@@ -1,4 +1,4 @@
-;;; ob-C.el --- org-babel functions for C and similar languages
+;;; ob-C.el --- Babel Functions for C and Similar Languages -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2010-2015 Free Software Foundation, Inc.
 
@@ -181,8 +181,8 @@ it's header arguments."
 (defun org-babel-C-expand-C (body params)
   "Expand a block of C or C++ code with org-babel according to
 it's header arguments."
-  (let ((vars (mapcar #'cdr (org-babel-get-header params :var)))
-	(colnames (cdar (org-babel-get-header params :colname-names)))
+  (let ((vars (org-babel--get-vars params))
+	(colnames (cdr (assq :colname-names params)))
 	(main-p (not (string= (cdr (assoc :main params)) "no")))
 	(includes (org-babel-read
 		   (or (cdr (assoc :includes params))
@@ -230,8 +230,8 @@ it's header arguments."
 (defun org-babel-C-expand-D (body params)
   "Expand a block of D code with org-babel according to
 it's header arguments."
-  (let ((vars (mapcar #'cdr (org-babel-get-header params :var)))
-	(colnames (cdar (org-babel-get-header params :colname-names)))
+  (let ((vars (org-babel--get-vars params))
+	(colnames (cdr (assq :colname-names params)))
 	(main-p (not (string= (cdr (assoc :main params)) "no")))
 	(imports (or (cdr (assoc :imports params))
 		     (org-babel-read (org-entry-get nil "imports" t)))))
@@ -265,12 +265,12 @@ it's header arguments."
       body
     (format "int main() {\n%s\nreturn 0;\n}\n" body)))
 
-(defun org-babel-prep-session:C (session params)
+(defun org-babel-prep-session:C (_session _params)
   "This function does nothing as C is a compiled language with no
 support for sessions"
   (error "C is a compiled languages -- no support for sessions"))
 
-(defun org-babel-load-session:C (session body params)
+(defun org-babel-load-session:C (_session _body _params)
   "This function does nothing as C is a compiled language with no
 support for sessions"
   (error "C is a compiled languages -- no support for sessions"))

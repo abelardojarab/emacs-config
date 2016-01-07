@@ -8,11 +8,112 @@ See the end of the file for license conditions.
 
 Please send Org bug reports to mailto:emacs-orgmode@gnu.org.
 
-* Version 8.4
+* Version 9.0
 ** Incompatible changes
-*** ~org-agenda-repeating-timestamp-show-all~ is more selective
-The variable only applies to ~+~ repeaters, not ~.+~ nor ~++~.
+*** New syntax for export blocks
+Export blocks are explicetly marked as such at the syntax level to
+disambiguate their parsing from special blocks.  The new syntax is
+
+#+BEGIN_SRC org
+,#+BEGIN_EXPORT backend
+...
+,#+END_EXPORT
+#+END_SRC
+
+instead of
+
+#+BEGIN_SRC org
+,#+BEGIN_backend
+...
+,#+END_backend
+#+END_SRC
+
+As a consequence, =INCLUDE= keywords syntax is modified, e.g.,
+
+#+BEGIN_SRC org
+,#+INCLUDE: "file.org" HTML
+#+END_SRC
+
+becomes
+
+#+BEGIN_SRC org
+,#+INCLUDE: "file.org" export html
+#+END_SRC
+
+The following function repairs export blocks and =INCLUDE= keywords
+using previous syntax:
+
+#+BEGIN_SRC emacs-lisp
+(defun org-repair-export-blocks ()
+  "Repair export blocks and INCLUDE keywords in current buffer."
+  (when (eq major-mode 'org-mode)
+    (let ((case-fold-search t)
+          (back-end-re (regexp-opt
+                        '("HTML" "ASCII" "LATEX" "ODT" "MARKDOWN" "MD" "ORG"
+                          "MAN" "BEAMER" "TEXINFO" "GROFF" "KOMA-LETTER")
+                        t)))
+      (org-with-wide-buffer
+       (goto-char (point-min))
+       (let ((block-re (concat "^[ \t]*#\\+BEGIN_" back-end-re)))
+         (save-excursion
+           (while (re-search-forward block-re nil t)
+             (let ((element (save-match-data (org-element-at-point))))
+               (when (eq (org-element-type element) 'special-block)
+                 (save-excursion
+                   (goto-char (org-element-property :end element))
+                   (save-match-data (search-backward "_"))
+                   (forward-char)
+                   (insert "EXPORT")
+                   (delete-region (point) (line-end-position)))
+                 (replace-match "EXPORT \\1" nil nil nil 1))))))
+       (let ((include-re
+              (format "^[ \t]*#\\+INCLUDE: .*?%s[ \t]*$" back-end-re)))
+         (while (re-search-forward include-re nil t)
+           (let ((element (save-match-data (org-element-at-point))))
+             (when (and (eq (org-element-type element) 'keyword)
+                        (string= (org-element-property :key element) "INCLUDE"))
+               (replace-match "EXPORT \\1" nil nil nil 1)))))))))
+#+END_SRC
+
+Moreover, ~:export-block~ keyword used in ~org-export-define-backend~
+and ~org-export-define-derived-backend~ is no longer used and needs to
+be removed.
+
+*** Footnotes
+**** [1]-like constructs are not valid footnotes
+Using =[1]= as a footnote was already discouraged in the manual, since
+it introduced too many false-positives in many Org documents.  These
+constructs are now unsupported.
+
+If you used =[N]= in some of your documents, consider turning them
+into =[fn:N]=.
+**** /Org Footnote/ library doesn't handle non-Org buffers
+Commands for footnotes in an Org document no longer try to do
+something in non-Org ones.  If you need to have footnotes there,
+consider using =footnote.el= library, shipped with Emacs.
+
+In particular, ~org-footnote-tag-for-non-org-mode-files~ no longer
+exists.
 ** New features
+*** New org-protocol key=value syntax
+
+Org-protocol can now handle query-style parameters such as:
+
+#+begin_example
+org-protocol://store-link?url=http:%2F%2Flocalhost%2Findex.html&title=The%20title
+org-protocol://capture?template=x&title=Hello&body=World&url=http:%2F%2Fexample.com
+#+end_example
+
+Old-style links such as
+: org-protocol://store-link:/http:%2F%2Flocalhost%2Findex.html/The%20title
+continue to be supported.
+
+If you have defined your own handler functions for
+~org-protocol-protocol-alist~, change them to accept either a property
+list (for new-style links) or a string (for old-style links).  Use
+~org-protocol-parse-parameters~ to convert old-style links into
+property lists.
+
 *** Org linter
 ~org-lint~ can check syntax and report common issues in Org documents.
 *** New option ~date-tree-last~ for ~org-agenda-insert-diary-strategy~
@@ -25,7 +126,8 @@ a broken internal link.  See its docstring for more information.
 ~\vbar~ or ~\vbar{}~ will be exported unconditionnally as a =|=,
 unlike to existing ~\vert~, which is expanded as ~&vert;~ when using
 a HTML derived export back-end.
-*** Babel: support for Stan language
+*** Babel
+**** Support for Stan language
 New ob-stan.el library.
 
 Evaluating a Stan block can produce two different results.
@@ -43,17 +145,86 @@ Evaluating a Stan block can produce two different results.
 
 For more information and usage examples, visit
 http://orgmode.org/worg/org-contrib/babel/languages/ob-doc-stan.html
+**** Support for Oracle databases via ~sqlplus~
+=ob-sql= library supports running SQL blocks against an Oracle
+database using ~sqlplus~.  Use with properties like this (all
+mandatory):
+
+#+BEGIN_EXAMPLE
+ :engine oracle
+ :dbhost <host.com>
+ :dbport <1521>
+ :dbuser <username>
+ :database <database>
+ :dbpassword <secret>
+#+END_EXAMPLE
 *** New =#+latex_compiler= keyword to set LaTeX compiler.
 PDFLaTeX, XeLaTeX, and LuaLaTeX are supported.  See the manual for
 details.
+*** Rewrite of radio lists
+Radio lists, i.e, Org plain lists in foreign buffers, have been
+rewritten to be on par with Radio tables.  You can use a large set of
+parameters to control how a given list should be rendered.  See manual
+for details.
 *** org-bbdb-anniversaries-future
 Used like org-bbdb-anniversaries, it provides a few days warning
 for upcoming anniversaries (default: 7 days).
+*** Support for ISO week trees
+ISO week trees are an alternative date tree format that orders entries
+by ISO week and not by month.
+
+For example:
+
+: * 2015
+: ** 2015-W35
+: ** 2015-W36
+: *** 2015-08-31 Monday
+
+They are supported in org-capture via ~file+weektree~ and
+~file+weektree+prompt~ target specifications.
 ** New functions
-~org-show-children~ is a faster implementation of
-~outline-show-children~.
+*** ~org-show-children~ 
+It is a faster implementation of ~outline-show-children~.
+
+*** ~org-next-line-empty-p~
+It replaces the deprecated ~next~ argument to ~org-previous-line-empty-p~.
 ** Removed functions
-*** ~org-element-remove-indentation~ in an obsolete alias for ~org-remove-indentation~
+*** ~org-agenda-todayp~ is deprecated.
+Use ~org-agenda-today-p~ instead.
+*** ~org-element-remove-indentation~ is deprecated.
+Use ~org-remove-indentation~ instead.
+*** ~org-babel-get-header~ is removed.
+Use ~org-babel--get-vars~ or ~assq~ instead, as applicable.
+
+*** ~org-image-file-name-regexp~ is deprecated
+Use ~image-file-name-regexp~ instead.
+The never-used-in-core ~extensions~ argument has been dropped.
+
+*** ~org-list-parse-list~ is deprecated
+Use ~org-list-to-lisp~ instead.
+*** ~org-on-heading-p~ is deprecated
+A comment to this effect was in the source code since 7.8.03, but
+now a byte-compiler warning will be generated as well.
+
+*** Various reimplementations of cl-lib functions are deprecated
+The affected functions are:
+- ~org-count~
+- ~org-remove-if~
+- ~org-remove-if-not~
+- ~org-reduce~
+- ~org-every~
+- ~org-some~
+
+Additionally, ~org-sublist~ is deprecated in favor of ~cl-subseq~.  Note
+the differences in indexing conventions: ~org-sublist~ is 1-based and
+end-inclusive; ~cl-subseq~ is 0-based and end-exclusive.
+
+*** ~org-table-recognize-table.el~ is deprecated
+It was not called by any org code since 2010.
+
+*** ~org-table-p~ is deprecated
+Use ~org-at-table-p~ instead.
+
 ** Removed options
 *** Remove ~org-list-empty-line-terminates-plain-lists~
 Two consecutive blank lines always terminate all levels of current
@@ -62,13 +233,31 @@ plain list.
 fixltx2e is obsolete, see LaTeX News 22.
 ** Miscellaneous
 *** Beamer export back-ends uses ~org-latex-prefer-user-labels~
-*** ~:preparation-function~ called earlier during publishing 
+*** ~:preparation-function~ called earlier during publishing
 Functions in this list are called before any file is associated to the
 current projet.  Thus, they can be used to generate to be published
 Org files.
 *** Function ~org-remove-indentation~ changes.
 The new algorithm doesn't remove TAB characters not used for
 indentation.
+
+*** Secure placeholders in capture templates
+Placeholders in capture templates are no longer expanded recursively.
+However, ~%(...)~ constructs are expanded very late, so you can fill
+the contents of the S-exp with the replacement text of non-interactive
+placeholders.  As before, interactive ones are still expanded as the
+very last step, so the previous statement doesn't apply to them.
+
+Note that only ~%(...)~ placeholders initially present in the
+template, or introduced using a file placeholder, i.e., ~%[...]~ are
+expanded.  This prevents evaluating potentially malicious code when
+another placeholder, e.g., ~%i~ expands to a S-exp.
+*** Links stored by ~org-gnus-store-link~ in nnir groups
+Since gnus nnir groups are temporary, ~org-gnus-store-link~ now refers
+to the article's original group.
+*** ~org-babel-check-confirm-evaluate~ is now a function instead of a macro
+The calling convention has changed.
+
 * Version 8.3
 
 ** Incompatible changes

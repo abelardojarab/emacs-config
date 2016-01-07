@@ -1,4 +1,4 @@
-;;; ob-processing.el --- Babel functions for evaluation of processing
+;;; ob-processing.el --- Babel functions for processing -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2015 Free Software Foundation, Inc.
 
@@ -134,7 +134,7 @@ This function is called by `org-babel-execute-src-block'."
 	      sketch-canvas-id
 	      "\"></canvas>"))))
 
-(defun org-babel-prep-session:processing (session params)
+(defun org-babel-prep-session:processing (_session _params)
   "Return an error if the :session header argument is set.
 Processing does not support sessions"
   (error "Processing does not support sessions"))
@@ -142,7 +142,7 @@ Processing does not support sessions"
 (defun org-babel-variable-assignments:processing (params)
   "Return list of processing statements assigning the block's variables."
   (mapcar #'org-babel-processing-var-to-processing
-	  (mapcar #'cdr (org-babel-get-header params :var))))
+	  (org-babel--get-vars params)))
 
 (defun org-babel-processing-var-to-processing (pair)
   "Convert an elisp value into a Processing variable.
@@ -179,17 +179,16 @@ a variable of the same value."
 
 DATA is a list.  Return type as a symbol.
 
-The type is `String' if any element in DATA is
-a string.  Otherwise, it is either `float', if some elements are
-floats, or `int'."
-  (let* ((type 'int)
-	 find-type			; For byte-compiler.
-	 (find-type
-	  (lambda (row)
-	    (dolist (e row type)
-	      (cond ((listp e) (setq type (funcall find-type e)))
-		    ((stringp e) (throw 'exit 'String))
-		    ((floatp e) (setq type 'float)))))))
+The type is `String' if any element in DATA is a string.
+Otherwise, it is either `float', if some elements are floats, or
+`int'."
+  (letrec ((type 'int)
+	   (find-type
+	    (lambda (row)
+	      (dolist (e row type)
+		(cond ((listp e) (setq type (funcall find-type e)))
+		      ((stringp e) (throw 'exit 'String))
+		      ((floatp e) (setq type 'float)))))))
     (catch 'exit (funcall find-type data))))
 
 (provide 'ob-processing)

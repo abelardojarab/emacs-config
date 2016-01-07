@@ -1,4 +1,4 @@
-;;; ob-clojure.el --- org-babel functions for clojure evaluation
+;;; ob-clojure.el --- Babel Functions for Clojure    -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2009-2015 Free Software Foundation, Inc.
 
@@ -67,7 +67,7 @@
 
 (defun org-babel-expand-body:clojure (body params)
   "Expand BODY according to PARAMS, return the expanded body."
-  (let* ((vars (mapcar #'cdr (org-babel-get-header params :var)))
+  (let* ((vars (org-babel--get-vars params))
 	 (result-params (cdr (assoc :result-params params)))
 	 (print-level nil) (print-length nil)
 	 (body (org-babel-trim

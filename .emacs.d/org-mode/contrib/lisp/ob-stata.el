@@ -42,7 +42,7 @@
 
 ;;; Code:
 (require 'ob)
-(eval-when-compile (require 'cl))
+(require 'cl-lib)
 
 (declare-function orgtbl-to-csv "org-table" (table params))
 (declare-function stata "ext:ess-stata" (&optional start-args))
@@ -50,7 +50,6 @@
 (declare-function ess-make-buffer-current "ext:ess-inf" ())
 (declare-function ess-eval-buffer "ext:ess-inf" (vis))
 (declare-function org-number-sequence "org-compat" (from &optional to inc))
-(declare-function org-remove-if-not "org" (predicate seq))
 
 (defconst org-babel-header-args:stata
   '((width		 . :any)
@@ -165,9 +164,9 @@ This function is called by `org-babel-execute-src-block'."
 (defun org-babel-stata-assign-elisp (name value colnames-p rownames-p)
   "Construct stata code assigning the elisp VALUE to a variable named NAME."
   (if (listp value)
-      (let ((max (apply #'max (mapcar #'length (org-remove-if-not
+      (let ((max (apply #'max (mapcar #'length (cl-remove-if-not
 						#'sequencep value))))
-	    (min (apply #'min (mapcar #'length (org-remove-if-not
+	    (min (apply #'min (mapcar #'length (cl-remove-if-not
 						#'sequencep value))))
 	    (transition-file (org-babel-temp-file "stata-import-")))
         ;; ensure VALUE has an orgtbl structure (depth of at least 2)
@@ -240,7 +239,7 @@ current code buffer."
 If RESULT-TYPE equals 'output then return standard output as a
 string.  If RESULT-TYPE equals 'value then return the value of the
 last statement in BODY, as elisp."
-  (case result-type
+  (cl-case result-type
     (value
      (let ((tmp-file (org-babel-temp-file "stata-")))
        (org-babel-eval org-babel-stata-command
@@ -262,7 +261,7 @@ last statement in BODY, as elisp."
 If RESULT-TYPE equals 'output then return standard output as a
 string.  If RESULT-TYPE equals 'value then return the value of the
 last statement in BODY, as elisp."
-  (case result-type
+  (cl-case result-type
     (value
      (with-temp-buffer
        (insert (org-babel-chomp body))

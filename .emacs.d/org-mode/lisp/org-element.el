@@ -1,6 +1,6 @@
 ;;; org-element.el --- Parser for Org Syntax         -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2012-2015 Free Software Foundation, Inc.
+;; Copyright (C) 2012-2016 Free Software Foundation, Inc.
 
 ;; Author: Nicolas Goaziou <n.goaziou at gmail dot com>
 ;; Keywords: outlines, hypermedia, calendar, wp
@@ -118,6 +118,7 @@
 
 (require 'org)
 (require 'avl-tree)
+(require 'cl-lib)
 
 
 
@@ -150,7 +151,7 @@ specially in `org-element--object-lex'.")
 		;; Headlines, inlinetasks.
 		org-outline-regexp "\\|"
 		;; Footnote definitions.
-		"\\[\\(?:[0-9]+\\|fn:[-_[:word:]]+\\)\\]" "\\|"
+		"\\[fn:[-_[:word:]]+\\]" "\\|"
 		;; Diary sexps.
 		"%%(" "\\|"
 		"[ \t]*\\(?:"
@@ -198,7 +199,12 @@ specially in `org-element--object-lex'.")
 		      ;; Objects starting with "[": regular link,
 		      ;; footnote reference, statistics cookie,
 		      ;; timestamp (inactive).
-		      "\\[\\(?:fn:\\|\\(?:[0-9]\\|\\(?:%\\|/[0-9]*\\)\\]\\)\\|\\[\\)"
+		      (concat "\\[\\(?:"
+			      "fn:" "\\|"
+			      "\\[" "\\|"
+			      "[0-9]\\{4\\}-[0-9]\\{2\\}-[0-9]\\{2\\}" "\\|"
+			      "[0-9]*\\(?:%\\|/[0-9]*\\)\\]"
+			      "\\)")
 		      ;; Objects starting with "@": export snippets.
 		      "@@"
 		      ;; Objects starting with "{": macro.
@@ -256,17 +262,6 @@ specially in `org-element--object-lex'.")
 (defconst org-element-object-containers
   (append org-element-recursive-objects '(paragraph table-row verse-block))
   "List of object or element types that can directly contain objects.")
-
-(defvar org-element-block-name-alist
-  '(("CENTER" . org-element-center-block-parser)
-    ("COMMENT" . org-element-comment-block-parser)
-    ("EXAMPLE" . org-element-example-block-parser)
-    ("QUOTE" . org-element-quote-block-parser)
-    ("SRC" . org-element-src-block-parser)
-    ("VERSE" . org-element-verse-block-parser))
-  "Alist between block names and the associated parsing function.
-Names must be uppercase.  Any block whose name has no association
-is parsed with `org-element-special-block-parser'.")
 
 (defconst org-element-affiliated-keywords
   '("CAPTION" "DATA" "HEADER" "HEADERS" "LABEL" "NAME" "PLOT" "RESNAME" "RESULT"
@@ -333,7 +328,7 @@ This list is checked after translations have been applied.  See
 	   ;; Regular affiliated keywords.
 	   (format "\\(?1:%s\\)"
 		   (regexp-opt
-		    (org-remove-if
+		    (cl-remove-if
 		     (lambda (k) (member k org-element-dual-keywords))
 		     org-element-affiliated-keywords)))
 	   "\\|"
@@ -846,7 +841,7 @@ Assume point is at the beginning of the footnote definition."
 (defun org-element-footnote-definition-interpreter (footnote-definition contents)
   "Interpret FOOTNOTE-DEFINITION element as Org syntax.
 CONTENTS is the contents of the footnote-definition."
-  (concat (format "[%s]" (org-element-property :label footnote-definition))
+  (concat (format "[fn:%s]" (org-element-property :label footnote-definition))
 	  " "
 	  contents))
 
@@ -1599,9 +1594,6 @@ CONTENTS is the contents of the element."
 ;; through the following steps: implement a parser and an interpreter,
 ;; tweak `org-element--current-element' so that it recognizes the new
 ;; type and add that new type to `org-element-all-elements'.
-;;
-;; As a special case, when the newly defined type is a block type,
-;; `org-element-block-name-alist' has to be modified accordingly.
 
 
 ;;;; Babel Call
@@ -1952,42 +1944,43 @@ containing `:begin', `:end', `:type', `:value', `:post-blank' and
 `:post-affiliated' keywords.
 
 Assume point is at export-block beginning."
-  (let* ((case-fold-search t)
-	 (type (progn (looking-at "[ \t]*#\\+BEGIN_\\(\\S-+\\)")
-		      (upcase (org-match-string-no-properties 1)))))
+  (let* ((case-fold-search t))
     (if (not (save-excursion
-	       (re-search-forward
-		(format "^[ \t]*#\\+END_%s[ \t]*$" type) limit t)))
+	       (re-search-forward "^[ \t]*#\\+END_EXPORT[ \t]*$" limit t)))
 	;; Incomplete block: parse it as a paragraph.
 	(org-element-paragraph-parser limit affiliated)
-      (let ((contents-end (match-beginning 0)))
-	(save-excursion
-	  (let* ((begin (car affiliated))
-		 (post-affiliated (point))
-		 (contents-begin (progn (forward-line) (point)))
-		 (pos-before-blank (progn (goto-char contents-end)
-					  (forward-line)
-					  (point)))
-		 (end (progn (skip-chars-forward " \r\t\n" limit)
-			     (if (eobp) (point) (line-beginning-position))))
-		 (value (buffer-substring-no-properties contents-begin
-							contents-end)))
-	    (list 'export-block
-		  (nconc
-		   (list :begin begin
-			 :end end
-			 :type type
-			 :value value
-			 :post-blank (count-lines pos-before-blank end)
-			 :post-affiliated post-affiliated)
-		   (cdr affiliated)))))))))
+      (save-excursion
+	(let* ((contents-end (match-beginning 0))
+	       (backend
+		(progn
+		  (looking-at
+		   "[ \t]*#\\+BEGIN_EXPORT\\(?:[ \t]+\\(\\S-+\\)\\)?[ \t]*$")
+		  (match-string-no-properties 1)))
+	       (begin (car affiliated))
+	       (post-affiliated (point))
+	       (contents-begin (progn (forward-line) (point)))
+	       (pos-before-blank (progn (goto-char contents-end)
+					(forward-line)
+					(point)))
+	       (end (progn (skip-chars-forward " \r\t\n" limit)
+			   (if (eobp) (point) (line-beginning-position))))
+	       (value (buffer-substring-no-properties contents-begin
+						      contents-end)))
+	  (list 'export-block
+		(nconc
+		 (list :type (and backend (upcase backend))
+		       :begin begin
+		       :end end
+		       :value value
+		       :post-blank (count-lines pos-before-blank end)
+		       :post-affiliated post-affiliated)
+		 (cdr affiliated))))))))
 
 (defun org-element-export-block-interpreter (export-block _)
   "Interpret EXPORT-BLOCK element as Org syntax."
-  (let ((type (org-element-property :type export-block)))
-    (concat (format "#+BEGIN_%s\n" type)
-	    (org-element-property :value export-block)
-	    (format "#+END_%s" type))))
+  (format "#+BEGIN_EXPORT %s\n%s#+END_EXPORT"
+	  (org-element-property :type export-block)
+	  (org-element-property :value export-block)))
 
 
 ;;;; Fixed-width
@@ -2779,14 +2772,10 @@ When at a footnote reference, return a list whose car is
       (when closing
 	(save-excursion
 	  (let* ((begin (point))
-		 (label
-		  (or (org-match-string-no-properties 2)
-		      (org-match-string-no-properties 3)
-		      (and (match-string 1)
-			   (concat "fn:" (org-match-string-no-properties 1)))))
-		 (type (if (or (not label) (match-string 1)) 'inline 'standard))
+		 (label (match-string-no-properties 1))
 		 (inner-begin (match-end 0))
 		 (inner-end (1- closing))
+		 (type (if (match-end 2) 'inline 'standard))
 		 (post-blank (progn (goto-char closing)
 				    (skip-chars-forward " \t")))
 		 (end (point)))
@@ -2802,9 +2791,9 @@ When at a footnote reference, return a list whose car is
 (defun org-element-footnote-reference-interpreter (footnote-reference contents)
   "Interpret FOOTNOTE-REFERENCE object as Org syntax.
 CONTENTS is its definition, when inline, or nil."
-  (format "[%s]"
-	  (concat (or (org-element-property :label footnote-reference) "fn:")
-		  (and contents (concat ":" contents)))))
+  (format "[fn:%s%s]"
+	  (or (org-element-property :label footnote-reference) "")
+	  (if contents (concat ":" contents) "")))
 
 
 ;;;; Inline Babel Call
@@ -3762,27 +3751,35 @@ element it has to parse."
 	     ;; Keywords.
 	     ((looking-at "[ \t]*#")
 	      (goto-char (match-end 0))
-	      (cond ((looking-at "\\(?: \\|$\\)")
-		     (beginning-of-line)
-		     (org-element-comment-parser limit affiliated))
-		    ((looking-at "\\+BEGIN_\\(\\S-+\\)")
-		     (beginning-of-line)
-		     (let ((parser (assoc (upcase (match-string 1))
-					  org-element-block-name-alist)))
-		       (if parser (funcall (cdr parser) limit affiliated)
-			 (org-element-special-block-parser limit affiliated))))
-		    ((looking-at "\\+CALL:")
-		     (beginning-of-line)
-		     (org-element-babel-call-parser limit affiliated))
-		    ((looking-at "\\+BEGIN:? ")
-		     (beginning-of-line)
-		     (org-element-dynamic-block-parser limit affiliated))
-		    ((looking-at "\\+\\S-+:")
-		     (beginning-of-line)
-		     (org-element-keyword-parser limit affiliated))
-		    (t
-		     (beginning-of-line)
-		     (org-element-paragraph-parser limit affiliated))))
+	      (cond
+	       ((looking-at "\\(?: \\|$\\)")
+		(beginning-of-line)
+		(org-element-comment-parser limit affiliated))
+	       ((looking-at "\\+BEGIN_\\(\\S-+\\)")
+		(beginning-of-line)
+		(funcall (pcase (upcase (match-string 1))
+			   ("CENTER"  #'org-element-center-block-parser)
+			   ("COMMENT" #'org-element-comment-block-parser)
+			   ("EXAMPLE" #'org-element-example-block-parser)
+			   ("EXPORT"  #'org-element-export-block-parser)
+			   ("QUOTE"   #'org-element-quote-block-parser)
+			   ("SRC"     #'org-element-src-block-parser)
+			   ("VERSE"   #'org-element-verse-block-parser)
+			   (_         #'org-element-special-block-parser))
+			 limit
+			 affiliated))
+	       ((looking-at "\\+CALL:")
+		(beginning-of-line)
+		(org-element-babel-call-parser limit affiliated))
+	       ((looking-at "\\+BEGIN:? ")
+		(beginning-of-line)
+		(org-element-dynamic-block-parser limit affiliated))
+	       ((looking-at "\\+\\S-+:")
+		(beginning-of-line)
+		(org-element-keyword-parser limit affiliated))
+	       (t
+		(beginning-of-line)
+		(org-element-paragraph-parser limit affiliated))))
 	     ;; Footnote Definition.
 	     ((looking-at org-footnote-definition-re)
 	      (org-element-footnote-definition-parser limit affiliated))
@@ -3964,7 +3961,7 @@ If STRING is the empty string or nil, return nil."
 	  (dolist (v local-variables)
 	    (ignore-errors
 	      (if (symbolp v) (makunbound v)
-		(org-set-local (car v) (cdr v)))))
+		(set (make-local-variable (car v)) (cdr v)))))
 	  (insert string)
 	  (restore-buffer-modified-p nil)
 	  (let ((data (org-element--parse-objects
@@ -5591,14 +5588,14 @@ buffers."
     (with-current-buffer buffer
       (when (and org-element-use-cache
 		 (or (derived-mode-p 'org-mode) orgstruct-mode))
-	(org-set-local 'org-element--cache
-		       (avl-tree-create #'org-element--cache-compare))
-	(org-set-local 'org-element--cache-objects (make-hash-table :test #'eq))
-	(org-set-local 'org-element--cache-sync-keys
+	(setq-local org-element--cache
+		    (avl-tree-create #'org-element--cache-compare))
+	(setq-local org-element--cache-objects (make-hash-table :test #'eq))
+	(setq-local org-element--cache-sync-keys
 		       (make-hash-table :weakness 'key :test #'eq))
-	(org-set-local 'org-element--cache-change-warning nil)
-	(org-set-local 'org-element--cache-sync-requests nil)
-	(org-set-local 'org-element--cache-sync-timer nil)
+	(setq-local org-element--cache-change-warning nil)
+	(setq-local org-element--cache-sync-requests nil)
+	(setq-local org-element--cache-sync-timer nil)
 	(add-hook 'before-change-functions
 		  #'org-element--cache-before-change nil t)
 	(add-hook 'after-change-functions
@@ -5955,7 +5952,7 @@ end of ELEM-A."
 	  (move-overlay (car o) (- (nth 1 o) offset) (- (nth 2 o) offset))))
       (goto-char (org-element-property :end elem-B)))))
 
-;; For backward-compatibility with Org < 8.4
+;; For backward-compatibility with Org <= 8.3
 (define-obsolete-function-alias
   'org-element-remove-indentation 'org-remove-indentation "25.1")
 

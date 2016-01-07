@@ -829,31 +829,27 @@ Some other text
   "Test `export-block' parser."
   ;; Standard test.
   (should
-   (org-test-with-temp-text "#+BEGIN_LATEX\nText\n#+END_LATEX"
-     (org-element-map
-      (let ((org-element-block-name-alist
-	     '(("LATEX" . org-element-export-block-parser))))
-	(org-element-parse-buffer))
-      'export-block 'identity)))
+   (eq 'export-block
+       (org-test-with-temp-text "#+BEGIN_EXPORT LATEX\nText\n#+END_EXPORT"
+	 (org-element-type (org-element-at-point)))))
+  (should
+   (equal "LATEX"
+	  (org-test-with-temp-text "#+BEGIN_EXPORT LATEX\nText\n#+END_EXPORT"
+	    (org-element-property :type (org-element-at-point)))))
   ;; Ignore case.
   (should
-   (let ((org-element-block-name-alist
-	  '(("LATEX" . org-element-export-block-parser))))
-     (org-test-with-temp-text "#+begin_latex\nText\n#+end_latex"
-       (org-element-map (org-element-parse-buffer) 'export-block 'identity))))
+   (eq 'export-block
+       (org-test-with-temp-text "#+begin_export latex\nText\n#+end_export"
+	 (org-element-type (org-element-at-point)))))
   ;; Ignore incomplete block.
   (should-not
-   (let ((org-element-block-name-alist
-	  '(("LATEX" . org-element-export-block-parser))))
-     (org-test-with-temp-text "#+BEGIN_LATEX"
-       (org-element-map (org-element-parse-buffer) 'export-block
-	 'identity nil t))))
+   (eq 'export-block
+       (org-test-with-temp-text "#+BEGIN_EXPORT"
+	 (org-element-type (org-element-at-point)))))
   ;; Handle non-empty blank line at the end of buffer.
   (should
-   (let ((org-element-block-name-alist
-	  '(("LATEX" . org-element-export-block-parser))))
-     (org-test-with-temp-text "#+BEGIN_LATEX\nC\n#+END_LATEX\n "
-       (= (org-element-property :end (org-element-at-point)) (point-max))))))
+   (org-test-with-temp-text "#+BEGIN_EXPORT latex\nC\n#+END_EXPORT\n "
+     (= (org-element-property :end (org-element-at-point)) (point-max)))))
 
 
 ;;;; Export Snippet
@@ -940,11 +936,6 @@ Some other text
   ;; Parse a standard reference.
   (should
    (org-test-with-temp-text "Text[fn:label]"
-     (org-element-map
-	 (org-element-parse-buffer) 'footnote-reference 'identity)))
-  ;; Parse a normalized reference.
-  (should
-   (org-test-with-temp-text "Text[1]"
      (org-element-map
 	 (org-element-parse-buffer) 'footnote-reference 'identity)))
   ;; Parse an inline reference.
@@ -2638,8 +2629,8 @@ CLOCK: [2012-01-01 sun. 00:01]--[2012-01-01 sun. 00:02] =>  0:01"))))
 (ert-deftest test-org-element/export-block-interpreter ()
   "Test export block interpreter."
   (should (equal (org-test-parse-and-interpret
-		  "#+BEGIN_HTML\nTest\n#+END_HTML")
-		 "#+BEGIN_HTML\nTest\n#+END_HTML\n")))
+		  "#+BEGIN_EXPORT HTML\nTest\n#+END_EXPORT")
+		 "#+BEGIN_EXPORT HTML\nTest\n#+END_EXPORT\n")))
 
 (ert-deftest test-org-element/fixed-width-interpreter ()
   "Test fixed width interpreter."
@@ -2897,17 +2888,15 @@ DEADLINE: <2012-03-29 thu.> SCHEDULED: <2012-03-29 thu.> CLOSED: [2012-03-29 thu
 
 (ert-deftest test-org-element/footnote-reference-interpreter ()
   "Test footnote reference interpreter."
-  ;; 1. Regular reference.
+  ;; Regular reference.
   (should (equal (org-test-parse-and-interpret "Text[fn:1]") "Text[fn:1]\n"))
-  ;; 2. Normalized reference.
-  (should (equal (org-test-parse-and-interpret "Text[1]") "Text[1]\n"))
-  ;; 3. Named reference.
+  ;; Named reference.
   (should (equal (org-test-parse-and-interpret "Text[fn:label]")
 		 "Text[fn:label]\n"))
-  ;; 4. Inline reference.
+  ;; Inline reference.
   (should (equal (org-test-parse-and-interpret "Text[fn:label:def]")
 		 "Text[fn:label:def]\n"))
-  ;; 5. Anonymous reference.
+  ;; Anonymous reference.
   (should (equal (org-test-parse-and-interpret "Text[fn::def]")
 		 "Text[fn::def]\n")))
 

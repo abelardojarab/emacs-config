@@ -1,4 +1,4 @@
-;;; ox-icalendar.el --- iCalendar Back-End for Org Export Engine
+;;; ox-icalendar.el --- iCalendar Back-End for Org Export Engine -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2004-2015 Free Software Foundation, Inc.
 
@@ -32,6 +32,7 @@
 ;;; Code:
 
 (eval-when-compile (require 'cl))
+(require 'cl-lib)
 (require 'ox-ascii)
 (declare-function org-bbdb-anniv-export-ical "org-bbdb" nil)
 
@@ -407,27 +408,25 @@ Universal Time, ignoring `org-icalendar-date-time-format'."
 ENTRY is a headline or an inlinetask element.  INFO is a plist
 used as a communication channel."
   (mapconcat
-   'identity
+   #'identity
    (org-uniquify
     (let (categories)
-      (mapc (lambda (type)
-	      (case type
-		(category
-		 (push (org-export-get-category entry info) categories))
-		(todo-state
-		 (let ((todo (org-element-property :todo-keyword entry)))
-		   (and todo (push todo categories))))
-		(local-tags
-		 (setq categories
-		       (append (nreverse (org-export-get-tags entry info))
-			       categories)))
-		(all-tags
-		 (setq categories
-		       (append (nreverse (org-export-get-tags entry info nil t))
-			       categories)))))
-	    org-icalendar-categories)
-      ;; Return list of categories, following specified order.
-      (nreverse categories))) ","))
+      (dolist (type org-icalendar-categories (nreverse categories))
+	(case type
+	  (category
+	   (push (org-export-get-category entry info) categories))
+	  (todo-state
+	   (let ((todo (org-element-property :todo-keyword entry)))
+	     (and todo (push todo categories))))
+	  (local-tags
+	   (setq categories
+		 (append (nreverse (org-export-get-tags entry info))
+			 categories)))
+	  (all-tags
+	   (setq categories
+		 (append (nreverse (org-export-get-tags entry info nil t))
+			 categories)))))))
+   ","))
 
 (defun org-icalendar-transcode-diary-sexp (sexp uid summary)
   "Transcode a diary sexp into iCalendar format.
@@ -479,7 +478,7 @@ or subject for the event."
 
 ;;; Filters
 
-(defun org-icalendar-clear-blank-lines (headline back-end info)
+(defun org-icalendar-clear-blank-lines (headline _back-end _info)
   "Remove blank lines in HEADLINE export.
 HEADLINE is a string representing a transcoded headline.
 BACK-END and INFO are ignored."
@@ -836,27 +835,23 @@ external process."
       ;; Asynchronous export is not interactive, so we will not call
       ;; `org-check-agenda-file'.  Instead we remove any non-existent
       ;; agenda file from the list.
-      (let ((files (org-remove-if-not 'file-exists-p (org-agenda-files t))))
+      (let ((files (cl-remove-if-not #'file-exists-p (org-agenda-files t))))
 	(org-export-async-start
 	    (lambda (results)
-	      (mapc (lambda (f) (org-export-add-to-stack f 'icalendar))
-		    results))
+	      (dolist (f results) (org-export-add-to-stack f 'icalendar)))
 	  `(let (output-files)
-	     (mapc (lambda (file)
-		     (with-current-buffer (org-get-agenda-file-buffer file)
-		       (push (expand-file-name (org-icalendar-export-to-ics))
-			     output-files)))
-		   ',files)
-	     output-files)))
+	     (dolist (file ',files outputfiles)
+	       (with-current-buffer (org-get-agenda-file-buffer file)
+		 (push (expand-file-name (org-icalendar-export-to-ics))
+		       output-files))))))
     (let ((files (org-agenda-files t)))
       (org-agenda-prepare-buffers files)
       (unwind-protect
-	  (mapc (lambda (file)
-		  (catch 'nextfile
-		    (org-check-agenda-file file)
-		    (with-current-buffer (org-get-agenda-file-buffer file)
-		      (org-icalendar-export-to-ics))))
-		files)
+	  (dolist (file files)
+	    (catch 'nextfile
+	      (org-check-agenda-file file)
+	      (with-current-buffer (org-get-agenda-file-buffer file)
+		(org-icalendar-export-to-ics))))
 	(org-release-buffers org-agenda-new-buffers)))))
 
 ;;;###autoload
@@ -871,14 +866,14 @@ The file is stored under the name chosen in
 `org-icalendar-combined-agenda-file'."
   (interactive)
   (if async
-      (let ((files (org-remove-if-not 'file-exists-p (org-agenda-files t))))
+      (let ((files (cl-remove-if-not #'file-exists-p (org-agenda-files t))))
 	(org-export-async-start
-	    (lambda (dummy)
+	    (lambda (_)
 	      (org-export-add-to-stack
 	       (expand-file-name org-icalendar-combined-agenda-file)
 	       'icalendar))
-	  `(apply 'org-icalendar--combine-files ',files)))
-    (apply 'org-icalendar--combine-files (org-agenda-files t))))
+	  `(apply #'org-icalendar--combine-files ',files)))
+    (apply #'org-icalendar--combine-files (org-agenda-files t))))
 
 (defun org-icalendar-export-current-agenda (file)
   "Export current agenda view to an iCalendar FILE.
@@ -901,7 +896,9 @@ This function assumes major mode for current buffer is
 			    (buffer-substring
 			     (point) (progn (outline-next-heading) (point)))))))))
 		   (forward-line)))))
-	   'icalendar t '(:ascii-charset utf-8 :ascii-links-to-notes nil))))
+	   'icalendar t
+	   '(:ascii-charset utf-8 :ascii-links-to-notes nil
+			    :icalendar-include-todo all))))
     (with-temp-file file
       (insert
        (org-icalendar--vcalendar

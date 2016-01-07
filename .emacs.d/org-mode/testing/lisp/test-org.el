@@ -301,17 +301,6 @@
     '(3 29 2012)
     (calendar-gregorian-from-absolute
      (org-closest-date "<2012-03-29 +0d>" "<2014-03-04>" nil))))
-  ;; Time stamps with a special repeater type are returned unchanged.
-  (should
-   (equal
-    '(3 29 2012)
-    (calendar-gregorian-from-absolute
-     (org-closest-date "<2012-03-29 .+1d>" "<2014-03-04>" nil))))
-  (should
-   (equal
-    '(3 29 2012)
-    (calendar-gregorian-from-absolute
-     (org-closest-date "<2012-03-29 ++1d>" "<2014-03-04>" nil))))
   ;; if PREFER is set to `past' always return a date before, or equal
   ;; to CURRENT.
   (should
@@ -993,10 +982,26 @@
 	   (org-link-search-must-match-exact-headline nil))
        (org-return))
      (org-looking-at-p "<<target>>")))
+  (should-not
+   (org-test-with-temp-text "Link [[target]]<point> <<target>>"
+     (let ((org-return-follows-link t)
+	   (org-link-search-must-match-exact-headline nil))
+       (org-return))
+     (org-looking-at-p "<<target>>")))
   ;; When `org-return-follows-link' is non-nil, tolerate links and
   ;; timestamps in comments, node properties, etc.
   (should
    (org-test-with-temp-text "# Comment [[target<point>]]\n <<target>>"
+     (let ((org-return-follows-link t)
+	   (org-link-search-must-match-exact-headline nil))
+       (org-return))
+     (org-looking-at-p "<<target>>")))
+  (should-not
+   (org-test-with-temp-text "# Comment [[target<point>]]\n <<target>>"
+     (let ((org-return-follows-link nil)) (org-return))
+     (org-looking-at-p "<<target>>")))
+  (should-not
+   (org-test-with-temp-text "# Comment [[target]]<point>\n <<target>>"
      (let ((org-return-follows-link t)
 	   (org-link-search-must-match-exact-headline nil))
        (org-return))
@@ -1400,6 +1405,43 @@
 	    '(org-block-todo-from-children-or-siblings-or-parent)))
        (org-entry-blocked-p)))))
 
+(ert-deftest test-org/format-outline-path ()
+  (should
+   (string= (org-format-outline-path (list "one" "two" "three"))
+	    "one/two/three"))
+  ;; Empty path.
+  (should
+   (string= (org-format-outline-path '())
+	    ""))
+  (should
+   (string= (org-format-outline-path '(nil))
+	    ""))
+  ;; Empty path and prefix.
+  (should
+   (string= (org-format-outline-path '() nil ">>")
+	    ">>"))
+  ;; Trailing whitespace in headings.
+  (should
+   (string= (org-format-outline-path (list "one\t" "tw o " "three  "))
+	    "one/tw o/three"))
+  ;; Non-default prefix and separators.
+  (should
+   (string= (org-format-outline-path (list "one" "two" "three") nil ">>" "|")
+	    ">>|one|two|three"))
+  ;; Truncate.
+  (should
+   (string= (org-format-outline-path (list "one" "two" "three" "four") 10)
+	    "one/two/.."))
+  ;; Give a very narrow width.
+  (should
+   (string= (org-format-outline-path (list "one" "two" "three" "four") 2)
+	    "on"))
+  ;; Give a prefix that extends beyond the width.
+  (should
+   (string= (org-format-outline-path (list "one" "two" "three" "four") 10
+				     ">>>>>>>>>>")
+	    ">>>>>>>>..")))
+
 
 ;;; Keywords
 
@@ -1580,7 +1622,7 @@
 #+BEGIN_SRC emacs-lisp
 \(+ 1 1)                  (ref:sc)
 #+END_SRC
-\[[(sc)]]<point>"
+\[[(sc)<point>]]"
      (org-open-at-point)
      (looking-at "(ref:sc)")))
   ;; Find coderef even with alternate label format.
@@ -1589,7 +1631,7 @@
 #+BEGIN_SRC emacs-lisp -l \"{ref:%s}\"
 \(+ 1 1)                  {ref:sc}
 #+END_SRC
-\[[(sc)]]<point>"
+\[[(sc)<point>]]"
      (org-open-at-point)
      (looking-at "{ref:sc}"))))
 
@@ -1599,13 +1641,13 @@
   "Test custom ID links specifications."
   (should
    (org-test-with-temp-text
-       "* H1\n:PROPERTIES:\n:CUSTOM_ID: custom\n:END:\n* H2\n[[#custom]]<point>"
+       "* H1\n:PROPERTIES:\n:CUSTOM_ID: custom\n:END:\n* H2\n[[#custom<point>]]"
      (org-open-at-point)
      (org-looking-at-p "\\* H1")))
   ;; Throw an error on false positives.
   (should-error
    (org-test-with-temp-text
-       "* H1\n:DRAWER:\n:CUSTOM_ID: custom\n:END:\n* H2\n[[#custom]]<point>"
+       "* H1\n:DRAWER:\n:CUSTOM_ID: custom\n:END:\n* H2\n[[#custom<point>]]"
      (org-open-at-point)
      (org-looking-at-p "\\* H1"))))
 
@@ -1679,8 +1721,7 @@
      (looking-at "\\* COMMENT Test")))
   ;; Correctly un-hexify fuzzy links.
   (should
-   (org-test-with-temp-text "* With space\n[[*With%20space][With space]]"
-     (goto-char (point-max))
+   (org-test-with-temp-text "* With space\n[[*With%20space][With space<point>]]"
      (org-open-at-point)
      (bobp))))
 
@@ -1922,6 +1963,42 @@ drops support for Emacs 24.1 and 24.2."
 
 
  
+;;; Miscellaneous
+
+(ert-deftest test-org/in-regexp ()
+  "Test `org-in-regexp' specifications."
+  ;; Standard tests.
+  (should
+   (org-test-with-temp-text "xx ab<point>c xx"
+     (org-in-regexp "abc")))
+  (should-not
+   (org-test-with-temp-text "xx abc <point>xx"
+     (org-in-regexp "abc")))
+  ;; Return non-nil even with multiple matching regexps in the same
+  ;; line.
+  (should
+   (org-test-with-temp-text "abc xx ab<point>c xx"
+     (org-in-regexp "abc")))
+  ;; With optional argument NLINES, check extra lines around point.
+  (should-not
+   (org-test-with-temp-text "A\nB<point>\nC"
+     (org-in-regexp "A\nB\nC")))
+  (should
+   (org-test-with-temp-text "A\nB<point>\nC"
+     (org-in-regexp "A\nB\nC" 1)))
+  (should-not
+   (org-test-with-temp-text "A\nB\nC<point>"
+     (org-in-regexp "A\nB\nC" 1)))
+  ;; When optional argument VISUALLY is non-nil, return nil if at
+  ;; regexp boundaries.
+  (should
+   (org-test-with-temp-text "xx abc<point> xx"
+     (org-in-regexp "abc")))
+  (should-not
+   (org-test-with-temp-text "xx abc<point> xx"
+     (org-in-regexp "abc" nil t))))
+
+
 ;;; Navigation
 
 (ert-deftest test-org/end-of-meta-data ()
@@ -3275,7 +3352,13 @@ Paragraph<point>"
    (equal '("A" "B" "COLUMNS")
 	  (org-test-with-temp-text
 	      "* H\n:PROPERTIES:\n:COLUMNS: %25ITEM %A %20B\n:END:"
-	    (org-buffer-property-keys nil nil t)))))
+	    (org-buffer-property-keys nil nil t))))
+  ;; With non-nil IGNORE-MALFORMED malformed property drawers are silently ignored.
+  (should
+   (equal '("A")
+	  (org-test-with-temp-text
+	      "* a\n:PROPERTIES:\n:A: 1\n:END:\n* b\n:PROPERTIES:\nsome junk here\n:END:\n"
+	    (org-buffer-property-keys nil nil nil t)))))
 
 (ert-deftest test-org/property-values ()
   "Test `org-property-values' specifications."
@@ -3639,6 +3722,13 @@ Paragraph<point>"
   (should-error
    (org-test-with-temp-text "* H\n:PROPERTIES:\n:test: 1\n:END:"
      (org-entry-put 1 "test" 2)))
+  ;; Error when property name is invalid.
+  (should-error
+   (org-test-with-temp-text "* H\n:PROPERTIES:\n:test: 1\n:END:"
+     (org-entry-put 1 "no space" "value")))
+  (should-error
+   (org-test-with-temp-text "* H\n:PROPERTIES:\n:test: 1\n:END:"
+     (org-entry-put 1 "" "value")))
   ;; Set "TODO" property.
   (should
    (string-match (regexp-quote " TODO H")

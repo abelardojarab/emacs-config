@@ -1,4 +1,4 @@
-;;; ob-abc.el --- org-babel functions for template evaluation
+;;; ob-abc.el --- Org Babel Functions for ABC -*- lexical-binding: t; -*-
 
 ;; Copyright (C) Free Software Foundation
 
@@ -42,7 +42,7 @@
 
 (defun org-babel-expand-body:abc (body params)
   "Expand BODY according to PARAMS, return the expanded body."
-  (let ((vars (mapcar #'cdr (org-babel-get-header params :var))))
+  (let ((vars (org-babel--get-vars params)))
     (mapc
      (lambda (pair)
        (let ((name (symbol-name (car pair)))
@@ -59,12 +59,10 @@
   "Execute a block of ABC code with org-babel.  This function is
    called by `org-babel-execute-src-block'"
   (message "executing Abc source code block")
-  (let* ((result-params (split-string (or (cdr (assoc :results params)))))
-	 (cmdline (cdr (assoc :cmdline params)))
-	 (out-file ((lambda (el)
-		      (or el
-			  (error "abc code block requires :file header argument")))
-		    (replace-regexp-in-string "\.pdf$" ".ps" (cdr (assoc :file params)))))
+  (let* ((cmdline (cdr (assoc :cmdline params)))
+	 (out-file (let ((file (cdr (assq :file params))))
+		     (if file (replace-regexp-in-string "\.pdf$" ".ps" file)
+		       (error "abc code block requires :file header argument"))))
 	 (in-file (org-babel-temp-file "abc-"))
 	 (render (concat "abcm2ps" " " cmdline
 		      " -O " (org-babel-process-file-name out-file)
@@ -86,7 +84,7 @@
 
 ;; This function should be used to assign any variables in params in
 ;; the context of the session environment.
-(defun org-babel-prep-session:abc (session params)
+(defun org-babel-prep-session:abc (_session _params)
   "Return an error because abc does not support sessions."
   (error "ABC does not support sessions"))
 

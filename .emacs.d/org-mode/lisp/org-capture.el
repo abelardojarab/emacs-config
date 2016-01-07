@@ -1,6 +1,6 @@
-;;; org-capture.el --- Fast note taking in Org-mode
+;;; org-capture.el --- Fast note taking in Org-mode  -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2010-2015 Free Software Foundation, Inc.
+;; Copyright (C) 2010-2016 Free Software Foundation, Inc.
 
 ;; Author: Carsten Dominik <carsten at orgmode dot org>
 ;; Keywords: outlines, hypermedia, calendar, wp
@@ -47,20 +47,20 @@
 
 ;;; Code:
 
-(eval-when-compile
-  (require 'cl))
+(require 'cl-lib)
 (require 'org)
 
+(declare-function org-at-encrypted-entry-p "org-crypt" ())
 (declare-function org-datetree-find-date-create "org-datetree"
 		  (date &optional keep-restriction))
-(declare-function org-table-analyze "org-table" ())
-(declare-function org-table-goto-line "org-table" (N))
+(declare-function org-decrypt-entry "org-crypt" ())
+(declare-function org-encrypt-entry "org-crypt" ())
 (declare-function org-pop-to-buffer-same-window "org-compat"
 		  (&optional buffer-or-name norecord label))
-(declare-function org-at-encrypted-entry-p "org-crypt" ())
-(declare-function org-encrypt-entry "org-crypt" ())
-(declare-function org-decrypt-entry "org-crypt" ())
+(declare-function org-table-analyze "org-table" ())
+(declare-function org-table-goto-line "org-table" (N))
 
+(defvar org-end-time-was-given)
 (defvar org-remember-default-headline)
 (defvar org-remember-templates)
 (defvar org-table-hlines)
@@ -76,6 +76,9 @@
 ;; The following variable is scoped dynamically by org-protocol
 ;; to indicate that the link properties have already been stored
 (defvar org-capture-link-is-already-stored nil)
+
+(defvar org-capture-is-refiling nil
+  "Non-nil when capture process is refiling an entry.")
 
 (defgroup org-capture nil
   "Options concerning capturing new entries."
@@ -149,6 +152,12 @@ target       Specification of where the captured item should be placed.
              (file+datetree+prompt \"path/to/file\")
                  Will create a heading in a date tree, prompts for date
 
+             (file+weektree \"path/to/file\")
+                 Will create a heading in a week tree for today's date
+
+             (file+weektree+prompt \"path/to/file\")
+                 Will create a heading in a week tree, prompts for date
+
              (file+function \"path/to/file\" function-finding-location)
                  A function to find the right location in the file
 
@@ -219,15 +228,20 @@ properties are:
                      is finalized.
 
 The template defines the text to be inserted.  Often this is an
-org-mode entry (so the first line should start with a star) that
+Org mode entry (so the first line should start with a star) that
 will be filed as a child of the target headline.  It can also be
 freely formatted text.  Furthermore, the following %-escapes will
-be replaced with content and expanded in this order:
+be replaced with content and expanded:
 
-  %[pathname] Insert the contents of the file given by `pathname'.
+  %[pathname] Insert the contents of the file given by
+              `pathname'.  These placeholders are expanded at the very
+              beginning of the process so they can be used to extend the
+              current template.
   %(sexp)     Evaluate elisp `(sexp)' and replace it with the results.
-              For convenience, %:keyword (see below) placeholders within
-              the expression will be expanded prior to this.
+              Only placeholders pre-existing within the template, or
+              introduced with %[pathname] are expanded this way.  Since this
+              happens after expanding non-interactive %-escapes, those can
+              be used to fill the expression.
   %<...>      The result of format-time-string on the ... format specification.
   %t          Time stamp, date only.
   %T          Time stamp with date and time.
@@ -256,8 +270,8 @@ be replaced with content and expanded in this order:
               A default value and a completion table ca be specified like this:
               %^{prompt|default|completion2|completion3|...}.
   %?          After completing the template, position cursor here.
-  %\\n         Insert the text entered at the nth %^{prompt}, where `n' is
-              a number, starting from 1.
+  %\\N         Insert the text entered at the nth %^{prompt}, where N
+              is a number, starting from 1.
 
 Apart from these general escapes, you can access information specific to
 the link type that is created.  For example, calling `org-capture' in emails
@@ -277,7 +291,10 @@ gnus                    |  %:from %:fromname %:fromaddress
 gnus                    |  %:group, for messages also all email fields
 w3, w3m                 |  %:type %:url
 info                    |  %:type %:file %:node
-calendar                |  %:type %:date"
+calendar                |  %:type %:date
+
+When you need to insert a literal percent sign in the template,
+you can escape ambiguous cases with a backward slash, e.g., \\%i."
   :group 'org-capture
   :version "24.1"
   :type
@@ -320,6 +337,12 @@ calendar                |  %:type %:date"
 				(file :tag "  File"))
 			  (list :tag "File & Date tree, prompt for date"
 				(const :format "" file+datetree+prompt)
+				(file :tag "  File"))
+			  (list :tag "File & Week tree"
+				(const :format "" file+weektree)
+				(file :tag "  File"))
+			  (list :tag "File & Week tree, prompt for date"
+				(const :format "" file+weektree+prompt)
 				(file :tag "  File"))
 			  (list :tag "File & function"
 				(const :format "" file+function)
@@ -433,8 +456,8 @@ for a capture buffer.")
 
 Turning on this mode runs the normal hook `org-capture-mode-hook'."
   nil " Rem" org-capture-mode-map
-  (org-set-local
-   'header-line-format
+  (setq-local
+   header-line-format
    (substitute-command-keys
     "\\<org-capture-mode-map>Capture buffer.  Finish \\[org-capture-finalize], \
 refile \\[org-capture-refile], abort \\[org-capture-kill].")))
@@ -615,7 +638,7 @@ of the day at point (if any) or the current HH:MM time."
 			(org-capture-put :interrupted-clock
 					 (copy-marker org-clock-marker)))
 		    (org-clock-in)
-		    (org-set-local 'org-capture-clock-was-started t))
+		    (setq-local org-capture-clock-was-started t))
 		(error
 		 "Could not start the clock in this capture buffer")))
 	  (if (org-capture-get :immediate-finish)
@@ -792,7 +815,7 @@ already gone.  Any prefix argument will be passed to the refile command."
      "Refiling from a capture buffer makes only sense for `entry'-type templates"))
   (let ((pos (point))
 	(base (buffer-base-buffer (current-buffer)))
-	(org-refile-for-capture t)
+	(org-capture-is-refiling t)
 	(kill-buffer (org-capture-get :kill-buffer 'local)))
     (org-capture-put :kill-buffer nil)
     (org-capture-finalize)
@@ -898,21 +921,25 @@ Store them in the capture property list."
 	      (setq target-entry-p (and (derived-mode-p 'org-mode) (org-at-heading-p))))
 	  (error "No match for target regexp in file %s" (nth 1 target))))
 
-       ((memq (car target) '(file+datetree file+datetree+prompt))
+       ((memq (car target) '(file+datetree file+datetree+prompt file+weektree file+weektree+prompt))
 	(require 'org-datetree)
 	(set-buffer (org-capture-target-buffer (nth 1 target)))
 	(org-capture-put-target-region-and-position)
 	(widen)
-	;; Make a date tree entry, with the current date (or yesterday,
-	;; if we are extending dates for a couple of hours)
-	(org-datetree-find-date-create
+	;; Make a date/week tree entry, with the current date (or
+	;; yesterday, if we are extending dates for a couple of hours)
+	(funcall
+	 (cond
+	  ((memq (car target) '(file+weektree file+weektree+prompt))
+	   #'org-datetree-find-iso-week-create)
+	  (t #'org-datetree-find-date-create))
 	 (calendar-gregorian-from-absolute
 	  (cond
 	   (org-overriding-default-time
 	    ;; use the overriding default time
 	    (time-to-days org-overriding-default-time))
 
-	   ((eq (car target) 'file+datetree+prompt)
+	   ((memq (car target) '(file+datetree+prompt file+weektree+prompt))
 	    ;; prompt for date
 	    (let ((prompt-time (org-read-date
 				nil t nil "Date for tree entry:"
@@ -993,12 +1020,6 @@ a string, return it.  However, if it is the empty string, return
       (progn (org-capture-put :new-buffer t)
 	     (find-file-noselect (expand-file-name file org-directory)))))
 
-(defun org-capture-steal-local-variables (buffer)
-  "Install Org-mode local variables of BUFFER."
-  (mapc (lambda (v)
-	  (ignore-errors (org-set-local (car v) (cdr v))))
-	(buffer-local-variables buffer)))
-
 (defun org-capture-place-template (&optional inhibit-wconf-store)
   "Insert the template at the target location, and display the buffer.
 When `inhibit-wconf-store', don't store the window configuration, as it
@@ -1011,32 +1032,29 @@ may have been stored before."
   (widen)
   (outline-show-all)
   (goto-char (org-capture-get :pos))
-  (org-set-local 'org-capture-target-marker
-		 (point-marker))
-  (org-set-local 'outline-level 'org-outline-level)
-  (let* ((template (org-capture-get :template))
-	 (type (org-capture-get :type)))
-    (case type
-      ((nil entry) (org-capture-place-entry))
-      (table-line (org-capture-place-table-line))
-      (plain (org-capture-place-plain-text))
-      (item (org-capture-place-item))
-      (checkitem (org-capture-place-item))))
+  (setq-local outline-level 'org-outline-level)
+  (pcase (org-capture-get :type)
+    ((or `nil `entry) (org-capture-place-entry))
+    (`table-line (org-capture-place-table-line))
+    (`plain (org-capture-place-plain-text))
+    (`item (org-capture-place-item))
+    (`checkitem (org-capture-place-item)))
   (org-capture-mode 1)
-  (org-set-local 'org-capture-current-plist org-capture-plist))
+  (setq-local org-capture-current-plist org-capture-plist))
 
 (defun org-capture-place-entry ()
   "Place the template as a new Org entry."
   (let* ((txt (org-capture-get :template))
 	 (reversed (org-capture-get :prepend))
 	 (target-entry-p (org-capture-get :target-entry-p))
-	 level beg end file)
+	 level beg end)
 
     (and (org-capture-get :exact-position)
 	 (goto-char (org-capture-get :exact-position)))
     (cond
      ((not target-entry-p)
-      ;; Insert as top-level entry, either at beginning or at end of file
+      ;; Insert as top-level entry, either at beginning or at end of
+      ;; file.
       (setq level 1)
       (if reversed
 	  (progn (goto-char (point-min))
@@ -1135,7 +1153,7 @@ may have been stored before."
   (let* ((txt (org-capture-get :template))
 	 (target-entry-p (org-capture-get :target-entry-p))
 	 (table-line-pos (org-capture-get :table-line-pos))
-	 ind beg end)
+	 beg end)
     (cond
      ((org-capture-get :exact-position)
       (goto-char (org-capture-get :exact-position)))
@@ -1378,10 +1396,8 @@ Point will remain at the first line after the inserted text."
   "Go to the target location of a capture template.
 The user is queried for the template."
   (interactive)
-  (let* (org-select-template-temp-major-mode
-	 (entry (org-capture-select-template template-key)))
-    (unless entry
-      (error "No capture template selected"))
+  (let ((entry (org-capture-select-template template-key)))
+    (unless entry (error "No capture template selected"))
     (org-capture-set-plist entry)
     (org-capture-set-target-location)
     (org-pop-to-buffer-same-window (org-capture-get :buffer))
@@ -1527,43 +1543,35 @@ Lisp programs can force the template by setting KEYS to a string."
 (defun org-capture-fill-template (&optional template initial annotation)
   "Fill a template and return the filled template as a string.
 The template may still contain \"%?\" for cursor positioning."
-  (setq template (or template (org-capture-get :template)))
-  (when (stringp initial)
-    (setq initial (org-no-properties initial)))
-  (let* ((buffer (org-capture-get :buffer))
+  (let* ((template (or template (org-capture-get :template)))
+	 (buffer (org-capture-get :buffer))
 	 (file (buffer-file-name (or (buffer-base-buffer buffer) buffer)))
-	 (ct (org-capture-get :default-time))
-	 (dct (decode-time ct))
-	 (ct1
-	  (if (< (nth 2 dct) org-extend-today-until)
-	      (encode-time 0 59 23 (1- (nth 3 dct)) (nth 4 dct) (nth 5 dct))
-	    ct))
-	 (plist-p (if org-store-link-plist t nil))
-	 (v-c (and (> (length kill-ring) 0) (current-kill 0)))
+	 (time (let* ((c (or (org-capture-get :default-time) (current-time)))
+		      (d (decode-time c)))
+		 (if (< (nth 2 d) org-extend-today-until)
+		     (encode-time 0 59 23 (1- (nth 3 d)) (nth 4 d) (nth 5 d))
+		   c)))
+	 (v-t (format-time-string (org-time-stamp-format nil) time))
+	 (v-T (format-time-string (org-time-stamp-format t) time))
+	 (v-u (format-time-string (org-time-stamp-format nil t) time))
+	 (v-U (format-time-string (org-time-stamp-format t t) time))
+	 (v-c (and kill-ring (current-kill 0)))
 	 (v-x (or (org-get-x-clipboard 'PRIMARY)
 		  (org-get-x-clipboard 'CLIPBOARD)
 		  (org-get-x-clipboard 'SECONDARY)))
-	 (v-t (format-time-string (car org-time-stamp-formats) ct1))
-	 (v-T (format-time-string (cdr org-time-stamp-formats) ct1))
-	 (v-u (concat "[" (substring v-t 1 -1) "]"))
-	 (v-U (concat "[" (substring v-T 1 -1) "]"))
-	 ;; `initial' and `annotation' might habe been passed.
-	 ;; But if the property list has them, we prefer those values
+	 ;; `initial' and `annotation' might have been passed.  But if
+	 ;; the property list has them, we prefer those values.
 	 (v-i (or (plist-get org-store-link-plist :initial)
-		  initial
+		  (and (stringp initial) (org-no-properties initial))
 		  (org-capture-get :initial)
 		  ""))
-	 (v-a (or (plist-get org-store-link-plist :annotation)
-		  annotation
-		  (org-capture-get :annotation)
-		  ""))
-	 ;; Is the link empty?  Then we do not want it...
-	 (v-a (if (equal v-a "[[]]") "" v-a))
-	 (clipboards (remove nil (list v-i
-				       (org-get-x-clipboard 'PRIMARY)
-				       (org-get-x-clipboard 'CLIPBOARD)
-				       (org-get-x-clipboard 'SECONDARY)
-				       v-c)))
+	 (v-a
+	  (let ((a (or (plist-get org-store-link-plist :annotation)
+		       annotation
+		       (org-capture-get :annotation)
+		       "")))
+	    ;; Is the link empty?  Then we do not want it...
+	    (if (equal a "[[]]") "" a)))
 	 (l-re "\\[\\[\\(.*?\\)\\]\\(\\[.*?\\]\\)?\\]")
 	 (v-A (if (and v-a (string-match l-re v-a))
 		  (replace-match "[[\\1][%^{Link description}]]" nil nil v-a)
@@ -1572,203 +1580,254 @@ The template may still contain \"%?\" for cursor positioning."
 		  (replace-match "\\1" nil nil v-a)
 		v-a))
 	 (v-n user-full-name)
-	 (v-k (if (marker-buffer org-clock-marker)
-		  (org-no-properties org-clock-heading)))
+	 (v-k (and (marker-buffer org-clock-marker)
+		   (org-no-properties org-clock-heading)))
 	 (v-K (if (marker-buffer org-clock-marker)
 		  (org-make-link-string
 		   (buffer-file-name (marker-buffer org-clock-marker))
 		   org-clock-heading)))
 	 (v-f (or (org-capture-get :original-file-nondirectory) ""))
 	 (v-F (or (org-capture-get :original-file) ""))
-	 v-I
-	 (org-startup-folded nil)
-	 (org-inhibit-startup t)
-	 org-time-was-given org-end-time-was-given x
-	 prompt completions char time pos default histvar strings)
+	 (clipboards (delq nil
+			   (list v-i
+				 (org-get-x-clipboard 'PRIMARY)
+				 (org-get-x-clipboard 'CLIPBOARD)
+				 (org-get-x-clipboard 'SECONDARY)
+				 v-c))))
 
-    (setq org-store-link-plist
-	  (plist-put org-store-link-plist :annotation v-a)
-	  org-store-link-plist
-	  (plist-put org-store-link-plist :initial v-i))
-    (setq initial v-i)
+    (setq org-store-link-plist (plist-put org-store-link-plist :annotation v-a))
+    (setq org-store-link-plist (plist-put org-store-link-plist :initial v-i))
 
-    (unless template (setq template "") (message "No template") (ding)
-	    (sit-for 1))
+    (unless template
+      (setq template "")
+      (message "no template") (ding)
+      (sit-for 1))
     (save-window-excursion
       (org-switch-to-buffer-other-window (get-buffer-create "*Capture*"))
       (erase-buffer)
+      (setq buffer-file-name nil)
+      (setq mark-active nil)
       (insert template)
       (goto-char (point-min))
-      (org-capture-steal-local-variables buffer)
-      (setq buffer-file-name nil mark-active nil)
 
-      ;; %[] Insert contents of a file.
-      (goto-char (point-min))
-      (while (re-search-forward "%\\[\\(.+\\)\\]" nil t)
-	(unless (org-capture-escaped-%)
-	  (let ((start (match-beginning 0))
-		(end (match-end 0))
-		(filename (expand-file-name (match-string 1))))
-	    (goto-char start)
-	    (delete-region start end)
-	    (condition-case error
-		(insert-file-contents filename)
-	      (error (insert (format "%%![Couldn not insert %s: %s]"
-				     filename error)))))))
-
-      ;; The current time
-      (goto-char (point-min))
-      (while (re-search-forward "%<\\([^>\n]+\\)>" nil t)
-	(replace-match (format-time-string (match-string 1)) t t))
-
-      ;; Simple %-escapes
-      (goto-char (point-min))
-      (while (re-search-forward "%\\([tTuUaliAcxkKInfF]\\)" nil t)
-	(unless (org-capture-escaped-%)
-	  (when (and initial (equal (match-string 0) "%i"))
-	    (save-match-data
-	      (let* ((lead (buffer-substring
-			    (point-at-bol) (match-beginning 0))))
-		(setq v-i (mapconcat 'identity
-				     (org-split-string initial "\n")
-				     (concat "\n" lead))))))
-	  (replace-match (or (eval (intern (concat "v-" (match-string 1)))) "")
-			 t t)))
-
-      ;; From the property list
-      (when plist-p
-	(goto-char (point-min))
-	(while (re-search-forward "%\\(:[-a-zA-Z]+\\)" nil t)
+      ;; %[] insert contents of a file.
+      (save-excursion
+	(while (re-search-forward "%\\[\\(.+\\)\\]" nil t)
 	  (unless (org-capture-escaped-%)
-	    (and (setq x (or (plist-get org-store-link-plist
-					(intern (match-string 1))) ""))
-		 (replace-match x t t)))))
+	    (let ((start (match-beginning 0))
+		  (end (match-end 0))
+		  (filename (expand-file-name (match-string 1))))
+	      (goto-char start)
+	      (delete-region start end)
+	      (condition-case error
+		  (insert-file-contents filename)
+		(error (insert (format "%%![couldn not insert %s: %s]"
+				       filename
+				       error))))))))
 
-      ;; %() embedded elisp
-      (goto-char (point-min))
+      ;; Mark %() embedded elisp for later evaluation.
+      (org-capture-expand-embedded-elisp 'mark)
+
+      ;; Expand non-interactive templates.
+      (let ((regexp "%\\(:[-a-za-z]+\\|<\\([^>\n]+\\)>\\|[aAcfFikKlntTuUx]\\)"))
+	(save-excursion
+	  (while (re-search-forward regexp nil t)
+	    (let ((pos (copy-marker (match-beginning 0)))
+		  (end (copy-marker (match-end 0)))
+		  (value (match-string 1))
+		  (time-string (match-string 2)))
+	      (unless (org-capture-escaped-%)
+		(goto-char pos)
+		(delete-region pos end)
+		(let ((replacement
+		       (pcase (string-to-char value)
+			 (?< (format-time-string time-string))
+			 (?:
+			  (or (plist-get org-store-link-plist (intern value))
+			      ""))
+			 (?i (let ((lead (buffer-substring-no-properties
+					  (line-beginning-position) pos)))
+			       (mapconcat #'identity
+					  (split-string v-i "\n")
+					  (concat "\n" lead))))
+			 (?a v-a)
+			 (?A v-A)
+			 (?c v-c)
+			 (?f v-f)
+			 (?F v-F)
+			 (?k v-k)
+			 (?K v-K)
+			 (?l v-l)
+			 (?n v-n)
+			 (?t v-t)
+			 (?T v-T)
+			 (?u v-u)
+			 (?U v-U)
+			 (?x v-x))))
+		  (insert
+		   (if (org-capture-inside-embedded-elisp-p)
+		       (replace-regexp-in-string
+			"\"" "\\\\\"" replacement nil t)
+		     replacement)))
+		(set-marker pos nil)
+		(set-marker end nil))))))
+
+      ;; Expand %() embedded Elisp.  Limit to Sexp originally marked.
       (org-capture-expand-embedded-elisp)
 
-      ;; Turn on org-mode in temp buffer, set local variables
-      ;; This is to support completion in interactive prompts
+      ;; Expand interactive templates.  This is the last step so that
+      ;; template is mostly expanded when prompting happens.  Turn on
+      ;; Org mode and set local variables.  This is to support
+      ;; completion in interactive prompts.
       (let ((org-inhibit-startup t)) (org-mode))
-      ;; Interactive template entries
-      (goto-char (point-min))
-      (while (re-search-forward "%^\\({\\([^}]*\\)}\\)?\\([gGtTuUCLp]\\)?" nil t)
-	(unless (org-capture-escaped-%)
-	  (setq char (if (match-end 3) (match-string-no-properties 3))
-		prompt (if (match-end 2) (match-string-no-properties 2)))
-	  (goto-char (match-beginning 0))
-	  (replace-match "")
-	  (setq completions nil default nil)
-	  (when prompt
-	    (setq completions (org-split-string prompt "|")
-		  prompt (pop completions)
-		  default (car completions)
-		  histvar (intern (concat
-				   "org-capture-template-prompt-history::"
-				   (or prompt "")))
-		  completions (mapcar 'list completions)))
-	  (unless (boundp histvar) (set histvar nil))
-	  (cond
-	   ((member char '("G" "g"))
-	    (let* ((org-last-tags-completion-table
-		    (org-global-tags-completion-table
-		     (if (equal char "G")
-			 (org-agenda-files)
-		       (and file (list file)))))
-		   (org-add-colon-after-tag-completion t)
-		   (ins (org-icompleting-read
-			 (if prompt (concat prompt ": ") "Tags: ")
-			 'org-tags-completion-function nil nil nil
-			 'org-tags-history)))
-	      (setq ins (mapconcat 'identity
-				   (org-split-string
-				    ins (org-re "[^[:alnum:]_@#%]+"))
-				   ":"))
-	      (when (string-match "\\S-" ins)
-		(or (equal (char-before) ?:) (insert ":"))
-		(insert ins)
-		(or (equal (char-after) ?:) (insert ":"))
-		(and (org-at-heading-p)
-		     (let ((org-ignore-region t))
-		       (org-set-tags nil 'align))))))
-	   ((equal char "C")
-	    (cond ((= (length clipboards) 1) (insert (car clipboards)))
-		  ((> (length clipboards) 1)
-		   (insert (read-string "Clipboard/kill value: "
-					(car clipboards) '(clipboards . 1)
-					(car clipboards))))))
-	   ((equal char "L")
-	    (cond ((= (length clipboards) 1)
-		   (org-insert-link 0 (car clipboards)))
-		  ((> (length clipboards) 1)
-		   (org-insert-link 0 (read-string "Clipboard/kill value: "
-						   (car clipboards)
-						   '(clipboards . 1)
-						   (car clipboards))))))
-	   ((equal char "p")
-	    (org-set-property (org-no-properties prompt) nil))
-	   (char
-	    ;; These are the date/time related ones
-	    (setq org-time-was-given (equal (upcase char) char))
-	    (setq time (org-read-date (equal (upcase char) char) t nil
-				      prompt))
-	    (if (equal (upcase char) char) (setq org-time-was-given t))
-	    (org-insert-time-stamp time org-time-was-given
-				   (member char '("u" "U"))
-				   nil nil (list org-end-time-was-given)))
-	   (t
-	    (let (org-completion-use-ido)
-	      (push (org-completing-read-no-i
-		     (concat (if prompt prompt "Enter string")
-			     (if default (concat " [" default "]"))
-			     ": ")
-		     completions nil nil nil histvar default)
-		    strings)
-	      (insert (car strings)))))))
-      ;; Replace %n escapes with nth %^{...} string
-      (setq strings (nreverse strings))
-      (goto-char (point-min))
-      (while (re-search-forward "%\\\\\\([1-9][0-9]*\\)" nil t)
-	(unless (org-capture-escaped-%)
-	  (replace-match
-	   (nth (1- (string-to-number (match-string 1))) strings)
-	   nil t)))
+      (org-clone-local-variables buffer "\\`org-")
+      (let (strings)			; Stores interactive answers.
+	(save-excursion
+	  (let ((regexp "%\\^\\(?:{\\([^}]*\\)}\\)?\\([CgGLptTuU]\\)?"))
+	    (while (re-search-forward regexp nil t)
+	      (unless (org-capture-escaped-%)
+		(let* ((items
+			(and (match-end 1)
+			     (save-match-data
+			       (split-string (match-string-no-properties 1)
+					     "|"))))
+		       (prompt (nth 0 items))
+		       (default (nth 1 items))
+		       (completions (nthcdr 2 items))
+		       (histvar
+			(intern
+			 (concat "org-capture-template-prompt-history::"
+				 (or prompt ""))))
+		       (key (match-string 2)))
+		  (delete-region (match-beginning 0) (match-end 0))
+		  (pcase key
+		    ((or "G" "g")
+		     (let* ((org-last-tags-completion-table
+			     (org-global-tags-completion-table
+			      (cond ((equal key "G") (org-agenda-files))
+				    (file (list file))
+				    (t nil))))
+			    (org-add-colon-after-tag-completion t)
+			    (ins (mapconcat
+				  #'identity
+				  (org-split-string
+				   (completing-read
+				    (if prompt (concat prompt ": ") "Tags: ")
+				    'org-tags-completion-function nil nil nil
+				    'org-tags-history)
+				   "[^[:alnum:]_@#%]+")
+				  ":")))
+		       (when (org-string-nw-p ins)
+			 (unless (eq (char-before) ?:) (insert ":"))
+			 (insert ins)
+			 (unless (eq (char-after) ?:) (insert ":"))
+			 (and (org-at-heading-p)
+			      (let ((org-ignore-region t))
+				(org-set-tags nil 'align))))))
+		    ("C"
+		     (cond
+		      ((= (length clipboards) 1) (insert (car clipboards)))
+		      ((> (length clipboards) 1)
+		       (insert (read-string "Clipboard/kill value: "
+					    (car clipboards)
+					    '(clipboards . 1)
+					    (car clipboards))))))
+		    ("L"
+		     (cond ((= (length clipboards) 1)
+			    (org-insert-link 0 (car clipboards)))
+			   ((> (length clipboards) 1)
+			    (org-insert-link
+			     0
+			     (read-string "Clipboard/kill value: "
+					  (car clipboards)
+					  '(clipboards . 1)
+					  (car clipboards))))))
+		    ("p" (org-set-property prompt nil))
+		    ((guard key)
+		     ;; These are the date/time related ones.
+		     (let* ((upcase? (equal (upcase key) key))
+			    (org-time-was-given upcase?)
+			    (org-end-time-was-given)
+			    (time (org-read-date upcase? t nil prompt)))
+		       (org-insert-time-stamp
+			time org-time-was-given
+			(member key '("u" "U"))
+			nil nil (list org-end-time-was-given))))
+		    (_
+		     (push (org-completing-read-no-i
+			    (concat (or prompt "Enter string")
+				    (and default (format " [%s]" default))
+				    ": ")
+			    completions nil nil nil histvar default)
+			   strings)
+		     (insert (car strings)))))))))
+
+	;; Replace %n escapes with nth %^{...} string.
+	(setq strings (nreverse strings))
+	(save-excursion
+	  (while (re-search-forward "%\\\\\\([1-9][0-9]*\\)" nil t)
+	    (unless (org-capture-escaped-%)
+	      (replace-match
+	       (nth (1- (string-to-number (match-string 1))) strings)
+	       nil t)))))
+
       ;; Make sure there are no empty lines before the text, and that
-      ;; it ends with a newline character
-      (goto-char (point-min))
-      (while (looking-at "[ \t]*\n") (replace-match ""))
-      (if (re-search-forward "[ \t\n]*\\'" nil t) (replace-match "\n"))
-      ;; Return the expanded template and kill the temporary buffer
+      ;; it ends with a newline character.
+      (skip-chars-forward " \t\n")
+      (delete-region (point-min) (line-beginning-position))
+      (goto-char (point-max))
+      (skip-chars-backward " \t\n")
+      (delete-region (point) (point-max))
+      (insert "\n")
+
+      ;; Return the expanded template and kill the capture buffer.
       (untabify (point-min) (point-max))
       (set-buffer-modified-p nil)
-      (prog1 (buffer-string) (kill-buffer (current-buffer))))))
+      (prog1 (buffer-substring-no-properties (point-min) (point-max))
+	(kill-buffer (current-buffer))))))
 
 (defun org-capture-escaped-% ()
-  "Check if % was escaped - if yes, unescape it now."
-  (if (equal (char-before (match-beginning 0)) ?\\)
-      (progn
-	(delete-region (1- (match-beginning 0)) (match-beginning 0))
-	t)
-    nil))
+  "Non-nil if % was escaped.
+If yes, unescape it now.  Assume match-data contains the
+placeholder to check."
+  (save-excursion
+    (goto-char (match-beginning 0))
+    (let ((n (abs (skip-chars-backward "\\\\"))))
+      (delete-char (/ (1+ n) 2))
+      (= (% n 2) 1))))
 
-(defun org-capture-expand-embedded-elisp ()
-  "Evaluate embedded elisp %(sexp) and replace with the result."
-  (goto-char (point-min))
-  (while (re-search-forward "%(" nil t)
-    (unless (org-capture-escaped-%)
-      (goto-char (match-beginning 0))
-      (let ((template-start (point)))
-	(forward-char 1)
-	(let* ((sexp (read (current-buffer)))
-	       (result (org-eval
-			(org-capture--expand-keyword-in-embedded-elisp sexp))))
-	  (delete-region template-start (point))
-	  (when result
-	    (if (stringp result)
-		(insert result)
-	      (error "Capture template sexp `%s' must evaluate to string or nil"
-		     sexp))))))))
+(defun org-capture-expand-embedded-elisp (&optional mark)
+  "Evaluate embedded elisp %(sexp) and replace with the result.
+When optional MARK argument is non-nil, mark Sexp with a text
+property (`org-embedded-elisp') for later evaluation.  Only
+marked Sexp are evaluated when this argument is nil."
+  (save-excursion
+    (goto-char (point-min))
+    (while (re-search-forward "%(" nil t)
+      (cond
+       ((get-text-property (match-beginning 0) 'org-embedded-elisp)
+	(goto-char (match-beginning 0))
+	(let ((template-start (point)))
+	  (forward-char 1)
+	  (let* ((sexp (read (current-buffer)))
+		 (result (org-eval
+			  (org-capture--expand-keyword-in-embedded-elisp
+			   sexp))))
+	    (delete-region template-start (point))
+	    (cond
+	     ((not result) nil)
+	     ((stringp result) (insert result))
+	     (t (error
+		 "Capture template sexp `%s' must evaluate to string or nil"
+		 sexp))))))
+       ((not mark) nil)
+       ;; Only mark valid and non-escaped sexp.
+       ((org-capture-escaped-%) nil)
+       (t
+	(let ((end (with-syntax-table emacs-lisp-mode-syntax-table
+		     (ignore-errors (scan-sexps (1- (point)) 1)))))
+	  (when end
+	    (put-text-property (- (point) 2) end 'org-embedded-elisp t))))))))
 
 (defun org-capture--expand-keyword-in-embedded-elisp (attr)
   "Recursively replace capture link keywords in ATTR sexp.
@@ -1785,20 +1844,10 @@ Such keywords are prefixed with \"%:\".  See
 	(t attr)))
 
 (defun org-capture-inside-embedded-elisp-p ()
-  "Return non-nil if point is inside of embedded elisp %(sexp)."
-  (let (beg end)
-    (with-syntax-table emacs-lisp-mode-syntax-table
-      (save-excursion
-	;; `looking-at' and `search-backward' below do not match the "%(" if
-	;; point is in its middle
-	(when (equal (char-before) ?%)
-	  (backward-char))
-	(save-match-data
-	  (when (or (looking-at "%(") (search-backward "%(" nil t))
-	    (setq beg (point))
-	    (setq end (progn (forward-char) (forward-sexp) (1- (point)))))))
-      (when (and beg end)
-	(and (<= (point) end) (>= (point) beg))))))
+  "Non-nil if point is inside of embedded elisp %(sexp).
+Assume sexps have been marked with
+`org-capture-expand-embedded-elisp' beforehand."
+  (get-text-property (point) 'org-embedded-elisp))
 
 ;;;###autoload
 (defun org-capture-import-remember-templates ()

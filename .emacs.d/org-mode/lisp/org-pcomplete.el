@@ -1,6 +1,6 @@
 ;;; org-pcomplete.el --- In-buffer completion code
 
-;; Copyright (C) 2004-2015 Free Software Foundation, Inc.
+;; Copyright (C) 2004-2016 Free Software Foundation, Inc.
 ;;
 ;; Author: Carsten Dominik <carsten at orgmode dot org>
 ;;         John Wiegley <johnw at gnu dot org>
@@ -40,7 +40,7 @@
 (declare-function org-get-buffer-tags "org" ())
 (declare-function org-get-tags "org" ())
 (declare-function org-buffer-property-keys "org"
-		  (&optional include-specials include-defaults include-columns))
+		  (&optional specials defaults columns ignore-malformed))
 (declare-function org-entry-properties "org" (&optional pom which specific))
 
 ;;;; Customization variables
@@ -142,7 +142,6 @@ When completing for #+STARTUP, for example, this function returns
 		pcomplete-default-completion-function))))
 
 (defvar org-options-keywords)		 ; From org.el
-(defvar org-element-block-name-alist)	 ; From org-element.el
 (defvar org-element-affiliated-keywords) ; From org-element.el
 (declare-function org-get-export-keywords "org" ())
 (defun pcomplete/org-mode/file-option ()
@@ -155,16 +154,19 @@ When completing for #+STARTUP, for example, this function returns
 	    (mapcar (lambda (keyword) (concat keyword ": "))
 		    org-element-affiliated-keywords)
 	    (let (block-names)
-	      (dolist (block-info org-element-block-name-alist block-names)
-		(let ((name (car block-info)))
-		  (push (format "END_%s" name) block-names)
-		  (push (concat "BEGIN_"
-				name
-				;; Since language is compulsory in
-				;; source blocks, add a space.
-				(and (equal name "SRC") " "))
-			block-names)
-		  (push (format "ATTR_%s: " name) block-names))))
+	      (dolist (name
+		       '("CENTER" "COMMENT" "EXAMPLE" "EXPORT" "QUOTE" "SRC"
+			 "VERSE")
+		       block-names)
+		(push (format "END_%s" name) block-names)
+		(push (concat "BEGIN_"
+			      name
+			      ;; Since language is compulsory in
+			      ;; export blocks source blocks, add
+			      ;; a space.
+			      (and (member name '("EXPORT" "SRC")) " "))
+		      block-names)
+		(push (format "ATTR_%s: " name) block-names)))
 	    (mapcar (lambda (keyword) (concat keyword ": "))
 		    (org-get-export-keywords))))
    (substring pcomplete-stub 2)))
@@ -359,7 +361,7 @@ This needs more work, to handle headings with lots of spaces in them."
 	     (concat x ": "))
 	   (let ((lst (pcomplete-uniqify-list
 		       (copy-sequence
-			(org-buffer-property-keys nil t t)))))
+			(org-buffer-property-keys nil t t t)))))
 	     (dolist (prop (org-entry-properties))
 	       (setq lst (delete (car prop) lst)))
 	     lst))

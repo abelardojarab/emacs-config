@@ -1,5 +1,6 @@
-;;; org-indent.el --- Dynamic indentation for  Org-mode
-;; Copyright (C) 2009-2015 Free Software Foundation, Inc.
+;;; org-indent.el --- Dynamic indentation for Org    -*- lexical-binding: t; -*-
+
+;; Copyright (C) 2009-2016 Free Software Foundation, Inc.
 ;;
 ;; Author: Carsten Dominik <carsten at orgmode dot org>
 ;; Keywords: outlines, hypermedia, calendar, wp
@@ -41,6 +42,7 @@
 
 (eval-when-compile
   (require 'cl))
+(require 'cl-lib)
 
 (declare-function org-inlinetask-get-task-level "org-inlinetask" ())
 (declare-function org-inlinetask-in-task-p "org-inlinetask" ())
@@ -68,7 +70,7 @@ Delay used when the buffer to initialize is current.")
 Delay used when the buffer to initialize isn't current.")
 (defvar org-indent-agent-resume-delay '(0 0 100000)
   "Minimal time for other idle processes before switching back to agent.")
-(defvar org-indent-initial-marker nil
+(defvar org-indent--initial-marker nil
   "Position of initialization before interrupt.
 This is used locally in each buffer being initialized.")
 (defvar org-hide-leading-stars-before-indent-mode nil
@@ -138,14 +140,14 @@ during idle time."
     (setq org-indent-mode nil))
    (org-indent-mode
     ;; mode was turned on.
-    (org-set-local 'indent-tabs-mode nil)
-    (org-set-local 'org-indent-initial-marker (copy-marker 1))
+    (setq-local indent-tabs-mode nil)
+    (setq-local org-indent--initial-marker (copy-marker 1))
     (when org-indent-mode-turns-off-org-adapt-indentation
-      (org-set-local 'org-adapt-indentation nil))
+      (setq-local org-adapt-indentation nil))
     (when org-indent-mode-turns-on-hiding-stars
-      (org-set-local 'org-hide-leading-stars-before-indent-mode
-		     org-hide-leading-stars)
-      (org-set-local 'org-hide-leading-stars t))
+      (setq-local org-hide-leading-stars-before-indent-mode
+		  org-hide-leading-stars)
+      (setq-local org-hide-leading-stars t))
     (org-add-hook 'filter-buffer-substring-functions
 		  (lambda (fun start end delete)
 		    (org-indent-remove-properties-from-string
@@ -169,11 +171,11 @@ during idle time."
     (kill-local-variable 'org-adapt-indentation)
     (setq org-indent-agentized-buffers
 	  (delq (current-buffer) org-indent-agentized-buffers))
-    (when (markerp org-indent-initial-marker)
-      (set-marker org-indent-initial-marker nil))
+    (when (markerp org-indent--initial-marker)
+      (set-marker org-indent--initial-marker nil))
     (when (boundp 'org-hide-leading-stars-before-indent-mode)
-      (org-set-local 'org-hide-leading-stars
-		     org-hide-leading-stars-before-indent-mode))
+      (setq-local org-hide-leading-stars
+		  org-hide-leading-stars-before-indent-mode))
     (remove-hook 'filter-buffer-substring-functions
 		 (lambda (fun start end delete)
 		   (org-indent-remove-properties-from-string
@@ -209,7 +211,7 @@ When no more buffer is being watched, the agent suppress itself."
   (when org-indent-agent-resume-timer
     (cancel-timer org-indent-agent-resume-timer))
   (setq org-indent-agentized-buffers
-	(org-remove-if-not #'buffer-live-p org-indent-agentized-buffers))
+	(cl-remove-if-not #'buffer-live-p org-indent-agentized-buffers))
   (cond
    ;; Job done:  kill agent.
    ((not org-indent-agentized-buffers) (cancel-timer org-indent-agent-timer))
@@ -233,13 +235,13 @@ a time value."
        (let ((interruptp
 	      ;; Always nil unless interrupted.
 	      (catch 'interrupt
-		(and org-indent-initial-marker
-		     (marker-position org-indent-initial-marker)
-		     (org-indent-add-properties org-indent-initial-marker
+		(and org-indent--initial-marker
+		     (marker-position org-indent--initial-marker)
+		     (org-indent-add-properties org-indent--initial-marker
 						(point-max)
 						delay)
 		     nil))))
-	 (move-marker org-indent-initial-marker interruptp)
+	 (move-marker org-indent--initial-marker interruptp)
 	 ;; Job is complete: un-agentize buffer.
 	 (unless interruptp
 	   (setq org-indent-agentized-buffers
@@ -342,13 +344,14 @@ Flag will be non-nil if command is going to modify or delete an
 headline."
   (when org-indent-mode
     (setq org-indent-modified-headline-flag
-	  (save-excursion
-	    (goto-char beg)
-	    (save-match-data
-	      (or (and (org-at-heading-p) (< beg (match-end 0)))
-		  (re-search-forward org-outline-regexp-bol end t)))))))
+	  (org-with-wide-buffer
+	   (goto-char beg)
+	   (save-match-data
+	     (or (and (org-at-heading-p) (< beg (match-end 0)))
+		 (re-search-forward
+		  (org-with-limited-levels org-outline-regexp-bol) end t)))))))
 
-(defun org-indent-refresh-maybe (beg end dummy)
+(defun org-indent-refresh-maybe (beg end _)
   "Refresh indentation properties in an adequate portion of buffer.
 BEG and END are the positions of the beginning and end of the
 range of inserted text.  DUMMY is an unused argument.
@@ -358,19 +361,21 @@ This function is meant to be called by `after-change-functions'."
     (save-match-data
       ;; If a headline was modified or inserted, set properties until
       ;; next headline.
-      (if (or org-indent-modified-headline-flag
-	      (save-excursion
-		(goto-char beg)
-		(beginning-of-line)
-		(re-search-forward org-outline-regexp-bol end t)))
-	  (let ((end (save-excursion
-		       (goto-char end)
-		       (org-with-limited-levels (outline-next-heading))
-		       (point))))
-	    (setq org-indent-modified-headline-flag nil)
-	    (org-indent-add-properties beg end))
-	;; Otherwise, only set properties on modified area.
-	(org-indent-add-properties beg end)))))
+      (org-with-wide-buffer
+       (if (or org-indent-modified-headline-flag
+	       (save-excursion
+		 (goto-char beg)
+		 (beginning-of-line)
+		 (re-search-forward
+		  (org-with-limited-levels org-outline-regexp-bol) end t)))
+	   (let ((end (save-excursion
+			(goto-char end)
+			(org-with-limited-levels (outline-next-heading))
+			(point))))
+	     (setq org-indent-modified-headline-flag nil)
+	     (org-indent-add-properties beg end))
+	 ;; Otherwise, only set properties on modified area.
+	 (org-indent-add-properties beg end))))))
 
 (provide 'org-indent)
 

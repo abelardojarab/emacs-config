@@ -1,4 +1,4 @@
-;;; ob-calc.el --- org-babel functions for calc code evaluation
+;;; ob-calc.el --- Babel Functions for Calc          -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2010-2015 Free Software Foundation, Inc.
 
@@ -39,7 +39,7 @@
 (defvar org-babel-default-header-args:calc nil
   "Default arguments for evaluating an calc source block.")
 
-(defun org-babel-expand-body:calc (body params)
+(defun org-babel-expand-body:calc (body _params)
   "Expand BODY according to PARAMS, return the expanded body." body)
 
 (defvar org--var-syms) ; Dynamically scoped from org-babel-execute:calc
@@ -48,7 +48,7 @@
   "Execute a block of calc code with Babel."
   (unless (get-buffer "*Calculator*")
     (save-window-excursion (calc) (calc-quit)))
-  (let* ((vars (mapcar #'cdr (org-babel-get-header params :var)))
+  (let* ((vars (org-babel--get-vars params))
 	 (org--var-syms (mapcar #'car vars))
 	 (var-names (mapcar #'symbol-name org--var-syms)))
     (mapc
@@ -89,7 +89,9 @@
 	     (split-string (org-babel-expand-body:calc body params) "[\n\r]"))))
   (save-excursion
     (with-current-buffer (get-buffer "*Calculator*")
-      (calc-eval (calc-top 1)))))
+      (prog1
+        (calc-eval (calc-top 1))
+        (calc-pop 1)))))
 
 (defun org-babel-calc-maybe-resolve-var (el)
   (if (consp el)

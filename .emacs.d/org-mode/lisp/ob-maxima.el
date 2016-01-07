@@ -1,4 +1,4 @@
-;;; ob-maxima.el --- org-babel functions for maxima evaluation
+;;; ob-maxima.el --- Babel Functions for Maxima      -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2009-2015 Free Software Foundation, Inc.
 
@@ -48,7 +48,7 @@
 
 (defun org-babel-maxima-expand (body params)
   "Expand a block of Maxima code according to its header arguments."
-  (let ((vars (mapcar #'cdr (org-babel-get-header params :var))))
+  (let ((vars (org-babel--get-vars params)))
     (mapconcat 'identity
 	       (list
 		;; graphic output
@@ -98,7 +98,7 @@ This function is called by `org-babel-execute-src-block'."
 	  (org-babel-import-elisp-from-file tmp-file))))))
 
 
-(defun org-babel-prep-session:maxima (session params)
+(defun org-babel-prep-session:maxima (_session _params)
   (error "Maxima does not support sessions"))
 
 (defun org-babel-maxima-var-to-maxima (pair)

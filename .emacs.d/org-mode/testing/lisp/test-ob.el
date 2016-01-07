@@ -87,32 +87,6 @@ should still return the link."
 	     org-babel-src-block-regexp
 	     (replace-regexp-in-string body "" test-block)))))
 
-(ert-deftest test-org-babel/get-header ()
-  (should (not (org-babel-get-header
-		org-babel-default-header-args :doesnt-exist)))
-  (should(equal '((:session . "none"))
-		(org-babel-get-header
-		 org-babel-default-header-args :session)))
-  (should(equal '((:session . "none"))
-		(org-babel-get-header
-		 org-babel-default-header-args :session nil)))
-  (should (not (org-babel-get-header
-		org-babel-default-header-args :SESSION)))
-  (should (equal '((:tangle . "no"))
-		 (org-babel-get-header
-		  org-babel-default-header-args :tangle)))
-  ;; with OTHERS option
-  (should (equal org-babel-default-header-args
-		 (org-babel-get-header
-		  org-babel-default-header-args :doesnt-exist 'others)))
-  (should (equal org-babel-default-header-args
-		 (org-babel-get-header
-		  org-babel-default-header-args nil 'others)))
-  (should (null
-	   (assoc :noweb
-		  (org-babel-get-header
-		   org-babel-default-header-args :noweb 'others)))))
-
 (ert-deftest test-org-babel/default-inline-header-args ()
   (should(equal
 	  '((:session . "none")
@@ -602,21 +576,25 @@ on two lines
     (should (string= (org-babel-execute-src-block)
 		     "A literal example\non two lines\n for me."))))
 
-(ert-deftest test-ob/resolve-code-blocks-before-data-blocks ()
-  (org-test-with-temp-text "
-#+name: foo
-: bar
+(ert-deftest test-ob/ignore-reference-in-commented-headings ()
+  (should
+   (= 2
+      (org-test-with-temp-text
+	  "
+* COMMENT H1
+#+NAME: n
+: 1
 
-#+name: foo
-#+begin_src emacs-lisp
-  \"baz\"
-#+end_src
+* H2
+#+NAME: n
+: 2
 
-#+begin_src emacs-lisp :var foo=foo
-  foo
-#+end_src"
-    (org-babel-next-src-block 2)
-    (should (string= (org-babel-execute-src-block) "baz"))))
+* Code
+
+<point>#+BEGIN_SRC emacs-lisp :var x=n
+x
+#+END_SRC"
+	(org-babel-execute-src-block)))))
 
 (ert-deftest test-ob/do-not-resolve-to-partial-names-data ()
   (org-test-with-temp-text "
@@ -1058,9 +1036,9 @@ content\"
 (ert-deftest test-ob/org-babel-remove-result--results-html ()
   "Test `org-babel-remove-result' with :results html."
   (test-ob-verify-result-and-removed-result
-   "#+BEGIN_HTML
+   "#+BEGIN_EXPORT html
 <head><body></body></head>
-#+END_HTML"
+#+END_EXPORT"
 
    "* org-babel-remove-result
 #+begin_src emacs-lisp :results html
@@ -1072,11 +1050,11 @@ content\"
 (ert-deftest test-ob/org-babel-remove-result--results-latex ()
   "Test `org-babel-remove-result' with :results latex."
   (test-ob-verify-result-and-removed-result
-   "#+BEGIN_LaTeX
+   "#+BEGIN_EXPORT latex
 Line 1
 Line 2
 Line 3
-#+END_LaTeX"
+#+END_EXPORT"
 
    "* org-babel-remove-result
 #+begin_src emacs-lisp :results latex
@@ -1476,6 +1454,64 @@ echo \"$data\"
   ;; ... with internal escaped backslash-escaped double quote
   (should (equal "foo\\\"bar"
 		 (org-babel-script-escape "\"foo\\\\\\\"bar\""))))
+
+(ert-deftest ob/process-params-no-duplicates ()
+    (should (equal (org-babel-process-params '((:colname-names . 1)
+                                               (:rowname-names . 1)
+                                               (:result-params . 1)
+                                               (:result-type . 1)
+                                               (:var . "\"foo\"")))
+                   '((:var)
+		     (:colname-names . 1)
+		     (:rowname-names . 1)
+		     (:result-params . 1)
+		     (:result-type . value)))))
+
+(defun org-test-babel-confirm-evaluate (eval-value)
+  (org-test-with-temp-text (format "#+begin_src emacs-lisp :eval %s
+  nil
+#+end_src" eval-value)
+	(goto-char (point-min))
+	(let ((info (org-babel-get-src-block-info)))
+	   (org-babel-check-confirm-evaluate info))))
+
+(ert-deftest ob/check-eval ()
+  (let ((org-confirm-babel-evaluate t))
+    ;; Non-export tests
+    (dolist (pair '(("no" . nil)
+		    ("never" . nil)
+		    ("query" . query)
+		    ("yes" . query)))
+      (should (eq (org-test-babel-confirm-evaluate (car pair)) (cdr pair))))
+    ;; Export tests
+    (let ((org-babel-exp-reference-buffer t))
+      (dolist (pair '(("no" . nil)
+		      ("never" . nil)
+		      ("query" . query)
+		      ("yes" . query)
+		      ("never-export" . nil)
+		      ("no-export" . nil)
+		      ("query-export" . query)))
+	(message (car pair))
+	(should (eq (org-test-babel-confirm-evaluate (car pair)) (cdr pair))))))
+  (let ((org-confirm-babel-evaluate nil))
+    ;; Non-export tests
+    (dolist (pair '(("no" . nil)
+		    ("never" . nil)
+		    ("query" . query)
+		    ("yes" . t)))
+      (should (eq (org-test-babel-confirm-evaluate (car pair)) (cdr pair))))
+    ;; Export tests
+    (let ((org-babel-exp-reference-buffer t))
+      (dolist (pair '(("no" . nil)
+		      ("never" . nil)
+		      ("query" . query)
+		      ("yes" . t)
+		      ("never-export" . nil)
+		      ("no-export" . nil)
+		      ("query-export" . query)))
+	(message (car pair))
+	(should (eq (org-test-babel-confirm-evaluate (car pair)) (cdr pair)))))))
 
 (provide 'test-ob)
 

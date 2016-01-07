@@ -210,8 +210,8 @@ The following patterns are replaced in the string:
 
 (defadvice visit-tags-table (after org-ctags-load-tag-list activate compile)
   (when (and org-ctags-enabled-p tags-file-name)
-    (set (make-local-variable 'org-ctags-tag-list)
-         (org-ctags-all-tags-in-current-tags-table))))
+    (setq-local org-ctags-tag-list
+		(org-ctags-all-tags-in-current-tags-table))))
 
 
 (defun org-ctags-enable ()
@@ -273,11 +273,6 @@ Return the list."
   (replace-regexp-in-string (regexp-quote search) replace string t t))
 
 
-(defun y-or-n-minibuffer (prompt)
-  (let ((use-dialog-box nil))
-    (y-or-n-p prompt)))
-
-
 ;;; Internal functions =======================================================
 
 
@@ -302,12 +297,12 @@ The new topic will be titled NAME (or TITLE if supplied)."
 ;;;; Misc interoperability with etags system =================================
 
 
-(defadvice find-tag (before org-ctags-set-org-mark-before-finding-tag
-			    activate compile)
+(defadvice xref-find-definitions
+    (before org-ctags-set-org-mark-before-finding-tag activate compile)
   "Before trying to find a tag, save our current position on org mark ring."
   (save-excursion
-    (if (and (derived-mode-p 'org-mode) org-ctags-enabled-p)
-        (org-mark-ring-push))))
+    (when (and (derived-mode-p 'org-mode) org-ctags-enabled-p)
+      (org-mark-ring-push))))
 
 
 
@@ -359,7 +354,7 @@ visit the file and location where the tag is found."
         (old-pnt (point-marker))
         (old-mark (copy-marker (mark-marker))))
     (condition-case nil
-        (progn (find-tag name)
+        (progn (xref-find-definitions name)
                t)
       (error
        ;; only restore old location if find-tag raises error
@@ -499,8 +494,8 @@ its subdirectories contain large numbers of taggable files."
                      (expand-file-name (concat dir-name "/*")))))
       (cond
        ((eql 0 exitcode)
-        (set (make-local-variable 'org-ctags-tag-list)
-             (org-ctags-all-tags-in-current-tags-table)))
+        (setq-local org-ctags-tag-list
+		    (org-ctags-all-tags-in-current-tags-table)))
        (t
         ;; This seems to behave differently on Linux, so just ignore
         ;; error codes for now
@@ -528,7 +523,7 @@ a new topic."
        ((member tag org-ctags-tag-list)
         ;; Existing tag
         (push tag org-ctags-find-tag-history)
-        (find-tag tag))
+        (xref-find-definitions tag))
        (t
         ;; New tag
         (run-hook-with-args-until-success
