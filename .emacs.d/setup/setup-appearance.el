@@ -117,9 +117,9 @@ non-nil."
 ;; (load-theme 'leuven t)
 ;; (load-theme 'zerodark t)
 ;; (load-theme 'material t)
-;; (load-theme 'material-light t)
+(load-theme 'leuven t)
 ;; (load-theme 'faff t)
-(load-theme 'monokai t)
+;; (load-theme 'monokai t)
 
 ;; Syntax coloring
 (global-font-lock-mode t)
