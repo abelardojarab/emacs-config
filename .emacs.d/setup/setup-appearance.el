@@ -113,11 +113,11 @@ non-nil."
 
 ;; Load Atom dark theme
 ;; (load-theme 'atom-dark t)
-;; (load-theme 'zenburn t)
+(load-theme 'zenburn t)
 ;; (load-theme 'leuven t)
 ;; (load-theme 'zerodark t)
 ;; (load-theme 'material t)
-(load-theme 'leuven t)
+;; (load-theme 'leuven t)
 ;; (load-theme 'faff t)
 ;; (load-theme 'monokai t)
 
