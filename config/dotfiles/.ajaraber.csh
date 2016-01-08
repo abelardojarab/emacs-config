@@ -21,7 +21,6 @@ setenv socks_proxy http://proxy-socks.fm.intel.com:1080
 setenv no_proxy intel.com,.intel.com,10.0.0.0/8,192.168.0.0/16,localhost,127.0.0.0/8,134.134.0.0/16
 setenv GIT_PROXY_COMMAND /nfs/pdx/home/ajaraber/bin/gitproxy
 setenv GDK_NATIVE_WINDOWS 1
-setenv INTEL_CTK $HOME/workspace/frametools/extratools/ctk
 setenv EMACS_SERVER_FILE $HOME/.emacs.cache/server/server
 
 # Libraries for OpenAccess
