@@ -1,9 +1,14 @@
 # .fvwm/.fvwm2rc
-SetEnv fvwm_wallpaper $[HOME]/Images/Wallpapers/1468177.png
+SetEnv fvwm_wallpaper $[HOME]/Images/Wallpapers/fvwmwallpaper.png
 
 # Pixmap
 ImagePath $[HOME]/workspace/emacsfull/Images/Icons:$[HOME]/Images/Icons:/usr/share/icons/fvwm:/usr/share/icons/hicolor/16x16
 IconPath  $[HOME]/workspace/emacsfull/Images/Icons:$[HOME]/Images/Icons:/usr/share/icons/fvwm:/usr/share/icons/hicolor/16x16/apps:/usr/share/icons/HighContrast/scalable/apps-extra:/usr/share/icons/icons/hicolor/16x16/apps:/usr/share/icons/oxygen/16x16/apps:/usr/share/icons/oxygen/16x16/actions:/usr/share/icons/gnome/16x16/apps:/usr/share/icons/oxygen/16x16/categories:/usr/share/icons/hicolor/scalable/apps:/usr/share/icons/HighContrast/16x16/apps:/usr/share/icons/locolor/16x16/apps
+
+# Fonts
+InfoStoreAdd font_sans "xft:Calibri:pixelsize=12:encoding=iso10646-1"
+InfoStoreAdd font_mono "xft:Monaco:size=10:encoding=iso10646-1"
+DefaultFont "$[infostore.font_mono]"
 
 # Viewport and Virtual Desktop Setup
 DeskTopSize 4x4
@@ -14,7 +19,8 @@ EwmhBaseStruts 128 20 0 20
 OpaqueMoveSize -1
 TitleStyle Height 13
 ColormapFocus FollowsFocus
-WindowFont  *-fixed-*-*-*-20-*
+WindowFont "$[infostore.font_mono]"
+# WindowFont *-fixed-*-*-*-20-*
 
 # Note: FvwmPager will be swallowed by FvwmButtons (below)
 *FvwmPager: Fore grey
@@ -38,29 +44,34 @@ AddToFunc StartFunction
 # Init function
 DestroyFunc InitFunction
 AddToFunc   InitFunction
-+ I Exec exec feh --bg-fill ~/Bilder/Walls/blox.jpg
++ I Exec exec feh $[HOME]/Images/Wallpapers/fvwmwallpaper.png
 + I Exec exec conky
 
 # Window Decor
 DestroyDecor MyDecor
 AddToDecor   MyDecor
 + TitleStyle LeftJustified Height 22
-+ ButtonStyle 1 ActiveUp Vector 4 30x30@3 60x60@3 60x30@4 30x60@3 -- Flat
-+ ButtonStyle 1 ActiveDown Vector 4 30x30@3 60x60@3 60x30@4 30x60@3 -- Flat
-+ ButtonStyle 1 Inactive Vector 4 30x30@3 60x60@3 60x30@4 30x60@3 -- Flat
-+ ButtonStyle 4 ActiveUp Vector 5 30x60@3 60x60@3 60x50@3 30x50@3 30x60@3 -- Flat
-+ ButtonStyle 4 ActiveDown Vector 5 30x60@3 60x60@3 60x50@3 30x50@3 30x60@3 -- Flat
-+ ButtonStyle 4 Inactive Vector 5 30x60@3 60x60@3 60x50@3 30x50@3 30x60@3 -- Flat
-+ ButtonStyle 3 ActiveUp Vector 2 30x60@3 60x60@3 60x50@3 30x50@3 30x60@3 -- Flat
-+ ButtonStyle 3 ActiveDown Vector 2 30x60@3 60x60@3 60x50@3 30x50@3 30x60@3 -- Flat
-+ ButtonStyle 3 Inactive Vector 2 30x60@3 60x60@3 60x50@3 30x50@3 30x60@3 -- Flat
-+ ButtonStyle 2 ActiveUp Vector 7 30x30@3 30x60@3 60x60@3 60x30@3 30x30@3 30x35@3 60x35@3 -- Flat
-+ ButtonStyle 2 ActiveDown Vector 7 30x30@3 30x60@3 60x60@3 60x30@3 30x30@3 30x35@3 60x35@3 -- Flat
-+ ButtonStyle 2 Inactive Vector 7 30x30@3 30x60@3 60x60@3 60x30@3 30x30@3 30x35@3 60x35@3 -- Flat
-+ TitleStyle -- Flat
-+ BorderStyle Simple -- NoInset Flat
++ ButtonStyle 1 ActiveUp Vector 4 30x30@3 60x60@3 60x30@4 30x60@3
++ ButtonStyle 1 ActiveDown Vector 4 30x30@3 60x60@3 60x30@4 30x60@3
++ ButtonStyle 1 Inactive Vector 4 30x30@3 60x60@3 60x30@4 30x60@3
++ ButtonStyle 4 ActiveUp Vector 5 30x60@3 60x60@3 60x50@3 30x50@3 30x60@3
++ ButtonStyle 4 ActiveDown Vector 5 30x60@3 60x60@3 60x50@3 30x50@3 30x60@3
++ ButtonStyle 4 Inactive Vector 5 30x60@3 60x60@3 60x50@3 30x50@3 30x60@3
++ ButtonStyle 3 ActiveUp Vector 2 30x60@3 60x60@3 60x50@3 30x50@3 30x60@3
++ ButtonStyle 3 ActiveDown Vector 2 30x60@3 60x60@3 60x50@3 30x50@3 30x60@3
++ ButtonStyle 3 Inactive Vector 2 30x60@3 60x60@3 60x50@3 30x50@3 30x60@3
++ ButtonStyle 2 ActiveUp Vector 7 30x30@3 30x60@3 60x60@3 60x30@3 30x30@3 30x35@3 60x35@3
++ ButtonStyle 2 ActiveDown Vector 7 30x30@3 30x60@3 60x60@3 60x30@3 30x30@3 30x35@3 60x35@3
++ ButtonStyle 2 Inactive Vector 7 30x30@3 30x60@3 60x60@3 60x30@3 30x30@3 30x35@3 60x35@3
++ TitleStyle Centered
++ TitleStyle -- Raised
++ TitleStyle ( HGradient 128 3 #CAC3CA 30 #C2C1C9 20 #C2C1C9 30 #CAC3CA -- Flat )
++ BorderStyle Simple
 + ButtonStyle All -- UseTitleStyle
++ BorderStyle   Inactive -- HiddenHandles
++ BorderStyle   Active   -- HiddenHandles
 
+ButtonStyle All -- Raised
 # Colorsets
 
 # Window Deco
@@ -80,6 +91,7 @@ Colorset 10 fg #bbbbbb, bg #303030, sh #eeeeee, hi #303030
 HilightColor black gainsboro
 
 # Styles
+Style * Font "$[infostore.font_mono]"
 Style * IconBox 700x84-220+12, IconFill right bottom
 Style * SmartPlacement, RandomPlacement, ResizeOutline
 Style * BorderWidth 4, GrabFocus, IgnoreRestack, MinOverlapPlacement
@@ -87,23 +99,38 @@ Style * NoPPosition, NoTransientPPosition, ResizeOpaque, SloppyFocus
 Style * DecorateTransient, IconBox -132 110 -8 -8
 Style * EWMHMiniIconOverride
 Style * UseDecor MyDecor
-Style * BorderWidth 2, HandleWidth 2
 Style * MWMBorder, FirmBorder
 Style * SnapAttraction 3
 Style * GrabFocusTransientOff
 Style * WindowShadeSteps 20, WindowShadeScrolls
+
+# !Handles, !Borders, !Title
+Style * HandleWidth 4, BorderWidth 4
+Style "Wine" FPLenient, NoFuncHint, NoDecorHint, NoOLDecor
+Style "glretrace" !Title
+
+#  Similar focus behavior to xfce/openbox.
+Style * ClickToFocus
+Style * FPSortWindowlistByFocus
+Style * RaiseTransient
+Style * LowerTransient
+Style * StackTransientParent
+Style * EWMHUseStackingOrderHints
+
+# Buttons
 Style FvwmButtons WindowListSkip, NeverFocus, NoHandles, NoTitle, StaysOnTop, Sticky
 Style FvwmPager NeverFocus, NoHandles, NoTitle, StaysOnTop, Sticky
 Style FvwmTaskBar NoTitle, WindowListSkip, CirculateSkip, Sticky, BorderWidth 0, NoHandles, StaysOnTop
 Style FvwmTaskBar NeverFocus, Layer 0
 
 # Set up the geometry so that the buttons stack vertically on the left.
-*FvwmButtonsFont  *-fixed-*-*-*-20-*
-*FvwmButtons: ButtonGeometry 100x50+1800+0
+*FvwmButtonsFont  "$[infostore.font_mono]"
+#*FvwmButtonsFont   *-fixed-*-*-*-20-*
+*FvwmButtons: ButtonGeometry 100x50+0+0
 *FvwmButtonsFore blick
 *FvwmButtons: Colorset 7
 *FvwmButtons: BoxSize fixed
-*FvwmButtons: Rows 14
+*FvwmButtons: Rows 10
 *FvwmButtons: Columns 1
 *FvwmButtons: Frame 1
 *FvwmButtons: (1x2+0+0, Swallow "FvwmPager" 'FvwmPager *')
@@ -114,10 +141,6 @@ Style FvwmTaskBar NeverFocus, Layer 0
 *FvwmButtons(Title Glade, Icon glade.png, Action 'Exec "Glade" glade-3 &')
 *FvwmButtons(Title Wing, Icon wing.png, Action 'Exec "Wing" wing  &')
 *FvwmButtons(Title PyCharm, Icon pycharm.png, Action 'Exec "PyCharm" pycharms.sh &')
-*FvwmButtons(Title Sublime, Icon sublime.png, Action 'Exec "Sublime" sublime_text &')
-*FvwmButtons(Title Komodo, Icon komodo.png, Action 'Exec "Komodo" komodo &')
-*FvwmButtons(Title Geany, Icon kate.png, Action 'Exec "Geany" geany &')
-*FvwmButtons(Title Acrobat, Icon acroread.png, Action 'Exec "Acrobat" acroread &')
 *FvwmButtons(Title Firefox, Icon firefox.png, Action 'Exec "Firefox" firefox &')
 
 # AutoHiding Console
@@ -133,7 +156,8 @@ MenuStyle * ItemFormat "%|%5.5i%1.3l%2.3>%|"
 MenuStyle * VerticalItemSpacing 1 1, VerticalTitleSpacing 2 2
 MenuStyle * MenuColorset 7
 MenuStyle * ActiveColorset 8
-MenuStyle * Font *-fixed-*-*-*-20-*
+MenuStyle * "$[infostore.font_mono]"
+!MenuStyle * Font *-fixed-*-*-*-20-*
 
 DestroyMenu GraphicsCADSubMenu
 AddToMenu GraphicsCADSubMenu "Graphics/CAD" Title
@@ -378,7 +402,7 @@ Mouse 1 F   A   Resize-or-Raise
 Mouse 1 T   A   Move-or-Raise
 Mouse 1 I   A   Move-or-Iconify
 Mouse 2 I   A   Iconify
-Mouse 2 T  A   Menu Window-Ops Nop
+Mouse 2 T   A   Menu Window-Ops Nop
 
 # raise or lower window with mousebutton3
 Mouse 2 SF   A   Move-or-Raise
@@ -390,11 +414,12 @@ AddToFunc Move-or-Raise     "I" Raise
 + C Focus
 + M Move
 
-AddToFunc Maximize-func     "M" Maximize     0 100
+AddToFunc Maximize-func     "M" Maximize   0   100
++ I ThisWindow (!Maximized) Maximize ewmhiwa true 95 97
 + I ThisWindow (Maximized) DestroyWindowStyle
-+ I TestRc (NoMatch) WindowStyle, ResizeHintOverride, FixedPosition, FixedSize
-+ I UpdateStyles
-+ I ThisWindow (Maximized) Maximize ewmhiwa true 95 96
++ I TestRc (!Match) WindowStyle, ResizeHintOverride, FixedPosition, FixedSize
++ I TestRc (!Match) Raise
++ I TestRc (!Match) UpdateStyles
 + I TestRc (NoMatch) Maximize ewmhiwa true 95 96
 
 AddToFunc Move-or-Iconify   "I" Raise
@@ -433,9 +458,9 @@ DestroyModuleConfig FvwmTaskBar: *
 *FvwmTaskBar: MailCheck 0
 *FvwmTaskBar: ClockFormat %T [%d/%m/%y]
 *FvwmTaskBar: WindowButtonsRightMargin 124
-*FvwmTaskBar: Font *-fixed-*-*-*-20-*
-*FvwmTaskBar: SelFont *-fixed-*-*-*-20-*
-*FvwmTaskBar: StatusFont *-fixed-*-*-*-20-*
+*FvwmTaskBar: Font "$[infostore.font_mono]"
+*FvwmTaskBar: SelFont "$[infostore.font_mono]"
+*FvwmTaskBar: StatusFont "$[infostore.font_mono]"
 *FvwmTaskBar: TipsBack bisque
 *FvwmTaskBar: TipsFore black
 *FvwmTaskBar: Colorset 7

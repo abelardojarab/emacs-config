@@ -112,7 +112,7 @@ export EMACS_SERVER_FILE=$HOME/.emacs.cache/server/server
 export PYTHONPATH=~/workspace/pythonlibs/lib/python2.7/site-packages
 export PYTHONPATH=${PYTHONPATH}:/opt/oaScript/python2
 export LM_LICENSE_FILE=$HOME/flexlm/license.dat
-export _JAVA_OPTIONS=" -Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel -Djava.net.preferIPv4Stack=true -Dawt.useSystemAAFontSettings=on -Dswing.aatext=true -Xms512m -Xmx1024m -Dsun.java2d.opengl=true"
+export _JAVA_OPTIONS=" -Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel -Djava.net.preferIPv4Stack=true -Dawt.useSystemAAFontSettings=on -Dswing.aatext=true -Xms512m -Xmx1024m"
 export theHost=`hostname`
 alias lmli='/opt/cadence/installs/IC615/tools/bin/lmgrd -c /opt/cadence/installs/IC615/share/license/license.dat'
 
