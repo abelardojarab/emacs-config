@@ -3,7 +3,6 @@ SetEnv fvwm_wallpaper $[HOME]/Images/Wallpapers/wallpaper.png
 
 # Pixmap
 ImagePath $[HOME]/workspace/emacsfull/Images/Icons:$[HOME]/Images/Icons:/usr/share/icons/fvwm:/usr/share/icons/hicolor/16x16
-
 IconPath  $[HOME]/workspace/emacsfull/Images/Icons:$[HOME]/Images/Icons:/usr/share/icons/fvwm:/usr/share/icons/hicolor/16x16/apps:/usr/share/icons/HighContrast/scalable/apps-extra:/usr/share/icons/icons/hicolor/16x16/apps:/usr/share/icons/oxygen/16x16/apps:/usr/share/icons/oxygen/16x16/actions:/usr/share/icons/gnome/16x16/apps:/usr/share/icons/oxygen/16x16/categories:/usr/share/icons/hicolor/scalable/apps:/usr/share/icons/HighContrast/16x16/apps:/usr/share/icons/locolor/16x16/apps
 
 # Fonts
@@ -65,7 +64,6 @@ AddToDecor   MyDecoration
 + ButtonStyle 2 Inactive Vector 7 30x30@3 30x60@3 60x60@3 60x30@3 30x30@3 30x35@3 60x35@3
 + TitleStyle Centered
 + TitleStyle -- Raised
-+ TitleStyle ( HGradient 128 3 #CAC3CA 30 #C2C1C9 20 #C2C1C9 30 #CAC3CA )
 + BorderStyle Simple
 + ButtonStyle All -- UseTitleStyle
 + BorderStyle Inactive -- HiddenHandles
@@ -85,7 +83,7 @@ Colorset  9 fg #606060, bg #505050, sh #eeeeee, hi #303030
 Colorset 10 fg #bbbbbb, bg #303030, sh #eeeeee, hi #303030
 
 # Gainsboro is a light grey
-HilightColor black gainsboro
+HilightColor black grey
 
 # Styles
 Style * Font "$[infostore.font_mono]"
@@ -125,7 +123,7 @@ Style FvwmTaskBar NeverFocus, Layer 0
 
 # Set up the geometry so that the buttons stack vertically on the left.
 *FvwmButtonsFont  "$[infostore.font_mono]"
-*FvwmButtons: ButtonGeometry 100x50+0+0
+*FvwmButtons: ButtonGeometry 100x50+1500+0
 *FvwmButtonsFore blick
 *FvwmButtons: Colorset 7
 *FvwmButtons: BoxSize fixed
@@ -176,6 +174,7 @@ Mouse 0 R N Menu MainMenu
 
 AddToMenu MainMenu "Main Menu" Title
 + "Terminal" Exec exec gnome-terminal
++ "Home" Exec exec pcmanfm
 + "xterm" Exec exec xterm -fg green -bg black -vb
 + "Net" Popup NetSubMenu
 + "Graphics/CAD" Popup GraphicsCADSubMenu
@@ -422,12 +421,12 @@ AddToFunc Resize-or-Raise   "I" Raise
 + M Resize
 
 AddToFunc Maximize-func     "M" Maximize   0   100
-+ I ThisWindow (!Maximized) Maximize ewmhiwa true 95 97
++ I ThisWindow (!Maximized) Maximize ewmhiwa true 94 98
 + I ThisWindow (Maximized) DestroyWindowStyle
 + I TestRc (!Match) WindowStyle, ResizeHintOverride, FixedPosition, FixedSize
 + I TestRc (!Match) Raise
 + I TestRc (!Match) UpdateStyles
-+ I TestRc (NoMatch) Maximize ewmhiwa true 95 96
++ I TestRc (NoMatch) Maximize ewmhiwa true 94 98
 
 DestroyFunc WheelScroll
 AddToFunc WheelScroll I PipeRead 'case $0 in \
