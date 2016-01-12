@@ -1,17 +1,18 @@
 # .fvwm/.fvwm2rc
-SetEnv fvwm_wallpaper $[HOME]/Images/Wallpapers/fvwmwallpaper.png
+SetEnv fvwm_wallpaper $[HOME]/Images/Wallpapers/wallpaper.png
 
 # Pixmap
 ImagePath $[HOME]/workspace/emacsfull/Images/Icons:$[HOME]/Images/Icons:/usr/share/icons/fvwm:/usr/share/icons/hicolor/16x16
+
 IconPath  $[HOME]/workspace/emacsfull/Images/Icons:$[HOME]/Images/Icons:/usr/share/icons/fvwm:/usr/share/icons/hicolor/16x16/apps:/usr/share/icons/HighContrast/scalable/apps-extra:/usr/share/icons/icons/hicolor/16x16/apps:/usr/share/icons/oxygen/16x16/apps:/usr/share/icons/oxygen/16x16/actions:/usr/share/icons/gnome/16x16/apps:/usr/share/icons/oxygen/16x16/categories:/usr/share/icons/hicolor/scalable/apps:/usr/share/icons/HighContrast/16x16/apps:/usr/share/icons/locolor/16x16/apps
 
 # Fonts
 InfoStoreAdd font_sans "xft:Calibri:pixelsize=12:encoding=iso10646-1"
-InfoStoreAdd font_mono "xft:Monaco:size=10:encoding=iso10646-1"
+InfoStoreAdd font_mono "xft:Consolas:size=10:encoding=iso10646-1"
 DefaultFont "$[infostore.font_mono]"
 
 # Viewport and Virtual Desktop Setup
-DeskTopSize 4x4
+DeskTopSize 3x3
 EdgeScroll 0 0
 EdgeThickness 2
 EdgeResistance 400
@@ -44,13 +45,12 @@ AddToFunc StartFunction
 # Init function
 DestroyFunc InitFunction
 AddToFunc   InitFunction
-+ I Exec exec feh $[HOME]/Images/Wallpapers/fvwmwallpaper.png
++ I Exec exec feh $[fvwm_wallpaper]
 + I Exec exec conky
 
 # Window Decor
-DestroyDecor MyDecor
-AddToDecor   MyDecor
-+ TitleStyle LeftJustified Height 22
+DestroyDecor MyDecoration
+AddToDecor   MyDecoration
 + ButtonStyle 1 ActiveUp Vector 4 30x30@3 60x60@3 60x30@4 30x60@3
 + ButtonStyle 1 ActiveDown Vector 4 30x30@3 60x60@3 60x30@4 30x60@3
 + ButtonStyle 1 Inactive Vector 4 30x30@3 60x60@3 60x30@4 30x60@3
@@ -65,14 +65,11 @@ AddToDecor   MyDecor
 + ButtonStyle 2 Inactive Vector 7 30x30@3 30x60@3 60x60@3 60x30@3 30x30@3 30x35@3 60x35@3
 + TitleStyle Centered
 + TitleStyle -- Raised
-+ TitleStyle ( HGradient 128 3 #CAC3CA 30 #C2C1C9 20 #C2C1C9 30 #CAC3CA -- Flat )
++ TitleStyle ( HGradient 128 3 #CAC3CA 30 #C2C1C9 20 #C2C1C9 30 #CAC3CA )
 + BorderStyle Simple
 + ButtonStyle All -- UseTitleStyle
-+ BorderStyle   Inactive -- HiddenHandles
-+ BorderStyle   Active   -- HiddenHandles
-
-ButtonStyle All -- Raised
-# Colorsets
++ BorderStyle Inactive -- HiddenHandles
++ BorderStyle Active
 
 # Window Deco
 Colorset  3 fg #9999CC, bg #9999CC
@@ -98,7 +95,7 @@ Style * BorderWidth 4, GrabFocus, IgnoreRestack, MinOverlapPlacement
 Style * NoPPosition, NoTransientPPosition, ResizeOpaque, SloppyFocus
 Style * DecorateTransient, IconBox -132 110 -8 -8
 Style * EWMHMiniIconOverride
-Style * UseDecor MyDecor
+Style * UseDecor MyDecoration
 Style * MWMBorder, FirmBorder
 Style * SnapAttraction 3
 Style * GrabFocusTransientOff
@@ -108,6 +105,9 @@ Style * WindowShadeSteps 20, WindowShadeScrolls
 Style * HandleWidth 4, BorderWidth 4
 Style "Wine" FPLenient, NoFuncHint, NoDecorHint, NoOLDecor
 Style "glretrace" !Title
+
+# Speed up window operations at the expense of a bit of RAM.
+Style * BackingStore, SaveUnder
 
 #  Similar focus behavior to xfce/openbox.
 Style * ClickToFocus
@@ -125,7 +125,6 @@ Style FvwmTaskBar NeverFocus, Layer 0
 
 # Set up the geometry so that the buttons stack vertically on the left.
 *FvwmButtonsFont  "$[infostore.font_mono]"
-#*FvwmButtonsFont   *-fixed-*-*-*-20-*
 *FvwmButtons: ButtonGeometry 100x50+0+0
 *FvwmButtonsFore blick
 *FvwmButtons: Colorset 7
@@ -139,7 +138,6 @@ Style FvwmTaskBar NeverFocus, Layer 0
 *FvwmButtons(Title Emacs, Icon emacs.png, Action 'Exec "Emacs Server" emacs &')
 *FvwmButtons(Title EmacsClient, Icon emacs.png, Action 'Exec "Emacs Client" emacsclient --server-file ~/.emacs.cache/server/server -c &')
 *FvwmButtons(Title Glade, Icon glade.png, Action 'Exec "Glade" glade-3 &')
-*FvwmButtons(Title Wing, Icon wing.png, Action 'Exec "Wing" wing  &')
 *FvwmButtons(Title PyCharm, Icon pycharm.png, Action 'Exec "PyCharm" pycharms.sh &')
 *FvwmButtons(Title Firefox, Icon firefox.png, Action 'Exec "Firefox" firefox &')
 
@@ -157,7 +155,6 @@ MenuStyle * VerticalItemSpacing 1 1, VerticalTitleSpacing 2 2
 MenuStyle * MenuColorset 7
 MenuStyle * ActiveColorset 8
 MenuStyle * "$[infostore.font_mono]"
-!MenuStyle * Font *-fixed-*-*-*-20-*
 
 DestroyMenu GraphicsCADSubMenu
 AddToMenu GraphicsCADSubMenu "Graphics/CAD" Title
@@ -381,7 +378,7 @@ AddToFunc           FullScreen
 # L=caps lock
 # A=any modifier
 
-# widows close,max,mini
+# windows close,max,mini
 Mouse 0 4   A       Iconify
 Mouse 0 2   A       Maximize-func
 Mouse 0 1   A       Close
@@ -414,14 +411,6 @@ AddToFunc Move-or-Raise     "I" Raise
 + C Focus
 + M Move
 
-AddToFunc Maximize-func     "M" Maximize   0   100
-+ I ThisWindow (!Maximized) Maximize ewmhiwa true 95 97
-+ I ThisWindow (Maximized) DestroyWindowStyle
-+ I TestRc (!Match) WindowStyle, ResizeHintOverride, FixedPosition, FixedSize
-+ I TestRc (!Match) Raise
-+ I TestRc (!Match) UpdateStyles
-+ I TestRc (NoMatch) Maximize ewmhiwa true 95 96
-
 AddToFunc Move-or-Iconify   "I" Raise
 + M Move
 + C Iconify
@@ -431,6 +420,14 @@ AddToFunc Resize-or-Raise   "I" Raise
 + C Raise
 + C Focus
 + M Resize
+
+AddToFunc Maximize-func     "M" Maximize   0   100
++ I ThisWindow (!Maximized) Maximize ewmhiwa true 95 97
++ I ThisWindow (Maximized) DestroyWindowStyle
++ I TestRc (!Match) WindowStyle, ResizeHintOverride, FixedPosition, FixedSize
++ I TestRc (!Match) Raise
++ I TestRc (!Match) UpdateStyles
++ I TestRc (NoMatch) Maximize ewmhiwa true 95 96
 
 DestroyFunc WheelScroll
 AddToFunc WheelScroll I PipeRead 'case $0 in \
@@ -533,7 +530,6 @@ Key KP_Next  A C  MoveAndGotoPage  2 2
 
 # Icon Manager
 DestroyModuleConfig FvwmIconMan
-
 *FvwmIconMan: NumManagers 1
 *FvwmIconMan: Colorset 40
 *FvwmIconMan: DrawIcons false
@@ -541,7 +537,7 @@ DestroyModuleConfig FvwmIconMan
 *FvwmIconMan: FocusAndSelectColorset 40
 *FvwmIconMan: FocusButton flat
 *FvwmIconMan: FocusColorset 40
-*FvwmIconMan: Font *-fixed-*-*-*-20-*
+*FvwmIconMan: Font "$[infostore.font_mono]"
 *FvwmIconMan: Format %t
 *FvwmIconMan: IconButton flat
 *FvwmIconMan: IconColorset 40
@@ -561,3 +557,10 @@ DestroyModuleConfig FvwmIconMan
 *FvwmIconMan: Action   Mouse   3  N sendcommand Iconify
 *FvwmIconMan: ButtonGeometry 150x20
 *FvwmIconMan: MaxButtonWidth 300
+
+# The following settings are interpreted by EMACS, do not remove them.
+# Local Variables:
+# mode: shell-script
+# fill-column: 80
+# coding: utf-8
+# End:
