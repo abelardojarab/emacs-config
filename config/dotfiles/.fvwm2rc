@@ -1,5 +1,5 @@
 # .fvwm/.fvwm2rc
-SetEnv fvwm_wallpaper $[HOME]/Images/Wallpapers/wallpaper.png
+SetEnv fvwm_wallpaper $[HOME]/workspace/emacsfull/Images/Wallpapers/536303d1311006587.png
 
 # Pixmap
 ImagePath $[HOME]/workspace/emacsfull/Images/Icons:$[HOME]/Images/Icons:/usr/share/icons/fvwm:/usr/share/icons/hicolor/16x16
