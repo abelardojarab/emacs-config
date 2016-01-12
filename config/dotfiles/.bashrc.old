@@ -165,7 +165,7 @@ export SNPS_ICV_ROOT=/opt/synopsys/icvalidator/H-2013.06
 export PATH=$DC_HOME/bin:$STAR_RCXT_HOME/bin:$SNPS_HSPICE_ROOT/hspice/bin:$SNPS_COSMOSSCOPE_ROOT/ai_bin:$PATH
 export PATH=$SNPS_ICWB_ROOT/bin/amd64:$SNPS_ICV_ROOT/bin/SUSE.64:$PATH
 export LM_LICENSE_FILE=$LM_LICENSE_FILE:$HOME/flexlm/synopsys.dat
-alias starrc='StarXtract' 
+alias starrc='StarXtract'
 
 # Mentor settings
 export MODELSIMROOT=/opt/mentor/modelsim/6.5f
@@ -177,6 +177,9 @@ export LM_LICENSE_FILE=$LM_LICENSE_FILE:$HOME/flexlm/calibre.dat:$HOME/flexlm/mo
 
 # Matlab settings
 export LM_LICENSE_FILE=$LM_LICENSE_FILE:$HOME/flexlm/matlab.dat
-export PATH=/opt/PyCharm/4.0.6/bin:/opt/IBM/SPSS/Statistics/22/bin:$PYTHONPATH/bin:$PATH:$HOME/workspace/frametools/bin
 
+# JetBrains settings
+export PATH=/opt/CLion/1.0.4/bin:/opt/PyCharm/4.0.6/bin:/opt/IBM/SPSS/Statistics/22/bin:$PATH
 
+# Extra settings
+export PATH=$PYTHONPATH/bin:$PATH:$HOME/workspace/frametools/bin
