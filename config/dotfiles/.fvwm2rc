@@ -124,7 +124,7 @@ Style FvwmTaskBar NeverFocus, Layer 0
 
 # Set up the geometry so that the buttons stack vertically on the left.
 *FvwmButtonsFont  "$[infostore.font_mono]"
-*FvwmButtons: ButtonGeometry 100x50+1500+0
+*FvwmButtons: ButtonGeometry 100x50+1940+0
 *FvwmButtonsFore blick
 *FvwmButtons: Colorset 7
 *FvwmButtons: BoxSize fixed
@@ -423,12 +423,12 @@ AddToFunc Resize-or-Raise   "I" Raise
 + M Resize
 
 AddToFunc Maximize-func     "M" Maximize   0   100
-+ I ThisWindow (!Maximized) Maximize ewmhiwa true 94 98
++ I ThisWindow (!Maximized) Maximize ewmhiwa true 95 98
 + I ThisWindow (Maximized) DestroyWindowStyle
 + I TestRc (!Match) WindowStyle, ResizeHintOverride, FixedPosition, FixedSize
 + I TestRc (!Match) Raise
 + I TestRc (!Match) UpdateStyles
-+ I TestRc (NoMatch) Maximize ewmhiwa true 94 98
++ I TestRc (NoMatch) Maximize ewmhiwa true 95 98
 
 DestroyFunc WheelScroll
 AddToFunc WheelScroll I PipeRead 'case $0 in \
@@ -560,7 +560,9 @@ DestroyModuleConfig FvwmIconMan
 *FvwmIconMan: MaxButtonWidth 300
 
 # Application specific style settings
-Style Conky	!Title, Sticky, WindowListSkip, StaysOnBottom, NeverFocus
+Style conky !Title, Sticky, WindowListSkip, StaysOnBottom, NeverFocus
+Style plank !Title, !Handles, StaysOnTop, Sticky, NeverFocus, WindowListSkip, CirculateSkip, BorderWidth 1, HandleWidth 0
+Style docky !Title, !Handles, Sticky, NeverFocus, WindowListSkip, CirculateSkip, BorderWidth 1, HandleWidth 0
 
 # The following settings are interpreted by EMACS, do not remove them.
 # Local Variables:

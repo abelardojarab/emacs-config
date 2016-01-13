@@ -1,0 +1,126 @@
+# Use Xft?
+use_xft yes
+xftfont Consolas:size=12
+xftalpha 0.8
+text_buffer_size 2048
+imlib_cache_size 10
+double_buffer yes
+
+# Update interval in seconds
+update_interval 2
+
+# This is the number of times Conky will update before quitting.
+# Set to zero to run forever.
+total_run_times 0
+
+# Create own window instead of using desktop (required in nautilus)
+own_window yes
+own_window_transparent yes
+own_window_type desktop
+own_window_hints undecorated,below,sticky,skip_taskbar,skip_pager
+
+# Minimum size of text area
+minimum_size 300 300
+
+# Draw shades?
+draw_shades yes
+
+# Draw outlines?
+draw_outline no
+
+# Draw borders around text
+draw_borders no
+
+# Stippled borders?
+stippled_borders 0
+
+# border width
+border_width 1
+
+# Default colors and also border colors
+default_color white
+own_window_colour white
+
+# Text alignment, other possible values are commented
+alignment top_left
+#alignment top_right
+#alignment bottom_left
+#alignment bottom_right
+
+# Gap between borders of screen and text
+# same thing as passing -x at command line
+gap_x 35
+gap_y 50
+
+# Subtract file system buffers from used memory?
+no_buffers yes
+
+# set to yes if you want all text to be in uppercase
+uppercase no
+
+# number of cpu samples to average
+# set to 1 to disable averaging
+cpu_avg_samples 2
+
+# number of net samples to average
+# set to 1 to disable averaging
+net_avg_samples 2
+
+# Force UTF8? note that UTF8 support required XFT
+override_utf8_locale yes
+
+# Add spaces to keep things from moving about? This only affects certain objects.
+use_spacer left
+TEXT
+${font Unnamed Cambria:size=16}S${color B8A0C8}tatus${color}${font}
+Operating System: ${alignr}Ubuntu 14.04
+Kernel: ${alignr}${kernel}
+CPU1: ${alignr}${cpubar cpu1 8,60}
+CPU2: ${alignr}${cpubar cpu2 8,60}
+RAM: ${alignr}${membar 8,60}
+SWAP: ${alignr}${swapbar 8,60}
+HDD: ${alignr}${fs_bar 8,60 /home}
+Battery: ${alignr}${battery_bar 8,60 BAT0}
+Temp: ${alignr}${acpitemp}°C
+Uptime: ${alignr}${uptime}
+
+${hr 2}
+${font Unnamed Cambria:size=16}M${color B8A0C8}emory${color} U${color B8A0C8}ssage${color}${font}
+1. ${top_mem name 1} ${alignr}${top_mem mem_res 1}
+2. ${top_mem name 2} ${alignr}${top_mem mem_res 2}
+3. ${top_mem name 3} ${alignr}${top_mem mem_res 3}
+4. ${top_mem name 4} ${alignr}${top_mem mem_res 4}
+5. ${top_mem name 5} ${alignr}${top_mem mem_res 5}
+
+${hr 2}
+${font Unnamed Cambria:size=16}C${color B8A0C8}PU${color} U${color B8A0C8}ssage${color}${font}
+1. ${color2}${top_mem name 1}${color}${alignr}${top cpu 1} %
+2. ${color2}${top_mem name 2}${color}${alignr}${top cpu 2} %
+3. ${color2}${top_mem name 3}${color}${alignr}${top cpu 3} %
+4. ${color2}${top_mem name 4}${color}${alignr}${top cpu 4} %
+5. ${color2}${top_mem name 5}${color}${alignr}${top cpu 5} %
+
+${hr 2}
+${font Unnamed Cambria:size=16}N${color B8A0C8}etwork${color}${font}
+${if_existing /proc/net/route eth4}
+Up: ${alignr}${upspeedgraph eth4 8,60 8434A4 A672CF}
+Down: ${alignr}${downspeedgraph eth4 8,60 8434A4 A672CF}
+Upload: ${alignr}${totalup eth4}
+Download: ${alignr}${totaldown eth4}
+Local Ip: ${alignr}${addr eth4}
+${endif}
+${if_existing /proc/net/route wlan0}
+Up: ${alignr}${upspeedgraph wlan0 8,60 8434A4 A672CF}
+Down: ${alignr}${downspeedgraph wlan0 8,60 8434A4 A672CF}
+Upload: ${alignr}${totalup wlan0}
+Download: ${alignr}${totaldown wlan0}
+Signal: ${wireless_link_qual eth1}% ${alignr}${wireless_link_bar 8,60 eth1}
+Local IP: ${alignr}${addr wlan0}
+${endif}
+
+# The following settings are interpreted by EMACS, do not remove them.
+# Local Variables:
+# mode: shell-script
+# fill-column: 80
+# coding: utf-8
+# End:
