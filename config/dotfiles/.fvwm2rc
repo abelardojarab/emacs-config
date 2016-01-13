@@ -131,7 +131,7 @@ Style FvwmTaskBar NeverFocus, Layer 0
 *FvwmButtons: Columns 1
 *FvwmButtons: Frame 1
 *FvwmButtons: (1x2+0+0, Swallow "FvwmPager" 'FvwmPager *')
-*FvwmButtons(Title GTerminal, Icon gnome-terminal.png, Action 'Exec "GTerminal" gnome-terminal &')
+*FvwmButtons(Title Terminal, Icon gnome-terminal.png, Action 'Exec "Terminal" gnome-terminal &')
 *FvwmButtons(Title XTerm, Icon xterm.png, Action 'Exec "xterm" xterm -ls &')
 *FvwmButtons(Title Emacs, Icon emacs.png, Action 'Exec "Emacs Server" emacs &')
 *FvwmButtons(Title EmacsClient, Icon emacs.png, Action 'Exec "Emacs Client" emacsclient --server-file ~/.emacs.cache/server/server -c &')
