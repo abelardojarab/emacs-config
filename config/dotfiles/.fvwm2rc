@@ -45,7 +45,6 @@ AddToFunc StartFunction
 DestroyFunc InitFunction
 AddToFunc   InitFunction
 + I Exec exec feh $[fvwm_wallpaper]
-+ I Exec exec conky
 + I Exec exec plank
 
 # Window Decor
