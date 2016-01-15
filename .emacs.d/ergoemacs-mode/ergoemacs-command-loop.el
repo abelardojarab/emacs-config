@@ -71,9 +71,11 @@
 (declare-function ergoemacs-map-properties--movement-p "ergoemacs-map-properties")
 (declare-function ergoemacs-map-properties--put "ergoemacs-map-properties")
 
-(declare-function ergoemacs-translate--event-convert-list "ergoemacs-translate")
 (declare-function ergoemacs-translate--define-key "ergoemacs-translate")
 (declare-function ergoemacs-translate--escape-to-meta "ergoemacs-translate")
+(declare-function ergoemacs-translate--event-basic-type "ergoemacs-translate")
+(declare-function ergoemacs-translate--event-convert-list "ergoemacs-translate")
+(declare-function ergoemacs-translate--event-modifiers "ergoemacs-translate")
 (declare-function ergoemacs-translate--event-mods "ergoemacs-translate")
 (declare-function ergoemacs-translate--get "ergoemacs-translate")
 (declare-function ergoemacs-translate--keymap "ergoemacs-translate")
@@ -574,77 +576,80 @@ to work appropriately.  I'm not sure the purpose of
 
 This is not done when the event is [ergoemacs-ignore]"
   (or (let ((event (pop unread-command-events))
-            translate)
-        (setq ergoemacs-comand-loop--untranslated-event event)
-        (when (and current-input-method (not current-key)
-                   (not overriding-local-map) (not overriding-terminal-local-map)
-                   (setq translate (ergoemacs-command-loop--input-method event)))
-          (setq event (pop translate))
-          (when translate
-            (setq unread-command-events (append translate unread-command-events))))
-        (unless (eq event 'ergoemacs-ignore)
-          (setq last-command-event event
-                last-input-event last-command-event
-                ergoemacs-last-command-event last-command-event
-                last-event-frame (selected-frame)))
-        event)
+	    translate)
+	(setq ergoemacs-comand-loop--untranslated-event event)
+	(when (and current-input-method (not current-key)
+		   (not overriding-local-map) (not overriding-terminal-local-map)
+		   (setq translate (ergoemacs-command-loop--input-method event)))
+	  (setq event (pop translate))
+	  (when translate
+	    (setq unread-command-events (append translate unread-command-events))))
+	(unless (eq event 'ergoemacs-ignore)
+	  (setq last-command-event event
+		last-input-event last-command-event
+		ergoemacs-last-command-event last-command-event
+		last-event-frame (selected-frame)))
+	event)
       (let* ((last-event-time (or (and ergoemacs-command-loop--last-event-time
-                                       (- (float-time) ergoemacs-command-loop--last-event-time))
-                                  (and (setq ergoemacs-command-loop--last-event-time (float-time)) 0)))
-             (prompt (cond
+				       (- (float-time) ergoemacs-command-loop--last-event-time))
+				  (and (setq ergoemacs-command-loop--last-event-time (float-time)) 0)))
+	     (prompt (cond
 		      ((not prompt) nil)
-                      ((not (string= "" ergoemacs-command-loop--read-key-prompt)) prompt)
-                      ((or (string= prompt " ")
-                           (string-match-p prompt (concat " *" (ergoemacs :unicode-or-alt ergoemacs-command-loop-blink-character "-") " *"))) nil)
-                      (ergoemacs-command-loop--universal prompt)
-                      (ergoemacs-command-loop--echo-keystrokes-complete prompt)
-                      ((not (numberp ergoemacs-command-loop-echo-keystrokes)) prompt)
-                      ((= 0 ergoemacs-command-loop-echo-keystrokes) prompt)
-                      ((< last-event-time ergoemacs-command-loop-echo-keystrokes) nil)
-                      ;; ((and (not ergoemacs-command-loop--echo-keystrokes-complete)
-                      ;;       (numberp ergoemacs-command-loop-echo-keystrokes)
-                      ;;       (or (= 0 ergoemacs-command-loop-echo-keystrokes)
-                      ;;           (< last-event-time ergoemacs-command-loop-echo-keystrokes))) nil)
-                      ;; ((and (< last-event-time ergoemacs-command-loop-time-before-blink) (string= prompt "")) nil)
-                      ;; ((and (< last-event-time ergoemacs-command-loop-time-before-blink) ) nil)
-                      (t
-                       (setq ergoemacs-command-loop--echo-keystrokes-complete t)
-                       prompt)))
-             (echo-keystrokes 0)
-             ;; Run (with-timeout) so that idle timers will work.
-             (event (cond
-                     (prompt (with-timeout (seconds nil)
-                               (progn
-                                 (ergoemacs-command-loop--message prompt)
-                                 (ignore-errors (read-event)))))
-                     ((and (not ergoemacs-command-loop--echo-keystrokes-complete)
-                           ergoemacs-command-loop--single-command-keys)
-                      (with-timeout (ergoemacs-command-loop-echo-keystrokes nil)
-                        (ignore-errors (read-event))))
-                     (t (ignore-errors (read-event)))))
-             translate)
-        (when (eventp event)
-          (setq ergoemacs-comand-loop--untranslated-event event)
-          (unless (consp event) ;; Don't record mouse events
-            (when (and current-input-method (not current-key)
-                       (not overriding-local-map) (not overriding-terminal-local-map)
-                       (setq translate (ergoemacs-command-loop--input-method event)))
-              (setq event (pop translate))
-              (when translate
-                (setq unread-command-events (append translate unread-command-events))))
-            (push (list ergoemacs-command-loop--single-command-keys 
-                        ergoemacs-command-loop--current-type 
-                        ergoemacs-command-loop--universal
-                        current-prefix-arg
-                        last-command-event)
-                  ergoemacs-command-loop--history))
-          (unless (eq event 'ergoemacs-ignore)
-            (setq ergoemacs-command-loop--last-event-time (float-time)
-                  last-command-event event
-                  last-input-event last-command-event
-                  ergoemacs-last-command-event last-command-event
-                  last-event-frame (selected-frame))))
-        event)))
+		      ((not (string= "" ergoemacs-command-loop--read-key-prompt)) prompt)
+		      ((or (string= prompt " ")
+			   (string-match-p prompt (concat " *" (ergoemacs :unicode-or-alt ergoemacs-command-loop-blink-character "-") " *"))) nil)
+		      (ergoemacs-command-loop--universal prompt)
+		      (ergoemacs-command-loop--echo-keystrokes-complete prompt)
+		      ((not (numberp ergoemacs-command-loop-echo-keystrokes)) prompt)
+		      ((= 0 ergoemacs-command-loop-echo-keystrokes) prompt)
+		      ((< last-event-time ergoemacs-command-loop-echo-keystrokes) nil)
+		      ;; ((and (not ergoemacs-command-loop--echo-keystrokes-complete)
+		      ;;       (numberp ergoemacs-command-loop-echo-keystrokes)
+		      ;;       (or (= 0 ergoemacs-command-loop-echo-keystrokes)
+		      ;;           (< last-event-time ergoemacs-command-loop-echo-keystrokes))) nil)
+		      ;; ((and (< last-event-time ergoemacs-command-loop-time-before-blink) (string= prompt "")) nil)
+		      ;; ((and (< last-event-time ergoemacs-command-loop-time-before-blink) ) nil)
+		      (t
+		       (setq ergoemacs-command-loop--echo-keystrokes-complete t)
+		       prompt)))
+	     (echo-keystrokes 0)
+	     ;; Run (with-timeout) so that idle timers will work.
+	     (event (cond
+		     (prompt (with-timeout (seconds nil)
+			       (progn
+				 (ergoemacs-command-loop--message prompt)
+				 (ignore-errors (read-event)))))
+		     ((and (not ergoemacs-command-loop--echo-keystrokes-complete)
+			   ergoemacs-command-loop--single-command-keys)
+		      (with-timeout (ergoemacs-command-loop-echo-keystrokes nil)
+			(ignore-errors (read-event))))
+		     (t (ignore-errors (read-event)))))
+	     translate)
+	(when (eventp event)
+	  (setq ergoemacs-comand-loop--untranslated-event event)
+	  (unless (consp event) ;; Don't record mouse events
+	    (when (and current-input-method (not current-key)
+		       (not overriding-local-map) (not overriding-terminal-local-map)
+		       (setq translate (ergoemacs-command-loop--input-method event)))
+	      (setq event (pop translate))
+	      (when translate
+		(setq unread-command-events (append translate unread-command-events))))
+	    (push (list ergoemacs-command-loop--single-command-keys 
+			ergoemacs-command-loop--current-type 
+			ergoemacs-command-loop--universal
+			current-prefix-arg
+			last-command-event)
+		  ergoemacs-command-loop--history))
+	  (unless (eq event 'ergoemacs-ignore)
+	    (setq ergoemacs-command-loop--last-event-time (float-time)
+		  last-command-event event
+		  last-input-event last-command-event
+		  ergoemacs-last-command-event last-command-event
+		  last-event-frame (selected-frame))))
+	event)))
+
+(defvar ergoemacs-command-loop--decode-event-timeout-p nil
+  "Determines if `ergoemacs-command-loop--decode-event' timed out.")
 
 (defun ergoemacs-command-loop--decode-event (event keymap &optional current-key)
   "Change EVENT based on KEYMAP.
@@ -657,25 +662,42 @@ inconjunction with `input-method-function' to translate keys if
   (let* ((new-event event)
          (old-ergoemacs-input unread-command-events)
          new-ergoemacs-input
-         (current-test-key (vector event))
+         (current-test-key (or (and (listp event)
+				    (vector (ergoemacs-translate--event-convert-list
+					     (append (ergoemacs-translate--event-modifiers event)
+						     (list (ergoemacs-translate--event-basic-type event))))))
+			       (vector event)))
          (test-ret (lookup-key keymap current-test-key))
+	 (timeout-key (key-binding (vconcat current-test-key [ergoemacs-timeout])))
          next-key)
     (while (and current-test-key
                 (ergoemacs-keymapp test-ret))
       ;; The translation needs more keys...
-      (setq next-key (ergoemacs-command-loop--history nil ergoemacs-command-loop--decode-event-delay current-key))
+      (if timeout-key
+	  (setq next-key (with-timeout (ergoemacs-ctl-c-or-ctl-x-delay
+					(progn
+					  (setq ergoemacs-command-loop--decode-event-timeout-p t)
+					  nil))
+			   (ergoemacs-command-loop--history nil ergoemacs-command-loop--decode-event-delay current-key)))
+	(setq next-key (ergoemacs-command-loop--history nil ergoemacs-command-loop--decode-event-delay current-key)))
       (when next-key ;; Since a key was read, save it to be read later.
         (push last-command-event new-ergoemacs-input))
       (if next-key
           (setq current-test-key (ergoemacs :combine current-test-key next-key)
+		timeout-key (key-binding (vconcat current-test-key [ergoemacs-timeout]))
                 test-ret (lookup-key keymap current-test-key))
         (setq current-test-key nil)))
     ;; Change strings to emacs keys.
-    (when (stringp test-ret) 
-      (setq test-ret (read-kbd-macro test-ret t)))
+    (when (stringp test-ret)
+      ;; Should it be read-kbd-macro?
+      (setq test-ret (vconcat test-ret)))
+    (when (functionp test-ret)
+      (setq last-input-event event
+	    test-ret (funcall test-ret))
+      (when (not (equal unread-command-events old-ergoemacs-input))
+      	(push (pop unread-command-events) new-ergoemacs-input)))
     (if (and (vectorp test-ret)
-             (
-              = (length test-ret) 1))
+             (= (length test-ret) 1))
         (progn
           (setq new-event (elt test-ret 0)))
       ;; Not a new event, restore anything that was popped off the
@@ -691,7 +713,9 @@ inconjunction with `input-method-function' to translate keys if
 (defun ergoemacs-command-loop--read-event (prompt &optional current-key)
   "Reads a single event.
 
-PROMPT is 
+PROMPT is the prompt used when reading an event.
+
+CURRENT-KEY is the current key sequence that has alerady been read.
 
 This respects `input-decode-map', `local-function-key-map' and `key-translation-map'.
 
@@ -716,15 +740,16 @@ It will timeout after `ergoemacs-command-loop-blink-rate' and return nil."
           (setq input gui)
         (setq input (ergoemacs-command-loop--decode-event input input-decode-map current-key)
               binding (key-binding (ergoemacs :combine current-key input) t)))
-      
       ;; These should only be replaced if they are not bound.
       (unless binding
         (setq last-input input
               input (ergoemacs-command-loop--decode-event input local-function-key-map current-key))
         (unless (eq last-input input)
           (setq binding (key-binding (ergoemacs :combine current-key input) t))))
-      (unless binding
-        (setq input (ergoemacs-command-loop--decode-event input key-translation-map current-key))))
+      (setq last-input input
+	    input (ergoemacs-command-loop--decode-event input key-translation-map current-key))
+      (unless (eq last-input input)
+          (setq binding (key-binding (ergoemacs :combine current-key input) t))))
     input))
 
 (defun ergoemacs-command-loop--read-key (&optional current-key type universal)
@@ -1164,6 +1189,7 @@ Fix this issue."
   ;;  This (sort of) fixes `this-command-keys'
   ;; But it doesn't fix it for keyboard macros.
   (clear-this-command-keys t)
+  (setq ergoemacs-command-loop--decode-event-timeout-p nil)
   (ergoemacs-command-loop--sync-point))
 
 (defun ergoemacs-command-loop--mouse-command-drop-first (args &optional fn-arg-p)
@@ -1270,12 +1296,13 @@ care of `window-live-p' errors that occur when running the
 Emacs detects keys when outside of Emacs.
 
 The RECORD-FLAG and KEYS arguments are passed to
-`call-interactively' for the mouse command."
+`ergoemacs-command-loop--grow-interactive' for the mouse command."
   (cond
    ((ergoemacs-keymapp command)
     (popup-menu command nil current-prefix-arg))
    (t
-    (ignore-errors (call-interactively (ergoemacs-command-loop--modify-mouse-command command) record-flag keys)))))
+    (ignore-errors
+      (ergoemacs-command-loop--grow-interactive (ergoemacs-command-loop--modify-mouse-command command) record-flag keys)))))
 
 (defvar ergoemacs-command-loop-describe-key-functions
   '(describe-key describe-function)
@@ -1284,9 +1311,83 @@ These functions will:
 - Replace `key-description' with `ergoemacs-key-description'.
 - Replace `read-key-sequence' with `ergoemacs-command-loop--read-key-sequence'.")
 
+(defcustom ergoemacs-comand-loop-grow-max-sizes-p t
+  "Grow the max sizes if needed.
+This grows `max-specpdl-size' and `max-lisp-eval-depth' if
+`ergoemacs-command-loop--call-interactively' throws an error
+about `max-specpdl-size' or `max-lisp-eval-depth'.
+
+The overall maximum that these are set to are controlled by
+`ergoemacs-max-specpdl-size' and
+`ergoemacs-max-lisp-eval-depth.'"
+  :type 'boolean
+  :group 'ergoemacs-mode)
+
+(defvar ergoemacs-command-loop--grow-command nil)
+(defvar ergoemacs-command-loop--grow-record nil)
+(defvar ergoemacs-command-loop--grow-keys nil)
+(defvar ergoemacs-command-loop--grow-special nil)
+
+
+(defcustom ergoemacs-max-specpdl-size (* 8 max-specpdl-size)
+  "Maximum `max-specpdl-size' that `ergoemacs-mode' increases to..."
+  :type 'boolean
+  :group 'ergoemacs-mode)
+
+(defcustom ergoemacs-max-lisp-eval-depth (* 8 max-lisp-eval-depth)
+  "Maximum `max-lisp-eval-depth' that `ergoemacs-mode' increases to..."
+  :type 'boolean
+  :group 'ergoemacs-mode)
+
+(defun ergoemacs-command-loop--grow-interactive (command &optional record-flag keys)
+  "Call the COMMAND interactively.
+The RECORD-FLAG and KEYS are sent to `ergoemacs--real-call-interactively'.
+
+This will grow `max-lisp-eval-depth' and `max-specpdl-size' if
+needed (and resotre them to the original values)."
+  (setq ergoemacs-command-loop--grow-command nil
+	  ergoemacs-command-loop--grow-record nil
+	  ergoemacs-command-loop--grow-keys nil
+	  ergoemacs-command-loop--grow-special nil)
+  (let ((grow-max-lisp-p t)
+	(orig-max-specpdl-size max-specpdl-size)
+	(orig-max-lisp-eval-depth max-lisp-eval-depth))
+    (while grow-max-lisp-p
+      (condition-case err
+          (cond
+	   (ergoemacs-command-loop--grow-command
+	    (command-execute ergoemacs-command-loop--grow-command
+			     ergoemacs-command-loop--grow-record
+			     ergoemacs-command-loop--grow-keys
+			     ergoemacs-command-loop--grow-special)
+	    (setq grow-max-lisp-p nil))
+	   (t
+            (call-interactively command record-flag keys)
+            (setq grow-max-lisp-p nil)))
+        (error
+         (if (and (eq (car err) 'error)
+                  (stringp (nth 1 err))
+                  (string-match "max-specpdl-size\\|max-lisp-eval-depth"
+                                (nth 1 err))
+                  ergoemacs-comand-loop-grow-max-sizes-p
+                  (<= max-specpdl-size ergoemacs-max-specpdl-size)
+                  (<= max-lisp-eval-depth ergoemacs-max-lisp-eval-depth))
+	     (progn
+	       (setq max-specpdl-size (* 2 max-specpdl-size)
+		     max-lisp-eval-depth (* 2 max-lisp-eval-depth))
+	       (ergoemacs-warn "Increased max-specpdl-size to %s and max-lisp-eval-depth to %s for %s"
+		     max-specpdl-size max-lisp-eval-depth command))
+           (setq grow-max-lisp-p nil
+		 max-specpdl-size orig-max-specpdl-size
+                 max-lisp-eval-depth orig-max-lisp-eval-depth)
+	   (signal (car err) (cdr err))))))
+    (setq max-specpdl-size orig-max-specpdl-size
+	  max-lisp-eval-depth orig-max-lisp-eval-depth)))
+
+
 (defun ergoemacs-command-loop--call-interactively (command &optional record-flag keys)
   "Call the COMMAND interactively.  Also handle mouse events (if possible.)
-The RECORD-FLAG and KEYS are sent to `call-interactively'."
+The RECORD-FLAG and KEYS are sent to `ergoemacs-command-loop--grow-interactive'."
   (ergoemacs-command-loop--sync-point)
   (cond
    ((and (eventp last-command-event)
@@ -1324,7 +1425,8 @@ The RECORD-FLAG and KEYS are sent to `call-interactively'."
       ;; emacsclient).  */
       (when area
         (setq command (key-binding (vconcat (list area last-command-event)) t))
-        (when (and obj (consp obj) (setq tmp (get-text-property (cdr obj)  'local-map (car obj)))
+        (when (and obj (consp obj)
+		   (setq tmp (ignore-errors (get-text-property (cdr obj)  'local-map (car obj))))
                    (setq tmp (or (and (symbolp tmp) (ergoemacs-sv tmp)) tmp))
                    (ergoemacs-keymapp tmp)
                    (setq tmp (lookup-key tmp (vconcat (list area last-command-event)))))
@@ -1339,9 +1441,36 @@ The RECORD-FLAG and KEYS are sent to `call-interactively'."
     (ergoemacs-command-loop--message "Command `%s' cannot be called from a key" command))
    ((memq command ergoemacs-command-loop-describe-key-functions)
     (ergoemacs-specials
-     (call-interactively command record-flag keys)))
+     (ergoemacs-command-loop--grow-interactive command record-flag keys)))
    (t
-    (call-interactively command record-flag keys))))
+    (ergoemacs-command-loop--grow-interactive command record-flag keys))))
+
+;; (condition-case err
+;;     (save-excursion
+;;       (if calc-embedded-info
+;;           (calc-embedded-select-buffer)
+;;         (calc-select-buffer))
+;;       (and (eq calc-algebraic-mode 'total)
+;;            (require 'calc-ext)
+;;            (use-local-map calc-alg-map))
+;;       (when (and do-slow calc-display-working-message)
+;;         (message "Working...")
+;;         (calc-set-command-flag 'clear-message))
+;;       (funcall do-body)
+;;       (setq calc-aborted-prefix nil)
+;;       (when (memq 'renum-stack calc-command-flags)
+;;         (calc-renumber-stack))
+;;       (when (memq 'clear-message calc-command-flags)
+;;         (message "")))
+;;   (error
+;;    (if (and (eq (car err) 'error)
+;;             (stringp (nth 1 err))
+;;             (string-match "max-specpdl-size\\|max-lisp-eval-depth"
+;;                           (nth 1 err)))
+;;        (error "Computation got stuck or ran too long.  Type `M' to increase the limit")
+;;      (setq calc-aborted-prefix nil)
+;;      (signal (car err) (cdr err)))))
+
 
 (defun ergoemacs-command-loop-start ()
   "Start `ergoemacs-command-loop'."
@@ -1357,7 +1486,7 @@ The RECORD-FLAG and KEYS are sent to `call-interactively'."
 (defvar ergoemacs-command-loop-spinner)
 (defvar ergoemacs-command-loop-spinners)
 
-(defvar ergoemacs-command-loop--spinner-display-message t
+(defvar ergoemacs-command-loop--spinner-display-message nil
   "Use spinner messages with history.")
 
 (defvar ergoemacs-command-loop--message-log-max nil
@@ -1816,10 +1945,13 @@ pressed the translated key by changing
 
                    ;; Immediate
                    ((and (not ergoemacs-ctl-c-or-ctl-x-delay)
-                         (eq ergoemacs-handle-ctl-c-or-ctl-x 'both))
+			 (eq ergoemacs-handle-ctl-c-or-ctl-x 'both))
                     (setq ret tmp))
                    
                    (t ;; with delay
+		    (if ergoemacs-command-loop--decode-event-timeout-p
+			(setq tmp2 nil
+			      ergoemacs-command-loop--decode-event-timeout-p nil))
                     (setq tmp2 (with-timeout (ergoemacs-ctl-c-or-ctl-x-delay nil)
                                  (ergoemacs-command-loop--read-event nil key)))
                     (if (not tmp2)

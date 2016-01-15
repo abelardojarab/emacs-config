@@ -1,27 +1,27 @@
 ;;; ergoemacs-lib.el --- Ergoemacs libraries -*- lexical-binding: t -*-
 
-;; Copyright © 2013-2015  Free Software Foundation, Inc.
+;; Copyright © 2013-2016  Free Software Foundation, Inc.
 
 ;; Author: Matthew L. Fidler, Xah Lee
-;; Maintainer: 
-;; 
+;; Maintainer:
+;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; 
+;;
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License as
 ;; published by the Free Software Foundation; either version 3, or
 ;; (at your option) any later version.
-;; 
+;;
 ;; This program is distributed in the hope that it will be useful,
 ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
 ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 ;; General Public License for more details.
-;; 
+;;
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
-;; 
+;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; 
+;;
 ;;; Code:
 ;; (require 'guide-key nil t)
 
@@ -45,6 +45,8 @@
 (defvar ergoemacs-handle-ctl-c-or-ctl-x)
 (defvar ergoemacs-dir)
 
+
+(declare-function ergoemacs-autoloadp "ergoemacs-macros")
 (declare-function ergoemacs-mode-reset "ergoemacs-mode")
 (declare-function ergoemacs-theme--list "ergoemacs-theme-engine")
 (declare-function ergoemacs-theme-option-on "ergoemacs-theme-engine")
@@ -97,7 +99,7 @@ Whe changed return t, otherwise return nil."
       (setq last-value -1))
     (cond
      ((and minor-mode-p (functionp variable))
-      (unless (and defer (autoloadp variable))
+      (unless (and defer (ergoemacs-autoloadp variable))
         (unless (get variable :ergoemacs-save-value)
           (put variable :ergoemacs-save-value (if new-value nil 1)))
         (ergoemacs :spinner "Call (%s %s)" variable new-value)
@@ -110,7 +112,7 @@ Whe changed return t, otherwise return nil."
      ((not (equal last-value value))
       (cond
        ((and minor-mode-p (not new-value) (functionp variable))
-        (unless (and defer (autoloadp variable))
+        (unless (and defer (ergoemacs-autoloadp variable))
           ;; (message "(%s -1) #2" variable)
           (ergoemacs :spinner "Call (%s -1)" variable)
           (funcall variable -1)
@@ -121,7 +123,7 @@ Whe changed return t, otherwise return nil."
           (pushnew variable ergoemacs-set-ignore-customize)
           (setq ret t)))
        ((and minor-mode-p new-value (functionp variable))
-        (unless (and defer (autoloadp variable))
+        (unless (and defer (ergoemacs-autoloadp variable))
           ;; (message "(%s %s) #3" variable new-value)
           (ergoemacs :spinner "Call (%s %s)" variable new-value)
           (funcall variable new-value)
@@ -363,26 +365,30 @@ All other modes are assumed to be minor modes or unimportant.
              (separator1 menu-item "--")
              (package menu-item  "Manage Packages" list-packages))))
 
+;; By Abelardo
 (defun ergoemacs-menu-tabbar-toggle ()
-  "Enables/Disables (and installs if not present) a tab-bar for emacs."
-  (interactive)
-  (require 'package nil t)
-  (if (not (fboundp 'tabbar-mode))
-      (let ((package-archives '(("melpa" . "http://melpa.org/packages/"))))
-        (require 'tabbar-ruler nil t)
-        (if (fboundp 'tabbar-install-faces)
-            (tabbar-install-faces)
-          (when (fboundp 'package-install)
-            (package-refresh-contents)
-            (package-initialize)
-            (package-install 'tabbar-ruler)
-            (require 'tabbar-ruler nil t)
-            (tabbar-install-faces))))
-    (if (not (featurep 'tabbar-ruler))
-        (require 'tabbar-ruler nil t)
-      (if tabbar-mode
-          (tabbar-mode -1)
-        (tabbar-mode 1)))))
+  t)
+
+;; (defun ergoemacs-menu-tabbar-toggle ()
+;;   "Enables/Disables (and installs if not present) a tab-bar for emacs."
+;;   (interactive)
+;;   (require 'package nil t)
+;;   (if (not (fboundp 'tabbar-mode))
+;;       (let ((package-archives '(("melpa" . "http://melpa.org/packages/"))))
+;;         (require 'tabbar-ruler nil t)
+;;         (if (fboundp 'tabbar-install-faces)
+;;             (tabbar-install-faces)
+;;           (when (fboundp 'package-install)
+;;             (package-refresh-contents)
+;;             (package-initialize)
+;;             (package-install 'tabbar-ruler)
+;;             (require 'tabbar-ruler nil t)
+;;             (tabbar-install-faces))))
+;;     (if (not (featurep 'tabbar-ruler))
+;;         (require 'tabbar-ruler nil t)
+;;       (if tabbar-mode
+;;           (tabbar-mode -1)
+;;         (tabbar-mode 1)))))
 
 (defun ergoemacs-menu--filter-key-shortcut (cmd &optional keymap)
   "Figures out ergoemacs-mode menu's preferred key-binding for CMD."
@@ -394,7 +400,7 @@ All other modes are assumed to be minor modes or unimportant.
          (eq cmd 'ergoemacs-copy-line-or-region)) (ergoemacs-key-description--menu (kbd "C-c")))
    (t
     ;;; FIXME: faster startup by creating component alists
-    ;; SLOW: 2-seconds 
+    ;; SLOW: 2-seconds
     (let ((key (where-is-internal cmd (or keymap ergoemacs-keymap) 'meta nil t)))
       (when (memq (elt key 0) '(menu-bar remap again redo cut copy paste help open find ergoemacs-remap execute))
         (setq key nil))
@@ -670,14 +676,14 @@ EVENT is used when this is called from a mouse event."
                   (throw 'found t)))
               nil)
       (if file
-	  (insert (propertize sym
-			      'ergoemacs-timing-symbol (intern sym)
-			      'ergoemacs-timing-file file
-			      'keymap ergoemacs-timing-jump-map
-			      'mouse-face 'highlight
-			      'face 'link
-			      'help-echo "mouse-1 or RET jumps to definition"))
-	(insert sym)))))
+      (insert (propertize sym
+                  'ergoemacs-timing-symbol (intern sym)
+                  'ergoemacs-timing-file file
+                  'keymap ergoemacs-timing-jump-map
+                  'mouse-face 'highlight
+                  'face 'link
+                  'help-echo "mouse-1 or RET jumps to definition"))
+    (insert sym)))))
 
 (defun ergoemacs-timing-output-result (resultvec)
   "Output the RESULTVEC into the results buffer. RESULTVEC is a 4

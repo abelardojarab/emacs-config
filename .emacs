@@ -1,10 +1,11 @@
 ;; -*-mode: Emacs-Lisp; -*-
-;; Copyright (C) 1996-2015 Abelardo Jara-Berrocal
+;; Copyright (C) 1996-2016 Abelardo Jara-Berrocal
 ;; URL: http://pintucoperu.wordpress.com
 ;; This file is free software licensed under the terms of the
 ;; GNU General Public License, version 3 or later.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(setq debug-on-quit t)
 (setq debug-on-error t)
 (defconst debian-emacs-flavor 'emacs24
   "A symbol representing the particular debian flavor of emacs running.
@@ -20,8 +21,7 @@
 (add-to-list 'load-path "~/.emacs.d/dash")
 (add-to-list 'load-path "~/.emacs.d/tabbar")
 
-;; cl-lib
-(require 'cl-lib)
+;; Missing cl-lib function
 (defun cl--set-getf (plist tag val)
   (let ((p plist))
     (while (and p (not (eq (car p) tag))) (setq p (cdr (cdr p))))
@@ -134,6 +134,9 @@
 ;; Setup Python
 (require 'setup-python)
 
+;; Setup Javascript
+(require 'setup-js2)
+
 ;; Setup Lisp mode
 (require 'setup-lisp)
 
@@ -176,10 +179,8 @@
 ;; Setup post
 (require 'setup-post)
 
-;; ;; Setup keys
+;; Setup keys
 (require 'setup-keys)
 
-;; Setup server
-(require 'setup-server)
-
 (setq debug-on-error nil)
+(setq debug-on-quit nil)

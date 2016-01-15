@@ -1,6 +1,6 @@
 ;;; setup-post.el ---                                -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2015  abelardo.jara-berrocal
+;; Copyright (C) 2015, 2016  abelardo.jara-berrocal
 
 ;; Author: abelardo.jara-berrocal <ajaraber@plxc20122.pdx.intel.com>
 ;; Keywords:
@@ -73,9 +73,10 @@
 (add-to-list 'auto-mode-alist '("\\.scs\\'" . spice-mode))
 
 ;; Ergoemacs
-;; (add-to-list 'load-path "~/.emacs.d/ergoemacs-mode")
-;; (setq ergoemacs-ignore-prev-global nil)
-;; (require 'ergoemacs-mode)
+(add-to-list 'load-path "~/.emacs.d/ergoemacs-mode")
+(setq ergoemacs-ignore-prev-global nil)
+(setq ergoemacs-component-struct--apply-ensure-p nil)
+(require 'ergoemacs-mode)
 
 (provide 'setup-post)
 ;;; setup-post.el ends here

@@ -1,57 +1,57 @@
 ;;; ergoemacs-component.el --- Ergoemacs map interface -*- lexical-binding: t -*-
 
-;; Copyright © 2013-2015  Free Software Foundation, Inc.
+;; Copyright © 2013-2016  Free Software Foundation, Inc.
 
 ;; Filename: ergoemacs-component.el
 ;; Description:
 ;; Author: Matthew L. Fidler
-;; Maintainer: 
+;; Maintainer:
 ;; Created: Sat Sep 28 20:10:56 2013 (-0500)
-;; Version: 
-;; Last-Updated: 
-;;           By: 
+;; Version:
+;; Last-Updated:
+;;           By:
 ;;     Update #: 0
-;; URL: 
-;; Doc URL: 
+;; URL:
+;; Doc URL:
 ;; Keywords:
-;; Compatibility: 
-;; 
+;; Compatibility:
+;;
 ;; Features that might be required by this library:
 ;;
 ;;   None
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; 
-;;; Commentary: 
-;; 
 ;;
-;; 
+;;; Commentary:
+;;
+;;
+;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; 
+;;
 ;;; Change Log:
-;; 
-;; 
+;;
+;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; 
+;;
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License as
 ;; published by the Free Software Foundation; either version 3, or
 ;; (at your option) any later version.
-;; 
+;;
 ;; This program is distributed in the hope that it will be useful,
 ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
 ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 ;; General Public License for more details.
-;; 
+;;
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
-;; 
+;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; 
+;;
 ;;; Code:
 ;; (require 'guide-key nil t)
 
-(eval-when-compile 
+(eval-when-compile
   (require 'cl)
   (require 'ergoemacs-macros))
 
@@ -101,6 +101,7 @@
 (declare-function ergoemacs-map-properties--key-hash "ergoemacs-map-properties")
 (declare-function ergoemacs-map-properties--map-regexp "ergoemacs-map-properties")
 (declare-function ergoemacs-map-properties--empty-p "ergoemacs-map-properties")
+(declare-function ergoemacs-map-properties--label "ergoemacs-map-properties")
 
 (declare-function ergoemacs-theme--get-version "ergoemacs-theme-engine")
 
@@ -125,7 +126,7 @@
   :type 'boolean
   :group 'ergoemacs-mode)
 
-;; for compatability 
+;; for compatability
 ;;;###autoload
 (defun ergoemacs-ignore-prev-global ()
   "Ignore previously defined global keys."
@@ -189,7 +190,7 @@ if the package is deferred."
                            ;; (message ,(format "Defer: %s %s" package defer))
                            ;; (require ,package)
                                  ;; (ergoemacs-component-struct--apply-inits))
-				 )
+                 )
             )
           (when (and defer autoloads)
             (dolist (c autoloads)
@@ -308,7 +309,7 @@ FILE is the file name where the component was created."
                  (demand (plist-get plist :demand))
                  (defer (if demand nil (plist-get plist :defer)))
                  (defer-present-p (or demand defer (memq :defer plist))))
-            
+
             ;; Handle :bind-keymap commands
             (when (and tmp (not defer-present-p) (not defer))
               (setq defer-present-p t defer t)
@@ -321,14 +322,14 @@ FILE is the file name where the component was created."
               (setq defer-present-p t defer t)
               (setf (ergoemacs-component-struct-defer ergoemacs-component-struct--define-key-current) t))
             (ergoemacs-component-struct--handle-bind tmp 'ergoemacs-override-keymap)
-            
+
             ;; Handle :bind keys
             (setq tmp (plist-get plist :bind))
             (when (and tmp (not defer-present-p) (not defer))
               (setq defer-present-p t defer t)
               (setf (ergoemacs-component-struct-defer ergoemacs-component-struct--define-key-current) t))
             (ergoemacs-component-struct--handle-bind tmp)
-            
+
             ;; Handle :bind* commands
             (setq tmp (plist-get plist :bind*))
             (when (and tmp (not defer-present-p) (not defer))
@@ -342,7 +343,7 @@ FILE is the file name where the component was created."
               (setq defer-present-p t defer t)
               (setf (ergoemacs-component-struct-defer ergoemacs-component-struct--define-key-current) t))
             (ergoemacs-component-struct--handle-mode tmp)
-            
+
             ;; Handle :commands
             (setq tmp (plist-get plist :commands))
             (when (and tmp (not defer-present-p) (not defer))
@@ -361,7 +362,7 @@ FILE is the file name where the component was created."
           (funcall body)
           (setf (ergoemacs-component-struct-variables ergoemacs-component-struct--define-key-current)
                 (reverse (ergoemacs-component-struct-variables ergoemacs-component-struct--define-key-current))))
-      
+
       (puthash (concat (ergoemacs-component-struct-name ergoemacs-component-struct--define-key-current)
                        (and (ergoemacs-component-struct-version ergoemacs-component-struct--define-key-current)
                             (concat "::" (ergoemacs-component-struct-version ergoemacs-component-struct--define-key-current))))
@@ -458,7 +459,7 @@ Allows the component not to be calculated."
            (= 2 (length def))
            (stringp (nth 0 def))
            (eq (nth 1 def) :emacs)
-           (setq tmp (lookup-key global-map (kbd (nth 0 def))))
+           (setq tmp (lookup-key global-map (read-kbd-macro (nth 0 def))))
            (commandp tmp))
       tmp)
      ((and (consp def)
@@ -519,7 +520,12 @@ Allows the component not to be calculated."
         (fset (ergoemacs-component-struct-dynamic-keys obj) new-dynamic)))))
 
 (defun ergoemacs-component-struct--ini-map (obj)
-  "Returns the map, if it hasn't been initialized, initialize with the label, and then return."
+  "Initilize keymap in OBJ.
+
+OBJ is an `egoemacs-component-struct' object.
+
+Returns the map, if it hasn't been initialized, initialize
+with the label, and then return."
   (or (ergoemacs-component-struct-map obj)
       (let ((map (make-sparse-keymap)))
         (ergoemacs map :label
@@ -561,7 +567,7 @@ If not specified, OBJECT is `ergoemacs-component-struct--define-key-current'."
           (cond
            ((and (not cur-map) (not when-condition))
             (pushnew keymap ergoemacs-map-properties--known-maps)
-	    (pushnew keymap ergoemacs-map-properties--label-atoms-maps)
+        (pushnew keymap ergoemacs-map-properties--label-atoms-maps)
             (setq cur-map (make-sparse-keymap))
             (puthash keymap cur-map (ergoemacs-component-struct-maps obj)))
            ((and (not cur-map) when-condition global-map-p)
@@ -571,7 +577,7 @@ If not specified, OBJECT is `ergoemacs-component-struct--define-key-current'."
             (unless (ergoemacs-gethash hook (ergoemacs-component-struct-hook-maps obj))
               (puthash hook (make-hash-table) (ergoemacs-component-struct-hook-maps obj)))
             (pushnew keymap ergoemacs-map-properties--known-maps)
-	    (pushnew keymap ergoemacs-map-properties--label-atoms-maps)
+        (pushnew keymap ergoemacs-map-properties--label-atoms-maps)
             (setq cur-map (make-sparse-keymap))
             (puthash keymap cur-map (ergoemacs-gethash hook (ergoemacs-component-struct-hook-maps obj)))))
           (cond
@@ -679,7 +685,7 @@ Formatted for use with `ergoemacs-theme-component-hash' it will return ::version
                    (version-list-<= test-version-list use-version))
               (setq best-version v
                     best-version-list test-version-list))
-             ((and (version-list-<= best-version-list test-version-list) ;; Better than best 
+             ((and (version-list-<= best-version-list test-version-list) ;; Better than best
                    (version-list-<= test-version-list use-version))
               (setq best-version v
                     best-version-list test-version-list))))
@@ -757,8 +763,14 @@ to figure out what variables LOOKUP-KEYMAP is bound to."
     ret))
 
 (defun ergoemacs-component-struct--get (map cur-layout &optional lookup-key translate-map)
-  "Get component MAP and return KEYMAP updating MAP cache.
-Cache using LOOKUP-KEY. "
+  "Get component MAP and return keymap updating MAP cache.
+
+CUR-LAYOUT is the current keymboard layout used.
+
+This keymap is cached using LOOKUP-KEY.
+
+The keymap to translate is TRANSLATE-MAP, otherwise it is the
+`ergoemacs-component-struct-map' for MAP."
   (let* (ret
          (cmap (or translate-map (ergoemacs-component-struct-map map)))
          (just-first-keys (ergoemacs-component-struct-just-first-keys map))
@@ -815,7 +827,7 @@ Cache using LOOKUP-KEY. "
       hash))))
 
 (defun ergoemacs-component-struct--minor-mode-map-alist (&optional obj)
-  "Get the ending maps for `minor-mode-map-alist' using the ergoemacs structures."
+  "Get the ending maps for `minor-mode-map-alist' using the ergoemacs structures OBJ."
   (let (ret map parent)
     (maphash
      (lambda(key value)
@@ -828,7 +840,9 @@ Cache using LOOKUP-KEY. "
     ret))
 
 (defun ergoemacs-component-struct--hooks (&optional obj ret)
-  "Gets a list of hooks that need to be defined eor OBJ."
+  "Gets a list of hooks that need to be defined eor OBJ.
+
+You can prespecify RET so that new hooks are pushed to the list."
   (let ((obj (ergoemacs-component-struct--lookup-hash (or obj (ergoemacs-theme-components))))
         tmp
         (ret ret))
@@ -965,8 +979,8 @@ be composed over the keymap.  This is done in
         ret))
      ((ergoemacs-component-struct-p obj)
       (mapcar (lambda(x)
-		(append x (list (ergoemacs-component-struct-name obj))))
-	      (ergoemacs-component-struct-variables obj)))
+        (append x (list (ergoemacs-component-struct-name obj))))
+          (ergoemacs-component-struct-variables obj)))
      (t (ergoemacs-component-struct--variables (ergoemacs-component-struct--lookup-hash obj))))))
 
 (defvar ergoemacs-component-struct--refresh-variables nil)
@@ -1007,30 +1021,6 @@ be composed over the keymap.  This is done in
                  'ergoemacs--last-start-emacs-state-2 ergoemacs--last-start-emacs-state-2))
             (ergoemacs-mode-clear-cache t)
             (ergoemacs-warn "ergoemacs-mode cache reset AFTER loading; Keys may be slightly inconsistent until emacs restart.")))))
-    (when ergoemacs-component-struct--apply-ensure-p
-      (setq ergoemacs-component-struct--apply-ensure-p nil)
-      ;; Ensure packages
-      (dolist (elt obj)
-        (setq comp (ergoemacs-component-struct--lookup-hash elt)
-              package-name (ergoemacs-component-struct-package-name comp)
-              ensure (ergoemacs-component-struct-ensure comp)
-              autoloads (ergoemacs-component-struct-autoloads comp)
-              defer (ergoemacs-component-struct-defer comp))
-        (cond
-         ((eq ensure t)
-          (ergoemacs-component-struct--ensure package-name defer autoloads))
-         ((and ensure (symbolp ensure))
-          (ergoemacs-component-struct--ensure ensure defer autoloads))
-         ((consp ensure)
-          (dolist (elt ensure)
-            (cond
-             ((and elt (symbolp elt))
-              (ergoemacs-component-struct--ensure elt defer autoloads))
-             ((stringp elt)
-              (ergoemacs-component-struct--ensure (intern elt) defer autoloads)))
-            (setq autoloads nil)))
-         ((stringp ensure)
-          (ergoemacs-component-struct--ensure (intern ensure) defer autoloads)))))
     ;; Turn on plist options (like :diminish)
     (dolist (elt obj)
       (unless (memq elt ergoemacs-component-struct--applied-plists)
@@ -1044,7 +1034,7 @@ be composed over the keymap.  This is done in
                        (fboundp fn))
               (funcall fn plist)))
           (push elt ergoemacs-component-struct--applied-plists))))
-    
+
     ;; Turn off plist options
     (setq tmp nil)
     (dolist (elt ergoemacs-component-struct--applied-plists)
@@ -1447,13 +1437,14 @@ Return 0 if there is no such symbol. Based on `variable-at-point'"
          (comp (ergoemacs-component-struct--lookup-hash (or component "")))
          (plist (ergoemacs-component-struct-plist comp))
          (file (plist-get plist :file))
-         (el-file (concat (file-name-sans-extension file) ".el"))
-         (elc-file (concat (file-name-sans-extension file) ".elc")))
-    (catch 'loaded
-      (dolist (load load-history)
-        (when (or (string= elc-file (car load))
-                  (string= el-file (car load)))
-          (throw 'loaded nil))) t)))
+         (el-file (and file (concat (file-name-sans-extension file) ".el")))
+         (elc-file (and file (concat (file-name-sans-extension file) ".elc"))))
+    (when file
+      (catch 'loaded
+    (dolist (load load-history)
+      (when (or (string= elc-file (car load))
+            (string= el-file (car load)))
+        (throw 'loaded nil))) t))))
 
 (defun ergoemacs-component-describe (component)
   "Display the full documentation of COMPONENT (a symbol or string)."
@@ -1464,7 +1455,7 @@ Return 0 if there is no such symbol. Based on `variable-at-point'"
          (comp (ergoemacs-component-struct--lookup-hash (or component "")))
          (plist (ergoemacs-component-struct-plist comp))
          (file (plist-get plist :file))
-         (el-file (concat (file-name-sans-extension file) ".el"))
+         (el-file (and file (concat (file-name-sans-extension file) ".el")))
          tmp vers
          lst)
     (if (not comp)
@@ -1477,7 +1468,7 @@ Return 0 if there is no such symbol. Based on `variable-at-point'"
           ;; Use " is " instead of a colon so that
           ;; it is easier to get out the function name using forward-sexp.
           (insert " is an `ergoemacs-mode' component")
-          (when (file-readable-p el-file)
+          (when (and el-file (file-readable-p el-file))
             (insert " defined in `")
             (insert (file-name-nondirectory el-file))
             (when (looking-back "`\\(.*\\)")
@@ -1495,7 +1486,7 @@ Return 0 if there is no such symbol. Based on `variable-at-point'"
               (insert (format "  %s -- %s\n" prop tmp))))
           (insert "\n")
           (insert (format "Plist: %s\n" plist))
-          
+
           (insert (format "Base Layout: %s\n" (ergoemacs-component-struct-layout comp)))
           (when (looking-back ": \\(.*\\)\n")
             (help-xref-button 1 'ergoemacs-layout-help (match-string 1)))
@@ -1519,7 +1510,7 @@ Return 0 if there is no such symbol. Based on `variable-at-point'"
                              (lambda(x) (ergoemacs-key-description x)) tmp ", "))))
 
           ;; FIXME: Describe major-mode / minor-mode differences
-          
+
           ;; FIXME: Describe what keys are deferred, and what they would
           ;; possibly bind to...
 
@@ -1529,7 +1520,7 @@ Return 0 if there is no such symbol. Based on `variable-at-point'"
             (insert (format "Versions: %s, %s\n" ergoemacs-mode-version
                             (mapconcat
                              (lambda(x) x) vers ", ")))
-            
+
             (setq lst `((,(format "Specified Keymap (%s)" (or (ergoemacs-theme--get-version) ergoemacs-mode-version))
                          ,(ergoemacs-component-struct-map comp))
                         ,@(mapcar
@@ -1548,7 +1539,7 @@ Return 0 if there is no such symbol. Based on `variable-at-point'"
                                  ,(ergoemacs-component-struct--get (ergoemacs-component-struct--lookup-hash component ver) ergoemacs-keyboard-layout))))
                            vers)
                         )))
-          
+
           (dolist (elt lst)
             (unless (or (not elt) (ergoemacs (nth 1 elt) :empty-p))
               (insert "\n")
@@ -1580,7 +1571,7 @@ The :dimininish tag can be of the form:
   displays.  The display is determined by
   `ergoemacs-key-description--unicode-char'.
 
-- (minor-mode-symbol) -- Suppress minor mode symbol 
+- (minor-mode-symbol) -- Suppress minor mode symbol
 
 - (minor-mode-symbol string) -- Replace minor mode symbol
   modeline indicator with string
@@ -1592,7 +1583,7 @@ The :dimininish tag can be of the form:
 
 - List of minor mode symbols, or list specifications that include
   the minor- mode symbol, so that multiple minor modes may be
-   processed by a single :diminish specifciation. 
+   processed by a single :diminish specifciation.
 
 DIM is the replacement for the PLIST :diminish, this is used in
 recursive calls to `ergoemacs-component--diminish-on' to process
@@ -1617,7 +1608,7 @@ modifications with `diminish-undo'"
        ((eq t dim)
         (cond
          (type (diminish-undo diminish-symbol))
-         ((ignore-errors (and (commandp diminish-symbol t) (not (autoloadp diminish-symbol))
+         ((ignore-errors (and (commandp diminish-symbol t) (not (ergoemacs-autoloadp diminish-symbol))
                               (diminish diminish-symbol)))
           )
          (t (eval-after-load diminish-symbol
@@ -1626,7 +1617,7 @@ modifications with `diminish-undo'"
        ((symbolp dim)
         (cond
          (type (diminish-undo dim))
-         ((ignore-errors (and (commandp diminish-symbol t) (not (autoloadp diminish-symbol))
+         ((ignore-errors (and (commandp diminish-symbol t) (not (ergoemacs-autoloadp diminish-symbol))
                               (diminish dim))))
          (t (eval-after-load diminish-symbol
               `(diminish ',dim)))))
@@ -1635,7 +1626,7 @@ modifications with `diminish-undo'"
        ((stringp dim)
         (cond
          (type (diminish-undo diminish-symbol))
-         ((ignore-errors (and (commandp diminish-symbol t) (not (autoloadp diminish-symbol))
+         ((ignore-errors (and (commandp diminish-symbol t) (not (ergoemacs-autoloadp diminish-symbol))
                               (diminish diminish-symbol dim))))
          (t (eval-after-load diminish-symbol
               `(diminish ',diminish-symbol ,dim)))))
@@ -1644,11 +1635,11 @@ modifications with `diminish-undo'"
              (symbolp (nth 0 dim)))
         (cond
          (type (diminish-undo (nth 0 dim)))
-         ((ignore-errors (and (commandp (nth 0 dim) t) (not (autoloadp (nth 0 dim)))
+         ((ignore-errors (and (commandp (nth 0 dim) t) (not (ergoemacs-autoloadp (nth 0 dim)))
                               (diminish (nth 0 dim) dim))))
          (t (eval-after-load diminish-symbol
               `(diminish ',(nth 0 dim))))))
-       
+
        ;; :diminish (" " " g")
        ((and (consp dim)
              (= 2 (length dim))
@@ -1656,7 +1647,7 @@ modifications with `diminish-undo'"
              (stringp (nth 1 dim)))
         (cond
          (type (diminish-undo diminish-symbol))
-         ((ignore-errors (and (commandp diminish-symbol t) (not (autoloadp diminish-symbol))
+         ((ignore-errors (and (commandp diminish-symbol t) (not (ergoemacs-autoloadp diminish-symbol))
                               (diminish diminish-symbol (ergoemacs :unicode (nth 0 dim) (nth 1 dim))))))
          (t (eval-after-load diminish-symbol
               `(ignore-errors
@@ -1670,7 +1661,7 @@ modifications with `diminish-undo'"
              (stringp (nth 3 dim)))
         (cond
          (type (diminish-undo diminish-symbol))
-         ((ignore-errors (and (commandp diminish-symbol t) (not (autoloadp diminish-symbol))
+         ((ignore-errors (and (commandp diminish-symbol t) (not (ergoemacs-autoloadp diminish-symbol))
                               (diminish diminish-symbol (ergoemacs :unicode (nth 0 dim) (ergoemacs :unicode (nth 1 dim) (nth 2 dim)))))))
          (t (eval-after-load diminish-symbol
               `(ignore-errors
@@ -1684,7 +1675,7 @@ modifications with `diminish-undo'"
              (stringp (nth 2 dim)))
         (cond
          (type (diminish-undo (nth 0 dim)))
-         ((ignore-errors (and (commandp (nth 0 dim) t) (not (autoloadp (nth 0 dim)))
+         ((ignore-errors (and (commandp (nth 0 dim) t) (not (ergoemacs-autoloadp (nth 0 dim)))
                               (diminish (nth 0 dim) (ergoemacs :unicode (nth 1 dim) (nth 2 dim))))))
          (t (eval-after-load diminish-symbol
               `(ignore-errors
@@ -1699,7 +1690,7 @@ modifications with `diminish-undo'"
              (stringp (nth 3 dim)))
         (cond
          (type (diminish-undo (nth 0 dim)))
-         ((ignore-errors (and (commandp (nth 0 dim) t) (not (autoloadp (nth 0 dim)))
+         ((ignore-errors (and (commandp (nth 0 dim) t) (not (ergoemacs-autoloadp (nth 0 dim)))
                               (diminish (nth 0 dim) (ergoemacs :unicode (nth 1 dim) (ergoemacs :unicode (nth 2 dim) (nth 3 dim)))))))
          (t (eval-after-load diminish-symbol
               `(ignore-errors
@@ -1712,7 +1703,7 @@ modifications with `diminish-undo'"
              (stringp (nth 1 dim)))
         (cond
          (type (diminish-undo (nth 0 dim)))
-         ((ignore-errors (and (commandp (nth 0 dim) t) (not (autoloadp (nth 0 dim)))
+         ((ignore-errors (and (commandp (nth 0 dim) t) (not (ergoemacs-autoloadp (nth 0 dim)))
                               (diminish (nth 0 dim) (nth 1 dim)))))
          (t (eval-after-load diminish-symbol
               `(diminish ',(nth 0 dim) ,(nth 1 dim))))))

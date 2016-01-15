@@ -386,11 +386,12 @@ This also translates <C-i> to ?i, <C-m> to ?m <C-[> to ?[
              (aref (match-string 1 basic) 0)))))
 
 (defun ergoemacs-translate--event-convert-list (list &optional layout)
-   "Convert the event description list EVENT-DESC to an event type.
+   "Convert the event description LIST to an event type.
 This is different than `event-convert-list' because:
  -  '(shift ?3) or '(ergoemacs-shift ?3) produces ?# on a QWERTY LAYOUT.
  -  '(ergoemacs-control control ?m) produces C-RET
- -  '(ergoemacs-gui control ?m) produces <C-m>. this applies for ?i and ?[ as well"
+ -  '(ergoemacs-gui control ?m) produces <C-m>. this applies for ?i and ?[ as well.
+ - Mouse events allow click modifiers"
   (let ((cur-list list)
         elt
         tmp
@@ -398,7 +399,7 @@ This is different than `event-convert-list' because:
         new-list
         first second base
         (gui-p (memq 'ergoemacs-gui list)))
-    (when (or gui-p (setq control-p(memq 'ergoemacs-control cur-list)))
+    (when (or gui-p (setq control-p (memq 'ergoemacs-control cur-list)))
       (setq cur-list (reverse cur-list))
       (if (and gui-p (memq (car cur-list) (list '\[ 'm 'i ?\[ ?m ?i))
                (memq 'control cur-list))
@@ -757,7 +758,7 @@ When NAME is a symbol, setup the translation function for the symbol."
     struct))
 
 (defun ergoemacs-translate--get (type)
-  "Get translation object TYPE"
+  "Get translation object TYPE."
   (let ((ret (ergoemacs-gethash type ergoemacs-translation-hash)))
     (cond
      ((and ret (ergoemacs-translation-struct-p ret))
@@ -818,10 +819,10 @@ If TYPE is unspecified, assume :normal translation"
 (defun ergoemacs-translate--parent-map ()
   (or ergoemacs-translate--parent-map
       (let ((map (make-sparse-keymap)))
-        (ergoemacs map :label (- most-positive-fixnum 1))
+	(setq ergoemacs-translate--parent-map map)
+        (ergoemacs map :label)
         (ergoemacs map :only-local-modifications-p t)
         (ergoemacs map :map-list-hash '(ergoemacs-translate--parent-map))
-        (setq ergoemacs-translate--parent-map map)
         map)))
 
 (add-hook 'ergoemacs-mode-intialize-hook #'ergoemacs-translate--parent-map)
@@ -833,10 +834,10 @@ If TYPE is unspecified, assume :normal translation"
 (defun ergoemacs-translate--modal-parent-map ()
   (or ergoemacs-translate--modal-parent-map
       (let ((map (make-sparse-keymap)))
-        (ergoemacs map :label (- most-positive-fixnum 2))
+	(setq ergoemacs-translate--modal-parent-map map)
+        (ergoemacs map :label)
         (ergoemacs map :only-local-modifications-p t)
         (ergoemacs map :map-list-hash '(ergoemacs-translate--modal-parent-map))
-        (setq ergoemacs-translate--modal-parent-map map)
         map)))
 (add-hook 'ergoemacs-mode-intialize-hook #'ergoemacs-translate--modal-parent-map)
 

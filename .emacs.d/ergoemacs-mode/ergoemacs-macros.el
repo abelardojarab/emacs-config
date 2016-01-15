@@ -698,7 +698,7 @@ The rest of the body is an `ergoemacs-theme-component' named
              (silent (ergoemacs-gethash "silent-themes" ergoemacs-theme-hash))
              (included (append opt-on opt-off comp))
              (file (or load-file-name (buffer-file-name)))
-             (mod (list file (nth 5 (file-attributes file)))))
+             (mod (list file (and (stringp file) (nth 5 (file-attributes file))))))
         (when (not (boundp 'ergoemacs--component-file-mod-time-list))
           (setq ergoemacs--component-file-mod-time-list nil))
         (push ,(plist-get (nth 0 kb) :name) themes)
@@ -923,6 +923,11 @@ When arg1 can be a property.  The following properties are supported:
         `(ergoemacs-map-properties--get ,arg1 ,arg2))))
      ((and arg1 arg2 arg3
            (symbolp arg2)
+	   (memq arg2 ergoemacs--map-properties-list))
+      ;; Assign a property.
+      `(,(intern (format "ergoemacs-map-properties--%s" (substring (symbol-name arg2) 1))) ,arg1 ,@(cdr (cdr args))))
+     ((and arg1 arg2 arg3
+           (symbolp arg2)
            (string= ":" (substring (symbol-name arg2) 0 1)))
       ;; Assign a property.
       `(ergoemacs-map-properties--put ,arg1 ,arg2 ,arg3))
@@ -1063,6 +1068,18 @@ When :type is :replace that replaces a function (like `define-key')"
   `(letf (((symbol-function 'read-key-sequence) #'ergoemacs-command-loop--read-key-sequence)
           ((symbol-function 'key-description) #'ergoemacs-key-description))
      ,@body))
+
+(defmacro ergoemacs-autoloadp (object)
+  "Non-nil if OBJECT is an autoload."
+  (cond
+   ((fboundp #'autoloadp) `(autoloadp ,object))
+   (t `(eq 'autoload (car-safe ,object)))))
+
+(defmacro ergoemacs-buffer-narrowed-p ()
+  "Return non-nil if the current buffer is narrowed."
+  (cond
+   ((fboundp #'buffer-narrowed-p) `(buffer-narrowed-p))
+   (t `(/= (- (point-max) (point-min)) (buffer-size)))))
 
 (provide 'ergoemacs-macros)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

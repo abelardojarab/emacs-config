@@ -93,10 +93,6 @@ Defaults to `error'."
   (setq shell-file-name "bash")))
 (setq explicit-shell-file-name shell-file-name)
 
-;; Set path environment depending on OS.
-(add-to-list 'load-path "~/.emacs.d/exec-path-from-shell")
-(require 'exec-path-from-shell)
-
 ;; GUI-specific thing
 (when (window-system)
   (setenv "EMACS_GUI" "t"))

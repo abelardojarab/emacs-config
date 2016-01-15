@@ -274,26 +274,6 @@ non-nil."
                     (concat "/home/" user-login-name) "~"
                     (or buffer-file-name "%b"))))))
 
-;; Adjust Emacs size according to resolution
-;; Next code work with Emacs 21.4, 22.3, 23.1.
-(when window-system
-  (add-hook 'window-setup-hook
-            (let ((px (display-pixel-width))
-                  (py (display-pixel-height))
-                  (fx (frame-char-width))
-                  (fy (frame-char-height))
-                  tx ty)
-              ;; Next formulas discovered empiric on Windows host with default font.
-              (setq tx (- (/ px fx) 4))
-              (setq ty (- (/ py fy) 6))
-              (setq initial-frame-alist '((top . 2) (left . 2)))
-              (add-to-list 'initial-frame-alist (cons 'width tx))
-              (add-to-list 'initial-frame-alist (cons 'height ty))
-              t)))
-
-;; Works for Emacs 24.4 and above
-(add-to-list 'default-frame-alist '(fullscreen . fullheight))
-
 ;; Highlight blocks
 (add-to-list 'load-path "~/.emacs.d/highlight-blocks")
 (require 'highlight-blocks)

@@ -478,6 +478,8 @@ should insert the face name."
   'help-function #'ergoemacs-theme-find-definition
   'help-echo (purecopy "mouse-2, RET: find this ergoemacs theme's definition"))
 
+(defvar ergoemacs-theme--svg-list nil)
+
 (defun ergoemacs-theme-find-definition (theme)
   "Find the definition of THEME.  THEME defaults to the name near point.
 
@@ -501,14 +503,19 @@ See also `find-function-recenter-line' and `find-function-after-hook'."
                          (and (symbolp theme) (symbol-name theme)))))
          (plist (ergoemacs-gethash (or theme "") ergoemacs-theme-hash))
          (file (plist-get plist :file))
-         (el-file (concat (file-name-sans-extension file) ".el"))
+         (el-file (and (stringp file) (concat (file-name-sans-extension file) ".el")))
          (old-theme ergoemacs-theme)
+
+	 (key (concat theme "-" ergoemacs-keyboard-layout "-" (symbol-name (ergoemacs-map--hashkey ergoemacs--start-emacs-state-2))))
          required-p
          svg png tmp)
     (if (not plist)
         (message "You did not specify a valid ergoemacs theme %s" theme)
-      (setq svg (ergoemacs-theme--svg theme)
-            png (ergoemacs-theme--png theme))
+      (if current-prefix-arg
+	  (setq svg (ergoemacs-theme--svg theme nil t)
+                 png (ergoemacs-theme--png theme nil t))
+	(setq svg (ergoemacs-theme--svg theme)
+	      png (ergoemacs-theme--png theme)))
       (help-setup-xref (list #'ergoemacs-theme-describe (or theme ""))
                        (called-interactively-p 'interactive))
       (with-help-window (help-buffer)
@@ -517,7 +524,7 @@ See also `find-function-recenter-line' and `find-function-after-hook'."
           ;; Use " is " instead of a colon so that
           ;; it is easier to get out the function name using forward-sexp.
           (insert " is an `ergoemacs-mode' theme")
-          (when (file-readable-p el-file)
+          (when (and el-file (file-readable-p el-file))
             (insert " defined in `")
             (insert (file-name-nondirectory el-file))
             (insert "'.")
@@ -551,6 +558,31 @@ See also `find-function-recenter-line' and `find-function-after-hook'."
             (if (looking-at "\\(\\[svg\\]\\)")
                 (help-xref-button 1 'help-url (car svg))))
           (goto-char (point-max))
+	  (when ergoemacs-theme--svg-list
+	    (insert "\n")
+	    (dolist (elt ergoemacs-theme--svg-list)
+	      (when (string= key (nth 0 elt))
+		(insert (ergoemacs-key-description (nth 1 elt)) ":\n")
+                (cond
+                 ((and (image-type-available-p 'png)
+                       (nth 2 elt)
+                       (file-exists-p (replace-regexp-in-string "[.]svg\\'" ".png" (nth 2 elt))))
+                  (insert-image (create-image (replace-regexp-in-string "[.]svg\\'" ".png" (nth 2 elt))))
+                  (insert "\n"))
+                 ((and (image-type-available-p 'svg)
+                       (nth 2 elt)
+                       (file-exists-p (nth 2 elt)))
+                  (insert-image (create-image (nth 2 elt)))
+                  (insert "\n")))
+                (when (file-exists-p (nth 2 elt))
+                  (insert "[svg]")
+                  (when (looking-back "\\(\\[svg\\]\\)")
+                    (help-xref-button 1 'help-url (nth 2 elt))))
+                (when (file-exists-p (replace-regexp-in-string "[.]svg\\'" ".png" (nth 2 elt)))
+                  (insert " [png]")
+                  (when (looking-back "\\(\\[png\\]\\)")
+                    (help-xref-button 1 'help-url (replace-regexp-in-string "[.]svg\\'" ".png" (nth 2 elt)))))
+                (insert "\n\n"))))
           (insert "\n\n")
           (when (setq tmp (plist-get plist :based-on))
             (when (eq (car tmp) 'quote)
@@ -882,13 +914,13 @@ See also `find-function-recenter-line' and `find-function-after-hook'."
     (let* ((lay (or layout ergoemacs-keyboard-layout))
            (theme (or theme ergoemacs-theme))
            (layout (symbol-value (ergoemacs :layout  lay)))
-           (file-dir (expand-file-name "bindings" (expand-file-name "ergoemacs-extras" user-emacs-directory)))
+           (file-dir (expand-file-name "bindings" (expand-file-name "eurgoemacs-extras" user-emacs-directory)))
            (file-name (expand-file-name (concat theme "-" lay "-" (symbol-name (ergoemacs-map--hashkey ergoemacs--start-emacs-state-2)) ".svg") file-dir))
            (reread reread)
            (old-theme ergoemacs-theme)
            (old-layout ergoemacs-keyboard-layout)
            pt ret)
-      (if (and file-name (file-exists-p file-name) (not reread))
+      (if (and file-name (file-exists-p file-name) (not reread) (or (not full-p) ergoemacs-theme--svg-list))
           (progn
             (setq ret (file-expand-wildcards (expand-file-name (concat theme "-" lay "-*-" (symbol-name (ergoemacs-map--hashkey ergoemacs--start-emacs-state-2)) ".svg") file-dir)))
             (push file-name ret)
@@ -997,6 +1029,8 @@ See also `find-function-recenter-line' and `find-function-after-hook'."
                       file-name (expand-file-name (concat ergoemacs-theme "-" lay "-"
                                                           (replace-regexp-in-string "[^A-Za-z0-9-]+" "_" (key-description ergoemacs-theme--svg-prefix))
                                                           "-" (symbol-name (ergoemacs-map--hashkey ergoemacs--start-emacs-state-2)) ".svg") file-dir))
+ 		(push (list (concat ergoemacs-theme "-" lay "-" (symbol-name (ergoemacs-map--hashkey ergoemacs--start-emacs-state-2)))
+			    ergoemacs-theme--svg-prefix file-name) ergoemacs-theme--svg-list)
                 (ergoemacs :spinner '("%s→%s" "%s->%s") (ergoemacs-key-description ergoemacs-theme--svg-prefix) file-name)
                 (with-temp-file file-name
                   (dolist (w ergoemacs-theme--svg)
@@ -1014,22 +1048,31 @@ See also `find-function-recenter-line' and `find-function-after-hook'."
         ret))))
 
 (defvar ergoemacs-theme--png nil)
+(defvar ergoemacs-theme--png-last nil)
 (defun ergoemacs-theme--png--process (&rest _ignore)
   "Process the `ergoemacs-theme--png' list to convert svg files
 to png files."
-  (save-excursion
-    (let* ((png-info (pop ergoemacs-theme--png))
-           process)
-      (if (not png-info)
-          (progn
-            (ergoemacs-command-loop--message "Done creating png files.")
-            ;; FIXME: Update images...
-            )
-        (ergoemacs :spinner "%s" (nth 0 png-info))
-        (setq process (start-process-shell-command
-                       "ergoemacs-png-convert" "*ergoemacs-theme-png-convert*"
-                                                   (nth 1 png-info)))
-        (set-process-sentinel process 'ergoemacs-theme--png--process)))))
+  (when (or (not ergoemacs-theme--png-last)
+	    (file-exists-p ergoemacs-theme--png-last)
+	    ;; Reset variables
+	    (and (message "PNG generation failed. Abort creating png files.")
+		 (setq ergoemacs-theme--png nil
+		       ergoemacs-theme--png-last nil)))
+    (save-excursion
+      (let* ((png-info (pop ergoemacs-theme--png))
+	     process)
+	(if (not png-info)
+	    (progn
+	      (ergoemacs-command-loop--message "Done creating png files.")
+	      ;; FIXME: Update images...
+	      )
+	  
+	  (ergoemacs :spinner "%s" (nth 0 png-info))
+	  (setq process (start-process-shell-command
+			 "ergoemacs-png-convert" "*ergoemacs-theme-png-convert*"
+			 (nth 1 png-info))
+		ergoemacs-theme--png-last (nth 2 png-info))
+	  (set-process-sentinel process 'ergoemacs-theme--png--process))))))
 
 (defun ergoemacs-theme--png (&optional theme layout full-p reread)
   "Get png file for layout, or create one.
@@ -1042,7 +1085,8 @@ Requires `ergoemacs-inkscape' to be specified."
         (if (and ergoemacs-inkscape (file-readable-p ergoemacs-inkscape))
             (progn
               (push (list (format "%s->%s" (file-name-nondirectory svg-file) (file-name-nondirectory png-file))
-                          (format "%s -z -f \"%s\" -e \"%s\"" ergoemacs-inkscape svg-file png-file)) ergoemacs-theme--png)
+                          (format "%s -z -f \"%s\" -e \"%s\"" ergoemacs-inkscape svg-file png-file)
+			  png-file) ergoemacs-theme--png)
               (push png-file ret))
           (message "Need inkscape and to specify inkscape location with `ergoemacs-inkscape'.")
           nil)))

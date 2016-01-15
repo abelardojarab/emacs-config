@@ -1,6 +1,6 @@
 ;;; ergoemacs-mode.el --- Emacs mode based on common modern interface and ergonomics. -*- lexical-binding: t -*-
 
-;; Copyright © 2007-2010, 2012-2015  Free Software Foundation, Inc.
+;; Copyright © 2007-2010, 2012-2016  Free Software Foundation, Inc.
 
 ;; Author: Xah Lee <xah@xahlee.org>
 ;;         David Capello <davidcapello@gmail.com>
@@ -35,7 +35,7 @@
 
 ;; Todo:
 
-;; 
+;;
 
 ;;; Acknowledgment:
 ;; Thanks to Shahin Azad for persian layout (fa) ishahinism at g
@@ -84,9 +84,9 @@
 (provide 'ergoemacs-mode)
 (require 'package)
 
-(add-to-list 'package-archives '("melpa-stable" . "http://stable.melpa.org/packages/"))
-(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
-(add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/"))
+;; (add-to-list 'package-archives '("melpa-stable" . "http://stable.melpa.org/packages/"))
+;; (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
+;; (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/"))
 
 (defvar ergoemacs--system (replace-regexp-in-string "[^0-9A-Za-z]+" "-" (concat emacs-version "-" system-configuration)))
 
@@ -103,7 +103,7 @@
 (defvar pcache-directory)
 (defvar ergoemacs-component-struct--apply-ensure-p)
 
-(require 'package)
+;; (require 'package)
 
 (declare-function ergoemacs-require "ergoemacs-lib")
 (declare-function ergoemacs-layouts--custom-documentation "ergoemacs-layouts")
@@ -159,7 +159,7 @@ Added beginning-of-buffer Alt+n (QWERTY notation) and end-of-buffer Alt+Shift+n"
                                (if (getenv "ERGOEMACS_THEME")
                                    (getenv "ERGOEMACS_THEME")
                                  nil)))
-  "Ergoemacs Keyboard Layout Themes"
+  "Ergoemacs Keyboard Layout Themes."
   :type '(choice
           (const :tag "Standard" :value nil)
           (choice (symbol :tag "Other (symbol)")
@@ -198,9 +198,9 @@ Added beginning-of-buffer Alt+n (QWERTY notation) and end-of-buffer Alt+Shift+n"
 (defcustom ergoemacs-mode-line t
   "Determines when the ergoemacs-mode modeline indicator is shown."
   :type '(choice
-	  (const :tag "Always Show Mode Line" t)
-	  (const :tag "Do not show layout" no-layout)
-	  (const :tag "Never Show Mode Line" nil))
+      (const :tag "Always Show Mode Line" t)
+      (const :tag "Do not show layout" no-layout)
+      (const :tag "Never Show Mode Line" nil))
   :group 'ergoemacs-mode)
 
 (defun ergoemacs-mode-line (&optional text)
@@ -472,7 +472,7 @@ bindings the keymap is:
       (if (not (setq val (gethash key ergoemacs-timing-hash)))
           (puthash key (vector 1 (setq val (float-time (time-subtract (current-time) entry-time)))
                                val val (or (and (setq file (assoc key ergoemacs-timing--locations)) (expand-file-name (cdr file) ergoemacs-dir))
-					   load-file-name buffer-file-name)) ergoemacs-timing-hash)
+                       load-file-name buffer-file-name)) ergoemacs-timing-hash)
         (incf (aref val 0))
         (incf (aref val 1) (setq time (float-time (time-subtract (current-time) entry-time))))
         (setf (aref val 2) (min time (aref val 2)))
@@ -508,7 +508,7 @@ bindings the keymap is:
     (dolist (file (file-expand-wildcards (expand-file-name (concat "*." ext) (expand-file-name "bindings" (expand-file-name "ergoemacs-extras" user-emacs-directory)))))
       (delete-file file)
       (message "Remove %s, since keys may have changed." file)))
-  
+
   (unless no-message
     (message "Clear cache for next startup.")))
 
@@ -601,7 +601,7 @@ When `store-p' is non-nil, save the tables."
                ergoemacs-layouts
                ergoemacs-lib
                ergoemacs-map
-               ergoemacs-map-properties 
+               ergoemacs-map-properties
                ergoemacs-mapkeymap
                ergoemacs-theme-engine
                ergoemacs-translate
@@ -862,7 +862,7 @@ Valid values are:
   :initialize #'custom-initialize-default
   :group 'ergoemacs-display)
 
-(define-obsolete-variable-alias 'ergoemacs-use-unicode-brackets 'ergoemacs-display-use-unicode-brackets-around-keys) 
+(define-obsolete-variable-alias 'ergoemacs-use-unicode-brackets 'ergoemacs-display-use-unicode-brackets-around-keys)
 
 
 (defcustom ergoemacs-display-small-symbols-for-key-modifiers nil
@@ -1171,22 +1171,22 @@ modal state is currently enabled."
         (mods '(control meta shift hyper super alt))
         tmp
         key)
-    (dolist (char '("<f1>" 
-                    "<f2>" 
-                    "<f3>" 
-                    "<f4>" 
-                    "<f5>" 
-                    "<f6>" 
-                    "<f7>" 
-                    "<f8>" 
-                    "<f9>" 
+    (dolist (char '("<f1>"
+                    "<f2>"
+                    "<f3>"
+                    "<f4>"
+                    "<f5>"
+                    "<f6>"
+                    "<f7>"
+                    "<f8>"
+                    "<f9>"
                     "<f10>"
                     "<f11>"
                     "<f12>"
                     "<apps>" "<menu>"
                     "RET" "ESC" "DEL" "TAB"
-                    "<home>" 
-                    "<next>" 
+                    "<home>"
+                    "<next>"
                     "<prior>"
                     "<end>"
                     "<insert>"

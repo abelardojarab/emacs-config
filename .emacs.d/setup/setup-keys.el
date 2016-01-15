@@ -1,6 +1,6 @@
 ;;; setup-keys.el ---
 
-;; Copyright (C) 2014, 2015  abelardo.jara-berrocal
+;; Copyright (C) 2014, 2015, 2016  abelardo.jara-berrocal
 
 ;; Author: abelardo.jara-berrocal <ajaraber@plxc25288.pdx.intel.com>
 ;; Keywords:
@@ -308,26 +308,14 @@
   (setq mouse-sel-mode t))
 
 ;; Moving cursor down at bottom scrolls only a single line, not half page
-(setq
- scroll-margin 1                ;; start scrolling when marker at top/bottom
- scroll-conservatively 100000   ;; marker distance from center (don't jump to center)
- scroll-preserve-screen-position 1) ;; try to keep screen position when PgDn/PgUp
-
-;; These ones are buffer local and thus have to be set up by setq-default
-(setq-default scroll-up-aggressively 0.01
-              scroll-down-aggressively 0.01)
-
-;; Moving cursor down at bottom scrolls only a single line, not half page
 (setq scroll-step 1)
 (setq auto-window-vscroll t)
 
 ;; Mouse wheel scroll support
 (mouse-wheel-mode t)
 
-;; scroll one line at a time (less "jumpy" than defaults)
-(setq mouse-wheel-scroll-amount '(0.07)) ;; one line at a time
-(setq mouse-wheel-progressive-speed nil) ;; don't accelerate scrolling
-(setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
+;; scroll window under mouse
+(setq mouse-wheel-follow-mouse 't)
 
 ;; Scroll with the mouse
 (defun smooth-scroll (increment)
@@ -361,9 +349,6 @@
 (global-set-key [(shift mouse-4)] '(lambda () (interactive) (scroll-down-line)))
 (global-set-key [(control mouse-5)] 'text-scale-decrease)
 (global-set-key [(control mouse-4)] 'text-scale-increase)
-
-;; Mac Key mode
-(require 'mac-key-mode)
 
 ;; Refresh file
 (defun refresh-file ()
