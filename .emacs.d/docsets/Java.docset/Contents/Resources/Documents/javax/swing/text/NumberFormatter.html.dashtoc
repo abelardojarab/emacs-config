@@ -1,1 +1,0 @@
-{"entries":[{"name":"Constructors","isHeader":true},{"name":"NumberFormatter()","path":"NumberFormatter--","entryType":"Constructor"},{"name":"NumberFormatter(NumberFormat)","path":"NumberFormatter-java.text.NumberFormat-","entryType":"Constructor"},{"name":"Methods","isHeader":true},{"name":"setFormat(Format)","path":"setFormat-java.text.Format-","entryType":"Method"}]}

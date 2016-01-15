@@ -1,1 +1,0 @@
-{"entries":[{"name":"Methods","isHeader":true},{"name":"invoke(T)","path":"invoke-T-","entryType":"Method"},{"name":"invokeAsync(T)","path":"invokeAsync-T-","entryType":"Method"},{"name":"invokeAsync(T, AsyncHandler)","path":"invokeAsync-T-javax.xml.ws.AsyncHandler-","entryType":"Method"},{"name":"invokeOneWay(T)","path":"invokeOneWay-T-","entryType":"Method"}]}

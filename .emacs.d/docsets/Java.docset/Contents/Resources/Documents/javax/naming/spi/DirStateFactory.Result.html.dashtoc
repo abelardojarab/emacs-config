@@ -1,1 +1,0 @@
-{"entries":[{"name":"Constructors","isHeader":true},{"name":"Result(Object, Attributes)","path":"Result-java.lang.Object-javax.naming.directory.Attributes-","entryType":"Constructor"},{"name":"Methods","isHeader":true},{"name":"getAttributes()","path":"getAttributes--","entryType":"Method"},{"name":"getObject()","path":"getObject--","entryType":"Method"}]}

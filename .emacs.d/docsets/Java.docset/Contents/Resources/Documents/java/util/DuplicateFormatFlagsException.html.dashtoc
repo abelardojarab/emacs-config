@@ -1,1 +1,0 @@
-{"entries":[{"name":"Constructors","isHeader":true},{"name":"DuplicateFormatFlagsException(String)","path":"DuplicateFormatFlagsException-java.lang.String-","entryType":"Constructor"},{"name":"Methods","isHeader":true},{"name":"getFlags()","path":"getFlags--","entryType":"Method"},{"name":"getMessage()","path":"getMessage--","entryType":"Method"}]}

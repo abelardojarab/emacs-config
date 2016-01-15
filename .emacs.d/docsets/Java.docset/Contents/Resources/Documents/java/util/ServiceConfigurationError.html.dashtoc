@@ -1,1 +1,0 @@
-{"entries":[{"name":"Constructors","isHeader":true},{"name":"ServiceConfigurationError(String)","path":"ServiceConfigurationError-java.lang.String-","entryType":"Constructor"},{"name":"ServiceConfigurationError(String, Throwable)","path":"ServiceConfigurationError-java.lang.String-java.lang.Throwable-","entryType":"Constructor"}]}

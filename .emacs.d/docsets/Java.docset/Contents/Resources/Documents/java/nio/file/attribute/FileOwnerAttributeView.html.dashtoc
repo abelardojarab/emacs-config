@@ -1,1 +1,0 @@
-{"entries":[{"name":"Methods","isHeader":true},{"name":"getOwner()","path":"getOwner--","entryType":"Method"},{"name":"name()","path":"name--","entryType":"Method"},{"name":"setOwner(UserPrincipal)","path":"setOwner-java.nio.file.attribute.UserPrincipal-","entryType":"Method"}]}

@@ -1,1 +1,0 @@
-{"entries":[{"name":"Constructors","isHeader":true},{"name":"PropertyVetoException(String, PropertyChangeEvent)","path":"PropertyVetoException-java.lang.String-java.beans.PropertyChangeEvent-","entryType":"Constructor"},{"name":"Methods","isHeader":true},{"name":"getPropertyChangeEvent()","path":"getPropertyChangeEvent--","entryType":"Method"}]}

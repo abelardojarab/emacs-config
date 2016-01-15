@@ -1,1 +1,0 @@
-{"entries":[{"name":"Constructors","isHeader":true},{"name":"UnknownUserException()","path":"UnknownUserException--","entryType":"Constructor"},{"name":"UnknownUserException(Any)","path":"UnknownUserException-org.omg.CORBA.Any-","entryType":"Constructor"},{"name":"Fields","isHeader":true},{"name":"except","path":"except","entryType":"Field"}]}

@@ -1,1 +1,0 @@
-{"entries":[{"name":"Methods","isHeader":true},{"name":"dynamicInvoker()","path":"dynamicInvoker--","entryType":"Method"},{"name":"getTarget()","path":"getTarget--","entryType":"Method"},{"name":"setTarget(MethodHandle)","path":"setTarget-java.lang.invoke.MethodHandle-","entryType":"Method"},{"name":"type()","path":"type--","entryType":"Method"}]}

@@ -1,1 +1,0 @@
-{"entries":[{"name":"Public Functions","isHeader":true},{"name":"QDeclarativeExtensionPlugin","path":"QDeclarativeExtensionPlugin","entryType":"Function"},{"name":"Reimplemented Public Functions","isHeader":true},{"name":"initializeEngine","path":"initializeEngine","entryType":"Function"},{"name":"registerTypes","path":"registerTypes","entryType":"Function"}]}

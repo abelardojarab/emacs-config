@@ -1,1 +1,0 @@
-{"entries":[{"name":"Methods","isHeader":true},{"name":"getFlavorsForNatives(String[]A)","path":"getFlavorsForNatives-java.lang.String:A-","entryType":"Method"},{"name":"getNativesForFlavors(DataFlavor[]A)","path":"getNativesForFlavors-java.awt.datatransfer.DataFlavor:A-","entryType":"Method"}]}

@@ -1,1 +1,0 @@
-{"entries":[{"name":"Constructors","isHeader":true},{"name":"SOAPConnectionFactory()","path":"SOAPConnectionFactory--","entryType":"Constructor"},{"name":"Methods","isHeader":true},{"name":"createConnection()","path":"createConnection--","entryType":"Method"},{"name":"newInstance()","path":"newInstance--","entryType":"Method"}]}

@@ -1,1 +1,0 @@
-{"entries":[{"name":"Methods","isHeader":true},{"name":"evaluate(Object, int)","path":"evaluate-java.lang.Object-int-","entryType":"Method"},{"name":"evaluate(Object, String)","path":"evaluate-java.lang.Object-java.lang.String-","entryType":"Method"},{"name":"evaluate(RowSet)","path":"evaluate-javax.sql.RowSet-","entryType":"Method"}]}

@@ -1,1 +1,0 @@
-{"entries":[{"name":"Constructors","isHeader":true},{"name":"ApplicationException(String, InputStream)","path":"ApplicationException-java.lang.String-org.omg.CORBA.portable.InputStream-","entryType":"Constructor"},{"name":"Methods","isHeader":true},{"name":"getId()","path":"getId--","entryType":"Method"},{"name":"getInputStream()","path":"getInputStream--","entryType":"Method"}]}

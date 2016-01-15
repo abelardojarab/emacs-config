@@ -1,1 +1,0 @@
-{"entries":[{"name":"Constructors","isHeader":true},{"name":"MissingFormatWidthException(String)","path":"MissingFormatWidthException-java.lang.String-","entryType":"Constructor"},{"name":"Methods","isHeader":true},{"name":"getFormatSpecifier()","path":"getFormatSpecifier--","entryType":"Method"},{"name":"getMessage()","path":"getMessage--","entryType":"Method"}]}

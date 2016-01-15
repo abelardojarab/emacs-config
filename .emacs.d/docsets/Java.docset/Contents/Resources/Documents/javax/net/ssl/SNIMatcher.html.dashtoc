@@ -1,1 +1,0 @@
-{"entries":[{"name":"Constructors","isHeader":true},{"name":"SNIMatcher(int)","path":"SNIMatcher-int-","entryType":"Constructor"},{"name":"Methods","isHeader":true},{"name":"getType()","path":"getType--","entryType":"Method"},{"name":"matches(SNIServerName)","path":"matches-javax.net.ssl.SNIServerName-","entryType":"Method"}]}

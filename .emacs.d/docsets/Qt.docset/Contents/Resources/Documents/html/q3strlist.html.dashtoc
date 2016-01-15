@@ -1,1 +1,0 @@
-{"entries":[{"name":"Public Functions","isHeader":true},{"name":"Q3StrList","path":"Q3StrList","entryType":"Function"},{"name":"~Q3StrList","path":"dtor.Q3StrList","entryType":"Function"},{"name":"operator QList<QByteArray>","path":"operator-QList-ltQByteArray-gt","entryType":"Function"},{"name":"operator=","path":"operator-eq","entryType":"Function"}]}

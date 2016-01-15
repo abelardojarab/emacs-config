@@ -1,1 +1,0 @@
-{"entries":[{"name":"Constructors","isHeader":true},{"name":"TypeKindVisitor7()","path":"TypeKindVisitor7--","entryType":"Constructor"},{"name":"TypeKindVisitor7(R)","path":"TypeKindVisitor7-R-","entryType":"Constructor"},{"name":"Methods","isHeader":true},{"name":"visitUnion(UnionType, P)","path":"visitUnion-javax.lang.model.type.UnionType-P-","entryType":"Method"}]}

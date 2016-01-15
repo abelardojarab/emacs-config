@@ -1,1 +1,0 @@
-{"entries":[{"name":"Constructors","isHeader":true},{"name":"DateFormatter()","path":"DateFormatter--","entryType":"Constructor"},{"name":"DateFormatter(DateFormat)","path":"DateFormatter-java.text.DateFormat-","entryType":"Constructor"},{"name":"Methods","isHeader":true},{"name":"setFormat(DateFormat)","path":"setFormat-java.text.DateFormat-","entryType":"Method"}]}

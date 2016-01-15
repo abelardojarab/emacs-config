@@ -1,1 +1,0 @@
-{"entries":[{"name":"Methods","isHeader":true},{"name":"check(Certificate)","path":"check-java.security.cert.Certificate-","entryType":"Method"},{"name":"init(boolean)","path":"init-boolean-","entryType":"Method"},{"name":"isForwardCheckingSupported()","path":"isForwardCheckingSupported--","entryType":"Method"}]}

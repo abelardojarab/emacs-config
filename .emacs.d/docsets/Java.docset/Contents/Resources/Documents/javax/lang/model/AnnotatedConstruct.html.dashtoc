@@ -1,1 +1,0 @@
-{"entries":[{"name":"Methods","isHeader":true},{"name":"getAnnotation(Class)","path":"getAnnotation-java.lang.Class-","entryType":"Method"},{"name":"getAnnotationMirrors()","path":"getAnnotationMirrors--","entryType":"Method"},{"name":"getAnnotationsByType(Class)","path":"getAnnotationsByType-java.lang.Class-","entryType":"Method"}]}

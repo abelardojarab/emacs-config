@@ -1,1 +1,0 @@
-{"entries":[{"name":"Constructors","isHeader":true},{"name":"PrinterIOException(IOException)","path":"PrinterIOException-java.io.IOException-","entryType":"Constructor"},{"name":"Methods","isHeader":true},{"name":"getCause()","path":"getCause--","entryType":"Method"},{"name":"getIOException()","path":"getIOException--","entryType":"Method"}]}

@@ -1,1 +1,0 @@
-{"entries":[{"name":"Methods","isHeader":true},{"name":"_read(InputStream)","path":"Z:Z_read-org.omg.CORBA.portable.InputStream-","entryType":"Method"},{"name":"_type()","path":"Z:Z_type--","entryType":"Method"},{"name":"_write(OutputStream)","path":"Z:Z_write-org.omg.CORBA.portable.OutputStream-","entryType":"Method"}]}

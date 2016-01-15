@@ -1,1 +1,0 @@
-{"entries":[{"name":"Constructors","isHeader":true},{"name":"HttpHandler()","path":"HttpHandler--","entryType":"Constructor"},{"name":"Methods","isHeader":true},{"name":"handle(HttpExchange)","path":"handle-javax.xml.ws.spi.http.HttpExchange-","entryType":"Method"}]}

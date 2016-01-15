@@ -1,1 +1,0 @@
-{"entries":[{"name":"Constructors","isHeader":true},{"name":"MalformedInputException(int)","path":"MalformedInputException-int-","entryType":"Constructor"},{"name":"Methods","isHeader":true},{"name":"getInputLength()","path":"getInputLength--","entryType":"Method"},{"name":"getMessage()","path":"getMessage--","entryType":"Method"}]}

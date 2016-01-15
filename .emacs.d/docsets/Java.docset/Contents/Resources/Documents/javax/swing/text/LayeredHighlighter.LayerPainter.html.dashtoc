@@ -1,1 +1,0 @@
-{"entries":[{"name":"Constructors","isHeader":true},{"name":"LayerPainter()","path":"LayerPainter--","entryType":"Constructor"},{"name":"Methods","isHeader":true},{"name":"paintLayer(Graphics, int, int, Shape, JTextComponent, View)","path":"paintLayer-java.awt.Graphics-int-int-java.awt.Shape-javax.swing.text.JTextComponent-javax.swing.text.View-","entryType":"Method"}]}

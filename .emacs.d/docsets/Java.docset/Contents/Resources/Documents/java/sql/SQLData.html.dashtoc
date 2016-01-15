@@ -1,1 +1,0 @@
-{"entries":[{"name":"Methods","isHeader":true},{"name":"getSQLTypeName()","path":"getSQLTypeName--","entryType":"Method"},{"name":"readSQL(SQLInput, String)","path":"readSQL-java.sql.SQLInput-java.lang.String-","entryType":"Method"},{"name":"writeSQL(SQLOutput)","path":"writeSQL-java.sql.SQLOutput-","entryType":"Method"}]}

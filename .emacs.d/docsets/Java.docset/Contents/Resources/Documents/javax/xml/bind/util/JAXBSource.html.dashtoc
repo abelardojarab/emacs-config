@@ -1,1 +1,0 @@
-{"entries":[{"name":"Constructors","isHeader":true},{"name":"JAXBSource(JAXBContext, Object)","path":"JAXBSource-javax.xml.bind.JAXBContext-java.lang.Object-","entryType":"Constructor"},{"name":"JAXBSource(Marshaller, Object)","path":"JAXBSource-javax.xml.bind.Marshaller-java.lang.Object-","entryType":"Constructor"}]}

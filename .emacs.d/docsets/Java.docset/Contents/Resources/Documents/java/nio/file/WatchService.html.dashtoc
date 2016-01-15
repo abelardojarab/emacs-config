@@ -1,1 +1,0 @@
-{"entries":[{"name":"Methods","isHeader":true},{"name":"close()","path":"close--","entryType":"Method"},{"name":"poll()","path":"poll--","entryType":"Method"},{"name":"poll(long, TimeUnit)","path":"poll-long-java.util.concurrent.TimeUnit-","entryType":"Method"},{"name":"take()","path":"take--","entryType":"Method"}]}

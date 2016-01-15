@@ -1,1 +1,0 @@
-{"entries":[{"name":"Constructors","isHeader":true},{"name":"GrayFilter(boolean, int)","path":"GrayFilter-boolean-int-","entryType":"Constructor"},{"name":"Methods","isHeader":true},{"name":"createDisabledImage(Image)","path":"createDisabledImage-java.awt.Image-","entryType":"Method"},{"name":"filterRGB(int, int, int)","path":"filterRGB-int-int-int-","entryType":"Method"}]}

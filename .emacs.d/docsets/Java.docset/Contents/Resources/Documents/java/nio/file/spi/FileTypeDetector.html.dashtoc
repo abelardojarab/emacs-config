@@ -1,1 +1,0 @@
-{"entries":[{"name":"Constructors","isHeader":true},{"name":"FileTypeDetector()","path":"FileTypeDetector--","entryType":"Constructor"},{"name":"Methods","isHeader":true},{"name":"probeContentType(Path)","path":"probeContentType-java.nio.file.Path-","entryType":"Method"}]}

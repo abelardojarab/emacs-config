@@ -1,1 +1,0 @@
-{"entries":[{"name":"Methods","isHeader":true},{"name":"append(char)","path":"append-char-","entryType":"Method"},{"name":"append(CharSequence)","path":"append-java.lang.CharSequence-","entryType":"Method"},{"name":"append(CharSequence, int, int)","path":"append-java.lang.CharSequence-int-int-","entryType":"Method"}]}

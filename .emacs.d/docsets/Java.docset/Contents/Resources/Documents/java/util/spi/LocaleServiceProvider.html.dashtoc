@@ -1,1 +1,0 @@
-{"entries":[{"name":"Constructors","isHeader":true},{"name":"LocaleServiceProvider()","path":"LocaleServiceProvider--","entryType":"Constructor"},{"name":"Methods","isHeader":true},{"name":"getAvailableLocales()","path":"getAvailableLocales--","entryType":"Method"},{"name":"isSupportedLocale(Locale)","path":"isSupportedLocale-java.util.Locale-","entryType":"Method"}]}

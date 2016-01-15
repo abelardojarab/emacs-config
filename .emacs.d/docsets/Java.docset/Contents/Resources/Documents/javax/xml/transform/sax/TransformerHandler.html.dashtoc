@@ -1,1 +1,0 @@
-{"entries":[{"name":"Methods","isHeader":true},{"name":"getSystemId()","path":"getSystemId--","entryType":"Method"},{"name":"getTransformer()","path":"getTransformer--","entryType":"Method"},{"name":"setResult(Result)","path":"setResult-javax.xml.transform.Result-","entryType":"Method"},{"name":"setSystemId(String)","path":"setSystemId-java.lang.String-","entryType":"Method"}]}

@@ -1,1 +1,0 @@
-{"entries":[{"name":"Constructors","isHeader":true},{"name":"NodeChangeEvent(Preferences, Preferences)","path":"NodeChangeEvent-java.util.prefs.Preferences-java.util.prefs.Preferences-","entryType":"Constructor"},{"name":"Methods","isHeader":true},{"name":"getChild()","path":"getChild--","entryType":"Method"},{"name":"getParent()","path":"getParent--","entryType":"Method"}]}

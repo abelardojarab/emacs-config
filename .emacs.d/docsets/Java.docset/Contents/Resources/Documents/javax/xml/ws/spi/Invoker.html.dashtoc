@@ -1,1 +1,0 @@
-{"entries":[{"name":"Constructors","isHeader":true},{"name":"Invoker()","path":"Invoker--","entryType":"Constructor"},{"name":"Methods","isHeader":true},{"name":"inject(WebServiceContext)","path":"inject-javax.xml.ws.WebServiceContext-","entryType":"Method"},{"name":"invoke(Method, Object...)","path":"invoke-java.lang.reflect.Method-java.lang.Object...-","entryType":"Method"}]}

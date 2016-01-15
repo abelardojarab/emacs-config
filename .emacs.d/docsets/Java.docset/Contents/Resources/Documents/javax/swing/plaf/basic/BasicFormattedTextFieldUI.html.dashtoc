@@ -1,1 +1,0 @@
-{"entries":[{"name":"Constructors","isHeader":true},{"name":"BasicFormattedTextFieldUI()","path":"BasicFormattedTextFieldUI--","entryType":"Constructor"},{"name":"Methods","isHeader":true},{"name":"createUI(JComponent)","path":"createUI-javax.swing.JComponent-","entryType":"Method"},{"name":"getPropertyPrefix()","path":"getPropertyPrefix--","entryType":"Method"}]}

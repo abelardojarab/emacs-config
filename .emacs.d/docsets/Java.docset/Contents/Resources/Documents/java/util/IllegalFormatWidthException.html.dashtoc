@@ -1,1 +1,0 @@
-{"entries":[{"name":"Constructors","isHeader":true},{"name":"IllegalFormatWidthException(int)","path":"IllegalFormatWidthException-int-","entryType":"Constructor"},{"name":"Methods","isHeader":true},{"name":"getMessage()","path":"getMessage--","entryType":"Method"},{"name":"getWidth()","path":"getWidth--","entryType":"Method"}]}

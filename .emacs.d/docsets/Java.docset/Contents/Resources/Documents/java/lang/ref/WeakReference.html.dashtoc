@@ -1,1 +1,0 @@
-{"entries":[{"name":"Constructors","isHeader":true},{"name":"WeakReference(T)","path":"WeakReference-T-","entryType":"Constructor"},{"name":"WeakReference(T, ReferenceQueue)","path":"WeakReference-T-java.lang.ref.ReferenceQueue-","entryType":"Constructor"}]}

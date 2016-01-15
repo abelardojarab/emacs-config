@@ -1,1 +1,0 @@
-{"entries":[{"name":"Public Functions","isHeader":true},{"name":"QMacCocoaViewContainer","path":"QMacCocoaViewContainer","entryType":"Function"},{"name":"~QMacCocoaViewContainer","path":"dtor.QMacCocoaViewContainer","entryType":"Function"},{"name":"cocoaView","path":"cocoaView","entryType":"Function"},{"name":"setCocoaView","path":"setCocoaView","entryType":"Function"}]}

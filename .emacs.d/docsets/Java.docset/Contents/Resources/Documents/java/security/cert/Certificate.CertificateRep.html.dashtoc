@@ -1,1 +1,0 @@
-{"entries":[{"name":"Constructors","isHeader":true},{"name":"CertificateRep(String, byte[]A)","path":"CertificateRep-java.lang.String-byte:A-","entryType":"Constructor"},{"name":"Methods","isHeader":true},{"name":"readResolve()","path":"readResolve--","entryType":"Method"}]}

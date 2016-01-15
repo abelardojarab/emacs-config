@@ -1,1 +1,0 @@
-{"entries":[{"name":"Methods","isHeader":true},{"name":"getContext(JComponent)","path":"getContext-javax.swing.JComponent-","entryType":"Method"},{"name":"paintBorder(SynthContext, Graphics, int, int, int, int)","path":"paintBorder-javax.swing.plaf.synth.SynthContext-java.awt.Graphics-int-int-int-int-","entryType":"Method"}]}

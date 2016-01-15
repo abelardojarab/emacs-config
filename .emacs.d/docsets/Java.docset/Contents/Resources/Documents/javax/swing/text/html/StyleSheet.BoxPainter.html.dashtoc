@@ -1,1 +1,0 @@
-{"entries":[{"name":"Methods","isHeader":true},{"name":"getInset(int, View)","path":"getInset-int-javax.swing.text.View-","entryType":"Method"},{"name":"paint(Graphics, float, float, float, float, View)","path":"paint-java.awt.Graphics-float-float-float-float-javax.swing.text.View-","entryType":"Method"}]}

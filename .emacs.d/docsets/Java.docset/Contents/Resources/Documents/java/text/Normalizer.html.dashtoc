@@ -1,1 +1,0 @@
-{"entries":[{"name":"Methods","isHeader":true},{"name":"isNormalized(CharSequence, Form)","path":"isNormalized-java.lang.CharSequence-java.text.Normalizer.Form-","entryType":"Method"},{"name":"normalize(CharSequence, Form)","path":"normalize-java.lang.CharSequence-java.text.Normalizer.Form-","entryType":"Method"}]}

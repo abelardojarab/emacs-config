@@ -1,1 +1,0 @@
-{"entries":[{"name":"Constructors","isHeader":true},{"name":"CharsetProvider()","path":"CharsetProvider--","entryType":"Constructor"},{"name":"Methods","isHeader":true},{"name":"charsetForName(String)","path":"charsetForName-java.lang.String-","entryType":"Method"},{"name":"charsets()","path":"charsets--","entryType":"Method"}]}

@@ -1,1 +1,0 @@
-{"entries":[{"name":"Constructors","isHeader":true},{"name":"MirroredTypeException(TypeMirror)","path":"MirroredTypeException-javax.lang.model.type.TypeMirror-","entryType":"Constructor"},{"name":"Methods","isHeader":true},{"name":"getTypeMirror()","path":"getTypeMirror--","entryType":"Method"}]}

@@ -1,6 +1,0 @@
-# HTTrack Website Copier Cookie File
-# This file format is compatible with Netscape cookies
-developer.mozilla.org	TRUE	/	FALSE	1999999999	messages	1965d62862db2452e1018f74c339b2fc2b3a895c$[[\"__json_message\"\0541\05430\054\"Redirigido desde https://developer.mozilla.org/es/docs/HTML/Elemento/span\"\054\"wiki_redirect\"]]"
-developer.mozilla.org	TRUE	/	FALSE	1999999999	sessionid	6nxihnh5y4r8ex8bou03j8n07248atuw
-developer.mozilla.org	TRUE	/	FALSE	1999999999	csrftoken	VhwVu38ubnmhd5aesXhwRM2MbyN8epRL
-

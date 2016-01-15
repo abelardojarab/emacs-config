@@ -1,1 +1,0 @@
-{"entries":[{"name":"Methods","isHeader":true},{"name":"and(BiPredicate)","path":"and-java.util.function.BiPredicate-","entryType":"Method"},{"name":"negate()","path":"negate--","entryType":"Method"},{"name":"or(BiPredicate)","path":"or-java.util.function.BiPredicate-","entryType":"Method"},{"name":"test(T, U)","path":"test-T-U-","entryType":"Method"}]}

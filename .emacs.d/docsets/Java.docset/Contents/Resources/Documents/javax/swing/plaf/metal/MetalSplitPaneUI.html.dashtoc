@@ -1,1 +1,0 @@
-{"entries":[{"name":"Constructors","isHeader":true},{"name":"MetalSplitPaneUI()","path":"MetalSplitPaneUI--","entryType":"Constructor"},{"name":"Methods","isHeader":true},{"name":"createDefaultDivider()","path":"createDefaultDivider--","entryType":"Method"},{"name":"createUI(JComponent)","path":"createUI-javax.swing.JComponent-","entryType":"Method"}]}

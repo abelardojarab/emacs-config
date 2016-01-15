@@ -1,1 +1,0 @@
-{"entries":[{"name":"Constructors","isHeader":true},{"name":"MimeHeader(String, String)","path":"MimeHeader-java.lang.String-java.lang.String-","entryType":"Constructor"},{"name":"Methods","isHeader":true},{"name":"getName()","path":"getName--","entryType":"Method"},{"name":"getValue()","path":"getValue--","entryType":"Method"}]}

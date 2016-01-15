@@ -1,1 +1,0 @@
-{"entries":[{"name":"Constructors","isHeader":true},{"name":"TaggedProfile()","path":"TaggedProfile--","entryType":"Constructor"},{"name":"TaggedProfile(int, byte[]A)","path":"TaggedProfile-int-byte:A-","entryType":"Constructor"},{"name":"Fields","isHeader":true},{"name":"profile_data","path":"profile_data","entryType":"Field"},{"name":"tag","path":"tag","entryType":"Field"}]}

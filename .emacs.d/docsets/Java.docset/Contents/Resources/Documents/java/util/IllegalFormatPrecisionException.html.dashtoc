@@ -1,1 +1,0 @@
-{"entries":[{"name":"Constructors","isHeader":true},{"name":"IllegalFormatPrecisionException(int)","path":"IllegalFormatPrecisionException-int-","entryType":"Constructor"},{"name":"Methods","isHeader":true},{"name":"getMessage()","path":"getMessage--","entryType":"Method"},{"name":"getPrecision()","path":"getPrecision--","entryType":"Method"}]}

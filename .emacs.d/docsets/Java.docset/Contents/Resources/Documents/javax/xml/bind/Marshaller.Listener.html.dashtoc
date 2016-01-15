@@ -1,1 +1,0 @@
-{"entries":[{"name":"Constructors","isHeader":true},{"name":"Listener()","path":"Listener--","entryType":"Constructor"},{"name":"Methods","isHeader":true},{"name":"afterMarshal(Object)","path":"afterMarshal-java.lang.Object-","entryType":"Method"},{"name":"beforeMarshal(Object)","path":"beforeMarshal-java.lang.Object-","entryType":"Method"}]}

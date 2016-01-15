@@ -1,1 +1,0 @@
-{"entries":[{"name":"Constructors","isHeader":true},{"name":"InterruptedIOException()","path":"InterruptedIOException--","entryType":"Constructor"},{"name":"InterruptedIOException(String)","path":"InterruptedIOException-java.lang.String-","entryType":"Constructor"},{"name":"Fields","isHeader":true},{"name":"bytesTransferred","path":"bytesTransferred","entryType":"Field"}]}

@@ -1,1 +1,0 @@
-{"entries":[{"name":"Constructors","isHeader":true},{"name":"LSException(short, String)","path":"LSException-short-java.lang.String-","entryType":"Constructor"},{"name":"Fields","isHeader":true},{"name":"code","path":"code","entryType":"Field"},{"name":"PARSE_ERR","path":"PARSE_ERR","entryType":"Field"},{"name":"SERIALIZE_ERR","path":"SERIALIZE_ERR","entryType":"Field"}]}

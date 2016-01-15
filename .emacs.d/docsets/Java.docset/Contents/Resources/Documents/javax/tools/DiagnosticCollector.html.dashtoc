@@ -1,1 +1,0 @@
-{"entries":[{"name":"Constructors","isHeader":true},{"name":"DiagnosticCollector()","path":"DiagnosticCollector--","entryType":"Constructor"},{"name":"Methods","isHeader":true},{"name":"getDiagnostics()","path":"getDiagnostics--","entryType":"Method"},{"name":"report(Diagnostic)","path":"report-javax.tools.Diagnostic-","entryType":"Method"}]}

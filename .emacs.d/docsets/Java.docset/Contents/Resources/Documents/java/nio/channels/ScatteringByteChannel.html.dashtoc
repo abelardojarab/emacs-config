@@ -1,1 +1,0 @@
-{"entries":[{"name":"Methods","isHeader":true},{"name":"read(ByteBuffer[]A)","path":"read-java.nio.ByteBuffer:A-","entryType":"Method"},{"name":"read(ByteBuffer[]A, int, int)","path":"read-java.nio.ByteBuffer:A-int-int-","entryType":"Method"}]}

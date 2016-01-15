@@ -1,1 +1,0 @@
-{"entries":[{"name":"Methods","isHeader":true},{"name":"and(DoublePredicate)","path":"and-java.util.function.DoublePredicate-","entryType":"Method"},{"name":"negate()","path":"negate--","entryType":"Method"},{"name":"or(DoublePredicate)","path":"or-java.util.function.DoublePredicate-","entryType":"Method"},{"name":"test(double)","path":"test-double-","entryType":"Method"}]}

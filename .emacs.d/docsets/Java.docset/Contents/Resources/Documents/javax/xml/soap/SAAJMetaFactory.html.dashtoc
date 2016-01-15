@@ -1,1 +1,0 @@
-{"entries":[{"name":"Constructors","isHeader":true},{"name":"SAAJMetaFactory()","path":"SAAJMetaFactory--","entryType":"Constructor"},{"name":"Methods","isHeader":true},{"name":"newMessageFactory(String)","path":"newMessageFactory-java.lang.String-","entryType":"Method"},{"name":"newSOAPFactory(String)","path":"newSOAPFactory-java.lang.String-","entryType":"Method"}]}

@@ -1,1 +1,0 @@
-{"entries":[{"name":"Constructors","isHeader":true},{"name":"DOMStructure(Node)","path":"DOMStructure-org.w3c.dom.Node-","entryType":"Constructor"},{"name":"Methods","isHeader":true},{"name":"getNode()","path":"getNode--","entryType":"Method"},{"name":"isFeatureSupported(String)","path":"isFeatureSupported-java.lang.String-","entryType":"Method"}]}

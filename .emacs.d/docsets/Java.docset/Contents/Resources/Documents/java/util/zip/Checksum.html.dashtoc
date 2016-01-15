@@ -1,1 +1,0 @@
-{"entries":[{"name":"Methods","isHeader":true},{"name":"getValue()","path":"getValue--","entryType":"Method"},{"name":"reset()","path":"reset--","entryType":"Method"},{"name":"update(byte[]A, int, int)","path":"update-byte:A-int-int-","entryType":"Method"},{"name":"update(int)","path":"update-int-","entryType":"Method"}]}

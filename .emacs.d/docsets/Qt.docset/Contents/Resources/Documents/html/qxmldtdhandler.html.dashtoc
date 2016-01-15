@@ -1,1 +1,0 @@
-{"entries":[{"name":"Public Functions","isHeader":true},{"name":"~QXmlDTDHandler","path":"dtor.QXmlDTDHandler","entryType":"Function"},{"name":"errorString","path":"errorString","entryType":"Function"},{"name":"notationDecl","path":"notationDecl","entryType":"Function"},{"name":"unparsedEntityDecl","path":"unparsedEntityDecl","entryType":"Function"}]}

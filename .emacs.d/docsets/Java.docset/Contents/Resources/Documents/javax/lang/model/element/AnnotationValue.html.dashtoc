@@ -1,1 +1,0 @@
-{"entries":[{"name":"Methods","isHeader":true},{"name":"accept(AnnotationValueVisitor, P)","path":"accept-javax.lang.model.element.AnnotationValueVisitor-P-","entryType":"Method"},{"name":"getValue()","path":"getValue--","entryType":"Method"},{"name":"toString()","path":"toString--","entryType":"Method"}]}

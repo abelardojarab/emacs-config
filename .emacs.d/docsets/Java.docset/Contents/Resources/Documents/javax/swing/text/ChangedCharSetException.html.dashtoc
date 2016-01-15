@@ -1,1 +1,0 @@
-{"entries":[{"name":"Constructors","isHeader":true},{"name":"ChangedCharSetException(String, boolean)","path":"ChangedCharSetException-java.lang.String-boolean-","entryType":"Constructor"},{"name":"Methods","isHeader":true},{"name":"getCharSetSpec()","path":"getCharSetSpec--","entryType":"Method"},{"name":"keyEqualsCharSet()","path":"keyEqualsCharSet--","entryType":"Method"}]}

@@ -1,1 +1,0 @@
-{"entries":[{"name":"Methods","isHeader":true},{"name":"encode(OutputStream)","path":"encode-java.io.OutputStream-","entryType":"Method"},{"name":"getId()","path":"getId--","entryType":"Method"},{"name":"getValue()","path":"getValue--","entryType":"Method"},{"name":"isCritical()","path":"isCritical--","entryType":"Method"}]}

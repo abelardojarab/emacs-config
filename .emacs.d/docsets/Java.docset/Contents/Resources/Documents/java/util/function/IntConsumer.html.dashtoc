@@ -1,1 +1,0 @@
-{"entries":[{"name":"Methods","isHeader":true},{"name":"accept(int)","path":"accept-int-","entryType":"Method"},{"name":"andThen(IntConsumer)","path":"andThen-java.util.function.IntConsumer-","entryType":"Method"}]}

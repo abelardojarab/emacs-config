@@ -1,1 +1,0 @@
-{"entries":[{"name":"Constructors","isHeader":true},{"name":"SynthStyleFactory()","path":"SynthStyleFactory--","entryType":"Constructor"},{"name":"Methods","isHeader":true},{"name":"getStyle(JComponent, Region)","path":"getStyle-javax.swing.JComponent-javax.swing.plaf.synth.Region-","entryType":"Method"}]}

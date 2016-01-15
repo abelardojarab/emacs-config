@@ -1,1 +1,0 @@
-{"entries":[{"name":"Constructors","isHeader":true},{"name":"KeyBinding(KeyStroke, String)","path":"KeyBinding-javax.swing.KeyStroke-java.lang.String-","entryType":"Constructor"},{"name":"Fields","isHeader":true},{"name":"actionName","path":"actionName","entryType":"Field"},{"name":"key","path":"key","entryType":"Field"}]}

@@ -1,1 +1,0 @@
-{"entries":[{"name":"Methods","isHeader":true},{"name":"create_dyn_any_from_type_code(TypeCode)","path":"create_dyn_any_from_type_code-org.omg.CORBA.TypeCode-","entryType":"Method"},{"name":"create_dyn_any(Any)","path":"create_dyn_any-org.omg.CORBA.Any-","entryType":"Method"}]}

@@ -1,1 +1,0 @@
-{"entries":[{"name":"Methods","isHeader":true},{"name":"getMBeanServer()","path":"getMBeanServer--","entryType":"Method"},{"name":"setMBeanServer(MBeanServer)","path":"setMBeanServer-javax.management.MBeanServer-","entryType":"Method"}]}

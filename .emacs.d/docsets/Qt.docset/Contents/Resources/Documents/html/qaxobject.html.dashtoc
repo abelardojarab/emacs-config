@@ -1,1 +1,0 @@
-{"entries":[{"name":"Public Functions","isHeader":true},{"name":"QAxObject","path":"QAxObject","entryType":"Function"},{"name":"~QAxObject","path":"dtor.QAxObject","entryType":"Function"},{"name":"doVerb","path":"doVerb","entryType":"Function"},{"name":"Reimplemented Protected Functions","isHeader":true},{"name":"connectNotify","path":"connectNotify","entryType":"Function"}]}

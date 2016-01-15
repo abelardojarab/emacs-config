@@ -1,1 +1,0 @@
-{"entries":[{"name":"Constructors","isHeader":true},{"name":"DHGenParameterSpec(int, int)","path":"DHGenParameterSpec-int-int-","entryType":"Constructor"},{"name":"Methods","isHeader":true},{"name":"getExponentSize()","path":"getExponentSize--","entryType":"Method"},{"name":"getPrimeSize()","path":"getPrimeSize--","entryType":"Method"}]}
