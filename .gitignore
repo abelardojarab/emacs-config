@@ -39,3 +39,4 @@ ergoemacs-theme-engine.elc
 Cask
 %backup%~
 .nfs*
+*.tar.gz
