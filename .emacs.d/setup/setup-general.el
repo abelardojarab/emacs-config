@@ -81,6 +81,10 @@ Defaults to `error'."
 (add-to-list 'load-path "~/.emacs.d/names")
 (require 'names)
 
+;; Exec path from shell
+(add-to-list 'load-path "~/.emacs.d/exec-path-from-shell")
+(require 'exec-path-from-shell)
+
 ;; Define preferred shell
 (cond
  ((executable-find "bash")
