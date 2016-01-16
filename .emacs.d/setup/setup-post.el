@@ -76,6 +76,7 @@
 (add-to-list 'load-path "~/.emacs.d/ergoemacs-mode")
 (setq ergoemacs-ignore-prev-global nil)
 (setq ergoemacs-component-struct--apply-ensure-p nil)
+(setq ergoemacs-theme--custom-documentation nil)
 (setq ergoemacs-keyboard-layout "us")
 (setq ergoemacs-theme "lvl0")
 (require 'ergoemacs-mode)
