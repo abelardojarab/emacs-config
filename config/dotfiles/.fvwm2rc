@@ -44,9 +44,12 @@ AddToFunc StartFunction
 # Init function
 DestroyFunc InitFunction
 AddToFunc   InitFunction
-+ I Exec exec feh $[fvwm_wallpaper]
-+ I Exec exec plank
-+ I Exec exec trayer --SetDockType true --distance 160 --padding 10 --transparent true --alpha 240 --edge top --align right --expand true --widthtype percent --width 20 --heighttype pixel --height 24 --distancefrom right
++ I Exec xrdb ~/.Xresources
++ I Exec feh $[fvwm_wallpaper]
++ I Exec plank
++ I Exec trayer --SetDockType true --distance 170 --padding 10 --transparent true --tint a6aaaa --alpha 50 --edge top --align right --expand true --widthtype percent --width 15 --heighttype pixel --height 24 --distancefrom right
++ I Exec hp-systray
++ I Exec gkrellm --geometry +1940+530
 
 # Window Decor
 DestroyDecor MyDecoration
@@ -560,10 +563,11 @@ DestroyModuleConfig FvwmIconMan
 *FvwmIconMan: MaxButtonWidth 300
 
 # Application specific style settings
-Style "conky" !Title, Sticky, WindowListSkip, StaysOnBottom, NeverFocus
-Style "plank" !Title, !Handles, StaysOnTop, Sticky, NeverFocus, WindowListSkip, CirculateSkip, BorderWidth 1, HandleWidth 0
-Style "docky" !Title, !Handles, Sticky, NeverFocus, WindowListSkip, CirculateSkip, BorderWidth 1, HandleWidth 0
-Style "trayer" NoTitle, FixedPosition, Sticky
+Style "conky"   !Title, Sticky, WindowListSkip, StaysOnBottom, NeverFocus
+Style "plank"   !Title, !Handles, StaysOnTop, Sticky, NeverFocus, WindowListSkip, CirculateSkip, BorderWidth 1, HandleWidth 0
+Style "gkrellm" !Title, !Handles, StaysOnTop, Sticky, NeverFocus, WindowListSkip, CirculateSkip, BorderWidth 1, HandleWidth 0
+Style "docky"   !Title, !Handles, Sticky, NeverFocus, WindowListSkip, CirculateSkip, BorderWidth 1, HandleWidth 0
+Style "trayer"  NoTitle, FixedPosition, Sticky
 
 # The following settings are interpreted by EMACS, do not remove them.
 # Local Variables:
