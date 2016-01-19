@@ -435,12 +435,12 @@ AddToFunc Resize-or-Raise   "I" Raise
 + M Resize
 
 AddToFunc Maximize-func     "M" Maximize   0   100
-+ I ThisWindow (!Maximized) Maximize ewmhiwa true 94 98
++ I ThisWindow (!Maximized) Maximize ewmhiwa true 94 97
 + I ThisWindow (Maximized) DestroyWindowStyle
 + I TestRc (!Match) WindowStyle, ResizeHintOverride, FixedPosition, FixedSize
 + I TestRc (!Match) Raise
 + I TestRc (!Match) UpdateStyles
-+ I TestRc (NoMatch) Maximize ewmhiwa true 94 98
++ I TestRc (NoMatch) Maximize ewmhiwa true 94 97
 
 DestroyFunc WheelScroll
 AddToFunc WheelScroll I PipeRead 'case $0 in \
