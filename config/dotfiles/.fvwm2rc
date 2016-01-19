@@ -9,6 +9,7 @@ IconPath  $[HOME]/workspace/emacsfull/Images/Icons:$[HOME]/Images/Icons:/usr/sha
 InfoStoreAdd font_sans "xft:Calibri:pixelsize=12:encoding=iso10646-1"
 InfoStoreAdd font_mono "xft:Consolas:size=12:encoding=iso10646-1"
 DefaultFont "$[infostore.font_mono]"
+WindowFont "$[infostore.font_mono]"
 
 # Viewport and Virtual Desktop Setup
 DeskTopSize 3x3
@@ -19,8 +20,6 @@ EwmhBaseStruts 128 20 0 20
 OpaqueMoveSize -1
 TitleStyle Height 13
 ColormapFocus FollowsFocus
-WindowFont "$[infostore.font_mono]"
-# WindowFont *-fixed-*-*-*-20-*
 
 # Note: FvwmPager will be swallowed by FvwmButtons (below)
 *FvwmPager: Fore grey
@@ -46,10 +45,15 @@ DestroyFunc InitFunction
 AddToFunc   InitFunction
 + I Exec xrdb ~/.Xresources
 + I Exec feh $[fvwm_wallpaper]
++ I Desk 0 0
 + I Exec plank
-+ I Exec trayer --SetDockType true --distance 170 --padding 10 --transparent true --tint a6aaaa --alpha 50 --edge top --align right --expand true --widthtype percent --width 15 --heighttype pixel --height 24 --distancefrom right
++ I Exec trayer --SetDockType true --distance 200 --padding 10 --transparent true --tint a6aaaa --alpha 50 --edge top --align right --expand true --widthtype percent --width 15 --heighttype pixel --height 24 --distancefrom right
 + I Exec hp-systray
 + I Exec gkrellm --geometry +1940+530
++ I Exec insync start
++ I Exec dropbox start
++ I Desk 1 0
++ I Exec /opt/google/chrome/chrome
 
 # Window Decor
 DestroyDecor MyDecoration
@@ -105,8 +109,13 @@ Style * WindowShadeSteps 20, WindowShadeScrolls
 
 # !Handles, !Borders, !Title
 Style * HandleWidth 4, BorderWidth 4
-Style "Wine" FPLenient, NoFuncHint, NoDecorHint, NoOLDecor
+Style "Wine"      FPLenient, NoFuncHint, NoDecorHint, NoOLDecor
 Style "glretrace" !Title
+Style "conky"     !Title, Sticky, WindowListSkip, StaysOnBottom, NeverFocus
+Style "plank"     !Title, !Handles, StaysOnTop, Sticky, NeverFocus, WindowListSkip
+Style "gkrellm"   !Title, !Handles, StaysOnTop, Sticky, NeverFocus, WindowListSkip
+Style "trayer"    !Title, FixedPosition, Sticky
+Style "chrome"    NoTitle
 
 # Speed up window operations at the expense of a bit of RAM.
 Style * BackingStore, SaveUnder
@@ -426,12 +435,12 @@ AddToFunc Resize-or-Raise   "I" Raise
 + M Resize
 
 AddToFunc Maximize-func     "M" Maximize   0   100
-+ I ThisWindow (!Maximized) Maximize ewmhiwa true 95 98
++ I ThisWindow (!Maximized) Maximize ewmhiwa true 94 98
 + I ThisWindow (Maximized) DestroyWindowStyle
 + I TestRc (!Match) WindowStyle, ResizeHintOverride, FixedPosition, FixedSize
 + I TestRc (!Match) Raise
 + I TestRc (!Match) UpdateStyles
-+ I TestRc (NoMatch) Maximize ewmhiwa true 95 98
++ I TestRc (NoMatch) Maximize ewmhiwa true 94 98
 
 DestroyFunc WheelScroll
 AddToFunc WheelScroll I PipeRead 'case $0 in \
@@ -561,13 +570,6 @@ DestroyModuleConfig FvwmIconMan
 *FvwmIconMan: Action   Mouse   3  N sendcommand Iconify
 *FvwmIconMan: ButtonGeometry 150x20
 *FvwmIconMan: MaxButtonWidth 300
-
-# Application specific style settings
-Style "conky"   !Title, Sticky, WindowListSkip, StaysOnBottom, NeverFocus
-Style "plank"   !Title, !Handles, StaysOnTop, Sticky, NeverFocus, WindowListSkip, CirculateSkip, BorderWidth 1, HandleWidth 0
-Style "gkrellm" !Title, !Handles, StaysOnTop, Sticky, NeverFocus, WindowListSkip, CirculateSkip, BorderWidth 1, HandleWidth 0
-Style "docky"   !Title, !Handles, Sticky, NeverFocus, WindowListSkip, CirculateSkip, BorderWidth 1, HandleWidth 0
-Style "trayer"  NoTitle, FixedPosition, Sticky
 
 # The following settings are interpreted by EMACS, do not remove them.
 # Local Variables:
