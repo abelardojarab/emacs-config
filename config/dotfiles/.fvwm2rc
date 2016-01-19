@@ -1,5 +1,5 @@
 # .fvwm/.fvwm2rc
-SetEnv fvwm_wallpaper $[HOME]/workspace/emacsfull/Images/Wallpapers/1340374.png
+SetEnv fvwm_wallpaper $[HOME]/workspace/emacsfull/Images/Wallpapers/kitzbuhel_mountain_view_austria_europe-wallpaper-2048x1152.png
 
 # Pixmap
 ImagePath $[HOME]/workspace/emacsfull/Images/Icons:$[HOME]/Images/Icons:/usr/share/icons/fvwm:/usr/share/icons/hicolor/16x16
