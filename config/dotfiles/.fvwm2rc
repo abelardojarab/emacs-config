@@ -6,7 +6,7 @@ ImagePath $[HOME]/workspace/emacsfull/Images/Icons:$[HOME]/Images/Icons:/usr/sha
 IconPath  $[HOME]/workspace/emacsfull/Images/Icons:$[HOME]/Images/Icons:/usr/share/icons/fvwm:/usr/share/icons/hicolor/16x16/apps:/usr/share/icons/HighContrast/scalable/apps-extra:/usr/share/icons/icons/hicolor/16x16/apps:/usr/share/icons/oxygen/16x16/apps:/usr/share/icons/oxygen/16x16/actions:/usr/share/icons/gnome/16x16/apps:/usr/share/icons/oxygen/16x16/categories:/usr/share/icons/hicolor/scalable/apps:/usr/share/icons/HighContrast/16x16/apps:/usr/share/icons/locolor/16x16/apps
 
 # Fonts
-InfoStoreAdd font_sans "xft:Calibri:pixelsize=12:encoding=iso10646-1"
+InfoStoreAdd font_sans "xft:Aquabase:size=12:encoding=iso10646-1"
 InfoStoreAdd font_mono "xft:Consolas:size=12:encoding=iso10646-1"
 DefaultFont "$[infostore.font_mono]"
 WindowFont "$[infostore.font_mono]"
@@ -52,8 +52,9 @@ AddToFunc   InitFunction
 + I Exec gkrellm --geometry +1940+530
 + I Exec insync start
 + I Exec dropbox start
++ I Exec /usr/lib/x86_64-linux-gnu/notify-osd
 + I Desk 1 0
-+ I Exec /opt/google/chrome/chrome
++ I Exec /opt/google/chrome-beta/chrome
 
 # Window Decor
 DestroyDecor MyDecoration
@@ -113,7 +114,7 @@ Style "Wine"      FPLenient, NoFuncHint, NoDecorHint, NoOLDecor
 Style "glretrace" !Title
 Style "conky"     !Title, Sticky, WindowListSkip, StaysOnBottom, NeverFocus
 Style "plank"     !Title, !Handles, StaysOnTop, Sticky, NeverFocus, WindowListSkip
-Style "gkrellm"   !Title, !Handles, StaysOnTop, Sticky, NeverFocus, WindowListSkip
+Style "gkrellm"   !Title, !Handles, StaysOnTop, Sticky, NeverFocus, WindowListSkip, FixedPosition
 Style "trayer"    !Title, FixedPosition, Sticky
 Style "chrome"    NoTitle
 
@@ -188,7 +189,7 @@ Mouse 0 R N Menu MainMenu
 
 AddToMenu MainMenu "Main Menu" Title
 + "Terminal" Exec exec gnome-terminal
-+ "Home" Exec exec pcmanfm
++ "Home" Exec exec nautilus
 + "xterm" Exec exec xterm -fg green -bg black -vb
 + "Net" Popup NetSubMenu
 + "Graphics/CAD" Popup GraphicsCADSubMenu
