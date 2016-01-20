@@ -375,6 +375,13 @@ DestroyFunc         FullScreen
 AddToFunc           FullScreen
 + "I" Maximize          100 100
 
+# Key bindings using Alt + Fn
+Key F1   A   M   Menu MainMenu Nop
+Key F2   A   M   Menu Window-Ops Nop
+Key F3   A   M   WindowList
+Key F4   A   M   Move
+Key F10  A   M   Maximize   94 98
+
 # Valid Contexts...combinations of:
 # R=root window
 # W=application window
