@@ -122,6 +122,9 @@ non-nil."
 ;; (load-theme 'monokai t)
 (load-theme 'solarized-dark t)
 
+;; White text
+(add-to-list 'default-frame-alist '(foreground-color . "#FFFFFF"))
+
 ;; Syntax coloring
 (global-font-lock-mode t)
 (global-hi-lock-mode nil)
