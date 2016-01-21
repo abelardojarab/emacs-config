@@ -112,14 +112,14 @@ non-nil."
 (setq solarized-scale-org-headlines nil)
 
 ;; Load Atom dark theme
-;; (load-theme 'atom-dark t)
+(load-theme 'atom-dark t)
 ;; (load-theme 'zenburn t)
 ;; (load-theme 'leuven t)
 ;; (load-theme 'zerodark t)
 ;; (load-theme 'material t)
 ;; (load-theme 'leuven t)
 ;; (load-theme 'faff t)
-(load-theme 'monokai t)
+;; (load-theme 'monokai t)
 
 ;; Syntax coloring
 (global-font-lock-mode t)
@@ -202,10 +202,10 @@ non-nil."
              (if (> (x-display-pixel-width) 1800)
                  (progn ;; HD monitor in Linux
                    (setq main-programming-font "Consolas-13:antialias=subpixel")
-                   (setq main-writing-font (concat main-writing-font "-13")))
+                   (setq main-writing-font (concat main-writing-font "-15")))
                (progn
                  (setq main-programming-font "Consolas-11:antialias=subpixel")
-                 (setq main-writing-font (concat main-writing-font "-11"))))))
+                 (setq main-writing-font (concat main-writing-font "-13"))))))
 
           ;; Apply fonts
           (set-default-font main-programming-font frame)
