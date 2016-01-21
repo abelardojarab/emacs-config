@@ -43,18 +43,16 @@ AddToFunc StartFunction
 # Init function
 DestroyFunc InitFunction
 AddToFunc   InitFunction
-+ I Exec xrdb ~/.Xresources
-+ I Exec feh $[fvwm_wallpaper]
-+ I Desk 0 0
-+ I Exec plank
-+ I Exec trayer --SetDockType true --distance 200 --padding 10 --transparent true --tint a6aaaa --alpha 50 --edge top --align right --expand true --widthtype percent --width 15 --heighttype pixel --height 24 --distancefrom right
-+ I Exec hp-systray
-+ I Exec gkrellm --geometry +1940+530
-+ I Exec insync start
-+ I Exec dropbox start
-+ I Exec /usr/lib/x86_64-linux-gnu/notify-osd
-+ I Desk 1 0
-+ I Exec /opt/google/chrome-beta/chrome
++ I Exec exec xrdb ~/.Xresources
++ I Exec exec feh $[fvwm_wallpaper]
++ I Exec exec plank
++ I Exec exec trayer --SetDockType true --distance 200 --padding 10 --transparent true --tint a6aaaa --alpha 50 --edge top --align right --expand true --widthtype percent --width 15 --heighttype pixel --height 24 --distancefrom right
++ I Exec exec hp-systray
++ I Exec exec gkrellm --geometry +1940+530
++ I Exec exec insync start
++ I Exec exec dropbox start
++ I Exec exec /usr/lib/x86_64-linux-gnu/notify-osd
++ I Exec exec /opt/google/chrome-beta/chrome
 
 # Window Decor
 DestroyDecor MyDecoration
@@ -171,8 +169,8 @@ MenuStyle * "$[infostore.font_mono]"
 
 DestroyMenu GraphicsCADSubMenu
 AddToMenu GraphicsCADSubMenu "Graphics/CAD" Title
-+ "dia"   Exec exec dia
-+ "Glade"   Exec exec glade-3
++ "dia"      Exec exec dia
++ "Glade"    Exec exec glade-3
 
 DestroyMenu NetSubMenu
 AddToMenu NetSubMenu "Net" Title
@@ -182,7 +180,7 @@ DestroyMenu OfficeTextSubMenu
 AddToMenu OfficeTextSubMenu "Office/Text" Title
 + "Emacs Client"  Exec exec emacsclient
 + "Emacs Server"  Exec exec emacs
-+ "LibreOffice"  Exec exec soffice
++ "LibreOffice"   Exec exec soffice
 
 # Replace Mouse Button 0 with my main ("start button") menu.
 Mouse 0 R N Menu MainMenu
