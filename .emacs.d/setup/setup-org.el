@@ -47,6 +47,11 @@
 (require 'org-list)
 (require 'ox-org)
 
+;; Disable linum in org files
+(defun my/turn-off-linum-mode ()
+  (linum-mode -1))
+(add-hook 'org-mode-hook 'my/turn-off-linum-mode)
+
 ;; Set up Org agenda files
 (let ((todo "~/workspace/Documents/Org/diary.org"))
   (when (file-readable-p todo)

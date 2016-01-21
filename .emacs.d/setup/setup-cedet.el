@@ -28,11 +28,6 @@
 (add-to-list 'load-path "~/.emacs.d/cedet/lisp/cedet")
 (require 'semantic/ia)
 (require 'semantic/wisent)
-(setq semantic-default-submodes
-      '(global-semantic-tag-folding-mode
-        global-semantic-idle-completions-mode
-        global-semantic-idle-local-symbol-highlight-mode
-        global-semantic-idle-scheduler-mode))
 (semantic-mode 1)
 (semantic-load-enable-minimum-features)
 
@@ -50,13 +45,6 @@
 (setq-default semanticdb-default-system-save-directory
               (setq-default semanticdb-default-save-directory "~/.emacs.cache/semanticdb"))
 (setq-default ede-project-placeholder-cache-file "~/.emacs.cache/ede-projects.el")
-
-;; ctags
-(defun my-semantic-hook ()
-  (imenu-add-to-menubar "TAGS"))
-(add-hook 'semantic-init-hooks 'my-semantic-hook)
-(when (cedet-ectag-version-check t)
-  (semantic-load-enable-primary-ectags-support))
 
 ;; Disable Semantics for large files
 (add-hook 'semantic--before-fetch-tags-hook
@@ -88,11 +76,6 @@
 ;; smart completions
 (setq-mode-local prog-mode semanticdb-find-default-throttle
                  '(project system))
-
-;; working with tags
-(when (cedet-gnu-global-version-check t)
-  (semanticdb-enable-gnu-global-databases 'c-mode)
-  (semanticdb-enable-gnu-global-databases 'c++-mode))
 
 ;; Put c++-mode as default for *.h files (improves parsing)
 (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
