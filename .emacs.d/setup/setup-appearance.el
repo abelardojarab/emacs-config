@@ -196,20 +196,24 @@ non-nil."
                      (progn ;; Ultra-HD monitor in OSX
                        (setq main-programming-font "Consolas-17:antialias=subpixel")
                        (setq main-writing-font (concat main-writing-font "-17")))
-                 (progn ;; HD monitor in OSX
-                   (setq main-programming-font "Consolas-14:antialias=subpixel")
-                   (setq main-writing-font (concat main-writing-font "-14"))))
+                   (progn ;; HD monitor in OSX
+                     (setq main-programming-font "Consolas-14:antialias=subpixel")
+                     (setq main-writing-font (concat main-writing-font "-14"))))
                (progn
                  (setq main-programming-font "Consolas-11:antialias=subpixel")
                  (setq main-writing-font (concat main-writing-font "-11")))))
             (t ;; Linux
-             (if (> (x-display-pixel-width) 1800)
+             (if (> (x-display-pixel-width) 2000)
                  (progn ;; HD monitor in Linux
-                   (setq main-programming-font "Consolas-13:antialias=subpixel")
-                   (setq main-writing-font (concat main-writing-font "-16")))
-               (progn
-                 (setq main-programming-font "Consolas-11:antialias=subpixel")
-                 (setq main-writing-font (concat main-writing-font "-13"))))))
+                   (setq main-programming-font "Consolas-14:antialias=subpixel")
+                   (setq main-writing-font (concat main-writing-font "-17")))
+               (if (> (x-display-pixel-width) 1800)
+                   (progn ;; HD monitor in Linux
+                     (setq main-programming-font "Consolas-13:antialias=subpixel")
+                     (setq main-writing-font (concat main-writing-font "-16")))
+                 (progn
+                   (setq main-programming-font "Consolas-11:antialias=subpixel")
+                   (setq main-writing-font (concat main-writing-font "-13")))))))
 
           ;; Apply fonts
           (set-default-font main-programming-font frame)
@@ -398,9 +402,9 @@ non-nil."
 (defun pretty-lambdas ()
   (font-lock-add-keywords
    nil `(("\\<lambda\\>"
-        (0 (progn (compose-region (match-beginning 0) (match-end 0)
-                                  ,(make-char 'greek-iso8859-7 107))
-                  nil))))))
+          (0 (progn (compose-region (match-beginning 0) (match-end 0)
+                                    ,(make-char 'greek-iso8859-7 107))
+                    nil))))))
 (add-hook 'emacs-lisp-mode-hook 'pretty-lambdas)
 (add-hook 'lisp-mode-hook 'pretty-lambdas)
 
