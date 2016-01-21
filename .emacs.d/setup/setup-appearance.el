@@ -202,7 +202,7 @@ non-nil."
              (if (> (x-display-pixel-width) 1800)
                  (progn ;; HD monitor in Linux
                    (setq main-programming-font "Consolas-13:antialias=subpixel")
-                   (setq main-writing-font (concat main-writing-font "-15")))
+                   (setq main-writing-font (concat main-writing-font "-16")))
                (progn
                  (setq main-programming-font "Consolas-11:antialias=subpixel")
                  (setq main-writing-font (concat main-writing-font "-13"))))))
