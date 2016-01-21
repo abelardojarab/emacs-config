@@ -112,7 +112,7 @@ non-nil."
 (setq solarized-scale-org-headlines nil)
 
 ;; Load Atom dark theme
-(load-theme 'atom-dark t)
+;; (load-theme 'atom-dark t)
 ;; (load-theme 'zenburn t)
 ;; (load-theme 'leuven t)
 ;; (load-theme 'zerodark t)
@@ -120,6 +120,7 @@ non-nil."
 ;; (load-theme 'leuven t)
 ;; (load-theme 'faff t)
 ;; (load-theme 'monokai t)
+(load-theme 'solarized-dark t)
 
 ;; Syntax coloring
 (global-font-lock-mode t)
