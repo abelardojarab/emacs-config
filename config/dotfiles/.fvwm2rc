@@ -112,7 +112,7 @@ Style "Wine"      FPLenient, NoFuncHint, NoDecorHint, NoOLDecor
 Style "glretrace" !Title
 Style "conky"     !Title, Sticky, WindowListSkip, StaysOnBottom, NeverFocus
 Style "plank"     !Title, !Handles, StaysOnTop, Sticky, NeverFocus, WindowListSkip
-Style "gkrellm"   !Title, !Handles, StaysOnTop, Sticky, NeverFocus, WindowListSkip, FixedPosition
+Style "gkrellm"   !Title, !Handles, StaysOnTop, Sticky, NeverFocus, WindowListSkip, FixedPosition, Sticky
 Style "trayer"    !Title, FixedPosition, Sticky
 Style "chrome"    NoTitle
 
