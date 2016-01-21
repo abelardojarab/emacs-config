@@ -126,6 +126,8 @@ non-nil."
 (global-hi-lock-mode nil)
 (setq font-lock-maximum-decoration t)
 (setq font-lock-maximum-size (* 512 512))
+(defun global-font-lock-mode-check-buffers () nil)
+(remove-hook 'post-command-hook #'global-font-lock-mode-check-buffers nil t)
 
 ;; Do not fontify large files
 (defun my-find-file-check-make-large-file-read-only-hook ()

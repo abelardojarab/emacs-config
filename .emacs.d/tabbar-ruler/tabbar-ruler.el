@@ -17,24 +17,24 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;;; Commentary:
-;; 
+;;
 ;; * Introduction
 ;; Tabbar ruler is an emacs package that allows both the tabbar and the
 ;; ruler to be used together.  In addition it allows auto-hiding of the
 ;; menu-bar and tool-bar.
-;; 
-;; 
+;;
+;;
 ;; Tabbar appearance based on reverse engineering Aquaemacs code and
 ;; changing to my preferences, and Emacs Wiki.
-;; 
+;;
 ;; Tabbar/Ruler integration is new. Tabbar should be active on mouse
 ;; move.  Ruler should be active on self-insert commands.
-;; 
+;;
 ;; Also allows auto-hiding of toolbar and menu.
-;; 
+;;
 ;; To use this, put the library in your load path and use
-;; 
-;; 
+;;
+;;
 ;;   (setq tabbar-ruler-global-tabbar t) ; If you want tabbar
 ;;   (setq tabbar-ruler-global-ruler t) ; if you want a global ruler
 ;;   (setq tabbar-ruler-popup-menu t) ; If you want a popup menu.
@@ -42,165 +42,165 @@
 ;;   (setq tabbar-ruler-popup-scrollbar t) ; If you want to only show the
 ;;                                         ; scroll bar when your mouse is moving.
 ;;   (require 'tabbar-ruler)
-;;   
-;; 
-;; 
-;; 
+;;
+;;
+;;
+;;
 ;; * Changing how tabbar groups files/buffers
 ;; The default behavior for tabbar-ruler is to group the tabs by frame.
 ;; You can change this back to the old-behavior by:
-;; 
+;;
 ;;   (tabbar-ruler-group-buffer-groups)
-;; 
+;;
 ;; or by issuing the following code:
-;; 
-;; 
+;;
+;;
 ;;   (setq tabbar-buffer-groups-function 'tabbar-buffer-groups)
-;; 
-;; 
+;;
+;;
 ;; In addition, you can also group by projectile project easily by:
-;; 
-;; 
+;;
+;;
 ;;   (tabbar-ruler-group-by-projectile-project)
-;; 
+;;
 ;; * Adding key-bindings to tabbar-ruler
 ;; You can add key-bindings to change the current tab.  The easiest way
 ;; to add the bindings is to add a key like:
-;; 
-;; 
+;;
+;;
 ;;   (global-set-key (kbd "C-c t") 'tabbar-ruler-move)
-;; 
-;; 
+;;
+;;
 ;; After that, all you would need to press is Control+c t and then the
 ;; arrow keys will allow you to change the buffer quite easily.  To exit
 ;; the buffer movement you can press enter or space.
-;; 
+;;
 ;; * Known issues
 ;; the left arrow is text instead of an image.
-;; 
+;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
 ;;; Change Log:
-;; 1-Jul-2013    Matthew L. Fidler  
+;; 1-Jul-2013    Matthew L. Fidler
 ;;    Last-Updated: Sat Dec 15 15:44:34 2012 (+0800) #663 (Matthew L. Fidler)
 ;;    Fix variable misspecification
-;; 28-Jun-2013    Matthew L. Fidler  
+;; 28-Jun-2013    Matthew L. Fidler
 ;;    Last-Updated: Sat Dec 15 15:44:34 2012 (+0800) #663 (Matthew L. Fidler)
 ;;    Fixed strange org-readme issue
-;; 28-Jun-2013    Matthew L. Fidler  
+;; 28-Jun-2013    Matthew L. Fidler
 ;;    Last-Updated: Tue Oct 19 15:37:53 2010 (-0500) (us041375) #663 (Matthew L. Fidler)
-;;    Added popup scrollbarbar 
-;; 27-Jun-2013    Matthew L. Fidler  
+;;    Added popup scrollbarbar
+;; 27-Jun-2013    Matthew L. Fidler
 ;;    Last-Updated: Sat Dec 15 15:44:34 2012 (+0800) #663 (Matthew L. Fidler)
 ;;    Added autoload for tabbar-install-faces.  That way ergoemacs and other
 ;;    packages can load the tabbar-ruler by just calling (tabbar-install-faces)
-;; 6-Jun-2013    Matthew L. Fidler  
+;; 6-Jun-2013    Matthew L. Fidler
 ;;    Last-Updated: Sat Dec 15 15:44:34 2012 (+0800) #663 (Matthew L. Fidler)
 ;;    Added left-char and right char to tabbar-ruler-move-keymap so that
 ;;    keybindings in emacs 24.3 work correctly.
-;; 6-Jun-2013    Matthew L. Fidler  
+;; 6-Jun-2013    Matthew L. Fidler
 ;;    Last-Updated: Sat Dec 15 15:44:34 2012 (+0800) #663 (Matthew L. Fidler)
 ;;    Changed movement commands.  The movement commands are simpler (in my opinion)
-;; 4-Jun-2013    Matthew L. Fidler  
+;; 4-Jun-2013    Matthew L. Fidler
 ;;    Last-Updated: Sat Dec 15 15:44:34 2012 (+0800) #663 (Matthew L. Fidler)
 ;;    Change package description.  Fixed the documentation to actually
 ;;    change to the old tabbar method of grouping buffers.
-;; 4-Jun-2013    Matthew L. Fidler  
+;; 4-Jun-2013    Matthew L. Fidler
 ;;    Last-Updated: Sat Dec 15 15:44:34 2012 (+0800) #663 (Matthew L. Fidler)
 ;;    Turn off ruler mode in the next buffer (if necessary)
-;; 4-Jun-2013    Matthew L. Fidler  
+;; 4-Jun-2013    Matthew L. Fidler
 ;;    Last-Updated: Sat Dec 15 15:44:34 2012 (+0800) #663 (Matthew L. Fidler)
 ;;    Add movement keys.  Also add toggles for different groupings.
-;; 1-May-2013    Matthew L. Fidler  
+;; 1-May-2013    Matthew L. Fidler
 ;;    Last-Updated: Sat Dec 15 15:44:34 2012 (+0800) #663 (Matthew L. Fidler)
 ;;    Try to address issue #4
-;; 1-May-2013    Matthew L. Fidler  
+;; 1-May-2013    Matthew L. Fidler
 ;;    Last-Updated: Sat Dec 15 15:44:34 2012 (+0800) #663 (Matthew L. Fidler)
 ;;    Changed the modified font to italics.  Made the modified symbol
 ;;    customizable, but off by default.  Should address issue #5.
-;; 5-Apr-2013    Matthew L. Fidler  
+;; 5-Apr-2013    Matthew L. Fidler
 ;;    Last-Updated: Sat Dec 15 15:44:34 2012 (+0800) #663 (Matthew L. Fidler)
 ;;    Trying to update upstream sources.
-;; 5-Apr-2013    Matthew L. Fidler  
+;; 5-Apr-2013    Matthew L. Fidler
 ;;    Last-Updated: Sat Dec 15 15:44:34 2012 (+0800) #663 (Matthew L. Fidler)
 ;;    Fixed speed issues on windows.  It wasn't a redraw that was causing
 ;;    the speed issues, it was the constant recreation of the right-click
-;;    menus... 
-;; 27-Mar-2013    Matthew L. Fidler  
+;;    menus...
+;; 27-Mar-2013    Matthew L. Fidler
 ;;    Last-Updated: Sat Dec 15 15:44:34 2012 (+0800) #663 (Matthew L. Fidler)
 ;;    Fixed typo to fix issue #2.
-;; 27-Mar-2013    Matthew L. Fidler  
+;; 27-Mar-2013    Matthew L. Fidler
 ;;    Last-Updated: Sat Dec 15 15:44:34 2012 (+0800) #663 (Matthew L. Fidler)
 ;;    Attempt to fix issue #2.  Whenever the color is not a string, assume
 ;;    that it should be transparent.  I'm unsure if the mac osx puts the
 ;;    translated color to a string.  However, it seems that the undefined
 ;;    should be the same as transparent.  Therefore, this fix *should* work...
-;; 20-Mar-2013    Matthew L. Fidler  
+;; 20-Mar-2013    Matthew L. Fidler
 ;;    Last-Updated: Sat Dec 15 15:44:34 2012 (+0800) #663 (Matthew L. Fidler)
 ;;    Add inverse video option for unselected tabbar.  Made it the default.
 ;;    has better contrast between the selected and unselected tabs.
-;; 20-Mar-2013    Matthew L. Fidler  
+;; 20-Mar-2013    Matthew L. Fidler
 ;;    Last-Updated: Sat Dec 15 15:44:34 2012 (+0800) #663 (Matthew L. Fidler)
 ;;    Changed emacs 24.3 to support the times character.  Also removed
 ;;    starred documentation strings.
-;; 20-Mar-2013    Matthew L. Fidler  
+;; 20-Mar-2013    Matthew L. Fidler
 ;;    Last-Updated: Sat Dec 15 15:44:34 2012 (+0800) #663 (Matthew L. Fidler)
 ;;    Emacs 24.3 had an error when using ucs-insert.  Added fallbacks so
 ;;    that this works when ucs-insert does not work.
-;; 20-Feb-2013    Matthew L. Fidler  
+;; 20-Feb-2013    Matthew L. Fidler
 ;;    Last-Updated: Sat Dec 15 15:44:34 2012 (+0800) #663 (Matthew L. Fidler)
 ;;    Changed so that the separators do not need to be fancy images.  I
 ;;    found that when the separators were images, it slowed down emacs on
 ;;    windows.  Therefore, the fancy images are disabled by default.  This
 ;;    also includes the stylized close symbols.
-;; 19-Dec-2012    Matthew L. Fidler  
+;; 19-Dec-2012    Matthew L. Fidler
 ;;    Last-Updated: Sat Dec 15 15:44:34 2012 (+0800) #663 (Matthew L. Fidler)
 ;;    Added back popup-menu
 ;; 19-Dec-2012    Matthew L. Fidler
 ;;    Last-Updated: Sat Dec 15 15:44:34 2012 (+0800) #663 (Matthew L. Fidler)
 ;;    Upload to marmalade
-;; 19-Dec-2012    Matthew L. Fidler  
+;; 19-Dec-2012    Matthew L. Fidler
 ;;    Last-Updated: Sat Dec 15 15:44:34 2012 (+0800) #663 (Matthew L. Fidler)
 ;;    Changed slope.  Made the background color the default background color
 ;;    if unspecified.  Made tabbar-hex-color return "None" if not defined
-;; 15-Dec-2012    Matthew L. Fidler  
+;; 15-Dec-2012    Matthew L. Fidler
 ;;    Last-Updated: Sat Dec 15 15:44:34 2012 (+0800) #663 (Matthew L. Fidler)
 ;;    Made sure that the tabbr-ruler-separator-image is at least 17 pixels high
-;; 15-Dec-2012    Matthew L. Fidler  
+;; 15-Dec-2012    Matthew L. Fidler
 ;;    Last-Updated: Sat Dec 15 15:44:34 2012 (+0800) #663 (Matthew L. Fidler)
 ;;    Attempt to fix another bug on load
-;; 14-Dec-2012    Matthew L. Fidler  
+;; 14-Dec-2012    Matthew L. Fidler
 ;;    Last-Updated: Thu Mar  1 09:02:56 2012 (-0600) #659 (Matthew L. Fidler)
 ;;    Fixed tabbar ruler so that it loads cold.
-;; 14-Dec-2012    Matthew L. Fidler  
+;; 14-Dec-2012    Matthew L. Fidler
 ;;    Last-Updated: Thu Mar  1 09:02:56 2012 (-0600) #659 (Matthew L. Fidler)
 ;;    Memoized the tabbar images to speed things up
-;; 14-Dec-2012    Matthew L. Fidler  
+;; 14-Dec-2012    Matthew L. Fidler
 ;;    Last-Updated: Thu Mar  1 09:02:56 2012 (-0600) #659 (Mat`'thew L. Fidler)
-;;    Upload to Marmalade 
-;; 14-Dec-2012    Matthew L. Fidler  
+;;    Upload to Marmalade
+;; 14-Dec-2012    Matthew L. Fidler
 ;;    Last-Updated: Thu Mar  1 09:02:56 2012 (-0600) #659 (Matthew L. Fidler)
 ;;    Fancy tabs
-;; 13-Dec-2012    Matthew L. Fidler  
+;; 13-Dec-2012    Matthew L. Fidler
 ;;    Last-Updated: Thu Mar  1 09:02:56 2012 (-0600) #659 (Matthew L. Fidler)
 ;;    Added Bug fix for coloring.  Made the selected tab match the default
 ;;    color in the buffer.  Everything else is grayed out.
-;; 10-Dec-2012    Matthew L. Fidler  
+;; 10-Dec-2012    Matthew L. Fidler
 ;;    Last-Updated: Thu Mar  1 09:02:56 2012 (-0600) #659 (Matthew L. Fidler)
 ;;    Took out a statement that may fix the left-scrolling bug?
-;; 10-Dec-2012    Matthew L. Fidler  
+;; 10-Dec-2012    Matthew L. Fidler
 ;;    Last-Updated: Thu Mar  1 09:02:56 2012 (-0600) #659 (Matthew L. Fidler)
 ;;    Added package-menu-mode to the excluded tabbar-ruler fight modes.
-;; 07-Dec-2012    Matthew L. Fidler  
+;; 07-Dec-2012    Matthew L. Fidler
 ;;    Last-Updated: Thu Mar  1 09:02:56 2012 (-0600) #659 (Matthew L. Fidler)
 ;;    Will no longer take over editing of org source blocks or info blocks.
 ;; 07-Dec-2012    Matthew L. Fidler
 ;;    Last-Updated: Thu Mar  1 09:02:56 2012 (-0600) #659 (Matthew L. Fidler)
 ;;    Changed the order of checking so that helm will work when you move a mouse.
-;; 07-Dec-2012    Matthew L. Fidler  
+;; 07-Dec-2012    Matthew L. Fidler
 ;;    Last-Updated: Thu Mar  1 09:02:56 2012 (-0600) #659 (Matthew L. Fidler)
 ;;    Now works with Helm.  Should fix issue #1
-;; 06-Dec-2012    Matthew L. Fidler  
+;; 06-Dec-2012    Matthew L. Fidler
 ;;    Last-Updated: Thu Mar  1 09:02:56 2012 (-0600) #659 (Matthew L. Fidler)
 ;;    Now colors are based on loaded theme (from minibar).  Also added
 ;;    bug-fix for setting tabbar colors every time a frame opens.  Also
@@ -210,29 +210,29 @@
 ;;    Last-Updated: Thu Mar  1 08:38:09 2012 (-0600) #656 (Matthew L. Fidler)
 ;;    Will not change tool-bar-mode in Mac.  It causes some funny
 ;;    things to happen.
-;; 9-Feb-2012    Matthew L. Fidler  
+;; 9-Feb-2012    Matthew L. Fidler
 ;;    Last-Updated: Thu Feb  9 19:18:21 2012 (-0600) #651 (Matthew L. Fidler)
 ;;    Will not change the menu bar in a Mac.  Its always there.
-;; 14-Jan-2012    Matthew L. Fidler  
+;; 14-Jan-2012    Matthew L. Fidler
 ;;    Last-Updated: Sat Jan 14 21:58:51 2012 (-0600) #648 (Matthew L. Fidler)
 ;;    Added more commands that trigger the ruler.
-;; 14-Jan-2012    Matthew L. Fidler  
+;; 14-Jan-2012    Matthew L. Fidler
 ;;    Last-Updated: Sat Jan 14 21:44:32 2012 (-0600) #641 (Matthew L. Fidler)
 ;;    Added more ruler commands.   It works a bit better
 ;;    now. Additionally I have changed the ep- to tabbar-ruler-.
-;; 14-Jan-2012    Matthew L. Fidler  
+;; 14-Jan-2012    Matthew L. Fidler
 ;;    Last-Updated: Tue Feb  8 15:01:27 2011 (-0600) #639 (Matthew L. Fidler)
 ;;    Changed EmacsPortable to tabbar-ruler
-;; 08-Feb-2011    Matthew L. Fidler  
+;; 08-Feb-2011    Matthew L. Fidler
 ;;    Last-Updated: Tue Feb  8 14:59:57 2011 (-0600) #638 (Matthew L. Fidler)
-;;    Added ELPA tags.  
-;; 08-Feb-2011    Matthew L. Fidler  
+;;    Added ELPA tags.
+;; 08-Feb-2011    Matthew L. Fidler
 ;;    Last-Updated: Tue Feb  8 12:47:09 2011 (-0600) #604 (Matthew L. Fidler)
 ;;    Removed xpm dependencies.  Now no images are required, they are built by the library.
-;; 04-Dec-2010    Matthew L. Fidler  
+;; 04-Dec-2010    Matthew L. Fidler
 ;;    Last-Updated: Sat Dec  4 16:27:07 2010 (-0600) #551 (Matthew L. Fidler)
 ;;    Added context menu.
-;; 01-Dec-2010    Matthew L. Fidler  
+;; 01-Dec-2010    Matthew L. Fidler
 ;;    Last-Updated: Wed Dec  1 15:26:37 2010 (-0600) #341 (Matthew L. Fidler)
 ;;    Added scratch buffers to list.
 ;; 04-Nov-2010
@@ -473,7 +473,7 @@
         (copy-face 'mode-line-inactive 'tabbar-selected-highlight frame))
   (copy-face 'default 'tabbar-selected frame)
   (copy-face 'shadow 'tabbar-unselected frame)
-  
+
   (if tabbar-ruler-invert-deselected
       (progn
         (copy-face 'tabbar-selected 'tabbar-unselected)
@@ -484,15 +484,15 @@
                         :inherit 'mode-line-buffer-id
                         :background (face-attribute 'mode-line-inactive :background)
                         :box nil))
-  
-  
+
+
   (copy-face 'mode-line-buffer-id 'tabbar-selected-highlight frame)
   (copy-face 'mode-line-inactive 'tabbar-unselected-highlight frame))
-  
+
   (set-face-attribute 'tabbar-separator frame
                       :inherit 'tabbar-default
                       :box nil)
-  
+
   (set-face-attribute 'tabbar-button frame
                       :inherit 'tabbar-default
                       :box nil))
@@ -653,7 +653,7 @@ When FACE1 does not equal FACE2, this creates a selected separator
         \"   .........  \",
         \"    .......   \",
         \"     .....    \"};" clr clr2)
-      
+
       (format
        "/* XPM */
 static char * scroll_%s_%s_xpm[] = {
@@ -817,7 +817,7 @@ Optional argument TYPE is a mouse click event type (see the function
   "Handle a mouse EVENT on a tab.
 Pass mouse click events on a tab to `tabbar-click-on-tab'."
   (interactive "@e")
-  (cond 
+  (cond
     ((tabbar-click-p event)
       (let ((target (posn-string (event-start event))))
         (tabbar-click-on-tab
@@ -871,7 +871,7 @@ element.
 Call `tabbar-tab-label-function' to obtain a label for TAB."
   (let* ( (selected-p (tabbar-selected-p tab (tabbar-current-tabset)))
           (modified-p (buffer-modified-p (tabbar-tab-value tab)))
-          (close-button-image (tabbar-find-image 
+          (close-button-image (tabbar-find-image
                                `((:type xpm :data ,(tabbar-ruler-image :type 'close :disabled (not modified-p)
                                                                        :color (if (eq tab sel)
                                                                                   (face-attribute 'default :foreground)
@@ -907,7 +907,7 @@ Call `tabbar-tab-label-function' to obtain a label for TAB."
                  'help-echo 'tabbar-help-on-tab
                  'face face
                  'pointer 'hand)
-     (propertize 
+     (propertize
       (if tabbar-tab-label-function
           (funcall tabbar-tab-label-function tab)
         tab)
@@ -1121,7 +1121,7 @@ Call `tabbar-tab-label-function' to obtain a label for TAB."
   :group 'tabbar-ruler)
 (defcustom tabbar-ruler-do-not-switch-on-ruler-when-tabbar-is-on-y 75
   "Minimum number of pixels to switch on ruler when tabbar is on."
-  :type 'integer          
+  :type 'integer
   :group 'tabbar-ruler)
 
 (defcustom tabbar-ruler-excluded-buffers '("*Messages*" "*Completions*" "*ESS*")
@@ -1215,7 +1215,7 @@ Call `tabbar-tab-label-function' to obtain a label for TAB."
               (when tabbar-ruler-popup-menu
                 (unless tabbar-ruler-menu-off
                   (unless (eq system-type 'darwin)
-		    (menu-bar-mode -1))
+            (menu-bar-mode -1))
                   (setq tabbar-ruler-menu-off 't)))
               (when tabbar-ruler-popup-toolbar
                 (unless (eq system-type 'darwin)
@@ -1260,7 +1260,7 @@ Call `tabbar-tab-label-function' to obtain a label for TAB."
   "Mouse Movement function"
   (interactive)
   (when tabbar-ruler-movement-timer
-    (cancel-timer tabbar-ruler-movement-timer))  
+    (cancel-timer tabbar-ruler-movement-timer))
   (let* ((y-pos (cddr (mouse-pixel-position)))
          (x-pos (cadr (mouse-pixel-position))))
     (unless y-pos
@@ -1291,7 +1291,7 @@ Call `tabbar-tab-label-function' to obtain a label for TAB."
               (when tabbar-ruler-popup-menu
                 (when tabbar-ruler-menu-off
                   (unless (eq system-type 'darwin)
-		    (menu-bar-mode 1))
+            (menu-bar-mode 1))
                   (setq tabbar-ruler-menu-off nil)))
               (when tabbar-ruler-popup-toolbar
                 (unless (eq system-type 'darwin)
@@ -1301,7 +1301,7 @@ Call `tabbar-tab-label-function' to obtain a label for TAB."
           (when tabbar-ruler-popup-menu
             (unless tabbar-ruler-menu-off
               (unless (eq system-type 'darwin)
-		(menu-bar-mode -1))
+        (menu-bar-mode -1))
               (setq tabbar-ruler-menu-off 't)))
           (when tabbar-ruler-popup-toolbar
             (unless (eq system-type 'darwin)
@@ -1309,7 +1309,7 @@ Call `tabbar-tab-label-function' to obtain a label for TAB."
                 (tool-bar-mode -1)
                 (setq tabbar-ruler-toolbar-off 't)))))))
     (setq tabbar-ruler-movement-timer (run-with-timer
-                                       0.01
+                                       1800 ;; by Abelardo
                                        nil
                                        'tabbar-ruler-mouse-movement))))
 (tabbar-ruler-mouse-movement)
@@ -1374,11 +1374,11 @@ visiting a file.  The current buffer is always included."
 (defun tabbar-ruler-projectile-tabbar-buffer-groups ()
   "Return the list of group names BUFFER belongs to.
     Return only one group for each buffer."
-  
+
   (if tabbar-ruler-projectile-tabbar-buffer-group-calc
       (symbol-value 'tabbar-ruler-projectile-tabbar-buffer-group-calc)
     (set (make-local-variable 'tabbar-ruler-projectile-tabbar-buffer-group-calc)
-         
+
          (cond
           ((or (get-buffer-process (current-buffer)) (memq major-mode '(comint-mode compilation-mode))) '("Term"))
           ((string-equal "*" (substring (buffer-name) 0 1)) '("Misc"))
@@ -1506,7 +1506,7 @@ remove the keymap depends on user input and KEEP-PRED:
   decide if the keymap should be removed (if predicate returns
   nil) or kept (otherwise). The predicate will be called after
   each key sequence."
-    
+
     (let* ((clearfunsym (make-symbol "clear-temporary-overlay-map"))
            (overlaysym (make-symbol "t"))
            (alist (list (cons overlaysym map)))
@@ -1524,7 +1524,7 @@ remove the keymap depends on user input and KEEP-PRED:
       (set overlaysym overlaysym)
       (fset clearfunsym clearfun)
       (add-hook 'pre-command-hook clearfunsym)
-      
+
       (push alist emulation-mode-map-alists))))
 
 (defvar tabbar-ruler-move-keymap (make-sparse-keymap)

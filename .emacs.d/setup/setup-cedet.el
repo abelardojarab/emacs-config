@@ -1,6 +1,6 @@
 ;;; setup-cedet.el ---
 
-;; Copyright (C) 2014, 2015  abelardo.jara-berrocal
+;; Copyright (C) 2014, 2015, 2016  abelardo.jara-berrocal
 
 ;; Author: abelardo.jara-berrocal <ajaraber@plxc25288.pdx.intel.com>
 ;; Keywords:
@@ -40,11 +40,11 @@
 (set-default 'semantic-case-fold t)
 
 ;; Faster parsing
-(setq-default semantic-idle-work-parse-neighboring-files-flag nil)
-(setq-default semantic-idle-work-update-headers-flag nil)
-(setq-default semantic-idle-scheduler-idle-time 3)
-(setq-default semantic-idle-scheduler-work-idle-time 180000)
-(setq-default semantic-idle-scheduler-max-buffer-size 1000)
+(setq semantic-idle-work-parse-neighboring-files-flag nil)
+(setq semantic-idle-work-update-headers-flag nil)
+(setq semantic-idle-scheduler-idle-time 30)
+(setq semantic-idle-scheduler-work-idle-time 1800)
+(setq semantic-idle-scheduler-max-buffer-size 1)
 
 ;; Default directory
 (setq-default semanticdb-default-system-save-directory

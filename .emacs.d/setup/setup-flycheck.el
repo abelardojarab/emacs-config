@@ -1,6 +1,6 @@
 ;;; setup-flycheck.el ---
 
-;; Copyright (C) 2014, 2015  abelardo.jara-berrocal
+;; Copyright (C) 2014, 2015, 2016  abelardo.jara-berrocal
 
 ;; Author: abelardo.jara-berrocal <ajaraber@plxc25288.pdx.intel.com>
 ;; Keywords:
@@ -37,6 +37,12 @@
         python-mode-hook
         js2-mode-hook
         java-mode-hook))
+
+;; disable flycheck during idle time, if enabled
+(delete 'idle-change flycheck-check-syntax-automatically)
+
+;; disable flycheck on newline, if enabled
+(delete 'new-line flycheck-check-syntax-automatically)
 
 ;; Configuration
 (setq-default flycheck-disabled-checkers '(html-tidy emacs-lisp-checkdoc))
