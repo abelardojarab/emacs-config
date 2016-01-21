@@ -143,6 +143,9 @@
 ;; Setup VHDL/Verilog mode
 (require 'setup-vhdl)
 
+;; Setup VHDL/Verilog mode
+(require 'setup-spice)
+
 ;; Setup bison/yacc/lex
 (require 'setup-bison)
 

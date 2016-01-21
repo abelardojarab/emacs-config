@@ -1,6 +1,6 @@
 ;;; setup-org.el ---
 
-;; Copyright (C) 2014, 2015  abelardo.jara-berrocal
+;; Copyright (C) 2014, 2015, 2016  abelardo.jara-berrocal
 
 ;; Author: abelardo.jara-berrocal <ajaraber@plxc25288.pdx.intel.com>
 ;; Keywords:
@@ -93,7 +93,9 @@
       '((heading . t)))
 
 ;; Agenda settings
-(setq org-agenda-show-log t
+(setq org-agenda-inhibit-startup t ;; 50x speedup
+      org-agenda-use-tag-inheritance nil ;; 3-4x speedup
+      org-agenda-show-log t
       org-agenda-start-on-weekday nil
       org-agenda-span 14
       org-agenda-include-diary t

@@ -66,18 +66,12 @@
 (setq org-ref-insert-cite-key "C-c )")
 (setq org-ref-default-citation-link "autocite")
 
-;; Spice mode
-(add-to-list 'load-path "~/.emacs.d/spice-mode")
-(require 'spice-mode)
-(add-to-list 'auto-mode-alist '("\\.sp\\'" . spice-mode))
-(add-to-list 'auto-mode-alist '("\\.scs\\'" . spice-mode))
-
 ;; Ergoemacs
-(add-to-list 'load-path "~/.emacs.d/ergoemacs-mode")
-(setq ergoemacs-ignore-prev-global nil)
-(setq ergoemacs-keyboard-layout "us")
-(setq ergoemacs-theme "lvl0")
-(require 'ergoemacs-mode)
+;; (add-to-list 'load-path "~/.emacs.d/ergoemacs-mode")
+;; (setq ergoemacs-ignore-prev-global nil)
+;; (setq ergoemacs-keyboard-layout "us")
+;; (setq ergoemacs-theme "lvl0")
+;; (require 'ergoemacs-mode)
 
 (provide 'setup-post)
 ;;; setup-post.el ends here
