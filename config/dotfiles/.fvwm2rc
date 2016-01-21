@@ -46,7 +46,7 @@ AddToFunc   InitFunction
 + I Exec exec xrdb ~/.Xresources
 + I Exec exec feh $[fvwm_wallpaper]
 + I Exec exec plank
-+ I Exec exec trayer --SetDockType true --distance 200 --padding 10 --transparent true --tint a6aaaa --alpha 50 --edge top --align right --expand true --widthtype percent --width 15 --heighttype pixel --height 24 --distancefrom right
++ I Exec exec trayer --SetDockType true --distance 200 --padding 10 --transparent true --tint a6aaaa --alpha 50 --edge top --align right --expand true --widthtype percent --width 10 --heighttype pixel --height 24 --distancefrom right
 + I Exec exec hp-systray
 + I Exec exec gkrellm --geometry +1940+530
 + I Exec exec insync start
