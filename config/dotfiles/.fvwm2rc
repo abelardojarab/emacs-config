@@ -112,9 +112,9 @@ Style "Wine"      FPLenient, NoFuncHint, NoDecorHint, NoOLDecor
 Style "glretrace" !Title
 Style "conky"     !Title, Sticky, WindowListSkip, StaysOnBottom, NeverFocus
 Style "plank"     !Title, !Handles, StaysOnTop, Sticky, NeverFocus, WindowListSkip
-Style "gkrellm"   !Title, !Handles, StaysOnTop, Sticky, NeverFocus, WindowListSkip, FixedPosition, Sticky
+Style "gkrellm"   !Title, !Handles, StaysOnTop, Sticky, NeverFocus, WindowListSkip, FixedPosition
 Style "trayer"    !Title, FixedPosition, Sticky
-Style "chrome"    NoTitle
+Style "chrome"    !Title, FPLenient, NoFuncHint, NoDecorHint, NoOLDecor
 
 # Speed up window operations at the expense of a bit of RAM.
 Style * BackingStore, SaveUnder
