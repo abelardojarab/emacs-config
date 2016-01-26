@@ -185,5 +185,4 @@
 ;; Setup keys
 (require 'setup-keys)
 
-(setq debug-on-error nil)
 (setq debug-on-quit nil)

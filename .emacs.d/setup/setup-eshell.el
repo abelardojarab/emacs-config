@@ -1,6 +1,6 @@
 ;;; setup-eshell.el ---
 
-;; Copyright (C) 2014, 2015
+;; Copyright (C) 2014, 2015, 2016
 
 ;; Author:  <ajaraber@AJARABER-MOBL5>
 ;; Keywords:
@@ -41,8 +41,6 @@
 
 ;; CShell mode
 (require 'csh-mode)
-;; (add-to-list 'auto-mode-alist '("\\.csh\\'" . csh-mode))
-;; (add-to-list 'auto-mode-alist '("\\.cshrc\\'" . csh-mode))
 (dolist (elt interpreter-mode-alist)
   (when (member (car elt) (list "csh" "tcsh"))
     (setcdr elt 'csh-mode)))

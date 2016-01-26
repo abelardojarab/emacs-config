@@ -73,5 +73,9 @@
 ;; (setq ergoemacs-theme "lvl0")
 ;; (require 'ergoemacs-mode)
 
+;; Enable GUI features
+(setq use-file-dialog t)
+(setq use-dialog-box t)
+
 (provide 'setup-post)
 ;;; setup-post.el ends here

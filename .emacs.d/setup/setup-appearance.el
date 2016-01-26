@@ -47,10 +47,6 @@
 ;; Do not redraw entire frame after suspending.
 (setq no-redraw-on-reenter t)
 
-;; Enable GUI features
-(setq use-file-dialog t)
-(setq use-dialog-box t)
-
 ;; Modify toggle truncate lines to avoid messages
 (defun toggle-truncate-lines (&optional arg)
   "Toggle truncating of long lines for the current buffer.
@@ -131,7 +127,6 @@ non-nil."
 (setq font-lock-maximum-decoration t)
 (setq font-lock-maximum-size (* 512 512))
 (defun global-font-lock-mode-check-buffers () nil)
-;; (remove-hook 'post-command-hook #'global-font-lock-mode-check-buffers nil t)
 
 ;; Do not fontify large files
 (defun my-find-file-check-make-large-file-read-only-hook ()
