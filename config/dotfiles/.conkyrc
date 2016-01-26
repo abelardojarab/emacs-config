@@ -85,7 +85,7 @@ Temp: ${alignr}${acpitemp}°C
 Uptime: ${alignr}${uptime}
 
 ${hr 2}
-${font Unnamed Cambria:size=16}M${color B8A0C8}emory${color} U${color B8A0C8}ssage${color}${font}
+${font Unnamed Cambria:size=16}M${color B8A0C8}emory${color} U${color B8A0C8}sage${color}${font}
 1. ${top_mem name 1} ${alignr}${top_mem mem_res 1}
 2. ${top_mem name 2} ${alignr}${top_mem mem_res 2}
 3. ${top_mem name 3} ${alignr}${top_mem mem_res 3}
@@ -93,7 +93,7 @@ ${font Unnamed Cambria:size=16}M${color B8A0C8}emory${color} U${color B8A0C8}ssa
 5. ${top_mem name 5} ${alignr}${top_mem mem_res 5}
 
 ${hr 2}
-${font Unnamed Cambria:size=16}C${color B8A0C8}PU${color} U${color B8A0C8}ssage${color}${font}
+${font Unnamed Cambria:size=16}C${color B8A0C8}PU${color} U${color B8A0C8}sage${color}${font}
 1. ${color2}${top_mem name 1}${color}${alignr}${top cpu 1} %
 2. ${color2}${top_mem name 2}${color}${alignr}${top cpu 2} %
 3. ${color2}${top_mem name 3}${color}${alignr}${top cpu 3} %
