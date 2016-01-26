@@ -647,5 +647,8 @@ Defaults to `error'."
            (emacs-uptime "%s")))
 (add-hook 'emacs-startup-hook 'show-startup-time 'append)
 
+;; Follow symbolic links
+(setq vc-follow-symlinks t)
+
 (provide 'setup-general)
 ;;; setup-general.el ends here
