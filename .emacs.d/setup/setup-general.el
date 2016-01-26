@@ -624,7 +624,7 @@ Defaults to `error'."
 
 ;; Line numbers
 (require 'linum)
-(global-linum-mode t)
+;; (global-linum-mode t)
 (defadvice linum-update-window (around linum-dynamic activate)
   (let* ((w (length (number-to-string
                      (count-lines (point-min) (point-max)))))

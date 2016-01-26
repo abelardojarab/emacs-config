@@ -59,24 +59,6 @@
 (defun semanticdb-create-table-for-file-not-in-buffer (arg)
   nil)
 
-;; Auto-complete support
-(require 'semantic/analyze/refs)
-(defun ac-complete-semantic-self-insert (arg)
-  (interactive "p")
-  (self-insert-command arg)
-  (ac-complete-semantic))
-
-(defun cc-mode-ac-key-bindings ()
-  (local-set-key "." 'ac-complete-semantic-self-insert)
-  (local-set-key ">" 'ac-complete-semantic-self-insert)
-  (local-set-key ":" 'ac-complete-semantic-self-insert))
-(add-hook 'c-mode-common-hook 'cc-mode-ac-key-bindings)
-(add-hook 'prog-mode-hook 'cc-mode-ac-key-bindings)
-
-;; smart completions
-(setq-mode-local prog-mode semanticdb-find-default-throttle
-                 '(project system))
-
 ;; Put c++-mode as default for *.h files (improves parsing)
 (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
 
@@ -87,11 +69,6 @@
   (setq-default c-basic-offset 4))
 (add-hook 'c-mode-hook #'my/c-mode-init)
 (add-hook 'c++-mode-hook #'my/c-mode-init)
-
-;; Include settings
-(require 'semantic/bovine/c)
-(require 'semantic/bovine/gcc)
-(require 'semantic/bovine/clang)
 
 ;; Enable which-function-mode for selected major modes
 (setq which-func-modes '(ecmascript-mode emacs-lisp-mode lisp-mode java-mode
