@@ -1,6 +1,6 @@
 ;;; setup-ido.el ---
 
-;; Copyright (C) 2014, 2015  abelardo.jara-berrocal
+;; Copyright (C) 2014, 2015, 2016  abelardo.jara-berrocal
 
 ;; Author: abelardo.jara-berrocal <ajaraber@plxc25288.pdx.intel.com>
 ;; Keywords:
@@ -26,19 +26,16 @@
 
 ;; ido makes competing buffers and finding files easier
 
-(add-to-list 'load-path "~/.emacs.d/flx")
 (require 'ido)
-(require 'flx-ido)
 (ido-mode 'both)
 (ido-everywhere 1)
-(flx-ido-mode 1)
 
 (setq
  ido-save-directory-list-file "~/.emacs.cache/ido.last"
  ido-ignore-buffers ;; ignore these guys
  '("\\` " "^\*Mess" "^\*Back" ".*Completion" "^\*Ido" "^\*trace"
    "^\*compilation" "^\*GTAGS" "^session\.*" "^\*")
- ido-work-directory-list '("~/" "~/Desktop" "~/Documents" "~src")
+ ido-work-directory-list '("~/" "~/Desktop" "~/Documents" "~/workspace")
  ido-case-fold t
  ido-enable-last-directory-history t
  ido-auto-merge-work-directories-length -1

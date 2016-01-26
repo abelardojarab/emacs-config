@@ -1,6 +1,6 @@
 ;;; setup-python.el ---
 
-;; Copyright (C) 2014, 2015  abelardo.jara-berrocal
+;; Copyright (C) 2014, 2015, 2016  abelardo.jara-berrocal
 
 ;; Author: abelardo.jara-berrocal <ajaraber@plxc25288.pdx.intel.com>
 ;; Keywords:
@@ -38,9 +38,6 @@
 ;; Extra
 (add-to-list 'auto-mode-alist '("\\.py\\'" . python-mode))
 (add-to-list 'interpreter-mode-alist '("python" . python-mode))
-(setq interpreter-mode-alist
-      (cons '("python" . python-mode)
-            interpreter-mode-alist))
 
 ;; Python hook
 (add-hook 'python-mode-hook
@@ -50,7 +47,8 @@
                         (set-variable 'py-indent-offset 4)
                         (set-variable 'indent-tabs-mode nil))
                       (setq indent-tabs-mode nil
-                            python-indent 4
+                            python-indent-offset 4
+                            py-indent-offset 4
                             tab-width 4))))
 
 ;; Update imenu
@@ -65,14 +63,14 @@
 (setenv "PYTHONPATH" (concat (concat (getenv "HOME") "/workspace/pythonlibs/lib/python2.7/site-packages") ":" (getenv "PYTHONPATH")))
 
 ;; switch to the interpreter after executing code
-(setq-default py-shell-switch-buffers-on-execute-p t)
-(setq-default py-switch-buffers-on-execute-p t)
+(setq py-shell-switch-buffers-on-execute-p t)
+(setq py-switch-buffers-on-execute-p t)
 
 ;; try to automagically figure out indentation
-(setq-default py-smart-indentation t)
+(setq py-smart-indentation t)
 
 ;; split horizontally on execution
-(setq-default py-split-windows-on-execute-function 'split-window-horizontally)
+(setq py-split-windows-on-execute-function 'split-window-horizontally)
 
 ;; in cedet semantic-python-get-system-include-path forces starting of the python interpreter
 (defun python-shell-internal-send-string (string) "")
@@ -91,7 +89,6 @@
 (setq jedi:setup-keys nil)
 (setq jedi:complete-on-dot t)
 (setq jedi:tooltip-method t)
-(add-hook 'python-mode-hook 'jedi-mode)
 (ac-flyspell-workaround)
 
 (provide 'setup-python)

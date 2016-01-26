@@ -101,10 +101,10 @@
 ;; Setup web support
 (require 'setup-web)
 
-;; Setup Etags and GTAGS
+;; Setup tags (optional)
 (require 'setup-tags)
 
-;; Setup Spelling
+;; Setup spelling (optional)
 (require 'setup-spell)
 
 ;; Setup Flycheck
@@ -113,14 +113,11 @@
 ;; Setup compile
 (require 'setup-compile)
 
-;; Setup Ido
+;; Setup Ido (optional, disabled GUI for open file)
 (require 'setup-ido)
 
 ;; Setup Autopair
 (require 'setup-autopair)
-
-;; Setup Eldoc
-(require 'setup-eldoc)
 
 ;; Setup Yasnippet
 (require 'setup-yasnippet)
@@ -128,17 +125,35 @@
 ;; Setup Auto-Complete
 (require 'setup-auto-complete)
 
-;; Setup markdown and Yaml
-(require 'setup-markdown)
+;; Setup bookmarks
+(require 'setup-bookmarks)
+
+;; Setup modeline and Smex
+(require 'setup-modeline)
+
+;; Setup recent
+(require 'setup-recentf)
+
+;; Setup tabbar (optional)
+(require 'setup-tabbar)
+
+;; Setup versioning (optional)
+;; (require 'setup-versioning)
+
+;; Setup helm
+(require 'setup-helm)
+
+;; Setup Lisp mode
+(require 'setup-lisp)
 
 ;; Setup Python
 (require 'setup-python)
 
+;; Setup markdown and Yaml
+(require 'setup-markdown)
+
 ;; Setup Javascript
 (require 'setup-js2)
-
-;; Setup Lisp mode
-(require 'setup-lisp)
 
 ;; Setup VHDL/Verilog mode
 (require 'setup-vhdl)
@@ -151,30 +166,6 @@
 
 ;; Setup shell
 (require 'setup-eshell)
-
-;; Setup bookmarks
-(require 'setup-bookmarks)
-
-;; Setup modeline and Smex
-(require 'setup-modeline)
-
-;; Setup recent
-(require 'setup-recentf)
-
-;; Setup tabbar
-(require 'setup-tabbar)
-
-;; Setup versioning
-(require 'setup-versioning)
-
-;; Setup helm
-(require 'setup-helm)
-
-;; Setup project
-(require 'setup-project)
-
-;; Setup dash
-(require 'setup-dash)
 
 ;; Setup ECB
 (require 'setup-ecb)
