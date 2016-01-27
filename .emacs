@@ -138,7 +138,7 @@
 (require 'setup-tabbar)
 
 ;; Setup versioning (optional)
-;; (require 'setup-versioning)
+(require 'setup-versioning)
 
 ;; Setup helm
 (require 'setup-helm)
