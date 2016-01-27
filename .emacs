@@ -177,3 +177,5 @@
 (require 'setup-keys)
 
 (setq debug-on-quit nil)
+
+(setq debug-on-error nil)
