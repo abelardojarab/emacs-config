@@ -46,7 +46,6 @@
   (diff-hl-update))
 
 ;; git
-(add-to-list 'load-path "~/.emacs.d/git-emacs")
 (add-to-list 'load-path "~/.emacs.d/git-gutter-plus")
 (add-to-list 'load-path "~/.emacs.d/git-gutter-fringe-plus")
 (add-to-list 'load-path "~/.emacs.d/git-timemachine")
