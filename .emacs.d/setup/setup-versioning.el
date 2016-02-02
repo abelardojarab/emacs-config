@@ -57,8 +57,11 @@
           (add-to-list 'Info-directory-list "~/.emacs.d/magit/Documentation")))
 (require 'with-editor)
 (require 'magit)
-;; (require 'setup-magit)
 (require 'git-timemachine)
+
+;; Show blame for current line
+(add-to-list 'load-path "~/.emacs.d/git-messenger")
+(require 'git-messenger)
 
 (when window-system
   (require 'git-gutter-fringe+)
