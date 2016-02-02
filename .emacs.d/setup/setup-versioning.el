@@ -1,6 +1,6 @@
 ;;; setup-versioning.el ---
 
-;; Copyright (C) 2014, 2015  abelardo.jara-berrocal
+;; Copyright (C) 2014, 2015, 2016  abelardo.jara-berrocal
 
 ;; Author: abelardo.jara-berrocal <ajaraber@plxc25288.pdx.intel.com>
 ;; Keywords:
@@ -46,20 +46,18 @@
   (diff-hl-update))
 
 ;; git
-(add-to-list 'load-path "~/.emacs.d/git-modes")
-(add-to-list 'load-path "~/.emacs.d/git-commit")
 (add-to-list 'load-path "~/.emacs.d/git-emacs")
 (add-to-list 'load-path "~/.emacs.d/git-gutter-plus")
 (add-to-list 'load-path "~/.emacs.d/git-gutter-fringe-plus")
 (add-to-list 'load-path "~/.emacs.d/git-timemachine")
-(add-to-list 'load-path "~/.emacs.d/magit")
+(add-to-list 'load-path "~/.emacs.d/with-editor")
+(add-to-list 'load-path "~/.emacs.d/magit/lisp")
 (eval-after-load 'info
   '(progn (info-initialize)
-          (add-to-list 'Info-directory-list "~/.emacs.d/magit/")))
-
-(require 'git-commit)
+          (add-to-list 'Info-directory-list "~/.emacs.d/magit/Documentation")))
+(require 'with-editor)
 (require 'magit)
-(require 'setup-magit)
+;; (require 'setup-magit)
 (require 'git-timemachine)
 
 (when window-system

@@ -1,13 +1,43 @@
-;; -*- lexical-binding: t -*-
+;;; examples.el --- Examples/tests for dash.el's API  -*- lexical-binding: t -*-
+
+;; Copyright (C) 2015 Free Software Foundation, Inc.
+
+;; This program is free software; you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+;;; Commentary:
 
 ;; Only the first three examples per function are shown in the docs,
 ;; so make those good.
+
+;;; Code:
 
 (require 'dash)
 
 (defun even? (num) (= 0 (% num 2)))
 (defun square (num) (* num num))
 (defun three-letters () '("A" "B" "C"))
+
+;; Allow approximate comparison of floating-point results, to work
+;; around differences in implementation between systems. Use the `~>'
+;; symbol instead of `=>' to test the expected and actual values with
+;; `approx-equal'
+(defvar dash--epsilon 1e-15)
+(defun approx-equal (u v)
+  (or (= u v)
+      (< (/ (abs (- u v))
+        (max (abs u) (abs v)))
+     dash--epsilon)))
 
 (def-example-group "Maps"
   "Functions in this category take a transforming function, which
@@ -27,6 +57,22 @@ new list."
     (--map-when (= it 2) 17 '(1 2 3 4)) => '(1 17 3 4)
     (-map-when (lambda (n) (= n 3)) (lambda (n) 0) '(1 2 3 4)) => '(1 2 0 4))
 
+  (defexamples -map-first
+    (-map-first 'even? 'square '(1 2 3 4)) => '(1 4 3 4)
+    (--map-first (> it 2) (* it it) '(1 2 3 4)) => '(1 2 9 4)
+    (--map-first (= it 2) 17 '(1 2 3 2)) => '(1 17 3 2)
+    (-map-first 'even? 'square '(1 3 5 7)) => '(1 3 5 7)
+    (-map-first 'even? 'square '(2)) => '(4)
+    (-map-first 'even? 'square nil) => nil)
+
+  (defexamples -map-last
+    (-map-last 'even? 'square '(1 2 3 4)) => '(1 2 3 16)
+    (--map-last (> it 2) (* it it) '(1 2 3 4)) => '(1 2 3 16)
+    (--map-last (= it 2) 17 '(1 2 3 2)) => '(1 2 3 17)
+    (-map-last 'even? 'square '(1 3 5 7)) => '(1 3 5 7)
+    (-map-last 'even? 'square '(2)) => '(4)
+    (-map-last 'even? 'square nil) => nil)
+
   (defexamples -map-indexed
     (-map-indexed (lambda (index item) (- item index)) '(1 2 3 4)) => '(1 1 1 1)
     (--map-indexed (- it it-index) '(1 2 3 4)) => '(1 1 1 1))
@@ -43,7 +89,8 @@ new list."
 
   (defexamples -splice-list
     (-splice-list 'keywordp '(a b c) '(1 :foo 2)) => '(1 a b c 2)
-    (-splice-list 'keywordp nil '(1 :foo 2)) => '(1 2))
+    (-splice-list 'keywordp nil '(1 :foo 2)) => '(1 2)
+    (--splice-list (keywordp it) '(a b c) '(1 :foo 2)) => '(1 a b c 2))
 
   (defexamples -mapcat
     (-mapcat 'list '(1 2 3)) => '(1 2 3)
@@ -68,6 +115,25 @@ new list."
     (--remove (= 0 (% it 2)) '(1 2 3 4)) => '(1 3)
     (let ((mod 2)) (-remove (lambda (num) (= 0 (% num mod))) '(1 2 3 4))) => '(1 3)
     (let ((mod 2)) (--remove (= 0 (% it mod)) '(1 2 3 4))) => '(1 3))
+
+  (defexamples -remove-first
+    (-remove-first 'even? '(1 3 5 4 7 8 10)) => '(1 3 5 7 8 10)
+    (-remove-first 'stringp '(1 2 "first" "second" "third")) => '(1 2 "second" "third")
+    (--remove-first (> it 3) '(1 2 3 4 5 6 7 8 9 10)) => '(1 2 3 5 6 7 8 9 10)
+    (-remove-first 'even? '(2 3 4)) => '(3 4)
+    (-remove-first 'even? '(3 5 7 4)) => '(3 5 7)
+    (-remove-first 'even? '(2)) => nil
+    (-remove-first 'even? '(1 3 5 7)) => '(1 3 5 7))
+
+  (defexamples -remove-last
+    (-remove-last 'even? '(1 3 5 4 7 8 10 11)) => '(1 3 5 4 7 8 11)
+    (-remove-last 'stringp '(1 2 "last" "second" "third")) => '(1 2 "last" "second")
+    (--remove-last (> it 3) '(1 2 3 4 5 6 7 8 9 10)) => '(1 2 3 4 5 6 7 8 9))
+
+  (defexamples -remove-item
+    (-remove-item 3 '(1 2 3 2 3 4 5 3)) => '(1 2 2 4 5)
+    (-remove-item 'foo '(foo bar baz foo)) => '(bar baz)
+    (-remove-item "bob" '("alice" "bob" "eve" "bob" "dave")) => '("alice" "eve" "dave"))
 
   (defexamples -non-nil
     (-non-nil '(1 nil 2 nil nil 3 4 nil 5 nil)) => '(1 2 3 4 5))
@@ -132,7 +198,10 @@ new list."
   (defexamples -flatten
     (-flatten '((1))) => '(1)
     (-flatten '((1 (2 3) (((4 (5))))))) => '(1 2 3 4 5)
-    (-flatten '(1 2 (3 . 4))) => '(1 2 (3 . 4)))
+    (-flatten '(1 2 (3 . 4))) => '(1 2 (3 . 4))
+    (-flatten '(nil nil nil)) => nil
+    (-flatten '(nil (1) nil)) => '(1)
+    (-flatten '(nil (nil) nil)) => nil)
 
   (defexamples -flatten-n
     (-flatten-n 1 '((1 2) ((3 4) ((5 6))))) => '(1 2 (3 4) ((5 6)))
@@ -146,6 +215,16 @@ new list."
     (-replace 1 "1" '(1 2 3 4 3 2 1)) => '("1" 2 3 4 3 2 "1")
     (-replace "foo" "bar" '("a" "nice" "foo" "sentence" "about" "foo")) => '("a" "nice" "bar" "sentence" "about" "bar")
     (-replace 1 2 nil) => nil)
+
+  (defexamples -replace-first
+    (-replace-first 1 "1" '(1 2 3 4 3 2 1)) => '("1" 2 3 4 3 2 1)
+    (-replace-first "foo" "bar" '("a" "nice" "foo" "sentence" "about" "foo")) => '("a" "nice" "bar" "sentence" "about" "foo")
+    (-replace-first 1 2 nil) => nil)
+
+  (defexamples -replace-last
+    (-replace-last 1 "1" '(1 2 3 4 3 2 1)) => '(1 2 3 4 3 2 "1")
+    (-replace-last "foo" "bar" '("a" "nice" "foo" "sentence" "about" "foo")) => '("a" "nice" "foo" "sentence" "about" "bar")
+    (-replace-last 1 2 nil) => nil)
 
   (defexamples -insert-at
     (-insert-at 1 'x '(a b c)) => '(a x b c)
@@ -321,7 +400,10 @@ new list."
     (-is-suffix? '(3 4 5) '(1 2 3 4 5)) => t
     (-is-suffix? '(1 2 3 4 5) '(3 4 5)) => nil
     (-is-suffix? '(3 5) '(1 2 3 4 5)) => nil
-    (-is-suffix? '(3 4 5) '(1 2 3 5)) => nil)
+    (-is-suffix? '(3 4 5) '(1 2 3 5)) => nil
+    (let ((l '(1 2 3)))
+      (list (-is-suffix? '(3) l)
+            l)) => '(t (1 2 3)))
 
   (defexamples -is-infix?
     (-is-infix? '(1 2 3) '(1 2 3 4 5)) => t
@@ -546,6 +628,11 @@ new list."
     (-first 'even? '(1 3 5)) => nil
     (--first (> it 2) '(1 2 3)) => 3)
 
+  (defexamples -some
+    (-some 'even? '(1 2 3)) => t
+    (--some (member 'foo it) '((foo bar) (baz))) => '(foo bar)
+    (--some (plist-get it :bar) '((:foo 1 :bar 2) (:baz 3))) => 2)
+
   (defexamples -last
     (-last 'even? '(1 2 3 4 5 6 3 3 3)) => 6
     (-last 'even? '(1 3 7 5 9)) => nil
@@ -574,8 +661,8 @@ new list."
   (defexamples -list
     (-list 1) => '(1)
     (-list 1 2 3) => '(1 2 3)
-    (-list '(1 2 3) => '(1 2 3))
-    (-list '((1) (2)) => '((1) (2))))
+    (-list '(1 2 3)) => '(1 2 3)
+    (-list '((1) (2))) => '((1) (2)))
 
   (defexamples -fix
     (-fix (lambda (l) (-non-nil (--mapcat (-split-at (/ (length it) 2) it) l))) '((1 2 3 4 5 6))) => '((1) (2) (3) (4) (5) (6))
@@ -671,7 +758,26 @@ new list."
   (defexamples -->
     (--> "def" (concat "abc" it "ghi")) => "abcdefghi"
     (--> "def" (concat "abc" it "ghi") (upcase it)) => "ABCDEFGHI"
-    (--> "def" (concat "abc" it "ghi") upcase) => "ABCDEFGHI"))
+    (--> "def" (concat "abc" it "ghi") upcase) => "ABCDEFGHI")
+
+  (defexamples -some->
+    (-some-> '(2 3 5)) => '(2 3 5)
+    (-some-> 5 square) => 25
+    (-some-> 5 even? square) => nil
+    (-some-> nil square) => nil)
+
+  (defexamples -some->>
+    (-some->> '(1 2 3) (-map 'square)) => '(1 4 9)
+    (-some->> '(1 3 5) (-last 'even?) (+ 100)) => nil
+    (-some->> '(2 4 6) (-last 'even?) (+ 100)) => 106
+    (-some->> '("A" "B" :c) (-filter 'stringp) (-reduce 'concat)) => "AB"
+    (-some->> '(:a :b :c) (-filter 'stringp) (-reduce 'concat)) => nil)
+
+  (defexamples -some-->
+    (-some--> "def" (concat "abc" it "ghi")) => "abcdefghi"
+    (-some--> nil (concat "abc" it "ghi")) => nil
+    (-some--> '(1 3 5) (-filter 'even? it) (append it it) (-map 'square it)) => nil
+    (-some--> '(2 4 6) (-filter 'even? it) (append it it) (-map 'square it)) => '(4 16 36 4 16 36)))
 
 (def-example-group "Binding"
   "Convenient versions of `let` and `let*` constructs combined with flow control."
@@ -730,21 +836,18 @@ new list."
     (-let [[a b c] "abcdef"] (list a b c)) => '(?a ?b ?c)
     (-let [[a (b [c]) d] [1 (2 [3 4]) 5 6]] (list a b c d)) => '(1 2 3 5)
     (-let [(a b c d) (list 1 2 3 4 5 6)] (list a b c d)) => '(1 2 3 4)
+    (-let [([a b]) (list (vector 1 2 3))] (list a b)) => '(1 2)
     ;; d is bound to nil. I don't think we want to error in such a case.
     ;; After all (car nil) => nil
     (-let [(a b c d) (list 1 2 3)] (list a b c d)) => '(1 2 3 nil)
     (-let [[a b c] [1 2 3 4]] (list a b c)) => '(1 2 3)
+    (-let [[a] [1 2 3 4]] a) => 1
     (-let [[a b &rest c] "abcdef"] (list a b c)) => '(?a ?b "cdef")
     (-let [[a b &rest c] [1 2 3 4 5 6]] (list a b c)) => '(1 2 [3 4 5 6])
     (-let [[a b &rest [c d]] [1 2 3 4 5 6]] (list a b c d)) => '(1 2 3 4)
     ;; here we error, because "vectors" are rigid, immutable structures,
     ;; so we should know how many elements there are
-    (condition-case nil
-        (-let [[a b c d] [1 2 3]]
-          (progn
-            (list a b c d)
-            (error "previous call should fail.")))
-      (args-out-of-range t)) => t
+    (-let [[a b c d] [1 2 3]] t) !!> args-out-of-range
     (-let [(a . (b . c)) (cons 1 (cons 2 3))] (list a b c)) => '(1 2 3)
     (-let [(_ _ . [a b]) (cons 1 (cons 2 (vector 3 4)))] (list a b)) => '(3 4)
     (-let [(_ _ . (a b)) (cons 1 (cons 2 (list 3 4)))] (list a b)) => '(3 4)
@@ -761,6 +864,10 @@ new list."
     (-let [(_ _ _ a) (list 1 2 3 4 5)] a) => 4
     (-let [(_ _ _ (a b)) (list 1 2 3 (list 4 5))] (list a b)) => '(4 5)
     (-let [(_ a _ b) (list 1 2 3 4 5)] (list a b)) => '(2 4)
+    (-let [(_ a _ b _ c) (list 1 2 3 4 5 6)] (list a b c)) => '(2 4 6)
+    (-let [(_ a _ b _ _ _ c) (list 1 2 3 4 5 6 7 8)] (list a b c)) => '(2 4 8)
+    (-let [(_ a _ _ _ b _ c) (list 1 2 3 4 5 6 7 8)] (list a b c)) => '(2 6 8)
+    (-let [(_ _ _ a _ _ _ b _ _ _ c) (list 1 2 3 4 5 6 7 8 9 10 11 12)] (list a b c)) => '(4 8 12)
     (-let [(_ (a b) _ c) (list 1 (list 2 3) 4 5)] (list a b c)) => '(2 3 5)
     (-let [(_ (a b) _ . c) (list 1 (list 2 3) 4 5)] (list a b c)) => '(2 3 (5))
     (-let [(_ (a b) _ (c d)) (list 1 (list 2 3) 4 (list 5 6))] (list a b c d)) => '(2 3 5 6)
@@ -812,7 +919,33 @@ new list."
     (-let [[(a _ b)] (vector (list 1 2 3 4))] (list a b)) => '(1 3)
     (-let [(&plist 'a a) (list 'a 1 'b 2)] a) => 1
     (-let [(&plist 'a [a b]) (list 'a [1 2] 'b 3)] (list a b)) => '(1 2)
-    (-let [(&plist 'a [a b] 'c c) (list 'a [1 2] 'c 3)] (list a b c)) => '(1 2 3))
+    (-let [(&plist 'a [a b] 'c c) (list 'a [1 2] 'c 3)] (list a b c)) => '(1 2 3)
+    ;; mixing dot and &alist
+    (-let (((x y &alist 'a a 'c c) (list 1 2 '(a . b) '(e . f) '(g . h) '(c . d)))) (list x y a c)) => '(1 2 b d)
+    (-let (((_ _ &alist 'a a 'c c) (list 1 2 '(a . b) '(e . f) '(g . h) '(c . d)))) (list a c)) => '(b d)
+    (-let (((x y . (&alist 'a a 'c c)) (list 1 2 '(a . b) '(e . f) '(g . h) '(c . d)))) (list x y a c)) => '(1 2 b d)
+    (-let (((_ _ . (&alist 'a a 'c c)) (list 1 2 '(a . b) '(e . f) '(g . h) '(c . d)))) (list a c)) => '(b d)
+    (-let (((x y (&alist 'a a 'c c)) (list 1 2 '((a . b) (e . f) (g . h) (c . d))))) (list x y a c)) => '(1 2 b d)
+    (-let (((_ _ . ((&alist 'a a 'c c))) (list 1 2 '((a . b) (e . f) (g . h) (c . d))))) (list a c)) => '(b d)
+    ;; test the &as form
+    (-let (((items &as first . rest) (list 1 2 3))) (list first rest items)) => '(1 (2 3) (1 2 3))
+    (-let [(all &as [vect &as a b] bar) (list [1 2] 3)] (list a b bar vect all)) => '(1 2 3 [1 2] ([1 2] 3))
+    (-let [(all &as (list &as a b) bar) (list (list 1 2) 3)] (list a b bar list all)) => '(1 2 3 (1 2) ((1 2) 3))
+    (-let [(x &as [a b]) (list (vector 1 2 3))] (list a b x)) => '(1 2 ([1 2 3]))
+    (-let [(result &as [_ a] [_ b]) (list [1 2] [3 4])] (list a b result)) => '(2 4 ([1 2] [3 4]))
+    (-let [(result &as [fst &as _ a] [snd &as _ b]) (list [1 2] [3 4])] (list a b fst snd result)) => '(2 4 [1 2] [3 4] ([1 2] [3 4]))
+    (-let [[x &as a b &rest r] (vector 1 2 3)] (list a b r x)) => '(1 2 [3] [1 2 3])
+    (-let [[x &as a] (vector 1 2 3)] (list a x)) => '(1 [1 2 3])
+    (-let [[x &as _ _ a] (vector 1 2 3)] (list a x)) => '(3 [1 2 3])
+    (-let [[x &as _ _ a] (vector 1 2 (list 3 4))] (list a x)) => '((3 4) [1 2 (3 4)])
+    (-let [[x &as _ _ (a b)] (vector 1 2 (list 3 4))] (list a b x)) => '(3 4 [1 2 (3 4)])
+    (-let [(b &as beg . end) (cons 1 2)] (list beg end b)) => '(1 2 (1 . 2))
+    (-let [(plist &as &plist :a a :b b) (list :a 1 :b 2)] (list a b plist)) => '(1 2 (:a 1 :b 2))
+    (-let [(alist &as &alist :a a :b b) (list (cons :a 1) (cons :b 2))] (list a b alist)) => '(1 2 ((:a . 1) (:b . 2)))
+    (-let [(list &as _ _ _ a _ _ _ b _ _ _ c) (list 1 2 3 4 5 6 7 8 9 10 11 12)] (list a b c list)) => '(4 8 12 (1 2 3 4 5 6 7 8 9 10 11 12))
+    (-let (((x &as a b) (list 1 2))
+           ((y &as c d) (list 3 4)))
+      (list a b c d x y)) => '(1 2 3 4 (1 2) (3 4)))
 
   (defexamples -let*
     (-let* (((a . b) (cons 1 2))
@@ -838,7 +971,7 @@ new list."
     (-map (-lambda ((&plist :a a :b b)) (+ a b)) '((:a 1 :b 2) (:a 3 :b 4) (:a 5 :b 6))) => '(3 7 11)
     (-map (-lambda (x) (let ((k (car x)) (v (cadr x))) (+ k v))) '((1 2) (3 4) (5 6))) => '(3 7 11)
     (funcall (-lambda ((a) (b)) (+ a b)) '(1 2 3) '(4 5 6)) => 5
-    (condition-case nil (progn (-lambda a t) (error "previous form should error")) (wrong-type-argument t)) => t
+    (-lambda a t) !!> wrong-type-argument
     (funcall (-lambda (a b) (+ a b)) 1 2) => 3
     (funcall (-lambda (a (b c)) (+ a b c)) 1 (list 2 3)) => 6))
 
@@ -951,13 +1084,15 @@ new list."
              (equal (funcall (-iteratefn fn 3) init)
                     (-last-item (-iterate fn init (1+ 3))))
              (equal (funcall (-iteratefn fn 5) init)
-                    (-last-item (-iterate fn init (1+ 5)))))))
+                    (-last-item (-iterate fn init (1+ 5)))))) => t)
 
     (defexamples -fixfn
-      ;; Find solution to cos(x) = x
-      (funcall (-fixfn 'cos) 0.7) => 0.7390851332151607
-      ;; Find solution to x^4 - x - 10 = 0
-      (funcall (-fixfn (lambda (x) (expt (+ x 10) 0.25))) 2.0) => 1.8555845286409378)
+      ;; Find solution to cos(x) = x (may not converge without fuzzy comparison)
+      (funcall (-fixfn 'cos 'approx-equal) 0.7) ~> 0.7390851332151607
+      ;; Find solution to x^4 - x - 10 = 0 (converges using 'equal comparison)
+      (funcall (-fixfn (lambda (x) (expt (+ x 10) 0.25))) 2.0) => 1.8555845286409378
+      ;; The sin function has a fixpoint at zero, but it converges too slowly and is halted
+      (funcall (-fixfn 'sin 'approx-equal) 0.1) => '(halted . t))
 
     (defexamples -prodfn
       (funcall (-prodfn '1+ '1- 'int-to-string) '(1 2 3)) => '(2 1 "3")
@@ -970,18 +1105,19 @@ new list."
             (input '(1 2))
             (input2 "foo")
             (input3 '("10" '(1 2 3))))
-        (equal (funcall (-prodfn f g) input)
-               (funcall (-juxt (-compose f (-partial 'nth 0)) (-compose g (-partial 'nth 1))) input))
-        (equal (funcall (-compose (-prodfn f g) (-juxt ff gg)) input2)
-               (funcall (-juxt (-compose f ff) (-compose g gg)) input2))
-        (equal (funcall (-compose (-partial 'nth 0) (-prod f g)) input)
-               (funcall (-compose f (-partial 'nth 0)) input))
-        (equal (funcall (-compose (-partial 'nth 1) (-prod f g)) input)
-               (funcall (-compose g (-partial 'nth 1)) input))
-        (equal (funcall (-compose (-prodfn f g) (-prodfn ff gg)) input3)
-               (funcall (-prodfn (-compose f ff) (-compose g gg)) input3))))
-    ))
+        (and (equal (funcall (-prodfn f g) input)
+                    (funcall (-juxt (-compose f (-partial 'nth 0)) (-compose g (-partial 'nth 1))) input))
+             (equal (funcall (-compose (-prodfn f g) (-juxt ff gg)) input2)
+                    (funcall (-juxt (-compose f ff) (-compose g gg)) input2))
+             (equal (funcall (-compose (-partial 'nth 0) (-prodfn f g)) input)
+                    (funcall (-compose f (-partial 'nth 0)) input))
+             (equal (funcall (-compose (-partial 'nth 1) (-prodfn f g)) input)
+                    (funcall (-compose g (-partial 'nth 1)) input))
+             (equal (funcall (-compose (-prodfn f g) (-prodfn ff gg)) input3)
+                    (funcall (-prodfn (-compose f ff) (-compose g gg)) input3)))) => t)))
 
 ;; Local Variables:
-;; eval: (font-lock-add-keywords nil '(("defexamples\\|def-example-group\\| => " (0 'font-lock-keyword-face)) ("(defexamples[[:blank:]]+\\(.*\\)" (1 'font-lock-function-name-face))))
+;; eval: (font-lock-add-keywords nil '(("defexamples\\|def-example-group\\| => \\| !!> \\| ~>" (0 'font-lock-keyword-face)) ("(defexamples[[:blank:]]+\\(.*\\)" (1 'font-lock-function-name-face))))
 ;; End:
+
+;;; examples.el ends here

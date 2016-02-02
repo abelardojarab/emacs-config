@@ -4,7 +4,7 @@ A modern list api for Emacs. No 'cl required.
 
 ## Installation
 
-It's available on [marmalade](http://marmalade-repo.org/) and [Melpa](http://melpa.milkbox.net/):
+It's available on [marmalade](http://marmalade-repo.org/) and [Melpa](https://melpa.org/):
 
     M-x package-install dash
 
@@ -19,11 +19,18 @@ If you want the function combinators, then also:
 
 Add this to the big comment block at the top:
 
-    ;; Package-Requires: ((dash "2.10.0"))
+    ;; Package-Requires: ((dash "2.12.1"))
 
 To get function combinators:
 
-    ;; Package-Requires: ((dash "2.10.0") (dash-functional "1.2.0") (emacs "24"))
+    ;; Package-Requires: ((dash "2.12.1") (dash-functional "1.2.0") (emacs "24"))
+
+## Upcoming breaking change!
+
+- For backward compatibility reasons `-zip` return a cons-cell instead of a list
+  with two elements when called on two lists. This is a clunky API, and in an
+  upcoming 3.0 release of Dash it will always return a list. If you rely on the
+  cons-cell return value, use `-zip-pair` instead.
 
 ## Syntax highlighting of dash functions
 
@@ -34,9 +41,7 @@ Include this in your emacs settings to get syntax highlighting:
 
 ## Functions
 
-[[ function-list ]]
-
-## Anaphoric functions
+All functions and constructs in the library are prefixed with a dash (-).
 
 There are also anaphoric versions of functions where that makes sense,
 prefixed with two dashes instead of one.
@@ -60,6 +65,8 @@ of course the original can also be written like
 ```
 
 which demonstrates the usefulness of both versions.
+
+[[ function-list ]]
 
 [[ function-docs ]]
 
@@ -90,6 +97,20 @@ Oh, and don't edit `README.md` directly, it is auto-generated.
 Change `readme-template.md` or `examples-to-docs.el` instead.
 
 ## Changelist
+
+- Added lexical binding pragma to dash.el
+
+### From 2.11 to 2.12
+
+- Add GNU ELPA support. (Phillip Lord)
+- Add `-some->`, `-some->>`, and `-some-->` macros. (Cam Saul)
+- `-is-suffix?` no longer destroys input list.
+- Faster hashtable implementation for `-union`.
+- Improvements to docstrings and examples
+
+### From 2.10 to 2.11
+
+- Lots of clean up wrt byte compilation, debug macros and tests
 
 ### From 2.9 to 2.10
 
@@ -204,6 +225,10 @@ Change `readme-template.md` or `examples-to-docs.el` instead.
  - [Christina Whyte](https://github.com/kurisuwhyte) contributed `-compose`
  - [Steve Lamb](https://github.com/steventlamb) contributed `-cycle`, `-pad`, `-annotate`, `-zip-fill` and an n-ary version of `-zip`.
  - [Fredrik Bergroth](https://github.com/fbergroth) made the `-if-let` family use `-let` destructuring and improved script for generating documentation.
+ - [Mark Oteiza](https://github.com/holomorph) contributed the script to create an info manual.
+ - [Vasilij Schneidermann](https://github.com/wasamasa) contributed `-some`.
+ - [William West](https://github.com/occidens) made `-fixfn` more robust at handling floats.
+ - [Cam Saül](https://github.com/camsaul) contributed `-some->`, `-some->>`, and `-some-->`.
 
 Thanks!
 

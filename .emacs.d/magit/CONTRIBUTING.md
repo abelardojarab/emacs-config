@@ -1,27 +1,55 @@
-Magit is currently in feature freeze.  Please keep that in mind
-when suggesting new features or submitting code contributions.
+<p align="center">
+  <img src="http://magit.vc/img/L.png" align="left">
+  <img src="http://magit.vc/img/R.png" align="right">
+  <b>
+    When something doesn't work as expected, then please first consult the
+    <a href="http://magit.vc/manual/magit/FAQ.html">FAQ</a> and ask a
+	search engine.   If that doesn't solve your problem, then please ask for help on
+    <a href="http://emacs.stackexchange.com/questions/tagged/magit"> Emacs.Stackexchange</a>.
+  </b>
+</p>
+***
 
-No new features will be implemented on the `master` branch, even
-if they are "obviously not going to cause any problems" (this has
-frequently turned out not to be true after all).  Even for bugfixes
-the threshold is fairly high now; if fixing a bug which has existed
-for years seems risky, then it won't be fixed now.
+Getting help
+============
 
-Very few new features will be implemented on the `next` branch.
-Basically only features that help *fixing* existing features might
-be implemented despite the feature freeze.
+**When something doesn't work as expected then please first see the
+[FAQ][faq].** Then also try the list of [open issues][issues] and use
+the search box at the top of that page to find older related issues.
+You should also consult the [manual][manual] and ask a general-purpose
+search engine.
 
-If you feel that your issue or new feature is important enough to
-violate the above restrictions, then please explicitly note that you
-have read this and explain in your initial post why you feel an
-exception should be made.  That way I at least do not have to repeat
-the above yet once more.
+If everything else fails then ask for help on the
+**[Emacs Stackexchange site][forum]**, the
+[mailing list][list], or the
+[Gitter chat][chat].
 
-Please also consider whether your feature really is important enough
-that implementing it now is justification enough to further delay the
-release of the many new and many more improved features in `next`.
+Reporting issues and suggesting features
+========================================
 
-Also see the [Roadmap toward 2.1.0](https://github.com/magit/magit/issues/1645).
+To report bugs and suggest new feature use the [issue tracker][issues].
 
-Report issues [here](https://github.com/magit/magit/issues),
-and open pull requests [here](https://github.com/magit/magit/pulls).
+Never use the phrase "at the very least".
+
+Code contributions
+==================
+
+If you have some code which you would like to be merged, then open a
+[pull request][pulls].  Please create atomic commits with descriptive
+commit messages.
+
+Donations
+=========
+
+Please also consider to contribute by making a
+[monetary donation][donations].
+
+
+[chat]:      https://gitter.im/magit/magit
+[donations]: http://magit.vc/donations.html
+[faq]:       http://magit.vc/manual/magit/FAQ.html
+[forum]:     http://emacs.stackexchange.com/questions/tagged/magit
+[issues]:    https://github.com/magit/magit/issues
+[list]:      https://groups.google.com/forum/?fromgroups#!forum/magit
+[manual]:    http://magit.vc/manual
+[pulls]:     https://github.com/magit/magit/pulls
