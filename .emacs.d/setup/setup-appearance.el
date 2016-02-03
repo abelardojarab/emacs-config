@@ -91,11 +91,15 @@ non-nil."
 
 ;; Material theme
 (add-to-list 'load-path "~/.emacs.d/emacs-matherial-theme")
-(add-to-list 'custom-theme-load-path "~/.emacs.d/emacs-matherial-theme")
+(add-to-list 'custom-theme-load-path "~/.emacs.d/emacs-material-theme")
 
 ;; Leuven theme
 (add-to-list 'load-path "~/.emacs.d/emacs-leuven-theme")
 (add-to-list 'custom-theme-load-path "~/.emacs.d/emacs-leuven-theme")
+
+;; FlatUI theme
+(add-to-list 'load-path "~/.emacs.d/emacs-flatui-theme")
+(add-to-list 'custom-theme-load-path "~/.emacs.d/emacs-flatui-theme")
 
 ;; Zerodark
 (add-to-list 'load-path "~/.emacs.d/zerodark-theme")
@@ -107,19 +111,20 @@ non-nil."
 (require 'solarized)
 (setq solarized-scale-org-headlines nil)
 
-;; Load Atom dark theme
+;; Different possible themes
 ;; (load-theme 'atom-dark t)
-(load-theme 'zenburn t)
+;; (load-theme 'zenburn t)
 ;; (load-theme 'leuven t)
 ;; (load-theme 'zerodark t)
-;; (load-theme 'material t)
-;; (load-theme 'leuven t)
+(load-theme 'material t)
+;; (load-theme 'FlatUI t)
 ;; (load-theme 'faff t)
 ;; (load-theme 'monokai t)
 ;; (load-theme 'solarized-dark t)
+;; (load-theme 'material-light t)
 
 ;; White text
-(add-to-list 'default-frame-alist '(foreground-color . "#FFFFFF"))
+;; (add-to-list 'default-frame-alist '(foreground-color . "#FFFFFF"))
 
 ;; Syntax coloring
 (global-font-lock-mode t)
