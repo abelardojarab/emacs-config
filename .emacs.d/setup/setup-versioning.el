@@ -46,8 +46,6 @@
   (diff-hl-update))
 
 ;; git
-(add-to-list 'load-path "~/.emacs.d/git-gutter-plus")
-(add-to-list 'load-path "~/.emacs.d/git-gutter-fringe-plus")
 (add-to-list 'load-path "~/.emacs.d/git-timemachine")
 (add-to-list 'load-path "~/.emacs.d/with-editor")
 (add-to-list 'load-path "~/.emacs.d/magit/lisp")
@@ -63,6 +61,8 @@
 (require 'git-messenger)
 
 (when window-system
+  (add-to-list 'load-path "~/.emacs.d/git-gutter-plus")
+  (add-to-list 'load-path "~/.emacs.d/git-gutter-fringe-plus")
   (require 'git-gutter-fringe+)
   (global-git-gutter+-mode t)
   (set-face-foreground 'git-gutter-fr+-modified "LightSeaGreen")

@@ -128,6 +128,16 @@ non-nil."
 (setq font-lock-maximum-size (* 512 512))
 (defun global-font-lock-mode-check-buffers () nil)
 
+;; Lazy font lock
+(setq font-lock-support-mode 'jit-lock-mode)
+(setq jit-lock-chunk-size 5000
+      jit-lock-context-time 0.2
+      jit-lock-defer-time .1
+      jit-lock-stealth-nice 0.5
+      jit-lock-stealth-time 16
+      jit-lock-stealth-verbose nil)
+(setq-default font-lock-multiline t)
+
 ;; Do not fontify large files
 (defun my-find-file-check-make-large-file-read-only-hook ()
   "If a file is over a given size, make the buffer read only."
@@ -160,54 +170,48 @@ non-nil."
 
     ;; Dynamic font adjusting based on monitor resolution
     (when (find-font (font-spec :name "Consolas"))
-      ;; Finally, set the fonts as desired
-      (defun set-default-font (main-programming-font frame)
-        (interactive)
-        (set-face-attribute 'default nil :font main-programming-font)
-        (set-face-attribute 'fixed-pitch nil :font main-programming-font)
-        (set-frame-parameter frame 'font main-programming-font))
 
       (defun fontify-frame (frame)
         (interactive)
         (let (main-writing-font main-programming-font)
-          (setq main-programming-font "Consolas-12")
+          (setq main-programming-font "Consolas")
           (setq main-writing-font "Consolas")
           (if (find-font (font-spec :name "Calibri"))
               (setq main-writing-font "Calibri"))
 
+          ;; Adjust text size based on resolution
           (case system-type
-
             ('windows-nt
              (if (> (x-display-pixel-width) 1800)
                  (progn ;; HD monitor in Windows
-                   (setq main-programming-font "Consolas-12:antialias=subpixel")
+                   (setq main-programming-font (concat main-programming-font "-12:antialias=subpixel"))
                    (setq main-writing-font (concat main-writing-font "-13")))
                (progn
-                 (setq main-programming-font "Consolas-11:antialias=subpixel")
+                 (setq main-programming-font (concat main-programming-font "-11:antialias=subpixel"))
                  (setq main-writing-font (concat main-writing-font "-12")))))
             ('darwin
              (if (> (x-display-pixel-width) 1800)
                  (if (> (x-display-pixel-width) 2000)
                      (progn ;; Ultra-HD monitor in OSX
-                       (setq main-programming-font "Consolas-17:antialias=subpixel")
+                       (setq main-programming-font (concat main-programming-font "-17:antialias=subpixel"))
                        (setq main-writing-font (concat main-writing-font "-17")))
                    (progn ;; HD monitor in OSX
-                     (setq main-programming-font "Consolas-14:antialias=subpixel")
+                     (setq main-programming-font (concat main-programming-font "-14:antialias=subpixel"))
                      (setq main-writing-font (concat main-writing-font "-14"))))
                (progn
-                 (setq main-programming-font "Consolas-11:antialias=subpixel")
+                 (setq main-programming-font (concat main-programming-font "-11:antialias=subpixel"))
                  (setq main-writing-font (concat main-writing-font "-11")))))
             (t ;; Linux
              (if (> (x-display-pixel-width) 2000)
-                 (progn ;; HD monitor in Linux
-                   (setq main-programming-font "Consolas-14:antialias=subpixel")
+                 (progn ;; Ultra-HD monitor in Linux
+                   (setq main-programming-font (concat main-programming-font "-14:antialias=subpixel"))
                    (setq main-writing-font (concat main-writing-font "-17")))
                (if (> (x-display-pixel-width) 1800)
                    (progn ;; HD monitor in Linux
-                     (setq main-programming-font "Consolas-13:antialias=subpixel")
+                     (setq main-programming-font (concat main-programming-font "-13:antialias=subpixel"))
                      (setq main-writing-font (concat main-writing-font "-16")))
                  (progn
-                   (setq main-programming-font "Consolas-11:antialias=subpixel")
+                   (setq main-programming-font (concat main-programming-font "-11:antialias=subpixel"))
                    (setq main-writing-font (concat main-writing-font "-13")))))))
 
           ;; Apply fonts
