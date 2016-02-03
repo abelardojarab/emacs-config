@@ -33,9 +33,7 @@
 (require 'cedet-remove-builtin)
 (setq byte-compile-warnings nil)
 (load-file "~/.emacs.d/cedet/cedet-devel-load.el")
-
 (load-file "~/.emacs.d/cedet/contrib/cedet-contrib-load.el")
-(global-ede-mode 1)
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
