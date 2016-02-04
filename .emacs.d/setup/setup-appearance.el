@@ -113,10 +113,10 @@ non-nil."
 
 ;; Different possible themes
 ;; (load-theme 'atom-dark t)
-;; (load-theme 'zenburn t)
+(load-theme 'zenburn t)
 ;; (load-theme 'leuven t)
 ;; (load-theme 'zerodark t)
-(load-theme 'material t)
+;; (load-theme 'material t)
 ;; (load-theme 'FlatUI t)
 ;; (load-theme 'faff t)
 ;; (load-theme 'monokai t)
@@ -124,7 +124,7 @@ non-nil."
 ;; (load-theme 'material-light t)
 
 ;; White text
-;; (add-to-list 'default-frame-alist '(foreground-color . "#FFFFFF"))
+(add-to-list 'default-frame-alist '(foreground-color . "#FFFFFF"))
 
 ;; Syntax coloring
 (global-font-lock-mode t)
