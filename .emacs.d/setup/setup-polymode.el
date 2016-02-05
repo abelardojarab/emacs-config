@@ -32,11 +32,7 @@
 ;; Enable minor mode
 (mapc (lambda (mode)
         (add-hook mode (lambda () (polymode-minor-mode t))))
-      '(org-mode-hook))
-
-;; Enable markdown mode
-(mapc (lambda (mode)
-        (add-hook mode (lambda () (poly-markdown-mode t))))
-      '(markdown-mode-hook))
+      '(org-mode-hook
+        markdown-mode))
 
 (provide 'setup-polymode)
