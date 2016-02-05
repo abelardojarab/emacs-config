@@ -142,7 +142,7 @@
 (global-set-key [(meta q)] 'kill-this-buffer)
 (global-set-key [(control t)] 'ispell-buffer)
 (global-set-key [(control r)] 'replace-string)
-(global-set-key "\C-a" 'mark-whole-buffer)
+(global-set-key [(control a)] 'mark-whole-buffer)
 
 ;; Recent files
 (global-set-key "\C-x\ \C-r" 'recentf-open-files)
@@ -309,7 +309,6 @@
 
 ;; Moving cursor down at bottom scrolls only a single line, not half page
 (setq scroll-step 1)
-(setq auto-window-vscroll t)
 
 ;; Mouse wheel scroll support
 (mouse-wheel-mode t)
@@ -321,13 +320,6 @@
 (defun smooth-scroll (increment)
   (scroll-up increment) (sit-for 0.05)
   (scroll-up increment) (sit-for 0.02)
-  (scroll-up increment) (sit-for 0.02)
-  (scroll-up increment) (sit-for 0.05)
-  (scroll-up increment) (sit-for 0.05)
-  (scroll-up increment) (sit-for 0.02)
-  (scroll-up increment) (sit-for 0.02)
-  (scroll-up increment) (sit-for 0.05)
-  (scroll-up increment) (sit-for 0.06)
   (scroll-up increment))
 
 (global-set-key [(mouse-5)] '(lambda () (interactive) (smooth-scroll 1)))

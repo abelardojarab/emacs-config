@@ -31,6 +31,9 @@
 (semantic-mode 1)
 (semantic-load-enable-minimum-features)
 
+;; Emacs freaks out if this isn't set.
+(setq warning-suppress-types nil)
+
 ;; Enable case-insensitive searching
 (set-default 'semantic-case-fold t)
 
@@ -71,8 +74,9 @@
 (add-hook 'c++-mode-hook #'my/c-mode-init)
 
 ;; Enable which-function-mode for selected major modes
-(setq which-func-modes '(ecmascript-mode emacs-lisp-mode lisp-mode java-mode
-                                         c-mode c++-mode makefile-mode sh-mode))
+(setq which-func-modes '(org-mode markdown-mode
+                                  ecmascript-mode emacs-lisp-mode lisp-mode java-mode
+                                  c-mode c++-mode makefile-mode sh-mode))
 (which-func-mode t)
 (mapc (lambda (mode)
         (add-hook mode (lambda () (which-function-mode t))))
