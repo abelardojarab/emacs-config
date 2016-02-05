@@ -101,9 +101,18 @@ non-nil."
 (add-to-list 'load-path "~/.emacs.d/emacs-flatui-theme")
 (add-to-list 'custom-theme-load-path "~/.emacs.d/emacs-flatui-theme")
 
-;; Zerodark
+;; FlatUI theme
+(add-to-list 'load-path "~/.emacs.d/pastelmac-theme")
+(add-to-list 'custom-theme-load-path "~/.emacs.d/pastelmac-theme")
+
+;; Zerodark theme
 (add-to-list 'load-path "~/.emacs.d/zerodark-theme")
 (add-to-list 'custom-theme-load-path "~/.emacs.d/zerodark-theme")
+
+;; Apropospriate theme
+(add-to-list 'load-path "~/.emacs.d/apropospriate-theme")
+(add-to-list 'custom-theme-load-path "~/.emacs.d/apropospriate-theme")
+(require 'apropospriate)
 
 ;; Solarized theme
 (add-to-list 'load-path "~/.emacs.d/solarized-emacs")
@@ -113,18 +122,20 @@ non-nil."
 
 ;; Different possible themes
 ;; (load-theme 'atom-dark t)
-(load-theme 'zenburn t)
+;; (load-theme 'zenburn t)
 ;; (load-theme 'leuven t)
 ;; (load-theme 'zerodark t)
 ;; (load-theme 'material t)
 ;; (load-theme 'FlatUI t)
 ;; (load-theme 'faff t)
-;; (load-theme 'monokai t)
+(load-theme 'monokai t)
+;; (load-theme 'pastelmac t)
 ;; (load-theme 'solarized-dark t)
 ;; (load-theme 'material-light t)
+;; (load-theme 'apropospriate-light t)
 
-;; White text
-(add-to-list 'default-frame-alist '(foreground-color . "#FFFFFF"))
+;; White or black text
+(add-to-list 'default-frame-alist '(foreground-color . "#ffffff"))
 
 ;; Syntax coloring
 (global-font-lock-mode t)
@@ -309,6 +320,9 @@ non-nil."
 (add-to-list 'load-path "~/.emacs.d/highlight-symbol")
 (require 'highlight-symbol)
 (add-hook 'prog-mode-hook (lambda () (highlight-symbol-mode)))
+(add-hook 'org-mode-hook (lambda () (highlight-symbol-mode)))
+(add-hook 'markdown-mode-hook (lambda () (highlight-symbol-mode)))
+(add-hook 'text-mode-hook (lambda () (highlight-symbol-mode)))
 (setq highlight-symbol-on-navigation-p t)
 
 ;; higlight changes in documents

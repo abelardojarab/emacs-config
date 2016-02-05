@@ -169,6 +169,8 @@
 (add-hook 'git-commit-mode-hook 'ac-ispell-ac-setup)
 (add-hook 'mail-mode-hook 'ac-ispell-ac-setup)
 (add-hook 'org-mode-hook 'ac-ispell-ac-setup)
+(add-hook 'markdown-mode-hook 'ac-ispell-ac-setup)
+(add-hook 'text-mode-hook 'ac-ispell-ac-setup)
 
 ;; Enable auto-complete on more modes
 (dolist (mode '(magit-log-edit-mode
@@ -190,10 +192,9 @@
 (require 'org-ac)
 (org-ac/config-default)
 
-;; font face setting
-(when (find-font (font-spec :name "Consolas"))
-  (set-face-attribute 'ac-candidate-face nil :inherit 'fixed-pitch :bold nil)
-  (set-face-attribute 'ac-selection-face nil :inherit 'fixed-pitch :bold nil))
+;; Set font face setting
+(set-face-attribute 'ac-candidate-face nil :inherit 'fixed-pitch :bold nil)
+(set-face-attribute 'ac-selection-face nil :inherit 'fixed-pitch :bold nil)
 
 ;; Tips for auto-complete
 (add-to-list 'load-path "~/.emacs.d/pos-tip")

@@ -1,0 +1,127 @@
+####======= Common Declarations for *all* ESS -*-Makefile-*-s ==========
+
+## To install ESS for all users on your unix system:
+## 1. Edit Section 1 and 2 below
+## 2. Execute: gmake install
+
+## Section 1
+## Installation variables for your emacs variant
+##
+## Variable        Description
+## EMACS           use emacs for GNU Emacs, xemacs for XEmacs
+## EMACSBATCH      emacs/xemacs command for compiling elisp files
+## SITELISP        Destination of site-lisp; but some variants have no site-lisp
+## LISPDIR         Destination of compiled elisp files
+## INFODIR         Destination of info files
+## ETCDIR          Destination of script and icon files
+## PREFIX(DESTDIR) Directory prepended to SITELISP, INFODIR, DOCDIR & ETCDIR
+##                 Specify either PREFIX or DESTDIR to over-ride /usr
+DESTDIR=/usr
+PREFIX=$(DESTDIR)
+
+##__ GNU Emacs __
+EMACS=emacs
+SITELISP=$(PREFIX)/share/emacs/site-lisp
+LISPDIR=$(SITELISP)/ess
+INFODIR=$(PREFIX)/share/info
+ETCDIR =$(PREFIX)/share/emacs/etc/ess
+
+##__ XEmacs __
+#EMACS=$(PREFIX)/bin/xemacs
+#SITELISP=$(PREFIX)/share/xemacs/site-packages/lisp
+#LISPDIR=$(SITELISP)/ess
+#INFODIR=$(PREFIX)/share/xemacs/site-packages/info
+#ETCDIR =$(PREFIX)/share/xemacs/site-packages/etc/ess
+
+##__ GNU Emacs __  for Mac OS X with NeXTstep (Cocoa or GNUstep)
+# PREFIX=/Applications/Emacs.app/Contents/Resources
+# EMACS=/Applications/Emacs.app/Contents/MacOS/Emacs
+# SITELISP=$(PREFIX)/site-lisp
+# LISPDIR=$(SITELISP)/ess
+# INFODIR=/usr/local/info
+# ETCDIR =$(PREFIX)/etc/ess
+
+##__ Aquamacs __  (donated by Dan Knoepfle, Mar 26, 2011)
+# PREFIX=/Applications/Aquamacs.app/Contents/Resources/lisp/aquamacs/edit-modes
+# EMACS=/Applications/Aquamacs.app/Contents/MacOS/Aquamacs
+# SITELISP=/Applications/Aquamacs.app/Contents/Resources/lisp
+# LISPDIR=$(PREFIX)/ess-mode/lisp
+# INFODIR=/Applications/Aquamacs.app/Contents/Resources/info
+# ETCDIR=$(PREFIX)/ess-mode/etc
+
+## the following command is the same for recent versions of both Emacs and XEmacs
+EMACSBATCH = $(EMACS) -batch -no-site-file -no-init-file
+
+## Section 2
+## Installation variables for your unix variant
+##
+## Variable        Description
+## SHELL           Bourne shell or XPG4 compliant shell
+## MAKEINFO        program to convert .texi{nfo} to .info
+## MAKEHTML        program to convert .texi{nfo} to .html
+## MAKETXT         program to convert .texi{nfo} to .txt
+## INSTALLDIR      to create directories, if necessary
+## INSTALL         to copy files, file copying commands expect 2 args:
+##                 1st) source-file & 2nd) target-directory
+## UNINSTALL       deletes all arguments
+## DOCDIR          Destination of other doc files
+## DOWNLOAD        Download internet file to stdout
+
+SHELL = /bin/sh
+
+MAKEINFO = LC_ALL=C LANG=en makeinfo
+# new:  MAKEHTML <output>.html  <input>.texi  {necessary to build 'Index'}
+MAKEHTML = $(MAKEINFO) --html --no-split --css-include=atouchofstyle.css -o
+##                            ^^^^^^^^^^ today's bandwidth is fast
+#MAKETXT  = $(MAKEINFO) --no-validate --no-headers --no-split -o -
+MAKETXT  = $(MAKEINFO) --no-validate --plaintext --no-split -o -
+
+INSTALLDIR = mkdir -p
+#INSTALLDIR = install -d
+
+INSTALL = cp -p
+#INSTALL = install
+
+UNINSTALL = rm -f
+
+DOCDIR=$(PREFIX)/share/doc/ess
+
+DOWNLOAD = wget -O -
+##DOWNLOAD = curl
+
+## Section 3
+## For ESS developers only, not part of installation procedure
+##
+## Variable        Description
+## ESSVERSION      set to the contents of VERSION
+## ESSDIR          ess- prepended to ESSVERSION
+## ESSVERSIONTAG   repository tags cannot contain .'s (no longer used)
+## GNUTAR          the name of GNU tar to support the z option
+## SVN_URL         SVN repository URL (repo retired)
+## UPLOAD_DIR      Martin's upload directory
+## ESS_HOMEPAGE    Martin's svn co https://svn.r-project.org/ESS-web/trunk
+##
+
+# $(shell) is a GNU-ism which we would like to workaround to be UNIX make friendly
+ESSVERSION=$(shell cat ./VERSION 2> /dev/null || cat ../VERSION)
+#F: but the following use of  `..` *FAILS*
+#F: ESSVERSION=`cat ./VERSION 2> /dev/null || cat ../VERSION`
+#ESSVERSIONTAG=ESS-$(shell sed 's/\./-/g' VERSION)
+
+## SVN repo retired
+## Currently only works when run in top ess/ directory; not in etc/ or lisp/ :
+# ESSfromSVN=$(shell test -d .svn && echo 'yes')
+# ifeq ($(ESSfromSVN),yes)
+#   ESSVERSIONsvn=$(shell svn up && echo "`date +%y-%m`-r`svnversion`")
+# else
+#   ESSVERSIONsvn=$(shell echo "`date +%y-%m`_not_svn")
+# endif
+# ESSVERSIONTAG=$(ESSVERSIONsvn)
+
+ESSDIR=ess-$(ESSVERSION)
+GNUTAR=tar
+# SVN_URL = https://svn.r-project.org/ESS
+UPLOAD_DIR = /u/maechler/emacs/ess-WWW/downloads/ess
+ESS_HOMEPAGE = /u/maechler/emacs/ESS-web
+
+.SUFFIXES: .i3 .m3 .nw .tex .dvi .html .c .h .el .elc

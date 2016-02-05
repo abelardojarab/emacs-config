@@ -66,13 +66,6 @@
 (setq org-ref-insert-cite-key "C-c )")
 (setq org-ref-default-citation-link "autocite")
 
-;; Ergoemacs
-;; (add-to-list 'load-path "~/.emacs.d/ergoemacs-mode")
-;; (setq ergoemacs-ignore-prev-global nil)
-;; (setq ergoemacs-keyboard-layout "us")
-;; (setq ergoemacs-theme "lvl0")
-;; (require 'ergoemacs-mode)
-
 ;; Enable GUI features
 (setq use-file-dialog t)
 (setq use-dialog-box t)

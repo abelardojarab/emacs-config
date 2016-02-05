@@ -695,11 +695,10 @@ a link to this file."
         '(
           "▢"
           "○"
-          "▪"
           "•"
-          "▰"
-          "+"
-          "-")))
+          "▪"
+          "-"
+          "+")))
 
 (provide 'setup-org)
 ;;; setup-org.el ends here

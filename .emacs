@@ -162,6 +162,9 @@
 ;; Setup bison/yacc/lex
 (require 'setup-bison)
 
+;; Setup R/ess
+(require 'setup-ess)
+
 ;; Setup shell
 (require 'setup-eshell)
 

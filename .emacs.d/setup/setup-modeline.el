@@ -74,8 +74,7 @@
 (add-to-list 'sml/hidden-modes " WSC")
 (add-to-list 'sml/hidden-modes " Spell")
 (add-to-list 'sml/hidden-modes " Wrap")
-(add-to-list 'sml/hidden-modes " FlyC")
-(add-to-list 'sml/hidden-modes " FlyC-")
+(add-to-list 'sml/hidden-modes " Fly")
 (add-to-list 'sml/hidden-modes " ll")
 (add-to-list 'sml/hidden-modes " FA")
 (add-to-list 'sml/hidden-modes " hl-s")
@@ -88,6 +87,8 @@
 (add-to-list 'sml/hidden-modes " Smrt")
 (add-to-list 'sml/hidden-modes " ctagsU")
 (add-to-list 'sml/hidden-modes " ARev")
+(add-to-list 'sml/hidden-modes " Wg")
+(add-to-list 'sml/hidden-modes " Hi")
 
 ;; Better Alt-x
 (if (and (= emacs-major-version 24) (= emacs-minor-version 2))
