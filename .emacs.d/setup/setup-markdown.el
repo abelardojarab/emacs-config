@@ -1,6 +1,6 @@
 ;;; setup-markdown.el ---
 
-;; Copyright (C) 2014, 2015  abelardo.jara-berrocal
+;; Copyright (C) 2014, 2015, 2016  abelardo.jara-berrocal
 
 ;; Author: abelardo.jara-berrocal <ajaraber@plxc25288.pdx.intel.com>
 ;; Keywords:
@@ -33,6 +33,9 @@
           (lambda ()
             (writegood-mode t)
             (flyspell-mode t)))
+
+;; Github markdown style
+(setq markdown-command "pandoc -c ~/.emacs.d/styles/github-pandoc.css --from markdown_github -t html5 --mathjax --highlight-style pygments --standalone")
 
 ;; Yaml mode
 (add-to-list 'load-path "~/.emacs.d/yaml-mode")
