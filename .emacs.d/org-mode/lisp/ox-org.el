@@ -1,6 +1,6 @@
 ;;; ox-org.el --- Org Back-End for Org Export Engine -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2013-2015 Free Software Foundation, Inc.
+;; Copyright (C) 2013-2016 Free Software Foundation, Inc.
 
 ;; Author: Nicolas Goaziou <n.goaziou@gmail.com>
 ;; Keywords: org, wp
@@ -298,7 +298,7 @@ Return output file name."
 	   (work-buffer (or visitingp (find-file-noselect filename)))
 	   newbuf)
       (with-current-buffer work-buffer
-        (font-lock-ensure)
+        (org-font-lock-ensure)
         (outline-show-all)
         (org-show-block-all)
         (setq newbuf (htmlize-buffer)))

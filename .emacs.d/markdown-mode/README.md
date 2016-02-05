@@ -9,48 +9,51 @@ under the GNU GPL.
 
  [Markdown]: http://daringfireball.net/projects/markdown/
 
-The latest stable version is markdown-mode 2.0, released on March 24, 2013:
+The latest stable version is markdown-mode 2.1, released on January 9, 2016:
 
    * [markdown-mode.el][]
    * [Screenshot][][^theme]
    * [Release notes][]
 
  [markdown-mode.el]: http://jblevins.org/projects/markdown-mode/markdown-mode.el
- [Screenshot]: http://jblevins.org/projects/markdown-mode/screenshots/20130131-002.png
- [Release notes]: http://jblevins.org/projects/markdown-mode/rev-2-0
+ [Screenshot]: http://jblevins.org/projects/markdown-mode/screenshots/20160108-001.png
+ [Release notes]: http://jblevins.org/projects/markdown-mode/rev-2-1
 
 [^theme]: The theme used in the screenshot is
     [color-theme-twilight](https://github.com/crafterm/twilight-emacs).
 
+The latest development version can be obtained from the Git
+repository at <http://jblevins.org/git/markdown-mode.git> or from
+[GitHub][]:
+
+    git clone git://jblevins.org/git/markdown-mode.git
+    git clone https://github.com/jrblevin/markdown-mode.git
+
+[![Build Status][status]][travis]
+
+ [devel.el]: http://jblevins.org/git/markdown-mode.git/plain/markdown-mode.el
+ [GitHub]: https://github.com/jrblevin/markdown-mode/
+ [travis]: https://travis-ci.org/jrblevin/markdown-mode
+ [status]: https://travis-ci.org/jrblevin/markdown-mode.svg?branch=master
+
 markdown-mode is also available in several package managers, including:
 
-   * Debian Linux: [emacs-goodies-el][]
-   * Ubuntu Linux: [emacs-goodies-el][emacs-goodies-el-ubuntu]
+   * Debian Linux: [elpa-markdown-mode][] and [emacs-goodies-el][]
+   * Ubuntu Linux: [elpa-markdown-mode][elpa-ubuntu] and [emacs-goodies-el][emacs-goodies-el-ubuntu]
    * RedHat and Fedora Linux: [emacs-goodies][]
    * NetBSD: [textproc/markdown-mode][]
-   * Arch Linux (AUR): [emacs-markdown-mode-git][]
    * MacPorts: [markdown-mode.el][macports-package] ([pending][macports-ticket])
    * FreeBSD: [textproc/markdown-mode.el][freebsd-port]
 
+ [elpa-markdown-mode]: https://packages.debian.org/sid/lisp/elpa-markdown-mode
+ [elpa-ubuntu]: http://packages.ubuntu.com/search?keywords=elpa-markdown-mode
  [emacs-goodies-el]: http://packages.debian.org/emacs-goodies-el
  [emacs-goodies-el-ubuntu]: http://packages.ubuntu.com/search?keywords=emacs-goodies-el
  [emacs-goodies]: https://apps.fedoraproject.org/packages/emacs-goodies
  [textproc/markdown-mode]: http://pkgsrc.se/textproc/markdown-mode
- [emacs-markdown-mode-git]: https://aur.archlinux.org/packages/emacs-goodies-el/
  [macports-package]: https://trac.macports.org/browser/trunk/dports/editors/markdown-mode.el/Portfile
  [macports-ticket]: http://trac.macports.org/ticket/35716
  [freebsd-port]: http://svnweb.freebsd.org/ports/head/textproc/markdown-mode.el
-
-The latest development version can be downloaded directly
-([markdown-mode.el][devel.el]) or it can be obtained from the
-(browsable and clonable) Git repository at
-<http://jblevins.org/git/markdown-mode.git>.  The entire repository,
-including the full project history, can be cloned via the Git protocol
-by running
-
-    git clone git://jblevins.org/git/markdown-mode.git
-
- [devel.el]: http://jblevins.org/git/markdown-mode.git/plain/markdown-mode.el
 
 ## Installation
 
@@ -67,6 +70,10 @@ with `.text`, `.markdown`, and `.md` files:
 There is no official Markdown file extension, nor is there even a
 _de facto_ standard, so you can easily add, change, or remove any
 of the file extensions above as needed.
+
+`markdown-mode` depends on `cl-lib`, which has been bundled with
+GNU Emacs since 24.3.  Users of GNU Emacs 24.1 and 24.2 can install
+`cl-lib` with `package.el`.
 
 ## Usage
 
@@ -148,8 +155,9 @@ keybindings by pressing <kbd>C-c C-h</kbd>.
     the word italic.  If the point is at an italic word or phrase,
     remove the italic markup.  Otherwise, simply insert italic
     delimiters and place the cursor in between them.  Similarly,
-    use <kbd>C-c C-s s</kbd> for bold (`<strong>`) and <kbd>C-c C-s c</kbd> for
-    inline code (`<code>`).
+    use <kbd>C-c C-s s</kbd> for bold (`<strong>`), <kbd>C-c C-s c</kbd> for
+    inline code (`<code>`), and <kbd>C-c C-s k</kbd> for inserting `<kbd>`
+    tags.
 
     <kbd>C-c C-s b</kbd> inserts a blockquote using the active region, if any,
     or starts a new blockquote.  <kbd>C-c C-s C-b</kbd> is a variation which
@@ -208,10 +216,14 @@ keybindings by pressing <kbd>C-c C-h</kbd>.
     and save the result in the file `basename.html`, where
     `basename` is the name of the Markdown file with the extension
     removed.  *Export and View:* press <kbd>C-c C-c v</kbd> to export the
-    file and view it in a browser.  **For both export commands, the
-    output file will be overwritten without notice.**
-    *Open:* <kbd>C-c C-c o</kbd> will open the Markdown source file directly
-    using `markdown-open-command`.
+    file and view it in a browser.  *Open:* <kbd>C-c C-c o</kbd> will open
+    the Markdown source file directly using `markdown-open-command`.
+    *Live Export*: Press <kbd>C-c C-c l</kbd> to turn on
+    `markdown-live-preview-mode` to view the exported output
+    side-by-side with the source Markdown. **For all export commands,
+    the output file will be overwritten without notice.**
+    `markdown-live-preview-window-function` can be customized to open
+    in a browser other than `eww`.
 
     To summarize:
 
@@ -221,6 +233,7 @@ keybindings by pressing <kbd>C-c C-h</kbd>.
       - <kbd>C-c C-c v</kbd>: `markdown-command` > `basename.html` > browser.
       - <kbd>C-c C-c w</kbd>: `markdown-command` > kill ring.
       - <kbd>C-c C-c o</kbd>: `markdown-open-command`.
+      - <kbd>C-c C-c l</kbd>: `markdown-live-preview-mode` > `*eww*` buffer.
 
     <kbd>C-c C-c c</kbd> will check for undefined references.  If there are
     any, a small buffer will open with a list of undefined
@@ -244,9 +257,9 @@ keybindings by pressing <kbd>C-c C-h</kbd>.
     or in the other window with the <kbd>C-u</kbd> prefix).  Use <kbd>M-p</kbd> and
     <kbd>M-n</kbd> to quickly jump to the previous or next link of any type.
 
-  * Jumping: <kbd>C-c C-j</kbd>
+  * Jumping: <kbd>C-c C-l</kbd>
 
-    Use <kbd>C-c C-j</kbd> to jump from the object at point to its counterpart
+    Use <kbd>C-c C-l</kbd> to jump from the object at point to its counterpart
     elsewhere in the text, when possible.  Jumps between reference
     links and definitions; between footnote markers and footnote
     text.  If more than one link uses the same reference name, a
@@ -285,8 +298,8 @@ keybindings by pressing <kbd>C-c C-h</kbd>.
 
   * Editing Lists: <kbd>M-RET</kbd>, <kbd>M-UP</kbd>, <kbd>M-DOWN</kbd>, <kbd>M-LEFT</kbd>, and <kbd>M-RIGHT</kbd>
 
-    New list items can be inserted with <kbd>M-RET</kbd>.  This command
-    determines the appropriate marker (one of the possible
+    New list items can be inserted with <kbd>M-RET</kbd> or <kbd>C-c C-j</kbd>.  This
+    command determines the appropriate marker (one of the possible
     unordered list markers or the next number in sequence for an
     ordered list) and indentation level by examining nearby list
     items.  If there is no list before or after the point, start a
@@ -436,10 +449,19 @@ provides an interface to all of the possible customizations:
     demotion, keep these sorted from largest to smallest.
 
   * `markdown-bold-underscore` - set to a non-nil value to use two
-    underscores for bold instead of two asterisks (default: `nil`).
+    underscores when inserting bold text instead of two asterisks
+    (default: `nil`).
 
   * `markdown-italic-underscore` - set to a non-nil value to use
-    underscores for italic instead of asterisks (default: `nil`).
+    underscores when inserting italic text instead of asterisks
+    (default: `nil`).
+
+  * `markdown-asymmetric-header` - set to a non-nil value to use
+    asymmetric header styling, placing header characters only on
+    the left of headers (default: `nil`).
+
+  * `markdown-list-indent-width` - depth of indentation for lists
+    when inserting, promoting, and demoting list items (default: 4).
 
   * `markdown-indent-function` - the function to use for automatic
     indentation (default: `markdown-indent-line`).
@@ -505,14 +527,11 @@ provides an interface to all of the possible customizations:
     (default: `end`).  The set of location options is the same as
     for `markdown-reference-location`.
 
-  * `markdown-font-lock-support-mode` - the variable
-    `font-lock-support-mode` is made buffer-local and set to
-    `markdown-font-lock-support-mode`, which is `jit-mode` by
-    default. This is currently the default support mode in Emacs as
-    well.  However, if fontification of multi-line constructs such
-    as preformatted code blocks, nested lists, and so on is
-    inaccurate, setting this to `nil` will allow more aggressive
-    fontification at the expense of some performance.
+  * `markdown-nested-imenu-heading-index` - Use nested imenu
+    heading instead of a flat index (default: `nil`).  A nested
+    index may provide more natural browsing from the menu, but a
+    flat list may allow for faster keyboard navigation via tab
+    completion.
 
   * `comment-auto-fill-only-comments` - variable is made
     buffer-local and set to `nil` by default.  In programming
@@ -522,6 +541,23 @@ provides an interface to all of the possible customizations:
     for the actual content of the document to be filled.  Making
     this variable buffer-local allows `markdown-mode` to override
     the default behavior induced when the global variable is non-nil.
+
+  * `markdown-gfm-additional-languages`, - additional languages to
+    make available, aside from those predefined in
+    `markdown-gfm-recognized-languages`, when inserting GFM code
+    blocks (default: `nil`). Language strings must have be trimmed
+    of whitespace and not contain any curly braces. They may be of
+    arbitrary capitalization, though.
+
+  * `markdown-gfm-use-electric-backquote` - use
+    `markdown-electric-backquote` for interactive insertion of GFM
+    code blocks when backquote is pressed three times (default: <kbd>t</kbd>).
+
+  * `markdown-make-gfm-checkboxes-buttons` - Whether GitHub
+    Flavored Markdown style task lists (checkboxes) should be
+    turned into buttons that can be toggled with mouse-1 or RET. If
+    non-nil (default), then buttons are enabled.  This works in
+    `markdown-mode` as well as `gfm-mode`.
 
 Additionally, the faces used for syntax highlighting can be modified to
 your liking by issuing <kbd>M-x customize-group RET markdown-faces</kbd>
@@ -540,7 +576,12 @@ previous and next links (including links of other types).
 Aliased or piped wiki links of the form `[[link text|PageName]]`
 are also supported.  Since some wikis reverse these components, set
 `markdown-wiki-link-alias-first` to nil to treat them as
-`[[PageName|link text]]`.
+`[[PageName|link text]]`.  By default, Markdown Mode only searches
+for target files in the current directory.  Sequential parent
+directory search (as in [Ikiwiki][]) can be enabled by setting
+`markdown-wiki-link-search-parent-directories` to a non-nil value.
+
+[Ikiwiki]: https://ikiwiki.info
 
 [SmartyPants][] support is possible by customizing `markdown-command`.
 If you install `SmartyPants.pl` at, say, `/usr/local/bin/smartypants`,
@@ -548,10 +589,7 @@ then you can set `markdown-command` to `"markdown | smartypants"`.
 You can do this either by using <kbd>M-x customize-group markdown</kbd>
 or by placing the following in your `.emacs` file:
 
-    (defun markdown-custom ()
-      "markdown-mode-hook"
-      (setq markdown-command "markdown | smartypants"))
-    (add-hook 'markdown-mode-hook '(lambda() (markdown-custom)))
+    (setq markdown-command "markdown | smartypants")
 
 [SmartyPants]: http://daringfireball.net/projects/smartypants/
 
@@ -562,39 +600,82 @@ either via customize or by placing `(setq markdown-enable-math t)`
 in `.emacs`, and then restarting Emacs or calling
 `markdown-reload-extensions`.
 
-## GitHub Flavored Markdown
+## GitHub Flavored Markdown (GFM)
 
-A [GitHub Flavored Markdown][GFM] (GFM) mode, `gfm-mode`, is also
-available.  The GitHub implementation of differs slightly from
-standard Markdown.  The most important differences are that
-newlines are significant, triggering hard line breaks, and that
-underscores inside of words (e.g., variable names) need not be
-escaped.  As such, `gfm-mode` turns off `auto-fill-mode` and turns
-on `visual-line-mode` (or `longlines-mode` if `visual-line-mode` is
-not available).  Underscores inside of words (such as
-test_variable) will not trigger emphasis.
+A [GitHub Flavored Markdown][GFM] mode, `gfm-mode`, is also
+available.  The GitHub implementation differs slightly from
+standard Markdown in that it supports things like different
+behavior for underscores inside of words, automatic linking of
+URLs, strikethrough text, and fenced code blocks with an optional
+language keyword.
 
-Wiki links in this mode will be treated as on GitHub, with hyphens
-replacing spaces in filenames and where the first letter of the
-filename capitalized.  For example, `[[wiki link]]` will map to a
-file named `Wiki-link` with the same extension as the current file.
+The GFM-specific features above apply to `README.md` files, wiki
+pages, and other Markdown-formatted files in repositories on
+GitHub.  GitHub also enables [additional features][GFM comments] for
+writing on the site (for issues, pull requests, messages, etc.)
+that are further extensions of GFM.  These features include task
+lists (checkboxes), newlines corresponding to hard line breaks,
+auto-linked references to issues and commits, wiki links, and so
+on.  To make matters more confusing, although task lists are not
+part of [GFM proper][GFM], [since 2014][] they are rendered (in a
+read-only fashion) in all Markdown documents in repositories on the
+site.  These additional extensions are supported to varying degrees
+by `markdown-mode` and `gfm-mode` as described below.
 
-GFM code blocks, with optional programming language keywords, will
-be highlighted.  They can be inserted with <kbd>C-c C-s P</kbd>.  If there
-is an active region, the text in the region will be placed inside
-the code block.  You will be prompted for the name of the language,
-but may press enter to continue without naming a language.
+* **URL autolinking:** Both `markdown-mode` and `gfm-mode` support
+  highlighting of URLs without angle brackets.
 
-Similarly, strike through text is supoorted in GFM mode and can be
-inserted (and toggled) using <kbd>C-c C-s d</kbd>. Following the mnemonics
-for the other style keybindings, the letter <kbd>d</kbd> coincides with the
-HTML tag `<del>`.
+* **Multiple underscores in words:** You must enable `gfm-mode` to
+  toggle support for underscores inside of words. In this mode
+  variable names such as `a_test_variable` will not trigger
+  emphasis (italics).
 
-For GFM preview can be powered by setting `markdown-command` to
-use [Docter][].  This may also be configured to work with [Marked 2][]
-for `markdown-open-command`.
+* **Fenced code blocks:** Code blocks quoted with backticks, with
+  optional programming language keywords, are highlighted in
+  both `markdown-mode` and `gfm-mode`.  They can be inserted with
+  <kbd>C-c C-s P</kbd>.  If there is an active region, the text in the
+  region will be placed inside the code block.  You will be
+  prompted for the name of the language, but may press enter to
+  continue without naming a language.
+
+* **Strikethrough:** Strikethrough text is only supported in
+  `gfm-mode` and can be inserted (and toggled) using <kbd>C-c C-s d</kbd>.
+  Following the mnemonics for the other style keybindings, the
+  letter <kbd>d</kbd> coincides with the HTML tag `<del>`.
+
+* **Task lists:** GFM task lists will be rendered as checkboxes
+  (Emacs buttons) in both `markdown-mode` and `gfm-mode` when
+  `markdown-make-gfm-checkboxes-buttons` is set to a non-nil value
+  (and it is set to t by default).  These checkboxes can be
+  toggled by clicking `mouse-1` or pressing <kbd>RET</kbd> over the button.
+
+* **Wiki links:** Generic wiki links are supported in
+  `markdown-mode`, but in `gfm-mode` specifically they will be
+  treated as they are on GitHub: spaces will be replaced by hyphens
+  in filenames and the first letter of the filename will be
+  capitalized.  For example, `[[wiki link]]` will map to a file
+  named `Wiki-link` with the same extension as the current file.
+
+* **Newlines:** Neither `markdown-mode` nor `gfm-mode` do anything
+  specifically with respect to newline behavior.  If you use
+  `gfm-mode` mostly to write text for comments or issues on the
+  GitHub site--where newlines are significant and correspond to
+  hard line breaks--then you may want to enable `visual-line-mode`
+  for line wrapping in buffers.  You can do this with a
+  `gfm-mode-hook` as follows:
+
+        ;; Use visual-line-mode in gfm-mode
+        (defun my-gfm-mode-hook ()
+          (visual-line-mode 1))
+        (add-hook 'gfm-mode-hook 'my-gfm-mode-hook)
+
+* **Preview:** GFM-specific preview can be powered by setting
+  `markdown-command` to use [Docter][].  This may also be
+  configured to work with [Marked 2][] for `markdown-open-command`.
 
 [GFM]: http://github.github.com/github-flavored-markdown/
+[GFM comments]: https://help.github.com/articles/writing-on-github/
+[since 2014]: https://github.com/blog/1825-task-lists-in-all-markdown-documents
 [Docter]: https://github.com/alampros/Docter
 
 ## Acknowledgments
@@ -678,7 +759,7 @@ following people:
     behavior regarding list items, footnotes, and reference
     definitions, improved killing of footnotes, and numerous other
     tests and bug fixes.
-  * Antonis Kanouras for strike through support.
+  * Antonis Kanouras for strikethrough support.
   * Tim Visher for multiple CSS files and other
     general improvements.
   * Matt McClure for a patch to prevent
@@ -686,15 +767,20 @@ following people:
   * Roger Bolsius for ordered list improvements.
   * Google's Open Source Programs Office for recognizing the project with
     a monetary contribution in June 2015.
+  * Howard Melman for supporting GFM checkboxes
+    as buttons.
+  * Danny McClanahan for live preview mode,
+    completion of GFM programming language names, and `cl-lib` updates.
+  * Syohei Yoshida for better heading detection
+    and movement functions, improved italic font lock, and fixing adaptive
+    filling for hanging list items.
 
 ## Bugs
 
-Although markdown-mode is developed and tested primarily using
-GNU Emacs 24, compatibility with earlier Emacsen is also a
-priority.
-
-If you find any bugs in markdown-mode, please construct a test case
-or a patch and open a ticket on the [GitHub issue tracker][issues].
+markdown-mode is developed and tested primarily for compatibility
+with GNU Emacs 24.3 and later.  If you find any bugs in
+markdown-mode, please construct a test case or a patch and open a
+ticket on the [GitHub issue tracker][issues].
 
  [issues]: https://github.com/jrblevin/markdown-mode/issues
 
@@ -714,6 +800,7 @@ first version was released on May 24, 2007.
   * 2011-08-15: [Version 1.8.1][]
   * 2013-01-25: [Version 1.9][]
   * 2013-03-24: [Version 2.0][]
+  * 2016-01-09: [Version 2.1][]
 
 [Version 1.3]: http://jblevins.org/projects/markdown-mode/rev-1-3
 [Version 1.5]: http://jblevins.org/projects/markdown-mode/rev-1-5
@@ -723,4 +810,5 @@ first version was released on May 24, 2007.
 [Version 1.8.1]: http://jblevins.org/projects/markdown-mode/rev-1-8-1
 [Version 1.9]: http://jblevins.org/projects/markdown-mode/rev-1-9
 [Version 2.0]: http://jblevins.org/projects/markdown-mode/rev-2-0
+[Version 2.1]: http://jblevins.org/projects/markdown-mode/rev-2-1
 

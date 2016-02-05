@@ -1,6 +1,6 @@
 ;;; org-agenda.el --- Dynamic task and appointment lists for Org
 
-;; Copyright (C) 2004-2015 Free Software Foundation, Inc.
+;; Copyright (C) 2004-2016 Free Software Foundation, Inc.
 
 ;; Author: Carsten Dominik <carsten at orgmode dot org>
 ;; Keywords: outlines, hypermedia, calendar, wp
@@ -2319,7 +2319,6 @@ The following commands are available:
 (org-defkey org-agenda-mode-map "_" 'org-agenda-filter-by-effort)
 (org-defkey org-agenda-mode-map "=" 'org-agenda-filter-by-regexp)
 (org-defkey org-agenda-mode-map "|" 'org-agenda-filter-remove-all)
-(org-defkey org-agenda-mode-map "\\" 'org-agenda-filter-by-tag-refine)
 (org-defkey org-agenda-mode-map "~" 'org-agenda-limit-interactively)
 (org-defkey org-agenda-mode-map "<" 'org-agenda-filter-by-category)
 (org-defkey org-agenda-mode-map "^" 'org-agenda-filter-by-top-headline)
@@ -4614,7 +4613,7 @@ in `org-agenda-text-search-extra-files'."
 				  (> (org-reduced-level (org-outline-level))
 				     org-agenda-search-view-max-outline-level)
 				  (forward-line -1)
-				  (outline-back-to-heading t)))
+				  (org-back-to-heading t)))
 		      (skip-chars-forward "* ")
 		      (setq beg (point-at-bol)
 			    beg1 (point)
@@ -4744,8 +4743,8 @@ for a keyword.  A numeric prefix directly selects the Nth keyword in
 	 rtn rtnall files file pos)
     (when (equal arg '(4))
       (setq org-select-this-todo-keyword
-	    (org-icompleting-read "Keyword (or KWD1|K2D2|...): "
-				  (mapcar 'list kwds) nil nil)))
+	    (completing-read "Keyword (or KWD1|K2D2|...): "
+			     (mapcar #'list kwds) nil nil)))
     (and (equal 0 arg) (setq org-select-this-todo-keyword nil))
     (catch 'exit
       (if org-agenda-sticky
@@ -4834,14 +4833,17 @@ The prefix arg TODO-ONLY limits the search to TODO entries."
       ;; Prepare agendas (and `org-tag-alist-for-agenda') before
       ;; expanding tags within `org-make-tags-matcher'
       (org-agenda-prepare (concat "TAGS " match))
-      (setq matcher (org-make-tags-matcher match)
-	    match (car matcher) matcher (cdr matcher))
+      (setq org--matcher-tags-todo-only todo-only
+	    matcher (org-make-tags-matcher match)
+	    match (car matcher)
+	    matcher (cdr matcher))
       (org-compile-prefix-format 'tags)
       (org-set-sorting-strategy 'tags)
       (setq org-agenda-query-string match)
       (setq org-agenda-redo-command
-      	    (list 'org-tags-view `(quote ,todo-only)
-      		  (list 'if 'current-prefix-arg nil `(quote ,org-agenda-query-string))))
+	    (list 'org-tags-view
+		  org--matcher-tags-todo-only
+		  `(if current-prefix-arg nil ,org-agenda-query-string)))
       (setq files (org-agenda-files nil 'ifmode)
 	    rtnall nil)
       (while (setq file (pop files))
@@ -4864,7 +4866,9 @@ The prefix arg TODO-ONLY limits the search to TODO entries."
 		      (narrow-to-region org-agenda-restrict-begin
 					org-agenda-restrict-end)
 		    (widen))
-		  (setq rtn (org-scan-tags 'agenda matcher todo-only))
+		  (setq rtn (org-scan-tags 'agenda
+					   matcher
+					   org--matcher-tags-todo-only))
 		  (setq rtnall (append rtnall rtn))))))))
       (if org-agenda-overriding-header
 	  (insert (org-add-props (copy-sequence org-agenda-overriding-header)
@@ -4882,17 +4886,19 @@ The prefix arg TODO-ONLY limits the search to TODO entries."
 	  (insert (substitute-command-keys
 		   "Press `\\[universal-argument] \\[org-agenda-redo]' \
 to search again with new search string\n")))
-	(add-text-properties pos (1- (point)) (list 'face 'org-agenda-structure)))
+	(add-text-properties pos (1- (point))
+			     (list 'face 'org-agenda-structure)))
       (org-agenda-mark-header-line (point-min))
       (when rtnall
 	(insert (org-agenda-finalize-entries rtnall 'tags) "\n"))
       (goto-char (point-min))
       (or org-agenda-multi (org-agenda-fit-window-to-buffer))
-      (add-text-properties (point-min) (point-max)
-			   `(org-agenda-type tags
-					     org-last-args (,todo-only ,match)
-					     org-redo-cmd ,org-agenda-redo-command
-					     org-series-cmd ,org-cmd))
+      (add-text-properties
+       (point-min) (point-max)
+       `(org-agenda-type tags
+			 org-last-args (,org--matcher-tags-todo-only ,match)
+			 org-redo-cmd ,org-agenda-redo-command
+			 org-series-cmd ,org-cmd))
       (org-agenda-finalize)
       (setq buffer-read-only t))))
 
@@ -7532,7 +7538,7 @@ to switch between filtering and excluding."
 	(setq-local org-global-tags-completion-table
 		    (org-global-tags-completion-table)))
       (let ((completion-ignore-case t))
-	(setq tag (org-icompleting-read
+	(setq tag (completing-read
 		   "Tag: " org-global-tags-completion-table))))
     (cond
      ((eq char ?\r)
@@ -7577,10 +7583,6 @@ to switch between filtering and excluding."
 	      (get-text-property (point) 'tags))))
     tags))
 
-(defun org-agenda-filter-by-tag-refine (arg &optional char)
-  "Refine the current filter.  See `org-agenda-filter-by-tag'."
-  (interactive "P")
-  (org-agenda-filter-by-tag arg char 'refine))
 
 (defun org-agenda-filter-make-matcher (filter type &optional expand)
   "Create the form that tests a line for agenda filter.  Optional
@@ -7709,7 +7711,7 @@ tags in the FILTER if any of the tags in FILTER are grouptags."
 	    (progn
 	      (setq tags (org-get-at-bol 'tags)
 		    cat (org-get-at-eol 'org-category 1)
-		    txt (org-get-at-eol 'txt 1))
+		    txt (org-get-at-bol 'txt))
 	      (if (not (eval org-agenda-filter-form))
 		  (org-agenda-filter-hide-line type))
 	      (beginning-of-line 2))
@@ -9904,16 +9906,16 @@ The prefix arg is passed through to the command if possible."
 		redo-at-end t))
 
 	 ((equal action ?t)
-	  (setq state (org-icompleting-read
+	  (setq state (completing-read
 		       "Todo state: "
 		       (with-current-buffer (marker-buffer (car entries))
-			 (mapcar 'list org-todo-keywords-1))))
+			 (mapcar #'list org-todo-keywords-1))))
 	  (setq cmd `(let ((org-inhibit-blocking t)
 			   (org-inhibit-logging 'note))
 		       (org-agenda-todo ,state))))
 
 	 ((memq action '(?- ?+))
-	  (setq tag (org-icompleting-read
+	  (setq tag (completing-read
 		     (format "Tag to %s: " (if (eq action ?+) "add" "remove"))
 		     (with-current-buffer (marker-buffer (car entries))
 		       (delq nil
@@ -9968,8 +9970,8 @@ The prefix arg is passed through to the command if possible."
 
 	 ((equal action ?f)
 	  (setq cmd (list (intern
-			   (org-icompleting-read "Function: "
-						 obarray 'fboundp t nil nil)))))
+			   (completing-read "Function: "
+					    obarray 'fboundp t nil nil)))))
 
 	 (t (user-error "Invalid bulk action")))
 

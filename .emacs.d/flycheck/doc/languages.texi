@@ -1,28 +1,10 @@
-@macro flyclanguage{language}
-@unnumberedsec \language\
-@anchor{language-\language\}
-@cindex Language, \language\
-@cindex \language\ language
-@end macro
+@include macros.texi
 
-@macro flycoption{option}
-@item @code{\option\}
-@vindex \option\
-@end macro
+Flycheck supports the following languages:
 
-@macro flycoptionx{option}
-@itemx @code{\option\}
-@vindex \option\
-@end macro
+@include languages-list.texi
 
-@macro flycconfigfile{option, tool}
-@item @code{\option\}
-@vindex \option\
-Configuration file for \tool\.  @xref{Syntax checker
-configuration files}, for more information about configuration files.
-@end macro
-
-@flyclanguage Ada
+@flyclanguage{Ada}
 
 @itemize
 @item
@@ -45,7 +27,7 @@ of a warning category to enable.
 
 @end itemize
 
-@flyclanguage AsciiDoc
+@flyclanguage{AsciiDoc}
 
 @itemize
 @item
@@ -524,6 +506,7 @@ These syntax checkers checker provide the following options:
 @flycoption flycheck-perl-include-path
 A list of include directories for Perl, relative to the file being
 checked.
+@flycconfigfile{flycheck-perlcriticrc,Perl::Critic}
 @flycoption flycheck-perlcritic-severity
 The severity level for Perl::Critic, as integer for the
 @option{--severity} option of Perl::Critic.
@@ -556,15 +539,31 @@ The coding standard for PHP CodeSniffer, either as name of a built-in
 standard, or as path to a standard specification.
 @end table
 
+@flyclanguage{Processing}
+
+@itemize
+@item
+@flyc{processing} (using the @uref{https://processing.org/,Processing
+command-line tool})
+@end itemize
+
 @flyclanguage{Puppet}
 
 @itemize
 @item
-@flyc{puppet-parser} (syntax check with @uref{http://puppetlabs.com/, Puppet})
+@flyc{puppet-parser} (syntax check with @uref{http://puppetlabs.com/,
+Puppet})
 @item
 @flyc{puppet-lint} (style check with @uref{http://puppet-lint.com/,
 Puppet Lint})
 @end itemize
+
+@flyc{puppet-lint} provides the following options:
+@table @asis
+@flycconfigfile{flycheck-puppet-lint-rc,puppet-lint}
+@flycoption flycheck-puppet-lint-disabled-checks
+A list of Puppet Lint checks to disable.
+@end table
 
 @flyclanguage{Python}
 
@@ -632,13 +631,6 @@ selects the linters to use.
 
 @end itemize
 
-@flyclanguage{Racket}
-
-@itemize
-@item
-@flyc{racket} (@uref{http://racket-lang.org/,Racket})
-@end itemize
-
 @flyclanguage{RPM Spec}
 
 @itemize
@@ -691,7 +683,7 @@ following checkers for very basic checking:
 @itemize
 @item
 @flyc{ruby} (using the @uref{https://www.ruby-lang.org/,standard Ruby
-interpreter}),
+interpreter}), or
 @item
 @flyc{ruby-jruby} (using @uref{http://jruby.org/,JRuby})
 @end itemize
@@ -700,26 +692,31 @@ interpreter}),
 
 @itemize
 @item
-@flyc{rust} (using the @uref{http://www.rust-lang.org/,Rust compiler}),
-with the following options:
+@flyc{rust-cargo} (using the @uref{https://crates.io/,Cargo}), or
+
+@item
+@flyc{rust} (using the @uref{http://www.rust-lang.org/,Rust compiler})
+
+These checkers provide the following options:
 
 @table @asis
 @flycoption flycheck-rust-args
 A list of additional arguments for the Rust compiler @command{rustc}.
+
 @flycoption flycheck-rust-check-tests
 Whether to check test code in Rust.
 
 @flycoption flycheck-rust-crate-root
 A path to the crate root for the current buffer, or nil if the current
-buffer is a crate by itself.
+buffer is a crate by itself.  @flyc{rust-cargo} ignores this option, as
+the crate root comes from Cargo.
 
 @flycoption flycheck-rust-crate-type
-The type of the crate to check, as string for the @option{--crate-type}
-option.
-
+The type of the crate to check, as string for the
+@option{--crate-type} option.
 @flycoption flycheck-rust-library-path
-A list of library directories for Rust.  Relative paths are relative to
-the buffer being checked.
+A list of additional library directories for Rust. Relative paths are
+relative to the buffer being checked.
 @end table
 
 @end itemize

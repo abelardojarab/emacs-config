@@ -2,8 +2,7 @@
 ;;
 ;;; Code:
 
-;;;### (autoloads nil "ob-core" "ob-core.el" (22158 41753 943690
-;;;;;;  0))
+;;;### (autoloads nil "ob-core" "ob-core.el" (22197 7660 812304 0))
 ;;; Generated autoloads from ob-core.el
 
 (autoload 'org-babel-execute-safely-maybe "ob-core" "\
@@ -231,8 +230,7 @@ Mark current src block.
 
 ;;;***
 
-;;;### (autoloads nil "ob-keys" "ob-keys.el" (22158 41753 615668
-;;;;;;  0))
+;;;### (autoloads nil "ob-keys" "ob-keys.el" (22197 7660 518291 0))
 ;;; Generated autoloads from ob-keys.el
 
 (autoload 'org-babel-describe-bindings "ob-keys" "\
@@ -242,7 +240,7 @@ Describe all keybindings behind `org-babel-key-prefix'.
 
 ;;;***
 
-;;;### (autoloads nil "ob-lob" "ob-lob.el" (22158 41753 618666 0))
+;;;### (autoloads nil "ob-lob" "ob-lob.el" (22197 7660 529291 0))
 ;;; Generated autoloads from ob-lob.el
 
 (autoload 'org-babel-lob-execute-maybe "ob-lob" "\
@@ -259,7 +257,7 @@ Return a Library of Babel function call as a string.
 
 ;;;***
 
-;;;### (autoloads nil "ob-tangle" "ob-tangle.el" (22158 41753 621665
+;;;### (autoloads nil "ob-tangle" "ob-tangle.el" (22197 7660 539287
 ;;;;;;  0))
 ;;; Generated autoloads from ob-tangle.el
 
@@ -288,7 +286,7 @@ used to limit the exported source code blocks by language.
 
 ;;;***
 
-;;;### (autoloads nil "org-agenda" "org-agenda.el" (22158 41754 99704
+;;;### (autoloads nil "org-agenda" "org-agenda.el" (22197 7661 241328
 ;;;;;;  0))
 ;;; Generated autoloads from org-agenda.el
 
@@ -562,8 +560,8 @@ to override `appt-message-warning-time'.
 
 ;;;***
 
-;;;### (autoloads nil "org-archive" "org-archive.el" (22158 41754
-;;;;;;  101689 0))
+;;;### (autoloads nil "org-archive" "org-archive.el" (22197 7661
+;;;;;;  248322 0))
 ;;; Generated autoloads from org-archive.el
 
 (autoload 'org-add-archive-files "org-archive" "\
@@ -618,7 +616,7 @@ This command is set with the variable `org-archive-default-command'.
 
 ;;;***
 
-;;;### (autoloads nil "org-attach" "org-attach.el" (22158 41753 773675
+;;;### (autoloads nil "org-attach" "org-attach.el" (22197 7660 815307
 ;;;;;;  0))
 ;;; Generated autoloads from org-attach.el
 
@@ -630,7 +628,7 @@ Shows a list of commands and prompts for another key to execute a command.
 
 ;;;***
 
-;;;### (autoloads nil "org-bbdb" "org-bbdb.el" (22158 41753 623666
+;;;### (autoloads nil "org-bbdb" "org-bbdb.el" (22197 7660 544291
 ;;;;;;  0))
 ;;; Generated autoloads from org-bbdb.el
 
@@ -646,8 +644,8 @@ Return list of anniversaries for today and the next n-1 days (default n=7).
 
 ;;;***
 
-;;;### (autoloads nil "org-capture" "org-capture.el" (22158 41754
-;;;;;;  585715 0))
+;;;### (autoloads nil "org-capture" "org-capture.el" (22197 7662
+;;;;;;  120364 0))
 ;;; Generated autoloads from org-capture.el
 
 (autoload 'org-capture-string "org-capture" "\
@@ -689,7 +687,7 @@ Set `org-capture-templates' to be similar to `org-remember-templates'.
 
 ;;;***
 
-;;;### (autoloads nil "org-clock" "org-clock.el" (22158 41753 625671
+;;;### (autoloads nil "org-clock" "org-clock.el" (22197 7660 550300
 ;;;;;;  0))
 ;;; Generated autoloads from org-clock.el
 
@@ -820,8 +818,8 @@ Otherwise, return nil.
 
 ;;;***
 
-;;;### (autoloads nil "org-colview" "org-colview.el" (22158 41753
-;;;;;;  775678 0))
+;;;### (autoloads nil "org-colview" "org-colview.el" (22197 7660
+;;;;;;  820306 0))
 ;;; Generated autoloads from org-colview.el
 
 (autoload 'org-columns-remove-overlays "org-colview" "\
@@ -884,7 +882,7 @@ Turn on or update column view in the agenda.
 
 ;;;***
 
-;;;### (autoloads nil "org-compat" "org-compat.el" (22158 41753 627667
+;;;### (autoloads nil "org-compat" "org-compat.el" (22197 7660 556289
 ;;;;;;  0))
 ;;; Generated autoloads from org-compat.el
 
@@ -895,32 +893,32 @@ Try very hard to provide sensible version strings.
 
 ;;;***
 
-;;;### (autoloads nil "org-datetree" "org-datetree.el" (22158 41753
-;;;;;;  723671 0))
+;;;### (autoloads nil "org-datetree" "org-datetree.el" (22197 7660
+;;;;;;  726297 0))
 ;;; Generated autoloads from org-datetree.el
 
 (autoload 'org-datetree-find-date-create "org-datetree" "\
-Find or create an entry for DATE.
+Find or create an entry for date D.
 If KEEP-RESTRICTION is non-nil, do not widen the buffer.
 When it is nil, the buffer will be widened to make sure an existing date
 tree can be found.
 
-\(fn DATE &optional KEEP-RESTRICTION)" nil nil)
+\(fn D &optional KEEP-RESTRICTION)" nil nil)
 
 (autoload 'org-datetree-find-iso-week-create "org-datetree" "\
-Find or create an ISO week entry for DATE.
+Find or create an ISO week entry for date D.
 Compared to `org-datetree-find-date-create' this function creates
 entries ordered by week instead of months.
 If KEEP-RESTRICTION is non-nil, do not widen the buffer.  When it
 is nil, the buffer will be widened to make sure an existing date
 tree can be found.
 
-\(fn DATE &optional KEEP-RESTRICTION)" nil nil)
+\(fn D &optional KEEP-RESTRICTION)" nil nil)
 
 ;;;***
 
-;;;### (autoloads nil "org-element" "org-element.el" (22158 41754
-;;;;;;  104743 0))
+;;;### (autoloads nil "org-element" "org-element.el" (22197 7661
+;;;;;;  256323 0))
 ;;; Generated autoloads from org-element.el
 
 (autoload 'org-element-update-syntax "org-element" "\
@@ -992,7 +990,7 @@ Providing it allows for quicker computation.
 
 ;;;***
 
-;;;### (autoloads nil "org-feed" "org-feed.el" (22158 41754 106785
+;;;### (autoloads nil "org-feed" "org-feed.el" (22197 7661 262322
 ;;;;;;  0))
 ;;; Generated autoloads from org-feed.el
 
@@ -1020,8 +1018,8 @@ Show the raw feed buffer of a feed.
 
 ;;;***
 
-;;;### (autoloads nil "org-footnote" "org-footnote.el" (22158 41754
-;;;;;;  108741 0))
+;;;### (autoloads nil "org-footnote" "org-footnote.el" (22197 7661
+;;;;;;  267329 0))
 ;;; Generated autoloads from org-footnote.el
 
 (autoload 'org-footnote-action "org-footnote" "\
@@ -1042,7 +1040,7 @@ offer additional commands in a menu.
 
 ;;;***
 
-;;;### (autoloads nil "org-id" "org-id.el" (22158 41753 707676 0))
+;;;### (autoloads nil "org-id" "org-id.el" (22197 7660 732296 0))
 ;;; Generated autoloads from org-id.el
 
 (autoload 'org-id-get-create "org-id" "\
@@ -1135,7 +1133,7 @@ Store a link to the current entry, using its ID.
 
 ;;;***
 
-;;;### (autoloads nil "org-indent" "org-indent.el" (22158 41753 811676
+;;;### (autoloads nil "org-indent" "org-indent.el" (22197 7660 908305
 ;;;;;;  0))
 ;;; Generated autoloads from org-indent.el
 
@@ -1153,8 +1151,7 @@ during idle time.
 
 ;;;***
 
-;;;### (autoloads nil "org-irc" "org-irc.el" (22158 41753 826676
-;;;;;;  0))
+;;;### (autoloads nil "org-irc" "org-irc.el" (22197 7660 919308 0))
 ;;; Generated autoloads from org-irc.el
 
 (autoload 'org-irc-store-link "org-irc" "\
@@ -1164,7 +1161,7 @@ Dispatch to the appropriate function to store a link to an IRC session.
 
 ;;;***
 
-;;;### (autoloads nil "org-lint" "org-lint.el" (22158 41753 717690
+;;;### (autoloads nil "org-lint" "org-lint.el" (22197 7660 738298
 ;;;;;;  0))
 ;;; Generated autoloads from org-lint.el
 
@@ -1181,7 +1178,7 @@ ARG can also be a list of checker names, as symbols, to run.
 
 ;;;***
 
-;;;### (autoloads nil "org-macs" "org-macs.el" (22158 41754 235700
+;;;### (autoloads nil "org-macs" "org-macs.el" (22197 7661 500343
 ;;;;;;  0))
 ;;; Generated autoloads from org-macs.el
 
@@ -1192,7 +1189,7 @@ Load FILE with optional arguments NOERROR and MUSTSUFFIX.  Drop the MUSTSUFFIX a
 
 ;;;***
 
-;;;### (autoloads nil "org-mobile" "org-mobile.el" (22158 41753 905699
+;;;### (autoloads nil "org-mobile" "org-mobile.el" (22197 7661 18312
 ;;;;;;  0))
 ;;; Generated autoloads from org-mobile.el
 
@@ -1212,7 +1209,7 @@ agenda view showing the flagged items.
 
 ;;;***
 
-;;;### (autoloads nil "org-plot" "org-plot.el" (22158 41754 112736
+;;;### (autoloads nil "org-plot" "org-plot.el" (22197 7661 280323
 ;;;;;;  0))
 ;;; Generated autoloads from org-plot.el
 
@@ -1225,7 +1222,7 @@ line directly before or after the table.
 
 ;;;***
 
-;;;### (autoloads nil "org-table" "org-table.el" (22158 41754 93713
+;;;### (autoloads nil "org-table" "org-table.el" (22197 7661 230324
 ;;;;;;  0))
 ;;; Generated autoloads from org-table.el
 
@@ -1569,8 +1566,11 @@ If NLAST is a number, only the NLAST fields will actually be summed.
 
 (autoload 'org-table-get-stored-formulas "org-table" "\
 Return an alist with the stored formulas directly after current table.
+By default, only return active formulas, i.e., formulas located
+on the first line after the table.  However, if optional argument
+LOCATION is a buffer position, consider the formulas there.
 
-\(fn &optional NOERROR)" nil nil)
+\(fn &optional NOERROR LOCATION)" nil nil)
 
 (autoload 'org-table-maybe-eval-formula "org-table" "\
 Check if the current field starts with \"=\" or \":=\".
@@ -1902,7 +1902,7 @@ characters width of the plot.  ASK may also be the
 
 ;;;***
 
-;;;### (autoloads nil "org-timer" "org-timer.el" (22158 41753 917684
+;;;### (autoloads nil "org-timer" "org-timer.el" (22197 7661 38312
 ;;;;;;  0))
 ;;; Generated autoloads from org-timer.el
 
@@ -1967,8 +1967,8 @@ using three `C-u' prefix arguments.
 
 ;;;***
 
-;;;### (autoloads nil "org-version" "org-version.el" (22158 41774
-;;;;;;  780693 0))
+;;;### (autoloads nil "org-version" "org-version.el" (22197 7684
+;;;;;;  45401 0))
 ;;; Generated autoloads from org-version.el
 
 (autoload 'org-release "org-version" "\
@@ -1988,7 +1988,7 @@ The location of ODT styles.")
 
 ;;;***
 
-;;;### (autoloads nil "org" "org.el" (22158 41753 764683 0))
+;;;### (autoloads nil "org" "org.el" (22197 7661 446337 0))
 ;;; Generated autoloads from org.el
 
 (autoload 'org-babel-do-load-languages "org" "\
@@ -2166,17 +2166,12 @@ Open a link in the string S, as if it was in Org-mode.
 
 (autoload 'org-switchb "org" "\
 Switch between Org buffers.
-With one prefix argument, restrict available buffers to files.
-With two prefix arguments, restrict available buffers to agenda files.
 
-Defaults to `iswitchb' for buffer name completion.
-Set `org-completion-use-ido' to make it use ido instead.
+With \\[universal-argument] prefix, restrict available buffers to files.
+
+With \\[universal-argument] \\[universal-argument] prefix, restrict available buffers to agenda files.
 
 \(fn &optional ARG)" t nil)
-
-(defalias 'org-ido-switchb 'org-switchb)
-
-(defalias 'org-iswitchb 'org-switchb)
 
 (autoload 'org-cycle-agenda-files "org" "\
 Cycle through the files in `org-agenda-files'.
@@ -2209,7 +2204,7 @@ Call the customize function with org as argument.
 
 ;;;***
 
-;;;### (autoloads nil "ox-ascii" "ox-ascii.el" (22158 41753 636672
+;;;### (autoloads nil "ox-ascii" "ox-ascii.el" (22197 7660 590294
 ;;;;;;  0))
 ;;; Generated autoloads from ox-ascii.el
 
@@ -2310,7 +2305,7 @@ Return output file name.
 
 ;;;***
 
-;;;### (autoloads nil "ox-beamer" "ox-beamer.el" (22158 41754 114727
+;;;### (autoloads nil "ox-beamer" "ox-beamer.el" (22197 7661 286336
 ;;;;;;  0))
 ;;; Generated autoloads from ox-beamer.el
 
@@ -2446,8 +2441,7 @@ Return output file name.
 
 ;;;***
 
-;;;### (autoloads nil "ox-html" "ox-html.el" (22158 41753 926684
-;;;;;;  0))
+;;;### (autoloads nil "ox-html" "ox-html.el" (22197 7660 782300 0))
 ;;; Generated autoloads from ox-html.el
 
 (put 'org-html-head-include-default-style 'safe-local-variable 'booleanp)
@@ -2553,8 +2547,8 @@ Return output file name.
 
 ;;;***
 
-;;;### (autoloads nil "ox-icalendar" "ox-icalendar.el" (22158 41753
-;;;;;;  913687 0))
+;;;### (autoloads nil "ox-icalendar" "ox-icalendar.el" (22197 7661
+;;;;;;  45315 0))
 ;;; Generated autoloads from ox-icalendar.el
 
 (autoload 'org-icalendar-export-to-ics "ox-icalendar" "\
@@ -2604,7 +2598,7 @@ The file is stored under the name chosen in
 
 ;;;***
 
-;;;### (autoloads nil "ox-latex" "ox-latex.el" (22158 41754 260701
+;;;### (autoloads nil "ox-latex" "ox-latex.el" (22197 7660 789303
 ;;;;;;  0))
 ;;; Generated autoloads from ox-latex.el
 
@@ -2730,7 +2724,7 @@ Return output file name.
 
 ;;;***
 
-;;;### (autoloads nil "ox-md" "ox-md.el" (22158 41753 628668 0))
+;;;### (autoloads nil "ox-md" "ox-md.el" (22197 7661 293323 0))
 ;;; Generated autoloads from ox-md.el
 
 (autoload 'org-md-export-as-markdown "ox-md" "\
@@ -2802,7 +2796,7 @@ Return output file name.
 
 ;;;***
 
-;;;### (autoloads nil "ox-odt" "ox-odt.el" (22158 41753 780675 0))
+;;;### (autoloads nil "ox-odt" "ox-odt.el" (22197 7660 563294 0))
 ;;; Generated autoloads from ox-odt.el
 
 (put 'org-odt-preferred-output-format 'safe-local-variable 'stringp)
@@ -2864,7 +2858,7 @@ is non-nil then the newly converted file is opened using
 
 ;;;***
 
-;;;### (autoloads nil "ox-org" "ox-org.el" (22158 41753 910682 0))
+;;;### (autoloads nil "ox-org" "ox-org.el" (22197 7661 24310 0))
 ;;; Generated autoloads from ox-org.el
 
 (autoload 'org-org-export-as-org "ox-org" "\
@@ -2942,7 +2936,7 @@ Return output file name.
 
 ;;;***
 
-;;;### (autoloads nil "ox-publish" "ox-publish.el" (22158 41753 912680
+;;;### (autoloads nil "ox-publish" "ox-publish.el" (22197 7660 904304
 ;;;;;;  0))
 ;;; Generated autoloads from ox-publish.el
 
@@ -2986,7 +2980,7 @@ the project.
 
 ;;;***
 
-;;;### (autoloads nil "ox-texinfo" "ox-texinfo.el" (22158 41753 971685
+;;;### (autoloads nil "ox-texinfo" "ox-texinfo.el" (22197 7661 92318
 ;;;;;;  0))
 ;;; Generated autoloads from ox-texinfo.el
 
@@ -3011,7 +3005,7 @@ this command to convert it.
 
 ;;;***
 
-;;;### (autoloads nil "ox" "ox.el" (22158 41753 969684 0))
+;;;### (autoloads nil "ox" "ox.el" (22197 7660 840307 0))
 ;;; Generated autoloads from ox.el
 
 (autoload 'org-export-as "ox" "\

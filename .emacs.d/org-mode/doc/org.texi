@@ -259,7 +259,7 @@
 @copying
 This manual is for Org version @value{VERSION}.
 
-Copyright @copyright{} 2004--2015 Free Software Foundation, Inc.
+Copyright @copyright{} 2004--2016 Free Software Foundation, Inc.
 
 @quotation
 Permission is granted to copy, distribute and/or modify this document
@@ -5446,7 +5446,7 @@ CLOCKSUM_T   @r{The sum of CLOCK intervals in the subtree for today.}
 CLOSED       @r{When was this entry closed?}
 DEADLINE     @r{The deadline time string, without the angular brackets.}
 FILE         @r{The filename the entry is located in.}
-ITEM         @r{The headline of the entry, with stars.}
+ITEM         @r{The headline of the entry.}
 PRIORITY     @r{The priority of the entry, a string with a single letter.}
 SCHEDULED    @r{The scheduling timestamp, without the angular brackets.}
 TAGS         @r{The tags defined directly in the headline.}
@@ -5798,6 +5798,8 @@ When set to a number, don't capture entries below this level.
 @item :skip-empty-rows
 When set to @code{t}, skip rows where the only non-empty specifier of the
 column view is @code{ITEM}.
+@item :indent
+When non-@code{nil}, indent each @code{ITEM} field according to its level.
 
 @end table
 
@@ -6429,7 +6431,9 @@ You may have both scheduling and deadline information for a specific task.
 If the repeater is set for the scheduling information only, you probably want
 the repeater to be ignored after the deadline.  If so, set the variable
 @code{org-agenda-skip-scheduled-if-deadline-is-shown} to
-@code{repeated-after-deadline}.  If you want both scheduling and deadline
+@code{repeated-after-deadline}.  However, any scheduling information without
+a repeater is no longer relevant once the task is done, and thus, removed
+upon repeating the task.  If you want both scheduling and deadline
 information to repeat after the same interval, set the same repeater for both
 timestamps.
 
@@ -8604,12 +8608,6 @@ Internet, and outside of business hours, with something like this:
 @end group
 @end smalllisp
 
-@orgcmd{\\,org-agenda-filter-by-tag-refine}
-Narrow the current agenda filter by an additional condition.  When called with
-prefix arg, remove the entries that @emph{do} have the tag, or that do match
-the effort criterion.  You can achieve the same effect by pressing @kbd{+} or
-@kbd{-} as the first key after the @kbd{/} command.
-
 @c
 @kindex [
 @kindex ]
@@ -8923,9 +8921,6 @@ agenda items}.
 @orgcmd{/,org-agenda-filter-by-tag}
 @vindex org-agenda-tag-filter-preset
 Filter the agenda view with respect to a tag and/or effort estimates.
-
-@orgcmd{\\,org-agenda-filter-by-tag-refine}
-Narrow the current agenda filter by an additional condition.
 
 @orgcmd{<,org-agenda-filter-by-category}
 @vindex org-agenda-category-filter-preset
@@ -12805,7 +12800,7 @@ height:width ratio, do the following
 
 @cindex #+ATTR_ODT
 You can control the manner in which an image is anchored by setting the
-@code{:anchor} property of it's @code{#+ATTR_ODT} line.  You can specify one
+@code{:anchor} property of its @code{#+ATTR_ODT} line.  You can specify one
 of the following three values for the @code{:anchor} property:
 @samp{"as-char"}, @samp{"paragraph"} and @samp{"page"}.
 
@@ -12928,7 +12923,7 @@ You can label and caption various category of objects---an inline image, a
 table, a @LaTeX{} fragment or a Math formula---using @code{#+LABEL} and
 @code{#+CAPTION} lines.  @xref{Images and tables}.  ODT exporter enumerates
 each labeled or captioned object of a given category separately.  As a
-result, each such object is assigned a sequence number based on order of it's
+result, each such object is assigned a sequence number based on order of its
 appearance in the Org file.
 
 In the exported document, a user-provided caption is augmented with the
@@ -13505,9 +13500,9 @@ These keywords are treated in details in the following sections.
 When processing a document, @samp{texinfo} back-end generates a minimal file
 header along with a title page, a copyright page, and a menu.  You control
 the latter through the structure of the document (@pxref{Headings and
-sectioning structure}).  Various keywords allow to tweak the other parts.  It
-is also possible to give directions to install the document in the @samp{Top}
-node.
+sectioning structure}).  Various keywords allow you to tweak the other parts.
+It is also possible to give directions to install the document in the
+@samp{Top} node.
 
 @subsubheading File header
 
@@ -13569,7 +13564,7 @@ Copyright information is printed on the back of the title page.
 
   This is a short example of a complete Texinfo file, version 1.0.
 
-  Copyright \copy 2015 Free Software Foundation, Inc.
+  Copyright \copy 2016 Free Software Foundation, Inc.
 @end example
 
 @subsubheading The Top node

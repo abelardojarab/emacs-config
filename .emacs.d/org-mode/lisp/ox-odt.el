@@ -1,6 +1,6 @@
 ;;; ox-odt.el --- OpenDocument Text Exporter for Org Mode -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2010-2015 Free Software Foundation, Inc.
+;; Copyright (C) 2010-2016 Free Software Foundation, Inc.
 
 ;; Author: Jambunathan K <kjambunathan at gmail dot com>
 ;; Keywords: outlines, hypermedia, calendar, wp
@@ -3122,7 +3122,7 @@ and prefix with \"OrgSrc\".  For example,
 		 (with-temp-buffer
 		   (insert code)
 		   (funcall lang-mode)
-		   (font-lock-ensure)
+		   (org-font-lock-ensure)
 		   (buffer-string))))
 	 (fontifier (if use-htmlfontify-p 'org-odt-htmlfontify-string
 		      'org-odt--encode-plain-text))

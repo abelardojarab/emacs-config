@@ -1,6 +1,6 @@
 ;;; ox-latex.el --- LaTeX Back-End for Org Export Engine -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2011-2015 Free Software Foundation, Inc.
+;; Copyright (C) 2011-2016 Free Software Foundation, Inc.
 
 ;; Author: Nicolas Goaziou <n.goaziou at gmail dot com>
 ;; Keywords: outlines, hypermedia, calendar, wp
@@ -1034,13 +1034,14 @@ exported.  This format string may contain these elements:
   %c for the caption
   %f for the float attribute
   %l for an appropriate label 
+  %o for the LaTeX attributes
 
 For example,
 
   (setq org-latex-custom-lang-environments
      '((python \"pythoncode\")
        (ocaml \"\\\\begin{listing}
-\\\\begin{minted}{ocaml}
+\\\\begin{minted}[%o]{ocaml}
 %s\\\\end{minted}
 \\\\caption{%c}
 \\\\label{%l}\")))
@@ -1056,7 +1057,7 @@ and if Org encounters an Ocaml source block during LaTeX export it
 will produce
 
   \\begin{listing}
-  \\begin{minted}{ocaml}
+  \\begin{minted}[<attr_latex options>]{ocaml}
   <src block body>
   \\end{minted}
   \\caption{<caption>}
@@ -2802,7 +2803,8 @@ contextual information."
 			 `((?s . ,formatted-src)
 			   (?c . ,caption)
 			   (?f . ,float)
-			   (?l . ,(org-latex--label src-block info)))))))
+			   (?l . ,(org-latex--label src-block info))
+			   (?o . ,(or (plist-get attributes :options) "")))))))
        ;; Case 3.  Use minted package.
        ((eq listings 'minted)
 	(let* ((caption-str (org-latex--caption/label-string src-block info))
@@ -2893,7 +2895,6 @@ contextual information."
 	       `(("captionpos" ,(if caption-above-p "t" "b")))
 	       (cond ((assoc "numbers" lst-opt) nil)
 		     ((not num-start) '(("numbers" "none")))
-		     ((zerop num-start) '(("numbers" "left")))
 		     (t `(("firstnumber" ,(number-to-string (1+ num-start)))
 			  ("numbers" "left"))))))
 	     (let ((local-options (plist-get attributes :options)))
@@ -3576,7 +3577,10 @@ Return PDF file name or an error if it couldn't be produced."
 	;; Check for process failure.  Provide collected errors if
 	;; possible.
 	(if (or (not (file-exists-p pdffile))
-		(time-less-p (nth 5 (file-attributes pdffile)) time))
+		;; Only compare times up to whole seconds as some filesystems
+		;; (e.g. HFS+) do not retain any finer granularity.
+		(time-less-p (cl-subseq (nth 5 (file-attributes pdffile)) 0 2)
+			     (cl-subseq time 0 2)))
 	    (error (format "PDF file %s wasn't produced" pdffile))
 	  ;; Else remove log files, when specified, and signal end of
 	  ;; process to user, along with any error encountered.

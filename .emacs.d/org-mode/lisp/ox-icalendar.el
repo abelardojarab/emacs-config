@@ -1,6 +1,6 @@
 ;;; ox-icalendar.el --- iCalendar Back-End for Org Export Engine -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2004-2015 Free Software Foundation, Inc.
+;; Copyright (C) 2004-2016 Free Software Foundation, Inc.
 
 ;; Author: Carsten Dominik <carsten at orgmode dot org>
 ;;      Nicolas Goaziou <n dot goaziou at gmail dot com>
@@ -77,7 +77,7 @@ for timed events.  If non-zero, alarms are created.
 
 (defcustom org-icalendar-exclude-tags nil
   "Tags that exclude a tree from export.
-This variable allows to specify different exclude tags from other
+This variable allows specifying different exclude tags from other
 back-ends.  It can also be set with the ICALENDAR_EXCLUDE_TAGS
 keyword."
   :group 'org-export-icalendar
@@ -904,8 +904,8 @@ This function assumes major mode for current buffer is
        (org-icalendar--vcalendar
 	org-icalendar-combined-name
 	user-full-name
-	org-icalendar-combined-description
 	(or (org-string-nw-p org-icalendar-timezone) (cadr (current-time-zone)))
+	org-icalendar-combined-description
 	contents)))
     (run-hook-with-args 'org-icalendar-after-save-hook file)))
 

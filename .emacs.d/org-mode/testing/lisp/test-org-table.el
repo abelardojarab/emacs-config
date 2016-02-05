@@ -1847,6 +1847,73 @@ is t, then new columns should be added as needed"
       (buffer-string)))))
 
 
+(ert-deftest test-org-table/orgtbl-ascii-draw ()
+  "Test `orgtbl-ascii-draw'."
+  ;; First value: Make sure that an integer input value is converted to a
+  ;; float before division. Further values: Show some float input value
+  ;; ranges corresponding to the same bar width.
+  (should
+   (equal
+    (org-test-with-temp-text
+	"
+|    Value | <l>     |
+|----------+---------|
+|       19 | replace |
+|----------+---------|
+| -0.50001 | replace |
+| -0.49999 | replace |
+|  0.49999 | replace |
+|  0.50001 | replace |
+|  1.49999 | replace |
+| 22.50001 | replace |
+| 23.49999 | replace |
+| 23.50001 | replace |
+| 24.49999 | replace |
+| 24.50001 | replace |
+<point>#+TBLFM: $2 = '(orgtbl-ascii-draw $1 0 24 3 \" 12345678\")"
+      (org-table-calc-current-TBLFM)
+      (buffer-string))
+    "
+|    Value | <l>       |
+|----------+-----------|
+|       19 | 883       |
+|----------+-----------|
+| -0.50001 | too small |
+| -0.49999 |           |
+|  0.49999 |           |
+|  0.50001 | 1         |
+|  1.49999 | 1         |
+| 22.50001 | 887       |
+| 23.49999 | 887       |
+| 23.50001 | 888       |
+| 24.49999 | 888       |
+| 24.50001 | too large |
+#+TBLFM: $2 = '(orgtbl-ascii-draw $1 0 24 3 \" 12345678\")"))
+  ;; Draw bars with a bullet. The bullet does not count in the parameter
+  ;; WIDTH of `orgtbl-ascii-draw'.
+  (should
+   (equal
+    (org-test-with-temp-text
+	"
+| -1 | replace |
+|  0 | replace |
+|  1 | replace |
+|  2 | replace |
+|  3 | replace |
+|  4 | replace |
+<point>#+TBLFM: $2 = '(orgtbl-ascii-draw $1 0 3 3 \"$-\")"
+      (org-table-calc-current-TBLFM)
+      (buffer-string))
+    "
+| -1 | too small |
+|  0 | $         |
+|  1 | -$        |
+|  2 | --$       |
+|  3 | ---$      |
+|  4 | too large |
+#+TBLFM: $2 = '(orgtbl-ascii-draw $1 0 3 3 \"$-\")")))
+
+
 (provide 'test-org-table)
 
 ;;; test-org-table.el ends here

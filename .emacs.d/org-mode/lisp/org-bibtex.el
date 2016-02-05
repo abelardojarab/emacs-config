@@ -1,6 +1,6 @@
 ;;; org-bibtex.el --- Org links to BibTeX entries    -*- lexical-binding: t; -*-
 ;;
-;; Copyright (C) 2007-2015 Free Software Foundation, Inc.
+;; Copyright (C) 2007-2016 Free Software Foundation, Inc.
 ;;
 ;; Authors: Bastien Guerry <bzg@gnu.org>
 ;;       Carsten Dominik <carsten dot dominik at gmail dot com>
@@ -441,7 +441,7 @@ With optional argument OPTIONAL, also prompt for optional fields."
 				(lambda (f) (when (org-bibtex-get (funcall name f)) f))
 				field)))))
           (setf field (or present (funcall keyword
-					   (org-icompleting-read
+					   (completing-read
 					    "Field: " (mapcar name field)))))))
       (let ((name (funcall name field)))
         (unless (org-bibtex-get name)
@@ -548,14 +548,16 @@ With optional argument OPTIONAL, also prompt for optional fields."
 
 
 ;;; Bibtex <-> Org-mode headline translation functions
-(defun org-bibtex (&optional filename)
+(defun org-bibtex (filename)
   "Export each headline in the current file to a bibtex entry.
 Headlines are exported using `org-bibtex-headline'."
   (interactive
    (list (read-file-name
 	  "Bibtex file: " nil nil nil
-	  (file-name-nondirectory
-	   (concat (file-name-sans-extension (buffer-file-name)) ".bib")))))
+	  (let ((file (buffer-file-name (buffer-base-buffer))))
+	    (and file
+		 (file-name-nondirectory
+		  (concat (file-name-sans-extension file) ".bib")))))))
   (let ((error-point
          (catch 'bib
            (let ((bibtex-entries
@@ -592,7 +594,7 @@ With prefix argument OPTIONAL also prompt for optional fields."
 With a prefix arg, query for optional fields as well.
 If nonew is t, add data to the headline of the entry at point."
   (interactive "P")
-  (let* ((type (org-icompleting-read
+  (let* ((type (completing-read
 		"Type: " (mapcar (lambda (type)
 				   (substring (symbol-name (car type)) 1))
 				 org-bibtex-types)

@@ -1,5 +1,5 @@
 ;;; ox-publish.el --- Publish Related Org Mode Files as a Website -*- lexical-binding: t; -*-
-;; Copyright (C) 2006-2015 Free Software Foundation, Inc.
+;; Copyright (C) 2006-2016 Free Software Foundation, Inc.
 
 ;; Author: David O'Toole <dto@gnu.org>
 ;; Maintainer: Carsten Dominik <carsten DOT dominik AT gmail DOT com>
@@ -864,8 +864,8 @@ When optional argument FORCE is non-nil, force publishing all
 files in PROJECT.  With a non-nil optional argument ASYNC,
 publishing will be done asynchronously, in another process."
   (interactive
-   (list (assoc (org-icompleting-read "Publish project: "
-				      org-publish-project-alist nil t)
+   (list (assoc (completing-read "Publish project: "
+				 org-publish-project-alist nil t)
 		org-publish-project-alist)
 	 current-prefix-arg))
   (let ((project (if (not (stringp project)) project
@@ -1129,7 +1129,7 @@ This function is meant to be used as a final output filter.  See
 
 Return value is an internal reference, as a string.
 
-This function allows to resolve external links like:
+This function allows the resolution of external links like:
 
   [[file.org::*fuzzy][description]]
   [[file.org::#custom-id][description]]

@@ -2,7 +2,7 @@ This is org, produced by makeinfo version 4.8 from org.texi.
 
    This manual is for Org version N/A (N/A).
 
-   Copyright (C) 2004-2015 Free Software Foundation, Inc.
+   Copyright (C) 2004-2016 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -28,7 +28,7 @@ Org Mode Manual
 
 This manual is for Org version N/A (N/A).
 
-   Copyright (C) 2004-2015 Free Software Foundation, Inc.
+   Copyright (C) 2004-2016 Free Software Foundation, Inc.
 
      Permission is granted to copy, distribute and/or modify this
      document under the terms of the GNU Free Documentation License,
@@ -4959,7 +4959,7 @@ used as keys in the properties drawer:
      CLOSED       When was this entry closed?
      DEADLINE     The deadline time string, without the angular brackets.
      FILE         The filename the entry is located in.
-     ITEM         The headline of the entry, with stars.
+     ITEM         The headline of the entry.
      PRIORITY     The priority of the entry, a string with a single letter.
      SCHEDULED    The scheduling timestamp, without the angular brackets.
      TAGS         The tags defined directly in the headline.
@@ -5331,6 +5331,9 @@ This dynamic block has the following parameters:
 `:skip-empty-rows'
      When set to `t', skip rows where the only non-empty specifier of
      the column view is `ITEM'.
+
+`:indent'
+     When non-`nil', indent each `ITEM' field according to its level.
 
 
 The following commands insert or update the dynamic block:
@@ -5900,9 +5903,11 @@ repeaters  `++' and `.+'.  For example:
 task.  If the repeater is set for the scheduling information only, you
 probably want the repeater to be ignored after the deadline.  If so,
 set the variable `org-agenda-skip-scheduled-if-deadline-is-shown' to
-`repeated-after-deadline'.  If you want both scheduling and deadline
-information to repeat after the same interval, set the same repeater
-for both timestamps.
+`repeated-after-deadline'.  However, any scheduling information without
+a repeater is no longer relevant once the task is done, and thus,
+removed upon repeating the task.  If you want both scheduling and
+deadline information to repeat after the same interval, set the same
+repeater for both timestamps.
 
    An alternative to using a repeater is to create a number of copies
 of a task subtree, with dates shifted in each copy.  The command `C-c
@@ -8035,13 +8040,6 @@ Filtering in the agenda
 
           (setq org-agenda-auto-exclude-function 'org-my-auto-exclude-function)
 
-`\     (`org-agenda-filter-by-tag-refine')'
-     Narrow the current agenda filter by an additional condition.  When
-     called with prefix arg, remove the entries that _do_ have the tag,
-     or that do match the effort criterion.  You can achieve the same
-     effect by pressing `+' or `-' as the first key after the `/'
-     command.
-
 `[ ] { }'
 
     in search view
@@ -8347,9 +8345,6 @@ Secondary filtering and query editing
 `/     (`org-agenda-filter-by-tag')'
      Filter the agenda view with respect to a tag and/or effort
      estimates.
-
-`\     (`org-agenda-filter-by-tag-refine')'
-     Narrow the current agenda filter by an additional condition.
 
 `<     (`org-agenda-filter-by-category')'
      Filter the current agenda view with respect to the category of the
@@ -11945,7 +11940,7 @@ Anchoring of images
 ...................
 
 You can control the manner in which an image is anchored by setting the
-`:anchor' property of it's `#+ATTR_ODT' line.  You can specify one of
+`:anchor' property of its `#+ATTR_ODT' line.  You can specify one of
 the following three values for the `:anchor' property: `"as-char"',
 `"paragraph"' and `"page"'.
 
@@ -12070,7 +12065,7 @@ a table, a LaTeX fragment or a Math formula--using `#+LABEL' and
 `#+CAPTION' lines.  *Note Images and tables::.  ODT exporter enumerates
 each labeled or captioned object of a given category separately.  As a
 result, each such object is assigned a sequence number based on order
-of it's appearance in the Org file.
+of its appearance in the Org file.
 
    In the exported document, a user-provided caption is augmented with
 the category and sequence number.  Consider the following inline image
@@ -12593,9 +12588,9 @@ File: org,  Node: Document preamble,  Next: Headings and sectioning structure,  
 When processing a document, `texinfo' back-end generates a minimal file
 header along with a title page, a copyright page, and a menu.  You
 control the latter through the structure of the document (*note
-Headings and sectioning structure::).  Various keywords allow to tweak
-the other parts.  It is also possible to give directions to install the
-document in the `Top' node.
+Headings and sectioning structure::).  Various keywords allow you to
+tweak the other parts.  It is also possible to give directions to
+install the document in the `Top' node.
 
 File header
 ...........
@@ -12648,7 +12643,7 @@ does not appear in the structure of the document.
 
        This is a short example of a complete Texinfo file, version 1.0.
 
-       Copyright \copy 2015 Free Software Foundation, Inc.
+       Copyright \copy 2016 Free Software Foundation, Inc.
 
 The Top node
 ............
@@ -18946,12 +18941,12 @@ Concept index
 * agenda:                                Weekly/daily agenda. (line   6)
 * agenda dispatcher:                     Agenda dispatcher.   (line   6)
 * agenda files:                          Agenda files.        (line   6)
-* agenda files, removing buffers:        Agenda commands.     (line 526)
+* agenda files, removing buffers:        Agenda commands.     (line 523)
 * agenda views:                          Agenda views.        (line   6)
 * agenda views, custom:                  Custom agenda views. (line   6)
 * agenda views, exporting <1>:           Exporting agenda views.
                                                               (line   6)
-* agenda views, exporting:               Agenda commands.     (line 512)
+* agenda views, exporting:               Agenda commands.     (line 509)
 * agenda views, main example:            Storing searches.    (line   9)
 * agenda views, optimization:            Speeding up your agendas.
                                                               (line   6)
@@ -19009,14 +19004,14 @@ Concept index
 * calculations, in tables <1>:           The spreadsheet.     (line   6)
 * calculations, in tables:               Built-in table editor.
                                                               (line 162)
-* calendar commands, from agenda:        Agenda commands.     (line 461)
+* calendar commands, from agenda:        Agenda commands.     (line 458)
 * calendar integration:                  Weekly/daily agenda. (line  32)
 * calendar, for selecting date:          The date/time prompt.
                                                               (line  76)
 * capture <1>:                           Capture.             (line   6)
 * capture:                               Capture - Refile - Archive.
                                                               (line   6)
-* capturing, from agenda:                Agenda commands.     (line 355)
+* capturing, from agenda:                Agenda commands.     (line 352)
 * category:                              Categories.          (line   6)
 * category filtering, in agenda:         Filtering/limiting agenda items.
                                                               (line  17)
@@ -19124,7 +19119,7 @@ Concept index
                                                               (line 132)
 * demotion, of subtrees:                 Structure editing.   (line   6)
 * dependencies, of TODO states:          TODO dependencies.   (line   6)
-* diary entries, creating from agenda:   Agenda commands.     (line 466)
+* diary entries, creating from agenda:   Agenda commands.     (line 463)
 * diary integration:                     Weekly/daily agenda. (line  32)
 * dictionary word completion:            Completion.          (line   6)
 * directories, for publishing:           Sources and destinations.
@@ -19137,7 +19132,7 @@ Concept index
 * document title, markup rules:          Document title.      (line   6)
 * Dominik, Carsten:                      Cooperation.         (line  17)
 * DONE, final TODO keyword:              Per-file keywords.   (line  26)
-* dragging, agenda lines:                Agenda commands.     (line 360)
+* dragging, agenda lines:                Agenda commands.     (line 357)
 * drawer, for properties:                Property syntax.     (line   6)
 * drawer, for state change recording:    Tracking TODO state changes.
                                                               (line   6)
@@ -19185,7 +19180,7 @@ Concept index
 * exporting:                             Exporting.           (line   6)
 * exporting agenda views <1>:            Exporting agenda views.
                                                               (line  13)
-* exporting agenda views:                Agenda commands.     (line 512)
+* exporting agenda views:                Agenda commands.     (line 509)
 * exporting, not:                        Comment lines.       (line   6)
 * extended TODO keywords:                TODO extensions.     (line   6)
 * external archiving:                    Moving subtrees.     (line   6)
@@ -19364,7 +19359,7 @@ Concept index
 * LibreOffice:                           OpenDocument Text export.
                                                               (line   6)
 * limits, in agenda:                     Filtering/limiting agenda items.
-                                                              (line 116)
+                                                              (line 109)
 * link abbreviations:                    Link abbreviations.  (line   6)
 * link abbreviations, completion of:     Completion.          (line   6)
 * link completion:                       Handling links.      (line  66)
@@ -19635,9 +19630,9 @@ Concept index
 * relative timer:                        Timers.              (line   6)
 * remember.el:                           Cooperation.         (line  42)
 * reminders:                             Weekly/daily agenda. (line 126)
-* remote editing, bulk, from agenda:     Agenda commands.     (line 371)
-* remote editing, from agenda:           Agenda commands.     (line 234)
-* remote editing, undo:                  Agenda commands.     (line 235)
+* remote editing, bulk, from agenda:     Agenda commands.     (line 368)
+* remote editing, from agenda:           Agenda commands.     (line 231)
+* remote editing, undo:                  Agenda commands.     (line 232)
 * remote references:                     References.          (line 131)
 * repeated tasks:                        Repeated tasks.      (line   6)
 * report, of clocked time:               The clock table.     (line   6)
@@ -19869,7 +19864,7 @@ Concept index
 * types as TODO keywords:                TODO types.          (line   6)
 * underlined text, markup rules:         Emphasis and monospace.
                                                               (line   6)
-* undoing remote-editing events:         Agenda commands.     (line 235)
+* undoing remote-editing events:         Agenda commands.     (line 232)
 * unison:                                Uploading files.     (line   6)
 * unoconv:                               Extending ODT export.
                                                               (line  11)
@@ -19910,22 +19905,22 @@ Key index
  [index ]
 * Menu:
 
-* $:                                     Agenda commands.     (line 269)
-* %:                                     Agenda commands.     (line 388)
+* $:                                     Agenda commands.     (line 266)
+* %:                                     Agenda commands.     (line 385)
 * ':                                     CDLaTeX mode.        (line  43)
-* *:                                     Agenda commands.     (line 373)
-* +:                                     Agenda commands.     (line 291)
-* ,:                                     Agenda commands.     (line 283)
-* -:                                     Agenda commands.     (line 296)
+* *:                                     Agenda commands.     (line 370)
+* +:                                     Agenda commands.     (line 288)
+* ,:                                     Agenda commands.     (line 280)
+* -:                                     Agenda commands.     (line 293)
 * .:                                     Agenda commands.     (line 103)
 * / <1>:                                 Agenda commands.     (line 204)
 * /:                                     Filtering/limiting agenda items.
                                                               (line  17)
-* ::                                     Agenda commands.     (line 279)
+* ::                                     Agenda commands.     (line 276)
 * ;:                                     Timers.              (line   6)
-* < <1>:                                 Agenda commands.     (line 211)
+* < <1>:                                 Agenda commands.     (line 208)
 * < <2>:                                 Filtering/limiting agenda items.
-                                                              (line  76)
+                                                              (line  69)
 * < <3>:                                 Agenda files.        (line  57)
 * < <4>:                                 The date/time prompt.
                                                               (line  82)
@@ -19950,10 +19945,10 @@ Key index
 * <TAB> <7>:                             Structure editing.   (line  42)
 * <TAB>:                                 Global and local cycling.
                                                               (line  10)
-* = <1>:                                 Agenda commands.     (line 219)
+* = <1>:                                 Agenda commands.     (line 216)
 * =:                                     Filtering/limiting agenda items.
-                                                              (line  87)
-* > <1>:                                 Agenda commands.     (line 332)
+                                                              (line  80)
+* > <1>:                                 Agenda commands.     (line 329)
 * > <2>:                                 Agenda files.        (line  61)
 * > <3>:                                 The date/time prompt.
                                                               (line  82)
@@ -19962,33 +19957,30 @@ Key index
                                                               (line  34)
 * [ <1>:                                 Agenda commands.     (line 127)
 * [:                                     Filtering/limiting agenda items.
-                                                              (line  66)
-* \ <1>:                                 Agenda commands.     (line 208)
-* \:                                     Filtering/limiting agenda items.
                                                               (line  59)
 * ]:                                     Filtering/limiting agenda items.
-                                                              (line  66)
+                                                              (line  59)
 * ^ <1>:                                 CDLaTeX mode.        (line  33)
-* ^ <2>:                                 Agenda commands.     (line 215)
+* ^ <2>:                                 Agenda commands.     (line 212)
 * ^:                                     Filtering/limiting agenda items.
-                                                              (line  83)
+                                                              (line  76)
 * _ <1>:                                 CDLaTeX mode.        (line  33)
 * _:                                     Filtering/limiting agenda items.
-                                                              (line  96)
+                                                              (line  89)
 * `:                                     CDLaTeX mode.        (line  39)
-* a:                                     Agenda commands.     (line 257)
+* a:                                     Agenda commands.     (line 254)
 * A:                                     Agenda commands.     (line  70)
 * a:                                     Using column view.   (line  59)
-* B:                                     Agenda commands.     (line 391)
+* B:                                     Agenda commands.     (line 388)
 * b:                                     Agenda commands.     (line 100)
-* C:                                     Agenda commands.     (line 494)
-* c:                                     Agenda commands.     (line 461)
+* C:                                     Agenda commands.     (line 491)
+* c:                                     Agenda commands.     (line 458)
 * C-#:                                   Advanced features.   (line  10)
 * C-':                                   Agenda files.        (line  22)
 * C-,:                                   Agenda files.        (line  22)
 * C-0 C-c C-w:                           Refile and copy.     (line  47)
 * C-<RET>:                               Structure editing.   (line  28)
-* C-_:                                   Agenda commands.     (line 235)
+* C-_:                                   Agenda commands.     (line 232)
 * C-c !:                                 Creating timestamps. (line  15)
 * C-c #:                                 Checkboxes.          (line  84)
 * C-c $:                                 Moving subtrees.     (line   9)
@@ -20073,7 +20065,7 @@ Key index
 * C-c c:                                 Conventions.         (line  35)
 * C-c c C:                               Capture templates.   (line  10)
 * C-c C-*:                               Plain lists.         (line 144)
-* C-c C-a <1>:                           Agenda commands.     (line 304)
+* C-c C-a <1>:                           Agenda commands.     (line 301)
 * C-c C-a:                               Attachments.         (line  26)
 * C-c C-a a:                             Attachments.         (line  31)
 * C-c C-a c:                             Attachments.         (line  37)
@@ -20105,7 +20097,7 @@ Key index
 * C-c C-c <8>:                           Clocking commands.   (line  51)
 * C-c C-c <9>:                           Creating timestamps. (line  26)
 * C-c C-c <10>:                          Capturing column view.
-                                                              (line  51)
+                                                              (line  54)
 * C-c C-c <11>:                          Using column view.   (line  52)
 * C-c C-c <12>:                          Property syntax.     (line  92)
 * C-c C-c <13>:                          Setting tags.        (line  20)
@@ -20120,7 +20112,7 @@ Key index
 * C-c C-c D:                             Property syntax.     (line 107)
 * C-c C-c d:                             Property syntax.     (line 104)
 * C-c C-c s:                             Property syntax.     (line  96)
-* C-c C-d <1>:                           Agenda commands.     (line 311)
+* C-c C-d <1>:                           Agenda commands.     (line 308)
 * C-c C-d:                               Inserting deadline/schedule.
                                                               (line   9)
 * C-c C-e:                               The export dispatcher.
@@ -20187,7 +20179,7 @@ Key index
                                                               (line  53)
 * C-c C-r:                               Global and local cycling.
                                                               (line  38)
-* C-c C-s <1>:                           Agenda commands.     (line 307)
+* C-c C-s <1>:                           Agenda commands.     (line 304)
 * C-c C-s:                               Inserting deadline/schedule.
                                                               (line  17)
 * C-c C-t <1>:                           Clocking commands.   (line  67)
@@ -20284,7 +20276,7 @@ Key index
                                                               (line  58)
 * C-c C-v z:                             Key bindings and useful functions.
                                                               (line  52)
-* C-c C-w <1>:                           Agenda commands.     (line 254)
+* C-c C-w <1>:                           Agenda commands.     (line 251)
 * C-c C-w <2>:                           Refile and copy.     (line  14)
 * C-c C-w <3>:                           Using capture.       (line  22)
 * C-c C-w:                               Structure editing.   (line 110)
@@ -20300,15 +20292,15 @@ Key index
 * C-c C-x \ <2>:                         Special symbols.     (line  31)
 * C-c C-x \:                             Timers.              (line  44)
 * C-c C-x _:                             Timers.              (line  47)
-* C-c C-x A:                             Agenda commands.     (line 265)
-* C-c C-x a:                             Agenda commands.     (line 262)
+* C-c C-x A:                             Agenda commands.     (line 262)
+* C-c C-x a:                             Agenda commands.     (line 259)
 * C-c C-x A:                             Internal archiving.  (line  49)
 * C-c C-x a:                             Internal archiving.  (line  36)
 * C-c C-x b <1>:                         Agenda commands.     (line  53)
 * C-c C-x b:                             Global and local cycling.
                                                               (line  55)
 * C-c C-x c:                             Structure editing.   (line 102)
-* C-c C-x C-a <1>:                       Agenda commands.     (line 257)
+* C-c C-x C-a <1>:                       Agenda commands.     (line 254)
 * C-c C-x C-a:                           Archiving.           (line  11)
 * C-c C-x C-b:                           Checkboxes.          (line  56)
 * C-c C-x C-c <1>:                       Agenda column view.  (line  11)
@@ -20326,13 +20318,13 @@ Key index
 * C-c C-x C-p:                           Handling links.      (line 152)
 * C-c C-x C-q:                           Clocking commands.   (line  71)
 * C-c C-x C-r:                           The clock table.     (line  10)
-* C-c C-x C-s <1>:                       Agenda commands.     (line 269)
+* C-c C-x C-s <1>:                       Agenda commands.     (line 266)
 * C-c C-x C-s:                           Moving subtrees.     (line   9)
 * C-c C-x C-t:                           Custom time format.  (line  12)
 * C-c C-x C-u <1>:                       Dynamic blocks.      (line  21)
 * C-c C-x C-u <2>:                       The clock table.     (line  16)
 * C-c C-x C-u:                           Capturing column view.
-                                                              (line  51)
+                                                              (line  54)
 * C-c C-x C-v:                           Handling links.      (line 133)
 * C-c C-x C-w <1>:                       Built-in table editor.
                                                               (line 136)
@@ -20347,7 +20339,7 @@ Key index
 * C-c C-x G:                             RSS feeds.           (line  27)
 * C-c C-x g:                             RSS feeds.           (line  23)
 * C-c C-x i:                             Capturing column view.
-                                                              (line  49)
+                                                              (line  52)
 * C-c C-x M-w <1>:                       Built-in table editor.
                                                               (line 132)
 * C-c C-x M-w:                           Structure editing.   (line  80)
@@ -20361,7 +20353,7 @@ Key index
                                                               (line  61)
 * C-c C-y <1>:                           Clocking commands.   (line  51)
 * C-c C-y:                               Creating timestamps. (line  59)
-* C-c C-z <1>:                           Agenda commands.     (line 299)
+* C-c C-z <1>:                           Agenda commands.     (line 296)
 * C-c C-z:                               Drawers.             (line  35)
 * C-c l <1>:                             Literal examples.    (line  81)
 * C-c l:                                 Handling links.      (line   9)
@@ -20376,12 +20368,12 @@ Key index
 * C-c }:                                 Editing and debugging formulas.
                                                               (line  26)
 * C-c ~:                                 Cooperation.         (line  63)
-* C-k:                                   Agenda commands.     (line 248)
-* C-S-<left> <1>:                        Agenda commands.     (line 246)
+* C-k:                                   Agenda commands.     (line 245)
+* C-S-<left> <1>:                        Agenda commands.     (line 243)
 * C-S-<left>:                            Multiple sets in one file.
                                                               (line  25)
 * C-S-<RET>:                             Structure editing.   (line  37)
-* C-S-<right> <1>:                       Agenda commands.     (line 243)
+* C-S-<right> <1>:                       Agenda commands.     (line 240)
 * C-S-<right>:                           Multiple sets in one file.
                                                               (line  25)
 * C-S-<up/down>:                         Clocking commands.   (line  56)
@@ -20403,7 +20395,7 @@ Key index
 * C-u C-c C-x C-u <1>:                   Dynamic blocks.      (line  22)
 * C-u C-c C-x C-u <2>:                   The clock table.     (line  20)
 * C-u C-c C-x C-u:                       Capturing column view.
-                                                              (line  55)
+                                                              (line  58)
 * C-u C-u <TAB> <1>:                     Initial visibility.  (line  25)
 * C-u C-u <TAB>:                         Global and local cycling.
                                                               (line  33)
@@ -20426,7 +20418,7 @@ Key index
                                                               (line  47)
 * C-x C-w <1>:                           Exporting agenda views.
                                                               (line  12)
-* C-x C-w:                               Agenda commands.     (line 511)
+* C-x C-w:                               Agenda commands.     (line 508)
 * C-x n b:                               Structure editing.   (line 129)
 * C-x n s:                               Structure editing.   (line 126)
 * C-x n w:                               Structure editing.   (line 132)
@@ -20440,18 +20432,18 @@ Key index
 * g:                                     Agenda commands.     (line 176)
 * G:                                     Agenda commands.     (line 165)
 * g:                                     Using column view.   (line  23)
-* H:                                     Agenda commands.     (line 498)
-* i:                                     Agenda commands.     (line 466)
-* I:                                     Agenda commands.     (line 337)
+* H:                                     Agenda commands.     (line 495)
+* i:                                     Agenda commands.     (line 463)
+* I:                                     Agenda commands.     (line 334)
 * J:                                     Agenda commands.     (line 109)
 * j:                                     Agenda commands.     (line 106)
-* k:                                     Agenda commands.     (line 350)
+* k:                                     Agenda commands.     (line 347)
 * l:                                     Agenda commands.     (line 116)
 * L:                                     Agenda commands.     (line  37)
-* M:                                     Agenda commands.     (line 485)
-* m:                                     Agenda commands.     (line 371)
-* M-*:                                   Agenda commands.     (line 385)
-* M-<down> <1>:                          Agenda commands.     (line 364)
+* M:                                     Agenda commands.     (line 482)
+* m:                                     Agenda commands.     (line 368)
+* M-*:                                   Agenda commands.     (line 382)
+* M-<down> <1>:                          Agenda commands.     (line 361)
 * M-<down> <2>:                          Editing and debugging formulas.
                                                               (line  77)
 * M-<down> <3>:                          Built-in table editor.
@@ -20476,7 +20468,7 @@ Key index
 * M-<TAB> <4>:                           Per-file keywords.   (line  23)
 * M-<TAB>:                               Editing and debugging formulas.
                                                               (line  64)
-* M-<up> <1>:                            Agenda commands.     (line 360)
+* M-<up> <1>:                            Agenda commands.     (line 357)
 * M-<up> <2>:                            Editing and debugging formulas.
                                                               (line  77)
 * M-<up> <3>:                            Built-in table editor.
@@ -20493,7 +20485,7 @@ Key index
 * M-g n:                                 Sparse trees.        (line  29)
 * M-g p:                                 Sparse trees.        (line  32)
 * M-h:                                   Structure editing.   (line  66)
-* M-m:                                   Agenda commands.     (line 382)
+* M-m:                                   Agenda commands.     (line 379)
 * M-S-<down> <1>:                        The date/time prompt.
                                                               (line  82)
 * M-S-<down> <2>:                        Editing and debugging formulas.
@@ -20540,20 +20532,20 @@ Key index
 * N:                                     Agenda commands.     (line  23)
 * n <1>:                                 Agenda commands.     (line  19)
 * n:                                     Using column view.   (line  42)
-* O:                                     Agenda commands.     (line 341)
+* O:                                     Agenda commands.     (line 338)
 * o:                                     Agenda commands.     (line  72)
 * P:                                     Agenda commands.     (line  26)
 * p <1>:                                 Agenda commands.     (line  20)
 * p:                                     Using column view.   (line  42)
-* q <1>:                                 Agenda commands.     (line 525)
+* q <1>:                                 Agenda commands.     (line 522)
 * q:                                     Using column view.   (line  26)
 * r:                                     Agenda commands.     (line 169)
 * R:                                     Agenda commands.     (line 138)
 * r <1>:                                 Global TODO list.    (line  23)
 * r:                                     Using column view.   (line  19)
-* S:                                     Agenda commands.     (line 489)
+* S:                                     Agenda commands.     (line 486)
 * s:                                     Agenda commands.     (line 179)
-* S-<down> <1>:                          Agenda commands.     (line 296)
+* S-<down> <1>:                          Agenda commands.     (line 293)
 * S-<down> <2>:                          The date/time prompt.
                                                               (line  82)
 * S-<down> <3>:                          Creating timestamps. (line  47)
@@ -20561,7 +20553,7 @@ Key index
 * S-<down> <5>:                          Editing and debugging formulas.
                                                               (line  67)
 * S-<down>:                              Plain lists.         (line  90)
-* S-<left> <1>:                          Agenda commands.     (line 328)
+* S-<left> <1>:                          Agenda commands.     (line 325)
 * S-<left> <2>:                          The clock table.     (line  24)
 * S-<left> <3>:                          The date/time prompt.
                                                               (line  82)
@@ -20576,7 +20568,7 @@ Key index
 * S-<left>:                              Plain lists.         (line 149)
 * S-<RET>:                               Built-in table editor.
                                                               (line 165)
-* S-<right> <1>:                         Agenda commands.     (line 314)
+* S-<right> <1>:                         Agenda commands.     (line 311)
 * S-<right> <2>:                         The clock table.     (line  24)
 * S-<right> <3>:                         The date/time prompt.
                                                               (line  82)
@@ -20593,7 +20585,7 @@ Key index
                                                               (line  66)
 * S-<TAB>:                               Global and local cycling.
                                                               (line  22)
-* S-<up> <1>:                            Agenda commands.     (line 291)
+* S-<up> <1>:                            Agenda commands.     (line 288)
 * S-<up> <2>:                            The date/time prompt.
                                                               (line  82)
 * S-<up> <3>:                            Creating timestamps. (line  47)
@@ -20604,10 +20596,10 @@ Key index
 * S-M-<RET>:                             TODO basics.         (line  58)
 * S-M-<right>:                           Using column view.   (line  72)
 * S-M-<up/down>:                         Clocking commands.   (line  60)
-* T:                                     Agenda commands.     (line 274)
-* t:                                     Agenda commands.     (line 239)
-* U:                                     Agenda commands.     (line 379)
-* u:                                     Agenda commands.     (line 376)
+* T:                                     Agenda commands.     (line 271)
+* t:                                     Agenda commands.     (line 236)
+* U:                                     Agenda commands.     (line 376)
+* u:                                     Agenda commands.     (line 373)
 * v:                                     Using column view.   (line  55)
 * v [:                                   Agenda commands.     (line 127)
 * v A:                                   Agenda commands.     (line 134)
@@ -20624,18 +20616,18 @@ Key index
 * v w:                                   Agenda commands.     (line  78)
 * v y:                                   Agenda commands.     (line  81)
 * w:                                     Agenda commands.     (line  78)
-* x:                                     Agenda commands.     (line 526)
-* X:                                     Agenda commands.     (line 344)
-* z:                                     Agenda commands.     (line 299)
+* x:                                     Agenda commands.     (line 523)
+* X:                                     Agenda commands.     (line 341)
+* z:                                     Agenda commands.     (line 296)
 * {:                                     Filtering/limiting agenda items.
-                                                              (line  66)
-* | <1>:                                 Agenda commands.     (line 228)
+                                                              (line  59)
+* | <1>:                                 Agenda commands.     (line 225)
 * |:                                     Filtering/limiting agenda items.
-                                                              (line 110)
+                                                              (line 103)
 * }:                                     Filtering/limiting agenda items.
-                                                              (line  66)
+                                                              (line  59)
 * ~:                                     Filtering/limiting agenda items.
-                                                              (line 152)
+                                                              (line 145)
 
 
 File: org,  Node: Command and Function Index,  Next: Variable Index,  Prev: Key Index,  Up: Top
@@ -20651,73 +20643,70 @@ Command and function index
 * next-error:                            Sparse trees.        (line  29)
 * org-agenda <1>:                        Conventions.         (line  35)
 * org-agenda:                            Activation.          (line   6)
-* org-agenda-add-note:                   Agenda commands.     (line 299)
-* org-agenda-archive:                    Agenda commands.     (line 269)
+* org-agenda-add-note:                   Agenda commands.     (line 296)
+* org-agenda-archive:                    Agenda commands.     (line 266)
 * org-agenda-archive-default-with-confirmation: Agenda commands.
-                                                              (line 257)
-* org-agenda-archive-to-archive-sibling: Agenda commands.     (line 265)
+                                                              (line 254)
+* org-agenda-archive-to-archive-sibling: Agenda commands.     (line 262)
 * org-agenda-archives-mode:              Agenda commands.     (line 131)
 * org-agenda-archives-mode 'files:       Agenda commands.     (line 134)
-* org-agenda-bulk-action:                Agenda commands.     (line 391)
-* org-agenda-bulk-mark:                  Agenda commands.     (line 371)
-* org-agenda-bulk-mark-all:              Agenda commands.     (line 373)
-* org-agenda-bulk-mark-regexp:           Agenda commands.     (line 388)
-* org-agenda-bulk-remove-all-marks:      Agenda commands.     (line 379)
-* org-agenda-bulk-toggle:                Agenda commands.     (line 382)
-* org-agenda-bulk-toggle-all:            Agenda commands.     (line 385)
-* org-agenda-bulk-unmark:                Agenda commands.     (line 376)
-* org-agenda-capture:                    Agenda commands.     (line 350)
-* org-agenda-clock-cancel:               Agenda commands.     (line 344)
+* org-agenda-bulk-action:                Agenda commands.     (line 388)
+* org-agenda-bulk-mark:                  Agenda commands.     (line 368)
+* org-agenda-bulk-mark-all:              Agenda commands.     (line 370)
+* org-agenda-bulk-mark-regexp:           Agenda commands.     (line 385)
+* org-agenda-bulk-remove-all-marks:      Agenda commands.     (line 376)
+* org-agenda-bulk-toggle:                Agenda commands.     (line 379)
+* org-agenda-bulk-toggle-all:            Agenda commands.     (line 382)
+* org-agenda-bulk-unmark:                Agenda commands.     (line 373)
+* org-agenda-capture:                    Agenda commands.     (line 347)
+* org-agenda-clock-cancel:               Agenda commands.     (line 341)
 * org-agenda-clock-goto:                 Agenda commands.     (line 109)
-* org-agenda-clock-in:                   Agenda commands.     (line 337)
-* org-agenda-clock-out:                  Agenda commands.     (line 341)
+* org-agenda-clock-in:                   Agenda commands.     (line 334)
+* org-agenda-clock-out:                  Agenda commands.     (line 338)
 * org-agenda-clockreport-mode:           Agenda commands.     (line 138)
 * org-agenda-columns <1>:                Agenda column view.  (line  11)
 * org-agenda-columns:                    Agenda commands.     (line 183)
-* org-agenda-convert-date:               Agenda commands.     (line 494)
-* org-agenda-date-prompt:                Agenda commands.     (line 332)
+* org-agenda-convert-date:               Agenda commands.     (line 491)
+* org-agenda-date-prompt:                Agenda commands.     (line 329)
 * org-agenda-day-view:                   Agenda commands.     (line  75)
-* org-agenda-deadline:                   Agenda commands.     (line 311)
-* org-agenda-diary-entry:                Agenda commands.     (line 466)
-* org-agenda-do-date-earlier:            Agenda commands.     (line 328)
-* org-agenda-do-date-later:              Agenda commands.     (line 314)
-* org-agenda-drag-line-backward:         Agenda commands.     (line 360)
-* org-agenda-drag-line-forward:          Agenda commands.     (line 364)
+* org-agenda-deadline:                   Agenda commands.     (line 308)
+* org-agenda-diary-entry:                Agenda commands.     (line 463)
+* org-agenda-do-date-earlier:            Agenda commands.     (line 325)
+* org-agenda-do-date-later:              Agenda commands.     (line 311)
+* org-agenda-drag-line-backward:         Agenda commands.     (line 357)
+* org-agenda-drag-line-forward:          Agenda commands.     (line 361)
 * org-agenda-earlier:                    Agenda commands.     (line 100)
 * org-agenda-entry-text-mode:            Agenda commands.     (line 157)
-* org-agenda-exit:                       Agenda commands.     (line 526)
+* org-agenda-exit:                       Agenda commands.     (line 523)
 * org-agenda-file-to-front:              Agenda files.        (line  15)
-* org-agenda-filter-by-category <1>:     Agenda commands.     (line 211)
+* org-agenda-filter-by-category <1>:     Agenda commands.     (line 208)
 * org-agenda-filter-by-category:         Filtering/limiting agenda items.
-                                                              (line  76)
+                                                              (line  69)
 * org-agenda-filter-by-effort:           Filtering/limiting agenda items.
-                                                              (line  96)
-* org-agenda-filter-by-regexp <1>:       Agenda commands.     (line 219)
+                                                              (line  89)
+* org-agenda-filter-by-regexp <1>:       Agenda commands.     (line 216)
 * org-agenda-filter-by-regexp:           Filtering/limiting agenda items.
-                                                              (line  87)
+                                                              (line  80)
 * org-agenda-filter-by-tag <1>:          Agenda commands.     (line 204)
 * org-agenda-filter-by-tag:              Filtering/limiting agenda items.
                                                               (line  17)
-* org-agenda-filter-by-tag-refine <1>:   Agenda commands.     (line 208)
-* org-agenda-filter-by-tag-refine:       Filtering/limiting agenda items.
-                                                              (line  59)
-* org-agenda-filter-by-top-headline <1>: Agenda commands.     (line 215)
+* org-agenda-filter-by-top-headline <1>: Agenda commands.     (line 212)
 * org-agenda-filter-by-top-headline:     Filtering/limiting agenda items.
-                                                              (line  83)
-* org-agenda-filter-remove-all <1>:      Agenda commands.     (line 228)
+                                                              (line  76)
+* org-agenda-filter-remove-all <1>:      Agenda commands.     (line 225)
 * org-agenda-filter-remove-all:          Filtering/limiting agenda items.
-                                                              (line 110)
+                                                              (line 103)
 * org-agenda-follow-mode:                Agenda commands.     (line  46)
 * org-agenda-fortnight-view:             Agenda commands.     (line  79)
 * org-agenda-goto:                       Agenda commands.     (line  40)
-* org-agenda-goto-calendar:              Agenda commands.     (line 461)
+* org-agenda-goto-calendar:              Agenda commands.     (line 458)
 * org-agenda-goto-date:                  Agenda commands.     (line 106)
 * org-agenda-goto-today:                 Agenda commands.     (line 103)
-* org-agenda-holidays:                   Agenda commands.     (line 498)
-* org-agenda-kill:                       Agenda commands.     (line 248)
+* org-agenda-holidays:                   Agenda commands.     (line 495)
+* org-agenda-kill:                       Agenda commands.     (line 245)
 * org-agenda-later:                      Agenda commands.     (line  94)
 * org-agenda-limit-interactively:        Filtering/limiting agenda items.
-                                                              (line 152)
+                                                              (line 145)
 * org-agenda-list:                       Weekly/daily agenda. (line   9)
 * org-agenda-list-stuck-projects:        Stuck projects.      (line  13)
 * org-agenda-log-mode:                   Agenda commands.     (line 116)
@@ -20726,38 +20715,38 @@ Command and function index
 * org-agenda-next-item:                  Agenda commands.     (line  23)
 * org-agenda-next-line:                  Agenda commands.     (line  19)
 * org-agenda-open-link:                  Agenda commands.     (line  62)
-* org-agenda-phases-of-moon:             Agenda commands.     (line 485)
+* org-agenda-phases-of-moon:             Agenda commands.     (line 482)
 * org-agenda-previous-item:              Agenda commands.     (line  26)
 * org-agenda-previous-line:              Agenda commands.     (line  20)
-* org-agenda-priority-down:              Agenda commands.     (line 296)
-* org-agenda-priority-up:                Agenda commands.     (line 291)
-* org-agenda-quit:                       Agenda commands.     (line 525)
+* org-agenda-priority-down:              Agenda commands.     (line 293)
+* org-agenda-priority-up:                Agenda commands.     (line 288)
+* org-agenda-quit:                       Agenda commands.     (line 522)
 * org-agenda-recenter:                   Agenda commands.     (line  37)
 * org-agenda-redo:                       Agenda commands.     (line 169)
-* org-agenda-refile:                     Agenda commands.     (line 254)
+* org-agenda-refile:                     Agenda commands.     (line 251)
 * org-agenda-remove-restriction-lock <1>: Agenda commands.    (line 194)
 * org-agenda-remove-restriction-lock:    Agenda files.        (line  49)
 * org-agenda-reset-view:                 Agenda commands.     (line  82)
-* org-agenda-schedule:                   Agenda commands.     (line 307)
+* org-agenda-schedule:                   Agenda commands.     (line 304)
 * org-agenda-set-restriction-lock:       Agenda files.        (line  42)
-* org-agenda-set-tags:                   Agenda commands.     (line 279)
+* org-agenda-set-tags:                   Agenda commands.     (line 276)
 * org-agenda-show-and-scroll-up:         Agenda commands.     (line  34)
-* org-agenda-show-priority:              Agenda commands.     (line 288)
-* org-agenda-show-tags:                  Agenda commands.     (line 274)
-* org-agenda-sunrise-sunset:             Agenda commands.     (line 489)
+* org-agenda-show-priority:              Agenda commands.     (line 285)
+* org-agenda-show-tags:                  Agenda commands.     (line 271)
+* org-agenda-sunrise-sunset:             Agenda commands.     (line 486)
 * org-agenda-switch-to:                  Agenda commands.     (line  43)
-* org-agenda-todo:                       Agenda commands.     (line 239)
-* org-agenda-todo-nextset:               Agenda commands.     (line 243)
-* org-agenda-todo-previousset:           Agenda commands.     (line 246)
-* org-agenda-toggle-archive-tag:         Agenda commands.     (line 262)
+* org-agenda-todo:                       Agenda commands.     (line 236)
+* org-agenda-todo-nextset:               Agenda commands.     (line 240)
+* org-agenda-todo-previousset:           Agenda commands.     (line 243)
+* org-agenda-toggle-archive-tag:         Agenda commands.     (line 259)
 * org-agenda-toggle-diary:               Agenda commands.     (line 112)
 * org-agenda-toggle-time-grid:           Agenda commands.     (line 165)
 * org-agenda-tree-to-indirect-buffer:    Agenda commands.     (line  53)
-* org-agenda-undo:                       Agenda commands.     (line 235)
+* org-agenda-undo:                       Agenda commands.     (line 232)
 * org-agenda-week-view:                  Agenda commands.     (line  78)
 * org-agenda-write <1>:                  Exporting agenda views.
                                                               (line  12)
-* org-agenda-write:                      Agenda commands.     (line 511)
+* org-agenda-write:                      Agenda commands.     (line 508)
 * org-agenda-year-view:                  Agenda commands.     (line  81)
 * org-archive-subtree:                   Moving subtrees.     (line   9)
 * org-archive-subtree-default:           Archiving.           (line  11)
@@ -20766,7 +20755,7 @@ Command and function index
                                                               (line  25)
 * org-ascii-export-to-ascii:             ASCII/Latin-1/UTF-8 export.
                                                               (line  21)
-* org-attach <1>:                        Agenda commands.     (line 304)
+* org-attach <1>:                        Agenda commands.     (line 301)
 * org-attach:                            Attachments.         (line  26)
 * org-attach-attach:                     Attachments.         (line  31)
 * org-attach-delete-all:                 Attachments.         (line  66)
@@ -20789,7 +20778,7 @@ Command and function index
 * org-beamer-select-environment:         Editing support.     (line  11)
 * org-buffer-property-keys:              Using the property API.
                                                               (line  35)
-* org-calendar-goto-agenda:              Agenda commands.     (line 462)
+* org-calendar-goto-agenda:              Agenda commands.     (line 459)
 * org-capture <1>:                       Using capture.       (line   6)
 * org-capture <2>:                       Conventions.         (line  35)
 * org-capture:                           Activation.          (line   6)
@@ -20842,7 +20831,7 @@ Command and function index
 * org-dblock-update <1>:                 Dynamic blocks.      (line  21)
 * org-dblock-update <2>:                 The clock table.     (line  16)
 * org-dblock-update:                     Capturing column view.
-                                                              (line  51)
+                                                              (line  54)
 * org-deadline:                          Inserting deadline/schedule.
                                                               (line   9)
 * org-delete-property:                   Property syntax.     (line 104)
@@ -20891,7 +20880,7 @@ Command and function index
 * org-icalendar-export-agenda-files:     iCalendar export.    (line  34)
 * org-icalendar-export-to-ics:           iCalendar export.    (line  32)
 * org-insert-columns-dblock:             Capturing column view.
-                                                              (line  49)
+                                                              (line  52)
 * org-insert-heading <1>:                Timers.              (line  40)
 * org-insert-heading <2>:                Plain lists.         (line  79)
 * org-insert-heading:                    Structure editing.   (line   6)
@@ -21117,7 +21106,7 @@ Command and function index
 * org-tree-to-indirect-buffer:           Global and local cycling.
                                                               (line  55)
 * org-update-all-dblocks:                Capturing column view.
-                                                              (line  55)
+                                                              (line  58)
 * org-update-statistics-cookies:         Checkboxes.          (line  84)
 * org-yank:                              Structure editing.   (line  90)
 * outline-next-visible-heading:          Motion.              (line   8)
@@ -21155,30 +21144,30 @@ org-customize <RET>' and then click yourself through the tree.
 * org-adapt-indentation:                 Clean view.          (line  46)
 * org-agenda-add-entry-text-maxlines:    Exporting agenda views.
                                                               (line  21)
-* org-agenda-bulk-custom-functions:      Agenda commands.     (line 371)
-* org-agenda-category-filter-preset <1>: Agenda commands.     (line 212)
+* org-agenda-bulk-custom-functions:      Agenda commands.     (line 368)
+* org-agenda-category-filter-preset <1>: Agenda commands.     (line 209)
 * org-agenda-category-filter-preset:     Filtering/limiting agenda items.
-                                                              (line  77)
+                                                              (line  70)
 * org-agenda-clock-consistency-checks:   Agenda commands.     (line 152)
 * org-agenda-columns-add-appointments-to-effort-sum: Effort estimates.
                                                               (line  41)
-* org-agenda-confirm-kill:               Agenda commands.     (line 251)
+* org-agenda-confirm-kill:               Agenda commands.     (line 248)
 * org-agenda-custom-commands <1>:        Extracting agenda information.
                                                               (line   6)
 * org-agenda-custom-commands <2>:        Setting options.     (line   6)
 * org-agenda-custom-commands <3>:        Storing searches.    (line   9)
 * org-agenda-custom-commands:            Sparse trees.        (line  37)
 * org-agenda-custom-commands-contexts:   Setting options.     (line  61)
-* org-agenda-diary-file:                 Agenda commands.     (line 469)
+* org-agenda-diary-file:                 Agenda commands.     (line 466)
 * org-agenda-dim-blocked-tasks <1>:      Speeding up your agendas.
                                                               (line  16)
 * org-agenda-dim-blocked-tasks:          TODO dependencies.   (line  47)
 * org-agenda-effort-filter-preset:       Filtering/limiting agenda items.
-                                                              (line  97)
+                                                              (line  90)
 * org-agenda-entry-text-maxlines:        Agenda commands.     (line 160)
 * org-agenda-exporter-settings <1>:      Exporting agenda views.
                                                               (line  13)
-* org-agenda-exporter-settings:          Agenda commands.     (line 512)
+* org-agenda-exporter-settings:          Agenda commands.     (line 509)
 * org-agenda-files <1>:                  iCalendar export.    (line  37)
 * org-agenda-files <2>:                  Sorting agenda items.
                                                               (line   8)
@@ -21188,25 +21177,25 @@ org-customize <RET>' and then click yourself through the tree.
 * org-agenda-inhibit-startup:            Initial visibility.  (line   6)
 * org-agenda-log-mode-items:             Agenda commands.     (line 119)
 * org-agenda-max-effort:                 Filtering/limiting agenda items.
-                                                              (line 116)
+                                                              (line 109)
 * org-agenda-max-entries:                Filtering/limiting agenda items.
-                                                              (line 116)
+                                                              (line 109)
 * org-agenda-max-tags:                   Filtering/limiting agenda items.
-                                                              (line 116)
+                                                              (line 109)
 * org-agenda-max-todos:                  Filtering/limiting agenda items.
-                                                              (line 116)
+                                                              (line 109)
 * org-agenda-ndays:                      Weekly/daily agenda. (line  15)
 * org-agenda-overriding-header:          Special agenda views.
                                                               (line  45)
 * org-agenda-prefix-format:              Presentation and sorting.
                                                               (line   6)
-* org-agenda-regexp-filter-preset <1>:   Agenda commands.     (line 220)
+* org-agenda-regexp-filter-preset <1>:   Agenda commands.     (line 217)
 * org-agenda-regexp-filter-preset:       Filtering/limiting agenda items.
-                                                              (line  88)
+                                                              (line  81)
 * org-agenda-restore-windows-after-quit: Agenda views.        (line  40)
 * org-agenda-show-inherited-tags <1>:    Speeding up your agendas.
                                                               (line  22)
-* org-agenda-show-inherited-tags:        Agenda commands.     (line 277)
+* org-agenda-show-inherited-tags:        Agenda commands.     (line 274)
 * org-agenda-skip-archived-trees:        Internal archiving.  (line  21)
 * org-agenda-skip-deadline-prewarning-if-scheduled: Deadlines and scheduling.
                                                               (line  12)
@@ -21257,7 +21246,7 @@ org-customize <RET>' and then click yourself through the tree.
 * org-agenda-use-time-grid:              Time-of-day specifications.
                                                               (line  41)
 * org-agenda-window-setup:               Agenda views.        (line  40)
-* org-archive-default-command <1>:       Agenda commands.     (line 260)
+* org-archive-default-command <1>:       Agenda commands.     (line 257)
 * org-archive-default-command:           Archiving.           (line  12)
 * org-archive-location <1>:              In-buffer settings.  (line  16)
 * org-archive-location:                  Moving subtrees.     (line  10)
@@ -21287,7 +21276,7 @@ org-customize <RET>' and then click yourself through the tree.
 * org-capture-bookmark:                  Using capture.       (line  50)
 * org-capture-templates-contexts:        Templates in contexts.
                                                               (line   6)
-* org-capture-use-agenda-date:           Agenda commands.     (line 355)
+* org-capture-use-agenda-date:           Agenda commands.     (line 352)
 * org-catch-invisible-edits:             Catching invisible edits.
                                                               (line   6)
 * org-checkbox-hierarchical-statistics:  Checkboxes.          (line  30)
@@ -21569,7 +21558,7 @@ org-customize <RET>' and then click yourself through the tree.
 * org-log-done <2>:                      Agenda commands.     (line 119)
 * org-log-done:                          Tracking TODO state changes.
                                                               (line  29)
-* org-log-into-drawer <1>:               Agenda commands.     (line 302)
+* org-log-into-drawer <1>:               Agenda commands.     (line 299)
 * org-log-into-drawer:                   Tracking TODO state changes.
                                                               (line   6)
 * org-log-note-clock-out <1>:            In-buffer settings.  (line 106)
@@ -21651,7 +21640,7 @@ org-customize <RET>' and then click yourself through the tree.
                                                               (line  40)
 * org-show-context-detail:               Sparse trees.        (line   6)
 * org-sort-agenda-noeffort-is-high:      Filtering/limiting agenda items.
-                                                              (line  97)
+                                                              (line  90)
 * org-sparse-tree-open-archived-trees:   Internal archiving.  (line  17)
 * org-special-ctrl-a/e:                  Headlines.           (line   6)
 * org-special-ctrl-k:                    Headlines.           (line   6)
@@ -21899,399 +21888,399 @@ Node: Tag searches203046
 Node: Properties and columns204341
 Node: Property syntax205777
 Node: Special properties210119
-Node: Property searches211776
-Node: Property inheritance213211
-Node: Column view215027
-Node: Defining columns216262
-Node: Scope of column definitions216640
-Node: Column attributes217545
-Ref: Column attributes-Footnote-1222369
-Node: Using column view222502
-Node: Capturing column view225363
-Ref: Capturing column view-Footnote-1228359
-Node: Property API228495
-Node: Dates and times228849
-Node: Timestamps229756
-Ref: Timestamps-Footnote-1232175
-Ref: Timestamps-Footnote-2232361
-Ref: Timestamps-Footnote-3232492
-Node: Creating timestamps233261
-Node: The date/time prompt236085
-Ref: The date/time prompt-Footnote-1240666
-Ref: The date/time prompt-Footnote-2240829
-Ref: The date/time prompt-Footnote-3240935
-Node: Custom time format241029
-Node: Deadlines and scheduling242751
-Ref: Deadlines and scheduling-Footnote-1246133
-Node: Inserting deadline/schedule246288
-Ref: Inserting deadline/schedule-Footnote-1248245
-Ref: Inserting deadline/schedule-Footnote-2248397
-Ref: Inserting deadline/schedule-Footnote-3248505
-Node: Repeated tasks248613
-Ref: Repeated tasks-Footnote-1252483
-Ref: Repeated tasks-Footnote-2252732
-Node: Clocking work time252931
-Ref: Clocking work time-Footnote-1254116
-Ref: Clocking work time-Footnote-2254260
-Node: Clocking commands254398
-Ref: Clocking commands-Footnote-1259345
-Ref: Clocking commands-Footnote-2259452
-Ref: Clocking commands-Footnote-3259502
-Ref: Clocking commands-Footnote-4259560
-Node: The clock table259638
-Ref: The clock table-Footnote-1267088
-Ref: The clock table-Footnote-2267182
-Node: Resolving idle time267307
-Ref: Resolving idle time-Footnote-1271154
-Node: Effort estimates271622
-Ref: Effort estimates-Footnote-1274375
-Node: Timers274482
-Node: Capture - Refile - Archive276781
-Node: Capture277771
-Node: Setting up capture278839
-Ref: Setting up capture-Footnote-1279248
-Node: Using capture279314
-Node: Capture templates281722
-Node: Template elements283683
-Ref: Template elements-Footnote-1289735
-Node: Template expansion289910
-Ref: Template expansion-Footnote-1293900
-Ref: Template expansion-Footnote-2293987
-Ref: Template expansion-Footnote-3294169
-Node: Templates in contexts294267
-Node: Attachments295089
-Ref: Attachments-Footnote-1298471
-Node: RSS feeds298621
-Node: Protocols300098
-Node: Refile and copy300813
-Ref: Refile and copy-Footnote-1303235
-Node: Archiving303331
-Node: Moving subtrees304031
-Node: Internal archiving306055
-Node: Agenda views308685
-Node: Agenda files310876
-Ref: Agenda files-Footnote-1313679
-Ref: Agenda files-Footnote-2313828
-Node: Agenda dispatcher314021
-Ref: Agenda dispatcher-Footnote-1316930
-Ref: Agenda dispatcher-Footnote-2317024
-Node: Built-in agenda views317126
-Node: Weekly/daily agenda317775
-Ref: Weekly/daily agenda-Footnote-1323509
-Ref: Weekly/daily agenda-Footnote-2323736
-Node: Global TODO list323911
-Node: Matching tags and properties326439
-Node: Timeline333427
-Node: Search view334119
-Node: Stuck projects335412
-Ref: Stuck projects-Footnote-1337472
-Node: Presentation and sorting337502
-Node: Categories338459
-Node: Time-of-day specifications339188
-Node: Sorting agenda items341157
-Node: Filtering/limiting agenda items342726
-Ref: Filtering/limiting agenda items-Footnote-1349954
-Node: Agenda commands350369
-Ref: Agenda commands-Footnote-1371890
-Ref: Agenda commands-Footnote-2371971
-Ref: Agenda commands-Footnote-3372090
-Ref: Agenda commands-Footnote-4372190
-Node: Custom agenda views372273
-Node: Storing searches372914
-Ref: Storing searches-Footnote-1375855
-Ref: Storing searches-Footnote-2375972
-Node: Block agenda376220
-Node: Setting options377458
-Node: Exporting agenda views381047
-Ref: Exporting agenda views-Footnote-1385953
-Ref: Exporting agenda views-Footnote-2386011
-Ref: Exporting agenda views-Footnote-3386167
-Ref: Exporting agenda views-Footnote-4386354
-Node: Agenda column view386436
-Node: Markup389510
-Node: Structural markup elements390542
-Node: Document title391197
-Node: Headings and sections391609
-Node: Table of contents392279
-Ref: Table of contents-Footnote-1394035
-Node: Lists394233
-Node: Paragraphs394524
-Node: Footnote markup395674
-Node: Emphasis and monospace396011
-Node: Horizontal rules396868
-Node: Comment lines397125
-Ref: Comment lines-Footnote-1397902
-Node: Images and tables398002
-Node: Literal examples399719
-Ref: Literal examples-Footnote-1403712
-Ref: Literal examples-Footnote-2404245
-Ref: Literal examples-Footnote-3404417
-Ref: Literal examples-Footnote-4404596
-Ref: Literal examples-Footnote-5404846
-Node: Include files404940
-Ref: Include files-Footnote-1407853
-Ref: Include files-Footnote-2408003
-Node: Index entries408169
-Node: Macro replacement408631
-Ref: Macro replacement-Footnote-1410588
-Node: Embedded LaTeX410818
-Ref: Embedded LaTeX-Footnote-1411782
-Node: Special symbols411972
-Ref: Special symbols-Footnote-1413573
-Node: Subscripts and superscripts413728
-Node: LaTeX fragments414833
-Ref: LaTeX fragments-Footnote-1417033
-Node: Previewing LaTeX fragments417237
-Ref: Previewing LaTeX fragments-Footnote-1418662
-Node: CDLaTeX mode418881
-Ref: CDLaTeX mode-Footnote-1421378
-Node: Special blocks421526
-Node: Exporting422464
-Node: The export dispatcher424419
-Ref: The export dispatcher-Footnote-1426459
-Node: Export back-ends426722
-Node: Export settings427632
-Ref: Export settings-Footnote-1434937
-Ref: Export settings-Footnote-2435039
-Ref: Export settings-Footnote-3435134
-Node: ASCII/Latin-1/UTF-8 export435177
-Node: Beamer export437957
-Node: Beamer export commands438680
-Node: Beamer specific export settings439355
-Node: Sectioning Frames and Blocks in Beamer441139
-Ref: Sectioning Frames and Blocks in Beamer-Footnote-1444095
-Ref: Sectioning Frames and Blocks in Beamer-Footnote-2444258
-Node: Beamer specific syntax444376
-Node: Editing support446015
-Node: A Beamer Example446446
-Node: HTML export447724
-Node: HTML Export commands448876
-Node: HTML Specific export settings449422
-Node: HTML doctypes451207
-Node: HTML preamble and postamble453454
-Node: Quoting HTML tags454502
-Node: Links in HTML export455141
-Node: Tables in HTML export456352
-Node: Images in HTML export457788
-Ref: Images in HTML export-Footnote-1459078
-Node: Math formatting in HTML export459133
-Ref: Math formatting in HTML export-Footnote-1460484
-Node: Text areas in HTML export460744
-Node: CSS support461526
-Ref: CSS support-Footnote-1464633
-Ref: CSS support-Footnote-2464805
-Node: JavaScript support465047
-Node: LaTeX and PDF export468428
-Ref: LaTeX and PDF export-Footnote-1469462
-Node: LaTeX export commands469706
-Ref: LaTeX export commands-Footnote-1470814
-Node: LaTeX specific export settings471020
-Node: Header and sectioning473192
-Ref: Header and sectioning-Footnote-1474813
-Ref: Header and sectioning-Footnote-2474925
-Node: Quoting LaTeX code475088
-Node: LaTeX specific attributes475691
-Ref: LaTeX specific attributes-Footnote-1485097
-Ref: LaTeX specific attributes-Footnote-2485175
-Ref: LaTeX specific attributes-Footnote-3485249
-Ref: LaTeX specific attributes-Footnote-4485333
-Node: Markdown export485487
-Ref: Markdown export-Footnote-1486791
-Node: OpenDocument Text export486877
-Ref: OpenDocument Text export-Footnote-1488067
-Ref: OpenDocument Text export-Footnote-2488097
-Node: Pre-requisites for ODT export488241
-Node: ODT export commands488567
-Ref: x-export-to-odt488769
-Ref: ODT export commands-Footnote-1489768
-Ref: ODT export commands-Footnote-2489828
-Node: ODT specific export settings489879
-Node: Extending ODT export490719
-Ref: x-export-to-other-formats491705
-Ref: x-convert-to-other-formats492215
-Node: Applying custom styles492672
-Node: Links in ODT export494794
-Node: Tables in ODT export495439
-Ref: Tables in ODT export-Footnote-1497573
-Node: Images in ODT export497666
-Ref: Images in ODT export-Footnote-1500391
-Node: Math formatting in ODT export500624
-Node: Working with LaTeX math snippets501086
-Ref: Working with LaTeX math snippets-Footnote-1503252
-Ref: Working with LaTeX math snippets-Footnote-2503328
-Node: Working with MathML or OpenDocument formula files503373
-Node: Labels and captions in ODT export503927
-Node: Literal examples in ODT export505384
-Ref: Literal examples in ODT export-Footnote-1506285
-Node: Advanced topics in ODT export506396
-Node: Configuring a document converter507150
-Ref: x-odt-converter-capabilities507922
-Node: Working with OpenDocument style files508503
-Ref: x-factory-styles508979
-Ref: x-orgodtstyles-xml509217
-Ref: x-orgodtcontenttemplate-xml509544
-Ref: x-overriding-factory-styles510200
-Ref: x-org-odt-styles-file510480
-Ref: x-org-odt-content-template-file511361
-Node: Creating one-off styles511502
-Node: Customizing tables in ODT export513723
-Ref: Customizing tables in ODT export-Footnote-1518700
-Ref: Customizing tables in ODT export-Footnote-2518804
-Ref: Customizing tables in ODT export-Footnote-3518892
-Node: Validating OpenDocument XML519207
-Ref: Validating OpenDocument XML-Footnote-1520206
-Node: Org export520258
-Node: Texinfo export521022
-Node: Texinfo export commands521711
-Ref: Texinfo export commands-Footnote-1522246
-Node: Texinfo specific export settings522354
-Node: Document preamble523456
-Ref: Document preamble-Footnote-1526741
-Node: Headings and sectioning structure526803
-Node: Indices528257
-Node: Quoting Texinfo code529050
-Node: Texinfo specific attributes529540
-Ref: Texinfo specific attributes-Footnote-1531062
-Node: An example531128
-Node: iCalendar export533119
-Ref: iCalendar export-Footnote-1535851
-Ref: iCalendar export-Footnote-2535941
-Ref: iCalendar export-Footnote-3536041
-Node: Other built-in back-ends536178
-Node: Export in foreign buffers536771
-Node: Advanced configuration537761
-Node: Publishing544703
-Node: Configuration545571
-Node: Project alist546334
-Node: Sources and destinations547475
-Node: Selecting files548993
-Node: Publishing action549994
-Ref: Publishing action-Footnote-1551823
-Node: Publishing options551980
-Node: Publishing links564877
-Node: Sitemap565844
-Node: Generating an index569063
-Node: Uploading files569650
-Node: Sample configuration571414
-Node: Simple example571903
-Node: Complex example572550
-Node: Triggering publication574601
-Node: Working with source code575597
-Node: Structure of code blocks577289
-Ref: Structure of code blocks-Footnote-1579122
-Node: Editing source code579216
-Node: Exporting code blocks581350
-Node: Extracting source code583851
-Node: Evaluating code blocks586086
-Ref: Evaluating code blocks-Footnote-1589520
-Ref: Evaluating code blocks-Footnote-2589817
-Node: Library of Babel589943
-Node: Languages590916
-Node: Header arguments593349
-Node: Using header arguments593834
-Node: System-wide header arguments594864
-Node: Language-specific header arguments595671
-Node: Header arguments in Org mode properties596180
-Ref: Header arguments in Org mode properties-Footnote-1597909
-Node: Language-specific header arguments in Org mode properties598181
-Node: Code block specific header arguments599197
-Node: Header arguments in function calls601043
-Node: Specific header arguments601792
-Node: var604566
-Node: results611357
-Node: file616210
-Node: file-desc617122
-Node: file-ext617592
-Node: output-dir618090
-Node: dir618628
-Node: exports621563
-Node: tangle622301
-Node: mkdirp623112
-Node: comments623445
-Node: padline624580
-Node: no-expand625112
-Node: session625751
-Node: noweb626786
-Node: noweb-ref628963
-Ref: noweb-ref-Footnote-1630429
-Node: noweb-sep630558
-Node: cache630852
-Ref: cache-Footnote-1633623
-Node: sep634053
-Node: hlines634625
-Node: colnames636127
-Node: rownames637430
-Node: shebang638605
-Node: tangle-mode639008
-Node: eval639759
-Node: wrap640797
-Node: post641237
-Node: prologue643129
-Node: epilogue643701
-Node: Results of evaluation643956
-Node: Noweb reference syntax647724
-Node: Key bindings and useful functions649375
-Node: Batch execution652120
-Node: Miscellaneous653154
-Node: Completion653983
-Node: Easy templates655937
-Node: Speed keys657355
-Node: Code evaluation security658179
-Node: Customization660889
-Node: In-buffer settings661484
-Ref: In-buffer settings-Footnote-1671224
-Node: The very busy C-c C-c key671272
-Node: Clean view673256
-Ref: Clean view-Footnote-1677241
-Ref: Clean view-Footnote-2677302
-Ref: Clean view-Footnote-3677486
-Ref: Clean view-Footnote-4677547
-Ref: Clean view-Footnote-5677659
-Ref: Clean view-Footnote-6677714
-Node: TTY keys677839
-Node: Interaction679605
-Node: Cooperation679999
-Node: Conflicts683777
-Node: org-crypt688746
-Node: Hacking690057
-Node: Hooks691043
-Node: Add-on packages691443
-Node: Adding hyperlink types691997
-Node: Adding export back-ends695917
-Node: Context-sensitive commands697275
-Ref: Context-sensitive commands-Footnote-1698852
-Node: Tables in arbitrary syntax698986
-Node: Radio tables700398
-Node: A LaTeX example702985
-Ref: A LaTeX example-Footnote-1706977
-Ref: A LaTeX example-Footnote-2707134
-Node: Translator functions707569
-Node: Radio lists710000
-Node: Dynamic blocks711357
-Node: Special agenda views713555
-Ref: x-agenda-skip-entry-regexp717018
-Ref: Special agenda views-Footnote-1717821
-Ref: Special agenda views-Footnote-2718016
-Node: Speeding up your agendas718151
-Node: Extracting agenda information719254
-Node: Using the property API723332
-Node: Using the mapping API726702
-Node: MobileOrg731124
-Node: Setting up the staging area732818
-Ref: Setting up the staging area-Footnote-1733899
-Ref: Setting up the staging area-Footnote-2734200
-Node: Pushing to MobileOrg734462
-Ref: Pushing to MobileOrg-Footnote-1735462
-Ref: Pushing to MobileOrg-Footnote-2735549
-Ref: Pushing to MobileOrg-Footnote-3735965
-Node: Pulling from MobileOrg736036
-Ref: Pulling from MobileOrg-Footnote-1738457
-Ref: Pulling from MobileOrg-Footnote-2738517
-Node: History and acknowledgments738892
-Node: GNU Free Documentation License754047
-Node: Main Index779237
-Node: Key Index868630
-Node: Command and Function Index921219
-Node: Variable Index956244
+Node: Property searches211764
+Node: Property inheritance213199
+Node: Column view215015
+Node: Defining columns216250
+Node: Scope of column definitions216628
+Node: Column attributes217533
+Ref: Column attributes-Footnote-1222357
+Node: Using column view222490
+Node: Capturing column view225351
+Ref: Capturing column view-Footnote-1228428
+Node: Property API228564
+Node: Dates and times228918
+Node: Timestamps229825
+Ref: Timestamps-Footnote-1232244
+Ref: Timestamps-Footnote-2232430
+Ref: Timestamps-Footnote-3232561
+Node: Creating timestamps233330
+Node: The date/time prompt236154
+Ref: The date/time prompt-Footnote-1240735
+Ref: The date/time prompt-Footnote-2240898
+Ref: The date/time prompt-Footnote-3241004
+Node: Custom time format241098
+Node: Deadlines and scheduling242820
+Ref: Deadlines and scheduling-Footnote-1246202
+Node: Inserting deadline/schedule246357
+Ref: Inserting deadline/schedule-Footnote-1248314
+Ref: Inserting deadline/schedule-Footnote-2248466
+Ref: Inserting deadline/schedule-Footnote-3248574
+Node: Repeated tasks248682
+Ref: Repeated tasks-Footnote-1252696
+Ref: Repeated tasks-Footnote-2252945
+Node: Clocking work time253144
+Ref: Clocking work time-Footnote-1254329
+Ref: Clocking work time-Footnote-2254473
+Node: Clocking commands254611
+Ref: Clocking commands-Footnote-1259558
+Ref: Clocking commands-Footnote-2259665
+Ref: Clocking commands-Footnote-3259715
+Ref: Clocking commands-Footnote-4259773
+Node: The clock table259851
+Ref: The clock table-Footnote-1267301
+Ref: The clock table-Footnote-2267395
+Node: Resolving idle time267520
+Ref: Resolving idle time-Footnote-1271367
+Node: Effort estimates271835
+Ref: Effort estimates-Footnote-1274588
+Node: Timers274695
+Node: Capture - Refile - Archive276994
+Node: Capture277984
+Node: Setting up capture279052
+Ref: Setting up capture-Footnote-1279461
+Node: Using capture279527
+Node: Capture templates281935
+Node: Template elements283896
+Ref: Template elements-Footnote-1289948
+Node: Template expansion290123
+Ref: Template expansion-Footnote-1294113
+Ref: Template expansion-Footnote-2294200
+Ref: Template expansion-Footnote-3294382
+Node: Templates in contexts294480
+Node: Attachments295302
+Ref: Attachments-Footnote-1298684
+Node: RSS feeds298834
+Node: Protocols300311
+Node: Refile and copy301026
+Ref: Refile and copy-Footnote-1303448
+Node: Archiving303544
+Node: Moving subtrees304244
+Node: Internal archiving306268
+Node: Agenda views308898
+Node: Agenda files311089
+Ref: Agenda files-Footnote-1313892
+Ref: Agenda files-Footnote-2314041
+Node: Agenda dispatcher314234
+Ref: Agenda dispatcher-Footnote-1317143
+Ref: Agenda dispatcher-Footnote-2317237
+Node: Built-in agenda views317339
+Node: Weekly/daily agenda317988
+Ref: Weekly/daily agenda-Footnote-1323722
+Ref: Weekly/daily agenda-Footnote-2323949
+Node: Global TODO list324124
+Node: Matching tags and properties326652
+Node: Timeline333640
+Node: Search view334332
+Node: Stuck projects335625
+Ref: Stuck projects-Footnote-1337685
+Node: Presentation and sorting337715
+Node: Categories338672
+Node: Time-of-day specifications339401
+Node: Sorting agenda items341370
+Node: Filtering/limiting agenda items342939
+Ref: Filtering/limiting agenda items-Footnote-1349828
+Node: Agenda commands350243
+Ref: Agenda commands-Footnote-1371653
+Ref: Agenda commands-Footnote-2371734
+Ref: Agenda commands-Footnote-3371853
+Ref: Agenda commands-Footnote-4371953
+Node: Custom agenda views372036
+Node: Storing searches372677
+Ref: Storing searches-Footnote-1375618
+Ref: Storing searches-Footnote-2375735
+Node: Block agenda375983
+Node: Setting options377221
+Node: Exporting agenda views380810
+Ref: Exporting agenda views-Footnote-1385716
+Ref: Exporting agenda views-Footnote-2385774
+Ref: Exporting agenda views-Footnote-3385930
+Ref: Exporting agenda views-Footnote-4386117
+Node: Agenda column view386199
+Node: Markup389273
+Node: Structural markup elements390305
+Node: Document title390960
+Node: Headings and sections391372
+Node: Table of contents392042
+Ref: Table of contents-Footnote-1393798
+Node: Lists393996
+Node: Paragraphs394287
+Node: Footnote markup395437
+Node: Emphasis and monospace395774
+Node: Horizontal rules396631
+Node: Comment lines396888
+Ref: Comment lines-Footnote-1397665
+Node: Images and tables397765
+Node: Literal examples399482
+Ref: Literal examples-Footnote-1403475
+Ref: Literal examples-Footnote-2404008
+Ref: Literal examples-Footnote-3404180
+Ref: Literal examples-Footnote-4404359
+Ref: Literal examples-Footnote-5404609
+Node: Include files404703
+Ref: Include files-Footnote-1407616
+Ref: Include files-Footnote-2407766
+Node: Index entries407932
+Node: Macro replacement408394
+Ref: Macro replacement-Footnote-1410351
+Node: Embedded LaTeX410581
+Ref: Embedded LaTeX-Footnote-1411545
+Node: Special symbols411735
+Ref: Special symbols-Footnote-1413336
+Node: Subscripts and superscripts413491
+Node: LaTeX fragments414596
+Ref: LaTeX fragments-Footnote-1416796
+Node: Previewing LaTeX fragments417000
+Ref: Previewing LaTeX fragments-Footnote-1418425
+Node: CDLaTeX mode418644
+Ref: CDLaTeX mode-Footnote-1421141
+Node: Special blocks421289
+Node: Exporting422227
+Node: The export dispatcher424182
+Ref: The export dispatcher-Footnote-1426222
+Node: Export back-ends426485
+Node: Export settings427395
+Ref: Export settings-Footnote-1434700
+Ref: Export settings-Footnote-2434802
+Ref: Export settings-Footnote-3434897
+Node: ASCII/Latin-1/UTF-8 export434940
+Node: Beamer export437720
+Node: Beamer export commands438443
+Node: Beamer specific export settings439118
+Node: Sectioning Frames and Blocks in Beamer440902
+Ref: Sectioning Frames and Blocks in Beamer-Footnote-1443858
+Ref: Sectioning Frames and Blocks in Beamer-Footnote-2444021
+Node: Beamer specific syntax444139
+Node: Editing support445778
+Node: A Beamer Example446209
+Node: HTML export447487
+Node: HTML Export commands448639
+Node: HTML Specific export settings449185
+Node: HTML doctypes450970
+Node: HTML preamble and postamble453217
+Node: Quoting HTML tags454265
+Node: Links in HTML export454904
+Node: Tables in HTML export456115
+Node: Images in HTML export457551
+Ref: Images in HTML export-Footnote-1458841
+Node: Math formatting in HTML export458896
+Ref: Math formatting in HTML export-Footnote-1460247
+Node: Text areas in HTML export460507
+Node: CSS support461289
+Ref: CSS support-Footnote-1464396
+Ref: CSS support-Footnote-2464568
+Node: JavaScript support464810
+Node: LaTeX and PDF export468191
+Ref: LaTeX and PDF export-Footnote-1469225
+Node: LaTeX export commands469469
+Ref: LaTeX export commands-Footnote-1470577
+Node: LaTeX specific export settings470783
+Node: Header and sectioning472955
+Ref: Header and sectioning-Footnote-1474576
+Ref: Header and sectioning-Footnote-2474688
+Node: Quoting LaTeX code474851
+Node: LaTeX specific attributes475454
+Ref: LaTeX specific attributes-Footnote-1484860
+Ref: LaTeX specific attributes-Footnote-2484938
+Ref: LaTeX specific attributes-Footnote-3485012
+Ref: LaTeX specific attributes-Footnote-4485096
+Node: Markdown export485250
+Ref: Markdown export-Footnote-1486554
+Node: OpenDocument Text export486640
+Ref: OpenDocument Text export-Footnote-1487830
+Ref: OpenDocument Text export-Footnote-2487860
+Node: Pre-requisites for ODT export488004
+Node: ODT export commands488330
+Ref: x-export-to-odt488532
+Ref: ODT export commands-Footnote-1489531
+Ref: ODT export commands-Footnote-2489591
+Node: ODT specific export settings489642
+Node: Extending ODT export490482
+Ref: x-export-to-other-formats491468
+Ref: x-convert-to-other-formats491978
+Node: Applying custom styles492435
+Node: Links in ODT export494557
+Node: Tables in ODT export495202
+Ref: Tables in ODT export-Footnote-1497336
+Node: Images in ODT export497429
+Ref: Images in ODT export-Footnote-1500153
+Node: Math formatting in ODT export500386
+Node: Working with LaTeX math snippets500848
+Ref: Working with LaTeX math snippets-Footnote-1503014
+Ref: Working with LaTeX math snippets-Footnote-2503090
+Node: Working with MathML or OpenDocument formula files503135
+Node: Labels and captions in ODT export503689
+Node: Literal examples in ODT export505145
+Ref: Literal examples in ODT export-Footnote-1506046
+Node: Advanced topics in ODT export506157
+Node: Configuring a document converter506911
+Ref: x-odt-converter-capabilities507683
+Node: Working with OpenDocument style files508264
+Ref: x-factory-styles508740
+Ref: x-orgodtstyles-xml508978
+Ref: x-orgodtcontenttemplate-xml509305
+Ref: x-overriding-factory-styles509961
+Ref: x-org-odt-styles-file510241
+Ref: x-org-odt-content-template-file511122
+Node: Creating one-off styles511263
+Node: Customizing tables in ODT export513484
+Ref: Customizing tables in ODT export-Footnote-1518461
+Ref: Customizing tables in ODT export-Footnote-2518565
+Ref: Customizing tables in ODT export-Footnote-3518653
+Node: Validating OpenDocument XML518968
+Ref: Validating OpenDocument XML-Footnote-1519967
+Node: Org export520019
+Node: Texinfo export520783
+Node: Texinfo export commands521472
+Ref: Texinfo export commands-Footnote-1522007
+Node: Texinfo specific export settings522115
+Node: Document preamble523217
+Ref: Document preamble-Footnote-1526506
+Node: Headings and sectioning structure526568
+Node: Indices528022
+Node: Quoting Texinfo code528815
+Node: Texinfo specific attributes529305
+Ref: Texinfo specific attributes-Footnote-1530827
+Node: An example530893
+Node: iCalendar export532884
+Ref: iCalendar export-Footnote-1535616
+Ref: iCalendar export-Footnote-2535706
+Ref: iCalendar export-Footnote-3535806
+Node: Other built-in back-ends535943
+Node: Export in foreign buffers536536
+Node: Advanced configuration537526
+Node: Publishing544468
+Node: Configuration545336
+Node: Project alist546099
+Node: Sources and destinations547240
+Node: Selecting files548758
+Node: Publishing action549759
+Ref: Publishing action-Footnote-1551588
+Node: Publishing options551745
+Node: Publishing links564642
+Node: Sitemap565609
+Node: Generating an index568828
+Node: Uploading files569415
+Node: Sample configuration571179
+Node: Simple example571668
+Node: Complex example572315
+Node: Triggering publication574366
+Node: Working with source code575362
+Node: Structure of code blocks577054
+Ref: Structure of code blocks-Footnote-1578887
+Node: Editing source code578981
+Node: Exporting code blocks581115
+Node: Extracting source code583616
+Node: Evaluating code blocks585851
+Ref: Evaluating code blocks-Footnote-1589285
+Ref: Evaluating code blocks-Footnote-2589582
+Node: Library of Babel589708
+Node: Languages590681
+Node: Header arguments593114
+Node: Using header arguments593599
+Node: System-wide header arguments594629
+Node: Language-specific header arguments595436
+Node: Header arguments in Org mode properties595945
+Ref: Header arguments in Org mode properties-Footnote-1597674
+Node: Language-specific header arguments in Org mode properties597946
+Node: Code block specific header arguments598962
+Node: Header arguments in function calls600808
+Node: Specific header arguments601557
+Node: var604331
+Node: results611122
+Node: file615975
+Node: file-desc616887
+Node: file-ext617357
+Node: output-dir617855
+Node: dir618393
+Node: exports621328
+Node: tangle622066
+Node: mkdirp622877
+Node: comments623210
+Node: padline624345
+Node: no-expand624877
+Node: session625516
+Node: noweb626551
+Node: noweb-ref628728
+Ref: noweb-ref-Footnote-1630194
+Node: noweb-sep630323
+Node: cache630617
+Ref: cache-Footnote-1633388
+Node: sep633818
+Node: hlines634390
+Node: colnames635892
+Node: rownames637195
+Node: shebang638370
+Node: tangle-mode638773
+Node: eval639524
+Node: wrap640562
+Node: post641002
+Node: prologue642894
+Node: epilogue643466
+Node: Results of evaluation643721
+Node: Noweb reference syntax647489
+Node: Key bindings and useful functions649140
+Node: Batch execution651885
+Node: Miscellaneous652919
+Node: Completion653748
+Node: Easy templates655702
+Node: Speed keys657120
+Node: Code evaluation security657944
+Node: Customization660654
+Node: In-buffer settings661249
+Ref: In-buffer settings-Footnote-1670989
+Node: The very busy C-c C-c key671037
+Node: Clean view673021
+Ref: Clean view-Footnote-1677006
+Ref: Clean view-Footnote-2677067
+Ref: Clean view-Footnote-3677251
+Ref: Clean view-Footnote-4677312
+Ref: Clean view-Footnote-5677424
+Ref: Clean view-Footnote-6677479
+Node: TTY keys677604
+Node: Interaction679370
+Node: Cooperation679764
+Node: Conflicts683542
+Node: org-crypt688511
+Node: Hacking689822
+Node: Hooks690808
+Node: Add-on packages691208
+Node: Adding hyperlink types691762
+Node: Adding export back-ends695682
+Node: Context-sensitive commands697040
+Ref: Context-sensitive commands-Footnote-1698617
+Node: Tables in arbitrary syntax698751
+Node: Radio tables700163
+Node: A LaTeX example702750
+Ref: A LaTeX example-Footnote-1706742
+Ref: A LaTeX example-Footnote-2706899
+Node: Translator functions707334
+Node: Radio lists709765
+Node: Dynamic blocks711122
+Node: Special agenda views713320
+Ref: x-agenda-skip-entry-regexp716783
+Ref: Special agenda views-Footnote-1717586
+Ref: Special agenda views-Footnote-2717781
+Node: Speeding up your agendas717916
+Node: Extracting agenda information719019
+Node: Using the property API723097
+Node: Using the mapping API726467
+Node: MobileOrg730889
+Node: Setting up the staging area732583
+Ref: Setting up the staging area-Footnote-1733664
+Ref: Setting up the staging area-Footnote-2733965
+Node: Pushing to MobileOrg734227
+Ref: Pushing to MobileOrg-Footnote-1735227
+Ref: Pushing to MobileOrg-Footnote-2735314
+Ref: Pushing to MobileOrg-Footnote-3735730
+Node: Pulling from MobileOrg735801
+Ref: Pulling from MobileOrg-Footnote-1738222
+Ref: Pulling from MobileOrg-Footnote-2738282
+Node: History and acknowledgments738657
+Node: GNU Free Documentation License753812
+Node: Main Index779002
+Node: Key Index868395
+Node: Command and Function Index920764
+Node: Variable Index955569
 
 End Tag Table

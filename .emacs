@@ -20,6 +20,8 @@
 (add-to-list 'load-path "~/.emacs.d/ctable")
 (add-to-list 'load-path "~/.emacs.d/dash")
 (add-to-list 'load-path "~/.emacs.d/tabbar")
+(add-to-list 'load-path "~/.emacs.d/seq")
+(add-to-list 'load-path "~/.emacs.d/emacs-buttercup")
 
 ;; Missing cl-lib function
 (defun cl--set-getf (plist tag val)

@@ -1,4 +1,4 @@
-;;; org-feed.el --- Add RSS feed items to Org files
+;;; org-feed.el --- Add RSS feed items to Org files  -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (C) 2009-2016 Free Software Foundation, Inc.
 ;;
@@ -24,11 +24,11 @@
 ;;
 ;;; Commentary:
 ;;
-;;  This module allows to create and change entries in an Org-mode
-;;  file triggered by items in an RSS feed.  The basic functionality is
-;;  geared toward simply adding new items found in a feed as outline nodes
-;;  to an Org file.  Using hooks, arbitrary actions can be triggered for
-;;  new or changed items.
+;;  This module allows entries to be created and changed in an Org mode
+;;  file triggered by items in an RSS feed.  The basic functionality
+;;  is geared toward simply adding new items found in a feed as
+;;  outline nodes to an Org file.  Using hooks, arbitrary actions can
+;;  be triggered for new or changed items.
 ;;
 ;;  Selecting feeds and target locations
 ;;  ------------------------------------
@@ -77,10 +77,8 @@
 ;;  org-feed.el needs to keep track of which feed items have been handled
 ;;  before, so that they will not be handled again.  For this, org-feed.el
 ;;  stores information in a special drawer, FEEDSTATUS, under the heading
-;;  that received the input of the feed.  You should add FEEDSTATUS
-;;  to your list of drawers in the files that receive feed input:
+;;  that received the input of the feed.
 ;;
-;;       #+DRAWERS: PROPERTIES CLOCK LOGBOOK RESULTS FEEDSTATUS
 ;;
 ;;  Acknowledgments
 ;;  ---------------
@@ -101,8 +99,8 @@
 (declare-function xml-substitute-special "xml" (string))
 
 (declare-function org-capture-escaped-% "org-capture" ())
+(declare-function org-capture-expand-embedded-elisp "org-capture" (&optional mark))
 (declare-function org-capture-inside-embedded-elisp-p "org-capture" ())
-(declare-function org-capture-expand-embedded-elisp "org-capture" ())
 
 (defgroup org-feed  nil
   "Options concerning RSS feeds as inputs for Org files."
@@ -314,7 +312,7 @@ it can be a list structured like an entry in `org-feed-alist'."
 	  (parse-entry (or (nth 1 (memq :parse-entry feed))
 			   'org-feed-parse-rss-entry))
 	  feed-buffer inbox-pos new-formatted
-	  entries old-status status new changed guid-alist e guid olds)
+	  entries old-status status new changed guid-alist guid olds)
       (setq feed-buffer (org-feed-get-feed url))
       (unless (and feed-buffer (bufferp (get-buffer feed-buffer)))
 	(error "Cannot get feed %s" name))
@@ -476,8 +474,7 @@ This will find DRAWER and extract the alist."
   "Write the feed STATUS to DRAWER in entry at POS."
   (save-excursion
     (goto-char pos)
-    (let ((end (save-excursion (org-end-of-subtree t t)))
-	  guid)
+    (let ((end (save-excursion (org-end-of-subtree t t))))
       (if (re-search-forward (concat "^[ \t]*:" drawer ":[ \t]*\n")
 			     end t)
 	  (progn
@@ -536,33 +533,40 @@ If that property is already present, nothing changes."
         ;; Mark %() embedded elisp for later evaluation.
         (org-capture-expand-embedded-elisp 'mark)
 
-        ;; Simple %-escapes
+        ;; Simple %-escapes.  `org-capture-escaped-%' may modify
+	;; buffer and cripple match-data.  Use markers instead.
         (while (re-search-forward "%\\([a-zA-Z]+\\)" nil t)
-          (unless (org-capture-escaped-%)
-            (let ((replacement
-                   (pcase (match-string-no-properties 1)
-                     ("h" v-h)
-                     ("t" v-t)
-                     ("T" v-T)
-                     ("u" v-u)
-                     ("U" v-U)
-                     ("a" v-a)
-                     (name
-                      (let ((v (plist-get entry (intern (concat ":" name)))))
-                        (save-excursion
-                          (save-match-data
-                            (beginning-of-line)
-                            (if (looking-at
-                                 (concat "^\\([ \t]*\\)%" name "[ \t]*$"))
-                                (org-feed-make-indented-block
-				 v (org-get-indentation))
-			      v))))))))
-	      (when replacement
-		(replace-match
-		 ;; Escape string delimiters within embedded lisp.
-		 (if (org-capture-inside-embedded-elisp-p)
-		     (replace-regexp-in-string "\"" "\\\\\"" replacement nil t)
-		   replacement))))))
+          (let ((key (match-string 1))
+		(beg (copy-marker (match-beginning 0)))
+		(end (copy-marker (match-end 0))))
+	    (unless (org-capture-escaped-%)
+	      (delete-region beg end)
+	      (set-marker beg nil)
+	      (set-marker end nil)
+	      (let ((replacement
+		     (pcase key
+		       ("h" v-h)
+		       ("t" v-t)
+		       ("T" v-T)
+		       ("u" v-u)
+		       ("U" v-U)
+		       ("a" v-a)
+		       (name
+			(let ((v (plist-get entry (intern (concat ":" name)))))
+			  (save-excursion
+			    (save-match-data
+			      (beginning-of-line)
+			      (if (looking-at
+				   (concat "^\\([ \t]*\\)%" name "[ \t]*$"))
+				  (org-feed-make-indented-block
+				   v (org-get-indentation))
+				v))))))))
+		(when replacement
+		  (insert
+		   ;; Escape string delimiters within embedded lisp.
+		   (if (org-capture-inside-embedded-elisp-p)
+		       (replace-regexp-in-string "\"" "\\\\\"" replacement)
+		     replacement)))))))
 
         ;; %() embedded elisp
         (org-capture-expand-embedded-elisp)

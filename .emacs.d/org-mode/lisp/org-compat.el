@@ -1,6 +1,6 @@
 ;;; org-compat.el --- Compatibility code for Org-mode
 
-;; Copyright (C) 2004-2015 Free Software Foundation, Inc.
+;; Copyright (C) 2004-2016 Free Software Foundation, Inc.
 
 ;; Author: Carsten Dominik <carsten at orgmode dot org>
 ;; Keywords: outlines, hypermedia, calendar, wp
@@ -333,7 +333,9 @@ Works on both Emacs and XEmacs."
 Pass COLUMN and FORCE to `move-to-column'.
 Pass BUFFER to the XEmacs version of `move-to-column'."
   (let ((buffer-invisibility-spec
-	 (remove '(org-filtered) buffer-invisibility-spec)))
+	 (if (listp buffer-invisibility-spec)
+	     (remove '(org-filtered) buffer-invisibility-spec)
+	   buffer-invisibility-spec)))
     (if (featurep 'xemacs)
 	(org-xemacs-without-invisibility
 	 (move-to-column column force buffer))
@@ -409,8 +411,10 @@ Pass BUFFER to the XEmacs version of `move-to-column'."
   (defalias 'format-message 'format))
 
 ;; `font-lock-ensure' is only available from 24.4.50 on
-(unless (fboundp 'font-lock-ensure)
-  (defalias 'font-lock-ensure 'font-lock-fontify-buffer))
+(defalias 'org-font-lock-ensure
+  (if (fboundp 'font-lock-ensure)
+      #'font-lock-ensure
+    (lambda (&optional _beg _end) (font-lock-fontify-buffer))))
 
 (defmacro org-no-popups (&rest body)
   "Suppress popup windows.

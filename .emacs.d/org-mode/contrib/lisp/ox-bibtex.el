@@ -159,9 +159,7 @@ to `org-bibtex-citation-p' predicate."
 (defun org-bibtex-goto-citation (&optional citation)
   "Visit a citation given its ID."
   (interactive)
-  (let ((citation (or citation
-		      (org-icompleting-read "Citation: "
-					    (obe-citations)))))
+  (let ((citation (or citation (completing-read "Citation: " (obe-citations)))))
     (find-file (or org-bibtex-file
 		   (error "`org-bibtex-file' has not been configured")))
     (goto-char (point-min))
@@ -248,6 +246,7 @@ Return new parse tree."
 		(insert (format "<div id=\"bibliography\">\n<h2>%s</h2>\n"
 				(org-export-translate "References" :html info)))
 		(insert-file-contents (concat out-file ".html"))
+		(goto-char (point-max))
 		(insert "\n</div>"))
 	       ((org-export-derived-backend-p backend 'ascii)
 		;; convert HTML references to text w/pandoc

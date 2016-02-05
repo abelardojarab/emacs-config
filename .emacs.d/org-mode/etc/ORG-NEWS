@@ -3,7 +3,7 @@ ORG NEWS -- history of user-visible changes.           -*- org -*-
 #+LINK: doc http://orgmode.org/worg/doc.html#%s
 #+LINK: git http://orgmode.org/cgit.cgi/org-mode.git/commit/?id=%s
 
-Copyright (C) 2012-2015 Free Software Foundation, Inc.
+Copyright (C) 2012-2016 Free Software Foundation, Inc.
 See the end of the file for license conditions.
 
 Please send Org bug reports to mailto:emacs-orgmode@gnu.org.
@@ -94,6 +94,17 @@ consider using =footnote.el= library, shipped with Emacs.
 
 In particular, ~org-footnote-tag-for-non-org-mode-files~ no longer
 exists.
+*** ~org-file-apps~ no longer accepts S-expressions as commands
+The variable now accepts functions of two arguments instead of plain
+S-expressions.  Replacing a S-expresion with an appropriate function
+is straightforward.  For example
+
+: ("pdf" . (foo))
+
+becomes
+
+: ("pdf" . (lambda (file link) (foo)))
+
 ** New features
 *** New org-protocol key=value syntax
 
@@ -169,6 +180,11 @@ for details.
 *** org-bbdb-anniversaries-future
 Used like org-bbdb-anniversaries, it provides a few days warning
 for upcoming anniversaries (default: 7 days).
+*** Clear non-repeated SCHEDULED upon repeating a task
+If the task is repeated, and therefore done at least one, scheduling
+information is no longer relevant.  It is therefore removed.
+
+See [[git:481719fbd5751aaa9c672b762cb43aea8ee986b0][commit message]] for more information.
 *** Support for ISO week trees
 ISO week trees are an alternative date tree format that orders entries
 by ISO week and not by month.
@@ -182,20 +198,32 @@ For example:
 
 They are supported in org-capture via ~file+weektree~ and
 ~file+weektree+prompt~ target specifications.
+*** Attributes support in custom language environments for LaTeX export 
+Custom language environments for LaTeX export can now define the
+string to be inserted during export, using attributes to indicate the
+position of the elements. See variable ~org-latex-custom-lang-environments~
+for more details.
+*** Accept ~:indent~ parameter when capturing column view
+When defining a "columnview" dynamic block, it is now possible to add
+an :indent parameter, much like the one in the clock table.
+
+On the other hand, stars no longer appear in an ITEM field.
 ** New functions
+*** ~org-next-line-empty-p~
+It replaces the deprecated ~next~ argument to ~org-previous-line-empty-p~.
 *** ~org-show-children~ 
 It is a faster implementation of ~outline-show-children~.
 
-*** ~org-next-line-empty-p~
-It replaces the deprecated ~next~ argument to ~org-previous-line-empty-p~.
 ** Removed functions
+*** ~org-agenda-filter-by-tag-refine~ has been removed.
+Use ~org-agenda-filter-by-tag~ instead.
 *** ~org-agenda-todayp~ is deprecated.
 Use ~org-agenda-today-p~ instead.
-*** ~org-element-remove-indentation~ is deprecated.
-Use ~org-remove-indentation~ instead.
 *** ~org-babel-get-header~ is removed.
 Use ~org-babel--get-vars~ or ~assq~ instead, as applicable.
 
+*** ~org-element-remove-indentation~ is deprecated.
+Use ~org-remove-indentation~ instead.
 *** ~org-image-file-name-regexp~ is deprecated
 Use ~image-file-name-regexp~ instead.
 The never-used-in-core ~extensions~ argument has been dropped.
@@ -205,6 +233,12 @@ Use ~org-list-to-lisp~ instead.
 *** ~org-on-heading-p~ is deprecated
 A comment to this effect was in the source code since 7.8.03, but
 now a byte-compiler warning will be generated as well.
+
+*** ~org-table-p~ is deprecated
+Use ~org-at-table-p~ instead.
+
+*** ~org-table-recognize-table.el~ is deprecated
+It was not called by any org code since 2010.
 
 *** Various reimplementations of cl-lib functions are deprecated
 The affected functions are:
@@ -219,13 +253,11 @@ Additionally, ~org-sublist~ is deprecated in favor of ~cl-subseq~.  Note
 the differences in indexing conventions: ~org-sublist~ is 1-based and
 end-inclusive; ~cl-subseq~ is 0-based and end-exclusive.
 
-*** ~org-table-recognize-table.el~ is deprecated
-It was not called by any org code since 2010.
-
-*** ~org-table-p~ is deprecated
-Use ~org-at-table-p~ instead.
-
 ** Removed options
+*** Remove all options related to ~ido~ or ~iswitchb~
+This includes ~org-completion-use-iswitchb~ and ~org-completion-use-ido~.
+Instead Org uses regular functions, e.g., ~completion-read~ so as to
+let those libraries operate.
 *** Remove ~org-list-empty-line-terminates-plain-lists~
 Two consecutive blank lines always terminate all levels of current
 plain list.
@@ -233,10 +265,12 @@ plain list.
 fixltx2e is obsolete, see LaTeX News 22.
 ** Miscellaneous
 *** Beamer export back-ends uses ~org-latex-prefer-user-labels~
+
 *** ~:preparation-function~ called earlier during publishing
 Functions in this list are called before any file is associated to the
 current projet.  Thus, they can be used to generate to be published
 Org files.
+
 *** Function ~org-remove-indentation~ changes.
 The new algorithm doesn't remove TAB characters not used for
 indentation.
@@ -252,12 +286,20 @@ Note that only ~%(...)~ placeholders initially present in the
 template, or introduced using a file placeholder, i.e., ~%[...]~ are
 expanded.  This prevents evaluating potentially malicious code when
 another placeholder, e.g., ~%i~ expands to a S-exp.
+
 *** Links stored by ~org-gnus-store-link~ in nnir groups
 Since gnus nnir groups are temporary, ~org-gnus-store-link~ now refers
 to the article's original group.
+
 *** ~org-babel-check-confirm-evaluate~ is now a function instead of a macro
 The calling convention has changed.
+*** HTML export table row customization changes
+Variable ~org-html-table-row-tags~ has been split into
+~org-html-table-row-open-tag~ and ~org-html-table-row-close-tag~.
+Both new variables can be either a string or a function which will be
+called with 6 parameters.
 
+*** =ITEM= special property returns headline without stars
 * Version 8.3
 
 ** Incompatible changes

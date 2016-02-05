@@ -1,6 +1,6 @@
 ;;; markdown-mode.el --- Emacs Major mode for Markdown-formatted text files
 
-;; Copyright (C) 2007-2015 Jason R. Blevins <jrblevin@sdf.org>
+;; Copyright (C) 2007-2016 Jason R. Blevins <jrblevin@sdf.org>
 ;; Copyright (C) 2007, 2009 Edward O'Connor <ted@oconnor.cx>
 ;; Copyright (C) 2007 Conal Elliott <conal@conal.net>
 ;; Copyright (C) 2008 Greg Bognar <greg_bognar@hms.harvard.edu>
@@ -24,11 +24,15 @@
 ;; Copyright (C) 2013 Matus Goljer <dota.keys@gmail.com>
 ;; Copyright (C) 2015 Google, Inc. (Contributor: Samuel Freilich <sfreilich@google.com>)
 ;; Copyright (C) 2015 Antonis Kanouras <antonis@metadosis.gr>
+;; Copyright (C) 2015 Howard Melman <hmelman@gmail.com>
+;; Copyright (C) 2015-2016 Danny McClanahan <danieldmcclanahan@gmail.com>
+;; Copyright (C) 2015-2016 Syohei Yoshida <syohex@gmail.com>
 
 ;; Author: Jason R. Blevins <jrblevin@sdf.org>
 ;; Maintainer: Jason R. Blevins <jrblevin@sdf.org>
 ;; Created: May 24, 2007
-;; Version: 2.0
+;; Version: 2.1
+;; Package-Requires: ((cl-lib "0.5"))
 ;; Keywords: Markdown, GitHub Flavored Markdown, itex
 ;; URL: http://jblevins.org/projects/markdown-mode/
 
@@ -57,48 +61,51 @@
 ;;
 ;;  [Markdown]: http://daringfireball.net/projects/markdown/
 ;;
-;; The latest stable version is markdown-mode 2.0, released on March 24, 2013:
+;; The latest stable version is markdown-mode 2.1, released on January 9, 2016:
 ;;
 ;;    * [markdown-mode.el][]
 ;;    * [Screenshot][][^theme]
 ;;    * [Release notes][]
 ;;
 ;;  [markdown-mode.el]: http://jblevins.org/projects/markdown-mode/markdown-mode.el
-;;  [Screenshot]: http://jblevins.org/projects/markdown-mode/screenshots/20130131-002.png
-;;  [Release notes]: http://jblevins.org/projects/markdown-mode/rev-2-0
+;;  [Screenshot]: http://jblevins.org/projects/markdown-mode/screenshots/20160108-001.png
+;;  [Release notes]: http://jblevins.org/projects/markdown-mode/rev-2-1
 ;;
 ;; [^theme]: The theme used in the screenshot is
 ;;     [color-theme-twilight](https://github.com/crafterm/twilight-emacs).
 ;;
+;; The latest development version can be obtained from the Git
+;; repository at <http://jblevins.org/git/markdown-mode.git> or from
+;; [GitHub][]:
+;;
+;;     git clone git://jblevins.org/git/markdown-mode.git
+;;     git clone https://github.com/jrblevin/markdown-mode.git
+;;
+;; [![Build Status][status]][travis]
+;;
+;;  [devel.el]: http://jblevins.org/git/markdown-mode.git/plain/markdown-mode.el
+;;  [GitHub]: https://github.com/jrblevin/markdown-mode/
+;;  [travis]: https://travis-ci.org/jrblevin/markdown-mode
+;;  [status]: https://travis-ci.org/jrblevin/markdown-mode.svg?branch=master
+;;
 ;; markdown-mode is also available in several package managers, including:
 ;;
-;;    * Debian Linux: [emacs-goodies-el][]
-;;    * Ubuntu Linux: [emacs-goodies-el][emacs-goodies-el-ubuntu]
+;;    * Debian Linux: [elpa-markdown-mode][] and [emacs-goodies-el][]
+;;    * Ubuntu Linux: [elpa-markdown-mode][elpa-ubuntu] and [emacs-goodies-el][emacs-goodies-el-ubuntu]
 ;;    * RedHat and Fedora Linux: [emacs-goodies][]
 ;;    * NetBSD: [textproc/markdown-mode][]
-;;    * Arch Linux (AUR): [emacs-markdown-mode-git][]
 ;;    * MacPorts: [markdown-mode.el][macports-package] ([pending][macports-ticket])
 ;;    * FreeBSD: [textproc/markdown-mode.el][freebsd-port]
 ;;
+;;  [elpa-markdown-mode]: https://packages.debian.org/sid/lisp/elpa-markdown-mode
+;;  [elpa-ubuntu]: http://packages.ubuntu.com/search?keywords=elpa-markdown-mode
 ;;  [emacs-goodies-el]: http://packages.debian.org/emacs-goodies-el
 ;;  [emacs-goodies-el-ubuntu]: http://packages.ubuntu.com/search?keywords=emacs-goodies-el
 ;;  [emacs-goodies]: https://apps.fedoraproject.org/packages/emacs-goodies
 ;;  [textproc/markdown-mode]: http://pkgsrc.se/textproc/markdown-mode
-;;  [emacs-markdown-mode-git]: https://aur.archlinux.org/packages/emacs-goodies-el/
 ;;  [macports-package]: https://trac.macports.org/browser/trunk/dports/editors/markdown-mode.el/Portfile
 ;;  [macports-ticket]: http://trac.macports.org/ticket/35716
 ;;  [freebsd-port]: http://svnweb.freebsd.org/ports/head/textproc/markdown-mode.el
-;;
-;; The latest development version can be downloaded directly
-;; ([markdown-mode.el][devel.el]) or it can be obtained from the
-;; (browsable and clonable) Git repository at
-;; <http://jblevins.org/git/markdown-mode.git>.  The entire repository,
-;; including the full project history, can be cloned via the Git protocol
-;; by running
-;;
-;;     git clone git://jblevins.org/git/markdown-mode.git
-;;
-;;  [devel.el]: http://jblevins.org/git/markdown-mode.git/plain/markdown-mode.el
 
 ;;; Installation:
 
@@ -115,6 +122,10 @@
 ;; There is no official Markdown file extension, nor is there even a
 ;; _de facto_ standard, so you can easily add, change, or remove any
 ;; of the file extensions above as needed.
+;;
+;; `markdown-mode' depends on `cl-lib', which has been bundled with
+;; GNU Emacs since 24.3.  Users of GNU Emacs 24.1 and 24.2 can install
+;; `cl-lib' with `package.el'.
 
 ;;; Usage:
 
@@ -196,8 +207,9 @@
 ;;     the word italic.  If the point is at an italic word or phrase,
 ;;     remove the italic markup.  Otherwise, simply insert italic
 ;;     delimiters and place the cursor in between them.  Similarly,
-;;     use `C-c C-s s` for bold (`<strong>`) and `C-c C-s c` for
-;;     inline code (`<code>`).
+;;     use `C-c C-s s` for bold (`<strong>`), `C-c C-s c` for
+;;     inline code (`<code>`), and `C-c C-s k` for inserting `<kbd>`
+;;     tags.
 ;;
 ;;     `C-c C-s b` inserts a blockquote using the active region, if any,
 ;;     or starts a new blockquote.  `C-c C-s C-b` is a variation which
@@ -256,10 +268,14 @@
 ;;     and save the result in the file `basename.html`, where
 ;;     `basename` is the name of the Markdown file with the extension
 ;;     removed.  *Export and View:* press `C-c C-c v` to export the
-;;     file and view it in a browser.  **For both export commands, the
-;;     output file will be overwritten without notice.**
-;;     *Open:* `C-c C-c o` will open the Markdown source file directly
-;;     using `markdown-open-command'.
+;;     file and view it in a browser.  *Open:* `C-c C-c o` will open
+;;     the Markdown source file directly using `markdown-open-command'.
+;;     *Live Export*: Press `C-c C-c l` to turn on
+;;     `markdown-live-preview-mode' to view the exported output
+;;     side-by-side with the source Markdown. **For all export commands,
+;;     the output file will be overwritten without notice.**
+;;     `markdown-live-preview-window-function' can be customized to open
+;;     in a browser other than `eww'.
 ;;
 ;;     To summarize:
 ;;
@@ -269,6 +285,7 @@
 ;;       - `C-c C-c v`: `markdown-command' > `basename.html` > browser.
 ;;       - `C-c C-c w`: `markdown-command' > kill ring.
 ;;       - `C-c C-c o`: `markdown-open-command'.
+;;       - `C-c C-c l`: `markdown-live-preview-mode' > `*eww*` buffer.
 ;;
 ;;     `C-c C-c c` will check for undefined references.  If there are
 ;;     any, a small buffer will open with a list of undefined
@@ -292,9 +309,9 @@
 ;;     or in the other window with the `C-u` prefix).  Use `M-p` and
 ;;     `M-n` to quickly jump to the previous or next link of any type.
 ;;
-;;   * Jumping: `C-c C-j`
+;;   * Jumping: `C-c C-l`
 ;;
-;;     Use `C-c C-j` to jump from the object at point to its counterpart
+;;     Use `C-c C-l` to jump from the object at point to its counterpart
 ;;     elsewhere in the text, when possible.  Jumps between reference
 ;;     links and definitions; between footnote markers and footnote
 ;;     text.  If more than one link uses the same reference name, a
@@ -333,8 +350,8 @@
 ;;
 ;;   * Editing Lists: `M-RET`, `M-UP`, `M-DOWN`, `M-LEFT`, and `M-RIGHT`
 ;;
-;;     New list items can be inserted with `M-RET`.  This command
-;;     determines the appropriate marker (one of the possible
+;;     New list items can be inserted with `M-RET` or `C-c C-j`.  This
+;;     command determines the appropriate marker (one of the possible
 ;;     unordered list markers or the next number in sequence for an
 ;;     ordered list) and indentation level by examining nearby list
 ;;     items.  If there is no list before or after the point, start a
@@ -484,10 +501,19 @@
 ;;     demotion, keep these sorted from largest to smallest.
 ;;
 ;;   * `markdown-bold-underscore' - set to a non-nil value to use two
-;;     underscores for bold instead of two asterisks (default: `nil').
+;;     underscores when inserting bold text instead of two asterisks
+;;     (default: `nil').
 ;;
 ;;   * `markdown-italic-underscore' - set to a non-nil value to use
-;;     underscores for italic instead of asterisks (default: `nil').
+;;     underscores when inserting italic text instead of asterisks
+;;     (default: `nil').
+;;
+;;   * `markdown-asymmetric-header' - set to a non-nil value to use
+;;     asymmetric header styling, placing header characters only on
+;;     the left of headers (default: `nil').
+;;
+;;   * `markdown-list-indent-width' - depth of indentation for lists
+;;     when inserting, promoting, and demoting list items (default: 4).
 ;;
 ;;   * `markdown-indent-function' - the function to use for automatic
 ;;     indentation (default: `markdown-indent-line').
@@ -553,14 +579,11 @@
 ;;     (default: `end`).  The set of location options is the same as
 ;;     for `markdown-reference-location'.
 ;;
-;;   * `markdown-font-lock-support-mode' - the variable
-;;     `font-lock-support-mode' is made buffer-local and set to
-;;     `markdown-font-lock-support-mode', which is `jit-mode' by
-;;     default. This is currently the default support mode in Emacs as
-;;     well.  However, if fontification of multi-line constructs such
-;;     as preformatted code blocks, nested lists, and so on is
-;;     inaccurate, setting this to `nil' will allow more aggressive
-;;     fontification at the expense of some performance.
+;;   * `markdown-nested-imenu-heading-index' - Use nested imenu
+;;     heading instead of a flat index (default: `nil').  A nested
+;;     index may provide more natural browsing from the menu, but a
+;;     flat list may allow for faster keyboard navigation via tab
+;;     completion.
 ;;
 ;;   * `comment-auto-fill-only-comments' - variable is made
 ;;     buffer-local and set to `nil' by default.  In programming
@@ -570,6 +593,23 @@
 ;;     for the actual content of the document to be filled.  Making
 ;;     this variable buffer-local allows `markdown-mode' to override
 ;;     the default behavior induced when the global variable is non-nil.
+;;
+;;   * `markdown-gfm-additional-languages', - additional languages to
+;;     make available, aside from those predefined in
+;;     `markdown-gfm-recognized-languages', when inserting GFM code
+;;     blocks (default: `nil`). Language strings must have be trimmed
+;;     of whitespace and not contain any curly braces. They may be of
+;;     arbitrary capitalization, though.
+;;
+;;   * `markdown-gfm-use-electric-backquote' - use
+;;     `markdown-electric-backquote' for interactive insertion of GFM
+;;     code blocks when backquote is pressed three times (default: `t`).
+;;
+;;   * `markdown-make-gfm-checkboxes-buttons' - Whether GitHub
+;;     Flavored Markdown style task lists (checkboxes) should be
+;;     turned into buttons that can be toggled with mouse-1 or RET. If
+;;     non-nil (default), then buttons are enabled.  This works in
+;;     `markdown-mode' as well as `gfm-mode'.
 ;;
 ;; Additionally, the faces used for syntax highlighting can be modified to
 ;; your liking by issuing `M-x customize-group RET markdown-faces`
@@ -588,7 +628,12 @@
 ;; Aliased or piped wiki links of the form `[[link text|PageName]]`
 ;; are also supported.  Since some wikis reverse these components, set
 ;; `markdown-wiki-link-alias-first' to nil to treat them as
-;; `[[PageName|link text]]`.
+;; `[[PageName|link text]]`.  By default, Markdown Mode only searches
+;; for target files in the current directory.  Sequential parent
+;; directory search (as in [Ikiwiki][]) can be enabled by setting
+;; `markdown-wiki-link-search-parent-directories' to a non-nil value.
+;;
+;; [Ikiwiki]: https://ikiwiki.info
 ;;
 ;; [SmartyPants][] support is possible by customizing `markdown-command'.
 ;; If you install `SmartyPants.pl` at, say, `/usr/local/bin/smartypants`,
@@ -596,10 +641,7 @@
 ;; You can do this either by using `M-x customize-group markdown`
 ;; or by placing the following in your `.emacs` file:
 ;;
-;;     (defun markdown-custom ()
-;;       "markdown-mode-hook"
-;;       (setq markdown-command "markdown | smartypants"))
-;;     (add-hook 'markdown-mode-hook '(lambda() (markdown-custom)))
+;;     (setq markdown-command "markdown | smartypants")
 ;;
 ;; [SmartyPants]: http://daringfireball.net/projects/smartypants/
 ;;
@@ -610,39 +652,82 @@
 ;; in `.emacs`, and then restarting Emacs or calling
 ;; `markdown-reload-extensions'.
 
-;;; GitHub Flavored Markdown:
+;;; GitHub Flavored Markdown (GFM):
 
-;; A [GitHub Flavored Markdown][GFM] (GFM) mode, `gfm-mode', is also
-;; available.  The GitHub implementation of differs slightly from
-;; standard Markdown.  The most important differences are that
-;; newlines are significant, triggering hard line breaks, and that
-;; underscores inside of words (e.g., variable names) need not be
-;; escaped.  As such, `gfm-mode' turns off `auto-fill-mode' and turns
-;; on `visual-line-mode' (or `longlines-mode' if `visual-line-mode' is
-;; not available).  Underscores inside of words (such as
-;; test_variable) will not trigger emphasis.
+;; A [GitHub Flavored Markdown][GFM] mode, `gfm-mode', is also
+;; available.  The GitHub implementation differs slightly from
+;; standard Markdown in that it supports things like different
+;; behavior for underscores inside of words, automatic linking of
+;; URLs, strikethrough text, and fenced code blocks with an optional
+;; language keyword.
 ;;
-;; Wiki links in this mode will be treated as on GitHub, with hyphens
-;; replacing spaces in filenames and where the first letter of the
-;; filename capitalized.  For example, `[[wiki link]]' will map to a
-;; file named `Wiki-link` with the same extension as the current file.
+;; The GFM-specific features above apply to `README.md` files, wiki
+;; pages, and other Markdown-formatted files in repositories on
+;; GitHub.  GitHub also enables [additional features][GFM comments] for
+;; writing on the site (for issues, pull requests, messages, etc.)
+;; that are further extensions of GFM.  These features include task
+;; lists (checkboxes), newlines corresponding to hard line breaks,
+;; auto-linked references to issues and commits, wiki links, and so
+;; on.  To make matters more confusing, although task lists are not
+;; part of [GFM proper][GFM], [since 2014][] they are rendered (in a
+;; read-only fashion) in all Markdown documents in repositories on the
+;; site.  These additional extensions are supported to varying degrees
+;; by `markdown-mode' and `gfm-mode' as described below.
 ;;
-;; GFM code blocks, with optional programming language keywords, will
-;; be highlighted.  They can be inserted with `C-c C-s P`.  If there
-;; is an active region, the text in the region will be placed inside
-;; the code block.  You will be prompted for the name of the language,
-;; but may press enter to continue without naming a language.
+;; * **URL autolinking:** Both `markdown-mode' and `gfm-mode' support
+;;   highlighting of URLs without angle brackets.
 ;;
-;; Similarly, strike through text is supoorted in GFM mode and can be
-;; inserted (and toggled) using `C-c C-s d`. Following the mnemonics
-;; for the other style keybindings, the letter `d` coincides with the
-;; HTML tag `<del>`.
+;; * **Multiple underscores in words:** You must enable `gfm-mode' to
+;;   toggle support for underscores inside of words. In this mode
+;;   variable names such as `a_test_variable` will not trigger
+;;   emphasis (italics).
 ;;
-;; For GFM preview can be powered by setting `markdown-command' to
-;; use [Docter][].  This may also be configured to work with [Marked 2][]
-;; for `markdown-open-command'.
+;; * **Fenced code blocks:** Code blocks quoted with backticks, with
+;;   optional programming language keywords, are highlighted in
+;;   both `markdown-mode' and `gfm-mode'.  They can be inserted with
+;;   `C-c C-s P`.  If there is an active region, the text in the
+;;   region will be placed inside the code block.  You will be
+;;   prompted for the name of the language, but may press enter to
+;;   continue without naming a language.
+;;
+;; * **Strikethrough:** Strikethrough text is only supported in
+;;   `gfm-mode' and can be inserted (and toggled) using `C-c C-s d`.
+;;   Following the mnemonics for the other style keybindings, the
+;;   letter `d` coincides with the HTML tag `<del>`.
+;;
+;; * **Task lists:** GFM task lists will be rendered as checkboxes
+;;   (Emacs buttons) in both `markdown-mode' and `gfm-mode' when
+;;   `markdown-make-gfm-checkboxes-buttons' is set to a non-nil value
+;;   (and it is set to t by default).  These checkboxes can be
+;;   toggled by clicking `mouse-1` or pressing `RET` over the button.
+;;
+;; * **Wiki links:** Generic wiki links are supported in
+;;   `markdown-mode', but in `gfm-mode' specifically they will be
+;;   treated as they are on GitHub: spaces will be replaced by hyphens
+;;   in filenames and the first letter of the filename will be
+;;   capitalized.  For example, `[[wiki link]]' will map to a file
+;;   named `Wiki-link` with the same extension as the current file.
+;;
+;; * **Newlines:** Neither `markdown-mode' nor `gfm-mode' do anything
+;;   specifically with respect to newline behavior.  If you use
+;;   `gfm-mode' mostly to write text for comments or issues on the
+;;   GitHub site--where newlines are significant and correspond to
+;;   hard line breaks--then you may want to enable `visual-line-mode'
+;;   for line wrapping in buffers.  You can do this with a
+;;   `gfm-mode-hook' as follows:
+;;
+;;         ;; Use visual-line-mode in gfm-mode
+;;         (defun my-gfm-mode-hook ()
+;;           (visual-line-mode 1))
+;;         (add-hook 'gfm-mode-hook 'my-gfm-mode-hook)
+;;
+;; * **Preview:** GFM-specific preview can be powered by setting
+;;   `markdown-command' to use [Docter][].  This may also be
+;;   configured to work with [Marked 2][] for `markdown-open-command'.
 ;;
 ;; [GFM]: http://github.github.com/github-flavored-markdown/
+;; [GFM comments]: https://help.github.com/articles/writing-on-github/
+;; [since 2014]: https://github.com/blog/1825-task-lists-in-all-markdown-documents
 ;; [Docter]: https://github.com/alampros/Docter
 
 ;;; Acknowledgments:
@@ -726,7 +811,7 @@
 ;;     behavior regarding list items, footnotes, and reference
 ;;     definitions, improved killing of footnotes, and numerous other
 ;;     tests and bug fixes.
-;;   * Antonis Kanouras <antonis@metadosis.gr> for strike through support.
+;;   * Antonis Kanouras <antonis@metadosis.gr> for strikethrough support.
 ;;   * Tim Visher <tim.visher@gmail.com> for multiple CSS files and other
 ;;     general improvements.
 ;;   * Matt McClure <matthewlmcclure@gmail.com> for a patch to prevent
@@ -734,15 +819,20 @@
 ;;   * Roger Bolsius <roger.bolsius@gmail.com> for ordered list improvements.
 ;;   * Google's Open Source Programs Office for recognizing the project with
 ;;     a monetary contribution in June 2015.
+;;   * Howard Melman <hmelman@gmail.com> for supporting GFM checkboxes
+;;     as buttons.
+;;   * Danny McClanahan <danieldmcclanahan@gmail.com> for live preview mode,
+;;     completion of GFM programming language names, and `cl-lib' updates.
+;;   * Syohei Yoshida <syohex@gmail.com> for better heading detection
+;;     and movement functions, improved italic font lock, and fixing adaptive
+;;     filling for hanging list items.
 
 ;;; Bugs:
 
-;; Although markdown-mode is developed and tested primarily using
-;; GNU Emacs 24, compatibility with earlier Emacsen is also a
-;; priority.
-;;
-;; If you find any bugs in markdown-mode, please construct a test case
-;; or a patch and open a ticket on the [GitHub issue tracker][issues].
+;; markdown-mode is developed and tested primarily for compatibility
+;; with GNU Emacs 24.3 and later.  If you find any bugs in
+;; markdown-mode, please construct a test case or a patch and open a
+;; ticket on the [GitHub issue tracker][issues].
 ;;
 ;;  [issues]: https://github.com/jrblevin/markdown-mode/issues
 
@@ -762,6 +852,7 @@
 ;;   * 2011-08-15: [Version 1.8.1][]
 ;;   * 2013-01-25: [Version 1.9][]
 ;;   * 2013-03-24: [Version 2.0][]
+;;   * 2016-01-09: [Version 2.1][]
 ;;
 ;; [Version 1.3]: http://jblevins.org/projects/markdown-mode/rev-1-3
 ;; [Version 1.5]: http://jblevins.org/projects/markdown-mode/rev-1-5
@@ -771,6 +862,7 @@
 ;; [Version 1.8.1]: http://jblevins.org/projects/markdown-mode/rev-1-8-1
 ;; [Version 1.9]: http://jblevins.org/projects/markdown-mode/rev-1-9
 ;; [Version 2.0]: http://jblevins.org/projects/markdown-mode/rev-2-0
+;; [Version 2.1]: http://jblevins.org/projects/markdown-mode/rev-2-1
 
 
 ;;; Code:
@@ -778,12 +870,14 @@
 (require 'easymenu)
 (require 'outline)
 (require 'thingatpt)
-(eval-when-compile (require 'cl))
+(require 'cl-lib)
+
+(declare-function eww-open-file "eww")
 
 
 ;;; Constants =================================================================
 
-(defconst markdown-mode-version "2.0"
+(defconst markdown-mode-version "2.1"
   "Markdown mode version number.")
 
 (defconst markdown-output-buffer-name "*markdown-output*"
@@ -794,6 +888,12 @@
 
 (defvar markdown-reference-label-history nil
   "History of used reference labels.")
+
+(defvar markdown-live-preview-mode nil
+  "Sentinel variable for `markdown-live-preview-mode'.")
+
+(defvar markdown-gfm-language-history nil
+  "History list of languages used in the current buffer in GFM code blocks.")
 
 
 ;;; Customizable Variables ====================================================
@@ -853,12 +953,20 @@ promotion and demotion functions."
   :type 'list)
 
 (defcustom markdown-bold-underscore nil
-  "Use two underscores for bold instead of two asterisks."
+  "Use two underscores when inserting bold text instead of two asterisks."
   :group 'markdown
   :type 'boolean)
 
 (defcustom markdown-italic-underscore nil
-  "Use underscores for italic instead of asterisks."
+  "Use underscores when inserting italic text instead of asterisks."
+  :group 'markdown
+  :type 'boolean)
+
+(defcustom markdown-asymmetric-header nil
+  "Determines if header style will be asymmetric.
+Set to non-nil to only have header characters to the left of the title.
+The default will ensure header characters are placed to the left and right
+of the title."
   :group 'markdown
   :type 'boolean)
 
@@ -880,7 +988,15 @@ auto-indentation by pressing \\[newline-and-indent]."
   "When non-nil, treat aliased wiki links like [[alias text|PageName]].
 Otherwise, they will be treated as [[PageName|alias text]]."
   :group 'markdown
-  :type 'boolean)
+  :type 'boolean
+  :safe 'booleanp)
+
+(defcustom markdown-wiki-link-search-parent-directories nil
+  "When non-nil, search for wiki link targets in parent directories.
+This is the default search behavior of Ikiwiki."
+  :group 'markdown
+  :type 'boolean
+  :safe 'booleanp)
 
 (defcustom markdown-uri-types
   '("acap" "cid" "data" "dav" "fax" "file" "ftp" "gopher" "http" "https"
@@ -954,16 +1070,503 @@ and `iso-latin-1'.  Use `list-coding-systems' for more choices."
   :group 'markdown
   :type 'string)
 
-(defcustom markdown-font-lock-support-mode 'jit-lock-mode
-  "Support modes speed up Font Lock by being selective about when
-fontification occurs. Because Markdown has many multline
-constructions by nature, `markdown-mode' is aggressive about Font
-Lock by default. If fontification is inaccurate, try setting this
-to `nil' instead. See `font-lock-support-mode' for more details."
-  :type '(choice (const :tag "none" nil)
-		 (const :tag "fast lock" fast-lock-mode)
-		 (const :tag "lazy lock" lazy-lock-mode)
-		 (const :tag "jit lock" jit-lock-mode)))
+(defcustom markdown-nested-imenu-heading-index nil
+  "Use nested or flat imenu heading index.
+A nested index may provide more natural browsing from the menu,
+but a flat list may allow for faster keyboard navigation via tab
+completion."
+  :group 'markdown
+  :type 'boolean)
+
+(defcustom markdown-make-gfm-checkboxes-buttons t
+  "When non-nil, make GFM checkboxes into buttons."
+  :group 'markdown
+  :type 'boolean)
+
+(defcustom markdown-live-preview-window-function
+  'markdown-live-preview-window-eww
+  "Function to display preview of Markdown output within Emacs. Function must
+update the buffer containing the preview and return the buffer."
+  :group 'markdown
+  :type 'function)
+
+(defcustom markdown-live-preview-delete-export 'delete-on-destroy
+  "Delete exported html file when using `markdown-live-preview-export' on every
+export by setting to 'delete-on-export, when quitting
+`markdown-live-preview-mode' by setting to 'delete-on-destroy, or not at all
+when nil."
+  :group 'markdown
+  :type 'symbol)
+
+(defcustom markdown-list-indent-width 4
+  "Depth of indentation for markdown lists. Used in `markdown-demote-list-item'
+and `markdown-promote-list-item'."
+  :group 'markdown
+  :type 'integer)
+
+(defcustom markdown-gfm-additional-languages nil
+  "Additional languages to make available when inserting GFM code
+blocks. Language strings must have be trimmed of whitespace and not contain any
+curly braces. They may be of arbitrary capitalization, though."
+  :group 'markdown
+  :type '(repeat (string :validate markdown-validate-language-string)))
+
+(defcustom markdown-gfm-use-electric-backquote t
+  "Use `markdown-electric-backquote' when backquote is hit three times."
+  :group 'markdown
+  :type 'boolean)
+
+(defcustom markdown-gfm-downcase-languages t
+  "Downcase suggested languages when inserting them to code blocks with
+`markdown-electric-backquote'."
+  :group 'markdown
+  :type 'boolean)
+
+
+;;; Regular Expressions =======================================================
+
+(defconst markdown-regex-comment-start
+  "<!--"
+  "Regular expression matches HTML comment opening.")
+
+(defconst markdown-regex-comment-end
+  "--[ \t]*>"
+  "Regular expression matches HTML comment closing.")
+
+(defconst markdown-regex-link-inline
+  "\\(!\\)?\\(\\[\\)\\([^]^][^]]*\\|\\)\\(\\]\\)\\((\\)\\([^)]*?\\)\\(?:\\s-+\\(\"[^\"]*\"\\)\\)?\\()\\)"
+  "Regular expression for a [text](file) or an image link ![text](file).
+Group 1 matches the leading exclamation point (optional).
+Group 2 matches the opening square bracket.
+Group 3 matches the text inside the square brackets.
+Group 4 matches the closing square bracket.
+Group 5 matches the opening parenthesis.
+Group 6 matches the URL.
+Group 7 matches the title (optional).
+Group 8 matches the closing parenthesis.")
+
+(defconst markdown-regex-link-reference
+  "\\(!\\)?\\(\\[\\)\\([^]^][^]]*\\|\\)\\(\\]\\)[ ]?\\(\\[\\)\\([^]]*?\\)\\(\\]\\)"
+  "Regular expression for a reference link [text][id].
+Group 1 matches the leading exclamation point (optional).
+Group 2 matches the opening square bracket for the link text.
+Group 3 matches the text inside the square brackets.
+Group 4 matches the closing square bracket for the link text.
+Group 5 matches the opening square bracket for the reference label.
+Group 6 matches the reference label.
+Group 7 matches the closing square bracket for the reference label.")
+
+(defconst markdown-regex-reference-definition
+  "^ \\{0,3\\}\\(\\[\\)\\([^]\n]+?\\)\\(\\]\\)\\(:\\)\\s *\\(.*?\\)\\s *\\( \"[^\"]*\"$\\|$\\)"
+  "Regular expression for a reference definition.
+Group 1 matches the opening square bracket.
+Group 2 matches the reference label.
+Group 3 matches the closing square bracket.
+Group 4 matches the colon.
+Group 5 matches the URL.
+Group 6 matches the title attribute (optional).")
+
+(defconst markdown-regex-footnote
+  "\\(\\[\\^\\)\\(.+?\\)\\(\\]\\)"
+  "Regular expression for a footnote marker [^fn].
+Group 1 matches the opening square bracket and carat.
+Group 2 matches only the label, without the surrounding markup.
+Group 3 matches the closing square bracket.")
+
+(defconst markdown-regex-header
+  "^\\(?:\\(.+\\)\n\\(=+\\)\\|\\(.+\\)\n\\(-+\\)\\|\\(#+\\)\\s-*\\(.*?\\)\\s-*?\\(#*\\)\\)$"
+  "Regexp identifying Markdown headings.
+Group 1 matches the text of a level-1 setext heading.
+Group 2 matches the underline of a level-1 setext heading.
+Group 3 matches the text of a level-1 setext heading.
+Group 4 matches the underline of a level-1 setext heading.
+Group 5 matches the opening hash marks of an atx heading.
+Group 6 matches the text, without surrounding whitespace, of an atx heading.
+Group 7 matches the closing hash marks of an atx heading.")
+
+(defconst markdown-regex-header-1-atx
+  "^\\(#\\)[ \t]*\\([^\\.].*?\\)[ \t]*\\(#*\\)$"
+  "Regular expression for level 1 atx-style (hash mark) headers.")
+
+(defconst markdown-regex-header-2-atx
+  "^\\(##\\)[ \t]*\\(.+?\\)[ \t]*\\(#*\\)$"
+  "Regular expression for level 2 atx-style (hash mark) headers.")
+
+(defconst markdown-regex-header-3-atx
+  "^\\(###\\)[ \t]*\\(.+?\\)[ \t]*\\(#*\\)$"
+  "Regular expression for level 3 atx-style (hash mark) headers.")
+
+(defconst markdown-regex-header-4-atx
+  "^\\(####\\)[ \t]*\\(.+?\\)[ \t]*\\(#*\\)$"
+  "Regular expression for level 4 atx-style (hash mark) headers.")
+
+(defconst markdown-regex-header-5-atx
+  "^\\(#####\\)[ \t]*\\(.+?\\)[ \t]*\\(#*\\)$"
+  "Regular expression for level 5 atx-style (hash mark) headers.")
+
+(defconst markdown-regex-header-6-atx
+  "^\\(######\\)[ \t]*\\(.+?\\)[ \t]*\\(#*\\)$"
+  "Regular expression for level 6 atx-style (hash mark) headers.")
+
+(defconst markdown-regex-header-1-setext
+  "^\\(.*\\)\n\\(=+\\)$"
+  "Regular expression for level 1 setext-style (underline) headers.")
+
+(defconst markdown-regex-header-2-setext
+  "^\\(.*\\)\n\\(-+\\)$"
+  "Regular expression for level 2 setext-style (underline) headers.")
+
+(defconst markdown-regex-header-setext
+  "^\\(.+\\)\n\\(\\(?:=\\|-\\)+\\)$"
+  "Regular expression for generic setext-style (underline) headers.")
+
+(defconst markdown-regex-header-atx
+  "^\\(#+\\)[ \t]*\\(.*?\\)[ \t]*\\(#*\\)$"
+  "Regular expression for generic atx-style (hash mark) headers.")
+
+(defconst markdown-regex-hr
+  "^\\(\\*[ ]?\\*[ ]?\\*[ ]?[\\* ]*\\|-[ ]?-[ ]?-[--- ]*\\)$"
+  "Regular expression for matching Markdown horizontal rules.")
+
+(defconst markdown-regex-code
+  "\\(?:\\`\\|[^\\]\\)\\(\\(`+\\)\\(\\(?:.\\|\n[^\n]\\)*?[^`]\\)\\(\\2\\)\\)\\(?:[^`]\\|\\'\\)"
+  "Regular expression for matching inline code fragments.
+
+Group 1 matches the entire code fragment including the backticks.
+Group 2 matches the opening backticks.
+Group 3 matches the code fragment itself, without backticks.
+Group 4 matches the closing backticks.
+
+The leading, unnumbered group ensures that the leading backquote
+character is not escaped.
+The last group, also unnumbered, requires that the character
+following the code fragment is not a backquote.
+Note that \\(?:.\\|\n[^\n]\\) matches any character, including newlines,
+but not two newlines in a row.")
+
+(defconst markdown-regex-kbd
+  "\\(<kbd>\\)\\(\\(?:.\\|\n[^\n]\\)*?\\)\\(</kbd>\\)"
+  "Regular expression for matching <kbd> tags.
+Groups 1 and 3 match the opening and closing tags.
+Group 2 matches the key sequence.")
+
+(defconst markdown-regex-gfm-code-block-open
+ "^\\s *\\(```\\)[ ]?\\([^[:space:]]+[[:space:]]*\\|{[^}]*}\\)?$"
+ "Regular expression matching opening of GFM code blocks.
+Group 1 matches the opening three backticks.
+Group 2 matches the language identifier (optional).
+Group 3 matches the closing three backticks.")
+
+(defconst markdown-regex-gfm-code-block-close
+ "^\\s *\\(```\\)\\s *$"
+ "Regular expression matching closing of GFM code blocks.
+Group 1 matches the closing three backticks.")
+
+(defconst markdown-regex-pre
+  "^\\(    \\|\t\\).*$"
+  "Regular expression for matching preformatted text sections.")
+
+(defconst markdown-regex-list
+  "^\\([ \t]*\\)\\([0-9#]+\\.\\|[\\*\\+-]\\)\\([ \t]+\\)"
+  "Regular expression for matching list items.")
+
+(defconst markdown-regex-bold
+  "\\(^\\|[^\\]\\)\\(\\([*_]\\{2\\}\\)\\([^ \n\t\\]\\|[^ \n\t]\\(?:.\\|\n[^\n]\\)*?[^\\ ]\\)\\(\\3\\)\\)"
+  "Regular expression for matching bold text.
+Group 1 matches the character before the opening asterisk or
+underscore, if any, ensuring that it is not a backslash escape.
+Group 2 matches the entire expression, including delimiters.
+Groups 3 and 5 matches the opening and closing delimiters.
+Group 4 matches the text inside the delimiters.")
+
+(defconst markdown-regex-italic
+  "\\(?:^\\|[^\\]\\)\\(\\([*_]\\)\\([^ \n\t\\]\\|[^ \n\t]\\(?:.\\|\n[^\n]\\)*?[^\\ ]\\)\\(\\2\\)\\)"
+  "Regular expression for matching italic text.
+The leading unnumbered matches the character before the opening
+asterisk or underscore, if any, ensuring that it is not a
+backslash escape.
+Group 1 matches the entire expression, including delimiters.
+Groups 2 and 4 matches the opening and closing delimiters.
+Group 3 matches the text inside the delimiters.")
+
+(defconst markdown-regex-strike-through
+  "\\(^\\|[^\\]\\)\\(\\(~~\\)\\([^ \n\t\\]\\|[^ \n\t]\\(?:.\\|\n[^\n]\\)*?[^\\ ]\\)\\(~~\\)\\)"
+  "Regular expression for matching strike-through text.
+Group 1 matches the character before the opening tilde, if any,
+ensuring that it is not a backslash escape.
+Group 2 matches the entire expression, including delimiters.
+Groups 3 and 5 matches the opening and closing delimiters.
+Group 4 matches the text inside the delimiters.")
+
+(defconst markdown-regex-gfm-italic
+  "\\(?:^\\|\\s-\\)\\(\\([*_]\\)\\([^ \\]\\2\\|[^ ]\\(?:.\\|\n[^\n]\\)*?[^\\ ]\\)\\(\\2\\)\\)"
+  "Regular expression for matching italic text in GitHub Flavored Markdown.
+Underscores in words are not treated as special.
+Group 1 matches the entire expression, including delimiters.
+Groups 2 and 4 matches the opening and closing delimiters.
+Group 3 matches the text inside the delimiters.")
+
+(defconst markdown-regex-blockquote
+  "^[ \t]*\\(>\\)\\(.*\\)$"
+  "Regular expression for matching blockquote lines.
+Group 1 matches the leading angle bracket.
+Group 2 matches the text.")
+
+(defconst markdown-regex-line-break
+  "[^ \n\t][ \t]*\\(  \\)$"
+  "Regular expression for matching line breaks.")
+
+(defconst markdown-regex-wiki-link
+  "\\(?:^\\|[^\\]\\)\\(\\(\\[\\[\\)\\([^]|]+\\)\\(?:\\(|\\)\\([^]]+\\)\\)?\\(\\]\\]\\)\\)"
+  "Regular expression for matching wiki links.
+This matches typical bracketed [[WikiLinks]] as well as 'aliased'
+wiki links of the form [[PageName|link text]].
+The meanings of the first and second components depend
+on the value of `markdown-wiki-link-alias-first'.
+
+Group 1 matches the entire link.
+Group 2 matches the opening square brackets.
+Group 3 matches the first component of the wiki link.
+Group 4 matches the pipe separator, when present.
+Group 5 matches the second component of the wiki link, when present.
+Group 6 matches the closing square brackets.")
+
+(defconst markdown-regex-uri
+  (concat (regexp-opt markdown-uri-types) ":[^]\t\n\r<>,;() ]+")
+  "Regular expression for matching inline URIs.")
+
+(defconst markdown-regex-angle-uri
+  (concat "\\(<\\)\\(" (regexp-opt markdown-uri-types) ":[^]\t\n\r<>,;()]+\\)\\(>\\)")
+  "Regular expression for matching inline URIs in angle brackets.")
+
+(defconst markdown-regex-email
+  "<\\(\\(\\sw\\|\\s_\\|\\s.\\)+@\\(\\sw\\|\\s_\\|\\s.\\)+\\)>"
+  "Regular expression for matching inline email addresses.")
+
+(defconst markdown-regex-link-generic
+  (concat "\\(?:" markdown-regex-wiki-link
+          "\\|" markdown-regex-link-inline
+          "\\|" markdown-regex-link-reference
+          "\\|" markdown-regex-angle-uri "\\)")
+  "Regular expression for matching any recognized link.")
+
+(defconst markdown-regex-gfm-checkbox
+  " \\(\\[[ xX]\\]\\) "
+  "Regular expression for matching GFM checkboxes.
+Group 1 matches the text to become a button.")
+
+(defconst markdown-regex-block-separator
+  "\\(\\`\\|\\(\n[ \t]*\n\\)[^\n \t]\\)"
+  "Regular expression for matching block boundaries.")
+
+(defconst markdown-regex-math-inline-single
+  "\\(?:^\\|[^\\]\\)\\(\\$\\)\\(\\(?:[^\\$]\\|\\\\.\\)*\\)\\(\\$\\)"
+  "Regular expression for itex $..$ math mode expressions.
+Groups 1 and 3 match the opening and closing dollar signs.
+Group 3 matches the mathematical expression contained within.")
+
+(defconst markdown-regex-math-inline-double
+  "\\(?:^\\|[^\\]\\)\\(\\$\\$\\)\\(\\(?:[^\\$]\\|\\\\.\\)*\\)\\(\\$\\$\\)"
+  "Regular expression for itex $$..$$ math mode expressions.
+Groups 1 and 3 match opening and closing dollar signs.
+Group 3 matches the mathematical expression contained within.")
+
+(defconst markdown-regex-math-display
+  "^\\(\\\\\\[\\)\\(\\(?:.\\|\n\\)*\\)?\\(\\\\\\]\\)$"
+  "Regular expression for itex \[..\] display mode expressions.
+Groups 1 and 3 matche the opening and closing delimiters.
+Group 2 matches the mathematical expression contained within.")
+
+(defconst markdown-regex-multimarkdown-metadata
+  "^\\([[:alpha:]][[:alpha:] _-]*?\\)\\(:[ \t]*\\)\\(.*\\)$"
+  "Regular expression for matching MultiMarkdown metadata.")
+
+(defconst markdown-regex-pandoc-metadata
+  "^\\(%\\)\\([ \t]*\\)\\(.*\\)$"
+  "Regular expression for matching Pandoc metadata.")
+
+
+;;; Syntax ====================================================================
+
+(defun markdown-syntax-propertize-extend-region (start end)
+  "Extend START to END region to include an entire block of text.
+This helps improve syntax analysis for block constructs.
+Returns a cons (NEW-START . NEW-END) or nil if no adjustment should be made.
+Function is called repeatedly until it returns nil. For details, see
+`syntax-propertize-extend-region-functions'."
+  (save-excursion
+    (let* ((new-start (progn (goto-char start)
+                             (if (re-search-backward "\n\n" nil t)
+                                 (match-end 0) (point-min))))
+           (new-end (progn (goto-char end)
+                           (if (re-search-forward "\n\n" nil t)
+                               (match-beginning 0) (point-max))))
+           (code-match (markdown-code-block-at-pos new-start))
+           (new-start (or (and code-match (cl-first code-match)) new-start))
+           (code-match (markdown-code-block-at-pos end))
+           (new-end (or (and code-match (cl-second code-match)) new-end)))
+      (unless (and (eq new-start start) (eq new-end end))
+        (cons new-start new-end)))))
+
+(defun markdown-syntax-propertize-pre-blocks (start end)
+  "Match preformatted text blocks from START to END."
+  (save-excursion
+    (goto-char start)
+    (let ((levels (markdown-calculate-list-levels))
+          indent pre-regexp close-regexp open close stop)
+      (while (and (< (point) end) (not close))
+        ;; Search for a region with sufficient indentation
+        (if (null levels)
+            (setq indent 1)
+          (setq indent (1+ (length levels))))
+        (setq pre-regexp (format "^\\(    \\|\t\\)\\{%d\\}" indent))
+        (setq close-regexp (format "^\\(    \\|\t\\)\\{0,%d\\}\\([^ \t]\\)" (1- indent)))
+
+        (cond
+         ;; If not at the beginning of a line, move forward
+         ((not (bolp)) (forward-line))
+         ;; Move past blank lines
+         ((markdown-cur-line-blank-p) (forward-line))
+         ;; At headers and horizontal rules, reset levels
+         ((markdown-new-baseline-p) (forward-line) (setq levels nil))
+         ;; If the current line has sufficient indentation, mark out pre block
+         ;; The opening should be preceded by a blank line.
+         ((and (looking-at pre-regexp)
+               (markdown-prev-line-blank-p))
+          (setq open (match-beginning 0))
+          (while (and (or (looking-at pre-regexp) (markdown-cur-line-blank-p))
+                      (not (eobp)))
+            (forward-line))
+          (skip-syntax-backward "-")
+          (setq close (point)))
+         ;; If current line has a list marker, update levels, move to end of block
+         ((looking-at markdown-regex-list)
+          (setq levels (markdown-update-list-levels
+                        (match-string 2) (markdown-cur-line-indent) levels))
+          (markdown-end-of-block-element))
+         ;; If this is the end of the indentation level, adjust levels accordingly.
+         ;; Only match end of indentation level if levels is not the empty list.
+         ((and (car levels) (looking-at close-regexp))
+          (setq levels (markdown-update-list-levels
+                        nil (markdown-cur-line-indent) levels))
+          (markdown-end-of-block-element))
+         (t (markdown-end-of-block-element))))
+
+      (when (and open close)
+        ;; Set text property data
+        (put-text-property open close 'markdown-pre (list open close))
+        ;; Recursively search again
+        (markdown-syntax-propertize-pre-blocks (point) end)))))
+
+(defun markdown-syntax-propertize-fenced-code-blocks (start end)
+  "Match tilde-fenced code text blocks from START to END."
+  (save-excursion
+    (goto-char start)
+    (while (re-search-forward "^\\([~]\\{3,\\}\\)" end t)
+      (let ((beg (match-beginning 1)))
+        (when (re-search-forward
+               (concat "^" (match-string 1) "~*") end t)
+          (put-text-property beg (match-end 0) 'markdown-fenced-code
+                             (list beg (point))))))))
+
+(defun markdown-syntax-propertize-gfm-code-blocks (start end)
+  "Match GFM code blocks from START to END."
+  (save-excursion
+    (goto-char start)
+    (while (re-search-forward markdown-regex-gfm-code-block-open end t)
+      (let ((open (list (match-beginning 1) (match-end 1)))
+            (lang (list (match-beginning 2) (match-end 2))))
+        (forward-line)
+        (let ((body (point)))
+          (when (re-search-forward
+                 markdown-regex-gfm-code-block-close end t)
+            (let ((close (list (match-beginning 1) (match-end 1)))
+                  (all (list (car open) (match-end 1))))
+              (setq body (list body (1- (match-beginning 0))))
+              (put-text-property (car open) (match-end 1) 'markdown-gfm-code
+                                 (append all open lang body close)))))))))
+
+(defun markdown-syntax-propertize-blockquotes (start end)
+  "Match blockquotes from START to END."
+  (save-excursion
+    (goto-char start)
+    (while (and (re-search-forward markdown-regex-blockquote end t)
+                (not (markdown-code-block-at-pos (match-beginning 0))))
+      (put-text-property (match-beginning 0) (match-end 0)
+                         'markdown-blockquote
+                         (match-data t)))))
+
+(defun markdown-syntax-propertize-headings-generic (symbol regex start end)
+  "Match headings of type SYMBOL with REGEX from START to END."
+  (save-excursion
+    (goto-char start)
+    (while (re-search-forward regex end t)
+      (unless (or (markdown-code-block-at-pos (match-beginning 0))
+                  (get-text-property (match-beginning 0) 'markdown-heading))
+        (put-text-property (match-beginning 0) (match-end 0)
+                           'markdown-heading t)
+        (put-text-property (match-beginning 0) (match-end 0)
+                           symbol (match-data t))))))
+
+(defun markdown-syntax-propertize-comments (start end)
+  "Match HTML comments from the START to END."
+  (let* ((state (syntax-ppss)) (in-comment (nth 4 state)))
+    (goto-char start)
+    (cond
+     ;; Comment start
+     ((and (not in-comment)
+           (re-search-forward markdown-regex-comment-start end t)
+           (save-match-data (not (markdown-code-at-point-p)))
+           (save-match-data (not (markdown-code-block-at-point))))
+      (let ((open-beg (match-beginning 0)))
+        (put-text-property open-beg (1+ open-beg)
+                           'syntax-table (string-to-syntax "<"))
+        (markdown-syntax-propertize-comments (1+ open-beg) end)))
+     ;; Comment end
+     ((and in-comment
+           (re-search-forward markdown-regex-comment-end end t))
+      (put-text-property (1- (match-end 0)) (match-end 0)
+                         'syntax-table (string-to-syntax ">"))
+      (markdown-syntax-propertize-comments (match-end 0) end))
+     ;; Nothing found
+     (t nil))))
+
+(defun markdown-syntax-propertize (start end)
+  "See `syntax-propertize-function'."
+  (remove-text-properties start end '(markdown-gfm-code))
+  (remove-text-properties start end '(markdown-fenced-code))
+  (remove-text-properties start end '(markdown-pre))
+  (remove-text-properties start end '(markdown-blockquote))
+  (remove-text-properties start end '(markdown-heading))
+  (remove-text-properties start end '(markdown-heading-1-setext))
+  (remove-text-properties start end '(markdown-heading-2-setext))
+  (remove-text-properties start end '(markdown-heading-1-atx))
+  (remove-text-properties start end '(markdown-heading-2-atx))
+  (remove-text-properties start end '(markdown-heading-3-atx))
+  (remove-text-properties start end '(markdown-heading-4-atx))
+  (remove-text-properties start end '(markdown-heading-5-atx))
+  (remove-text-properties start end '(markdown-heading-6-atx))
+  (markdown-syntax-propertize-gfm-code-blocks start end)
+  (markdown-syntax-propertize-fenced-code-blocks start end)
+  (markdown-syntax-propertize-pre-blocks start end)
+  (markdown-syntax-propertize-blockquotes start end)
+  (markdown-syntax-propertize-headings-generic
+   'markdown-heading-1-setext markdown-regex-header-1-setext start end)
+  (markdown-syntax-propertize-headings-generic
+   'markdown-heading-2-setext markdown-regex-header-2-setext start end)
+  (markdown-syntax-propertize-headings-generic
+   'markdown-heading-6-atx markdown-regex-header-6-atx start end)
+  (markdown-syntax-propertize-headings-generic
+   'markdown-heading-5-atx markdown-regex-header-5-atx start end)
+  (markdown-syntax-propertize-headings-generic
+   'markdown-heading-4-atx markdown-regex-header-4-atx start end)
+  (markdown-syntax-propertize-headings-generic
+   'markdown-heading-3-atx markdown-regex-header-3-atx start end)
+  (markdown-syntax-propertize-headings-generic
+   'markdown-heading-2-atx markdown-regex-header-2-atx start end)
+  (markdown-syntax-propertize-headings-generic
+   'markdown-heading-1-atx markdown-regex-header-1-atx start end)
+  (markdown-syntax-propertize-comments start end))
 
 
 ;;; Font Lock =================================================================
@@ -1054,18 +1657,27 @@ to `nil' instead. See `font-lock-support-mode' for more details."
 (defvar markdown-metadata-value-face 'markdown-metadata-value-face
   "Face name to use for metadata values.")
 
+(defvar markdown-gfm-checkbox-face 'markdown-gfm-checkbox-face
+  "Face name to use for GFM checkboxes.")
+
+(defvar markdown-highlight-face 'markdown-highlight-face
+  "Face name to use for mouse highlighting.")
+
+(defvar markdown-markup-face 'markdown-markup-face
+  "Face name to use for markup elements.")
+
 (defgroup markdown-faces nil
   "Faces used in Markdown Mode"
   :group 'markdown
   :group 'faces)
 
 (defface markdown-italic-face
-  '((t (:inherit font-lock-variable-name-face :slant italic)))
+  '((t (:inherit font-lock-variable-name-face :slant italic :weight normal)))
   "Face for italic text."
   :group 'markdown-faces)
 
 (defface markdown-bold-face
-  '((t (:inherit font-lock-variable-name-face :weight bold)))
+  '((t (:inherit font-lock-variable-name-face :weight bold :slant normal)))
   "Face for bold text."
   :group 'markdown-faces)
 
@@ -1074,13 +1686,18 @@ to `nil' instead. See `font-lock-support-mode' for more details."
   "Face for strike-through text."
   :group 'markdown-faces)
 
+(defface markdown-markup-face
+  '((t (:inherit shadow :slant normal :weight normal)))
+  "Face for markup elements."
+  :group 'markdown-faces)
+
 (defface markdown-header-rule-face
-  '((t (:inherit font-lock-function-name-face :weight bold)))
+  '((t (:inherit markdown-markup-face)))
   "Base face for headers rules."
   :group 'markdown-faces)
 
 (defface markdown-header-delimiter-face
-  '((t (:inherit font-lock-function-name-face :weight bold)))
+  '((t (:inherit markdown-markup-face)))
   "Base face for headers hash delimiter."
   :group 'markdown-faces)
 
@@ -1125,7 +1742,7 @@ to `nil' instead. See `font-lock-support-mode' for more details."
   :group 'markdown-faces)
 
 (defface markdown-list-face
-  '((t (:inherit font-lock-builtin-face)))
+  '((t (:inherit markdown-markup-face)))
   "Face for list item markers."
   :group 'markdown-faces)
 
@@ -1155,12 +1772,12 @@ to `nil' instead. See `font-lock-support-mode' for more details."
   :group 'markdown-faces)
 
 (defface markdown-reference-face
-  '((t (:inherit font-lock-type-face)))
+  '((t (:inherit markdown-markup-face)))
   "Face for link references."
   :group 'markdown-faces)
 
 (defface markdown-footnote-face
-  '((t (:inherit font-lock-keyword-face)))
+  '((t (:inherit markdown-markup-face)))
   "Face for footnote markers."
   :group 'markdown-faces)
 
@@ -1199,271 +1816,131 @@ to `nil' instead. See `font-lock-support-mode' for more details."
   "Face for metadata values."
   :group 'markdown-faces)
 
-(defconst markdown-regex-link-inline
-  "\\(!\\)?\\(\\[\\([^]^][^]]*\\|\\)\\]\\)\\((\\([^)]*?\\)\\(?:\\s-+\\(\"[^\"]*\"\\)\\)?)\\)"
-  "Regular expression for a [text](file) or an image link ![text](file).
-Group 1 matches the leading exclamation point, if any.
-Group 2 matchs the entire square bracket term, including the text.
-Group 3 matches the text inside the square brackets.
-Group 4 matches the entire parenthesis term, including the URL and title.
-Group 5 matches the URL.
-Group 6 matches (optional) title.")
+(defface markdown-gfm-checkbox-face
+  '((t (:inherit font-lock-builtin-face)))
+  "Face for GFM checkboxes."
+  :group 'markdown-faces)
 
-(defconst markdown-regex-link-reference
-  "\\(!\\)?\\(\\[\\([^]^][^]]*\\|\\)\\]\\)[ ]?\\(\\[\\([^]]*?\\)\\]\\)"
-  "Regular expression for a reference link [text][id].
-Group 1 matches the leading exclamation point, if any.
-Group 2 matchs the entire first square bracket term, including the text.
-Group 3 matches the text inside the square brackets.
-Group 4 matches the entire second square bracket term.
-Group 5 matches the reference label.")
+(defface markdown-highlight-face
+  '((t (:inherit highlight)))
+  "Face for mouse highlighting."
+  :group 'markdown-faces)
 
-(defconst markdown-regex-reference-definition
-  "^ \\{0,3\\}\\(\\[[^]\n]+?\\]\\):\\s *\\(.*?\\)\\s *\\( \"[^\"]*\"$\\|$\\)"
-  "Regular expression for a link definition [id]: ...")
-
-(defconst markdown-regex-footnote
-  "\\(\\[\\^.+?\\]\\)"
-  "Regular expression for a footnote marker [^fn].")
-
-(defconst markdown-regex-header
-  "^\\(?:\\(.+\\)\n\\(=+\\)\\|\\(.+\\)\n\\(-+\\)\\|\\(#+\\)\\s-*\\(.*?\\)\\s-*?\\(#*\\)\\)$"
-  "Regexp identifying Markdown headers.")
-
-(defconst markdown-regex-header-1-atx
-  "^\\(#\\)[ \t]*\\([^\\.].*?\\)[ \t]*\\(#*\\)$"
-  "Regular expression for level 1 atx-style (hash mark) headers.")
-
-(defconst markdown-regex-header-2-atx
-  "^\\(##\\)[ \t]*\\(.+?\\)[ \t]*\\(#*\\)$"
-  "Regular expression for level 2 atx-style (hash mark) headers.")
-
-(defconst markdown-regex-header-3-atx
-  "^\\(###\\)[ \t]*\\(.+?\\)[ \t]*\\(#*\\)$"
-  "Regular expression for level 3 atx-style (hash mark) headers.")
-
-(defconst markdown-regex-header-4-atx
-  "^\\(####\\)[ \t]*\\(.+?\\)[ \t]*\\(#*\\)$"
-  "Regular expression for level 4 atx-style (hash mark) headers.")
-
-(defconst markdown-regex-header-5-atx
-  "^\\(#####\\)[ \t]*\\(.+?\\)[ \t]*\\(#*\\)$"
-  "Regular expression for level 5 atx-style (hash mark) headers.")
-
-(defconst markdown-regex-header-6-atx
-  "^\\(######\\)[ \t]*\\(.+?\\)[ \t]*\\(#*\\)$"
-  "Regular expression for level 6 atx-style (hash mark) headers.")
-
-(defconst markdown-regex-header-1-setext
-  "^\\(.*\\)\n\\(=+\\)$"
-  "Regular expression for level 1 setext-style (underline) headers.")
-
-(defconst markdown-regex-header-2-setext
-  "^\\(.*\\)\n\\(-+\\)$"
-  "Regular expression for level 2 setext-style (underline) headers.")
-
-(defconst markdown-regex-header-setext
-  "^\\(.+\\)\n\\(\\(?:=\\|-\\)+\\)$"
-  "Regular expression for generic setext-style (underline) headers.")
-
-(defconst markdown-regex-header-atx
-  "^\\(#+\\)[ \t]*\\(.*?\\)[ \t]*\\(#*\\)$"
-  "Regular expression for generic atx-style (hash mark) headers.")
-
-(defconst markdown-regex-hr
-  "^\\(\\*[ ]?\\*[ ]?\\*[ ]?[\\* ]*\\|-[ ]?-[ ]?-[--- ]*\\)$"
-  "Regular expression for matching Markdown horizontal rules.")
-
-(defconst markdown-regex-code
-  "\\(\\`\\|[^\\]\\)\\(\\(`+\\)\\(\\(.\\|\n[^\n]\\)*?[^`]\\)\\3\\)\\([^`]\\|\\'\\)"
-  "Regular expression for matching inline code fragments.
-
-The first group ensures that the leading backquote character
-is not escaped.  The group \\(.\\|\n[^\n]\\) matches any
-character, including newlines, but not two newlines in a row.
-The final group requires that the character following the code
-fragment is not a backquote.")
-
-(defconst markdown-regex-kbd
-  "\\(<kbd>\\)\\(\\(?:.\\|\n[^\n]\\)*?\\)\\(</kbd>\\)"
-  "Regular expression for matching <kbd> tags.
-Groups 1 and 3 match the opening and closing tags.
-Group 2 matches the key sequence.")
-
-(defconst markdown-regex-pre
-  "^\\(    \\|\t\\).*$"
-  "Regular expression for matching preformatted text sections.")
-
-(defconst markdown-regex-list
-  "^\\([ \t]*\\)\\([0-9#]+\\.\\|[\\*\\+-]\\)\\([ \t]+\\)"
-  "Regular expression for matching list items.")
-
-(defconst markdown-regex-bold
-  "\\(^\\|[^\\]\\)\\(\\([*_]\\{2\\}\\)\\([^ \n\t\\]\\|[^ \n\t]\\(?:.\\|\n[^\n]\\)*?[^\\ ]\\)\\(\\3\\)\\)"
-  "Regular expression for matching bold text.
-Group 1 matches the character before the opening asterisk or
-underscore, if any, ensuring that it is not a backslash escape.
-Group 2 matches the entire expression, including delimiters.
-Groups 3 and 5 matches the opening and closing delimiters.
-Group 4 matches the text inside the delimiters.")
-
-(defconst markdown-regex-italic
-  "\\(^\\|[^\\]\\)\\(\\([*_]\\)\\([^ \n\t\\]\\|[^ \n\t]\\(?:.\\|\n[^\n]\\)*?[^\\ ]\\)\\(\\3\\)\\)"
-  "Regular expression for matching italic text.
-Group 1 matches the character before the opening asterisk or
-underscore, if any, ensuring that it is not a backslash escape.
-Group 2 matches the entire expression, including delimiters.
-Groups 3 and 5 matches the opening and closing delimiters.
-Group 4 matches the text inside the delimiters.")
-
-(defconst markdown-regex-strike-through
-  "\\(^\\|[^\\]\\)\\(\\(~~\\)\\([^ \n\t\\]\\|[^ \n\t]\\(?:.\\|\n[^\n]\\)*?[^\\ ]\\)\\(~~\\)\\)"
-  "Regular expression for matching strike-through text.
-Group 1 matches the character before the opening tilde, if any,
-ensuring that it is not a backslash escape.
-Group 2 matches the entire expression, including delimiters.
-Groups 3 and 5 matches the opening and closing delimiters.
-Group 4 matches the text inside the delimiters.")
-
-(defconst markdown-regex-gfm-italic
-  "\\(^\\|\\s-\\)\\(\\([*_]\\)\\([^ \\]\\3\\|[^ ]\\(.\\|\n[^\n]\\)*?[^\\ ]\\3\\)\\)"
-  "Regular expression for matching italic text in GitHub Flavored Markdown.
-Underscores in words are not treated as special.")
-
-(defconst markdown-regex-blockquote
-  "^[ \t]*\\(>\\).*$"
-  "Regular expression for matching blockquote lines.")
-
-(defconst markdown-regex-line-break
-  "[^ \n\t][ \t]*\\(  \\)$"
-  "Regular expression for matching line breaks.")
-
-(defconst markdown-regex-wiki-link
-  "\\(?:^\\|[^\\]\\)\\(\\[\\[\\([^]|]+\\)\\(|\\([^]]+\\)\\)?\\]\\]\\)"
-  "Regular expression for matching wiki links.
-This matches typical bracketed [[WikiLinks]] as well as 'aliased'
-wiki links of the form [[PageName|link text]].  In this regular
-expression, group 1 matches the entire link, including square
-brackets, group 2 matches the first component of the wiki link
-and group 4 matches the second component, after the pipe, when
-present.  The meanings of the first and second components depend
-on the value of `markdown-wiki-link-alias-first'.")
-
-(defconst markdown-regex-uri
-  (concat (regexp-opt markdown-uri-types) ":[^]\t\n\r<>,;() ]+")
-  "Regular expression for matching inline URIs.")
-
-(defconst markdown-regex-angle-uri
-  (concat "\\(<\\)\\(" (regexp-opt markdown-uri-types) ":[^]\t\n\r<>,;()]+\\)\\(>\\)")
-  "Regular expression for matching inline URIs in angle brackets.")
-
-(defconst markdown-regex-email
-  "<\\(\\(\\sw\\|\\s_\\|\\s.\\)+@\\(\\sw\\|\\s_\\|\\s.\\)+\\)>"
-  "Regular expression for matching inline email addresses.")
-
-(defconst markdown-regex-link-generic
-  (concat "\\(?:" markdown-regex-wiki-link
-          "\\|" markdown-regex-link-inline
-          "\\|" markdown-regex-link-reference
-          "\\|" markdown-regex-angle-uri "\\)")
-  "Regular expression for matching any recognized link.")
-
-(defconst markdown-regex-block-separator
-  "\\(\\`\\|\\(\n[ \t]*\n\\)[^\n \t]\\)"
-  "Regular expression for matching block boundaries.")
-
-(defconst markdown-regex-math-inline
-  "\\(^\\|[^\\]\\)\\(\\$\\($\\([^\\$]\\|\\\\.\\)*\\$\\|\\([^\\$]\\|\\\\.\\)*\\)\\$\\)"
-  "Regular expression for itex $..$ or $$..$$ math mode expressions.")
-
-(defconst markdown-regex-math-display
-  "^\\\\\\[\\(.\\|\n\\)*?\\\\\\]$"
-  "Regular expression for itex \[..\] display mode expressions.")
-
-(defconst markdown-regex-multimarkdown-metadata
-  "^\\([[:alpha:]][[:alpha:] _-]*?\\):[ \t]*\\(.*\\)$"
-  "Regular expression for matching MultiMarkdown metadata.")
-
-(defconst markdown-regex-pandoc-metadata
-  "^\\(%\\)[ \t]*\\(.*\\)$"
-  "Regular expression for matching Pandoc metadata.")
+(defun markdown-syntactic-face (state)
+  "Returns a font-lock face for characters with given STATE.
+See `font-lock-syntactic-face-function' for details."
+  (let ((in-comment (nth 4 state)))
+    (cond
+     (in-comment 'markdown-comment-face)
+     (t nil))))
 
 (defvar markdown-mode-font-lock-keywords-basic
   (list
-   (cons 'markdown-match-gfm-code-blocks '((1 markdown-pre-face)
-                                           (2 markdown-language-keyword-face t t)
+   (cons 'markdown-match-gfm-code-blocks '((1 markdown-markup-face)
+                                           (2 markdown-language-keyword-face nil t)
                                            (3 markdown-pre-face)
-                                           (4 markdown-pre-face)))
+                                           (4 markdown-markup-face)))
    (cons 'markdown-match-fenced-code-blocks '((0 markdown-pre-face)))
    (cons 'markdown-match-pre-blocks '((0 markdown-pre-face)))
-   (cons markdown-regex-blockquote 'markdown-blockquote-face)
-   (cons markdown-regex-header-1-setext '((1 markdown-header-face-1)
-                                          (2 markdown-header-rule-face)))
-   (cons markdown-regex-header-2-setext '((1 markdown-header-face-2)
-                                          (2 markdown-header-rule-face)))
-   (cons markdown-regex-header-6-atx '((1 markdown-header-delimiter-face)
-                                       (2 markdown-header-face-6)
-                                       (3 markdown-header-delimiter-face)))
-   (cons markdown-regex-header-5-atx '((1 markdown-header-delimiter-face)
-                                       (2 markdown-header-face-5)
-                                       (3 markdown-header-delimiter-face)))
-   (cons markdown-regex-header-4-atx '((1 markdown-header-delimiter-face)
-                                       (2 markdown-header-face-4)
-                                       (3 markdown-header-delimiter-face)))
-   (cons markdown-regex-header-3-atx '((1 markdown-header-delimiter-face)
-                                       (2 markdown-header-face-3)
-                                       (3 markdown-header-delimiter-face)))
-   (cons markdown-regex-header-2-atx '((1 markdown-header-delimiter-face)
-                                       (2 markdown-header-face-2)
-                                       (3 markdown-header-delimiter-face)))
-   (cons markdown-regex-header-1-atx '((1 markdown-header-delimiter-face)
-                                       (2 markdown-header-face-1)
-                                       (3 markdown-header-delimiter-face)))
+   (cons 'markdown-match-blockquotes '((1 markdown-markup-face)
+                                       (2 markdown-blockquote-face)))
+   (cons 'markdown-match-heading-1-setext '((1 markdown-header-face-1)
+                                            (2 markdown-header-rule-face)))
+   (cons 'markdown-match-heading-2-setext '((1 markdown-header-face-2)
+                                            (2 markdown-header-rule-face)))
+   (cons 'markdown-match-heading-6-atx '((1 markdown-header-delimiter-face)
+                                         (2 markdown-header-face-6)
+                                         (3 markdown-header-delimiter-face)))
+   (cons 'markdown-match-heading-5-atx '((1 markdown-header-delimiter-face)
+                                         (2 markdown-header-face-5)
+                                         (3 markdown-header-delimiter-face)))
+   (cons 'markdown-match-heading-4-atx '((1 markdown-header-delimiter-face)
+                                         (2 markdown-header-face-4)
+                                         (3 markdown-header-delimiter-face)))
+   (cons 'markdown-match-heading-3-atx '((1 markdown-header-delimiter-face)
+                                         (2 markdown-header-face-3)
+                                         (3 markdown-header-delimiter-face)))
+   (cons 'markdown-match-heading-2-atx '((1 markdown-header-delimiter-face)
+                                         (2 markdown-header-face-2)
+                                         (3 markdown-header-delimiter-face)))
+   (cons 'markdown-match-heading-1-atx '((1 markdown-header-delimiter-face)
+                                         (2 markdown-header-face-1)
+                                         (3 markdown-header-delimiter-face)))
    (cons 'markdown-match-multimarkdown-metadata '((1 markdown-metadata-key-face)
-                                                  (2 markdown-metadata-value-face)))
-   (cons 'markdown-match-pandoc-metadata '((1 markdown-comment-face)
-                                           (2 markdown-metadata-value-face)))
-   (cons markdown-regex-hr 'markdown-header-face)
-   (cons 'markdown-match-comments '((0 markdown-comment-face)))
-   (cons 'markdown-match-code '((0 markdown-inline-code-face)))
-   (cons markdown-regex-kbd 'markdown-inline-code-face)
-   (cons markdown-regex-angle-uri 'markdown-link-face)
+                                                  (2 markdown-markup-face)
+                                                  (3 markdown-metadata-value-face)))
+   (cons 'markdown-match-pandoc-metadata '((1 markdown-markup-face)
+                                           (2 markdown-markup-face)
+                                           (3 markdown-metadata-value-face)))
+   (cons 'markdown-match-hr 'markdown-header-delimiter-face)
+   (cons 'markdown-match-code '((1 markdown-markup-face)
+                                (2 markdown-inline-code-face)
+                                (3 markdown-markup-face)))
+   (cons markdown-regex-kbd '((1 markdown-markup-face)
+                              (2 markdown-inline-code-face)
+                              (3 markdown-markup-face)))
+   (cons markdown-regex-angle-uri '((1 markdown-markup-face)
+                                    (2 markdown-link-face)
+                                    (3 markdown-markup-face)))
+   (cons markdown-regex-list '(2 markdown-list-face))
+   (cons markdown-regex-footnote '((1 markdown-markup-face)   ; [^
+                                   (2 markdown-footnote-face) ; label
+                                   (3 markdown-markup-face))) ; ]
+   (cons markdown-regex-link-inline '((1 markdown-markup-face nil t)     ; ! (optional)
+                                      (2 markdown-markup-face)           ; [
+                                      (3 markdown-link-face)             ; text
+                                      (4 markdown-markup-face)           ; ]
+                                      (5 markdown-markup-face)           ; (
+                                      (6 markdown-url-face)              ; url
+                                      (7 markdown-link-title-face nil t) ; "title" (optional)
+                                      (8 markdown-markup-face)))         ; )
+   (cons markdown-regex-link-reference '((1 markdown-markup-face nil t) ; ! (optional)
+                                         (2 markdown-markup-face)       ; [
+                                         (3 markdown-link-face)         ; text
+                                         (4 markdown-markup-face)       ; ]
+                                         (5 markdown-markup-face)       ; [
+                                         (6 markdown-reference-face)    ; label
+                                         (7 markdown-markup-face)))     ; ]
+   (cons markdown-regex-reference-definition '((1 markdown-markup-face)       ; [
+                                               (2 markdown-reference-face)    ; label
+                                               (3 markdown-markup-face)       ; ]
+                                               (4 markdown-markup-face)       ; :
+                                               (5 markdown-url-face)          ; url
+                                               (6 markdown-link-title-face))) ; "title" (optional)
+   ;; Math mode $..$
+   (cons 'markdown-match-math-single '((1 markdown-markup-face prepend)
+                                       (2 markdown-math-face append)
+                                       (3 markdown-markup-face prepend)))
+   ;; Math mode $$..$$
+   (cons 'markdown-match-math-double '((1 markdown-markup-face prepend)
+                                       (2 markdown-math-face append)
+                                       (3 markdown-markup-face prepend)))
+   (cons 'markdown-match-bold '((1 markdown-markup-face prepend)
+                                (2 markdown-bold-face append)
+                                (3 markdown-markup-face prepend)))
+   (cons 'markdown-match-italic '((1 markdown-markup-face prepend)
+                                  (2 markdown-italic-face append)
+                                  (3 markdown-markup-face prepend)))
    (cons markdown-regex-uri 'markdown-link-face)
    (cons markdown-regex-email 'markdown-link-face)
-   (cons markdown-regex-list '(2 markdown-list-face))
-   (cons markdown-regex-footnote 'markdown-footnote-face)
-   (cons markdown-regex-link-inline '((1 markdown-link-face t t)
-                                      (2 markdown-link-face t)
-                                      (4 markdown-url-face t)
-                                      (6 markdown-link-title-face t t)))
-   (cons markdown-regex-link-reference '((1 markdown-link-face t t)
-                                         (2 markdown-link-face t)
-                                         (4 markdown-reference-face t)))
-   (cons markdown-regex-reference-definition '((1 markdown-reference-face t)
-                                               (2 markdown-url-face t)
-                                               (3 markdown-link-title-face t)))
-   (cons markdown-regex-bold '(2 markdown-bold-face))
    (cons markdown-regex-line-break '(1 markdown-line-break-face prepend))
    )
   "Syntax highlighting for Markdown files.")
 
-(defvar markdown-mode-font-lock-keywords-core
-  (list
-   (cons markdown-regex-italic '(2 markdown-italic-face))
-   )
-  "Additional syntax highlighting for Markdown files.
-Includes features which are overridden by some variants.")
-
 (defconst markdown-mode-font-lock-keywords-math
   (list
-   ;; Math mode $..$ or $$..$$
-   (cons markdown-regex-math-inline '(2 markdown-math-face))
    ;; Display mode equations with brackets: \[ \]
-   (cons markdown-regex-math-display 'markdown-math-face)
+   (cons markdown-regex-math-display '((1 markdown-markup-face prepend)
+                                       (2 markdown-math-face append)
+                                       (3 markdown-markup-face prepend)))
    ;; Equation reference (eq:foo)
-   (cons "(eq:[[:alnum:]:_]+)" 'markdown-reference-face)
+   (cons "\\((eq:\\)\\([[:alnum:]:_]+\\)\\()\\)" '((1 markdown-markup-face)
+                                                   (2 markdown-reference-face)
+                                                   (3 markdown-markup-face)))
    ;; Equation reference \eqref{foo}
-   (cons "\\\\eqref{[[:alnum:]:_]+}" 'markdown-reference-face))
+   (cons "\\(\\\\eqref{\\)\\([[:alnum:]:_]+\\)\\(}\\)" '((1 markdown-markup-face)
+                                                         (2 markdown-reference-face)
+                                                         (3 markdown-markup-face))))
   "Syntax highlighting for LaTeX and itex fragments.")
 
 (defvar markdown-mode-font-lock-keywords nil
@@ -1515,14 +1992,42 @@ in XEmacs 21."
   "Determine whether this Emacs supports buttons."
   (or (featurep 'button) (locate-library "button")))
 
+;; Use new names for outline-mode functions in Emacs 25 and later.
+(eval-and-compile
+  (defalias 'markdown-hide-sublevels
+    (if (fboundp 'outline-hide-sublevels)
+        'outline-hide-sublevels
+      'hide-sublevels))
+  (defalias 'markdown-show-all
+    (if (fboundp 'outline-show-all)
+        'outline-show-all
+      'show-all))
+  (defalias 'markdown-hide-body
+    (if (fboundp 'outline-hide-body)
+        'outline-hide-body
+      'hide-body))
+  (defalias 'markdown-show-children
+    (if (fboundp 'outline-show-children)
+        'outline-show-children
+      'show-children))
+  (defalias 'markdown-show-subtree
+    (if (fboundp 'outline-show-subtree)
+        'outline-show-subtree
+      'show-subtree))
+  (defalias 'markdown-hide-subtree
+    (if (fboundp 'outline-hide-subtree)
+        'outline-hide-subtree
+      'hide-subtree)))
+
 
 ;;; Markdown Parsing Functions ================================================
 
 (defun markdown-cur-line-blank-p ()
   "Return t if the current line is blank and nil otherwise."
-  (save-excursion
-    (beginning-of-line)
-    (re-search-forward "^\\s *$" (line-end-position) t)))
+  (save-match-data
+    (save-excursion
+      (beginning-of-line)
+      (re-search-forward "^\\s *$" (line-end-position) t))))
 
 (defun markdown-prev-line-blank-p ()
   "Return t if the previous line is blank and nil otherwise.
@@ -1686,24 +2191,22 @@ upon failure."
     (setq indent (markdown-cur-line-indent))
     (while
         (cond
-         ;; Stop at beginning of buffer
-         ((bobp) (setq prev nil))
-         ;; Continue if current line is blank
-         ((markdown-cur-line-blank-p) t)
          ;; List item
          ((and (looking-at markdown-regex-list)
                (setq bounds (markdown-cur-list-item-bounds)))
           (cond
-           ;; Continue at item with greater indentation
-           ((> (nth 3 bounds) level) t)
-           ;; Stop and return point at item of equal indentation
-           ((= (nth 3 bounds) level)
+           ;; Stop and return point at item of lesser or equal indentation
+           ((<= (nth 3 bounds) level)
             (setq prev (point))
             nil)
-           ;; Stop and return nil at item with lesser indentation
-           ((< (nth 3 bounds) level)
-            (setq prev nil)
-            nil)))
+           ;; Stop at beginning of buffer
+           ((bobp) (setq prev nil))
+           ;; Continue at item with greater indentation
+           ((> (nth 3 bounds) level) t)))
+         ;; Stop at beginning of buffer
+         ((bobp) (setq prev nil))
+         ;; Continue if current line is blank
+         ((markdown-cur-line-blank-p) t)
          ;; Continue while indentation is the same or greater
          ((>= indent level) t)
          ;; Stop if current indentation is less than list item
@@ -1797,7 +2300,7 @@ If the point is not in a list item, do nothing."
       (setq indent (markdown-cur-line-indent)))
     ;; Don't skip over whitespace for empty list items (marker and
     ;; whitespace only), just move to end of whitespace.
-    (if (looking-back (concat markdown-regex-list "\\s-*"))
+    (if (looking-back (concat markdown-regex-list "\\s-*") nil)
           (goto-char (match-end 3))
       (skip-syntax-backward "-"))))
 
@@ -1844,7 +2347,7 @@ Return bounds of form (beg . end) if THING is found, or nil otherwise."
 
 (defun markdown-reference-definition (reference)
   "Find out whether Markdown REFERENCE is defined.
-REFERENCE should include the square brackets, like [this].
+REFERENCE should not include the square brackets.
 When REFERENCE is defined, return a list of the form (text start end)
 containing the definition text itself followed by the start and end
 locations of the text.  Otherwise, return nil.
@@ -1855,18 +2358,18 @@ intact additional processing."
       (goto-char (point-min))
       (catch 'found
         (while (re-search-forward markdown-regex-reference-definition nil t)
-          (when (string= reference (downcase (match-string-no-properties 1)))
+          (when (string= reference (downcase (match-string-no-properties 2)))
             (throw 'found
-                   (list (match-string-no-properties 2)
-                         (match-beginning 2) (match-end 2)))))))))
+                   (list (match-string-no-properties 5)
+                         (match-beginning 5) (match-end 5)))))))))
 
 (defun markdown-get-defined-references ()
-  "Return a list of all defined reference labels (including square brackets)."
+  "Return a list of all defined reference labels (not including square brackets)."
   (save-excursion
     (goto-char (point-min))
     (let (refs)
       (while (re-search-forward markdown-regex-reference-definition nil t)
-        (let ((target (match-string-no-properties 1)))
+        (let ((target (match-string-no-properties 2)))
           (add-to-list 'refs target t)))
       refs)))
 
@@ -1877,7 +2380,12 @@ Return nil otherwise.  Set match data according to
 This function searches the block for a code fragment that
 contains the point using `markdown-match-code'.  We do this
 because `thing-at-point-looking-at' does not work reliably with
-`markdown-regex-code'."
+`markdown-regex-code'.
+
+The match data is set as follows:
+Group 1 matches the opening backticks.
+Group 2 matches the code fragment itself, without backticks.
+Group 3 matches the closing backticks."
   (interactive)
   (save-excursion
     (let ((old-point (point))
@@ -1891,113 +2399,205 @@ because `thing-at-point-looking-at' does not work reliably with
            (<= (match-beginning 0) old-point) ; match contains old-point
            (>= (match-end 0) old-point)))))
 
+(defun markdown-code-block-at-pos (pos)
+  "Return match data list if there is a code block at POS.
+This includes pre blocks, tilde-fenced code blocks, and GFM
+quoted code blocks.  Return nil otherwise."
+  (or (get-text-property pos 'markdown-pre)
+      (get-text-property pos 'markdown-gfm-code)
+      (get-text-property pos 'markdown-fenced-code)
+      ;; polymode removes text properties set by markdown-mode, so
+      ;; check if `poly-markdown-mode' is active and whether the
+      ;; `chunkmode' property is non-nil at POS.
+      (and (bound-and-true-p poly-markdown-mode)
+           (get-text-property pos 'chunkmode))))
+
+(defun markdown-code-block-at-point ()
+  "Return match data if the point is inside a code block.
+This includes pre blocks, tilde-fenced code blocks, and
+GFM quoted code blocks.  Calls `markdown-code-block-at-pos'."
+  (markdown-code-block-at-pos (point)))
+
 
 ;;; Markdown Font Lock Matching Functions =====================================
 
-(defun markdown-match-comments (last)
-  "Match HTML comments from the point to LAST."
-  (cond ((search-forward "<!--" last t)
-         (backward-char 4)
-         (let ((beg (point)))
-           (cond ((search-forward-regexp "--[ \t]*>" last t)
-                  (set-match-data (list beg (point)))
-                  t)
-                 (t nil))))
-        (t nil)))
+(defun markdown-range-property-any (begin end prop values)
+  "Return t if PROP from BEGIN to END is equal to one of the given VALUES.
+Also returns t if PROP is a list containing one of the VALUES.
+Return nil otherwise."
+  (let (loc props val)
+    (catch 'found
+      (dolist (loc (number-sequence begin end))
+        (when (setq props (get-char-property loc prop))
+          (cond ((listp props)
+                 ;; props is a list, check for membership
+                 (dolist (val values)
+                   (when (memq val props) (throw 'found loc))))
+              (t
+               ;; props is a scalar, check for equality
+               (dolist (val values)
+                 (when (eq val props) (throw 'found loc))))))))))
+
+(defun markdown-match-inline-generic (regex last)
+  "Match inline REGEX from the point to LAST."
+  (when (re-search-forward regex last t)
+    (let ((bounds (markdown-code-block-at-pos (match-beginning 0))))
+      (if (null bounds)
+          ;; Not in a code block: keep match data and return t when in bounds
+          (<= (match-end 0) last)
+        ;; In code block: move past it and recursively search again
+        (when (< (goto-char (nth 1 bounds)) last)
+          (markdown-match-inline-generic regex last))))))
 
 (defun markdown-match-code (last)
-  "Match inline code from the point to LAST."
+  "Match inline code fragments from point to LAST."
   (unless (bobp)
     (backward-char 1))
-  (cond ((re-search-forward markdown-regex-code last t)
-         (set-match-data (list (match-beginning 2) (match-end 2)
-                               (match-beginning 4) (match-end 4)))
-         (goto-char (match-end 0))
-         t)
-        (t (forward-char 2) nil)))
+  (when (markdown-match-inline-generic markdown-regex-code last)
+    (set-match-data (list (match-beginning 1) (match-end 1)
+                          (match-beginning 2) (match-end 2)
+                          (match-beginning 3) (match-end 3)
+                          (match-beginning 4) (match-end 4)))
+    (goto-char (1+ (match-end 0)))))
+
+(defun markdown-match-bold (last)
+  "Match inline bold from the point to LAST."
+  (when (markdown-match-inline-generic markdown-regex-bold last)
+    (set-match-data (list (match-beginning 2) (match-end 2)
+                          (match-beginning 3) (match-end 3)
+                          (match-beginning 4) (match-end 4)
+                          (match-beginning 5) (match-end 5)))
+    (goto-char (1+ (match-end 0)))))
+
+(defun markdown-match-italic (last)
+  "Match inline italics from the point to LAST."
+  (let ((regex (if (eq major-mode 'gfm-mode)
+                   markdown-regex-gfm-italic markdown-regex-italic)))
+    (when (markdown-match-inline-generic regex last)
+      (let ((begin (match-beginning 1)) (end (match-end 1)))
+        (cond
+         ((markdown-range-property-any
+           begin end 'face (list markdown-inline-code-face
+                                 markdown-bold-face
+                                 markdown-list-face
+                                 markdown-math-face))
+          (goto-char (1+ (match-end 0)))
+          (markdown-match-italic last))
+         (t
+          (set-match-data (list (match-beginning 1) (match-end 1)
+                                (match-beginning 2) (match-end 2)
+                                (match-beginning 3) (match-end 3)
+                                (match-beginning 4) (match-end 4)))
+          (goto-char (1+ (match-end 0)))))))))
+
+(defun markdown-match-math-generic (regex last)
+  "Match quoted $..$ or $$..$$ math from point to LAST."
+  (when (and markdown-enable-math
+             (markdown-match-inline-generic regex last))
+    (let ((begin (match-beginning 1)) (end (match-end 1)))
+      (prog1
+          (if (markdown-range-property-any
+               begin end 'face (list markdown-inline-code-face
+                                     markdown-bold-face))
+              (markdown-match-math-generic regex last)
+            t)
+        (goto-char (1+ (match-end 0)))))))
+
+(defun markdown-match-math-single (last)
+  "Match single quoted $..$ math from point to LAST."
+  (markdown-match-math-generic markdown-regex-math-inline-single last))
+
+(defun markdown-match-math-double (last)
+  "Match double quoted $$..$$ math from point to LAST."
+  (markdown-match-math-generic markdown-regex-math-inline-double last))
+
+(defun markdown-match-propertized-text (property last)
+  "Match text with PROPERTY from point to LAST.
+Restore match data previously stored in PROPERTY."
+  (let (saved pos)
+    (unless (setq saved (get-text-property (point) property))
+      (setq pos (next-single-char-property-change (point) property nil last))
+      (setq saved (get-text-property pos property)))
+    (when saved
+      (set-match-data saved)
+      (goto-char (min (1+ (match-end 0)) (point-max)))
+      saved)))
 
 (defun markdown-match-pre-blocks (last)
-  "Match Markdown pre blocks from point to LAST."
-  (let ((levels (markdown-calculate-list-levels))
-        indent pre-regexp end-regexp begin end stop)
-    (while (and (< (point) last) (not end))
-      ;; Search for a region with sufficient indentation
-      (if (null levels)
-          (setq indent 1)
-        (setq indent (1+ (length levels))))
-      (setq pre-regexp (format "^\\(    \\|\t\\)\\{%d\\}" indent))
-      (setq end-regexp (format "^\\(    \\|\t\\)\\{0,%d\\}\\([^ \t]\\)" (1- indent)))
+  "Match preformatted blocks from point to LAST.
+Use data stored in 'markdown-pre text property during syntax
+analysis."
+  (markdown-match-propertized-text 'markdown-pre last))
 
-      (cond
-       ;; If not at the beginning of a line, move forward
-       ((not (bolp)) (forward-line))
-       ;; Move past blank lines
-       ((markdown-cur-line-blank-p) (forward-line))
-       ;; At headers and horizontal rules, reset levels
-       ((markdown-new-baseline-p) (forward-line) (setq levels nil))
-       ;; If the current line has sufficient indentation, mark out pre block
-       ;; The opening should be preceded by a blank line.
-       ((and (looking-at pre-regexp)
-             (markdown-prev-line-blank-p))
-        (setq begin (match-beginning 0))
-        (while (and (or (looking-at pre-regexp) (markdown-cur-line-blank-p))
-                    (not (eobp)))
-          (forward-line))
-        (setq end (point)))
-       ;; If current line has a list marker, update levels, move to end of block
-       ((looking-at markdown-regex-list)
-        (setq levels (markdown-update-list-levels
-                      (match-string 2) (markdown-cur-line-indent) levels))
-        (markdown-end-of-block-element))
-       ;; If this is the end of the indentation level, adjust levels accordingly.
-       ;; Only match end of indentation level if levels is not the empty list.
-       ((and (car levels) (looking-at end-regexp))
-        (setq levels (markdown-update-list-levels
-                      nil (markdown-cur-line-indent) levels))
-        (markdown-end-of-block-element))
-       (t (markdown-end-of-block-element))))
-
-    (if (not (and begin end))
-        ;; Return nil if no pre block was found
-        nil
-      ;; Set match data and return t upon success
-      (set-match-data (list begin end))
-      t)))
+(defun markdown-match-gfm-code-blocks (last)
+  "Match GFM quoted code blocks from point to LAST.
+Use data stored in 'markdown-gfm-code text property during syntax
+analysis."
+  (markdown-match-propertized-text 'markdown-gfm-code last))
 
 (defun markdown-match-fenced-code-blocks (last)
   "Match fenced code blocks from the point to LAST."
-  (cond ((search-forward-regexp "^\\([~]\\{3,\\}\\)" last t)
-         (beginning-of-line)
-         (let ((beg (point)))
-           (forward-line)
-           (cond ((search-forward-regexp
-                   (concat "^" (match-string 1) "~*") last t)
-                  (set-match-data (list beg (point)))
-                  t)
-                 (t nil))))
+  (markdown-match-propertized-text 'markdown-fenced-code last))
+
+(defun markdown-match-blockquotes (last)
+  "Match blockquotes from point to LAST.
+Use data stored in 'markdown-blockquote text property during syntax
+analysis."
+  (markdown-match-propertized-text 'markdown-blockquote last))
+
+(defun markdown-match-heading-1-setext (last)
+  "Match level 1 setext headings from point to LAST."
+  (markdown-match-propertized-text 'markdown-heading-1-setext last))
+
+(defun markdown-match-heading-2-setext (last)
+  "Match level 2 setext headings from point to LAST."
+  (markdown-match-propertized-text 'markdown-heading-2-setext last))
+
+(defun markdown-match-heading-1-atx (last)
+  "Match level 1 ATX headings from point to LAST."
+  (markdown-match-propertized-text 'markdown-heading-1-atx last))
+
+(defun markdown-match-heading-2-atx (last)
+  "Match level 2 ATX headings from point to LAST."
+  (markdown-match-propertized-text 'markdown-heading-2-atx last))
+
+(defun markdown-match-heading-3-atx (last)
+  "Match level 3 ATX headings from point to LAST."
+  (markdown-match-propertized-text 'markdown-heading-3-atx last))
+
+(defun markdown-match-heading-4-atx (last)
+  "Match level 4 ATX headings from point to LAST."
+  (markdown-match-propertized-text 'markdown-heading-4-atx last))
+
+(defun markdown-match-heading-5-atx (last)
+  "Match level 5 ATX headings from point to LAST."
+  (markdown-match-propertized-text 'markdown-heading-5-atx last))
+
+(defun markdown-match-heading-6-atx (last)
+  "Match level 6 ATX headings from point to LAST."
+  (markdown-match-propertized-text 'markdown-heading-6-atx last))
+
+(defun markdown-match-hr (last)
+  "Match horizontal rules comments from the point to LAST."
+  (while (and (re-search-forward markdown-regex-hr last t)
+              (or (markdown-on-heading-p)
+                  (markdown-code-block-at-point))
+              (< (match-end 0) last))
+    (forward-line))
+  (beginning-of-line)
+  (cond ((looking-at markdown-regex-hr)
+         (forward-line)
+         t)
         (t nil)))
 
-(defun markdown-match-gfm-code-blocks (last)
-  "Match GFM quoted code blocks from point to LAST."
-  (let (open lang body close all)
-    (if (search-forward-regexp
-         "\\(?:\\`\\|[\n\r]+\\s *[\n\r]\\)\\(```\\)\\([^[:space:]]+[[:space:]]*\\|{[^}]*}\\)?$" last t)
-        (progn
-          (beginning-of-line)
-          (setq open (list (match-beginning 1) (match-end 1))
-                lang (list (match-beginning 2) (match-end 2)))
-          (if (markdown-prev-line-blank-p)
-              (progn
-                (forward-line)
-                (setq body (list (point)))
-                (if (search-forward-regexp "^```$" last t)
-                    (progn
-                      (setq body (reverse (cons (1- (match-beginning 0)) body))
-                            close (list (match-beginning 0) (match-end 0))
-                            all (list (car open) (match-end 0)))
-                      (set-match-data (append all open lang body close))
-                      t)))))
-      nil)))
+(defun markdown-match-comments (last)
+  "Match HTML comments from the point to LAST."
+  (when (and (skip-syntax-forward "^<" last))
+    (let ((beg (point)))
+      (when (and (skip-syntax-forward "^>" last) (< (point) last))
+        (forward-char)
+        (set-match-data (list beg (point)))
+        t))))
 
 (defun markdown-match-generic-metadata (regexp last)
   "Match generic metadata specified by REGEXP from the point to LAST."
@@ -2013,7 +2613,9 @@ because `thing-at-point-looking-at' does not work reliably with
            ;; If a metadata item is found, it may span several lines.
            (let ((key-beginning (match-beginning 1))
                  (key-end (match-end 1))
-                 (value-beginning (match-beginning 2)))
+                 (markup-begin (match-beginning 2))
+                 (markup-end (match-end 2))
+                 (value-beginning (match-beginning 3)))
              (while (and (not (looking-at regexp))
                          (not (> (point) (min last header-end)))
                          (not (eobp)))
@@ -2023,6 +2625,7 @@ because `thing-at-point-looking-at' does not work reliably with
                (end-of-line))
              (set-match-data (list key-beginning (point) ; complete metadata
                                    key-beginning key-end ; key
+                                   markup-begin markup-end ; markup
                                    value-beginning (point))) ; value
            t))
           (t nil))))
@@ -2034,21 +2637,6 @@ because `thing-at-point-looking-at' does not work reliably with
 (defun markdown-match-pandoc-metadata (last)
   "Match Pandoc metadata from the point to LAST."
   (markdown-match-generic-metadata markdown-regex-pandoc-metadata last))
-
-(defun markdown-font-lock-extend-region ()
-  "Extend the search region to include an entire block of text.
-This helps improve font locking for block constructs such as pre blocks."
-  ;; Avoid compiler warnings about these global variables from font-lock.el.
-  ;; See the documentation for variable `font-lock-extend-region-functions'.
-  (eval-when-compile (defvar font-lock-beg) (defvar font-lock-end))
-  (save-excursion
-    (goto-char font-lock-beg)
-    (unless (looking-back "\n\n")
-      (let ((found (or (re-search-backward "\n\n" nil t) (point-min))))
-        (goto-char font-lock-end)
-        (when (re-search-forward "\n\n" nil t)
-          (setq font-lock-end (match-beginning 0))
-          (setq font-lock-beg found))))))
 
 
 ;;; Syntax Table ==============================================================
@@ -2065,7 +2653,7 @@ This helps improve font locking for block constructs such as pre blocks."
 (defun markdown-ensure-blank-line-before ()
   "If previous line is not already blank, insert a blank line before point."
   (unless (bolp) (insert "\n"))
-  (unless (or (bobp) (looking-back "\n\\s-*\n")) (insert "\n")))
+  (unless (or (bobp) (looking-back "\n\\s-*\n" nil)) (insert "\n")))
 
 (defun markdown-ensure-blank-line-after ()
   "If following line is not already blank, insert a blank line after point.
@@ -2216,18 +2804,18 @@ insert italic delimiters and place the cursor in between them."
         ;; Active region
         (let ((bounds (markdown-unwrap-things-in-region
                        (region-beginning) (region-end)
-                       markdown-regex-italic 2 4)))
+                       markdown-regex-italic 1 3)))
           (markdown-wrap-or-insert delim delim nil (car bounds) (cdr bounds)))
       ;; Italic markup removal, italic word at point, or empty markup insertion
       (if (thing-at-point-looking-at markdown-regex-italic)
-          (markdown-unwrap-thing-at-point nil 2 4)
+          (markdown-unwrap-thing-at-point nil 1 3)
         (markdown-wrap-or-insert delim delim 'word nil nil)))))
 
 (defun markdown-insert-strike-through ()
-  "Insert markup to make a region or word strike-through.
-If there is an active region, make the region strike-through.  If the point
-is at a non-bold word, make the word strike-through.  If the point is at a
-strike-through word or phrase, remove the strike-through markup.  Otherwise,
+  "Insert markup to make a region or word strikethrough.
+If there is an active region, make the region strikethrough.  If the point
+is at a non-bold word, make the word strikethrough.  If the point is at a
+strikethrough word or phrase, remove the strikethrough markup.  Otherwise,
 simply insert bold delimiters and place the cursor in between them."
   (interactive)
   (let ((delim "~~"))
@@ -2237,7 +2825,7 @@ simply insert bold delimiters and place the cursor in between them."
                        (region-beginning) (region-end)
                        markdown-regex-strike-through 2 4)))
           (markdown-wrap-or-insert delim delim nil (car bounds) (cdr bounds)))
-      ;; Strike-through markup removal, strike-through word at point, or empty markup insertion
+      ;; Strikethrough markup removal, strikethrough word at point, or empty markup insertion
       (if (thing-at-point-looking-at markdown-regex-strike-through)
           (markdown-unwrap-thing-at-point nil 2 4)
         (markdown-wrap-or-insert delim delim 'word nil nil)))))
@@ -2253,12 +2841,29 @@ place the cursor in between them."
       ;; Active region
       (let ((bounds (markdown-unwrap-things-in-region
                      (region-beginning) (region-end)
-                     markdown-regex-code 2 4)))
+                     markdown-regex-code 1 3)))
         (markdown-wrap-or-insert "`" "`" nil (car bounds) (cdr bounds)))
     ;; Code markup removal, code markup for word, or empty markup insertion
     (if (markdown-code-at-point-p)
-        (markdown-unwrap-thing-at-point nil 0 1)
+        (markdown-unwrap-thing-at-point nil 0 2)
       (markdown-wrap-or-insert "`" "`" 'word nil nil))))
+
+(defun markdown-insert-kbd ()
+  "Insert markup to wrap region or word in <kbd> tags.
+If there is an active region, use the region.  If the point is at
+a word, use the word.  Otherwise, simply insert <kbd> tags and
+place the cursor in between them."
+  (interactive)
+  (if (markdown-use-region-p)
+      ;; Active region
+      (let ((bounds (markdown-unwrap-things-in-region
+                     (region-beginning) (region-end)
+                     markdown-regex-kbd 0 2)))
+        (markdown-wrap-or-insert "<kbd>" "</kbd>" nil (car bounds) (cdr bounds)))
+    ;; Markup removal, markup for word, or empty markup insertion
+    (if (thing-at-point-looking-at markdown-regex-kbd)
+        (markdown-unwrap-thing-at-point nil 0 2)
+      (markdown-wrap-or-insert "<kbd>" "</kbd>" 'word nil nil))))
 
 (defun markdown-insert-link ()
   "Insert an inline link, using region or word as link text if possible.
@@ -2283,27 +2888,37 @@ to XHTML.  If URL is nil, insert only the link portion (for
 example, when a reference label is already defined)."
   (insert (concat "[" text "][" label "]"))
   (when url
-    (let ((end (point))
-          (label (if (> (length label) 0) label text)))
-      (cond
-       ((eq markdown-reference-location 'end) (goto-char (point-max)))
-       ((eq markdown-reference-location 'immediately) (markdown-end-of-block))
-       ((eq markdown-reference-location 'header) (markdown-end-of-defun)))
-      (unless (markdown-cur-line-blank-p) (insert "\n"))
-      (insert "\n[" label "]: " url)
-      (unless (> (length url) 0)
-        (setq end (point)))
-      (when (> (length title) 0)
-        (insert " \"" title "\""))
-      (insert "\n")
-      (unless (or (eobp) (looking-at "\n"))
-        (insert "\n"))
-      (goto-char end)
-      (when (> (length url) 0)
-        (message
-         (substitute-command-keys
-          "Defined reference [%s], press \\[markdown-jump] to jump there")
-         (or label text))))))
+    (markdown-insert-reference-definition
+     (if (string-equal label "") text label)
+     url title)))
+
+(defun markdown-insert-reference-definition (label &optional url title)
+  "Add definition for reference LABEL with URL and TITLE.
+LABEL is a Markdown reference label without square brackets.
+URL and TITLE are optional.  When given, the TITLE will
+be used to populate the title attribute when converted to XHTML."
+  ;; END specifies where to leave the point upon return
+  (let ((end (point)))
+    (cond
+     ((eq markdown-reference-location 'end) (goto-char (point-max)))
+     ((eq markdown-reference-location 'immediately) (markdown-end-of-block))
+     ((eq markdown-reference-location 'header) (markdown-end-of-defun)))
+    (unless (markdown-cur-line-blank-p) (insert "\n"))
+    (insert "\n[" label "]: ")
+    (if url
+        (insert url)
+      ;; When no URL is given, leave cursor at END following the colon
+      (setq end (point)))
+    (when title
+      (insert " \"" title "\""))
+    (unless (looking-at "\n")
+      (insert "\n"))
+    (goto-char end)
+    (when url
+      (message
+       (substitute-command-keys
+        "Defined reference [%s], press \\[markdown-jump] to jump there")
+       label))))
 
 (defun markdown-insert-reference-link-dwim ()
   "Insert a reference link of the form [text][label] at point.
@@ -2336,14 +2951,14 @@ location determined by `markdown-reference-location'."
                  nil nil nil 'markdown-reference-label-history nil))
          (ref (save-match-data
                 (markdown-reference-definition
-                 (concat "[" (if (> (length label) 0) label text) "]"))))
+                 (if (> (length label) 0) label text))))
          (url (cond (ref nil)
-                    (switch (match-string 5))
+                    (switch (match-string 6))
                     (t (read-string "Link URL: "))))
          (title (cond
                  ((= (length url) 0) nil)
-                 (switch (if (> (length (match-string 6)) 2)
-                             (substring (match-string 6) 1 -1)
+                 (switch (if (> (length (match-string 7)) 2)
+                             (substring (match-string 7) 1 -1)
                            nil))
                  (t (read-string "Link Title (optional): ")))))
     (when bounds (delete-region (car bounds) (cdr bounds)))
@@ -2380,9 +2995,9 @@ insert link markup."
     ;; Markup removal, wiki link at at point, or empty markup insertion
     (if (thing-at-point-looking-at markdown-regex-wiki-link)
         (if (or markdown-wiki-link-alias-first
-                (null (match-string 4)))
-            (markdown-unwrap-thing-at-point nil 1 2)
-          (markdown-unwrap-thing-at-point nil 1 4))
+                (null (match-string 5)))
+            (markdown-unwrap-thing-at-point nil 1 3)
+          (markdown-unwrap-thing-at-point nil 1 5))
       (markdown-wrap-or-insert "[[" "]]"))))
 
 (defun markdown-insert-image (&optional arg)
@@ -2451,7 +3066,8 @@ header will be inserted."
            (insert text "\n" hdr))
           (t
            (setq hdr (make-string level ?#))
-           (insert hdr " " text " " hdr))))
+           (insert hdr " " text)
+           (when (null markdown-asymmetric-header) (insert " " hdr)))))
   (markdown-ensure-blank-line-after)
   ;; Leave point at end of text
   (if setext
@@ -2486,17 +3102,18 @@ header text is determined."
   (interactive "*P")
   (let (level)
     (save-excursion
-      (when (re-search-backward markdown-regex-header nil t)
-        ;; level of previous header
+      (when (or (thing-at-point-looking-at markdown-regex-header)
+                (re-search-backward markdown-regex-header nil t))
+        ;; level of current or previous header
         (setq level (markdown-outline-level))
-        ;; match groups 1 and 2 indicate setext headers
+        ;; match groups 1 and 3 indicate setext headers
         (setq setext (or setext (match-end 1) (match-end 3)))))
     ;; check prefix argument
     (cond
-     ((and (equal arg '(4)) (> level 1)) ;; C-u
-      (decf level))
-     ((and (equal arg '(16)) (< level 6)) ;; C-u C-u
-      (incf level))
+     ((and (equal arg '(4)) level (> level 1)) ;; C-u
+      (cl-decf level))
+     ((and (equal arg '(16)) level (< level 6)) ;; C-u C-u
+      (cl-incf level))
      (arg ;; numeric prefix
       (setq level (prefix-numeric-value arg))))
     ;; setext headers must be level one or two
@@ -2642,19 +3259,141 @@ Arguments BEG and END specify the beginning and end of the region."
   (let ((indent (markdown-pre-indentation (max (point-min) (1- beg)))))
     (markdown-block-region beg end indent)))
 
+(defun markdown-electric-backquote (arg)
+  "Insert a backquote.
+The numeric prefix argument ARG says how many times to repeat the insertion.
+Call `markdown-insert-gfm-code-block' interactively
+if three backquotes inserted at the beginning of line."
+  (interactive "*P")
+  (self-insert-command (prefix-numeric-value arg))
+  (when (and markdown-gfm-use-electric-backquote (looking-back "^```" nil))
+    (replace-match "")
+    (call-interactively #'markdown-insert-gfm-code-block)))
+
+(defconst markdown-gfm-recognized-languages
+  ;; to reproduce/update, evaluate the let-form in
+  ;; scripts/get-recognized-gfm-languages.el. that produces a single long sexp,
+  ;; but with appropriate use of a keyboard macro, indenting and filling it
+  ;; properly is pretty fast.
+  '("ABAP" "AGS-Script" "AMPL" "ANTLR" "API-Blueprint" "APL" "ASP" "ATS"
+    "ActionScript" "Ada" "Agda" "Alloy" "Ant-Build-System" "ApacheConf" "Apex"
+    "AppleScript" "Arc" "Arduino" "AsciiDoc" "AspectJ" "Assembly" "Augeas"
+    "AutoHotkey" "AutoIt" "Awk" "Batchfile" "Befunge" "Bison" "BitBake"
+    "BlitzBasic" "BlitzMax" "Bluespec" "Boo" "Brainfuck" "Brightscript" "Bro" "C#"
+    "C++" "C-ObjDump" "C2hs-Haskell" "CLIPS" "CMake" "COBOL" "CSS" "Cap'n-Proto"
+    "CartoCSS" "Ceylon" "Chapel" "Charity" "ChucK" "Cirru" "Clarion" "Clean"
+    "Click" "Clojure" "CoffeeScript" "ColdFusion" "ColdFusion-CFC" "Common-Lisp"
+    "Component-Pascal" "Cool" "Coq" "Cpp-ObjDump" "Creole" "Crystal" "Cucumber"
+    "Cuda" "Cycript" "Cython" "D-ObjDump" "DIGITAL-Command-Language" "DM"
+    "DNS-Zone" "DTrace" "Darcs-Patch" "Dart" "Diff" "Dockerfile" "Dogescript"
+    "Dylan" "ECL" "ECLiPSe" "Eagle" "Ecere-Projects" "Eiffel" "Elixir" "Elm"
+    "Emacs-Lisp" "EmberScript" "Erlang" "F#" "FLUX" "FORTRAN" "Factor" "Fancy"
+    "Fantom" "Filterscript" "Formatted" "Forth" "FreeMarker" "Frege" "G-code"
+    "GAMS" "GAP" "GAS" "GDScript" "GLSL" "Game-Maker-Language" "Genshi"
+    "Gentoo-Ebuild" "Gentoo-Eclass" "Gettext-Catalog" "Glyph" "Gnuplot" "Go"
+    "Golo" "Gosu" "Grace" "Gradle" "Grammatical-Framework"
+    "Graph-Modeling-Language" "Graphviz-(DOT)" "Groff" "Groovy"
+    "Groovy-Server-Pages" "HCL" "HTML" "HTML+Django" "HTML+EEX" "HTML+ERB"
+    "HTML+PHP" "HTTP" "Hack" "Haml" "Handlebars" "Harbour" "Haskell" "Haxe" "Hy"
+    "HyPhy" "IDL" "IGOR-Pro" "INI" "IRC-log" "Idris" "Inform-7" "Inno-Setup" "Io"
+    "Ioke" "Isabelle" "Isabelle-ROOT" "JFlex" "JSON" "JSON5" "JSONLD" "JSONiq"
+    "JSX" "Jade" "Jasmin" "Java" "Java-Server-Pages" "JavaScript" "Julia"
+    "Jupyter-Notebook" "KRL" "KiCad" "Kit" "Kotlin" "LFE" "LLVM" "LOLCODE" "LSL"
+    "LabVIEW" "Lasso" "Latte" "Lean" "Less" "Lex" "LilyPond" "Limbo"
+    "Linker-Script" "Linux-Kernel-Module" "Liquid" "Literate-Agda"
+    "Literate-CoffeeScript" "Literate-Haskell" "LiveScript" "Logos" "Logtalk"
+    "LookML" "LoomScript" "Lua" "MAXScript" "MTML" "MUF" "Makefile" "Mako"
+    "Markdown" "Mask" "Mathematica" "Matlab" "Maven-POM" "Max" "MediaWiki"
+    "Mercury" "Metal" "MiniD" "Mirah" "Modelica" "Modula-2"
+    "Module-Management-System" "Monkey" "Moocode" "MoonScript" "Myghty" "NCL" "NL"
+    "NSIS" "Nemerle" "NetLinx" "NetLinx+ERB" "NetLogo" "NewLisp" "Nginx" "Nimrod"
+    "Ninja" "Nit" "Nix" "Nu" "NumPy" "OCaml" "ObjDump" "Objective-C"
+    "Objective-C++" "Objective-J" "Omgrofl" "Opa" "Opal" "OpenCL" "OpenEdge-ABL"
+    "OpenSCAD" "Org" "Ox" "Oxygene" "Oz" "PAWN" "PHP" "PLSQL" "PLpgSQL" "Pan"
+    "Papyrus" "Parrot" "Parrot-Assembly" "Parrot-Internal-Representation" "Pascal"
+    "Perl" "Perl6" "Pickle" "PicoLisp" "PigLatin" "Pike" "Pod" "PogoScript" "Pony"
+    "PostScript" "PowerShell" "Processing" "Prolog" "Propeller-Spin"
+    "Protocol-Buffer" "Public-Key" "Puppet" "Pure-Data" "PureBasic" "PureScript"
+    "Python" "Python-traceback" "QML" "QMake" "RAML" "RDoc" "REALbasic" "RHTML"
+    "RMarkdown" "Racket" "Ragel-in-Ruby-Host" "Raw-token-data" "Rebol" "Red"
+    "Redcode" "Ren'Py" "RenderScript" "RobotFramework" "Rouge" "Ruby" "Rust" "SAS"
+    "SCSS" "SMT" "SPARQL" "SQF" "SQL" "SQLPL" "STON" "SVG" "Sage" "SaltStack"
+    "Sass" "Scala" "Scaml" "Scheme" "Scilab" "Self" "Shell" "ShellSession" "Shen"
+    "Slash" "Slim" "Smali" "Smalltalk" "Smarty" "SourcePawn" "Squirrel" "Stan"
+    "Standard-ML" "Stata" "Stylus" "SuperCollider" "Swift" "SystemVerilog" "TOML"
+    "TXL" "Tcl" "Tcsh" "TeX" "Tea" "Text" "Textile" "Thrift" "Turing" "Turtle"
+    "Twig" "TypeScript" "Unified-Parallel-C" "Unity3D-Asset" "UnrealScript"
+    "UrWeb" "VCL" "VHDL" "Vala" "Verilog" "VimL" "Visual-Basic" "Volt" "Vue"
+    "Web-Ontology-Language" "WebIDL" "X10" "XC" "XML" "XPages" "XProc" "XQuery"
+    "XS" "XSLT" "Xojo" "Xtend" "YAML" "Yacc" "Zephir" "Zimpl" "desktop" "eC" "edn"
+    "fish" "mupad" "nesC" "ooc" "reStructuredText" "wisp" "xBase")
+  "Language specifiers recognized by github's syntax highlighting features.")
+
+(defvar markdown-gfm-used-languages nil
+  "Languages used in the current buffer in GFM code blocks, which are not
+already in `markdown-gfm-recognized-languages' or
+`markdown-gfm-additional-languages'.")
+(make-variable-buffer-local 'markdown-gfm-used-languages)
+(defvar markdown-gfm-last-used-language nil
+  "Last language used in the current buffer in GFM code blocks.")
+(make-variable-buffer-local 'markdown-gfm-last-used-language)
+
+(defun markdown-trim-whitespace (str)
+  (markdown-replace-regexp-in-string
+   "\\(?:[[:space:]\r\n]+\\'\\|\\`[[:space:]\r\n]+\\)" "" str))
+
+(defun markdown-clean-language-string (str)
+  (markdown-replace-regexp-in-string
+   "{\\.?\\|}" "" (markdown-trim-whitespace str)))
+
+(defun markdown-validate-language-string (widget)
+  (let ((str (widget-value widget)))
+    (unless (string= str (markdown-clean-language-string str))
+      (widget-put widget :error (format "Invalid language spec: '%s'" str))
+      widget)))
+
+(defun markdown-gfm-get-corpus ()
+  "Create corpus of recognized GFM code block languages for the given buffer."
+  (let ((given-corpus (append markdown-gfm-additional-languages
+                              markdown-gfm-recognized-languages)))
+    (append
+     markdown-gfm-used-languages
+     (if markdown-gfm-downcase-languages (cl-mapcar #'downcase given-corpus)
+       given-corpus))))
+
+(defun markdown-add-language-if-new (lang)
+  (let* ((cleaned-lang (markdown-clean-language-string lang))
+         (find-result
+          (cl-find cleaned-lang (markdown-gfm-get-corpus)
+                   :test #'equal)))
+    (setq markdown-gfm-last-used-language cleaned-lang)
+    (unless find-result (push cleaned-lang markdown-gfm-used-languages))))
+
 (defun markdown-insert-gfm-code-block (&optional lang)
   "Insert GFM code block for language LANG.
 If LANG is nil, the language will be queried from user.  If a
 region is active, wrap this region with the markup instead.  If
 the region boundaries are not on empty lines, these are added
 automatically in order to have the correct markup."
-  (interactive "sProgramming language [none]: ")
+  (interactive
+   (list (let ((completion-ignore-case nil))
+           (condition-case nil
+               (markdown-clean-language-string
+                (completing-read
+                 (format "Programming language [%s]: "
+                         (or markdown-gfm-last-used-language "none"))
+                 (markdown-gfm-get-corpus)
+                 nil 'confirm nil
+                 'markdown-gfm-language-history))
+             (quit "")))))
+  (unless (string= lang "") (markdown-add-language-if-new lang))
+  (when (> (length lang) 0) (setq lang (concat " " lang)))
   (if (markdown-use-region-p)
       (let ((b (region-beginning)) (e (region-end)))
         (goto-char e)
         ;; if we're on a blank line, don't newline, otherwise the ```
         ;; should go on its own line
-        (unless (looking-back "\n")
+        (unless (looking-back "\n" nil)
           (newline))
         (insert "```")
         (markdown-ensure-blank-line-after)
@@ -2667,11 +3406,17 @@ automatically in order to have the correct markup."
         (markdown-ensure-blank-line-before)
         (insert "```" lang))
     (markdown-ensure-blank-line-before)
-    (insert "```" lang)
-    (newline 2)
-    (insert "```")
+    (insert "```" lang "\n\n```")
     (markdown-ensure-blank-line-after)
     (forward-line -1)))
+
+(defun markdown-gfm-parse-buffer-for-languages (&optional buffer)
+  (with-current-buffer (or buffer (current-buffer))
+    (save-excursion
+      (goto-char (point-min))
+      (while (re-search-forward markdown-regex-gfm-code-block-open nil t)
+        (let ((lang (match-string-no-properties 2)))
+          (when lang (markdown-add-language-if-new lang)))))))
 
 
 ;;; Footnotes ======================================================================
@@ -2686,7 +3431,7 @@ automatically in order to have the correct markup."
         (let ((fn (string-to-number (match-string 1))))
           (when (> fn markdown-footnote-counter)
             (setq markdown-footnote-counter fn))))))
-  (incf markdown-footnote-counter))
+  (cl-incf markdown-footnote-counter))
 
 (defun markdown-insert-footnote ()
   "Insert footnote with a new number and move point to footnote definition."
@@ -2721,7 +3466,7 @@ footnote marker or in the footnote text."
       ;; We're starting in footnote text, so mark our return position and jump
       ;; to the marker if possible.
       (let ((marker-pos (markdown-footnote-find-marker
-                         (first starting-footnote-text-positions))))
+                         (cl-first starting-footnote-text-positions))))
             (if marker-pos
                 (goto-char (1- marker-pos))
               ;; If there isn't a marker, we still want to kill the text.
@@ -2735,10 +3480,10 @@ footnote marker or in the footnote text."
           (error "Not at a footnote"))
         ;; Even if we knew the text position before, it changed when we deleted
         ;; the label.
-        (setq marker-pos (second marker))
-        (let ((new-text-pos (markdown-footnote-find-text (first marker))))
+        (setq marker-pos (cl-second marker))
+        (let ((new-text-pos (markdown-footnote-find-text (cl-first marker))))
           (unless new-text-pos
-            (error "No text for footnote `%s'" (first marker)))
+            (error "No text for footnote `%s'" (cl-first marker)))
           (goto-char new-text-pos))))
     (let ((pos (markdown-footnote-kill-text)))
       (goto-char (if starting-footnote-text-positions
@@ -2752,7 +3497,7 @@ start position of the marker before deletion.  If no footnote
 marker was deleted, this function returns NIL."
   (let ((marker (markdown-footnote-marker-positions)))
     (when marker
-      (delete-region (second marker) (third marker))
+      (delete-region (cl-second marker) (cl-third marker))
       (butlast marker))))
 
 (defun markdown-footnote-kill-text ()
@@ -2764,14 +3509,14 @@ The killed text is placed in the kill ring (without the footnote
 number)."
   (let ((fn (markdown-footnote-text-positions)))
     (when fn
-      (let ((text (delete-and-extract-region (second fn) (third fn))))
-        (string-match (concat "\\[\\" (first fn) "\\]:[[:space:]]*\\(\\(.*\n?\\)*\\)") text)
+      (let ((text (delete-and-extract-region (cl-second fn) (cl-third fn))))
+        (string-match (concat "\\[\\" (cl-first fn) "\\]:[[:space:]]*\\(\\(.*\n?\\)*\\)") text)
         (kill-new (match-string 1 text))
         (when (and (markdown-cur-line-blank-p)
                    (markdown-prev-line-blank-p)
                    (not (bobp)))
           (delete-region (1- (point)) (point)))
-        (second fn)))))
+        (cl-second fn)))))
 
 (defun markdown-footnote-goto-text ()
   "Jump to the text of the footnote at point."
@@ -2884,7 +3629,7 @@ text to kill ring), and list items."
     (cond
      ;; Inline code
      ((markdown-code-at-point-p)
-      (kill-new (match-string 1))
+      (kill-new (match-string 2))
       (delete-region (match-beginning 0) (match-end 0)))
      ;; ATX header
      ((thing-at-point-looking-at markdown-regex-header-atx)
@@ -2924,9 +3669,9 @@ text to kill ring), and list items."
       (delete-region (match-beginning 2) (match-end 2)))
      ;; Italics
      ((thing-at-point-looking-at markdown-regex-italic)
-      (kill-new (match-string 4))
-      (delete-region (match-beginning 2) (match-end 2)))
-     ;; Strike-through
+      (kill-new (match-string 3))
+      (delete-region (match-beginning 1) (match-end 1)))
+     ;; Strikethrough
      ((thing-at-point-looking-at markdown-regex-strike-through)
       (kill-new (match-string 4))
       (delete-region (match-beginning 2) (match-end 2)))
@@ -2938,11 +3683,11 @@ text to kill ring), and list items."
       (markdown-footnote-kill))
      ;; Reference definition (add URL to kill ring)
      ((thing-at-point-looking-at markdown-regex-reference-definition)
-      (kill-new (match-string 2))
+      (kill-new (match-string 5))
       (delete-region (match-beginning 0) (match-end 0)))
      ;; List item
      ((setq val (markdown-cur-list-item-bounds))
-      (kill-new (delete-and-extract-region (first val) (second val))))
+      (kill-new (delete-and-extract-region (cl-first val) (cl-second val))))
      (t
       (error "Nothing found at point to kill")))))
 
@@ -3025,9 +3770,9 @@ duplicate positions, which are handled up by calling functions."
 (defun markdown-enter-key ()
   "Handle RET according to to the value of `markdown-indent-on-enter'."
   (interactive)
-  (if markdown-indent-on-enter
-      (newline-and-indent)
-    (newline)))
+  (newline)
+  (when markdown-indent-on-enter
+    (markdown-indent-line)))
 
 (defun markdown-exdent-or-delete (arg)
   "Handle BACKSPACE by cycling through indentation points.
@@ -3215,7 +3960,7 @@ match."
             (let (match)
               (save-match-data
                 (dolist (prev-regexp previous)
-                  (or match (setq match (looking-back prev-regexp)))))
+                  (or match (setq match (looking-back prev-regexp nil)))))
               (unless match
                 (save-excursion (funcall function))))))
         (add-to-list 'previous regexp)))))
@@ -3305,10 +4050,10 @@ Assumes match data is available for `markdown-regex-bold'."
   "Cycle italic markup between underscores and asterisks.
 Assumes match data is available for `markdown-regex-italic'."
   (save-excursion
-    (let* ((old-delim (match-string 3))
+    (let* ((old-delim (match-string 2))
            (new-delim (if (string-equal old-delim "*") "_" "*")))
-      (replace-match new-delim t t nil 3)
-      (replace-match new-delim t t nil 5))))
+      (replace-match new-delim t t nil 2)
+      (replace-match new-delim t t nil 4))))
 
 
 ;;; Keymap ====================================================================
@@ -3337,9 +4082,11 @@ Assumes match data is available for `markdown-regex-italic'."
     (define-key map "\C-c\C-se" 'markdown-insert-italic)
     (define-key map "\C-c\C-sc" 'markdown-insert-code)
     (define-key map "\C-c\C-sb" 'markdown-insert-blockquote)
+    (define-key map "\C-c\C-sk" 'markdown-insert-kbd)
     (define-key map "\C-c\C-s\C-b" 'markdown-blockquote-region)
     (define-key map "\C-c\C-sp" 'markdown-insert-pre)
     (define-key map "\C-c\C-s\C-p" 'markdown-pre-region)
+    (define-key map "\C-c\C-sP" 'markdown-insert-gfm-code-block)
     (define-key map "\C-c-" 'markdown-insert-hr)
     ;; Element insertion (deprecated)
     (define-key map "\C-c\C-ar" 'markdown-insert-reference-link-dwim)
@@ -3353,29 +4100,30 @@ Assumes match data is available for `markdown-regex-italic'."
     (define-key map (kbd "C-c C-]") 'markdown-complete)
     ;; Following and Jumping
     (define-key map (kbd "C-c C-o") 'markdown-follow-thing-at-point)
-    (define-key map (kbd "C-c C-j") 'markdown-jump)
+    (define-key map (kbd "C-c C-l") 'markdown-jump)
     ;; Indentation
     (define-key map (kbd "C-m") 'markdown-enter-key)
-    (define-key map (kbd "<backspace>") 'markdown-exdent-or-delete)
+    (define-key map (kbd "DEL") 'markdown-exdent-or-delete)
     (define-key map (kbd "C-c >") 'markdown-indent-region)
     (define-key map (kbd "C-c <") 'markdown-exdent-region)
     ;; Visibility cycling
-    (define-key map (kbd "<tab>") 'markdown-cycle)
+    (define-key map (kbd "TAB") 'markdown-cycle)
     (define-key map (kbd "<S-iso-lefttab>") 'markdown-shifttab)
     (define-key map (kbd "<S-tab>")  'markdown-shifttab)
     (define-key map (kbd "<backtab>") 'markdown-shifttab)
     ;; Header navigation
-    (define-key map (kbd "C-c C-n") 'outline-next-visible-heading)
-    (define-key map (kbd "C-c C-p") 'outline-previous-visible-heading)
-    (define-key map (kbd "C-c C-f") 'outline-forward-same-level)
-    (define-key map (kbd "C-c C-b") 'outline-backward-same-level)
-    (define-key map (kbd "C-c C-u") 'outline-up-heading)
+    (define-key map (kbd "C-c C-n") 'markdown-next-visible-heading)
+    (define-key map (kbd "C-c C-p") 'markdown-previous-visible-heading)
+    (define-key map (kbd "C-c C-f") 'markdown-forward-same-level)
+    (define-key map (kbd "C-c C-b") 'markdown-backward-same-level)
+    (define-key map (kbd "C-c C-u") 'markdown-up-heading)
     ;; Buffer-wide commands
     (define-key map (kbd "C-c C-c m") 'markdown-other-window)
     (define-key map (kbd "C-c C-c p") 'markdown-preview)
     (define-key map (kbd "C-c C-c e") 'markdown-export)
     (define-key map (kbd "C-c C-c v") 'markdown-export-and-preview)
     (define-key map (kbd "C-c C-c o") 'markdown-open)
+    (define-key map (kbd "C-c C-c l") 'markdown-live-preview-mode)
     (define-key map (kbd "C-c C-c w") 'markdown-kill-ring-save)
     (define-key map (kbd "C-c C-c c") 'markdown-check-refs)
     (define-key map (kbd "C-c C-c n") 'markdown-cleanup-list-numbers)
@@ -3386,6 +4134,7 @@ Assumes match data is available for `markdown-regex-italic'."
     (define-key map (kbd "M-<left>") 'markdown-promote)
     (define-key map (kbd "M-<right>") 'markdown-demote)
     (define-key map (kbd "M-<return>") 'markdown-insert-list-item)
+    (define-key map (kbd "C-c C-j") 'markdown-insert-list-item)
     ;; Subtree editing
     (define-key map (kbd "M-S-<up>") 'markdown-move-subtree-up)
     (define-key map (kbd "M-S-<down>") 'markdown-move-subtree-down)
@@ -3408,8 +4157,8 @@ Assumes match data is available for `markdown-regex-italic'."
 (defvar gfm-mode-map
   (let ((map (make-sparse-keymap)))
     (set-keymap-parent map markdown-mode-map)
-    (define-key map (kbd "C-c C-s P") 'markdown-insert-gfm-code-block)
     (define-key map (kbd "C-c C-s d") 'markdown-insert-strike-through)
+    (define-key map "`" 'markdown-electric-backquote)
     map)
   "Keymap for `gfm-mode'.
 See also `markdown-mode-map'.")
@@ -3421,7 +4170,7 @@ See also `markdown-mode-map'.")
   "Menu for Markdown mode"
   '("Markdown"
     ("Show/Hide"
-     ["Cycle visibility" markdown-cycle (outline-on-heading-p)]
+     ["Cycle visibility" markdown-cycle (markdown-on-heading-p)]
      ["Cycle global visibility" markdown-shifttab])
     "---"
     ["Compile" markdown-other-window]
@@ -3429,6 +4178,8 @@ See also `markdown-mode-map'.")
     ["Export" markdown-export]
     ["Export & View" markdown-export-and-preview]
     ["Open" markdown-open]
+    ["Live Export" markdown-live-preview-mode
+     :style toggle :selected markdown-live-preview-mode]
     ["Kill ring save" markdown-kill-ring-save]
     "---"
     ("Headings"
@@ -3447,7 +4198,7 @@ See also `markdown-mode-map'.")
     "---"
     ["Bold" markdown-insert-bold]
     ["Italic" markdown-insert-italic]
-    ["Strike-through" markdown-insert-strike-through]
+    ["Strikethrough" markdown-insert-strike-through]
     ["Blockquote" markdown-insert-blockquote]
     ["Preformatted" markdown-insert-pre]
     ["Code" markdown-insert-code]
@@ -3465,11 +4216,11 @@ See also `markdown-mode-map'.")
     ["Jump" markdown-jump]
     ["Follow link" markdown-follow-thing-at-point]
     ("Outline"
-     ["Next visible heading" outline-next-visible-heading]
-     ["Previous visible heading" outline-previous-visible-heading]
-     ["Forward same level" outline-forward-same-level]
-     ["Backward same level" outline-backward-same-level]
-     ["Up to parent heading" outline-up-heading])
+     ["Next visible heading" markdown-next-visible-heading]
+     ["Previous visible heading" markdown-previous-visible-heading]
+     ["Forward same level" markdown-forward-same-level]
+     ["Backward same level" markdown-backward-same-level]
+     ["Up to parent heading" markdown-up-heading])
     "---"
     ("Completion and Cycling"
      ["Complete" markdown-complete]
@@ -3492,8 +4243,8 @@ See also `markdown-mode-map'.")
 
 ;;; imenu =====================================================================
 
-(defun markdown-imenu-create-index ()
-  "Create and return an imenu index alist for the current buffer.
+(defun markdown-imenu-create-nested-index ()
+  "Create and return a nested imenu index alist for the current buffer.
 See `imenu-create-index-function' and `imenu--index-alist' for details."
   (let* ((root '(nil . nil))
          cur-alist
@@ -3504,72 +4255,84 @@ See `imenu-create-index-function' and `imenu--index-alist' for details."
     (save-excursion
       (goto-char (point-min))
       (while (re-search-forward markdown-regex-header (point-max) t)
+        (unless (markdown-code-block-at-point)
+          (cond
+           ((setq heading (match-string-no-properties 1))
+            (setq pos (match-beginning 1)
+                  level 1))
+           ((setq heading (match-string-no-properties 3))
+            (setq pos (match-beginning 3)
+                  level 2))
+           ((setq hashes (match-string-no-properties 5))
+            (setq heading (match-string-no-properties 6)
+                  pos (match-beginning 5)
+                  level (length hashes))))
+          (let ((alist (list (cons heading pos))))
+            (cond
+             ((= cur-level level)       ; new sibling
+              (setcdr cur-alist alist)
+              (setq cur-alist alist))
+             ((< cur-level level)       ; first child
+              (dotimes (i (- level cur-level 1))
+                (setq alist (list (cons empty-heading alist))))
+              (if cur-alist
+                  (let* ((parent (car cur-alist))
+                         (self-pos (cdr parent)))
+                    (setcdr parent (cons (cons self-heading self-pos) alist)))
+                (setcdr root alist))    ; primogenitor
+              (setq cur-alist alist)
+              (setq cur-level level))
+             (t                         ; new sibling of an ancestor
+              (let ((sibling-alist (last (cdr root))))
+                (dotimes (i (1- level))
+                  (setq sibling-alist (last (cdar sibling-alist))))
+                (setcdr sibling-alist alist)
+                (setq cur-alist alist))
+              (setq cur-level level))))))
+      (cdr root))))
+
+(defun markdown-imenu-create-flat-index ()
+  "Create and return a flat imenu index alist for the current buffer.
+See `imenu-create-index-function' and `imenu--index-alist' for details."
+  (let* ((empty-heading "-") index heading pos)
+    (save-excursion
+      (goto-char (point-min))
+      (while (re-search-forward markdown-regex-header (point-max) t)
         (cond
          ((setq heading (match-string-no-properties 1))
-          (setq pos (match-beginning 1)
-                level 1))
+          (setq pos (match-beginning 1)))
          ((setq heading (match-string-no-properties 3))
-          (setq pos (match-beginning 3)
-                level 2))
-         ((setq hashes (match-string-no-properties 5))
-          (setq heading (match-string-no-properties 6)
-                pos (match-beginning 5)
-                level (length hashes))))
-        (let ((alist (list (cons heading pos))))
-          (cond
-           ((= cur-level level)         ; new sibling
-            (setcdr cur-alist alist)
-            (setq cur-alist alist))
-           ((< cur-level level)         ; first child
-            (dotimes (i (- level cur-level 1))
-              (setq alist (list (cons empty-heading alist))))
-            (if cur-alist
-                (let* ((parent (car cur-alist))
-                       (self-pos (cdr parent)))
-                  (setcdr parent (cons (cons self-heading self-pos) alist)))
-              (setcdr root alist))      ; primogenitor
-            (setq cur-alist alist)
-            (setq cur-level level))
-           (t                           ; new sibling of an ancestor
-            (let ((sibling-alist (last (cdr root))))
-              (dotimes (i (1- level))
-                (setq sibling-alist (last (cdar sibling-alist))))
-              (setcdr sibling-alist alist)
-              (setq cur-alist alist))
-            (setq cur-level level)))))
-      (cdr root))))
+          (setq pos (match-beginning 3)))
+         ((setq heading (match-string-no-properties 6))
+          (setq pos (match-beginning 5))))
+        (or (> (length heading) 0)
+            (setq heading empty-heading))
+        (setq index (append index (list (cons heading pos)))))
+      index)))
 
 
 ;;; References ================================================================
-
-(defun markdown-insert-reference-definition (ref &optional buffer)
-  "Add blank REF definition to the end of BUFFER.
-REF is a Markdown reference in square brackets, like \"[lisp-history]\"."
-  (or buffer (setq buffer (current-buffer)))
-  (with-current-buffer buffer
-    (goto-char (point-max))
-    (indent-new-comment-line)
-    (insert (concat ref ": "))))
 
 (defun markdown-reference-goto-definition ()
   "Jump to the definition of the reference at point or create it."
   (interactive)
   (when (thing-at-point-looking-at markdown-regex-link-reference)
-    (let* ((text (match-string-no-properties 2))
-           (reference (match-string-no-properties 4))
-           (target (downcase (if (string= reference "[]") text reference)))
+    (let* ((text (match-string-no-properties 3))
+           (reference (match-string-no-properties 6))
+           (target (downcase (if (string= reference "") text reference)))
            (loc (cadr (markdown-reference-definition target))))
       (if loc
           (goto-char loc)
-        (markdown-insert-reference-definition target (current-buffer))))))
+        (goto-char (match-beginning 0))
+        (markdown-insert-reference-definition target)))))
 
 (defun markdown-reference-find-links (reference)
   "Return a list of all links for REFERENCE.
-REFERENCE should include the surrounding square brackets like [this].
+REFERENCE should not include the surrounding square brackets.
 Elements of the list have the form (text start line), where
 text is the link text, start is the location at the beginning of
 the link, and line is the line number on which the link appears."
-  (let* ((ref-quote (regexp-quote (substring reference 1 -1)))
+  (let* ((ref-quote (regexp-quote reference))
          (regexp (format "!?\\(?:\\[\\(%s\\)\\][ ]?\\[\\]\\|\\[\\([^]]+?\\)\\][ ]?\\[%s\\]\\)"
                          ref-quote ref-quote))
          links)
@@ -3589,15 +4352,15 @@ Result is an alist of pairs (reference . occurrences), where
 occurrences is itself another alist of pairs (label . line-number).
 For example, an alist corresponding to [Nice editor][Emacs] at line 12,
 \[GNU Emacs][Emacs] at line 45 and [manual][elisp] at line 127 is
-\((\"[emacs]\" (\"[Nice editor]\" . 12) (\"[GNU Emacs]\" . 45)) (\"[elisp]\" (\"[manual]\" . 127)))."
+\((\"emacs\" (\"Nice editor\" . 12) (\"GNU Emacs\" . 45)) (\"elisp\" (\"manual\" . 127)))."
   (let ((missing))
     (save-excursion
       (goto-char (point-min))
       (while
           (re-search-forward markdown-regex-link-reference nil t)
-        (let* ((text (match-string-no-properties 2))
-               (reference (match-string-no-properties 4))
-               (target (downcase (if (string= reference "[]") text reference))))
+        (let* ((text (match-string-no-properties 3))
+               (reference (match-string-no-properties 6))
+               (target (downcase (if (string= reference "") text reference))))
           (unless (markdown-reference-definition target)
             (let ((entry (assoc target missing)))
               (if (not entry)
@@ -3647,7 +4410,7 @@ BUFFER-NAME is the name of the main buffer being visited."
     linkbuf))
 
 (when (markdown-use-buttons-p)
-  ;; Add an empty Markdown reference definition to the end of buffer
+  ;; Add an empty Markdown reference definition to buffer
   ;; specified in the 'target-buffer property.  The reference name is
   ;; the button's label.
   (define-button-type 'markdown-undefined-reference-button
@@ -3655,10 +4418,13 @@ BUFFER-NAME is the name of the main buffer being visited."
     'follow-link t
     'face 'bold
     'action (lambda (b)
-              (let ((buffer (button-get b 'target-buffer)))
-                (markdown-insert-reference-definition (button-label b) buffer)
+              (let ((buffer (button-get b 'target-buffer))
+                    (line (button-get b 'target-line))
+                    (label (button-label b)))
                 (switch-to-buffer-other-window buffer)
-                (goto-char (point-max))
+                (goto-char (point-min))
+                (forward-line line)
+                (markdown-insert-reference-definition label)
                 (markdown-check-refs t))))
 
   ;; Jump to line in buffer specified by 'target-buffer property.
@@ -3696,7 +4462,8 @@ as by `markdown-get-undefined-refs'."
         ;; Create a reference button in Emacs 22
         (insert-button label
                        :type 'markdown-undefined-reference-button
-                       'target-buffer oldbuf)
+                       'target-buffer oldbuf
+                       'target-line (cdr (car (cdr reference))))
       ;; Insert reference as text in Emacs < 22
       (insert label))
     (insert " (")
@@ -3719,9 +4486,9 @@ as by `markdown-get-undefined-refs'."
   "Insert a button for jumping to LINK in buffer OLDBUF.
 LINK should be a list of the form (text char line) containing
 the link text, location, and line number."
-  (let ((label (first link))
-        (char (second link))
-        (line (third link)))
+  (let ((label (cl-first link))
+        (char (cl-second link))
+        (line (cl-third link)))
     (if (markdown-use-buttons-p)
         ;; Create a reference button in Emacs 22
         (insert-button label
@@ -3737,7 +4504,7 @@ the link text, location, and line number."
   (interactive)
   (unless reference
     (if (thing-at-point-looking-at markdown-regex-reference-definition)
-        (setq reference (match-string-no-properties 1))
+        (setq reference (match-string-no-properties 2))
       (error "No reference definition at point")))
   (let ((links (markdown-reference-find-links reference)))
     (cond ((= (length links) 1)
@@ -3796,7 +4563,7 @@ decrease the indentation by one level.
 With two \\[universal-argument] prefixes (i.e., when ARG is (16)),
 increase the indentation by one level."
   (interactive "p")
-  (let (bounds item-indent marker indent new-indent new-loc)
+  (let (bounds cur-indent marker indent new-indent new-loc)
     (save-match-data
       ;; Look for a list item on current or previous non-blank line
       (save-excursion
@@ -3832,13 +4599,23 @@ increase the indentation by one level."
             (unless (markdown-cur-line-blank-p)
               (insert "\n"))
             (insert markdown-unordered-list-item-prefix))
-        ;; Compute indentation for a new list item
-        (setq item-indent (nth 2 bounds))
+        ;; Compute indentation and marker for new list item
+        (setq cur-indent (nth 2 bounds))
         (setq marker (nth 4 bounds))
-        (setq indent (cond
-                      ((= arg 4) (max (- item-indent 4) 0))
-                      ((= arg 16) (+ item-indent 4))
-                      (t item-indent)))
+        (cond
+         ;; Dedent: decrement indentation, find previous marker.
+         ((= arg 4)
+          (setq indent (max (- cur-indent 4) 0))
+          (let ((prev-bounds
+                 (save-excursion
+                   (when (markdown-prev-list-item (- (nth 3 bounds) 1))
+                     (markdown-cur-list-item-bounds)))))
+            (when prev-bounds
+              (setq marker (nth 4 prev-bounds)))))
+         ;; Indent: increment indentation by 4, use same marker.
+         ((= arg 16) (setq indent (+ cur-indent 4)))
+         ;; Same level: keep current indentation and marker.
+         (t (setq indent cur-indent)))
         (setq new-indent (make-string indent 32))
         (goto-char new-loc)
         (cond
@@ -3847,7 +4624,7 @@ increase the indentation by one level."
           (if (= arg 16) ;; starting a new column indented one more level
               (insert (concat new-indent "1. "))
             ;; travel up to the last item and pick the correct number.  If
-            ;; the argument was nil, "new-indent = item-indent" is the same,
+            ;; the argument was nil, "new-indent = cur-indent" is the same,
             ;; so we don't need special treatment. Neat.
             (save-excursion
               (while (and (not (looking-at (concat new-indent "\\([0-9]+\\)\\(\\.[ \t]*\\)")))
@@ -3913,12 +4690,11 @@ Optionally, BOUNDS of the current list item may be provided if available."
   (when (or bounds (setq bounds (markdown-cur-list-item-bounds)))
     (save-excursion
       (save-match-data
-        (let* ((end-marker (make-marker))
-               (end-marker (set-marker end-marker (nth 1 bounds))))
+        (let ((end-marker (set-marker (make-marker) (nth 1 bounds))))
           (goto-char (nth 0 bounds))
           (while (< (point) end-marker)
             (unless (markdown-cur-line-blank-p)
-              (insert "    "))
+              (insert (make-string markdown-list-indent-width ? )))
             (forward-line)))))))
 
 (defun markdown-promote-list-item (&optional bounds)
@@ -3928,11 +4704,11 @@ Optionally, BOUNDS of the current list item may be provided if available."
   (when (or bounds (setq bounds (markdown-cur-list-item-bounds)))
     (save-excursion
       (save-match-data
-        (let* ((end-marker (make-marker))
-               (end-marker (set-marker end-marker (nth 1 bounds)))
-               num regexp)
+        (let ((end-marker (set-marker (make-marker) (nth 1 bounds)))
+              num regexp)
           (goto-char (nth 0 bounds))
-          (when (looking-at "^[ ]\\{1,4\\}")
+          (when (looking-at (format "^[ ]\\{1,%d\\}"
+                                    markdown-list-indent-width))
             (setq num (- (match-end 0) (match-beginning 0)))
             (setq regexp (format "^[ ]\\{1,%d\\}" num))
             (while (and (< (point) end-marker)
@@ -3992,155 +4768,6 @@ a list."
     (markdown-cleanup-list-numbers-level "")))
 
 
-;;; Outline ===================================================================
-
-(defvar markdown-cycle-global-status 1)
-(defvar markdown-cycle-subtree-status nil)
-
-(defun markdown-end-of-subtree (&optional invisible-OK)
-  "Move to the end of the current subtree.
-Only visible heading lines are considered, unless INVISIBLE-OK is
-non-nil.
-Derived from `org-end-of-subtree'."
-  (outline-back-to-heading invisible-OK)
-  (let ((first t)
-        (level (funcall outline-level)))
-    (while (and (not (eobp))
-                (or first (> (funcall outline-level) level)))
-      (setq first nil)
-      (outline-next-heading))
-    (if (memq (preceding-char) '(?\n ?\^M))
-        (progn
-          ;; Go to end of line before heading
-          (forward-char -1)
-          (if (memq (preceding-char) '(?\n ?\^M))
-              ;; leave blank line before heading
-              (forward-char -1)))))
-  (point))
-
-(defun markdown-cycle (&optional arg)
-  "Visibility cycling for Markdown mode.
-If ARG is t, perform global visibility cycling.  If the point is
-at an atx-style header, cycle visibility of the corresponding
-subtree.  Otherwise, insert a tab using `indent-relative'.
-Derived from `org-cycle'."
-  (interactive "P")
-  (cond
-   ((eq arg t) ;; Global cycling
-    (cond
-     ((and (eq last-command this-command)
-           (eq markdown-cycle-global-status 2))
-      ;; Move from overview to contents
-      (hide-sublevels 1)
-      (message "CONTENTS")
-      (setq markdown-cycle-global-status 3))
-
-     ((and (eq last-command this-command)
-           (eq markdown-cycle-global-status 3))
-      ;; Move from contents to all
-      (show-all)
-      (message "SHOW ALL")
-      (setq markdown-cycle-global-status 1))
-
-     (t
-      ;; Defaults to overview
-      (hide-body)
-      (message "OVERVIEW")
-      (setq markdown-cycle-global-status 2))))
-
-   ((save-excursion (beginning-of-line 1) (looking-at outline-regexp))
-    ;; At a heading: rotate between three different views
-    (outline-back-to-heading)
-    (let ((goal-column 0) eoh eol eos)
-      ;; Determine boundaries
-      (save-excursion
-        (outline-back-to-heading)
-        (save-excursion
-          (beginning-of-line 2)
-          (while (and (not (eobp)) ;; this is like `next-line'
-                      (get-char-property (1- (point)) 'invisible))
-            (beginning-of-line 2)) (setq eol (point)))
-        (outline-end-of-heading)   (setq eoh (point))
-        (markdown-end-of-subtree t)
-        (skip-chars-forward " \t\n")
-        (beginning-of-line 1) ; in case this is an item
-        (setq eos (1- (point))))
-      ;; Find out what to do next and set `this-command'
-      (cond
-       ((= eos eoh)
-        ;; Nothing is hidden behind this heading
-        (message "EMPTY ENTRY")
-        (setq markdown-cycle-subtree-status nil))
-       ((>= eol eos)
-        ;; Entire subtree is hidden in one line: open it
-        (show-entry)
-        (show-children)
-        (message "CHILDREN")
-        (setq markdown-cycle-subtree-status 'children))
-       ((and (eq last-command this-command)
-             (eq markdown-cycle-subtree-status 'children))
-        ;; We just showed the children, now show everything.
-        (show-subtree)
-        (message "SUBTREE")
-        (setq markdown-cycle-subtree-status 'subtree))
-       (t
-        ;; Default action: hide the subtree.
-        (hide-subtree)
-        (message "FOLDED")
-        (setq markdown-cycle-subtree-status 'folded)))))
-
-   (t
-    (indent-for-tab-command))))
-
-(defun markdown-shifttab ()
-  "Global visibility cycling.
-Calls `markdown-cycle' with argument t."
-  (interactive)
-  (markdown-cycle t))
-
-(defun markdown-outline-level ()
-  "Return the depth to which a statement is nested in the outline."
-  (cond
-   ((match-end 1) 1)
-   ((match-end 3) 2)
-   ((- (match-end 5) (match-beginning 5)))))
-
-(defun markdown-promote-subtree (&optional arg)
-  "Promote the current subtree of ATX headings.
-Note that Markdown does not support heading levels higher than six
-and therefore level-six headings will not be promoted further."
-  (interactive "*P")
-  (save-excursion
-    (when (or (thing-at-point-looking-at markdown-regex-header-atx)
-              (re-search-backward markdown-regex-header-atx nil t))
-      (let ((level (length (match-string 1)))
-            (promote-or-demote (if arg 1 -1))
-            (remove 't))
-        (markdown-cycle-atx promote-or-demote remove)
-        (forward-line)
-        (catch 'end-of-subtree
-          (while (re-search-forward markdown-regex-header-atx nil t)
-            ;; Exit if this not a higher level heading; promote otherwise.
-            (if (<= (length (match-string-no-properties 1)) level)
-                (throw 'end-of-subtree nil)
-              (markdown-cycle-atx promote-or-demote remove))))))))
-
-(defun markdown-demote-subtree ()
-  "Demote the current subtree of ATX headings."
-  (interactive)
-  (markdown-promote-subtree t))
-
-(defun markdown-move-subtree-up ()
-  "Move the current subtree of ATX headings up."
-  (interactive)
-  (outline-move-subtree-up 1))
-
-(defun markdown-move-subtree-down ()
-  "Move the current subtree of ATX headings down."
-  (interactive)
-  (outline-move-subtree-down 1))
-
-
 ;;; Movement ==================================================================
 
 (defun markdown-beginning-of-defun (&optional arg)
@@ -4150,6 +4777,7 @@ When ARG is non-nil, repeat that many times.  When ARG is negative,
 move forward to the ARG-th following section."
   (interactive "P")
   (or arg (setq arg 1))
+  (forward-char 1)
   (or (re-search-backward markdown-regex-header nil t arg)
       (goto-char (point-min))))
 
@@ -4235,7 +4863,11 @@ See `markdown-wiki-link-p' and `markdown-previous-wiki-link'."
       ;; At a link already, move past it.
       (goto-char (+ (match-end 0) 1)))
     ;; Search for the next wiki link and move to the beginning.
-    (if (re-search-forward markdown-regex-link-generic nil t)
+    (while (and (re-search-forward markdown-regex-link-generic nil t)
+                (markdown-code-block-at-point)
+                (< (point) (point-max))))
+    (if (and (not (eq (point) opoint))
+             (or (markdown-link-p) (markdown-wiki-link-p)))
         ;; Group 1 will move past non-escape character in wiki link regexp.
         ;; Go to beginning of group zero for all other link types.
         (goto-char (or (match-beginning 1) (match-beginning 0)))
@@ -4247,9 +4879,296 @@ See `markdown-wiki-link-p' and `markdown-previous-wiki-link'."
 If successful, return point.  Otherwise, return nil.
 See `markdown-wiki-link-p' and `markdown-next-wiki-link'."
   (interactive)
-  (if (re-search-backward markdown-regex-link-generic nil t)
-      (goto-char (or (match-beginning 1) (match-beginning 0)))
-    nil))
+  (let ((opoint (point)))
+    (while (and (re-search-backward markdown-regex-link-generic nil t)
+                (markdown-code-block-at-point)
+                (> (point) (point-min))))
+    (if (and (not (eq (point) opoint))
+             (or (markdown-link-p) (markdown-wiki-link-p)))
+        (goto-char (or (match-beginning 1) (match-beginning 0)))
+      (goto-char opoint)
+      nil)))
+
+(defun markdown-next-heading ()
+  "Move to the next heading line of any level.
+With argument, repeats or can move backward if negative."
+  (let ((pos (outline-next-heading)))
+    (while (markdown-code-block-at-point)
+      (setq pos (outline-next-heading)))
+    pos))
+
+(defun markdown-previous-heading ()
+  "Move to the previous heading line of any level.
+With argument, repeats or can move backward if negative."
+  (let ((pos (outline-previous-heading)))
+    (while (markdown-code-block-at-point)
+      (setq pos (outline-previous-heading)))
+    pos))
+
+
+;;; Outline ===================================================================
+
+(defun markdown-move-heading-common (move-fn &optional arg)
+  "Wrapper for `outline-mode' functions to skip false positives.
+For example, headings inside preformatted code blocks may match
+`outline-regexp' but should not be considered as headings."
+  (funcall move-fn arg)
+  (let ((prev -1))
+    (while (and (/= prev (point)) (markdown-code-block-at-point))
+      (setq prev (point))
+      (funcall move-fn arg))))
+
+(defun markdown-next-visible-heading (arg)
+  "Move to the next visible heading line of any level.
+With argument, repeats or can move backward if negative."
+  (interactive "p")
+  (markdown-move-heading-common 'outline-next-visible-heading arg))
+
+(defun markdown-previous-visible-heading (arg)
+  "Move to the previous visible heading line of any level.
+With argument, repeats or can move backward if negative."
+  (interactive "p")
+  (markdown-move-heading-common 'outline-previous-visible-heading arg))
+
+(defun markdown-forward-same-level (arg)
+  "Move forward to the ARG'th heading at same level as this one.
+Stop at the first and last headings of a superior heading."
+  (interactive "p")
+  (markdown-move-heading-common 'outline-forward-same-level arg))
+
+(defun markdown-back-to-heading-over-code-block (&optional invisible-ok)
+  (beginning-of-line)
+  (or (and (outline-on-heading-p invisible-ok)
+           (not (markdown-code-block-at-point)))
+      (let ((header-re (concat "^\\(?:" outline-regexp "\\)"))
+            found)
+        (save-excursion
+          (while (not found)
+            (let (finish)
+              (while (and (not finish) (re-search-backward header-re nil t))
+                (when (and (or invisible-ok (not (outline-invisible-p)))
+                           (not (markdown-code-block-at-point)))
+                  (setq finish t)))
+              (if (not finish)
+                  (error "Before first heading")
+                (setq found (point))))))
+        (goto-char found)
+        found)))
+
+(defun markdown-backward-same-level (arg)
+  "Move backward to the ARG'th heading at same level as this one.
+Stop at the first and last headings of a superior heading."
+  (interactive "p")
+  (markdown-back-to-heading-over-code-block)
+  (while (> arg 0)
+    (let ((point-to-move-to (save-excursion
+			      (outline-get-last-sibling))))
+      (if point-to-move-to
+	  (progn
+	    (goto-char point-to-move-to)
+	    (setq arg (1- arg)))
+        (error "No previous same-level heading")))))
+
+(defun markdown-up-heading (arg)
+  "Move to the visible heading line of which the present line is a subheading.
+With argument, move up ARG levels."
+  (interactive "p")
+  (markdown-move-heading-common 'outline-up-heading arg))
+
+(defun markdown-back-to-heading (&optional invisible-ok)
+  "Move to previous heading line, or beg of this line if it's a heading.
+Only visible heading lines are considered, unless INVISIBLE-OK is non-nil."
+  (markdown-move-heading-common 'outline-back-to-heading invisible-ok))
+
+(defalias 'markdown-end-of-heading 'outline-end-of-heading)
+
+(defun markdown-on-heading-p ()
+  "Return t if point is on a (visible) heading line."
+  (get-text-property (point) 'markdown-heading))
+
+(defun markdown-end-of-subtree (&optional invisible-OK)
+  "Move to the end of the current subtree.
+Only visible heading lines are considered, unless INVISIBLE-OK is
+non-nil.
+Derived from `org-end-of-subtree'."
+  (markdown-back-to-heading invisible-OK)
+  (let ((first t)
+        (level (funcall outline-level)))
+    (while (and (not (eobp))
+                (or first (> (funcall outline-level) level)))
+      (setq first nil)
+      (markdown-next-heading))
+    (if (memq (preceding-char) '(?\n ?\^M))
+        (progn
+          ;; Go to end of line before heading
+          (forward-char -1)
+          (if (memq (preceding-char) '(?\n ?\^M))
+              ;; leave blank line before heading
+              (forward-char -1)))))
+  (point))
+
+(defun markdown-outline-fix-visibility ()
+  "Hide any false positive headings that should not be shown.
+For example, headings inside preformatted code blocks may match
+`outline-regexp' but should not be shown as headings when cycling."
+  (save-excursion
+    (goto-char (point-min))
+    (unless (outline-on-heading-p)
+      (outline-next-visible-heading 1))
+    (while (< (point) (point-max))
+      (when (markdown-code-block-at-point)
+        (outline-flag-region (1- (point-at-bol)) (point-at-eol) t))
+      (outline-next-visible-heading 1))))
+
+(defvar markdown-cycle-global-status 1)
+(defvar markdown-cycle-subtree-status nil)
+
+(defun markdown-next-preface ()
+  (let (finish)
+    (while (and (not finish) (re-search-forward (concat "\n\\(?:" outline-regexp "\\)")
+                                                nil 'move))
+      (unless (markdown-code-block-at-point)
+        (goto-char (match-beginning 0))
+        (setq finish t))))
+  (when (and (bolp) (or outline-blank-line (eobp)) (not (bobp)))
+    (forward-char -1)))
+
+(defun markdown-show-entry ()
+  (save-excursion
+    (outline-back-to-heading t)
+    (outline-flag-region (1- (point))
+                         (progn
+                           (markdown-next-preface)
+                           (if (= 1 (- (point-max) (point)))
+                               (point-max)
+                             (point)))
+                         nil)))
+
+(defun markdown-cycle (&optional arg)
+  "Visibility cycling for Markdown mode.
+If ARG is t, perform global visibility cycling.  If the point is
+at an atx-style header, cycle visibility of the corresponding
+subtree.  Otherwise, insert a tab using `indent-relative'.
+Derived from `org-cycle'."
+  (interactive "P")
+  (cond
+   ((eq arg t) ;; Global cycling
+    (cond
+     ((and (eq last-command this-command)
+           (eq markdown-cycle-global-status 2))
+      ;; Move from overview to contents
+      (markdown-hide-sublevels 1)
+      (message "CONTENTS")
+      (setq markdown-cycle-global-status 3)
+      (markdown-outline-fix-visibility))
+
+     ((and (eq last-command this-command)
+           (eq markdown-cycle-global-status 3))
+      ;; Move from contents to all
+      (markdown-show-all)
+      (message "SHOW ALL")
+      (setq markdown-cycle-global-status 1))
+
+     (t
+      ;; Defaults to overview
+      (markdown-hide-body)
+      (message "OVERVIEW")
+      (setq markdown-cycle-global-status 2)
+      (markdown-outline-fix-visibility))))
+
+   ((save-excursion (beginning-of-line 1) (markdown-on-heading-p))
+    ;; At a heading: rotate between three different views
+    (markdown-back-to-heading)
+    (let ((goal-column 0) eoh eol eos)
+      ;; Determine boundaries
+      (save-excursion
+        (markdown-back-to-heading)
+        (save-excursion
+          (beginning-of-line 2)
+          (while (and (not (eobp)) ;; this is like `next-line'
+                      (get-char-property (1- (point)) 'invisible))
+            (beginning-of-line 2)) (setq eol (point)))
+        (markdown-end-of-heading)   (setq eoh (point))
+        (markdown-end-of-subtree t)
+        (skip-chars-forward " \t\n")
+        (beginning-of-line 1) ; in case this is an item
+        (setq eos (1- (point))))
+      ;; Find out what to do next and set `this-command'
+      (cond
+       ((= eos eoh)
+        ;; Nothing is hidden behind this heading
+        (message "EMPTY ENTRY")
+        (setq markdown-cycle-subtree-status nil))
+       ((>= eol eos)
+        ;; Entire subtree is hidden in one line: open it
+        (markdown-show-entry)
+        (markdown-show-children)
+        (message "CHILDREN")
+        (setq markdown-cycle-subtree-status 'children))
+       ((and (eq last-command this-command)
+             (eq markdown-cycle-subtree-status 'children))
+        ;; We just showed the children, now show everything.
+        (markdown-show-subtree)
+        (message "SUBTREE")
+        (setq markdown-cycle-subtree-status 'subtree))
+       (t
+        ;; Default action: hide the subtree.
+        (markdown-hide-subtree)
+        (message "FOLDED")
+        (setq markdown-cycle-subtree-status 'folded)))))
+
+   (t
+    (indent-for-tab-command))))
+
+(defun markdown-shifttab ()
+  "Global visibility cycling.
+Calls `markdown-cycle' with argument t."
+  (interactive)
+  (markdown-cycle t))
+
+(defun markdown-outline-level ()
+  "Return the depth to which a statement is nested in the outline."
+  (cond
+   ((markdown-code-block-at-point) 7)
+   ((match-end 1) 1)
+   ((match-end 3) 2)
+   ((- (match-end 5) (match-beginning 5)))))
+
+(defun markdown-promote-subtree (&optional arg)
+  "Promote the current subtree of ATX headings.
+Note that Markdown does not support heading levels higher than six
+and therefore level-six headings will not be promoted further."
+  (interactive "*P")
+  (save-excursion
+    (when (and (or (thing-at-point-looking-at markdown-regex-header-atx)
+                   (re-search-backward markdown-regex-header-atx nil t))
+               (not (markdown-code-block-at-point)))
+      (let ((level (length (match-string 1)))
+            (promote-or-demote (if arg 1 -1))
+            (remove 't))
+        (markdown-cycle-atx promote-or-demote remove)
+        (catch 'end-of-subtree
+          (while (markdown-next-heading)
+            ;; Exit if this not a higher level heading; promote otherwise.
+            (if (and (looking-at markdown-regex-header-atx)
+                     (<= (length (match-string-no-properties 1)) level))
+                (throw 'end-of-subtree nil)
+              (markdown-cycle-atx promote-or-demote remove))))))))
+
+(defun markdown-demote-subtree ()
+  "Demote the current subtree of ATX headings."
+  (interactive)
+  (markdown-promote-subtree t))
+
+(defun markdown-move-subtree-up ()
+  "Move the current subtree of ATX headings up."
+  (interactive)
+  (outline-move-subtree-up 1))
+
+(defun markdown-move-subtree-down ()
+  "Move the current subtree of ATX headings down."
+  (interactive)
+  (outline-move-subtree-down 1))
 
 
 ;;; Generic Structure Editing, Completion, and Cycling Commands ===============
@@ -4341,7 +5260,6 @@ Return the name of the output buffer used."
 
       (unless output-buffer-name
         (setq output-buffer-name markdown-output-buffer-name))
-
       (cond
        ;; Handle case when `markdown-command' does not read from stdin
        (markdown-command-needs-filename
@@ -4374,7 +5292,8 @@ Insert the output in the buffer named OUTPUT-BUFFER-NAME."
 When OUTPUT-BUFFER-NAME is given, insert the output in the buffer with
 that name."
   (interactive)
-  (display-buffer (markdown-standalone output-buffer-name)))
+  (markdown-display-buffer-other-window
+   (markdown-standalone output-buffer-name)))
 
 (defun markdown-output-standalone-p ()
   "Determine whether `markdown-command' output is standalone XHTML.
@@ -4394,6 +5313,7 @@ Standalone XHTML output is identified by an occurrence of
 
 (defun markdown-add-xhtml-header-and-footer (title)
   "Wrap XHTML header and footer with given TITLE around current buffer."
+  (goto-char (point-min))
   (insert "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n"
           "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n"
           "\t\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n\n"
@@ -4485,6 +5405,128 @@ current filename, but with the extension removed and replaced with .html."
   (interactive)
   (browse-url-of-file (markdown-export)))
 
+(defvar markdown-live-preview-buffer nil
+  "Buffer used to preview markdown output in `markdown-live-preview-export'.")
+(make-variable-buffer-local 'markdown-live-preview-buffer)
+
+(defvar markdown-live-preview-source-buffer nil
+  "Buffer with markdown source generating the source of the current
+buffer. Inverse of `markdown-live-preview-buffer'.")
+(make-variable-buffer-local 'markdown-live-preview-source-buffer)
+
+(defvar markdown-live-preview-currently-exporting nil)
+
+(defun markdown-live-preview-get-filename ()
+  "Standardize the filename exported by `markdown-live-preview-export'."
+  (markdown-export-file-name ".html"))
+
+(defun markdown-live-preview-window-eww (file)
+  "A `markdown-live-preview-window-function' for previewing with eww."
+  (if (require 'eww nil t)
+      (progn
+        (eww-open-file file)
+        (get-buffer "*eww*"))
+    (error "eww is not present or not loaded on this version of emacs")))
+
+(defun markdown-live-preview-window-serialize (buf)
+  "Get window point and scroll data for all windows displaying BUF if BUF is
+non-nil."
+  (when buf
+    (mapcar (lambda (win) (list win (window-point win) (window-start win)))
+            (get-buffer-window-list buf))))
+
+(defun markdown-live-preview-window-deserialize (window-posns)
+  "Apply window point and scroll data from WINDOW-POSNS, given by
+`markdown-live-preview-window-serialize'."
+  (cl-destructuring-bind (win pt start) window-posns
+    (when (window-live-p win)
+      (set-window-buffer win markdown-live-preview-buffer)
+      (set-window-point win pt)
+      (set-window-start win start))))
+
+(defun markdown-live-preview-export ()
+  "Export to XHTML using `markdown-export' and browse the resulting file within
+Emacs using `markdown-live-preview-window-function' Return the buffer displaying
+the rendered output."
+  (interactive)
+  (let* ((markdown-live-preview-currently-exporting t)
+         (cur-buf (current-buffer))
+         (export-file (markdown-export (markdown-live-preview-get-filename)))
+         ;; get positions in all windows currently displaying output buffer
+         (window-data
+          (markdown-live-preview-window-serialize
+           markdown-live-preview-buffer)))
+    (save-window-excursion
+      (let ((output-buffer
+             (funcall markdown-live-preview-window-function export-file)))
+        (with-current-buffer output-buffer
+          (setq markdown-live-preview-source-buffer cur-buf)
+          (add-hook 'kill-buffer-hook
+                    #'markdown-live-preview-remove-on-kill t t))
+        (with-current-buffer cur-buf
+          (setq markdown-live-preview-buffer output-buffer))))
+    (with-current-buffer cur-buf
+      ;; reset all windows displaying output buffer to where they were,
+      ;; now with the new output
+      (mapc #'markdown-live-preview-window-deserialize window-data)
+      ;; delete html editing buffer
+      (let ((buf (get-file-buffer export-file))) (when buf (kill-buffer buf)))
+      (when (and export-file (file-exists-p export-file)
+                 (eq markdown-live-preview-delete-export
+                     'delete-on-export))
+        (delete-file export-file))
+      markdown-live-preview-buffer)))
+
+(defun markdown-live-preview-remove ()
+  (when (buffer-live-p markdown-live-preview-buffer)
+    (kill-buffer markdown-live-preview-buffer))
+  (setq markdown-live-preview-buffer nil)
+  ;; if set to 'delete-on-export, the output has already been deleted
+  (when (eq markdown-live-preview-delete-export 'delete-on-destroy)
+    (let ((outfile-name (markdown-live-preview-get-filename)))
+      (when (file-exists-p outfile-name)
+        (delete-file outfile-name)))))
+
+(defun markdown-display-buffer-other-window (buf)
+  (let ((cur-buf (current-buffer)))
+    (switch-to-buffer-other-window buf)
+    (set-buffer cur-buf)))
+
+(defun markdown-live-preview-if-markdown ()
+  (when (and (derived-mode-p 'markdown-mode)
+             markdown-live-preview-mode)
+    (unless markdown-live-preview-currently-exporting
+      (if (buffer-live-p markdown-live-preview-buffer)
+          (markdown-live-preview-export)
+        (markdown-display-buffer-other-window
+         (markdown-live-preview-export))))))
+
+(defun markdown-live-preview-remove-on-kill ()
+  (cond ((and (derived-mode-p 'markdown-mode)
+              markdown-live-preview-mode)
+         (markdown-live-preview-remove))
+        (markdown-live-preview-source-buffer
+         (with-current-buffer markdown-live-preview-source-buffer
+           (setq markdown-live-preview-buffer nil))
+         (setq markdown-live-preview-source-buffer nil))))
+
+(defun markdown-live-preview-switch-to-output ()
+  (interactive)
+  "Turn on `markdown-live-preview-mode' if not already on, and switch to its
+output buffer in another window."
+  (if markdown-live-preview-mode
+      (markdown-display-buffer-other-window (markdown-live-preview-export)))
+    (markdown-live-preview-mode))
+
+(defun markdown-live-preview-re-export ()
+  (interactive)
+  "If the current buffer is a buffer displaying the exported version of a
+`markdown-live-preview-mode' buffer, call `markdown-live-preview-export' and
+update this buffer's contents."
+  (when markdown-live-preview-source-buffer
+    (with-current-buffer markdown-live-preview-source-buffer
+      (markdown-live-preview-export))))
+
 (defun markdown-open ()
   "Open file for the current buffer with `markdown-open-command'."
   (interactive)
@@ -4511,6 +5553,7 @@ current filename, but with the extension removed and replaced with .html."
 See `markdown-wiki-link-p' for more information."
   (let ((case-fold-search nil))
     (and (not (markdown-wiki-link-p))
+         (not (markdown-code-block-at-point))
          (or (thing-at-point-looking-at markdown-regex-link-inline)
              (thing-at-point-looking-at markdown-regex-link-reference)
              (thing-at-point-looking-at markdown-regex-uri)
@@ -4522,11 +5565,11 @@ Works with both inline and reference style links.  If point is
 not at a link or the link reference is not defined returns nil."
   (cond
    ((thing-at-point-looking-at markdown-regex-link-inline)
-    (match-string-no-properties 5))
+    (match-string-no-properties 6))
    ((thing-at-point-looking-at markdown-regex-link-reference)
-    (let* ((text (match-string-no-properties 2))
-           (reference (match-string-no-properties 4))
-           (target (downcase (if (string= reference "[]") text reference))))
+    (let* ((text (match-string-no-properties 3))
+           (reference (match-string-no-properties 6))
+           (target (downcase (if (string= reference "") text reference))))
       (car (markdown-reference-definition target))))
    ((thing-at-point-looking-at markdown-regex-uri)
     (match-string-no-properties 0))
@@ -4551,28 +5594,27 @@ returned by `match-data'.  Note that the potential wiki link name must
 be available via `match-string'."
   (let ((case-fold-search nil))
     (and (thing-at-point-looking-at markdown-regex-wiki-link)
+         (not (markdown-code-block-at-point))
          (or (not buffer-file-name)
              (not (string-equal (buffer-file-name)
                                 (markdown-convert-wiki-link-to-filename
-                                 (markdown-wiki-link-link)))))
-         (not (save-match-data
-                (save-excursion))))))
+                                 (markdown-wiki-link-link))))))))
 
 (defun markdown-wiki-link-link ()
   "Return the link part of the wiki link using current match data.
 The location of the link component depends on the value of
 `markdown-wiki-link-alias-first'."
   (if markdown-wiki-link-alias-first
-      (or (match-string-no-properties 4) (match-string-no-properties 2))
-    (match-string-no-properties 2)))
+      (or (match-string-no-properties 5) (match-string-no-properties 3))
+    (match-string-no-properties 3)))
 
 (defun markdown-wiki-link-alias ()
   "Return the alias or text part of the wiki link using current match data.
 The location of the alias component depends on the value of
 `markdown-wiki-link-alias-first'."
   (if markdown-wiki-link-alias-first
-      (match-string-no-properties 2)
-    (or (match-string-no-properties 4) (match-string-no-properties 2))))
+      (match-string-no-properties 3)
+    (or (match-string-no-properties 5) (match-string-no-properties 3))))
 
 (defun markdown-convert-wiki-link-to-filename (name)
   "Generate a filename from the wiki link NAME.
@@ -4584,10 +5626,24 @@ and [[test test]] both map to Test-test.ext."
     (when (eq major-mode 'gfm-mode)
       (setq basename (concat (upcase (substring basename 0 1))
                              (downcase (substring basename 1 nil)))))
-    (concat basename
-            (if (buffer-file-name)
-                (concat "."
-                        (file-name-extension (buffer-file-name)))))))
+    (let* ((default
+            (concat basename
+                    (if (and (buffer-file-name)
+                             (file-name-extension (buffer-file-name)))
+                        (concat "."
+                                (file-name-extension (buffer-file-name))))))
+           (current default))
+      (catch 'done
+        (condition-case nil
+            (cl-loop
+             (if (or (not markdown-wiki-link-search-parent-directories)
+                     (file-exists-p current))
+                 (throw 'done current))
+             (if (string-equal (expand-file-name current)
+                               (concat "/" default))
+                 (throw 'done default))
+             (setq current (concat "../" current)))
+          (error default))))))
 
 (defun markdown-follow-wiki-link (name &optional other)
   "Follow the wiki link NAME.
@@ -4597,7 +5653,8 @@ window when OTHER is non-nil."
   (let ((filename (markdown-convert-wiki-link-to-filename name))
         (wp (file-name-directory buffer-file-name)))
     (when other (other-window 1))
-    (find-file (concat wp filename)))
+    (let ((default-directory wp))
+      (find-file filename)))
   (when (not (eq major-mode 'markdown-mode))
     (markdown-mode)))
 
@@ -4616,7 +5673,7 @@ See `markdown-wiki-link-p' and `markdown-follow-wiki-link'."
 
 (defun markdown-unfontify-region-wiki-links (from to)
   "Remove wiki link faces from the region specified by FROM and TO."
-  (interactive "nfrom: \nnto: ")
+  (interactive "*r")
   (remove-text-properties from to '(font-lock-face markdown-link-face))
   (remove-text-properties from to '(font-lock-face markdown-missing-link-face)))
 
@@ -4627,18 +5684,17 @@ and highlight accordingly."
   (goto-char from)
   (save-match-data
     (while (re-search-forward markdown-regex-wiki-link to t)
-      (let ((highlight-beginning (match-beginning 1))
-            (highlight-end (match-end 1))
-            (file-name
-             (markdown-convert-wiki-link-to-filename
-              (markdown-wiki-link-link))))
-        (if (file-exists-p file-name)
+      (when (not (markdown-code-block-at-point))
+        (let ((highlight-beginning (match-beginning 1))
+              (highlight-end (match-end 1))
+              (file-name
+               (markdown-convert-wiki-link-to-filename
+                (markdown-wiki-link-link))))
+          (if (condition-case nil (file-exists-p file-name) (error nil))
+              (markdown-highlight-wiki-link
+               highlight-beginning highlight-end markdown-link-face)
             (markdown-highlight-wiki-link
-             highlight-beginning highlight-end markdown-link-face)
-          (markdown-highlight-wiki-link
-           highlight-beginning highlight-end markdown-link-face)
-          (markdown-highlight-wiki-link
-           highlight-beginning highlight-end markdown-missing-link-face))))))
+             highlight-beginning highlight-end markdown-missing-link-face)))))))
 
 (defun markdown-extend-changed-region (from to)
   "Extend region given by FROM and TO so that we can fontify all links.
@@ -4656,40 +5712,51 @@ newline after."
     (re-search-forward "\n" nil t)
     (if (not (= (point) to))
         (setq new-to (point)))
-    (values new-from new-to)))
+    (cl-values new-from new-to)))
 
-(defun markdown-check-change-for-wiki-link (from to change)
-  "Check region between FROM and TO for wiki links and re-fontfy as needed.
-Designed to be used with the `after-change-functions' hook.
-CHANGE is the number of bytes of pre-change text replaced by the
-given range."
-  (interactive "nfrom: \nnto: \nnchange: ")
+(defun markdown-check-change-for-wiki-link (from to)
+  "Check region between FROM and TO for wiki links and re-fontify as needed."
+  (interactive "*r")
   (let* ((modified (buffer-modified-p))
          (buffer-undo-list t)
          (inhibit-read-only t)
          (inhibit-point-motion-hooks t)
          deactivate-mark
          buffer-file-truename)
-     (unwind-protect
-         (save-excursion
-           (save-match-data
-             (save-restriction
-               ;; Extend the region to fontify so that it starts
-               ;; and ends at safe places.
-               (multiple-value-bind (new-from new-to)
-                   (markdown-extend-changed-region from to)
-                 ;; Unfontify existing fontification (start from scratch)
-                 (markdown-unfontify-region-wiki-links new-from new-to)
-                 ;; Now do the fontification.
-                 (markdown-fontify-region-wiki-links new-from new-to)))))
-       (and (not modified)
-            (buffer-modified-p)
-            (set-buffer-modified-p nil)))))
+    (unwind-protect
+        (save-excursion
+          (save-match-data
+            (save-restriction
+              ;; Extend the region to fontify so that it starts
+              ;; and ends at safe places.
+              (cl-multiple-value-bind (new-from new-to)
+                  (markdown-extend-changed-region from to)
+                (goto-char new-from)
+                ;; Only refontify when the range contains text with a
+                ;; wiki link face or if the wiki link regexp matches.
+                (when (or (markdown-range-property-any
+                           new-from new-to 'font-lock-face
+                           (list markdown-link-face
+                                 markdown-missing-link-face))
+                          (re-search-forward
+                           markdown-regex-wiki-link new-to t))
+                  ;; Unfontify existing fontification (start from scratch)
+                  (markdown-unfontify-region-wiki-links new-from new-to)
+                  ;; Now do the fontification.
+                  (markdown-fontify-region-wiki-links new-from new-to))))))
+      (and (not modified)
+           (buffer-modified-p)
+           (set-buffer-modified-p nil)))))
+
+(defun markdown-check-change-for-wiki-link-after-change (from to _)
+    "Check region between FROM and TO for wiki links and re-fontify as needed.
+Designed to be used with the `after-change-functions' hook."
+  (markdown-check-change-for-wiki-link from to))
 
 (defun markdown-fontify-buffer-wiki-links ()
   "Refontify all wiki links in the buffer."
   (interactive)
-  (markdown-check-change-for-wiki-link (point-min) (point-max) 0))
+  (markdown-check-change-for-wiki-link (point-min) (point-max)))
 
 
 ;;; Following and Jumping =====================================================
@@ -4721,7 +5788,7 @@ markers and footnote text."
         ((thing-at-point-looking-at markdown-regex-link-reference)
          (markdown-reference-goto-definition))
         ((thing-at-point-looking-at markdown-regex-reference-definition)
-         (markdown-reference-goto-link (match-string-no-properties 1)))
+         (markdown-reference-goto-link (match-string-no-properties 2)))
         (t
          (error "Nothing to jump to from context at point"))))
 
@@ -4732,8 +5799,8 @@ markers and footnote text."
   "Compress whitespace in STR and return result.
 Leading and trailing whitespace is removed.  Sequences of multiple
 spaces, tabs, and newlines are replaced with single spaces."
-  (replace-regexp-in-string "\\(^[ \t\n]+\\|[ \t\n]+$\\)" ""
-                            (replace-regexp-in-string "[ \t\n]+" " " str)))
+  (markdown-replace-regexp-in-string "\\(^[ \t\n]+\\|[ \t\n]+$\\)" ""
+                            (markdown-replace-regexp-in-string "[ \t\n]+" " " str)))
 
 (defun markdown-line-number-at-pos (&optional pos)
   "Return (narrowed) buffer line number at position POS.
@@ -4749,7 +5816,7 @@ This is an exact copy of `line-number-at-pos' for use in emacs21."
 
 (defun markdown-inside-link-text-p ()
   "Return nil if not currently within link anchor text."
-  (looking-back "\\[[^]]*"))
+  (looking-back "\\[[^]]*" nil))
 
 (defun markdown-line-is-reference-definition-p ()
   "Return whether the current line is a (non-footnote) reference defition."
@@ -4763,7 +5830,7 @@ This is an exact copy of `line-number-at-pos' for use in emacs21."
   (cond
    ;; List item inside blockquote
    ((looking-at "^[ \t]*>[ \t]*\\(\\(?:[0-9]+\\|#\\)\\.\\|[*+-]\\)[ \t]+")
-    (replace-regexp-in-string
+    (markdown-replace-regexp-in-string
      "[0-9\\.*+-]" " " (match-string-no-properties 0)))
    ;; Blockquote
    ((looking-at "^[ \t]*>[ \t]*")
@@ -4799,11 +5866,13 @@ This is an exact copy of `line-number-at-pos' for use in emacs21."
   (when (eq major-mode 'markdown-mode)
     (setq markdown-mode-font-lock-keywords
           (append
-           (when markdown-enable-math
-             markdown-mode-font-lock-keywords-math)
            markdown-mode-font-lock-keywords-basic
-           markdown-mode-font-lock-keywords-core))
-    (setq font-lock-defaults '(markdown-mode-font-lock-keywords))
+           (when markdown-enable-math
+             markdown-mode-font-lock-keywords-math)))
+    (setq font-lock-defaults
+          '(markdown-mode-font-lock-keywords
+            nil nil nil nil
+            (font-lock-syntactic-face-function . markdown-syntactic-face)))
     (when (fboundp 'font-lock-refresh-defaults) (font-lock-refresh-defaults))))
 
 (defun markdown-enable-math (&optional arg)
@@ -4830,6 +5899,47 @@ before regenerating font-lock rules for extensions."
     (markdown-reload-extensions)))
 
 
+;;; GFM Checkboxes as Buttons =================================================
+
+(require 'button)
+
+(define-button-type 'markdown-gfm-checkbox-button
+  'follow-link t
+  'face 'markdown-gfm-checkbox-face
+  'mouse-face 'markdown-highlight-face
+  'action #'markdown-toggle-gfm-checkbox)
+
+(defun markdown-toggle-gfm-checkbox (button)
+  "Toggle a GFM checkbox clicked on."
+  (save-match-data
+    (save-excursion
+      (goto-char (button-start button))
+      (cond ((looking-at "\\[ \\]")
+             (replace-match "[x]" nil t))
+            ((looking-at "\\[[xX]\\]")
+             (replace-match "[ ]" nil t))))))
+
+(defun markdown-make-gfm-checkboxes-buttons (start end)
+  "Make GFM checkboxes buttons in region between START and END."
+  (save-excursion
+    (goto-char start)
+    (let ((case-fold-search t))
+      (save-excursion
+	(while (re-search-forward markdown-regex-gfm-checkbox end t)
+	  (make-button (match-beginning 1) (match-end 1)
+                       :type 'markdown-gfm-checkbox-button))))))
+
+;; Called when any modification is made to buffer text.
+(defun markdown-gfm-checkbox-after-change-function (beg end old-len)
+  "Add to `after-change-functions' to setup GFM checkboxes as buttons."
+  (save-excursion
+    (save-match-data
+      ;; Rescan between start of line from `beg' and start of line after `end'.
+      (markdown-make-gfm-checkboxes-buttons
+       (progn (goto-char beg) (beginning-of-line) (point))
+       (progn (goto-char end) (forward-line 1) (point))))))
+
+
 ;;; Mode Definition  ==========================================================
 
 (defun markdown-show-version ()
@@ -4852,12 +5962,15 @@ before regenerating font-lock rules for extensions."
   (make-local-variable 'comment-column)
   (setq comment-column 0)
   (set (make-local-variable 'comment-auto-fill-only-comments) nil)
+  ;; Syntax
+  (add-hook 'syntax-propertize-extend-region-functions
+            'markdown-syntax-propertize-extend-region)
+  (set (make-local-variable 'syntax-propertize-function)
+       'markdown-syntax-propertize)
   ;; Font lock.
   (set (make-local-variable 'markdown-mode-font-lock-keywords) nil)
   (set (make-local-variable 'font-lock-defaults) nil)
   (set (make-local-variable 'font-lock-multiline) t)
-  (set (make-local-variable 'font-lock-support-mode)
-       markdown-font-lock-support-mode)
   ;; Extensions
   (make-local-variable 'markdown-enable-math)
   ;; Reload extensions
@@ -4865,7 +5978,10 @@ before regenerating font-lock rules for extensions."
   ;; Add a buffer-local hook to reload after file-local variables are read
   (add-hook 'hack-local-variables-hook 'markdown-handle-local-variables nil t)
   ;; For imenu support
-  (setq imenu-create-index-function 'markdown-imenu-create-index)
+  (setq imenu-create-index-function
+        (if markdown-nested-imenu-heading-index
+            'markdown-imenu-create-nested-index
+          'markdown-imenu-create-flat-index))
   ;; For menu support in XEmacs
   (easy-menu-add markdown-mode-menu markdown-mode-map)
   ;; Defun movement
@@ -4875,7 +5991,7 @@ before regenerating font-lock rules for extensions."
        'markdown-end-of-defun)
   ;; Paragraph filling
   (set
-   ; Should match start of lines that start or seaprate paragraphs
+   ; Should match start of lines that start or separate paragraphs
    (make-local-variable 'paragraph-start)
        (mapconcat 'identity
                   '(
@@ -4884,6 +6000,7 @@ before regenerating font-lock rules for extensions."
                     "[ \t]*[*+-][ \t]+" ; unordered list item
                     "[ \t]*\\(?:[0-9]+\\|#\\)\\.[ \t]+" ; ordered list item
                     "[ \t]*\\[\\S-*\\]:[ \t]+" ; link ref def
+                    "[ \t]*:[ \t]+" ; definition
                     )
                   "\\|"))
   (set
@@ -4900,6 +6017,7 @@ before regenerating font-lock rules for extensions."
               "\\|"))
   (set (make-local-variable 'adaptive-fill-first-line-regexp)
        "\\`[ \t]*>[ \t]*?\\'")
+  (set (make-local-variable 'adaptive-fill-regexp) "\\s-*")
   (set (make-local-variable 'adaptive-fill-function)
        'markdown-adaptive-fill-function)
   (set (make-local-variable 'fill-forward-paragraph-function)
@@ -4934,18 +6052,24 @@ before regenerating font-lock rules for extensions."
     (make-local-hook 'font-lock-extend-region-functions)
     (make-local-hook 'window-configuration-change-hook))
 
-  ;; Multiline font lock
-  (add-hook 'font-lock-extend-region-functions
-            'markdown-font-lock-extend-region)
-
   ;; Anytime text changes make sure it gets fontified correctly
-  (add-hook 'after-change-functions 'markdown-check-change-for-wiki-link t t)
+  (add-hook 'after-change-functions
+            'markdown-check-change-for-wiki-link-after-change t t)
+
+  ;; Make checkboxes buttons
+  (when markdown-make-gfm-checkboxes-buttons
+    (markdown-make-gfm-checkboxes-buttons (point-min) (point-max))
+    (add-hook 'after-change-functions 'markdown-gfm-checkbox-after-change-function t t))
 
   ;; If we left the buffer there is a really good chance we were
   ;; creating one of the wiki link documents. Make sure we get
   ;; refontified when we come back.
   (add-hook 'window-configuration-change-hook
             'markdown-fontify-buffer-wiki-links t t)
+
+  ;; add live preview export hook
+  (add-hook 'after-save-hook #'markdown-live-preview-if-markdown t t)
+  (add-hook 'kill-buffer-hook #'markdown-live-preview-remove-on-kill t t)
 
   ;; do the initial link fontification
   (markdown-fontify-buffer-wiki-links))
@@ -4960,16 +6084,18 @@ before regenerating font-lock rules for extensions."
 
 ;;; GitHub Flavored Markdown Mode  ============================================
 
+(defvar gfm-mode-hook nil
+  "Hook run when entering GFM mode.")
+
 (defvar gfm-font-lock-keywords
   (append
    ;; GFM features to match first
    (list
-    (cons markdown-regex-strike-through '(2 markdown-strike-through-face)))
+    (cons markdown-regex-strike-through '((3 markdown-markup-face)
+                                          (4 markdown-strike-through-face)
+                                          (5 markdown-markup-face))))
    ;; Basic Markdown features (excluding possibly overridden ones)
-   markdown-mode-font-lock-keywords-basic
-   ;; GFM features to match last
-   (list
-    (cons markdown-regex-gfm-italic '(2 markdown-italic-face))))
+   markdown-mode-font-lock-keywords-basic)
   "Default highlighting expressions for GitHub Flavored Markdown mode.")
 
 ;;;###autoload
@@ -4978,14 +6104,18 @@ before regenerating font-lock rules for extensions."
   (setq markdown-link-space-sub-char "-")
   (set (make-local-variable 'font-lock-defaults)
        '(gfm-font-lock-keywords))
-  (auto-fill-mode 0)
-  ;; Use visual-line-mode if available, fall back to longlines-mode:
-  (cond ((fboundp 'visual-line-mode)
-         (visual-line-mode 1))
-        ((fboundp 'longlines-mode)
-         (longlines-mode 1)))
   ;; do the initial link fontification
-  (markdown-fontify-buffer-wiki-links))
+  (markdown-fontify-buffer-wiki-links)
+  (markdown-gfm-parse-buffer-for-languages))
+
+
+;;; Live Preview Mode  ============================================
+(define-minor-mode markdown-live-preview-mode
+  "Toggle native previewing on save for a specific markdown file."
+  :lighter " MD-Preview"
+  (if markdown-live-preview-mode
+      (markdown-display-buffer-other-window (markdown-live-preview-export))
+    (markdown-live-preview-remove)))
 
 
 (provide 'markdown-mode)

@@ -1,6 +1,6 @@
 ;;; ob-R.el --- Babel Functions for R                -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2009-2015 Free Software Foundation, Inc.
+;; Copyright (C) 2009-2016 Free Software Foundation, Inc.
 
 ;; Author: Eric Schulte
 ;;	Dan Davison
@@ -137,7 +137,7 @@ This function is used when the table contains a header.")
 
 This function is used when the table does not contain a header.")
 
-(defun org-babel-expand-body:R (body params &optional &graphics-file)
+(defun org-babel-expand-body:R (body params &optional _graphics-file)
   "Expand BODY according to PARAMS, return the expanded body."
   (mapconcat 'identity
 	     (append
@@ -397,7 +397,7 @@ last statement in BODY, as elisp."
 	(org-babel-result-cond result-params
 	  (with-temp-buffer
 	    (insert-file-contents tmp-file)
-	    (buffer-string))
+	    (org-babel-chomp (buffer-string) "\n"))
 	  (org-babel-import-elisp-from-file tmp-file '(16)))
 	column-names-p)))
     (output (org-babel-eval org-babel-R-command body))))
@@ -431,7 +431,7 @@ last statement in BODY, as elisp."
 	(org-babel-result-cond result-params
 	  (with-temp-buffer
 	    (insert-file-contents tmp-file)
-	    (buffer-string))
+	    (org-babel-chomp (buffer-string) "\n"))
 	  (org-babel-import-elisp-from-file tmp-file '(16)))
 	column-names-p)))
     (output

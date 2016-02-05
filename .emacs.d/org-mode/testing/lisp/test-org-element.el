@@ -926,7 +926,18 @@ Some other text
   ;; Handle non-empty blank line at the end of buffer.
   (should
    (org-test-with-temp-text "[fn:1] Definition\n "
-     (= (org-element-property :end (org-element-at-point)) (point-max)))))
+     (= (org-element-property :end (org-element-at-point)) (point-max))))
+  ;; Footnote with attributes.
+  (should
+   (= 1
+      (org-test-with-temp-text "#+attr_latex: :offset 0in\n[fn:1] A footnote."
+	(length
+	 (org-element-map (org-element-parse-buffer) 'footnote-definition
+	   #'identity)))))
+  (should
+   (org-test-with-temp-text "[fn:1] 1\n\n#+attr_latex: :offset 0in\n[fn:2] 2"
+     (goto-char (org-element-property :end (org-element-at-point)))
+     (looking-at "#"))))
 
 
 ;;;; Footnotes Reference.
@@ -3187,7 +3198,7 @@ Text
    (equal
     (org-element-normalize-contents
      '(paragraph nil "  Two spaces\n\n \n  Two spaces"))
-    '(paragraph nil "Two spaces\n\n \nTwo spaces")))
+    '(paragraph nil "Two spaces\n\n\nTwo spaces")))
   (should
    (equal
     '(paragraph nil " Two spaces\n" (verbatim nil "V") "\n Two spaces")
@@ -3398,6 +3409,15 @@ Text
   (should
    (eq 'link
        (org-test-with-temp-text "[fn::[[<point>http://orgmode.org]]]"
+	 (org-element-type (org-element-context)))))
+  ;; Special case: tags looking like a link.
+  (should-not
+   (eq 'link
+       (org-test-with-temp-text "* Headline :file<point>:tags:"
+	 (org-element-type (org-element-context)))))
+  (should
+   (eq 'link
+       (org-test-with-temp-text "* Headline :file<point>:tags: :real:tag:"
 	 (org-element-type (org-element-context))))))
 
 

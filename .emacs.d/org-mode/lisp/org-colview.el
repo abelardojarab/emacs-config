@@ -1,6 +1,6 @@
 ;;; org-colview.el --- Column View in Org            -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2004-2015 Free Software Foundation, Inc.
+;; Copyright (C) 2004-2016 Free Software Foundation, Inc.
 
 ;; Author: Carsten Dominik <carsten at orgmode dot org>
 ;; Keywords: outlines, hypermedia, calendar, wp
@@ -162,7 +162,8 @@ This is the compiled version of the format.")
   (interactive)
   (save-excursion
     (beginning-of-line)
-    (let* ((level-face (and (looking-at "\\(\\**\\)\\(\\* \\)")
+    (let* ((level (or (org-current-level) 0))
+	   (level-face (and (looking-at "\\(\\**\\)\\(\\* \\)")
 			    (org-get-level-face 2)))
 	   (ref-face (or level-face
 			 (and (eq major-mode 'org-agenda-mode)
@@ -211,7 +212,10 @@ This is the compiled version of the format.")
 		 ((functionp org-columns-modify-value-for-display-function)
 		  (funcall org-columns-modify-value-for-display-function
 			   title val))
-		 ((equal property "ITEM") (org-columns-compact-links val))
+		 ((equal property "ITEM")
+		  (concat (make-string level ?*)
+			  " "
+			  (org-columns-compact-links val)))
 		 (fc (org-columns-number-to-string
 		      (org-columns-string-to-number val fm) fm fc))
 		 ((and calc (functionp calc)
@@ -459,7 +463,7 @@ Where possible, use the standard interface for changing this line."
      (t
       (setq allowed (org-property-get-allowed-values pom key 'table))
       (if allowed
-	  (setq nval (org-icompleting-read
+	  (setq nval (completing-read
 		      "Value: " allowed nil
 		      (not (get-text-property 0 'org-unrestricted
 					      (caar allowed)))))
@@ -603,7 +607,7 @@ an integer, select that value."
        (t (setq nval (car allowed)))))
     (cond
      ((equal major-mode 'org-agenda-mode)
-      (org-columns-eval '(org-entry-put pom key nval))
+      (org-columns-eval `(org-entry-put ,pom ,key ,nval))
       ;; The following let preserves the current format, and makes sure
       ;; that in only a single file things need to be updated.
       (let* ((org-agenda-overriding-columns-format org-columns-current-fmt)
@@ -614,13 +618,13 @@ an integer, select that value."
 	(org-agenda-columns)))
      (t
       (let ((inhibit-read-only t))
-	(remove-text-properties (1- bol) eol '(read-only t))
+	(remove-text-properties (max (1- bol) (point-min)) eol '(read-only t))
 	(unwind-protect
 	    (progn
 	      (setq org-columns-overlays
 		    (org-delete-all line-overlays org-columns-overlays))
 	      (mapc 'delete-overlay line-overlays)
-	      (org-columns-eval '(org-entry-put pom key nval)))
+	      (org-columns-eval `(org-entry-put ,pom ,key ,nval)))
 	  (org-columns-display-here)))
       (org-move-to-column col)
       (and (nth 3 (assoc-string key org-columns-current-fmt-compiled t))
@@ -777,15 +781,15 @@ calc        function called on every element before summarizing.  This is
   (let ((editp (and prop
 		    (assoc-string prop org-columns-current-fmt-compiled t)))
 	cell)
-    (setq prop (org-icompleting-read
-		"Property: " (mapcar 'list (org-buffer-property-keys t nil t))
+    (setq prop (completing-read
+		"Property: " (mapcar #'list (org-buffer-property-keys t nil t))
 		nil nil prop))
     (setq title (read-string (concat "Column title [" prop "]: ") (or title prop)))
     (setq width (read-string "Column width: " (if width (number-to-string width))))
     (if (string-match "\\S-" width)
 	(setq width (string-to-number width))
       (setq width nil))
-    (setq fmt (org-icompleting-read
+    (setq fmt (completing-read
 	       "Summary [none]: "
 	       (mapcar (lambda (x) (list (symbol-name (cadr x))))
 		       org-columns-compile-map)
@@ -1250,7 +1254,7 @@ PARAMS is a property list of parameters:
 	(skip-empty-rows (plist-get params :skip-empty-rows))
 	(columns-fmt (plist-get params :format))
 	(case-fold-search t)
-	tbl id idpos nfields tmp recalc line
+	tbl id idpos nfields recalc line
 	id-as-string view-file view-pos)
     (when (setq id (plist-get params :id))
       (setq id-as-string (cond ((numberp id) (number-to-string id))
@@ -1286,19 +1290,40 @@ PARAMS is a property list of parameters:
     (move-marker pos nil)
     (when tbl
       (when (plist-get params :hlines)
-	(setq tmp nil)
-	(while tbl
-	  (if (eq (car tbl) 'hline)
-	      (push (pop tbl) tmp)
-	    (if (string-match "\\` *\\(\\*+\\)" (caar tbl))
+	(let (tmp)
+	  (while tbl
+	    (if (eq (car tbl) 'hline)
+		(push (pop tbl) tmp)
+	      (when (string-match "\\` *\\(\\*+\\)" (caar tbl))
 		(if (and (not (eq (car tmp) 'hline))
 			 (or (eq hlines t)
 			     (and (numberp hlines)
 				  (<= (- (match-end 1) (match-beginning 1))
 				      hlines))))
 		    (push 'hline tmp)))
-	    (push (pop tbl) tmp)))
-	(setq tbl (nreverse tmp)))
+	      (push (pop tbl) tmp)))
+	  (setq tbl (nreverse tmp))))
+      ;; Remove stars.  Add indentation entities, if required.
+      (let ((index (cl-position
+		    "ITEM"
+		    (mapcar #'cadr org-columns-current-fmt-compiled)
+		    :test #'equal)))
+	(when index
+	  (dolist (row tbl)
+	    (unless (eq row 'hline)
+	      (let ((item (nth index row)))
+		(setf (nth index row)
+		      (replace-regexp-in-string
+		       "\\`\\(\\*+\\) +"
+		       (if (plist-get params :indent)
+			   (lambda (m)
+			     (let ((l (org-reduced-level
+				       (length (match-string 1 m)))))
+			       (if (= l 1) ""
+				 (concat "\\\\_"
+					 (make-string (* 2 (1- l)) ?\s)))))
+			 "")
+		       item)))))))
       (when vlines
 	(setq tbl (mapcar (lambda (x)
 			    (if (eq 'hline x) x (cons "" x)))
@@ -1340,10 +1365,10 @@ and tailing newline characters."
   "Create a dynamic block capturing a column view table."
   (interactive)
   (let ((defaults '(:name "columnview" :hlines 1))
-	(id (org-icompleting-read
+	(id (completing-read
 	     "Capture columns (local, global, entry with :ID: property) [local]: "
 	     (append '(("global") ("local"))
-		     (mapcar 'list (org-property-values "ID"))))))
+		     (mapcar #'list (org-property-values "ID"))))))
     (if (equal id "") (setq id 'local))
     (if (equal id "global") (setq id 'global))
     (setq defaults (append defaults (list :id id)))

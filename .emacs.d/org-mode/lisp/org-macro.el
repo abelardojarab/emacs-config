@@ -1,6 +1,6 @@
 ;;; org-macro.el --- Macro Replacement Code for Org  -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2013-2015 Free Software Foundation, Inc.
+;; Copyright (C) 2013-2016 Free Software Foundation, Inc.
 
 ;; Author: Nicolas Goaziou <n.goaziou@gmail.com>
 ;; Keywords: outlines, hypermedia, calendar, wp
@@ -186,7 +186,7 @@ found in the buffer with no definition in TEMPLATES.
 
 Optional argument KEYWORDS, when non-nil is a list of keywords,
 as strings, where macro expansion is allowed."
-  (save-excursion
+  (org-with-wide-buffer
     (goto-char (point-min))
     (let ((properties-regexp
 	   (format "\\`EXPORT_%s\\+?\\'" (regexp-opt keywords)))

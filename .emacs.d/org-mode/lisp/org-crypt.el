@@ -1,6 +1,6 @@
 ;;; org-crypt.el --- Public key encryption for org-mode entries
 
-;; Copyright (C) 2007-2015 Free Software Foundation, Inc.
+;; Copyright (C) 2007-2016 Free Software Foundation, Inc.
 
 ;; Emacs Lisp Archive Entry
 ;; Filename: org-crypt.el
@@ -225,7 +225,7 @@ See `org-crypt-disable-auto-save'."
 	    ;; outline property starts at the \n of the heading.
 	    (delete-region (1- (point)) end)
 	    ;; Store a checksum of the decrypted and the encrypted
-	    ;; text value.  This allow to reuse the same encrypted text
+	    ;; text value.  This allows reusing the same encrypted text
 	    ;; if the text does not change, and therefore avoid a
 	    ;; re-encryption process.
 	    (insert "\n" (propertize decrypted-text
@@ -240,20 +240,20 @@ See `org-crypt-disable-auto-save'."
 (defun org-encrypt-entries ()
   "Encrypt all top-level entries in the current buffer."
   (interactive)
-  (let (todo-only)
+  (let ((org--matcher-tags-todo-only nil))
     (org-scan-tags
      'org-encrypt-entry
      (cdr (org-make-tags-matcher org-crypt-tag-matcher))
-     todo-only)))
+     org--matcher-tags-todo-only)))
 
 (defun org-decrypt-entries ()
   "Decrypt all entries in the current buffer."
   (interactive)
-  (let (todo-only)
+  (let ((org--matcher-tags-todo-only nil))
     (org-scan-tags
      'org-decrypt-entry
      (cdr (org-make-tags-matcher org-crypt-tag-matcher))
-     todo-only)))
+     org--matcher-tags-todo-only)))
 
 (defun org-at-encrypted-entry-p ()
   "Is the current entry encrypted?"

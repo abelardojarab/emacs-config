@@ -1,8 +1,8 @@
 ;;; yasnippet.el --- Yet another snippet extension for Emacs.
 
 ;; Copyright (C) 2008-2013, 2015 Free Software Foundation, Inc.
-;; Authors: pluskid <pluskid@gmail.com>,  João Távora <joaotavora@gmail.com>
-;; Maintainer: João Távora <joaotavora@gmail.com>
+;; Authors: pluskid <pluskid@gmail.com>,  João Távora <joaotavora@gmail.com>, Noam Postavsky <npostavs@gmail.com>
+;; Maintainer: Noam Postavsky <npostavs@gmail.com>
 ;; Version: 0.8.1
 ;; Package-version: 0.8.0
 ;; X-URL: http://github.com/capitaomorte/yasnippet
@@ -156,8 +156,11 @@
       (when load-file-name
         (concat (file-name-directory load-file-name) "snippets")))
 
+(defconst yas--default-user-snippets-dir
+  (concat user-emacs-directory "snippets"))
+
 (defcustom yas-snippet-dirs (remove nil
-                                    (list "~/.emacs.d/snippets"
+                                    (list yas--default-user-snippets-dir
                                           'yas-installed-snippets-dir))
   "List of top-level snippet directories.
 
@@ -199,10 +202,9 @@ created with `yas-new-snippet'. "
 (defvaralias 'yas/root-directory 'yas-snippet-dirs)
 
 (defcustom yas-new-snippet-default "\
-# -*- mode: snippet; require-final-newline: nil -*-
+# -*- mode: snippet -*-
 # name: $1
-# key: ${2:${1:$(yas--key-from-desc yas-text)}}${3:
-# binding: ${4:direct-keybinding}}
+# key: ${2:${1:$(yas--key-from-desc yas-text)}}
 # --
 $0"
   "Default snippet to use when creating a new snippet.
@@ -210,10 +212,9 @@ If nil, don't use any snippet."
   :type 'string
   :group 'yasnippet)
 
-(defcustom yas-prompt-functions '(yas-x-prompt
-                                  yas-dropdown-prompt
+(defcustom yas-prompt-functions '(yas-dropdown-prompt
                                   yas-completing-prompt
-                                  yas-ido-prompt
+                                  yas-maybe-ido-prompt
                                   yas-no-prompt)
   "Functions to prompt for keys, templates, etc interactively.
 
@@ -459,10 +460,10 @@ Attention: These hooks are not run when exiting nested/stacked snippet expansion
   "Hooks to run just before expanding a snippet.")
 
 (defvar yas-buffer-local-condition
-  '(if (and (or (fourth (syntax-ppss))
-                (fifth (syntax-ppss)))
-	    this-command
-            (eq this-command 'yas-expand-from-trigger-key))
+  '(if (and (let ((ppss (syntax-ppss)))
+              (or (nth 3 ppss) (nth 4 ppss)))
+            (memq this-command '(yas-expand yas-expand-from-trigger-key
+                                            yas-expand-from-keymap)))
        '(require-snippet-condition . force-in-comment)
      t)
   "Snippet expanding condition.
@@ -728,22 +729,21 @@ defined direct keybindings to the command
 (defun yas--modes-to-activate (&optional mode)
   "Compute list of mode symbols that are active for `yas-expand'
 and friends."
-  (let (dfs explored)
-    (setq dfs (lambda (mode)
-                (unless (memq mode explored)
-                  (push mode explored)
-                  (loop for neighbour
-                        in (cl-list* (get mode 'derived-mode-parent)
-                                     (ignore-errors (symbol-function mode))
-                                     (gethash mode yas--parents))
-                        when (and neighbour
-                                  (not (memq neighbour explored))
-                                  (symbolp neighbour))
-                        do (funcall dfs neighbour)))))
-    (if mode
-        (funcall dfs mode)
-      (mapcar dfs (cons major-mode yas--extra-modes)))
-    explored))
+  (let* ((explored (if mode (list mode) ; Building up list in reverse.
+                     (cons major-mode (reverse yas--extra-modes))))
+         (dfs
+          (lambda (mode)
+            (cl-loop for neighbour
+                     in (cl-list* (get mode 'derived-mode-parent)
+                                  (ignore-errors (symbol-function mode))
+                                  (gethash mode yas--parents))
+                     when (and neighbour
+                               (not (memq neighbour explored))
+                               (symbolp neighbour))
+                     do (push neighbour explored)
+                     (funcall dfs neighbour)))))
+    (mapcar dfs explored)
+    (nreverse explored)))
 
 (defvar yas-minor-mode-hook nil
   "Hook run when `yas-minor-mode' is turned on.")
@@ -1388,16 +1388,6 @@ them all in `yas--menu-table'"
                     :visible (yas--show-menu-p ',mode)))
     menu-keymap))
 
-
-(defmacro yas--called-interactively-p (&optional kind)
-  "A backward-compatible version of `called-interactively-p'.
-
-Optional KIND is as documented at `called-interactively-p'
-in GNU Emacs 24.1 or higher."
-  (if (string< emacs-version "24.1")
-      '(called-interactively-p)
-    `(called-interactively-p ,kind)))
-
 
 ;;; Template-related and snippet loading functions
 
@@ -1449,7 +1439,7 @@ Here's a list of currently recognized directives:
                                                      (point-max)))
                (setq bound (point))
                (goto-char (point-min))
-               (while (re-search-forward "^# *\\([^ ]+?\\) *: *\\(.*\\)$" bound t)
+               (while (re-search-forward "^# *\\([^ ]+?\\) *: *\\(.*?\\)[[:space:]]*$" bound t)
                  (when (string= "uuid" (match-string-no-properties 1))
                    (setq uuid (match-string-no-properties 2)))
                  (when (string= "type" (match-string-no-properties 1))
@@ -1593,11 +1583,13 @@ Optional PROMPT sets the prompt to use."
                             (if display-fn (mapcar display-fn choices) choices)))))
      (keyboard-quit))))
 
+(defun yas-maybe-ido-prompt (prompt choices &optional display-fn)
+  (when (bound-and-true-p ido-mode)
+    (yas-ido-prompt prompt choices display-fn)))
+
 (defun yas-ido-prompt (prompt choices &optional display-fn)
-  (when (and (fboundp 'ido-completing-read)
-	     (or (>= emacs-major-version 24)
-		 ido-mode))
-    (yas-completing-prompt prompt choices display-fn #'ido-completing-read)))
+  (require 'ido)
+  (yas-completing-prompt prompt choices display-fn #'ido-completing-read))
 
 (defun yas-dropdown-prompt (_prompt choices &optional display-fn)
   (when (fboundp 'dropdown-list)
@@ -1751,8 +1743,8 @@ With prefix argument USE-JIT do jit-loading of snippets."
             (funcall fun)))
         ;; Look for buffers that are already in `mode-sym', and so
         ;; need the new snippets immediately...
-        ;; 
-        (when use-jit 
+        ;;
+        (when use-jit
           (cl-loop for buffer in (buffer-list)
                    do (with-current-buffer buffer
                         (when (eq major-mode mode-sym)
@@ -1760,7 +1752,7 @@ With prefix argument USE-JIT do jit-loading of snippets."
                           (push buffer impatient-buffers)))))))
     ;; ...after TOP-LEVEL-DIR has been completely loaded, call
     ;; `yas--load-pending-jits' in these impatient buffers.
-    ;; 
+    ;;
     (cl-loop for buffer in impatient-buffers
              do (with-current-buffer buffer (yas--load-pending-jits))))
   (when interactive
@@ -1779,9 +1771,9 @@ With prefix argument USE-JIT do jit-loading of snippets."
                           (current-time-string)))))
     ;; Normal case.
     (unless (file-exists-p (concat directory "/" ".yas-skip"))
-      (if (and (progn (yas--message 2 "Loading compiled snippets from %s" directory) t)
-               (load (expand-file-name ".yas-compiled-snippets" directory) 'noerror (<= yas-verbosity 3)))
-          (yas--message 2 "Loading snippet files from %s" directory)
+      (unless (and (load (expand-file-name ".yas-compiled-snippets" directory) 'noerror (<= yas-verbosity 3))
+                   (progn (yas--message 2 "Loaded compiled snippets from %s" directory) t))
+        (yas--message 2 "Loading snippet files from %s" directory)
         (yas--load-directory-2 directory mode-sym)))))
 
 (defun yas--load-directory-2 (directory mode-sym)
@@ -1811,16 +1803,18 @@ With prefix argument USE-JIT do jit-loading of snippets."
   "Reload the directories listed in `yas-snippet-dirs' or
 prompt the user to select one."
   (let (errors)
-    (if yas-snippet-dirs
-        (dolist (directory (reverse (yas-snippet-dirs)))
-          (cond ((file-directory-p directory)
-                 (yas-load-directory directory (not nojit))
-                 (if nojit
-                     (yas--message 3 "Loaded %s" directory)
-                   (yas--message 3 "Prepared just-in-time loading for %s" directory)))
-                (t
-                 (push (yas--message 0 "Check your `yas-snippet-dirs': %s is not a directory" directory) errors))))
-      (call-interactively 'yas-load-directory))
+    (if (null yas-snippet-dirs)
+        (call-interactively 'yas-load-directory)
+      (when (member yas--default-user-snippets-dir yas-snippet-dirs)
+        (make-directory yas--default-user-snippets-dir t))
+      (dolist (directory (reverse (yas-snippet-dirs)))
+        (cond ((file-directory-p directory)
+               (yas-load-directory directory (not nojit))
+               (if nojit
+                   (yas--message 3 "Loaded %s" directory)
+                 (yas--message 3 "Prepared just-in-time loading for %s" directory)))
+              (t
+               (push (yas--message 0 "Check your `yas-snippet-dirs': %s is not a directory" directory) errors)))))
     errors))
 
 (defun yas-reload-all (&optional no-jit interactive)
@@ -1946,7 +1940,7 @@ This works by stubbing a few functions, then calling
   (interactive)
   (message (concat "yasnippet (version "
                    yas--version
-                   ") -- pluskid <pluskid@gmail.com>/joaotavora <joaotavora@gmail.com>")))
+                   ") -- pluskid/joaotavora/npostavs")))
 
 
 ;;; Apropos snippet menu:
@@ -2226,12 +2220,12 @@ Common gateway for `yas-expand-from-trigger-key' and
                 ;; loops when other extensions use mechanisms similar
                 ;; to `yas--keybinding-beyond-yasnippet'. (github #525
                 ;; and #526)
-                ;; 
+                ;;
                 (yas-minor-mode nil)
                 (beyond-yasnippet (yas--keybinding-beyond-yasnippet)))
            (yas--message 4 "Falling back to %s"  beyond-yasnippet)
            (assert (or (null beyond-yasnippet) (commandp beyond-yasnippet)))
-           (setq this-original-command beyond-yasnippet)
+           (setq this-command beyond-yasnippet)
            (when beyond-yasnippet
              (call-interactively beyond-yasnippet))))
         ((and (listp yas-fallback-behavior)
@@ -2359,7 +2353,6 @@ visited file in `snippet-mode'."
   (interactive)
   (let* ((yas-buffer-local-condition 'always)
          (templates (yas--all-templates (yas--get-snippet-tables)))
-         (yas-prompt-functions '(yas-ido-prompt yas-completing-prompt))
          (template (and templates
                         (or (yas--prompt-for-template templates
                                                      "Choose a snippet template to edit: ")
@@ -2417,7 +2410,7 @@ where snippets of table might exist."
   (let ((main-dir (replace-regexp-in-string
                    "/+$" ""
                    (or (first (or (yas-snippet-dirs)
-                                  (setq yas-snippet-dirs '("~/.emacs.d/snippets")))))))
+                                  (setq yas-snippet-dirs (list yas--default-user-snippets-dir)))))))
         (tables (or (and table
                          (list table))
                     (yas--get-snippet-tables))))
@@ -3042,11 +3035,11 @@ through the field's start point"
 
 The most recently-inserted snippets are returned first."
   (sort
-   (remove nil (remove-duplicates (mapcar #'(lambda (ov)
-                                              (overlay-get ov 'yas--snippet))
-                                          (if all-snippets
-                                              (overlays-in (point-min) (point-max))
-                                            (nconc (overlays-at (point)) (overlays-at (1- (point))))))))
+   (delq nil (delete-dups
+              (mapcar (lambda (ov) (overlay-get ov 'yas--snippet))
+                      (if all-snippets (overlays-in (point-min) (point-max))
+                        (nconc (overlays-at (point))
+                               (overlays-at (1- (point))))))))
    #'(lambda (s1 s2)
        (<= (yas--snippet-id s2) (yas--snippet-id s1)))))
 
@@ -3159,12 +3152,6 @@ Also create some protection overlays"
 (defvar yas--inhibit-overlay-hooks nil
   "Bind this temporarily to non-nil to prevent running `yas--on-*-modification'.")
 
-(defmacro yas--inhibit-overlay-hooks (&rest body)
-  "Run BODY with `yas--inhibit-overlay-hooks' set to t."
-  (declare (indent 0))
-  `(let ((yas--inhibit-overlay-hooks t))
-     ,@body))
-
 (defvar yas-snippet-beg nil "Beginning position of the last snippet committed.")
 (defvar yas-snippet-end nil "End position of the last snippet committed.")
 
@@ -3184,7 +3171,7 @@ This renders the snippet as ordinary text."
       (setq yas-snippet-end (overlay-end control-overlay))
       (delete-overlay control-overlay))
 
-    (yas--inhibit-overlay-hooks
+    (let ((yas--inhibit-overlay-hooks t))
       (when yas--active-field-overlay
         (delete-overlay yas--active-field-overlay))
       (when yas--field-protection-overlays
@@ -3396,13 +3383,28 @@ Move the overlay, or create it if it does not exit."
     (overlay-put yas--active-field-overlay 'insert-behind-hooks
                  '(yas--on-field-overlay-modification))))
 
-(defun yas--on-field-overlay-modification (overlay after? _beg _end &optional _length)
+(defun yas--skip-and-clear-field-p (field _beg _end &optional _length)
+  "Tell if newly modified FIELD should be cleared and skipped.
+BEG, END and LENGTH like overlay modification hooks."
+  (and (not (yas--field-modified-p field))
+       (= (point) (yas--field-start field))
+       (require 'delsel)
+       ;; `yank' sets `this-command' to t during execution.
+       (let ((clearp (get (if (commandp this-command) this-command
+                            this-original-command)
+                          'delete-selection)))
+         (when (and (not (memq clearp '(yank supersede kill)))
+                    (functionp clearp))
+           (setq clearp (funcall clearp)))
+         clearp)))
+
+(defun yas--on-field-overlay-modification (overlay after? beg end &optional length)
   "Clears the field and updates mirrors, conditionally.
 
-Only clears the field if it hasn't been modified and it point it
-at field start.  This hook doesn't do anything if an undo is in
-progress."
+Only clears the field if it hasn't been modified and point is at
+field start.  This hook does nothing if an undo is in progress."
   (unless (or yas--inhibit-overlay-hooks
+              (not (overlayp yas--active-field-overlay)) ; Avoid Emacs bug #21824.
               (yas--undo-in-progress))
     (let* ((field (overlay-get overlay 'yas--field))
            (snippet (overlay-get yas--active-field-overlay 'yas--snippet)))
@@ -3412,11 +3414,7 @@ progress."
                (yas--field-update-display field))
              (yas--update-mirrors snippet))
             (field
-             (when (and (not after?)
-                        (not (yas--field-modified-p field))
-                        (eq (point) (if (markerp (yas--field-start field))
-                                        (marker-position (yas--field-start field))
-                                      (yas--field-start field))))
+             (when (yas--skip-and-clear-field-p field beg end)
                (yas--skip-and-clear field))
              (setf (yas--field-modified-p field) t))))))
 
@@ -3429,7 +3427,7 @@ progress."
 ;; As of github #537 this no longer inhibits the command by issuing an
 ;; error: all the snippets at point, including nested snippets, are
 ;; automatically commited and the current command can proceed.
-;; 
+;;
 (defun yas--make-move-field-protection-overlays (snippet field)
   "Place protection overlays surrounding SNIPPET's FIELD.
 
@@ -3443,7 +3441,7 @@ Move the overlays, or create them if they do not exit."
     ;;
     (when (< (buffer-size) end)
       (save-excursion
-        (yas--inhibit-overlay-hooks
+        (let ((yas--inhibit-overlay-hooks t))
           (goto-char (point-max))
           (newline))))
     ;; go on to normal overlay creation/moving
@@ -3559,7 +3557,7 @@ considered when expanding the snippet."
              ;; them mostly to make the undo information
              ;;
              (setq yas--start-column (current-column))
-             (yas--inhibit-overlay-hooks
+             (let ((yas--inhibit-overlay-hooks t))
                (setq snippet
                      (if expand-env
                          (eval `(let* ,expand-env
@@ -4241,7 +4239,7 @@ When multiple expressions are found, only the last one counts."
                (not (string= reflection (buffer-substring-no-properties (yas--mirror-start mirror)
                                                                         (yas--mirror-end mirror)))))
       (goto-char (yas--mirror-start mirror))
-      (yas--inhibit-overlay-hooks
+      (let ((yas--inhibit-overlay-hooks t))
         (insert reflection))
       (if (> (yas--mirror-end mirror) (point))
           (delete-region (point) (yas--mirror-end mirror))
@@ -4260,7 +4258,7 @@ When multiple expressions are found, only the last one counts."
                                                                            (yas--field-end field)))))
         (setf (yas--field-modified-p field) t)
         (goto-char (yas--field-start field))
-        (yas--inhibit-overlay-hooks
+        (let ((yas--inhibit-overlay-hooks t))
           (insert transformed)
           (if (> (yas--field-end field) (point))
               (delete-region (point) (yas--field-end field))
