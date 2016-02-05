@@ -1,0 +1,21 @@
+\documentclass{article}
+
+\begin{document}
+
+\begin{definitions}
+  Here is a code  chunk.
+  \begin{definition}
+
+    <<foo, fig.height=4>>=
+    1+1
+    plot(rnorm(100))
+    @
+
+\end{definition}
+
+
+\end{definitions}
+You can also write inline expressions, e.g. $\pi=\Sexpr{pi}$, and
+\Sexpr{1.598673e8} is a big number.
+
+\end{document}

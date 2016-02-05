@@ -26,17 +26,15 @@
 
 ;; Flycheck
 (add-to-list 'load-path "~/.emacs.d/flycheck")
-(require 'f)
 (require 'flycheck)
-(add-hook 'after-init-hook 'global-flycheck-mode)
 (mapc (lambda (mode)
         (add-hook mode (lambda () (flycheck-mode t))))
-      '(c-mode-hook
+      '(ess-mode-hook
+        c-mode-hook
         c++-mode-hook
-        lisp-mode-hook
+        perl-mode-hook
         python-mode-hook
-        js2-mode-hook
-        java-mode-hook))
+        js2-mode-hook))
 
 ;; disable flycheck during idle time, if enabled
 (delete 'idle-change flycheck-check-syntax-automatically)

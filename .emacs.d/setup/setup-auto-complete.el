@@ -116,7 +116,7 @@
 (add-to-list 'ac-dictionary-directories "~/.emacs.cache/ac-dict")
 (setq ac-comphist-file  "~/.emacs.cache/ac-comphist.dat")
 (ac-config-default)
-(setq-default ac-sources '(ac-source-words-in-same-mode-buffers ac-source-imenu))
+(setq-default ac-sources '(ac-source-words-in-same-mode-buffers))
 
 ;; Let's have snippets and TAGS in the auto-complete dropdown
 (defun ac-common-setup ()
@@ -129,7 +129,6 @@
 ;; Clang auto-complete
 (add-to-list 'load-path "~/.emacs.d/auto-complete-clang")
 (require 'auto-complete-clang)
-
 (defun my-ac-cc-mode-setup ()
   (setq ac-sources (append '(ac-source-clang) ac-sources)))
 
@@ -155,22 +154,6 @@
                                ac-source-math-latex) ac-sources))))
 (add-hook 'LaTeX-mode-hook 'ac-latex-mode-setup)
 (add-hook 'org-mode-hook 'ac-latex-mode-setup)
-
-;; Autocomplete using Aspell
-(add-to-list 'load-path "~/.emacs.d/ac-ispell")
-(require 'ac-ispell)
-(setq ac-ispell-requires 3)
-(setq ac-ispell-fuzzy-limit 2)
-
-(eval-after-load "auto-complete"
-  '(progn
-     (ac-ispell-setup)))
-
-(add-hook 'git-commit-mode-hook 'ac-ispell-ac-setup)
-(add-hook 'mail-mode-hook 'ac-ispell-ac-setup)
-(add-hook 'org-mode-hook 'ac-ispell-ac-setup)
-(add-hook 'markdown-mode-hook 'ac-ispell-ac-setup)
-(add-hook 'text-mode-hook 'ac-ispell-ac-setup)
 
 ;; Enable auto-complete on more modes
 (dolist (mode '(magit-log-edit-mode

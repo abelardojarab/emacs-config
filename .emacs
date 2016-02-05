@@ -167,6 +167,9 @@
 ;; Setup R/ess
 (require 'setup-ess)
 
+;; Setup polymode
+(require 'setup-polymode)
+
 ;; Setup shell
 (require 'setup-eshell)
 

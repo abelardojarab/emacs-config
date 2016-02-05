@@ -27,12 +27,20 @@
 (add-to-list 'load-path "~/.emacs.d/ESS/lisp")
 (require 'ess-site)
 (setq-default ess-dialect "R")
+(setq-default inferior-R-args "--no-restore-history --no-save  ")
 
 ;; show function arguments in ESS buffers
 (require 'ess-eldoc)
 
 ;; also show in iESS buffers
 (add-hook 'inferior-ess-mode-hook 'ess-use-eldoc)
+
+;; http://www.kieranhealy.org/blog/archives/2009/10/12/make-shift-enter-do-a-lot-in-ess/
+(add-hook 'ess-mode-hook
+          '(lambda()
+             (setq comint-scroll-to-bottom-on-input t)
+             (setq comint-scroll-to-bottom-on-output t)
+             (setq comint-move-point-for-output t)))
 
 ;; http://permalink.gmane.org/gmane.emacs.ess.general/8419
 ;; Script font lock highlight.
