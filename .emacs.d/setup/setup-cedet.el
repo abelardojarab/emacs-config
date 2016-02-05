@@ -27,6 +27,7 @@
 ;; Enable Semantic
 (add-to-list 'load-path "~/.emacs.d/cedet/lisp/cedet")
 (semantic-load-enable-minimum-features)
+(require 'semantic/wisent)
 
 ;; Emacs freaks out if this isn't set.
 (setq warning-suppress-types nil)
