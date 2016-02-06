@@ -123,19 +123,19 @@ non-nil."
 ;; Different possible themes
 ;; (load-theme 'atom-dark t)
 ;; (load-theme 'zenburn t)
-;; (load-theme 'leuven t)
+(load-theme 'leuven t)
 ;; (load-theme 'zerodark t)
 ;; (load-theme 'material t)
 ;; (load-theme 'FlatUI t)
 ;; (load-theme 'faff t)
-(load-theme 'monokai t)
+;; (load-theme 'monokai t)
 ;; (load-theme 'pastelmac t)
 ;; (load-theme 'solarized-dark t)
 ;; (load-theme 'material-light t)
 ;; (load-theme 'apropospriate-light t)
 
 ;; White or black text
-(add-to-list 'default-frame-alist '(foreground-color . "#ffffff"))
+;; (add-to-list 'default-frame-alist '(foreground-color . "#ffffff"))
 
 ;; Syntax coloring
 (global-font-lock-mode t)
