@@ -1,5 +1,5 @@
 # .fvwm/.fvwm2rc
-SetEnv fvwm_wallpaper $[HOME]/workspace/emacsfull/Images/Wallpapers/2560x1440-pencils_paper_debian_coffee_linux_drawing-14101.png
+SetEnv fvwm_wallpaper $[HOME]/workspace/emacsfull/Images/Wallpapers/mapnationalgeographic.png
 
 # Pixmap
 ImagePath $[HOME]/workspace/emacsfull/Images/Icons:$[HOME]/Images/Icons:/usr/share/icons/fvwm:/usr/share/icons/hicolor/16x16
@@ -46,7 +46,7 @@ AddToFunc   InitFunction
 + I Exec exec xrdb ~/.Xresources
 + I Exec exec feh $[fvwm_wallpaper]
 + I Exec exec plank
-+ I Exec exec trayer --SetDockType true --distance 200 --padding 10 --transparent true --tint a6aaaa --alpha 50 --edge top --align right --expand true --widthtype percent --width 10 --heighttype pixel --height 24 --distancefrom right
++ I Exec exec trayer --SetDockType true --distance 200 --padding 10 --transparent true --tint a6aaaa --alpha 50 --edge top --align right --expand true --widthtype percent --width 12 --heighttype pixel --height 24 --distancefrom right
 + I Exec exec hp-systray
 + I Exec exec gkrellm --geometry +1940+530
 + I Exec exec insync start
