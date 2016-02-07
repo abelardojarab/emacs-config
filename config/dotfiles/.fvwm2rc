@@ -1,5 +1,5 @@
 # .fvwm/.fvwm2rc
-SetEnv fvwm_wallpaper $[HOME]/workspace/emacsfull/Images/Wallpapers/mapnationalgeographic.png
+SetEnv fvwm_wallpaper $[HOME]/workspace/emacsfull/Images/Wallpapers/2048x1152-mapnationalgeographic.png
 
 # Pixmap
 ImagePath $[HOME]/workspace/emacsfull/Images/Icons:$[HOME]/Images/Icons:/usr/share/icons/fvwm:/usr/share/icons/hicolor/16x16
@@ -36,7 +36,7 @@ ColormapFocus FollowsFocus
 AddToFunc StartFunction
 + I FvwmButtons
 + I FvwmTaskBar
-+ I Test (Init) Exec exec fvwm-root --dither --retain-pixmap $[fvwm_wallpaper]
+# + I Test (Init) Exec exec fvwm-root --dither --retain-pixmap $[fvwm_wallpaper]
 # + I FvwmAuto FvwmAutohide -menter FuncAutoEnter
 # + I Test (Init) StartHiddenConsole
 
@@ -44,7 +44,7 @@ AddToFunc StartFunction
 DestroyFunc InitFunction
 AddToFunc   InitFunction
 + I Exec exec xrdb ~/.Xresources
-+ I Exec exec feh $[fvwm_wallpaper]
++ I Exec exec feh --bg-scale $[fvwm_wallpaper]
 + I Exec exec plank
 + I Exec exec trayer --SetDockType true --distance 200 --padding 10 --transparent true --tint a6aaaa --alpha 50 --edge top --align right --expand true --widthtype percent --width 12 --heighttype pixel --height 24 --distancefrom right
 + I Exec exec hp-systray
