@@ -7,7 +7,7 @@ IconPath  $[HOME]/workspace/emacsfull/Images/Icons:$[HOME]/Images/Icons:/usr/sha
 
 # Fonts
 InfoStoreAdd font_sans "xft:Aquabase:size=12:encoding=iso10646-1"
-InfoStoreAdd font_mono "xft:Roboto-Bold:size=12:encoding=iso10646-1"
+InfoStoreAdd font_mono "xft:Roboto-Bold:size=13:encoding=iso10646-1"
 DefaultFont "$[infostore.font_mono]"
 WindowFont "$[infostore.font_mono]"
 
@@ -82,11 +82,11 @@ Colorset  4 fg #9999CC, bg #996666
 Colorset  5 fg #ffffff, bg #9999CC
 
 # Menu
-Colorset  7 fg #f0f0f0, bg #151515, sh #f0f0f0, hi #f0f0f0
+Colorset  7 fg #f0f0f0, bg #151515, sh #909090, hi #808080
 Colorset  8 fg #dddddd, bg #eb928e, sh #eb928e, hi #151515
 
 # Pager
-Colorset  9 fg #a0a0a0, bg #505050, sh #eeeeee, hi #303030
+Colorset  9 fg #606060, bg #505050, sh #eeeeee, hi #606060
 Colorset 10 fg #bbbbbb, bg #303030, sh #eeeeee, hi #303030
 
 # Gainsboro is a light grey
