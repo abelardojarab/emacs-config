@@ -179,6 +179,9 @@
 ;; Setup ECB
 (require 'setup-ecb)
 
+;; Setup hideshow
+(require 'setup-hideshow)
+
 ;; Setup post
 (require 'setup-post)
 

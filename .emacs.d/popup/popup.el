@@ -5,7 +5,7 @@
 ;; Author: Tomohiro Matsuyama <m2ym.pub@gmail.com>
 ;; Keywords: lisp
 ;; Version: 0.5.3
-;; Package-Requires: ((cl-lib "0.3"))
+;; Package-Requires: ((cl-lib "0.5"))
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -887,13 +887,19 @@ Pages up through POPUP."
 (defvar popup-menu-show-quick-help-function 'popup-menu-show-quick-help
   "Function used for showing quick help by `popup-menu*'.")
 
+(defcustom popup-isearch-regexp-builder-function #'regexp-quote
+  "Function used to construct a regexp from a pattern. You may for instance
+  provide a function that replaces spaces by '.+' if you like helm or ivy style
+  of completion."
+  :type 'function)
+
 (defsubst popup-isearch-char-p (char)
   (and (integerp char)
        (<= 32 char)
        (<= char 126)))
 
 (defun popup-isearch-filter-list (pattern list)
-  (cl-loop with regexp = (regexp-quote pattern)
+  (cl-loop with regexp = (funcall popup-isearch-regexp-builder-function pattern)
            for item in list
            do
            (unless (stringp item)
@@ -1023,8 +1029,9 @@ HELP-DELAY is a delay of displaying helps."
                      prompt
                      &aux tip lines)
   "Show a tooltip of STRING at POINT. This function is
-synchronized unless NOWAIT specified. Almost arguments are same
-as `popup-create' except for TRUNCATE, NOWAIT, and PROMPT.
+synchronized unless NOWAIT specified. Almost all arguments are
+the same as in `popup-create', except for TRUNCATE, NOWAIT, and
+PROMPT.
 
 If TRUNCATE is non-nil, the tooltip can be truncated.
 
@@ -1319,8 +1326,8 @@ PROMPT is a prompt string when reading events during event loop."
                        initial-index
                        &aux menu event)
   "Show a popup menu of LIST at POINT. This function returns a
-value of the selected item. Almost arguments are same as
-`popup-create' except for KEYMAP, FALLBACK, HELP-DELAY, PROMPT,
+value of the selected item. Almost all arguments are the same as in
+`popup-create', except for KEYMAP, FALLBACK, HELP-DELAY, PROMPT,
 ISEARCH, ISEARCH-FILTER, ISEARCH-CURSOR-COLOR, ISEARCH-KEYMAP, and
 ISEARCH-CALLBACK.
 

@@ -1,6 +1,6 @@
 ;;; setup-hideshow.el ---
 
-;; Copyright (C) 2014, 2015  abelardo.jara-berrocal
+;; Copyright (C) 2014, 2015, 2016  abelardo.jara-berrocal
 
 ;; Author: abelardo.jara-berrocal <ajaraber@plxc25288.pdx.intel.com>
 ;; Keywords:
@@ -25,7 +25,7 @@
 ;;; Code:
 
 (require 'folding)
-(defun my-folding-check-folded ()
+(defun iy-folding-check-folded ()
   "Function to determine if this file is in folded form."
   (let ((folding-re1 "^.?.?.?{{{")
         (folding-re2 "[\r\n].*}}}"))
@@ -33,13 +33,14 @@
       (goto-char (point-min))
       ;;  If we found both, we assume file is folded
       (and (assq major-mode folding-mode-marks-alist)
-         (< (point-max) 10000)
-         (re-search-forward folding-re1 nil t)
-         ;; if file is folded, there are \r's
-         (re-search-forward "[\r\n]" nil t)
-         (re-search-forward folding-re2 nil t)))))
-(setq folding-check-folded-file-function 'my-folding-check-folded)
+           (< (point-max) 10000)
+           (re-search-forward folding-re1 nil t)
+           ;; if file is folded, there are \r's
+           (re-search-forward "[\r\n]" nil t)
+           (re-search-forward folding-re2 nil t)))))
+(setq folding-check-folded-file-function 'iy-folding-check-folded)
 (folding-mode-add-find-file-hook)
+(define-key folding-mode-prefix-map (kbd "<SPC>") 'folding-context-next-action)
 
 ;; why open-fold is defined but not called in this function?
 (defun folding-shift-in (&optional noerror)
@@ -48,16 +49,16 @@
       ((open-fold nil
                   (let ((data (folding-show-current-entry noerror t)))
                     (and data
-                       (progn
-                         (when folding-narrow-by-default
-                           (setq folding-stack
-                                 (if folding-stack
-                                     (cons (cons (point-min-marker)
-                                                 (point-max-marker))
-                                           folding-stack)
-                                   '(folded)))
-                           (folding-set-mode-line))
-                         (folding-narrow-to-region (car data) (nth 1 data)))))))
+                         (progn
+                           (when folding-narrow-by-default
+                             (setq folding-stack
+                                   (if folding-stack
+                                       (cons (cons (point-min-marker)
+                                                   (point-max-marker))
+                                             folding-stack)
+                                     '(folded)))
+                             (folding-set-mode-line))
+                           (folding-narrow-to-region (car data) (nth 1 data)))))))
     (let ((goal (point)))
       (while (folding-skip-ellipsis-backward)
         (beginning-of-line)
@@ -73,6 +74,8 @@
   (ignore-errors
     (font-lock-add-keywords nil (folding-font-lock-keywords major-mode))))
 
+
+;; Enable fold dwim (do what i mean)
 (require 'fold-dwim)
 (defun folding-marker-p (&optional pos)
   (eq (get-char-property (or pos (point)) 'face) 'fringe))
@@ -114,6 +117,138 @@
           ad-do-it)
         (folding-mode))
     ad-do-it))
+
+;; Enable hideshowvis
+(autoload 'hideshowvis-enable "hideshowvis" "Highlight foldable regions")
+(autoload 'hideshowvis-minor-mode
+  "hideshowvis"
+  "Will indicate regions foldable with hideshow in the fringe."
+  'interactive)
+(dolist (hook (list 'prog-mode-hook))
+  (add-hook hook 'hideshowvis-enable))
+
+;; enable `hs-minor-mode' at startup
+(add-hook 'prog-mode-hook
+          (lambda () (hs-minor-mode 1)))
+
+(defun hs-minor-mode-settings ()
+  "settings of `hs-minor-mode'."
+  (defvar hs-headline-max-len 30 "*Maximum length of `hs-headline' to display.")
+  (setq hs-isearch-open t)
+
+  (defun hs-display-headline ()
+    (let* ((len (length hs-headline))
+           (headline hs-headline)
+           (postfix ""))
+      (when (>= len hs-headline-max-len)
+        (setq postfix "...")
+        (setq headline (substring hs-headline 0 hs-headline-max-len)))
+      (if hs-headline (concat headline postfix " ") "")))
+
+  (setq-default mode-line-format
+                (append '((:eval (hs-display-headline))) mode-line-format))
+
+  ;; Add the following to your .emacs and uncomment it in order to get a right arrow symbol
+  (define-fringe-bitmap 'hs-marker [0 32 48 56 60 56 48 32])
+
+  ;; Down arrow symbol
+  (define-fringe-bitmap 'hideshowvis-hideable-marker [0 0 254 124 56 16 0 0])
+
+  (defcustom hs-fringe-face 'hs-fringe-face
+    "*Specify face used to highlight the fringe on hidden regions."
+    :type 'face
+    :group 'hideshow)
+
+  (defface hs-fringe-face
+    '((t (:foreground "#999" :box (:line-width 2 :color "grey75" :style released-button))))
+    "Face used to highlight the fringe on folded regions"
+    :group 'hideshow)
+
+  (defcustom hs-face 'hs-face
+    "*Specify the face to to use for the hidden region indicator"
+    :type 'face
+    :group 'hideshow)
+
+  (defface hs-face
+    '((t (:background "#558" :box t)))
+    "Face to hightlight the ... area of hidden regions"
+    :group 'hideshow)
+
+  (defun display-code-line-counts (ov)
+    (when (eq 'code (overlay-get ov 'hs))
+      (let* ((marker-string "*fringe-dummy*")
+             (marker-length (length marker-string))
+             (display-string (format "(%d)..." (count-lines
+                                                (overlay-start ov) (overlay-end ov)))))
+        (overlay-put ov 'help-echo "Hiddent text. M-s <SPC> to show")
+        (put-text-property 0 marker-length 'display (list 'left-fringe
+                                                          'hs-marker 'hs-fringe-face) marker-string)
+        (overlay-put ov 'before-string marker-string)
+        (put-text-property 1 (length display-string) 'face 'hs-face
+                           display-string)
+        (overlay-put ov 'display display-string))))
+  (setq hs-set-up-overlay 'display-code-line-counts)
+
+  (defadvice folding-subst-regions (around toggle-fringe (list find replace) activate)
+    ad-do-it
+    (save-excursion
+      (while list
+        (let* ((begin (car list))
+               (end (cadr list))
+               bol eol
+               (marker-string "*fringe-dummy*")
+               (marker-length (length marker-string)))
+          (dolist (ov (overlays-in begin end))
+            (when (overlay-get ov 'fringe-folding-p)
+              (delete-overlay ov)))
+          (when (and (eq find ?\n) (eq replace ?\r))
+            ;; \\n -> \\r add fringe
+            (goto-char begin)
+            (search-forward "\r")
+            (forward-char -1)
+            (let* ((ov (make-overlay (point) end))
+                   (display-string (format " (%d)..." (count-lines begin end))))
+              (put-text-property 0 marker-length 'display (list 'left-fringe 'hs-marker 'fringe-face) marker-string)
+              (overlay-put ov 'before-string marker-string)
+              (put-text-property 1 (length display-string) 'face 'collapsed-face display-string)
+              (overlay-put ov 'display display-string)
+              (overlay-put ov 'priority 9999)
+              (overlay-put ov 'fringe-folding-p t))))
+        (setq list (cdr (cdr list))))))
+
+  ;; Support to toggle/untoggle all
+  (defvar hs-hide-all nil "Current state of hideshow for toggling all.")
+  (make-local-variable 'hs-hide-all)
+
+  (defun hs-toggle-hiding-all ()
+    "Toggle hideshow all."
+    (interactive)
+    (setq hs-hide-all (not hs-hide-all))
+    (if hs-hide-all
+        (hs-hide-all)
+      (hs-show-all)))
+
+  (defvar fold-all-fun nil "Function to fold all.")
+  (make-variable-buffer-local 'fold-all-fun)
+  (defvar fold-fun nil "Function to fold.")
+  (make-variable-buffer-local 'fold-fun)
+
+  (defun toggle-fold-all ()
+    "Toggle fold all."
+    (interactive)
+    (if fold-all-fun
+        (call-interactively fold-all-fun)
+      (hs-toggle-hiding-all)))
+
+  (defun toggle-fold ()
+    "Toggle fold."
+    (interactive)
+    (if fold-fun
+        (call-interactively fold-fun)
+      (hs-toggle-hiding))))
+
+(eval-after-load "hideshow"
+  '(hs-minor-mode-settings))
 
 (provide 'setup-hideshow)
 ;;; setup-hideshow.el ends here
