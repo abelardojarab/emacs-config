@@ -46,7 +46,7 @@
 
 ;; Disable Semantics for large files
 (add-hook 'semantic--before-fetch-tags-hook
-          (lambda () (if (and (> (point-max) 400)
+          (lambda () (if (and (> (point-max) 500)
                               (not (semantic-parse-tree-needs-rebuild-p)))
                          nil
                        t)))
