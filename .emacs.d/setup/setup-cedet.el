@@ -29,9 +29,6 @@
 (semantic-load-enable-minimum-features)
 (require 'semantic/wisent)
 
-;; Emacs freaks out if this isn't set.
-(setq warning-suppress-types nil)
-
 ;; Enable case-insensitive searching
 (set-default 'semantic-case-fold t)
 
@@ -49,7 +46,7 @@
 
 ;; Disable Semantics for large files
 (add-hook 'semantic--before-fetch-tags-hook
-          (lambda () (if (and (> (point-max) 5000)
+          (lambda () (if (and (> (point-max) 400)
                               (not (semantic-parse-tree-needs-rebuild-p)))
                          nil
                        t)))
