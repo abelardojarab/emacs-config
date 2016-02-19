@@ -38,15 +38,13 @@
         (overlay-put o 'evaporate t)))))
 (add-hook 'dired-after-readin-hook 'dired-sync-symlink-filter)
 
+;; Speed up find file
+(remove-hook 'find-file-hooks 'vc-find-file-hook)
+
 ;; psvn
-(add-to-list 'load-path "~/.emacs.d/diff-hl")
 (require 'psvn)
-(require 'diff-hl)
-(defadvice svn-status-update-modeline (after svn-update-diff-hl activate)
-  (diff-hl-update))
 
 ;; git
-(add-to-list 'load-path "~/.emacs.d/git-timemachine")
 (add-to-list 'load-path "~/.emacs.d/with-editor")
 (add-to-list 'load-path "~/.emacs.d/magit/lisp")
 (eval-after-load 'info
@@ -54,6 +52,17 @@
           (add-to-list 'Info-directory-list "~/.emacs.d/magit/Documentation")))
 (require 'with-editor)
 (require 'magit)
+
+;; diff-hl
+(add-to-list 'load-path "~/.emacs.d/diff-hl")
+(require 'diff-hl)
+(setq diff-hl-draw-borders t)
+(defadvice svn-status-update-modeline (after svn-update-diff-hl activate)
+  (diff-hl-update))
+(add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh)
+
+;; git-timenachine
+(add-to-list 'load-path "~/.emacs.d/git-timemachine")
 (require 'git-timemachine)
 
 ;; Show blame for current line
@@ -106,9 +115,6 @@
   (unless (string-equal system-type "windows-nt")
     (defadvice git-gutter+-process-diff (before git-gutter+-process-diff-advice activate)
       (ad-set-arg 0 (file-truename (ad-get-arg 0))))))
-
-;; Speed up find file
-(remove-hook 'find-file-hooks 'vc-find-file-hook)
 
 ;; ibuffer versioning-based groups
 (add-to-list 'load-path "~/.emacs.d/ibuffer-vc")

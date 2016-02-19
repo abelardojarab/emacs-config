@@ -1,11 +1,11 @@
-;;; diff-hl.el --- Highlight uncommitted changes -*- lexical-binding: t -*-
+;;; diff-hl.el --- Highlight uncommitted changes using VC -*- lexical-binding: t -*-
 
-;; Copyright (C) 2012-2014  Free Software Foundation, Inc.
+;; Copyright (C) 2012-2016  Free Software Foundation, Inc.
 
 ;; Author:   Dmitry Gutov <dgutov@yandex.ru>
 ;; URL:      https://github.com/dgutov/diff-hl
 ;; Keywords: vc, diff
-;; Version:  1.6.0
+;; Version:  1.8.3
 ;; Package-Requires: ((cl-lib "0.2"))
 
 ;; This file is part of GNU Emacs.
@@ -25,9 +25,9 @@
 
 ;;; Commentary:
 
-;; `diff-hl-mode' highlights uncommitted changes on the left side of
-;; the window (using the fringe, by default), allows you to jump
-;; between the hunks and revert them selectively.
+;; `diff-hl-mode' highlights uncommitted changes on the side of the
+;; window (using the fringe, by default), allows you to jump between
+;; the hunks and revert them selectively.
 
 ;; Provided commands:
 ;;
@@ -59,7 +59,8 @@
   (require 'cl-lib)
   (require 'vc-git)
   (require 'vc-hg)
-  (require 'face-remap))
+  (require 'face-remap)
+  (declare-function smartrep-define-key 'smartrep))
 
 (defgroup diff-hl nil
   "VC diff highlighting on the side of a window"
@@ -116,6 +117,16 @@
   :group 'diff-hl
   :type 'function)
 
+(defcustom diff-hl-side 'left
+  "Which side to use for indicators."
+  :type '(choice (const left)
+                 (const right))
+  :set (lambda (var value)
+         (let ((on (bound-and-true-p global-diff-hl-mode)))
+           (when on (global-diff-hl-mode -1))
+           (set-default var value)
+           (when on (global-diff-hl-mode 1)))))
+
 (defvar diff-hl-reference-revision nil
   "Revision to diff against.  nil means the most recent one.")
 
@@ -129,7 +140,8 @@
                (if (floatp spacing)
                    (truncate (* (frame-char-height) spacing))
                  spacing)))
-         (w (frame-parameter nil 'left-fringe))
+         (w (min (frame-parameter nil (intern (format "%s-fringe" diff-hl-side)))
+                 16))
          (middle (make-vector h (expt 2 (1- w))))
          (ones (1- (expt 2 w)))
          (top (copy-sequence middle))
@@ -168,13 +180,16 @@
 
 (defvar diff-hl-spec-cache (make-hash-table :test 'equal))
 
-(defun diff-hl-fringe-spec (type pos)
-  (let* ((key (list type pos diff-hl-fringe-bmp-function))
+(defun diff-hl-fringe-spec (type pos side)
+  (let* ((key (list type pos side
+                    diff-hl-fringe-face-function
+                    diff-hl-fringe-bmp-function))
          (val (gethash key diff-hl-spec-cache)))
     (unless val
       (let* ((face-sym (funcall diff-hl-fringe-face-function type pos))
              (bmp-sym (funcall diff-hl-fringe-bmp-function type pos)))
-        (setq val (propertize " " 'display `((left-fringe ,bmp-sym ,face-sym))))
+        (setq val (propertize " " 'display `((,(intern (format "%s-fringe" side))
+                                              ,bmp-sym ,face-sym))))
         (puthash key val diff-hl-spec-cache)))
     val))
 
@@ -198,8 +213,25 @@
          (vc-hg-diff-switches nil)
          (vc-svn-diff-switches nil)
          (vc-diff-switches '("-U0"))
-         (vc-disable-async-diff t))
+         ,@(when (boundp 'vc-disable-async-diff)
+             '((vc-disable-async-diff t))))
      ,body))
+
+(defun diff-hl-modified-p (state)
+  (or (eq state 'edited)
+      (and (eq state 'up-to-date)
+           ;; VC state is stale in after-revert-hook.
+           (or revert-buffer-in-progress-p
+               ;; Diffing against an older revision.
+               diff-hl-reference-revision))))
+
+(defun diff-hl-changes-buffer (file backend)
+  (let ((buf-name " *diff-hl* "))
+    (diff-hl-with-diff-switches
+     (vc-call-backend backend 'diff (list file)
+                      diff-hl-reference-revision nil
+                      buf-name))
+    buf-name))
 
 (defun diff-hl-changes ()
   (let* ((file buffer-file-name)
@@ -207,20 +239,9 @@
     (when backend
       (let ((state (vc-state file backend)))
         (cond
-         ((or (eq state 'edited)
-              (and (eq state 'up-to-date)
-                   ;; VC state is stale in after-revert-hook.
-                   (or revert-buffer-in-progress-p
-                       ;; Diffing against an older revision.
-                       diff-hl-reference-revision)))
-          (let* ((buf-name " *diff-hl* ")
-                 diff-auto-refine-mode
-                 res)
-            (diff-hl-with-diff-switches
-             (vc-call-backend backend 'diff (list file)
-                              diff-hl-reference-revision nil
-                              buf-name))
-            (with-current-buffer buf-name
+         ((diff-hl-modified-p state)
+          (let* (diff-auto-refine-mode res)
+            (with-current-buffer (diff-hl-changes-buffer file backend)
               (goto-char (point-min))
               (unless (eobp)
                 (ignore-errors
@@ -251,31 +272,33 @@
         (current-line 1))
     (diff-hl-remove-overlays)
     (save-excursion
-      (goto-char (point-min))
-      (dolist (c changes)
-        (cl-destructuring-bind (line len type) c
-          (forward-line (- line current-line))
-          (setq current-line line)
-          (let ((hunk-beg (point)))
-            (while (cl-plusp len)
-              (diff-hl-add-highlighting
-               type
-               (cond
-                ((not diff-hl-draw-borders) 'empty)
-                ((and (= len 1) (= line current-line)) 'single)
-                ((= len 1) 'bottom)
-                ((= line current-line) 'top)
-                (t 'middle)))
-              (forward-line 1)
-              (cl-incf current-line)
-              (cl-decf len))
-            (let ((h (make-overlay hunk-beg (point)))
-                  (hook '(diff-hl-overlay-modified)))
-              (overlay-put h 'diff-hl t)
-              (overlay-put h 'diff-hl-hunk t)
-              (overlay-put h 'modification-hooks hook)
-              (overlay-put h 'insert-in-front-hooks hook)
-              (overlay-put h 'insert-behind-hooks hook))))))))
+      (save-restriction
+        (widen)
+        (goto-char (point-min))
+        (dolist (c changes)
+          (cl-destructuring-bind (line len type) c
+            (forward-line (- line current-line))
+            (setq current-line line)
+            (let ((hunk-beg (point)))
+              (while (cl-plusp len)
+                (diff-hl-add-highlighting
+                 type
+                 (cond
+                  ((not diff-hl-draw-borders) 'empty)
+                  ((and (= len 1) (= line current-line)) 'single)
+                  ((= len 1) 'bottom)
+                  ((= line current-line) 'top)
+                  (t 'middle)))
+                (forward-line 1)
+                (cl-incf current-line)
+                (cl-decf len))
+              (let ((h (make-overlay hunk-beg (point)))
+                    (hook '(diff-hl-overlay-modified)))
+                (overlay-put h 'diff-hl t)
+                (overlay-put h 'diff-hl-hunk t)
+                (overlay-put h 'modification-hooks hook)
+                (overlay-put h 'insert-in-front-hooks hook)
+                (overlay-put h 'insert-behind-hooks hook)))))))))
 
 (defun diff-hl-add-highlighting (type shape)
   (let ((o (make-overlay (point) (point))))
@@ -284,19 +307,20 @@
     o))
 
 (defun diff-hl-highlight-on-fringe (ovl type shape)
-  (overlay-put ovl 'before-string (diff-hl-fringe-spec type shape)))
+  (overlay-put ovl 'before-string (diff-hl-fringe-spec type shape
+                                                       diff-hl-side)))
 
-(defun diff-hl-remove-overlays ()
-  (dolist (o (overlays-in (point-min) (point-max)))
-    (when (overlay-get o 'diff-hl) (delete-overlay o))))
+(defun diff-hl-remove-overlays (&optional beg end)
+  (save-restriction
+    (widen)
+    (dolist (o (overlays-in (or beg (point-min)) (or end (point-max))))
+      (when (overlay-get o 'diff-hl) (delete-overlay o)))))
 
 (defun diff-hl-overlay-modified (ov after-p _beg _end &optional _length)
   "Delete the hunk overlay and all our line overlays inside it."
   (unless after-p
     (when (overlay-buffer ov)
-      (save-restriction
-        (narrow-to-region (overlay-start ov) (overlay-end ov))
-        (diff-hl-remove-overlays))
+      (diff-hl-remove-overlays (overlay-start ov) (overlay-end ov))
       (delete-overlay ov))))
 
 (defvar diff-hl-timer nil)
@@ -367,7 +391,8 @@ in the source file, or the last line of the hunk above it."
               (when (eobp)
                 (with-current-buffer ,buffer (diff-hl-remove-overlays))
                 (error "Buffer is up-to-date"))
-              (diff-hl-diff-skip-to ,line)
+              (let (diff-auto-refine-mode)
+                (diff-hl-diff-skip-to ,line))
               (save-excursion
                 (while (looking-at "[-+]") (forward-line 1))
                 (setq end-line (line-number-at-pos (point)))
@@ -382,6 +407,8 @@ in the source file, or the last line of the hunk above it."
                 (if (>= wbh (- end-line beg-line))
                     (recenter (/ (+ wbh (- beg-line end-line) 2) 2))
                   (recenter 1)))
+              (when diff-auto-refine-mode
+                (diff-refine-hunk))
               (unless (yes-or-no-p (format "Revert current hunk in %s?"
                                            ,(cl-caadr fileset)))
                 (error "Revert canceled"))
@@ -390,7 +417,7 @@ in the source file, or the last line of the hunk above it."
               (with-current-buffer ,buffer
                 (save-buffer))
               (message "Hunk reverted"))))
-      (quit-windows-on diff-buffer))))
+      (quit-windows-on diff-buffer t))))
 
 (defun diff-hl-hunk-overlay-at (pos)
   (cl-loop for o in (overlays-in pos (1+ pos))
@@ -418,13 +445,21 @@ in the source file, or the last line of the hunk above it."
   (interactive)
   (diff-hl-next-hunk t))
 
-(define-prefix-command 'diff-hl-command-map)
+(defun diff-hl-mark-hunk ()
+  (interactive)
+  (let ((hunk (diff-hl-hunk-overlay-at (point))))
+    (unless hunk
+      (error "No hunk at point"))
+    (goto-char (overlay-start hunk))
+    (push-mark (overlay-end hunk) nil t)))
 
-(let ((map diff-hl-command-map))
-  (define-key map "n" 'diff-hl-revert-hunk)
-  (define-key map "[" 'diff-hl-previous-hunk)
-  (define-key map "]" 'diff-hl-next-hunk)
-  map)
+(defvar diff-hl-command-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map "n" 'diff-hl-revert-hunk)
+    (define-key map "[" 'diff-hl-previous-hunk)
+    (define-key map "]" 'diff-hl-next-hunk)
+    map))
+(fset 'diff-hl-command-map diff-hl-command-map)
 
 ;;;###autoload
 (define-minor-mode diff-hl-mode
@@ -453,6 +488,9 @@ in the source file, or the last line of the hunk above it."
         ;; doesn't care about changed VC state.
         ;; https://github.com/magit/magit/issues/603
         (add-hook 'magit-revert-buffer-hook 'diff-hl-update nil t)
+        ;; Magit versions 2.0-2.3 don't do the above and call this
+        ;; instead, but only when they dosn't call `revert-buffer':
+        (add-hook 'magit-not-reverted-hook 'diff-hl-update nil t)
         (add-hook 'auto-revert-mode-hook 'diff-hl-update nil t)
         (add-hook 'text-scale-mode-hook 'diff-hl-define-bitmaps nil t))
     (remove-hook 'after-save-hook 'diff-hl-update t)
@@ -461,6 +499,7 @@ in the source file, or the last line of the hunk above it."
     (remove-hook 'vc-checkin-hook 'diff-hl-update t)
     (remove-hook 'after-revert-hook 'diff-hl-update t)
     (remove-hook 'magit-revert-buffer-hook 'diff-hl-update t)
+    (remove-hook 'magit-not-reverted-hook 'diff-hl-update t)
     (remove-hook 'auto-revert-mode-hook 'diff-hl-update t)
     (remove-hook 'text-scale-mode-hook 'diff-hl-define-bitmaps t)
     (diff-hl-remove-overlays)))
@@ -477,6 +516,32 @@ in the source file, or the last line of the hunk above it."
                        map)))
       (scan diff-hl-command-map)
       (smartrep-define-key diff-hl-mode-map diff-hl-command-prefix smart-keys))))
+
+(declare-function magit-toplevel "magit-git")
+(declare-function magit-unstaged-files "magit-git")
+
+(defun diff-hl-magit-post-refresh ()
+  (let* ((topdir (magit-toplevel))
+         (modified-files
+          (mapcar (lambda (file) (expand-file-name file topdir))
+                  (magit-unstaged-files t)))
+         (unmodified-states '(up-to-date ignored unregistered)))
+    (dolist (buf (buffer-list))
+      (when (and (buffer-local-value 'diff-hl-mode buf)
+                 (not (buffer-modified-p buf))
+                 (file-in-directory-p (buffer-file-name buf) topdir))
+        (with-current-buffer buf
+          (let* ((file buffer-file-name)
+                 (backend (vc-backend file)))
+            (when backend
+              (cond
+               ((member file modified-files)
+                (when (memq (vc-state file) unmodified-states)
+                  (vc-state-refresh file backend))
+                (diff-hl-update))
+               ((not (memq (vc-state file backend) unmodified-states))
+                (vc-state-refresh file backend)
+                (diff-hl-update))))))))))
 
 (defun diff-hl-dir-update ()
   (dolist (pair (if (vc-dir-marked-files)

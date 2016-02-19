@@ -15,6 +15,8 @@ The package also contains auxiliary modes:
 * `diff-hl-margin-mode` changes the highlighting function to
   use the margin instead of the fringe.
 * `diff-hl-amend-mode` shifts the reference revision back by one.
+* `diff-hl-flydiff-mode` implements highlighting changes on the fly.
+  It requires Emacs 24.4 or newer.
 
 Check out the Commentary section in each respective file for the usage
 instructions.
@@ -46,10 +48,9 @@ Emacs 24+. On OS X, Emacs 24.3 or higher is recommended.
 Notes
 =====
 
-* Since it uses the corresponding VC diff command, it's only accurate when the
-  buffer is in saved state. Highlighting changes "on the fly" might be better,
-  maybe we can do something similar to `highlight-markup-buffers` with a hidden
-  buffer containing the unmodified copy.
+* By default `diff-hl-mode` uses the corresponding VC diff command, so
+  it's only accurate when the buffer is in saved state. Check out
+  `diff-hl-flydiff-mode`, it aims to handle unsaved buffers as well.
 
 * We conflict with other modes when they put indicators on the fringe,
   such as [Flycheck](https://github.com/flycheck/flycheck). This is
@@ -62,6 +63,9 @@ Notes
   to show the indicators in the margin instead.
 
 * Frame-local and buffer-local values of `line-spacing` are not supported.
+
+* Fringe width up to 16 works best (because we can't define a bitmap
+  with width above that number).
 
 * [emacs-git-gutter](https://github.com/syohex/emacs-git-gutter) shows
   indicators in the margin by default, allows you to customize how the
@@ -86,5 +90,11 @@ psvn
 Magit
 -----
 
-If you have a recent enough version installed, it defines
-`magit-revert-buffer-hook`, which we use.
+If you're using a version before 2.4.0, it defines `magit-revert-buffer-hook`
+(or `magit-not-reverted-hook`), which we use.
+
+When using Magit 2.4 or newer, add this to your init script:
+
+```lisp
+(add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh)
+```

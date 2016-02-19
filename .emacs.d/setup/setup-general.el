@@ -56,9 +56,6 @@ Defaults to `error'."
 (if (not (file-exists-p (expand-file-name "~/.emacs.cache")))
     (make-directory (expand-file-name "~/.emacs.cache") t))
 
-;; Garbage collection
-(setq gc-cons-threshold 120000000)
-
 ;; Inhibit startup window, very annoying
 (setq inhibit-startup-message t)
 

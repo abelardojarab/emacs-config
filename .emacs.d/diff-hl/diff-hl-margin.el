@@ -1,6 +1,6 @@
 ;;; diff-hl-margin.el --- Highlight buffer changes on margins -*- lexical-binding: t -*-
 
-;; Copyright (C) 2012-2014  Free Software Foundation, Inc.
+;; Copyright (C) 2012-2015  Free Software Foundation, Inc.
 
 ;; This file is part of GNU Emacs.
 
@@ -44,16 +44,6 @@
   "Highlight buffer changes on margin"
   :group 'diff-hl)
 
-(defcustom diff-hl-margin-side 'left
-  "Which margin to use for indicators."
-  :type '(choice (const left)
-                 (const right))
-  :set (lambda (var value)
-         (let ((on diff-hl-margin-mode))
-           (when on (diff-hl-margin-mode -1))
-           (set-default var value)
-           (when on (diff-hl-margin-mode 1)))))
-
 ;;;###autoload
 (define-minor-mode diff-hl-margin-mode
   "Toggle displaying `diff-hl-mode' highlights on the margin."
@@ -82,7 +72,7 @@
   "Toggle displaying `diff-hl-mode' highlights on the margin locally.
 You probably shouldn't use this function directly."
   :lighter ""
-  (let ((width-var (intern (format "%s-margin-width" diff-hl-margin-side))))
+  (let ((width-var (intern (format "%s-margin-width" diff-hl-side))))
     (if diff-hl-margin-minor-mode
         (progn
           (set (make-local-variable 'diff-hl-margin-old-highlight-function)
@@ -95,6 +85,8 @@ You probably shouldn't use this function directly."
       (set width-var 0)))
   (dolist (win (get-buffer-window-list))
     (set-window-buffer win (current-buffer))))
+
+(define-obsolete-variable-alias 'diff-hl-margin-side 'diff-hl-side "1.7.1")
 
 (defun diff-hl-margin-minor-mode-off ()
   (diff-hl-margin-minor-mode -1))
@@ -114,7 +106,7 @@ You probably shouldn't use this function directly."
                                        (intern (format "diff-hl-%s" type)))))))))
 
 (defun diff-hl-highlight-on-margin (ovl type _shape)
-  (let ((spec (cdr (assoc (cons type diff-hl-margin-side)
+  (let ((spec (cdr (assoc (cons type diff-hl-side)
                           diff-hl-margin-spec-cache))))
     (overlay-put ovl 'before-string spec)))
 
