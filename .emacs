@@ -114,13 +114,16 @@
 (require 'setup-compile)
 
 ;; Setup Ido (optional, disabled GUI for open file)
-;; (require 'setup-ido)
+(require 'setup-ido)
 
 ;; Setup Autopair
 (require 'setup-autopair)
 
 ;; Setup Yasnippet
 (require 'setup-yasnippet)
+
+;; Setup Auto-Insert
+(require 'setup-auto-insert)
 
 ;; Setup Auto-Complete
 (require 'setup-auto-complete)

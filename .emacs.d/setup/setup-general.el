@@ -74,8 +74,8 @@ Defaults to `error'."
       ps-font-size 7.0
       ps-print-header nil
       ps-print-color-p t
-      ps-landscape-mode nil    ; for two pages per page: t
-      ps-number-of-columns 1)  ; for two pages per page: 2
+      ps-landscape-mode nil    ;; for two pages per page: t
+      ps-number-of-columns 1)  ;; for two pages per page: 2
 
 ;; Namespace implementation
 (add-to-list 'load-path "~/.emacs.d/names")
@@ -548,8 +548,7 @@ Defaults to `error'."
 ;; Pretty diff mode
 (autoload 'ediff-buffers "ediff" "Intelligent Emacs interface to diff" t)
 (autoload 'ediff-files "ediff" "Intelligent Emacs interface to diff" t)
-(autoload 'ediff-files-remote "ediff"
-  "Intelligent Emacs interface to diff")
+(autoload 'ediff-files-remote "ediff" "Intelligent Emacs interface to diff" t)
 
 ;; Change type files
 (setq auto-mode-alist
@@ -613,14 +612,6 @@ Defaults to `error'."
 ;; Browse kill ring
 (add-to-list 'load-path "~/.emacs.d/browse-kill-ring")
 (require 'browse-kill-ring)
-
-;; Autoinsert skeletons and templates
-(require 'autoinsert)
-(auto-insert-mode t)
-
-;; This turns off the prompt that auto-insert-mode asks before
-;; it actually inserts text/code for you
-(setq auto-insert-query nil)
 
 ;; Line numbers
 (require 'linum)
