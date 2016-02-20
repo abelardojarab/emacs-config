@@ -184,16 +184,16 @@ non-nil."
       (set-face-attribute 'variable-pitch nil :font main-writing-font :weight 'normal)
       (add-hook 'text-mode-hook 'variable-pitch-mode))
 
-    ;; Dynamic font adjusting based on monitor resolution
-    (when (find-font (font-spec :name "Consolas"))
+    ;; Dynamic font adjusting based on monitor resolution, using Android fonts
+    (when (find-font (font-spec :name "Roboto Mono"))
 
       (defun fontify-frame (frame)
         (interactive)
         (let (main-writing-font main-programming-font)
-          (setq main-programming-font "Consolas")
-          (setq main-writing-font "Consolas")
-          (if (find-font (font-spec :name "Calibri"))
-              (setq main-writing-font "Calibri"))
+          (setq main-programming-font "Roboto Mono")
+          (setq main-writing-font "Roboto Mono")
+          (if (find-font (font-spec :name "Roboto Mono"))
+              (setq main-writing-font "Roboto Mono"))
 
           ;; Adjust text size based on resolution
           (case system-type
@@ -221,14 +221,14 @@ non-nil."
              (if (> (x-display-pixel-width) 2000)
                  (progn ;; Ultra-HD monitor in Linux
                    (setq main-programming-font (concat main-programming-font "-14:antialias=subpixel"))
-                   (setq main-writing-font (concat main-writing-font "-17")))
+                   (setq main-writing-font (concat main-writing-font "-15")))
                (if (> (x-display-pixel-width) 1800)
                    (progn ;; HD monitor in Linux
                      (setq main-programming-font (concat main-programming-font "-13:antialias=subpixel"))
-                     (setq main-writing-font (concat main-writing-font "-16")))
+                     (setq main-writing-font (concat main-writing-font "-14")))
                  (progn
                    (setq main-programming-font (concat main-programming-font "-11:antialias=subpixel"))
-                   (setq main-writing-font (concat main-writing-font "-13")))))))
+                   (setq main-writing-font (concat main-writing-font "-12")))))))
 
           ;; Apply fonts
           (set-default-font main-programming-font frame)
