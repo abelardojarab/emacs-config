@@ -1,7 +1,6 @@
-;; -*-no-byte-compile: t; -*-
 ;;; tabbar.el --- Display a tab bar in the header line
 
-;; Copyright (C) 2003, 2004, 2005 David Ponce
+;; Copyright (C) 2003, 2004, 2005, 2016 David Ponce
 
 ;; Author: David Ponce <david@dponce.com>
 ;; Maintainer: David Ponce <david@dponce.com>
@@ -392,10 +391,10 @@ You should use this hook to reset dependent data.")
 The result is a list just as long as the number of existing tab sets."
          (let (,result)
            (if tabbar-tabsets
-	       (mapatoms
-		#'(lambda (,tabset)
-		    (push (funcall ,function ,tabset) ,result))
-		tabbar-tabsets))
+           (mapatoms
+        #'(lambda (,tabset)
+            (push (funcall ,function ,tabset) ,result))
+        tabbar-tabsets))
            ,result)))))
 
 (defun tabbar-make-tabset (name &rest objects)
@@ -865,10 +864,10 @@ SPECS is a list of image specifications.  See also `find-image'."
       tabbar-cached-image
     (when (and tabbar-use-images (display-images-p))
       (condition-case nil
-	  (prog1
-	      (setq tabbar-cached-image (find-image specs))
-	    (setq tabbar-cached-spec specs))
-	(error nil)))))
+      (prog1
+          (setq tabbar-cached-image (find-image specs))
+        (setq tabbar-cached-spec specs))
+    (error nil)))))
 
 (defsubst tabbar-disable-image (image)
   "From IMAGE, return a new image which looks disabled."
@@ -1568,7 +1567,7 @@ Returns non-nil if the new state is enabled.
         (setq tabbar--global-hlf (default-value 'header-line-format))
         (tabbar-init-tabsets-store)
         (setq-default header-line-format tabbar-header-line-format)
-	(if (fboundp 'tabbar-define-access-keys) (tabbar-define-access-keys)))
+    (if (fboundp 'tabbar-define-access-keys) (tabbar-define-access-keys)))
 ;;; OFF
     (when (tabbar-mode-on-p)
       ;; Turn off Tabbar-Local mode globally.
@@ -1740,8 +1739,8 @@ Return a list of one element based on major mode."
 Return the the first group where the current buffer is."
   (let ((bl (sort
              (mapcar
-	      ;; for each buffer, create list: buffer, buffer name, groups-list
-	      ;; sort on buffer name; store to bl (buffer list)
+          ;; for each buffer, create list: buffer, buffer name, groups-list
+          ;; sort on buffer name; store to bl (buffer list)
               #'(lambda (b)
                   (with-current-buffer b
                     (list (current-buffer)
@@ -1760,15 +1759,15 @@ Return the the first group where the current buffer is."
         (dolist (g (nth 2 e)) ;; for each member of groups-list for current buffer
           (let ((tabset (tabbar-get-tabset g))) ;; get group from group name
             (if tabset ;; if group exists
-		;; check if current buffer is same as any cached buffer
-		;; (search buffer list for matching buffer)
+        ;; check if current buffer is same as any cached buffer
+        ;; (search buffer list for matching buffer)
                 (unless (equal e (assq (car e) tabbar--buffers)) ;; if not,...
                   ;; This is a new buffer, or a previously existing
                   ;; buffer that has been renamed, or moved to another
                   ;; group.  Update the tab set, and the display.
                   (tabbar-add-tab tabset (car e) t) ;; add to end of tabset
                   (tabbar-set-template tabset nil))
-	      ;;if tabset doesn't exist, make a new tabset with this buffer
+          ;;if tabset doesn't exist, make a new tabset with this buffer
               (tabbar-make-tabset g (car e))))))
       ;; Remove tabs for buffers not found in cache or moved to other
       ;; groups, and remove empty tabsets.
