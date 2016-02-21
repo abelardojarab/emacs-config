@@ -623,6 +623,15 @@ Defaults to `error'."
 (add-to-list 'load-path "~/.emacs.d/multiple-cursors")
 (require 'multiple-cursors)
 
+;; Smoother scrolling
+(setq redisplay-dont-pause t
+      scroll-margin 1
+      scroll-step 1
+      scroll-conservatively 10000
+      scroll-preserve-screen-position 1
+      scroll-up-aggressively 0.01
+      scroll-down-aggressively 0.01)
+
 ;; Benchmark-init can give us a breakdown of time spent on require and load calls:
 (add-to-list 'load-path "~/.emacs.d/benchmark-init")
 (require 'benchmark-init)
@@ -634,9 +643,6 @@ Defaults to `error'."
   (message "Startup time: %s seconds."
            (emacs-uptime "%s")))
 (add-hook 'emacs-startup-hook 'show-startup-time 'append)
-
-;; Follow symbolic links
-(setq vc-follow-symlinks t)
 
 (provide 'setup-general)
 ;;; setup-general.el ends here

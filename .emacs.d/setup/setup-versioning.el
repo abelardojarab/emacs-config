@@ -24,6 +24,9 @@
 
 ;;; Code:
 
+;; Follow symbolic links
+(setq vc-follow-symlinks t)
+
 ;; Designsync versioning control
 (require 'vc-sync)
 (defun dired-sync-symlink-filter ()
