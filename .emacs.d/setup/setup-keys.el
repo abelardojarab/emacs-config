@@ -325,13 +325,13 @@
 ;; Scroll with the mouse
 (defun smooth-scroll (increment)
   (scroll-up increment) (sit-for 0.01)
-  (scroll-up increment) (sit-for 0.1)
-  (scroll-up increment) (sit-for 0.1)
+  (scroll-up increment) (sit-for 0.02)
+  (scroll-up increment) (sit-for 0.02)
   (scroll-up increment) (sit-for 0.01)
   (scroll-up increment))
 
-(global-set-key [(mouse-5)] '(lambda () (interactive) (smooth-scroll 25)))
-(global-set-key [(mouse-4)] '(lambda () (interactive) (smooth-scroll -25)))
+(global-set-key [(mouse-5)] '(lambda () (interactive) (smooth-scroll 2)))
+(global-set-key [(mouse-4)] '(lambda () (interactive) (smooth-scroll -2)))
 
 ;; Zoom in/out like feature, with mouse wheel
 (global-unset-key (kbd "<C-wheel-up>")) ;; moved to <mode-line>
