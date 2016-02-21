@@ -47,9 +47,6 @@
 ;; Do not redraw entire frame after suspending.
 (setq no-redraw-on-reenter t)
 
-;; Is this the reason for the crashing
-(setq redisplay-dont-pause nil)
-
 ;; Modify toggle truncate lines to avoid messages
 (defun toggle-truncate-lines (&optional arg)
   "Toggle truncating of long lines for the current buffer.

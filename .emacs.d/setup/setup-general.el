@@ -624,13 +624,21 @@ Defaults to `error'."
 (require 'multiple-cursors)
 
 ;; Smoother scrolling
-(setq redisplay-dont-pause t
+(setq redisplay-dont-pause nil
       scroll-margin 1
       scroll-step 1
       scroll-conservatively 10000
       scroll-preserve-screen-position 1
       scroll-up-aggressively 0.01
       scroll-down-aggressively 0.01)
+
+;; Optimization
+(setq-default bidi-display-reordering nil)
+
+;; Garbage collection
+(setq gc-cons-threshold 20000000)
+(setq max-lisp-eval-depth 1600
+      max-specpdl-size 4680)
 
 ;; Benchmark-init can give us a breakdown of time spent on require and load calls:
 (add-to-list 'load-path "~/.emacs.d/benchmark-init")
