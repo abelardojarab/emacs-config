@@ -179,5 +179,8 @@
 ;; Setup keys
 (require 'setup-keys)
 
+;; Setup server
+(require 'setup-server)
+
 (setq debug-on-quit nil)
 (setq debug-on-error nil)

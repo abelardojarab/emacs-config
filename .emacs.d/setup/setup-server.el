@@ -1,6 +1,6 @@
 ;;; setup-server.el ---
 
-;; Copyright (C) 2014, 2015  abelardo.jara-berrocal
+;; Copyright (C) 2014, 2015, 2016  abelardo.jara-berrocal
 
 ;; Author: abelardo.jara-berrocal <ajaraber@plxc25288.pdx.intel.com>
 ;; Keywords:
@@ -44,7 +44,7 @@ hopefully be in emacs 24: http://debbugs.gnu.org/cgi/bugreport.cgi?bug=6781"
 
 ;; Ensure there is always at least one visible frame open at all times
 (defadvice server-save-buffers-kill-terminal (around dont-kill-last-client-frame activate)
-  (when (< 2 (length (frame-list)))
+  (when (< 1 (length (frame-list)))
     ad-do-it))
 
 ;; Keeping emacs running even when "exiting"
@@ -53,8 +53,8 @@ hopefully be in emacs 24: http://debbugs.gnu.org/cgi/bugreport.cgi?bug=6781"
   (interactive)
   ;; message
   (message (format "There are currently %d client(s) and %d frame(s)."
-                   (- (length server-clients) 0)
-                   (- (length (frame-list)) 0)))
+                   (length server-clients)
+                   (length (frame-list))))
 
   ;; Check for a server-buffer before closing the server-buffer
   (if server-clients

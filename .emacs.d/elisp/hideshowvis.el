@@ -79,7 +79,7 @@
 ;; - don't show '-' in fringe if the foldable region ends on the same line
 ;;
 
-(define-fringe-bitmap 'hideshowvis-hideable-marker [0 0 0 126 126 0 0 0])
+(define-fringe-bitmap 'hideshowvis-hideable-marker [0 0 254 124 56 16 0 0])
 
 (defconst hideshowvis-version "v0.5" "Version of hideshowvis minor mode")
 

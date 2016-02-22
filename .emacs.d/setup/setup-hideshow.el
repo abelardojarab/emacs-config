@@ -118,18 +118,21 @@
         (folding-mode))
     ad-do-it))
 
+;; Down arrow symbol
+(define-fringe-bitmap 'hideshowvis-hideable-marker [0 0 254 124 56 16 0 0])
+
+;; enable `hs-minor-mode' at startup
+(dolist (hook (list 'prog-mode-hook 'org-mode-hook))
+  (add-hook hook (lambda () (hs-minor-mode 1))))
+
 ;; Enable hideshowvis
 (autoload 'hideshowvis-enable "hideshowvis" "Highlight foldable regions")
 (autoload 'hideshowvis-minor-mode
   "hideshowvis"
   "Will indicate regions foldable with hideshow in the fringe."
   'interactive)
-(dolist (hook (list 'prog-mode-hook))
+(dolist (hook (list 'prog-mode-hook 'org-mode-hook))
   (add-hook hook 'hideshowvis-enable))
-
-;; enable `hs-minor-mode' at startup
-(add-hook 'prog-mode-hook
-          (lambda () (hs-minor-mode 1)))
 
 (defun hs-minor-mode-settings ()
   "settings of `hs-minor-mode'."
@@ -147,12 +150,6 @@
 
   (setq-default mode-line-format
                 (append '((:eval (hs-display-headline))) mode-line-format))
-
-  ;; Add the following to your .emacs and uncomment it in order to get a right arrow symbol
-  (define-fringe-bitmap 'hs-marker [0 32 48 56 60 56 48 32])
-
-  ;; Down arrow symbol
-  (define-fringe-bitmap 'hideshowvis-hideable-marker [0 0 254 124 56 16 0 0])
 
   (defcustom hs-fringe-face 'hs-fringe-face
     "*Specify face used to highlight the fringe on hidden regions."
@@ -215,6 +212,9 @@
               (overlay-put ov 'priority 9999)
               (overlay-put ov 'fringe-folding-p t))))
         (setq list (cdr (cdr list))))))
+
+  ;; Add the following to your .emacs and uncomment it in order to get a right arrow symbol
+  (define-fringe-bitmap 'hs-marker [0 32 48 56 60 56 48 32])
 
   ;; Support to toggle/untoggle all
   (defvar hs-hide-all nil "Current state of hideshow for toggling all.")
