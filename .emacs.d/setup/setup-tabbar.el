@@ -1,6 +1,6 @@
 ;;; setup-tabbar.el ---
 
-;; Copyright (C) 2014, 2015  abelardo.jara-berrocal
+;; Copyright (C) 2014, 2015, 2016  abelardo.jara-berrocal
 
 ;; Author: abelardo.jara-berrocal <ajaraber@plxc25288.pdx.intel.com>
 ;; Keywords:
@@ -23,6 +23,10 @@
 ;;
 
 ;;; Code:
+
+;; Tabbar ruler pre-requisites
+(add-to-list 'load-path "~/.emacs.d/mode-icons")
+(add-to-list 'load-path "~/.emacs.d/powerline")
 
 ;; Tabbar mode
 (add-to-list 'load-path "~/.emacs.d/tabbar")
