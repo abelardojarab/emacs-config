@@ -77,6 +77,10 @@ non-nil."
 (add-to-list 'load-path "~/.emacs.d/monokai-emacs")
 (add-to-list 'custom-theme-load-path "~/.emacs.d/monokai-emacs")
 
+;; Monokai theme
+(add-to-list 'load-path "~/.emacs.d/monokai-extended-theme")
+(add-to-list 'custom-theme-load-path "~/.emacs.d/monokai-extended-theme")
+
 ;; Atom theme
 (add-to-list 'load-path "~/.emacs.d/atom-dark-theme-emacs")
 (add-to-list 'custom-theme-load-path "~/.emacs.d/atom-dark-theme-emacs")
@@ -128,7 +132,8 @@ non-nil."
 ;; (load-theme 'material t)
 ;; (load-theme 'FlatUI t)
 ;; (load-theme 'faff t)
-(load-theme 'monokai t)
+;; (load-theme 'monokai t)
+(load-theme 'monokai-extended t)
 ;; (load-theme 'pastelmac t)
 ;; (load-theme 'solarized-dark t)
 ;; (load-theme 'material-light t)
