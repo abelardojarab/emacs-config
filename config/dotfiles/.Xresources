@@ -28,7 +28,7 @@ Xft.rgba: rgb
 ! Bigger font
 xterm*utf8:       2
 xterm*termName:   xterm-256color
-xterm*faceName:   xft:Menlo:pixelsize=16
+xterm*faceName:   xft:Roboto Mono:pixelsize=16
 ! xterm*faceSize: 12
 
 ! Fix up xterm keybindings 
