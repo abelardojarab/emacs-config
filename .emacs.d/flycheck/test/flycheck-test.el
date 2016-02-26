@@ -202,10 +202,6 @@ and extension, as in `file-name-base'."
   :tags '(customization)
   (should (eq flycheck-standard-error-navigation t)))
 
-(ert-deftest flycheck-completion-system/defaults-to-nil ()
-  :tags '(customization)
-  (should (eq flycheck-completion-system nil)))
-
 (ert-deftest flycheck-CHECKER-executable/is-special-variable ()
   :tags '(customization)
   (dolist (checker flycheck-checkers)
@@ -1733,21 +1729,6 @@ and extension, as in `file-name-base'."
     (let ((flycheck-current-errors (list 'foo)))
       (flycheck-report-failed-syntax-check)
       (should-not flycheck-current-errors))))
-
-(ert-deftest flycheck-mode-line/mentions-errors ()
-  :tags '(status-reporting)
-  (flycheck-ert-with-temp-buffer
-    (let ((flycheck-current-errors
-           (list (flycheck-error-new-at 1 1 'info "info")
-                 (flycheck-error-new-at 1 1 'error "error"))))
-      (should (string= (flycheck-mode-line-status-text 'finished) " FlyC:1/0")))))
-
-(ert-deftest flycheck-mode-line/ignores-info ()
-  :tags '(status-reporting)
-  (flycheck-ert-with-temp-buffer
-    (let ((flycheck-current-errors
-           (list (flycheck-error-new-at 1 1 'info "info"))))
-      (should (string= (flycheck-mode-line-status-text 'finished) " FlyC")))))
 
 
 ;;; Error levels
@@ -3570,14 +3551,14 @@ In the expression: putStrLn True" :checker haskell-stack-ghc))))
   (let ((flycheck-disabled-checkers '(haskell-ghc)))
     (flycheck-ert-should-syntax-check
      "language/haskell/Warnings.hs" 'haskell-mode
-     '(4 1 error "Eta reduce
+     '(4 1 warning "Eta reduce
 Found:
   spam eggs = map lines eggs
 Why not:
   spam = map lines" :checker haskell-hlint)
      '(4 1 warning "Top-level binding with no type signature:
   spam :: [String] -> [[String]]" :checker haskell-stack-ghc)
-     '(7 8 warning "Redundant bracket
+     '(7 8 info "Redundant bracket
 Found:
   (putStrLn \"hello world\")
 Why not:
@@ -3611,7 +3592,7 @@ In the expression: putStrLn True" :checker haskell-ghc))))
   (let ((flycheck-disabled-checkers '(haskell-stack-ghc)))
     (flycheck-ert-should-syntax-check
      "language/haskell/Warnings.hs" 'haskell-mode
-     '(4 1 error "Eta reduce
+     '(4 1 warning "Eta reduce
 Found:
   spam eggs = map lines eggs
 Why not:
@@ -3619,7 +3600,7 @@ Why not:
      '(4 1 warning "Top-level binding with no type signature:
   spam :: [String] -> [[String]]"
          :checker haskell-ghc)
-     '(7 8 warning "Redundant bracket
+     '(7 8 info "Redundant bracket
 Found:
   (putStrLn \"hello world\")
 Why not:
@@ -3792,18 +3773,17 @@ Why not:
 
 (flycheck-ert-def-checker-test json-jsonlint json nil
   (flycheck-ert-should-syntax-check
-   "language/json.json" 'text-mode
+   "language/json.json" 'json-mode
    '(1 44 error "found: ',' - expected: 'EOF'." :checker json-jsonlint)))
 
 (flycheck-ert-def-checker-test json-python-json json nil
   (let ((flycheck-disabled-checkers '(json-jsonlint)))
     (flycheck-ert-should-syntax-check
-     "language/json.json" 'text-mode
+     "language/json.json" 'json-mode
      '(1 44 error "Extra data" :checker json-python-json))))
 
 (flycheck-ert-def-checker-test less less file-error
-  (let* ((candidates (list (flycheck-ert-resource-filename "language/less/no-such-file.less")
-                           (flycheck-ert-resource-filename "language/less/no-such-file.less")
+  (let* ((candidates (list "no-such-file.less"
                            "no-such-file.less"))
          (message (string-join candidates ",")))
     (flycheck-ert-should-syntax-check
@@ -4039,6 +4019,12 @@ Why not:
          :checker r-lintr)
      '(4 6 warning "Do not use absolute paths." :checker r-lintr)
      '(7 5 error "unexpected end of input" :checker r-lintr))))
+
+(flycheck-ert-def-checker-test racket racket nil
+  (skip-unless (funcall (flycheck-checker-get 'racket 'predicate)))
+  (flycheck-ert-should-syntax-check
+   "language/racket.rkt" 'racket-mode
+   '(4 3 error "read: expected a `)' to close `('" :checker racket)))
 
 (flycheck-ert-def-checker-test rpm-rpmlint rpm nil
   (flycheck-ert-should-syntax-check

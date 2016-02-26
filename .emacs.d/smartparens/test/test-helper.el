@@ -1,6 +1,6 @@
 ;;; test-helper.el --- Helper for tests.
 
-;; Copyright (C) 2015 Matus Goljer
+;; Copyright (C) 2015-2016 Matus Goljer
 
 ;; Author: Matus Goljer <matus.goljer@gmail.com>
 ;; Maintainer: Matus Goljer <matus.goljer@gmail.com>
@@ -12,6 +12,10 @@
 
 ;;; Code:
 
+(when (require 'undercover nil t)
+  (message "loaded undercover!")
+  (undercover "smartparens*.el"))
+
 (require 'ert)
 (require 'dash)
 (require 'f)
@@ -19,7 +23,10 @@
 
 (let ((sp-dir (f-parent (f-dirname (f-this-file)))))
   (add-to-list 'load-path sp-dir))
-(require 'smartparens)
+(require 'smartparens-config)
+;; preload latex-mode settings
+(with-temp-buffer
+  (latex-mode))
 
 (defvar sp--test-basic-pairs
   '((t
@@ -51,19 +58,6 @@
        (,mode)
        (smartparens-mode 1)
        ,@forms)))
-
-(defun sp-test-paired-sexp (string expected back fail)
-  (unwind-protect
-      (progn
-        (insert string)
-        (if back (progn
-                   (goto-char (point-max))
-                   (--when-let (car (sp-get-comment-bounds))
-                     (goto-char it)))
-          (goto-char (point-min)))
-        (let ((pair (sp-get-paired-expression back)))
-          (should (equal pair expected))))
-    (erase-buffer)))
 
 (defun sp-test-stringlike-sexp (string expected start back fail)
   (unwind-protect
@@ -101,21 +95,22 @@ Finally, FORMS are run."
   (declare (indent 2)
            (debug (form form body)))
   `(save-window-excursion
-     (with-temp-buffer
-       (set-input-method nil)
-       ,initform
-       (smartparens-mode 1)
-       (pop-to-buffer (current-buffer))
-       (insert ,initial)
-       (goto-char (point-min))
-       (when (search-forward "M" nil t)
-         (delete-char -1)
-         (set-mark (point))
-         (activate-mark))
-       (goto-char (point-min))
-       (when (search-forward "|" nil t)
-         (delete-char -1))
-       ,@forms)))
+     (let ((case-fold-search nil))
+       (with-temp-buffer
+         (set-input-method nil)
+         ,initform
+         (smartparens-mode 1)
+         (pop-to-buffer (current-buffer))
+         (insert ,initial)
+         (goto-char (point-min))
+         (when (search-forward "M" nil t)
+           (delete-char -1)
+           (set-mark (point))
+           (activate-mark))
+         (goto-char (point-min))
+         (when (search-forward "|" nil t)
+           (delete-char -1))
+         ,@forms))))
 
 (defmacro sp-test-with-temp-elisp-buffer (initial &rest forms)
   "Setup a new `emacs-lisp-mode' test buffer.

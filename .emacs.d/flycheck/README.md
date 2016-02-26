@@ -1,9 +1,8 @@
-[![License GPL 3](https://img.shields.io/badge/license-GPL_3-blue.svg)][COPYING]
-[![Join the chat](https://badges.gitter.im/flycheck/flycheck.svg)](https://gitter.im/flycheck/flycheck)
-[![Manual](https://img.shields.io/badge/manual-latest-green.svg)][manual]
+[![License GPL 3](https://img.shields.io/github/license/flycheck/flycheck.svg)][COPYING]
+[![Join the chat](https://img.shields.io/gitter/room/flycheck/flycheck.svg)](https://gitter.im/flycheck/flycheck)
 [![MELPA stable version](http://stable.melpa.org/packages/flycheck-badge.svg)](http://stable.melpa.org/#/flycheck)
 [![MELPA version](http://melpa.org/packages/flycheck-badge.svg)](http://melpa.org/#/flycheck)
-[![Build Status](https://travis-ci.org/flycheck/flycheck.svg?branch=master)](https://travis-ci.org/flycheck/flycheck)
+[![Build Status](https://img.shields.io/travis/flycheck/flycheck/master.svg)](https://travis-ci.org/flycheck/flycheck)
 
 # [![Flycheck][logo]](http://www.flycheck.org) #
 
@@ -61,6 +60,7 @@ through [Quickstart][] guide.
 [Installation]: http://www.flycheck.org/manual/latest/Installation.html#Installation
 [Quickstart]: http://www.flycheck.org/manual/latest/Quickstart.html#Quickstart
 [windows issues]: https://github.com/flycheck/flycheck/labels/B-Windows%20only
+[windows support]: http://www.flycheck.org/manual/latest/Installation.html#index-Windows
 
 ## Support & Contribution ##
 

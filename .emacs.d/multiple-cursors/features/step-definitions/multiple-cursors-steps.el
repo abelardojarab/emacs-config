@@ -1,6 +1,12 @@
 (When "^I mark next like this$"
       (lambda () (call-interactively 'mc/mark-next-like-this)))
 
+(When "^I mark next like this word$"
+      (lambda () (call-interactively 'mc/mark-next-like-this-word)))
+
+(When "^I mark next like this symbol$"
+      (lambda () (call-interactively 'mc/mark-next-like-this-symbol)))
+
 (When "^I mark previous like this$"
       (lambda () (call-interactively 'mc/mark-previous-like-this)))
 
@@ -15,6 +21,9 @@
 
 (When "^I insert numbers$"
       (lambda () (call-interactively 'mc/insert-numbers)))
+
+(When "^I insert letters$"
+      (lambda () (call-interactively 'mc/insert-letters)))
 
 (When "^I reverse regions$"
       (lambda () (call-interactively 'mc/reverse-regions)))

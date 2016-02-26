@@ -1,13 +1,29 @@
-(require 'smartparens-config)
-
 (defun sp-test-command-setup ()
   (cond
    ((not (boundp 'mode)) (emacs-lisp-mode))
    ((eq mode 'elisp) (emacs-lisp-mode))
-   ((eq mode 'c) (c-mode)))
+   ((eq mode 'racket) (racket-mode))
+   ((eq mode 'c) (c-mode))
+   ((eq mode 'python) (python-mode)))
   (smartparens-mode 1))
 
+;; TODO: don't use this, simply define the tests manually.  Gives more
+;; control and less magic
 (defmacro sp-test-command (command examples)
+  "Define a series of tests for COMMAND using EXAMPLES.
+
+EXAMPLES is a list of (LETBINDINGS TESTCASES...)
+
+LETBINDINGS takes the same form as bindings to `let', but
+additionally the symbol mode can be used to set the major mode.
+
+TESTCASES is a list of strings:
+
+\(initial-state state-after-1-call state-after-2-calls...)
+
+that are used to test the resulting state after running the
+command. Each string may contain | to specify where point should
+be."
   (declare (indent 1))
   `(ert-deftest ,(intern (concat "sp-test-command-"
                                  (symbol-name command))) ()
@@ -19,24 +35,28 @@
 
 (defun sp--test-command (command examples)
   "Run the test for COMMAND."
-  (shut-up
-    (cl-dolist (example examples)
-      (let ((before (car example)))
-        (cl-dolist (expected (cdr example))
-          (with-temp-buffer
-            (sp-test-command-setup)
-            (insert before)
-            (goto-char (point-min))
-            (search-forward "|")
-            (delete-char -1)
-            (call-interactively command)
-            (insert "|")
-            (cond
-             ((eq expected 'error)
-              (should (equal before (buffer-string))))
-             ((stringp expected)
-              (should (equal expected (buffer-string)))))
-            (setq before expected)))))))
+  ;; TODO: get rid of this
+  (unless (and (boundp 'mode)
+               (eq mode 'racket)
+               (version<= "24.3" emacs-version))
+    (shut-up
+      (cl-dolist (example examples)
+        (let ((before (car example)))
+          (cl-dolist (expected (cdr example))
+            (with-temp-buffer
+              (sp-test-command-setup)
+              (insert before)
+              (goto-char (point-min))
+              (search-forward "|")
+              (delete-char -1)
+              (call-interactively command)
+              (insert "|")
+              (cond
+               ((eq expected 'error)
+                (should (equal before (buffer-string))))
+               ((stringp expected)
+                (should (equal expected (buffer-string)))))
+              (setq before expected))))))))
 
 (sp-test-command sp-forward-sexp
   ((nil
@@ -172,7 +192,10 @@
    (((mode 'c))
     ("int funct() { int |foo =} bar;" "int funct() { int |foo = bar;}")
     ("int funct() { int |foo =}; bar" "int funct() { int |foo = bar};")
-    ("int funct() { int |foo =}; bar;" "int funct() { int |foo = bar;};"))))
+    ("int funct() { int |foo =}; bar;" "int funct() { int |foo = bar;};"))
+   (((mode 'racket)
+     (sp-sexp-prefix '((racket-mode regexp "#?['`,]@?"))))
+    ("(f|oo)  #'(bar)" "(f|oo  #'(bar))"))))
 
 (sp-test-command sp-backward-slurp-sexp
   ((nil
@@ -192,7 +215,11 @@
      "(f|oo)\nbar ;; baz (foo) baz\n(quux)")
 
     ("(foo)\nbar ;; baz (f|oo baz)\n(quux)"
-     "(foo)\nbar ;; baz (f|oo) baz\n(quux)"))))
+     "(foo)\nbar ;; baz (f|oo) baz\n(quux)"))
+
+   (((mode 'racket)
+     (sp-sexp-prefix '((racket-mode regexp "#?['`,]@?"))))
+    ("(f|oo  #'(bar))" "(f|oo)  #'(bar)"))))
 
 (sp-test-command sp-backward-barf-sexp
   ((nil
@@ -320,7 +347,25 @@
     ;; keep comment before the form from which we are splicing if it is on a separate line
     ("(\n    ;; foo bar\n |asd\n as\n ;; asds (asdasd asd hgujirjf) asd\n asd\n )" "|;; foo bar\nasd")
     ("(\n    ;; foo bar\n asd\n as\n ;; asds (asdasd asd hgujirjf) asd\n |asd\n )" "|;; asds (asdasd asd hgujirjf) asd\nasd")
-    )))
+    )
+   ;; from #243
+   (((sp-navigate-consider-stringlike-sexp '(emacs-lisp-mode)))
+    (";; \"quote\" here\nand \"|here\"" ";; \"quote\" here\nand |here")
+    (";; \"|quote\" here\nand here" ";; |quote here\nand here")
+
+    ;; from #580, should also work without sp-navigate-consider-stringlike-sexp
+    ("(foo \"|bar\")" "(foo |bar)")
+
+    ;; from #569
+    ("(\" \" f|oo)" "|foo")
+    ("(\" \" |foo)" "|foo")
+    ("(\"x\" |foo)" "|foo"))
+   ;; TODO: this should also work without sp-navigate-consider-stringlike-sexp
+   ;; (nil
+   ;;  ("(\" \" f|oo)" "|foo")
+   ;;  ("(\" \" |foo)" "|foo")
+   ;;  ("(\"x\" |foo)" "|foo"))
+   ))
 
 (sp-test-command sp-split-sexp
   ((nil
@@ -381,12 +426,31 @@
 (sp-test-command sp-up-sexp
   ((nil
     ("(;; foo\n b|ar\n baz\n )" "(;; foo\n bar\n baz)|")
-    ("(;; foo\n b|ar\n baz\n ;; foo\n )" "(;; foo\n bar\n baz\n ;; foo\n )|"))
+    ("(;; foo\n b|ar\n baz\n ;; foo\n )" "(;; foo\n bar\n baz\n ;; foo\n )|")
+
+    ;; #446
+    ("(define-key sp-keymap (kbd | \"C-(\") 'sp-down-sexp)" "(define-key sp-keymap (kbd  \"C-(\")| 'sp-down-sexp)" )
+    ("(define-key sp-keymap (kbd | \"C-[\") 'sp-up-sexp)" "(define-key sp-keymap (kbd  \"C-[\")| 'sp-up-sexp)" )
+    ("(define-key sp-keymap (kbd | \"C-{\") 'sp-beginning-of-next-sexp)" "(define-key sp-keymap (kbd  \"C-{\")| 'sp-beginning-of-next-sexp)" ))
    (((current-prefix-arg -1))
     ("(\n b|ar\n baz)" "|(bar\n baz)")
     ("(;; foo\n b|ar\n baz)" "|(;; foo\n bar\n baz)")
     ("(`|(depends-on ,pkg))" "|(`(depends-on ,pkg))")
     ("(,@|(depends-on ,pkg))" "|(,@(depends-on ,pkg))"))))
+
+(sp-test-command sp-end-of-sexp
+  ((nil
+    ;; #446
+    ("(define-key sp-keymap (kbd | \"C-(\") 'sp-down-sexp)" "(define-key sp-keymap (kbd  \"C-(\"|) 'sp-down-sexp)" )
+    ("(define-key sp-keymap (kbd | \"C-[\") 'sp-up-sexp)" "(define-key sp-keymap (kbd  \"C-[\"|) 'sp-up-sexp)" )
+    ("(define-key sp-keymap (kbd | \"C-{\") 'sp-beginning-of-next-sexp)" "(define-key sp-keymap (kbd  \"C-{\"|) 'sp-beginning-of-next-sexp)" ))))
+
+(sp-test-command sp-beginning-of-sexp
+  ((nil
+    ;; #446
+    ("(define-key sp-keymap (kbd | \"C-(\") 'sp-down-sexp)" "(define-key sp-keymap (|kbd  \"C-(\") 'sp-down-sexp)" )
+    ("(define-key sp-keymap (kbd | \"C-[\") 'sp-up-sexp)" "(define-key sp-keymap (|kbd  \"C-[\") 'sp-up-sexp)" )
+    ("(define-key sp-keymap (kbd | \"C-{\") 'sp-beginning-of-next-sexp)" "(define-key sp-keymap (|kbd  \"C-{\") 'sp-beginning-of-next-sexp)" ))))
 
 (sp-test-command backward-delete-char
   ((nil
@@ -426,3 +490,53 @@
     ("(foo\n bar| (baz\n      qux))" "(foo\n bar ;; |\n (baz\n  qux))")
     ("(foo\n bar |(baz\n      qux))" "(foo\n bar ;; |\n (baz\n  qux))")
     ("(foo\n bar (baz\n      |qux))" "(foo\n bar (baz\n      ;; |qux\n      ))"))))
+
+(sp-test-command sp-kill-sexp
+  ((nil
+    ("(foo |(abc) bar)" "(foo | bar)"))
+   (((current-prefix-arg 2))
+    ("(foo (bar) | baz)" "|"))
+   (((current-prefix-arg '(16)))
+    ("(foo |(bar) baz)" "|"))
+   (((current-prefix-arg '(4)))
+    ("(1 |2 3 4 5 6)" "(1|)"))
+   (((current-prefix-arg 3))
+    ("(1 |2 3 4 5 6)" "(1 | 5 6)"))
+   (((current-prefix-arg -2))
+    ("(1 2 3 4 5| 6)" "(1 2 3 | 6)"))
+   (((current-prefix-arg '(-4)))
+    ("(1 2 3 4| 5 6)" "(|5 6)"))
+   (((current-prefix-arg '(4)))
+    ("(1 2 |   )" "(1 2|)"))
+   (((current-prefix-arg 0))
+    ("(1 2 3 |4 5 6)" "(|)"))
+   (((mode 'python)
+     (current-prefix-arg -1))
+    ("x - |" "|"))))
+
+(defun sp--test-sp-rewrap-sexp (initial pair expected &optional keep)
+  (sp-test-with-temp-elisp-buffer initial
+    (sp-rewrap-sexp pair keep)
+    (insert "|")
+    (should (equal (buffer-string) expected))))
+
+(ert-deftest sp-test-command-sp-rewrap-sexp ()
+  (sp--test-sp-rewrap-sexp "[f|oo]" '("(" . ")") "(f|oo)")
+  (sp--test-sp-rewrap-sexp "{f|oo}" '("(" . ")") "(f|oo)")
+  (sp--test-sp-rewrap-sexp "\"f|oo\"" '("(" . ")") "(f|oo)")
+  (sp--test-sp-rewrap-sexp "(f|oo)" '("[" . "]") "[f|oo]")
+  (sp--test-sp-rewrap-sexp "(f|oo)" '("\\{" . "\\}") "\\{f|oo\\}")
+  (sp--test-sp-rewrap-sexp "(f|oo)" '("\"" . "\"") "\"f|oo\"")
+
+  (sp--test-sp-rewrap-sexp "[f|oo]" '("(" . ")") "([f|oo])" :keep)
+  (sp--test-sp-rewrap-sexp "(f|oo)" '("[" . "]") "[(f|oo)]" :keep)
+  (sp--test-sp-rewrap-sexp "\\{f|oo\\}" '("[" . "]") "[\\{f|oo\\}]" :keep)
+  (sp--test-sp-rewrap-sexp "[f|oo]" '("\\{" . "\\}") "\\{[f|oo]\\}" :keep))
+
+(ert-deftest sp-test-command-sp-rewrap-sexp-invalid-pair ()
+  (condition-case c
+      (sp-test-with-temp-elisp-buffer "(fo|o)"
+        (let ((unread-command-events (list ?\a)))
+          (call-interactively 'sp-rewrap-sexp))
+        (error "We should never get here"))
+    (user-error t)))

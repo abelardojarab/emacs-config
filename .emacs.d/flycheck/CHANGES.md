@@ -13,10 +13,16 @@ now for questions and discussions about development. [GH-820]
 
   * Remove `flycheck-copy-messages-as-kill`, obsolete since Flycheck 0.22
   * Remove `flycheck-perlcritic-verbosity`, obsolete since Flycheck 0.22
+  * Replace `flycheck-completion-system` with
+    `flycheck-completing-read-function` [GH-870]
+  * JSON syntax checkers now require `json-mode` and do not check in Javascript
+    Mode anymore
+  * Prefer eslint over jshint for Javascript
 
 * New syntax checkers:
 
   * Processing [GH-793] [GH-812]
+  * Racket [GH-799] [GH-873]
 
 * New features:
 
@@ -28,6 +34,12 @@ now for questions and discussions about development. [GH-820]
     Flycheck
   * Add `flycheck-perlcriticrc` to set a configuration file for Perl::Critic
     [GH-851]
+  * Add `flycheck-jshint-extract-javascript` to extract Javascript from HTML
+    [GH-825]
+  * Add `flycheck-cppcheck-language-standard` to set the language standard for
+    cppcheck [GH-862]
+  * Add `flycheck-mode-line-prefix` to customise the prefix of Flycheck’s mode
+    line lighter [GH-879] [GH-880]
 
 * Improvements:
 
@@ -35,6 +47,8 @@ now for questions and discussions about development. [GH-820]
   * Explicitly display errors at point with `C-c ! h` [GH-834]
   * Merge message and checker columns in the error list to remove redundant
     ellipsis [GH-828]
+  * Indicate disabled checkers in verification buffers [GH-749]
+  * Do not enable Flycheck Mode in `fundamental-mode` buffers [GH-883]
 
 * Bug fixes:
 
@@ -49,6 +63,7 @@ now for questions and discussions about development. [GH-820]
     [GH-848]
   * Don’t hang when sending buffers to node.js processes on Windows [GH-794]
     [GH-850]
+  * Parse suggestions from `hlint` [GH-874]
 
 [buttercup]: https://github.com/jorgenschaefer/emacs-buttercup
 
@@ -1022,7 +1037,7 @@ now for questions and discussions about development. [GH-820]
 
 [flymake-cursor]: http://www.emacswiki.org/emacs/FlymakeCursor
 
-## 0.4 (Nov 21, t2012) ##
+## 0.4 (Nov 21, 2012) ##
 
 * Rename the project to Flycheck [GH-5]
 * New syntax checkers

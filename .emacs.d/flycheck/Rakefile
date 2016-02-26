@@ -118,7 +118,7 @@ namespace :verify do
     Flycheck::Lint.check_files(ALL_SOURCES.to_a)
   end
 
-  task 'Verify all source files'
+  desc 'Verify all source files'
   task all: [:travis, :markdown, :ruby, :elisp]
 end
 
@@ -177,6 +177,7 @@ namespace :test do
                       selector))
     end
 
+    desc 'Run all unit tests'
     task all: [:specs, :ert]
   end
 
@@ -185,7 +186,7 @@ namespace :test do
     spec_task :specs, 'test/integration'
 
     desc 'Run integration tests'
-    task :ert, [:selector] => OBJECTS + ['test:integration:specs'] do |_, args|
+    task :ert, [:selector] => OBJECTS do |_, args|
       selector = '(tag external-tool)'
       selector = "(and #{selector} #{args.selector})" if args.selector
       sh(*emacs_batch('--load', 'test/run.el',
@@ -248,15 +249,24 @@ namespace :deploy do
 end
 
 # Top-level targets
-desc 'Check Flycheck (verify, compile, test)'
-task check: ['verify:all', 'compile:all', 'test:all']
-
 namespace :check do
+  desc 'Check Flycheck for a given LANGUAGE'
+  task :language, [:language] => 'verify:elisp' do |_, args|
+    task('test:integration:ert').invoke("(language #{args.language})")
+    task('test:unit:specs').invoke('^Manual')
+  end
+
   desc 'Check Flycheck fast (verify, compile, unit tests only)'
   task fast: ['verify:all', 'compile:all', 'test:unit:all']
 
+  desc 'Check Flycheck (verify, compile, test)'
+  task all: ['verify:all', 'compile:all', 'test:all']
+
   desc 'Check documentation (generate and test)'
-  task doc: ['doc:info', 'test:integration:doc']
+  task doc: ['doc:info'] do
+    task('test:unit:specs').invoke('^Manual')
+    task('test:integration:doc').invoke
+  end
 end
 
 task :help do

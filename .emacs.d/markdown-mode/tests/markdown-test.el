@@ -1312,9 +1312,17 @@ the opening bracket of [^2], and then subsequent functions would kill [^2])."
                           (markdown-footnote-kill)
                           (should (string-equal (current-kill 0) "foo\n")))))
 
+(when (version< emacs-version "24.2")
+  ;; fix segfault on 24.1 with the normal implementation of this function. isn't
+  ;; exactly correct, but should make tests work the same
+  (defadvice kill-buffer-and-window (around markdown-test-fix-segfault activate)
+    (kill-buffer)
+    (select-window (previous-window))))
+
 (ert-deftest test-markdown-footnote-reference/jump ()
   "Test `markdown-jump' for footnotes and reference links."
-  (markdown-test-string "body[^1], [link 1][ref],
+  (markdown-test-string
+      "body[^1], [link 1][ref],
 [link 2][ref]
 
 [^1]: footnote
@@ -1354,8 +1362,6 @@ the opening bracket of [^2], and then subsequent functions would kill [^2])."
                      '("![foo][bar]" . "foo")
                      '("<http://foo.com/>" . "http://foo.com/")
                      '("<foo@bar.com>" . "foo@bar.com")
-                     '("[[foo]]" . "foo")
-                     '("[[foo|bar]]" . "foo")
                      '("**foo**" . "foo")
                      '("__foo__" . "foo")
                      '("*foo*" . "foo")
@@ -2132,7 +2138,9 @@ if (y)
 ~~~
 "
    (markdown-test-range-has-face 1 19 nil)
-   (markdown-test-range-has-face 20 63 markdown-pre-face)))
+   (markdown-test-range-has-face 20 22 markdown-markup-face)
+   (markdown-test-range-has-face 24 60 markdown-pre-face)
+   (markdown-test-range-has-face 61 63 markdown-markup-face)))
 
 (ert-deftest test-markdown-font-lock/gfm-fenced-1 ()
   "Test GFM-style fenced code blocks (1)."
@@ -2252,33 +2260,33 @@ for (var i = 0; i < 10; i++) {
 
 (ert-deftest test-markdown-font-lock/mmd-metadata ()
   "Basic MultMarkdown metadata tests."
-  (markdown-test-string "Title: peg-multimarkdown User's Guide  
-Author: Fletcher T. Penney  
-Base Header Level: 2  "
+  (markdown-test-string "Title: peg-multimarkdown User's Guide
+Author: Fletcher T. Penney
+Base Header Level: 2"
    (markdown-test-range-has-face 1 5 markdown-metadata-key-face)
    (markdown-test-range-has-face 6 6 markdown-markup-face)
    (markdown-test-range-has-face 8 37 markdown-metadata-value-face)
-   (markdown-test-range-has-face 41 46 markdown-metadata-key-face)
-   (markdown-test-range-has-face 47 47 markdown-markup-face)
-   (markdown-test-range-has-face 49 66 markdown-metadata-value-face)
-   (markdown-test-range-has-face 70 86 markdown-metadata-key-face)
-   (markdown-test-range-has-face 87 87 markdown-markup-face)
-   (markdown-test-range-has-face 89 89 markdown-metadata-value-face))
+   (markdown-test-range-has-face 39 44 markdown-metadata-key-face)
+   (markdown-test-range-has-face 46 46 markdown-markup-face)
+   (markdown-test-range-has-face 47 64 markdown-metadata-value-face)
+   (markdown-test-range-has-face 66 82 markdown-metadata-key-face)
+   (markdown-test-range-has-face 83 83 markdown-markup-face)
+   (markdown-test-range-has-face 85 85 markdown-metadata-value-face))
   ;; Avoid triggering when a title contains a colon (e.g., Markdown: Syntax)
   (markdown-test-file "syntax.text"
    (markdown-test-range-has-face 1 16 markdown-header-face-1)))
 
 (ert-deftest test-markdown-font-lock/mmd-metadata-after-header ()
   "Ensure that similar lines are not matched after the header."
-  (markdown-test-string "Title: peg-multimarkdown User's Guide  
+  (markdown-test-string "Title: peg-multimarkdown User's Guide
 
-Author: Fletcher T. Penney  
-Base Header Level: 2  "
+Author: Fletcher T. Penney
+Base Header Level: 2"
    (markdown-test-range-has-face 1 5 markdown-metadata-key-face)
    (markdown-test-range-has-face 6 6 markdown-markup-face)
    (markdown-test-range-has-face 8 37 markdown-metadata-value-face)
-   (markdown-test-range-has-face 40 67 nil)
-   (markdown-test-range-has-face 71 90 nil)))
+   (markdown-test-range-has-face 40 65 nil)
+   (markdown-test-range-has-face 67 86 nil)))
 
 (ert-deftest test-markdown-font-lock/pandoc-metadata ()
   "Basic Pandoc metadata tests."
@@ -2296,6 +2304,74 @@ body"
    (markdown-test-range-has-face 58 58 markdown-markup-face)
    (markdown-test-range-has-face 60 63 markdown-metadata-value-face)
    (markdown-test-range-has-face 64 69 nil)))
+
+(ert-deftest test-markdown-font-lock/yaml-metadata ()
+  "Basic yaml metadata tests."
+  (markdown-test-string
+   "---
+layout: post
+date: 2015-08-13 11:35:25 EST
+---
+"
+   ;; first section
+   (markdown-test-range-has-face 1 3 markdown-markup-face)
+   (markdown-test-range-has-face 5 10 markdown-metadata-key-face)
+   (markdown-test-range-has-face 11 11 markdown-markup-face)
+   (markdown-test-range-has-face 13 16 markdown-metadata-value-face)
+   (markdown-test-range-has-face 18 21 markdown-metadata-key-face)
+   (markdown-test-range-has-face 22 22 markdown-markup-face)
+   (markdown-test-range-has-face 24 46 markdown-metadata-value-face)
+   (markdown-test-range-has-face 48 50 markdown-markup-face)))
+
+(ert-deftest test-markdown-font-lock/pandoc-yaml-metadata ()
+  "Basic yaml metadata tests, with pandoc syntax."
+  (let ((markdown-use-pandoc-style-yaml-metadata t))
+    (markdown-test-string
+     "some text
+
+---
+layout: post
+date: 2015-08-13 11:35:25 EST
+...
+
+more text
+
+---
+layout: post
+date: 2015-08-13 11:35:25 EST
+---
+
+But this is merely a code block
+
+```
+---
+layout: post
+date: 2015-08-13 11:35:25 EST
+---
+```
+"
+     ;; first section
+     (markdown-test-range-has-face 12 14 markdown-markup-face)
+     (markdown-test-range-has-face 16 21 markdown-metadata-key-face)
+     (markdown-test-range-has-face 22 22 markdown-markup-face)
+     (markdown-test-range-has-face 24 27 markdown-metadata-value-face)
+     (markdown-test-range-has-face 29 32 markdown-metadata-key-face)
+     (markdown-test-range-has-face 33 33 markdown-markup-face)
+     (markdown-test-range-has-face 35 57 markdown-metadata-value-face)
+     (markdown-test-range-has-face 59 61 markdown-markup-face)
+     ;; second section
+     (markdown-test-range-has-face 75 77 markdown-markup-face)
+     (markdown-test-range-has-face 79 84 markdown-metadata-key-face)
+     (markdown-test-range-has-face 85 85 markdown-markup-face)
+     (markdown-test-range-has-face 87 90 markdown-metadata-value-face)
+     (markdown-test-range-has-face 92 95 markdown-metadata-key-face)
+     (markdown-test-range-has-face 96 96 markdown-markup-face)
+     (markdown-test-range-has-face 98 120 markdown-metadata-value-face)
+     (markdown-test-range-has-face 122 124 markdown-markup-face)
+     ;; third section
+     (markdown-test-range-has-face 160 162 markdown-markup-face)
+     (markdown-test-range-has-face 164 213 markdown-pre-face)
+     (markdown-test-range-has-face 215 217 markdown-markup-face))))
 
 (ert-deftest test-markdown-font-lock/line-break ()
   "Basic line break tests."
@@ -2390,6 +2466,15 @@ returns nil."
    (should (equal (markdown-syntax-propertize-extend-region 486 510)
                   nil))))
 
+(defun markdown-test-check-match-limits (prop num begin end &optional pos)
+  (let* ((posn (or pos (point)))
+         (props (get-text-property posn prop)))
+    (save-match-data
+      (set-match-data props)
+      (and (match-beginning num) (match-end num)
+           (= (match-beginning num) begin)
+           (= (match-end num) end)))))
+
 (ert-deftest test-markdown-parsing/syntax-with-adjacent-code-blocks ()
   "Test `markdown-syntax-propertize-fenced-code-blocks' with adjacent blocks."
   (markdown-test-string
@@ -2405,46 +2490,251 @@ echo \"Hello, world!\"
 echo \"Hello, world v2!\"
 ~~~
 "
-   (let ((start-1 (make-marker)) (end-1 (make-marker))
+   (let ((start-top-1 (make-marker)) (end-top-1 (make-marker))
+         (start-lang-1 (make-marker)) (end-lang-1 (make-marker))
+         (start-mid-1 (make-marker)) (end-mid-1 (make-marker))
+         (start-bottom-1 (make-marker)) (end-bottom-1 (make-marker))
          (between (make-marker))
-         (start-2 (make-marker)) (end-2 (make-marker)))
+         (start-top-2 (make-marker)) (end-top-2 (make-marker))
+         (start-lang-2 (make-marker)) (end-lang-2 (make-marker))
+         (start-mid-2 (make-marker)) (end-mid-2 (make-marker))
+         (start-bottom-2 (make-marker)) (end-bottom-2 (make-marker)))
      ;; First code block
-     (set-marker start-1 1)
-     (set-marker end-1 46)
-     (should (equal (get-text-property start-1 'markdown-fenced-code)
-                    (list (marker-position start-1) (marker-position end-1))))
-     (should (equal (get-text-property (1- end-1) 'markdown-fenced-code)
-                    (list (marker-position start-1) (marker-position end-1))))
+     (set-marker start-top-1 1)
+     (set-marker end-top-1 4)
+     (set-marker start-lang-1 5)
+     (set-marker end-lang-1 10)
+     (set-marker start-mid-1 11)
+     (set-marker end-mid-1 43)
+     (set-marker start-bottom-1 43)
+     (set-marker end-bottom-1 46)
+     ;; check top tildes
+     (should (markdown-test-check-match-limits
+              'markdown-tilde-fence-begin 1 (marker-position start-top-1)
+              (marker-position end-top-1) (marker-position start-top-1)))
+     ;; check top language specifier
+     (should (markdown-test-check-match-limits
+              'markdown-tilde-fence-begin 2 (marker-position start-lang-1)
+              (marker-position end-lang-1) (marker-position start-lang-1)))
+     ;; check text in between
+     (should (markdown-test-check-match-limits
+              'markdown-fenced-code 0 (marker-position start-mid-1)
+              (marker-position end-mid-1) (marker-position start-mid-1)))
+     ;; check bottom tildes
+     (should (markdown-test-check-match-limits
+              'markdown-tilde-fence-end 1 (marker-position start-bottom-1)
+              (marker-position end-bottom-1) (marker-position start-bottom-1)))
      ;; Point between code blocks
      (set-marker between 47)
      (should (equal (get-text-property between 'markdown-fenced-code)
                     nil))
      ;; Second code block
-     (set-marker start-2 48)
-     (set-marker end-2 96)
-     (should (equal (get-text-property start-2 'markdown-fenced-code)
-                    (list (marker-position start-2) (marker-position end-2))))
-     (should (equal (get-text-property (1- end-2) 'markdown-fenced-code)
-                    (list (marker-position start-2) (marker-position end-2))))
-     ;; Move point between code blocks and insert a character
+     (set-marker start-top-2 48)
+     (set-marker end-top-2 51)
+     (set-marker start-lang-2 52)
+     (set-marker end-lang-2 57)
+     (set-marker start-mid-2 58)
+     (set-marker end-mid-2 93)
+     (set-marker start-bottom-2 93)
+     (set-marker end-bottom-2 96)
+     (should (markdown-test-check-match-limits
+              'markdown-tilde-fence-begin 1 (marker-position start-top-2)
+              (marker-position end-top-2) (marker-position start-top-2)))
+     (should (markdown-test-check-match-limits
+              'markdown-tilde-fence-begin 2 (marker-position start-lang-2)
+              (marker-position end-lang-2) (marker-position start-lang-2)))
+     (should (markdown-test-check-match-limits
+              'markdown-fenced-code 0 (marker-position start-mid-2)
+              (marker-position end-mid-2) (marker-position start-mid-2)))
+     (should (markdown-test-check-match-limits
+              'markdown-tilde-fence-end 1 (marker-position start-bottom-2)
+              (marker-position end-bottom-2) (marker-position start-bottom-2)))
+     ;; ;; Move point between code blocks and insert a character
      (goto-char between)
      (insert "x")
      ;; Re-propertize region after change
      (let ((range (markdown-syntax-propertize-extend-region (1- between) (point-max))))
        (markdown-syntax-propertize (car range) (cdr range)))
      ;; Re-check first code block
-     (should (equal (get-text-property start-1 'markdown-fenced-code)
-                    (list (marker-position start-1) (marker-position end-1))))
-     (should (equal (get-text-property (1- end-1) 'markdown-fenced-code)
-                    (list (marker-position start-1) (marker-position end-1))))
+     (should (markdown-test-check-match-limits
+              'markdown-tilde-fence-begin 1 (marker-position start-top-1)
+              (marker-position end-top-1) (marker-position start-top-1)))
+     (should (markdown-test-check-match-limits
+              'markdown-tilde-fence-begin 2 (marker-position start-lang-1)
+              (marker-position end-lang-1) (marker-position start-lang-1)))
+     (should (markdown-test-check-match-limits
+              'markdown-fenced-code 0 (marker-position start-mid-1)
+              (marker-position end-mid-1) (marker-position start-mid-1)))
+     (should (markdown-test-check-match-limits
+              'markdown-tilde-fence-end 1 (marker-position start-bottom-1)
+              (marker-position end-bottom-1) (marker-position start-bottom-1)))
      ;; Re-check point between code blocks
      (should (equal (get-text-property between 'markdown-fenced-code)
                     nil))
-     ;; Re-check first code block
-     (should (equal (get-text-property start-1 'markdown-fenced-code)
-                    (list (marker-position start-1) (marker-position end-1))))
-     (should (equal (get-text-property (1- end-1) 'markdown-fenced-code)
-                    (list (marker-position start-1) (marker-position end-1)))))))
+     ;; Re-check second code block
+     (should (markdown-test-check-match-limits
+              'markdown-tilde-fence-begin 1 (marker-position start-top-2)
+              (marker-position end-top-2) (marker-position start-top-2)))
+     (should (markdown-test-check-match-limits
+              'markdown-tilde-fence-begin 2 (marker-position start-lang-2)
+              (marker-position end-lang-2) (marker-position start-lang-2)))
+     (should (markdown-test-check-match-limits
+              'markdown-fenced-code 0 (marker-position start-mid-2)
+              (marker-position end-mid-2) (marker-position start-mid-2)))
+     (should (markdown-test-check-match-limits
+              'markdown-tilde-fence-end 1 (marker-position start-bottom-2)
+              (marker-position end-bottom-2)
+              (marker-position start-bottom-2))))))
+
+(ert-deftest test-markdown-parsing/propertize-fenced-in-between ()
+  "Test whether `markdown-syntax-propertize-fenced-block-constructs' handles the
+case when it can't propertize both the start and end of a fenced block within a
+single pass (the end of the block is past the END argument)."
+  (markdown-test-string
+      "~~~ shell
+#!/bin/sh
+
+echo \"Hello, world!\"
+~~~
+"
+    (set-text-properties (point-min) (point-max) nil)
+    ;; syntax-propertize up to right after hashbang
+    (markdown-syntax-propertize-fenced-block-constructs (point-min) 21)
+    ;; ~~~ shell should be propertized, but nothing else
+    ;; check tildes
+    (should (markdown-test-check-match-limits
+             'markdown-tilde-fence-begin 1 1 4 1))
+    ;; check language
+    (should (markdown-test-check-match-limits
+             'markdown-tilde-fence-begin 2 5 10 5))
+    ;; middle should not be propertized
+    (should-not (get-text-property 11 'markdown-fenced-code))
+    ;; neither should end
+    (should-not (get-text-property 43 'markdown-tilde-fence-end))
+    (markdown-syntax-propertize-fenced-block-constructs 21 (point-max))
+    ;; everything should be propertized now
+    ;; re-check top
+    (should (markdown-test-check-match-limits
+             'markdown-tilde-fence-begin 1 1 4 1))
+    (should (markdown-test-check-match-limits
+             'markdown-tilde-fence-begin 2 5 10 5))
+    ;; check middle
+    (should (markdown-test-check-match-limits 'markdown-fenced-code 0 10 43 10))
+    ;; check ending tildes
+    (should (markdown-test-check-match-limits
+             'markdown-tilde-fence-end 1 43 46 43))))
+
+(ert-deftest test-markdown-parsing/get-code-block-at-pos ()
+  "Test whether `markdown-code-block-at-pos' works in all situations. All
+  situations are:
+1. pre block
+2. tilde block
+3. gfm block
+4. yaml metadata block"
+  (let ((markdown-use-pandoc-style-yaml-metadata t))
+    (markdown-test-string
+        "
+~~~ ruby
+some_ruby_fun()
+~~~
+
+---
+a: b
+---
+
+``` {.bash}
+#!/bin/sh
+echo hey
+```
+
+    pre code
+    random stuff
+    more preformatted code
+
+---
+data: pandoc
+...
+"
+      ;; start/mid/end at tilde block
+      (should (equal (markdown-code-block-at-pos 2) (list 2 30)))
+      (should (equal (markdown-code-block-at-pos 11) (list 2 30)))
+      (should (equal (markdown-code-block-at-pos 27) (list 2 30)))
+      ;; yaml metadata block
+      (should (equal (markdown-code-block-at-pos 32) (list 32 44)))
+      (should (equal (markdown-code-block-at-pos 36) (list 32 44)))
+      (should (equal (markdown-code-block-at-pos 41) (list 32 44)))
+      ;; gfm block
+      (should (equal (markdown-code-block-at-pos 46) (list 46 80)))
+      (should (equal (markdown-code-block-at-pos 58) (list 46 80)))
+      (should (equal (markdown-code-block-at-pos 77) (list 46 80)))
+      ;; pre block
+      (should (equal (markdown-code-block-at-pos 82) (list 82 138)))
+      (should (equal (markdown-code-block-at-pos 99) (list 82 138)))
+      (should (equal (markdown-code-block-at-pos 137) (list 82 138)))
+      ;; pandoc yaml metadata block (should work if yaml above works)
+      (should (equal (markdown-code-block-at-pos 140) (list 140 160)))
+      (should (equal (markdown-code-block-at-pos 142) (list 140 160)))
+      (should (equal (markdown-code-block-at-pos 144) (list 140 160)))
+      (should (equal (markdown-code-block-at-pos 157) (list 140 160)))
+      (should (equal (markdown-code-block-at-pos 159) (list 140 160))))))
+
+(ert-deftest test-markdown-parsing/syntax-get-fenced-blocks ()
+  "Test whether *-get-fenced-block-* functions work in the case where a block is
+only partially propertized."
+  (save-match-data
+    (markdown-test-string
+     "~~~
+"
+     (should (equal (markdown-syntax-propertize-extend-region
+                     (point-min) (point-max))
+                    nil))
+     (goto-char 1)
+     (set-match-data (markdown-text-property-at-point
+                      'markdown-tilde-fence-begin))
+     (should (equal (markdown-get-fenced-block-from-start
+                     'markdown-tilde-fence-begin)
+                    nil)))
+    (markdown-test-string
+     "~~~
+~~~"
+     (goto-char 1)
+     (set-match-data (markdown-text-property-at-point
+                      'markdown-tilde-fence-begin))
+     (should (equal (markdown-get-fenced-block-from-start
+                     'markdown-tilde-fence-begin)
+                    (list 1 8)))
+     (should (equal (markdown-code-block-at-point) (list 1 8)))
+     (goto-char 5)
+     (set-match-data (markdown-text-property-at-point
+                      'markdown-tilde-fence-end))
+     (should (equal (markdown-get-fenced-block-from-end
+                     'markdown-tilde-fence-end)
+                    (list 1 8)))
+     (should (equal (markdown-code-block-at-point) (list 1 8))))
+    (markdown-test-string
+     "~~~
+
+~~~"
+     (goto-char 1)
+     (set-match-data (markdown-text-property-at-point
+                      'markdown-tilde-fence-begin))
+     (should (equal (markdown-get-fenced-block-from-start
+                     'markdown-tilde-fence-begin)
+                    (list 1 9)))
+     (should (equal (markdown-code-block-at-point) (list 1 9)))
+     (goto-char 5)
+     (set-match-data (markdown-text-property-at-point 'markdown-fenced-code))
+     (should (equal (markdown-get-fenced-block-from-middle
+                     'markdown-fenced-code)
+                    (list 1 9)))
+     (should (equal (markdown-code-block-at-point) (list 1 9)))
+     (goto-char 6)
+     (set-match-data (markdown-text-property-at-point
+                      'markdown-tilde-fence-end))
+     (should (equal (markdown-get-fenced-block-from-end
+                     'markdown-tilde-fence-end)
+                    (list 1 9)))
+     (should (equal (markdown-code-block-at-point) (list 1 9))))))
 
 (ert-deftest test-markdown-parsing/reference-definition-basic ()
   "Test reference definition function."
@@ -2482,28 +2772,29 @@ echo \"Hello, world v2!\"
   (markdown-test-file "wiki-links.text"
    (should (equal (markdown-get-defined-references) nil))))
 
+(defun markdown-test-test-region (beg end)
+  (goto-char (1- beg))
+  (should-not (markdown-code-at-point-p))
+  (goto-char (1+ end))
+  (should-not (markdown-code-at-point-p))
+  (dolist (loc (number-sequence beg end))
+    (goto-char loc)
+    (should (markdown-code-at-point-p))
+    (should (equal (match-beginning 0) beg))
+    (should (equal (match-end 0) end))))
+
 (ert-deftest test-markdown-parsing/code-at-point-inline ()
   "Test `markdown-code-at-point-p'."
-  (cl-flet ((test-region (beg end)
-              (goto-char (1- beg))
-              (should-not (markdown-code-at-point-p))
-              (goto-char (1+ end))
-              (should-not (markdown-code-at-point-p))
-              (dolist (loc (number-sequence beg end))
-                (goto-char loc)
-                (should (markdown-code-at-point-p))
-                (should (equal (match-beginning 0) beg))
-                (should (equal (match-end 0) end)))))
-    (markdown-test-file "inline.text"
-                        (test-region 45 51) ; Regular code span
-                        (test-region 61 90) ; Code containing backticks
-                        (test-region 228 240) ; Backquotes at beginning
-                        (test-region 341 352) ; Backquotes at end
-                        (test-region 460 469) ; Backslash as final character
-                        (test-region 657 667) ; A code span crossing lines
-                        (test-region 749 758) ; Three backquotes on same line
-                        (test-region 806 815) ; Three backquotes across lines
-                        )))
+  (markdown-test-file "inline.text"
+    (markdown-test-test-region 45 51) ; Regular code span
+    (markdown-test-test-region 61 90) ; Code containing backticks
+    (markdown-test-test-region 228 240) ; Backquotes at beginning
+    (markdown-test-test-region 341 352) ; Backquotes at end
+    (markdown-test-test-region 460 469) ; Backslash as final character
+    (markdown-test-test-region 657 667) ; A code span crossing lines
+    (markdown-test-test-region 749 758) ; Three backquotes on same line
+    (markdown-test-test-region 806 815) ; Three backquotes across lines
+    ))
 
 (ert-deftest test-markdown-parsing/code-at-point-one-space ()
   "Test `markdown-code-at-point-p' with multiple code spans in a row."
@@ -2960,47 +3251,57 @@ like statement. Detail: https://github.com/jrblevin/markdown-mode/issues/75"
 
 ;;; Wiki link tests:
 
+(ert-deftest test-markdown-wiki-link/file-local-variabls ()
+  "Test enabling wiki links via file-local variables."
+  (markdown-test-file "wiki-links.text"
+   (should-not markdown-enable-wiki-links)
+   (hack-local-variables)
+   (should markdown-enable-wiki-links)))
+
 (ert-deftest test-markdown-wiki-link/aliasing ()
   "Test filename extraction for aliased wiki links."
-  (markdown-test-file "wiki-links.text"
-   ;; Confirm location of first wiki link
-   (should (eq (markdown-next-link) 8))
-   ;; Confirm location of second wiki link
-   (should (eq (markdown-next-link) 73))
-   ;; Test predicate function
-   (should (markdown-wiki-link-p))
-   ;; Test alias-first filename extraction
-   (setq markdown-wiki-link-alias-first t)
-   (should (string-equal (markdown-wiki-link-link) "second"))
-   ;; Test alias-second filename extraction
-   (setq markdown-wiki-link-alias-first nil)
-   (should (string-equal (markdown-wiki-link-link) "first"))))
+  (let ((markdown-enable-wiki-links t))
+    (markdown-test-file "wiki-links.text"
+      ;; Confirm location of first wiki link
+      (should (eq (markdown-next-link) 8))
+      ;; Confirm location of second wiki link
+      (should (eq (markdown-next-link) 73))
+      ;; Test predicate function
+      (should (markdown-wiki-link-p))
+      ;; Test alias-first filename extraction
+      (setq markdown-wiki-link-alias-first t)
+      (should (string-equal (markdown-wiki-link-link) "second"))
+      ;; Test alias-second filename extraction
+      (setq markdown-wiki-link-alias-first nil)
+      (should (string-equal (markdown-wiki-link-link) "first")))))
 
 (ert-deftest test-markdown-wiki-link/navigation ()
   "Test wiki link navigation."
-  (markdown-test-file "wiki-links.text"
-   ;; Advance to first link
-   (should (eq (markdown-next-link) 8))
-   ;; Advance to second link
-   (should (eq (markdown-next-link) 73))
-   ;; Avance to final link
-   (should (eq (markdown-next-link) 155))
-   ;; Return nil and don't advance point
-   (should (eq (markdown-next-link) nil))
-   (should (eq (point) 155))
-   ;; Move back to second link
-   (should (eq (markdown-previous-link) 73))
-   ;; Move back to first link
-   (should (eq (markdown-previous-link) 8))
-   ;; Return nil and don't move point
-   (should (eq (markdown-previous-link) nil))
-   (should (eq (point) 8))))
+  (let ((markdown-enable-wiki-links t))
+    (markdown-test-file "wiki-links.text"
+      ;; Advance to first link
+      (should (eq (markdown-next-link) 8))
+      ;; Advance to second link
+      (should (eq (markdown-next-link) 73))
+      ;; Avance to final link
+      (should (eq (markdown-next-link) 155))
+      ;; Return nil and don't advance point
+      (should (eq (markdown-next-link) nil))
+      (should (eq (point) 155))
+      ;; Move back to second link
+      (should (eq (markdown-previous-link) 73))
+      ;; Move back to first link
+      (should (eq (markdown-previous-link) 8))
+      ;; Return nil and don't move point
+      (should (eq (markdown-previous-link) nil))
+      (should (eq (point) 8)))))
 
 (ert-deftest test-markdown-wiki-link/font-lock ()
   "Test font lock faces for wiki links."
   (markdown-test-temp-file "wiki-links.text"
    (let* ((fn (concat (file-name-directory buffer-file-name)
-                     "inline.text")))
+                     "inline.text"))
+          (markdown-enable-wiki-links t))
      ;; Create inline.text in the same temp directory, refontify
      (write-region "" nil fn nil 1)
      (markdown-fontify-buffer-wiki-links)
@@ -3020,6 +3321,20 @@ like statement. Detail: https://github.com/jrblevin/markdown-mode/issues/75"
      ;; Remove temporary files
      (delete-file fn)
      )))
+
+(ert-deftest test-markdown-wiki-link/kill ()
+  "Simple tests for `markdown-kill-thing-at-point' for wiki links."
+  (let ((kill-ring nil)
+        (markdown-enable-wiki-links t)
+        (tests (list '("[[foo]]" . "foo")
+                     '("[[foo|bar]]" . "bar"))))
+    (dolist (test tests)
+      ;; Load test string (the car), move to end of first line, kill
+      ;; thing at point, and then verify that the kill ring contains cdr.
+      (markdown-test-string (car test)
+                            (end-of-line)
+                            (call-interactively 'markdown-kill-thing-at-point)
+                            (should (string-equal (current-kill 0) (cdr test)))))))
 
 ;;; Filling tests:
 
@@ -3259,7 +3574,7 @@ Detail: https://github.com/jrblevin/markdown-mode/issues/79"
 (ert-deftest test-markdown-math/reload ()
   "Test enabling math mode via function `markdown-enable-math'."
   (markdown-test-file "math.text"
-    (markdown-enable-math t)
+    (markdown-toggle-math t)
     ;; Flag should be set to t
     (should markdown-enable-math)
     ;; Font-lock keywords should be updated
@@ -3271,7 +3586,7 @@ Detail: https://github.com/jrblevin/markdown-mode/issues/79"
 (ert-deftest test-markdown-math/font-lock ()
   "Test markdown math mode."
   (markdown-test-file "math.text"
-   (markdown-enable-math t)
+   (markdown-toggle-math t)
    (funcall markdown-test-font-lock-function)
    (markdown-test-range-has-face 1 32 nil)
    (markdown-test-range-has-face 33 33 markdown-markup-face)
@@ -3290,7 +3605,10 @@ Detail: https://github.com/jrblevin/markdown-mode/issues/79"
    (markdown-test-range-has-face 119 152 markdown-header-face-1)
    (markdown-test-range-has-face 129 129 markdown-markup-face)
    (markdown-test-range-has-face 136 136 markdown-markup-face)
-   (markdown-test-range-has-face 174 214 markdown-pre-face)
+   (markdown-test-range-has-face 174 177 markdown-markup-face)
+   (markdown-test-range-has-face 179 188 markdown-language-keyword-face)
+   (markdown-test-range-has-face 190 211 markdown-pre-face)
+   (markdown-test-range-has-face 212 215 markdown-markup-face)
    (markdown-test-range-has-face 218 218 markdown-markup-face)
    (markdown-test-range-has-face 219 223 markdown-math-face)
    (markdown-test-range-has-face 224 224 markdown-markup-face)))
@@ -3298,7 +3616,7 @@ Detail: https://github.com/jrblevin/markdown-mode/issues/79"
 (ert-deftest test-markdown-math/font-lock-italics ()
   "Test markdown math mode with underscores."
   (markdown-test-file "math.text"
-   (markdown-enable-math t)
+   (markdown-toggle-math t)
    (funcall markdown-test-font-lock-function)
    (markdown-test-range-has-face 227 227 markdown-markup-face)
    (markdown-test-range-has-face 228 233 markdown-math-face)
@@ -3426,7 +3744,9 @@ Detail: https://github.com/jrblevin/markdown-mode/issues/79"
     (should (string-equal (buffer-string) " #. abc\n    def\n"))))
 
 (ert-deftest test-markdown-ext/ikiwiki ()
-  (let ((markdown-wiki-link-search-parent-directories t))
+  (let ((markdown-enable-wiki-links t)
+        (markdown-wiki-link-fontify-missing t)
+        (markdown-wiki-link-search-parent-directories t))
     (progn
       (find-file "ikiwiki/root")
       (unwind-protect
@@ -3447,25 +3767,32 @@ Detail: https://github.com/jrblevin/markdown-mode/issues/79"
         (kill-buffer)))))
 
 (defadvice markdown-live-preview-window-eww
-    (around markdown-create-fake-eww disable)
+    (around markdown-test-create-fake-eww disable)
   (setq ad-return-value (get-buffer-create "*eww*")))
 
-(defmacro markdown-temp-eww (&rest body)
+(defmacro markdown-test-fake-eww (&rest body)
   `(progn
-     ,@(if (featurep 'eww) body
+     ,@(if (and (fboundp 'libxml-parse-html-region) (require 'eww nil t)) body
          `((ad-enable-advice #'markdown-live-preview-window-eww
-                             'around 'markdown-create-fake-eww)
+                             'around 'markdown-test-create-fake-eww)
            (ad-activate #'markdown-live-preview-window-eww)
            ,@body
            (ad-disable-advice #'markdown-live-preview-window-eww
-                              'around 'markdown-create-fake-eww)
+                              'around 'markdown-test-create-fake-eww)
            (ad-activate #'markdown-live-preview-window-eww)))))
+
+(defmacro markdown-test-eww-or-nothing (test &rest body)
+  (if (and (fboundp 'libxml-parse-html-region) (require 'eww nil t)
+           (executable-find markdown-command))
+      `(progn ,@body)
+    (message "no eww, no libxml2, or no %s found: skipping %s" markdown-command test)
+    nil))
 
 (ert-deftest test-markdown-ext/live-preview-exports ()
   (markdown-test-temp-file "inline.text"
-    (unless (require 'eww nil t)
+    (unless (and (fboundp 'libxml-parse-html-region) (require 'eww nil t))
       (should-error (markdown-live-preview-mode)))
-    (markdown-temp-eww
+    (markdown-test-fake-eww
      (markdown-live-preview-mode)
      (should (buffer-live-p markdown-live-preview-buffer))
      (should (eq (current-buffer)
@@ -3478,7 +3805,7 @@ Detail: https://github.com/jrblevin/markdown-mode/issues/79"
      (should (buffer-live-p markdown-live-preview-buffer)))))
 
 (ert-deftest test-markdown-ext/live-preview-delete-exports ()
-  (markdown-temp-eww
+  (markdown-test-fake-eww
    (let ((markdown-live-preview-delete-export 'delete-on-destroy)
          file-output)
      (markdown-test-temp-file "inline.text"
@@ -3499,6 +3826,49 @@ Detail: https://github.com/jrblevin/markdown-mode/issues/79"
            (setq file-output (markdown-export-file-name))
            (should (file-exists-p file-output)))
        (delete-file file-output)))))
+
+(ert-deftest test-markdown-ext/live-preview-follow-min-max ()
+  (markdown-test-eww-or-nothing "live-preview-follow-min-max"
+   (markdown-test-temp-file "inline.text"
+     (markdown-live-preview-mode)
+     (should (buffer-live-p markdown-live-preview-buffer))
+     (should (window-live-p (get-buffer-window markdown-live-preview-buffer)))
+     (with-selected-window (get-buffer-window markdown-live-preview-buffer)
+       (goto-char (point-min)))
+     (goto-char (point-min))
+     (insert "a test ")
+     (markdown-live-preview-export)
+     (let (final-pt final-win-st-diff)
+       ;; test that still starts at point-min
+       (with-selected-window (get-buffer-window markdown-live-preview-buffer)
+         (should (= (window-point) 1))
+         (should (= (markdown-visual-lines-between-points
+                     (window-start) (window-point))
+                    0))
+         (set-window-point (selected-window) (point-max))
+         (setq final-pt (window-point)
+               final-win-st-diff (markdown-visual-lines-between-points
+                                  (window-start) (window-point))))
+       (goto-char (point-min))
+       (insert "this is ")
+       (markdown-live-preview-export)
+       (with-selected-window (get-buffer-window markdown-live-preview-buffer)
+         (should (= (window-point) (+ final-pt (length "this is "))))
+         (should (= (markdown-visual-lines-between-points
+                     (window-start) (window-point))
+                    final-win-st-diff))
+         ;; test that still starts at point-max, with correct line difference
+         (goto-char (floor (/ (float (- (point-max) (point-min))) 2)))
+         (setq final-pt (window-point)
+               final-win-st-diff (markdown-visual-lines-between-points
+                                  (window-start) final-pt)))
+       (markdown-live-preview-export)
+       ;; test that still starts at same point, with correct line difference
+       (with-selected-window (get-buffer-window markdown-live-preview-buffer)
+         (should (= (window-point) final-pt))
+         (should (= (markdown-visual-lines-between-points
+                     (window-start) (window-point))
+                    final-win-st-diff)))))))
 
 (provide 'markdown-test)
 
