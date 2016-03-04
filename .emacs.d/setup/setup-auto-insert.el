@@ -65,5 +65,9 @@
         (yas-expand-snippet (buffer-substring-no-properties (point-min) (point-max)))
         (delete-region (point-min) old-point-max)))))
 
+;; Automated auto-insert of Yasnippet templates on new files
+(add-to-list 'load-path "~/.emacs.d/yatemplate")
+(require 'yatemplate)
+
 (provide 'setup-auto-insert)
 ;;; setup-auto-insert.el ends here
