@@ -82,6 +82,7 @@ one match."
     (helm-exit-and-execute-action
      (lambda (c)
        (helm-etags-action-goto 'find-file-other-window c)))))
+(put 'helm-etags-run-switch-other-window 'helm-only t)
 
 (defun helm-etags-run-switch-other-frame ()
   "Run switch to other frame action from `helm-source-etags-select'."
@@ -90,6 +91,7 @@ one match."
     (helm-exit-and-execute-action
      (lambda (c)
        (helm-etags-action-goto 'find-file-other-frame c)))))
+(put 'helm-etags-run-switch-other-frame 'helm-only t)
 
 (defvar helm-etags-map
   (let ((map (make-sparse-keymap)))
@@ -159,13 +161,12 @@ If not found in CURRENT-DIR search in upper directory."
 
 (defun helm-etags-create-buffer (file)
   "Create the `helm-buffer' based on contents of etags tag FILE."
-  (let* ((tag-fname file)
-         max
-         (split (with-current-buffer (find-file-noselect tag-fname)
+  (let* (max
+         (split (with-temp-buffer
+                  (insert-file-contents file)
                   (prog1
                       (split-string (buffer-string) "\n" 'omit-nulls)
-                    (setq max (line-number-at-pos (point-max)))
-                    (kill-buffer))))
+                    (setq max (line-number-at-pos (point-max))))))
          (progress-reporter (make-progress-reporter "Loading tag file..." 0 max)))
     (cl-loop
           with fname
@@ -224,6 +225,7 @@ If no entry in cache, create one."
                                      (cl-caddr (helm-grep-split-line candidate)))))
                       (tag    (cl-caddr (helm-grep-split-line candidate)))
                       (all    candidate)))
+    :fuzzy-match helm-etags-fuzzy-match
     :help-message 'helm-etags-help-message
     :keymap helm-etags-map
     :action '(("Go to tag" . (lambda (c)
@@ -240,6 +242,15 @@ If no entry in cache, create one."
     :persistent-action (lambda (candidate)
                          (helm-etags-action-goto 'find-file candidate)
                          (helm-highlight-current-line))))
+
+(defcustom helm-etags-fuzzy-match nil
+  "Use fuzzy matching in `helm-etags-select'."
+  :group 'helm-tags
+  :type 'boolean
+  :set (lambda (var val)
+         (set var val)
+         (setq helm-source-etags-select
+                (helm-etags-build-source))))
 
 (defvar find-tag-marker-ring)
 
@@ -318,7 +329,9 @@ Create with etags shell command, or visit with `find-tag' or `visit-tags-table'.
                 (helm-etags-build-source)))
         (helm :sources 'helm-source-etags-select
               :keymap helm-etags-map
-              :default (list (concat "\\_<" str "\\_>") str)
+              :default (if helm-etags-fuzzy-match
+                           str
+                           (list (concat "\\_<" str "\\_>") str))
               :buffer "*helm etags*"))))
 
 (provide 'helm-tags)

@@ -26,7 +26,13 @@
 (require 'helm-files)
 (require 'advice)
 
+(declare-function 'helm-describe-function "helm-lib")
+(declare-function 'helm-describe-variable "helm-lib")
+(declare-function 'helm-describe-face "helm-lib")
+
 
+;;; Customizable values
+
 (defgroup helm-elisp nil
   "Elisp related Applications and libraries for Helm."
   :group 'helm)
@@ -37,7 +43,7 @@
   :type  'boolean)
 
 (defcustom helm-show-completion-use-special-display t
-  "A special display will be used in lisp completion if non--nil.
+  "A special display will be used in Lisp completion if non--nil.
 All functions that are wrapped in macro `with-helm-show-completion'
 will be affected."
   :group 'helm-elisp
@@ -111,7 +117,7 @@ fuzzy completion is not available in `completion-at-point'."
 
 (defcustom helm-elisp-help-function
   'helm-elisp-show-help
-  "Function for displaying help for lisp symbols."
+  "Function for displaying help for Lisp symbols."
   :group 'helm-elisp
   :type '(choice (function :tag "Open help for the symbol."
                   helm-elisp-show-help)
@@ -327,8 +333,11 @@ in other window according to the value of `helm-elisp-help-function'."
   (let ((sym (intern-soft candidate)))
     (cl-typecase sym
       ((and fboundp boundp)
-       (when (member name '("describe-function" "describe-variable"))
-         (funcall (intern (format "helm-%s" name)) sym)))
+       (if (member name '("describe-function" "describe-variable"))
+           (funcall (intern (format "helm-%s" name)) sym)
+           ;; When there is no way to know what to describe
+           ;; prefer describe-function.
+           (helm-describe-function sym)))
       (fboundp  (helm-describe-function sym))
       (bound    (helm-describe-variable sym))
       (face     (helm-describe-face sym)))))
@@ -339,7 +348,7 @@ Arg NAME specify the name of the top level function
 calling helm generic completion (e.g \"describe-function\")."
   (helm-elisp--persistent-help
    candidate 'helm-elisp--show-help-1 name))
-  
+
 (defun helm-elisp-show-doc-modeline (candidate &optional name)
   "Show brief documentation for the function in modeline."
   (let ((cursor-in-echo-area t)
@@ -373,7 +382,8 @@ If SYM is not documented, return \"Not documented\"."
                 (cond ((string= name "describe-function")
                        (documentation sym t))
                       ((string= name  "describe-variable")
-                       (documentation-property sym 'variable-documentation t))))
+                       (documentation-property sym 'variable-documentation t))
+                      (t (documentation sym t))))
                (fbound  (documentation sym t))
                (bound   (documentation-property sym 'variable-documentation t))
                (face    (face-documentation sym)))))
@@ -489,21 +499,30 @@ Filename completion happen if string start after or between a double quote."
                          (helm-elisp--persistent-help
                           candidate 'helm-describe-variable))
     :persistent-help "Describe variable"
-    :action '(("Describe Variable" . helm-describe-variable)
-              ("Find Variable" . helm-find-variable)
+    :action '(("Describe variable" . helm-describe-variable)
+              ("Find variable" . helm-find-variable)
               ("Info lookup" . helm-info-lookup-symbol)
               ("Set variable" . helm-set-variable))
     :action-transformer
     (lambda (actions candidate)
       (let ((sym (helm-symbolify candidate)))
         (if (custom-variable-p sym)
-            (append actions
-                    '(("Customize Variable" .
-                       (lambda (candidate)
-                         (customize-option (helm-symbolify candidate))))))
+            (append
+             actions
+             (let ((standard-value (eval (car (get sym 'standard-value)))))
+               (unless (equal standard-value (symbol-value sym))
+                 `(("Reset Variable to default value" .
+                    ,(lambda (candidate)
+                       (let ((sym (helm-symbolify candidate)))
+                         (set sym standard-value)))))))
+             '(("Customize variable" .
+                (lambda (candidate)
+                  (customize-option (helm-symbolify candidate))))))
           actions)))))
 
 (defun helm-def-source--emacs-faces (&optional default)
+  "Create `helm' source for faces to be displayed with
+`helm-apropos'."
   (helm-build-in-buffer-source "Faces"
     :init (lambda () (helm-apropos-init-faces default))
     :fuzzy-match helm-apropos-fuzzy-match
@@ -519,7 +538,10 @@ Filename completion happen if string start after or between a double quote."
                           candidate 'helm-describe-face))
     :persistent-help "Describe face"
     :nomark t
-    :action 'helm-describe-face))
+    :action '(("Describe face" . helm-describe-face)
+              ("Find face" . helm-find-face-definition)
+              ("Customize face" . (lambda (candidate)
+                                    (customize-face (helm-symbolify candidate)))))))
 
 (defun helm-def-source--helm-attributes (&optional _default)
   (let ((def-act (lambda (candidate)
@@ -551,8 +573,8 @@ Filename completion happen if string start after or between a double quote."
                          (helm-elisp--persistent-help
                           candidate 'helm-describe-function))
     :persistent-help "Describe command"
-    :action '(("Describe Function" . helm-describe-function)
-              ("Find Function" . helm-find-function)
+    :action '(("Describe function" . helm-describe-function)
+              ("Find function" . helm-find-function)
               ("Info lookup" . helm-info-lookup-symbol))))
 
 (defun helm-def-source--emacs-functions (&optional default)
@@ -572,8 +594,8 @@ Filename completion happen if string start after or between a double quote."
                           candidate 'helm-describe-function))
     :persistent-help "Describe function"
     :nomark t
-    :action '(("Describe Function" . helm-describe-function)
-              ("Find Function" . helm-find-function)
+    :action '(("Describe function" . helm-describe-function)
+              ("Find function" . helm-find-function)
               ("Info lookup" . helm-info-lookup-symbol))))
 
 (defun helm-def-source--eieio-classes (&optional default)
@@ -590,8 +612,8 @@ Filename completion happen if string start after or between a double quote."
                          (helm-elisp--persistent-help
                           candidate 'helm-describe-function))
     :persistent-help "Describe class"
-    :action '(("Describe Function" . helm-describe-function)
-              ("Find Function" . helm-find-function)
+    :action '(("Describe function" . helm-describe-function)
+              ("Find function" . helm-find-function)
               ("Info lookup" . helm-info-lookup-symbol))))
 
 (defun helm-def-source--eieio-generic (&optional default)
@@ -608,8 +630,8 @@ Filename completion happen if string start after or between a double quote."
                          (helm-elisp--persistent-help
                           candidate 'helm-describe-function))
     :persistent-help "Describe generic function"
-    :action '(("Describe Function" . helm-describe-function)
-              ("Find Function" . helm-find-function)
+    :action '(("Describe function" . helm-describe-function)
+              ("Find function" . helm-find-function)
               ("Info lookup" . helm-info-lookup-symbol))))
 
 (defun helm-info-lookup-symbol-1 (c)
@@ -759,13 +781,12 @@ Filename completion happen if string start after or between a double quote."
 ;;
 (defclass helm-absolute-time-timers-class (helm-source-sync helm-type-timers)
   ((candidates :initform timer-list)
-   (filtered-candidate-transformer
-    :initform
-    (lambda (candidates _source)
-      (cl-loop for timer in candidates
-               collect (cons (helm-elisp--format-timer timer) timer))))
    (allow-dups :initform t)
-   (volatile :initform t)))
+   (candidate-transformer
+    :initform
+    (lambda (candidates)
+      (cl-loop for timer in candidates
+               collect (cons (helm-elisp--format-timer timer) timer))))))
 
 (defvar helm-source-absolute-time-timers
   (helm-make-source "Absolute Time Timers" 'helm-absolute-time-timers-class))
@@ -773,10 +794,9 @@ Filename completion happen if string start after or between a double quote."
 (defclass helm-idle-time-timers-class (helm-source-sync helm-type-timers)
   ((candidates :initform timer-idle-list)
    (allow-dups :initform t)
-   (volatile :initform t)
-   (filtered-candidate-transformer
+   (candidate-transformer
     :initform
-    (lambda (candidates _source)
+    (lambda (candidates)
       (cl-loop for timer in candidates
                collect (cons (helm-elisp--format-timer timer) timer))))))
 
@@ -861,11 +881,8 @@ Filename completion happen if string start after or between a double quote."
                       (and (boundp 'helm-sexp--last-sexp)
                            (setq helm-sexp--last-sexp candidate))
                       (run-with-timer 0.1 nil #'helm-sexp-eval candidate))
-             "Edit and eval"
-             (lambda (cand)
-               (minibuffer-with-setup-hook
-                   (lambda () (insert cand))
-                 (call-interactively #'eval-expression))))
+             "Edit and eval" (lambda (candidate)
+                               (edit-and-eval-command "Eval: " (read candidate))))
     :persistent-action #'helm-sexp-eval))
 
 ;;;###autoload

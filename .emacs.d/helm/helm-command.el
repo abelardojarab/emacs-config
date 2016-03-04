@@ -45,7 +45,9 @@ Show all candidates on startup when 0 (default)."
   :type 'boolean)
 
 (defcustom helm-M-x-fuzzy-match nil
-  "Enable fuzzy matching in `helm-M-x' when non--nil.")
+  "Enable fuzzy matching in `helm-M-x' when non--nil."
+  :group 'helm-command
+  :type 'boolean)
 
 
 ;;; Faces
@@ -108,6 +110,7 @@ fuzzy matching is running its own sort function with a different algorithm."
           for cand in candidates
           for local-key  = (car (rassq cand local-map))
           for key        = (substitute-command-keys (format "\\[%s]" cand))
+          unless (get (intern (if (consp cand) (car cand) cand)) 'helm-only)
           collect
           (cons (cond ((and (string-match "^M-x" key) local-key)
                        (format "%s (%s)"

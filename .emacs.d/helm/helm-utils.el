@@ -24,6 +24,7 @@
 (require 'dired)
 
 (declare-function helm-find-files-1 "helm-files.el" (fname &optional preselect))
+(declare-function popup-tip "ext:popup")
 (defvar winner-boring-buffers)
 
 
@@ -42,7 +43,12 @@ It is a float, usually 1024.0 but could be 1000.0 on some systems."
   :group 'helm-utils
   :type 'float)
 
-(defcustom helm-highlight-number-lines-around-point 15
+(define-obsolete-variable-alias
+  'helm-highlight-number-lines-around-point
+  'helm-highlight-matches-around-point-max-lines
+  "20160119")
+
+(defcustom helm-highlight-matches-around-point-max-lines 15
   "Number of lines around point where matched items are highlighted."
   :group 'helm-utils
   :type 'integer)
@@ -56,6 +62,12 @@ It is a float, usually 1024.0 but could be 1000.0 on some systems."
   "The size of the helm-window when resizing on persistent action."
   :group 'helm-utils
   :type 'integer)
+
+(defcustom helm-sources-using-help-echo-popup '("Moccur" "Imenu in all buffers"
+                                                "Ack-Grep" "AG" "Gid" "Git-Grep")
+  "Show the buffer name or the filename in a popup at selection."
+  :group 'helm-utils
+  :type '(repeat (choice string)))
 
 
 (defvar helm-goto-line-before-hook '(helm-save-current-pos-to-mark-ring)
@@ -170,22 +182,24 @@ To use this add it to `helm-goto-line-before-hook'."
       (set-marker (mark-marker) (point))
       (push-mark (point) 'nomsg))))
 
-;;;###autoload
 (defun helm-show-all-in-this-source-only (arg)
   "Show only current source of this helm session with all its candidates.
 With a numeric prefix arg show only the ARG number of candidates."
   (interactive "p")
-  (with-helm-window
-    (with-helm-default-directory (helm-default-directory)
-        (let ((helm-candidate-number-limit (and (> arg 1) arg)))
-          (helm-set-source-filter
-           (list (assoc-default 'name (helm-get-current-source))))))))
+  (with-helm-alive-p
+    (with-helm-window
+      (with-helm-default-directory (helm-default-directory)
+          (let ((helm-candidate-number-limit (and (> arg 1) arg)))
+            (helm-set-source-filter
+             (list (assoc-default 'name (helm-get-current-source)))))))))
+(put 'helm-show-all-in-this-source-only 'helm-only t)
 
-;;;###autoload
 (defun helm-display-all-sources ()
   "Display all sources previously hidden by `helm-set-source-filter'."
   (interactive)
-  (helm-set-source-filter nil))
+  (with-helm-alive-p
+    (helm-set-source-filter nil)))
+(put 'helm-display-all-sources 'helm-only t)
 
 (defun helm-displaying-source-names ()
   "Return the list of sources name for this helm session."
@@ -205,63 +219,64 @@ after running winner-undo/redo."
   (cl-pushnew helm-buffer winner-boring-buffers :test 'equal))
 (add-hook 'helm-cleanup-hook #'helm-handle-winner-boring-buffers)
 
-;;;###autoload
 (defun helm-quit-and-find-file ()
   "Drop into `helm-find-files' from `helm'.
 If current selection is a buffer or a file, `helm-find-files'
 from its directory."
   (interactive)
-  (require 'helm-grep)
-  (helm-run-after-exit
-   (lambda (f)
-     (if (file-exists-p f)
-         (helm-find-files-1 (file-name-directory f)
-                            (concat
-                             "^"
-                             (regexp-quote
-                              (if helm-ff-transformer-show-only-basename
-                                  (helm-basename f) f))))
-       (helm-find-files-1 f)))
-   (let* ((sel       (helm-get-selection))
-          (grep-line (and (stringp sel)
-                          (helm-grep-split-line sel)))
-          (bmk-name  (and (stringp sel)
-                          (not grep-line)
-                          (replace-regexp-in-string "\\`\\*" "" sel)))
-          (bmk       (and bmk-name (assoc bmk-name bookmark-alist)))
-          (buf       (helm-aif (and (bufferp sel) (get-buffer sel))
-                         (buffer-name it)))
-          (default-preselection (or (buffer-file-name helm-current-buffer)
-                                    default-directory)))
-     (cond
-       ;; Buffer.
-       (buf (or (buffer-file-name sel)
-                (car (rassoc buf dired-buffers))
-                (and (with-current-buffer buf
-                       (eq major-mode 'org-agenda-mode))
-                     org-directory
-                     (expand-file-name org-directory))
-                (with-current-buffer buf default-directory)))
-       ;; Bookmark.
-       (bmk (helm-aif (bookmark-get-filename bmk)
-                (if (and ffap-url-regexp
-                         (string-match ffap-url-regexp it))
-                    it (expand-file-name it))
-              default-directory))
-       ((or (file-remote-p sel)
-            (file-exists-p sel))
-        (expand-file-name sel))
-       ;; Grep.
-       ((and grep-line (file-exists-p (car grep-line)))
-        (expand-file-name (car grep-line)))
-       ;; Occur.
-       (grep-line
-        (with-current-buffer (get-buffer (car grep-line))
-          (or (buffer-file-name) default-directory)))
-       ;; Url.
-       ((and ffap-url-regexp (string-match ffap-url-regexp sel)) sel)
-       ;; Default.
-       (t default-preselection)))))
+  (with-helm-alive-p
+    (require 'helm-grep)
+    (helm-run-after-exit
+     (lambda (f)
+       (if (file-exists-p f)
+           (helm-find-files-1 (file-name-directory f)
+                              (concat
+                               "^"
+                               (regexp-quote
+                                (if helm-ff-transformer-show-only-basename
+                                    (helm-basename f) f))))
+           (helm-find-files-1 f)))
+     (let* ((sel       (helm-get-selection))
+            (grep-line (and (stringp sel)
+                            (helm-grep-split-line sel)))
+            (bmk-name  (and (stringp sel)
+                            (not grep-line)
+                            (replace-regexp-in-string "\\`\\*" "" sel)))
+            (bmk       (and bmk-name (assoc bmk-name bookmark-alist)))
+            (buf       (helm-aif (and (bufferp sel) (get-buffer sel))
+                           (buffer-name it)))
+            (default-preselection (or (buffer-file-name helm-current-buffer)
+                                      default-directory)))
+       (cond
+         ;; Buffer.
+         (buf (or (buffer-file-name sel)
+                  (car (rassoc buf dired-buffers))
+                  (and (with-current-buffer buf
+                         (eq major-mode 'org-agenda-mode))
+                       org-directory
+                       (expand-file-name org-directory))
+                  (with-current-buffer buf default-directory)))
+         ;; Bookmark.
+         (bmk (helm-aif (bookmark-get-filename bmk)
+                  (if (and ffap-url-regexp
+                           (string-match ffap-url-regexp it))
+                      it (expand-file-name it))
+                default-directory))
+         ((or (file-remote-p sel)
+              (file-exists-p sel))
+          (expand-file-name sel))
+         ;; Grep.
+         ((and grep-line (file-exists-p (car grep-line)))
+          (expand-file-name (car grep-line)))
+         ;; Occur.
+         (grep-line
+          (with-current-buffer (get-buffer (car grep-line))
+            (or (buffer-file-name) default-directory)))
+         ;; Url.
+         ((and ffap-url-regexp (string-match ffap-url-regexp sel)) sel)
+         ;; Default.
+         (t default-preselection))))))
+(put 'helm-quit-and-find-file 'helm-only t)
 
 (defun helm-generic-sort-fn (s1 s2)
   "Sort predicate function for helm candidates.
@@ -456,20 +471,20 @@ If STRING is non--nil return instead a space separated string."
   "Highlight and underline current position"
   (let* ((start (or start (line-beginning-position)))
          (end (or end (1+ (line-end-position))))
-         (start-match (if (or (zerop helm-highlight-number-lines-around-point)
-                              (null helm-highlight-number-lines-around-point))
+         (start-match (if (or (null helm-highlight-matches-around-point-max-lines)
+                              (zerop helm-highlight-matches-around-point-max-lines))
                           start
-                          (save-excursion
-                            (forward-line
-                             (- helm-highlight-number-lines-around-point))
-                            (point-at-bol))))
-         (end-match   (if (or (zerop helm-highlight-number-lines-around-point)
-                              (null helm-highlight-number-lines-around-point))
+                        (save-excursion
+                          (forward-line
+                           (- helm-highlight-matches-around-point-max-lines))
+                          (point-at-bol))))
+         (end-match   (if (or (null helm-highlight-matches-around-point-max-lines)
+                              (zerop helm-highlight-matches-around-point-max-lines))
                           end
-                          (save-excursion
-                            (forward-line
-                             helm-highlight-number-lines-around-point)
-                            (point-at-eol))))
+                        (save-excursion
+                          (forward-line
+                           helm-highlight-matches-around-point-max-lines)
+                          (point-at-eol))))
          (args (list start end buf)))
     (if (not helm-match-line-overlay)
         (setq helm-match-line-overlay (apply 'make-overlay args))
@@ -485,16 +500,16 @@ If STRING is non--nil return instead a space separated string."
                     (while (condition-case _err
                                (if helm-migemo-mode
                                    (helm-mm-migemo-forward r end-match t)
-                                   (re-search-forward r end-match t))
+                                 (re-search-forward r end-match t))
                              (invalid-regexp nil))
                       (let ((s (match-beginning 0))
                             (e (match-end 0)))
                         (if (= s e)
                             (throw 'empty-line nil)
-                            (push (setq ov (make-overlay s e))
-                                  helm--match-item-overlays)
-                            (overlay-put ov 'face 'helm-match-item)
-                            (overlay-put ov 'priority 1)))))))
+                          (push (setq ov (make-overlay s e))
+                                helm--match-item-overlays)
+                          (overlay-put ov 'face 'helm-match-item)
+                          (overlay-put ov 'priority 1)))))))
     (recenter)
     (when pulse
       (sit-for 0.3)
@@ -521,6 +536,47 @@ If STRING is non--nil return instead a space separated string."
 (add-hook 'helm-after-persistent-action-hook 'helm-persistent-autoresize-hook)
 (add-hook 'helm-cleanup-hook 'helm-match-line-cleanup)
 (add-hook 'helm-after-persistent-action-hook 'helm-match-line-update)
+
+;;; Popup buffer-name or filename in grep/moccur/imenu-all.
+;;
+(defvar helm--show-help-echo-timer nil)
+
+(defun helm-cancel-help-echo-timer ()
+  (when helm--show-help-echo-timer
+    (cancel-timer helm--show-help-echo-timer)
+    (setq helm--show-help-echo-timer nil)))
+
+(defun helm-show-help-echo ()
+  (when helm--show-help-echo-timer
+    (cancel-timer helm--show-help-echo-timer)
+    (setq helm--show-help-echo-timer nil))
+  (when (and helm-alive-p
+             (member (assoc-default 'name (helm-get-current-source))
+                     helm-sources-using-help-echo-popup))
+    (setq helm--show-help-echo-timer
+          (run-with-idle-timer
+           1 nil
+           (lambda ()
+             (with-helm-window
+               (helm-aif (get-text-property (point-at-bol) 'help-echo)
+                   (popup-tip (concat " " (abbreviate-file-name it))
+                              :around nil
+                              :point (save-excursion
+                                       (end-of-visual-line) (point))))))))))
+
+;;;###autoload
+(define-minor-mode helm-popup-tip-mode
+    "Show help-echo informations in a popup tip at end of line."
+  :global t
+  (require 'popup)
+  (if helm-popup-tip-mode
+      (progn
+        (add-hook 'helm-update-hook 'helm-show-help-echo) ; Needed for async sources.
+        (add-hook 'helm-move-selection-after-hook 'helm-show-help-echo)
+        (add-hook 'helm-cleanup-hook 'helm-cancel-help-echo-timer))
+      (remove-hook 'helm-update-hook 'helm-show-help-echo)
+      (remove-hook 'helm-move-selection-after-hook 'helm-show-help-echo)
+      (remove-hook 'helm-cleanup-hook 'helm-cancel-help-echo-timer)))
 
 (defun helm-open-file-with-default-tool (file)
   "Open FILE with the default tool on this platform."

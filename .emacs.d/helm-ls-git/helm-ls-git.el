@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 2012 ~ 2015 Thierry Volpiatto <thierry.volpiatto@gmail.com>
 
-;; Package-Requires: ((helm "1.5"))
+;; Package-Requires: ((helm "1.7.8"))
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@
 (require 'cl-lib)
 (require 'vc)
 (require 'vc-git)
-(require 'helm-files)
+(require 'helm-files) ; helm-grep is required in helm-files.
 (require 'helm-types)
 
 (defvaralias 'helm-c-source-ls-git 'helm-source-ls-git)
@@ -63,12 +63,25 @@ Valid values are symbol 'abs (default) or 'relative."
                helm-source-ls-git-buffers nil))
   :type 'boolean)
 
-(defcustom helm-ls-git-grep-command "git grep -n%cH --color=never --full-name -e %p %f"
-  "The git grep default command line.
-The option \"--color=always\" can be used safely, it is disabled by default though.
-The color of matched items can be customized in your .gitconfig."
+;; Now the git-grep command is defined in helm-grep.el,
+;; alias it for backward compatibility.
+(defvar helm-ls-git-grep-command)
+(defvaralias 'helm-ls-git-grep-command 'helm-grep-git-grep-command)
+(make-obsolete-variable 'helm-ls-git-grep-command 'helm-grep-git-grep-command "1.8.0")
+
+(defcustom helm-ls-git-default-sources '(helm-source-ls-git-status
+                                         helm-source-ls-git-buffers
+                                         helm-source-ls-git)
+  "Default sources for `helm-ls-git-ls'."
+  :group 'helm-ls-git
+  :type '(repeat symbol))
+
+(defcustom helm-ls-git-format-glob-string "'%s'"
+  "String to format globs in `helm-grep-get-file-extensions'.
+Glob are enclosed in single quotes by default."
   :group 'helm-ls-git
   :type 'string)
+
 
 (defface helm-ls-git-modified-not-staged-face
     '((t :foreground "yellow"))
@@ -122,6 +135,58 @@ The color of matched items can be customized in your .gitconfig."
     (define-key map (kbd "C-s")   'helm-ls-git-run-grep)
     (define-key map (kbd "C-c g") 'helm-ff-run-gid)
     map))
+
+(defvar helm-ls-git-help-message
+  "* Helm ls git
+
+** Tips
+
+*** Git grep usage
+
+**** With no prefix arg.
+
+Grep file at current selection or marked files if some.
+
+**** With one prefix arg.
+
+Grep all files in current repository with a specific extension,
+\(you will be prompted for choosing extension\).
+
+**** With two prefix args.
+
+Grep all files in current repository.
+
+**** Grep a subdirectory of current repository.
+
+Switch to `helm-find-files' with `C-x C-f', navigate to your directory
+and launch git-grep from there.
+
+** Commands
+\\<helm-ls-git-map>
+\\[helm-ls-git-run-grep]\t\tRun git-grep.
+\\[helm-ff-run-gid]\t\tRun Gid.
+\\<helm-generic-files-map>
+\\[helm-ff-run-toggle-basename]\t\tToggle basename.
+\\[helm-ff-run-zgrep]\t\tRun zgrep.
+\\[helm-ff-run-pdfgrep]\t\tRun Pdfgrep on marked files.
+\\[helm-ff-run-copy-file]\t\tCopy file(s)
+\\[helm-ff-run-rename-file]\t\tRename file(s).
+\\[helm-ff-run-symlink-file]\t\tSymlink file(s).
+\\[helm-ff-run-hardlink-file]\t\tHardlink file(s).
+\\[helm-ff-run-delete-file]\t\tDelete file(s).
+\\[helm-ff-run-byte-compile-file]\t\tByte compile file(s) (C-u load) (elisp).
+\\[helm-ff-run-load-file]\t\tLoad file(s) (elisp).
+\\[helm-ff-run-ediff-file]\t\tEdiff file.
+\\[helm-ff-run-ediff-merge-file]\t\tEdiff merge file.
+\\[helm-ff-run-switch-other-window]\t\tSwitch other window.
+\\[helm-ff-properties-persistent]\t\tShow file properties.
+\\[helm-ff-run-etags]\t\tRun etags (C-u use tap, C-u C-u reload DB).
+\\[helm-yank-text-at-point]\t\tYank text at point.
+\\[helm-ff-run-open-file-externally]\t\tOpen file with external program (C-u to choose).
+\\[helm-ff-run-open-file-with-default-tool]\t\tOpen file externally with default tool.
+\\[helm-ff-run-insert-org-link]\t\tInsert org link.")
+
+
 
 ;; Append visited files from `helm-source-ls-git' to `file-name-history'.
 (add-to-list 'helm-files-save-history-extra-sources "Git files")
@@ -143,7 +208,10 @@ The color of matched items can be customized in your .gitconfig."
                 (apply #'process-file
                        "git"
                        nil (list t helm-ls-git-log-file) nil
-                       (list "ls-files" "--full-name" "--")))))))
+                       (list "ls-files" "--full-name" "--")))))
+    ;; Return empty string to give to `split-string'
+    ;; in `helm-ls-git-init'.
+    ""))
 
 (cl-defun helm-ls-git-root-dir (&optional (directory default-directory))
   (let ((root (locate-dominating-file directory ".git")))
@@ -185,17 +253,20 @@ The color of matched items can be customized in your .gitconfig."
               data)))
     (helm-init-candidates-in-buffer 'global data)))
 
+(defvar helm-ls-git--current-branch nil)
+(defun helm-ls-git--branch ()
+  (or helm-ls-git--current-branch
+      (with-temp-buffer
+        (let ((ret (call-process "git" nil t nil "symbolic-ref" "--short" "HEAD")))
+          ;; Use sha of HEAD when branch name is missing.
+          (unless (zerop ret)
+            (erase-buffer)
+            (call-process "git" nil t nil "rev-parse" "--short" "HEAD")))
+        (buffer-substring-no-properties (goto-char (point-min))
+                                        (line-end-position)))))
+
 (defun helm-ls-git-header-name (name)
-  (format "%s (%s)"
-          name
-          (with-temp-buffer
-            (let ((ret (call-process-shell-command "git symbolic-ref --short HEAD" nil t)))
-              ;; Use sha of HEAD when branch name is missing.
-              (unless (zerop ret)
-                (erase-buffer)
-                (call-process-shell-command "git rev-parse --short HEAD" nil t)))
-            (buffer-substring-no-properties (goto-char (point-min))
-                                            (line-end-position)))))
+  (format "%s (%s)" name (helm-ls-git--branch)))
 
 (defun helm-ls-git-actions-list (&optional actions)
   (helm-append-at-nth
@@ -220,8 +291,11 @@ The color of matched items can be customized in your .gitconfig."
 (defclass helm-ls-git-source (helm-source-in-buffer)
   ((header-name :initform 'helm-ls-git-header-name)
    (init :initform 'helm-ls-git-init)
+   (update :initform (lambda ()
+                       (helm-set-local-variable
+                        'helm-ls-git--current-branch nil)))
    (keymap :initform helm-ls-git-map)
-   (help-message :initform helm-generic-file-help-message)
+   (help-message :initform helm-ls-git-help-message)
    (match-part :initform 'helm-ls-git-match-part)
    (candidate-transformer :initform '(helm-ls-git-transformer
                                       helm-ls-git-sort-fn))
@@ -252,14 +326,14 @@ The color of matched items can be customized in your .gitconfig."
   (let* ((helm-grep-default-command helm-ls-git-grep-command)
          helm-grep-default-recurse-command
          (files (cond ((equal helm-current-prefix-arg '(4))
-                       (list "--"
-                             (format "'%s'" (mapconcat
-                                             'identity
-                                             (helm-grep-get-file-extensions
-                                             (helm-marked-candidates))
-                                             " "))))
+                       (list (format helm-ls-git-format-glob-string
+                                     (mapconcat
+                                      'identity
+                                      (helm-grep-get-file-extensions
+                                       (helm-marked-candidates))
+                                      " "))))
                       ((equal helm-current-prefix-arg '(16))
-                       '("--"))
+                       '(""))
                       (t (helm-marked-candidates))))
          ;; Expand filename of each candidate with the git root dir.
          ;; The filename will be in the help-echo prop.
@@ -272,7 +346,7 @@ The color of matched items can be customized in your .gitconfig."
   "Run Git Grep action from helm-ls-git."
   (interactive)
   (with-helm-alive-p
-    (helm-quit-and-execute-action 'helm-ls-git-grep)))
+    (helm-exit-and-execute-action 'helm-ls-git-grep)))
 
 
 (defun helm-ls-git-search-log (_candidate)
@@ -416,23 +490,24 @@ The color of matched items can be customized in your .gitconfig."
   (interactive "p")
   (when (and arg (helm-ls-git-not-inside-git-repo))
     (error "Not inside a Git repository"))
-  (unless (and helm-source-ls-git-status
-               helm-source-ls-git
-               helm-source-ls-git-buffers)
+  (unless (cl-loop for s in helm-ls-git-default-sources
+                   always (symbol-value s))
     (setq helm-source-ls-git-status
-          (helm-make-source "Git status" 'helm-ls-git-status-source
-            :fuzzy-match helm-ls-git-fuzzy-match)
+          (and (memq 'helm-source-ls-git-status helm-ls-git-default-sources)
+               (helm-make-source "Git status" 'helm-ls-git-status-source
+                 :fuzzy-match helm-ls-git-fuzzy-match))
           helm-source-ls-git
-          (helm-make-source "Git files" 'helm-ls-git-source
-            :fuzzy-match helm-ls-git-fuzzy-match)
+          (and (memq 'helm-source-ls-git helm-ls-git-default-sources)
+               (helm-make-source "Git files" 'helm-ls-git-source
+                 :fuzzy-match helm-ls-git-fuzzy-match))
           helm-source-ls-git-buffers
-          (helm-make-source "Buffers in git project" 'helm-source-buffers
-            :header-name #'helm-ls-git-header-name
-            :buffer-list (lambda () (helm-browse-project-get-buffers
-                                     (helm-ls-git-root-dir))))))
-  (helm :sources '(helm-source-ls-git-status
-                   helm-source-ls-git-buffers
-                   helm-source-ls-git)
+          (and (memq 'helm-source-ls-git-buffers helm-ls-git-default-sources)
+               (helm-make-source "Buffers in git project" 'helm-source-buffers
+                 :header-name #'helm-ls-git-header-name
+                 :buffer-list (lambda () (helm-browse-project-get-buffers
+                                          (helm-ls-git-root-dir)))))))
+  (helm-set-local-variable 'helm-ls-git--current-branch (helm-ls-git--branch))
+  (helm :sources helm-ls-git-default-sources
         :ff-transformer-show-only-basename nil
         :buffer "*helm lsgit*"))
 

@@ -69,13 +69,6 @@
   "Polymode Chunkmode Objects"
   :group 'polymode)
 
-(defvar polymode-select-mode-hook nil ;; not used yet
-  "Hook run after a different mode is selected.")
-
-(defvar polymode-indirect-buffer-hook nil ;; not used yet
-  "Hook run by `pm/install-mode' in each indirect buffer.
-It is run after all the indirect buffers have been set up.")
-
 (defcustom polymode-prefix-key "\M-n"
   "Prefix key for the polymode mode keymap.
 Not effective after loading the polymode library."
@@ -176,11 +169,11 @@ Return, how many chucks actually jumped over."
          (lambda ()
            (unless (memq (car *span*) '(head tail))
              (when (and (equal this-class
-                               (pm--object-name (car (last *span*))))
+                               (eieio-object-name (car (last *span*))))
                         (eq this-type (car *span*)))
                (setq sofar (1+ sofar)))
              (unless this-class
-               (setq this-class (pm--object-name (car (last *span*)))
+               (setq this-class (eieio-object-name (car (last *span*)))
                      this-type (car *span*)))
              (when (>= sofar N)
                (signal 'quit nil))))
@@ -270,35 +263,37 @@ Return, how many chucks actually jumped over."
         (widen)
         (let* ((beg (nth 1 span))
                (end (max beg (1- (nth 2 span)))))
-          (and (eq span (get-text-property beg :pm-span))
-               (eq span (get-text-property end :pm-span))
-               span))))))
+          (when (<= end (point-max))
+            (and (eq span (get-text-property beg :pm-span))
+                 (eq span (get-text-property end :pm-span))
+                 span)))))))
 
 (defun pm-get-innermost-span (&optional pos no-cache)
   "Get span object at POS.
 If NO-CACHE is non-nil, don't use cache and force re-computation
 of the span."
-  (save-restriction
-    (widen)
-    (let* ((span (or (and (not no-cache)
-                          (pm-get-cached-span pos))
-                     (pm-get-span pm/polymode pos)))
-           (beg (nth 1 span))
-           (end (nth 2 span)))
-      ;; might be used by external applications like flyspell
-      (with-silent-modifications
-        (add-text-properties beg end
-                             (list :pm-span span
-                                   :pm-span-type (car span)
-                                   :pm-span-beg beg
-                                   :pm-span-end end)))
-      span)))
+  (save-excursion
+    (save-restriction
+      (widen)
+      (let* ((span (or (and (not no-cache)
+                            (pm-get-cached-span pos))
+                       (pm-get-span pm/polymode pos)))
+             (beg (nth 1 span))
+             (end (nth 2 span)))
+        ;; might be used by external applications like flyspell
+        (with-silent-modifications
+          (add-text-properties beg end
+                               (list :pm-span span
+                                     :pm-span-type (car span)
+                                     :pm-span-beg beg
+                                     :pm-span-end end)))
+        span))))
 
 (defun pm-span-to-range (span)
   (and span (cons (nth 1 span) (nth 2 span))))
 
-(defun pm-get-innermost-range (&optional pos)
-  (pm-span-to-range (pm-get-innermost-span pos)))
+(defun pm-get-innermost-range (&optional pos no-cache)
+  (pm-span-to-range (pm-get-innermost-span pos no-cache)))
 
 (defun pm-switch-to-buffer (&optional pos)
   "Bring the appropriate polymode buffer to front.
@@ -320,12 +315,10 @@ done."
 (defun pm-map-over-spans (fun beg end &optional count backwardp visuallyp no-cache)
   "For all spans between BEG and END, execute FUN.
 FUN is a function of no args. It is executed with point at the
-beginning of the span and with the buffer narrowed to the
-span. If COUNT is non-nil, jump at most that many times. If
-BACKWARDP is non-nil, map backwards.
- 
-During the call of FUN, a dynamically bound variable *span* holds
-the current innermost span."
+beginning of the span. Buffer is *not* narrowed to the span. If
+COUNT is non-nil, jump at most that many times. If BACKWARDP is
+non-nil, map backwards. During the call of FUN, a dynamically
+bound variable *span* holds the current innermost span."
   (save-restriction
     (widen)
     (goto-char (if backwardp end beg))
@@ -356,16 +349,37 @@ the current innermost span."
             (goto-char (max 1 (1- (nth 1 *span*)))) 
           (goto-char (min (point-max) (1+ (nth 2 *span*)))))))))
 
+(defun pm--reset-ppss-last (&optional span-start force)
+  "Reset `syntax-ppss-last' cache if it was recorded before SPAN-START.
+If SPAN-START is nil, use span at point. If force, reset
+regardless of the position `syntax-ppss-last' was recorder at."
+  ;; syntax-ppss has its own condition-case for this case, but that means
+  ;; throwing an error each time it calls parse-partial-sexp
+  (setq span-start (or span-start (car (pm-get-innermost-range))))
+  (when (or force
+            (and syntax-ppss-last
+                 (car syntax-ppss-last)
+                 ;; non-strict is intentional (occasionally ppss is screwed)
+                 (<= (car syntax-ppss-last) span-start)))
+    (setq syntax-ppss-last
+          (cons span-start (list 0 nil span-start nil nil nil 0)))))
+
 (defun pm-narrow-to-span (&optional span)
   "Narrow to current chunk."
   (interactive)
   (unless (= (point-min) (point-max))
     (let ((span (or span
                     (pm-get-innermost-span))))
-      (let ((min (nth 1 span))
-            (max (nth 2 span)))
-        (setq syntax-ppss-last (cons min (list 0 nil min nil nil nil 0 nil nil nil)))
-        (narrow-to-region min max)))))
+      (let ((sbeg (nth 1 span))
+            (send (nth 2 span)))
+        (pm--reset-ppss-last sbeg t)
+        (narrow-to-region sbeg send)))))
+
+(defmacro pm-with-narrowed-to-span (span &rest body)
+  (declare (indent 1) (debug body))
+  `(save-restriction
+     (pm-narrow-to-span ,span)
+     ,@body))
 
 (defun polymode-post-command-select-buffer ()
   "Select the appropriate (indirect) buffer corresponding to point's context.
@@ -377,6 +391,18 @@ This funciton is placed in local `post-command-hook'."
         (pm-switch-to-buffer)
       (error (message "(pm-switch-to-buffer %s): %s"
                       (point) (error-message-string err))))))
+
+(defun polymode-flush-ppss-cache (beg end)
+  "Run `syntax-ppss-flush-cache' in all polymode buffers.
+This function is placed in `before-change-functions' hook."
+  ;; Modification hooks are run only in current buffer and not in other (base or
+  ;; indirect) buffers.
+  (dolist (buff (oref pm/polymode -buffers))
+    (with-current-buffer buff
+      ;; now `syntax-ppss-flush-cache is harmless, but who knows in the future
+      (when (memq 'syntax-ppss-flush-cache before-change-functions)
+        (remove-hook 'before-change-functions 'syntax-ppss-flush-cache t))
+      (syntax-ppss-flush-cache beg end))))
 
 
 ;;; DEFINE
@@ -534,6 +560,15 @@ BODY contains code to be executed after the complete
 (define-derived-mode poly-head-tail-mode prog-mode "HeadTail"
   "Default major mode for polymode head and tail spans.")
 
+(define-derived-mode poly-fallback-mode prog-mode "FallBack"
+  ;; fixme:
+  ;; 1. doesn't work as fallback for hostmode
+  ;; 2. highlighting is lost (Rnw with inner fallback)
+  "Default major mode for modes which were not found.
+This is better than fundamental-mode because it allows running
+globalized minor modes and can run user hooks.")
+
+
 
 ;;; FONT-LOCK
 ;; indulge elisp font-lock :) 
@@ -543,6 +578,7 @@ BODY contains code to be executed after the complete
    '(("(\\(define-polymode\\)\\s +\\(\\(\\w\\|\\s_\\)+\\)"
       (1 font-lock-keyword-face)
       (2 font-lock-variable-name-face)))))
+
 
 
 ;;; TOOLS for DEBUGGING
@@ -640,20 +676,26 @@ Key bindings:
           (call-next-method))
 
 (defun pm--debug-info (&optional span)
-  (let* ((span (or span (pm-get-innermost-span)))
+  (let* ((span (or span (and polymode-mode (pm-get-innermost-span))))
          (message-log-max nil)
          (beg (nth 1 span))
          (end (nth 2 span))
-         (obj (nth 3 span)))
-    (message "(%s) type:%s span:%s-%s %s"
-             major-mode (or (car span) 'host) beg end (pm-debug-info obj))))
+         (obj (nth 3 span))
+         (type (and span (or (car span) 'host))))
+    (list (current-buffer)
+          (point-min) (point) (point-max)
+          major-mode
+          type beg end
+          (and obj (pm-debug-info obj))
+          (format "lppss:%s"
+                  syntax-ppss-last))))
 
 (defun pm-debug-info-on-current-span ()
   (interactive)
   (if (not polymode-mode)
       (message "not in a polymode buffer")
     (let ((span (pm-get-innermost-span)))
-      (pm--debug-info span)
+      (apply 'message "min:%d pos:%d max:%d || (%s) type:%s span:%s-%s %s" (pm--debug-info span))
       (move-overlay pm--inverse-video-overlay (nth 1 span) (nth 2 span) (current-buffer)))))
 
 (defvar pm-debug-display-info-message nil)
@@ -744,33 +786,59 @@ Key bindings:
                                  poly-lock-refontify
                                  pm--fontify-region-original))
     (jit-loc . (jit-lock-refontify jit-lock-mode jit-lock-fontify-now))
-    
     (font-lock . (;; font-lock-mode turn-on-font-lock-if-desired
                   turn-on-font-lock
                   font-lock-after-change-function
+                  font-lock-default-fontify-region
+                  font-lock-fontify-syntactically-region
+                  font-lock-extend-region-wholelines
+                  font-lock-extend-region-multiline
+                  font-lock-fontify-syntactic-keywords-region
+                  font-lock-fontify-keywords-region
+                  font-lock-unfontify-region
                   font-lock-fontify-region font-lock-flush
-                  font-lock-fontify-buffer font-lock-ensure))))
+                  font-lock-fontify-buffer font-lock-ensure))
+    (methods . (pm-select-buffer pm-get-buffer pm-))
+    (select . (pm-get-innermost-span pm-map-over-spans))
+    (insert . (self-insert-command))))
 
 (defun pm-debug-trace-background-1 (fn)
-  (trace-function-background fn nil
-                             '(lambda ()
-                                (format " [buf:%s pos:%s type:%s (%s)]"
-                                        (current-buffer) (point)
-                                        (get-text-property (point) :pm-span-type)
-                                        (current-time-string)))))
+  (interactive (trace--read-args "Trace function in background: "))
+  (unless (symbolp fn)
+    (error "can trace symbols only"))
+  (unless (get fn 'cl--class)
+    (trace-function-background fn nil
+                               '(lambda ()
+                                  (format " [buf:%s pos:%s type:%s (%f)]"
+                                          (current-buffer) (point)
+                                          (get-text-property (point) :pm-span-type)
+                                          (float-time))))))
 
-(defun pm-debug-trace-relevant-functions ()
+(defun pm-debug-trace-relevant-functions (&optional group)
+  "GROUP is either a string or a list of functions to trace.
+If string, it must b an entry in
+`pm-debug-relevant-functions-alist'."
   (interactive)
   (require 'trace)
-  (let* ((groups (append '("*ALL*") (mapcar #'car pm-debug-relevant-functions-alist)))
-         (group-name (completing-read "Trace group: " groups nil t)))
-    (if (equal group-name "*ALL*")
-        (mapc (lambda (group)
-                (mapc #'pm-debug-trace-background-1
-                      (assoc group pm-debug-relevant-functions-alist)))
-              (cdr groups))
-      (mapc #'pm-debug-trace-background-1
-            (assoc (intern group-name) pm-debug-relevant-functions-alist)))))
+  (if (and group (listp group))
+      (mapc #'pm-debug-trace-background-1 group)
+   (let* ((groups (append '("*ALL*") (mapcar #'car pm-debug-relevant-functions-alist)))
+          (group-name (or group (completing-read "Trace group: " groups nil t))))
+     (if (equal group-name "*ALL*")
+         (mapc (lambda (group)
+                 (mapc #'pm-debug-trace-background-1
+                       (assoc group pm-debug-relevant-functions-alist)))
+               (cdr groups))
+       (mapc #'pm-debug-trace-background-1
+             (assoc (intern group-name) pm-debug-relevant-functions-alist))))))
+
+(defun pm-debug-trace-functions-by-regexp (regexp)
+  "Trace all functions whose name matched REGEXP."
+  (cl-loop for sym being the symbols
+           when (and (fboundp sym)
+                     (not (eq sym 'pm-debug-trace-background-1)))
+           when (string-match regexp (symbol-name sym))
+           do (pm-debug-trace-background-1 sym)))
 
 (defvar pm-debug-relevant-variables '(fontification-functions
                                       font-lock-flush-function
@@ -841,6 +909,16 @@ Key bindings:
       (pm-switch-to-buffer))
     (let ((elapsed  (float-time (time-subtract (current-time) start))))
       (message "elapsed: %s  per-char: %s" elapsed (/ elapsed count)))))
+
+(defun pm-dbg (msg &rest args)
+  (let ((cbuf (current-buffer))
+        (cpos (point)))
+   (with-current-buffer (get-buffer-create "*pm-dbg*")
+     (save-excursion
+       (goto-char (point-max))
+       (insert "\n")
+       (insert (apply 'format (concat "%f [%s at %d]: " msg)
+                      (float-time) cbuf cpos args))))))
 
 (provide 'polymode)
 ;;; polymode.el ends here

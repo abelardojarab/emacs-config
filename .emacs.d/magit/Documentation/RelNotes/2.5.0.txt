@@ -19,6 +19,8 @@ Released 30 January 2016 by Jonas Bernoulli.
 We are pleased to announce the release of Magit version 2.5.0,
 representing 78 commits by 4 contributors over 2 weeks.
 
+Also see http://emacsair.me/2016/02/10/magit-2.5.
+
 Changes since v2.4.0
 --------------------
 
@@ -118,7 +120,7 @@ Fixes since v2.4.1
   not preserved and instead reset to the default state when a command
   was invoked which changes what log/reflog is being displayed.
 
-* Pressing RET on a variable in a popup causes an error.
+* Pressing RET on a variable in a popup caused an error.
 
 This release also contains the fixes described in the v2.4.1 release
 notes, as well as various typofixes, documentation updates, code

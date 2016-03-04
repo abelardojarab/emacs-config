@@ -6,7 +6,7 @@
 ;; Author: Joost Kremers <joostkremers@fastmail.fm>
 ;; Maintainer: Joost Kremers <joostkremers@fastmail.fm>
 ;; Created: 2014
-;; Version: 2.3
+;; Version: 2.5
 ;; Keywords: text bibtex
 
 ;; Redistribution and use in source and binary forms, with or without
@@ -119,14 +119,14 @@ Also automatically remove duplicates."
           (let ((keyword-list (ebib--read-file-to-list (concat dir ebib-keywords-file))))
             ;; note: even if keyword-list is empty, we store it, because the user
             ;; may subsequently add keywords.
-            (add-to-list 'ebib--keywords-files-alist    ; add the dir if not in the list yet
-                         (list dir keyword-list nil)   ; the extra empty list is for new keywords
-                         t (lambda (x y) (equal (car x) (car y)))))))))
+            (cl-pushnew (list dir keyword-list nil)   ; the extra empty list is for new keywords
+                        ebib--keywords-files-alist
+                        :test (lambda (x y) (equal (car x) (car y)))))))))
 
 (defun ebib--keywords-add-keyword (keyword db)
   "Add KEYWORD to the list of keywords for DB."
   (if (not ebib-keywords-file)        ; only the general list exists
-      (add-to-list 'ebib--keywords-list-per-session keyword t)
+      (push keyword ebib--keywords-list-per-session)
     (let ((dir (or (file-name-directory ebib-keywords-file)      ; a single keywords file
                    (file-name-directory (ebib-db-get-filename db)))))    ; per-directory keywords files
       (push keyword (cl-third (assoc dir ebib--keywords-files-alist))))))
@@ -198,7 +198,7 @@ keywords and the third the keywords added in this session."
     (when (and (cl-third lst)           ; if there are new keywords
                (or (eq ebib-keywords-file-save-on-exit 'always)
                    (and (eq ebib-keywords-file-save-on-exit 'ask)
-                        (y-or-n-p "New keywords have been added. Save? "))))
+                        (y-or-n-p "New keywords have been added.  Save? "))))
       (ebib--keywords-save-to-file lst)
       ;; now move the new keywords to the list of existing keywords
       (setf (cl-second lst) (append (cl-second lst) (cl-third lst)))
@@ -233,7 +233,7 @@ Optional argument DB specifies the database to check for."
                (or (eq ebib-keywords-file-save-on-exit 'always)
                    (called-interactively-p 'any)
                    (and (eq ebib-keywords-file-save-on-exit 'ask)
-                        (y-or-n-p (format "New keywords were added. Save '%s'? "
+                        (y-or-n-p (format "New keywords were added.  Save '%s'? "
                                           (file-name-nondirectory ebib-keywords-file)))))) ; strip path for succinctness
       (mapc (lambda (elt)
               (ebib--keywords-save-to-file elt))

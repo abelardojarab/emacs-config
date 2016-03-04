@@ -196,7 +196,10 @@ The functions which respect this option are
 
 all    Show counts for branches and tags.
 branch Show counts for branches only.
-nil    Never show counts."
+nil    Never show counts.
+
+To change the value in an existing buffer use the command
+`magit-refs-show-commit-count'"
   :package-version '(magit . "2.1.0")
   :group 'magit-refs
   :safe (lambda (val) (memq val '(all branch nil)))
@@ -1898,12 +1901,23 @@ If no merge is in progress, do nothing."
 
 ;;;; Reset
 
+;;;###autoload (autoload 'magit-reset-popup "magit" nil t)
+(magit-define-popup magit-reset-popup
+  "Popup console for reset commands."
+  'magit-commands
+  :man-page "git-reset"
+  :actions '((?m "reset mixed  (HEAD and index)"         magit-reset-head)
+             (?s "reset soft   (HEAD only)"              magit-reset-soft)
+             (?h "reset hard   (HEAD, index, and files)" magit-reset-hard)
+             (?i "reset index  (index only)"             magit-reset-index))
+  :max-action-columns 1)
+
 ;;;###autoload
 (defun magit-reset-index (commit)
   "Reset the index to COMMIT.
 Keep the head and working tree as-is, so if COMMIT refers to the
 head this effectively unstages all changes.
-\n(git reset COMMIT)"
+\n(git reset COMMIT .)"
   (interactive (list (magit-read-branch-or-commit "Reset index to")))
   (magit-reset-internal nil commit "."))
 
@@ -2259,12 +2273,13 @@ the current repository."
 
 (magit-define-popup magit-file-popup
   "Popup console for Magit commands in file-visiting buffers."
-  :actions '((?s "Stage"   magit-stage-file)
-             (?l "Log"     magit-log-buffer-file)
-             (?c "Commit"  magit-commit-popup)
-             (?u "Unstage" magit-unstage-file)
-             (?b "Blame"   magit-blame-popup) nil nil
-             (?p "Find blob" magit-blob-previous))
+  :actions '((?s "Stage"     magit-stage-file)
+             (?d "Diff"      magit-diff-buffer-file-popup)
+             (?b "Blame"     magit-blame-popup)
+             (?u "Unstage"   magit-unstage-file)
+             (?l "Log"       magit-log-buffer-file)
+             (?p "Find blob" magit-blob-previous)
+             (?c "Commit"    magit-commit-popup))
   :max-action-columns 3)
 
 (defvar magit-file-mode-lighter "")
@@ -2382,6 +2397,7 @@ Currently this only adds the following key bindings.
              (?f "Fetching"        magit-fetch-popup)
              (?F "Pulling"         magit-pull-popup)
              (?l "Logging"         magit-log-popup)
+             (?L "Change logs"     magit-log-refresh-popup)
              (?m "Merging"         magit-merge-popup)
              (?M "Remoting"        magit-remote-popup)
              (?o "Submodules"      magit-submodule-popup)
@@ -2392,6 +2408,7 @@ Currently this only adds the following key bindings.
              (?V "Reverting"       magit-revert-popup)
              (?w "Apply patches"   magit-am-popup)
              (?W "Format patches"  magit-patch-popup)
+             (?X "Resetting"       magit-reset-popup)
              (?y "Show Refs"       magit-show-refs-popup)
              (?z "Stashing"        magit-stash-popup)
              (?! "Running"         magit-run-popup)

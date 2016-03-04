@@ -13,7 +13,7 @@ endif
 unsetenv PYTHONPATH
 setenv EC_DISABLE_VAL 1
 setenv CAMDEXGT_CAD_ROOT ${HOME}/camdex/data
-setenv PYTHONPATH ${HOME}/workspace/pythonlibs/lib/python2.7/site-packages:${HOME}/workspace/frametools/extratools/ctk/tools/oascript/v3.1_oa22.43p028/linux_rhel55_gcc44x_64/python
+setenv PYTHONPATH ${HOME}/workspace/pythonlibs/lib/python2.7/site-packages:${HOME}/workspace/frametools/extratools/ctktools/tools/oascript/v3.1_oa22.43p028/linux_rhel55_gcc44x_64/python
 setenv _JAVA_OPTIONS '-Dswing.defaultlaf=com.sun.java.swing.plaf.gtk.GTKLookAndFeel -Djava.net.preferIPv4Stack=true -Dawt.useSystemAAFontSettings=on -Dswing.aatext=true -Xmx750m'
 setenv http_proxy http://proxy-chain.intel.com:911
 setenv https_proxy http://proxy-chain.intel.com:911
@@ -29,7 +29,7 @@ set oascript_version=v3.1_oa${oa_version}
 set oaxpop_version=v1.2_oasv3.1_oa${oa_version}
 set oaxctk_version=v0.1_oasv3.1_oa${oa_version}
 set platform=linux_rhel55_gcc44x_64
-set ctk_tool_root=${HOME}/workspace/frametools/extratools/ctk/tools
+set ctk_tool_root=${HOME}/workspace/frametools/extratools/ctktools/tools
 set oascript_root=${ctk_tool_root}/oascript/$oascript_version/$platform
 set oaxpop_root=${ctk_tool_root}/oaxpop/$oaxpop_version/$platform
 set oa_libs=${ctk_tool_root}/oa/$oa_version/$platform/lib/linux_rhel50_gcc44x_64/opt

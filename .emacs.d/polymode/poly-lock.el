@@ -16,6 +16,7 @@
 (defvar poly-lock-allow-after-change t)
 (defvar poly-lock-allow-fontification t)
 (defvar poly-lock-fontification-in-progress nil)
+(defvar pm-initialization-in-progress)
 
 (eval-when-compile
   (defmacro with-buffer-prepared-for-poly-lock (&rest body)
@@ -75,14 +76,17 @@ Preserves the `buffer-modified-p' state of the current buffer."
   "The only function in `fontification-functions'.
 This is the entry point called by the display engine. START is
 defined in `fontification-functions'."
-  (if poly-lock-allow-fontification
-      (when (and poly-lock-mode
-                 (not memory-full))
-        (unless (input-pending-p)
-          (let ((end (next-single-property-change
-                      start 'fontified nil (point-max))))
-            (poly-lock-fontify-region start end))))
-    (put-text-property start (point-max) 'fontified t)))
+  (unless pm-initialization-in-progress
+    (if poly-lock-allow-fontification
+        (when (and poly-lock-mode
+                   (not memory-full))
+          (unless (input-pending-p)
+            (let ((end (or (text-property-any start (point-max) 'fontified t)
+                           (point-max))))
+              (when (< start end)
+                (poly-lock-fontify-region start end)))))
+      (with-buffer-prepared-for-poly-lock
+       (put-text-property start (point-max) 'fontified t)))))
 
 (defun poly-lock-after-change (beg end old-len)
   "Mark changed region as not fontified after change.
@@ -120,21 +124,16 @@ Installed on `after-change-functions'."
 (defun poly-lock-fontify-region (beg end &optional verbose)
   "Polymode font-lock fontification function.
 Fontifies chunk-by chunk within the region. Assigned to
-`font-lock-fontify-region-function'.
-
-A fontification mechanism should call
-`font-lock-fontify-region-function' (`jit-lock-function' does
-that). If it does not, the fontification will probably be screwed
-in polymode buffers."
-  (unless poly-lock-fontification-in-progress
+`font-lock-fontify-region-function'."
+  (unless (or poly-lock-fontification-in-progress
+              pm-initialization-in-progress)
     (let* ((font-lock-dont-widen t)
            (pmarker (point-marker))
            (dbuffer (current-buffer))
-           (pm--restrict-widen t)
            ;; Fontification in one buffer can trigger fontification in another
            ;; buffer. Particularly, this happens when new indirect buffers are
-           ;; created and `normal-mode' triggers font-lock in those
-           ;; buffers. We avoid this by dynamically binding
+           ;; created and `normal-mode' triggers font-lock in those buffers. We
+           ;; avoid this by dynamically binding
            ;; `poly-lock-fontification-in-progress' and un-setting
            ;; `fontification-functions' in case re-display suddenly decides to
            ;; fontify something else in other buffer.
@@ -148,40 +147,29 @@ in polymode buffers."
              (with-buffer-prepared-for-poly-lock
               (let ((sbeg (nth 1 *span*))
                     (send (nth 2 *span*)))
-                (when (and font-lock-mode font-lock-keywords (> send sbeg))
-                  (when parse-sexp-lookup-properties
-                    (pm--comment-region 1 sbeg))
-                  (let ((new-beg (max sbeg beg))
-                        (new-end (min send end)))
-
-                    (condition-case-unless-debug err
-                        (if (oref pm/chunkmode :font-lock-narrow)
-                            (save-restriction
-                              ;; fixme: optimization opportunity: Cache
-                              ;; chunk state in text properties. For big
-                              ;; chunks font-lock fontifies it by smaller
-                              ;; segments, thus poly-lock-fontify-region is
-                              ;; called multiple times per chunk and spans
-                              ;; are re-computed each time.
-                              (narrow-to-region sbeg send)
-                              (font-lock-unfontify-region new-beg new-end)
-                              (funcall pm--fontify-region-original new-beg new-end verbose))
-                          (funcall pm--fontify-region-original new-beg new-end verbose))
-                      
-                      ;; Don't change this error string; it is used in
-                      ;; `pm-debug-fontify-last-font-lock-error'
-                      (error (message "(poly-lock-fontify-region %s %s) -> (%s %s %s %s): %s "
-                                      beg end pm--fontify-region-original new-beg new-end verbose
-                                      (error-message-string err))))
-                    ;; even if failed or no font-lock, set to t
-                    (put-text-property new-beg new-end 'fontified t))
+                (when (> send sbeg)
+                  (if  (not (and font-lock-mode font-lock-keywords))
+                      ;; when no font-lock, set to t to avoid repeated calls
+                      ;; from display engine
+                      (put-text-property sbeg send 'fontified t)
+                    (let ((new-beg (max sbeg beg))
+                          (new-end (min send end)))
+                      (condition-case-unless-debug err
+                          (if (oref pm/chunkmode :font-lock-narrow)
+                              (pm-with-narrowed-to-span *span*
+                                (font-lock-unfontify-region new-beg new-end)
+                                (funcall pm--fontify-region-original new-beg new-end verbose))
+                            (font-lock-unfontify-region new-beg new-end)
+                            (funcall pm--fontify-region-original new-beg new-end verbose))
+                        (error (message "(poly-lock-fontify-region %s %s) -> (%s %s %s %s): %s "
+                                        beg end pm--fontify-region-original new-beg new-end verbose
+                                        (error-message-string err))))
+                      ;; even if failed set to t
+                      (put-text-property new-beg new-end 'fontified t))
                   
-                  (when parse-sexp-lookup-properties
-                    (pm--uncomment-region 1 sbeg)))
-                
-                (pm--adjust-chunk-face sbeg send (pm-get-adjust-face pm/chunkmode)))))
-           beg end)))))
-  (current-buffer))
+                    (pm--adjust-chunk-face sbeg send (pm-get-adjust-face pm/chunkmode)))))))
+           beg end))))
+    (current-buffer)))
 
 (defun poly-lock-refontify (&optional beg end)
   "Force refontification of the region BEG..END.
@@ -189,7 +177,8 @@ END is extended to the next chunk separator. This function is
 pleased in `font-lock-flush-function' and
 `font-lock-ensure-function'"
   (when (and poly-lock-allow-fontification
-             (not poly-lock-fontification-in-progress))
+             (not poly-lock-fontification-in-progress)
+             (not pm-initialization-in-progress))
     (with-buffer-prepared-for-poly-lock
      (save-restriction
        (widen)

@@ -167,7 +167,6 @@ text to be displayed in BUFNAME."
            (org-mode)
            (save-excursion
              (funcall insert-content-fn))
-           (setq cursor-type nil)
            (buffer-disable-undo)
            (helm-help-event-loop))
       (setq helm-suspend-update-flag nil)
@@ -185,6 +184,25 @@ text to be displayed in BUFNAME."
     (beginning-of-buffer nil)
     (end-of-buffer nil)))
 
+(defun helm-help-next-line ()
+  (condition-case _err
+      (call-interactively #'next-line)
+    (beginning-of-buffer nil)
+    (end-of-buffer nil)))
+
+(defun helm-help-previous-line ()
+  (condition-case _err
+      (call-interactively #'previous-line)
+    (beginning-of-buffer nil)
+    (end-of-buffer nil)))
+
+(defun helm-help-toggle-mark ()
+  (if (region-active-p)
+      (deactivate-mark)
+      (push-mark nil nil t)))
+
+;; For movement of cursor in help buffer we need to call interactively
+;; commands for impaired people using a synthetizer (#1347).
 (defun helm-help-event-loop ()
   (let ((prompt (propertize
                  "[SPC,C-v,down,next:NextPage  b,M-v,up,prior:PrevPage C-s/r:Isearch q:Quit]"
@@ -196,8 +214,22 @@ text to be displayed in BUFNAME."
                ((?\M-v ?b up prior) (helm-help-scroll-down helm-scroll-amount))
                (?\C-s (isearch-forward))
                (?\C-r (isearch-backward))
-               (?q (cl-return))
-               (t (ignore))))))
+               (?\C-a (call-interactively #'move-beginning-of-line))
+               (?\C-e (call-interactively #'move-end-of-line))
+               (?\C-f (call-interactively #'forward-char))
+               (?\C-b (call-interactively #'backward-char))
+               (?\C-n (helm-help-next-line))
+               (?\C-p (helm-help-previous-line))
+               (?\M-a (call-interactively #'backward-sentence))
+               (?\M-e (call-interactively #'forward-sentence))
+               (?\M-f (call-interactively #'forward-word))
+               (?\M-b (call-interactively #'backward-word))
+               (?\C-  (helm-help-toggle-mark))
+               (?\M-w (copy-region-as-kill
+                       (region-beginning) (region-end))
+                      (deactivate-mark))
+               (?q    (cl-return))
+               (t     (ignore))))))
 
 
 ;;; List processing
@@ -368,6 +400,11 @@ Add spaces at end if needed to reach WIDTH when STR is shorter than WIDTH."
 
 (defun helm-region-active-p ()
   (and transient-mark-mode mark-active (/= (mark) (point))))
+
+(defun helm-quote-whitespace (candidate)
+  "Quote whitespace, if some, in string CANDIDATE."
+  (replace-regexp-in-string " " "\\\\ " candidate))
+
 
 ;;; Symbols routines
 ;;
@@ -405,6 +442,10 @@ Add spaces at end if needed to reach WIDTH when STR is shorter than WIDTH."
   "VAR is symbol or string."
   (find-variable (helm-symbolify var)))
 
+(defun helm-find-face-definition (face)
+  "FACE is symbol or string."
+  (find-face-definition (helm-symbolify face)))
+
 (defun helm-kill-new (candidate &optional replace)
   "CANDIDATE is symbol or string.
 See `kill-new' for argument REPLACE."
@@ -412,9 +453,18 @@ See `kill-new' for argument REPLACE."
 
 ;;; Files routines
 ;;
+(defun helm-file-name-sans-extension (filename)
+  "Same as `file-name-sans-extension' but remove all extensions."
+  (helm-aif (file-name-sans-extension filename)
+      ;; Start searching at index 1 for files beginning with a dot (#1335).
+      (if (string-match "\\." (helm-basename it) 1)
+          (helm-file-name-sans-extension it)
+          it)))
+
 (defun helm-basename (fname &optional ext)
   "Print FNAME  with any  leading directory  components removed.
-If specified, also remove filename extension EXT."
+If specified, also remove filename extension EXT.
+Arg EXT can be specified as a string with or without dot."
   (let ((non-essential t))
     (if (and ext (or (string= (file-name-extension fname) ext)
                      (string= (file-name-extension fname t) ext))
@@ -446,7 +496,6 @@ Useful in dired buffers when there is inserted subdirs."
     file nil nil) nil t))
 
 (defun helm-w32-shell-execute-open-file (file)
-  (interactive "fOpen file:")
   (with-no-warnings
     (w32-shell-execute "open" (helm-w32-prepare-filename file))))
 
@@ -635,11 +684,11 @@ as emacs-25 version of `ansi-color-apply' is partially broken."
         (put-text-property
          start end 'font-lock-face (ansi-color--find-face codes) string))
       (setq colorized-substring (substring string start end)
-	    start (match-end 0))
+            start (match-end 0))
       ;; Eliminate unrecognized ANSI sequences.
       (while (string-match helm--ansi-color-drop-regexp colorized-substring)
-	(setq colorized-substring
-	      (replace-match "" nil nil colorized-substring)))
+        (setq colorized-substring
+              (replace-match "" nil nil colorized-substring)))
       (push colorized-substring result)
       ;; Create new face, by applying escape sequence parameters.
       (setq codes (ansi-color-apply-sequence escape-sequence codes)))
@@ -651,7 +700,7 @@ as emacs-25 version of `ansi-color-apply' is partially broken."
     ;; Save the remainder of the string to the result.
     (if (string-match "\033" string start)
         (push (substring string start (match-beginning 0)) result)
-	(push (substring string start) result))
+        (push (substring string start) result))
     (apply 'concat (nreverse result))))
 
 (provide 'helm-lib)

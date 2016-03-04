@@ -21,7 +21,6 @@
 ;;; Require
 ;;
 ;;
-(require 'helm-aliases)
 (declare-function async-bytecomp-package-mode "ext:async-bytecomp.el")
 (when (require 'async-bytecomp nil t)
   (and (fboundp 'async-bytecomp-package-mode)
@@ -95,7 +94,6 @@
     (define-key map (kbd "C-,")       'helm-calcul-expression)
     (define-key map (kbd "M-x")       'helm-M-x)
     (define-key map (kbd "M-s o")     'helm-occur)
-    (define-key map (kbd "M-g s")     'helm-do-grep)
     (define-key map (kbd "M-g a")     'helm-do-grep-ag)
     (define-key map (kbd "c")         'helm-colors)
     (define-key map (kbd "F")         'helm-select-xfont)
@@ -110,7 +108,7 @@
     (define-key map (kbd "C-x r i")   'helm-register)
     (define-key map (kbd "C-c C-x")   'helm-run-external-command)
     (define-key map (kbd "b")         'helm-resume)
-    (define-key map (kbd "C-c g")       'helm-gid)
+    (define-key map (kbd "M-g i")     'helm-gid)
     (define-key map (kbd "@")         'helm-list-elisp-packages)
     map))
 

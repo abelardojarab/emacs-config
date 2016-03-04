@@ -78,7 +78,10 @@
                                                helm-transform-file-cache))
   (set-slot-value source 'candidate-transformer '(helm-skip-boring-files
                                                   helm-highlight-files
-                                                  helm-w32-pathname-transformer)))
+                                                  helm-w32-pathname-transformer))
+  (set-slot-value source 'help-message 'helm-generic-file-help-message)
+  (set-slot-value source 'keymap helm-generic-files-map))
+
 
 ;; Bookmarks
 (defclass helm-type-bookmark (helm-source) ()
@@ -236,7 +239,10 @@
     ("Describe Function" . (lambda (tm)
                              (describe-function (timer--function tm))))
     ("Find Function" . (lambda (tm)
-                         (find-function (timer--function tm)))))
+                         (helm-aif (timer--function tm)
+                             (if (byte-code-function-p it)
+                                 (message "Can't find anonymous function `%s'" it)
+                                 (find-function it))))))
   "Default actions for type timers."
   :group 'helm-elisp
   :type '(alist :key-type string :value-type function))

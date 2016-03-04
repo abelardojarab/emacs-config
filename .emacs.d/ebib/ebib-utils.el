@@ -6,7 +6,7 @@
 ;; Author: Joost Kremers <joostkremers@fastmail.fm>
 ;; Maintainer: Joost Kremers <joostkremers@fastmail.fm>
 ;; Created: 2014
-;; Version: 2.3
+;; Version: 2.5
 ;; Keywords: text bibtex
 ;; Package-Requires: ((dash "2.5.0") (emacs "24.3"))
 
@@ -110,19 +110,19 @@ when it is first saved.  Note that Ebib uses
                  (const :tag "Do not create backups" nil)))
 
 (defcustom ebib-extra-fields '((BibTeX "crossref"
-                                       "annote"
-                                       "abstract"
-                                       "keywords"
-                                       "file"
-                                       "timestamp"
-                                       "url"
-                                       "doi")
-                               (biblatex "crossref"
-                                         "annotation"
-                                         "abstract"
-                                         "keywords"
-                                         "file"
-                                         "timestamp"))
+                                   "annote"
+                                   "abstract"
+                                   "keywords"
+                                   "file"
+                                   "timestamp"
+                                   "url"
+                                   "doi")
+                           (biblatex "crossref"
+                                     "annotation"
+                                     "abstract"
+                                     "keywords"
+                                     "file"
+                                     "timestamp"))
   "List of the extra fields for BibTeX entries.
 Extra fields are fields that are available for all entry types.
 Depending on the bibliography style, the value of these fields
@@ -140,19 +140,19 @@ the option \"Hidden Fields\" (`ebib--hidden-fields') for details."
                        (repeat :tag "Extra fields" (string :tag "Field")))))
 
 (defcustom ebib-hidden-fields '("addendum" "afterword" "annotator" "bookauthor"
-                                "booksubtitle" "booktitleaddon" "chapter" "commentator"
-                                "edition" "editora" "editorb" "editorc" "eid" "eprint"
-                                "eprintclass" "eprinttype" "eventdate" "eventtitle"
-                                "foreword" "holder" "howpublished" "introduction" "isbn"
-                                "isrn" "issn" "issue" "issuesubtitle" "issuetitle"
-                                "journalsubtitle" "language" "location" "mainsubtitle"
-                                "maintitle" "maintitleaddon" "month" "origlanguage"
-                                "pagetotal" "part" "remark" "subtitle" "timestamp"
-                                "titleaddon" "translator" "urldate" "venue" "version"
-                                "volumes")
+                            "booksubtitle" "booktitleaddon" "chapter" "commentator"
+                            "edition" "editora" "editorb" "editorc" "eid" "eprint"
+                            "eprintclass" "eprinttype" "eventdate" "eventtitle"
+                            "foreword" "holder" "howpublished" "introduction" "isbn"
+                            "isrn" "issn" "issue" "issuesubtitle" "issuetitle"
+                            "journalsubtitle" "language" "location" "mainsubtitle"
+                            "maintitle" "maintitleaddon" "month" "origlanguage"
+                            "pagetotal" "part" "remark" "subtitle" "timestamp"
+                            "titleaddon" "translator" "urldate" "venue" "version"
+                            "volumes")
   "List of fields that are not displayed.
 The fields in this list are not displayed by default.  Since
-BibLaTeX defines a large number of fields, it is not practical to
+Biblatex defines a large number of fields, it is not practical to
 display them all in the entry buffer.  You can make these fields
 temporarily visible with the command `\\<ebib-index-mode-map>\\[ebib-toggle-hidden]'
 or through the menu."
@@ -171,6 +171,7 @@ be displayed when you edit an entry of if you press
 \\[ebib-select-and-popup-entry]."
   :group 'ebib-windows
   :type '(choice (const :tag "Use full frame" full)
+                 (const :tag "Use current window" window)
                  (const :tag "Use right part of the frame" custom)
                  (const :tag "Display only index window" index-only)))
 
@@ -184,8 +185,8 @@ selected when Ebib is started.
 
 This option only takes effect if `ebib-layout' is set to `custom'."
   :group 'ebib-windows
-  :type '(choice (integer :label "Absolute width:")
-                 (float :label "Relative width:" :value 0.3)))
+  :type '(choice (integer :tag "Absolute width")
+                 (float :tag "Relative width" :value 0.3)))
 
 (defcustom ebib-popup-entry-window nil
   "Create a popup window to display the entry window.
@@ -219,12 +220,12 @@ The rest of the frame is used for the entry buffer, unless
   :type 'integer)
 
 (defcustom ebib-index-mode-line '("%e"
-                                  mode-line-front-space
-                                  mode-line-modified
-                                  mode-line-buffer-identification
-                                  (:eval (format "  (%s)" (ebib--get-dialect)))
-                                  (:eval (if (and ebib--cur-db (ebib--cur-entry-key)) "     Entry %l" "     No Entries"))
-                                  (:eval (if (and ebib--cur-db (ebib-db-get-filter ebib--cur-db)) (format "  |%s|"(ebib--filters-pp-filter (ebib-db-get-filter ebib--cur-db))) "")))
+                              mode-line-front-space
+                              mode-line-modified
+                              mode-line-buffer-identification
+                              (:eval (format "  (%s)" (ebib--get-dialect)))
+                              (:eval (if (and ebib--cur-db (ebib--cur-entry-key)) "     Entry %l" "     No Entries"))
+                              (:eval (if (and ebib--cur-db (ebib-db-get-filter ebib--cur-db)) (format "  |%s|"(ebib--filters-pp-filter (ebib-db-get-filter ebib--cur-db))) "")))
   "The mode line for the index window.
 The mode line of the index window shows some Ebib-specific
 information.  You can customize this information if you wish, or
@@ -265,13 +266,13 @@ documentation for details."
   :type 'boolean)
 
 (defcustom ebib-citation-commands '((any
-                                     (("cite" "\\cite%<[%A]%>{%K}")))
-                                    (org-mode
-                                     (("ebib" "[[ebib:%K][%D]]")))
-                                    (markdown-mode
-                                     (("text" "@%K%< [%A]%>")
-                                      ("paren" "[%(%<%A %>@%K%<, %A%>%; )]")
-                                      ("year" "[-@%K%< %A%>]"))))
+                                 (("cite" "\\cite%<[%A]%>{%K}")))
+                                (org-mode
+                                 (("ebib" "[[ebib:%K][%D]]")))
+                                (markdown-mode
+                                 (("text" "@%K%< [%A]%>")
+                                  ("paren" "[%(%<%A %>@%K%<, %A%>%; )]")
+                                  ("year" "[-@%K%< %A%>]"))))
   "A list of format strings to insert a citation into a buffer.
 This option defines the citation commands that you can use when
 inserting a citation key into a buffer (with
@@ -392,7 +393,7 @@ this command extracts the filename."
   :type 'string)
 
 (defcustom ebib-file-associations '(("pdf" . "xpdf")
-                                    ("ps" . "gv"))
+                                ("ps" . "gv"))
   "List of file associations.
 Lists file extensions together with external programs to handle
 files with those extensions.  The program is searched for in
@@ -423,6 +424,45 @@ Note that searching is not recursive: only the files listed here
 are searched, not their subdirectories."
   :group 'ebib
   :type '(repeat :tag "Search directories" (string :tag "Directory")))
+
+(defcustom ebib-name-transform-function 'identity
+  "Function for transforming keys into file names.
+When `ebib-view-file' is called but no filename is listed in the
+file field, the entry key is converted to a filename using this
+function."
+  :group 'ebib
+  :type '(choice (const :tag "Do not apply any function" identity)
+                 (function :tag "Apply function")))
+
+(defcustom ebib-notes-file-extension "org"
+  "Extension used for notes files.
+The extension should be specified without a dot."
+  :group 'ebib
+  :type '(string :tag "Extension"))
+
+(defcustom ebib-notes-file-symbol "[N]"
+  "Symbol (or string) used to indicate the existence of a notes file.
+If there is a notes file for the current entry, this symbol is
+displayed in the mode line of the entry buffer after the entry
+key."
+  :group 'ebib
+  :type '(string :tag "Notes file symbol"))
+
+(defcustom ebib-notes-directory nil
+  "Directory to save notes files to.
+If this is nil, the first directory in `ebib-file-search-dirs' is
+used."
+  :group 'ebib
+  :type '(choice (const :tag "Use first of `ebib-file-search-dirs'")
+                 (directory :tag "Specify directory")))
+
+(defcustom ebib-notes-name-transform-function nil
+  "Function for transforming keys into notes file names.
+If this is nil, the function `ebib-name-transform-function' is
+used instead."
+  :group 'ebib
+  :type '(choice (const :tag "Use `ebib-name-transform-function'" nil)
+                 (function :tag "Apply function")))
 
 (defcustom ebib-local-variable-indentation ""
   "Indentation of the local variable block."
@@ -500,98 +540,98 @@ unset the option entirely."
   :type '(repeat (string :tag "Extension")))
 
 (defcustom ebib-biblatex-inheritances '(("all"
-                                         "all"
-                                         (("ids" . none)
-                                          ("crossref" . none)
-                                          ("xref" . none)
-                                          ("entryset" . none)
-                                          ("entrysubtype" . none)
-                                          ("execute" . none)
-                                          ("label" . none)
-                                          ("options" . none)
-                                          ("presort" . none)
-                                          ("related" . none)
-                                          ("relatedoptions" . none)
-                                          ("relatedstring" . none)
-                                          ("relatedtype" . none)
-                                          ("shorthand" . none)
-                                          ("shorthandintro" . none)
-                                          ("sortkey" . none)))
+                                     "all"
+                                     (("ids" . none)
+                                      ("crossref" . none)
+                                      ("xref" . none)
+                                      ("entryset" . none)
+                                      ("entrysubtype" . none)
+                                      ("execute" . none)
+                                      ("label" . none)
+                                      ("options" . none)
+                                      ("presort" . none)
+                                      ("related" . none)
+                                      ("relatedoptions" . none)
+                                      ("relatedstring" . none)
+                                      ("relatedtype" . none)
+                                      ("shorthand" . none)
+                                      ("shorthandintro" . none)
+                                      ("sortkey" . none)))
 
-                                        ("inbook, bookinbook, suppbook"
-                                         "mvbook, book"
-                                         (("author" . "author")
-                                          ("bookauthor" . "author")))
+                                    ("inbook, bookinbook, suppbook"
+                                     "mvbook, book"
+                                     (("author" . "author")
+                                      ("bookauthor" . "author")))
 
-                                        ("book, inbook, bookinbook, suppbook"
-                                         "mvbook"
-                                         (("maintitle" . "title")
-                                          ("mainsubtitle" . "subtitle")
-                                          ("maintitleaddon" . "titleaddon")
-                                          ("shorttitle" . none)
-                                          ("sorttitle" . none)
-                                          ("indextitle" . none)
-                                          ("indexsorttitle" . none)))
+                                    ("book, inbook, bookinbook, suppbook"
+                                     "mvbook"
+                                     (("maintitle" . "title")
+                                      ("mainsubtitle" . "subtitle")
+                                      ("maintitleaddon" . "titleaddon")
+                                      ("shorttitle" . none)
+                                      ("sorttitle" . none)
+                                      ("indextitle" . none)
+                                      ("indexsorttitle" . none)))
 
-                                        ("collection, reference, incollection, inreference, suppcollection"
-                                         "mvcollection, mvreference"
-                                         (("maintitle" . "title")
-                                          ("mainsubtitle" . "subtitle")
-                                          ("maintitleaddon" . "titleaddon")
-                                          ("shorttitle" . none)
-                                          ("sorttitle" . none)
-                                          ("indextitle" . none)
-                                          ("indexsorttitle" . none)))
+                                    ("collection, reference, incollection, inreference, suppcollection"
+                                     "mvcollection, mvreference"
+                                     (("maintitle" . "title")
+                                      ("mainsubtitle" . "subtitle")
+                                      ("maintitleaddon" . "titleaddon")
+                                      ("shorttitle" . none)
+                                      ("sorttitle" . none)
+                                      ("indextitle" . none)
+                                      ("indexsorttitle" . none)))
 
-                                        ("proceedings, inproceedings"
-                                         "mvproceedings"
-                                         (("maintitle" . "title")
-                                          ("mainsubtitle" . "subtitle")
-                                          ("maintitleaddon" . "titleaddon")
-                                          ("shorttitle" . none)
-                                          ("sorttitle" . none)
-                                          ("indextitle" . none)
-                                          ("indexsorttitle" . none)))
+                                    ("proceedings, inproceedings"
+                                     "mvproceedings"
+                                     (("maintitle" . "title")
+                                      ("mainsubtitle" . "subtitle")
+                                      ("maintitleaddon" . "titleaddon")
+                                      ("shorttitle" . none)
+                                      ("sorttitle" . none)
+                                      ("indextitle" . none)
+                                      ("indexsorttitle" . none)))
 
-                                        ("inbook, bookinbook, suppbook"
-                                         "book"
-                                         (("booktitle" . "title")
-                                          ("booksubtitle" . "subtitle")
-                                          ("booktitleaddon" . "titleaddon")
-                                          ("shorttitle" . none)
-                                          ("sorttitle" . none)
-                                          ("indextitle" . none)
-                                          ("indexsorttitle" . none)))
+                                    ("inbook, bookinbook, suppbook"
+                                     "book"
+                                     (("booktitle" . "title")
+                                      ("booksubtitle" . "subtitle")
+                                      ("booktitleaddon" . "titleaddon")
+                                      ("shorttitle" . none)
+                                      ("sorttitle" . none)
+                                      ("indextitle" . none)
+                                      ("indexsorttitle" . none)))
 
-                                        ("incollection, inreference, suppcollection"
-                                         "collection, reference"
-                                         (("booktitle" . "title")
-                                          ("booksubtitle" . "subtitle")
-                                          ("booktitleaddon" . "titleaddon")
-                                          ("shorttitle" . none)
-                                          ("sorttitle" . none)
-                                          ("indextitle" . none)
-                                          ("indexsorttitle" . none)))
+                                    ("incollection, inreference, suppcollection"
+                                     "collection, reference"
+                                     (("booktitle" . "title")
+                                      ("booksubtitle" . "subtitle")
+                                      ("booktitleaddon" . "titleaddon")
+                                      ("shorttitle" . none)
+                                      ("sorttitle" . none)
+                                      ("indextitle" . none)
+                                      ("indexsorttitle" . none)))
 
-                                        ("inproceedings"
-                                         "proceedings"
-                                         (("booktitle" . "title")
-                                          ("booksubtitle" . "subtitle")
-                                          ("booktitleaddon" . "titleaddon")
-                                          ("shorttitle" . none)
-                                          ("sorttitle" . none)
-                                          ("indextitle" . none)
-                                          ("indexsorttitle" . none)))
-                                        ("article, suppperiodical"
-                                         "periodical"
-                                         (("title" . "journaltitle")
-                                          ("subtitle" . "journalsubtitle")
-                                          ("shorttitle" . none)
-                                          ("sorttitle" . none)
-                                          ("indextitle" . none)
-                                          ("indexsorttitle" . none))))
+                                    ("inproceedings"
+                                     "proceedings"
+                                     (("booktitle" . "title")
+                                      ("booksubtitle" . "subtitle")
+                                      ("booktitleaddon" . "titleaddon")
+                                      ("shorttitle" . none)
+                                      ("sorttitle" . none)
+                                      ("indextitle" . none)
+                                      ("indexsorttitle" . none)))
+                                    ("article, suppperiodical"
+                                     "periodical"
+                                     (("title" . "journaltitle")
+                                      ("subtitle" . "journalsubtitle")
+                                      ("shorttitle" . none)
+                                      ("sorttitle" . none)
+                                      ("indextitle" . none)
+                                      ("indexsorttitle" . none))))
   "Inheritance scheme for cross-referencing.
-This option allows you to define inheritances for BibLaTeX.
+This option allows you to define inheritances for Biblatex.
 Inheritances are specified for pairs of target and source entry
 type, where the target is the cross-referencing entry and the
 source the cross-referenced entry.  For each pair, specify the
@@ -607,7 +647,7 @@ combination, the field inherits from the same-name field in the
 cross-referenced entry.  If no inheritance should take place, set
 the source field to \"No inheritance\".
 
-Note that this option is only relevant for BibLaTeX.  If the
+Note that this option is only relevant for Biblatex.  If the
 BibTeX dialect is set to `BibTeX', this option is ignored."
   :group 'ebib
   :type '(repeat (list (string :tag "Target entry type(s)")
@@ -619,10 +659,10 @@ BibTeX dialect is set to `BibTeX', this option is ignored."
 
 (defcustom ebib-hide-cursor t
   "Hide the cursor in the Ebib buffers.
-Normally, the cursor is hidden in Ebib buffers.  Instead, the
-highlight indicates which entry, field or string is active.  By
-unsetting this option, you can make the cursor visible.  Note that
-changing this option does not take effect until you restart
+Normally, the cursor is hidden in Ebib buffers. with the
+highlight indicating which entry, field or string is active.  By
+unsetting this option, you can make the cursor visible.  Note
+that changing this option does not take effect until you restart
 Ebib (not Emacs)."
   :group 'ebib
   :type '(choice (const :tag "Hide the cursor" t)
@@ -650,10 +690,12 @@ Ebib (not Emacs)."
   "Face for field names."
   :group 'ebib-faces)
 
-(defface ebib-nonpermanent-keyword-face '((t (:inherit error)))
-  "Face for keywords that have not been made permanent.
-Keywords can be made permanent by storing them in
-`ebib-keywords-list' or by saving them in a file."
+(defface ebib-warning-face '((t (:inherit error)))
+  "Face for marking potential problems with the database.
+Currently, the following problems are marked:
+
+* Crossreferences to entry keys that do not exist.
+* Keywords that have not been saved."
   :group 'ebib-faces)
 
 ;; generic for all databases
@@ -661,7 +703,7 @@ Keywords can be made permanent by storing them in
 ;; constants and variables that are set only once
 (defvar ebib--initialized nil "T if Ebib has been initialized.")
 
-;; Entry type and field aliases defined by BibLaTeX.
+;; Entry type and field aliases defined by Biblatex.
 (defconst ebib--field-aliases '(("location" . "address")
                                 ("annotation" . "annote")
                                 ("eprinttype" . "archiveprefix")
@@ -670,7 +712,7 @@ Keywords can be made permanent by storing them in
                                 ("file" . "pdf")
                                 ("eprintclass" . "primaryclass")
                                 ("institution" . "school"))
-  "List of field aliases for BibLaTeX.")
+  "List of field aliases for Biblatex.")
 
 (defconst ebib--type-aliases '(("Conference" . "InProceedings")
                                ("Electronic" . "Online")
@@ -678,7 +720,7 @@ Keywords can be made permanent by storing them in
                                ("PhDThesis" . "Thesis")
                                ("TechReport" . "Report")
                                ("WWW" . "Online"))
-  "List of entry type aliases for BibLaTeX.")
+  "List of entry type aliases for Biblatex.")
 
 (defvar ebib--buffer-alist nil "Alist of Ebib buffers.")
 (defvar ebib--index-overlay nil "Overlay to mark the current entry.")
@@ -764,13 +806,14 @@ Restore the dedicated status after executing BODY."
            (set-window-dedicated-p (selected-window) t)))))
 
 (defmacro ebib--ifstring (bindvar then &rest else)
-  "Bind the string in BINDVAR and execute THEN only if is nonempty.
+  "Create a string and test its value.
 
-Format: (ebib--ifstring (var value) then-form [else-forms])
-
-VAR is bound to VALUE, which is evaluated.  If VAR is a nonempty
-string, THEN-FORM is executed.  If VAR is either \"\" or nil, the
-ELSE-FORMS are executed.  Return the value of THEN or of ELSE."
+BINDVAR should be of the form (<var> <value>), where <var> is a
+variable name (unquoted symbol) which will be let-bound to the
+result of evaluating <value>.  If VALUE is a nonempty string,
+THEN (a single sexpr) is executed and its return value returned.
+If VALUE is either \"\" or nil, the forms in ELSE are executed
+and the return value of its last form is returned."
   (declare (indent 2))
   `(let ,(list bindvar)
      (if (not (or (null ,(car bindvar))
@@ -902,14 +945,6 @@ is the new value of point."
   (beginning-of-line)
   (point))
 
-(defvar ebib--info-flag nil "Non-nil means Info was called from Ebib.")
-
-(defadvice Info-exit (after ebib--info-exit activate)
-  "Quit info and return to Ebib, if Info was called from there."
-  (when ebib--info-flag
-    (setq ebib--info-flag nil)
-    (ebib)))
-
 (defun ebib--read-file-to-list (filename)
   "Return the contents of FILENAME as a list of lines."
   (if (and filename                               ; protect against 'filename' being 'nil'
@@ -952,6 +987,12 @@ filename suffix."
                             file
                           (concat file (car ebib-bibtex-extensions))))))
 
+(defun ebib--get-file-modtime (file)
+  "Return the modification time of FILE.
+If FILE cannot be read, return nil."
+  (if (file-readable-p file)
+      (nth 5 (file-attributes file))))
+
 (defun ebib--ensure-extension (filename ext)
   "Ensure FILENAME has an extension.
 Return FILENAME if it alread has an extension, otherwise return
@@ -961,6 +1002,14 @@ dot."
       filename
     (concat filename ext)))
 
+(defun ebib--create-file-name-from-key (key ext)
+  "Create a filename from KEY and EXT.
+KEY is modified as per `ebib-name-transform-function'.  EXT is
+the extension and should not contain a dot."
+  (concat (funcall ebib-name-transform-function key)
+          "."
+          ext))
+
 (defun ebib--remove-from-string (string remove)
   "Return a copy of STRING with all the occurrences of REMOVE taken out.
 REMOVE can be a regular expression."
@@ -969,7 +1018,7 @@ REMOVE can be a regular expression."
 (defun ebib--multiline-p (string)
   "Return non-nil if STRING is multiline."
   (if (stringp string)
-      (string-match "\n" string)))
+      (string-match-p "\n" string)))
 
 (defun ebib--first-line (string)
   "Return the first line of a multiline STRING."
@@ -1034,7 +1083,7 @@ block, the return value is nil."
   (let ((vars (split-string str "[\n]+" t "[ \t\r]+")))
     (when (and (string= (car vars) "Local Variables:")
                (string= (-last-item vars) "End:"))
-      (--map (split-string it "[: ]" t) (-slice vars 1 -1)))))
+      (--map (split-string it ": " t "[ \t]+") (-slice vars 1 -1)))))
 
 (defun ebib--local-vars-add-dialect (vars dialect &optional overwrite)
   "Expand local variable block VARS with DIALECT.
@@ -1066,43 +1115,6 @@ argument to a function or not."
   (when (numberp num)
     num))
 
-;; TODO The exporting macros and functions should be rewritten...
-
-(defmacro ebib--export-to-db (num message copy-fn)
-  "Export data to another database.
-NUM is the number of the database to which the data is to be copied.
-
-MESSAGE is a string displayed in the echo area if the export was
-succesful.  It must contain a %d directive, which is used to
-display the database number to which the entry was exported.
-
-COPY-FN is the function that actually copies the relevant
-data.  It must take as argument the database to which the data is
-to be copied.  COPY-FN must return T if the copying was
-successful, and NIL otherwise."
-  (let ((goal-db (make-symbol "goal-db")))
-    `(let ((,goal-db (nth (1- ,num) ebib--databases)))
-       (if (not ,goal-db)
-           (error "Database %d does not exist" ,num)
-         (when (funcall ,copy-fn ,goal-db)
-           (ebib--set-modified t ,goal-db)
-           (message ,message ,num))))))
-
-(defmacro ebib--export-to-file (prompt-string insert-fn)
-  "Export data to a file.
-PROMPT-STRING is the string that is used to ask for the filename
-to export to.  INSERT-FN must insert the data to be exported into
-the current buffer: it is called within a `with-temp-buffer',
-whose contents is appended to the file the user enters."
-  (let ((filename (make-symbol "filename")))
-    `(let ((insert-default-directory (not ebib--export-filename)))
-       (ebib--ifstring (,filename (read-file-name
-                                   ,prompt-string "~/" nil nil ebib--export-filename))
-           (with-temp-buffer
-             (funcall ,insert-fn)
-             (append-to-file (point-min) (point-max) ,filename)
-             (setq ebib--export-filename ,filename))))))
-
 (defun ebib--list-fields (entry-type type dialect)
   "List the fields of ENTRY-TYPE.
 TYPE specifies which fields to list.  It is a symbol and can be
@@ -1115,7 +1127,7 @@ listed in `bibtex-dialect-list' or NIL, in which case the value
 of `ebib-bibtex-dialect' is used.
 
 If DIALECT is `biblatex' and ENTRY-TYPE is a type alias as
-defined by BibLaTeX, return the fields of the entry type for
+defined by Biblatex, return the fields of the entry type for
 which ENTRY-TYPE is an alias."
   (or dialect (setq dialect ebib-bibtex-dialect))
   (if (eq dialect 'biblatex)
@@ -1175,7 +1187,7 @@ Possible values for DIALECT are those listed in
         (mapc (lambda (entry)
                 (setq fields (-union fields (ebib--list-fields (car entry) 'all dialect))))
               (bibtex-entry-alist dialect))
-        (add-to-list 'ebib--unique-field-alist (cons dialect fields))
+        (push (cons dialect fields) ebib--unique-field-alist)
         fields)))
 
 (defun ebib--erase-buffer (buffer)

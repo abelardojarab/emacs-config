@@ -150,11 +150,6 @@ If set to nil `doc-view-mode' will be used instead of an external command."
   :group 'helm-grep
   :type 'string)
 
-(defcustom helm-do-grep-preselect-candidate nil
-  "When non--nil the file name of current buffer will be selected."
-  :group 'helm-grep
-  :type 'boolean)
-
 (defcustom helm-grep-preferred-ext nil
   "This file extension will be preselected for grep."
   :group 'helm-grep
@@ -451,7 +446,7 @@ It is intended to use as a let-bound variable, DON'T set this globaly.")
                          (not (with-helm-buffer helm-grep-use-zgrep)))
                     (with-helm-buffer
                       (insert (concat "* Exit with code 1, no result found,"
-                                      " Command line was:\n\n "
+                                      " command line was:\n\n "
                                       (propertize helm-grep-last-cmd-line
                                                   'face 'helm-grep-cmd-line)))
                       (setq mode-line-format
@@ -481,10 +476,7 @@ It is intended to use as a let-bound variable, DON'T set this globaly.")
                                           (if helm-grep-in-recurse
                                               (helm-grep-command t)
                                             (helm-grep-command))))
-                                       (max (1- (count-lines
-                                                 (point-min)
-                                                 (point-max)))
-                                            0))
+                                       (helm-get-candidate-number))
                                       'face 'helm-grep-finish))))
                       (force-mode-line-update)))
                    ;; Catch error output in log.
@@ -506,7 +498,7 @@ It is intended to use as a let-bound variable, DON'T set this globaly.")
 ;;
 ;;
 (defun helm-grep-action (candidate &optional where mark)
-  "Define a default action for `helm-do-grep' on CANDIDATE.
+  "Define a default action for `helm-do-grep-1' on CANDIDATE.
 WHERE can be one of other-window, elscreen, other-frame."
   (let* ((split        (helm-grep-split-line candidate))
          (lineno       (string-to-number (nth 1 split)))
@@ -551,7 +543,7 @@ WHERE can be one of other-window, elscreen, other-frame."
                       helm-grep-history))))))
 
 (defun helm-grep-persistent-action (candidate)
-  "Persistent action for `helm-do-grep'.
+  "Persistent action for `helm-do-grep-1'.
 With a prefix arg record CANDIDATE in `mark-ring'."
   (if current-prefix-arg
       (helm-grep-action candidate nil 'mark)
@@ -605,7 +597,8 @@ If N is positive go forward otherwise go backward."
            (helm-aif (next-single-property-change (point-at-bol) 'help-echo)
                (goto-char it)
              (forward-line 1))
-           (funcall mark-maybe)))))
+           (funcall mark-maybe)))
+    (helm-log-run-hook 'helm-move-selection-after-hook)))
 
 ;;;###autoload
 (defun helm-goto-precedent-file ()
@@ -614,6 +607,7 @@ If N is positive go forward otherwise go backward."
   (with-helm-alive-p
     (with-helm-window
       (helm-goto-next-or-prec-file -1))))
+(put 'helm-goto-precedent-file 'helm-only t)
 
 ;;;###autoload
 (defun helm-goto-next-file ()
@@ -627,24 +621,28 @@ If N is positive go forward otherwise go backward."
   (interactive)
   (with-helm-alive-p
     (helm-exit-and-execute-action 'helm-grep-action)))
+(put 'helm-grep-run-default-action 'helm-only t)
 
 (defun helm-grep-run-other-window-action ()
   "Run grep goto other window action from `helm-do-grep-1'."
   (interactive)
   (with-helm-alive-p
     (helm-exit-and-execute-action 'helm-grep-other-window)))
+(put 'helm-grep-run-other-window-action 'helm-only t)
 
 (defun helm-grep-run-other-frame-action ()
   "Run grep goto other frame action from `helm-do-grep-1'."
   (interactive)
   (with-helm-alive-p
     (helm-exit-and-execute-action 'helm-grep-other-frame)))
+(put 'helm-grep-run-other-frame-action 'helm-only t)
 
 (defun helm-grep-run-save-buffer ()
   "Run grep save results action from `helm-do-grep-1'."
   (interactive)
   (with-helm-alive-p
     (helm-exit-and-execute-action 'helm-grep-save-results)))
+(put 'helm-grep-run-save-buffer 'helm-only t)
 
 
 ;;; helm-grep-mode
@@ -682,7 +680,6 @@ If N is positive go forward otherwise go backward."
       (helm-grep-mode) (pop-to-buffer buf))
     (message "Helm Grep Results saved in `%s' buffer" buf)))
 
-;;;###autoload
 (define-derived-mode helm-grep-mode
     special-mode "helm-grep"
     "Major mode to provide actions in helm grep saved buffer.
@@ -1018,7 +1015,7 @@ in recurse, and ignoring EXTS, search being made on
         "")))
 
 (defun helm-grep-filter-one-by-one (candidate)
-  "`filter-one-by-one' transformer function for `helm-do-grep'."
+  "`filter-one-by-one' transformer function for `helm-do-grep-1'."
   (let ((helm-grep-default-directory-fn
          (or helm-grep-default-directory-fn
              (lambda () (or helm-ff-default-directory
@@ -1237,10 +1234,7 @@ You can use safely \"--color\" (default)."
                              (format
                               "[%s process finished - (%s results)] "
                               (upcase (helm-grep--ag-command))
-                              (max (1- (count-lines
-                                        (point-min)
-                                        (point-max)))
-                                   0))
+                              (helm-get-candidate-number))
                              'face 'helm-grep-finish))))
              (force-mode-line-update))))))))
 
@@ -1271,13 +1265,14 @@ You can use safely \"--color\" (default)."
                    "Find file other window" 'helm-grep-other-window)))
   (helm :sources 'helm-source-grep-ag
         :keymap helm-grep-map
+        :truncate-lines helm-grep-truncate-lines
         :buffer (format "*helm %s*" (helm-grep--ag-command))))
 
 ;;; Git grep
 ;;
 ;;
 (defcustom helm-grep-git-grep-command
-  "git grep -n%cH --color=always --exclude-standard --no-index --full-name -e %p %f"
+  "git grep -n%cH --color=always --exclude-standard --no-index --full-name -e %p -- %f"
   "The git grep default command line.
 The option \"--color=always\" can be used safely.
 The color of matched items can be customized in your .gitconfig
@@ -1291,7 +1286,7 @@ You have also to enable this in global \".gitconfig\" with
   :group 'helm-grep
   :type 'string)
 
-(defun helm-grep-git-1 (directory)
+(defun helm-grep-git-1 (directory &optional all)
   (require 'vc)
   (let* ((helm-grep-default-command helm-grep-git-grep-command)
          helm-grep-default-recurse-command
@@ -1300,84 +1295,24 @@ You have also to enable this in global \".gitconfig\" with
          (helm-grep-default-directory-fn (lambda ()
                                            (vc-find-root directory ".git")))
          (helm-ff-default-directory (funcall helm-grep-default-directory-fn)))
-    (helm-do-grep-1 '("--"))))
+    (cl-assert helm-ff-default-directory nil "Not inside a Git repository")
+    (helm-do-grep-1 (if all '("") `(,(expand-file-name directory))))))
 
 
 ;;;###autoload
 (defun helm-do-grep-ag ()
   "Preconfigured helm for grepping with AG in `default-directory'."
   (interactive)
+  (require 'helm-files)
   (helm-grep-ag-1 default-directory))
 
 ;;;###autoload
-(defun helm-grep-do-git-grep ()
-  "Preconfigured helm for git-grepping `default-directory'."
-  (interactive)
-  (helm-grep-git-1 default-directory))
-
-;;;###autoload
-(defun helm-do-grep ()
-  "Preconfigured helm for grep.
-Contrarily to Emacs `grep', no default directory is given, but
-the full path of candidates in ONLY.
-That allow to grep different files not only in `default-directory' but anywhere
-by marking them (C-<SPACE>). If one or more directory is selected
-grep will search in all files of these directories.
-You can also use wildcard in the base name of candidate.
-If a prefix arg is given use the -r option of grep (recurse).
-The prefix arg can be passed before or after start file selection.
-See also `helm-do-grep-1'."
-  (interactive)
-  (require 'helm-mode)
-  (let* ((preselection (or (dired-get-filename nil t)
-                           (buffer-file-name (current-buffer))))
-         (only    (helm-read-file-name
-                   "Search in file(s): "
-                   :marked-candidates t
-                   :preselect (and helm-do-grep-preselect-candidate
-                                   (if helm-ff-transformer-show-only-basename
-                                       (helm-basename preselection)
-                                     preselection))))
-         (prefarg (or current-prefix-arg helm-current-prefix-arg)))
-    (helm-do-grep-1 only prefarg)))
-
-;;;###autoload
-(defun helm-do-zgrep ()
-  "Preconfigured helm for zgrep."
-  (interactive)
-  (require 'helm-mode)
-  (let* ((prefarg (or current-prefix-arg helm-current-prefix-arg))
-         (preselection (or (dired-get-filename nil t)
-                           (buffer-file-name (current-buffer))))
-         (ls (helm-read-file-name
-              "Search in file(s): "
-              :marked-candidates t
-              :preselect (and helm-do-grep-preselect-candidate
-                              (if helm-ff-transformer-show-only-basename
-                                  (helm-basename preselection)
-                                preselection)))))
-    (helm-ff-zgrep-1 ls prefarg)))
-
-;;;###autoload
-(defun helm-do-pdfgrep ()
-  "Preconfigured helm for pdfgrep."
-  (interactive)
-  (require 'helm-mode)
-  (let* ((preselection (or (dired-get-filename nil t)
-                           (buffer-file-name (current-buffer))))
-         (only (helm-read-file-name
-                "Search in file(s): "
-                :marked-candidates t
-                :test (lambda (file)
-                          (or (string= (file-name-extension file) "pdf")
-                              (string= (file-name-extension file) "PDF")
-                              (file-directory-p file)))
-                :preselect (and helm-do-grep-preselect-candidate
-                                (if helm-ff-transformer-show-only-basename
-                                    (helm-basename preselection)
-                                  preselection))))
-         (helm-grep-default-function 'helm-pdfgrep-init))
-    (helm-do-pdfgrep-1 only)))
+(defun helm-grep-do-git-grep (arg)
+  "Preconfigured helm for git-grepping `default-directory'.
+With a prefix arg ARG git-grep the whole repository."
+  (interactive "P")
+  (require 'helm-files)
+  (helm-grep-git-1 default-directory arg))
 
 
 (provide 'helm-grep)

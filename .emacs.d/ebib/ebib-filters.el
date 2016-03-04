@@ -1,4 +1,4 @@
-;;; ebib-filters.el --- Part of Ebib, a BibTeX database manager
+;;; ebib-filters.el --- Part of Ebib, a BibTeX database manager  -*- lexical-binding: nil -*-
 
 ;; Copyright (c) 2003-2014 Joost Kremers
 ;; All rights reserved.
@@ -6,7 +6,7 @@
 ;; Author: Joost Kremers <joostkremers@fastmail.fm>
 ;; Maintainer: Joost Kremers <joostkremers@fastmail.fm>
 ;; Created: 2014
-;; Version: 2.3
+;; Version: 2.5
 ;; Keywords: text bibtex
 
 ;; Redistribution and use in source and binary forms, with or without
@@ -36,6 +36,9 @@
 
 ;; This file is part of Ebib, a BibTeX database manager for Emacs. It
 ;; contains the filter code.
+;;
+;; Note: this file must be compiled with `lexical-binding' set to nil, due to
+;; the local macro definition `contains' in `ebib--filters-run-filter'.
 
 ;;; Code:
 
@@ -138,7 +141,7 @@ a filter.  Return the filter as a list (NAME FILTER)."
     (if filter
         (let ((name (read-from-minibuffer "Enter filter name: ")))
           (when (or (not (ebib--filters-exists-p name))
-                    (y-or-n-p (format "Filter `%s' already exists. Overwrite " name)))
+                    (y-or-n-p (format "Filter `%s' already exists.  Overwrite? " name)))
             (ebib--filters-add-filter filter name 'overwrite)
             (setq ebib--filters-modified t)
             (message "Filter stored.")))
@@ -233,13 +236,15 @@ return value is also nil."
                             (format "(%s contains \"%s\")" (pp-filter (cl-second f)) (pp-filter (cl-third f))))
                            ((member op '(and or))
                             (format "(%s %s %s)" (pp-filter (cl-second f)) op (pp-filter (cl-third f)))))))
-                       (t (if (string= f "any") 
+                       (t (if (string= f "any")
                               "any field"
                             f)))))
         (let ((pretty-filter (pp-filter filter)))
-          (if (string-match "\\`(\\(.*\\))\\'" pretty-filter) ; remove the outer parentheses
-              (match-string 1 pretty-filter)
-            pretty-filter))))))
+          (if (not pretty-filter)
+              "Filtered"
+            (if (string-match "\\`(\\(.*\\))\\'" pretty-filter) ; remove the outer parentheses
+                (match-string 1 pretty-filter)
+              pretty-filter)))))))
 
 (defun ebib--filters-load-file (file &optional overwrite)
   "Load filters from FILE.
@@ -297,7 +302,7 @@ unless OVERWRITE is non-NIL."
       (if overwrite
           (setcdr (ebib--filters-get-filter name) (list filter))
         (ebib--log 'message "Filter name conflict: \"%s\".\n" name))
-    (add-to-list 'ebib--filters-alist (list name filter) 'append)))
+    (push (list name filter) ebib--filters-alist)))
 
 (defun ebib--filters-get-filter (name &optional noerror)
   "Return the filter record corresponding to NAME.
@@ -310,6 +315,20 @@ filter named NAME, raise an error, unless NOERROR is non-NIL."
 (defun ebib--filters-exists-p (name)
   "Return non-NIL if a filter with NAME already exists."
   (assoc-string name ebib--filters-alist ebib-filters-ignore-case))
+
+;; Special filters
+
+(defun ebib--newer-than (date)
+  "Function for use in filters.
+Return t if the entry being tested is newer than DATE.  DATE must
+be a list of the format returned by `current-time' and is
+compared to the timestamp of the entry being tested.  If the
+entry has no timestamp, or a timestamp that cannot be converted
+into a date representation, return nil."
+  (let ((timestamp (cdr (assoc-string "timestamp" entry))))
+    (when (and timestamp
+               (setq timestamp (ignore-errors (date-to-time timestamp))))
+      (time-less-p date timestamp))))
 
 (provide 'ebib-filters)
 
