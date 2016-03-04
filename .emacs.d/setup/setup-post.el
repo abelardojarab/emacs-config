@@ -70,5 +70,8 @@
 (setq use-file-dialog t)
 (setq use-dialog-box t)
 
+;; Kill timers
+(cancel-function-timers 'dframe-timer-fn)
+
 (provide 'setup-post)
 ;;; setup-post.el ends here

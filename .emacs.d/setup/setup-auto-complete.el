@@ -121,8 +121,9 @@
 ;; Let's have snippets and TAGS in the auto-complete dropdown
 (defun ac-common-setup ()
   (setq ac-sources (append ac-sources '(ac-source-yasnippet
-                                        ac-source-imenu
-                                        ac-source-abbrev
+                                        ;; ac-source-imenu
+                                        ;; ac-source-abbrev
+                                        ac-source-symbols
                                         ac-source-words-in-same-mode-buffers))))
 (add-hook 'auto-complete-mode-hook 'ac-common-setup)
 

@@ -299,7 +299,7 @@ Defaults to `error'."
 (require 'desktop)
 (setq-default desktop-missing-file-warning nil)
 (if (boundp 'desktop-auto-save-timeout)
-    (setq desktop-auto-save-timeout (* 60 60)))
+    (setq desktop-auto-save-timeout (* 1 60)))
 (setq desktop-dirname             "~/.emacs.cache/"
       desktop-base-file-name      "emacs.desktop"
       desktop-base-lock-name      "lock"
