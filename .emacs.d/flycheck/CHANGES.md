@@ -40,6 +40,8 @@ now for questions and discussions about development. [GH-820]
     cppcheck [GH-862]
   * Add `flycheck-mode-line-prefix` to customise the prefix of Flycheck’s mode
     line lighter [GH-879] [GH-880]
+  * Add `flycheck-go-vet-shadow` to check for shadowed variables with `go vet`
+    [GH-765] [GH-897]
 
 * Improvements:
 
@@ -49,6 +51,7 @@ now for questions and discussions about development. [GH-820]
     ellipsis [GH-828]
   * Indicate disabled checkers in verification buffers [GH-749]
   * Do not enable Flycheck Mode in `fundamental-mode` buffers [GH-883]
+  * Write `go test` output to a temporary files [GH-887]
 
 * Bug fixes:
 
@@ -58,7 +61,7 @@ now for questions and discussions about development. [GH-820]
   * Don’t change current buffer when closing the error message buffer [GH-648]
   * Never display error message buffer in current window [GH-822]
   * Work around a caching issue in Rubocop [GH-844]
-  * Fix checkdoc failure with some Emacs Lisp syntax [GH-833] [GH-845]
+  * Fix checkdoc failure with some Emacs Lisp syntax [GH-833] [GH-845] [GH-898]
   * Correctly parse Haskell module name with exports right after the module name
     [GH-848]
   * Don’t hang when sending buffers to node.js processes on Windows [GH-794]

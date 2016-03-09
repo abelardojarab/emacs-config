@@ -3307,9 +3307,9 @@ See https://github.com/flycheck/flycheck/issues/531 and Emacs bug #19206"))
         :checker emacs-lisp )))
 
 (flycheck-ert-def-checker-test (emacs-lisp emacs-lisp-checkdoc) emacs-lisp
-                               right-syntax-table
+                               uses-right-major-mode
   (flycheck-ert-should-syntax-check
-   "language/emacs-lisp/checkdoc-syntax-table-regression.el" 'emacs-lisp-mode
+   "language/emacs-lisp/checkdoc-elisp-mode-regression.el" 'emacs-lisp-mode
    '(11 nil warning "All variables and subroutines might as well have a documentation string"
         :checker emacs-lisp-checkdoc)))
 
@@ -3524,12 +3524,14 @@ See https://github.com/flycheck/flycheck/issues/531 and Emacs bug #19206"))
        :checker handlebars)))
 
 (flycheck-ert-def-checker-test haskell-stack-ghc haskell syntax-error
+  (skip-unless (file-exists-p (getenv "HOME")))
   (let ((flycheck-disabled-checkers '(haskell-ghc)))
     (flycheck-ert-should-syntax-check
      "language/haskell/SyntaxError.hs" 'haskell-mode
      '(3 1 error "parse error on input ‘module’" :checker haskell-stack-ghc))))
 
 (flycheck-ert-def-checker-test haskell-stack-ghc haskell type-error
+  (skip-unless (file-exists-p (getenv "HOME")))
   (let ((flycheck-disabled-checkers '(haskell-ghc)))
     (flycheck-ert-should-syntax-check
      "language/haskell/Error.hs" 'haskell-mode
@@ -3540,6 +3542,7 @@ In the first argument of ‘putStrLn’, namely ‘True’
 In the expression: putStrLn True" :checker haskell-stack-ghc))))
 
 (flycheck-ert-def-checker-test (haskell-stack-ghc haskell-hlint) haskell literate
+  (skip-unless (file-exists-p (getenv "HOME")))
   (let ((flycheck-disabled-checkers '(haskell-ghc)))
     (flycheck-ert-should-syntax-check
      "language/haskell/Literate.lhs" 'literate-haskell-mode
@@ -3548,6 +3551,7 @@ In the expression: putStrLn True" :checker haskell-stack-ghc))))
 
 (flycheck-ert-def-checker-test (haskell-stack-ghc haskell-hlint) haskell
                                complete-chain
+  (skip-unless (file-exists-p (getenv "HOME")))
   (let ((flycheck-disabled-checkers '(haskell-ghc)))
     (flycheck-ert-should-syntax-check
      "language/haskell/Warnings.hs" 'haskell-mode
