@@ -6,10 +6,10 @@
 ;; Created: 03 October 2001. (as utility functions in my `.emacs' file.)
 ;;          14 March   2010. (re-written as library `volatile-highlights.el')
 ;; Keywords: emulations convenience wp
-;; Revision: $Id: 33de1bedfdf66672608de0f2b6c88655e15a5cd7 $
+;; Revision: $Id: 871c507e5cb4d3a55180f493a87d5b85979da869 $
 ;; URL: http://www.emacswiki.org/emacs/download/volatile-highlights.el
 ;; GitHub: http://github.com/k-talo/volatile-highlights.el
-;; Version: 1.11
+;; Version: 1.12
 ;; Contributed by: Ryan Thompson and Le Wang.
 
 ;; This file is not part of GNU Emacs.
@@ -100,6 +100,9 @@
 
 ;;; Change Log:
 
+;; v1.12  Sun Feb 21 19:09:29 2016 JST
+;;   - Added autoload cookie.
+;;
 ;; v1.11  Sun Oct  5 13:05:38 2014 JST
 ;;   - Fixed an error "Symbol's function definition is void: return",
 ;;     that occurs when highlight being created with `hideshow' commands.
@@ -216,6 +219,7 @@
 ;;;  Minor Mode Definition.
 ;;;
 ;;;============================================================================
+;;;###autoload
 (easy-mmode-define-minor-mode
  volatile-highlights-mode "Minor mode for visual feedback on some operations."
  :global t
