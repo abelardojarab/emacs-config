@@ -1,6 +1,6 @@
 ;;; setup-package.el ---                             -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2015  abelardo.jara-berrocal
+;; Copyright (C) 2015, 2016  abelardo.jara-berrocal
 
 ;; Author: abelardo.jara-berrocal <ajaraber@plxc20122.pdx.intel.com>
 ;; Keywords:
@@ -26,15 +26,25 @@
 
 (setq package-user-dir "~/.emacs.d/site-lisp/package-install")
 (require 'package)
-(add-to-list
- 'package-archives
- '("melpa" . "http://melpa.org/packages/")
- t)
+(setq package-enable-at-startup nil)
+(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
+(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
+(add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/"))
 
 ;; Use Package
-(add-to-list 'load-path "~/.emacs.d/pkg-info")
-(add-to-list 'load-path "~/.emacs.d/use-package")
 (require 'use-package)
+
+;; Baseline packages
+(use-package bind-key)
+(use-package diminish)
+
+;; Undefined function (baseline package)
+(use-package let-alist)
+
+;; Namespace implementation (baseline package)
+(add-to-list 'load-path "~/.emacs.d/names")
+(use-package names
+  :ensure nil)
 
 (provide 'setup-package)
 ;;; setup-package.el ends here

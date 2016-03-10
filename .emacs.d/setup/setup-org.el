@@ -71,8 +71,7 @@
             (progn
               (flyspell-mode t)
               (writegood-mode t)
-              (yas-minor-mode t)
-              (indent-guide-mode -1))))
+              (yas-minor-mode t))))
 (add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
 
 ;; Miscellanenous settings

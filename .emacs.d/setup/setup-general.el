@@ -274,19 +274,19 @@ Defaults to `error'."
 (setq popup-use-optimized-column-computation nil)
 
 ;; Fix indent guide issue
-(defvar sanityinc/indent-guide-mode-suppressed nil)
-(defadvice popup-create (before indent-guide-mode activate)
-  "Suspend indent-guide-mode while popups are visible"
-  (let ((indent-guide-enabled (and (boundp 'indent-guide-mode) indent-guide-mode)))
-    (set (make-local-variable 'sanityinc/indent-guide-mode-suppressed) indent-guide-mode)
-    (when indent-guide-enabled
-      (indent-guide-mode nil))))
-(defadvice popup-delete (after indent-guide-mode activate)
-  "Restore indent-guide-mode when all popups have closed"
-  (let ((indent-guide-enabled (and (boundp 'indent-guide-mode) indent-guide-mode)))
-    (when (and (not popup-instances) sanityinc/indent-guide-mode-suppressed)
-      (setq sanityinc/indent-guide-mode-suppressed nil)
-      (indent-guide-mode 1))))
+;; (defvar sanityinc/indent-guide-mode-suppressed nil)
+;;(defadvice popup-create (before indent-guide-mode activate)
+;;  "Suspend indent-guide-mode while popups are visible"
+;;  (let ((indent-guide-enabled (and (boundp 'indent-guide-mode) indent-guide-mode)))
+;;    (set (make-local-variable 'sanityinc/indent-guide-mode-suppressed) indent-guide-mode)
+;;    (when indent-guide-enabled
+;;      (indent-guide-mode nil))))
+;;(defadvice popup-delete (after indent-guide-mode activate)
+;;  "Restore indent-guide-mode when all popups have closed"
+;;  (let ((indent-guide-enabled (and (boundp 'indent-guide-mode) indent-guide-mode)))
+;;    (when (and (not popup-instances) sanityinc/indent-guide-mode-suppressed)
+;;      (setq sanityinc/indent-guide-mode-suppressed nil)
+;;     (indent-guide-mode 1))))
 
 ;; Manage popup windows
 (add-to-list 'load-path "~/.emacs.d/popwin")
@@ -500,7 +500,6 @@ Defaults to `error'."
 
 ;; Search at point
 (require 'thingatpt)
-(require 'thingatpt+)
 
 ;; Better search, similar to vim
 (require 'isearch-prop)
@@ -639,11 +638,6 @@ Defaults to `error'."
 (setq gc-cons-threshold 20000000)
 (setq max-lisp-eval-depth 10000
       max-specpdl-size 4680)
-
-;; Benchmark-init can give us a breakdown of time spent on require and load calls:
-(add-to-list 'load-path "~/.emacs.d/benchmark-init")
-(require 'benchmark-init)
-(add-hook 'after-init-hook 'benchmark-init/deactivate)
 
 ;; Measure Emacs startup time
 (defun show-startup-time ()

@@ -114,9 +114,9 @@ non-nil."
 (add-to-list 'custom-theme-load-path "~/.emacs.d/zerodark-theme")
 
 ;; Apropospriate theme
-(add-to-list 'load-path "~/.emacs.d/apropospriate-theme")
-(add-to-list 'custom-theme-load-path "~/.emacs.d/apropospriate-theme")
-(require 'apropospriate)
+;; (add-to-list 'load-path "~/.emacs.d/apropospriate-theme")
+;; (add-to-list 'custom-theme-load-path "~/.emacs.d/apropospriate-theme")
+;; (require 'apropospriate)
 
 ;; Solarized theme
 (add-to-list 'load-path "~/.emacs.d/solarized-emacs")
@@ -316,11 +316,6 @@ non-nil."
 (add-hook 'prog-mode-hook 'indent-hint-mode)
 (add-hook 'lisp-mode-hook 'indent-hint-lisp)
 
-;; Transient indentation guide
-(add-to-list 'load-path "~/.emacs.d/indent-guide")
-(defvar indent-guide-mode)
-(require 'indent-guide)
-
 ;; Highlight symbol
 (add-to-list 'load-path "~/.emacs.d/highlight-symbol")
 (require 'highlight-symbol)
@@ -430,11 +425,6 @@ non-nil."
                     nil))))))
 (add-hook 'emacs-lisp-mode-hook 'pretty-lambdas)
 (add-hook 'lisp-mode-hook 'pretty-lambdas)
-
-;; Pretty mode
-(add-to-list 'load-path "~/.emacs.d/pretty-mode")
-(require 'pretty-mode)
-(global-pretty-mode t)
 
 (provide 'setup-appearance)
 ;;; setup-appearance.el ends here

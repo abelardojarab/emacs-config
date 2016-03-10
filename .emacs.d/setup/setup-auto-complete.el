@@ -117,7 +117,7 @@
 (setq ac-comphist-file  "~/.emacs.cache/ac-comphist.dat")
 (ac-config-default)
 (setq-default ac-sources '(ac-source-yasnippet
-                           ac-source-symbol
+                           ac-source-symbols
                            ac-source-words-in-same-mode-buffers))
 
 ;; Let's have snippets and TAGS in the auto-complete dropdown
