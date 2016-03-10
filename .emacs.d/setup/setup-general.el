@@ -637,7 +637,7 @@ Defaults to `error'."
 
 ;; Garbage collection
 (setq gc-cons-threshold 20000000)
-(setq max-lisp-eval-depth 1600
+(setq max-lisp-eval-depth 10000
       max-specpdl-size 4680)
 
 ;; Benchmark-init can give us a breakdown of time spent on require and load calls:
