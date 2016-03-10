@@ -1,6 +1,6 @@
 ;;; setup-helm.el ---                                -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2015  Abelardo Jara
+;; Copyright (C) 2015, 2016  Abelardo Jara
 
 ;; Author: Abelardo Jara <abelardojara@Abelardos-MacBook-Pro.local>
 ;; Keywords:
@@ -83,6 +83,31 @@
 ;; ;; Go to the opposite side of line from the end or beginning of line
 (setq helm-swoop-move-to-line-cycle t)
 
+;; Indent semantic entries
+(require 'helm-imenu)
+(defun my-helm-imenu-transformer (cands)
+  (with-helm-current-buffer
+    (save-excursion
+      (cl-loop for (func-name . mrkr) in cands
+               collect
+               (cons (format "Line %4d: %s"
+                             (line-number-at-pos mrkr)
+                             (progn (goto-char mrkr)
+                                    (buffer-substring mrkr (line-end-position))))
+                     (cons func-name mrkr))))))
+
+(defvar my-helm-imenu-source  (helm-make-source "Imenu" 'helm-imenu-source
+                                :candidate-transformer
+                                'my-helm-imenu-transformer))
+(defun my-helm-imenu ()
+  (interactive)
+  (let ((imenu-auto-rescan t)
+        (str (thing-at-point 'symbol))
+        (helm-execute-action-at-once-if-one
+         helm-imenu-execute-action-at-once-if-one))
+    (helm :sources 'my-helm-imenu-source
+          :preselect str
+          :buffer "*helm imenu*")))
 
 (provide 'setup-helm)
 ;;; setup-helm.el ends here
