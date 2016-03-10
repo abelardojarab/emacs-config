@@ -457,7 +457,7 @@ Defaults to `error'."
 (defvar my-auto-save-folder "~/.emacs.cache/auto-save/") ;; folder for auto-saves
 (setq auto-save-list-file-prefix "~/.emacs.cache/auto-save/.saves-") ;; set prefix for auto-saves
 (setq auto-save-file-name-transforms `((".*" ,my-auto-save-folder t))) ;; location for all auto-save files
-(setq tramp-auto-save-directory my-auto-save-folder) ;; auyto-save tramp files in local directory
+(make-directory my-auto-save-folder t)
 
 ;; Backups
 (setq make-backup-files t

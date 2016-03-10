@@ -80,6 +80,9 @@
 ;; Setup general
 (require 'setup-general)
 
+;; Setup tramp
+(require 'setup-tramp)
+
 ;; Setup appearance
 (require 'setup-appearance)
 

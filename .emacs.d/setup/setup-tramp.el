@@ -1,6 +1,6 @@
 ;;; setup-tramp.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2015  Abelardo Jara
+;; Copyright (C) 2015, 2016  Abelardo Jara
 
 ;; Author: Abelardo Jara <abelardojara@Abelardos-MacBook-Pro.local>
 ;; Keywords:
@@ -29,6 +29,14 @@
     (setq tramp-default-method "plink")
   (setq tramp-default-method "ssh"))
 
+;; Set control master options before loading tramp
+(setq tramp-ssh-controlmaster-options "-o ControlMaster=auto -o ControlPath='tramp.%%C' -o ControlPersist=no")
+(require 'tramp)
+
+;; Fix auto save problem
+(setq tramp-persistency-file-name "~/.emacs.cache/tramp")
+(setq tramp-auto-save-directory "~/.emacs.cache/auto-save")
+
 ;; Tramp configurations
 (setq my-tramp-ssh-completions
       '((tramp-parse-sconfig "~/.ssh/config")
@@ -37,20 +45,15 @@
         (tramp-set-completion-function method my-tramp-ssh-completions))
       '("rsync" "scp" "scpc" "scpx" "sftp" "ssh" "plink"))
 
-;; Fix the auto save problem.
-(setq-default tramp-persistency-file-name "~/.emacs.cache/tramp")
-(setq-default tramp-auto-save-directory "~/.emacs.cache/backups")
-(make-directory tramp-auto-save-directory t)
-
-;; have tramp save temps locally...
+;; have tramp save temps locally
 (unless (string-equal system-type "windows-nt")
   (setq auto-save-file-name-transforms
         '(("\\`/[^/]*:\\([^/]*/\\)*\\([^/]*\\)\\'" "/tmp/\\2" t)
-          ("\\`/?\\([^/]*/\\)*\\([^/]*\\)\\'" "~/.emacs.cache/backups/" t))))
+          ("\\`/?\\([^/]*/\\)*\\([^/]*\\)\\'" "~/.emacs.cache/auto-save/" t))))
 
-;; End of line
+;; End of line, needed by tramp
 (require 'eol-conversion)
-(setq inhibit-eol-conversion 't) ;; do this so tramp doesnt complain about ls
+(setq inhibit-eol-conversion 't)
 
 (provide 'setup-tramp)
 ;;; setup-tramp.el ends here
