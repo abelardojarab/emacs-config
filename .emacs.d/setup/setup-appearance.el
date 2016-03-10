@@ -44,31 +44,6 @@
 (standard-display-ascii ?\226 "---")
 (standard-display-ascii ?\227 "--")
 
-;; Do not redraw entire frame after suspending.
-(setq no-redraw-on-reenter t)
-
-;; Modify toggle truncate lines to avoid messages
-(defun toggle-truncate-lines (&optional arg)
-  "Toggle truncating of long lines for the current buffer.
-When truncating is off, long lines are folded.
-With prefix argument ARG, truncate long lines if ARG is positive,
-otherwise fold them.  Note that in side-by-side windows, this
-command has no effect if `truncate-partial-width-windows' is
-non-nil."
-  (interactive "P")
-  (setq truncate-lines
-        (if (null arg)
-            (not truncate-lines)
-          (> (prefix-numeric-value arg) 0)))
-  (force-mode-line-update)
-  (unless truncate-lines
-    (let ((buffer (current-buffer)))
-      (walk-windows (lambda (window)
-                      (if (eq buffer (window-buffer window))
-                          (set-window-hscroll window 0)))
-                    nil t)))
-  t)
-
 ;; Fringe helper
 (add-to-list 'load-path "~/.emacs.d/fringe-helper")
 (require 'fringe-helper)
@@ -205,34 +180,34 @@ non-nil."
             ('windows-nt
              (if (> (x-display-pixel-width) 1800)
                  (progn ;; HD monitor in Windows
-                   (setq main-programming-font (concat main-programming-font "-12:antialias=subpixel"))
+                   (setq main-programming-font (concat main-programming-font "-12"))
                    (setq main-writing-font (concat main-writing-font "-13")))
                (progn
-                 (setq main-programming-font (concat main-programming-font "-11:antialias=subpixel"))
+                 (setq main-programming-font (concat main-programming-font "-11"))
                  (setq main-writing-font (concat main-writing-font "-12")))))
             ('darwin
              (if (> (x-display-pixel-width) 1800)
                  (if (> (x-display-pixel-width) 2000)
                      (progn ;; Ultra-HD monitor in OSX
-                       (setq main-programming-font (concat main-programming-font "-17:antialias=subpixel"))
+                       (setq main-programming-font (concat main-programming-font "-17"))
                        (setq main-writing-font (concat main-writing-font "-17")))
                    (progn ;; HD monitor in OSX
-                     (setq main-programming-font (concat main-programming-font "-14:antialias=subpixel"))
+                     (setq main-programming-font (concat main-programming-font "-14"))
                      (setq main-writing-font (concat main-writing-font "-14"))))
                (progn
-                 (setq main-programming-font (concat main-programming-font "-11:antialias=subpixel"))
+                 (setq main-programming-font (concat main-programming-font "-11"))
                  (setq main-writing-font (concat main-writing-font "-11")))))
             (t ;; Linux
              (if (> (x-display-pixel-width) 2000)
                  (progn ;; Ultra-HD monitor in Linux
-                   (setq main-programming-font (concat main-programming-font "-14:antialias=subpixel"))
+                   (setq main-programming-font (concat main-programming-font "-14"))
                    (setq main-writing-font (concat main-writing-font "-15")))
                (if (> (x-display-pixel-width) 1800)
                    (progn ;; HD monitor in Linux
-                     (setq main-programming-font (concat main-programming-font "-13:antialias=subpixel"))
+                     (setq main-programming-font (concat main-programming-font "-13"))
                      (setq main-writing-font (concat main-writing-font "-14")))
                  (progn
-                   (setq main-programming-font (concat main-programming-font "-11:antialias=subpixel"))
+                   (setq main-programming-font (concat main-programming-font "-11"))
                    (setq main-writing-font (concat main-writing-font "-12")))))))
 
           ;; Apply fonts

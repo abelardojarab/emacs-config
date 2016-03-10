@@ -390,7 +390,7 @@
 ;; Faster buffer switching
 (add-to-list 'load-path "~/.emacs.d/popup-switcher")
 (require 'popup-switcher)
-(global-set-key (kbd "M-o") 'psw-switch-function)
+(global-set-key (kbd "M-o") 'psw-switch-buffer)
 
 ;; Select Window
 (require 'popup-select-window)
@@ -432,8 +432,8 @@
 (define-key my-keys-minor-mode-map (kbd "<f2>")   'helm-bm)
 (define-key my-keys-minor-mode-map (kbd "<C-f2>") 'bm-toggle)
 (define-key my-keys-minor-mode-map (kbd "<left-margin> <mouse-1>") 'bm-toggle)
-(define-key my-keys-minor-mode-map (kbd "M-o") 'popup-select-window)
-(define-key my-keys-minor-mode-map (kbd "C-`") 'psw-switch-function)
+(define-key my-keys-minor-mode-map (kbd "C-`") 'popup-select-window)
+(define-key my-keys-minor-mode-map (kbd "M-o") 'psw-switch-buffer)
 (define-key my-keys-minor-mode-map (kbd "<f4>") 'helm-semantic-or-imenu)
 (define-key my-keys-minor-mode-map (kbd "<f5>") 'smex)
 (define-key my-keys-minor-mode-map (kbd "<f12>") 'helm-buffer-list)

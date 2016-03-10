@@ -286,5 +286,28 @@ Now it correctly stops at the beginning of the line when the pointer is at the f
         (kill-buffer buffer)
         (message "File '%s' successfully removed" filename)))))
 
+;; Number lines on a rectangle
+(defun number-rectangle (start end format-string from)
+  "Delete (don't save) text in the region-rectangle, then number it."
+  (interactive
+   (list (region-beginning) (region-end)
+         (read-string "Number rectangle: "
+                      (if (looking-back "^ *") "%d. " "%d"))
+         (read-number "From: " 1)))
+  (save-excursion
+    (goto-char start)
+    (setq start (point-marker))
+    (goto-char end)
+    (setq end (point-marker))
+    (delete-rectangle start end)
+    (goto-char start)
+    (loop with column = (current-column)
+          while (and (<= (point) end) (not (eobp)))
+          for i from from   do
+          (move-to-column column t)
+          (insert (format format-string i))
+          (forward-line 1)))
+  (goto-char start))
+
 (provide 'setup-functions)
 ;;; setup-utilities.el ends here

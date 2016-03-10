@@ -78,9 +78,12 @@ Defaults to `error'."
 (add-to-list 'load-path "~/.emacs.d/names")
 (require 'names)
 
-;; Exec path from shell
-(add-to-list 'load-path "~/.emacs.d/exec-path-from-shell")
-(require 'exec-path-from-shell)
+;; Exec path from shell in Mac OSX
+(when (equal system-type 'darwin)
+  (add-to-list 'load-path "~/.emacs.d/exec-path-from-shell")
+  (require 'exec-path-from-shell)
+  (setq exec-path-from-shell-check-startup-files nil)
+  (exec-path-from-shell-initialize))
 
 ;; Define preferred shell
 (cond
@@ -242,8 +245,8 @@ Defaults to `error'."
 ;; if indent-tabs-mode is off, untabify before saving
 (add-hook 'write-file-hooks
           (lambda () (if (not indent-tabs-mode)
-                         (save-excursion
-                           (untabify (point-min) (point-max)))) nil))
+                    (save-excursion
+                      (untabify (point-min) (point-max)))) nil))
 
 ;; Always split horizontally
 (setq split-width-threshold 78)
@@ -262,7 +265,7 @@ Defaults to `error'."
   "If there's only one window (excluding any possibly active
          minibuffer), then split the current window horizontally."
   (if (and (one-window-p t)
-         (not (active-minibuffer-window)))
+           (not (active-minibuffer-window)))
       (let ((split-height-threshold nil))
         (split-window-sensibly window))
     (split-window-sensibly window)))
@@ -271,29 +274,27 @@ Defaults to `error'."
 ;; Popup, used by auto-complete and other tools
 (add-to-list 'load-path "~/.emacs.d/popup")
 (require 'popup)
-(setq popup-use-optimized-column-computation nil)
+(setq popup-use-optimized-column-computation t)
 
 ;; Fix indent guide issue
 ;; (defvar sanityinc/indent-guide-mode-suppressed nil)
-;;(defadvice popup-create (before indent-guide-mode activate)
-;;  "Suspend indent-guide-mode while popups are visible"
-;;  (let ((indent-guide-enabled (and (boundp 'indent-guide-mode) indent-guide-mode)))
-;;    (set (make-local-variable 'sanityinc/indent-guide-mode-suppressed) indent-guide-mode)
-;;    (when indent-guide-enabled
-;;      (indent-guide-mode nil))))
-;;(defadvice popup-delete (after indent-guide-mode activate)
-;;  "Restore indent-guide-mode when all popups have closed"
-;;  (let ((indent-guide-enabled (and (boundp 'indent-guide-mode) indent-guide-mode)))
-;;    (when (and (not popup-instances) sanityinc/indent-guide-mode-suppressed)
-;;      (setq sanityinc/indent-guide-mode-suppressed nil)
-;;     (indent-guide-mode 1))))
+;; (defadvice popup-create (before indent-guide-mode activate)
+;;   "Suspend indent-guide-mode while popups are visible"
+;;   (let ((indent-guide-enabled (and (boundp 'indent-guide-mode) indent-guide-mode)))
+;;     (set (make-local-variable 'sanityinc/indent-guide-mode-suppressed) indent-guide-mode)
+;;     (when indent-guide-enabled
+;;       (indent-guide-mode nil))))
+;; (defadvice popup-delete (after indent-guide-mode activate)
+;;   "Restore indent-guide-mode when all popups have closed"
+;;   (let ((indent-guide-enabled (and (boundp 'indent-guide-mode) indent-guide-mode)))
+;;     (when (and (not popup-instances) sanityinc/indent-guide-mode-suppressed)
+;;       (setq sanityinc/indent-guide-mode-suppressed nil)
+;;       (indent-guide-mode 1))))
 
 ;; Manage popup windows
 (add-to-list 'load-path "~/.emacs.d/popwin")
 (require 'popwin)
-
-;; suspress warnings
-(setq warning-minimum-level :error)
+(popwin-mode 1)
 
 ;; Automatically save and restore sessions
 (require 'desktop)
@@ -633,6 +634,31 @@ Defaults to `error'."
 
 ;; Optimization
 (setq-default bidi-display-reordering nil)
+
+;; Do not redraw entire frame after suspending.
+(setq no-redraw-on-reenter t)
+
+;; Modify toggle truncate lines to avoid messages
+(defun toggle-truncate-lines (&optional arg)
+  "Toggle truncating of long lines for the current buffer.
+When truncating is off, long lines are folded.
+With prefix argument ARG, truncate long lines if ARG is positive,
+otherwise fold them.  Note that in side-by-side windows, this
+command has no effect if `truncate-partial-width-windows' is
+non-nil."
+  (interactive "P")
+  (setq truncate-lines
+        (if (null arg)
+            (not truncate-lines)
+          (> (prefix-numeric-value arg) 0)))
+  (force-mode-line-update)
+  (unless truncate-lines
+    (let ((buffer (current-buffer)))
+      (walk-windows (lambda (window)
+                      (if (eq buffer (window-buffer window))
+                          (set-window-hscroll window 0)))
+                    nil t)))
+  t)
 
 ;; Garbage collection
 (setq gc-cons-threshold 20000000)
