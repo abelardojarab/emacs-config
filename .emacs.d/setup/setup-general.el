@@ -161,7 +161,7 @@
   :load-path "~/.emacs.d/auto-indent-mode"
   :init (progn
           (setq auto-indent-indent-style 'conservative)
-          (setq auto-indent-on-visit-file t) ;; do not indent when a file is visit
+          (setq auto-indent-on-visit-file nil) ;; do not indent when a file is visit
           (setq auto-indent-blank-lines-on-move nil)
           (setq auto-indent-next-pair-timer-geo-mean (quote ((default 0.0005 0))))
           (setq auto-indent-disabled-modes-list (list (quote vhdl-mode))))
