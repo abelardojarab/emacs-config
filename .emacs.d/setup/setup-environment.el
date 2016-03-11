@@ -689,4 +689,17 @@ non-nil."
 (add-hook 'emacs-lisp-mode-hook 'pretty-lambdas)
 (add-hook 'lisp-mode-hook 'pretty-lambdas)
 
+;; higlight changes in documents
+(global-highlight-changes-mode t)
+(setq highlight-changes-visibility-initial-state nil)
+
+;; Fix highlight bug of marking a file as modified
+(defadvice highlight-changes-rotate-faces (around around-rotate-faces)
+  (let ((was-modified (buffer-modified-p))
+        (buffer-undo-list t))
+    ad-do-it
+    (unless was-modified
+      (set-buffer-modified-p nil))))
+(ad-activate 'highlight-changes-rotate-faces)
+
 (provide 'setup-environment)

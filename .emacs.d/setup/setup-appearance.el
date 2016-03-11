@@ -114,10 +114,6 @@
 ;; (load-theme 'material-light t)
 ;; (load-theme 'apropospriate-light t)
 
-;; White or black text
-;; (add-to-list 'default-frame-alist '(foreground-color . "#ffffff"))
-
-
 ;; Highlight the line
 (require 'hl-line)
 (defun local-hl-line-mode-off ()
@@ -129,7 +125,6 @@
 (defadvice hi-lock-set-pattern (around use-overlays activate)
   (let ((font-lock-fontified nil))
     ad-do-it))
-
 (add-hook 'org-mode-hook 'local-hl-line-mode-off)
 
 ;; Highlight the latest changes in the buffer (like text inserted from: yank, undo, etc.) until the next command is run
@@ -157,19 +152,6 @@
 (add-hook 'markdown-mode-hook (lambda () (highlight-symbol-mode)))
 (add-hook 'text-mode-hook (lambda () (highlight-symbol-mode)))
 (setq highlight-symbol-on-navigation-p t)
-
-;; higlight changes in documents
-(global-highlight-changes-mode t)
-(setq highlight-changes-visibility-initial-state nil)
-
-;; Fix highlight bug of marking a file as modified
-(defadvice highlight-changes-rotate-faces (around around-rotate-faces)
-  (let ((was-modified (buffer-modified-p))
-        (buffer-undo-list t))
-    ad-do-it
-    (unless was-modified
-      (set-buffer-modified-p nil))))
-(ad-activate 'highlight-changes-rotate-faces)
 
 ;; Blinking cursor
 (require 'heartbeat-cursor)
