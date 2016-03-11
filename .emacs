@@ -72,6 +72,9 @@
 ;; Setup package
 (require 'setup-package)
 
+;; Setup environment
+(require 'setup-environment)
+
 ;; Setup general
 (require 'setup-general)
 
