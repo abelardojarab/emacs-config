@@ -364,4 +364,329 @@ Defaults to `error'."
 ;; Ignore case when looking for a file
 (setq read-file-name-completion-ignore-case t)
 
+;; Edition of EMACS edition modes
+(setq major-mode 'text-mode)
+(add-hook 'text-mode-hook 'text-mode-hook-identify)
+(add-hook 'text-mode-hook (function
+                           (lambda () (ispell-minor-mode))))
+
+;; Pretty diff mode
+(autoload 'ediff-buffers "ediff" "Intelligent Emacs interface to diff" t)
+(autoload 'ediff-files "ediff" "Intelligent Emacs interface to diff" t)
+(autoload 'ediff-files-remote "ediff" "Intelligent Emacs interface to diff" t)
+
+;; Change type files
+(setq auto-mode-alist
+      (append '(("\\.cpp$" . c++-mode)
+                ("\\.h$" . c++-mode)
+                ("\\.hpp$" . c++-mode)
+                ("\\.lsp$" . lisp-mode)
+                ("\\.il$" . lisp-mode)
+                ("\\.ils$" . lisp-mode)
+                ("\\.scm$" . scheme-mode)
+                ("\\.pl$" . perl-mode)
+                ) auto-mode-alist))
+
+;; Time stamp
+(setq
+ time-stamp-active t          ;; do enable time-stamps
+ time-stamp-line-limit 20     ;; check first 10 buffer lines for Time-stamp:
+ time-stamp-format "%04y-%02m-%02d %02H:%02M:%02S (%u)") ;; date format
+(add-hook 'write-file-hooks 'time-stamp) ;; update when saving
+
+;; More exhaustive cleaning of white space
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
+
+;; Make URLs in comments/strings clickable, (emacs > v22)
+(add-hook 'find-file-hooks 'goto-address-prog-mode)
+
+;; Marker if the line goes beyond the end of the screen (arrows)
+(global-visual-line-mode 1)
+(add-hook 'text-mode-hook 'turn-on-visual-line-mode)
+(setq visual-line-fringe-indicators '(nil right-curly-arrow))
+(add-hook 'prog-mode-hook
+          (lambda ()
+            (visual-line-mode -1)
+            (toggle-truncate-lines 1)))
+(add-hook 'org-agenda-mode-hook
+          (lambda ()
+            (visual-line-mode -1)
+            (toggle-truncate-lines 1)))
+
+;; Smoother scrolling
+(setq redisplay-dont-pause nil
+      scroll-margin 1
+      scroll-step 1
+      scroll-conservatively 10000
+      scroll-preserve-screen-position 1
+      scroll-up-aggressively 0.01
+      scroll-down-aggressively 0.01)
+
+;; Optimization
+(setq-default bidi-display-reordering nil)
+
+;; Do not redraw entire frame after suspending.
+(setq no-redraw-on-reenter t)
+
+;; Modify toggle truncate lines to avoid messages
+(defun toggle-truncate-lines (&optional arg)
+  "Toggle truncating of long lines for the current buffer.
+When truncating is off, long lines are folded.
+With prefix argument ARG, truncate long lines if ARG is positive,
+otherwise fold them.  Note that in side-by-side windows, this
+command has no effect if `truncate-partial-width-windows' is
+non-nil."
+  (interactive "P")
+  (setq truncate-lines
+        (if (null arg)
+            (not truncate-lines)
+          (> (prefix-numeric-value arg) 0)))
+  (force-mode-line-update)
+  (unless truncate-lines
+    (let ((buffer (current-buffer)))
+      (walk-windows (lambda (window)
+                      (if (eq buffer (window-buffer window))
+                          (set-window-hscroll window 0)))
+                    nil t)))
+  t)
+
+;; Garbage collection
+(setq gc-cons-threshold 20000000)
+(setq max-lisp-eval-depth 10000
+      max-specpdl-size 4680)
+
+;; Measure Emacs startup time
+(defun show-startup-time ()
+  "Show Emacs's startup time in the minibuffer"
+  (message "Startup time: %s seconds."
+           (emacs-uptime "%s")))
+(add-hook 'emacs-startup-hook 'show-startup-time 'append)
+
+;; Syntax coloring
+(global-font-lock-mode t)
+(global-hi-lock-mode nil)
+(setq font-lock-maximum-decoration t)
+(setq font-lock-maximum-size (* 512 512))
+(defun global-font-lock-mode-check-buffers () nil)
+
+;; Lazy font lock
+(setq font-lock-support-mode 'jit-lock-mode)
+(setq jit-lock-chunk-size 5000
+      jit-lock-context-time 0.2
+      jit-lock-defer-time .1
+      jit-lock-stealth-nice 0.5
+      jit-lock-stealth-time 16
+      jit-lock-stealth-verbose nil)
+(setq-default font-lock-multiline t)
+
+;; Do not fontify large files
+(defun my-find-file-check-make-large-file-read-only-hook ()
+  "If a file is over a given size, make the buffer read only."
+  (when (> (buffer-size) (* 512 256))
+    (setq buffer-read-only t)
+    (buffer-disable-undo)
+    (fundamental-mode)))
+(add-hook 'find-file-hook 'my-find-file-check-make-large-file-read-only-hook)
+
+;; Adjust font when using graphical interface
+(when window-system
+  (let ()
+
+    ;; Use 12-pt Consolas as default font
+    (when (find-font (font-spec :name "Consolas"))
+      (setq main-programming-font "Consolas-12")
+      (set-face-attribute 'default nil :font main-programming-font)
+      (set-face-attribute 'fixed-pitch nil :font main-programming-font)
+      (add-to-list 'default-frame-alist '(font . "Consolas-12"))) ;; default font, used by speedbar
+
+    (when (find-font (font-spec :name "Calibri"))
+      (setq main-writing-font "Calibri-12")
+      (set-face-attribute 'variable-pitch nil :font main-writing-font :weight 'normal)
+      (add-hook 'text-mode-hook 'variable-pitch-mode))
+
+    ;; Dynamic font adjusting based on monitor resolution, using Android fonts
+    (when (find-font (font-spec :name "Roboto Mono"))
+
+      (defun fontify-frame (frame)
+        (interactive)
+        (let (main-writing-font main-programming-font)
+          (setq main-programming-font "Roboto Mono")
+          (setq main-writing-font "Roboto Mono")
+          (if (find-font (font-spec :name "Roboto Mono"))
+              (setq main-writing-font "Roboto Mono"))
+
+          ;; Adjust text size based on resolution
+          (case system-type
+            ('windows-nt
+             (if (> (x-display-pixel-width) 1800)
+                 (progn ;; HD monitor in Windows
+                   (setq main-programming-font (concat main-programming-font "-12"))
+                   (setq main-writing-font (concat main-writing-font "-13")))
+               (progn
+                 (setq main-programming-font (concat main-programming-font "-11"))
+                 (setq main-writing-font (concat main-writing-font "-12")))))
+            ('darwin
+             (if (> (x-display-pixel-width) 1800)
+                 (if (> (x-display-pixel-width) 2000)
+                     (progn ;; Ultra-HD monitor in OSX
+                       (setq main-programming-font (concat main-programming-font "-17"))
+                       (setq main-writing-font (concat main-writing-font "-17")))
+                   (progn ;; HD monitor in OSX
+                     (setq main-programming-font (concat main-programming-font "-14"))
+                     (setq main-writing-font (concat main-writing-font "-14"))))
+               (progn
+                 (setq main-programming-font (concat main-programming-font "-11"))
+                 (setq main-writing-font (concat main-writing-font "-11")))))
+            (t ;; Linux
+             (if (> (x-display-pixel-width) 2000)
+                 (progn ;; Ultra-HD monitor in Linux
+                   (setq main-programming-font (concat main-programming-font "-14"))
+                   (setq main-writing-font (concat main-writing-font "-15")))
+               (if (> (x-display-pixel-width) 1800)
+                   (progn ;; HD monitor in Linux
+                     (setq main-programming-font (concat main-programming-font "-13"))
+                     (setq main-writing-font (concat main-writing-font "-14")))
+                 (progn
+                   (setq main-programming-font (concat main-programming-font "-11"))
+                   (setq main-writing-font (concat main-writing-font "-12")))))))
+
+          ;; Apply fonts
+          (set-default-font main-programming-font frame)
+          (add-to-list 'default-frame-alist (cons 'font main-programming-font))
+          (set-face-attribute 'fixed-pitch nil :font main-programming-font)
+          (set-face-attribute 'variable-pitch nil :font main-writing-font :weight 'normal)))
+
+      ;; Fontify current frame
+      (fontify-frame nil)
+
+      ;; Fontify any future frames for emacsclient
+      (push 'fontify-frame after-make-frame-functions)
+
+      ;; hook for setting up UI when not running in daemon mode
+      (add-hook 'emacs-startup-hook '(lambda () (fontify-frame nil))))))
+
+;; Fixed pitch for HTML
+(defun fixed-pitch-mode ()
+  (buffer-face-mode -1))
+(add-hook 'html-mode-hook 'fixed-pitch-mode)
+(add-hook 'nxml-mode-hook 'fixed-pitch-mode)
+
+;; Change form/shape of emacs cursor
+(setq djcb-read-only-color "green")
+(setq djcb-read-only-cursor-type 'hbar)
+(setq djcb-overwrite-color "red")
+(setq djcb-overwrite-cursor-type 'box)
+(setq djcb-normal-color "yellow")
+(setq djcb-normal-cursor-type 'bar)
+(defun djcb-set-cursor-according-to-mode ()
+  "change cursor color and type according to some minor modes."
+  (cond
+   (buffer-read-only
+    (set-cursor-color djcb-read-only-color)
+    (setq cursor-type djcb-read-only-cursor-type))
+   (overwrite-mode
+    (set-cursor-color djcb-overwrite-color)
+    (setq cursor-type djcb-overwrite-cursor-type))
+   (t
+    (set-cursor-color djcb-normal-color)
+    (setq cursor-type djcb-normal-cursor-type))))
+(add-hook 'post-command-hook
+          (lambda () (interactive)
+            (unless (member
+                     major-mode '(pdf-docs doc-view-mode))
+              (djcb-set-cursor-according-to-mode))))
+
+;; Put a nice title to the window, including filename
+(add-hook 'window-configuration-change-hook
+          (lambda ()
+            (setq frame-title-format
+                  (concat
+                   invocation-name "@" system-name ": "
+                   (replace-regexp-in-string
+                    (concat "/home/" user-login-name) "~"
+                    (or buffer-file-name "%b"))))))
+
+;; Scrollbar
+(when window-system
+  (set-scroll-bar-mode 'right)
+
+  ;; Smart scrollbar
+  (defvar regexp-always-scroll-bar '("\\.yes" "\\*Scroll-Bar\\*")
+    "Regexp matching buffer names that will always have scroll bars.")
+
+  (defvar regexp-never-scroll-bar '("\\.off" "\\.not")
+    "Regexp matching buffer names that will never have scroll bars.")
+
+  (add-to-list 'default-frame-alist '(vertical-scroll-bars . nil))
+  (modify-all-frames-parameters (list (cons 'vertical-scroll-bars nil)))
+
+  (defun lawlist-scroll-bar ()
+    (ignore-errors
+      (when (window-live-p (get-buffer-window (current-buffer)))
+        (redisplay t)
+        (cond
+         ;; not regexp matches | not narrow-to-region
+         ((and
+           (not (regexp-match-p regexp-always-scroll-bar (buffer-name)))
+           (not (regexp-match-p regexp-never-scroll-bar (buffer-name)))
+           (equal (- (point-max) (point-min)) (buffer-size)))
+          (cond
+           ;; Lines of text are less-than or equal-to window height,
+           ;; and scroll bars are present (which need to be removed).
+           ((and
+             (<= (- (point-max) (point-min)) (- (window-end) (window-start)))
+             (equal (window-scroll-bars) `(15 2 right nil)))
+            (set-window-scroll-bars (selected-window) 0 'right nil))
+           ;; Lines of text are greater-than window height, and
+           ;; scroll bars are not present and need to be added.
+           ((and
+             (> (- (point-max) (point-min)) (- (window-end) (window-start)))
+             (not (equal (window-scroll-bars) `(15 2 right nil))))
+            (set-window-scroll-bars (selected-window) 15 'right nil))))
+         ;; Narrow-to-region is active, and scroll bars are present
+         ;; (which need to be removed).
+         ((and
+           (not (equal (- (point-max) (point-min)) (buffer-size)))
+           (equal (window-scroll-bars) `(15 2 right nil)))
+          (set-window-scroll-bars (selected-window) 0 'right nil))
+         ;; not narrow-to-region | regexp always scroll-bars
+         ((and
+           (equal (- (point-max) (point-min)) (buffer-size))
+           (regexp-match-p regexp-always-scroll-bar (buffer-name)))
+          (set-window-scroll-bars (selected-window) 15 'right nil))
+         ;; not narrow-to-region | regexp never scroll-bars
+         ((and
+           (equal (- (point-max) (point-min)) (buffer-size))
+           (regexp-match-p regexp-never-scroll-bar (buffer-name)))
+          (set-window-scroll-bars (selected-window) 0 'right nil))))))
+
+  (define-minor-mode lawlist-scroll-bar-mode
+    "This is a custom scroll bar mode."
+    :lighter " sc"
+    (if lawlist-scroll-bar-mode
+        (progn
+          (add-hook 'post-command-hook 'lawlist-scroll-bar nil t))
+      (remove-hook 'post-command-hook 'lawlist-scroll-bar t)
+      (remove-hook 'change-major-mode-hook 'lawlist-scroll-bar t)
+      (remove-hook 'window-configuration-change-hook 'lawlist-scroll-bar t)))
+
+  (define-globalized-minor-mode global-lawlist-scroll-bar-mode
+    lawlist-scroll-bar-mode lawlist-scroll-bar-on)
+
+  (defun lawlist-scroll-bar-on ()
+    (unless (minibufferp)
+      (lawlist-scroll-bar-mode 1)))
+
+  (global-lawlist-scroll-bar-mode))
+
+;; Pretty lambdas
+(defun pretty-lambdas ()
+  (font-lock-add-keywords
+   nil `(("\\<lambda\\>"
+          (0 (progn (compose-region (match-beginning 0) (match-end 0)
+                                    ,(make-char 'greek-iso8859-7 107))
+                    nil))))))
+(add-hook 'emacs-lisp-mode-hook 'pretty-lambdas)
+(add-hook 'lisp-mode-hook 'pretty-lambdas)
+
 (provide 'setup-environment)
