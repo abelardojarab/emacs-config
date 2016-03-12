@@ -53,14 +53,7 @@ Defaults to `error'."
 (defvar cursor-sensor-inhibit nil)
 
 ;; ignore byte-compile warnings
-(setq byte-compile-warnings '(not nresolved
-                                  free-vars
-                                  callargs
-                                  redefine
-                                  obsolete
-                                  noruntime
-                                  cl-functions
-                                  interactive-only))
+(setq byte-compile-warnings nil)
 
 ;; Assure .emacs.cache directory exists
 (if (not (file-exists-p (expand-file-name "~/.emacs.cache")))

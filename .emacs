@@ -39,12 +39,12 @@
     (if p (progn (setcar (cdr p) val) plist) (list* tag val plist))))
 
 ;; CEDET
-;; (add-to-list 'load-path "~/.emacs.d/cedet")
-;; (add-to-list 'load-path "~/.emacs/cedet/contrib")
-;; (require 'cedet-remove-builtin)
-;; (setq byte-compile-warnings nil)
-;; (load-file "~/.emacs.d/cedet/cedet-devel-load.el")
-;; (load-file "~/.emacs.d/cedet/contrib/cedet-contrib-load.el")
+(add-to-list 'load-path "~/.emacs.d/cedet")
+(add-to-list 'load-path "~/.emacs/cedet/contrib")
+(require 'cedet-remove-builtin)
+(setq byte-compile-warnings nil)
+(load-file "~/.emacs.d/cedet/cedet-devel-load.el")
+(load-file "~/.emacs.d/cedet/contrib/cedet-contrib-load.el")
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -90,9 +90,6 @@
 
 ;; Setup appearance
 (require 'setup-appearance)
-
-;; Setup Cedet
-;; (require 'setup-cedet)
 
 ;; Setup Org
 (require 'setup-org)
@@ -190,9 +187,6 @@
 ;; Setup shell
 (require 'setup-eshell)
 
-;; Setup ECB
-(require 'setup-ecb)
-
 ;; Setup hideshow
 (require 'setup-hideshow)
 
@@ -201,6 +195,9 @@
 
 ;; Setup keys
 (require 'setup-keys)
+
+;; Setup ECB
+(require 'setup-ecb)
 
 ;; Setup server
 (require 'setup-server)
