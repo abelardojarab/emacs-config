@@ -24,10 +24,6 @@
 
 ;;; Code:
 
-;; write good mode
-(add-to-list 'load-path "~/.emacs.d/writegood-mode")
-(require 'writegood-mode)
-
 ;; Org mode
 (setq load-path (cons "~/.emacs.d/org-mode/contrib/lisp" load-path))
 (setq load-path (cons "~/.emacs.d/org-mode/lisp" load-path))
@@ -76,21 +72,21 @@
 
 ;; Miscellanenous settings
 (setq org-startup-folded 'nofold
-      org-startup-indented t
-      org-cycle-separator-lines 1
-      org-startup-with-inline-images nil
-      org-image-actual-width '(100)
-      org-startup-truncated t
-      org-blank-before-new-entry '((heading . auto) (plain-list-item . auto))
-      org-refile-targets '((org-agenda-files :maxlevel . 9))
-      org-src-fontify-natively t
-      org-src-tab-acts-natively t
-      org-confirm-babel-evaluate nil
-      org-use-speed-commands t
-      org-completion-use-ido t
-      org-hide-leading-stars t
-      org-log-done t
-      org-enforce-todo-dependencies)
+     org-startup-indented t
+     org-cycle-separator-lines 1
+     org-startup-with-inline-images nil
+     org-image-actual-width '(100)
+     org-startup-truncated t
+     org-blank-before-new-entry '((heading . auto) (plain-list-item . auto))
+     org-refile-targets '((org-agenda-files :maxlevel . 9))
+     org-src-fontify-natively t
+     org-src-tab-acts-natively t
+     org-confirm-babel-evaluate nil
+     org-use-speed-commands t
+     org-completion-use-ido t
+     org-hide-leading-stars t
+     org-log-done t
+     org-enforce-todo-dependencies t)
 
 (setq org-indent-mode nil) ;; this causes problem in other modes
 (setq org-blank-before-new-entry ;; Insert blank line before new heading
@@ -209,360 +205,6 @@
         ("TASK" . 'font-lock-builtin-face)
         ("CANCELLED" . 'font-lock-doc-face)))
 
-;; Images
-(add-to-list 'load-path "~/.emacs.d/image+")
-(eval-after-load 'image '(require 'image+))
-(eval-after-load 'image+ '(imagex-global-sticky-mode 1))
-(eval-after-load 'image+ '(imagex-auto-adjust-mode 1))
-(setq imagex-quiet-error t)
-
-;; Insert images from files like this:
-;; #+BEGIN: image :file "~/Documents/personal/foo.png"
-;; #+END
-(defun org-dblock-write:image (params)
-  (let ((file (plist-get params :file)))
-    (clear-image-cache file)
-    (insert-image (create-image file))))
-
-;; Showing images
-(require 'iimage)
-(autoload 'iimage-mode "iimage" "Support Inline image minor mode." t)
-(autoload 'turn-on-iimage-mode "iimage" "Turn on Inline image minor mode." t)
-(add-to-list 'iimage-mode-image-regex-alist '("@startuml\s+\\(.+\\)" . 1))
-(add-to-list 'iimage-mode-image-regex-alist (cons (concat "\[\[file:\(~?" iimage-mode-image-filename-regex "\)\]") 1))
-
-;; Function to setup images for display on load
-(defun org-turn-on-iimage-in-org ()
-  "display images in your org file"
-  (interactive)
-  (turn-on-iimage-mode)
-  (set-face-underline-p 'org-link t)) ;; start with hidden images
-(add-hook 'org-mode-hook '(lambda () (org-turn-on-iimage-in-org)))
-
-;; Function to toggle images in a org buffer
-(defun org-toggle-iimage-in-org ()
-  "display images in your org file"
-  (interactive)
-  (if (face-underline-p 'org-link)
-      (set-face-underline-p 'org-link nil)
-    (set-face-underline-p 'org-link t))
-  (call-interactively 'iimage-mode))
-
-;; Image reloading
-(defun org-reload-image-at-point ()
-  (interactive)
-  (message "reloading image at point in the current buffer...")
-  (image-refresh (get-text-property (point) 'display)))
-
-;; Image resizing and reloading
-(defun org-resize-image-at-point ()
-  (interactive)
-  (message "resizing image at point in the current buffer...")
-  (let* ((image-spec (get-text-property (point) 'display))
-         (file (cadr (member :file image-spec))))
-    (message (concat "resizing image..." file))
-    (shell-command (format "convert -resize %d %s %s "
-                           (* (window-width (selected-window)) (frame-char-width))
-                           file file))
-    (org-reload-image-at-point)))
-
-;; Rendering ditaa
-(setq org-ditaa-jar-path (expand-file-name "~/.emacs.d/jar/ditaa.jar"))
-
-;; Rendering plantuml
-(setq org-plantuml-jar-path (expand-file-name "~/.emacs.d/jar/plantuml.jar"))
-(defun plantuml-render-buffer ()
-  (interactive)
-  (message "PLANTUML Start rendering")
-  (shell-command (concat "java -jar "
-                         (expand-file-name "~/.emacs.d/jar/plantuml.jar")
-                         " "
-                         buffer-file-name))
-  (message (concat "PLANTUML Rendered:  " (buffer-name))))
-
-;; Preview LaTeX equations in buffers by showing images (C-c C-x C-l)
-(setq org-latex-create-formula-image-program 'imagemagick)
-
-;; Equations in Org
-(defvar text-scale-mode-hook nil
-  "Hook run at end of command `text-scale-mode'.")
-
-(defadvice text-scale-mode (after text-scale-mode-hooks nil activate)
-  "Run `text-scale-mode-hook' at end of command `text-scale-mode'."
-  (if (functionp text-scale-mode-hook)
-      (funcall text-scale-mode-hook)
-    (loop for hook in text-scale-mode-hook do
-          (if (eq hook 't)
-              (run-hooks (default-value text-scale-mode-hook))
-            (run-hooks hook)))))
-
-(defun org-text-scale-eye ()
-  "Scale equation images according to text-scale-mode-amount."
-  (when (boundp 'text-scale-mode-amount)
-    (let ((relwidth (* (expt text-scale-mode-step text-scale-mode-amount))))
-      (loop for ol in (overlays-in (point-min) (point-max)) do
-            (when (eq (overlay-get ol 'org-overlay-type) 'org-latex-overlay)
-              (unless (overlay-get ol 'org-image-original-width)
-                (overlay-put ol 'org-image-original-width (car (image-size (overlay-get ol 'display) t))))
-              (let ((ol-disp-plist (cdr (overlay-get ol 'display))))
-                (setq ol-disp-plist (plist-put ol-disp-plist :type 'imagemagick))
-                (setq ol-disp-plist (plist-put ol-disp-plist :width (round (* relwidth (overlay-get ol 'org-image-original-width)))))
-                (overlay-put ol 'display (append '(image) ol-disp-plist))))))
-    (force-window-update)))
-(add-hook 'org-mode-hook '(lambda () (add-hook 'text-scale-mode-hook 'org-text-scale-eye)))
-
-(defadvice org-format-latex (before set-scale activate)
-  "Set :scale in `org-format-latex-options' to the scaling factor resulting from `text-scale-mode' and clear cache."
-  (let ((relwidth (expt text-scale-mode-step text-scale-mode-amount)))
-    (unless (= (plist-get org-format-latex-options :scale) relwidth)
-      (plist-put org-format-latex-options :scale relwidth))))
-
-;; Insert screenshots into Org mode, very useful
-(defun org-insert-screenshot ()
-  "Take a screenshot into a time stamped unique-named file in the same
-directory as the org-buffer and insert
-a link to this file."
-  (interactive)
-  (let ((case-fold-search nil))
-    (setq tilde-buffer-filename
-          (replace-regexp-in-string "/" "\\" (buffer-file-name) t t))
-    (setq tilde-buffer-filename
-          (replace-regexp-in-string ".org" "" tilde-buffer-filename t t))
-    (setq filename
-          (concat
-           (make-temp-name
-            (concat tilde-buffer-filename
-                    "_"
-                    (format-time-string "%Y%m%d_%H%M%S_")) ) ".png"))
-    (setq filename (file-relative-name filename (file-name-directory (buffer-file-name))))
-    (setq filename (replace-regexp-in-string "\\\\" "/" filename))
-    (if (equal system-type 'windows-nt)
-        ;; Windows: Irfanview
-        (call-process "C:\\Program Files (x86)\\IrfanView\\i_view32.exe" nil nil nil (concat
-                                                                                      "/clippaste /convert=" filename))
-
-      (if (equal system-type 'darwin)
-          ;; Mac OSX pngpaste utility: https://github.com/jcsalterego/pngpaste
-          (call-process "pngpaste" nil nil nil filename)
-
-        ;; Linux: ImageMagick: (call-process "import" nil nil nil filename)
-        (call-process "import" nil nil nil filename))
-      ) ;; if
-    (insert (concat "[[file:" filename "]]"))
-    (org-display-inline-images)))
-
-;; for Tikz image in Org
-(setq org-babel-latex-htlatex "htlatex")
-(defmacro by-backend (&rest body)
-  `(case (if (boundp 'backend) (org-export-backend-name backend) nil) ,@body))
-
-;; for Graphviz image in Org
-(add-to-list 'org-src-lang-modes (quote ("dot" . graphviz-dot)))
-
-;; for Gnuplot
-(add-to-list 'load-path "~/.emacs.d/gnuplot")
-(require 'gnuplot)
-
-;; Tweaks for Latex exporting
-(require 'ox-latex)
-(setq org-latex-listings t)
-(setq org-export-latex-quotes
-      '(("en" ("\\(\\s-\\|[[(]\\)\"" . "\\enquote{") ("\\(\\S-\\)\"" . "}") ("\\(\\s-\\|(\\)'" . "`"))))
-
-;; Reftex
-(require 'dash)
-(require 'reftex-cite)
-(setq reftex-default-bibliography '("~/workspace/Documents/Bibliography/biblio.bib")) ;; So that RefTeX in Org-mode knows bibliography
-(defun org-mode-reftex-setup ()
-  (interactive)
-  (and (buffer-file-name) (file-exists-p (buffer-file-name))
-       (progn
-         ;; Reftex should use the org file as master file. See C-h v TeX-master for infos.
-         (setq TeX-master t)
-         (turn-on-reftex)
-         ;; enable auto-revert-mode to update reftex when bibtex file changes on disk
-         (global-auto-revert-mode t) ; careful: this can kill the undo
-         ;; history when you change the file
-         ;; on-disk.
-         (reftex-parse-all)
-         ;; add a custom reftex cite format to insert links
-         ;; This also changes any call to org-citation!
-         (reftex-set-cite-format
-          '((?c . "\\citet{%l}") ; natbib inline text
-            (?i . "\\citep{%l}") ; natbib with parens
-            ))))
-  (define-key org-mode-map (kbd "C-c )") 'reftex-citation)
-  (define-key org-mode-map (kbd "C-c (") 'org-mode-reftex-search))
-(add-hook 'org-mode-hook 'org-mode-reftex-setup)
-
-;; Add defaults packages to include when exporting.
-(setq org-latex-hyperref-template
-      "\\hypersetup{\n  pdfkeywords={%k},\n  pdfsubject={%d},\n  pdfcreator={%c},\n  colorlinks=true,\n  linkcolor=black,\n  urlcolor=blue}\n")
-(add-to-list 'org-latex-packages-alist '("" "graphicx"))
-(add-to-list 'org-latex-packages-alist '("" "geometry"))
-(add-to-list 'org-latex-packages-alist '("" "hyperref"))
-(add-to-list 'org-latex-packages-alist '("" "caption"))
-(add-to-list 'org-latex-packages-alist '("" "listings"))
-(add-to-list 'org-latex-packages-alist '("" "color"))
-(add-to-list 'org-latex-packages-alist '("" "mathptmx"))
-
-(add-to-list 'org-latex-classes
-             '("xelatex"
-               "\\documentclass[11pt,a4paper]{article}
-\\usepackage[T1]{fontenc}
-\\usepackage{graphicx}
-\\usepackage{geometry}
-\\usepackage{listings}
-\\usepackage{hyperref}
-\\usepackage{caption}
-\\usepackage{color}
-\\usepackage{xcolor}
-\\usepackage{mathptmx}
-\\usepackage[section]{placeins}
-\\usepackage{tikz}
-\\usepackage{csquotes}
-\\usepackage[backend=biber,sorting=none]{biblatex}
-\\addbibresource[datatype=bibtex]{~/workspace/Documents/Bibliography/biblio.bib}
-\\usepackage[]{xkeyval}
-\\usepackage{paralist}
-\\geometry{a4paper, textwidth=6.5in, textheight=10in,
-            marginparsep=7pt, marginparwidth=.6in}
-\\definecolor{light-gray}{gray}{0.95}
-\\lstset{
-  frame=tlbr,
-  framesep=4pt,
-  framerule=0pt,
-  columns=fullflexible,
-  breaklines=true,
-  backgroundcolor=\\color{light-gray},
-  basicstyle=\\normalsize\\ttfamily,
-  showstringspaces=false,
-  keywordstyle=\\itshape\\color{blue},
-  identifierstyle=\\ttfamily,
-  commentstyle=\\color{black},
-  xleftmargin=0.5cm,
-  xrightmargin=0.5cm,
-  aboveskip=\\bigskipamount,
-  belowskip=\\bigskipamount}
-\\renewcommand{\\rmdefault}{ptm}
-\\title{}
-      [NO-DEFAULT-PACKAGES]
-      [NO-PACKAGES]
-\\hypersetup{pdfencoding=auto,colorlinks=true}"
-               ("\\section{%s}" . "\\section*{%s}")
-               ("\\subsection{%s}" . "\\subsection*{%s}")
-               ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-               ("\\paragraph{%s}" . "\\paragraph*{%s}")
-               ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
-
-(add-to-list 'org-latex-classes
-             '("pdflatex"
-               "\\documentclass[11pt,a4paper]{article}
-\\usepackage[T1]{fontenc}
-\\usepackage{lmodern}
-\\usepackage{graphicx}
-\\usepackage{geometry}
-\\usepackage{listings}
-\\usepackage{hyperref}
-\\usepackage{caption}
-\\usepackage{color}
-\\usepackage{mathptmx}
-\\usepackage[section]{placeins}
-\\geometry{a4paper, textwidth=6.5in, textheight=10in,
-            marginparsep=7pt, marginparwidth=.6in}
-\\definecolor{light-gray}{gray}{0.95}
-\\lstset{
-  frame=tlbr,
-  framesep=4pt,
-  framerule=0pt,
-  columns=fullflexible,
-  breaklines=true,
-  backgroundcolor=\\color{light-gray},
-  basicstyle=\\normalsize\\ttfamily,
-  showstringspaces=false,
-  keywordstyle=\\itshape\\color{blue},
-  identifierstyle=\\ttfamily,
-  commentstyle=\\color{black},
-  xleftmargin=0.5cm,
-  xrightmargin=0.5cm,
-  aboveskip=\\bigskipamount,
-  belowskip=\\bigskipamount}
-\\renewcommand{\\rmdefault}{ptm}
-\\title{}
-      [NO-DEFAULT-PACKAGES]
-      [NO-PACKAGES]"
-               ("\\section{%s}" . "\\section*{%s}")
-               ("\\subsection{%s}" . "\\subsection*{%s}")
-               ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-               ("\\paragraph{%s}" . "\\paragraph*{%s}")
-               ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
-
-;; Set default document stylesheet
-(if (executable-find "xelatex")
-    (setq org-latex-default-class "xelatex")
-  (setq org-latex-default-class "pdflatex"))
-
-;; Let the exporter use the -shell-escape option to let latex execute external programs.
-(if (executable-find "xelatex")
-    (setq org-latex-pdf-process
-          '("xelatex -interaction nonstopmode -synctex=1 -shell-escape -output-directory %o %f"
-            "biber %b"
-            "bibtex $(basename %b)"
-            "xelatex -interaction nonstopmode -synctex=1 -shell-escape -output-directory %o %f"
-            "xelatex -interaction nonstopmode -synctex=1 -shell-escape -output-directory %o %f")) ;; multipass
-  (setq org-latex-pdf-process
-        '("pdflatex -interaction nonstopmode -shell-escape -output-directory %o %f"
-          "bibtex $(basename %b)"
-          "pdflatex -interaction nonstopmode -shell-escape -output-directory %o %f"
-          "pdflatex -interaction nonstopmode -shell-escape -output-directory %o %f"))
-  ) ;; multipass
-
-;; Tweak the PDF viewer
-(eval-after-load "org"
-  '(progn
-     ;; .txt files aren't in the list initially, but in case that changes
-     ;; in a future version of org, use if to avoid errors
-     (if (assoc "\\.txt\\'" org-file-apps)
-         (setcdr (assoc "\\.txt\\'" org-file-apps) "kate %s")
-       (add-to-list 'org-file-apps '("\\.txt\\'" . "kate %s") t))
-     ;; Change .pdf association directly within the alist
-     (setcdr (assoc "\\.pdf\\'" org-file-apps) "acroread %s")))
-
-;; Automatically refresh inline images that are generated from Babel blocks
-(add-hook 'org-babel-after-execute-hook (lambda ()
-                                          (condition-case nil
-                                              (org-display-inline-images)
-                                            (error nil)))
-          'append)
-
-;; Enable multiple languages
-(org-babel-do-load-languages
- 'org-babel-load-languages
- '((emacs-lisp . t)
-   (plantuml . t)
-   (ditaa . t)
-   (dot . t)
-   (gnuplot . t)
-   (sh . t)
-   (R . t)
-   (perl . t)
-   (ruby . t)
-   (python . t)
-   (js . t)
-   (C . t)
-   (haskell . t)))
-
-;; Don't ask for confirmation on every =C-c C-c= code-block compile.
-(setq org-confirm-babel-evaluate nil)
-
-;; The next block makes org-babel aware that a lower-case 'r' in a =src= block header should be processed as R.
-(add-to-list 'org-src-lang-modes
-             '("r" . ess-mode))
-
-;; add emacs lisp support for minted
-(setq org-latex-custom-lang-environments
-      '((emacs-lisp "common-lispcode")))
-
 ;; Make org do not open other frames
 (setq org-link-frame-setup (quote ((vm . vm-visit-folder-other-frame)
                                    (vm-imap . vm-visit-imap-folder-other-frame)
@@ -573,12 +215,6 @@ a link to this file."
 ;; Add missing function
 (defun org-reverse-string (string)
   (apply 'string (reverse (string-to-list string))))
-
-;; CSS for the HTML
-(setq org-html-style-include-scripts nil
-      org-html-style-include-default nil)
-(setq org-html-style
-      "<link rel=\"stylesheet\" type=\"text/css\" href=\"http://thomasf.github.io/solarized-css/solarized-light.min.css\" />")
 
 ;; Use Org bold, italics, code styles
 (defun org-text-wrapper (txt &optional endtxt)
@@ -617,11 +253,6 @@ a link to this file."
        (interactive)
        (org-text-wrapper "="))
 
-;; Org Table of Contents
-(add-to-list 'load-path "~/.emacs.d/org-toc")
-(require 'org-toc)
-(add-hook 'org-mode-hook 'org-toc-enable)
-
 ;; Strike thru headlines for DONE task
 ;; Stolen from http://sachachua.com/blog/2012/12/emacs-strike-through-headlines-for-done-tasks-in-org/
 (setq org-fontify-done-headline t)
@@ -633,52 +264,10 @@ a link to this file."
    ((((class color) (min-colors 16) (background dark))
      (:foreground "LightSalmon" :strike-through t)))))
 
-;; Pandoc
-(add-to-list 'load-path "~/.emacs.d/hydra")
-(add-to-list 'load-path "~/.emacs.d/pandoc-mode")
-(require 'pandoc-mode)
-(add-hook 'markdown-mode-hook 'turn-on-pandoc)
-(add-hook 'org-mode-hook 'pandoc-load-default-settings)
-(add-hook 'pandoc-mode-hook 'pandoc-load-default-settings)
-
-;; Abbrev
-(add-hook 'org-mode-hook (lambda () (abbrev-mode 1)))
-(define-skeleton skel-org-block-elisp
-  "Insert an emacs-lisp block"
-  ""
-  "#+begin_src emacs-lisp\n"
-  _ - \n
-  "#+end_src\n")
-(define-abbrev org-mode-abbrev-table "elsrc" "" 'skel-org-block-elisp)
-
-(define-skeleton skel-org-block-js
-  "Insert a JavaScript block"
-  ""
-  "#+begin_src js\n"
-  _ - \n
-  "#+end_src\n")
-(define-abbrev org-mode-abbrev-table "jssrc" "" 'skel-org-block-js)
-
-(define-skeleton skel-header-block
-  "Creates my default header"
-  ""
-  "#+TITLE: " str "\n"
-  "#+AUTHOR:\n"
-  "#+EMAIL:\n"
-  "#+LANGUAGE: en\n"
-  "#+OPTIONS:  toc:nil num:0\n"
-  "#+OPTIONS: author:t email:nil  date:t\n"
-  "#+OPTIONS: c:nil d:(not LOGBOOK) e:t f:t inline:t p:nil pri:nil stat:t tags:t\n"
-  "#+OPTIONS: tasks:t tex:t timestamp:t todo:t\n"
-  "#+DESCRIPTION:\n"
-  "#+EXCLUDE_TAGS: noexport\n"
-  "#+KEYWORDS:\n"
-  "#+SELECT_TAGS: export\n"
-  "#+STYLE: <link rel=\"stylesheet\" type=\"text/css\" href=\"http://thomasf.github.io/solarized-css/solarized-light.min.css\" />\n")
-(define-abbrev org-mode-abbrev-table "sheader" "" 'skel-header-block)
-
-;; Tell auto-insert what to use for .org files
-(define-auto-insert "\\.org" 'skel-header-block)
+;; Org Table of Contents
+(add-to-list 'load-path "~/.emacs.d/org-toc")
+(require 'org-toc)
+(add-hook 'org-mode-hook 'org-toc-enable)
 
 ;; Nice bulleted lists
 (add-to-list 'load-path "~/.emacs.d/org-autolist")

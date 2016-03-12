@@ -51,8 +51,7 @@
 ;; Manage popup windows
 (use-package popwin
   :load-path "~/.emacs.d/popwin"
-  :pin manual
-  :config (popwin-mode 1))
+  :pin manual)
 
 ;; Automatically save and restore sessions
 (use-package desktop
@@ -293,6 +292,11 @@
 (use-package multiple-cursors
   :pin manual
   :load-path "~/.emacs.d/multiple-cursors")
+
+;; write good mode
+(use-package writegood-mode
+  :pin manual
+  :load-path "~/.emacs.d/writegood-mode")
 
 (provide 'setup-general)
 ;;; setup-general.el ends here

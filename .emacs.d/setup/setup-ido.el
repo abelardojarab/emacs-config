@@ -31,6 +31,10 @@
 (ido-everywhere 1)
 
 (setq
+ ido-max-dir-file-cache 0
+ ido-show-dot-for-dired t
+ ido-default-file-method 'samewindow
+ ido-default-buffer-method 'samewindow
  ido-save-directory-list-file "~/.emacs.cache/ido.last"
  ido-ignore-buffers ;; ignore these guys
  '("\\` " "^\*Mess" "^\*Back" ".*Completion" "^\*Ido" "^\*trace"
@@ -39,8 +43,8 @@
  ido-case-fold t
  ido-enable-last-directory-history t
  ido-auto-merge-work-directories-length -1
- ido-max-work-directory-list 30
- ido-max-work-file-list 50
+ ido-max-work-directory-list 15
+ ido-max-work-file-list 10
  ido-use-filename-at-point nil
  ido-use-url-at-point nil
  ido-enable-flex-matching t

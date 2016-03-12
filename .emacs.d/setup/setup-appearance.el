@@ -121,8 +121,7 @@
 (use-package highlight-blocks
   :load-path "~/.emacs.d/highlight-blocks"
   :pin manual
-  :diminish highlight-blocks-mode
-  :config (add-hook 'prog-mode-hook 'highlight-blocks-mode))
+  :diminish highlight-blocks-mode)
 
 ;; Permanent indentation guide
 (use-package indent-hint

@@ -24,8 +24,6 @@
 
 ;;; Code:
 
-
-;; Set control master options before loading tramp
 (use-package tramp
   :init (progn
           ;; Set tramp variables
@@ -33,6 +31,7 @@
               (setq tramp-default-method "plink")
             (setq tramp-default-method "ssh"))
 
+          ;; Set control master options before loading tramp
           (setq tramp-ssh-controlmaster-options "-o ControlMaster=auto -o ControlPath='tramp.%%C' -o ControlPersist=no"))
   :config (progn
             ;; Fix auto save problem

@@ -94,8 +94,23 @@
 ;; Setup Cedet
 (require 'setup-cedet)
 
-;; Setup Org and LaTeX
+;; Setup Org
 (require 'setup-org)
+
+;; Setup Org (babel support)
+(require 'setup-org-babel)
+
+;; Setup Org (image supporg)
+(require 'setup-org-image)
+
+;; Setup Org (latex support)
+(require 'setup-org-latex)
+
+;; Setup Org (html support)
+(require 'setup-org-html)
+
+;; Setup pandoc
+(require 'setup-pandoc)
 
 ;; Setup web support
 (require 'setup-web)
