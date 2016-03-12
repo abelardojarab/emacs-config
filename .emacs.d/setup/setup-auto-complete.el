@@ -24,22 +24,6 @@
 
 ;;; Code:
 
-;; Abbrevs
-(setq abbrev-file-name "~/.emacs.cache/abbrev_defs")
-(if (file-exists-p abbrev-file-name)
-    (quietly-read-abbrev-file))
-(add-hook 'kill-emacs-hook
-          'write-abbrev-file)
-
-;; Activate template autocompletion
-(abbrev-mode t)
-(setq save-abbrevs t)
-(dolist (hook '(prog-mode-hook
-                markdown-mode-hook
-                org-mode-hook
-                text-mode-hook))
-  (add-hook hook (lambda () (abbrev-mode 1))))
-
 ;; Auto-Complete
 (add-to-list 'load-path "~/.emacs.d/auto-complete")
 (require 'auto-complete-config)
