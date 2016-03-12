@@ -25,9 +25,9 @@
 ;;; Code:
 
 ;; Enable Semantic
-;; (add-to-list 'load-path "~/.emacs.d/cedet/lisp/cedet")
-;; (semantic-load-enable-minimum-features)
-(semantic-mode 1)
+(add-to-list 'load-path "~/.emacs.d/cedet/lisp/cedet")
+(semantic-load-enable-minimum-features)
+;; (semantic-mode 1)
 (require 'semantic/wisent)
 
 ;; Enable case-insensitive searching

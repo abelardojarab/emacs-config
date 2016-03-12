@@ -91,6 +91,9 @@
 ;; Setup appearance
 (require 'setup-appearance)
 
+;; Setup CEDET
+(require 'setup-cedet)
+
 ;; Setup Org
 (require 'setup-org)
 
