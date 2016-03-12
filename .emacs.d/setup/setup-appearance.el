@@ -91,52 +91,70 @@
 ;; (load-theme 'apropospriate-light t)
 
 ;; Fringe helper
-(add-to-list 'load-path "~/.emacs.d/fringe-helper")
-(require 'fringe-helper)
+(use-package fringe-helper
+  :pin manual
+  :load-path "~/.emacs.d/fringe-helper")
 
 ;; Highlight the line
-(require 'hl-line)
-(defun local-hl-line-mode-off ()
-  (interactive)
-  (make-local-variable 'global-hl-line-mode)
-  (setq global-hl-line-mode t))
+(use-package hl-line
+  :config (progn
+            (defun local-hl-line-mode-off ()
+              (interactive)
+              (make-local-variable 'global-hl-line-mode)
+              (setq global-hl-line-mode t))
 
-;; hl-line overrides the background of hi-lock’ed text, this will provide a fix
-(defadvice hi-lock-set-pattern (around use-overlays activate)
-  (let ((font-lock-fontified nil))
-    ad-do-it))
-(add-hook 'org-mode-hook 'local-hl-line-mode-off)
+            ;; hl-line overrides the background of hi-lock’ed text, this will provide a fix
+            (defadvice hi-lock-set-pattern (around use-overlays activate)
+              (let ((font-lock-fontified nil))
+                ad-do-it))
+            (add-hook 'org-mode-hook 'local-hl-line-mode-off)))
 
 ;; Highlight the latest changes in the buffer (like text inserted from: yank, undo, etc.) until the next command is run
-(add-to-list 'load-path "~/.emacs.d/volatile-highlights")
-(require 'volatile-highlights)
-(volatile-highlights-mode t)
+(use-package volatile-highlights
+  :pin manual
+  :load-path "~/.emacs.d/volatile-highlights"
+  :diminish volatile-highlights-mode
+  :config (progn
+            (volatile-highlights-mode t)))
 
 ;; Highlight blocks
-(add-to-list 'load-path "~/.emacs.d/highlight-blocks")
-(require 'highlight-blocks)
+(use-package highlight-blocks
+  :load-path "~/.emacs.d/highlight-blocks"
+  :pin manual
+  :diminish highlight-blocks-mode
+  :config (add-hook 'prog-mode-hook 'highlight-blocks-mode))
 
 ;; Permanent indentation guide
-(add-to-list 'load-path "~/.emacs.d/indent-hint")
-(setq indent-hint-background-overlay t)
-(setq indent-hint-bg nil)
-(require 'indent-hint)
-(add-hook 'prog-mode-hook 'indent-hint-mode)
-(add-hook 'lisp-mode-hook 'indent-hint-lisp)
+(use-package indent-hint
+  :pin manual
+  :load-path "~/.emacs.d/indent-hint"
+  :init (progn
+          (setq indent-hint-background-overlay t)
+          (setq indent-hint-bg nil))
+  :config (progn
+            (add-hook 'prog-mode-hook 'indent-hint-mode)
+            (add-hook 'lisp-mode-hook 'indent-hint-lisp)))
 
 ;; Highlight symbol
 (add-to-list 'load-path "~/.emacs.d/highlight-symbol")
-(require 'highlight-symbol)
-(add-hook 'prog-mode-hook (lambda () (highlight-symbol-mode)))
-(add-hook 'org-mode-hook (lambda () (highlight-symbol-mode)))
-(add-hook 'markdown-mode-hook (lambda () (highlight-symbol-mode)))
-(add-hook 'text-mode-hook (lambda () (highlight-symbol-mode)))
-(setq highlight-symbol-on-navigation-p t)
+(use-package highlight-symbol
+  :load-path "~/.emacs.d/highlight-symbol"
+  :pin manual
+  :config (progn (mapc (lambda (mode)
+                         (add-hook mode 'highlight-symbol-mode))
+                       '(prog-mode-hook
+                         org-mode-hook
+                         markdown-mode-hook
+                         text-mode-hook))
+                 (setq highlight-symbol-on-navigation-p t))
+  :diminish highlight-symbol-mode)
 
 ;; Blinking cursor
-(require 'heartbeat-cursor)
-(add-hook 'prog-mode-hook (lambda () (heartbeat-cursor-mode)))
-(add-hook 'org-mode-hook (lambda () (heartbeat-cursor-mode)))
+(use-package heartbeat-cursor
+  :pin manual
+  :config (progn
+            (add-hook 'prog-mode-hook (lambda () (heartbeat-cursor-mode)))
+            (add-hook 'org-mode-hook (lambda () (heartbeat-cursor-mode)))))
 
 (provide 'setup-appearance)
 ;;; setup-appearance.el ends here

@@ -24,36 +24,39 @@
 
 ;;; Code:
 
-;; Set tramp variables
-(if (eq system-type 'windows-nt)
-    (setq tramp-default-method "plink")
-  (setq tramp-default-method "ssh"))
 
 ;; Set control master options before loading tramp
-(setq tramp-ssh-controlmaster-options "-o ControlMaster=auto -o ControlPath='tramp.%%C' -o ControlPersist=no")
-(require 'tramp)
+(use-package tramp
+  :init (progn
+          ;; Set tramp variables
+          (if (eq system-type 'windows-nt)
+              (setq tramp-default-method "plink")
+            (setq tramp-default-method "ssh"))
 
-;; Fix auto save problem
-(setq tramp-persistency-file-name "~/.emacs.cache/tramp")
-(setq tramp-auto-save-directory "~/.emacs.cache/auto-save")
+          (setq tramp-ssh-controlmaster-options "-o ControlMaster=auto -o ControlPath='tramp.%%C' -o ControlPersist=no"))
+  :config (progn
+            ;; Fix auto save problem
+            (setq tramp-persistency-file-name "~/.emacs.cache/tramp")
+            (setq tramp-auto-save-directory "~/.emacs.cache/auto-save")
 
-;; Tramp configurations
-(setq my-tramp-ssh-completions
-      '((tramp-parse-sconfig "~/.ssh/config")
-        (tramp-parse-shosts "~/.ssh/known_hosts")))
-(mapc (lambda (method)
-        (tramp-set-completion-function method my-tramp-ssh-completions))
-      '("rsync" "scp" "scpc" "scpx" "sftp" "ssh" "plink"))
+            ;; Tramp configurations
+            (setq my-tramp-ssh-completions
+                  '((tramp-parse-sconfig "~/.ssh/config")
+                    (tramp-parse-shosts "~/.ssh/known_hosts")))
+            (mapc (lambda (method)
+                    (tramp-set-completion-function method my-tramp-ssh-completions))
+                  '("rsync" "scp" "scpc" "scpx" "sftp" "ssh" "plink"))
 
-;; have tramp save temps locally
-(unless (string-equal system-type "windows-nt")
-  (setq auto-save-file-name-transforms
-        '(("\\`/[^/]*:\\([^/]*/\\)*\\([^/]*\\)\\'" "/tmp/\\2" t)
-          ("\\`/?\\([^/]*/\\)*\\([^/]*\\)\\'" "~/.emacs.cache/auto-save/" t))))
+            ;; have tramp save temps locally
+            (unless (string-equal system-type "windows-nt")
+              (setq auto-save-file-name-transforms
+                    '(("\\`/[^/]*:\\([^/]*/\\)*\\([^/]*\\)\\'" "/tmp/\\2" t)
+                      ("\\`/?\\([^/]*/\\)*\\([^/]*\\)\\'" "~/.emacs.cache/auto-save/" t))))))
 
 ;; End of line, needed by tramp
-(require 'eol-conversion)
-(setq inhibit-eol-conversion 't)
+(use-package eol-conversion
+  :pin manual
+  :config (setq inhibit-eol-conversion 't))
 
 (provide 'setup-tramp)
 ;;; setup-tramp.el ends here

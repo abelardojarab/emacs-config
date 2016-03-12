@@ -245,8 +245,7 @@
 
 ;; Turn on subword-mode for non-lispy languages
 (use-package subword
-  :config (progn (global-subword-mode)
-                 (mapc (lambda (mode)
+  :config (progn (mapc (lambda (mode)
                          (add-hook mode 'subword-mode))
                        '(c-common-mode-hook
                          python-mode-hook

@@ -37,14 +37,12 @@
 ;; Baseline packages
 (use-package bind-key)
 (use-package diminish)
-
-;; Undefined function (baseline package)
 (use-package let-alist)
 
 ;; Namespace implementation (baseline package)
-(add-to-list 'load-path "~/.emacs.d/names")
 (use-package names
-  :ensure nil)
+  :load-path "~/.emacs.d/names"
+  :pin manual)
 
 (provide 'setup-package)
 ;;; setup-package.el ends here
