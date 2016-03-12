@@ -24,30 +24,6 @@
 
 ;;; Code:
 
-;; Fix appearance of Windows Unicode characters
-(standard-display-ascii ?\200 [15])
-(standard-display-ascii ?\201 [21])
-(standard-display-ascii ?\202 [24])
-(standard-display-ascii ?\203 [13])
-(standard-display-ascii ?\204 [22])
-(standard-display-ascii ?\205 [25])
-(standard-display-ascii ?\206 [12])
-(standard-display-ascii ?\210 [23])
-(standard-display-ascii ?\211 [14])
-(standard-display-ascii ?\212 [18])
-(standard-display-ascii ?\214 [11])
-(standard-display-ascii ?\221 [?\'])
-(standard-display-ascii ?\222 [?\'])
-(standard-display-ascii ?\223 [?\"])
-(standard-display-ascii ?\224 [?\"])
-(standard-display-ascii ?\225 [?\*])
-(standard-display-ascii ?\226 "---")
-(standard-display-ascii ?\227 "--")
-
-;; Fringe helper
-(add-to-list 'load-path "~/.emacs.d/fringe-helper")
-(require 'fringe-helper)
-
 ;; Monokai theme
 (add-to-list 'load-path "~/.emacs.d/monokai-emacs")
 (add-to-list 'custom-theme-load-path "~/.emacs.d/monokai-emacs")
@@ -113,6 +89,10 @@
 ;; (load-theme 'solarized-dark t)
 ;; (load-theme 'material-light t)
 ;; (load-theme 'apropospriate-light t)
+
+;; Fringe helper
+(add-to-list 'load-path "~/.emacs.d/fringe-helper")
+(require 'fringe-helper)
 
 ;; Highlight the line
 (require 'hl-line)

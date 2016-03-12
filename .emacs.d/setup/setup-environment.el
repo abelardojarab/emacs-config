@@ -596,6 +596,9 @@ non-nil."
                      major-mode '(pdf-docs doc-view-mode))
               (djcb-set-cursor-according-to-mode))))
 
+;; Disable blinking cursor
+(blink-cursor-mode 0)
+
 ;; Put a nice title to the window, including filename
 (add-hook 'window-configuration-change-hook
           (lambda ()
@@ -701,5 +704,25 @@ non-nil."
     (unless was-modified
       (set-buffer-modified-p nil))))
 (ad-activate 'highlight-changes-rotate-faces)
+
+;; Fix appearance of Windows Unicode characters
+(standard-display-ascii ?\200 [15])
+(standard-display-ascii ?\201 [21])
+(standard-display-ascii ?\202 [24])
+(standard-display-ascii ?\203 [13])
+(standard-display-ascii ?\204 [22])
+(standard-display-ascii ?\205 [25])
+(standard-display-ascii ?\206 [12])
+(standard-display-ascii ?\210 [23])
+(standard-display-ascii ?\211 [14])
+(standard-display-ascii ?\212 [18])
+(standard-display-ascii ?\214 [11])
+(standard-display-ascii ?\221 [?\'])
+(standard-display-ascii ?\222 [?\'])
+(standard-display-ascii ?\223 [?\"])
+(standard-display-ascii ?\224 [?\"])
+(standard-display-ascii ?\225 [?\*])
+(standard-display-ascii ?\226 "---")
+(standard-display-ascii ?\227 "--")
 
 (provide 'setup-environment)
