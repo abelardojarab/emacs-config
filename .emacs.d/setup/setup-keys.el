@@ -433,6 +433,7 @@
 (define-key my-keys-minor-mode-map (kbd "<C-f2>") 'bm-toggle)
 (define-key my-keys-minor-mode-map (kbd "<left-margin> <mouse-1>") 'bm-toggle)
 (define-key my-keys-minor-mode-map (kbd "C-`") 'popup-select-window)
+(define-key my-keys-minor-mode-map (kbd "C-b") 'beautify-buffer)
 (define-key my-keys-minor-mode-map (kbd "M-o") 'psw-switch-buffer)
 (define-key my-keys-minor-mode-map (kbd "<f4>") 'helm-semantic-or-imenu)
 (define-key my-keys-minor-mode-map (kbd "<f5>") 'smex)
@@ -444,10 +445,10 @@
           (function
            (lambda ()
              (progn
-               (local-set-key [(meta up)] 'psw-switch-buffer)
-               (local-set-key [(meta down)] 'psw-switch-buffer)
-               (local-set-key [(meta left)] 'psw-switch-function)
-               (local-set-key [(meta right)] 'psw-switch-function)))))
+               (local-set-key [(meta up)] 'tabbar-backward-group)
+               (local-set-key [(meta down)] 'tabbar-forward-group)
+               (local-set-key [(meta left)] 'tabbar-backward-tab)
+               (local-set-key [(meta right)] 'tabbar-forward-tab)))))
 
 ;; Define custom key mode
 (define-minor-mode my-keys-minor-mode
