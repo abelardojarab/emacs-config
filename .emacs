@@ -85,6 +85,9 @@
 ;; Setup general
 (require 'setup-general)
 
+;; Setup desktop (caused crash)
+;; (require 'setup-desktop)
+
 ;; Setup tramp
 (require 'setup-tramp)
 
@@ -151,10 +154,10 @@
 ;; Setup bookmarks
 (require 'setup-bookmarks)
 
-;; Setup modeline
-(require 'setup-modeline)
+;; Setup modeline (cause crash)
+;; (require 'setup-modeline)
 
-;; Setup recentf
+;; Setup recentf (causes crash?)
 (require 'setup-recentf)
 
 ;; Setup dash
@@ -163,7 +166,7 @@
 ;; Setup versioning (optional)
 (require 'setup-versioning)
 
-;; Setup Lisp mode (caused crash)
+;; Setup Lisp mode (cause crash)
 (require 'setup-lisp)
 
 ;; Setup Python
