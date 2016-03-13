@@ -78,18 +78,5 @@
 ;; Add Wisent
 (add-hook 'python-mode-hook 'wisent-python-default-setup)
 
-;; Jedi settings
-(add-to-list 'load-path "~/.emacs.d/python-environment")
-(add-to-list 'load-path "~/.emacs.d/epc")
-(add-to-list 'load-path "~/.emacs.d/jedi")
-(require 'python-environment)
-(require 'epc)
-(require 'jedi)
-(add-hook 'python-mode-hook 'jedi:setup)
-(setq jedi:setup-keys nil)
-(setq jedi:complete-on-dot t)
-(setq jedi:tooltip-method t)
-(ac-flyspell-workaround)
-
 (provide 'setup-python)
 ;;; setup-python.el ends here

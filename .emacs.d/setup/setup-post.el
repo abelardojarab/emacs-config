@@ -33,10 +33,5 @@
 (setq org-ref-insert-cite-key "C-c )")
 (setq org-ref-default-citation-link "autocite")
 
-;; Kill timers
-(cancel-function-timers 'dframe-timer-fn)
-(cancel-function-timers 'tabbar-ruler-mouse-movement)
-(cancel-function-timers 'js-gc)
-
 (provide 'setup-post)
 ;;; setup-post.el ends here

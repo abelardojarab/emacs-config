@@ -20,23 +20,13 @@
 (add-to-list 'load-path "~/.emacs.d/elisp")
 (add-to-list 'load-path "~/.emacs.d/dadams")
 (add-to-list 'load-path "~/.emacs.d/setup")
-(add-to-list 'load-path "~/.emacs.d/elp")
-(add-to-list 'load-path "~/.emacs.d/s")
-(add-to-list 'load-path "~/.emacs.d/f")
-(add-to-list 'load-path "~/.emacs.d/deferred")
-(add-to-list 'load-path "~/.emacs.d/ctable")
-(add-to-list 'load-path "~/.emacs.d/dash")
-(add-to-list 'load-path "~/.emacs.d/tabbar")
-(add-to-list 'load-path "~/.emacs.d/seq")
-(add-to-list 'load-path "~/.emacs.d/emacs-buttercup")
-(add-to-list 'load-path "~/.emacs.d/pkg-info")
 (add-to-list 'load-path "~/.emacs.d/use-package")
 
-;; Missing cl-lib function
-(defun cl--set-getf (plist tag val)
-  (let ((p plist))
-    (while (and p (not (eq (car p) tag))) (setq p (cdr (cdr p))))
-    (if p (progn (setcar (cdr p) val) plist) (list* tag val plist))))
+;; Setup package
+(require 'setup-package)
+
+;; Setup functions
+(require 'setup-functions)
 
 ;; CEDET
 (add-to-list 'load-path "~/.emacs.d/cedet")
@@ -62,9 +52,7 @@
      default)))
  '(ecb-options-version "2.40")
  '(ede-locate-setup-options (quote (ede-locate-global ede-locate-locate)))
- '(ede-project-directories (quote ("~/workspace")))
- '(magit-use-overlays t)
- '(protect-buffer-bury-p nil))
+ '(ede-project-directories (quote ("~/workspace"))))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -73,20 +61,11 @@
  ;; If there is more than one, they won't work right.
  '(jedi:highlight-function-argument ((t (:inherit eldoc-highlight-function-argument)))))
 
-;; Setup utilities
-(require 'setup-functions)
-
-;; Setup package
-(require 'setup-package)
-
 ;; Setup environment
 (require 'setup-environment)
 
 ;; Setup general
 (require 'setup-general)
-
-;; Setup desktop (caused crash)
-;; (require 'setup-desktop)
 
 ;; Setup tramp
 (require 'setup-tramp)
@@ -154,9 +133,6 @@
 ;; Setup bookmarks
 (require 'setup-bookmarks)
 
-;; Setup modeline (cause crash)
-;; (require 'setup-modeline)
-
 ;; Setup recentf (causes crash?)
 (require 'setup-recentf)
 
@@ -171,6 +147,9 @@
 
 ;; Setup Python
 (require 'setup-python)
+
+;; Setup Python plugins (e.g. Jedi)
+(require 'setup-python-plugins)
 
 ;; Setup markdown and Yaml
 (require 'setup-markdown)

@@ -40,9 +40,22 @@
 (use-package let-alist)
 
 ;; Namespace implementation (baseline package)
-(use-package names
-  :load-path "~/.emacs.d/names"
-  :pin manual)
+(use-package ctable          :defer t :load-path "~/.emacs.d/ctable")
+(use-package deferred        :defer t :load-path "~/.emacs.d/deferred")
+(use-package epc             :defer t :load-path "~/.emacs.d/epc")
+(use-package epl             :defer t :load-path "~/.emacs.d/epl")
+(use-package f               :defer t :load-path "~/.emacs.d/f")
+(use-package s               :defer t :load-path "~/.emacs.d/s")
+(use-package seq             :defer t :load-path "~/.emacs.d/seq")
+(use-package pkg-info        :defer t :load-path "~/.emacs.d/pkg-info")
+(use-package popup           :defer t :load-path "~/.emacs.d/popup")
+(use-package popwin          :defer t :load-path "~/.emacs.d/popwin")
+(use-package pos-tip         :defer t :load-path "~/.emacs.d/pos-tip")
+(use-package tabbar          :defer t :load-path "~/.emacs.d/tabbar")
+(use-package names           :defer t :load-path "~/.emacs.d/names")
+(use-package xml-rpc         :defer t :load-path "~/.emacs.d/xml-rpc")
+(use-package dash            :defer t :load-path "~/.emacs.d/dash")
+(use-package emacs-buttercup :defer t :load-path "~/.emacs.d/emacs-buttercup")
 
 (provide 'setup-package)
 ;;; setup-package.el ends here

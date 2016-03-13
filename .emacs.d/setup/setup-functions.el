@@ -24,6 +24,12 @@
 
 ;;; Code:
 
+;; Missing cl-lib function
+(defun cl--set-getf (plist tag val)
+  (let ((p plist))
+    (while (and p (not (eq (car p) tag))) (setq p (cdr (cdr p))))
+    (if p (progn (setcar (cdr p) val) plist) (list* tag val plist))))
+
 ;; Missing function
 (when (not (fboundp 'define-error))
   (defun define-error (name message &optional parent)
@@ -51,9 +57,6 @@ Defaults to `error'."
 
 ;; Missing variable
 (defvar cursor-sensor-inhibit nil)
-
-;; Missing function
-(require 'let-alist)
 
 ;; https://github.com/kentaro/auto-save-buffers-enhanced
 ;; `regexp-match-p` function modified by @sds on stackoverflow
