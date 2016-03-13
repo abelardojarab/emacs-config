@@ -151,10 +151,10 @@
 ;; Setup bookmarks
 (require 'setup-bookmarks)
 
-;; Setup modeline (possible cause of crash)
+;; Setup modeline
 (require 'setup-modeline)
 
-;; Setup recent (possible cause of crash)
+;; Setup recentf
 (require 'setup-recentf)
 
 ;; Setup dash
@@ -196,7 +196,7 @@
 ;; Setup hideshow
 (require 'setup-hideshow)
 
-;; Setup imenu (possible cause of crash)
+;; Setup imenu
 (require 'setup-imenu)
 
 ;; Setup helm
