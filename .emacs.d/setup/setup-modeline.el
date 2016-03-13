@@ -31,14 +31,14 @@
   (nyan-mode t))
 
 ;; Smart modeline
-(add-to-list 'load-path "~/.emacs.d/rich-minority")
-(add-to-list 'load-path "~/.emacs.d/smart-mode-line")
-(require 'smart-mode-line)
-(sml/setup)
-(setq sml/shorten-directory t)
-(setq sml/shorten-modes t)
-(setq sml/name-width 25)
-(setq sml/mode-width 'full)
+;; (add-to-list 'load-path "~/.emacs.d/rich-minority")
+;; (add-to-list 'load-path "~/.emacs.d/smart-mode-line")
+;; (require 'smart-mode-line)
+;; (sml/setup)
+;; (setq sml/shorten-directory t)
+;; (setq sml/shorten-modes t)
+;; (setq sml/name-width 25)
+;; (setq sml/mode-width 'full)
 
 (provide 'setup-modeline)
 ;;; setup-modeline.el ends here
