@@ -24,33 +24,7 @@
 
 ;;; Code:
 
-;; Missing function
-(when (not (fboundp 'define-error))
-  (defun define-error (name message &optional parent)
-    "Define NAME as a new error signal.
-MESSAGE is a string that will be output to the echo area if such an error
-is signaled without being caught by a `condition-case'.
-PARENT is either a signal or a list of signals from which it inherits.
-Defaults to `error'."
-    (unless parent (setq parent 'error))
-    (let ((conditions
-           (if (consp parent)
-               (apply #'nconc
-                      (mapcar (lambda (parent)
-                                (cons parent
-                                      (or (get parent 'error-conditions)
-                                          (error "Unknown signal `%s'" parent))))
-                              parent))
-             (cons parent (get parent 'error-conditions)))))
-      (put name 'error-conditions
-           (delete-dups (copy-sequence (cons name conditions))))
-      (when message (put name 'error-message message)))))
 
-;; Missing variable
-(defvar scheme-imenu-generic-expression "")
-
-;; Missing variable
-(defvar cursor-sensor-inhibit nil)
 
 ;; ignore byte-compile warnings
 (setq byte-compile-warnings nil)
@@ -66,9 +40,6 @@ Defaults to `error'."
 (if window-system
     (tool-bar-mode -1))
 
-;; Undefined function
-(require 'let-alist)
-
 ;; Printing
 (setq ps-paper-type 'a4
       ps-font-size 7.0
@@ -76,10 +47,6 @@ Defaults to `error'."
       ps-print-color-p t
       ps-landscape-mode nil    ;; for two pages per page: t
       ps-number-of-columns 1)  ;; for two pages per page: 2
-
-;; Namespace implementation
-(add-to-list 'load-path "~/.emacs.d/names")
-(require 'names)
 
 ;; Exec path from shell in Mac OSX
 (when (equal system-type 'darwin)

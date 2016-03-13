@@ -24,39 +24,6 @@
 
 ;;; Code:
 
-;; iMenu
-(set-default 'imenu-auto-rescan t)
-(add-hook 'lisp-mode-hook
-         (lambda ()
-           (setq imenu-create-index-function 'imenu-example--create-lisp-index)
-           (setq imenu-generic-expression scheme-imenu-generic-expression)))
-
-(mapc (lambda (mode)
-       (add-hook mode 'imenu-add-menubar-index))
-      '(prog-mode-hook
-        reftex-mode-hook
-        reftex-load-hook
-        org-mode-hook))
-
-;; iMenus
-(add-to-list 'load-path "~/.emacs.d/imenus")
-(autoload 'imenus "imenus" nil t)
-(autoload 'imenus-mode-buffers "imenus" nil t)
-
-;; Helm-bibtex
-(add-to-list 'load-path "~/.emacs.d/ebib")
-(add-to-list 'load-path "~/.emacs.d/parsebib")
-(add-to-list 'load-path "~/.emacs.d/helm-bibtex")
-(require 'ebib)
-(require 'parsebib)
-(require 'helm-bibtex)
-(defun helm-bibtex-cite ()
-  "Helm command to cite bibliography."
-  (interactive)
-  (helm-other-buffer
-   '(helm-c-source-bibtex)
-   "*helm bibtex:"))
-
 ;; Org-Ref
 (add-to-list 'load-path "~/.emacs.d/org-ref")
 (require 'org-ref)
@@ -65,10 +32,6 @@
       org-ref-pdf-directory "~/workspace/Documents/Bibliography/bibtex-pdfs")
 (setq org-ref-insert-cite-key "C-c )")
 (setq org-ref-default-citation-link "autocite")
-
-;; Enable GUI features
-(setq use-file-dialog t)
-(setq use-dialog-box t)
 
 ;; Kill timers
 (cancel-function-timers 'dframe-timer-fn)

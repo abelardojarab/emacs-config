@@ -28,61 +28,6 @@
 (add-to-list 'load-path "~/.emacs.d/helm")
 (require 'helm-config)
 
-;; Helm-flyspell
-(add-to-list 'load-path "~/.emacs.d/helm-flyspell")
-(require 'helm-flyspell)
-
-;; Helm-flycheck
-(add-to-list 'load-path "~/.emacs.d/helm-flycheck")
-(require 'helm-flycheck)
-
-;; Helm ls git
-(add-to-list 'load-path "~/.emacs.d/helm-ls-git")
-(require 'helm-ls-git)
-
-;; Helm bm support
-(add-to-list 'load-path "~/.emacs.d/helm-bm")
-(require 'helm-bm)
-
-;; Helm themes
-(add-to-list 'load-path "~/.emacs.d/helm-themes")
-(require 'helm-themes)
-
-;; Helm etags plus
-(add-to-list 'load-path "~/.emacs.d/helm-etags+")
-(require 'helm-etags+)
-
-;; Helm swoop
-(add-to-list 'load-path "~/.emacs.d/helm-swoop")
-(require 'helm-swoop)
-
-;; From helm-swoop to helm-multi-swoop-all
-(define-key helm-swoop-map (kbd "M-i") 'helm-multi-swoop-all-from-helm-swoop)
-
-;; Instead of helm-multi-swoop-all, you can also use helm-multi-swoop-current-mode
-(define-key helm-swoop-map (kbd "M-m") 'helm-multi-swoop-current-mode-from-helm-swoop)
-
-;; Move up and down like isearch
-(define-key helm-swoop-map (kbd "C-r") 'helm-previous-line)
-(define-key helm-swoop-map (kbd "C-s") 'helm-next-line)
-(define-key helm-multi-swoop-map (kbd "C-r") 'helm-previous-line)
-(define-key helm-multi-swoop-map (kbd "C-s") 'helm-next-line)
-
-;; Save buffer when helm-multi-swoop-edit complete
-(setq helm-multi-swoop-edit-save t)
-
-;; If this value is t, split window inside the current window
-(setq helm-swoop-split-with-multiple-windows nil)
-
-;; Split direcion. 'split-window-vertically or 'split-window-horizontally
-(setq helm-swoop-split-direction 'split-window-vertically)
-
-;; If nil, you can slightly boost invoke speed in exchange for text color
-(setq helm-swoop-speed-or-color nil)
-
-;; ;; Go to the opposite side of line from the end or beginning of line
-(setq helm-swoop-move-to-line-cycle t)
-
 ;; Indent semantic entries
 (require 'helm-imenu)
 (defun my-helm-imenu-transformer (cands)

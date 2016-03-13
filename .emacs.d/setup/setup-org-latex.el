@@ -239,5 +239,11 @@
      ;; Change .pdf association directly within the alist
      (setcdr (assoc "\\.pdf\\'" org-file-apps) "acroread %s")))
 
+;; Ebib parsing
+(add-to-list 'load-path "~/.emacs.d/ebib")
+(add-to-list 'load-path "~/.emacs.d/parsebib")
+(require 'ebib)
+(require 'parsebib)
+
 (provide 'setup-org-latex)
 ;;; setup-org-latex.el ends here

@@ -165,8 +165,6 @@
 
 ;; Helm semantic (switch function)
 (global-set-key (kbd "<f4>") 'helm-semantic-or-imenu)
-(define-key c-mode-base-map (kbd "S-<f4>") 'eassist-switch-h-cpp)
-(define-key c-mode-base-map (kbd "C-<f4>") 'dts-switch-between-header-and-source)
 
 ;; Smex
 (global-set-key (kbd "M-x") 'smex)
@@ -321,17 +319,6 @@
 
 ;; don't accelerate scrolling
 (setq mouse-wheel-progressive-speed nil)
-
-;; Scroll with the mouse
-(defun smooth-scroll (increment)
-  (scroll-up increment) (sit-for 0.01)
-  (scroll-up increment) (sit-for 0.02)
-  (scroll-up increment) (sit-for 0.02)
-  (scroll-up increment) (sit-for 0.01)
-  (scroll-up increment))
-
-(global-set-key [(mouse-5)] '(lambda () (interactive) (smooth-scroll 2)))
-(global-set-key [(mouse-4)] '(lambda () (interactive) (smooth-scroll -2)))
 
 ;; Zoom in/out like feature, with mouse wheel
 (global-unset-key (kbd "<C-wheel-up>")) ;; moved to <mode-line>

@@ -91,11 +91,20 @@
 ;; Setup appearance
 (require 'setup-appearance)
 
+;; Setup Ido (optional, disabled GUI for open file)
+(require 'setup-ido)
+
 ;; Setup CEDET
 (require 'setup-cedet)
 
 ;; Setup Org
 (require 'setup-org)
+
+;; Setup tabbar (optional)
+(require 'setup-tabbar)
+
+;; Setup smex
+(require 'setup-smex)
 
 ;; Setup Org (babel support)
 (require 'setup-org-babel)
@@ -127,9 +136,6 @@
 ;; Setup compile
 (require 'setup-compile)
 
-;; Setup Ido (optional, disabled GUI for open file)
-(require 'setup-ido)
-
 ;; Setup Autopair
 (require 'setup-autopair)
 
@@ -145,22 +151,19 @@
 ;; Setup bookmarks
 (require 'setup-bookmarks)
 
-;; Setup modeline and Smex
+;; Setup modeline (possible cause of crash)
 (require 'setup-modeline)
 
-;; Setup recent
+;; Setup recent (possible cause of crash)
 (require 'setup-recentf)
 
-;; Setup tabbar (optional)
-(require 'setup-tabbar)
+;; Setup dash
+(require 'setup-dash)
 
 ;; Setup versioning (optional)
 (require 'setup-versioning)
 
-;; Setup helm
-(require 'setup-helm)
-
-;; Setup Lisp mode
+;; Setup Lisp mode (caused crash)
 (require 'setup-lisp)
 
 ;; Setup Python
@@ -193,14 +196,23 @@
 ;; Setup hideshow
 (require 'setup-hideshow)
 
+;; Setup imenu (possible cause of crash)
+(require 'setup-imenu)
+
+;; Setup helm
+(require 'setup-helm)
+
+;; Setup helm plugin
+(require 'setup-helm-plugins)
+
 ;; Setup post
 (require 'setup-post)
 
-;; Setup keys
-(require 'setup-keys)
-
 ;; Setup ECB
 (require 'setup-ecb)
+
+;; Setup keys
+(require 'setup-keys)
 
 ;; Setup server
 (require 'setup-server)
