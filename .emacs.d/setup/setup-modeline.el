@@ -89,7 +89,8 @@
 
                                (concat (powerline-render lhs)
                                        (powerline-fill 'ml-fill-face (powerline-width rhs))
-                                       (powerline-render rhs))))))))
+                                       (powerline-render rhs))))))
+            (powerline-default-theme)))
 
 (provide 'setup-modeline)
 ;;; setup-modeline.el ends here
