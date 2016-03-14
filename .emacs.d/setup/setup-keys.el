@@ -374,14 +374,8 @@
 (global-set-key (kbd "C-x <home>") 'tabbar-forward-tab)
 (global-set-key (kbd "C-x <end>") 'tabbar-backward-tab)
 
-;; Faster buffer switching
-(add-to-list 'load-path "~/.emacs.d/popup-switcher")
-(require 'popup-switcher)
-(global-set-key (kbd "M-o") 'psw-switch-buffer)
-
-;; Select Window
-(require 'popup-select-window)
-(global-set-key (kbd "C-`") 'popup-select-window)
+;; Code navigation
+(global-set-key (kbd "C-`") 'helm-semantic)
 
 ;; Jump between windows
 (global-set-key [C-up] 'windmove-up)
@@ -419,7 +413,7 @@
 (define-key my-keys-minor-mode-map (kbd "<f2>")   'helm-bm)
 (define-key my-keys-minor-mode-map (kbd "<C-f2>") 'bm-toggle)
 (define-key my-keys-minor-mode-map (kbd "<left-margin> <mouse-1>") 'bm-toggle)
-(define-key my-keys-minor-mode-map (kbd "C-`") 'popup-select-window)
+(define-key my-keys-minor-mode-map (kbd "C-`") 'helm-semantic)
 (define-key my-keys-minor-mode-map (kbd "C-b") 'beautify-buffer)
 (define-key my-keys-minor-mode-map (kbd "M-o") 'psw-switch-buffer)
 (define-key my-keys-minor-mode-map (kbd "<f4>") 'helm-semantic-or-imenu)
@@ -428,19 +422,15 @@
 (define-key my-keys-minor-mode-map [S-tab] 'my-unindent)
 
 ;; Good for navigating
-(add-hook 'prog-mode-hook
-          (function
-           (lambda ()
-             (progn
-               (local-set-key [(meta up)] 'tabbar-backward-group)
-               (local-set-key [(meta down)] 'tabbar-forward-group)
-               (local-set-key [(meta left)] 'tabbar-backward-tab)
-               (local-set-key [(meta right)] 'tabbar-forward-tab)))))
+(define-key my-keys-minor-mode-map [(meta up)] 'tabbar-backward-group)
+(define-key my-keys-minor-mode-map [(meta down)] 'tabbar-forward-group)
+(define-key my-keys-minor-mode-map [(meta left)] 'tabbar-backward-tab)
+(define-key my-keys-minor-mode-map [(meta down)] 'tabbar-forward-tab)
 
 ;; Define custom key mode
 (define-minor-mode my-keys-minor-mode
   "A minor mode so that my key settings override annoying major modes."
-  t " my-keys" 'my-keys-minor-mode-map)
+  t " Custom" 'my-keys-minor-mode-map)
 
 (my-keys-minor-mode 1)
 (defun my-minibuffer-setup-hook ()
