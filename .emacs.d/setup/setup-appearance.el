@@ -24,10 +24,6 @@
 
 ;;; Code:
 
-;; Fringe helper
-(use-package fringe-helper
-  :load-path "~/.emacs.d/fringe-helper")
-
 ;; Highlight the line
 (use-package hl-line
   :config (progn
