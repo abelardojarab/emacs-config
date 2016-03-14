@@ -24,75 +24,8 @@
 
 ;;; Code:
 
-;; Monokai theme
-(add-to-list 'load-path "~/.emacs.d/monokai-emacs")
-(add-to-list 'custom-theme-load-path "~/.emacs.d/monokai-emacs")
-
-;; Monokai theme
-(add-to-list 'load-path "~/.emacs.d/monokai-extended-theme")
-(add-to-list 'custom-theme-load-path "~/.emacs.d/monokai-extended-theme")
-
-;; Atom theme
-(add-to-list 'load-path "~/.emacs.d/atom-dark-theme-emacs")
-(add-to-list 'custom-theme-load-path "~/.emacs.d/atom-dark-theme-emacs")
-
-;; Zenburn theme
-(add-to-list 'load-path "~/.emacs.d/zenburn-emacs")
-(add-to-list 'custom-theme-load-path "~/.emacs.d/zenburn-emacs")
-
-;; Faff theme
-(add-to-list 'load-path "~/.emacs.d/emacs-faff-theme")
-(add-to-list 'custom-theme-load-path "~/.emacs.d/emacs-faff-theme")
-
-;; Material theme
-(add-to-list 'load-path "~/.emacs.d/emacs-matherial-theme")
-(add-to-list 'custom-theme-load-path "~/.emacs.d/emacs-material-theme")
-
-;; Leuven theme
-(add-to-list 'load-path "~/.emacs.d/emacs-leuven-theme")
-(add-to-list 'custom-theme-load-path "~/.emacs.d/emacs-leuven-theme")
-
-;; FlatUI theme
-(add-to-list 'load-path "~/.emacs.d/emacs-flatui-theme")
-(add-to-list 'custom-theme-load-path "~/.emacs.d/emacs-flatui-theme")
-
-;; FlatUI theme
-(add-to-list 'load-path "~/.emacs.d/pastelmac-theme")
-(add-to-list 'custom-theme-load-path "~/.emacs.d/pastelmac-theme")
-
-;; Zerodark theme
-(add-to-list 'load-path "~/.emacs.d/zerodark-theme")
-(add-to-list 'custom-theme-load-path "~/.emacs.d/zerodark-theme")
-
-;; Apropospriate theme
-;; (add-to-list 'load-path "~/.emacs.d/apropospriate-theme")
-;; (add-to-list 'custom-theme-load-path "~/.emacs.d/apropospriate-theme")
-;; (require 'apropospriate)
-
-;; Solarized theme
-(add-to-list 'load-path "~/.emacs.d/solarized-emacs")
-(add-to-list 'custom-theme-load-path "~/.emacs.d/solarized-emacs")
-(require 'solarized)
-(setq solarized-scale-org-headlines nil)
-
-;; Different possible themes
-;; (load-theme 'atom-dark t)
-;; (load-theme 'zenburn t)
-;; (load-theme 'leuven t)
-;; (load-theme 'zerodark t)
-;; (load-theme 'material t)
-;; (load-theme 'FlatUI t)
-;; (load-theme 'faff t)
-(load-theme 'monokai t)
-;; (load-theme 'monokai-extended t)
-;; (load-theme 'pastelmac t)
-;; (load-theme 'solarized-dark t)
-;; (load-theme 'material-light t)
-;; (load-theme 'apropospriate-light t)
-
 ;; Fringe helper
 (use-package fringe-helper
-  :pin manual
   :load-path "~/.emacs.d/fringe-helper")
 
 ;; Highlight the line
@@ -111,7 +44,6 @@
 
 ;; Highlight the latest changes in the buffer (like text inserted from: yank, undo, etc.) until the next command is run
 (use-package volatile-highlights
-  :pin manual
   :load-path "~/.emacs.d/volatile-highlights"
   :diminish volatile-highlights-mode
   :config (progn
@@ -120,12 +52,10 @@
 ;; Highlight blocks
 (use-package highlight-blocks
   :load-path "~/.emacs.d/highlight-blocks"
-  :pin manual
   :diminish highlight-blocks-mode)
 
 ;; Permanent indentation guide
 (use-package indent-hint
-  :pin manual
   :load-path "~/.emacs.d/indent-hint"
   :init (progn
           (setq indent-hint-background-overlay t)
@@ -135,10 +65,8 @@
             (add-hook 'lisp-mode-hook 'indent-hint-lisp)))
 
 ;; Highlight symbol
-(add-to-list 'load-path "~/.emacs.d/highlight-symbol")
 (use-package highlight-symbol
   :load-path "~/.emacs.d/highlight-symbol"
-  :pin manual
   :config (progn (mapc (lambda (mode)
                          (add-hook mode 'highlight-symbol-mode))
                        '(prog-mode-hook
@@ -147,13 +75,6 @@
                          text-mode-hook))
                  (setq highlight-symbol-on-navigation-p t))
   :diminish highlight-symbol-mode)
-
-;; Blinking cursor
-(use-package heartbeat-cursor
-  :pin manual
-  :config (progn
-            (add-hook 'prog-mode-hook (lambda () (heartbeat-cursor-mode)))
-            (add-hook 'org-mode-hook (lambda () (heartbeat-cursor-mode)))))
 
 (provide 'setup-appearance)
 ;;; setup-appearance.el ends here

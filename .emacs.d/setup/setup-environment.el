@@ -420,11 +420,6 @@ non-nil."
                     nil t)))
   t)
 
-;; Garbage collection
-(setq gc-cons-threshold 20000000)
-(setq max-lisp-eval-depth 10000
-      max-specpdl-size 4680)
-
 ;; Measure Emacs startup time
 (defun show-startup-time ()
   "Show Emacs's startup time in the minibuffer"
@@ -457,117 +452,6 @@ non-nil."
     (buffer-disable-undo)
     (fundamental-mode)))
 (add-hook 'find-file-hook 'my-find-file-check-make-large-file-read-only-hook)
-
-;; Adjust font when using graphical interface
-(when window-system
-  (let ()
-
-    ;; Use 12-pt Consolas as default font
-    (when (find-font (font-spec :name "Consolas"))
-      (setq main-programming-font "Consolas-12")
-      (set-face-attribute 'default nil :font main-programming-font)
-      (set-face-attribute 'fixed-pitch nil :font main-programming-font)
-      (add-to-list 'default-frame-alist '(font . "Consolas-12"))) ;; default font, used by speedbar
-
-    (when (find-font (font-spec :name "Calibri"))
-      (setq main-writing-font "Calibri-12")
-      (set-face-attribute 'variable-pitch nil :font main-writing-font :weight 'normal)
-      (add-hook 'text-mode-hook 'variable-pitch-mode))
-
-    ;; Dynamic font adjusting based on monitor resolution, using Android fonts
-    (when (find-font (font-spec :name "Roboto Mono"))
-
-      (defun fontify-frame (frame)
-        (interactive)
-        (let (main-writing-font main-programming-font)
-          (setq main-programming-font "Roboto Mono")
-          (setq main-writing-font "Roboto Mono")
-          (if (find-font (font-spec :name "Roboto Mono"))
-              (setq main-writing-font "Roboto Mono"))
-
-          ;; Adjust text size based on resolution
-          (case system-type
-            ('windows-nt
-             (if (> (x-display-pixel-width) 1800)
-                 (progn ;; HD monitor in Windows
-                   (setq main-programming-font (concat main-programming-font "-12"))
-                   (setq main-writing-font (concat main-writing-font "-13")))
-               (progn
-                 (setq main-programming-font (concat main-programming-font "-11"))
-                 (setq main-writing-font (concat main-writing-font "-12")))))
-            ('darwin
-             (if (> (x-display-pixel-width) 1800)
-                 (if (> (x-display-pixel-width) 2000)
-                     (progn ;; Ultra-HD monitor in OSX
-                       (setq main-programming-font (concat main-programming-font "-17"))
-                       (setq main-writing-font (concat main-writing-font "-17")))
-                   (progn ;; HD monitor in OSX
-                     (setq main-programming-font (concat main-programming-font "-14"))
-                     (setq main-writing-font (concat main-writing-font "-14"))))
-               (progn
-                 (setq main-programming-font (concat main-programming-font "-11"))
-                 (setq main-writing-font (concat main-writing-font "-11")))))
-            (t ;; Linux
-             (if (> (x-display-pixel-width) 2000)
-                 (progn ;; Ultra-HD monitor in Linux
-                   (setq main-programming-font (concat main-programming-font "-14"))
-                   (setq main-writing-font (concat main-writing-font "-15")))
-               (if (> (x-display-pixel-width) 1800)
-                   (progn ;; HD monitor in Linux
-                     (setq main-programming-font (concat main-programming-font "-13"))
-                     (setq main-writing-font (concat main-writing-font "-14")))
-                 (progn
-                   (setq main-programming-font (concat main-programming-font "-11"))
-                   (setq main-writing-font (concat main-writing-font "-12")))))))
-
-          ;; Apply fonts
-          (set-default-font main-programming-font frame)
-          (add-to-list 'default-frame-alist (cons 'font main-programming-font))
-          (set-face-attribute 'fixed-pitch nil :font main-programming-font)
-          (set-face-attribute 'variable-pitch nil :font main-writing-font :weight 'normal)))
-
-      ;; Fontify current frame
-      (fontify-frame nil)
-
-      ;; Fontify any future frames for emacsclient
-      (push 'fontify-frame after-make-frame-functions)
-
-      ;; hook for setting up UI when not running in daemon mode
-      (add-hook 'emacs-startup-hook '(lambda () (fontify-frame nil))))))
-
-;; Fixed pitch for HTML
-(defun fixed-pitch-mode ()
-  (buffer-face-mode -1))
-(add-hook 'html-mode-hook 'fixed-pitch-mode)
-(add-hook 'nxml-mode-hook 'fixed-pitch-mode)
-
-;; Change form/shape of emacs cursor
-(setq djcb-read-only-color "green")
-(setq djcb-read-only-cursor-type 'hbar)
-(setq djcb-overwrite-color "red")
-(setq djcb-overwrite-cursor-type 'box)
-(setq djcb-normal-color "yellow")
-(setq djcb-normal-cursor-type 'bar)
-(defun djcb-set-cursor-according-to-mode ()
-  "change cursor color and type according to some minor modes."
-  (cond
-   (buffer-read-only
-    (set-cursor-color djcb-read-only-color)
-    (setq cursor-type djcb-read-only-cursor-type))
-   (overwrite-mode
-    (set-cursor-color djcb-overwrite-color)
-    (setq cursor-type djcb-overwrite-cursor-type))
-   (t
-    (set-cursor-color djcb-normal-color)
-    (setq cursor-type djcb-normal-cursor-type))))
-(add-hook 'post-command-hook
-          (lambda () (interactive)
-            (unless (member
-                     major-mode '(pdf-docs doc-view-mode))
-              (djcb-set-cursor-according-to-mode))))
-
-;; Disable blinking cursor
-(blink-cursor-mode 0)
 
 ;; Put a nice title to the window, including filename
 (add-hook 'window-configuration-change-hook
@@ -652,16 +536,6 @@ non-nil."
 
   (global-lawlist-scroll-bar-mode))
 
-;; Pretty lambdas
-(defun pretty-lambdas ()
-  (font-lock-add-keywords
-   nil `(("\\<lambda\\>"
-          (0 (progn (compose-region (match-beginning 0) (match-end 0)
-                                    ,(make-char 'greek-iso8859-7 107))
-                    nil))))))
-(add-hook 'emacs-lisp-mode-hook 'pretty-lambdas)
-(add-hook 'lisp-mode-hook 'pretty-lambdas)
-
 ;; higlight changes in documents
 (global-highlight-changes-mode t)
 (setq highlight-changes-visibility-initial-state nil)
@@ -674,25 +548,5 @@ non-nil."
     (unless was-modified
       (set-buffer-modified-p nil))))
 (ad-activate 'highlight-changes-rotate-faces)
-
-;; Fix appearance of Windows Unicode characters
-(standard-display-ascii ?\200 [15])
-(standard-display-ascii ?\201 [21])
-(standard-display-ascii ?\202 [24])
-(standard-display-ascii ?\203 [13])
-(standard-display-ascii ?\204 [22])
-(standard-display-ascii ?\205 [25])
-(standard-display-ascii ?\206 [12])
-(standard-display-ascii ?\210 [23])
-(standard-display-ascii ?\211 [14])
-(standard-display-ascii ?\212 [18])
-(standard-display-ascii ?\214 [11])
-(standard-display-ascii ?\221 [?\'])
-(standard-display-ascii ?\222 [?\'])
-(standard-display-ascii ?\223 [?\"])
-(standard-display-ascii ?\224 [?\"])
-(standard-display-ascii ?\225 [?\*])
-(standard-display-ascii ?\226 "---")
-(standard-display-ascii ?\227 "--")
 
 (provide 'setup-environment)

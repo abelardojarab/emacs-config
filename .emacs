@@ -73,7 +73,16 @@
 ;; Setup appearance
 (require 'setup-appearance)
 
-;; Setup Ido (optional, disabled GUI for open file)
+;; Setup fonts
+(require 'setup-fonts)
+
+;; Setup cursor
+(require 'setup-cursor)
+
+;; Setup themes
+(require 'setup-themes)
+
+;; Setup Ido (optional, disabled GUI for open file, caused crash too?)
 (require 'setup-ido)
 
 ;; Setup CEDET
