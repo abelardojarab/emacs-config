@@ -85,6 +85,9 @@
 ;; Setup Ido (optional, disabled GUI for open file, caused crash too?)
 (require 'setup-ido)
 
+;; Setup desktop
+(require 'setup-desktop)
+
 ;; Setup CEDET
 (require 'setup-cedet)
 
