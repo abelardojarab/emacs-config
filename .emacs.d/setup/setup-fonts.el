@@ -74,7 +74,7 @@
     ;; Dynamic font adjusting based on monitor resolution, using Android fonts
     (when (find-font (font-spec :name "Roboto Mono"))
 
-      (defun fontify-frame (frame)
+      (defun fontify-frame (&optional frame)
         (interactive)
         (let (main-writing-font main-programming-font)
           (setq main-programming-font "Roboto Mono")
@@ -119,17 +119,22 @@
 
           ;; Apply fonts
           (set-default-font main-programming-font frame)
+          (add-to-list 'default-frame-alist (cons 'font main-programming-font))   (set-default-font main-programming-font frame)
+          (set-frame-font main-programming-font t)
+          (set-face-attribute 'default nil :font main-programming-font)
           (set-face-attribute 'fixed-pitch nil :font main-programming-font)
           (set-face-attribute 'variable-pitch nil :font main-writing-font :weight 'normal)))
 
       ;; Fontify current frame
       (fontify-frame nil)
+      (let (frame (selected-frame))
+        (fontify-frame frame))
 
       ;; Fontify any future frames for emacsclient
-      (push 'fontify-frame after-make-frame-functions)
+      (add-hook 'after-make-frame-functions #'fontify-frame)
 
       ;; hook for setting up UI when not running in daemon mode
-      (add-hook 'emacs-startup-hook '(lambda () (fontify-frame nil))))))
+      (add-hook 'emacs-startup-hook '(lambda () (fontify-frame (selected-frame)))))))
 
 ;; Fixed pitch for HTML
 (defun fixed-pitch-mode ()
