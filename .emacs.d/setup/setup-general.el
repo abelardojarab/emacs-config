@@ -141,62 +141,6 @@
 
              (popwin-mode 1)))
 
-;; Show-paren-mode: subtle blinking of matching paren (defaults are ugly)
-(use-package paren
-  :config (progn
-            ;; Show paren-mode when off-screen
-            (defadvice show-paren-function
-                (after show-matching-paren-offscreen activate)
-              "If the matching paren is offscreen, show the matching line in the
-        echo area. Has no effect if the character before point is not of
-        the syntax class ')'."
-              (interactive)
-              (let* ((cb (char-before (point)))
-                     (matching-text (and cb
-                                         (char-equal (char-syntax cb) ?\) )
-                                         (blink-matching-open))))
-                (when matching-text (message matching-text))))
-
-            ;; Opening bracket to be highlighted when the point is on the closing bracket
-            (defadvice show-paren-function
-                (around show-paren-closing-before
-                        activate compile)
-              (if (eq (syntax-class (syntax-after (point))) 5)
-                  (save-excursion
-                    (forward-char)
-                    ad-do-it)
-                ad-do-it))
-
-            (show-paren-mode 1)))
-
-;; Smartparens
-(use-package smartparens
-  :load-path "~/.emacs.d/smartparens"
-  :pin manual
-  :init (progn
-          (require 'smartparens-config))
-  :config (progn
-            (show-smartparens-global-mode 1)))
-
-;; Auto-indent mode
-(use-package auto-indent-mode
-  :pin manual
-  :load-path "~/.emacs.d/auto-indent-mode"
-  :init (progn
-          (setq auto-indent-indent-style 'conservative)
-          (setq auto-indent-on-visit-file nil) ;; do not indent when a file is visit
-          (setq auto-indent-blank-lines-on-move nil)
-          (setq auto-indent-next-pair-timer-geo-mean (quote ((default 0.0005 0))))
-          (setq auto-indent-disabled-modes-list (list (quote vhdl-mode))))
-  :config (progn
-            (auto-indent-global-mode)))
-
-;; Remember the position where we closed a file
-(use-package saveplace
-  :init (progn
-          (setq save-place-file "~/.emacs.cache/emacs.saveplace")
-          (setq-default save-place t)))
-
 ;; Better search, similar to vim
 (use-package isearch+
   :init (progn

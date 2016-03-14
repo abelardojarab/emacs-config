@@ -82,6 +82,12 @@
 ;; Setup themes
 (require 'setup-themes)
 
+;; Setup parenthesis
+(require 'setup-parenthesis)
+
+;; Setup indentation
+(require 'setup-indent)
+
 ;; Setup Ido (optional, disabled GUI for open file, caused crash too?)
 (require 'setup-ido)
 
@@ -127,14 +133,11 @@
 ;; Setup spelling (optional)
 (require 'setup-spell)
 
-;; Setup Flycheck
+;; Setup flycheck
 (require 'setup-flycheck)
 
 ;; Setup compile
 (require 'setup-compile)
-
-;; Setup Autopair
-(require 'setup-autopair)
 
 ;; Setup Yasnippet
 (require 'setup-yasnippet)

@@ -24,6 +24,12 @@
 
 ;;; Code:
 
+;; Remember the position where we closed a file
+(use-package saveplace
+  :init (progn
+          (setq save-place-file "~/.emacs.cache/emacs.saveplace")
+          (setq-default save-place t)))
+
 ;; Automatically save and restore sessions
 (use-package desktop
   :init (progn
