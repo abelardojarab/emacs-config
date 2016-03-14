@@ -119,7 +119,11 @@
 
           ;; Apply fonts
           (set-default-font main-programming-font frame)
-          (add-to-list 'default-frame-alist (cons 'font main-programming-font))
+          (set-face-attribute 'default nil :font main-programming-font)
+          (setq default-frame-alist
+                '((top . 10) (left . 2)
+                  (width . 160) (height . 160)
+                  (font . main-programming-font)))
           (set-face-attribute 'fixed-pitch nil :font main-programming-font)
           (set-face-attribute 'variable-pitch nil :font main-writing-font :weight 'normal)))
 
