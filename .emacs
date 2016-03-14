@@ -91,6 +91,9 @@
 ;; Setup Org
 (require 'setup-org)
 
+;; Setup modeline
+(require 'setup-modeline)
+
 ;; Setup tabbar (optional)
 (require 'setup-tabbar)
 

@@ -24,10 +24,6 @@
 
 ;;; Code:
 
-;; Tabbar ruler pre-requisites
-(add-to-list 'load-path "~/.emacs.d/mode-icons")
-(add-to-list 'load-path "~/.emacs.d/powerline")
-
 ;; Tabbar mode
 (add-to-list 'load-path "~/.emacs.d/tabbar")
 (require 'tabbar)
@@ -55,6 +51,10 @@
   (ztl-modification-state-change))
 (add-hook 'after-save-hook 'ztl-modification-state-change)
 (add-hook 'first-change-hook 'ztl-on-buffer-modification)
+
+;; Tabbar ruler pre-requisites
+(add-to-list 'load-path "~/.emacs.d/mode-icons")
+(require 'mode-icons)
 
 ;; more tweaking to tabbar
 (add-to-list 'load-path "~/.emacs.d/tabbar-ruler")
