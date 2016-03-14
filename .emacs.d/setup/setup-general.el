@@ -114,10 +114,6 @@
   :init (progn
           (require 'isearch-prop))
   :config (progn
-            (defun my-isearch-word-at-point ()
-              (interactive)
-              (call-interactively 'isearch-forward-regexp))
-
             (defun my-isearch-yank-word-hook ()
               (when (equal this-command 'my-isearch-word-at-point)
                 (let ((string (concat "\\<"
