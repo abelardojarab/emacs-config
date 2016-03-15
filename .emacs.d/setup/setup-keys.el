@@ -238,7 +238,7 @@
 
 ;; C-v
 (global-set-key (kbd "C-v") 'yank)
-(global-set-key (kbd "C-S-v") 'browse-kill-ring)
+(global-set-key (kbd "C-S-v") 'helm-show-kill-ring)
 (global-set-key "\C-cy" '(lambda ()
                            (interactive)
                            (popup-menu 'yank-menu)))

@@ -137,9 +137,7 @@
 
              ;; eshell 3 is always my "download stuff" buffer
              (global-set-key (kbd "C-x M-d") #'my/popup-downloads)
-             (global-set-key (kbd "C-h e") 'popwin:messages)
-
-             (popwin-mode 1)))
+             (global-set-key (kbd "C-h e") 'popwin:messages)))
 
 ;; Better search, similar to vim
 (use-package isearch+

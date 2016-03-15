@@ -34,15 +34,16 @@
               (setq ad-return-value (ad-get-arg 0)))
             (bind-key "C-o" 'helm-occur-from-isearch isearch-mode-map)
             (bind-keys ("C-;" . helm-mini)
-                       ("C-z" . helm-resume)
                        ("M-y" . helm-show-kill-ring))
             (bind-keys :map ctl-x-map
-                       ("x"   . helm-M-x)
-                       ("C-a" . helm-apropos)
-                       ("C-b" . helm-buffers-list)
-                       ("C-d" . helm-descbinds)
-                       ("C-f" . helm-find-files)
-                       ("C-r" . helm-recentf))))
+                       ("x" . helm-M-x)
+                       ("a" . helm-apropos)
+                       ("m" . helm-semantic-or-imenu)
+                       ("u" . helm-resume)
+                       ("b" . helm-buffers-list)
+                       ("d" . helm-descbinds)
+                       ("f" . helm-find-files)
+                       ("r" . helm-recentf))))
 
 ;; Indent semantic entries
 (use-package helm-imenu
