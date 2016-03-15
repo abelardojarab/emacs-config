@@ -170,7 +170,7 @@
 (require 'setup-python)
 
 ;; Setup Python plugins (e.g. Jedi)
-(require 'setup-python-plugins)
+;; (require 'setup-python-plugins)
 
 ;; Setup markdown and Yaml
 (require 'setup-markdown)
