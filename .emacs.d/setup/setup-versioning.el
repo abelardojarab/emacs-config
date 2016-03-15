@@ -27,99 +27,111 @@
 ;; Follow symbolic links
 (setq vc-follow-symlinks t)
 
-;; Designsync versioning control
-(require 'vc-sync)
-(defun dired-sync-symlink-filter ()
-  (save-excursion
-    ;; Goto the beginning of the buffer
-    (goto-char (point-min))
-    ;; For each matching symbolic link with sync_cache or sync/mirrors in the path name...
-    (while (re-search-forward "\\(-> .*/sync\\(_cache\\|/mirrors\\)/.*$\\)" nil t)
-      ;; Create an overlay that masks out everything between the -> and the end of line
-      (let ((o (make-overlay (match-beginning 1) (progn (end-of-line) (point)))))
-        (overlay-put o 'invisible t)
-        (overlay-put o 'evaporate t)))))
-(add-hook 'dired-after-readin-hook 'dired-sync-symlink-filter)
-
 ;; Speed up find file
 (remove-hook 'find-file-hooks 'vc-find-file-hook)
 
-;; psvn
-(require 'psvn)
+;; Designsync versioning control
+(use-package vc-sync
+  :config (progn
+            (defun dired-sync-symlink-filter ()
+              (save-excursion
+                ;; Goto the beginning of the buffer
+                (goto-char (point-min))
+                ;; For each matching symbolic link with sync_cache or sync/mirrors in the path name...
+                (while (re-search-forward "\\(-> .*/sync\\(_cache\\|/mirrors\\)/.*$\\)" nil t)
+                  ;; Create an overlay that masks out everything between the -> and the end of line
+                  (let ((o (make-overlay (match-beginning 1) (progn (end-of-line) (point)))))
+                    (overlay-put o 'invisible t)
+                    (overlay-put o 'evaporate t)))))
+            (add-hook 'dired-after-readin-hook 'dired-sync-symlink-filter)))
 
-;; git
-(add-to-list 'load-path "~/.emacs.d/magit/lisp")
-(eval-after-load 'info
-  '(progn (info-initialize)
-          (add-to-list 'Info-directory-list "~/.emacs.d/magit/Documentation")))
-(require 'magit)
+;; psvn
+(use-package psvn
+  :config
+  (setq svn-status-hide-unmodified t)
+  (setq svn-status-hide-unknown t)
+  (setq svn-status-svn-file-coding-system 'utf-8))
+
+;; magit
+(use-package magit
+  :load-path "~/.emacs.d/magit/lisp"
+  :init (eval-after-load 'info
+          '(progn (info-initialize)
+                  (add-to-list 'Info-directory-list "~/.emacs.d/magit/Documentation")))
+  :config (progn
+            (setq magit-diff-refine-hunk t)))
 
 ;; diff-hl
-(add-to-list 'load-path "~/.emacs.d/diff-hl")
-(require 'diff-hl)
-(setq diff-hl-draw-borders t)
-(defadvice svn-sttus-update-modeline (after svn-update-diff-hl activate)
-  (diff-hl-update))
-(add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh)
+(use-package diff-hl
+  :load-path "~/.emacs.d/diff-hl"
+  :config (progn
+            (setq diff-hl-draw-borders t)
+            (defadvice svn-sttus-update-modeline (after svn-update-diff-hl activate)
+              (diff-hl-update))
+            (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh)))
 
 ;; git-timenachine
-(add-to-list 'load-path "~/.emacs.d/git-timemachine")
-(require 'git-timemachine)
+(use-package git-timemachine
+  :load-path "~/.emacs.d/git-timemachine")
 
 ;; Show blame for current line
-(add-to-list 'load-path "~/.emacs.d/git-messenger")
-(require 'git-messenger)
+(use-package git-messenger
+  :load-path "~/.emacs.d/git-messenger")
 
 (when window-system
-  (add-to-list 'load-path "~/.emacs.d/git-gutter-plus")
-  (add-to-list 'load-path "~/.emacs.d/git-gutter-fringe-plus")
-  (require 'git-gutter-fringe+)
-  (global-git-gutter+-mode t)
-  (set-face-foreground 'git-gutter-fr+-modified "LightSeaGreen")
-  (set-face-foreground 'git-gutter-fr+-added    "SeaGreen")
-  (set-face-foreground 'git-gutter-fr+-deleted  "red")
+  (use-package git-gutter-plus
+    :defer t
+    :load-path "~/.emacs.d/git-gutter-plus")
 
-  ;; Please adjust fringe width if your own sign is too big.
-  (setq-default left-fringe-width 20)
+  (use-package git-gutter-fringe+
+    :load-path "~/.emacs.d/git-gutter-fringe-plus"
+    :config (progn
+              (global-git-gutter+-mode t)
+              (set-face-foreground 'git-gutter-fr+-modified "LightSeaGreen")
+              (set-face-foreground 'git-gutter-fr+-added    "SeaGreen")
+              (set-face-foreground 'git-gutter-fr+-deleted  "red")
 
-  (fringe-helper-define 'git-gutter-fr+-added nil
-    ".XXXXXX."
-    "XXxxxxXX"
-    "XX....XX"
-    "XX....XX"
-    "XXXXXXXX"
-    "XXXXXXXX"
-    "XX....XX"
-    "XX....XX")
+              ;; Please adjust fringe width if your own sign is too big.
+              (setq-default left-fringe-width 20)
 
-  (fringe-helper-define 'git-gutter-fr+-deleted nil
-    "XXXXXX.."
-    "XXXXXXX."
-    "XX...xXX"
-    "XX....XX"
-    "XX....XX"
-    "XX...xXX"
-    "XXXXXXX."
-    "XXXXXX..")
+              (fringe-helper-define 'git-gutter-fr+-added nil
+                ".XXXXXX."
+                "XXxxxxXX"
+                "XX....XX"
+                "XX....XX"
+                "XXXXXXXX"
+                "XXXXXXXX"
+                "XX....XX"
+                "XX....XX")
 
-  (fringe-helper-define 'git-gutter-fr+-modified nil
-    "XXXXXXXX"
-    "XXXXXXXX"
-    "Xx.XX.xX"
-    "Xx.XX.xX"
-    "Xx.XX.xX"
-    "Xx.XX.xX"
-    "Xx.XX.xX"
-    "Xx.XX.xX")
+              (fringe-helper-define 'git-gutter-fr+-deleted nil
+                "XXXXXX.."
+                "XXXXXXX."
+                "XX...xXX"
+                "XX....XX"
+                "XX....XX"
+                "XX...xXX"
+                "XXXXXXX."
+                "XXXXXX..")
 
-  ;; Fringe fix in Windows
-  (unless (string-equal system-type "windows-nt")
-    (defadvice git-gutter+-process-diff (before git-gutter+-process-diff-advice activate)
-      (ad-set-arg 0 (file-truename (ad-get-arg 0))))))
+              (fringe-helper-define 'git-gutter-fr+-modified nil
+                "XXXXXXXX"
+                "XXXXXXXX"
+                "Xx.XX.xX"
+                "Xx.XX.xX"
+                "Xx.XX.xX"
+                "Xx.XX.xX"
+                "Xx.XX.xX"
+                "Xx.XX.xX")
+
+              ;; Fringe fix in Windows
+              (unless (string-equal system-type "windows-nt")
+                (defadvice git-gutter+-process-diff (before git-gutter+-process-diff-advice activate)
+                  (ad-set-arg 0 (file-truename (ad-get-arg 0))))))))
 
 ;; ibuffer versioning-based groups
-(add-to-list 'load-path "~/.emacs.d/ibuffer-vc")
-(require 'ibuffer-vc)
+(use-package ibuffer-vc
+  :load-path "~/.emacs.d/ibuffer-vc")
 
 (provide 'setup-versioning)
 ;;; setup-versioning.el ends here

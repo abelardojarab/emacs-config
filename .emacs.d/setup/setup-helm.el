@@ -25,34 +25,51 @@
 ;;; Code:
 
 ;; Helm
-(add-to-list 'load-path "~/.emacs.d/helm")
-(require 'helm-config)
+(use-package helm-config
+  :load-path "~/.emacs.d/helm"
+  :config (progn
+            (setq helm-delete-minibuffer-contents-from-point t)
+            (setq helm-buffer-max-length 35)
+            (defadvice helm-buffers-sort-transformer (around ignore activate)
+              (setq ad-return-value (ad-get-arg 0)))
+            (bind-key "C-o" 'helm-occur-from-isearch isearch-mode-map)
+            (bind-keys ("C-;" . helm-mini)
+                       ("C-z" . helm-resume)
+                       ("M-y" . helm-show-kill-ring))
+            (bind-keys :map ctl-x-map
+                       ("x"   . helm-M-x)
+                       ("C-a" . helm-apropos)
+                       ("C-b" . helm-buffers-list)
+                       ("C-d" . helm-descbinds)
+                       ("C-f" . helm-find-files)
+                       ("C-r" . helm-recentf))))
 
 ;; Indent semantic entries
-(require 'helm-imenu)
-(defun my-helm-imenu-transformer (cands)
-  (with-helm-current-buffer
-    (save-excursion
-      (cl-loop for (func-name . mrkr) in cands
-               collect
-               (cons (format "Line %4d: %s"
-                             (line-number-at-pos mrkr)
-                             (progn (goto-char mrkr)
-                                    (buffer-substring mrkr (line-end-position))))
-                     (cons func-name mrkr))))))
+(use-package helm-imenu
+  :config (progn
+            (defun my-helm-imenu-transformer (cands)
+              (with-helm-current-buffer
+                (save-excursion
+                  (cl-loop for (func-name . mrkr) in cands
+                           collect
+                           (cons (format "Line %4d: %s"
+                                         (line-number-at-pos mrkr)
+                                         (progn (goto-char mrkr)
+                                                (buffer-substring mrkr (line-end-position))))
+                                 (cons func-name mrkr))))))
 
-(defvar my-helm-imenu-source  (helm-make-source "Imenu" 'helm-imenu-source
-                                :candidate-transformer
-                                'my-helm-imenu-transformer))
-(defun my-helm-imenu ()
-  (interactive)
-  (let ((imenu-auto-rescan t)
-        (str (thing-at-point 'symbol))
-        (helm-execute-action-at-once-if-one
-         helm-imenu-execute-action-at-once-if-one))
-    (helm :sources 'my-helm-imenu-source
-          :preselect str
-          :buffer "*helm imenu*")))
+            (defvar my-helm-imenu-source  (helm-make-source "Imenu" 'helm-imenu-source
+                                            :candidate-transformer
+                                            'my-helm-imenu-transformer))
+            (defun my-helm-imenu ()
+              (interactive)
+              (let ((imenu-auto-rescan t)
+                    (str (thing-at-point 'symbol))
+                    (helm-execute-action-at-once-if-one
+                     helm-imenu-execute-action-at-once-if-one))
+                (helm :sources 'my-helm-imenu-source
+                      :preselect str
+                      :buffer "*helm imenu*")))))
 
 (provide 'setup-helm)
 ;;; setup-helm.el ends here
