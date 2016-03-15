@@ -24,7 +24,8 @@
 
 ;;; Code:
 
-
+;; garbage collection
+(setq gc-cons-threshold 256000000)
 
 ;; ignore byte-compile warnings
 (setq byte-compile-warnings nil)
