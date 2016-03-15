@@ -81,5 +81,12 @@
             (add-hook 'org-mode-hook
                       #'(lambda () (setq autopair-dont-activate t)))))
 
+;; Rainbow delimiters
+(use-package rainbow-delimiters
+  :load-path "~/.emacs.d/rainbow-delimiters"
+  :config (progn
+            (add-hook 'lisp-mode-hook 'rainbow-delimiters-mode)
+            (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)))
+
 (provide 'setup-parenthesis)
 ;;; setup-autopair.el ends here

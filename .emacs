@@ -91,6 +91,9 @@
 ;; Setup Ido (optional, disabled GUI for open file, caused crash too?)
 (require 'setup-ido)
 
+;; Setup highlights
+(require 'setup-highlight)
+
 ;; Setup desktop
 (require 'setup-desktop)
 

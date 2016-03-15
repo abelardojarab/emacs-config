@@ -230,7 +230,6 @@
 ;; imenu list
 (add-to-list 'load-path "~/.emacs.d/imenu-list")
 (use-package imenu-list
-  :pin manual
   :load-path "~/.emacs.d/imenu-list"
   :config (progn
             (setq imenu-list-size 0.2)
@@ -240,38 +239,31 @@
 
 ;; Browse kill ring
 (use-package browse-kill-ring
-  :pin manual
   :load-path "~/.emacs.d/browse-kill-ring")
-
-;; Line numbers
-(use-package linum
-  :config (progn
-            (defadvice linum-update-window (around linum-dynamic activate)
-              (let* ((w (length (number-to-string
-                                 (count-lines (point-min) (point-max)))))
-                     (linum-format (concat " %" (number-to-string w) "d ")))
-                ad-do-it))))
 
 ;; Multiple cursors
 (use-package multiple-cursors
-  :pin manual
   :load-path "~/.emacs.d/multiple-cursors")
 
 ;; Abbrevs
-(setq abbrev-file-name "~/.emacs.cache/abbrev_defs")
-(if (file-exists-p abbrev-file-name)
-    (quietly-read-abbrev-file))
-(add-hook 'kill-emacs-hook
-          'write-abbrev-file)
+(use-package abbrev
+  :diminish abbrev-mode
+  :init (progn
+          (setq abbrev-file-name "~/.emacs.cache/abbrev_defs")
+          (if (file-exists-p abbrev-file-name)
+              (quietly-read-abbrev-file))
+          (add-hook 'kill-emacs-hook
+                    'write-abbrev-file))
 
-;; Activate template autocompletion
-(abbrev-mode t)
-(setq save-abbrevs t)
-(dolist (hook '(prog-mode-hook
-                markdown-mode-hook
-                org-mode-hook
-                text-mode-hook))
-  (add-hook hook (lambda () (abbrev-mode 1))))
+  :config (progn
+            ;; Activate template autocompletion
+            (abbrev-mode t)
+            (setq save-abbrevs t)
+            (dolist (hook '(prog-mode-hook
+                            markdown-mode-hook
+                            org-mode-hook
+                            text-mode-hook))
+              (add-hook hook (lambda () (abbrev-mode 1))))))
 
 ;; write good mode
 (use-package writegood-mode
