@@ -99,11 +99,11 @@
                        (setq main-programming-font (concat main-programming-font "-17"))
                        (setq main-writing-font (concat main-writing-font "-17")))
                    (progn ;; HD monitor in OSX
-                     (setq main-programming-font (concat main-programming-font "-14"))
-                     (setq main-writing-font (concat main-writing-font "-14"))))
+                     (setq main-programming-font (concat main-programming-font "-15"))
+                     (setq main-writing-font (concat main-writing-font "-15"))))
                (progn
-                 (setq main-programming-font (concat main-programming-font "-11"))
-                 (setq main-writing-font (concat main-writing-font "-11")))))
+                 (setq main-programming-font (concat main-programming-font "-15"))
+                 (setq main-writing-font (concat main-writing-font "-15")))))
             (t ;; Linux
              (if (> (x-display-pixel-width) 2000)
                  (progn ;; Ultra-HD monitor in Linux
