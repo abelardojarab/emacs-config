@@ -81,6 +81,7 @@
 (when window-system
   (use-package git-gutter-plus
     :defer t
+    :diminish git-gutter+-mode
     :load-path "~/.emacs.d/git-gutter-plus")
 
   (use-package git-gutter-fringe+

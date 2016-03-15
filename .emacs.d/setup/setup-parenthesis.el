@@ -54,8 +54,8 @@
 
 ;; Smartparens
 (use-package smartparens
+  :diminish smartparens-mode
   :load-path "~/.emacs.d/smartparens"
-  :pin manual
   :init (progn
           (require 'smartparens-config))
   :config (progn
@@ -64,6 +64,7 @@
 ;; Autopair
 (use-package autopair
   :load-path "~/.emacs.d/autopair"
+  :diminish autopair-mode
   :config (progn
             (autopair-global-mode) ;; enable autopair in all buffers
             (setq autopair-autowrap t)
