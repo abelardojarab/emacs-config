@@ -56,6 +56,7 @@
 (use-package xml-rpc         :defer t :load-path "~/.emacs.d/xml-rpc")
 (use-package dash            :defer t :load-path "~/.emacs.d/dash")
 (use-package emacs-buttercup :defer t :load-path "~/.emacs.d/emacs-buttercup")
+(use-package with-editor     :defer t :load-path "~/.emacs.d/with-editor")
 (use-package fringe-helper   :defer t :load-path "~/.emacs.d/fringe-helper")
 
 (provide 'setup-package)

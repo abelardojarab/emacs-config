@@ -48,19 +48,17 @@
 (require 'psvn)
 
 ;; git
-(add-to-list 'load-path "~/.emacs.d/with-editor")
 (add-to-list 'load-path "~/.emacs.d/magit/lisp")
 (eval-after-load 'info
   '(progn (info-initialize)
           (add-to-list 'Info-directory-list "~/.emacs.d/magit/Documentation")))
-(require 'with-editor)
 (require 'magit)
 
 ;; diff-hl
 (add-to-list 'load-path "~/.emacs.d/diff-hl")
 (require 'diff-hl)
 (setq diff-hl-draw-borders t)
-(defadvice svn-status-update-modeline (after svn-update-diff-hl activate)
+(defadvice svn-sttus-update-modeline (after svn-update-diff-hl activate)
   (diff-hl-update))
 (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh)
 
