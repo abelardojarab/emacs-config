@@ -32,24 +32,6 @@
             ;; Activate highlight in search and replace
             (setq search-highlight t)
             (setq query-replace-highlight t)
-            (defun my-isearch-yank-word-hook ()
-              (when (equal this-command 'my-isearch-word-at-point)
-                (let ((string (concat "\\<"
-                                      (buffer-substring-no-properties
-                                       (progn (skip-syntax-backward "w_") (point))
-                                       (progn (skip-syntax-forward "w_") (point)))
-                                      "\\>")))
-                  (if (and isearch-case-fold-search
-                           (eq 'not-yanks search-upper-case))
-                      (setq string (downcase string)))
-                  (setq isearch-string string
-                        isearch-message
-                        (concat isearch-message
-                                (mapconcat 'isearch-text-char-description
-                                           string ""))
-                        isearch-yank-flag t)
-                  (isearch-search-and-update))))
-            (add-hook 'isearch-mode-hook 'my-isearch-yank-word-hook)
 
             ;; Keep the search results in the center in incremental search
             (defadvice isearch-repeat-forward (after isearch-repeat-forward-recenter activate)
