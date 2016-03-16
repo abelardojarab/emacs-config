@@ -67,6 +67,9 @@
 ;; Setup general
 (require 'setup-general)
 
+;; Setup files
+(require 'setup-file)
+
 ;; Setup search
 (require 'setup-search)
 

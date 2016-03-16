@@ -173,38 +173,6 @@
   (require 'w32browser-dlgopen)
   (setq dlgopen-executable-path "~/.emacs.d/elisp/getfile.exe")))
 
-;; Trick emacs when opening a file through menu-find-file-existing
-(defadvice find-file-read-args (around find-file-read-args-always-use-dialog-box act)
-  "Simulate invoking menu item as if by the mouse; see `use-dialog-box'."
-  (let ((last-nonmenu-event nil)
-        (use-dialog-box t))
-    ad-do-it))
-
-;; try to improve slow performance on windows.
-(setq w32-get-true-file-attributes nil)
-
-;; Garantee utf8 as input-method
-(set-input-method nil)
-(setq read-quoted-char-radix 10)
-(set-language-environment 'utf-8)
-(set-locale-environment "en_US.UTF-8")
-(setq locale-coding-system 'utf-8-unix)
-
-;; Coding system
-(set-default-coding-systems 'utf-8-unix)
-(set-terminal-coding-system 'utf-8-unix)
-(set-keyboard-coding-system 'utf-8-unix)
-(set-selection-coding-system 'utf-8-unix)
-(prefer-coding-system 'utf-8-unix)
-
-;; Even so, ansi-term doesn’t obey:
-(defadvice ansi-term (after advise-ansi-term-coding-system)
-  (set-buffer-process-coding-system 'utf-8-unix 'utf-8-unix))
-(ad-activate 'ansi-term)
-
-;; update the copyright when present
-(add-hook 'before-save-hook 'copyright-update)
-
 ;; Emacs is a text editor, make sure your text files end in a newline
 (setq require-final-newline 'query)
 
@@ -212,12 +180,6 @@
 (defadvice save-buffers-kill-emacs (around no-query-kill-emacs activate)
   "Prevent annoying \"Active processes exist\" query when you quit Emacs."
   (flet ((process-list ())) ad-do-it))
-
-;; if indent-tabs-mode is off, untabify before saving
-(add-hook 'write-file-hooks
-          (lambda () (if (not indent-tabs-mode)
-                         (save-excursion
-                           (untabify (point-min) (point-max)))) nil))
 
 ;; Always split horizontally
 (setq split-width-threshold 78)
@@ -245,9 +207,6 @@
 ;; Enable tooltips
 (tooltip-mode t)
 (setq tooltip-use-echo-area t)
-
-;; deleting files goes to OS's trash folder
-(setq delete-by-moving-to-trash t)
 
 ;; Put something different in the scratch buffer
 (setq initial-scratch-message "Start typing...")
@@ -295,9 +254,6 @@
 ;; Show column-number in the mode line
 (column-number-mode 1)
 
-;; Ignore case when looking for a file
-(setq read-file-name-completion-ignore-case t)
-
 ;; Edition of EMACS edition modes
 (setq major-mode 'text-mode)
 (add-hook 'text-mode-hook 'text-mode-hook-identify)
@@ -321,101 +277,12 @@
                 ("\\.pl$" . perl-mode)
                 ) auto-mode-alist))
 
-;; Time stamp
-(setq
- time-stamp-active t          ;; do enable time-stamps
- time-stamp-line-limit 20     ;; check first 10 buffer lines for Time-stamp:
- time-stamp-format "%04y-%02m-%02d %02H:%02M:%02S (%u)") ;; date format
-(add-hook 'write-file-hooks 'time-stamp) ;; update when saving
-
-;; More exhaustive cleaning of white space
-(add-hook 'before-save-hook 'delete-trailing-whitespace)
-
-;; Make URLs in comments/strings clickable, (emacs > v22)
-(add-hook 'find-file-hooks 'goto-address-prog-mode)
-
-;; Marker if the line goes beyond the end of the screen (arrows)
-(global-visual-line-mode 1)
-(add-hook 'text-mode-hook 'turn-on-visual-line-mode)
-(setq visual-line-fringe-indicators '(nil right-curly-arrow))
-(add-hook 'prog-mode-hook
-          (lambda ()
-            (visual-line-mode -1)
-            (toggle-truncate-lines 1)))
-(add-hook 'org-agenda-mode-hook
-          (lambda ()
-            (visual-line-mode -1)
-            (toggle-truncate-lines 1)))
-
-;; Smoother scrolling
-(setq redisplay-dont-pause nil
-      scroll-margin 20
-      scroll-step 1
-      scroll-conservatively 10000
-      scroll-preserve-screen-position 1
-      scroll-up-aggressively 0.01
-      scroll-down-aggressively 0.01)
-
-;; Optimization
-(setq-default bidi-display-reordering nil)
-
-;; Do not redraw entire frame after suspending.
-(setq no-redraw-on-reenter t)
-
-;; Modify toggle truncate lines to avoid messages
-(defun toggle-truncate-lines (&optional arg)
-  "Toggle truncating of long lines for the current buffer.
-When truncating is off, long lines are folded.
-With prefix argument ARG, truncate long lines if ARG is positive,
-otherwise fold them.  Note that in side-by-side windows, this
-command has no effect if `truncate-partial-width-windows' is
-non-nil."
-  (interactive "P")
-  (setq truncate-lines
-        (if (null arg)
-            (not truncate-lines)
-          (> (prefix-numeric-value arg) 0)))
-  (force-mode-line-update)
-  (unless truncate-lines
-    (let ((buffer (current-buffer)))
-      (walk-windows (lambda (window)
-                      (if (eq buffer (window-buffer window))
-                          (set-window-hscroll window 0)))
-                    nil t)))
-  t)
-
 ;; Measure Emacs startup time
 (defun show-startup-time ()
   "Show Emacs's startup time in the minibuffer"
   (message "Startup time: %s seconds."
            (emacs-uptime "%s")))
 (add-hook 'emacs-startup-hook 'show-startup-time 'append)
-
-;; Syntax coloring
-(global-font-lock-mode t)
-(global-hi-lock-mode nil)
-(setq font-lock-maximum-decoration t)
-(setq font-lock-maximum-size (* 512 512))
-(defun global-font-lock-mode-check-buffers () nil)
-
-;; Lazy font lock
-(setq font-lock-support-mode 'jit-lock-mode)
-(setq jit-lock-chunk-size 5000
-      jit-lock-context-time 0.2
-      jit-lock-defer-time .1
-      jit-lock-stealth-nice 0.5
-      jit-lock-stealth-time 16
-      jit-lock-stealth-verbose nil)
-(setq-default font-lock-multiline t)
-
-;; Do not fontify large files
-(defun my-find-file-check-make-large-file-read-only-hook ()
-  "If a file is over a given size, make the buffer read only."
-  (when (> (buffer-size) (* 512 256))
-    (setq buffer-read-only t)
-    (buffer-disable-undo)
-    (fundamental-mode)))
-(add-hook 'find-file-hook 'my-find-file-check-make-large-file-read-only-hook)
 
 ;; Put a nice title to the window, including filename
 (add-hook 'window-configuration-change-hook

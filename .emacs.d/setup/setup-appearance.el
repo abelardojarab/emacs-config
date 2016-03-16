@@ -24,6 +24,73 @@
 
 ;;; Code:
 
+;; Smoother scrolling
+(setq redisplay-dont-pause nil
+      scroll-margin 20
+      scroll-step 1
+      scroll-conservatively 10000
+      scroll-preserve-screen-position 1
+      scroll-up-aggressively 0.01
+      scroll-down-aggressively 0.01)
+
+;; Optimization
+(setq-default bidi-display-reordering nil)
+
+;; Do not redraw entire frame after suspending.
+(setq no-redraw-on-reenter t)
+
+;; Modify toggle truncate lines to avoid messages
+(defun toggle-truncate-lines (&optional arg)
+  "Toggle truncating of long lines for the current buffer.
+When truncating is off, long lines are folded.
+With prefix argument ARG, truncate long lines if ARG is positive,
+otherwise fold them.  Note that in side-by-side windows, this
+command has no effect if `truncate-partial-width-windows' is
+non-nil."
+  (interactive "P")
+  (setq truncate-lines
+        (if (null arg)
+            (not truncate-lines)
+          (> (prefix-numeric-value arg) 0)))
+  (force-mode-line-update)
+  (unless truncate-lines
+    (let ((buffer (current-buffer)))
+      (walk-windows (lambda (window)
+                      (if (eq buffer (window-buffer window))
+                          (set-window-hscroll window 0)))
+                    nil t)))
+  t)
+
+;; Marker if the line goes beyond the end of the screen (arrows)
+(global-visual-line-mode 1)
+(add-hook 'text-mode-hook 'turn-on-visual-line-mode)
+(setq visual-line-fringe-indicators '(nil right-curly-arrow))
+(add-hook 'prog-mode-hook
+          (lambda ()
+            (visual-line-mode -1)
+            (toggle-truncate-lines 1)))
+(add-hook 'org-agenda-mode-hook
+          (lambda ()
+            (visual-line-mode -1)
+            (toggle-truncate-lines 1)))
+
+;; Syntax coloring
+(global-font-lock-mode t)
+(global-hi-lock-mode nil)
+(setq font-lock-maximum-decoration t)
+(setq font-lock-maximum-size (* 512 512))
+(defun global-font-lock-mode-check-buffers () nil)
+
+;; Lazy font lock
+(setq font-lock-support-mode 'jit-lock-mode)
+(setq jit-lock-chunk-size 5000
+      jit-lock-context-time 0.2
+      jit-lock-defer-time .1
+      jit-lock-stealth-nice 0.5
+      jit-lock-stealth-time 16
+      jit-lock-stealth-verbose nil)
+(setq-default font-lock-multiline t)
+
 ;; Line numbers
 (use-package linum
   :config (progn
