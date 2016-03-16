@@ -148,7 +148,6 @@
              uniquify-ignore-buffers-re "^\\*")))
 
 ;; imenu list
-(add-to-list 'load-path "~/.emacs.d/imenu-list")
 (use-package imenu-list
   :load-path "~/.emacs.d/imenu-list"
   :config (progn

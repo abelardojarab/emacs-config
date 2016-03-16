@@ -293,44 +293,11 @@
                                 objc-mode latex-mode plain-tex-mode python-mode java-mode js2-mode))
       (indent-region (region-beginning) (region-end) nil)))
 
-;; Autosave
-(setq auto-save-default nil)
-(setq auto-save-interval 500)
-(defvar my-auto-save-folder "~/.emacs.cache/auto-save/") ;; folder for auto-saves
-(setq auto-save-list-file-prefix "~/.emacs.cache/auto-save/.saves-") ;; set prefix for auto-saves
-(setq auto-save-file-name-transforms `((".*" ,my-auto-save-folder t))) ;; location for all auto-save files
-(make-directory my-auto-save-folder t)
-
-;; Backups
-(setq make-backup-files t
-      backup-by-copying t
-      backup-directory-alist '(("." . "~/.emacs.cache/backups"))
-      version-control t
-      kept-new-versions 2
-      kept-old-versions 5
-      delete-old-versions t)
-
-;; Preserve the owner and group of the file you're editing
-(setq backup-by-copying-when-mismatch t)
-
 ;; Show line-number in the mode line
 (line-number-mode 1)
 
 ;; Show column-number in the mode line
 (column-number-mode 1)
-
-;; Savehist: save some history
-(setq savehist-additional-variables
-      '(search ring regexp-search-ring)
-      savehist-autosave-interval 120
-      savehist-file "~/.emacs.cache/savehist")
-(savehist-mode t)
-
-;; filecache: http://www.emacswiki.org/cgi-bin/wiki/FileNameCache
-(eval-after-load "filecache"
-  '(progn (message "Loading file cache...")
-          (file-cache-add-directory "~/")
-          (file-cache-add-directory-list '("~/Desktop" "~/Documents" "~/workspace"))))
 
 ;; Ignore case when looking for a file
 (setq read-file-name-completion-ignore-case t)
