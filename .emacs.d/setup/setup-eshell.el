@@ -40,23 +40,24 @@
 (add-hook 'sh-mode-hook 'ansi-color-for-comint-mode-on)
 
 ;; CShell mode
-(require 'csh-mode)
-(dolist (elt interpreter-mode-alist)
-  (when (member (car elt) (list "csh" "tcsh"))
-    (setcdr elt 'csh-mode)))
+(use-package csh-mode
+            :config (progn
+                      (dolist (elt interpreter-mode-alist)
+                        (when (member (car elt) (list "csh" "tcsh"))
+                          (setcdr elt 'csh-mode)))
 
-;; Fix issues in csh indentation
-(add-to-list 'auto-mode-alist '("\\.zsh\\'" . sh-mode))
-(add-to-list 'auto-mode-alist '("\\.csh\\'" . sh-mode))
-(add-to-list 'auto-mode-alist '("\\.cshrc\\'" . sh-mode))
-(defun my/tcsh-set-indent-functions ()
-  (when (or (string-match ".*\\.alias" (buffer-file-name))
-           (string-match "\\(.*\\)\\.csh$" (file-name-nondirectory (buffer-file-name))))
-    (setq-local indent-line-function   #'csh-indent-line)
-    (setq-local indent-region-function #'csh-indent-region)))
-(add-hook 'sh-mode-hook #'my/tcsh-set-indent-functions)
-(add-hook 'sh-set-shell-hook #'my/tcsh-set-indent-functions)
-(add-hook 'sh-mode-hook (lambda () (electric-indent-mode -1)))
+                      ;; Fix issues in csh indentation
+                      (add-to-list 'auto-mode-alist '("\\.zsh\\'" . sh-mode))
+                      (add-to-list 'auto-mode-alist '("\\.csh\\'" . sh-mode))
+                      (add-to-list 'auto-mode-alist '("\\.cshrc\\'" . sh-mode))
+                      (defun my/tcsh-set-indent-functions ()
+                        (when (or (string-match ".*\\.alias" (buffer-file-name))
+                                  (string-match "\\(.*\\)\\.csh$" (file-name-nondirectory (buffer-file-name))))
+                          (setq-local indent-line-function   #'csh-indent-line)
+                          (setq-local indent-region-function #'csh-indent-region)))
+                      (add-hook 'sh-mode-hook #'my/tcsh-set-indent-functions)
+                      (add-hook 'sh-set-shell-hook #'my/tcsh-set-indent-functions)
+                      (add-hook 'sh-mode-hook (lambda () (electric-indent-mode -1)))))
 
 (provide 'setup-eshell)
 ;;; setup-eshell.el ends here

@@ -127,6 +127,9 @@
 ;; Setup Org (html support)
 (require 'setup-org-html)
 
+;; Setup hydry
+(require 'setup-hydra)
+
 ;; Setup pandoc
 (require 'setup-pandoc)
 

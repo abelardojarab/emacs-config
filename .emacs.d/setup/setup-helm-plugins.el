@@ -55,7 +55,7 @@
 
 ;; Helm etags plus
 (use-package helm-etags+
-  :load-path "~/.emacs.d/helm-etags+")
+  :load-path "~/.emacs.d/helm-etags-plus")
 
 ;; Helm swoop
 (use-package helm-swoop

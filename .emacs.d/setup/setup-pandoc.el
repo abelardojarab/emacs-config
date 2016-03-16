@@ -25,12 +25,12 @@
 ;;; Code:
 
 ;; Pandoc
-(add-to-list 'load-path "~/.emacs.d/hydra")
-(add-to-list 'load-path "~/.emacs.d/pandoc-mode")
-(require 'pandoc-mode)
-(add-hook 'markdown-mode-hook 'pandoc-load-default-settings)
-(add-hook 'org-mode-hook 'pandoc-load-default-settings)
-(add-hook 'pandoc-mode-hook 'pandoc-load-default-settings)
+(use-package pandoc-mode
+  :load-path "~/.emacs.d/pandoc-mode"
+  :config (progn
+            (add-hook 'markdown-mode-hook 'pandoc-load-default-settings)
+            (add-hook 'org-mode-hook 'pandoc-load-default-settings)
+            (add-hook 'pandoc-mode-hook 'pandoc-load-default-settings)))
 
 (provide 'setup-pandoc)
 ;;; setup-pandoc.el ends here
