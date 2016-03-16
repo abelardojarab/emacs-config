@@ -52,6 +52,9 @@
   :defer t
   :load-path "~/.emacs.d/pos-tip")
 
+;; Drop down list support, related to popup
+(use-package dropdown-list)
+
 ;; Manage popup windows
 (use-package popwin
   :load-path "~/.emacs.d/popwin"

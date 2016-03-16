@@ -91,6 +91,7 @@
 
 ;; Ctags
 (use-package ctags
+  :if (executable-find "ctags")
   :config (progn
             ;; Helper functions for etags/ctags
             (defun create-ctags (dir-name)

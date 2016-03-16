@@ -26,50 +26,52 @@
 
 ;; Yasnippet (should be invoked before auto-complete)
 (add-to-list 'load-path "~/.emacs.d/yasnippet")
-(require 'yasnippet)
-(setq yas-snippet-dirs
-      '("~/.emacs.d/snippets"))
-(yas-initialize)
-(yas-global-mode 1)
+(use-package yasnippet
+  :diminish yas-minor-mode
+  :load-path "~/.emacs.d/yasnippet"
+  :config (progn
+            (setq yas-snippet-dirs
+                  '("~/.emacs.d/snippets"))
+            (yas-initialize)
+            (yas-global-mode 1)
 
-;; Do not activate for read only and non-existent snippets
-(set-default 'yas--dont-activate
-             #'(lambda ()
-                 (or buffer-read-only
-                     (and yas-snippet-dirs
-                          (null (yas--get-snippet-tables))))))
+            ;; Do not activate for read only and non-existent snippets
+            (set-default 'yas--dont-activate
+                         #'(lambda ()
+                             (or buffer-read-only
+                                 (and yas-snippet-dirs
+                                      (null (yas--get-snippet-tables))))))
 
-;; Remove Yasnippet's default tab key binding (avoid collision with auto-complete)
-(define-key yas-minor-mode-map (kbd "<tab>") nil)
-(define-key yas-minor-mode-map (kbd "TAB") nil)
+            ;; Remove Yasnippet's default tab key binding (avoid collision with auto-complete)
+            (define-key yas-minor-mode-map (kbd "<tab>") nil)
+            (define-key yas-minor-mode-map (kbd "TAB") nil)
 
-;; Select a snippet with popup library
-(require 'dropdown-list)
-(setq yas-prompt-functions '(yas-dropdown-prompt
-                             yas-ido-prompt
-                             yas-completing-prompt
-                             yas-no-prompt))
+            ;; Select a snippet with popup library
+            (setq yas-prompt-functions '(yas-dropdown-prompt
+                                         yas-ido-prompt
+                                         yas-completing-prompt
+                                         yas-no-prompt))
 
-;; Tweaking Yasnippet for Org mode
-(defun yas--org-very-safe-expand ()
-  (let ((yas-fallback-behavior 'return-nil)) (yas-expand)))
-(add-hook 'org-mode-hook
-          (lambda ()
-            (make-variable-buffer-local 'yas-trigger-key)
-            (setq yas-trigger-key [tab])
-            (add-to-list 'org-tab-first-hook 'yas--org-very-safe-expand)
-            (define-key yas-keymap [tab] 'yas-next-field)))
+            ;; Tweaking Yasnippet for Org mode
+            (defun yas--org-very-safe-expand ()
+              (let ((yas-fallback-behavior 'return-nil)) (yas-expand)))
+            (add-hook 'org-mode-hook
+                      (lambda ()
+                        (make-variable-buffer-local 'yas-trigger-key)
+                        (setq yas-trigger-key [tab])
+                        (add-to-list 'org-tab-first-hook 'yas--org-very-safe-expand)
+                        (define-key yas-keymap [tab] 'yas-next-field)))
 
-;; Auto-complete enhancement
-(defun yas/set-ac-modes ()
-  "Add modes in `yas-snippet-dirs' to `ac-modes'. Call (yas/set-ac-modes) BEFORE (global-auto-complete-mode 1) or (ac-config-default)."
-  (eval-after-load "auto-complete"
-    '(setq ac-modes
-           (append
-            (apply 'append (mapcar (lambda (dir) (mapcar 'intern (directory-files dir nil "-mode$")))
-                                   (yas-snippet-dirs)))
-            ac-modes))))
-(yas/set-ac-modes)
+            ;; Auto-complete enhancement
+            (defun yas/set-ac-modes ()
+              "Add modes in `yas-snippet-dirs' to `ac-modes'. Call (yas/set-ac-modes) BEFORE (global-auto-complete-mode 1) or (ac-config-default)."
+              (eval-after-load "auto-complete"
+                '(setq ac-modes
+                       (append
+                        (apply 'append (mapcar (lambda (dir) (mapcar 'intern (directory-files dir nil "-mode$")))
+                                               (yas-snippet-dirs)))
+                        ac-modes))))
+            (yas/set-ac-modes)))
 
 (provide 'setup-yasnippet)
 ;;; setup-yasnippet.el ends here
