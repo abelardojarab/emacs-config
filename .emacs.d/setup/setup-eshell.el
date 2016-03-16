@@ -26,13 +26,17 @@
 
 (setq-default eshell-directory-name "~/.emacs.cache/eshell")
 
+;; ansi-term doesn’t obey usage of utf-8-unix
+(defadvice ansi-term (after advise-ansi-term-coding-system)
+  (set-buffer-process-coding-system 'utf-8-unix 'utf-8-unix))
+(ad-activate 'ansi-term)
+
 ;; Configuration choices
 (add-hook 'sh-mode-hook
           (lambda ()
             (show-paren-mode -1)
             (flycheck-mode -1)
             (setq blink-matching-paren nil)))
-
 
 ;; When compiling from shell, display error result as in compilation
 ;; buffer, with links to errors.
