@@ -29,10 +29,4 @@
 (require 'poly-markdown)
 (require 'poly-org)
 
-;; Enable minor mode
-(mapc (lambda (mode)
-        (add-hook mode (lambda () (polymode-minor-mode t))))
-      '(org-mode-hook
-        markdown-mode))
-
 (provide 'setup-polymode)
