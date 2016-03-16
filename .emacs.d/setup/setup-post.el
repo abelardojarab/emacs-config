@@ -25,13 +25,14 @@
 ;;; Code:
 
 ;; Org-Ref
-(add-to-list 'load-path "~/.emacs.d/org-ref")
-(require 'org-ref)
-(setq org-ref-bibliography-notes "~/workspace/Documents/Bibliography/notes.org"
-      org-ref-default-bibliography '("~/workspace/Documents/Bibliography/biblio.bib")
-      org-ref-pdf-directory "~/workspace/Documents/Bibliography/bibtex-pdfs")
-(setq org-ref-insert-cite-key "C-c )")
-(setq org-ref-default-citation-link "autocite")
+(use-package org-ref
+  :load-path "~/.emacs.d/org-ref"
+  :config (progn
+            (setq org-ref-bibliography-notes "~/workspace/Documents/Bibliography/notes.org"
+                  org-ref-default-bibliography '("~/workspace/Documents/Bibliography/biblio.bib")
+                  org-ref-pdf-directory "~/workspace/Documents/Bibliography/bibtex-pdfs")
+            (setq org-ref-insert-cite-key "C-c )")
+            (setq org-ref-default-citation-link "autocite")))
 
 (provide 'setup-post)
 ;;; setup-post.el ends here

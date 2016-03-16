@@ -278,10 +278,5 @@
 (use-package yaxception
   :load-path "~/.emacs.d/yaxception")
 
-;; write good mode
-(use-package writegood-mode
-  :pin manual
-  :load-path "~/.emacs.d/writegood-mode")
-
 (provide 'setup-general)
 ;;; setup-general.el ends here

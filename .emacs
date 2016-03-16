@@ -100,6 +100,9 @@
 ;; Setup CEDET
 (require 'setup-cedet)
 
+;; Setup spelling (optional)
+(require 'setup-spell)
+
 ;; Setup Org
 (require 'setup-org)
 
@@ -132,9 +135,6 @@
 
 ;; Setup tags (optional)
 (require 'setup-tags)
-
-;; Setup spelling (optional)
-(require 'setup-spell)
 
 ;; Setup flycheck
 (require 'setup-flycheck)
@@ -216,6 +216,9 @@
 
 ;; Setup keys
 (require 'setup-keys)
+
+;; Setup ergoemacs
+;; (require 'setup-ergoemacs)
 
 ;; Setup server
 (require 'setup-server)

@@ -1,6 +1,6 @@
 ;;; setup-spell.el ---
 
-;; Copyright (C) 2014, 2015  abelardo.jara-berrocal
+;; Copyright (C) 2014, 2015, 2016  abelardo.jara-berrocal
 
 ;; Author: abelardo.jara-berrocal <ajaraber@plxc25288.pdx.intel.com>
 ;; Keywords:
@@ -25,68 +25,74 @@
 ;;; Code:
 
 ;; Enable ispell at the end
-(require 'ispell)
+(use-package ispell
+  :config (progn
 
-;; We need tell emacs to use aspell, and where your custom dictionary is.
-(setq ispell-silently-savep t)
-(setq ispell-program-name "aspell"
-      ispell-extra-args '("--sug-mode=ultra")
-      ispell-alternate-dictionary (expand-file-name "~/.emacs.d/dictionaries/words.txt" ))
-(add-to-list 'ispell-skip-region-alist '("[^\000-\377]+"))
-(when (eq system-type 'darwin)
-  (if (file-executable-p "/usr/local/bin/aspell")
-      (progn
-        (setq ispell-program-name "/usr/local/bin/aspell")
-        (setq ispell-extra-args '("-d" "/Library/Application Support/cocoAspell/aspell6-en-6.0-0/en.multi")))))
+            ;; We need tell emacs to use aspell, and where your custom dictionary is.
+            (setq ispell-silently-savep t)
+            (setq ispell-program-name "aspell"
+                  ispell-extra-args '("--sug-mode=ultra")
+                  ispell-alternate-dictionary (expand-file-name "~/.emacs.d/dictionaries/words.txt" ))
+            (add-to-list 'ispell-skip-region-alist '("[^\000-\377]+"))
+            (when (eq system-type 'darwin)
+              (if (file-executable-p "/usr/local/bin/aspell")
+                  (progn
+                    (setq ispell-program-name "/usr/local/bin/aspell")
+                    (setq ispell-extra-args '("-d" "/Library/Application Support/cocoAspell/aspell6-en-6.0-0/en.multi")))))
 
-;; change dictionary: "C-c e" = english, "C-c s"=spanish, "C-c w"=turn off flyspell
-(add-hook 'text-mode-hook
-          '(lambda ()
-             (local-set-key (kbd "C-c s 2")
-                            (lambda () (interactive)
-                              (ispell-change-dictionary "american")
-                              (flyspell-mode 1)
-                              (flyspell-buffer)))
-             (local-set-key (kbd "C-c s 1")
-                            (lambda () (interactive)
-                              (ispell-change-dictionary "spanish")
-                              (flyspell-mode 1)
-                              (flyspell-buffer)))
-             (local-set-key (kbd "C-c s 0")
-                            (lambda () (interactive)
-                              (flyspell-mode -1)))))
-
-;; Langtool
-(add-to-list 'load-path "~/.emacs.d/langtool")
-(require 'langtool)
-(setq langtool-language-tool-jar (expand-file-name "~/.emacs.d/jar/LanguageTool-2.7/languagetool-commandline.jar")
-      langtool-mother-tongue "en"
-      langtool-disabled-rules '("WHITESPACE_RULE"
-                                "EN_UNPAIRED_BRACKETS"
-                                "COMMA_PARENTHESIS_WHITESPACE"
-                                "EN_QUOTES"))
+            ;; change dictionary: "C-c e" = english, "C-c s"=spanish, "C-c w"=turn off flyspell
+            (add-hook 'text-mode-hook
+                      '(lambda ()
+                         (local-set-key (kbd "C-c s 2")
+                                        (lambda () (interactive)
+                                          (ispell-change-dictionary "american")
+                                          (flyspell-mode 1)
+                                          (flyspell-buffer)))
+                         (local-set-key (kbd "C-c s 1")
+                                        (lambda () (interactive)
+                                          (ispell-change-dictionary "spanish")
+                                          (flyspell-mode 1)
+                                          (flyspell-buffer)))
+                         (local-set-key (kbd "C-c s 0")
+                                        (lambda () (interactive)
+                                          (flyspell-mode -1)))))))
 
 ;; flyspell
-(dolist (hook '(text-mode-hook))
-  (add-hook hook (lambda () (flyspell-mode 1))))
-(dolist (hook '(change-log-mode-hook log-edit-mode-hook))
-  (add-hook hook (lambda () (flyspell-mode -1))))
+(use-package flyspell
+  :config (progn
+            (dolist (hook '(text-mode-hook))
+              (add-hook hook (lambda () (flyspell-mode 1))))
+            (dolist (hook '(change-log-mode-hook log-edit-mode-hook))
+              (add-hook hook (lambda () (flyspell-mode -1))))
 
-(eval-after-load "flyspell"
-  '(defun flyspell-ajust-cursor-point (save cursor-location old-max)
-     (when (not (looking-at "\\b"))
-       (forward-word))))
+            (defun flyspell-ajust-cursor-point (save cursor-location old-max)
+              (when (not (looking-at "\\b"))
+                (forward-word)))
 
-;; Fix for right click on Mac OS X
-(when (eq system-type 'darwin)
-  (eval-after-load "flyspell"
-    '(progn
-       (define-key flyspell-mouse-map [down-mouse-3] #'flyspell-correct-word)
-       (define-key flyspell-mouse-map [mouse-3] #'undefined))))
+            ;; Fix for right click on Mac OS X
+            (when (eq system-type 'darwin)
+              (progn
+                (define-key flyspell-mouse-map [down-mouse-3] #'flyspell-correct-word)
+                (define-key flyspell-mouse-map [mouse-3] #'undefined)))
 
-;; Disable flyspell keybindings
-(eval-after-load "flyspell"
-  '(define-key flyspell-mode-map (kbd "C-.") nil))
+            ;; Disable flyspell keybindings
+            (define-key flyspell-mode-map (kbd "C-.") nil)))
+
+;; write good mode
+(use-package writegood-mode
+  :pin manual
+  :load-path "~/.emacs.d/writegood-mode")
+
+;; Langtool
+(use-package langtool
+  :load-path "~/.emacs.d/langtool"
+  :config (progn
+            (setq langtool-language-tool-jar (expand-file-name "~/.emacs.d/jar/LanguageTool-2.7/languagetool-commandline.jar")
+                  langtool-mother-tongue "en"
+                  langtool-disabled-rules '("WHITESPACE_RULE"
+                                            "EN_UNPAIRED_BRACKETS"
+                                            "COMMA_PARENTHESIS_WHITESPACE"
+                                            "EN_QUOTES"))))
 
 (provide 'setup-spell)
 ;;; setup-spell.el ends here

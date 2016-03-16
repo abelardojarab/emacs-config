@@ -1,8 +1,8 @@
-;;; setup-pandoc.el ---                              -*- lexical-binding: t; -*-
+;;; setup-ergoemacs.el ---                           -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016  Abelardo Jara
+;; Copyright (C) 2016  abelardo.jara-berrocal
 
-;; Author: Abelardo Jara <abelardojara@Abelardos-MacBook-Pro.local>
+;; Author: abelardo.jara-berrocal <ajaraber@plxcj9063.pdx.intel.com>
 ;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -24,13 +24,13 @@
 
 ;;; Code:
 
-;; Pandoc
-(add-to-list 'load-path "~/.emacs.d/hydra")
-(add-to-list 'load-path "~/.emacs.d/pandoc-mode")
-(require 'pandoc-mode)
-(add-hook 'markdown-mode-hook 'pandoc-load-default-settings)
-(add-hook 'org-mode-hook 'pandoc-load-default-settings)
-(add-hook 'pandoc-mode-hook 'pandoc-load-default-settings)
+;; Ergoemacs
+(add-to-list 'load-path "~/.emacs.d/ergoemacs-mode")
+(use-package ergoemacs-mode
+  :ensure nil
+  :load-path "~/.emacs.d/ergoemacs-mode"
+  :init (progn
+          (setq ergoemacs-ignore-prev-global nil)))
 
-(provide 'setup-pandoc)
-;;; setup-pandoc.el ends here
+(provide 'setup-ergoemacs)
+;;; setup-ergoemacs.el ends here
