@@ -242,10 +242,6 @@
     (split-window-sensibly window)))
 (setq split-window-preferred-function 'split-window-prefer-horizonally)
 
-;; Activate highlight in search and replace
-(setq search-highlight t)
-(setq query-replace-highlight t)
-
 ;; Enable tooltips
 (tooltip-mode t)
 (setq tooltip-use-echo-area t)
@@ -353,7 +349,7 @@
 
 ;; Smoother scrolling
 (setq redisplay-dont-pause nil
-      scroll-margin 1
+      scroll-margin 20
       scroll-step 1
       scroll-conservatively 10000
       scroll-preserve-screen-position 1

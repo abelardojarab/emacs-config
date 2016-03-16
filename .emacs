@@ -67,6 +67,9 @@
 ;; Setup general
 (require 'setup-general)
 
+;; Setup search
+(require 'setup-search)
+
 ;; Setup tramp
 (require 'setup-tramp)
 
