@@ -23,10 +23,14 @@
 ;;
 
 ;;; Code:
-(add-to-list 'load-path "~/.emacs.d/polymode")
-(add-to-list 'load-path "~/.emacs.d/polymode/modes")
-(require 'poly-R)
-(require 'poly-markdown)
-(require 'poly-org)
+(use-package polymode
+  :load-path "~/.emacs.d/polymode"
+  :init (add-to-list 'load-path "~/.emacs.d/polymode/modes")
+  :config (progn
+            (require 'poly-R)
+            (require 'poly-markdown)
+            (require 'poly-org)
+            (setq pm-weaver "knitR-ESS" ;; Default weaver
+                  pm-exporter "pandoc")))
 
 (provide 'setup-polymode)

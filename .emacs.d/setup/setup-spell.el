@@ -29,8 +29,10 @@
   :config (progn
 
             ;; We need tell emacs to use aspell, and where your custom dictionary is.
-            (setq ispell-silently-savep t)
-            (setq ispell-program-name "aspell"
+            (setq ispell-dictionary "english"
+                  ispell-highlight-face 'flyspell-incorrect
+                  ispell-silently-savep t
+                  ispell-program-name "aspell"
                   ispell-extra-args '("--sug-mode=ultra")
                   ispell-alternate-dictionary (expand-file-name "~/.emacs.d/dictionaries/words.txt" ))
             (add-to-list 'ispell-skip-region-alist '("[^\000-\377]+"))
@@ -60,10 +62,13 @@
 ;; flyspell
 (use-package flyspell
   :config (progn
-            (dolist (hook '(text-mode-hook))
+            (setq flyspell-issue-message-flag nil
+                  flyspell-issue-welcome-flag nil)
+            (dolist (hook '(text-mode-hook org-mode-hook markdown-mode-hook))
               (add-hook hook (lambda () (flyspell-mode 1))))
             (dolist (hook '(change-log-mode-hook log-edit-mode-hook))
               (add-hook hook (lambda () (flyspell-mode -1))))
+            (add-hook 'prog-mode-hook 'flyspell-prog-mode)
 
             (defun flyspell-ajust-cursor-point (save cursor-location old-max)
               (when (not (looking-at "\\b"))

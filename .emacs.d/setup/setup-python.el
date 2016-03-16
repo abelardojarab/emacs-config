@@ -60,7 +60,9 @@
   (setq imenu-create-index-function 'python-imenu-create-index))
 
 ;; Setup Python path
-(setenv "PYTHONPATH" (concat (concat (getenv "HOME") "/workspace/pythonlibs/lib/python2.7/site-packages") ":" (getenv "PYTHONPATH")))
+(setenv "PYTHONPATH" (concat (concat (getenv "HOME")
+                                     "/workspace/pythonlibs/lib/python2.7/site-packages") ":"
+                             (getenv "PYTHONPATH")))
 
 ;; switch to the interpreter after executing code
 (setq py-shell-switch-buffers-on-execute-p t)

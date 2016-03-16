@@ -28,6 +28,14 @@
 (use-package flycheck
   :load-path "~/.emacs.d/flycheck"
   :config (progn
+            (add-to-list 'display-buffer-alist
+                         `(,(rx bos "*Flycheck errors*" eos)
+                           (display-buffer-reuse-window
+                            display-buffer-in-side-window)
+                           (reusable-frames . visible)
+                           (side            . bottom)
+                           (window-height   . 0.4)))
+
             (mapc (lambda (mode)
                     (add-hook mode (lambda () (flycheck-mode t))))
                   '(ess-mode-hook

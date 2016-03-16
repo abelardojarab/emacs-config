@@ -24,16 +24,6 @@
 
 ;;; Code:
 
-;; Permanent indentation guide
-(use-package indent-hint
-  :load-path "~/.emacs.d/indent-hint"
-  :init (progn
-          (setq indent-hint-background-overlay t)
-          (setq indent-hint-bg nil))
-  :config (progn
-            (add-hook 'prog-mode-hook 'indent-hint-mode)
-            (add-hook 'lisp-mode-hook 'indent-hint-lisp)))
-
 ;; Line numbers
 (use-package linum
   :config (progn
