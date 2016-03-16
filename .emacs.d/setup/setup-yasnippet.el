@@ -45,12 +45,23 @@
             ;; Remove Yasnippet's default tab key binding (avoid collision with auto-complete)
             (define-key yas-minor-mode-map (kbd "<tab>") nil)
             (define-key yas-minor-mode-map (kbd "TAB") nil)
+            (define-key yas-minor-mode-map (kbd "M-<right>") 'yas-next-field-or-maybe-expand)
+            (define-key yas-minor-mode-map (kbd "M-<left>") 'yas-next-field-or-maybe-expand)
+            (define-key yas-minor-mode-map (kbd "<backtab>") 'yas-insert-snippet)
+            (define-key yas-minor-mode-map (kbd "<S-tab>") 'yas-insert-snippet)
 
             ;; Select a snippet with popup library
             (setq yas-prompt-functions '(yas-dropdown-prompt
                                          yas-ido-prompt
                                          yas-completing-prompt
                                          yas-no-prompt))
+
+            ;; use yas/completing-prompt when ONLY when `M-x yas-insert-snippet'
+            ;; thanks to capitaomorte for providing the trick.
+            (defadvice yas-insert-snippet (around use-completing-prompt activate)
+              "Use `yas-completing-prompt' for `yas-prompt-functions' but only here..."
+              (let ((yas-prompt-functions '(yas-ido-prompt)))
+                ad-do-it))
 
             ;; Tweaking Yasnippet for Org mode
             (defun yas--org-very-safe-expand ()

@@ -374,18 +374,21 @@
 (global-set-key (kbd "C-x <home>") 'tabbar-forward-tab)
 (global-set-key (kbd "C-x <end>") 'tabbar-backward-tab)
 
-;; Code navigation
-(global-set-key (kbd "C-`") 'helm-semantic)
-
 ;; Jump between windows
 (global-set-key [C-up] 'windmove-up)
 (global-set-key [C-down] 'windmove-down)
 (global-set-key [C-left] 'windmove-left)
 (global-set-key [C-right] 'windmove-right)
 
+;; Code navigation
+(global-set-key (kbd "C-`") 'helm-semantic)
+
 ;; Flycheck tips
 (define-key global-map (kbd "C->") 'error-tip-cycle-dwim)
 (define-key global-map (kbd "C-<") 'error-tip-cycle-dwim-reverse)
+
+;; Extra Ctrl-x mapping
+(define-key ctl-x-map (kbd "u") 'my-unindent)
 
 ;; Region bindings mode
 (add-to-list 'load-path "~/.emacs.d/region-bindings-mode")
@@ -419,13 +422,6 @@
 (define-key my-keys-minor-mode-map (kbd "<f4>") 'helm-semantic-or-imenu)
 (define-key my-keys-minor-mode-map (kbd "<f5>") 'smex)
 (define-key my-keys-minor-mode-map (kbd "<f12>") 'helm-buffer-list)
-(define-key my-keys-minor-mode-map [S-tab] 'my-unindent)
-
-;; Good for navigating
-(define-key my-keys-minor-mode-map [(meta up)] 'tabbar-backward-group)
-(define-key my-keys-minor-mode-map [(meta down)] 'tabbar-forward-group)
-(define-key my-keys-minor-mode-map [(meta left)] 'tabbar-backward-tab)
-(define-key my-keys-minor-mode-map [(meta down)] 'tabbar-forward-tab)
 
 ;; Define custom key mode
 (define-minor-mode my-keys-minor-mode

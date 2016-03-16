@@ -67,6 +67,9 @@
             ;; this is used for trigger ac actions from org-mode also
             (add-to-list 'ac-trigger-commands 'org-self-insert-command)
 
+            ;; disable auto-complete in comments
+            (setq ac-disable-faces '(font-lock-string-face font-lock-doc-face))
+
             ;; support for imenu
             (defvar ac-imenu-index nil)
             (ac-clear-variable-every-10-minutes 'ac-imenu-index)
