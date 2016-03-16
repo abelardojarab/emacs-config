@@ -29,7 +29,6 @@
   ;; We don't ensure this package, because we definitely don't want to have this
   ;; mess, but unfortunately it's a dependency of Ensime :(
   :load-path "~/.emacs.d/popup"
-  :pin manual
   :config (progn
             (setq popup-use-optimized-column-computation t)))
 
@@ -47,6 +46,11 @@
 ;;     (when (and (not popup-instances) sanityinc/indent-guide-mode-suppressed)
 ;;       (setq sanityinc/indent-guide-mode-suppressed nil)
 ;;       (indent-guide-mode 1))))
+
+;; Pos-tip library
+(use-package pos-tip
+  :defer t
+  :load-path "~/.emacs.d/pos-tip")
 
 ;; Manage popup windows
 (use-package popwin
@@ -137,7 +141,10 @@
 
              ;; eshell 3 is always my "download stuff" buffer
              (global-set-key (kbd "C-x M-d") #'my/popup-downloads)
-             (global-set-key (kbd "C-h e") 'popwin:messages)))
+             (global-set-key (kbd "C-h e") 'popwin:messages)
+
+             ;; popwin conflicts with ecb
+             (popwin-mode -1)))
 
 ;; Better search, similar to vim
 (use-package isearch+
@@ -262,6 +269,14 @@
                             org-mode-hook
                             text-mode-hook))
               (add-hook hook (lambda () (abbrev-mode 1))))))
+
+;; log4e
+(use-package log4e
+  :load-path "~/.emacs.d/log4e")
+
+;; yaxception
+(use-package yaxception
+  :load-path "~/.emacs.d/yaxception")
 
 ;; write good mode
 (use-package writegood-mode

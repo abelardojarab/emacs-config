@@ -1,6 +1,6 @@
 ;;; setup-web.el ---                                 -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2015  abelardo.jara-berrocal
+;; Copyright (C) 2015, 2016  abelardo.jara-berrocal
 
 ;; Author: abelardo.jara-berrocal <ajaraber@plxcj9064.pdx.intel.com>
 ;; Keywords:
@@ -24,6 +24,20 @@
 
 ;;; Code:
 
+;; w3m
+(use-package w3m
+  :load-path "~/.emacs.d/w3m"
+  :commands (w3m w3m-find-file w3m-goto-url-new-session)
+  :init (progn
+          (setq w3m-init-file "~/.emacs.cache/emacs-w3m"
+                w3m-home-page "http://www.google.com"
+                w3m-use-cookies t
+                w3m-command-arguments '("-cookie" "-F")
+                w3m-show-graphic-icons-in-header-line t
+                w3m-show-graphic-icons-in-mode-line t
+                w3m-default-display-inline-images t)))
+
+;; eww
 (when (fboundp 'eww)
   (setq browse-url-browser-function 'eww-browse-url)
   (setq-default url-configuration-directory "~/.emacs.cache/url")
