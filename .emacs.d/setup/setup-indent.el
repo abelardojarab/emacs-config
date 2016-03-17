@@ -27,7 +27,7 @@
 ;; Auto-indent mode
 (use-package auto-indent-mode
   :pin manual
-  :load-path "~/.emacs.d/auto-indent-mode"
+  :load-path (lambda () (expand-file-name "auto-indent-mode/" user-emacs-directory))
   :init (progn
           (setq auto-indent-indent-style 'conservative)
           (setq auto-indent-on-visit-file nil) ;; do not indent when a file is visit
@@ -39,7 +39,7 @@
 
 ;; Permanent indentation guide
 (use-package indent-hint
-  :load-path "~/.emacs.d/indent-hint"
+  :load-path (lambda () (expand-file-name "indent-hint/" user-emacs-directory))
   :init (progn
           (setq indent-hint-background-overlay t)
           (setq indent-hint-bg nil))

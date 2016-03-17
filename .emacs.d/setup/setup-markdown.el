@@ -25,25 +25,27 @@
 ;;; Code:
 
 ;; Markdown
-(add-to-list 'load-path "~/.emacs.d/markdown-mode")
-(require 'markdown-mode)
-(add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
-(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
-(add-hook 'markdown-mode-hook
-          (lambda ()
-            (writegood-mode t)
-            (flyspell-mode t)))
+(use-package markdown-mode
+  :load-path (lambda () (expand-file-name "markdown-mode/" user-emacs-directory))
+  :config (progn
+            (add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
+            (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
+            (add-hook 'markdown-mode-hook
+                      (lambda ()
+                        (writegood-mode t)
+                        (flyspell-mode t)))
 
-;; Github markdown style
-(setq markdown-command "pandoc -c ~/.emacs.d/styles/github-pandoc.css --from markdown_github -t html5 --mathjax --highlight-style pygments --standalone")
+            ;; Github markdown style
+            (setq markdown-command "pandoc -c ~/.emacs.d/styles/github-pandoc.css --from markdown_github -t html5 --mathjax --highlight-style pygments --standalone")))
 
 ;; Yaml mode
-(add-to-list 'load-path "~/.emacs.d/yaml-mode")
-(require 'yaml-mode)
-(add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
-(add-hook 'yaml-mode-hook
-          '(lambda ()
-             (define-key yaml-mode-map "\C-m" 'newline-and-indent)))
+(use-package yaml-mode
+  :load-path (lambda () (expand-file-name "yaml-mode/" user-emacs-directory))
+  :config (progn
+            (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
+            (add-hook 'yaml-mode-hook
+                      '(lambda ()
+                         (define-key yaml-mode-map "\C-m" 'newline-and-indent)))))
 
 (provide 'setup-markdown)
 ;;; setup-markdown.el ends here

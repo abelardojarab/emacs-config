@@ -25,14 +25,15 @@
 ;;; Code:
 
 ;; Nyan cat
-(when window-system
-  (add-to-list 'load-path "~/.emacs.d/nyan-mode")
-  (require 'nyan-mode)
-  (nyan-mode t))
+(use-package nyan-mode
+  :if window-system
+  :load-path (lambda () (expand-file-name "nyan-mode/" user-emacs-directory))
+
+  :config (nyan-mode t))
 
 ;; Powerline
 (use-package powerline
-  :load-path "~/.emacs.d/powerline"
+  :load-path (lambda () (expand-file-name "powerline/" user-emacs-directory))
   :init (setq powerline-default-separator 'wave)
   :config (progn
             (add-hook 'desktop-after-read-hook 'powerline-reset)

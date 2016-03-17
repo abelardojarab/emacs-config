@@ -24,6 +24,10 @@
 
 ;;; Code:
 
+;; web server
+(use-package web-server
+  :load-path (lambda () (expand-file-name "web-server/" user-emacs-directory)))
+
 ;; w3m
 (use-package w3m
   :load-path "~/.emacs.d/w3m"
@@ -36,6 +40,10 @@
                 w3m-show-graphic-icons-in-header-line t
                 w3m-show-graphic-icons-in-mode-line t
                 w3m-default-display-inline-images t)))
+
+(add-to-list 'load-path "~/.emacs.d/web-server")
+(add-to-list 'load-path "~/.emacs.d/skewer-mode")
+
 
 ;; eww
 (when (fboundp 'eww)

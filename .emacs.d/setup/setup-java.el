@@ -1,6 +1,6 @@
 ;;; setup-java.el ---                                -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2015  abelardo.jara-berrocal
+;; Copyright (C) 2015, 2016  abelardo.jara-berrocal
 
 ;; Author: abelardo.jara-berrocal <ajaraber@plxc26391.pdx.intel.com>
 ;; Keywords:
@@ -24,10 +24,11 @@
 
 ;;; Code:
 
-(add-to-list 'load-path "~/.emacs.d/ajc-java-complete/")
-(require 'ajc-java-complete-config)
-(add-hook 'java-mode-hook 'ajc-java-complete-mode)
-(setq ajc-tag-file-list (list (expand-file-name "~/.emacs.d/ajc-java-complete/java_base.tag")))
+(use-package ajc-java-complete-config
+  :load-path (lambda () (expand-file-name "ajc-java-complete/" user-emacs-directory))
+  :config (progn
+			(add-hook 'java-mode-hook 'ajc-java-complete-mode)
+			(setq ajc-tag-file-list (list (expand-file-name "ajc-java-complete/java_base.tag" user-emacs-directory)))))
 
 (provide 'setup-java)
 ;;; setup-java.el ends here
