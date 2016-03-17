@@ -26,13 +26,13 @@
 
 ;; Bookmark Plus
 (use-package bookmark+
-  :load-path "~/.emacs.d/bookmark+"
+  :load-path (lambda () (expand-file-name "bookmark+/" user-emacs-directory))
   :config (progn
             (setq-default bookmark-default-file "~/.emacs.cache/bookmarks")))
 
 ;; Bookmarks
 (use-package bm
-  :load-path "~/.emacs.d/bm"
+  :load-path (lambda () (expand-file-name "bm/" user-emacs-directory))
   :config (progn
             (setq bm-highlight-style 'bm-highlight-line-and-fringe)
             (setq bm-restore-repository-on-load t)

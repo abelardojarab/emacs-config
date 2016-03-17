@@ -24,6 +24,14 @@
 
 ;;; Code:
 
+;; Disable tool-bar
+(if window-system
+    (tool-bar-mode -1))
+
+;; GUI-specific thing
+(when (window-system)
+  (setenv "EMACS_GUI" "t"))
+
 ;; Smoother scrolling
 (setq redisplay-dont-pause nil
       scroll-margin 20

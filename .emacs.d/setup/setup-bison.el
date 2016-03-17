@@ -1,6 +1,6 @@
 ;;; setup-bison.el ---
 
-;; Copyright (C) 2014
+;; Copyright (C) 2014, 2016
 
 ;; Author:  <ajaraber@AJARABER-MOBL5>
 ;; Keywords:
@@ -27,15 +27,6 @@
 (add-to-list 'load-path "~/.emacs.d/bison-mode")
 (require 'bison-mode)
 
-(setq imenu-create-index-function
-      (lambda ()
-        (let ((end))
-          (beginning-of-buffer)
-          (re-search-forward "^%%")
-          (forward-line 1)
-          (setq end (save-excursion (re-search-forward "^%%") (point)))
-          (loop while (re-search-forward "^\\([a-z].*?\\)\\s-*\n?\\s-*:" end t)
-                collect (cons (match-string 1) (point))))))
 
 (provide 'setup-bison)
 ;;; setup-bison.el ends here

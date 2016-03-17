@@ -25,7 +25,7 @@
 ;;; Code:
 
 (use-package hydra
-  :load-path "~/.emacs.d/hydra"
+  :load-path (lambda () (expand-file-name "hydra/" user-emacs-directory))
   :defer t)
 
 (provide 'setup-hydra)

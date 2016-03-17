@@ -25,49 +25,50 @@
 ;;; Code:
 
 ;; Autoinsert skeletons and templates
-(require 'autoinsert)
-(auto-insert-mode t)
+(use-package autoinsert
+  :config (progn
+            (auto-insert-mode t)
 
-;; This turns off the prompt that auto-insert-mode asks before
-;; it actually inserts text/code for you
-(setq auto-insert-query nil)
+            ;; This turns off the prompt that auto-insert-mode asks before
+            ;; it actually inserts text/code for you
+            (setq auto-insert-query nil)
 
-;; Provide headers or templates for new files using Yasnippet
-(defun yas--expand-by-uuid (mode uuid)
-  "Expand snippet template in MODE by its UUID"
-  (yas--expand-snippet
-   (yas--template-content
-    (yas--get-template-by-uuid mode uuid))))
+            ;; Provide headers or templates for new files using Yasnippet
+            (defun yas--expand-by-uuid (mode uuid)
+              "Expand snippet template in MODE by its UUID"
+              (yas--expand-snippet
+               (yas--template-content
+                (yas--get-template-by-uuid mode uuid))))
 
-;; Yasnippet templates used in auto-insert mode
-(define-auto-insert "\\.R"
-  '(lambda () (yas--expand-by-uuid 'ess-mode "header")))
-(define-auto-insert "\\.py"
-  '(lambda () (yas--expand-by-uuid 'python-mode "import")))
-(defun autoinsert-yas-expand()
-  "Replace text in yasnippet template."
-  (yas-expand-snippet (buffer-string) (point-min) (point-max)))
-(define-auto-insert "\\.c$"  ["c-auto-insert" autoinsert-yas-expand])
-(define-auto-insert "\\.cpp$" ["c++-auto-insert" autoinsert-yas-expand])
-(define-auto-insert "\\.cs$" ["csharp-auto-insert" autoinsert-yas-expand])
-(define-auto-insert "\\.py$" ["py-auto-insert" autoinsert-yas-expand])
+            ;; Yasnippet templates used in auto-insert mode
+            (define-auto-insert "\\.R"
+              '(lambda () (yas--expand-by-uuid 'ess-mode "header")))
+            (define-auto-insert "\\.py"
+              '(lambda () (yas--expand-by-uuid 'python-mode "import")))
+            (defun autoinsert-yas-expand()
+              "Replace text in yasnippet template."
+              (yas-expand-snippet (buffer-string) (point-min) (point-max)))
+            (define-auto-insert "\\.c$"  ["c-auto-insert" autoinsert-yas-expand])
+            (define-auto-insert "\\.cpp$" ["c++-auto-insert" autoinsert-yas-expand])
+            (define-auto-insert "\\.cs$" ["csharp-auto-insert" autoinsert-yas-expand])
+            (define-auto-insert "\\.py$" ["py-auto-insert" autoinsert-yas-expand])
 
-(defadvice auto-insert (around yasnippet-expand-after-auto-insert activate)
-  "Expand Content Auto-inserted as yasnippet Templete,
+            (defadvice auto-insert (around yasnippet-expand-after-auto-insert activate)
+              "Expand Content Auto-inserted as yasnippet Templete,
   so That WE could use yasnippet in autoinsert mode "
-  (let ((is-new-File (and (not buffer-read-only)
-                          (or (eq this-command 'auto-insert)
-                              (and auto-insert (bobp) (eobp))))))
-    ad-do-it
-    (let ((old-point-max (point-max)))
-      (when is-new-File
-        (goto-char old-point-max)
-        (yas-expand-snippet (buffer-substring-no-properties (point-min) (point-max)))
-        (delete-region (point-min) old-point-max)))))
+              (let ((is-new-File (and (not buffer-read-only)
+                                      (or (eq this-command 'auto-insert)
+                                          (and auto-insert (bobp) (eobp))))))
+                ad-do-it
+                (let ((old-point-max (point-max)))
+                  (when is-new-File
+                    (goto-char old-point-max)
+                    (yas-expand-snippet (buffer-substring-no-properties (point-min) (point-max)))
+                    (delete-region (point-min) old-point-max)))))))
 
 ;; Automated auto-insert of Yasnippet templates on new files
-(add-to-list 'load-path "~/.emacs.d/yatemplate")
-(require 'yatemplate)
+(use-package yatemplate
+  :load-path (lambda () (expand-file-name "yatemplate/" user-emacs-directory)))
 
 (provide 'setup-auto-insert)
 ;;; setup-auto-insert.el ends here

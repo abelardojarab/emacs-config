@@ -31,15 +31,11 @@
 (setq byte-compile-warnings nil)
 
 ;; Assure .emacs.cache directory exists
-(if (not (file-exists-p (expand-file-name "~/.emacs.cache")))
-    (make-directory (expand-file-name "~/.emacs.cache") t))
+(if (not (file-exists-p "~/.emacs.cache"))
+    (make-directory "~/.emacs.cache") t)
 
 ;; Inhibit startup window, very annoying
 (setq inhibit-startup-message t)
-
-;; Disable tool-bar
-(if window-system
-    (tool-bar-mode -1))
 
 ;; Printing
 (setq ps-paper-type 'a4
@@ -48,13 +44,6 @@
       ps-print-color-p t
       ps-landscape-mode nil    ;; for two pages per page: t
       ps-number-of-columns 1)  ;; for two pages per page: 2
-
-;; Exec path from shell in Mac OSX
-(when (equal system-type 'darwin)
-  (add-to-list 'load-path "~/.emacs.d/exec-path-from-shell")
-  (require 'exec-path-from-shell)
-  (setq exec-path-from-shell-check-startup-files nil)
-  (exec-path-from-shell-initialize))
 
 ;; Define preferred shell
 (cond
@@ -67,10 +56,6 @@
  (t
   (setq shell-file-name "bash")))
 (setq explicit-shell-file-name shell-file-name)
-
-;; GUI-specific thing
-(when (window-system)
-  (setenv "EMACS_GUI" "t"))
 
 (cond
 
@@ -171,7 +156,7 @@
 
   (setenv "SHELL" shell-file-name)
   (require 'w32browser-dlgopen)
-  (setq dlgopen-executable-path "~/.emacs.d/elisp/getfile.exe")))
+  (setq dlgopen-executable-path (expand-file-name "elisp/getfile.exe" user-emacs-directory))))
 
 ;; Emacs is a text editor, make sure your text files end in a newline
 (setq require-final-newline 'query)
@@ -207,9 +192,6 @@
 ;; Enable tooltips
 (tooltip-mode t)
 (setq tooltip-use-echo-area t)
-
-;; Put something different in the scratch buffer
-(setq initial-scratch-message "Start typing...")
 
 ;; Bell instead of annoying beep
 (setq visible-bell t)

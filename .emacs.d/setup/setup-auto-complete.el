@@ -25,9 +25,8 @@
 ;;; Code:
 
 ;; Auto-Complete
-(add-to-list 'load-path "~/.emacs.d/auto-complete")
 (use-package auto-complete
-  :load-path "~/.emacs.d/auto-complete"
+  :load-path (lambda () (expand-file-name "auto-complete/" user-emacs-directory))
   :init (require 'auto-complete-config)
   :config (progn
             (ac-config-default)
@@ -138,7 +137,7 @@
 
 ;; Clang auto-complete
 (use-package auto-complete-clang
-  :load-path "~/.emacs.d/auto-complete-clang"
+  :load-path (lambda () (expand-file-name "auto-complete-clang/" user-emacs-directory))
   :config (progn
             (defun my-ac-cc-mode-setup ()
               (setq ac-sources (append '(ac-source-clang) ac-sources)))
@@ -154,7 +153,7 @@
 
 ;; Latex math auto-complete
 (use-package ac-math
-  :load-path "~/.emacs.d/ac-math")
+  :load-path (lambda () (expand-file-name "ac-math/" user-emacs-directory)))
 
 ;; Latex auto-complete
 (use-package auto-complete-latex
@@ -171,10 +170,10 @@
 
 ;; Autocomplete for Org
 (use-package auto-complete-pcmp
-  :load-path "~/.emacs.d/auto-complete-pcmp")
+  :load-path (lambda () (expand-file-name "auto-complete-pcmp/" user-emacs-directory)))
 
 (use-package org-ac
-  :load-path "~/.emacs.d/org-ac"
+  :load-path (lambda () (expand-file-name "org-ac/" user-emacs-directory))
   :config (org-ac/config-default))
 
 ;; Tips for auto-complete

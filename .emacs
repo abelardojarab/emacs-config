@@ -17,10 +17,10 @@
 (defconst debian-emacs-flavor 'emacs24
   "A symbol representing the particular debian flavor of emacs running.
  Something like 'emacs20, 'xemacs20, etc.")
-(add-to-list 'load-path "~/.emacs.d/elisp")
-(add-to-list 'load-path "~/.emacs.d/dadams")
-(add-to-list 'load-path "~/.emacs.d/setup")
-(add-to-list 'load-path "~/.emacs.d/use-package")
+(add-to-list 'load-path (expand-file-name "elisp/" user-emacs-directory))
+(add-to-list 'load-path (expand-file-name "dadams/" user-emacs-directory))
+(add-to-list 'load-path (expand-file-name "setup/" user-emacs-directory))
+(add-to-list 'load-path (expand-file-name "use-package/" user-emacs-directory))
 
 ;; Setup package
 (require 'setup-package)
@@ -29,12 +29,12 @@
 (require 'setup-functions)
 
 ;; CEDET
-(add-to-list 'load-path "~/.emacs.d/cedet")
-(add-to-list 'load-path "~/.emacs/cedet/contrib")
+(add-to-list 'load-path (expand-file-name "cedet/" user-emacs-directory))
+(add-to-list 'load-path (expand-file-name "cedet/contrib/" user-emacs-directory))
 (require 'cedet-remove-builtin)
 (setq byte-compile-warnings nil)
-(load-file "~/.emacs.d/cedet/cedet-devel-load.el")
-(load-file "~/.emacs.d/cedet/contrib/cedet-contrib-load.el")
+(load-file (expand-file-name "cedet/cedet-devel-load.el" user-emacs-directory))
+(load-file (expand-file-name "cedet/contrib/cedet-contrib-load.el" user-emacs-directory))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.

@@ -26,7 +26,7 @@
 
 ;; Helm
 (use-package helm-config
-  :load-path "~/.emacs.d/helm"
+  :load-path (lambda () (expand-file-name "helm/" user-emacs-directory))
   :config (progn
             (setq helm-delete-minibuffer-contents-from-point t)
             (setq helm-buffer-max-length 35)

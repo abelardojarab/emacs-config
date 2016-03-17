@@ -24,11 +24,19 @@
 
 ;;; Code:
 
+;; Exec path from shell in Mac OSX
+(use-package exec-path-from-shell
+  :if (equal system-type 'darwin)
+  :load-path (lambda () (expand-file-name "exec-path-from-shell/" user-emacs-directory))
+  :config (progn
+            (setq exec-path-from-shell-check-startup-files nil)
+            (exec-path-from-shell-initialize)))
+
 ;; Popup, used by auto-complete and other tools
 (use-package popup
   ;; We don't ensure this package, because we definitely don't want to have this
   ;; mess, but unfortunately it's a dependency of Ensime :(
-  :load-path "~/.emacs.d/popup"
+  :load-path (lambda () (expand-file-name "popup/" user-emacs-directory))
   :config (progn
             (setq popup-use-optimized-column-computation t)))
 
@@ -50,14 +58,14 @@
 ;; Pos-tip library
 (use-package pos-tip
   :defer t
-  :load-path "~/.emacs.d/pos-tip")
+  :load-path (lambda () (expand-file-name "pos-tip/" user-emacs-directory)))
 
 ;; Drop down list support, related to popup
 (use-package dropdown-list)
 
 ;; Manage popup windows
 (use-package popwin
-  :load-path "~/.emacs.d/popwin"
+  :load-path (lambda () (expand-file-name "popwin/" user-emacs-directory))
   ;; popwin conflicts with ecb
   :config (popwin-mode -1))
 
@@ -82,22 +90,13 @@
              ;; don't muck with special buffers
              uniquify-ignore-buffers-re "^\\*")))
 
-;; imenu list
-(use-package imenu-list
-  :load-path "~/.emacs.d/imenu-list"
-  :config (progn
-            (setq imenu-list-size 0.2)
-            (setq imenu-list-focus-after-activation t)
-            (setq imenu-list-auto-resize t)
-            (setq imenu-list-position 'right)))
-
 ;; Browse kill ring
 (use-package browse-kill-ring
-  :load-path "~/.emacs.d/browse-kill-ring")
+  :load-path (lambda () (expand-file-name "browse-kill-ring/" user-emacs-directory)))
 
 ;; Multiple cursors
 (use-package multiple-cursors
-  :load-path "~/.emacs.d/multiple-cursors")
+  :load-path (lambda () (expand-file-name "multiple-cursors/" user-emacs-directory)))
 
 ;; Abbrevs
 (use-package abbrev
@@ -121,11 +120,11 @@
 
 ;; log4e
 (use-package log4e
-  :load-path "~/.emacs.d/log4e")
+  :load-path (lambda () (expand-file-name "log4e/" user-emacs-directory)))
 
 ;; yaxception
 (use-package yaxception
-  :load-path "~/.emacs.d/yaxception")
+  :load-path (lambda () (expand-file-name "yaxception/" user-emacs-directory)))
 
 (provide 'setup-general)
 ;;; setup-general.el ends here

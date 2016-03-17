@@ -25,9 +25,8 @@
 ;;; Code:
 
 ;; Enable Semantic
-(add-to-list 'load-path "~/.emacs.d/cedet/lisp/cedet")
+(add-to-list 'load-path (expand-file-name "cedet/lisp/cedet/" user-emacs-directory))
 (semantic-load-enable-minimum-features)
-;; (semantic-mode 1)
 (require 'semantic/wisent)
 
 ;; Enable case-insensitive searching
