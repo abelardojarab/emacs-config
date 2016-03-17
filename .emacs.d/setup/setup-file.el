@@ -85,5 +85,17 @@
 ;; More exhaustive cleaning of white space
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
+;; Make shell scrips executable on save. Good!
+(add-hook 'after-save-hook 'executable-make-buffer-file-executable-if-script-p)
+
+;; Auto compile *.elc-files on save
+(defun auto-byte-recompile ()
+  "If the current buffer is in emacs-lisp-mode and there already exists an .elc file corresponding to the current buffer file, then recompile the file on save."
+  (interactive)
+  (when (and (eq major-mode 'emacs-lisp-mode)
+             (file-exists-p (byte-compile-dest-file buffer-file-name)))
+    (byte-compile-file buffer-file-name)))
+(add-hook 'after-save-hook 'auto-byte-recompile)
+
 (provide 'setup-file)
 ;;; setup-file.el ends here

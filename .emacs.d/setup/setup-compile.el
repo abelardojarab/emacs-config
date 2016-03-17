@@ -1,6 +1,6 @@
 ;;; setup-compile.el ---
 
-;; Copyright (C) 2014, 2015  abelardo.jara-berrocal
+;; Copyright (C) 2014, 2015, 2016  abelardo.jara-berrocal
 
 ;; Author: abelardo.jara-berrocal <ajaraber@plxc25288.pdx.intel.com>
 ;; Keywords:
@@ -24,84 +24,75 @@
 
 ;;; Code:
 
-;; make sure ant's output is in a format emacs likes
-(setenv "ANT_ARGS" "-emacs")
-
-;; gdb should use many windows, to make it look like an IDE
-(setq gdb-many-windows t
-      gdb-max-frames 120)
-
-;; Close compile buffer if no errors nor warnings
-(defun bury-compile-buffer-if-successful (buffer string)
-  "Bury a compilation buffer if succeeded without warnings "
-  (if (and
-       (string-match "compilation" (buffer-name buffer))
-       (string-match "finished" string)
-       (not
-        (with-current-buffer buffer
-          **(goto-char 1)**
-          (search-forward "warning" nil t))))
-      (run-with-timer 1 nil
-                      (lambda (buf)
-                        (bury-buffer buf)
-                        (switch-to-prev-buffer (get-buffer-window buf) 'kill))
-                      buffer)))
-(add-hook 'compilation-finish-functions 'bury-compile-buffer-if-successful)
-
-;; Helper for compilation. Close the compilation window if there was no error at all.
-(defun compilation-exit-autoclose (status code msg)
-  ;; If M-x compile exists with a 0
-  (when (and (eq status 'exit) (zerop code))
-    ;; then bury the *compilation* buffer, so that C-x b doesn't go there
-    (bury-buffer)
-    ;; and delete the *compilation* window
-    (delete-window (get-buffer-window (get-buffer "*compilation*"))))
-  ;; Always return the anticipated result of compilation-exit-message-function
-  (cons msg code))
-
-;; Compilation
-;; http://www.emacswiki.org/cgi-bin/wiki/ModeCompile
-(setq
- compilation-context-lines 1 compilation-context-lines 1
- compilation-exit-message-function 'compilation-exit-autoclose
- compilation-scroll-output 'first-error      ;; scroll until first error
- compilation-read-command nil                  ;; don't need enter
- compilation-window-height 12                ;; keep it readable
- compilation-auto-jump-to-first-error t      ;; jump to first error auto
- compilation-auto-jump-to-next-error t)      ;; jump to next error
-
-;; Make shell scrips executable on save. Good!
-(add-hook 'after-save-hook 'executable-make-buffer-file-executable-if-script-p)
-
-;; Auto compile *.elc-files on save
-(defun auto-byte-recompile ()
-  "If the current buffer is in emacs-lisp-mode and there already exists an .elc file corresponding to the current buffer file, then recompile the file on save."
-  (interactive)
-  (when (and (eq major-mode 'emacs-lisp-mode)
-             (file-exists-p (byte-compile-dest-file buffer-file-name)))
-    (byte-compile-file buffer-file-name)))
-(add-hook 'after-save-hook 'auto-byte-recompile)
-
 ;; Better compile buffer
-(require 'compile)
-(add-hook 'c-mode-common-hook
-          (lambda ()
-            (local-set-key (kbd "<M-up>")   'previous-error)
-            (local-set-key (kbd "<M-down>") 'next-error)
+(use-package compile
+  :config (progn
 
-            (unless (file-exists-p "Makefile")
-              (set (make-local-variable 'compile-command)
-                   ;; emulate make's .c.o implicit pattern rule, but with
-                   ;; different defaults for the CC, CPPFLAGS, and CFLAGS
-                   ;; variables:
-                   ;; $(CC) -c -o $@ $(CPPFLAGS) $(CFLAGS) $<
-                   (let ((file (file-name-nondirectory buffer-file-name)))
-                     (format "%s -o %s %s %s"
-                             (or (getenv "CC") "g++")
-                             (file-name-sans-extension file)
-                             ;;(or (getenv "CPPFLAGS") "-DDEBUG=9")
-                             (or (getenv "CFLAGS") " -g -O2")
-                             file))))))
+            ;; make sure ant's output is in a format emacs likes
+            (setenv "ANT_ARGS" "-emacs")
+
+            ;; gdb should use many windows, to make it look like an IDE
+            (setq gdb-many-windows t
+                  gdb-max-frames 120)
+
+            ;; Compilation
+            ;; http://www.emacswiki.org/cgi-bin/wiki/ModeCompile
+            (setq
+             compilation-context-lines 1 compilation-context-lines 1
+             compilation-exit-message-function 'compilation-exit-autoclose
+             compilation-scroll-output 'first-error      ;; scroll until first error
+             compilation-read-command nil                  ;; don't need enter
+             compilation-window-height 12                ;; keep it readable
+             compilation-auto-jump-to-first-error t      ;; jump to first error auto
+             compilation-auto-jump-to-next-error t)      ;; jump to next error
+
+
+	    ;; Close compile buffer if no errors nor warnings
+            (defun bury-compile-buffer-if-successful (buffer string)
+              "Bury a compilation buffer if succeeded without warnings "
+              (if (and
+                   (string-match "compilation" (buffer-name buffer))
+                   (string-match "finished" string)
+                   (not
+                    (with-current-buffer buffer
+                      **(goto-char 1)**
+                      (search-forward "warning" nil t))))
+                  (run-with-timer 1 nil
+                                  (lambda (buf)
+                                    (bury-buffer buf)
+                                    (switch-to-prev-buffer (get-buffer-window buf) 'kill))
+                                  buffer)))
+            (add-hook 'compilation-finish-functions 'bury-compile-buffer-if-successful)
+
+            ;; Helper for compilation. Close the compilation window if there was no error at all.
+            (defun compilation-exit-autoclose (status code msg)
+              ;; If M-x compile exists with a 0
+              (when (and (eq status 'exit) (zerop code))
+                ;; then bury the *compilation* buffer, so that C-x b doesn't go there
+                (bury-buffer)
+                ;; and delete the *compilation* window
+                (delete-window (get-buffer-window (get-buffer "*compilation*"))))
+              ;; Always return the anticipated result of compilation-exit-message-function
+              (cons msg code))
+
+            (add-hook 'c-mode-common-hook
+                      (lambda ()
+                        (local-set-key (kbd "<M-up>")   'previous-error)
+                        (local-set-key (kbd "<M-down>") 'next-error)
+
+                        (unless (file-exists-p "Makefile")
+                          (set (make-local-variable 'compile-command)
+                               ;; emulate make's .c.o implicit pattern rule, but with
+                               ;; different defaults for the CC, CPPFLAGS, and CFLAGS
+                               ;; variables:
+                               ;; $(CC) -c -o $@ $(CPPFLAGS) $(CFLAGS) $<
+                               (let ((file (file-name-nondirectory buffer-file-name)))
+                                 (format "%s -o %s %s %s"
+                                         (or (getenv "CC") "g++")
+                                         (file-name-sans-extension file)
+                                         ;;(or (getenv "CPPFLAGS") "-DDEBUG=9")
+                                         (or (getenv "CFLAGS") " -g -O2")
+                                         file))))))))
 
 ;; makefiles
 (add-hook 'makefile-mode-hook
