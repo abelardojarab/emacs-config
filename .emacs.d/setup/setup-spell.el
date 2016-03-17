@@ -86,13 +86,15 @@
 ;; write good mode
 (use-package writegood-mode
   :pin manual
-  :load-path "~/.emacs.d/writegood-mode")
+  :load-path (lambda () (expand-file-name "writegood-mode/" user-emacs-directory)))
 
 ;; Langtool
 (use-package langtool
-  :load-path "~/.emacs.d/langtool"
+  :load-path (lambda () (expand-file-name "langtool/" user-emacs-directory))
   :config (progn
-            (setq langtool-language-tool-jar (expand-file-name "~/.emacs.d/jar/LanguageTool-2.7/languagetool-commandline.jar")
+            (setq langtool-language-tool-jar (expand-file-name
+											  "jar/LanguageTool-2.7/languagetool-commandline.jar"
+											  user-emacs-directory)
                   langtool-mother-tongue "en"
                   langtool-disabled-rules '("WHITESPACE_RULE"
                                             "EN_UNPAIRED_BRACKETS"

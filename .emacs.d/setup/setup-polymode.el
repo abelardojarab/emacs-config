@@ -24,8 +24,8 @@
 
 ;;; Code:
 (use-package polymode
-  :load-path "~/.emacs.d/polymode"
-  :init (add-to-list 'load-path "~/.emacs.d/polymode/modes")
+  :load-path (lambda () (expand-file-name "polymode/" user-emacs-directory))
+  :init (add-to-list 'load-path (expand-file-name "polymode/modes" user-emacs-directory))
   :config (progn
             (require 'poly-R)
             (require 'poly-markdown)

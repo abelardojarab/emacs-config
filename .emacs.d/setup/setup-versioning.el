@@ -47,23 +47,23 @@
 
 ;; psvn
 (use-package psvn
-  :config
-  (setq svn-status-hide-unmodified t)
-  (setq svn-status-hide-unknown t)
-  (setq svn-status-svn-file-coding-system 'utf-8))
+  :config (progn
+			(setq svn-status-hide-unmodified t)
+			(setq svn-status-hide-unknown t)
+			(setq svn-status-svn-file-coding-system 'utf-8)))
 
 ;; magit
 (use-package magit
-  :load-path "~/.emacs.d/magit/lisp"
+  :load-path (lambda () (expand-file-name "magit/lisp" user-emacs-directory))
   :init (eval-after-load 'info
           '(progn (info-initialize)
-                  (add-to-list 'Info-directory-list "~/.emacs.d/magit/Documentation")))
+                  (add-to-list 'Info-directory-list (expand-file-name "magit/Documentation" user-emacs-directory))))
   :config (progn
             (setq magit-diff-refine-hunk t)))
 
 ;; diff-hl
 (use-package diff-hl
-  :load-path "~/.emacs.d/diff-hl"
+  :load-path (lambda () (expand-file-name "diff-hl/" user-emacs-directory))
   :config (progn
             (setq diff-hl-draw-borders t)
             (defadvice svn-sttus-update-modeline (after svn-update-diff-hl activate)
@@ -72,67 +72,68 @@
 
 ;; git-timenachine
 (use-package git-timemachine
-  :load-path "~/.emacs.d/git-timemachine")
+  :load-path (lambda () (expand-file-name "git-timemachine/" user-emacs-directory)))
 
 ;; Show blame for current line
 (use-package git-messenger
-  :load-path "~/.emacs.d/git-messenger")
+  :load-path (lambda () (expand-file-name "git-messenger/" user-emacs-directory)))
 
-(when window-system
-  (use-package git-gutter-plus
-    :defer t
-    :diminish git-gutter+-mode
-    :load-path "~/.emacs.d/git-gutter-plus")
+(use-package git-gutter-plus
+  :defer t
+  :if window-system
+  :diminish git-gutter+-mode
+  :load-path (lambda () (expand-file-name "git-gutter-plus/" user-emacs-directory)))
 
-  (use-package git-gutter-fringe+
-    :load-path "~/.emacs.d/git-gutter-fringe-plus"
-    :config (progn
-              (global-git-gutter+-mode t)
-              (set-face-foreground 'git-gutter-fr+-modified "LightSeaGreen")
-              (set-face-foreground 'git-gutter-fr+-added    "SeaGreen")
-              (set-face-foreground 'git-gutter-fr+-deleted  "red")
+(use-package git-gutter-fringe+
+  :if window-system
+  :load-path (lambda () (expand-file-name "git-gutter-fringe-plus/" user-emacs-directory))
+  :config (progn
+            (global-git-gutter+-mode t)
+            (set-face-foreground 'git-gutter-fr+-modified "LightSeaGreen")
+            (set-face-foreground 'git-gutter-fr+-added    "SeaGreen")
+            (set-face-foreground 'git-gutter-fr+-deleted  "red")
 
-              ;; Please adjust fringe width if your own sign is too big.
-              (setq-default left-fringe-width 20)
+            ;; Please adjust fringe width if your own sign is too big.
+            (setq-default left-fringe-width 20)
 
-              (fringe-helper-define 'git-gutter-fr+-added nil
-                ".XXXXXX."
-                "XXxxxxXX"
-                "XX....XX"
-                "XX....XX"
-                "XXXXXXXX"
-                "XXXXXXXX"
-                "XX....XX"
-                "XX....XX")
+            (fringe-helper-define 'git-gutter-fr+-added nil
+              ".XXXXXX."
+              "XXxxxxXX"
+              "XX....XX"
+              "XX....XX"
+              "XXXXXXXX"
+              "XXXXXXXX"
+              "XX....XX"
+              "XX....XX")
 
-              (fringe-helper-define 'git-gutter-fr+-deleted nil
-                "XXXXXX.."
-                "XXXXXXX."
-                "XX...xXX"
-                "XX....XX"
-                "XX....XX"
-                "XX...xXX"
-                "XXXXXXX."
-                "XXXXXX..")
+            (fringe-helper-define 'git-gutter-fr+-deleted nil
+              "XXXXXX.."
+              "XXXXXXX."
+              "XX...xXX"
+              "XX....XX"
+              "XX....XX"
+              "XX...xXX"
+              "XXXXXXX."
+              "XXXXXX..")
 
-              (fringe-helper-define 'git-gutter-fr+-modified nil
-                "XXXXXXXX"
-                "XXXXXXXX"
-                "Xx.XX.xX"
-                "Xx.XX.xX"
-                "Xx.XX.xX"
-                "Xx.XX.xX"
-                "Xx.XX.xX"
-                "Xx.XX.xX")
+            (fringe-helper-define 'git-gutter-fr+-modified nil
+              "XXXXXXXX"
+              "XXXXXXXX"
+              "Xx.XX.xX"
+              "Xx.XX.xX"
+              "Xx.XX.xX"
+              "Xx.XX.xX"
+              "Xx.XX.xX"
+              "Xx.XX.xX")
 
-              ;; Fringe fix in Windows
-              (unless (string-equal system-type "windows-nt")
-                (defadvice git-gutter+-process-diff (before git-gutter+-process-diff-advice activate)
-                  (ad-set-arg 0 (file-truename (ad-get-arg 0))))))))
+            ;; Fringe fix in Windows
+            (unless (string-equal system-type "windows-nt")
+              (defadvice git-gutter+-process-diff (before git-gutter+-process-diff-advice activate)
+                (ad-set-arg 0 (file-truename (ad-get-arg 0)))))))
 
 ;; ibuffer versioning-based groups
 (use-package ibuffer-vc
-  :load-path "~/.emacs.d/ibuffer-vc")
+  :load-path (lambda () (expand-file-name "ibuffer-vc/" user-emacs-directory)))
 
 (provide 'setup-versioning)
 ;;; setup-versioning.el ends here

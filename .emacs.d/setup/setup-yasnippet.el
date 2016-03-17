@@ -25,13 +25,14 @@
 ;;; Code:
 
 ;; Yasnippet (should be invoked before auto-complete)
-(add-to-list 'load-path "~/.emacs.d/yasnippet")
 (use-package yasnippet
   :diminish yas-minor-mode
-  :load-path "~/.emacs.d/yasnippet"
+  :load-path (lambda () (expand-file-name "yasnippet/" user-emacs-directory))
   :config (progn
             (setq yas-snippet-dirs
                   '("~/.emacs.d/snippets"))
+            (setq yas-snippet-dirs (cons (expand-file-name "snippets" user-emacs-directory)
+                                         (yas-snippet-dirs)))
             (yas-initialize)
             (yas-global-mode 1)
 

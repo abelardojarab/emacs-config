@@ -25,10 +25,11 @@
 ;;; Code:
 
 ;; Spice mode
-(add-to-list 'load-path "~/.emacs.d/spice-mode")
-(require 'spice-mode)
-(add-to-list 'auto-mode-alist '("\\.sp\\'" . spice-mode))
-(add-to-list 'auto-mode-alist '("\\.scs\\'" . spice-mode))
+(use-package spice-mode
+  :load-path (lambda () (expand-file-name "spice-mode/" user-emacs-directory))
+  :config (progn
+			(add-to-list 'auto-mode-alist '("\\.sp\\'" . spice-mode))
+			(add-to-list 'auto-mode-alist '("\\.scs\\'" . spice-mode))))
 
 (provide 'setup-spice)
 ;;; setup-post.el ends here

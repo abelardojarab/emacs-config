@@ -25,24 +25,22 @@
 ;;; Code:
 
 ;; Rendering ditaa
-(setq org-ditaa-jar-path (expand-file-name "~/.emacs.d/jar/ditaa.jar"))
+(setq org-ditaa-jar-path (expand-file-name "jar/ditaa.jar" user-emacs-directory))
 
 ;; Rendering plantuml
-(setq org-plantuml-jar-path (expand-file-name "~/.emacs.d/jar/plantuml.jar"))
+(setq org-plantuml-jar-path (expand-file-name "jar/plantuml.jar" user-emacs-directory))
 (defun plantuml-render-buffer ()
   (interactive)
   (message "PLANTUML Start rendering")
   (shell-command (concat "java -jar "
-                         (expand-file-name "~/.emacs.d/jar/plantuml.jar")
+                         (expand-file-name "jar/plantuml.jar" user-emacs-directory)
                          " "
                          buffer-file-name))
   (message (concat "PLANTUML Rendered:  " (buffer-name))))
 
-
-
 ;; for Gnuplot
-(add-to-list 'load-path "~/.emacs.d/gnuplot")
-(require 'gnuplot)
+(use-package gnuplot
+  :load-path (lambda () (expand-file-name "gnuplot/" user-emacs-directory)))
 
 ;; Automatically refresh inline images that are generated from Babel blocks
 (add-hook 'org-babel-after-execute-hook (lambda ()

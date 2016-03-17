@@ -26,40 +26,40 @@
 
 ;; Helm flycheck
 (use-package helm-flycheck
-  :load-path "~/.emacs.d/helm-flycheck"
+  :load-path (lambda () (expand-file-name "helm-flycheck/" user-emacs-directory))
   :config (progn
             (bind-keys :map ctl-x-map
                        ("k" . helm-flycheck))))
 
 ;; Helm ls git
 (use-package helm-ls-git
-  :load-path "~/.emacs.d/helm-ls-git"
+  :load-path (lambda () (expand-file-name "helm-ls-git/" user-emacs-directory))
   :config (progn
             (bind-keys :map ctl-x-map
                        ("g" . helm-ls-git-ls))))
 
 ;; Helm bm support
 (use-package helm-bm
-  :load-path "~/.emacs.d/helm-bm"
+  :load-path (lambda () (expand-file-name "helm-bm/" user-emacs-directory))
   :config (progn
             (bind-keys :map ctl-x-map
                        ("b" . helm-bookmarks))))
 
 ;; Helm themes
 (use-package helm-themes
-  :load-path "~/.emacs.d/helm-themes")
+  :load-path (lambda () (expand-file-name "helm-themes/" user-emacs-directory)))
 
 ;; Helm flyspell
 (use-package helm-flyspell
-  :load-path "~/.emacs.d/helm-flyspell")
+  :load-path (lambda () (expand-file-name "helm-flyspell/" user-emacs-directory)))
 
 ;; Helm etags plus
 (use-package helm-etags+
-  :load-path "~/.emacs.d/helm-etags-plus")
+  :load-path (lambda () (expand-file-name "helm-etags-plus/" user-emacs-directory)))
 
 ;; Helm swoop
 (use-package helm-swoop
-  :load-path "~/.emacs.d/helm-etags+"
+  :load-path (lambda () (expand-file-name "helm-swoop/" user-emacs-directory))
   :config (progn
 
             ;; From helm-swoop to helm-multi-swoop-all
@@ -91,10 +91,10 @@
 
 ;; Helm dash
 (use-package helm-dash
-  :load-path "~/.emacs.d/helm-dash"
+  :load-path (lambda () (expand-file-name "helm-dash/" user-emacs-directory))
   :config (progn
             (setq helm-dash-min-length 2)
-            (setq helm-dash-docsets-path (expand-file-name "~/.emacs.d/docsets"))
+            (setq helm-dash-docsets-path (expand-file-name "docsets/" user-emacs-directory))
             (setq helm-dash-common-docsets '(
                                              "Markdown"
                                              "LaTeX"
@@ -129,7 +129,7 @@
 
 ;; Helm bibtex
 (use-package helm-bibtex
-  :load-path "~/.emacs.d/helm-bibtex"
+  :load-path (lambda () (expand-file-name "helm-bibtex/" user-emacs-directory))
   :config (progn
             (defun helm-bibtex-cite ()
               "Helm command to cite bibliography."

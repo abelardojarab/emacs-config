@@ -26,7 +26,7 @@
 
 ;; Org-Ref
 (use-package org-ref
-  :load-path "~/.emacs.d/org-ref"
+  :load-path (lambda () (expand-file-name "org-ref/" user-emacs-directory))
   :config (progn
             (setq org-ref-bibliography-notes "~/workspace/Documents/Bibliography/notes.org"
                   org-ref-default-bibliography '("~/workspace/Documents/Bibliography/biblio.bib")

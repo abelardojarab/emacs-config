@@ -55,7 +55,7 @@
 ;; Smartparens
 (use-package smartparens
   :diminish smartparens-mode
-  :load-path "~/.emacs.d/smartparens"
+  :load-path (lambda () (expand-file-name "smartparens/" user-emacs-directory))
   :init (progn
           (require 'smartparens-config))
   :config (progn
@@ -63,7 +63,7 @@
 
 ;; Autopair
 (use-package autopair
-  :load-path "~/.emacs.d/autopair"
+  :load-path (lambda () (expand-file-name "web-server/" user-emacs-directory))
   :diminish autopair-mode
   :config (progn
             (autopair-global-mode) ;; enable autopair in all buffers
@@ -84,7 +84,7 @@
 
 ;; Rainbow delimiters
 (use-package rainbow-delimiters
-  :load-path "~/.emacs.d/rainbow-delimiters"
+  :load-path (lambda () (expand-file-name "rainbow-delimiters/" user-emacs-directory))
   :config (progn
             (add-hook 'lisp-mode-hook 'rainbow-delimiters-mode)
             (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)))

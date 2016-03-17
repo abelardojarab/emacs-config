@@ -27,7 +27,7 @@
 ;; by default, the function 'python-mode is associated with
 ;; the package python.el. The following changes that to python-mode.el:
 (autoload 'python-mode "python-mode" "Python Mode." t)
-(add-to-list 'load-path "~/.emacs.d/python-mode")
+(add-to-list 'load-path (expand-file-name "python-mode/" user-emacs-directory))
 (autoload 'python-mode "python-mode" "Python Mode." t)
 
 ;; Python configuration

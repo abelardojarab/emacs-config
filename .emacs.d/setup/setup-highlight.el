@@ -53,19 +53,19 @@
 
 ;; Highlight the latest changes in the buffer (like text inserted from: yank, undo, etc.) until the next command is run
 (use-package volatile-highlights
-  :load-path "~/.emacs.d/volatile-highlights"
+  :load-path (lambda () (expand-file-name "volatile-highlights/" user-emacs-directory))
   :diminish volatile-highlights-mode
   :config (progn
             (volatile-highlights-mode t)))
 
 ;; Highlight blocks
 (use-package highlight-blocks
-  :load-path "~/.emacs.d/highlight-blocks"
+  :load-path (lambda () (expand-file-name "highlight-blocks/" user-emacs-directory))
   :diminish highlight-blocks-mode)
 
 ;; Highlight symbol
 (use-package highlight-symbol
-  :load-path "~/.emacs.d/highlight-symbol"
+  :load-path (lambda () (expand-file-name "highlight-symbol/" user-emacs-directory))
   :config (progn (mapc (lambda (mode)
                          (add-hook mode 'highlight-symbol-mode))
                        '(prog-mode-hook

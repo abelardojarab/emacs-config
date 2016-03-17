@@ -25,14 +25,14 @@
 ;;; Code:
 
 ;; Better Alt-x
-(if (and (= emacs-major-version 24) (= emacs-minor-version 2))
-    ;; Use smex2
-    (add-to-list 'load-path "~/.emacs.d/smex2")
-  ;; Use smex3
-  (add-to-list 'load-path "~/.emacs.d/smex")
-  ) ;; if
-(require 'smex)
-(smex-initialize)
+
+(use-package smex
+  :load-path (lambda ()
+               (expand-file-name
+                (if (and (= emacs-major-version 24) (= emacs-minor-version 2))
+                    "smex2/"
+                  "smex/") user-emacs-directory))
+  :config (smex-initialize))
 
 (provide 'setup-smex)
 ;;; setup-modeline.el ends here

@@ -26,7 +26,7 @@
 
 ;; Tabbar mode
 (use-package tabbar
-  :load-path "~/.emacs.d/tabbar"
+  :load-path (lambda () (expand-file-name "tabbar/" user-emacs-directory))
   :config (progn
             (setq tabbar-use-images t)
             (setq tabbar-cycle-scope (quote tabs))
@@ -56,11 +56,11 @@
 ;; Tabbar ruler pre-requisites
 (use-package mode-icons
   :defer t
-  :load-path "~/.emacs.d/mode-icons")
+  :load-path (lambda () (expand-file-name "mode-icons/" user-emacs-directory)))
 
 ;; more tweaking to tabbar
 (use-package tabbar-ruler
-  :load-path "~/.emacs.d/tabbar-ruler"
+  :load-path (lambda () (expand-file-name "tabbar-ruler/" user-emacs-directory))
   :init (setq tabbar-ruler-global-tabbar 't) ;; If you want tabbar
   :config (progn
             (setq tabbar-separator '(0.5))

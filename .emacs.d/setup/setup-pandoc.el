@@ -26,7 +26,7 @@
 
 ;; Pandoc
 (use-package pandoc-mode
-  :load-path "~/.emacs.d/pandoc-mode"
+  :load-path (lambda () (expand-file-name "pandoc-mode/" user-emacs-directory))
   :config (progn
             (add-hook 'markdown-mode-hook 'pandoc-load-default-settings)
             (add-hook 'org-mode-hook 'pandoc-load-default-settings)
