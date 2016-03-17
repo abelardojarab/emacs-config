@@ -28,32 +28,32 @@
 (use-package bookmark+
   :load-path "~/.emacs.d/bookmark+"
   :config (progn
-			(setq-default bookmark-default-file "~/.emacs.cache/bookmarks")))
+            (setq-default bookmark-default-file "~/.emacs.cache/bookmarks")))
 
 ;; Bookmarks
 (use-package bm
   :load-path "~/.emacs.d/bm"
   :config (progn
-			(setq bm-highlight-style 'bm-highlight-line-and-fringe)
-			(setq bm-restore-repository-on-load t)
-			(setq bookmark-save-flag 1)
+            (setq bm-highlight-style 'bm-highlight-line-and-fringe)
+            (setq bm-restore-repository-on-load t)
+            (setq bookmark-save-flag 1)
 
-			;; make bookmarks persistent as default
-			(setq-default bm-buffer-persistence t)
+            ;; make bookmarks persistent as default
+            (setq-default bm-buffer-persistence t)
 
-			;; Loading the repository from file when on start up.
-			(add-hook 'after-init-hook 'bm-repository-load)
+            ;; Loading the repository from file when on start up.
+            (add-hook 'after-init-hook 'bm-repository-load)
 
-			;; Restoring bookmarks when on file find.
-			(add-hook 'find-file-hooks 'bm-buffer-restore)
+            ;; Restoring bookmarks when on file find.
+            (add-hook 'find-file-hooks 'bm-buffer-restore)
 
-			;; Saving bookmark data on killing a buffer
-			(add-hook 'kill-buffer-hook 'bm-buffer-save)
+            ;; Saving bookmark data on killing a buffer
+            (add-hook 'kill-buffer-hook 'bm-buffer-save)
 
-			;; Saving the repository to file when on exit.
-			(add-hook 'kill-emacs-hook '(lambda nil
-										  (bm-buffer-save-all)
-										  (bm-repository-save)))))
+            ;; Saving the repository to file when on exit.
+            (add-hook 'kill-emacs-hook '(lambda nil
+                                          (bm-buffer-save-all)
+                                          (bm-repository-save)))))
 
 (provide 'setup-bookmarks)
 ;;; setup-bookmarks.el ends here
