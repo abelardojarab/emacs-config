@@ -1,6 +1,6 @@
 ;;; setup-bookmarks.el ---
 
-;; Copyright (C) 2014, 2015  abelardo.jara-berrocal
+;; Copyright (C) 2014, 2015, 2016  abelardo.jara-berrocal
 
 ;; Author: abelardo.jara-berrocal <ajaraber@plxc25288.pdx.intel.com>
 ;; Keywords:
@@ -25,33 +25,35 @@
 ;;; Code:
 
 ;; Bookmark Plus
-(add-to-list 'load-path "~/.emacs.d/bookmark+")
-(require 'bookmark+)
-(setq-default bookmark-default-file "~/.emacs.cache/bookmarks")
+(use-package bookmark+
+  :load-path "~/.emacs.d/bookmark+"
+  :config (progn
+			(setq-default bookmark-default-file "~/.emacs.cache/bookmarks")))
 
 ;; Bookmarks
-(add-to-list 'load-path "~/.emacs.d/bm")
-(require 'bm)
-(setq bm-highlight-style 'bm-highlight-line-and-fringe)
-(setq bm-restore-repository-on-load t)
-(setq bookmark-save-flag 1)
+(use-package bm
+  :load-path "~/.emacs.d/bm"
+  :config (progn
+			(setq bm-highlight-style 'bm-highlight-line-and-fringe)
+			(setq bm-restore-repository-on-load t)
+			(setq bookmark-save-flag 1)
 
-;; make bookmarks persistent as default
-(setq-default bm-buffer-persistence t)
+			;; make bookmarks persistent as default
+			(setq-default bm-buffer-persistence t)
 
-;; Loading the repository from file when on start up.
-(add-hook 'after-init-hook 'bm-repository-load)
+			;; Loading the repository from file when on start up.
+			(add-hook 'after-init-hook 'bm-repository-load)
 
-;; Restoring bookmarks when on file find.
-(add-hook 'find-file-hooks 'bm-buffer-restore)
+			;; Restoring bookmarks when on file find.
+			(add-hook 'find-file-hooks 'bm-buffer-restore)
 
-;; Saving bookmark data on killing a buffer
-(add-hook 'kill-buffer-hook 'bm-buffer-save)
+			;; Saving bookmark data on killing a buffer
+			(add-hook 'kill-buffer-hook 'bm-buffer-save)
 
-;; Saving the repository to file when on exit.
-(add-hook 'kill-emacs-hook '(lambda nil
-                              (bm-buffer-save-all)
-                              (bm-repository-save)))
+			;; Saving the repository to file when on exit.
+			(add-hook 'kill-emacs-hook '(lambda nil
+										  (bm-buffer-save-all)
+										  (bm-repository-save)))))
 
 (provide 'setup-bookmarks)
 ;;; setup-bookmarks.el ends here
