@@ -110,20 +110,19 @@
 (require 'setup-spell)
 
 ;; Setup Org
-(use-package setup-org
-  :mode "\\.org\\'"
-  :config (progn
-            ;; Setup Org (babel support)
-            (require 'setup-org-babel)
+(require 'setup-org)
 
-            ;; Setup Org (image supporg)
-            (require 'setup-org-image)
+;; Setup Org (babel support)
+(require 'setup-org-babel)
 
-            ;; Setup Org (latex support)
-            (require 'setup-org-latex)
+;; Setup Org (image supporg)
+(require 'setup-org-image)
 
-            ;; Setup Org (html support)
-            (require 'setup-org-html)))
+;; Setup Org (latex support)
+(require 'setup-org-latex)
+
+;; Setup Org (html support)
+(require 'setup-org-html)
 
 ;; Setup modeline
 (require 'setup-modeline)
@@ -177,32 +176,22 @@
 (require 'setup-lisp)
 
 ;; Setup Python
-(use-package setup-python
-  :mode "\\.py\\'"
-
-  ;; Setup Python plugins (e.g. Jedi)
-  ;; :config (require 'setup-python-plugins)
-  )
+(require 'setup-python)
 
 ;; Setup Javascript
-(use-package setup-js2
-  :mode "\\.js*\\'")
+(require 'setup-js2)
 
 ;; Setup YAML
-(use-package setup-yaml
-  :mode "\\.yaml\\'")
+(require 'setup-yaml)
 
 ;; Setup Java
-(use-package setup-java
-  :mode "\\.java\\'")
+(require 'setup-java)
 
 ;; Setup VHDL mode
-(use-package setup-vhdl
-  :mode "\\.vhd\\'")
+(require 'setup-vhdl)
 
 ;; Setup VHDL mode
-(use-package setup-verilog
-  :mode "\\.v\\'")
+(require 'setup-verilog)
 
 ;; Setup Spice mode
 (require 'setup-spice)
@@ -211,15 +200,11 @@
 (require 'setup-bison)
 
 ;; Setup R/ess
-(use-package setup-ess
-  :mode "\\.r\\'")
+(require 'setup-ess)
 
 ;; Setup markdown and Yaml
-(use-package setup-markdown
-  :mode "\\.md\\'"
-
-  ;; Setup polymode
-  :config (require 'setup-polymode))
+(require 'setup-markdown)
+(require 'setup-polymode)
 
 ;; Setup shell
 (require 'setup-eshell)
