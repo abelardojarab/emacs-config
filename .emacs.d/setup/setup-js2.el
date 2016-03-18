@@ -54,16 +54,21 @@
             (setq-default js2-strict-trailing-comma-warning t) ;; jshint does not warn about this now for some reason
             (add-hook 'js2-mode-hook (lambda () (flycheck-mode 1)))))
 
+;; skewer mode
+(use-package skewer-mode
+  :defer t
+  :load-path (lambda () (expand-file-name "skewer-mode/" user-emacs-directory)))
+
+;; web server
+(use-package web-server
+  :defer t
+  :load-path (lambda () (expand-file-name "web-server/" user-emacs-directory)))
+
 ;; ac-js2
 (use-package ac-js2
   :load-path (lambda () (expand-file-name "ac-js2/" user-emacs-directory))
   :config (progn
             (add-hook 'js2-mode-hook 'ac-js2-mode)
             (setq-default ac-js2-evaluate-calls t)))
-
-;; skewer mode
-(use-package skewer-mode
-  :load-path (lambda () (expand-file-name "skewer-mode/" 
-user-emacs-directory)))
 
 (provide 'setup-js2)

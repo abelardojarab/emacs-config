@@ -24,10 +24,6 @@
 
 ;;; Code:
 
-;; web server
-(use-package web-server
-  :load-path (lambda () (expand-file-name "web-server/" user-emacs-directory)))
-
 ;; w3m
 (use-package w3m
   :load-path (lambda () (expand-file-name "w3m/" user-emacs-directory))
