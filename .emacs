@@ -223,8 +223,10 @@
 ;; Setup R/ess
 (require 'setup-ess)
 
-;; Setup markdown and Yaml
+;; Setup markdown
 (require 'setup-markdown)
+
+;; Setup polymode
 (require 'setup-polymode)
 
 ;; Setup shell
