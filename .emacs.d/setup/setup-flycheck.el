@@ -26,7 +26,7 @@
 
 ;; Flycheck
 (use-package flycheck
-  :load-path "~/.emacs.d/flycheck"
+  :load-path (lambda () (expand-file-name "flycheck/" user-emacs-directory))
   :config (progn
             (add-to-list 'display-buffer-alist
                          `(,(rx bos "*Flycheck errors*" eos)
@@ -92,7 +92,7 @@
 
 ;; Tooltips
 (use-package flycheck-tip
-  :load-path "~/.emacs.d/flycheck-tip"
+  :load-path (lambda () (expand-file-name "flycheck-tip/" user-emacs-directory))
   :config (progn
             (setq flycheck-tip-avoid-show-func nil)))
 

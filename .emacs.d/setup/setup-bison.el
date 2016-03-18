@@ -24,9 +24,8 @@
 
 ;;; Code:
 
-(add-to-list 'load-path "~/.emacs.d/bison-mode")
-(require 'bison-mode)
-
+(use-package bison-mode
+  :load-path (lambda () (expand-file-name "bison-mode/" user-emacs-directory)))
 
 (provide 'setup-bison)
 ;;; setup-bison.el ends here

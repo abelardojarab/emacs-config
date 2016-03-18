@@ -25,17 +25,22 @@
 ;;; Code:
 
 ;; Jedi settings
-(add-to-list 'load-path "~/.emacs.d/python-environment")
-(add-to-list 'load-path "~/.emacs.d/epc")
-(add-to-list 'load-path "~/.emacs.d/jedi")
-(require 'python-environment)
-(require 'epc)
-(require 'jedi)
-(add-hook 'python-mode-hook 'jedi:setup)
-(setq jedi:setup-keys nil)
-(setq jedi:complete-on-dot t)
-(setq jedi:tooltip-method t)
-(ac-flyspell-workaround)
+(use-package python-environment
+  :defer t
+  :load-path (lambda () (expand-file-name "python-environment/" user-emacs-directory)))
+
+(use-package epc
+  :defer t
+  :load-path (lambda () (expand-file-name "epc/" user-emacs-directory)))
+
+(use-package jedi
+  :load-path (lambda () (expand-file-name "jedi/" user-emacs-directory))
+  :config (progn
+			(add-hook 'python-mode-hook 'jedi:setup)
+			(setq jedi:setup-keys nil)
+			(setq jedi:complete-on-dot t)
+			(setq jedi:tooltip-method t)
+			(ac-flyspell-workaround)))
 
 (provide 'setup-python-plugins)
 ;;; setup-python-plugins.el ends here

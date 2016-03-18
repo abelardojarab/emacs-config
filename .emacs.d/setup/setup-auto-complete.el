@@ -106,7 +106,7 @@
 
             ;; create and add new words to the dictionary on the fly
             (require 'auto-complete-config)
-            (add-to-list 'ac-dictionary-directories "~/.emacs.d/auto-complete/dict")
+            (add-to-list 'ac-dictionary-directories (expand-file-name "auto-complete/dict" user-emacs-directory))
             (add-to-list 'ac-dictionary-directories "~/.emacs.cache/ac-dict")
             (setq ac-comphist-file  "~/.emacs.cache/ac-comphist.dat")
             (ac-config-default)

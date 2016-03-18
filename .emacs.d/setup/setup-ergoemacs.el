@@ -25,10 +25,9 @@
 ;;; Code:
 
 ;; Ergoemacs
-(add-to-list 'load-path "~/.emacs.d/ergoemacs-mode")
 (use-package ergoemacs-mode
   :ensure nil
-  :load-path "~/.emacs.d/ergoemacs-mode"
+  :load-path (lambda () (expand-file-name "ergoemacs-mode/" user-emacs-directory))
   :init (progn
           (setq ergoemacs-ignore-prev-global nil)))
 

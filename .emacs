@@ -187,6 +187,9 @@
 ;; Setup Javascript
 (require 'setup-js2)
 
+;; Setup Java
+(require 'setup-java)
+
 ;; Setup VHDL/Verilog mode
 (require 'setup-vhdl)
 

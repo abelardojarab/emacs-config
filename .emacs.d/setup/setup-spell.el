@@ -34,7 +34,7 @@
                   ispell-silently-savep t
                   ispell-program-name "aspell"
                   ispell-extra-args '("--sug-mode=ultra")
-                  ispell-alternate-dictionary (expand-file-name "~/.emacs.d/dictionaries/words.txt" ))
+                  ispell-alternate-dictionary (expand-file-name "dictionaries/words.txt" user-emacs-directory))
             (add-to-list 'ispell-skip-region-alist '("[^\000-\377]+"))
             (when (eq system-type 'darwin)
               (if (file-executable-p "/usr/local/bin/aspell")
