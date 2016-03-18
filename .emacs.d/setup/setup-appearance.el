@@ -33,7 +33,7 @@
   (setenv "EMACS_GUI" "t"))
 
 ;; Smoother scrolling
-(setq redisplay-dont-pause nil
+(setq redisplay-dont-pause t
       scroll-margin 20
       scroll-step 1
       scroll-conservatively 10000
@@ -87,6 +87,7 @@ non-nil."
 (global-hi-lock-mode nil)
 (setq font-lock-maximum-decoration t)
 (setq font-lock-maximum-size (* 512 512))
+(setq font-lock-multiline t)
 (defun global-font-lock-mode-check-buffers () nil)
 
 ;; Lazy font lock
@@ -97,7 +98,6 @@ non-nil."
       jit-lock-stealth-nice 0.5
       jit-lock-stealth-time 16
       jit-lock-stealth-verbose nil)
-(setq-default font-lock-multiline t)
 
 ;; Line numbers
 (use-package linum
