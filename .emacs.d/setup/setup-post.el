@@ -24,15 +24,5 @@
 
 ;;; Code:
 
-;; Org-Ref
-(use-package org-ref
-  :load-path (lambda () (expand-file-name "org-ref/" user-emacs-directory))
-  :config (progn
-            (setq org-ref-bibliography-notes "~/workspace/Documents/Bibliography/notes.org"
-                  org-ref-default-bibliography '("~/workspace/Documents/Bibliography/biblio.bib")
-                  org-ref-pdf-directory "~/workspace/Documents/Bibliography/bibtex-pdfs")
-            (setq org-ref-insert-cite-key "C-c )")
-            (setq org-ref-default-citation-link "autocite")))
-
 (provide 'setup-post)
 ;;; setup-post.el ends here

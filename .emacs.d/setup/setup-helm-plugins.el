@@ -131,12 +131,31 @@
 (use-package helm-bibtex
   :load-path (lambda () (expand-file-name "helm-bibtex/" user-emacs-directory))
   :config (progn
+            (setq helm-bibtex-bibliography "~/workspace/Documents/Bibliography/references.bib")
+            (setq helm-bibtex-library-path "~/workspace/Documents/Bibliography/bibtex-pdfs")
+            (setq helm-bibtex-notes-path "~/workspace/Documents/Bibliography/helm-bibtex-notes")
+
+            ;; open pdf with system pdf viewer (works on mac)
+            (setq helm-bibtex-pdf-open-function
+                  (lambda (fpath)
+                    (start-process "open" "*open*" "open" fpath)))
+
             (defun helm-bibtex-cite ()
               "Helm command to cite bibliography."
               (interactive)
               (helm-other-buffer
                '(helm-c-source-bibtex)
                "*helm bibtex:"))))
+
+;; Org-Ref
+(use-package org-ref
+  :load-path (lambda () (expand-file-name "org-ref/" user-emacs-directory))
+  :config (progn
+            (setq org-ref-bibliography-notes "~/workspace/Documents/Bibliography/notes.org"
+                  org-ref-default-bibliography '("~/workspace/Documents/Bibliography/biblio.bib")
+                  org-ref-pdf-directory "~/workspace/Documents/Bibliography/bibtex-pdfs")
+            (setq org-ref-insert-cite-key "C-c )")
+            (setq org-ref-default-citation-link "autocite")))
 
 (provide 'setup-helm-plugins)
 ;;; setup-helm-plugins.el ends here
