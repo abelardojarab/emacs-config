@@ -108,14 +108,14 @@
              (if (> (x-display-pixel-width) 2000)
                  (progn ;; Ultra-HD monitor in Linux
                    (setq main-programming-font (concat main-programming-font "-14"))
-                   (setq main-writing-font (concat main-writing-font "-15")))
+                   (setq main-writing-font (concat main-writing-font "-14")))
                (if (> (x-display-pixel-width) 1800)
                    (progn ;; HD monitor in Linux
                      (setq main-programming-font (concat main-programming-font "-13"))
-                     (setq main-writing-font (concat main-writing-font "-14")))
+                     (setq main-writing-font (concat main-writing-font "-13")))
                  (progn
                    (setq main-programming-font (concat main-programming-font "-11"))
-                   (setq main-writing-font (concat main-writing-font "-12")))))))
+                   (setq main-writing-font (concat main-writing-font "-11")))))))
 
           ;; Apply fonts
           (set-default-font main-programming-font frame)

@@ -256,14 +256,15 @@
 
             ;; Strike thru headlines for DONE task
             ;; Stolen from http://sachachua.com/blog/2012/12/emacs-strike-through-headlines-for-done-tasks-in-org/
-            (setq org-fontify-done-headline t)
-            (custom-set-faces
-             '(org-done ((t (:foreground "PaleGreen"
-                                         :weight normal
-                                         :strike-through t))))
-             '(org-headline-done
-               ((((class color) (min-colors 16) (background dark))
-                 (:foreground "LightSalmon" :strike-through t)))))))
+            ;; (setq org-fontify-done-headline t)
+            ;; (custom-set-faces
+            ;;  '(org-done ((t (:foreground "PaleGreen"
+            ;;                              :weight normal
+            ;;                              :strike-through t))))
+            ;;  '(org-headline-done
+            ;;    ((((class color) (min-colors 16) (background dark))
+            ;;      (:foreground "LightSalmon" :strike-through t)))))
+            ))
 
 ;; ASCII doc
 (use-package ox-asciidoc
@@ -288,7 +289,7 @@
   :if window-system
   :load-path (lambda () (expand-file-name "org-bullets/" user-emacs-directory))
   :config (progn
-            ;; (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+            (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
             (setq org-bullets-bullet-list
                   '(
                     "❯"
