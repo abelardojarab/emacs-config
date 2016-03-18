@@ -199,6 +199,9 @@
 ;; Setup Python
 (require 'setup-python)
 
+;; Setup HTML
+(require 'setup-html)
+
 ;; Setup Javascript
 (require 'setup-js2)
 
