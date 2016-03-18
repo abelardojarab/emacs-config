@@ -1,5 +1,4 @@
-;;; setup-org-latex.el ---                           -*- 
-lexical-binding: t; -*-
+;;; setup-org-latex.el ---                           -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2016  Abelardo Jara
 
@@ -44,28 +43,20 @@ lexical-binding: t; -*-
 (defun org-text-scale-eye ()
   "Scale equation images according to text-scale-mode-amount."
   (when (boundp 'text-scale-mode-amount)
-    (let ((relwidth (* (expt text-scale-mode-step 
-text-scale-mode-amount))))
+    (let ((relwidth (* (expt text-scale-mode-step text-scale-mode-amount))))
       (loop for ol in (overlays-in (point-min) (point-max)) do
-            (when (eq (overlay-get ol 'org-overlay-type) 
-'org-latex-overlay)
+            (when (eq (overlay-get ol 'org-overlay-type) 'org-latex-overlay)
               (unless (overlay-get ol 'org-image-original-width)
-                (overlay-put ol 'org-image-original-width (car 
-(image-size (overlay-get ol 'display) t))))
+                (overlay-put ol 'org-image-original-width (car (image-size (overlay-get ol 'display) t))))
               (let ((ol-disp-plist (cdr (overlay-get ol 'display))))
-                (setq ol-disp-plist (plist-put ol-disp-plist :type 
-'imagemagick))
-                (setq ol-disp-plist (plist-put ol-disp-plist :width 
-(round (* relwidth (overlay-get ol 'org-image-original-width)))))
-                (overlay-put ol 'display (append '(image) 
-ol-disp-plist))))))
+                (setq ol-disp-plist (plist-put ol-disp-plist :type 'imagemagick))
+                (setq ol-disp-plist (plist-put ol-disp-plist :width (round (* relwidth (overlay-get ol 'org-image-original-width)))))
+                (overlay-put ol 'display (append '(image) ol-disp-plist))))))
     (force-window-update)))
-(add-hook 'org-mode-hook '(lambda () (add-hook 'text-scale-mode-hook 
-'org-text-scale-eye)))
+(add-hook 'org-mode-hook '(lambda () (add-hook 'text-scale-mode-hook 'org-text-scale-eye)))
 
 (defadvice org-format-latex (before set-scale activate)
-  "Set :scale in `org-format-latex-options' to the scaling factor 
-resulting from `text-scale-mode' and clear cache."
+  "Set :scale in `org-format-latex-options' to the scaling factor resulting from `text-scale-mode' and clear cache."
   (let ((relwidth (expt text-scale-mode-step text-scale-mode-amount)))
     (unless (= (plist-get org-format-latex-options :scale) relwidth)
       (plist-put org-format-latex-options :scale relwidth))))
@@ -74,8 +65,7 @@ resulting from `text-scale-mode' and clear cache."
 ;; for Tikz image in Org
 (setq org-babel-latex-htlatex "htlatex")
 (defmacro by-backend (&rest body)
-  `(case (if (boundp 'backend) (org-export-backend-name backend) nil) 
-,@body))
+  `(case (if (boundp 'backend) (org-export-backend-name backend) nil) ,@body))
 
 ;; for Graphviz image in Org
 (add-to-list 'org-src-lang-modes (quote ("dot" . graphviz-dot)))
@@ -84,25 +74,20 @@ resulting from `text-scale-mode' and clear cache."
 (require 'ox-latex)
 (setq org-latex-listings t)
 (setq org-export-latex-quotes
-      '(("en" ("\\(\\s-\\|[[(]\\)\"" . "\\enquote{") ("\\(\\S-\\)\"" . 
-"}") ("\\(\\s-\\|(\\)'" . "`"))))
+      '(("en" ("\\(\\s-\\|[[(]\\)\"" . "\\enquote{") ("\\(\\S-\\)\"" . "}") ("\\(\\s-\\|(\\)'" . "`"))))
 
 ;; Reftex
 (require 'dash)
 (require 'reftex-cite)
-(setq reftex-default-bibliography 
-'("~/workspace/Documents/Bibliography/biblio.bib")) ;; So that RefTeX in 
-Org-mode knows bibliography
+(setq reftex-default-bibliography '("~/workspace/Documents/Bibliography/biblio.bib")) ;; So that RefTeX in Org-mode knows bibliography
 (defun org-mode-reftex-setup ()
   (interactive)
   (and (buffer-file-name) (file-exists-p (buffer-file-name))
        (progn
-         ;; Reftex should use the org file as master file. See C-h v 
-TeX-master for infos.
+         ;; Reftex should use the org file as master file. See C-h v TeX-master for infos.
          (setq TeX-master t)
          (turn-on-reftex)
-         ;; enable auto-revert-mode to update reftex when bibtex file 
-changes on disk
+         ;; enable auto-revert-mode to update reftex when bibtex file changes on disk
          (global-auto-revert-mode t) ; careful: this can kill the undo
          ;; history when you change the file
          ;; on-disk.
@@ -119,9 +104,7 @@ changes on disk
 
 ;; Add defaults packages to include when exporting.
 (setq org-latex-hyperref-template
-      "\\hypersetup{\n  pdfkeywords={%k},\n  pdfsubject={%d},\n  
-pdfcreator={%c},\n  colorlinks=true,\n  linkcolor=black,\n  
-urlcolor=blue}\n")
+      "\\hypersetup{\n  pdfkeywords={%k},\n  pdfsubject={%d},\n  pdfcreator={%c},\n  colorlinks=true,\n  linkcolor=black,\n  urlcolor=blue}\n")
 (add-to-list 'org-latex-packages-alist '("" "graphicx"))
 (add-to-list 'org-latex-packages-alist '("" "geometry"))
 (add-to-list 'org-latex-packages-alist '("" "hyperref"))
@@ -226,26 +209,19 @@ urlcolor=blue}\n")
     (setq org-latex-default-class "xelatex")
   (setq org-latex-default-class "pdflatex"))
 
-;; Let the exporter use the -shell-escape option to let latex execute 
-external programs.
+;; Let the exporter use the -shell-escape option to let latex execute external programs.
 (if (executable-find "xelatex")
     (setq org-latex-pdf-process
-          '("xelatex -interaction nonstopmode -synctex=1 -shell-escape 
--output-directory %o %f"
+          '("xelatex -interaction nonstopmode -synctex=1 -shell-escape -output-directory %o %f"
             "biber %b"
             "bibtex $(basename %b)"
-            "xelatex -interaction nonstopmode -synctex=1 -shell-escape 
--output-directory %o %f"
-            "xelatex -interaction nonstopmode -synctex=1 -shell-escape 
--output-directory %o %f")) ;; multipass
+            "xelatex -interaction nonstopmode -synctex=1 -shell-escape -output-directory %o %f"
+            "xelatex -interaction nonstopmode -synctex=1 -shell-escape -output-directory %o %f")) ;; multipass
   (setq org-latex-pdf-process
-        '("pdflatex -interaction nonstopmode -shell-escape 
--output-directory %o %f"
+        '("pdflatex -interaction nonstopmode -shell-escape -output-directory %o %f"
           "bibtex $(basename %b)"
-          "pdflatex -interaction nonstopmode -shell-escape 
--output-directory %o %f"
-          "pdflatex -interaction nonstopmode -shell-escape 
--output-directory %o %f"))
+          "pdflatex -interaction nonstopmode -shell-escape -output-directory %o %f"
+          "pdflatex -interaction nonstopmode -shell-escape -output-directory %o %f"))
   ) ;; multipass
 
 ;; add emacs lisp support for minted
@@ -255,8 +231,7 @@ external programs.
 ;; Tweak the PDF viewer
 (eval-after-load "org"
   '(progn
-     ;; .txt files aren't in the list initially, but in case that 
-changes
+     ;; .txt files aren't in the list initially, but in case that changes
      ;; in a future version of org, use if to avoid errors
      (if (assoc "\\.txt\\'" org-file-apps)
          (setcdr (assoc "\\.txt\\'" org-file-apps) "kate %s")
