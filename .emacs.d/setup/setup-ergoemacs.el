@@ -26,6 +26,8 @@
 
 ;; Ergoemacs
 (use-package ergoemacs-mode
+  ;; Ergoemacs does not work with Emacs 25
+  :if (= emacs-major-version 24)
   :ensure nil
   :load-path (lambda () (expand-file-name "ergoemacs-mode/" user-emacs-directory))
   :init (progn
