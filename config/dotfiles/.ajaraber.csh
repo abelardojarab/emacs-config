@@ -1,6 +1,6 @@
 alias ls       'ls -l --color -sF'
 alias cd 'cd \!*; set prompt = "%{\033[34m%}[%n@%{\033[35m%}%m%{\033[33m%} %b%{\033[0m%}%c]$ "'
-alias emacs '$HOME/workspace_old/emacspkgs/emacs-24.5/src/emacs'
+alias emacs '$HOME/workspace_old/emacspkgs/emacs-24.4/src/emacs'
 alias emacsclient 'emacsclient -n'
 
 setenv JAVA_HOME /usr/intel/pkgs/java/1.8.0

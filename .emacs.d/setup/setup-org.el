@@ -246,6 +246,14 @@
                    (interactive)
                    (org-text-wrapper "="))
 
+            ;; convert csv to org-table considering "12,12"
+            (defun org-convert-csv-table (beg end)
+              (interactive (list (point) (mark)))
+              (replace-regexp "\\(^\\)\\|\\(\".*?\"\\)\\|," (quote (replace-eval-replacement
+                                                                    replace-quote (cond ((equal "^" (match-string 1)) "|")
+                                                                                        ((equal "," (match-string 0)) "|")
+                                                                                        ((match-string 2))) ))  nil  beg end))
+
             ;; Strike thru headlines for DONE task
             ;; Stolen from http://sachachua.com/blog/2012/12/emacs-strike-through-headlines-for-done-tasks-in-org/
             (setq org-fontify-done-headline t)
@@ -280,14 +288,14 @@
   :if window-system
   :load-path (lambda () (expand-file-name "org-bullets/" user-emacs-directory))
   :config (progn
-			(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
-			(setq org-bullets-bullet-list
-				  '(
-					"❯"
-					"➤"
-					"▪"
-					"•"
-					))))
+            (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+            (setq org-bullets-bullet-list
+                  '(
+                    "❯"
+                    "➤"
+                    "▪"
+                    "•"
+                    ))))
 
 (provide 'setup-org)
 ;;; setup-org.el ends here

@@ -107,8 +107,8 @@
             (dolist (hook (list 'prog-mode-hook 'org-mode-hook))
               (add-hook hook (lambda () (hs-minor-mode 1))))
 
-            (dolist (hook (list 'prog-mode-hook 'org-mode-hook))
-              (add-hook hook 'hideshowvis-enable))
+            ;; (dolist (hook (list 'prog-mode-hook 'org-mode-hook))
+            ;;   (add-hook hook 'hideshowvis-enable))
 
             (defun hs-minor-mode-settings ()
               "settings of `hs-minor-mode'."
