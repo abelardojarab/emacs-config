@@ -87,7 +87,7 @@ a link to this file."
               (interactive)
               (turn-on-iimage-mode)
               (set-face-underline-p 'org-link t)) ;; start with hidden images
-            (add-hook 'org-mode-hook '(lambda () (org-turn-on-iimage-in-org)))
+            ;; (add-hook 'org-mode-hook '(lambda () (org-turn-on-iimage-in-org)))
 
             ;; Function to toggle images in a org buffer
             (defun org-toggle-iimage-in-org ()
@@ -97,7 +97,6 @@ a link to this file."
                   (set-face-underline-p 'org-link nil)
                 (set-face-underline-p 'org-link t))
               (call-interactively 'iimage-mode))
-
 
             ;; Image reloading
             (defun org-reload-image-at-point ()
