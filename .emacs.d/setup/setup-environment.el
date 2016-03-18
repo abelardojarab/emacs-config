@@ -57,6 +57,14 @@
   (setq shell-file-name "bash")))
 (setq explicit-shell-file-name shell-file-name)
 
+;; Exec path from shell in Mac OSX
+(use-package exec-path-from-shell
+  :if (equal system-type 'darwin)
+  :load-path (lambda () (expand-file-name "exec-path-from-shell/" user-emacs-directory))
+  :config (progn
+            (setq exec-path-from-shell-check-startup-files nil)
+            (exec-path-from-shell-initialize)))
+
 (cond
 
  ;; Linux
