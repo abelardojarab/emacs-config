@@ -141,6 +141,11 @@ the citation link into the buffer."
   :group 'org-ref)
 
 
+(defcustom org-ref-cite-completion-function
+  nil
+  "Function to prompt for keys with completion.")
+
+
 (defcustom org-ref-insert-label-function
   nil
   "Function to call to insert label links.
@@ -336,9 +341,9 @@ Uses a hook function to display the message in the minibuffer."
     org-ref-replace-nonascii
     orcb-&
     org-ref-title-case-article
+    orcb-clean-year
     orcb-key
     orcb-clean-doi
-    orcb-clean-year
     orcb-clean-pages
     org-ref-sort-bibtex-entry)
   "Hook that is run in `org-ref-clean-bibtex-entry'.
@@ -397,14 +402,19 @@ label link."
 
 ;;;###autoload
 (defun org-ref-change-completion ()
-  "Change the completion backend."
+  "Change the completion backend.
+Options are \"org-ref-helm-bibtex\", \"org-ref-helm-cite\",
+\"org-ref-ivy-bibtex\" and \"org-ref-reftex\"."
   (interactive)
   (require
    (intern
     (completing-read "Backend: " '("org-ref-helm-bibtex"
 				   "org-ref-helm-cite"
 				   "org-ref-ivy-bibtex"
-				   "org-ref-reftex")))))
+				   "org-ref-reftex")
+		     nil
+		     t
+		     "org-ref-helm-cite"))))
 
 ;;** Messages for context under mouse pointer
 
@@ -702,10 +712,35 @@ Add tooltip to the link."
       (goto-char (org-element-property :end this-link)))))
 
 
+(defun org-ref-make-org-link-cite-key-visible (&rest _)
+  "Make the org-ref cite link visible in descriptive links."
+  (unless (string= (buffer-name) "*Org Agenda*")
+    (save-match-data
+      (let ((s (match-string 1))
+	    (s-begin (match-beginning 1))
+	    (s-end (match-end 1))
+	    (beg (match-beginning 0))
+	    (end (match-end 0))
+	    (cite-re (format "^\\(%s:\\)"
+			     (regexp-opt (-sort
+					  (lambda (a b)
+					    (> (length a) (length b)))
+					  org-ref-cite-types))))
+	    cite-type)
+
+	(when (and s (string-match cite-re s))
+	  (setq cite-type (match-string 1 s))
+	  (remove-text-properties beg end
+				  '(invisible))
+	  (add-text-properties
+	   beg end
+	   `(face (:foreground ,org-ref-cite-color))))))))
+
 (when org-ref-colorize-links
   (add-hook
    'org-mode-hook
    (lambda ()
+     (advice-add 'org-activate-bracket-links :after #'org-ref-make-org-link-cite-key-visible)
      (font-lock-add-keywords
       nil
       '((org-ref-match-next-cite-link (0  'org-ref-cite-face t))
@@ -718,59 +753,75 @@ Add tooltip to the link."
 
 ;;* Links
 ;;** bibliography and bibliographystyle
+(defun org-ref-open-bibliography-no-org (link-string)
+  "Open a bibliography link when you are not in org-mode.
+This means you cannot use the usual org-machinery to figure it
+out. We don't try to be clever here. If there is only one file,
+we open it, otherwise prompt for which one to open."
+  (let ((bibfiles (split-string link-string ",")))
+    (find-file (if (= 1 (length bibfiles))
+		   (car bibfiles)
+		 (ido-completing-read
+		  "Bib file: " bibfiles nil t)))))
+
+(defun org-ref-open-bibliography (link-string)
+  "The click function for a bibliography link."
+  ;; get link-string boundaries we have to go to the
+  ;; beginning of the line, and then search forward
+  (if (not (eq major-mode 'org-mode))
+      (org-ref-open-bibliography-no-org link-string)
+    (let* ((bibfile)
+	   ;; object is the link you clicked on
+	   (object (org-element-context))
+	   (link-string-beginning)
+	   (link-string-end)
+	   (cp (point)))
+      (save-excursion
+	(goto-char (org-element-property :begin object))
+	(search-forward link-string nil nil 1)
+	(setq link-string-beginning (match-beginning 0))
+	(setq link-string-end (match-end 0)))
+
+      ;; Make sure point is in the link-path.
+      (if (< cp link-string-beginning)
+	  (goto-char link-string-beginning))
+      ;; We set the reftex-default-bibliography
+      ;; here. it should be a local variable only in
+      ;; the current buffer. We need this for using
+      ;; reftex to do citations.
+      (set (make-local-variable 'reftex-default-bibliography)
+	   (split-string
+	    (org-element-property :path object) ","))
+
+      (let (key-beginning key-end)
+	;; now if we have comma separated bibliographies
+	;; we find the one clicked on. we want to
+	;; search forward to next comma from point
+	(save-excursion
+	  (if (search-forward "," link-string-end 1 1)
+	      ;; we found a match
+	      (setq key-end (- (match-end 0) 1))
+	    ;; no comma found so take the point
+	    (setq key-end (point))))
+	;; and backward to previous comma from point
+	(save-excursion
+	  (if (search-backward "," link-string-beginning 1 1)
+	      ;; we found a match
+	      (setq key-beginning (+ (match-beginning 0) 1))
+	    (setq key-beginning (point)))) ; no match found
+	;; save the key we clicked on.
+	(setq bibfile (org-ref-strip-string
+		       (buffer-substring key-beginning key-end)))
+	;; open file on click
+	(find-file bibfile)))))
+
+
 (org-add-link-type
  "bibliography"
  ;; this code is run on clicking. The bibliography
  ;; may contain multiple files. this code finds the
  ;; one you clicked on and opens it.
- (lambda (link-string)
-   ;; get link-string boundaries we have to go to the
-   ;; beginning of the line, and then search forward
-   (let* ((bibfile)
-	  ;; object is the link you clicked on
-	  (object (org-element-context))
-	  (link-string-beginning)
-	  (link-string-end)
-	  (cp (point)))
-     (save-excursion
-       (goto-char (org-element-property :begin object))
-       (search-forward link-string nil nil 1)
-       (setq link-string-beginning (match-beginning 0))
-       (setq link-string-end (match-end 0)))
-
-     ;; Make sure point is in the link-path.
-     (if (< cp link-string-beginning)
-	 (goto-char link-string-beginning))
-     ;; We set the reftex-default-bibliography
-     ;; here. it should be a local variable only in
-     ;; the current buffer. We need this for using
-     ;; reftex to do citations.
-     (set (make-local-variable 'reftex-default-bibliography)
-	  (split-string
-	   (org-element-property :path object) ","))
-
-     (let (key-beginning key-end)
-       ;; now if we have comma separated bibliographies
-       ;; we find the one clicked on. we want to
-       ;; search forward to next comma from point
-       (save-excursion
-	 (if (search-forward "," link-string-end 1 1)
-	     ;; we found a match
-	     (setq key-end (- (match-end 0) 1))
-	   ;; no comma found so take the point
-	   (setq key-end (point))))
-       ;; and backward to previous comma from point
-       (save-excursion
-	 (if (search-backward "," link-string-beginning 1 1)
-	     ;; we found a match
-	     (setq key-beginning (+ (match-beginning 0) 1))
-	   (setq key-beginning (point)))) ; no match found
-       ;; save the key we clicked on.
-       (setq bibfile (org-ref-strip-string
-		      (buffer-substring key-beginning key-end)))
-       ;; open file on click
-       (find-file bibfile))))
-
+ 'org-ref-open-bibliography
  ;; formatting code
  (lambda (keyword desc format)
    (cond
@@ -1111,7 +1162,8 @@ ARG does nothing."
      (count-matches (format "^#\\+label:\\s-*%s\\b[^-:]" label)
                     (point-min) (point-max))
      (let ((custom-id-count 0))
-       (unless (file-exists-p (buffer-file-name))
+       (when (and (buffer-file-name)
+		  (file-exists-p (buffer-file-name)))
 	 (save-buffer))
        (org-map-entries
         (lambda ()
@@ -1477,9 +1529,9 @@ keyword we clicked on.  We also strip the text properties."
   "Find the bibliography in the buffer.
 This function sets and returns cite-bibliography-files, which is
 a list of files either from bibliography:f1.bib,f2.bib
-\bibliography{f1,f2} internal bibliographies
-
-falling back to what the user has set in `org-ref-default-bibliography'"
+\bibliography{f1,f2}, internal bibliographies, from files in the
+BIBINPUTS env var, and finally falling back to what the user has
+set in `org-ref-default-bibliography'"
   (catch 'result
     ;; If you call this in a bibtex file, assume we want this file
     (when (string= (or (f-ext (or (buffer-file-name) "")) "")  "bib")
@@ -1523,6 +1575,20 @@ falling back to what the user has set in `org-ref-default-bibliography'"
 		      (split-string (match-string 1) ",")))
 	(throw 'result org-ref-bibliography-files))
 
+      ;; Try BIBINPUTS. It is a : separated string of paths.
+      (let ((bibinputs (getenv "BIBINPUTS")))
+	(when bibinputs
+	  (setq org-ref-bibliography-files
+		(apply
+		 'append
+		 (loop for path in (split-string  bibinputs ":")
+		       collect
+		       (-filter (lambda (f) (f-ext? f "bib"))
+				(f-files
+				 (substitute-in-file-name  path))))))
+	  (when org-ref-bibliography-files
+	    (throw 'result org-ref-bibliography-files))))
+
       ;; we did not find anything. use defaults
       (setq org-ref-bibliography-files org-ref-default-bibliography)))
 
@@ -1559,13 +1625,13 @@ If no key is provided, get one under point."
 (defmacro org-ref-make-completion-function (type)
   "Macro to make a link completion function for a link of TYPE."
   `(defun ,(intern (format "org-%s-complete-link" type)) (&optional arg)
-     (interactive)
-     (format "%s:%s"
-             ,type
-             (completing-read
-              "bibtex key: "
-              (let ((bibtex-files (org-ref-find-bibliography)))
-                (bibtex-global-key-alist))))))
+     (format
+      "%s:%s"
+      ,type
+      (completing-read
+       "bibtex key: "
+       (let ((bibtex-files (org-ref-find-bibliography)))
+	 (bibtex-global-key-alist))))))
 
 
 (defmacro org-ref-make-format-function (type)
@@ -1989,67 +2055,99 @@ construct the heading by hand."
 ;;** Extract bibtex entries in org-file
 
 ;;;###autoload
+;; (defun org-ref-extract-bibtex-entries ()
+;;   "Extract the bibtex entries in the current buffer into a src block.
+
+;; If no bibliography is in the buffer the variable
+;; `reftex-default-bibliography' is used."
+;;   (interactive)
+;;   (let* ((temporary-file-directory (if (buffer-file-name)
+;;				       (file-name-directory
+;;					(buffer-file-name))
+;;				     "."))
+;;          (tempname (make-temp-file "extract-bib"))
+;;          (contents (buffer-string))
+;;          (cb (current-buffer))
+;;          basename texfile bibfile results)
+
+;;     ;; open tempfile and insert org-buffer contents
+;;     (find-file tempname)
+;;     (insert contents)
+;;     (setq basename (file-name-sans-extension
+;;                     (file-name-nondirectory buffer-file-name))
+;;           texfile (concat tempname ".tex")
+;;           bibfile (concat tempname ".bib"))
+
+;;     ;; see if we have a bibliography, and insert the default one if not.
+;;     (save-excursion
+;;       (goto-char (point-min))
+;;       (unless (re-search-forward "^bibliography:" (point-max) 'end)
+;;         (insert (format "\nbibliography:%s"
+;;                         (mapconcat 'identity
+;;				   reftex-default-bibliography ",")))))
+;;     (when (buffer-file-name)
+;;       (save-buffer))
+
+;;     ;; get a latex file and extract the references
+;;     (org-latex-export-to-latex)
+;;     (find-file texfile)
+;;     (reftex-parse-all)
+;;     (reftex-create-bibtex-file bibfile)
+;;     (when (buffer-file-name)
+;;       (save-buffer))
+;;     ;; save results of the references
+;;     (setq results (buffer-string))
+
+;;     ;; kill buffers. these are named by basename, not full path
+;;     (kill-buffer (concat basename ".bib"))
+;;     (kill-buffer (concat basename ".tex"))
+;;     (kill-buffer basename)
+
+;;     (delete-file bibfile)
+;;     (delete-file texfile)
+;;     (delete-file tempname)
+
+;;     ;; Now back to the original org buffer and insert the results
+;;     (switch-to-buffer cb)
+;;     (when (not (string= "" results))
+;;       (save-excursion
+;;         (goto-char (point-max))
+;;         (insert "\n\n")
+;;         (org-insert-heading)
+;;         (insert (format " Bibtex entries
+
+;; #+BEGIN_SRC text :tangle %s
+;; %s
+;; #+END_SRC" (concat (file-name-sans-extension
+;;		    (file-name-nondirectory
+;;		     (buffer-file-name))) ".bib") results))))))
+
 (defun org-ref-extract-bibtex-entries ()
-  "Extract the bibtex entries in the current buffer into a src block.
-
-If no bibliography is in the buffer the variable
-`reftex-default-bibliography' is used."
+  "Extract the bibtex entries in the current buffer into a src block."
   (interactive)
-  (let* ((temporary-file-directory (file-name-directory (buffer-file-name)))
-         (tempname (make-temp-file "extract-bib"))
-         (contents (buffer-string))
-         (cb (current-buffer))
-         basename texfile bibfile results)
+  (let ((bibtex-files (org-ref-find-bibliography))
+	(bibtex-entry-kill-ring '()))
 
-    ;; open tempfile and insert org-buffer contents
-    (find-file tempname)
-    (insert contents)
-    (setq basename (file-name-sans-extension
-                    (file-name-nondirectory buffer-file-name))
-          texfile (concat tempname ".tex")
-          bibfile (concat tempname ".bib"))
+    (save-window-excursion
+      (cl-loop for key in (reverse (org-ref-get-bibtex-keys))
+	       do
+	       (bibtex-search-entry key t)
+	       (bibtex-kill-entry t)))
 
-    ;; see if we have a bibliography, and insert the default one if not.
-    (save-excursion
-      (goto-char (point-min))
-      (unless (re-search-forward "^bibliography:" (point-max) 'end)
-        (insert (format "\nbibliography:%s"
-                        (mapconcat 'identity
-				   reftex-default-bibliography ",")))))
-    (save-buffer)
 
-    ;; get a latex file and extract the references
-    (org-latex-export-to-latex)
-    (find-file texfile)
-    (reftex-parse-all)
-    (reftex-create-bibtex-file bibfile)
-    (save-buffer)
-    ;; save results of the references
-    (setq results (buffer-string))
+    (goto-char (point-max))
+    (insert "\n\n")
+    (org-insert-heading)
+    (insert (format " Bibtex entries
 
-    ;; kill buffers. these are named by basename, not full path
-    (kill-buffer (concat basename ".bib"))
-    (kill-buffer (concat basename ".tex"))
-    (kill-buffer basename)
-
-    (delete-file bibfile)
-    (delete-file texfile)
-    (delete-file tempname)
-
-    ;; Now back to the original org buffer and insert the results
-    (switch-to-buffer cb)
-    (when (not (string= "" results))
-      (save-excursion
-        (goto-char (point-max))
-        (insert "\n\n")
-        (org-insert-heading)
-        (insert (format " Bibtex entries
-
-#+BEGIN_SRC text :tangle %s
+#+BEGIN_SRC text
 %s
-#+END_SRC" (concat (file-name-sans-extension
-		    (file-name-nondirectory
-		     (buffer-file-name))) ".bib") results))))))
+#+END_SRC"
+		    (mapconcat
+		     'identity
+		     bibtex-entry-kill-ring
+		     "\n\n")))))
+
 
 ;;** Find bad citations
 (defun org-ref-list-index (substring list)
@@ -2073,11 +2171,14 @@ List is displayed in an `org-mode' buffer using the known bibtex
 file.  Makes a new buffer with clickable links."
   (interactive)
   ;; generate the list of bibtex-keys and cited keys
-  (let* ((bibtex-files (org-ref-find-bibliography))
+  (let* ((bibtex-files (mapcar
+			'file-name-nondirectory
+			(org-ref-find-bibliography)))
          (bibtex-file-path (mapconcat
 			    (lambda (x)
 			      (file-name-directory (file-truename x)))
-			    bibtex-files ":"))
+			    (org-ref-find-bibliography)
+			    ":"))
          (bibtex-keys (mapcar (lambda (x)
 				(car x))
 			      (bibtex-global-key-alist)))
@@ -2098,8 +2199,7 @@ file.  Makes a new buffer with clickable links."
                   `(,(format "%s [[elisp:(progn (switch-to-buffer-other-frame \"%s\")(goto-char %s))][not found here]]\n"
                              key
                              (buffer-name)
-                             (plist-get plist :begin)))))
-                )))))
+                             (plist-get plist :begin))))))))))
       ;; set with-affilates to t to get citations in a caption
       nil nil nil t)
 
@@ -2320,8 +2420,9 @@ file.  Makes a new buffer with clickable links."
       (insert (replace-regexp-in-string "^http://dx.doi.org/" "" doi)))))
 
 
-(defun orcb-clean-year ()
-  "Fix years set to 0."
+(defun orcb-clean-year (&optional new-year)
+  "Fix years set to 0.
+If optional NEW-YEAR set it to that, otherwise prompt for it."
   ;; asap articles often set year to 0, which messes up key
   ;; generation. fix that.
   (let ((year (bibtex-autokey-get-field "year")))
@@ -2331,7 +2432,7 @@ file.  Makes a new buffer with clickable links."
       (bibtex-kill-field)
       (bibtex-make-field "year")
       (backward-char)
-      (insert (read-string "Enter year: ")))))
+      (insert (or new-year (read-string "Enter year: "))))))
 
 
 (defun orcb-clean-pages ()
@@ -2650,12 +2751,14 @@ move to the beginning of the previous cite link after this one."
 (defun org-ref-link-message ()
   "Print a minibuffer message about the link that point is on."
   (interactive)
-  ;; the way links are recognized in org-element-context counts a blank space
+  ;; the way links are recognized in org-element-context counts blank spaces
   ;; after a link and the closing brackets in literal links. We don't try to get
   ;; a message if the cursor is on those, or if it is on a blank line.
-  (when (not (or (looking-at " ")
-		 (looking-at "^$")
-		 (looking-at "]")))
+  (when (not (or (looking-at " ")	;looking at a space
+		 (looking-at "^$")	;looking at a blank line
+		 (looking-at "]")	;looking at a bracket at the end
+		 (looking-at "$"	;looking at the end of the line.
+			     )))
 
     (save-restriction
       (widen)
@@ -3001,6 +3104,8 @@ provide their own version."
      ["List of tables" org-ref-list-of-tables]
      ["Extract bibtex entries" org-ref-extract-bibtex-entries]
      ["Check org-file" org-ref]
+     "--"
+     ["Change completion backend" org-ref-change-completion]
      "--"
      ["Help" org-ref-help]
      ["Customize org-ref" (customize-group 'org-ref)])
