@@ -288,7 +288,7 @@
   :if window-system
   :load-path (lambda () (expand-file-name "org-bullets/" user-emacs-directory))
   :config (progn
-            (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+            ;; (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
             (setq org-bullets-bullet-list
                   '(
                     "❯"
