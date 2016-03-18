@@ -85,22 +85,8 @@ IniRead CurrTrans, ergoemacs-settings.ini, Curr, Trans
 If (CurrTrans == "ERROR"){
   CurrTrans=No Translation
 }
-
-IniRead CurrTrans2, ergoemacs-settings.ini, Curr, Trans2
-If (CurrTrans2 == "ERROR"){
-  CurrTrans2=No Translation
-}
-
-IniRead ExternalClass, ergoemacs.ini,Class,External
-If (ExternalClass == "Error"){
-  ExternalClass=TscShellContainerClass
-}
-
-StringSplit, ExternalClassArray, ExternalClass, *
-
 ;; Add Translation
 Loop, 120 {
-  ; CurLayout -> TransKey
   IniRead CurrKey, ergoemacs.ini, %CurrLayout%, %A_Index%
   If (CurrTrans == "No Translation"){
      objTrans%CurrKey% := CurrKey
@@ -108,16 +94,6 @@ Loop, 120 {
       If (CurrKey != ""){
        IniRead TransKey, ergoemacs.ini, %CurrTrans%, %A_Index%
        objTrans%CurrKey% := TransKey
-      }
-  }
-  ; HostLayout -> CurLayout
-  IniRead CurrKey, ergoemacs.ini, %CurrTrans2%, %A_Index%
-  If (CurrTrans2 == "No Translation"){
-     objTrans_%CurrKey% := CurrKey
-  } else {
-      If (CurrKey != ""){
-       IniRead TransKey, ergoemacs.ini, %CurrLayout%, %A_Index%
-       objTrans_%CurrKey% := TransKey
       }
   }
 }
@@ -161,7 +137,6 @@ Loop, Read, ergoemacs.ini
         fn := SubStr(tmp,1,NextSec - 1)
         NextSec := SubStr(tmp,NextSec + 1)
         objTrans%NextSec% := fn
-	objTrans_%NextSec% := fn
         ;;HotKey, %NextSec%, %fn%
       }
     }
@@ -172,24 +147,18 @@ Loop, Read, ergoemacs.ini
 
 
 ; Create Menu
+
 Loop, parse, LayLst, `n 
 {
         Menu, TranslateKey, add, No Translation, TranslateKeyHandler
-	Menu, TranslateKey2, add, No Translation, TranslateKey2Handler
         If (CurrTrans == "No Translation"){
           Menu, TranslateKey, Check,No Translation
         } else {
           Menu, TranslateKey, UnCheck,No Translation 
         }
-	If (CurrTrans2 == "No Translation"){
-          Menu, TranslateKey2, Check,No Translation
-        } else {
-          Menu, TranslateKey2, UnCheck,No Translation 
-        }
         If (A_LoopField != ""){
            Menu, MenuKey, add, %A_LoopField%, MenuKeyHandler
            Menu, TranslateKey, add, %A_LoopField%, TranslateKeyHandler
-	   Menu, TranslateKey2, add, %A_LoopField%, TranslateKey2Handler
            If (A_LoopField == CurrLayout){
               Menu, MenuKey, Check, %A_LoopField%
            } else {
@@ -200,12 +169,6 @@ Loop, parse, LayLst, `n
               Menu, TranslateKey, Check, %A_LoopField%
            } else {
               Menu, TranslateKey, UnCheck, %A_LoopField%
-           }
-
-	   If (A_LoopField == CurrTrans2){
-              Menu, TranslateKey2, Check, %A_LoopField%
-           } else {
-              Menu, TranslateKey2, UnCheck, %A_LoopField%
            }
         }
 }
@@ -228,7 +191,6 @@ Menu, Tray, DeleteAll
 Menu, Tray, NoStandard
 Menu, tray, add, Keyboard Layouts, :MenuKey
 Menu, tray, add, Translated Layout, :TranslateKey
-Menu, tray, add, Translated Layout (External), :TranslateKey2
 Menu, tray, add, Themes, :ThemeKey
 Menu, Tray, add
 Menu, Caps, add, Caps Lock, ToggleCaps
@@ -372,7 +334,6 @@ ListenForKey:
   
 DelayKeyOutput:
   Critical
-  isExternal := IsExternalProgram()
   origKey := SubStr(A_ThisHotkey,0)
   ;; Get Modifiers
   modifiers := GetModifiers()
@@ -385,21 +346,14 @@ DelayKeyOutput:
   pressedKey := origKey
   ;; Translate to the correct layout
   transKey := Asc(pressedKey)
-  if (isExternal == 1){
-     transKey := Chr(objTrans_%transKey%)
-  } else {
-    transKey := Chr(objTrans%transKey%)
-  }
+  transKey := Chr(objTrans%transKey%)
   if (transKey != ""){
     pressedKey := transKey
   }
   ;; get goto subroutine.
   transKey := Asc(origKey)*timesf+modifiers2
-  if (isExternal == 1){
-      transKey := objTrans_%transKey%
-  } else {
-    transKey := objTrans%transKey%
-  }
+  transKey := objTrans%transKey%
+  
   ; Only wait to see if the space comes up if 1) the space bar key is
   ; down in the first place and 2) it has been held down for less than
   ; the timeout and 3) another Ctrl key combo hasn't already been
@@ -427,7 +381,7 @@ DelayKeyOutput:
       }
     }
   }
-  if (IsLabel(transKey) & !WinActive("ahk_class Emacs") & !WinActive("ahk_class cygwin/x X rl")){
+  if (IsLabel(transKey) & !WinActive("ahk_class Emacs")){
     Goto %transKey%
   } Else {
     SendInput % modifiers pressedKey
@@ -470,7 +424,7 @@ DelayKeyOutput:
   if (GetSpaceBarHoldTime() <= g_TimeOut)
   {
     modifiers := GetModifiers()
-    if (WinActive("ahk_class Emacs") | (WinActive("ahk_class cygwin/x X rl"))) {
+    if (WinActive("ahk_class Emacs")) {
        SendInput % modifiers "{Space}"
     } else {
        If (modifiers == "!"){
@@ -527,11 +481,6 @@ return
 
 TranslateKeyHandler:
 IniWrite, %A_ThisMenuItem%,ergoemacs-settings.ini,Curr,Trans
-Reload
-return
-
-TranslateKey2Handler:
-IniWrite, %A_ThisMenuItem%,ergoemacs-settings.ini,Curr,Trans2
 Reload
 return
 
@@ -715,7 +664,7 @@ redo:
 
 execute-extended-command:
   ;; Send to org-outlook if using outlook
-  If (!WinActive("ahk_class Emacs") & !(WinActive("ahk_class cygwin/x X rl"))){
+  If !WinActive("ahk_class Emacs"){
        If WinActive("ahk_class rctrl_renwnd32"){
           If !FileExist(OutlookSave){
              FileSelectFolder, OutlookSave, ,3, Select Folder to Save Outlook Emails
@@ -822,16 +771,6 @@ send-apps:
 send-f6:
   SendKey("{F6}")
   return
-
-IsExternalProgram(){
-  External = 0
-  if (WinActive("ahk_class TscShellContainerClass")){
-     External = 1
-  } else if (WinActive("ahk_class cygwin/x X rl")){
-     External = 1
-  }
-  Return External
-}
 
 GetSpaceBarHoldTime()
 {

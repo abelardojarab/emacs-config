@@ -29,7 +29,10 @@
   :ensure nil
   :load-path (lambda () (expand-file-name "ergoemacs-mode/" user-emacs-directory))
   :init (progn
-          (setq ergoemacs-ignore-prev-global nil)))
+          (setq ergoemacs-theme nil)
+          (setq ergoemacs-keyboard-layout "us")
+          (setq ergoemacs-ignore-prev-global nil))
+  :config (ergoemacs-mode))
 
 (provide 'setup-ergoemacs)
 ;;; setup-ergoemacs.el ends here
