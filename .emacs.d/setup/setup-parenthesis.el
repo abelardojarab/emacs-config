@@ -63,7 +63,7 @@
 
 ;; Autopair
 (use-package autopair
-  :load-path (lambda () (expand-file-name "web-server/" user-emacs-directory))
+  :load-path (lambda () (expand-file-name "autopair/" user-emacs-directory))
   :diminish autopair-mode
   :config (progn
             (autopair-global-mode) ;; enable autopair in all buffers

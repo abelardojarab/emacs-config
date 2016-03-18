@@ -53,6 +53,7 @@
 
 ;; filecache: http://www.emacswiki.org/cgi-bin/wiki/FileNameCache
 (use-package file-cache
+  :disabled t
   :config (progn
             (message "Loading file cache...")
             (file-cache-add-directory "~/")
