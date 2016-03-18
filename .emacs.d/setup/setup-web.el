@@ -30,7 +30,7 @@
 
 ;; w3m
 (use-package w3m
-  :load-path "~/.emacs.d/w3m"
+  :load-path (lambda () (expand-file-name "w3m/" user-emacs-directory))
   :commands (w3m w3m-find-file w3m-goto-url-new-session)
   :init (progn
           (setq w3m-init-file "~/.emacs.cache/emacs-w3m"
@@ -40,10 +40,6 @@
                 w3m-show-graphic-icons-in-header-line t
                 w3m-show-graphic-icons-in-mode-line t
                 w3m-default-display-inline-images t)))
-
-(add-to-list 'load-path "~/.emacs.d/web-server")
-(add-to-list 'load-path "~/.emacs.d/skewer-mode")
-
 
 ;; eww
 (when (fboundp 'eww)
