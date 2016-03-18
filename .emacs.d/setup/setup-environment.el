@@ -219,11 +219,11 @@
 ;; Set indent to 4 instead of 2
 (setq standard-indent 4)
 
-;; Use spaces instead of tab
-(setq indent-tabs-mode nil)
+;; Use spaces instead of tab, has to be setq-default
+(setq-default indent-tabs-mode nil)
 
-;; Set tab width
-(setq default-tab-width 4)
+;; Set tab width, again has to be setq-default
+(setq-default default-tab-width 4)
 
 ;; auto-indent pasted code
 (defadvice yank (after indent-region activate)
