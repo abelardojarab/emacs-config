@@ -24,6 +24,19 @@
 
 ;;; Code:
 
+(use-package web-mode
+  :load-path (lambda () (expand-file-name "web-mode/" user-emacs-directory))
+  :init (progn
+          (add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
+          (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode)))
+  :config (progn
+            (add-hook 'web-mode-hook
+                      (lambda ()
+                        (setq web-mode-enable-css-colorization t)
+                        (setq web-mode-markup-indent-offset 2)
+                        (setq web-mode-style-padding 2)
+                        (setq web-mode-script-padding 2)))))
+
 (use-package ac-html
   :load-path (lambda () (expand-file-name "ac-html/" user-emacs-directory))
   :config (progn
@@ -44,6 +57,7 @@
               ;; Enable auto complete mode
               (auto-complete-mode))
 
+            (add-hook 'web-mode-hook 'setup-ac-for-html)
             (add-hook 'html-mode-hook 'setup-ac-for-html)))
 
 (provide 'setup-html)

@@ -49,6 +49,7 @@
  '(ecb-source-path (quote (("/" "/"))))
  '(ede-locate-setup-options (quote (ede-locate-global ede-locate-locate)))
  '(ede-project-directories (quote ("~/workspace")))
+ '(electric-indent-mode nil)
  '(ergoemacs-ctl-c-or-ctl-x-delay 0.2)
  '(ergoemacs-handle-ctl-c-or-ctl-x (quote both))
  '(ergoemacs-ini-mode t)

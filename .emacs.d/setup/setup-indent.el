@@ -24,6 +24,10 @@
 
 ;;; Code:
 
+;; Disable electric indent
+(if (featurep 'electric-indent-mode)
+	(add-hook 'prog-mode-hook (lambda () (electric-indent-local-mode -1))))
+
 ;; Auto-indent mode
 (use-package auto-indent-mode
   :pin manual
@@ -43,9 +47,10 @@
   :init (progn
           (setq indent-hint-background-overlay t)
           (setq indent-hint-bg nil))
-  :config (progn
-            (add-hook 'prog-mode-hook 'indent-hint-mode)
-            (add-hook 'lisp-mode-hook 'indent-hint-lisp)))
+  ;; :config (progn
+  ;;           (add-hook 'prog-mode-hook 'indent-hint-mode)
+  ;;           (add-hook 'lisp-mode-hook 'indent-hint-lisp))
+  )
 
 (provide 'setup-indent)
 ;;; setup-indent.el ends here

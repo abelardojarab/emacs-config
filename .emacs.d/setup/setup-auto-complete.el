@@ -113,7 +113,6 @@
             (setq-default ac-sources '(ac-source-yasnippet
                                        ac-source-imenu
                                        ac-source-abbrev
-                                       ac-source-symbols
                                        ac-source-words-in-same-mode-buffers))
 
             ;; Enable auto-complete on more modes
@@ -131,7 +130,6 @@
               (setq ac-sources (append ac-sources '(ac-source-yasnippet
                                                     ac-source-imenu
                                                     ac-source-abbrev
-                                                    ac-source-symbols
                                                     ac-source-words-in-same-mode-buffers))))
             (add-hook 'auto-complete-mode-hook 'ac-common-setup)))
 
