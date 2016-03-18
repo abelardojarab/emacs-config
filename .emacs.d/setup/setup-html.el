@@ -30,6 +30,7 @@
           (add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
           (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode)))
   :config (progn
+			(add-hook 'web-mode-hook 'autopair-mode)
             (add-hook 'web-mode-hook
                       (lambda ()
                         (setq web-mode-enable-css-colorization t)

@@ -33,7 +33,7 @@
 ;; Python configuration
 (add-hook 'python-mode-hook 'autopair-mode)
 (add-hook 'python-mode-hook 'auto-complete-mode)
-(add-hook 'python-mode-hook 'indent-hint-mode)
+;; (add-hook 'python-mode-hook 'indent-hint-mode)
 
 ;; Extra
 (add-to-list 'auto-mode-alist '("\\.py\\'" . python-mode))
