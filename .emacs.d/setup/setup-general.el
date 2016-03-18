@@ -77,8 +77,7 @@
                        '(c-common-mode-hook
                          python-mode-hook
                          js2-mode-hook
-                         java-mode-hook)))
-  :diminish subword-mode)
+                         java-mode-hook))))
 
 ;; Uniquify-buffers
 (use-package uniquify
