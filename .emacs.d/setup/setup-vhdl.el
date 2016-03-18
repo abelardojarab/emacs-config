@@ -24,16 +24,6 @@
 
 ;;; Code:
 
-;; Load verilog mode only when needed
-(use-package verilog-mode
-  :load-path (lambda () (expand-file-name "verilog-mode/" user-emacs-directory))
-  :config (progn
-            ;; Any files that end in .v should be in verilog mode
-            (setq auto-mode-alist (cons '("\\.v\\'" . verilog-mode) auto-mode-alist))
-
-            ;; Any files in verilog mode should have their keywords colorized
-            (add-hook 'verilog-mode-hook 'font-lock-mode)))
-
 ;; VHDL mode
 (use-package vhdl-mode
   :load-path (lambda () (expand-file-name "vhdl-mode/" user-emacs-directory))

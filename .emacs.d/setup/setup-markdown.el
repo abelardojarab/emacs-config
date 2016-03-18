@@ -38,14 +38,5 @@
             ;; Github markdown style
             (setq markdown-command "pandoc -c ~/.emacs.d/styles/github-pandoc.css --from markdown_github -t html5 --mathjax --highlight-style pygments --standalone")))
 
-;; Yaml mode
-(use-package yaml-mode
-  :load-path (lambda () (expand-file-name "yaml-mode/" user-emacs-directory))
-  :config (progn
-            (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
-            (add-hook 'yaml-mode-hook
-                      '(lambda ()
-                         (define-key yaml-mode-map "\C-m" 'newline-and-indent)))))
-
 (provide 'setup-markdown)
 ;;; setup-markdown.el ends here

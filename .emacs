@@ -110,7 +110,20 @@
 (require 'setup-spell)
 
 ;; Setup Org
-(require 'setup-org)
+(use-package setup-org
+  :mode "\\.org\\'"
+  :config (progn
+            ;; Setup Org (babel support)
+            (require 'setup-org-babel)
+
+            ;; Setup Org (image supporg)
+            (require 'setup-org-image)
+
+            ;; Setup Org (latex support)
+            (require 'setup-org-latex)
+
+            ;; Setup Org (html support)
+            (require 'setup-org-html)))
 
 ;; Setup modeline
 (require 'setup-modeline)
@@ -121,26 +134,14 @@
 ;; Setup smex
 (require 'setup-smex)
 
-;; Setup Org (babel support)
-(require 'setup-org-babel)
-
-;; Setup Org (image supporg)
-(require 'setup-org-image)
-
-;; Setup Org (latex support)
-(require 'setup-org-latex)
-
-;; Setup Org (html support)
-(require 'setup-org-html)
-
-;; Setup hydry
+;; Setup hydra
 (require 'setup-hydra)
-
-;; Setup pandoc
-(require 'setup-pandoc)
 
 ;; Setup web support
 (require 'setup-web)
+
+;; Setup pandoc
+(require 'setup-pandoc)
 
 ;; Setup tags (optional)
 (require 'setup-tags)
@@ -176,34 +177,49 @@
 (require 'setup-lisp)
 
 ;; Setup Python
-(require 'setup-python)
+(use-package setup-python
+  :mode "\\.py\\'"
 
-;; Setup Python plugins (e.g. Jedi)
-;; (require 'setup-python-plugins)
-
-;; Setup markdown and Yaml
-(require 'setup-markdown)
+  ;; Setup Python plugins (e.g. Jedi)
+  ;; :config (require 'setup-python-plugins)
+  )
 
 ;; Setup Javascript
-(require 'setup-js2)
+(use-package setup-js2
+  :mode "\\.js*\\'")
+
+;; Setup YAML
+(use-package setup-yaml
+  :mode "\\.yaml\\'")
 
 ;; Setup Java
-(require 'setup-java)
+(use-package setup-java
+  :mode "\\.java\\'")
 
-;; Setup VHDL/Verilog mode
-(require 'setup-vhdl)
+;; Setup VHDL mode
+(use-package setup-vhdl
+  :mode "\\.vhd\\'")
 
-;; Setup VHDL/Verilog mode
+;; Setup VHDL mode
+(use-package setup-verilog
+  :mode "\\.v\\'")
+
+;; Setup Spice mode
 (require 'setup-spice)
 
 ;; Setup bison/yacc/lex
 (require 'setup-bison)
 
 ;; Setup R/ess
-(require 'setup-ess)
+(use-package setup-ess
+  :mode "\\.r\\'")
 
-;; Setup polymode
-(require 'setup-polymode)
+;; Setup markdown and Yaml
+(use-package setup-markdown
+  :mode "\\.md\\'"
+
+  ;; Setup polymode
+  :config (require 'setup-polymode))
 
 ;; Setup shell
 (require 'setup-eshell)

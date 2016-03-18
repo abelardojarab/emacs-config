@@ -58,6 +58,8 @@
 (use-package emacs-buttercup :defer t :load-path (lambda () (expand-file-name "emacs-buttercup" user-emacs-directory)))
 (use-package with-editor     :defer t :load-path (lambda () (expand-file-name "with-editor" user-emacs-directory)))
 (use-package fringe-helper   :defer t :load-path (lambda () (expand-file-name "fringe-helper" user-emacs-directory)))
+(use-package parsebib        :defer t :load-path (lambda () (expand-file-name "parsebib/" user-emacs-directory)))
+(use-package ebib            :defer t :load-path (lambda () (expand-file-name "ebib/" user-emacs-directory)))
 
 (provide 'setup-package)
 ;;; setup-package.el ends here
