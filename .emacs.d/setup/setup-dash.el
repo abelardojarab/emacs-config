@@ -25,7 +25,7 @@
 ;;; Code:
 
 (use-package dash
-  :load-path "~/.emacs.d/dash")
+  :load-path (lambda () (expand-file-name "dash/" user-emacs-directory)))
 
 (provide 'setup-dash)
 ;;; setup-dash.el ends here

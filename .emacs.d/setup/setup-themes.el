@@ -25,53 +25,48 @@
 ;;; Code:
 
 ;; Monokai theme
-(add-to-list 'load-path "~/.emacs.d/monokai-emacs")
-(add-to-list 'custom-theme-load-path "~/.emacs.d/monokai-emacs")
+(add-to-list 'load-path (expand-file-name "monokai-emacs/" user-emacs-directory))
+(add-to-list 'custom-theme-load-path (expand-file-name "monokai-emacs/" user-emacs-directory))
 
 ;; Monokai theme
-(add-to-list 'load-path "~/.emacs.d/monokai-extended-theme")
-(add-to-list 'custom-theme-load-path "~/.emacs.d/monokai-extended-theme")
+(add-to-list 'load-path (expand-file-name "monokai-extended-theme/" user-emacs-directory))
+(add-to-list 'custom-theme-load-path (expand-file-name "monokai-extended-theme/" user-emacs-directory))
 
 ;; Atom theme
-(add-to-list 'load-path "~/.emacs.d/atom-dark-theme-emacs")
-(add-to-list 'custom-theme-load-path "~/.emacs.d/atom-dark-theme-emacs")
+(add-to-list 'load-path (expand-file-name "atom-dark-theme-emacs/" user-emacs-directory))
+(add-to-list 'custom-theme-load-path (expand-file-name "atom-dark-theme-emacs/" user-emacs-directory))
 
 ;; Zenburn theme
-(add-to-list 'load-path "~/.emacs.d/zenburn-emacs")
-(add-to-list 'custom-theme-load-path "~/.emacs.d/zenburn-emacs")
+(add-to-list 'load-path (expand-file-name "zenburn-emacs/" user-emacs-directory))
+(add-to-list 'custom-theme-load-path (expand-file-name "zenburn-emacs/" user-emacs-directory))
 
 ;; Faff theme
-(add-to-list 'load-path "~/.emacs.d/emacs-faff-theme")
-(add-to-list 'custom-theme-load-path "~/.emacs.d/emacs-faff-theme")
+(add-to-list 'load-path (expand-file-name "emacs-faff-theme/" user-emacs-directory))
+(add-to-list 'custom-theme-load-path (expand-file-name "emacs-faff-theme/" user-emacs-directory))
 
 ;; Material theme
-(add-to-list 'load-path "~/.emacs.d/emacs-matherial-theme")
-(add-to-list 'custom-theme-load-path "~/.emacs.d/emacs-material-theme")
+(add-to-list 'load-path (expand-file-name "emacs-matherial-theme/" user-emacs-directory))
+(add-to-list 'custom-theme-load-path (expand-file-name "emacs-matherial-theme/" user-emacs-directory))
 
 ;; Leuven theme
-(add-to-list 'load-path "~/.emacs.d/emacs-leuven-theme")
-(add-to-list 'custom-theme-load-path "~/.emacs.d/emacs-leuven-theme")
+(add-to-list 'load-path (expand-file-name "emacs-leuven-theme/" user-emacs-directory))
+(add-to-list 'custom-theme-load-path (expand-file-name "emacs-leuven-theme/" user-emacs-directory))
 
 ;; FlatUI theme
-(add-to-list 'load-path "~/.emacs.d/emacs-flatui-theme")
-(add-to-list 'custom-theme-load-path "~/.emacs.d/emacs-flatui-theme")
+(add-to-list 'load-path (expand-file-name "emacs-flatui-theme/" user-emacs-directory))
+(add-to-list 'custom-theme-load-path (expand-file-name "emacs-flatui-theme" user-emacs-directory))
 
 ;; FlatUI theme
-(add-to-list 'load-path "~/.emacs.d/pastelmac-theme")
-(add-to-list 'custom-theme-load-path "~/.emacs.d/pastelmac-theme")
+(add-to-list 'load-path (expand-file-name "pastelmac-theme/" user-emacs-directory))
+(add-to-list 'custom-theme-load-path (expand-file-name "pastelmac-theme/" user-emacs-directory))
 
 ;; Zerodark theme
-(add-to-list 'load-path "~/.emacs.d/zerodark-theme")
-(add-to-list 'custom-theme-load-path "~/.emacs.d/zerodark-theme")
-
-;; Apropospriate theme
-;; (add-to-list 'load-path "~/.emacs.d/apropospriate-theme")
-;; (add-to-list 'custom-theme-load-path "~/.emacs.d/apropospriate-theme")
-;; (require 'apropospriate)
+(add-to-list 'load-path (expand-file-name "zerodark-theme/" user-emacs-directory))
+(add-to-list 'custom-theme-load-path (expand-file-name "zerodark-theme/" user-emacs-directory))
 
 ;; Solarized theme
-(add-to-list 'load-path "~/.emacs.d/solarized-emacs")
-(add-to-list 'custom-theme-load-path "~/.emacs.d/solarized-emacs")
+(add-to-list 'load-path (expand-file-name "solarized-emacs/" user-emacs-directory))
+(add-to-list 'custom-theme-load-path (expand-file-name "solarized-emacs" user-emacs-directory))
 (require 'solarized)
 (setq solarized-scale-org-headlines nil)
 

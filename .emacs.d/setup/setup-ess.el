@@ -24,73 +24,74 @@
 
 ;;; Code:
 
-(add-to-list 'load-path "~/.emacs.d/ESS/lisp")
-(require 'ess-site)
-(setq-default ess-dialect "R")
-(setq-default inferior-R-args "--no-restore-history --no-save  ")
+(use-package ess-site
+  :load-path (lambda () (expand-file-name "ESS/lisp" user-emacs-directory))
+  :config (progn
+            (setq-default ess-dialect "R")
+            (setq-default inferior-R-args " --no-restore-history --no-save ")
 
-;; show function arguments in ESS buffers
-(require 'ess-eldoc)
+            ;; show function arguments in ESS buffers
+            (require 'ess-eldoc)
 
-;; also show in iESS buffers
-(add-hook 'inferior-ess-mode-hook 'ess-use-eldoc)
+            ;; also show in iESS buffers
+            (add-hook 'inferior-ess-mode-hook 'ess-use-eldoc)
 
-;; http://www.kieranhealy.org/blog/archives/2009/10/12/make-shift-enter-do-a-lot-in-ess/
-(add-hook 'ess-mode-hook
-          '(lambda()
-             (setq comint-scroll-to-bottom-on-input t)
-             (setq comint-scroll-to-bottom-on-output t)
-             (setq comint-move-point-for-output t)))
+            ;; http://www.kieranhealy.org/blog/archives/2009/10/12/make-shift-enter-do-a-lot-in-ess/
+            (add-hook 'ess-mode-hook
+                      '(lambda()
+                         (setq comint-scroll-to-bottom-on-input t)
+                         (setq comint-scroll-to-bottom-on-output t)
+                         (setq comint-move-point-for-output t)))
 
-;; http://permalink.gmane.org/gmane.emacs.ess.general/8419
-;; Script font lock highlight.
-(setq ess-R-font-lock-keywords
-      '((ess-R-fl-keyword:modifiers . t)
-        (ess-R-fl-keyword:fun-defs . t)
-        (ess-R-fl-keyword:keywords . t)
-        (ess-R-fl-keyword:assign-ops . t)
-        (ess-R-fl-keyword:constants . t)
-        (ess-fl-keyword:fun-calls . t)
-        (ess-fl-keyword:numbers . t)
-        (ess-fl-keyword:operators . t)
-        (ess-fl-keyword:delimiters . t)
-        (ess-fl-keyword:= . t)
-        (ess-R-fl-keyword:F&T . t)
-        (ess-R-fl-keyword:%op% . t)
-        ))
+            ;; http://permalink.gmane.org/gmane.emacs.ess.general/8419
+            ;; Script font lock highlight.
+            (setq ess-R-font-lock-keywords
+                  '((ess-R-fl-keyword:modifiers . t)
+                    (ess-R-fl-keyword:fun-defs . t)
+                    (ess-R-fl-keyword:keywords . t)
+                    (ess-R-fl-keyword:assign-ops . t)
+                    (ess-R-fl-keyword:constants . t)
+                    (ess-fl-keyword:fun-calls . t)
+                    (ess-fl-keyword:numbers . t)
+                    (ess-fl-keyword:operators . t)
+                    (ess-fl-keyword:delimiters . t)
+                    (ess-fl-keyword:= . t)
+                    (ess-R-fl-keyword:F&T . t)
+                    (ess-R-fl-keyword:%op% . t)
+                    ))
 
-;; Console font lock highlight.
-(setq inferior-R-font-lock-keywords
-      '((ess-S-fl-keyword:prompt . t)
-        (ess-R-fl-keyword:messages . t)
-        (ess-R-fl-keyword:modifiers . t)
-        (ess-R-fl-keyword:fun-defs . t)
-        (ess-R-fl-keyword:keywords . t)
-        (ess-R-fl-keyword:assign-ops . t)
-        (ess-R-fl-keyword:constants . t)
-        (ess-fl-keyword:matrix-labels . t)
-        (ess-fl-keyword:fun-calls . t)
-        (ess-fl-keyword:numbers . t)
-        (ess-fl-keyword:operators . t)
-        (ess-fl-keyword:delimiters . t)
-        (ess-fl-keyword:= . t)
-        (ess-R-fl-keyword:F&T . t)
-        (ess-R-fl-keyword:%op% . t)
-        ))
+            ;; Console font lock highlight.
+            (setq inferior-R-font-lock-keywords
+                  '((ess-S-fl-keyword:prompt . t)
+                    (ess-R-fl-keyword:messages . t)
+                    (ess-R-fl-keyword:modifiers . t)
+                    (ess-R-fl-keyword:fun-defs . t)
+                    (ess-R-fl-keyword:keywords . t)
+                    (ess-R-fl-keyword:assign-ops . t)
+                    (ess-R-fl-keyword:constants . t)
+                    (ess-fl-keyword:matrix-labels . t)
+                    (ess-fl-keyword:fun-calls . t)
+                    (ess-fl-keyword:numbers . t)
+                    (ess-fl-keyword:operators . t)
+                    (ess-fl-keyword:delimiters . t)
+                    (ess-fl-keyword:= . t)
+                    (ess-R-fl-keyword:F&T . t)
+                    (ess-R-fl-keyword:%op% . t)
+                    ))
 
-;; Associate files
-(setq auto-mode-alist
-      (cons (cons "\\.[rR]$" 'R-mode) auto-mode-alist))
-(add-hook 'R-mode-hook  '(lambda ()
-                           (auto-complete-mode)
-                           (setq ess-use-auto-complete t)))
+            ;; Associate files
+            (setq auto-mode-alist
+                  (cons (cons "\\.[rR]$" 'R-mode) auto-mode-alist))
+            (add-hook 'R-mode-hook  '(lambda ()
+                                       (auto-complete-mode)
+                                       (setq ess-use-auto-complete t)))
 
-;; config
-(setq ess-indent-level 2)
-(setq ess-arg-function-offset-new-line (list ess-indent-level))
-(setq ess-fancy-comments nil)
-(setq ess-loaded-p t)
-(setq ess-ask-for-ess-directory nil)
-(setq ess-eldoc-show-on-symbol t)
+            ;; config
+            (setq ess-indent-level 2)
+            (setq ess-arg-function-offset-new-line (list ess-indent-level))
+            (setq ess-fancy-comments nil)
+            (setq ess-loaded-p t)
+            (setq ess-ask-for-ess-directory nil)
+            (setq ess-eldoc-show-on-symbol t)))
 
 (provide 'setup-ess)
