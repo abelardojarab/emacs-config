@@ -97,5 +97,9 @@
     (byte-compile-file buffer-file-name)))
 (add-hook 'after-save-hook 'auto-byte-recompile)
 
+;; sudo edit
+(use-package sudo-edit
+  :load-path (lambda () (expand-file-name "sudo-edit/" user-emacs-directory)))
+
 (provide 'setup-file)
 ;;; setup-file.el ends here
