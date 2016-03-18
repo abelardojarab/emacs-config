@@ -34,8 +34,8 @@
           (setq auto-indent-blank-lines-on-move nil)
           (setq auto-indent-next-pair-timer-geo-mean (quote ((default 0.0005 0))))
           (setq auto-indent-disabled-modes-list (list (quote vhdl-mode))))
-  :config (progn
-            (auto-indent-global-mode)))
+  ;; :config (auto-indent-global-mode)
+  )
 
 ;; Permanent indentation guide
 (use-package indent-hint
