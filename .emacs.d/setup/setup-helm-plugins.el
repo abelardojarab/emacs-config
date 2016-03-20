@@ -57,6 +57,10 @@
 (use-package helm-etags+
   :load-path (lambda () (expand-file-name "helm-etags-plus/" user-emacs-directory)))
 
+;; Helm make support
+(use-package helm-make
+  :load-path (lambda () (expand-file-name "helm-make/" user-emacs-directory)))
+
 ;; Helm swoop
 (use-package helm-swoop
   :load-path (lambda () (expand-file-name "helm-swoop/" user-emacs-directory))
