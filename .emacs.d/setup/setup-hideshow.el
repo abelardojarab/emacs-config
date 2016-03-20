@@ -104,8 +104,8 @@
             (define-fringe-bitmap 'hideshowvis-hideable-marker [0 0 254 124 56 16 0 0])
 
             ;; enable `hs-minor-mode' at startup
-            (dolist (hook (list 'prog-mode-hook 'org-mode-hook))
-              (add-hook hook (lambda () (hs-minor-mode 1))))
+            ;; (dolist (hook (list 'prog-mode-hook 'org-mode-hook))
+            ;;   (add-hook hook (lambda () (hs-minor-mode 1))))
 
             ;; (dolist (hook (list 'prog-mode-hook 'org-mode-hook))
             ;;   (add-hook hook 'hideshowvis-enable))
