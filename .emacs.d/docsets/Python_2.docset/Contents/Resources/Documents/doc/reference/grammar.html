@@ -1,0 +1,301 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>9. Full Grammar specification</title>
+    
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '2.7.11',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/sidebar.js"></script>
+    <link rel="search" type="application/opensearchdescription+xml"
+          title="Search within Python 2.7.11 documentation"
+          href="../_static/opensearch.xml"/>
+    <link rel="author" title="About these documents" href="../about.html" />
+    <link rel="copyright" title="Copyright" href="../copyright.html" />
+    <link rel="top" title="Python 2.7.11 documentation" href="../contents.html" />
+    <link rel="up" title="The Python Language Reference" href="index.html" />
+    <link rel="next" title="The Python Standard Library" href="../library/index.html" />
+    <link rel="prev" title="8. Top-level components" href="toplevel_components.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    <script type="text/javascript" src="../_static/version_switch.js"></script>
+ 
+    
+
+  </head>
+  <body role="document">  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../library/index.html" title="The Python Standard Library"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="toplevel_components.html" title="8. Top-level components"
+             accesskey="P">previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <span class="version_switcher_placeholder">2.7.11</span>
+          <a href="../index.html">Documentation</a> &raquo;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">The Python Language Reference</a> &raquo;</li> 
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="full-grammar-specification">
+<h1>9. Full Grammar specification<a class="headerlink" href="#full-grammar-specification" title="Permalink to this headline">¶</a></h1>
+<p>This is the full Python grammar, as it is read by the parser generator and used
+to parse Python source files:</p>
+<div class="highlight-python"><div class="highlight"><pre># Grammar for Python
+
+# Note:  Changing the grammar specified in this file will most likely
+#        require corresponding changes in the parser module
+#        (../Modules/parsermodule.c).  If you can&#39;t make the changes to
+#        that module yourself, please co-ordinate the required changes
+#        with someone who can; ask around on python-dev for help.  Fred
+#        Drake &lt;fdrake@acm.org&gt; will probably be listening there.
+
+# NOTE WELL: You should also follow all the steps listed in PEP 306,
+# &quot;How to Change Python&#39;s Grammar&quot;
+
+# Start symbols for the grammar:
+#       single_input is a single interactive statement;
+#       file_input is a module or sequence of commands read from an input file;
+#       eval_input is the input for the eval() and input() functions.
+# NB: compound_stmt in single_input is followed by extra NEWLINE!
+single_input: NEWLINE | simple_stmt | compound_stmt NEWLINE
+file_input: (NEWLINE | stmt)* ENDMARKER
+eval_input: testlist NEWLINE* ENDMARKER
+
+decorator: &#39;@&#39; dotted_name [ &#39;(&#39; [arglist] &#39;)&#39; ] NEWLINE
+decorators: decorator+
+decorated: decorators (classdef | funcdef)
+funcdef: &#39;def&#39; NAME parameters &#39;:&#39; suite
+parameters: &#39;(&#39; [varargslist] &#39;)&#39;
+varargslist: ((fpdef [&#39;=&#39; test] &#39;,&#39;)*
+              (&#39;*&#39; NAME [&#39;,&#39; &#39;**&#39; NAME] | &#39;**&#39; NAME) |
+              fpdef [&#39;=&#39; test] (&#39;,&#39; fpdef [&#39;=&#39; test])* [&#39;,&#39;])
+fpdef: NAME | &#39;(&#39; fplist &#39;)&#39;
+fplist: fpdef (&#39;,&#39; fpdef)* [&#39;,&#39;]
+
+stmt: simple_stmt | compound_stmt
+simple_stmt: small_stmt (&#39;;&#39; small_stmt)* [&#39;;&#39;] NEWLINE
+small_stmt: (expr_stmt | print_stmt  | del_stmt | pass_stmt | flow_stmt |
+             import_stmt | global_stmt | exec_stmt | assert_stmt)
+expr_stmt: testlist (augassign (yield_expr|testlist) |
+                     (&#39;=&#39; (yield_expr|testlist))*)
+augassign: (&#39;+=&#39; | &#39;-=&#39; | &#39;*=&#39; | &#39;/=&#39; | &#39;%=&#39; | &#39;&amp;=&#39; | &#39;|=&#39; | &#39;^=&#39; |
+            &#39;&lt;&lt;=&#39; | &#39;&gt;&gt;=&#39; | &#39;**=&#39; | &#39;//=&#39;)
+# For normal assignments, additional restrictions enforced by the interpreter
+print_stmt: &#39;print&#39; ( [ test (&#39;,&#39; test)* [&#39;,&#39;] ] |
+                      &#39;&gt;&gt;&#39; test [ (&#39;,&#39; test)+ [&#39;,&#39;] ] )
+del_stmt: &#39;del&#39; exprlist
+pass_stmt: &#39;pass&#39;
+flow_stmt: break_stmt | continue_stmt | return_stmt | raise_stmt | yield_stmt
+break_stmt: &#39;break&#39;
+continue_stmt: &#39;continue&#39;
+return_stmt: &#39;return&#39; [testlist]
+yield_stmt: yield_expr
+raise_stmt: &#39;raise&#39; [test [&#39;,&#39; test [&#39;,&#39; test]]]
+import_stmt: import_name | import_from
+import_name: &#39;import&#39; dotted_as_names
+import_from: (&#39;from&#39; (&#39;.&#39;* dotted_name | &#39;.&#39;+)
+              &#39;import&#39; (&#39;*&#39; | &#39;(&#39; import_as_names &#39;)&#39; | import_as_names))
+import_as_name: NAME [&#39;as&#39; NAME]
+dotted_as_name: dotted_name [&#39;as&#39; NAME]
+import_as_names: import_as_name (&#39;,&#39; import_as_name)* [&#39;,&#39;]
+dotted_as_names: dotted_as_name (&#39;,&#39; dotted_as_name)*
+dotted_name: NAME (&#39;.&#39; NAME)*
+global_stmt: &#39;global&#39; NAME (&#39;,&#39; NAME)*
+exec_stmt: &#39;exec&#39; expr [&#39;in&#39; test [&#39;,&#39; test]]
+assert_stmt: &#39;assert&#39; test [&#39;,&#39; test]
+
+compound_stmt: if_stmt | while_stmt | for_stmt | try_stmt | with_stmt | funcdef | classdef | decorated
+if_stmt: &#39;if&#39; test &#39;:&#39; suite (&#39;elif&#39; test &#39;:&#39; suite)* [&#39;else&#39; &#39;:&#39; suite]
+while_stmt: &#39;while&#39; test &#39;:&#39; suite [&#39;else&#39; &#39;:&#39; suite]
+for_stmt: &#39;for&#39; exprlist &#39;in&#39; testlist &#39;:&#39; suite [&#39;else&#39; &#39;:&#39; suite]
+try_stmt: (&#39;try&#39; &#39;:&#39; suite
+           ((except_clause &#39;:&#39; suite)+
+            [&#39;else&#39; &#39;:&#39; suite]
+            [&#39;finally&#39; &#39;:&#39; suite] |
+           &#39;finally&#39; &#39;:&#39; suite))
+with_stmt: &#39;with&#39; with_item (&#39;,&#39; with_item)*  &#39;:&#39; suite
+with_item: test [&#39;as&#39; expr]
+# NB compile.c makes sure that the default except clause is last
+except_clause: &#39;except&#39; [test [(&#39;as&#39; | &#39;,&#39;) test]]
+suite: simple_stmt | NEWLINE INDENT stmt+ DEDENT
+
+# Backward compatibility cruft to support:
+# [ x for x in lambda: True, lambda: False if x() ]
+# even while also allowing:
+# lambda x: 5 if x else 2
+# (But not a mix of the two)
+testlist_safe: old_test [(&#39;,&#39; old_test)+ [&#39;,&#39;]]
+old_test: or_test | old_lambdef
+old_lambdef: &#39;lambda&#39; [varargslist] &#39;:&#39; old_test
+
+test: or_test [&#39;if&#39; or_test &#39;else&#39; test] | lambdef
+or_test: and_test (&#39;or&#39; and_test)*
+and_test: not_test (&#39;and&#39; not_test)*
+not_test: &#39;not&#39; not_test | comparison
+comparison: expr (comp_op expr)*
+comp_op: &#39;&lt;&#39;|&#39;&gt;&#39;|&#39;==&#39;|&#39;&gt;=&#39;|&#39;&lt;=&#39;|&#39;&lt;&gt;&#39;|&#39;!=&#39;|&#39;in&#39;|&#39;not&#39; &#39;in&#39;|&#39;is&#39;|&#39;is&#39; &#39;not&#39;
+expr: xor_expr (&#39;|&#39; xor_expr)*
+xor_expr: and_expr (&#39;^&#39; and_expr)*
+and_expr: shift_expr (&#39;&amp;&#39; shift_expr)*
+shift_expr: arith_expr ((&#39;&lt;&lt;&#39;|&#39;&gt;&gt;&#39;) arith_expr)*
+arith_expr: term ((&#39;+&#39;|&#39;-&#39;) term)*
+term: factor ((&#39;*&#39;|&#39;/&#39;|&#39;%&#39;|&#39;//&#39;) factor)*
+factor: (&#39;+&#39;|&#39;-&#39;|&#39;~&#39;) factor | power
+power: atom trailer* [&#39;**&#39; factor]
+atom: (&#39;(&#39; [yield_expr|testlist_comp] &#39;)&#39; |
+       &#39;[&#39; [listmaker] &#39;]&#39; |
+       &#39;{&#39; [dictorsetmaker] &#39;}&#39; |
+       &#39;`&#39; testlist1 &#39;`&#39; |
+       NAME | NUMBER | STRING+)
+listmaker: test ( list_for | (&#39;,&#39; test)* [&#39;,&#39;] )
+testlist_comp: test ( comp_for | (&#39;,&#39; test)* [&#39;,&#39;] )
+lambdef: &#39;lambda&#39; [varargslist] &#39;:&#39; test
+trailer: &#39;(&#39; [arglist] &#39;)&#39; | &#39;[&#39; subscriptlist &#39;]&#39; | &#39;.&#39; NAME
+subscriptlist: subscript (&#39;,&#39; subscript)* [&#39;,&#39;]
+subscript: &#39;.&#39; &#39;.&#39; &#39;.&#39; | test | [test] &#39;:&#39; [test] [sliceop]
+sliceop: &#39;:&#39; [test]
+exprlist: expr (&#39;,&#39; expr)* [&#39;,&#39;]
+testlist: test (&#39;,&#39; test)* [&#39;,&#39;]
+dictorsetmaker: ( (test &#39;:&#39; test (comp_for | (&#39;,&#39; test &#39;:&#39; test)* [&#39;,&#39;])) |
+                  (test (comp_for | (&#39;,&#39; test)* [&#39;,&#39;])) )
+
+classdef: &#39;class&#39; NAME [&#39;(&#39; [testlist] &#39;)&#39;] &#39;:&#39; suite
+
+arglist: (argument &#39;,&#39;)* (argument [&#39;,&#39;]
+                         |&#39;*&#39; test (&#39;,&#39; argument)* [&#39;,&#39; &#39;**&#39; test] 
+                         |&#39;**&#39; test)
+# The reason that keywords are test nodes instead of NAME is that using NAME
+# results in an ambiguity. ast.c makes sure it&#39;s a NAME.
+argument: test [comp_for] | test &#39;=&#39; test
+
+list_iter: list_for | list_if
+list_for: &#39;for&#39; exprlist &#39;in&#39; testlist_safe [list_iter]
+list_if: &#39;if&#39; old_test [list_iter]
+
+comp_iter: comp_for | comp_if
+comp_for: &#39;for&#39; exprlist &#39;in&#39; or_test [comp_iter]
+comp_if: &#39;if&#39; old_test [comp_iter]
+
+testlist1: test (&#39;,&#39; test)*
+
+# not used in grammar, but may appear in &quot;node&quot; passed from Parser to Compiler
+encoding_decl: NAME
+
+yield_expr: &#39;yield&#39; [testlist]
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="toplevel_components.html"
+                        title="previous chapter">8. Top-level components</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="../library/index.html"
+                        title="next chapter">The Python Standard Library</a></p>
+<h3>This Page</h3>
+<ul class="this-page-menu">
+  <li><a href="../bugs.html">Report a Bug</a></li>
+  <li><a href="../_sources/reference/grammar.txt"
+         rel="nofollow">Show Source</a></li>
+</ul>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../library/index.html" title="The Python Standard Library"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="toplevel_components.html" title="8. Top-level components"
+             >previous</a> |</li>
+        <li><img src="../_static/py.png" alt=""
+                 style="vertical-align: middle; margin-top: -1px"/></li>
+        <li><a href="https://www.python.org/">Python</a> &raquo;</li>
+        <li>
+          <span class="version_switcher_placeholder">2.7.11</span>
+          <a href="../index.html">Documentation</a> &raquo;
+        </li>
+
+          <li class="nav-item nav-item-1"><a href="index.html" >The Python Language Reference</a> &raquo;</li> 
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 1990-2015, Python Software Foundation.
+    <br />
+    The Python Software Foundation is a non-profit corporation.
+    <a href="https://www.python.org/psf/donations/">Please donate.</a>
+    <br />
+    Last updated on Dec 05, 2015.
+    <a href="../bugs.html">Found a bug</a>?
+    <br />
+    Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.3.3.
+    </div>
+
+  </body>
+</html>

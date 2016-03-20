@@ -1,0 +1,110 @@
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rev="made" href="mailto:webmasters@gnu.org">
+<link rel="icon" type="image/png" href="/graphics/gnu-head-mini.png">
+<meta name="ICBM" content="42.256233,-71.006581">
+<meta name="DC.title" content="gnu.org">
+
+<title>Creating Keymaps</title>
+<!--
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.4.
+
+Copyright (C) 1990--1996, 1998--2014 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<style type="text/css">
+@import url('/software/emacs/manual.css');
+</style>
+</head>
+<body>
+<div class="node" style="background-color:#DDDDFF">
+<a name="Creating-Keymaps"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Inheritance-and-Keymaps.html#Inheritance-and-Keymaps">Inheritance and Keymaps</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Format-of-Keymaps.html#Format-of-Keymaps">Format of Keymaps</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Keymaps.html#Keymaps">Keymaps</a>
+
+</p></div>
+
+<h3 class="section">21.4 Creating Keymaps</h3>
+
+<p><a name="index-creating-keymaps-1532"></a>
+  Here we describe the functions for creating keymaps.
+
+</p><div class="defun">
+<a class="dashAnchor" name="//apple_ref/func/make%2Dsparse%2Dkeymap"></a><a name="DASH-584"></a>— Function: <b>make-sparse-keymap</b><var> &amp;optional prompt<a name="index-make_002dsparse_002dkeymap-1533"></a></var><br>
+<blockquote><p>This function creates and returns a new sparse keymap with no entries. 
+(A sparse keymap is the kind of keymap you usually want.)  The new
+keymap does not contain a char-table, unlike <code>make-keymap</code>, and
+does not bind any events.
+
+     </p><pre class="example">          (make-sparse-keymap)
+              ⇒ (keymap)
+</pre>
+        <p>If you specify <var>prompt</var>, that becomes the overall prompt string
+for the keymap.  You should specify this only for menu keymaps
+(see <a href="Defining-Menus.html#Defining-Menus">Defining Menus</a>).  A keymap with an overall prompt string will
+always present a mouse menu or a keyboard menu if it is active for
+looking up the next input event.  Don't specify an overall prompt string
+for the main map of a major or minor mode, because that would cause
+the command loop to present a keyboard menu every time. 
+</p></blockquote></div>
+
+<div class="defun">
+<a class="dashAnchor" name="//apple_ref/func/make%2Dkeymap"></a><a name="DASH-585"></a>— Function: <b>make-keymap</b><var> &amp;optional prompt<a name="index-make_002dkeymap-1534"></a></var><br>
+<blockquote><p>This function creates and returns a new full keymap.  That keymap
+contains a char-table (see <a href="Char_002dTables.html#Char_002dTables">Char-Tables</a>) with slots for all
+characters without modifiers.  The new keymap initially binds all
+these characters to <code>nil</code>, and does not bind any other kind of
+event.  The argument <var>prompt</var> specifies a
+prompt string, as in <code>make-sparse-keymap</code>.
+
+     <!-- This example seems kind of pointless, but I guess it serves -->
+     <!-- to contrast the result with make-sparse-keymap above. -->
+     </p><pre class="example">          (make-keymap)
+              ⇒ (keymap #^[nil nil keymap nil nil nil ...])
+</pre>
+        <p>A full keymap is more efficient than a sparse keymap when it holds
+lots of bindings; for just a few, the sparse keymap is better. 
+</p></blockquote></div>
+
+<div class="defun">
+<a class="dashAnchor" name="//apple_ref/func/copy%2Dkeymap"></a><a name="DASH-586"></a>— Function: <b>copy-keymap</b><var> keymap<a name="index-copy_002dkeymap-1535"></a></var><br>
+<blockquote><p>This function returns a copy of <var>keymap</var>.  Any keymaps that
+appear directly as bindings in <var>keymap</var> are also copied recursively,
+and so on to any number of levels.  However, recursive copying does not
+take place when the definition of a character is a symbol whose function
+definition is a keymap; the same symbol appears in the new copy. 
+<!-- Emacs 19 feature -->
+
+     </p><pre class="example">          (setq map (copy-keymap (current-local-map)))
+          ⇒ (keymap
+               ;; <span class="roman">(This implements meta characters.)</span>
+               (27 keymap
+                   (83 . center-paragraph)
+                   (115 . center-line))
+               (9 . tab-to-tab-stop))
+          
+          (eq map (current-local-map))
+              ⇒ nil
+          (equal map (current-local-map))
+              ⇒ t
+</pre>
+        </blockquote></div>
+
+   
+
+</body></html>

@@ -1,0 +1,70 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+
+<html lang="en">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rev="made" href="mailto:webmasters@gnu.org">
+<link rel="icon" type="image/png" href="/graphics/gnu-head-mini.png">
+<meta name="ICBM" content="42.256233,-71.006581">
+<meta name="DC.title" content="gnu.org">
+
+<title>Source Breakpoints</title>
+<!--
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.4.
+
+Copyright (C) 1990--1996, 1998--2014 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<style type="text/css">
+@import url('/software/emacs/manual.css');
+</style>
+</head>
+<body>
+<div class="node" style="background-color:#DDDDFF">
+<a name="Source-Breakpoints"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Global-Break-Condition.html#Global-Break-Condition">Global Break Condition</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Breaks.html#Breaks">Breaks</a>
+
+</div>
+
+<h5 class="subsubsection">17.2.6.3 Source Breakpoints</h5>
+
+<p><a name="index-edebug-1019"></a><a name="index-source-breakpoints-1020"></a>  All breakpoints in a definition are forgotten each time you
+reinstrument it.  If you wish to make a breakpoint that won't be
+forgotten, you can write a <dfn>source breakpoint</dfn>, which is simply a
+call to the function <code>edebug</code> in your source code.  You can, of
+course, make such a call conditional.  For example, in the <code>fac</code>
+function, you can insert the first line as shown below, to stop when the
+argument reaches zero:
+
+<pre class="example">     (defun fac (n)
+       (if (= n 0) (edebug))
+       (if (&lt; 0 n)
+           (* n (fac (1- n)))
+         1))
+</pre>
+   <p>When the <code>fac</code> definition is instrumented and the function is
+called, the call to <code>edebug</code> acts as a breakpoint.  Depending on
+the execution mode, Edebug stops or pauses there.
+
+   <p>If no instrumented code is being executed when <code>edebug</code> is called,
+that function calls <code>debug</code>. 
+<!-- This may not be a good idea anymore. -->
+
+   </body></html>
+

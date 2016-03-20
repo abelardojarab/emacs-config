@@ -1,0 +1,69 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+
+<html lang="en">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rev="made" href="mailto:webmasters@gnu.org">
+<link rel="icon" type="image/png" href="/graphics/gnu-head-mini.png">
+<meta name="ICBM" content="42.256233,-71.006581">
+<meta name="DC.title" content="gnu.org">
+
+<title>Format Properties</title>
+<!--
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.4.
+
+Copyright (C) 1990--1996, 1998--2014 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<style type="text/css">
+@import url('/software/emacs/manual.css');
+</style>
+</head>
+<body>
+<div class="node" style="background-color:#DDDDFF">
+<a name="Format-Properties"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Sticky-Properties.html#Sticky-Properties">Sticky Properties</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Special-Properties.html#Special-Properties">Special Properties</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Text-Properties.html#Text-Properties">Text Properties</a>
+
+</div>
+
+<h4 class="subsection">31.19.5 Formatted Text Properties</h4>
+
+<p>These text properties affect the behavior of the fill commands.  They
+are used for representing formatted text.  See <a href="Filling.html#Filling">Filling</a>, and
+<a href="Margins.html#Margins">Margins</a>.
+
+     <dl>
+<dt><code>hard</code><dd>If a newline character has this property, it is a &ldquo;hard&rdquo; newline. 
+The fill commands do not alter hard newlines and do not move words
+across them.  However, this property takes effect only if the
+<code>use-hard-newlines</code> minor mode is enabled.  See <a href="../emacs/Hard-and-Soft-Newlines.html#Hard-and-Soft-Newlines">Hard and Soft Newlines</a>.
+
+     <br><dt><code>right-margin</code><dd>This property specifies an extra right margin for filling this part of the
+text.
+
+     <br><dt><code>left-margin</code><dd>This property specifies an extra left margin for filling this part of the
+text.
+
+     <br><dt><code>justification</code><dd>This property specifies the style of justification for filling this part
+of the text. 
+</dl>
+
+   </body></html>
+

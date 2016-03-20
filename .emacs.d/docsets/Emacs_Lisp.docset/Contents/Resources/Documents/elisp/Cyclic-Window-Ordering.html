@@ -1,0 +1,216 @@
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rev="made" href="mailto:webmasters@gnu.org">
+<link rel="icon" type="image/png" href="/graphics/gnu-head-mini.png">
+<meta name="ICBM" content="42.256233,-71.006581">
+<meta name="DC.title" content="gnu.org">
+
+<title>Cyclic Window Ordering</title>
+<!--
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.4.
+
+Copyright (C) 1990--1996, 1998--2014 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<style type="text/css">
+@import url('/software/emacs/manual.css');
+</style>
+</head>
+<body>
+<div class="node" style="background-color:#DDDDFF">
+<a name="Cyclic-Window-Ordering"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Buffers-and-Windows.html#Buffers-and-Windows">Buffers and Windows</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Selecting-Windows.html#Selecting-Windows">Selecting Windows</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Windows.html#Windows">Windows</a>
+
+</p></div>
+
+<h3 class="section">27.9 Cyclic Ordering of Windows</h3>
+
+<p><a name="index-cyclic-ordering-of-windows-2341"></a><a name="index-ordering-of-windows_002c-cyclic-2342"></a><a name="index-window-ordering_002c-cyclic-2343"></a>
+  When you use the command <kbd>C-x o</kbd> (<code>other-window</code>) to select
+some other window, it moves through live windows in a specific order. 
+For any given configuration of windows, this order never varies.  It
+is called the <dfn>cyclic ordering of windows</dfn>.
+
+   </p><p>The ordering is determined by a depth-first traversal of the frame's
+window tree, retrieving the live windows which are the leaf nodes of
+the tree (see <a href="Windows-and-Frames.html#Windows-and-Frames">Windows and Frames</a>).  If the minibuffer is active,
+the minibuffer window is included too.  The ordering is cyclic, so the
+last window in the sequence is followed by the first one.
+
+</p><div class="defun">
+<a class="dashAnchor" name="//apple_ref/func/next%2Dwindow"></a><a name="DASH-628"></a>— Function: <b>next-window</b><var> &amp;optional window minibuf all-frames<a name="index-next_002dwindow-2344"></a></var><br>
+<blockquote><p><a name="index-minibuffer-window_002c-and-_0040code_007bnext_002dwindow_007d-2345"></a>This function returns a live window, the one following <var>window</var> in
+the cyclic ordering of windows.  <var>window</var> should be a live window;
+if omitted or <code>nil</code>, it defaults to the selected window.
+
+        </p><p>The optional argument <var>minibuf</var> specifies whether minibuffer windows
+should be included in the cyclic ordering.  Normally, when <var>minibuf</var>
+is <code>nil</code>, a minibuffer window is included only if it is currently
+“active”; this matches the behavior of <kbd>C-x o</kbd>.  (Note that a
+minibuffer window is active as long as its minibuffer is in use; see
+<a href="Minibuffers.html#Minibuffers">Minibuffers</a>).
+
+        </p><p>If <var>minibuf</var> is <code>t</code>, the cyclic ordering includes all
+minibuffer windows.  If <var>minibuf</var> is neither <code>t</code> nor
+<code>nil</code>, minibuffer windows are not included even if they are active.
+
+        </p><p>The optional argument <var>all-frames</var> specifies which frames to
+consider:
+
+          </p><ul>
+<li><code>nil</code>
+means to consider windows on <var>window</var>'s frame.  If the minibuffer
+window is considered (as specified by the <var>minibuf</var> argument),
+then frames that share the minibuffer window are considered too.
+
+          </li><li><code>t</code>
+means to consider windows on all existing frames.
+
+          </li><li><code>visible</code>
+means to consider windows on all visible frames.
+
+          </li><li>0
+means to consider windows on all visible or iconified frames.
+
+          </li><li>A frame
+means to consider windows on that specific frame.
+
+          </li><li>Anything else
+means to consider windows on <var>window</var>'s frame, and no others. 
+</li></ul>
+
+        <p>If more than one frame is considered, the cyclic ordering is obtained
+by appending the orderings for those frames, in the same order as the
+list of all live frames (see <a href="Finding-All-Frames.html#Finding-All-Frames">Finding All Frames</a>). 
+</p></blockquote></div>
+
+<div class="defun">
+<a class="dashAnchor" name="//apple_ref/func/previous%2Dwindow"></a><a name="DASH-629"></a>— Function: <b>previous-window</b><var> &amp;optional window minibuf all-frames<a name="index-previous_002dwindow-2346"></a></var><br>
+<blockquote><p>This function returns a live window, the one preceding <var>window</var> in
+the cyclic ordering of windows.  The other arguments are handled like
+in <code>next-window</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+<a class="dashAnchor" name="//apple_ref/Command/other%2Dwindow"></a><a name="DASH-630"></a>— Command: <b>other-window</b><var> count &amp;optional all-frames<a name="index-other_002dwindow-2347"></a></var><br>
+<blockquote><p>This function selects a live window, one <var>count</var> places from the
+selected window in the cyclic ordering of windows.  If <var>count</var> is
+a positive number, it skips <var>count</var> windows forwards; if
+<var>count</var> is negative, it skips −<var>count</var> windows
+backwards; if <var>count</var> is zero, that simply re-selects the selected
+window.  When called interactively, <var>count</var> is the numeric prefix
+argument.
+
+        </p><p>The optional argument <var>all-frames</var> has the same meaning as in
+<code>next-window</code>, like a <code>nil</code> <var>minibuf</var> argument to
+<code>next-window</code>.
+
+        </p><p>This function does not select a window that has a non-<code>nil</code>
+<code>no-other-window</code> window parameter (see <a href="Window-Parameters.html#Window-Parameters">Window Parameters</a>). 
+</p></blockquote></div>
+
+<div class="defun">
+<a class="dashAnchor" name="//apple_ref/func/walk%2Dwindows"></a><a name="DASH-631"></a>— Function: <b>walk-windows</b><var> fun &amp;optional minibuf all-frames<a name="index-walk_002dwindows-2348"></a></var><br>
+<blockquote><p>This function calls the function <var>fun</var> once for each live window,
+with the window as the argument.
+
+        </p><p>It follows the cyclic ordering of windows.  The optional arguments
+<var>minibuf</var> and <var>all-frames</var> specify the set of windows
+included; these have the same arguments as in <code>next-window</code>.  If
+<var>all-frames</var> specifies a frame, the first window walked is the
+first window on that frame (the one returned by
+<code>frame-first-window</code>), not necessarily the selected window.
+
+        </p><p>If <var>fun</var> changes the window configuration by splitting or deleting
+windows, that does not alter the set of windows walked, which is
+determined prior to calling <var>fun</var> for the first time. 
+</p></blockquote></div>
+
+<div class="defun">
+<a class="dashAnchor" name="//apple_ref/func/one%2Dwindow%2Dp"></a><a name="DASH-632"></a>— Function: <b>one-window-p</b><var> &amp;optional no-mini all-frames<a name="index-one_002dwindow_002dp-2349"></a></var><br>
+<blockquote><p>This function returns <code>t</code> if the selected window is the only live
+window, and <code>nil</code> otherwise.
+
+        </p><p>If the minibuffer window is active, it is normally considered (so that
+this function returns <code>nil</code>).  However, if the optional argument
+<var>no-mini</var> is non-<code>nil</code>, the minibuffer window is ignored even
+if active.  The optional argument <var>all-frames</var> has the same
+meaning as for <code>next-window</code>. 
+</p></blockquote></div>
+
+   <p><a name="index-finding-windows-2350"></a>  The following functions return a window which satisfies some
+criterion, without selecting it:
+
+   </p><p><a name="index-least-recently-used-window-2351"></a>
+
+</p><div class="defun">
+<a class="dashAnchor" name="//apple_ref/func/get%2Dlru%2Dwindow"></a><a name="DASH-633"></a>— Function: <b>get-lru-window</b><var> &amp;optional all-frames dedicated not-selected<a name="index-get_002dlru_002dwindow-2352"></a></var><br>
+<blockquote><p>This function returns a live window which is heuristically the “least
+recently used” window.  The optional argument <var>all-frames</var> has
+the same meaning as in <code>next-window</code>.
+
+        </p><p>If any full-width windows are present, only those windows are
+considered.  A minibuffer window is never a candidate.  A dedicated
+window (see <a href="Dedicated-Windows.html#Dedicated-Windows">Dedicated Windows</a>) is never a candidate unless the
+optional argument <var>dedicated</var> is non-<code>nil</code>.  The selected
+window is never returned, unless it is the only candidate.  However, if
+the optional argument <var>not-selected</var> is non-<code>nil</code>, this
+function returns <code>nil</code> in that case. 
+</p></blockquote></div>
+
+   <p><a name="index-largest-window-2353"></a>
+
+</p><div class="defun">
+<a class="dashAnchor" name="//apple_ref/func/get%2Dlargest%2Dwindow"></a><a name="DASH-634"></a>— Function: <b>get-largest-window</b><var> &amp;optional all-frames dedicated not-selected<a name="index-get_002dlargest_002dwindow-2354"></a></var><br>
+<blockquote><p>This function returns the window with the largest area (height times
+width).  The optional argument <var>all-frames</var> specifies the windows to
+search, and has the same meaning as in <code>next-window</code>.
+
+        </p><p>A minibuffer window is never a candidate.  A dedicated window
+(see <a href="Dedicated-Windows.html#Dedicated-Windows">Dedicated Windows</a>) is never a candidate unless the optional
+argument <var>dedicated</var> is non-<code>nil</code>.  The selected window is not
+a candidate if the optional argument <var>not-selected</var> is
+non-<code>nil</code>.  If the optional argument <var>not-selected</var> is
+non-<code>nil</code> and the selected window is the only candidate, this
+function returns <code>nil</code>.
+
+        </p><p>If there are two candidate windows of the same size, this function
+prefers the one that comes first in the cyclic ordering of windows,
+starting from the selected window. 
+</p></blockquote></div>
+
+   <p><a name="index-window-that-satisfies-a-predicate-2355"></a><a name="index-conditional-selection-of-windows-2356"></a>
+
+</p><div class="defun">
+<a class="dashAnchor" name="//apple_ref/func/get%2Dwindow%2Dwith%2Dpredicate"></a><a name="DASH-635"></a>— Function: <b>get-window-with-predicate</b><var> predicate &amp;optional minibuf all-frames default<a name="index-get_002dwindow_002dwith_002dpredicate-2357"></a></var><br>
+<blockquote><p>This function calls the function <var>predicate</var> for each of the
+windows in the cyclic order of windows in turn, passing it the window
+as an argument.  If the predicate returns non-<code>nil</code> for any
+window, this function stops and returns that window.  If no such
+window is found, the return value is <var>default</var> (which defaults to
+<code>nil</code>).
+
+        </p><p>The optional arguments <var>minibuf</var> and <var>all-frames</var> specify the
+windows to search, and have the same meanings as in
+<code>next-window</code>. 
+</p></blockquote></div>
+
+   
+
+</body></html>

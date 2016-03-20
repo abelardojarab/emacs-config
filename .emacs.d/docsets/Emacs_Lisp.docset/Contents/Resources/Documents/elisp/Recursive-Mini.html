@@ -1,0 +1,79 @@
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rev="made" href="mailto:webmasters@gnu.org">
+<link rel="icon" type="image/png" href="/graphics/gnu-head-mini.png">
+<meta name="ICBM" content="42.256233,-71.006581">
+<meta name="DC.title" content="gnu.org">
+
+<title>Recursive Mini</title>
+<!--
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.4.
+
+Copyright (C) 1990--1996, 1998--2014 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<style type="text/css">
+@import url('/software/emacs/manual.css');
+</style>
+</head>
+<body>
+<div class="node" style="background-color:#DDDDFF">
+<a name="Recursive-Mini"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Minibuffer-Misc.html#Minibuffer-Misc">Minibuffer Misc</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Minibuffer-Contents.html#Minibuffer-Contents">Minibuffer Contents</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Minibuffers.html#Minibuffers">Minibuffers</a>
+
+</p></div>
+
+<h3 class="section">19.13 Recursive Minibuffers</h3>
+
+<p><a name="index-recursive-minibuffers-1266"></a>
+  These functions and variables deal with recursive minibuffers
+(see <a href="Recursive-Editing.html#Recursive-Editing">Recursive Editing</a>):
+
+</p><div class="defun">
+<a class="dashAnchor" name="//apple_ref/func/minibuffer%2Ddepth"></a><a name="DASH-1713"></a>— Function: <b>minibuffer-depth</b><var><a name="index-minibuffer_002ddepth-1267"></a></var><br>
+<blockquote><p>This function returns the current depth of activations of the
+minibuffer, a nonnegative integer.  If no minibuffers are active, it
+returns zero. 
+</p></blockquote></div>
+
+<div class="defun">
+<a class="dashAnchor" name="//apple_ref/Option/enable%2Drecursive%2Dminibuffers"></a><a name="DASH-1714"></a>— User Option: <b>enable-recursive-minibuffers</b><var><a name="index-enable_002drecursive_002dminibuffers-1268"></a></var><br>
+<blockquote><p>If this variable is non-<code>nil</code>, you can invoke commands (such as
+<code>find-file</code>) that use minibuffers even while the minibuffer window
+is active.  Such invocation produces a recursive editing level for a new
+minibuffer.  The outer-level minibuffer is invisible while you are
+editing the inner one.
+
+        </p><p>If this variable is <code>nil</code>, you cannot invoke minibuffer
+commands when the minibuffer window is active, not even if you switch to
+another window to do it. 
+</p></blockquote></div>
+
+<!-- Emacs 19 feature -->
+   <p>If a command name has a property <code>enable-recursive-minibuffers</code>
+that is non-<code>nil</code>, then the command can use the minibuffer to read
+arguments even if it is invoked from the minibuffer.  A command can
+also achieve this by binding <code>enable-recursive-minibuffers</code>
+to <code>t</code> in the interactive declaration (see <a href="Using-Interactive.html#Using-Interactive">Using Interactive</a>). 
+The minibuffer command <code>next-matching-history-element</code> (normally
+<kbd>M-s</kbd> in the minibuffer) does the latter.
+
+   
+
+</p></body></html>

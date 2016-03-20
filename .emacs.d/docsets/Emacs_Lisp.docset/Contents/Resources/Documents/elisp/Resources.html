@@ -1,0 +1,104 @@
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rev="made" href="mailto:webmasters@gnu.org">
+<link rel="icon" type="image/png" href="/graphics/gnu-head-mini.png">
+<meta name="ICBM" content="42.256233,-71.006581">
+<meta name="DC.title" content="gnu.org">
+
+<title>Resources</title>
+<!--
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.4.
+
+Copyright (C) 1990--1996, 1998--2014 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<style type="text/css">
+@import url('/software/emacs/manual.css');
+</style>
+</head>
+<body>
+<div class="node" style="background-color:#DDDDFF">
+<a name="Resources"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Display-Feature-Testing.html#Display-Feature-Testing">Display Feature Testing</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Text-Terminal-Colors.html#Text-Terminal-Colors">Text Terminal Colors</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Frames.html#Frames">Frames</a>
+
+</p></div>
+
+<h3 class="section">28.22 X Resources</h3>
+
+<p>This section describes some of the functions and variables for
+querying and using X resources, or their equivalent on your operating
+system.  See <a href="../emacs/X-Resources.html#X-Resources">X Resources</a>, for more information about X resources.
+
+</p><div class="defun">
+<a class="dashAnchor" name="//apple_ref/func/x%2Dget%2Dresource"></a><a name="DASH-1767"></a>— Function: <b>x-get-resource</b><var> attribute class &amp;optional component subclass<a name="index-x_002dget_002dresource-2729"></a></var><br>
+<blockquote><p>The function <code>x-get-resource</code> retrieves a resource value from the X
+Window defaults database.
+
+        </p><p>Resources are indexed by a combination of a <dfn>key</dfn> and a <dfn>class</dfn>. 
+This function searches using a key of the form
+‘<samp><var>instance</var><span class="samp">.</span><var>attribute</var></samp>’ (where <var>instance</var> is the name
+under which Emacs was invoked), and using ‘<samp><span class="samp">Emacs.</span><var>class</var></samp>’ as
+the class.
+
+        </p><p>The optional arguments <var>component</var> and <var>subclass</var> add to the key
+and the class, respectively.  You must specify both of them or neither. 
+If you specify them, the key is
+‘<samp><var>instance</var><span class="samp">.</span><var>component</var><span class="samp">.</span><var>attribute</var></samp>’, and the class is
+‘<samp><span class="samp">Emacs.</span><var>class</var><span class="samp">.</span><var>subclass</var></samp>’. 
+</p></blockquote></div>
+
+<div class="defun">
+<a class="dashAnchor" name="//apple_ref/Variable/x%2Dresource%2Dclass"></a><a name="DASH-1768"></a>— Variable: <b>x-resource-class</b><var><a name="index-x_002dresource_002dclass-2730"></a></var><br>
+<blockquote><p>This variable specifies the application name that <code>x-get-resource</code>
+should look up.  The default value is <code>"Emacs"</code>.  You can examine X
+resources for application names other than “Emacs” by binding this
+variable to some other string, around a call to <code>x-get-resource</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+<a class="dashAnchor" name="//apple_ref/Variable/x%2Dresource%2Dname"></a><a name="DASH-1769"></a>— Variable: <b>x-resource-name</b><var><a name="index-x_002dresource_002dname-2731"></a></var><br>
+<blockquote><p>This variable specifies the instance name that <code>x-get-resource</code>
+should look up.  The default value is the name Emacs was invoked with,
+or the value specified with the ‘<samp><span class="samp">-name</span></samp>’ or ‘<samp><span class="samp">-rn</span></samp>’ switches. 
+</p></blockquote></div>
+
+   <p>To illustrate some of the above, suppose that you have the line:
+
+</p><pre class="example">     xterm.vt100.background: yellow
+</pre>
+   <p class="noindent">in your X resources file (whose name is usually <samp><span class="file">~/.Xdefaults</span></samp>
+or <samp><span class="file">~/.Xresources</span></samp>).  Then:
+
+</p><pre class="example">     (let ((x-resource-class "XTerm") (x-resource-name "xterm"))
+       (x-get-resource "vt100.background" "VT100.Background"))
+          ⇒ "yellow"
+     (let ((x-resource-class "XTerm") (x-resource-name "xterm"))
+       (x-get-resource "background" "VT100" "vt100" "Background"))
+          ⇒ "yellow"
+</pre>
+   <div class="defun">
+<a class="dashAnchor" name="//apple_ref/Variable/inhibit%2Dx%2Dresources"></a><a name="DASH-1770"></a>— Variable: <b>inhibit-x-resources</b><var><a name="index-inhibit_002dx_002dresources-2732"></a></var><br>
+<blockquote><p>If this variable is non-<code>nil</code>, Emacs does not look up X
+resources, and X resources do not have any effect when creating new
+frames. 
+</p></blockquote></div>
+
+   
+
+</body></html>

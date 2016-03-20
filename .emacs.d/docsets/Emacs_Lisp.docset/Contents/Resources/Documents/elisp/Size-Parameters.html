@@ -1,0 +1,83 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+
+<html lang="en">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rev="made" href="mailto:webmasters@gnu.org">
+<link rel="icon" type="image/png" href="/graphics/gnu-head-mini.png">
+<meta name="ICBM" content="42.256233,-71.006581">
+<meta name="DC.title" content="gnu.org">
+
+<title>Size Parameters</title>
+<!--
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.4.
+
+Copyright (C) 1990--1996, 1998--2014 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<style type="text/css">
+@import url('/software/emacs/manual.css');
+</style>
+</head>
+<body>
+<div class="node" style="background-color:#DDDDFF">
+<a name="Size-Parameters"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Layout-Parameters.html#Layout-Parameters">Layout Parameters</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Position-Parameters.html#Position-Parameters">Position Parameters</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Window-Frame-Parameters.html#Window-Frame-Parameters">Window Frame Parameters</a>
+
+</div>
+
+<h5 class="subsubsection">28.3.3.3 Size Parameters</h5>
+
+<p><a name="index-window-size-on-display-2556"></a>
+  Frame parameters specify frame sizes in character units.  On
+graphical displays, the <code>default</code> face determines the actual
+pixel sizes of these character units (see <a href="Face-Attributes.html#Face-Attributes">Face Attributes</a>).
+
+     
+<a name="index-height_002c-a-frame-parameter-2557"></a>
+<dl><dt><code>height</code><dd>The height of the frame contents, in characters.  (To get the height in
+pixels, call <code>frame-pixel-height</code>; see <a href="Size-and-Position.html#Size-and-Position">Size and Position</a>.)
+
+     <p><a name="index-width_002c-a-frame-parameter-2558"></a><br><dt><code>width</code><dd>The width of the frame contents, in characters.  (To get the width in
+pixels, call <code>frame-pixel-width</code>; see <a href="Size-and-Position.html#Size-and-Position">Size and Position</a>.)
+
+     <p><a name="index-user_002dsize_002c-a-frame-parameter-2559"></a><br><dt><code>user-size</code><dd>This does for the size parameters <code>height</code> and <code>width</code> what
+the <code>user-position</code> parameter (see <a href="Position-Parameters.html#Position-Parameters">user-position</a>) does for the position parameters <code>top</code> and
+<code>left</code>.
+
+     <p><a name="index-full_002dscreen-frames-2560"></a><a name="index-fullscreen_002c-a-frame-parameter-2561"></a><br><dt><code>fullscreen</code><dd>Specify that width, height or both shall be maximized.  The value
+<code>fullwidth</code> specifies that width shall be as wide as possible. 
+The value <code>fullheight</code> specifies that height shall be as tall as
+possible.  The value <code>fullboth</code> specifies that both the width and
+the height shall be set to the size of the screen.  The value
+<code>maximized</code> specifies that the frame shall be maximized.  The
+difference between <code>maximized</code> and <code>fullboth</code> is that the
+former can still be resized by dragging window manager decorations
+with the mouse, while the latter really covers the whole screen and
+does not allow resizing by mouse dragging.
+
+     <p>With some window managers you may have to customize the variable
+<code>frame-resize-pixelwise</code> to a non-<code>nil</code> value in order to make
+a frame appear &ldquo;maximized&rdquo; or &ldquo;fullscreen&rdquo;.
+
+   </dl>
+
+   </body></html>
+

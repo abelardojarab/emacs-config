@@ -93,39 +93,49 @@
 (use-package helm-dash
   :load-path (lambda () (expand-file-name "helm-dash/" user-emacs-directory))
   :config (progn
+            (setq helm-dash-enable-debugging nil)
             (setq helm-dash-min-length 2)
             (setq helm-dash-docsets-path (expand-file-name "docsets/" user-emacs-directory))
             (setq helm-dash-common-docsets '(
-                                             "Markdown"
-                                             "LaTeX"
-                                             "Python_2"
-                                             "Perl"
-                                             "C++"
-                                             "JavaScript"
-                                             "Bash"
-                                             "Tcl"
-                                             "R"
-                                             "Emacs_Lisp"))
+                                             ;; "C" ;; does not work
+                                             ;; "C++" ;; does not work
+                                             ;; "Bash" ;; does not work
+                                             ;; "LaTeX" ;; does not work
+                                             "Emacs_Lisp" ;; works
+                                             "Python_2" ;; works
+                                             ;; "NumPy" ;; does not work
+                                             ;; "SciPy" ;; does not work
+                                             ;; "JavaScript" ;; does not work
+                                             ;; "NodeJS";; does not work
+                                             ;; "HTML";; does not work
+                                             ;; "Java";; does not work
+                                             ))
 
-            (defun c-doc-hook ()
-              (interactive)
-              (setq-local helm-dash-docsets '("C" "C++" "Qt")))
-            (add-hook 'c-mode-common-hook 'c-doc-hook)
+            ;; (defun lisp-doc-hook ()
+            ;;   (interactive)
+            ;;   (setq-local helm-dash-docsets '("Emacs_Lisp")))
+            ;; (add-hook 'lisp-mode-hook 'lisp-doc-hook)
 
-            (defun python-doc-hook ()
-              (interactive)
-              (setq-local helm-dash-docsets '("Python_2" "NumPy" "SciPy")))
-            (add-hook 'python-mode-hook 'python-doc-hook)
+            ;; (defun c-doc-hook ()
+            ;;   (interactive)
+            ;;   (setq-local helm-dash-docsets '("C" "C++")))
+            ;; (add-hook 'c-mode-common-hook 'c-doc-hook)
 
-            (defun js2-doc-hook ()
-              (interactive)
-              (setq-local helm-dash-docsets '("JavaScript" "NodeJS" "HTML")))
-            (add-hook 'js2-mode-hook 'js2-doc-hook)
+            ;; (defun python-doc-hook ()
+            ;;   (interactive)
+            ;;   (setq-local helm-dash-docsets '("Python_2")))
+            ;; (add-hook 'python-mode-hook 'python-doc-hook)
 
-            (defun java-doc-hook ()
-              (interactive)
-              (setq-local helm-dash-docsets '("Java")))
-            (add-hook 'java-mode-hook 'java-doc-hook)))
+            ;; (defun js2-doc-hook ()
+            ;;   (interactive)
+            ;;   (setq-local helm-dash-docsets '("JavaScript" "NodeJS" "HTML")))
+            ;; (add-hook 'js2-mode-hook 'js2-doc-hook)
+
+            ;; (defun java-doc-hook ()
+            ;;   (interactive)
+            ;;   (setq-local helm-dash-docsets '("Java")))
+            ;; (add-hook 'java-mode-hook 'java-doc-hook)
+            ))
 
 ;; Helm bibtex
 (use-package helm-bibtex

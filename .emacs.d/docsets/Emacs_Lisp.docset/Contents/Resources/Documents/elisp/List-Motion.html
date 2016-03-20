@@ -1,0 +1,155 @@
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rev="made" href="mailto:webmasters@gnu.org">
+<link rel="icon" type="image/png" href="/graphics/gnu-head-mini.png">
+<meta name="ICBM" content="42.256233,-71.006581">
+<meta name="DC.title" content="gnu.org">
+
+<title>List Motion</title>
+<!--
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.4.
+
+Copyright (C) 1990--1996, 1998--2014 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<style type="text/css">
+@import url('/software/emacs/manual.css');
+</style>
+</head>
+<body>
+<div class="node" style="background-color:#DDDDFF">
+<a name="List-Motion"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Skipping-Characters.html#Skipping-Characters">Skipping Characters</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Screen-Lines.html#Screen-Lines">Screen Lines</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Motion.html#Motion">Motion</a>
+
+</p></div>
+
+<h4 class="subsection">29.2.6 Moving over Balanced Expressions</h4>
+
+<p><a name="index-sexp-motion-2797"></a><a name="index-Lisp-expression-motion-2798"></a><a name="index-list-motion-2799"></a><a name="index-balanced-parenthesis-motion-2800"></a>
+  Here are several functions concerned with balanced-parenthesis
+expressions (also called <dfn>sexps</dfn> in connection with moving across
+them in Emacs).  The syntax table controls how these functions interpret
+various characters; see <a href="Syntax-Tables.html#Syntax-Tables">Syntax Tables</a>.  See <a href="Parsing-Expressions.html#Parsing-Expressions">Parsing Expressions</a>, for lower-level primitives for scanning sexps or parts of
+sexps.  For user-level commands, see <a href="../emacs/Parentheses.html#Parentheses">Commands for Editing with Parentheses</a>.
+
+</p><div class="defun">
+<a class="dashAnchor" name="//apple_ref/Command/forward%2Dlist"></a><a name="DASH-1216"></a>— Command: <b>forward-list</b><var> &amp;optional arg<a name="index-forward_002dlist-2801"></a></var><br>
+<blockquote><p>This function moves forward across <var>arg</var> (default 1) balanced groups of
+parentheses.  (Other syntactic entities such as words or paired string
+quotes are ignored.) 
+</p></blockquote></div>
+
+<div class="defun">
+<a class="dashAnchor" name="//apple_ref/Command/backward%2Dlist"></a><a name="DASH-1217"></a>— Command: <b>backward-list</b><var> &amp;optional arg<a name="index-backward_002dlist-2802"></a></var><br>
+<blockquote><p>This function moves backward across <var>arg</var> (default 1) balanced groups of
+parentheses.  (Other syntactic entities such as words or paired string
+quotes are ignored.) 
+</p></blockquote></div>
+
+<div class="defun">
+<a class="dashAnchor" name="//apple_ref/Command/up%2Dlist"></a><a name="DASH-1218"></a>— Command: <b>up-list</b><var> &amp;optional arg<a name="index-up_002dlist-2803"></a></var><br>
+<blockquote><p>This function moves forward out of <var>arg</var> (default 1) levels of parentheses. 
+A negative argument means move backward but still to a less deep spot. 
+</p></blockquote></div>
+
+<div class="defun">
+<a class="dashAnchor" name="//apple_ref/Command/down%2Dlist"></a><a name="DASH-1219"></a>— Command: <b>down-list</b><var> &amp;optional arg<a name="index-down_002dlist-2804"></a></var><br>
+<blockquote><p>This function moves forward into <var>arg</var> (default 1) levels of
+parentheses.  A negative argument means move backward but still go
+deeper in parentheses (−<var>arg</var> levels). 
+</p></blockquote></div>
+
+<div class="defun">
+<a class="dashAnchor" name="//apple_ref/Command/forward%2Dsexp"></a><a name="DASH-1220"></a>— Command: <b>forward-sexp</b><var> &amp;optional arg<a name="index-forward_002dsexp-2805"></a></var><br>
+<blockquote><p>This function moves forward across <var>arg</var> (default 1) balanced expressions. 
+Balanced expressions include both those delimited by parentheses and
+other kinds, such as words and string constants. 
+See <a href="Parsing-Expressions.html#Parsing-Expressions">Parsing Expressions</a>.  For example,
+
+     </p><pre class="example">          ---------- Buffer: foo ----------
+          (concat-!- "foo " (car x) y z)
+          ---------- Buffer: foo ----------
+          
+          (forward-sexp 3)
+               ⇒ nil
+          
+          ---------- Buffer: foo ----------
+          (concat "foo " (car x) y-!- z)
+          ---------- Buffer: foo ----------
+</pre>
+        </blockquote></div>
+
+<div class="defun">
+<a class="dashAnchor" name="//apple_ref/Command/backward%2Dsexp"></a><a name="DASH-1221"></a>— Command: <b>backward-sexp</b><var> &amp;optional arg<a name="index-backward_002dsexp-2806"></a></var><br>
+<blockquote><p>This function moves backward across <var>arg</var> (default 1) balanced expressions. 
+</p></blockquote></div>
+
+<div class="defun">
+<a class="dashAnchor" name="//apple_ref/Command/beginning%2Dof%2Ddefun"></a><a name="DASH-1222"></a>— Command: <b>beginning-of-defun</b><var> &amp;optional arg<a name="index-beginning_002dof_002ddefun-2807"></a></var><br>
+<blockquote><p>This function moves back to the <var>arg</var>th beginning of a defun.  If
+<var>arg</var> is negative, this actually moves forward, but it still moves
+to the beginning of a defun, not to the end of one.  <var>arg</var> defaults
+to 1. 
+</p></blockquote></div>
+
+<div class="defun">
+<a class="dashAnchor" name="//apple_ref/Command/end%2Dof%2Ddefun"></a><a name="DASH-1223"></a>— Command: <b>end-of-defun</b><var> &amp;optional arg<a name="index-end_002dof_002ddefun-2808"></a></var><br>
+<blockquote><p>This function moves forward to the <var>arg</var>th end of a defun.  If
+<var>arg</var> is negative, this actually moves backward, but it still moves
+to the end of a defun, not to the beginning of one.  <var>arg</var> defaults
+to 1. 
+</p></blockquote></div>
+
+<div class="defun">
+<a class="dashAnchor" name="//apple_ref/Option/defun%2Dprompt%2Dregexp"></a><a name="DASH-1224"></a>— User Option: <b>defun-prompt-regexp</b><var><a name="index-defun_002dprompt_002dregexp-2809"></a></var><br>
+<blockquote><p>If non-<code>nil</code>, this buffer-local variable holds a regular
+expression that specifies what text can appear before the
+open-parenthesis that starts a defun.  That is to say, a defun begins
+on a line that starts with a match for this regular expression,
+followed by a character with open-parenthesis syntax. 
+</p></blockquote></div>
+
+<div class="defun">
+<a class="dashAnchor" name="//apple_ref/Option/open%2Dparen%2Din%2Dcolumn%2D0%2Dis%2Ddefun%2Dstart"></a><a name="DASH-1225"></a>— User Option: <b>open-paren-in-column-0-is-defun-start</b><var><a name="index-open_002dparen_002din_002dcolumn_002d0_002dis_002ddefun_002dstart-2810"></a></var><br>
+<blockquote><p>If this variable's value is non-<code>nil</code>, an open parenthesis in
+column 0 is considered to be the start of a defun.  If it is
+<code>nil</code>, an open parenthesis in column 0 has no special meaning. 
+The default is <code>t</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+<a class="dashAnchor" name="//apple_ref/Variable/beginning%2Dof%2Ddefun%2Dfunction"></a><a name="DASH-1226"></a>— Variable: <b>beginning-of-defun-function</b><var><a name="index-beginning_002dof_002ddefun_002dfunction-2811"></a></var><br>
+<blockquote><p>If non-<code>nil</code>, this variable holds a function for finding the
+beginning of a defun.  The function <code>beginning-of-defun</code>
+calls this function instead of using its normal method, passing it its
+optional argument.  If the argument is non-<code>nil</code>, the function
+should move back by that many functions, like
+<code>beginning-of-defun</code> does. 
+</p></blockquote></div>
+
+<div class="defun">
+<a class="dashAnchor" name="//apple_ref/Variable/end%2Dof%2Ddefun%2Dfunction"></a><a name="DASH-1227"></a>— Variable: <b>end-of-defun-function</b><var><a name="index-end_002dof_002ddefun_002dfunction-2812"></a></var><br>
+<blockquote><p>If non-<code>nil</code>, this variable holds a function for finding the end of
+a defun.  The function <code>end-of-defun</code> calls this function instead
+of using its normal method. 
+</p></blockquote></div>
+
+   
+
+</body></html>

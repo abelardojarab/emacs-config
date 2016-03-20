@@ -1,0 +1,124 @@
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rev="made" href="mailto:webmasters@gnu.org">
+<link rel="icon" type="image/png" href="/graphics/gnu-head-mini.png">
+<meta name="ICBM" content="42.256233,-71.006581">
+<meta name="DC.title" content="gnu.org">
+
+<title>Declare Form</title>
+<!--
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.4.
+
+Copyright (C) 1990--1996, 1998--2014 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<style type="text/css">
+@import url('/software/emacs/manual.css');
+</style>
+</head>
+<body>
+<div class="node" style="background-color:#DDDDFF">
+<a name="Declare-Form"></a>
+<p>
+Next:&nbsp;<a rel="next" accesskey="n" href="Declaring-Functions.html#Declaring-Functions">Declaring Functions</a>,
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Inline-Functions.html#Inline-Functions">Inline Functions</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Functions.html#Functions">Functions</a>
+
+</p></div>
+
+<h3 class="section">12.13 The <code>declare</code> Form</h3>
+
+<p><a name="index-declare-799"></a>
+  <code>declare</code> is a special macro which can be used to add “meta”
+properties to a function or macro: for example, marking it as
+obsolete, or giving its forms a special &lt;TAB&gt; indentation
+convention in Emacs Lisp mode.
+
+   </p><p><a name="Definition-of-declare"></a>
+
+</p><div class="defun">
+<a class="dashAnchor" name="//apple_ref/macro/declare"></a><a name="DASH-638"></a>— Macro: <b>declare</b><var> specs<small class="dots">...</small><a name="index-declare-800"></a></var><br>
+<blockquote><p>This macro ignores its arguments and evaluates to <code>nil</code>; it has
+no run-time effect.  However, when a <code>declare</code> form occurs in the
+<var>declare</var> argument of a <code>defun</code> or <code>defsubst</code> function
+definition (see <a href="Defining-Functions.html#Defining-Functions">Defining Functions</a>) or a <code>defmacro</code> macro
+definition (see <a href="Defining-Macros.html#Defining-Macros">Defining Macros</a>), it appends the properties
+specified by <var>specs</var> to the function or macro.  This work is
+specially performed by <code>defun</code>, <code>defsubst</code>, and
+<code>defmacro</code>.
+
+        </p><p>Each element in <var>specs</var> should have the form <code>(</code><var>property</var>
+<var>args</var><code>...)</code>, which should not be quoted.  These have the
+following effects:
+
+          </p><dl>
+<dt><code>(advertised-calling-convention </code><var>signature</var> <var>when</var><code>)</code></dt><dd>This acts like a call to <code>set-advertised-calling-convention</code>
+(see <a href="Obsolete-Functions.html#Obsolete-Functions">Obsolete Functions</a>); <var>signature</var> specifies the correct
+argument list for calling the function or macro, and <var>when</var> should
+be a string indicating when the old argument list was first made obsolete.
+
+          <br></dd><dt><code>(debug </code><var>edebug-form-spec</var><code>)</code></dt><dd>This is valid for macros only.  When stepping through the macro with
+Edebug, use <var>edebug-form-spec</var>.  See <a href="Instrumenting-Macro-Calls.html#Instrumenting-Macro-Calls">Instrumenting Macro Calls</a>.
+
+          <br></dd><dt><code>(doc-string </code><var>n</var><code>)</code></dt><dd>This is used when defining a function or macro which itself will be used to
+define entities like functions, macros, or variables.  It indicates that
+the <var>n</var>th argument, if any, should be considered
+as a documentation string.
+
+          <br></dd><dt><code>(indent </code><var>indent-spec</var><code>)</code></dt><dd>Indent calls to this function or macro according to <var>indent-spec</var>. 
+This is typically used for macros, though it works for functions too. 
+See <a href="Indenting-Macros.html#Indenting-Macros">Indenting Macros</a>.
+
+          <br></dd><dt><code>(obsolete </code><var>current-name</var> <var>when</var><code>)</code></dt><dd>Mark the function or macro as obsolete, similar to a call to
+<code>make-obsolete</code> (see <a href="Obsolete-Functions.html#Obsolete-Functions">Obsolete Functions</a>).  <var>current-name</var>
+should be a symbol (in which case the warning message says to use that
+instead), a string (specifying the warning message), or <code>nil</code> (in
+which case the warning message gives no extra details).  <var>when</var>
+should be a string indicating when the function or macro was first
+made obsolete.
+
+          <br></dd><dt><code>(compiler-macro </code><var>expander</var><code>)</code></dt><dd>This can only be used for functions, and tells the compiler to use
+<var>expander</var> as an optimization function.  When encountering a call to the
+function, of the form <code>(</code><var>function</var> <var>args</var><code>...)</code>, the macro
+expander will call <var>expander</var> with that form as well as with
+<var>args</var><small class="dots">...</small>, and <var>expander</var> can either return a new expression to use
+instead of the function call, or it can return just the form unchanged,
+to indicate that the function call should be left alone.  <var>expander</var> can
+be a symbol, or it can be a form <code>(lambda (</code><var>arg</var><code>) </code><var>body</var><code>)</code> in
+which case <var>arg</var> will hold the original function call expression, and the
+(unevaluated) arguments to the function can be accessed using the function's
+formal arguments.
+
+          <br></dd><dt><code>(gv-expander </code><var>expander</var><code>)</code></dt><dd>Declare <var>expander</var> to be the function to handle calls to the macro (or
+function) as a generalized variable, similarly to <code>gv-define-expander</code>. 
+<var>expander</var> can be a symbol or it can be of the form <code>(lambda
+(</code><var>arg</var><code>) </code><var>body</var><code>)</code> in which case that function will additionally have
+access to the macro (or function)'s arguments.
+
+          <br></dd><dt><code>(gv-setter </code><var>setter</var><code>)</code></dt><dd>Declare <var>setter</var> to be the function to handle calls to the macro (or
+function) as a generalized variable.  <var>setter</var> can be a symbol in which
+case it will be passed to <code>gv-define-simple-setter</code>, or it can be of the
+form <code>(lambda (</code><var>arg</var><code>) </code><var>body</var><code>)</code> in which case that function will
+additionally have access to the macro (or function)'s arguments and it will
+passed to <code>gv-define-setter</code>.
+
+        </dd></dl>
+
+        </blockquote></div>
+
+   
+
+</body></html>

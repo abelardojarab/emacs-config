@@ -1,0 +1,70 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+
+<html lang="en">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rev="made" href="mailto:webmasters@gnu.org">
+<link rel="icon" type="image/png" href="/graphics/gnu-head-mini.png">
+<meta name="ICBM" content="42.256233,-71.006581">
+<meta name="DC.title" content="gnu.org">
+
+<title>Excess Close</title>
+<!--
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.4.
+
+Copyright (C) 1990--1996, 1998--2014 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<style type="text/css">
+@import url('/software/emacs/manual.css');
+</style>
+</head>
+<body>
+<div class="node" style="background-color:#DDDDFF">
+<a name="Excess-Close"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Excess-Open.html#Excess-Open">Excess Open</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Syntax-Errors.html#Syntax-Errors">Syntax Errors</a>
+
+</div>
+
+<h4 class="subsection">17.3.2 Excess Close Parentheses</h4>
+
+<p>To deal with an excess close parenthesis, first go to the beginning
+of the file, then type <kbd>C-u -1 C-M-u</kbd> to find the end of the first
+unbalanced defun.
+
+   <p>Then find the actual matching close parenthesis by typing <kbd>C-M-f</kbd>
+at the beginning of that defun.  This will leave you somewhere short of
+the place where the defun ought to end.  It is possible that you will
+find a spurious close parenthesis in that vicinity.
+
+   <p>If you don't see a problem at that point, the next thing to do is to
+type <kbd>C-M-q</kbd> at the beginning of the defun.  A range of lines will
+probably shift left; if so, the missing open parenthesis or spurious
+close parenthesis is probably near the first of those lines.  (However,
+don't assume this is true; study the code to make sure.)  Once you have
+found the discrepancy, undo the <kbd>C-M-q</kbd> with <kbd>C-_</kbd>, since the
+old indentation is probably appropriate to the intended parentheses.
+
+   <p>After you think you have fixed the problem, use <kbd>C-M-q</kbd> again.  If
+the old indentation actually fits the intended nesting of parentheses,
+and you have put back those parentheses, <kbd>C-M-q</kbd> should not change
+anything.
+
+   </body></html>
+

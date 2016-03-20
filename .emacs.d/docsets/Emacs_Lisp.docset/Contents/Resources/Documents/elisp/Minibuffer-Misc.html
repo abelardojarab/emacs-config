@@ -1,0 +1,116 @@
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rev="made" href="mailto:webmasters@gnu.org">
+<link rel="icon" type="image/png" href="/graphics/gnu-head-mini.png">
+<meta name="ICBM" content="42.256233,-71.006581">
+<meta name="DC.title" content="gnu.org">
+
+<title>Minibuffer Misc</title>
+<!--
+This is the `GNU Emacs Lisp Reference Manual'
+corresponding to Emacs version 24.4.
+
+Copyright (C) 1990--1996, 1998--2014 Free Software Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with the Invariant Sections being ``GNU General Public
+     License,'' with the Front-Cover Texts being ``A GNU Manual,'' and
+     with the Back-Cover Texts as in (a) below.  A copy of the license
+     is included in the section entitled ``GNU Free Documentation
+     License.''
+
+     (a) The FSF's Back-Cover Text is: ``You have the freedom to copy
+     and modify this GNU manual.  Buying copies from the FSF supports
+     it in developing GNU and promoting software freedom.''
+   -->
+<style type="text/css">
+@import url('/software/emacs/manual.css');
+</style>
+</head>
+<body>
+<div class="node" style="background-color:#DDDDFF">
+<a name="Minibuffer-Misc"></a>
+<p>
+Previous:&nbsp;<a rel="previous" accesskey="p" href="Recursive-Mini.html#Recursive-Mini">Recursive Mini</a>,
+Up:&nbsp;<a rel="up" accesskey="u" href="Minibuffers.html#Minibuffers">Minibuffers</a>
+
+</p></div>
+
+<h3 class="section">19.14 Minibuffer Miscellany</h3>
+
+<div class="defun">
+<a class="dashAnchor" name="//apple_ref/func/minibufferp"></a><a name="DASH-1381"></a>— Function: <b>minibufferp</b><var> &amp;optional buffer-or-name<a name="index-minibufferp-1269"></a></var><br>
+<blockquote><p>This function returns non-<code>nil</code> if <var>buffer-or-name</var> is a
+minibuffer.  If <var>buffer-or-name</var> is omitted, it tests the current
+buffer. 
+</p></blockquote></div>
+
+<div class="defun">
+<a class="dashAnchor" name="//apple_ref/Variable/minibuffer%2Dsetup%2Dhook"></a><a name="DASH-1382"></a>— Variable: <b>minibuffer-setup-hook</b><var><a name="index-minibuffer_002dsetup_002dhook-1270"></a></var><br>
+<blockquote><p>This is a normal hook that is run whenever the minibuffer is entered. 
+See <a href="Hooks.html#Hooks">Hooks</a>. 
+</p></blockquote></div>
+
+<div class="defun">
+<a class="dashAnchor" name="//apple_ref/Variable/minibuffer%2Dexit%2Dhook"></a><a name="DASH-1383"></a>— Variable: <b>minibuffer-exit-hook</b><var><a name="index-minibuffer_002dexit_002dhook-1271"></a></var><br>
+<blockquote><p>This is a normal hook that is run whenever the minibuffer is exited. 
+See <a href="Hooks.html#Hooks">Hooks</a>. 
+</p></blockquote></div>
+
+<div class="defun">
+<a class="dashAnchor" name="//apple_ref/Variable/minibuffer%2Dhelp%2Dform"></a><a name="DASH-1384"></a>— Variable: <b>minibuffer-help-form</b><var><a name="index-minibuffer_002dhelp_002dform-1272"></a></var><br>
+<blockquote><p><a name="Definition-of-minibuffer_002dhelp_002dform"></a>The current value of this variable is used to rebind <code>help-form</code>
+locally inside the minibuffer (see <a href="Help-Functions.html#Help-Functions">Help Functions</a>). 
+</p></blockquote></div>
+
+<div class="defun">
+<a class="dashAnchor" name="//apple_ref/Variable/minibuffer%2Dscroll%2Dwindow"></a><a name="DASH-1385"></a>— Variable: <b>minibuffer-scroll-window</b><var><a name="index-minibuffer_002dscroll_002dwindow-1273"></a></var><br>
+<blockquote><p><a name="Definition-of-minibuffer_002dscroll_002dwindow"></a>If the value of this variable is non-<code>nil</code>, it should be a window
+object.  When the function <code>scroll-other-window</code> is called in the
+minibuffer, it scrolls this window. 
+</p></blockquote></div>
+
+<div class="defun">
+<a class="dashAnchor" name="//apple_ref/func/minibuffer%2Dselected%2Dwindow"></a><a name="DASH-1386"></a>— Function: <b>minibuffer-selected-window</b><var><a name="index-minibuffer_002dselected_002dwindow-1274"></a></var><br>
+<blockquote><p>This function returns the window that was selected when the
+minibuffer was entered.  If selected window is not a minibuffer
+window, it returns <code>nil</code>. 
+</p></blockquote></div>
+
+<div class="defun">
+<a class="dashAnchor" name="//apple_ref/Option/max%2Dmini%2Dwindow%2Dheight"></a><a name="DASH-1387"></a>— User Option: <b>max-mini-window-height</b><var><a name="index-max_002dmini_002dwindow_002dheight-1275"></a></var><br>
+<blockquote><p>This variable specifies the maximum height for resizing minibuffer
+windows.  If a float, it specifies a fraction of the height of the
+frame.  If an integer, it specifies a number of lines. 
+</p></blockquote></div>
+
+   <p><a name="index-minibuffer_002dmessage_002dtimeout-1276"></a>
+
+</p><div class="defun">
+<a class="dashAnchor" name="//apple_ref/func/minibuffer%2Dmessage"></a><a name="DASH-1388"></a>— Function: <b>minibuffer-message</b><var> string &amp;rest args<a name="index-minibuffer_002dmessage-1277"></a></var><br>
+<blockquote><p>This function displays <var>string</var> temporarily at the end of the
+minibuffer text, for a few seconds, or until the next input event
+arrives, whichever comes first.  The variable
+<code>minibuffer-message-timeout</code> specifies the number of seconds to
+wait in the absence of input.  It defaults to 2.  If <var>args</var> is
+non-<code>nil</code>, the actual message is obtained by passing <var>string</var>
+and <var>args</var> through <code>format</code>.  See <a href="Formatting-Strings.html#Formatting-Strings">Formatting Strings</a>. 
+</p></blockquote></div>
+
+<div class="defun">
+<a class="dashAnchor" name="//apple_ref/Command/minibuffer%2Dinactive%2Dmode"></a><a name="DASH-1389"></a>— Command: <b>minibuffer-inactive-mode</b><var><a name="index-minibuffer_002dinactive_002dmode-1278"></a></var><br>
+<blockquote><p>This is the major mode used in inactive minibuffers.  It uses
+keymap <code>minibuffer-inactive-mode-map</code>.  This can be useful
+if the minibuffer is in a separate frame.  See <a href="Minibuffers-and-Frames.html#Minibuffers-and-Frames">Minibuffers and Frames</a>. 
+</p></blockquote></div>
+   <!-- *-texinfo-*- -->
+<!-- This is part of the GNU Emacs Lisp Reference Manual. -->
+<!-- Copyright (C) 1990-1995, 1998-1999, 2001-2014 Free Software -->
+<!-- Foundation, Inc. -->
+<!-- See the file elisp.texi for copying conditions. -->
+
+   
+
+</body></html>
