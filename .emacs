@@ -88,6 +88,9 @@
 ;; Setup general
 (require 'setup-general)
 
+;; Setup abbrev
+(require 'setup-dabbrev)
+
 ;; Setup files
 (require 'setup-file)
 

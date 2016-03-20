@@ -30,8 +30,8 @@
   :load-path (lambda () (expand-file-name "exec-path-from-shell/" user-emacs-directory))
   :config (progn
             (setq exec-path-from-shell-check-startup-files nil)
-	    ;; (exec-path-from-shell-initialize)
-	))
+        ;; (exec-path-from-shell-initialize)
+    ))
 
 ;; Popup, used by auto-complete and other tools
 (use-package popup
@@ -97,26 +97,6 @@
 ;; Multiple cursors
 (use-package multiple-cursors
   :load-path (lambda () (expand-file-name "multiple-cursors/" user-emacs-directory)))
-
-;; Abbrevs
-(use-package abbrev
-  :diminish abbrev-mode
-  :init (progn
-          (setq abbrev-file-name "~/.emacs.cache/abbrev_defs")
-          (if (file-exists-p abbrev-file-name)
-              (quietly-read-abbrev-file))
-          (add-hook 'kill-emacs-hook
-                    'write-abbrev-file))
-
-  :config (progn
-            ;; Activate template autocompletion
-            (abbrev-mode t)
-            (setq save-abbrevs t)
-            (dolist (hook '(prog-mode-hook
-                            markdown-mode-hook
-                            org-mode-hook
-                            text-mode-hook))
-              (add-hook hook (lambda () (abbrev-mode 1))))))
 
 ;; log4e
 (use-package log4e
