@@ -81,7 +81,7 @@
             (setq helm-swoop-split-with-multiple-windows nil)
 
             ;; Split direcion. 'split-window-vertically or 'split-window-horizontally
-            (setq helm-swoop-split-direction 'split-window-vertically)
+            (setq helm-swoop-split-direction 'split-window-horizontally)
 
             ;; If nil, you can slightly boost invoke speed in exchange for text color
             (setq helm-swoop-speed-or-color nil)
