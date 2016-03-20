@@ -25,7 +25,9 @@
 ;;; Code:
 
 ;; garbage collection
-(setq gc-cons-threshold 256000000)
+(setq-default ;; alloc.c
+ gc-cons-threshold (* 20 1204 1204)
+ gc-cons-percentage 0.5)
 
 ;; ignore byte-compile warnings
 (setq byte-compile-warnings nil)

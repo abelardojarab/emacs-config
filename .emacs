@@ -247,6 +247,12 @@
 ;; Setup helm plugin
 (require 'setup-helm-plugins)
 
+;; Setup projectile
+(require 'setup-projectile)
+
+;; Setup dired
+(require 'setup-dired)
+
 ;; Setup post
 (require 'setup-post)
 
