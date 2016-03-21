@@ -33,8 +33,7 @@
             (setq projectile-require-project-root nil)
             (setq projectile-completion-system 'helm)
             (add-to-list 'projectile-globally-ignored-files ".DS_Store")
-            (projectile-global-mode 1)
-            ))
+            (projectile-global-mode 1)))
 
 (provide 'setup-projectile)
 ;;; setup-projectile.el ends here
