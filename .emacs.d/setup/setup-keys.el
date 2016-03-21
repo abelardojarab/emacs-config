@@ -100,9 +100,9 @@
 (use-package smart-tab
   :load-path (lambda () (expand-file-name "smart-tab/" user-emacs-directory))
   :config (progn
-			(cons 'yas-hippie-try-expand 'hippie-expand-try-functions-list)
-			(setq smart-tab-using-hippie-expand t)
-			(global-smart-tab-mode)))
+            (cons 'yas-hippie-try-expand 'hippie-expand-try-functions-list)
+            (setq smart-tab-using-hippie-expand t)
+            (global-smart-tab-mode)))
 
 ;; Fix tab problem in some modes that grab the tab key so auto-complete and yasnipet dont work
 (defun ac-tab-noconflict ()
@@ -395,13 +395,13 @@
 (use-package region-bindings-mode
   :load-path (lambda () (expand-file-name "region-bindings-mode/" user-emacs-directory))
   :config (progn
-			(region-bindings-mode-enable)
-			(define-key region-bindings-mode-map (kbd "C-p") 'mc/mark-previous-like-this)
-			(define-key region-bindings-mode-map (kbd "C-n") 'mc/mark-next-like-this)
-			(define-key region-bindings-mode-map (kbd "C-a") 'mc/mark-all-like-this)
-			(define-key region-bindings-mode-map (kbd "C-e") 'mc/edit-lines)
-			(define-key region-bindings-mode-map (kbd "C-c") 'kill-ring-save)
-			(define-key region-bindings-mode-map (kbd "C-x") 'kill-region)))
+            (region-bindings-mode-enable)
+            (define-key region-bindings-mode-map (kbd "C-p") 'mc/mark-previous-like-this)
+            (define-key region-bindings-mode-map (kbd "C-n") 'mc/mark-next-like-this)
+            (define-key region-bindings-mode-map (kbd "C-a") 'mc/mark-all-like-this)
+            (define-key region-bindings-mode-map (kbd "C-e") 'mc/edit-lines)
+            (define-key region-bindings-mode-map (kbd "C-c") 'kill-ring-save)
+            (define-key region-bindings-mode-map (kbd "C-x") 'kill-region)))
 
 ;; Move text
 (require 'move-text)

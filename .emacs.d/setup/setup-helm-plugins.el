@@ -57,6 +57,14 @@
 (use-package helm-etags+
   :load-path (lambda () (expand-file-name "helm-etags-plus/" user-emacs-directory)))
 
+;; Helm yasnippet
+(use-package helm-c-yasnippet
+  :load-path (lambda () (expand-file-name "helm-c-yasnippet/" user-emacs-directory))
+  :config (progn
+            (setq helm-yas-space-match-any-greedy t)
+            (bind-keys :map ctl-x-map
+                       ("y" . helm-yas-complete))))
+
 ;; Helm make support
 (use-package helm-make
   :load-path (lambda () (expand-file-name "helm-make/" user-emacs-directory)))
