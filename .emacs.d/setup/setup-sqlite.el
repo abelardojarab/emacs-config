@@ -29,7 +29,6 @@
   :load-path (lambda () (expand-file-name "pcsv/" user-emacs-directory)))
 
 (use-package esqlite
-  :defer t
   :load-path (lambda () (expand-file-name "esqlite/" user-emacs-directory)))
 
 (provide 'setup-sqlite)
