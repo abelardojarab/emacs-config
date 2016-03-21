@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: (function(exports) {
+# --
+(function(exports) {
+
+  $0
+
+})(window.$1 = {});

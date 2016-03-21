@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: var ... = function(...) {
+# --
+var ${1:name} = function(${2:args}) {
+  $0
+};
