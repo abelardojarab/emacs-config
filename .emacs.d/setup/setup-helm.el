@@ -38,7 +38,7 @@
             (bind-keys :map ctl-x-map
                        ("x" . helm-M-x)
                        ("a" . helm-apropos)
-                       ("m" . helm-semantic-or-imenu)
+                       ("n" . helm-semantic-or-imenu)
                        ("u" . helm-resume)
                        ("b" . helm-buffers-list)
                        ("f" . helm-find-files)

@@ -24,6 +24,14 @@
 
 ;;; Code:
 
+;; Helm desc-binds
+(use-package helm-descbinds
+  :load-path (lambda () (expand-file-name "helm-descbinds/" user-emacs-directory))
+  :config (progn
+            (helm-descbinds-mode 1)
+            (bind-keys :map ctl-x-map
+                       ("i" . helm-descbinds))))
+
 ;; Helm flycheck
 (use-package helm-flycheck
   :load-path (lambda () (expand-file-name "helm-flycheck/" user-emacs-directory))
