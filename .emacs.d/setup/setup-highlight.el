@@ -40,10 +40,11 @@
 ;; Highlight the line
 (use-package hl-line
   :config (progn
+            (global-hl-line-mode t)
             (defun local-hl-line-mode-off ()
               (interactive)
               (make-local-variable 'global-hl-line-mode)
-              (setq global-hl-line-mode t))
+              (setq global-hl-line-mode nil))
 
             ;; hl-line overrides the background of hi-lock’ed text, this will provide a fix
             (defadvice hi-lock-set-pattern (around use-overlays activate)

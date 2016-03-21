@@ -64,6 +64,22 @@
 (add-to-list 'load-path (expand-file-name "zerodark-theme/" user-emacs-directory))
 (add-to-list 'custom-theme-load-path (expand-file-name "zerodark-theme/" user-emacs-directory))
 
+;; E-Ink theme
+(add-to-list 'load-path (expand-file-name "eink-emacs/" user-emacs-directory))
+(add-to-list 'custom-theme-load-path (expand-file-name "eink-emacs/" user-emacs-directory))
+
+;; Twilight bright theme
+(add-to-list 'load-path (expand-file-name "twilight-bright-theme/" user-emacs-directory))
+(add-to-list 'custom-theme-load-path (expand-file-name "twilight-bright-theme/" user-emacs-directory))
+
+;; Plan9 theme
+(add-to-list 'load-path (expand-file-name "plan9-theme/" user-emacs-directory))
+(add-to-list 'custom-theme-load-path (expand-file-name "plan9-theme/" user-emacs-directory))
+
+;; Minimal theme
+(add-to-list 'load-path (expand-file-name "minimal-theme/" user-emacs-directory))
+(add-to-list 'custom-theme-load-path (expand-file-name "minimal-theme/" user-emacs-directory))
+
 ;; Solarized theme
 (add-to-list 'load-path (expand-file-name "solarized-emacs/" user-emacs-directory))
 (add-to-list 'custom-theme-load-path (expand-file-name "solarized-emacs" user-emacs-directory))
@@ -78,7 +94,11 @@
 ;; (load-theme 'material t)
 ;; (load-theme 'FlatUI t)
 ;; (load-theme 'faff t)
-(load-theme 'monokai t)
+;; (load-theme 'twilight-brigh)
+;; (load-theme 'plan9)
+;; (load-theme 'minimal-light) ;; best ink theme
+(load-theme 'monokai t) ;; best dark color scheme
+;; (load-theme 'eink)
 ;; (load-theme 'monokai-extended t)
 ;; (load-theme 'pastelmac t)
 ;; (load-theme 'solarized-dark t)
