@@ -31,6 +31,24 @@
           (setq stack-trace-on-error t)
           (setq after-find-file-from-revert-buffer t))
   :config (progn
+            ;; Integration of Projectile with ECB
+            (defvar default-ecb-source-path (list '("~/Documents/workspace" "Workspace")
+                                                  '("~/workspace/Documents" "Documents")
+                                                  '("~/workspace" "workspace")
+                                                  '("~/" "~/")
+                                                  '("/" "/")))
+
+            (add-hook 'ecb-basic-buffer-sync-hook
+                      (lambda ()
+                        (when (functionp 'projectile-get-project-directories)
+                          (when (projectile-project-p)
+                            (dolist (path-dir (projectile-get-project-directories))
+                              (unless (member (list path-dir path-dir) default-ecb-source-path)
+                                (push (list path-dir path-dir) default-ecb-source-path)
+                                (customize-set-variable 'ecb-source-path default-ecb-source-path)
+                                ))))))
+
+            ;; ECB setup
             (setq ecb-show-sources-in-directories-buffer 'always)
             (setq ecb-tip-of-the-day nil)
             (if (ecb--semantic-active-p)
@@ -60,7 +78,6 @@
 
             ;; Keep line truncation
             (setq ecb-truncate-lines t)
-
             (add-hook 'ecb-show-ecb-windows-before-hook
                       'ecb-enlarge-frame-width-before-show)
             (add-hook 'ecb-hide-ecb-windows-before-hook
