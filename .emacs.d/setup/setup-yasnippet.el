@@ -33,6 +33,9 @@
                   '("~/.emacs.d/snippets"))
             (setq yas-snippet-dirs (cons (expand-file-name "snippets" user-emacs-directory)
                                          (yas-snippet-dirs)))
+            (setq yas-snippet-dirs (cons (expand-file-name "snippets-extra" user-emacs-directory)
+                                         (yas-snippet-dirs)))
+
             (yas-initialize)
             (yas-global-mode 1)
 

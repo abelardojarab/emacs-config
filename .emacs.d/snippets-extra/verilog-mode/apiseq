@@ -1,0 +1,33 @@
+# name: TBNG API Seqence
+# key: tbng
+# group: tbng
+# --
+/*! \class $1_$2_seq_c
+ *  \brief 
+ *  \ingroup $1_sequence
+ */
+class $1_${2:Seq}_seq_c extends ${1:Agent}_seq_base_c;
+
+  /*! Register class with the factor */
+  `uvm_object_utils($1_$2_seq_c)
+
+  /*! Constructs a new $1_$2_seq_c instance.
+   *
+   * \param name sequence name
+   */
+  function new(string name = "$1_$2_write_seq_c");
+     super.new(name);
+  endfunction : new
+
+  /*! Body description 
+   */
+  task body();
+     req = $1_item_c::type_id::create("req");
+
+     start_item(req);
+     $0
+     finish_item(req);
+     get_response(rsp);
+   endtask : body
+
+endclass : $1_$2_seq_c

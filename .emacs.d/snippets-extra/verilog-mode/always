@@ -1,0 +1,11 @@
+# name: always @()
+# key: always
+# group: verilog
+# --
+always @(posedge ${1:CLOCK} or negedge ${2:RESETn}) begin
+   if (~$2) begin
+      $0
+   end else begin
+  
+   end
+end

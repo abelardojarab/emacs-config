@@ -1,0 +1,9 @@
+# name: enum
+# key: enum
+# group: verilog
+# --
+/*! Description */
+typedef enum ${2:Type} {
+   ${3:Value} = $0;  //!< Value Description
+} ${1:Name};
+

@@ -1,0 +1,28 @@
+# name: TBNG Virtual Sequence
+# key: tbng
+# group: tbng
+# --
+/*! \class $1_seq_c
+ *  \brief 
+ */
+class ${1:SequenceName}_seq_c extends virtual_sequence_c;
+
+   /*! Register class with the factory */
+   `uvm_object_utils($1_seq_c);
+
+   const string report_id = "${1:$(upcase text)}_SEQ"; //!< Default id for messaging
+   
+   /*! Constructs a new $1_seq_c instance.
+    *
+    * \param name sequence name
+    */
+   function new(string name = "$1_seq_c");
+      super.new(name);
+   endfunction : new
+
+   task body();
+      $0
+   endtask : body
+
+endclass : $1_seq_c
+

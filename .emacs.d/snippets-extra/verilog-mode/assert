@@ -1,0 +1,9 @@
+# name: assert
+# key: assert
+# group: verilog
+# --
+property ${1:PropertyName};
+   @(posedge ${2:CLK}) $0/* condition |=> value*/ ;
+endproperty
+
+assert_$1: assert property ($1);

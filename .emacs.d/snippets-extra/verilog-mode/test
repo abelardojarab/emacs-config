@@ -1,0 +1,55 @@
+# name: TBNG Test
+# key: tbng
+# group: tbng
+# --
+/*! \class ${1:TestName}
+ *  \brief Provide a description of the test here
+ *
+ *  Provide a more detailed description here
+ */
+class $1 extends test_base_c;
+
+   const string report_id = "${1:$(upcase text)}_SEQ"; //!< Default id for messaging
+   
+   /*! Register class with the factory */
+   `uvm_component_utils($1);
+
+   /*! Create a new instance
+    *
+    * \param name Name of the test
+    * \param parent Parent component
+    */
+   function new(string name = "$BASE$", uvm_component parent = null);
+      super.new(name, parent);
+   endfunction : new
+
+   /*! Sets the config values
+    */
+   function void set_config_values();
+      super.set_config_values();
+
+      // Set config variables here
+      // m_ebi_cfg_h.enable_monitor_recording = 0;
+      // m_ebi_cfg_h.has_scoreboard = 0;
+      // m_uart_cfg_h.enable_monitor_recording = 0;
+
+      // Set simulation timeout to the 
+      set_global_timeout(200us);
+      
+   endfunction : set_config_values
+   
+   /*! Run the test
+    */
+   task main_phase(uvm_phase phase);
+
+      phase.raise_objection(this);
+
+      // Write test here
+      $0
+
+      phase.drop_objection(this); 
+   endtask : run
+   
+endclass : $1
+
+/*!@}*/

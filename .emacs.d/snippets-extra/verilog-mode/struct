@@ -1,0 +1,9 @@
+# name: struct
+# key: struct
+# group: verilog
+# --
+/*! Typedef Description */
+typedef struct {
+    $0;    //!< Field Description
+} ${1:Name};
+

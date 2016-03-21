@@ -1,0 +1,11 @@
+# name: fork/join_any
+# key: fork
+# group: verilog
+# --
+fork
+   begin : ${1:label_1}
+      $0
+   end
+   begin : ${2:label_2}
+   end
+join_any

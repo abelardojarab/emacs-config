@@ -1,0 +1,7 @@
+# name: union
+# key: union
+# group: verilog
+# --
+typedef union {
+   $0
+} ${1:name_u};

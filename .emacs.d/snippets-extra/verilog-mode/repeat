@@ -1,0 +1,7 @@
+# name: repeat
+# key: repeat
+# group: verilog
+# --
+repeat (${1:Condition}) begin
+   $0
+end

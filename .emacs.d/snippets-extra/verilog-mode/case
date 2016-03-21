@@ -1,0 +1,13 @@
+# name: case
+# key: case
+# group: verilog
+# --
+case (${1:Expression}) 
+   ${2:Condition}: 
+      begin
+         $0
+      end
+   default:
+      begin
+      end 
+endcase

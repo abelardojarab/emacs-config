@@ -1,0 +1,13 @@
+# name: function
+# key: func
+# group: verilog
+# --
+/*! Function Description
+ *
+ *  \param <name> <description>
+ *
+ *  \return <return value description>
+ */
+function ${2:Type} ${1:Name}();
+   $0
+endfunction : $1
