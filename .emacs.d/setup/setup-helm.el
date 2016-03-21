@@ -41,7 +41,6 @@
                        ("m" . helm-semantic-or-imenu)
                        ("u" . helm-resume)
                        ("b" . helm-buffers-list)
-                       ("d" . helm-descbinds)
                        ("f" . helm-find-files)
                        ("r" . helm-recentf))))
 

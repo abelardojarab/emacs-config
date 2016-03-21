@@ -29,7 +29,7 @@
   :load-path (lambda () (expand-file-name "helm-flycheck/" user-emacs-directory))
   :config (progn
             (bind-keys :map ctl-x-map
-                       ("k" . helm-flycheck))))
+                       ("c" . helm-flycheck))))
 
 ;; Helm ls git
 (use-package helm-ls-git
@@ -45,17 +45,19 @@
             (bind-keys :map ctl-x-map
                        ("b" . helm-bookmarks))))
 
-;; Helm themes
-(use-package helm-themes
-  :load-path (lambda () (expand-file-name "helm-themes/" user-emacs-directory)))
-
 ;; Helm flyspell
 (use-package helm-flyspell
-  :load-path (lambda () (expand-file-name "helm-flyspell/" user-emacs-directory)))
+  :load-path (lambda () (expand-file-name "helm-flyspell/" user-emacs-directory))
+  :config (progn
+            (bind-keys :map ctl-x-map
+                       ("s" . helm-flyspell-correct))))
 
 ;; Helm etags plus
 (use-package helm-etags+
-  :load-path (lambda () (expand-file-name "helm-etags-plus/" user-emacs-directory)))
+  :load-path (lambda () (expand-file-name "helm-etags-plus/" user-emacs-directory))
+  :config (progn
+            (bind-keys :map ctl-x-map
+                       ("t" . helm-etags-select))))
 
 ;; Helm yasnippet
 (use-package helm-c-yasnippet
@@ -67,7 +69,14 @@
 
 ;; Helm make support
 (use-package helm-make
-  :load-path (lambda () (expand-file-name "helm-make/" user-emacs-directory)))
+  :load-path (lambda () (expand-file-name "helm-make/" user-emacs-directory))
+  :config (progn
+            (bind-keys :map ctl-x-map
+                       ("m" . helm-etags-select))))
+
+;; Helm themes
+(use-package helm-themes
+  :load-path (lambda () (expand-file-name "helm-themes/" user-emacs-directory)))
 
 ;; Helm swoop
 (use-package helm-swoop
@@ -105,6 +114,9 @@
 (use-package helm-dash
   :load-path (lambda () (expand-file-name "helm-dash/" user-emacs-directory))
   :config (progn
+            (bind-keys :map ctl-x-map
+                       ("d" . helm-dash))
+
             (setq helm-dash-enable-debugging nil)
             (setq helm-dash-min-length 2)
             (setq helm-dash-docsets-path (expand-file-name "docsets/" user-emacs-directory))
