@@ -76,18 +76,17 @@
                    ;; For jumping to standard headers:
                    '(".*\\.\\([ch]\\|cpp\\)" (expand-file-name "~/.emacs.cache/TAGS"))
                    ))
-            (setq etags-table-search-up-depth 1) ;; Max depth to search up for a tags file.  nil means don't search.
+            (setq etags-table-search-up-depth 2) ;; Max depth to search up for a tags file.  nil means don't search.
 
             ;; Below function comes useful when you change the project-root
             ;; symbol to a different value (when switching projects)
-            (defun modi/update-etags-table ()
+            (defun update-etags-table ()
               "Update `etags-table-alist' based on the current project directory."
               (interactive)
-              (when (featurep 'projectile)
-                (add-to-list 'etags-table-alist
-                             `(,(concat (projectile-project-root) ".*")
-                               ,(concat (projectile-project-root) "TAGS"))
-                             t)))))
+              (add-to-list 'etags-table-alist
+                           `(,(concat (projectile-project-root) ".*")
+                             ,(concat (projectile-project-root) "TAGS"))
+                           t))))
 
 ;; Ctags
 (use-package ctags
