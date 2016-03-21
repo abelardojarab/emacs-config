@@ -229,6 +229,9 @@
 ;; Setup R/ess
 (require 'setup-ess)
 
+;; Setup sqlite
+(require 'setup-sqlite)
+
 ;; Setup markdown
 (require 'setup-markdown)
 
