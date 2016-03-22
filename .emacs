@@ -44,17 +44,13 @@
  '(cua-enable-cua-keys nil)
  '(custom-safe-themes
    (quote
-    ("a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e" "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" "756597b162f1be60a12dbd52bab71d40d6a2845a3e3c2584c6573ee9c332a66e" "96ec5305ec9f275f61c25341363081df286d616a27a69904a35c9309cfa0fe1b" "6a37be365d1d95fad2f4d185e51928c789ef7a4ccf17e7ca13ad63a8bf5b922f" "fb4bf07618eab33c89d72ddc238d3c30918a501cf7f086f2edf8f4edba9bd59f" default)))
+    ("a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e"
+     "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa"
+     "756597b162f1be60a12dbd52bab71d40d6a2845a3e3c2584c6573ee9c332a66e"
+     "96ec5305ec9f275f61c25341363081df286d616a27a69904a35c9309cfa0fe1b"
+     "6a37be365d1d95fad2f4d185e51928c789ef7a4ccf17e7ca13ad63a8bf5b922f"
+     "fb4bf07618eab33c89d72ddc238d3c30918a501cf7f086f2edf8f4edba9bd59f" default)))
  '(ecb-options-version "2.40")
- '(ecb-source-path
-   (quote
-    (("/nfs/pdx/disks/ch_icf_fdk_rv_003/ajaraber/workspace/emacsfull/" "/nfs/pdx/disks/ch_icf_fdk_rv_003/ajaraber/workspace/emacsfull/")
-     ("/nfs/pdx/home/ajaraber/" "/nfs/pdx/home/ajaraber/")
-     ("~/Documents/workspace" "Workspace")
-     ("~/workspace/Documents" "Documents")
-     ("~/workspace" "workspace")
-     ("~/" "~/")
-     ("/" "/"))))
  '(ede-locate-setup-options (quote (ede-locate-global ede-locate-locate)))
  '(ede-project-directories (quote ("~/workspace")))
  '(ergoemacs-ctl-c-or-ctl-x-delay 0.2)
