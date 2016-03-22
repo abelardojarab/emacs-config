@@ -24,11 +24,22 @@
 
 ;;; Code:
 
-;; Images
+;; Manipulate images using ImageMagick
 (use-package image+
+  :if (executable-find "convert")
   :load-path (lambda () (expand-file-name "image+/" user-emacs-directory))
   :init (require 'image)
   :config (progn
+            (imagex-global-sticky-mode 1)
+            (imagex-auto-adjust-mode 1)
+            (setq imagex-quiet-error t)))
+
+;; Integrating graphics with text inside Emacs
+(use-package iimage
+  :config (progn
+            (add-to-list 'iimage-mode-image-regex-alist '("@startuml\s+\\(.+\\)" . 1))
+            (add-to-list 'iimage-mode-image-regex-alist (cons (concat "\[\[file:\(~?" iimage-mode-image-filename-regex "\)\]") 1))
+
             ;; Insert images from files like this:
             ;; #+BEGIN: image :file "~/Documents/personal/foo.png"
             ;; #+END
@@ -70,16 +81,6 @@ a link to this file."
                   ) ;; if
                 (insert (concat "[[file:" filename "]]"))
                 (org-display-inline-images)))
-
-            (imagex-global-sticky-mode 1)
-            (imagex-auto-adjust-mode 1)
-            (setq imagex-quiet-error t)))
-
-;; Showing images
-(use-package iimage
-  :config (progn
-            (add-to-list 'iimage-mode-image-regex-alist '("@startuml\s+\\(.+\\)" . 1))
-            (add-to-list 'iimage-mode-image-regex-alist (cons (concat "\[\[file:\(~?" iimage-mode-image-filename-regex "\)\]") 1))
 
             ;; Function to setup images for display on load
             (defun org-turn-on-iimage-in-org ()
