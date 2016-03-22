@@ -31,17 +31,10 @@
   :ensure nil
   :load-path (lambda () (expand-file-name "ergoemacs-mode/" user-emacs-directory))
   :init (progn
-          (setq ergoemacs-ctl-c-or-ctl-x-delay 0.2
-                ergoemacs-handle-ctl-c-or-ctl-x (quote both)
-                ergoemacs-ini-mode t
-                ergoemacs-mode nil
-                ergoemacs-smart-paste nil
-                ergoemacs-theme "standard"
-                ergoemacs-theme-options nil
-                ergoemacs-use-menus t
+          (setq ergoemacs-theme nil
                 ergoemacs-keyboard-layout "us"
-                ergoemacs-ignore-prev-global nil)
-          :config (ergoemacs-mode)))
+                ergoemacs-ignore-prev-global nil))
+  :config (ergoemacs-mode))
 
 (provide 'setup-ergoemacs)
 ;;; setup-ergoemacs.el ends here
