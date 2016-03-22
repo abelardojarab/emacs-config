@@ -41,20 +41,20 @@
   :config (progn
             (setq popup-use-optimized-column-computation t)))
 
-;; Fix indent guide issue
-;; (defvar sanityinc/indent-guide-mode-suppressed nil)
-;; (defadvice popup-create (before indent-guide-mode activate)
-;;   "Suspend indent-guide-mode while popups are visible"
-;;   (let ((indent-guide-enabled (and (boundp 'indent-guide-mode) indent-guide-mode)))
-;;     (set (make-local-variable 'sanityinc/indent-guide-mode-suppressed) indent-guide-mode)
-;;     (when indent-guide-enabled
-;;       (indent-guide-mode nil))))
-;; (defadvice popup-delete (after indent-guide-mode activate)
-;;   "Restore indent-guide-mode when all popups have closed"
-;;   (let ((indent-guide-enabled (and (boundp 'indent-guide-mode) indent-guide-mode)))
-;;     (when (and (not popup-instances) sanityinc/indent-guide-mode-suppressed)
-;;       (setq sanityinc/indent-guide-mode-suppressed nil)
-;;       (indent-guide-mode 1))))
+;; Fix indent guide issue with column-number
+(defvar sanityinc/column-number-mode-suppressed nil)
+(defadvice popup-create (before column-number-mode activate)
+  "Suspend column-number-mode while popups are visible"
+  (let ((column-number-enabled (and (boundp 'column-number-mode) column-number-mode)))
+    (set (make-local-variable 'sanityinc/column-number-mode-suppressed) column-number-mode)
+    (when column-number-enabled
+      (column-number-mode nil))))
+(defadvice popup-delete (after column-number-mode activate)
+  "Restore column-number-mode when all popups have closed"
+  (let ((column-number-enabled (and (boundp 'column-number-mode) column-number-mode)))
+    (when (and (not popup-instances) sanityinc/column-number-mode-suppressed)
+      (setq sanityinc/column-number-mode-suppressed nil)
+      (column-number-mode 1))))
 
 ;; Pos-tip library
 (use-package pos-tip

@@ -182,6 +182,20 @@
   :load-path (lambda () (expand-file-name "org-ac/" user-emacs-directory))
   :config (org-ac/config-default))
 
+;; ispell auto-complete for Org
+(use-package ac-ispell
+  :load-path (lambda () (expand-file-name "ac-ispell/" user-emacs-directory))
+  :if (executable-find "aspell")
+  :init (progn
+          (setq ac-ispell-requires 4
+                ac-ispell-fuzzy-limit 0))
+  :config (progn
+            (ac-ispell-setup)
+            (add-hook 'markdown-mode-hook 'ac-ispell-ac-setup)
+            (add-hook 'org-mode-hook 'ac-ispell-ac-setup)
+            (add-hook 'git-commit-mode-hook 'ac-ispell-ac-setup)
+            (add-hook 'mail-mode-hook 'ac-ispell-ac-setup)))
+
 ;; Tips for auto-complete
 (use-package popup-pos-tip
   :config (progn
