@@ -31,22 +31,6 @@
           (setq stack-trace-on-error t)
           (setq after-find-file-from-revert-buffer t))
   :config (progn
-            ;; Integration of Projectile with ECB
-            (defvar default-ecb-source-path (list '("~/Documents/workspace" "workspace")
-                                                  '("~/workspace/Documents" "Documents")
-                                                  '("~/workspace/emacsfull" "emacsfull")
-                                                  '("~/workspace" "Workspace")
-                                                  '("~/" "Home")))
-
-            (add-hook 'ecb-basic-buffer-sync-hook
-                      (lambda ()
-                        (when (functionp 'projectile-get-project-directories)
-                          (when (projectile-project-p)
-                            (dolist (path-dir (projectile-get-project-directories))
-                              (unless (member (list path-dir path-dir) default-ecb-source-path)
-                                (push (list path-dir path-dir) default-ecb-source-path)
-                                ;; (customize-set-variable 'ecb-source-path default-ecb-source-path)
-                                ))))))
 
             ;; ECB setup
             (setq ecb-show-sources-in-directories-buffer 'always)
