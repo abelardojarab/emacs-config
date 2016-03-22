@@ -29,6 +29,11 @@
  gc-cons-threshold (* 20 1204 1204)
  gc-cons-percentage 0.5)
 
+;; Improve Emacs performance
+(if (boundp 'max-specpdl-size)
+    (setq max-specpdl-size (* max-specpdl-size 15)
+          max-lisp-eval-depth (* max-lisp-eval-depth 30)))
+
 ;; ignore byte-compile warnings
 (setq byte-compile-warnings nil)
 
@@ -221,11 +226,11 @@
 ;; Set indent to 4 instead of 2
 (setq standard-indent 4)
 
-;; Use spaces instead of tab, has to be setq-default
-(setq-default indent-tabs-mode nil)
-
-;; Set tab width, again has to be setq-default
-(setq-default default-tab-width 4)
+;; My personal configurations, has to use setq-default
+(setq-default indent-tabs-mode nil
+              default-tab-width 4
+              tab-width 4
+              c-basic-offset 4)
 
 ;; auto-indent pasted code
 (defadvice yank (after indent-region activate)
