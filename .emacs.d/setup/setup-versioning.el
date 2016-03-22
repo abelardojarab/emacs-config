@@ -48,12 +48,15 @@
 ;; psvn
 (use-package psvn
   :config (progn
-			(setq svn-status-hide-unmodified t)
-			(setq svn-status-hide-unknown t)
-			(setq svn-status-svn-file-coding-system 'utf-8)))
+            (setq svn-status-hide-unmodified t)
+            (setq svn-status-hide-unknown t)
+            (setq svn-status-svn-file-coding-system 'utf-8)))
 
 ;; magit
 (use-package magit
+  :bind (("C-c g" . magit-status)
+         :map ctl-x-map
+         ("v" . magit-status))
   :load-path (lambda () (expand-file-name "magit/lisp" user-emacs-directory))
   :init (eval-after-load 'info
           '(progn (info-initialize)

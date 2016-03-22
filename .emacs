@@ -51,7 +51,8 @@
     (("~/Documents/workspace" "workspace")
      ("~/workspace/Documents" "Documents")
      ("~/workspace" "Workspace")
-     ("~/" "Home"))))
+     ("~/" "Home")
+     ("/" "/"))))
  '(ede-locate-setup-options (quote (ede-locate-global ede-locate-locate)))
  '(ede-project-directories (quote ("~/workspace")))
  '(ergoemacs-ctl-c-or-ctl-x-delay 0.2)
@@ -76,7 +77,8 @@
  '(scroll-error-top-bottom nil)
  '(set-mark-command-repeat-pop nil)
  '(shift-select-mode t)
- '(smex-prompt-string "M-x "))
+ '(smex-prompt-string "M-x ")
+ '(transient-mark-mode nil))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

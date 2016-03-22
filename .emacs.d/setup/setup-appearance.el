@@ -94,8 +94,8 @@ non-nil."
 (setq font-lock-support-mode 'jit-lock-mode)
 (setq jit-lock-chunk-size 25
       jit-lock-context-time 0.05
-      jit-lock-defer-time .1
-      jit-lock-stealth-nice 0.5
+      jit-lock-defer-time 0.25
+      jit-lock-stealth-nice 0.25
       jit-lock-stealth-time 16
       jit-lock-stealth-verbose nil)
 
@@ -122,7 +122,7 @@ non-nil."
 (use-package lawlist-scroll-mode
   :if window-system
   :init (set-scroll-bar-mode 'right)
-  ;; :config	(global-lawlist-scroll-bar-mode)
+  ;; :config    (global-lawlist-scroll-bar-mode)
   )
 
 (provide 'setup-appearance)

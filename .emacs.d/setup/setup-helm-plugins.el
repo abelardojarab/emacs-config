@@ -27,104 +27,59 @@
 ;; Helm desc-binds
 (use-package helm-descbinds
   :load-path (lambda () (expand-file-name "helm-descbinds/" user-emacs-directory))
+  :bind (:map ctl-x-map
+              ("i" . helm-descbinds))
   :config (progn
-            (helm-descbinds-mode 1)
-            (bind-keys :map ctl-x-map
-                       ("i" . helm-descbinds))))
+            (helm-descbinds-mode 1)))
 
 ;; Helm flycheck
 (use-package helm-flycheck
   :load-path (lambda () (expand-file-name "helm-flycheck/" user-emacs-directory))
-  :config (progn
-            (bind-keys :map ctl-x-map
-                       ("c" . helm-flycheck))))
+  :bind (:map ctl-x-map
+              ("c" . helm-flycheck)))
 
 ;; Helm ls git
 (use-package helm-ls-git
   :load-path (lambda () (expand-file-name "helm-ls-git/" user-emacs-directory))
-  :config (progn
-            (bind-keys :map ctl-x-map
-                       ("g" . helm-ls-git-ls))))
+  :bind (:map ctl-x-map
+              ("g" . helm-ls-git-ls)))
 
 ;; Helm bm support
 (use-package helm-bm
   :load-path (lambda () (expand-file-name "helm-bm/" user-emacs-directory))
-  :config (progn
-            (bind-keys :map ctl-x-map
-                       ("b" . helm-bookmarks))))
+  :bind (:map ctl-x-map
+              ("b" . helm-bookmarks)))
 
 ;; Helm flyspell
 (use-package helm-flyspell
   :load-path (lambda () (expand-file-name "helm-flyspell/" user-emacs-directory))
-  :config (progn
-            (bind-keys :map ctl-x-map
-                       ("s" . helm-flyspell-correct))))
+  :bind (:map ctl-x-map
+              ("s" . helm-flyspell-correct)))
 
 ;; Helm etags plus
 (use-package helm-etags+
   :load-path (lambda () (expand-file-name "helm-etags-plus/" user-emacs-directory))
-  :config (progn
-            (bind-keys :map ctl-x-map
-                       ("t" . helm-etags-select))))
+  :bind (:map ctl-x-map
+              ("t" . helm-etags-select)))
 
 ;; Helm yasnippet
 (use-package helm-c-yasnippet
   :load-path (lambda () (expand-file-name "helm-c-yasnippet/" user-emacs-directory))
-  :config (progn
-            (setq helm-yas-space-match-any-greedy t)
-            (bind-keys :map ctl-x-map
-                       ("y" . helm-yas-complete))))
+  :bind (:map ctl-x-map
+              ("y" . helm-yas-complete)))
 
 ;; Helm make support
 (use-package helm-make
   :load-path (lambda () (expand-file-name "helm-make/" user-emacs-directory))
-  :config (progn
-            (bind-keys :map ctl-x-map
-                       ("m" . helm-etags-select))))
-
-;; Helm themes
-(use-package helm-themes
-  :load-path (lambda () (expand-file-name "helm-themes/" user-emacs-directory)))
-
-;; Helm swoop
-(use-package helm-swoop
-  :load-path (lambda () (expand-file-name "helm-swoop/" user-emacs-directory))
-  :config (progn
-
-            ;; From helm-swoop to helm-multi-swoop-all
-            (define-key helm-swoop-map (kbd "M-i") 'helm-multi-swoop-all-from-helm-swoop)
-
-            ;; Instead of helm-multi-swoop-all, you can also use helm-multi-swoop-current-mode
-            (define-key helm-swoop-map (kbd "M-m") 'helm-multi-swoop-current-mode-from-helm-swoop)
-
-            ;; Move up and down like isearch
-            (define-key helm-swoop-map (kbd "C-r") 'helm-previous-line)
-            (define-key helm-swoop-map (kbd "C-s") 'helm-next-line)
-            (define-key helm-multi-swoop-map (kbd "C-r") 'helm-previous-line)
-            (define-key helm-multi-swoop-map (kbd "C-s") 'helm-next-line)
-
-            ;; Save buffer when helm-multi-swoop-edit complete
-            (setq helm-multi-swoop-edit-save t)
-
-            ;; If this value is t, split window inside the current window
-            (setq helm-swoop-split-with-multiple-windows nil)
-
-            ;; Split direcion. 'split-window-vertically or 'split-window-horizontally
-            (setq helm-swoop-split-direction 'split-window-horizontally)
-
-            ;; If nil, you can slightly boost invoke speed in exchange for text color
-            (setq helm-swoop-speed-or-color nil)
-
-            ;; ;; Go to the opposite side of line from the end or beginning of line
-            (setq helm-swoop-move-to-line-cycle t)))
+  :bind (:map ctl-x-map
+              ("m" . helm-make)))
 
 ;; Helm dash
 (use-package helm-dash
   :load-path (lambda () (expand-file-name "helm-dash/" user-emacs-directory))
+  :bind (:map ctl-x-map
+              ("d" . helm-dash))
   :config (progn
-            (bind-keys :map ctl-x-map
-                       ("d" . helm-dash))
-
             (setq helm-dash-enable-debugging nil)
             (setq helm-dash-min-length 2)
             (setq helm-dash-docsets-path (expand-file-name "docsets/" user-emacs-directory))
@@ -177,8 +132,44 @@
             (setq org-ref-bibliography-notes "~/workspace/Documents/Bib/notes.org"
                   org-ref-default-bibliography '("~/workspace/Documents/Bib/biblio.bib")
                   org-ref-pdf-directory "~/workspace/Documents/Bib/bibtex-pdfs")
-            (setq org-ref-insert-cite-key "C-c )")
+            (setq org-ref-insert-cite-key "C-c [")
             (setq org-ref-default-citation-link "autocite")))
+
+;; Helm themes
+(use-package helm-themes
+  :load-path (lambda () (expand-file-name "helm-themes/" user-emacs-directory)))
+
+;; Helm swoop
+(use-package helm-swoop
+  :load-path (lambda () (expand-file-name "helm-swoop/" user-emacs-directory))
+  :config (progn
+
+            ;; From helm-swoop to helm-multi-swoop-all
+            (define-key helm-swoop-map (kbd "M-i") 'helm-multi-swoop-all-from-helm-swoop)
+
+            ;; Instead of helm-multi-swoop-all, you can also use helm-multi-swoop-current-mode
+            (define-key helm-swoop-map (kbd "M-m") 'helm-multi-swoop-current-mode-from-helm-swoop)
+
+            ;; Move up and down like isearch
+            (define-key helm-swoop-map (kbd "C-r") 'helm-previous-line)
+            (define-key helm-swoop-map (kbd "C-s") 'helm-next-line)
+            (define-key helm-multi-swoop-map (kbd "C-r") 'helm-previous-line)
+            (define-key helm-multi-swoop-map (kbd "C-s") 'helm-next-line)
+
+            ;; Save buffer when helm-multi-swoop-edit complete
+            (setq helm-multi-swoop-edit-save t)
+
+            ;; If this value is t, split window inside the current window
+            (setq helm-swoop-split-with-multiple-windows nil)
+
+            ;; Split direcion. 'split-window-vertically or 'split-window-horizontally
+            (setq helm-swoop-split-direction 'split-window-horizontally)
+
+            ;; If nil, you can slightly boost invoke speed in exchange for text color
+            (setq helm-swoop-speed-or-color nil)
+
+            ;; ;; Go to the opposite side of line from the end or beginning of line
+            (setq helm-swoop-move-to-line-cycle t)))
 
 (provide 'setup-helm-plugins)
 ;;; setup-helm-plugins.el ends here

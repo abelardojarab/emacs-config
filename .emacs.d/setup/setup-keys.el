@@ -87,14 +87,16 @@
 (fix-up-xterm-input-function-key-map)
 
 ;; As in Windows, replace after typing a letter
-(require 'delsel)
-(delete-selection-mode 1)
-(setq mouse-drag-copy-region nil)
+(use-package delsel
+  :config (delete-selection-mode 1))
 
 ;; Windows-like mouse/arrow movement & selection
-(transient-mark-mode t)
-(setq shift-select-mode t)
-(cua-mode 1)
+(use-package cua-base
+  :init (progn
+          (transient-mark-mode t)
+          (setq shift-select-mode t))
+  :config (progn
+            (cua-mode 1)))
 
 ;; Smart tab
 (use-package smart-tab
@@ -300,11 +302,15 @@
 (define-key minibuffer-local-isearch-map [escape] 'abort-recursive-edit)
 
 ;; Enable mouse support
-(unless window-system
-  (require 'mouse)
-  (xterm-mouse-mode t)
-  (defun track-mouse (e))
-  (setq mouse-sel-mode t))
+(use-package mouse
+  :if window-system
+  :config (progn
+            (xterm-mouse-mode t)
+            (defun track-mouse (e))
+            (setq mouse-sel-mode t)))
+
+;; Do not copy region use mouse dragging
+(setq mouse-drag-copy-region nil)
 
 ;; Moving cursor down at bottom scrolls only a single line, not half page
 (setq scroll-step 1)
@@ -344,24 +350,28 @@
   (revert-buffer t t t))
 
 ;; Redo
-(require 'redo+)
-(global-set-key (kbd "C-S-z") 'redo) ;; Mac style
-(global-set-key (kbd "C-y") 'redo) ;; Microsoft Windows style
-(setq undo-no-redo t)
+(use-package redo+
+  :config (progn
+            (global-set-key (kbd "C-S-z") 'redo) ;; Mac style
+            (global-set-key (kbd "C-y") 'redo) ;; Microsoft Windows style
+            (setq undo-no-redo t)))
 
 ;; Better undo
-(require 'undo-tree)
-(global-undo-tree-mode)
-(global-set-key (kbd "C-z") 'undo-tree-undo)
-(global-set-key (kbd "C-S-z") 'undo-tree-redo)
-(setq undo-tree-visualizer-diff t)
-(setq undo-tree-visualizer-timestamps t)
+(use-package undo-tree
+  :config (progn
+            (global-undo-tree-mode)
+            (global-set-key (kbd "C-z") 'undo-tree-undo)
+            (global-set-key (kbd "C-S-z") 'undo-tree-redo)
+            (setq undo-tree-visualizer-diff t)
+            (setq undo-tree-visualizer-timestamps t)))
 
 ;; Right click mouse
-(global-unset-key [(control mouse-3)])
-(require 'mouse3)
-(defalias 'mouse3-region-popup-menu 'mouse3-popup-menu)
-(global-set-key (kbd "<mouse-3>") 'mouse3-popup-menu)
+(use-package mouse3
+  :init (progn
+          (global-unset-key [(control mouse-3)]))
+  :config (progn
+            (defalias 'mouse3-region-popup-menu 'mouse3-popup-menu)
+            (global-set-key (kbd "<mouse-3>") 'mouse3-popup-menu)))
 
 ;; Tabbar
 (global-set-key [C-prior] 'tabbar-backward-tab)
@@ -404,11 +414,12 @@
             (define-key region-bindings-mode-map (kbd "C-x") 'kill-region)))
 
 ;; Move text
-(require 'move-text)
-(define-key region-bindings-mode-map [C-up] 'move-text-up)
-(define-key region-bindings-mode-map [C-down] 'move-text-down)
-(define-key region-bindings-mode-map [C-right] 'increase-left-margin)
-(define-key region-bindings-mode-map [C-left] 'decrease-left-margin)
+(use-package move-text
+  :config (progn
+            (define-key region-bindings-mode-map [C-up] 'move-text-up)
+            (define-key region-bindings-mode-map [C-down] 'move-text-down)
+            (define-key region-bindings-mode-map [C-right] 'increase-left-margin)
+            (define-key region-bindings-mode-map [C-left] 'decrease-left-margin)))
 
 ;; Overwrite other modes
 (defvar my-keys-minor-mode-map (make-keymap) "my-keys-minor-mode keymap.")

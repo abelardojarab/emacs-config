@@ -27,22 +27,23 @@
 ;; Helm
 (use-package helm-config
   :load-path (lambda () (expand-file-name "helm/" user-emacs-directory))
+  :bind (("C-;" . helm-mini)
+         ("M-y" . helm-show-kill-ring)
+         :map isearch-mode-map
+         ("C-h" . helm-occur-from-isearch)
+         :map ctl-x-map
+         ("x" . helm-M-x)
+         ("a" . helm-apropos)
+         ("n" . helm-semantic-or-imenu)
+         ("u" . helm-resume)
+         ("b" . helm-buffers-list)
+         ("f" . helm-find-files)
+         ("r" . helm-recentf))
   :config (progn
             (setq helm-delete-minibuffer-contents-from-point t)
             (setq helm-buffer-max-length 35)
             (defadvice helm-buffers-sort-transformer (around ignore activate)
-              (setq ad-return-value (ad-get-arg 0)))
-            (bind-key "C-o" 'helm-occur-from-isearch isearch-mode-map)
-            (bind-keys ("C-;" . helm-mini)
-                       ("M-y" . helm-show-kill-ring))
-            (bind-keys :map ctl-x-map
-                       ("x" . helm-M-x)
-                       ("a" . helm-apropos)
-                       ("n" . helm-semantic-or-imenu)
-                       ("u" . helm-resume)
-                       ("b" . helm-buffers-list)
-                       ("f" . helm-find-files)
-                       ("r" . helm-recentf))))
+              (setq ad-return-value (ad-get-arg 0)))))
 
 ;; Indent semantic entries
 (use-package helm-imenu
