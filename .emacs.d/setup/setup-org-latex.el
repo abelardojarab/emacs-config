@@ -61,7 +61,6 @@
     (unless (= (plist-get org-format-latex-options :scale) relwidth)
       (plist-put org-format-latex-options :scale relwidth))))
 
-
 ;; for Tikz image in Org
 (setq org-babel-latex-htlatex "htlatex")
 (defmacro by-backend (&rest body)

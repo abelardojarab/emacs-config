@@ -148,25 +148,6 @@
             ;;   (setq-local helm-dash-docsets '("Emacs_Lisp")))
             ;; (add-hook 'lisp-mode-hook 'lisp-doc-hook)
 
-            ;; (defun c-doc-hook ()
-            ;;   (interactive)
-            ;;   (setq-local helm-dash-docsets '("C" "C++")))
-            ;; (add-hook 'c-mode-common-hook 'c-doc-hook)
-
-            ;; (defun python-doc-hook ()
-            ;;   (interactive)
-            ;;   (setq-local helm-dash-docsets '("Python_2")))
-            ;; (add-hook 'python-mode-hook 'python-doc-hook)
-
-            ;; (defun js2-doc-hook ()
-            ;;   (interactive)
-            ;;   (setq-local helm-dash-docsets '("JavaScript" "NodeJS" "HTML")))
-            ;; (add-hook 'js2-mode-hook 'js2-doc-hook)
-
-            ;; (defun java-doc-hook ()
-            ;;   (interactive)
-            ;;   (setq-local helm-dash-docsets '("Java")))
-            ;; (add-hook 'java-mode-hook 'java-doc-hook)
             ))
 
 ;; Helm bibtex
