@@ -48,11 +48,9 @@
  '(ecb-options-version "2.40")
  '(ecb-source-path
    (quote
-    (("/nfs/pdx/disks/ch_icf_fdk_rv_003/ajaraber/workspace/emacsfull/" "/nfs/pdx/disks/ch_icf_fdk_rv_003/ajaraber/workspace/emacsfull/")
-     ("/nfs/pdx/home/ajaraber/" "/nfs/pdx/home/ajaraber/")
-     ("~/Documents/workspace" "Workspace")
+    (("~/Documents/workspace" "workspace")
      ("~/workspace/Documents" "Documents")
-     ("~/workspace" "workspace")
+     ("~/workspace" "Workspace")
      ("~/" "~/")
      ("/" "/"))))
  '(ede-locate-setup-options (quote (ede-locate-global ede-locate-locate)))
