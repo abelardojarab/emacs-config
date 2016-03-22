@@ -207,6 +207,9 @@
 ;; Setup Python
 (require 'setup-python)
 
+;; Setup Python Jedi
+(require 'setup-python-plugins)
+
 ;; Setup HTML
 (require 'setup-html)
 

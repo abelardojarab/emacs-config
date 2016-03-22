@@ -34,13 +34,14 @@
   :load-path (lambda () (expand-file-name "epc/" user-emacs-directory)))
 
 (use-package jedi
+  :if (executable-find "python")
   :load-path (lambda () (expand-file-name "jedi/" user-emacs-directory))
   :config (progn
-			(add-hook 'python-mode-hook 'jedi:setup)
-			(setq jedi:setup-keys nil)
-			(setq jedi:complete-on-dot t)
-			(setq jedi:tooltip-method t)
-			(ac-flyspell-workaround)))
+            (add-hook 'python-mode-hook 'jedi:setup)
+            (setq jedi:setup-keys nil)
+            (setq jedi:complete-on-dot t)
+            (setq jedi:tooltip-method t)
+            (ac-flyspell-workaround)))
 
 (provide 'setup-python-plugins)
 ;;; setup-python-plugins.el ends here
