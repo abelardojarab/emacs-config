@@ -41,17 +41,9 @@
   :load-path (lambda () (expand-file-name "function-args/" user-emacs-directory))
   :config (progn
             (fa-config-default)
-
             (define-key function-args-mode-map (kbd "M-o") nil)
             (define-key c-mode-map (kbd "C-M-:") 'moo-complete)
-            (define-key c++-mode-map (kbd "C-M-:") 'moo-complete)
-
-            (custom-set-faces
-             '(fa-face-hint ((t (:background "#3f3f3f" :foreground "#ffffff"))))
-             '(fa-face-hint-bold ((t (:background "#3f3f3f" :weight bold))))
-             '(fa-face-semi ((t (:background "#3f3f3f" :foreground "#ffffff" :weight bold))))
-             '(fa-face-type ((t (:inherit (quote font-lock-type-face) :background "#3f3f3f"))))
-             '(fa-face-type-bold ((t (:inherit (quote font-lock-type-face) :background "#999999" :bold t)))))))
+            (define-key c++-mode-map (kbd "C-M-:") 'moo-complete)))
 
 (use-package srefactor
   :load-path (lambda () (expand-file-name "semantic-refactor/" user-emacs-directory))
