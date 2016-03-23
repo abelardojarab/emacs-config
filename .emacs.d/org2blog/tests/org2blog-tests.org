@@ -1,0 +1,822 @@
+# Tests for org2blog live here
+
+* Setup
+#+BEGIN_SRC emacs-lisp
+  (require 'org2blog)
+
+  ;; Global configuration for tests
+  (setq org2blog/wp-use-sourcecode-shortcode t)
+
+  (setq org2blog/wp-blog-alist
+        `(("test"
+            :url "https://testorg2blog.wordpress.com/xmlrpc.php"
+            :username "org2blog"
+            :password ,(getenv "org2blog_password")
+            :default-title "Hello World"
+            :default-categories ("org2blog"))
+          ))
+#+END_SRC
+
+* Utility code
+
+#+BEGIN_SRC emacs-lisp :var filename=(buffer-file-name)
+  ;;; Directory containing tests
+  (defconst o2b-test-dir
+    (expand-file-name (file-name-directory (or load-file-name buffer-file-name))))
+
+  ;;; File with the test inputs and outputs
+  (defconst o2b-test-case-file
+    (expand-file-name filename o2b-test-dir))
+
+  ;;; Fetch the SRC block given the name
+  (defun o2b-test-fetch-src-block (name)
+    (let ((src ""))
+      (save-excursion
+        (save-restriction
+          (with-temp-buffer
+            (insert-file-contents o2b-test-case-file)
+            (goto-char (point-min))
+            (unless (org-babel-goto-named-src-block name)
+              (setq src (nth 1 (org-babel-get-src-block-info t)))))))
+      src))
+
+  (defmacro o2b-test-buffer-with-block (src-name &rest body)
+    "Create a temporary buffer, insert the code with the given
+  SRC-NAME and evaluage BODY there."
+    (declare (indent 0) (debug t))
+    `(let ()
+       (with-temp-buffer
+         (org-mode)
+         (insert (o2b-test-fetch-src-block ,src-name))
+         (goto-char (point-min))
+         (progn ,@body))))
+#+END_SRC
+
+* Tests
+** Sub-tree tests
+#+BEGIN_SRC emacs-lisp
+  (ert-deftest should-correctly-parse-subtree ()
+    (should
+     (string-equal
+      (o2b-test-fetch-src-block "o2b-test-post-subtree-output")
+      (o2b-test-buffer-with-block
+       "o2b-test-post-subtree-input"
+       (cdr (assoc "description" (org2blog/wp--export-as-post t)))))))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (ert-deftest should-correctly-parse-subtree-tags ()
+    (should
+     (equal
+      '("gratitude" "time" "awareness" "procrastination")
+      (o2b-test-buffer-with-block
+        "o2b-test-post-subtree-input"
+        (cdr (assoc "tags" (org2blog/wp--export-as-post t)))))))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (ert-deftest should-not-change-output-when-subtree-demoted ()
+    (should (string-equal
+             ;; Expected output
+             (o2b-test-fetch-src-block "o2b-test-post-subtree-output")
+             ;; Output from parsing entry
+             (o2b-test-buffer-with-block
+               "o2b-test-post-subtree-input"
+               (org-demote-subtree)
+               (cdr (assoc "description" (org2blog/wp--export-as-post t)))))))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (ert-deftest should-post-subtree-with-toc ()
+    (should
+     (string-equal
+      (o2b-test-fetch-src-block "o2b-test-post-subtree-toc")
+      (o2b-test-buffer-with-block
+       "o2b-test-post-subtree-input"
+       (let ((org2blog/wp-export-options (copy-sequence org2blog/wp-export-options)))
+         (plist-put org2blog/wp-export-options :with-toc t)
+         (cdr (assoc "description" (org2blog/wp--export-as-post t))))))))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (ert-deftest should-parse-subtree-parent ()
+    (let ((post (o2b-test-buffer-with-block
+                 "o2b-test-post-subtree-input"
+                 (org2blog/wp--export-as-post t))))
+      (should (equal (cdr (assoc "parent" post)) "20"))))
+#+END_SRC
+
+*** Data
+#+NAME: o2b-test-post-subtree-input
+#+BEGIN_SRC org
+  ,* Test Post
+    :PROPERTIES:
+    :PARENT:   20
+    :POST_TAGS: gratitude, time, awareness, procrastination
+    :END:
+    This is a subtree that we are testing
+  ,** Sub heading 1
+     - Foo
+     - Bar
+     - Baz
+#+END_SRC
+
+#+NAME: o2b-test-post-subtree-output
+#+BEGIN_SRC html
+  <p> This is a subtree that we are testing </p>
+  <div id="outline-container-orgheadline1" class="outline-2">
+  <h2 id="orgheadline1">Sub heading 1</h2>
+  <div class="outline-text-2" id="text-orgheadline1">
+  <ul class="org-ul">
+  <li>Foo</li>
+  <li>Bar</li>
+  <li>Baz</li>
+  </ul>
+  </div>
+  </div>
+
+#+END_SRC
+
+#+NAME: o2b-test-post-subtree-toc
+#+BEGIN_SRC html
+  <div id="table-of-contents">
+  <h2>Table of Contents</h2>
+  <div id="text-table-of-contents">
+  <ul>
+  <li><a href="#orgheadline1">Sub heading 1</a></li>
+  </ul>
+  </div>
+  </div>
+  <p> This is a subtree that we are testing </p>
+  <div id="outline-container-orgheadline1" class="outline-2">
+  <h2 id="orgheadline1">Sub heading 1</h2>
+  <div class="outline-text-2" id="text-orgheadline1">
+  <ul class="org-ul">
+  <li>Foo</li>
+  <li>Bar</li>
+  <li>Baz</li>
+  </ul>
+  </div>
+  </div>
+
+#+END_SRC
+** Buffer tests
+#+BEGIN_SRC emacs-lisp
+  (ert-deftest should-post-from-non-visible-content-buffer ()
+    (should (string-equal
+             (o2b-test-fetch-src-block "o2b-test-post-buffer-non-visible")
+             (o2b-test-buffer-with-block
+               "o2b-test-post-buffer-non-visible-input"
+               (let ()
+                 (org-shifttab 4)
+                 (goto-char (point-max))
+                 (cdr (assoc "description" (org2blog/wp--export-as-post nil))))))))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (ert-deftest should-not-hang-with-specific-input ()
+    (should (string-equal
+             (o2b-test-fetch-src-block "o2b-test-post-buffer-hangs")
+             (o2b-test-buffer-with-block
+               "o2b-test-post-buffer-hangs-input"
+               (let ()
+                 (cdr (assoc "description" (org2blog/wp--export-as-post nil))))))))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (ert-deftest should-use-tags-as-categories ()
+    (let ((post (o2b-test-buffer-with-block
+                 "o2b-test-tags-as-categories"
+                 (let ((org2blog/wp-use-tags-as-categories t))
+                   (org2blog/wp--export-as-post nil)))))
+
+      (should (equal (cdr (assoc "categories" post)) (list "tags" "sacha")))
+      (should (equal (cdr (assoc "tags" post)) nil))))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (ert-deftest should-not-use-tags-as-categories ()
+    (let ((post (o2b-test-buffer-with-block
+                 "o2b-test-tags-as-categories"
+                 (org2blog/wp--export-as-post nil))))
+
+      (should (equal (cdr (assoc "categories" post)) nil))
+      (should (equal (cdr (assoc "tags" post)) (list "tags" "sacha")))))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (ert-deftest should-parse-parent ()
+    (let ((post (o2b-test-buffer-with-block
+                 "o2b-test-tags-as-categories"
+                 (org2blog/wp--export-as-post nil))))
+      (should (equal (cdr (assoc "parent" post)) "20"))))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (ert-deftest should-get-parent-id ()
+    (let ((post (o2b-test-buffer-with-block
+                 "o2b-test-get-parent-id"
+                 (org2blog/wp--export-as-post nil))))
+      (should (equal (cdr (assoc "parent" post)) "1"))))
+#+END_SRC
+
+*** Data
+
+#+NAME: o2b-test-tags-as-categories
+#+BEGIN_SRC org
+  ,#+BLOG: test
+  ,#+POSTID: 121
+  ,#+DATE: [2013-09-14 Sat 18:29]
+  ,#+OPTIONS: toc:nil num:nil todo:nil pri:nil tags:nil ^:nil
+  ,#+TAGS: tags, sacha
+  ,#+DESCRIPTION:
+  ,#+PARENT: 20
+  ,#+TITLE: Hello World
+  ,* Heading 1
+    Text
+
+  ,** Heading 2
+     More text
+
+#+END_SRC
+
+#+NAME: o2b-test-post-buffer-non-visible-input
+#+BEGIN_SRC org
+  ,#+BLOG: test
+  ,#+POSTID: 121
+  ,#+DATE: [2013-09-14 Sat 18:29]
+  ,#+OPTIONS: toc:nil num:nil todo:nil pri:nil tags:nil ^:nil
+  ,#+CATEGORY: org2blog, emacs
+  ,#+TAGS:
+  ,#+DESCRIPTION:
+  ,#+TITLE: Hello World
+  ,* Heading 1
+    Text
+
+  ,** Heading 2
+     More text
+
+#+END_SRC
+
+#+NAME: o2b-test-post-buffer-non-visible
+#+BEGIN_SRC html
+  <div id="outline-container-orgheadline1" class="outline-2">
+  <h2 id="orgheadline1">Heading 1</h2>
+  <div class="outline-text-2" id="text-orgheadline1">
+  <p> Text </p>
+  </div>
+
+  <div id="outline-container-orgheadline2" class="outline-3">
+  <h3 id="orgheadline2">Heading 2</h3>
+  <div class="outline-text-3" id="text-orgheadline2">
+  <p> More text </p>
+  </div>
+  </div>
+  </div>
+
+#+END_SRC
+
+#+NAME: o2b-test-post-buffer-hangs-input
+#+BEGIN_SRC org
+  ,#+BLOG: test
+  ,#+POSTID: 127
+  ,#+DATE: [2013-09-14 Sat 20:14]
+  ,#+OPTIONS: toc:nil num:nil todo:nil pri:nil tags:nil ^:nil
+  ,#+CATEGORY: org2blog, emacs
+  ,#+TAGS:
+  ,#+DESCRIPTION:
+  ,#+TITLE: Test Hangs
+  ,* Heading
+
+  ,** Preparing patches
+
+  The Org-mode mailing list has a [[http://patchwork.newartisans.com/project/org-mode/][Patchwork server]] that looks for
+  patches in messages that contain the string =[PATCH]= in the subject.
+  Make sure both the =master= and =jasond= branches are up-to-date and
+  then type the following to get a diff that can be inserted into the
+  =[PATCH]= email:
+
+#+END_SRC
+
+#+NAME: o2b-test-post-buffer-hangs
+#+BEGIN_SRC html
+  <div id="outline-container-orgheadline2" class="outline-2">
+  <h2 id="orgheadline2">Heading</h2>
+  <div class="outline-text-2" id="text-orgheadline2">
+  </div><div id="outline-container-orgheadline1" class="outline-3">
+  <h3 id="orgheadline1">Preparing patches</h3>
+  <div class="outline-text-3" id="text-orgheadline1">
+  <p> The Org-mode mailing list has a <a href="http://patchwork.newartisans.com/project/org-mode/">Patchwork server</a> that looks for patches in messages that contain the string <code>[PATCH]</code> in the subject. Make sure both the <code>master</code> and <code>jasond</code> branches are up-to-date and then type the following to get a diff that can be inserted into the <code>[PATCH]</code> email: </p>
+  </div>
+  </div>
+  </div>
+
+#+END_SRC
+
+#+NAME: o2b-test-get-parent-id
+#+BEGIN_SRC org
+  ,#+BLOG: org2blog
+  ,#+DATE: [2013-09-14 Sat 18:29]
+  ,#+OPTIONS: toc:nil num:nil todo:nil pri:nil tags:nil ^:nil
+  ,#+TAGS: tags, sacha
+  ,#+DESCRIPTION:
+  ,#+PARENT: About
+  ,#+TITLE: Hello World
+  ,* Heading 1
+    Text
+
+  ,** Heading 2
+     More text
+
+#+END_SRC
+** LaTeX tests
+#+BEGIN_SRC emacs-lisp
+  (ert-deftest should-render-latex-without-wp-plugin ()
+    (should (string-equal
+             (o2b-test-fetch-src-block "o2b-test-parse-latex-output-plain")
+             (o2b-test-buffer-with-block
+               "o2b-test-parse-latex-input"
+               (let ((org2blog/wp-use-wp-latex nil))
+                 (cdr (assoc "description" (org2blog/wp--export-as-post t))))))))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (ert-deftest should-render-latex-with-wp-plugin ()
+
+    (should (string-equal
+             (o2b-test-fetch-src-block "o2b-test-parse-latex-output-wp")
+             (o2b-test-buffer-with-block
+               "o2b-test-parse-latex-input"
+               (let ((org2blog/wp-use-wp-latex t))
+                 (cdr (assoc "description" (org2blog/wp--export-as-post t))))))))
+#+END_SRC
+
+*** Data
+#+NAME: o2b-test-parse-latex-input
+#+BEGIN_SRC org
+  ,* LaTeX issues
+
+  ,** Superscripts don't work correctly
+
+     $f^{-1}$
+
+  ,** The equations should be centered
+
+     \[
+     \alpha + \beta = \gamma
+     \]
+#+END_SRC
+
+#+NAME: o2b-test-parse-latex-output-plain
+#+BEGIN_SRC html
+  <div id="outline-container-orgheadline1" class="outline-2">
+  <h2 id="orgheadline1">Superscripts don't work correctly</h2>
+  <div class="outline-text-2" id="text-orgheadline1">
+  <p> \(f^{-1}\) </p>
+  </div>
+  </div>
+
+  <div id="outline-container-orgheadline2" class="outline-2">
+  <h2 id="orgheadline2">The equations should be centered</h2>
+  <div class="outline-text-2" id="text-orgheadline2">
+  <p> \[    \alpha + \beta = \gamma    \]</p>
+  </div>
+  </div>
+
+#+END_SRC
+
+#+NAME: o2b-test-parse-latex-output-wp
+#+BEGIN_SRC html
+  <div id="outline-container-orgheadline1" class="outline-2">
+  <h2 id="orgheadline1">Superscripts don't work correctly</h2>
+  <div class="outline-text-2" id="text-orgheadline1">
+  <p> $latex f^{-1}$ </p>
+  </div>
+  </div>
+
+  <div id="outline-container-orgheadline2" class="outline-2">
+  <h2 id="orgheadline2">The equations should be centered</h2>
+  <div class="outline-text-2" id="text-orgheadline2">
+  <p> <p style="text-align:center"> $latex    \alpha + \beta = \gamma    $ </p></p>
+  </div>
+  </div>
+
+#+END_SRC
+
+** Source code blocks tests
+#+BEGIN_SRC emacs-lisp
+  (ert-deftest should-post-specific-subtree-with-awk-source ()
+    (should (string-equal
+             (o2b-test-fetch-src-block "o2b-test-post-awk-source")
+             (o2b-test-buffer-with-block
+               "o2b-test-post-awk-source-input"
+               (let ()
+                 (cdr (assoc "description" (org2blog/wp--export-as-post t))))))))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (ert-deftest should-post-subtree-with-source-code ()
+    (should (string-equal
+             (o2b-test-fetch-src-block "o2b-test-source-subtree-error")
+             (o2b-test-buffer-with-block
+               "o2b-test-source-subtree-error-input"
+               (let ()
+                 (cdr (assoc "description" (org2blog/wp--export-as-post t))))))))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (ert-deftest should-not-confuse-regexp-as-latex ()
+    "Testing if a source block with \[ is treated as LaTeX."
+    (should (string-equal
+             (o2b-test-fetch-src-block "o2b-test-regexp-source-becomes-latex")
+             (o2b-test-buffer-with-block
+               "o2b-test-regexp-source-becomes-latex-input"
+               (let ()
+                 (cdr (assoc "description" (org2blog/wp--export-as-post nil))))))))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (ert-deftest should-not-escape-html-in-wp-src-blocks ()
+    (should (string-equal
+             (o2b-test-fetch-src-block "o2b-test-greater-than-should-not-be-escaped-output")
+             (o2b-test-buffer-with-block
+              "o2b-test-greater-than-should-not-be-escaped"
+              (let ()
+                (cdr (assoc "description" (org2blog/wp--export-as-post nil))))))))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (ert-deftest should-escape-html-in-plain-src-blocks ()
+    (should (string-equal
+             (o2b-test-fetch-src-block "o2b-test-greater-than-should-be-escaped-plain-output")
+             (o2b-test-buffer-with-block
+              "o2b-test-greater-than-should-not-be-escaped"
+              (let ((org2blog/wp-use-sourcecode-shortcode nil))
+                (cdr (assoc "description" (org2blog/wp--export-as-post nil))))))))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (ert-deftest should-set-wp-sourcecode-shortcode-attributes ()
+    (should (string-equal
+             (o2b-test-fetch-src-block "o2b-test-sourcecode-shortcode-attrs-output")
+             (o2b-test-buffer-with-block
+               "o2b-test-sourcecode-shortcode-attrs-input"
+               (let ()
+                 (cdr (assoc "description" (org2blog/wp--export-as-post nil))))))))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (ert-deftest should-set-correct-language-from-map ()
+    (should (string-equal
+             (o2b-test-fetch-src-block "o2b-test-post-with-lang-map-output")
+             (o2b-test-buffer-with-block
+               "o2b-test-post-with-lang-map-input"
+               (let ((org2blog/wp-shortcode-langs-map '(("sh" . "bash"))))
+                 (cdr (assoc "description" (org2blog/wp--export-as-post t))))))))
+
+#+END_SRC
+
+*** Data
+
+#+NAME: o2b-test-post-awk-source-input
+#+BEGIN_SRC org
+  ,* one liner of awk                                            :linux:awk:en:
+  ,#+begin_src sh
+  echo "hello:world"| awk -F ":" '{printf("{\"%s\",\"%s\"},\n",$1,$2) }'
+  ,#+end_src
+
+#+END_SRC
+
+#+NAME: o2b-test-post-awk-source
+#+BEGIN_SRC html
+  [sourcecode language="sh" title="" ]
+  echo "hello:world"| awk -F ":" '{printf("{\"%s\",\"%s\"},\n",$1,$2) }'
+  [/sourcecode]
+
+#+END_SRC
+
+#+NAME: o2b-test-post-with-lang-map-input
+#+BEGIN_SRC org
+  ,* one liner of awk                                            :linux:awk:en:
+  ,#+begin_src sh
+  echo "hello:world"| awk -F ":" '{printf("{\"%s\",\"%s\"},\n",$1,$2) }'
+  ,#+end_src
+
+#+END_SRC
+
+#+NAME: o2b-test-post-with-lang-map-output
+#+BEGIN_SRC html
+  [sourcecode language="bash" title="" ]
+  echo "hello:world"| awk -F ":" '{printf("{\"%s\",\"%s\"},\n",$1,$2) }'
+  [/sourcecode]
+
+#+END_SRC
+
+#+NAME: o2b-test-source-subtree-error-input
+#+BEGIN_SRC org
+  ,* How to use keyboard to navigate feedly.com                                    :en:keysnail:emacs:
+    :PROPERTIES:
+    :ID:       o2b:efc2e27e-8a71-4950-9b64-ad4aa5269ce9
+    :POST_DATE: [2013-05-06 一 23:59]
+    :END:
+  Here is the detailed steps,
+  1. Install [[https://github.com/mooz/keysnail][keysnail]] (a firefox addon)
+  2. Install [[https://github.com/mooz/keysnail/wiki/plugin][HoK]] (no less than version 1.3.9) through keysnail
+  3. Add below code into .keysnail.js
+  ,#+BEGIN_SRC javascript
+  key.setViewKey('e', function (aEvent, aArg) {ext.exec("hok-start-foreground-mode", aArg);}, 'Hok - Foreground hint mode', true);
+  key.setViewKey('E', function (aEvent, aArg) {ext.exec("hok-start-background-mode", aArg);}, 'HoK - Background hint mode', true);
+  key.setViewKey(';', function (aEvent, aArg) {ext.exec("hok-start-extended-mode", aArg);}, 'HoK - Extented hint mode', true);
+  key.setViewKey(['C-c', 'C-e'], function (aEvent, aArg) {ext.exec("hok-start-continuous-mode", aArg);}, 'Start continuous HaH', true);
+
+  hook.addToHook('PluginLoaded', function () {
+    if (!plugins.hok)
+      return;
+
+    /* HoK 1.3.9+ requried */
+    plugins.hok.pOptions.selector = plugins.hok.pOptions.selector
+      /* feedly */
+      + ", *[data-uri]"
+      + ", *[data-selector-toggle]"
+      + ", *[data-page-action]"
+      + ", *[data-app-action]"
+    ;
+  });
+  ,#+END_SRC
+  4. Restart Firefox, logged into [[http://www.feedly.com]] and press hot key "e"
+  5. Enjoy!
+#+END_SRC
+
+#+NAME: o2b-test-source-subtree-error
+#+BEGIN_SRC html
+  <p> Here is the detailed steps, </p>
+
+  <ol class="org-ol">
+  <li>Install <a href="https://github.com/mooz/keysnail">keysnail</a> (a firefox addon)</li>
+  <li>Install <a href="https://github.com/mooz/keysnail/wiki/plugin">HoK</a> (no less than version 1.3.9) through keysnail</li>
+  <li>Add below code into .keysnail.js</li>
+  </ol>
+  [sourcecode language="javascript" title="" ]
+  key.setViewKey('e', function (aEvent, aArg) {ext.exec("hok-start-foreground-mode", aArg);}, 'Hok - Foreground hint mode', true);
+  key.setViewKey('E', function (aEvent, aArg) {ext.exec("hok-start-background-mode", aArg);}, 'HoK - Background hint mode', true);
+  key.setViewKey(';', function (aEvent, aArg) {ext.exec("hok-start-extended-mode", aArg);}, 'HoK - Extented hint mode', true);
+  key.setViewKey(['C-c', 'C-e'], function (aEvent, aArg) {ext.exec("hok-start-continuous-mode", aArg);}, 'Start continuous HaH', true);
+
+  hook.addToHook('PluginLoaded', function () {
+    if (!plugins.hok)
+      return;
+
+    /* HoK 1.3.9+ requried */
+    plugins.hok.pOptions.selector = plugins.hok.pOptions.selector
+      /* feedly */
+      + ", *[data-uri]"
+      + ", *[data-selector-toggle]"
+      + ", *[data-page-action]"
+      + ", *[data-app-action]"
+    ;
+  });
+  [/sourcecode]
+  <ol class="org-ol">
+  <li>Restart Firefox, logged into <a href="http://www.feedly.com/">http://www.feedly.com/</a> and press hot key "e"</li>
+  <li>Enjoy!</li>
+  </ol>
+
+#+END_SRC
+
+#+NAME: o2b-test-regexp-source-becomes-latex-input
+#+BEGIN_SRC org
+  ,#+BLOG: test
+  ,#+POSTID: 127
+  ,#+DATE: [2013-09-14 Sat 20:14]
+  ,#+OPTIONS: toc:nil num:nil todo:nil pri:nil tags:nil ^:nil
+  ,#+CATEGORY: org2blog, emacs
+  ,#+TAGS:
+  ,#+DESCRIPTION:
+  ,#+TITLE: Test source regexp becomes LaTeX
+  Test source code
+  ,#+BEGIN_SRC emacs-lisp
+  (concat "- State \"\\(" (regexp-opt org-done-keywords)"\\)\"\\s-*\\\([^]\n]+\\)\$ ")))
+  ,#+END_SRC
+
+#+END_SRC
+
+#+NAME: o2b-test-regexp-source-becomes-latex
+#+BEGIN_SRC html
+  <p> Test source code </p>
+
+  [sourcecode language="emacs-lisp" title="" ]
+  (concat "- State \"\\(" (regexp-opt org-done-keywords)"\\)\"\\s-*\\\([^]\n]+\\)\$ ")))
+  [/sourcecode]
+
+#+END_SRC
+
+#+NAME: o2b-test-greater-than-should-not-be-escaped
+#+BEGIN_SRC org
+  ,#+BLOG: test
+  ,#+POSTID: 127
+  ,#+DATE: [2013-09-14 Sat 20:14]
+  ,#+OPTIONS: toc:nil num:nil todo:nil pri:nil tags:nil ^:nil
+  ,#+CATEGORY: org2blog, emacs
+  ,#+TAGS:
+  ,#+DESCRIPTION:
+  ,#+TITLE: Test > becomes &gt;
+  ,#+BEGIN_SRC sh
+  echo hello > world
+  ,#+END_SRC
+  Test source code
+#+END_SRC
+
+#+NAME: o2b-test-greater-than-should-not-be-escaped-output
+#+BEGIN_SRC html
+  [sourcecode language="sh" title="" ]
+  echo hello > world
+  [/sourcecode]
+  <p> Test source code</p>
+
+#+END_SRC
+
+#+NAME: o2b-test-greater-than-should-be-escaped-plain-output
+#+BEGIN_SRC html
+  <div class="org-src-container">
+
+  <pre class="src src-sh">echo hello &gt; world
+  </pre>
+  </div>
+  <p> Test source code</p>
+
+#+END_SRC
+
+#+NAME: o2b-test-sourcecode-shortcode-attrs-input
+#+BEGIN_SRC org
+  ,* wp sourcecode shortcode attrs                   :wp:
+
+  ,#+attr_wp: :syntaxhl light="true"
+  ,#+begin_src sh
+  echo "hello:world"| awk -F ":" '{printf("{\"%s\",\"%s\"},\n",$1,$2) }'
+  ,#+end_src
+
+#+END_SRC
+
+#+NAME: o2b-test-sourcecode-shortcode-attrs-output
+#+BEGIN_SRC html
+  <div id="outline-container-orgheadline1" class="outline-2">
+  <h2 id="orgheadline1">wp sourcecode shortcode attrs</h2>
+  <div class="outline-text-2" id="text-orgheadline1">
+  [sourcecode language="sh" title="" light="true"]
+  echo "hello:world"| awk -F ":" '{printf("{\"%s\",\"%s\"},\n",$1,$2) }'
+  [/sourcecode]
+  </div>
+  </div>
+
+#+END_SRC
+
+** Login
+#+BEGIN_SRC emacs-lisp
+  (ert-deftest should-login ()
+    (org2blog/wp-login "test")
+    (should org2blog/wp-logged-in))
+#+END_SRC
+
+** Tracking posts
+#+BEGIN_SRC emacs-lisp
+  (ert-deftest should-save-post-details-when-org-directory-doesn-not-exist ()
+    (let* ((org-directory (expand-file-name (make-temp-name temporary-file-directory))))
+      (o2b-test-buffer-with-block
+       "o2b-test-post-awk-source-input"
+       (let ((post (org2blog/wp--export-as-post t))
+             (dashboard (expand-file-name (car org2blog/wp-track-posts) org-directory)))
+         (org2blog/wp-save-details post "" nil t)
+         (should (file-exists-p dashboard))
+         (should
+          (with-temp-buffer
+            (find-file-read-only dashboard)
+            (search-forward (cdr (assoc "title" post)) nil t nil)))))))
+#+END_SRC
+** Post date
+#+BEGIN_SRC emacs-lisp
+  (ert-deftest should-persist-post-date-on-publishing ()
+    (should (string-equal
+             (org2blog/wp--convert-timestamp-to-iso
+              "[2013-09-14 Sat 18:29]")
+             (o2b-test-buffer-with-block
+              "o2b-test-persist-date"
+              (cdr (assoc "date" (org2blog/wp--export-as-post nil)))))))
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (ert-deftest should-insert-date-on-publishing ()
+    (o2b-test-buffer-with-block
+     "o2b-test-insert-date"
+     (should (string-equal
+              ;; note: order is important since date is written during parse...
+              (cdr (assoc "date" (org2blog/wp--export-as-post nil)))
+              (org2blog/wp--convert-timestamp-to-iso (org2blog/wp-get-option "DATE"))))))
+#+END_SRC
+
+*** Data
+#+NAME: o2b-test-persist-date
+#+BEGIN_SRC org
+  ,#+BLOG: test
+  ,#+POSTID: 121
+  ,#+DATE: [2013-09-14 Sat 18:29]
+  ,#+OPTIONS: toc:nil num:nil todo:nil pri:nil tags:nil ^:nil
+  ,#+CATEGORY: org2blog, emacs
+  ,#+TAGS:
+  ,#+DESCRIPTION:
+  ,#+TITLE: Hello World
+  ,* Heading 1
+    Text
+
+  ,** Heading 2
+     More text
+
+#+END_SRC
+
+#+NAME: o2b-test-insert-date
+#+BEGIN_SRC org
+  ,#+BLOG: test
+  ,#+POSTID: 121
+  ,#+OPTIONS: toc:nil num:nil todo:nil pri:nil tags:nil ^:nil
+  ,#+CATEGORY: org2blog, emacs
+  ,#+TAGS:
+  ,#+DESCRIPTION:
+  ,#+TITLE: Hello World
+  ,* Heading 1
+    Text
+
+  ,** Heading 2
+     More text
+
+#+END_SRC
+
+** Posts with images
+
+#+BEGIN_SRC emacs-lisp
+  (ert-deftest should-not-republish-images-if-url-line-indented ()
+    (should (equal
+             1
+             (o2b-test-buffer-with-block
+               "o2b-test-repost-buffer-with-image"
+               (let ((org2blog/wp-show-post-in-browser nil))
+                 (org2blog/wp-post-buffer-and-publish)
+                 (let ((updated-post (buffer-string)))
+                   (with-temp-buffer
+                     (insert updated-post)
+                     (goto-char (point-min))
+                     (count-matches "# ./test-image.png http"))))))))
+
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp
+  (ert-deftest should-preserve-img-attributes ()
+    (should (and
+             (let ((output (o2b-test-buffer-with-block
+                             "o2b-test-thumbnails"
+                             (let ((org2blog/wp-show-post-in-browser nil)
+                                   (org2blog/wp-image-thumbnails t))
+                               (cdr (assoc "description" (org2blog/wp--export-as-post nil)))))))
+               (string-match-p "My fancy value for the alt attribute" output)
+               (string-match-p "super-stylish" output)))))
+
+#+END_SRC
+
+*** Data
+#+NAME: o2b-test-repost-buffer-with-image
+#+BEGIN_SRC org
+  ,#+BLOG: test
+  ,#+POSTID: 10
+  ,#+DATE: [2014-11-05 Wed 23:21]
+  ,#+OPTIONS: toc:nil num:nil todo:nil pri:nil tags:nil ^:nil
+  ,#+CATEGORY: org2blog, emacs
+  ,#+TAGS:
+  ,#+DESCRIPTION:
+  ,#+TITLE: Hello World
+
+  ,* Heading
+    This is an amazing blog post with an amazing image.
+
+    [[./test-image.png]]
+
+    # ./test-image.png http://testorg2blog.files.wordpress.com/2014/11/wpid-test-image3.png
+#+END_SRC
+
+#+NAME: o2b-test-thumbnails
+#+BEGIN_SRC org
+  ,#+BLOG: test
+  ,#+POSTID: 10
+  ,#+DATE: [2014-11-05 Wed 23:21]
+  ,#+OPTIONS: toc:nil num:nil todo:nil pri:nil tags:nil ^:nil
+  ,#+CATEGORY: org2blog, emacs
+  ,#+TAGS:
+  ,#+DESCRIPTION:
+  ,#+TITLE: Hello World
+
+  ,* Heading
+    This is an amazing blog post with an amazing image.
+
+    ,#+ATTR_HTML: :alt My fancy value for the alt attribute :style super-stylish;
+    [[./test-image.png]]
+
+    # ./test-image.png http://testorg2blog.files.wordpress.com/2014/11/wpid-test-image3.png
+
+#+END_SRC
