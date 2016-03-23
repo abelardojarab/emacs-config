@@ -137,6 +137,9 @@
 ;; Setup CEDET
 (require 'setup-cedet)
 
+;; Setup C++
+(require 'setup-c++)
+
 ;; Setup spelling (optional)
 (require 'setup-spell)
 

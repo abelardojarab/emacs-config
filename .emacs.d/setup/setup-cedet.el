@@ -57,17 +57,6 @@
 (defun semanticdb-create-table-for-file-not-in-buffer (arg)
   nil)
 
-;; Put c++-mode as default for *.h files (improves parsing)
-(add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
-
-;; C/C++ style
-(defun my/c-mode-init ()
-  (c-set-style "k&r")
-  (c-toggle-electric-state -1)
-  (setq-default c-basic-offset 4))
-(add-hook 'c-mode-hook #'my/c-mode-init)
-(add-hook 'c++-mode-hook #'my/c-mode-init)
-
 ;; Enable which-function-mode for selected major modes
 (setq which-func-modes '(org-mode markdown-mode
                                   ecmascript-mode emacs-lisp-mode lisp-mode java-mode

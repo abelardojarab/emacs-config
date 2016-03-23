@@ -143,6 +143,7 @@
 
 ;; Clang auto-complete
 (use-package auto-complete-clang
+  :if (executable-find "clang")
   :load-path (lambda () (expand-file-name "auto-complete-clang/" user-emacs-directory))
   :config (progn
             (defun my-ac-cc-mode-setup ()
@@ -150,12 +151,20 @@
 
             (add-hook 'c-mode-common-hook 'my-ac-cc-mode-setup)
             (setq ac-clang-flags
-                  (mapcar (lambda (item)(concat "-I" item))
+                  (mapcar (lambda (item) (concat "-I" item))
                           (split-string
-                           "
- /usr/local/include
+                           "/usr/local/include
  /usr/include
  /usr/include/c++")))))
+
+;; C-headers
+(use-package auto-complete-c-headers
+  :load-path (lambda () (expand-file-name "auto-complete-c-headers/" user-emacs-directory))
+  :config (progn
+            (add-hook 'c++-mode-hook (lambda ()
+                                       '(setq ac-sources (append ac-sources '(ac-source-c-headers)))))
+            (add-hook 'c-mode-hook (lambda ()
+                                     '(setq ac-sources (append ac-sources '(ac-source-c-headers)))))))
 
 ;; Latex math auto-complete
 (use-package ac-math
