@@ -91,8 +91,8 @@
  '(fa-face-type ((t (:inherit (quote font-lock-type-face) :background "#3f3f3f"))))
  '(fa-face-type-bold ((t (:inherit (quote font-lock-type-face) :background "#999999" :bold t))))
  '(jedi:highlight-function-argument ((t (:inherit eldoc-highlight-function-argument))))
- '(org-done ((t (:foreground "PaleGreen" :weight normal :strike-through t))))
- '(org-headline-done ((((class color) (min-colors 16) (background dark)) (:foreground "LightSalmon" :strike-through t)))))
+ '(org-done ((t (:foreground "Green" :weight normal :strike-through t))))
+ '(org-headline-done ((((class color) (min-colors 16) (background light)) (:foreground "Green" :strike-through t)))))
 
 ;; Setup environment
 (require 'setup-environment)
