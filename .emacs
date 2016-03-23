@@ -85,6 +85,11 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(fa-face-hint ((t (:background "#3f3f3f" :foreground "#ffffff"))))
+ '(fa-face-hint-bold ((t (:background "#3f3f3f" :weight bold))))
+ '(fa-face-semi ((t (:background "#3f3f3f" :foreground "#ffffff" :weight bold))))
+ '(fa-face-type ((t (:inherit (quote font-lock-type-face) :background "#3f3f3f"))))
+ '(fa-face-type-bold ((t (:inherit (quote font-lock-type-face) :background "#999999" :bold t))))
  '(jedi:highlight-function-argument ((t (:inherit eldoc-highlight-function-argument))))
  '(org-done ((t (:foreground "PaleGreen" :weight normal :strike-through t))))
  '(org-headline-done ((((class color) (min-colors 16) (background dark)) (:foreground "LightSalmon" :strike-through t)))))

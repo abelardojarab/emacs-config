@@ -42,14 +42,14 @@
   :config (progn
             (fa-config-default)
             (define-key function-args-mode-map (kbd "M-o") nil)
-            (define-key c-mode-map (kbd "C-M-:") 'moo-complete)
-            (define-key c++-mode-map (kbd "C-M-:") 'moo-complete)))
+            (define-key c-mode-map (kbd "C-:") 'moo-complete)
+            (define-key c++-mode-map (kbd "C-:") 'moo-complete)))
 
 (use-package srefactor
   :load-path (lambda () (expand-file-name "semantic-refactor/" user-emacs-directory))
   :config (progn
-            (define-key c-mode-map (kbd "M-RET") 'srefactor-refactor-at-point)
-            (define-key c++-mode-map (kbd "M-RET") 'srefactor-refactor-at-point)))
+            (define-key c-mode-map (kbd "C-|") 'srefactor-refactor-at-point)
+            (define-key c++-mode-map (kbd "C-|") 'srefactor-refactor-at-point)))
 
 (provide 'setup-c++)
 ;;; setup-c++.el ends here
