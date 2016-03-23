@@ -36,6 +36,7 @@
                            (side            . bottom)
                            (window-height   . 0.4)))
 
+            ;; Enable flycheck for set of modes
             (mapc (lambda (mode)
                     (add-hook mode (lambda () (flycheck-mode t))))
                   '(ess-mode-hook
