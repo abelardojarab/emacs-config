@@ -265,6 +265,9 @@
 ;; Setup imenu
 (require 'setup-imenu)
 
+;; Setup swiper
+(require 'setup-swiper)
+
 ;; Setup helm
 (require 'setup-helm)
 
