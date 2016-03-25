@@ -1,6 +1,6 @@
 ;;; ede/arduino.el --- EDE support for arduino projects / sketches
 ;;
-;; Copyright (C) 2012, 2013, 2014, 2015 Eric M. Ludlam
+;; Copyright (C) 2012, 2013, 2014, 2015, 2016 Eric M. Ludlam
 ;;
 ;; Author: Eric M. Ludlam <eric@siege-engine.com>
 ;;
@@ -437,7 +437,7 @@ Argument COMMAND is the command to use for compiling the target."
       (set-buffer buff)
       (save-excursion
 	(goto-char (point-min))
-	(while (re-search-forward "#include <\\(\\w+\\).h>" nil t)
+	(while (re-search-forward "^#include <\\(\\w+\\).h>" nil t)
 	  (setq tmp (match-string 1))
 	  (unless (file-exists-p (concat tmp ".h"))
 	    (let* ((lib (match-string 1))

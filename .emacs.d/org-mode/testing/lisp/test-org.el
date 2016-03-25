@@ -718,21 +718,29 @@
   ;; whole list.
   (should
    (= 4
-      (org-test-with-temp-text "* H\n- A\n  - AA\n"
-	(goto-char (point-max))
+      (org-test-with-temp-text "* H\n- A\n  - AA\n<point>"
 	(let ((org-adapt-indentation t)) (org-indent-line))
 	(org-get-indentation))))
   (should
    (zerop
-    (org-test-with-temp-text "* H\n- A\n  - AA\n\n\n\n"
-      (goto-char (point-max))
+    (org-test-with-temp-text "* H\n- A\n  - AA\n\n\n\n<point>"
       (let ((org-adapt-indentation t)) (org-indent-line))
       (org-get-indentation))))
   (should
    (= 4
-      (org-test-with-temp-text "* H\n- A\n  - \n"
-	(goto-char (point-max))
+      (org-test-with-temp-text "* H\n- A\n  - \n<point>"
 	(let ((org-adapt-indentation t)) (org-indent-line))
+	(org-get-indentation))))
+  (should
+   (= 4
+      (org-test-with-temp-text
+	  "* H\n  - \n    #+BEGIN_SRC emacs-lisp\n  t\n    #+END_SRC\n<point>"
+	(let ((org-adapt-indentation t)) (org-indent-line))
+	(org-get-indentation))))
+  (should
+   (= 2
+      (org-test-with-temp-text "- A\n  B\n\n<point>"
+	(let ((org-adapt-indentation nil)) (org-indent-line))
 	(org-get-indentation))))
   ;; Likewise, on a blank line at the end of a footnote definition,
   ;; indent at column 0 if line belongs to the definition.  Otherwise,
@@ -1405,7 +1413,72 @@
 	    '(org-block-todo-from-children-or-siblings-or-parent)))
        (org-entry-blocked-p)))))
 
+(ert-deftest test-org/get-outline-path ()
+  "Test `org-get-outline-path' specifications."
+  ;; Top-level headlines have no outline path.
+  (should-not
+   (org-test-with-temp-text "* H"
+     (org-get-outline-path)))
+  ;; Otherwise, outline path is the path leading to the headline.
+  (should
+   (equal '("H")
+	  (org-test-with-temp-text "* H\n** S<point>"
+	    (org-get-outline-path))))
+  ;; Find path even when point is not on a headline.
+  (should
+   (equal '("H")
+	  (org-test-with-temp-text "* H\n** S\nText<point>"
+	    (org-get-outline-path))))
+  ;; TODO keywords, tags and statistics cookies are ignored.
+  (should
+   (equal '("H")
+	  (org-test-with-temp-text "* TODO H [0/1] :tag:\n** S<point>"
+	    (org-get-outline-path))))
+  ;; Links are replaced with their description or their path.
+  (should
+   (equal '("Org")
+	  (org-test-with-temp-text
+	      "* [[http://orgmode.org][Org]]\n** S<point>"
+	    (org-get-outline-path))))
+  (should
+   (equal '("http://orgmode.org")
+	  (org-test-with-temp-text
+	      "* [[http://orgmode.org]]\n** S<point>"
+	    (org-get-outline-path))))
+  ;; When WITH-SELF is non-nil, include current heading.
+  (should
+   (equal '("H")
+	  (org-test-with-temp-text "* H"
+	    (org-get-outline-path t))))
+  (should
+   (equal '("H" "S")
+	  (org-test-with-temp-text "* H\n** S\nText<point>"
+	    (org-get-outline-path t))))
+  ;; Using cache is transparent to the user.
+  (should
+   (equal '("H")
+	  (org-test-with-temp-text "* H\n** S<point>"
+	    (setq org-outline-path-cache nil)
+	    (org-get-outline-path nil t))))
+  ;; Do not corrupt cache when finding outline path in distant part of
+  ;; the buffer.
+  (should
+   (equal '("H2")
+	  (org-test-with-temp-text "* H\n** S<point>\n* H2\n** S2"
+	    (setq org-outline-path-cache nil)
+	    (org-get-outline-path nil t)
+	    (search-forward "S2")
+	    (org-get-outline-path nil t))))
+  ;; Do not choke on empty headlines.
+  (should
+   (org-test-with-temp-text "* H\n** <point>"
+     (org-get-outline-path)))
+  (should
+   (org-test-with-temp-text "* \n** H<point>"
+     (org-get-outline-path))))
+
 (ert-deftest test-org/format-outline-path ()
+  "Test `org-format-outline-path' specifications."
   (should
    (string= (org-format-outline-path (list "one" "two" "three"))
 	    "one/two/three"))
@@ -1530,6 +1603,46 @@ SCHEDULED: <2014-03-04 tue.>"
 	  (org-test-with-temp-text "* H1 :yes:\n* H2 :no:\n* H3 :yes:no:"
 	    (let (org-odd-levels-only)
 	      (org-map-entries #'point "yes&no"))))))
+
+(ert-deftest test-org/edit-headline ()
+  "Test `org-edit-headline' specifications."
+  (should
+   (equal "* B"
+	  (org-test-with-temp-text "* A"
+	    (org-edit-headline "B")
+	    (buffer-string))))
+  ;; Handle empty headings.
+  (should
+   (equal "* "
+	  (org-test-with-temp-text "* A"
+	    (org-edit-headline "")
+	    (buffer-string))))
+  (should
+   (equal "* A"
+	  (org-test-with-temp-text "* "
+	    (org-edit-headline "A")
+	    (buffer-string))))
+  ;; Handle TODO keywords and priority cookies.
+  (should
+   (equal "* TODO B"
+	  (org-test-with-temp-text "* TODO A"
+	    (org-edit-headline "B")
+	    (buffer-string))))
+  (should
+   (equal "* [#A] B"
+	  (org-test-with-temp-text "* [#A] A"
+	    (org-edit-headline "B")
+	    (buffer-string))))
+  (should
+   (equal "* TODO [#A] B"
+	  (org-test-with-temp-text "* TODO [#A] A"
+	    (org-edit-headline "B")
+	    (buffer-string))))
+  ;; Handle tags.
+  (equal "* B :tag:"
+	 (org-test-with-temp-text "* A :tag:"
+	   (let ((org-tags-column 4)) (org-edit-headline "B"))
+	   (buffer-string))))
 
 
 

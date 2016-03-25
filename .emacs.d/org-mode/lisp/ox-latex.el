@@ -1033,7 +1033,7 @@ exported.  This format string may contain these elements:
   %s for the formatted source
   %c for the caption
   %f for the float attribute
-  %l for an appropriate label 
+  %l for an appropriate label
   %o for the LaTeX attributes
 
 For example,
@@ -1074,12 +1074,12 @@ will produce
 
 ;;;; Compilation
 
-(defcustom org-latex-compiler-file-string "%% Indented LaTeX compiler: %s\n"
+(defcustom org-latex-compiler-file-string "%% Intended LaTeX compiler: %s\n"
   "LaTeX compiler format-string.
 See also `org-latex-compiler'."
   :group 'org-export-latex
   :type '(choice
-	  (const :tag "Comment" "%% Indented LaTeX compiler: %s\n")
+	  (const :tag "Comment" "%% Intended LaTeX compiler: %s\n")
 	  (const :tag "latex-mode file variable" "%% -*- latex-run-command: %s -*-\n")
 	  (const :tag "AUCTeX file variable" "%% -*- LaTeX-command: %s -*-\n")
 	  (string :tag "custom format" "%% %s"))
@@ -1280,7 +1280,7 @@ For non-floats, see `org-latex--wrap-label'."
      ((org-string-nw-p caption-from-attr-latex)
       (concat caption-from-attr-latex "\n"))
      ((and (not main) (equal label "")) "")
-     ((not main) (concat label "\n"))
+     ((not main) label)
      ;; Option caption format with short name.
      (t
       (format (if nonfloat "\\captionof{%s}%s{%s%s}\n"
@@ -2012,10 +2012,10 @@ contextual information."
 			     (downcase org-lang)))
 	      (options (org-latex--make-option-string
 			(plist-get info :latex-minted-options))))
-	 (concat (format "\\mint%s{%s}"
+	 (format "\\mintinline%s{%s}{%s}"
 			 (if (string= options "") "" (format "[%s]" options))
-			 mint-lang)
-		 separator code separator)))
+			 mint-lang
+			 code)))
       ;; Use listings package.
       (otherwise
        ;; Maybe translate language's name.

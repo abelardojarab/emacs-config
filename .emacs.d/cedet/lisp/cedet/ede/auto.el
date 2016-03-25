@@ -1,6 +1,6 @@
 ;;; ede/auto.el --- Autoload features for EDE
 
-;; Copyright (C) 2010-2015 Free Software Foundation, Inc.
+;; Copyright (C) 2010-2016 Free Software Foundation, Inc.
 
 ;; Author: Eric M. Ludlam <zappo@gnu.org>
 
@@ -271,7 +271,7 @@ added.  Possible values are:
 	 (pf (oref this proj-file))
 	 (f (when (stringp pf) (expand-file-name pf d))))
     (if f
-	(and f (file-exists-p f))
+	(file-exists-p f)
       (let ((dirmatch (oref this proj-root-dirmatch)))
 	(cond 
 	 ((stringp dirmatch)

@@ -3737,19 +3737,6 @@ ellipses string, only part of the ellipses string will be shown."
   :group 'org-properties
   :type 'string)
 
-(defcustom org-columns-modify-value-for-display-function nil
-  "Function that modifies values for display in column view.
-For example, it can be used to cut out a certain part from a time stamp.
-The function must take 2 arguments:
-
-column-title    The title of the column (*not* the property name)
-value           The value that should be modified.
-
-The function should return the value that should be displayed,
-or nil if the normal value should be used."
-  :group 'org-properties
-  :type '(choice (const nil) (function)))
-
 (defconst org-global-properties-fixed
   '(("VISIBILITY_ALL" . "folded children content all")
     ("CLOCK_MODELINE_TOTAL_ALL" . "current today repeat all auto"))
@@ -4739,7 +4726,6 @@ Otherwise, these types are allowed:
 
 ;; Declare Column View Code
 
-(declare-function org-columns-number-to-string "org-colview" (n fmt &optional printf))
 (declare-function org-columns-get-format-and-top-level "org-colview" ())
 (declare-function org-columns-compute "org-colview" (property))
 
@@ -7880,6 +7866,22 @@ This is a list with the following elements:
     (org-back-to-heading t)
     (buffer-substring (point-at-bol 2) (org-end-of-subtree t))))
 
+(defun org-edit-headline (&optional heading)
+  "Edit the current headline.
+Set it to HEADING when provided."
+  (interactive)
+  (org-with-wide-buffer
+   (org-back-to-heading t)
+   (when (looking-at org-complex-heading-regexp)
+     (let* ((old (match-string-no-properties 4))
+	    (new (org-trim (or heading (read-string "Edit: " old)))))
+       (unless (equal old new)
+	 (if old (replace-match new t t nil 4)
+	   (goto-char (or (match-end 3) (match-end 2) (match-end 1)))
+	   (insert " " new))
+	 (org-set-tags nil t)
+	 (when (looking-at "[ \t]*$") (replace-match "")))))))
+
 (defun org-insert-heading-after-current ()
   "Insert a new heading with same level as current, after current subtree."
   (interactive)
@@ -9116,6 +9118,7 @@ buffer.  It will also recognize item context in multiline items."
 		  org-ctrl-c-minus
 		  org-ctrl-c-star
 		  org-cycle
+		  org-force-cycle-archived
 		  org-forward-heading-same-level
 		  org-insert-heading
 		  org-insert-heading-respect-content
@@ -11325,15 +11328,22 @@ If the file does not exist, an error is thrown."
      ((functionp cmd)
       (save-match-data
 	(set-match-data link-match-data)
-	(funcall cmd file link)))
+	(condition-case nil
+	    (funcall cmd file link)
+	  ;; FIXME: Remove this check when most default installations
+	  ;; of Emacs have at least Org 9.0.
+	  ((debug wrong-number-of-arguments wrong-type-argument
+	    invalid-function)
+	   (user-error "Please see Org News for version 9.0 about \
+`org-file-apps'--Lisp error: %S" cmd)))))
      ((consp cmd)
       ;; FIXME: Remove this check when most default installations of
       ;; Emacs have at least Org 9.0.
       ;; Heads-up instead of silently fall back to
       ;; `org-link-frame-setup' for an old usage of `org-file-apps'
       ;; with sexp instead of a function for `cmd'.
-      (user-error
-       "Please see Org News for version 9.0 about `org-file-apps'"))
+      (user-error "Please see Org News for version 9.0 about \
+`org-file-apps'--Error: Deprecated usage of %S" cmd))
      (t (funcall (cdr (assq 'file org-link-frame-setup)) file)))
     (and (derived-mode-p 'org-mode)
 	 (eq old-mode 'org-mode)
@@ -11481,17 +11491,23 @@ on the system \"/user@host:\"."
 			   org-refile-cache))))
       (and set (org-refile-cache-check-set set) set)))))
 
+(defvar org-outline-path-cache nil
+  "Alist between buffer positions and outline paths.
+It value is an alist (POSITION . PATH) where POSITION is the
+buffer position at the beginning of an entry and PATH is a list
+of strings describing the outline path for that entry, in reverse
+order.")
+
 (defun org-refile-get-targets (&optional default-buffer excluded-entries)
   "Produce a table with refile targets."
   (let ((case-fold-search nil)
 	;; otherwise org confuses "TODO" as a kw and "Todo" as a word
 	(entries (or org-refile-targets '((nil . (:level . 1)))))
-	targets tgs txt re files desc descre fast-path-p level pos0)
+	targets tgs files desc descre)
     (message "Getting targets...")
     (with-current-buffer (or default-buffer (current-buffer))
       (dolist (entry entries)
 	(setq files (car entry) desc (cdr entry))
-	(setq fast-path-p nil)
 	(cond
 	 ((null files) (setq files (list (current-buffer))))
 	 ((eq files 'org-agenda-files)
@@ -11515,7 +11531,6 @@ on the system \"/user@host:\"."
 					    (cdr desc)))
 			       "\\}[ \t]")))
 	 ((eq (car desc) :maxlevel)
-	  (setq fast-path-p t)
 	  (setq descre (concat "^\\*\\{1," (number-to-string
 					    (if org-odd-levels-only
 						(1- (* 2 (cdr desc)))
@@ -11523,58 +11538,51 @@ on the system \"/user@host:\"."
 			       "\\}[ \t]")))
 	 (t (error "Bad refiling target description %s" desc)))
 	(dolist (f files)
-	  (with-current-buffer
-	      (if (bufferp f) f (org-get-agenda-file-buffer f))
+	  (with-current-buffer (if (bufferp f) f (org-get-agenda-file-buffer f))
 	    (or
 	     (setq tgs (org-refile-cache-get (buffer-file-name) descre))
 	     (progn
-	       (when (bufferp f) (setq f (buffer-file-name
-					  (buffer-base-buffer f))))
+	       (when (bufferp f)
+		 (setq f (buffer-file-name (buffer-base-buffer f))))
 	       (setq f (and f (expand-file-name f)))
 	       (when (eq org-refile-use-outline-path 'file)
 		 (push (list (file-name-nondirectory f) f nil nil) tgs))
-	       (save-excursion
-		 (save-restriction
-		   (widen)
-		   (goto-char (point-min))
-		   (while (re-search-forward descre nil t)
-		     (goto-char (setq pos0 (point-at-bol)))
-		     (catch 'next
-		       (when org-refile-target-verify-function
-			 (save-match-data
-			   (or (funcall org-refile-target-verify-function)
-			       (throw 'next t))))
-		       (when (and (looking-at org-complex-heading-regexp)
-				  (not (member (match-string 4) excluded-entries))
-				  (match-string 4))
-			 (setq level (org-reduced-level
-				      (- (match-end 1) (match-beginning 1)))
-			       txt (org-link-display-format (match-string 4))
-			       txt (replace-regexp-in-string "\\( *[[0-9]+/?[0-9]*%?]\\)+$" "" txt)
-			       re (format org-complex-heading-regexp-format
-					  (regexp-quote (match-string 4))))
-			 (when org-refile-use-outline-path
-			   (setq txt (mapconcat
-				      'org-protect-slash
-				      (append
-				       (if (eq org-refile-use-outline-path
-					       'file)
-					   (list (file-name-nondirectory
-						  (buffer-file-name
-						   (buffer-base-buffer))))
-					 (when (eq org-refile-use-outline-path
-						   'full-file-path)
-					   (list (buffer-file-name
+	       (org-with-wide-buffer
+		(goto-char (point-min))
+		(setq org-outline-path-cache nil)
+		(while (re-search-forward descre nil t)
+		  (beginning-of-line)
+		  (looking-at org-complex-heading-regexp)
+		  (let ((begin (point))
+			(heading (org-match-string-no-properties 4)))
+		    (unless (or (and
+				 org-refile-target-verify-function
+				 (not
+				  (funcall org-refile-target-verify-function)))
+				(not heading)
+				(member heading excluded-entries))
+		      (let ((re (format org-complex-heading-regexp-format
+					(regexp-quote heading)))
+			    (target
+			     (if (not org-refile-use-outline-path) heading
+			       (mapconcat
+				#'org-protect-slash
+				(append
+				 (pcase org-refile-use-outline-path
+				   (`file (list (file-name-nondirectory
+						 (buffer-file-name
 						  (buffer-base-buffer)))))
-				       (org-get-outline-path fast-path-p
-							     level txt)
-				       (list txt))
-				      "/")))
-			 (push (list txt f re (org-refile-marker (point)))
-			       tgs)))
-		     (when (= (point) pos0)
-		       ;; verification function has not moved point
-		       (goto-char (point-at-eol))))))))
+				   (`full-file-path
+				    (list (buffer-file-name
+					   (buffer-base-buffer))))
+				   (_ nil))
+				 (org-get-outline-path t t))
+				"/"))))
+			(push (list target f re (org-refile-marker (point)))
+			      tgs)))
+		    (when (= (point) begin)
+		      ;; Verification function has not moved point.
+		      (end-of-line)))))))
 	    (when org-refile-use-cache
 	      (org-refile-cache-put tgs (buffer-file-name) descre))
 	    (setq targets (append tgs targets))))))
@@ -11586,36 +11594,59 @@ on the system \"/user@host:\"."
     (setq s (replace-match "\\" t t s)))
   s)
 
-(defvar org-olpa (make-vector 20 nil))
+(defun org--get-outline-path-1 (&optional use-cache)
+  "Return outline path to current headline.
 
-(defun org-get-outline-path (&optional fastp level heading)
-  "Return the outline path to the current entry, as a list.
+Outline path is a list of strings, in reverse order.  When
+optional argument USE-CACHE is non-nil, make use of a cache.  See
+`org-get-outline-path' for details.
 
-The parameters FASTP, LEVEL, and HEADING are for use by a scanner
-routine which makes outline path derivations for an entire file,
-avoiding backtracing.  Refile target collection makes use of that."
-  (if fastp
-      (progn
-	(when (> level 19)
-	  (error "Outline path failure, more than 19 levels"))
-	(cl-loop for i from level upto 19 do
-		 (aset org-olpa i nil))
-	(prog1
-	    (delq nil (append org-olpa nil))
-	  (aset org-olpa level heading)))
-    (let (rtn case-fold-search)
-      (save-excursion
-	(save-restriction
-	  (widen)
-	  (while (org-up-heading-safe)
-	    (when (looking-at org-complex-heading-regexp)
-	      (push (org-trim
-		     (replace-regexp-in-string
-		      ;; Remove statistical/checkboxes cookies
-		      "\\[[0-9]+%\\]\\|\\[[0-9]+/[0-9]+\\]" ""
-		      (org-match-string-no-properties 4)))
-		    rtn)))
-	  rtn)))))
+Assume buffer is widened and point is on a headline."
+  (or (and use-cache (cdr (assq (point) org-outline-path-cache)))
+      (let ((p (point))
+	    (heading (progn
+		       (looking-at org-complex-heading-regexp)
+		       (if (not (match-end 4)) ""
+			 ;; Remove statistics cookies.
+			 (org-trim
+			  (org-link-display-format
+			   (replace-regexp-in-string
+			    "\\[[0-9]+%\\]\\|\\[[0-9]+/[0-9]+\\]" ""
+			    (org-match-string-no-properties 4))))))))
+	(if (org-up-heading-safe)
+	    (let ((path (cons heading (org--get-outline-path-1 use-cache))))
+	      (when use-cache
+		(push (cons p path) org-outline-path-cache))
+	      path)
+	  ;; This is a new root node.  Since we assume we are moving
+	  ;; forward, we can drop previous cache so as to limit number
+	  ;; of associations there.
+	  (let ((path (list heading)))
+	    (when use-cache (setq org-outline-path-cache (list (cons p path))))
+	    path)))))
+
+(defun org-get-outline-path (&optional with-self use-cache)
+  "Return the outline path to the current entry.
+
+An outline path is a list of ancestors for current headline, as
+a list of strings.  Statistics cookies are removed and links are
+replaced with their description, if any, or their path otherwise.
+
+When optional argument WITH-SELF is non-nil, the path also
+includes the current headline.
+
+When optional argument USE-CACHE is non-nil, cache outline paths
+between calls to this function so as to avoid backtracking.  This
+argument is useful when planning to find more than one outline
+path in the same document.  In that case, there are two
+conditions to satisfy:
+  - `org-outline-path-cache' is set to nil before starting the
+    process;
+  - outline paths are computed by increasing buffer positions."
+  (org-with-wide-buffer
+   (and (or (and with-self (org-back-to-heading t))
+	    (org-up-heading-safe))
+	(reverse (org--get-outline-path-1 use-cache)))))
 
 (defun org-format-outline-path (path &optional width prefix separator)
   "Format the outline path PATH for display.
@@ -14844,7 +14875,7 @@ If DATA is nil or the empty string, any tags will be removed."
 	(delete-region (match-beginning 1) (match-end 1))))))
 
 (defun org-align-all-tags ()
-  "Align the tags i all headings."
+  "Align the tags in all headings."
   (interactive)
   (save-excursion
     (or (ignore-errors (org-back-to-heading t))
@@ -15606,8 +15637,7 @@ strings."
 	      (let ((clocksum (get-text-property (point) :org-clock-minutes)))
 		(when clocksum
 		  (push (cons "CLOCKSUM"
-			      (org-columns-number-to-string
-			       (/ (float clocksum) 60.) 'add_times))
+			      (org-minutes-to-clocksum-string clocksum))
 			props)))
 	      (when specific (throw 'exit props)))
 	    (when (or (not specific) (string= specific "CLOCKSUM_T"))
@@ -15615,8 +15645,7 @@ strings."
 						  :org-clock-minutes-today)))
 		(when clocksumt
 		  (push (cons "CLOCKSUM_T"
-			      (org-columns-number-to-string
-			       (/ (float clocksumt) 60.) 'add_times))
+			      (org-minutes-to-clocksum-string clocksumt))
 			props)))
 	      (when specific (throw 'exit props)))
 	    (when (or (not specific) (string= specific "ITEM"))
@@ -16365,7 +16394,7 @@ then applies it to the property in the column format's scope."
     (user-error "Not at a property"))
   (let ((prop (org-match-string-no-properties 2)))
     (org-columns-get-format-and-top-level)
-    (unless (nth 3 (assoc prop org-columns-current-fmt-compiled))
+    (unless (nth 3 (assoc-string prop org-columns-current-fmt-compiled t))
       (user-error "No operator defined for property %s" prop))
     (org-columns-compute prop)))
 
@@ -16982,7 +17011,7 @@ user."
 			  (string-to-number (format-time-string "%Y"))))
 	    month (string-to-number (match-string 3 ans))
 	    day (string-to-number (match-string 4 ans)))
-      (when (< year 100) (setq year (+ 2000 year)))
+      (setq year (org-small-year-to-year year))
       (setq ans (replace-match (format "%04d-%02d-%02d\\5" year month day)
 			       t nil ans)))
 
@@ -17006,7 +17035,7 @@ user."
 			  (string-to-number (format-time-string "%Y"))))
 	    month (string-to-number (match-string 1 ans))
 	    day (string-to-number (match-string 2 ans)))
-      (when (< year 100) (setq year (+ 2000 year)))
+      (setq year (org-small-year-to-year year))
       (setq ans (replace-match (format "%04d-%02d-%02d\\5" year month day)
 			       t nil ans)))
     ;; Help matching am/pm times, because `parse-time-string' does not do that.
@@ -17216,8 +17245,7 @@ user function argument order change dependent on argument order."
 
 (defun org-eval-in-calendar (form &optional keepdate)
   "Eval FORM in the calendar window and return to current window.
-When KEEPDATE is non-nil, update `org-ans2' from the cursor date,
-otherwise stick to the current value of `org-ans2'."
+Unless KEEPDATE is non-nil, update `org-ans2' to the cursor date."
   (let ((sf (selected-frame))
 	(sw (selected-window)))
     (select-window (get-buffer-window "*Calendar*" t))
@@ -17419,14 +17447,15 @@ both scheduled and deadline timestamps."
 (defun org-check-before-date (d)
   "Check if there are deadlines or scheduled entries before date D."
   (interactive (list (org-read-date)))
-  (let ((case-fold-search nil)
-	(regexp (org-re-timestamp org-ts-type))
-	(callback
-	 `(lambda ()
+  (let* ((case-fold-search nil)
+	 (regexp (org-re-timestamp org-ts-type))
+	 (ts-type org-ts-type)
+	 (callback
+	  (lambda ()
 	    (let ((match (match-string 1)))
-	      (and ,(if (memq org-ts-type '(active inactive all))
-			'(eq (org-element-type (org-element-context)) 'timestamp)
-		      '(org-at-planning-p))
+	      (and (if (memq ts-type '(active inactive all))
+		       (eq (org-element-type (org-element-context)) 'timestamp)
+		     (org-at-planning-p))
 		   (time-less-p
 		    (org-time-string-to-time match)
 		    (org-time-string-to-time d)))))))
@@ -17437,14 +17466,15 @@ both scheduled and deadline timestamps."
 (defun org-check-after-date (d)
   "Check if there are deadlines or scheduled entries after date D."
   (interactive (list (org-read-date)))
-  (let ((case-fold-search nil)
-	(regexp (org-re-timestamp org-ts-type))
-	(callback
-	 `(lambda ()
+  (let* ((case-fold-search nil)
+	 (regexp (org-re-timestamp org-ts-type))
+	 (ts-type org-ts-type)
+	 (callback
+	  (lambda ()
 	    (let ((match (match-string 1)))
-	      (and ,(if (memq org-ts-type '(active inactive all))
-			'(eq (org-element-type (org-element-context)) 'timestamp)
-		      '(org-at-planning-p))
+	      (and (if (memq ts-type '(active inactive all))
+		       (eq (org-element-type (org-element-context)) 'timestamp)
+		     (org-at-planning-p))
 		   (not (time-less-p
 			 (org-time-string-to-time match)
 			 (org-time-string-to-time d))))))))
@@ -17628,11 +17658,11 @@ D may be an absolute day number, or a calendar-type list (month day year)."
   (when (numberp d) (setq d (calendar-gregorian-from-absolute d)))
   (encode-time 0 0 0 (nth 1 d) (car d) (nth 2 d)))
 
+(defvar org-agenda-current-date)
 (defun org-calendar-holiday ()
   "List of holidays, for Diary display in Org mode."
-  (declare (special date))
   (require 'holidays)
-  (let ((hl (calendar-check-holidays date)))
+  (let ((hl (calendar-check-holidays org-agenda-current-date)))
     (and hl (mapconcat #'identity hl "; "))))
 
 (defun org-diary-sexp-entry (sexp entry d)
@@ -18898,28 +18928,38 @@ looks only before point, not after."
     (org-in-regexp
      "\\\\[a-zA-Z]+\\*?\\(\\(\\[[^][\n{}]*\\]\\)\\|\\({[^{}\n]*}\\)\\)*")))
 
-(defvar-local org-latex-fragment-image-overlays nil
-  "List of overlays carrying the images of latex fragments.")
+(defun org--format-latex-make-overlay (beg end image)
+  "Build an overlay between BEG and END using IMAGE file."
+  (let ((ov (make-overlay beg end)))
+    (overlay-put ov 'org-overlay-type 'org-latex-overlay)
+    (overlay-put ov 'evaporate t)
+    (overlay-put ov
+		 'modification-hooks
+		 (list (lambda (o _flag _beg _end &optional _l)
+			 (delete-overlay o))))
+    (if (featurep 'xemacs)
+	(progn
+	  (overlay-put ov 'invisible t)
+	  (overlay-put ov 'end-glyph (make-glyph (vector 'png :file image))))
+      (overlay-put ov
+		   'display
+		   (list 'image :type 'png :file image :ascent 'center)))))
+
+(defun org--list-latex-overlays (&optional beg end)
+  "List all Org LaTeX overlays in current buffer.
+Limit to overlays between BEG and END when those are provided."
+  (cl-remove-if-not
+   (lambda (o) (eq (overlay-get o 'org-overlay-type) 'org-latex-overlay))
+   (overlays-in (or beg (point-min)) (or end (point-max)))))
 
 (defun org-remove-latex-fragment-image-overlays (&optional beg end)
   "Remove all overlays with LaTeX fragment images in current buffer.
 When optional arguments BEG and END are non-nil, remove all
-overlays between them instead.  Return t when some overlays were
-removed, nil otherwise."
-  (let (removedp)
-    (setq org-latex-fragment-image-overlays
-	  (let ((beg (or beg (point-min)))
-		(end (or end (point-max))))
-	    (cl-remove-if
-	     (lambda (o)
-	       (cond ((not (overlay-buffer o)) (delete-overlay o) t)
-		     ((and (>= (overlay-start o) beg)
-			   (<= (overlay-end o) end))
-		      (delete-overlay o)
-		      (unless removedp (setq removedp t)))
-		     (t nil)))
-	     org-latex-fragment-image-overlays)))
-    removedp))
+overlays between them instead.  Return a non-nil value when some
+overlays were removed, nil otherwise."
+  (let ((overlays (org--list-latex-overlays beg end)))
+    (mapc #'delete-overlay overlays)
+    overlays))
 
 (define-obsolete-function-alias
   'org-preview-latex-fragment 'org-toggle-latex-fragment "24.4")
@@ -18937,8 +18977,6 @@ headline.  With a double prefix ARG \\[universal-argument] \
 \\[universal-argument] preview or clear images
 for all fragments in the buffer."
   (interactive "P")
-  (unless (buffer-file-name (buffer-base-buffer))
-    (user-error "Can't preview LaTeX fragment in a non-file buffer"))
   (when (display-graphic-p)
     (catch 'exit
       (save-excursion
@@ -18986,11 +19024,11 @@ for all fragments in the buffer."
 		   (narrow-to-region beg end))))))
 	    (let ((file (buffer-file-name (buffer-base-buffer))))
 	      (org-format-latex
-	       (concat org-latex-preview-ltxpng-directory
-		       (file-name-sans-extension (file-name-nondirectory file)))
+	       (concat org-latex-preview-ltxpng-directory "org-ltxpng")
 	       ;; Emacs cannot overlay images from remote hosts.
 	       ;; Create it in `temporary-file-directory' instead.
-	       (if (file-remote-p file) temporary-file-directory
+	       (if (or (not file) (file-remote-p file))
+		   temporary-file-directory
 		 default-directory)
 	       'overlays msg 'forbuffer
 	       org-latex-create-formula-image-program)))
@@ -18998,27 +19036,6 @@ for all fragments in the buffer."
 	  ;; when widening back the buffer.
 	  (set-window-start nil window-start)
 	  (message (concat msg "done")))))))
-
-(defun org--format-latex-make-overlay (beg end image)
-  "Build an overlay between BEG and END using IMAGE file.
-Register new overlay in `org-latex-fragment-image-overlays'."
-  (let ((ov (make-overlay beg end)))
-    (overlay-put ov 'org-overlay-type 'org-latex-overlay)
-    (overlay-put ov 'evaporate t)
-    (overlay-put ov
-		 'modification-hooks
-		 (list (lambda (o after _beg _end &optional _l)
-			 (unless after
-			   (org-remove-latex-fragment-image-overlays
-			    (overlay-start o) (overlay-end o))))))
-    (if (featurep 'xemacs)
-	(progn
-	  (overlay-put ov 'invisible t)
-	  (overlay-put ov 'end-glyph (make-glyph (vector 'png :file image))))
-      (overlay-put ov
-		   'display
-		   (list 'image :type 'png :file image :ascent 'center)))
-    (push ov org-latex-fragment-image-overlays)))
 
 (defun org-format-latex
     (prefix &optional dir overlays msg forbuffer processing-type)
@@ -19922,7 +19939,7 @@ boundaries."
 (org-defkey org-mode-map "\C-c\C-xe"    'org-set-effort)
 (org-defkey org-mode-map "\C-c\C-xE"    'org-inc-effort)
 (org-defkey org-mode-map "\C-c\C-xo"    'org-toggle-ordered-property)
-(org-defkey org-mode-map "\C-c\C-xi"    'org-insert-columns-dblock)
+(org-defkey org-mode-map "\C-c\C-xi"    'org-columns-insert-dblock)
 (org-defkey org-mode-map [(control ?c) (control ?x) ?\;] 'org-timer-set-timer)
 
 (org-defkey org-mode-map "\C-c\C-x."    'org-timer)
@@ -21774,7 +21791,7 @@ on context.  See the individual commands for more information."
      "--"
      ["Set property" org-set-property (not (org-before-first-heading-p))]
      ["Column view of properties" org-columns t]
-     ["Insert Column View DBlock" org-insert-columns-dblock t])
+     ["Insert Column View DBlock" org-columns-insert-dblock t])
     ("Dates and Scheduling"
      ["Timestamp" org-time-stamp (not (org-before-first-heading-p))]
      ["Timestamp (inactive)" org-time-stamp-inactive (not (org-before-first-heading-p))]
@@ -22440,11 +22457,11 @@ and :keyword."
       (when (looking-at org-radio-target-regexp)
 	(push (org-point-in-group p 0 :radio-target) clist))
       (goto-char p))
-     ((setq o (car (delq nil
-			 (mapcar
-			  (lambda (x)
-			    (when (memq x org-latex-fragment-image-overlays) x))
-			  (overlays-at (point))))))
+     ((setq o (cl-some
+	       (lambda (o)
+		 (and (eq (overlay-get o 'org-overlay-type) 'org-latex-overlay)
+		      o))
+	       (overlays-at (point))))
       (push (list :latex-fragment
 		  (overlay-start o) (overlay-end o)) clist)
       (push (list :latex-preview
@@ -22863,11 +22880,7 @@ ELEMENT."
 		(let ((cend (org-element-property :contents-end element)))
 		  (and cend (<= cend pos))))
 	   (if (memq type '(footnote-definition item plain-list))
-	       (let ((last (org-element-at-point)))
-		 (org--get-expected-indentation
-		  last
-		  (memq (org-element-type last)
-			'(footnote-definition item plain-list))))
+	       (org--get-expected-indentation (org-element-at-point) nil)
 	     (goto-char start)
 	     (org-get-indentation)))
 	  ;; In any other case, indent like the current line.
@@ -24365,7 +24378,7 @@ respect customization of `org-odd-levels-only'."
    (outline-next-visible-heading arg)))
 
 (defun org-previous-visible-heading (arg)
-  "Move to the next visible heading.
+  "Move to the previous visible heading.
 
 This function wraps `outline-previous-visible-heading' with
 `org-with-limited-levels' in order to skip over inline tasks and
@@ -24918,17 +24931,16 @@ when non-nil, is a regexp matching keywords names."
 		 (when (derived-mode-p 'org-mode)
 		   (org-show-context 'org-goto))))))
 
-(defun org-link-display-format (link)
-  "Replace a link with its the description.
+(defun org-link-display-format (s)
+  "Replace links in string S with their description.
 If there is no description, use the link target."
   (save-match-data
-    (if (string-match org-bracket-link-analytic-regexp link)
-	(replace-match (if (match-end 5)
-			   (match-string 5 link)
-			 (concat (match-string 1 link)
-				 (match-string 3 link)))
-		       nil t link)
-      link)))
+    (replace-regexp-in-string
+     org-bracket-link-analytic-regexp
+     (lambda (m)
+       (if (match-end 5) (match-string 5 m)
+	 (concat (match-string 1 m) (match-string 3 m))))
+     s nil t)))
 
 (defun org-toggle-link-display ()
   "Toggle the literal or descriptive display of links."

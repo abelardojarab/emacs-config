@@ -20,7 +20,7 @@
 
 ;;; Code:
 
-(ert-deftest test-org-babel/indented-cached-org-bracket-link ()
+(ert-deftest test-ob/indented-cached-org-bracket-link ()
   "When the result of a source block is a cached indented link it
 should still return the link."
   (should
@@ -36,7 +36,7 @@ should still return the link."
       (string= (concat default-directory "test.txt")
 	       (org-babel-execute-src-block))))))
 
-(ert-deftest test-org-babel/multi-line-header-regexp ()
+(ert-deftest test-ob/multi-line-header-regexp ()
   (should(equal "^[ \t]*#\\+headers?:[ \t]*\\([^\n]*\\)$"
 		org-babel-multi-line-header-regexp))
   ;;TODO can be optimised - and what about blah4 blah5 blah6?
@@ -56,7 +56,7 @@ should still return the link."
 	 org-babel-multi-line-header-regexp
 	 "   \t #+headers : blah1 blah2 blah3 \t\n\t\n blah4 blah5 blah6 \n"))))
 
-(ert-deftest test-org-babel/src-block-regexp ()
+(ert-deftest test-ob/src-block-regexp ()
   (let ((test-block
 	 (concat
 	  "#+begin_src language -n-r-a-b -c :argument-1 yes :argument-2 no\n"
@@ -87,7 +87,7 @@ should still return the link."
 	     org-babel-src-block-regexp
 	     (replace-regexp-in-string body "" test-block)))))
 
-(ert-deftest test-org-babel/default-inline-header-args ()
+(ert-deftest test-ob/default-inline-header-args ()
   (should(equal
 	  '((:session . "none")
 	    (:results . "replace")
@@ -114,23 +114,23 @@ should still return the link."
                      (cdr (assoc (car pair) results)))))))
 
 ;;; ob-get-src-block-info
-(ert-deftest test-org-babel/get-src-block-info-language ()
+(ert-deftest test-ob/get-src-block-info-language ()
   (org-test-at-marker nil org-test-file-ob-anchor
     (let ((info (org-babel-get-src-block-info)))
       (should (string= "emacs-lisp" (nth 0 info))))))
 
-(ert-deftest test-org-babel/get-src-block-info-body ()
+(ert-deftest test-ob/get-src-block-info-body ()
   (org-test-at-marker nil org-test-file-ob-anchor
     (let ((info (org-babel-get-src-block-info)))
       (should (string-match (regexp-quote org-test-file-ob-anchor)
 			    (nth 1 info))))))
 
-(ert-deftest test-org-babel/get-src-block-info-tangle ()
+(ert-deftest test-ob/get-src-block-info-tangle ()
   (org-test-at-marker nil org-test-file-ob-anchor
     (let ((info (org-babel-get-src-block-info)))
       (should (string= "no" (cdr (assoc :tangle (nth 2 info))))))))
 
-(ert-deftest test-org-babel/elisp-in-header-arguments ()
+(ert-deftest test-ob/elisp-in-header-arguments ()
   "Test execution of elisp forms in header arguments."
   (org-test-with-temp-text-in-file "
 
@@ -146,7 +146,7 @@ should still return the link."
     (let ((info (org-babel-get-src-block-info)))
       (should (= 42 (org-babel-execute-src-block))))))
 
-(ert-deftest test-org-babel/simple-named-code-block ()
+(ert-deftest test-ob/simple-named-code-block ()
   "Test that simple named code blocks can be evaluated."
   (org-test-with-temp-text-in-file "
 
@@ -157,7 +157,7 @@ should still return the link."
     (org-babel-next-src-block 1)
     (should (= 42 (org-babel-execute-src-block)))))
 
-(ert-deftest test-org-babel/simple-variable-resolution ()
+(ert-deftest test-ob/simple-variable-resolution ()
   "Test that simple variable resolution is working."
   (org-test-with-temp-text-in-file "
 
@@ -177,7 +177,7 @@ should still return the link."
 			    (point-at-bol)
 			    (point-at-eol))))))
 
-(ert-deftest test-org-babel/multi-line-header-arguments ()
+(ert-deftest test-ob/multi-line-header-arguments ()
   "Test that multi-line header arguments and can be read."
   (org-test-with-temp-text-in-file "
 
@@ -195,7 +195,7 @@ should still return the link."
       (should(equal 'a (cadr (assoc 1 results))))
       (should(equal 'd (cadr (assoc 4 results)))))))
 
-(ert-deftest test-org-babel/parse-header-args ()
+(ert-deftest test-ob/parse-header-args ()
   (org-test-with-temp-text-in-file "
 
 #+begin_src example-lang :session     :results output :var num=9
@@ -213,7 +213,7 @@ should still return the link."
       (should (equal '(:result-type . output) (assoc :result-type params)))
       (should (equal '(num . 9) (cdr (assoc :var params)))))))
 
-(ert-deftest test-org-babel/parse-header-args2 ()
+(ert-deftest test-ob/parse-header-args2 ()
   (org-test-with-temp-text-in-file "
 
 * resolving sub-trees as references
@@ -238,7 +238,7 @@ this is simple"
     (org-babel-next-src-block)
     (should (= 14 (org-babel-execute-src-block)))))
 
-(ert-deftest test-org-babel/inline-src-blocks ()
+(ert-deftest test-ob/inline-src-blocks ()
   (should
    (= 1
       (org-test-with-temp-text
@@ -279,33 +279,7 @@ at the beginning of a line."
  :results silent]{(+ 6 1)}"
 	(org-babel-execute-src-block)))))
 
-(ert-deftest test-org-babel/org-babel-get-inline-src-block-matches ()
-  (flet ((test-at-id (id)
-	   (org-test-at-id
-	    id
-	    (let ((test-point (point)))
-	      (should (fboundp 'org-babel-get-inline-src-block-matches))
-	      (should (re-search-forward "src_" nil t)) ;; 1
-	      (should (org-babel-get-inline-src-block-matches))
-	      (should (re-search-forward " b" nil (point-at-bol))) ;; 1
-	      (should-not (org-babel-get-inline-src-block-matches))
-	      (should (re-search-forward "in" nil t)) ;; 2
-	      (should-not (org-babel-get-inline-src-block-matches))
-	      (should (re-search-forward "echo" nil t)) ;; 2
-	      (should (org-babel-get-inline-src-block-matches))
-	      (should (re-search-forward "blocks" nil t)) ;; 3
-	      (backward-char 7) ;; 3
-	      (should (org-babel-get-inline-src-block-matches))
-	      (forward-char 1) ;;3
-	      (should-not (org-babel-get-inline-src-block-matches))
-	      (should (re-search-forward ":results" nil t)) ;; 4
-	      (should (org-babel-get-inline-src-block-matches))
-	      (end-of-line)
-	      (should-not (org-babel-get-inline-src-block-matches))))))
-    (test-at-id "0D0983D4-DE33-400A-8A05-A225A567BC74")
-    (test-at-id "d55dada7-de0e-4340-8061-787cccbedee5")))
-
-(ert-deftest test-org-babel/inline-src_blk-default-results-replace-line-1 ()
+(ert-deftest test-ob/inline-src_blk-default-results-replace-line-1 ()
   (let ((test-line "src_sh{echo 1}")
 	(org-babel-inline-result-wrap "=%s="))
     ;; src_ at bol line 1...
@@ -340,10 +314,23 @@ at the beginning of a line."
 		 (concat test-line " {{{results(=1=)}}}")
 		 (buffer-substring-no-properties (point-at-bol) (point-at-eol))))
 	(forward-char 6)
-	(should-error (org-ctrl-c-ctrl-c))
-	))))
+	(should-error (org-ctrl-c-ctrl-c))))
+    ;; Results on a subsequent line are replaced.
+    (should
+     (equal
+      "src_emacs-lisp{(+ 1 2)}\n  {{{results(=3=)}}}"
+      (org-test-with-temp-text "src_emacs-lisp{(+ 1 2)}\n  {{{results(=2=)}}}"
+	(let ((org-babel-inline-result-wrap "=%s=")) (org-babel-execute-maybe))
+	(buffer-string))))
+    ;; Also handle results at the beginning of a line.
+    (should
+     (equal
+      "src_emacs-lisp{(+ 1 2)}\n{{{results(=3=)}}}"
+      (org-test-with-temp-text "src_emacs-lisp{(+ 1 2)}\n{{{results(=2=)}}}"
+	(let ((org-babel-inline-result-wrap "=%s=")) (org-babel-execute-maybe))
+	(buffer-string))))))
 
-(ert-deftest test-org-babel/inline-src_blk-default-results-replace-line-2 ()
+(ert-deftest test-ob/inline-src_blk-default-results-replace-line-2 ()
   ;; src_ at bol line 2...
   (let ((test-line " src_emacs-lisp{ \"x\" }")
 	(org-babel-inline-result-wrap "=%s="))
@@ -376,7 +363,7 @@ at the beginning of a line."
       (forward-char 3)
       (should-error (org-ctrl-c-ctrl-c)))))
 
-(ert-deftest test-org-babel/inline-src_blk-manual-results-replace ()
+(ert-deftest test-ob/inline-src_blk-manual-results-replace ()
   (let ((test-line " src_emacs-lisp[:results replace]{ \"x\" }")
 	(org-babel-inline-result-wrap "=%s="))
     (org-test-with-temp-text
@@ -408,7 +395,7 @@ at the beginning of a line."
       (forward-char 3)
       (should-error (org-ctrl-c-ctrl-c)))))
 
-(ert-deftest test-org-babel/inline-src_blk-results-silent ()
+(ert-deftest test-ob/inline-src_blk-results-silent ()
   (let ((test-line "src_emacs-lisp[ :results silent ]{ \"x\" }"))
     (org-test-with-temp-text test-line
       (org-babel-execute-maybe)
@@ -432,7 +419,7 @@ at the beginning of a line."
       (forward-char 2)
       (should-error (org-ctrl-c-ctrl-c)))))
 
-(ert-deftest test-org-babel/inline-src_blk-results-raw ()
+(ert-deftest test-ob/inline-src_blk-results-raw ()
   (let ((test-line "src_emacs-lisp[ :results raw ]{ \"x\" }"))
     (org-test-with-temp-text test-line
       (org-babel-execute-maybe)
@@ -452,7 +439,7 @@ at the beginning of a line."
       (forward-char 2)
       (should-error (org-ctrl-c-ctrl-c)))))
 
-(ert-deftest test-org-babel/inline-src_blk-results-file ()
+(ert-deftest test-ob/inline-src_blk-results-file ()
   (let ((test-line "src_emacs-lisp[ :results file ]{ \"~/test-file\"  }"))
     (org-test-with-temp-text
 	test-line
@@ -461,7 +448,7 @@ at the beginning of a line."
 		       (buffer-substring-no-properties
 			(point-min) (point-max)))))))
 
-(ert-deftest test-org-babel/inline-src_blk-results-scalar ()
+(ert-deftest test-ob/inline-src_blk-results-scalar ()
   (let ((test-line "src_emacs-lisp[ :results scalar ]{ \"x\"  }")
 	(org-babel-inline-result-wrap "=%s="))
     (org-test-with-temp-text
@@ -471,7 +458,7 @@ at the beginning of a line."
 		       (buffer-substring-no-properties
 			(point-min) (point-max)))))))
 
-(ert-deftest test-org-babel/inline-src_blk-results-verbatim ()
+(ert-deftest test-ob/inline-src_blk-results-verbatim ()
   (let ((test-line "src_emacs-lisp[ :results verbatim ]{ \"x\"  }")
 	(org-babel-inline-result-wrap "=%s="))
     (org-test-with-temp-text
@@ -481,7 +468,7 @@ at the beginning of a line."
 		       (buffer-substring-no-properties
 			(point-min) (point-max)))))))
 
-(ert-deftest test-org-babel/combining-scalar-and-raw-result-types ()
+(ert-deftest test-ob/combining-scalar-and-raw-result-types ()
   (org-test-with-temp-text-in-file "
 
 #+begin_src sh :results scalar
@@ -502,11 +489,12 @@ echo \"[[file:./cv.cls]]\"
 			(forward-line 1)))
       (goto-char (point-min))
       (next-result)
-      (should (org-babel-in-example-or-verbatim))
+      (should (eq (org-element-type (org-element-at-point)) 'fixed-width))
       (next-result)
-      (should (not (org-babel-in-example-or-verbatim))))))
+      (should-not
+       (eq (org-element-type (org-element-at-point)) 'fixed-width)))))
 
-(ert-deftest test-org-babel/no-defaut-value-for-var ()
+(ert-deftest test-ob/no-defaut-value-for-var ()
   "Test that the absence of a default value for a variable DOES THROW
   a proper error."
   (org-test-at-id "f2df5ba6-75fa-4e6b-8441-65ed84963627"
@@ -519,7 +507,7 @@ echo \"[[file:./cv.cls]]\"
 	  "Variable \"x\" must be assigned a default value")
 	err)))))
 
-(ert-deftest test-org-babel/just-one-results-block ()
+(ert-deftest test-ob/just-one-results-block ()
   "Test that evaluating two times the same code block does not result in a
 duplicate results block."
   (org-test-with-temp-text "#+begin_src sh\necho Hello\n#+end_src\n"
@@ -529,20 +517,20 @@ duplicate results block."
     (should (search-forward "Hello")) ; the same string in the results block
     (should-error (search-forward "Hello"))))
 
-(ert-deftest test-org-babel/nested-code-block ()
+(ert-deftest test-ob/nested-code-block ()
   "Test nested code blocks inside code blocks don't cause problems."
   (should
    (string= "#+begin_src emacs-lisp\n  'foo\n#+end_src"
 	    (org-test-with-temp-text "#+begin_src org :results silent
   ,#+begin_src emacs-lisp
-  ,  'foo
+    'foo
   ,#+end_src
 #+end_src"
 	      (let ((org-edit-src-content-indentation 2)
 		    (org-src-preserve-indentation nil))
 		(org-babel-execute-src-block))))))
 
-(ert-deftest test-org-babel/partial-nested-code-block ()
+(ert-deftest test-ob/partial-nested-code-block ()
   "Test nested code blocks inside code blocks don't cause problems."
   (org-test-with-temp-text "#+begin_src org :results silent
   ,#+begin_src emacs-lisp
@@ -598,11 +586,11 @@ x
 
 (ert-deftest test-ob/do-not-resolve-to-partial-names-data ()
   (org-test-with-temp-text "
-#+tblname: base_plus
+#+name: base_plus
 | 1 |
 | 2 |
 
-#+tblname: base
+#+name: base
 | 3 |
 | 4 |
 
@@ -917,7 +905,7 @@ trying to find the :END: marker."
 
 * next heading"))
 
-(ert-deftest test-org-babel/inline-src_blk-preceded-punct-preceded-by-point ()
+(ert-deftest test-ob/inline-src_blk-preceded-punct-preceded-by-point ()
   (let ((test-line ".src_emacs-lisp[ :results verbatim ]{ \"x\"  }")
 	(org-babel-inline-result-wrap "=%s="))
     (org-test-with-temp-text
@@ -1200,7 +1188,7 @@ Paragraph"
       (org-babel-execute-src-block))
     (should-not (re-search-forward "^#\\+RESULTS:" nil t))
     (widen)
-    (should (should (re-search-forward "^: 3" nil t)))))
+    (should (re-search-forward "^: 3" nil t))))
 
 (ert-deftest test-ob/specific-colnames ()
   "Test passing specific column names."
@@ -1348,7 +1336,7 @@ echo \"$data\"
 		       (org-babel-execute-src-block)))
       (should (= noweb-expansions-in-cache-var 2)))))
 
-(ert-deftest test-org-babel/file-ext-and-output-dir ()
+(ert-deftest test-ob/file-ext-and-output-dir ()
   (org-test-at-id "93573e1d-6486-442e-b6d0-3fedbdc37c9b"
     (org-babel-next-src-block)
     (should (equal  "file-ext-basic.txt"
@@ -1370,7 +1358,7 @@ echo \"$data\"
 		   (cdr (assq :file (nth 2 (org-babel-get-src-block-info t))))))
     ))
 
-(ert-deftest test-org-babel/script-escape ()
+(ert-deftest test-ob/script-escape ()
   ;; Delimited lists of numbers
   (should (equal '(1 2 3)
 		 (org-babel-script-escape "[1 2 3]")))
@@ -1455,17 +1443,18 @@ echo \"$data\"
   (should (equal "foo\\\"bar"
 		 (org-babel-script-escape "\"foo\\\\\\\"bar\""))))
 
-(ert-deftest ob/process-params-no-duplicates ()
-    (should (equal (org-babel-process-params '((:colname-names . 1)
-                                               (:rowname-names . 1)
-                                               (:result-params . 1)
-                                               (:result-type . 1)
-                                               (:var . "\"foo\"")))
-                   '((:var)
-		     (:colname-names . 1)
-		     (:rowname-names . 1)
-		     (:result-params . 1)
-		     (:result-type . value)))))
+(ert-deftest test-ob/process-params-no-duplicates ()
+  (should
+   (equal (org-babel-process-params '((:colname-names)
+				      (:rowname-names)
+				      (:result-params)
+				      (:result-type)
+				      (:var . "\"foo\"")))
+	  '((:var)
+	    (:colname-names)
+	    (:rowname-names)
+	    (:result-params)
+	    (:result-type . value)))))
 
 (defun org-test-babel-confirm-evaluate (eval-value)
   (org-test-with-temp-text (format "#+begin_src emacs-lisp :eval %s
@@ -1475,7 +1464,7 @@ echo \"$data\"
 	(let ((info (org-babel-get-src-block-info)))
 	   (org-babel-check-confirm-evaluate info))))
 
-(ert-deftest ob/check-eval ()
+(ert-deftest test-ob/check-eval ()
   (let ((org-confirm-babel-evaluate t))
     ;; Non-export tests
     (dolist (pair '(("no" . nil)
@@ -1566,6 +1555,147 @@ echo \"$data\"
 	    (org-test-with-temp-text "#+begin_src elisp -i\n(+ 1 1)\n#+end_src"
 	      (org-babel-update-block-body "      2")
 	      (buffer-string))))))
+
+(ert-deftest test-ob/find-named-result ()
+  "Test `org-babel-find-named-result' specifications."
+  (should
+   (= 1
+      (org-test-with-temp-text "#+results: foo\n: result"
+	(org-babel-find-named-result "foo"))))
+  (should-not
+   (org-test-with-temp-text "#+results: foo\n: result"
+     (org-babel-find-named-result "bar")))
+  (should-not
+   (org-test-with-temp-text "#+results: foobar\n: result"
+     (org-babel-find-named-result "foo")))
+  ;; Search is case insensitive.
+  (should
+   (org-test-with-temp-text "#+RESULTS: FOO\n: result"
+     (org-babel-find-named-result "foo")))
+  ;; Handle hash in results keyword.
+  (should
+   (org-test-with-temp-text "#+results[hash]: FOO\n: result"
+     (org-babel-find-named-result "foo")))
+  ;; Accept orphaned affiliated keywords.
+  (should
+   (org-test-with-temp-text "#+results: foo"
+     (org-babel-find-named-result "foo"))))
+
+(ert-deftest test-ob/where-is-src-block-result ()
+  "Test `org-babel-where-is-src-block-result' specifications."
+  ;; Find anonymous results.
+  (should
+   (equal "#+RESULTS:"
+	  (org-test-with-temp-text
+	      "#+BEGIN_SRC emacs-lisp\n(+ 1 1)\n#+END_SRC\n\n#+RESULTS:\n: 2"
+	    (goto-char (org-babel-where-is-src-block-result))
+	    (buffer-substring-no-properties (point) (line-end-position)))))
+  ;; Find named results.  Those have priority over anonymous ones.
+  (should
+   (equal "#+RESULTS: example"
+	  (org-test-with-temp-text
+	      "
+<point>#+NAME: example
+#+BEGIN_SRC emacs-lisp
+\(+ 1 1)
+#+END_SRC
+
+#+RESULTS: example
+: 2"
+	    (goto-char (org-babel-where-is-src-block-result))
+	    (buffer-substring-no-properties (point) (line-end-position)))))
+  (should
+   (equal "#+RESULTS: example"
+	  (org-test-with-temp-text
+	      "
+<point>#+NAME: example
+#+BEGIN_SRC emacs-lisp
+\(+ 1 1)
+#+END_SRC
+
+#+RESULTS:
+: fake
+
+#+RESULTS: example
+: 2"
+	    (goto-char (org-babel-where-is-src-block-result))
+	    (buffer-substring-no-properties (point) (line-end-position)))))
+  ;; Return nil when no result is found.
+  (should-not
+   (org-test-with-temp-text "#+BEGIN_SRC emacs-lisp\n(+ 1 1)\n#+END_SRC"
+     (org-babel-where-is-src-block-result)))
+  (should-not
+   (org-test-with-temp-text
+       "- item\n  #+BEGIN_SRC emacs-lisp\n(+ 1 1)\n#+END_SRC\n\n"
+     (org-babel-where-is-src-block-result)))
+  ;; When optional argument INSERT is non-nil, add RESULTS keyword
+  ;; whenever no RESULTS can be found.
+  (should
+   (equal
+    "#+RESULTS:"
+    (org-test-with-temp-text "#+BEGIN_SRC emacs-lisp\n(+ 1 1)\n#+END_SRC"
+      (let ((org-babel-results-keyword "RESULTS"))
+	(goto-char (org-babel-where-is-src-block-result t)))
+      (buffer-substring-no-properties (point) (line-end-position)))))
+  ;; Insert a named RESULTS keyword if possible.
+  (should
+   (equal
+    "#+RESULTS: e"
+    (org-test-with-temp-text
+	"#+NAME: e\n#+BEGIN_SRC emacs-lisp\n(+ 1 1)\n#+END_SRC"
+      (let ((org-babel-results-keyword "RESULTS"))
+	(goto-char (org-babel-where-is-src-block-result t)))
+      (buffer-substring-no-properties (point) (line-end-position)))))
+  ;; When optional argument HASH is provided, clear RESULTS keyword
+  ;; and related contents if they do not match it.
+  (should
+   (equal
+    "#+RESULTS[bbbb]:"
+    (org-test-with-temp-text
+	"#+BEGIN_SRC emacs-lisp\n(+ 1 1)\n#+END_SRC\n\n#+RESULTS[aaaa]:\n: 3"
+      (let ((org-babel-results-keyword "RESULTS"))
+	(goto-char (org-babel-where-is-src-block-result nil nil "bbbb")))
+      (org-trim (buffer-substring-no-properties (point) (point-max))))))
+  (should
+   (equal
+    "#+RESULTS[bbbb]:"
+    (org-test-with-temp-text
+	"#+BEGIN_SRC emacs-lisp\n(+ 1 1)\n#+END_SRC\n\n#+RESULTS[aaaa]:"
+      (let ((org-babel-results-keyword "RESULTS"))
+	(goto-char (org-babel-where-is-src-block-result nil nil "bbbb")))
+      (org-trim (buffer-substring-no-properties (point) (point-max))))))
+  ;; RESULTS keyword may not be the last affiliated keyword.
+  (should
+   (equal
+    "#+RESULTS[bbbb]:"
+    (org-test-with-temp-text
+	"
+<point>#+BEGIN_SRC emacs-lisp
+\(+ 1 1)
+#+END_SRC
+
+#+RESULTS[aaaa]:
+#+NAME: e
+: 3"
+      (let ((org-babel-results-keyword "RESULTS"))
+	(goto-char (org-babel-where-is-src-block-result nil nil "bbbb")))
+      (org-trim (buffer-substring-no-properties (point) (point-max))))))
+  ;; HASH does nothing if no RESULTS can be found.  However, if INSERT
+  ;; is also non-nil, RESULTS keyword is inserted along with the
+  ;; expected hash.
+  (should
+   (equal
+    "#+BEGIN_SRC emacs-lisp\n(+ 1 1)\n#+END_SRC"
+    (org-test-with-temp-text "#+BEGIN_SRC emacs-lisp\n(+ 1 1)\n#+END_SRC"
+      (org-babel-where-is-src-block-result nil nil "bbbb")
+      (buffer-string))))
+  (should
+   (equal
+    "#+RESULTS[bbbb]:"
+    (org-test-with-temp-text "#+BEGIN_SRC emacs-lisp\n(+ 1 1)\n#+END_SRC"
+      (let ((org-babel-results-keyword "RESULTS"))
+	(goto-char (org-babel-where-is-src-block-result t nil "bbbb")))
+      (org-trim (buffer-substring-no-properties (point) (point-max)))))))
 
 (provide 'test-ob)
 

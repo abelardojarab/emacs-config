@@ -4153,6 +4153,66 @@ error if no block contains REF."
 	info 'first-match)
       (signal 'org-link-broken (list ref))))
 
+(defun org-export-search-cells (datum)
+  "List search cells for element or object DATUM.
+
+A search cell follows the pattern (TYPE . SEARCH) where
+
+  TYPE is a symbol among `headline', `custom-id', `target' and
+  `other'.
+
+  SEARCH is the string a link is expected to match.  More
+  accurately, it is
+
+    - headline's title, as a list of strings, if TYPE is
+      `headline'.
+
+    - CUSTOM_ID value, as a string, if TYPE is `custom-id'.
+
+    - target's or radio-target's name as a list of strings if
+      TYPE is `target'.
+
+    - NAME affiliated keyword is TYPE is `other'.
+
+A search cell is the internal representation of a fuzzy link.  It
+ignores white spaces and statistics cookies, if applicable."
+  (pcase (org-element-type datum)
+    (`headline
+     (let ((title (split-string
+		   (replace-regexp-in-string
+		    "\\[[0-9]*\\(?:%\\|/[0-9]*\\)\\]" ""
+		    (org-element-property :raw-value datum)))))
+       (delq nil
+	     (list
+	      (cons 'headline title)
+	      (cons 'other title)
+	      (let ((custom-id (org-element-property :custom-id datum)))
+		(and custom-id (cons 'custom-id custom-id)))))))
+    (`target
+     (list (cons 'target (split-string (org-element-property :value datum)))))
+    ((and (let name (org-element-property :name datum))
+	  (guard name))
+     (list (cons 'other (split-string name))))
+    (_ nil)))
+
+(defun org-export-string-to-search-cell (s)
+  "Return search cells associated to string S.
+S is either the path of a fuzzy link or a search option, i.e., it
+tries to match either a headline (through custom ID or title),
+a target or a named element."
+  (pcase (string-to-char s)
+    (?* (list (cons 'headline (split-string (substring s 1)))))
+    (?# (list (cons 'custom-id (substring s 1))))
+    ((let search (split-string s))
+     (list (cons 'target search) (cons 'other search)))))
+
+(defun org-export-match-search-cell-p (datum cells)
+  "Non-nil when DATUM matches search cells CELLS.
+DATUM is an element or object.  CELLS is a list of search cells,
+as returned by `org-export-search-cells'."
+  (let ((targets (org-export-search-cells datum)))
+    (and targets (cl-some (lambda (cell) (member cell targets)) cells))))
+
 (defun org-export-resolve-fuzzy-link (link info)
   "Return LINK destination.
 
@@ -4172,54 +4232,37 @@ Return value can be an object or an element:
 
 Assume LINK type is \"fuzzy\".  White spaces are not
 significant."
-  (let* ((raw-path (org-link-unescape (org-element-property :path link)))
-	 (headline-only (eq (string-to-char raw-path) ?*))
-	 ;; Split PATH at white spaces so matches are space
-	 ;; insensitive.
-	 (path (org-split-string
-		(if headline-only (substring raw-path 1) raw-path)))
+  (let* ((search-cells (org-export-string-to-search-cell
+			(org-link-unescape (org-element-property :path link))))
 	 (link-cache
 	  (or (plist-get info :resolve-fuzzy-link-cache)
 	      (plist-get (plist-put info
 				    :resolve-fuzzy-link-cache
 				    (make-hash-table :test #'equal))
 			 :resolve-fuzzy-link-cache)))
-	 (cached (gethash path link-cache 'not-found)))
+	 (cached (gethash search-cells link-cache 'not-found)))
     (if (not (eq cached 'not-found)) cached
-      (let ((ast (plist-get info :parse-tree)))
+      (let ((matches
+	     (org-element-map (plist-get info :parse-tree)
+		 (cons 'target org-element-all-elements)
+	       (lambda (datum)
+		 (and (org-export-match-search-cell-p datum search-cells)
+		      datum)))))
+	(unless matches
+	  (signal 'org-link-broken
+		  (list (org-element-property :raw-path link))))
 	(puthash
-	 path
-	 (cond
-	  ;; First try to find a matching "<<path>>" unless user
-	  ;; specified he was looking for a headline (path starts with
-	  ;; a "*" character).
-	  ((and (not headline-only)
-		(org-element-map ast 'target
-		  (lambda (datum)
-		    (and (equal (org-split-string
-				 (org-element-property :value datum))
-				path)
-			 datum))
-		  info 'first-match)))
-	  ;; Then try to find an element with a matching "#+NAME: path"
-	  ;; affiliated keyword.
-	  ((and (not headline-only)
-		(org-element-map ast org-element-all-elements
-		  (lambda (datum)
-		    (let ((name (org-element-property :name datum)))
-		      (and name (equal (org-split-string name) path) datum)))
-		  info 'first-match)))
-	  ;; Try to find a matching headline.
-	  ((org-element-map ast 'headline
-	     (lambda (h)
-	       (and (equal (org-split-string
-			    (replace-regexp-in-string
-			     "\\[[0-9]+%\\]\\|\\[[0-9]+/[0-9]+\\]" ""
-			     (org-element-property :raw-value h)))
-			   path)
-		    h))
-	     info 'first-match))
-	  (t (signal 'org-link-broken (list raw-path))))
+	 search-cells
+	 ;; There can be multiple matches for un-typed searches, i.e.,
+	 ;; for searches not starting with # or *.  In this case,
+	 ;; prioritize targets and names over headline titles.
+	 ;; Matching both a name and a target is not valid, and
+	 ;; therefore undefined.
+	 (or (cl-some (lambda (datum)
+			(and (not (eq (org-element-type datum) 'headline))
+			     datum))
+		      matches)
+	     (car matches))
 	 link-cache)))))
 
 (defun org-export-resolve-id-link (link info)
@@ -4272,29 +4315,63 @@ has type \"radio\"."
 ;;;; For References
 ;;
 ;; `org-export-get-reference' associate a unique reference for any
-;; object or element.
+;; object or element.  It uses `org-export-new-reference' and
+;; `org-export-format-reference' to, respectively, generate new
+;; internal references and turn them into a string suitable for
+;; output.
 ;;
 ;; `org-export-get-ordinal' associates a sequence number to any object
 ;; or element.
 
+(defun org-export-new-reference (references)
+  "Return a unique reference, among REFERENCES.
+REFERENCES is an alist whose values are in-use references, as
+numbers.  Returns a number, which is the internal representation
+of a reference.  See also `org-export-format-reference'."
+  ;; Generate random 7 digits hexadecimal numbers.  Collisions
+  ;; increase exponentially with the numbers of references.  However,
+  ;; the odds for encountering at least one collision with 1000 active
+  ;; references in the same document are roughly 0.2%, so this
+  ;; shouldn't be the bottleneck.
+  (let ((new (random #x10000000)))
+    (while (rassq new references) (setq new (random #x10000000)))
+    new))
+
+(defun org-export-format-reference (reference)
+  "Format REFERENCE into a string.
+REFERENCE is a number representing a reference, as returned by
+`org-export-new-reference', which see."
+  (format "org%x" reference))
+
 (defun org-export-get-reference (datum info)
   "Return a unique reference for DATUM, as a string.
+
 DATUM is either an element or an object.  INFO is the current
-export state, as a plist.  Returned reference consists of
-alphanumeric characters only."
-  (let ((type (org-element-type datum))
-	(cache (or (plist-get info :internal-references)
-		   (let ((h (make-hash-table :test #'eq)))
-		     (plist-put info :internal-references h)
-		     h))))
-    (or (gethash datum cache)
-	(puthash datum
-		 (format "org%s%d"
-			 (if type
-			     (replace-regexp-in-string "-" "" (symbol-name type))
-			   "secondarystring")
-			 (cl-incf (gethash type cache 0)))
-		 cache))))
+export state, as a plist.
+
+This functions checks `:crossrefs' property in INFO for search
+cells matching DATUM before creating a new reference.  Returned
+reference consists of alphanumeric characters only."
+  (let ((cache (plist-get info :internal-references)))
+    (or (car (rassq datum cache))
+	(let* ((crossrefs (plist-get info :crossrefs))
+	       (cells (org-export-search-cells datum))
+	       ;; If any other published document relies on an
+	       ;; association between a search cell and a reference,
+	       ;; make sure to preserve it.  See
+	       ;; `org-publish-resolve-external-link' for details.
+	       (new (or (cdr (cl-some (lambda (c) (assoc c crossrefs)) cells))
+			(org-export-new-reference cache)))
+	       (reference-string (org-export-format-reference new)))
+	  ;; Cache contains both data already associated to
+	  ;; a reference and in-use internal references, so as to make
+	  ;; unique references.
+	  (dolist (cell cells) (push (cons cell new) cache))
+	  ;; Keep an associated related to DATUM as not every object
+	  ;; and element can be associated to a search cell.
+	  (push (cons reference-string datum) cache)
+	  (plist-put info :internal-references cache)
+	  reference-string))))
 
 (defun org-export-get-ordinal (element info &optional types predicate)
   "Return ordinal number of an element or object.
@@ -5229,7 +5306,11 @@ INFO is the current export state, as a plist."
 	 (value (gethash parent cache 'missing-data)))
     (if (not (eq value 'missing-data)) (cdr (assq s value))
       (let (level1-open full-status)
-	(org-element-map parent 'plain-text
+	(org-element-map
+	    (let ((secondary (org-element-secondary-p s)))
+	      (if secondary (org-element-property secondary parent)
+		(org-element-contents parent)))
+	    'plain-text
 	  (lambda (text)
 	    (let ((start 0) current-status)
 	      (while (setq start (string-match "['\"]" text start))

@@ -531,10 +531,9 @@ value if point was successfully moved."
     (goto-char (match-end 0))
     (org-show-context 'link-search)
     (when (derived-mode-p 'org-mode)
-      (message
-       (substitute-command-keys
-	"Edit definition and go back with `\\[org-mark-ring-goto]' or, if \
-unique, with `\\[org-ctrl-c-ctrl-c]'.")))
+      (message "%s" (substitute-command-keys
+		     "Edit definition and go back with \
+`\\[org-mark-ring-goto]' or, if unique, with `\\[org-ctrl-c-ctrl-c]'.")))
     t))
 
 (defun org-footnote-goto-previous-reference (label)
@@ -817,7 +816,12 @@ to `org-footnote-section'.  Inline definitions are ignored."
 		   (insert "\n"
 			   (or (cdr (assoc label definitions))
 			       (format "[fn:%s] DEFINITION NOT FOUND." label))
-			   "\n")))))))
+			   "\n"))))
+	     ;; Insert un-referenced footnote definitions at the end.
+	     (let ((unreferenced
+		    (cl-remove-if (lambda (d) (member (car d) inserted))
+				  definitions)))
+	       (dolist (d unreferenced) (insert "\n" (cdr d) "\n"))))))
       ;; Clear dangling markers in the buffer.
       (dolist (r references) (set-marker (nth 1 r) nil)))))
 
@@ -896,7 +900,18 @@ to `org-footnote-section'.  Inline definitions are ignored."
 			      (t
 			       (replace-regexp-in-string
 				"\\`\\[fn:\\(.*?\\)\\]" new stored nil nil 1)))
-			     "\n"))))))))
+			     "\n")))))
+	     ;; Insert un-referenced footnote definitions at the end.
+	     (let ((unreferenced
+		    (cl-remove-if (lambda (d) (member (car d) inserted))
+				  definitions)))
+	       (dolist (d unreferenced)
+		 (insert "\n"
+			 (replace-regexp-in-string
+			  org-footnote-definition-re
+			  (format "[fn:%d]" (cl-incf n))
+			  (cdr d))
+			 "\n"))))))
       ;; Clear dangling markers.
       (dolist (r references) (set-marker (nth 1 r) nil)))))
 

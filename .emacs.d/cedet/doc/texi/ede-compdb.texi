@@ -271,9 +271,14 @@ process that is followed when a new file is opened within an existing
 @item
 If the current buffer file is in the compilation database, that is used.
 @item
-If there is an "other" file associated with the current buffer which
-is also in the compilation database, that is used. The definition of
-an "other" file is almost exactly the same as that used by the the
+If the @uref{http://batsov.com/projectile/,Projectile} package is
+configured for the current buffer, the
+@code{projectile-get-other-files} function will be used to search for
+a matching entry in the compilation database.
+@item
+The standard emacs ``other'' file mechanism is also used to search for
+matching entries in the compilation database. The definition of an
+``other'' file is almost exactly the same as that used by the the
 built-in emacs function @code{ff-get-other-file}. By default,
 @code{ff-get-other-file} will search the current directory for an
 equivalent @file{.cpp} file, so if the current buffer is visiting an
@@ -319,6 +324,23 @@ described in the process above.
 The hook @code{ede-compdb-project-rescan-hook} is called for every
 open buffer after the compilation database is rescanned.
 
+For Ninja projects, a list of build rules is required in order to
+query the compilation database. The build rule names vary depending on
+which Ninja generator is used, and hence this may need
+customization. For example, CMake generates Ninja build rules for C++
+files of the form @code{CXX_COMPILER_(name)}. The @code{:build-rules}
+and @code{:build-rules-regexp} attributes should be used to specify
+the build rules on project creation.
+
+@lisp
+(ede-ninja-project projname
+   :file projfile
+   :compdb-file compdb-file
+   :build-rules '("icc14.0.3_cxx" "gcc4.8.3_cxx")
+   :build-rules-regex "^\(C\|CXX\)_COMPILER"
+   )
+@end lisp
+
 @node Compilation Database Troubleshooting
 @section Compilation Database Troubleshooting
 
@@ -343,21 +365,7 @@ is not strictly JSON formatted, then it cannot be parsed by
 @i{compdb}. In particular, look for spurious output at the start or
 end of the buffer.
 @item
-For Ninja projects, you may need to customise the project for certain
-build rules. These are generally specific to the generator, and hence
-there are no good defaults. Generally you should ensure that the
-output of @command{ninja -t compdb RULENAME} produces JSON-formatted
-compilation database, where @samp{RULENAME} is a compilation database
-rule. Check your generated @file{build.ninja} file for rule names if
-you don't know what to use here. Once you have determined the correct
-build rule names, you can use them in your project by providing the
-@code{:build-rules} argument, for example:
-
-@lisp
-(ede-ninja-project projname
-   :file projfile
-   :compdb-file compdb-file
-   :build-rules '("icc14.0.3_cxx" "gcc4.8.3_cxx")
-   )
-@end lisp
+For Ninja projects, if you have an empty compilation database in the
+@samp{*compdb: projname} buffer, you may need to configure your build
+rules, @xref{Rescanning the Compilation Database}.
 @end enumerate

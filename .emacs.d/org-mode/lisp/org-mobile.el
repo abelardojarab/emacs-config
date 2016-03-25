@@ -88,7 +88,7 @@ org-agenda-text-search-extra-files
 Encryption uses AES-256, with a password given in
 `org-mobile-encryption-password'.
 When nil, plain files are kept on the server.
-Turning on encryption requires to set the same password in the MobileOrg
+Turning on encryption requires setting the same password in the MobileOrg
 application.  Before turning this on, check of MobileOrg does already
 support it - at the time of this writing it did not yet."
   :group 'org-mobile
@@ -454,14 +454,16 @@ agenda view showing the flagged items."
 	(insert "#+TODO: " (mapconcat 'identity todo-kwds " ") " | "
 		(mapconcat 'identity done-kwds " ") "\n"))
       (setq def-tags (mapcar
-		      (lambda (x)
-			(cond ((null x) nil)
-			      ((stringp x) x)
-			      ((eq (car x) :startgroup) "{")
-			      ((eq (car x) :endgroup) "}")
-			      ((eq (car x) :grouptags) nil)
-			      ((eq (car x) :newline) nil)
-			      ((listp x) (car x))))
+		      (lambda (tag)
+			(cl-case (car tag)
+			  ((nil) nil)
+			  (:startgroup "{")
+			  (:endgroup "}")
+			  (:startgrouptag "[")
+			  (:endgrouptag "]")
+			  (:grouptags ":")
+			  (:newline nil)
+			  (t (car tag))))
 		      def-tags))
       (setq def-tags (delq nil def-tags))
       (setq tags (org-delete-all def-tags tags))

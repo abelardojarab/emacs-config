@@ -35,11 +35,10 @@
       ".exe"
     nil))
 
-;; dynamically scoped for tramp
-(defvar org-babel-call-process-region-original nil)
 (defvar org-babel-library-of-babel)
 (defvar org-edit-src-content-indentation)
 (defvar org-src-lang-modes)
+(defvar org-src-preserve-indentation)
 
 (declare-function outline-show-all "outline" ())
 (declare-function org-get-indentation "org" (&optional line))
@@ -53,6 +52,8 @@
 (declare-function with-parsed-tramp-file-name "tramp" (filename var &rest body))
 (declare-function org-edit-src-code "org-src" (&optional code edit-buffer-name))
 (declare-function org-edit-src-exit "org-src"  ())
+(declare-function org-get-indentation "org" (&optional line))
+(declare-function org-in-regexp "org" (regexp &optional nlines visually))
 (declare-function org-open-at-point "org" (&optional in-emacs reference-buffer))
 (declare-function org-save-outline-visibility "org-macs" (use-markers &rest body))
 (declare-function org-outline-overlay-data "org" (&optional use-markers))
@@ -61,6 +62,7 @@
 (declare-function org-split-string "org" (string &optional separators))
 (declare-function org-entry-get "org"
 		  (pom property &optional inherit literal-nil))
+(declare-function org-indent-line "org" ())
 (declare-function org-make-options-regexp "org" (kwds &optional extra))
 (declare-function org-do-remove-indentation "org" (&optional n))
 (declare-function org-next-block "org" (arg &optional backward block-regexp))
@@ -78,7 +80,6 @@
 (declare-function orgtbl-to-generic "org-table" (table params))
 (declare-function orgtbl-to-orgtbl "org-table" (table params))
 (declare-function org-babel-tangle-comment-links "ob-tangle" (&optional info))
-(declare-function org-babel-lob-get-info "ob-lob" nil)
 (declare-function org-babel-ref-split-args "ob-ref" (arg-string))
 (declare-function org-babel-ref-parse "ob-ref" (assignment))
 (declare-function org-babel-ref-resolve "ob-ref" (ref))
@@ -203,16 +204,6 @@ This string must include a \"%s\" which will be replaced by the results."
    "\\([^\000]*?\n\\)??[ \t]*#\\+end_src")
   "Regexp used to identify code blocks.")
 
-(defvar org-babel-inline-src-block-regexp
-  (concat
-   ;; (1) replacement target (2) lang
-   "\\(?:^\\|[^-[:alnum:]]?\\)\\(src_\\([^ \f\t\n\r\v[]+\\)"
-   ;; (3,4) (unused, headers)
-   "\\(\\|\\[[ \t]*\\(.*?\\)\\]\\)"
-   ;; (5) body
-   "{\\([^\f\n\r\v]+?\\)}\\)")
-  "Regexp used to identify inline src-blocks.")
-
 (defun org-babel--get-vars (params)
   "Return the babel variable assignments in PARAMS.
 
@@ -221,64 +212,6 @@ multiple entries for the key `:var'.  This function returns a
 list of the cdr of all the `:var' entries."
   (mapcar #'cdr
 	  (cl-remove-if-not (lambda (x) (eq (car x) :var)) params)))
-
-(defun org-babel-get-inline-src-block-matches ()
-  "Set match data if within body of an inline source block.
-Returns non-nil if match-data set"
- (save-excursion
-    (let ((datum (org-element-context)))
-      (when (eq (org-element-type datum) 'inline-src-block)
-	(goto-char (org-element-property :begin datum))
-	(when (looking-at org-babel-inline-src-block-regexp)
-	  t )))))
-
-(defvar org-babel-inline-lob-one-liner-regexp)
-(defun org-babel-get-lob-one-liner-matches ()
-  "Set match data if on line of an lob one liner.
-Returns non-nil if match-data set"
-  (save-excursion
-    (let ((datum (org-element-context)))
-      (when (eq (org-element-type datum) 'inline-babel-call)
-	(goto-char (org-element-property :begin datum))))
-    (if (looking-at org-babel-inline-lob-one-liner-regexp)
-	t
-      nil)))
-
-(defun org-babel-get-src-block-info (&optional light)
-  "Get information on the current source block.
-
-Optional argument LIGHT does not resolve remote variable
-references; a process which could likely result in the execution
-of other code blocks.
-
-Returns a list
- (language body header-arguments-alist switches name indent block-head)."
-  (let ((case-fold-search t) head info name indent)
-    ;; full code block
-    (if (setq head (org-babel-where-is-src-block-head))
-	(save-excursion
-	  (goto-char head)
-	  (setq info (org-babel-parse-src-block-match))
-	  (setq indent (car (last info)))
-	  (setq info (butlast info))
-	  (while (and (forward-line -1)
-		      (looking-at org-babel-multi-line-header-regexp))
-	    (setf (nth 2 info)
-		  (org-babel-merge-params
-		   (nth 2 info)
-		   (org-babel-parse-header-arguments (match-string 1)))))
-	  (when (looking-at (org-babel-named-src-block-regexp-for-name))
-	    (setq name (org-match-string-no-properties 9))))
-      ;; inline source block
-      (when (org-babel-get-inline-src-block-matches)
-	(setq head (match-beginning 0))
-	(setq info (org-babel-parse-inline-src-block-match))))
-    ;; resolve variable references and add summary parameters
-    (when (and info (not light))
-      (setf (nth 2 info) (org-babel-process-params (nth 2 info))))
-    (when info
-      (setf (nth 2 info) (org-babel-generate-file-param name (nth 2 info))))
-    (when info (append info (list name indent head)))))
 
 (defvar org-babel-exp-reference-buffer nil
   "Buffer containing original contents of the exported buffer.
@@ -302,7 +235,7 @@ should be asked whether to allow evaluation."
 		    (and export (equal eval "query-export"))
 		    (if (functionp org-confirm-babel-evaluate)
 			(save-excursion
-			  (goto-char (nth 6 info))
+			  (goto-char (nth 5 info))
 			  (funcall org-confirm-babel-evaluate
 				   ;; language, code block body
 				   (nth 0 info) (nth 1 info)))
@@ -377,8 +310,8 @@ environment, to override this check."
   "Execute BODY if point is in a source block and return t.
 
 Otherwise do nothing and return nil."
-  `(if (or (org-babel-where-is-src-block-head)
-           (org-babel-get-inline-src-block-matches))
+  `(if (memq (org-element-type (org-element-context))
+	     '(inline-src-block src-block))
        (progn
 	 ,@body
 	 t)
@@ -549,22 +482,24 @@ For the format of SAFE-LIST, see `org-babel-safe-header-args'."
 (put 'org-babel-default-inline-header-args 'safe-local-variable
      (org-babel-header-args-safe-fn org-babel-safe-header-args))
 
-(defvar org-babel-data-names '("tblname" "results" "name"))
+(defconst org-babel-name-regexp
+  (format "^[ \t]*#\\+%s:[ \t]*"
+	  ;; FIXME: TBLNAME is for backward compatibility.
+	  (regexp-opt '("NAME" "TBLNAME")))
+  "Regexp matching a NAME keyword.")
 
-(defvar org-babel-result-regexp
-  (concat "^[ \t]*#\\+"
-	  (regexp-opt org-babel-data-names t)
-	  "\\(\\[\\("
-	  ;; FIXME The string below is `org-ts-regexp'
-	  "<\\([0-9]\\{4\\}-[0-9]\\{2\\}-[0-9]\\{2\\} ?[^\r\n>]*?\\)>"
-	  " \\)?\\([[:alnum:]]+\\)\\]\\)?\\:[ \t]*")
+(defconst org-babel-result-regexp
+  (format "^[ \t]*#\\+%s\\(?:\\[\\(?:%S\\)?\\([[:alnum:]]+\\)\\]\\)?:[ \t]*"
+	  org-babel-results-keyword
+	  "<\\([0-9]\\{4\\}-[0-9]\\{2\\}-[0-9]\\{2\\} ?[^\r\n>]*?\\)>")
   "Regular expression used to match result lines.
 If the results are associated with a hash key then the hash will
-be saved in the second match data.")
+be saved in match group 1.")
 
-(defvar org-babel-result-w-name-regexp
-  (concat org-babel-result-regexp
-	  "\\([^ ()\f\t\n\r\v]+\\)\\((\\(.*\\))\\|\\)"))
+(defconst org-babel-result-w-name-regexp
+  (concat org-babel-result-regexp "\\(?9:[^ \t\n\r\v\f]+\\)")
+  "Regexp matching a RESULTS keyword with a name.
+Name is saved in match group 9.")
 
 (defvar org-babel-min-lines-for-block-output 10
   "The minimum number of lines for block output.
@@ -608,10 +543,9 @@ match group 9.  Other match groups are defined in
 
 (defun org-babel-named-data-regexp-for-name (name)
   "This generates a regexp used to match data named NAME."
-  (concat org-babel-result-regexp (regexp-quote name) "\\([ \t]\\|$\\)"))
+  (concat org-babel-name-regexp (regexp-quote name) "[ \t]*$"))
 
 ;;; functions
-(defvar call-process-region)
 (defvar org-babel-current-src-block-location nil
   "Marker pointing to the src block currently being executed.
 This may also point to a call line or an inline code block.  If
@@ -620,6 +554,74 @@ through use of the :var header argument) this marker points to
 the outer-most code block.")
 
 (defvar *this*)
+
+(defun org-babel-get-src-block-info (&optional light datum)
+  "Extract information from a source block or inline source block.
+
+Optional argument LIGHT does not resolve remote variable
+references; a process which could likely result in the execution
+of other code blocks.
+
+By default, consider the block at point.  However, when optional
+argument DATUM is provided, extract information from that parsed
+object instead.
+
+Return nil if point is not on a source block.  Otherwise, return
+a list with the following pattern:
+
+  \(language body header-arguments-alist switches name block-head)"
+  (let* ((datum (or datum (org-element-context)))
+	 (type (org-element-type datum))
+	 (inline (eq type 'inline-src-block)))
+    (when (memq type '(inline-src-block src-block))
+      (let* ((lang (org-element-property :language datum))
+	     (lang-headers (intern
+			    (concat "org-babel-default-header-args:" lang)))
+	     (name (org-element-property :name datum))
+	     (info
+	      (list
+	       lang
+	       ;; Normalize contents.  In particular, remove spurious
+	       ;; indentation and final newline character.
+	       (let* ((value (org-element-property :value datum))
+		      (body (if (and (> (length value) 1)
+				     (string-match-p "\n\\'" value))
+				(substring value 0 -1)
+			      value)))
+		 (cond (inline
+			 ;; Newline characters and indentation in an
+			 ;; inline src-block are not meaningful, since
+			 ;; they could come from some paragraph
+			 ;; filling.  Treat them as a white space.
+			 (replace-regexp-in-string "\n[ \t]*" " " body))
+		       ((or org-src-preserve-indentation
+			    (org-element-property :preserve-indent datum))
+			body)
+		       (t (org-remove-indentation body))))
+	       (apply #'org-babel-merge-params
+		      (if inline org-babel-default-inline-header-args
+			org-babel-default-header-args)
+		      (and (boundp lang-headers) (symbol-value lang-headers))
+		      (append
+		       ;; If DATUM is provided, make sure we get node
+		       ;; properties applicable to its location within
+		       ;; the document.
+		       (org-with-wide-buffer
+			(when datum
+			  (goto-char (org-element-property :begin datum)))
+			(org-babel-params-from-properties lang))
+		       (mapcar #'org-babel-parse-header-arguments
+			       (cons
+				(org-element-property :parameters datum)
+				(org-element-property :header datum)))))
+	       (or (org-element-property :switches datum) "")
+	       name
+	       (org-element-property (if inline :begin :post-affiliated)
+				     datum))))
+	(unless light
+	  (setf (nth 2 info) (org-babel-process-params (nth 2 info))))
+	(setf (nth 2 info) (org-babel-generate-file-param name (nth 2 info)))
+	info))))
 
 ;;;###autoload
 (defun org-babel-execute-src-block (&optional arg info params)
@@ -640,14 +642,9 @@ block."
   (interactive)
   (let* ((org-babel-current-src-block-location
 	  (or org-babel-current-src-block-location
-	      (nth 6 info)
-	      (org-babel-where-is-src-block-head)
-	      ;; inline src block
-	      (and (org-babel-get-inline-src-block-matches)
-		   (match-beginning 0))))
-	 (info (if info
-		   (copy-tree info)
-		 (org-babel-get-src-block-info))))
+	      (nth 5 info)
+	      (org-babel-where-is-src-block-head)))
+	 (info (if info (copy-tree info) (org-babel-get-src-block-info))))
     (cl-callf org-babel-merge-params (nth 2 info) params)
     (when (org-babel-check-evaluate info)
       (cl-callf org-babel-process-params (nth 2 info))
@@ -679,72 +676,52 @@ block."
 		 (default-directory
 		   (or (and dir (file-name-as-directory (expand-file-name dir)))
 		       default-directory))
-		 (org-babel-call-process-region-original ;; for tramp handler
-		  (or (org-bound-and-true-p
-		       org-babel-call-process-region-original)
-		      (symbol-function 'call-process-region)))
-		 (indent (nth 5 info))
-		 result cmd)
-	    (unwind-protect
-		(let ((call-process-region
-		       (lambda (&rest args)
-			 (apply 'org-babel-tramp-handle-call-process-region
-				args))))
-		  (let ((lang-check
-			 (lambda (f)
-			   (let ((f (intern (concat "org-babel-execute:" f))))
-			     (when (fboundp f) f)))))
-		    (setq cmd
-			  (or (funcall lang-check lang)
-			      (funcall lang-check
-				       (symbol-name
-					(cdr (assoc lang org-src-lang-modes))))
-			      (error "No org-babel-execute function for %s!"
-				     lang))))
-		  (message "executing %s code block%s..."
-			   (capitalize lang)
-			   (if (nth 4 info) (format " (%s)" (nth 4 info)) ""))
-		  (if (member "none" result-params)
-		      (progn
-			(funcall cmd body params)
-			(message "result silenced")
-			(setq result nil))
-		    (setq result
-			  (let ((result (funcall cmd body params)))
-                            (if (and (eq (cdr (assoc :result-type params))
-                                         'value)
-                                     (or (member "vector" result-params)
-                                         (member "table" result-params))
-                                     (not (listp result)))
-                                (list (list result)) result)))
-		    ;; If non-empty result and :file then write to :file.
-		    (when (cdr (assoc :file params))
-		      (when result
-			(with-temp-file (cdr (assoc :file params))
-			  (insert
-			   (org-babel-format-result
-			    result (cdr (assoc :sep (nth 2 info)))))))
-		      (setq result (cdr (assoc :file params))))
-		    ;; Possibly perform post process provided its appropriate.
-		    (when (cdr (assoc :post params))
-		      (let ((*this* (if (cdr (assoc :file params))
-					(org-babel-result-to-file
-					 (cdr (assoc :file params))
-					 (when (assoc :file-desc params)
-					   (or (cdr (assoc :file-desc params))
-					       result)))
-				      result)))
-			(setq result (org-babel-ref-resolve
-				      (cdr (assoc :post params))))
-			(when (cdr (assoc :file params))
-			  (setq result-params
-				(remove "file" result-params)))))
-		    (org-babel-insert-result
-		     result result-params info new-hash indent lang))
-                  (run-hooks 'org-babel-after-execute-hook)
-		  result)
-	      (setq call-process-region
-		    'org-babel-call-process-region-original)))))))))
+		 (cmd (intern (concat "org-babel-execute:" lang)))
+		 result)
+	    (unless (fboundp cmd)
+	      (error "No org-babel-execute function for %s!" lang))
+	    (message "executing %s code block%s..."
+		     (capitalize lang)
+		     (if (nth 4 info) (format " (%s)" (nth 4 info)) ""))
+	    (if (member "none" result-params)
+		(progn
+		  (funcall cmd body params)
+		  (message "result silenced")
+		  (setq result nil))
+	      (setq result
+		    (let ((result (funcall cmd body params)))
+		      (if (and (eq (cdr (assoc :result-type params))
+				   'value)
+			       (or (member "vector" result-params)
+				   (member "table" result-params))
+			       (not (listp result)))
+			  (list (list result)) result)))
+	      ;; If non-empty result and :file then write to :file.
+	      (when (cdr (assoc :file params))
+		(when result
+		  (with-temp-file (cdr (assoc :file params))
+		    (insert
+		     (org-babel-format-result
+		      result (cdr (assoc :sep (nth 2 info)))))))
+		(setq result (cdr (assoc :file params))))
+	      ;; Possibly perform post process provided its appropriate.
+	      (when (cdr (assoc :post params))
+		(let ((*this* (if (cdr (assoc :file params))
+				  (org-babel-result-to-file
+				   (cdr (assoc :file params))
+				   (when (assoc :file-desc params)
+				     (or (cdr (assoc :file-desc params))
+					 result)))
+				result)))
+		  (setq result (org-babel-ref-resolve
+				(cdr (assoc :post params))))
+		  (when (cdr (assoc :file params))
+		    (setq result-params
+			  (remove "file" result-params)))))
+	      (org-babel-insert-result
+	       result result-params info new-hash lang))
+	    (run-hooks 'org-babel-after-execute-hook)
+	    result)))))))
 
 (defun org-babel-expand-body:generic (body params &optional var-lines)
   "Expand BODY with PARAMS.
@@ -850,7 +827,7 @@ arguments and pop open the results in a preview buffer."
   (interactive)
   (let* ((info (org-babel-get-src-block-info 'light))
 	 (lang (car info))
-	 (begin (nth 6 info))
+	 (begin (nth 5 info))
 	 (lang-headers (intern (concat "org-babel-header-args:" lang)))
 	 (headers (org-babel-combine-header-arg-lists
 		   org-babel-common-header-args-w-values
@@ -1117,81 +1094,91 @@ end-body --------- point at the end of the body"
 
 ;;;###autoload
 (defmacro org-babel-map-inline-src-blocks (file &rest body)
-  "Evaluate BODY forms on each inline source-block in FILE.
+  "Evaluate BODY forms on each inline source block in FILE.
 If FILE is nil evaluate BODY forms on source blocks in current
 buffer."
-  (declare (indent 1))
-  (let ((tempvar (make-symbol "file")))
+  (declare (indent 1) (debug (form body)))
+  (org-with-gensyms (datum end point tempvar to-be-removed visitedp)
     `(let* ((case-fold-search t)
 	    (,tempvar ,file)
-	    (visited-p (or (null ,tempvar)
+	    (,visitedp (or (null ,tempvar)
 			   (get-file-buffer (expand-file-name ,tempvar))))
-	    (point (point)) to-be-removed)
+	    (,point (point))
+	    ,to-be-removed)
        (save-window-excursion
 	 (when ,tempvar (find-file ,tempvar))
-	 (setq to-be-removed (current-buffer))
+	 (setq ,to-be-removed (current-buffer))
 	 (goto-char (point-min))
-	 (while (re-search-forward org-babel-inline-src-block-regexp nil t)
-	   (when (org-babel-active-location-p)
-	     (goto-char (match-beginning 1))
-	     (save-match-data ,@body))
-	   (goto-char (match-end 0))))
-       (unless visited-p (kill-buffer to-be-removed))
-       (goto-char point))))
-(def-edebug-spec org-babel-map-inline-src-blocks (form body))
-
-(defvar org-babel-lob-one-liner-regexp)
+	 (while (re-search-forward "src_\\S-" nil t)
+	   (let ((,datum (save-match-data (org-element-context))))
+	     (when (eq (org-element-type ,datum) 'inline-src-block)
+	       (goto-char (match-beginning 0))
+	       (let ((,end (copy-marker (org-element-property :end ,datum))))
+		 ,@body
+		 (goto-char ,end)
+		 (set-marker ,end nil))))))
+       (unless ,visitedp (kill-buffer ,to-be-removed))
+       (goto-char ,point))))
 
 ;;;###autoload
 (defmacro org-babel-map-call-lines (file &rest body)
   "Evaluate BODY forms on each call line in FILE.
 If FILE is nil evaluate BODY forms on source blocks in current
 buffer."
-  (declare (indent 1))
-  (let ((tempvar (make-symbol "file")))
-    `(let* ((,tempvar ,file)
-	    (visited-p (or (null ,tempvar)
+  (declare (indent 1) (debug (form body)))
+  (org-with-gensyms (datum end point tempvar to-be-removed visitedp)
+    `(let* ((case-fold-search t)
+	    (,tempvar ,file)
+	    (,visitedp (or (null ,tempvar)
 			   (get-file-buffer (expand-file-name ,tempvar))))
-	    (point (point)) to-be-removed)
+	    (,point (point))
+	    ,to-be-removed)
        (save-window-excursion
 	 (when ,tempvar (find-file ,tempvar))
-	 (setq to-be-removed (current-buffer))
+	 (setq ,to-be-removed (current-buffer))
 	 (goto-char (point-min))
-	 (while (re-search-forward org-babel-lob-one-liner-regexp nil t)
-	   (when (org-babel-active-location-p)
-	     (goto-char (match-beginning 1))
-	     (save-match-data ,@body))
-	   (goto-char (match-end 0))))
-       (unless visited-p (kill-buffer to-be-removed))
-       (goto-char point))))
-(def-edebug-spec org-babel-map-call-lines (form body))
+	 (while (re-search-forward "call_\\S-\\|^[ \t]*#\\+CALL:" nil t)
+	   (let ((,datum (save-match-data (org-element-context))))
+	     (when (memq (org-element-type ,datum)
+			 '(babel-call inline-babel-call))
+	       (goto-char (match-beginning 0))
+	       (let ((,end (copy-marker (org-element-property :end ,datum))))
+		 ,@body
+		 (goto-char ,end)
+		 (set-marker ,end nil))))))
+       (unless ,visitedp (kill-buffer ,to-be-removed))
+       (goto-char ,point))))
 
 ;;;###autoload
 (defmacro org-babel-map-executables (file &rest body)
-  (declare (indent 1))
-  (let ((tempvar (make-symbol "file"))
-	(rx (make-symbol "rx")))
-    `(let* ((,tempvar ,file)
-	    (,rx (concat "\\(" org-babel-src-block-regexp
-			 "\\|" org-babel-inline-src-block-regexp
-			 "\\|" org-babel-lob-one-liner-regexp "\\)"))
-	    (visited-p (or (null ,tempvar)
+  "Evaluate BODY forms on each active Babel code in FILE.
+If FILE is nil evaluate BODY forms on source blocks in current
+buffer."
+  (declare (indent 1) (debug (form body)))
+  (org-with-gensyms (datum end point tempvar to-be-removed visitedp)
+    `(let* ((case-fold-search t)
+	    (,tempvar ,file)
+	    (,visitedp (or (null ,tempvar)
 			   (get-file-buffer (expand-file-name ,tempvar))))
-	    (point (point)) to-be-removed)
+	    (,point (point))
+	    ,to-be-removed)
        (save-window-excursion
 	 (when ,tempvar (find-file ,tempvar))
-	 (setq to-be-removed (current-buffer))
+	 (setq ,to-be-removed (current-buffer))
 	 (goto-char (point-min))
-	 (while (re-search-forward ,rx nil t)
-	   (when (org-babel-active-location-p)
-	     (goto-char (match-beginning 1))
-	     (when (looking-at org-babel-inline-src-block-regexp)
-	       (forward-char 1))
-	     (save-match-data ,@body))
-	   (goto-char (match-end 0))))
-       (unless visited-p (kill-buffer to-be-removed))
-       (goto-char point))))
-(def-edebug-spec org-babel-map-executables (form body))
+	 (while (re-search-forward
+		 "\\(call\\|src\\)_\\|^[ \t]*#\\+\\(BEGIN_SRC\\|CALL:\\)" nil t)
+	   (let ((,datum (save-match-data (org-element-context))))
+	     (when (memq (org-element-type ,datum)
+			 '(babel-call inline-babel-call inline-src-block
+				      src-block))
+	       (goto-char (match-beginning 0))
+	       (let ((,end (copy-marker (org-element-property :end ,datum))))
+		 ,@body
+		 (goto-char ,end)
+		 (set-marker ,end nil))))))
+       (unless ,visitedp (kill-buffer ,to-be-removed))
+       (goto-char ,point))))
 
 ;;;###autoload
 (defun org-babel-execute-buffer (&optional arg)
@@ -1202,7 +1189,8 @@ the current buffer."
   (org-babel-eval-wipe-error-buffer)
   (org-save-outline-visibility t
     (org-babel-map-executables nil
-      (if (looking-at org-babel-lob-one-liner-regexp)
+      (if (memq (org-element-type (org-element-context))
+		'(babel-call inline-babel-call))
           (org-babel-lob-execute-maybe)
         (org-babel-execute-src-block arg)))))
 
@@ -1276,19 +1264,25 @@ the current subtree."
 
 (defun org-babel-current-result-hash (&optional info)
   "Return the current in-buffer hash."
-  (org-babel-where-is-src-block-result nil info)
-  (org-no-properties (match-string 5)))
+  (let ((result (org-babel-where-is-src-block-result nil info)))
+    (when result
+      (org-with-wide-buffer
+       (goto-char result)
+       (looking-at org-babel-result-regexp)
+       (match-string-no-properties 1)))))
 
 (defun org-babel-set-current-result-hash (hash info)
   "Set the current in-buffer hash to HASH."
-  (org-babel-where-is-src-block-result nil info)
-  (save-excursion (goto-char (match-beginning 5))
-		  (mapc #'delete-overlay (overlays-at (point)))
-		  (forward-char org-babel-hash-show)
-		  (mapc #'delete-overlay (overlays-at (point)))
-		  (replace-match hash nil nil nil 5)
-		  (goto-char (point-at-bol))
-		  (org-babel-hide-hash)))
+  (org-with-wide-buffer
+   (goto-char (org-babel-where-is-src-block-result nil info))
+   (looking-at org-babel-result-regexp)
+   (goto-char (match-beginning 1))
+   (mapc #'delete-overlay (overlays-at (point)))
+   (forward-char org-babel-hash-show)
+   (mapc #'delete-overlay (overlays-at (point)))
+   (replace-match hash nil nil nil 1)
+   (beginning-of-line)
+   (org-babel-hide-hash)))
 
 (defun org-babel-hide-hash ()
   "Hide the hash in the current results line.
@@ -1297,11 +1291,11 @@ will remain visible."
   (add-to-invisibility-spec '(org-babel-hide-hash . t))
   (save-excursion
     (when (and (re-search-forward org-babel-result-regexp nil t)
-               (match-string 5))
-      (let* ((start (match-beginning 5))
+               (match-string 1))
+      (let* ((start (match-beginning 1))
              (hide-start (+ org-babel-hash-show start))
-             (end (match-end 5))
-             (hash (match-string 5))
+             (end (match-end 1))
+             (hash (match-string 1))
              ov1 ov2)
         (setq ov1 (make-overlay start hide-start))
         (setq ov2 (make-overlay hide-start end))
@@ -1450,54 +1444,6 @@ specified in the properties of the current outline entry."
 			  (concat "header-args:" lang)
 			  'inherit))))))
 
-(defvar org-src-preserve-indentation) ;; declare defcustom from org-src
-(defun org-babel-parse-src-block-match ()
-  "Parse the results from a match of the `org-babel-src-block-regexp'."
-  (let* ((block-indentation (string-width (match-string 1)))
-	 (lang (org-match-string-no-properties 2))
-         (lang-headers (intern (concat "org-babel-default-header-args:" lang)))
-	 (switches (match-string 3))
-         (body (let* ((body (org-match-string-no-properties 5))
-		      (sub-length (- (length body) 1)))
-		 (if (and (> sub-length 0)
-			  (string= "\n" (substring body sub-length)))
-		     (substring body 0 sub-length)
-		   (or body ""))))
-	 (preserve-indentation (or org-src-preserve-indentation
-				   (save-match-data
-				     (string-match "-i\\>" switches)))))
-    (list lang
-          ;; get block body less properties, protective commas, and indentation
-          (with-temp-buffer
-            (save-match-data
-              (insert (org-unescape-code-in-string body))
-	      (unless preserve-indentation (org-do-remove-indentation))
-              (buffer-string)))
-	  (apply #'org-babel-merge-params
-		 org-babel-default-header-args
-		 (when (boundp lang-headers) (eval lang-headers))
-		 (append
-		  (org-babel-params-from-properties lang)
-		  (list (org-babel-parse-header-arguments
-			 (org-no-properties (or (match-string 4) ""))))))
-	  switches
-	  block-indentation)))
-
-(defun org-babel-parse-inline-src-block-match ()
-  "Parse the results from a match of the `org-babel-inline-src-block-regexp'."
-  (let* ((lang (org-no-properties (match-string 2)))
-         (lang-headers (intern (concat "org-babel-default-header-args:" lang))))
-    (list lang
-          (org-unescape-code-in-string (org-no-properties (match-string 5)))
-          (apply #'org-babel-merge-params
-		 org-babel-default-inline-header-args
-		 (if (boundp lang-headers) (eval lang-headers) nil)
-		 (append
-		  (org-babel-params-from-properties lang)
-		  (list (org-babel-parse-header-arguments
-			 (org-no-properties (or (match-string 4) ""))))))
-	  nil)))
-
 (defun org-babel-balanced-split (string alts)
   "Split STRING on instances of ALTS.
 ALTS is a cons of two character options where each option may be
@@ -1592,11 +1538,12 @@ shown below.
 			    (cdr (assoc :colnames params))
 			    (cdr (assoc :rownames params)))))
 	 (raw-result (or (cdr (assoc :results params)) ""))
-	 (result-params (append
-			 (split-string (if (stringp raw-result)
-					   raw-result
-					 (eval raw-result)))
-			 (cdr (assoc :result-params params)))))
+	 (result-params (delete-dups
+			 (append
+			  (split-string (if (stringp raw-result)
+					    raw-result
+					  (eval raw-result)))
+			  (cdr (assoc :result-params params))))))
     (append
      (mapcar (lambda (var) (cons :var var)) (car vars-and-names))
      (list
@@ -1610,7 +1557,7 @@ shown below.
 				(t 'value))))
      (cl-remove-if
       (lambda (x) (memq (car x) '(:colname-names :rowname-names :result-params
-						 :result-type :var)))
+					    :result-type :var)))
       params))))
 
 ;; row and column names
@@ -1744,33 +1691,24 @@ If the point is not on a source block then return nil."
   (interactive
    (let ((completion-ignore-case t)
 	 (case-fold-search t)
-	 (under-point (thing-at-point 'line)))
+	 (all-block-names (org-babel-src-block-names)))
      (list (completing-read
-	    "source-block name: " (org-babel-src-block-names) nil t
-	    (cond
-	     ;; noweb
-	     ((string-match (org-babel-noweb-wrap) under-point)
-	      (let ((block-name (match-string 1 under-point)))
-		(string-match "[^(]*" block-name)
-		(match-string 0 block-name)))
-	     ;; #+call:
-	     ((string-match org-babel-lob-one-liner-regexp under-point)
-	      (let ((source-info (car (org-babel-lob-get-info))))
-		(if (string-match "^\\([^\\[]+?\\)\\(\\[.*\\]\\)?(" source-info)
-		    (let ((source-name (match-string 1 source-info)))
-		      source-name))))
-	     ;; #+results:
-	     ((string-match (concat "#\\+" org-babel-results-keyword
-				    "\\:\s+\\([^\\(]*\\)") under-point)
-	      (match-string 1 under-point))
-	     ;; symbol-at-point
-	     ((and (thing-at-point 'symbol))
-	      (org-babel-find-named-block (thing-at-point 'symbol))
-	      (thing-at-point 'symbol))
-	     (""))))))
+	    "source-block name: " all-block-names nil t
+	    (let* ((context (org-element-context))
+		   (type (org-element-type context)))
+	      (cond
+	       ((and (memq type '(inline-src-block src-block)) ;<<noweb>>
+		     (org-in-regexp (org-babel-noweb-wrap))))
+	       ((memq type '(babel-call inline-babel-call)) ;#+CALL:
+		(org-element-property :call context))
+	       ((org-element-property :results context)) ;#+RESULTS:
+	       ((let ((symbol (thing-at-point 'symbol))) ;Symbol.
+		  (and (member-ignore-case symbol all-block-names)
+		       symbol)))
+	       (t "")))))))
   (let ((point (org-babel-find-named-block name)))
     (if point
-        ;; taken from `org-open-at-point'
+        ;; Taken from `org-open-at-point'.
         (progn (org-mark-ring-push) (goto-char point) (org-show-context))
       (message "source-code block `%s' not found in this buffer" name))))
 
@@ -1808,25 +1746,23 @@ to `org-babel-named-src-block-regexp'."
         (progn (goto-char point) (org-show-context))
       (message "result `%s' not found in this buffer" name))))
 
-(defun org-babel-find-named-result (name &optional point)
+(defun org-babel-find-named-result (name)
   "Find a named result.
 Return the location of the result named NAME in the current
 buffer or nil if no such result exists."
   (save-excursion
-    (let ((case-fold-search t))
-      (goto-char (or point (point-min)))
-      (catch 'is-a-code-block
-	(when (re-search-forward
-	       (concat org-babel-result-regexp
-		       "[ \t]" (regexp-quote name) "[ \t]*[\n\f\v\r]")
-               nil t)
-	  (when (and (string= "name" (downcase (match-string 1)))
-		     (or (beginning-of-line 1)
-			 (looking-at org-babel-src-block-regexp)
-			 (looking-at org-babel-multi-line-header-regexp)
-			 (looking-at org-babel-lob-one-liner-regexp)))
-	    (throw 'is-a-code-block (org-babel-find-named-result name (point))))
-	  (beginning-of-line 0) (point))))))
+    (goto-char (point-min))
+    (let ((case-fold-search t)
+	  (re (format "^[ \t]*#\\+%s.*?:[ \t]*%s[ \t]*$"
+		      org-babel-results-keyword
+		      (regexp-quote name))))
+      (catch :found
+	(while (re-search-forward re nil t)
+	  (let ((element (org-element-at-point)))
+	    (when (or (eq (org-element-type element) 'keyword)
+		      (< (point)
+			 (org-element-property :post-affiliated element)))
+	      (throw :found (line-beginning-position)))))))))
 
 (defun org-babel-result-names (&optional file)
   "Returns the names of results in FILE or the current buffer."
@@ -1834,7 +1770,7 @@ buffer or nil if no such result exists."
     (when file (find-file file)) (goto-char (point-min))
     (let ((case-fold-search t) names)
       (while (re-search-forward org-babel-result-w-name-regexp nil t)
-	(setq names (cons (match-string 4) names)))
+	(setq names (cons (match-string-no-properties 9) names)))
       names)))
 
 ;;;###autoload
@@ -1886,7 +1822,7 @@ region is not active then the point is demarcated."
            (save-excursion
              (goto-char place)
              (let ((lang (nth 0 info))
-                   (indent (make-string (nth 5 info) ? )))
+                   (indent (make-string (org-get-indentation) ?\s)))
 	       (when (string-match "^[[:space:]]*$"
 				   (buffer-substring (point-at-bol)
 						     (point-at-eol)))
@@ -1924,90 +1860,146 @@ region is not active then the point is demarcated."
 			(funcall (if lower-case-p 'downcase 'upcase) "#+end_src\n")))
 	(goto-char start) (move-end-of-line 1)))))
 
-(defvar org-babel-lob-one-liner-regexp)
-(defun org-babel-where-is-src-block-result (&optional insert info hash indent)
+(defun org-babel--insert-results-keyword (name hash)
+  "Insert RESULTS keyword with NAME value at point.
+If NAME is nil, results are anonymous.  HASH is a string used as
+the results hash, or nil.  Leave point before the keyword."
+  (save-excursion (insert "\n"))	;open line to indent.
+  (org-indent-line)
+  (delete-char 1)
+  (insert (concat "#+" org-babel-results-keyword
+		  (cond ((not hash) nil)
+			(org-babel-hash-show-time
+			 (format "[%s %s]"
+				 (format-time-string "<%Y-%m-%d %H:%M:%S>")
+				 hash))
+			(t (format "[%s]" hash)))
+		  ":"
+		  (when name (concat " " name))
+		  "\n\n"))
+  (beginning-of-line -1)
+  (when hash (org-babel-hide-hash)))
+
+(defun org-babel--clear-results-maybe (hash)
+  "Clear results when hash doesn't match HASH.
+
+When results hash does not match HASH, remove RESULTS keyword at
+point, along with related contents.  Do nothing if HASH is nil.
+
+Return a non-nil value if results were cleared.  In this case,
+leave point where new results should be inserted."
+  (when hash
+    (looking-at org-babel-result-regexp)
+    (unless (string= (match-string 1) hash)
+      (let* ((e (org-element-at-point))
+	     (post (copy-marker (org-element-property :post-affiliated e))))
+	;; Delete contents.
+	(delete-region post
+		       (save-excursion
+			 (goto-char (org-element-property :end e))
+			 (skip-chars-backward " \t\n")
+			 (line-beginning-position 2)))
+	;; Delete RESULT keyword.  However, if RESULTS keyword is
+	;; orphaned, ignore this part.  The deletion above already
+	;; took care of it.
+	(unless (= (point) post)
+	  (delete-region (line-beginning-position)
+			 (line-beginning-position 2)))
+	(goto-char post)
+	(set-marker post nil)))
+    t))
+
+(defun org-babel-where-is-src-block-result (&optional insert _info hash)
   "Find where the current source block results begin.
+
 Return the point at the beginning of the result of the current
-source block.  Specifically at the beginning of the results line.
-If no result exists for this block then create a results line
-following the source block."
-  (save-excursion
-    (let* ((case-fold-search t)
-	   (on-lob-line (save-excursion
-			  (beginning-of-line 1)
-			  (looking-at org-babel-lob-one-liner-regexp)))
-	   (inlinep (when (org-babel-get-inline-src-block-matches)
-		      (match-end 0)))
-	   (name (nth 4 (or info (org-babel-get-src-block-info 'light))))
-	   (head (unless on-lob-line (org-babel-where-is-src-block-head)))
-	   found beg end)
-      (when head (goto-char head))
+source block, specifically at the beginning of the results line.
+
+If no result exists for this block return nil, unless optional
+argument INSERT is non-nil.  In this case, create a results line
+following the source block and return the position at its
+beginning.  In the case of inline code, remove the results part
+instead.
+
+If optional argument HASH is a string, remove contents related to
+RESULTS keyword if its hash is different.  Then update the latter
+to HASH."
+  (let ((context (org-element-context)))
+    (catch :found
       (org-with-wide-buffer
-       (setq
-	found ;; was there a result (before we potentially insert one)
-	(or
-	 inlinep
-	 (and
-	  ;; named results:
-	  ;; - return t if it is found, else return nil
-	  ;; - if it does not need to be rebuilt, then don't set end
-	  ;; - if it does need to be rebuilt then do set end
-	  name (setq beg (org-babel-find-named-result name))
-	  (prog1 beg
-	    (when (and hash (not (string= hash (match-string 5))))
-	      (goto-char beg) (setq end beg) ;; beginning of result
-	      (forward-line 1)
-	      (delete-region end (org-babel-result-end)) nil)))
-	 (and
-	  ;; unnamed results:
-	  ;; - return t if it is found, else return nil
-	  ;; - if it is found, and the hash doesn't match, delete and set end
-	  (or on-lob-line (re-search-forward "^[ \t]*#\\+end_src" nil t))
-	  (progn (end-of-line 1)
-		 (if (eobp) (insert "\n") (forward-char 1))
-		 (setq end (point))
-		 (and
-		  (not name)
-		  (progn ;; unnamed results line already exists
-		    (catch 'non-comment
-		      (while (re-search-forward "[^ \f\t\n\r\v]" nil t)
-			(beginning-of-line 1)
-			(cond
-			 ((looking-at (concat org-babel-result-regexp "\n"))
-			  (throw 'non-comment t))
-			 ((and (looking-at "^[ \t]*#")
-			       (not (looking-at
-				     org-babel-lob-one-liner-regexp)))
-			  (end-of-line 1))
-			 (t (throw 'non-comment nil))))))
-		  (let ((this-hash (match-string 5)))
-		    (prog1 (point)
-		      ;; must remove and rebuild if hash!=old-hash
-		      (if (and hash (not (string= hash this-hash)))
-			  (progn
-			    (setq end (point-at-bol))
-			    (forward-line 1)
-			    (delete-region end (org-babel-result-end))
-			    (setq beg end))
-			(setq end nil))))))))))
-      (if (not (and insert end)) found
-	(goto-char end)
-	(unless beg
-	  (if (looking-at "[\n\r]") (forward-char 1) (insert "\n")))
-	(when (wholenump indent) (indent-to indent))
-	(insert (concat
-		 "#+" org-babel-results-keyword
-		 (when hash
-		   (if org-babel-hash-show-time
-		       (concat
-			"["(format-time-string "<%Y-%m-%d %H:%M:%S>")" "hash"]")
-		     (concat "["hash"]")))
-		 ":"
-		 (when name (concat " " name)) "\n"))
-	(unless beg (insert "\n") (backward-char))
-	(beginning-of-line 0)
-	(when hash (org-babel-hide-hash))
-	(point)))))
+       (pcase (org-element-type context)
+	 ((or `inline-babel-call `inline-src-block)
+	  ;; Results for inline objects are located right after them.
+	  ;; There is no RESULTS line to insert either.
+	  (let ((limit (org-element-property
+			:contents-end (org-element-property :parent context))))
+	    (goto-char (org-element-property :end context))
+	    (skip-chars-forward " \t\n" limit)
+	    (throw :found
+		   (and
+		    (< (point) limit)
+		    (let ((result (org-element-context)))
+		      (and (eq (org-element-type result) 'macro)
+			   (string= (org-element-property :key result)
+				    "results")
+			   (if (not insert) (point)
+			     (delete-region
+			      (point)
+			      (progn
+				(goto-char (org-element-property :end result))
+				(skip-chars-backward " \t")
+				(point)))
+			     (point))))))))
+	 ((or `babel-call `src-block)
+	  (let* ((name (org-element-property :name context))
+		 (named-results (and name (org-babel-find-named-result name))))
+	    (goto-char (or named-results (org-element-property :end context)))
+	    (cond
+	     ;; Existing results named after the current source.
+	     (named-results
+	      (when (org-babel--clear-results-maybe hash)
+		(org-babel--insert-results-keyword name hash))
+	      (throw :found (point)))
+	     ;; Named results expect but none to be found.
+	     (name)
+	     ;; No possible anonymous results at the very end of
+	     ;; buffer or outside CONTEXT parent.
+	     ((eq (point)
+		  (or (org-element-property
+		       :contents-end (org-element-property :parent context))
+		      (point-max))))
+	     ;; Check if next element is an anonymous result below
+	     ;; the current block.
+	     ((let* ((next (org-element-at-point))
+		     (end (save-excursion
+			    (goto-char
+			     (org-element-property :post-affiliated next))
+			    (line-end-position)))
+		     (empty-result-re (concat org-babel-result-regexp "$"))
+		     (case-fold-search t))
+		(re-search-forward empty-result-re end t))
+	      (beginning-of-line)
+	      (when (org-babel--clear-results-maybe hash)
+		(org-babel--insert-results-keyword nil hash))
+	      (throw :found (point))))))
+	 ;; Ignore other elements.
+	 (_ (throw :found nil))))
+      ;; No result found.  Insert a RESULTS keyword below element, if
+      ;; appropriate.  In this case, ensure there is an empty line
+      ;; after the previous element.
+      (when insert
+	(save-excursion
+	  (goto-char (min (org-element-property :end context) (point-max)))
+	  (skip-chars-backward " \t\n")
+	  (forward-line)
+	  (cond ((not (bolp)) (insert "\n\n"))
+		((or (eobp)
+		     (= (org-element-property :post-blank context) 0))
+		 (insert "\n"))
+		(t (forward-line)))
+	  (org-babel--insert-results-keyword
+	   (org-element-property :name context) hash)
+	  (point))))))
 
 (defun org-babel-read-element (element)
   "Read ELEMENT into emacs-lisp.
@@ -2020,7 +2012,13 @@ Return nil if ELEMENT cannot be read."
 	(or (org-babel-number-p v) v)))
      (`table (org-babel-read-table))
      (`plain-list (org-babel-read-list))
-     ((or `example-block `export-block)
+     (`example-block
+      (let ((v (org-element-property :value element)))
+	(if (or org-src-preserve-indentation
+		(org-element-property :preserve-indent element))
+	    v
+	  (org-remove-indentation v))))
+     (`export-block
       (org-remove-indentation (org-element-property :value element)))
      (`paragraph
       ;; Treat paragraphs containing a single link specially.
@@ -2042,46 +2040,28 @@ Return nil if ELEMENT cannot be read."
 	(org-element-property :contents-end element))))
      (_ nil))))
 
-(defvar org-block-regexp)
 (defun org-babel-read-result ()
-  "Read the result at `point' into emacs-lisp."
-  (let ((case-fold-search t) result-string)
-    (cond
-     ((org-at-table-p) (org-babel-read-table))
-     ((org-at-item-p) (org-babel-read-list))
-     ((looking-at org-bracket-link-regexp) (org-babel-read-link))
-     ((looking-at org-block-regexp) (org-remove-indentation (match-string 4)))
-     ((or (looking-at "^[ \t]*: ") (looking-at "^[ \t]*:$"))
-      (setq result-string
-	    (org-babel-trim
-	     (mapconcat (lambda (line)
-                          (or (and (> (length line) 1)
-				   (string-match "^[ \t]*: ?\\(.+\\)" line)
-				   (match-string 1 line))
-			      ""))
-			(split-string
-			 (buffer-substring
-                          (point) (org-babel-result-end)) "[\r\n]+")
-			"\n")))
-      (or (org-babel-number-p result-string) result-string))
-     ((looking-at org-babel-result-regexp)
-      (save-excursion (forward-line 1) (org-babel-read-result))))))
+  "Read the result at point into emacs-lisp."
+  (and (not (save-excursion
+	      (beginning-of-line)
+	      (looking-at-p "[ \t]*$")))
+       (org-babel-read-element (org-element-at-point))))
 
 (defun org-babel-read-table ()
-  "Read the table at `point' into emacs-lisp."
+  "Read the table at point into emacs-lisp."
   (mapcar (lambda (row)
             (if (and (symbolp row) (equal row 'hline)) row
               (mapcar (lambda (el) (org-babel-read el 'inhibit-lisp-eval)) row)))
           (org-table-to-lisp)))
 
 (defun org-babel-read-list ()
-  "Read the list at `point' into emacs-lisp."
+  "Read the list at point into emacs-lisp."
   (mapcar (lambda (el) (org-babel-read el 'inhibit-lisp-eval))
 	  (cdr (org-list-to-lisp))))
 
 (defvar org-link-types-re)
 (defun org-babel-read-link ()
-  "Read the link at `point' into emacs-lisp.
+  "Read the link at point into emacs-lisp.
 If the path of the link is a file path it is expanded using
 `expand-file-name'."
   (let* ((case-fold-search t)
@@ -2106,8 +2086,7 @@ If the path of the link is a file path it is expanded using
       ;; scalar result
       (funcall echo-res result))))
 
-(defun org-babel-insert-result
-    (result &optional result-params info hash indent lang)
+(defun org-babel-insert-result (result &optional result-params info hash lang)
   "Insert RESULT into the current buffer.
 
 By default RESULT is inserted after the end of the current source
@@ -2181,205 +2160,201 @@ INFO may provide the values of these header arguments (in the
 :wrap --- the effect is similar to `latex' in RESULT-PARAMS but
           using the argument supplied to specify the export block
           or snippet type."
-
-  (if (stringp result)
-      (progn
-        (setq result (org-no-properties result))
-        (when (member "file" result-params)
-	  (setq result (org-babel-result-to-file
-			result (when (assoc :file-desc (nth 2 info))
-				 (or (cdr (assoc :file-desc (nth 2 info)))
-				     result))))))
-    (unless (listp result) (setq result (format "%S" result))))
+  (cond ((stringp result)
+	 (setq result (org-no-properties result))
+	 (when (member "file" result-params)
+	   (setq result (org-babel-result-to-file
+			 result (when (assoc :file-desc (nth 2 info))
+				  (or (cdr (assoc :file-desc (nth 2 info)))
+				      result))))))
+	((listp result))
+	(t (setq result (format "%S" result))))
   (if (and result-params (member "silent" result-params))
-      (progn
-	(message (replace-regexp-in-string "%" "%%" (format "%S" result)))
-	result)
-    (save-excursion
-      (let* ((inlinep
-	      (save-excursion
-		(when (or (org-babel-get-inline-src-block-matches)
-			  (org-babel-get-lob-one-liner-matches))
-		  (goto-char (match-end 0))
-		  (org-babel-remove-inline-result)
-		  (insert " ")
-		  (point))))
-	     (existing-result
-	      (unless inlinep
-		(org-babel-where-is-src-block-result t info hash indent)))
-	     (bad-inline-p
-	      (when inlinep
-		(or
-		 (and (member "table" result-params) "`:results table'")
-		 (and (listp result) "list result")
-		 (and (org-string-match-p "\n." result) "multiline result")
-		 (and (member "list" result-params) "`:results list'"))))
-	     (results-switches
-	      (cdr (assoc :results_switches (nth 2 info))))
-	     (visible-beg (point-min-marker))
-	     (visible-end (point-max-marker))
-	     ;; When results exist outside of the current visible
-	     ;; region of the buffer, be sure to widen buffer to
-	     ;; update them.
-	     (outside-scope-p (and existing-result
+      (progn (message (replace-regexp-in-string "%" "%%" (format "%S" result)))
+	     result)
+    (let ((inline (let ((context (org-element-context)))
+		    (and (memq (org-element-type context)
+			       '(inline-babel-call inline-src-block))
+			 context))))
+      (when inline
+	(let ((warning
+	       (or (and (member "table" result-params) "`:results table'")
+		   (and (listp result) "list result")
+		   (and (string-match-p "\n." result) "multiline result")
+		   (and (member "list" result-params) "`:results list'"))))
+	  (when warning
+	    (user-error "Inline error: %s cannot be used" warning))))
+      (save-excursion
+	(let* ((visible-beg (point-min-marker))
+	       (visible-end (copy-marker (point-max) t))
+	       (inline (let ((context (org-element-context)))
+			 (and (memq (org-element-type context)
+				    '(inline-babel-call inline-src-block))
+			      context)))
+	       (existing-result (org-babel-where-is-src-block-result t nil hash))
+	       (results-switches (cdr (assq :results_switches (nth 2 info))))
+	       ;; When results exist outside of the current visible
+	       ;; region of the buffer, be sure to widen buffer to
+	       ;; update them.
+	       (outside-scope (and existing-result
+				   (buffer-narrowed-p)
 				   (or (> visible-beg existing-result)
 				       (<= visible-end existing-result))))
-	     beg end)
-	(when (and (stringp result)  ; ensure results end in a newline
-		   (not inlinep)
-		   (> (length result) 0)
-		   (not (or (string-equal (substring result -1) "\n")
-			    (string-equal (substring result -1) "\r"))))
-	  (setq result (concat result "\n")))
-	(unwind-protect
-	    (progn
-	      (when outside-scope-p (widen))
-	      (if (not existing-result)
-		  (setq beg (or inlinep (point)))
-		(goto-char existing-result)
-		(save-excursion
-		  (re-search-forward "#" nil t)
-		  (setq indent (- (current-column) 1)))
-		(forward-line 1)
+	       beg end indent)
+	  ;; Ensure non-inline results end in a newline.
+	  (when (and (org-string-nw-p result)
+		     (not inline)
+		     (not (string-equal (substring result -1) "\n")))
+	    (setq result (concat result "\n")))
+	  (unwind-protect
+	      (progn
+		(when outside-scope (widen))
+		(if existing-result (goto-char existing-result)
+		  (goto-char (org-element-property :end inline))
+		  (skip-chars-backward " \t"))
+		(unless inline
+		  (setq indent (org-get-indentation))
+		  (forward-line 1))
 		(setq beg (point))
 		(cond
+		 (inline
+		   ;; Make sure new results are separated from the
+		   ;; source code by one space.
+		   (unless existing-result
+		     (insert " ")
+		     (setq beg (point))))
 		 ((member "replace" result-params)
 		  (delete-region (point) (org-babel-result-end)))
 		 ((member "append" result-params)
 		  (goto-char (org-babel-result-end)) (setq beg (point-marker)))
-		 ((member "prepend" result-params)))) ; already there
-	      (setq results-switches
-		    (if results-switches (concat " " results-switches) ""))
-	      (let ((wrap (lambda (start finish &optional no-escape no-newlines
-				    inline-start inline-finish)
-			    (when inlinep
-			      (setq start inline-start)
-			      (setq finish inline-finish)
-			      (setq no-newlines t))
-			    (goto-char end)
-			    (insert (concat finish (unless no-newlines "\n")))
-			    (goto-char beg)
-			    (insert (concat start (unless no-newlines "\n")))
-			    (unless no-escape
-			      (org-escape-code-in-region (min (point) end) end))
-			    (goto-char end)
-			    (unless no-newlines (goto-char (point-at-eol)))
-			    (setq end (point-marker))))
-		    (tabulablep
-		     (lambda (r)
-		       ;; Non-nil when result R can be turned into
-		       ;; a table.
-		       (and (listp r)
-			    (null (cdr (last r)))
-			    (cl-every
-			     (lambda (e) (or (atom e) (null (cdr (last e)))))
-			     result)))))
-		;; insert results based on type
-		(cond
-		 ;; Do nothing for an empty result.
-		 ((null result))
-		 ;; Illegal inline result or params.
-		 (bad-inline-p
-		  (error "Inline error: %s cannot be used" bad-inline-p))
-		 ;; insert a list if preferred
-		 ((member "list" result-params)
-		  (insert
-		   (org-babel-trim
-		    (org-list-to-generic
-		     (cons 'unordered
-			   (mapcar
-			    (lambda (e)
-			      (list (if (stringp e) e (format "%S" e))))
-			    (if (listp result) result
-			      (split-string result "\n" t))))
-		     '(:splicep nil :istart "- " :iend "\n")))
-		   "\n"))
-		 ;; Try hard to print RESULT as a table.  Give up if
-		 ;; it contains an improper list.
-		 ((funcall tabulablep result)
-		  (goto-char beg)
-		  (insert (concat (orgtbl-to-orgtbl
-				   (if (cl-every
-					(lambda (e)
-					  (or (eq e 'hline) (listp e)))
-					result)
-				       result
-				     (list result))
-				   nil)
-				  "\n"))
-		  (goto-char beg)
-		  (when (org-at-table-p) (org-table-align))
-		  (goto-char (org-table-end)))
-		 ;; Print verbatim a list that cannot be turned into
-		 ;; a table.
-		 ((listp result) (insert (format "%s\n" result)))
-		 ((member "file" result-params)
-		  (when inlinep
-		    (goto-char inlinep)
-		    (setq result (org-macro-escape-arguments result)))
-		  (insert result))
-		 ((and inlinep
-		       (not (member "raw" result-params)))
-		  (goto-char inlinep)
-		  (insert (org-macro-escape-arguments
-			   (org-babel-chomp result "\n"))))
-		 (t (goto-char beg) (insert result)))
-		(setq end (point-marker))
-		;; possibly wrap result
-		(cond
-		 (bad-inline-p)		; Do nothing.
-		 ((assoc :wrap (nth 2 info))
-		  (let ((name (or (cdr (assoc :wrap (nth 2 info))) "RESULTS")))
-		    (funcall wrap (concat "#+BEGIN_" name)
-			     (concat "#+END_" (car (org-split-string name)))
-			     nil nil (concat "{{{results(@@" name ":") "@@)}}}")))
-		 ((member "html" result-params)
-		  (funcall wrap "#+BEGIN_EXPORT html" "#+END_EXPORT" nil nil
-			   "{{{results(@@html:" "@@)}}}"))
-		 ((member "latex" result-params)
-		  (funcall wrap "#+BEGIN_EXPORT latex" "#+END_EXPORT" nil nil
-			   "{{{results(@@latex:" "@@)}}}"))
-		 ((member "org" result-params)
-		  (goto-char beg) (if (org-at-table-p) (org-cycle))
-		  (funcall wrap "#+BEGIN_SRC org" "#+END_SRC" nil nil
-			   "{{{results(src_org{" "})}}}"))
-		 ((member "code" result-params)
-		  (let ((lang (or lang "none")))
-		    (funcall wrap (format "#+BEGIN_SRC %s%s" lang results-switches)
-			     "#+END_SRC" nil nil
-			     (format "{{{results(src_%s[%s]{" lang results-switches)
-			     "})}}}")))
-		 ((member "raw" result-params)
-		  (goto-char beg) (if (org-at-table-p) (org-cycle)))
-		 ((or (member "drawer" result-params)
-		      ;; Stay backward compatible with <7.9.2
-		      (member "wrap" result-params))
-		  (goto-char beg) (if (org-at-table-p) (org-cycle))
-		  (funcall wrap ":RESULTS:" ":END:" 'no-escape nil
-			   "{{{results(" ")}}}"))
-		 ((and inlinep (member "file" result-params))
-		  (funcall wrap nil nil nil nil "{{{results(" ")}}}"))
-		 ((and (not (funcall tabulablep result))
-		       (not (member "file" result-params)))
-		  (let ((org-babel-inline-result-wrap
-			 ;; Hard code {{{results(...)}}} on top of customization.
-			 (format "{{{results(%s)}}}" org-babel-inline-result-wrap)))
-		    (org-babel-examplify-region beg end results-switches)
-		    (setq end (point))))))
-	      ;; possibly indent the results to match the #+results line
-	      (when (and (not inlinep) (numberp indent) indent (> indent 0)
-			 ;; in this case `table-align' does the work for us
-			 (not (and (listp result)
-				   (member "append" result-params))))
-		(indent-rigidly beg end indent))
-	      (if (null result)
-		  (if (member "value" result-params)
-		      (message "Code block returned no value.")
-		    (message "Code block produced no output."))
-		(message "Code block evaluation complete.")))
-	  (when outside-scope-p (narrow-to-region visible-beg visible-end))
-	  (set-marker visible-beg nil)
-	  (set-marker visible-end nil))))))
+		 ((member "prepend" result-params))) ; already there
+		(setq results-switches
+		      (if results-switches (concat " " results-switches) ""))
+		(let ((wrap (lambda (start finish &optional no-escape no-newlines
+				      inline-start inline-finish)
+			      (when inline
+				(setq start inline-start)
+				(setq finish inline-finish)
+				(setq no-newlines t))
+			      (goto-char end)
+			      (insert (concat finish (unless no-newlines "\n")))
+			      (goto-char beg)
+			      (insert (concat start (unless no-newlines "\n")))
+			      (unless no-escape
+				(org-escape-code-in-region (min (point) end) end))
+			      (goto-char end)
+			      (unless no-newlines (goto-char (point-at-eol)))
+			      (setq end (point-marker))))
+		      (tabulablep
+		       (lambda (r)
+			 ;; Non-nil when result R can be turned into
+			 ;; a table.
+			 (and (listp r)
+			      (null (cdr (last r)))
+			      (cl-every
+			       (lambda (e) (or (atom e) (null (cdr (last e)))))
+			       result)))))
+		  ;; insert results based on type
+		  (cond
+		   ;; Do nothing for an empty result.
+		   ((null result))
+		   ;; Insert a list if preferred.
+		   ((member "list" result-params)
+		    (insert
+		     (org-babel-trim
+		      (org-list-to-generic
+		       (cons 'unordered
+			     (mapcar
+			      (lambda (e)
+				(list (if (stringp e) e (format "%S" e))))
+			      (if (listp result) result
+				(split-string result "\n" t))))
+		       '(:splicep nil :istart "- " :iend "\n")))
+		     "\n"))
+		   ;; Try hard to print RESULT as a table.  Give up if
+		   ;; it contains an improper list.
+		   ((funcall tabulablep result)
+		    (goto-char beg)
+		    (insert (concat (orgtbl-to-orgtbl
+				     (if (cl-every
+					  (lambda (e)
+					    (or (eq e 'hline) (listp e)))
+					  result)
+					 result
+				       (list result))
+				     nil)
+				    "\n"))
+		    (goto-char beg)
+		    (when (org-at-table-p) (org-table-align))
+		    (goto-char (org-table-end)))
+		   ;; Print verbatim a list that cannot be turned into
+		   ;; a table.
+		   ((listp result) (insert (format "%s\n" result)))
+		   ((member "file" result-params)
+		    (when inline
+		      (setq result (org-macro-escape-arguments result)))
+		    (insert result))
+		   ((and inline (not (member "raw" result-params)))
+		    (insert (org-macro-escape-arguments
+			     (org-babel-chomp result "\n"))))
+		   (t (goto-char beg) (insert result)))
+		  (setq end (point-marker))
+		  ;; possibly wrap result
+		  (cond
+		   ((assoc :wrap (nth 2 info))
+		    (let ((name (or (cdr (assoc :wrap (nth 2 info))) "RESULTS")))
+		      (funcall wrap (concat "#+BEGIN_" name)
+			       (concat "#+END_" (car (org-split-string name)))
+			       nil nil (concat "{{{results(@@" name ":") "@@)}}}")))
+		   ((member "html" result-params)
+		    (funcall wrap "#+BEGIN_EXPORT html" "#+END_EXPORT" nil nil
+			     "{{{results(@@html:" "@@)}}}"))
+		   ((member "latex" result-params)
+		    (funcall wrap "#+BEGIN_EXPORT latex" "#+END_EXPORT" nil nil
+			     "{{{results(@@latex:" "@@)}}}"))
+		   ((member "org" result-params)
+		    (goto-char beg) (if (org-at-table-p) (org-cycle))
+		    (funcall wrap "#+BEGIN_SRC org" "#+END_SRC" nil nil
+			     "{{{results(src_org{" "})}}}"))
+		   ((member "code" result-params)
+		    (let ((lang (or lang "none")))
+		      (funcall wrap (format "#+BEGIN_SRC %s%s" lang results-switches)
+			       "#+END_SRC" nil nil
+			       (format "{{{results(src_%s[%s]{" lang results-switches)
+			       "})}}}")))
+		   ((member "raw" result-params)
+		    (goto-char beg) (if (org-at-table-p) (org-cycle)))
+		   ((or (member "drawer" result-params)
+			;; Stay backward compatible with <7.9.2
+			(member "wrap" result-params))
+		    (goto-char beg) (if (org-at-table-p) (org-cycle))
+		    (funcall wrap ":RESULTS:" ":END:" 'no-escape nil
+			     "{{{results(" ")}}}"))
+		   ((and inline (member "file" result-params))
+		    (funcall wrap nil nil nil nil "{{{results(" ")}}}"))
+		   ((and (not (funcall tabulablep result))
+			 (not (member "file" result-params)))
+		    (let ((org-babel-inline-result-wrap
+			   ;; Hard code {{{results(...)}}} on top of customization.
+			   (format "{{{results(%s)}}}"
+				   org-babel-inline-result-wrap)))
+		      (org-babel-examplify-region beg end results-switches inline)
+		      (setq end (point))))))
+		;; Possibly indent results in par with #+results line.
+		(when (and (not inline) (numberp indent) (> indent 0)
+			   ;; In this case `table-align' does the work
+			   ;; for us.
+			   (not (and (listp result)
+				     (member "append" result-params))))
+		  (indent-rigidly beg end indent))
+		(if (null result)
+		    (if (member "value" result-params)
+			(message "Code block returned no value.")
+		      (message "Code block produced no output."))
+		  (message "Code block evaluation complete.")))
+	    (when outside-scope (narrow-to-region visible-beg visible-end))
+	    (set-marker visible-beg nil)
+	    (set-marker visible-end nil)))))))
 
 (defun org-babel-remove-result (&optional info keep-keyword)
   "Remove the result of the current source block."
@@ -2393,23 +2368,29 @@ INFO may provide the values of these header arguments (in the
 	   (if keep-keyword (1+ (match-end 0)) (1- (match-beginning 0)))
 	   (progn (forward-line 1) (org-babel-result-end))))))))
 
-(defun org-babel-remove-inline-result ()
+(defun org-babel-remove-inline-result (&optional datum)
   "Remove the result of the current inline-src-block or babel call.
 The result must be wrapped in a `results' macro to be removed.
-Leading whitespace is trimmed."
+Leading white space is trimmed."
   (interactive)
-  (let* ((el (org-element-context))
-	 (post-blank (org-element-property :post-blank el)))
+  (let* ((el (or datum (org-element-context))))
     (when (memq (org-element-type el) '(inline-src-block inline-babel-call))
       (org-with-wide-buffer
-        (goto-char (org-element-property :end el))
-        (let ((el (org-element-context)))
-	  (when (and (eq (org-element-type el) 'macro)
-		     (string= (org-element-property :key el) "results"))
-	    (delete-region ; And leading whitespace.
-	     (- (org-element-property :begin el) post-blank)
-	     (- (org-element-property :end el)
-		(org-element-property :post-blank el)))))))))
+       (goto-char (org-element-property :end el))
+       (skip-chars-backward " \t")
+       (let ((result (save-excursion
+		       (skip-chars-forward
+			" \t\n"
+			(org-element-property
+			 :contents-end (org-element-property :parent el)))
+		       (org-element-context))))
+	 (when (and (eq (org-element-type result) 'macro)
+		    (string= (org-element-property :key result) "results"))
+	   (delete-region		; And leading whitespace.
+	    (point)
+	    (progn (goto-char (org-element-property :end result))
+		   (skip-chars-backward " \t\n")
+		   (point)))))))))
 
 (defun org-babel-remove-result-one-or-many (x)
   "Remove the result of the current source block.
@@ -2463,25 +2444,17 @@ file's directory then expand relative links."
   'org-babel-examplize-region
   'org-babel-examplify-region "25.1")
 
-(defun org-babel-examplify-region (beg end &optional results-switches)
+(defun org-babel-examplify-region (beg end &optional results-switches inline)
   "Comment out region using the inline `==' or `: ' org example quote."
   (interactive "*r")
-  (let ((chars-between (lambda (b e)
-			 (not (string-match "^[\\s]*$"
-					    (buffer-substring b e)))))
-	(maybe-cap (lambda (str) (if org-babel-capitalize-example-region-markers
-				(upcase str) str)))
-	(beg-bol (save-excursion (goto-char beg) (point-at-bol)))
-	(end-bol (save-excursion (goto-char end) (point-at-bol)))
-	(end-eol (save-excursion (goto-char end) (point-at-eol))))
-    (if (and (not (= end end-bol))
-	     (or (funcall chars-between beg-bol beg)
-		 (funcall chars-between end end-eol)))
+  (let ((maybe-cap
+	 (lambda (str)
+	   (if org-babel-capitalize-example-region-markers (upcase str) str))))
+    (if inline
 	(save-excursion
 	  (goto-char beg)
 	  (insert (format org-babel-inline-result-wrap
-			  (prog1 (buffer-substring beg end)
-			    (delete-region beg end)))))
+			  (delete-and-extract-region beg end))))
       (let ((size (count-lines beg end)))
 	(save-excursion
 	  (cond ((= size 0))	      ; do nothing for an empty result
@@ -2993,25 +2966,6 @@ character of the string."
    (org-reverse-string
     (org-babel-chomp (org-reverse-string string) regexp)) regexp))
 
-(defun org-babel-tramp-handle-call-process-region
-  (start end program &optional delete buffer display &rest args)
-  "Use Tramp to handle `call-process-region'.
-Fixes a bug in `tramp-handle-call-process-region'."
-  (if (and (featurep 'tramp) (file-remote-p default-directory))
-      (let ((tmpfile (tramp-compat-make-temp-file "")))
-	(write-region start end tmpfile)
-	(when delete (delete-region start end))
-	(unwind-protect
-	    ;;	(apply 'call-process program tmpfile buffer display args)
-            ;; bug in tramp
-	    (apply 'process-file program tmpfile buffer display args)
-	  (delete-file tmpfile)))
-    ;; org-babel-call-process-region-original is the original emacs
-    ;; definition.  It is in scope from the let binding in
-    ;; org-babel-execute-src-block
-    (apply org-babel-call-process-region-original
-           start end program delete buffer display args)))
-
 (defun org-babel-local-file-name (file)
   "Return the local name component of FILE."
   (or (file-remote-p file 'localname) file))
@@ -3170,6 +3124,26 @@ plus the parameter value."
       (user-error "No :file header argument given; cannot create graphical result.")))
   (and (member "graphics" (cdr (assq :result-params params)))
        (cdr (assq :file params))))
+
+(defun org-babel-make-language-alias (new old)
+  "Make source blocks of type NEW aliases for those of type OLD.
+
+NEW and OLD should be strings.  This function should be called
+after the babel API for OLD-type source blocks is fully defined.
+
+Callers of this function will probably want to add an entry to
+`org-src-lang-modes' as well."
+  (dolist (fn '("execute" "expand-body" "prep-session"
+		"variable-assignments" "load-session"))
+    (let ((sym (intern-soft (concat "org-babel-" fn ":" old))))
+      (when (and sym (fboundp sym))
+	(defalias (intern (concat "org-babel-" fn ":" new)) sym))))
+  ;; Technically we don't need a `dolist' for just one variable, but
+  ;; we keep it for symmetry/ease of future expansion.
+  (dolist (var '("default-header-args"))
+    (let ((sym (intern-soft (concat "org-babel-" var ":" old))))
+      (when (and sym (boundp sym))
+	(defvaralias (intern (concat "org-babel-" var ":" new)) sym)))))
 
 (provide 'ob-core)
 

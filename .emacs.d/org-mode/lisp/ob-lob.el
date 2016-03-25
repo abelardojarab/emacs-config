@@ -28,7 +28,6 @@
 (require 'ob-core)
 (require 'ob-table)
 
-(declare-function org-babel-in-example-or-verbatim "ob-exp" nil)
 (declare-function org-element-context "org-element" (&optional element))
 (declare-function org-element-property "org-element" (property element))
 (declare-function org-element-type "org-element" (element))
@@ -65,24 +64,7 @@ To add files to this list use the `org-babel-lob-ingest' command."
 	     lob-ingest-count (if (> lob-ingest-count 1) "s" ""))
     lob-ingest-count))
 
-(defconst org-babel-block-lob-one-liner-regexp
-  (concat
-   "^\\([ \t]*?\\)#\\+call:[ \t]+\\([^()\n]+?\\)\\(\\[\\(.*\\)\\]\\|\\(\\)\\)"
-   "(\\([^\n]*?\\))\\(\\[.+\\]\\|\\)[ \t]*\\(\\([^\n]*\\)\\)?")
-  "Regexp to match non-inline calls to predefined source block functions.")
-
-(defconst org-babel-inline-lob-one-liner-regexp
-  (concat
-   "\\([^\n]*?\\)call_\\([^()[:space:]\n]+?\\)\\(\\[\\(.*?\\)\\]\\|\\(\\)\\)"
-   "(\\(.*?\\))\\(\\[\\(.*?\\)\\]\\)?")
-  "Regexp to match inline calls to predefined source block functions.")
-
-(defconst org-babel-lob-one-liner-regexp
-  (concat "\\(" org-babel-block-lob-one-liner-regexp
-	  "\\|" org-babel-inline-lob-one-liner-regexp "\\)")
-  "Regexp to match calls to predefined source block functions.")
-
-;; functions for executing lob one-liners
+;; Functions for executing lob one-liners.
 
 ;;;###autoload
 (defun org-babel-lob-execute-maybe ()
@@ -91,49 +73,48 @@ Detect if this is context for a Library Of Babel source block and
 if so then run the appropriate source block from the Library."
   (interactive)
   (let ((info (org-babel-lob-get-info)))
-    (if (and (nth 0 info) (not (org-babel-in-example-or-verbatim)))
-	(progn (org-babel-lob-execute info) t)
-      nil)))
+    (when info
+      (org-babel-lob-execute info)
+      t)))
 
 ;;;###autoload
-(defun org-babel-lob-get-info ()
-  "Return a Library of Babel function call as a string."
-  (when (save-excursion
-	  (beginning-of-line)
-	  (let ((case-fold-search t))
-	    (looking-at org-babel-lob-one-liner-regexp)))
-    (let ((context (save-match-data (org-element-context))))
-      (when (memq (org-element-type context) '(babel-call inline-babel-call))
-	(list (format "%s%s(%s)"
-		      (org-element-property :call context)
-		      (let ((in (org-element-property :inside-header context)))
-			(if in (format "[%s]" in) ""))
-		      (or (org-element-property :arguments context) ""))
-	      (org-element-property :end-header context)
-	      (length (if (= (length (match-string 12)) 0)
-			  (match-string-no-properties 2)
-			(match-string-no-properties 11)))
-	      (org-element-property :name context))))))
+(defun org-babel-lob-get-info (&optional datum)
+  "Return a Library of Babel function call as a string.
+Return nil when not on an appropriate location.  Build string
+from `inline-babel-call' or `babel-call' DATUM, when provided."
+  (let* ((context (or datum (org-element-context)))
+	 (type (org-element-type context)))
+    (when (memq type '(babel-call inline-babel-call))
+      (list (format "%s%s(%s)"
+		    (org-element-property :call context)
+		    (let ((in (org-element-property :inside-header context)))
+		      (if in (format "[%s]" in) ""))
+		    (or (org-element-property :arguments context) ""))
+	    (org-element-property :end-header context)
+	    (org-element-property :name context)
+	    (org-element-property
+	     (if (eq type 'babel-call) :post-affiliated :begin)
+	     datum)))))
 
 (defvar org-babel-default-header-args:emacs-lisp) ; Defined in ob-emacs-lisp.el
 (defun org-babel-lob-execute (info)
   "Execute the lob call specified by INFO."
   (let* ((mkinfo (lambda (p)
-		   (list "emacs-lisp" "results" p nil
-			 (nth 3 info) ;; name
-			 (nth 2 info))))
-	 (pre-params (apply #'org-babel-merge-params
-			    org-babel-default-header-args
-			    org-babel-default-header-args:emacs-lisp
-			    (append
-			     (org-babel-params-from-properties)
-			     (list
-			      (org-babel-parse-header-arguments
-			       (org-no-properties
-				(concat
-				 ":var results="
-				 (mapconcat #'identity (butlast info 2)
-					    " "))))))))
+		   ;; Make plist P compatible with
+		   ;; `org-babel-get-src-block-info'.
+		   (list
+		    "emacs-lisp" "results" p nil (nth 2 info) (nth 3 info))))
+	 (pre-params
+	  (apply #'org-babel-merge-params
+		 org-babel-default-header-args
+		 org-babel-default-header-args:emacs-lisp
+		 (append
+		  (org-babel-params-from-properties)
+		  (list
+		   (org-babel-parse-header-arguments
+		    (org-no-properties
+		     (concat ":var results="
+			     (mapconcat #'identity (butlast info 2) " "))))))))
 	 (pre-info (funcall mkinfo pre-params))
 	 (cache-p (and (cdr (assoc :cache pre-params))
 		       (string= "yes" (cdr (assoc :cache pre-params)))))

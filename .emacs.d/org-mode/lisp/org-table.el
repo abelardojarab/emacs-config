@@ -55,17 +55,20 @@
 
 (declare-function org-export-create-backend "org-export" (&rest rest))
 (declare-function org-export-data-with-backend "org-export" (arg1 arg2 arg3))
-(declare-function org-export-first-sibling-p "org-export" (arg1 arg2))
-(declare-function org-export-get-backend "org-export" (arg1))
+(declare-function org-export-filter-apply-functions "org-export" (&optional filters value info))
+(declare-function org-export-first-sibling-p "org-export" (blob info))
+(declare-function org-export-get-backend "org-export" (name))
 (declare-function org-export-get-environment "org-export" (&optional arg1 arg2 arg3))
-(declare-function org-export-table-has-special-column-p "org-export" (arg1))
-(declare-function org-export-table-row-is-special-p "org-export" (arg1 arg2))
+(declare-function org-export-install-filters "org-export" (info))
+(declare-function org-export-table-has-special-column-p "org-export" (table))
+(declare-function org-export-table-row-is-special-p "org-export" (table-row info))
 
 (declare-function calc-eval "calc" (str &optional separator &rest args))
 
 (defvar orgtbl-mode) ; defined below
 (defvar orgtbl-mode-menu) ; defined when orgtbl mode get initialized
 (defvar constants-unit-system)
+(defvar org-export-filters-alist)
 (defvar org-table-follow-field-mode)
 (defvar sort-fold-case)
 
@@ -795,9 +798,8 @@ When nil, simply write \"#ERROR\" in corrupted fields.")
                    (org-add-props x nil
                      'help-echo
                      (concat
-                      (substitute-command-keys
-                       "Clipped table field, use \\[org-table-edit-field] to \
-edit.  Full value is:\n")
+		      "Clipped table field, use `\\[org-table-edit-field]' to \
+edit.  Full value is:\n"
                       (substring-no-properties x)))
                    (let ((l (length x))
                          (f1 (min fmax
@@ -2136,11 +2138,10 @@ If NLAST is a number, only the NLAST fields will actually be summed."
 			   s diff)
 		     (format "%.0f:%02.0f:%02.0f" h m s))))
 	(kill-new sres)
-	(if (org-called-interactively-p 'interactive)
-	    (message "%s"
-		     (substitute-command-keys
-		      (format "Sum of %d items: %-20s     (\\[yank] will insert result into buffer)"
-			      (length numbers) sres))))
+	(when (org-called-interactively-p 'interactive)
+	    (message "%s" (substitute-command-keys
+			   (format "Sum of %d items: %-20s     \
+\(\\[yank] will insert result into buffer)" (length numbers) sres))))
 	sres))))
 
 (defun org-table-get-number-for-summing (s)
@@ -3591,8 +3592,7 @@ Parameters get priority."
       (when (eq org-table-use-standard-references t)
 	(org-table-fedit-toggle-ref-type))
       (org-goto-line startline)
-      (message
-       (substitute-command-keys "\\<org-mode-map>\
+      (message "%s" (substitute-command-keys "\\<org-mode-map>\
 Edit formulas, finish with `\\[org-ctrl-c-ctrl-c]' or `\\[org-edit-special]'.  \
 See menu for more commands.")))))
 
@@ -4845,10 +4845,21 @@ This may be either a string or a function of two arguments:
 		((consp e)
 		 (princ "| ") (dolist (c e) (princ c) (princ " |"))
 		 (princ "\n")))))
+      ;; Add back-end specific filters, but not user-defined ones.  In
+      ;; particular, make sure to call parse-tree filters on the
+      ;; table.
+      (setq info
+	    (let ((org-export-filters-alist nil))
+	      (org-export-install-filters
+	       (org-combine-plists
+		(org-export-get-environment backend nil params)
+		`(:back-end ,(org-export-get-backend backend))))))
       (setq data
-	    (org-element-map (org-element-parse-buffer) 'table
-	      #'identity nil t))
-      (setq info (org-export-get-environment backend nil params)))
+	    (org-export-filter-apply-functions
+	     (plist-get info :filter-parse-tree)
+	     (org-element-map (org-element-parse-buffer) 'table
+	       #'identity nil t)
+	     info)))
     (when (and backend (symbolp backend) (not (org-export-get-backend backend)))
       (user-error "Unknown :backend value"))
     (when (or (not backend) (plist-get info :raw)) (require 'ox-org))
@@ -4891,9 +4902,9 @@ This may be either a string or a function of two arguments:
 	    (push datum ignore))))
       (setq info (plist-put info :ignore-list ignore)))
     ;; We use a low-level mechanism to export DATA so as to skip all
-    ;; usual pre-processing and post-processing, i.e., hooks, filters,
-    ;; Babel code evaluation, include keywords and macro expansion,
-    ;; and filters.
+    ;; usual pre-processing and post-processing, i.e., hooks, Babel
+    ;; code evaluation, include keywords and macro expansion.  Only
+    ;; back-end specific filters are retained.
     (let ((output (org-export-data-with-backend data custom-backend info)))
       ;; Remove final newline.
       (if (org-string-nw-p output) (substring-no-properties output 0 -1) ""))))

@@ -11,7 +11,7 @@ Please send Org bug reports to mailto:emacs-orgmode@gnu.org.
 * Version 9.0
 ** Incompatible changes
 *** New syntax for export blocks
-Export blocks are explicetly marked as such at the syntax level to
+Export blocks are explicitly marked as such at the syntax level to
 disambiguate their parsing from special blocks.  The new syntax is
 
 #+BEGIN_SRC org
@@ -208,6 +208,22 @@ When defining a "columnview" dynamic block, it is now possible to add
 an :indent parameter, much like the one in the clock table.
 
 On the other hand, stars no longer appear in an ITEM field.
+*** Columns view
+**** ~org-columns~ accepts a prefix argument
+When called with a prefix argument, ~org-columns~ apply to the whole
+buffer unconditionally.
+**** New variable : ~org-agenda-view-columns-initially~
+The variable used to be a ~defvar~, it is now a ~defcustom~.
+**** Allow custom summaries
+It is now possible to add new summary types, or override those
+provided by Org by customizing ~org-columns-summary-types~, which see.
+**** Allow multiple summaries for any property
+Columns can now summarize the same property using different summary
+types.
+*** Preview LaTeX snippets in buffers not visiting files
+*** New option ~org-attach-commit~
+When non-nil, commit attachments with git, assuming the document is in
+a git repository.
 ** New functions
 *** ~org-next-line-empty-p~
 It replaces the deprecated ~next~ argument to ~org-previous-line-empty-p~.
@@ -298,8 +314,9 @@ Variable ~org-html-table-row-tags~ has been split into
 ~org-html-table-row-open-tag~ and ~org-html-table-row-close-tag~.
 Both new variables can be either a string or a function which will be
 called with 6 parameters.
-
 *** =ITEM= special property returns headline without stars
+*** Rename ~org-insert-columns-dblock~ into ~org-columns-insert-dblock~
+The previous name is, for the time being, kept as an obsolete alias.
 * Version 8.3
 
 ** Incompatible changes
@@ -394,7 +411,7 @@ buffer name, as the title.  Instead, simply ignore the title.
 *** Default bindings of =C-c C-n= and =C-c C-p= changed
 
 The key sequences =C-c C-n= and =C-c C-p= are now bound to
-~org-next-visible-heading~ and ~org-next-visible-heading~ respectively,
+~org-next-visible-heading~ and ~org-previous-visible-heading~ respectively,
 rather than the =outline-mode= versions of these functions.  The Org
 version of these functions skips over inline tasks (and even-level
 headlines when ~org-odd-levels-only~ is set).

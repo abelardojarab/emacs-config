@@ -28,11 +28,9 @@
 (eval-when-compile
   (require 'cl))
 
-(defvar org-babel-lob-one-liner-regexp)
 (defvar org-babel-ref-split-regexp)
-(defvar org-list-forbidden-blocks)
 
-(declare-function org-babel-lob-get-info "ob-lob" ())
+(declare-function org-babel-lob-get-info "ob-lob" (&optional datum))
 (declare-function org-babel-eval-wipe-error-buffer "ob-eval" ())
 (declare-function org-between-regexps-p "org"
 		  (start-re end-re &optional lim-up lim-down))
@@ -165,19 +163,11 @@ may make them unreachable."
     (save-excursion
       (let ((case-fold-search t)
 	    (org-babel-exp-reference-buffer reference-buffer)
-	    (regexp (concat org-babel-inline-src-block-regexp "\\|"
-			    org-babel-lob-one-liner-regexp "\\|"
-			    "^[ \t]*#\\+BEGIN_SRC")))
+	    (regexp "\\(call\\|src\\)_\\|^[ \t]*#\\+\\(BEGIN_SRC\\|CALL:\\)"))
 	(goto-char (point-min))
 	(while (re-search-forward regexp nil t)
 	  (unless (save-match-data (org-in-commented-heading-p))
-	    (let* ((element (save-excursion
-			      ;; If match is inline, point is at its
-			      ;; end.  Move backward so
-			      ;; `org-element-context' can get the
-			      ;; object, not the following one.
-			      (backward-char)
-			      (save-match-data (org-element-context))))
+	    (let* ((element (save-match-data (org-element-context)))
 		   (type (org-element-type element))
 		   (begin (copy-marker (org-element-property :begin element)))
 		   (end (copy-marker
@@ -187,9 +177,7 @@ may make them unreachable."
 			   (point)))))
 	      (case type
 		(inline-src-block
-		 (let* ((head (match-beginning 0))
-			(info (append (org-babel-parse-inline-src-block-match)
-				      (list nil nil head)))
+		 (let* ((info (org-babel-get-src-block-info nil element))
 			(params (nth 2 info)))
 		   (setf (nth 1 info)
 			 (if (and (cdr (assoc :noweb params))
@@ -214,7 +202,7 @@ may make them unreachable."
 		       (delete-region begin end)
 		       (insert replacement)))))
 		((babel-call inline-babel-call)
-		 (let* ((lob-info (org-babel-lob-get-info))
+		 (let* ((lob-info (org-babel-lob-get-info element))
 			(results
 			 (org-babel-exp-do-export
 			  (list "emacs-lisp" "results"
@@ -228,10 +216,10 @@ may make them unreachable."
 					  (org-no-properties
 					   (concat
 					    ":var results="
-					    (mapconcat 'identity
+					    (mapconcat #'identity
 						       (butlast lob-info 2)
 						       " ")))))))
-				"" (nth 3 lob-info) (nth 2 lob-info))
+				"" (nth 2 lob-info) (nth 3 lob-info))
 			  'lob))
 			(rep (org-fill-template
 			      org-babel-exp-call-line-template
@@ -301,34 +289,22 @@ may make them unreachable."
 	      (set-marker begin nil)
 	      (set-marker end nil))))))))
 
-(defun org-babel-in-example-or-verbatim ()
-  "Return true if point is in example or verbatim code.
-Example and verbatim code include escaped portions of
-an org-mode buffer code that should be treated as normal
-org-mode text."
-  (or (save-match-data
-	(save-excursion
-	  (goto-char (point-at-bol))
-	  (looking-at "[ \t]*:[ \t]")))
-      (org-in-verbatim-emphasis)
-      (org-in-block-p org-list-forbidden-blocks)
-      (org-between-regexps-p "^[ \t]*#\\+begin_src" "^[ \t]*#\\+end_src")))
-
 (defun org-babel-exp-do-export (info type &optional hash)
   "Return a string with the exported content of a code block.
 The function respects the value of the :exports header argument."
   (let ((silently (lambda () (let ((session (cdr (assoc :session (nth 2 info)))))
-			       (when (not (and session (equal "none" session)))
-				 (org-babel-exp-results info type 'silent)))))
+			  (unless (equal "none" session)
+			    (org-babel-exp-results info type 'silent)))))
 	(clean (lambda () (if (eq type 'inline)
-			      (org-babel-remove-inline-result)
-			    (org-babel-remove-result info)))))
-    (case (intern (or (cdr (assoc :exports (nth 2 info))) "code"))
-      ('none (funcall silently) (funcall clean) "")
-      ('code (funcall silently) (funcall clean) (org-babel-exp-code info type))
-      ('results (org-babel-exp-results info type nil hash) "")
-      ('both (org-babel-exp-results info type nil hash)
-	     (org-babel-exp-code info type)))))
+			 (org-babel-remove-inline-result)
+		       (org-babel-remove-result info)))))
+    (pcase (or (cdr (assq :exports (nth 2 info))) "code")
+      ("none" (funcall silently) (funcall clean) "")
+      ("code" (funcall silently) (funcall clean) (org-babel-exp-code info type))
+      ("results" (org-babel-exp-results info type nil hash) "")
+      ("both"
+       (org-babel-exp-results info type nil hash)
+       (org-babel-exp-code info type)))))
 
 (defcustom org-babel-exp-code-template
   "#+BEGIN_SRC %lang%switches%flags\n%body\n#+END_SRC"
@@ -400,7 +376,7 @@ replaced with its value."
 
 (defun org-babel-exp-results (info type &optional silent hash)
   "Evaluate and return the results of the current code block for export.
-Results are prepared in a manner suitable for export by org-mode.
+Results are prepared in a manner suitable for export by Org mode.
 This function is called by `org-babel-exp-do-export'.  The code
 block will be evaluated.  Optional argument SILENT can be used to
 inhibit insertion of results into the buffer."
@@ -415,7 +391,7 @@ inhibit insertion of results into the buffer."
 		  (nth 1 info)))
 	  (info (copy-sequence info))
 	  (org-babel-current-src-block-location (point-marker)))
-      ;; skip code blocks which we can't evaluate
+      ;; Skip code blocks which we can't evaluate.
       (when (fboundp (intern (concat "org-babel-execute:" lang)))
 	(org-babel-eval-wipe-error-buffer)
 	(prog1 nil
@@ -426,20 +402,17 @@ inhibit insertion of results into the buffer."
 		   (org-babel-merge-params
 		    (nth 2 info)
 		    `((:results . ,(if silent "silent" "replace")))))))
-	  (cond
-	   ((equal type 'block)
-	    (org-babel-execute-src-block nil info))
-	   ((equal type 'inline)
-	    ;; position the point on the inline source block allowing
-	    ;; `org-babel-insert-result' to check that the block is
-	    ;; inline
-	    (re-search-backward "[ \f\t\n\r\v]" nil t)
-	    (re-search-forward org-babel-inline-src-block-regexp nil t)
-	    (re-search-backward "src_" nil t)
-	    (org-babel-execute-src-block nil info))
-	   ((equal type 'lob)
-	    (save-excursion
-	      (re-search-backward org-babel-lob-one-liner-regexp nil t)
+	  (pcase type
+	    (`block (org-babel-execute-src-block nil info))
+	    (`inline
+	      ;; Position the point on the inline source block
+	      ;; allowing `org-babel-insert-result' to check that the
+	      ;; block is inline.
+	      (goto-char (nth 5 info))
+	      (org-babel-execute-src-block nil info))
+	    (`lob
+	     (save-excursion
+	      (goto-char (nth 5 info))
 	      (let (org-confirm-babel-evaluate)
 		(org-babel-execute-src-block nil info))))))))))
 

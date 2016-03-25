@@ -86,6 +86,17 @@
   :group 'ede
   :type 'file)
 
+(defcustom ede-ninja-default-rule-name-rx
+  (rx
+   string-start
+   (or "C" "CXX")
+   "_COMPILER"
+   )
+  "Default build rules to match in Ninja projects."
+  :group 'ede
+  :type 'string
+  )
+
 ;;; Classes:
 
 (defclass compdb-entry (eieio-named)
@@ -99,9 +110,15 @@
    (compiler
     :type string :initarg :compiler
     :documentation "The compiler portion of the full command line (may be multi-word)")
-   (include-path
-    :type list :initarg :include-path :initform '()
-    :documentation "List of directories to search for include files")
+   (include-path-common
+    :type list :initarg :include-path-common :initform '()
+    :documentation "List of directories to search for include files, used for both user and system includes.")
+   (include-path-user
+    :type list :initarg :include-path-user :initform '()
+    :documentation "List of directories to search for user include files only.")
+   (include-path-system
+    :type list :initarg :include-path-system :initform '()
+    :documentation "List of directories to search for system include files only.")
    (includes
     :type list :initarg :includes :initform '()
     :documentation "List of implicitly included files")
@@ -159,8 +176,11 @@
     :type list :initform '()
     :documentation "Phony targets which ninja can build")
    (build-rules
-    :type list :initarg :build-rules :initform '("CXX_COMPILER" "C_COMPILER")
-    :documentation "Ninja build rules for compiler commands.")
+    :type list :initarg :build-rules :initform '()
+    :documentation "Ninja build rule names.")
+   (build-rules-regexp
+    :type (or string symbol) :initarg :build-rules-regexp :initform 'ede-ninja-default-rule-name-rx
+    :documentation "Ninja build rule name regexps.")
    )
   "Variant of ede-compdb-project, extended to take advantage of the ninja build tool."
 )
@@ -268,7 +288,7 @@ from the command line (which is most of them!)"
   "Regex to identify directories which are relative to sysroot")
 
 (defmethod parse-command-line ((this compdb-entry))
-  "Parse the :command-line slot of THIS to derive :compiler, :include-path, etc."
+  "Parse the :command-line slot of THIS to derive :compiler, :include-path-common, etc."
   (let ((args (split-string (oref this command-line)))
         (seenopt nil)
         (case-fold-search nil))
@@ -287,9 +307,12 @@ from the command line (which is most of them!)"
            (object-add-to-list this :defines (cons (or argval (pop args)) eqval) t))
           (`"-U"
            (object-add-to-list this :undefines (or argval (pop args)) t))
-          ;; TODO: support gcc notation "=dir" where '=' is the sysroot prefix
-          ((or `"-I" `"-F" `"-isystem")
-           (object-add-to-list this :include-path (file-name-as-directory (or argval (pop args))) t))
+          (`"-I"
+           (object-add-to-list this :include-path-common (file-name-as-directory (or argval (pop args))) t))
+          (`"-isystem"
+           (object-add-to-list this :include-path-system (file-name-as-directory (or argval (pop args))) t))
+          (`"-iquote"
+           (object-add-to-list this :include-path-user (file-name-as-directory (or argval (pop args))) t))
           (`"-include"
            (object-add-to-list this :includes (pop args) t)) ;; append
           (`"-imacros"
@@ -303,18 +326,20 @@ from the command line (which is most of them!)"
         )
       )
 
-    ;; Add sysroot prefix to include-path
-    (when (slot-boundp this :sysroot)
-      (let ((rep (concat (regexp-quote (oref this sysroot)) "\\1")))
-        (cl-maplist
-         #'(lambda (d) (setcar d (replace-regexp-in-string ede-compdb-entry-sysroot-directory-rx rep (car d))))
-         (oref this include-path))))
+    ;; Fix up include-path-*
+    (dolist (PATH '(:include-path-common :include-path-system :include-path-user))
+      ;; Add sysroot prefix
+      (when (slot-boundp this :sysroot)
+        (let ((rep (concat (regexp-quote (oref this sysroot)) "\\1")))
+          (cl-maplist
+           #'(lambda (d) (setcar d (replace-regexp-in-string ede-compdb-entry-sysroot-directory-rx rep (car d))))
+           (slot-value this PATH))))
 
-    ;; Evaluate relative directories in include-path
-    (cl-maplist
-     #'(lambda (d) (setcar d (file-name-as-directory (expand-file-name (car d) (oref this directory)))))
-     (oref this include-path))
-    ))
+      ;; Evaluate relative directories in include-path-*
+      (cl-maplist
+       #'(lambda (d) (setcar d (file-name-as-directory (expand-file-name (car d) (oref this directory)))))
+       (slot-value this PATH))
+      )))
 
 (defmethod get-defines ((this compdb-entry))
   "Get the preprocessor defines for THIS compdb entry. Returns a list of strings, suitable for use with -D arguments."
@@ -326,18 +351,30 @@ from the command line (which is most of them!)"
                      (car def)))
    (oref this defines)))
 
-(defmethod get-include-path ((this compdb-entry) &optional excludecompiler)
+(defmethod get-system-include-path ((this compdb-entry) &optional excludecompiler)
   "Get the system include path used by THIS compdb entry.
 If EXCLUDECOMPILER is t, we ignore compiler include paths"
   (parse-command-line-if-needed this)
   (append
-   (oref this include-path)
    (list (oref this directory))
+   (oref this include-path-common)
+   (oref this include-path-system)
    (unless excludecompiler
      (let ((path (ede-compdb-compiler-include-path (oref this compiler) (oref this directory))))
        (if (slot-boundp this :sysroot)
            (mapcar #'(lambda (d) (concat (directory-file-name (oref this sysroot)) d)) path)
          path)))
+   ))
+
+(defmethod get-user-include-path ((this compdb-entry) &optional excludecompiler)
+  "Get the user include path used by THIS compdb entry.
+If EXCLUDECOMPILER is t, we ignore compiler include paths"
+  (parse-command-line-if-needed this)
+  (append
+   (list (oref this directory))
+   (oref this include-path-user)
+   ;; strip the leading "." from the system include path - we already inserted it
+   (cdr (get-system-include-path this excludecompiler))
    ))
 
 (defmethod get-includes ((this compdb-entry))
@@ -355,7 +392,9 @@ If EXCLUDECOMPILER is t, we ignore compiler include paths"
   (project-rescan-if-needed (oref this project))
   (let ((comp (oref this compilation)))
     (when comp
-      (get-include-path comp excludecompiler))))
+      ;; In CEDET terms there is no distinguishing between user and system includes - they are all
+      ;; viewed as 'system' includes.
+      (get-user-include-path comp excludecompiler))))
 
 (defmethod ede-preprocessor-map ((this ede-compdb-target))
   "Get the preprocessor map for target THIS."
@@ -443,7 +482,8 @@ current configuration directory is used if CONFIG not set."
 (defmethod other-file-list ((_this ede-compdb-project) fname)
   "Returns a list of 'other' files for FNAME."
   ;; Use projectile-get-other-files if defined, or ff-other-file-list (see below) if not
-  (or (and (fboundp 'projectile-get-other-files)
+  (or (and (fboundp 'projectile-project-p)
+           (projectile-project-p)
            (projectile-get-other-files fname (projectile-current-project-files) t))
       (ff-other-file-list)))
 
@@ -672,6 +712,88 @@ of `ede-compdb-target' or a string."
 (defvar ede-ninja-target-regexp "^\\(.+\\): \\(phony\\|CLEAN\\)$"
   "Regexp to identify phony targets in the output of ninja -t targets.")
 
+(defconst ede-ninja-file-rule-decl-rx
+  (rx
+   line-start
+   (* space)
+   (or
+    (group "rule ")
+    (group "include ")
+    (: (group (+ (or alnum "_"))) (* space) "="))
+   (* space)
+   ;; TODO: handle quoted filenames
+   (group (+ (not space)))
+   line-end)
+  "Regexp to match rule or include declarations in a Ninja file.")
+
+(defconst ede-ninja-variable-instance-rx
+  (rx
+   "$"
+   (or
+    (: "{" (group (+ (or alnum "_"))) "}")
+    (group (+ (or alnum "_"))))
+   )
+  "Regexp to match variable instances in Ninja files, eg $VAR or ${VAR}.")
+
+
+(defun ede-ninja-expand-vars (string vars)
+  "Return STRING with variables expanded from VARS.
+
+Ninja syntax is assumed, with $VAR and ${VAR} handled identically."
+  (save-match-data
+    (replace-regexp-in-string
+     ede-ninja-variable-instance-rx
+     #'(lambda (x) (or (cdr (assoc (or (match-string 1 x) (match-string 2 x)) vars)) x))
+     string t t)))
+
+
+(defun ede-ninja-scan-build-rules (file build-rules-rx &optional vars)
+  "Return Ninja build rules in FILE which match regexp BUILD-RULES-RX.
+
+FILE is scanned recursively looking for rule declarations. In
+order to do this effectively, the file is also scanned for
+``include'' declarations, and also for variable declarations
+which may be used within ``include'' declarations. VARS is used
+to pass variable definitions.
+
+This is a brute-force alternative in the event that the Ninja
+'rules' tool is not available."
+  (let (ret)
+    (when (symbolp build-rules-rx)
+      (setq build-rules-rx (symbol-value build-rules-rx)))
+    (with-temp-buffer
+      (insert-file-contents file)
+      (while (re-search-forward ede-ninja-file-rule-decl-rx nil t)
+        (let ((arg (ede-ninja-expand-vars (match-string 4) vars)))
+          (cond
+           ((match-beginning 1)         ; rule arg
+            (when (string-match build-rules-rx arg)
+              (push arg ret)))
+           ((match-beginning 2)         ; include arg
+            (setq ret (nconc ret (ede-ninja-scan-build-rules arg build-rules-rx vars))))
+           ((match-beginning 3)         ; var=arg
+            (push (cons (match-string 3) arg) vars))
+           ))))
+    ret))
+
+(defmethod get-build-rules ((this ede-ninja-project))
+  "Returns a list of build rules to use when building the compilation database for the current project."
+  (append
+   (oref this :build-rules)
+   ;; TODO: Use the upcoming Ninja 'rules' tool, when supported.
+   (when (oref this build-rules-regexp)
+     (ede-ninja-scan-build-rules (oref this compdb-file) (oref this build-rules-regexp)))
+   ))
+
+(defmethod insert-compdb ((this ede-ninja-project) compdb-path)
+  "Use ninja's compdb tool to insert the compilation database
+into the current buffer. COMPDB-PATH represents the current path
+to :compdb-file"
+  (message "Building compilation database...")
+  (let ((default-directory (file-name-directory compdb-path)))
+    (apply 'call-process `(,(get-build-exe this) nil t nil
+                           "-f" ,(oref this compdb-file) "-t" "compdb" ,@(get-build-rules this)))))
+
 (defmethod project-rescan ((this ede-ninja-project))
   "Get ninja to describe the set of phony targets, add them to the target list"
   (call-next-method)
@@ -689,15 +811,6 @@ of `ede-compdb-target' or a string."
           )
         (progress-reporter-done progress-reporter))
       )))
-
-(defmethod insert-compdb ((this ede-ninja-project) compdb-path)
-  "Use ninja's compdb tool to insert the compilation database
-into the current buffer. COMPDB-PATH represents the current path
-to :compdb-file"
-  (message "Building compilation database...")
-  (let ((default-directory (file-name-directory compdb-path)))
-    (apply 'call-process `(,(get-build-exe this) nil t nil
-                           "-f" ,(oref this compdb-file) "-t" "compdb" ,@(oref this :build-rules)))))
 
 (defmethod project-interactive-select-target ((this ede-ninja-project) prompt)
   "Interactively query for a target. Argument PROMPT is the prompt to use."

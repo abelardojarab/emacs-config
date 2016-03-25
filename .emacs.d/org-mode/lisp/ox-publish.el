@@ -568,27 +568,28 @@ Return output file name."
   (unless (or (not pub-dir) (file-exists-p pub-dir)) (make-directory pub-dir t))
   ;; Check if a buffer visiting FILENAME is already open.
   (let* ((org-inhibit-startup t)
-	 (visitingp (find-buffer-visiting filename))
-	 (work-buffer (or visitingp (find-file-noselect filename))))
-    (prog1 (with-current-buffer work-buffer
-	     (let ((output-file
-		    (org-export-output-file-name extension nil pub-dir))
-		   (body-p (plist-get plist :body-only)))
-	       (org-export-to-file backend output-file
-		 nil nil nil body-p
-		 ;; Add `org-publish--collect-references' and
-		 ;; `org-publish-collect-index' to final output
-		 ;; filters.  The latter isn't dependent on
-		 ;; `:makeindex', since we want to keep it up-to-date
-		 ;; in cache anyway.
-		 (org-combine-plists
-		  plist
-		  `(:filter-final-output
-		    ,(cons 'org-publish--collect-references
-			   (cons 'org-publish-collect-index
-				 (plist-get plist :filter-final-output))))))))
+	 (visiting (find-buffer-visiting filename))
+	 (work-buffer (or visiting (find-file-noselect filename))))
+    (unwind-protect
+	(with-current-buffer work-buffer
+	  (let ((output (org-export-output-file-name extension nil pub-dir)))
+	    (org-export-to-file backend output
+	      nil nil nil (plist-get plist :body-only)
+	      ;; Add `org-publish--store-crossrefs' and
+	      ;; `org-publish-collect-index' to final output filters.
+	      ;; The latter isn't dependent on `:makeindex', since we
+	      ;; want to keep it up-to-date in cache anyway.
+	      (org-combine-plists
+	       plist
+	       `(:crossrefs
+		 ,(org-publish-cache-get-file-property
+		   (expand-file-name filename) :crossrefs nil t)
+		 :filter-final-output
+		 (org-publish--store-crossrefs
+		  org-publish-collect-index
+		  ,@(plist-get plist :filter-final-output)))))))
       ;; Remove opened buffer in the process.
-      (unless visitingp (kill-buffer work-buffer)))))
+      (unless visiting (kill-buffer work-buffer)))))
 
 (defun org-publish-attachment (_plist filename pub-dir)
   "Publish a file with no transformation of any kind.
@@ -614,10 +615,10 @@ Return output file name."
 
 (defun org-publish-file (filename &optional project no-cache)
   "Publish file FILENAME from PROJECT.
-If NO-CACHE is not nil, do not initialize org-publish-cache and
-write it to disk.  This is needed, since this function is used to
-publish single files, when entire projects are published.
-See `org-publish-projects'."
+If NO-CACHE is not nil, do not initialize `org-publish-cache'.
+This is needed, since this function is used to publish single
+files, when entire projects are published (see
+`org-publish-projects')."
   (let* ((project
 	  (or project
 	      (or (org-publish-get-project-from-filename filename)
@@ -659,7 +660,9 @@ See `org-publish-projects'."
 	  (run-hook-with-args 'org-publish-after-publishing-hook
 			      filename
 			      output))))
-    (unless no-cache (org-publish-write-cache-file))))
+    ;; Make sure to write cache to file after successfully publishing
+    ;; a file, so as to minimize impact of a publishing failure.
+    (org-publish-write-cache-file)))
 
 (defun org-publish-projects (projects)
   "Publish all files belonging to the PROJECTS alist.
@@ -1059,102 +1062,63 @@ publishing directory."
 ;; This part implements tools to resolve [[file.org::*Some headline]]
 ;; links, where "file.org" belongs to the current project.
 
-(defun org-publish--collect-references (output _backend info)
-  "Store references for current published file.
+(defun org-publish--store-crossrefs (output _backend info)
+  "Store cross-references for current published file.
 
 OUPUT is the produced output, as a string.  BACKEND is the export
 back-end used, as a symbol.  INFO is the final export state, as
 a plist.
 
-References are stored as an alist ((TYPE SEARCH) . VALUE) where
-
-  TYPE is a symbol among `headline', `custom-id', `target' and
-  `other'.
-
-  SEARCH is the string a link is expected to match.  It is
-
-    - headline's title, as a string, with all whitespace
-      characters and statistics cookies removed, if TYPE is
-      `headline'.
-
-    - CUSTOM_ID value if TYPE is `custom-id'.
-
-    - target's or radio-target's name if TYPE is `target'.
-
-    - NAME affiliated keyword is TYPE is `other'.
-
-  VALUE is an internal reference used in the document, as
-  a string.
-
 This function is meant to be used as a final output filter.  See
 `org-publish-org-to'."
   (org-publish-cache-set-file-property
-   (plist-get info :input-file) :references
-   (let (refs)
-     (when (hash-table-p (plist-get info :internal-references))
-       (maphash
-	(lambda (k v)
-	  (pcase (org-element-type k)
-	    (`nil nil)
-	    ((or `headline `inlinetask)
-	     (push (cons
-		    (cons 'headline
-			  (org-split-string
-			   (replace-regexp-in-string
-			    "\\[[0-9]+%\\]\\|\\[[0-9]+/[0-9]+\\]" ""
-			    (org-element-property :raw-value k))))
-		    v)
-		   refs)
-	     (let ((custom-id (org-element-property :CUSTOM_ID k)))
-	       (when custom-id
-		 (push (cons (cons 'custom-id custom-id) v) refs))))
-	    ((or `radio-target `target)
-	     (push
-	      (cons (cons 'target
-			  (org-split-string (org-element-property :value k)))
-		    v)
-	      refs))
-	    ((and (let name (org-element-property :name k))
-		  (guard name))
-	     (push (cons (cons 'other (org-split-string name)) v)
-		   refs)))
-	  refs)
-	(plist-get info :internal-references)))
-     refs))
+   (plist-get info :input-file) :crossrefs
+   ;; Update `:crossrefs' so as to remove unused references and search
+   ;; cells.  Actually used references are extracted from
+   ;; `:internal-references', with references as strings removed.  See
+   ;; `org-export-get-reference' for details.
+   (cl-remove-if (lambda (pair) (stringp (car pair)))
+		 (plist-get info :internal-references)))
   ;; Return output unchanged.
   output)
 
 (defun org-publish-resolve-external-link (search file)
-  "Return reference for elements or objects matching SEARCH in FILE.
+  "Return reference for element matching string SEARCH in FILE.
 
 Return value is an internal reference, as a string.
 
-This function allows the resolution of external links like:
+This function allows resolving external links with a search
+option, e.g.,
 
-  [[file.org::*fuzzy][description]]
+  [[file.org::*heading][description]]
   [[file.org::#custom-id][description]]
-  [[file.org::fuzzy][description]]"
+  [[file.org::fuzzy][description]]
+
+It only makes sense to use this if export back-end builds
+references with `org-export-get-reference'."
   (if (not org-publish-cache)
       (progn
-	(message "Reference \"%s\" in file \"%s\" cannot be resolved without \
-publishing"
+	(message "Reference %S in file %S cannot be resolved without publishing"
 		 search
 		 file)
 	"MissingReference")
-    (let ((references (org-publish-cache-get-file-property
-		       (expand-file-name file) :references nil t)))
-      (cond
-       ((cdr (pcase (aref search 0)
-	       (?* (assoc (cons 'headline (org-split-string (substring search 1)))
-			  references))
-	       (?# (assoc (cons 'custom-id (substring search 1)) references))
-	       (_
-		(let ((s (org-split-string search)))
-		  (or (assoc (cons 'target s) references)
-		      (assoc (cons 'other s) references)
-		      (assoc (cons 'headline s) references)))))))
-       (t (message "Unknown cross-reference \"%s\" in file \"%s\"" search file)
-	  "MissingReference")))))
+    (let* ((filename (expand-file-name file))
+	   (crossrefs
+	    (org-publish-cache-get-file-property filename :crossrefs nil t))
+	   (cells (org-export-string-to-search-cell search)))
+      (or
+       ;; Look for reference associated to search cells triggered by
+       ;; LINK.  It can match when targeted file has been published
+       ;; already.
+       (let ((known (cdr (cl-some (lambda (c) (assoc c crossrefs)) cells))))
+	 (and known (org-export-format-reference known)))
+       ;; Search cell is unknown so far.  Generate a new internal
+       ;; reference that will be used when the targeted file will be
+       ;; published.
+       (let ((new (org-export-new-reference crossrefs)))
+	 (dolist (cell cells) (push (cons cell new) crossrefs))
+	 (org-publish-cache-set-file-property filename :crossrefs crossrefs)
+	 (org-export-format-reference new))))))
 
 
 
@@ -1171,13 +1135,12 @@ If FREE-CACHE, empty the cache."
       (error "Cannot find cache-file name in `org-publish-write-cache-file'"))
     (with-temp-file cache-file
       (let (print-level print-length)
-	(insert "(setq org-publish-cache (make-hash-table :test 'equal :weakness nil :size 100))\n")
+	(insert "(setq org-publish-cache \
+\(make-hash-table :test 'equal :weakness nil :size 100))\n")
 	(maphash (lambda (k v)
 		   (insert
-		    (format (concat "(puthash %S "
-				    (if (or (listp v) (symbolp v))
-					"'" "")
-				    "%S org-publish-cache)\n") k v)))
+		    (format "(puthash %S %s%S org-publish-cache)\n"
+			    k (if (or (listp v) (symbolp v)) "'" "") v)))
 		 org-publish-cache)))
     (when free-cache (org-publish-reset-cache))))
 
@@ -1185,7 +1148,8 @@ If FREE-CACHE, empty the cache."
   "Initialize the projects cache if not initialized yet and return it."
 
   (unless project-name
-    (error "Cannot initialize `org-publish-cache' without projects name in `org-publish-initialize-cache'"))
+    (error "Cannot initialize `org-publish-cache' without projects name in \
+`org-publish-initialize-cache'"))
 
   (unless (file-exists-p org-publish-timestamp-directory)
     (make-directory org-publish-timestamp-directory t))

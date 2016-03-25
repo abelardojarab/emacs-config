@@ -1950,6 +1950,14 @@ category, you can use:
   :tag "Org Agenda Column View"
   :group 'org-agenda)
 
+(defcustom org-agenda-view-columns-initially nil
+  "When non-nil, switch to columns view right after creating the agenda."
+  :group 'org-agenda-column-view
+  :type 'boolean
+  :version "25.1"
+  :package-version '(Org . "9.0")
+  :safe #'booleanp)
+
 (defcustom org-agenda-columns-show-summaries t
   "Non-nil means show summaries for columns displayed in the agenda view."
   :group 'org-agenda-column-view
@@ -2047,6 +2055,8 @@ The buffer is still writable when this hook is called.")
 (defvar org-agenda-force-single-file nil)
 (defvar org-agenda-bulk-marked-entries nil
   "List of markers that refer to marked entries in the agenda.")
+(defvar org-agenda-current-date nil
+  "Active date when building the agenda.")
 
 ;;; Multiple agenda buffers support
 
@@ -5340,6 +5350,7 @@ the documentation of `org-diary'."
 	(unless (derived-mode-p 'org-mode)
 	  (error "Agenda file %s is not in `org-mode'" file))
 	(setq org-agenda-buffer (or org-agenda-buffer buffer))
+	(setf org-agenda-current-date date)
 	(save-excursion
 	  (save-restriction
 	    (if (eq buffer org-agenda-restrict)
@@ -9930,8 +9941,15 @@ The prefix arg is passed through to the command if possible."
 		     nil nil nil
 		     (if (eq action ?s) "(Re)Schedule to" "(Re)Set Deadline to")
 		     org-overriding-default-time)))
-		 (c1 (if (eq action ?s) 'org-agenda-schedule 'org-agenda-deadline)))
-	    (setq cmd `(eval '(,c1 arg ,time)))))
+		 (c1 (if (eq action ?s) 'org-agenda-schedule
+		       'org-agenda-deadline)))
+	    ;; Make sure to not prompt for a note when bulk
+	    ;; rescheduling as Org cannot cope with simultaneous Org.
+	    ;; Besides, it could be annoying depending on the number
+	    ;; of items re-scheduled.
+	    (setq cmd `(eval '(let ((org-log-reschedule
+				     (and org-log-reschedule 'time)))
+				(,c1 arg ,time))))))
 
 	 ((equal action ?S)
 	  (if (not (org-agenda-check-type nil 'agenda 'timeline 'todo))
@@ -10096,8 +10114,9 @@ tag and (if present) the flagging note."
 	(replace-match "\n" t t))
       (goto-char (point-min))
       (select-window win)
-      (message (substitute-command-keys "Flagging note pushed to kill ring.  \
-Press \\[org-agenda-show-the-flagging-note] again to remove tag and note")))))
+      (message "%s" (substitute-command-keys "Flagging note pushed to \
+kill ring.  Press \\[org-agenda-show-the-flagging-note] again to remove \
+tag and note")))))
 
 (defun org-agenda-remove-flag (marker)
   "Remove the FLAGGED tag and any flagging note in the entry."
@@ -10154,61 +10173,62 @@ to override `appt-message-warning-time'."
   (if refresh (setq appt-time-msg-list nil))
   (if (eq filter t)
       (setq filter (read-from-minibuffer "Regexp filter: ")))
-  (let* ((cnt 0) ; count added events
-	 (scope (or args '(:deadline* :scheduled* :timestamp)))
-	 (org-agenda-new-buffers nil)
-	 (org-deadline-warning-days 0)
-	 ;; Do not use `org-today' here because appt only takes
-	 ;; time and without date as argument, so it may pass wrong
-	 ;; information otherwise
-	 (today (org-date-to-gregorian
-		 (time-to-days (current-time))))
-	 (org-agenda-restrict nil)
-	 (files (org-agenda-files 'unrestricted)) entries file
-	 (org-agenda-buffer nil))
+  (let* ((cnt 0)                        ; count added events
+         (scope (or args '(:deadline* :scheduled* :timestamp)))
+         (org-agenda-new-buffers nil)
+         (org-deadline-warning-days 0)
+         ;; Do not use `org-today' here because appt only takes
+         ;; time and without date as argument, so it may pass wrong
+         ;; information otherwise
+         (today (org-date-to-gregorian
+                 (time-to-days (current-time))))
+         (org-agenda-restrict nil)
+         (files (org-agenda-files 'unrestricted)) entries file
+         (org-agenda-buffer nil))
     ;; Get all entries which may contain an appt
     (org-agenda-prepare-buffers files)
     (while (setq file (pop files))
       (setq entries
-	    (delq nil
-		  (append entries
-			  (apply 'org-agenda-get-day-entries
-				 file today scope)))))
+            (delq nil
+                  (append entries
+                          (apply 'org-agenda-get-day-entries
+                                 file today scope)))))
     ;; Map thru entries and find if we should filter them out
     (mapc
-     (lambda(x)
+     (lambda (x)
        (let* ((evt (org-trim
-		    (replace-regexp-in-string
-		     org-bracket-link-regexp "\\3"
-		     (or (get-text-property 1 'txt x) ""))))
-	      (cat (get-text-property (1- (length x)) 'org-category x))
-	      (tod (get-text-property 1 'time-of-day x))
-	      (ok (or (null filter)
-		      (and (stringp filter) (string-match filter evt))
-		      (and (functionp filter) (funcall filter x))
-		      (and (listp filter)
-			   (let ((cat-filter (cadr (assoc 'category filter)))
-				 (evt-filter (cadr (assoc 'headline filter))))
-			     (or (and (stringp cat-filter)
-				      (string-match cat-filter cat))
-				 (and (stringp evt-filter)
-				      (string-match evt-filter evt)))))))
-	      (wrn (get-text-property 1 'warntime x)))
-	 ;; FIXME: Shall we remove text-properties for the appt text?
-	 ;; (setq evt (set-text-properties 0 (length evt) nil evt))
-	 (when (and ok tod)
-	   (setq tod (concat "00" (number-to-string tod))
-		 tod (when (string-match
-			    "\\([0-9]\\{1,2\\}\\)\\([0-9]\\{2\\}\\)\\'" tod)
-		       (concat (match-string 1 tod) ":"
-			       (match-string 2 tod))))
-	   (if (version< emacs-version "23.3")
-	       (appt-add tod evt)
-	     (appt-add tod evt wrn))
-	   (setq cnt (1+ cnt))))) entries)
+                    (replace-regexp-in-string
+                     org-bracket-link-regexp "\\3"
+                     (or (get-text-property 1 'txt x) ""))))
+              (cat (get-text-property (1- (length x)) 'org-category x))
+              (tod (get-text-property 1 'time-of-day x))
+              (ok (or (null filter)
+                      (and (stringp filter) (string-match filter evt))
+                      (and (functionp filter) (funcall filter x))
+                      (and (listp filter)
+                           (let ((cat-filter (cadr (assoc 'category filter)))
+                                 (evt-filter (cadr (assoc 'headline filter))))
+                             (or (and (stringp cat-filter)
+                                      (string-match cat-filter cat))
+                                 (and (stringp evt-filter)
+                                      (string-match evt-filter evt)))))))
+              (wrn (get-text-property 1 'warntime x)))
+         ;; FIXME: Shall we remove text-properties for the appt text?
+         ;; (setq evt (set-text-properties 0 (length evt) nil evt))
+         (when (and ok tod (not (string-match "\\`DONE\\|CANCELLED" evt)))
+           (setq tod (concat "00" (number-to-string tod)))
+           (setq tod (when (string-match
+                            "\\([0-9]\\{1,2\\}\\)\\([0-9]\\{2\\}\\)\\'" tod)
+                       (concat (match-string 1 tod) ":"
+                               (match-string 2 tod))))
+           (when (if (version< emacs-version "23.3")
+                     (appt-add tod evt)
+                   (appt-add tod evt wrn))
+             (setq cnt (1+ cnt))))))
+     entries)
     (org-release-buffers org-agenda-new-buffers)
     (if (eq cnt 0)
-	(message "No event to add")
+        (message "No event to add")
       (message "Added %d event%s for today" cnt (if (> cnt 1) "s" "")))))
 
 (defun org-agenda-today-p (date)

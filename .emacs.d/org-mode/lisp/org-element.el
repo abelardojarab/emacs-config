@@ -393,6 +393,15 @@ still has an entry since one of its properties (`:title') does.")
     (item :tag))
   "Alist between element types and locations of secondary values.")
 
+(defconst org-element--pair-round-table
+  (let ((table (make-syntax-table)))
+    (modify-syntax-entry ?\( "()" table)
+    (modify-syntax-entry ?\) ")(" table)
+    (dolist (char '(?\{ ?\} ?\[ ?\] ?\< ?\>) table)
+      (modify-syntax-entry char " " table)))
+  "Table used internally to pair only round brackets.
+Other brackets are treated as spaces.")
+
 (defconst org-element--pair-square-table
   (let ((table (make-syntax-table)))
     (modify-syntax-entry ?\[ "(]" table)
@@ -400,6 +409,15 @@ still has an entry since one of its properties (`:title') does.")
     (dolist (char '(?\{ ?\} ?\( ?\) ?\< ?\>) table)
       (modify-syntax-entry char " " table)))
   "Table used internally to pair only square brackets.
+Other brackets are treated as spaces.")
+
+(defconst org-element--pair-curly-table
+  (let ((table (make-syntax-table)))
+    (modify-syntax-entry ?\{ "(}" table)
+    (modify-syntax-entry ?\} "){" table)
+    (dolist (char '(?\[ ?\] ?\( ?\) ?\< ?\>) table)
+      (modify-syntax-entry char " " table)))
+  "Table used internally to pair only curly brackets.
 Other brackets are treated as spaces.")
 
 
@@ -620,7 +638,7 @@ is cleared and contents are removed in the process."
 ;; cannot contain other greater elements of their own type.
 ;;
 ;; Beside implementing a parser and an interpreter, adding a new
-;; greater element requires to tweak `org-element--current-element'.
+;; greater element requires tweaking `org-element--current-element'.
 ;; Moreover, the newly defined type must be added to both
 ;; `org-element-all-elements' and `org-element-greater-elements'.
 
@@ -1900,13 +1918,10 @@ containing `:begin', `:end', `:number-lines', `:preserve-indent',
 		 ;; Standard block parsing.
 		 (begin (car affiliated))
 		 (post-affiliated (point))
-		 (block-ind (progn (skip-chars-forward " \t") (current-column)))
-		 (contents-begin (progn (forward-line) (point)))
-		 (value (org-remove-indentation
-			 (org-unescape-code-in-string
-			  (buffer-substring-no-properties
-			   contents-begin contents-end))
-			 block-ind))
+		 (contents-begin (line-beginning-position 2))
+		 (value (org-unescape-code-in-string
+			 (buffer-substring-no-properties
+			  contents-begin contents-end)))
 		 (pos-before-blank (progn (goto-char contents-end)
 					  (forward-line)
 					  (point)))
@@ -2406,14 +2421,10 @@ Assume point is at the beginning of the block."
 		  (or (not switches)
 		      (and retain-labels
 			   (not (string-match "-k\\>" switches)))))
-		 ;; Indentation.
-		 (block-ind (progn (skip-chars-forward " \t") (current-column)))
 		 ;; Retrieve code.
-		 (value (org-remove-indentation
-			 (org-unescape-code-in-string
-			  (buffer-substring-no-properties
-			   (progn (forward-line) (point)) contents-end))
-			 block-ind))
+		 (value (org-unescape-code-in-string
+			 (buffer-substring-no-properties
+			  (line-beginning-position 2) contents-end)))
 		 (pos-before-blank (progn (goto-char contents-end)
 					  (forward-line)
 					  (point)))
@@ -2450,11 +2461,12 @@ Assume point is at the beginning of the block."
 	    ((or org-src-preserve-indentation
 		 (org-element-property :preserve-indent src-block))
 	     val)
-	    ((zerop org-edit-src-content-indentation) val)
+	    ((zerop org-edit-src-content-indentation)
+	     (org-remove-indentation val))
 	    (t
 	     (let ((ind (make-string org-edit-src-content-indentation ?\s)))
 	       (replace-regexp-in-string
-		"\\(^\\)[ \t]*\\S-" ind val nil nil 1)))))))
+		"^" ind (org-remove-indentation val))))))))
     (concat (format "#+BEGIN_SRC%s\n"
 		    (concat (and lang (concat " " lang))
 			    (and switches (concat " " switches))
@@ -2820,27 +2832,45 @@ When at an inline babel call, return a list whose car is
 
 Assume point is at the beginning of the babel call."
   (save-excursion
-    (unless (bolp) (backward-char))
-    (when (let ((case-fold-search t))
-	    (looking-at org-babel-inline-lob-one-liner-regexp))
-      (let ((begin (match-end 1))
-	    (call (org-match-string-no-properties 2))
-	    (inside-header (org-string-nw-p (org-match-string-no-properties 4)))
-	    (arguments (org-string-nw-p (org-match-string-no-properties 6)))
-	    (end-header (org-string-nw-p (org-match-string-no-properties 8)))
-	    (value (buffer-substring-no-properties (match-end 1) (match-end 0)))
-	    (post-blank (progn (goto-char (match-end 0))
-			       (skip-chars-forward " \t")))
-	    (end (point)))
-	(list 'inline-babel-call
-	      (list :call call
-		    :inside-header inside-header
-		    :arguments arguments
-		    :end-header end-header
-		    :begin begin
-		    :end end
-		    :value value
-		    :post-blank post-blank))))))
+    (catch :no-object
+      (when (let ((case-fold-search nil))
+	      (looking-at
+	       "\\<call_\\([^ \t\n[{]+\\)\\(?:\\[\\([^]]*\\)\\]\\)?("))
+	(let ((begin (point))
+	      (call (match-string-no-properties 1))
+	      (inside-header
+	       (let ((h (org-string-nw-p (match-string-no-properties 2))))
+		 (and h (org-trim
+			 (replace-regexp-in-string "\n[ \t]*" " " h))))))
+	  (goto-char (1- (match-end 0)))
+	  (let* ((s (point))
+		 (e (with-syntax-table org-element--pair-round-table
+		      (or (ignore-errors (scan-lists s 1 0))
+			  ;; Invalid inline source block.
+			  (throw :no-object nil))))
+		 (arguments
+		  (let ((a (org-string-nw-p
+			    (buffer-substring-no-properties (1+ s) (1- e)))))
+		    (and a (org-trim
+			    (replace-regexp-in-string "\n[ \t]*" " " a)))))
+		 (end-header
+		  (progn
+		    (goto-char e)
+		    (and (looking-at "\\[\\([^]]*\\)\\]")
+			 (prog1 (org-string-nw-p (match-string-no-properties 1))
+			   (goto-char (match-end 0))))))
+		 (value (buffer-substring-no-properties begin (point)))
+		 (post-blank (skip-chars-forward " \t"))
+		 (end (point)))
+	    (list 'inline-babel-call
+		  (list :call call
+			:inside-header inside-header
+			:arguments arguments
+			:end-header end-header
+			:begin begin
+			:end end
+			:value value
+			:post-blank post-blank))))))))
 
 (defun org-element-inline-babel-call-interpreter (inline-babel-call _)
   "Interpret INLINE-BABEL-CALL object as Org syntax."
@@ -2865,22 +2895,33 @@ keywords.  Otherwise, return nil.
 
 Assume point is at the beginning of the inline src block."
   (save-excursion
-    (unless (bolp) (backward-char))
-    (when (looking-at org-babel-inline-src-block-regexp)
-      (let ((begin (match-beginning 1))
-	    (language (org-match-string-no-properties 2))
-	    (parameters (org-match-string-no-properties 4))
-	    (value (org-match-string-no-properties 5))
-	    (post-blank (progn (goto-char (match-end 0))
-			       (skip-chars-forward " \t")))
-	    (end (point)))
-	(list 'inline-src-block
-	      (list :language language
-		    :value value
-		    :parameters parameters
-		    :begin begin
-		    :end end
-		    :post-blank post-blank))))))
+    (catch :no-object
+      (when (let ((case-fold-search nil))
+	      (looking-at "\\<src_\\([^ \t\n[{]+\\)\
+\\(?:\\[[ \t]*\\([^]]*?\\)[ \t]*\\]\\)?{"))
+	(let ((begin (point))
+	      (language (match-string-no-properties 1))
+	      (parameters
+	       (let ((p (org-string-nw-p (match-string-no-properties 2))))
+		 (and p (org-trim
+			 (replace-regexp-in-string "\n[ \t]*" " " p))))))
+	  (goto-char (1- (match-end 0)))
+	  (let* ((s (point))
+		 (e (with-syntax-table org-element--pair-curly-table
+		      (or (ignore-errors (scan-lists s 1 0))
+			  ;; Invalid inline source block.
+			  (throw :no-object nil))))
+		 (value (buffer-substring-no-properties
+			 (1+ s) (1- e)))
+		 (post-blank (progn (goto-char e)
+				    (skip-chars-forward " \t"))))
+	    (list 'inline-src-block
+		  (list :language language
+			:value value
+			:parameters parameters
+			:begin begin
+			:end (point)
+			:post-blank post-blank))))))))
 
 (defun org-element-inline-src-block-interpreter (inline-src-block _)
   "Interpret INLINE-SRC-BLOCK object as Org syntax."
@@ -5712,15 +5753,15 @@ Providing it allows for quicker computation."
     (org-with-wide-buffer
      (let* ((pos (point))
 	    (element (or element (org-element-at-point)))
-	    (type (org-element-type element)))
+	    (type (org-element-type element))
+	    (post (org-element-property :post-affiliated element)))
        ;; If point is inside an element containing objects or
        ;; a secondary string, narrow buffer to the container and
        ;; proceed with parsing.  Otherwise, return ELEMENT.
        (cond
 	;; At a parsed affiliated keyword, check if we're inside main
 	;; or dual value.
-	((let ((post (org-element-property :post-affiliated element)))
-	   (and post (< pos post)))
+	((and post (< pos post))
 	 (beginning-of-line)
 	 (let ((case-fold-search t)) (looking-at org-element--affiliated-re))
 	 (cond
@@ -5739,7 +5780,8 @@ Providing it allows for quicker computation."
 	;; At an item, objects can only be located within tag, if any.
 	((eq type 'item)
 	 (let ((tag (org-element-property :tag element)))
-	   (if (not tag) (throw 'objects-forbidden element)
+	   (if (or (not tag) (/= (line-beginning-position) post))
+	       (throw 'objects-forbidden element)
 	     (beginning-of-line)
 	     (search-forward tag (line-end-position))
 	     (goto-char (match-beginning 0))

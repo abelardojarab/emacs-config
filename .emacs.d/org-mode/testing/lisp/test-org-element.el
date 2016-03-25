@@ -699,19 +699,6 @@ Some other text
 	  (org-test-with-temp-text
 	      "#+BEGIN_EXAMPLE\n,* Headline\n ,#+keyword\nText\n#+END_EXAMPLE"
 	    (org-element-property :value (org-element-at-point)))))
-  ;; Remove block indentation according to block boundaries, unless
-  ;; block contents are less indented than block boundaries.
-  (should
-   (equal " L1\nL2\n"
-	  (org-test-with-temp-text " #+BEGIN_EXAMPLE\n  L1\n L2\n #+END_EXAMPLE"
-	    (let ((org-src-preserve-indentation t))
-	      (org-element-property :value (org-element-at-point))))))
-  (should
-   (equal
-    "  L1\n L2\n"
-    (org-test-with-temp-text "  #+BEGIN_EXAMPLE\n  L1\n L2\n  #+END_EXAMPLE"
-      (let ((org-src-preserve-indentation t))
-	(org-element-property :value (org-element-at-point))))))
   ;; Handle non-empty blank line at the end of buffer.
   (should
    (org-test-with-temp-text "#+BEGIN_EXAMPLE\nC\n#+END_EXAMPLE\n "
@@ -1147,7 +1134,23 @@ Some other text
    (equal
     ":results html"
     (org-test-with-temp-text "call_test[:results output](x=2)[:results html]"
-      (org-element-property :end-header (org-element-context))))))
+      (org-element-property :end-header (org-element-context)))))
+  ;; Handle multi-line babel calls.
+  (should
+   (eq 'inline-babel-call
+       (org-test-with-temp-text
+	   "call_test[:results\noutput](x=2)[:results html]"
+	 (org-element-type (org-element-context)))))
+  (should
+   (eq 'inline-babel-call
+       (org-test-with-temp-text
+	   "call_test[:results output](x=2\ny=3)[:results html]"
+	 (org-element-type (org-element-context)))))
+  (should
+   (eq 'inline-babel-call
+       (org-test-with-temp-text
+	   "call_test[:results output](x=2)[:results\nhtml]"
+	 (org-element-type (org-element-context))))))
 
 
 ;;;; Inline Src Block
@@ -1182,7 +1185,37 @@ Some other text
   ;; Test parsing at the beginning of an item.
   (should
    (org-test-with-temp-text "- src_emacs-lisp{(+ 1 1)}"
-     (org-element-map (org-element-parse-buffer) 'inline-src-block 'identity))))
+     (org-element-map (org-element-parse-buffer) 'inline-src-block 'identity)))
+  ;; Test parsing multi-line source blocks.
+  (should
+   (eq 'inline-src-block
+       (org-test-with-temp-text "src_emacs-lisp{(+ 1\n  1)}"
+	 (org-element-type (org-element-context)))))
+  (should
+   (eq 'inline-src-block
+       (org-test-with-temp-text "src_emacs-lisp[\n:foo bar]{(+ 1 1)}"
+	 (org-element-type (org-element-context)))))
+  (should
+   (eq 'inline-src-block
+       (org-test-with-temp-text "src_emacs-lisp[:foo\nbar]{(+ 1 1)}"
+	 (org-element-type (org-element-context)))))
+  ;; Besides curly brackets, ignore any other bracket type.
+  (should
+   (equal "[foo"
+	  (org-test-with-temp-text "src_emacs-lisp{[foo}"
+	    (org-element-property :value (org-element-context)))))
+  (should
+   (equal "foo]"
+	  (org-test-with-temp-text "src_emacs-lisp{foo]}"
+	    (org-element-property :value (org-element-context)))))
+  (should
+   (equal "(foo"
+	  (org-test-with-temp-text "src_emacs-lisp{(foo}"
+	    (org-element-property :value (org-element-context)))))
+  (should
+   (equal "foo)"
+	  (org-test-with-temp-text "src_emacs-lisp{foo)}"
+	    (org-element-property :value (org-element-context))))))
 
 
 ;;;; Inlinetask
@@ -2058,19 +2091,6 @@ Outside list"
 	  (org-test-with-temp-text
 	      "#+BEGIN_SRC org\n,* Headline\n ,#+keyword\nText\n#+END_SRC"
 	    (org-element-property :value (org-element-at-point)))))
-  ;; Remove block indentation according to block boundaries, unless
-  ;; block contents are less indented than block boundaries.
-  (should
-   (equal " L1\nL2\n"
-	  (org-test-with-temp-text " #+BEGIN_SRC org\n  L1\n L2\n #+END_SRC"
-	    (let ((org-src-preserve-indentation t))
-	      (org-element-property :value (org-element-at-point))))))
-  (should
-   (equal
-    "  L1\n L2\n"
-    (org-test-with-temp-text "  #+BEGIN_SRC org\n  L1\n L2\n  #+END_SRC"
-      (let ((org-src-preserve-indentation t))
-	(org-element-property :value (org-element-at-point))))))
   ;; Handle non-empty blank line at the end of buffer.
   (should
    (org-test-with-temp-text "#+BEGIN_SRC emacs-lisp\nC\n#+END_SRC\n "
@@ -3319,36 +3339,43 @@ Text
   ;; Return closest object containing point.
   (should
    (eq 'underline
-       (org-test-with-temp-text "Some *text with _underline_ text*"
-	 (progn (search-forward "under")
-		(org-element-type (org-element-context))))))
+       (org-test-with-temp-text "Some *text with _under<point>line_ text*"
+	 (org-element-type (org-element-context)))))
   ;; Find objects in secondary strings.
   (should
    (eq 'underline
-       (org-test-with-temp-text "* Headline _with_ underlining"
-	 (progn (search-forward "w")
-		(org-element-type (org-element-context))))))
+       (org-test-with-temp-text "* Headline _<point>with_ underlining"
+	 (org-element-type (org-element-context)))))
   ;; Find objects in objects.
   (should
    (eq 'macro
-       (org-test-with-temp-text "| a | {{{macro}}} |"
-	 (progn (search-forward "{")
-		(org-element-type (org-element-context))))))
+       (org-test-with-temp-text "| a | {<point>{{macro}}} |"
+	 (org-element-type (org-element-context)))))
   (should
    (eq 'table-cell
-       (org-test-with-temp-text "| a | b {{{macro}}} |"
-	 (progn (search-forward "b")
-		(org-element-type (org-element-context))))))
+       (org-test-with-temp-text "| a | b<point> {{{macro}}} |"
+	 (org-element-type (org-element-context)))))
   ;; Find objects in planning lines.
   (should
    (eq 'timestamp
-       (org-test-with-temp-text "* H\n  SCHEDULED: <2012-03-29 thu.>"
-	 (search-forward "2012")
+       (org-test-with-temp-text "* H\n  SCHEDULED: <2012<point>-03-29 thu.>"
 	 (org-element-type (org-element-context)))))
   (should-not
    (eq 'timestamp
-       (org-test-with-temp-text "* H\n  SCHEDULED: <2012-03-29 thu.>"
-	 (search-forward "SCHEDULED")
+       (org-test-with-temp-text "* H\n  SCHEDULED<point>: <2012-03-29 thu.>"
+	 (org-element-type (org-element-context)))))
+  ;; Find objects in item tags.
+  (should
+   (eq 'bold
+       (org-test-with-temp-text "- *bo<point>ld* ::"
+	 (org-element-type (org-element-context)))))
+  (should-not
+   (eq 'bold
+       (org-test-with-temp-text "- *bold* ::<point>"
+	 (org-element-type (org-element-context)))))
+  (should-not
+   (eq 'bold
+       (org-test-with-temp-text "- *bold* ::\n<point>"
 	 (org-element-type (org-element-context)))))
   ;; Do not find objects in table rules.
   (should
@@ -3358,14 +3385,12 @@ Text
   ;; Find objects in parsed affiliated keywords.
   (should
    (eq 'macro
-       (org-test-with-temp-text "#+CAPTION: {{{macro}}}\n| a | b |."
-	 (progn (search-forward "{")
-		(org-element-type (org-element-context))))))
+       (org-test-with-temp-text "#+CAPTION: {<point>{{macro}}}\n| a | b |"
+	 (org-element-type (org-element-context)))))
   (should
    (eq 'bold
-       (org-test-with-temp-text "#+caption: *bold*\nParagraph"
-	 (progn (search-forward "*")
-		(org-element-type (org-element-context))))))
+       (org-test-with-temp-text "#+caption: *<point>bold*\nParagraph"
+	 (org-element-type (org-element-context)))))
   ;; Find objects at the end of buffer.
   (should
    (eq 'bold
@@ -3375,35 +3400,28 @@ Text
   ;; Correctly set `:parent' property.
   (should
    (eq 'paragraph
-       (org-test-with-temp-text "Some *bold* text"
-	 (progn (search-forward "bold")
-		(org-element-type
-		 (org-element-property :parent (org-element-context)))))))
+       (org-test-with-temp-text "Some *bold<point>* text"
+	 (org-element-type
+	  (org-element-property :parent (org-element-context))))))
   ;; Between two objects, return the second one.
   (should
    (eq 'macro
-       (org-test-with-temp-text "<<target>>{{{test}}}"
-	 (progn (search-forward "{")
-		(backward-char)
-		(org-element-type (org-element-context))))))
+       (org-test-with-temp-text "<<target>><point>{{{test}}}"
+	 (org-element-type (org-element-context)))))
   ;; Test optional argument.
   (should
    (eq 'underline
-       (org-test-with-temp-text "Some *text with _underline_ text*"
-	 (progn
-	   (search-forward "under")
-	   (org-element-type (org-element-context (org-element-at-point)))))))
+       (org-test-with-temp-text "Some *text with _under<point>line_ text*"
+	 (org-element-type (org-element-context (org-element-at-point))))))
   ;; Special case: bold object at the beginning of a headline.
   (should
    (eq 'bold
-       (org-test-with-temp-text "* *bold*"
-	 (search-forward "bo")
+       (org-test-with-temp-text "* *bo<point>ld*"
 	 (org-element-type (org-element-context)))))
   ;; Special case: incomplete cell at the end of a table row.
   (should
    (eq 'table-cell
-       (org-test-with-temp-text "|a|b|c"
-	 (goto-char (point-max))
+       (org-test-with-temp-text "|a|b|c<point>"
 	 (org-element-type (org-element-context)))))
   ;; Special case: objects in inline footnotes.
   (should
