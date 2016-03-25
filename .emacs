@@ -64,6 +64,7 @@
  '(ergoemacs-theme "standard")
  '(ergoemacs-theme-options nil)
  '(ergoemacs-use-menus t)
+ '(guide-key-mode t)
  '(initial-scratch-message
    ";; This buffer is for notes you don't want to save, and for Lisp evaluation.
 ;; If you want to create a file, visit that file with C-x C-f,
