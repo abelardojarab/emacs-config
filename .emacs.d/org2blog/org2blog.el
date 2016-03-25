@@ -1,6 +1,6 @@
 ;;; org2blog.el --- blog from Org mode to wordpress
 
-;; Copyright (C) 2010 Benjamin Beckwith <bnbeckwith@gmail.com>
+;; Copyright (C) 2010, 2016 Benjamin Beckwith <bnbeckwith@gmail.com>
 ;; Copyright (C) 2010 Marcel van der Boom <marcel@hsdev.com>
 ;; Copyright (C) 2010-2014 Puneeth Chaganti <punchagan+org2blog@muse-amuse.in>
 ;; Copyright (C) 2010 Sacha Chua <sacha@sachachua.com>
@@ -50,8 +50,8 @@
 
 
 (require 'org)
-(when (version< (org-version) "8.0")
-  (error "Require org-version>=8.0; Current version: %s" (org-version)))
+;; (when (version< (org-version) "8.0")
+;;   (error "Require org-version>=8.0; Current version: %s" (org-version)))
 
 (require 'xml-rpc)
 (require 'metaweblog)

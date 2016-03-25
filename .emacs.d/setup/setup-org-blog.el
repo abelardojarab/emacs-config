@@ -24,21 +24,10 @@
 
 ;;; Code:
 
-;; global variables defcustoms
-(defgroup emacs-custom-setup nil
-  "Emacs rimero setup group."
-  :group 'customize
-  :prefix "ers-")
-
-;; Credentials file for netrc authentication
-;; Also symblink .authinfo to .netrc for offlineimap
-(defcustom ers-secrets-file "~/.authinfo"
-  "Secrets file."
-  :type 'string
-  :group 'emacs-custom-setup)
-
+;; .authinfo parsing
 (use-package netrc)
 
+;; org2blog pre-requisite
 (use-package metaweblog
   :defer t
   :load-path (lambda () (expand-file-name "metaweblog/" user-emacs-directory)))
@@ -46,23 +35,15 @@
 (use-package org2blog
   :load-path (lambda () (expand-file-name "org2blog/" user-emacs-directory))
   :config (progn
-
             ;; blogging
-            (setq personal-blog-name "wordpress-your-netrc-entry-in-dot-autinfo")
-            (setq corporate-blog-name "wordpress-your-netrc-entry-in-dot-autinfo")
-            (setq personal-blog-url "http://wordpress-site/xmlrpc.php")
-            (setq corporate-blog-url "http://wordpress-site/xmlrpc.php")
-
-            (setq corporate-blog (netrc-machine (netrc-parse ers-secrets-file) "corporate-blog" t)
-                  personal-blog  (netrc-machine (netrc-parse ers-secrets-file) "personal-blog"  t)
-                  org2blog/wp-blog-alist `((,corporate-blog-name
-                                            :url ,corporate-blog-url
-                                            :username (netrc-get corporate-blog "login")
-                                            :password (netrc-get corporate-blog "password"))
-                                           (,personal-blog-name
+            (setq personal-blog-name "personal-blog")
+            (setq personal-blog-url "url/xmlrpc.php")
+            (setq personal-blog (netrc-machine (netrc-parse "~/.authinfo") "machinename"  t)
+                  org2blog/wp-blog-alist `((,personal-blog-name
                                             :url ,personal-blog-url
-                                            :username (netrc-get personal-blog "login")
-                                            :password (netrc-get personal-blog "password"))))))
+                                            ;; :username (netrc-get personal-blog "login")
+                                            ;; :password (netrc-get personal-blog "password")
+                                            )))))
 
 (provide 'setup-org-blog)
 ;;; setup-org-blog.el ends here
