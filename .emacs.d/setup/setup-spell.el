@@ -27,20 +27,41 @@
 ;; Enable ispell at the end
 (use-package ispell
   :config (progn
-
-            ;; We need tell emacs to use aspell, and where your custom dictionary is.
-            (setq ispell-dictionary "english"
-                  ispell-highlight-face 'flyspell-incorrect
+            ;; General configuration
+            (setq ispell-highlight-face 'flyspell-incorrect
                   ispell-silently-savep t
-                  ispell-program-name "aspell"
-                  ispell-extra-args '("--sug-mode=ultra")
                   ispell-alternate-dictionary (expand-file-name "dictionaries/words.txt" user-emacs-directory))
             (add-to-list 'ispell-skip-region-alist '("[^\000-\377]+"))
-            (when (eq system-type 'darwin)
-              (if (file-executable-p "/usr/local/bin/aspell")
-                  (progn
-                    (setq ispell-program-name "/usr/local/bin/aspell")
-                    (setq ispell-extra-args '("-d" "/Library/Application Support/cocoAspell/aspell6-en-6.0-0/en.multi")))))
+
+            ;; find aspell and hunspell automatically
+            (cond
+             ;; try hunspell at first
+             ((executable-find "hunspell")
+              (setq ispell-dictionary-alist '((nil "[A-Za-z]" "[^A-Za-z]" "[']" t
+                                                   ("-d" "en_US" "-i" "utf-8") nil utf-8)
+
+                                              ("english"
+                                                   "[[:alpha:]]"
+                                                   "[^[:alpha:]]"
+                                                   "[']"
+                                                   t
+                                                   ("-d" "en_US")
+                                                   nil
+                                                   utf-8)))
+              (setq ispell-dictionary "english"
+                    ispell-program-name "hunspell"
+                    ispell-extra-args (list "-d" (expand-file-name "dictionaries/en_US" user-emacs-directory))))
+
+             ;; if hunspell does not exist, use aspell
+             ((executable-find "aspell")
+              (setq ispell-dictionary "english"
+                    ispell-program-name "aspell"
+                    ispell-extra-args '("--sug-mode=ultra"))
+              (when (eq system-type 'darwin)
+                (if (file-executable-p "/usr/local/bin/aspell")
+                    (progn
+                      (setq ispell-program-name "/usr/local/bin/aspell")
+                      (setq ispell-extra-args '("-d" "/Library/Application Support/cocoAspell/aspell6-en-6.0-0/en.multi")))))))
 
             ;; change dictionary: "C-c e" = english, "C-c s"=spanish, "C-c w"=turn off flyspell
             (add-hook 'text-mode-hook
@@ -93,8 +114,8 @@
   :load-path (lambda () (expand-file-name "langtool/" user-emacs-directory))
   :config (progn
             (setq langtool-language-tool-jar (expand-file-name
-											  "jar/LanguageTool-2.7/languagetool-commandline.jar"
-											  user-emacs-directory)
+                                              "jar/LanguageTool-2.7/languagetool-commandline.jar"
+                                              user-emacs-directory)
                   langtool-mother-tongue "en"
                   langtool-disabled-rules '("WHITESPACE_RULE"
                                             "EN_UNPAIRED_BRACKETS"
