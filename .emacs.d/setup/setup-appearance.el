@@ -121,9 +121,7 @@ non-nil."
 ;; Scrollbar
 (use-package lawlist-scroll-mode
   :if window-system
-  :init (set-scroll-bar-mode 'right)
-  ;; :config    (global-lawlist-scroll-bar-mode)
-  )
+  :init (set-scroll-bar-mode 'right))
 
 (provide 'setup-appearance)
 ;;; setup-appearance.el ends here

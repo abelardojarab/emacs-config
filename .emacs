@@ -211,6 +211,9 @@
 ;; Setup versioning (optional)
 (require 'setup-versioning)
 
+;; Setup eldoc
+(require 'setup-eldoc)
+
 ;; Setup Lisp mode (cause crash)
 (require 'setup-lisp)
 

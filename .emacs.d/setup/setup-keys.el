@@ -457,5 +457,15 @@
         (add-to-list 'minor-mode-map-alist mykeys))))
 (ad-activate 'load)
 
+;; Guide key
+(use-package guide-key
+  :diminish guide-key-mode
+  :load-path (lambda () (expand-file-name "guide-key/" user-emacs-directory))
+  :config (progn
+            (setq guide-key/idle-delay 1)
+            (setq guide-key/popup-window-position 'right)
+            (setq guide-key/guide-key-sequence '("C-x"))
+            (setq guide-key/recursive-key-sequence-flag t)))
+
 (provide 'setup-keys)
 ;;; setup-keys.el ends here
