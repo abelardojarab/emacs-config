@@ -1,4 +1,5 @@
 # Can ignore specific files
+smex-items
 .DS_Store
 *.DS_Store
 **/*.DS_Store
