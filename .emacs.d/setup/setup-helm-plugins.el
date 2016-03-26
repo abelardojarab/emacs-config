@@ -48,7 +48,7 @@
 (use-package helm-bm
   :load-path (lambda () (expand-file-name "helm-bm/" user-emacs-directory))
   :bind (:map ctl-x-map
-              ("b" . helm-bookmarks)))
+              ("m" . helm-bookmarks)))
 
 ;; Helm flyspell
 (use-package helm-flyspell
@@ -72,7 +72,7 @@
 (use-package helm-make
   :load-path (lambda () (expand-file-name "helm-make/" user-emacs-directory))
   :bind (:map ctl-x-map
-              ("m" . helm-make)))
+              ("k" . helm-make)))
 
 ;; Helm dash
 (use-package helm-dash
