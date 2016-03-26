@@ -115,7 +115,7 @@
                      (setq main-writing-font (concat main-writing-font "-14")))
                  (progn
                    (setq main-programming-font (concat main-programming-font "-12"))
-                   (setq main-writing-font (concat main-writing-font "-14")))))))
+                   (setq main-writing-font (concat main-writing-font "-13")))))))
 
           ;; Apply fonts
           (set-default-font main-programming-font frame)
