@@ -114,7 +114,7 @@
   :load-path (lambda () (expand-file-name "langtool/" user-emacs-directory))
   :config (progn
             (setq langtool-language-tool-jar (expand-file-name
-                                              "jar/LanguageTool-2.7/languagetool-commandline.jar"
+                                              "jar/LanguageTool-3.2/languagetool-commandline.jar"
                                               user-emacs-directory)
                   langtool-mother-tongue "en"
                   langtool-disabled-rules '("WHITESPACE_RULE"
