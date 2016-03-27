@@ -203,6 +203,47 @@
                ("\\paragraph{%s}" . "\\paragraph*{%s}")
                ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
 
+(add-to-list 'org-latex-classes
+             '("ieeeproceedings"
+               "\\documentclass[conference]{IEEEtran}
+\\usepackage[T1]{fontenc}
+\\usepackage{lmodern}
+\\usepackage{graphicx}
+\\usepackage{geometry}
+\\usepackage{listings}
+\\usepackage{hyperref}
+\\usepackage{caption}
+\\usepackage{color}
+\\usepackage{mathptmx}
+\\usepackage[section]{placeins}
+\\geometry{a4paper, textwidth=6.5in, textheight=10in,
+            marginparsep=7pt, marginparwidth=.6in}
+\\definecolor{light-gray}{gray}{0.95}
+\\lstset{
+  frame=tlbr,
+  framesep=4pt,
+  framerule=0pt,
+  columns=fullflexible,
+  breaklines=true,
+  backgroundcolor=\\color{light-gray},
+  basicstyle=\\normalsize\\ttfamily,
+  showstringspaces=false,
+  keywordstyle=\\itshape\\color{blue},
+  identifierstyle=\\ttfamily,
+  commentstyle=\\color{black},
+  xleftmargin=0.5cm,
+  xrightmargin=0.5cm,
+  aboveskip=\\bigskipamount,
+  belowskip=\\bigskipamount}
+\\title{}
+      [NO-DEFAULT-PACKAGES]
+      [NO-PACKAGES]"
+               ("\\section{%s}" . "\\section*{%s}")
+               ("\\subsection{%s}" . "\\subsection*{%s}")
+               ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+               ("\\paragraph{%s}" . "\\paragraph*{%s}")
+               ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+
 ;; Set default document stylesheet
 (if (executable-find "xelatex")
     (setq org-latex-default-class "xelatex")
