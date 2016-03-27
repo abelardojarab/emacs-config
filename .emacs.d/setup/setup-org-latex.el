@@ -182,7 +182,6 @@
   framesep=4pt,
   framerule=0pt,
   columns=fullflexible,
-  breaklines=true,
   backgroundcolor=\\color{light-gray},
   basicstyle=\\normalsize\\ttfamily,
   showstringspaces=false,
@@ -191,6 +190,12 @@
   commentstyle=\\color{black},
   xleftmargin=0.5cm,
   xrightmargin=0.5cm,
+  numberstyle=\\tiny,             % the size of the fonts that are used for the line-numbers
+  numbers=left,                   % where to put the line-numbers
+  stepnumber=1,                   % the step between two line-numbers. If it's 1 each line
+  tabsize=2,                      % sets default tabsize to 2 spaces
+  breaklines=true,                % sets automatic line breaking
+  breakatwhitespace=true,         % sets if automatic breaks should only happen at whitespace
   aboveskip=\\bigskipamount,
   belowskip=\\bigskipamount}
 \\renewcommand{\\rmdefault}{ptm}
@@ -216,7 +221,7 @@
 \\usepackage{color}
 \\usepackage{mathptmx}
 \\usepackage[section]{placeins}
-\\geometry{a4paper, textwidth=6.5in, textheight=10in,
+\\geometry{a4paper, textwidth=6.5in,
             marginparsep=7pt, marginparwidth=.6in}
 \\definecolor{light-gray}{gray}{0.95}
 \\lstset{
@@ -224,7 +229,12 @@
   framesep=4pt,
   framerule=0pt,
   columns=fullflexible,
-  breaklines=true,
+  numberstyle=\\tiny,             % the size of the fonts that are used for the line-numbers
+  numbers=left,                   % where to put the line-numbers
+  stepnumber=1,                   % the step between two line-numbers. If it's 1 each line
+  tabsize=2,                      % sets default tabsize to 2 spaces
+  breaklines=true,                % sets automatic line breaking
+  breakatwhitespace=true,         % sets if automatic breaks should only happen at whitespace
   backgroundcolor=\\color{light-gray},
   basicstyle=\\normalsize\\ttfamily,
   showstringspaces=false,
