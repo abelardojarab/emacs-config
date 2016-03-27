@@ -33,10 +33,12 @@
          ("C-h" . helm-occur-from-isearch)
          :map ctl-x-map
          ("x" . helm-M-x)
+         ("n" . helm-mini)
          ("a" . helm-apropos)
          ("i" . helm-semantic-or-imenu)
+         ("." . helm-semantic)
          ("u" . helm-resume)
-         ("b" . helm-buffers-list)
+         ("l" . helm-buffers-list)
          ("f" . helm-find-files)
          ("r" . helm-recentf))
   :config (progn

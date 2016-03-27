@@ -96,6 +96,11 @@ Defaults to `error'."
     (setq-default line-spacing nil))
   (redraw-display))
 
+;; Refresh file
+(defun refresh-file ()
+  (interactive)
+  (revert-buffer t t t))
+
 ;; Put file name on clip board
 (defun put-file-name-on-clipboard ()
   "Put the current file name on the clipboard"
@@ -212,6 +217,7 @@ buffer."
                          (backward-list 1)
                          (backward-char 1)))))))))
 
+;; Move to matching parenthesis
 (defun goto-match-paren (arg)
   "Go to the matching parenthesis if on parenthesis, otherwise
    insert the character typed."
@@ -221,7 +227,7 @@ buffer."
         (t                    (self-insert-command (or arg 1)))))
 
 ;; Unindent blocks
-(defvar my-tab-width 2)
+(defvar my-tab-width 4)
 (defun indent-block()
   (shift-region my-tab-width)
   (setq deactivate-mark nil))
@@ -243,7 +249,7 @@ buffer."
     (let ((save-mark (mark)))
       (indent-rigidly region-start region-finish numcols))))
 
-(defun my-unindent()
+(defun unindent-block-or-line()
   "Unindent line, or block if it's a region selected.
 When pressing Shift+tab, erase words backward (one at a time) up to the beginning of line.
 Now it correctly stops at the beginning of the line when the pointer is at the first char of an indented line. Before the command would (unconveniently)  kill all the white spaces, as well as the last word of the previous line."

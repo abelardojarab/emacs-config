@@ -38,6 +38,12 @@
   :bind (:map ctl-x-map
               ("c" . helm-flycheck)))
 
+;; Helm flyspell
+(use-package helm-flyspell
+  :load-path (lambda () (expand-file-name "helm-flyspell/" user-emacs-directory))
+  :bind (:map ctl-x-map
+              ("s" . helm-flyspell-correct)))
+
 ;; Helm ls git
 (use-package helm-ls-git
   :load-path (lambda () (expand-file-name "helm-ls-git/" user-emacs-directory))
@@ -48,13 +54,7 @@
 (use-package helm-bm
   :load-path (lambda () (expand-file-name "helm-bm/" user-emacs-directory))
   :bind (:map ctl-x-map
-              ("m" . helm-bookmarks)))
-
-;; Helm flyspell
-(use-package helm-flyspell
-  :load-path (lambda () (expand-file-name "helm-flyspell/" user-emacs-directory))
-  :bind (:map ctl-x-map
-              ("s" . helm-flyspell-correct)))
+              ("b" . helm-bookmarks)))
 
 ;; Helm etags plus
 (use-package helm-etags+
@@ -72,7 +72,7 @@
 (use-package helm-make
   :load-path (lambda () (expand-file-name "helm-make/" user-emacs-directory))
   :bind (:map ctl-x-map
-              ("e" . helm-make)))
+              ("m" . helm-make)))
 
 ;; Helm dash
 (use-package helm-dash

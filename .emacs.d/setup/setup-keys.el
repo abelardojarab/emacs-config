@@ -193,9 +193,8 @@
 (global-set-key (kbd "<f8>") 'toggle-selective-display)
 (global-set-key (kbd "C-<f8>") 'fold-dwim-toggle)
 
-;; Org capture
-(global-set-key (kbd "<f9>") 'org-capture)
-(global-set-key (kbd "C-<f9>") 'org-projectile:project-todo-completing-read)
+;; Refresh file
+(global-set-key (kbd "<f9>") 'refresh-file)
 
 ;; Hint: customize `magit-repo-dirs' so that you can
 ;; quickly open magit on any one of your projects.
@@ -213,7 +212,7 @@
 (global-set-key (kbd "C-.") (if (and (fboundp 'ggtags-find-tag-dwim)
                                      (executable-find "global"))
                                 'ggtags-find-tag-dwim
-                              'etags-select-find-tag))
+                              'helm-etags-select))
 
 ;; Use Helm instead of 'etags-select-find-tag
 (global-set-key (kbd "M-.") 'helm-etags-select)
@@ -344,11 +343,6 @@
 (global-set-key [(control mouse-5)] 'text-scale-decrease)
 (global-set-key [(control mouse-4)] 'text-scale-increase)
 
-;; Refresh file
-(defun refresh-file ()
-  (interactive)
-  (revert-buffer t t t))
-
 ;; Redo
 (use-package redo+
   :config (progn
@@ -380,10 +374,10 @@
 (global-set-key [C-end] 'tabbar-forward-group)
 
 ;; Alternative tabbar keys
-(global-set-key (kbd "C-x <prior>") 'tabbar-backward-group)
-(global-set-key (kbd "C-x <next>") 'tabbar-forward-group)
-(global-set-key (kbd "C-x <home>") 'tabbar-forward-tab)
-(global-set-key (kbd "C-x <end>") 'tabbar-backward-tab)
+(global-set-key (kbd "C-x <up>") 'tabbar-backward-group)
+(global-set-key (kbd "C-x <down>") 'tabbar-forward-group)
+(global-set-key (kbd "C-x <left>") 'tabbar-forward-tab)
+(global-set-key (kbd "C-x <right>") 'tabbar-backward-tab)
 
 ;; Jump between windows
 (global-set-key [C-up] 'windmove-up)
@@ -391,19 +385,23 @@
 (global-set-key [C-left] 'windmove-left)
 (global-set-key [C-right] 'windmove-right)
 
-;; Code navigation
-(global-set-key (kbd "C-`") 'helm-semantic)
-
 ;; Flycheck tips
 (define-key global-map (kbd "C->") 'error-tip-cycle-dwim)
 (define-key global-map (kbd "C-<") 'error-tip-cycle-dwim-reverse)
 
-;; Extra Ctrl-x mapping
-(define-key ctl-x-map (kbd "u") 'my-unindent)
+;; Extra Ctrl-x mappings
+(define-key ctl-x-map (kbd "x") 'kill-region)
+(define-key ctl-x-map (kbd "u") 'unindent-block-or-line)
+(define-key ctl-x-map (kbd "SPC") (lambda() (interactive) (push-mark nil nil 1)))
+(define-key ctl-x-map (kbd "<up>") 'tabbar-backward-group)
+(define-key ctl-x-map (kbd "<down>") 'tabbar-forward-group)
+(define-key ctl-x-map (kbd "<left>") 'tabbar-backward-tab)
+(define-key ctl-x-map (kbd "<right>") 'tabbar-forward-tab)
 
 ;; Region bindings mode
 (use-package region-bindings-mode
   :load-path (lambda () (expand-file-name "region-bindings-mode/" user-emacs-directory))
+  :diminish region-bindings-mode
   :config (progn
             (region-bindings-mode-enable)
             (define-key region-bindings-mode-map (kbd "C-p") 'mc/mark-previous-like-this)
@@ -411,7 +409,12 @@
             (define-key region-bindings-mode-map (kbd "C-a") 'mc/mark-all-like-this)
             (define-key region-bindings-mode-map (kbd "C-e") 'mc/edit-lines)
             (define-key region-bindings-mode-map (kbd "C-c") 'kill-ring-save)
-            (define-key region-bindings-mode-map (kbd "C-x") 'kill-region)))
+            (define-key region-bindings-mode-map (kbd "C-x") 'kill-region)
+
+            ;; extra key bindings
+            (define-key region-bindings-mode-map (kbd "u") 'unindent-block-or-line)
+            (define-key region-bindings-mode-map (kbd "c") 'kill-ring-save)
+            (define-key region-bindings-mode-map (kbd "x") 'kill-region)))
 
 ;; Move text
 (use-package move-text
@@ -429,9 +432,8 @@
 (define-key my-keys-minor-mode-map (kbd "<f2>")   'helm-bm)
 (define-key my-keys-minor-mode-map (kbd "<C-f2>") 'bm-toggle)
 (define-key my-keys-minor-mode-map (kbd "<left-margin> <mouse-1>") 'bm-toggle)
-(define-key my-keys-minor-mode-map (kbd "C-`") 'helm-semantic)
+(define-key my-keys-minor-mode-map (kbd "C-`") 'helm-buffers-list)
 (define-key my-keys-minor-mode-map (kbd "C-b") 'beautify-buffer)
-(define-key my-keys-minor-mode-map (kbd "M-o") 'psw-switch-buffer)
 (define-key my-keys-minor-mode-map (kbd "<f4>") 'helm-semantic-or-imenu)
 (define-key my-keys-minor-mode-map (kbd "<f5>") 'smex)
 (define-key my-keys-minor-mode-map (kbd "<f12>") 'helm-buffer-list)
