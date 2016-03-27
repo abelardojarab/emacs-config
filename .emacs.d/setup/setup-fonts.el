@@ -96,8 +96,8 @@
              (if (> (x-display-pixel-width) 1800)
                  (if (> (x-display-pixel-width) 2000)
                      (progn ;; Ultra-HD monitor in OSX
-                       (setq main-programming-font (concat main-programming-font "-18"))
-                       (setq main-writing-font (concat main-writing-font "-19")))
+                       (setq main-programming-font (concat main-programming-font "-19"))
+                       (setq main-writing-font (concat main-writing-font "-20")))
                    (progn ;; HD monitor in OSX
                      (setq main-programming-font (concat main-programming-font "-16"))
                      (setq main-writing-font (concat main-writing-font "-17"))))
