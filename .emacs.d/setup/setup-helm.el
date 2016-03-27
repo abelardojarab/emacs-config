@@ -34,7 +34,7 @@
          :map ctl-x-map
          ("x" . helm-M-x)
          ("a" . helm-apropos)
-         ("n" . helm-semantic-or-imenu)
+         ("i" . helm-semantic-or-imenu)
          ("u" . helm-resume)
          ("b" . helm-buffers-list)
          ("f" . helm-find-files)

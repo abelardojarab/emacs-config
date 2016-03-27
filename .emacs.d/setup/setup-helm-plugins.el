@@ -28,7 +28,7 @@
 (use-package helm-descbinds
   :load-path (lambda () (expand-file-name "helm-descbinds/" user-emacs-directory))
   :bind (:map ctl-x-map
-              ("i" . helm-descbinds))
+              ("k" . helm-descbinds))
   :config (progn
             (helm-descbinds-mode 1)))
 
@@ -72,7 +72,7 @@
 (use-package helm-make
   :load-path (lambda () (expand-file-name "helm-make/" user-emacs-directory))
   :bind (:map ctl-x-map
-              ("k" . helm-make)))
+              ("e" . helm-make)))
 
 ;; Helm dash
 (use-package helm-dash
