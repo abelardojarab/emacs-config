@@ -217,6 +217,9 @@
 ;; Use Helm instead of 'etags-select-find-tag
 (global-set-key (kbd "M-.") 'helm-etags-select)
 
+;; Helm semantic or imenu
+(global-set-key (kbd "C-`") 'helm-semantic-or-imenu)
+
 ;; Native file opening
 (cond
  ;; Windows
@@ -432,7 +435,7 @@
 (define-key my-keys-minor-mode-map (kbd "<f2>")   'helm-bm)
 (define-key my-keys-minor-mode-map (kbd "<C-f2>") 'bm-toggle)
 (define-key my-keys-minor-mode-map (kbd "<left-margin> <mouse-1>") 'bm-toggle)
-(define-key my-keys-minor-mode-map (kbd "C-`") 'helm-buffers-list)
+(define-key my-keys-minor-mode-map (kbd "C-`") 'helm-semantic-or-imenu)
 (define-key my-keys-minor-mode-map (kbd "C-b") 'beautify-buffer)
 (define-key my-keys-minor-mode-map (kbd "<f4>") 'helm-semantic-or-imenu)
 (define-key my-keys-minor-mode-map (kbd "<f5>") 'smex)
