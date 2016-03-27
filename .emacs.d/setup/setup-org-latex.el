@@ -216,12 +216,11 @@
 \\usepackage{graphicx}
 \\usepackage{geometry}
 \\usepackage{listings}
-\\usepackage{hyperref}
 \\usepackage{caption}
 \\usepackage{color}
 \\usepackage{mathptmx}
 \\usepackage[section]{placeins}
-\\geometry{a4paper, textwidth=6.5in,
+\\geometry{a4paper, textwidth=6.5in, textheight=9.2in,
             marginparsep=7pt, marginparwidth=.6in}
 \\definecolor{light-gray}{gray}{0.95}
 \\lstset{
@@ -245,6 +244,40 @@
   xrightmargin=0.5cm,
   aboveskip=\\bigskipamount,
   belowskip=\\bigskipamount}
+
+% For wrapping text in tables
+\\usepackage{array}
+
+% Support for floats
+\\RequirePackage{float}
+
+% For more table formatting
+\\RequirePackage{booktabs}
+
+% Use hyperlinks for convenience, but let's not make them coloured
+\\RequirePackage[bookmarks,colorlinks,breaklinks]{hyperref}
+\\hypersetup{
+  colorlinks,
+  citecolor=black,
+  filecolor=black,
+  linkcolor=black,
+  urlcolor=black
+}
+
+% Use the excellent biblatex package with IEEE style, sorted = none makes the numbering appear in order
+\\RequirePackage[american]{babel}
+\\RequirePackage{csquotes}
+\\RequirePackage[
+  sorting = none,
+  url = false,
+  hyperref = true,
+  style = ieee,
+  bibencoding = utf8]{biblatex}
+\\DeclareLanguageMapping{american}{american-apa}
+
+% Bibliography
+\\bibliography{biblio}
+
 \\title{}
       [NO-DEFAULT-PACKAGES]
       [NO-PACKAGES]"
