@@ -67,7 +67,7 @@
       (add-to-list 'default-frame-alist '(font . "Consolas-12"))) ;; default font, used by speedbar
 
     (when (find-font (font-spec :name "Calibri"))
-      (setq main-writing-font "Calibri-12")
+      (setq main-writing-font "Calibri-13")
       (set-face-attribute 'variable-pitch nil :font main-writing-font :weight 'normal)
       (add-hook 'text-mode-hook 'variable-pitch-mode))
 
@@ -88,7 +88,7 @@
              (if (> (x-display-pixel-width) 1800)
                  (progn ;; HD monitor in Windows
                    (setq main-programming-font (concat main-programming-font "-13"))
-                   (setq main-writing-font (concat main-writing-font "-15")))
+                   (setq main-writing-font (concat main-writing-font "-16")))
                (progn
                  (setq main-programming-font (concat main-programming-font "-12"))
                  (setq main-writing-font (concat main-writing-font "-15")))))
