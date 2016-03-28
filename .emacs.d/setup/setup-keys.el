@@ -435,11 +435,12 @@
 (define-key my-keys-minor-mode-map (kbd "<f2>")   'helm-bm)
 (define-key my-keys-minor-mode-map (kbd "<C-f2>") 'bm-toggle)
 (define-key my-keys-minor-mode-map (kbd "<left-margin> <mouse-1>") 'bm-toggle)
-(define-key my-keys-minor-mode-map (kbd "C-`") 'helm-semantic-or-imenu)
 (define-key my-keys-minor-mode-map (kbd "C-b") 'beautify-buffer)
 (define-key my-keys-minor-mode-map (kbd "<f4>") 'helm-semantic-or-imenu)
+(define-key my-keys-minor-mode-map (kbd "C-`") 'helm-semantic-or-imenu)
 (define-key my-keys-minor-mode-map (kbd "<f5>") 'smex)
 (define-key my-keys-minor-mode-map (kbd "<f12>") 'helm-buffer-list)
+(define-key my-keys-minor-mode-map (kbd "C-0") 'helm-buffer-list)
 
 ;; Define custom key mode
 (define-minor-mode my-keys-minor-mode

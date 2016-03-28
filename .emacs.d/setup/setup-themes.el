@@ -45,8 +45,8 @@
 (add-to-list 'custom-theme-load-path (expand-file-name "emacs-faff-theme/" user-emacs-directory))
 
 ;; Material theme
-(add-to-list 'load-path (expand-file-name "emacs-matherial-theme/" user-emacs-directory))
-(add-to-list 'custom-theme-load-path (expand-file-name "emacs-matherial-theme/" user-emacs-directory))
+(add-to-list 'load-path (expand-file-name "emacs-material-theme/" user-emacs-directory))
+(add-to-list 'custom-theme-load-path (expand-file-name "emacs-material-theme/" user-emacs-directory))
 
 ;; Leuven theme
 (add-to-list 'load-path (expand-file-name "emacs-leuven-theme/" user-emacs-directory))
@@ -90,7 +90,7 @@
 ;; (load-theme 'atom-dark t)
 ;; (load-theme 'zenburn t)
 ;; (load-theme 'leuven t)
-;; (load-theme 'zerodark t)
+(load-theme 'zerodark t)
 ;; (load-theme 'material t)
 ;; (load-theme 'FlatUI t)
 ;; (load-theme 'faff t)
@@ -99,11 +99,10 @@
 ;; (load-theme 'minimal-light) ;; best ink theme
 ;; (load-theme 'monokai t) ;; best dark color scheme
 ;; (load-theme 'eink)
-(load-theme 'monokai-extended t)
+;; (load-theme 'monokai-extended t)
 ;; (load-theme 'pastelmac t)
 ;; (load-theme 'solarized-dark t)
 ;; (load-theme 'material-light t)
-;; (load-theme 'apropospriate-light t)
 
 (provide 'setup-themes)
 ;;; setup-themes.el ends here
