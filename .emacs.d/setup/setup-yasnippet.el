@@ -29,8 +29,7 @@
   :diminish yas-minor-mode
   :load-path (lambda () (expand-file-name "yasnippet/" user-emacs-directory))
   :config (progn
-            (setq yas-snippet-dirs
-                  '("~/.emacs.d/snippets"))
+            (setq yas-snippet-dirs '())
             (setq yas-snippet-dirs (cons (expand-file-name "snippets" user-emacs-directory)
                                          (yas-snippet-dirs)))
             (setq yas-snippet-dirs (cons (expand-file-name "snippets-extra" user-emacs-directory)
