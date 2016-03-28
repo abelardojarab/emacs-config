@@ -293,9 +293,9 @@
             (setq org-bullets-bullet-list
                   '(
                     "▣"
-                    "▫"
                     "▪"
                     "•"
+                    "⁕"
                     ))))
 
 (provide 'setup-org)

@@ -17,6 +17,10 @@
 (defconst debian-emacs-flavor 'emacs24
   "A symbol representing the particular debian flavor of emacs running.
  Something like 'emacs20, 'xemacs20, etc.")
+
+;; Setup the starting directories
+(if (file-exists-p "~/.emacs.d/workspace/emacsfull/.emacs.d")
+    (setq user-emacs-directory "~/.emacs.d/workspace/emacsfull/.emacs.d"))
 (add-to-list 'load-path (expand-file-name "elisp/" user-emacs-directory))
 (add-to-list 'load-path (expand-file-name "dadams/" user-emacs-directory))
 (add-to-list 'load-path (expand-file-name "setup/" user-emacs-directory))
