@@ -48,7 +48,7 @@
          ("M-s ," . my-isearch-forward-word-at-point))
   :config
   (progn
-    (defun my-isearch-forward-word-at-point ()
+    (defun isearch-forward-word-at-point ()
       "Search for word at point."
       (interactive)
       (let ((word (thing-at-point 'word t))
@@ -61,7 +61,7 @@
               (isearch-yank-string word))
           (user-error "No word at point"))))
 
-    (defun my-isearch-forward-symbol-at-point ()
+    (defun isearch-forward-symbol-at-point ()
       "Search for symbol at point."
       (interactive)
       (let ((symbol (thing-at-point 'symbol t))
