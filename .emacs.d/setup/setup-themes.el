@@ -90,14 +90,14 @@
 ;; (load-theme 'atom-dark t)
 ;; (load-theme 'zenburn t)
 ;; (load-theme 'leuven t)
-(load-theme 'zerodark t)
+;; (load-theme 'zerodark t)
 ;; (load-theme 'material t)
 ;; (load-theme 'FlatUI t)
 ;; (load-theme 'faff t)
 ;; (load-theme 'twilight-brigh)
 ;; (load-theme 'plan9)
 ;; (load-theme 'minimal-light) ;; best ink theme
-;; (load-theme 'monokai t) ;; best dark color scheme
+(load-theme 'monokai t) ;; best dark color scheme
 ;; (load-theme 'eink)
 ;; (load-theme 'monokai-extended t)
 ;; (load-theme 'pastelmac t)
