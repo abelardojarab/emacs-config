@@ -89,7 +89,7 @@
 ;; Different possible themes
 ;; (load-theme 'atom-dark t)
 ;; (load-theme 'zenburn t)
-(load-theme 'leuven t)
+;; (load-theme 'leuven t)
 ;; (load-theme 'zerodark t)
 ;; (load-theme 'material t)
 ;; (load-theme 'FlatUI t)
@@ -99,7 +99,7 @@
 ;; (load-theme 'minimal-light) ;; best ink theme
 ;; (load-theme 'monokai t) ;; best dark color scheme
 ;; (load-theme 'eink)
-;; (load-theme 'monokai-extended t)
+(load-theme 'monokai-extended t)
 ;; (load-theme 'pastelmac t)
 ;; (load-theme 'solarized-dark t)
 ;; (load-theme 'material-light t)
