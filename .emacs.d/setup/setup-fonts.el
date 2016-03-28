@@ -91,7 +91,7 @@
                    (setq main-writing-font (concat main-writing-font "-15")))
                (progn
                  (setq main-programming-font (concat main-programming-font "-12"))
-                 (setq main-writing-font (concat main-writing-font "-14")))))
+                 (setq main-writing-font (concat main-writing-font "-15")))))
             ('darwin
              (if (> (x-display-pixel-width) 1800)
                  (if (> (x-display-pixel-width) 2000)
