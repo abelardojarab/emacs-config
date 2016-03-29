@@ -37,6 +37,7 @@
 (add-to-list 'load-path (expand-file-name "cedet/contrib/" user-emacs-directory))
 (require 'cedet-remove-builtin)
 (setq byte-compile-warnings nil)
+(setq vc-follow-symlinks t)
 (load-file (expand-file-name "cedet/cedet-devel-load.el" user-emacs-directory))
 (load-file (expand-file-name "cedet/contrib/cedet-contrib-load.el" user-emacs-directory))
 
@@ -141,9 +142,6 @@
 ;; Setup highlights
 (require 'setup-highlight)
 
-;; Setup desktop
-(require 'setup-desktop)
-
 ;; Setup CEDET
 (require 'setup-cedet)
 
@@ -167,6 +165,9 @@
 
 ;; Setup Org (html support)
 (require 'setup-org-html)
+
+;; Setup Org (blogging support)
+(require 'setup-org-blog)
 
 ;; Setup modeline
 (require 'setup-modeline)
@@ -287,6 +288,9 @@
 
 ;; Setup dired
 (require 'setup-dired)
+
+;; Setup desktop
+(require 'setup-desktop)
 
 ;; Setup post
 (require 'setup-post)

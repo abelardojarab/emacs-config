@@ -24,26 +24,61 @@
 
 ;;; Code:
 
-;; .authinfo parsing
+;; htmlize, require to format source for wordpress (otherwise code blocks will appear empty)
+(use-package htmlize
+  :load-path (lambda () (expand-file-name "htmlize/" user-emacs-directory)))
+
+;; .authinfo parsing (not longer valid for org2blog, use auth-source)
 (use-package netrc)
+
+;; .authinfo parsing
+(use-package auth-source
+  :config (progn
+            (if (file-exists-p "~/.authinfo")
+                (add-to-list 'auth-sources "~/.authinfo"))))
 
 ;; org2blog pre-requisite
 (use-package metaweblog
   :defer t
   :load-path (lambda () (expand-file-name "metaweblog/" user-emacs-directory)))
 
+;; org2blog
 (use-package org2blog
   :load-path (lambda () (expand-file-name "org2blog/" user-emacs-directory))
   :config (progn
-            ;; blogging
-            (setq personal-blog-name "personal-blog")
-            (setq personal-blog-url "url/xmlrpc.php")
-            (setq personal-blog (netrc-machine (netrc-parse "~/.authinfo") "machinename"  t)
-                  org2blog/wp-blog-alist `((,personal-blog-name
-                                            :url ,personal-blog-url
-                                            ;; :username (netrc-get personal-blog "login")
-                                            ;; :password (netrc-get personal-blog "password")
-                                            )))))
+            (let (credentials)
+
+              ;; Fetch credentials
+              (setq credentials (auth-source-user-and-password "personal-blog"))
+
+              ;; blogging
+              (setq personal-blog-name "personal-blog")
+              (setq personal-blog-url "http://abelardojarab.dyndns.org/wp-login.php")
+              (setq org2blog/wp-blog-alist `((,personal-blog-name
+                                              :url ,personal-blog-url
+                                              :username ,(car credentials)
+                                              :password ,(cadr credentials)
+                                              :default-categories ("org2blog" "Emacs")
+                                              :tags-as-categories nil
+                                              )))
+
+            ;; htmlize` is required, else you get empty
+            ;; code blocks https://github.com/punchagan/org2blog/blob/master/org2blog.el
+            ;; with wp-use-sourcecode-shortcode set to 't, org2blog will use 1
+            ;; shortcodes, and hence the SyntaxHighlighter Evolved plugin on your blog.
+            ;; however, if you set this to nil, native Emacs highlighting will be used,
+            ;; implemented as HTML styling. Your pick!
+            (setq org2blog/wp-use-sourcecode-shortcode 't)
+
+            ;; removed light="true"
+            (setq org2blog/wp-sourcecode-default-params nil)
+
+            ;; target language needs to be in here
+            (setq org2blog/wp-sourcecode-langs
+                  '("actionscript3" "bash" "coldfusion" "cpp" "csharp" "css" "delphi"
+                    "erlang" "fsharp" "diff" "groovy" "javascript" "java" "javafx" "matlab"
+                    "objc" "perl" "php" "text" "powershell" "python" "ruby" "scala" "sql"
+                    "vb" "xml" "sh" "emacs-lisp" "lisp" "lua")))))
 
 (provide 'setup-org-blog)
 ;;; setup-org-blog.el ends here
