@@ -63,7 +63,7 @@
   :load-path (lambda () (expand-file-name "newsticker/" user-emacs-directory))
   :config (progn
             (require 'newsticker-notify)
-            (setq newsticker-dir "~/.emacs.cache/Newsticker")
+            (setq newsticker-dir "~/.emacs.cache/newsticker")
             (setq newsticker-url-list-defaults nil)
             (setq newsticker-automatically-mark-items-as-old t)
             (setq newsticker-automatically-mark-visited-items-as-old t)
