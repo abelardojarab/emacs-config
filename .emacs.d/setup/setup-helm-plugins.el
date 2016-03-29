@@ -24,6 +24,14 @@
 
 ;;; Code:
 
+;; Helm grepint
+(use-package helm-grepint
+  :load-path (lambda () (expand-file-name "helm-grepint/" user-emacs-directory))
+  :bind (:map ctl-x-map
+              ("e" . helm-grepint-grep))
+  :config (progn
+            (helm-grepint-set-default-config)))
+
 ;; Helm desc-binds
 (use-package helm-descbinds
   :load-path (lambda () (expand-file-name "helm-descbinds/" user-emacs-directory))

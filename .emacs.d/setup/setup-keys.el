@@ -398,6 +398,7 @@
 ;; Extra Ctrl-x mappings
 (global-set-key (kbd "C-x x") 'kill-region)
 (define-key ctl-x-map (kbd "x") 'kill-region)
+(define-key ctl-x-map (kbd "p") 'yank)
 (define-key ctl-x-map (kbd "u") 'unindent-block-or-line)
 (define-key ctl-x-map (kbd "SPC") (lambda() (interactive) (push-mark nil nil 1)))
 (define-key ctl-x-map (kbd "<up>") 'tabbar-backward-group)
