@@ -112,6 +112,9 @@
 (add-to-list 'org-latex-packages-alist '("" "color"))
 (add-to-list 'org-latex-packages-alist '("" "mathptmx"))
 
+;; Define the output styles
+(unless (boundp 'org-latex-classes)
+  (setq org-latex-classes nil))
 (add-to-list 'org-latex-classes
              '("xelatex"
                "\\documentclass[11pt,a4paper]{article}
@@ -240,6 +243,53 @@
                ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
                ("\\paragraph{%s}" . "\\paragraph*{%s}")
                ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+
+(add-to-list 'org-latex-classes
+             '("beamer"
+               "\\documentclass[11pt,presentation]{beamer}
+\\usepackage[T1]{fontenc}
+\\usepackage{lmodern}
+\\usepackage{graphicx}
+\\usepackage{geometry}
+\\usepackage{listings}
+\\usepackage{hyperref}
+\\usepackage{caption}
+\\usepackage{color}
+\\usepackage{mathptmx}
+\\usepackage[section]{placeins}
+\\definecolor{light-gray}{gray}{0.95}
+\\lstset{
+  frame=single,
+  showtabs=false,
+  columns=fullflexible,
+  backgroundcolor=\\color{light-gray},
+  basicstyle=\\normalsize\\ttfamily,
+  showstringspaces=false,
+  keywordstyle=\\itshape\\color{blue},
+  identifierstyle=\\ttfamily,
+  commentstyle=\\color{black},
+  xleftmargin=0.5cm,
+  xrightmargin=0.5cm,
+  numberstyle=\\tiny,             % the size of the fonts that are used for the line-numbers
+  numbers=left,                   % where to put the line-numbers
+  stepnumber=1,                   % the step between two line-numbers. If it's 1 each line
+  tabsize=4,                      % sets default tabsize to 4 spaces
+  breaklines=true,                % sets automatic line breaking
+  breakatwhitespace=true,         % sets if automatic breaks should only happen at whitespace
+}
+\\usepackage{verbatim}\n
+
+\\title{}
+[NO-DEFAULT-PACKAGES]
+      [NO-PACKAGES]"
+
+               ;; Other section
+               ("\\section{%s}" . "\\section*{%s}")
+
+               ("\\begin{frame}[fragile]\\frametitle{%s}"
+                "\\end{frame}"
+                "\\begin{frame}[fragile]\\frametitle{%s}"
+                "\\end{frame}")))
 
 (add-to-list 'org-latex-classes
              '("ieeeproceedings"
