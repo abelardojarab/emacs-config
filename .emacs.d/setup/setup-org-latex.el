@@ -281,7 +281,7 @@
 
 \\title{}
 [NO-DEFAULT-PACKAGES]
-      [NO-PACKAGES]"
+[NO-PACKAGES]"
 
                ;; Other section
                ("\\section{%s}" . "\\section*{%s}")
