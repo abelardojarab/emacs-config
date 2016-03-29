@@ -280,7 +280,7 @@
 ;; Setup helm
 (require 'setup-helm)
 
-;; Setup helm plugin
+;; Setup helm plugins
 (require 'setup-helm-plugins)
 
 ;; Setup projectile
@@ -288,6 +288,9 @@
 
 ;; Setup dired
 (require 'setup-dired)
+
+;; Setup dired plugins
+(require 'setup-dired-plugins)
 
 ;; Setup gnus
 (require 'setup-gnus)

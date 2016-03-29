@@ -25,35 +25,34 @@
 ;;; Code:
 
 (use-package dired
-  :config  (setq dired-auto-revert-buffer t
-                 dired-dwim-target t
-                 dired-listing-switches "-alhF --group-directories-first"))
-
-(use-package dired-x
-  :init (progn
-          (global-set-key (kbd "C-x C-j") 'dired-jump)
-          (add-hook 'dired-mode-hook 'projectile-mode)
-          (setq-default dired-omit-mode t)))
-
-(use-package direx
-  :load-path (lambda () (expand-file-name "direx/" user-emacs-directory))
+  :bind ("C-x C-j" . dired-jump)
   :config (progn
-    (setq direx:closed-icon "+ ")
-    (setq direx:leaf-icon "| ")
-    (setq direx:open-icon "> ")
-    (define-key direx:direx-mode-map [mouse-1] 'direx:mouse-2)
-    (define-key direx:direx-mode-map [mouse-3] 'direx:mouse-1)
-    (push '(direx:direx-mode :position left :width 30 :dedicated t :stick t :noselect t) popwin:special-display-config)))
+            (defun my/dired-mode-hook ()
+              (setq-local truncate-lines t))
+            (require 'dired-x)
+            (add-hook 'dired-mode-hook 'projectile-mode)
+            (setq-default dired-omit-mode t)
+            (put 'dired-find-alternate-file 'disabled nil)
+            (add-to-list 'dired-omit-extensions ".DS_Store")
+            (setq ls-lisp-dirs-first t
+                  dired-listing-switches "-alhF --group-directories-first"
+                  dired-recursive-copies 'always
+                  dired-recursive-deletes 'always
+                  dired-dwim-target t
+                  ;; -F marks links with @
+                  dired-ls-F-marks-symlinks t
+                  ;; Auto refresh dired
+                  dired-auto-revert-buffer t
+                  global-auto-revert-non-file-buffers t)
 
-(use-package direx-project
-  :load-path (lambda () (expand-file-name "direx/" user-emacs-directory))
-  :bind ("C-x C-j" . direx-project:jump-to-project-root-other-window))
+            ;; key bindings
+            (bind-key "u" #'dired-up-directory dired-mode-map)
+            (bind-key "M-!" #'async-shell-command dired-mode-map)
+            (define-key dired-mode-map (kbd "RET") #'dired-find-alternate-file)
 
-(use-package dired-k
- :load-path (lambda () (expand-file-name "dired-k/" user-emacs-directory))
- :config (progn
-           (define-key dired-mode-map (kbd "K") 'dired-k)
-           (add-hook 'dired-initial-position-hook 'dired-k)))
+            ;; extra hooks
+            (add-hook 'dired-mode-hook #'hl-line-mode)
+            (add-hook 'dired-mode-hook #'my/dired-mode-hook)))
 
 (provide 'setup-dired)
 ;;; setup-dired.el ends here
