@@ -1,5 +1,4 @@
 # Can ignore specific files
-projectile.cache
 smex-items
 .DS_Store
 *.DS_Store
@@ -25,6 +24,7 @@ var/*
 .projectile
 projectile-bookmarks.eld
 .projectile-bookmarks.eld
+projectile.cache
 .projectile.cache
 .smex.save
 ede-projects.el*
