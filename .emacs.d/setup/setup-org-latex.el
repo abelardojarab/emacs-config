@@ -150,6 +150,11 @@
   commentstyle=\\color{black},
   xleftmargin=0.5cm,
   xrightmargin=0.5cm,
+  numberstyle=\\tiny,             % the size of the fonts that are used for the line-numbers
+  numbers=left,                   % where to put the line-numbers
+  stepnumber=1,                   % the step between two line-numbers. If it's 1 each line
+  tabsize=2,                      % sets default tabsize to 2 spaces
+  breaklines=true,                % sets automatic line breaking
   aboveskip=\\bigskipamount,
   belowskip=\\bigskipamount}
 
@@ -277,15 +282,13 @@
   breaklines=true,                % sets automatic line breaking
   breakatwhitespace=true,         % sets if automatic breaks should only happen at whitespace
 }
-\\usepackage{verbatim}\n
-
+\\usepackage{verbatim}
 \\title{}
-[NO-DEFAULT-PACKAGES]
-[NO-PACKAGES]"
+      [NO-DEFAULT-PACKAGES]
+      [NO-PACKAGES]"
 
                ;; Other section
                ("\\section{%s}" . "\\section*{%s}")
-
                ("\\begin{frame}[fragile]\\frametitle{%s}"
                 "\\end{frame}"
                 "\\begin{frame}[fragile]\\frametitle{%s}"
@@ -311,12 +314,6 @@
   framesep=4pt,
   framerule=0pt,
   columns=fullflexible,
-  numberstyle=\\tiny,             % the size of the fonts that are used for the line-numbers
-  numbers=left,                   % where to put the line-numbers
-  stepnumber=1,                   % the step between two line-numbers. If it's 1 each line
-  tabsize=2,                      % sets default tabsize to 2 spaces
-  breaklines=true,                % sets automatic line breaking
-  breakatwhitespace=true,         % sets if automatic breaks should only happen at whitespace
   backgroundcolor=\\color{light-gray},
   basicstyle=\\normalsize\\ttfamily,
   showstringspaces=false,
@@ -325,6 +322,12 @@
   commentstyle=\\color{black},
   xleftmargin=0.5cm,
   xrightmargin=0.5cm,
+  numberstyle=\\tiny,             % the size of the fonts that are used for the line-numbers
+  numbers=left,                   % where to put the line-numbers
+  stepnumber=1,                   % the step between two line-numbers. If it's 1 each line
+  tabsize=2,                      % sets default tabsize to 2 spaces
+  breaklines=true,                % sets automatic line breaking
+  breakatwhitespace=true,         % sets if automatic breaks should only happen at whitespace
   aboveskip=\\bigskipamount,
   belowskip=\\bigskipamount}
 

@@ -109,9 +109,9 @@
 (use-package helm-bibtex
   :load-path (lambda () (expand-file-name "helm-bibtex/" user-emacs-directory))
   :config (progn
-            (setq helm-bibtex-bibliography "~/workspace/Documents/Bib/biblio.bib")
-            (setq helm-bibtex-library-path "~/workspace/Documents/Bib/bibtex-pdfs")
-            (setq helm-bibtex-notes-path "~/workspace/Documents/Bib/notes.org")
+            (setq helm-bibtex-bibliography "~/workspace/Documents/Bibliography/biblio.bib")
+            (setq helm-bibtex-library-path "~/workspace/Documents/Bibliography/bibtex-pdfs")
+            (setq helm-bibtex-notes-path "~/workspace/Documents/Bibliography/notes.org")
 
             ;; open pdf with system pdf viewer (works on mac)
             (setq helm-bibtex-pdf-open-function

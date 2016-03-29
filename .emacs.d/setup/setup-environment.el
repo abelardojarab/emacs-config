@@ -119,10 +119,11 @@
     (setq exec-path (split-string (car exec-path) " "))
     (setenv "PATH" (mapconcat 'identity exec-path ":"))
     (setq eshell-path-env (getenv "PATH")))
-  (setenv "PATH" (concat "/usr/texbin:/opt/local/bin:/usr/local/bin:" (getenv "PATH")))
+  (setenv "PATH" (concat "/usr/local/texlive/2014/bin/x86_64-darwin:/usr/texbin:/opt/local/bin:/usr/local/bin:" (getenv "PATH")))
   (push "/usr/local/bin" exec-path)
   (push "/opt/local/bin" exec-path)
   (push "/usr/texbin" exec-path)
+  (push "/usr/local/texlive/2014/bin/x86_64-darwin" exec-path)
 
   (defun mac-open-file ()
     (interactive)
