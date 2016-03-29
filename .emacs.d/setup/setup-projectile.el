@@ -28,11 +28,14 @@
   :diminish projectile-mode
   :load-path (lambda () (expand-file-name "projectile/" user-emacs-directory))
   :config (progn
+            (setq projectile-known-projects-file "~/.emacs.cache/projectile-bookmarks.eld")
+            (setq projectile-cache-file "~/.emacs.cache/projectile.cache")
             (setq projectile-switch-project-action 'projectile-dired)
             (setq projectile-enable-caching t)
             (setq projectile-require-project-root nil)
             (setq projectile-completion-system 'helm)
-            (add-to-list 'projectile-globally-ignored-files ".DS_Store")
+            (setq projectile-sort-order 'recently-active)
+            (setq projectile-globally-ignored-files (quote ("TAGS" "*.log" "*DS_Store")))
             (projectile-global-mode 1)))
 
 (provide 'setup-projectile)
