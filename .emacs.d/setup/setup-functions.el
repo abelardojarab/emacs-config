@@ -361,5 +361,10 @@ Now it correctly stops at the beginning of the line when the pointer is at the f
           (forward-line 1)))
   (goto-char start))
 
+;; Check for web access
+(defun internet-up-p (&optional host)
+  (= 0 (call-process "ping" nil nil nil "-c" "1" "-W" "1"
+                     (if host host "www.google.com"))))
+
 (provide 'setup-functions)
 ;;; setup-utilities.el ends here

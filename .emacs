@@ -289,8 +289,8 @@
 ;; Setup dired
 (require 'setup-dired)
 
-;; Setup desktop
-(require 'setup-desktop)
+;; Setup gnus
+(require 'setup-gnus)
 
 ;; Setup post
 (require 'setup-post)
@@ -306,6 +306,9 @@
 
 ;; Setup server
 (require 'setup-server)
+
+;; Setup desktop
+(require 'setup-desktop)
 
 (setq debug-on-quit nil)
 (setq debug-on-error nil)
