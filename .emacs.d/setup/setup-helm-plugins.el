@@ -82,6 +82,76 @@
   :bind (:map ctl-x-map
               ("m" . helm-make)))
 
+;; Helm swoop
+(use-package helm-swoop
+  :bind (:map ctl-x-map
+              ("o" . helm-swoop))
+  :load-path (lambda () (expand-file-name "helm-swoop/" user-emacs-directory))
+  :config (progn
+
+            ;; From helm-swoop to helm-multi-swoop-all
+            (define-key helm-swoop-map (kbd "M-i") 'helm-multi-swoop-all-from-helm-swoop)
+
+            ;; Instead of helm-multi-swoop-all, you can also use helm-multi-swoop-current-mode
+            (define-key helm-swoop-map (kbd "M-m") 'helm-multi-swoop-current-mode-from-helm-swoop)
+
+            ;; Move up and down like isearch
+            (define-key helm-swoop-map (kbd "C-r") 'helm-previous-line)
+            (define-key helm-swoop-map (kbd "C-s") 'helm-next-line)
+            (define-key helm-multi-swoop-map (kbd "C-r") 'helm-previous-line)
+            (define-key helm-multi-swoop-map (kbd "C-s") 'helm-next-line)
+
+            ;; Save buffer when helm-multi-swoop-edit complete
+            (setq helm-multi-swoop-edit-save t)
+
+            ;; If this value is t, split window inside the current window
+            (setq helm-swoop-split-with-multiple-windows nil)
+
+            ;; Split direcion. 'split-window-vertically or 'split-window-horizontally
+            (setq helm-swoop-split-direction 'split-window-horizontally)
+
+            ;; If nil, you can slightly boost invoke speed in exchange for text color
+            (setq helm-swoop-speed-or-color nil)
+
+            ;; ;; Go to the opposite side of line from the end or beginning of line
+            (setq helm-swoop-move-to-line-cycle t)))
+
+;; Helm bibtex
+(use-package helm-bibtex
+  :bind (:map ctl-x-map
+              ("[" . helm-bibtex))
+  :load-path (lambda () (expand-file-name "helm-bibtex/" user-emacs-directory))
+  :config (progn
+            (setq helm-bibtex-bibliography "~/workspace/Documents/Bibliography/biblio.bib")
+            (setq helm-bibtex-library-path "~/workspace/Documents/Bibliography/PDFs")
+            (setq helm-bibtex-notes-path "~/workspace/Documents/Bibliography/notes.org")
+
+            ;; open pdf with system pdf viewer (works on mac)
+            (setq helm-bibtex-pdf-open-function
+                  (lambda (fpath)
+                    (start-process "open" "*open*" "open" fpath)))
+
+            (defun helm-bibtex-cite ()
+              "Helm command to cite bibliography."
+              (interactive)
+              (helm-other-buffer
+               '(helm-c-source-bibtex)
+               "*helm bibtex:"))))
+
+;; Org-Ref
+(use-package org-ref
+  :load-path (lambda () (expand-file-name "org-ref/" user-emacs-directory))
+  :config (progn
+            (setq org-ref-bibliography-notes "~/workspace/Documents/Bibliography/notes.org"
+                  org-ref-default-bibliography '("~/workspace/Documents/Bibliography/biblio.bib")
+                  org-ref-pdf-directory "~/workspace/Documents/Bibliography/PDFs")
+            (setq org-ref-insert-cite-key "C-c [")
+            (setq org-ref-default-citation-link "autocite")))
+
+;; Helm themes
+(use-package helm-themes
+  :load-path (lambda () (expand-file-name "helm-themes/" user-emacs-directory)))
+
 ;; Helm dash
 (use-package helm-dash
   :load-path (lambda () (expand-file-name "helm-dash/" user-emacs-directory))
@@ -112,72 +182,6 @@
             ;; (add-hook 'lisp-mode-hook 'lisp-doc-hook)
 
             ))
-
-;; Helm bibtex
-(use-package helm-bibtex
-  :load-path (lambda () (expand-file-name "helm-bibtex/" user-emacs-directory))
-  :config (progn
-            (setq helm-bibtex-bibliography "~/workspace/Documents/Bibliography/biblio.bib")
-            (setq helm-bibtex-library-path "~/workspace/Documents/Bibliography/bibtex-pdfs")
-            (setq helm-bibtex-notes-path "~/workspace/Documents/Bibliography/notes.org")
-
-            ;; open pdf with system pdf viewer (works on mac)
-            (setq helm-bibtex-pdf-open-function
-                  (lambda (fpath)
-                    (start-process "open" "*open*" "open" fpath)))
-
-            (defun helm-bibtex-cite ()
-              "Helm command to cite bibliography."
-              (interactive)
-              (helm-other-buffer
-               '(helm-c-source-bibtex)
-               "*helm bibtex:"))))
-
-;; Org-Ref
-(use-package org-ref
-  :load-path (lambda () (expand-file-name "org-ref/" user-emacs-directory))
-  :config (progn
-            (setq org-ref-bibliography-notes "~/workspace/Documents/Bib/notes.org"
-                  org-ref-default-bibliography '("~/workspace/Documents/Bib/biblio.bib")
-                  org-ref-pdf-directory "~/workspace/Documents/Bib/bibtex-pdfs")
-            (setq org-ref-insert-cite-key "C-c [")
-            (setq org-ref-default-citation-link "autocite")))
-
-;; Helm themes
-(use-package helm-themes
-  :load-path (lambda () (expand-file-name "helm-themes/" user-emacs-directory)))
-
-;; Helm swoop
-(use-package helm-swoop
-  :load-path (lambda () (expand-file-name "helm-swoop/" user-emacs-directory))
-  :config (progn
-
-            ;; From helm-swoop to helm-multi-swoop-all
-            (define-key helm-swoop-map (kbd "M-i") 'helm-multi-swoop-all-from-helm-swoop)
-
-            ;; Instead of helm-multi-swoop-all, you can also use helm-multi-swoop-current-mode
-            (define-key helm-swoop-map (kbd "M-m") 'helm-multi-swoop-current-mode-from-helm-swoop)
-
-            ;; Move up and down like isearch
-            (define-key helm-swoop-map (kbd "C-r") 'helm-previous-line)
-            (define-key helm-swoop-map (kbd "C-s") 'helm-next-line)
-            (define-key helm-multi-swoop-map (kbd "C-r") 'helm-previous-line)
-            (define-key helm-multi-swoop-map (kbd "C-s") 'helm-next-line)
-
-            ;; Save buffer when helm-multi-swoop-edit complete
-            (setq helm-multi-swoop-edit-save t)
-
-            ;; If this value is t, split window inside the current window
-            (setq helm-swoop-split-with-multiple-windows nil)
-
-            ;; Split direcion. 'split-window-vertically or 'split-window-horizontally
-            (setq helm-swoop-split-direction 'split-window-horizontally)
-
-            ;; If nil, you can slightly boost invoke speed in exchange for text color
-            (setq helm-swoop-speed-or-color nil)
-
-            ;; ;; Go to the opposite side of line from the end or beginning of line
-            (setq helm-swoop-move-to-line-cycle t)))
 
 (provide 'setup-helm-plugins)
 ;;; setup-helm-plugins.el ends here

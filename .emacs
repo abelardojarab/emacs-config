@@ -301,8 +301,17 @@
 ;; Setup ECB
 (require 'setup-ecb)
 
+;; Setup mouse
+(require 'setup-mouse)
+
+;; Setup undo and redo
+(require 'setup-undoandredo)
+
 ;; Setup keys
 (require 'setup-keys)
+
+;; Setup region
+(require 'setup-region)
 
 ;; Setup ergoemacs
 (require 'setup-ergoemacs)

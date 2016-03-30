@@ -58,5 +58,9 @@
             (add-hook 'prog-mode-hook (lambda () (heartbeat-cursor-mode)))
             (add-hook 'org-mode-hook (lambda () (heartbeat-cursor-mode)))))
 
+;; Multiple cursors
+(use-package multiple-cursors
+  :load-path (lambda () (expand-file-name "multiple-cursors/" user-emacs-directory)))
+
 (provide 'setup-cursor)
 ;;; setup-cursor.el ends here

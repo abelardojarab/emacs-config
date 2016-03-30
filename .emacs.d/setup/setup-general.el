@@ -94,10 +94,6 @@
 (use-package browse-kill-ring
   :load-path (lambda () (expand-file-name "browse-kill-ring/" user-emacs-directory)))
 
-;; Multiple cursors
-(use-package multiple-cursors
-  :load-path (lambda () (expand-file-name "multiple-cursors/" user-emacs-directory)))
-
 ;; log4e
 (use-package log4e
   :load-path (lambda () (expand-file-name "log4e/" user-emacs-directory)))

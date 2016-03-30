@@ -24,68 +24,6 @@
 
 ;;; Code:
 
-;; xterm through SSH
-(defun fix-up-xterm-input-function-key-map ()
-  (define-key function-key-map "\e[1;2A" [S-up])
-  (define-key function-key-map "\e[1;2B" [S-down])
-  (define-key function-key-map "\e[1;2C" [S-right])
-  (define-key function-key-map "\e[1;2D" [S-left])
-  (define-key function-key-map "\e[2A"   [S-up])
-  (define-key function-key-map "\e[2B"   [S-down])
-  (define-key function-key-map "\e[2C"   [S-right])
-  (define-key function-key-map "\e[2D"   [S-left])
-
-  (define-key function-key-map "\e[1;5A" [C-up])
-  (define-key function-key-map "\e[1;5B" [C-down])
-  (define-key function-key-map "\e[1;5C" [C-right])
-  (define-key function-key-map "\e[1;5D" [C-left])
-  (define-key function-key-map "\e[5A"   [C-up])
-  (define-key function-key-map "\e[5B"   [C-down])
-  (define-key function-key-map "\e[5C"   [C-right])
-  (define-key function-key-map "\e[5D"   [C-left])
-
-  (define-key function-key-map "\e[1;3A" [M-up])
-  (define-key function-key-map "\e[1;3B" [M-down])
-  (define-key function-key-map "\e[1;3C" [M-right])
-  (define-key function-key-map "\e[1;3D" [M-left])
-
-  (define-key function-key-map "\e[1;4A" [M-S-up])
-  (define-key function-key-map "\e[1;4B" [M-S-down])
-  (define-key function-key-map "\e[1;4C" [M-S-right])
-  (define-key function-key-map "\e[1;4D" [M-S-left])
-
-  (define-key function-key-map "\e[5~"   [prior])
-  (define-key function-key-map "\e[6~"   [next])
-  (define-key function-key-map "\e[5;5~" [C-prior])
-  (define-key function-key-map "\e[6;5~" [C-next])
-
-  (define-key function-key-map "\e[5;2~"  [S-prior])
-  (define-key function-key-map "\e[5;3~"  [M-prior])
-  (define-key function-key-map "\e[5;4~"  [M-S-prior])
-  (define-key function-key-map "\e[5;5~"  [C-prior])
-  (define-key function-key-map "\e[5;6~"  [C-S-prior])
-  (define-key function-key-map "\e[5;7~"  [M-C-prior])
-  (define-key function-key-map "\e[5;8~"  [M-C-S-prior])
-
-  (define-key function-key-map "\e[6;2~"  [S-next])
-  (define-key function-key-map "\e[6;3~"  [M-next])
-  (define-key function-key-map "\e[6;4~"  [M-S-next])
-  (define-key function-key-map "\e[6;5~"  [C-next])
-  (define-key function-key-map "\e[6;6~"  [C-S-next])
-  (define-key function-key-map "\e[6;7~"  [M-C-next])
-  (define-key function-key-map "\e[6;8~"  [M-C-S-next])
-
-  (define-key function-key-map "\e[z2a"    [S-tab])
-  (define-key function-key-map "\e[z5a"    [C-tab])
-  (define-key function-key-map "\e[z2b"    [S-return])
-  (define-key function-key-map "\e[z3b"    [M-return])
-  (define-key function-key-map "\e[z4b"    [M-S-return])
-  (define-key function-key-map "\e[z5b"    [C-return])
-  (define-key function-key-map "\e[z6b"    [C-S-return])
-  (define-key function-key-map "\e[z7b"    [M-C-return])
-  (define-key function-key-map "\e[z8b"    [M-C-S-return]))
-(fix-up-xterm-input-function-key-map)
-
 ;; As in Windows, replace after typing a letter
 (use-package delsel
   :config (delete-selection-mode 1))
@@ -123,6 +61,7 @@
 (global-set-key '[C-kp-add] 'text-scale-increase)
 (global-set-key '[C-kp-subtract] 'text-scale-decrease)
 (global-set-key '[C-+] 'text-scale-increase)
+(global-set-key '[C--] 'text-scale-decrease)
 
 ;; Commands to make my programming environment nice
 (global-set-key (kbd "RET") 'newline-and-indent)
@@ -143,9 +82,9 @@
 (global-set-key [(meta s)] 'write-file)
 (global-set-key [(control q)] 'save-buffers-kill-emacs)
 (global-set-key [(meta q)] 'kill-this-buffer)
-(global-set-key [(control t)] 'ispell-buffer)
 (global-set-key [(control r)] 'replace-string)
 (global-set-key [(control a)] 'mark-whole-buffer)
+(global-set-key [(control t)] 'magit-status)
 
 ;; Recent files
 (global-set-key "\C-x\ \C-r" 'recentf-open-files)
@@ -153,7 +92,6 @@
 ;; Bookmarks
 (global-set-key (kbd "<f2>")   'helm-bm)
 (global-set-key (kbd "<C-f2>") 'bm-toggle)
-(global-set-key (kbd "<S-f2>") 'bm-next)
 
 ;; Highlight symbol at point
 (global-set-key [f3] 'highlight-symbol-at-point)
@@ -200,7 +138,6 @@
 ;; quickly open magit on any one of your projects.
 (global-set-key (kbd "<f10>") 'menu-bar-open)
 (global-set-key (kbd "C-<f10>") 'helm-ls-git-ls)
-(global-set-key (kbd "S-<f10>") #'git-messenger:popup-message)
 
 ;; Toggle frame maximized
 (global-set-key (kbd "<f11>") 'toggle-frame-maximized)
@@ -292,86 +229,12 @@
 (define-key isearch-mode-map (kbd "C-*") 'helm-swoop-from-isearch)
 (define-key isearch-mode-map [(control kp-multiply)] 'helm-swoop-from-isearch)
 
-;; Cancel minibuffer operation if you click outside
-(defun stop-using-minibuffer ()
-  "kill the minibuffer"
-  (when (and (>= (recursion-depth) 1) (active-minibuffer-window))
-    (abort-recursive-edit)))
-(add-hook 'mouse-leave-buffer-hook 'stop-using-minibuffer)
-
 ;; Escape key in minibuffer
 (define-key minibuffer-local-map [escape] 'abort-recursive-edit)
 (define-key minibuffer-local-ns-map [escape] 'abort-recursive-edit)
 (define-key minibuffer-local-completion-map [escape] 'abort-recursive-edit)
 (define-key minibuffer-local-must-match-map [escape] 'abort-recursive-edit)
 (define-key minibuffer-local-isearch-map [escape] 'abort-recursive-edit)
-
-;; Enable mouse support
-(use-package mouse
-  :if window-system
-  :config (progn
-            (xterm-mouse-mode t)
-            (defun track-mouse (e))
-            (setq mouse-sel-mode t)))
-
-;; Do not copy region use mouse dragging
-(setq mouse-drag-copy-region nil)
-
-;; Moving cursor down at bottom scrolls only a single line, not half page
-(setq scroll-step 1)
-
-;; Mouse wheel scroll support
-(mouse-wheel-mode t)
-
-;; scroll window under mouse
-(setq mouse-wheel-follow-mouse 't)
-
-;; scroll one line at a time
-(setq mouse-wheel-scroll-amount '(1 ((shift) . 1)))
-
-;; don't accelerate scrolling
-(setq mouse-wheel-progressive-speed nil)
-
-;; Zoom in/out like feature, with mouse wheel
-(global-unset-key (kbd "<C-wheel-up>")) ;; moved to <mode-line>
-(global-unset-key (kbd "<C-wheel-down>"))
-(global-set-key (kbd "<C-wheel-up>") 'text-scale-increase) ;; moved to <mode-line>
-(global-set-key (kbd "<C-wheel-down>") 'text-scale-decrease)
-
-;; Get the scroll wheel to work
-(global-set-key [(shift button5)] '(lambdas () (interactive) (scroll-up-line)))
-(global-set-key [(shift button4)] '(lambda () (interactive) (scroll-down-line)))
-(global-set-key [(control button5)] 'text-scale-decrease)
-(global-set-key [(control button4)] 'text-scale-increase)
-
-(global-set-key [(shift mouse-5)] '(lambda () (interactive) (scroll-up-line)))
-(global-set-key [(shift mouse-4)] '(lambda () (interactive) (scroll-down-line)))
-(global-set-key [(control mouse-5)] 'text-scale-decrease)
-(global-set-key [(control mouse-4)] 'text-scale-increase)
-
-;; Redo
-(use-package redo+
-  :config (progn
-            (global-set-key (kbd "C-S-z") 'redo) ;; Mac style
-            (global-set-key (kbd "C-y") 'redo) ;; Microsoft Windows style
-            (setq undo-no-redo t)))
-
-;; Better undo
-(use-package undo-tree
-  :config (progn
-            (global-undo-tree-mode)
-            (global-set-key (kbd "C-z") 'undo-tree-undo)
-            (global-set-key (kbd "C-S-z") 'undo-tree-redo)
-            (setq undo-tree-visualizer-diff t)
-            (setq undo-tree-visualizer-timestamps t)))
-
-;; Right click mouse
-(use-package mouse3
-  :init (progn
-          (global-unset-key [(control mouse-3)]))
-  :config (progn
-            (defalias 'mouse3-region-popup-menu 'mouse3-popup-menu)
-            (global-set-key (kbd "<mouse-3>") 'mouse3-popup-menu)))
 
 ;; Tabbar
 (global-set-key [C-prior] 'tabbar-backward-tab)
@@ -405,32 +268,6 @@
 (define-key ctl-x-map (kbd "<down>") 'tabbar-forward-group)
 (define-key ctl-x-map (kbd "<left>") 'tabbar-backward-tab)
 (define-key ctl-x-map (kbd "<right>") 'tabbar-forward-tab)
-
-;; Region bindings mode
-(use-package region-bindings-mode
-  :load-path (lambda () (expand-file-name "region-bindings-mode/" user-emacs-directory))
-  :diminish region-bindings-mode
-  :config (progn
-            (region-bindings-mode-enable)
-            (define-key region-bindings-mode-map (kbd "C-p") 'mc/mark-previous-like-this)
-            (define-key region-bindings-mode-map (kbd "C-n") 'mc/mark-next-like-this)
-            (define-key region-bindings-mode-map (kbd "C-a") 'mc/mark-all-like-this)
-            (define-key region-bindings-mode-map (kbd "C-e") 'mc/edit-lines)
-            (define-key region-bindings-mode-map (kbd "C-c") 'kill-ring-save)
-            (define-key region-bindings-mode-map (kbd "C-x") 'kill-region)
-
-            ;; extra key bindings
-            (define-key region-bindings-mode-map (kbd "u") 'unindent-block-or-line)
-            (define-key region-bindings-mode-map (kbd "c") 'kill-ring-save)
-            (define-key region-bindings-mode-map (kbd "x") 'kill-region)))
-
-;; Move text
-(use-package move-text
-  :config (progn
-            (define-key region-bindings-mode-map [C-up] 'move-text-up)
-            (define-key region-bindings-mode-map [C-down] 'move-text-down)
-            (define-key region-bindings-mode-map [C-right] 'increase-left-margin)
-            (define-key region-bindings-mode-map [C-left] 'decrease-left-margin)))
 
 ;; Overwrite other modes
 (defvar my-keys-minor-mode-map (make-keymap) "my-keys-minor-mode keymap.")
