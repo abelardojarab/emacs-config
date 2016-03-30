@@ -24,6 +24,23 @@
 
 ;;; Code:
 
+;; Help to determine who modifies buffer
+(defvar my-debug-set-buffer-modified-p-buffers nil)
+(defadvice set-buffer-modified-p
+    (before my-debug-set-buffer-modified-p-advice)
+  (when (memq (current-buffer) my-debug-set-buffer-modified-p-buffers)
+    (debug)))
+(ad-activate 'set-buffer-modified-p)
+
+(defun my-debug-set-buffer-modified-p (buffer)
+  (interactive (list (current-buffer)))
+  (if (memq buffer my-debug-set-buffer-modified-p-buffers)
+      (progn (setq my-debug-set-buffer-modified-p-buffers
+                   (delq buffer my-debug-set-buffer-modified-p-buffers))
+             (message "Disabled for %s" buffer))
+    (add-to-list 'my-debug-set-buffer-modified-p-buffers buffer)
+    (message "Enabled for %s" buffer)))
+
 ;; Trick emacs when opening a file through menu-find-file-existing
 (defadvice find-file-read-args (around find-file-read-args-always-use-dialog-box act)
   "Simulate invoking menu item as if by the mouse; see `use-dialog-box'."
@@ -72,15 +89,6 @@
  time-stamp-line-limit 20     ;; check first 10 buffer lines for Time-stamp:
  time-stamp-format "%04y-%02m-%02d %02H:%02M:%02S (%u)") ;; date format
 (add-hook 'write-file-hooks 'time-stamp) ;; update when saving
-
-;; Do not fontify large files
-(defun my-find-file-check-make-large-file-read-only-hook ()
-  "If a file is over a given size, make the buffer read only."
-  (when (> (buffer-size) (* 512 256))
-    (setq buffer-read-only t)
-    (buffer-disable-undo)
-    (fundamental-mode)))
-(add-hook 'find-file-hook 'my-find-file-check-make-large-file-read-only-hook)
 
 ;; More exhaustive cleaning of white space
 (add-hook 'before-save-hook 'delete-trailing-whitespace)

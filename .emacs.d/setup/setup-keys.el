@@ -125,25 +125,24 @@
 (global-set-key (kbd "C-<f7>") 'helm-flycheck)
 
 ;; Code folding
-(defun toggle-selective-display ()
-  (interactive)
-  (set-selective-display (if selective-display nil 1)))
 (global-set-key (kbd "<f8>") 'toggle-selective-display)
 (global-set-key (kbd "C-<f8>") 'fold-dwim-toggle)
 
 ;; Refresh file
 (global-set-key (kbd "<f9>") 'refresh-file)
 
-;; Hint: customize `magit-repo-dirs' so that you can
-;; quickly open magit on any one of your projects.
+;; Menu bar
 (global-set-key (kbd "<f10>") 'menu-bar-open)
-(global-set-key (kbd "C-<f10>") 'helm-ls-git-ls)
 
 ;; Toggle frame maximized
 (global-set-key (kbd "<f11>") 'toggle-frame-maximized)
 
-;; iBuffer
+;; List buffers
 (global-set-key (kbd "<f12>") 'helm-buffers-list)
+
+;; Hint: customize `magit-repo-dirs' so that you can
+;; quickly open magit on any one of your projects.
+(global-set-key (kbd "C-<f10>") 'helm-ls-git-ls)
 
 ;; Native file opening
 (cond

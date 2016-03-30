@@ -29,9 +29,7 @@
   :if (equal system-type 'darwin)
   :load-path (lambda () (expand-file-name "exec-path-from-shell/" user-emacs-directory))
   :config (progn
-            (setq exec-path-from-shell-check-startup-files nil)
-            ;; (exec-path-from-shell-initialize)
-            ))
+            (setq exec-path-from-shell-check-startup-files nil)))
 
 ;; Popup, used by auto-complete and other tools
 (use-package popup

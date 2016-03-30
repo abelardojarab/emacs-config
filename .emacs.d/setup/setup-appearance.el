@@ -93,11 +93,20 @@ non-nil."
 ;; Lazy font lock
 (setq font-lock-support-mode 'jit-lock-mode)
 (setq jit-lock-chunk-size 25
-      jit-lock-context-time 0.1
-      jit-lock-defer-time 0.1
-      jit-lock-stealth-nice 0.1
-      jit-lock-stealth-time 16
+      jit-lock-context-time 0.05 ;; jit-lock-context-time seconds of Emacs idle time, redisplay will refontify
+      jit-lock-defer-time 0.05 ;; improve scrolling speed
+      jit-lock-stealth-nice 0.1 ;; time to pause between chunks of stealth fontification
+      jit-lock-stealth-time 16 ;; time to wait before starting stealth fontification
       jit-lock-stealth-verbose nil)
+
+;; Do not fontify large files
+(defun my-find-file-check-make-large-file-read-only-hook ()
+  "If a file is over a given size, make the buffer read only."
+  (when (> (buffer-size) (* 512 512))
+    (setq buffer-read-only t)
+    (buffer-disable-undo)
+    (fundamental-mode)))
+(add-hook 'find-file-hook 'my-find-file-check-make-large-file-read-only-hook)
 
 ;; Line numbers
 (use-package linum

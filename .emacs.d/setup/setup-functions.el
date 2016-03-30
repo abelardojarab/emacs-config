@@ -274,39 +274,6 @@ Now it correctly stops at the beginning of the line when the pointer is at the f
                 (delete-horizontal-space)
               (backward-kill-word 1))))))))
 
-;; Help to determine who modifies buffer
-(defvar my-debug-set-buffer-modified-p-buffers nil)
-(defadvice set-buffer-modified-p
-    (before my-debug-set-buffer-modified-p-advice)
-  (when (memq (current-buffer) my-debug-set-buffer-modified-p-buffers)
-    (debug)))
-(ad-activate 'set-buffer-modified-p)
-
-(defun my-debug-set-buffer-modified-p (buffer)
-  (interactive (list (current-buffer)))
-  (if (memq buffer my-debug-set-buffer-modified-p-buffers)
-      (progn (setq my-debug-set-buffer-modified-p-buffers
-                   (delq buffer my-debug-set-buffer-modified-p-buffers))
-             (message "Disabled for %s" buffer))
-    (add-to-list 'my-debug-set-buffer-modified-p-buffers buffer)
-    (message "Enabled for %s" buffer)))
-
-;; Fix for SSH
-(defun find-agent ()
-  (first (split-string
-          (shell-command-to-string
-           (concat
-            "ls -t1 "
-            "$(find /tmp/ -uid $UID -path \\*ssh\\* -type s 2> /dev/null)"
-            "|"
-            "head -1")))))
-
-(defun fix-agent ()
-  (interactive)
-  (let ((agent (find-agent)))
-    (setenv "SSH_AUTH_SOCK" agent)
-    (message agent)))
-
 ;; Rename buffer and file
 (defun rename-file-and-buffer ()
   "Renames current buffer and file it is visiting."
@@ -365,6 +332,27 @@ Now it correctly stops at the beginning of the line when the pointer is at the f
 (defun internet-up-p (&optional host)
   (= 0 (call-process "ping" nil nil nil "-c" "1" "-W" "1"
                      (if host host "www.google.com"))))
+
+;; Toggle selective display
+(defun toggle-selective-display ()
+  (interactive)
+  (set-selective-display (if selective-display nil 1)))
+
+;; Fix SSH agent on UNIX
+(when (not (equal system-type 'windows-nt))
+  (defun find-agent ()
+    (first (split-string
+            (shell-command-to-string
+             (concat
+              "ls -t1 "
+              "$(find /tmp/ -uid $UID -path \\*ssh\\* -type s 2> /dev/null)"
+              "|"
+              "head -1")))))
+  (defun fix-agent ()
+    (interactive)
+    (let ((agent (find-agent)))
+      (setenv "SSH_AUTH_SOCK" agent)
+      (message agent))))
 
 (provide 'setup-functions)
 ;;; setup-utilities.el ends here
