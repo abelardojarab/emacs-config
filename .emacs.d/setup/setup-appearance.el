@@ -93,9 +93,9 @@ non-nil."
 ;; Lazy font lock
 (setq font-lock-support-mode 'jit-lock-mode)
 (setq jit-lock-chunk-size 25
-      jit-lock-context-time 0.05
-      jit-lock-defer-time 0.25
-      jit-lock-stealth-nice 0.25
+      jit-lock-context-time 0.1
+      jit-lock-defer-time 0.1
+      jit-lock-stealth-nice 0.1
       jit-lock-stealth-time 16
       jit-lock-stealth-verbose nil)
 

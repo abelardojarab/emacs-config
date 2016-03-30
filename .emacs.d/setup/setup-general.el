@@ -30,8 +30,8 @@
   :load-path (lambda () (expand-file-name "exec-path-from-shell/" user-emacs-directory))
   :config (progn
             (setq exec-path-from-shell-check-startup-files nil)
-        ;; (exec-path-from-shell-initialize)
-    ))
+            ;; (exec-path-from-shell-initialize)
+            ))
 
 ;; Popup, used by auto-complete and other tools
 (use-package popup

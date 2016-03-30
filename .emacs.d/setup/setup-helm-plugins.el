@@ -24,6 +24,12 @@
 
 ;;; Code:
 
+;; Helm describe modes
+(use-package helm-describe-modes
+  :load-path (lambda () (expand-file-name "helm-describe-modes/" user-emacs-directory))
+  :config (progn
+            (global-set-key [remap describe-mode] #'helm-describe-modes)))
+
 ;; Helm grepint
 (use-package helm-grepint
   :load-path (lambda () (expand-file-name "helm-grepint/" user-emacs-directory))
@@ -164,16 +170,8 @@
             (setq helm-dash-common-docsets '(
                                              ;; "C" ;; does not work
                                              ;; "C++" ;; does not work
-                                             ;; "Bash" ;; does not work
-                                             ;; "LaTeX" ;; does not work
                                              "Emacs_Lisp" ;; works
                                              "Python_2" ;; works
-                                             ;; "NumPy" ;; does not work
-                                             ;; "SciPy" ;; does not work
-                                             ;; "JavaScript" ;; does not work
-                                             ;; "NodeJS";; does not work
-                                             ;; "HTML";; does not work
-                                             ;; "Java";; does not work
                                              ))
 
             ;; (defun lisp-doc-hook ()
