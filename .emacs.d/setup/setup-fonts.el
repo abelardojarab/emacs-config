@@ -81,8 +81,8 @@
                    (setq main-programming-font (concat main-programming-font "-16"))
                    (setq main-writing-font (concat main-writing-font "-17"))))
              (progn
-               (setq main-programming-font (concat main-programming-font "-13"))
-               (setq main-writing-font (concat main-writing-font "-14")))))
+               (setq main-programming-font (concat main-programming-font "-16"))
+               (setq main-writing-font (concat main-writing-font "-16")))))
           (t ;; Linux
            (if (> (x-display-pixel-width) 2000)
                (progn ;; Ultra-HD monitor in Linux
