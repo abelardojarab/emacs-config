@@ -27,7 +27,7 @@
 (use-package async
   :load-path (lambda () (expand-file-name "async/" user-emacs-directory))
   :config (progn
-            (autoload 'dired-async-mode "dired-async.el" nil t)
+            (require 'dired-async)
             (dired-async-mode 1)))
 
 (use-package direx
