@@ -26,7 +26,7 @@
 
 ;; Disable electric indent
 (if (featurep 'electric-indent-mode)
-	(add-hook 'prog-mode-hook (lambda () (electric-indent-local-mode -1))))
+    (add-hook 'prog-mode-hook (lambda () (electric-indent-local-mode -1))))
 
 ;; Auto-indent mode
 (use-package auto-indent-mode
@@ -46,11 +46,7 @@
   :load-path (lambda () (expand-file-name "indent-hint/" user-emacs-directory))
   :init (progn
           (setq indent-hint-background-overlay t)
-          (setq indent-hint-bg nil))
-  ;; :config (progn
-  ;;           (add-hook 'prog-mode-hook 'indent-hint-mode)
-  ;;           (add-hook 'lisp-mode-hook 'indent-hint-lisp))
-  )
+          (setq indent-hint-bg nil)))
 
 (provide 'setup-indent)
 ;;; setup-indent.el ends here

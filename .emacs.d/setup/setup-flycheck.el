@@ -93,8 +93,6 @@
 
 ;; Tooltips
 (use-package flycheck-tip
-  :bind (("C->" . error-tip-cycle-dwim)
-         ("C-<" . error-tip-cycle-dwim-reverse))
   :load-path (lambda () (expand-file-name "flycheck-tip/" user-emacs-directory))
   :config (progn
             (setq flycheck-tip-avoid-show-func nil)))

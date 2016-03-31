@@ -127,6 +127,32 @@ Defaults to `error'."
           (replace-match "" nil nil))
         (message (format "%d Trailing spaces removed from buffer." remove-count))))))
 
+;; do what i mean when indenting
+(defun unindent-dwim (&optional count-arg)
+  "Keeps relative spacing in the region.  Unindents to the next multiple of the current tab-width"
+  (interactive)
+  (let ((deactivate-mark nil)
+        (beg (or (and mark-active (region-beginning)) (line-beginning-position)))
+        (end (or (and mark-active (region-end)) (line-end-position)))
+        (min-indentation)
+        (count (or count-arg 1)))
+    (save-excursion
+      (goto-char beg)
+      (while (< (point) end)
+        (add-to-list 'min-indentation (current-indentation))
+        (forward-line)))
+    (if (< 0 count)
+        (if (not (< 0 (apply 'min min-indentation)))
+            (error "Can't indent any more.  Try `indent-rigidly` with a negative arg.")))
+    (if (> 0 count)
+        (indent-rigidly beg end (* (- 0 tab-width) count))
+      (let (
+            (indent-amount
+             (apply 'min (mapcar (lambda (x) (- 0 (mod x tab-width))) min-indentation))))
+        (indent-rigidly beg end (or
+                                 (and (< indent-amount 0) indent-amount)
+                                 (* (or count 1) (- 0 tab-width))))))))
+
 ;; Unfill paragraph
 (defun unfill-paragraph ()
   "Replace newline chars in current paragraph by single spaces.

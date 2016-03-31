@@ -170,6 +170,10 @@
                            (interactive)
                            (popup-menu 'yank-menu)))
 
+;; Unindent (do what I mean version)
+(global-set-key (kbd "C-<") 'unindent-dwim)
+(global-set-key (kbd "C->") (lambda () (interactive) (unindent-dwim -1)))
+
 ;; Beautify buffer
 (global-unset-key "\C-b")
 (global-set-key "\C-b" 'beautify-buffer)
