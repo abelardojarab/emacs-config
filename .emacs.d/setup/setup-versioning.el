@@ -54,6 +54,7 @@
 
 ;; magit
 (use-package magit
+  :commands (magit-status magit-blame magit-mode)
   :bind (("C-c g" . magit-status)
          :map ctl-x-map
          ("v" . magit-status))
