@@ -166,7 +166,7 @@
 ;; C-v
 (global-set-key (kbd "C-v") 'yank)
 (global-set-key (kbd "C-S-v") 'helm-show-kill-ring)
-(global-set-key "\C-cy" '(lambda ()
+(global-set-key "\C-cv" '(lambda ()
                            (interactive)
                            (popup-menu 'yank-menu)))
 

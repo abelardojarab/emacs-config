@@ -24,13 +24,6 @@
 
 ;;; Code:
 
-;; Helm describe modes
-(use-package helm-describe-modes
-  :commands (helm-describe-modes)
-  :load-path (lambda () (expand-file-name "helm-describe-modes/" user-emacs-directory))
-  :config (progn
-            (global-set-key [remap describe-mode] #'helm-describe-modes)))
-
 ;; Helm grepint
 (use-package helm-grepint
   :commands (helm-grepint-grep helm-grep-do-git-grep)
@@ -39,6 +32,24 @@
               ("e" . helm-grepint-grep))
   :config (progn
             (helm-grepint-set-default-config)))
+
+;; Helm ag/ack
+(use-package helm-ag
+  :commands (helm-ag helm-do-ag helm-do-ag-this-file helm-do-ag-project-root)
+  :bind ("C-c a" . helm-ag)
+  :load-path (lambda () (expand-file-name "helm-ag/" user-emacs-directory))
+  :config (progn
+            ;; Fallback to ack if the silver searcher is not found
+            (unless (or (executable-find "ag")
+                        (executable-find "pt"))
+              (setq helm-ag-base-command "ack --nocolor --nogroup"))))
+
+;; Helm describe modes
+(use-package helm-describe-modes
+  :commands (helm-describe-modes)
+  :load-path (lambda () (expand-file-name "helm-describe-modes/" user-emacs-directory))
+  :config (progn
+            (global-set-key [remap describe-mode] #'helm-describe-modes)))
 
 ;; Helm desc-binds
 (use-package helm-descbinds
@@ -83,7 +94,7 @@
   :load-path (lambda () (expand-file-name "helm-etags-plus/" user-emacs-directory))
   :bind (("M-." . helm-etags-select)
          :map ctl-x-map
-              ("t" . helm-etags-select)))
+         ("t" . helm-etags-select)))
 
 ;; Helm yasnippet
 (use-package helm-c-yasnippet
