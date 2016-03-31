@@ -264,7 +264,7 @@
 ;; Define custom key mode
 (define-minor-mode my-keys-minor-mode
   "A minor mode so that my key settings override annoying major modes."
-  t " Custom" 'my-keys-minor-mode-map)
+  t "" 'my-keys-minor-mode-map)
 
 (my-keys-minor-mode 1)
 (defun my-minibuffer-setup-hook ()
