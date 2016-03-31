@@ -250,7 +250,7 @@
 (define-key my-keys-minor-mode-map (kbd "<mouse-3>") 'mouse3-popup-menu)
 (define-key my-keys-minor-mode-map [C-tab] 'comment-or-uncomment-region)
 (define-key my-keys-minor-mode-map (kbd "M-.") 'helm-etags-select)
-(define-key my-keys-minor-mode-map (kbd "<f2>")   'helm-bm)
+(define-key my-keys-minor-mode-map (kbd "<f2>")   'bm-next)
 (define-key my-keys-minor-mode-map (kbd "<C-f2>") 'bm-toggle)
 (define-key my-keys-minor-mode-map (kbd "<left-margin> <mouse-1>") 'bm-toggle)
 (define-key my-keys-minor-mode-map (kbd "C-b") 'beautify-buffer)
