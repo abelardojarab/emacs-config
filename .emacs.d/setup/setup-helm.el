@@ -28,6 +28,8 @@
 (use-package helm-config
   :load-path (lambda () (expand-file-name "helm/" user-emacs-directory))
   :bind (("C-;" . helm-mini)
+         ("C-0" . helm-buffers-list)
+         ("C-`" . helm-semantic-or-imenu)
          ("M-y" . helm-show-kill-ring)
          :map isearch-mode-map
          ("C-h" . helm-occur-from-isearch)

@@ -27,6 +27,9 @@
 ;; Better Alt-x
 
 (use-package smex
+  :commands (smex smex-major-mode-commands)
+  :bind (("M-x" . smex)
+         ("M-X" . smex-major-mode-commands))
   :load-path (lambda ()
                (expand-file-name
                 (if (and (= emacs-major-version 24) (= emacs-minor-version 2))

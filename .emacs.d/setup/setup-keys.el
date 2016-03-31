@@ -84,7 +84,6 @@
 (global-set-key [(meta q)] 'kill-this-buffer)
 (global-set-key [(control r)] 'replace-string)
 (global-set-key [(control a)] 'mark-whole-buffer)
-(global-set-key [(control t)] 'magit-status)
 
 ;; Recent files
 (global-set-key "\C-x\ \C-r" 'recentf-open-files)
@@ -108,7 +107,6 @@
 (global-set-key (kbd "<f4>") 'helm-semantic-or-imenu)
 
 ;; Smex
-(global-set-key (kbd "M-x") 'smex)
 (global-set-key (kbd "<f5>") 'smex)
 
 ;; Flyspell
@@ -177,7 +175,7 @@
 (global-set-key "\C-b" 'beautify-buffer)
 
 ;; Find matching parenthesis
-(global-set-key [(control %)] 'goto-match-paren-or-up)
+(global-set-key [(control t)] 'goto-match-paren-or-up)
 
 ;; search forward with Ctrl-f
 (global-set-key [(control f)] 'isearch-forward)
@@ -211,23 +209,6 @@
                                 'ggtags-find-tag-dwim
                               'helm-etags-select))
 
-;; Use Helm instead of 'etags-select-find-tag
-(global-set-key (kbd "M-.") 'helm-etags-select)
-
-;; Helm semantic or imenu
-(global-set-key (kbd "C-`") 'helm-semantic-or-imenu)
-
-;; Helm buffer list
-(global-set-key (kbd "C-0") 'helm-buffers-list)
-
-;; Helm-swoop extension
-(global-set-key (kbd "C-*") 'helm-swoop)
-(global-set-key [(control kp-multiply)] 'helm-swoop)
-
-;; When doing isearch, hand the word over to helm-swoop
-(define-key isearch-mode-map (kbd "C-*") 'helm-swoop-from-isearch)
-(define-key isearch-mode-map [(control kp-multiply)] 'helm-swoop-from-isearch)
-
 ;; Escape key in minibuffer
 (define-key minibuffer-local-map [escape] 'abort-recursive-edit)
 (define-key minibuffer-local-ns-map [escape] 'abort-recursive-edit)
@@ -252,10 +233,6 @@
 (global-set-key [C-down] 'windmove-down)
 (global-set-key [C-left] 'windmove-left)
 (global-set-key [C-right] 'windmove-right)
-
-;; Flycheck tips
-(define-key global-map (kbd "C->") 'error-tip-cycle-dwim)
-(define-key global-map (kbd "C-<") 'error-tip-cycle-dwim-reverse)
 
 ;; Extra Ctrl-x mappings
 (global-set-key (kbd "C-x x") 'kill-region)

@@ -27,6 +27,7 @@
 ;; Auto-Complete
 (use-package auto-complete
   :load-path (lambda () (expand-file-name "auto-complete/" user-emacs-directory))
+  :diminish auto-complete-mode
   :init (require 'auto-complete-config)
   :config (progn
 

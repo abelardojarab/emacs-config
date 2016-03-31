@@ -38,18 +38,19 @@
                 w3m-default-display-inline-images t)))
 
 ;; eww
-(when (fboundp 'eww)
-  (setq browse-url-browser-function 'eww-browse-url)
-  (setq-default url-configuration-directory "~/.emacs.cache/url")
-  (setq-default url-cookie-file "~/.emacs.cache/url/cookies")
+(use-package eww
+  :if (fboundp 'eww)
+  :config (progn
+            (setq browse-url-browser-function 'eww-browse-url)
+            (setq-default url-configuration-directory "~/.emacs.cache/url")
+            (setq-default url-cookie-file "~/.emacs.cache/url/cookies")
 
-  (advice-add 'url-http-user-agent-string :around
-              (lambda (ignored)
-                "Pretend to be a mobile browser."
-                (concat
-                 "User-Agent: "
-                 "Mozilla/5.0 (Linux; U; Android 4.0.3; ko-kr; LG-L160L Build/IML74K) AppleWebkit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30")))
-  ) ;; when
+            (advice-add 'url-http-user-agent-string :around
+                        (lambda (ignored)
+                          "Pretend to be a mobile browser."
+                          (concat
+                           "User-Agent: "
+                           "Mozilla/5.0 (Linux; U; Android 4.0.3; ko-kr; LG-L160L Build/IML74K) AppleWebkit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30")))))
 
 (provide 'setup-web)
 ;;; setup-web.el ends here
