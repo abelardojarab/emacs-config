@@ -44,7 +44,7 @@
                 (paredit-mode . " π")
                 (eldoc-mode . "")
                 (abbrev-mode . "")
-                (git-gutter+-mode . " ┢")
+                (git-gutter+-mode . " ┅")
                 (smartparens-mode . " π")
 
                 ;; Major modes
