@@ -54,7 +54,16 @@
 
 ;; magit
 (use-package magit
-  :commands (magit-status magit-blame magit-mode)
+  :commands (magit-init
+             magit-status
+             magit-diff
+             magit-log
+             magit-commit
+             magit-blame
+             magit-mode
+             magit-blame-mode
+             projectile-vc
+             magit-status-internal)
   :bind (("C-c g" . magit-status)
          :map ctl-x-map
          ("v" . magit-status))
@@ -63,6 +72,7 @@
           '(progn (info-initialize)
                   (add-to-list 'Info-directory-list (expand-file-name "magit/Documentation" user-emacs-directory))))
   :config (progn
+            (setq magit-completing-read-function 'magit-ido-completing-read)
             (setq magit-diff-refine-hunk t)))
 
 ;; diff-hl
@@ -74,8 +84,9 @@
               (diff-hl-update))
             (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh)))
 
-;; git-timenachine
+;; git-timemachine
 (use-package git-timemachine
+  :commands (git-timemachine git-timemachine-mode)
   :load-path (lambda () (expand-file-name "git-timemachine/" user-emacs-directory)))
 
 ;; Show blame for current line

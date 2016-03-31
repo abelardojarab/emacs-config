@@ -37,6 +37,7 @@
   ;; only use Jedi if python packages are present
   :if (and (executable-find "python")
            (file-exists-p "~/workspace/pythonlibs"))
+  :commands (jedi:setup)
   :load-path (lambda () (expand-file-name "jedi/" user-emacs-directory))
   :config (progn
             (add-hook 'python-mode-hook 'jedi:setup)
