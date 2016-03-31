@@ -32,21 +32,21 @@
   :config (progn
             (imagex-global-sticky-mode 1)
             (imagex-auto-adjust-mode 1)
-            (setq imagex-quiet-error t)))
-
-;; Integrating graphics with text inside Emacs
-(use-package iimage
-  :config (progn
-            (add-to-list 'iimage-mode-image-regex-alist '("@startuml\s+\\(.+\\)" . 1))
-            (add-to-list 'iimage-mode-image-regex-alist (cons (concat "\[\[file:\(~?" iimage-mode-image-filename-regex "\)\]") 1))
-
-            ;; Insert images from files like this:
+            (setq imagex-quiet-error t)
+                        ;; Insert images from files like this:
             ;; #+BEGIN: image :file "~/Documents/personal/foo.png"
             ;; #+END
             (defun org-dblock-write:image (params)
               (let ((file (plist-get params :file)))
                 (clear-image-cache file)
-                (insert-image (create-image file))))
+                (insert-image (create-image file))))))
+
+;; Integrating graphics with text inside Emacs
+(use-package iimage
+  :commands (iimage-mode org-turn-on-iimage-in-org)
+  :config (progn
+            (add-to-list 'iimage-mode-image-regex-alist '("@startuml\s+\\(.+\\)" . 1))
+            (add-to-list 'iimage-mode-image-regex-alist (cons (concat "\[\[file:\(~?" iimage-mode-image-filename-regex "\)\]") 1))
 
             ;; Insert screenshots into Org mode, very useful
             (defun org-insert-screenshot ()
