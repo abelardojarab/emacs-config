@@ -48,10 +48,7 @@
                 (smartparens-mode . " π")
 
                 ;; Major modes
-                (hi-lock-mode . "")
-                (python-mode . "Py")
-                (emacs-lisp-mode . "λ")
-                (nxhtml-mode . "nx"))
+                (hi-lock-mode . ""))
 
               "Alist for `clean-mode-line'.
 When you add a new element to the alist, keep in mind that you
