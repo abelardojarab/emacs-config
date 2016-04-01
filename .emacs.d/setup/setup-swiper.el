@@ -25,6 +25,7 @@
 ;;; Code:
 
 (use-package swiper
+  :bind ("C-c s" . swiper)
   :load-path (lambda () (expand-file-name "swiper/" user-emacs-directory))
   :config (progn
             (setq ivy-use-virtual-buffers t)

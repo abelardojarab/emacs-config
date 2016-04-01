@@ -26,59 +26,54 @@
 
 ;; by default, the function 'python-mode is associated with
 ;; the package python.el. The following changes that to python-mode.el:
-(autoload 'python-mode "python-mode" "Python Mode." t)
-(add-to-list 'load-path (expand-file-name "python-mode/" user-emacs-directory))
-(autoload 'python-mode "python-mode" "Python Mode." t)
 
-;; Python configuration
-(add-hook 'python-mode-hook 'autopair-mode)
-(add-hook 'python-mode-hook 'auto-complete-mode)
-;; (add-hook 'python-mode-hook 'indent-hint-mode)
+(use-package python-mode
+  :load-path (lambda () (expand-file-name "python-mode/" user-emacs-directory))
+  :config (progn
 
-;; Extra
-(add-to-list 'auto-mode-alist '("\\.py\\'" . python-mode))
-(add-to-list 'interpreter-mode-alist '("python" . python-mode))
+            ;; Python configuration
+            (add-hook 'python-mode-hook 'autopair-mode)
+            (add-hook 'python-mode-hook 'auto-complete-mode)
 
-;; Python hook
-(add-hook 'python-mode-hook
-          (function (lambda ()
-                      (progn
-                        (set-variable 'python-indent-offset 4)
-                        (set-variable 'py-indent-offset 4)
-                        (set-variable 'indent-tabs-mode nil))
-                      (setq indent-tabs-mode nil
-                            python-indent-offset 4
-                            py-indent-offset 4
-                            tab-width 4))))
+            ;; Extra
+            (add-to-list 'auto-mode-alist '("\\.py\\'" . python-mode))
+            (add-to-list 'interpreter-mode-alist '("python" . python-mode))
 
-;; Update imenu
-(defun python-reset-imenu ()
-  (interactive)
-  (if (fboundp 'setq-mode-local)
-      (setq-mode-local python-mode
-                       imenu-create-index-function 'python-imenu-create-index))
-  (setq imenu-create-index-function 'python-imenu-create-index))
+            ;; Python hook
+            (add-hook 'python-mode-hook
+                      (function (lambda ()
+                                  (progn
+                                    (set-variable 'python-indent-offset 4)
+                                    (set-variable 'py-indent-offset 4)
+                                    (set-variable 'indent-tabs-mode nil))
+                                  (setq indent-tabs-mode nil
+                                        python-indent-offset 4
+                                        py-indent-offset 4
+                                        tab-width 4))))
 
-;; Setup Python path
-(setenv "PYTHONPATH" (concat (concat (getenv "HOME")
-                                     "/workspace/pythonlibs/lib/python2.7/site-packages") ":"
-                             (getenv "PYTHONPATH")))
+            ;; Update imenu
+            (defun python-reset-imenu ()
+              (interactive)
+              (if (fboundp 'setq-mode-local)
+                  (setq-mode-local python-mode
+                                   imenu-create-index-function 'python-imenu-create-index))
+              (setq imenu-create-index-function 'python-imenu-create-index))
 
-;; switch to the interpreter after executing code
-(setq py-shell-switch-buffers-on-execute-p t)
-(setq py-switch-buffers-on-execute-p t)
+            ;; Setup Python path
+            (setenv "PYTHONPATH" (concat (concat (getenv "HOME") "/workspace/pythonlibs/lib/python2.7/site-packages")
+                                         ":" (getenv "PYTHONPATH")))
 
-;; try to automagically figure out indentation
-(setq py-smart-indentation t)
+            ;; Python settings
+            (setq py-shell-switch-buffers-on-execute-p t
+                  py-switch-buffers-on-execute-p t
+                  py-smart-indentation t
+                  py-split-windows-on-execute-function 'split-window-horizontally)
 
-;; split horizontally on execution
-(setq py-split-windows-on-execute-function 'split-window-horizontally)
+            ;; Stop cedet semantic-python-get-system-include-path to start the python interpreter
+            (defun python-shell-internal-send-string (string) "")
 
-;; in cedet semantic-python-get-system-include-path forces starting of the python interpreter
-(defun python-shell-internal-send-string (string) "")
-
-;; Add Wisent
-(add-hook 'python-mode-hook 'wisent-python-default-setup)
+            ;; Add Wisent
+            (add-hook 'python-mode-hook 'wisent-python-default-setup)))
 
 (provide 'setup-python)
 ;;; setup-python.el ends here
