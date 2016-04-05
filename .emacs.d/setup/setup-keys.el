@@ -38,6 +38,7 @@
 
 ;; Smart tab
 (use-package smart-tab
+  :diminish smart-tab-mode
   :load-path (lambda () (expand-file-name "smart-tab/" user-emacs-directory))
   :config (progn
             (cons 'yas-hippie-try-expand 'hippie-expand-try-functions-list)

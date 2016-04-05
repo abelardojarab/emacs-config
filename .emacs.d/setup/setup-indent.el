@@ -37,9 +37,7 @@
           (setq auto-indent-on-visit-file nil) ;; do not indent when a file is visit
           (setq auto-indent-blank-lines-on-move nil)
           (setq auto-indent-next-pair-timer-geo-mean (quote ((default 0.0005 0))))
-          (setq auto-indent-disabled-modes-list (list (quote vhdl-mode))))
-  ;; :config (auto-indent-global-mode)
-  )
+          (setq auto-indent-disabled-modes-list (list (quote vhdl-mode)))))
 
 ;; Permanent indentation guide
 (use-package indent-hint
@@ -51,6 +49,7 @@
 ;; Transient indentation guide
 (use-package indent-guide
   :load-path (lambda () (expand-file-name "indent-guide/" user-emacs-directory))
+  :diminish indent-guide-mode
   :config (progn
             (setq indent-guide-char "┊"
                   indent-guide-recursive t)
