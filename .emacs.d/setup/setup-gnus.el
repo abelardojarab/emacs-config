@@ -58,6 +58,7 @@
 
 ;; newsticker
 (use-package newsticker
+  :commands (newsticker-start newsticker-start-ticker)
   :if (and (not (equal system-type 'windows-nt))
            (internet-up-p))
   :load-path (lambda () (expand-file-name "newsticker/" user-emacs-directory))
