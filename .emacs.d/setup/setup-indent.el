@@ -48,5 +48,17 @@
           (setq indent-hint-background-overlay t)
           (setq indent-hint-bg nil)))
 
+;; Transient indentation guide
+(use-package indent-guide
+  :load-path (lambda () (expand-file-name "indent-guide/" user-emacs-directory))
+  :config (progn
+            (setq indent-guide-char "┊")
+            (add-hook 'prog-mode-hook (lambda () (indent-guide-mode t)))))
+
+;; Highlight indentation levels
+(use-package highlight-indentation
+  :load-path (lambda () (expand-file-name "highlight-indentation/" user-emacs-directory)))
+
 (provide 'setup-indent)
+
 ;;; setup-indent.el ends here
