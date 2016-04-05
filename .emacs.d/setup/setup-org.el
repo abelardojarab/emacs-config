@@ -86,6 +86,7 @@
                   org-use-speed-commands t
                   org-completion-use-ido t
                   org-hide-leading-stars t
+                  org-hide-emphasis-markers t
                   org-log-done t
                   org-enforce-todo-dependencies t)
 
@@ -118,6 +119,11 @@
 
             ;; Mouse in Org
             (require 'org-mouse)
+
+            ;; Show +/-'s as bullets
+            (font-lock-add-keywords 'org-mode
+                                    '(("^ +\\([-*]\\) "
+                                       (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
 
             ;; Fonts
             (add-hook 'org-mode-hook (lambda () (variable-pitch-mode t)))
