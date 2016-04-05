@@ -25,38 +25,42 @@
 ;;; Code:
 
 ;; Monokai theme
-(add-to-list 'load-path (expand-file-name "monokai-emacs/" user-emacs-directory))
-(add-to-list 'custom-theme-load-path (expand-file-name "monokai-emacs/" user-emacs-directory))
+(add-to-list 'load-path (expand-file-name "monokai-theme/" user-emacs-directory))
+(add-to-list 'custom-theme-load-path (expand-file-name "monokai-theme/" user-emacs-directory))
 
 ;; Monokai theme
 (add-to-list 'load-path (expand-file-name "monokai-extended-theme/" user-emacs-directory))
 (add-to-list 'custom-theme-load-path (expand-file-name "monokai-extended-theme/" user-emacs-directory))
 
 ;; Atom theme
-(add-to-list 'load-path (expand-file-name "atom-dark-theme-emacs/" user-emacs-directory))
-(add-to-list 'custom-theme-load-path (expand-file-name "atom-dark-theme-emacs/" user-emacs-directory))
+(add-to-list 'load-path (expand-file-name "atom-dark-theme/" user-emacs-directory))
+(add-to-list 'custom-theme-load-path (expand-file-name "atom-dark-theme/" user-emacs-directory))
+
+;; Atom One Dark theme
+(add-to-list 'load-path (expand-file-name "atom-one-dark-theme/" user-emacs-directory))
+(add-to-list 'custom-theme-load-path (expand-file-name "atom-one-dark-theme/" user-emacs-directory))
 
 ;; Zenburn theme
-(add-to-list 'load-path (expand-file-name "zenburn-emacs/" user-emacs-directory))
-(add-to-list 'custom-theme-load-path (expand-file-name "zenburn-emacs/" user-emacs-directory))
+(add-to-list 'load-path (expand-file-name "zenburn-theme/" user-emacs-directory))
+(add-to-list 'custom-theme-load-path (expand-file-name "zenburn-theme/" user-emacs-directory))
 
 ;; Faff theme
-(add-to-list 'load-path (expand-file-name "emacs-faff-theme/" user-emacs-directory))
-(add-to-list 'custom-theme-load-path (expand-file-name "emacs-faff-theme/" user-emacs-directory))
+(add-to-list 'load-path (expand-file-name "faff-theme/" user-emacs-directory))
+(add-to-list 'custom-theme-load-path (expand-file-name "faff-theme/" user-emacs-directory))
 
 ;; Material theme
-(add-to-list 'load-path (expand-file-name "emacs-material-theme/" user-emacs-directory))
-(add-to-list 'custom-theme-load-path (expand-file-name "emacs-material-theme/" user-emacs-directory))
+(add-to-list 'load-path (expand-file-name "material-theme/" user-emacs-directory))
+(add-to-list 'custom-theme-load-path (expand-file-name "material-theme/" user-emacs-directory))
 
 ;; Leuven theme
-(add-to-list 'load-path (expand-file-name "emacs-leuven-theme/" user-emacs-directory))
-(add-to-list 'custom-theme-load-path (expand-file-name "emacs-leuven-theme/" user-emacs-directory))
+(add-to-list 'load-path (expand-file-name "leuven-theme/" user-emacs-directory))
+(add-to-list 'custom-theme-load-path (expand-file-name "leuven-theme/" user-emacs-directory))
 
 ;; FlatUI theme
-(add-to-list 'load-path (expand-file-name "emacs-flatui-theme/" user-emacs-directory))
-(add-to-list 'custom-theme-load-path (expand-file-name "emacs-flatui-theme" user-emacs-directory))
+(add-to-list 'load-path (expand-file-name "flatui-theme/" user-emacs-directory))
+(add-to-list 'custom-theme-load-path (expand-file-name "flatui-theme" user-emacs-directory))
 
-;; FlatUI theme
+;; Pastelmac theme
 (add-to-list 'load-path (expand-file-name "pastelmac-theme/" user-emacs-directory))
 (add-to-list 'custom-theme-load-path (expand-file-name "pastelmac-theme/" user-emacs-directory))
 
@@ -65,8 +69,12 @@
 (add-to-list 'custom-theme-load-path (expand-file-name "zerodark-theme/" user-emacs-directory))
 
 ;; E-Ink theme
-(add-to-list 'load-path (expand-file-name "eink-emacs/" user-emacs-directory))
-(add-to-list 'custom-theme-load-path (expand-file-name "eink-emacs/" user-emacs-directory))
+(add-to-list 'load-path (expand-file-name "eink-theme/" user-emacs-directory))
+(add-to-list 'custom-theme-load-path (expand-file-name "eink-theme/" user-emacs-directory))
+
+;; Paper theme
+(add-to-list 'load-path (expand-file-name "paper-theme/" user-emacs-directory))
+(add-to-list 'custom-theme-load-path (expand-file-name "paper-theme/" user-emacs-directory))
 
 ;; Twilight bright theme
 (add-to-list 'load-path (expand-file-name "twilight-bright-theme/" user-emacs-directory))
@@ -86,8 +94,8 @@
 (require 'color-theme-sanityinc-tomorrow)
 
 ;; Solarized theme
-(add-to-list 'load-path (expand-file-name "solarized-emacs/" user-emacs-directory))
-(add-to-list 'custom-theme-load-path (expand-file-name "solarized-emacs" user-emacs-directory))
+(add-to-list 'load-path (expand-file-name "solarized-theme/" user-emacs-directory))
+(add-to-list 'custom-theme-load-path (expand-file-name "solarized-theme" user-emacs-directory))
 (require 'solarized)
 (setq solarized-scale-org-headlines nil)
 
