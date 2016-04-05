@@ -48,13 +48,17 @@
   :config (progn
             (let (credentials)
 
+              ;; Autoloads
+              (require 'org2blog-autoloads)
+
               ;; Fetch credentials
               (setq credentials (auth-source-user-and-password "personal-blog"))
 
               ;; blogging
               (setq personal-blog-name "personal-blog")
-              (setq personal-blog-url "http://abelardojarab.dyndns.org/wp-login.php")
-              (setq org2blog/wp-blog-alist `((,personal-blog-name
+              (setq personal-blog-url "http://abelardojarab.dyndns.org/xmlrpc.php")
+              (setq org2blog/wp-confirm-post t
+                    org2blog/wp-blog-alist `((,personal-blog-name
                                               :url ,personal-blog-url
                                               :username ,(car credentials)
                                               :password ,(cadr credentials)
@@ -62,23 +66,23 @@
                                               :tags-as-categories nil
                                               )))
 
-            ;; htmlize` is required, else you get empty
-            ;; code blocks https://github.com/punchagan/org2blog/blob/master/org2blog.el
-            ;; with wp-use-sourcecode-shortcode set to 't, org2blog will use 1
-            ;; shortcodes, and hence the SyntaxHighlighter Evolved plugin on your blog.
-            ;; however, if you set this to nil, native Emacs highlighting will be used,
-            ;; implemented as HTML styling. Your pick!
-            (setq org2blog/wp-use-sourcecode-shortcode 't)
+              ;; htmlize` is required, else you get empty
+              ;; code blocks https://github.com/punchagan/org2blog/blob/master/org2blog.el
+              ;; with wp-use-sourcecode-shortcode set to 't, org2blog will use 1
+              ;; shortcodes, and hence the SyntaxHighlighter Evolved plugin on your blog.
+              ;; however, if you set this to nil, native Emacs highlighting will be used,
+              ;; implemented as HTML styling. Your pick!
+              (setq org2blog/wp-use-sourcecode-shortcode 't)
 
-            ;; removed light="true"
-            (setq org2blog/wp-sourcecode-default-params nil)
+              ;; removed light="true"
+              (setq org2blog/wp-sourcecode-default-params nil)
 
-            ;; target language needs to be in here
-            (setq org2blog/wp-sourcecode-langs
-                  '("actionscript3" "bash" "coldfusion" "cpp" "csharp" "css" "delphi"
-                    "erlang" "fsharp" "diff" "groovy" "javascript" "java" "javafx" "matlab"
-                    "objc" "perl" "php" "text" "powershell" "python" "ruby" "scala" "sql"
-                    "vb" "xml" "sh" "emacs-lisp" "lisp" "lua")))))
+              ;; target language needs to be in here
+              (setq org2blog/wp-sourcecode-langs
+                    '("actionscript3" "bash" "coldfusion" "cpp" "csharp" "css" "delphi"
+                      "erlang" "fsharp" "diff" "groovy" "javascript" "java" "javafx" "matlab"
+                      "objc" "perl" "php" "text" "powershell" "python" "ruby" "scala" "sql"
+                      "vb" "xml" "sh" "emacs-lisp" "lisp" "lua")))))
 
 (provide 'setup-org-blog)
 ;;; setup-org-blog.el ends here
