@@ -1,6 +1,6 @@
 ;;; helm-regexp.el --- In buffer regexp searching and replacement for helm. -*- lexical-binding: t -*-
 
-;; Copyright (C) 2012 ~ 2015 Thierry Volpiatto <thierry.volpiatto@gmail.com>
+;; Copyright (C) 2012 ~ 2016 Thierry Volpiatto <thierry.volpiatto@gmail.com>
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -487,7 +487,8 @@ Same as `helm-moccur-goto-line' but go in new frame."
           (insert (with-current-buffer helm-buffer
                     (goto-char (point-min)) (forward-line 1)
                     (buffer-substring (point) (point-max))))))
-      (helm-moccur-mode) (pop-to-buffer buf))
+      (helm-moccur-mode))
+    (pop-to-buffer buf)
     (message "Helm Moccur Results saved in `%s' buffer" buf)))
 
 ;;;###autoload
@@ -501,6 +502,7 @@ Special commands:
          (with-helm-buffer helm-multi-occur-buffer-list))
     (set (make-local-variable 'revert-buffer-function)
          #'helm-moccur-mode--revert-buffer-function))
+(put 'helm-moccur-mode 'helm-only t)
 
 (defun helm-moccur-mode--revert-buffer-function (&optional _ignore-auto _noconfirm)
   (goto-char (point-min))
@@ -532,14 +534,15 @@ Special commands:
                       concat bufstr)
              "\n")
             (goto-char (point-min))
-            (cl-loop while (re-search-forward pattern nil t)
+            (cl-loop with helm-pattern = pattern
+                     while (helm-mm-search pattern)
                      for line = (helm-moccur-get-line (point-at-bol) (point-at-eol))
                      when line
                      do (with-current-buffer buffer
                           (insert
-                           (propertize
-                            (car (helm-moccur-filter-one-by-one line))
-                            'helm-realvalue line)
+                            (propertize
+                             (car (helm-moccur-filter-one-by-one line))
+                             'helm-realvalue line)
                            "\n")))))
         (message "Reverting buffer done")))))
 

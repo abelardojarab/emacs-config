@@ -396,13 +396,30 @@ REDIRECT-URL is where the pdf url will be in."
 ;; http://ieeexplore.ieee.org/ielx7/6903646/6912234/06912247.pdf
 ;; http://ieeexplore.ieee.org/iel7/6903646/6912234/06912247.pdf?arnumber=6912247
 ;; <meta name="citation_pdf_url" content="http://ieeexplore.ieee.org/iel7/6903646/6912234/06912247.pdf?arnumber=6912247">
+;; <frame src="http://ieeexplore.ieee.org/ielx7/6903646/6912234/06912247.pdf?tp=&arnumber=6912247&isnumber=6912234" frameborder=0 />
 (defun ieee-pdf-url (*doi-utils-redirect*)
   "Get a url to the pdf from *DOI-UTILS-REDIRECT* for IEEE urls."
   (when (string-match "^http://ieeexplore.ieee.org" *doi-utils-redirect*)
     (with-current-buffer (url-retrieve-synchronously *doi-utils-redirect*)
       (goto-char (point-min))
       (when (re-search-forward "<meta name=\"citation_pdf_url\" content=\"\\([[:ascii:]]*?\\)\">")
-	(match-string 1)))))
+	(let ((framed-url (match-string 1)))
+          (with-current-buffer (url-retrieve-synchronously framed-url)
+            (goto-char (point-min))
+            (when (re-search-forward "<frame src=\"\\(http[[:ascii:]]*?\\)\"")
+              (match-string 1))))))))
+
+;; ACM Digital Library
+;; http://dl.acm.org/citation.cfm?doid=1368088.1368132
+;; <a name="FullTextPDF" title="FullText PDF" href="ft_gateway.cfm?id=1368132&ftid=518423&dwn=1&CFID=766519780&CFTOKEN=49739320" target="_blank">
+(defun acm-pdf-url (*doi-utils-redirect*)
+  "Get a url to the pdf from *DOI-UTILS-REDIRECT* for ACM urls."
+  (when (string-match "^http://dl.acm.org" *doi-utils-redirect*)
+    (with-current-buffer (url-retrieve-synchronously *doi-utils-redirect*)
+          (goto-char (point-min))
+          (when (re-search-forward "<a name=\"FullTextPDF\".*href=\"\\([[:ascii:]]*?\\)\"")
+            (concat "http://dl.acm.org/" (match-string 1))))))
+
 
 ;;** Add all functions
 
@@ -429,6 +446,7 @@ REDIRECT-URL is where the pdf url will be in."
        'sage-pdf-url
        'jneurosci-pdf-url
        'ieee-pdf-url
+       'acm-pdf-url
        'generic-full-pdf-url))
 
 ;;** Get the pdf url for a doi
@@ -670,7 +688,7 @@ Also cleans entry using ‘org-ref’, and tries to download the corresponding p
   (when doi-utils-download-pdf
     (doi-utils-get-bibtex-entry-pdf))
 
-  (when doi-utils-make-notes
+  (when (and doi-utils-make-notes org-ref-bibliography-notes)
     (save-excursion
       (when (f-file? org-ref-bibliography-notes)
 	(find-file-noselect org-ref-bibliography-notes)
@@ -732,7 +750,9 @@ Argument BIBFILE the bibliography to use."
       (if (search-forward doi nil t)
           (message "%s is already in this file" doi)
         (goto-char (point-max))
-        (insert "\n\n")
+	(if require-final-newline
+	    (insert "\n")
+	  (insert "\n\n"))
         (doi-utils-insert-bibtex-entry-from-doi doi)
         (save-buffer)))))
 
@@ -1186,40 +1206,61 @@ error."
                  (append (f-entries "." (lambda (f) (f-ext? f "bib")))
                          org-ref-default-bibliography))))
   (let* ((json-string)
-         (json-data)
-         (doi))
+	 (json-data)
+	 (doi))
 
     (with-current-buffer
-        (url-retrieve-synchronously
-         (concat
-          "http://search.crossref.org/dois?q="
-          (url-hexify-string query)))
-      (setq json-string (buffer-substring url-http-end-of-headers (point-max)))
+	(url-retrieve-synchronously
+	 (concat
+	  "http://search.crossref.org/dois?q="
+	  (url-hexify-string query)))
+      ;; remove html tags
+      (save-excursion
+	(goto-char (point-min))
+	(while (re-search-forward "<i>" nil t)
+	  (replace-match ""))
+	(goto-char (point-min))
+	(while (re-search-forward "&quot;" nil t)
+	  (replace-match "\\\"" nil t))
+	(goto-char (point-min))
+	(while (re-search-forward "</i>" nil t)
+	  (replace-match "")))
+      (setq raw-json-string (buffer-substring url-http-end-of-headers (point-max)))
+      ;; encode json string
+      (setq json-string (decode-coding-string (string-make-unibyte raw-json-string) 'utf-8))
       (setq json-data (json-read-from-string json-string)))
 
     (let* ((name (format "Crossref hits for %s"
-                         ;; remove carriage returns. they cause problems in helm.
-                         (replace-regexp-in-string "\n" " " query)))
-           (helm-candidates (mapcar (lambda (x)
-                                      (cons
-                                       (concat
-                                        (cdr (assoc 'fullCitation x))
-                                        " "
-                                        (cdr (assoc 'doi x)))
-                                       (cdr (assoc 'doi x))))
-                                    json-data))
-           (source `((name . ,name)
-                     (candidates . ,helm-candidates)
-                     ;; just return the candidate
-                     (action . (("Insert bibtex entry" .  (lambda (doi)
-                                                            (cl-loop for doi in (helm-marked-candidates)
-                                                                  do
-                                                                  (doi-utils-add-bibtex-entry-from-doi
-                                                                   (replace-regexp-in-string
-                                                                    "^http://dx.doi.org/" "" doi)
-                                                                   ,bibtex-file))))
-                                ("Open url" . (lambda (doi)
-                                                (browse-url doi))))))))
+			 ;; remove carriage returns. they cause problems in helm.
+			 (replace-regexp-in-string "\n" " " query)))
+	   (helm-candidates (mapcar (lambda (x)
+				      (cons
+				       (concat
+					(cdr (assoc 'fullCitation x)))
+				       (cdr (assoc 'doi x))))
+				    json-data))
+	   (source `((name . ,name)
+		     (candidates . ,helm-candidates)
+		     ;; just return the candidate
+		     (action . (("Insert bibtex entry" .  (lambda (doi)
+							    ;; always show bibtex entry
+							    (if (string= (buffer-name (current-buffer))
+									 (file-name-nondirectory bibtex-file))
+								(setq doi-utils--bibtex-file nil)
+							      (setq doi-utils--bibtex-file t)
+							      (split-window-below)
+							      (other-window 1)
+							      (find-file bibtex-file))
+							    (cl-loop for doi in (helm-marked-candidates)
+								     do
+								     (doi-utils-add-bibtex-entry-from-doi
+								      (replace-regexp-in-string
+								       "^http://dx.doi.org/" "" doi)
+								      ,bibtex-file))
+							    (when doi-utils--bibtex-file
+							      (recenter-top-bottom 0))))
+				("Open url" . (lambda (doi)
+						(browse-url doi))))))))
       (helm :sources '(source)))))
 
 (defalias 'crossref-add-bibtex-entry 'doi-utils-add-entry-from-crossref-query

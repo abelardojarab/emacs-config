@@ -32,6 +32,7 @@
            s
          (replace-regexp-in-string "^ *" "" s)))
       (js2-jsx-mode)
+      (js2-reparse) ; solely for js2-jsx-self-closing, for some reason
       (indent-region (point-min) (point-max))
       (should (string= s (buffer-substring-no-properties
                           (point-min) (point)))))))
@@ -146,7 +147,15 @@
   "class A {
   |  * x() {
   |    return 1
-  |      * 2;
+  |      * a(2);
+  |  }
+  |}")
+
+(js2-deftest-indent indent-generator-computed-method
+  "class A {
+  |  *[Symbol.iterator]() {
+  |    yield 'Foo';
+  |    yield 'Bar';
   |  }
   |}")
 
@@ -170,6 +179,13 @@
   |    return 1;
   |}"
   :bind ((js2-indent-switch-body t)))
+
+(js2-deftest-indent continued-expression-vs-unary-minus
+  "var arr = [
+  |  -1, 2,
+  |  -3, 4 +
+  |    -5
+  |];")
 
 (js2-deftest-indent jsx-one-line
   "var foo = <div></div>;")

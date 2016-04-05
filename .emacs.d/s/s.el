@@ -419,6 +419,19 @@ ignored after the first."
         (push (nreverse strings) all-strings)))
     (nreverse all-strings)))
 
+(defun s-matched-positions-all (regexp string &optional subexp-depth)
+  "Return a list of matched positions for REGEXP in STRING.
+SUBEXP-DEPTH is 0 by default."
+  (if (null subexp-depth)
+      (setq subexp-depth 0))
+  (let ((pos 0) result)
+    (while (and (string-match regexp string pos)
+                (< pos (length string)))
+      (let ((m (match-end subexp-depth)))
+        (push (cons (match-beginning subexp-depth) (match-end subexp-depth)) result)
+        (setq pos m)))
+    (nreverse result)))
+
 (defun s-match (regexp s &optional start)
   "When the given expression matches the string, this function returns a list
 of the whole matching string and a string for each matched subexpressions.
@@ -440,13 +453,14 @@ When START is non-nil the search will start at that index."
 
 (defun s-slice-at (regexp s)
   "Slices S up at every index matching REGEXP."
-  (save-match-data
-    (let (i)
-      (setq i (string-match regexp s 1))
-      (if i
-          (cons (substring s 0 i)
-                (s-slice-at regexp (substring s i)))
-        (list s)))))
+  (if (= 0 (length s)) (list "")
+    (save-match-data
+      (let (i)
+        (setq i (string-match regexp s 1))
+        (if i
+            (cons (substring s 0 i)
+                  (s-slice-at regexp (substring s i)))
+          (list s))))))
 
 (defun s-split-words (s)
   "Split S into list of words."
@@ -537,6 +551,8 @@ transformation."
                           (funcall 's--aget extra var))
                          ((eq replacer 'elt)
                           (funcall replacer extra var))
+                         ((eq replacer 'oref)
+                          (funcall #'slot-value extra (intern var)))
                          (t
                           (set-match-data saved-match-data)
                           (if extra

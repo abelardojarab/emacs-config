@@ -246,6 +246,7 @@ FAQ
 * I am using MS Windows and cannot push with Magit::
 * How to install the gitman info manual?::
 * How can I show Git's output?::
+* Diffs contain control sequences::
 * Expanding a file to show the diff causes it to disappear::
 * Point is wrong in the COMMIT@math{_EDITMSG} buffer::
 * Can Magit be used as ediff-version-control-package?::
@@ -2908,6 +2909,11 @@ is an integer, highlight indentation with at least that many spaces.
 Otherwise, highlight neither.
 @end defopt
 
+@defopt magit-diff-hide-trailing-cr-characters
+
+Whether to hide ^M characters at the end of a line in diffs.
+@end defopt
+
 @node Revision buffer
 @subsection Revision buffer
 
@@ -3015,6 +3021,12 @@ Show changes in a file between HEAD and working tree using Ediff.
 
 Show changes to a file introduced by a commit using Ediff.
 
+@kindex E z
+@cindex magit-ediff-show-stash
+@item @kbd{E z} @tie{}@tie{}@tie{}@tie{}(@code{magit-ediff-show-stash})
+
+Show changes to a file introduced by a stash using Ediff.
+
 @end table
 
 @defopt magit-ediff-dwim-show-on-hunks
@@ -3024,6 +3036,14 @@ point is on uncommitted hunks.  When nil, always run
 @code{magit-ediff-stage}.  Otherwise, use @code{magit-ediff-show-staged} and
 @code{magit-ediff-show-unstaged} to show staged and unstaged changes,
 respectively.
+@end defopt
+
+@defopt magit-ediff-show-stash-with-index
+
+This option controls whether @code{magit-ediff-show-stash} includes a
+buffer containing the file's state in the index at the time the
+stash was created.  This makes it possible to tell which changes in
+the stash were staged.
 @end defopt
 
 @defopt magit-ediff-quit-hook
@@ -7103,7 +7123,8 @@ TYPE is the section type, a symbol.  Many commands that act on the
 current section behave differently depending on that type.  Also if
 a variable @code{magit-TYPE-section-map} exists, then use that as the
 text-property @code{keymap} of all text belonging to the section (but this
-may be overwritten in subsections).
+may be overwritten in subsections).  TYPE can also have the form
+@code{(eval FORM)} in which case FORM is evaluated at runtime.
 
 Optional VALUE is the value of the section, usually a string that is
 required when acting on the section.
@@ -7604,6 +7625,7 @@ made it into the manual yet, see @uref{https://github.com/magit/magit/wiki/FAQ}.
 * I am using MS Windows and cannot push with Magit::
 * How to install the gitman info manual?::
 * How can I show Git's output?::
+* Diffs contain control sequences::
 * Expanding a file to show the diff causes it to disappear::
 * Point is wrong in the COMMIT@math{_EDITMSG} buffer::
 * Can Magit be used as ediff-version-control-package?::
@@ -7781,6 +7803,27 @@ is run for side-effects.  When the output is consumed in some way then
 also inserting it into the process buffer would be to expensive.  For
 debugging purposes it's possible to do so anyway by setting
 @code{magit-git-debug} to @code{t}.
+
+@node Diffs contain control sequences
+@section Diffs contain control sequences
+
+This happens when you configure Git to always color diffs and/or all
+of its output.  The valid values for relevant Git variables @code{color.ui}
+and @code{color.diff} are @code{false}, @code{true} and @code{always}, and the default is @code{true}.
+You should leave it that because then you get colorful output in
+terminals but git's output is consumed by something else, then no
+colors are used.
+
+If you actually use some other tool which expects that requires that
+you force git to output control sequences (which is highly unlikely),
+then you can override these settings just for Magit by using:
+
+@lisp
+(setq magit-git-global-arguments
+      (nconc magit-git-global-arguments
+	     '("-c" "color.ui=false"
+	       "-c" "color.diff=false")))
+@end lisp
 
 @node Expanding a file to show the diff causes it to disappear
 @section Expanding a file to show the diff causes it to disappear

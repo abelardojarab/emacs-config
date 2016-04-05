@@ -37,7 +37,7 @@ help:
 	$(info )
 	$(info make test             - run tests)
 	$(info make test-interactive - run tests interactively)
-	$(info make magit            - run emacs -Q plus Magit)
+	$(info make emacs-Q          - run emacs -Q plus Magit)
 	$(info )
 	$(info Release Managment)
 	$(info =================)
@@ -46,7 +46,7 @@ help:
 	$(info make genstats         - regenerate statistics)
 	$(info make authors          - regenerate AUTHORS.md)
 	$(info make dist             - create tarballs)
-	$(info make VERSION=N.M bump-versions - bump versions for release)
+	$(info make bump-versions    - bump versions for release)
 	$(info make bump-snapshots   - bump versions after release)
 	@printf "\n"
 
@@ -84,13 +84,11 @@ test-interactive:
 	(load-file \"t/magit-tests.el\")\
 	(ert t))"
 
-magit: clean-lisp
+emacs-Q: clean-lisp
 	@$(EMACSBIN) -Q $(LOAD_PATH) --debug-init --eval "(progn\
+	(setq debug-on-error t)\
 	(require 'magit)\
-	(global-set-key \"\\C-xg\" 'magit-status)\
-	(tool-bar-mode 0)\
-	(menu-bar-mode 0)\
-	(scroll-bar-mode 0))"
+	(global-set-key \"\\C-xg\" 'magit-status))"
 
 clean: clean-lisp clean-docs clean-archives
 	@printf "Cleaning...\n"
@@ -156,7 +154,7 @@ endef
 export set_package_requires
 
 define set_manual_version
-(let ((version (split-string "$(VERSION)" "\\.")))
+(let ((version (split-string "$(MAGIT_VERSION)" "\\.")))
   (setq version (concat (car version) "." (cadr version)))
   (dolist (file (list "magit-popup" "magit"))
     (with-current-buffer (find-file-noselect (format "Documentation/%s.org" file))

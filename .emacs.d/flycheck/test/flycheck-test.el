@@ -96,34 +96,6 @@
                               "`\\1'" msg 'fixedcase)))
 
 
-;;; Code style
-(defmacro flycheck-test-def-indent-test (filename)
-  "Define a test case for the indentation of FILENAME.
-
-FILENAME is relative to the source directory.  The test case is
-named `flycheck-code-style/FILENAME-BASE/indentation', where
-FILENAME-BASE is FILENAME without leading directory components
-and extension, as in `file-name-base'."
-  (let ((testname (intern (format "flycheck-code-style/%s/indentation"
-                                  (file-name-base filename)))))
-    `(ert-deftest ,testname ()
-       :tags '(style)
-       (skip-unless (version<= "24.5" emacs-version))
-       (flycheck-ert-with-file-buffer
-           (expand-file-name ,filename
-                             flycheck-test-source-directory)
-         (set-auto-mode)
-         (shut-up
-           (indent-region (point-min) (point-max)))
-         (should-not (buffer-modified-p))))))
-
-(flycheck-test-def-indent-test "flycheck.el")
-(flycheck-test-def-indent-test "flycheck-ert.el")
-(flycheck-test-def-indent-test "test/run.el")
-(flycheck-test-def-indent-test "test/flycheck-test.el")
-(flycheck-test-def-indent-test "admin/run-checkdoc.el")
-
-
 ;;; Customization
 (ert-deftest flycheck-checkers/there-are-registered-checkers ()
   :tags '(customization)
@@ -336,7 +308,7 @@ and extension, as in `file-name-base'."
 (ert-deftest flycheck-same-files-p/different-files ()
   :tags '(utility)
   (let ((default-directory flycheck-test-source-directory))
-    (should-not (flycheck-same-files-p "flycheck.el" "Rakefile"))))
+    (should-not (flycheck-same-files-p "flycheck.el" "Makefile"))))
 
 (ert-deftest flycheck-same-files-p/file-in-non-existing-directory ()
   :tags '(utility)
@@ -2776,9 +2748,9 @@ evaluating BODY."
   :tags '(configuration)
   (flycheck-ert-with-temp-buffer
     (cd flycheck-test-directory)
-    (should (equal (flycheck-locate-config-file-by-path "../Rakefile"
+    (should (equal (flycheck-locate-config-file-by-path "../Makefile"
                                                         'emacs-lisp)
-                   (expand-file-name "../Rakefile" flycheck-test-directory)))))
+                   (expand-file-name "../Makefile" flycheck-test-directory)))))
 
 (ert-deftest flycheck-locate-config-file-by-path/non-existing-file ()
   :tags '(configuration)
@@ -2809,8 +2781,8 @@ evaluating BODY."
     (setq buffer-file-name (expand-file-name "flycheck-test.el"
                                              flycheck-test-directory))
     (should (equal (flycheck-locate-config-file-ancestor-directories
-                    "Rakefile" 'emacs-lisp)
-                   (expand-file-name "../Rakefile"
+                    "Makefile" 'emacs-lisp)
+                   (expand-file-name "../Makefile"
                                      flycheck-test-directory)))))
 
 (ert-deftest flycheck-locate-config-file/not-existing-file ()
@@ -2821,7 +2793,7 @@ evaluating BODY."
 (ert-deftest flycheck-locate-config-file/existing-file-in-parent-directory ()
   :tags '(configuration)
   (flycheck-ert-with-env (list (cons "HOME" flycheck-test-directory))
-    (should-not (flycheck-locate-config-file-home "Rakefile" 'emacs-lisp))))
+    (should-not (flycheck-locate-config-file-home "Makefile" 'emacs-lisp))))
 
 (ert-deftest flycheck-locate-config-file/existing-file-in-home-directory ()
   :tags '(configuration)
@@ -3462,36 +3434,24 @@ See https://github.com/flycheck/flycheck/issues/531 and Emacs bug #19206"))
                             go-root-pkg)
            :checker go-build)))))
 
+(flycheck-ert-def-checker-test go-build go directory-with-two-packages
+  (flycheck-ert-with-env
+      `(("GOPATH" . ,(flycheck-ert-resource-filename "checkers/go")))
+    (flycheck-ert-should-syntax-check
+     "checkers/go/src/multipkg/a.go" 'go-mode
+     `(1 nil info
+         ,(concat "can't load package: package multipkg: "
+                  "found packages a (a.go) and b (b.go) in "
+                  (flycheck-ert-resource-filename
+                   "checkers/go/src/multipkg"))
+         :checker go-build))))
+
 (flycheck-ert-def-checker-test go-test go nil
   (flycheck-ert-with-env
       `(("GOPATH" . ,(flycheck-ert-resource-filename "checkers/go")))
     (flycheck-ert-should-syntax-check
      "language/go/src/test/test-error_test.go" 'go-mode
      '(8 nil error "undefined: fmt in fmt.Println" :checker go-test))))
-
-(ert-deftest flycheck-go-package-name/no-gopath ()
-  :tags '(language-go)
-  (flycheck-ert-with-env '(("GOPATH" . nil))
-    (should-not (flycheck-go-package-name
-                 (flycheck-ert-resource-filename
-                  "language/go/src/errcheck/errcheck.go")))))
-
-(ert-deftest flycheck-go-package-name/no-package-file ()
-  :tags '(language-go)
-  (flycheck-ert-with-env
-      `(("GOPATH" . ,(flycheck-ert-resource-filename "language/go")))
-    (should-not (flycheck-go-package-name
-                 (flycheck-ert-resource-filename
-                  "language/emacs-lisp-syntax-error.el")))))
-
-(ert-deftest flycheck-go-package-name/package-file ()
-  :tags '(language-go)
-  (flycheck-ert-with-env
-      `(("GOPATH" . ,(flycheck-ert-resource-filename "language/go")))
-    (should (equal "errcheck"
-                   (flycheck-go-package-name
-                    (flycheck-ert-resource-filename
-                     "language/go/src/errcheck/errcheck.go"))))))
 
 (flycheck-ert-def-checker-test go-errcheck go nil
   (flycheck-ert-with-env
@@ -4016,6 +3976,7 @@ Why not:
 (flycheck-ert-def-checker-test r-lintr r nil
   ;; Disable caching in lintr tests to make sure that the file is re-checked
   ;; every time
+  (skip-unless (flycheck-r-has-lintr (flycheck-checker-executable 'r-lintr)))
   (let ((flycheck-lintr-caching nil))
     (flycheck-ert-should-syntax-check
      "language/r.R" 'R-mode

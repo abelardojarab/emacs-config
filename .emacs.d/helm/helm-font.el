@@ -1,6 +1,6 @@
 ;;; helm-font --- Font and ucs selection for Helm -*- lexical-binding: t -*-
 
-;; Copyright (C) 2012 ~ 2015 Thierry Volpiatto <thierry.volpiatto@gmail.com>
+;; Copyright (C) 2012 ~ 2016 Thierry Volpiatto <thierry.volpiatto@gmail.com>
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -73,6 +73,7 @@
 ;;
 (defvar helm-ucs--max-len nil)
 (defvar helm-ucs--names nil)
+(defvar helm-ucs-history nil)
 
 (defun helm-calculate-ucs-max-len ()
   "Calculate the length of longest `ucs-names' candidate."
@@ -185,6 +186,7 @@ Only math* symbols are collected."
   (let ((char (helm-aif (char-after) (string it))))
     (helm :sources 'helm-source-ucs
           :keymap  helm-ucs-map
+          :history 'helm-ucs-history
           :input (and char (multibyte-string-p char) char))))
 
 (provide 'helm-font)

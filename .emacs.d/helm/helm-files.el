@@ -1,6 +1,6 @@
 ;;; helm-files.el --- helm file browser and related. -*- lexical-binding: t -*-
 
-;; Copyright (C) 2012 ~ 2015 Thierry Volpiatto <thierry.volpiatto@gmail.com>
+;; Copyright (C) 2012 ~ 2016 Thierry Volpiatto <thierry.volpiatto@gmail.com>
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -44,6 +44,8 @@
 (declare-function eshell-send-input "esh-mode" (&optional use-region queue-p no-newline))
 (declare-function eshell-kill-input "esh-mode")
 (declare-function eshell-bol "esh-mode")
+(declare-function eshell-reset "esh-mode.el")
+(declare-function eshell/cd "em-dirs.el")
 (declare-function eshell-quote-argument "esh-arg.el")
 (declare-function helm-ls-git-ls "ext:helm-ls-git")
 (declare-function helm-hg-find-files-in-project "ext:helm-ls-hg")
@@ -249,6 +251,11 @@ This doesn't disable url or mail at point, see
   "Use ffap to guess local urls at point in `helm-find-files'.
 This doesn't disable guessing filenames at point,
 see `helm-ff-guess-ffap-filenames' for this."
+  :group 'helm-files
+  :type 'boolean)
+
+(defcustom helm-ff-no-preselect nil
+  "When non--nil `helm-find-files' starts at root of current directory."
   :group 'helm-files
   :type 'boolean)
 
@@ -504,6 +511,7 @@ Should not be used among other sources.")
    (persistent-action :initform 'helm-find-files-persistent-action)
    (persistent-help :initform "Hit1 Expand Candidate, Hit2 or (C-u) Find file")
    (help-message :initform 'helm-ff-help-message)
+   (mode-line :initform (list "File(s)" helm-mode-line-string))
    (volatile :initform t)
    (cleanup :initform 'helm-find-files-cleanup)
    (migemo :initform t)
@@ -546,8 +554,9 @@ Should not be used among other sources.")
 
 (defun helm-dwim-target-directory ()
   "Return value of `default-directory' of buffer in other window.
-If there is only one window return the value ot `default-directory'
-for current buffer."
+If there is only one window return the value of currently visited directory
+if found in `helm-ff-history' or fallback to `default-directory'
+of current buffer."
   (with-helm-current-buffer
     (let ((num-windows (length (remove (get-buffer-window helm-marked-buffer-name)
                                        (window-list)))))
@@ -557,7 +566,7 @@ for current buffer."
              (other-window 1)
              default-directory)
            ;; Using the car of *ff-history allow
-           ;; allow staying in the directory visited instead of current.
+           ;; staying in the directory visited instead of current.
            (or (car-safe helm-ff-history) default-directory))))))
 
 (defun helm-find-files-do-action (action)
@@ -570,11 +579,6 @@ ACTION must be an action supported by `helm-dired-action'."
                          (capitalize (symbol-name action))
                          (length ifiles)))
          helm-ff--move-to-first-real-candidate
-         (helm-always-two-windows t)
-         (helm-reuse-last-window-split-state t)
-         (helm-split-window-default-side
-          (eq helm-split-window-default-side 'same))
-         helm-split-window-in-side-p
          (parg   helm-current-prefix-arg)
          helm-display-source-at-screen-top ; prevent setting window-start.
          helm-ff-auto-update-initial-value
@@ -677,7 +681,8 @@ ACTION must be an action supported by `helm-dired-action'."
   (helm-grep-git-1 helm-ff-default-directory helm-current-prefix-arg))
 
 (defun helm-find-files-ag (_candidate)
-  (helm-grep-ag-1 helm-ff-default-directory))
+  (helm-grep-ag helm-ff-default-directory
+                helm-current-prefix-arg))
 
 (defun helm-ff-zgrep (_candidate)
   "Default action to zgrep files from `helm-find-files'."
@@ -820,11 +825,8 @@ See `helm-find-files-eshell-command-on-file-1' for more info."
 (defun helm-ff-switch-to-eshell (_candidate)
   "Switch to eshell and cd to `helm-ff-default-directory'."
   (let ((cd-eshell (lambda ()
-                       (eshell-kill-input)
-                       (goto-char (point-max))
-                       (insert
-                        (format "cd '%s'" helm-ff-default-directory))
-                       (eshell-send-input))))
+                     (eshell/cd helm-ff-default-directory)
+                     (eshell-reset))))
     (if (get-buffer "*eshell*")
         (switch-to-buffer "*eshell*")
       (call-interactively 'eshell))
@@ -959,7 +961,7 @@ This doesn't replace inside the files, only modify filenames."
                for new = (concat (helm-basedir old)
                                  (replace-regexp-in-string
                                   regexp str
-                                  (helm-basename old)))
+                                  (helm-basename old) t))
                ;; If `regexp' is not matched in `old'
                ;; `replace-regexp-in-string' will
                ;; return `old' unmodified.
@@ -1350,35 +1352,23 @@ The checksum is copied to kill-ring."
       (helm-ff-toggle-basename nil))))
 (put 'helm-ff-run-toggle-basename 'helm-only t)
 
-(cl-defun helm-reduce-file-name (fname level &key unix-close expand)
-  "Reduce FNAME by LEVEL from end or beginning depending LEVEL value.
-If LEVEL is positive reduce from end else from beginning.
-If UNIX-CLOSE is non--nil close filename with /.
-If EXPAND is non--nil expand-file-name."
-  (let* ((exp-fname  (expand-file-name fname))
-         (fname-list (split-string
-		      (if (or (string= fname "~/") expand)
-			  exp-fname fname)
-		      "/" t))
-         (len        (length fname-list))
-         (pop-list   (if (< level 0)
-                         (cl-subseq fname-list (* level -1))
-                       (cl-subseq fname-list 0 (- len level))))
-         (result     (mapconcat 'identity pop-list "/"))
-	 (abbrev-fname  (string-match "^~" result))
-         (empty      (string= result "")))
-    (when unix-close (setq result (concat result "/")))
-    (cond ((and abbrev-fname (string= result "~/")) "~/")
-	  (abbrev-fname result)
-	  ((and (< level 0) empty) "../")
-	  ((< level 0) (concat "../" result))
-	  ((and (eq system-type 'windows-nt)
-                (not (file-remote-p fname)))
-           ;; Result is starting by a volume name i.e "c:/".
-           result)
-          ;; Expand to "/" or "c:/".
-	  (empty (expand-file-name "/"))
-	  (t (concat "/" result)))))
+(defun helm-reduce-file-name (fname level)
+  "Reduce FNAME by number LEVEL from end."
+  (cl-loop with result
+           with iter = (helm-iter-reduce-fname (expand-file-name fname))
+           repeat level do (setq result (helm-iter-next iter))
+           finally return (or result (expand-file-name "/"))))
+
+(defun helm-iter-reduce-fname (fname)
+  "Yield FNAME reduced by one level at each call."
+  (let ((split (split-string fname "/" t)))
+    (unless (or (null split)
+                (string-match "\\`\\(~\\|[[:alpha:]]:\\)" (car split)))
+      (setq split (cons "/" split)))
+    (lambda ()
+      (when (and split (cdr split))
+        (cl-loop for i in (setq split (butlast split))
+                 concat (if (string= i "/") i (concat i "/")))))))
 
 (defvar helm-find-files--level-tree nil)
 (defvar helm-find-files--level-tree-iterator nil)
@@ -1396,8 +1386,7 @@ If prefix numeric arg is given go ARG level up."
       ;; corresponding to actual directory, so store this info
       ;; in `helm-ff-last-expanded'.
       (let ((cur-cand (helm-get-selection))
-            (new-pattern (helm-reduce-file-name
-                          helm-pattern arg :unix-close t :expand t)))
+            (new-pattern (helm-reduce-file-name helm-pattern arg)))
         (cond ((file-directory-p helm-pattern)
                (setq helm-ff-last-expanded helm-ff-default-directory))
               ((file-exists-p helm-pattern)
@@ -2468,6 +2457,12 @@ Use it for non--interactive calls of `helm-find-files'."
                :default def
                :prompt "Find Files or Url: "
                :buffer "*Helm Find Files*")
+      (helm-attrset 'resume `(lambda ()
+                               (setq helm-ff-default-directory
+                                     ,helm-ff-default-directory
+                                     helm-ff-last-expanded
+                                     ,helm-ff-last-expanded))
+                    helm-source-find-files)
       (setq helm-ff-default-directory nil))))
 
 (defun helm-find-files-cleanup ()
@@ -2508,11 +2503,11 @@ Use it for non--interactive calls of `helm-find-files'."
 (defun helm-find-files-input (file-at-pt thing-at-pt)
   "Try to guess a default input for `helm-find-files'."
   (let* ((non-essential t)
-         (remp (or (and file-at-pt (file-remote-p file-at-pt))
-                   (and thing-at-pt (file-remote-p thing-at-pt))))
+         (remp    (or (and file-at-pt (file-remote-p file-at-pt))
+                      (and thing-at-pt (file-remote-p thing-at-pt))))
          (def-dir (helm-current-directory))
-         (urlp (and file-at-pt ffap-url-regexp
-                    (string-match ffap-url-regexp file-at-pt)))
+         (urlp    (and file-at-pt ffap-url-regexp
+                       (string-match ffap-url-regexp file-at-pt)))
          (lib     (when helm-ff-search-library-in-sexp
                     (helm-find-library-at-point)))
          (hlink   (helm-ff-find-url-at-point))
@@ -2533,7 +2528,7 @@ Use it for non--interactive calls of `helm-find-files'."
           ((and file-at-pt
                 (not remp)
                 (file-exists-p file-at-pt))
-           file-at-pt))))
+           (expand-file-name file-at-pt)))))
 
 (defun helm-ff-find-url-at-point ()
   "Try to find link to an url in text-property at point."
@@ -3472,7 +3467,8 @@ This is the starting point for nearly all actions you can do on files."
                               (if helm-ff-transformer-show-only-basename
                                   (helm-basename it) it))))
     (set-text-properties 0 (length input) nil input)
-    (helm-find-files-1 input (and presel (concat "^" (regexp-quote presel))))))
+    (helm-find-files-1 input (and presel (null helm-ff-no-preselect)
+                                  (concat "^" (regexp-quote presel))))))
 
 ;;;###autoload
 (defun helm-for-files ()

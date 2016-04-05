@@ -4,7 +4,7 @@
 
 ;; Author: John Kitchin <jkitchin@andrew.cmu.edu>
 ;; URL: https://github.com/jkitchin/org-ref
-;; Version: 0.7.0
+;; Version: 0.7.2
 ;; Keywords: org-mode, cite, ref, label
 ;; Package-Requires: ((dash "2.11.0") (helm "1.5.5") (helm-bibtex "1.0.0") (hydra "0.13.2") (key-chord "0") (s "1.10.0") (f "0.18.0") (emacs "24.4"))
 
@@ -340,6 +340,7 @@ Uses a hook function to display the message in the minibuffer."
   '(orcb-key-comma
     org-ref-replace-nonascii
     orcb-&
+    orcb-%
     org-ref-title-case-article
     orcb-clean-year
     orcb-key
@@ -1258,7 +1259,13 @@ A number greater than one means multiple labels!"
         (progn
           (goto-char (point-min))
           (re-search-forward
-           (format "^#\\+tblname:\\s-*\\(%s\\)\\b" label) nil t)))
+           (format "^#\\+tblname:\\s-*\\(%s\\)\\b" label) nil t))
+
+	;; a #+name
+	(progn
+          (goto-char (point-min))
+          (re-search-forward
+           (format "^#\\+name:\\s-*\\(%s\\)\\b" label) nil t)))
 
      ;; we did not find anything, so go back to where we came
      (org-mark-ring-goto)
@@ -2453,6 +2460,15 @@ If optional NEW-YEAR set it to that, otherwise prompt for it."
       (replace-match " \\\\& "))))
 
 
+(defun orcb-% ()
+  "Replace naked % with % in a bibtex entry."
+  (save-restriction
+    (bibtex-narrow-to-entry)
+    (bibtex-beginning-of-entry)
+    (while (re-search-forward "%" nil t)
+      (replace-match " \\\\%"))))
+
+
 (defun orcb-key-comma ()
   "Make sure there is a comma at the end of the first line."
   (bibtex-beginning-of-entry)
@@ -2736,6 +2752,18 @@ move to the beginning of the previous cite link after this one."
       (goto-char (point-min))
       (when (re-search-forward
              (format "^#\\+tblname:\\s-*\\(%s\\)\\b" label) nil t)
+        (throw 'result (buffer-substring
+                        (progn
+                          (forward-line -1)
+                          (beginning-of-line)
+                          (point))
+                        (progn
+                          (forward-line 4)
+                          (point)))))
+
+      (goto-char (point-min))
+      (when (re-search-forward
+             (format "^#\\+name:\\s-*\\(%s\\)\\b" label) nil t)
         (throw 'result (buffer-substring
                         (progn
                           (forward-line -1)
@@ -3115,7 +3143,37 @@ provide their own version."
 
 (add-hook 'org-mode-hook 'org-ref-org-menu)
 
+;;* Make bibliography links at end not get folded so you can see where they are..
+;; Adapted from http://stackoverflow.com/questions/9134956/avoid-printbibliography-being-swallowed-by-org-mode-headings
+(defvar org-ref-biblink-re "^\\(bibliography\\(style\\)?\\|\\(printbibliography\\)\\):.*"
+  "Regex for bibliography links used for showing biblinks at the end of the buffer.")
 
+(defun org-ref-show-biblinks (&optional _)
+  "Flag a region containing biblinks so they do not get folded.
+We assume these are at the end of the buffer, and do not look
+past the last headline."
+  (save-excursion
+    (goto-char (point-max))
+    (when (re-search-backward org-ref-biblink-re nil t)
+      (outline-flag-region (1- (point)) (point-max) nil))))
+
+(add-hook 'org-cycle-hook 'org-ref-show-biblinks)
+(add-hook 'org-occur-hook 'org-ref-show-biblinks)
+
+;; (remove-hook 'org-cycle-hook 'org-ref-show-biblinks)
+;; (remove-hook 'org-occur-hook 'org-ref-show-biblinks)
+
+;; This seems to redefine where the end of subtree is. We do not do this in an
+;; export though.
+(defadvice org-end-of-subtree (after always-show-org-footer
+                                     ()
+                                     activate)
+  (unless org-export-current-backend
+    (when (>= (point) (1- (point-max)))
+      (re-search-backward org-ref-biblink-re nil t)
+      (setq ad-return-value (point)))))
+
+;; (ad-remove-advice 'org-end-of-subtree  'after 'always-show-org-footer)
 
 ;;* The end
 (provide 'org-ref)

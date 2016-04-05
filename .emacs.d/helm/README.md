@@ -8,7 +8,7 @@
 
 <p>You can <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&amp;business=thierry.volpiatto@gmail.com&amp;lc=US&amp;currency_code=EUR&amp;bn=PP-DonationsBF:btn_donateCC_LG.gif:NonHosted"><img src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" alt="Donate" title="" /></a> to help this project.</p>
 
-<!-- markdown-toc start - Don't edit this section. Run M-x markdown-toc/generate-toc again -->
+<!-- markdown-toc start - Don't edit this section. Run M-x markdown-toc-generate-toc again -->
 **Table of Contents**
 
 - [Introduction](#introduction)
@@ -16,6 +16,7 @@
 - [Getting Started](#getting-started)
     - [Quick install from git](#quick-install-from-git)
     - [Install from Emacs packaging system](#install-from-emacs-packaging-system)
+    - [Debian and Ubuntu](#debian-and-ubuntu)
     - [Installing just the helm-core package](#installing-just-the-helm-core-package)
     - [Warning about alternate installation methods](#warning-about-alternate-installation-methods)
     - [Configuration](#configuration)
@@ -119,6 +120,12 @@ effect.
 **Note to Linux Distributions Maintainers**
 
 `Only the extensions in the github emacs-helm repository are supported.`
+
+## Debian and Ubuntu
+
+Users of Debian 9 or later or Ubuntu 16.04 or later may simply
+`apt-get install elpa-helm` (or `apt-get install elpa-helm-core`; see
+below).
 
 ## Installing just the helm-core package
 

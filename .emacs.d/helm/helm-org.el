@@ -1,6 +1,6 @@
 ;;; helm-org.el --- Helm for org headlines and keywords completion -*- lexical-binding: t -*-
 
-;; Copyright (C) 2012 ~ 2015 Thierry Volpiatto <thierry.volpiatto@gmail.com>
+;; Copyright (C) 2012 ~ 2016 Thierry Volpiatto <thierry.volpiatto@gmail.com>
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -174,6 +174,9 @@ Note this have no effect in `helm-org-in-buffer-headings'."
         (save-restriction
           (widen)
           (unless parents (goto-char (point-min)))
+          ;; clear cache for new version of org-get-outline-path
+          (and (boundp 'org-outline-path-cache)
+               (setq org-outline-path-cache nil))
           (cl-loop with width = (window-width (helm-window))
                    while (funcall search-fn)
                    for beg = (point-at-bol)
@@ -189,10 +192,16 @@ Note this have no effect in `helm-org-in-buffer-headings'."
                    collect `(,(propertize
                                (if helm-org-format-outline-path
                                    (org-format-outline-path
-                                    (append (apply #'org-get-outline-path
-                                                   (unless parents
-                                                     (list t level heading)))
-                                            (list heading))
+                                    ;; org-get-outline-path changed in signature and behaviour since org's
+                                    ;; commit 105a4466971. Let's fall-back to the new version in case
+                                    ;; of wrong-number-of-arguments error.
+                                    (condition-case nil
+                                        (append (apply #'org-get-outline-path
+                                                       (unless parents
+                                                         (list t level heading)))
+                                                (list heading))
+                                      (wrong-number-of-arguments
+                                       (org-get-outline-path t t)))
                                     width file)
                                    (if file
                                        (concat file (funcall match-fn  0))
@@ -264,6 +273,40 @@ current heading."
         :truncate-lines helm-org-truncate-lines
         :buffer "*helm org capture templates*"))
 
+;;; Org tag completion
+
+;; Based on code from Anders Johansson posted on 3 Mar 2016 at
+;; <https://groups.google.com/d/msg/emacs-helm/tA6cn6TUdRY/G1S3TIdzBwAJ>
+
+(defvar crm-separator)
+
+;;;###autoload
+(defun helm-org-completing-read-tags (prompt collection pred req initial
+                                      hist def inherit-input-method _name _buffer)
+  (if (not (string= "Tags: " prompt))
+      ;; Not a tags prompt.  Use normal completion by calling
+      ;; `org-icompleting-read' again without this function in
+      ;; `helm-completing-read-handlers-alist'
+      (let ((helm-completing-read-handlers-alist
+             (rassq-delete-all
+              'helm-org-completing-read-tags
+              helm-completing-read-handlers-alist)))
+        (org-icompleting-read
+         prompt collection pred req initial hist def inherit-input-method))
+    ;; Tags prompt
+    (let* ((curr (and (stringp initial)
+                      (not (string= initial ""))
+                      (org-split-string initial ":")))
+           (table   (delete curr
+                            (org-uniquify
+                             (mapcar 'car org-last-tags-completion-table))))
+           (crm-separator ":\\|,\\|\\s-"))
+      (cl-letf (((symbol-function 'crm-complete-word)
+                 'self-insert-command))
+        (mapconcat 'identity
+                   (completing-read-multiple
+                    prompt table pred nil initial hist def)
+                   ":")))))
 
 (provide 'helm-org)
 

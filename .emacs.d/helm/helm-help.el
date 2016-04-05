@@ -1,6 +1,6 @@
 ;;; helm-help.el --- Help messages for Helm. -*- lexical-binding: t -*-
 
-;; Copyright (C) 2012 ~ 2015 Thierry Volpiatto <thierry.volpiatto@gmail.com>
+;; Copyright (C) 2012 ~ 2016 Thierry Volpiatto <thierry.volpiatto@gmail.com>
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -359,6 +359,16 @@ also using not recursive wilcard (e.g. \"*.el\") is perfectly fine for this.
 This feature (\"**\") is activated by default with the option `helm-file-globstar'.
 The directory selection with \"**foo/\" like bash shopt globstar option is not supported yet.
 
+*** Query replace on filenames
+
+You can rename your files by replacing only part of filenames matching
+a regexp.
+
+e.g Rename recursively all files with \".JPG\" extension to \".jpg\":
+Use the helm-file-globstar feature described in previous section by
+entering at end of helm-find-files pattern \"**.JPG\", then hit `M-%`,
+at first prompt enter \"JPG\", at second \"jpg\" and hit `RET`.
+
 *** Copying renaming asynchronously
 
 If you use async library (if you have installed helm from MELPA you do) you can enable
@@ -579,6 +589,8 @@ than 1 megabyte:
 ** Tips
 
 *** You can start grep with a prefix arg to recurse in subdirectories
+However now that helm support git-grep and AG, you have better time
+using one of those for your recursives search.
 
 *** You can use wild card when selecting files (e.g. *.el)
 
@@ -586,7 +598,11 @@ than 1 megabyte:
 
 *** You can save your results in a `helm-grep-mode' buffer, see commands below
 
-Once in this buffer you can use emacs-wgrep to edit your changes.
+Once in this buffer you can use emacs-wgrep (external package not bundled with helm)
+to edit your changes.
+
+*** Helm grep is supporting multi matching starting from version 1.9.4.
+Just add a space between each pattern like in most helm commands.
 
 *** Important
 
@@ -610,6 +626,9 @@ Helm Gid use the symbol at point as default-input.
 You have access to this command also from `helm-find-files' which allow you to
 navigate to another directory to consult its database.
 
+NOTE: Helm gid support multi matches but only the last pattern entered will be
+highlighted due to the lack of ~--color~ support in GID itself.
+
 * Helm AG
 
 ** Tips
@@ -621,6 +640,19 @@ or global when placed in home directory (See AG man page for more infos).
 This file supports same entries as what you will find in `helm-grep-ignored-files' and
 `helm-grep-ignored-directories'.
 As always you can access helm AG from `helm-find-files'.
+
+Starting at version 0.30 AG allow providing one or more TYPE argument on its command line.
+Helm provide completion on these TYPES arguments when available with your AG version,
+Use a prefix argument when starting helm ag session to get this completion.
+NOTE: You can mark several types to match in your ag query, however on the first versions of
+AG providing this, only one type was allowed, so in this case the last marked will take effect.
+
+* Helm git-grep
+
+Helm git-grep is searching from current directory
+(i.e default-directory or the directory currently browsed by helm-find-files).
+If this current directory is a subdirectory of project and you want to match
+also upper directories (i.e the whole project) use a prefix arg.
 
 ** Commands
 \\<helm-grep-map>
@@ -1199,12 +1231,6 @@ HELM-ATTRIBUTE should be a symbol."
   Functions should return transformed `helm-pattern'.
 
   It is useful to change interpretation of `helm-pattern'.")
-
-(helm-document-attribute 'delayed "optional"
-  "  Candidates from the source are shown only if the user stops
-  typing and is idle for `helm-idle-delay' seconds.
-  If a value is given to delayed attr, this value is used instead only
-  if it is > to `helm-idle-delay'.")
 
 (helm-document-attribute 'volatile "optional"
   "  Indicates the source assembles the candidate list dynamically,

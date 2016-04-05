@@ -1,6 +1,6 @@
 ;;; helm-mode.el --- Enable helm completion everywhere. -*- lexical-binding: t -*-
 
-;; Copyright (C) 2012 ~ 2015 Thierry Volpiatto <thierry.volpiatto@gmail.com>
+;; Copyright (C) 2012 ~ 2016 Thierry Volpiatto <thierry.volpiatto@gmail.com>
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -37,6 +37,8 @@
     (trace-function-foreground . helm-completing-read-symbols)
     (trace-function-background . helm-completing-read-symbols)
     (find-tag . helm-completing-read-with-cands-in-buffer)
+    (org-capture . helm-org-completing-read-tags)
+    (org-set-tags . helm-org-completing-read-tags)
     (ffap-alternate-file . nil)
     (tmm-menubar . nil)
     (find-file . nil)
@@ -400,7 +402,7 @@ that use `helm-comp-read' See `helm-M-x' for example."
                       . (lambda (candidate)
                           (if ,marked-candidates
                               (helm-marked-candidates)
-                            (identity candidate)))))))
+                              (identity candidate)))))))
     ;; Assume completion have been already required,
     ;; so always use 'confirm.
     (when (eq must-match 'confirm-after-completion)

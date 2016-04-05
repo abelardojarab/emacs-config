@@ -1,6 +1,6 @@
 ;;; helm-command.el --- Helm execute-exended-command. -*- lexical-binding: t -*-
 
-;; Copyright (C) 2012 ~ 2015 Thierry Volpiatto <thierry.volpiatto@gmail.com>
+;; Copyright (C) 2012 ~ 2016 Thierry Volpiatto <thierry.volpiatto@gmail.com>
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -230,21 +230,22 @@ the prefix args if needed, are passed AFTER starting `helm-M-x'.
 You can get help on each command by persistent action."
   (interactive (list current-prefix-arg (helm-M-x-read-extended-command)))
   (let ((sym-com (and (stringp command-name) (intern-soft command-name))))
-    ;; Avoid having `this-command' set to *exit-minibuffer.
-    (setq this-command sym-com
-          ;; Handle C-x z (repeat) Issue #322
-          real-this-command sym-com)
-    ;; If helm-M-x is called with regular emacs completion (kmacro)
-    ;; use the value of arg otherwise use helm-current-prefix-arg.
-    (let ((prefix-arg (or helm-current-prefix-arg arg)))
-      ;; This ugly construct is to save history even on error.
-      (unless helm-M-x-always-save-history
-        (command-execute sym-com 'record))
-      (setq extended-command-history
-            (cons command-name
-                  (delete command-name extended-command-history)))
-      (when helm-M-x-always-save-history
-        (command-execute sym-com 'record)))))
+    (when sym-com
+      ;; Avoid having `this-command' set to *exit-minibuffer.
+      (setq this-command sym-com
+            ;; Handle C-x z (repeat) Issue #322
+            real-this-command sym-com)
+      ;; If helm-M-x is called with regular emacs completion (kmacro)
+      ;; use the value of arg otherwise use helm-current-prefix-arg.
+      (let ((prefix-arg (or helm-current-prefix-arg arg)))
+        ;; This ugly construct is to save history even on error.
+        (unless helm-M-x-always-save-history
+          (command-execute sym-com 'record))
+        (setq extended-command-history
+              (cons command-name
+                    (delete command-name extended-command-history)))
+        (when helm-M-x-always-save-history
+          (command-execute sym-com 'record))))))
 
 
 (provide 'helm-command)

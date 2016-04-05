@@ -2151,6 +2151,10 @@ without having to using one of the diff popups.
   is an integer, highlight indentation with at least that many spaces.
   Otherwise, highlight neither.
 
+- User Option: magit-diff-hide-trailing-cr-characters
+
+  Whether to hide ^M characters at the end of a line in diffs.
+
 *** Revision buffer
 
 - User Option: magit-revision-insert-related-refs
@@ -2235,6 +2239,10 @@ without having to using one of the diff popups.
 
   Show changes to a file introduced by a commit using Ediff.
 
+- Key: E z, magit-ediff-show-stash
+
+  Show changes to a file introduced by a stash using Ediff.
+
 - User Option: magit-ediff-dwim-show-on-hunks
 
   This option controls what command ~magit-ediff-dwim~ calls when
@@ -2242,6 +2250,13 @@ without having to using one of the diff popups.
   ~magit-ediff-stage~.  Otherwise, use ~magit-ediff-show-staged~ and
   ~magit-ediff-show-unstaged~ to show staged and unstaged changes,
   respectively.
+
+- User Option: magit-ediff-show-stash-with-index
+
+  This option controls whether ~magit-ediff-show-stash~ includes a
+  buffer containing the file's state in the index at the time the
+  stash was created.  This makes it possible to tell which changes in
+  the stash were staged.
 
 - User Option: magit-ediff-quit-hook
 
@@ -5194,7 +5209,8 @@ And now for the asynchronous variants.
   current section behave differently depending on that type.  Also if
   a variable ~magit-TYPE-section-map~ exists, then use that as the
   text-property ~keymap~ of all text belonging to the section (but this
-  may be overwritten in subsections).
+  may be overwritten in subsections).  TYPE can also have the form
+  ~(eval FORM)~ in which case FORM is evaluated at runtime.
 
   Optional VALUE is the value of the section, usually a string that is
   required when acting on the section.
@@ -5797,6 +5813,26 @@ is run for side-effects.  When the output is consumed in some way then
 also inserting it into the process buffer would be to expensive.  For
 debugging purposes it's possible to do so anyway by setting
 ~magit-git-debug~ to ~t~.
+
+** Diffs contain control sequences
+
+This happens when you configure Git to always color diffs and/or all
+of its output.  The valid values for relevant Git variables ~color.ui~
+and ~color.diff~ are ~false~, ~true~ and ~always~, and the default is ~true~.
+You should leave it that because then you get colorful output in
+terminals but git's output is consumed by something else, then no
+colors are used.
+
+If you actually use some other tool which expects that requires that
+you force git to output control sequences (which is highly unlikely),
+then you can override these settings just for Magit by using:
+
+#+BEGIN_SRC emacs-lisp
+  (setq magit-git-global-arguments
+        (nconc magit-git-global-arguments
+               '("-c" "color.ui=false"
+                 "-c" "color.diff=false")))
+#+END_SRC
 
 ** Expanding a file to show the diff causes it to disappear
 
