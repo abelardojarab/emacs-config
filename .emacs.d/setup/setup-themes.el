@@ -80,6 +80,11 @@
 (add-to-list 'load-path (expand-file-name "minimal-theme/" user-emacs-directory))
 (add-to-list 'custom-theme-load-path (expand-file-name "minimal-theme/" user-emacs-directory))
 
+;; Tomorrow theme
+(add-to-list 'load-path (expand-file-name "sanityinc-tomorrow-theme/" user-emacs-directory))
+(add-to-list 'custom-theme-load-path (expand-file-name "sanityinc-tomorrow-theme/" user-emacs-directory))
+(require 'color-theme-sanityinc-tomorrow)
+
 ;; Solarized theme
 (add-to-list 'load-path (expand-file-name "solarized-emacs/" user-emacs-directory))
 (add-to-list 'custom-theme-load-path (expand-file-name "solarized-emacs" user-emacs-directory))

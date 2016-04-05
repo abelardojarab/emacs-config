@@ -111,8 +111,11 @@
 
 ;; Langtool
 (use-package langtool
+  :if (executable-find "java")
   :load-path (lambda () (expand-file-name "langtool/" user-emacs-directory))
   :config (progn
+
+            ;; tool settings
             (setq langtool-language-tool-jar (expand-file-name
                                               "jar/LanguageTool-3.2/languagetool-commandline.jar"
                                               user-emacs-directory)
@@ -120,7 +123,20 @@
                   langtool-disabled-rules '("WHITESPACE_RULE"
                                             "EN_UNPAIRED_BRACKETS"
                                             "COMMA_PARENTHESIS_WHITESPACE"
-                                            "EN_QUOTES"))))
+                                            "EN_QUOTES"))
+
+            ;; Show LanguageTool report automatically by popup
+            ;; This idea come from: http://d.hatena.ne.jp/LaclefYoshi/20150912/langtool_popup
+            (defun langtool-autoshow-detail-popup (overlays)
+              (when (require 'popup nil t)
+                ;; Do not interrupt current popup
+                (unless (or popup-instances
+                            ;; suppress popup after type `C-g` .
+                            (memq last-command '(keyboard-quit)))
+                  (let ((msg (langtool-details-error-message overlays)))
+                    (popup-tip msg)))))
+            (setq langtool-autoshow-message-function
+                  'langtool-autoshow-detail-popup)))
 
 (provide 'setup-spell)
 ;;; setup-spell.el ends here

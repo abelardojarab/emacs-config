@@ -57,9 +57,9 @@
       (interactive)
       (let (main-writing-font main-programming-font)
         (setq main-programming-font "Roboto Mono")
-        (setq main-writing-font "Roboto Mono")
-        (if (find-font (font-spec :name "Roboto Mono"))
-            (setq main-writing-font "Roboto Mono"))
+        (if (find-font (font-spec :name "Roboto Mono Light"))
+            (setq main-writing-font "Roboto Mono Light")
+          (setq main-writing-font main-programming-font))
 
         ;; Adjust text size based on resolution
         (case system-type

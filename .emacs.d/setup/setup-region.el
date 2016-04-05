@@ -39,7 +39,6 @@
 
             ;; extra key bindings
             (define-key region-bindings-mode-map (kbd "u") 'unindent-block-or-line)
-            (define-key region-bindings-mode-map (kbd "c") 'kill-ring-save)
             (define-key region-bindings-mode-map (kbd "x") 'kill-region)))
 
 ;; Move text

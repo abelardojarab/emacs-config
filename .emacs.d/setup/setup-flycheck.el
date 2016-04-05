@@ -39,12 +39,8 @@
             ;; Enable flycheck for set of modes
             (mapc (lambda (mode)
                     (add-hook mode (lambda () (flycheck-mode t))))
-                  '(ess-mode-hook
-                    c-mode-hook
-                    c++-mode-hook
-                    perl-mode-hook
-                    python-mode-hook
-                    js2-mode-hook))
+                  '(prog-mode-hook
+                    ess-mode-hook))
 
             ;; disable flycheck during idle time, if enabled
             (delete 'idle-change flycheck-check-syntax-automatically)
@@ -70,14 +66,28 @@
                   (error line-start (file-name) ":" line ":" column
                          ": error: " (message) line-end))
                  :modes ',modes))
-            (flycheck-define-clike-checker c-gcc
-                                           ("gcc" "-fsyntax-only" "-Wall" "-Wextra")
-                                           c-mode)
-            (add-to-list 'flycheck-checkers 'c-gcc)
-            (flycheck-define-clike-checker c++-g++
-                                           ("g++" "-fsyntax-only" "-Wall" "-Wextra" "-std=c++11")
-                                           c++-mode)
-            (add-to-list 'flycheck-checkers 'c++-g++)
+            (when (executable-find "gcc")
+              (flycheck-define-clike-checker c-gcc
+                                             ("gcc" "-fsyntax-only" "-Wall" "-Wextra")
+                                             c-mode)
+              (add-to-list 'flycheck-checkers 'c-gcc))
+            (when (executable-find "g++")
+              (flycheck-define-clike-checker c++-g++
+                                             ("g++" "-fsyntax-only" "-Wall" "-Wextra" "-std=c++11")
+                                             c++-mode)
+              (add-to-list 'flycheck-checkers 'c++-g++))
+
+            ;; proselint support
+            (when (executable-find "proselint")
+              (flycheck-define-checker proselint
+                "A linter for prose."
+                :command ("proselint" source-inplace)
+                :error-patterns
+                ((warning line-start (file-name) ":" line ":" column ": "
+                          (id (one-or-more (not (any " "))))
+                          (message) line-end))
+                :modes (text-mode markdown-mode gfm-mode org-mode))
+              (add-to-list 'flycheck-checkers 'proselint))
 
             ;; Display error messages on one line in minibuffer and by new lines
             ;; separated in `flycheck-error-message-buffer'.
