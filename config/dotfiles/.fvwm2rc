@@ -47,12 +47,13 @@ AddToFunc   InitFunction
 + I Exec exec feh --bg-scale $[fvwm_wallpaper]
 + I Exec exec plank
 + I Exec exec trayer --SetDockType true --distance 200 --padding 10 --transparent true --tint a6aaaa --alpha 50 --edge top --align right --expand true --widthtype percent --width 12 --heighttype pixel --height 24 --distancefrom right
++ I Exec exec /usr/lib/x86_64-linux-gnu/notify-osd
 + I Exec exec hp-systray
 + I Exec exec gkrellm --geometry +1940+530
 + I Exec exec insync start
 + I Exec exec dropbox start
-+ I Exec exec /usr/lib/x86_64-linux-gnu/notify-osd
 + I Exec exec /opt/google/chrome-beta/chrome
++ I Exec exec google-musicmanager
 
 # Window Decor
 DestroyDecor MyDecoration
