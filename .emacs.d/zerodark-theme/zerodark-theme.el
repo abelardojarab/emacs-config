@@ -5,7 +5,7 @@
 ;; Author: Nicolas Petton <nicolas@petton.fr>
 ;; Keywords: themes
 ;; URL: https://github.com/NicolasPetton/zerodark-theme
-;; Version: 0.1
+;; Version: 1.0
 
 ;; This file is NOT part of GNU Emacs
 
@@ -138,13 +138,13 @@
                                               :inverse-video unspecified))))
    `(whitespace-trailing ((,class (:background ,red :foreground ,background :weight bold
                                                :inverse-video nil))))
-   `(whitespace-line ((,class (:background unspecified :foreground unspecified
+   `(whitespace-line ((,class (:background unspecified :foreground ,red
                                            :inverse-video unspecified))))
    `(whitespace-space-before-tab ((,class (:inherit whitespace-space))))
    `(whitespace-space-after-tab ((,class (:inherit whitespace-space))))
    `(whitespace-indentation ((,class (:background unspecified :foreground ,highlight
                                                   :inverse-video unspecified))))
-   `(whitespace-empty ((,class (:background unspecified :foreground ,highlight
+   `(whitespace-empty ((,class (:background ,orange :foreground ,highlight
                                             :inverse-video unspecified))))
 
    ;; link faces
@@ -169,11 +169,16 @@
 
    ;; magit
    `(magit-diff-context-highlight ((,class (:background ,background-darker))))
-   `(magit-diff-file-heading ((,class (:weight normal))))
+   `(magit-diff-file-heading ((,class (:weight bold :foreground ,blue))))
+   `(magit-diff-file-heading-highlight ((,class (:weight bold :foreground ,blue :background ,background-blue))))
    `(magit-diff-removed-highlight ((,class (:background ,diff-removed-background))))
    `(magit-diff-removed ((,class (:background ,diff-removed-background))))
    `(magit-diff-added-highlight ((,class (:background ,diff-added-background))))
    `(magit-diff-added ((,class (:background ,diff-added-background))))
+   `(magit-diff-lines-heading ((,class (:background ,blue-dark :foreground "white"))))
+   `(magit-diff-hunk-heading ((,class (:background ,background-lighter))))
+   `(magit-diff-hunk-heading-highlight ((,class (:background ,blue-dark))))
+   `(magit-diff-hunk-heading ((,class (:background ,background-lighter))))
 
    `(magit-section-highlight ((,class (:background ,background-darker))))
    `(magit-section-heading ((,class (:foreground ,grey :weight bold))))
@@ -247,13 +252,13 @@
    ;; FIC
    `(font-lock-fic-face ((,class (:foreground ,background :background ,red :weight bold))))
 
-   ;; org-mode todo WORK IN PROGRESS
+   ;; org-mode todo
    `(org-hide ((,class (:foreground ,background))))
    `(org-todo ((,class (:foreground ,red :background ,background-red :weight bold))))
    `(org-done ((,class (:foreground ,blue :background ,background-blue :weight bold))))
    `(org-date ((,class (:background ,background-lighter))))
    `(org-scheduled-previously ((,class (:foreground ,red))))
-   `(org-scheduled ((,class (:foreground ,orange))))
+   `(org-scheduled ((,class (:foreground ,default))))
    `(org-headline-done ((,class (:foreground ,comment))))
    `(outline-1 ((,class (:foreground ,blue :weight bold))))
    `(outline-2 ((,class (:foreground ,purple :weight bold))))
@@ -265,9 +270,15 @@
    `(outline-8 ((,class (:weight bold))))
    `(org-column-title ((,class (:foreground unspecified :background unspecified))))
    `(org-agenda-date ((,class (:foreground ,purple :weight bold))))
-   `(org-agenda-structure ((,class (:foreground ,orange :weight bold))))
+   `(org-agenda-date-today ((,class (:foreground ,blue :weight bold :background ,background-blue :box 1))))
+   `(org-agenda-structure ((,class (:foreground ,blue :weight bold))))
    `(org-scheduled-today ((,class (:foreground ,default :weight bold))))
    `(org-agenda-done ((,class (:foreground ,comment))))
+   `(org-time-grid ((,class (:foreground ,comment))))
+
+   ;; org blocks
+   `(org-block-begin-line ((,class (:background ,background-green :foreground ,green-light :height 0.9))))
+   `(org-block-end-line ((,class (:background ,background-green :foreground ,green-light :height 0.9))))
 
    ;; Gnus faces -- from wombat, feel free to improve :)
    `(gnus-group-news-1 ((,class (:weight bold :foreground "#95e454"))))
@@ -319,6 +330,15 @@
    `(ediff-odd-diff-B ((,class (:background ,highlight :foreground unspecified))))
    `(ediff-odd-diff-C ((,class (:background ,highlight :foreground unspecified))))
 
+   ;; ivy
+   `(ivy-current-match ((,class (:background ,background-purple :weight bold :foreground ,purple))))
+   `(ivy-minibuffer-match-face-1 ((,class (:foreground ,orange))))
+   `(ivy-minibuffer-match-face-2 ((,class (:foreground ,green))))
+   `(ivy-minibuffer-match-face-3 ((,class (:foreground ,orange))))
+   `(ivy-minibuffer-match-face-4 ((,class (:foreground ,green))))
+   `(ivy-match-required-face ((,class (:foreground ,red :background ,background-red :weight bold))))
+   `(ivy-remote ((,class (:foreground ,blue))))
+
    ;; helm
    `(helm-candidate-number ((,class (:weight bold))))
    `(helm-header-line-left-margin ((,class (:weight bold :foreground ,red))))
@@ -363,7 +383,58 @@
 
    ;; clojure
    `(clojure-keyword-face ((,class (:inherit font-lock-builtin-face))))
-   ))
+
+   ;; ledger
+   `(ledger-font-report-clickable-face ((,class (:foreground ,blue))))
+   `(ledger-font-posting-amount-face ((,class (:foreground ,purple))))
+   `(ledger-font-posting-date-face ((,class (:foreground ,red :background))))
+   `(ledger-font-payee-uncleared-face ((,class (:foreground ,red :weight bold))))
+   `(ledger-font-posting-account-face ((,class (:foreground ,blue))))
+   `(ledger-font-posting-account-pending-face ((,class (:foreground ,red))))
+   `(ledger-font-xact-highlight-face ((,class (:background ,background-darker))))
+   `(ledger-font-other-face ((,class (:inherit ,font-lock-comment-face))))
+   `(ledger-font-periodic-xact-face ((,class (:foreground ,green))))
+
+   `(diff-hl-change ((,class (:foreground ,purple :background ,background-purple))))
+   `(diff-hl-delete ((,class (:foreground ,red :background ,background-red))))
+   `(diff-hl-insert ((,class (:foreground ,green :background ,background-green))))
+
+   `(term-color-black ((,class (:foreground ,default :background ,background-darker))))
+   `(term-color-red ((,class (:foreground ,red :background ,background-red))))
+   `(term-color-green ((,class (:foreground ,green :background ,background-green))))
+   `(term-color-yellow ((,class (:foreground ,orange :background ,background-orange))))
+   `(term-color-blue ((,class (:foreground ,blue :background ,background-blue))))
+   `(term-color-magenta ((,class (:foreground ,purple :background ,background-purple))))
+   `(term-color-cyan ((,class (:foreground ,blue-dark))))
+   `(term-color-white ((,class (:foreground ,grey))))
+   `(term ((,class (:foreground ,default :background ,background))))
+   `(term-default-fg-color ((,class (:inherit term-color-white))))
+   `(term-default-bg-color ((,class (:inherit term-color-black))))
+
+   `(avy-lead-face ((,class :foreground ,red :background ,background-red)))
+   `(avy-lead-face-0 ((,class :foreground ,purple :background ,background-purple)))
+   `(avy-lead-face-1 ((,class :foreground ,blue :background ,background-blue)))
+   `(avy-lead-face-2 ((,class :foreground ,green :background ,background-green)))
+
+   `(erc-nick-default-face ((,class :foreground ,blue :background ,background-blue :weight bold)))
+   `(erc-current-nick-face ((,class :foreground ,red :weight bold :background ,background-red)))
+   `(erc-my-nick-face ((,class :foreground ,red :weight bold :background ,background-red)))
+   `(erc-notice-face ((,class :foreground ,comment)))
+   `(erc-input-face ((,class :foreground ,default :weight bold)))
+   `(erc-prompt-face ((,class :foreground ,purple :background ,background-purple :weight bold :box 1)))
+   `(erc-timestamp-face ((,class :foreground ,purple :weight bold)))
+   )
+
+  (custom-theme-set-variables
+   'zerodark
+   `(ansi-color-names-vector [,background
+                              ,red
+                              ,green
+                              ,orange
+                              ,blue
+                              ,purple
+                              ,blue-dark
+                              ,default])))
 
 ;;;###autoload
 (when (and (boundp 'custom-theme-load-path) load-file-name)
