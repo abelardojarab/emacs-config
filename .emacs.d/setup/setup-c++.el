@@ -25,6 +25,10 @@
 ;;; Code:
 
 (use-package cc-mode
+  :bind (:map c-mode-map
+              ("C-c o" . ff-find-other-file)
+              :map c++-mode-map
+              ("C-c o" . ff-find-other-file))
   :config (progn
             ;; Put c++-mode as default for *.h files (improves parsing)
             (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
@@ -39,6 +43,10 @@
 
 (use-package function-args
   :load-path (lambda () (expand-file-name "function-args/" user-emacs-directory))
+  :bind (:map c-mode-map
+              ("C-:" . moo-complete)
+              :map c++-mode-map
+              ("C-:" . moo-complete))
   :config (progn
             (fa-config-default)
             (define-key function-args-mode-map (kbd "M-o") nil)
@@ -47,9 +55,10 @@
 
 (use-package srefactor
   :load-path (lambda () (expand-file-name "semantic-refactor/" user-emacs-directory))
-  :config (progn
-            (define-key c-mode-map (kbd "C-|") 'srefactor-refactor-at-point)
-            (define-key c++-mode-map (kbd "C-|") 'srefactor-refactor-at-point)))
+  :bind (:map c-mode-map
+              ("C-|" . srefactor-refactor-at-point)
+              :map c++-mode-map
+              ("C-|" . srefactor-refactor-at-point)))
 
 (provide 'setup-c++)
 ;;; setup-c++.el ends here
