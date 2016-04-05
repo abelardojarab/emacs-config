@@ -36,54 +36,20 @@ Some of the modes that have icons instead of names now:
   - [[http://fontawesome.io/][Font Awesome]]
   - [[https://octicons.github.com/][GitHub Octicons]]
   - [[http://fizzed.com/oss/font-mfizz][Font Mfizz]]
-  - [[https://icomoon.io/#icons-icomoon][IcoMoon]]
 
-  The icons look the best if you have the fonts installed on your
-  system and mode-icons will not do this for you.
+  You need to have installed these on your system in order to use
+  these fonts, mode-icons will not do this for you. If you don't have
+  them installed you may get some strange glyphs in your mode-line
+  instead.
 
 * Installation
-** Manually
+
+** manually
 
    Place ~mode-icons.el~ somewhere in your =load-path= and copy the
    ~icons/~ directory there as well. Then =require= ~mode-icons~ in your
    [[http://gnu.org/software/emacs][Emacs]] init file.
 
 * Usage
+
   Once installed you can add =(mode-icons-mode)= to your init file.
-** Ignoring mode-icons in other buffers
-When looking at buffers with commands like ~ibuffer~, they display the
-icons for the mode names as well. If you don't like this behavior you
-can change ~mode-icons-change-mode-name~ to be nil:
-
-#+BEGIN_SRC emacs-lisp
-(setq mode-icons-change-mode-name nil)
-#+END_SRC
- 
-** Changing how mode-icons recolors images
-Additionally, if the image icon was an ~xpm~ icon, then you can have
-it changed to match your mode-line face.  In the example below, the
-inactive mode-line shows the emacs and yasnippet icon changed to match
-the inactive mode-line:
-
-[[http://i.imgur.com/QOM9wYM.png]]
-
-This is enabled by default, and can be disabled by:
-
-#+BEGIN_SRC emacs-lisp
-(setq mode-icons-desaturate-inactive nil)
-#+END_SRC
-
-You can also change the icon to match the active mode line (disabled by default):
-
-#+BEGIN_SRC emacs-lisp
-(setq mode-icons-desaturate-active t)
-#+END_SRC
-
-Some of the black and white images are tagged as black and white and
-are automatically recolored to match the mode-line face.  You can turn this off
-and use the black and white image by setting:
-
-#+BEGIN_SRC emacs-lisp
-(setq mode-icons-grayscale-transform nil)
-#+END_SRC
-
