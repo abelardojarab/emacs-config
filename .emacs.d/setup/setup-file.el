@@ -62,7 +62,7 @@
 (setq read-quoted-char-radix 10)
 (if (equal system-type 'windows-nt)
     (progn
-      (set-language-environment 'utf-16-le)
+      (set-language-environment 'utf-8)
       (prefer-coding-system 'utf-16-le)
       (setq locale-coding-system 'utf-16-le)
       (setq buffer-file-coding-system 'utf-16-le)
