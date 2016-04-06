@@ -88,6 +88,10 @@
 (add-to-list 'load-path (expand-file-name "minimal-theme/" user-emacs-directory))
 (add-to-list 'custom-theme-load-path (expand-file-name "minimal-theme/" user-emacs-directory))
 
+;; Goose theme
+(add-to-list 'load-path (expand-file-name "goose-theme/" user-emacs-directory))
+(add-to-list 'custom-theme-load-path (expand-file-name "goose-theme/" user-emacs-directory))
+
 ;; Tomorrow theme
 (add-to-list 'load-path (expand-file-name "sanityinc-tomorrow-theme/" user-emacs-directory))
 (add-to-list 'custom-theme-load-path (expand-file-name "sanityinc-tomorrow-theme/" user-emacs-directory))
@@ -110,7 +114,8 @@
 ;; (load-theme 'twilight-brigh)
 ;; (load-theme 'plan9)
 ;; (load-theme 'minimal-light) ;; best ink theme
-(load-theme 'monokai t) ;; best dark color scheme
+;; (load-theme 'monokai t) ;; best dark color scheme
+(load-theme 'goose t)
 ;; (load-theme 'eink)
 ;; (load-theme 'monokai-extended t)
 ;; (load-theme 'pastelmac t)
