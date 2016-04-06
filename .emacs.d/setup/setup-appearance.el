@@ -76,14 +76,16 @@ non-nil."
 (add-hook 'prog-mode-hook
           (lambda ()
             (visual-line-mode -1)
-            (toggle-truncate-lines -1)))
-(add-hook 'org-agenda-mode-hook
+            (toggle-truncate-lines t)
+            (setq truncate-lines t)))
+(add-hook 'text-mode-hook
           (lambda ()
             (visual-line-mode 1)
-            (toggle-truncate-lines 1)))
+            (toggle-truncate-lines -1)
+            (setq truncate-lines nil)))
 
-;; Enable word wrapping
-(setq-default word-wrap t)
+;; Disable word wrapping
+(setq-default word-wrap nil)
 
 ;; Syntax coloring
 (global-font-lock-mode t)
