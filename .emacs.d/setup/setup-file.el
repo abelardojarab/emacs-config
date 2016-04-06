@@ -51,8 +51,8 @@
 ;; if indent-tabs-mode is off, untabify before saving
 (add-hook 'write-file-hooks
           (lambda () (if (not indent-tabs-mode)
-                         (save-excursion
-                           (untabify (point-min) (point-max)))) nil))
+                    (save-excursion
+                      (untabify (point-min) (point-max)))) nil))
 
 ;; try to improve slow performance on windows.
 (setq w32-get-true-file-attributes nil)
@@ -60,16 +60,27 @@
 ;; Garantee utf8 as input-method
 (set-input-method nil)
 (setq read-quoted-char-radix 10)
-(set-language-environment 'utf-8)
-(set-locale-environment "en_US.UTF-8")
-(setq locale-coding-system 'utf-8-unix)
-
-;; Coding system
-(set-default-coding-systems 'utf-8-unix)
-(set-terminal-coding-system 'utf-8-unix)
-(set-keyboard-coding-system 'utf-8-unix)
-(set-selection-coding-system 'utf-8-unix)
-(prefer-coding-system 'utf-8-unix)
+(if (equal system-type 'windows-nt)
+    (progn
+      (set-language-environment 'utf-16-le)
+      (prefer-coding-system 'utf-16-le)
+      (setq locale-coding-system 'utf-16-le)
+      (setq buffer-file-coding-system 'utf-16-le)
+      (set-default-coding-systems 'utf-16-le)
+      (set-terminal-coding-system 'utf-16-le)
+      (set-keyboard-coding-system 'utf-8)
+      (set-selection-coding-system 'utf-16-le)
+      (prefer-coding-system 'utf-16-le))
+  (progn
+    (set-language-environment 'utf-8)
+    (set-locale-environment "en_US.UTF-8")
+    (setq locale-coding-system 'utf-8-unix)
+    (setq buffer-file-coding-system 'utf-8-unix)
+    (set-default-coding-systems 'utf-8-unix)
+    (set-terminal-coding-system 'utf-8-unix)
+    (set-keyboard-coding-system 'utf-8-unix)
+    (set-selection-coding-system 'utf-8-unix)
+    (prefer-coding-system 'utf-8-unix)))
 
 ;; update the copyright when present
 (add-hook 'before-save-hook 'copyright-update)
