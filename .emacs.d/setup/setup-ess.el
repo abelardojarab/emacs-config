@@ -26,6 +26,9 @@
 
 (use-package ess-site
   :load-path (lambda () (expand-file-name "ESS/lisp" user-emacs-directory))
+  :init (progn
+          (add-to-list 'auto-mode-alist '("\\.r\\'" . R-mode))
+          (add-to-list 'auto-mode-alist '("\\.R\\'" . R-mode)))
   :config (progn
             (setq-default ess-dialect "R")
             (setq-default inferior-R-args " --no-restore-history --no-save ")
@@ -57,8 +60,7 @@
                     (ess-fl-keyword:delimiters . t)
                     (ess-fl-keyword:= . t)
                     (ess-R-fl-keyword:F&T . t)
-                    (ess-R-fl-keyword:%op% . t)
-                    ))
+                    (ess-R-fl-keyword:%op% . t)))
 
             ;; Console font lock highlight.
             (setq inferior-R-font-lock-keywords
@@ -76,8 +78,7 @@
                     (ess-fl-keyword:delimiters . t)
                     (ess-fl-keyword:= . t)
                     (ess-R-fl-keyword:F&T . t)
-                    (ess-R-fl-keyword:%op% . t)
-                    ))
+                    (ess-R-fl-keyword:%op% . t)))
 
             ;; Associate files
             (setq auto-mode-alist

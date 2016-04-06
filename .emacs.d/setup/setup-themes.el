@@ -118,9 +118,9 @@
 ;; (load-theme 'twilight-brigh)
 ;; (load-theme 'plan9)
 ;; (load-theme 'minimal-light) ;; best ink theme
-;; (load-theme 'monokai t) ;; best dark color scheme
+(load-theme 'monokai t) ;; best dark color scheme
 ;; (load-theme 'goose t)
-(load-theme 'tao-yang t)
+;; (load-theme 'tao-yang t)
 ;; (load-theme 'tao-yin t)
 ;; (load-theme 'eink)
 ;; (load-theme 'monokai-extended t)

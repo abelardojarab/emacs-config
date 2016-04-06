@@ -27,16 +27,19 @@
 (use-package web-mode
   :load-path (lambda () (expand-file-name "web-mode/" user-emacs-directory))
   :init (progn
-          (add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
+          (add-to-list 'auto-mode-alist '("\\.css?\\'" . web-mode))
           (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode)))
   :config (progn
-			(add-hook 'web-mode-hook 'autopair-mode)
-            (add-hook 'web-mode-hook
-                      (lambda ()
-                        (setq web-mode-enable-css-colorization t)
-                        (setq web-mode-markup-indent-offset 2)
-                        (setq web-mode-style-padding 2)
-                        (setq web-mode-script-padding 2)))))
+            (setq web-mode-enable-css-colorization t
+                  web-mode-style-padding 2
+                  web-mode-script-padding 2
+                  web-mode-markup-indent-offset 2
+                  web-mode-code-indent-offset 2
+                  web-mode-enable-current-element-highlight t
+                  web-mode-ac-sources-alist
+                  '(("css" . (ac-source-css-property))
+                    ("html" . (ac-source-words-in-buffer ac-source-abbrev))))
+            (add-hook 'web-mode-hook 'autopair-mode)))
 
 (use-package ac-html
   :load-path (lambda () (expand-file-name "ac-html/" user-emacs-directory))

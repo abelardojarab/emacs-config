@@ -25,9 +25,12 @@
 ;;; Code:
 
 (use-package eldoc
-  :defer t
   :diminish eldoc-mode
-  :init (add-hook 'prog-mode-hook 'eldoc-mode))
+  :commands turn-on-eldoc-mode
+  :init (progn
+          (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
+          (add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
+          (add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)))
 
 (use-package c-eldoc
   :load-path (lambda () (expand-file-name "c-eldoc/" user-emacs-directory))
