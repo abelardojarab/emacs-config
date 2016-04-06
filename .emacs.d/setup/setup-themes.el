@@ -96,6 +96,10 @@
 (add-to-list 'load-path (expand-file-name "tao-theme/" user-emacs-directory))
 (add-to-list 'custom-theme-load-path (expand-file-name "tao-theme/" user-emacs-directory))
 
+;; White sand theme
+(add-to-list 'load-path (expand-file-name "white-sand-theme/" user-emacs-directory))
+(add-to-list 'custom-theme-load-path (expand-file-name "white-sand-theme/" user-emacs-directory))
+
 ;; Tomorrow theme
 (add-to-list 'load-path (expand-file-name "sanityinc-tomorrow-theme/" user-emacs-directory))
 (add-to-list 'custom-theme-load-path (expand-file-name "sanityinc-tomorrow-theme/" user-emacs-directory))
@@ -117,8 +121,9 @@
 ;; (load-theme 'faff t)
 ;; (load-theme 'twilight-brigh)
 ;; (load-theme 'plan9)
+(load-theme 'white-sand) ;; best light theme
 ;; (load-theme 'minimal-light) ;; best ink theme
-(load-theme 'monokai t) ;; best dark color scheme
+;; (load-theme 'monokai t) ;; best dark color scheme
 ;; (load-theme 'goose t)
 ;; (load-theme 'tao-yang t)
 ;; (load-theme 'tao-yin t)
