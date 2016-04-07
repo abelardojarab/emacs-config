@@ -162,13 +162,13 @@
 \\usepackage{array}
 
 % Support for floats
-\\RequirePackage{float}
+\\usepackage{float}
 
 % For more table formatting
-\\RequirePackage{booktabs}
+\\usepackage{booktabs}
 
 % Use hyperlinks for convenience, but let's not make them coloured
-\\RequirePackage[bookmarks,colorlinks,breaklinks]{hyperref}
+\\usepackage[bookmarks,colorlinks,breaklinks]{hyperref}
 \\hypersetup{
   colorlinks,
   citecolor=black,
@@ -178,17 +178,18 @@
 }
 
 % Use the excellent biblatex package with IEEE style, sorted = none makes the numbering appear in order
-\\RequirePackage[american]{babel}
-\\RequirePackage{csquotes}
-\\RequirePackage[
-  sorting = none,
-  url = false,
-  hyperref = true,
-  style = ieee,
-  bibencoding = utf8]{biblatex}
+\\usepackage[american]{babel}
+\\usepackage{csquotes}
+\\usepackage[
+  sorting=none,
+  url=false,
+  hyperref=true,
+  style=authoryear,
+  bibencoding=ascii]{biblatex}
 \\DeclareLanguageMapping{american}{american-apa}
 
 % Bibliography
+\\addbibresource{../../Bibliography/biblio.bib}  %% point at your bib file
 \\bibliography{biblio}
 
 \\renewcommand{\\rmdefault}{ptm}
@@ -305,6 +306,7 @@
 \\usepackage{caption}
 \\usepackage{color}
 \\usepackage{mathptmx}
+\\usepackage[mla]{ellipsis}
 \\usepackage[section]{placeins}
 \\geometry{a4paper, textwidth=6.5in, textheight=9.2in,
             marginparsep=7pt, marginparwidth=.6in}
@@ -335,33 +337,33 @@
 \\usepackage{array}
 
 % Support for floats
-\\RequirePackage{float}
+\\usepackage{float}
 
 % For more table formatting
-\\RequirePackage{booktabs}
+\\usepackage{booktabs}
 
 % Use hyperlinks for convenience, but let's not make them coloured
-\\RequirePackage[bookmarks,colorlinks,breaklinks]{hyperref}
+\\usepackage[bookmarks,colorlinks,breaklinks]{hyperref}
 \\hypersetup{
   colorlinks,
   citecolor=black,
   filecolor=black,
   linkcolor=black,
-  urlcolor=black
-}
+  urlcolor=black}
 
 % Use the excellent biblatex package with IEEE style, sorted = none makes the numbering appear in order
-\\RequirePackage[american]{babel}
-\\RequirePackage{csquotes}
-\\RequirePackage[
-  sorting = none,
-  url = false,
-  hyperref = true,
-  style = ieee,
-  bibencoding = utf8]{biblatex}
+\\usepackage[american]{babel}
+\\usepackage{csquotes}
+\\usepackage[
+  sorting=nyt, % name, year, title
+  url=false,
+  hyperref=true,
+  style=ieee,
+  bibencoding=ascii]{biblatex}
 \\DeclareLanguageMapping{american}{american-apa}
 
 % Bibliography
+\\addbibresource{../../Bibliography/biblio.bib}  %% point at your bib file
 \\bibliography{biblio}
 
 \\title{}
@@ -383,7 +385,6 @@
     (setq org-latex-pdf-process
           '("xelatex -interaction nonstopmode -synctex=1 -shell-escape -output-directory %o %f"
             "biber %b"
-            "bibtex $(basename %b)"
             "xelatex -interaction nonstopmode -synctex=1 -shell-escape -output-directory %o %f"
             "xelatex -interaction nonstopmode -synctex=1 -shell-escape -output-directory %o %f")) ;; multipass
   (setq org-latex-pdf-process
