@@ -117,7 +117,7 @@
     (add-hook 'emacs-startup-hook '(lambda () (fontify-frame (selected-frame))))
 
     ;; Use Symbola font on Unicode mathematical symbols
-    (when (find-font (font-spec :name "Symbola"))
+    (if (find-font (font-spec :name "Symbola"))
       (set-fontset-font t nil "Symbola"))))
 
 ;; Fixed pitch for HTML
