@@ -51,8 +51,7 @@
   :load-path (lambda () (expand-file-name "indent-guide/" user-emacs-directory))
   :diminish indent-guide-mode
   :config (progn
-            (if (equal system-type 'windows-nt)
-                (setq indent-guide-car ":")
+            (unless (equal system-type 'windows-nt)
               (setq indent-guide-char "┊"))
             (setq indent-guide-recursive t)
             (add-hook 'prog-mode-hook (lambda () (indent-guide-mode t)))))
