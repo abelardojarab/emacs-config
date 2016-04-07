@@ -51,8 +51,10 @@
   :load-path (lambda () (expand-file-name "indent-guide/" user-emacs-directory))
   :diminish indent-guide-mode
   :config (progn
-            (setq indent-guide-char "┊"
-                  indent-guide-recursive t)
+            (if (equal system-type 'windows-nt)
+                (setq indent-guide-car ":")
+              (setq indent-guide-char "┊"))
+            (setq indent-guide-recursive t)
             (add-hook 'prog-mode-hook (lambda () (indent-guide-mode t)))))
 
 ;; Highlight indentation levels
