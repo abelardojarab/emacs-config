@@ -76,7 +76,7 @@
 ;; then enter the text in that file's own buffer.")
  '(org-CUA-compatible t)
  '(org-special-ctrl-a/e t)
- '(org-support-shift-select t)
+ '(org-support-shift-select (quote always))
  '(recentf-menu-before "Close")
  '(scroll-error-top-bottom t)
  '(set-mark-command-repeat-pop t)
@@ -314,11 +314,12 @@
 ;; Setup ergoemacs
 (require 'setup-ergoemacs)
 
+;; Disable checks
+(setq debug-on-quit nil)
+(setq debug-on-error nil)
+
 ;; Setup server
 (require 'setup-server)
 
 ;; Setup desktop
 (require 'setup-desktop)
-
-(setq debug-on-quit nil)
-(setq debug-on-error nil)
