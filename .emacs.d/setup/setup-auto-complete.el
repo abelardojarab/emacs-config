@@ -78,6 +78,9 @@
             ;; disable auto-complete in comments
             (setq ac-disable-faces '(font-lock-string-face font-lock-doc-face))
 
+            ;; Default colors
+            (set-face-background 'ac-selection-face "darkgray")
+
             ;; support for imenu
             (defvar ac-imenu-index nil)
             (ac-clear-variable-every-10-minutes 'ac-imenu-index)

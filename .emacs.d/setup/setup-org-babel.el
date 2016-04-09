@@ -98,7 +98,7 @@
   "#+AUTHOR:\n"
   "#+EMAIL:\n"
   "#+LANGUAGE: en\n"
-  "#+OPTIONS:  toc:nil num:0\n"
+  "#+OPTIONS:  toc:nil num:0 H:2\n"
   "#+OPTIONS: author:t email:nil  date:t\n"
   "#+OPTIONS: c:nil d:(not LOGBOOK) e:t f:t inline:t p:nil pri:nil stat:t tags:t\n"
   "#+OPTIONS: tasks:t tex:t timestamp:t todo:t\n"

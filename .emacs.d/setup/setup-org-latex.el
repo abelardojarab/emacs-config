@@ -103,7 +103,7 @@
 
 ;; Add defaults packages to include when exporting.
 (setq org-latex-hyperref-template
-      "\\hypersetup{\n  pdfkeywords={%k},\n  pdfsubject={%d},\n  pdfcreator={%c},\n  colorlinks=true,\n  linkcolor=black,\n  urlcolor=blue}\n")
+      "\\hypersetup{\n  pdfkeywords={%k},\n  pdfsubject={%d},\n  pdfcreator={%c},\n  colorlinks=true,\n  linkcolor=black,\n  urlcolor=black}\n")
 (add-to-list 'org-latex-packages-alist '("" "graphicx"))
 (add-to-list 'org-latex-packages-alist '("" "geometry"))
 (add-to-list 'org-latex-packages-alist '("" "hyperref"))

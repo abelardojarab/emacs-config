@@ -41,19 +41,30 @@
 
 (use-package dired-k
   :load-path (lambda () (expand-file-name "dired-k/" user-emacs-directory))
+  :defer t
+  :bind (:map dired-mode-map
+              ("K" . dired-k))
   :config (progn
-            (define-key dired-mode-map (kbd "K") 'dired-k)
             (add-hook 'dired-initial-position-hook 'dired-k)))
 
 (use-package direx-project
   :load-path (lambda () (expand-file-name "direx/" user-emacs-directory)))
 
+;; Facility to see images inside dired
 (use-package image-dired
+  :defer t
   :config (progn
             (setq image-dired-cmd-create-thumbnail-options
                   (replace-regexp-in-string "-strip" "-auto-orient -strip" image-dired-cmd-create-thumbnail-options)
                   image-dired-cmd-create-temp-image-options
                   (replace-regexp-in-string "-strip" "-auto-orient -strip" image-dired-cmd-create-temp-image-options))))
+
+;;preview files in dired
+(use-package peep-dired
+  :load-path (lambda () (expand-file-name "peep-dired/" user-emacs-directory))
+  :defer t ;; don't access `dired-mode-map' until `peep-dired' is loaded
+  :bind (:map dired-mode-map
+              ("P" . peep-dired)))
 
 (provide 'setup-dired-plugins)
 ;;; setup-dired-plugins.el ends here
