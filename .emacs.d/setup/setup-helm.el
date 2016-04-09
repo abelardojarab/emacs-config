@@ -34,9 +34,10 @@
          :map isearch-mode-map
          ("C-h" . helm-occur-from-isearch)
          :map ctl-x-map
+         ("p" . helm-show-kill-ring)
          ("x" . helm-M-x)
          ("n" . helm-mini)
-         ("a" . helm-apropos)
+         ("h" . helm-apropos)
          ("i" . helm-semantic-or-imenu)
          ("." . helm-semantic)
          ("u" . helm-resume)

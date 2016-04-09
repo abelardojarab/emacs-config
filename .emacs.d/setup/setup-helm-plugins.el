@@ -26,6 +26,7 @@
 
 ;; Helm grepint
 (use-package helm-grepint
+  :defer t
   :commands (helm-grepint-grep helm-grep-do-git-grep)
   :load-path (lambda () (expand-file-name "helm-grepint/" user-emacs-directory))
   :bind (:map ctl-x-map
@@ -35,8 +36,10 @@
 
 ;; Helm ag/ack
 (use-package helm-ag
+  :defer t
   :commands (helm-ag helm-do-ag helm-do-ag-this-file helm-do-ag-project-root)
-  :bind ("C-c a" . helm-ag)
+  :bind (:map ctl-x-map
+              ("a" . helm-ag))
   :load-path (lambda () (expand-file-name "helm-ag/" user-emacs-directory))
   :config (progn
             ;; Fallback to ack if the silver searcher is not found
@@ -46,6 +49,7 @@
 
 ;; Helm describe modes
 (use-package helm-describe-modes
+  :defer t
   :commands (helm-describe-modes)
   :load-path (lambda () (expand-file-name "helm-describe-modes/" user-emacs-directory))
   :config (progn
@@ -53,6 +57,7 @@
 
 ;; Helm desc-binds
 (use-package helm-descbinds
+  :defer t
   :commands (helm-descbinds)
   :load-path (lambda () (expand-file-name "helm-descbinds/" user-emacs-directory))
   :bind (:map ctl-x-map
@@ -62,6 +67,7 @@
 
 ;; Helm flycheck
 (use-package helm-flycheck
+  :defer t
   :commands (helm-flycheck)
   :load-path (lambda () (expand-file-name "helm-flycheck/" user-emacs-directory))
   :bind (:map ctl-x-map
@@ -69,6 +75,7 @@
 
 ;; Helm flyspell
 (use-package helm-flyspell
+  :defer t
   :commands (helm-flyspell-correct)
   :load-path (lambda () (expand-file-name "helm-flyspell/" user-emacs-directory))
   :bind (:map ctl-x-map
@@ -76,13 +83,15 @@
 
 ;; Helm ls git
 (use-package helm-ls-git
+  :defer t
   :commands (helm-ls-git-ls)
   :load-path (lambda () (expand-file-name "helm-ls-git/" user-emacs-directory))
   :bind (:map ctl-x-map
-              ("g" . helm-ls-git-ls)))
+              ("v" . helm-ls-git-ls)))
 
 ;; Helm bm support
 (use-package helm-bm
+  :defer t
   :commands (helm-bookmarks)
   :load-path (lambda () (expand-file-name "helm-bm/" user-emacs-directory))
   :bind (:map ctl-x-map
@@ -90,6 +99,7 @@
 
 ;; Helm etags plus
 (use-package helm-etags+
+  :defer t
   :commands (helm-etags-select)
   :load-path (lambda () (expand-file-name "helm-etags-plus/" user-emacs-directory))
   :bind (("M-." . helm-etags-select)
@@ -98,6 +108,7 @@
 
 ;; Helm yasnippet
 (use-package helm-c-yasnippet
+  :defer t
   :commands (helm-yas-complete)
   :load-path (lambda () (expand-file-name "helm-c-yasnippet/" user-emacs-directory))
   :bind (:map ctl-x-map
@@ -105,6 +116,7 @@
 
 ;; Helm make support
 (use-package helm-make
+  :defer t
   :commands (helm-make)
   :load-path (lambda () (expand-file-name "helm-make/" user-emacs-directory))
   :bind (:map ctl-x-map
@@ -112,6 +124,7 @@
 
 ;; Helm swoop
 (use-package helm-swoop
+  :defer t
   :commands (helm-swoop helm-swoop-from-isearch)
   :bind (("C-*" . helm-swoop)
          :map isearch-mode-map
@@ -150,6 +163,7 @@
 
 ;; Helm bibtex
 (use-package helm-bibtex
+  :defer t
   :commands (helm-bibtex)
   :bind (:map ctl-x-map
               ("[" . helm-bibtex))
@@ -183,11 +197,13 @@
 
 ;; Helm themes
 (use-package helm-themes
+  :defer t
   :commands (helm-themes)
   :load-path (lambda () (expand-file-name "helm-themes/" user-emacs-directory)))
 
 ;; Helm dash
 (use-package helm-dash
+  :defer t
   :commands (helm-dash)
   :load-path (lambda () (expand-file-name "helm-dash/" user-emacs-directory))
   :bind (:map ctl-x-map

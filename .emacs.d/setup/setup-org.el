@@ -27,6 +27,17 @@
 ;; Org mode
 (use-package org
   :load-path (lambda () (expand-file-name "org-mode/lisp" user-emacs-directory))
+  :bind (("C-c r" . org-capture)
+         ("C-c a" . org-agenda)
+         ("C-c l" . org-store-link)
+         ("C-c L" . org-insert-link-global)
+         ("C-c O" . org-open-at-point-global)
+         :map org-mode-map
+         ("C-TAB" . org-cycle)
+         ("C-c k" . org-cut-subtree)
+         ("C-c t" . org-show-todo-tree)
+         ("C-c r" . org-refile)
+         ("C-c v" . org-reveal))
   :init (progn
           (setq load-path (cons (expand-file-name "org-mode/contrib/lisp" user-emacs-directory) load-path))
           (defvar org-list-allow-alphabetical t)
@@ -75,6 +86,7 @@
             (setq org-startup-folded 'nofold
                   org-startup-indented t
                   org-cycle-separator-lines 1
+                  org-cycle-include-plain-lists 'integrate
                   org-startup-with-inline-images nil
                   org-image-actual-width '(100)
                   org-startup-truncated t

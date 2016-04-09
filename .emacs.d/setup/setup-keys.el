@@ -167,9 +167,6 @@
 ;; C-v
 (global-set-key (kbd "C-v") 'yank)
 (global-set-key (kbd "C-S-v") 'helm-show-kill-ring)
-(global-set-key "\C-cv" '(lambda ()
-                           (interactive)
-                           (popup-menu 'yank-menu)))
 
 ;; Unindent (do what I mean version)
 (global-set-key (kbd "C-<") 'unindent-dwim)
@@ -240,10 +237,9 @@
 (global-set-key [C-right] 'windmove-right)
 
 ;; Extra Ctrl-x mappings
-(global-set-key (kbd "C-x x") 'kill-region)
-(define-key ctl-x-map (kbd "x") 'kill-region)
-(define-key ctl-x-map (kbd "p") 'yank)
-(define-key ctl-x-map (kbd "u") 'unindent-block-or-line)
+(define-key ctl-x-map (kbd "P") '(lambda ()
+                                   (interactive)
+                                   (popup-menu 'yank-menu)))
 (define-key ctl-x-map (kbd "SPC") (lambda() (interactive) (push-mark nil nil 1)))
 (define-key ctl-x-map (kbd "<up>") 'tabbar-backward-group)
 (define-key ctl-x-map (kbd "<down>") 'tabbar-forward-group)
