@@ -103,7 +103,7 @@
 
 ;; Add defaults packages to include when exporting.
 (setq org-latex-hyperref-template
-      "\\hypersetup{\n  pdfkeywords={%k},\n  pdfsubject={%d},\n  pdfcreator={%c},\n  colorlinks=true,\n  linkcolor=black,\n  urlcolor=black}\n")
+      "\\hypersetup{\n  pdfkeywords={%k},\n  pdfsubject={%d},\n  pdfcreator={%c},\n  citecolor=black,\n  filecolor=black,\n  colorlinks=true,\n  linkcolor=black,\n  urlcolor=black}\n")
 (add-to-list 'org-latex-packages-alist '("" "graphicx"))
 (add-to-list 'org-latex-packages-alist '("" "geometry"))
 (add-to-list 'org-latex-packages-alist '("" "hyperref"))
@@ -169,13 +169,6 @@
 
 % Use hyperlinks for convenience, but let's not make them coloured
 \\usepackage[bookmarks,colorlinks,breaklinks]{hyperref}
-\\hypersetup{
-  colorlinks,
-  citecolor=black,
-  filecolor=black,
-  linkcolor=black,
-  urlcolor=black
-}
 
 % Use the excellent biblatex package with IEEE style, sorted = none makes the numbering appear in order
 \\usepackage[american]{babel}
@@ -284,6 +277,7 @@
   breakatwhitespace=true,         % sets if automatic breaks should only happen at whitespace
 }
 \\usepackage{verbatim}
+\\usetheme{Madrid}
 \\title{}
       [NO-DEFAULT-PACKAGES]
       [NO-PACKAGES]"
@@ -344,12 +338,6 @@
 
 % Use hyperlinks for convenience, but let's not make them coloured
 \\usepackage[bookmarks,colorlinks,breaklinks]{hyperref}
-\\hypersetup{
-  colorlinks,
-  citecolor=black,
-  filecolor=black,
-  linkcolor=black,
-  urlcolor=black}
 
 % Use the excellent biblatex package with IEEE style, sorted = none makes the numbering appear in order
 \\usepackage[american]{babel}
