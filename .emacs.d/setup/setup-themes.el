@@ -121,7 +121,7 @@
 ;; (load-theme 'faff t)
 ;; (load-theme 'twilight-brigh)
 ;; (load-theme 'plan9)
-(load-theme 'white-sand) ;; best light theme
+;; (load-theme 'white-sand) ;; best light theme
 ;; (load-theme 'minimal-light) ;; best ink theme
 ;; (load-theme 'monokai t) ;; best dark color scheme
 ;; (load-theme 'goose t)
@@ -132,6 +132,7 @@
 ;; (load-theme 'pastelmac t)
 ;; (load-theme 'solarized-dark t)
 ;; (load-theme 'material-light t)
+(load-theme 'sanityinc-tomorrow-night t)
 
 (provide 'setup-themes)
 ;;; setup-themes.el ends here
