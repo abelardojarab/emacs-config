@@ -32,7 +32,10 @@
   :defer t
   :bind ("C-c w" . writeroom-mode)
   :load-path (lambda () (expand-file-name "writeroom-mode/" user-emacs-directory))
-  :config (setq writeroom-width (- (frame-width) 40)))
+  :config (progn
+            (if (> (frame-width) 200)
+                (setq writeroom-width (- (frame-width) 80))
+              (setq writeroom-width 120))))
 
 (provide 'setup-writeroom)
 ;;; setup-writeroom.el ends here

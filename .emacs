@@ -84,6 +84,7 @@
  '(set-mark-command-repeat-pop nil)
  '(shift-select-mode t)
  '(smex-prompt-string "M-x ")
+ '(tabbar-mode t nil (tabbar))
  '(transient-mark-mode nil))
 
 (custom-set-faces

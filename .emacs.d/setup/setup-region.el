@@ -24,6 +24,9 @@
 
 ;;; Code:
 
+;; Move text
+(use-package move-text)
+
 ;; Region bindings mode
 (use-package region-bindings-mode
   :load-path (lambda () (expand-file-name "region-bindings-mode/" user-emacs-directory))
@@ -38,16 +41,12 @@
             (define-key region-bindings-mode-map (kbd "C-x") 'kill-region)
 
             ;; extra key bindings
-            (define-key region-bindings-mode-map (kbd "u") 'unindent-block-or-line)
+            (define-key region-bindings-mode-map (kbd "d") 'move-text-down)
+            (define-key region-bindings-mode-map (kbd "u") 'move-text-up)
+            (define-key region-bindings-mode-map (kbd "<") 'decrease-left-margin)
+            (define-key region-bindings-mode-map (kbd ">") 'increase-right-margin)
+            (define-key region-bindings-mode-map (kbd "c") 'kill-ring-save)
             (define-key region-bindings-mode-map (kbd "x") 'kill-region)))
-
-;; Move text
-(use-package move-text
-  :config (progn
-            (define-key region-bindings-mode-map [C-up] 'move-text-up)
-            (define-key region-bindings-mode-map [C-down] 'move-text-down)
-            (define-key region-bindings-mode-map [C-right] 'increase-left-margin)
-            (define-key region-bindings-mode-map [C-left] 'decrease-left-margin)))
 
 (provide 'setup-region)
 ;;; setup-region.el ends here

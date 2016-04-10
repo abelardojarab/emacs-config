@@ -237,10 +237,12 @@
 (global-set-key [C-right] 'windmove-right)
 
 ;; Extra Ctrl-x mappings
-(define-key ctl-x-map (kbd "P") '(lambda ()
-                                   (interactive)
-                                   (popup-menu 'yank-menu)))
-(define-key ctl-x-map (kbd "SPC") (lambda() (interactive) (push-mark nil nil 1)))
+(define-key ctl-x-map (kbd "P") '(lambda () (interactive) (popup-menu 'yank-menu)))
+(define-key ctl-x-map (kbd "SPC") (lambda () (interactive) (push-mark nil nil 1)))
+(define-key ctl-x-map (kbd ">") 'increase-left-margin)
+(define-key ctl-x-map (kbd "<") 'decrease-left-margin)
+(define-key ctl-x-map (kbd "F") 'toggle-frame-fullscreen)
+(define-key ctl-x-map (kbd "T") 'toggle-truncate-lines)
 (define-key ctl-x-map (kbd "<up>") 'tabbar-backward-group)
 (define-key ctl-x-map (kbd "<down>") 'tabbar-forward-group)
 (define-key ctl-x-map (kbd "<left>") 'tabbar-backward-tab)
