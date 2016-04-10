@@ -28,11 +28,11 @@
 (use-package nyan-mode
   :if window-system
   :load-path (lambda () (expand-file-name "nyan-mode/" user-emacs-directory))
-
   :config (nyan-mode t))
 
 ;; Powerline
 (use-package powerline
+  :commands powerline-default-theme
   :load-path (lambda () (expand-file-name "powerline/" user-emacs-directory))
   :init (setq powerline-default-separator 'wave)
   :config (progn

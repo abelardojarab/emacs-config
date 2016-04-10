@@ -29,6 +29,7 @@
   ;; Ergoemacs does not work with Emacs 25
   :if (= emacs-major-version 24)
   :ensure nil
+  :commands ergoemacs-mode
   :load-path (lambda () (expand-file-name "ergoemacs-mode/" user-emacs-directory))
   :init (progn
           (setq ergoemacs-theme nil

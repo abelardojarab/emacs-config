@@ -27,6 +27,7 @@
 ;; higlight changes in documents
 (global-highlight-changes-mode t)
 (setq highlight-changes-visibility-initial-state nil)
+(diminish 'highlight-changes-mode)
 
 ;; Fix highlight bug of marking a file as modified
 (defadvice highlight-changes-rotate-faces (around around-rotate-faces)
@@ -69,10 +70,7 @@
   :load-path (lambda () (expand-file-name "highlight-symbol/" user-emacs-directory))
   :config (progn (mapc (lambda (mode)
                          (add-hook mode 'highlight-symbol-mode))
-                       '(prog-mode-hook
-                         org-mode-hook
-                         markdown-mode-hook
-                         text-mode-hook))
+                       '(prog-mode-hook))
                  (setq highlight-symbol-on-navigation-p t))
   :diminish highlight-symbol-mode)
 

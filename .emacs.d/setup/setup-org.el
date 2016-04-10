@@ -83,7 +83,7 @@
             (add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
 
             ;; Miscellanenous settings
-            (setq org-startup-folded 'nofold
+            (setq org-startup-folded t
                   org-startup-indented t
                   org-cycle-separator-lines 1
                   org-cycle-include-plain-lists 'integrate

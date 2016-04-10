@@ -145,8 +145,7 @@
  end try")))
       (if (> (length file) 3)
           (setq file
-                (substring file 1 (- (length file) 1))
-                ))
+                (substring file 1 (- (length file) 1))))
       (if (not (equal file ""))
           (write-file file)
         (beep))))
