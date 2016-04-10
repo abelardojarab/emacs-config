@@ -39,16 +39,17 @@
             (define-key direx:direx-mode-map [mouse-1] 'direx:mouse-2)
             (define-key direx:direx-mode-map [mouse-3] 'direx:mouse-1)))
 
+(use-package direx-project
+  :load-path (lambda () (expand-file-name "direx/" user-emacs-directory)))
+
+;; highlight dired buffer with K-shell coloring
 (use-package dired-k
   :load-path (lambda () (expand-file-name "dired-k/" user-emacs-directory))
-  :defer t
   :bind (:map dired-mode-map
               ("K" . dired-k))
   :config (progn
-            (add-hook 'dired-initial-position-hook 'dired-k)))
-
-(use-package direx-project
-  :load-path (lambda () (expand-file-name "direx/" user-emacs-directory)))
+            (add-hook 'dired-initial-position-hook 'dired-k)
+            (add-hook 'dired-after-readin-hook #'dired-k-no-revert)))
 
 ;; Facility to see images inside dired
 (use-package image-dired

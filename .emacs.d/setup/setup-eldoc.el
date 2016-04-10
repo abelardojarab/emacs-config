@@ -34,6 +34,7 @@
 
 (use-package c-eldoc
   :load-path (lambda () (expand-file-name "c-eldoc/" user-emacs-directory))
+  :commands c-turn-on-eldoc-mode
   :config (progn
             (add-hook 'c-mode-hook 'c-turn-on-eldoc-mode)
             (add-hook 'c++-mode-hook 'c-turn-on-eldoc-mode)

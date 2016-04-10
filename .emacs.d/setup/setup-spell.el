@@ -82,6 +82,7 @@
 
 ;; flyspell
 (use-package flyspell
+  :diminish flyspell-mode
   :config (progn
             (setq flyspell-issue-message-flag nil
                   flyspell-issue-welcome-flag nil)
@@ -107,6 +108,7 @@
 ;; write good mode
 (use-package writegood-mode
   :pin manual
+  :diminish writegood-mode
   :load-path (lambda () (expand-file-name "writegood-mode/" user-emacs-directory)))
 
 ;; Langtool
