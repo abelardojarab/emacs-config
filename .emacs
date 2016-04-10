@@ -307,6 +307,9 @@
 ;; Setup undo and redo
 (require 'setup-undoandredo)
 
+;; Setup write room
+(require 'setup-writeroom)
+
 ;; Setup keys
 (require 'setup-keys)
 
