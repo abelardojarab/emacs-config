@@ -29,15 +29,13 @@
 
 (use-package python-mode
   :load-path (lambda () (expand-file-name "python-mode/" user-emacs-directory))
+  :mode ("\\.py\\'" . python-mode)
+  :interpreter ("python" . python-mode)
   :config (progn
 
             ;; Python configuration
             (add-hook 'python-mode-hook 'autopair-mode)
             (add-hook 'python-mode-hook 'auto-complete-mode)
-
-            ;; Extra
-            (add-to-list 'auto-mode-alist '("\\.py\\'" . python-mode))
-            (add-to-list 'interpreter-mode-alist '("python" . python-mode))
 
             ;; Python hook
             (add-hook 'python-mode-hook
@@ -60,7 +58,8 @@
               (setq imenu-create-index-function 'python-imenu-create-index))
 
             ;; Setup Python path
-            (setenv "PYTHONPATH" (concat (concat (getenv "HOME") "/workspace/pythonlibs/lib/python2.7/site-packages")
+            (setenv "PYTHONPATH" (concat (concat (getenv "HOME")
+                                                 "/workspace/pythonlibs/lib/python2.7/site-packages")
                                          ":" (getenv "PYTHONPATH")))
 
             ;; Python settings

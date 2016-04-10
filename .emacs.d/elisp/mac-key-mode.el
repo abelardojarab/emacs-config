@@ -1,6 +1,6 @@
 ;;; mac-key-mode.el --- provide mac-style key bindings on Carbon Emacs
 
-;; Copyright (C) 2004-2010, 2014, 2015  Seiji Zenitani
+;; Copyright (C) 2004-2010, 2014, 2015, 2016  Seiji Zenitani
 
 ;; Author: Seiji Zenitani <zenitani@mac.com>
 ;; $Id$
@@ -34,9 +34,9 @@
 ;;
 ;; To use this package, add these lines to your .emacs file:
 ;;
-;; ;;    (require 'redo+)
-;;     (require 'mac-key-mode)
-;;     (mac-key-mode 1)
+;;    (require 'redo+)
+;;    (require 'mac-key-mode)
+;;    (mac-key-mode 1)
 ;;
 ;; Note that mac-key-mode requires redo+.el.
 ;; In order to set additional key bindings,

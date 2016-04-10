@@ -314,6 +314,9 @@
 ;; Setup keys
 (require 'setup-keys)
 
+;; Setup OS-specific keys
+(require 'setup-keys-extensions)
+
 ;; Setup region
 (require 'setup-region)
 

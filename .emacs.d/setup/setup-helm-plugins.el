@@ -79,7 +79,7 @@
   :commands (helm-flyspell-correct)
   :load-path (lambda () (expand-file-name "helm-flyspell/" user-emacs-directory))
   :bind (:map ctl-x-map
-              ("s" . helm-flyspell-correct)))
+              ("S" . helm-flyspell-correct)))
 
 ;; Helm ls git
 (use-package helm-ls-git

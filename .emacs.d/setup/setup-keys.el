@@ -255,20 +255,20 @@
 (define-key my-keys-minor-mode-map (kbd "M-.") 'helm-etags-select)
 (define-key my-keys-minor-mode-map (kbd "<f2>")   'bm-next)
 (define-key my-keys-minor-mode-map (kbd "<C-f2>") 'bm-toggle)
-(define-key my-keys-minor-mode-map (kbd "<left-margin> <mouse-1>") 'bm-toggle)
+(define-key my-keys-minor-mode-map (kbd "<left-margin> <double-mouse-1>") 'bm-toggle)
 (define-key my-keys-minor-mode-map (kbd "C-b") 'beautify-buffer)
 (define-key my-keys-minor-mode-map (kbd "<f4>") 'helm-semantic-or-imenu)
 (define-key my-keys-minor-mode-map (kbd "C-`") 'helm-semantic-or-imenu)
-(define-key my-keys-minor-mode-map (kbd "<f5>") 'smex)
 (define-key my-keys-minor-mode-map (kbd "<f12>") 'helm-buffers-list)
 (define-key my-keys-minor-mode-map (kbd "C-0") 'helm-buffers-list)
 (define-key my-keys-minor-mode-map (kbd "C-*") 'helm-swoop)
+(define-key my-keys-minor-mode-map (kbd "<f5>") 'smex)
 
 ;; Define custom key mode
 (define-minor-mode my-keys-minor-mode
   "A minor mode so that my key settings override annoying major modes."
   t "" 'my-keys-minor-mode-map)
-
+(diminish 'my-keys-minor-mode)
 (my-keys-minor-mode 1)
 (defun my-minibuffer-setup-hook ()
   (my-keys-minor-mode 0))

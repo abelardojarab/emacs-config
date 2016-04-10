@@ -1,8 +1,8 @@
-;;; setup-swiper.el ---                              -*- lexical-binding: t; -*-
+;;; setup-keys-extensions.el ---                     -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016  abelardo.jara-berrocal
+;; Copyright (C) 2016  Abelardo Jara
 
-;; Author: abelardo.jara-berrocal <ajaraber@plxcj9063.pdx.intel.com>
+;; Author: Abelardo Jara <abelardojara@Abelardos-MacBook-Pro.local>
 ;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -24,14 +24,10 @@
 
 ;;; Code:
 
-(use-package swiper
-  :defer t
-  :bind (:map ctl-x-map
-              ("s" . swiper))
-  :load-path (lambda () (expand-file-name "swiper/" user-emacs-directory))
-  :config (progn
-            (setq ivy-use-virtual-buffers t)
-            (setq ivy-height 10)))
+;; Mac OS X extensions
+(use-package mac-key-mode
+  :commands (mac-key-mode mac-key-speak-region mac-key-speak-buffer mac-key-quick-look)
+  :if (equal system-type 'darwin))
 
-(provide 'setup-swiper)
-;;; setup-swiper.el ends here
+(provide 'setup-keys-extensions)
+;;; setup-keys-extensions.el ends here

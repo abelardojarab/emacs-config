@@ -50,8 +50,7 @@
             (defadvice hi-lock-set-pattern (around use-overlays activate)
               (let ((font-lock-fontified nil))
                 ad-do-it))
-            (add-hook 'org-mode-hook 'local-hl-line-mode-off)
-            ))
+            (add-hook 'org-mode-hook 'local-hl-line-mode-off)))
 
 ;; Highlight the latest changes in the buffer (like text inserted from: yank, undo, etc.) until the next command is run
 (use-package volatile-highlights
