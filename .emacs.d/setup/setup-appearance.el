@@ -32,14 +32,8 @@
 (when (window-system)
   (setenv "EMACS_GUI" "t"))
 
-;; Smoother scrolling
-(setq redisplay-dont-pause t
-      scroll-margin 20
-      scroll-step 1
-      scroll-conservatively 10000
-      scroll-preserve-screen-position 1
-      scroll-up-aggressively 0.01
-      scroll-down-aggressively 0.01)
+;; Dont pause screen refresh
+(setq redisplay-dont-pause t)
 
 ;; Optimization
 (setq-default bidi-display-reordering nil)

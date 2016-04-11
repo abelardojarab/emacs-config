@@ -126,6 +126,9 @@
 ;; Setup cursor
 (require 'setup-cursor)
 
+;; Setup scrolling
+(require 'setup-scroll)
+
 ;; Setup themes
 (require 'setup-themes)
 
