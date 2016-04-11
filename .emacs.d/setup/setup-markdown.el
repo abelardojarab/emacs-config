@@ -26,10 +26,10 @@
 
 ;; Markdown
 (use-package markdown-mode
+  :mode ("\\.markdown\\'" "\\.mk?d\\'" "\\.text\\'")
+  :commands markdown-mode
   :load-path (lambda () (expand-file-name "markdown-mode/" user-emacs-directory))
   :config (progn
-            (add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
-            (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
             (add-hook 'markdown-mode-hook
                       (lambda ()
                         (writegood-mode t)

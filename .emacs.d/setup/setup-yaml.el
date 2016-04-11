@@ -27,8 +27,9 @@
 ;; Yaml mode
 (use-package yaml-mode
   :load-path (lambda () (expand-file-name "yaml-mode/" user-emacs-directory))
+  :commands yaml-mode
+  :mode "\\.ya?ml\'"
   :config (progn
-            (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
             (add-hook 'yaml-mode-hook
                       '(lambda ()
                          (define-key yaml-mode-map "\C-m" 'newline-and-indent)))))

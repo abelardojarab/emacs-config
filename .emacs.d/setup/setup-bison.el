@@ -25,6 +25,8 @@
 ;;; Code:
 
 (use-package bison-mode
+  :commands bison-mode
+  :mode ("\\.y\\'" "\\.l\\'" "\\.yacc\\'" "\\.lex\\'")
   :load-path (lambda () (expand-file-name "bison-mode/" user-emacs-directory)))
 
 (provide 'setup-bison)
