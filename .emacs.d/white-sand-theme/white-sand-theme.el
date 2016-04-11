@@ -111,7 +111,6 @@
         `(org-document-info-keyword ((,class (:foreground ,func))))
 
         ;; magit-mode:
-
         `(magit-reflog-cherry-pick ((,class (:foreground ,const))))
         `(magit-reflog-commit ((,class (:foreground ,const))))
         `(magit-reflog-merge ((,class (:foreground ,const))))
@@ -181,8 +180,8 @@
         `(rainbow-delimiters-unmatched-face ((,class :foreground ,warning)))
         `(helm-header ((,class (:foreground ,fg2 :background ,bg1 :underline nil :box nil))))
         `(helm-source-header ((,class (:foreground ,keyword :background ,bg1 :underline nil :weight bold))))
-        `(helm-selection ((,class (:background ,bg2 :underline nil))))
-        `(helm-selection-line ((,class (:background ,bg2))))
+        `(helm-selection ((,class (:background ,bg5 :underline nil))))
+        `(helm-selection-line ((,class (:background ,bg5))))
         `(helm-visible-mark ((,class (:foreground ,bg1 :background ,bg3))))
         `(helm-candidate-number ((,class (:foreground ,bg1 :background ,fg1))))
         `(helm-separator ((,class (:foreground ,type :background ,bg1))))
