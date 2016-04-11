@@ -26,6 +26,8 @@
 
 ;; Gnus
 (use-package gnus
+  :defer t
+  :commands (gnus compose-mail)
   :config (progn
             (setq gnus-select-method
                   '(nnimap "Gmail"
