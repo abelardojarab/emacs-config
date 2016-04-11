@@ -24,6 +24,23 @@
 
 ;;; Code:
 
+;; visual feedback when pressing keys
+(use-package which-key
+  :load-path (lambda () (expand-file-name "which-key/" user-emacs-directory))
+  :diminish which-key-mode
+  :config (progn
+            (when window-system
+              (add-to-list 'which-key-key-replacement-alist '("TAB" . "↹"))
+              (add-to-list 'which-key-key-replacement-alist '("RET" . "⏎"))
+              (add-to-list 'which-key-key-replacement-alist '("DEL" . "⇤"))
+              (add-to-list 'which-key-key-replacement-alist '("SPC" . "␣")))
+
+            ;; Side window setup
+            (setq which-key-popup-type 'side-window)
+            (setq which-key-side-window-location 'right)
+            (setq which-key-side-window-max-width 0.33)
+            (which-key-mode)))
+
 ;; Mac OS X extensions
 (use-package mac-key-mode
   :commands (mac-key-mode mac-key-speak-region mac-key-speak-buffer mac-key-quick-look)
