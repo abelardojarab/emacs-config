@@ -32,7 +32,8 @@
 (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/"))
 
 ;; Use Package
-(require 'use-package)
+(eval-when-compile
+  (require 'use-package))
 
 ;; Baseline packages
 (use-package bind-key)
