@@ -301,7 +301,8 @@
 
 ;; Nice bulleted lists
 (use-package org-bullets
-  :if window-system
+  :if (and window-system
+           (not (equal system-type 'windows-nt)))
   :load-path (lambda () (expand-file-name "org-bullets/" user-emacs-directory))
   :config (progn
             (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))

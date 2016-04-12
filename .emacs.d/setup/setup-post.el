@@ -48,5 +48,7 @@
     ;; (or the window deleted, if no such buffer)
     (purpose-x-kill-setup)))
 
+;; Add all diminished modes here
+
 (provide 'setup-post)
 ;;; setup-post.el ends here

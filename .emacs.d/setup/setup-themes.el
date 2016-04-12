@@ -121,7 +121,7 @@
 ;; (load-theme 'faff t)
 ;; (load-theme 'twilight-bright)
 ;; (load-theme 'plan9)
-(load-theme 'white-sand) ;; best light theme
+;; (load-theme 'white-sand) ;; best light theme
 ;; (load-theme 'minimal-light) ;; best ink theme
 ;; (load-theme 'monokai t) ;; best dark color scheme
 ;; (load-theme 'goose t)
@@ -133,6 +133,11 @@
 ;; (load-theme 'solarized-dark t)
 ;; (load-theme 'material-light t)
 ;; (load-theme 'sanityinc-tomorrow-night t)
+
+;; Choose different themes depending if we are using GUI or not
+(if window-system
+    (load-theme 'white-sand)
+  (load-theme 'monokai t))
 
 (provide 'setup-themes)
 ;;; setup-themes.el ends here
