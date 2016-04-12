@@ -74,12 +74,7 @@
 (use-package json-reformat
   :load-path (lambda () (expand-file-name "json-reformat/" user-emacs-directory)))
 
-;; json-snatcher
-(use-package json-snatcher
-  :config (bind-key "C-c C-g" 'jsons-print-path js2-mode-map)
-  :load-path (lambda () (expand-file-name "json-snatcher/" user-emacs-directory)))
-
-;; json
+;; json-mode
 (use-package json-mode
   :mode "\\.json$"
   :commands json-mode
@@ -87,5 +82,12 @@
   :config (progn
             (add-hook 'json-mode-hook 'js2-minor-mode)
             (setq js-indent-level 4)))
+
+;; json-snatcher
+(use-package json-snatcher
+  :bind (:map js2-minor-mode-map
+              ("C-c C-g" . jsons-print-path))
+  :config (bind-key "C-c C-g" 'jsons-print-path js2-mode-map)
+  :load-path (lambda () (expand-file-name "json-snatcher/" user-emacs-directory)))
 
 (provide 'setup-javascript)
