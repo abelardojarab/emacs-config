@@ -25,11 +25,11 @@
 ;;; Code:
 
 (use-package js2-mode
-  :mode ("\\.js\\'")
-  :commands (js2-mode js2-minor-mode)
-  :interpreter ("node" . js2-mode)
   :load-path (lambda () (expand-file-name "js2-mode/" user-emacs-directory))
   :config (progn
+            (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
+            (add-to-list 'interpreter-mode-alist '("node" . js2-mode))
+
             (add-hook 'js2-mode-hook (lambda () (flycheck-mode 1)))
             (add-hook 'js2-mode-hook 'skewer-mode)
             (setq-default js2-allow-rhino-new-expr-initializer nil)
@@ -72,7 +72,6 @@
 
 ;; json-reformat
 (use-package json-reformat
-  :defer t
   :load-path (lambda () (expand-file-name "json-reformat/" user-emacs-directory)))
 
 ;; json-snatcher

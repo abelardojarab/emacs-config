@@ -24,6 +24,7 @@
 
 ;;; Code:
 (use-package polymode
+  :commands polymode-mode
   :load-path (lambda () (expand-file-name "polymode/" user-emacs-directory))
   :init (add-to-list 'load-path (expand-file-name "polymode/modes" user-emacs-directory))
   :config (progn

@@ -273,9 +273,6 @@
 ;; Setup markdown
 (require 'setup-markdown)
 
-;; Setup polymode
-(require 'setup-polymode)
-
 ;; Setup shell
 (require 'setup-eshell)
 
@@ -302,6 +299,9 @@
 
 ;; Setup dired plugins
 (require 'setup-dired-plugins)
+
+;; Setup polymode
+(require 'setup-polymode)
 
 ;; Setup gnus
 (require 'setup-gnus)
