@@ -244,7 +244,7 @@
 (require 'setup-html)
 
 ;; Setup Javascript
-(require 'setup-js2)
+(require 'setup-javascript)
 
 ;; Setup YAML
 (require 'setup-yaml)

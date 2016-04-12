@@ -1,4 +1,4 @@
-;;; setup-compile.el ---
+;;; setup-javascript.el ---
 
 ;; Copyright (C) 2014, 2015, 2016  abelardo.jara-berrocal
 
@@ -25,13 +25,11 @@
 ;;; Code:
 
 (use-package js2-mode
+  :mode ("\\.js\\'")
+  :commands (js2-mode js2-minor-mode)
+  :interpreter ("node" . js2-mode)
   :load-path (lambda () (expand-file-name "js2-mode/" user-emacs-directory))
   :config (progn
-            (add-to-list 'auto-mode-alist '("\\.json$" . js-mode))
-            (add-hook 'js-mode-hook 'js2-minor-mode)
-
-            (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
-            (add-to-list 'interpreter-mode-alist '("node" . js2-mode))
             (add-hook 'js2-mode-hook (lambda () (flycheck-mode 1)))
             (add-hook 'js2-mode-hook 'skewer-mode)
             (setq-default js2-allow-rhino-new-expr-initializer nil)
@@ -57,6 +55,7 @@
 ;; skewer mode
 (use-package skewer-mode
   :defer t
+  :commands skewer-mode
   :load-path (lambda () (expand-file-name "skewer-mode/" user-emacs-directory)))
 
 ;; web server
@@ -71,4 +70,23 @@
             (add-hook 'js2-mode-hook 'ac-js2-mode)
             (setq-default ac-js2-evaluate-calls t)))
 
-(provide 'setup-js2)
+;; json-reformat
+(use-package json-reformat
+  :defer t
+  :load-path (lambda () (expand-file-name "json-reformat/" user-emacs-directory)))
+
+;; json-snatcher
+(use-package json-snatcher
+  :config (bind-key "C-c C-g" 'jsons-print-path js2-mode-map)
+  :load-path (lambda () (expand-file-name "json-snatcher/" user-emacs-directory)))
+
+;; json
+(use-package json-mode
+  :mode "\\.json$"
+  :commands json-mode
+  :load-path (lambda () (expand-file-name "json-mode/" user-emacs-directory))
+  :config (progn
+            (add-hook 'json-mode-hook 'js2-minor-mode)
+            (setq js-indent-level 4)))
+
+(provide 'setup-javascript)
