@@ -26,10 +26,9 @@
 
 ;; Spice mode
 (use-package spice-mode
-  :load-path (lambda () (expand-file-name "spice-mode/" user-emacs-directory))
-  :config (progn
-			(add-to-list 'auto-mode-alist '("\\.sp\\'" . spice-mode))
-			(add-to-list 'auto-mode-alist '("\\.scs\\'" . spice-mode))))
+  :mode ("\\.spice\\'" "\\.scs\\'")
+  :commands spice-mode
+  :load-path (lambda () (expand-file-name "spice-mode/" user-emacs-directory)))
 
 (provide 'setup-spice)
 ;;; setup-post.el ends here

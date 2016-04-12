@@ -28,9 +28,10 @@
 ;; the package python.el. The following changes that to python-mode.el:
 
 (use-package python-mode
-  :load-path (lambda () (expand-file-name "python-mode/" user-emacs-directory))
   :mode ("\\.py\\'" . python-mode)
+  :commands python-mode
   :interpreter ("python" . python-mode)
+  :load-path (lambda () (expand-file-name "python-mode/" user-emacs-directory))
   :config (progn
 
             ;; Python configuration

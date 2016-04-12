@@ -50,15 +50,21 @@
           (defun org-element-subscript-successor      (arg))
           (defun org-element-superscript-successor    (arg))
           (defun org-element-underline-successor      (arg))
-          (defun org-element-verbatim-successor       (arg)))
+          (defun org-element-verbatim-successor       (arg))
+          (add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode)))
   :config (progn
             (require 'org-list)
             (require 'ox-org)
 
-            ;; Disable linum in org files
-            (defun my/turn-off-linum-mode ()
-              (linum-mode -1))
-            (add-hook 'org-mode-hook 'my/turn-off-linum-mode)
+            ;; Tweaks
+            (add-hook 'org-mode-hook
+                      (lambda ()
+                        (progn
+                          (linum-mode -1)
+                          (cua-mode t)
+                          (flyspell-mode t)
+                          (writegood-mode t)
+                          (yas-minor-mode t))))
 
             ;; Set up Org agenda files
             (let ((todo "~/workspace/Documents/Org/diary.org"))
@@ -72,15 +78,6 @@
                 (setq org-agenda-files (list
                                         (concat org-directory "/diary.org")
                                         (concat org-directory "/agenda.org")))))
-
-            ;; Tweaks
-            (add-hook 'org-mode-hook
-                      (lambda ()
-                        (progn
-                          (flyspell-mode t)
-                          (writegood-mode t)
-                          (yas-minor-mode t))))
-            (add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
 
             ;; Miscellanenous settings
             (setq org-startup-folded t

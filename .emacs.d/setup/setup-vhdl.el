@@ -26,13 +26,14 @@
 
 ;; VHDL mode
 (use-package vhdl-mode
+  :mode ("\\.vhdl?\\'" "\\.vho\\'")
+  :commands vhdl-mode
   :load-path (lambda () (expand-file-name "vhdl-mode/" user-emacs-directory))
   :config (progn
-            (setq auto-mode-alist (append '(("\\.vhd$"  . vhdl-mode)) auto-mode-alist))
-            (setq auto-mode-alist (append '(("\\.vhdl$" . vhdl-mode)) auto-mode-alist))
+            ;; Compilation flag for ModelSim
             (defvar vhdl-compiler-options  "-work work")
 
-            ;; Detecting error in Modelsim
+            ;; Recognizing errors reported by ModelSim
             ;; For Modelsim: vcom error format:
             ;;** Error: switch.vhd(68): near ")": expecting: IDENTIFIER
             (eval-after-load "compile"

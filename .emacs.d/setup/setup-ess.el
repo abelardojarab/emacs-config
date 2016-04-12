@@ -26,9 +26,8 @@
 
 (use-package ess-site
   :load-path (lambda () (expand-file-name "ESS/lisp" user-emacs-directory))
-  :init (progn
-          (add-to-list 'auto-mode-alist '("\\.r\\'" . R-mode))
-          (add-to-list 'auto-mode-alist '("\\.R\\'" . R-mode)))
+  :mode ("\\.[rR]$" . R-mode)
+  :commands R-mode
   :config (progn
             (setq-default ess-dialect "R")
             (setq-default inferior-R-args " --no-restore-history --no-save ")
@@ -80,9 +79,7 @@
                     (ess-R-fl-keyword:F&T . t)
                     (ess-R-fl-keyword:%op% . t)))
 
-            ;; Associate files
-            (setq auto-mode-alist
-                  (cons (cons "\\.[rR]$" 'R-mode) auto-mode-alist))
+            ;; Enable auto-complete
             (add-hook 'R-mode-hook  '(lambda ()
                                        (auto-complete-mode)
                                        (setq ess-use-auto-complete t)))

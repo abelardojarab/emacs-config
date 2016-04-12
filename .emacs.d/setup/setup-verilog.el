@@ -24,7 +24,7 @@
 
 ;;; Code:
 
-;; Load verilog mode only when needed
+;; Verilog mode
 (use-package verilog-mode
   :load-path (lambda () (expand-file-name "verilog-mode/" user-emacs-directory))
   :config (progn

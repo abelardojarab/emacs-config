@@ -25,10 +25,9 @@
 ;;; Code:
 
 (use-package web-mode
+  :mode ("\\.css?\\'" "\\.html?\\'")
+  :commands web-mode
   :load-path (lambda () (expand-file-name "web-mode/" user-emacs-directory))
-  :init (progn
-          (add-to-list 'auto-mode-alist '("\\.css?\\'" . web-mode))
-          (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode)))
   :config (progn
             (setq web-mode-enable-css-colorization t
                   web-mode-style-padding 2
