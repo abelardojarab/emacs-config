@@ -51,6 +51,22 @@
   :load-path (lambda () (expand-file-name "indent-guide/" user-emacs-directory))
   :diminish indent-guide-mode
   :config (progn
+
+            ;; Fix indent guide issue with popup
+            (defvar my/indent-guide-mode-suppressed nil)
+            (defadvice popup-create (before indent-guide-mode activate)
+              "Suspend indent-guide-mode while popups are visible"
+              (let ((indent-guide-enabled (and (boundp 'indent-guide-mode) indent-guide-mode)))
+                (set (make-local-variable 'my/indent-guide-mode-suppressed) indent-guide-mode)
+                (when indent-guide-enabled
+                  (indent-guide-mode -1))))
+            (defadvice popup-delete (after indent-guide-mode activate)
+              "Restore indent-guide-mode when all popups have closed"
+              (let ((indent-guide-enabled (and (boundp 'indent-guide-mode) indent-guide-mode)))
+                (when (and (not popup-instances) my/indent-guide-mode-suppressed)
+                  (setq my/indent-guide-mode-suppressed nil)
+                  (indent-guide-mode 1))))
+
             (unless (equal system-type 'windows-nt)
               (setq indent-guide-char "┊"))
             (setq indent-guide-recursive t)

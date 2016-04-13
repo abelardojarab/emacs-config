@@ -65,12 +65,7 @@
          ("C-n" . mc/mark-next-like-this)
          ("C-p" . mc/mark-previous-like-this)
          ("C-a" . mc/mark-all-like-this)
-         ("C-m" . mc/mark-more-like-this)
-
-         ;; extra commands
-         ("C-i" . mc/insert-numbers)
-         ("C-s" . mc/sort-regions)
-         ("C-r" . mc/reverse-regions))
+         ("C-m" . mc/mark-more-like-this))
   :load-path (lambda () (expand-file-name "multiple-cursors/" user-emacs-directory)))
 
 (provide 'setup-cursor)

@@ -48,7 +48,8 @@
                                                    ("-d" "en_US")
                                                    nil
                                                    utf-8)))
-              (setq ispell-dictionary "english"
+              (setq ispell-really-hunspell t
+                    ispell-dictionary "english"
                     ispell-program-name "hunspell"
                     ispell-extra-args (list "-d" (expand-file-name "dictionaries/en_US" user-emacs-directory))))
 
@@ -56,7 +57,7 @@
              ((executable-find "aspell")
               (setq ispell-dictionary "english"
                     ispell-program-name "aspell"
-                    ispell-extra-args '("--sug-mode=ultra"))
+                    ispell-extra-args '("--sug-mode=fast"))
               (when (eq system-type 'darwin)
                 (if (file-executable-p "/usr/local/bin/aspell")
                     (progn
@@ -68,7 +69,7 @@
                       '(lambda ()
                          (local-set-key (kbd "C-c s 2")
                                         (lambda () (interactive)
-                                          (ispell-change-dictionary "american")
+                                          (ispell-change-dictionary "english")
                                           (flyspell-mode 1)
                                           (flyspell-buffer)))
                          (local-set-key (kbd "C-c s 1")
