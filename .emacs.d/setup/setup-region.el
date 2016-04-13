@@ -33,8 +33,6 @@
   :diminish region-bindings-mode
   :config (progn
             (region-bindings-mode-enable)
-            (define-key region-bindings-mode-map (kbd "C-c") 'kill-ring-save)
-            (define-key region-bindings-mode-map (kbd "C-x") 'kill-region)
 
             ;; extra key bindings
             (define-key region-bindings-mode-map (kbd "d") 'move-text-down)
