@@ -132,6 +132,9 @@
 ;; Setup fonts
 (require 'setup-fonts)
 
+;; Setup region
+(require 'setup-region)
+
 ;; Setup cursor
 (require 'setup-cursor)
 
@@ -326,9 +329,6 @@
 
 ;; Setup OS-specific keys
 (require 'setup-keys-extensions)
-
-;; Setup region
-(require 'setup-region)
 
 ;; Setup ergoemacs
 (require 'setup-ergoemacs)

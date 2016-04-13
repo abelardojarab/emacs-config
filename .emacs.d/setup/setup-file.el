@@ -48,12 +48,6 @@
         (use-dialog-box t))
     ad-do-it))
 
-;; if indent-tabs-mode is off, untabify before saving
-(add-hook 'write-file-hooks
-          (lambda () (if (not indent-tabs-mode)
-                    (save-excursion
-                      (untabify (point-min) (point-max)))) nil))
-
 ;; try to improve slow performance on windows.
 (setq w32-get-true-file-attributes nil)
 

@@ -132,9 +132,9 @@
  end try")))
       (if (> (length file) 3)
           (setq file
-                (substring file 1 (- (length file) 1))
-                ))
-      (if (and (not (equal file ""))(file-readable-p file))
+                (substring file 1 (- (length file) 1))))
+      (if (and (not (equal file ""))
+               (file-readable-p file))
           (find-file file)
         (beep))))
 
@@ -229,8 +229,13 @@
 ;; My personal configurations, has to use setq-default
 (setq-default indent-tabs-mode nil
               default-tab-width 4
-              tab-width 4
-              c-basic-offset 4)
+              tab-width 4)
+
+;; if indent-tabs-mode is off, untabify before saving
+(add-hook 'write-file-hooks
+          (lambda () (if (not indent-tabs-mode)
+                         (save-excursion
+                           (untabify (point-min) (point-max)))) nil))
 
 ;; auto-indent pasted code
 (defadvice yank (after indent-region activate)

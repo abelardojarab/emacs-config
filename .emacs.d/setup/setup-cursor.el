@@ -60,6 +60,17 @@
 
 ;; Multiple cursors
 (use-package multiple-cursors
+  :bind (:map region-bindings-mode-map
+         ("C-l" . mc/edit-lines)
+         ("C-n" . mc/mark-next-like-this)
+         ("C-p" . mc/mark-previous-like-this)
+         ("C-a" . mc/mark-all-like-this)
+         ("C-m" . mc/mark-more-like-this)
+
+         ;; extra commands
+         ("C-i" . mc/insert-numbers)
+         ("C-s" . mc/sort-regions)
+         ("C-r" . mc/reverse-regions))
   :load-path (lambda () (expand-file-name "multiple-cursors/" user-emacs-directory)))
 
 (provide 'setup-cursor)

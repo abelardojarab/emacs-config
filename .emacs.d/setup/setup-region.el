@@ -33,10 +33,6 @@
   :diminish region-bindings-mode
   :config (progn
             (region-bindings-mode-enable)
-            (define-key region-bindings-mode-map (kbd "C-p") 'mc/mark-previous-like-this)
-            (define-key region-bindings-mode-map (kbd "C-n") 'mc/mark-next-like-this)
-            (define-key region-bindings-mode-map (kbd "C-a") 'mc/mark-all-like-this)
-            (define-key region-bindings-mode-map (kbd "C-e") 'mc/edit-lines)
             (define-key region-bindings-mode-map (kbd "C-c") 'kill-ring-save)
             (define-key region-bindings-mode-map (kbd "C-x") 'kill-region)
 

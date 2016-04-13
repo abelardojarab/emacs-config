@@ -44,8 +44,8 @@
 ;; Search at point
 (use-package thingatpt
   :defer 1
-  :bind (("M-s ." . my-isearch-forward-symbol-at-point)
-         ("M-s ," . my-isearch-forward-word-at-point))
+  :bind (("M-s ." . isearch-forward-symbol-at-point)
+         ("M-s ," . isearch-forward-word-at-point))
   :config
   (progn
     (defun isearch-forward-word-at-point ()
