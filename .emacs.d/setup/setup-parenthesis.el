@@ -50,6 +50,10 @@
                     ad-do-it)
                 ad-do-it))
 
+            ;; Find matching parenthesis
+            (global-set-key [(control t)] 'goto-match-paren-or-up)
+
+            ;; Enable mode
             (show-paren-mode 1)))
 
 ;; Smartparens

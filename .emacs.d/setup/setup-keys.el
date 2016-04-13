@@ -166,7 +166,6 @@
 
 ;; C-v
 (global-set-key (kbd "C-v") 'yank)
-(global-set-key (kbd "C-S-v") 'helm-show-kill-ring)
 
 ;; Unindent (do what I mean version)
 (global-set-key (kbd "C-<") 'unindent-dwim)
@@ -175,35 +174,6 @@
 ;; Beautify buffer
 (global-unset-key "\C-b")
 (global-set-key "\C-b" 'beautify-buffer)
-
-;; Find matching parenthesis
-(global-set-key [(control t)] 'goto-match-paren-or-up)
-
-;; search forward with Ctrl-f
-(global-set-key [(control f)] 'isearch-forward)
-(define-key isearch-mode-map [(control f)] (lookup-key isearch-mode-map "\C-s"))
-(define-key minibuffer-local-isearch-map [(control f)]
-  (lookup-key minibuffer-local-isearch-map "\C-s"))
-
-;; search backward with Alt-f
-(global-set-key [(meta f)] 'isearch-backward)
-(define-key isearch-mode-map [(meta f)] (lookup-key isearch-mode-map "\C-r"))
-(define-key minibuffer-local-isearch-map [(meta f)]
-  (lookup-key minibuffer-local-isearch-map "\C-r"))
-
-;; exit search mode with any key
-(setq search-exit-option t)
-
-;; Search at point
-(global-set-key (kbd "C-=") 'isearch-forward-word-at-point)
-(define-key isearch-mode-map (kbd "C-=")
-  (lambda ()
-    "Reset current isearch to a word-mode search of the word under point."
-    (interactive)
-    (setq isearch-word t
-          isearch-string ""
-          isearch-message "")
-    (isearch-yank-string (word-at-point))))
 
 ;; Use GNU global instead of normal find-tag, fall back to etags-select
 (global-set-key (kbd "C-.") (if (and (fboundp 'ggtags-find-tag-dwim)

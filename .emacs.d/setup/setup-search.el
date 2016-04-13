@@ -33,19 +33,35 @@
             (setq search-highlight t)
             (setq query-replace-highlight t)
 
+            ;; exit search mode with any key
+            (setq search-exit-option t)
+
             ;; Keep the search results in the center in incremental search
             (defadvice isearch-repeat-forward (after isearch-repeat-forward-recenter activate)
               (recenter))
             (defadvice isearch-repeat-backward (after isearch-repeat-backward-recenter activate)
               (recenter))
             (ad-activate 'isearch-repeat-forward)
-            (ad-activate 'isearch-repeat-backward)))
+            (ad-activate 'isearch-repeat-backward)
+
+            ;; search forward with Ctrl-f
+            (global-set-key [(control f)] 'isearch-forward)
+            (define-key isearch-mode-map [(control f)] (lookup-key isearch-mode-map "\C-s"))
+            (define-key minibuffer-local-isearch-map [(control f)]
+              (lookup-key minibuffer-local-isearch-map "\C-s"))
+
+            ;; search backward with Alt-f
+            (global-set-key [(meta f)] 'isearch-backward)
+            (define-key isearch-mode-map [(meta f)] (lookup-key isearch-mode-map "\C-r"))
+            (define-key minibuffer-local-isearch-map [(meta f)]
+              (lookup-key minibuffer-local-isearch-map "\C-r"))))
 
 ;; Search at point
 (use-package thingatpt
-  :defer 1
-  :bind (("M-s ." . isearch-forward-symbol-at-point)
-         ("M-s ," . isearch-forward-word-at-point))
+  :bind (("C-=" . isearch-forward-word-at-point)
+         :map isearch-mode-map
+         ("C-=" . isearch-forward-word-at-point-isearch))
+  :commands (isearch-forward-word-at-point isearch-forward-symbol-at-point)
   :config
   (progn
     (defun isearch-forward-word-at-point ()
@@ -72,7 +88,16 @@
               (when (< (car bounds) (point))
                 (goto-char (car bounds)))
               (isearch-yank-string symbol))
-          (user-error "No symbol at point"))))))
+          (user-error "No symbol at point"))))
+
+    ;; Search at point
+    (defun isearch-forward-word-at-point-isearch ()
+        "Reset current isearch to a word-mode search of the word under point."
+        (interactive)
+        (setq isearch-word t
+              isearch-string ""
+              isearch-message "")
+        (isearch-yank-string (word-at-point)))))
 
 (provide 'setup-search)
 ;;; setup-search.el ends here

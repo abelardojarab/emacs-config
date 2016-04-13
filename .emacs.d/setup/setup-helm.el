@@ -30,6 +30,7 @@
   :bind (("C-;" . helm-mini)
          ("C-0" . helm-buffers-list)
          ("C-`" . helm-semantic-or-imenu)
+         ("C-S-v" . helm-show-kill-ring)
          ("M-y" . helm-show-kill-ring)
          :map isearch-mode-map
          ("C-h" . helm-occur-from-isearch)
