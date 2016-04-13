@@ -38,16 +38,11 @@
                          buffer-file-name))
   (message (concat "PLANTUML Rendered:  " (buffer-name))))
 
-;; for Gnuplot
-(use-package gnuplot
-  :load-path (lambda () (expand-file-name "gnuplot/" user-emacs-directory)))
-
 ;; Automatically refresh inline images that are generated from Babel blocks
 (add-hook 'org-babel-after-execute-hook (lambda ()
                                           (condition-case nil
                                               (org-display-inline-images)
-                                            (error nil)))
-          'append)
+                                            (error nil))) 'append)
 
 ;; Enable multiple languages
 (org-babel-do-load-languages
@@ -57,7 +52,9 @@
    (ditaa . t)
    (dot . t)
    (gnuplot . t)
-   (sh . t)
+   ;; sh was renamed to shell according to:
+   ;; http://comments.gmane.org/gmane.emacs.orgmode/102877
+   (shell . t)
    (R . t)
    (perl . t)
    (ruby . t)

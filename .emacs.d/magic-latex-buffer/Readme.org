@@ -1,0 +1,59 @@
+* magic-latex-buffer.el
+
+Magically enhance LaTeX-mode font-locking for semi-WYSIWYG editing.
+
+LaTeX-mode のシンタックスハイライトを激しく
+
+** Screencast
+
+[[imgs/screencast.gif]]
+
+** Other examples
+
+- make it readable a mess of commands
+
+  [[imgs/readability.gif]]
+
+- highlight decorated blocks (note that nested blocks are also
+  highlighted correctly)
+
+  [[imgs/nested_blocks.gif]]
+
+- align centered/flushed blocks
+
+[[imgs/alignment.gif]]
+
+- inline image preview powered by =iimage-mode=
+
+- fix inline-math highlighting for documents with multi-byte characters
+
+** Installation
+
+1. Install an unicode font supporting many symbols (eg. Symbolas,
+   Unifont, etc).
+
+2. Put magic-latex-buffer.el into a "load-path"ed directory, and load
+   it in your init file:
+
+   : (require 'magic-latex-buffer)
+
+You can activate the magic with =M-x magic-latex-buffer= in a
+=latex-mode= buffer. If you want to activate automatically, add the
+function to the mode hook.
+
+: (add-hook 'latex-mode-hook 'magic-latex-buffer)
+
+** Customizations
+
+You can disable some features independently, if they're too fancy.
+
+: (setq magic-latex-enable-block-highlight nil
+:       magic-latex-enable-suscript        t
+:       magic-latex-enable-pretty-symbols  t
+:       magic-latex-enable-block-align     nil
+:       magic-latex-enable-inline-image    nil
+:       magic-latex-enable-minibuffer-echo nil)
+
+** Known Issues
+
+- Not perfectly compatible with =multiple-cursors= (but still usable)

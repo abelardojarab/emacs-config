@@ -45,7 +45,7 @@
                       (loop while (re-search-forward "^\\([a-z].*?\\)\\s-*\n?\\s-*:" end t)
                             collect (cons (match-string 1) (point))))))))
 
-;; imenu list
+;; iMenu list
 (use-package imenu-list
   :load-path (lambda () (expand-file-name "imenu-list/" user-emacs-directory))
   :config (progn
@@ -53,7 +53,6 @@
             (setq imenu-list-focus-after-activation t)
             (setq imenu-list-auto-resize t)
             (setq imenu-list-position 'right)))
-
 
 ;; iMenus
 (use-package imenus

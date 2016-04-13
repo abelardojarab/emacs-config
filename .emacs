@@ -165,6 +165,9 @@
 ;; Setup spelling (optional)
 (require 'setup-spell)
 
+;; Setup gnuplot (so org-babel accepts)
+(require 'setup-gnuplot)
+
 ;; Setup Org
 (require 'setup-org)
 
@@ -245,6 +248,9 @@
 
 ;; Setup HTML
 (require 'setup-html)
+
+;; Setup LaTeX
+(require 'setup-latex)
 
 ;; Setup Javascript
 (require 'setup-javascript)

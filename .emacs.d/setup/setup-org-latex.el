@@ -76,7 +76,6 @@
       '(("en" ("\\(\\s-\\|[[(]\\)\"" . "\\enquote{") ("\\(\\S-\\)\"" . "}") ("\\(\\s-\\|(\\)'" . "`"))))
 
 ;; Reftex
-(require 'dash)
 (require 'reftex-cite)
 (setq reftex-default-bibliography '("~/workspace/Documents/Bibliography/biblio.bib")) ;; So that RefTeX in Org-mode knows bibliography
 (defun org-mode-reftex-setup ()

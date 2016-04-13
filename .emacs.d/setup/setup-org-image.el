@@ -33,7 +33,7 @@
             (imagex-global-sticky-mode 1)
             (imagex-auto-adjust-mode 1)
             (setq imagex-quiet-error t)
-                        ;; Insert images from files like this:
+            ;; Insert images from files like this:
             ;; #+BEGIN: image :file "~/Documents/personal/foo.png"
             ;; #+END
             (defun org-dblock-write:image (params)
@@ -43,7 +43,7 @@
 
 ;; Integrating graphics with text inside Emacs
 (use-package iimage
-  :commands (iimage-mode org-turn-on-iimage-in-org)
+  :commands (iimage-mode org-turn-on-iimage org-insert-screenshot org-toggle-iimage org-reload-image-at-point org-resize-image-at-point)
   :config (progn
             (add-to-list 'iimage-mode-image-regex-alist '("@startuml\s+\\(.+\\)" . 1))
             (add-to-list 'iimage-mode-image-regex-alist (cons (concat "\[\[file:\(~?" iimage-mode-image-filename-regex "\)\]") 1))
@@ -83,15 +83,15 @@ a link to this file."
                 (org-display-inline-images)))
 
             ;; Function to setup images for display on load
-            (defun org-turn-on-iimage-in-org ()
+            (defun org-turn-on-iimage ()
               "display images in your org file"
               (interactive)
               (turn-on-iimage-mode)
               (set-face-underline-p 'org-link t)) ;; start with hidden images
-            ;; (add-hook 'org-mode-hook '(lambda () (org-turn-on-iimage-in-org)))
+            ;; (add-hook 'org-mode-hook '(lambda () (org-turn-on-iimage)))
 
             ;; Function to toggle images in a org buffer
-            (defun org-toggle-iimage-in-org ()
+            (defun org-toggle-iimage ()
               "display images in your org file"
               (interactive)
               (if (face-underline-p 'org-link)
