@@ -37,28 +37,37 @@
             (defun my/c-mode-init ()
               (c-set-style "k&r")
               (c-toggle-electric-state -1)
+              (setq comment-multi-line t)
+              (setq-default c-default-style "k&r")
               (setq-default c-basic-offset 4))
             (add-hook 'c-mode-hook #'my/c-mode-init)
             (add-hook 'c++-mode-hook #'my/c-mode-init)))
 
+;; Insert and delete C++ header files automatically.
+(use-package cpp-auto-include
+  :commands cpp-auto-include
+  :bind (:map c++-mode-map
+              ("C-c i" . cpp-auto-include))
+  :load-path (lambda () (expand-file-name "cpp-auto-include/" user-emacs-directory)))
+
+;; Show inline arguments hint for the C/C++ function at point
 (use-package function-args
   :load-path (lambda () (expand-file-name "function-args/" user-emacs-directory))
   :bind (:map c-mode-map
-              ("C-:" . moo-complete)
+              ("C-c c" . moo-complete)
               :map c++-mode-map
-              ("C-:" . moo-complete))
+              ("C-c c" . moo-complete))
   :config (progn
             (fa-config-default)
-            (define-key function-args-mode-map (kbd "M-o") nil)
-            (define-key c-mode-map (kbd "C-:") 'moo-complete)
-            (define-key c++-mode-map (kbd "C-:") 'moo-complete)))
+            (define-key function-args-mode-map (kbd "M-o") nil)))
 
+;; C/C++ refactoring tool based on Semantic parser framework
 (use-package srefactor
   :load-path (lambda () (expand-file-name "semantic-refactor/" user-emacs-directory))
   :bind (:map c-mode-map
-              ("C-|" . srefactor-refactor-at-point)
+              ("C-c s" . srefactor-refactor-at-point)
               :map c++-mode-map
-              ("C-|" . srefactor-refactor-at-point)))
+              ("C-c s" . srefactor-refactor-at-point)))
 
 (provide 'setup-c++)
 ;;; setup-c++.el ends here

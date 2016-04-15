@@ -66,18 +66,23 @@
                           (writegood-mode t)
                           (yas-minor-mode t))))
 
-            ;; Set up Org agenda files
+            ;; Set up Org default files
             (let ((todo "~/workspace/Documents/Org/diary.org"))
               (when (file-readable-p todo)
 
                 ;; set org directory
                 (setq org-directory (expand-file-name "~/workspace/Documents/Org"))
                 (setq diary-file (concat org-directory "/diary"))
+                (setq org-id-locations-file "~/.emacs.cache/org-id-locations")
                 (setq org-default-notes-file (concat org-directory "/notes.org"))
+                (setq org-default-refile-file (concat org-directory "/refile.org"))
                 (setq org-agenda-diary-file (concat org-directory "/diary.org"))
+                (setq org-mobile-directory (concat org-directory "/mobile-org"))
+                (setq org-mobile-file (concat org-directory "/mobile-org/from-mobile.org"))
                 (setq org-agenda-files (list
                                         (concat org-directory "/diary.org")
-                                        (concat org-directory "/agenda.org")))))
+                                        (concat org-directory "/notes.org")
+                                        (concat org-directory "/refile.org")))))
 
             ;; Miscellanenous settings
             (setq org-startup-folded t
@@ -107,8 +112,10 @@
             (setq org-agenda-inhibit-startup t ;; 50x speedup
                   org-agenda-use-tag-inheritance nil ;; 3-4x speedup
                   org-agenda-show-log t
+                  org-agenda-show-all-dates t
                   org-agenda-start-on-weekday nil
                   org-agenda-span 14
+                  org-agenda-ndays 14
                   org-agenda-include-diary t
                   org-agenda-window-setup 'current-window
                   org-deadline-warning-days 7)

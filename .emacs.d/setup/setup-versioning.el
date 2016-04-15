@@ -71,8 +71,19 @@
           '(progn (info-initialize)
                   (add-to-list 'Info-directory-list (expand-file-name "magit/Documentation" user-emacs-directory))))
   :config (progn
-            (setq magit-completing-read-function 'magit-ido-completing-read)
-            (setq magit-diff-refine-hunk t)))
+            (setq magit-commit-signoff nil
+                  magit-auto-revert-mode nil
+                  magit-process-popup-time 5
+                  magit-save-some-buffers nil
+                  magit-set-upstream-on-push t
+                  magit-diff-refine-hunk t
+                  magit-auto-revert-mode-lighter nil
+                  ;; magit-completing-read-function 'magit-ido-completing-read
+                  magit-completing-read-function 'magit-builtin-completing-read)
+
+            (add-hook 'magit-log-edit-mode-hook 'flyspell-mode)
+            (add-hook 'git-commit-setup-hook 'git-commit-turn-on-flyspell)
+            (add-hook 'git-commit-mode-hook (toggle-save-place 0))))
 
 ;; diff-hl
 (use-package diff-hl

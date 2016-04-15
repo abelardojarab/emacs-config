@@ -246,6 +246,9 @@
 ;; Setup Python Jedi
 (require 'setup-python-plugins)
 
+;; Setup Perl
+(require 'setup-perl)
+
 ;; Setup HTML
 (require 'setup-html)
 
