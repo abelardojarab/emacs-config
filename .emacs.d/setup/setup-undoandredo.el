@@ -34,11 +34,14 @@
 ;; Better undo
 (use-package undo-tree
   :config (progn
-            (global-undo-tree-mode)
             (global-set-key (kbd "C-z") 'undo-tree-undo)
             (global-set-key (kbd "C-S-z") 'undo-tree-redo)
             (setq undo-tree-visualizer-diff t)
-            (setq undo-tree-visualizer-timestamps t)))
+            (setq undo-tree-visualizer-timestamps t)
+            (setq undo-tree-auto-save t)
+            (setq undo-tree-history-directory-alist
+                  '((".*" . "~/.emacs.cache/undo-tree")))
+            (global-undo-tree-mode)))
 
 (provide 'setup-undoandredo)
 ;;; setup-undoandredo.el ends here

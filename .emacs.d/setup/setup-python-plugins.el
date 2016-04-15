@@ -27,7 +27,9 @@
 ;; Jedi settings
 (use-package python-environment
   :defer t
-  :load-path (lambda () (expand-file-name "python-environment/" user-emacs-directory)))
+  :load-path (lambda () (expand-file-name "python-environment/" user-emacs-directory))
+  :init (progn
+          (setq python-environment-directory "~/.emacs.cache/python-environments")))
 
 (use-package epc
   :defer t

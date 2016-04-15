@@ -41,8 +41,21 @@
 (if (not (file-exists-p "~/.emacs.cache"))
     (make-directory "~/.emacs.cache") t)
 
+;; Assure .emacs.cache/semanticdb directory exists
+(if (not (file-exists-p "~/.emacs.cache/semanticdb"))
+    (make-directory "~/.emacs.cache/semanticdb") t)
+
+;; Assure .emacs.cache/semanticdb directory exists
+(if (not (file-exists-p "~/.emacs.cache/backups"))
+    (make-directory "~/.emacs.cache/backups") t)
+
 ;; Inhibit startup window, very annoying
 (setq inhibit-startup-message t)
+
+;; Features
+(put 'narrow-to-region 'disabled nil)
+(put 'narrow-to-page 'disabled nil)
+(put 'narrow-to-defun 'disabled nil)
 
 ;; Printing
 (setq ps-paper-type 'a4
@@ -255,6 +268,9 @@
 
 ;; Show column-number in the mode line
 (column-number-mode 1)
+
+;; Show file size in mode line
+(size-indication-mode 1)
 
 ;; Edition of EMACS edition modes
 (setq major-mode 'text-mode)

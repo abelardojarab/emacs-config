@@ -51,7 +51,10 @@
 (use-package popwin
   :load-path (lambda () (expand-file-name "popwin/" user-emacs-directory))
   ;; popwin conflicts with ecb
-  :config (popwin-mode -1))
+  :config (progn
+            (push '("^\*helm .+\*$" :regexp t) popwin:special-display-config)
+            (push '("^\*helm-.+\*$" :regexp t) popwin:special-display-config)
+            (popwin-mode -1)))
 
 ;; Turn on subword-mode for non-lispy languages
 (use-package subword
@@ -67,7 +70,7 @@
   :config (progn
             (setq
              uniquify-buffer-name-style 'post-forward
-             uniquify-separator ":"
+             uniquify-separator " • "
              ;; rename after killing uniquified
              uniquify-after-kill-buffer-p t
              ;; don't muck with special buffers

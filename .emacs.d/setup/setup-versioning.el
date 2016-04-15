@@ -78,11 +78,8 @@
                   magit-set-upstream-on-push t
                   magit-diff-refine-hunk t
                   magit-auto-revert-mode-lighter nil
-                  ;; magit-completing-read-function 'magit-ido-completing-read
-                  magit-completing-read-function 'magit-builtin-completing-read)
+                  magit-completing-read-function 'magit-ido-completing-read)
 
-            (add-hook 'magit-log-edit-mode-hook 'flyspell-mode)
-            (add-hook 'git-commit-setup-hook 'git-commit-turn-on-flyspell)
             (add-hook 'git-commit-mode-hook (toggle-save-place 0))))
 
 ;; diff-hl
