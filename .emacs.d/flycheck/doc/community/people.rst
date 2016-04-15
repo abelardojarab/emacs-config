@@ -12,12 +12,15 @@ Teams
 Maintainers
 -----------
 
-* **Sebastian Wiesner** (:gh:`lunaryorn`, head maintainer)
+* **Sebastian Wiesner** (:gh:`lunaryorn`, head maintainer, GPG key ``5C42FE98``)
 * Clément Pit--Claudel (:gh:`cpitclaudel`, maintainer)
 
 We maintain Flycheck and all official extensions within the `Flycheck
 organisation`_, and set the direction and scope Flycheck.  We also accept or
 decline pull requests and feature proposals, implement changes and fix bugs in
+Flycheck.
+
+Our GPG keys are used to sign commits on Github and to sign release tags for
 Flycheck.
 
 .. _Flycheck Organisation: https://github.com/flycheck

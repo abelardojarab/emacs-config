@@ -832,7 +832,7 @@ This variable is a normal hook.  See Info node `(elisp)Hooks'."
     (define-key map "?"         #'flycheck-describe-checker)
     (define-key map "h"         #'flycheck-display-error-at-point)
     (define-key map "H"         #'display-local-help)
-    (define-key map "i"         #'flycheck-info)
+    (define-key map "i"         #'flycheck-manual)
     (define-key map "V"         #'flycheck-version)
     (define-key map "v"         #'flycheck-verify-setup)
     (define-key map "x"         #'flycheck-disable-checker)
@@ -1023,10 +1023,13 @@ just return nil."
         (assq-delete-all 'flycheck-checker find-function-regexp-alist)))
 
 ;;;###autoload
-(defun flycheck-info ()
+(defun flycheck-manual ()
   "Open the Flycheck manual."
   (interactive)
-  (info "flycheck"))
+  (browse-url "http://www.flycheck.org"))
+
+(define-obsolete-function-alias 'flycheck-info
+  'flycheck-manual "26" "Open the Flycheck manual.")
 
 
 ;;; Utility functions
@@ -6588,7 +6591,7 @@ This option requires Go 1.6 or newer."
   "A Go syntax checker using the `go tool vet' command.
 
 See URL `https://golang.org/cmd/go/' and URL
-`https://godoc.org/golang.org/x/tools/cmd/vet'."
+`https://golang.org/cmd/vet/'."
   :command ("go" "tool" "vet" "-all"
             (option "-printfuncs=" flycheck-go-vet-print-functions concat
                     flycheck-option-comma-separated-list)
@@ -6606,14 +6609,15 @@ See URL `https://golang.org/cmd/go/' and URL
                   go-test
                   ;; Fall back if `go build' or `go test' can be used
                   go-errcheck)
-  :verify-fn (lambda (_)
-               (let ((have-vet (member "vet" (ignore-errors
-                                               (process-lines go "tool")))))
-                 (list
-                  (flycheck-verification-result-new
-                   :label "go tool vet"
-                   :message (if have-vet "present" "missing")
-                   :face (if have-vet 'success '(bold error)))))))
+  :verify (lambda (_)
+            (let* ((go (flycheck-checker-executable 'go-vet))
+                   (have-vet (member "vet" (ignore-errors
+                                             (process-lines go "tool")))))
+              (list
+               (flycheck-verification-result-new
+                :label "go tool vet"
+                :message (if have-vet "present" "missing")
+                :face (if have-vet 'success '(bold error)))))))
 
 (flycheck-def-option-var flycheck-go-build-install-deps nil go-build
   "Whether to install dependencies in `go build'.

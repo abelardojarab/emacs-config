@@ -35,15 +35,15 @@
 
 ;;; Commentary:
 
-;; Ebib is a BibTeX database manager that runs in GNU Emacs. With Ebib, you
-;; can create and manage .bib-files, all within Emacs. It supports @string
+;; Ebib is a BibTeX database manager that runs in GNU Emacs.  With Ebib, you
+;; can create and manage .bib-files, all within Emacs.  It supports @string
 ;; and @preamble definitions, multi-line field values, searching, and
 ;; integration with Emacs' (La)TeX mode.
 
 ;; See the Ebib manual for usage and installation instructions.
 
 ;; The latest release version of Ebib, contact information and mailing list
-;; can be found at <http://joostkremers.github.io/ebib>. Development
+;; can be found at <http://joostkremers.github.io/ebib>.  Development
 ;; sources can be found at <https://github.com/joostkremers/ebib>.
 
 ;;; Code:
@@ -266,10 +266,6 @@ it is highlighted.  DB defaults to the current database."
 If `ebib--cur-db' is nil, the buffer is just erased and its name set
 to \"none\". This function sets `ebib--cur-keys-list'."
   (with-current-ebib-buffer 'index
-    ;; First set the modification flag, so that it's still correct after
-    ;; with-ebib-buffer-writable.
-    (when ebib--cur-db
-      (set-buffer-modified-p (ebib-db-modified-p ebib--cur-db)))
     (with-ebib-buffer-writable
       (erase-buffer)
       (if (not ebib--cur-db)
@@ -329,15 +325,16 @@ the field contents."
 (defun ebib--set-modified (mod &optional db)
   "Set the modified flag MOD on database DB.
 MOD must be either t or nil; DB defaults to the current database.
-If DB is the current database, the modified flag of the index
-buffer is also (re)set.  Return value is MOD."
+If DB is the current database, the mode line is redisplayed, in
+order to correctly reflect the database's modified status.  The
+return value is MOD."
   (unless db
     (setq db ebib--cur-db))
   (ebib-db-set-modified mod db)
   (when (eq db ebib--cur-db)
     (with-current-ebib-buffer 'index
-      (set-buffer-modified-p mod)
-      mod)))
+      (force-mode-line-update)))
+  mod)
 
 (defun ebib--modified-p ()
   "Check if any of the databases in Ebib were modified.
@@ -868,7 +865,8 @@ FILE must be a fully expanded filename."
 
 (defun ebib--reload-database (db)
   "Reload database DB from disk."
-  (let ((file (ebib-db-get-filename db)))
+  (let ((file (ebib-db-get-filename db))
+        (cur-key (ebib--db-get-current-entry-key db)))
     ;; first clear out some variables
     (ebib-db-clear-database db)
     ;; then load the file
@@ -879,7 +877,7 @@ FILE must be a fully expanded filename."
     (ebib--load-entries file db)
     ;; If the user makes any changes, we'll want to create a back-up.
     (ebib-db-set-backup t ebib--cur-db)
-    (ebib-db-set-current-entry-key t db)))
+    (ebib-db-set-current-entry-key cur-key db 'first)))
 
 (defun ebib-merge-bibtex-file ()
   "Merge a BibTeX file into the current database."
@@ -1681,30 +1679,36 @@ their contents into a single field."
 (defun ebib-delete-entry ()
   "Delete the current entry from the database."
   (interactive)
-  (cl-flet ((remove-entry (key)
-                          (ebib-db-remove-entry key ebib--cur-db)
-                          (ebib-db-unmark-entry key ebib--cur-db) ; This is harmless if key isn't marked.
-                          (ebib-db-set-current-entry-key (or (ebib--next-elem key ebib--cur-keys-list)
-                                                         (-last-item ebib--cur-keys-list))
-                                                     ebib--cur-db
-                                                     'first)
-                          (setq ebib--cur-keys-list (delete key ebib--cur-keys-list))))
-    (ebib--execute-when
-      ((marked-entries)
-       (when (y-or-n-p "Delete all marked entries? ")
-         (mapc #'remove-entry (ebib-db-list-marked-entries ebib--cur-db))
-         (message "Marked entries deleted.")
+  (ebib--execute-when
+    ((marked-entries)
+     (when (y-or-n-p "Delete all marked entries? ")
+       (let ((new-cur-key (ebib--cur-entry-key)))
+         (dolist (key (ebib-db-list-marked-entries ebib--cur-db))
+           (ebib-db-remove-entry key ebib--cur-db)
+           (if (string= key new-cur-key)
+               (setq new-cur-key (ebib--next-elem key ebib--cur-keys-list))))
+         (ebib-db-unmark-entry 'all ebib--cur-db)  ; This works despite the fact that all marked keys have been removed.
+         (unless new-cur-key  ; If nil, the last entry was active and we deleted it.
+           (setq new-cur-key (-last-item (ebib--list-keys))))
+         (ebib-db-set-current-entry-key new-cur-key ebib--cur-db 'first))
+       (message "Marked entries deleted.")
+       (ebib--set-modified t)
+       (ebib--redisplay)))
+    ((entries)
+     (let ((key (ebib--cur-entry-key)))
+       (when (y-or-n-p (format "Delete %s? " key))
+         (ebib-db-remove-entry key ebib--cur-db)
+         (let ((new-cur-key (ebib--next-elem key ebib--cur-keys-list)))
+           (setq ebib--cur-keys-list (delete key ebib--cur-keys-list))
+           (ebib-db-set-current-entry-key (or new-cur-key  ; If new-cur-key is nil, we've deleted the last entry.
+                                          (-last-item ebib--cur-keys-list))
+                                      ebib--cur-db
+                                      'first))
+         (message (format "Entry `%s' deleted." key))
          (ebib--set-modified t)
-         (ebib--redisplay)))
-      ((entries)
-       (let ((key (ebib--cur-entry-key)))
-         (when (y-or-n-p (format "Delete %s? " key))
-           (remove-entry key)
-           (message (format "Entry `%s' deleted." key))
-           (ebib--set-modified t)
-           (ebib--redisplay))))
-      ((default)
-       (beep)))))
+         (ebib--redisplay))))
+    ((default)
+     (beep))))
 
 (defun ebib-select-and-popup-entry ()
   "Make the entry at point current and display it.
@@ -3468,7 +3472,8 @@ is found, return the symbol `none'."
   (if (not (eq major-mode 'latex-mode))
       'none
     (let ((texfile-buffer (current-buffer))
-          texfile)
+          texfile
+          files)
       ;; if AucTeX's TeX-master is used and set to a string, we must
       ;; search that file for a \bibliography command, as it's more
       ;; likely to be in there than in the file we're in.
@@ -3479,23 +3484,30 @@ is found, return the symbol `none'."
         (if (and texfile (file-readable-p texfile))
             (insert-file-contents texfile)
           (insert-buffer-substring texfile-buffer))
-        (save-excursion
-          (save-match-data
-            (let (files)
-              (goto-char (point-min))
-              ;; First search for a \bibliography command:
-              (if (re-search-forward "\\\\\\(?:no\\)*bibliography{\\(.*?\\)}" nil t)
-                  (setq files (mapcar (lambda (file)
-                                        (ebib--ensure-extension file ".bib"))
-                                      (split-string (buffer-substring-no-properties (match-beginning 1) (match-end 1)) ",[ ]*")))
-                ;; If we didn't find a \bibliography command, search for \addbibresource commands:
-                (while (re-search-forward "\\\\addbibresource\\(\\[.*?\\]\\)?{\\(.*?\\)}" nil t)
-                  (let ((option (match-string 1))
-                        (file (match-string-no-properties 2)))
-                    ;; If this isn't a remote resource, add it to the list.
-                    (unless (and option (string-match-p "location=remote" option))
-                      (push file files)))))
-              (or files 'none))))))))
+        (save-match-data
+          (goto-char (point-min))
+          ;; First search for a \bibliography command:
+          (if (re-search-forward "\\\\\\(?:no\\)*bibliography{\\(.*?\\)}" nil t)
+              (setq files (mapcar (lambda (file)
+                                    (ebib--ensure-extension file ".bib"))
+                                  (split-string (buffer-substring-no-properties (match-beginning 1) (match-end 1)) ",[ ]*")))
+            ;; If we didn't find a \bibliography command, search for \addbibresource commands:
+            (while (re-search-forward "\\\\addbibresource\\(\\[.*?\\]\\)?{\\(.*?\\)}" nil t)
+              (let ((option (match-string 1))
+                    (file (match-string-no-properties 2)))
+                ;; If this isn't a remote resource, add it to the list.
+                (unless (and option (string-match-p "location=remote" option))
+                  (push file files)))))))
+      (if files
+          (mapcar (lambda (file)
+                    ;; If a file has a directory part, we expand it, so
+                    ;; `ebib--get-db-from-filename' can match it up with a
+                    ;; database's file path.
+                    (if (file-name-directory file)
+                        (expand-file-name file)
+                      file))
+                  files)
+        'none))))
 
 (defun ebib--create-collection-from-db ()
   "Create a collection of BibTeX keys.

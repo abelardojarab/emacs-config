@@ -24,17 +24,6 @@
 
 ;;; Code:
 
-
-;; Pretty lambdas
-(defun pretty-lambdas ()
-  (font-lock-add-keywords
-   nil `(("\\<lambda\\>"
-          (0 (progn (compose-region (match-beginning 0) (match-end 0)
-                                    ,(make-char 'greek-iso8859-7 107))
-                    nil))))))
-(add-hook 'emacs-lisp-mode-hook 'pretty-lambdas)
-(add-hook 'lisp-mode-hook 'pretty-lambdas)
-
 ;; Adjust font when using graphical interface
 (when window-system
 
@@ -125,6 +114,21 @@
   (buffer-face-mode -1))
 (add-hook 'html-mode-hook 'fixed-pitch-mode)
 (add-hook 'nxml-mode-hook 'fixed-pitch-mode)
+
+;; Pretty lambdas
+(defun pretty-lambdas ()
+  (font-lock-add-keywords
+   nil `(("\\<lambda\\>"
+          (0 (progn (compose-region (match-beginning 0) (match-end 0)
+                                    ,(make-char 'greek-iso8859-7 107))
+                    nil))))))
+(add-hook 'emacs-lisp-mode-hook 'pretty-lambdas)
+(add-hook 'lisp-mode-hook 'pretty-lambdas)
+
+;; Pretty mode
+(use-package pretty-mode
+  :commands pretty-mode
+  :load-path (lambda () (expand-file-name "pretty-mode/" user-emacs-directory)))
 
 (provide 'setup-fonts)
 ;;; setup-fonts.el ends here
