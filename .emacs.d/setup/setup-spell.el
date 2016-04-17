@@ -37,17 +37,13 @@
             (cond
              ;; try hunspell at first
              ((executable-find "hunspell")
-              (setq ispell-dictionary-alist '((nil "[A-Za-z]" "[^A-Za-z]" "[']" t
-                                                   ("-d" "en_US" "-i" "utf-8") nil utf-8)
+              (setq ispell-dictionary-alist '((nil
+                                               "[A-Za-z]" "[^A-Za-z]" "[']" t
+                                               ("-d" "en_US" "-i" "utf-8") nil utf-8)
 
                                               ("english"
-                                                   "[[:alpha:]]"
-                                                   "[^[:alpha:]]"
-                                                   "[']"
-                                                   t
-                                                   ("-d" "en_US")
-                                                   nil
-                                                   utf-8)))
+                                               "[[:alpha:]]" "[^[:alpha:]]" "[']" t
+                                               ("-d" "en_US") nil utf-8)))
               (setq ispell-really-hunspell t
                     ispell-dictionary "english"
                     ispell-program-name "hunspell"
@@ -59,10 +55,22 @@
                     ispell-program-name "aspell"
                     ispell-extra-args '("--sug-mode=fast"))
               (when (eq system-type 'darwin)
-                (if (file-executable-p "/usr/local/bin/aspell")
-                    (progn
-                      (setq ispell-program-name "/usr/local/bin/aspell")
-                      (setq ispell-extra-args '("-d" "/Library/Application Support/cocoAspell/aspell6-en-6.0-0/en.multi")))))))
+                (setq ispell-dictionary-alist
+                      '((nil
+                         "[A-Za-z]" "[^A-Za-z]" "[']" nil
+                         ("-B" "-d" "en.multi" "--dict-dir"
+                          "/Library/Application Support/cocoAspell/aspell6-en-6.0-0")
+                         nil utf-8)
+
+                        ("english"
+                         "[A-Za-z]" "[^A-Za-z]" "[']" nil
+                         ("-B" "-d" "en.multi" "--dict-dir"
+                          "/Library/Application Support/cocoAspell/aspell6-en-6.0-0")
+                         nil utf-8)))
+
+                ;; Use Macports aspell if available
+                (if (file-executable-p "/opt/local/bin/aspell")
+                    (setq ispell-program-name "/opt/local/bin/aspell")))))
 
             ;; change dictionary: "C-c e" = english, "C-c s"=spanish, "C-c w"=turn off flyspell
             (add-hook 'text-mode-hook
