@@ -76,11 +76,11 @@
                 (setq org-id-locations-file "~/.emacs.cache/org-id-locations")
                 (setq org-default-notes-file (concat org-directory "/notes.org"))
                 (setq org-default-refile-file (concat org-directory "/refile.org"))
-                (setq org-agenda-diary-file (concat org-directory "/diary.org"))
+                (setq org-agenda-diary-file (concat org-directory "/todo.org"))
                 (setq org-mobile-file (concat org-directory "/mobileorg.org"))
                 (setq org-mobile-directory (concat org-directory "/mobile-org"))
                 (setq org-agenda-files (list
-                                        (concat org-directory "/diary.org")
+                                        (concat org-directory "/todo.org")
                                         (concat org-directory "/notes.org")
                                         (concat org-directory "/mobileorg.org")
                                         (concat org-directory "/refile.org")))))
@@ -103,11 +103,15 @@
                   org-hide-leading-stars t
                   org-hide-emphasis-markers t
                   org-log-done t
-                  org-enforce-todo-dependencies t)
-
-            (setq org-indent-mode nil) ;; this causes problem in other modes
+                  org-enforce-todo-dependencies t
+                  org-indent-mode nil) ;; this causes problem in other modes
             (setq org-blank-before-new-entry ;; Insert blank line before new heading
                   '((heading . t)))
+
+            ;; Ellipsis
+            (unless (equal system-type 'windows-nt)
+              (setq org-ellipsis " ⤵"
+                    org-columns-ellipses "…"))
 
             ;; Agenda settings
             (setq org-agenda-inhibit-startup t ;; 50x speedup
@@ -126,6 +130,7 @@
             (setq org-export-with-smart-quotes t) ;; curly quotes in HTML
             (setq org-export-with-sub-superscripts '{})
             (setq org-export-allow-bind-keywords t)
+            (setq org-export-async-debug t)
 
             ;; Stop Org splitting window
             (setq org-link-frame-setup (quote ((vm . vm-visit-folder-other-frame)
@@ -166,6 +171,7 @@
             ;; Org Templates
             (add-to-list 'org-structure-template-alist '("E" "#+BEGIN_SRC emacs-lisp\n?\n#+END_SRC\n"))
             (add-to-list 'org-structure-template-alist '("S" "#+BEGIN_SRC shell-script\n?\n#+END_SRC\n"))
+            (add-to-list 'org-structure-template-alist '("al" "#+BEGIN_SRC latex\n\\begin{align*}\n?\\end{align*}\n#+END_SRC"))
 
             ;; Fix shift problem in Org mode
             (setq org-CUA-compatible t)

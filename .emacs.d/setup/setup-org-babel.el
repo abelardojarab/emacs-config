@@ -24,6 +24,15 @@
 
 ;;; Code:
 
+;; A progress indicator for code blocks in org-mode courtesy of John Kitchin
+(defadvice org-babel-execute-src-block (around progress nil activate)
+  ;; (set-face-attribute
+  ;;  'org-block-background nil :background "LightSteelBlue")
+  (message "Running your code block")
+  ad-do-it
+  ;; (set-face-attribute 'org-block-background nil :background "gray")
+  (message "Done with code block"))
+
 ;; Rendering ditaa
 (setq org-ditaa-jar-path (expand-file-name "jar/ditaa.jar" user-emacs-directory))
 
@@ -69,6 +78,9 @@
 ;; The next block makes org-babel aware that a lower-case 'r' in a =src= block header should be processed as R.
 (add-to-list 'org-src-lang-modes
              '("r" . ess-mode))
+
+;; for Graphviz image in Org
+(add-to-list 'org-src-lang-modes (quote ("dot" . graphviz-dot)))
 
 ;; Abbrev
 (add-hook 'org-mode-hook (lambda () (abbrev-mode 1)))

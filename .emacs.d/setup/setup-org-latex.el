@@ -24,56 +24,120 @@
 
 ;;; Code:
 
-;; Preview LaTeX equations in buffers by showing images (C-c C-x C-l)
-(setq org-latex-create-formula-image-program 'imagemagick)
 
-;; Equations in Org
-(defvar text-scale-mode-hook nil
-  "Hook run at end of command `text-scale-mode'.")
-
-(defadvice text-scale-mode (after text-scale-mode-hooks nil activate)
-  "Run `text-scale-mode-hook' at end of command `text-scale-mode'."
-  (if (functionp text-scale-mode-hook)
-      (funcall text-scale-mode-hook)
-    (loop for hook in text-scale-mode-hook do
-          (if (eq hook 't)
-              (run-hooks (default-value text-scale-mode-hook))
-            (run-hooks hook)))))
-
-(defun org-text-scale-eye ()
-  "Scale equation images according to text-scale-mode-amount."
-  (when (boundp 'text-scale-mode-amount)
-    (let ((relwidth (* (expt text-scale-mode-step text-scale-mode-amount))))
-      (loop for ol in (overlays-in (point-min) (point-max)) do
-            (when (eq (overlay-get ol 'org-overlay-type) 'org-latex-overlay)
-              (unless (overlay-get ol 'org-image-original-width)
-                (overlay-put ol 'org-image-original-width (car (image-size (overlay-get ol 'display) t))))
-              (let ((ol-disp-plist (cdr (overlay-get ol 'display))))
-                (setq ol-disp-plist (plist-put ol-disp-plist :type 'imagemagick))
-                (setq ol-disp-plist (plist-put ol-disp-plist :width (round (* relwidth (overlay-get ol 'org-image-original-width)))))
-                (overlay-put ol 'display (append '(image) ol-disp-plist))))))
-    (force-window-update)))
-(add-hook 'org-mode-hook '(lambda () (add-hook 'text-scale-mode-hook 'org-text-scale-eye)))
-
-(defadvice org-format-latex (before set-scale activate)
-  "Set :scale in `org-format-latex-options' to the scaling factor resulting from `text-scale-mode' and clear cache."
-  (let ((relwidth (expt text-scale-mode-step text-scale-mode-amount)))
-    (unless (= (plist-get org-format-latex-options :scale) relwidth)
-      (plist-put org-format-latex-options :scale relwidth))))
+;; Tweaks for LaTeX exporting
+(require 'ox-latex)
+(setq org-latex-listings t)
+(setq org-export-latex-quotes
+      '(("en" ("\\(\\s-\\|[[(]\\)\"" . "\\enquote{") ("\\(\\S-\\)\"" . "}") ("\\(\\s-\\|(\\)'" . "`"))))
 
 ;; for Tikz image in Org
 (setq org-babel-latex-htlatex "htlatex")
 (defmacro by-backend (&rest body)
   `(case (if (boundp 'backend) (org-export-backend-name backend) nil) ,@body))
 
-;; for Graphviz image in Org
-(add-to-list 'org-src-lang-modes (quote ("dot" . graphviz-dot)))
+;; Preview LaTeX equations in buffers by showing images (C-c C-x C-l)
+(if (executable-find "convert")
+    (setq org-latex-create-formula-image-program 'imagemagick)
+  (setq org-latex-create-formula-image-program 'dvipng))
 
-;; Tweaks for Latex exporting
-(require 'ox-latex)
-(setq org-latex-listings t)
-(setq org-export-latex-quotes
-      '(("en" ("\\(\\s-\\|[[(]\\)\"" . "\\enquote{") ("\\(\\S-\\)\"" . "}") ("\\(\\s-\\|(\\)'" . "`"))))
+;; Toggle previsualization of LaTeX equations in Org-mode
+(defvar org-latex-fragment-last nil
+  "Holds last fragment/environment you were on.")
+
+(defun org-latex-fragment-toggle ()
+  "Toggle a latex fragment image "
+  (and (eq 'org-mode major-mode)
+       (let* ((el (org-element-context))
+              (el-type (car el)))
+         (cond
+          ;; were on a fragment and now on a new fragment
+          ((and
+            ;; fragment we were on
+            org-latex-fragment-last
+            ;; and are on a fragment now
+            (or
+             (eq 'latex-fragment el-type)
+             (eq 'latex-environment el-type))
+            ;; but not on the last one this is a little tricky. as you edit the
+            ;; fragment, it is not equal to the last one. We use the begin
+            ;; property which is less likely to change for the comparison.
+            (not (= (org-element-property :begin el)
+                    (org-element-property :begin org-latex-fragment-last))))
+           ;; go back to last one and put image back
+           (save-excursion
+             (goto-char (org-element-property :begin org-latex-fragment-last))
+             (org-preview-latex-fragment))
+           ;; now remove current image
+           (goto-char (org-element-property :begin el))
+           (let ((ov (loop for ov in org--list-latex-overlays
+                           if
+                           (and
+                            (<= (overlay-start ov) (point))
+                            (>= (overlay-end ov) (point)))
+                           return ov)))
+             (when ov
+               (delete-overlay ov)))
+           ;; and save new fragment
+           (setq org-latex-fragment-last el))
+
+          ;; were on a fragment and now are not on a fragment
+          ((and
+            ;; not on a fragment now
+            (not (or
+                  (eq 'latex-fragment el-type)
+                  (eq 'latex-environment el-type)))
+            ;; but we were on one
+            org-latex-fragment-last)
+           ;; put image back on
+           (save-excursion
+             (goto-char (org-element-property :begin org-latex-fragment-last))
+             (org-preview-latex-fragment))
+           ;; unset last fragment
+           (setq org-latex-fragment-last nil))
+
+          ;; were not on a fragment, and now are
+          ((and
+            ;; we were not one one
+            (not org-latex-fragment-last)
+            ;; but now we are
+            (or
+             (eq 'latex-fragment el-type)
+             (eq 'latex-environment el-type)))
+           (goto-char (org-element-property :begin el))
+           ;; remove image
+           (let ((ov (loop for ov in org--list-latex-overlays
+                           if
+                           (and
+                            (<= (overlay-start ov) (point))
+                            (>= (overlay-end ov) (point)))
+                           return ov)))
+             (when ov
+               (delete-overlay ov)))
+           (setq org-latex-fragment-last el))))))
+
+(add-hook 'post-command-hook 'org-latex-fragment-toggle)
+
+;; Force figure position
+(setq org-latex-default-figure-position "!htb")
+
+;; Place table caption below table
+(setq org-latex-table-caption-above nil)
+
+;; Use centered images in Org-mode
+(advice-add 'org-latex--inline-image :around
+            (lambda (orig link info)
+              (concat
+               "\\begin{center}"
+               (funcall orig link info)
+               "\\end{center}")))
+
+;; Add cite link
+(org-add-link-type "cite" 'ebib
+                   (lambda (path desc format)
+                     (cond
+                      ((eq format 'html)  (format "(<cite>%s</cite>)" path))
+                      ((eq format 'latex) (format "\\cite{%s}" path)))))
 
 ;; Reftex
 (require 'reftex-cite)
