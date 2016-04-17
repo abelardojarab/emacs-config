@@ -77,11 +77,12 @@
                 (setq org-default-notes-file (concat org-directory "/notes.org"))
                 (setq org-default-refile-file (concat org-directory "/refile.org"))
                 (setq org-agenda-diary-file (concat org-directory "/diary.org"))
+                (setq org-mobile-file (concat org-directory "/mobileorg.org"))
                 (setq org-mobile-directory (concat org-directory "/mobile-org"))
-                (setq org-mobile-file (concat org-directory "/mobile-org/from-mobile.org"))
                 (setq org-agenda-files (list
                                         (concat org-directory "/diary.org")
                                         (concat org-directory "/notes.org")
+                                        (concat org-directory "/mobileorg.org")
                                         (concat org-directory "/refile.org")))))
 
             ;; Miscellanenous settings
