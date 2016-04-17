@@ -70,7 +70,7 @@
              (org-preview-latex-fragment))
            ;; now remove current image
            (goto-char (org-element-property :begin el))
-           (let ((ov (loop for ov in org--list-latex-overlays
+           (let ((ov (loop for ov in (org--list-latex-overlays)
                            if
                            (and
                             (<= (overlay-start ov) (point))
@@ -106,7 +106,7 @@
              (eq 'latex-environment el-type)))
            (goto-char (org-element-property :begin el))
            ;; remove image
-           (let ((ov (loop for ov in org--list-latex-overlays
+           (let ((ov (loop for ov in (org--list-latex-overlays)
                            if
                            (and
                             (<= (overlay-start ov) (point))
