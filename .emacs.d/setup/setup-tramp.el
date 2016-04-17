@@ -26,6 +26,22 @@
 
 (use-package tramp
   :init (progn
+          ;; Fix SSH agent on UNIX
+          (when (not (equal system-type 'windows-nt))
+            (defun find-agent ()
+              (first (split-string
+                      (shell-command-to-string
+                       (concat
+                        "ls -t1 "
+                        "$(find /tmp/ -uid $UID -path \\*ssh\\* -type s 2> /dev/null)"
+                        "|"
+                        "head -1")))))
+            (defun fix-agent ()
+              (interactive)
+              (let ((agent (find-agent)))
+                (setenv "SSH_AUTH_SOCK" agent)
+                (message agent))))
+
           ;; Set tramp variables
           (if (eq system-type 'windows-nt)
               (setq tramp-default-method "plink")

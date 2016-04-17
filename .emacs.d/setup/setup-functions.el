@@ -364,21 +364,5 @@ Now it correctly stops at the beginning of the line when the pointer is at the f
   (interactive)
   (set-selective-display (if selective-display nil 1)))
 
-;; Fix SSH agent on UNIX
-(when (not (equal system-type 'windows-nt))
-  (defun find-agent ()
-    (first (split-string
-            (shell-command-to-string
-             (concat
-              "ls -t1 "
-              "$(find /tmp/ -uid $UID -path \\*ssh\\* -type s 2> /dev/null)"
-              "|"
-              "head -1")))))
-  (defun fix-agent ()
-    (interactive)
-    (let ((agent (find-agent)))
-      (setenv "SSH_AUTH_SOCK" agent)
-      (message agent))))
-
 (provide 'setup-functions)
 ;;; setup-utilities.el ends here

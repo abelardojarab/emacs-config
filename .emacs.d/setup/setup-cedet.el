@@ -24,6 +24,10 @@
 
 ;;; Code:
 
+;; Assure .emacs.cache/semanticdb directory exists
+(if (not (file-exists-p "~/.emacs.cache/semanticdb"))
+    (make-directory "~/.emacs.cache/semanticdb") t)
+
 ;; Enable Semantic
 (add-to-list 'load-path (expand-file-name "cedet/lisp/cedet/" user-emacs-directory))
 (semantic-load-enable-minimum-features)

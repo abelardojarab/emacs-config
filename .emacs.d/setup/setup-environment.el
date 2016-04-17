@@ -41,14 +41,6 @@
 (if (not (file-exists-p "~/.emacs.cache"))
     (make-directory "~/.emacs.cache") t)
 
-;; Assure .emacs.cache/semanticdb directory exists
-(if (not (file-exists-p "~/.emacs.cache/semanticdb"))
-    (make-directory "~/.emacs.cache/semanticdb") t)
-
-;; Assure .emacs.cache/semanticdb directory exists
-(if (not (file-exists-p "~/.emacs.cache/backups"))
-    (make-directory "~/.emacs.cache/backups") t)
-
 ;; Inhibit startup window, very annoying
 (setq inhibit-startup-message t)
 

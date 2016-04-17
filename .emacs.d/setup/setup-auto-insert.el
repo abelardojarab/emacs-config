@@ -68,7 +68,9 @@
 
 ;; Automated auto-insert of Yasnippet templates on new files
 (use-package yatemplate
-  :load-path (lambda () (expand-file-name "yatemplate/" user-emacs-directory)))
+  :defer 2 ;; WORKAROUND https://github.com/mineo/yatemplate/issues/3
+  :load-path (lambda () (expand-file-name "yatemplate/" user-emacs-directory))
+  :config (progn (yatemplate-fill-alist)))
 
 (provide 'setup-auto-insert)
 ;;; setup-auto-insert.el ends here

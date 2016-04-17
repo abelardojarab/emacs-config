@@ -294,6 +294,9 @@
 ;; Setup imenu
 (require 'setup-imenu)
 
+;; Setup windows
+(require 'setup-windows)
+
 ;; Setup swiper
 (require 'setup-swiper)
 

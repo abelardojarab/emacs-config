@@ -24,6 +24,10 @@
 
 ;;; Code:
 
+;; Assure .emacs.cache/backup directory exists
+(if (not (file-exists-p "~/.emacs.cache/backups"))
+    (make-directory "~/.emacs.cache/backups") t)
+
 ;; Backups
 (setq make-backup-files nil
       backup-by-copying t

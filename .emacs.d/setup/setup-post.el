@@ -24,29 +24,6 @@
 
 ;;; Code:
 
-;; Window purpose
-(use-package window-purpose
-  :load-path (lambda () (expand-file-name "window-purpose/" user-emacs-directory))
-  :init (progn
-          ;; overriding `purpose-mode-map' with empty keymap, so it doesn't conflict
-          ;; with original `C-x C-f', `C-x b', etc. and `semantic' key bindings. must
-          ;; be done before `window-purpose' is loaded
-          (setq purpose-mode-map (make-sparse-keymap)))
-  :config (progn
-            (require 'window-purpose-x)
-            (setq purpose-preferred-prompt 'helm)
-            (defalias 'window-purpose/helm-mini-ignore-purpose
-              (without-purpose-command #'helm-mini)
-              "Same as `helm-mini', but disable window-purpose while this command executes.")
-
-            (purpose-mode)
-            (purpose-x-popwin-setup)
-
-            ;; when killing a purpose-dedicated buffer that is displayed in a window,
-            ;; ensure that the buffer is replaced by a buffer with the same purpose
-            ;; (or the window deleted, if no such buffer)
-            (purpose-x-kill-setup)))
-
 ;; Add all diminished modes here
 
 (provide 'setup-post)

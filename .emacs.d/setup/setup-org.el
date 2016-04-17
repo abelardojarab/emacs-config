@@ -27,10 +27,10 @@
 ;; Org mode
 (use-package org
   :load-path (lambda () (expand-file-name "org-mode/lisp" user-emacs-directory))
-  :bind (("C-c r" . org-capture)
-         ("C-c a" . org-agenda)
-         ("C-c l" . org-store-link)
-         ("C-c L" . org-insert-link-global)
+  :bind (("C-c C" . org-capture)
+         ("C-c A" . org-agenda)
+         ("C-c L" . org-store-link)
+         ("C-c I" . org-insert-link-global)
          ("C-c O" . org-open-at-point-global)
          :map org-mode-map
          ("C-TAB" . org-cycle)
