@@ -41,6 +41,17 @@
     (setq org-latex-create-formula-image-program 'imagemagick)
   (setq org-latex-create-formula-image-program 'dvipng))
 
+;; Bigger LaTeX fragments
+(plist-put org-format-latex-options :scale 2.3)
+
+;; Increase LaTeX font size when text scales with Ctrl-+/-
+(defun update-org-latex-fragment-scale ()
+  (let ((text-scale-factor (expt text-scale-mode-step text-scale-mode-amount)))
+    (org-toggle-latex-fragment '(16))
+    (plist-put org-format-latex-options :scale (* 2.3 text-scale-factor))
+    (org-toggle-latex-fragment '(16))))
+(add-hook 'text-scale-mode-hook 'update-org-latex-fragment-scale)
+
 ;; Toggle previsualization of LaTeX equations in Org-mode
 (defvar org-latex-fragment-last nil
   "Holds last fragment/environment you were on.")
