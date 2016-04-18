@@ -45,11 +45,10 @@
 (setq org-latex-preview-ltxpng-directory "~/.emacs.cache/ltxpng")
 
 ;; Bigger LaTeX fragments and other options for LaTeX export
-(setq org-format-latex-options '(:scale 2.1
+(setq org-format-latex-options '(:scale 2.0
                                         :html-foreground "Black" :html-background "Transparent"
                                         :html-scale 1.0
                                         :matchers ("begin" "$1" "$" "$$" "\\(" "\\[")))
-
 
 ;; Toggle previsualization of LaTeX equations in Org-mode
 (when window-system
