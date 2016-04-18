@@ -1,6 +1,6 @@
 ;;; setup-file.el ---                                -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016  abelardo.jara-berrocal
+;; Copyright (C) 2016, , , , ,   abelardo.jara-berrocal
 
 ;; Author: abelardo.jara-berrocal <ajaraber@plxcj9063.pdx.intel.com>
 ;; Keywords:
@@ -56,19 +56,17 @@
 (setq read-quoted-char-radix 10)
 (if (equal system-type 'windows-nt)
     (progn
-;;      (set-language-environment 'utf-8)
-;;      (prefer-coding-system 'utf-16-le)
-;;      (setq locale-coding-system 'utf-16-le)
-;;      (setq buffer-file-coding-system 'utf-16-le)
-;;      (set-default-coding-systems 'utf-16-le)
-;;      (set-terminal-coding-system 'utf-16-le)
-;;      (set-keyboard-coding-system 'utf-8)
+      (set-language-environment 'utf-8)
+      ;; (setq locale-coding-system 'utf-16-le) ;; bad, it can potentially undefine all fonts
+      (setq buffer-file-coding-system 'utf-8-unix)
+      (set-default-coding-systems 'utf-8-unix)
+      (set-terminal-coding-system 'utf-8)
+      (set-keyboard-coding-system 'utf-8)
       (set-selection-coding-system 'utf-16-le)
-;;      (prefer-coding-system 'utf-16-le)
-    ) ;; progn
+      (prefer-coding-system 'utf-8-unix)) ;; progn
   (progn
-    (set-language-environment 'utf-8)
     (set-locale-environment "en_US.UTF-8")
+    (set-language-environment 'utf-8)
     (setq locale-coding-system 'utf-8-unix)
     (setq buffer-file-coding-system 'utf-8-unix)
     (set-default-coding-systems 'utf-8-unix)
