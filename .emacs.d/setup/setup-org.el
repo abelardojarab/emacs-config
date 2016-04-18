@@ -67,11 +67,21 @@
                           (yas-minor-mode t))))
 
             ;; Set up Org default files
-            (let ((todo "~/workspace/Documents/Org/diary.org"))
-              (when (file-readable-p todo)
+            (let ((todo_workspace "~/workspace/Documents/Org/todo.org")
+                  (todo_dropbox "~/Dropbox/Documents/Org/todo.org")
+                  (todo_googledrive "~/Google Drive/Documents/Org/todo.org"))
+              (when (or (file-readable-p todo_workspace)
+                        (file-readable-p todo_dropbox)
+                        (file-readable-p todo_googledrive))
 
-                ;; set org directory
-                (setq org-directory (expand-file-name "~/workspace/Documents/Org"))
+                ;; Set base Org directory
+                (if (file-exists-p todo_dropbox)
+                    (setq org-directory (expand-file-name "~/Dropbox/Documents/Org"))
+                  (if (file-exists-p todo_workspace)
+                      (setq org-directory (expand-file-name "~/workspace/Documents/Org"))
+                    (setq org-directory (expand-file-name "~/Google Drive/Documents/Org"))))
+
+                ;; Set remaining Org files
                 (setq diary-file (concat org-directory "/diary"))
                 (setq org-id-locations-file "~/.emacs.cache/org-id-locations")
                 (setq org-default-notes-file (concat org-directory "/notes.org"))
@@ -105,7 +115,9 @@
                   org-log-done t
                   org-enforce-todo-dependencies t
                   org-indent-mode nil) ;; this causes problem in other modes
-            (setq org-blank-before-new-entry ;; Insert blank line before new heading
+
+            ;; Insert blank line before new heading
+            (setq org-blank-before-new-entry
                   '((heading . t)))
 
             ;; Ellipsis
@@ -281,19 +293,7 @@
               (replace-regexp "\\(^\\)\\|\\(\".*?\"\\)\\|," (quote (replace-eval-replacement
                                                                     replace-quote (cond ((equal "^" (match-string 1)) "|")
                                                                                         ((equal "," (match-string 0)) "|")
-                                                                                        ((match-string 2))) ))  nil  beg end))
-
-            ;; Strike thru headlines for DONE task
-            ;; Stolen from http://sachachua.com/blog/2012/12/emacs-strike-through-headlines-for-done-tasks-in-org/
-            ;; (setq org-fontify-done-headline t)
-            ;; (custom-set-faces
-            ;;  '(org-done ((t (:foreground "PaleGreen"
-            ;;                              :weight normal
-            ;;                              :strike-through t))))
-            ;;  '(org-headline-done
-            ;;    ((((class color) (min-colors 16) (background dark))
-            ;;      (:foreground "LightSalmon" :strike-through t)))))
-            ))
+                                                                                        ((match-string 2))) ))  nil  beg end))))
 
 ;; ASCII doc
 (use-package ox-asciidoc
