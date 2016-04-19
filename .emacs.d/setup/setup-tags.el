@@ -74,9 +74,10 @@
             (setq etags-table-alist
                   (list
                    ;; For jumping to standard headers:
-                   '(".*\\.\\([ch]\\|cpp\\)" (expand-file-name "~/.emacs.cache/TAGS"))
-                   ))
-            (setq etags-table-search-up-depth 2) ;; Max depth to search up for a tags file.  nil means don't search.
+                   '(".*\\.\\([ch]\\|cpp\\)" (expand-file-name "~/.emacs.cache/TAGS"))))
+
+            ;; Max depth to search up for a tags file.  nil means don't search.
+            (setq etags-table-search-up-depth 2)
 
             ;; Below function comes useful when you change the project-root
             ;; symbol to a different value (when switching projects)
@@ -99,33 +100,43 @@
               (shell-command
                (format "ctags -f %s -e -R %s" path-to-ctags (directory-file-name dir-name))))))
 
-;; Global tags
-(when (executable-find "global")
-  (defun gtags-update ()
-    (interactive)
-    (let (buffer)
-      (save-excursion
-        (setq buffer (generate-new-buffer (generate-new-buffer-name "*rootdir*")))
-        (set-buffer buffer)
-        (call-process "global" nil t nil "-u")
-        (kill-buffer buffer))))
+;; Gtags
+(use-package ggtags
+  :if (executable-find "global")
+  :commands (ggtags-mode ggtags-find-tag-dwim)
+  :diminish ggtags-mode
+  :load-path (lambda () (expand-file-name "ggtags/" user-emacs-directory))
+  :init (progn
+          (add-hook 'c-mode-common-hook
+                    (lambda ()
+                      (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
+                        (ggtags-mode 1)))))
+  :config (progn
+            (defun gtags-update ()
+              (interactive)
+              (let (buffer)
+                (save-excursion
+                  (setq buffer (generate-new-buffer (generate-new-buffer-name "*rootdir*")))
+                  (set-buffer buffer)
+                  (call-process "global" nil t nil "-u")
+                  (kill-buffer buffer))))
 
-  (defun gtags-create-or-update ()
-    "Create or update the GNU-Global tag file"
-    (interactive
-     (if (zerop (call-process "global" nil nil nil "-p"))
-         ;; case 1: tag file exists: update
-         (progn
-           (shell-command "global -u -q 2>/dev/null")
-           (message "Tagfile updated"))
-       ;; case 2: no tag file yet: create it
-       (when (yes-or-no-p "Create tagfile?")
-         (let ((olddir default-directory)
-               (default-directory
-                 (read-directory-name
-                  "gtags: top of source tree:" default-directory)))
-           (shell-command "gtags -i -q 2>/dev/null")
-           (message "Created tagfile")))))))
+            (defun gtags-create-or-update ()
+              "Create or update the GNU-Global tag file"
+              (interactive
+               (if (zerop (call-process "global" nil nil nil "-p"))
+                   ;; case 1: tag file exists: update
+                   (progn
+                     (shell-command "global -u -q 2>/dev/null")
+                     (message "Tagfile updated"))
+                 ;; case 2: no tag file yet: create it
+                 (when (yes-or-no-p "Create tagfile?")
+                   (let ((olddir default-directory)
+                         (default-directory
+                           (read-directory-name
+                            "gtags: top of source tree:" default-directory)))
+                     (shell-command "gtags -i -q 2>/dev/null")
+                     (message "Created tagfile"))))))))
 
 (provide 'setup-tags)
 ;;; setup-tags.el ends here

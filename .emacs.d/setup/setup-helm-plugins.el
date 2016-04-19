@@ -85,9 +85,7 @@
 (use-package helm-ls-git
   :defer t
   :commands (helm-ls-git-ls)
-  :load-path (lambda () (expand-file-name "helm-ls-git/" user-emacs-directory))
-  :bind (:map ctl-x-map
-              ("v" . helm-ls-git-ls)))
+  :load-path (lambda () (expand-file-name "helm-ls-git/" user-emacs-directory)))
 
 ;; Helm bm support
 (use-package helm-bm
@@ -105,6 +103,16 @@
   :bind (("M-." . helm-etags-select)
          :map ctl-x-map
          ("t" . helm-etags-select)))
+
+;; Helm gtags
+(use-package helm-gtags
+  :defer t
+  :commands (helm-gtags-select helm-gtags-dwim)
+  :if (executable-find "global")
+  :load-path (lambda () (expand-file-name "helm-gtags/" user-emacs-directory))
+  :bind (("C-." . helm-gtags-dwim)
+         :map ctl-x-map
+         ("g" . helm-gtags-dwim)))
 
 ;; Helm yasnippet
 (use-package helm-c-yasnippet

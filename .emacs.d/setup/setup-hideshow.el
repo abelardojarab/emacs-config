@@ -98,18 +98,19 @@
 ;; Enable hideshowvis
 (use-package hideshowvis
   :if window-system
+  :commands hideshowvis-enable
   :diminish hs-minor-mode
+  :init (progn
+          ;; enable `hs-minor-mode' at startup
+          (dolist (hook (list 'prog-mode-hook))
+            (add-hook hook (lambda () (hs-minor-mode 1))))
+
+          (dolist (hook (list 'prog-mode-hook))
+            (add-hook hook 'hideshowvis-enable)))
   :config (progn
 
             ;; Down arrow symbol
             (define-fringe-bitmap 'hideshowvis-hideable-marker [0 0 254 124 56 16 0 0])
-
-            ;; enable `hs-minor-mode' at startup
-            ;; (dolist (hook (list 'prog-mode-hook 'org-mode-hook))
-            ;;   (add-hook hook (lambda () (hs-minor-mode 1))))
-
-            ;; (dolist (hook (list 'prog-mode-hook 'org-mode-hook))
-            ;;   (add-hook hook 'hideshowvis-enable))
 
             (defun hs-minor-mode-settings ()
               "settings of `hs-minor-mode'."
@@ -134,7 +135,7 @@
                 :group 'hideshow)
 
               (defface hs-fringe-face
-                '((t (:foreground "#999" :box (:line-width 2 :color "grey75" :style released-button))))
+                '((t (:foreground "#999" :box (:line-width 2 :color "grey50" :style released-button))))
                 "Face used to highlight the fringe on folded regions"
                 :group 'hideshow)
 

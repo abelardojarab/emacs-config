@@ -84,7 +84,7 @@
 (defconst hideshowvis-version "v0.5" "Version of hideshowvis minor mode")
 
 (defface hideshowvis-hidable-face
-  '((t (:foreground "#ccc" :box t)))
+  '((t (:foreground "#665" :box t)))
   "Face to highlight foldable regions"
   :group 'hideshow)
 
@@ -195,7 +195,7 @@ the end of the line for hidden regions."
     :group 'hideshow)
 
   (defface hs-fringe-face
-    '((t (:foreground "#888" :box (:line-width 2 :color "grey75" :style released-button))))
+    '((t (:foreground "#666" :box (:line-width 2 :color "grey75" :style released-button))))
     "Face used to highlight the fringe on folded regions"
     :group 'hideshow)
 

@@ -65,7 +65,7 @@
              projectile-vc
              magit-status-internal)
   :bind (:map ctl-x-map
-              ("g" . magit-status))
+              ("v" . magit-status))
   :load-path (lambda () (expand-file-name "magit/lisp" user-emacs-directory))
   :init (eval-after-load 'info
           '(progn (info-initialize)
