@@ -125,6 +125,11 @@
               (setq org-ellipsis " ⤵"
                     org-columns-ellipses "…"))
 
+            ;; Better bullets
+            (font-lock-add-keywords 'org-mode
+                                    '(("^ +\\([-*]\\) "
+                                       (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
+
             ;; Agenda settings
             (setq org-agenda-inhibit-startup t ;; 50x speedup
                   org-agenda-use-tag-inheritance nil ;; 3-4x speedup
@@ -183,7 +188,7 @@
             ;; Org Templates
             (add-to-list 'org-structure-template-alist '("E" "#+BEGIN_SRC emacs-lisp\n?\n#+END_SRC\n"))
             (add-to-list 'org-structure-template-alist '("S" "#+BEGIN_SRC shell-script\n?\n#+END_SRC\n"))
-            (add-to-list 'org-structure-template-alist '("al" "#+BEGIN_SRC latex\n\\begin{align*}\n?\\end{align*}\n#+END_SRC"))
+            (add-to-list 'org-structure-template-alist '("L" "#+BEGIN_SRC latex\n\\begin{align*}\n?\\end{align*}\n#+END_SRC"))
 
             ;; Fix shift problem in Org mode
             (setq org-CUA-compatible t)
@@ -315,7 +320,8 @@
 
 ;; Nice bulleted lists
 (use-package org-bullets
-  :if window-system
+  :if (and window-system
+           (not (equal system-type 'windows-nt)))
   :load-path (lambda () (expand-file-name "org-bullets/" user-emacs-directory))
   :config (progn
             (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))

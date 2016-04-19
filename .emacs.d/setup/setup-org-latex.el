@@ -34,7 +34,7 @@
 ;; for Tikz image in Org
 (setq org-babel-latex-htlatex "htlatex")
 (defmacro by-backend (&rest body)
-  `(case (if (boundp 'backend) (org-export-backend-name backend) nil) ,@body))
+  `(case org-export-current-backend ,@body))
 
 ;; Preview LaTeX equations in buffers by showing images (C-c C-x C-l)
 (if (executable-find "convert")
@@ -52,7 +52,6 @@
 
 ;; Toggle previsualization of LaTeX equations in Org-mode
 (when window-system
-
   (defvar org-latex-fragment-last nil
     "Holds last fragment/environment you were on.")
 
@@ -168,8 +167,8 @@
          ;; add a custom reftex cite format to insert links
          ;; This also changes any call to org-citation!
          (reftex-set-cite-format
-          '((?c . "\\citet{%l}") ; natbib inline text
-            (?i . "\\citep{%l}") ; natbib with parens
+          '((?c . "\\citet{%l}") ;; natbib inline text
+            (?i . "\\citep{%l}") ;; natbib with parens
             ))))
   (define-key org-mode-map (kbd "C-c )") 'reftex-citation)
   (define-key org-mode-map (kbd "C-c (") 'org-mode-reftex-search))
