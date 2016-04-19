@@ -136,7 +136,7 @@
 
 ;; Choose different themes depending if we are using GUI or not
 (if window-system
-    (load-theme 'white-sand t)
+    (load-theme 'monokai-extended t)
   (load-theme 'monokai t))
 
 (provide 'setup-themes)
