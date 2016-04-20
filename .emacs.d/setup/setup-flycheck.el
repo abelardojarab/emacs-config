@@ -101,8 +101,18 @@
             (setq flycheck-display-errors-function
                   'flycheck-diplay-error-messages-one-line)))
 
+;; Flycheck irony
+(use-package flycheck-irony
+  :after flycheck
+  :if (executable-find "irony-server")
+  :load-path (lambda () (expand-file-name "flycheck-irony/" user-emacs-directory))
+  :config (progn
+            (add-hook 'flycheck-mode-hook #'flycheck-irony-setup)
+            (flycheck-add-next-checker 'irony '(warning . c/c++-cppcheck))))
+
 ;; Tooltips
 (use-package flycheck-tip
+  :after flycheck
   :load-path (lambda () (expand-file-name "flycheck-tip/" user-emacs-directory))
   :config (progn
             (setq flycheck-tip-avoid-show-func nil)))
