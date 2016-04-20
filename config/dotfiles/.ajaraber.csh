@@ -1,6 +1,6 @@
 alias ls       'ls -l --color -sF'
 alias cd 'cd \!*; set prompt = "%{\033[34m%}[%n@%{\033[35m%}%m%{\033[33m%} %b%{\033[0m%}%c]$ "'
-alias emacs '/urs/intel/pkgs/emacs/24.5/bin/emacs'
+alias emacs '/usr/intel/pkgs/emacs/24.5/bin/emacs'
 alias emacsclient 'emacsclient -n'
 
 setenv JAVA_HOME /usr/intel/pkgs/java/1.8.0
@@ -11,6 +11,7 @@ else
 endif
 
 unsetenv PYTHONPATH
+setenv DICTPATH $HOME/workspace/emacsfull/.emacs.d/dictionaries
 setenv EC_DISABLE_VAL 1
 setenv CAMDEXGT_CAD_ROOT ${HOME}/camdex/data
 setenv PYTHONPATH ${HOME}/workspace/pythonlibs/lib/python2.7/site-packages:${HOME}/workspace/frametools/extratools/ctktools/tools/oascript/v3.1_oa22.43p028/linux_rhel55_gcc44x_64/python

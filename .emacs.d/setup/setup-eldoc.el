@@ -33,12 +33,18 @@
           (add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)))
 
 (use-package c-eldoc
-  :load-path (lambda () (expand-file-name "c-eldoc/" user-emacs-directory))
   :commands c-turn-on-eldoc-mode
+  :load-path (lambda () (expand-file-name "c-eldoc/" user-emacs-directory))
   :config (progn
             (add-hook 'c-mode-hook 'c-turn-on-eldoc-mode)
             (add-hook 'c++-mode-hook 'c-turn-on-eldoc-mode)
             (setq c-eldoc-buffer-regenerate-time 60)))
+
+(use-package irony-eldoc
+  :commands irony-eldoc
+  :load-path (lambda () (expand-file-name "irony-eldoc/" user-emacs-directory))
+  :init (progn
+            (add-hook 'irony-mode-hook 'irony-eldoc)))
 
 (provide 'setup-eldoc)
 ;;; setup-eldoc.el ends here

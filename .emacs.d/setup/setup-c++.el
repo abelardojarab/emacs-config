@@ -39,12 +39,13 @@
               (c-toggle-electric-state -1)
               (setq comment-multi-line t)
               (setq-default c-default-style "k&r")
-              (setq-default c-basic-offset 4))
+              (setq-default c-basic-offset 3))
             (add-hook 'c-mode-hook #'my/c-mode-init)
             (add-hook 'c++-mode-hook #'my/c-mode-init)))
 
 ;; Insert and delete C++ header files automatically.
 (use-package cpp-auto-include
+  :defer t
   :commands cpp-auto-include
   :bind (:map c++-mode-map
               ("C-c i" . cpp-auto-include))
@@ -52,6 +53,8 @@
 
 ;; Show inline arguments hint for the C/C++ function at point
 (use-package function-args
+  :defer t
+  :commands moo-complete
   :load-path (lambda () (expand-file-name "function-args/" user-emacs-directory))
   :bind (:map c-mode-map
               ("C-c c" . moo-complete)
@@ -63,11 +66,20 @@
 
 ;; C/C++ refactoring tool based on Semantic parser framework
 (use-package srefactor
+  :defer t
+  :commands srefactor-refactor-at-point
   :load-path (lambda () (expand-file-name "semantic-refactor/" user-emacs-directory))
   :bind (:map c-mode-map
               ("C-c s" . srefactor-refactor-at-point)
               :map c++-mode-map
               ("C-c s" . srefactor-refactor-at-point)))
+
+;; Irony server
+(use-package irony
+  :defer t
+  :commands (irony-mode irony-install-server)
+  :if (executable-find "clang")
+  :load-path (lambda () (expand-file-name "irony-mode/" user-emacs-directory)))
 
 (provide 'setup-c++)
 ;;; setup-c++.el ends here

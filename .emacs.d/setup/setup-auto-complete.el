@@ -170,6 +170,14 @@
             (add-hook 'c-mode-hook (lambda ()
                                      '(setq ac-sources (append ac-sources '(ac-source-c-headers)))))))
 
+;; Irony auto-complete
+(use-package ac-irony
+  :load-path (lambda () (expand-file-name "ac-irony/" user-emacs-directory))
+  :config (progn
+            (defun my-ac-irony-setup ()
+              (add-to-list 'ac-sources 'ac-source-irony))
+            (add-hook 'irony-mode-hook 'my-ac-irony-setup)))
+
 ;; Latex math auto-complete
 (use-package ac-math
   :load-path (lambda () (expand-file-name "ac-math/" user-emacs-directory)))
