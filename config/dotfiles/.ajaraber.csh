@@ -11,7 +11,6 @@ else
 endif
 
 unsetenv PYTHONPATH
-setenv DICTPATH $HOME/workspace/emacsfull/.emacs.d/dictionaries
 setenv EC_DISABLE_VAL 1
 setenv CAMDEXGT_CAD_ROOT ${HOME}/camdex/data
 setenv PYTHONPATH ${HOME}/workspace/pythonlibs/lib/python2.7/site-packages:${HOME}/workspace/frametools/extratools/ctktools/tools/oascript/v3.1_oa22.43p028/linux_rhel55_gcc44x_64/python
@@ -23,6 +22,7 @@ setenv no_proxy intel.com,.intel.com,10.0.0.0/8,192.168.0.0/16,localhost,127.0.0
 setenv GIT_PROXY_COMMAND /nfs/pdx/home/ajaraber/bin/gitproxy
 setenv GDK_NATIVE_WINDOWS 1
 setenv EMACS_SERVER_FILE $HOME/.emacs.cache/server/server
+setenv DICTPATH $HOME/workspace/emacsfull/.emacs.d/dictionaries
 
 # Libraries for OpenAccess
 set oa_version=22.43p028
