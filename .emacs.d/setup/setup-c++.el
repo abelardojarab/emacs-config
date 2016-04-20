@@ -79,7 +79,11 @@
   :defer t
   :commands (irony-mode irony-install-server)
   :if (executable-find "clang")
-  :load-path (lambda () (expand-file-name "irony-mode/" user-emacs-directory)))
+  :load-path (lambda () (expand-file-name "irony-mode/" user-emacs-directory))
+  :init (progn
+          (when (executable-find "irony-server")
+            (add-hook 'c++-mode-hook 'irony-mode)
+            (add-hook 'c-mode-hook 'irony-mode))))
 
 (provide 'setup-c++)
 ;;; setup-c++.el ends here
