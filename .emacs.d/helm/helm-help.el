@@ -263,12 +263,17 @@ If you are already in `default-directory' this will move cursor on top.
 
 **** Enter `../' at end of pattern will reach upper directory, moving cursor on top
 
-NOTE: This is different to using `C-l' in that `C-l' don't move cursor on top but stay on previous
+NOTE: This is different from using `C-l' in that `C-l' doesn't move cursor on top but stays on previous
 subdir name.
 
 **** Enter any environment var (e.g. `$HOME') at end of pattern, it will be expanded
 
 **** You can yank any valid filename after pattern, it will be expanded
+
+**** Special case with url's at point
+
+This have no effect at end of an url, you have first to kill pattern (`C-k')
+before entering one of these quick expansions patterns.
 
 *** Helm find files is fuzzy matching (start on third char entered)
 
@@ -359,7 +364,7 @@ also using not recursive wilcard (e.g. \"*.el\") is perfectly fine for this.
 This feature (\"**\") is activated by default with the option `helm-file-globstar'.
 The directory selection with \"**foo/\" like bash shopt globstar option is not supported yet.
 
-*** Query replace on filenames
+*** Query replace regexp on filenames
 
 You can rename your files by replacing only part of filenames matching
 a regexp.
@@ -368,6 +373,24 @@ e.g Rename recursively all files with \".JPG\" extension to \".jpg\":
 Use the helm-file-globstar feature described in previous section by
 entering at end of helm-find-files pattern \"**.JPG\", then hit `M-%`,
 at first prompt enter \"JPG\", at second \"jpg\" and hit `RET`.
+
+Shortcut for basename without extension and only extension are available:
+
+- Basename without extension => \"%.\"
+- Only extension             => \".%\"
+
+If you want to rename a serie of files from number 001 to 00x use \\# inside the replacement
+string when you will be prompted for it.
+
+e.g To rename the files \"foo.jpg\" \"bar.jpg\" and \"baz.jpg\"
+    to \"foo-001.jpg\" \"foo-002.jpg\" \"foo-003.jpg\"
+
+Use as replace regexp \"%.\" and as replacement string \"foo-\\#\".
+Where \"%.\" is same as regexp \".*\\.jpg\".
+
+Note: You can do this with the serial renames actions you will find in the action menu
+      for more sophisticated renaming, but using query replace regexp on filenames
+      is a fast way for most common serial replacements.
 
 *** Copying renaming asynchronously
 

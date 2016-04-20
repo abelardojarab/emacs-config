@@ -947,54 +947,68 @@ other directories.
 See `helm-ff-serial-rename-1'."
   (helm-ff-serial-rename-action 'copy))
 
-(defun helm-ff-query-replace-on-marked-1 (candidates)
+(defvar helm-ff-query-replace-fnames-history-from nil)
+(defvar helm-ff-query-replace-fnames-history-to nil)
+(defun helm-ff-query-replace-on-filenames (candidates)
   "Query replace on filenames of CANDIDATES.
 This doesn't replace inside the files, only modify filenames."
-  (with-helm-display-marked-candidates
-    helm-marked-buffer-name
-    (mapcar 'helm-basename candidates)
-    (let* ((regexp (read-string "Replace regexp on filename(s): "))
-           (str    (read-string (format "Replace regexp `%s' with: " regexp))))
-      (cl-loop with query = "y"
-               with count = 0
-               for old in candidates
-               for new = (concat (helm-basedir old)
-                                 (replace-regexp-in-string
-                                  regexp str
-                                  (helm-basename old) t))
-               ;; If `regexp' is not matched in `old'
-               ;; `replace-regexp-in-string' will
-               ;; return `old' unmodified.
-               unless (string= old new)
-               do (progn
-                    (unless (string= query "!")
-                      (while (not (member
-                                   (setq query
-                                         (string
-                                          (read-key
-                                           (propertize
-                                            (format
-                                             "Replace `%s' by `%s' [!,y,n,q]"
-                                             old new)
-                                            'face 'minibuffer-prompt))))
-                                   '("y" "!" "n" "q")))
-                        (message "Please answer by y,n,! or q") (sit-for 1)))
-                    (when (string= query "q")
-                      (cl-return (message "Operation aborted")))
-                    (unless (string= query "n")
-                      (rename-file old new)
-                      (cl-incf count)))
-               finally (message "%d Files renamed" count))))
-  ;; This fix the emacs bug where "Emacs-Lisp:" is sent
-  ;; in minibuffer (not the echo area).
-  (sit-for 0.1)
-  (with-current-buffer (window-buffer (minibuffer-window))
-    (delete-minibuffer-contents)))
+  (let ((def (helm-basename (car candidates))))
+    (with-helm-display-marked-candidates
+      helm-marked-buffer-name
+      (mapcar 'helm-basename candidates)
+      (let* ((regexp (read-string "Replace regexp on filename(s): "
+                                  nil 'helm-ff-query-replace-history-from def))
+             (str    (read-string (format "Replace regexp `%s' with: " regexp)
+                                  nil 'helm-ff-query-replace-history-to def)))
+        (cl-loop with query = "y"
+                 with count = 0
+                 for old in candidates
+                 for new = (concat (helm-basedir old)
+                                   (replace-regexp-in-string
+                                    (cond ((string= regexp "%.")
+                                           (helm-basename old t))
+                                          ((string= regexp ".%")
+                                           (file-name-extension old))
+                                          (t regexp))
+                                    (save-match-data
+                                      (if (string-match "\\\\#" str)
+                                          (replace-match
+                                           (format "%03d" (1+ count)) t t str)
+                                          str))
+                                    (helm-basename old) t))
+                 ;; If `regexp' is not matched in `old'
+                 ;; `replace-regexp-in-string' will
+                 ;; return `old' unmodified.
+                 unless (string= old new)
+                 do (progn
+                      (unless (string= query "!")
+                        (while (not (member
+                                     (setq query
+                                           (string
+                                            (read-key
+                                             (propertize
+                                              (format
+                                               "Replace `%s' by `%s' [!,y,n,q]"
+                                               old new)
+                                              'face 'minibuffer-prompt))))
+                                     '("y" "!" "n" "q")))
+                          (message "Please answer by y,n,! or q") (sit-for 1)))
+                      (when (string= query "q")
+                        (cl-return (message "Operation aborted")))
+                      (unless (string= query "n")
+                        (rename-file old new)
+                        (cl-incf count)))
+                 finally (message "%d Files renamed" count))))
+    ;; This fix the emacs bug where "Emacs-Lisp:" is sent
+    ;; in minibuffer (not the echo area).
+    (sit-for 0.1)
+    (with-current-buffer (window-buffer (minibuffer-window))
+      (delete-minibuffer-contents))))
 
 ;; The action.
 (defun helm-ff-query-replace-on-marked (_candidate)
   (let ((marked (helm-marked-candidates :with-wildcard t)))
-    (helm-ff-query-replace-on-marked-1 marked)))
+    (helm-ff-query-replace-on-filenames marked)))
 
 ;; The command for `helm-find-files-map'.
 (defun helm-ff-run-query-replace-on-marked ()
@@ -3032,13 +3046,12 @@ Don't use it in your own code unless you know what you are doing.")
    (persistent-action :initform 'helm-ff-kill-or-find-buffer-fname)))
 
 (defmethod helm--setup-source :after ((source helm-recentf-source))
-  (set-slot-value
-   source 'action
-   (append (symbol-value (helm-actions-from-type-file))
-           '(("Delete file(s) from recentf" .
-              (lambda (_candidate)
-                (cl-loop for file in (helm-marked-candidates)
-                         do (setq recentf-list (delq file recentf-list)))))))))
+  (setf (slot-value source 'action)
+        (append (symbol-value (helm-actions-from-type-file))
+                '(("Delete file(s) from recentf" .
+                   (lambda (_candidate)
+                     (cl-loop for file in (helm-marked-candidates)
+                              do (setq recentf-list (delq file recentf-list)))))))))
 
 (defvar helm-source-recentf nil 
   "See (info \"(emacs)File Conveniences\").

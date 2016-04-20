@@ -1,7 +1,7 @@
 
 (defmacro with-r-file (file &rest body)
   (declare (indent 1) (debug (&rest body)))
-  (apply #'with-r-file- `(,file (,@body))))
+  `(apply #'with-r-file- (list ,file '(,@body))))
 
 (defun with-r-file- (file body)
   (let ((r-file-buffer (if file
@@ -10,17 +10,19 @@
     (save-window-excursion
       (switch-to-buffer r-file-buffer)
       (R-mode)
-      (mapc #'eval body)))
-  nil)
+      (mapcar #'eval body))))
 
 (defmacro with-r-running (file &rest body)
   (declare (indent 1) (debug (&rest body)))
-  (apply #'with-r-running- `(,file (,@body))))
+  `(apply #'with-r-running- (list ,file '(,@body))))
 
 (defun with-r-running- (file body)
-  (let ((r-file-buffer (if file
-                           (find-file-noselect file)
-                         (generate-new-buffer " *with-r-file-temp*"))))
+  (let ((r-file-buffer (cond ((bufferp file)
+                              file)
+                             ((stringp file)
+                              (find-file-noselect file))
+                             (t
+                              (generate-new-buffer " *with-r-file-temp*")))))
     (save-window-excursion
       (switch-to-buffer r-file-buffer)
       (R-mode)
@@ -35,8 +37,9 @@
           (erase-buffer))
         (set-process-buffer proc output-buffer)
         (set-process-filter proc 'inferior-ess-ordinary-filter)
-        (unwind-protect (progn
-                          (mapc #'eval body)
+        (unwind-protect (prog1
+                            ;; Returning the last value
+                            (car (last (mapcar #'eval body)))
                           (ess-wait-for-process proc)
                           ;; Avoid getting "Process killed" in
                           ;; output-buffer
@@ -44,13 +47,7 @@
                           (with-current-buffer output-buffer
                             (ess-kill-last-line)
                             (buffer-string)))
-          (kill-process proc)))
-      nil)))
-
-(defun ess-kill-last-line ()
-  (goto-char (point-max))
-  (forward-line -1)
-  (delete-region (point-at-eol) (point-max)))
+          (kill-process proc))))))
 
 ;; The following retrieve the last output and clean the output
 ;; buffer. This is useful to continue testing without restarting a
@@ -70,6 +67,10 @@
   (eval code)
   (ess-wait-for-process proc)
   (let ((output (output)))
-    (string= output (eval expected))))
+    (if (string= output (eval expected))
+        output
+      ;; Probably a better way but this gets the job done
+      (signal 'ert-test-failed (list (concat "Expected: \n" expected)
+                                     (concat "Result: \n" output))))))
 
 (provide 'ess-r-tests-utils)

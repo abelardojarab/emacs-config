@@ -6,49 +6,52 @@
 
 ;;; Inferior R
 
-(ert-deftest ess-r-format-eval-command ()
+(ert-deftest ess-build-eval-command:R ()
   (let ((command "command(\"string\")"))
-    (should (string= (ess-r-format-eval-command command)
-                     ".ess.eval('command(\"string\")', visibly = FALSE, output = FALSE)\n"))
-    (should (string= (ess-r-format-eval-command command nil t)
-                     ".ess.eval('command(\"string\")', visibly = FALSE, output = TRUE)\n"))
-    (should (string= (ess-r-format-eval-command command t t "file.ext" "foo")
-                     ".essDev.eval('command(\"string\")', visibly = TRUE, output = TRUE, package = 'foo', file = 'file.ext')\n"))
+    (should (string= (ess-build-eval-command:R command)
+                     ".ess.eval(\"command(\"string\")\", visibly = FALSE, output = FALSE)\n"))
+    (should (string= (ess-build-eval-command:R command nil t)
+                     ".ess.eval(\"command(\"string\")\", visibly = FALSE, output = TRUE)\n"))
+    (should (string= (ess-build-eval-command:R command t t "file.ext" "foo")
+                     ".ess.ns_eval(\"command(\"string\")\", visibly = TRUE, output = TRUE, package = 'foo', file = 'file.ext')\n"))
     (with-r-file nil
       (let ((command "command(\"string\")"))
         (should (string= (ess-build-eval-command command)
-                         (ess-r-format-eval-command command)))))))
+                         (ess-build-eval-command:R (ess-quote-special-chars command))))))))
 
-(ert-deftest ess-r-format-load-command ()
-  (should (string= (ess-r-format-load-command "file.ext")
-                   ".ess.source('file.ext', visibly = FALSE, output = FALSE); cat('Sourced file file.ext\n')"))
-  (should (string= (ess-r-format-load-command "file.ext" t t)
-                   ".ess.source('file.ext', visibly = TRUE, output = TRUE); cat('Sourced file file.ext\n')"))
-  (should (string= (ess-r-format-load-command "file.ext" nil t "foo")
-                   ".essDev_source('file.ext', visibly = FALSE, output = TRUE, package = 'foo'); cat('[foo] Sourced file file.ext\n')"))
+(ert-deftest ess-build-load-command:R ()
+  (should (string= (ess-build-load-command:R "file.ext")
+                   ".ess.source('file.ext', visibly = FALSE, output = FALSE)\n"))
+  (should (string= (ess-build-load-command:R "file.ext" t t)
+                   ".ess.source('file.ext', visibly = TRUE, output = TRUE)\n"))
+  (should (string= (ess-build-load-command:R "file.ext" nil t "foo")
+                   ".ess.ns_source('file.ext', visibly = FALSE, output = TRUE, package = 'foo')\n"))
   (with-r-file nil
     (should (string= (ess-build-load-command "file")
-                     (ess-r-format-load-command "file")))))
+                     (ess-build-load-command:R "file")))))
+
+(ert-deftest ess-r-send-single-quoted-strings ()
+  (with-r-running nil
+    (insert "'hop'\n")
+    (let (ess-eval-visibly)
+      (should (output= (ess-eval-buffer nil)
+                       "[1] \"hop\"")))))
+
+(ert-deftest ess-r-send-double-quoted-strings ()
+  (with-r-running nil
+    (insert "\"hop\"\n")
+    (let (ess-eval-visibly)
+      (should (output= (ess-eval-buffer nil)
+                       "[1] \"hop\"")))))
 
 
 ;;; ess-r-package-mode
 
-(ert-deftest ess-r-mode-line ()
+(ert-deftest ess-r-package-auto-activate ()
+  (with-temp-buffer
+    (text-mode)
+    (hack-local-variables)
+    (should (not ess-r-package-mode)))
   (with-r-file "dummy-pkg/R/test.R"
-    (let ((mode-line (eval (plist-get ess-r-package-mode-line :eval))))
-      (should (string= mode-line " [pkg:foo]")))
-
-    (ess-r-select-evaluation-namespace "foo")
-    (let ((mode-line (eval (plist-get ess-r-package-mode-line :eval))))
-      (should (string= mode-line " [pkg:src:foo]")))
-
-    (ess-r-select-evaluation-namespace "bar")
-    (let ((pkg-mode-line (eval (plist-get ess-r-package-mode-line :eval)))
-          (src-mode-line (eval (plist-get ess-r-special-evaluation-mode-line :eval))))
-      (should (string= pkg-mode-line " [pkg:foo]"))
-      (should (string= src-mode-line " [src:bar]")))
-
-    (ess-r-select-evaluation-namespace '(4))
-    (let ((mode-line (eval (plist-get ess-r-package-mode-line :eval))))
-      (should (string= mode-line " [pkg:foo]")))))
-
+    (hack-local-variables)
+    (should ess-r-package-mode)))

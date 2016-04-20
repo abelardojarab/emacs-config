@@ -45,6 +45,7 @@
 
 (require 'ess)
 (require 'ess-mode)
+(require 'cl)
 
  ; ess-help-mode
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -90,6 +91,17 @@ first 150 characters of the buffer are searched."
             (buffer-substring (match-beginning 0) (match-end 0))
           (buffer-string))))))
 
+(defun ess-help-get-local-help-buffers ()
+  (ess-force-buffer-current)
+  (cl-remove-if-not
+   (lambda (buffer) (let* ((pattern (concat "*help[" ess-current-process-name "]("))
+                      (name (buffer-name buffer))
+                      (candidate (when (> (length name) (length pattern))
+                                   (substring name 0 (length pattern))) ))
+                 (when (string= pattern candidate)
+                   buffer)))
+   (buffer-list)))
+
 (defvar ess-help-type nil
   "Type of help file, help, index, vingettes etc.
 Local in ess-help buffers.")
@@ -119,10 +131,8 @@ If COMMAND is suplied, it is used instead of `inferior-ess-help-command'."
      (when current-prefix-arg ;update cache if prefix
        (ess-process-put 'sp-for-help-changed? t))
      (list (ess-find-help-file "Help on"))))
-  (cond
-   ((fboundp ess-display-help-on-object-function)
-    (funcall ess-display-help-on-object-function object command))
-   (t
+  (if (fboundp ess-display-help-on-object-function)
+      (funcall ess-display-help-on-object-function object command)
     (let* ((hb-name (concat "*help["
                             ess-current-process-name
                             "](" (replace-regexp-in-string "^\\?\\|`" "" object) ")*"))
@@ -136,14 +146,13 @@ If COMMAND is suplied, it is used instead of `inferior-ess-help-command'."
                 ess-help-type 'help)
           (ess--flush-help-into-current-buffer object command)))
       (unless (ess--help-kill-bogus-buffer-maybe tbuffer)
-        (ess--switch-to-help-buffer tbuffer))))))
+        (ess--switch-to-help-buffer tbuffer)))))
 
 (defun ess-build-help-command (object)
-  (cond ((fboundp ess-build-help-command-function)
-         (funcall ess-build-help-command-function object))
-        (t
-         ;; FIXME: Remove the inferior- prefix for consistency
-         (format inferior-ess-help-command object))))
+  (if (fboundp ess-build-help-command-function)
+      (funcall ess-build-help-command-function object)
+    ;; TODO-CLEANUP: Remove the inferior- prefix for consistency
+    (format inferior-ess-help-command object)))
 
 (defun ess--flush-help-into-current-buffer (object &optional command dont-ask)
   (ess-write-to-dribble-buffer
@@ -153,7 +162,10 @@ If COMMAND is suplied, it is used instead of `inferior-ess-help-command'."
   (if buffer-read-only (setq buffer-read-only nil))
   (delete-region (point-min) (point-max))
   (ess-help-mode)
-  (ess-command (ess-build-help-command object) (current-buffer))
+  (let ((command (if (and command (string-match-p "%s" command))
+                     (format command object)
+                   command)))
+    (ess-command (or command (ess-build-help-command object)) (current-buffer)))
   (ess-help-underline)
   ;;VS[03-09-2012]: todo: this should not be here:
   ;; Stata is clean, so we get a big BARF from this.
@@ -209,17 +221,16 @@ If COMMAND is suplied, it is used instead of `inferior-ess-help-command'."
           (if com-get-file-path
               (browse-url (car (ess-get-words-from-vector (format com-get-file-path ess-help-object))))
             (when (functionp fun-get-file-path)
-              (browse-url (funcall fun-get-file-path ess-help-object))))))
-      )))
+              (browse-url (funcall fun-get-file-path ess-help-object)))))))))
 
-(defun ess--action-help-on-object (&optional button)
+(defun ess--button-action (&optional button)
   "Provide help on object at the beginning of line.
 It's intended to be used in R-index help pages. Load the package
 if necessary.  It is bound to RET and C-m in R-index pages."
   (interactive)
   (let* ((string (button-label button))
-         (command (when (fboundp ess-build-help-command-on-action)
-                    (funcall ess-build-help-command-on-action string))))
+         (command (when (fboundp ess-build-help-command-function)
+                    (funcall ess-build-help-command-function string))))
     (ess-display-help-on-object string command)))
 
 (defun ess-display-package-index ()
@@ -285,7 +296,7 @@ if necessary.  It is bound to RET and C-m in R-index pages."
   ;; ITEM-REGEXP -- first subexpression is highlighted
   ;; TITLE of the help page
   ;; HELP-TYPE to be stored in `ess-help-type' local variable
-  ;; ACTION is a function with no argument (default is `ess--action-help-on-object')
+  ;; ACTION is a function with no argument (default is `ess--button-action')
   ;; HELP-ECHO
   ;; REG-START gives the start location from where to search linkifying"
   (interactive)
@@ -313,7 +324,7 @@ if necessary.  It is bound to RET and C-m in R-index pages."
           (while (re-search-forward item-regexp nil t)
             (make-text-button (match-beginning 1) (match-end 1)
                               'mouse-face 'highlight
-                              'action (or action #'ess--action-help-on-object)
+                              'action (or action #'ess--button-action)
                               'help-object (buffer-substring-no-properties (match-beginning 1) (match-end 1))
                               'follow-link t
                               'help-echo (or help-echo "help on object")))))
@@ -493,15 +504,14 @@ For internal use. Used in `ess-display-help-on-object',
                            (selected-window))
                       (and ess-help-reuse-window
                            (ess--find-displayed-help-window)))))
-    (if help-win
-        (progn
-          (select-window help-win 'norecord)
-          (set-window-buffer help-win buff)
-          ;; (switch-to-buffer buff nil 'force) <- 3rd argument appeared in emacs 24
-          )
-      (if ess-help-pop-to-buffer
-          (pop-to-buffer buff)
-        (ess-display-temp-buffer buff)))))
+    (cond (help-win
+           (select-window help-win 'norecord)
+           ;; (switch-to-buffer buff nil 'force) <- 3rd argument appeared in emacs 24
+           (set-window-buffer help-win buff))
+          (ess-help-pop-to-buffer
+           (pop-to-buffer buff))
+          (t
+           (ess-display-temp-buffer buff)))))
 
 (defvar ess-help-frame nil
   "Stores the frame used for displaying R help buffers.")
@@ -774,23 +784,22 @@ Keystroke    Section
       (substring object (match-end 0))
     object))
 
-(defun ess-helpobjs-at-point (slist &optional)
+(defun ess-helpobjs-at-point (slist)
   ;; Return a list (def obj fun) where OBJ is a name at point, FUN - name of
   ;; the function call point is in. DEF is either OBJ or FUN (in that order)
   ;; which has a a help file, i.e. it is a member of slist (string-list). nil
   ;; otherwise
   (let* ((obj (ess-helpobjs-at-point--read-obj))
-         (unqualified-obj (ess-unqualify-symbol obj))
+         (unqualified-obj (and obj (ess-unqualify-symbol obj)))
          ;; FIXME: probably should use syntactic logic here
-         (fun (condition-case ()
-                  (save-excursion
-                    (save-restriction
-                      (narrow-to-region (max (point-min) (- (point) 1000))
-                                        (point-max))
-                      (backward-up-list 1)
-                      (backward-char 1)
-                      (ess-read-object-name-default)))
-                (error nil))))
+         (fun (ignore-errors
+                (save-excursion
+                  (save-restriction
+                    (narrow-to-region (max (point-min) (- (point) 1000))
+                                      (point-max))
+                    (backward-up-list 1)
+                    (backward-char 1)
+                    (ess-read-object-name-default))))))
     (list (or (car (member obj slist))
               (when (member unqualified-obj slist)
                 obj)

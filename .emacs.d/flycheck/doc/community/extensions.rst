@@ -12,6 +12,10 @@ extensions are maintained by the :ref:`Flycheck maintainers
 If you do know extensions not in this list, or would like to see your own
 extension here, please feel free to `add it`_.
 
+We would like to thank all people who created and contributed to Flycheck
+extensions for their awesome work.  Without your help and support Flycheck would
+not be what it is today.
+
 .. _add it: https://github.com/flycheck/flycheck/edit/master/doc/community/extensions.rst
 
 User interface
@@ -59,8 +63,8 @@ Additional languages and syntax checkers
 * :flyc:`flycheck-mercury` (*official*) adds a Flycheck syntax checker for the
   `Mercury language`_.
 * :flyc:`flycheck-ocaml` (*official*) adds a syntax checker for OCaml.
-* :gh:`purcell/flycheck-package` checks emacs lisp package source code for
-  common problems.
+* :gh:`purcell/flycheck-package` checks Emacs Lisp packages for common problems
+  with package metadata.
 * :gh:`Wilfred/flycheck-pyflakes` adds a Python syntax checker using Pyflakes.
 
 .. _Debian devscripts: https://anonscm.debian.org/cgit/collab-maint/devscripts.git

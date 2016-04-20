@@ -138,6 +138,8 @@ a broken internal link.  See its docstring for more information.
 unlike to existing ~\vert~, which is expanded as ~&vert;~ when using
 a HTML derived export back-end.
 *** Babel
+**** Support for SLY in Lisp blocks
+See ~org-babel-lisp-eval-fn~ to activate it.
 **** Support for Stan language
 New ob-stan.el library.
 
@@ -224,6 +226,12 @@ types.
 *** New option ~org-attach-commit~
 When non-nil, commit attachments with git, assuming the document is in
 a git repository.
+*** New HTML ~id~ attributes on special, example and quote blocks
+If the block has a =#+NAME:= attribute assigned, then the HTML element
+will have an ~id~ attribute with that name in the HTML export. This
+enables one to create links to these elements in other places, e.g.,
+~<a href="#name">text</a>~.
+
 ** New functions
 *** ~org-next-line-empty-p~
 It replaces the deprecated ~next~ argument to ~org-previous-line-empty-p~.
@@ -280,6 +288,12 @@ plain list.
 *** ~fixltx2e~ is removed from ~org-latex-default-packages-alist~
 fixltx2e is obsolete, see LaTeX News 22.
 ** Miscellaneous
+*** Allow angular links within link descriptions
+It is now allowed to write, e.g.,
+~[[http:orgmode.org][<file:unicorn.png>]]~ as an equivalent to
+~[[http:orgmode.org][file:unicorn.png]]~.  The advantage of the former
+is that spaces are allowed within the path.
+
 *** Beamer export back-ends uses ~org-latex-prefer-user-labels~
 
 *** ~:preparation-function~ called earlier during publishing
@@ -317,6 +331,20 @@ called with 6 parameters.
 *** =ITEM= special property returns headline without stars
 *** Rename ~org-insert-columns-dblock~ into ~org-columns-insert-dblock~
 The previous name is, for the time being, kept as an obsolete alias.
+*** Function ~org-info-export~ changes.
+HTML links created from certain info links now point to =gnu.org= URL's rather
+than just to local files. For example info links such as =info:emacs#List
+Buffers= used to be converted to HTML links like this:
+
+: <a href="emacs.html#List-Buffers">emacs#List Buffers</a>
+
+where local file =emacs.html= is referenced.
+For most folks this file does not exist.
+Thus the new behavior is to generate this HTML link instead:
+
+: <a href="http://www.gnu.org/software/emacs/manual/html_mono/emacs.html#List-Buffers">emacs#List Buffers</a>
+
+All emacs related info links are similarly translated plus few other =gnu.org= manuals.
 * Version 8.3
 
 ** Incompatible changes
@@ -439,6 +467,17 @@ docstring for more information.
 - ~org-latex-format-inlinetask-function~
 - ~org-link-search~
 ** New features
+*** Default lexical evaluation of emacs-lisp src blocks
+Emacs-lisp src blocks in babel are now evaluated using lexical scoping. There is a new header to control this behavior.
+
+The default results in an eval with lexical scoping.
+:lexical yes
+
+This turns lexical scoping off in the eval (the former behavior).
+:lexical no
+
+This uses the lexical environment with x=42 in the eval.
+:lexical '((x . 42))
 
 *** Behavior of ~org-return~ changed
 

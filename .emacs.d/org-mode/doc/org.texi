@@ -5200,23 +5200,22 @@ When setting @code{org-tag-alist} you can use @code{:startgroup} &
 @code{:endgroup} instead of @code{:startgrouptag} & @code{:endgrouptag} to
 make the tags mutually exclusive.
 
-Furthermore; The members of a @emph{group tag} can also be regular
-expression, creating the possibility of more dynamic and rule-based
-tag-structure.  The regular expressions in the group must be marked up within
-@{ @}.  Example use, to expand on the example given above:
+Furthermore, the members of a @emph{group tag} can also be regular
+expressions, creating the possibility of a more dynamic and rule-based
+tag structure.  The regular expressions in the group must be specified
+within @{ @}.  Here is an expanded example:
 
 @example
-#+TAGS: [ Vision : @{V@.+@} ]
-#+TAGS: [ Goal : @{G@.+@} ]
-#+TAGS: [ AOF : @{AOF@.+@} ]
-#+TAGS: [ Project : @{P@.+@} ]
+#+TAGS: [ Vision : @{V@@@.+@} ]
+#+TAGS: [ Goal : @{G@@@.+@} ]
+#+TAGS: [ AOF : @{AOF@@@.+@} ]
+#+TAGS: [ Project : @{P@@@.+@} ]
 @end example
 
 Searching for the tag @samp{Project} will now list all tags also including
-regular expression matches for @samp{P@@.+}.  Similar for tag-searches on
-@samp{Vision}, @samp{Goal} and @samp{AOF}.  This can be good for example if
-tags for a certain project is tagged with a common project-identifier,
-i.e. @samp{P@@2014_OrgTags}.
+regular expression matches for @samp{P@@@.+}, and similarly for tag searches on
+@samp{Vision}, @samp{Goal} and @samp{AOF}.  For example, this would work well
+for a project tagged with a common project-identifier, e.g. @samp{P@@2014_OrgTags}.
 
 @kindex C-c C-x q
 @vindex org-group-tags
@@ -6888,9 +6887,9 @@ down the list to stuff that fits into an available time slot.
 @cindex countdown timer
 @kindex ;
 
-Org provides provides two types of timers.  There is a relative timer that
-counts up, which can be useful when taking notes during, for example, a
-meeting or a video viewing.  There is also a countdown timer.
+Org provides two types of timers.  There is a relative timer that counts up,
+which can be useful when taking notes during, for example, a meeting or
+a video viewing.  There is also a countdown timer.
 
 The relative and countdown are started with separate commands.
 
@@ -12295,13 +12294,33 @@ the @LaTeX{} @code{\includegraphics} macro will be commented out.
 @cindex plain lists, in @LaTeX{} export
 
 Plain lists accept two optional attributes: @code{:environment} and
-@code{:options}.  The first one allows the use of a non-standard environment
-(e.g., @samp{inparaenum}).  The second one specifies additional arguments for
-that environment.
+@code{:options}.  The first can be used to specify the environment.  The
+second can be used to specifies additional arguments to the environment.
+Both attributes are illustrated in the following example:
 
 @example
-#+ATTR_LATEX: :environment compactitem :options [$\circ$]
-- you need ``paralist'' package to reproduce this example.
+#+LATEX_HEADER: \usepackage[inline]@{enumitem@}
+Some ways to say "Hello":
+#+ATTR_LATEX: :environment itemize*
+#+ATTR_LATEX: :options [label=@{@}, itemjoin=@{,@}, itemjoin*=@{, and@}]
+- Hola
+- Bonjour
+- Guten Tag.
+@end example
+
+By default, @LaTeX{} only supports four levels of nesting for lists.  If
+deeper nesting is needed, the @samp{enumitem} @LaTeX{} package can be
+employed, as shown in this example:
+
+@example
+#+LATEX_HEADER: \usepackage@{enumitem@}
+#+LATEX_HEADER: \renewlist@{itemize@}@{itemize@}@{9@}
+#+LATEX_HEADER: \setlist[itemize]@{label=$\circ$@}
+- One
+  - Two
+    - Three
+      - Four
+        - Five
 @end example
 
 @subsubheading Source blocks in @LaTeX{} export
@@ -16818,14 +16837,12 @@ for i in $@@; do
 done
 
 emacs -Q --batch \
---eval "(progn
-(add-to-list 'load-path (expand-file-name \"~/src/org/lisp/\"))
-(add-to-list 'load-path (expand-file-name \"~/src/org/contrib/lisp/\" t))
-(require 'org)(require 'org-exp)(require 'ob)(require 'ob-tangle)
-(mapc (lambda (file)
-       (find-file (expand-file-name file \"$DIR\"))
-       (org-babel-tangle)
-       (kill-buffer)) '($FILES)))" 2>&1 |grep tangled
+     --eval "(progn
+     (require 'org)(require 'ob)(require 'ob-tangle)
+     (mapc (lambda (file)
+            (find-file (expand-file-name file \"$DIR\"))
+            (org-babel-tangle)
+            (kill-buffer)) '($FILES)))" 2>&1 |grep -i tangled
 @end example
 
 @node Miscellaneous

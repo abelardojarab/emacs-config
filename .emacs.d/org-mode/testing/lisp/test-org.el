@@ -722,6 +722,11 @@
 	(let ((org-adapt-indentation t)) (org-indent-line))
 	(org-get-indentation))))
   (should
+   (= 4
+      (org-test-with-temp-text "* H\n- A\n  -\n\n<point>"
+	(let ((org-adapt-indentation t)) (org-indent-line))
+	(org-get-indentation))))
+  (should
    (zerop
     (org-test-with-temp-text "* H\n- A\n  - AA\n\n\n\n<point>"
       (let ((org-adapt-indentation t)) (org-indent-line))
@@ -1652,40 +1657,75 @@ SCHEDULED: <2014-03-04 tue.>"
   "Test `org-set-regexps-and-options' specifications."
   ;; TAGS keyword.
   (should
+   (equal '(("A"))
+	  (let ((org-tag-alist '(("A")))
+		(org-tag-persistent-alist nil))
+	    (org-test-with-temp-text ""
+	      (org-mode-restart)
+	      org-current-tag-alist))))
+  (should
+   (equal '(("B"))
+	  (let ((org-tag-alist '(("A")))
+		(org-tag-persistent-alist nil))
+	    (org-test-with-temp-text "#+TAGS: B"
+	      (org-mode-restart)
+	      org-current-tag-alist))))
+  (should
+   (equal '(("C") ("B"))
+	  (let ((org-tag-alist '(("A")))
+		(org-tag-persistent-alist '(("C"))))
+	    (org-test-with-temp-text "#+TAGS: B"
+	      (org-mode-restart)
+	      org-current-tag-alist))))
+  (should
+   (equal '(("B"))
+	  (let ((org-tag-alist '(("A")))
+		(org-tag-persistent-alist '(("C"))))
+	    (org-test-with-temp-text "#+STARTUP: noptag\n#+TAGS: B"
+	      (org-mode-restart)
+	      org-current-tag-alist))))
+  (should
    (equal '(("A" . ?a) ("B") ("C"))
-	  (org-test-with-temp-text "#+TAGS: A(a) B C"
-	    (org-mode-restart)
-	    org-tag-alist)))
+	  (let ((org-tag-persistant-alist nil))
+	    (org-test-with-temp-text "#+TAGS: A(a) B C"
+	      (org-mode-restart)
+	      org-current-tag-alist))))
   (should
    (equal '(("A") (:newline) ("B"))
-	  (org-test-with-temp-text "#+TAGS: A\n#+TAGS: B"
-	    (org-mode-restart)
-	    org-tag-alist)))
+	  (let ((org-tag-persistent-alist nil))
+	    (org-test-with-temp-text "#+TAGS: A\n#+TAGS: B"
+	      (org-mode-restart)
+	      org-current-tag-alist))))
   (should
    (equal '((:startgroup) ("A") ("B") (:endgroup) ("C"))
-	  (org-test-with-temp-text "#+TAGS: { A B } C"
-	    (org-mode-restart)
-	    org-tag-alist)))
+	  (let ((org-tag-persistent-alist nil))
+	    (org-test-with-temp-text "#+TAGS: { A B } C"
+	      (org-mode-restart)
+	      org-current-tag-alist))))
   (should
    (equal '((:startgroup) ("A") (:grouptags) ("B") ("C") (:endgroup))
-	  (org-test-with-temp-text "#+TAGS: { A : B C }"
-	    (org-mode-restart)
-	    org-tag-alist)))
+	  (let ((org-tag-persistent-alist nil))
+	    (org-test-with-temp-text "#+TAGS: { A : B C }"
+	      (org-mode-restart)
+	      org-current-tag-alist))))
   (should
    (equal '(("A" "B" "C"))
-	  (org-test-with-temp-text "#+TAGS: { A : B C }"
-	    (org-mode-restart)
-	    org-tag-groups-alist)))
+	  (let ((org-tag-persistent-alist nil))
+	    (org-test-with-temp-text "#+TAGS: { A : B C }"
+	      (org-mode-restart)
+	      org-tag-groups-alist))))
   (should
    (equal '((:startgrouptag) ("A") (:grouptags) ("B") ("C") (:endgrouptag))
-	  (org-test-with-temp-text "#+TAGS: [ A : B C ]"
-	    (org-mode-restart)
-	    org-tag-alist)))
+	  (let ((org-tag-persistent-alist nil))
+	    (org-test-with-temp-text "#+TAGS: [ A : B C ]"
+	      (org-mode-restart)
+	      org-current-tag-alist))))
   (should
    (equal '(("A" "B" "C"))
-	  (org-test-with-temp-text "#+TAGS: [ A : B C ]"
-	    (org-mode-restart)
-	    org-tag-groups-alist)))
+	  (let ((org-tag-persistent-alist nil))
+	    (org-test-with-temp-text "#+TAGS: [ A : B C ]"
+	      (org-mode-restart)
+	      org-tag-groups-alist))))
   ;; FILETAGS keyword.
   (should
    (equal '("A" "B" "C")
@@ -4234,6 +4274,62 @@ Paragraph<point>"
      (org-match-sparse-tree t "tag")
      (search-forward "H2")
      (org-invisible-p2))))
+
+
+;;; Tags
+
+(ert-deftest test-org/tag-string-to-alist ()
+  "Test `org-tag-string-to-alist' specifications."
+  ;; Tag without selection key.
+  (should (equal (org-tag-string-to-alist "tag1") '(("tag1"))))
+  ;; Tag with selection key.
+  (should (equal (org-tag-string-to-alist "tag1(t)") '(("tag1" . ?t))))
+  ;; Tag group.
+  (should
+   (equal
+    (org-tag-string-to-alist "[ group : t1 t2 ]")
+    '((:startgrouptag) ("group") (:grouptags) ("t1") ("t2") (:endgrouptag))))
+  ;; Mutually exclusive tags.
+  (should (equal (org-tag-string-to-alist "{ tag1 tag2 }")
+		 '((:startgroup) ("tag1") ("tag2") (:endgroup))))
+  (should
+   (equal
+    (org-tag-string-to-alist "{ group : tag1 tag2 }")
+    '((:startgroup) ("group") (:grouptags) ("tag1") ("tag2") (:endgroup)))))
+
+(ert-deftest test-org/tag-alist-to-string ()
+  "Test `org-tag-alist-to-string' specifications."
+  (should (equal (org-tag-alist-to-string '(("tag1"))) "tag1"))
+  (should (equal (org-tag-alist-to-string '(("tag1" . ?t))) "tag1(t)"))
+  (should
+   (equal
+    (org-tag-alist-to-string
+     '((:startgrouptag) ("group") (:grouptags) ("t1") ("t2") (:endgrouptag)))
+    "[ group : t1 t2 ]"))
+  (should
+   (equal (org-tag-alist-to-string
+	   '((:startgroup) ("tag1") ("tag2") (:endgroup)))
+	  "{ tag1 tag2 }"))
+  (should
+   (equal
+    (org-tag-alist-to-string
+     '((:startgroup) ("group") (:grouptags) ("tag1") ("tag2") (:endgroup)))
+    "{ group : tag1 tag2 }")))
+
+(ert-deftest test-org/tag-alist-to-groups ()
+  "Test `org-tag-alist-to-groups' specifications."
+  (should
+   (equal (org-tag-alist-to-groups
+	   '((:startgroup) ("group") (:grouptags) ("t1") ("t2") (:endgroup)))
+	  '(("group" "t1" "t2"))))
+  (should
+   (equal
+    (org-tag-alist-to-groups
+     '((:startgrouptag) ("group") (:grouptags) ("t1") ("t2") (:endgrouptag)))
+    '(("group" "t1" "t2"))))
+  (should-not
+   (org-tag-alist-to-groups
+    '((:startgroup) ("group") ("t1") ("t2") (:endgroup)))))
 
 
 ;;; Timestamps API

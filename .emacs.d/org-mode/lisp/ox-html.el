@@ -2374,10 +2374,17 @@ contextual information."
   "Transcode a EXAMPLE-BLOCK element from Org to HTML.
 CONTENTS is nil.  INFO is a plist holding contextual
 information."
-  (if (org-export-read-attribute :attr_html example-block :textarea)
-      (org-html--textarea-block example-block)
-    (format "<pre class=\"example\">\n%s</pre>"
-	    (org-html-format-code example-block info))))
+  (let ((attributes (org-export-read-attribute :attr_html example-block)))
+    (if (plist-get attributes :textarea)
+	(org-html--textarea-block example-block)
+      (format "<pre class=\"example\"%s>\n%s</pre>"
+	      (let* ((name (org-element-property :name example-block))
+		     (a (org-html--make-attribute-string
+			 (if (or (not name) (plist-member attributes :id))
+			     attributes
+			   (plist-put attributes :id name)))))
+		(if (org-string-nw-p a) (concat " " a) ""))
+	      (org-html-format-code example-block info)))))
 
 ;;;; Export Snippet
 
@@ -2835,7 +2842,7 @@ INFO is a plist holding contextual information.  See
 	 (desc (org-string-nw-p desc))
 	 (path
 	  (cond
-	   ((member type '("http" "https" "ftp" "mailto"))
+	   ((member type '("http" "https" "ftp" "mailto" "news"))
 	    (org-link-escape-browser
 	     (org-link-unescape (concat type ":" raw-path))))
 	   ((string= type "file")
@@ -3110,30 +3117,27 @@ contextual information."
 
 ;; Planning
 
-(defun org-html-planning (planning _contents _info)
+(defun org-html-planning (planning _contents info)
   "Transcode a PLANNING element from Org to HTML.
 CONTENTS is nil.  INFO is a plist used as a communication
 channel."
-  (let ((span-fmt "<span class=\"timestamp-kwd\">%s</span> <span class=\"timestamp\">%s</span>"))
-    (format
-     "<p><span class=\"timestamp-wrapper\">%s</span></p>"
-     (mapconcat
-      'identity
-      (delq nil
-	    (list
-	     (let ((closed (org-element-property :closed planning)))
-	       (when closed
-		 (format span-fmt org-closed-string
-			 (org-timestamp-translate closed))))
-	     (let ((deadline (org-element-property :deadline planning)))
-	       (when deadline
-		 (format span-fmt org-deadline-string
-			 (org-timestamp-translate deadline))))
-	     (let ((scheduled (org-element-property :scheduled planning)))
-	       (when scheduled
-		 (format span-fmt org-scheduled-string
-			 (org-timestamp-translate scheduled))))))
-      " "))))
+  (format
+   "<p><span class=\"timestamp-wrapper\">%s</span></p>"
+   (org-trim
+    (mapconcat
+     (lambda (pair)
+       (let ((timestamp (cdr pair)))
+	 (when timestamp
+	   (let ((string (car pair)))
+	     (format "<span class=\"timestamp-kwd\">%s</span> \
+<span class=\"timestamp\">%s</span> "
+		     string
+		     (org-html-plain-text (org-timestamp-translate timestamp)
+					  info))))))
+     `((,org-closed-string . ,(org-element-property :closed planning))
+       (,org-deadline-string . ,(org-element-property :deadline planning))
+       (,org-scheduled-string . ,(org-element-property :scheduled planning)))
+     ""))))
 
 ;;;; Property Drawer
 
@@ -3146,11 +3150,19 @@ holding contextual information."
 
 ;;;; Quote Block
 
-(defun org-html-quote-block (_quote-block contents _info)
+(defun org-html-quote-block (quote-block contents _info)
   "Transcode a QUOTE-BLOCK element from Org to HTML.
 CONTENTS holds the contents of the block.  INFO is a plist
 holding contextual information."
-  (format "<blockquote>\n%s</blockquote>" contents))
+  (format "<blockquote%s>\n%s</blockquote>"
+	  (let* ((name (org-element-property :name quote-block))
+		 (attributes (org-export-read-attribute :attr_html quote-block))
+		 (a (org-html--make-attribute-string
+		     (if (or (not name) (plist-member attributes :id))
+			 attributes
+		       (plist-put attributes :id name)))))
+	    (if (org-string-nw-p a) (concat " " a) ""))
+	  contents))
 
 ;;;; Section
 
@@ -3193,22 +3205,24 @@ contextual information."
 CONTENTS holds the contents of the block.  INFO is a plist
 holding contextual information."
   (let* ((block-type (org-element-property :type special-block))
-	 (contents (or contents ""))
-	 (html5-fancy (and (org-html--html5-fancy-p info)
-			   (member block-type org-html-html5-elements)))
-	 (attributes (org-export-read-attribute :attr_html special-block)))
+         (html5-fancy (and (org-html--html5-fancy-p info)
+                           (member block-type org-html-html5-elements)))
+         (attributes (org-export-read-attribute :attr_html special-block)))
     (unless html5-fancy
       (let ((class (plist-get attributes :class)))
-	(setq attributes (plist-put attributes :class
-				    (if class (concat class " " block-type)
-				      block-type)))))
-    (setq attributes (org-html--make-attribute-string attributes))
-    (when (not (equal attributes ""))
-      (setq attributes (concat " " attributes)))
-    (if html5-fancy
-	(format "<%s%s>\n%s</%s>" block-type attributes
-		contents block-type)
-      (format "<div%s>\n%s\n</div>" attributes contents))))
+        (setq attributes (plist-put attributes :class
+                                    (if class (concat class " " block-type)
+                                      block-type)))))
+    (let* ((contents (or contents ""))
+	   (name (org-element-property :name special-block))
+	   (a (org-html--make-attribute-string
+	       (if (or (not name) (plist-member attributes :id))
+		   attributes
+		 (plist-put attributes :id name))))
+	   (str (if (org-string-nw-p a) (concat " " a) "")))
+      (if html5-fancy
+	  (format "<%s%s>\n%s</%s>" block-type str contents block-type)
+	(format "<div%s>\n%s\n</div>" str contents)))))
 
 ;;;; Src Block
 

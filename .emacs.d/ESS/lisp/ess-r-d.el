@@ -54,11 +54,17 @@
 (autoload 'ess-help-underline "ess-help" "(Autoload)" t)
 (autoload 'ess--flush-help-into-current-buffer "ess-help" "(Autoload)" t)
 
+
+;;*;; Mode definition
+
+;;;*;;; UI (Keymaps / Menus)
+
 (defvar ess-dev-map
   (let (ess-dev-map)
     (define-prefix-command 'ess-dev-map)
     ;; Note: some of these comand are automatically redefined by those in
-    (define-key ess-dev-map "\C-s" 'ess-r-select-evaluation-namespace)
+    (define-key ess-dev-map "\C-s" 'ess-r-set-evaluation-namespace)
+    (define-key ess-dev-map "s" 'ess-r-set-evaluation-namespace)
     (define-key ess-dev-map "T" 'ess-toggle-tracebug)
     (define-key ess-dev-map "\C-l" 'ess-r-package-load-package)
     (define-key ess-dev-map "l" 'ess-r-package-load-package)
@@ -117,6 +123,7 @@
     (define-key ess-r-package-dev-map "\C-t" 'ess-r-devtools-test-package)
     (define-key ess-r-package-dev-map "\C-u" 'ess-r-devtools-unload-package)
     ess-r-package-dev-map))
+
 
 (easy-menu-define ess-roxygen-menu nil
   "Roxygen submenu."
@@ -189,12 +196,10 @@
 
 (ess-message "[ess-r-d:] (autoload ..) & (def** ..)")
 
-;; (autoload 'inferior-ess "ess-inf" "Run an ESS process.")
-;; (autoload 'ess-mode     "ess-mode" "Edit an ESS process.")
 
-(defvar R-customize-alist
+(defvar ess-r-customize-alist
   (append
-   '((ess-local-customize-alist         . 'R-customize-alist)
+   '((ess-local-customize-alist         . 'ess-r-customize-alist)
      (ess-eldoc-function                . #'ess-R-eldoc-function)
      (ess-dialect                       . "R")
      (ess-suffix                        . "R")
@@ -203,17 +208,11 @@
      (ess-build-tags-command            . "rtags('%s', recursive = TRUE, pattern = '\\\\.[RrSs](rw)?$',ofile = '%s')")
      (ess-traceback-command             . "local({cat(geterrmessage(), \"---------------------------------- \n\", fill=TRUE);try(traceback(), silent=TRUE)})\n")
      (ess-call-stack-command            . "traceback(1)\n")
-     (ess-build-eval-command-function  . #'ess-r-format-eval-command)
-     (ess-build-load-command-function  . #'ess-r-format-load-command)
-     (ess-send-region-function          . #'ess-r-send-region)
-     (ess-load-file-function            . #'ess-r-load-file)
-     (ess-make-source-refd-command-function . #'ess-r-make-source-refd-command)
-     (ess-format-eval-message-function  . #'ess-r-format-eval-message)
+     (ess-build-eval-message-function  . #'ess-r-build-eval-message)
      (ess-dump-filename-template        . (ess-replace-regexp-in-string
                                            "S$" ess-suffix ; in the one from custom:
                                            ess-dump-filename-template-proto))
      (ess-build-help-command-function   . #'ess-r-build-help-command)
-     (ess-build-help-command-on-action-function . #'ess-r-build-help-command-on-action)
      (ess-help-web-search-command       . 'ess-R-sos)
      (ess-mode-syntax-table             . R-syntax-table)
      (ess-mode-editing-alist            . R-editing-alist)
@@ -237,7 +236,6 @@
      ;;harmful for shell-mode's C-a: -- but "necessary" for ESS-help?
      (inferior-ess-start-file	          . nil) ;; "~/.ess-R"
      (inferior-ess-start-args           . "")
-     (inferior-ess-quit-function        . #'inferior-ess-r-quit)
      (ess-error-regexp-alist            . ess-R-error-regexp-alist)
      (ess-describe-object-at-point-commands . 'ess-R-describe-object-at-point-commands)
      (ess-STERM                         . "iESS")
@@ -250,6 +248,7 @@
    S-common-cust-alist)
   "Variables to customize for R -- set up later than emacs initialization.")
 
+(defalias 'R-customize-alist 'ess-r-customize-alist)
 
 (defvar R-editing-alist
   ;; copy the S-alist and modify :
@@ -313,6 +312,9 @@ Set this variable to nil to disable searching for other versions of R.
 If you set this variable, you need to restart Emacs (and set this variable
 before ess-site is loaded) for it to take effect."))
 
+
+;;;*;;; Mode init
+
 (defvar ess-R-post-run-hook nil
   "Functions run in process buffer after the initialization of R
   process.")
@@ -362,7 +364,7 @@ will be prompted to enter arguments interactively."
           (concat r-always-arg
                   inferior-R-args " "   ; add space just in case
                   start-args))
-         (cust-alist (copy-alist R-customize-alist))
+         (cust-alist (copy-alist ess-r-customize-alist))
          (gdbp (string-match-p "gdb" r-start-args))
          use-dialog-box)
 
@@ -433,9 +435,9 @@ Executed in process buffer."
 (defun R-mode  (&optional proc-name)
   "Major mode for editing R source.  See `ess-mode' for more help."
   (interactive "P")
-  (setq ess-customize-alist R-customize-alist)
+  (setq ess-customize-alist ess-r-customize-alist)
   ;;(setq imenu-generic-expression R-imenu-generic-expression)
-  (ess-mode R-customize-alist proc-name)
+  (ess-mode ess-r-customize-alist proc-name)
   ;; for emacs < 24
   (add-hook 'comint-dynamic-complete-functions 'ess-complete-object-name t 'local)
   ;; for emacs >= 24
@@ -464,12 +466,15 @@ Executed in process buffer."
   (ad-activate 'move-beginning-of-line)
   (ad-activate 'back-to-indentation)
   (ad-activate 'ess-eval-line-and-step)
-  (if ess-roxy-hide-show-p
+  (when ess-roxy-hide-show-p
     (ad-activate 'ess-indent-command))
 
   (run-hooks 'R-mode-hook))
 
 (fset 'r-mode 'R-mode)
+
+
+;;*;; Miscellaneous
 
 (defun ess-R-arch-2-bit (arch)
   "Translate R's architecture shortcuts/directory names to 'bits',
@@ -794,7 +799,7 @@ See `ess-noweb-mode' and `R-mode' for more help."
 (defun R-transcript-mode ()
   "Does the right thing."
   (interactive)
-  (ess-transcript-mode R-customize-alist))
+  (ess-transcript-mode ess-r-customize-alist))
 
 (fset 'r-transcript-mode 'R-transcript-mode)
 
@@ -998,54 +1003,54 @@ similar to `load-library' emacs function."
                  value)))
     (concat ", " param " = " value)))
 
-(defun ess-r-format-args (visibly output namespace)
+(defun ess-r-build-args (visibly output namespace)
   (let ((visibly (ess-r-arg "visibly" (if visibly "TRUE" "FALSE")))
         (output (ess-r-arg "output" (if output "TRUE" "FALSE")))
         (pkg (when namespace (ess-r-arg "package" namespace t)))
-        (verbose (when (and ess-r-special-evaluation-mode
+        (verbose (when (and (ess-r-get-evaluation-env)
                             ess-r-namespaced-load-verbose)
                    (ess-r-arg "verbose" "TRUE"))))
     (concat visibly output pkg verbose)))
 
-(defun ess-r-format-eval-command (string &optional visibly output file namespace)
-  (let ((cmd (if namespace ".essDev.eval" ".ess.eval"))
-        (file (when file (ess-r-arg "file" file t)))
-        (args (ess-r-format-args visibly output namespace)))
-    (concat cmd "('" string "'" args file ")\n")))
+(ess-defmethod R ess-build-eval-command (string &optional visibly output file namespace)
+  (let* ((namespace (or namespace (ess-r-get-evaluation-env)))
+         (cmd (if namespace ".ess.ns_eval" ".ess.eval"))
+         (file (when file (ess-r-arg "file" file t)))
+         (args (ess-r-build-args visibly output namespace)))
+    (concat cmd "(\"" string "\"" args file ")\n")))
 
-(defun ess-r-format-load-command (file &optional visibly output namespace)
-  (let ((cmd (if namespace ".essDev_source" ".ess.source"))
-        (args (ess-r-format-args visibly output namespace))
-        (msg (concat "cat('"
-                     (when namespace (format "[%s] " namespace))
-                     (format "Sourced file %s\n')" file))))
-    (concat cmd "('" file "'" args "); " msg)))
+(ess-defmethod R ess-build-load-command (file &optional visibly output namespace)
+  (let* ((namespace (or namespace (ess-r-get-evaluation-env)))
+         (cmd (if namespace ".ess.ns_source" ".ess.source"))
+         (args (ess-r-build-args visibly output namespace)))
+    (concat cmd "('" file "'" args ")\n")))
 
-(defun ess-r-format-eval-message (message)
-  (if (ess-r-namespaced-evaluation-p)
-      (let ((pkg-name (ess-r--get-evaluation-env)))
-        (format "[%s] %s" pkg-name message))
-    message))
+(defun ess-r-build-eval-message (message)
+  (let ((env (cond ((ess-r-get-evaluation-env))
+                   (ess-debug-minor-mode
+                    (substring-no-properties ess-debug-indicator 1)))))
+    (if env
+        (format "[%s] %s" env message)
+      message)))
 
-(defvar ess-r-evaluation-env nil
+(defvar-local ess-r-evaluation-env nil
   "Environment into which code should be evaluated.
+When this variable is nil, code is evaluated in the current
+environment. Currently only packages can be set as evaluation
+environments. Use `ess-r-set-evaluation-namespace' to set this
+variable.")
 
-When nil, code is evaluated in the global environment if tracebug
-is not active, or the evaluation environment of the current
-function if it is active.
-
-Currently only namespaces can be set as evaluation environments.
-Use `ess-r-select-evaluation-namespace' to select a package
-namespace.")
-(make-variable-buffer-local 'ess-r-evaluation-env)
+(defun ess-r-get-evaluation-env ()
+  "Get current evaluation env."
+  (or ess-r-evaluation-env
+      (and ess-current-process-name
+           (ess-get-process-variable 'ess-r-evaluation-env))))
 
 (defvar ess-r-prompt-for-attached-pkgs-only nil
-  "Whether to look for all installed R packages.
+  "If nil provide completion for all installed R packages.
+If non-nil, only look for attached packages.")
 
-If non-nil, only look for attached packages when selecting a
-namespace to source into.")
-
-(defun ess-r-select-evaluation-namespace (&optional arg)
+(defun ess-r-set-evaluation-namespace (&optional arg)
   "Select a package namespace for evaluation of R code.
 
 Call interactively with a prefix argument to disable evaluation
@@ -1056,58 +1061,28 @@ disable, or nil to prompt for a package.
 If `ess-r-prompt-for-attached-pkgs-only' is non-nil, prompt only for
 attached packages."
   (interactive "P")
-  (let ((pkg-name (cond ((stringp arg)
-                         arg)
-                        (arg
-                         ess-r-evaluation-env)
-                        (t
-                         (ess-r--select-package-name)))))
-    (cond ((and arg (not (stringp arg)))
-           (setq-local ess-r-evaluation-env nil)
-           (ess-r-special-evaluation-mode -1)
-           (message (format "Evaluation of code in %s disabled" pkg-name)))
-          (t
-           (setq-local ess-r-evaluation-env pkg-name)
-           (ess-r-special-evaluation-mode 1)
-           (message (format "Evaluating code in %s" pkg-name))))
+  (let ((env (cond ((stringp arg) arg)
+                   ((null arg) (ess-r--select-package-name))
+                   (t "*none*"))))
+    (if (equal env "*none*")
+        (let ((cur-env (ess-r-get-evaluation-env)))
+          ;; fixme: does not work if env is set at process level
+          (setq ess-r-evaluation-env nil)
+          (delq 'ess-r--evaluation-env-mode-line ess--local-mode-line-process-indicator)
+          (message (format "Evaluation in %s disabled" (propertize cur-env 'face font-lock-function-name-face))))
+      (setq ess-r-evaluation-env env)
+      (add-to-list 'ess--local-mode-line-process-indicator 'ess-r--evaluation-env-mode-line t)
+      (message (format "Evaluating in %s" (propertize env 'face font-lock-function-name-face))))
     (force-mode-line-update)))
 
-(defcustom ess-r-special-evaluation-mode-line
-  '(:eval (if (and ess-r-package-mode
-                   (string= ess-r-evaluation-env
-                            (car (ess-r-package--local-package-info))))
-              ""
-            (format " [src:%s]" ess-r-evaluation-env)))
-  "Mode line for namespaced evaluation.
-
-The default value handles the interaction with `ess-r-package-mode-line'.
-Set this variable to nil to disable the mode line entirely."
-  :group 'ess-R
-  :type 'sexp
-  :risky t)
-
-(define-minor-mode ess-r-special-evaluation-mode
-  "Minor mode used for evaluating code into special R environments.
-
-Currently only used for namespaced evaluation.  Its main purpose
-is as a placeholder for special settings (e.g. a lighter for the
-mode line)."
-  :init-value nil
-  :lighter ess-r-special-evaluation-mode-line)
-
-(defun ess-r-namespaced-evaluation-p ()
-  (and
-   ;; Always evaluate in current environment while debugging
-   (not ess-debug-minor-mode)
-   (or ess-r-evaluation-env
-       (ess-get-process-variable 'ess-r-evaluation-env))))
-
-(defun ess-r--get-evaluation-env (&optional ask)
-  (cond (ess-r-evaluation-env)
-        (ask
-         (ess-r-select-evaluation-namespace))
-        (t
-         (error "Namespaced evaluation is not active"))))
+(defvar-local ess-r--evaluation-env-mode-line 
+  '(:eval (let ((env (ess-r-get-evaluation-env)))
+            (if env
+                (format " %s" (if (equal env (car (ess-r-package-get-info)))
+                                  "pkg"
+                                env))
+              ""))))
+(put 'ess-r--evaluation-env-mode-line 'risky-local-variable t)
 
 (defvar ess-r-namespaced-load-verbose t
   "Whether to display information on namespaced loading.
@@ -1119,36 +1094,31 @@ namespace.")
 (defvar ess-r-namespaced-load-only-existing t
   "Whether to load only objects already existing in a namespace.")
 
-(defun ess-r-load-file (file)
+(ess-defmethod R ess-load-file (file)
   (cond
    ;; Namespaced evaluation
-   ((ess-r-namespaced-evaluation-p)
+   ((ess-r-get-evaluation-env)
     (ess-r-load-file-namespaced file))
    ;; Evaluation into current env via .ess.source()
    (t
-    (let ((command (ess-r-format-load-command file nil t)))
+    (let ((command (ess-build-load-command file nil t)))
       (ess-send-string (ess-get-process) command)))))
 
 (defun ess-r-load-file-namespaced (&optional file)
   "Load FILE into a package namespace.
 
 This prompts for a package when no package is currently
-selected (see `ess-r-select-evaluation-namespace')."
+selected (see `ess-r-set-evaluation-namespace')."
   (interactive)
   (ess-force-buffer-current "R process to use: ")
-  (let* ((pkg-name (ess-r--get-evaluation-env))
-         (command (ess-r-format-load-command file nil t pkg-name)))
+  (let* ((pkg-name (ess-r-get-evaluation-env))
+         (command (ess-build-load-command file nil t pkg-name)))
     (ess-send-string (ess-get-process) command)))
 
-(defun ess-r-make-source-refd-command (string visibly tmpfile)
-  (let ((pkg-name (when (ess-r-namespaced-evaluation-p)
-                    (ess-r--get-evaluation-env))))
-    (ess-build-eval-command string visibly t tmpfile pkg-name)))
-
-(defun ess-r-send-region (proc start end visibly message)
+(ess-defmethod R ess-send-region (proc start end visibly message)
   (cond
    ;; Namespaced evaluation
-   ((ess-r-namespaced-evaluation-p)
+   ((ess-r-get-evaluation-env)
     (ess-r-send-region-namespaced proc start end visibly message))
    ;; Evaluation into current env
    (t
@@ -1156,9 +1126,10 @@ selected (see `ess-r-select-evaluation-namespace')."
 
 (defun ess-r-send-region-namespaced (proc beg end &optional visibly message)
   "Ask for for the package and devSource region into it."
-  (let* ((pkg-name (ess-r--get-evaluation-env 'ask-if-nil))
-         (message (ess-r-format-eval-message (or message "Eval region"))))
-    (ess-send-string proc (buffer-substring start end) visibly message)))
+  (let* ((pkg-name (or (ess-r-get-evaluation-env)
+                       (ess-r-set-evaluation-namespace))))
+    (message (ess-r-build-eval-message (or message "Eval region"))))
+  (ess-send-string proc (buffer-substring start end) visibly message))
 
 
 ;;;*;;; Help
@@ -1183,38 +1154,35 @@ selected (see `ess-r-select-evaluation-namespace')."
         (ess-completing-read "Choose location" pkgs nil t)))))
 
 (defun ess-r-build-help-command--unqualified (object dont-ask)
-  (let ((pkg-dir (ess-r-build-help-command--get-package-dir object dont-ask))
-        (command (format inferior-ess-r-help-command object)))
-    (if pkg-dir
-        ;; Invoking `print.help_files_with_topic'
-        (format "do.call(structure, c('%s', attributes(%s)))\n" pkg-dir command)
-      command)))
+  (if (eq ess-help-type 'index)
+      ;; we are in index page, qualify with namespace
+      (ess-r-build-help-command--qualified (format "%s::%s" ess-help-object object))
+    (let ((pkg-dir (ess-r-build-help-command--get-package-dir object dont-ask))
+          (command (format inferior-ess-r-help-command object)))
+      (if pkg-dir
+          ;; Invoking `print.help_files_with_topic'
+          (format "do.call(structure, c('%s', attributes(%s)))\n" pkg-dir command)
+        command))))
 
 (defun ess-r-build-help-command (object &optional dont-ask)
-  (cond ((ess-r-build-help-command--qualified object))
-        (t
-         (ess-r-build-help-command--unqualified object dont-ask))))
-
-;; FIXME: use ess-r-build-help-command
-(defun ess-r-build-help-command-on-action (string)
-  (cond ((string-match "::" string)
-         (format "?%s\n" (ess-help-r--sanitize-topic string)))
-        ((eq ess-help-type 'index)
-         (format "?%s::`%s`\n" ess-help-object string))))
-
-(defun ess-help-r--sanitize-topic (string)
-  ;; Enclose help topics into `` to avoid ?while ?if etc hangs
-  (if (string-match "\\([^:]*:+\\)\\(.*\\)$" string) ; treat foo::bar corectly
-      (format "%s`%s`" (match-string 1 string) (match-string 2 string))
-    (format "`%s`" string)))
+  (or (ess-r-build-help-command--qualified object)
+      (ess-r-build-help-command--unqualified object dont-ask)))
 
 (defconst inferior-ess-r--input-help (format "^ *help *(%s)" ess-help-arg-regexp))
 (defconst inferior-ess-r--input-?-help-regexp "^ *\\(?:\\(?1:[a-zA-Z ]*?\\?\\{1,2\\}\\) *\\(?2:.+\\)\\)")
 (defconst inferior-ess-r--page-regexp (format "^ *page *(%s)" ess-help-arg-regexp))
 
-;; FIXME: This is still buggy in some cases with namespaced
-;; commands. This also tends to issue error messages even when it
-;; works
+(defvar ess-help-r--last-help-type nil
+  "Variable holding the last known help type. If it changes,
+we flush the cache.")
+
+(defun ess-help-r--check-last-help-type ()
+  (let ((help-type (ess-string-command "getOption('help_type')\n")))
+    (when (not (string= help-type ess-help-r--last-help-type))
+      (let ((help-buffers (ess-help-get-local-help-buffers)))
+        (mapc #'kill-buffer help-buffers))
+      (setq ess-help-r--last-help-type help-type))))
+
 (defun ess-help-r--process-help-input (proc string)
   (let ((help-match (and (string-match inferior-ess-r--input-help string)
                          (match-string 2 string)))
@@ -1222,40 +1190,50 @@ selected (see `ess-r-select-evaluation-namespace')."
                            string))
         (page-match   (and (string-match inferior-ess-r--page-regexp string)
                            (match-string 2 string))))
-    (cond (help-match
-           (ess-display-help-on-object help-match)
-           (process-send-string proc "\n"))
-          (help-?-match
-           (if (string-match "\\?\\?\\(.+\\)" help-?-match)
-               (ess--display-indexed-help-page (concat help-?-match "\n")
-                                               "^\\([^ \t\n]+::[^ \t\n]+\\)[ \t\n]+"
-                                               (format "*ess-apropos[%s](%s)*"
-                                                       ess-current-process-name (match-string 1 help-?-match))
-                                               'appropos)
-             ;; help(foo::bar) doesn't work
-             (if (string-match "^ *\\? *\\([^:]+\\)$" help-?-match)
-                 (ess-display-help-on-object (match-string 1 help-?-match))
-               ;; Anything else we send to process almost unchanged
-               (let ((help-?-match (and (string-match inferior-ess-r--input-?-help-regexp string)
-                                        (format "%s%s" (match-string 1 string)
-                                                (ess-help-r--sanitize-topic (match-string 2 string))))))
-                 (ess-display-help-on-object help-?-match "%s\n"))))
-           (process-send-string proc "\n"))
-          (page-match
-           (switch-to-buffer-other-window
-            (ess-command (concat page-match "\n")
-                         (get-buffer-create (concat page-match ".rt"))))
-           (R-transcript-mode)
-           (process-send-string proc "\n")))))
+    (when (or help-match help-?-match page-match)
+      (ess-help-r--check-last-help-type)
+      (cond (help-match
+             (ess-display-help-on-object help-match)
+             (process-send-string proc "\n"))
+            (help-?-match
+             (ess-help-r--display-help-? proc string help-?-match)
+             (process-send-string proc "\n"))
+            (page-match
+             (switch-to-buffer-other-window
+              (ess-command (concat page-match "\n")
+                           (get-buffer-create (concat page-match ".rt"))))
+             (R-transcript-mode)
+             (process-send-string proc "\n")))
+      t)))
 
+(defun ess-help-r--display-help-? (proc string help-?-match)
+  (cond ((string-match "\\?\\?\\(.+\\)" help-?-match)
+         (ess--display-indexed-help-page (concat help-?-match "\n")
+                                         "^\\([^ \t\n]+::[^ \t\n]+\\)[ \t\n]+"
+                                         (format "*ess-apropos[%s](%s)*"
+                                                 ess-current-process-name (match-string 1 help-?-match))
+                                         'appropos))
+        ((string-match "^ *\\? *\\([^ \t]+\\)$" help-?-match)
+         (ess-display-help-on-object (match-string 1 help-?-match)))
+        ;; Anything else we send to process almost unchanged
+        (t
+         (let ((help-?-match (and (string-match inferior-ess-r--input-?-help-regexp string)
+                                  (format "%s%s" (match-string 1 string)
+                                          (ess-help-r--sanitize-topic (match-string 2 string))))))
+           (ess-display-help-on-object help-?-match "%s\n")))))
+
+(defun ess-help-r--sanitize-topic (string)
+  ;; Enclose help topics into `` to avoid ?while ?if etc hangs
+  (if (string-match "\\([^:]*:+\\)\\(.*\\)$" string) ; treat foo::bar corectly
+      (format "%s`%s`" (match-string 1 string) (match-string 2 string))
+    (format "`%s`" string)))
 
 ;;;*;;; Utils for inferior R process
 
 (defun inferior-ess-r-input-sender (proc string)
   (save-current-buffer
-    (cond ((ess-help-r--process-help-input proc string))
-          (t
-           (inferior-ess-input-sender proc string)))))
+    (or (ess-help-r--process-help-input proc string)
+        (inferior-ess-input-sender proc string))))
 
 (defun inferior-ess-r-load-ESSR ()
   "Load/INSTALL/Update ESSR."
@@ -1301,13 +1279,7 @@ selected (see `ess-r-select-evaluation-namespace')."
         (ess-command (format ".ess.ESSRversion <- '%s'\n" version)) ; cannot do this at R level
         (mapc #'ess--inject-code-from-file files)))))
 
-(defun inferior-ess-r-quit (&optional no-save)
-  "Issue an exiting command to an inferior R process, and
-optionally clean up.  This version is for killing *R* processes;
-it asks the extra question regarding whether the workspace image
-should be saved unless NO-SAVE is non-nil."
-  (ess-force-buffer-current "Process to quit: " nil 'no-autostart)
-  (ess-make-buffer-current)
+(ess-defmethod R ess-quit (&optional no-save)
   (let (cmd
         ;;Q     response
         (sprocess (ess-get-process ess-current-process-name)))
@@ -1336,7 +1308,7 @@ should be saved unless NO-SAVE is non-nil."
   (let ((pkg-info ess-r-package-info)
         (r-proc (ess-get-process)))
     (with-ess-process-buffer nil
-      (ess-quit-r 'no-save)
+      (ess-quit 'no-save)
       (while (memq (process-status r-proc) '(run busy))
         (accept-process-output r-proc 0.002))
       (kill-buffer)
@@ -1348,7 +1320,7 @@ should be saved unless NO-SAVE is non-nil."
 
 
 ;;*;; Editing Tools
-
+
 ;;;*;;; Indentation Engine
 
 ;; Written by Lionel Henry in mid 2015
@@ -1917,7 +1889,7 @@ otherwise nil."
              (looking-at (concat match "("))
              (current-column))))))
 
-
+
 ;;;*;;; Call filling engine
 
 ;; Unroll arguments to a single line until closing marker is found.
