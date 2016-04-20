@@ -129,38 +129,16 @@
               (setq-default mode-line-format
                             (append '((:eval (hs-display-headline))) mode-line-format))
 
-              (defcustom hs-fringe-face 'hs-fringe-face
-                "*Specify face used to highlight the fringe on hidden regions."
-                :type 'face
-                :group 'hideshow)
-
-              (defface hs-fringe-face
-                '((t (:foreground "#999" :box (:line-width 2 :color "grey50" :style released-button))))
-                "Face used to highlight the fringe on folded regions"
-                :group 'hideshow)
-
-              (defcustom hs-face 'hs-face
-                "*Specify the face to to use for the hidden region indicator"
-                :type 'face
-                :group 'hideshow)
-
-              (defface hs-face
-                '((t (:background "#558" :box t)))
-                "Face to hightlight the ... area of hidden regions"
-                :group 'hideshow)
-
+              ;; Redefine display functions
               (defun display-code-line-counts (ov)
                 (when (eq 'code (overlay-get ov 'hs))
                   (let* ((marker-string "*fringe-dummy*")
                          (marker-length (length marker-string))
-                         (display-string (format "(%d)..." (count-lines
-                                                            (overlay-start ov) (overlay-end ov)))))
+                         (display-string (format " (%d)..." (count-lines (overlay-start ov) (overlay-end ov)))))
                     (overlay-put ov 'help-echo "Hiddent text. M-s <SPC> to show")
-                    (put-text-property 0 marker-length 'display (list 'left-fringe
-                                                                      'hs-marker 'hs-fringe-face) marker-string)
+                    (put-text-property 0 marker-length 'display (list 'left-fringe 'hs-marker 'fringe-face) marker-string)
                     (overlay-put ov 'before-string marker-string)
-                    (put-text-property 1 (length display-string) 'face 'hs-face
-                                       display-string)
+                    (put-text-property 1 (length display-string) 'face 'mode-line display-string)
                     (overlay-put ov 'display display-string))))
               (setq hs-set-up-overlay 'display-code-line-counts)
 
@@ -185,7 +163,7 @@
                                (display-string (format " (%d)..." (count-lines begin end))))
                           (put-text-property 0 marker-length 'display (list 'left-fringe 'hs-marker 'fringe-face) marker-string)
                           (overlay-put ov 'before-string marker-string)
-                          (put-text-property 1 (length display-string) 'face 'collapsed-face display-string)
+                          (put-text-property 1 (length display-string) 'face 'mode-line display-string)
                           (overlay-put ov 'display display-string)
                           (overlay-put ov 'priority 9999)
                           (overlay-put ov 'fringe-folding-p t))))
