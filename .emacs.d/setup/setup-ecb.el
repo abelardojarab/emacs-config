@@ -27,7 +27,7 @@
 ;; Code Browser
 (use-package ecb
   :load-path (lambda () (expand-file-name "ecb/" user-emacs-directory))
-  :commands (ecb-activate)
+  ;; :commands (ecb-activate) ;; enabling this line places ecb in autoload state
   :init (progn
           (setq stack-trace-on-error t)
           (setq after-find-file-from-revert-buffer t))
@@ -344,7 +344,8 @@ little more place. "
             (speedbar-add-supported-extension ".ils")
 
             ;; Finally activate ecb
-            (ecb-activate)))
+            (if window-system
+                (ecb-activate))))
 
 (provide 'setup-ecb)
 ;;; setup-ecb.el ends here

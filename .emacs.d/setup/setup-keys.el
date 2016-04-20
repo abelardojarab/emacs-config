@@ -188,17 +188,11 @@
 (global-set-key [C-home] 'tabbar-backward-group)
 (global-set-key [C-end] 'tabbar-forward-group)
 
-;; Alternative tabbar keys
-(global-set-key (kbd "C-x <up>") 'tabbar-backward-group)
-(global-set-key (kbd "C-x <down>") 'tabbar-forward-group)
-(global-set-key (kbd "C-x <left>") 'tabbar-forward-tab)
-(global-set-key (kbd "C-x <right>") 'tabbar-backward-tab)
-
 ;; Jump between windows
-(global-set-key [C-up] 'windmove-up)
-(global-set-key [C-down] 'windmove-down)
-(global-set-key [C-left] 'windmove-left)
-(global-set-key [C-right] 'windmove-right)
+(global-set-key (kbd "C-x <up>") 'windmove-up)
+(global-set-key (kbd "C-x <down>") 'windmove-down)
+(global-set-key (kbd "C-x <left>") 'windmove-left)
+(global-set-key (kbd "C-x <right>") 'windmove-right)
 
 ;; Extra Ctrl-x mappings
 (define-key ctl-x-map (kbd "P") '(lambda () (interactive) (popup-menu 'yank-menu)))
@@ -207,10 +201,10 @@
 (define-key ctl-x-map (kbd "<") 'decrease-left-margin)
 (define-key ctl-x-map (kbd "F") 'toggle-frame-fullscreen)
 (define-key ctl-x-map (kbd "T") 'toggle-truncate-lines)
-(define-key ctl-x-map (kbd "<up>") 'tabbar-backward-group)
-(define-key ctl-x-map (kbd "<down>") 'tabbar-forward-group)
-(define-key ctl-x-map (kbd "<left>") 'tabbar-backward-tab)
-(define-key ctl-x-map (kbd "<right>") 'tabbar-forward-tab)
+(define-key ctl-x-map (kbd "<up>") 'windmove-up)
+(define-key ctl-x-map (kbd "<down>") 'windmove-down)
+(define-key ctl-x-map (kbd "<left>") 'windmove-left)
+(define-key ctl-x-map (kbd "<right>") 'windmove-right)
 
 ;; Overwrite other modes
 (defvar my-keys-minor-mode-map (make-keymap) "my-keys-minor-mode keymap.")
