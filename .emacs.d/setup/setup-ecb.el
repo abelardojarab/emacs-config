@@ -344,8 +344,7 @@ little more place. "
             (speedbar-add-supported-extension ".ils")
 
             ;; Finally activate ecb
-            (if window-system
-                (ecb-activate))))
+            (ecb-activate)))
 
 (provide 'setup-ecb)
 ;;; setup-ecb.el ends here

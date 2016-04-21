@@ -46,10 +46,12 @@
             (ac-set-trigger-key "<tab>")
             (define-key ac-completing-map (kbd "<tab>") 'ac-complete)
             (define-key ac-completing-map (kbd "RET") 'ac-complete)
-            (define-key ac-completing-map  (kbd "ESC") 'ac-stop)
+
+            ;; http://emacs.stackexchange.com/questions/8092/arrow-and-m-n-m-p-dont-work-with-company-mode-in-terminal-when-esc-aborts-compl
+            (if window-system
+                (define-key ac-completing-map  (kbd "ESC") 'ac-stop))
             (global-auto-complete-mode t)
             (auto-complete-mode 1)
-
 
             ;; Set font face setting
             (set-face-attribute 'ac-candidate-face nil :inherit 'fixed-pitch :bold nil)

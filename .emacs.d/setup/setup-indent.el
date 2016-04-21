@@ -67,7 +67,8 @@
                   (setq my/indent-guide-mode-suppressed nil)
                   (indent-guide-mode 1))))
 
-            (unless (equal system-type 'windows-nt)
+            (unless (or (equal system-type 'windows-nt)
+                        (not window-system))
               (setq indent-guide-char "┊"))
             (setq indent-guide-recursive t)
             (add-hook 'prog-mode-hook (lambda () (indent-guide-mode t)))))
