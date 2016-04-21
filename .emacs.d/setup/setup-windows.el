@@ -40,12 +40,15 @@
               "Same as `helm-mini', but disable window-purpose while this command executes.")
 
             (purpose-mode)
-            (purpose-x-popwin-setup)
+
+            ;; Enable for popwin compatibility
+            ;; (purpose-x-popwin-setup)
 
             ;; when killing a purpose-dedicated buffer that is displayed in a window,
             ;; ensure that the buffer is replaced by a buffer with the same purpose
             ;; (or the window deleted, if no such buffer)
-            (purpose-x-kill-setup)))
+            ;; (purpose-x-kill-setup)
+            ))
 
 (provide 'setup-windows)
 ;;; setup-windows.el ends here

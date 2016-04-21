@@ -172,7 +172,8 @@
 
 ;; Irony auto-complete
 (use-package ac-irony
-  :if (executable-find "irony-server")
+  :if (or (executable-find "irony-server")
+          (file-exists-p "~/.emacs.cache/irony-server/irony-server"))
   :load-path (lambda () (expand-file-name "ac-irony/" user-emacs-directory))
   :config (progn
             (defun my-ac-irony-setup ()
