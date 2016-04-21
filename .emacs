@@ -163,6 +163,9 @@
 ;; Setup C++
 (require 'setup-c++)
 
+;; Setup cmake
+(require 'setup-cmake)
+
 ;; Setup spelling (optional)
 (require 'setup-spell)
 
