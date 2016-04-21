@@ -52,6 +52,18 @@
             (setq-default js2-strict-trailing-comma-warning t) ;; jshint does not warn about this now for some reason
             (add-hook 'js2-mode-hook (lambda () (flycheck-mode 1)))))
 
+;; tern
+(use-package tern
+  :defer t
+  :if (executable-find "node")
+  :commands (tern-mode)
+  :diminish tern-mode
+  :load-path (lambda () (expand-file-name "tern/emacs/" user-emacs-directory))
+  :init (add-hook 'js2-mode-hook 'tern-mode)
+  :config (progn
+     (require 'tern-auto-complete)
+     (tern-ac-setup)))
+
 ;; skewer mode
 (use-package skewer-mode
   :defer t
