@@ -42,7 +42,9 @@
   (setq org-latex-create-formula-image-program 'dvipng))
 
 ;; Directory where LaTeX previews are stored
-(setq org-latex-preview-ltxpng-directory "~/.emacs.cache/ltxpng")
+(if (not (file-exists-p "~/.emacs.cache/ltxpng"))
+    (make-directory "~/.emacs.cache/ltxpng") t)
+(setq org-latex-preview-ltxpng-directory "~/.emacs.cache/ltxpng/")
 
 ;; Bigger LaTeX fragments and other options for LaTeX export
 (setq org-format-latex-options '(:scale 2.0

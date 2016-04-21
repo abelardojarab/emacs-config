@@ -104,8 +104,7 @@
 ;; Flycheck irony
 (use-package flycheck-irony
   :after flycheck
-  :if (or (executable-find "irony-server")
-          (file-exists-p "~/.emacs.cache/irony-server/irony-server"))
+  :if (file-exists-p "~/.emacs.cache/irony-server/bin/irony-server")
   :load-path (lambda () (expand-file-name "flycheck-irony/" user-emacs-directory))
   :config (progn
             (add-hook 'flycheck-mode-hook #'flycheck-irony-setup)

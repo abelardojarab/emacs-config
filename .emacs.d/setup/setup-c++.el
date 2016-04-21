@@ -81,8 +81,7 @@
   :if (executable-find "clang")
   :load-path (lambda () (expand-file-name "irony-mode/" user-emacs-directory))
   :init (progn
-          (when (or (executable-find "irony-server")
-                    (file-exists-p "~/.emacs.cache/irony-server/irony-server"))
+          (when (file-exists-p "~/.emacs.cache/irony-server/bin/irony-server")
             (add-hook 'c++-mode-hook 'irony-mode)
             (add-hook 'c-mode-hook 'irony-mode)))
   :config (progn
