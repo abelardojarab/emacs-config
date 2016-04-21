@@ -37,6 +37,9 @@
 ;; ignore byte-compile warnings
 (setq byte-compile-warnings nil)
 
+;; prefer newer non-byte compiled sources to older byte compiled ones
+(setq load-prefer-newer t)
+
 ;; Assure .emacs.cache directory exists
 (if (not (file-exists-p "~/.emacs.cache"))
     (make-directory "~/.emacs.cache") t)

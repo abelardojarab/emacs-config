@@ -36,7 +36,8 @@
               (add-to-list 'which-key-key-replacement-alist '("SPC" . "␣")))
 
             ;; Side window setup
-            (setq which-key-popup-type 'side-window)
+            ;; (setq which-key-popup-type 'side-window)
+            (setq which-key-popup-type 'minibuffer)
             (setq which-key-side-window-location 'right)
             (setq which-key-side-window-max-width 0.33)
             (which-key-mode)))

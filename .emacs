@@ -163,6 +163,9 @@
 ;; Setup C++
 (require 'setup-c++)
 
+;; Setup doxygen
+(require 'setup-doxygen)
+
 ;; Setup cmake
 (require 'setup-cmake)
 
