@@ -44,7 +44,7 @@
                 (paredit-mode . " π")
                 (eldoc-mode . "")
                 (abbrev-mode . "")
-                (git-gutter+-mode . " ┅")
+                (git-gutter+-mode . " ⎇")
                 (smartparens-mode . " π")
 
                 ;; Major modes
@@ -66,65 +66,99 @@ want to use in the modeline *in lieu of* the original.")
                          ;; major mode
                          (when (eq mode major-mode)
                            (setq mode-name mode-str)))))
-            (add-hook 'after-change-major-mode-hook 'clean-mode-line)
+            (if (display-graphic-p)
+                (add-hook 'after-change-major-mode-hook 'clean-mode-line))
 
             ;; Powerline setup
             (add-hook 'desktop-after-read-hook 'powerline-reset)
-            (defface modes-ml-face '((t (:background "#002b36" :inherit mode-line)))
-              "Powerline face for modes section of the mode-line"
-              :group 'powerline)
-            (defface file-ml-face '((t (:background "#586e75" :inherit mode-line)))
-              "Powerline face for file and branch section of the mode-line"
-              :group 'powerline)
-            (defface line-ml-face '((t (:background "#93a1a1" :inherit mode-line)))
-              "Powerline face for line number section of the mode-line"
-              :group 'powerline)
-            (defface pos-ml-face '((t (:background "#586e75" :inherit mode-line)))
-              "Powerline face for file position section of the mode-line"
-              :group 'powerline)
-            (defface ml-fill-face '((t (:background "#93a1a1" :inherit mode-line)))
-              "Powerline face used to fill the unused portion of the mode-line"
-              :group 'powerline)
-            (setq-default mode-line-format
-                          '("%e"
-                            (:eval
-                             (let* ((file-name (buffer-file-name (current-buffer)))
-                                    (active (powerline-selected-window-active))
-                                    (separator-left (intern (format "powerline-%s-%s"
-                                                                    (powerline-current-separator)
-                                                                    (car powerline-default-separator-dir))))
-                                    (separator-right (intern (format "powerline-%s-%s"
-                                                                     (powerline-current-separator)
-                                                                     (cdr powerline-default-separator-dir))))
-                                    (lhs (list (powerline-major-mode 'modes-ml-face 'l)
-                                               (powerline-process 'modes-ml-face 'l)
-                                               (powerline-minor-modes 'modes-ml-face 'l)
-                                               (powerline-raw " " 'modes-ml-face)
-                                               (funcall separator-left 'modes-ml-face 'file-ml-face)
+            (defun powerline-simpler-vc-mode (s)
+              (if s
+                  (replace-regexp-in-string "Git[:-]" "" s)
+                s))
 
-                                               (powerline-raw "[" 'file-ml-face)
-                                               (powerline-raw (projectile-project-name) 'file-ml-face)
-                                               (powerline-raw "] %b %*" 'file-ml-face)
-                                               (powerline-raw (concat " "
-                                                                      (when (and file-name vc-mode)
-                                                                        (concat "(" (-> file-name
-                                                                                        vc-working-revision
-                                                                                        (string-utils-truncate-to 40))
-                                                                                ")")))
-                                                              'file-ml-face 'r)
-                                               (funcall separator-left 'file-ml-face 'ml-fill-face)))
+            ;; Some point, we could change the text of the minor modes, but we
+            ;; need to get the text properties and sub them /back in/. To be
+            ;; figured out later... Like:
+            ;;   (let* ((props (text-properties-at 1 s))
+            ;;          (apple (set-text-properties 0 1 props "⌘"))
+            ;;          (fly-c (set-text-properties 0 1 props "✓"))
+            ;;          (news2 (replace-regexp-in-string "FlyC" fly-c news1)))
 
-                                    (rhs (list (powerline-raw global-mode-string 'ml-fill-face 'r)
-                                               (funcall separator-right 'ml-fill-face 'pos-ml-face)
-                                               (powerline-raw "%p " 'pos-ml-face 'l)
-                                               (funcall separator-right 'pos-ml-face 'line-ml-face)
+            (defun powerline-simpler-minor-display (s)
+              (replace-regexp-in-string
+               (concat " " (mapconcat 'identity '("Projectile" "Fill" "BufFace") "\\|")) "" s))
 
-                                               (powerline-raw " %4l " 'line-ml-face 'r))))
+            (defun powerline-ha-theme ()
+              "A powerline theme that removes many minor-modes that don't serve much purpose on the mode-line."
+              (interactive)
+              (setq-default mode-line-format
+                            '("%e"
+                              (:eval
+                               (let*
+                                   ((active
+                                     (powerline-selected-window-active))
+                                    (mode-line
+                                     (if active 'mode-line 'mode-line-inactive))
+                                    (face1
+                                     (if active 'powerline-active1 'powerline-inactive1))
+                                    (face2
+                                     (if active 'powerline-active2 'powerline-inactive2))
+                                    (separator-left
+                                     (intern
+                                      (format "powerline-%s-%s" powerline-default-separator
+                                              (car powerline-default-separator-dir))))
+                                    (separator-right
+                                     (intern
+                                      (format "powerline-%s-%s" powerline-default-separator
+                                              (cdr powerline-default-separator-dir))))
+                                    (lhs
+                                     (list
+                                      (powerline-raw "%*" nil 'l)
+                                      (powerline-buffer-id nil 'l)
+                                      (powerline-raw " ")
+                                      (funcall separator-left mode-line face1)
+                                      (powerline-raw '(:eval (format " Proj[%s]"
+                                                                     (projectile-project-name))) face1)
+                                      (powerline-raw " ƒ" face1)
+                                      (powerline-raw mode-line-misc-info face1 'r)))
+                                    (rhs
+                                     (list
+                                      (when (bound-and-true-p nyan-mode)
+                                        (powerline-raw (list (nyan-create)) face1 'l))
+                                      (powerline-raw "%4l" face1 'r)
+                                      (powerline-raw ":" face1)
+                                      (powerline-raw '(:eval
+                                                       (propertize "%3c" 'face
+                                                                   (if (>= (current-column) 90)
+                                                                       'font-lock-warning-face 'nil))) face1 'l)
+                                      (funcall separator-right face1 mode-line)
+                                      (powerline-raw " ")
+                                      (powerline-raw "%6p" nil 'r)
+                                      (powerline-hud face2 face1)))
+                                    (center
+                                     (list
+                                      (powerline-raw " " face1)
+                                      (funcall separator-left face1 face2)
+                                      (powerline-major-mode face2 'l)
+                                      (powerline-process face2)
+                                      (powerline-raw ":" face2)
+                                      (powerline-simpler-minor-display
+                                       (powerline-minor-modes face2 'l))
 
-                               (concat (powerline-render lhs)
-                                       (powerline-fill 'ml-fill-face (powerline-width rhs))
-                                       (powerline-render rhs))))))
-            (powerline-default-theme)))
+                                      (powerline-raw " " face2)
+                                      (funcall separator-right face2 face1))))
+                                 (concat
+                                  (powerline-render lhs)
+                                  (powerline-fill-center face1
+                                                         (/
+                                                          (powerline-width center)
+                                                          2.0))
+                                  (powerline-render center)
+                                  (powerline-fill face1
+                                                  (powerline-width rhs))
+                                  (powerline-render rhs)))))))
+
+            (powerline-ha-theme)))
 
 (provide 'setup-modeline)
 ;;; setup-modeline.el ends here
