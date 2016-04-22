@@ -26,7 +26,7 @@
 
 ;; Enable mouse support
 (use-package mouse
-  :unless window-system
+  :unless (display-graphic-p)
   :config (progn
             (xterm-mouse-mode t)
             (defun track-mouse (e))

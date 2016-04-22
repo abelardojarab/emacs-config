@@ -25,7 +25,7 @@
 ;;; Code:
 
 ;; Adjust font when using graphical interface
-(when window-system
+(when (display-graphic-p)
 
   ;; Use 12-pt Consolas as default font
   (when (find-font (font-spec :name "Consolas"))

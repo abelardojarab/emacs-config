@@ -97,7 +97,7 @@
 
 ;; Enable hideshowvis
 (use-package hideshowvis
-  :if window-system
+  :if (display-graphic-p)
   :commands hideshowvis-enable
   :diminish hs-minor-mode
   :init (progn

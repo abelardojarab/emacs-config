@@ -55,13 +55,13 @@
 
 ;; Tabbar ruler pre-requisites
 (use-package mode-icons
-  :if window-system
+  :if (display-graphic-p)
   :defer t
   :load-path (lambda () (expand-file-name "mode-icons/" user-emacs-directory)))
 
 ;; more tweaking to tabbar
 (use-package tabbar-ruler
-  :if window-system
+  :if (display-graphic-p)
   :load-path (lambda () (expand-file-name "tabbar-ruler/" user-emacs-directory))
   :init (setq tabbar-ruler-global-tabbar 't) ;; If you want tabbar
   :config (progn

@@ -62,7 +62,7 @@ hopefully be in emacs 24: http://debbugs.gnu.org/cgi/bugreport.cgi?bug=6781"
       (server-edit))
 
   ;; Hide the server
-  (if window-system
+  (if (display-graphic-p)
       (iconify-frame)
     (make-frame-invisible nil t)))
 (global-set-key (kbd "C-x C-c") 'bnb/exit)

@@ -244,7 +244,7 @@
 ;; Setup eldoc
 (require 'setup-eldoc)
 
-;; Setup Lisp mode (cause crash)
+;; Setup Lisp
 (require 'setup-lisp)
 
 ;; Setup Python
@@ -289,7 +289,7 @@
 ;; Setup sqlite
 (require 'setup-sqlite)
 
-;; Setup markdown
+;; Setup Markdown
 (require 'setup-markdown)
 
 ;; Setup shell

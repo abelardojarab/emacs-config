@@ -53,7 +53,7 @@
                                         :matchers ("begin" "$1" "$" "$$" "\\(" "\\[")))
 
 ;; Toggle previsualization of LaTeX equations in Org-mode
-(when window-system
+(when (display-graphic-p)
   (defvar org-latex-fragment-last nil
     "Holds last fragment/environment you were on.")
 

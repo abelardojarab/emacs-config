@@ -68,7 +68,7 @@
                   (indent-guide-mode 1))))
 
             (unless (or (equal system-type 'windows-nt)
-                        (not window-system))
+                        (not (display-graphic-p)))
               (setq indent-guide-char "┊"))
             (setq indent-guide-recursive t)
             (add-hook 'prog-mode-hook (lambda () (indent-guide-mode t)))))

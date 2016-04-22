@@ -80,6 +80,7 @@
                   magit-auto-revert-mode-lighter nil
                   magit-completing-read-function 'magit-ido-completing-read)
 
+            ;; Disable saving place on git commit logs
             (add-hook 'git-commit-mode-hook (toggle-save-place 0))))
 
 ;; diff-hl
@@ -102,12 +103,12 @@
 
 (use-package git-gutter-plus
   :defer t
-  :if window-system
+  :if (display-graphic-p)
   :diminish git-gutter+-mode
   :load-path (lambda () (expand-file-name "git-gutter-plus/" user-emacs-directory)))
 
 (use-package git-gutter-fringe+
-  :if window-system
+  :if (display-graphic-p)
   :load-path (lambda () (expand-file-name "git-gutter-fringe-plus/" user-emacs-directory))
   :config (progn
             (global-git-gutter+-mode t)

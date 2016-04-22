@@ -29,7 +29,8 @@
   :load-path (lambda () (expand-file-name "which-key/" user-emacs-directory))
   :diminish which-key-mode
   :config (progn
-            (when window-system
+            (unless (or (equal system-type 'windows-nt)
+                        (not (display-graphic-p)))
               (add-to-list 'which-key-key-replacement-alist '("TAB" . "↹"))
               (add-to-list 'which-key-key-replacement-alist '("RET" . "⏎"))
               (add-to-list 'which-key-key-replacement-alist '("DEL" . "⇤"))

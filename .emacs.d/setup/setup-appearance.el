@@ -25,11 +25,11 @@
 ;;; Code:
 
 ;; Disable tool-bar
-(if window-system
+(if (display-graphic-p)
     (tool-bar-mode -1))
 
 ;; GUI-specific thing
-(when (window-system)
+(if (display-graphic-p)
   (setenv "EMACS_GUI" "t"))
 
 ;; Dont pause screen refresh
@@ -103,7 +103,7 @@ non-nil."
 
 ;; Scrollbar
 (use-package lawlist-scroll-mode
-  :if window-system
+  :if (display-graphic-p)
   :init (set-scroll-bar-mode 'right))
 
 (provide 'setup-appearance)

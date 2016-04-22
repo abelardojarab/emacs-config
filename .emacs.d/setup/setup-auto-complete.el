@@ -48,7 +48,7 @@
             (define-key ac-completing-map (kbd "RET") 'ac-complete)
 
             ;; http://emacs.stackexchange.com/questions/8092/arrow-and-m-n-m-p-dont-work-with-company-mode-in-terminal-when-esc-aborts-compl
-            (if window-system
+            (if (display-graphic-p)
                 (define-key ac-completing-map  (kbd "ESC") 'ac-stop))
             (global-auto-complete-mode t)
             (auto-complete-mode 1)

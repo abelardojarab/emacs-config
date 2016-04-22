@@ -74,7 +74,7 @@
                     'display img)))))
 
 ;; Enable tooltip in graphical mode
-(if window-system
+(if (display-graphic-p)
     (font-lock-add-keywords
      nil
      `((,image-tooltip-re
