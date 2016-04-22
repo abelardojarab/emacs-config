@@ -47,15 +47,6 @@
 ;; Drop down list support, related to popup
 (use-package dropdown-list)
 
-;; Manage popup windows
-(use-package popwin
-  :load-path (lambda () (expand-file-name "popwin/" user-emacs-directory))
-  ;; popwin conflicts with ecb
-  :config (progn
-            (push '("^\*helm .+\*$" :regexp t) popwin:special-display-config)
-            (push '("^\*helm-.+\*$" :regexp t) popwin:special-display-config)
-            (popwin-mode -1)))
-
 ;; Turn on subword-mode for non-lispy languages
 (use-package subword
   :config (progn (mapc (lambda (mode)

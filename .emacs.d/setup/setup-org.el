@@ -309,9 +309,9 @@
   :load-path (lambda () (expand-file-name "orgtblasciiplot/" user-emacs-directory)))
 
 ;; Org Table of Contents
-(use-package org-toc
-  :load-path (lambda () (expand-file-name "org-toc/" user-emacs-directory))
-  :config(add-hook 'org-mode-hook 'org-toc-enable))
+(use-package toc-org
+  :load-path (lambda () (expand-file-name "toc-org/" user-emacs-directory))
+  :config(add-hook 'org-mode-hook 'toc-org-enable))
 
 ;; Nice bulleted lists
 (use-package org-autolist

@@ -4,7 +4,7 @@
 
 ;; Author: Johan Andersson <johan.rejeep@gmail.com>
 ;; Maintainer: Johan Andersson <johan.rejeep@gmail.com>
-;; Version: 0.17.2
+;; Version: 0.18.2
 ;; Keywords: files, directories
 ;; URL: http://github.com/rejeep/f.el
 ;; Package-Requires: ((s "1.7.0") (dash "2.2.0"))
@@ -76,7 +76,8 @@ If PATH is not allowed to be modified, throw error."
 
 (defun f-expand (path &optional dir)
   "Expand PATH relative to DIR (or `default-directory')."
-  (directory-file-name (expand-file-name path dir)))
+  (let (file-name-handler-alist)
+    (directory-file-name (expand-file-name path dir))))
 
 (defun f-filename (path)
   "Return the name of PATH."
@@ -100,7 +101,7 @@ If PATH is not allowed to be modified, throw error."
     (let* ((paths (-map 'f-split paths))
            (common (caar paths))
            (re nil))
-      (while (--all? (equal (car it) common) paths)
+      (while (and (not (null (car paths))) (--all? (equal (car it) common) paths))
         (setq paths (-map 'cdr paths))
         (push common re)
         (setq common (caar paths)))
@@ -119,8 +120,15 @@ If PATH is not allowed to be modified, throw error."
   "Return everything but the file extension of PATH."
   (file-name-sans-extension path))
 
+(defun f-swap-ext (path ext)
+  "Return PATH but with EXT as the new extension.
+EXT must not be nil or empty."
+  (if (s-blank? ext)
+      (error "extension cannot be empty or nil.")
+    (concat (f-no-ext path) "." ext)))
+
 (defun f-base (path)
-  "Return the name of PATH, excluding the extension if file."
+  "Return the name of PATH, excluding the extension of file."
   (f-no-ext (f-filename path)))
 
 (defun f-relative (path &optional dir)
@@ -378,6 +386,14 @@ directory, return sum of all files in PATH."
       (-sum (-map 'f-size (f-files path nil t)))
     (nth 7 (file-attributes path))))
 
+(defun f-depth (path)
+  "Return the depth of PATH.
+
+At first, PATH is expanded with `f-expand'. Then the full path is used to
+detect the depth.
+'/' will be zero depth, '/usr' will be one depth. And so on."
+  (- (length (f-split (f-expand path))) 1))
+
 
 ;;;; Misc
 
@@ -488,7 +504,7 @@ RECURSIVE - Search for files and directories recursive."
         parent
       (if (funcall fn dir)
           dir
-        (f-up fn parent)))))
+       (with-no-warnings (f-up fn parent))))))
 
 (defmacro f--traverse-upwards (body &optional path)
   "Anaphoric version of `f-traverse-upwards'."

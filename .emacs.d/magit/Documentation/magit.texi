@@ -55,7 +55,6 @@ General Public License for more details.
 @insertcopying
 @end ifnottex
 
-
 @menu
 * Introduction::
 * Installation::
@@ -76,12 +75,16 @@ General Public License for more details.
 @detailmenu
 --- The Detailed Node Listing ---
 
+
 Installation
 
 * Updating from an older release::
 * Installing from an Elpa archive::
 * Installing from the Git repository::
 * Post-installation tasks::
+
+
+
 
 Interface concepts
 
@@ -100,6 +103,7 @@ Modes and Buffers
 * Automatic Saving of File-Visiting Buffers::
 * Automatic Reverting of File-Visiting Buffers::
 
+
 Sections
 
 * Section movement::
@@ -107,6 +111,9 @@ Sections
 * Section hooks::
 * Section types and values::
 * Section options::
+
+
+
 
 Running Git
 
@@ -132,6 +139,7 @@ Status buffer
 * Status header sections::
 * Status options::
 
+
 Logging
 
 * Refreshing logs::
@@ -139,12 +147,15 @@ Logging
 * Select from log::
 * Reflog::
 
+
 Diffing
 
 * Refreshing diffs::
 * Diff buffer::
 * Diff options::
 * Revision buffer::
+
+
 
 References buffer
 
@@ -163,19 +174,26 @@ Manipulating
 * Resetting::
 * Stashing::
 
+
 Staging and unstaging
 
 * Staging from file-visiting buffers::
+
+
 
 Committing
 
 * Initiating a commit::
 * Editing commit messages::
 
+
+
+
 Rebasing
 
 * Editing rebase sequences::
 * Rebase sequence log::
+
 
 Cherry picking
 
@@ -190,6 +208,8 @@ Transferring
 * Creating and sending patches::
 * Applying patches::
 
+
+
 Miscellaneous
 
 * Tagging::
@@ -200,10 +220,13 @@ Miscellaneous
 * Minor mode for buffers visiting files::
 * Minor mode for buffers visiting blobs::
 
+
+
 Customizing
 
 * Per-repository configuration::
 * Essential settings::
+
 
 Essential settings
 
@@ -222,11 +245,14 @@ Calling Git
 * Getting a value from Git::
 * Calling Git for effect::
 
+
 Section plumbing
 
 * Creating sections::
 * Section selection::
 * Matching sections::
+
+
 
 Conventions
 
@@ -238,6 +264,7 @@ FAQ
 * Magit is slow::
 * I changed several thousand files at once and now Magit is unusable::
 * I am having problems committing::
+* Diffs are collapsed after un-/staging::
 * I don't understand how branching and pushing work::
 * I don't like the key binding in v2.4: I don't like the key binding in v24. 
 * I cannot install the pre-requisites for Magit v2::
@@ -254,7 +281,6 @@ FAQ
 * Emacs 24.5 hangs when loading Magit: Emacs 245 hangs when loading Magit. 
 * Symbol's value as function is void --some::
 * Where is the branch manager::
-
 @end detailmenu
 @end menu
 
@@ -660,7 +686,6 @@ You might also want to enable @code{global-magit-file-mode} (see @ref{Minor mode
 
 @node Interface concepts
 @chapter Interface concepts
-
 
 @menu
 * Modes and Buffers::
@@ -1647,7 +1672,6 @@ option when acting on a single section.
 
 @node Running Git
 @section Running Git
-
 
 @menu
 * Viewing Git output::
@@ -3495,7 +3519,6 @@ Hook run by @code{magit-blame-next-chunk} and @code{magit-blame-previous-chunk}.
 
 @node Manipulating
 @chapter Manipulating
-
 
 @menu
 * Repository setup::
@@ -5369,10 +5392,10 @@ are not stashed.
 @cindex magit-stash-worktree
 @item @kbd{z w} @tie{}@tie{}@tie{}@tie{}(@code{magit-stash-worktree})
 
-Create a stash of the working tree only.  Untracked files are
-included according to popup arguments.  One prefix argument is
-equivalent to @code{--include-untracked} while two prefix arguments are
-equivalent to @code{--all}.
+Create a stash of unstaged changes in the working tree.  Untracked
+files are included according to popup arguments.  One prefix
+argument is equivalent to @code{--include-untracked} while two prefix
+arguments are equivalent to @code{--all}.
 
 @kindex z x
 @cindex magit-stash-keep-index
@@ -5403,10 +5426,10 @@ are not stashed.
 @cindex magit-snapshot-worktree
 @item @kbd{z W} @tie{}@tie{}@tie{}@tie{}(@code{magit-snapshot-worktree})
 
-Create a snapshot of the working tree only.  Untracked files are
-included according to popup arguments.  One prefix argument is
-equivalent to @code{--include-untracked} while two prefix arguments are
-equivalent to @code{--all}-.
+Create a snapshot of unstaged changes in the working tree.
+Untracked files are included according to popup arguments.  One
+prefix argument is equivalent to @code{--include-untracked} while two
+prefix arguments are equivalent to @code{--all}-.
 
 @kindex z a
 @cindex magit-stash-apply
@@ -5465,7 +5488,6 @@ Remove all stashes saved in REF's reflog by deleting REF.
 
 @node Transferring
 @chapter Transferring
-
 
 @menu
 * Remotes::
@@ -5910,7 +5932,6 @@ changes made since the sequence started.
 
 @node Miscellaneous
 @chapter Miscellaneous
-
 
 @menu
 * Tagging::
@@ -7105,7 +7126,6 @@ git exits with a non-zero exit status.  For debugging purposes.
 @node Section plumbing
 @section Section plumbing
 
-
 @menu
 * Creating sections::
 * Section selection::
@@ -7446,7 +7466,6 @@ of this variable and then calling this @code{magit-refresh-function}.
 @node Conventions
 @section Conventions
 
-
 @menu
 * Confirmation and completion::
 * Theming Faces::
@@ -7617,6 +7636,7 @@ made it into the manual yet, see @uref{https://github.com/magit/magit/wiki/FAQ}.
 * Magit is slow::
 * I changed several thousand files at once and now Magit is unusable::
 * I am having problems committing::
+* Diffs are collapsed after un-/staging::
 * I don't understand how branching and pushing work::
 * I don't like the key binding in v2.4: I don't like the key binding in v24. 
 * I cannot install the pre-requisites for Magit v2::
@@ -7657,6 +7677,28 @@ commit.  Also see @ref{Performance,Performance}.
 That likely means that Magit is having problems finding an appropriate
 emacsclient executable.  See @ref{Configuring With-Editor,,,with-editor,}
 and @ref{Debugging,,,with-editor,}.
+
+@node Diffs are collapsed after un-/staging
+@section Diffs are collapsed after un-/staging
+
+Currently when one part of a Magit buffer has to be updated the whole
+buffer is recreated from scratch.  That obviously isn't good for
+performance and will be fixed eventually.  Meanwhile we need a kludge
+that prevents the update from taking very long under certain
+circumstances, e.g. when showing the difference for hundrets of
+changes files.
+
+For that reason the variable @code{magit-diff-expansion-treshhold} was added,
+defaulting to one second.  If it takes longer than that to recreate a
+Magit buffer, then no further diff sections are expanded because
+that's one of the steps that take the longest.  If a diff is not
+expanded, then some work can be delayed until it actually is.
+
+You can then still expand sections manually, but when you refresh the
+complete buffer explicitly using @code{g} or by performing an action which
+triggers a refresh, then previously expanded diffs could be collapsed.
+You can set @code{magit-diff-expansion-treshhold} to a higher value to
+prevent that from happening.
 
 @node I don't understand how branching and pushing work
 @section I don't understand how branching and pushing work

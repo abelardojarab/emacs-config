@@ -8,7 +8,7 @@ with files and directories in Emacs.
 
 ## Installation
 
-It's available on [Melpa](http://melpa.milkbox.net/):
+It's available on [Melpa](https://melpa.org/):
 
     M-x package-install f
 
@@ -26,8 +26,9 @@ Or you can just dump `f.el` in your load path somewhere.
 * [f-common-parent](#f-common-parent-paths) `(paths)`
 * [f-ext](#f-ext-path) `(path)`
 * [f-no-ext](#f-no-ext-path) `(path)`
+* [f-swap-ext](#f-swap-ext) `(path ext)`
 * [f-base](#f-base-path) `(path)`
-* [f-relative](#f-relative-path-optional-file) `(path &optional file)`
+* [f-relative](#f-relative-path-optional-dir) `(path &optional dir)`
 * [f-short](#f-short-path) `(path)`
 * [f-long](#f-long-path) `(path)`
 * [f-canonical](#f-canonical-path) `(path)`
@@ -74,6 +75,7 @@ Or you can just dump `f.el` in your load path somewhere.
 ### Stats
 
 * [f-size](#f-size-path) `(path)`
+* [f-depth](#f-depth-path) `(path)`
 
 ### Misc
 
@@ -168,9 +170,19 @@ Return everything but the file extension of PATH.
 (f-no-ext "path/to/directory") ;; => "path/to/directory"
 ```
 
+### f-swap-ext `(path ext)`
+
+Return PATH but with EXT as the new extension.
+EXT must not be nil or empty.
+
+```lisp
+(f-swap-ext "path/to/file.ext" "org") ;; => "path/to/file.org"
+(f-swap-ext "path/to/file.ext" "") ;; => error
+```
+
 ### f-base `(path)`
 
-Return the name of PATH, excluding the extension if file.
+Return the name of PATH, excluding the extension of file.
 
 ```lisp
 (f-base "path/to/file.ext") ;; => "file"
@@ -394,8 +406,8 @@ Alias: `f-dir?`
 Return t if PATH is file, false otherwise.
 
 ```lisp
-(f-directory? "path/to/file.txt") ;; => t
-(f-directory? "path/to/dir") ;; => nil
+(f-file? "path/to/file.txt") ;; => t
+(f-file? "path/to/dir") ;; => nil
 ```
 
 ### f-symlink? `(path)`
@@ -541,6 +553,20 @@ directory, return sum of all files in PATH.
 (f-size "path/to/dir")
 ```
 
+### f-depth `(path)`
+
+Return the depth of PATH.
+
+At first, PATH is expanded with `f-expand'. Then the full path is used to
+detect the depth.
+'/' will be zero depth, '/usr' will be one depth. And so on.
+
+```lisp
+(f-depth "/") ;; 0
+(f-depth "/var/") ;; 1
+(f-depth "/usr/local/bin") ;; 3
+```
+
 ### f-this-file `()`
 
 Return path to this file.
@@ -660,6 +686,11 @@ Only allow PATH-OR-PATHS and decendants to be modified in BODY.
 ```
 
 ## Changelog
+
+### v0.18.0
+
+* Add `f-swap-ext` (by @phillord)
+* Add `f-depth` (by @cheunghy)
 
 ### v0.17.0
 

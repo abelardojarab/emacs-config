@@ -169,6 +169,12 @@
             ;; ;; Go to the opposite side of line from the end or beginning of line
             (setq helm-swoop-move-to-line-cycle t)))
 
+;; Biblio (helm-bibtex requirement)
+;; extensible Emacs package for browsing and fetching references
+(use-package biblio
+  :defer t
+  :load-path (lambda () (expand-file-name "biblio/" user-emacs-directory))
+
 ;; Helm bibtex
 (use-package helm-bibtex
   :defer t

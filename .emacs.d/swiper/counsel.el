@@ -144,8 +144,9 @@ Or the time of the last minibuffer update.")
             (ivy--sort-maybe
              cands))
            (setq counsel-grep-last-line nil)
-           (setq counsel--async-duration
-                 (time-to-seconds (time-since counsel--async-start)))
+           (when counsel--async-start
+             (setq counsel--async-duration
+                   (time-to-seconds (time-since counsel--async-start))))
            (let ((re (funcall ivy--regex-function ivy-text)))
              (unless (stringp re)
                (setq re (caar re)))
@@ -1507,6 +1508,7 @@ the command."
   "Call `swiper' for small buffers and `counsel-grep' for large ones."
   (interactive)
   (if (and (buffer-file-name)
+           (not (buffer-narrowed-p))
            (not (ignore-errors
                   (file-remote-p (buffer-file-name))))
            (> (buffer-size)

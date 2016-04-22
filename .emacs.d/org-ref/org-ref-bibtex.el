@@ -404,7 +404,6 @@ This is defined in `org-ref-bibtex-journal-abbreviations'."
       (while (re-search-forward char nil t)
         (replace-match (cdr (assoc char org-ref-nonascii-latex-replacements))))
       (goto-char (point-min))))
-  (save-buffer)
   (occur "[^[:ascii:]]"))
 
 
@@ -976,7 +975,7 @@ This generates the candidates for the file. Some of this code is
 adapted from `helm-bibtex-parse-bibliography'. This function runs
 when called, it resets the cache for the BIBFILE."
   (with-current-buffer (find-file-noselect bibfile)
-    (goto-char (point-min))
+    (bibtex-beginning-of-first-entry)
     (message "Updating cache for %s" bibfile)
     (let ((hash (secure-hash 'sha256 (current-buffer)))
 	  (entries

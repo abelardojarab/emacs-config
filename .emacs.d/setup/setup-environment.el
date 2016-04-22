@@ -189,29 +189,6 @@
   "Prevent annoying \"Active processes exist\" query when you quit Emacs."
   (flet ((process-list ())) ad-do-it))
 
-;; Always split horizontally
-(setq split-width-threshold 78)
-(setq split-height-threshold nil)
-
-;; Helper function for horizontal splitting
-(defun split-horizontally-for-temp-buffers ()
-  "Split the window horizontally for temp buffers."
-  (when (and (one-window-p t)
-             (not (active-minibuffer-window)))
-    (split-window-horizontally)))
-(add-hook 'temp-buffer-setup-hook 'split-horizontally-for-temp-buffers)
-
-;; horizontal splitting - when opening files or buffers with C-x4b or C-x4f
-(defun split-window-prefer-horizonally (window)
-  "If there's only one window (excluding any possibly active
-         minibuffer), then split the current window horizontally."
-  (if (and (one-window-p t)
-           (not (active-minibuffer-window)))
-      (let ((split-height-threshold nil))
-        (split-window-sensibly window))
-    (split-window-sensibly window)))
-(setq split-window-preferred-function 'split-window-prefer-horizonally)
-
 ;; Enable tooltips
 (tooltip-mode t)
 (setq tooltip-use-echo-area t)

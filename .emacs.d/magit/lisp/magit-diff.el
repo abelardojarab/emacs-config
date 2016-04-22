@@ -1399,7 +1399,9 @@ section or a child thereof."
         (setq orig (magit-decode-git-path orig)))
       (setq file (magit-decode-git-path file))
       ;; KLUDGE `git-log' ignores `--no-prefix' when `-L' is used.
-      (when (derived-mode-p 'magit-log-mode)
+      (when (and (derived-mode-p 'magit-log-mode)
+                 (--first (string-match-p "\\`-L" it)
+                          (nth 1 magit-refresh-args)))
         (setq file (substring file 2))
         (when orig
           (setq orig (substring orig 2))))
@@ -1435,8 +1437,9 @@ section or a child thereof."
         (magit-delete-line)
         (setq modified t))
       (cond
-       ((looking-at "^Submodule [^ ]+ \\([^ :]+\\)\\( (rewind)\\)?:$")
-        (magit-bind-match-strings (range rewind) nil
+       ((and (looking-at "^Submodule \\([^ ]+\\) \\([^ :]+\\)\\( (rewind)\\)?:$")
+             (equal (match-string 1) module))
+        (magit-bind-match-strings (_module range rewind) nil
           (magit-delete-line)
           (while (looking-at "^  \\([<>]\\) \\(.+\\)$")
             (magit-delete-line))
@@ -1464,8 +1467,9 @@ section or a child thereof."
               (magit-git-wash (apply-partially 'magit-log-wash-log 'module)
                 "log" "--oneline" "--left-right" range)
               (delete-char -1)))))
-       ((looking-at "^Submodule [^ ]+ \\([^ ]+\\) (\\([^)]+\\))$")
-        (magit-bind-match-strings (_range msg) nil
+       ((and (looking-at "^Submodule \\([^ ]+\\) \\([^ ]+\\) (\\([^)]+\\))$")
+             (equal (match-string 1) module))
+        (magit-bind-match-strings (_module _range msg) nil
           (magit-delete-line)
           (magit-insert-section (file module)
             (magit-insert-heading

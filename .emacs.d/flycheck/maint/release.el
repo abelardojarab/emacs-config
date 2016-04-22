@@ -74,9 +74,11 @@
   "Call git with ARGS.
 
 Fail if git returns a non-zero exit code."
-  (let ((status (apply #'call-process "git" nil nil nil args)))
-    (unless (eq status 0)
-      (error "Git exited with status %s (args: %S)" status args))))
+  (with-temp-buffer
+    (let ((status (apply #'call-process "git" nil t nil args)))
+      (unless (eq status 0)
+        (error "Git exited with status %s (args: %S):
+%s" status args (buffer-string))))))
 
 (defun flycheck/working-tree-changed-p ()
   "Whether the working tree has changed.
@@ -219,7 +221,6 @@ Please fix the error, push, wait for the Travis CI build and try again"))))
 (defun flycheck/make-release ()
   "Create and publish a Flycheck release."
   (flycheck/check-releasable)
-  (error "YAY")
   (let* ((current-version (flycheck/current-version))
          (new-version (flycheck/next-version current-version)))
     (unless (flycheck/snapshot-version-p current-version)

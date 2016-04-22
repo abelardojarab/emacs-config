@@ -3885,10 +3885,10 @@ Also see [[info:gitman#git-stash]].
 
 - Key: z w, magit-stash-worktree
 
-  Create a stash of the working tree only.  Untracked files are
-  included according to popup arguments.  One prefix argument is
-  equivalent to ~--include-untracked~ while two prefix arguments are
-  equivalent to ~--all~.
+  Create a stash of unstaged changes in the working tree.  Untracked
+  files are included according to popup arguments.  One prefix
+  argument is equivalent to ~--include-untracked~ while two prefix
+  arguments are equivalent to ~--all~.
 
 - Key: z x, magit-stash-keep-index
 
@@ -3911,10 +3911,10 @@ Also see [[info:gitman#git-stash]].
 
 - Key: z W, magit-snapshot-worktree
 
-  Create a snapshot of the working tree only.  Untracked files are
-  included according to popup arguments.  One prefix argument is
-  equivalent to ~--include-untracked~ while two prefix arguments are
-  equivalent to ~--all~-.
+  Create a snapshot of unstaged changes in the working tree.
+  Untracked files are included according to popup arguments.  One
+  prefix argument is equivalent to ~--include-untracked~ while two
+  prefix arguments are equivalent to ~--all~-.
 
 - Key: z a, magit-stash-apply
 
@@ -5675,6 +5675,27 @@ commit.  Also see [[*Performance]].
 That likely means that Magit is having problems finding an appropriate
 emacsclient executable.  See [[info:with-editor#Configuring With-Editor]]
 and [[info:with-editor#Debugging]].
+
+** Diffs are collapsed after un-/staging
+
+Currently when one part of a Magit buffer has to be updated the whole
+buffer is recreated from scratch.  That obviously isn't good for
+performance and will be fixed eventually.  Meanwhile we need a kludge
+that prevents the update from taking very long under certain
+circumstances, e.g. when showing the difference for hundrets of
+changes files.
+
+For that reason the variable ~magit-diff-expansion-treshhold~ was added,
+defaulting to one second.  If it takes longer than that to recreate a
+Magit buffer, then no further diff sections are expanded because
+that's one of the steps that take the longest.  If a diff is not
+expanded, then some work can be delayed until it actually is.
+
+You can then still expand sections manually, but when you refresh the
+complete buffer explicitly using ~g~ or by performing an action which
+triggers a refresh, then previously expanded diffs could be collapsed.
+You can set ~magit-diff-expansion-treshhold~ to a higher value to
+prevent that from happening.
 
 ** I don't understand how branching and pushing work
 

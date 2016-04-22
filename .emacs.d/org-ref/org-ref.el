@@ -4,9 +4,9 @@
 
 ;; Author: John Kitchin <jkitchin@andrew.cmu.edu>
 ;; URL: https://github.com/jkitchin/org-ref
-;; Version: 0.7.2
+;; Version: 0.8.0
 ;; Keywords: org-mode, cite, ref, label
-;; Package-Requires: ((dash "2.11.0") (helm "1.5.5") (helm-bibtex "1.0.0") (hydra "0.13.2") (key-chord "0") (s "1.10.0") (f "0.18.0") (emacs "24.4"))
+;; Package-Requires: ((dash "2.11.0") (helm "1.5.5") (helm-bibtex "2.0.0") (hydra "0.13.2") (key-chord "0") (s "1.10.0") (f "0.18.0") (emacs "24.4"))
 
 ;; This file is not currently part of GNU Emacs.
 
@@ -37,6 +37,8 @@
 (eval-when-compile
   (require 'cl))
 (require 'dash)
+(require 'f)
+(require 's)
 (require 'doi-utils)
 (require 'org-ref-bibtex)
 (require 'org-ref-utils)
@@ -1162,6 +1164,9 @@ ARG does nothing."
      ;; this is the org-format #+label:
      (count-matches (format "^#\\+label:\\s-*%s\\b[^-:]" label)
                     (point-min) (point-max))
+     ;; #+name:
+     (count-matches (format "^#\\+name:\\s-*%s\\b[^-:]" label)
+		    (point-min) (point-max))
      (let ((custom-id-count 0))
        (when (and (buffer-file-name)
 		  (file-exists-p (buffer-file-name)))
@@ -1265,7 +1270,18 @@ A number greater than one means multiple labels!"
 	(progn
           (goto-char (point-min))
           (re-search-forward
-           (format "^#\\+name:\\s-*\\(%s\\)\\b" label) nil t)))
+           (format "^#\\+name:\\s-*\\(%s\\)\\b" label) nil t))
+
+	;; CUSTOM_ID
+	(progn
+	  (goto-char (point-min))
+	  (let ((p (org-map-entries
+		    (lambda ()
+		      (point))
+		    (format "CUSTOM_ID=\"%s\"" label))))
+	    (if (not (= 1 (length p)))
+		nil
+	      (goto-char (car p))))))
 
      ;; we did not find anything, so go back to where we came
      (org-mark-ring-goto)
@@ -1325,6 +1341,18 @@ A number greater than one means multiple labels!"
       (org-element-property :name table))))
 
 
+(defun org-ref-get-names ()
+  "Return list of names in the buffer."
+  (save-excursion
+    (save-restriction
+      (widen)
+      (goto-char (point-min))
+      (let ((matches '()))
+	(while (re-search-forward "^#\\+name:\\s-+\\(.*\\)" nil t)
+	  (pushnew (match-string 1) matches))
+	matches))))
+
+
 (defun org-ref-get-labels ()
   "Return a list of labels in the buffer that you can make a ref link to.
 This is used to complete ref links."
@@ -1348,7 +1376,9 @@ This is used to complete ref links."
                 ;; #+tblname: and actually #+label
                 (org-ref-get-tblnames)
                 ;; CUSTOM_IDs
-                (org-ref-get-custom-ids))))))
+                (org-ref-get-custom-ids)
+		;; names
+		(org-ref-get-names))))))
 
 
 (defun org-ref-complete-link (&optional arg)
@@ -1545,7 +1575,8 @@ set in `org-ref-default-bibliography'"
       (setq org-ref-bibliography-files (list (buffer-file-name)))
       (throw 'result org-ref-bibliography-files))
     ;; otherwise, check current file for a bibliography source
-    (save-excursion
+    (save-excursion (save-restriction
+      (widen)                
       (goto-char (point-min))
       ;;  look for a bibliography link
       (when (re-search-forward "\\<bibliography:\\([^\]\|\n]+\\)" nil t)
@@ -1597,7 +1628,7 @@ set in `org-ref-default-bibliography'"
 	    (throw 'result org-ref-bibliography-files))))
 
       ;; we did not find anything. use defaults
-      (setq org-ref-bibliography-files org-ref-default-bibliography)))
+      (setq org-ref-bibliography-files org-ref-default-bibliography))))
 
   ;; set reftex-default-bibliography so we can search
   (set (make-local-variable 'reftex-default-bibliography) org-ref-bibliography-files)
@@ -2772,6 +2803,25 @@ move to the beginning of the previous cite link after this one."
                         (progn
                           (forward-line 4)
                           (point)))))
+      ;; ;; CUSTOM_ID
+      (goto-char (point-min))
+      ;; do we have a CUSTOM-ID?
+      (let ((heading (org-map-entries
+		      (lambda ()
+			(buffer-substring
+			 (progn
+			   (forward-line -1)
+			   (beginning-of-line)
+			   (point))
+			 (progn
+			   (forward-line 4)
+			   (point))))
+		      (format  "CUSTOM_ID=\"%s\"" label))))
+	;; (message-box heading)
+	(when heading
+	  (throw 'result (car heading))))
+
+
       (throw 'result "!!! NO CONTEXT FOUND !!!"))))
 
 
