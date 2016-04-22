@@ -173,7 +173,7 @@
 ;; extensible Emacs package for browsing and fetching references
 (use-package biblio
   :defer t
-  :load-path (lambda () (expand-file-name "biblio/" user-emacs-directory))
+  :load-path (lambda () (expand-file-name "biblio/" user-emacs-directory)))
 
 ;; Helm bibtex
 (use-package helm-bibtex
