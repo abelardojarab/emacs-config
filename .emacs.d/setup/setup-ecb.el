@@ -206,8 +206,7 @@ the layout contains no persistent compilation window and the other windows get a
 little more place. "
               (ecb-set-history-buffer)
               (ecb-split-ver 0.3)
-              (ecb-set-speedbar-buffer)
-              ;; (ecb-set-sources-buffer)
+              (ecb-set-directories-buffer)
               (select-window (next-window (next-window)))
               (ecb-set-methods-buffer)
               (select-window (previous-window (selected-window) 0)))
@@ -227,7 +226,8 @@ little more place. "
                          (when (bound-and-true-p ecb-minor-mode)
                            ;; this is to get the methods buffer to refresh correctly.
                            ;; semantic idle mode refresh doesn't seem to work all that well.
-                           (semantic-force-refresh))))
+                           (semantic-force-refresh)
+                           (ecb-rebuild-methods-buffer))))
 
             ;; Redefine fonts, not needed
             (set-face-attribute 'ecb-default-general-face nil
