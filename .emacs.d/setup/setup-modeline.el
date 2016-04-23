@@ -44,7 +44,7 @@
                 (paredit-mode . " π")
                 (eldoc-mode . "")
                 (abbrev-mode . "")
-                (git-gutter+-mode . " ⎇")
+                (git-gutter+-mode . " ⇥")
                 (smartparens-mode . " π")
 
                 ;; Major modes
@@ -117,8 +117,13 @@ want to use in the modeline *in lieu of* the original.")
                                       (powerline-buffer-id nil 'l)
                                       (powerline-raw " ")
                                       (funcall separator-left mode-line face1)
-                                      (powerline-raw '(:eval (format " Proj[%s]"
+                                      (powerline-raw '(:eval (format " ⑆[%s]"
                                                                      (projectile-project-name))) face1)
+                                      (if (executable-find "git")
+                                          (powerline-raw '(:eval (format " ⑃[%s]"
+                                                                       (s-trim
+                                                                        (shell-command-to-string
+                                                                         "git rev-parse --abbrev-ref HEAD"))) face1)))
                                       (powerline-raw " ƒ" face1)
                                       (powerline-raw mode-line-misc-info face1 'r)))
                                     (rhs
