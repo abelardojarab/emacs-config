@@ -205,8 +205,9 @@ If you have not set a compilation-window in `ecb-compile-window-height' then
 the layout contains no persistent compilation window and the other windows get a
 little more place. "
               (ecb-set-history-buffer)
-              (ecb-split-ver 0.5)
-              (ecb-set-sources-buffer)
+              (ecb-split-ver 0.3)
+              (ecb-set-speedbar-buffer)
+              ;; (ecb-set-sources-buffer)
               (select-window (next-window (next-window)))
               (ecb-set-methods-buffer)
               (select-window (previous-window (selected-window) 0)))
@@ -225,7 +226,7 @@ little more place. "
                       '(lambda()
                          (when (bound-and-true-p ecb-minor-mode)
                            ;; this is to get the methods buffer to refresh correctly.
-                           ;; semantic idle mode refresh doesn't seem to work all that     well.
+                           ;; semantic idle mode refresh doesn't seem to work all that well.
                            (semantic-force-refresh))))
 
             ;; Redefine fonts, not needed
@@ -238,29 +239,16 @@ little more place. "
                   speedbar-show-unknown-files t
                   speedbar-smart-directory-expand-flag t
                   speedbar-directory-button-trim-method 'trim
-                  speedbar-use-images nil
+                  speedbar-use-images t
                   speedbar-indentation-width 2
                   speedbar-use-imenu-flag t
                   speedbar-file-unshown-regexp "flycheck-.*"
+                  speedbar-update-flag t
                   sr-speedbar-width 40
                   sr-speedbar-width-x 40
                   sr-speedbar-auto-refresh t
                   sr-speedbar-skip-other-window-p t
                   sr-speedbar-right-side nil)
-
-            ;; Refresh the speedbar when relevant hooks are run.
-            (defvar graphene-speedbar-refresh-hooks-added nil
-              "Whether hooks have been added to refresh speedbar.")
-            (defvar graphene-speedbar-refresh-hooks nil
-              "Dummy variable.")
-
-            (add-hook 'speedbar-mode-hook
-                      (when (not graphene-speedbar-refresh-hooks-added)
-                        (lambda ()
-                          (mapc (lambda (hook)
-                                  (add-hook hook 'speedbar-refresh))
-                                graphene-speedbar-refresh-hooks)
-                          (setq graphene-speedbar-refresh-hooks t))))
 
             ;; More familiar keymap settings.
             (add-hook 'speedbar-reconfigure-keymaps-hook
@@ -271,70 +259,6 @@ little more place. "
 
             ;; Highlight the current line
             (add-hook 'speedbar-mode-hook '(lambda () (hl-line-mode 1)))
-
-            ;; Pin and unpin the speedbar
-            (defadvice speedbar-update-directory-contents
-                (around graphene-speedbar-pin-directory activate disable)
-              "Pin the speedbar to the directory set in graphene-speedbar-pinned-directory."
-              (let ((default-directory graphene-speedbar-pinned-directory))
-                ad-do-it))
-
-            (defadvice speedbar-dir-follow
-                (around graphene-speedbar-prevent-follow activate disable)
-              "Prevent speedbar changing directory on button clicks."
-              (speedbar-toggle-line-expansion))
-
-            (defadvice speedbar-directory-buttons-follow
-                (around graphene-speedbar-prevent-root-follow activate disable)
-              "Prevent speedbar changing root directory on button clicks.")
-
-            (defvar graphene-speedbar-pin-advice
-              '((speedbar-update-directory-contents around graphene-speedbar-pin-directory)
-                (speedbar-dir-follow around graphene-speedbar-prevent-follow)
-                (speedbar-directory-buttons-follow around graphene-speedbar-prevent-root-follow))
-              "Advice to be enabled and disabled on graphene-[un]-pin-speedbar.")
-
-            (defun graphene-speedbar-pin-advice-activate ()
-              "Activate the advice applied to speedbar functions in order to pin it to a directory."
-              (mapc 'ad-activate (mapcar 'car graphene-speedbar-pin-advice)))
-
-            (defun graphene-pin-speedbar (directory)
-              "Prevent the speedbar from changing the displayed root directory."
-              (setq graphene-speedbar-pinned-directory directory)
-              (mapc (lambda (ls) (apply 'ad-enable-advice ls)) graphene-speedbar-pin-advice)
-              (graphene-speedbar-pin-advice-activate))
-
-            (defun graphene-unpin-speedbar ()
-              "Allow the speedbar to change the displayed root directory."
-              (mapc (lambda (ls) (apply 'ad-disable-advice ls)) graphene-speedbar-pin-advice)
-              (graphene-speedbar-pin-advice-activate))
-
-            ;; Always use the last selected window for loading files from speedbar.
-            (defvar last-selected-window
-              (if (not (eq (selected-window) sr-speedbar-window))
-                  (selected-window)
-                (other-window)))
-
-            (defadvice select-window (after remember-selected-window activate)
-              "Remember the last selected window."
-              (unless (or (eq (selected-window) sr-speedbar-window) (not (window-live-p (selected-window))))
-                (setq last-selected-window (selected-window))))
-
-            (defun sr-speedbar-before-visiting-file-hook ()
-              "Function that hooks `speedbar-before-visiting-file-hook'."
-              (select-window last-selected-window))
-
-            (defun sr-speedbar-before-visiting-tag-hook ()
-              "Function that hooks `speedbar-before-visiting-tag-hook'."
-              (select-window last-selected-window))
-
-            (defun sr-speedbar-visiting-file-hook ()
-              "Function that hooks `speedbar-visiting-file-hook'."
-              (select-window last-selected-window))
-
-            (defun sr-speedbar-visiting-tag-hook ()
-              "Function that hooks `speedbar-visiting-tag-hook'."
-              (select-window last-selected-window))
 
             ;; Add Javascript
             (speedbar-add-supported-extension ".js")
