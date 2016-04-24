@@ -40,11 +40,11 @@
             ;; https://www.masteringemacs.org/article/hiding-replacing-modeline-strings
             (defvar mode-line-cleaner-alist
               `((auto-complete-mode . " α")
-                (yas/minor-mode . " υ")
+                (yas/minor-mode . "")
                 (paredit-mode . " π")
                 (eldoc-mode . "")
                 (abbrev-mode . "")
-                (git-gutter+-mode . " ⇥")
+                (git-gutter+-mode . "")
                 (smartparens-mode . " π")
 
                 ;; Major modes
@@ -117,14 +117,23 @@ want to use in the modeline *in lieu of* the original.")
                                       (powerline-buffer-id nil 'l)
                                       (powerline-raw " ")
                                       (funcall separator-left mode-line face1)
-                                      (powerline-raw '(:eval (format " ⑆[%s]"
+
+                                      ;; Project
+                                      (powerline-raw '(:eval (format " Project[%s]"
                                                                      (projectile-project-name))) face1)
+
+                                      ;; Git branch
                                       (if (executable-find "git")
-                                          (powerline-raw '(:eval (format " ⑃[%s]"
-                                                                       (s-trim
-                                                                        (shell-command-to-string
-                                                                         "git rev-parse --abbrev-ref HEAD"))) face1)))
-                                      (powerline-raw " ƒ" face1)
+                                          (let ((branch (s-trim
+                                                         (shell-command-to-string
+                                                          "git rev-parse --abbrev-ref HEAD"))))
+
+                                            ;; Display branch name
+                                            (if (equal (length (s-split-words branch)) 1)
+                                                (powerline-raw '(:eval (format " Git[%s]" branch) face1)))))
+
+                                      ;; Miscellaneous info
+                                      (powerline-raw " ")
                                       (powerline-raw mode-line-misc-info face1 'r)))
                                     (rhs
                                      (list
@@ -146,7 +155,7 @@ want to use in the modeline *in lieu of* the original.")
                                       (funcall separator-left face1 face2)
                                       (powerline-major-mode face2 'l)
                                       (powerline-process face2)
-                                      (powerline-raw ":" face2)
+                                      (powerline-raw " :" face2)
                                       (powerline-simpler-minor-display
                                        (powerline-minor-modes face2 'l))
 
