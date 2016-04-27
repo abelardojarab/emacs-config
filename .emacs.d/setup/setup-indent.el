@@ -71,7 +71,7 @@
                         (not (display-graphic-p)))
               (setq indent-guide-char "┊"))
             (setq indent-guide-recursive t)
-            (add-hook 'prog-mode-hook (lambda () (indent-guide-mode t)))))
+            (add-hook 'python-mode-hook (lambda () (indent-guide-mode t)))))
 
 ;; Highlight indentation levels
 (use-package highlight-indentation

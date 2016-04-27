@@ -24,22 +24,27 @@
 
 ;;; Code:
 
-;; cmake-based setup for flycheck and code completion
-(use-package cpputils-cmake
-  :defer t
-  :commands cppcm-reload-all
-  :if (executable-find "cmake")
-  :load-path (lambda () (expand-file-name "cpputils-cmake/" user-emacs-directory))
-  :init (progn
-            (add-hook 'c-mode-hook 'cppcm-reload-all)
-            (add-hook 'c++-mode-hook 'cppcm-reload-all)))
-
+;; cmake syntax highlighting
 (use-package cmake-mode
   :defer t
   :commands cmake-mode
   :mode (("/CMakeLists\\.txt\\'" . cmake-mode)
          ("\\.cmake\\'" . cmake-mode))
   :load-path (lambda () (expand-file-name "cmake-mode/" user-emacs-directory)))
+
+;; cmake-based IDE
+(use-package cmake-ide
+  :defer t
+  :after irony-mode
+  :commands use-cmake-ide
+  :load-path (lambda () (expand-file-name "cmake-ide/" user-emacs-directory))
+  :init (if (executable-find "cmake")
+            (add-hook 'c-mode-common-hook #'use-cmake-ide))
+  :config (progn
+            (defun use-cmake-ide ()
+              (cmake-ide-setup)
+              (when (cmake-ide--locate-cmakelists)
+                (setq cmake-ide-dir (concat (cmake-ide--locate-cmakelists) "build/"))))))
 
 (provide 'setup-cmake)
 ;;; setup-cmake.el ends here
