@@ -32,6 +32,16 @@
          ("\\.cmake\\'" . cmake-mode))
   :load-path (lambda () (expand-file-name "cmake-mode/" user-emacs-directory)))
 
+;; cmake utilities
+(use-package cpputils-cmake
+  :commands cppcm-reload-all
+  :defer t
+  :if (executable-find "cmake")
+  :load-path (lambda () (expand-file-name "cpputils-cmake/" user-emacs-directory))
+  :init (progn
+          (add-hook 'c-mode-hook 'cppcm-reload-all)
+          (add-hook 'c++-mode-hook 'cppcm-reload-all)))
+
 ;; cmake-based IDE
 (use-package cmake-ide
   :defer t
