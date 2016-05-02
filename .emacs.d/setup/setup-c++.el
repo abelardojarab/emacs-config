@@ -86,7 +86,15 @@
             (add-hook 'c-mode-hook 'irony-mode)))
   :config (progn
             (setq irony-server-install-prefix "~/.emacs.cache/irony-server/")
-            (push "-std=c++11" irony-additional-clang-options)))
+            (push "-std=c++11" irony-additional-clang-options)
+
+
+            (if (not (file-exists-p "~/.emacs.cache/irony-user-dir"))
+                (make-directory "~/.emacs.cache/irony-user-dir") t)
+            (setq irony-user-dir "~/.emacs.cache/irony-user-dir/")
+
+            ;; Irony json projects
+            (require 'irony-cdb-json)))
 
 (provide 'setup-c++)
 ;;; setup-c++.el ends here
