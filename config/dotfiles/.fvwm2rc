@@ -1,5 +1,5 @@
 # .fvwm/.fvwm2rc
-SetEnv fvwm_wallpaper $[HOME]/workspace/emacsfull/Images/Wallpapers/2048x1152-mapnationalgeographic.png
+SetEnv fvwm_wallpaper $[HOME]/workspace/emacsfull/Images/Wallpapers/debian_stream_clean.png
 
 # Pixmap
 ImagePath $[HOME]/workspace/emacsfull/Images/Icons:$[HOME]/Images/Icons:/usr/share/icons/fvwm:/usr/share/icons/hicolor/16x16
@@ -48,12 +48,11 @@ AddToFunc   InitFunction
 + I Exec exec plank
 + I Exec exec trayer --SetDockType true --distance 200 --padding 10 --transparent true --tint a6aaaa --alpha 50 --edge top --align right --expand true --widthtype percent --width 12 --heighttype pixel --height 24 --distancefrom right
 + I Exec exec /usr/lib/x86_64-linux-gnu/notify-osd
-+ I Exec exec hp-systray
-# + I Exec exec gkrellm --geometry +1940+530
-+ I Exec exec insync start
-+ I Exec exec dropbox start
-+ I Exec exec /opt/google/chrome-beta/chrome
-+ I Exec exec google-musicmanager
++ I Exec exec bash -c 'if [ $DISPLAY = ":99" ]; then insync start; fi'
++ I Exec exec bash -c 'if [ $DISPLAY = ":99" ]; then dropbox start; fi'
++ I Exec exec bash -c 'if [ $DISPLAY = ":99" ]; then /opt/google/chrome-beta/chrome; fi'
++ I Exec exec bash -c 'if [ $DISPLAY = ":99" ]; then google-musicmanager; fi'
++ I Exec exec bash -c 'if [ $DISPLAY = ":99" ]; then hp-systray; fi'
 
 # Window Decor
 DestroyDecor MyDecoration
