@@ -50,7 +50,7 @@ AddToFunc   InitFunction
 + I Exec exec /usr/lib/x86_64-linux-gnu/notify-osd
 + I Exec exec bash -c 'if [ $DISPLAY = ":99" ]; then insync start; fi'
 + I Exec exec bash -c 'if [ $DISPLAY = ":99" ]; then dropbox start; fi'
-+ I Exec exec bash -c 'if [ $DISPLAY = ":99" ]; then /opt/google/chrome-beta/chrome; fi'
+# + I Exec exec bash -c 'if [ $DISPLAY = ":99" ]; then /opt/google/chrome-beta/chrome; fi'
 + I Exec exec bash -c 'if [ $DISPLAY = ":99" ]; then google-musicmanager; fi'
 + I Exec exec bash -c 'if [ $DISPLAY = ":99" ]; then hp-systray; fi'
 
