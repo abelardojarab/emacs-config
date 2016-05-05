@@ -24,7 +24,7 @@
 
 ;;; Code:
 
-(setq scroll-margin 20
+(setq scroll-margin 7
       scroll-step 1
       scroll-conservatively 10000
       scroll-preserve-screen-position 1
@@ -33,6 +33,7 @@
 
 ;; Enable smooth scrolling package
 (use-package smooth-scrolling
+  :disabled t ;; ruins the shift selection
   :load-path (lambda () (expand-file-name "smooth-scrolling/" user-emacs-directory))
   :config (smooth-scrolling-mode 1))
 

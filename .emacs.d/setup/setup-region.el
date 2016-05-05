@@ -34,9 +34,17 @@
   :config (progn
             (region-bindings-mode-enable)
 
-            ;; extra key bindings
-            (define-key region-bindings-mode-map (kbd "d") 'move-text-down)
+            ;; shift select bindings
+            (define-key region-bindings-mode-map (kbd "<prior>") 'shift-mark-backward-page)
+            (define-key region-bindings-mode-map (kbd "<next>") 'shift-mark-forward-page)
+            (define-key region-bindings-mode-map (kbd "<left>") 'shift-mark-backward-char)
+            (define-key region-bindings-mode-map (kbd "<right>") 'shift-mark-forward-char)
+            (define-key region-bindings-mode-map (kbd "<home>") 'shift-mark-backward-paragraph)
+            (define-key region-bindings-mode-map (kbd "<end>") 'shift-mark-forward-paragraph)
+
+            ;; movement bindings
             (define-key region-bindings-mode-map (kbd "u") 'move-text-up)
+            (define-key region-bindings-mode-map (kbd "d") 'move-text-down)
             (define-key region-bindings-mode-map (kbd "<") 'decrease-left-margin)
             (define-key region-bindings-mode-map (kbd ">") 'increase-right-margin)
             (define-key region-bindings-mode-map (kbd "c") 'kill-ring-save)

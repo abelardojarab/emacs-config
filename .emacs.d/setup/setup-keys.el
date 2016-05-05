@@ -31,10 +31,15 @@
 ;; Windows-like mouse/arrow movement & selection
 (use-package cua-base
   :init (progn
+          (require 'shift-mark)
           (transient-mark-mode t)
           (setq shift-select-mode t))
   :config (progn
             (cua-mode 1)))
+
+;; key bindings for shift select
+(global-set-key [S-prior]      'shift-mark-backward-page)
+(global-set-key [S-next]       'shift-mark-forward-page)
 
 ;; Smart tab
 (use-package smart-tab
@@ -234,6 +239,10 @@
 (define-key my-keys-minor-mode-map (kbd "C-0") 'helm-buffers-list)
 (define-key my-keys-minor-mode-map (kbd "<f5>") 'smex)
 (define-key my-keys-minor-mode-map (kbd "C-*") 'helm-swoop)
+
+;; key bindings for shift select
+(define-key my-keys-minor-mode-map [S-prior]      'shift-mark-backward-page)
+(define-key my-keys-minor-mode-map [S-next]       'shift-mark-forward-page)
 
 ;; Define custom key mode
 (define-minor-mode my-keys-minor-mode
