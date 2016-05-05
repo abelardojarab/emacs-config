@@ -34,8 +34,7 @@
   :if (executable-find "doxymacs_parser")
   :diminish doxymacs-mode
   :load-path (lambda () (expand-file-name "doxymacs/" user-emacs-directory))
-  :init (add-hook 'c-mode-common-hook 'doxymacs-mode)
-  :config (add-hook 'c-mode-common-hook 'doxymacs-font-lock))
+  :init (add-hook 'c-mode-common-hook 'doxymacs-mode))
 
 (provide 'setup-doxygen)
 ;;; setup-doxygen.el ends here
