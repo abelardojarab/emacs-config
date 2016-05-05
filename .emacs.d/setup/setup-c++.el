@@ -35,13 +35,16 @@
 
             ;; C/C++ style
             (defun my/c-mode-init ()
-              (c-set-style "k&r")
+              (c-set-style "bsd")
+              (c-set-offset 'substatement-open 0)
               (c-toggle-electric-state -1)
               (setq comment-multi-line t)
-              (setq-default c-default-style "k&r")
-              (setq-default c-basic-offset 3))
-            (add-hook 'c-mode-hook #'my/c-mode-init)
-            (add-hook 'c++-mode-hook #'my/c-mode-init)))
+              (setq c-default-style "k&r")
+              (setq c-basic-offset 4)
+              (setq c-indent-level 4)
+              (setq tab-width 4))
+            (add-hook 'c-mode-hook 'my/c-mode-init)
+            (add-hook 'c++-mode-hook 'my/c-mode-init)))
 
 ;; Insert and delete C++ header files automatically.
 (use-package cpp-auto-include
