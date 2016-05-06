@@ -341,6 +341,7 @@ to view the docstring of the syntax checker.  Likewise, you may use
    3. `go-vet`
    4. `go-build` or `go-test`
    5. `go-errcheck`
+   6. `go-unconvert`
 
    .. syntax-checker:: go-gofmt
 
@@ -387,6 +388,12 @@ to view the docstring of the syntax checker.  Likewise, you may use
       Check for unhandled error returns in Go with errcheck_.
 
       .. _errcheck: https://github.com/kisielk/errcheck
+
+   .. syntax-checker:: go-unconvert
+
+      Check for unnecessary type conversions with unconvert_.
+
+      .. _unconvert: https://github.com/mdempsky/unconvert
 
 .. supported-language:: Groovy
 
@@ -576,6 +583,22 @@ to view the docstring of the syntax checker.  Likewise, you may use
 
       Check syntax with the `Lua compiler <http://www.lua.org/>`_.
 
+.. supported-language:: Markdown
+
+   .. syntax-checker:: markdown-mdl
+
+      Check Markdown with `markdownlint <https://github.com/mivok/markdownlint/>`_.
+
+      .. option:: flycheck-markdown-mdl-rules
+
+         A list of enabled rules.
+
+      .. option:: flycheck-markdown-mdl-tags
+
+         A list of enabled rule tags.
+
+      .. syntax-checker-config-file:: flycheck-markdown-mdl-style
+
 .. supported-language:: Perl
 
    Flycheck checks Perl with `perl` and `perl-perlcritic`.
@@ -621,9 +644,11 @@ to view the docstring of the syntax checker.  Likewise, you may use
 
    .. syntax-checker:: php-phpcs
 
-      Check style with `PHP CodeSniffer`_.
+      Check style with `PHP Code Sniffer`_.
 
-      .. _PHP CodeSniffer: https://github.com/squizlabs/PHP_CodeSniffer
+      Needs PHP Code Sniffer 2.6 or newer.
+
+      .. _PHP Code Sniffer: http://pear.php.net/package/PHP_CodeSniffer
 
       .. option:: flycheck-phpcs-standard
 
@@ -667,7 +692,7 @@ to view the docstring of the syntax checker.  Likewise, you may use
 
    .. syntax-checker:: python-flake8
 
-      Check syntax and lint with `flake8 <https://flake8.readthedocs.org/>`_.
+      Check syntax and lint with `flake8 <https://flake8.readthedocs.io/>`_.
 
       .. option:: flycheck-flake8-error-level-alist
 

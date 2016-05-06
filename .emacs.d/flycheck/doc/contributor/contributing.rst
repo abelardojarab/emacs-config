@@ -97,9 +97,12 @@ Run ``make help`` to see a list of all available targets.  Some common ones are:
   eventually be removed.
 - ``make integ`` runs all integration tests for Flycheck syntax checkers.  These
   tests are very dependent on the checker programs and their versions; expect
-  failures when running this target.
+  failures when running this target.  Set :makevar:`SELECTOR` to run only tests
+  matching a specific ERT selector, e.g. ``make SELECTOR='(language haskell)'
+  integ`` to run only integration tests for Haskell.  ``make LANGUAGE=haskell
+  integ`` is a shortcut for this.
 
-.. _Cask: http://cask.readthedocs.org/
+.. _Cask: http://cask.readthedocs.io/
 .. _Buttercup: https://github.com/jorgenschaefer/emacs-buttercup
 
 Pull requests
@@ -113,10 +116,10 @@ Flycheck. Github provides great documentation about `Pull Requests`_.
 Please make your pull requests against the ``master`` branch.
 
 Use ``make specs test`` to test your pull request locally. When making changes
-to syntax checkers of a specific language, it’s also a good idea to run ``make
-integ`` and check whether the tests for the particular language still work.  You
-may safely ignore failures for other languages; a successful ``make integ`` is
-by no means mandatory for pull requests!
+to syntax checkers of a specific language, it’s also a good idea to run
+:samp:`make LANGUAGE={language} integ` and check whether the tests for the
+particular language still work.  A successful ``make integ`` is by no means
+mandatory for pull requests, though, we will test your changes, too.
 
 All pull requests are reviewed by a :ref:`maintainer <flycheck-maintainers>`.
 Feel free to mention individual developers (e.g. ``@lunaryorn``) to request a
@@ -200,38 +203,40 @@ Issue management
 We manage all issues and pull requests on our `Waffle board`_. The board has six
 columns which correspond to ``S-`` labels on Github:
 
--  The *Backlog* (no ``S`` label) holds all incoming issues. Pull
-   requests waiting for review sit here, as well as bugs that were
-   reported or stories and tasks that are not ready to work on yet.
--  In *Ready* (``S-ready`` label) we keep issues that we are ready to
-   work on. This includes bugs which we can reproduce and fix, and pull
-   requests that were reviewed and are ready to be merged now. Look at
-   this column to see what’s coming next to Flycheck.
--  When we start to work on an issue it moves into *In Progress*
-   (``S-in progress`` label).
--  *Blocked* (``S-blocked`` label) issues are waiting for something,
-   like a change in an upstream project or a feedback from another
-   developer. A \ ``B-`` label may provide additional clue why the issue
-   is blocked. Blocked issues may also appear in the backlog, but in
-   this column we actively seek to remove the blockers and move the
-   issue to *Ready*.
--  *Community* (``S-needs your love`` label) issues are those that we
-   will not work on ourselves. These issues need pull requests from the
-   community to be solved. Look at this column to find spots to
-   contribute to.
--  Eventually issues move into *Done* when they are closed.
+- The *Backlog* (no ``S`` label) holds all incoming issues. Pull requests
+  waiting for review sit here, as well as bugs that were reported or stories and
+  tasks that are not ready to work on yet.
+- *Community* (``S-needs your love`` label) issues are those that we will not
+  work on ourselves. These issues need pull requests from the community to be
+  solved. Look at this column to find spots to contribute to.
+- *Blocked* (``S-blocked`` label) issues are waiting for something, like a
+  change in an upstream project or a feedback from another developer. A \ ``B-``
+  label may provide additional clue why the issue is blocked. Blocked issues may
+  also appear in the backlog, but in this column we actively seek to remove the
+  blockers and move the issue to *Ready*.
+- In *Ready* (``S-ready`` label) we keep issues that we are ready to work
+  on. This includes bugs which we can reproduce and fix, and pull requests that
+  were reviewed and are ready to be merged now. Look at this column to see
+  what’s coming next to Flycheck.
+- When we start to work on an issue it moves into *In Progress* (``S-in
+  progress`` label).
+- Open pull requests, whether from contributors or core developers, start in the
+  ``S-to review`` column for review by maintainers.  Once review is complete we
+  will either merge the pull request and thus move it to *Done*, or move the
+  issue back to ``S-in progress`` if the pull request still needs work.
+- Eventually issues move into *Done* when they are closed.
 
 In addition to these columns which reflect the basic issue workflow we
 also use a variety of labels to group issues:
 
--  Yellow, **A**-prefixed labels describes the area of Flycheck the
-   issue belongs to.
--  Orange, **B**-prefixed labels gives reasons why an issue is blocked.
--  Green, **E**-prefixed labels denotes the level of experience
-   necessary to address an issue.
--  Blue, **K**-prefixed labels tells the kind of an issue, i.e. whether
-   it’s a bug, a feature request, etc.
--  Grey, **R**-prefixed labels inform about the resolution of an issue.
+- Yellow, **A**-prefixed labels describes the area of Flycheck the issue belongs
+  to.
+- Orange, **B**-prefixed labels gives reasons why an issue is blocked.
+- Green, **E**-prefixed labels denotes the level of experience necessary to
+  address an issue.
+- Blue, **K**-prefixed labels tells the kind of an issue, i.e. whether it’s a
+  bug, a feature request, etc.
+- Grey, **R**-prefixed labels inform about the resolution of an issue.
 
 Out of tree contributions
 =========================

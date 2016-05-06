@@ -3173,12 +3173,14 @@ of the file will be interrupted because there are too many #ifdef configurations
          :checker coffee-coffeelint))))
 
 (flycheck-ert-def-checker-test coq coq syntax-error
+  (skip-unless (load "coq" 'noerror 'nomessage))
   (flycheck-ert-should-syntax-check
    "language/coq/syntax-error.v" 'coq-mode
    '(6 12 error "'end' expected after [branches] (in [match_constr])."
        :checker coq)))
 
 (flycheck-ert-def-checker-test coq coq error
+  (skip-unless (load "coq" 'noerror 'nomessage))
   (flycheck-ert-should-syntax-check
    "language/coq/error.v" 'coq-mode
    '(7 21 error "In environment
@@ -3284,6 +3286,14 @@ See https://github.com/flycheck/flycheck/issues/531 and Emacs bug #19206"))
    "language/emacs-lisp/checkdoc-elisp-mode-regression.el" 'emacs-lisp-mode
    '(11 nil warning "All variables and subroutines might as well have a documentation string"
         :checker emacs-lisp-checkdoc)))
+
+(flycheck-ert-def-checker-test (emacs-lisp-checkdoc) emacs-lisp
+                               inherits-checkdoc-variables
+  ;; This test doesn't run on 24.3 and earlier because the corresponding
+  ;; checkdoc variables were only introduced in 24.4.
+  (skip-unless (version<= "24.4" emacs-version))
+  (flycheck-ert-should-syntax-check
+   "language/emacs-lisp/local-checkdoc-variables.el" 'emacs-lisp-mode))
 
 (flycheck-ert-def-checker-test (emacs-lisp emacs-lisp-checkdoc) emacs-lisp
                                checks-compressed-file
@@ -3462,6 +3472,15 @@ See https://github.com/flycheck/flycheck/issues/531 and Emacs bug #19206"))
          :checker go-errcheck)
      '(9 9 warning "Ignored `error` returned from `os.Stat(\"enoent\")`"
          :checker go-errcheck))))
+
+(flycheck-ert-def-checker-test go-unconvert go nil
+  :tags '(language-go external-tool)
+  (flycheck-ert-with-env
+      `(("GOPATH" . ,(flycheck-ert-resource-filename "language/go")))
+    (flycheck-ert-should-syntax-check
+     "language/go/unconvert/unconvert.go" 'go-mode
+     '(7 17 warning "unnecessary conversion"
+         :checker go-unconvert))))
 
 (flycheck-ert-def-checker-test groovy groovy syntax-error
   ;; Work around
@@ -3803,14 +3822,14 @@ Why not:
 (flycheck-ert-def-checker-test php php syntax-error
   (flycheck-ert-should-syntax-check
    "language/php/syntax-error.php" 'php-mode
-   '(8 nil error "syntax error, unexpected ')', expecting '('" :checker php)))
+   '(8 nil error "syntax error, unexpected ')', expecting '['" :checker php)))
 
 (flycheck-ert-def-checker-test (php php-phpcs php-phpmd) php nil
   :tags '(phpmd-xml checkstyle-xml)
   (flycheck-ert-should-syntax-check
    "language/php/warnings.php" 'php-mode
-   '(19 1 error "Missing class doc comment"
-        :id "PEAR.Commenting.ClassComment.Missing" :checker php-phpcs)
+   '(1 1 error "Missing file doc comment"
+       :id "PEAR.Commenting.FileComment.Missing" :checker php-phpcs)
    '(21 nil warning "Avoid unused private fields such as '$FOO'."
         :id "UnusedPrivateField" :checker php-phpmd)
    '(21 20 error "Private member variable \"FOO\" must be prefixed with an underscore"
@@ -4000,6 +4019,11 @@ Why not:
    '(7 nil error "buildarch-instead-of-exclusivearch-tag x86_64"
        :checker rpm-rpmlint)
    '(22 nil warning "macro-in-%changelog %{_bindir}" :checker rpm-rpmlint)))
+
+(flycheck-ert-def-checker-test markdown-mdl markdown nil
+  (flycheck-ert-should-syntax-check
+   "language/markdown.md" 'markdown-mode
+   '(1 nil error "First header should be a h1 header" :id "MD002" :checker markdown-mdl)))
 
 (ert-deftest flycheck-locate-sphinx-source-directory/not-in-a-sphinx-project ()
   :tags '(language-rst)

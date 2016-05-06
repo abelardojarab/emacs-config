@@ -1,5 +1,28 @@
-26-cvs (in development)
+27-cvs (in development)
 =======================
+
+- **Breaking changes**
+
+  - Require PHP Code Sniffer 2.6 or newer for ``php-phpcs`` [GH-921]
+
+- New syntax checkers:
+
+  - Go with ``go-unconvert`` [GH-905]
+  - Markdown with ``mdl`` [GH-839] [GH-916]
+
+- Improvements:
+
+  - Pass checkdoc settings from Emacs to `emacs-lisp-checkdoc` [GH-741] [GH-937]
+
+- Bug fixes:
+
+  - Fix parsing of syntax errors in triple-quoted strings for
+    ``python-pycompile`` [GH-948]
+  - Correctly handle rules based on the current file name in ``php-phpcs``
+    [GH-921]
+
+26 (Apr 27, 2016)
+=================
 
 Flycheck now has a `Code of Conduct`_ which defines the acceptable behaviour and
 the moderation guidelines for the Flycheck community. [GH-819]
@@ -67,7 +90,7 @@ version number.  Breaking changes may occur at any point.
   - Indicate disabled checkers in verification buffers [GH-749]
   - Do not enable Flycheck Mode in ``fundamental-mode`` buffers [GH-883]
   - Write ``go test`` output to a temporary files [GH-887]
-  - Check whether ``lintr`` is acutally installed [GH-911]
+  - Check whether ``lintr`` is actually installed [GH-911]
 
 - Bug fixes:
 

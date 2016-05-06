@@ -23,6 +23,10 @@ OPTIPNG = optipng
 # Program options
 EMACSOPTS =
 PATTERN = .*
+LANGUAGE =
+ifdef LANGUAGE
+SELECTOR = (language $(LANGUAGE))
+endif
 
 # Internal variables
 EMACSBATCH = $(CASK) exec $(EMACS) -Q --batch -L . $(EMACSOPTS)
@@ -95,32 +99,39 @@ specs: compile
 .PHONY: unit
 unit: compile
 	$(EMACSBATCH) --load test/run.el -f flycheck-run-tests-main \
-		'(not (tag external-tool))'
+		'(and (not (tag external-tool)) $(SELECTOR))'
 
-.PHONY: int
+.PHONY: integ
 integ: compile
 	$(EMACSBATCH) --load test/run.el -f flycheck-run-tests-main \
-		'(tag external-tool)'
+		'(and (tag external-tool) $(SELECTOR))'
 
 .PHONY: images
 images: $(IMGS)
 
 .PHONY: help
 help:
-	@echo "Run 'make init' first to install and update all local dependencies."
-	@echo ""
-	@echo "Available targets:"
-	@echo "  init:    Initialise the project.  RUN FIRST!"
-	@echo "  compile: Byte-compile Emacs Lisp sources"
-	@echo "  specs:   Run all buttercup specs for Flycheck"
-	@echo "  unit:    Run all ERT unit tests for Flycheck (legacy)"
-	@echo "  integ:   Run all integration tests for Flycheck"
-	@echo "  images:  Generate PNG images from SVG sources"
-	@echo "  clean:   Clean compiled files"
-	@echo "  purge:   Clean everything"
-	@echo ""
-	@echo "Available programs:"
-	@echo "  $(CASK): $(if $(HAVE_CASK),yes,no)"
-	@echo ""
-	@echo "You need $(CASK) to develop Flycheck."
-	@echo "See http://cask.readthedocs.org/ for more information."
+	@echo 'Run `make init` first to install and update all local dependencies.'
+	@echo ''
+	@echo 'Available targets:'
+	@echo '  init:    Initialise the project.  RUN FIRST!'
+	@echo '  compile: Byte-compile Emacs Lisp sources'
+	@echo '  specs:   Run all buttercup specs for Flycheck'
+	@echo '  unit:    Run all ERT unit tests for Flycheck (legacy)'
+	@echo '  integ:   Run all integration tests for Flycheck'
+	@echo '  images:  Generate PNG images from SVG sources'
+	@echo '  clean:   Clean compiled files'
+	@echo '  purge:   Clean everything'
+	@echo ''
+	@echo 'Available make variables:'
+	@echo '  PATTERN:  A regular expression matching spec names to run with `specs`'
+	@echo '  SELECTOR: An ERT selector expression for `unit` and `integ`'
+	@echo '  LANGUAGE: The name of a language for `integ`.  Overrides `ERTSELECTOR`'
+	@echo '  EMCSOPTS: Additional options to pass to `emacs`'
+	@echo '  EMACS:    The path or name of the Emacs to use for tests and compilation'
+	@echo ''
+	@echo 'Available programs:'
+	@echo '  $(CASK): $(if $(HAVE_CASK),yes,no)'
+	@echo ''
+	@echo 'You need $(CASK) to develop Flycheck.'
+	@echo 'See http://cask.readthedocs.io/ for more information.'
