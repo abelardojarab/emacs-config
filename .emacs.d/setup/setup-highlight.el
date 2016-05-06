@@ -55,6 +55,7 @@
 
 ;; Highlight symbol
 (use-package highlight-symbol
+  :defer t
   :commands highlight-symbol-mode
   :load-path (lambda () (expand-file-name "highlight-symbol/" user-emacs-directory))
   :diminish highlight-symbol-mode
@@ -65,12 +66,17 @@
 
 ;; Highlight blocks
 (use-package highlight-blocks
+  :defer t
   :commands highlight-blocks-mode
   :load-path (lambda () (expand-file-name "highlight-blocks/" user-emacs-directory))
-  :diminish highlight-blocks-mode)
+  :diminish highlight-blocks-mode
+  :config (progn (mapc (lambda (mode)
+                         (add-hook mode 'highlight-sexp-mode))
+                       '(prog-mode-hook))))
 
 ;; Highlight s-exp
 (use-package highlight-sexp
+  :defer t
   :commands highlight-sexp-mode
   :load-path (lambda () (expand-file-name "highlight-sexp/" user-emacs-directory))
   :diminish highlight-sexp-mode
