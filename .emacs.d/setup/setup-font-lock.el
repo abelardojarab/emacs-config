@@ -81,5 +81,13 @@
         0 '(face font-lock-keyword-face
                  help-echo image-tooltip)))))
 
+;; Colorize color strings
+(use-package rainbow-mode
+  :load-path (lambda () (expand-file-name "rainbow-mode/" user-emacs-directory))
+  :diminish rainbow-mode
+  :config (progn (mapc (lambda (mode)
+                         (add-hook mode 'rainbow-mode))
+                       '(prog-mode-hook text-mode-hook markdown-mode-hook org-mode-hook))))
+
 (provide 'setup-font-lock)
 ;;; setup-font-lock.el ends here
