@@ -172,7 +172,7 @@ want to use in the modeline *in lieu of* the original.")
                                                   (powerline-width rhs))
                                   (powerline-render rhs)))))))
 
-            (powerline-ha-theme)))
+            (powerline-default-theme)))
 
 (provide 'setup-modeline)
 ;;; setup-modeline.el ends here
