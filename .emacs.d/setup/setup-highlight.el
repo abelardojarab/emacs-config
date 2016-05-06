@@ -53,34 +53,37 @@
                 ad-do-it))
             (add-hook 'org-mode-hook 'local-hl-line-mode-off)))
 
+;; Highlight symbol
+(use-package highlight-symbol
+  :commands highlight-symbol-mode
+  :load-path (lambda () (expand-file-name "highlight-symbol/" user-emacs-directory))
+  :diminish highlight-symbol-mode
+  :config (progn (mapc (lambda (mode)
+                         (add-hook mode 'highlight-symbol-mode))
+                       '(prog-mode-hook))
+                 (setq highlight-symbol-on-navigation-p t)))
+
+;; Highlight blocks
+(use-package highlight-blocks
+  :commands highlight-blocks-mode
+  :load-path (lambda () (expand-file-name "highlight-blocks/" user-emacs-directory))
+  :diminish highlight-blocks-mode)
+
+;; Highlight s-exp
+(use-package highlight-sexp
+  :commands highlight-sexp-mode
+  :load-path (lambda () (expand-file-name "highlight-sexp/" user-emacs-directory))
+  :diminish highlight-sexp-mode
+  :config (progn (mapc (lambda (mode)
+                         (add-hook mode 'highlight-sexp-mode))
+                       '(prog-mode-hook))))
+
 ;; Highlight the latest changes in the buffer (like text inserted from: yank, undo, etc.) until the next command is run
 (use-package volatile-highlights
   :load-path (lambda () (expand-file-name "volatile-highlights/" user-emacs-directory))
   :diminish volatile-highlights-mode
   :config (progn
             (volatile-highlights-mode t)))
-
-;; Highlight blocks
-(use-package highlight-blocks
-  :load-path (lambda () (expand-file-name "highlight-blocks/" user-emacs-directory))
-  :diminish highlight-blocks-mode)
-
-;; Highlight symbol
-(use-package highlight-symbol
-  :load-path (lambda () (expand-file-name "highlight-symbol/" user-emacs-directory))
-  :config (progn (mapc (lambda (mode)
-                         (add-hook mode 'highlight-symbol-mode))
-                       '(prog-mode-hook))
-                 (setq highlight-symbol-on-navigation-p t))
-  :diminish highlight-symbol-mode)
-
-;; Highlight s-exp
-(use-package highlight-sexp
-  :load-path (lambda () (expand-file-name "highlight-sexp/" user-emacs-directory))
-  :diminish highlight-sexp-mode
-  :config (progn (mapc (lambda (mode)
-                         (add-hook mode 'highlight-sexp-mode))
-                       '(prog-mode-hook))))
 
 (provide 'setup-highlight)
 ;;; setup-highlight.el ends here
