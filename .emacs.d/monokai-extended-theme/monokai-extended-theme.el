@@ -1,6 +1,6 @@
 ;;; monokai-extended-theme.el --- Monokai Color Theme for Emacs.
 
-;; Copyright (C) 2015 Katherine Whitlock
+;; Copyright (C) 2015, 2016 Katherine Whitlock
 ;;
 ;; Author: Katherine Whitlock <toroidalcode@gmail.com
 ;; Maintainer: Katherine Whitlock
@@ -24,7 +24,7 @@
 ;; This theme builds on the great work done by lvillani and milouse at
 ;; https://github.com/milouse/el-monokai-theme
 ;; and hbin's molokai theme at https://github.com/hbin/molokai.
-;; 
+;;
 
 ;;; Code:
 
@@ -89,7 +89,7 @@
       (monokai-base01         "#465457")
       (monokai-base02         "#455354")
       (monokai-base03         "#293739")
-      
+
       )
   (custom-theme-set-faces
    'monokai-extended
@@ -100,14 +100,15 @@
    `(fringe ((t (:background ,monokai-bg))))
    `(highlight ((t (:background ,monokai-base2))))
    `(hl-line ((t (:background ,monokai-base1))))
+   `(hl-sexp-background-color ((t (:background ,monokai-base1))))
    `(region ((t (:background ,monokai-base2))
              (t (:inverse-video t))))
    `(warning ((t (:foreground ,monokai-palevioletred :weight bold))))
-   
+
    `(minibuffer-prompt ((t (:foreground ,monokai-orange :bold t))))  ; was fg2
    `(modeline ((t (:background ,monokai-base5 :foreground ,monokai-base4))))
-   
-   
+
+
    `(show-paren-match-face ((t (:background ,monokai-base5))))
    `(scroll-bar ((t (:foreground ,monokai-base4 :background ,monokai-bg))))
    `(popup-scroll-bar-background-face ((t (:background ,monokai-bg))))
@@ -131,7 +132,7 @@
    `(font-lock-type-face ((t (:foreground ,monokai-cyan :italic t))))
    `(font-lock-variable-name-face ((t (:foreground ,monokai-orange)))) ; was green
    `(font-lock-warning-face ((t (:bold t :foreground ,monokai-chartreuse))))
-   
+
    ;; Company
    `(company-tooltip ((t (:foreground ,monokai-base4 :background ,monokai-base2))))
    `(company-tooltip-selection ((t (:foreground ,monokai-orange :background "#333333"))))
@@ -140,10 +141,10 @@
    `(company-tooltip-common-selection ((t (:foreground ,monokai-orange :background ,monokai-base2))))
    `(company-preview ((t (:foreground ,monokai-chartreuse :inherit 'company-tooltip))))
    `(company-preview-common ((t (:foreground ,monokai-orange+5 :background ,monokai-bg))))
-   
+
    ;; CUA
    `(cua-rectangle ((t (:background ,monokai-base1))))
-   
+
    ;; ECB
    `(ecb-default-highlight-face ((t (:foreground ,monokai-orange+5))))
 
@@ -156,8 +157,6 @@
        (:underline (:style wave :color ,monokai-orange-5) :inherit unspecified))
       ;;(,t (:foreground ,yellow-hc :background ,yellow-lc :weight bold :underline t))
       ))
-
-   
 
    ;; helm
    `(helm-source-header ((t (:foreground ,monokai-purple :background ,monokai-base1 :height 1.2))))
@@ -180,10 +179,10 @@
    `(ido-first-match ((t (:foreground ,monokai-purple :bold t))))
    `(ido-only-match ((t (:foreground ,monokai-grapefruit))))
    `(ido-subdir ((t (:foreground ,monokai-chartreuse))))
-   
+
    ;; linum-mode
    `(linum ((t (:foreground ,monokai-grey-2 :background ,monokai-grey+5))))
-     
+
    ;; Merlin
    `(merlin-type-face ((t (:background ,monokai-base2 :bold t))))
 

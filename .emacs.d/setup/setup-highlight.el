@@ -74,5 +74,13 @@
                  (setq highlight-symbol-on-navigation-p t))
   :diminish highlight-symbol-mode)
 
+;; Highlight s-exp
+(use-package highlight-sexp
+  :load-path (lambda () (expand-file-name "highlight-sexp/" user-emacs-directory))
+  :diminish highlight-sexp-mode
+  :config (progn (mapc (lambda (mode)
+                         (add-hook mode 'highlight-sexp-mode))
+                       '(prog-mode-hook))))
+
 (provide 'setup-highlight)
 ;;; setup-highlight.el ends here
