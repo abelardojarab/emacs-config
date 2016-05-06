@@ -66,7 +66,7 @@
   :init (setq tabbar-ruler-global-tabbar 't) ;; If you want tabbar
   :config (progn
             (setq tabbar-separator '(0.5))
-            (tabbar-ruler-group-buffer-groups)
+            (tabbar-ruler-group-by-projectile-project)
 
             ;; Fix for tabbar under Emacs 24.4
             ;; store tabbar-cache into a real hash,
