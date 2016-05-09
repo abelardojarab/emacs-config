@@ -39,8 +39,8 @@
 ;; Faster parsing
 (setq semantic-idle-work-parse-neighboring-files-flag nil)
 (setq semantic-idle-work-update-headers-flag nil)
-(setq semantic-idle-scheduler-idle-time 30)
-(setq semantic-idle-scheduler-work-idle-time 1800)
+(setq semantic-idle-scheduler-idle-time 60)
+(setq semantic-idle-scheduler-work-idle-time 1800) ;; default is 60
 (setq semantic-idle-scheduler-max-buffer-size 1)
 
 ;; Default directory
@@ -51,9 +51,9 @@
 ;; Disable Semantics for large files
 (add-hook 'semantic--before-fetch-tags-hook
           (lambda () (if (and (> (point-max) 500)
-                              (not (semantic-parse-tree-needs-rebuild-p)))
-                         nil
-                       t)))
+                         (not (semantic-parse-tree-needs-rebuild-p)))
+                    nil
+                  t)))
 
 ;; This prevents Emacs to become uresponsive
 (defun semanticdb-kill-hook ()
@@ -61,10 +61,21 @@
 (defun semanticdb-create-table-for-file-not-in-buffer (arg)
   nil)
 
+;; etags support
+(when (cedet-ectag-version-check t)
+  (semantic-load-enable-primary-ectags-support))
+
+;; global/gtags support
+(when (cedet-gnu-global-version-check t)
+  (semanticdb-enable-gnu-global-databases 'c-mode t)
+  (semanticdb-enable-gnu-global-databases 'c++-mode t))
+
 ;; Enable which-function-mode for selected major modes
 (setq which-func-modes '(org-mode markdown-mode
                                   ecmascript-mode emacs-lisp-mode lisp-mode java-mode
                                   c-mode c++-mode makefile-mode sh-mode))
+
+;; which-function-mode
 (which-func-mode t)
 (mapc (lambda (mode)
         (add-hook mode (lambda () (which-function-mode t))))
