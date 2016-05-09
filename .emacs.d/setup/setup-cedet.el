@@ -70,6 +70,10 @@
   (semanticdb-enable-gnu-global-databases 'c-mode t)
   (semanticdb-enable-gnu-global-databases 'c++-mode t))
 
+;; semantic support for clang
+(if (executable-find "clang")
+  (require 'semantic/bovine/clang))
+
 ;; Enable which-function-mode for selected major modes
 (setq which-func-modes '(org-mode markdown-mode
                                   ecmascript-mode emacs-lisp-mode lisp-mode java-mode
