@@ -25,7 +25,7 @@
 ;;; Code:
 
 ;; Always split horizontally
-(setq split-width-threshold 78)
+(setq split-width-threshold 3000)
 (setq split-height-threshold nil)
 
 ;; Helper function for horizontal splitting
