@@ -292,6 +292,9 @@
 ;; Setup Markdown
 (require 'setup-markdown)
 
+;; Setup xUnit
+(require 'setup-xunit)
+
 ;; Setup shell
 (require 'setup-eshell)
 
