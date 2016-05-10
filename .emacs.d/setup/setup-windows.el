@@ -25,7 +25,7 @@
 ;;; Code:
 
 ;; Always split horizontally
-(setq split-width-threshold 3000)
+(setq split-width-threshold 80)
 (setq split-height-threshold nil)
 
 ;; Helper function for horizontal splitting
@@ -53,6 +53,86 @@
   :commands popwin-mode
   :load-path (lambda () (expand-file-name "popwin/" user-emacs-directory))
   :config (progn
+            (defvar popwin:special-display-config-backup popwin:special-display-config)
+            (setq display-buffer-function 'popwin:display-buffer)
+
+            ;; basic
+            (push '("*Help*" :stick t :noselect t) popwin:special-display-config)
+            (push '("*helm world time*" :stick t :noselect t) popwin:special-display-config)
+            (push '("*Pp Eval Output*" :stick t) popwin:special-display-config)
+
+            ;; magit
+            (push '("*magit-process*" :stick t) popwin:special-display-config)
+
+            ;; quickrun
+            (push '("*quickrun*" :stick t) popwin:special-display-config)
+
+            ;; dictionaly
+            (push '("*dict*" :stick t) popwin:special-display-config)
+            (push '("*sdic*" :stick t) popwin:special-display-config)
+
+            ;; popwin for slime
+            (push '(slime-repl-mode :stick t) popwin:special-display-config)
+
+            ;; man
+            (push '(Man-mode :stick t :height 20) popwin:special-display-config)
+
+            ;; Elisp
+            (push '("*ielm*" :stick t) popwin:special-display-config)
+            (push '("*eshell pop*" :stick t) popwin:special-display-config)
+
+            ;; pry
+            (push '(inf-ruby-mode :stick t :height 20) popwin:special-display-config)
+
+            ;; python
+            (push '("*Python*"   :stick t) popwin:special-display-config)
+            (push '("*Python Help*" :stick t :height 20) popwin:special-display-config)
+            (push '("*jedi:doc*" :stick t :noselect t) popwin:special-display-config)
+
+            ;; ecb
+            (push '("*ECB History*" :position left :width 0.3 :stick t)
+                  popwin:special-display-config)
+            (push '("*ECB Source*" :position left :width 0.3 :stick t)
+                  popwin:special-display-config)
+            (push '("*ECB History*" :position right :width 0.3 :stick t)
+                  popwin:special-display-config)
+
+            ;; sgit
+            (push '("*sgit*" :position right :width 0.5 :stick t)
+                  popwin:special-display-config)
+
+            ;; git-gutter
+            (push '("*git-gutter:diff*" :width 0.5 :stick t)
+                  popwin:special-display-config)
+
+            ;; es-results-mode
+            (push '(es-result-mode :stick t :width 0.5)
+                  popwin:special-display-config)
+
+            ;; direx
+            (push '(direx:direx-mode :position left :width 40 :dedicated t)
+                  popwin:special-display-config)
+
+            (push '("*Occur*" :stick t) popwin:special-display-config)
+
+            ;; cmake-ide-compilation
+            (push '("*compilation*" :stick t :height 30)
+                  popwin:special-display-config)
+
+            ;; org-mode
+            (push '("*Org tags*" :stick t :height 30)
+                  popwin:special-display-config)
+
+            ;; Completions
+            (push '("*Completions*" :stick t :noselect t) popwin:special-display-config)
+
+            ;; ggtags
+            (push '("*ggtags-global*" :stick t :noselect t :height 30) popwin:special-display-config)
+
+            ;; async shell commands
+            (push '("*Async Shell Command*" :stick t) popwin:special-display-config)
+
+            ;; helm
             (push '("^\*helm .+\*$" :regexp t) popwin:special-display-config)
             (push '("^\*helm-.+\*$" :regexp t) popwin:special-display-config)
 

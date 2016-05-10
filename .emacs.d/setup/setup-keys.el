@@ -58,15 +58,25 @@
 (add-hook 'markdown-mode-hook 'ac-tab-noconflict)
 (add-hook 'org-mode-hook 'ac-tab-noconflict)
 
+;; popup-based buffer switcher
+(use-package popup-switcher
+  :defer t
+  :commands (psw-switch-buffer psw-switch-function psw-switch-projectile-files psw-navigate-files)
+  :load-path (lambda () (expand-file-name "popup-switcher/" user-emacs-directory)))
+
+;; switch window
+(use-package switch-window
+  :defer t
+  :if (display-graphic-p)
+  :commands switch-window
+  :load-path (lambda () (expand-file-name "switch-window/" user-emacs-directory)))
+
 ;; Treat 'y' or <CR> as yes, 'n' as no.
 (fset 'yes-or-no-p 'y-or-n-p)
 (define-key query-replace-map [return] 'act)
 (define-key query-replace-map [?\C-m] 'act)
 
 ;; Zoom in/out like feature, without mouse wheel
-(global-set-key '[C-kp-add] 'text-scale-increase)
-(global-set-key '[C-kp-subtract] 'text-scale-decrease)
-(global-set-key '[C-+] 'text-scale-increase)
 (global-set-key '[C--] 'text-scale-decrease)
 
 ;; Commands to make my programming environment nice
