@@ -229,6 +229,15 @@ little more place. "
                            (semantic-force-refresh)
                            (ecb-rebuild-methods-buffer))))
 
+            ;; Reparse after a file load
+            (add-hook 'find-file-hook
+                      '(lambda()
+                         (when (bound-and-true-p ecb-minor-mode)
+                           ;; this is to get the methods buffer to refresh correctly.
+                           ;; semantic idle mode refresh doesn't seem to work all that well.
+                           (semantic-force-refresh)
+                           (ecb-rebuild-methods-buffer))))
+
             ;; Redefine fonts, not needed
             (set-face-attribute 'ecb-default-general-face nil
                                 :inherit 'default)
