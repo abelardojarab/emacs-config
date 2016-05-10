@@ -58,31 +58,18 @@
 
             ;; basic
             (push '("*Help*" :stick t :noselect t) popwin:special-display-config)
-            (push '("*helm world time*" :stick t :noselect t) popwin:special-display-config)
-            (push '("*Pp Eval Output*" :stick t) popwin:special-display-config)
+            (push '("*Cedet Global*" :stick t :noselect t) popwin:special-display-config)
 
             ;; magit
             (push '("*magit-process*" :stick t) popwin:special-display-config)
-
-            ;; quickrun
-            (push '("*quickrun*" :stick t) popwin:special-display-config)
 
             ;; dictionaly
             (push '("*dict*" :stick t) popwin:special-display-config)
             (push '("*sdic*" :stick t) popwin:special-display-config)
 
-            ;; popwin for slime
-            (push '(slime-repl-mode :stick t) popwin:special-display-config)
-
-            ;; man
-            (push '(Man-mode :stick t :height 20) popwin:special-display-config)
-
             ;; Elisp
             (push '("*ielm*" :stick t) popwin:special-display-config)
             (push '("*eshell pop*" :stick t) popwin:special-display-config)
-
-            ;; pry
-            (push '(inf-ruby-mode :stick t :height 20) popwin:special-display-config)
 
             ;; python
             (push '("*Python*"   :stick t) popwin:special-display-config)
@@ -115,7 +102,7 @@
 
             (push '("*Occur*" :stick t) popwin:special-display-config)
 
-            ;; cmake-ide-compilation
+            ;; compilation
             (push '("*compilation*" :stick t :height 30)
                   popwin:special-display-config)
 
