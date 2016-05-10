@@ -1,0 +1,954 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/Mozilla/JavaScript_code_modules/Promise.jsm/Examples by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 19:38:37 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <script async="" src="../../../../../../www.google-analytics.com/analytics.js"></script><script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+  
+    
+  
+
+  
+  <title>Examples</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+  
+    
+    
+    <link href="../../../../../../developer.cdn.mozilla.net/static/build/styles/mdn.593f20d8c365.css" rel="stylesheet" type="text/css">
+
+    
+  
+    <link href="../../../../../../developer.cdn.mozilla.net/static/build/styles/wiki.13dd9abdfb62.css" rel="stylesheet" type="text/css">
+
+    
+
+    
+
+  <!-- common social tags -->
+  
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon144.a6e4162070f4.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon114.0e9fabd44f85.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon72.8ff9d87c82a0.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon57.a2490b9a2d76.png">
+  <!-- basic favicon -->
+  
+    
+  
+  <link rel="shortcut icon" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon32.e02854fdcf73.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/html5shiv.3948ccddab6f.js" charset="utf-8"></script>
+  <![endif]-->
+
+  
+  <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Mozilla/JavaScript_code_modules/Promise.jsm/Examples$json">
+  <link rel="canonical" href="Examples.html">
+
+  
+
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="Examples">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Mozilla/JavaScript_code_modules/Promise.jsm/Examples">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Mozilla/JavaScript_code_modules/Promise.jsm/Examples">
+  <meta name="twitter:title" content="Examples">
+  
+  <meta property="og:description" content="If you have a function that is a promise, and want to end it and throw reject, return an error object:">
+  <meta name="description" content="If you have a function that is a promise, and want to end it and throw reject, return an error object:">
+  <meta name="twitter:description" content="If you have a function that is a promise, and want to end it and throw reject, return an error object:">
+  
+
+  
+    
+
+
+
+  
+</head>
+<body data-slug="Mozilla/JavaScript_code_modules/Promise.jsm/Examples" contextmenu="edit-history-menu" data-search-url="" class="document  ">
+
+  <script type="text/javascript">
+    (function(win) {
+        'use strict';
+
+        
+            (function(){
+  var FLAGS = {
+    'compat_api': false,'kumaediting': false,'page_move': false,'registration_disabled': false,'search_suggestions': false,'section_edit': false,'spam_admin_override': false,'spam_checks_enabled': true,'spam_spammer_override': false,'spam_submissions_enabled': false,'spam_testing_mode': false,'wiki_samples': true,'wiki_spam_exempted': false,'wiki_spam_training': true
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': true,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+
+        // This needs to be set before ckeditor.js loads
+        window.CKEDITOR_BASEPATH = 'https://developer.mozilla.org/static/js/libs/ckeditor/build/ckeditor/';
+
+        // This represents the site configuration
+        win.mdn = {
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+            
+            notifications: [],
+            
+            // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            },
+            // Assets that need to be dynamically injected
+            assets_disabled: {
+                css: {
+                    'editor-content': ['https://developer.cdn.mozilla.net/static/build/styles/editor-content.3d79df72080d.css',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/styles/wiki-compat-tables.f3a3bfce97a1.css',]
+                },
+                js: {
+                    'syntax-prism': ['https://developer.cdn.mozilla.net/static/build/js/syntax-prism.7a66ddfa68bf.js',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/js/wiki-compat-tables.14ce5dcb2c3d.js',]
+                }
+            }
+        };
+    })(this);
+</script>
+
+  
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+    
+      <li><a href="#q" id="skip-search">Skip to search</a></li>
+    
+  </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+    <a href="https://developer.mozilla.org/en-US/" class="logo">Mozilla Developer Network</a>
+
+    <div id="nav-sec">
+        
+                  <ul>
+                  <li>
+
+    
+
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                Sign in
+              </span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FMozilla%2FJavaScript_code_modules%2FPromise.jsm%2FExamples" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/Mozilla/JavaScript_code_modules/Promise.jsm/Examples" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/Mozilla/JavaScript_code_modules/Promise.jsm/Examples" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2FMozilla%2FJavaScript_code_modules%2FPromise.jsm%2FExamples" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+              
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+        
+    </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../../../Web/API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+
+   <!-- end is_zone -->
+
+    <div class="wiki-main-content" id="document-main"><div class="center">
+      
+      <div class="article-meta">
+        <!-- action buttons -->
+        
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+  <ul class="page-buttons" data-sticky="false">
+      
+      <li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+              
+                <li class="smaller">No translations exist for this article.</li>
+              
+
+              
+                <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/JavaScript_code_modules/Promise.jsm/Examples$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+              
+            </ul>
+          </div>
+        </div>
+      </li>
+
+      <li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Mozilla/JavaScript_code_modules/Promise.jsm/Examples$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li>
+
+        
+
+        <li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/JavaScript_code_modules/Promise.jsm/Examples$history" rel="nofollow, noindex">History</a></li>
+                
+                
+                
+                
+
+                
+
+                
+                
+                
+                <li class="page-print"><a href="#" onclick="return window.print();">Print this article</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+        
+  <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Mozilla" rel="v:url" property="v:title">Mozilla</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Mozilla/JavaScript_code_modules" rel="v:url" property="v:title">JavaScript code modules</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="../Promise.html" rel="v:url" property="v:title">Promise.jsm</a></li>
+    
+    <li class="crumb" typeof="v:Breadcrumb" property="v:title">Examples</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        
+        <div class="contributor-avatars" data-all-text="see all contributors" data-alternate-message="hide contributors">
+            <ul>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/ChrisDenton" title="View profile: ChrisDenton">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="ChrisDenton" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">ChrisDenton</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/najamelan" title="View profile: najamelan">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="najamelan" data-src="../../../../../../secure.gravatar.com/avatar/f8d61e314eed6a4ceaed69ae0a0adde06c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">najamelan</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/P.A." title="View profile: P.A.">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="P.A." data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">P.A.</noscript></a>
+                </li>
+            
+            </ul>
+        </div>
+        
+
+        <h1>Examples</h1>
+
+      </div>
+      
+
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-closed wiki-left-none">
+
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+            
+              <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+              
+              <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#How_to_throw_reject" rel="internal">How to throw reject</a></li><li><a href="#Using_a_promise_returned_by_a_function_(verbose)" rel="internal">Using a promise returned by a function (verbose)</a></li><li><a href="#Using_a_promise_returned_by_a_function_(compact)" rel="internal">Using a promise returned by a function (compact)</a></li><li><a href="#Chaining_promises" rel="internal">Chaining promises</a></li><li><a href="#Parallel_promise_(THIS_EXAMPLE_NEEDS_MORE_WORK)" rel="internal">Parallel promise (THIS EXAMPLE NEEDS MORE WORK)</a></li><li><a href="#Simple_Example_User_Defined_Promise_Function_2" rel="internal">Simple Example User Defined Promise Function 2</a></li><li><a href="#Intermediate_of_User_Defined_Promise_Function_1" rel="internal">Intermediate of User Defined Promise Function 1</a></li><li><a href="#Make_user_defined_promise_return_after_multiple_images_finish_loading_(Promise.all_and_Promise.defer)" rel="internal">Make user defined promise return after multiple images finish loading (Promise.all and Promise.defer)</a></li><li><a href="#sect1" rel="internal">&nbsp;</a></li><li><a href="#The_case_of_unhandled_rejections" rel="internal">The case of unhandled rejections</a>
+                </li></ol>
+              </div>
+              
+              </div>
+            
+
+            
+            
+              
+            
+
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-main wiki-column text-content">
+
+              
+
+              
+
+              
+                
+                  <div class="warning warning-review">
+                    <p>
+                      This article needs a technical review. <a href="https://developer.mozilla.org/docs/MDN/Contribute/HowTo/Do_a_technical_review">How you can help.</a>
+                    </p>
+                  </div>
+                
+                
+                
+              
+              
+
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                
+                  
+                    <h2 id="How_to_throw_reject">How to throw reject</h2>
+
+<p>If you have a function that is a promise, and want to end it and throw reject, return an error object:</p>
+
+<pre class="brush: js">Components.utils.import("resource://gre/modules/osfile.jsm")
+
+let path = OS.Path.join(OS.Constants.Path.tmpDir, "file.txt");
+
+let promise = OS.File.exists(path);
+
+let newPromise = promise.then(function onFulfill(aExists) {
+  if (aExists) {
+    console.log("You have file.txt in your temporary directory.");
+  } else {
+  &nbsp; return new Error("You don't have file.txt in your temporary directory.");
+  }
+});
+
+// Unexpected errors should always be reported at the end of a promise chain.
+let lastPromise = newPromise.then(
+function onFulfill(){
+
+},
+function onReject(aRejectReason) {
+  console.warn('newPromise failed with reason: ', aRejectReason);
+});</pre>
+
+<h2 id="Using_a_promise_returned_by_a_function_(verbose)">Using a promise returned by a function (verbose)</h2>
+
+<p>This example uses a verbose syntax, showing all the involved promises.</p>
+
+<pre class="brush: js">Components.utils.import("resource://gre/modules/osfile.jsm")
+
+let path = OS.Path.join(OS.Constants.Path.tmpDir, "file.txt");
+
+let promise = OS.File.exists(path);
+
+let newPromise = promise.then(function onFulfill(aExists) {
+  if (aExists) {
+    console.log("You have file.txt in your temporary directory.");
+  } else {
+  &nbsp; console.log("You don't have file.txt in your temporary directory.");
+  }
+});
+
+// Unexpected errors should always be reported at the end of a promise chain.
+let lastPromise = newPromise.then(null, Components.utils.reportError);
+</pre>
+
+<p>In this case, if the file existence check succeeds, the <code>onFulfill</code> callback is invoked. When the callback finishes execution, <code>newPromise</code> will be fulfilled with an <code>undefined</code> fulfillment value, because the callback does not return any value. When <code>newPromise</code> is fulfilled, nothing happens, because no fulfillment callback is specified and the return value of the last <code>then</code> method is ignored.</p>
+
+<p>If the file existence check fails, for example because access is denied, <code>promise</code> is rejected with an <a href="../OSFile.jsm/OS.File-2.html" title="/en-US/docs/JavaScript_OS.File/OS.File.Error"><code>OS.File.Error</code></a> instance. This state will propagate to&nbsp;<code>newPomise</code>, and <a href="https://developer.mozilla.org/en-US/docs/Components.utils.reportError" title="/en-US/docs/Components.utils.reportError"><code>Components.utils.reportError</code></a> will report all the details of the exception to the console.</p>
+
+<h2 id="Using_a_promise_returned_by_a_function_(compact)">Using a promise returned by a function (compact)</h2>
+
+<p>The same code as the previous example is usually written with a more compact syntax:</p>
+
+<pre class="brush: js">Components.utils.import("resource://gre/modules/osfile.jsm")
+
+let path = OS.Path.join(OS.Constants.Path.tmpDir, "file.txt");
+
+OS.File.exists(path).then(exists =&gt; {
+  console.log(exists ? "You have file.txt in your temporary directory."
+                     : "You don't have file.txt in your temporary directory.");
+}).then(null, Components.utils.reportError);</pre>
+
+<h2 id="Chaining_promises">Chaining promises</h2>
+
+<p>The promise returned by <code>then</code> eventually assumes the state of the promise returned by the callback. This can be used for chaining:</p>
+
+<pre class="brush: js">Components.utils.import("resource://gre/modules/osfile.jsm")
+
+OS.File.getCurrentDirectory().then(currentDir =&gt; {
+  let path = OS.Path.join(currentDir, ".mozconfig");
+
+  return OS.File.exists(path).then(exists =&gt; {
+    console.log(exists ? "You have .mozconfig in " + currentDir
+                       : "You don't have .mozconfig in " + currentDir);
+  });
+}).then(null, Components.utils.reportError);</pre>
+
+<h2 id="Parallel_promise_(THIS_EXAMPLE_NEEDS_MORE_WORK)">Parallel promise (THIS EXAMPLE NEEDS MORE WORK)</h2>
+
+<p>So when chaining promises, consequent promises run after the previous promise completes. Now what if we want to run multiple promises and then return when all are done? This is accomplished by using <code>Promise.all</code>, this feature requires <code>Promise.jsm</code>.</p>
+
+<pre class="brush: js">const {Cu} = require("chrome");
+const {TextDecoder, TextEncoder, OS} = Cu.import("resource://gre/modules/osfile.jsm", {});
+
+/* files: An array of file paths */
+function readTextFiles(files) {
+  let promises = [],
+      decoder = new TextDecoder();
+  for (let i = 0; i &lt; files.length; i++) {
+    let promise = OS.File.read(files[i])
+    promise = promise.then(function onSuccess(array) {
+      return decoder.decode(array);
+    });
+    promises.push(promise);
+  }
+  return Promise.all(promises);
+}
+
+let folder = "/path/to/folder";
+let promise = readTextFiles([
+  OS.Path.join(folder, "read.me"),
+  Os.Path.join(folder, "home.html")
+]);
+promise.then(
+  function onSuccess(filesContent) {
+    // filesContent is an array of strings; each string is the content of one file.
+    console.log(filesContent);
+  },
+  function onFail() {
+    console.error("Failed to load all files");
+  }
+);
+</pre>
+
+<p>See also the ask.m.o topic: <a href="https://ask.mozilla.org/question/413/doing-multiple-promises-in-function-in-pareallel-how-return-when-last-done/" class="external">Doing multiple promises in function in pareallel, how return when last done?</a></p>
+
+<h2 id="Simple_Example_User_Defined_Promise_Function_2">Simple Example User Defined Promise Function 2</h2>
+
+<p>Whenever you want to make a function a promise. Always wrap that function in a try catch and make that catch return Promise.reject(ex) otherwise it will not trigger the rejection function of the promise.then. This way if any error happens it will reject the promise. In the example below we try alerting an undefined variable.</p>
+
+<pre class="brush: js">Components.utils.import("resource://gre/modules/Promise.jsm");
+
+var myPromise = myUserDefinedPromise();
+myPromise.then(
+&nbsp; function(aSuccessReason) {
+&nbsp;&nbsp;&nbsp; alert('myPromise was SUCCESFUL and reason was = "' + aSuccessReason + '"');
+&nbsp; },
+&nbsp; function(aRejectReason) {
+&nbsp;&nbsp;&nbsp; alert('myPromise FAILED for reason = "' + uneval(aRejectReason) + '"');
+&nbsp; }
+);
+
+function myUserDefinedPromise() {
+&nbsp; try {
+&nbsp;&nbsp;&nbsp; //var myVarIsCommented = 'hi'; // I commented this out s oit is undefined, this will cause rejected
+&nbsp;&nbsp;&nbsp; alert(myVarIsCommented);
+    
+&nbsp;&nbsp;&nbsp; return Promise.resolve('yay success'); // this makes the success function trigger with aSuccessReason being 'yay success' but because I commented out the var 2 lines above, it will error out on the alert(myVarIsCommented) and never get to this success line. uncommet the var 2 lines above to see the promise succesfully return
+&nbsp; } catch(ex) {
+&nbsp;&nbsp;&nbsp; return Promise.reject(ex);
+&nbsp; }
+}</pre>
+
+<p>Copy and paste this code and the rejection will take place. Uncomment the line `//var myVarIsCommented.....` and the promise will complete succesfully. Now replace the `alert(myVarIsCommented)` with `throw new Error('i feel like rejecting this promise')` like this:</p>
+
+<pre class="brush: js">Components.utils.import("resource://gre/modules/Promise.jsm");
+
+var myPromise = myUserDefinedPromise();
+myPromise.then(
+&nbsp; function(aSuccessReason) {
+&nbsp;&nbsp;&nbsp; alert('myPromise was SUCCESFUL and reason was = "' + aSuccessReason + '"');
+&nbsp; },
+&nbsp; function(aRejectReason) {
+&nbsp;&nbsp;&nbsp; alert('myPromise FAILED for reason = "' + uneval(aRejectReason) + '"');
+&nbsp; }
+);
+
+function myUserDefinedPromise() {
+&nbsp; try {
+&nbsp;&nbsp;&nbsp; var myVarIsCommented = 'hi';
+&nbsp;&nbsp;&nbsp; alert(myVarIsCommented);
+    throw new Error('i feel like rejecting this promise');
+&nbsp;&nbsp;&nbsp; return Promise.resolve('yay success'); // this makes the success function trigger with aSuccessReason being 'yay success' but because I commented out the var 2 lines above, it will error out on the throw and never get to this success line becuase i throw an error on the line before this
+&nbsp; } catch(ex) {
+&nbsp;&nbsp;&nbsp; return Promise.reject(ex);
+&nbsp; }
+}</pre>
+
+<p>In this example even though the variable is defined, the proimse is rejected because I threw an error.</p>
+
+<p>This copy/paste code here will complete succesfully:</p>
+
+<pre class="brush: js">Components.utils.import("resource://gre/modules/Promise.jsm");
+
+var myPromise = myUserDefinedPromise();
+myPromise.then(
+&nbsp; function(aSuccessReason) {
+&nbsp;&nbsp;&nbsp; alert('myPromise was SUCCESFUL and reason was = "' + aSuccessReason + '"');
+&nbsp; },
+&nbsp; function(aRejectReason) {
+&nbsp;&nbsp;&nbsp; alert('myPromise FAILED for reason = "' + uneval(aRejectReason) + '"');
+&nbsp; }
+);
+
+function myUserDefinedPromise() {
+&nbsp; try {
+&nbsp;&nbsp;&nbsp; var myVarIsCommented = 'hi';
+&nbsp;&nbsp;&nbsp; alert(myVarIsCommented);
+    // throw new Error('i feel like rejecting this promise');
+&nbsp;&nbsp;&nbsp; return Promise.resolve('yay success'); // this takes place
+&nbsp; } catch(ex) {
+&nbsp;&nbsp;&nbsp; return Promise.reject(ex);
+&nbsp; }
+}</pre>
+
+<p>You MUST return `Promise.resolve` in order to make the promise complete successfuly. If you do not then it will not understand itis a promise. This is improper usage:</p>
+
+<pre class="brush: js">Components.utils.import("resource://gre/modules/Promise.jsm");
+
+var myPromise = myUserDefinedPromise();
+myPromise.then(
+&nbsp; function(aSuccessReason) {
+&nbsp;&nbsp;&nbsp; alert('myPromise was SUCCESFUL and reason was = "' + aSuccessReason + '"');
+&nbsp; },
+&nbsp; function(aRejectReason) {
+&nbsp;&nbsp;&nbsp; alert('myPromise FAILED for reason = "' + uneval(aRejectReason) + '"');
+&nbsp; }
+);
+
+function myUserDefinedPromise() {
+&nbsp; return 'i didnt do a Promise.resolve so this will not understand that myPromise is a promise';
+}
+// creates this error:
+/*
+Exception: myPromise.then is not a function
+@Scratchpad/5:8:1
+WCA_evalWithDebugger@resource://gre/modules/commonjs/toolkit/loader.js -&gt; resource://gre/modules/devtools/server/actors/webconsole.js:1069:7
+WCA_onEvaluateJS@resource://gre/modules/commonjs/toolkit/loader.js -&gt; resource://gre/modules/devtools/server/actors/webconsole.js:734:9
+DSC_onPacket@resource://gre/modules/commonjs/toolkit/loader.js -&gt; resource://gre/modules/devtools/server/main.js:1098:9
+LDT_send/&lt;@resource://gre/modules/devtools/dbg-client.jsm -&gt; resource://gre/modules/devtools/server/transport.js:279:11
+makeInfallible/&lt;@resource://gre/modules/commonjs/toolkit/loader.js -&gt; resource://gre/modules/devtools/DevToolsUtils.js:84:7
+*/</pre>
+
+<h2 id="Intermediate_of_User_Defined_Promise_Function_1">Intermediate of User Defined Promise Function 1</h2>
+
+<pre class="brush: js">Components.utils.import("resource://gre/modules/Promise.jsm");
+
+// This function creates and returns a new promise.
+function promiseValueAfterTimeout(aValue, aTimeout)
+{
+  let deferred = Promise.defer();
+
+  try {
+    // An asynchronous operation will trigger the resolution of the promise.
+    // In this example, we don't have a callback that triggers a rejection.
+    setTimeout(function () {
+      deferred.resolve('rawr my success value');
+    }, aTimeout);
+  } catch (ex) {
+    // Generally, functions returning promises propagate exceptions through
+    // the returned promise, though they may also choose to fail early.
+    deferred.reject(ex);
+  }
+
+  // We don't return the deferred to the caller, but only the contained
+  // promise, so that the caller cannot accidentally change its state.
+  return deferred.promise;
+}
+
+// This code uses the promise returned be the function above.
+let promise = promiseValueAfterTimeout("Value", 1000);
+
+let newPromise = promise.then(function onFulfill(aValue) {
+  console.log("Fulfilled with this value: " + aValue);
+}, function onReject(aReason) {
+  console.log("Rejected with this reason: " + aReason);
+});
+
+// Unexpected errors should always be reported at the end of a promise chain.
+newPromise.then(null, Components.utils.reportError);</pre>
+
+<div class="note"><strong>Note:</strong> More examples for consuming promises are available in the <a href="Promise.html" title="/en-US/docs/Mozilla/JavaScript_code_modules/Promise.jsm/Promise">Promise object documentation</a>.</div>
+
+<h2 id="Make_user_defined_promise_return_after_multiple_images_finish_loading_(Promise.all_and_Promise.defer)">Make user defined promise return after multiple images finish loading (Promise.all and Promise.defer)</h2>
+
+<p>This example shows how to use Promise.all to wait to create multiple promises with Promise.defer() and return at the end of it.</p>
+
+<pre class="brush: js">Components.utils.import("resource://gre/modules/Promise.jsm");
+
+var myPromise = myUserDefinedPromise();
+myPromise.then(
+&nbsp; function(aSuccessReason) {
+&nbsp;&nbsp;&nbsp; alert('myPromise was SUCCESFUL and reason was = "' + aSuccessReason + '"');
+&nbsp; },
+&nbsp; function(aRejectReason) {
+&nbsp;&nbsp;&nbsp; alert('myPromise FAILED for reason = "' + uneval(aRejectReason) + '"');
+&nbsp; }
+);
+
+function myUserDefinedPromise() {
+&nbsp; try {
+&nbsp;&nbsp;&nbsp; var mySubPromises = [];
+&nbsp;&nbsp; &nbsp;
+&nbsp;&nbsp;&nbsp; var imagePaths = ['http://www.mozilla.org/media/img/firefox/favicon.png', 'https://developer.cdn.mozilla.net/media/redesign/img/favicon32.png'];
+&nbsp;&nbsp;&nbsp; [].forEach.call(imagePaths, function(path) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; let myImage = new Image();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; let loadThisImagePromise = Promise.defer();
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; mySubPromises.push(loadThisImagePromise.promise);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; myImage.onload = function() {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; loadThisImagePromise.resolve('Succesfully loaded image at path = "' + path + '" the width of this image is = "' + this.naturalWidth + '".');
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (!this.naturalWidth) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; loadThisImagePromise.reject('Image loaded but it has 0 width at path = "' + path + '" the naturalWidth was 0');
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; myImage.onerror = function(e) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; loadThisImagePromise.reject('An error occured while loading path = "' + path + '". The error = ' + uneval(e));
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; myImage.onabort = function(e) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; loadThisImagePromise.reject('Image load was aborted loading path = "' + path + '".');
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; myImage.src = path;
+&nbsp;&nbsp;&nbsp; });
+&nbsp;&nbsp; &nbsp;
+&nbsp;&nbsp;&nbsp; return Promise.all(mySubPromises);
+&nbsp; } catch(ex) {
+&nbsp;&nbsp;&nbsp; return Promise.reject(ex);
+&nbsp; }
+}</pre>
+
+<p>To test and see what happens when you get an error. Change the array in the code above. Change this line:</p>
+
+<pre class="brush: js">&nbsp;&nbsp;&nbsp; var imagePaths = ['http://www.mozilla.org/media/img/firefox/favicon.png', 'https://developer.cdn.mozilla.net/media/redesign/img/favicon32.png'];</pre>
+
+<p>Change it to:</p>
+
+<pre class="brush: js">&nbsp;&nbsp;&nbsp; var imagePaths = ['http://www.mozilla.org/media/img/firefox/favicon.png', 'https://developer.cdn.mozilla.net/media/redesign/img/favicon32.png', 'blah blah'];</pre>
+
+<p>I added 'blah blah' to that array, it will cuase the whole promise to reject.</p>
+
+<h2 id="sect1">&nbsp;</h2>
+
+<h2 id="The_case_of_unhandled_rejections">The case of unhandled rejections</h2>
+
+<p>One of the difficult problems with promises is locating uncaught rejections.</p>
+
+<div class="warning">
+<p><strong>Warning:</strong> When consuming promises, you should always handle or report errors (rejection reasons). See <a href="Promise.html#Handling_errors_and_common_pitfalls" title="#Handling_errors_and_common_pitfalls">handling errors and common pitfalls</a>.</p>
+</div>
+
+<p>Rejection handlers provide information about the exact error time and location, but the handlers may sometimes be forgotten. Consider the following cases:</p>
+
+<pre class="brush: js" style="text-align: justify;">function f() {
+  return Promise.reject(new Error("BOOM!")); // If nobody catches the error, how will it be reported?
+}
+
+function g() {
+  return Promise.resolve().then(function() {
+    throw new Error("BOOM!"); // If nobody catches the error, how will it be reported?
+  });
+}
+
+function h() {
+  Promise.reject(new Error("BOOM!"); // Oops, we forgot to return the promise, nobody can catch it!
+}
+</pre>
+
+<p>We adopt the following strategy: if a promise is rejected at the time of its garbage-collection <strong>and</strong> if the promise is at the end of a promise chain (i.e. <code>thatPromise.then</code> has never been called), then we print a warning.</p>
+
+<div class="note"><strong>Note:</strong> This warning is generated some time after the error occurred, and may provide less information about the error location. It generally indicates the need to insert a proper error handler. When a proper rejection handler is used, it effectively replaces this delayed reporting.</div>
+
+<pre class="brush: js">let deferred = Promise.defer();
+let p = deferred.promise.then();
+deferred.reject(new Error("I am an uncaught error"));
+deferred = null;
+p = null;</pre>
+
+<p><br>
+ In this snippet, since <code>deferred.promise</code> is not the last in the chain, no error will be reported for that promise. However, since <code>p</code> is the last promise in the chain, the error will be reported for <code>p</code>.<br>
+ <br>
+ Note that this may, in some cases, cause an error to be reported more than once. For instance, consider:</p>
+
+<pre class="brush: js">let deferred = Promise.defer();
+let p1 = deferred.promise.then();
+let p2 = deferred.promise.then();
+deferred.reject(new Error("I am an uncaught error"));
+p1 = p2 = deferred = null;</pre>
+
+<p><br>
+ In this snippet, the error is reported both at <code>p1</code> and at <code>p2</code>.</p>
+                  
+                
+              </article>
+
+              
+
+    
+    
+    
+
+    
+    
+    
+
+    <div class="share">
+        <strong>Share:</strong>
+        <ul>
+            <li><a href="http://twitter.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FMozilla%2FJavaScript_code_modules%2FPromise.jsm%2FExamples%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dtwitter.com&amp;text=I+learned+about+Examples+on+MDN." target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Mozilla/JavaScript_code_modules/Promise.jsm/Examples?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=twitter.com" data-title="I learned about Examples on MDN." class="share-link twitter"><i aria-hidden="true" class="icon-twitter"></i>Twitter</a></li>
+            <li><a href="http://facebook.com/sharer.php?s=100&amp;p[url]=https://developer.mozilla.org/en-US/docs/Mozilla/JavaScript_code_modules/Promise.jsm/Examples?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Mozilla/JavaScript_code_modules/Promise.jsm/Examples?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" data-title="I learned about Examples on MDN." class="share-link facebook"><i aria-hidden="true" class="icon-facebook"></i>Facebook</a></li>
+            <li><a href="https://plus.google.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FMozilla%2FJavaScript_code_modules%2FPromise.jsm%2FExamples%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dplus.google.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Mozilla/JavaScript_code_modules/Promise.jsm/Examples?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=plus.google.com" data-title="I learned about Examples on MDN." class="share-link gplus"><i aria-hidden="true" class="icon-google-plus"></i>Google+</a></li>
+        </ul>
+    </div>
+
+              
+
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                  
+                  
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-group icon-fw"></i>&nbsp;<strong>Contributors to this page:</strong> 
+        <a href="https://developer.mozilla.org/en-US/profiles/ChrisDenton">ChrisDenton</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/najamelan">najamelan</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/P.A.">P.A.</a>
+    
+                    </div>
+                  
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o icon-fw"></i>&nbsp;<strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/ChrisDenton">ChrisDenton</a>,
+                      <time datetime="2015-06-03T15:17:08-07:00">Jun 3, 2015, 3:17:08 PM</time>
+                    </div>
+                  
+                </div>
+              
+            </div>
+
+            
+          </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Mozilla/JavaScript_code_modules/Promise.jsm/Examples$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Mozilla/JavaScript_code_modules/Promise.jsm/Examples$history" label="View page history"></menuitem>
+  </menu>
+
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+        
+        <div class="contentinfo">
+          <p>© 2005-2016 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>
+          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+        
+        </div>
+      </div>
+      <div class="column-strip">
+        
+          
+  
+
+        
+      </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+  
+    
+    <!--[if lte IE 8]><script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/selectivizr.091e18cf669b.js" charset="utf-8"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/main.a7b27a25fb9c.js" charset="utf-8"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+    
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/syntax-prism-min.js" charset="utf-8"></script><script type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/wiki.bd71ca9fd27d.js" charset="utf-8" id="wikiscript"></script>
+
+  
+
+  <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/helpfulness.7b208a764d28.js" charset="utf-8"></script>
+
+  
+
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/Mozilla/JavaScript_code_modules/Promise.jsm/Examples by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 19:38:37 GMT -->
+</body></html>

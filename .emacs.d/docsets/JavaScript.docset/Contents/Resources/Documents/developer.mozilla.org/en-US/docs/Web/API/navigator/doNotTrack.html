@@ -1,0 +1,852 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/Navigator/doNotTrack by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 15:37:26 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <script async="" src="../../../../../../www.google-analytics.com/analytics.js"></script><script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+  
+    
+  
+
+  
+  <title>Navigator.doNotTrack</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+  
+    
+    
+    <link href="../../../../../../developer.cdn.mozilla.net/static/build/styles/mdn.593f20d8c365.css" rel="stylesheet" type="text/css">
+
+    
+  
+    <link href="../../../../../../developer.cdn.mozilla.net/static/build/styles/wiki.13dd9abdfb62.css" rel="stylesheet" type="text/css">
+
+    
+
+    
+
+  <!-- common social tags -->
+  
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon144.a6e4162070f4.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon114.0e9fabd44f85.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon72.8ff9d87c82a0.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon57.a2490b9a2d76.png">
+  <!-- basic favicon -->
+  
+    
+  
+  <link rel="shortcut icon" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon32.e02854fdcf73.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/html5shiv.3948ccddab6f.js" charset="utf-8"></script>
+  <![endif]-->
+
+  
+  <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Web/API/Navigator/doNotTrack$json">
+  <link rel="canonical" href="doNotTrack.html">
+
+  
+    
+      <link rel="alternate" hreflang="fi" href="https://developer.mozilla.org/fi/docs/DOM/navigator.doNotTrack" title="navigator.doNotTrack">
+    
+      <link rel="alternate" hreflang="fr" href="https://developer.mozilla.org/fr/docs/Web/API/Navigator/doNotTrack" title="Navigator.doNotTrack">
+    
+      <link rel="alternate" hreflang="ru" href="https://developer.mozilla.org/ru/docs/Web/API/Navigator/doNotTrack" title="Navigator.doNotTrack">
+    
+      <link rel="alternate" hreflang="zh-CN" href="https://developer.mozilla.org/zh-CN/docs/Web/API/Navigator/doNotTrack" title="Navigator.doNotTrack">
+    
+  
+
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="Navigator.doNotTrack">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Web/API/Navigator/doNotTrack">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Web/API/Navigator/doNotTrack">
+  <meta name="twitter:title" content="Navigator.doNotTrack">
+  
+  <meta property="og:description" content="Returns the user's do-not-track setting. This is &quot;1&quot; if the user has requested not to be tracked by web sites, content, or advertising.">
+  <meta name="description" content="Returns the user's do-not-track setting. This is &quot;1&quot; if the user has requested not to be tracked by web sites, content, or advertising.">
+  <meta name="twitter:description" content="Returns the user's do-not-track setting. This is &quot;1&quot; if the user has requested not to be tracked by web sites, content, or advertising.">
+  
+
+  
+    
+
+
+
+  
+</head>
+<body data-slug="Web/API/Navigator/doNotTrack" contextmenu="edit-history-menu" data-search-url="" class="document  ">
+
+  <script type="text/javascript">
+    (function(win) {
+        'use strict';
+
+        
+            (function(){
+  var FLAGS = {
+    'compat_api': false,'kumaediting': false,'page_move': false,'registration_disabled': false,'search_suggestions': false,'section_edit': false,'spam_admin_override': false,'spam_checks_enabled': true,'spam_spammer_override': false,'spam_submissions_enabled': false,'spam_testing_mode': false,'wiki_samples': true,'wiki_spam_exempted': false,'wiki_spam_training': true
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': true,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+
+        // This needs to be set before ckeditor.js loads
+        window.CKEDITOR_BASEPATH = 'https://developer.mozilla.org/static/js/libs/ckeditor/build/ckeditor/';
+
+        // This represents the site configuration
+        win.mdn = {
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+            
+            notifications: [],
+            
+            // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            },
+            // Assets that need to be dynamically injected
+            assets_disabled: {
+                css: {
+                    'editor-content': ['https://developer.cdn.mozilla.net/static/build/styles/editor-content.3d79df72080d.css',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/styles/wiki-compat-tables.f3a3bfce97a1.css',]
+                },
+                js: {
+                    'syntax-prism': ['https://developer.cdn.mozilla.net/static/build/js/syntax-prism.7a66ddfa68bf.js',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/js/wiki-compat-tables.14ce5dcb2c3d.js',]
+                }
+            }
+        };
+    })(this);
+</script>
+
+  
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+    
+      <li><a href="#q" id="skip-search">Skip to search</a></li>
+    
+  </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+    <a href="https://developer.mozilla.org/en-US/" class="logo">Mozilla Developer Network</a>
+
+    <div id="nav-sec">
+        
+                  <ul>
+                  <li>
+
+    
+
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                Sign in
+              </span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FNavigator%2FdoNotTrack" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/Web/API/Navigator/doNotTrack" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/Web/API/Navigator/doNotTrack" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FNavigator%2FdoNotTrack" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+              
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+        
+    </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../../API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+
+   <!-- end is_zone -->
+
+    <div class="wiki-main-content" id="document-main"><div class="center">
+      
+      <div class="article-meta">
+        <!-- action buttons -->
+        
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+  <ul class="page-buttons" data-sticky="false">
+      
+      <li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+              
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/fi/docs/DOM/navigator.doNotTrack" title="navigator.doNotTrack">suomi</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/fr/docs/Web/API/Navigator/doNotTrack" title="Navigator.doNotTrack">Français</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/ru/docs/Web/API/Navigator/doNotTrack" title="Navigator.doNotTrack">Русский</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/zh-CN/docs/Web/API/Navigator/doNotTrack" title="Navigator.doNotTrack">中文 (简体)</a></bdi></li>
+                
+              
+
+              
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Navigator/doNotTrack$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+              
+            </ul>
+          </div>
+        </div>
+      </li>
+
+      <li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Navigator/doNotTrack$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li>
+
+        
+
+        <li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Navigator/doNotTrack$history" rel="nofollow, noindex">History</a></li>
+                
+                
+                
+                
+
+                
+
+                
+                
+                
+                <li class="page-print"><a href="#" onclick="return window.print();">Print this article</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+        
+  <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web" rel="v:url" property="v:title">Web technology for developers</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="../../API.html" rel="v:url" property="v:title">Web APIs</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="../Navigator.html" rel="v:url" property="v:title">Navigator</a></li>
+    
+    <li class="crumb" typeof="v:Breadcrumb" property="v:title">Navigator.doNotTrack</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        
+        <div class="contributor-avatars" data-all-text="see all contributors" data-alternate-message="hide contributors" data-has-hidden="1">
+            <ul>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Krinkle" title="View profile: Krinkle">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Krinkle" data-src="../../../../../../secure.gravatar.com/avatar/49061e8503ca321a8045c9065963a8c66c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Krinkle</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Sebastianz" title="View profile: Sebastianz">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Sebastianz" data-src="../../../../../../secure.gravatar.com/avatar/337fa9c543a4f881977b6d2fbbd2dea86c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Sebastianz</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/ChristianSiegert" title="View profile: ChristianSiegert">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="ChristianSiegert" data-src="../../../../../../secure.gravatar.com/avatar/a7be01021f310d85a540778fcc24b1c66c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">ChristianSiegert</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/teoli" title="View profile: teoli">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="teoli" data-src="../../../../../../secure.gravatar.com/avatar/d0d90148e08e3b64ccf75c46f31442c56c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">teoli</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/scott.s.mccoy" title="View profile: scott.s.mccoy">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="scott.s.mccoy" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">scott.s.mccoy</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Standard8" title="View profile: Standard8">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Standard8" data-src="../../../../../../secure.gravatar.com/avatar/5ae84093298e3aa77dda526e060df7d36c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Standard8</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/MHasan" title="View profile: MHasan">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="MHasan" data-src="../../../../../../secure.gravatar.com/avatar/04d096e57c03e1627aa0abbd32056baf6c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">MHasan</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/mitar" title="View profile: mitar">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="mitar" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">mitar</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/kscarfone" title="View profile: kscarfone">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="kscarfone" data-src="../../../../../../secure.gravatar.com/avatar/89c1e54a9703125168e40d22316d2b496c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">kscarfone</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Sheppy" title="View profile: Sheppy">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Sheppy" data-src="../../../../../../secure.gravatar.com/avatar/945076feb88f2d7003891ffbf06f32bf6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Sheppy</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/ziyunfei" title="View profile: ziyunfei">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="ziyunfei" data-src="../../../../../../secure.gravatar.com/avatar/2dbf9c055c2b32d3ca45d25be01174236c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">ziyunfei</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/vipsoft" title="View profile: vipsoft">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="vipsoft" data-src="../../../../../../secure.gravatar.com/avatar/f472a689ebecb41e80909c65c804260c6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">vipsoft</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/jlebar" title="View profile: jlebar">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="jlebar" data-src="../../../../../../secure.gravatar.com/avatar/9fca4b61a1ab555f231851e7543f9a3e6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">jlebar</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Marcoos" title="View profile: Marcoos">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Marcoos" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Marcoos</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/jswisher" title="View profile: jswisher">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="jswisher" data-src="../../../../../../secure.gravatar.com/avatar/38185c2812cbcae186ebbe4a829106616c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">jswisher</noscript></a>
+                </li>
+            
+            </ul>
+        </div>
+        
+
+        <h1>Navigator.doNotTrack</h1>
+
+      </div>
+      
+
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-present">
+
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+            
+              <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+              
+              <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#Syntax" rel="internal">Syntax</a></li><li><a href="#Example" rel="internal">Example</a></li><li><a href="#Specifications" rel="internal">Specifications</a></li><li><a href="#Browser_compatibility" rel="internal">Browser compatibility</a></li><li><a href="#See_also" rel="internal">See also</a>
+                </li></ol>
+              </div>
+              
+              </div>
+            
+
+            
+            
+              
+            
+
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-half wiki-column text-content">
+
+              
+
+              
+
+              
+                
+                
+                
+              
+              
+
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                
+                  
+                    <div><section id="Quick_Links" class="Quick_links"><!-- --></section><div class="notice experimental"> 
+    <p><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span> <strong>This is an experimental technology</strong><br>Because this technology's specification has not stabilized, check the <a href="#Browser_compatibility">compatibility table</a> for usage in various browsers. Also note that the syntax and behavior of an experimental technology is subject to change in future versions of browsers as the specification changes.</p> 
+</div></div>
+
+<p>Returns the user's do-not-track setting. This is "1" if the user has requested not to be tracked by web sites, content, or advertising.</p>
+
+<h2 id="Syntax">Syntax</h2>
+
+<pre class="syntaxbox"><em>dnt</em> = <em>navigator</em>.doNotTrack;
+</pre>
+
+<p>The value reflects that of the do-not-track header, i.e. values of {"1", "0", "unspecified" }. Note: Prior to Gecko 32, Gecko used the values { "yes", "no", "unspecified"} (<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=887703" class="external">bug 887703</a>).</p>
+
+<h2 id="Example">Example</h2>
+
+<pre class="brush: js">dump(navigator.doNotTrack); 
+// prints "1" if DNT is enabled; "0" if the user opted-in for tracking; otherwise this is "unspecified"
+</pre>
+
+<h2 id="Specifications">Specifications</h2>
+
+<table class="standard-table">
+ <thead>
+  <tr>
+   <th scope="col">Specification</th>
+   <th scope="col">Status</th>
+   <th scope="col">Comment</th>
+  </tr>
+ </thead>
+ <tbody>
+  <tr>
+   <td><a href="http://www.w3.org/2011/tracking-protection/drafts/tracking-dnt.html#widl-Navigator-doNotTrack" class="external" lang="en" hreflang="en">Tracking Preference Expression (DNT)<br><small lang="en-US">The definition of 'Navigator.doNotTrack' in that specification.</small></a></td>
+   <td><span class="spec-WD">Working Draft</span></td>
+   <td>Initial definition</td>
+  </tr>
+ </tbody>
+</table>
+
+<h2 id="Browser_compatibility">Browser compatibility</h2>
+
+<p></p><div class="htab"> 
+    <a name="AutoCompatibilityTable" id="AutoCompatibilityTable"></a> 
+    <ul> 
+        <li class="selected"><a>Desktop</a></li> 
+        <li><a>Mobile</a></li> 
+    </ul> 
+</div><p></p>
+
+<div id="compat-desktop">
+<table class="compat-table">
+ <tbody>
+  <tr>
+   <th>Feature</th>
+   <th>Chrome</th>
+   <th>Firefox (Gecko)</th>
+   <th>Internet Explorer</th>
+   <th>Opera</th>
+   <th>Safari</th>
+  </tr>
+  <tr>
+   <td>Basic support</td>
+   <td>23</td>
+   <td><a href="https://developer.mozilla.org/en-US/Firefox/Releases/9" title="Released on 2011-12-20.">9.0</a> (9.0)<sup>[1]</sup></td>
+   <td>9<sup>[2]</sup><br>
+    11[3]</td>
+   <td>12</td>
+   <td>5.1<sup>[4]</sup></td>
+  </tr>
+ </tbody>
+</table>
+</div>
+
+<div id="compat-mobile">
+<table class="compat-table">
+ <tbody>
+  <tr>
+   <th>Feature</th>
+   <th>Android</th>
+   <th>Firefox Mobile (Gecko)</th>
+   <th>IE Mobile</th>
+   <th>Opera Mobile</th>
+   <th>Safari Mobile</th>
+  </tr>
+  <tr>
+   <td>Basic support</td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td>9.0 (9.0)<sup>[1]</sup></td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span><sup>[2]</sup></td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+  </tr>
+ </tbody>
+</table>
+</div>
+
+<p>[1] Prior to Gecko 32 Firefox would report <code>navigator.doNotTrack</code> with values of <code>yes</code> and <code>no</code> rather than <code>1</code> and <code>0</code>.</p>
+
+<p>[2] Internet Explorer 9 and 10 use&nbsp;a vendor prefix, i.e. <code>navigator.msDoNotTrack</code>.</p>
+
+<p>[3] Internet Explorer 11 uses <code>window.doNotTrack</code> rather than <code>navigator.doNotTrack</code>.</p>
+
+<p>[4] Safari 7.1.3+ uses <code>window.doNotTrack</code> rather than <code>navigator.doNotTrack</code>.</p>
+
+<h2 id="See_also">See also</h2>
+
+<ul>
+ <li><a href="https://developer.mozilla.org/en-US/docs/Web/Security/Do_not_track_field_guide">The Do Not Track field guide</a></li>
+</ul>
+                  
+                
+              </article>
+
+              
+
+    
+    
+    
+
+    
+    
+    
+
+    <div class="share">
+        <strong>Share:</strong>
+        <ul>
+            <li><a href="http://twitter.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FAPI%2FNavigator%2FdoNotTrack%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dtwitter.com&amp;text=I+learned+about+Navigator.doNotTrack+on+MDN." target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/API/Navigator/doNotTrack?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=twitter.com" data-title="I learned about Navigator.doNotTrack on MDN." class="share-link twitter"><i aria-hidden="true" class="icon-twitter"></i>Twitter</a></li>
+            <li><a href="http://facebook.com/sharer.php?s=100&amp;p[url]=https://developer.mozilla.org/en-US/docs/Web/API/Navigator/doNotTrack?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/API/Navigator/doNotTrack?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" data-title="I learned about Navigator.doNotTrack on MDN." class="share-link facebook"><i aria-hidden="true" class="icon-facebook"></i>Facebook</a></li>
+            <li><a href="https://plus.google.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FAPI%2FNavigator%2FdoNotTrack%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dplus.google.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/API/Navigator/doNotTrack?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=plus.google.com" data-title="I learned about Navigator.doNotTrack on MDN." class="share-link gplus"><i aria-hidden="true" class="icon-google-plus"></i>Google+</a></li>
+        </ul>
+    </div>
+
+              
+
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                  
+                  
+  <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags icon-fw"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+      
+        <li><a href="../../../tag/API.html">API</a></li>
+      
+        <li><a href="../../../tag/DOM.html">DOM</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Experimental">Experimental</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Expérimental">Expérimental</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Property">Property</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Reference">Reference</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Référence">Référence</a></li>
+      
+    </ul>
+  </div>
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-group icon-fw"></i>&nbsp;<strong>Contributors to this page:</strong> 
+        <a href="https://developer.mozilla.org/en-US/profiles/Krinkle">Krinkle</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Sebastianz">Sebastianz</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/ChristianSiegert">ChristianSiegert</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/teoli">teoli</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/scott.s.mccoy">scott.s.mccoy</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Standard8">Standard8</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/MHasan">MHasan</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/mitar">mitar</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/kscarfone">kscarfone</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Sheppy">Sheppy</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/ziyunfei">ziyunfei</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/vipsoft">vipsoft</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/jlebar">jlebar</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Marcoos">Marcoos</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/jswisher">jswisher</a>
+    
+                    </div>
+                  
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o icon-fw"></i>&nbsp;<strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/Krinkle">Krinkle</a>,
+                      <time datetime="2016-03-02T18:15:32-08:00">Mar 2, 2016, 6:15:32 PM</time>
+                    </div>
+                  
+                </div>
+              
+            </div>
+
+            
+              <!-- quick links and zone subnav strip -->
+              <div id="wiki-left" class="column-strip wiki-column">
+
+              
+
+                
+
+                
+                  <!-- quick links -->
+                  
+  <div class="quick-links" id="quick-links">
+    <div class="title see-also">See also</div>
+    <ol><li><strong><a href="../Navigator.html"><code>Navigator</code></a></strong></li><li data-default-state="open"><a href="#"><strong>Properties</strong></a><ol><li><span class="sidebar-icon"><span title="This deprecated API should no longer be used, but will probably still work."><i class="icon-thumbs-down-alt"> </i></span></span><a href="../NavigatorID/appCodeName.html" title="The NavigatorID.appCodeName always returns 'Mozilla', on any browser. This property is kept only for compatibility purposes."><code>appCodeName</code></a></li><li><span class="sidebar-icon"><span title="This deprecated API should no longer be used, but will probably still work."><i class="icon-thumbs-down-alt"> </i></span></span><a href="../NavigatorID/appName.html" title="The NavigatorID.appName property returns the name of the browser. The HTML5 specification also allows any browser to return &quot;Netscape&quot; here, for compatibility reasons."><code>appName</code></a></li><li><span class="sidebar-icon"><span title="This deprecated API should no longer be used, but will probably still work."><i class="icon-thumbs-down-alt"> </i></span></span><a href="../NavigatorID/appVersion.html" title="Returns the version of the browser as a string. It may be either a plain version number, like &quot;5.0&quot;, or a version number followed by more detailed information. The HTML5 specification also allows any browser to return &quot;4.0&quot;, for compatibility reasons."><code>appVersion</code></a></li><li><span class="sidebar-icon"><span title="This deprecated API should no longer be used, but will probably still work."><i class="icon-thumbs-down-alt"> </i></span></span><a href="battery.html" title="The battery read-only property returns a BatteryManagerprovides information about the system's battery charge level; provides also some new events you can handle to monitor the battery status. This implements the Battery Status API; see that documentation for additional details, a guide to using the API, and sample code."><code>battery</code></a></li><li><a href="buildID.html" title="Returns the build identifier of the browser."><code>buildID</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="connection.html" title="The Navigator.connection read-only property represents a NetworkInformation containing information about the system's connection, such as the current bandwidth of the user's device or whether the connection is metered. This could be used to select high definition content or low definition content based on the user's connection."><code>connection</code></a></li><li><a href="cookieEnabled.html" title="Returns a Boolean value indicating whether cookies are enabled or not (read-only)."><code>cookieEnabled</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><em><code>doNotTrack</code></em></li><li><a href="geolocation.html" title="The Navigator.geolocation read-only property returns a Geolocation object that gives Web content access to the location of the device. This allows a Web site or app to offer customized results based on the user's location."><code>geolocation</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="id-2.html" title="The BrowserID protocol defines a new id property on the window.navigator object, through which it exposes the BrowserID API, that is the IdentityManager intreface. This API has gone through several significant revisions. Each generation is listed separately below."><code>id</code></a></li><li><a href="../NavigatorLanguage/language.html" title="The NavigatorLanguage.language read-only property returns a string representing the preferred language of the user, usually the language of the browser UI."><code>language</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="../NavigatorLanguage/languages.html" title="The NavigatorLanguage.languages read-only property returns an array of DOMStrings representing the user's preferred languages. The language is described using BCP 47 language tags. In the returned array they are ordered by preference with the most preferred language first."><code>languages</code></a></li><li><a href="maxTouchPoints.html" title="Return the maximum number of simultaneous touch contact points are supported by the current device."><code>maxTouchPoints</code></a></li><li><a href="mediaDevices.html" title="The Navigator.mediaDevices read-only property returns a MediaDevices object, which provides access to connected media input devices like cameras and microphones, as well as screensharing."><code>mediaDevices</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="mozBluetooth.html" title="Returns a BluetoothManager object you can use to get a BluetoothAdapter object."><code>mozBluetooth</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="mozCameras.html" title="Returns a CameraManager object you can use to access the cameras available on the user's device."><code>mozCameras</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="../../../Mozilla/Firefox_OS/API/Navigator/mozContacts.html" title="Return a ContactManager to access and manage all the contacts available on the device."><code>mozContacts</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><span class="sidebar-icon"><span title="This deprecated API should no longer be used, but will probably still work."><i class="icon-thumbs-down-alt"> </i></span></span><a href="mozNotification.html" title="Provides support for creating notification objects, which are used to display desktop notification alerts to the user. Currently, these are only supported on Firefox Mobile and Firefox OS. See Displaying notifications for an example."><code>mozNotification</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="mozPermissionSettings.html" title="Returns a PermissionSettings object you can use to get and set permissions of apps on the Firefox OS platform."><code>mozPermissionSettings</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="mozSocial.html" title="Returns a MozSocial object, is available within the social media provider's panel to provide functionality it may need."><code>mozSocial</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="mozTime.html" title="Returns a MozTimeManager object you can use to change the device's time."><code>mozTime</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="mozVoicemail.html" title="Returns a MozVoicemail object you can use to handle the access to the voicemail functionality from the RIL of a Firefox OS phone."><code>mozVoicemail</code></a></li><li><a href="../NavigatorOnLine/onLine.html" title="Returns the online status of the browser. The property returns a boolean value, with true meaning online and false meaning offline. The property sends updates whenever the browser's ability to connect to the network changes. The update occurs when the user follows links or when a script requests a remote page. For example, the property should return false when users click links soon after they lose internet connection."><code>onLine</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="oscpu.html" title="Returns a string that identifies the current operating system."><code>oscpu</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="permissions.html" title="The Navigator.permissions read-only property returns a Permissions object that can be used to query and update permission status of APIs covered by the Permissions API."><code>permissions</code></a></li><li><span class="sidebar-icon"><span title="This deprecated API should no longer be used, but will probably still work."><i class="icon-thumbs-down-alt"> </i></span></span><a href="../NavigatorID/platform.html" title="Returns a string representing the platform of the browser. The specification allows browsers to always return the empty string, so don't rely on this property to get a reliable answer."><code>platform</code></a></li><li><span class="sidebar-icon"><span title="This deprecated API should no longer be used, but will probably still work."><i class="icon-thumbs-down-alt"> </i></span></span><a href="../NavigatorID/product.html" title="The NavigatorID.product property returns the product name of the current browser."><code>product</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="productSub.html" title="The Navigator.productSub read-only property returns the build number of the current browser."><code>productSub</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="push.html" title="The Navigator.push read-only property is a PushManager object providing a way to receive notifications from third party servers. These are real-time notifications provided by external services directly to installed apps. This implements the SimplePush API that does not require sending real data on those notifications. Also, you can see this documentation for additional details, a guide to using the API, and sample code."><code>push</code></a></li><li><a href="serviceWorker.html" title="The Navigator.serviceWorker read-only property returns a ServiceWorkerContainer object, which provides access to registration, removal, upgrade, and communication with the ServiceWorker objects for the associated document."><code>serviceWorker</code></a></li><li><span class="sidebar-icon"><span title="This deprecated API should no longer be used, but will probably still work."><i class="icon-thumbs-down-alt"> </i></span></span><a href="../NavigatorID/userAgent.html" title="The NavigatorID.userAgent read-only property returns the user agent string for the current browser."><code>userAgent</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="vendor.html" title="Returns the name of the browser vendor for the current browser."><code>vendor</code></a></li><li><a href="vendorSub.html" title="The Navigator.vendorSub read-only property is the substring of the vendor having to do with the vendor version number. &nbsp;The specification allows browsers to always return the empty string, so don't rely on this property to get a reliable answer."><code>vendorSub</code></a></li></ol></li><li data-default-state="open"><a href="#"><strong>Methods</strong></a><ol><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="addIdleObserver.html" title="This method is used to add an observer that will check if the user is idle and will act accordingly. Once an observer is added, it can be removed with Navigator.removeIdleObserver."><code>addIdleObserver()</code></a></li><li><a href="getBattery.html" title="The getBattery() method provides information about the system's battery, returns a battery promise, which is resolved in a BatteryManager object providing also some new events you can handle to monitor the battery status.. This implements the Battery Status API; see that documentation for additional details, a guide to using the API, and sample code."><code>getBattery()</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="getGamepads.html" title="The Navigator.getGamepads() method returns an array: the first value is null, and the others are all Gamepad objects, one for each gamepad connected to the device. So if no gamepads are connected, the method will just return null."><code>getGamepads()</code></a></li><li><span class="sidebar-icon"><span title="This deprecated API should no longer be used, but will probably still work."><i class="icon-thumbs-down-alt"> </i></span></span><a href="getUserMedia.html" title="The Navigator.getUserMedia() method prompts the user for permission to use 0 or 1 video and 0 or 1 audio input device such as a camera, a shared screen, or a microphone. If the user provides permission, then the successCallback is invoked with the resulting MediaStream object as its argument. If the user denies permission or media is not available, then the errorCallback is called with PermissionDeniedError or NotFoundError respectively. Note that it is possible for neither completion callback to be called, as the user is not required to make a choice."><code>getUserMedia()</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="getVRDevices.html" title="The getVRDevices() method returns a promise that resolves to an array of objects representing any VR devices that are connected to the computer and compatible with the browser."><code>getVRDevices()</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><span class="sidebar-icon"><span title="This is an obsolete API and is no longer guaranteed to work."><i class="icon-trash"> </i></span></span><s class="obsoleteElement"><a href="mozIsLocallyAvailable.html" title="The Navigator.mozIsLocallyAvailable() method allows add-ons to determine whether or not a given resource is available."><code>mozIsLocallyAvailable()</code></a></s></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="../../../Archive/Marketplace/API/Navigator_(Marketplace)/mozPay.html" title="The mozPay function is used to perform payments. It enables an app to use in-app payments."><code>mozPay()</code></a></li><li><a href="registerContentHandler.html" title="Allows web sites to register themselves as possible handlers for content of a particular MIME type."><code>registerContentHandler()</code></a></li><li><a href="registerProtocolHandler.html" title="Allows web sites to register themselves as possible handlers for particular protocols."><code>registerProtocolHandler()</code></a></li><li><a href="requestMediaKeySystemAccess.html" title="The Navigator.requestMediaKeySystemAccess() method returns a Promise for a MediaKeySystemAccess object."><code>requestMediaKeySystemAccess()</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="requestWakeLock.html" title="This Navigator.requestWakeLock() method of the Wake Lock API is used to request a MozWakeLock on any resource of the device. This means that you can prevent that resource from becoming unavailable as long as your app holds a lock for that resource. For example, a voice recording app can obtain a lock to keep the screen on during recording so that it can give prover visual feedback to the user that recording is progressing."><code>requestWakeLock()</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="sendBeacon.html" title="The navigator.sendBeacon() method can be used to asynchronously transfer small HTTP data from the User Agent to a web server."><code>sendBeacon()</code></a></li><li><span class="sidebar-icon"><span title="This deprecated API should no longer be used, but will probably still work."><i class="icon-thumbs-down-alt"> </i></span></span><a href="../NavigatorID/taintEnabled.html" title="The NavigatorID.taintEnabled() method always returns false."><code>taintEnabled()</code></a></li><li><a href="vibrate.html" title="The Navigator.vibrate() method pulses the vibration hardware on the device, if such hardware exists. If the device doesn't support vibration, this method has no effect. If a vibration pattern is already in progress when this method is called, the previous pattern is halted and the new one begins instead."><code>vibrate()</code></a></li></ol></li><li data-default-state="open"><a href="#"><strong>Events</strong></a><ol><li><a href="../../Events/abort.html"><code>abort</code></a></li><li><a href="../../Events/autocomplete.html"><code>autocomplete</code></a></li><li><a href="../../Events/autocompleteerror.html"><code>autocompleteerror</code></a></li><li><a href="../../Events/DOMContentLoaded.html"><code>DOMContentLoaded</code></a></li><li><a href="../../Events/afterprint.html"><code>afterprint</code></a></li><li><a href="../../Events/afterscriptexecute.html"><code>afterscriptexecute</code></a></li><li><a href="../../Events/beforeprint.html"><code>beforeprint</code></a></li><li><a href="../../Events/beforescriptexecute.html"><code>beforescriptexecute</code></a></li><li><a href="../../Events/beforeunload.html"><code>beforeunload</code></a></li><li><a href="../../Events/blur.html"><code>blur</code></a></li><li><a href="../../Events/cancel.html"><code>cancel</code></a></li><li><a href="../../Events/change.html"><code>change</code></a></li><li><a href="../../Events/click.html"><code>click</code></a></li><li><a href="../../Events/close.html"><code>close</code></a></li><li><a href="../../Events/connect.html"><code>connect</code></a></li><li><a href="../../Events/contextmenu.html"><code>contextmenu</code></a></li><li><a href="../../Events/error.html"><code>error</code></a></li><li><a href="../../Events/focus.html"><code>focus</code></a></li><li><a href="../../Events/hashchange.html"><code>hashchange</code></a></li><li><a href="../../Events/input.html"><code>input</code></a></li><li><a href="../../Events/invalid.html"><code>invalid</code></a></li><li><a href="../../Events/languagechange.html"><code>languagechange</code></a></li><li><a href="../../Events/load.html"><code>load</code></a></li><li><a href="../../Events/loadend.html"><code>loadend</code></a></li><li><a href="../../Events/loadstart.html"><code>loadstart</code></a></li><li><a href="../../Events/message.html"><code>message</code></a></li><li><a href="../../Events/offline.html"><code>offline</code></a></li><li><a href="../../Events/online.html"><code>online</code></a></li><li><a href="../../Events/open.html"><code>open</code></a></li><li><a href="../../Events/pagehide.html"><code>pagehide</code></a></li><li><a href="../../Events/pageshow.html"><code>pageshow</code></a></li><li><a href="../../Events/popstate.html"><code>popstate</code></a></li><li><a href="../../Events/progress.html"><code>progress</code></a></li><li><a href="../../Events/readystatechange.html"><code>readystatechange</code></a></li><li><a href="../../Events/reset.html"><code>reset</code></a></li><li><a href="../../Events/select.html"><code>select</code></a></li><li><a href="../../Events/show.html"><code>show</code></a></li><li><a href="../../Events/sort.html"><code>sort</code></a></li><li><a href="../../Events/storage.html"><code>storage</code></a></li><li><a href="../../Events/submit.html"><code>submit</code></a></li><li><a href="../../Events/toggle.html"><code>toggle</code></a></li><li><a href="../../Events/unload.html"><code>unload</code></a></li><li><a href="../../Events/loadeddata.html"><code>loadeddata</code></a></li><li><a href="../../Events/loadedmetadata.html"><code>loadedmetadata</code></a></li><li><a href="../../Events/canplay.html"><code>canplay</code></a></li><li><a href="../../Events/playing.html"><code>playing</code></a></li><li><a href="../../Events/play.html"><code>play</code></a></li><li><a href="../../Events/canplaythrough.html"><code>canplaythrough</code></a></li><li><a href="../../Events/seeked.html"><code>seeked</code></a></li><li><a href="../../Events/seeking.html"><code>seeking</code></a></li><li><a href="../../Events/stalled.html"><code>stalled</code></a></li><li><a href="../../Events/suspend.html"><code>suspend</code></a></li><li><a href="../../Events/timeupdate.html"><code>timeupdate</code></a></li><li><a href="../../Events/volumechange.html"><code>volumechange</code></a></li><li><a href="../../Events/waiting.html"><code>waiting</code></a></li><li><a href="../../Events/durationchange.html"><code>durationchange</code></a></li><li><a href="../../Events/emptied.html"><code>emptied</code></a></li></ol></li><li data-default-state="open"><a href="#"><strong>Related pages for HTML DOM</strong></a><ol><li><a href="../BeforeUnloadEvent.html"><code>BeforeUnloadEvent</code></a></li><li><a href="../DOMStringMap.html"><code>DOMStringMap</code></a></li><li><a href="../ErrorEvent.html"><code>ErrorEvent</code></a></li><li><a href="../GlobalEventHandlers.html"><code>GlobalEventHandlers</code></a></li><li><a href="../HTMLAnchorElement.html"><code>HTMLAnchorElement</code></a></li><li><a href="../HTMLAreaElement.html"><code>HTMLAreaElement</code></a></li><li><a href="../HTMLAudioElement.html"><code>HTMLAudioElement</code></a></li><li><a href="../HTMLBRElement.html"><code>HTMLBRElement</code></a></li><li><a href="../HTMLBaseElement.html"><code>HTMLBaseElement</code></a></li><li><a href="../HTMLBaseFontElement.html"><code>HTMLBaseFontElement</code></a></li><li><a href="../HTMLBodyElement.html"><code>HTMLBodyElement</code></a></li><li><a href="../HTMLButtonElement.html"><code>HTMLButtonElement</code></a></li><li><a href="../HTMLCanvasElement.html"><code>HTMLCanvasElement</code></a></li><li><a href="../HTMLContentElement.html"><code>HTMLContentElement</code></a></li><li><a href="../HTMLDListElement.html"><code>HTMLDListElement</code></a></li><li><a href="../HTMLDataElement.html"><code>HTMLDataElement</code></a></li><li><a href="../HTMLDataListElement.html"><code>HTMLDataListElement</code></a></li><li><a href="../HTMLDialogElement.html"><code>HTMLDialogElement</code></a></li><li><a href="../HTMLDivElement.html"><code>HTMLDivElement</code></a></li><li><a href="../HTMLDocument.html"><code>HTMLDocument</code></a></li><li><a href="../HTMLElement.html"><code>HTMLElement</code></a></li><li><a href="../HTMLEmbedElement.html"><code>HTMLEmbedElement</code></a></li><li><a href="../HTMLFieldSetElement.html"><code>HTMLFieldSetElement</code></a></li><li><a href="../HTMLFormControlsCollection.html"><code>HTMLFormControlsCollection</code></a></li><li><a href="../HTMLFormElement.html"><code>HTMLFormElement</code></a></li><li><a href="../HTMLFrameSetElement.html"><code>HTMLFrameSetElement</code></a></li><li><a href="../HTMLHRElement.html"><code>HTMLHRElement</code></a></li><li><a href="../HTMLHeadElement.html"><code>HTMLHeadElement</code></a></li><li><a href="../HTMLHeadingElement.html"><code>HTMLHeadingElement</code></a></li><li><a href="../HTMLHtmlElement.html"><code>HTMLHtmlElement</code></a></li><li><a href="../HTMLIFrameElement.html"><code>HTMLIFrameElement</code></a></li><li><a href="../HTMLImageElement.html"><code>HTMLImageElement</code></a></li><li><a href="../HTMLInputElement.html"><code>HTMLInputElement</code></a></li><li><a href="../HTMLIsIndexElement.html"><code>HTMLIsIndexElement</code></a></li><li><a href="../HTMLKeygenElement.html"><code>HTMLKeygenElement</code></a></li><li><a href="../HTMLLIElement.html"><code>HTMLLIElement</code></a></li><li><a href="../HTMLLabelElement.html"><code>HTMLLabelElement</code></a></li><li><a href="../HTMLLegendElement.html"><code>HTMLLegendElement</code></a></li><li><a href="../HTMLLinkElement.html"><code>HTMLLinkElement</code></a></li><li><a href="../HTMLMapElement.html"><code>HTMLMapElement</code></a></li><li><a href="../HTMLMediaElement.html"><code>HTMLMediaElement</code></a></li><li><a href="../HTMLMetaElement.html"><code>HTMLMetaElement</code></a></li><li><a href="../HTMLMeterElement.html"><code>HTMLMeterElement</code></a></li><li><a href="../HTMLModElement.html"><code>HTMLModElement</code></a></li><li><a href="../HTMLOListElement.html"><code>HTMLOListElement</code></a></li><li><a href="../HTMLObjectElement.html"><code>HTMLObjectElement</code></a></li><li><a href="../HTMLOptGroupElement.html"><code>HTMLOptGroupElement</code></a></li><li><a href="../HTMLOptionElement.html"><code>HTMLOptionElement</code></a></li><li><a href="../HTMLOptionsCollection.html"><code>HTMLOptionsCollection</code></a></li><li><a href="../HTMLOutputElement.html"><code>HTMLOutputElement</code></a></li><li><a href="../HTMLParagraphElement.html"><code>HTMLParagraphElement</code></a></li><li><a href="../HTMLParamElement.html"><code>HTMLParamElement</code></a></li><li><a href="../HTMLPictureElement.html"><code>HTMLPictureElement</code></a></li><li><a href="../HTMLPreElement.html"><code>HTMLPreElement</code></a></li><li><a href="../HTMLProgressElement.html"><code>HTMLProgressElement</code></a></li><li><a href="../HTMLQuoteElement.html"><code>HTMLQuoteElement</code></a></li><li><a href="../HTMLScriptElement.html"><code>HTMLScriptElement</code></a></li><li><a href="../HTMLSelectElement.html"><code>HTMLSelectElement</code></a></li><li><a href="../HTMLShadowElement.html"><code>HTMLShadowElement</code></a></li><li><a href="../HTMLSourceElement.html"><code>HTMLSourceElement</code></a></li><li><a href="../HTMLSpanElement.html"><code>HTMLSpanElement</code></a></li><li><a href="../HTMLStyleElement.html"><code>HTMLStyleElement</code></a></li><li><a href="../HTMLTableCaptionElement.html"><code>HTMLTableCaptionElement</code></a></li><li><a href="../HTMLTableCellElement.html"><code>HTMLTableCellElement</code></a></li><li><a href="../HTMLTableColElement.html"><code>HTMLTableColElement</code></a></li><li><a href="../HTMLTableDataCellElement.html"><code>HTMLTableDataCellElement</code></a></li><li><a href="../HTMLTableElement.html"><code>HTMLTableElement</code></a></li><li><a href="../HTMLTableHeaderCellElement.html"><code>HTMLTableHeaderCellElement</code></a></li><li><a href="../HTMLTableRowElement.html"><code>HTMLTableRowElement</code></a></li><li><a href="../HTMLTableSectionElement.html"><code>HTMLTableSectionElement</code></a></li><li><a href="../HTMLTemplateElement.png"><code>HTMLTemplateElement</code></a></li><li><a href="../HTMLTextAreaElement.html"><code>HTMLTextAreaElement</code></a></li><li><a href="../HTMLTimeElement.html"><code>HTMLTimeElement</code></a></li><li><a href="../HTMLTitleElement.html"><code>HTMLTitleElement</code></a></li><li><a href="../HTMLTrackElement.html"><code>HTMLTrackElement</code></a></li><li><a href="../HTMLUListElement.html"><code>HTMLUListElement</code></a></li><li><a href="../HTMLUnknownElement.html"><code>HTMLUnknownElement</code></a></li><li><a href="../HTMLVideoElement.html"><code>HTMLVideoElement</code></a></li><li><a href="../HashChangeEvent.html"><code>HashChangeEvent</code></a></li><li><a href="../History.html"><code>History</code></a></li><li><a href="../ImageData.html"><code>ImageData</code></a></li><li><a href="../Location.html"><code>Location</code></a></li><li><a href="../MessageChannel.html"><code>MessageChannel</code></a></li><li><a href="../MessageEvent.html"><code>MessageEvent</code></a></li><li><a href="../MessagePort.html"><code>MessagePort</code></a></li><li><a href="../NavigatorGeolocation.html"><code>NavigatorGeolocation</code></a></li><li><a href="../NavigatorID.html"><code>NavigatorID</code></a></li><li><a href="../NavigatorLanguage.html"><code>NavigatorLanguage</code></a></li><li><a href="../NavigatorOnLine.html"><code>NavigatorOnLine</code></a></li><li><a href="../NavigatorPlugins.html"><code>NavigatorPlugins</code></a></li><li><a href="../PageTransitionEvent.html"><code>PageTransitionEvent</code></a></li><li><a href="../Plugin.html"><code>Plugin</code></a></li><li><a href="../PluginArray.html"><code>PluginArray</code></a></li><li><a href="../PopStateEvent.html"><code>PopStateEvent</code></a></li><li><a href="../PortCollection.html"><code>PortCollection</code></a></li><li><a href="../RadioNodeList.html"><code>RadioNodeList</code></a></li><li><a href="../Transferable.html"><code>Transferable</code></a></li><li><a href="../ValidityState.html"><code>ValidityState</code></a></li><li><a href="../WebVTT.html"><code>WebVTT</code></a></li><li><a href="../Window.html"><code>Window</code></a></li><li><a href="../WindowBase64.html"><code>WindowBase64</code></a></li><li><a href="../WindowEventHandlers.html"><code>WindowEventHandlers</code></a></li><li><a href="../WindowTimers.html"><code>WindowTimers</code></a></li></ol></li></ol>
+  </div>
+                
+
+                <!-- approvals -->
+                
+
+              
+
+              </div>
+            
+          </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Web/API/Navigator/doNotTrack$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Web/API/Navigator/doNotTrack$history" label="View page history"></menuitem>
+  </menu>
+
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+        
+        <div class="contentinfo">
+          <p>© 2005-2016 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>
+          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+        
+        </div>
+      </div>
+      <div class="column-strip">
+        
+          
+  
+    <form class="languages go" method="get" action="https://developer.mozilla.org/en-US/docs/Web">
+      <label for="language">Other languages:</label>
+      <select id="language" class="wiki-l10n" name="next" dir="ltr">
+        <option value="/en-US/docs/Web/API/Navigator/doNotTrack" selected="">
+          English (US)
+        </option>
+        
+          <option value="/fi/docs/DOM/navigator.doNotTrack">
+            suomi
+          </option>
+          <option value="/fr/docs/Web/API/Navigator/doNotTrack">
+            Français
+          </option>
+          <option value="/ru/docs/Web/API/Navigator/doNotTrack">
+            Русский
+          </option>
+          <option value="/zh-CN/docs/Web/API/Navigator/doNotTrack">
+            中文 (简体)
+          </option>
+      </select>
+      <noscript>&lt;button type="submit"&gt;Go&lt;/button&gt;</noscript>
+    </form>
+  
+
+        
+      </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+  
+    
+    <!--[if lte IE 8]><script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/selectivizr.091e18cf669b.js" charset="utf-8"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/main.a7b27a25fb9c.js" charset="utf-8"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+    
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/syntax-prism-min.js" charset="utf-8"></script><script type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/wiki.bd71ca9fd27d.js" charset="utf-8" id="wikiscript"></script>
+
+  
+
+  <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/helpfulness.7b208a764d28.js" charset="utf-8"></script>
+
+  
+
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/Navigator/doNotTrack by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 15:37:27 GMT -->
+</body></html>

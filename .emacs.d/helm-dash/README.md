@@ -1,4 +1,11 @@
-# Helm Dash [![Build Status](https://api.travis-ci.org/areina/helm-dash.png?branch=master)](http://travis-ci.org/areina/helm-dash) [![Coverage Status](https://img.shields.io/coveralls/areina/helm-dash.svg)](https://coveralls.io/r/areina/helm-dash?branch=master)
+# Helm Dash
+
+[![Build Status](https://api.travis-ci.org/areina/helm-dash.svg?branch=master)](http://travis-ci.org/areina/helm-dash)
+[![Coverage Status](https://img.shields.io/coveralls/areina/helm-dash.svg)](https://coveralls.io/r/areina/helm-dash?branch=master)
+[![MELPA](http://melpa.org/packages/helm-dash-badge.svg)](http://melpa.org/#/helm-dash)
+[![MELPA Stable](http://stable.melpa.org/packages/helm-dash-badge.svg)](http://stable.melpa.org/#/helm-dash)
+[![Tag Version](https://img.shields.io/github/tag/areina/helm-dash.svg)](https://github.com/areina/helm-dash/tags)
+[![License](http://img.shields.io/:license-gpl3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0.html)
 
 ## What's it
 
@@ -24,7 +31,7 @@ If you're looking for dash.el, the list library, please go to
 
 ## Installation
 
-It's available on [MELPA](http://melpa.milkbox.net).
+It's available on [MELPA](https://melpa.org).
 
 Now, it's possible to choose between install the stable or development version
 of helm-dash. [Here](https://github.com/milkypostman/melpa#stable-packages)
@@ -42,7 +49,13 @@ official docsets or `m-x helm-dash-install-user-docset` for user
 contributed docsets (experimental).
 
 To install a docset from a file in your drive you can use `m-x
-helm-dash-install-docset-from-file'.
+helm-dash-install-docset-from-file'. That function takes as input
+a `tgz` file that you obtained, starting from a folder named `<docset
+name>.docset`, with the command:
+
+`tar --exclude='.DS_Store' -cvzf <docset name>.tgz <docset name>.docset`
+
+as explained [here](https://kapeli.com/docsets#dashdocsetfeed).
 
 ## Usage
 

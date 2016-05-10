@@ -1,0 +1,1022 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/Performance by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 14:30:36 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <script async="" src="../../../../../www.google-analytics.com/analytics.js"></script><script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+  
+    
+  
+
+  
+  <title>Performance</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+  
+    
+    
+    <link href="../../../../../developer.cdn.mozilla.net/static/build/styles/mdn.593f20d8c365.css" rel="stylesheet" type="text/css">
+
+    
+  
+    <link href="../../../../../developer.cdn.mozilla.net/static/build/styles/wiki.13dd9abdfb62.css" rel="stylesheet" type="text/css">
+
+    
+
+    
+
+  <!-- common social tags -->
+  
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../developer.cdn.mozilla.net/static/img/favicon144.a6e4162070f4.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../developer.cdn.mozilla.net/static/img/favicon114.0e9fabd44f85.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../developer.cdn.mozilla.net/static/img/favicon72.8ff9d87c82a0.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../developer.cdn.mozilla.net/static/img/favicon57.a2490b9a2d76.png">
+  <!-- basic favicon -->
+  
+    
+  
+  <link rel="shortcut icon" href="../../../../../developer.cdn.mozilla.net/static/img/favicon32.e02854fdcf73.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/html5shiv.3948ccddab6f.js" charset="utf-8"></script>
+  <![endif]-->
+
+  
+  <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Web/API/Performance$json">
+  <link rel="canonical" href="Performance.html">
+
+  
+    
+      <link rel="alternate" hreflang="fr" href="https://developer.mozilla.org/fr/docs/Web/API/Performance" title="Performance">
+    
+      <link rel="alternate" hreflang="ja" href="https://developer.mozilla.org/ja/docs/Web/API/Performance" title="Performance">
+    
+      <link rel="alternate" hreflang="ru" href="https://developer.mozilla.org/ru/docs/Web/API/Performance" title="Performance">
+    
+      <link rel="alternate" hreflang="zh-CN" href="https://developer.mozilla.org/zh-CN/docs/Web/API/Performance" title="Performance">
+    
+  
+
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="Performance">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Web/API/Performance">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Web/API/Performance">
+  <meta name="twitter:title" content="Performance">
+  
+  <meta property="og:description" content="The Performance interface represents timing-related performance information for the given page.">
+  <meta name="description" content="The Performance interface represents timing-related performance information for the given page.">
+  <meta name="twitter:description" content="The Performance interface represents timing-related performance information for the given page.">
+  
+
+  
+    
+
+
+
+  
+</head>
+<body data-slug="Web/API/Performance" contextmenu="edit-history-menu" data-search-url="" class="document  ">
+
+  <script type="text/javascript">
+    (function(win) {
+        'use strict';
+
+        
+            (function(){
+  var FLAGS = {
+    'compat_api': false,'kumaediting': false,'page_move': false,'registration_disabled': false,'search_suggestions': false,'section_edit': true,'spam_admin_override': false,'spam_checks_enabled': true,'spam_spammer_override': false,'spam_submissions_enabled': false,'spam_testing_mode': false,'wiki_samples': true,'wiki_spam_exempted': false,'wiki_spam_training': true
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': true,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+
+        // This needs to be set before ckeditor.js loads
+        window.CKEDITOR_BASEPATH = 'https://developer.mozilla.org/static/js/libs/ckeditor/build/ckeditor/';
+
+        // This represents the site configuration
+        win.mdn = {
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+            
+            notifications: [],
+            
+            // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            },
+            // Assets that need to be dynamically injected
+            assets_disabled: {
+                css: {
+                    'editor-content': ['https://developer.cdn.mozilla.net/static/build/styles/editor-content.3d79df72080d.css',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/styles/wiki-compat-tables.f3a3bfce97a1.css',]
+                },
+                js: {
+                    'syntax-prism': ['https://developer.cdn.mozilla.net/static/build/js/syntax-prism.7a66ddfa68bf.js',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/js/wiki-compat-tables.14ce5dcb2c3d.js',]
+                }
+            }
+        };
+    })(this);
+</script>
+
+  
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+    
+      <li><a href="#q" id="skip-search">Skip to search</a></li>
+    
+  </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+    <a href="https://developer.mozilla.org/en-US/" class="logo">Mozilla Developer Network</a>
+
+    <div id="nav-sec">
+        
+                  <ul>
+                  <li>
+
+    
+
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                Sign in
+              </span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FPerformance" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/Web/API/Performance" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/Web/API/Performance" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FPerformance" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+              
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+        
+    </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+
+   <!-- end is_zone -->
+
+    <div class="wiki-main-content" id="document-main"><div class="center">
+      
+      <div class="article-meta">
+        <!-- action buttons -->
+        
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+  <ul class="page-buttons" data-sticky="false">
+      
+      <li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+              
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/fr/docs/Web/API/Performance" title="Performance">Français</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/ja/docs/Web/API/Performance" title="Performance">日本語</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/ru/docs/Web/API/Performance" title="Performance">Русский</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/zh-CN/docs/Web/API/Performance" title="Performance">中文 (简体)</a></bdi></li>
+                
+              
+
+              
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Performance$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+              
+            </ul>
+          </div>
+        </div>
+      </li>
+
+      <li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Performance$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li>
+
+        
+
+        <li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Performance$history" rel="nofollow, noindex">History</a></li>
+                
+                
+                
+                
+
+                
+
+                
+                
+                
+                <li class="page-print"><a href="#" onclick="return window.print();">Print this article</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+        
+  <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web" rel="v:url" property="v:title">Web technology for developers</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="../API.html" rel="v:url" property="v:title">Web APIs</a></li>
+    
+    <li class="crumb" typeof="v:Breadcrumb" property="v:title">Performance</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        
+        <div class="contributor-avatars" data-all-text="see all contributors" data-alternate-message="hide contributors" data-has-hidden="1">
+            <ul>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/AFBarstow" title="View profile: AFBarstow">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="AFBarstow" data-src="../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">AFBarstow</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills" title="View profile: chrisdavidmills">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="chrisdavidmills" data-src="../../../../../secure.gravatar.com/avatar/deeea0ba82390bd5acc539703c4b0cfb6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">chrisdavidmills</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Rob W" title="View profile: Rob W">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Rob W" data-src="../../../../../secure.gravatar.com/avatar/c916d92c098426d84778a7910cc32b396c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Rob W</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/adria" title="View profile: adria">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="adria" data-src="../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">adria</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/fscholz" title="View profile: fscholz">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="fscholz" data-src="../../../../../secure.gravatar.com/avatar/e24391c9174352988d819a9b9ea77c9e6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">fscholz</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/zanona" title="View profile: zanona">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="zanona" data-src="../../../../../secure.gravatar.com/avatar/96d23ca2ef5d13034bf07fd125e525446c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">zanona</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Bzbarsky" title="View profile: Bzbarsky">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Bzbarsky" data-src="../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Bzbarsky</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/teoli" title="View profile: teoli">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="teoli" data-src="../../../../../secure.gravatar.com/avatar/d0d90148e08e3b64ccf75c46f31442c56c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">teoli</noscript></a>
+                </li>
+            
+            </ul>
+        </div>
+        
+
+        <h1>Performance</h1>
+
+      </div>
+      
+
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-present">
+
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+            
+              <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+              
+              <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#Properties" rel="internal">Properties</a></li><li><a href="#Methods" rel="internal">Methods</a></li><li><a href="#Specifications" rel="internal">Specifications</a></li><li><a href="#Browser_compatibility" rel="internal">Browser compatibility</a>
+                </li></ol>
+              </div>
+              
+              </div>
+            
+
+            
+            
+              
+            
+
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-half wiki-column text-content">
+
+              
+
+              
+
+              
+                
+                
+                
+              
+              
+
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                
+                  
+                    <div><section id="Quick_Links" class="Quick_links"><!-- --></section></div>
+
+<p>The <strong><code>Performance</code></strong> interface represents timing-related performance information for the given page.</p>
+
+<p>An object of this type can be obtained by calling the <a href="Window/performance.html" title="The Web Performance API allows web pages access to certain functions for measuring the performance of web pages and web applications, including the Navigation Timing API and high-resolution time data."><code>Window.performance</code></a> read-only attribute.</p>
+
+<div class="note">
+<p><strong><em>Note</em>: </strong>This interface and its members are available in <a href="Web_Workers_API.html">Web Workers</a>, except where indicated below. Note that some available parts of the interface are not yet documented (see the <a href="http://www.w3.org/TR/performance-timeline/#sec-window.performance-attribute" class="external">Performance Timeline</a> and <a href="http://www.w3.org/TR/user-timing/#extensions-performance-interface" class="external">User Timing</a> specs for more details.) Also note that performance markers and measures are per context. If you create a mark on the main thread (or other worker), you cannot see it in a worker thread, and vice versa.</p>
+</div>
+
+<h2 id="Properties">Properties</h2>
+
+<p><em>The <code>Performance</code> interface doesn't inherit any properties.</em></p>
+
+<dl>
+ <dt><a href="Performance/navigation.html" title="The Performance.navigation read-only property returns a PerformanceNavigation object representing the type of navigation that occurs in the given browsing context, like the amount of redirections needed to fetch the resource."><code>Performance.navigation</code></a> <span class="inlineIndicator readOnly readOnlyInline" title="This value may not be changed.">Read only </span> <span class="inlineIndicator unimplemented unimplementedInline" title="This feature cannot be used to Web Workers.">Not available to workers </span></dt>
+ <dd>Is a <a href="PerformanceNavigation.html" title="The PerformanceNavigation interface represents information about how the navigation to the current document was done."><code>PerformanceNavigation</code></a> object representing the type of navigation that occurs in the given browsing context, like the amount of redirections needed to fetch the resource.</dd>
+ <dt><a href="Performance/onresourcetimingbufferfull.html" title="The onresourcetimingbufferfull property is an event handler that will be called when the resourcetimingbufferfull event is fired. This event is fired when the browser's resource timing performance buffer is full."><code>Performance.onresourcetimingbufferfull</code></a></dt>
+ <dd>Is an <a href="EventTarget.html" title="EventTarget is an interface implemented by objects that can receive events and may have listeners for them."><code>EventTarget</code></a> which is a callback that will be called when the <code><a href="../Events/resourcetimingbufferfull.html" title="/en-US/docs/Web/Events/resourcetimingbufferfull">resourcetimingbufferfull</a></code> event is fired.</dd>
+ <dt><a href="Performance/timing.html" title="The Performance.timing read-only property returns a PerformanceTiming object containing latency-related performance information."><code>Performance.timing</code></a> <span class="inlineIndicator readOnly readOnlyInline" title="This value may not be changed.">Read only </span> <span class="inlineIndicator unimplemented unimplementedInline" title="This feature cannot be used to Web Workers.">Not available to workers </span></dt>
+ <dd>Is a <a href="PerformanceTiming.html" title="The PerformanceTiming interface represents timing-related performance information for the given page."><code>PerformanceTiming</code></a> object containing latency-related performance information.</dd>
+</dl>
+
+<h2 id="Methods">Methods</h2>
+
+<p><em><em>The <code>Performance</code> interface doesn't inherit any </em>method</em>.</p>
+
+<dl>
+ <dt><a href="Performance/clearMarks.html" title="The clearMarks() method removes the named mark from the browser's performance entry buffer. If the method is called with no arguments, all performance entries with an entry type of &quot;mark&quot; will be removed from the performance entry buffer."><code>Performance.clearMarks()</code></a></dt>
+ <dd>Removes the given <em>mark</em> from the browser's performance entry buffer.</dd>
+ <dt><a href="Performance/clearMeasures.html" title="The clearMeasures() method removes the named measure from the browser's performance entry buffer. If the method is called with no arguments, all performance entries with an entry type of &quot;measure&quot; will be removed from the performance entry buffer."><code>Performance.clearMeasures()</code></a></dt>
+ <dd>Removes the given <em>measure</em> from the browser's performance entry buffer.</dd>
+ <dt><a href="Performance/clearResourceTimings.html" title="The clearResourceTimings() method removes all performance entries with a entryType of &quot;resource&quot; from the browser's performance data buffer and sets the size of the performance data buffer to zero. To set the size of the the browser's performance data buffer, use the setResourceTimingBufferSize() method."><code>Performance.clearResourceTimings()</code></a></dt>
+ <dd>Removes all <a href="PerformanceEntry.html" title="The PerformanceEntry object encapsulates a single performance metric that may be part of a performance timeline. A performance entry can be directly created by making a performance mark or measure (for example by calling the mark() method) at an explicit point in an application. Performance entries can also be created in indirect ways such as loading a resource (such as an image)."><code>performance entries</code></a> with a <a href="PerformanceEntry/entryType.html" title="The entryType property returns the performance entry's type. The valid entryType values are:"><code>entryType</code></a> of "<code>resource</code>" from the browser's performance data buffer.</dd>
+ <dt><a href="Performance/getEntries.html" title="The getEntries() method returns a list of PerformanceEntry objects for a given filter. The list's members (entries) can be created by making performance marks or measures (for example by calling the mark() method) at explicit points in time."><code>Performance.getEntries()</code></a></dt>
+ <dd>Returns a list of <a href="PerformanceEntry.html" title="The PerformanceEntry object encapsulates a single performance metric that may be part of a performance timeline. A performance entry can be directly created by making a performance mark or measure (for example by calling the mark() method) at an explicit point in an application. Performance entries can also be created in indirect ways such as loading a resource (such as an image)."><code>PerformanceEntry</code></a> objects based on the given <em>filter</em>.</dd>
+ <dt><a href="Performance/getEntriesByName.html" title="The getEntriesByName() method returns a list of PerformanceEntry objects for the given name and type. The list's members (entries) can be created by making performance marks or measures (for example by calling the mark() method) at explicit points in time."><code>Performance.getEntriesByName()</code></a></dt>
+ <dd>Returns a list of <a href="PerformanceEntry.html" title="The PerformanceEntry object encapsulates a single performance metric that may be part of a performance timeline. A performance entry can be directly created by making a performance mark or measure (for example by calling the mark() method) at an explicit point in an application. Performance entries can also be created in indirect ways such as loading a resource (such as an image)."><code>PerformanceEntry</code></a> objects based on the given <em>name</em> and <em>entry type</em>.</dd>
+ <dt><a href="Performance/getEntriesByType.html" title="The getEntriesByType() method returns a list of PerformanceEntry objects for a given type. The list's members (entries) can be created by making performance marks or measures (for example by calling the mark() method) at explicit points in time."><code>Performance.getEntriesByType()</code></a></dt>
+ <dd>Returns a list of <a href="PerformanceEntry.html" title="The PerformanceEntry object encapsulates a single performance metric that may be part of a performance timeline. A performance entry can be directly created by making a performance mark or measure (for example by calling the mark() method) at an explicit point in an application. Performance entries can also be created in indirect ways such as loading a resource (such as an image)."><code>PerformanceEntry</code></a> objects of the given <em>entry type</em>.</dd>
+
+ <dt><a href="Performance/mark.html" title="The mark() method creates a timestamp in the browser's performance entry buffer with the given name. The application defined timestamp can be retrieved by one of the Performance interface's getEntries*() methods (getEntries(), getEntriesByName() or getEntriesByType())."><code>Performance.mark()</code></a></dt>
+ <dd>Creates a <a href="DOMHighResTimeStamp.html" title="The DOMHighResTimeStamp type is a double and is used to store a time value. The value could be a discrete point in time or the difference in time between two discrete points in time. The unit is milliseconds and should be accurate to 5 µs (microseconds). However, if the browser is unable to provide a time value accurate to 5 microseconds (because, for example, due to hardware or software constraints), the browser can represent a the value as a time in milliseconds accurate to a millisecond."><code>timestamp</code></a> in the browser's <em>performance entry buffer</em> with the given name.</dd>
+ <dt><a href="Performance/measure.html" title="The measure() method creates a named timestamp in the browser's performance entry buffer between two specified marks (known as the start mark and end mark, respectively). The named timestamp is referred to as a measure."><code>Performance.measure()</code></a></dt>
+ <dd>Creates a named <a href="DOMHighResTimeStamp.html" title="The DOMHighResTimeStamp type is a double and is used to store a time value. The value could be a discrete point in time or the difference in time between two discrete points in time. The unit is milliseconds and should be accurate to 5 µs (microseconds). However, if the browser is unable to provide a time value accurate to 5 microseconds (because, for example, due to hardware or software constraints), the browser can represent a the value as a time in milliseconds accurate to a millisecond."><code>timestamp</code></a> in the browser's performance entry buffer between two specified marks (known as the <em>start mark</em> and <em>end mark</em>, respectively).</dd>
+
+ <dt><a href="Performance/now.html" title="The Performance.now() method returns a DOMHighResTimeStamp, measured in milliseconds, accurate to one thousandth of a millisecond."><code>Performance.now()</code></a></dt>
+ <dd>Returns a <a href="DOMHighResTimeStamp.html" title="The DOMHighResTimeStamp type is a double and is used to store a time value. The value could be a discrete point in time or the difference in time between two discrete points in time. The unit is milliseconds and should be accurate to 5 µs (microseconds). However, if the browser is unable to provide a time value accurate to 5 microseconds (because, for example, due to hardware or software constraints), the browser can represent a the value as a time in milliseconds accurate to a millisecond."><code>DOMHighResTimeStamp</code></a> representing the amount of milliseconds elapsed since a reference instant.</dd>
+ <dt><a href="Performance/setResourceTimingBufferSize.html" title="The setResourceTimingBufferSize() method sets the browser's resource timing buffer size to the specified number of &quot;resource&quot; type performance entry objects."><code>Performance.setResourceTimingBufferSize()</code></a></dt>
+ <dd>Sets the browser's resource timing buffer size to the specified number of "<code>resource</code>" <a href="PerformanceEntry/entryType.html" title="The entryType property returns the performance entry's type. The valid entryType values are:"><code>type</code></a> <a href="PerformanceEntry.html" title="The PerformanceEntry object encapsulates a single performance metric that may be part of a performance timeline. A performance entry can be directly created by making a performance mark or measure (for example by calling the mark() method) at an explicit point in an application. Performance entries can also be created in indirect ways such as loading a resource (such as an image)."><code>performance entry</code></a> objects.</dd>
+ <dt><a href="Performance/toJSON.html" title="The toJSON() method of the Performance interface is a standard serializer: it returns a JSON representation of the performance object's properties."><code>Performance.toJSON()</code></a> <span class="inlineIndicator unimplemented unimplementedInline" title="This feature cannot be used to Web Workers.">Not available to workers </span></dt>
+ <dd>Is a jsonizer returning a json object representing the <code>Performance</code> object.</dd>
+</dl>
+
+<h2 id="Specifications">Specifications</h2>
+
+<table class="standard-table">
+ <tbody>
+  <tr>
+   <th scope="col">Specification</th>
+   <th scope="col">Status</th>
+   <th scope="col">Comment</th>
+  </tr>
+  <tr>
+   <td><a href="https://w3c.github.io/hr-time/#the-performance-interface" class="external" lang="en" hreflang="en">High Resolution Time Level 2<br><small lang="en-US">The definition of 'toJSON()' in that specification.</small></a></td>
+   <td><span class="spec-ED">Editor's Draft</span></td>
+   <td>Defines <code>toJson()</code> method.</td>
+  </tr>
+  <tr>
+   <td><a href="http://www.w3.org/TR/hr-time/#the-performance-interface" class="external" lang="en" hreflang="en">High Resolution Time<br><small lang="en-US">The definition of 'Performance' in that specification.</small></a></td>
+   <td><span class="spec-REC">Recommendation</span></td>
+   <td>Defines <code>now()</code> method.</td>
+  </tr>
+  <tr>
+   <td><a href="http://www.w3.org/TR/navigation-timing/#sec-window.performance-attribute" class="external" lang="en" hreflang="en">Navigation Timing<br><small lang="en-US">The definition of 'Performance' in that specification.</small></a></td>
+   <td><span class="spec-REC">Recommendation</span></td>
+   <td>Defines <code>timing</code> and <code>navigation</code> properties.</td>
+  </tr>
+  <tr>
+   <td><a href="https://w3c.github.io/performance-timeline/#extensions-to-the-performance-interface" class="external" lang="en" hreflang="en">Performance Timeline Time Level 2<br><small lang="en-US">The definition of 'Performance extensions' in that specification.</small></a></td>
+   <td><span class="spec-ED">Editor's Draft</span></td>
+   <td>Changes <code>getEntries()</code> interface.</td>
+  </tr>
+  <tr>
+   <td><a href="http://www.w3.org/TR/performance-timeline/#sec-window.performance-attribute" class="external" lang="en" hreflang="en">Performance Timeline<br><small lang="en-US">The definition of 'Performance extensions' in that specification.</small></a></td>
+   <td><span class="spec-REC">Recommendation</span></td>
+   <td>Defines <code>getEntries()</code>, <code>getEntriesByType()</code> and <code>getEntriesByName()</code> methods.</td>
+  </tr>
+  <tr>
+   <td><a href="https://w3c.github.io/resource-timing/#extensions-performance-interface" class="external" lang="en" hreflang="en">Resource Timing<br><small lang="en-US">The definition of 'Performance extensions' in that specification.</small></a></td>
+   <td><span class="spec-ED">Editor's Draft</span></td>
+   <td>Defines <code>clearResourceTimings()</code> and <code>setResourceTimingBufferSize()</code> methods and the <code>onresourcetimingbufferfull</code> property.</td>
+  </tr>
+  <tr>
+   <td><a href="https://w3c.github.io/user-timing/#extensions-performance-interface" class="external" lang="en" hreflang="en">User Timing<br><small lang="en-US">The definition of 'Performance extensions' in that specification.</small></a></td>
+   <td><span class="spec-ED">Editor's Draft</span></td>
+   <td>Clarifies <code>mark()</code>, <code>clearMark()</code>, <code>measure()</code> and <code>clearMeasure()</code> interfaces.</td>
+  </tr>
+  <tr>
+   <td><a href="http://www.w3.org/TR/user-timing/#extensions-performance-interface" class="external" lang="en" hreflang="en">User Timing<br><small lang="en-US">The definition of 'Performance extensions' in that specification.</small></a></td>
+   <td><span class="spec-REC">Recommendation</span></td>
+   <td>Defines <code>mark()</code>, <code>clearMark()</code>, <code>measure()</code> and <code>clearMeasure()</code> interfaces.</td>
+  </tr>
+ </tbody>
+</table>
+
+<h2 id="Browser_compatibility">Browser compatibility</h2>
+
+<div><div class="htab"> 
+    <a name="AutoCompatibilityTable" id="AutoCompatibilityTable"></a> 
+    <ul> 
+        <li class="selected"><a>Desktop</a></li> 
+        <li><a>Mobile</a></li> 
+    </ul> 
+</div></div>
+
+<div id="compat-desktop">
+<table class="compat-table">
+ <tbody>
+  <tr>
+   <th>Feature</th>
+   <th>Chrome</th>
+   <th>Firefox (Gecko)</th>
+   <th>Internet Explorer</th>
+   <th>Opera</th>
+   <th>Safari (WebKit)</th>
+  </tr>
+  <tr>
+   <td>Basic support (<code>timing </code>attribute)</td>
+   <td>6.0</td>
+   <td><a href="https://developer.mozilla.org/en-US/Firefox/Releases/7" title="Released on 2011-09-26.">7.0</a> (7.0)</td>
+   <td>9.0</td>
+   <td>15.0</td>
+   <td>8</td>
+  </tr>
+  <tr>
+   <td><code>navigation</code> attribute</td>
+   <td>9</td>
+   <td><a href="https://developer.mozilla.org/en-US/Firefox/Releases/7" title="Released on 2011-09-26.">7</a> (7)</td>
+   <td>9.0</td>
+   <td>15</td>
+   <td>8</td>
+  </tr>
+  <tr>
+   <td><code>now()</code> on regular context</td>
+   <td>20.0 <span class="inlineIndicator prefixBox prefixBoxInline" title="prefix"><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Prefixes" title="The name of this feature is prefixed with 'webkit' as this browser considers it experimental">webkit</a></span><br>
+    24.0</td>
+   <td><a href="https://developer.mozilla.org/en-US/Firefox/Releases/15" title="Released on 2012-08-28.">15.0</a> (15.0)</td>
+   <td>10.0</td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td>8</td>
+  </tr>
+  <tr>
+   <td><code>now()</code> in Web workers.</td>
+   <td>33.0</td>
+   <td><a href="https://developer.mozilla.org/en-US/Firefox/Releases/34" title="Released on 2014-12-01.">34.0</a> (34.0)</td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+  </tr>
+  <tr>
+   <td><code>toJSON()</code></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><a href="https://developer.mozilla.org/en-US/Firefox/Releases/25" title="Released on 2013-10-29.">25.0</a> (25.0)</td>
+   <td>9.0</td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+  </tr>
+  <tr>
+   <td><code>getEntries()</code>, <code>getEntriesByType()</code>, <code>getEntriesByName()</code></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+  </tr>
+  <tr>
+   <td><code>clearResourceTimings()</code>, <code>setResourceTimingBufferSize()</code></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+  </tr>
+  <tr>
+   <td><code>onresourcetimingbufferfull</code></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+  </tr>
+  <tr>
+   <td><code>mark()</code>, <code>clearMark()</code>, <code>measure()</code>, <code>clearMeasure()</code></td>
+   <td>43</td>
+   <td>41</td>
+   <td>10</td>
+   <td>33</td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+  </tr>
+ </tbody>
+</table>
+</div>
+
+<div id="compat-mobile">
+<table class="compat-table">
+ <tbody>
+  <tr>
+   <th>Feature</th>
+   <th>Android</th>
+   <th>Firefox Mobile (Gecko)</th>
+   <th><strong>Firefox OS</strong></th>
+   <th>IE Phone</th>
+   <th>Opera Mobile</th>
+   <th>Safari Mobile</th>
+  </tr>
+  <tr>
+   <td>Basic support</td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td>7.0 (7.0)</td>
+   <td>1.0 (7.0)</td>
+   <td>9.0</td>
+   <td>15.0</td>
+   <td>9</td>
+  </tr>
+  <tr>
+   <td><code>navigation</code> attribute</td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td>9.0</td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td>9</td>
+  </tr>
+  <tr>
+   <td><code>now()</code> on regular context</td>
+   <td>20.0 <span class="inlineIndicator prefixBox prefixBoxInline" title="prefix"><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Prefixes" title="The name of this feature is prefixed with 'webkit' as this browser considers it experimental">webkit</a></span><br>
+    24.0</td>
+   <td>15.0 (15.0)</td>
+   <td>1.0 (15.0)</td>
+   <td>10.0</td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td>9</td>
+  </tr>
+  <tr>
+   <td><code>now()</code> in Web workers.</td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td>34.0 (34.0)</td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+  </tr>
+  <tr>
+   <td><code>toJSON()</code></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td>25.0 (25.0)</td>
+   <td>1.2 (25.0)</td>
+   <td>10.0</td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+  </tr>
+  <tr>
+   <td><code>getEntries()</code>, <code>getEntriesByType()</code>, <code>getEntriesByName()</code></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td>25.0 (25.0)</td>
+   <td>1.2 (25.0)</td>
+   <td>10.0</td>
+   <td>33</td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+  </tr>
+  <tr>
+   <td><code>clearResourceTimings()</code>, <code>setResourceTimingBufferSize()</code></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td>33</td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+  </tr>
+  <tr>
+   <td><code>onresourcetimingbufferfull</code></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td>33</td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+  </tr>
+  <tr>
+   <td><code>mark()</code>, <code>clearMark()</code>, <code>measure()</code>, <code>clearMeasure()</code></td>
+   <td>46</td>
+   <td>42</td>
+   <td>42</td>
+   <td>10</td>
+   <td>33</td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+  </tr>
+ </tbody>
+</table>
+</div>
+                  
+                
+              </article>
+
+              
+
+    
+    
+    
+
+    
+    
+    
+
+    <div class="share">
+        <strong>Share:</strong>
+        <ul>
+            <li><a href="http://twitter.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FAPI%2FPerformance%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dtwitter.com&amp;text=I+learned+about+Performance+on+MDN." target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/API/Performance?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=twitter.com" data-title="I learned about Performance on MDN." class="share-link twitter"><i aria-hidden="true" class="icon-twitter"></i>Twitter</a></li>
+            <li><a href="http://facebook.com/sharer.php?s=100&amp;p[url]=https://developer.mozilla.org/en-US/docs/Web/API/Performance?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/API/Performance?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" data-title="I learned about Performance on MDN." class="share-link facebook"><i aria-hidden="true" class="icon-facebook"></i>Facebook</a></li>
+            <li><a href="https://plus.google.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FAPI%2FPerformance%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dplus.google.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/API/Performance?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=plus.google.com" data-title="I learned about Performance on MDN." class="share-link gplus"><i aria-hidden="true" class="icon-google-plus"></i>Google+</a></li>
+        </ul>
+    </div>
+
+              
+
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                  
+                  
+  <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags icon-fw"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+      
+        <li><a href="../../tag/API.html">API</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Interface">Interface</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Navigation Timing">Navigation Timing</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Performance">Performance</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Reference">Reference</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Web Performance">Web Performance</a></li>
+      
+    </ul>
+  </div>
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-group icon-fw"></i>&nbsp;<strong>Contributors to this page:</strong> 
+        <a href="https://developer.mozilla.org/en-US/profiles/AFBarstow">AFBarstow</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills">chrisdavidmills</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Rob W">Rob W</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/adria">adria</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/fscholz">fscholz</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/zanona">zanona</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Bzbarsky">Bzbarsky</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/teoli">teoli</a>
+    
+                    </div>
+                  
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o icon-fw"></i>&nbsp;<strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/AFBarstow">AFBarstow</a>,
+                      <time datetime="2015-12-09T17:58:41-08:00">Dec 9, 2015, 5:58:41 PM</time>
+                    </div>
+                  
+                </div>
+              
+            </div>
+
+            
+              <!-- quick links and zone subnav strip -->
+              <div id="wiki-left" class="column-strip wiki-column">
+
+              
+
+                
+
+                
+                  <!-- quick links -->
+                  
+  <div class="quick-links" id="quick-links">
+    <div class="title see-also">See also</div>
+    <ol><li><strong><a href="Performance_API.html">Performance API</a></strong></li><li><strong><a href="Performance.html"><code>Performance</code></a></strong></li><li data-default-state="open"><a href="#"><strong>Properties</strong></a><ol><li><a href="Performance/navigation.html" title="The Performance.navigation read-only property returns a PerformanceNavigation object representing the type of navigation that occurs in the given browsing context, like the amount of redirections needed to fetch the resource."><code>Performance.navigation</code></a></li><li><a href="Performance/onresourcetimingbufferfull.html" title="The onresourcetimingbufferfull property is an event handler that will be called when the resourcetimingbufferfull event is fired. This event is fired when the browser's resource timing performance buffer is full."><code>Performance.onresourcetimingbufferfull</code></a></li><li><a href="Performance/timing.html" title="The Performance.timing read-only property returns a PerformanceTiming object containing latency-related performance information."><code>Performance.timing</code></a></li></ol></li><li data-default-state="open"><a href="#"><strong>Methods</strong></a><ol><li><a href="Performance/clearMarks.html" title="The clearMarks() method removes the named mark from the browser's performance entry buffer. If the method is called with no arguments, all performance entries with an entry type of &quot;mark&quot; will be removed from the performance entry buffer."><code>Performance.clearMarks()</code></a></li><li><a href="Performance/clearMeasures.html" title="The clearMeasures() method removes the named measure from the browser's performance entry buffer. If the method is called with no arguments, all performance entries with an entry type of &quot;measure&quot; will be removed from the performance entry buffer."><code>Performance.clearMeasures()</code></a></li><li><a href="Performance/clearResourceTimings.html" title="The clearResourceTimings() method removes all performance entries with a entryType of &quot;resource&quot; from the browser's performance data buffer and sets the size of the performance data buffer to zero. To set the size of the the browser's performance data buffer, use the setResourceTimingBufferSize() method."><code>Performance.clearResourceTimings()</code></a></li><li><a href="Performance/getEntries.html" title="The getEntries() method returns a list of PerformanceEntry objects for a given filter. The list's members (entries) can be created by making performance marks or measures (for example by calling the mark() method) at explicit points in time."><code>Performance.getEntries()</code></a></li><li><a href="Performance/getEntriesByName.html" title="The getEntriesByName() method returns a list of PerformanceEntry objects for the given name and type. The list's members (entries) can be created by making performance marks or measures (for example by calling the mark() method) at explicit points in time."><code>Performance.getEntriesByName()</code></a></li><li><a href="Performance/getEntriesByType.html" title="The getEntriesByType() method returns a list of PerformanceEntry objects for a given type. The list's members (entries) can be created by making performance marks or measures (for example by calling the mark() method) at explicit points in time."><code>Performance.getEntriesByType()</code></a></li><li><a href="Performance/mark.html" title="The mark() method creates a timestamp in the browser's performance entry buffer with the given name. The application defined timestamp can be retrieved by one of the Performance interface's getEntries*() methods (getEntries(), getEntriesByName() or getEntriesByType())."><code>Performance.mark()</code></a></li><li><a href="Performance/measure.html" title="The measure() method creates a named timestamp in the browser's performance entry buffer between two specified marks (known as the start mark and end mark, respectively). The named timestamp is referred to as a measure."><code>Performance.measure()</code></a></li><li><a href="Performance/now.html" title="The Performance.now() method returns a DOMHighResTimeStamp, measured in milliseconds, accurate to one thousandth of a millisecond."><code>Performance.now()</code></a></li><li><a href="Performance/setResourceTimingBufferSize.html" title="The setResourceTimingBufferSize() method sets the browser's resource timing buffer size to the specified number of &quot;resource&quot; type performance entry objects."><code>Performance.setResourceTimingBufferSize()</code></a></li><li><a href="Performance/toJSON.html" title="The toJSON() method of the Performance interface is a standard serializer: it returns a JSON representation of the performance object's properties."><code>Performance.toJSON()</code></a></li></ol></li><li data-default-state="open"><a href="#"><strong>Related pages for High Resolution Time</strong></a><ol><li><a href="PerformanceEntry.html"><code>PerformanceEntry</code></a></li><li><a href="PerformanceMark.html"><code>PerformanceMark</code></a></li><li><a href="PerformanceMeasure.html"><code>PerformanceMeasure</code></a></li><li><a href="PerformanceNavigation.html"><code>PerformanceNavigation</code></a></li><li><a href="PerformanceResourceTiming.html"><code>PerformanceResourceTiming</code></a></li><li><a href="PerformanceTiming.html"><code>PerformanceTiming</code></a></li></ol></li></ol>
+  </div>
+                
+
+                <!-- approvals -->
+                
+
+              
+
+              </div>
+            
+          </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Web/API/Performance$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Web/API/Performance$history" label="View page history"></menuitem>
+  </menu>
+
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+        
+        <div class="contentinfo">
+          <p>© 2005-2016 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>
+          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+        
+        </div>
+      </div>
+      <div class="column-strip">
+        
+          
+  
+    <form class="languages go" method="get" action="https://developer.mozilla.org/en-US/docs/Web">
+      <label for="language">Other languages:</label>
+      <select id="language" class="wiki-l10n" name="next" dir="ltr">
+        <option value="/en-US/docs/Web/API/Performance" selected="">
+          English (US)
+        </option>
+        
+          <option value="/fr/docs/Web/API/Performance">
+            Français
+          </option>
+          <option value="/ja/docs/Web/API/Performance">
+            日本語
+          </option>
+          <option value="/ru/docs/Web/API/Performance">
+            Русский
+          </option>
+          <option value="/zh-CN/docs/Web/API/Performance">
+            中文 (简体)
+          </option>
+      </select>
+      <noscript>&lt;button type="submit"&gt;Go&lt;/button&gt;</noscript>
+    </form>
+  
+
+        
+      </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+  
+    
+    <!--[if lte IE 8]><script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/selectivizr.091e18cf669b.js" charset="utf-8"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script type="text/javascript" src="../../../../../developer.cdn.mozilla.net/static/build/js/main.a7b27a25fb9c.js" charset="utf-8"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+    
+    <script async="" type="text/javascript" src="../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../developer.cdn.mozilla.net/static/build/js/syntax-prism-min.js" charset="utf-8"></script><script type="text/javascript" src="../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../developer.cdn.mozilla.net/static/build/js/wiki.bd71ca9fd27d.js" charset="utf-8" id="wikiscript"></script>
+
+  
+
+  <script async="" type="text/javascript" src="../../../../../developer.cdn.mozilla.net/static/build/js/helpfulness.7b208a764d28.js" charset="utf-8"></script>
+
+  
+    <script type="text/javascript">
+        (function($) {
+            $('#wikiArticle').children('h2[id]').each(function() {
+                var id = $(this).attr('id');
+                var href = '/en-US/docs/Web/API/Performance$edit#' + id;
+
+                $('<a>').attr({
+                    href: href,
+                    'class': 'button section-edit only-icon'
+                })
+                .append($('<i aria-hidden="true" class="icon-pencil"></i>'))
+                .append($('<span>'))
+                .find('span')
+                .text(gettext('Edit'))
+                .end()
+                .on('click', function(e) {
+                    e.preventDefault();
+
+                    mdn.analytics.trackEvent({
+                        category: 'Section Edit',
+                        action: id
+                    }, function() {
+                        window.location = href;
+                    });
+                })
+                .appendTo(this);
+            });
+        })(jQuery);
+    </script>
+  
+
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/Performance by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 14:30:40 GMT -->
+</body></html>

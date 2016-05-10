@@ -1,0 +1,1344 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API/Using_Service_Workers by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 15:27:00 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <script async="" src="../../../../../../www.google-analytics.com/analytics.js"></script><script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+  
+    
+  
+
+  
+  <title>Using Service Workers</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+  
+    
+    
+    <link href="../../../../../../developer.cdn.mozilla.net/static/build/styles/mdn.593f20d8c365.css" rel="stylesheet" type="text/css">
+
+    
+  
+    <link href="../../../../../../developer.cdn.mozilla.net/static/build/styles/wiki.13dd9abdfb62.css" rel="stylesheet" type="text/css">
+
+    
+
+    
+
+  <!-- common social tags -->
+  
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon144.a6e4162070f4.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon114.0e9fabd44f85.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon72.8ff9d87c82a0.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon57.a2490b9a2d76.png">
+  <!-- basic favicon -->
+  
+    
+  
+  <link rel="shortcut icon" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon32.e02854fdcf73.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/html5shiv.3948ccddab6f.js" charset="utf-8"></script>
+  <![endif]-->
+
+  
+  <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API/Using_Service_Workers$json">
+  <link rel="canonical" href="Using_Service_Workers.html">
+
+  
+    
+      <link rel="alternate" hreflang="de" href="https://developer.mozilla.org/de/docs/Web/API/Service_Worker_API/Using_Service_Workers" title="Benutze Service Workers">
+    
+      <link rel="alternate" hreflang="fr" href="https://developer.mozilla.org/fr/docs/Web/API/Service_Worker_API/Using_Service_Workers" title="Utiliser les Service Workers">
+    
+      <link rel="alternate" hreflang="ja" href="https://developer.mozilla.org/ja/docs/Web/API/ServiceWorker_API/Using_Service_Workers" title="Service Workerの利用について">
+    
+      <link rel="alternate" hreflang="ru" href="https://developer.mozilla.org/ru/docs/Web/API/Service_Worker_API/Using_Service_Workers" title="Использование Service Worker">
+    
+  
+
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="Using Service Workers">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API/Using_Service_Workers">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API/Using_Service_Workers">
+  <meta name="twitter:title" content="Using Service Workers">
+  
+  <meta property="og:description" content="One overriding problem that web users have suffered with for years is loss of connectivity. The best web app in the world will provide a terrible user experience if you can’t download it. There have been various attempts to create technologies to solve this problem, as our Offline page shows, and some of the issues have been solved. But the overriding problem is that there still isn’t a good overall control mechanism for asset caching and custom network requests. The previous attempt — AppCache — seemed to be a good idea because it allowed you to specify assets to cache really easily. However, it made many assumptions about what you were trying to do and then broke horribly when your app didn’t follow those assumptions exactly. Read Jake Archibald's Application Cache is a Douchebag for more details.">
+  <meta name="description" content="One overriding problem that web users have suffered with for years is loss of connectivity. The best web app in the world will provide a terrible user experience if you can’t download it. There have been various attempts to create technologies to solve this problem, as our Offline page shows, and some of the issues have been solved. But the overriding problem is that there still isn’t a good overall control mechanism for asset caching and custom network requests. The previous attempt — AppCache — seemed to be a good idea because it allowed you to specify assets to cache really easily. However, it made many assumptions about what you were trying to do and then broke horribly when your app didn’t follow those assumptions exactly. Read Jake Archibald's Application Cache is a Douchebag for more details.">
+  <meta name="twitter:description" content="One overriding problem that web users have suffered with for years is loss of connectivity. The best web app in the world will provide a terrible user experience if you can’t download it. There have been various attempts to create technologies to solve this problem, as our Offline page shows, and some of the issues have been solved. But the overriding problem is that there still isn’t a good overall control mechanism for asset caching and custom network requests. The previous attempt — AppCache — seemed to be a good idea because it allowed you to specify assets to cache really easily. However, it made many assumptions about what you were trying to do and then broke horribly when your app didn’t follow those assumptions exactly. Read Jake Archibald's Application Cache is a Douchebag for more details.">
+  
+
+  
+    
+
+
+
+  
+</head>
+<body data-slug="Web/API/Service_Worker_API/Using_Service_Workers" contextmenu="edit-history-menu" data-search-url="" class="document  ">
+
+  <script type="text/javascript">
+    (function(win) {
+        'use strict';
+
+        
+            (function(){
+  var FLAGS = {
+    'compat_api': false,'kumaediting': false,'page_move': false,'registration_disabled': false,'search_suggestions': false,'section_edit': false,'spam_admin_override': false,'spam_checks_enabled': true,'spam_spammer_override': false,'spam_submissions_enabled': false,'spam_testing_mode': false,'wiki_samples': true,'wiki_spam_exempted': false,'wiki_spam_training': true
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': true,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+
+        // This needs to be set before ckeditor.js loads
+        window.CKEDITOR_BASEPATH = 'https://developer.mozilla.org/static/js/libs/ckeditor/build/ckeditor/';
+
+        // This represents the site configuration
+        win.mdn = {
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+            
+            notifications: [],
+            
+            // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            },
+            // Assets that need to be dynamically injected
+            assets_disabled: {
+                css: {
+                    'editor-content': ['https://developer.cdn.mozilla.net/static/build/styles/editor-content.3d79df72080d.css',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/styles/wiki-compat-tables.f3a3bfce97a1.css',]
+                },
+                js: {
+                    'syntax-prism': ['https://developer.cdn.mozilla.net/static/build/js/syntax-prism.7a66ddfa68bf.js',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/js/wiki-compat-tables.14ce5dcb2c3d.js',]
+                }
+            }
+        };
+    })(this);
+</script>
+
+  
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+    
+      <li><a href="#q" id="skip-search">Skip to search</a></li>
+    
+  </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+    <a href="https://developer.mozilla.org/en-US/" class="logo">Mozilla Developer Network</a>
+
+    <div id="nav-sec">
+        
+                  <ul>
+                  <li>
+
+    
+
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                Sign in
+              </span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FService_Worker_API%2FUsing_Service_Workers" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/Web/API/Service_Worker_API/Using_Service_Workers" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/Web/API/Service_Worker_API/Using_Service_Workers" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FService_Worker_API%2FUsing_Service_Workers" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+              
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+        
+    </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../../API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+
+   <!-- end is_zone -->
+
+    <div class="wiki-main-content" id="document-main"><div class="center">
+      
+      <div class="article-meta">
+        <!-- action buttons -->
+        
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+  <ul class="page-buttons" data-sticky="false">
+      
+      <li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+              
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/de/docs/Web/API/Service_Worker_API/Using_Service_Workers" title="Benutze Service Workers">Deutsch</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/fr/docs/Web/API/Service_Worker_API/Using_Service_Workers" title="Utiliser les Service Workers">Français</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/ja/docs/Web/API/ServiceWorker_API/Using_Service_Workers" title="Service Workerの利用について">日本語</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/ru/docs/Web/API/Service_Worker_API/Using_Service_Workers" title="Использование Service Worker">Русский</a></bdi></li>
+                
+              
+
+              
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API/Using_Service_Workers$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+              
+            </ul>
+          </div>
+        </div>
+      </li>
+
+      <li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API/Using_Service_Workers$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li>
+
+        
+
+        <li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API/Using_Service_Workers$history" rel="nofollow, noindex">History</a></li>
+                
+                
+                
+                
+
+                
+
+                
+                
+                
+                <li class="page-print"><a href="#" onclick="return window.print();">Print this article</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+        
+  <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web" rel="v:url" property="v:title">Web technology for developers</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="../../API.html" rel="v:url" property="v:title">Web APIs</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="../Service_Worker_API.html" rel="v:url" property="v:title">Service Worker API</a></li>
+    
+    <li class="crumb" typeof="v:Breadcrumb" property="v:title">Using Service Workers</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        
+        <div class="contributor-avatars" data-all-text="see all contributors" data-alternate-message="hide contributors" data-has-hidden="1">
+            <ul>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/franzy1709" title="View profile: franzy1709">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="franzy1709" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">franzy1709</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills" title="View profile: chrisdavidmills">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="chrisdavidmills" data-src="../../../../../../secure.gravatar.com/avatar/deeea0ba82390bd5acc539703c4b0cfb6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">chrisdavidmills</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/maybe" title="View profile: maybe">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="maybe" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">maybe</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/stevemao" title="View profile: stevemao">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="stevemao" data-src="../../../../../../secure.gravatar.com/avatar/084668018e4752a76a838f27e041d1826c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">stevemao</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/miguelmota" title="View profile: miguelmota">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="miguelmota" data-src="../../../../../../secure.gravatar.com/avatar/1e122f7a1295b43d71385d738dfe38246c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">miguelmota</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/enguerran" title="View profile: enguerran">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="enguerran" data-src="../../../../../../secure.gravatar.com/avatar/2e43fe3376aaf887aad755de94942fa06c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">enguerran</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/allen.dean" title="View profile: allen.dean">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="allen.dean" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">allen.dean</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/fscholz" title="View profile: fscholz">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="fscholz" data-src="../../../../../../secure.gravatar.com/avatar/e24391c9174352988d819a9b9ea77c9e6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">fscholz</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Brettz9" title="View profile: Brettz9">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Brettz9" data-src="../../../../../../secure.gravatar.com/avatar/4c750582e23fcf068bdde51cc50416d16c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Brettz9</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/jryans" title="View profile: jryans">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="jryans" data-src="../../../../../../secure.gravatar.com/avatar/da74cfd81f892e34f7e3926f2c56f9086c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">jryans</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/teoli" title="View profile: teoli">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="teoli" data-src="../../../../../../secure.gravatar.com/avatar/d0d90148e08e3b64ccf75c46f31442c56c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">teoli</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/bhritchie" title="View profile: bhritchie">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="bhritchie" data-src="../../../../../../secure.gravatar.com/avatar/5a406c7ff2cfb0a43bdcf8056e4863f06c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">bhritchie</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/vrana" title="View profile: vrana">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="vrana" data-src="../../../../../../secure.gravatar.com/avatar/b8a7eece5a46b9ed2a1a8025a78c4fb66c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">vrana</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/rippedspine" title="View profile: rippedspine">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="rippedspine" data-src="../../../../../../secure.gravatar.com/avatar/707f9d9db883e7176485837810e785616c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">rippedspine</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/jpmedley" title="View profile: jpmedley">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="jpmedley" data-src="../../../../../../secure.gravatar.com/avatar/fde784135f738cc182672e703dea9a4b6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">jpmedley</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/adria" title="View profile: adria">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="adria" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">adria</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Sheppy" title="View profile: Sheppy">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Sheppy" data-src="../../../../../../secure.gravatar.com/avatar/945076feb88f2d7003891ffbf06f32bf6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Sheppy</noscript></a>
+                </li>
+            
+            </ul>
+        </div>
+        
+
+        <h1>Using Service Workers</h1>
+
+      </div>
+      
+
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-present">
+
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+            
+              <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+              
+              <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#The_premise_of_Service_Workers" rel="internal">The premise of Service Workers</a></li><li><a href="#Setting_up_to_play_with_Service_Workers" rel="internal">Setting up to play with Service Workers</a></li><li><a href="#Basic_architecture" rel="internal">Basic architecture</a><ol><li><a href="#Promises" rel="internal">Promises</a><ol><li><a href="#sync" rel="internal">sync</a></li><li><a href="#async" rel="internal">async</a></li></ol></li></ol></li><li><a href="#Service_workers_demo" rel="internal">Service workers demo</a></li><li><a href="#Enter_Service_workers" rel="internal">Enter Service workers</a><ol><li><a href="#Registering_your_worker" rel="internal">Registering your worker</a><ol><li><a href="#Why_is_my_service_worker_failing_to_register" rel="internal">Why is my service worker failing to register?</a></li></ol></li><li><a href="#Install_and_activate_populating_your_cache" rel="internal">Install and activate: populating your cache</a></li><li><a href="#Custom_responses_to_requests" rel="internal">Custom responses to requests</a></li></ol></li><li><a href="#Recovering_failed_requests" rel="internal">Recovering failed requests</a></li><li><a href="#Updated_code_pattern_suggestion" rel="internal">Updated code pattern suggestion</a></li><li><a href="#Updating_your_service_worker" rel="internal">Updating your service worker</a><ol><li><a href="#Deleting_old_caches" rel="internal">Deleting old caches</a></li></ol></li><li><a href="#Dev_tools" rel="internal">Dev tools</a></li><li><a href="#Specifications" rel="internal">Specifications</a></li><li><a href="#Browser_compatibility" rel="internal">Browser compatibility</a></li><li><a href="#See_also" rel="internal">See also</a>
+                </li></ol>
+              </div>
+              
+              </div>
+            
+
+            
+            
+              
+            
+
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-half wiki-column text-content">
+
+              
+
+              
+
+              
+                
+                
+                
+              
+              
+
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                
+                  
+                    <p></p><section id="Quick_Links"><!-- --></section><p></p>
+
+<p></p><div class="notice experimental"> 
+    <p><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span> <strong>This is an experimental technology</strong><br>Because this technology's specification has not stabilized, check the <a href="#Browser_compatibility">compatibility table</a> for usage in various browsers. Also note that the syntax and behavior of an experimental technology is subject to change in future versions of browsers as the specification changes.</p> 
+</div><p></p>
+
+<div class="summary">
+<p>This article provides information on getting started with service workers, including basic architecture, registering a service worker, the install and activation process for a new service worker, updating your service worker, cache control and custom responses, all in the context of a simple app with offline functionality.&nbsp;</p>
+</div>
+
+<h2 id="The_premise_of_Service_Workers">The premise of Service Workers</h2>
+
+<p>One overriding problem that web users have suffered with for years is loss of connectivity. The best web app in the world will provide a terrible user experience if you can’t download it. There have been various attempts to create technologies to solve this problem, as our <a href="https://developer.mozilla.org/en-US/Apps/Build/Offline">Offline</a> page shows, and some of the issues have been solved. But the overriding problem is that there still isn’t a good overall control mechanism for asset caching and custom network requests.<br>
+ <br>
+ The previous attempt — AppCache — seemed to be a good idea because it allowed you to specify assets to cache really easily. However, it made many assumptions about what you were trying to do and then broke horribly when your app didn’t follow those assumptions exactly. Read Jake Archibald's <a href="http://alistapart.com/article/application-cache-is-a-douchebag" class="external">Application Cache is a Douchebag</a> for more details.</p>
+
+<div class="note">
+<p><strong>Note</strong>: As of Firefox 44, when <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Using_the_application_cache">AppCache</a> is used to provide offline support for a page a warning message is now displayed in the console advising developers to use <a href="Using_Service_Workers.html">Service workers</a> instead (<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1204581" class="external" title="FIXED: Add a deprecation notice for AppCache if service worker fetch interception is enabled">bug&nbsp;1204581</a>.)</p>
+</div>
+
+<p>Service workers should finally fix these issues. Service Worker syntax is more complex than that of AppCache, but the trade off is that you can use JavaScript to control your AppCache-implied behaviours with a fine degree of granularity, allowing you to handle this problem and many more. Using a Service Worker you can easily set an app up to use cached assets first, thus providing a default experience even when offline, before then getting more data from the network (commonly known as <a href="http://offlinefirst.org/" class="external">Offline First</a>). This is already available with native apps, which is one of the main reasons native apps are often chosen over web apps.</p>
+
+<h2 id="Setting_up_to_play_with_Service_Workers">Setting up to play with Service Workers</h2>
+
+<p>Many service workers features are now enabled by default in newer versions of supporting browsers. If however you find that demo code is not working in your installed versions, you might need to enable a pref:</p>
+
+<ul>
+ <li><strong>Firefox Nightly</strong>: Go to <code>about:config</code> and set <code>dom.serviceWorkers.enabled</code> to true; restart browser.</li>
+ <li><strong>Chrome Canary</strong>: Go to <code>chrome://flags</code> and turn on <code>experimental-web-platform-features</code>; restart browser (note that some features are now enabled by default in Chrome.)</li>
+ <li><strong>Opera</strong>: Go to <code>opera://flags</code> and enable <code>Support for ServiceWorker</code>; restart browser.</li>
+</ul>
+
+<p>You’ll also need to serve your code via HTTPS — Service Workers are restricted to running across HTTPS for security reasons. GitHub is therefore a good place to host experiments, as it supports HTTPS.</p>
+
+<h2 id="Basic_architecture">Basic architecture</h2>
+
+<p>With service workers, the following steps are generally observed for basic set up:</p>
+
+<ol>
+ <li>The service worker URL is fetched and registered via <a href="../ServiceWorkerContainer/register.html" title="The register() method of the ServiceWorkerContainer interface creates or updates a ServiceWorkerRegistration for the given scriptURL."><code>serviceWorkerContainer.register()</code></a>.</li>
+ <li>If successful, the service worker is executed in a <a href="../ServiceWorkerGlobalScope.html" title="The ServiceWorkerGlobalScope interface of the ServiceWorker API represents the global execution context of a service worker."><code>ServiceWorkerGlobalScope</code></a>; this is basically a special kind of worker context, running off the main script execution thread, with no DOM access.</li>
+ <li>The service worker is now ready to process events.</li>
+ <li>Installation of the worker is attempted when service worker-controlled pages are accessed subsequently. An Install event is always the first one sent to a service worker (this can be used to start the process of populating an IndexedDB, and caching site assets). This is really the same kind of procedure as installing a native or Firefox OS app — making everything available for use offline.</li>
+ <li>When the <code>oninstall</code> handler completes, the service worker is considered installed.</li>
+ <li>Next is activation. When the service worker is installed, it then receives an activate event. The primary use of <code>onactivate</code> is for cleanup of resources used in previous versions of a Service Worker script.</li>
+ <li>The Service Worker will now control pages, but only those opened after the <code>register()</code> is successful. i.e. a document starts life with or without a Service Worker and maintains that for its lifetime. So documents will have to be reloaded to actually be controlled.</li>
+</ol>
+
+<p><img src="../../../../../../mdn.mozillademos.org/files/12636/sw-lifecycle.png" style="display: block; height: 867px; margin: 0px auto; width: 579px;" alt=""></p>
+
+<p>The below graphic shows a summary of the available service worker events:</p>
+
+<p><img src="../../../../../../mdn.mozillademos.org/files/12632/sw-events.png" style="display: block; margin: 0px auto;" alt="install, activate, message, fetch, sync, push"></p>
+
+<h3 id="Promises">Promises</h3>
+
+<p><a href="../../JavaScript/Reference/Global_Objects/Promise.html">Promises</a> are a great mechanism for running async operations, with success dependant on one another. This is central to the way service workers work.<br>
+ <br>
+ Promises can do a great many things, but for now, all you need to know is that if something returns a promise, you can attach <code>.then()</code> to the end and include callbacks inside it for success, failure, etc., or you can insert <code>.catch()</code> on the end if you want to include a failure callback.</p>
+
+<p>Let’s compare a traditional synchronous callback structure to its asynchronous promise equivalent.</p>
+
+<h4 id="sync">sync</h4>
+
+<pre class="brush: js">try {
+  var value = myFunction();
+  console.log(value);
+} catch(err) {
+  console.log(err);
+}</pre>
+
+<h4 id="async">async</h4>
+
+<pre class="brush: js">myFunction().then(function(value) {
+  console.log(value);
+  }).catch(function(err) {
+  console.log(err);
+});</pre>
+
+<p>In the first example, we have to wait for <code>myFunction()</code> to run and return <code>value</code> before any more of the code can execute. In the second example, <code>myFunction()</code> returns a promise for <code>value</code>, then the rest of the code can carry on running. When the promise resolves, the code inside <code>then</code> will be run, asynchronously.<br>
+ <br>
+ Now for a real example — what if we wanted to load images dynamically, but we wanted to make sure the images were loaded before we tried to display it? This is a standard thing to want to do, but it can be a bit of a pain. We can use <code>.onload</code> to only display the image after it’s loaded, but what about events that start happening before we start listening to them? We could try to work around this using <code>.complete</code>, but it’s still not foolproof, and what about multiple images? And, ummm, it’s still synchronous, so blocks the main thread.<br>
+ <br>
+ Instead, we could build our own promise to handle this kind of case. (See our <a href="https://github.com/mdn/promises-test" class="external">Promises test</a> example for the source code, or <a href="https://mdn.github.io/promises-test/" class="external">look at it running live</a>.)</p>
+
+<p></p><div class="note"><strong>Note:</strong>&nbsp;A real service worker implementation would use caching and onfetch rather than the deprecated XMLHttpRequest API. Those features are not used here so that you can focus on understanding Promises.</div><p></p>
+
+<pre class="brush: js">function imgLoad(url) {
+  return new Promise(function(resolve, reject) {      
+    var request = new XMLHttpRequest();
+    request.open('GET', url);
+    request.responseType = 'blob';
+
+    request.onload = function() {
+      if (request.status == 200) {
+        resolve(request.response);
+      } else {
+        reject(Error('Image didn\'t load successfully; error code:' + request.statusText));
+      }
+    };
+
+    request.onerror = function() {
+      reject(Error('There was a network error.'));
+    };
+
+    request.send();
+  });
+}</pre>
+
+<p>We return a new promise using the <code>Promise()</code> constructor, which takes as an argument a callback function with <code>resolve</code> and <code>reject</code> parameters. Somewhere in the function, we need to define what happens for the promise to resolve successfully or be rejected — in this case return a 200 OK status or not — and then call <code>resolve</code> on success, or <code>reject</code> on failure. The rest of the contents of this function is fairly standard XHR stuff, so we won’t worry about that for now.</p>
+
+<p>When we come to call the <code>imgLoad()</code> function, we call it with the url to the image we want to load, as we might expect, but the rest of the code is a little different:</p>
+
+<pre class="brush: js">var body = document.querySelector('body');
+var myImage = new Image();
+
+imgLoad('myLittleVader.jpg').then(function(response) {
+  var imageURL = window.URL.createObjectURL(response);
+  myImage.src = imageURL;
+  body.appendChild(myImage);
+}, function(Error) {
+  console.log(Error);
+});</pre>
+
+<p>On to the end of the function call, we chain the promise <code>then()</code> method, which contains two functions — the first one is executed when the promise successfully resolves, and the second is called when the promise is rejected. In the resolved case, we display the image inside <code>myImage</code> and append it to the body (it’s argument is the <code>request.response</code> contained inside the promise’s <code>resolve</code> method); in the rejected case we return an error to the console.</p>
+
+<p>This all happens asynchronously.</p>
+
+<div class="note">
+<p><strong>Note</strong>: You can also chain promise calls together, for example:<br>
+ <code>myPromise().then(success, failure).then(success).catch(failure);</code></p>
+</div>
+
+<div class="note">
+<p><strong>Note</strong>: You can find a lot more out about promises by reading Jake Archibald’s excellent <a href="http://www.html5rocks.com/en/tutorials/es6/promises/" class="external">JavaScript Promises: there and back again</a>.</p>
+</div>
+
+<h2 id="Service_workers_demo">Service workers demo</h2>
+
+<p>To demonstrate just the very basics of registering and installing a service worker, we have created a simple demo called <a href="https://github.com/mdn/sw-test" class="external">sw-test</a>, which is a simple Star wars Lego image gallery. It uses a promise-powered function to read image data from a JSON object and load the images using Ajax, before displaying the images in a line down the page. We’ve kept things static and simple for now. It also registers, installs, and activates a service worker, and when more of the spec is supported by browsers it will cache all the files required so it will work offline!</p>
+
+<p><img src="../../../../../../mdn.mozillademos.org/files/8243/demo-screenshot.png" style="display: block; height: 410px; margin: 0px auto; width: 480px;" alt=""><br>
+ <br>
+ <br>
+ You can see the <a href="https://github.com/mdn/sw-test/" class="external">source code on GitHub</a>, and <a href="https://mdn.github.io/sw-test/" class="external">view the example live</a>. The one bit we’ll call out here is the promise (see <a href="https://github.com/mdn/sw-test/blob/gh-pages/app.js#L17-L42" class="external">app.js lines 17-42</a>), which is a modified version of what you read about above, in the <a href="https://github.com/mdn/promises-test" class="external">Promises test demo</a>. It is different in the following ways:</p>
+
+<ol>
+ <li>In the original, we only passed in a URL to an image we wanted to load. In this version, we pass in a JSON fragment containing all the data for a single image (see what they look like in <a href="https://github.com/mdn/sw-test/blob/gh-pages/image-list.js" class="external">image-list.js</a>). This is because all the data for each promise resolve has to be passed in with the promise, as it is asynchronous. If you just passed in the url, and then tried to access the other items in the JSON separately when the <code>for()</code> loop is being iterated through later on, it wouldn’t work, as the promise wouldn’t resolve at the same time as the iterations are being done (that is a synchronous process.)</li>
+ <li>We actually resolve the promise with an array, as we want to make the loaded image blob available to the resolving function later on in the code, but also the image name, credits and alt text (see <a href="https://github.com/mdn/sw-test/blob/gh-pages/app.js#L26-L29" class="external">app.js lines 26-29</a>). Promises will only resolve with a single argument, so if you want to resolve with multiple values, you need to use an array/object.</li>
+ <li>To access the resolved promise values, we then access this function as you’d then expect (see <a href="https://github.com/mdn/sw-test/blob/gh-pages/app.js#L55-L59" class="external">app.js lines 55-59</a>.) This may seem a bit odd at first, but this is the way promises work.</li>
+</ol>
+
+<h2 id="Enter_Service_workers">Enter Service workers</h2>
+
+<p>Now let’s get on to service workers!</p>
+
+<h3 id="Registering_your_worker">Registering your worker</h3>
+
+<p>The first block of code in&nbsp;our app’s JavaScript file — <code>app.js</code> — is as follows. This is our entry point into using service workers.</p>
+
+<pre class="brush: js">if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw-test/sw.js', { scope: '/sw-test/' }).then(function(reg) {
+    // registration worked
+    console.log('Registration succeeded. Scope is ' + reg.scope);
+  }).catch(function(error) {
+    // registration failed
+    console.log('Registration failed with ' + error);
+  });
+};</pre>
+
+<ol>
+ <li>The outer block performs a feature detection test to make sure service workers are supported before trying to register one.</li>
+ <li>Next, we use the <a href="../ServiceWorkerContainer/register.html" title="The register() method of the ServiceWorkerContainer interface creates or updates a ServiceWorkerRegistration for the given scriptURL."><code>ServiceWorkerContainer.register()</code></a> function to register the service worker for this site, which is just a JavaScript file residing inside our app (note this is the file's URL relative to the origin, not the JS file that references it.)</li>
+ <li>The <code>scope</code> parameter is optional, and can be used to specify the subset of your content that you want the service worker to control. In this case, we have specified '<code>/sw-test/'</code>, which means all content under the app's origin. If you leave it out, it will default to this value anyway, but we specified it here for illustration purposes.</li>
+ <li>The <code>.then()</code> promise function is used to chain a success case onto our promise structure. &nbsp;When the promise resolves successfully, the code inside it executes.</li>
+ <li>Finally, we chain a <code>.catch()</code> function onto the end that will run if the promise is rejected.</li>
+</ol>
+
+<p>This registers a service worker, which runs in a worker context, and therefore has no DOM access. You then run code in the service worker outside of your normal pages&nbsp;to control their loading.<br>
+ <br>
+ A single service worker can control many pages. Each time a page within your scope is loaded, the service worker is installed against that page and operates on it. Bear in mind therefore that you need to be careful with global variables in the service worker script: each page doesn’t get its own unique worker.</p>
+
+<div class="note">
+<p><strong>Note</strong>: Your service worker functions like a proxy server, allowing you to modify requests and responses, replace them with items from its own cache, and more.</p>
+</div>
+
+<div class="note">
+<p><strong>Note</strong>: One great thing about service workers is that if you use feature detection like we’ve shown above, browsers that don’t support service workers can just use your app online in the normal expected fashion. Furthermore, if you use AppCache and SW on a page, browsers that don’t support SW but do support AppCache will use that, and browsers that support both will ignore the AppCache and let SW take over.</p>
+</div>
+
+<h4 id="Why_is_my_service_worker_failing_to_register">Why is my service worker failing to register?</h4>
+
+<p>This could be for the following reasons:</p>
+
+<ol>
+ <li>You are not running your application through HTTPS.</li>
+ <li>The path to your service worker file is not written correctly — it needs to be written relative to the origin, not your app’s root directory. In our example, the worker is at <code>https://mdn.github.io/sw-test/sw.js</code>, and the app’s root is <code>https://mdn.github.io/sw-test/</code>. But the path needs to be written as <code>/sw-test/sw.js</code>, not <code>/sw.js</code>.</li>
+ <li>The service worker being pointed to is on a different origin to that of your app. This is also not allowed.</li>
+</ol>
+
+<p><img src="../../../../../../mdn.mozillademos.org/files/12630/important-notes.png" style="display: block; height: 277px; margin: 0px auto; width: 574px;" alt=""></p>
+
+<p>Also note:</p>
+
+<ul>
+ <li>The service worker will only catch requests from clients under the service worker's scope.</li>
+ <li>The max scope for a service worker is the location of the worker.</li>
+ <li>If your server worker is active on a client being served with the <code>Service-Worker-Allowed</code> header, you can specify a list of max scopes for that worker.</li>
+</ul>
+
+<h3 id="Install_and_activate_populating_your_cache">Install and activate: populating your cache</h3>
+
+<p>After your service worker is registered, the browser will attempt to install then activate the service worker for your page/site.<br>
+ <br>
+ The install event is fired when an install is successfully completed. The install event is generally used to populate your browser’s offline caching capabilities with the assets you need to run your app offline. To do this, we use Service Worker’s brand new storage API — <a href="../Cache.html" title="The Cache interface of the ServiceWorker API represents the storage for Request / Response object pairs that are cached as part of the ServiceWorker life cycle."><code>cache</code></a> — a global on the service worker that allows us to store assets delivered by responses, and keyed by their requests. This API works in a similar way to the browser’s standard cache, but it is specific to your domain. It persists until you tell it not to — again, you have full control.</p>
+
+<div class="note">
+<p><strong>Note</strong>: The Cache API is not supported in every&nbsp;browser. (See the <a href="#Browser_support">Browser support</a> section for more information.)&nbsp;If you want&nbsp;to use this now, you could consider using a polyfill like the one available in <a href="https://github.com/Polymer/topeka/blob/master/sw.js" class="external">Google's Topeka demo</a>, or perhaps store your assets in <a href="../IndexedDB_API.html">IndexedDB</a>.</p>
+</div>
+
+<p>Let’s start this section by looking at a code sample — this is the <a href="https://github.com/mdn/sw-test/blob/gh-pages/sw.js#L1-L18" class="external">first block you’ll find in our service worker</a>:</p>
+
+<pre class="brush: js">this.addEventListener('install', function(event) {
+&nbsp; event.waitUntil(
+&nbsp;&nbsp;&nbsp; caches.open('v1').then(function(cache) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return cache.addAll([
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '/sw-test/',
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '/sw-test/index.html',
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '/sw-test/style.css',
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '/sw-test/app.js',
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '/sw-test/image-list.js',
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '/sw-test/star-wars-logo.jpg',
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '/sw-test/gallery/',
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '/sw-test/gallery/bountyHunters.jpg',
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '/sw-test/gallery/myLittleVader.jpg',
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '/sw-test/gallery/snowTroopers.jpg'
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ]);
+&nbsp;&nbsp;&nbsp; })
+&nbsp; );
+});</pre>
+
+<ol>
+ <li>Here we add an <code>install</code> event listener to the service worker (hence <code>this</code>), and then chain a <a href="../ExtendableEvent/waitUntil.html" title="The ExtendableEvent.waitUntil() method extends the lifetime of the event. When called in an EventHandler associated to the install event, it delays treating the installing&nbsp;worker as installed until the passed Promise resolves successfully. This is primarily used to ensure that a service worker is not considered installed until all of the core caches it depends on are populated."><code>ExtendableEvent.waitUntil()</code></a> method onto the event — this ensures that the Service Worker will not install until the code inside <code>waitUntil()</code> has successfully occurred.</li>
+ <li>Inside <code>waitUntil()</code> we use the <a href="../CacheStorage/open.html"><code>caches.open()</code></a> method to create a new cache called <code>v1</code>, which will be version 1 of our site resources cache. This returns a promise for a created cache; once resolved, we then call a function that calls <code>addAll()</code> on the created cache, which for its parameter takes an array of origin-relative URLs to all the resources you want to cache.</li>
+ <li>If the promise is rejected, the install fails, and the worker won’t do anything. This is ok, as you can fix your code and then try again the next time registration occurs.</li>
+ <li>After a successful installation, the service worker activates. This doesn’t have much of a distinct use the first time your service worker is installed/activated, but it means more when the service worker is updated (see the <a href="#Updating_your_service_worker">Updating your service worker</a> section later on.)</li>
+</ol>
+
+<div class="note">
+<p><strong>Note</strong>: <a href="../Web_Storage_API.html">localStorage</a> works in a similar way to service worker cache, but it is synchronous, so not allowed in service workers.</p>
+</div>
+
+<div class="note">
+<p><strong>Note</strong>: <a href="../IndexedDB_API.html">IndexedDB</a> can be used inside a service worker for data storage if you require it.</p>
+</div>
+
+<h3 id="Custom_responses_to_requests">Custom responses to requests</h3>
+
+<p>Now you’ve got your site assets cached, you need to tell service workers to do something with the cached content. This is easily done with the <code>fetch</code> event.</p>
+
+<p><img src="../../../../../../mdn.mozillademos.org/files/12634/sw-fetch.png" style="display: block; margin: 0 auto;" alt=""></p>
+
+<p>A <code>fetch</code> event fires every time any resource controlled by a service worker is fetched, which includes the documents inside the specified scope, and any resources referenced in those documents (for example if <code>index.html</code> makes a cross origin request to embed an image, that still goes through its service worker.)</p>
+
+<p>You can attach a <code>fetch</code> event listener to the service worker, then call the <code>respondWith()</code> method on the event to hijack our HTTP responses and update them with your own magic.</p>
+
+<pre class="brush: js">this.addEventListener('fetch', function(event) {
+  event.respondWith(
+    // magic goes here
+  );
+});</pre>
+
+<p>We could start by simply responding with the resource whose url matches that of the network request, in each case:</p>
+
+<pre class="brush: js">this.addEventListener('fetch', function(event) {
+  event.respondWith(
+    caches.match(event.request);
+  );
+});</pre>
+
+<p><code>caches.match(event.request)</code> allows us to match each resource requested from the network with the equivalent resource available in the cache, if there is a matching one available. The matching is done via url and vary headers, just like with normal HTTP requests.</p>
+
+<p>Let’s look at a few other options we have when defining our magic (see our <a href="../Fetch_API.html">Fetch API documentation</a> for more information about <a href="../Request.html" title="The Request interface of the Fetch API represents a resource request."><code>Request</code></a> and <a href="../Response.html" title="The Response interface of the Fetch API represents the response to a request."><code>Response</code></a> objects.)</p>
+
+<ol>
+ <li>
+  <p>The <code><a href="../Response/Response.html" title="The Response() constructor creates a new Response object."><code>Response()</code></a></code> constructor allows you to create a custom response. In this case, we are just returning a simple text string:</p>
+
+  <pre class="brush: js">new Response('Hello from your friendly neighbourhood service worker!');</pre>
+ </li>
+ <li>
+  <p>This more complex <code>Response</code> below shows that you can optionally pass a set of headers in with your response, emulating standard HTTP response headers. Here we are just telling the browser what the content type of our synthetic response is:</p>
+
+  <pre class="brush: js">new Response('&lt;p&gt;Hello from your friendly neighbourhood service worker!&lt;/p&gt;', {
+  headers: { 'Content-Type': 'text/html' }
+})</pre>
+ </li>
+ <li>
+  <p>If a match wasn’t found in the cache, you could tell the browser to simply <a href="../GlobalFetch/fetch.html" title="The fetch() method of the GlobalFetch interface starts the process of fetching a resource. This returns a promise that resolves to the Response object representing the response to your request."><code>fetch</code></a> the default network request for that resource, to get the new resource from the network if it is available:</p>
+
+  <pre class="brush: js">fetch(event.request)</pre>
+ </li>
+ <li>
+  <p>If a match wasn’t found in the cache, and the network isn’t available, you could just match the request with some kind of default fallback page as a response using <a href="../CacheStorage/match.html" title="The match() method of the CacheStorage interface checks if a given Request is a key in any of the Cache objects that the CacheStorage object tracks and returns a Promise that resolves to the matching Response."><code>match()</code></a>, like this:</p>
+
+  <pre class="brush: js">caches.match('/fallback.html');</pre>
+ </li>
+ <li>
+  <p>You can retrieve a lot of information about each request by calling parameters of the <a href="../Request.html" title="The Request interface of the Fetch API represents a resource request."><code>Request</code></a> object returned by the <a href="../FetchEvent.html" title="The parameter passed into the ServiceWorkerGlobalScope.onfetch handler, FetchEvent represents a fetch action that is dispatched on the ServiceWorkerGlobalScope of a ServiceWorker. It contains information about the request and resulting response, and provides the FetchEvent.respondWith() method, which allows us to provide an arbitrary response back to the controlled page."><code>FetchEvent</code></a>:</p>
+
+  <pre class="brush: js">event.request.url
+event.request.method
+event.request.headers
+event.request.body</pre>
+ </li>
+</ol>
+
+<h2 id="Recovering_failed_requests">Recovering failed requests</h2>
+
+<p>So <code>caches.match(event.request)</code> is great when there is a match in the service worker cache, but what about cases when there isn’t a match? If we didn’t provide any kind of failure handling, our promise would reject and we would just come up against a network error when a match isn’t found.</p>
+
+<p>Fortunately service workers’ promise-based structure makes it trivial&nbsp;to provide further options towards success. We could do this:</p>
+
+<pre class="brush: js">this.addEventListener('fetch', function(event) {
+  event.respondWith(
+    caches.match(event.request).catch(function() {
+      return fetch(event.request);
+    })
+  );
+});</pre>
+
+<p>If the promise rejects, the <code>catch()</code> function returns the default network request for the resource instead, meaning that those who have network available can just load the resource from the server.</p>
+
+<p>If we were being really clever, we would not only request the resource from the network; we would also save it into the cache so that later requests for that resource could be retrieved offline too! This would mean that if extra images were added to the Star Wars gallery, our app could automatically grab them and cache them. The following would do the trick:</p>
+
+<pre class="brush: js">this.addEventListener('fetch', function(event) {
+  event.respondWith(
+    caches.match(event.request).catch(function() {
+      return fetch(event.request).then(function(response) {
+        return caches.open('v1').then(function(cache) {
+          cache.put(event.request, response.clone());
+          return response;
+        });  
+      });
+    })
+  );
+});</pre>
+
+<p>Here we return the default network request with <code>return fetch(event.request)</code>, which returns a promise. When this promise is resolved, we respond by running a function that grabs our cache using <code>caches.open('v1')</code>; this also returns a promise. When that promise resolves, <code>cache.put()</code> is used to add the resource to the cache. The resource is grabbed from <code>event.request</code>, and the response is then cloned with <code>response.clone()</code> and added to the cache. The clone is put in the cache, and the original response is returned to the browser to be given to the page that called it.</p>
+
+<p>Why? This is because request and response streams can only be read once.&nbsp; In order to return the response to the browser and put it in the cache we have to clone it. So the original gets returned to the browser and the clone gets sent to the cache.&nbsp; They are each read once.</p>
+
+<p>The only trouble we have now is that if the request doesn’t match anything in the cache, and the network is not available, our request will still fail. Let’s provide a default fallback so that whatever happens, the user will at least get something:</p>
+
+<pre class="brush: js">this.addEventListener('fetch', function(event) {
+  event.respondWith(
+    caches.match(event.request).catch(function() {
+      return fetch(event.request).then(function(response) {
+        return caches.open('v1').then(function(cache) {
+          cache.put(event.request, response.clone());
+          return response;
+        });  
+      });
+    }).catch(function() {
+&nbsp;&nbsp;&nbsp;   return caches.match('/sw-test/gallery/myLittleVader.jpg');
+&nbsp;   })
+  );
+});</pre>
+
+<p>We have opted for this fallback image because the only updates that are likely to fail are new images, as everything else is depended on for installation in the <code>install</code> event listener we saw earlier.</p>
+
+<h2 id="Updated_code_pattern_suggestion">Updated code pattern suggestion</h2>
+
+<p>This uses more standard promise chaining and returns the response to the document without having to wait for <code>caches.open()</code> to resolve:</p>
+
+<pre class="brush: js">this.addEventListener('fetch', function(event) {
+&nbsp; var response;
+&nbsp; event.respondWith(caches.match(event.request).catch(function() {
+&nbsp;&nbsp;&nbsp; return fetch(event.request);
+&nbsp; }).then(function(r) {
+&nbsp;&nbsp;&nbsp; response = r;
+&nbsp;&nbsp;&nbsp; caches.open('v1').then(function(cache) {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cache.put(event.request, response);
+&nbsp;&nbsp;&nbsp; });
+&nbsp;&nbsp;&nbsp; return response.clone();
+&nbsp; }).catch(function() {
+&nbsp;&nbsp;&nbsp; return caches.match('/sw-test/gallery/myLittleVader.jpg');
+&nbsp; }));
+});</pre>
+
+<h2 id="Updating_your_service_worker"><a name="Updating your service worker" id="Updating your service worker">Updating your service worker</a></h2>
+
+<p>If your service worker has previously been installed, but then a new version of the worker is available on refresh or page load, the new version is installed in the background, but not yet activated. It is only activated when there are no longer any pages loaded that are still using the old service worker. As soon as there are no more such pages still loaded, the new service worker activates.</p>
+
+<p>You’ll want to update your <code>install</code> event listener in the new service worker to something like this (notice the new version number):</p>
+
+<pre class="brush: js">this.addEventListener('install', function(event) {
+  event.waitUntil(
+    caches.open('v2').then(function(cache) {
+      return cache.addAll([
+        '/sw-test/',
+        '/sw-test/index.html',
+        '/sw-test/style.css',
+        '/sw-test/app.js',
+        '/sw-test/image-list.js',
+        
+             …
+
+              // include other new resources for the new version...
+      ]);
+    });
+  );
+});</pre>
+
+<p>While this happens, the previous version is still responsible for fetches. The new version is installing in the background. We are calling the new cache <code>v2</code>, so the previous <code>v1</code> cache isn't disturbed.</p>
+
+<p>When no pages are using the current version, the new worker activates and becomes responsible for fetches.</p>
+
+<h3 id="Deleting_old_caches">Deleting old caches</h3>
+
+<p>You also get an <code>activate</code> event. This is a generally used to do stuff that would have broken the previous version while it was still running, for example getting rid of old caches. This is also useful for removing data that is no longer needed to avoid filling up too much disk space — each browser has a hard limit on the amount of cache storage that a given service worker can use. The browser does its best to manage disk space, but it may delete the Cache storage for an origin.&nbsp; The browser will generally delete all of the data for an origin or none of the data for an origin.</p>
+
+<p>Promises passed into <code>waitUntil()</code> will block other events until completion, so you can rest assured that your clean-up operation will have completed by the time you get your first <code>fetch</code> event on the new cache.</p>
+
+<pre class="brush: js">this.addEventListener('activate', function(event) {
+  var cacheWhitelist = ['v2'];
+
+  event.waitUntil(
+    caches.keys().then(function(keyList) {
+      return Promise.all(keyList.map(function(key) {
+        if (cacheWhitelist.indexOf(key) === -1) {
+          return caches.delete(key);
+        }
+      }));
+    })
+  );
+});</pre>
+
+<h2 id="Dev_tools">Dev tools</h2>
+
+<p>Chrome has <code>chrome://inspect/#service-workers</code>, which shows current service worker activity and storage on a device, and <code>chrome://serviceworker-internals</code>, which shows more detail and allows you to start/stop/debug the worker process. In the future they will have throttling/offline modes to simulate bad or non-existent connections, which will be a really good thing.</p>
+
+<p>Firefox has also started to implement some useful tools related to service workers:</p>
+
+<ul>
+ <li>You can navigate to <a>about:serviceworkers</a> to see what SWs are registered and update/remove them.</li>
+ <li>When testing you can get around the HTTPS restriction by checking the "Enable Service Workers over HTTP (when toolbox is open)" option in the Firefox Devtools options (gear menu.)</li>
+</ul>
+
+<h2 id="Specifications">Specifications</h2>
+
+<table class="standard-table">
+ <tbody>
+  <tr>
+   <th scope="col">Specification</th>
+   <th scope="col">Status</th>
+   <th scope="col">Comment</th>
+  </tr>
+  <tr>
+   <td><a href="https://www.w3.org/TR/service-workers/" class="external" lang="en" title="The 'Service Workers' specification" hreflang="en">Service Workers</a></td>
+   <td><span class="spec-WD">Working Draft</span></td>
+   <td>Initial definition.</td>
+  </tr>
+ </tbody>
+</table>
+
+<h2 id="Browser_compatibility">Browser compatibility</h2>
+
+<div><div class="htab"> 
+    <a name="AutoCompatibilityTable" id="AutoCompatibilityTable"></a> 
+    <ul> 
+        <li class="selected"><a>Desktop</a></li> 
+        <li><a>Mobile</a></li> 
+    </ul> 
+</div></div>
+
+<div id="compat-desktop">
+<table class="compat-table">
+ <tbody>
+  <tr>
+   <th>Feature</th>
+   <th>Chrome</th>
+   <th>Firefox (Gecko)</th>
+   <th>Internet Explorer</th>
+   <th>Opera</th>
+   <th>Safari (WebKit)</th>
+  </tr>
+  <tr>
+   <td>Basic support</td>
+   <td>40.0</td>
+   <td><a href="https://developer.mozilla.org/en-US/Firefox/Releases/33" title="Released on 2014-10-14.">33.0</a> (33.0)<sup>[1]</sup></td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+   <td>24</td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+  </tr>
+ </tbody>
+</table>
+</div>
+
+<div id="compat-mobile">
+<table class="compat-table">
+ <tbody>
+  <tr>
+   <th>Feature</th>
+   <th>Android</th>
+   <th>Chrome for Android</th>
+   <th>Firefox Mobile (Gecko)</th>
+   <th>Firefox OS</th>
+   <th>IE Phone</th>
+   <th>Opera Mobile</th>
+   <th>Safari Mobile</th>
+  </tr>
+  <tr>
+   <td>Basic support</td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+   <td>40.0</td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+  </tr>
+ </tbody>
+</table>
+</div>
+
+<p>[1] Service workers (and <a href="../Push_API.html">Push</a>) have been disabled in the <a href="https://www.mozilla.org/en-US/firefox/organizations/" class="external">Firefox 45 Extended Support Release</a> (ESR.)</p>
+
+<h2 id="See_also">See also</h2>
+
+<ul>
+ <li><a href="https://serviceworke.rs/" class="external">The Service Worker Cookbook</a></li>
+ <li><a href="https://jakearchibald.github.io/isserviceworkerready/" class="external">Is ServiceWorker ready?</a></li>
+ <li>Download the <a href="../../../../../../mdn.mozillademos.org/files/12638/sw101.png" class="external">Service Workers 101 cheatsheet</a>.</li>
+ <li><a href="../../JavaScript/Reference/Global_Objects/Promise.html">Promises</a></li>
+ <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Performance/Using_web_workers">Using web workers</a></li>
+</ul>
+                  
+                
+              </article>
+
+              
+
+    
+    
+    
+
+    
+    
+    
+
+    <div class="share">
+        <strong>Share:</strong>
+        <ul>
+            <li><a href="http://twitter.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FAPI%2FService_Worker_API%2FUsing_Service_Workers%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dtwitter.com&amp;text=I+learned+about+Using+Service+Workers+on+MDN." target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API/Using_Service_Workers?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=twitter.com" data-title="I learned about Using Service Workers on MDN." class="share-link twitter"><i aria-hidden="true" class="icon-twitter"></i>Twitter</a></li>
+            <li><a href="http://facebook.com/sharer.php?s=100&amp;p[url]=https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API/Using_Service_Workers?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API/Using_Service_Workers?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" data-title="I learned about Using Service Workers on MDN." class="share-link facebook"><i aria-hidden="true" class="icon-facebook"></i>Facebook</a></li>
+            <li><a href="https://plus.google.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FAPI%2FService_Worker_API%2FUsing_Service_Workers%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dplus.google.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API/Using_Service_Workers?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=plus.google.com" data-title="I learned about Using Service Workers on MDN." class="share-link gplus"><i aria-hidden="true" class="icon-google-plus"></i>Google+</a></li>
+        </ul>
+    </div>
+
+              
+
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                  
+                  
+  <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags icon-fw"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/basics">basics</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Guide">Guide</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Service">Service</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/ServiceWorker">ServiceWorker</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Workers">Workers</a></li>
+      
+    </ul>
+  </div>
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-group icon-fw"></i>&nbsp;<strong>Contributors to this page:</strong> 
+        <a href="https://developer.mozilla.org/en-US/profiles/franzy1709">franzy1709</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills">chrisdavidmills</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/maybe">maybe</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/stevemao">stevemao</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/miguelmota">miguelmota</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/enguerran">enguerran</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/allen.dean">allen.dean</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/fscholz">fscholz</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Brettz9">Brettz9</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/jryans">jryans</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/teoli">teoli</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/bhritchie">bhritchie</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/vrana">vrana</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/rippedspine">rippedspine</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/jpmedley">jpmedley</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/adria">adria</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Sheppy">Sheppy</a>
+    
+                    </div>
+                  
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o icon-fw"></i>&nbsp;<strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/franzy1709">franzy1709</a>,
+                      <time datetime="2016-03-25T03:32:14-07:00">Mar 25, 2016, 3:32:14 AM</time>
+                    </div>
+                  
+                </div>
+              
+            </div>
+
+            
+              <!-- quick links and zone subnav strip -->
+              <div id="wiki-left" class="column-strip wiki-column">
+
+              
+
+                
+
+                
+                  <!-- quick links -->
+                  
+  <div class="quick-links" id="quick-links">
+    <div class="title see-also">See also</div>
+     
+ <ol> 
+  <li><a href="../Service_Worker_API.html"><strong>Service Worker API</strong></a></li> 
+  <li data-default-state="open"><a href="#"><strong>Service Worker guides</strong></a> 
+   <ol> 
+     <li><a href="Using_Service_Workers.html">Using Service Workers</a></li> 
+   </ol> 
+  </li> 
+  <li data-default-state="open"><a href="#"><strong>Interfaces</strong></a> 
+   <ol> 
+    <li><a href="../Cache.html" title="The Cache interface of the ServiceWorker API represents the storage for Request / Response object pairs that are cached as part of the ServiceWorker life cycle."><code>Cache</code></a></li> 
+    <li><a href="../CacheStorage.html" title="The CacheStorage interface of the ServiceWorker API represents the storage for Cache objects. It provides a master directory of all the named caches that a ServiceWorker&nbsp;can access and maintains a mapping of string names to corresponding Cache objects."><code>CacheStorage</code></a></li> 
+    <li><a href="../Client.html" title="The Client interface of the ServiceWorker API represents the scope of a service worker client. A service worker client is either a document in a browser context or a SharedWorker, which is controlled by an active worker. A client object acts as a snapshot representation of its associated service worker client in the scope of a service worker."><code>Client</code></a></li> 
+    <li><a href="../Clients.html" title="The Clients interface of the Service Workers API represents a container for a list of Client&nbsp;objects."><code>Clients</code></a></li> 
+    <li><a href="../ExtendableEvent.html" title="The ExtendableEvent interface extends the lifetime of the install and activate events dispatched on the global scope as part of the service worker lifecycle. This ensures that any functional events (like FetchEvent) are not dispatched until it upgrades database schemas and deletes the outdated cache entries."><code>ExtendableEvent</code></a></li> 
+    <li><a href="../FetchEvent.html" title="The parameter passed into the ServiceWorkerGlobalScope.onfetch handler, FetchEvent represents a fetch action that is dispatched on the ServiceWorkerGlobalScope of a ServiceWorker. It contains information about the request and resulting response, and provides the FetchEvent.respondWith() method, which allows us to provide an arbitrary response back to the controlled page."><code>FetchEvent</code></a></li> 
+    <li><a href="../InstallEvent.html" title="The parameter passed into the oninstall handler, the InstallEvent interface represents an install action that is dispatched on the ServiceWorkerGlobalScope of a ServiceWorker. As a child of ExtendableEvent,&nbsp;it ensures that functional events such as FetchEvent&nbsp;are not dispatched during installation."><code>InstallEvent</code></a></li> 
+    <li><a href="../Navigator/serviceWorker.html" title="The Navigator.serviceWorker read-only property returns the ServiceWorkerContainer object for the associated document, which provides access to registration, removal, upgrade, and communication with the ServiceWorker."><code>Navigator.serviceWorker</code></a></li> 
+    <li><a href="../NotificationEvent.html" title="The parameter passed into the onnotificationclick handler, the NotificationEvent interface represents a notification click event that is dispatched on the ServiceWorkerGlobalScope of a ServiceWorker."><code>NotificationEvent</code></a></li> 
+    <li><a href="../PeriodicSyncEvent.html" title="The parameter passed into the sync handler, the PeriodicSyncEvent interface represents a periodic sync action that is dispatched on the ServiceWorkerGlobalScope&nbsp;of a ServiceWorker.&nbsp;"><code>PeriodicSyncEvent</code></a></li> 
+    <li><a href="../PeriodicSyncManager.html" title="The PeriodicSyncManager interface of the the ServiceWorker API provides an interface for registering and retrieving PeriodicSyncRegistration objects."><code>PeriodicSyncManager</code></a></li> 
+    <li><a href="../PeriodicSyncRegistration.html" title="The PeriodicSyncRegistration interface of the ServiceWorker API provides an object for managing periodic background synchronization."><code>PeriodicSyncRegistration</code></a></li> 
+    <li><a href="../ServiceWorker.html" title="The ServiceWorker interface of the ServiceWorker API provides a reference to a service worker. Multiple browsing contexts (e.g. pages, workers, etc.) can be associated with the same service worker, each through a unique ServiceWorker object."><code>ServiceWorker</code></a></li> 
+    <li><a href="../ServiceWorkerContainer.html" title="The ServiceWorkerContainer interface of the ServiceWorker API provides an object representing the service worker as an overall unit in the network ecosystem, including facilities to register, unregister and update service workers, and access the state of service workers and their registrations."><code>ServiceWorkerContainer</code></a></li> 
+    <li><a href="../ServiceWorkerGlobalScope.html" title="The ServiceWorkerGlobalScope interface of the ServiceWorker API represents the global execution context of a service worker."><code>ServiceWorkerGlobalScope</code></a></li> 
+    <li><a href="../ServiceWorkerRegistration.html" title="The ServiceWorkerRegistion interface of the ServiceWorker API represents the service worker registration. You register a service worker to control one or more pages that share the same origin."><code>ServiceWorkerRegistration</code></a></li> 
+    <li><a href="../SyncEvent.html" title="The SyncEvent interface represents a sync action that is dispatched on the ServiceWorkerGlobalScope&nbsp;of a ServiceWorker.&nbsp;"><code>SyncEvent</code></a></li> 
+    <li><a href="../SyncManager.html" title="The SyncManager interface of the the ServiceWorker API provides an interface for registering and listing sync registrations."><code>SyncManager</code></a></li> 
+    <li><a href="../SyncRegistration.html" title="The SyncRegistration interface of the the ServiceWorker API provides an object for managing background synchronization."><code>SyncRegistration</code></a></li> 
+    <li><a href="../WindowClient.html" title="The WindowClient interface of the ServiceWorker API represents the scope of a service worker client that is a document in a browser context, controlled by an active worker. The service worker client independently selects and uses a service worker for its own loading and sub-resources."><code>WindowClient</code></a></li> 
+   </ol> 
+  </li> 
+  <li data-default-state="open"><a href="#"><strong>Related APIs</strong></a> 
+   <ol> 
+     <li><a href="../Channel_Messaging_API.html">Channel Messaging API</a></li> 
+     <li><a href="../Notifications_API.html">Notifications API</a></li> 
+     <li><a href="../Push_API.html">Push API</a></li> 
+     <li><a href="../Web_Workers_API.html">Web Workers API</a></li> 
+   </ol> 
+  </li> 
+  <li><strong><a href="https://developer.mozilla.org/en-US/docs/MDN">Documentation:</a></strong></li> 
+  <li data-default-state="closed"><a href="#">Useful lists</a> 
+   <ol> 
+    <li><a href="https://developer.mozilla.org/en-US/docs/tag/ServiceWorker">Pages tagged "ServiceWorker"</a></li> 
+   </ol> 
+  </li> 
+  <li data-default-state="closed"><a href="#">Contribute</a> 
+   <ol> 
+    <li><a href="../../../MDN/Doc_status/API/ServiceWorkers.html">Service Worker doc status</a></li> 
+    <li><a href="https://developer.mozilla.org/en-US/docs/MDN">The MDN project</a></li> 
+   </ol> 
+  </li> 
+ </ol> 
+
+  </div>
+                
+
+                <!-- approvals -->
+                
+
+              
+
+              </div>
+            
+          </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Web/API/Service_Worker_API/Using_Service_Workers$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Web/API/Service_Worker_API/Using_Service_Workers$history" label="View page history"></menuitem>
+  </menu>
+
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+        
+        <div class="contentinfo">
+          <p>© 2005-2016 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>
+          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+        
+        </div>
+      </div>
+      <div class="column-strip">
+        
+          
+  
+    <form class="languages go" method="get" action="https://developer.mozilla.org/en-US/docs/Web">
+      <label for="language">Other languages:</label>
+      <select id="language" class="wiki-l10n" name="next" dir="ltr">
+        <option value="/en-US/docs/Web/API/Service_Worker_API/Using_Service_Workers" selected="">
+          English (US)
+        </option>
+        
+          <option value="/de/docs/Web/API/Service_Worker_API/Using_Service_Workers">
+            Deutsch
+          </option>
+          <option value="/fr/docs/Web/API/Service_Worker_API/Using_Service_Workers">
+            Français
+          </option>
+          <option value="/ja/docs/Web/API/ServiceWorker_API/Using_Service_Workers">
+            日本語
+          </option>
+          <option value="/ru/docs/Web/API/Service_Worker_API/Using_Service_Workers">
+            Русский
+          </option>
+      </select>
+      <noscript>&lt;button type="submit"&gt;Go&lt;/button&gt;</noscript>
+    </form>
+  
+
+        
+      </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+  
+    
+    <!--[if lte IE 8]><script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/selectivizr.091e18cf669b.js" charset="utf-8"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/main.a7b27a25fb9c.js" charset="utf-8"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+    
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/syntax-prism-min.js" charset="utf-8"></script><script type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/wiki.bd71ca9fd27d.js" charset="utf-8" id="wikiscript"></script>
+
+  
+
+  <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/helpfulness.7b208a764d28.js" charset="utf-8"></script>
+
+  
+
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API/Using_Service_Workers by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 15:27:04 GMT -->
+</body></html>

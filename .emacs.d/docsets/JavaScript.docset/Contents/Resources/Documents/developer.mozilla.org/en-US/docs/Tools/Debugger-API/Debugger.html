@@ -1,0 +1,943 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/Tools/Debugger-API/Debugger.Object by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 19:57:51 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <script async="" src="../../../../../www.google-analytics.com/analytics.js"></script><script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+  
+    
+  
+
+  
+  <title>Debugger.Object</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+  
+    
+    
+    <link href="../../../../../developer.cdn.mozilla.net/static/build/styles/mdn.593f20d8c365.css" rel="stylesheet" type="text/css">
+
+    
+  
+    <link href="../../../../../developer.cdn.mozilla.net/static/build/styles/wiki.13dd9abdfb62.css" rel="stylesheet" type="text/css">
+
+    
+
+    
+      
+        <link rel="stylesheet" type="text/css" href="https://developer.mozilla.org/en-US/docs/Tools$styles">
+      
+    
+
+  <!-- common social tags -->
+  
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../developer.cdn.mozilla.net/static/img/favicon144.a6e4162070f4.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../developer.cdn.mozilla.net/static/img/favicon114.0e9fabd44f85.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../developer.cdn.mozilla.net/static/img/favicon72.8ff9d87c82a0.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../developer.cdn.mozilla.net/static/img/favicon57.a2490b9a2d76.png">
+  <!-- basic favicon -->
+  
+    
+  
+  <link rel="shortcut icon" href="../../../../../developer.cdn.mozilla.net/static/img/favicon32.e02854fdcf73.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/html5shiv.3948ccddab6f.js" charset="utf-8"></script>
+  <![endif]-->
+
+  
+  <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Tools/Debugger-API/Debugger.Object$json">
+  <link rel="canonical" href="Debugger.html">
+
+  
+    
+      <link rel="alternate" hreflang="fr" href="https://developer.mozilla.org/fr/docs/Outils/Debugger-API/Debugger.Object" title="Debugger.Object">
+    
+  
+
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="Debugger.Object">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Tools/Debugger-API/Debugger.Object">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Tools/Debugger-API/Debugger.Object">
+  <meta name="twitter:title" content="Debugger.Object">
+  
+  <meta property="og:description" content="A Debugger.Object instance represents an object in the debuggee, providing reflection-oriented methods to inspect and modify its referent. The referent's properties do not appear directly as properties of the Debugger.Object instance; the debugger can access them only through methods like Debugger.Object.prototype.getOwnPropertyDescriptor and Debugger.Object.prototype.defineProperty, ensuring that the debugger will not inadvertently invoke the referent's getters and setters.">
+  <meta name="description" content="A Debugger.Object instance represents an object in the debuggee, providing reflection-oriented methods to inspect and modify its referent. The referent's properties do not appear directly as properties of the Debugger.Object instance; the debugger can access them only through methods like Debugger.Object.prototype.getOwnPropertyDescriptor and Debugger.Object.prototype.defineProperty, ensuring that the debugger will not inadvertently invoke the referent's getters and setters.">
+  <meta name="twitter:description" content="A Debugger.Object instance represents an object in the debuggee, providing reflection-oriented methods to inspect and modify its referent. The referent's properties do not appear directly as properties of the Debugger.Object instance; the debugger can access them only through methods like Debugger.Object.prototype.getOwnPropertyDescriptor and Debugger.Object.prototype.defineProperty, ensuring that the debugger will not inadvertently invoke the referent's getters and setters.">
+  
+
+  
+    
+
+
+
+  
+</head>
+<body data-slug="Tools/Debugger-API/Debugger.Object" contextmenu="edit-history-menu" data-search-url="" class="document zone ">
+
+  <script type="text/javascript">
+    (function(win) {
+        'use strict';
+
+        
+            (function(){
+  var FLAGS = {
+    'compat_api': false,'kumaediting': false,'page_move': false,'registration_disabled': false,'search_suggestions': false,'section_edit': true,'spam_admin_override': false,'spam_checks_enabled': true,'spam_spammer_override': false,'spam_submissions_enabled': false,'spam_testing_mode': false,'wiki_samples': true,'wiki_spam_exempted': false,'wiki_spam_training': true
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': true,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+
+        // This needs to be set before ckeditor.js loads
+        window.CKEDITOR_BASEPATH = 'https://developer.mozilla.org/static/js/libs/ckeditor/build/ckeditor/';
+
+        // This represents the site configuration
+        win.mdn = {
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+            
+            notifications: [],
+            
+            // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            },
+            // Assets that need to be dynamically injected
+            assets_disabled: {
+                css: {
+                    'editor-content': ['https://developer.cdn.mozilla.net/static/build/styles/editor-content.3d79df72080d.css',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/styles/wiki-compat-tables.f3a3bfce97a1.css',]
+                },
+                js: {
+                    'syntax-prism': ['https://developer.cdn.mozilla.net/static/build/js/syntax-prism.7a66ddfa68bf.js',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/js/wiki-compat-tables.14ce5dcb2c3d.js',]
+                }
+            }
+        };
+    })(this);
+</script>
+
+  
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+    
+      <li><a href="#q" id="skip-search">Skip to search</a></li>
+    
+  </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+    <a href="https://developer.mozilla.org/en-US/" class="logo">Mozilla Developer Network</a>
+
+    <div id="nav-sec">
+        
+                  <ul>
+                  <li>
+
+    
+
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                Sign in
+              </span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FTools%2FDebugger-API%2FDebugger.Object" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/Tools/Debugger-API/Debugger.Object" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/Tools/Debugger-API/Debugger.Object" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2FTools%2FDebugger-API%2FDebugger.Object" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+              
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+        
+    </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../../Web/API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+
+  
+      
+        <div class="zone-article-header" id="document-main"><div class="center">
+          <!-- zone title -->
+          <div class="zone-title"><a href="https://developer.mozilla.org/en-US/docs/Tools">Firefox Developer Tools</a></div>
+          <!-- zone image -->
+          <div class="zone-image"></div>
+        </div></div>
+      
+
+     <!-- end is_zone -->
+
+    <div class="wiki-main-content"><div class="center">
+      
+      <div class="article-meta">
+        <!-- action buttons -->
+        
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+  <ul class="page-buttons" data-sticky="false">
+      
+      <li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+              
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/fr/docs/Outils/Debugger-API/Debugger.Object" title="Debugger.Object">Français</a></bdi></li>
+                
+              
+
+              
+                <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Debugger-API/Debugger.Object$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+              
+            </ul>
+          </div>
+        </div>
+      </li>
+
+      <li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Tools/Debugger-API/Debugger.Object$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li>
+
+        
+
+        <li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Debugger-API/Debugger.Object$history" rel="nofollow, noindex">History</a></li>
+                
+                
+                
+                
+
+                
+
+                
+                
+                
+                <li class="page-print"><a href="#" onclick="return window.print();">Print this article</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+        
+  <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Tools" rel="v:url" property="v:title">Firefox Developer Tools</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="../Debugger-API.html" rel="v:url" property="v:title">Debugger-API</a></li>
+    
+    <li class="crumb" typeof="v:Breadcrumb" property="v:title">Debugger.Object</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        
+        <div class="contributor-avatars" data-all-text="see all contributors" data-alternate-message="hide contributors">
+            <ul>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/jimblandy" title="View profile: jimblandy">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="jimblandy" data-src="../../../../../secure.gravatar.com/avatar/26684b295a47bf5a82b22010a9427ade6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">jimblandy</noscript></a>
+                </li>
+            
+            </ul>
+        </div>
+        
+
+        <h1>Debugger.Object</h1>
+
+      </div>
+      
+
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-present">
+
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+            
+              <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+              
+              <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#Accessor_Properties_of_the_Debugger.Object_prototype" rel="internal">Accessor Properties of the Debugger.Object prototype</a></li><li><a href="#Function_Properties_of_the_Debugger.Object_prototype" rel="internal">Function Properties of the Debugger.Object prototype</a><ol><li><ol><li><a href="#Source_Metadata" rel="internal">Source Metadata</a></li></ol></li></ol></li>
+                </ol>
+              </div>
+              
+              </div>
+            
+
+            
+            
+              
+            
+
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-half wiki-column text-content">
+
+              
+
+              
+
+              
+                
+                
+                
+              
+              
+
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                
+                  
+                    <h1 id="Debugger.Object">Debugger.Object</h1>
+<p>A <code>Debugger.Object</code> instance represents an object in the debuggee, providing reflection-oriented methods to inspect and modify its referent. The referent's properties do not appear directly as properties of the <code>Debugger.Object</code> instance; the debugger can access them only through methods like <code>Debugger.Object.prototype.getOwnPropertyDescriptor</code> and <code>Debugger.Object.prototype.defineProperty</code>, ensuring that the debugger will not inadvertently invoke the referent's getters and setters.</p>
+<p>SpiderMonkey creates exactly one <code>Debugger.Object</code> instance for each debuggee object it presents to a given <a href="Debugger-2.html" title="The Debugger object"><code>Debugger</code></a> instance: if the debugger encounters the same object through two different routes (perhaps two functions are called on the same object), SpiderMonkey presents the same <code>Debugger.Object</code> instance to the debugger each time. This means that the debugger can use the <code>==</code> operator to recognize when two <code>Debugger.Object</code> instances refer to the same debuggee object, and place its own properties on a <code>Debugger.Object</code> instance to store metadata about particular debuggee objects.</p>
+<p>JavaScript code in different compartments can have different views of the same object. For example, in Firefox, code in privileged compartments sees content DOM element objects without redefinitions or extensions made to that object's properties by content code. (In Firefox terminology, privileged code sees the element through an "xray wrapper".) To ensure that debugger code sees each object just as the debuggee would, each <code>Debugger.Object</code> instance presents its referent as it would be seen from a particular compartment. This "viewing compartment" is chosen to match the way the debugger came across the referent. As a consequence, a single <a href="Debugger-2.html" title="The Debugger object"><code>Debugger</code></a> instance may actually have several <code>Debugger.Object</code> instances: one for each compartment from which the referent is viewed.</p>
+<p>If more than one <a href="Debugger-2.html" title="The Debugger object"><code>Debugger</code></a> instance is debugging the same code, each <a href="Debugger-2.html" title="The Debugger object"><code>Debugger</code></a> gets a separate <code>Debugger.Object</code> instance for a given object. This allows the code using each <a href="Debugger-2.html" title="The Debugger object"><code>Debugger</code></a> instance to place whatever properties it likes on its own <code>Debugger.Object</code> instances, without worrying about interfering with other debuggers.</p>
+<p>While most <code>Debugger.Object</code> instances are created by SpiderMonkey in the process of exposing debuggee's behavior and state to the debugger, the debugger can use <code>Debugger.Object.prototype.makeDebuggeeValue</code> to create <code>Debugger.Object</code> instances for given debuggee objects, or use <code>Debugger.Object.prototype.copy</code> and <code>Debugger.Object.prototype.create</code> to create new objects in debuggee compartments, allocated as if by particular debuggee globals.</p>
+<p><code>Debugger.Object</code> instances protect their referents from the garbage collector; as long as the <code>Debugger.Object</code> instance is live, the referent remains live. This means that garbage collection has no visible effect on <code>Debugger.Object</code> instances.</p>
+<h2 id="Accessor_Properties_of_the_Debugger.Object_prototype">Accessor Properties of the Debugger.Object prototype</h2>
+<p>A <code>Debugger.Object</code> instance inherits the following accessor properties from its prototype:</p>
+<dl>
+<dt><code>proto</code></dt>
+<dd>The referent's prototype (as a new <code>Debugger.Object</code> instance), or <code>null</code> if it has no prototype.
+</dd>
+<dt><code>class</code></dt>
+<dd>A string naming the ECMAScript <code>[[Class]]</code> of the referent.
+</dd>
+<dt><code>callable</code></dt>
+<dd><code>true</code> if the referent is a callable object (such as a function or a function proxy); false otherwise.
+</dd>
+<dt><code>name</code></dt>
+<dd><p>The name of the referent, if it is a named function. If the referent is an anonymous function, or not a function at all, this is <code>undefined</code>.</p>
+<p>This accessor returns whatever name appeared after the <code>function</code> keyword in the source code, regardless of whether the function is the result of instantiating a function declaration (which binds the function to its name in the enclosing scope) or evaluating a function expression (which binds the function to its name only within the function's body).</p>
+</dd>
+<dt><code>displayName</code></dt>
+<dd><p>The referent's display name, if the referent is a function with a display name. If the referent is not a function, or if it has no display name, this is <code>undefined</code>.</p>
+<p>If a function has a given name, its display name is the same as its given name. In this case, the <code>displayName</code> and <code>name</code> properties are equal.</p>
+<p>If a function has no name, SpiderMonkey attempts to infer an appropriate name for it given its context. For example:</p>
+<pre class="language-js"><code>function f() {}          // display name: f (the given name)
+var g = function () {};  // display name: g
+o.p = function () {};    // display name: o.p
+var q = {
+  r: function () {}      // display name: q.r
+};</code></pre>
+<p>Note that the display name may not be a proper JavaScript identifier, or even a proper expression: we attempt to find helpful names even when the function is not immediately assigned as the value of some variable or property. Thus, we use <code><i>a</i>/<i>b</i></code> to refer to the <i>b</i> defined within <i>a</i>, and <code><i>a</i>&lt;</code> to refer to a function that occurs somewhere within an expression that is assigned to <i>a</i>. For example:</p>
+<pre class="language-js"><code>function h() {
+  var i = function() {};    // display name: h/i
+  f(function () {});        // display name: h/&lt;
+}
+var s = f(function () {});  // display name: s&lt;</code></pre>
+</dd>
+<dt><code>parameterNames</code></dt>
+<dd><p>If the referent is a debuggee function, the names of the its parameters, as an array of strings. If the referent is not a debuggee function, or not a function at all, this is <code>undefined</code>.</p>
+<p>If the referent is a host function for which parameter names are not available, return an array with one element per parameter, each of which is <code>undefined</code>.</p>
+<p>If the referent is a function proxy, return an empty array.</p>
+<p>If the referent uses destructuring parameters, then the array's elements reflect the structure of the parameters. For example, if the referent is a function declared in this way:</p>
+<pre class="language-js"><code>function f(a, [b, c], {d, e:f}) { ... }</code></pre>
+<p>then this <code>Debugger.Object</code> instance's <code>parameterNames</code> property would have the value:</p>
+<pre class="language-js"><code>["a", ["b", "c"], {d:"d", e:"f"}]</code></pre>
+</dd>
+<dt><code>script</code></dt>
+<dd>If the referent is a function that is debuggee code, this is that function's script, as a <a href="Debugger-6.html" title="Debugger.Script"><code>Debugger.Script</code></a> instance. If the referent is a function proxy or not debuggee code, this is <code>undefined</code>.
+</dd>
+<dt><code>environment</code></dt>
+<dd>If the referent is a function that is debuggee code, a <a href="Debugger-3.html" title="Debugger.Environment"><code>Debugger.Environment</code></a> instance representing the lexical environment enclosing the function when it was created. If the referent is a function proxy or not debuggee code, this is <code>undefined</code>.
+</dd>
+<dt><code>isBoundFunction</code></dt>
+<dd><code>true</code> if the referent is a bound function; <code>false</code> otherwise.
+</dd>
+<dt><code>isArrowFunction</code></dt>
+<dd><code>true</code> if the referent is an arrow function; <code>false</code> otherwise.
+</dd>
+<dt><code>boundTargetFunction</code></dt>
+<dd>If the referent is a bound function, this is its target functionâ€”the function that was bound to a particular <code>this</code> object. If the referent is not a bound function, this is <code>undefined</code>.
+</dd>
+<dt><code>boundThis</code></dt>
+<dd>If the referent is a bound function, this is the <code>this</code> value it was bound to. If the referent is not a bound function, this is <code>undefined</code>.
+</dd>
+<dt><code>boundArguments</code></dt>
+<dd>If the referent is a bound function, this is an array (in the Debugger object's compartment) that contains the debuggee values of the <code>arguments</code> object it was bound to. If the referent is not a bound function, this is <code>undefined</code>.
+</dd>
+<dt><code>proxyHandler</code></dt>
+<dd>If the referent is a proxy whose handler object was allocated by debuggee code, this is its handler objectâ€”the object whose methods are invoked to implement accesses of the proxy's properties. If the referent is not a proxy whose handler object was allocated by debuggee code, this is <code>null</code>.
+</dd>
+<dt><code>proxyCallTrap</code></dt>
+<dd>If the referent is a function proxy whose handler object was allocated by debuggee code, this is its call trap functionâ€”the function called when the function proxy is called. If the referent is not a function proxy whose handler object was allocated by debuggee code, this is <code>null</code>.
+</dd>
+<dt><code>proxyConstructTrap</code></dt>
+<dd>If the referent is a function proxy whose handler object was allocated by debuggee code, its construction trap functionâ€”the function called when the function proxy is called via a <code>new</code> expression. If the referent is not a function proxy whose handler object was allocated by debuggee code, this is <code>null</code>.
+</dd>
+<dt><code>global</code></dt>
+<dd>A <code>Debugger.Object</code> instance referring to the global object in whose scope the referent was allocated. This does not unwrap cross-compartment wrappers: if the referent is a wrapper, the result refers to the wrapper's global, not the wrapped object's global. The result refers to the global directly, not via a wrapper.
+</dd>
+<dt><code id="allocationsite">allocationSite</code></dt>
+<dd>If <a href="Debugger-5.html#trackingallocationsites" title="Debugger.Memory: trackingAllocationSites">object allocation site tracking</a> was enabled when this <code>Debugger.Object</code>'s referent was allocated, return the <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Projects/SpiderMonkey/SavedFrame" title="SavedFrame">JavaScript execution stack</a> captured at the time of the allocation. Otherwise, return <code>null</code>.
+</dd>
+</dl>
+<h2 id="Function_Properties_of_the_Debugger.Object_prototype">Function Properties of the Debugger.Object prototype</h2>
+<p>The functions described below may only be called with a <code>this</code> value referring to a <code>Debugger.Object</code> instance; they may not be used as methods of other kinds of objects. The descriptions use "referent" to mean "the referent of this <code>Debugger.Object</code> instance".</p>
+<p>Unless otherwise specified, these methods are not <a href="Debugger-4.html#invf" title="Debugger.Frame: Invocation Frames">invocation functions</a>; if a call would cause debuggee code to run (say, because it gets or sets an accessor property whose handler is debuggee code, or because the referent is a proxy whose traps are debuggee code), the call throws a <a href="Conventions.html#the-debugger.debuggeewouldrun-exception" title="Debugger API: DebuggeeWouldRun"><code>Debugger.DebuggeeWouldRun</code></a> exception.</p>
+<dl>
+<dt><code>getProperty(<i>name</i>)</code></dt>
+<dd>Return the value of the referent's property named <i>name</i>, or <code>undefined</code> if it has no such property. <i>Name</i> must be a string. The result is a debuggee value.
+</dd>
+<dt><code>setProperty(<i>name</i>, <i>value</i>)</code></dt>
+<dd>Store <i>value</i> as the value of the referent's property named <i>name</i>, creating the property if it does not exist. <i>Name</i> must be a string; <i>value</i> must be a debuggee value.
+</dd>
+<dt><code>getOwnPropertyDescriptor(<i>name</i>)</code></dt>
+<dd>Return a property descriptor for the property named <i>name</i> of the referent. If the referent has no such property, return <code>undefined</code>. (This function behaves like the standard <code>Object.getOwnPropertyDescriptor</code> function, except that the object being inspected is implicit; the property descriptor returned is allocated as if by code scoped to the debugger's global object (and is thus in the debugger's compartment); and its <code>value</code>, <code>get</code>, and <code>set</code> properties, if present, are debuggee values.)
+</dd>
+<dt><code>getOwnPropertyNames()</code></dt>
+<dd>Return an array of strings naming all the referent's own properties, as if <code>Object.getOwnPropertyNames(<i>referent</i>)</code> had been called in the debuggee, and the result copied in the scope of the debugger's global object.
+</dd>
+<dt><code>getOwnPropertySymbols()</code></dt>
+<dd>Return an array of strings naming all the referent's own symbols, as if <code>Object.getOwnPropertySymbols(<i>referent</i>)</code> had been called in the debuggee, and the result copied in the scope of the debugger's global object.
+</dd>
+<dt><code>defineProperty(<i>name</i>, <i>attributes</i>)</code></dt>
+<dd>Define a property on the referent named <i>name</i>, as described by the property descriptor <i>descriptor</i>. Any <code>value</code>, <code>get</code>, and <code>set</code> properties of <i>attributes</i> must be debuggee values. (This function behaves like <code>Object.defineProperty</code>, except that the target object is implicit, and in a different compartment from the function and descriptor.)
+</dd>
+<dt><code>defineProperties(<i>properties</i>)</code></dt>
+<dd>Add the properties given by <i>properties</i> to the referent. (This function behaves like <code>Object.defineProperties</code>, except that the target object is implicit, and in a different compartment from the <i>properties</i> argument.)
+</dd>
+<dt><code>deleteProperty(<i>name</i>)</code></dt>
+<dd>Remove the referent's property named <i>name</i>. Return true if the property was successfully removed, or if the referent has no such property. Return false if the property is non-configurable.
+</dd>
+<dt><code>seal()</code></dt>
+<dd>Prevent properties from being added to or deleted from the referent. Return this <code>Debugger.Object</code> instance. (This function behaves like the standard <code>Object.seal</code> function, except that the object to be sealed is implicit and in a different compartment from the caller.)
+</dd>
+<dt><code>freeze()</code></dt>
+<dd>Prevent properties from being added to or deleted from the referent, and mark each property as non-writable. Return this <code>Debugger.Object</code> instance. (This function behaves like the standard <code>Object.freeze</code> function, except that the object to be sealed is implicit and in a different compartment from the caller.)
+</dd>
+<dt><code>preventExtensions()</code></dt>
+<dd>Prevent properties from being added to the referent. (This function behaves like the standard <code>Object.preventExtensions</code> function, except that the object to operate on is implicit and in a different compartment from the caller.)
+</dd>
+<dt><code>isSealed()</code></dt>
+<dd>Return true if the referent is sealedâ€”that is, if it is not extensible, and all its properties have been marked as non-configurable. (This function behaves like the standard <code>Object.isSealed</code> function, except that the object inspected is implicit and in a different compartment from the caller.)
+</dd>
+<dt><code>isFrozen()</code></dt>
+<dd>Return true if the referent is frozenâ€”that is, if it is not extensible, and all its properties have been marked as non-configurable and read-only. (This function behaves like the standard <code>Object.isFrozen</code> function, except that the object inspected is implicit and in a different compartment from the caller.)
+</dd>
+<dt><code>isExtensible()</code></dt>
+<dd>Return true if the referent is extensibleâ€”that is, if it can have new properties defined on it. (This function behaves like the standard <code>Object.isExtensible</code> function, except that the object inspected is implicit and in a different compartment from the caller.)
+</dd>
+<dt><code>copy(<i>value</i>)</code></dt>
+<dd><p>Apply the HTML5 "structured cloning" algorithm to create a copy of <i>value</i> in the referent's global object (and thus in the referent's compartment), and return a <code>Debugger.Object</code> instance referring to the copy.</p>
+<p>Note that this returns primitive values unchanged. This means you can use <code>Debugger.Object.prototype.copy</code> as a generic "debugger value to debuggee value" conversion functionâ€”within the limitations of the "structured cloning" algorithm.</p>
+</dd>
+<dt><code>create(<i>prototype</i>, [<i>properties</i>])</code></dt>
+<dd>Create a new object in the referent's global (and thus in the referent's compartment), and return a <code>Debugger.Object</code> referring to it. The new object's prototype is <i>prototype</i>, which must be an <code>Debugger.Object</code> instance. The new object's properties are as given by <i>properties</i>, as if <i>properties</i> were passed to <code>Debugger.Object.prototype.defineProperties</code>, with the new <code>Debugger.Object</code> instance as the <code>this</code> value.
+</dd>
+<dt><code>makeDebuggeeValue(<i>value</i>)</code></dt>
+<dd><p>Return the debuggee value that represents <i>value</i> in the debuggee. If <i>value</i> is a primitive, we return it unchanged; if <i>value</i> is an object, we return the <code>Debugger.Object</code> instance representing that object, wrapped appropriately for use in this <code>Debugger.Object</code>'s referent's compartment.</p>
+<p>Note that, if <i>value</i> is an object, it need not be one allocated in a debuggee global, nor even a debuggee compartment; it can be any object the debugger wishes to use as a debuggee value.</p>
+<p>As described above, each <code>Debugger.Object</code> instance presents its referent as viewed from a particular compartment. Given a <code>Debugger.Object</code> instance <i>d</i> and an object <i>o</i>, the call <code><i>d</i>.makeDebuggeeValue(<i>o</i>)</code> returns a <code>Debugger.Object</code> instance that presents <i>o</i> as it would be seen by code in <i>d</i>'s compartment.</p>
+</dd>
+<dt><code>decompile([<i>pretty</i>])</code></dt>
+<dd>If the referent is a function that is debuggee code, return the JavaScript source code for a function definition equivalent to the referent function in its effect and result, as a string. If <i>pretty</i> is present and true, produce indented code with line breaks. If the referent is not a function that is debuggee code, return <code>undefined</code>.
+</dd>
+<dt><code>call(<i>this</i>, <i>argument</i>, ...)</code></dt>
+<dd>If the referent is callable, call it with the given <i>this</i> value and <i>argument</i> values, and return a <a href="Conventions.html#completion-values" title="Debugger API: General Conventions: Completion Values">completion value</a> describing how the call completed. <i>This</i> should be a debuggee value, or <code>{ asConstructor: true }</code> to invoke the referent as a constructor, in which case SpiderMonkey provides an appropriate <code>this</code> value itself. Each <i>argument</i> must be a debuggee value. All extant handler methods, breakpoints, watchpoints, and so on remain active during the call. If the referent is not callable, throw a <code>TypeError</code>. This function follows the <a href="Debugger-4.html#invf" title="Debugger.Frame: Invocation Frames">invocation function conventions</a>.
+</dd>
+<dt><code>apply(<i>this</i>, <i>arguments</i>)</code></dt>
+<dd>If the referent is callable, call it with the given <i>this</i> value and the argument values in <i>arguments</i>, and return a <a href="Conventions.html#completion-values" title="Debugger API: General Conventions: Completion Values">completion value</a> describing how the call completed. <i>This</i> should be a debuggee value, or <code>{ asConstructor: true }</code> to invoke <i>function</i> as a constructor, in which case SpiderMonkey provides an appropriate <code>this</code> value itself. <i>Arguments</i> must either be an array (in the debugger) of debuggee values, or <code>null</code> or <code>undefined</code>, which are treated as an empty array. All extant handler methods, breakpoints, watchpoints, and so on remain active during the call. If the referent is not callable, throw a <code>TypeError</code>. This function follows the <a href="Debugger-4.html#invf" title="Debugger.Frame: Invocation Frames">invocation function conventions</a>.
+</dd>
+<dt><code>executeInGlobal(<i>code</i>, [<i>options</i>])</code></dt>
+<dd><p>If the referent is a global object, evaluate <i>code</i> in that global environment, and return a <a href="Conventions.html#completion-values" title="Debugger API: General Conventions: Completion Values">completion value</a> describing how it completed. <i>Code</i> is a string. All extant handler methods, breakpoints, watchpoints, and so on remain active during the call. This function follows the <a href="Debugger-4.html#invf" title="Debugger.Frame: Invocation Frames">invocation function conventions</a>. If the referent is not a global object, throw a <code>TypeError</code> exception.</p>
+<p><i>Code</i> is interpreted as strict mode code when it contains a Use Strict Directive.</p>
+<p>This evaluation is semantically equivalent to executing statements at the global level, not an indirect eval. Regardless of <i>code</i> being strict mode code, variable declarations in <i>code</i> affect the referent global object.</p>
+<p>The <i>options</i> argument is as for <a href="Debugger-4.html#eval" title="Debugger.Frame: Eval"><code>Debugger.Frame.prototype.eval</code></a>.</p>
+</dd>
+<dt><code>executeInGlobalWithBindings(<i>code</i>, <i>bindings</i>, [<i>options</i>])</code></dt>
+<dd><p>Like <code>executeInGlobal</code>, but evaluate <i>code</i> using the referent as the variable object, but with a lexical environment extended with bindings from the object <i>bindings</i>. For each own enumerable property of <i>bindings</i> named <i>name</i> whose value is <i>value</i>, include a variable in the lexical environment in which <i>code</i> is evaluated named <i>name</i>, whose value is <i>value</i>. Each <i>value</i> must be a debuggee value. (This is not like a <code>with</code> statement: <i>code</i> may access, assign to, and delete the introduced bindings without having any effect on the <i>bindings</i> object.)</p>
+<p>This method allows debugger code to introduce temporary bindings that are visible to the given debuggee code and which refer to debugger-held debuggee values, and do so without mutating any existing debuggee environment.</p>
+<p>Note that, like <code>executeInGlobal</code>, any declarations it contains affect the referent global object, even as <i>code</i> is evaluated in an environment extended according to <i>bindings</i>. (In the terms used by the ECMAScript specification, the <code>VariableEnvironment</code> of the execution context for <i>code</i> is the referent, and the <i>bindings</i> appear in a new declarative environment, which is the eval code's <code>LexicalEnvironment</code>.)</p>
+<p>The <i>options</i> argument is as for <a href="Debugger-4.html#eval" title="Debugger.Frame: Eval"><code>Debugger.Frame.prototype.eval</code></a>.</p>
+</dd>
+<dt><code>asEnvironment()</code></dt>
+<dd>If the referent is a global object, return the <a href="Debugger-3.html" title="Debugger.Environment"><code>Debugger.Environment</code></a> instance representing the referent's global lexical scope. The global lexical scope's enclosing scope is the global object. If the referent is not a global object, throw a <code>TypeError</code>.
+</dd>
+<dt><code>setObjectWatchpoint(<i>handler</i>)</code> <i>(future plan)</i></dt>
+<dd><p>Set a watchpoint on all the referent's own properties, reporting events by calling <i>handler</i>'s methods. Any previous watchpoint handler on this <code>Debugger.Object</code> instance is replaced. If <i>handler</i> is null, the referent is no longer watched. <i>Handler</i> may have the following methods, called under the given circumstances:</p>
+<dl>
+<dt><code>add(<i>frame</i>, <i>name</i>, <i>descriptor</i>)</code></dt>
+<dd>A property named <i>name</i> has been added to the referent. <i>Descriptor</i> is a property descriptor of the sort accepted by <code>Debugger.Object.prototype.defineProperty</code>, giving the newly added property's attributes.
+</dd>
+<dt><code>delete(<i>frame</i>, <i>name</i>)</code></dt>
+<dd>The property named <i>name</i> is about to be deleted from the referent.
+</dd>
+<dt><code>change(<i>frame</i>, <i>name</i>, <i>oldDescriptor</i>, <i>newDescriptor</i>)</code></dt>
+<dd>The existing property named <i>name</i> on the referent is being changed from those given by <i>oldDescriptor</i> to those given by <i>newDescriptor</i>. This handler method is only called when attributes of the property other than its value are being changed; if only the value is changing, SpiderMonkey calls the handler's <code>set</code> method.
+</dd>
+<dt><code>set(<i>frame</i>, <i>oldValue</i>, <i>newValue</i>)</code></dt>
+<dd><p>The data property named <i>name</i> of the referent is about to have its value changed from <i>oldValue</i> to <i>newValue</i>.</p>
+<p>SpiderMonkey only calls this method on assignments to data properties that will succeed; assignments to un-writable data properties fail without notifying the debugger.</p>
+</dd>
+<dt><code>extensionsPrevented(<i>frame</i>)</code></dt>
+<dd>The referent has been made non-extensible, as if by a call to <code>Object.preventExtensions</code>.
+</dd>
+</dl>
+<p>For all watchpoint handler methods:</p>
+<ul>
+<li><p>Handler calls receive the handler object itself as the <code>this</code> value.</p></li>
+<li><p>The <i>frame</i> argument is the current stack frame, whose code is about to perform the operation on the object being reported.</p></li>
+<li><p>If the method returns <code>undefined</code>, then SpiderMonkey makes the announced change to the object, and continues execution normally. If the method returns an object:</p></li>
+<li><p>If the object has a <code>superseded</code> property whose value is a true value, then SpiderMonkey does not make the announced change.</p></li>
+<li><p>If the object has a <code>resume</code> property, its value is taken as a <a href="Conventions.html#resumption-values" title="Debugger API: General Conventions: Resumption Values">resumption value</a>, indicating how execution should proceed. (However, <code>return</code> resumption values are not supported.)</p></li>
+<li><p>If a given method is absent from <i>handler</i>, then events of that sort are ignored. The watchpoint consults <i>handler</i>'s properties each time an event occurs, so adding methods to or removing methods from <i>handler</i> after setting the watchpoint enables or disables reporting of the corresponding events.</p></li>
+<li><p>Values passed to <i>handler</i>'s methods are debuggee values. Descriptors passed to <i>handler</i>'s methods are ordinary objects in the debugger's compartment, except for <code>value</code>, <code>get</code>, and <code>set</code> properties in descriptors, which are debuggee values; they are the sort of value expected by <code>Debugger.Object.prototype.defineProperty</code>.</p></li>
+<li><p>Watchpoint handler calls are cross-compartment, intra-thread calls: the call takes place in the same thread that changed the property, and in <i>handler</i>'s method's compartment (typically the same as the debugger's compartment).</p></li>
+</ul>
+<p>The new watchpoint belongs to the <a href="Debugger-2.html" title="The Debugger object"><code>Debugger</code></a> instance to which this <code>Debugger.Object</code> instance belongs; disabling the <a href="Debugger-2.html" title="The Debugger object"><code>Debugger</code></a> instance disables this watchpoint.</p>
+</dd>
+<dt><code>clearObjectWatchpoint()</code> <i>(future plan)</i></dt>
+<dd>Remove any object watchpoint set on the referent.
+</dd>
+<dt><code>setPropertyWatchpoint(<i>name</i>, <i>handler</i>)</code> <i>(future plan)</i></dt>
+<dd>Set a watchpoint on the referent's property named <i>name</i>, reporting events by calling <i>handler</i>'s methods. Any previous watchpoint handler on this property for this <code>Debugger.Object</code> instance is replaced. If <i>handler</i> is null, the property is no longer watched. <i>Handler</i> is as described for <code>Debugger.Object.prototype.setObjectWatchpoint</code>, except that it does not receive <code>extensionsPrevented</code> events.
+</dd>
+<dt><code>clearPropertyWatchpoint(<i>name</i>)</code> <i>(future plan)</i></dt>
+<dd>Remove any watchpoint set on the referent's property named <i>name</i>.
+</dd>
+<dt><code>unwrap()</code></dt>
+<dd>If the referent is a wrapper that this <code>Debugger.Object</code>'s compartment is permitted to unwrap, return a <code>Debugger.Object</code> instance referring to the wrapped object. If we are not permitted to unwrap the referent, return <code>null</code>. If the referent is not a wrapper, return this <code>Debugger.Object</code> instance unchanged.
+</dd>
+<dt><code>unsafeDereference()</code></dt>
+<dd><p>Return the referent of this <code>Debugger.Object</code> instance.</p>
+<p>If the referent is an inner object (say, an HTML5 <code>Window</code> object), return the corresponding outer object (say, the HTML5 <code>WindowProxy</code> object). This makes <code>unsafeDereference</code> more useful in producing values appropriate for direct use by debuggee code, without using <a href="Debugger-4.html#invf" title="Debugger.Frame: Invocation Frames">invocation functions</a>.</p>
+<p>This method pierces the membrane of <code>Debugger.Object</code> instances meant to protect debugger code from debuggee code, and allows debugger code to access debuggee objects through the standard cross-compartment wrappers, rather than via <code>Debugger.Object</code>'s reflection-oriented interfaces. This method makes it easier to gradually adapt large code bases to this Debugger API: adapted portions of the code can use <code>Debugger.Object</code> instances, but use this method to pass direct object references to code that has not yet been updated.</p>
+</dd>
+</dl>
+<h4 id="Source_Metadata">Source Metadata</h4>
+<dl>
+    <dt>Generated from file:</dt><dt>
+    </dt><dd>js/src/doc/Debugger/Debugger.Object.md</dd>
+    <dt>Watermark:</dt>
+    <dd id="watermark">sha256:8a643b01082c02e0647a0fc59d7b1b4a907dc7ace794cf1be1fb3b6cf625466d</dd>
+    <dt>Changeset:</dt>
+    <dd><a href="https://hg.mozilla.org/mozilla-central/rev/cfb5851c96ea" class="external">cfb5851c96ea+</a></dd>
+</dl>
+
+                  
+                
+              </article>
+
+              
+
+    
+    
+    
+
+    
+    
+    
+
+    <div class="share">
+        <strong>Share:</strong>
+        <ul>
+            <li><a href="http://twitter.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FTools%2FDebugger-API%2FDebugger.Object%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dtwitter.com&amp;text=I+learned+about+Debugger.Object+on+MDN." target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Tools/Debugger-API/Debugger.Object?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=twitter.com" data-title="I learned about Debugger.Object on MDN." class="share-link twitter"><i aria-hidden="true" class="icon-twitter"></i>Twitter</a></li>
+            <li><a href="http://facebook.com/sharer.php?s=100&amp;p[url]=https://developer.mozilla.org/en-US/docs/Tools/Debugger-API/Debugger.Object?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Tools/Debugger-API/Debugger.Object?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" data-title="I learned about Debugger.Object on MDN." class="share-link facebook"><i aria-hidden="true" class="icon-facebook"></i>Facebook</a></li>
+            <li><a href="https://plus.google.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FTools%2FDebugger-API%2FDebugger.Object%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dplus.google.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Tools/Debugger-API/Debugger.Object?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=plus.google.com" data-title="I learned about Debugger.Object on MDN." class="share-link gplus"><i aria-hidden="true" class="icon-google-plus"></i>Google+</a></li>
+        </ul>
+    </div>
+
+              
+
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                  
+                  
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-group icon-fw"></i>&nbsp;<strong>Contributors to this page:</strong> 
+        <a href="https://developer.mozilla.org/en-US/profiles/jimblandy">jimblandy</a>
+    
+                    </div>
+                  
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o icon-fw"></i>&nbsp;<strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/jimblandy">jimblandy</a>,
+                      <time datetime="2015-12-16T16:35:20-08:00">Dec 16, 2015, 4:35:20 PM</time>
+                    </div>
+                  
+                </div>
+              
+            </div>
+
+            
+              <!-- quick links and zone subnav strip -->
+              <div id="wiki-left" class="column-strip wiki-column">
+
+              
+
+                
+                  <!-- zone subnav -->
+                  
+  <nav class="zone-subnav-container" role="navigation">
+    <div class="subnav" id="Subnav">
+      
+
+<ol>
+ <li><a href="#">Creating</a>
+
+  <ol>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Scratchpad">Scratchpad</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Style_Editor">Style Editor</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Shader_Editor">Shader Editor</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Web_Audio_Editor">Web Audio Editor</a></li>
+  </ol>
+ </li>
+ <li><a href="#">Debugging</a>
+  <ol>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Page_Inspector">Page Inspector</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Web_Console">Console</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Debugger">Debugger</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Network_Monitor">Network Monitor</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Storage_Inspector">Storage Inspector</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/GCLI">Developer Toolbar</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/3D_View">3D View</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Eyedropper">Eyedropper</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/about:debugging">about:debugging</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/tools/Working_with_iframes">Selecting iframes</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/View_source">View Source</a></li>
+  </ol>
+ </li>
+ <li><a href="#">Mobile</a>
+  <ol>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Responsive_Design_Mode">Responsive Design Mode</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/WebIDE">WebIDE</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Remote_Debugging/Firefox_for_Android">Firefox for Android</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Firefox_OS_Simulator">Firefox OS Simulator</a></li>
+  </ol>
+ </li>
+ <li><a href="#">Performance</a>
+  <ol>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Performance">Performance Tool</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Memory">Memory</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Performance/Frame_rate">Frame rate graph</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Performance/Waterfall">Waterfall</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Performance/Call_Tree">Call Tree</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Performance/Flame_Chart">Flame Chart</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Paint_Flashing_Tool">Paint Flashing Tool</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Web_Console/Console_messages#Reflow_events">Reflow Event Logging</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Network_Monitor#Performance_analysis">Network Performance</a></li>
+  </ol>
+ </li>
+ <li><a href="#">Debugging the browser</a>
+  <ol>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Browser_Console">Browser Console</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Browser_Toolbox">Browser Toolbox</a></li>
+  </ol>
+ </li>
+ <li><a href="#">Extending the devtools</a>
+  <ol>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Adding_a_panel_to_the_toolbox">Adding a panel to the toolbox</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Example_add-ons">Example devtools add-ons</a></li>
+   <li><a href="https://wiki.mozilla.org/Remote_Debugging_Protocol">Remote Debugging Protocol</a></li>
+   <li><a href="https://wiki.mozilla.org/Remote_Debugging_Protocol_Stream_Transport">Stream Transport</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Editor">Source Editor</a></li>
+   <li><a href="../Debugger-API.html">The <code>Debugger</code> Interface</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Web_Console/Custom_output">Web Console custom output</a></li>
+  </ol>
+ </li>
+ <li><a href="https://developer.mozilla.org/en-US/docs/Tools_Toolbox#Settings">Settings</a></li>
+ <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Release_notes">Release notes</a></li>
+</ol>
+    </div>
+  </nav>&nbsp;
+                
+
+                
+
+                <!-- approvals -->
+                
+
+              
+
+              </div>
+            
+          </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Tools/Debugger-API/Debugger.Object$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Tools/Debugger-API/Debugger.Object$history" label="View page history"></menuitem>
+  </menu>
+
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+        
+        <div class="contentinfo">
+          <p>© 2005-2016 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>
+          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+        
+        </div>
+      </div>
+      <div class="column-strip">
+        
+          
+  
+    <form class="languages go" method="get" action="https://developer.mozilla.org/en-US/docs/Web">
+      <label for="language">Other languages:</label>
+      <select id="language" class="wiki-l10n" name="next" dir="ltr">
+        <option value="/en-US/docs/Tools/Debugger-API/Debugger.Object" selected="">
+          English (US)
+        </option>
+        
+          <option value="/fr/docs/Outils/Debugger-API/Debugger.Object">
+            Français
+          </option>
+      </select>
+      <noscript>&lt;button type="submit"&gt;Go&lt;/button&gt;</noscript>
+    </form>
+  
+
+        
+      </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+  
+    
+    <!--[if lte IE 8]><script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/selectivizr.091e18cf669b.js" charset="utf-8"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script type="text/javascript" src="../../../../../developer.cdn.mozilla.net/static/build/js/main.a7b27a25fb9c.js" charset="utf-8"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+    
+    <script async="" type="text/javascript" src="../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../developer.cdn.mozilla.net/static/build/js/syntax-prism-min.js" charset="utf-8"></script><script type="text/javascript" src="../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../developer.cdn.mozilla.net/static/build/js/wiki.bd71ca9fd27d.js" charset="utf-8" id="wikiscript"></script>
+
+  
+
+  <script async="" type="text/javascript" src="../../../../../developer.cdn.mozilla.net/static/build/js/helpfulness.7b208a764d28.js" charset="utf-8"></script>
+
+  
+    <script type="text/javascript">
+        (function($) {
+            $('#wikiArticle').children('h2[id]').each(function() {
+                var id = $(this).attr('id');
+                var href = '/en-US/docs/Tools/Debugger-API/Debugger.Object$edit#' + id;
+
+                $('<a>').attr({
+                    href: href,
+                    'class': 'button section-edit only-icon'
+                })
+                .append($('<i aria-hidden="true" class="icon-pencil"></i>'))
+                .append($('<span>'))
+                .find('span')
+                .text(gettext('Edit'))
+                .end()
+                .on('click', function(e) {
+                    e.preventDefault();
+
+                    mdn.analytics.trackEvent({
+                        category: 'Section Edit',
+                        action: id
+                    }, function() {
+                        window.location = href;
+                    });
+                })
+                .appendTo(this);
+            });
+        })(jQuery);
+    </script>
+  
+
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/Tools/Debugger-API/Debugger.Object by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 19:57:51 GMT -->
+</body></html>

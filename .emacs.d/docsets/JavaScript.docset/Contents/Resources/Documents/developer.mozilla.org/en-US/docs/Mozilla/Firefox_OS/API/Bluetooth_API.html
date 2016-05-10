@@ -1,0 +1,931 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS/API/Bluetooth_API by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 17:24:37 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <script async="" src="../../../../../../www.google-analytics.com/analytics.js"></script><script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+  
+    
+  
+
+  
+  <title>Web Bluetooth API (Firefox OS)</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+  
+    
+    
+    <link href="../../../../../../developer.cdn.mozilla.net/static/build/styles/mdn.593f20d8c365.css" rel="stylesheet" type="text/css">
+
+    
+  
+    <link href="../../../../../../developer.cdn.mozilla.net/static/build/styles/wiki.13dd9abdfb62.css" rel="stylesheet" type="text/css">
+
+    
+
+    
+      
+        <link rel="stylesheet" type="text/css" href="https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS$styles">
+      
+    
+
+  <!-- common social tags -->
+  
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon144.a6e4162070f4.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon114.0e9fabd44f85.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon72.8ff9d87c82a0.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon57.a2490b9a2d76.png">
+  <!-- basic favicon -->
+  
+    
+  
+  <link rel="shortcut icon" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon32.e02854fdcf73.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/html5shiv.3948ccddab6f.js" charset="utf-8"></script>
+  <![endif]-->
+
+  
+  <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS/API/Bluetooth_API$json">
+  <link rel="canonical" href="Bluetooth_API.html">
+
+  
+    
+      <link rel="alternate" hreflang="fr" href="https://developer.mozilla.org/fr/docs/WebAPI/WebBluetooth" title="L'API Web Bluetooth">
+    
+      <link rel="alternate" hreflang="pt-BR" href="https://developer.mozilla.org/pt-BR/docs/WebAPI/WebBluetooth" title="WebBluetooth">
+    
+  
+
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="Web Bluetooth API (Firefox OS)">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS/API/Bluetooth_API">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS/API/Bluetooth_API">
+  <meta name="twitter:title" content="Web Bluetooth API (Firefox OS)">
+  
+  <meta property="og:description" content="The Web Bluetooth API lets an open web app discover, pair with, and connect to Bluetooth devices. As it is a completely experimental and non-standard API, the Bluetooth API is currently available for certified applications only. However, there is some traction to have such an API available for regular Web content; this will be discussed as part of the W3C's System Applications Working Group.">
+  <meta name="description" content="The Web Bluetooth API lets an open web app discover, pair with, and connect to Bluetooth devices. As it is a completely experimental and non-standard API, the Bluetooth API is currently available for certified applications only. However, there is some traction to have such an API available for regular Web content; this will be discussed as part of the W3C's System Applications Working Group.">
+  <meta name="twitter:description" content="The Web Bluetooth API lets an open web app discover, pair with, and connect to Bluetooth devices. As it is a completely experimental and non-standard API, the Bluetooth API is currently available for certified applications only. However, there is some traction to have such an API available for regular Web content; this will be discussed as part of the W3C's System Applications Working Group.">
+  
+
+  
+    
+
+
+
+  
+</head>
+<body data-slug="Mozilla/Firefox_OS/API/Bluetooth_API" contextmenu="edit-history-menu" data-search-url="" class="document zone ">
+
+  <script type="text/javascript">
+    (function(win) {
+        'use strict';
+
+        
+            (function(){
+  var FLAGS = {
+    'compat_api': false,'kumaediting': false,'page_move': false,'registration_disabled': false,'search_suggestions': false,'section_edit': false,'spam_admin_override': false,'spam_checks_enabled': true,'spam_spammer_override': false,'spam_submissions_enabled': false,'spam_testing_mode': false,'wiki_samples': true,'wiki_spam_exempted': false,'wiki_spam_training': true
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': true,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+
+        // This needs to be set before ckeditor.js loads
+        window.CKEDITOR_BASEPATH = 'https://developer.mozilla.org/static/js/libs/ckeditor/build/ckeditor/';
+
+        // This represents the site configuration
+        win.mdn = {
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+            
+            notifications: [],
+            
+            // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            },
+            // Assets that need to be dynamically injected
+            assets_disabled: {
+                css: {
+                    'editor-content': ['https://developer.cdn.mozilla.net/static/build/styles/editor-content.3d79df72080d.css',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/styles/wiki-compat-tables.f3a3bfce97a1.css',]
+                },
+                js: {
+                    'syntax-prism': ['https://developer.cdn.mozilla.net/static/build/js/syntax-prism.7a66ddfa68bf.js',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/js/wiki-compat-tables.14ce5dcb2c3d.js',]
+                }
+            }
+        };
+    })(this);
+</script>
+
+  
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+    
+      <li><a href="#q" id="skip-search">Skip to search</a></li>
+    
+  </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+    <a href="https://developer.mozilla.org/en-US/" class="logo">Mozilla Developer Network</a>
+
+    <div id="nav-sec">
+        
+                  <ul>
+                  <li>
+
+    
+
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                Sign in
+              </span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FMozilla%2FFirefox_OS%2FAPI%2FBluetooth_API" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/Mozilla/Firefox_OS/API/Bluetooth_API" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/Mozilla/Firefox_OS/API/Bluetooth_API" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2FMozilla%2FFirefox_OS%2FAPI%2FBluetooth_API" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+              
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+        
+    </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../../../Web/API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+
+  
+      
+        <div class="zone-article-header" id="document-main"><div class="center">
+          <!-- zone title -->
+          <div class="zone-title"><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS">B2G OS</a></div>
+          <!-- zone image -->
+          <div class="zone-image"></div>
+        </div></div>
+      
+
+     <!-- end is_zone -->
+
+    <div class="wiki-main-content"><div class="center">
+      
+      <div class="article-meta">
+        <!-- action buttons -->
+        
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+  <ul class="page-buttons" data-sticky="false">
+      
+      <li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+              
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/fr/docs/WebAPI/WebBluetooth" title="L'API Web Bluetooth">Français</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/pt-BR/docs/WebAPI/WebBluetooth" title="WebBluetooth">Português (do&nbsp;Brasil)</a></bdi></li>
+                
+              
+
+              
+                <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS/API/Bluetooth_API$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+              
+            </ul>
+          </div>
+        </div>
+      </li>
+
+      <li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS/API/Bluetooth_API$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li>
+
+        
+
+        <li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS/API/Bluetooth_API$history" rel="nofollow, noindex">History</a></li>
+                
+                
+                
+                
+
+                
+
+                
+                
+                
+                <li class="page-print"><a href="#" onclick="return window.print();">Print this article</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+        
+  <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Mozilla" rel="v:url" property="v:title">Mozilla</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS" rel="v:url" property="v:title">B2G OS</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="../API.html" rel="v:url" property="v:title">Firefox OS APIs</a></li>
+    
+    <li class="crumb" typeof="v:Breadcrumb" property="v:title">Web Bluetooth API (Firefox OS)</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        
+        <div class="contributor-avatars" data-all-text="see all contributors" data-alternate-message="hide contributors" data-has-hidden="1">
+            <ul>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills" title="View profile: chrisdavidmills">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="chrisdavidmills" data-src="../../../../../../secure.gravatar.com/avatar/deeea0ba82390bd5acc539703c4b0cfb6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">chrisdavidmills</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/teoli" title="View profile: teoli">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="teoli" data-src="../../../../../../secure.gravatar.com/avatar/d0d90148e08e3b64ccf75c46f31442c56c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">teoli</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/jpmedley" title="View profile: jpmedley">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="jpmedley" data-src="../../../../../../secure.gravatar.com/avatar/fde784135f738cc182672e703dea9a4b6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">jpmedley</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Jamin_Liu" title="View profile: Jamin_Liu">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Jamin_Liu" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Jamin_Liu</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/316k" title="View profile: 316k">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="316k" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">316k</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Sheppy" title="View profile: Sheppy">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Sheppy" data-src="../../../../../../secure.gravatar.com/avatar/945076feb88f2d7003891ffbf06f32bf6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Sheppy</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Thiha" title="View profile: Thiha">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Thiha" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Thiha</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/eric30" title="View profile: eric30">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="eric30" data-src="../../../../../../secure.gravatar.com/avatar/7f6c1bcb510758ba4c2095022d37c5206c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">eric30</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/kscarfone" title="View profile: kscarfone">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="kscarfone" data-src="../../../../../../secure.gravatar.com/avatar/89c1e54a9703125168e40d22316d2b496c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">kscarfone</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Jeremie" title="View profile: Jeremie">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Jeremie" data-src="../../../../../../secure.gravatar.com/avatar/ea74cf7f528273838138e9ae407cd8ef6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Jeremie</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/FredB" title="View profile: FredB">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="FredB" data-src="../../../../../../secure.gravatar.com/avatar/ae5b9bd466dae65a6be4e9ff223d2b2a6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">FredB</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/JusticeLY" title="View profile: JusticeLY">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="JusticeLY" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">JusticeLY</noscript></a>
+                </li>
+            
+            </ul>
+        </div>
+        
+
+        <h1>Web Bluetooth API (Firefox OS)</h1>
+
+      </div>
+      
+
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-present">
+
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+            
+              <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+              
+              <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#API_overview" rel="internal">API overview</a><ol><li><a href="#Basic_interfaces" rel="internal">Basic interfaces</a></li><li><a href="#Gatt_interfaces" rel="internal">Gatt interfaces</a></li><li><a href="#Bluetooth_event_interfaces" rel="internal">Bluetooth event interfaces</a></li><li><a href="#System_messages" rel="internal">System messages</a></li><li><a href="#Obsolete_interfaces" rel="internal">Obsolete interfaces</a></li></ol></li><li><a href="#Specifications" rel="internal">Specifications</a></li><li><a href="#Browser_Compatibility" rel="internal">Browser Compatibility</a><ol><li><a href="#Compatibility_notes" rel="internal">Compatibility notes</a></li></ol></li><li><a href="#See_also" rel="internal">See also</a>
+                </li></ol>
+              </div>
+              
+              </div>
+            
+
+            
+            
+              
+            
+
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-half wiki-column text-content">
+
+              
+
+              
+
+              
+                
+                
+                
+              
+              
+
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                
+                  
+                    <p></p><section id="Quick_Links" class="Quick_links"><!-- --></section><p></p>
+
+<p></p><div class="overheadIndicator nonStandard nonStandardHeader"> 
+      <p><strong><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span> Non-standard</strong><br> 
+      This feature is not on a current W3C standards track, but it is supported on the Firefox OS platform. Although implementations may change in the future and it is not supported widely across browsers, it is suitable for use in code dedicated to Firefox OS apps.</p> 
+      </div><p></p>
+
+<p></p><div class="warning"> 
+    <p style="text-align: center;">This API is available on <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS">Firefox OS</a> for <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS/Security/Application_security#App_Types">internal applications</a> only.</p> 
+</div><p></p>
+
+<p>The Web Bluetooth API lets an open web app discover, pair with, and connect to Bluetooth devices. As it is a completely experimental and non-standard API, the Bluetooth API is currently available for certified applications only. However, there is some traction to have such an API available for regular Web content; this will be discussed as part of the <a href="http://www.w3.org/2012/sysapps/" class="external">W3C's System Applications Working Group</a>.</p>
+
+<div class="note">
+<p><strong>Note:</strong> App developers who wish to send data to a Bluetooth device can use <a href="Web_Activities.html#Firefox_OS_activities">the share activity</a>. This activity allows sharing of images, audio, video and vCard content only.</p>
+</div>
+
+<h2 id="API_overview">API overview</h2>
+
+<p>The main entry point for the API is the <a href="../../../Web/API/Navigator/mozBluetooth.html" title="Returns a BluetoothManager object you can use to get a BluetoothAdapter object."><code>Navigator.mozBluetooth</code></a> property, which returns a <a href="../../../Web/API/BluetoothManager_(Firefox_OS)-2.png" title="The documentation about this has not yet been written; please consider contributing!"><code>BluetoothManager</code></a> object.</p>
+
+<h3 id="Basic_interfaces">Basic interfaces</h3>
+
+<p>The following interfaces provide an app with basic Bluetooth functionality</p>
+
+<dl>
+ <dt><a href="../../../Web/API/BluetoothManager_(Firefox_OS)-2.png" title="The documentation about this has not yet been written; please consider contributing!"><code>BluetoothManager</code></a></dt>
+ <dd>Allows access to all Bluetooth adapters available on the device. Adapters are the connection interface to connect another Bluetooth-enabled device to the current device.</dd>
+ <dt><a href="../../../Web/API/BluetoothAdapter_(Firefox_OS).png" title="The BluetoothAdapter interface of the Web Bluetooth API is used to handle all the operations requested by Bluetooth networks. A Bluetooth adapter is the physical interface which is used to interact with local Bluetooth device."><code>BluetoothAdapter</code></a></dt>
+ <dd>Used to handle all the operations requested by Bluetooth networks.</dd>
+ <dt><a href="../../../Web/API/BluetoothClassOfDevice_(Firefox_OS).png" title="The documentation about this has not yet been written; please consider contributing!"><code>BluetoothClassOfDevice</code></a></dt>
+ <dd>Provides identifying/classification information about a given remote Bluetooth device, available at discovery stage.</dd>
+ <dt><a href="../../../Web/API/BluetoothDevice_(Firefox_OS).png" title="The BluetoothDevice interface of the Web Bluetooth API provides information regarding a given Bluetooth device."><code>BluetoothDevice</code></a></dt>
+ <dd>Provides information regarding a given remote Bluetooth device.</dd>
+ <dt><a href="BluetoothDiscoveryHandle.html" title="The documentation about this has not yet been written; please consider contributing!"><code>BluetoothDiscoveryHandle</code></a></dt>
+ <dd>Used to notify the current application about the discovery of a remote bluetooth device.</dd>
+ <dt><a href="../../../Web/API/BluetoothPairingHandle_(Firefox_OS).png" title="The documentation about this has not yet been written; please consider contributing!"><code>BluetoothPairingHandle</code></a></dt>
+ <dd>Contains the functionality required for completing a device pairing operation, including passkeys, and mechanisms to reply to user-entered pin codes and confirm passkeys.</dd>
+ <dt><a href="../../../Web/API/BluetoothPairingListener_(Firefox_OS).png" title="The BluetoothPairingListener interface of the Web Bluetooth API defines event handlers triggered for different pairing operations."><code>BluetoothPairingListener</code></a></dt>
+ <dd>Defines event handlers triggered for different pairing operations.</dd>
+</dl>
+
+<h3 id="Gatt_interfaces">Gatt interfaces</h3>
+
+<p>The following interfaces allow Firefox OS to communicate with and consume Gatt (Generic Attribute Profile)-based services on remote Smart/LE (low energy) devices.</p>
+
+<dl>
+ <dt><a href="../../../Web/API/BluetoothGatt_(Firefox_OS).png" title="The BluetoothGatt interface of the Web Bluetooth API handles initial communications and connections with Gatt services."><code>BluetoothGatt</code></a></dt>
+ <dd>Handles initial communications and connections with Gatt services.</dd>
+ <dt><a href="../../../Web/API/BluetoothGattServer_(Firefox_OS).png" title="The BluetoothGattServer interface of the Web Bluetooth API provides Bluetooth GATT server functionality to allow creation of Bluetooth Smart/LE services and characteristics."><code>BluetoothGattServer</code></a></dt>
+ <dd>Provides Bluetooth GATT server functionality to allow creation of Bluetooth Smart/LE services and characteristics.</dd>
+ <dt><a href="BluetoothGattService.html" title="The BluetoothGattService interface of the Web Bluetooth API represents a service provided by a GATT server, including the service definition, a list of referenced services, and a list of the characteristics of this service."><code>BluetoothGattService</code></a></dt>
+ <dd>Represents a service provided by a GATT server, including the service definition, a list of included services, and a list of the characteristics of this service.</dd>
+ <dt><a href="../../../Web/API/BluetoothGattCharacteristic_(Firefox_OS).png" title="The documentation about this has not yet been written; please consider contributing!"><code>BluetoothGattCharacteristic</code></a></dt>
+ <dd>Represents a GATT service characteristic, which includes characteristic definition, value, properties and configuration info, and a list of descriptors that provide related information.</dd>
+ <dt><a href="BluetoothGattDescriptor.html" title="The BluetoothGattDescriptor interface of the Web Bluetooth API represents a GATT descriptor, which contains related information about a characteristic value."><code>BluetoothGattDescriptor</code></a></dt>
+ <dd>Represents a GATT descriptor, which contains related information about a characteristic value.</dd>
+</dl>
+
+<h3 id="Bluetooth_event_interfaces">Bluetooth event interfaces</h3>
+
+<p>These objects represent different events occuring within a Bluetooth interaction.</p>
+
+<dl>
+ <dt><a href="../../../Web/API/BluetoothAdapterEvent_(Firefox_OS).png" title="The documentation about this has not yet been written; please consider contributing!"><code>BluetoothAdapterEvent</code></a></dt>
+ <dd>Provides access to a <a href="../../../Web/API/BluetoothAdapter_(Firefox_OS).png" title="The BluetoothAdapter interface of the Web Bluetooth API is used to handle all the operations requested by Bluetooth networks. A Bluetooth adapter is the physical interface which is used to interact with local Bluetooth device."><code>BluetoothAdapter</code></a> object and its address as the parameter of a <code><a href="../../../Web/Events/adapteradded.html" class="new" title="/en-US/docs/Web/Events/adapteradded">adapteradded</a></code> or&nbsp;<code><a href="../../../Web/Events/adapterremoved.html" class="new" title="/en-US/docs/Web/Events/adapterremoved">adapterremoved</a></code> event handler (see <a href="BluetoothManager/onadapteradded.html" title="The documentation about this has not yet been written; please consider contributing!"><code>BluetoothManager.onadapteradded</code></a> and <a href="../../../Web/API/BluetoothManager_(Firefox_OS)/onadapterremoved.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>BluetoothManager.onadapterremoved</code></a>), when fired.</dd>
+ <dt><a href="../../../Web/API/BluetoothAttributeEvent_(Firefox_OS).png" title="The BluetoothAttributeEvent interface of the Web Bluetooth API provides access to changed attributes and their new values as the parameter of attributechanged event handlers (including BluetoothManager.onattributechanged, BluetoothAdapter.onattributechanged, and BluetoothDevice.onattributechanged), when fired."><code>BluetoothAttributeEvent</code></a></dt>
+ <dd>Provides access to changed attributes and their new values as the parameter of <code><a href="../../../Web/Events/attributechanged.html" class="new" title="/en-US/docs/Web/Events/attributechanged">attributechanged</a></code> event handlers (including <a href="../../../Web/API/BluetoothManager_(Firefox_OS)/onattributechanged.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>BluetoothManager.onattributechanged</code></a>, <a href="../../../Web/API/BluetoothAdapter_(Firefox_OS)/onattributechanged.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>BluetoothAdapter.onattributechanged</code></a>, and <a href="../../../Web/API/BluetoothDevice_(Firefox_OS)/onattributechanged.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>BluetoothDevice.onattributechanged</code></a>), when fired.</dd>
+ <dt><a href="../../../Web/API/BluetoothDeviceEvent_(Firefox_OS).png" title="The BluetoothDeviceEvent interface of the Web Bluetooth API provides access to a found/paired device (BluetoothDevice) object or the address or an unpaired device as the parameter of a devicefound,&nbsp;devicepaired or&nbsp;deviceunpaired event handler (see BluetoothDiscoveryHandle.ondevicefound, BluetoothAdapter.ondevicepaired, and BluetoothAdapter.ondeviceunpaired), when fired."><code>BluetoothDeviceEvent</code></a></dt>
+ <dd>Provides access to a found/paired device (<a href="../../../Web/API/BluetoothDevice_(Firefox_OS).png" title="The BluetoothDevice interface of the Web Bluetooth API provides information regarding a given Bluetooth device."><code>BluetoothDevice</code></a>) object or the address or an unpaired device as the parameter of a <code><a href="../../../Web/Events/devicefound.html" class="new" title="/en-US/docs/Web/Events/devicefound">devicefound</a></code>,&nbsp;<code><a href="../../../Web/Events/devicepaired.html" class="new" title="/en-US/docs/Web/Events/devicepaired">devicepaired</a></code> or&nbsp;<code><a href="../../../Web/Events/deviceunpaired.html" class="new" title="/en-US/docs/Web/Events/deviceunpaired">deviceunpaired</a></code> event handler (see <a href="../../../Web/API/BluetoothDiscoveryHandle_(Firefox_OS)/ondevicefound.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>BluetoothDiscoveryHandle.ondevicefound</code></a>, <a href="../../../Web/API/BluetoothAdapter_(Firefox_OS)/ondevicepaired.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>BluetoothAdapter.ondevicepaired</code></a>, <a href="../../../Web/API/BluetoothAdapter_(Firefox_OS)/ondeviceunpaired.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>BluetoothAdapter.ondeviceunpaired</code></a>), when fired.</dd>
+ <dt><a href="../../../Web/API/BluetoothGattCharacteristicEvent_(Firefox_OS).png" title="The documentation about this has not yet been written; please consider contributing!"><code>BluetoothGattCharacteristicEvent</code></a></dt>
+ <dd>Provides access to an updated <a href="../../../Web/API/BluetoothGattCharacteristic_(Firefox_OS).png" title="The documentation about this has not yet been written; please consider contributing!"><code>BluetoothGattCharacteristic</code></a> object as the parameter of the <a href="../../../Web/API/BluetoothGatt_(Firefox_OS)/oncharacteristicchanged.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>BluetoothGatt.oncharacteristicchanged</code></a>, handler, when the <code><a href="../../../Web/Events/characteristicchanged.html" class="new" title="/en-US/docs/Web/Events/characteristicchanged">characteristicchanged</a></code> event is fired.</dd>
+ <dt><a href="BluetoothLeDeviceEvent.html" title="The BluetoothLeDeviceEvent interface of the Web Bluetooth API provides access to an LE device BluetoothDevice object and its&nbsp;RSSI value and advertisement record, as the parameter of a devicefound event handler (see BluetoothDiscoveryHandle.ondevicefound), when fired."><code>BluetoothLeDeviceEvent</code></a></dt>
+ <dd>Provides access to an LE device <a href="../../../Web/API/BluetoothDevice_(Firefox_OS).png" title="The BluetoothDevice interface of the Web Bluetooth API provides information regarding a given Bluetooth device."><code>BluetoothDevice</code></a> object and its&nbsp;RSSI value and advertisement record, as the parameter of a <code><a href="../../../Web/Events/devicefound.html" class="new" title="/en-US/docs/Web/Events/devicefound">devicefound</a></code> event handler (see <a href="../../../Web/API/BluetoothDiscoveryHandle_(Firefox_OS)/ondevicefound.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>BluetoothDiscoveryHandle.ondevicefound</code></a>), when fired.</dd>
+ <dt><a href="../../../Web/API/BluetoothPairingEvent_(Firefox_OS).png" title="The BluetoothPairingEvent interface of the Web Bluetooth API provides access to a device's name and the BluetoothPairingHandle object required for pairing devices as the parameter of pairing-related handlers (for example&nbsp;including BluetoothPairingListener.ondisplaypasskeyreq and BluetoothPairingListener.onenterpincodereq), when fired."><code>BluetoothPairingEvent</code></a></dt>
+ <dd>Provides access to a device's name and the <a href="../../../Web/API/BluetoothPairingHandle_(Firefox_OS).png" title="The documentation about this has not yet been written; please consider contributing!"><code>BluetoothPairingHandle</code></a> object required for pairing devices as the parameter of pairing-related handlers (for example&nbsp;including <a href="../../../Web/API/BluetoothPairingListener_(Firefox_OS)/ondisplaypasskeyreq.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>BluetoothPairingListener.ondisplaypasskeyreq</code></a> and <a href="../../../Web/API/BluetoothPairingListener_(Firefox_OS)/onenterpincodereq.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>BluetoothPairingListener.onenterpincodereq</code></a>), when fired.</dd>
+</dl>
+
+<h3 id="System_messages">System messages</h3>
+
+<p>Because some actions from remote devices can require waking up an app to handle them, there are several system messages related to Bluetooth:</p>
+
+<ul>
+ <li><code>bluetooth-dialer-command</code></li>
+ <li><code>bluetooth-cancel</code></li>
+ <li><code>bluetooth-hid-status-changed</code></li>
+ <li><code>bluetooth-pairing-request</code></li>
+ <li><code>bluetooth-opp-transfer-complete</code></li>
+ <li><code>bluetooth-opp-update-progress</code></li>
+ <li><code>bluetooth-opp-receiving-file-confirmation</code></li>
+ <li><code>bluetooth-opp-transfer-start</code></li>
+</ul>
+
+<div class="note">
+<p><strong>Note:</strong> An App can react to these messages by requesting them in its <a href="https://developer.mozilla.org/en-US/Apps/Build/Manifest">app manifest file</a> and by using the <a href="../../../Web/API/Window/navigator/mozSetMessageHandler.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>navigator.mozSetMessageHandler()</code></a> function to define a message handler.</p>
+</div>
+
+<h3 id="Obsolete_interfaces">Obsolete interfaces</h3>
+
+<dl>
+ <dt><a href="../../../Web/API/BluetoothStatusChangedEvent_(Firefox_OS).html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>BluetoothStatusChangedEvent</code></a></dt>
+ <dd>Provides access to information regarding any change to the status of a Bluetooth device.</dd>
+</dl>
+
+<h2 id="Specifications">Specifications</h2>
+
+<table class="standard-table">
+ <tbody>
+  <tr>
+   <th scope="col">Specification</th>
+   <th scope="col">Status</th>
+   <th scope="col">Comment</th>
+  </tr>
+  <tr>
+   <td><a href="https://webbluetoothcg.github.io/web-bluetooth/" class="external" lang="en" title="The 'Web Bluetooth' specification" hreflang="en">Web Bluetooth</a></td>
+   <td><span class="spec-Draft">Draft</span></td>
+   <td>Rough draft; not part of any official specification yet. It should be discussed as part of the <a href="http://www.w3.org/2012/sysapps/" class="external">W3C's System Applications Working Group</a>.</td>
+  </tr>
+ </tbody>
+</table>
+
+<h2 id="Browser_Compatibility">Browser Compatibility</h2>
+
+<div><div class="htab"> 
+    <a name="AutoCompatibilityTable" id="AutoCompatibilityTable"></a> 
+    <ul> 
+        <li class="selected"><a>Desktop</a></li> 
+        <li><a>Mobile</a></li> 
+    </ul> 
+</div></div>
+
+<div id="compat-desktop">
+<table class="compat-table">
+ <tbody>
+  <tr>
+   <th style="line-height: 16px;">Feature</th>
+   <th style="line-height: 16px;">Chrome</th>
+   <th style="line-height: 16px;">Firefox (Gecko)</th>
+   <th style="line-height: 16px;">Internet Explorer</th>
+   <th style="line-height: 16px;">Opera</th>
+   <th style="line-height: 16px;">Safari (WebKit)</th>
+  </tr>
+  <tr>
+   <td>Basic support</td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+  </tr>
+ </tbody>
+</table>
+</div>
+
+<div id="compat-mobile">
+<table class="compat-table">
+ <tbody>
+  <tr>
+   <th style="line-height: 16px;">Feature</th>
+   <th style="line-height: 16px;">Android</th>
+   <th style="line-height: 16px;">Android Webview</th>
+   <th style="line-height: 16px;">Firefox Mobile (Gecko)</th>
+   <th style="line-height: 16px;">Firefox OS</th>
+   <th style="line-height: 16px;">IE Mobile</th>
+   <th style="line-height: 16px;">Opera Mobile</th>
+   <th style="line-height: 16px;">Safari Mobile</th>
+   <th style="line-height: 16px;">Chrome for Android</th>
+  </tr>
+  <tr>
+   <td>Bluetooth 'v2' support</td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+   <td>2.1</td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+  </tr>
+  <tr>
+   <td>Bluetooth initial support: <code>BluetoothManager</code>, <code>BluetoothAdapter</code>, <code>BluetoothDevice</code>, <code>BluetoothDeviceEvent</code>, <code>BluetoothStatusChangedEvent</code></td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+   <td>1.0.1</td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+  </tr>
+ </tbody>
+</table>
+</div>
+
+<h3 id="Compatibility_notes">Compatibility notes</h3>
+
+<ul>
+ <li>The Web Bluetooth API is implemented in Firefox OS 1.0.1 and above.</li>
+ <li>However, on Firefox OS &lt;1.2, you need to be careful with Bluetooth file sharing. If you are sharing a file directly from the SDCard you are ok, but if you are sharing say, an image blob directly from the camera via a Web Activity you will run into problems, as Bluetooth is expecting a valid path to the SDCard as a file location (see <a href="https://github.com/mozilla-b2g/gaia/blob/v1.0.1/apps/bluetooth/js/transfer.js#L277" class="external">B2G 1.0.1 Gaia Bluetooth app</a>.) This is <a href="https://github.com/mozilla-b2g/gaia/blob/15b019e3acbbc111652640c6ef95882e90d65e18/apps/bluetooth/js/transfer.js#L159-L179" class="external">fixed in Firefox OS 1.2</a>. In Firefox &lt;1.2 you'd have to write it to an SDCard via <a href="Device_Storage_API.html">Device Storage</a> first, then transfer it via Bluetooth.</li>
+ <li>There is an added complication too: Device Storage is only available to privileged (packaged) apps, so if your app is hosted then you can't use Device Storage to solve the above problem.</li>
+ <li>Another problem you may run into when attempting to use Bluetooth File sharing between Firefox OS and another device is that the other devce may not have Bluetooth Sharing enabled (Firefox OS has it enabled by default.) For eample on Mac OSX 10.9 it is turned on via <em>System Preferences &gt; Sharing &gt; check "Bluetooth Sharing"</em>.&nbsp;</li>
+</ul>
+
+<h2 id="See_also">See also</h2>
+
+<p><a href="Bluetooth_API/Using_the_Web_Bluetooth_API.html">Using the Web Bluetooth API</a></p>
+                  
+                
+              </article>
+
+              
+
+    
+    
+    
+
+    
+    
+    
+
+    <div class="share">
+        <strong>Share:</strong>
+        <ul>
+            <li><a href="http://twitter.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FMozilla%2FFirefox_OS%2FAPI%2FBluetooth_API%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dtwitter.com&amp;text=I+learned+about+Web+Bluetooth+API+%28Firefox+OS%29+on+MDN." target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS/API/Bluetooth_API?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=twitter.com" data-title="I learned about Web Bluetooth API (Firefox OS) on MDN." class="share-link twitter"><i aria-hidden="true" class="icon-twitter"></i>Twitter</a></li>
+            <li><a href="http://facebook.com/sharer.php?s=100&amp;p[url]=https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS/API/Bluetooth_API?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS/API/Bluetooth_API?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" data-title="I learned about Web Bluetooth API (Firefox OS) on MDN." class="share-link facebook"><i aria-hidden="true" class="icon-facebook"></i>Facebook</a></li>
+            <li><a href="https://plus.google.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FMozilla%2FFirefox_OS%2FAPI%2FBluetooth_API%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dplus.google.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS/API/Bluetooth_API?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=plus.google.com" data-title="I learned about Web Bluetooth API (Firefox OS) on MDN." class="share-link gplus"><i aria-hidden="true" class="icon-google-plus"></i>Google+</a></li>
+        </ul>
+    </div>
+
+              
+
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                  
+                  
+  <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags icon-fw"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+      
+        <li><a href="../../../tag/API.html">API</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/B2G">B2G</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Certified">Certified</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Firefox OS">Firefox OS</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Landing">Landing</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Non-standard">Non-standard</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Reference">Reference</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Web Bluetooth">Web Bluetooth</a></li>
+      
+    </ul>
+  </div>
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-group icon-fw"></i>&nbsp;<strong>Contributors to this page:</strong> 
+        <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills">chrisdavidmills</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/teoli">teoli</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/jpmedley">jpmedley</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Jamin_Liu">Jamin_Liu</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/316k">316k</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Sheppy">Sheppy</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Thiha">Thiha</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/eric30">eric30</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/kscarfone">kscarfone</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Jeremie">Jeremie</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/FredB">FredB</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/JusticeLY">JusticeLY</a>
+    
+                    </div>
+                  
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o icon-fw"></i>&nbsp;<strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills">chrisdavidmills</a>,
+                      <time datetime="2016-02-10T07:48:00-08:00">Feb 10, 2016, 7:48:00 AM</time>
+                    </div>
+                  
+                </div>
+              
+            </div>
+
+            
+              <!-- quick links and zone subnav strip -->
+              <div id="wiki-left" class="column-strip wiki-column">
+
+              
+
+                
+
+                
+                  <!-- quick links -->
+                  
+  <div class="quick-links" id="quick-links">
+    <div class="title see-also">See also</div>
+    <ol><li><strong><a href="../../../Web/API/Web_Bluetooth_API.html">Web Bluetooth API</a></strong></li><li data-default-state="open"><a href="#"><strong>Interfaces</strong></a><ol><li><a href="../../../Web/API/BluetoothAdvertisingData.html"><code>BluetoothAdvertisingData</code></a></li><li><a href="../../../Web/API/BluetoothDevice.html"><code>BluetoothDevice</code></a></li><li><a href="../../../Web/API/BluetoothRemoteGATTCharacteristic.html"><code>BluetoothGATTCharacteristic</code></a></li><li><a href="../../../Web/API/BluetoothGATTDescriptor.html"><code>BluetoothGATTDescriptor</code></a></li><li><a href="../../../Web/API/BluetoothGATTRemoteServer.png"><code>BluetoothGATTRemoteServer</code></a></li><li><a href="../../../Web/API/BluetoothGATTService-2.html"><code>BluetoothGATTService</code></a></li></ol></li></ol>
+  </div>
+                
+
+                <!-- approvals -->
+                
+
+              
+
+              </div>
+            
+          </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Mozilla/Firefox_OS/API/Bluetooth_API$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Mozilla/Firefox_OS/API/Bluetooth_API$history" label="View page history"></menuitem>
+  </menu>
+
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+        
+        <div class="contentinfo">
+          <p>© 2005-2016 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>
+          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+        
+        </div>
+      </div>
+      <div class="column-strip">
+        
+          
+  
+    <form class="languages go" method="get" action="https://developer.mozilla.org/en-US/docs/Web">
+      <label for="language">Other languages:</label>
+      <select id="language" class="wiki-l10n" name="next" dir="ltr">
+        <option value="/en-US/docs/Mozilla/Firefox_OS/API/Bluetooth_API" selected="">
+          English (US)
+        </option>
+        
+          <option value="/fr/docs/WebAPI/WebBluetooth">
+            Français
+          </option>
+          <option value="/pt-BR/docs/WebAPI/WebBluetooth">
+            Português (do&nbsp;Brasil)
+          </option>
+      </select>
+      <noscript>&lt;button type="submit"&gt;Go&lt;/button&gt;</noscript>
+    </form>
+  
+
+        
+      </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+  
+    
+    <!--[if lte IE 8]><script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/selectivizr.091e18cf669b.js" charset="utf-8"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/main.a7b27a25fb9c.js" charset="utf-8"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+    
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/syntax-prism-min.js" charset="utf-8"></script><script type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/wiki.bd71ca9fd27d.js" charset="utf-8" id="wikiscript"></script>
+
+  
+
+  <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/helpfulness.7b208a764d28.js" charset="utf-8"></script>
+
+  
+
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS/API/Bluetooth_API by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 17:24:42 GMT -->
+</body></html>

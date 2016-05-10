@@ -1,0 +1,1599 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/MDN/Doc_status/API/WebRTC by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 15:43:12 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <script async="" src="../../../../../../www.google-analytics.com/analytics.js"></script><script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+  
+    
+  
+
+  
+  <title>API: WebRTC documentation status</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+  
+    
+    
+    <link href="../../../../../../developer.cdn.mozilla.net/static/build/styles/mdn.593f20d8c365.css" rel="stylesheet" type="text/css">
+
+    
+  
+    <link href="../../../../../../developer.cdn.mozilla.net/static/build/styles/wiki.13dd9abdfb62.css" rel="stylesheet" type="text/css">
+
+    
+
+    
+
+  <!-- common social tags -->
+  
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon144.a6e4162070f4.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon114.0e9fabd44f85.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon72.8ff9d87c82a0.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon57.a2490b9a2d76.png">
+  <!-- basic favicon -->
+  
+    
+  
+  <link rel="shortcut icon" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon32.e02854fdcf73.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/html5shiv.3948ccddab6f.js" charset="utf-8"></script>
+  <![endif]-->
+
+  
+  <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/MDN/Doc_status/API/WebRTC$json">
+  <link rel="canonical" href="WebRTC.html">
+
+  
+    
+      <link rel="alternate" hreflang="fr" href="https://developer.mozilla.org/fr/docs/MDN/Doc_status/API/WebRTC" title="Statut de la documentation API : WebRTC">
+    
+      <link rel="alternate" hreflang="ko" href="https://developer.mozilla.org/ko/docs/MDN/Doc_status/API/WebRTC" title="API 문서화 현황 : WebRTC">
+    
+  
+
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="API: WebRTC documentation status">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/MDN/Doc_status/API/WebRTC">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/MDN/Doc_status/API/WebRTC">
+  <meta name="twitter:title" content="API: WebRTC documentation status">
+  
+  <meta property="og:description" content="See also localization status of this section.">
+  <meta name="description" content="See also localization status of this section.">
+  <meta name="twitter:description" content="See also localization status of this section.">
+  
+
+  
+    
+
+
+
+  
+</head>
+<body data-slug="MDN/Doc_status/API/WebRTC" contextmenu="edit-history-menu" data-search-url="" class="document  ">
+
+  <script type="text/javascript">
+    (function(win) {
+        'use strict';
+
+        
+            (function(){
+  var FLAGS = {
+    'compat_api': false,'kumaediting': false,'page_move': false,'registration_disabled': false,'search_suggestions': false,'section_edit': false,'spam_admin_override': false,'spam_checks_enabled': true,'spam_spammer_override': false,'spam_submissions_enabled': false,'spam_testing_mode': false,'wiki_samples': true,'wiki_spam_exempted': false,'wiki_spam_training': true
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': true,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+
+        // This needs to be set before ckeditor.js loads
+        window.CKEDITOR_BASEPATH = 'https://developer.mozilla.org/static/js/libs/ckeditor/build/ckeditor/';
+
+        // This represents the site configuration
+        win.mdn = {
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+            
+            notifications: [],
+            
+            // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            },
+            // Assets that need to be dynamically injected
+            assets_disabled: {
+                css: {
+                    'editor-content': ['https://developer.cdn.mozilla.net/static/build/styles/editor-content.3d79df72080d.css',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/styles/wiki-compat-tables.f3a3bfce97a1.css',]
+                },
+                js: {
+                    'syntax-prism': ['https://developer.cdn.mozilla.net/static/build/js/syntax-prism.7a66ddfa68bf.js',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/js/wiki-compat-tables.14ce5dcb2c3d.js',]
+                }
+            }
+        };
+    })(this);
+</script>
+
+  
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+    
+      <li><a href="#q" id="skip-search">Skip to search</a></li>
+    
+  </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+    <a href="https://developer.mozilla.org/en-US/" class="logo">Mozilla Developer Network</a>
+
+    <div id="nav-sec">
+        
+                  <ul>
+                  <li>
+
+    
+
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                Sign in
+              </span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FMDN%2FDoc_status%2FAPI%2FWebRTC" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/MDN/Doc_status/API/WebRTC" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/MDN/Doc_status/API/WebRTC" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2FMDN%2FDoc_status%2FAPI%2FWebRTC" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+              
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+        
+    </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../../../Web/API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+
+   <!-- end is_zone -->
+
+    <div class="wiki-main-content" id="document-main"><div class="center">
+      
+      <div class="article-meta">
+        <!-- action buttons -->
+        
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+  <ul class="page-buttons" data-sticky="false">
+      
+      <li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+              
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/fr/docs/MDN/Doc_status/API/WebRTC" title="Statut de la documentation API : WebRTC">Français</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/ko/docs/MDN/Doc_status/API/WebRTC" title="API 문서화 현황 : WebRTC">한국어</a></bdi></li>
+                
+              
+
+              
+                <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Doc_status/API/WebRTC$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+              
+            </ul>
+          </div>
+        </div>
+      </li>
+
+      <li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/MDN/Doc_status/API/WebRTC$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li>
+
+        
+
+        <li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Doc_status/API/WebRTC$history" rel="nofollow, noindex">History</a></li>
+                
+                
+                
+                
+
+                
+
+                
+                
+                
+                <li class="page-print"><a href="#" onclick="return window.print();">Print this article</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+        
+  <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/MDN" rel="v:url" property="v:title">The MDN project</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/MDN/Doc_status" rel="v:url" property="v:title">Doc status by topic</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="../API.html" rel="v:url" property="v:title">API documentation status overview</a></li>
+    
+    <li class="crumb" typeof="v:Breadcrumb" property="v:title">API: WebRTC documentation status</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        
+        <div class="contributor-avatars" data-all-text="see all contributors" data-alternate-message="hide contributors">
+            <ul>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Sheppy" title="View profile: Sheppy">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Sheppy" data-src="../../../../../../secure.gravatar.com/avatar/945076feb88f2d7003891ffbf06f32bf6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Sheppy</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/fscholz" title="View profile: fscholz">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="fscholz" data-src="../../../../../../secure.gravatar.com/avatar/e24391c9174352988d819a9b9ea77c9e6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">fscholz</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/teoli" title="View profile: teoli">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="teoli" data-src="../../../../../../secure.gravatar.com/avatar/d0d90148e08e3b64ccf75c46f31442c56c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">teoli</noscript></a>
+                </li>
+            
+            </ul>
+        </div>
+        
+
+        <h1>API: WebRTC documentation status</h1>
+
+      </div>
+      
+
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-closed wiki-right-none wiki-left-present">
+
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+            
+
+            
+            
+              
+            
+
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-main wiki-column text-content">
+
+              
+
+              
+
+              
+                
+                
+                
+              
+              
+
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                
+                  
+                    <div><!-- --></div>
+
+<p>This page tracks ongoing documentation work in the MDN <strong>WebRTC</strong> section.</p>
+
+<p>Feel free to contribute! We love help!</p>
+
+<h2 id="Summary">Summary</h2>
+
+<p></p><table class="docstatussummary standard-table"> 
+  <thead> 
+    <tr> 
+ 
+    <th><a href="../../../Web/API/Index.html">Pages</a></th> 
+ 
+    <th><a href="WebRTC.html#Needs*_tags">Needs* tags</a></th> 
+ 
+    <th><a href="WebRTC.html#Missing_tags">Missing tags</a></th> 
+ 
+    <th><a href="WebRTC.html#Editorial_reviews">Editorial reviews</a></th> 
+ 
+    <th><a href="WebRTC.html#Technical_reviews">Technical reviews</a></th> 
+ 
+    <th><a href="WebRTC.html#Outdated_pages">Outdated pages</a></th> 
+ 
+    <th><a href="WebRTC.html#Missing_pages">Missing pages</a></th> 
+ 
+    <th><a href="WebRTC.html#Dev-doc-needed_bugs">Dev-doc-needed bugs</a></th> 
+ 
+    <th><a href="WebRTC.html#Documentation_requests">Documentation requests</a></th> 
+ 
+    </tr> 
+  </thead> 
+  <tbody> 
+    <tr> 
+ 
+    <td>109</td> 
+ 
+    <td style="background-color: rgb(255, 255, 153);">5 (5%) </td> 
+ 
+    <td style="background-color: rgb(204, 255, 153);">0 (0%) </td> 
+ 
+    <td style="background-color: rgb(204, 255, 153);">0 (0%) </td> 
+ 
+    <td style="background-color: rgb(255, 204, 204);">12 (12%) </td> 
+ 
+    <td style="background-color: rgb(255, 204, 204);">46 (43%) </td> 
+ 
+    <td style="background-color: rgb(255, 204, 204);">18 (17%) </td> 
+ 
+    <td style="background-color: rgb(255, 204, 204);">20 (19%) </td> 
+ 
+    <td style="background-color: rgb(255, 204, 204);">33 (31%) </td> 
+ 
+    </tr> 
+  </tbody> 
+</table> 
+ 
+<p>See also <a href="WebRTC.html#Localizations">localization status</a> of this section.</p> 
+ 
+ 
+ 
+ 
+ 
+ 
+<h2 id="Needs*_tags">Needs* tags</h2> 
+ 
+ 
+<p><strong>Found 5 pages.</strong> Learn more about <a href="https://developer.mozilla.org/en-US/docs/MDN/Contribute/Howto/Tag#Document_metadata">how to deal with meta-tags</a>.</p> 
+<div class="wideColumnBox wideColumnBoxList"> 
+<ul> 
+ 
+    <li> 
+        <strong>NeedsSpecTable</strong> 
+        <ul> 
+ 
+            <li><a href="../../../Web/API/MessageEvent.html">MessageEvent</a></li> 
+ 
+        </ul> 
+    </li> 
+ 
+    <li> 
+        <strong>NeedsUpdate</strong> 
+        <ul> 
+ 
+            <li><a href="../../../Web/API/RTCPeerConnection.html">RTCPeerConnection</a></li> 
+ 
+            <li><a href="../../../Web/API/WebRTC_API/WebRTC_basics.html">WebRTC basics</a></li> 
+ 
+        </ul> 
+    </li> 
+ 
+    <li> 
+        <strong>NeedsExample</strong> 
+        <ul> 
+ 
+            <li><a href="../../../Web/API/RTCPeerConnection/setRemoteDescription.html">RTCPeerConnection.setRemoteDescription()</a></li> 
+ 
+        </ul> 
+    </li> 
+ 
+    <li> 
+        <strong>NeedsContent</strong> 
+        <ul> 
+ 
+            <li><a href="../../../Web/API/WebRTC_API/Session_lifetime.html">Lifetime of a WebRTC session</a></li> 
+ 
+        </ul> 
+    </li> 
+ 
+</ul> 
+</div> 
+ 
+<h2 id="Technical_reviews">Technical reviews</h2> 
+ 
+ 
+<p><strong>Found 12 pages.</strong> Learn more about <a href="https://developer.mozilla.org/en-US/docs/MDN/Contribute/Howto/Do_a_technical_review">how to do a technical review</a>.</p> 
+<div class="wideColumnBox wideColumnBoxList"> 
+<ul> 
+ 
+    <li><a href="../../../Web/API/LocalMediaStream.html">LocalMediaStream</a></li> 
+ 
+    <li><a href="../../../Web/API/MediaDeviceInfo.html">MediaDeviceInfo</a></li> 
+ 
+    <li><a href="../../../Web/API/MediaStreamTrack/remote.html">MediaStreamTrack.remote</a></li> 
+ 
+    <li><a href="../../../Web/API/RTCCertificate.html">RTCCertificate</a></li> 
+ 
+    <li><a href="../../../Web/API/RTCIceCandidate.html">RTCIceCandidate</a></li> 
+ 
+    <li><a href="../../../Web/API/RTCIceServer.html">RTCIceServer</a></li> 
+ 
+    <li><a href="../../../Web/API/RTCPeerConnection/addIceCandidate.html">RTCPeerConnection.addIceCandidate()</a></li> 
+ 
+    <li><a href="../../../Web/API/RTCPeerConnection/RTCPeerConnection-2.html">RTCPeerConnection.createAnswer()</a></li> 
+ 
+    <li><a href="../../../Web/API/RTCPeerConnection/currentLocalDescription.html">RTCPeerConnection.currentLocalDescription</a></li> 
+ 
+    <li><a href="../../../Web/API/RTCPeerConnection/currentRemoteDescription.html">RTCPeerConnection.currentRemoteDescription</a></li> 
+ 
+    <li><a href="../../../Web/API/RTCPeerConnection/pendingLocalDescription.html">RTCPeerConnection.pendingLocalDescription</a></li> 
+ 
+    <li><a href="../../../Web/API/RTCPeerConnection/pendingRemoteDescription.html">RTCPeerConnection.pendingRemoteDescription</a></li> 
+ 
+</ul> 
+</div> 
+ 
+<h2 id="Outdated_pages">Outdated pages</h2> 
+ 
+ 
+<p><strong>Found 46 pages.</strong> These pages haven't been updated in over a year. Outdated pages can have problems with both content and format. Look at these pages and consider: Is this page talking about the Web of today? Does it look consistent with newer pages in this topic area? If not, make any needed changes.</p> 
+<div class="wideColumnBox wideColumnBoxList"> 
+<ul> 
+ 
+    <li><a href="../../../Web/API/LocalMediaStream.html">LocalMediaStream</a><br><small>432 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/MediaStreamEvent.html">MediaStreamEvent</a><br><small>434 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/MediaStreamEvent/MediaStreamEvent.html">MediaStreamEvent()</a><br><small>434 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/MediaStreamEvent/stream.html">MediaStreamEvent.stream</a><br><small>434 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/MediaStreamTrack/id.html">MediaStreamTrack.id</a><br><small>434 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/MediaStreamTrack/kind.html">MediaStreamTrack.kind</a><br><small>434 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/MediaStreamTrack/label.html">MediaStreamTrack.label</a><br><small>434 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/MediaStreamTrack/onmute.html">MediaStreamTrack.onmute</a><br><small>434 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/MediaStreamTrack/onoverconstrained.html">MediaStreamTrack.onoverconstrained</a><br><small>434 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/MediaStreamTrack/onunmute.html">MediaStreamTrack.onunmute</a><br><small>434 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/MediaStreamTrack/readyState.html">MediaStreamTrack.readyState</a><br><small>434 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/RTCDataChannel/binaryType.html">RTCDataChannel.binaryType</a><br><small>433 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/RTCDataChannel/bufferedAmount.html">RTCDataChannel.bufferedAmount</a><br><small>387 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/RTCDataChannel/close.html">RTCDataChannel.close()</a><br><small>433 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/RTCDataChannel/id.html">RTCDataChannel.id</a><br><small>433 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/RTCDataChannel/label.html">RTCDataChannel.label</a><br><small>433 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/RTCDataChannel/ordered.html">RTCDataChannel.ordered</a><br><small>433 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/RTCDataChannel/protocol.html">RTCDataChannel.protocol</a><br><small>433 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/RTCDataChannel/readyState.html">RTCDataChannel.readyState</a><br><small>433 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/RTCDataChannelEvent/RTCDataChannelEvent.html">RTCDataChannelEvent()</a><br><small>433 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/RTCDataChannelEvent/channel.html">RTCDataChannelEvent.channel</a><br><small>433 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/RTCIdentityErrorEvent/idp.html">RTCIdentityErrorEvent.idp</a><br><small>433 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/RTCIdentityErrorEvent/loginUrl.html">RTCIdentityErrorEvent.loginUrl</a><br><small>433 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/RTCIdentityErrorEvent/protocol.html">RTCIdentityErrorEvent.protocol</a><br><small>433 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/RTCIdentityEvent/assertion.html">RTCIdentityEvent.assertion</a><br><small>433 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/RTCPeerConnection/addStream.html">RTCPeerConnection.addStream()</a><br><small>433 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/RTCPeerConnection/getIdentityAssertion.html">RTCPeerConnection.getIdentityAssertion()</a><br><small>433 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/RTCPeerConnection/getLocalStreams.html">RTCPeerConnection.getLocalStreams()</a><br><small>433 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/RTCPeerConnection/getRemoteStreams.html">RTCPeerConnection.getRemoteStreams()</a><br><small>433 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/RTCPeerConnection/getStreamById.html">RTCPeerConnection.getStreamById()</a><br><small>433 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/RTCPeerConnection/iceConnectionState.html">RTCPeerConnection.iceConnectionState</a><br><small>433 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/RTCPeerConnection/iceGatheringState.html">RTCPeerConnection.iceGatheringState</a><br><small>433 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/RTCPeerConnection/oniceconnectionstatechange.html">RTCPeerConnection.oniceconnectionstatechange</a><br><small>433 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/RTCPeerConnection/onidentityresult.html">RTCPeerConnection.onidentityresult</a><br><small>433 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/RTCPeerConnection/onidpassertionerror.html">RTCPeerConnection.onidpassertionerror</a><br><small>433 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/RTCPeerConnection/onidpvalidationerror.html">RTCPeerConnection.onidpvalidationerror</a><br><small>433 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/RTCPeerConnection/onpeeridentity.html">RTCPeerConnection.onpeeridentity</a><br><small>433 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/RTCPeerConnection/onremovestream.html">RTCPeerConnection.onremovestream</a><br><small>433 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/RTCPeerConnection/removeStream.html">RTCPeerConnection.removeStream()</a><br><small>433 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/RTCPeerConnection/setIdentityProvider.html">RTCPeerConnection.setIdentityProvider()</a><br><small>433 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/RTCPeerConnection/signalingState.html">RTCPeerConnection.signalingState</a><br><small>433 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/RTCPeerConnectionIceEvent/candidate.html">RTCPeerConnectionIceEvent.candidate</a><br><small>433 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/RTCSessionDescription/RTCSessionDescription.html">RTCSessionDescription()</a><br><small>433 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/RTCSessionDescription/sdp.html">RTCSessionDescription.sdp</a><br><small>433 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/RTCSessionDescription/toJSON.html">RTCSessionDescription.toJSON()</a><br><small>433 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/RTCSessionDescriptionCallback.html">RTCSessionDescriptionCallback</a><br><small>433 days old</small></li> 
+ 
+</ul> 
+</div> 
+ 
+<h2 id="Missing_pages">Missing pages</h2> 
+ 
+ 
+<p><strong>Found 18 pages.</strong> These pages are not yet written. Please help to create them.</p> 
+<div class="wideColumnBox wideColumnBoxList"> 
+<ul> 
+ 
+    <li><a href="../../../Web/API/MediaDevices/getSupportedConstraints.html" class="new">MediaDevices.getSupportedConstraints</a></li> 
+ 
+    <li><a href="../../../Web/API/RTCCertificate.html">RTCCertificate</a></li> 
+ 
+    <li><a href="../../../Web/API/RTCCertificate/expires.html" class="new">RTCCertificate.expires</a></li> 
+ 
+    <li><a href="../../../Web/API/RTCIdentityProviderRegistrar.html" class="new">RTCIdentityProviderRegistrar</a></li> 
+ 
+    <li><a href="../../../Web/API/RTCIdentityProviderRegistrar/generateAssertion.html" class="new">RTCIdentityProviderRegistrar.generateAssertion</a></li> 
+ 
+    <li><a href="../../../Web/API/RTCIdentityProviderRegistrar/idp.html" class="new">RTCIdentityProviderRegistrar.idp</a></li> 
+ 
+    <li><a href="../../../Web/API/RTCIdentityProviderRegistrar/register.html" class="new">RTCIdentityProviderRegistrar.register</a></li> 
+ 
+    <li><a href="../../../Web/API/RTCIdentityProviderRegistrar/validateAssertion.html" class="new">RTCIdentityProviderRegistrar.validateAssertion</a></li> 
+ 
+    <li><a href="../../../Web/API/RTCRtpReceiver.html" class="new">RTCRtpReceiver</a></li> 
+ 
+    <li><a href="../../../Web/API/RTCRtpReceiver/track.html" class="new">RTCRtpReceiver.track</a></li> 
+ 
+    <li><a href="../../../Web/API/RTCRtpSender.html" class="new">RTCRtpSender</a></li> 
+ 
+    <li><a href="../../../Web/API/RTCRtpSender/replaceTrack.html" class="new">RTCRtpSender.replaceTrack</a></li> 
+ 
+    <li><a href="../../../Web/API/RTCRtpSender/track.html" class="new">RTCRtpSender.track</a></li> 
+ 
+    <li><a href="../../../Web/API/RTCStatsReport.html">RTCStatsReport</a></li> 
+ 
+    <li><a href="../../../Web/API/RTCStatsReport/forEach.html" class="new">RTCStatsReport.forEach</a></li> 
+ 
+    <li><a href="../../../Web/API/RTCStatsReport/get.html" class="new">RTCStatsReport.get</a></li> 
+ 
+    <li><a href="../../../Web/API/RTCStatsReport/has.html" class="new">RTCStatsReport.has</a></li> 
+ 
+    <li><a href="../../../Web/API/RTCStatsReport/mozPcid.html" class="new">RTCStatsReport.mozPcid</a></li> 
+ 
+</ul> 
+</div> 
+ 
+ 
+ 
+ 
+ 
+ 
+    <h2 id="Dev-doc-needed_bugs">Dev-doc-needed bugs</h2> 
+    <p><strong>Found 20 bugs.</strong> Learn more about <a href="https://developer.mozilla.org/en-US/docs/MDN/Contribute/Howto/Resolve_a_dev-doc-needed_bug">how to resolve a dev-doc-needed bug</a>.</p> 
+     
+    <table class="standard-table"> 
+        <thead> 
+            <tr> 
+                <th>Bug</th> 
+                <th>Summary</th> 
+                <th>Release</th> 
+            </tr> 
+        </thead> 
+    <tbody> 
+     
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1213056" class="external">1213056</a></td> 
+        <td>Change RTCStatsReport to be maplike.</td> 
+        <td>mozilla48</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1232082" class="external">1232082</a></td> 
+        <td>Add RTCRtpReceiver and fire ontrack for remote tracks</td> 
+        <td>mozilla46</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1175609" class="external">1175609</a></td> 
+        <td>onnegotiationneeded fires synchronously</td> 
+        <td>mozilla45</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1155923" class="external">1155923</a></td> 
+        <td>Unprefix WebRTC</td> 
+        <td>mozilla44</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1189060" class="external">1189060</a></td> 
+        <td>Add hooks to allow an extension to hook into createOffer() and createAnswer()</td> 
+        <td>mozilla43</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1184426" class="external">1184426</a></td> 
+        <td>Unprefix RTCIceCandidatePairStats.priority (formerly mozPriority)</td> 
+        <td>mozilla42</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1152538" class="external">1152538</a></td> 
+        <td>Enable WebRTC identity by default</td> 
+        <td>mozilla40</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=975144" class="external">975144</a></td> 
+        <td>Support electrolysis for WebRTC identity</td> 
+        <td>mozilla38</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1091898" class="external">1091898</a></td> 
+        <td>Update WebRTC with promises</td> 
+        <td>mozilla37</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1032839" class="external">1032839</a></td> 
+        <td>Implement Track replace for RTPSender</td> 
+        <td>mozilla34</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1032835" class="external">1032835</a></td> 
+        <td>Implement basic RTPSender and RTPReceiver with RTCPeerConnection</td> 
+        <td>mozilla34</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1036653" class="external">1036653</a></td> 
+        <td>Implement application sharing for getUserMedia</td> 
+        <td>mozilla34</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1038926" class="external">1038926</a></td> 
+        <td>Add support for window sharing for getUserMedia</td> 
+        <td>mozilla33</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=942367" class="external">942367</a></td> 
+        <td>Implement peerIdentity constraint</td> 
+        <td>mozilla32</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1014304" class="external">1014304</a></td> 
+        <td>Remove onconnection and onclosedconnection from PC</td> 
+        <td>mozilla32</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=859565" class="external">859565</a></td> 
+        <td>Remove readyState legacy attribute in future release</td> 
+        <td>mozilla32</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=796463" class="external">796463</a></td> 
+        <td>Pref on WebRTC by default</td> 
+        <td>mozilla21</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=752352" class="external">752352</a></td> 
+        <td>Define and implement chrome extensions to getUserMedia and MediaStreams for privileged callers</td> 
+        <td>mozilla18</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=691234" class="external">691234</a></td> 
+        <td>Write MediaEngine backend for Desktop based on WebRTC code</td> 
+        <td>mozilla16</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=752353" class="external">752353</a></td> 
+        <td>Implement DOM bindings for getUserMedia</td> 
+        <td>mozilla15</td> 
+    </tr> 
+     
+     
+    </tbody> 
+    </table> 
+    <p>Browse as <a href="https://bugzilla.mozilla.org/buglist.cgi?bug_id=1213056,1232082,1175609,1155923,1189060,1184426,1152538,975144,1091898,1032839,1032835,1036653,1038926,942367,1014304,859565,796463,752352,691234,752353," class="external">bug list</a>.</p> 
+ 
+ 
+ 
+    <h2 id="Documentation_requests">Documentation requests</h2> 
+    <p><strong>Found 33 bugs.</strong> Documentation request bugs can contain various kinds work related to MDN pages. Read through the bug and ask questions in the bug if in doubt.</p> 
+     
+    <table class="standard-table"> 
+        <thead> 
+            <tr> 
+                <th>Bug</th> 
+                <th>Summary</th> 
+            </tr> 
+        </thead> 
+    <tbody> 
+     
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1050930" class="external">1050930</a></td> 
+        <td>[META] Complete WebRTC documentation</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1117356" class="external">1117356</a></td> 
+        <td>Update WebRTC basics article</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1119285" class="external">1119285</a></td> 
+        <td>webrtc video chat examples and documentation are old and broken</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1243487" class="external">1243487</a></td> 
+        <td>Document potential causes of WebRTC ICE renegotiation</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1257984" class="external">1257984</a></td> 
+        <td>Document RTCIceTransport interface</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1257985" class="external">1257985</a></td> 
+        <td>Update and finish RTCPeerConnection documentation</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1257987" class="external">1257987</a></td> 
+        <td>Clean up RTCSessionDescription documentation</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1257988" class="external">1257988</a></td> 
+        <td>Clean up and verify documentation of RTCPeerConnectionIceEvent</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1257990" class="external">1257990</a></td> 
+        <td>Update and complete RTCRtpSender documentation</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1257992" class="external">1257992</a></td> 
+        <td>Update and complete RTCRtpReceiver documentation</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1257994" class="external">1257994</a></td> 
+        <td>Update and complete RTCTrackEvent documentation</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1257999" class="external">1257999</a></td> 
+        <td>Document RTCCertificate</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1258002" class="external">1258002</a></td> 
+        <td>Document RTCDataChannel</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1258004" class="external">1258004</a></td> 
+        <td>Document RTCDTMFSender</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1258007" class="external">1258007</a></td> 
+        <td>Document RTCDTMFToneChangeEvent</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1258393" class="external">1258393</a></td> 
+        <td>Document RTCStatsReport</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1258394" class="external">1258394</a></td> 
+        <td>Document RTCIdentityProviderRegistrar</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1258395" class="external">1258395</a></td> 
+        <td>Document RTCIdentityProvider</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1258396" class="external">1258396</a></td> 
+        <td>Document RTCIdentityAssertion</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1258400" class="external">1258400</a></td> 
+        <td>Update documentation: RTCIdentityEvent has been removed from the spec</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1258401" class="external">1258401</a></td> 
+        <td>Update documentation: RTCIdentityErrorEvent has been removed</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1258405" class="external">1258405</a></td> 
+        <td>Ensure that RTCConfiguration document is complete and up-to-date</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1258408" class="external">1258408</a></td> 
+        <td>Document RTCPeerConnectionIceErrorEvent</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1258409" class="external">1258409</a></td> 
+        <td>Document RTCRtpTransceiver</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1258411" class="external">1258411</a></td> 
+        <td>Document RTCDtlsTransport</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1258412" class="external">1258412</a></td> 
+        <td>Document RTCDataChannelEvent</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1258413" class="external">1258413</a></td> 
+        <td>Document RTCStatsReport</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1258415" class="external">1258415</a></td> 
+        <td>Document RTCStats</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1258418" class="external">1258418</a></td> 
+        <td>Complete and verify currentness of MediaStreamTrack documentation</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1258419" class="external">1258419</a></td> 
+        <td>Document how to use Web-based identity providers with WebRTC</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1258423" class="external">1258423</a></td> 
+        <td>Document how to use DTMF with WebRTC</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1258424" class="external">1258424</a></td> 
+        <td>Document how to use WebRTC statistics to debug and measure quality of WebRTC connections</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1258437" class="external">1258437</a></td> 
+        <td>Document privacy and security considerations for WebRTC apps</td> 
+    </tr> 
+     
+     
+    </tbody> 
+    </table> 
+    <p>Browse as <a href="https://bugzilla.mozilla.org/buglist.cgi?bug_id=1050930,1117356,1119285,1243487,1257984,1257985,1257987,1257988,1257990,1257992,1257994,1257999,1258002,1258004,1258007,1258393,1258394,1258395,1258396,1258400,1258401,1258405,1258408,1258409,1258411,1258412,1258413,1258415,1258418,1258419,1258423,1258424,1258437," class="external">bug list</a>.</p> 
+ 
+ 
+ 
+ 
+ 
+ 
+<h2 id="Localizations">Localizations</h2> 
+<p>Please help us to localize this documentation into different languages. Read more about <a href="https://developer.mozilla.org/en-US/docs/MDN/Contribute/Localize/Translating_pages">how to translate</a>.</p> 
+<table class="standard-table"> 
+  <thead> 
+    <tr> 
+        <th>Language</th> 
+        <th>Pages</th> 
+        <th>Translated</th> 
+        <th>Translations up to date</th> 
+    </tr> 
+  </thead> 
+  <tbody> 
+     
+        <tr> 
+            <td><a href="https://developer.mozilla.org/fr/docs/MDN/Doc_status/API/WebRTC">fr</a></td> 
+            <td>85</td> 
+            <td>8 (9%)</td> 
+            <td>1 (12%)</td> 
+        </tr> 
+     
+        <tr> 
+            <td><a href="https://developer.mozilla.org/ko/docs/MDN/Doc_status/API/WebRTC">ko</a></td> 
+            <td>95</td> 
+            <td>0 (0%)</td> 
+            <td>0 (NaN%)</td> 
+        </tr> 
+     
+</tbody> 
+</table> 
+ 
+ 
+ 
+ 
+<div id="json" style="display: none;">{"pages":{"title":"Pages","link":"/en-US/docs/Web/API/Index","counter":109},"needsTags":{"title":"Needs* tags","link":"#Needs*_tags","counter":5,"help":"Learn more about &lt;a href=\"https://developer.mozilla.org/en-US/docs/MDN/Contribute/Howto/Tag#Document_metadata\"&gt;how to deal with meta-tags&lt;/a&gt;."},"requiredTags":{"title":"Missing tags","link":"#Missing_tags","counter":0,"help":"Learn more about &lt;a href=\"https://developer.mozilla.org/en-US/docs/MDN/Contribute/Howto/Tag\"&gt;how to tag pages&lt;/a&gt;."},"editorialReviews":{"title":"Editorial reviews","link":"#Editorial_reviews","counter":0,"help":"Learn more about &lt;a href=\"https://developer.mozilla.org/en-US/docs/MDN/Contribute/Howto/Do_an_editorial_review\"&gt;how to do an editorial review&lt;/a&gt;."},"technicalReviews":{"title":"Technical reviews","link":"#Technical_reviews","counter":12,"help":"Learn more about &lt;a href=\"https://developer.mozilla.org/en-US/docs/MDN/Contribute/Howto/Do_a_technical_review\"&gt;how to do a technical review&lt;/a&gt;."},"outdated":{"title":"Outdated pages","link":"#Outdated_pages","counter":46,"help":"These pages haven't been updated in over a year. Outdated pages can have problems with both content and format. Look at these pages and consider: Is this page talking about the Web of today? Does it look consistent with newer pages in this topic area? If not, make any needed changes."},"missing":{"title":"Missing pages","link":"#Missing_pages","counter":18,"help":"These pages are not yet written. Please help to create them."},"ddn":{"title":"Dev-doc-needed bugs","link":"#Dev-doc-needed_bugs","counter":20},"dr":{"title":"Documentation requests","link":"#Documentation_requests","counter":33}}</div><p></p>
+
+<h2 id="Team">Team</h2>
+
+<p>The documentation work will be handled primarily by:</p>
+
+<dl>
+ <dt><a href="https://developer.mozilla.org/profiles/Sheppy">Sheppy</a></dt>
+ <dd>Sample code and guide/tutorial content.</dd>
+ <dt>Romain Gauthier (tOkeshu on IRC)</dt>
+ <dd>
+ <p>has volunteered to help with samples and tutorials. He's got a few already on github, including:<a href="https://github.com/tOkeshu/smoke-signals" class="external"> Signaling server</a>. <a href="https://github.com/tOkeshu/hibuddy" class="external">HiBuddy</a> (bidirectional video chat)</p>
+ </dd>
+</dl>
+
+<h2 id="Goals">Goals</h2>
+
+<ul>
+ <li>Encourage the use of a critical new Web technology.</li>
+ <li>Enable Firefox OS developers to easily learn how to write audio/video apps.</li>
+ <li>Enable Firefox OS developers to perform peer-to-peer data transactions.</li>
+ <li>Enable Firefox OS developers to write code that sends DTMF (touch-tone phone dialing) signals.</li>
+</ul>
+
+<h2 id="User_stories">User stories</h2>
+
+<p>A <strong>user story</strong> is a description of a specific user's needs that should be met by the documentation once it's finished.</p>
+
+<ul>
+ <li>I want to write a video capture application.</li>
+ <li>I want to write a video/audio chat application.</li>
+ <li>I want to do easy peer-to-peer data transactions.</li>
+ <li>My app needs to send DTMF tones. <strong>Note: This is very low priority; Gecko doesn't support it yet and implementing it isn't a priority, and while Chrome supports it, generally devs aren't interested in using it.</strong></li>
+</ul>
+
+<h2 id="Documents_needed">Documents needed</h2>
+
+<h3 id="Landing_pages">Landing pages</h3>
+
+<ul>
+ <li>The main landing page for the WebRTC API will be located here: <a href="../../../Web/API/WebRTC_API.html">https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API</a>.</li>
+</ul>
+
+<h3 id="User_guides">User guides</h3>
+
+<p>The following user guide content will be needed.</p>
+
+<ul>
+ <li>High level guides
+  <ul>
+   <li>Introduction to WebRTC (what it is and what it can do)</li>
+   <li>Overview of the APIs</li>
+   <li>Architecture overview
+    <ul>
+     <li>Protocols (ICE, STUN, etc)</li>
+     <li>Two-way call architecture</li>
+     <li>Multi-party call architecture</li>
+    </ul>
+   </li>
+   <li>The life cycle of a WebRTC connection</li>
+   <li>Security</li>
+   <li>Tools and frameworks</li>
+   <li>Support and compatibility details
+    <ul>
+     <li>Browser compatibility details</li>
+     <li>Supported codecs/formats</li>
+    </ul>
+   </li>
+   <li>FAQ</li>
+  </ul>
+ </li>
+ <li>Low level guides
+  <ul>
+   <li>Working with media streams
+    <ul>
+     <li>Introduction to the MediaStream API</li>
+     <li>Things you can do with media streams</li>
+     <li>Creating a stream</li>
+    </ul>
+   </li>
+   <li>Peer-to-peer connections
+    <ul>
+     <li>Introduction
+      <ul>
+       <li>What it is</li>
+       <li>Things you can do once connected
+        <ul>
+         <li>Streaming media</li>
+         <li>Data transfer</li>
+        </ul>
+       </li>
+       <li>What's done for you by RTCPeerConnection</li>
+      </ul>
+     </li>
+     <li>Signaling servers
+      <ul>
+       <li>What signaling is</li>
+       <li>How it works
+        <ul>
+         <li>STUN</li>
+         <li>TURN</li>
+         <li>Which to use when and why</li>
+        </ul>
+       </li>
+       <li>Setting up a signaling server
+        <ul>
+         <li>Available services to do it for you</li>
+         <li>Setting up your own
+          <ul>
+           <li>Available libraries and tools</li>
+           <li>Example: Using &lt;some package yet to be chosen&gt;</li>
+          </ul>
+         </li>
+        </ul>
+       </li>
+      </ul>
+     </li>
+     <li>Establishing a connection
+      <ul>
+       <li>Session description object</li>
+       <li>Exchanging session descriptions</li>
+       <li>Opening the connection</li>
+      </ul>
+     </li>
+    </ul>
+   </li>
+   <li>Data channels
+    <ul>
+     <li>Introduction
+      <ul>
+       <li>What it is</li>
+       <li>Architecture
+        <ul>
+         <li>Use of RTCPeerConnection</li>
+         <li>API modeled on WebSocket</li>
+        </ul>
+       </li>
+       <li>Advantages of RTCDataChannel</li>
+      </ul>
+     </li>
+     <li>Using data channels
+      <ul>
+       <li>Creating the channel</li>
+       <li>Sending and receiving data</li>
+      </ul>
+     </li>
+    </ul>
+   </li>
+   <li>Using DTMF (need more info on what to do here)</li>
+   <li>Example:</li>
+   <li>Video conferencing
+    <ul>
+     <li>Calling another user</li>
+     <li>Receiving a connection</li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+<h3 id="Code_samples">Code samples</h3>
+
+<p>The following things need to be demonstrated in sample code. This may be accomplished by either multiple small examples or one large example project which can be presented in pieces as needed to demonstrate specific concepts.</p>
+
+<ul>
+ <li>Video
+  <ul>
+   <li>One way video session</li>
+   <li>Audio-only sessions?</li>
+   <li>Starting a two-way video session</li>
+   <li>Multi-user sessions</li>
+   <li>Handling video session errors</li>
+   <li>Adding/removing users from a session</li>
+   <li>Screen sharing</li>
+  </ul>
+ </li>
+ <li>Data
+  <ul>
+   <li>Initiating a data transfer session</li>
+   <li>Unidirectional/bidirectional?</li>
+   <li>Multicasting? (I don't know yet if this is supported)</li>
+  </ul>
+ </li>
+ <li>Chat
+  <ul>
+   <li>A larger example of a chat client/server system using a combination of WebRTC and WebSockets
+    <ul>
+     <li>Text chat like IRC</li>
+     <li>Option to initiate video conference among users</li>
+     <li>Option to transmit files among users</li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+ <li>Contact API
+  <ul>
+   <li>Using contacts to start a WebRTC session</li>
+  </ul>
+ </li>
+</ul>
+
+<h2 id="References">References</h2>
+
+<p>The links below contain useful information that may help when producing WebRTC documentation.</p>
+
+<ul>
+ <li><a href="http://dev.w3.org/2011/webrtc/editor/webrtc.html" class="external free">http://dev.w3.org/2011/webrtc/editor/webrtc.html</a></li>
+ <li><a href="http://dev.w3.org/2011/webrtc/editor/getusermedia.html" class="external free">http://dev.w3.org/2011/webrtc/editor/getusermedia.html</a></li>
+ <li><a href="http://www.webrtc.org/" class="external free">http://www.webrtc.org/</a></li>
+ <li><a href="https://hacks.mozilla.org/2013/10/an-ar-game-technical-overview/" class="external free">https://hacks.mozilla.org/2013/10/an-ar-game-technical-overview/</a></li>
+ <li><a href="https://hacks.mozilla.org/2013/11/introducing-the-whiteboard-drum-webrtc-and-web-audio-api-magic/" class="external free">https://hacks.mozilla.org/2013/11/introducing-the-whiteboard-drum-webrtc-and-web-audio-api-magic/</a></li>
+ <li><a href="https://hacks.mozilla.org/2014/04/inside-the-party-bus-building-a-web-app-with-multiple-live-video-streams-interactive-graphics/" class="external free">https://hacks.mozilla.org/2014/04/inside-the-party-bus-building-a-web-app-with-multiple-live-video-streams-interactive-graphics/</a></li>
+ <li><a href="http://www.html5rocks.com/en/tutorials/webrtc/basics/" class="external">http://www.html5rocks.com/en/tutorials/webrtc/basics/</a></li>
+ <li><a href="https://bugzilla.mozilla.org/buglist.cgi?keywords=dev-doc-needed%2C%20&amp;keywords_type=allwords&amp;list_id=10607798&amp;resolution=---&amp;resolution=FIXED&amp;resolution=INVALID&amp;resolution=WONTFIX&amp;resolution=DUPLICATE&amp;resolution=WORKSFORME&amp;resolution=INCOMPLETE&amp;resolution=SUPPORT&amp;resolution=EXPIRED&amp;resolution=MOVED&amp;query_format=advanced&amp;component=WebRTC&amp;component=WebRTC%3A%20Audio%2FVideo&amp;component=WebRTC%3A%20Networking&amp;component=WebRTC%3A%20Signaling" class="text external">dev-doc-needed bugs</a></li>
+ <li><a href="https://github.com/GoogleChrome/webrtc" class="external">https://github.com/GoogleChrome/webrtc</a></li>
+ <li><a href="http://webrtcbook.com/" class="external">http://webrtcbook.com/</a></li>
+ <li>
+  <p>In addition, see the <a href="https://lists.mozilla.org/listinfo/dev-media" class="external">dev-media</a> mailing list for discussion about WebRTC.</p>
+ </li>
+</ul>
+
+<h2 id="Notes">Notes</h2>
+
+<h3 id="Tagging_standard">Tagging standard</h3>
+
+<ul>
+ <li>Grouping tag is: "WebRTC"</li>
+</ul>
+
+<h3 id="Other_tasks_to_do">Other tasks to do</h3>
+
+<ul>
+ <li>TBD</li>
+</ul>
+
+<h3 id="Tutorial_to-do_list">Tutorial to-do list</h3>
+
+<ul>
+ <li>TBD</li>
+</ul>
+
+<h3 id="Notes_for_translators">Notes for translators</h3>
+
+<p>Any notes here? Where do we expect updates, so that localizers don't translate and update too often?</p>
+
+<h3 id="Specifications">Specifications</h3>
+
+<p>The interfaces defined in the following specifications are tracked by this status page:</p>
+
+<table class="spec-table standard-table">
+ <tbody>
+  <tr>
+   <th scope="col">Specification</th>
+   <th scope="col">Status</th>
+   <th scope="col">Comment</th>
+  </tr>
+  <tr>
+   <td><a href="https://w3c.github.io/webrtc-pc/" class="external" lang="en" title="The 'WebRTC 1.0: Real-time Communication Between Browser' specification" hreflang="en">WebRTC 1.0: Real-time Communication Between Browser</a></td>
+   <td><span class="spec-WD">Working Draft</span></td>
+   <td>&nbsp;</td>
+  </tr>
+  <tr>
+   <td><a href="http://w3c.github.io/mediacapture-main/" class="external" lang="en" title="The 'Media Capture and Streams' specification" hreflang="en">Media Capture and Streams</a></td>
+   <td><span class="spec-ED">Editor's Draft</span></td>
+   <td>&nbsp;</td>
+  </tr>
+  <tr>
+   <td><a href="https://w3c.github.io/mediacapture-record/MediaRecorder.html" class="external" lang="en" title="The 'MediaStream Recording' specification" hreflang="en">MediaStream Recording</a></td>
+   <td><span class="spec-WD">Working Draft</span></td>
+   <td>&nbsp;</td>
+  </tr>
+ </tbody>
+</table>
+
+<p></p><div class="overheadIndicator communitybox"> 
+    <div class="column-container"> 
+        <div id="Help_topic" class="communitysubhead">Help the 'API/WebRTC' documentation project…</div> 
+        <div class="communitycontact">Topic driver : <a href="https://developer.mozilla.org/en-US/profiles/sheppy">Eric Shepherd</a> (IRC nickname: sheppy)</div> 
+        <div class="communitycontact">Look at the current <a href="https://developer.mozilla.org/en-US/docs/MDN/Doc_status">status</a> of the 'API/WebRTC' documentation.</div> 
+        <div class="communitysubhead communitycontact">Don't hesitate to contact us on <a href="irc://irc.mozilla.org/mdn">#mdn</a> or on the <em>dev-mdc</em> mailing-list:</div> 
+        <ul class="communitymailinglist"> 
+  <li><a href="https://lists.mozilla.org/listinfo/dev-mdc" class="external">Mailing list</a></li> 
+   
+   
+  <li><a href="http://groups.google.com/group/mozilla.dev.mdc" class="external">Google Group</a></li> 
+  <li><a href="http://groups.google.com/group/mozilla.dev.mdc/feeds" class="external">RSS feed</a></li> 
+</ul> 
+    </div> 
+</div><p></p>
+                  
+                
+              </article>
+
+              
+
+    
+    
+    
+
+    
+    
+    
+
+    <div class="share">
+        <strong>Share:</strong>
+        <ul>
+            <li><a href="http://twitter.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FMDN%2FDoc_status%2FAPI%2FWebRTC%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dtwitter.com&amp;text=I+learned+about+API%3A+WebRTC+documentation+status+on+MDN." target="_blank" data-url="https://developer.mozilla.org/en-US/docs/MDN/Doc_status/API/WebRTC?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=twitter.com" data-title="I learned about API: WebRTC documentation status on MDN." class="share-link twitter"><i aria-hidden="true" class="icon-twitter"></i>Twitter</a></li>
+            <li><a href="http://facebook.com/sharer.php?s=100&amp;p[url]=https://developer.mozilla.org/en-US/docs/MDN/Doc_status/API/WebRTC?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/MDN/Doc_status/API/WebRTC?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" data-title="I learned about API: WebRTC documentation status on MDN." class="share-link facebook"><i aria-hidden="true" class="icon-facebook"></i>Facebook</a></li>
+            <li><a href="https://plus.google.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FMDN%2FDoc_status%2FAPI%2FWebRTC%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dplus.google.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/MDN/Doc_status/API/WebRTC?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=plus.google.com" data-title="I learned about API: WebRTC documentation status on MDN." class="share-link gplus"><i aria-hidden="true" class="icon-google-plus"></i>Google+</a></li>
+        </ul>
+    </div>
+
+              
+
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                  
+                  
+  <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags icon-fw"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Documentation status">Documentation status</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Meta">Meta</a></li>
+      
+    </ul>
+  </div>
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-group icon-fw"></i>&nbsp;<strong>Contributors to this page:</strong> 
+        <a href="https://developer.mozilla.org/en-US/profiles/Sheppy">Sheppy</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/fscholz">fscholz</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/teoli">teoli</a>
+    
+                    </div>
+                  
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o icon-fw"></i>&nbsp;<strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/Sheppy">Sheppy</a>,
+                      <time datetime="2015-10-14T11:25:54-07:00">Oct 14, 2015, 11:25:54 AM</time>
+                    </div>
+                  
+                </div>
+              
+            </div>
+
+            
+              <!-- quick links and zone subnav strip -->
+              <div id="wiki-left" class="column-strip wiki-column">
+
+              
+
+                
+                  <!-- zone subnav -->
+                  
+  <nav class="zone-subnav-container" role="navigation">
+    <div class="subnav" id="Subnav">
+      
+
+<ol><li><a href="https://developer.mozilla.org/en-US/docs/MDN/About">About MDN</a>
+
+  <ol><li><a href="https://developer.mozilla.org/en-US/docs/MDN/About">About MDN</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/MDN/About/Promote">Promote MDN</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Send feedback about MDN</a></li>
+  </ol></li>
+ <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Getting_started">Get started on MDN</a></li>
+ <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Contribute">Help improve MDN</a>
+  <ol><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Contribute">Help improve MDN</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Contribute/Howto">Things you can do</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Contribute/Localize">Localizing MDN</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Contribute/Editor">MDN editor UI</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Contribute/Tools">Tools for power users</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Contribute/Guidelines">Guidelines</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Contribute/Processes">Work processes</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Contribute/Structures">Content structures</a></li>
+  </ol></li>
+ <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Kuma">Kuma: MDN's wiki platform</a></li>
+ <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+ <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Doc_status">Doc status by topic</a>
+  <ol><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Doc_status">Doc status by topic</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Doc_status/Overview">Are we documented yet?</a></li>
+  </ol></li>
+</ol>
+    </div>
+  </nav>&nbsp;
+                
+
+                
+
+                <!-- approvals -->
+                
+
+              
+
+              </div>
+            
+          </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/MDN/Doc_status/API/WebRTC$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/MDN/Doc_status/API/WebRTC$history" label="View page history"></menuitem>
+  </menu>
+
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+        
+        <div class="contentinfo">
+          <p>© 2005-2016 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>
+          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+        
+        </div>
+      </div>
+      <div class="column-strip">
+        
+          
+  
+    <form class="languages go" method="get" action="https://developer.mozilla.org/en-US/docs/Web">
+      <label for="language">Other languages:</label>
+      <select id="language" class="wiki-l10n" name="next" dir="ltr">
+        <option value="/en-US/docs/MDN/Doc_status/API/WebRTC" selected="">
+          English (US)
+        </option>
+        
+          <option value="/fr/docs/MDN/Doc_status/API/WebRTC">
+            Français
+          </option>
+          <option value="/ko/docs/MDN/Doc_status/API/WebRTC">
+            한국어
+          </option>
+      </select>
+      <noscript>&lt;button type="submit"&gt;Go&lt;/button&gt;</noscript>
+    </form>
+  
+
+        
+      </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+  
+    
+    <!--[if lte IE 8]><script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/selectivizr.091e18cf669b.js" charset="utf-8"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/main.a7b27a25fb9c.js" charset="utf-8"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+    
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/syntax-prism-min.js" charset="utf-8"></script><script type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/wiki.bd71ca9fd27d.js" charset="utf-8" id="wikiscript"></script>
+
+  
+
+  <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/helpfulness.7b208a764d28.js" charset="utf-8"></script>
+
+  
+
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/MDN/Doc_status/API/WebRTC by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 15:43:14 GMT -->
+</body></html>

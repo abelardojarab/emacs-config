@@ -1,0 +1,1019 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/WebRTC_API/Taking_still_photos by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 15:40:22 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <script async="" src="../../../../../../www.google-analytics.com/analytics.js"></script><script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+  
+    
+  
+
+  
+  <title>Taking still photos with WebRTC</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+  
+    
+    
+    <link href="../../../../../../developer.cdn.mozilla.net/static/build/styles/mdn.593f20d8c365.css" rel="stylesheet" type="text/css">
+
+    
+  
+    <link href="../../../../../../developer.cdn.mozilla.net/static/build/styles/wiki.13dd9abdfb62.css" rel="stylesheet" type="text/css">
+
+    
+
+    
+
+  <!-- common social tags -->
+  
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon144.a6e4162070f4.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon114.0e9fabd44f85.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon72.8ff9d87c82a0.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon57.a2490b9a2d76.png">
+  <!-- basic favicon -->
+  
+    
+  
+  <link rel="shortcut icon" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon32.e02854fdcf73.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/html5shiv.3948ccddab6f.js" charset="utf-8"></script>
+  <![endif]-->
+
+  
+  <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API/Taking_still_photos$json">
+  <link rel="canonical" href="Taking_still_photos.html">
+
+  
+    
+      <link rel="alternate" hreflang="es" href="https://developer.mozilla.org/es/docs/WebRTC/Taking_webcam_photos" title="Capturar fotografías con la cámara web">
+    
+      <link rel="alternate" hreflang="fr" href="https://developer.mozilla.org/fr/docs/WebRTC/Prendre_des_photos_avec_la_webcam" title="Prendre des photos avec la webcam">
+    
+  
+
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="Taking still photos with WebRTC">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API/Taking_still_photos">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API/Taking_still_photos">
+  <meta name="twitter:title" content="Taking still photos with WebRTC">
+  
+  <meta property="og:description" content="This article shows how to use WebRTC to access the camera on a computer or mobile phone with WebRTC support and take a photo with it.">
+  <meta name="description" content="This article shows how to use WebRTC to access the camera on a computer or mobile phone with WebRTC support and take a photo with it.">
+  <meta name="twitter:description" content="This article shows how to use WebRTC to access the camera on a computer or mobile phone with WebRTC support and take a photo with it.">
+  
+
+  
+    
+
+
+
+  
+</head>
+<body data-slug="Web/API/WebRTC_API/Taking_still_photos" contextmenu="edit-history-menu" data-search-url="" class="document  ">
+
+  <script type="text/javascript">
+    (function(win) {
+        'use strict';
+
+        
+            (function(){
+  var FLAGS = {
+    'compat_api': false,'kumaediting': false,'page_move': false,'registration_disabled': false,'search_suggestions': false,'section_edit': false,'spam_admin_override': false,'spam_checks_enabled': true,'spam_spammer_override': false,'spam_submissions_enabled': false,'spam_testing_mode': false,'wiki_samples': true,'wiki_spam_exempted': false,'wiki_spam_training': true
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': true,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+
+        // This needs to be set before ckeditor.js loads
+        window.CKEDITOR_BASEPATH = 'https://developer.mozilla.org/static/js/libs/ckeditor/build/ckeditor/';
+
+        // This represents the site configuration
+        win.mdn = {
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+            
+            notifications: [],
+            
+            // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            },
+            // Assets that need to be dynamically injected
+            assets_disabled: {
+                css: {
+                    'editor-content': ['https://developer.cdn.mozilla.net/static/build/styles/editor-content.3d79df72080d.css',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/styles/wiki-compat-tables.f3a3bfce97a1.css',]
+                },
+                js: {
+                    'syntax-prism': ['https://developer.cdn.mozilla.net/static/build/js/syntax-prism.7a66ddfa68bf.js',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/js/wiki-compat-tables.14ce5dcb2c3d.js',]
+                }
+            }
+        };
+    })(this);
+</script>
+
+  
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+    
+      <li><a href="#q" id="skip-search">Skip to search</a></li>
+    
+  </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+    <a href="https://developer.mozilla.org/en-US/" class="logo">Mozilla Developer Network</a>
+
+    <div id="nav-sec">
+        
+                  <ul>
+                  <li>
+
+    
+
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                Sign in
+              </span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FWebRTC_API%2FTaking_still_photos" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/Web/API/WebRTC_API/Taking_still_photos" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/Web/API/WebRTC_API/Taking_still_photos" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FWebRTC_API%2FTaking_still_photos" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+              
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+        
+    </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../../API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+
+   <!-- end is_zone -->
+
+    <div class="wiki-main-content" id="document-main"><div class="center">
+      
+      <div class="article-meta">
+        <!-- action buttons -->
+        
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+  <ul class="page-buttons" data-sticky="false">
+      
+      <li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+              
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/es/docs/WebRTC/Taking_webcam_photos" title="Capturar fotografías con la cámara web">Español</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/fr/docs/WebRTC/Prendre_des_photos_avec_la_webcam" title="Prendre des photos avec la webcam">Français</a></bdi></li>
+                
+              
+
+              
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API/Taking_still_photos$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+              
+            </ul>
+          </div>
+        </div>
+      </li>
+
+      <li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API/Taking_still_photos$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li>
+
+        
+
+        <li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API/Taking_still_photos$history" rel="nofollow, noindex">History</a></li>
+                
+                
+                
+                
+
+                
+
+                
+                
+                
+                <li class="page-print"><a href="#" onclick="return window.print();">Print this article</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+        
+  <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web" rel="v:url" property="v:title">Web technology for developers</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="../../API.html" rel="v:url" property="v:title">Web APIs</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="../WebRTC_API.html" rel="v:url" property="v:title">WebRTC API</a></li>
+    
+    <li class="crumb" typeof="v:Breadcrumb" property="v:title">Taking still photos with WebRTC</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        
+        <div class="contributor-avatars" data-all-text="see all contributors" data-alternate-message="hide contributors" data-has-hidden="1">
+            <ul>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/zalun" title="View profile: zalun">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="zalun" data-src="../../../../../../secure.gravatar.com/avatar/62452804d51b4860db78446ed50908a46c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">zalun</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/teoli" title="View profile: teoli">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="teoli" data-src="../../../../../../secure.gravatar.com/avatar/d0d90148e08e3b64ccf75c46f31442c56c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">teoli</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Sheppy" title="View profile: Sheppy">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Sheppy" data-src="../../../../../../secure.gravatar.com/avatar/945076feb88f2d7003891ffbf06f32bf6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Sheppy</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/kshitijpurwar" title="View profile: kshitijpurwar">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="kshitijpurwar" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">kshitijpurwar</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills" title="View profile: chrisdavidmills">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="chrisdavidmills" data-src="../../../../../../secure.gravatar.com/avatar/deeea0ba82390bd5acc539703c4b0cfb6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">chrisdavidmills</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Kiley85" title="View profile: Kiley85">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Kiley85" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Kiley85</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Null" title="View profile: Null">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Null" data-src="../../../../../../secure.gravatar.com/avatar/4a78126dfc066a4e9442c3ff9921f26d6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Null</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/fscholz" title="View profile: fscholz">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="fscholz" data-src="../../../../../../secure.gravatar.com/avatar/e24391c9174352988d819a9b9ea77c9e6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">fscholz</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/KarlPurk" title="View profile: KarlPurk">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="KarlPurk" data-src="../../../../../../secure.gravatar.com/avatar/438c19ce9bce3e12535fe93c5d54f30a6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">KarlPurk</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Jeremie" title="View profile: Jeremie">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Jeremie" data-src="../../../../../../secure.gravatar.com/avatar/ea74cf7f528273838138e9ae407cd8ef6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Jeremie</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/igall" title="View profile: igall">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="igall" data-src="../../../../../../secure.gravatar.com/avatar/e635aabc6324a8e66e9e22839004308e6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">igall</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/codepo8" title="View profile: codepo8">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="codepo8" data-src="../../../../../../secure.gravatar.com/avatar/07fcd228af02d476b1b8367d85a903b26c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">codepo8</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/jswisher" title="View profile: jswisher">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="jswisher" data-src="../../../../../../secure.gravatar.com/avatar/38185c2812cbcae186ebbe4a829106616c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">jswisher</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/espressive" title="View profile: espressive">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="espressive" data-src="../../../../../../secure.gravatar.com/avatar/3f0e9b6231df27e285c4589d21c4ae466c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">espressive</noscript></a>
+                </li>
+            
+            </ul>
+        </div>
+        
+
+        <h1>Taking still photos with WebRTC</h1>
+
+      </div>
+      
+
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-present">
+
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+            
+              <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+              
+              <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#The_HTML_markup" rel="internal">The HTML markup</a></li><li><a href="#The_JavaScript_code" rel="internal">The JavaScript code</a><ol><li><a href="#Initialization" rel="internal">Initialization</a></li><li><a href="#The_startup()_function" rel="internal">The startup() function</a><ol><li><a href="#Getting_element_references" rel="internal">Getting element references</a></li><li><a href="#Get_the_media_stream" rel="internal">Get the media stream</a></li><li><a href="#Listen_for_the_video_to_start_playing" rel="internal">Listen for the video to start playing</a></li><li><a href="#Handle_clicks_on_the_button" rel="internal">Handle clicks on the button</a></li><li><a href="#Wrapping_up_the_startup()_method" rel="internal">Wrapping up the startup() method</a></li></ol></li><li><a href="#Clearing_the_photo_box" rel="internal">Clearing the photo box</a></li><li><a href="#Capturing_a_frame_from_the_stream" rel="internal">Capturing a frame from the stream</a></li></ol></li><li><a href="#Fun_with_filters" rel="internal">Fun with filters</a></li><li><a href="#See_also" rel="internal">See also</a>
+                </li></ol>
+              </div>
+              
+              </div>
+            
+
+            
+            
+              
+            
+
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-half wiki-column text-content">
+
+              
+
+              
+
+              
+                
+                
+                
+              
+              
+
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                
+                  
+                    <p></p><section id="Quick_Links"><!-- --></section><p></p>
+
+<p><span class="seoSummary">This article shows how to use WebRTC to access the camera on a computer or mobile phone with WebRTC support and take a photo with it.</span> <a href="http://mdn-samples.mozilla.org/s/webrtc-capturestill" class="external">Try this sample</a>, then read on to learn how it works.</p>
+
+<p><img src="../../../../../../mdn.mozillademos.org/files/10281/web-rtc-demo.png" style="display: block; height: 252px; margin: 0px auto; width: 677px;" alt="WebRTC-based image capture app — on the left we have a video stream taken from a webcam and a take photo button, on the right we have the still image output from taking the photo"></p>
+
+<p>You can also jump straight to the <a href="https://github.com/mdn/samples-server/tree/master/s/webrtc-capturestill" class="external">code on Github</a> if you like.</p>
+
+<h2 id="The_HTML_markup">The HTML markup</h2>
+
+<p><a href="https://github.com/mdn/samples-server/tree/master/s/webrtc-capturestill/index.html" class="external">Our HTML interface</a> has two main operational sections: the stream and capture panel and the presentation panel. Each of these is presented side-by-side in its own <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/div" title="The HTML &lt;div&gt; element (or HTML Document Division Element) is the generic container for flow content, which does not inherently represent anything. It can be used to group elements for styling purposes (using the class or id attributes), or because they share attribute values, such as lang. It should be used only when no other semantic element (such as &lt;article&gt; or &lt;nav&gt;) is appropriate."><code>&lt;div&gt;</code></a> to facilitate styling and control.</p>
+
+<p>The first panel on the left contains two components: a <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video" title="The HTML &lt;video&gt; element is used to embed video content. It may contain several video sources, represented using the src attribute or the &lt;source&gt; element; the browser will choose the most suitable one."><code>&lt;video&gt;</code></a> element, which will receive the stream from WebRTC, and a <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button" title="The HTML &lt;button&gt; Element represents a clickable button."><code>&lt;button&gt;</code></a> the user clicks to capture a video frame.</p>
+
+<pre class="brush: html">&nbsp; &lt;div class="camera"&gt;
+&nbsp;&nbsp;&nbsp; &lt;video id="video"&gt;Video stream not available.&lt;/video&gt;
+&nbsp;&nbsp;&nbsp; &lt;button id="startbutton"&gt;Take photo&lt;/button&gt;
+&nbsp; &lt;/div&gt;</pre>
+
+<p>This is straightforward, and we'll see how it ties together when we get into the JavaScript code.</p>
+
+<p>Next, we have a <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/canvas" title="The HTML &lt;canvas&gt; Element can be used to draw graphics via scripting (usually JavaScript). For example, it can be used to draw graphs, make photo compositions or even perform animations. You may (and should) provide alternate content inside the &lt;canvas&gt; block. That content will be rendered both on older browsers that don't support canvas and in browsers with JavaScript disabled."><code>&lt;canvas&gt;</code></a> element into which the captured frames are stored, potentially manipulated in some way, and then converted into an output image file. This canvas is kept hidden by styling the canvas with <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/display" title="The display CSS property specifies the type of rendering box used for an element. In HTML, default display property values are taken from behaviors described in the HTML specifications or from the browser/user default stylesheet. The default value in XML is inline."><code>display</code></a><code>:none</code>, to avoid cluttering up the screen — the user does not need to see this intermediate stage.</p>
+
+<p>We also have an <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img" title="The&nbsp;HTML Image Element&nbsp;(&lt;img&gt;) represents an image in the document."><code>&lt;img&gt;</code></a> element into which we will draw the image — this is the final display shown to the user.</p>
+
+<pre class="brush: html">&nbsp; &lt;canvas id="canvas"&gt;
+&nbsp; &lt;/canvas&gt;
+&nbsp; &lt;div class="output"&gt;
+&nbsp;&nbsp;&nbsp; &lt;img id="photo" alt="The screen capture will appear in this box."&gt;
+&nbsp; &lt;/div&gt;</pre>
+
+<p>That's all of the relevant HTML. The rest is just some page layout fluff and a bit of text offering a link back to this page.</p>
+
+<h2 id="The_JavaScript_code"><span style="font-size: 30px;">The JavaScript code</span></h2>
+
+<p>Now let's take a look at the <a href="https://github.com/mdn/samples-server/tree/master/s/webrtc-capturestill/capture.js" class="external">JavaScript code</a>. We'll break it up into a few bite-sized pieces to make it easier to explain.</p>
+
+<h3 id="Initialization">Initialization</h3>
+
+<p>We start by wrapping the whole script in an anonymous function to avoid global variables, then setting up various variables we'll be using.</p>
+
+<pre class="brush: js">(function() {
+  var width = 320;    // We will scale the photo width to this
+  var height = 0;     // This will be computed based on the input stream
+
+  var streaming = false;
+
+  var video = null;
+  var canvas = null;
+  var photo = null;
+  var startbutton = null;</pre>
+
+<p>Those variables are:</p>
+
+<dl>
+ <dt><code>width</code></dt>
+ <dd>Whatever size the incoming video is, we're going to scale the resulting image to be 320 pixels wide.</dd>
+ <dt><code>height</code></dt>
+ <dd>The output height of the image will be computed given the <code>width</code> and the aspect ratio of the stream.</dd>
+ <dt><code>streaming</code></dt>
+ <dd>Indicates whether or not there is currently an active stream of video running.</dd>
+ <dt><code>video</code></dt>
+ <dd>This will be a reference to the <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video" title="The HTML &lt;video&gt; element is used to embed video content. It may contain several video sources, represented using the src attribute or the &lt;source&gt; element; the browser will choose the most suitable one."><code>&lt;video&gt;</code></a> element after the page is done loading.</dd>
+ <dt><code>canvas</code></dt>
+ <dd>This will be a reference to the <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/canvas" title="The HTML &lt;canvas&gt; Element can be used to draw graphics via scripting (usually JavaScript). For example, it can be used to draw graphs, make photo compositions or even perform animations. You may (and should) provide alternate content inside the &lt;canvas&gt; block. That content will be rendered both on older browsers that don't support canvas and in browsers with JavaScript disabled."><code>&lt;canvas&gt;</code></a> element after the page is done loading.</dd>
+ <dt><code>photo</code></dt>
+ <dd>This will be a reference to the <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img" title="The&nbsp;HTML Image Element&nbsp;(&lt;img&gt;) represents an image in the document."><code>&lt;img&gt;</code></a> element after the page is done loading.</dd>
+ <dt><code>startbutton</code></dt>
+ <dd>This will be a reference to the <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button" title="The HTML &lt;button&gt; Element represents a clickable button."><code>&lt;button&gt;</code></a> element that's used to trigger capture. We'll get that after the page is done loading.</dd>
+</dl>
+
+<h3 id="The_startup()_function">The startup() function</h3>
+
+<p>The <code>startup()</code> function is run when the page has finished loading, courtesy of <a href="../EventTarget/addEventListener.html" title="The EventTarget.addEventListener() method registers the specified listener on the EventTarget it's called on. The event target may be an Element in a document, the Document itself, a Window, or any other object that supports events (such as XMLHttpRequest)."><code>window.addEventListener()</code></a>. This function's job is to request access to the user's webcam, initialize the output <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img" title="The&nbsp;HTML Image Element&nbsp;(&lt;img&gt;) represents an image in the document."><code>&lt;img&gt;</code></a> to a default state, and to establish the event listeners needed to receive each frame of video from the camera and react when the button is clicked to capture an image.</p>
+
+<h4 id="Getting_element_references">Getting element references</h4>
+
+<p>First, we grab references to the major elements we need to be able to access.</p>
+
+<pre class="brush: js">  function startup() {
+    video = document.getElementById('video');
+    canvas = document.getElementById('canvas');
+    photo = document.getElementById('photo');
+    startbutton = document.getElementById('startbutton');</pre>
+
+<h4 id="Get_the_media_stream">Get the media stream</h4>
+
+<p>The next task is to get the media stream. We start by dealing with the fact that there are a lot of vendor prefixes floating around at the moment:</p>
+
+<pre class="brush: js">    navigator.getMedia = ( navigator.getUserMedia ||
+                           navigator.webkitGetUserMedia ||
+                           navigator.mozGetUserMedia ||
+                           navigator.msGetUserMedia);</pre>
+
+<p>Then we use this to fetch and start the stream:</p>
+
+<pre class="brush: js">    navigator.getMedia(
+      {
+        video: true,
+        audio: false
+      },
+      function(stream) {
+        if (navigator.mozGetUserMedia) {
+          video.mozSrcObject = stream;
+        } else {
+          var vendorURL = window.URL || window.webkitURL;
+          video.src = vendorURL.createObjectURL(stream);
+        }
+        video.play();
+      },
+      function(err) {
+        console.log("An error occured! " + err);
+      }
+    );</pre>
+
+<p>Here, we're calling <a href="../Navigator/getUserMedia.html" title="Prompts the user for permission to use one video and/or one audio input device such as a camera or screensharing and/or a microphone. If the user provides permission, then the successCallback is invoked with the resulting MediaStream object as its argument. If the user denies permission or media is not available, then the errorCallback is called with PermissionDeniedError or NotFoundError respectively. Note that it is possible for neither completion callback to be called, as the user is not required to make a choice."><code>navigator.getUserMedia()</code></a> and requesting a video stream (without audio). We provide two callbacks as well.</p>
+
+<p>The first callback is the one that's called on success; it receives a <code>stream</code> object as input. It tests to see if it's running on Firefox (by looking for <code>navigator.mozGetUserMedia()</code>), and, if it is, uses a Firefox-specific method to directly link the stream to the <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video" title="The HTML &lt;video&gt; element is used to embed video content. It may contain several video sources, represented using the src attribute or the &lt;source&gt; element; the browser will choose the most suitable one."><code>&lt;video&gt;</code></a> element. For all other browsers, it uses a different approach.</p>
+
+<div class="note">
+<p><strong>Note:</strong> The standard has finally stabilized in regard to exactly how to establish this connection, and the need to do this browser-specific code should come to an end very soon.</p>
+</div>
+
+<p>Once the stream is linked to the <code>&lt;video&gt;</code> element, we start it playing by calling <code><a href="../HTMLMediaElement.html#play">HTMLMediaElement.play()</a></code>.</p>
+
+<p>The second callback to <a href="../Navigator/getUserMedia.html" title="Prompts the user for permission to use one video and/or one audio input device such as a camera or screensharing and/or a microphone. If the user provides permission, then the successCallback is invoked with the resulting MediaStream object as its argument. If the user denies permission or media is not available, then the errorCallback is called with PermissionDeniedError or NotFoundError respectively. Note that it is possible for neither completion callback to be called, as the user is not required to make a choice."><code>navigator.getUserMedia()</code></a> is called if an error occurs and opening the stream doesn't work. This will happen for example if there's no compatible camera connected.</p>
+
+<div class="warning">
+<p><strong>Important:</strong> Right now there is a difference in the sizes of video provided by <code>getUserMedia()</code>. Firefox Nightly uses 352x288 resolution and Opera and Chrome use 640x400 resolution. This will change in the future, but resizing with a ratio as we do below makes sure you don't get any nasty surprises.</p>
+</div>
+
+<h4 id="Listen_for_the_video_to_start_playing">Listen for the video to start playing</h4>
+
+<p>After calling <code><a href="../HTMLMediaElement.html#play">HTMLMediaElement.play()</a></code> on the <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video" title="The HTML &lt;video&gt; element is used to embed video content. It may contain several video sources, represented using the src attribute or the &lt;source&gt; element; the browser will choose the most suitable one."><code>&lt;video&gt;</code></a>, there's a (hopefully brief) period of time that elapses before the stream of video begins to flow. To avoid blocking until that happens, we add an event listener to <code>video</code>, <code>canplay</code>, which is delivered when the video playback actually begins. At that point, all the properties in the <code>video</code> object have been configured based on the stream's format.</p>
+
+<pre class="brush: js">    video.addEventListener('canplay', function(ev){
+      if (!streaming) {
+        height = video.videoHeight / (video.videoWidth/width);
+      
+        // Firefox currently has a bug where the height can't be read from
+        // the video, so we will make assumptions if this happens.
+      
+        if (isNaN(height)) {
+          height = width / (4/3);
+        }
+      
+        video.setAttribute('width', width);
+        video.setAttribute('height', height);
+        canvas.setAttribute('width', width);
+        canvas.setAttribute('height', height);
+        streaming = true;
+      }
+    }, false);</pre>
+
+<p>This callback does nothing unless it's the first time it's been called; this is tested by looking at the value of our <code>streaming</code> variable, which is <code>false</code> the first time this method is run.</p>
+
+<p>If this is indeed the first run, we set the video's height based on the size difference between the video's actual size, <code>video.videoWidth</code>, and the width at which we're going to render it, <code>width</code>.</p>
+
+<div class="note">
+<p><strong>Note:</strong> There's a bug in Firefox in which <a href="../HTMLVideoElement/videoHeight.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>HTMLVideoElement.videoHeight</code></a> cannot be read and returns <code>NaN</code>; if this is the case, we assume that the aspect ratio is 4:3 and compute a height based on that.</p>
+</div>
+
+<p>Finally, the <code>width</code> and <code>height</code> of both the video and the canvas are set to match each other by calling <a href="../Element/setAttribute.html" title="Adds a new attribute or changes the value of an existing attribute on the specified element."><code>Element.setAttribute()</code></a> on each of the two properties on each element, and setting widths and heights as appropriate. Finally, we set the <code>streaming</code> variable to <code>true</code> to prevent us from inadvertently running this setup code again.</p>
+
+<h4 id="Handle_clicks_on_the_button">Handle clicks on the button</h4>
+
+<p>To capture a still photo each time the user clicks the <code>startbutton</code>, we need to add an event listener to the button, to be called when the <code>click</code> event is issued:</p>
+
+<pre class="brush: js">    startbutton.addEventListener('click', function(ev){
+      takepicture();
+      ev.preventDefault();
+    }, false);</pre>
+
+<p>This method is simple enough: it just calls our <code>takepicture()</code> function, defined below in the section <a href="#Capturing_a_frame_from_the_stream">Capturing a frame from the stream</a>, then calls <a href="../Event/preventDefault.html" title="Cancels the event if it is cancelable, without stopping further propagation of the event."><code>Event.preventDefault()</code></a> on the received event to prevent the click from being handled more than once.</p>
+
+<h4 id="Wrapping_up_the_startup()_method">Wrapping up the startup() method</h4>
+
+<p>There are only two more lines of code in the <code>startup()</code> method:</p>
+
+<pre class="brush: js">    clearphoto();
+  }</pre>
+
+<p>This is where we call the <code>clearphoto()</code> method we'll describe below in the section <a href="#Clearing_the_photo_box">Clearing the photo box</a>.</p>
+
+<h3 id="Clearing_the_photo_box">Clearing the photo box</h3>
+
+<p>Clearing the photo box involves creating an image, then converting it into a format usable by the <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img" title="The&nbsp;HTML Image Element&nbsp;(&lt;img&gt;) represents an image in the document."><code>&lt;img&gt;</code></a> element that displays the most recently captured frame. That code looks like this:</p>
+
+<pre class="brush: js">  function clearphoto() {
+    var context = canvas.getContext('2d');
+    context.fillStyle = "#AAA";
+    context.fillRect(0, 0, canvas.width, canvas.height);
+
+    var data = canvas.toDataURL('image/png');
+    photo.setAttribute('src', data);
+  }</pre>
+
+<p>We start by getting a reference to the hidden <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/canvas" title="The HTML &lt;canvas&gt; Element can be used to draw graphics via scripting (usually JavaScript). For example, it can be used to draw graphs, make photo compositions or even perform animations. You may (and should) provide alternate content inside the &lt;canvas&gt; block. That content will be rendered both on older browsers that don't support canvas and in browsers with JavaScript disabled."><code>&lt;canvas&gt;</code></a> element that we use for offscreen rendering.&nbsp; Next we set the <code>fillStyle</code> to <code>#AAA</code> (a fairly light grey), and fill the entire canvas with that color by calling <a href="../CanvasRenderingContext2D/fillRect.html" title="The CanvasRenderingContext2D.fillRect() method of the Canvas 2D API draws a filled rectangle at (x, y) position whose size is determined by width and height and whose style is determined by the fillStyle attribute."><code>fillRect()</code></a>.</p>
+
+<p>Last in this function, we convert the canvas into a PNG image and call <code><a href="../Element/setAttribute.html" title="Adds a new attribute or changes the value of an existing attribute on the specified element."><code>photo.setAttribute()</code></a></code> to make our captured still box display the image.</p>
+
+<h3 id="Capturing_a_frame_from_the_stream">Capturing a frame from the stream</h3>
+
+<p>There's one last function to define, and it's the point to the entire exercise: the <code>takepicture()</code> function, whose job it is to capture the currently displayed video frame, convert it into a PNG file, and display it in the captured frame box. The code looks like this:</p>
+
+<pre class="brush: js">  function takepicture() {
+    var context = canvas.getContext('2d');
+    if (width &amp;&amp; height) {
+      canvas.width = width;
+      canvas.height = height;
+      context.drawImage(video, 0, 0, width, height);
+    
+      var data = canvas.toDataURL('image/png');
+      photo.setAttribute('src', data);
+    } else {
+      clearphoto();
+    }
+  }</pre>
+
+<p>As is the case any time we need to work with the contents of a canvas, we start by getting the <a href="../CanvasRenderingContext2D.html" title="The CanvasRenderingContext2D interface provides the 2D rendering context for the drawing surface of a &lt;canvas&gt; element."><code>2D drawing context</code></a> for the hidden canvas.</p>
+
+<p>Then, if the width and height are both non-zero (meaning that there's at least potentially valid image data), we set the width and height of the canvas to match that of the captured frame, then call <a href="../CanvasRenderingContext2D/drawImage.html" title="The CanvasRenderingContext2D.drawImage() method of the Canvas 2D API provides different ways to draw an image onto the canvas."><code>drawImage()</code></a> to draw the current frame of the video into the context, filling the entire canvas with the frame image.</p>
+
+<div class="note">
+<p><strong>Note:</strong> This takes advantage of the fact that the <a href="../HTMLVideoElement.html" title="The HTMLVideoElement interface provides special properties and methods for manipulating video objects. It also inherits properties and methods of HTMLMediaElement and HTMLElement."><code>HTMLVideoElement</code></a> interface looks like a <a href="../HTMLImageElement.html" title="The HTMLImageElement interface provides special properties and methods (beyond the regular HTMLElement interface it also has available to it by inheritance) for manipulating the layout and presentation of &lt;img&gt; elements."><code>HTMLImageElement</code></a> to any API that accepts an <code>HTMLImageElement</code> as a parameter, with the video's current frame presented as the image's contents.</p>
+</div>
+
+<p>Once the canvas contains the captured image, we convert it to PNG format by calling <a href="../HTMLCanvasElement/toDataURL.html" title="The HTMLCanvasElement.toDataURL() method returns a data URIs containing a representation of the image in the format specified by the type parameter (defaults to PNG). The returned image is in a resolution of 96 dpi."><code>HTMLCanvasElement.toDataURL()</code></a> on it; finally, we call <a href="../Element/setAttribute.html" title="Adds a new attribute or changes the value of an existing attribute on the specified element."><code>photo.setAttribute()</code></a> to make our captured still box display the image.</p>
+
+<p>If there isn't a valid image available (that is, the <code>width</code> and <code>height</code> are both 0), we clear the contents of the captured frame box by calling <code>clearphoto()</code>.</p>
+
+<h2 id="Fun_with_filters">Fun with filters</h2>
+
+<p>Since we're capturing images from the user's webcam by grabbing frames from a <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video" title="The HTML &lt;video&gt; element is used to embed video content. It may contain several video sources, represented using the src attribute or the &lt;source&gt; element; the browser will choose the most suitable one."><code>&lt;video&gt;</code></a> element, we can very easily apply filters and fun effects to the video. As it turns out, any CSS filters you apply to the element using the <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/filter" title="The filter property provides for effects like blurring or color shifting on an element’s rendering before the element is displayed. Filters are commonly used to adjust the rendering of an image, a background, or a border."><code>filter</code></a> property affect the captured photo. These filters can range from the simple (making the image black and white)&nbsp; to the extreme (gaussian blurs and hue rotation).</p>
+
+<p>You can play with this effect using, for example, the Firefox developer tools' <a href="https://developer.mozilla.org/en-US/docs/Tools/Style_Editor">style editor</a>; see <a href="https://developer.mozilla.org/en-US/docs/Tools/Page_Inspector/How_to/Edit_CSS_filters">Edit CSS filters</a> for details on how to do so.</p>
+
+<h2 id="See_also">See also</h2>
+
+<ul>
+ <li><a href="http://mdn-samples.mozilla.org/s/webrtc-capturestill" class="external">Try this sample</a></li>
+ <li><a href="https://github.com/mdn/samples-server/tree/master/s/webrtc-capturestill" class="external">Sample code on Github</a></li>
+ <li><a href="../Navigator/getUserMedia.html" title="Prompts the user for permission to use one video and/or one audio input device such as a camera or screensharing and/or a microphone. If the user provides permission, then the successCallback is invoked with the resulting MediaStream object as its argument. If the user denies permission or media is not available, then the errorCallback is called with PermissionDeniedError or NotFoundError respectively. Note that it is possible for neither completion callback to be called, as the user is not required to make a choice."><code>Navigator.getUserMedia()</code></a></li>
+ <li>"<a href="../Canvas_API/Tutorial/Using_images.html#Using_frames_from_a_video">Using frames from a video</a>" in <a href="../Canvas_API/Tutorial/Using_images.html">Using images</a></li>
+ <li><a href="../CanvasRenderingContext2D/drawImage.html" title="The CanvasRenderingContext2D.drawImage() method of the Canvas 2D API provides different ways to draw an image onto the canvas."><code>CanvasRenderingContext2D.drawImage()</code></a></li>
+</ul>
+                  
+                
+              </article>
+
+              
+
+    
+    
+    
+
+    
+    
+    
+
+    <div class="share">
+        <strong>Share:</strong>
+        <ul>
+            <li><a href="http://twitter.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FAPI%2FWebRTC_API%2FTaking_still_photos%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dtwitter.com&amp;text=I+learned+about+Taking+still+photos+with+WebRTC+on+MDN." target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API/Taking_still_photos?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=twitter.com" data-title="I learned about Taking still photos with WebRTC on MDN." class="share-link twitter"><i aria-hidden="true" class="icon-twitter"></i>Twitter</a></li>
+            <li><a href="http://facebook.com/sharer.php?s=100&amp;p[url]=https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API/Taking_still_photos?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API/Taking_still_photos?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" data-title="I learned about Taking still photos with WebRTC on MDN." class="share-link facebook"><i aria-hidden="true" class="icon-facebook"></i>Facebook</a></li>
+            <li><a href="https://plus.google.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FAPI%2FWebRTC_API%2FTaking_still_photos%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dplus.google.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/API/WebRTC_API/Taking_still_photos?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=plus.google.com" data-title="I learned about Taking still photos with WebRTC on MDN." class="share-link gplus"><i aria-hidden="true" class="icon-google-plus"></i>Google+</a></li>
+        </ul>
+    </div>
+
+              
+
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                  
+                  
+  <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags icon-fw"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Advanced">Advanced</a></li>
+      
+        <li><a href="../../../tag/API.html">API</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Example">Example</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Sample code">Sample code</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Video">Video</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/webcam">webcam</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/WebRTC">WebRTC</a></li>
+      
+    </ul>
+  </div>
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-group icon-fw"></i>&nbsp;<strong>Contributors to this page:</strong> 
+        <a href="https://developer.mozilla.org/en-US/profiles/zalun">zalun</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/teoli">teoli</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Sheppy">Sheppy</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/kshitijpurwar">kshitijpurwar</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills">chrisdavidmills</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Kiley85">Kiley85</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Null">Null</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/fscholz">fscholz</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/KarlPurk">KarlPurk</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Jeremie">Jeremie</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/igall">igall</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/codepo8">codepo8</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/jswisher">jswisher</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/espressive">espressive</a>
+    
+                    </div>
+                  
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o icon-fw"></i>&nbsp;<strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/zalun">zalun</a>,
+                      <time datetime="2015-07-24T05:25:58-07:00">Jul 24, 2015, 5:25:58 AM</time>
+                    </div>
+                  
+                </div>
+              
+            </div>
+
+            
+              <!-- quick links and zone subnav strip -->
+              <div id="wiki-left" class="column-strip wiki-column">
+
+              
+
+                
+
+                
+                  <!-- quick links -->
+                  
+  <div class="quick-links" id="quick-links">
+    <div class="title see-also">See also</div>
+     
+ <ol> 
+  <li><a href="../WebRTC_API.html"><strong>WebRTC API</strong></a></li> 
+  <li data-default-state="open"><a href="#"><strong>WebRTC Guides</strong></a> 
+   <ol> 
+     <li><a href="Architecture.html">WebRTC Architecture</a></li> 
+     <li><a href="WebRTC_Basics-2.html">WebRTC Basics</a></li> 
+     <li><a href="Protocols.html">WebRTC Protocols</a></li> 
+     <li><a href="Connectivity.html">Dealing with connectivity</a></li> 
+     <li><a href="Overview.html">Overview of WebRTC interfaces</a></li> 
+     <li><a href="Session_lifetime.html">Lifetime of a WebRTC Session</a></li> 
+   </ol> 
+  </li> 
+  <li data-default-state="open"><a href="#"><strong>WebRTC Tutorials</strong></a> 
+   <ol> 
+    <li><a href="adapter.html">Interoperability with adapter.js</a></li> 
+    <li><a href="Taking_still_photos.html">Taking still photos from the camera</a></li> 
+    <li><a href="Simple_RTCDataChannel_sample.html">A simple data channel example</a></li> 
+</ol> 
+  </li> 
+  <li data-default-state="open"><a href="#"><strong>Interfaces</strong></a> 
+   <ol> 
+    <li><a href="../RTCPeerConnection.html" title="The RTCPeerConnection interface represents a WebRTC connection between the local computer and a remote peer. It is used to handle efficient streaming of data between the two peers."><code>RTCPeerConnection</code></a></li> 
+    <li><a href="../RTCSessionDescription.html" title="The RTCSessionDescription interface represents the parameters of a session. Each RTCSessionDescription consists of a description type indicating which part of the offer/answer negotiation process it describes and of the SDP descriptor of the session."><code>RTCSessionDescription</code></a></li> 
+    <li><a href="../RTCIceCandidate.html" title="The documentation about this has not yet been written; please consider contributing!"><code>RTCIceCandidate</code></a></li> 
+    <li><a href="../RTCPeerConnectionIceEvent.html" title="The RTCPeerConnectionIceEvent interface represents events that occurs in relation to ICE candidates with the target, usually a RTCPeerConnection. Only one event is of this type: icecandidate."><code>RTCPeerConnectionIceEvent</code></a></li> 
+    <li><a href="../MessageEvent.html" title="A MessageEvent is the interface representing a message received by a target, being a WebSocket or a WebRTC RTCDataChannel"><code>MessageEvent</code></a></li> 
+    <li><a href="../MediaStream.html" title="The MediaStream interface represents a stream of media content. A stream consists of several tracks such as&nbsp;video or audio tracks."><code>MediaStream</code></a></li> 
+    <li><a href="../RTCStatsReport.html" title="The documentation about this has not yet been written; please consider contributing!"><code>RTCStatsReport</code></a></li> 
+    <li><a href="../RTCIdentityEvent.html" title="The RTCIdentityEvent interface represents events that indicates that the identity provider (IdP) associated with the target, usually a RTCPeerConnection, have generated an identity assertion. The only event sent with this type is identityresult."><code>RTCIdentityEvent</code></a></li> 
+    <li><a href="../RTCIdentityErrorEvent.html" title="The RTCIdentityErrorEvent interface represents events that indicates that the identity provider (IdP) associated with the target, usually a RTCPeerConnection, have encountered an error. Two events are sent with this type: idpassertionerror and idpvalidationerror."><code>RTCIdentityErrorEvent</code></a></li> 
+    <li><a href="../MediaStreamEvent.html" title="The MediaStreamEvent interface represents events that occurs in relation to a MediaStream. Two events of this type can be thrown: addstream and removestream."><code>MediaStreamEvent</code></a></li> 
+    <li><a href="../MediaStreamTrack.html" title="The MediaStream interface represents a stream of media content. A stream consists of several tracks, like video or audio tracks."><code>MediaStreamTrack</code></a></li> 
+    <li><a href="../MediaDevices.html" title="The MediaDevices interface provides access to connected media input devices like cameras and microphones, as well as screensharing."><code>MediaDevices</code></a></li> 
+    <li> 
+   </li></ol> 
+  </li> 
+  <li><strong><a href="https://developer.mozilla.org/en-US/docs/MDN">Documentation:</a></strong></li> 
+  <li data-default-state="closed"><a href="#">Useful lists</a> 
+   <ol> 
+    <li><a href="https://developer.mozilla.org/en-US/docs/tag/WebRTC">Pages tagged "WebRTC"</a></li> 
+   </ol> 
+  </li> 
+  <li data-default-state="closed"><a href="#">Contribute</a> 
+   <ol> 
+    <li><a href="../../../MDN/Doc_status/API/WebRTC.html">WebRTC doc status</a></li> 
+    <li><a href="https://developer.mozilla.org/en-US/docs/MDN">The MDN project</a></li> 
+   </ol> 
+  </li> 
+ </ol> 
+
+  </div>
+                
+
+                <!-- approvals -->
+                
+
+              
+
+              </div>
+            
+          </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Web/API/WebRTC_API/Taking_still_photos$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Web/API/WebRTC_API/Taking_still_photos$history" label="View page history"></menuitem>
+  </menu>
+
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+        
+        <div class="contentinfo">
+          <p>© 2005-2016 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>
+          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+        
+        </div>
+      </div>
+      <div class="column-strip">
+        
+          
+  
+    <form class="languages go" method="get" action="https://developer.mozilla.org/en-US/docs/Web">
+      <label for="language">Other languages:</label>
+      <select id="language" class="wiki-l10n" name="next" dir="ltr">
+        <option value="/en-US/docs/Web/API/WebRTC_API/Taking_still_photos" selected="">
+          English (US)
+        </option>
+        
+          <option value="/es/docs/WebRTC/Taking_webcam_photos">
+            Español
+          </option>
+          <option value="/fr/docs/WebRTC/Prendre_des_photos_avec_la_webcam">
+            Français
+          </option>
+      </select>
+      <noscript>&lt;button type="submit"&gt;Go&lt;/button&gt;</noscript>
+    </form>
+  
+
+        
+      </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+  
+    
+    <!--[if lte IE 8]><script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/selectivizr.091e18cf669b.js" charset="utf-8"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/main.a7b27a25fb9c.js" charset="utf-8"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+    
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/syntax-prism-min.js" charset="utf-8"></script><script type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/wiki.bd71ca9fd27d.js" charset="utf-8" id="wikiscript"></script>
+
+  
+
+  <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/helpfulness.7b208a764d28.js" charset="utf-8"></script>
+
+  
+
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/WebRTC_API/Taking_still_photos by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 15:40:23 GMT -->
+</body></html>

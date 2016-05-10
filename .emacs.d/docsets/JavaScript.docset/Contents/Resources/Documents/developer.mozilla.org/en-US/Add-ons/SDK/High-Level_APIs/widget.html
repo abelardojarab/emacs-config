@@ -1,0 +1,1593 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/Add-ons/SDK/High-Level_APIs/widget by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 17:26:08 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <script async="" src="../../../../../www.google-analytics.com/analytics.js"></script><script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+  
+    
+  
+
+  
+  <title>widget</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+  
+    
+    
+    <link href="../../../../../developer.cdn.mozilla.net/static/build/styles/mdn.593f20d8c365.css" rel="stylesheet" type="text/css">
+
+    
+  
+    <link href="../../../../../developer.cdn.mozilla.net/static/build/styles/wiki.13dd9abdfb62.css" rel="stylesheet" type="text/css">
+
+    
+
+    
+      
+        <link rel="stylesheet" type="text/css" href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons$styles">
+      
+    
+
+  <!-- common social tags -->
+  
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../developer.cdn.mozilla.net/static/img/favicon144.a6e4162070f4.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../developer.cdn.mozilla.net/static/img/favicon114.0e9fabd44f85.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../developer.cdn.mozilla.net/static/img/favicon72.8ff9d87c82a0.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../developer.cdn.mozilla.net/static/img/favicon57.a2490b9a2d76.png">
+  <!-- basic favicon -->
+  
+    
+  
+  <link rel="shortcut icon" href="../../../../../developer.cdn.mozilla.net/static/img/favicon32.e02854fdcf73.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/html5shiv.3948ccddab6f.js" charset="utf-8"></script>
+  <![endif]-->
+
+  
+  <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/SDK/High-Level_APIs/widget$json">
+  <link rel="canonical" href="widget.html">
+
+  
+
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="widget">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/SDK/High-Level_APIs/widget">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/SDK/High-Level_APIs/widget">
+  <meta name="twitter:title" content="widget">
+  
+  <meta property="og:description" content="Create a simple user interface for an add-on in Firefox's add-on bar.">
+  <meta name="description" content="Create a simple user interface for an add-on in Firefox's add-on bar.">
+  <meta name="twitter:description" content="Create a simple user interface for an add-on in Firefox's add-on bar.">
+  
+
+  
+    
+
+
+
+  
+</head>
+<body data-slug="Mozilla/Add-ons/SDK/High-Level_APIs/widget" contextmenu="edit-history-menu" data-search-url="" class="document zone ">
+
+  <script type="text/javascript">
+    (function(win) {
+        'use strict';
+
+        
+            (function(){
+  var FLAGS = {
+    'compat_api': false,'kumaediting': false,'page_move': false,'registration_disabled': false,'search_suggestions': false,'section_edit': true,'spam_admin_override': false,'spam_checks_enabled': true,'spam_spammer_override': false,'spam_submissions_enabled': false,'spam_testing_mode': false,'wiki_samples': true,'wiki_spam_exempted': false,'wiki_spam_training': true
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': true,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+
+        // This needs to be set before ckeditor.js loads
+        window.CKEDITOR_BASEPATH = 'https://developer.mozilla.org/static/js/libs/ckeditor/build/ckeditor/';
+
+        // This represents the site configuration
+        win.mdn = {
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+            
+            notifications: [],
+            
+            // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            },
+            // Assets that need to be dynamically injected
+            assets_disabled: {
+                css: {
+                    'editor-content': ['https://developer.cdn.mozilla.net/static/build/styles/editor-content.3d79df72080d.css',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/styles/wiki-compat-tables.f3a3bfce97a1.css',]
+                },
+                js: {
+                    'syntax-prism': ['https://developer.cdn.mozilla.net/static/build/js/syntax-prism.7a66ddfa68bf.js',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/js/wiki-compat-tables.14ce5dcb2c3d.js',]
+                }
+            }
+        };
+    })(this);
+</script>
+
+  
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+    
+      <li><a href="#q" id="skip-search">Skip to search</a></li>
+    
+  </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+    <a href="https://developer.mozilla.org/en-US/" class="logo">Mozilla Developer Network</a>
+
+    <div id="nav-sec">
+        
+                  <ul>
+                  <li>
+
+    
+
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                Sign in
+              </span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2FAdd-ons%2FSDK%2FHigh-Level_APIs%2Fwidget" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/Add-ons/SDK/High-Level_APIs/widget" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/Add-ons/SDK/High-Level_APIs/widget" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2FAdd-ons%2FSDK%2FHigh-Level_APIs%2Fwidget" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+              
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+        
+    </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../../../docs/Web/API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+
+  
+      
+        <div class="zone-article-header" id="document-main"><div class="center">
+          <!-- zone title -->
+          <div class="zone-title"><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></div>
+          <!-- zone image -->
+          <div class="zone-image"></div>
+        </div></div>
+      
+
+     <!-- end is_zone -->
+
+    <div class="wiki-main-content"><div class="center">
+      
+      <div class="article-meta">
+        <!-- action buttons -->
+        
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+  <ul class="page-buttons" data-sticky="false">
+      
+      <li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+              
+                <li class="smaller">No translations exist for this article.</li>
+              
+
+              
+                <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/SDK/High-Level_APIs/widget$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+              
+            </ul>
+          </div>
+        </div>
+      </li>
+
+      <li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/SDK/High-Level_APIs/widget$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li>
+
+        
+
+        <li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/SDK/High-Level_APIs/widget$history" rel="nofollow, noindex">History</a></li>
+                
+                
+                
+                
+
+                
+
+                
+                
+                
+                <li class="page-print"><a href="#" onclick="return window.print();">Print this article</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+        
+  <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Mozilla" rel="v:url" property="v:title">Mozilla</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons" rel="v:url" property="v:title">Add-ons</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/SDK" rel="v:url" property="v:title">Add-on SDK</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="../High-Level_APIs.html" rel="v:url" property="v:title">High-Level APIs</a></li>
+    
+    <li class="crumb" typeof="v:Breadcrumb" property="v:title">widget</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        
+        <div class="contributor-avatars" data-all-text="see all contributors" data-alternate-message="hide contributors">
+            <ul>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/wbamberg" title="View profile: wbamberg">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="wbamberg" data-src="../../../../../secure.gravatar.com/avatar/576b94c81f8ad97e58d63f12e5fdb00c6c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">wbamberg</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Canuckistani" title="View profile: Canuckistani">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Canuckistani" data-src="../../../../../secure.gravatar.com/avatar/b07ae75dd1a5414bf30d7f773ccfc8946c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Canuckistani</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/evold" title="View profile: evold">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="evold" data-src="../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">evold</noscript></a>
+                </li>
+            
+            </ul>
+        </div>
+        
+
+        <h1>widget</h1>
+
+      </div>
+      
+
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-present">
+
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+            
+              <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+              
+              <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#Usage" rel="internal">Usage</a><ol><li><a href="#Creation_and_content" rel="internal">Creation and content</a></li><li><a href="#Scripting_widget_content" rel="internal">Scripting widget content</a></li><li><a href="#Scripting_trusted_widget_content" rel="internal">Scripting trusted widget content</a></li><li><a href="#Attaching_panels_to_widgets" rel="internal">Attaching panels to widgets</a></li><li><a href="#Private_windows" rel="internal">Private windows</a></li><li><a href="#Examples" rel="internal">Examples</a></li></ol></li><li><a href="#Globals" rel="internal">Globals</a><ol><li><a href="#Constructors" rel="internal">Constructors</a><ol><li><a href="#Widget(options)" rel="internal"><code>Widget(options)</code></a></li></ol></li></ol></li><li><a href="#Widget" rel="internal">Widget</a><ol><li><a href="#Methods" rel="internal">Methods</a><ol><li><a href="#destroy()" rel="internal"><code>destroy()</code></a></li><li><a href="#postMessage(data)" rel="internal"><code>postMessage(data)</code></a></li><li><a href="#on(type_listener)" rel="internal"><code>on(type, listener)</code></a></li><li><a href="#removeListener(type_listener)" rel="internal"><code>removeListener(type, listener)</code></a></li><li><a href="#getView(window)" rel="internal"><code>getView(window)</code></a></li></ol></li><li><a href="#Properties" rel="internal">Properties</a><ol><li><a href="#label" rel="internal"><code>label</code></a></li><li><a href="#content" rel="internal"><code>content</code></a></li><li><a href="#contentURL" rel="internal"><code>contentURL</code></a></li><li><a href="#panel" rel="internal"><code>panel</code></a></li><li><a href="#width" rel="internal"><code>width</code></a></li><li><a href="#tooltip" rel="internal"><code>tooltip</code></a></li><li><a href="#allow" rel="internal"><code>allow</code></a></li><li><a href="#contentScriptFile" rel="internal"><code>contentScriptFile</code></a></li><li><a href="#contentScript" rel="internal"><code>contentScript</code></a></li><li><a href="#contentScriptWhen" rel="internal"><code>contentScriptWhen</code></a></li><li><a href="#contentScriptOptions" rel="internal"><code>contentScriptOptions</code></a></li><li><a href="#port" rel="internal"><code>port</code></a></li></ol></li><li><a href="#Events" rel="internal">Events</a><ol><li><a href="#attach" rel="internal"><code>attach</code></a></li><li><a href="#click" rel="internal"><code>click</code></a></li><li><a href="#message" rel="internal"><code>message</code></a></li><li><a href="#mouseover" rel="internal"><code>mouseover</code></a></li><li><a href="#mouseout" rel="internal"><code>mouseout</code></a></li></ol></li></ol></li><li><a href="#WidgetView" rel="internal">WidgetView</a><ol><li><a href="#Methods_2" rel="internal">Methods</a><ol><li><a href="#destroy()_2" rel="internal"><code>destroy()</code></a></li><li><a href="#postMessage(data)_2" rel="internal"><code>postMessage(data)</code></a></li><li><a href="#on(type_listener)_2" rel="internal"><code>on(type, listener)</code></a></li><li><a href="#removeListener(type_listener)_2" rel="internal"><code>removeListener(type, listener)</code></a></li></ol></li><li><a href="#Properties_2" rel="internal">Properties</a><ol><li><a href="#label_2" rel="internal"><code>label</code></a></li><li><a href="#content_2" rel="internal"><code>content</code></a></li><li><a href="#contentURL_2" rel="internal"><code>contentURL</code></a></li><li><a href="#panel_2" rel="internal"><code>panel</code></a></li><li><a href="#width_2" rel="internal"><code>width</code></a></li><li><a href="#tooltip_2" rel="internal"><code>tooltip</code></a></li><li><a href="#allow_2" rel="internal"><code>allow</code></a></li><li><a href="#contentScriptFile_2" rel="internal"><code>contentScriptFile</code></a></li><li><a href="#contentScript_2" rel="internal"><code>contentScript</code></a></li><li><a href="#contentScriptWhen_2" rel="internal"><code>contentScriptWhen</code></a></li><li><a href="#contentScriptOptions_2" rel="internal"><code>contentScriptOptions</code></a></li><li><a href="#port_2" rel="internal"><code>port</code></a></li></ol></li><li><a href="#Events_2" rel="internal">Events</a><ol><li><a href="#detach" rel="internal"><code>detach</code></a></li><li><a href="#click_2" rel="internal"><code>click</code></a></li><li><a href="#message_2" rel="internal"><code>message</code></a></li><li><a href="#mouseover_2" rel="internal"><code>mouseover</code></a></li><li><a href="#mouseout_2" rel="internal"><code>mouseout</code></a></li></ol></li></ol></li>
+                </ol>
+              </div>
+              
+              </div>
+            
+
+            
+            
+              
+            
+
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-half wiki-column text-content">
+
+              
+
+              
+
+              
+                
+                
+                
+              
+              
+
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                
+                  
+                    <section id="Quick_Links" class="Quick_links"><!-- --></section>
+
+<div class="warning">
+<p>Deprecated in Firefox 29 and removed in Firefox 38.</p>
+
+<p>The widget API is deprecated from Firefox 29 onwards. Please see the <a href="ui.html">ui module</a> for replacements. In particular, for a simple button, try the <a href="ui.html#ActionButton">action button</a> or <a href="ui.html#ToggleButton">toggle button</a> APIs, and for a more complex widget try the <a href="ui.html#Toolbar">toolbar</a> or <a href="ui.html#Sidebar">sidebar</a> APIs.</p>
+</div>
+
+<p><span class="seoSummary">Create a simple user interface for an add-on in Firefox's add-on bar.</span></p>
+
+<h2 id="Usage">Usage</h2>
+
+<p>"Widgets" are small pieces of content that live in the Firefox 4 <a href="https://developer.mozilla.org/en/The_add-on_bar">add-on bar</a>. They can be simple icons or complex web pages. You can attach <a href="panel.html">panels</a> to them that open when they're clicked, or you can define a custom click handler to perform some other action, like opening a web page in a tab.</p>
+
+<p>There are a few advantages to using widgets over an ad hoc user interface. First, your users will be accustomed to interacting with add-ons via widgets and the add-on bar. Second, it allows Firefox to treat your interface as a first-class citizen. For example, in the future Firefox may allow the user to drag widgets from the add-on bar to other toolbars. By exposing your interface as a widget, your add-on would automatically inherit such functionality.</p>
+
+<h3 id="Creation_and_content">Creation and content</h3>
+
+<p>Widgets can contain images or arbitrary web content. You can include this content inline as a string by using the <code>content</code> property, or point to content using a URL with the <code>contentURL</code> property.</p>
+
+<p>Upon creation, the widget is automatically added to the add-on bar. You can set the width of a widget, but the height is fixed so as to fit in the add-on bar. If the content is an image, it is automatically scaled to be 16x16 pixels.</p>
+
+<p>For example, this widget contains an image, so it looks like a simple icon:</p>
+
+<pre class="brush: js">require("sdk/widget").Widget({
+  id: "mozilla-icon",
+  label: "My Mozilla Widget",
+  contentURL: "http://www.mozilla.org/favicon.ico"
+});</pre>
+
+<p><img src="../../../../../mdn.mozillademos.org/files/6695/widget-mozilla.png" style="display: block; height: 184px; margin-left: auto; margin-right: auto; width: 464px;" alt="">You can make <code>contentURL</code> point to an HTML or icon file which you have packaged inside your add-on. Just save the file in your add-on's <code>data</code> directory, and reference it using the <code>data.url()</code> method of the <a href="self.html"><code>self</code></a> module:</p>
+
+<pre class="brush: js">var data = require("sdk/self").data;
+
+require("sdk/widget").Widget({
+  id: "my-widget",
+  label: "My Widget",
+  contentURL: data.url("my-content.html")
+});</pre>
+
+<p>This widget contains an entire web page:</p>
+
+<pre class="brush: js">require("sdk/widget").Widget({
+  id: "hello-display",
+  label: "My Hello Widget",
+  content: "Hello!",
+  width: 50
+});</pre>
+
+<p><img src="../../../../../mdn.mozillademos.org/files/6605/widget-hello-text.png" style="display: block; height: 132px; margin-left: auto; margin-right: auto; width: 282px;" alt="">Widgets are quite small by default, so this example used the <code>width</code> property to grow it in order to show all the text.</p>
+
+<h3 id="Scripting_widget_content">Scripting widget content</h3>
+
+<p>To interact with the widget's content you need to load a separate script into the panel. In the SDK these scripts are called "content scripts" because they're explicitly used for interacting with web content.</p>
+
+<p>While content scripts can access the content they're attached to, they can't use the SDK's APIs. So implementing a complete solution usually means you have to send messages between the content script and the main add-on code.</p>
+
+<ul>
+ <li>
+  <p>You can specify one or more content scripts to load into the widget using the <code>contentScript</code> or <code>contentScriptFile</code> options to the <a href="widget.html#Widget(options)"><code>Widget()</code> constructor</a>.</p>
+ </li>
+ <li>
+  <p>You can communicate with the script using either the <a href="https://developer.mozilla.org/en-US/Add-ons/SDK/Guides/using_postMessage"><code>postMessage()</code></a> API or (preferably, usually) the <a href="https://developer.mozilla.org/en-US/Add-ons/SDK/Guides/using_port"><code>port</code></a> API.</p>
+ </li>
+</ul>
+
+<div class="warning">
+<p>Unless your content script is extremely simple and consists only of a static string, don't use <code>contentScript</code>: if you do, you may have problems getting your add-on approved on AMO.</p>
+
+<p>Instead, keep the script in a separate file and load it using <code>contentScriptFile</code>. This makes your code easier to maintain, secure, debug and review.</p>
+</div>
+
+<p><img src="../../../../../mdn.mozillademos.org/files/6607/widget-player-buttons.png" style="float: right; height: 132px; width: 282px;" alt="">For example, suppose we want to implement a media player as an add-on. We could implement the main user interface as a widget hosting an array of buttons to control play/pause/stop functions.</p>
+
+<p>We can then use a content script to listen for clicks on those buttons. But because content scripts can't use the SDK's APIs, we'll want the content script to send messages to the main add-on code, which can then implement the media player functions using the SDK.</p>
+
+<p>The widget's content is specified using HTML like this:</p>
+
+<pre class="brush: html"><code class="brush: js">&lt;html&gt;
+  &lt;body&gt;
+    &lt;img src="play.png" id="play-button"&gt;
+    &lt;img src="pause.png" id="pause-button"&gt;
+    &lt;img src="stop.png" id="stop-button"&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+<p>We just include three icons, and assign an ID to each one. This HTML file, and the icon files it references, are saved in the add-on's <code>data</code> directory.</p>
+
+<p>Next, we write a content script that listens for click events on each icon and sends the corresponding message to the main add-on code:</p>
+
+<pre class="brush: js">var play_button = document.getElementById("play-button");
+play_button.onclick = function() {
+  self.port.emit("play");
+}
+
+var pause_button = document.getElementById("pause-button");
+pause_button.onclick = function() {
+  self.port.emit("pause");
+}
+
+var stop_button = document.getElementById("stop-button");
+stop_button.onclick = function() {
+  self.port.emit("stop");
+}</pre>
+
+<p>We save this file in the add-on's <code>data</code> directory as "button-script.js". Finally. in the add-on's "main.js" file, we create the widget, assign it the HTML file and the content script, and listen for events from the content script:</p>
+
+<pre class="brush: js">const widgets = require("sdk/widget");
+const data = require("sdk/self").data;
+
+var player = widgets.Widget({
+  id: "player",
+  width: 72,
+  label: "Player",
+  contentURL: data.url("buttons.html"),
+  contentScriptFile: data.url("button-script.js")
+});
+
+player.port.on("play", function() {
+  console.log("playing");
+});
+
+player.port.on("pause", function() {
+  console.log("pausing");
+});
+
+player.port.on("stop", function() {
+  console.log("stopping");
+});</pre>
+
+<p>To learn much more about content scripts, see the <a href="https://developer.mozilla.org/en-US/Add-ons/SDK/Guides/Content_Scripts">Working with Content Scripts</a> guide.</p>
+
+<h3 id="Scripting_trusted_widget_content">Scripting trusted widget content</h3>
+
+<p>We've already seen that you can package HTML files in your add-on's <code>data</code> directory and use them to define the widget's content. We can call this "trusted" content, because unlike content loaded from a source outside the add-on, the add-on author knows exactly what it's doing. To interact with trusted content you don't need to use content scripts: you can just include a script from the HTML file in the normal way, using <code>script</code> tags.</p>
+
+<p>Like a content script, these scripts can communicate with the add-on code using the <a href="https://developer.mozilla.org/en-US/Add-ons/SDK/Guides/using_postMessage"><code>postMessage()</code></a> API or the <a href="https://developer.mozilla.org/en-US/Add-ons/SDK/Guides/using_port"><code>port</code></a> API. The crucial difference is that these scripts access the <code>postMessage</code> and <code>port</code> objects through the <code>addon</code> object, whereas content scripts access them through the <code>self</code> object.</p>
+
+<p>To show the difference, convert the <code>player</code> add-on above to use normal page scripts instead of content scripts.</p>
+
+<p>First, in the content script, change <code>self</code> to <code>addon</code>, and wrap it in a function:</p>
+
+<pre class="brush: js">function init() {
+  var play_button = document.getElementById("play-button");
+  play_button.onclick = function() {
+    addon.port.emit("play");
+  }
+
+  var pause_button = document.getElementById("pause-button");
+  pause_button.onclick = function() {
+    addon.port.emit("pause");
+  }
+
+  var stop_button = document.getElementById("stop-button");
+  stop_button.onclick = function() {
+    addon.port.emit("stop");
+  }
+}</pre>
+
+<p>Next, add a <code>script</code> tag to reference "button-script.js", and call its <code>init()</code> function on load:</p>
+
+<pre class="brush: html">&lt;html&gt;
+  &lt;head&gt;
+    &lt;script src="button-script.js"&gt;&lt;/script&gt;
+  &lt;/head&gt;
+  &lt;body onLoad="init()"&gt;
+    &lt;img src="play.png" id="play-button"&gt;
+    &lt;img src="pause.png" id="pause-button"&gt;
+    &lt;img src="stop.png" id="stop-button"&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</pre>
+
+<p>Finally, remove the line attaching the content script from "main.js":</p>
+
+<pre class="brush: js">const widgets = require("sdk/widget");
+const data = require("sdk/self").data;
+
+var player = widgets.Widget({
+  id: "player",
+  width: 72,
+  label: "Player",
+  contentURL: data.url("buttons.html")
+});
+
+player.port.emit("init");
+
+player.port.on("play", function() {
+  console.log("playing");
+});
+
+player.port.on("pause", function() {
+  console.log("pausing");
+});
+
+player.port.on("stop", function() {
+  console.log("stopping");
+});</pre>
+
+<h3 id="Attaching_panels_to_widgets">Attaching panels to widgets</h3>
+
+<p>You can supply a <a href="panel.html">panel</a> to the widget's constructor: if you do this, the panel is automatically displayed when the user clicks the widget.</p>
+
+<p><img src="../../../../../mdn.mozillademos.org/files/6609/widget-panel-clock.png" style="float: right; height: 222px; width: 214px;" alt=""></p>
+
+<pre class="brush: js">data = require("sdk/self").data
+
+var clockPanel = require("sdk/panel").Panel({
+  width:215,
+  height:160,
+  contentURL: data.url("clock.html")
+});
+
+require("sdk/widget").Widget({
+  id: "open-clock-btn",
+  label: "Clock",
+  contentURL: data.url("History.png"),
+  panel: clockPanel
+});</pre>
+
+<p>Note that this is, at the moment, the only way you can attach a panel to a widget.</p>
+
+<p>You must supply the panel in the widget's constructor for it to work. If you assign the panel to the widget after construction, the panel can still be shown but will not be anchored to the widget:</p>
+
+<pre class="brush: js">data = require("sdk/self").data
+
+var clockPanel = require("sdk/panel").Panel({
+  width:215,
+  height:160,
+  contentURL: data.url("clock.html")
+});
+
+widget = require("sdk/widget").Widget({
+  id: "open-clock-btn",
+  label: "Clock",
+  contentURL: data.url("History.png")
+});
+
+widget.panel = clockPanel;
+
+// Will not be anchored
+widget.panel.show();</pre>
+
+<p>Also, if you try to call <code>panel.show()</code> inside your widget's <code>click</code> event listener, the panel will not be anchored:</p>
+
+<pre class="brush: js">data = require("sdk/self").data
+
+var clockPanel = require("sdk/panel").Panel({
+  width:215,
+  height:160,
+  contentURL: data.url("clock.html")
+});
+
+require("sdk/widget").Widget({
+  id: "open-clock-btn",
+  label: "Clock",
+  contentURL: data.url("History.png"),
+  panel: clockPanel,
+  onClick: function() {
+    // Will not be anchored
+    this.panel.show();
+  }
+});</pre>
+
+<p>See <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=638142" class="external">bug 638142</a>.</p>
+
+<h3 id="Private_windows">Private windows</h3>
+
+<p>If your add-on has not opted into private browsing, then your widget will not appear in any private browser windows.</p>
+
+<p>To learn more about private windows, how to opt into private browsing, and how to support private browsing, refer to the <a href="private-browsing.html">documentation for the <code>private-browsing</code> module</a>.</p>
+
+<h3 id="Examples">Examples</h3>
+
+<p>For conciseness, these examples create their content scripts as strings and use the <code>contentScript</code> property. In your own add-ons, you will probably want to create your content scripts in separate files and pass their URLs using the <code>contentScriptFile</code> property. See <a href="https://developer.mozilla.org/en-US/Add-ons/SDK/Guides/Content_Scripts">Working with Content Scripts</a> for more information.</p>
+
+<pre class="brush: js">var widgets = require("sdk/widget");
+
+// A basic click-able image widget.
+widgets.Widget({
+  id: "google-link",
+  label: "Widget with an image and a click handler",
+  contentURL: "http://www.google.com/favicon.ico",
+  onClick: function() {
+    require("sdk/tabs").activeTab.url = "http://www.google.com/";
+  }
+});</pre>
+
+<pre class="brush: js">// A widget that changes display on mouseover.
+widgets.Widget({
+  id: "mouseover-effect",
+  label: "Widget with changing image on mouseover",
+  contentURL: "http://www.yahoo.com/favicon.ico",
+  onMouseover: function() {
+    this.contentURL = "http://www.bing.com/favicon.ico";
+  },
+  onMouseout: function() {
+    this.contentURL = "http://www.yahoo.com/favicon.ico";
+  }
+});</pre>
+
+<pre class="brush: js">// A widget that updates content on a timer.
+widgets.Widget({
+  id: "auto-update-widget",
+  label: "Widget that updates content on a timer",
+  content: "0",
+  contentScript: 'setTimeout(function() {' +
+                 '  document.body.innerHTML++;' +
+                 '}, 2000)',
+  contentScriptWhen: "ready"
+});</pre>
+
+<pre class="brush: js">// A widget created with a specified width, that grows.
+var myWidget = widgets.Widget({
+  id: "widget-effect",
+  label: "Wide widget that grows wider on a timer",
+  content: "I'm getting longer.",
+  width: 50,
+});
+require("sdk/timers").setInterval(function() {
+  myWidget.width += 10;
+}, 1000);</pre>
+
+<pre class="brush: js">// A widget communicating bi-directionally with a content script.
+var widget = widgets.Widget({
+  id: "message-test",
+  label: "Bi-directional communication!",
+  content: "&lt;foo&gt;bar&lt;/foo&gt;",
+  contentScriptWhen: "ready",
+  contentScript: 'self.on("message", function(message) {' +
+                 '  alert("Got message: " + message);' +
+                 '});' +
+                 'self.postMessage("ready");',
+  onMessage: function(message) {
+    if (message == "ready")
+      widget.postMessage("me too");
+  }
+});</pre>
+
+<h2 id="Globals">Globals</h2>
+
+<h3 id="Constructors">Constructors</h3>
+
+<h4 id="Widget(options)" class="addon-sdk-api-name"><code>Widget(options)</code></h4>
+
+<p>Creates a new widget. The widget is immediately added to the add-on bar.</p>
+
+<h5 id="Parameters">Parameters</h5>
+
+<p><strong>options : object</strong><br>
+ Required options:</p>
+
+<table class="standard-table">
+ <thead>
+  <tr>
+   <th scope="col">Name</th>
+   <th scope="col">Type</th>
+   <th scope="col">&nbsp;</th>
+  </tr>
+ </thead>
+ <tbody>
+  <tr>
+   <td>label</td>
+   <td>string</td>
+   <td>
+    <p>A string description of the widget used for accessibility, title bars, and error reporting.</p>
+   </td>
+  </tr>
+  <tr>
+   <td>id</td>
+   <td>string</td>
+   <td>
+    <p>A string used to identify your widget in order to save its location when the user moves it in the browser. This string has to be unique and must not be changed over time.</p>
+   </td>
+  </tr>
+ </tbody>
+</table>
+
+<p>Optional options:</p>
+
+<table class="standard-table">
+ <thead>
+  <tr>
+   <th scope="col">Name</th>
+   <th scope="col">Type</th>
+   <th scope="col">&nbsp;</th>
+  </tr>
+ </thead>
+ <tbody>
+  <tr>
+   <td>content</td>
+   <td>string</td>
+   <td>
+    <p>An optional string value containing the displayed content of the widget. It may contain HTML. Widgets must have either the <code>content</code> property or the <code>contentURL</code> property set.</p>
+
+    <p>If the content is an image, it is automatically scaled to be 16x16 pixels.</p>
+   </td>
+  </tr>
+  <tr>
+   <td>contentURL</td>
+   <td>string</td>
+   <td>
+    <p>An optional string URL to content to load into the widget. This can be local content or remote content, an image or web content. Widgets must have either the <code>content</code> property or the <code>contentURL</code> property set.</p>
+
+    <p>If the content is an image, it is automatically scaled to be 16x16 pixels.</p>
+   </td>
+  </tr>
+  <tr>
+   <td>panel</td>
+   <td>Panel</td>
+   <td>
+    <p>An optional <a href="panel.html">panel</a> to open when the user clicks on the widget. Note: If you also register a "click" listener, it will be called instead of the panel being opened. However, you can show the panel from the listener by calling <code>this.panel.show()</code>.</p>
+   </td>
+  </tr>
+  <tr>
+   <td>width</td>
+   <td>integer</td>
+   <td>
+    <p>Optional width in pixels of the widget. If not given, a default width is used.</p>
+   </td>
+  </tr>
+  <tr>
+   <td>onClick</td>
+   <td>function</td>
+   <td>
+    <p>Include this to listen to the widget's <code>click</code> event.</p>
+   </td>
+  </tr>
+  <tr>
+   <td>onMessage</td>
+   <td>function</td>
+   <td>
+    <p>Include this to listen to the widget's <code>message</code> event.</p>
+   </td>
+  </tr>
+  <tr>
+   <td>onMouseover</td>
+   <td>function</td>
+   <td>
+    <p>Include this to listen to the widget's <code>mouseover</code> event.</p>
+   </td>
+  </tr>
+  <tr>
+   <td>onMouseout</td>
+   <td>function</td>
+   <td>
+    <p>Include this to listen to the widget's <code>mouseout</code> event.</p>
+   </td>
+  </tr>
+  <tr>
+   <td>onAttach</td>
+   <td>function</td>
+   <td>
+    <p>Include this to listen to the widget's <code>attach</code> event.</p>
+   </td>
+  </tr>
+  <tr>
+   <td>tooltip</td>
+   <td>string</td>
+   <td>
+    <p>Optional text to show when the user's mouse hovers over the widget. If not given, the <code>label</code> is used.</p>
+   </td>
+  </tr>
+  <tr>
+   <td>allow</td>
+   <td>object</td>
+   <td>
+    <p>An optional object describing permissions for the content. It should contain a single key named <code>script</code> whose value is a boolean that indicates whether or not to execute script in the content. <code>script</code> defaults to true.</p>
+   </td>
+  </tr>
+  <tr>
+   <td>contentScriptFile</td>
+   <td>string,array</td>
+   <td>
+    <p>A local file URL or an array of local file URLs of content scripts to load. Content scripts specified by this property are loaded <em>before</em> those specified by the <code>contentScript</code> property.</p>
+   </td>
+  </tr>
+  <tr>
+   <td>contentScript</td>
+   <td>string,array</td>
+   <td>
+    <p>A string or an array of strings containing the texts of content scripts to load. Content scripts specified by this property are loaded <em>after</em> those specified by the <code>contentScriptFile</code> property.</p>
+   </td>
+  </tr>
+  <tr>
+   <td>contentScriptWhen</td>
+   <td>string</td>
+   <td>
+    <p>When to load the content scripts. This may take one of the following values:</p>
+
+    <ul>
+     <li>"start": load content scripts immediately after the document element for the widget is inserted into the DOM, but before the DOM content itself has been loaded</li>
+     <li>"ready": load content scripts once DOM content has been loaded, corresponding to the <a href="https://developer.mozilla.org/en-US/docs/Mozilla_event_reference">DOMContentLoaded</a> event</li>
+     <li>"end": load content scripts once all the content (DOM, JS, CSS, images) for the widget has been loaded, at the time the <a href="../../../docs/Web/API/GlobalEventHandlers/onload.html">window.onload event</a> fires</li>
+    </ul>
+
+    <p>This property is optional and defaults to "end".</p>
+   </td>
+  </tr>
+  <tr>
+   <td>contentScriptOptions</td>
+   <td>object</td>
+   <td>
+    <p>Read-only value exposed to content scripts under <code>self.options</code> property.</p>
+
+    <p>Any kind of jsonable value (object, array, string, etc.) can be used here. Optional.</p>
+   </td>
+  </tr>
+ </tbody>
+</table>
+
+<h2 id="Widget">Widget</h2>
+
+<p>Represents a widget object.</p>
+
+<h3 id="Methods">Methods</h3>
+
+<h4 id="destroy()" class="addon-sdk-api-name"><code>destroy()</code></h4>
+
+<p>Removes the widget from the add-on bar.</p>
+
+<h4 id="postMessage(data)" class="addon-sdk-api-name"><code>postMessage(data)</code></h4>
+
+<p>Sends a message to the widget's content scripts.</p>
+
+<h5 id="Parameters_2">Parameters</h5>
+
+<p><strong>data : value</strong><br>
+ The message to send. The message can be any <a href="https://developer.mozilla.org/en-US/Add-ons/SDK/Guides/Content_Scripts/using_port#JSON-Serializable_Values">JSON-serializable value</a>.</p>
+
+<h4 id="on(type_listener)" class="addon-sdk-api-name"><code>on(type, listener)</code></h4>
+
+<p>Registers an event listener with the widget.</p>
+
+<h5 id="Parameters_3">Parameters</h5>
+
+<p><strong>type : string</strong><br>
+ The type of event to listen for.</p>
+
+<p><strong>listener : function</strong><br>
+ The listener function that handles the event.</p>
+
+<h4 id="removeListener(type_listener)" class="addon-sdk-api-name"><code>removeListener(type, listener)</code></h4>
+
+<p>Unregisters an event listener from the widget.</p>
+
+<h5 id="Parameters_4">Parameters</h5>
+
+<p><strong>type : string</strong><br>
+ The type of event for which <code>listener</code> was registered.</p>
+
+<p><strong>listener : function</strong><br>
+ The listener function that was registered.</p>
+
+<h4 id="getView(window)" class="addon-sdk-api-name"><code>getView(window)</code></h4>
+
+<p>Retrieve a <code>WidgetView</code> instance of this widget relative to a browser window.</p>
+
+<h5 id="Parameters_5">Parameters</h5>
+
+<p><strong>window : BrowserWindow</strong><br>
+ The <a href="windows.html#BrowserWindow">BrowserWindow</a> instance to match.</p>
+
+<h5 id="Returns">Returns</h5>
+
+<p><strong>WidgetView</strong> : A <code>WidgetView</code> instance associated with the browser window. Any changes subsequently applied to this object will only be applied to the widget attached to that window.</p>
+
+<h3 id="Properties">Properties</h3>
+
+<h4 id="label" class="addon-sdk-api-name"><code>label</code></h4>
+
+<p>The widget's label. Read-only.</p>
+
+<h4 id="content" class="addon-sdk-api-name"><code>content</code></h4>
+
+<p>A string containing the widget's content. It can contain HTML. Setting it updates the widget's appearance immediately. However, if the widget was created using <code>contentURL</code>, then this property is meaningless, and setting it has no effect.</p>
+
+<h4 id="contentURL" class="addon-sdk-api-name"><code>contentURL</code></h4>
+
+<p>The URL of content to load into the widget. This can point to local content loaded from your add-on's "data" directory or remote content, an image or web content. Setting it updates the widget's appearance immediately. However, if the widget was created using <code>content</code>, then this property is meaningless, and setting it has no effect.</p>
+
+<p>Setting the <code>contentURL</code> property will break the channel of communication between this widget and any content scripts it contains. Messages sent from the content script will no longer be received by the main add-on code, and vice versa. This issue is currently tracked as <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=825434" class="external">bug 825434</a>.</p>
+
+<h4 id="panel" class="addon-sdk-api-name"><code>panel</code></h4>
+
+<p>A <a href="panel.html">panel</a> to open when the user clicks on the widget.</p>
+
+<h4 id="width" class="addon-sdk-api-name"><code>width</code></h4>
+
+<p>The widget's width in pixels. Setting it updates the widget's appearance immediately.</p>
+
+<h4 id="tooltip" class="addon-sdk-api-name"><code>tooltip</code></h4>
+
+<p>The text of the tooltip that appears when the user hovers over the widget.</p>
+
+<h4 id="allow" class="addon-sdk-api-name"><code>allow</code></h4>
+
+<p>A object describing permissions for the content. It contains a single key named <code>script</code> whose value is a boolean that indicates whether or not to execute script in the content.</p>
+
+<h4 id="contentScriptFile" class="addon-sdk-api-name"><code>contentScriptFile</code></h4>
+
+<p>A local file URL or an array of local file URLs of content scripts to load.</p>
+
+<h4 id="contentScript" class="addon-sdk-api-name"><code>contentScript</code></h4>
+
+<p>A string or an array of strings containing the texts of content scripts to load.</p>
+
+<h4 id="contentScriptWhen" class="addon-sdk-api-name"><code>contentScriptWhen</code></h4>
+
+<p>When to load the content scripts. This may have one of the following values:</p>
+
+<ul>
+ <li>"start": load content scripts immediately after the document element for the widget is inserted into the DOM, but before the DOM content itself has been loaded</li>
+ <li>"ready": load content scripts once DOM content has been loaded, corresponding to the <a href="https://developer.mozilla.org/en-US/docs/Mozilla_event_reference">DOMContentLoaded</a> event</li>
+ <li>"end": load content scripts once all the content (DOM, JS, CSS, images) for the widget has been loaded, at the time the <a href="../../../docs/Web/API/GlobalEventHandlers/onload.html">window.onload event</a> fires</li>
+</ul>
+
+<h4 id="contentScriptOptions" class="addon-sdk-api-name"><code>contentScriptOptions</code></h4>
+
+<p>Read-only value exposed to content scripts under <code>self.options</code> property.</p>
+
+<p>Any kind of jsonable value (object, array, string, etc.) can be used here. Optional.</p>
+
+<h4 id="port" class="addon-sdk-api-name"><code>port</code></h4>
+
+<p>Object that allows you to:</p>
+
+<ul>
+ <li>send events to the content script using the <code>port.emit</code> function</li>
+ <li>receive events from the content script using the <code>port.on</code> function</li>
+</ul>
+
+<p>See the guide to <a href="https://developer.mozilla.org/en-US/Add-ons/SDK/Guides/using_port"> communicating using <code>port</code></a> for details.</p>
+
+<h3 id="Events">Events</h3>
+
+<h4 id="attach" class="addon-sdk-api-name"><code>attach</code></h4>
+
+<p>This event is emitted when a browser window is opened and a new <code>WidgetView</code> object is created. If the widget has a content script, this event is fired only when the content script is applied according to the <code>contentScriptWhen</code> attribute.</p>
+
+<h5 id="Arguments">Arguments</h5>
+
+<p><strong>WidgetView</strong> : The related <code>WidgetView</code> object.</p>
+
+<h4 id="click" class="addon-sdk-api-name"><code>click</code></h4>
+
+<p>This event is emitted when the widget is clicked.</p>
+
+<h5 id="Arguments_2">Arguments</h5>
+
+<p><strong>WidgetView</strong> : Listeners are passed a single argument which is the <code>WidgetView</code> that triggered the click event.</p>
+
+<h4 id="message" class="addon-sdk-api-name"><code>message</code></h4>
+
+<p>If you listen to this event you can receive message events from content scripts associated with this widget. When a content script posts a message using <code>self.postMessage()</code>, the message is delivered to the add-on code in the widget's <code>message</code> event.</p>
+
+<h5 id="Arguments_3">Arguments</h5>
+
+<p><strong>value</strong> : Listeners are passed a single argument which is the message posted from the content script. The message can be any <a href="https://developer.mozilla.org/en-US/Add-ons/SDK/Guides/Content_Scripts/using_port#JSON-Serializable_Values">JSON-serializable value</a>.</p>
+
+<h4 id="mouseover" class="addon-sdk-api-name"><code>mouseover</code></h4>
+
+<p>This event is emitted when the user moves the mouse over the widget.</p>
+
+<h4 id="mouseout" class="addon-sdk-api-name"><code>mouseout</code></h4>
+
+<p>This event is emitted when the user moves the mouse away from the widget.</p>
+
+<h2 id="WidgetView">WidgetView</h2>
+
+<p>Represents a widget instance specific to one browser window.</p>
+
+<p>Anything you do to an instance of this object will only be applied to the instance attached to its browser window: widget instances attached to other browser windows will be unaffected.</p>
+
+<p>By contrast, any changes you make to an instance of the normal <code>Widget</code> class will be applied across all browser windows.</p>
+
+<p>This class has all the same methods, attributes and events as the <code>Widget</code> class except for the <code>getView</code> method and the <code>attach</code> event.</p>
+
+<p>In this example <code>WidgetView</code> is used to display different content for <code>http</code> and <code>https</code> schemes:</p>
+
+<pre class="brush: js">// A widget that update its content specifically to each window.
+var tabs = require("sdk/tabs");
+var windows = require("sdk/windows").browserWindows;
+var widget = require("sdk/widget").Widget({
+  id: "window-specific-test",
+  label: "Widget with content specific to each window",
+  content: " ",
+  width: 50
+});
+// Observe tab switch or document changes in each existing tab:
+function updateWidgetState(tab) {
+  var view = widget.getView(tab.window);
+  if (!view) return;
+  // Update widget displayed text:
+  view.content = tab.url.match(/^https/) ? "Secured" : "Unsafe";
+}
+tabs.on('ready', updateWidgetState);
+tabs.on('activate', updateWidgetState);</pre>
+
+<h3 id="Methods_2">Methods</h3>
+
+<h4 id="destroy()_2" class="addon-sdk-api-name"><code>destroy()</code></h4>
+
+<p>Removes the widget view from the add-on bar.</p>
+
+<h4 id="postMessage(data)_2" class="addon-sdk-api-name"><code>postMessage(data)</code></h4>
+
+<p>Sends a message to the widget view's content scripts.</p>
+
+<h5 id="Parameters_6">Parameters</h5>
+
+<p><strong>data : value</strong><br>
+ The message to send. The message can be any <a href="https://developer.mozilla.org/en-US/Add-ons/SDK/Guides/Content_Scripts/using_port#JSON-Serializable_Values">JSON-serializable value</a>.</p>
+
+<h4 id="on(type_listener)_2" class="addon-sdk-api-name"><code>on(type, listener)</code></h4>
+
+<p>Registers an event listener with the widget view.</p>
+
+<h5 id="Parameters_7">Parameters</h5>
+
+<p><strong>type : string</strong><br>
+ The type of event to listen for.</p>
+
+<p><strong>listener : function</strong><br>
+ The listener function that handles the event.</p>
+
+<h4 id="removeListener(type_listener)_2" class="addon-sdk-api-name"><code>removeListener(type, listener)</code></h4>
+
+<p>Unregisters an event listener from the widget view.</p>
+
+<h5 id="Parameters_8">Parameters</h5>
+
+<p><strong>type : string</strong><br>
+ The type of event for which <code>listener</code> was registered.</p>
+
+<p><strong>listener : function</strong><br>
+ The listener function that was registered.</p>
+
+<h3 id="Properties_2">Properties</h3>
+
+<h4 id="label_2" class="addon-sdk-api-name"><code>label</code></h4>
+
+<p>The widget view's label. Read-only.</p>
+
+<h4 id="content_2" class="addon-sdk-api-name"><code>content</code></h4>
+
+<p>A string containing the widget view's content. It can contain HTML. Setting it updates the widget view's appearance immediately. However, if the widget view was created using <code>contentURL</code>, then this property is meaningless, and setting it has no effect.</p>
+
+<h4 id="contentURL_2" class="addon-sdk-api-name"><code>contentURL</code></h4>
+
+<p>The URL of content to load into the widget. This can point to local content loaded from your add-on's "data" directory or remote content, an image or web content. Setting it updates the widget's appearance immediately. However, if the widget was created using <code>content</code>, then this property is meaningless, and setting it has no effect.</p>
+
+<p>Setting the <code>contentURL</code> property will break the channel of communication between this widget and any content scripts it contains. Messages sent from the content script will no longer be received by the main add-on code, and vice versa. This issue is currently tracked as <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=825434" class="external">bug 825434</a>.</p>
+
+<h4 id="panel_2" class="addon-sdk-api-name"><code>panel</code></h4>
+
+<p>A <a href="panel.html">panel</a> to open when the user clicks on the widget view.</p>
+
+<h4 id="width_2" class="addon-sdk-api-name"><code>width</code></h4>
+
+<p>The widget view's width in pixels. Setting it updates the widget view's appearance immediately.</p>
+
+<h4 id="tooltip_2" class="addon-sdk-api-name"><code>tooltip</code></h4>
+
+<p>The text of the tooltip that appears when the user hovers over the widget view.</p>
+
+<h4 id="allow_2" class="addon-sdk-api-name"><code>allow</code></h4>
+
+<p>A object describing permissions for the content. It contains a single key named <code>script</code> whose value is a boolean that indicates whether or not to execute script in the content.</p>
+
+<h4 id="contentScriptFile_2" class="addon-sdk-api-name"><code>contentScriptFile</code></h4>
+
+<p>A local file URL or an array of local file URLs of content scripts to load.</p>
+
+<h4 id="contentScript_2" class="addon-sdk-api-name"><code>contentScript</code></h4>
+
+<p>A string or an array of strings containing the texts of content scripts to load.</p>
+
+<h4 id="contentScriptWhen_2" class="addon-sdk-api-name"><code>contentScriptWhen</code></h4>
+
+<p>When to load the content scripts. This may have one of the following values:</p>
+
+<ul>
+ <li>"start": load content scripts immediately after the document element for the widget view is inserted into the DOM, but before the DOM content itself has been loaded</li>
+ <li>"ready": load content scripts once DOM content has been loaded, corresponding to the <a href="https://developer.mozilla.org/en-US/docs/Mozilla_event_reference">DOMContentLoaded</a> event</li>
+ <li>"end": load content scripts once all the content (DOM, JS, CSS, images) for the widget view has been loaded, at the time the <a href="../../../docs/Web/API/GlobalEventHandlers/onload.html">window.onload event</a> fires</li>
+</ul>
+
+<h4 id="contentScriptOptions_2" class="addon-sdk-api-name"><code>contentScriptOptions</code></h4>
+
+<p>Read-only value exposed to content scripts under <code>self.options</code> property.</p>
+
+<p>Any kind of jsonable value (object, array, string, etc.) can be used here. Optional.</p>
+
+<h4 id="port_2" class="addon-sdk-api-name"><code>port</code></h4>
+
+<p>Object that allows you to:</p>
+
+<ul>
+ <li>send events to the content script using the <code>port.emit</code> function</li>
+ <li>receive events from the content script using the <code>port.on</code></li>
+</ul>
+
+<p>See the guide to <a href="https://developer.mozilla.org/en-US/Add-ons/SDK/Guides/using_port"> communicating using <code>port</code></a> for details.</p>
+
+<h3 id="Events_2">Events</h3>
+
+<h4 id="detach" class="addon-sdk-api-name"><code>detach</code></h4>
+
+<p>The <code>detach</code> event is fired when the widget view is removed from its related window. This can occur if the window is closed, Firefox exits, or the add-on is disabled.</p>
+
+<h4 id="click_2" class="addon-sdk-api-name"><code>click</code></h4>
+
+<p>This event is emitted when the widget view is clicked.</p>
+
+<h4 id="message_2" class="addon-sdk-api-name"><code>message</code></h4>
+
+<p>If you listen to this event you can receive message events from content scripts associated with this widget view. When a content script posts a message using <code>self.postMessage()</code>, the message is delivered to the add-on code in the widget view's <code>message</code> event.</p>
+
+<h5 id="Arguments_4">Arguments</h5>
+
+<p><strong>value</strong> : Listeners are passed a single argument which is the message posted from the content script. The message can be any <a href="https://developer.mozilla.org/en-US/Add-ons/SDK/Guides/Content_Scripts/using_port#JSON-Serializable_Values">JSON-serializable value</a>.</p>
+
+<h4 id="mouseover_2" class="addon-sdk-api-name"><code>mouseover</code></h4>
+
+<p>This event is emitted when the user moves the mouse over the widget view.</p>
+
+<h4 id="mouseout_2" class="addon-sdk-api-name"><code>mouseout</code></h4>
+
+<p>This event is emitted when the user moves the mouse away from the widget view.</p>
+                  
+                
+              </article>
+
+              
+
+    
+    
+    
+
+    
+    
+    
+
+    <div class="share">
+        <strong>Share:</strong>
+        <ul>
+            <li><a href="http://twitter.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FMozilla%2FAdd-ons%2FSDK%2FHigh-Level_APIs%2Fwidget%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dtwitter.com&amp;text=I+learned+about+widget+on+MDN." target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/SDK/High-Level_APIs/widget?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=twitter.com" data-title="I learned about widget on MDN." class="share-link twitter"><i aria-hidden="true" class="icon-twitter"></i>Twitter</a></li>
+            <li><a href="http://facebook.com/sharer.php?s=100&amp;p[url]=https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/SDK/High-Level_APIs/widget?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/SDK/High-Level_APIs/widget?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" data-title="I learned about widget on MDN." class="share-link facebook"><i aria-hidden="true" class="icon-facebook"></i>Facebook</a></li>
+            <li><a href="https://plus.google.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FMozilla%2FAdd-ons%2FSDK%2FHigh-Level_APIs%2Fwidget%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dplus.google.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/SDK/High-Level_APIs/widget?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=plus.google.com" data-title="I learned about widget on MDN." class="share-link gplus"><i aria-hidden="true" class="icon-google-plus"></i>Google+</a></li>
+        </ul>
+    </div>
+
+              
+
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                  
+                  
+  <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags icon-fw"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Add-on SDK">Add-on SDK</a></li>
+      
+    </ul>
+  </div>
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-group icon-fw"></i>&nbsp;<strong>Contributors to this page:</strong> 
+        <a href="https://developer.mozilla.org/en-US/profiles/wbamberg">wbamberg</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Canuckistani">Canuckistani</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/evold">evold</a>
+    
+                    </div>
+                  
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o icon-fw"></i>&nbsp;<strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/wbamberg">wbamberg</a>,
+                      <time datetime="2016-01-15T10:00:28-08:00">Jan 15, 2016, 10:00:28 AM</time>
+                    </div>
+                  
+                </div>
+              
+            </div>
+
+            
+              <!-- quick links and zone subnav strip -->
+              <div id="wiki-left" class="column-strip wiki-column">
+
+              
+
+                
+
+                
+                  <!-- quick links -->
+                  
+  <div class="quick-links" id="quick-links">
+    <div class="title see-also">See also</div>
+     
+  <ol> 
+    <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions"><strong>WebExtensions</strong></a></li> 
+ 
+    <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions#Getting_started">Getting started</a> 
+      <ol> 
+        <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Prerequisites">Prerequisites</a></li> 
+        <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Anatomy_of_a_WebExtension">Anatomy of a WebExtension</a></li> 
+        <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Packaging_and_Installation">Packaging and Installation</a> 
+        </li><li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Walkthrough">Walkthrough</a> 
+        </li><li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Examples">Examples</a> 
+      </li></ol> 
+    </li> 
+     
+    <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions#Guides">Guides</a> 
+      <ol> 
+        <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Content_scripts">Content scripts</a></li> 
+        <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Porting_from_Google_Chrome">Porting from Google Chrome</a> 
+        </li><li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Match_patterns">Match patterns</a> 
+        </li><li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Debugging">Debugging</a></li> 
+        <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Chrome_incompatibilities">Chrome incompatibilities</a> 
+      </li></ol> 
+    </li>   
+     
+    <li data-default-state="closed"><a href="../../WebExtensions/API.html">JavaScript APIs</a> 
+     <ol><li><a href="../../WebExtensions/API/alarms.html">alarms</a></li><li><a href="../../WebExtensions/API/bookmarks.html">bookmarks</a></li><li><a href="../../WebExtensions/API/browserAction.html">browserAction</a></li><li><a href="../../WebExtensions/API/contextMenus.html">contextMenus</a></li><li><a href="../../WebExtensions/API/cookies.html">cookies</a></li><li><a href="../../../docs/Mozilla/Add-ons/WebExtensions/API/events.png">events</a></li><li><a href="../../WebExtensions/API/extension.html">extension</a></li><li><a href="../../WebExtensions/API/extensionTypes.html">extensionTypes</a></li><li><a href="../../WebExtensions/API/i18n.html">i18n</a></li><li><a href="../../WebExtensions/API/idle.html">idle</a></li><li><a href="../../../docs/Mozilla/Add-ons/WebExtensions/API/notifications.png">notifications</a></li><li><a href="../../WebExtensions/API/pageAction.html">pageAction</a></li><li><a href="../../WebExtensions/API/runtime.html">runtime</a></li><li><a href="../../WebExtensions/API/storage.html">storage</a></li><li><a href="../../WebExtensions/API/tabs.html">tabs</a></li><li><a href="../../WebExtensions/API/webNavigation.html">webNavigation</a></li><li><a href="../../WebExtensions/API/webRequest.html">webRequest</a></li><li><a href="../../WebExtensions/API/windows.html">windows</a></li></ol> 
+    </li> 
+     
+    <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json">Manifest keys</a> 
+    <ol><li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/applications">applications</a></li><li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/background">background</a></li><li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/browser_action">browser_action</a></li><li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/content_scripts">content_scripts</a></li><li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/default_locale">default_locale</a></li><li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/description">description</a></li><li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/icons">icons</a></li><li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/manifest_version">manifest_version</a></li><li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/name">name</a></li><li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/page_action">page action</a></li><li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/permissions">permissions</a></li><li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/version">version</a></li><li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/web_accessible_resources">web_accessible_resources</a></li></ol> 
+    </li> 
+     
+    <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/Add-on_SDK"><strong>Add-on SDK</strong></a></li> 
+    <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions#Getting_started">Getting started</a> 
+      <ol> 
+        <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/SDK/Tutorials/Installation">Installation</a></li> 
+        <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/SDK/Tutorials/Getting_started">Getting started</a></li> 
+        <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/SDK/Tutorials/Troubleshooting">Troubleshooting</a></li> 
+      </ol> 
+    </li> 
+     
+    <li data-default-state="open"><a href="../High-Level_APIs.html">High-Level APIs</a> 
+      <ol><li><a href="addon-page.html">addon-page</a></li><li><a href="base64.html">base64</a></li><li><a href="clipboard.html">clipboard</a></li><li><a href="context-menu.html">context-menu</a></li><li><a href="hotkeys.html">hotkeys</a></li><li><a href="indexed-db.html">indexed-db</a></li><li><a href="l10n.html">l10n</a></li><li><a href="notifications.html">notifications</a></li><li><a href="page-mod.html">page-mod</a></li><li><a href="page-worker.html">page-worker</a></li><li><a href="panel.html">panel</a></li><li><a href="passwords.html">passwords</a></li><li><a href="private-browsing.html">private-browsing</a></li><li><a href="querystring.html">querystring</a></li><li><a href="request.html">request</a></li><li><a href="selection.html">selection</a></li><li><a href="self.html">self</a></li><li><a href="simple-prefs.html">simple-prefs</a></li><li><a href="simple-storage.html">simple-storage</a></li><li><a href="system.html">system</a></li><li><a href="tabs.html">tabs</a></li><li><a href="timers.html">timers</a></li><li><a href="ui.html">ui</a></li><li><a href="url.html">url</a></li><li><a href="widget.html">widget</a></li><li><a href="windows.html">windows</a></li></ol> 
+    </li> 
+    <li data-default-state="closed"><a href="../../../docs/Mozilla/Add-ons/SDK/Low-Level_APIs.png">Low-Level APIs</a> 
+      <ol><li><a href="../Low-Level_APIs/_loader.html">/loader</a></li><li><a href="../Low-Level_APIs/chrome.html">chrome</a></li><li><a href="../Low-Level_APIs/console_plain-text.html">console/plain-text</a></li><li><a href="../Low-Level_APIs/console_traceback.html">console/traceback</a></li><li><a href="../Low-Level_APIs/content_content.html">content/content</a></li><li><a href="../Low-Level_APIs/content_loader.html">content/loader</a></li><li><a href="../Low-Level_APIs/content_mod.html">content/mod</a></li><li><a href="../Low-Level_APIs/content_symbiont.html">content/symbiont</a></li><li><a href="../Low-Level_APIs/content_worker.html">content/worker</a></li><li><a href="../Low-Level_APIs/core_heritage.html">core/heritage</a></li><li><a href="../Low-Level_APIs/core_namespace.html">core/namespace</a></li><li><a href="../Low-Level_APIs/core_promise.html">core/promise</a></li><li><a href="../Low-Level_APIs/dev_panel.html">dev/panel</a></li><li><a href="../Low-Level_APIs/event_core.html">event/core</a></li><li><a href="../Low-Level_APIs/event_target.html">event/target</a></li><li><a href="../Low-Level_APIs/frame_hidden-frame.html">frame/hidden-frame</a></li><li><a href="../Low-Level_APIs/frame_utils.html">frame/utils</a></li><li><a href="../Low-Level_APIs/fs_path.html">fs/path</a></li><li><a href="../Low-Level_APIs/io_byte-streams.html">io/byte-streams</a></li><li><a href="../Low-Level_APIs/io_file.html">io/file</a></li><li><a href="../Low-Level_APIs/io_text-streams.html">io/text-streams</a></li><li><a href="../Low-Level_APIs/lang_functional.html">lang/functional</a></li><li><a href="../Low-Level_APIs/lang_type.html">lang/type</a></li><li><a href="../Low-Level_APIs/loader_cuddlefish.html">loader/cuddlefish</a></li><li><a href="../Low-Level_APIs/loader_sandbox.html">loader/sandbox</a></li><li><a href="../Low-Level_APIs/net_url.html">net/url</a></li><li><a href="../Low-Level_APIs/net_xhr.html">net/xhr</a></li><li><a href="../Low-Level_APIs/places_bookmarks.html">places/bookmarks</a></li><li><a href="../Low-Level_APIs/places_favicon.html">places/favicon</a></li><li><a href="../Low-Level_APIs/places_history.html">places/history</a></li><li><a href="../Low-Level_APIs/platform_xpcom.html">platform/xpcom</a></li><li><a href="../Low-Level_APIs/preferences_event-target.html">preferences/event-target</a></li><li><a href="../Low-Level_APIs/preferences_service.html">preferences/service</a></li><li><a href="../Low-Level_APIs/remote_child.html">remote/child</a></li><li><a href="../Low-Level_APIs/remote_parent.html">remote/parent</a></li><li><a href="../Low-Level_APIs/stylesheet_style.html">stylesheet/style</a></li><li><a href="../Low-Level_APIs/stylesheet_utils.html">stylesheet/utils</a></li><li><a href="../Low-Level_APIs/system_child_process.html">system/child_process</a></li><li><a href="../Low-Level_APIs/system_environment.html">system/environment</a></li><li><a href="../Low-Level_APIs/system_events.html">system/events</a></li><li><a href="../Low-Level_APIs/system_runtime.html">system/runtime</a></li><li><a href="../Low-Level_APIs/system_unload.html">system/unload</a></li><li><a href="../Low-Level_APIs/system_xul-app.html">system/xul-app</a></li><li><a href="../Low-Level_APIs/tabs_utils.html">tabs/utils</a></li><li><a href="../Low-Level_APIs/test_assert.html">test/assert</a></li><li><a href="../Low-Level_APIs/test_harness.html">test/harness</a></li><li><a href="../Low-Level_APIs/test_httpd.html">test/httpd</a></li><li><a href="../Low-Level_APIs/test_runner.html">test/runner</a></li><li><a href="../Low-Level_APIs/test_utils.html">test/utils</a></li><li><a href="../Low-Level_APIs/ui_button_action.html">ui/button/action</a></li><li><a href="../Low-Level_APIs/ui_button_toggle.html">ui/button/toggle</a></li><li><a href="../Low-Level_APIs/ui_frame.html">ui/frame</a></li><li><a href="../Low-Level_APIs/ui_id.html">ui/id</a></li><li><a href="../Low-Level_APIs/ui_sidebar.html">ui/sidebar</a></li><li><a href="../Low-Level_APIs/ui_toolbar.html">ui/toolbar</a></li><li><a href="../Low-Level_APIs/util_array.html">util/array</a></li><li><a href="../Low-Level_APIs/util_collection.html">util/collection</a></li><li><a href="../Low-Level_APIs/util_deprecate.html">util/deprecate</a></li><li><a href="../Low-Level_APIs/util_list.html">util/list</a></li><li><a href="../Low-Level_APIs/util_match-pattern.html">util/match-pattern</a></li><li><a href="../Low-Level_APIs/util_object.html">util/object</a></li><li><a href="../Low-Level_APIs/util_uuid.html">util/uuid</a></li><li><a href="../Low-Level_APIs/window_utils.html">window/utils</a></li></ol> 
+    </li>  
+ 
+    <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/Firefox_for_Android"><strong>Firefox for Android</strong></a></li> 
+    <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/Firefox_for_Android">Getting started</a> 
+      <ol> 
+        <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/Firefox_for_Android/Walkthrough">Walkthrough</a></li> 
+        <li><a href="en-US/docs/Tools/Remote_Debugging/Debugging_Firefox_for_Android_with_WebIDE.html">Debugging</a></li> 
+        <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/Firefox_for_Android/Code_snippets">Code snippets</a></li> 
+      </ol> 
+    </li> 
+ 
+    <li><a href="../../../docs/Mozilla/Add-ons/Firefox_for_Android/API.png">APIs</a> 
+      <ol><li><a href="../../Firefox_for_Android/API/Accounts.html">Accounts.jsm</a></li><li><a href="../../Firefox_for_Android/API/BrowserApp.html">BrowserApp</a></li><li><a href="../../Firefox_for_Android/API/HelperApps.html">HelperApps.jsm</a></li><li><a href="../../../docs/Mozilla/Add-ons/Firefox_for_Android/API/Home.png">Home.jsm</a></li><li><a href="../../Firefox_for_Android/API/HomeProvider.html">HomeProvider.jsm</a></li><li><a href="../../Firefox_for_Android/API/JavaAddonManager.html">JavaAddonManager.jsm</a></li><li><a href="../../../docs/Mozilla/Add-ons/Firefox_for_Android/API/NativeWindow.png">NativeWindow</a></li><li><a href="../../Firefox_for_Android/API/Notifications.html">Notifications.jsm</a></li><li><a href="../../Firefox_for_Android/API/PageActions.html">PageActions.jsm</a></li><li><a href="../../Firefox_for_Android/API/Prompt.html">Prompt.jsm</a></li><li><a href="../../Firefox_for_Android/API/Snackbars.html">Snackbars.jsm</a></li><li><a href="../../Firefox_for_Android/API/Sound.html">Sound.jsm</a></li><li><a href="../../Firefox_for_Android/API/Tab.html">Tab</a></li></ol> 
+    </li>  
+ 
+    <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/Legacy"><strong>Legacy</strong></a></li> 
+     
+    <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/Bootstrapped_Extensions">Restartless extensions</a> 
+      <ol> 
+        <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/Bootstrapped_extensions">Overview</a></li> 
+      </ol> 
+    </li> 
+    <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/Overlay_Extensions">Overlay extensions</a> 
+      <ol> 
+        <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/Overlay_Extensions">Overview</a></li> 
+      </ol> 
+    </li> 
+ 
+    <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/Themes"><strong>Themes</strong></a></li> 
+     
+    <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/Themes/Background">Lightweight themes</a> 
+      <ol> 
+        <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/Themes/Background">Overview</a></li> 
+      </ol> 
+    </li> 
+    <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/Themes/Complete_themes">Complete themes</a> 
+      <ol> 
+        <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/Themes">Overview</a></li> 
+      </ol> 
+    </li> 
+ 
+    <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/Distribution"><strong>Publishing add-ons</strong></a></li> 
+    <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/Distribution">Guides</a> 
+      <ol> 
+        <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/Distribution">Signing and distribution overview</a></li> 
+        <li><a href="https://addons.mozilla.org/developers/addon/submit/">Submit an add-on</a></li> 
+        <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/AMO/Policy/Reviews">Review policies</a></li> 
+        <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/AMO/Policy/Agreement">Developer agreement</a></li> 
+        <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/AMO/Policy/Featured">Featured add-ons</a></li> 
+        <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/AMO/Policy/Contact">Contact addons.mozilla.org</a></li> 
+      </ol> 
+    </li> 
+ 
+    <li><a href="https://discourse.mozilla-community.org/c/add-ons"><strong>Community and support</strong></a></li> 
+    <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/Channels">Channels</a> 
+      <ol> 
+        <li><a href="https://blog.mozilla.org/addons">Add-ons blog</a></li> 
+        <li><a href="https://discourse.mozilla-community.org/c/add-ons">Add-on forums</a></li> 
+        <li><a href="http://stackoverflow.com/questions/tagged/firefox-addon">Stack Overflow</a></li> 
+        <li><a href="https://groups.google.com/forum/#!forum/mozilla.dev.extensions">Development newsgroup</a></li> 
+        <li><a href="irc://irc.mozilla.org/extdev">IRC Channel</a></li> 
+      </ol> 
+    </li> 
+  </ol> 
+
+  </div>
+                
+
+                <!-- approvals -->
+                
+
+              
+
+              </div>
+            
+          </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Mozilla/Add-ons/SDK/High-Level_APIs/widget$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Mozilla/Add-ons/SDK/High-Level_APIs/widget$history" label="View page history"></menuitem>
+  </menu>
+
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+        
+        <div class="contentinfo">
+          <p>© 2005-2016 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>
+          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+        
+        </div>
+      </div>
+      <div class="column-strip">
+        
+          
+  
+
+        
+      </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+  
+    
+    <!--[if lte IE 8]><script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/selectivizr.091e18cf669b.js" charset="utf-8"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script type="text/javascript" src="../../../../../developer.cdn.mozilla.net/static/build/js/main.a7b27a25fb9c.js" charset="utf-8"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+    
+    <script async="" type="text/javascript" src="../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../developer.cdn.mozilla.net/static/build/js/syntax-prism-min.js" charset="utf-8"></script><script type="text/javascript" src="../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../developer.cdn.mozilla.net/static/build/js/wiki.bd71ca9fd27d.js" charset="utf-8" id="wikiscript"></script>
+
+  
+
+  <script async="" type="text/javascript" src="../../../../../developer.cdn.mozilla.net/static/build/js/helpfulness.7b208a764d28.js" charset="utf-8"></script>
+
+  
+    <script type="text/javascript">
+        (function($) {
+            $('#wikiArticle').children('h2[id]').each(function() {
+                var id = $(this).attr('id');
+                var href = '/en-US/docs/Mozilla/Add-ons/SDK/High-Level_APIs/widget$edit#' + id;
+
+                $('<a>').attr({
+                    href: href,
+                    'class': 'button section-edit only-icon'
+                })
+                .append($('<i aria-hidden="true" class="icon-pencil"></i>'))
+                .append($('<span>'))
+                .find('span')
+                .text(gettext('Edit'))
+                .end()
+                .on('click', function(e) {
+                    e.preventDefault();
+
+                    mdn.analytics.trackEvent({
+                        category: 'Section Edit',
+                        action: id
+                    }, function() {
+                        window.location = href;
+                    });
+                })
+                .appendTo(this);
+            });
+        })(jQuery);
+    </script>
+  
+
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/Add-ons/SDK/High-Level_APIs/widget by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 17:26:09 GMT -->
+</body></html>

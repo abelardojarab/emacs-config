@@ -1,0 +1,938 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/Web/Events/DOMContentLoaded by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 14:52:01 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <script async="" src="../../../../../www.google-analytics.com/analytics.js"></script><script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+  
+    
+  
+
+  
+  <title>DOMContentLoaded</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+  
+    
+    
+    <link href="../../../../../developer.cdn.mozilla.net/static/build/styles/mdn.593f20d8c365.css" rel="stylesheet" type="text/css">
+
+    
+  
+    <link href="../../../../../developer.cdn.mozilla.net/static/build/styles/wiki.13dd9abdfb62.css" rel="stylesheet" type="text/css">
+
+    
+
+    
+
+  <!-- common social tags -->
+  
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../developer.cdn.mozilla.net/static/img/favicon144.a6e4162070f4.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../developer.cdn.mozilla.net/static/img/favicon114.0e9fabd44f85.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../developer.cdn.mozilla.net/static/img/favicon72.8ff9d87c82a0.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../developer.cdn.mozilla.net/static/img/favicon57.a2490b9a2d76.png">
+  <!-- basic favicon -->
+  
+    
+  
+  <link rel="shortcut icon" href="../../../../../developer.cdn.mozilla.net/static/img/favicon32.e02854fdcf73.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/html5shiv.3948ccddab6f.js" charset="utf-8"></script>
+  <![endif]-->
+
+  
+  <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Web/Events/DOMContentLoaded$json">
+  <link rel="canonical" href="DOMContentLoaded.html">
+
+  
+    
+      <link rel="alternate" hreflang="fr" href="../../../../fr/docs/Web/Events/DOMContentLoaded.html" title="DOMContentLoaded">
+    
+      <link rel="alternate" hreflang="ja" href="../../../../ja/docs/Web/Reference/Events/DOMContentLoaded.html" title="DOMContentLoaded">
+    
+      <link rel="alternate" hreflang="pt-BR" href="../../../../pt-BR/docs/Web/Events/DOMContentLoaded.html" title="DOMContentLoaded">
+    
+      <link rel="alternate" hreflang="zh-CN" href="../../../../zh-CN/docs/Web/Events/DOMContentLoaded.html" title="DOMContentLoaded">
+    
+      <link rel="alternate" hreflang="zh-TW" href="../../../../zh-TW/docs/Web/Reference/Events/DOMContentLoaded.html" title="DOMContentLoaded">
+    
+  
+
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="DOMContentLoaded">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Web/Events/DOMContentLoaded">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Web/Events/DOMContentLoaded">
+  <meta name="twitter:title" content="DOMContentLoaded">
+  
+  <meta property="og:description" content="The DOMContentLoaded event is fired when the initial HTML document has been completely loaded and parsed, without waiting for stylesheets, images, and subframes to finish loading.&nbsp;A very different event - load -&nbsp;should be used only to detect a fully-loaded page. It is an incredibly popular mistake to use load where DOMContentLoaded would be much more appropriate, so be cautious.">
+  <meta name="description" content="The DOMContentLoaded event is fired when the initial HTML document has been completely loaded and parsed, without waiting for stylesheets, images, and subframes to finish loading.&nbsp;A very different event - load -&nbsp;should be used only to detect a fully-loaded page. It is an incredibly popular mistake to use load where DOMContentLoaded would be much more appropriate, so be cautious.">
+  <meta name="twitter:description" content="The DOMContentLoaded event is fired when the initial HTML document has been completely loaded and parsed, without waiting for stylesheets, images, and subframes to finish loading.&nbsp;A very different event - load -&nbsp;should be used only to detect a fully-loaded page. It is an incredibly popular mistake to use load where DOMContentLoaded would be much more appropriate, so be cautious.">
+  
+
+  
+    
+
+
+
+  
+</head>
+<body data-slug="Web/Events/DOMContentLoaded" contextmenu="edit-history-menu" data-search-url="" class="document  ">
+
+  <script type="text/javascript">
+    (function(win) {
+        'use strict';
+
+        
+            (function(){
+  var FLAGS = {
+    'compat_api': false,'kumaediting': false,'page_move': false,'registration_disabled': false,'search_suggestions': false,'section_edit': true,'spam_admin_override': false,'spam_checks_enabled': true,'spam_spammer_override': false,'spam_submissions_enabled': false,'spam_testing_mode': false,'wiki_samples': true,'wiki_spam_exempted': false,'wiki_spam_training': true
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': true,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+
+        // This needs to be set before ckeditor.js loads
+        window.CKEDITOR_BASEPATH = 'https://developer.mozilla.org/static/js/libs/ckeditor/build/ckeditor/';
+
+        // This represents the site configuration
+        win.mdn = {
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+            
+            notifications: [],
+            
+            // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            },
+            // Assets that need to be dynamically injected
+            assets_disabled: {
+                css: {
+                    'editor-content': ['https://developer.cdn.mozilla.net/static/build/styles/editor-content.3d79df72080d.css',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/styles/wiki-compat-tables.f3a3bfce97a1.css',]
+                },
+                js: {
+                    'syntax-prism': ['https://developer.cdn.mozilla.net/static/build/js/syntax-prism.7a66ddfa68bf.js',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/js/wiki-compat-tables.14ce5dcb2c3d.js',]
+                }
+            }
+        };
+    })(this);
+</script>
+
+  
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+    
+      <li><a href="#q" id="skip-search">Skip to search</a></li>
+    
+  </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+    <a href="https://developer.mozilla.org/en-US/" class="logo">Mozilla Developer Network</a>
+
+    <div id="nav-sec">
+        
+                  <ul>
+                  <li>
+
+    
+
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                Sign in
+              </span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FEvents%2FDOMContentLoaded" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/Web/Events/DOMContentLoaded" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/Web/Events/DOMContentLoaded" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FEvents%2FDOMContentLoaded" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+              
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+        
+    </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+
+   <!-- end is_zone -->
+
+    <div class="wiki-main-content" id="document-main"><div class="center">
+      
+      <div class="article-meta">
+        <!-- action buttons -->
+        
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+  <ul class="page-buttons" data-sticky="false">
+      
+      <li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+              
+                
+                  <li><bdi><a rel="internal" href="../../../../fr/docs/Web/Events/DOMContentLoaded.html" title="DOMContentLoaded">Français</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="../../../../ja/docs/Web/Reference/Events/DOMContentLoaded.html" title="DOMContentLoaded">日本語</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="../../../../pt-BR/docs/Web/Events/DOMContentLoaded.html" title="DOMContentLoaded">Português (do&nbsp;Brasil)</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="../../../../zh-CN/docs/Web/Events/DOMContentLoaded.html" title="DOMContentLoaded">中文 (简体)</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="../../../../zh-TW/docs/Web/Reference/Events/DOMContentLoaded.html" title="DOMContentLoaded">正體中文 (繁體)</a></bdi></li>
+                
+              
+
+              
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/Events/DOMContentLoaded$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+              
+            </ul>
+          </div>
+        </div>
+      </li>
+
+      <li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Web/Events/DOMContentLoaded$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li>
+
+        
+
+        <li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/Events/DOMContentLoaded$history" rel="nofollow, noindex">History</a></li>
+                
+                
+                
+                
+
+                
+
+                
+                
+                
+                <li class="page-print"><a href="#" onclick="return window.print();">Print this article</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+        
+  <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web" rel="v:url" property="v:title">Web technology for developers</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="../Events.html" rel="v:url" property="v:title">Event reference</a></li>
+    
+    <li class="crumb" typeof="v:Breadcrumb" property="v:title">DOMContentLoaded</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        
+        <div class="contributor-avatars" data-all-text="see all contributors" data-alternate-message="hide contributors" data-has-hidden="1">
+            <ul>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/teoli" title="View profile: teoli">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="teoli" data-src="../../../../../secure.gravatar.com/avatar/d0d90148e08e3b64ccf75c46f31442c56c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">teoli</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/RandallFlagg" title="View profile: RandallFlagg">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="RandallFlagg" data-src="../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">RandallFlagg</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Sebastianz" title="View profile: Sebastianz">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Sebastianz" data-src="../../../../../secure.gravatar.com/avatar/337fa9c543a4f881977b6d2fbbd2dea86c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Sebastianz</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/gtrufitt" title="View profile: gtrufitt">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="gtrufitt" data-src="../../../../../secure.gravatar.com/avatar/a959afc1b4415ada875f4d3eaa8891326c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">gtrufitt</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/ibmua" title="View profile: ibmua">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="ibmua" data-src="../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">ibmua</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/ribeirobreno" title="View profile: ribeirobreno">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="ribeirobreno" data-src="../../../../../secure.gravatar.com/avatar/058b7c45db9717a3de321d49c909d7436c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">ribeirobreno</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Alhadis" title="View profile: Alhadis">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Alhadis" data-src="../../../../../secure.gravatar.com/avatar/ed9bd09e90afd13633429b5d482b11356c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Alhadis</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/rwaldron" title="View profile: rwaldron">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="rwaldron" data-src="../../../../../secure.gravatar.com/avatar/36c697d974542aadaee06a0f39cb14376c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">rwaldron</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/davidmark" title="View profile: davidmark">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="davidmark" data-src="../../../../../secure.gravatar.com/avatar/3a96580041f54b7b606e0248372780186c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">davidmark</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/tregagnon" title="View profile: tregagnon">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="tregagnon" data-src="../../../../../secure.gravatar.com/avatar/8431892ef37f88fe820096de721c00ba6c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">tregagnon</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/gentooboontoo" title="View profile: gentooboontoo">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="gentooboontoo" data-src="../../../../../secure.gravatar.com/avatar/f4610d2a094fc6bcaf235d190b8dae796c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">gentooboontoo</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Sheppy" title="View profile: Sheppy">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Sheppy" data-src="../../../../../secure.gravatar.com/avatar/945076feb88f2d7003891ffbf06f32bf6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Sheppy</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Daniel Hug" title="View profile: Daniel Hug">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Daniel Hug" data-src="../../../../../secure.gravatar.com/avatar/12ce9b9ec9f98fdbe2b3c47eedfbfcc96c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Daniel Hug</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Jeremie" title="View profile: Jeremie">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Jeremie" data-src="../../../../../secure.gravatar.com/avatar/ea74cf7f528273838138e9ae407cd8ef6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Jeremie</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/ethertank" title="View profile: ethertank">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="ethertank" data-src="../../../../../secure.gravatar.com/avatar/abac73ba2093b500bf7599c76d80280c6c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">ethertank</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/enderandpeter" title="View profile: enderandpeter">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="enderandpeter" data-src="../../../../../secure.gravatar.com/avatar/e272c067cd5fe72f2992b1667340956b6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">enderandpeter</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/louisremi" title="View profile: louisremi">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="louisremi" data-src="../../../../../secure.gravatar.com/avatar/1d924ae6b834d2c43d313a94137ac6fe6c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">louisremi</noscript></a>
+                </li>
+            
+            </ul>
+        </div>
+        
+
+        <h1>DOMContentLoaded</h1>
+
+      </div>
+      
+
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-present">
+
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+            
+              <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+              
+              <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#Speeding_up" rel="internal">Speeding up</a></li><li><a href="#General_info" rel="internal">General info</a></li><li><a href="#Properties" rel="internal">Properties</a></li><li><a href="#Example" rel="internal">Example</a></li><li><a href="#Browser_compatibility" rel="internal">Browser compatibility</a></li><li><a href="#Related_Events" rel="internal">Related Events</a>
+                </li></ol>
+              </div>
+              
+              </div>
+            
+
+            
+            
+              
+            
+
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-half wiki-column text-content">
+
+              
+
+              
+
+              
+                
+                
+                
+              
+              
+
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                
+                  
+                    <p></p><section id="Quick_Links" class="Quick_links"><!-- --></section><p></p>
+
+<p>The <code>DOMContentLoaded</code> event is fired when the initial HTML document has been completely loaded and parsed, without waiting for stylesheets, images, and subframes to finish loading.&nbsp;A very different event -&nbsp;<a href="https://developer.mozilla.org/en-US/docs/Mozilla_event_reference/load"><code>load</code></a>&nbsp;-&nbsp;should be used only to detect a fully-loaded page. It is an incredibly popular mistake to use <a href="https://developer.mozilla.org/en-US/docs/Mozilla_event_reference/load"><code>load</code></a> where <code>DOMContentLoaded</code> would be much more appropriate, so be cautious.</p>
+
+<p></p><div class="note"><strong>Note:</strong>&nbsp;Synchronous Javascript pauses parsing of the DOM.</div><p></p>
+
+<p></p><div class="note"><strong>Note:</strong>&nbsp;There are also plenty of general-purpose and standalone libraries who offer cross-browser methods to detect that the DOM is ready.</div><p></p>
+
+<h2 id="Speeding_up">Speeding up</h2>
+
+<p>If you want DOM to get parsed as fast as possible after the user had requested the page, some things you could do is turn your <a href="../API/XMLHttpRequest/Synchronous_and_Asynchronous_Requests.html">JavaScript asynchronous</a> and to <a href="https://developers.google.com/speed/docs/insights/OptimizeCSSDelivery" class="external">optimize loading of stylesheets</a> which if used as usual, slow down page load due to being loaded in parallel, "stealing" traffic from the main html document.</p>
+
+<h2 id="General_info">General info</h2>
+
+<dl>
+ <dt style="width: 120px; text-align: right; float: left;">Specification</dt>
+ <dd style="margin: 0px 0px 0px 120px;"><a href="http://www.whatwg.org/specs/web-apps/current-work/multipage/the-end.html#the-end" class="external">HTML5</a></dd>
+ <dt style="width: 120px; text-align: right; float: left;">Interface</dt>
+ <dd style="margin: 0px 0px 0px 120px;">Event</dd>
+ <dt style="width: 120px; text-align: right; float: left;">Bubbles</dt>
+ <dd style="margin: 0px 0px 0px 120px;">Yes</dd>
+ <dt style="width: 120px; text-align: right; float: left;">Cancelable</dt>
+ <dd style="margin: 0px 0px 0px 120px;">Yes (although specified as a simple event that isn't cancelable)</dd>
+ <dt style="width: 120px; text-align: right; float: left;">Target</dt>
+ <dd style="margin: 0px 0px 0px 120px;">Document</dd>
+ <dt style="width: 120px; text-align: right; float: left;">Default Action</dt>
+ <dd style="margin: 0px 0px 0px 120px;">None.</dd>
+</dl>
+
+<h2 id="Properties">Properties</h2>
+
+<p></p><table class="standard-table"> 
+  <thead> 
+    <tr> 
+      <th scope="col">Property</th> 
+      <th scope="col">Type</th> 
+      <th scope="col">Description</th> 
+    </tr> 
+  </thead> 
+  <tbody> 
+  
+ <tr> 
+    <td><code>target</code> <span class="inlineIndicator readOnly readOnlyInline" title="This value may not be changed.">Read only </span></td> 
+    <td><a href="../API/EventTarget.html" title="EventTarget is an interface implemented by objects that can receive events and may have listeners for them."><code>EventTarget</code></a></td> 
+    <td>The event target (the topmost target in the DOM tree).</td> 
+ </tr> 
+  
+  <tr> 
+    <td><code>type</code> <span class="inlineIndicator readOnly readOnlyInline" title="This value may not be changed.">Read only </span></td> 
+    <td><a href="../API/DOMString.html" title="DOMString is a UTF-16 String. As JavaScript already uses such strings, DOMString is mapped directly to a String."><code>DOMString</code></a></td> 
+    <td>The type of event.</td> 
+  </tr> 
+  <tr> 
+    <td><code>bubbles</code> <span class="inlineIndicator readOnly readOnlyInline" title="This value may not be changed.">Read only </span></td> 
+    <td><a href="../../JavaScript/Reference/Global_Objects/Boolean.png" title="The Boolean object is an object wrapper for a boolean value."><code>Boolean</code></a></td> 
+    <td>Whether the event normally bubbles or not</td> 
+  </tr> 
+  <tr> 
+    <td><code>cancelable</code> <span class="inlineIndicator readOnly readOnlyInline" title="This value may not be changed.">Read only </span></td> 
+    <td><a href="../../JavaScript/Reference/Global_Objects/Boolean.png" title="The Boolean object is an object wrapper for a boolean value."><code>Boolean</code></a></td> 
+    <td>Whether the event is cancellable or not?</td> 
+  </tr></tbody></table><p></p>
+
+<h2 id="Example">Example</h2>
+
+<pre class="brush: html">&lt;script&gt;
+  document.addEventListener("DOMContentLoaded", function(event) {
+&nbsp;   console.log("DOM fully loaded and parsed");
+  });
+&lt;/script&gt;
+</pre>
+
+<pre class="brush: html">&lt;script&gt;
+  document.addEventListener("DOMContentLoaded", function(event) {
+&nbsp;   console.log("DOM fully loaded and parsed");
+  });
+
+for(var i=0; i&lt;1000000000; i++)
+{} // this synchronous script is going to delay parsing of the DOM. So the DOMContentLoaded event is going to launch later.
+&lt;/script&gt;
+</pre>
+
+<h2 id="Browser_compatibility">Browser compatibility</h2>
+
+<p></p><div class="htab"> 
+    <a name="AutoCompatibilityTable" id="AutoCompatibilityTable"></a> 
+    <ul> 
+        <li class="selected"><a>Desktop</a></li> 
+        <li><a>Mobile</a></li> 
+    </ul> 
+</div><p></p>
+
+<div id="compat-desktop">
+<table class="compat-table">
+ <tbody>
+  <tr>
+   <th>Feature</th>
+   <th>Chrome</th>
+   <th>Firefox (Gecko)</th>
+   <th>Internet Explorer</th>
+   <th>Opera</th>
+   <th>Safari</th>
+  </tr>
+  <tr>
+   <td>Basic support</td>
+   <td>1.0<sup>[1]</sup></td>
+   <td>1.0 (1.7 or earlier)<sup>[1]</sup></td>
+   <td>9.0<sup>[2]</sup></td>
+   <td>9.0</td>
+   <td>3.1<sup>[1]</sup></td>
+  </tr>
+ </tbody>
+</table>
+</div>
+
+<div id="compat-mobile">
+<table class="compat-table">
+ <tbody>
+  <tr>
+   <th>Feature</th>
+   <th>Android</th>
+   <th>Firefox Mobile (Gecko)</th>
+   <th>IE Mobile</th>
+   <th>Opera Mobile</th>
+   <th>Safari Mobile</th>
+  </tr>
+  <tr>
+   <td>Basic support</td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span><sup>[1]</sup></td>
+   <td>1.0 (1)<sup>[1]</sup></td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span><sup>[2]</sup></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span><sup>[1]</sup></td>
+  </tr>
+ </tbody>
+</table>
+</div>
+
+<p>[1] Bubbling for this event is supported by at least Gecko 1.9.2, Chrome 6, and Safari 4.</p>
+
+<p>[2] Internet Explorer 8 supports the <code>readystatechange</code> event, which can be used to detect when the DOM is ready. In earlier versions of Internet Explorer, this state can be detected by repeatedly trying to execute <code>document.documentElement.doScroll("left");</code>, as this snippet will throw an error until the DOM is ready.</p>
+
+<h2 id="Related_Events">Related Events</h2>
+
+<p></p><ul> 
+<li><a href="DOMContentLoaded.html"><code>DOMContentLoaded</code></a></li> 
+<li><a href="readystatechange.html"><code>readystatechange</code></a></li> 
+<li><a href="load.html"><code>load</code></a></li> 
+<li><a href="beforeunload.html"><code>beforeunload</code></a></li> 
+<li><a href="unload.html"><code>unload</code></a></li> 
+</ul><p></p>
+                  
+                
+              </article>
+
+              
+
+    
+    
+    
+
+    
+    
+    
+
+    <div class="share">
+        <strong>Share:</strong>
+        <ul>
+            <li><a href="http://twitter.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FEvents%2FDOMContentLoaded%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dtwitter.com&amp;text=I+learned+about+DOMContentLoaded+on+MDN." target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/Events/DOMContentLoaded?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=twitter.com" data-title="I learned about DOMContentLoaded on MDN." class="share-link twitter"><i aria-hidden="true" class="icon-twitter"></i>Twitter</a></li>
+            <li><a href="http://facebook.com/sharer.php?s=100&amp;p[url]=https://developer.mozilla.org/en-US/docs/Web/Events/DOMContentLoaded?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/Events/DOMContentLoaded?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" data-title="I learned about DOMContentLoaded on MDN." class="share-link facebook"><i aria-hidden="true" class="icon-facebook"></i>Facebook</a></li>
+            <li><a href="https://plus.google.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FEvents%2FDOMContentLoaded%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dplus.google.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/Events/DOMContentLoaded?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=plus.google.com" data-title="I learned about DOMContentLoaded on MDN." class="share-link gplus"><i aria-hidden="true" class="icon-google-plus"></i>Google+</a></li>
+        </ul>
+    </div>
+
+              
+
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                  
+                  
+  <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags icon-fw"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+      
+        <li><a href="../../tag/events.html">events</a></li>
+      
+        <li><a href="../../tag/Events-2.html">Events</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Reference">Reference</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Web">Web</a></li>
+      
+    </ul>
+  </div>
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-group icon-fw"></i>&nbsp;<strong>Contributors to this page:</strong> 
+        <a href="https://developer.mozilla.org/en-US/profiles/teoli">teoli</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/RandallFlagg">RandallFlagg</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Sebastianz">Sebastianz</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/gtrufitt">gtrufitt</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/ibmua">ibmua</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/ribeirobreno">ribeirobreno</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Alhadis">Alhadis</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/rwaldron">rwaldron</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/davidmark">davidmark</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/tregagnon">tregagnon</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/gentooboontoo">gentooboontoo</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Sheppy">Sheppy</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Daniel Hug">Daniel Hug</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Jeremie">Jeremie</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/ethertank">ethertank</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/enderandpeter">enderandpeter</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/louisremi">louisremi</a>
+    
+                    </div>
+                  
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o icon-fw"></i>&nbsp;<strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/teoli">teoli</a>,
+                      <time datetime="2016-04-07T01:51:06-07:00">Apr 7, 2016, 1:51:06 AM</time>
+                    </div>
+                  
+                </div>
+              
+            </div>
+
+            
+              <!-- quick links and zone subnav strip -->
+              <div id="wiki-left" class="column-strip wiki-column">
+
+              
+
+                
+
+                
+                  <!-- quick links -->
+                  
+  <div class="quick-links" id="quick-links">
+    <div class="title see-also">See also</div>
+    <ol><li><strong><a href="../Events.html">Events</a></strong></li><li data-default-state="open"><a href="#"><strong>HTML DOM events</strong></a><ol><li><a href="DOMContentLoaded.html"><code>DOMContentLoaded</code></a></li><li><a href="abort.html"><code>abort</code></a></li><li><a href="afterprint.html"><code>afterprint</code></a></li><li><a href="afterscriptexecute.html"><code>afterscriptexecute</code></a></li><li><a href="autocomplete.html"><code>autocomplete</code></a></li><li><a href="autocompleteerror.html"><code>autocompleteerror</code></a></li><li><a href="beforeprint.html"><code>beforeprint</code></a></li><li><a href="beforescriptexecute.html"><code>beforescriptexecute</code></a></li><li><a href="beforeunload.html"><code>beforeunload</code></a></li><li><a href="blur.html"><code>blur</code></a></li><li><a href="cancel.html"><code>cancel</code></a></li><li><a href="canplay.html"><code>canplay</code></a></li><li><a href="canplaythrough.html"><code>canplaythrough</code></a></li><li><a href="change.html"><code>change</code></a></li><li><a href="click.html"><code>click</code></a></li><li><a href="close.html"><code>close</code></a></li><li><a href="connect.html"><code>connect</code></a></li><li><a href="contextmenu.html"><code>contextmenu</code></a></li><li><a href="durationchange.html"><code>durationchange</code></a></li><li><a href="emptied.html"><code>emptied</code></a></li><li><a href="error.html"><code>error</code></a></li><li><a href="focus.html"><code>focus</code></a></li><li><a href="hashchange.html"><code>hashchange</code></a></li><li><a href="input.html"><code>input</code></a></li><li><a href="invalid.html"><code>invalid</code></a></li><li><a href="languagechange.html"><code>languagechange</code></a></li><li><a href="load.html"><code>load</code></a></li><li><a href="loadeddata.html"><code>loadeddata</code></a></li><li><a href="loadedmetadata.html"><code>loadedmetadata</code></a></li><li><a href="loadend.html"><code>loadend</code></a></li><li><a href="loadstart.html"><code>loadstart</code></a></li><li><a href="message.html"><code>message</code></a></li><li><a href="offline.html"><code>offline</code></a></li><li><a href="online.html"><code>online</code></a></li><li><a href="open.html"><code>open</code></a></li><li><a href="pagehide.html"><code>pagehide</code></a></li><li><a href="pageshow.html"><code>pageshow</code></a></li><li><a href="play.html"><code>play</code></a></li><li><a href="playing.html"><code>playing</code></a></li><li><a href="popstate.html"><code>popstate</code></a></li><li><a href="progress.html"><code>progress</code></a></li><li><a href="readystatechange.html"><code>readystatechange</code></a></li><li><a href="rejectionhandled.html"><code>rejectionhandled</code></a></li><li><a href="reset.html"><code>reset</code></a></li><li><a href="seeked.html"><code>seeked</code></a></li><li><a href="seeking.html"><code>seeking</code></a></li><li><a href="select.html"><code>select</code></a></li><li><a href="show.html"><code>show</code></a></li><li><a href="sort.html"><code>sort</code></a></li><li><a href="stalled.html"><code>stalled</code></a></li><li><a href="storage.html"><code>storage</code></a></li><li><a href="submit.html"><code>submit</code></a></li><li><a href="suspend.html"><code>suspend</code></a></li><li><a href="timeupdate.html"><code>timeupdate</code></a></li><li><a href="toggle.html"><code>toggle</code></a></li><li><a href="unhandledrejection.html"><code>unhandledrejection</code></a></li><li><a href="unload.html"><code>unload</code></a></li><li><a href="volumechange.html"><code>volumechange</code></a></li><li><a href="waiting.html"><code>waiting</code></a></li></ol></li></ol>
+  </div>
+                
+
+                <!-- approvals -->
+                
+
+              
+
+              </div>
+            
+          </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Web/Events/DOMContentLoaded$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Web/Events/DOMContentLoaded$history" label="View page history"></menuitem>
+  </menu>
+
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+        
+        <div class="contentinfo">
+          <p>© 2005-2016 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>
+          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+        
+        </div>
+      </div>
+      <div class="column-strip">
+        
+          
+  
+    <form class="languages go" method="get" action="https://developer.mozilla.org/en-US/docs/Web">
+      <label for="language">Other languages:</label>
+      <select id="language" class="wiki-l10n" name="next" dir="ltr">
+        <option value="/en-US/docs/Web/Events/DOMContentLoaded" selected="">
+          English (US)
+        </option>
+        
+          <option value="/fr/docs/Web/Events/DOMContentLoaded">
+            Français
+          </option>
+          <option value="/ja/docs/Web/Reference/Events/DOMContentLoaded">
+            日本語
+          </option>
+          <option value="/pt-BR/docs/Web/Events/DOMContentLoaded">
+            Português (do&nbsp;Brasil)
+          </option>
+          <option value="/zh-CN/docs/Web/Events/DOMContentLoaded">
+            中文 (简体)
+          </option>
+          <option value="/zh-TW/docs/Web/Reference/Events/DOMContentLoaded">
+            正體中文 (繁體)
+          </option>
+      </select>
+      <noscript>&lt;button type="submit"&gt;Go&lt;/button&gt;</noscript>
+    </form>
+  
+
+        
+      </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+  
+    
+    <!--[if lte IE 8]><script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/selectivizr.091e18cf669b.js" charset="utf-8"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script type="text/javascript" src="../../../../../developer.cdn.mozilla.net/static/build/js/main.a7b27a25fb9c.js" charset="utf-8"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+    
+    <script async="" type="text/javascript" src="../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../developer.cdn.mozilla.net/static/build/js/syntax-prism-min.js" charset="utf-8"></script><script type="text/javascript" src="../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../developer.cdn.mozilla.net/static/build/js/wiki.bd71ca9fd27d.js" charset="utf-8" id="wikiscript"></script>
+
+  
+
+  <script async="" type="text/javascript" src="../../../../../developer.cdn.mozilla.net/static/build/js/helpfulness.7b208a764d28.js" charset="utf-8"></script>
+
+  
+    <script type="text/javascript">
+        (function($) {
+            $('#wikiArticle').children('h2[id]').each(function() {
+                var id = $(this).attr('id');
+                var href = '/en-US/docs/Web/Events/DOMContentLoaded$edit#' + id;
+
+                $('<a>').attr({
+                    href: href,
+                    'class': 'button section-edit only-icon'
+                })
+                .append($('<i aria-hidden="true" class="icon-pencil"></i>'))
+                .append($('<span>'))
+                .find('span')
+                .text(gettext('Edit'))
+                .end()
+                .on('click', function(e) {
+                    e.preventDefault();
+
+                    mdn.analytics.trackEvent({
+                        category: 'Section Edit',
+                        action: id
+                    }, function() {
+                        window.location = href;
+                    });
+                })
+                .appendTo(this);
+            });
+        })(jQuery);
+    </script>
+  
+
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/Web/Events/DOMContentLoaded by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 14:52:04 GMT -->
+</body></html>

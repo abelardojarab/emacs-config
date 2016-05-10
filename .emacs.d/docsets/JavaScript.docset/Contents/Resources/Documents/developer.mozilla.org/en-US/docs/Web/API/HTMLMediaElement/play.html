@@ -1,0 +1,743 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/play by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 15:10:52 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <script async="" src="../../../../../../www.google-analytics.com/analytics.js"></script><script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+  
+    
+  
+
+  
+  <title>play()</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+  
+    
+    
+    <link href="../../../../../../developer.cdn.mozilla.net/static/build/styles/mdn.593f20d8c365.css" rel="stylesheet" type="text/css">
+
+    
+  
+    <link href="../../../../../../developer.cdn.mozilla.net/static/build/styles/wiki.13dd9abdfb62.css" rel="stylesheet" type="text/css">
+
+    
+
+    
+
+  <!-- common social tags -->
+  
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon144.a6e4162070f4.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon114.0e9fabd44f85.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon72.8ff9d87c82a0.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon57.a2490b9a2d76.png">
+  <!-- basic favicon -->
+  
+    
+  
+  <link rel="shortcut icon" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon32.e02854fdcf73.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/html5shiv.3948ccddab6f.js" charset="utf-8"></script>
+  <![endif]-->
+
+  
+  <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/play$json">
+  <link rel="canonical" href="play.html">
+
+  
+
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="play()">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/play">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/play">
+  <meta name="twitter:title" content="play()">
+  
+  <meta property="og:description" content="The HTMLMediaElement.play() method attempts to begin playback of the media and returns a Promise which is fulfilled when the playback has been successfully started, and which is rejected if playback fails to begin for any reason (such as permission issues or other problems).">
+  <meta name="description" content="The HTMLMediaElement.play() method attempts to begin playback of the media and returns a Promise which is fulfilled when the playback has been successfully started, and which is rejected if playback fails to begin for any reason (such as permission issues or other problems).">
+  <meta name="twitter:description" content="The HTMLMediaElement.play() method attempts to begin playback of the media and returns a Promise which is fulfilled when the playback has been successfully started, and which is rejected if playback fails to begin for any reason (such as permission issues or other problems).">
+  
+
+  
+    
+
+
+
+  
+</head>
+<body data-slug="Web/API/HTMLMediaElement/play" contextmenu="edit-history-menu" data-search-url="" class="document  ">
+
+  <script type="text/javascript">
+    (function(win) {
+        'use strict';
+
+        
+            (function(){
+  var FLAGS = {
+    'compat_api': false,'kumaediting': false,'page_move': false,'registration_disabled': false,'search_suggestions': false,'section_edit': false,'spam_admin_override': false,'spam_checks_enabled': true,'spam_spammer_override': false,'spam_submissions_enabled': false,'spam_testing_mode': false,'wiki_samples': true,'wiki_spam_exempted': false,'wiki_spam_training': true
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': true,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+
+        // This needs to be set before ckeditor.js loads
+        window.CKEDITOR_BASEPATH = 'https://developer.mozilla.org/static/js/libs/ckeditor/build/ckeditor/';
+
+        // This represents the site configuration
+        win.mdn = {
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+            
+            notifications: [],
+            
+            // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            },
+            // Assets that need to be dynamically injected
+            assets_disabled: {
+                css: {
+                    'editor-content': ['https://developer.cdn.mozilla.net/static/build/styles/editor-content.3d79df72080d.css',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/styles/wiki-compat-tables.f3a3bfce97a1.css',]
+                },
+                js: {
+                    'syntax-prism': ['https://developer.cdn.mozilla.net/static/build/js/syntax-prism.7a66ddfa68bf.js',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/js/wiki-compat-tables.14ce5dcb2c3d.js',]
+                }
+            }
+        };
+    })(this);
+</script>
+
+  
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+    
+      <li><a href="#q" id="skip-search">Skip to search</a></li>
+    
+  </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+    <a href="https://developer.mozilla.org/en-US/" class="logo">Mozilla Developer Network</a>
+
+    <div id="nav-sec">
+        
+                  <ul>
+                  <li>
+
+    
+
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                Sign in
+              </span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FHTMLMediaElement%2Fplay" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/Web/API/HTMLMediaElement/play" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/Web/API/HTMLMediaElement/play" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FHTMLMediaElement%2Fplay" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+              
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+        
+    </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../../API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+
+   <!-- end is_zone -->
+
+    <div class="wiki-main-content" id="document-main"><div class="center">
+      
+      <div class="article-meta">
+        <!-- action buttons -->
+        
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+  <ul class="page-buttons" data-sticky="false">
+      
+      <li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+              
+                <li class="smaller">No translations exist for this article.</li>
+              
+
+              
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/play$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+              
+            </ul>
+          </div>
+        </div>
+      </li>
+
+      <li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/play$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li>
+
+        
+
+        <li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/play$history" rel="nofollow, noindex">History</a></li>
+                
+                
+                
+                
+
+                
+
+                
+                
+                
+                <li class="page-print"><a href="#" onclick="return window.print();">Print this article</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+        
+  <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web" rel="v:url" property="v:title">Web technology for developers</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="../../API.html" rel="v:url" property="v:title">Web APIs</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="../HTMLMediaElement.html" rel="v:url" property="v:title">HTMLMediaElement</a></li>
+    
+    <li class="crumb" typeof="v:Breadcrumb" property="v:title">play()</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        
+        <div class="contributor-avatars" data-all-text="see all contributors" data-alternate-message="hide contributors">
+            <ul>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/jpmedley" title="View profile: jpmedley">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="jpmedley" data-src="../../../../../../secure.gravatar.com/avatar/fde784135f738cc182672e703dea9a4b6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">jpmedley</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Sheppy" title="View profile: Sheppy">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Sheppy" data-src="../../../../../../secure.gravatar.com/avatar/945076feb88f2d7003891ffbf06f32bf6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Sheppy</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/dgashmdn" title="View profile: dgashmdn">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="dgashmdn" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">dgashmdn</noscript></a>
+                </li>
+            
+            </ul>
+        </div>
+        
+
+        <h1>play()</h1>
+
+      </div>
+      
+
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-present">
+
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+            
+              <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+              
+              <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a rel="internal" href="#Syntax">Syntax</a><ol><li><a rel="internal" href="#Parameters">Parameters</a></li><li><a rel="internal" href="#Return_value">Return value</a></li><li><a rel="internal" href="#Exceptions">Exceptions</a></li></ol></li><li><a rel="internal" href="#Specifications">Specifications</a></li><li><a rel="internal" href="#Browser_compatibility">Browser compatibility</a>
+                </li></ol>
+              </div>
+              
+              </div>
+            
+
+            
+            
+              
+            
+
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-half wiki-column text-content">
+
+              
+
+              
+
+              
+                
+                  <div class="warning warning-review">
+                    <p>
+                      This article needs a technical review. <a href="https://developer.mozilla.org/docs/MDN/Contribute/HowTo/Do_a_technical_review">How you can help.</a>
+                    </p>
+                  </div>
+                
+                
+                
+              
+              
+
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                
+                  
+                    <p></p><section id="Quick_Links" class="Quick_links"><!-- --></section>&nbsp;<div class="notice experimental"> 
+    <p><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span> <strong>This is an experimental technology</strong><br>Because this technology's specification has not stabilized, check the <a href="#Browser_compatibility">compatibility table</a> for usage in various browsers. Also note that the syntax and behavior of an experimental technology is subject to change in future versions of browsers as the specification changes.</p> 
+</div><p></p>
+
+<p>The <strong><code>HTMLMediaElement.play()</code></strong> method attempts to begin playback of the media and returns a <a title="The Promise object is used for deferred and asynchronous computations. A Promise represents an operation that hasn't completed yet, but is expected in the future." href="../../JavaScript/Reference/Global_Objects/Promise.html"><code>Promise</code></a> which is fulfilled when the playback has been successfully started, and which is rejected if playback fails to begin for any reason (such as permission issues or other problems).</p>
+
+<h2 id="Syntax">Syntax</h2>
+
+<pre class="syntaxbox"><em>HTMLMediaElement</em>.play().then(function() { ... }</pre>
+
+<h3 id="Parameters">Parameters</h3>
+
+<p>None.</p>
+
+<h3 id="Return_value">Return value</h3>
+
+<p>A <a title="The Promise object is used for deferred and asynchronous computations. A Promise represents an operation that hasn't completed yet, but is expected in the future." href="../../JavaScript/Reference/Global_Objects/Promise.html"><code>Promise</code></a> which is fulfilled when playback has been started, or is rejected if for any reason playback cannot be started.</p>
+
+<h3 id="Exceptions">Exceptions</h3>
+
+<p>The promise's <em>rejection handler</em> is called with an exception as its input value (as opposed to a traditional exception being thrown). Possible exceptions include:</p>
+
+<dl>
+ <dt><code>NotAllowedError</code></dt>
+ <dd>The user agent (browser) or operating system doesn't allow playback of media in the current context or situation. This may happen, for example, if the browser requires the user to explicitly start media playback by clicking a "play" button.</dd>
+ <dt><code>NotSupportedError</code></dt>
+ <dd>The media source (which may be specified as a <a title="The MediaStream interface represents a stream of media content. A stream consists of several tracks such as&nbsp;video or audio tracks." href="../MediaStream.html"><code>MediaStream</code></a>, <a title="The MediaSource interface represents a source of media data for an HTMLMediaElement object. A MediaSource object can be attached to a HTMLMediaElement to be played in the user agent." href="../MediaSource.html"><code>MediaSource</code></a>, <a title="A Blob object represents a file-like object of immutable, raw data. Blobs represent data that isn't necessarily in a JavaScript-native format. The File interface is based on Blob, inheriting blob functionality and expanding it to support files on the user's system." href="../Blob.html"><code>Blob</code></a>, or <a title="The File interface provides information about files and allows JavaScript in a web page to access their content." href="../File.html"><code>File</code></a>, for example) doesn't represent a supported media format.</dd>
+</dl>
+
+<p>Other exceptions may be reported, depending on browser implementation details, media player implementation, and so forth.</p>
+
+<h2 id="Specifications">Specifications</h2>
+
+<table class="standard-table">
+ <tbody>
+  <tr>
+   <th>Specification</th>
+   <th>Status</th>
+   <th>Comment</th>
+  </tr>
+  <tr>
+   <td><a hreflang="en" class="external" lang="en" href="https://html.spec.whatwg.org/multipage/embedded-content.html#dom-media-play">WHATWG HTML Living Standard<br><small lang="en-US">The definition of 'play()' in that specification.</small></a></td>
+   <td><span class="spec-Living">Living Standard</span></td>
+   <td>Initial definition; living specification.</td>
+  </tr>
+  <tr>
+   <td><a hreflang="en" class="external" lang="en" href="http://www.w3.org/TR/html5/embedded-content-0.html#playing-the-media-resource">HTML5<br><small lang="en-US">The definition of 'play()' in that specification.</small></a></td>
+   <td><span class="spec-REC">Recommendation</span></td>
+   <td>Initial definition.</td>
+  </tr>
+ </tbody>
+</table>
+
+<div class="note">
+<p>Note that the WHATWG and W3C versions of the specification differ (as of April 20, 2016) as to whether or not this method returns a <a title="The Promise object is used for deferred and asynchronous computations. A Promise represents an operation that hasn't completed yet, but is expected in the future." href="../../JavaScript/Reference/Global_Objects/Promise.html"><code>Promise</code></a> or nothing at all, respectively.</p>
+</div>
+
+<h2 id="Browser_compatibility">Browser compatibility</h2>
+
+<p></p><div class="htab"> 
+    <a name="AutoCompatibilityTable" id="AutoCompatibilityTable"></a> 
+    <ul> 
+        <li class="selected"><a>Desktop</a></li> 
+        <li><a>Mobile</a></li> 
+    </ul> 
+</div><p></p>
+
+<div id="compat-desktop">
+<table class="compat-table">
+ <tbody>
+  <tr>
+   <th>Feature</th>
+   <th>Chrome</th>
+   <th>Firefox (Gecko)</th>
+   <th>Internet Explorer</th>
+   <th>Opera</th>
+   <th>Safari (WebKit)</th>
+  </tr>
+  <tr>
+   <td>Basic support</td>
+   <td>50.0</td>
+   <td><a title="Released on 2009-06-30." href="https://developer.mozilla.org/en-US/Firefox/Releases/3.5">3.5</a> (1.9.1)</td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+  </tr>
+ </tbody>
+</table>
+</div>
+
+<div id="compat-mobile">
+<table class="compat-table">
+ <tbody>
+  <tr>
+   <th>Feature</th>
+   <th>Android</th>
+   <th>Android Webview</th>
+   <th>Firefox Mobile (Gecko)</th>
+   <th>Firefox OS</th>
+   <th>IE Mobile</th>
+   <th>Opera Mobile</th>
+   <th>Safari Mobile</th>
+   <th>Chrome for Android</th>
+  </tr>
+  <tr>
+   <td>Basic support</td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+   <td>50.0</td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td>50.0</td>
+  </tr>
+ </tbody>
+</table>
+</div>
+                  
+                
+              </article>
+
+              
+
+    
+    
+    
+
+    
+    
+    
+
+    <div class="share">
+        <strong>Share:</strong>
+        <ul>
+            <li><a href="http://twitter.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FAPI%2FHTMLMediaElement%2Fplay%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dtwitter.com&amp;text=I+learned+about+play%28%29+on+MDN." target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/play?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=twitter.com" data-title="I learned about play() on MDN." class="share-link twitter"><i aria-hidden="true" class="icon-twitter"></i>Twitter</a></li>
+            <li><a href="http://facebook.com/sharer.php?s=100&amp;p[url]=https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/play?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/play?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" data-title="I learned about play() on MDN." class="share-link facebook"><i aria-hidden="true" class="icon-facebook"></i>Facebook</a></li>
+            <li><a href="https://plus.google.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FAPI%2FHTMLMediaElement%2Fplay%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dplus.google.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/play?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=plus.google.com" data-title="I learned about play() on MDN." class="share-link gplus"><i aria-hidden="true" class="icon-google-plus"></i>Google+</a></li>
+        </ul>
+    </div>
+
+              
+
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                  
+                  
+  <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags icon-fw"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+      
+        <li><a href="../../../tag/API.html">API</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Audio">Audio</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/audio">audio</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/HTMLMediaElement">HTMLMediaElement</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Media">Media</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Method">Method</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Reference">Reference</a></li>
+      
+    </ul>
+  </div>
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-group icon-fw"></i>&nbsp;<strong>Contributors to this page:</strong> 
+        <a href="https://developer.mozilla.org/en-US/profiles/jpmedley">jpmedley</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Sheppy">Sheppy</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/dgashmdn">dgashmdn</a>
+    
+                    </div>
+                  
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o icon-fw"></i>&nbsp;<strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/jpmedley">jpmedley</a>,
+                      <time datetime="2016-04-21T05:33:10-07:00">Apr 21, 2016, 5:33:10 AM</time>
+                    </div>
+                  
+                </div>
+              
+            </div>
+
+            
+              <!-- quick links and zone subnav strip -->
+              <div id="wiki-left" class="column-strip wiki-column">
+
+              
+
+                
+
+                
+                  <!-- quick links -->
+                  
+  <div class="quick-links" id="quick-links">
+    <div class="title see-also">See also</div>
+    <ol><li><strong><a href="../HTMLMediaElement.html"><code>HTMLMediaElement</code></a></strong></li><li data-default-state="open"><a href="#"><strong>Properties</strong></a><ol><li><a title="The HTMLMediaElement.audioTracks&nbsp;property is an&nbsp;AudioTrackList&nbsp;that represents the list of AudioTrack objects contained in the element." href="audioTracks.html"><code>audioTracks</code></a></li><li><a title="The HTMLMediaElement.autoplay property reflects the autoplay HTML attribute, indicating whether playback should automatically begin as soon as enough media is available to do so without interruption." href="autoplay.html"><code>autoplay</code></a></li><li><a title="The HTMLMediaElement.buffered read-only property returns a new TimeRanges object that&nbsp;indicates&nbsp;the ranges of the media source that the browser has buffered (if any) at the moment the buffered property is accessed." href="buffered.html"><code>buffered</code></a></li><li><a title="The HTMLMediaElement.controller property represents the media controller assigned to the element." href="controller.html"><code>controller</code></a></li><li><a title="The HTMLMediaElement.controls property reflects the controls HTML attribute, which controls whether user interface controls&nbsp;for playing the media item&nbsp;will&nbsp;be displayed." href="controls.html"><code>controls</code></a></li><li><a title="The HTMLMediaElement.crossOrigin property is the CORS setting for this image element. See CORS settings attributes for details." href="crossOrigin.html"><code>crossOrigin</code></a></li><li><a title="The HTMLMediaElement.currentSrc property contains the absolute URL of the chosen media resource.&nbsp;This could happen, for example, if the web server selects a media file based on the resolution of the user's display.&nbsp;The value is&nbsp;an empty string if the networkState&nbsp;property is EMPTY." href="currentSrc.html"><code>currentSrc</code></a></li><li><a title="The HTMLMediaElement.currentTime&nbsp;property gives the current playback time in seconds. Setting this value seeks the media to the new time." href="currentTime.html"><code>currentTime</code></a></li><li><a title="The HTMLMediaElement.defaultMuted property reflects the muted HTML attribute, which indicates whether the media element's audio output should be muted by default. This property has no dynamic effect. To mute and unmute the audio output, use the muted property." href="defaultMuted.html"><code>defaultMuted</code></a></li><li><a title="The HTMLMediaElement.defaultPlaybackRate property indicates the default playback rate for the media." href="defaultPlaybackRate.html"><code>defaultPlaybackRate</code></a></li><li><a title="The HTMLMediaElement.duration property gives the length of the media in seconds, or zero if no media data is available." href="duration.html"><code>duration</code></a></li><li><a title="The HTMLMediaElement.ended indicates whether the media element has ended playback." href="ended.html"><code>ended</code></a></li><li><a title="The HTMLMediaElement.error is the MediaError object for the most recent error, or null if there has not been an error." href="error.html"><code>error</code></a></li><li><a title="The HTMLMediaElement.initialTime&nbsp;is&nbsp;the initial playback position in seconds.&nbsp;   " href="initialTime.html"><code>initialTime</code></a></li><li><a title="The HTMLMediaElement.loop property reflects the loop HTML attribute, which controls whether the media element should start over when it reaches the end." href="loop.html"><code>loop</code></a></li><li><a title="The HTMLMediaElement.mediaGroup property reflects the mediagroup HTML attribute, which indicates the name of the group of elements it belongs to. A group of media elements shares a common controller." href="mediaGroup.html"><code>mediaGroup</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a title="Technical review completed." href="mozAudioChannelType.html"><code>mozAudioChannelType</code></a></li><li><a title="The HTMLMediaElement.muted indicates whether the media element muted." href="muted.html"><code>muted</code></a></li><li><a title="The HTMLMediaElement.networkState property indicates the current state of the fetching of media over the network." href="networkState.html"><code>networkState</code></a></li><li><a title="The read-only&nbsp;HTMLMediaElement.paused&nbsp;property tells&nbsp;whether the media element is paused." href="paused.html"><code>paused</code></a></li><li><a title="The HTMLMediaElement.playbackRate property sets&nbsp;the&nbsp;rate at which the media is being played back. This is used to implement user controls for fast forward, slow motion, and so forth. The normal playback rate is multiplied by this value to obtain the current rate, so a value of 1.0 indicates normal speed." href="playbackRate.html"><code>playbackRate</code></a></li><li><a title="The HTMLMediaElement.readyState property indicates the readiness state of the media." href="readyState.html"><code>readyState</code></a></li><li><a title="The seekable read-only property of the HTMLMediaElement returns a TimeRanges object that contains&nbsp;the time ranges that the user is able to seek to, if any." href="seekable.html"><code>seekable</code></a></li><li><a title="The HTMLMediaElement.sinkId&nbsp;read-only property&nbsp;returns&nbsp;a&nbsp;DOMString&nbsp;that is&nbsp;the unique ID of the audio device delivering output. If it is using the user agent default, it returns an empty string. This ID should be one of the&nbsp;MediaDeviceInfo.deviceid&nbsp;values returned fromMediaDevices.enumeratedDevices(),&nbsp;id-multimedia, or&nbsp;id-communications." href="sinkId.html"><code>sinkId</code></a></li></ol></li><li data-default-state="open"><a href="#"><strong>Methods</strong></a><ol><li><a title="The HTMLMediaElement.canPlayType() method determines whether the specified media type can be played back." href="canPlayType.html"><code>canPlayType()</code></a></li><li><em><code>play</code></em></li><li><a title="The HTMLMediaElement.setSinkId() method sets&nbsp;the ID of the audio device to use for output and returns a&nbsp;Promise. This only works when the application is authorized to use the specified device." href="setSinkId.html"><code>setSinkId()</code></a></li></ol></li><li data-default-state="open"><a href="#"><strong>Inheritance:</strong></a><ol><li><a href="../HTMLElement.html"><code>HTMLElement</code></a></li><li><a href="../Element.html"><code>Element</code></a></li><li><a href="../Node.html"><code>Node</code></a></li><li><a href="../EventTarget.html"><code>EventTarget</code></a></li></ol></li><li data-default-state="open"><a href="#"><strong>Events</strong></a><ol><li><a href="../../Events/abort.html"><code>abort</code></a></li><li><a href="../../Events/autocomplete.html"><code>autocomplete</code></a></li><li><a href="../../Events/autocompleteerror.html"><code>autocompleteerror</code></a></li><li><a href="../../Events/DOMContentLoaded.html"><code>DOMContentLoaded</code></a></li><li><a href="../../Events/afterprint.html"><code>afterprint</code></a></li><li><a href="../../Events/afterscriptexecute.html"><code>afterscriptexecute</code></a></li><li><a href="../../Events/beforeprint.html"><code>beforeprint</code></a></li><li><a href="../../Events/beforescriptexecute.html"><code>beforescriptexecute</code></a></li><li><a href="../../Events/beforeunload.html"><code>beforeunload</code></a></li><li><a href="../../Events/blur.html"><code>blur</code></a></li><li><a href="../../Events/cancel.html"><code>cancel</code></a></li><li><a href="../../Events/change.html"><code>change</code></a></li><li><a href="../../Events/click.html"><code>click</code></a></li><li><a href="../../Events/close.html"><code>close</code></a></li><li><a href="../../Events/connect.html"><code>connect</code></a></li><li><a href="../../Events/contextmenu.html"><code>contextmenu</code></a></li><li><a href="../../Events/error.html"><code>error</code></a></li><li><a href="../../Events/focus.html"><code>focus</code></a></li><li><a href="../../Events/hashchange.html"><code>hashchange</code></a></li><li><a href="../../Events/input.html"><code>input</code></a></li><li><a href="../../Events/invalid.html"><code>invalid</code></a></li><li><a href="../../Events/languagechange.html"><code>languagechange</code></a></li><li><a href="../../Events/load.html"><code>load</code></a></li><li><a href="../../Events/loadend.html"><code>loadend</code></a></li><li><a href="../../Events/loadstart.html"><code>loadstart</code></a></li><li><a href="../../Events/message.html"><code>message</code></a></li><li><a href="../../Events/offline.html"><code>offline</code></a></li><li><a href="../../Events/online.html"><code>online</code></a></li><li><a href="../../Events/open.html"><code>open</code></a></li><li><a href="../../Events/pagehide.html"><code>pagehide</code></a></li><li><a href="../../Events/pageshow.html"><code>pageshow</code></a></li><li><a href="../../Events/popstate.html"><code>popstate</code></a></li><li><a href="../../Events/progress.html"><code>progress</code></a></li><li><a href="../../Events/readystatechange.html"><code>readystatechange</code></a></li><li><a href="../../Events/reset.html"><code>reset</code></a></li><li><a href="../../Events/select.html"><code>select</code></a></li><li><a href="../../Events/show.html"><code>show</code></a></li><li><a href="../../Events/sort.html"><code>sort</code></a></li><li><a href="../../Events/storage.html"><code>storage</code></a></li><li><a href="../../Events/submit.html"><code>submit</code></a></li><li><a href="../../Events/toggle.html"><code>toggle</code></a></li><li><a href="../../Events/unload.html"><code>unload</code></a></li><li><a href="../../Events/loadeddata.html"><code>loadeddata</code></a></li><li><a href="../../Events/loadedmetadata.html"><code>loadedmetadata</code></a></li><li><a href="../../Events/canplay.html"><code>canplay</code></a></li><li><a href="../../Events/playing.html"><code>playing</code></a></li><li><a href="../../Events/play.html"><code>play</code></a></li><li><a href="../../Events/canplaythrough.html"><code>canplaythrough</code></a></li><li><a href="../../Events/seeked.html"><code>seeked</code></a></li><li><a href="../../Events/seeking.html"><code>seeking</code></a></li><li><a href="../../Events/stalled.html"><code>stalled</code></a></li><li><a href="../../Events/suspend.html"><code>suspend</code></a></li><li><a href="../../Events/timeupdate.html"><code>timeupdate</code></a></li><li><a href="../../Events/volumechange.html"><code>volumechange</code></a></li><li><a href="../../Events/waiting.html"><code>waiting</code></a></li><li><a href="../../Events/durationchange.html"><code>durationchange</code></a></li><li><a href="../../Events/emptied.html"><code>emptied</code></a></li><li><a href="../../Events/unhandledrejection.html"><code>unhandledrejection</code></a></li><li><a href="../../Events/rejectionhandled.html"><code>rejectionhandled</code></a></li></ol></li><li data-default-state="open"><a href="#"><strong>Related pages for HTML DOM</strong></a><ol><li><a href="../BeforeUnloadEvent.html"><code>BeforeUnloadEvent</code></a></li><li><a href="../DOMStringMap.html"><code>DOMStringMap</code></a></li><li><a href="../ErrorEvent.html"><code>ErrorEvent</code></a></li><li><a href="../GlobalEventHandlers.html"><code>GlobalEventHandlers</code></a></li><li><a href="../HTMLAnchorElement.html"><code>HTMLAnchorElement</code></a></li><li><a href="../HTMLAreaElement.html"><code>HTMLAreaElement</code></a></li><li><a href="../HTMLAudioElement.html"><code>HTMLAudioElement</code></a></li><li><a href="../HTMLBRElement.html"><code>HTMLBRElement</code></a></li><li><a href="../HTMLBaseElement.html"><code>HTMLBaseElement</code></a></li><li><a href="../HTMLBaseFontElement.html"><code>HTMLBaseFontElement</code></a></li><li><a href="../HTMLBodyElement.html"><code>HTMLBodyElement</code></a></li><li><a href="../HTMLButtonElement.html"><code>HTMLButtonElement</code></a></li><li><a href="../HTMLCanvasElement.html"><code>HTMLCanvasElement</code></a></li><li><a href="../HTMLContentElement.html"><code>HTMLContentElement</code></a></li><li><a href="../HTMLDListElement.html"><code>HTMLDListElement</code></a></li><li><a href="../HTMLDataElement.html"><code>HTMLDataElement</code></a></li><li><a href="../HTMLDataListElement.html"><code>HTMLDataListElement</code></a></li><li><a href="../HTMLDialogElement.html"><code>HTMLDialogElement</code></a></li><li><a href="../HTMLDivElement.html"><code>HTMLDivElement</code></a></li><li><a href="../HTMLDocument.html"><code>HTMLDocument</code></a></li><li><a href="../HTMLElement.html"><code>HTMLElement</code></a></li><li><a href="../HTMLEmbedElement.html"><code>HTMLEmbedElement</code></a></li><li><a href="../HTMLFieldSetElement.html"><code>HTMLFieldSetElement</code></a></li><li><a href="../HTMLFormControlsCollection.html"><code>HTMLFormControlsCollection</code></a></li><li><a href="../HTMLFormElement.html"><code>HTMLFormElement</code></a></li><li><a href="../HTMLFrameSetElement.html"><code>HTMLFrameSetElement</code></a></li><li><a href="../HTMLHRElement.html"><code>HTMLHRElement</code></a></li><li><a href="../HTMLHeadElement.html"><code>HTMLHeadElement</code></a></li><li><a href="../HTMLHeadingElement.html"><code>HTMLHeadingElement</code></a></li><li><a href="../HTMLHtmlElement.html"><code>HTMLHtmlElement</code></a></li><li><a href="../HTMLIFrameElement.html"><code>HTMLIFrameElement</code></a></li><li><a href="../HTMLImageElement.html"><code>HTMLImageElement</code></a></li><li><a href="../HTMLInputElement.html"><code>HTMLInputElement</code></a></li><li><a href="../HTMLIsIndexElement.html"><code>HTMLIsIndexElement</code></a></li><li><a href="../HTMLKeygenElement.html"><code>HTMLKeygenElement</code></a></li><li><a href="../HTMLLIElement.html"><code>HTMLLIElement</code></a></li><li><a href="../HTMLLabelElement.html"><code>HTMLLabelElement</code></a></li><li><a href="../HTMLLegendElement.html"><code>HTMLLegendElement</code></a></li><li><a href="../HTMLLinkElement.html"><code>HTMLLinkElement</code></a></li><li><a href="../HTMLMapElement.html"><code>HTMLMapElement</code></a></li><li><a href="../HTMLMetaElement.html"><code>HTMLMetaElement</code></a></li><li><a href="../HTMLMeterElement.html"><code>HTMLMeterElement</code></a></li><li><a href="../HTMLModElement.html"><code>HTMLModElement</code></a></li><li><a href="../HTMLOListElement.html"><code>HTMLOListElement</code></a></li><li><a href="../HTMLObjectElement.html"><code>HTMLObjectElement</code></a></li><li><a href="../HTMLOptGroupElement.html"><code>HTMLOptGroupElement</code></a></li><li><a href="../HTMLOptionElement.html"><code>HTMLOptionElement</code></a></li><li><a href="../HTMLOptionsCollection.html"><code>HTMLOptionsCollection</code></a></li><li><a href="../HTMLOutputElement.html"><code>HTMLOutputElement</code></a></li><li><a href="../HTMLParagraphElement.html"><code>HTMLParagraphElement</code></a></li><li><a href="../HTMLParamElement.html"><code>HTMLParamElement</code></a></li><li><a href="../HTMLPictureElement.html"><code>HTMLPictureElement</code></a></li><li><a href="../HTMLPreElement.html"><code>HTMLPreElement</code></a></li><li><a href="../HTMLProgressElement.html"><code>HTMLProgressElement</code></a></li><li><a href="../HTMLQuoteElement.html"><code>HTMLQuoteElement</code></a></li><li><a href="../HTMLScriptElement.html"><code>HTMLScriptElement</code></a></li><li><a href="../HTMLSelectElement.html"><code>HTMLSelectElement</code></a></li><li><a href="../HTMLShadowElement.html"><code>HTMLShadowElement</code></a></li><li><a href="../HTMLSourceElement.html"><code>HTMLSourceElement</code></a></li><li><a href="../HTMLSpanElement.html"><code>HTMLSpanElement</code></a></li><li><a href="../HTMLStyleElement.html"><code>HTMLStyleElement</code></a></li><li><a href="../HTMLTableCaptionElement.html"><code>HTMLTableCaptionElement</code></a></li><li><a href="../HTMLTableCellElement.html"><code>HTMLTableCellElement</code></a></li><li><a href="../HTMLTableColElement.html"><code>HTMLTableColElement</code></a></li><li><a href="../HTMLTableDataCellElement.html"><code>HTMLTableDataCellElement</code></a></li><li><a href="../HTMLTableElement.html"><code>HTMLTableElement</code></a></li><li><a href="../HTMLTableHeaderCellElement.html"><code>HTMLTableHeaderCellElement</code></a></li><li><a href="../HTMLTableRowElement.html"><code>HTMLTableRowElement</code></a></li><li><a href="../HTMLTableSectionElement.html"><code>HTMLTableSectionElement</code></a></li><li><a href="../HTMLTemplateElement.png"><code>HTMLTemplateElement</code></a></li><li><a href="../HTMLTextAreaElement.html"><code>HTMLTextAreaElement</code></a></li><li><a href="../HTMLTimeElement.html"><code>HTMLTimeElement</code></a></li><li><a href="../HTMLTitleElement.html"><code>HTMLTitleElement</code></a></li><li><a href="../HTMLTrackElement.html"><code>HTMLTrackElement</code></a></li><li><a href="../HTMLUListElement.html"><code>HTMLUListElement</code></a></li><li><a href="../HTMLUnknownElement.html"><code>HTMLUnknownElement</code></a></li><li><a href="../HTMLVideoElement.html"><code>HTMLVideoElement</code></a></li><li><a href="../HashChangeEvent.html"><code>HashChangeEvent</code></a></li><li><a href="../History.html"><code>History</code></a></li><li><a href="../ImageData.html"><code>ImageData</code></a></li><li><a href="../Location.html"><code>Location</code></a></li><li><a href="../MessageChannel.html"><code>MessageChannel</code></a></li><li><a href="../MessageEvent.html"><code>MessageEvent</code></a></li><li><a href="../MessagePort.html"><code>MessagePort</code></a></li><li><a href="../Navigator.html"><code>Navigator</code></a></li><li><a href="../NavigatorGeolocation.html"><code>NavigatorGeolocation</code></a></li><li><a href="../NavigatorID.html"><code>NavigatorID</code></a></li><li><a href="../NavigatorLanguage.html"><code>NavigatorLanguage</code></a></li><li><a href="../NavigatorOnLine.html"><code>NavigatorOnLine</code></a></li><li><a href="../NavigatorPlugins.html"><code>NavigatorPlugins</code></a></li><li><a href="../PageTransitionEvent.html"><code>PageTransitionEvent</code></a></li><li><a href="../Plugin.html"><code>Plugin</code></a></li><li><a href="../PluginArray.html"><code>PluginArray</code></a></li><li><a href="../PopStateEvent.html"><code>PopStateEvent</code></a></li><li><a href="../PortCollection.html"><code>PortCollection</code></a></li><li><a href="../PromiseRejectionEvent.html"><code>PromiseRejectionEvent</code></a></li><li><a href="../RadioNodeList.html"><code>RadioNodeList</code></a></li><li><a href="../Transferable.html"><code>Transferable</code></a></li><li><a href="../ValidityState.html"><code>ValidityState</code></a></li><li><a href="../Window.html"><code>Window</code></a></li><li><a href="../WindowBase64.html"><code>WindowBase64</code></a></li><li><a href="../WindowEventHandlers.html"><code>WindowEventHandlers</code></a></li><li><a href="../WindowTimers.html"><code>WindowTimers</code></a></li></ol></li></ol>
+  </div>
+                
+
+                <!-- approvals -->
+                
+
+              
+
+              </div>
+            
+          </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Web/API/HTMLMediaElement/play$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Web/API/HTMLMediaElement/play$history" label="View page history"></menuitem>
+  </menu>
+
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+        
+        <div class="contentinfo">
+          <p>© 2005-2016 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>
+          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+        
+        </div>
+      </div>
+      <div class="column-strip">
+        
+          
+  
+
+        
+      </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+  
+    
+    <!--[if lte IE 8]><script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/selectivizr.091e18cf669b.js" charset="utf-8"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/main.a7b27a25fb9c.js" charset="utf-8"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+    
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/syntax-prism-min.js" charset="utf-8"></script><script type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/wiki.bd71ca9fd27d.js" charset="utf-8" id="wikiscript"></script>
+
+  
+
+  <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/helpfulness.7b208a764d28.js" charset="utf-8"></script>
+
+  
+
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement/play by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 15:10:52 GMT -->
+</body></html>

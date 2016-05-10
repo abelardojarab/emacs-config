@@ -1,0 +1,2090 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/dashboards/revisions?user=PushpitaPikuDey&page=1 by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 15:45:12 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <script async="" src="../../../www.google-analytics.com/analytics.js"></script><script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+  
+    
+  
+
+  
+  <title>Revision Dashboard</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+  
+    <link href="../../../developer.cdn.mozilla.net/static/build/styles/mdn.593f20d8c365.css" rel="stylesheet" type="text/css">
+
+    
+      <link href="../../../developer.cdn.mozilla.net/static/build/styles/dashboards.e3cf7e9181f6.css" rel="stylesheet" type="text/css">
+    
+      <link href="../../../developer.cdn.mozilla.net/static/build/styles/jquery-ui.c08daff10f3e.css" rel="stylesheet" type="text/css">
+    
+  
+
+  <!-- common social tags -->
+  
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../developer.cdn.mozilla.net/static/img/favicon144.a6e4162070f4.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../developer.cdn.mozilla.net/static/img/favicon114.0e9fabd44f85.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../developer.cdn.mozilla.net/static/img/favicon72.8ff9d87c82a0.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../developer.cdn.mozilla.net/static/img/favicon57.a2490b9a2d76.png">
+  <!-- basic favicon -->
+  
+    
+  
+  <link rel="shortcut icon" href="../../../developer.cdn.mozilla.net/static/img/favicon32.e02854fdcf73.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/html5shiv.3948ccddab6f.js" charset="utf-8"></script>
+  <![endif]-->
+
+  
+
+  
+    
+
+
+
+  
+</head>
+<body class="">
+
+  <script type="text/javascript">
+    (function(win) {
+        'use strict';
+
+        
+            (function(){
+  var FLAGS = {
+    'compat_api': false,'kumaediting': false,'page_move': false,'registration_disabled': false,'search_suggestions': false,'section_edit': false,'spam_admin_override': false,'spam_checks_enabled': true,'spam_spammer_override': false,'spam_submissions_enabled': false,'spam_testing_mode': false,'wiki_samples': true,'wiki_spam_exempted': false,'wiki_spam_training': true
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': true,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+
+        // This needs to be set before ckeditor.js loads
+        window.CKEDITOR_BASEPATH = 'https://developer.mozilla.org/static/js/libs/ckeditor/build/ckeditor/';
+
+        // This represents the site configuration
+        win.mdn = {
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+            
+            notifications: [],
+            
+            // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            },
+            // Assets that need to be dynamically injected
+            assets_disabled: {
+                css: {
+                    'editor-content': ['https://developer.cdn.mozilla.net/static/build/styles/editor-content.3d79df72080d.css',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/styles/wiki-compat-tables.f3a3bfce97a1.css',]
+                },
+                js: {
+                    'syntax-prism': ['https://developer.cdn.mozilla.net/static/build/js/syntax-prism.7a66ddfa68bf.js',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/js/wiki-compat-tables.14ce5dcb2c3d.js',]
+                }
+            }
+        };
+    })(this);
+</script>
+
+  
+
+  <ul id="nav-access">
+    <li><a href="#content" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+    
+      <li><a href="#q" id="skip-search">Skip to search</a></li>
+    
+  </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+    <a href="https://developer.mozilla.org/en-US/" class="logo">Mozilla Developer Network</a>
+
+    <div id="nav-sec">
+        
+                  <ul>
+                  <li>
+
+    
+
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                Sign in
+              </span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdashboards%2Frevisions%3Fuser%3DPushpitaPikuDey%26page%3D1" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/dashboards/revisions?user=PushpitaPikuDey&amp;page=1" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/dashboards/revisions?user=PushpitaPikuDey&amp;page=1" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdashboards%2Frevisions%3Fuser%3DPushpitaPikuDey%26page%3D1" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+              
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+        
+    </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../docs/Web/API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+
+    <div class="dashboard">
+        <h1><a href="https://developer.mozilla.org/en-US/dashboards/revisions">Revision Dashboard</a></h1>
+        <form method="get" id="revision-filter" action="https://developer.mozilla.org/en-US/dashboards/revisions">
+            <div class="revision-field">
+                <label for="id_locale">Locale:</label>
+                <select id="id_locale" name="locale">
+<option value="" selected="selected">All Locales</option>
+<option value="af">Afrikaans</option>
+<option value="ar">عربي</option>
+<option value="az">Azərbaycanca</option>
+<option value="bm">Bamanankan</option>
+<option value="bn-BD">বাংলা (বাংলাদেশ)</option>
+<option value="bn-IN">বাংলা (ভারত)</option>
+<option value="ca">Català</option>
+<option value="cs">Čeština</option>
+<option value="de">Deutsch</option>
+<option value="ee">Eʋe</option>
+<option value="el">Ελληνικά</option>
+<option value="en-US">English (US)</option>
+<option value="es">Español</option>
+<option value="fa">فارسی</option>
+<option value="ff">Pulaar-Fulfulde</option>
+<option value="fi">suomi</option>
+<option value="fr">Français</option>
+<option value="fy-NL">Frysk</option>
+<option value="ga-IE">Gaeilge</option>
+<option value="ha">Hausa</option>
+<option value="he">עברית</option>
+<option value="hi-IN">हिन्दी (भारत)</option>
+<option value="hr">Hrvatski</option>
+<option value="hu">magyar</option>
+<option value="id">Bahasa Indonesia</option>
+<option value="ig">Igbo</option>
+<option value="it">Italiano</option>
+<option value="ja">日本語</option>
+<option value="ka">ქართული</option>
+<option value="ko">한국어</option>
+<option value="ln">Lingála</option>
+<option value="mg">Malagasy</option>
+<option value="ml">മലയാളം</option>
+<option value="ms">Melayu</option>
+<option value="my">မြန်မာဘာသာ</option>
+<option value="nl">Nederlands</option>
+<option value="pl">Polski</option>
+<option value="pt-BR">Português (do&nbsp;Brasil)</option>
+<option value="pt-PT">Português (Europeu)</option>
+<option value="ro">Română</option>
+<option value="ru">Русский</option>
+<option value="son">Soŋay</option>
+<option value="sq">Shqip</option>
+<option value="sr">Српски</option>
+<option value="sr-Latn">Srpski</option>
+<option value="sv-SE">Svenska</option>
+<option value="sw">Kiswahili</option>
+<option value="ta">தமிழ்</option>
+<option value="th">ไทย</option>
+<option value="tl">Tagalog</option>
+<option value="tn">Setswana</option>
+<option value="tr">Türkçe</option>
+<option value="uk">Українська</option>
+<option value="vi">Tiếng Việt</option>
+<option value="wo">Wolof</option>
+<option value="xh">isiXhosa</option>
+<option value="yo">Yorùbá</option>
+<option value="zh-CN">中文 (简体)</option>
+<option value="zh-TW">正體中文 (繁體)</option>
+<option value="zu">isiZulu</option>
+</select>
+            </div>
+
+            <div class="revision-field">
+                <label for="id_user">User:</label>
+                <input id="id_user" maxlength="255" name="user" type="text" value="PushpitaPikuDey">
+            </div>
+
+            <div class="revision-field">
+                <label for="id_topic">Topic:</label>
+                <input id="id_topic" maxlength="255" name="topic" type="text">
+            </div>
+            <br>
+
+            <div class="revision-field">
+                <label for="id_start_date">Start Date:</label>
+                <input id="id_start_date" name="start_date" pattern="\d{1,2}/\d{1,2}/\d{4}" type="text">
+            </div>
+
+            <div class="revision-field">
+                <label for="id_end_date">End Date:</label>
+                <input id="id_end_date" name="end_date" pattern="\d{1,2}/\d{1,2}/\d{4}" type="text">
+            </div>
+
+            <div class="revision-field">
+                <label for="id_preceding_period">Preceding Period:</label>
+                <select id="id_preceding_period" name="preceding_period">
+<option value="" selected="selected">None</option>
+<option value="hour">Hour</option>
+<option value="day">Day</option>
+<option value="week">Week</option>
+<option value="month">30 days</option>
+</select>
+            </div>
+
+            <button type="submit">Filter</button>
+            <input type="hidden" name="page" id="revision-page" value="1">
+        </form>
+
+        <div id="revision-replace-block">
+        
+  <ol class="pagination">
+  
+  
+  
+    <li class="selected">
+      <a href="revisions5f64.html?user=PushpitaPikuDey&amp;page=1">1</a>
+    </li>
+  
+    <li>
+      <a href="revisionsbc62.html?user=PushpitaPikuDey&amp;page=2">2</a>
+    </li>
+  
+    <li>
+      <a href="revisionsd0a0.html?user=PushpitaPikuDey&amp;page=3">3</a>
+    </li>
+  
+  
+  
+    <li class="next">
+      <a href="revisionsbc62.html?user=PushpitaPikuDey&amp;page=2">
+        Next
+      </a>
+    </li>
+  
+  </ol>
+
+    <table class="dashboard-table" width="100%">
+        <thead>
+            <tr>
+                <th class="dashboard-revision">Revision</th>
+                <th class="dashboard-title">Title</th>
+                <th class="dashboard-comment">Comment</th>
+                <th class="dashboard-author">Author</th>
+                
+            </tr>
+        </thead>
+        <tbody>
+            
+                
+                
+                <tr tabindex="0" class="dashboard-row " data-revision-id="1041150" data-previous-id="1041148" data-view-url="/en-US/docs/Games/Techniques/3D_on_the_web/GLSL_Shaders" data-edit-url="/en-US/docs/Games/Techniques/3D_on_the_web/GLSL_Shaders$edit" data-compare-url="/en-US/docs/Games/Techniques/3D_on_the_web/GLSL_Shaders$compare?from=1041148&amp;to=1041150&amp;raw=1" data-revert-url="/en-US/docs/Games/Techniques/3D_on_the_web/GLSL_Shaders$revert/1041150" data-history-url="/en-US/docs/Games/Techniques/3D_on_the_web/GLSL_Shaders$history">
+                    <td class="dashboard-revision">
+                        <a href="https://developer.mozilla.org/en-US/docs/Games/Techniques/3D_on_the_web/GLSL_Shaders$revision/1041150"><time datetime="2016-04-10T15:40:19-07:00">Apr 10, 2016, 3:40:19 PM</time></a>
+                        <br>
+                        <span class="locale">en-US</span>
+                        
+                        
+                    </td>
+                    <td class="dashboard-title">
+                        <a href="https://developer.mozilla.org/en-US/docs/Games/Techniques/3D_on_the_web/GLSL_Shaders">GLSL Shaders</a>
+                        <span class="dashboard-slug">Games/Techniques/3D_on_the_web/GLSL_Shaders</span>
+                    </td>
+                    <td class="dashboard-comment">
+                        Editorial review completed.
+                    </td>
+                    <td class="dashboard-author">
+                        <a href="../profiles/PushpitaPikuDey.html">PushpitaPikuDey</a><br>
+                        
+                        
+                        
+                    </td>
+                    
+                </tr>
+            
+                
+                
+                <tr tabindex="0" class="dashboard-row " data-revision-id="1041148" data-previous-id="1039444" data-view-url="/en-US/docs/Games/Techniques/3D_on_the_web/GLSL_Shaders" data-edit-url="/en-US/docs/Games/Techniques/3D_on_the_web/GLSL_Shaders$edit" data-compare-url="/en-US/docs/Games/Techniques/3D_on_the_web/GLSL_Shaders$compare?from=1039444&amp;to=1041148&amp;raw=1" data-revert-url="/en-US/docs/Games/Techniques/3D_on_the_web/GLSL_Shaders$revert/1041148" data-history-url="/en-US/docs/Games/Techniques/3D_on_the_web/GLSL_Shaders$history">
+                    <td class="dashboard-revision">
+                        <a href="https://developer.mozilla.org/en-US/docs/Games/Techniques/3D_on_the_web/GLSL_Shaders$revision/1041148"><time datetime="2016-04-10T15:40:03-07:00">Apr 10, 2016, 3:40:03 PM</time></a>
+                        <br>
+                        <span class="locale">en-US</span>
+                        
+                        
+                    </td>
+                    <td class="dashboard-title">
+                        <a href="https://developer.mozilla.org/en-US/docs/Games/Techniques/3D_on_the_web/GLSL_Shaders">GLSL Shaders</a>
+                        <span class="dashboard-slug">Games/Techniques/3D_on_the_web/GLSL_Shaders</span>
+                    </td>
+                    <td class="dashboard-comment">
+                        
+                    </td>
+                    <td class="dashboard-author">
+                        <a href="../profiles/PushpitaPikuDey.html">PushpitaPikuDey</a><br>
+                        
+                        
+                        
+                    </td>
+                    
+                </tr>
+            
+                
+                
+                <tr tabindex="0" class="dashboard-row " data-revision-id="1041146" data-previous-id="1041144" data-view-url="/en-US/docs/Mozilla/Projects/NSS/NSS_3.19.2.4_release_notes" data-edit-url="/en-US/docs/Mozilla/Projects/NSS/NSS_3.19.2.4_release_notes$edit" data-compare-url="/en-US/docs/Mozilla/Projects/NSS/NSS_3.19.2.4_release_notes$compare?from=1041144&amp;to=1041146&amp;raw=1" data-revert-url="/en-US/docs/Mozilla/Projects/NSS/NSS_3.19.2.4_release_notes$revert/1041146" data-history-url="/en-US/docs/Mozilla/Projects/NSS/NSS_3.19.2.4_release_notes$history">
+                    <td class="dashboard-revision">
+                        <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/NSS_3.19.2.4_release_notes$revision/1041146"><time datetime="2016-04-10T15:08:17-07:00">Apr 10, 2016, 3:08:17 PM</time></a>
+                        <br>
+                        <span class="locale">en-US</span>
+                        
+                        
+                    </td>
+                    <td class="dashboard-title">
+                        <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/NSS_3.19.2.4_release_notes">NSS 3.19.2.4 release notes</a>
+                        <span class="dashboard-slug">Mozilla/Projects/NSS/NSS_3.19.2.4_release_notes</span>
+                    </td>
+                    <td class="dashboard-comment">
+                        Editorial review completed.
+                    </td>
+                    <td class="dashboard-author">
+                        <a href="../profiles/PushpitaPikuDey.html">PushpitaPikuDey</a><br>
+                        
+                        
+                        
+                    </td>
+                    
+                </tr>
+            
+                
+                
+                <tr tabindex="0" class="dashboard-row " data-revision-id="1041144" data-previous-id="1032038" data-view-url="/en-US/docs/Mozilla/Projects/NSS/NSS_3.19.2.4_release_notes" data-edit-url="/en-US/docs/Mozilla/Projects/NSS/NSS_3.19.2.4_release_notes$edit" data-compare-url="/en-US/docs/Mozilla/Projects/NSS/NSS_3.19.2.4_release_notes$compare?from=1032038&amp;to=1041144&amp;raw=1" data-revert-url="/en-US/docs/Mozilla/Projects/NSS/NSS_3.19.2.4_release_notes$revert/1041144" data-history-url="/en-US/docs/Mozilla/Projects/NSS/NSS_3.19.2.4_release_notes$history">
+                    <td class="dashboard-revision">
+                        <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/NSS_3.19.2.4_release_notes$revision/1041144"><time datetime="2016-04-10T15:07:53-07:00">Apr 10, 2016, 3:07:53 PM</time></a>
+                        <br>
+                        <span class="locale">en-US</span>
+                        
+                        
+                    </td>
+                    <td class="dashboard-title">
+                        <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Projects/NSS/NSS_3.19.2.4_release_notes">NSS 3.19.2.4 release notes</a>
+                        <span class="dashboard-slug">Mozilla/Projects/NSS/NSS_3.19.2.4_release_notes</span>
+                    </td>
+                    <td class="dashboard-comment">
+                        
+                    </td>
+                    <td class="dashboard-author">
+                        <a href="../profiles/PushpitaPikuDey.html">PushpitaPikuDey</a><br>
+                        
+                        
+                        
+                    </td>
+                    
+                </tr>
+            
+                
+                
+                <tr tabindex="0" class="dashboard-row " data-revision-id="1036914" data-previous-id="1035550" data-view-url="/en-US/docs/Games/Techniques/3D_on_the_web/Building_up_a_basic_demo_with_Babylon.js" data-edit-url="/en-US/docs/Games/Techniques/3D_on_the_web/Building_up_a_basic_demo_with_Babylon.js$edit" data-compare-url="/en-US/docs/Games/Techniques/3D_on_the_web/Building_up_a_basic_demo_with_Babylon.js$compare?from=1035550&amp;to=1036914&amp;raw=1" data-revert-url="/en-US/docs/Games/Techniques/3D_on_the_web/Building_up_a_basic_demo_with_Babylon.js$revert/1036914" data-history-url="/en-US/docs/Games/Techniques/3D_on_the_web/Building_up_a_basic_demo_with_Babylon.js$history">
+                    <td class="dashboard-revision">
+                        <a href="https://developer.mozilla.org/en-US/docs/Games/Techniques/3D_on_the_web/Building_up_a_basic_demo_with_Babylon.js$revision/1036914"><time datetime="2016-04-01T11:36:24-07:00">Apr 1, 2016, 11:36:24 AM</time></a>
+                        <br>
+                        <span class="locale">en-US</span>
+                        
+                        
+                    </td>
+                    <td class="dashboard-title">
+                        <a href="../docs/Games/Techniques/3D_on_the_web/Building_up_a_basic_demo_with_Babylon.html">Building up a basic demo with Babylon.js</a>
+                        <span class="dashboard-slug">Games/Techniques/3D_on_the_web/Building_up_a_basic_demo_with_Babylon.js</span>
+                    </td>
+                    <td class="dashboard-comment">
+                        
+                    </td>
+                    <td class="dashboard-author">
+                        <a href="../profiles/PushpitaPikuDey.html">PushpitaPikuDey</a><br>
+                        
+                        
+                        
+                    </td>
+                    
+                </tr>
+            
+                
+                
+                <tr tabindex="0" class="dashboard-row " data-revision-id="1034530" data-previous-id="1034526" data-view-url="/en-US/docs/Mozilla/QA/Firefox_UI_tests/FirefoxTestCase" data-edit-url="/en-US/docs/Mozilla/QA/Firefox_UI_tests/FirefoxTestCase$edit" data-compare-url="/en-US/docs/Mozilla/QA/Firefox_UI_tests/FirefoxTestCase$compare?from=1034526&amp;to=1034530&amp;raw=1" data-revert-url="/en-US/docs/Mozilla/QA/Firefox_UI_tests/FirefoxTestCase$revert/1034530" data-history-url="/en-US/docs/Mozilla/QA/Firefox_UI_tests/FirefoxTestCase$history">
+                    <td class="dashboard-revision">
+                        <a href="https://developer.mozilla.org/en-US/docs/Mozilla/QA/Firefox_UI_tests/FirefoxTestCase$revision/1034530"><time datetime="2016-03-28T15:49:28-07:00">Mar 28, 2016, 3:49:28 PM</time></a>
+                        <br>
+                        <span class="locale">en-US</span>
+                        
+                        
+                    </td>
+                    <td class="dashboard-title">
+                        <a href="https://developer.mozilla.org/en-US/docs/Mozilla/QA/Firefox_UI_tests/FirefoxTestCase">FirefoxTestCase</a>
+                        <span class="dashboard-slug">Mozilla/QA/Firefox_UI_tests/FirefoxTestCase</span>
+                    </td>
+                    <td class="dashboard-comment">
+                        Editorial review completed.
+                    </td>
+                    <td class="dashboard-author">
+                        <a href="../profiles/PushpitaPikuDey.html">PushpitaPikuDey</a><br>
+                        
+                        
+                        
+                    </td>
+                    
+                </tr>
+            
+                
+                
+                <tr tabindex="0" class="dashboard-row " data-revision-id="1034526" data-previous-id="1032124" data-view-url="/en-US/docs/Mozilla/QA/Firefox_UI_tests/FirefoxTestCase" data-edit-url="/en-US/docs/Mozilla/QA/Firefox_UI_tests/FirefoxTestCase$edit" data-compare-url="/en-US/docs/Mozilla/QA/Firefox_UI_tests/FirefoxTestCase$compare?from=1032124&amp;to=1034526&amp;raw=1" data-revert-url="/en-US/docs/Mozilla/QA/Firefox_UI_tests/FirefoxTestCase$revert/1034526" data-history-url="/en-US/docs/Mozilla/QA/Firefox_UI_tests/FirefoxTestCase$history">
+                    <td class="dashboard-revision">
+                        <a href="https://developer.mozilla.org/en-US/docs/Mozilla/QA/Firefox_UI_tests/FirefoxTestCase$revision/1034526"><time datetime="2016-03-28T15:49:14-07:00">Mar 28, 2016, 3:49:14 PM</time></a>
+                        <br>
+                        <span class="locale">en-US</span>
+                        
+                        
+                    </td>
+                    <td class="dashboard-title">
+                        <a href="https://developer.mozilla.org/en-US/docs/Mozilla/QA/Firefox_UI_tests/FirefoxTestCase">FirefoxTestCase</a>
+                        <span class="dashboard-slug">Mozilla/QA/Firefox_UI_tests/FirefoxTestCase</span>
+                    </td>
+                    <td class="dashboard-comment">
+                        
+                    </td>
+                    <td class="dashboard-author">
+                        <a href="../profiles/PushpitaPikuDey.html">PushpitaPikuDey</a><br>
+                        
+                        
+                        
+                    </td>
+                    
+                </tr>
+            
+                
+                
+                <tr tabindex="0" class="dashboard-row " data-revision-id="1034520" data-previous-id="1034518" data-view-url="/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/firmware_update_guide_for_windows" data-edit-url="/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/firmware_update_guide_for_windows$edit" data-compare-url="/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/firmware_update_guide_for_windows$compare?from=1034518&amp;to=1034520&amp;raw=1" data-revert-url="/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/firmware_update_guide_for_windows$revert/1034520" data-history-url="/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/firmware_update_guide_for_windows$history">
+                    <td class="dashboard-revision">
+                        <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/firmware_update_guide_for_windows$revision/1034520"><time datetime="2016-03-28T15:37:53-07:00">Mar 28, 2016, 3:37:53 PM</time></a>
+                        <br>
+                        <span class="locale">en-US</span>
+                        
+                        
+                    </td>
+                    <td class="dashboard-title">
+                        <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/firmware_update_guide_for_windows">firmware update guide for windows</a>
+                        <span class="dashboard-slug">Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/firmware_update_guide_for_windows</span>
+                    </td>
+                    <td class="dashboard-comment">
+                        Tags added
+                    </td>
+                    <td class="dashboard-author">
+                        <a href="../profiles/PushpitaPikuDey.html">PushpitaPikuDey</a><br>
+                        
+                        
+                        
+                    </td>
+                    
+                </tr>
+            
+                
+                
+                <tr tabindex="0" class="dashboard-row " data-revision-id="1034518" data-previous-id="1034516" data-view-url="/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/firmware_update_guide_for_windows" data-edit-url="/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/firmware_update_guide_for_windows$edit" data-compare-url="/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/firmware_update_guide_for_windows$compare?from=1034516&amp;to=1034518&amp;raw=1" data-revert-url="/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/firmware_update_guide_for_windows$revert/1034518" data-history-url="/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/firmware_update_guide_for_windows$history">
+                    <td class="dashboard-revision">
+                        <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/firmware_update_guide_for_windows$revision/1034518"><time datetime="2016-03-28T15:36:12-07:00">Mar 28, 2016, 3:36:12 PM</time></a>
+                        <br>
+                        <span class="locale">en-US</span>
+                        
+                        
+                    </td>
+                    <td class="dashboard-title">
+                        <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/firmware_update_guide_for_windows">firmware update guide for windows</a>
+                        <span class="dashboard-slug">Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/firmware_update_guide_for_windows</span>
+                    </td>
+                    <td class="dashboard-comment">
+                        Editorial review completed.
+                    </td>
+                    <td class="dashboard-author">
+                        <a href="../profiles/PushpitaPikuDey.html">PushpitaPikuDey</a><br>
+                        
+                        
+                        
+                    </td>
+                    
+                </tr>
+            
+                
+                
+                <tr tabindex="0" class="dashboard-row " data-revision-id="1034516" data-previous-id="1034274" data-view-url="/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/firmware_update_guide_for_windows" data-edit-url="/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/firmware_update_guide_for_windows$edit" data-compare-url="/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/firmware_update_guide_for_windows$compare?from=1034274&amp;to=1034516&amp;raw=1" data-revert-url="/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/firmware_update_guide_for_windows$revert/1034516" data-history-url="/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/firmware_update_guide_for_windows$history">
+                    <td class="dashboard-revision">
+                        <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/firmware_update_guide_for_windows$revision/1034516"><time datetime="2016-03-28T15:35:37-07:00">Mar 28, 2016, 3:35:37 PM</time></a>
+                        <br>
+                        <span class="locale">en-US</span>
+                        
+                        
+                    </td>
+                    <td class="dashboard-title">
+                        <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/firmware_update_guide_for_windows">firmware update guide for windows</a>
+                        <span class="dashboard-slug">Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/firmware_update_guide_for_windows</span>
+                    </td>
+                    <td class="dashboard-comment">
+                        
+                    </td>
+                    <td class="dashboard-author">
+                        <a href="../profiles/PushpitaPikuDey.html">PushpitaPikuDey</a><br>
+                        
+                        
+                        
+                    </td>
+                    
+                </tr>
+            
+                
+                
+                <tr tabindex="0" class="dashboard-row " data-revision-id="1031692" data-previous-id="1031690" data-view-url="/en-US/docs/Web/API/URLSearchParams/getAll" data-edit-url="/en-US/docs/Web/API/URLSearchParams/getAll$edit" data-compare-url="/en-US/docs/Web/API/URLSearchParams/getAll$compare?from=1031690&amp;to=1031692&amp;raw=1" data-revert-url="/en-US/docs/Web/API/URLSearchParams/getAll$revert/1031692" data-history-url="/en-US/docs/Web/API/URLSearchParams/getAll$history">
+                    <td class="dashboard-revision">
+                        <a href="https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams/getAll$revision/1031692"><time datetime="2016-03-18T16:23:28-07:00">Mar 18, 2016, 4:23:28 PM</time></a>
+                        <br>
+                        <span class="locale">en-US</span>
+                        
+                        
+                    </td>
+                    <td class="dashboard-title">
+                        <a href="../docs/Web/API/URLSearchParams/getAll.html">URLSearchParams.getAll()</a>
+                        <span class="dashboard-slug">Web/API/URLSearchParams/getAll</span>
+                    </td>
+                    <td class="dashboard-comment">
+                        Editorial review completed.
+                    </td>
+                    <td class="dashboard-author">
+                        <a href="../profiles/PushpitaPikuDey.html">PushpitaPikuDey</a><br>
+                        
+                        
+                        
+                    </td>
+                    
+                </tr>
+            
+                
+                
+                <tr tabindex="0" class="dashboard-row " data-revision-id="1031690" data-previous-id="1030610" data-view-url="/en-US/docs/Web/API/URLSearchParams/getAll" data-edit-url="/en-US/docs/Web/API/URLSearchParams/getAll$edit" data-compare-url="/en-US/docs/Web/API/URLSearchParams/getAll$compare?from=1030610&amp;to=1031690&amp;raw=1" data-revert-url="/en-US/docs/Web/API/URLSearchParams/getAll$revert/1031690" data-history-url="/en-US/docs/Web/API/URLSearchParams/getAll$history">
+                    <td class="dashboard-revision">
+                        <a href="https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams/getAll$revision/1031690"><time datetime="2016-03-18T16:23:05-07:00">Mar 18, 2016, 4:23:05 PM</time></a>
+                        <br>
+                        <span class="locale">en-US</span>
+                        
+                        
+                    </td>
+                    <td class="dashboard-title">
+                        <a href="../docs/Web/API/URLSearchParams/getAll.html">URLSearchParams.getAll()</a>
+                        <span class="dashboard-slug">Web/API/URLSearchParams/getAll</span>
+                    </td>
+                    <td class="dashboard-comment">
+                        
+                    </td>
+                    <td class="dashboard-author">
+                        <a href="../profiles/PushpitaPikuDey.html">PushpitaPikuDey</a><br>
+                        
+                        
+                        
+                    </td>
+                    
+                </tr>
+            
+                
+                
+                <tr tabindex="0" class="dashboard-row " data-revision-id="1031688" data-previous-id="1031686" data-view-url="/en-US/docs/Web/API/OfflineAudioContext/resume" data-edit-url="/en-US/docs/Web/API/OfflineAudioContext/resume$edit" data-compare-url="/en-US/docs/Web/API/OfflineAudioContext/resume$compare?from=1031686&amp;to=1031688&amp;raw=1" data-revert-url="/en-US/docs/Web/API/OfflineAudioContext/resume$revert/1031688" data-history-url="/en-US/docs/Web/API/OfflineAudioContext/resume$history">
+                    <td class="dashboard-revision">
+                        <a href="https://developer.mozilla.org/en-US/docs/Web/API/OfflineAudioContext/resume$revision/1031688"><time datetime="2016-03-18T16:21:07-07:00">Mar 18, 2016, 4:21:07 PM</time></a>
+                        <br>
+                        <span class="locale">en-US</span>
+                        
+                        
+                    </td>
+                    <td class="dashboard-title">
+                        <a href="../docs/Web/API/OfflineAudioContext/resume.html">OfflineAudioContext.resume()</a>
+                        <span class="dashboard-slug">Web/API/OfflineAudioContext/resume</span>
+                    </td>
+                    <td class="dashboard-comment">
+                        Editorial review completed.
+                    </td>
+                    <td class="dashboard-author">
+                        <a href="../profiles/PushpitaPikuDey.html">PushpitaPikuDey</a><br>
+                        
+                        
+                        
+                    </td>
+                    
+                </tr>
+            
+                
+                
+                <tr tabindex="0" class="dashboard-row " data-revision-id="1031686" data-previous-id="1030122" data-view-url="/en-US/docs/Web/API/OfflineAudioContext/resume" data-edit-url="/en-US/docs/Web/API/OfflineAudioContext/resume$edit" data-compare-url="/en-US/docs/Web/API/OfflineAudioContext/resume$compare?from=1030122&amp;to=1031686&amp;raw=1" data-revert-url="/en-US/docs/Web/API/OfflineAudioContext/resume$revert/1031686" data-history-url="/en-US/docs/Web/API/OfflineAudioContext/resume$history">
+                    <td class="dashboard-revision">
+                        <a href="https://developer.mozilla.org/en-US/docs/Web/API/OfflineAudioContext/resume$revision/1031686"><time datetime="2016-03-18T16:20:39-07:00">Mar 18, 2016, 4:20:39 PM</time></a>
+                        <br>
+                        <span class="locale">en-US</span>
+                        
+                        
+                    </td>
+                    <td class="dashboard-title">
+                        <a href="../docs/Web/API/OfflineAudioContext/resume.html">OfflineAudioContext.resume()</a>
+                        <span class="dashboard-slug">Web/API/OfflineAudioContext/resume</span>
+                    </td>
+                    <td class="dashboard-comment">
+                        
+                    </td>
+                    <td class="dashboard-author">
+                        <a href="../profiles/PushpitaPikuDey.html">PushpitaPikuDey</a><br>
+                        
+                        
+                        
+                    </td>
+                    
+                </tr>
+            
+                
+                
+                <tr tabindex="0" class="dashboard-row " data-revision-id="1031204" data-previous-id="1030984" data-view-url="/en-US/docs/Web/API/SVGAltGlyphElement/glyphRef" data-edit-url="/en-US/docs/Web/API/SVGAltGlyphElement/glyphRef$edit" data-compare-url="/en-US/docs/Web/API/SVGAltGlyphElement/glyphRef$compare?from=1030984&amp;to=1031204&amp;raw=1" data-revert-url="/en-US/docs/Web/API/SVGAltGlyphElement/glyphRef$revert/1031204" data-history-url="/en-US/docs/Web/API/SVGAltGlyphElement/glyphRef$history">
+                    <td class="dashboard-revision">
+                        <a href="https://developer.mozilla.org/en-US/docs/Web/API/SVGAltGlyphElement/glyphRef$revision/1031204"><time datetime="2016-03-17T11:03:37-07:00">Mar 17, 2016, 11:03:37 AM</time></a>
+                        <br>
+                        <span class="locale">en-US</span>
+                        
+                        
+                    </td>
+                    <td class="dashboard-title">
+                        <a href="../docs/Web/API/SVGAltGlyphElement/glyphRef.html">SVGAltGlyphElement.glyphRef</a>
+                        <span class="dashboard-slug">Web/API/SVGAltGlyphElement/glyphRef</span>
+                    </td>
+                    <td class="dashboard-comment">
+                        
+                    </td>
+                    <td class="dashboard-author">
+                        <a href="../profiles/PushpitaPikuDey.html">PushpitaPikuDey</a><br>
+                        
+                        
+                        
+                    </td>
+                    
+                </tr>
+            
+                
+                
+                <tr tabindex="0" class="dashboard-row " data-revision-id="1030688" data-previous-id="1030686" data-view-url="/en-US/docs/Web/API/URLSearchParams/delete" data-edit-url="/en-US/docs/Web/API/URLSearchParams/delete$edit" data-compare-url="/en-US/docs/Web/API/URLSearchParams/delete$compare?from=1030686&amp;to=1030688&amp;raw=1" data-revert-url="/en-US/docs/Web/API/URLSearchParams/delete$revert/1030688" data-history-url="/en-US/docs/Web/API/URLSearchParams/delete$history">
+                    <td class="dashboard-revision">
+                        <a href="https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams/delete$revision/1030688"><time datetime="2016-03-16T15:14:39-07:00">Mar 16, 2016, 3:14:39 PM</time></a>
+                        <br>
+                        <span class="locale">en-US</span>
+                        
+                        
+                    </td>
+                    <td class="dashboard-title">
+                        <a href="../docs/Web/API/URLSearchParams/delete.html">URLSearchParams.delete()</a>
+                        <span class="dashboard-slug">Web/API/URLSearchParams/delete</span>
+                    </td>
+                    <td class="dashboard-comment">
+                        Editorial review completed.
+                    </td>
+                    <td class="dashboard-author">
+                        <a href="../profiles/PushpitaPikuDey.html">PushpitaPikuDey</a><br>
+                        
+                        
+                        
+                    </td>
+                    
+                </tr>
+            
+                
+                
+                <tr tabindex="0" class="dashboard-row " data-revision-id="1030686" data-previous-id="1030326" data-view-url="/en-US/docs/Web/API/URLSearchParams/delete" data-edit-url="/en-US/docs/Web/API/URLSearchParams/delete$edit" data-compare-url="/en-US/docs/Web/API/URLSearchParams/delete$compare?from=1030326&amp;to=1030686&amp;raw=1" data-revert-url="/en-US/docs/Web/API/URLSearchParams/delete$revert/1030686" data-history-url="/en-US/docs/Web/API/URLSearchParams/delete$history">
+                    <td class="dashboard-revision">
+                        <a href="https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams/delete$revision/1030686"><time datetime="2016-03-16T15:13:58-07:00">Mar 16, 2016, 3:13:58 PM</time></a>
+                        <br>
+                        <span class="locale">en-US</span>
+                        
+                        
+                    </td>
+                    <td class="dashboard-title">
+                        <a href="../docs/Web/API/URLSearchParams/delete.html">URLSearchParams.delete()</a>
+                        <span class="dashboard-slug">Web/API/URLSearchParams/delete</span>
+                    </td>
+                    <td class="dashboard-comment">
+                        
+                    </td>
+                    <td class="dashboard-author">
+                        <a href="../profiles/PushpitaPikuDey.html">PushpitaPikuDey</a><br>
+                        
+                        
+                        
+                    </td>
+                    
+                </tr>
+            
+                
+                
+                <tr tabindex="0" class="dashboard-row " data-revision-id="1030678" data-previous-id="1030676" data-view-url="/en-US/docs/Web/API/IIRFilterNode" data-edit-url="/en-US/docs/Web/API/IIRFilterNode$edit" data-compare-url="/en-US/docs/Web/API/IIRFilterNode$compare?from=1030676&amp;to=1030678&amp;raw=1" data-revert-url="/en-US/docs/Web/API/IIRFilterNode$revert/1030678" data-history-url="/en-US/docs/Web/API/IIRFilterNode$history">
+                    <td class="dashboard-revision">
+                        <a href="https://developer.mozilla.org/en-US/docs/Web/API/IIRFilterNode$revision/1030678"><time datetime="2016-03-16T14:57:09-07:00">Mar 16, 2016, 2:57:09 PM</time></a>
+                        <br>
+                        <span class="locale">en-US</span>
+                        
+                        
+                    </td>
+                    <td class="dashboard-title">
+                        <a href="../docs/Web/API/IIRFilterNode.html">IIRFilterNode</a>
+                        <span class="dashboard-slug">Web/API/IIRFilterNode</span>
+                    </td>
+                    <td class="dashboard-comment">
+                        Editorial review completed.
+                    </td>
+                    <td class="dashboard-author">
+                        <a href="../profiles/PushpitaPikuDey.html">PushpitaPikuDey</a><br>
+                        
+                        
+                        
+                    </td>
+                    
+                </tr>
+            
+                
+                
+                <tr tabindex="0" class="dashboard-row " data-revision-id="1030676" data-previous-id="1029104" data-view-url="/en-US/docs/Web/API/IIRFilterNode" data-edit-url="/en-US/docs/Web/API/IIRFilterNode$edit" data-compare-url="/en-US/docs/Web/API/IIRFilterNode$compare?from=1029104&amp;to=1030676&amp;raw=1" data-revert-url="/en-US/docs/Web/API/IIRFilterNode$revert/1030676" data-history-url="/en-US/docs/Web/API/IIRFilterNode$history">
+                    <td class="dashboard-revision">
+                        <a href="https://developer.mozilla.org/en-US/docs/Web/API/IIRFilterNode$revision/1030676"><time datetime="2016-03-16T14:56:55-07:00">Mar 16, 2016, 2:56:55 PM</time></a>
+                        <br>
+                        <span class="locale">en-US</span>
+                        
+                        
+                    </td>
+                    <td class="dashboard-title">
+                        <a href="../docs/Web/API/IIRFilterNode.html">IIRFilterNode</a>
+                        <span class="dashboard-slug">Web/API/IIRFilterNode</span>
+                    </td>
+                    <td class="dashboard-comment">
+                        
+                    </td>
+                    <td class="dashboard-author">
+                        <a href="../profiles/PushpitaPikuDey.html">PushpitaPikuDey</a><br>
+                        
+                        
+                        
+                    </td>
+                    
+                </tr>
+            
+                
+                
+                <tr tabindex="0" class="dashboard-row " data-revision-id="1030674" data-previous-id="1030672" data-view-url="/en-US/docs/Web/API/OfflineAudioContext/suspend" data-edit-url="/en-US/docs/Web/API/OfflineAudioContext/suspend$edit" data-compare-url="/en-US/docs/Web/API/OfflineAudioContext/suspend$compare?from=1030672&amp;to=1030674&amp;raw=1" data-revert-url="/en-US/docs/Web/API/OfflineAudioContext/suspend$revert/1030674" data-history-url="/en-US/docs/Web/API/OfflineAudioContext/suspend$history">
+                    <td class="dashboard-revision">
+                        <a href="https://developer.mozilla.org/en-US/docs/Web/API/OfflineAudioContext/suspend$revision/1030674"><time datetime="2016-03-16T14:49:22-07:00">Mar 16, 2016, 2:49:22 PM</time></a>
+                        <br>
+                        <span class="locale">en-US</span>
+                        
+                        
+                    </td>
+                    <td class="dashboard-title">
+                        <a href="../docs/Web/API/OfflineAudioContext/suspend.html">suspend</a>
+                        <span class="dashboard-slug">Web/API/OfflineAudioContext/suspend</span>
+                    </td>
+                    <td class="dashboard-comment">
+                        Editorial review completed.
+                    </td>
+                    <td class="dashboard-author">
+                        <a href="../profiles/PushpitaPikuDey.html">PushpitaPikuDey</a><br>
+                        
+                        
+                        
+                    </td>
+                    
+                </tr>
+            
+                
+                
+                <tr tabindex="0" class="dashboard-row " data-revision-id="1030672" data-previous-id="1030124" data-view-url="/en-US/docs/Web/API/OfflineAudioContext/suspend" data-edit-url="/en-US/docs/Web/API/OfflineAudioContext/suspend$edit" data-compare-url="/en-US/docs/Web/API/OfflineAudioContext/suspend$compare?from=1030124&amp;to=1030672&amp;raw=1" data-revert-url="/en-US/docs/Web/API/OfflineAudioContext/suspend$revert/1030672" data-history-url="/en-US/docs/Web/API/OfflineAudioContext/suspend$history">
+                    <td class="dashboard-revision">
+                        <a href="https://developer.mozilla.org/en-US/docs/Web/API/OfflineAudioContext/suspend$revision/1030672"><time datetime="2016-03-16T14:49:05-07:00">Mar 16, 2016, 2:49:05 PM</time></a>
+                        <br>
+                        <span class="locale">en-US</span>
+                        
+                        
+                    </td>
+                    <td class="dashboard-title">
+                        <a href="../docs/Web/API/OfflineAudioContext/suspend.html">suspend</a>
+                        <span class="dashboard-slug">Web/API/OfflineAudioContext/suspend</span>
+                    </td>
+                    <td class="dashboard-comment">
+                        
+                    </td>
+                    <td class="dashboard-author">
+                        <a href="../profiles/PushpitaPikuDey.html">PushpitaPikuDey</a><br>
+                        
+                        
+                        
+                    </td>
+                    
+                </tr>
+            
+                
+                
+                <tr tabindex="0" class="dashboard-row " data-revision-id="1030068" data-previous-id="1026320" data-view-url="/en-US/docs/Mozilla/Add-ons/WebExtensions/Anatomy_of_a_WebExtension" data-edit-url="/en-US/docs/Mozilla/Add-ons/WebExtensions/Anatomy_of_a_WebExtension$edit" data-compare-url="/en-US/docs/Mozilla/Add-ons/WebExtensions/Anatomy_of_a_WebExtension$compare?from=1026320&amp;to=1030068&amp;raw=1" data-revert-url="/en-US/docs/Mozilla/Add-ons/WebExtensions/Anatomy_of_a_WebExtension$revert/1030068" data-history-url="/en-US/docs/Mozilla/Add-ons/WebExtensions/Anatomy_of_a_WebExtension$history">
+                    <td class="dashboard-revision">
+                        <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Anatomy_of_a_WebExtension$revision/1030068"><time datetime="2016-03-14T14:52:39-07:00">Mar 14, 2016, 2:52:39 PM</time></a>
+                        <br>
+                        <span class="locale">en-US</span>
+                        
+                        
+                    </td>
+                    <td class="dashboard-title">
+                        <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Anatomy_of_a_WebExtension">Anatomy of a WebExtension</a>
+                        <span class="dashboard-slug">Mozilla/Add-ons/WebExtensions/Anatomy_of_a_WebExtension</span>
+                    </td>
+                    <td class="dashboard-comment">
+                        
+                    </td>
+                    <td class="dashboard-author">
+                        <a href="../profiles/PushpitaPikuDey.html">PushpitaPikuDey</a><br>
+                        
+                        
+                        
+                    </td>
+                    
+                </tr>
+            
+                
+                
+                <tr tabindex="0" class="dashboard-row " data-revision-id="1029458" data-previous-id="1029456" data-view-url="/en-US/docs/Web/API/AudioContext/CreateIIRFilter" data-edit-url="/en-US/docs/Web/API/AudioContext/CreateIIRFilter$edit" data-compare-url="/en-US/docs/Web/API/AudioContext/CreateIIRFilter$compare?from=1029456&amp;to=1029458&amp;raw=1" data-revert-url="/en-US/docs/Web/API/AudioContext/CreateIIRFilter$revert/1029458" data-history-url="/en-US/docs/Web/API/AudioContext/CreateIIRFilter$history">
+                    <td class="dashboard-revision">
+                        <a href="https://developer.mozilla.org/en-US/docs/Web/API/AudioContext/CreateIIRFilter$revision/1029458"><time datetime="2016-03-13T14:24:10-07:00">Mar 13, 2016, 2:24:10 PM</time></a>
+                        <br>
+                        <span class="locale">en-US</span>
+                        
+                        
+                    </td>
+                    <td class="dashboard-title">
+                        <a href="../docs/Web/API/AudioContext/CreateIIRFilter-2.html">CreateIIRFilter</a>
+                        <span class="dashboard-slug">Web/API/AudioContext/CreateIIRFilter</span>
+                    </td>
+                    <td class="dashboard-comment">
+                        Editorial review completed.
+                    </td>
+                    <td class="dashboard-author">
+                        <a href="../profiles/PushpitaPikuDey.html">PushpitaPikuDey</a><br>
+                        
+                        
+                        
+                    </td>
+                    
+                </tr>
+            
+                
+                
+                <tr tabindex="0" class="dashboard-row " data-revision-id="1029456" data-previous-id="1029116" data-view-url="/en-US/docs/Web/API/AudioContext/CreateIIRFilter" data-edit-url="/en-US/docs/Web/API/AudioContext/CreateIIRFilter$edit" data-compare-url="/en-US/docs/Web/API/AudioContext/CreateIIRFilter$compare?from=1029116&amp;to=1029456&amp;raw=1" data-revert-url="/en-US/docs/Web/API/AudioContext/CreateIIRFilter$revert/1029456" data-history-url="/en-US/docs/Web/API/AudioContext/CreateIIRFilter$history">
+                    <td class="dashboard-revision">
+                        <a href="https://developer.mozilla.org/en-US/docs/Web/API/AudioContext/CreateIIRFilter$revision/1029456"><time datetime="2016-03-13T14:23:51-07:00">Mar 13, 2016, 2:23:51 PM</time></a>
+                        <br>
+                        <span class="locale">en-US</span>
+                        
+                        
+                    </td>
+                    <td class="dashboard-title">
+                        <a href="../docs/Web/API/AudioContext/CreateIIRFilter-2.html">CreateIIRFilter</a>
+                        <span class="dashboard-slug">Web/API/AudioContext/CreateIIRFilter</span>
+                    </td>
+                    <td class="dashboard-comment">
+                        
+                    </td>
+                    <td class="dashboard-author">
+                        <a href="../profiles/PushpitaPikuDey.html">PushpitaPikuDey</a><br>
+                        
+                        
+                        
+                    </td>
+                    
+                </tr>
+            
+                
+                
+                <tr tabindex="0" class="dashboard-row " data-revision-id="1029310" data-previous-id="1028048" data-view-url="/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/basic_startup" data-edit-url="/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/basic_startup$edit" data-compare-url="/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/basic_startup$compare?from=1028048&amp;to=1029310&amp;raw=1" data-revert-url="/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/basic_startup$revert/1029310" data-history-url="/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/basic_startup$history">
+                    <td class="dashboard-revision">
+                        <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/basic_startup$revision/1029310"><time datetime="2016-03-12T14:23:52-08:00">Mar 12, 2016, 2:23:52 PM</time></a>
+                        <br>
+                        <span class="locale">en-US</span>
+                        
+                        
+                    </td>
+                    <td class="dashboard-title">
+                        <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/basic_startup">Startup section</a>
+                        <span class="dashboard-slug">Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/basic_startup</span>
+                    </td>
+                    <td class="dashboard-comment">
+                        
+                    </td>
+                    <td class="dashboard-author">
+                        <a href="../profiles/PushpitaPikuDey.html">PushpitaPikuDey</a><br>
+                        
+                        
+                        
+                    </td>
+                    
+                </tr>
+            
+                
+                
+                <tr tabindex="0" class="dashboard-row " data-revision-id="1029124" data-previous-id="1027260" data-view-url="/en-US/docs/Web/CSS/var()" data-edit-url="/en-US/docs/Web/CSS/var()$edit" data-compare-url="/en-US/docs/Web/CSS/var()$compare?from=1027260&amp;to=1029124&amp;raw=1" data-revert-url="/en-US/docs/Web/CSS/var()$revert/1029124" data-history-url="/en-US/docs/Web/CSS/var()$history">
+                    <td class="dashboard-revision">
+                        <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/var()$revision/1029124"><time datetime="2016-03-11T15:52:40-08:00">Mar 11, 2016, 3:52:40 PM</time></a>
+                        <br>
+                        <span class="locale">en-US</span>
+                        
+                        
+                    </td>
+                    <td class="dashboard-title">
+                        <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/var()">var()</a>
+                        <span class="dashboard-slug">Web/CSS/var()</span>
+                    </td>
+                    <td class="dashboard-comment">
+                        
+                    </td>
+                    <td class="dashboard-author">
+                        <a href="../profiles/PushpitaPikuDey.html">PushpitaPikuDey</a><br>
+                        
+                        
+                        
+                    </td>
+                    
+                </tr>
+            
+                
+                
+                <tr tabindex="0" class="dashboard-row " data-revision-id="1029122" data-previous-id="1029120" data-view-url="/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/board_connectors" data-edit-url="/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/board_connectors$edit" data-compare-url="/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/board_connectors$compare?from=1029120&amp;to=1029122&amp;raw=1" data-revert-url="/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/board_connectors$revert/1029122" data-history-url="/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/board_connectors$history">
+                    <td class="dashboard-revision">
+                        <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/board_connectors$revision/1029122"><time datetime="2016-03-11T15:46:38-08:00">Mar 11, 2016, 3:46:38 PM</time></a>
+                        <br>
+                        <span class="locale">en-US</span>
+                        
+                        
+                    </td>
+                    <td class="dashboard-title">
+                        <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/board_connectors">Layout of the connectors</a>
+                        <span class="dashboard-slug">Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/board_connectors</span>
+                    </td>
+                    <td class="dashboard-comment">
+                        Editorial review completed.
+                    </td>
+                    <td class="dashboard-author">
+                        <a href="../profiles/PushpitaPikuDey.html">PushpitaPikuDey</a><br>
+                        
+                        
+                        
+                    </td>
+                    
+                </tr>
+            
+                
+                
+                <tr tabindex="0" class="dashboard-row " data-revision-id="1029120" data-previous-id="1028774" data-view-url="/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/board_connectors" data-edit-url="/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/board_connectors$edit" data-compare-url="/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/board_connectors$compare?from=1028774&amp;to=1029120&amp;raw=1" data-revert-url="/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/board_connectors$revert/1029120" data-history-url="/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/board_connectors$history">
+                    <td class="dashboard-revision">
+                        <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/board_connectors$revision/1029120"><time datetime="2016-03-11T15:46:07-08:00">Mar 11, 2016, 3:46:07 PM</time></a>
+                        <br>
+                        <span class="locale">en-US</span>
+                        
+                        
+                    </td>
+                    <td class="dashboard-title">
+                        <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/board_connectors">Layout of the connectors</a>
+                        <span class="dashboard-slug">Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/board_connectors</span>
+                    </td>
+                    <td class="dashboard-comment">
+                        
+                    </td>
+                    <td class="dashboard-author">
+                        <a href="../profiles/PushpitaPikuDey.html">PushpitaPikuDey</a><br>
+                        
+                        
+                        
+                    </td>
+                    
+                </tr>
+            
+                
+                
+                <tr tabindex="0" class="dashboard-row " data-revision-id="1028762" data-previous-id="1028760" data-view-url="/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/dev_windows" data-edit-url="/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/dev_windows$edit" data-compare-url="/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/dev_windows$compare?from=1028760&amp;to=1028762&amp;raw=1" data-revert-url="/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/dev_windows$revert/1028762" data-history-url="/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/dev_windows$history">
+                    <td class="dashboard-revision">
+                        <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/dev_windows$revision/1028762"><time datetime="2016-03-10T14:47:32-08:00">Mar 10, 2016, 2:47:32 PM</time></a>
+                        <br>
+                        <span class="locale">en-US</span>
+                        
+                        
+                    </td>
+                    <td class="dashboard-title">
+                        <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/dev_windows">Development-environment preparation section windows version</a>
+                        <span class="dashboard-slug">Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/dev_windows</span>
+                    </td>
+                    <td class="dashboard-comment">
+                        
+                    </td>
+                    <td class="dashboard-author">
+                        <a href="../profiles/PushpitaPikuDey.html">PushpitaPikuDey</a><br>
+                        
+                        
+                        
+                    </td>
+                    
+                </tr>
+            
+                
+                
+                <tr tabindex="0" class="dashboard-row " data-revision-id="1028760" data-previous-id="1028756" data-view-url="/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/dev_windows" data-edit-url="/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/dev_windows$edit" data-compare-url="/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/dev_windows$compare?from=1028756&amp;to=1028760&amp;raw=1" data-revert-url="/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/dev_windows$revert/1028760" data-history-url="/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/dev_windows$history">
+                    <td class="dashboard-revision">
+                        <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/dev_windows$revision/1028760"><time datetime="2016-03-10T14:46:23-08:00">Mar 10, 2016, 2:46:23 PM</time></a>
+                        <br>
+                        <span class="locale">en-US</span>
+                        
+                        
+                    </td>
+                    <td class="dashboard-title">
+                        <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/dev_windows">Development-environment preparation section windows version</a>
+                        <span class="dashboard-slug">Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/dev_windows</span>
+                    </td>
+                    <td class="dashboard-comment">
+                        Editorial review completed.
+                    </td>
+                    <td class="dashboard-author">
+                        <a href="../profiles/PushpitaPikuDey.html">PushpitaPikuDey</a><br>
+                        
+                        
+                        
+                    </td>
+                    
+                </tr>
+            
+                
+                
+                <tr tabindex="0" class="dashboard-row " data-revision-id="1028756" data-previous-id="1028754" data-view-url="/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/dev_windows" data-edit-url="/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/dev_windows$edit" data-compare-url="/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/dev_windows$compare?from=1028754&amp;to=1028756&amp;raw=1" data-revert-url="/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/dev_windows$revert/1028756" data-history-url="/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/dev_windows$history">
+                    <td class="dashboard-revision">
+                        <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/dev_windows$revision/1028756"><time datetime="2016-03-10T14:45:04-08:00">Mar 10, 2016, 2:45:04 PM</time></a>
+                        <br>
+                        <span class="locale">en-US</span>
+                        
+                        
+                    </td>
+                    <td class="dashboard-title">
+                        <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/dev_windows">Development-environment preparation section windows version</a>
+                        <span class="dashboard-slug">Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/dev_windows</span>
+                    </td>
+                    <td class="dashboard-comment">
+                        Technical review completed.
+                    </td>
+                    <td class="dashboard-author">
+                        <a href="../profiles/PushpitaPikuDey.html">PushpitaPikuDey</a><br>
+                        
+                        
+                        
+                    </td>
+                    
+                </tr>
+            
+                
+                
+                <tr tabindex="0" class="dashboard-row " data-revision-id="1028754" data-previous-id="1028020" data-view-url="/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/dev_windows" data-edit-url="/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/dev_windows$edit" data-compare-url="/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/dev_windows$compare?from=1028020&amp;to=1028754&amp;raw=1" data-revert-url="/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/dev_windows$revert/1028754" data-history-url="/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/dev_windows$history">
+                    <td class="dashboard-revision">
+                        <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/dev_windows$revision/1028754"><time datetime="2016-03-10T14:44:04-08:00">Mar 10, 2016, 2:44:04 PM</time></a>
+                        <br>
+                        <span class="locale">en-US</span>
+                        
+                        
+                    </td>
+                    <td class="dashboard-title">
+                        <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/dev_windows">Development-environment preparation section windows version</a>
+                        <span class="dashboard-slug">Mozilla/Firefox_OS/Board_guide/CHIRIMEN/Quick_start_guide/dev_windows</span>
+                    </td>
+                    <td class="dashboard-comment">
+                        
+                    </td>
+                    <td class="dashboard-author">
+                        <a href="../profiles/PushpitaPikuDey.html">PushpitaPikuDey</a><br>
+                        
+                        
+                        
+                    </td>
+                    
+                </tr>
+            
+                
+                
+                <tr tabindex="0" class="dashboard-row " data-revision-id="1028198" data-previous-id="1028196" data-view-url="/en-US/docs/Web/CSS/mask-size" data-edit-url="/en-US/docs/Web/CSS/mask-size$edit" data-compare-url="/en-US/docs/Web/CSS/mask-size$compare?from=1028196&amp;to=1028198&amp;raw=1" data-revert-url="/en-US/docs/Web/CSS/mask-size$revert/1028198" data-history-url="/en-US/docs/Web/CSS/mask-size$history">
+                    <td class="dashboard-revision">
+                        <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/mask-size$revision/1028198"><time datetime="2016-03-09T14:38:37-08:00">Mar 9, 2016, 2:38:37 PM</time></a>
+                        <br>
+                        <span class="locale">en-US</span>
+                        
+                        
+                    </td>
+                    <td class="dashboard-title">
+                        <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/mask-size">mask-size</a>
+                        <span class="dashboard-slug">Web/CSS/mask-size</span>
+                    </td>
+                    <td class="dashboard-comment">
+                        Editorial review completed.
+                    </td>
+                    <td class="dashboard-author">
+                        <a href="../profiles/PushpitaPikuDey.html">PushpitaPikuDey</a><br>
+                        
+                        
+                        
+                    </td>
+                    
+                </tr>
+            
+                
+                
+                <tr tabindex="0" class="dashboard-row " data-revision-id="1028196" data-previous-id="1027382" data-view-url="/en-US/docs/Web/CSS/mask-size" data-edit-url="/en-US/docs/Web/CSS/mask-size$edit" data-compare-url="/en-US/docs/Web/CSS/mask-size$compare?from=1027382&amp;to=1028196&amp;raw=1" data-revert-url="/en-US/docs/Web/CSS/mask-size$revert/1028196" data-history-url="/en-US/docs/Web/CSS/mask-size$history">
+                    <td class="dashboard-revision">
+                        <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/mask-size$revision/1028196"><time datetime="2016-03-09T14:38:13-08:00">Mar 9, 2016, 2:38:13 PM</time></a>
+                        <br>
+                        <span class="locale">en-US</span>
+                        
+                        
+                    </td>
+                    <td class="dashboard-title">
+                        <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/mask-size">mask-size</a>
+                        <span class="dashboard-slug">Web/CSS/mask-size</span>
+                    </td>
+                    <td class="dashboard-comment">
+                        
+                    </td>
+                    <td class="dashboard-author">
+                        <a href="../profiles/PushpitaPikuDey.html">PushpitaPikuDey</a><br>
+                        
+                        
+                        
+                    </td>
+                    
+                </tr>
+            
+                
+                
+                <tr tabindex="0" class="dashboard-row " data-revision-id="1027800" data-previous-id="1027798" data-view-url="/en-US/docs/Web/CSS/text-combine-upright" data-edit-url="/en-US/docs/Web/CSS/text-combine-upright$edit" data-compare-url="/en-US/docs/Web/CSS/text-combine-upright$compare?from=1027798&amp;to=1027800&amp;raw=1" data-revert-url="/en-US/docs/Web/CSS/text-combine-upright$revert/1027800" data-history-url="/en-US/docs/Web/CSS/text-combine-upright$history">
+                    <td class="dashboard-revision">
+                        <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/text-combine-upright$revision/1027800"><time datetime="2016-03-08T15:24:24-08:00">Mar 8, 2016, 3:24:24 PM</time></a>
+                        <br>
+                        <span class="locale">en-US</span>
+                        
+                        
+                    </td>
+                    <td class="dashboard-title">
+                        <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/text-combine-upright">text-combine-upright</a>
+                        <span class="dashboard-slug">Web/CSS/text-combine-upright</span>
+                    </td>
+                    <td class="dashboard-comment">
+                        Editorial review completed.
+                    </td>
+                    <td class="dashboard-author">
+                        <a href="../profiles/PushpitaPikuDey.html">PushpitaPikuDey</a><br>
+                        
+                        
+                        
+                    </td>
+                    
+                </tr>
+            
+                
+                
+                <tr tabindex="0" class="dashboard-row " data-revision-id="1027798" data-previous-id="1027794" data-view-url="/en-US/docs/Web/CSS/text-combine-upright" data-edit-url="/en-US/docs/Web/CSS/text-combine-upright$edit" data-compare-url="/en-US/docs/Web/CSS/text-combine-upright$compare?from=1027794&amp;to=1027798&amp;raw=1" data-revert-url="/en-US/docs/Web/CSS/text-combine-upright$revert/1027798" data-history-url="/en-US/docs/Web/CSS/text-combine-upright$history">
+                    <td class="dashboard-revision">
+                        <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/text-combine-upright$revision/1027798"><time datetime="2016-03-08T15:23:26-08:00">Mar 8, 2016, 3:23:26 PM</time></a>
+                        <br>
+                        <span class="locale">en-US</span>
+                        
+                        
+                    </td>
+                    <td class="dashboard-title">
+                        <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/text-combine-upright">text-combine-upright</a>
+                        <span class="dashboard-slug">Web/CSS/text-combine-upright</span>
+                    </td>
+                    <td class="dashboard-comment">
+                        
+                    </td>
+                    <td class="dashboard-author">
+                        <a href="../profiles/PushpitaPikuDey.html">PushpitaPikuDey</a><br>
+                        
+                        
+                        
+                    </td>
+                    
+                </tr>
+            
+                
+                
+                <tr tabindex="0" class="dashboard-row " data-revision-id="1027794" data-previous-id="1027144" data-view-url="/en-US/docs/Web/CSS/text-combine-upright" data-edit-url="/en-US/docs/Web/CSS/text-combine-upright$edit" data-compare-url="/en-US/docs/Web/CSS/text-combine-upright$compare?from=1027144&amp;to=1027794&amp;raw=1" data-revert-url="/en-US/docs/Web/CSS/text-combine-upright$revert/1027794" data-history-url="/en-US/docs/Web/CSS/text-combine-upright$history">
+                    <td class="dashboard-revision">
+                        <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/text-combine-upright$revision/1027794"><time datetime="2016-03-08T15:21:58-08:00">Mar 8, 2016, 3:21:58 PM</time></a>
+                        <br>
+                        <span class="locale">en-US</span>
+                        
+                        
+                    </td>
+                    <td class="dashboard-title">
+                        <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/text-combine-upright">text-combine-upright</a>
+                        <span class="dashboard-slug">Web/CSS/text-combine-upright</span>
+                    </td>
+                    <td class="dashboard-comment">
+                        
+                    </td>
+                    <td class="dashboard-author">
+                        <a href="../profiles/PushpitaPikuDey.html">PushpitaPikuDey</a><br>
+                        
+                        
+                        
+                    </td>
+                    
+                </tr>
+            
+                
+                
+                <tr tabindex="0" class="dashboard-row " data-revision-id="1027788" data-previous-id="1027786" data-view-url="/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/CHIRIMEN_FAQ" data-edit-url="/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/CHIRIMEN_FAQ$edit" data-compare-url="/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/CHIRIMEN_FAQ$compare?from=1027786&amp;to=1027788&amp;raw=1" data-revert-url="/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/CHIRIMEN_FAQ$revert/1027788" data-history-url="/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/CHIRIMEN_FAQ$history">
+                    <td class="dashboard-revision">
+                        <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/CHIRIMEN_FAQ$revision/1027788"><time datetime="2016-03-08T13:23:09-08:00">Mar 8, 2016, 1:23:09 PM</time></a>
+                        <br>
+                        <span class="locale">en-US</span>
+                        
+                        
+                    </td>
+                    <td class="dashboard-title">
+                        <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/CHIRIMEN_FAQ">CHIRIMEN FAQ</a>
+                        <span class="dashboard-slug">Mozilla/Firefox_OS/Board_guide/CHIRIMEN/CHIRIMEN_FAQ</span>
+                    </td>
+                    <td class="dashboard-comment">
+                        Editorial review completed.
+                    </td>
+                    <td class="dashboard-author">
+                        <a href="../profiles/PushpitaPikuDey.html">PushpitaPikuDey</a><br>
+                        
+                        
+                        
+                    </td>
+                    
+                </tr>
+            
+                
+                
+                <tr tabindex="0" class="dashboard-row " data-revision-id="1027786" data-previous-id="1025866" data-view-url="/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/CHIRIMEN_FAQ" data-edit-url="/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/CHIRIMEN_FAQ$edit" data-compare-url="/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/CHIRIMEN_FAQ$compare?from=1025866&amp;to=1027786&amp;raw=1" data-revert-url="/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/CHIRIMEN_FAQ$revert/1027786" data-history-url="/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/CHIRIMEN_FAQ$history">
+                    <td class="dashboard-revision">
+                        <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/CHIRIMEN_FAQ$revision/1027786"><time datetime="2016-03-08T13:21:52-08:00">Mar 8, 2016, 1:21:52 PM</time></a>
+                        <br>
+                        <span class="locale">en-US</span>
+                        
+                        
+                    </td>
+                    <td class="dashboard-title">
+                        <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS/Board_guide/CHIRIMEN/CHIRIMEN_FAQ">CHIRIMEN FAQ</a>
+                        <span class="dashboard-slug">Mozilla/Firefox_OS/Board_guide/CHIRIMEN/CHIRIMEN_FAQ</span>
+                    </td>
+                    <td class="dashboard-comment">
+                        
+                    </td>
+                    <td class="dashboard-author">
+                        <a href="../profiles/PushpitaPikuDey.html">PushpitaPikuDey</a><br>
+                        
+                        
+                        
+                    </td>
+                    
+                </tr>
+            
+                
+                
+                <tr tabindex="0" class="dashboard-row " data-revision-id="1027266" data-previous-id="1025926" data-view-url="/en-US/docs/Tools/Performance/Call_Tree" data-edit-url="/en-US/docs/Tools/Performance/Call_Tree$edit" data-compare-url="/en-US/docs/Tools/Performance/Call_Tree$compare?from=1025926&amp;to=1027266&amp;raw=1" data-revert-url="/en-US/docs/Tools/Performance/Call_Tree$revert/1027266" data-history-url="/en-US/docs/Tools/Performance/Call_Tree$history">
+                    <td class="dashboard-revision">
+                        <a href="https://developer.mozilla.org/en-US/docs/Tools/Performance/Call_Tree$revision/1027266"><time datetime="2016-03-07T14:30:55-08:00">Mar 7, 2016, 2:30:55 PM</time></a>
+                        <br>
+                        <span class="locale">en-US</span>
+                        
+                        
+                    </td>
+                    <td class="dashboard-title">
+                        <a href="https://developer.mozilla.org/en-US/docs/Tools/Performance/Call_Tree">Call Tree</a>
+                        <span class="dashboard-slug">Tools/Performance/Call_Tree</span>
+                    </td>
+                    <td class="dashboard-comment">
+                        
+                    </td>
+                    <td class="dashboard-author">
+                        <a href="../profiles/PushpitaPikuDey.html">PushpitaPikuDey</a><br>
+                        
+                        
+                        
+                    </td>
+                    
+                </tr>
+            
+                
+                
+                <tr tabindex="0" class="dashboard-row " data-revision-id="1026830" data-previous-id="1026438" data-view-url="/en-US/docs/Learn/HTML/Introduction_to_HTML/HTML_text_fundamentals" data-edit-url="/en-US/docs/Learn/HTML/Introduction_to_HTML/HTML_text_fundamentals$edit" data-compare-url="/en-US/docs/Learn/HTML/Introduction_to_HTML/HTML_text_fundamentals$compare?from=1026438&amp;to=1026830&amp;raw=1" data-revert-url="/en-US/docs/Learn/HTML/Introduction_to_HTML/HTML_text_fundamentals$revert/1026830" data-history-url="/en-US/docs/Learn/HTML/Introduction_to_HTML/HTML_text_fundamentals$history">
+                    <td class="dashboard-revision">
+                        <a href="https://developer.mozilla.org/en-US/docs/Learn/HTML/Introduction_to_HTML/HTML_text_fundamentals$revision/1026830"><time datetime="2016-03-06T14:03:36-08:00">Mar 6, 2016, 2:03:36 PM</time></a>
+                        <br>
+                        <span class="locale">en-US</span>
+                        
+                        
+                    </td>
+                    <td class="dashboard-title">
+                        <a href="https://developer.mozilla.org/en-US/docs/Learn/HTML/Introduction_to_HTML/HTML_text_fundamentals">HTML text fundamentals</a>
+                        <span class="dashboard-slug">Learn/HTML/Introduction_to_HTML/HTML_text_fundamentals</span>
+                    </td>
+                    <td class="dashboard-comment">
+                        
+                    </td>
+                    <td class="dashboard-author">
+                        <a href="../profiles/PushpitaPikuDey.html">PushpitaPikuDey</a><br>
+                        
+                        
+                        
+                    </td>
+                    
+                </tr>
+            
+                
+                
+                <tr tabindex="0" class="dashboard-row " data-revision-id="1026238" data-previous-id="1026236" data-view-url="/en-US/docs/Web/API/WebSockets_API/Writing_a_WebSocket_server_in_Java" data-edit-url="/en-US/docs/Web/API/WebSockets_API/Writing_a_WebSocket_server_in_Java$edit" data-compare-url="/en-US/docs/Web/API/WebSockets_API/Writing_a_WebSocket_server_in_Java$compare?from=1026236&amp;to=1026238&amp;raw=1" data-revert-url="/en-US/docs/Web/API/WebSockets_API/Writing_a_WebSocket_server_in_Java$revert/1026238" data-history-url="/en-US/docs/Web/API/WebSockets_API/Writing_a_WebSocket_server_in_Java$history">
+                    <td class="dashboard-revision">
+                        <a href="https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API/Writing_a_WebSocket_server_in_Java$revision/1026238"><time datetime="2016-03-03T14:17:03-08:00">Mar 3, 2016, 2:17:03 PM</time></a>
+                        <br>
+                        <span class="locale">en-US</span>
+                        
+                        
+                    </td>
+                    <td class="dashboard-title">
+                        <a href="../docs/Web/API/WebSockets_API/Writing_a_WebSocket_server_in_Java.html">Writing a WebSocket server in Java</a>
+                        <span class="dashboard-slug">Web/API/WebSockets_API/Writing_a_WebSocket_server_in_Java</span>
+                    </td>
+                    <td class="dashboard-comment">
+                        
+                    </td>
+                    <td class="dashboard-author">
+                        <a href="../profiles/PushpitaPikuDey.html">PushpitaPikuDey</a><br>
+                        
+                        
+                        
+                    </td>
+                    
+                </tr>
+            
+                
+                
+                <tr tabindex="0" class="dashboard-row " data-revision-id="1026236" data-previous-id="1026234" data-view-url="/en-US/docs/Web/API/WebSockets_API/Writing_a_WebSocket_server_in_Java" data-edit-url="/en-US/docs/Web/API/WebSockets_API/Writing_a_WebSocket_server_in_Java$edit" data-compare-url="/en-US/docs/Web/API/WebSockets_API/Writing_a_WebSocket_server_in_Java$compare?from=1026234&amp;to=1026236&amp;raw=1" data-revert-url="/en-US/docs/Web/API/WebSockets_API/Writing_a_WebSocket_server_in_Java$revert/1026236" data-history-url="/en-US/docs/Web/API/WebSockets_API/Writing_a_WebSocket_server_in_Java$history">
+                    <td class="dashboard-revision">
+                        <a href="https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API/Writing_a_WebSocket_server_in_Java$revision/1026236"><time datetime="2016-03-03T14:14:52-08:00">Mar 3, 2016, 2:14:52 PM</time></a>
+                        <br>
+                        <span class="locale">en-US</span>
+                        
+                        
+                    </td>
+                    <td class="dashboard-title">
+                        <a href="../docs/Web/API/WebSockets_API/Writing_a_WebSocket_server_in_Java.html">Writing a WebSocket server in Java</a>
+                        <span class="dashboard-slug">Web/API/WebSockets_API/Writing_a_WebSocket_server_in_Java</span>
+                    </td>
+                    <td class="dashboard-comment">
+                        Editorial review completed.
+                    </td>
+                    <td class="dashboard-author">
+                        <a href="../profiles/PushpitaPikuDey.html">PushpitaPikuDey</a><br>
+                        
+                        
+                        
+                    </td>
+                    
+                </tr>
+            
+                
+                
+                <tr tabindex="0" class="dashboard-row " data-revision-id="1026234" data-previous-id="1020238" data-view-url="/en-US/docs/Web/API/WebSockets_API/Writing_a_WebSocket_server_in_Java" data-edit-url="/en-US/docs/Web/API/WebSockets_API/Writing_a_WebSocket_server_in_Java$edit" data-compare-url="/en-US/docs/Web/API/WebSockets_API/Writing_a_WebSocket_server_in_Java$compare?from=1020238&amp;to=1026234&amp;raw=1" data-revert-url="/en-US/docs/Web/API/WebSockets_API/Writing_a_WebSocket_server_in_Java$revert/1026234" data-history-url="/en-US/docs/Web/API/WebSockets_API/Writing_a_WebSocket_server_in_Java$history">
+                    <td class="dashboard-revision">
+                        <a href="https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API/Writing_a_WebSocket_server_in_Java$revision/1026234"><time datetime="2016-03-03T14:14:31-08:00">Mar 3, 2016, 2:14:31 PM</time></a>
+                        <br>
+                        <span class="locale">en-US</span>
+                        
+                        
+                    </td>
+                    <td class="dashboard-title">
+                        <a href="../docs/Web/API/WebSockets_API/Writing_a_WebSocket_server_in_Java.html">Writing a WebSocket server in Java</a>
+                        <span class="dashboard-slug">Web/API/WebSockets_API/Writing_a_WebSocket_server_in_Java</span>
+                    </td>
+                    <td class="dashboard-comment">
+                        
+                    </td>
+                    <td class="dashboard-author">
+                        <a href="../profiles/PushpitaPikuDey.html">PushpitaPikuDey</a><br>
+                        
+                        
+                        
+                    </td>
+                    
+                </tr>
+            
+                
+                
+                <tr tabindex="0" class="dashboard-row " data-revision-id="1026228" data-previous-id="1026224" data-view-url="/en-US/docs/Web/API/Performance_Timeline/Using_Performance_Timeline" data-edit-url="/en-US/docs/Web/API/Performance_Timeline/Using_Performance_Timeline$edit" data-compare-url="/en-US/docs/Web/API/Performance_Timeline/Using_Performance_Timeline$compare?from=1026224&amp;to=1026228&amp;raw=1" data-revert-url="/en-US/docs/Web/API/Performance_Timeline/Using_Performance_Timeline$revert/1026228" data-history-url="/en-US/docs/Web/API/Performance_Timeline/Using_Performance_Timeline$history">
+                    <td class="dashboard-revision">
+                        <a href="https://developer.mozilla.org/en-US/docs/Web/API/Performance_Timeline/Using_Performance_Timeline$revision/1026228"><time datetime="2016-03-03T13:55:00-08:00">Mar 3, 2016, 1:55:00 PM</time></a>
+                        <br>
+                        <span class="locale">en-US</span>
+                        
+                        
+                    </td>
+                    <td class="dashboard-title">
+                        <a href="../docs/Web/API/Performance_Timeline/Using_Performance_Timeline.html">Using Performance Timeline</a>
+                        <span class="dashboard-slug">Web/API/Performance_Timeline/Using_Performance_Timeline</span>
+                    </td>
+                    <td class="dashboard-comment">
+                        Editorial review completed.
+                    </td>
+                    <td class="dashboard-author">
+                        <a href="../profiles/PushpitaPikuDey.html">PushpitaPikuDey</a><br>
+                        
+                        
+                        
+                    </td>
+                    
+                </tr>
+            
+                
+                
+                <tr tabindex="0" class="dashboard-row " data-revision-id="1026224" data-previous-id="1026048" data-view-url="/en-US/docs/Web/API/Performance_Timeline/Using_Performance_Timeline" data-edit-url="/en-US/docs/Web/API/Performance_Timeline/Using_Performance_Timeline$edit" data-compare-url="/en-US/docs/Web/API/Performance_Timeline/Using_Performance_Timeline$compare?from=1026048&amp;to=1026224&amp;raw=1" data-revert-url="/en-US/docs/Web/API/Performance_Timeline/Using_Performance_Timeline$revert/1026224" data-history-url="/en-US/docs/Web/API/Performance_Timeline/Using_Performance_Timeline$history">
+                    <td class="dashboard-revision">
+                        <a href="https://developer.mozilla.org/en-US/docs/Web/API/Performance_Timeline/Using_Performance_Timeline$revision/1026224"><time datetime="2016-03-03T13:54:20-08:00">Mar 3, 2016, 1:54:20 PM</time></a>
+                        <br>
+                        <span class="locale">en-US</span>
+                        
+                        
+                    </td>
+                    <td class="dashboard-title">
+                        <a href="../docs/Web/API/Performance_Timeline/Using_Performance_Timeline.html">Using Performance Timeline</a>
+                        <span class="dashboard-slug">Web/API/Performance_Timeline/Using_Performance_Timeline</span>
+                    </td>
+                    <td class="dashboard-comment">
+                        
+                    </td>
+                    <td class="dashboard-author">
+                        <a href="../profiles/PushpitaPikuDey.html">PushpitaPikuDey</a><br>
+                        
+                        
+                        
+                    </td>
+                    
+                </tr>
+            
+                
+                
+                <tr tabindex="0" class="dashboard-row " data-revision-id="1024182" data-previous-id="1019858" data-view-url="/en-US/docs/Learn/HTML/Howto/Set_up_a_proper_title_hierarchy" data-edit-url="/en-US/docs/Learn/HTML/Howto/Set_up_a_proper_title_hierarchy$edit" data-compare-url="/en-US/docs/Learn/HTML/Howto/Set_up_a_proper_title_hierarchy$compare?from=1019858&amp;to=1024182&amp;raw=1" data-revert-url="/en-US/docs/Learn/HTML/Howto/Set_up_a_proper_title_hierarchy$revert/1024182" data-history-url="/en-US/docs/Learn/HTML/Howto/Set_up_a_proper_title_hierarchy$history">
+                    <td class="dashboard-revision">
+                        <a href="https://developer.mozilla.org/en-US/docs/Learn/HTML/Howto/Set_up_a_proper_title_hierarchy$revision/1024182"><time datetime="2016-03-01T15:00:46-08:00">Mar 1, 2016, 3:00:46 PM</time></a>
+                        <br>
+                        <span class="locale">en-US</span>
+                        
+                        
+                    </td>
+                    <td class="dashboard-title">
+                        <a href="https://developer.mozilla.org/en-US/docs/Learn/HTML/Howto/Set_up_a_proper_title_hierarchy">Set up a proper title hierarchy</a>
+                        <span class="dashboard-slug">Learn/HTML/Howto/Set_up_a_proper_title_hierarchy</span>
+                    </td>
+                    <td class="dashboard-comment">
+                        
+                    </td>
+                    <td class="dashboard-author">
+                        <a href="../profiles/PushpitaPikuDey.html">PushpitaPikuDey</a><br>
+                        
+                        
+                        
+                    </td>
+                    
+                </tr>
+            
+                
+                
+                <tr tabindex="0" class="dashboard-row " data-revision-id="1024180" data-previous-id="1024178" data-view-url="/en-US/docs/Web/CSS/@font-face/font-family" data-edit-url="/en-US/docs/Web/CSS/@font-face/font-family$edit" data-compare-url="/en-US/docs/Web/CSS/@font-face/font-family$compare?from=1024178&amp;to=1024180&amp;raw=1" data-revert-url="/en-US/docs/Web/CSS/@font-face/font-family$revert/1024180" data-history-url="/en-US/docs/Web/CSS/@font-face/font-family$history">
+                    <td class="dashboard-revision">
+                        <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-family$revision/1024180"><time datetime="2016-03-01T14:43:12-08:00">Mar 1, 2016, 2:43:12 PM</time></a>
+                        <br>
+                        <span class="locale">en-US</span>
+                        
+                        
+                    </td>
+                    <td class="dashboard-title">
+                        <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-family">font-family</a>
+                        <span class="dashboard-slug">Web/CSS/@font-face/font-family</span>
+                    </td>
+                    <td class="dashboard-comment">
+                        Editorial review completed.
+                    </td>
+                    <td class="dashboard-author">
+                        <a href="../profiles/PushpitaPikuDey.html">PushpitaPikuDey</a><br>
+                        
+                        
+                        
+                    </td>
+                    
+                </tr>
+            
+                
+                
+                <tr tabindex="0" class="dashboard-row " data-revision-id="1024178" data-previous-id="1003117" data-view-url="/en-US/docs/Web/CSS/@font-face/font-family" data-edit-url="/en-US/docs/Web/CSS/@font-face/font-family$edit" data-compare-url="/en-US/docs/Web/CSS/@font-face/font-family$compare?from=1003117&amp;to=1024178&amp;raw=1" data-revert-url="/en-US/docs/Web/CSS/@font-face/font-family$revert/1024178" data-history-url="/en-US/docs/Web/CSS/@font-face/font-family$history">
+                    <td class="dashboard-revision">
+                        <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-family$revision/1024178"><time datetime="2016-03-01T14:42:52-08:00">Mar 1, 2016, 2:42:52 PM</time></a>
+                        <br>
+                        <span class="locale">en-US</span>
+                        
+                        
+                    </td>
+                    <td class="dashboard-title">
+                        <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-family">font-family</a>
+                        <span class="dashboard-slug">Web/CSS/@font-face/font-family</span>
+                    </td>
+                    <td class="dashboard-comment">
+                        
+                    </td>
+                    <td class="dashboard-author">
+                        <a href="../profiles/PushpitaPikuDey.html">PushpitaPikuDey</a><br>
+                        
+                        
+                        
+                    </td>
+                    
+                </tr>
+            
+                
+                
+                <tr tabindex="0" class="dashboard-row " data-revision-id="1023486" data-previous-id="1023482" data-view-url="/en-US/docs/Glossary/firewall" data-edit-url="/en-US/docs/Glossary/firewall$edit" data-compare-url="/en-US/docs/Glossary/firewall$compare?from=1023482&amp;to=1023486&amp;raw=1" data-revert-url="/en-US/docs/Glossary/firewall$revert/1023486" data-history-url="/en-US/docs/Glossary/firewall$history">
+                    <td class="dashboard-revision">
+                        <a href="https://developer.mozilla.org/en-US/docs/Glossary/firewall$revision/1023486"><time datetime="2016-02-29T14:13:10-08:00">Feb 29, 2016, 2:13:10 PM</time></a>
+                        <br>
+                        <span class="locale">en-US</span>
+                        
+                        
+                    </td>
+                    <td class="dashboard-title">
+                        <a href="https://developer.mozilla.org/en-US/docs/Glossary/firewall">firewall</a>
+                        <span class="dashboard-slug">Glossary/firewall</span>
+                    </td>
+                    <td class="dashboard-comment">
+                        Editorial review completed.
+                    </td>
+                    <td class="dashboard-author">
+                        <a href="../profiles/PushpitaPikuDey.html">PushpitaPikuDey</a><br>
+                        
+                        
+                        
+                    </td>
+                    
+                </tr>
+            
+        </tbody>
+    </table>
+
+  <ol class="pagination">
+  
+  
+  
+    <li class="selected">
+      <a href="revisions5f64.html?user=PushpitaPikuDey&amp;page=1">1</a>
+    </li>
+  
+    <li>
+      <a href="revisionsbc62.html?user=PushpitaPikuDey&amp;page=2">2</a>
+    </li>
+  
+    <li>
+      <a href="revisionsd0a0.html?user=PushpitaPikuDey&amp;page=3">3</a>
+    </li>
+  
+  
+  
+    <li class="next">
+      <a href="revisionsbc62.html?user=PushpitaPikuDey&amp;page=2">
+        Next
+      </a>
+    </li>
+  
+  </ol>
+
+        </div>
+    </div>
+
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+        
+        <div class="contentinfo">
+          <p>© 2005-2016 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>
+          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+        
+        </div>
+      </div>
+      <div class="column-strip">
+        
+          
+              <form class="languages go" method="get" action="#">
+  <label for="language">Other languages:</label>
+  
+    
+    <input type="hidden" name="user" value="PushpitaPikuDey">
+    
+  
+    
+    <input type="hidden" name="page" value="1">
+    
+  
+  <select id="language" class="autosubmit" name="lang">
+    <option value="af">
+        Afrikaans
+      </option><option value="ar">
+        عربي
+      </option><option value="az">
+        Azərbaycanca
+      </option><option value="bm">
+        Bamanankan
+      </option><option value="bn-BD">
+        বাংলা (বাংলাদেশ)
+      </option><option value="bn-IN">
+        বাংলা (ভারত)
+      </option><option value="ca">
+        Català
+      </option><option value="cs">
+        Čeština
+      </option><option value="de">
+        Deutsch
+      </option><option value="ee">
+        Eʋe
+      </option><option value="el">
+        Ελληνικά
+      </option><option value="en-US" selected="">
+        English (US)
+      </option><option value="es">
+        Español
+      </option><option value="fa">
+        فارسی
+      </option><option value="ff">
+        Pulaar-Fulfulde
+      </option><option value="fi">
+        suomi
+      </option><option value="fr">
+        Français
+      </option><option value="fy-NL">
+        Frysk
+      </option><option value="ga-IE">
+        Gaeilge
+      </option><option value="ha">
+        Hausa
+      </option><option value="he">
+        עברית
+      </option><option value="hi-IN">
+        हिन्दी (भारत)
+      </option><option value="hr">
+        Hrvatski
+      </option><option value="hu">
+        magyar
+      </option><option value="id">
+        Bahasa Indonesia
+      </option><option value="ig">
+        Igbo
+      </option><option value="it">
+        Italiano
+      </option><option value="ja">
+        日本語
+      </option><option value="ka">
+        ქართული
+      </option><option value="ko">
+        한국어
+      </option><option value="ln">
+        Lingála
+      </option><option value="mg">
+        Malagasy
+      </option><option value="ml">
+        മലയാളം
+      </option><option value="ms">
+        Melayu
+      </option><option value="my">
+        မြန်မာဘာသာ
+      </option><option value="nl">
+        Nederlands
+      </option><option value="pl">
+        Polski
+      </option><option value="pt-BR">
+        Português (do&nbsp;Brasil)
+      </option><option value="pt-PT">
+        Português (Europeu)
+      </option><option value="ro">
+        Română
+      </option><option value="ru">
+        Русский
+      </option><option value="son">
+        Soŋay
+      </option><option value="sq">
+        Shqip
+      </option><option value="sr">
+        Српски
+      </option><option value="sr-Latn">
+        Srpski
+      </option><option value="sv-SE">
+        Svenska
+      </option><option value="sw">
+        Kiswahili
+      </option><option value="ta">
+        தமிழ்
+      </option><option value="th">
+        ไทย
+      </option><option value="tl">
+        Tagalog
+      </option><option value="tn">
+        Setswana
+      </option><option value="tr">
+        Türkçe
+      </option><option value="uk">
+        Українська
+      </option><option value="vi">
+        Tiếng Việt
+      </option><option value="wo">
+        Wolof
+      </option><option value="xh">
+        isiXhosa
+      </option><option value="yo">
+        Yorùbá
+      </option><option value="zh-CN">
+        中文 (简体)
+      </option><option value="zh-TW">
+        正體中文 (繁體)
+      </option><option value="zu">
+        isiZulu
+      </option>
+  </select>
+  <noscript>&lt;button type="submit"&gt;Go&lt;/button&gt;</noscript>
+</form>
+          
+        
+      </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+  
+    <!--[if lte IE 8]><script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/selectivizr.091e18cf669b.js" charset="utf-8"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="personainclude.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script type="text/javascript" src="../../../developer.cdn.mozilla.net/static/build/js/main.a7b27a25fb9c.js" charset="utf-8"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+    
+    <script type="text/javascript" src="../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+
+  
+<script type="text/javascript" src="../../../developer.cdn.mozilla.net/static/build/js/jquery-ui.041c0367b45b.js" charset="utf-8"></script>
+
+<script>
+(function (jQuery) {
+    'use strict';
+
+    var $revisionReplaceBlock = $('#revision-replace-block');
+    var $localeInput = $('#id_locale');
+    var $filterForm = $('#revision-filter');
+    var $pageInput = $('#revision-page');
+    var $showIPsButton = $('#show_ips_btn');
+    var currentLocale = 'en-US';
+    var controlsTemplate = '\
+    <div class="action-bar">\
+        <ul id="page-buttons">\
+            <li><a id="revert" href="$reverturl" class="button">Revert<i aria-hidden="true" class="icon-undo"></i></a></li><li><a id="view" href="$viewurl" class="button">View Page<i aria-hidden="true" class="icon-circle-arrow-right"></i></a></li><li class="page-edit"><a id="edit" href="$editurl" class="button">Edit Page<i aria-hidden="true" class="icon-pencil"></i></a></li><li class="page-history"><a id="history" href="$historyurl" class="button">History<i aria-hidden="true" class="icon-book"></i></a></li>\
+        </ul>\
+    </div>';
+
+    // Create the autocomplete for user
+    $('#id_user').mozillaAutocomplete({
+        minLength: 3,
+        labelField: 'label',
+        autocompleteUrl: '/en-US/dashboards/user_lookup',
+        buildRequestData: function (req) {
+            // Should add locale value here
+            req.locale = getLocale();
+            req.user = req.term;
+            return req;
+        }
+    });
+
+    // Create the autocomplete for topic
+    $('#id_topic').mozillaAutocomplete({
+        minLength: 3,
+        labelField: 'label',
+        autocompleteUrl: '/en-US/dashboards/topic_lookup',
+        buildRequestData: function (req) {
+            // Should add locale value here
+            req.locale = getLocale();
+            req.topic = req.term;
+            return req;
+        }
+    });
+
+    // Enable keynav
+    $revisionReplaceBlock.mozKeyboardNav({
+        itemSelector: '.dashboard-row',
+        onEnterKey: function (item) {
+            $(item).trigger('mdn:click');
+        },
+        alwaysCollectItems: true
+    });
+
+    // Hide IPs & wire Toggle IPs button, if present
+    $('.revision_ip').toggle();
+    $showIPsButton.on('click', function(e) {
+        $('.revision_ip').slideToggle();
+    });
+
+    // Focus on the first item, if there
+    focusFirst();
+
+    // Create date pickers
+    $('#id_start_date, #id_end_date').datepicker();
+
+    // When an item is clicked, load its detail
+    $revisionReplaceBlock.on('click mdn:click', '.dashboard-row', function (e) {
+        var $this = $(this);
+        var $thisParent = $this.parent();
+        var $detail;
+
+        // Don't interrupt links and stop if a request is already running
+        if (e.target.tagName == 'A' || $this.attr('data-running')) return;
+
+        if ($this.attr('data-loaded')) {
+            $this.next('.dashboard-detail').find('.dashboard-detail-details').slideToggle();
+        } else {
+            $this.attr('data-running', 1);
+            $.ajax({
+                url: $this.attr('data-compare-url')
+            }).then(function (content) {
+                // Prepend the controls
+                var controls = controlsTemplate
+                                        .replace('$reverturl', $this.attr('data-revert-url'))
+                                        .replace('$viewurl', $this.attr('data-view-url'))
+                                        .replace('$editurl', $this.attr('data-edit-url'))
+                                        .replace('$historyurl', $this.attr('data-history-url'));
+
+                $detail = $('<tr class="dashboard-detail"><td colspan="5"><div class="dashboard-detail-details">' + controls + content + '</div></td></tr>').insertAfter($this);
+                $this.next('.dashboard-detail').find('.dashboard-detail-details').slideToggle();
+                $this.attr('data-loaded', 1);
+                $this.removeAttr('data-running');
+            });
+        }
+    });
+
+    // AJAX loads for pagination
+    $revisionReplaceBlock.on('click', '.pagination a', function (e) {
+        e.preventDefault();
+        var pageNum = /page=([^&#]*)/.exec(this.href)[1];
+        var linkText = this.text.trim();
+        mdn.analytics.trackEvent({
+            category: 'Dashboard Pagination',
+            action: pageNum,
+            label: linkText
+        });
+        $pageInput.val(pageNum);
+        $filterForm.submit();
+    });
+
+    // Filter form submission handler; loads content via AJAX, updates URL state
+    $filterForm.on('submit', function (e) {
+        e.preventDefault();
+        var $this = $(this);
+
+        if ('pushState' in history) {
+            history.pushState(null, '', location.pathname + '?' + $this.serialize());
+        }
+
+        var notification = mdn.Notifier.growl(gettext('Hang on! Updating filters…'), { duration: 0 });
+        $.ajax({
+            url: $this.attr('action'),
+            data: $this.serialize()
+        }).then(function (content) {
+            replaceContent(content);
+            $this.trigger('ajaxComplete');
+            notification.success(gettext('Updated filters.'), 2000);
+            // Reset the page count to 0 in case of new filter
+            $pageInput.val(1);
+        });
+    });
+
+    // Returns the current locale
+    function getLocale() {
+        return $localeInput.get(0).value || currentLocale;
+    }
+
+    // Focuses on the first row in the table
+    function focusFirst() {
+        var first = $revisionReplaceBlock.find('.dashboard-row').first();
+        first.length && first.get(0).focus();
+    }
+
+    // Replaces table body content and scrolls to top of the page
+    function replaceContent(content) {
+        $revisionReplaceBlock.fadeOut(function () {
+            $(this).html(content).fadeIn(function () {
+                focusFirst();
+            });
+
+            // Animate to top!
+            $('html, body').animate({
+                scrollTop: $revisionReplaceBlock.offset().top
+            }, 2000);
+        });
+    }
+
+})(jQuery);
+</script>
+
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/dashboards/revisions?user=PushpitaPikuDey&page=1 by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 15:45:12 GMT -->
+</body></html>

@@ -1,0 +1,820 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/Session_store_API by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 17:40:27 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <script async="" src="../../../www.google-analytics.com/analytics.js"></script><script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+  
+    
+  
+
+  
+  <title>Session store API</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+  
+    
+    
+    <link href="../../../developer.cdn.mozilla.net/static/build/styles/mdn.593f20d8c365.css" rel="stylesheet" type="text/css">
+
+    
+  
+    <link href="../../../developer.cdn.mozilla.net/static/build/styles/wiki.13dd9abdfb62.css" rel="stylesheet" type="text/css">
+
+    
+
+    
+
+  <!-- common social tags -->
+  
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../developer.cdn.mozilla.net/static/img/favicon144.a6e4162070f4.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../developer.cdn.mozilla.net/static/img/favicon114.0e9fabd44f85.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../developer.cdn.mozilla.net/static/img/favicon72.8ff9d87c82a0.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../developer.cdn.mozilla.net/static/img/favicon57.a2490b9a2d76.png">
+  <!-- basic favicon -->
+  
+    
+  
+  <link rel="shortcut icon" href="../../../developer.cdn.mozilla.net/static/img/favicon32.e02854fdcf73.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/html5shiv.3948ccddab6f.js" charset="utf-8"></script>
+  <![endif]-->
+
+  
+  <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Session_store_API$json">
+  <link rel="canonical" href="Session_store_API.html">
+
+  
+    
+      <link rel="alternate" hreflang="es" href="https://developer.mozilla.org/es/docs/API_de_restauración_de_sesión" title="API de restauración de sesión">
+    
+      <link rel="alternate" hreflang="fr" href="https://developer.mozilla.org/fr/docs/API_de_restauration_de_session" title="API de restauration de session">
+    
+      <link rel="alternate" hreflang="ja" href="https://developer.mozilla.org/ja/docs/Session_store_API" title="Session store API">
+    
+      <link rel="alternate" hreflang="pl" href="https://developer.mozilla.org/pl/docs/API_przechowywania_sesji" title="API przechowywania sesji">
+    
+      <link rel="alternate" hreflang="ru" href="https://developer.mozilla.org/ru/docs/Session_store_API" title="Session store API">
+    
+  
+
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="Session store API">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Session_store_API">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Session_store_API">
+  <meta name="twitter:title" content="Session store API">
+  
+  <meta property="og:description" content="Session store makes it possible for extensions to easily save and restore data across Firefox sessions. There is a simple API that lets extensions access the session store feature.">
+  <meta name="description" content="Session store makes it possible for extensions to easily save and restore data across Firefox sessions. There is a simple API that lets extensions access the session store feature.">
+  <meta name="twitter:description" content="Session store makes it possible for extensions to easily save and restore data across Firefox sessions. There is a simple API that lets extensions access the session store feature.">
+  
+
+  
+    
+
+
+
+  
+</head>
+<body data-slug="Session_store_API" contextmenu="edit-history-menu" data-search-url="" class="document  ">
+
+  <script type="text/javascript">
+    (function(win) {
+        'use strict';
+
+        
+            (function(){
+  var FLAGS = {
+    'compat_api': false,'kumaediting': false,'page_move': false,'registration_disabled': false,'search_suggestions': false,'section_edit': true,'spam_admin_override': false,'spam_checks_enabled': true,'spam_spammer_override': false,'spam_submissions_enabled': false,'spam_testing_mode': false,'wiki_samples': true,'wiki_spam_exempted': false,'wiki_spam_training': true
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': true,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+
+        // This needs to be set before ckeditor.js loads
+        window.CKEDITOR_BASEPATH = 'https://developer.mozilla.org/static/js/libs/ckeditor/build/ckeditor/';
+
+        // This represents the site configuration
+        win.mdn = {
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+            
+            notifications: [],
+            
+            // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            },
+            // Assets that need to be dynamically injected
+            assets_disabled: {
+                css: {
+                    'editor-content': ['https://developer.cdn.mozilla.net/static/build/styles/editor-content.3d79df72080d.css',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/styles/wiki-compat-tables.f3a3bfce97a1.css',]
+                },
+                js: {
+                    'syntax-prism': ['https://developer.cdn.mozilla.net/static/build/js/syntax-prism.7a66ddfa68bf.js',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/js/wiki-compat-tables.14ce5dcb2c3d.js',]
+                }
+            }
+        };
+    })(this);
+</script>
+
+  
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+    
+      <li><a href="#q" id="skip-search">Skip to search</a></li>
+    
+  </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+    <a href="https://developer.mozilla.org/en-US/" class="logo">Mozilla Developer Network</a>
+
+    <div id="nav-sec">
+        
+                  <ul>
+                  <li>
+
+    
+
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                Sign in
+              </span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FSession_store_API" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/Session_store_API" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/Session_store_API" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2FSession_store_API" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+              
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+        
+    </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="Web/API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+
+   <!-- end is_zone -->
+
+    <div class="wiki-main-content" id="document-main"><div class="center">
+      
+      <div class="article-meta">
+        <!-- action buttons -->
+        
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+  <ul class="page-buttons" data-sticky="false">
+      
+      <li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+              
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/es/docs/API_de_restauración_de_sesión" title="API de restauración de sesión">Español</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/fr/docs/API_de_restauration_de_session" title="API de restauration de session">Français</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/ja/docs/Session_store_API" title="Session store API">日本語</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/pl/docs/API_przechowywania_sesji" title="API przechowywania sesji">Polski</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/ru/docs/Session_store_API" title="Session store API">Русский</a></bdi></li>
+                
+              
+
+              
+                <li><a href="https://developer.mozilla.org/en-US/docs/Session_store_API$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+              
+            </ul>
+          </div>
+        </div>
+      </li>
+
+      <li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Session_store_API$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li>
+
+        
+
+        <li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Session_store_API$history" rel="nofollow, noindex">History</a></li>
+                
+                
+                
+                
+
+                
+
+                
+                
+                
+                <li class="page-print"><a href="#" onclick="return window.print();">Print this article</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+        
+  <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+    
+    <li class="crumb" typeof="v:Breadcrumb" property="v:title">Session store API</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        
+        <div class="contributor-avatars" data-all-text="see all contributors" data-alternate-message="hide contributors" data-has-hidden="1">
+            <ul>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Sheppy" title="View profile: Sheppy">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Sheppy" data-src="../../../secure.gravatar.com/avatar/945076feb88f2d7003891ffbf06f32bf6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Sheppy</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/trevorh" title="View profile: trevorh">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="trevorh" data-src="../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">trevorh</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Neil" title="View profile: Neil">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Neil" data-src="../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Neil</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Jürgen Jeka" title="View profile: Jürgen Jeka">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Jürgen Jeka" data-src="../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Jürgen Jeka</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Dao" title="View profile: Dao">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Dao" data-src="../../../secure.gravatar.com/avatar/13260fa2d08e92e3869ae7411518e7786c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Dao</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Philip Chee" title="View profile: Philip Chee">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Philip Chee" data-src="../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Philip Chee</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Nullbit" title="View profile: Nullbit">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Nullbit" data-src="../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Nullbit</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Jomel" title="View profile: Jomel">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Jomel" data-src="../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Jomel</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Ptak82" title="View profile: Ptak82">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Ptak82" data-src="../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Ptak82</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Chbok" title="View profile: Chbok">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Chbok" data-src="../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Chbok</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Nukeador" title="View profile: Nukeador">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Nukeador" data-src="../../../secure.gravatar.com/avatar/964709e83999a80c4f7dc469591b27c26c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Nukeador</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Okome" title="View profile: Okome">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Okome" data-src="../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Okome</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Nickolay" title="View profile: Nickolay">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Nickolay" data-src="../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Nickolay</noscript></a>
+                </li>
+            
+            </ul>
+        </div>
+        
+
+        <h1>Session store API</h1>
+
+      </div>
+      
+
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-closed wiki-left-none">
+
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+            
+              <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+              
+              <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <code></code><code></code><code></code><li><a href="#Knowing_when_to_restore" rel="internal">Knowing when to restore</a><code></code><code></code><code></code><code></code><ol><li><a href="#Restoring_without_restarting" rel="internal">Restoring without restarting</a></li></ol></li><li><a href="#The_session_restore_process" rel="internal">The session restore process</a><code></code><code></code><code></code><code></code><code></code><code></code><code></code><code></code></li><li><a href="#Using_the_session_store_API" rel="internal">Using the session store API</a><ol><li><a href="#Saving_a_value_with_a_tab" rel="internal">Saving a value with a tab</a></li><li><a href="#Fetching_a_saved_value" rel="internal">Fetching a saved value</a></li><li><a href="#Deleting_a_value_associated_with_a_tab" rel="internal">Deleting a value associated with a tab</a></li><li><a href="#Remarks" rel="internal">Remarks</a></li></ol></li><li><a href="#Using_the_session_store_API" rel="internal">Using the session store API in SeaMonkey</a></li><li><a href="#See_also" rel="internal">See also</a><code></code>
+                </li></ol>
+              </div>
+              
+              </div>
+            
+
+            
+            
+              
+            
+
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-main wiki-column text-content">
+
+              
+
+              
+
+              
+                
+                
+                
+              
+              
+
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                
+                  
+                    <p> Session store makes it possible for <a href="https://developer.mozilla.org/en-US/docs/Extensions" title="en/Extensions">extensions</a> to easily save and restore data across Firefox sessions. There is a simple API that lets extensions access the session store feature.</p>
+<p>One key scenario in which supporting this feature can be crucial for an extension: Firefox 2 lets users undo the closing of tabs. In order to properly restore your extension's state when a tab is restored, it needs to use the session store API's <code>setTabValue()</code> method to save any data it will need in order to restore its state, and then call <code>getTabValue()</code> to retrieve the previous setting when the tab is restored.</p>
+<p>The Session Store API is implemented using the <code><a href="https://developer.mozilla.org/en-US/docs/XPCOM_Interface_Reference/nsISessionStore" title="">nsISessionStore</a></code> interface.</p>
+<h2 id="Knowing_when_to_restore" name="Knowing_when_to_restore">Knowing when to restore</h2>
+<p>Each time Firefox is about to restore a tab, an event of type <code>SSTabRestoring</code> is sent. If your extension wants to be able to restore data when tabs are restored, you can install a listener like this:</p>
+<pre>function myExtensionHandleRestore(aEvent) {
+  var tab = event.originalTarget;        /* the tab being restored */
+  var uri = tab.linkedBrowser.contentDocument.location;  /* the tab's URI */
+
+  Components.classes["@mozilla.org/consoleservice;1"]
+            .getService(Components.interfaces.nsIConsoleService)
+            .logStringMessage("restoring tab: " + uri);
+};
+
+document.addEventListener("SSTabRestoring", myExtensionHandleRestore, false);
+</pre>
+<p>Simply replace the contents of the function <code>myExtensionHandleRestore()</code> with whatever you need to do when the tab is restored. In this example, <code><a href="https://developer.mozilla.org/en-US/docs/nsIConsoleService" title="en/nsIConsoleService">nsIConsoleService</a></code> is used to display a message to the <a href="https://developer.mozilla.org/en-US/docs/Error_Console" title="en/Error_Console">console</a>.</p>
+<p>This event is sent just before a tab is restored. An event of type <code>SSTabRestored</code> fires each time a tab has finished restoring. It's worth noting that this event is sent even if tab loading at startup is deferred until the user selects the tab.</p>
+<p></p><div class="blockIndicator standardNote standardNoteBlock"> 
+    <p><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Firefox/Releases/3">Firefox 3 note</a></p> 
+    <p style="font-weight: 400;">In Firefox 3 and later, if you need to detect when a tab is about to be closed so that you can update data associated with the tab before it is closed, you can watch for the "SSTabClosing" event, which is sent to the tab.</p> 
+</div><p></p>
+<h3 id="Restoring_without_restarting">Restoring without restarting</h3>
+<p></p><div class="blockIndicator standardNote standardNoteBlock"> 
+    <p><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Firefox/Releases/3.6">Firefox 3.6 note</a></p> 
+    <p style="font-weight: 400;">This section applies to Firefox 3.6 and later.</p> 
+</div><p></p>
+<p>Firefox 3.6 knows how to save session store data when the last browser window closes, even if there are still other windows open. Similarly, it can now restore the user's session while in that state. In other words, it's now possible for sessions to be restored even without the browser quitting and being relaunched. This is something you may need to keep in mind if you rely on the behavior of the session store system.</p>
+<h2 id="The_session_restore_process" name="The_session_restore_process">The session restore process</h2>
+<p>The exact sequence of events that occurs when a session is being restored is:</p>
+<ol>
+  <li>A session state is about to be restored. This can be on startup or in response to Undo Close Tab, since closed tabs are restored as single-tab sessions.</li>
+  <li>New windows are opened as required (one for each window that was saved in the session store), and cookies and the list of recently closed tabs are restored.</li>
+</ol>
+<p>After that, the following steps are taken for each tab being restored:</p>
+<ol>
+  <li>Either an existing tab is reused or a new tab is created. In the latter case, a <code>TabOpen</code> event is sent.</li>
+  <li>The tab's persistent XUL attributes (those saved due to calls to <code><a href="https://developer.mozilla.org/en-US/docs/nsISessionStore#persistTabAttribute.28.29" title="en/nsISessionStore#persistTabAttribute.28.29">persistTabAttribute()</a></code>) and permissions are restored.</li>
+  <li>The <code>SSTabRestoring</code> event is sent.</li>
+  <li>The tab is told to load the URL it should be displaying.</li>
+  <li>When the page is finished loading, text fields and scroll state are restored.</li>
+  <li>Finally, the <code>SSTabRestored</code> event is sent.</li>
+</ol>
+<p>If you want to set permissions or otherwise manipulate a restored tab before the page is loaded into it, you should watch <code>SSTabRestoring</code>. If you want to do something after the page is loaded, you should watch <code>SSTabRestored</code>.</p>
+<p>Both events are always sent for each tab being restored. You can determine which tab is being restored by looking at the event's <code>originalTarget</code> field.</p>
+<p>There's not really a way to determine when the last tab has been restored unless you determine how many tabs need to be restored then count the <code>SSTabRestored</code> events.</p>
+<h2 id="Using_the_session_store_API" name="Using_the_session_store_API">Using the session store API</h2>
+<p>This section provides a few simple examples of how to make use of the session store API.</p>
+<h3 id="Saving_a_value_with_a_tab" name="Saving_a_value_with_a_tab">Saving a value with a tab</h3>
+<p>The following code will attach a key/value pair to a tab, so that when the tab is restored, that pair is still associated with it.</p>
+<pre class="eval"> var ss = Components.classes["@mozilla.org/browser/sessionstore;1"]
+                    .getService(Components.interfaces.nsISessionStore);
+ var currentTab = gBrowser.selectedTab;
+ var dataToAttach = "I want to attach this";
+ ss.setTabValue(currentTab, "key-name-here", dataToAttach);
+</pre>
+<p>This code sets the value of the key "key-name-here" to <var>dataToAttach</var>. You may use any JavaScript object as the data.</p>
+<h3 id="Fetching_a_saved_value" name="Fetching_a_saved_value">Fetching a saved value</h3>
+<p>You can fetch a value associated with a tab at any time (whether the tab is in the process of being restored or not), using code similar to the following:</p>
+<pre class="eval"> var ss = Components.classes["@mozilla.org/browser/sessionstore;1"]
+                    .getService(Components.interfaces.nsISessionStore);
+ var currentTab = gBrowser.selectedTab;
+ var retrievedData = ss.getTabValue(currentTab, "key-name-here");
+</pre>
+<p>After this code executes, the variable <var>retrievedData</var> contains the value saved for the key "key-name-here". <var>retrievedData</var> is undefined if there is no value saved for that key name.</p>
+<h3 id="Deleting_a_value_associated_with_a_tab" name="Deleting_a_value_associated_with_a_tab">Deleting a value associated with a tab</h3>
+<p>To delete a value from a tab, you can use code similar to the following:</p>
+<pre class="eval"> var ss = Components.classes["@mozilla.org/browser/sessionstore;1"]
+                    .getService(Components.interfaces.nsISessionStore);
+ var currentTab = gBrowser.selectedTab;
+ ss.deleteTabValue(currentTab, "key-name-here");
+</pre>
+<h3 id="Remarks" name="Remarks">Remarks</h3>
+<p>The window value save and restore functions work exactly like the tab-based functions by similar names.</p>
+<p>Starting in Firefox 3.5, notifications are sent after reading session store data and before using it, as well as immediately before writing it back to disk. <a class="internal" href="https://developer.mozilla.org/en-US/docs/Observer_Notifications#Session_Store" title="en/Observer Notifications#Session Store">See the list in Observer Notifications</a>.</p>
+<h2 id="Using_the_session_store_API" name="Using_the_session_store_API">Using the session store API in SeaMonkey</h2>
+<p>There are a number of differences between the session store API in Firefox and the API in SeaMonkey 2.0:</p>
+<ul>
+  <li>The class name is <strong><span style="font-family: Courier New;">@mozilla.org/suite/sessionstore;1</span></strong></li>
+</ul>
+<pre class="eval">var ss = Components.classes["@mozilla.org/suite/sessionstore;1"]
+                   .getService(Components.interfaces.nsISessionStore);</pre>
+<ul>
+  <li>When restoring a window, closed tabs in that window are not currently restored.</li>
+  <li>When closing a tab, SeaMonkey does not generate SSTab events. This means that you cannot currently tell if a tab has been saved or restored. However SeaMonkey reuses the browser element (up to the undo close tab limit) which means that you can set state on the browser element and it will be restored with the tab.</li>
+</ul>
+<h2 id="See_also" name="See_also">See also</h2>
+<p><code><a href="https://developer.mozilla.org/en-US/docs/XPCOM_Interface_Reference/nsISessionStore" title="">nsISessionStore</a></code></p>
+                  
+                
+              </article>
+
+              
+
+    
+    
+    
+
+    
+    
+    
+
+    <div class="share">
+        <strong>Share:</strong>
+        <ul>
+            <li><a href="http://twitter.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FSession_store_API%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dtwitter.com&amp;text=I+learned+about+Session+store+API+on+MDN." target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Session_store_API?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=twitter.com" data-title="I learned about Session store API on MDN." class="share-link twitter"><i aria-hidden="true" class="icon-twitter"></i>Twitter</a></li>
+            <li><a href="http://facebook.com/sharer.php?s=100&amp;p[url]=https://developer.mozilla.org/en-US/docs/Session_store_API?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Session_store_API?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" data-title="I learned about Session store API on MDN." class="share-link facebook"><i aria-hidden="true" class="icon-facebook"></i>Facebook</a></li>
+            <li><a href="https://plus.google.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FSession_store_API%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dplus.google.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Session_store_API?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=plus.google.com" data-title="I learned about Session store API on MDN." class="share-link gplus"><i aria-hidden="true" class="icon-google-plus"></i>Google+</a></li>
+        </ul>
+    </div>
+
+              
+
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                  
+                  
+  <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags icon-fw"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Add-ons">Add-ons</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Extensions">Extensions</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Firefox">Firefox</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Guide">Guide</a></li>
+      
+    </ul>
+  </div>
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-group icon-fw"></i>&nbsp;<strong>Contributors to this page:</strong> 
+        <a href="https://developer.mozilla.org/en-US/profiles/Sheppy">Sheppy</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/trevorh">trevorh</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Neil">Neil</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Jürgen Jeka">Jürgen Jeka</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Dao">Dao</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Philip Chee">Philip Chee</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Nullbit">Nullbit</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Jomel">Jomel</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Ptak82">Ptak82</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Chbok">Chbok</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Nukeador">Nukeador</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Okome">Okome</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Nickolay">Nickolay</a>
+    
+                    </div>
+                  
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o icon-fw"></i>&nbsp;<strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/Sheppy">Sheppy</a>,
+                      <time datetime="2013-10-09T06:46:13-07:00">Oct 9, 2013, 6:46:13 AM</time>
+                    </div>
+                  
+                </div>
+              
+            </div>
+
+            
+          </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Session_store_API$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Session_store_API$history" label="View page history"></menuitem>
+  </menu>
+
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+        
+        <div class="contentinfo">
+          <p>© 2005-2016 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>
+          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+        
+        </div>
+      </div>
+      <div class="column-strip">
+        
+          
+  
+    <form class="languages go" method="get" action="https://developer.mozilla.org/en-US/docs/Web">
+      <label for="language">Other languages:</label>
+      <select id="language" class="wiki-l10n" name="next" dir="ltr">
+        <option value="/en-US/docs/Session_store_API" selected="">
+          English (US)
+        </option>
+        
+          <option value="/es/docs/API_de_restauraci%C3%B3n_de_sesi%C3%B3n">
+            Español
+          </option>
+          <option value="/fr/docs/API_de_restauration_de_session">
+            Français
+          </option>
+          <option value="/ja/docs/Session_store_API">
+            日本語
+          </option>
+          <option value="/pl/docs/API_przechowywania_sesji">
+            Polski
+          </option>
+          <option value="/ru/docs/Session_store_API">
+            Русский
+          </option>
+      </select>
+      <noscript>&lt;button type="submit"&gt;Go&lt;/button&gt;</noscript>
+    </form>
+  
+
+        
+      </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+  
+    
+    <!--[if lte IE 8]><script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/selectivizr.091e18cf669b.js" charset="utf-8"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script type="text/javascript" src="../../../developer.cdn.mozilla.net/static/build/js/main.a7b27a25fb9c.js" charset="utf-8"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+    
+    <script async="" type="text/javascript" src="../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../developer.cdn.mozilla.net/static/build/js/syntax-prism-min.js" charset="utf-8"></script><script type="text/javascript" src="../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../developer.cdn.mozilla.net/static/build/js/wiki.bd71ca9fd27d.js" charset="utf-8" id="wikiscript"></script>
+
+  
+
+  <script async="" type="text/javascript" src="../../../developer.cdn.mozilla.net/static/build/js/helpfulness.7b208a764d28.js" charset="utf-8"></script>
+
+  
+    <script type="text/javascript">
+        (function($) {
+            $('#wikiArticle').children('h2[id]').each(function() {
+                var id = $(this).attr('id');
+                var href = '/en-US/docs/Session_store_API$edit#' + id;
+
+                $('<a>').attr({
+                    href: href,
+                    'class': 'button section-edit only-icon'
+                })
+                .append($('<i aria-hidden="true" class="icon-pencil"></i>'))
+                .append($('<span>'))
+                .find('span')
+                .text(gettext('Edit'))
+                .end()
+                .on('click', function(e) {
+                    e.preventDefault();
+
+                    mdn.analytics.trackEvent({
+                        category: 'Section Edit',
+                        action: id
+                    }, function() {
+                        window.location = href;
+                    });
+                })
+                .appendTo(this);
+            });
+        })(jQuery);
+    </script>
+  
+
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/Session_store_API by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 17:40:28 GMT -->
+</body></html>

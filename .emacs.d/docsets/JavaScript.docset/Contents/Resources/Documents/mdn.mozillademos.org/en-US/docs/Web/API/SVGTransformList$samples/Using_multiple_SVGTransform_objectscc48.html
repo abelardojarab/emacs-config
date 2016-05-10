@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+    
+<!-- Mirrored from mdn.mozillademos.org/en-US/docs/Web/API/SVGTransformList$samples/Using_multiple_SVGTransform_objects?revision=900505 by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 15:18:25 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+        <link rel="stylesheet" type="text/css" href="../../../../../../developer.mozilla.org/en-US/docs/Template_CustomSampleCSS2af1.css?raw=1" />
+        
+    </head>
+    <body>
+        
+            <svg id="my-svg" viewBox="0 0 300 280"
+     xmlns="http://www.w3.org/2000/svg" version="1.1">
+  <desc>Example showing how to transform svg elements that using SVGTransform objects</desc>
+  <script type="application/ecmascript"> <![CDATA[
+    function transformMe(evt) {
+      // svg root element to access the createSVGTransform() function
+      var svgroot = evt.target.parentNode;
+
+      // SVGTransformList of the element that has been clicked on
+      var tfmList = evt.target.transform.baseVal;
+
+      // Create a seperate transform object for each transform
+      var translate = svgroot.createSVGTransform();
+      translate.setTranslate(50,5);
+      
+      var rotate = svgroot.createSVGTransform();
+      rotate.setRotate(10,0,0);
+
+      var scale = svgroot.createSVGTransform();
+      scale.setScale(0.8,0.8);
+
+      // apply the transformations by appending the SVGTranform objects to the SVGTransformList associated with the element
+      tfmList.appendItem(translate);
+      tfmList.appendItem(rotate);
+      tfmList.appendItem(scale);
+    }
+  ]]> </script>
+
+  <polygon fill="orange" stroke="black" stroke-width="5"
+           points="100,225 100,115 130,115 70,15 70,15 10,115 40,115 40,225" 
+           onclick="transformMe(evt)"/>
+  <rect x="200" y="100" width="100" height="100" 
+        fill="yellow" stroke="black" stroke-width="5"  
+        onclick="transformMe(evt)"/>
+  <text x="40" y="250"
+        font-family="Verdana" font-size="16" fill="green" >
+    Click on a shape to transform it
+  </text>
+</svg>
+        
+        
+    </body>
+
+<!-- Mirrored from mdn.mozillademos.org/en-US/docs/Web/API/SVGTransformList$samples/Using_multiple_SVGTransform_objects?revision=900505 by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 15:18:25 GMT -->
+</html>

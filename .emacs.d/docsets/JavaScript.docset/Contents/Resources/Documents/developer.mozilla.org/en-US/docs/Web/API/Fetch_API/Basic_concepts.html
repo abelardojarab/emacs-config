@@ -1,0 +1,754 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Basic_concepts by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 15:35:00 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <script async="" src="../../../../../../www.google-analytics.com/analytics.js"></script><script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+  
+    
+  
+
+  
+  <title>Fetch basic concepts</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+  
+    
+    
+    <link href="../../../../../../developer.cdn.mozilla.net/static/build/styles/mdn.593f20d8c365.css" rel="stylesheet" type="text/css">
+
+    
+  
+    <link href="../../../../../../developer.cdn.mozilla.net/static/build/styles/wiki.13dd9abdfb62.css" rel="stylesheet" type="text/css">
+
+    
+
+    
+
+  <!-- common social tags -->
+  
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon144.a6e4162070f4.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon114.0e9fabd44f85.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon72.8ff9d87c82a0.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon57.a2490b9a2d76.png">
+  <!-- basic favicon -->
+  
+    
+  
+  <link rel="shortcut icon" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon32.e02854fdcf73.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/html5shiv.3948ccddab6f.js" charset="utf-8"></script>
+  <![endif]-->
+
+  
+  <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Basic_concepts$json">
+  <link rel="canonical" href="Basic_concepts.html">
+
+  
+    
+      <link rel="alternate" hreflang="zh-CN" href="https://developer.mozilla.org/zh-CN/docs/Web/API/Fetch_API/Basic_concepts" title="Fetch 基本概念">
+    
+  
+
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="Fetch basic concepts">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Basic_concepts">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Basic_concepts">
+  <meta name="twitter:title" content="Fetch basic concepts">
+  
+  <meta property="og:description" content="At the heart of Fetch are the Interface abstractions of HTTP Request s, Response s, Headers, and Body payloads, along with a global fetch method for initiating asynchronous resource requests. Because the main components of HTTP are abstracted as JavaScript objects, it is easy for other APIs to make use of such functionality.">
+  <meta name="description" content="At the heart of Fetch are the Interface abstractions of HTTP Request s, Response s, Headers, and Body payloads, along with a global fetch method for initiating asynchronous resource requests. Because the main components of HTTP are abstracted as JavaScript objects, it is easy for other APIs to make use of such functionality.">
+  <meta name="twitter:description" content="At the heart of Fetch are the Interface abstractions of HTTP Request s, Response s, Headers, and Body payloads, along with a global fetch method for initiating asynchronous resource requests. Because the main components of HTTP are abstracted as JavaScript objects, it is easy for other APIs to make use of such functionality.">
+  
+
+  
+    
+
+
+
+  
+</head>
+<body data-slug="Web/API/Fetch_API/Basic_concepts" contextmenu="edit-history-menu" data-search-url="" class="document  ">
+
+  <script type="text/javascript">
+    (function(win) {
+        'use strict';
+
+        
+            (function(){
+  var FLAGS = {
+    'compat_api': false,'kumaediting': false,'page_move': false,'registration_disabled': false,'search_suggestions': false,'section_edit': true,'spam_admin_override': false,'spam_checks_enabled': true,'spam_spammer_override': false,'spam_submissions_enabled': false,'spam_testing_mode': false,'wiki_samples': true,'wiki_spam_exempted': false,'wiki_spam_training': true
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': true,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+
+        // This needs to be set before ckeditor.js loads
+        window.CKEDITOR_BASEPATH = 'https://developer.mozilla.org/static/js/libs/ckeditor/build/ckeditor/';
+
+        // This represents the site configuration
+        win.mdn = {
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+            
+            notifications: [],
+            
+            // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            },
+            // Assets that need to be dynamically injected
+            assets_disabled: {
+                css: {
+                    'editor-content': ['https://developer.cdn.mozilla.net/static/build/styles/editor-content.3d79df72080d.css',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/styles/wiki-compat-tables.f3a3bfce97a1.css',]
+                },
+                js: {
+                    'syntax-prism': ['https://developer.cdn.mozilla.net/static/build/js/syntax-prism.7a66ddfa68bf.js',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/js/wiki-compat-tables.14ce5dcb2c3d.js',]
+                }
+            }
+        };
+    })(this);
+</script>
+
+  
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+    
+      <li><a href="#q" id="skip-search">Skip to search</a></li>
+    
+  </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+    <a href="https://developer.mozilla.org/en-US/" class="logo">Mozilla Developer Network</a>
+
+    <div id="nav-sec">
+        
+                  <ul>
+                  <li>
+
+    
+
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                Sign in
+              </span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FFetch_API%2FBasic_concepts" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/Web/API/Fetch_API/Basic_concepts" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/Web/API/Fetch_API/Basic_concepts" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FFetch_API%2FBasic_concepts" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+              
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+        
+    </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../../API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+
+   <!-- end is_zone -->
+
+    <div class="wiki-main-content" id="document-main"><div class="center">
+      
+      <div class="article-meta">
+        <!-- action buttons -->
+        
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+  <ul class="page-buttons" data-sticky="false">
+      
+      <li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+              
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/zh-CN/docs/Web/API/Fetch_API/Basic_concepts" title="Fetch 基本概念">中文 (简体)</a></bdi></li>
+                
+              
+
+              
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Basic_concepts$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+              
+            </ul>
+          </div>
+        </div>
+      </li>
+
+      <li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Basic_concepts$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li>
+
+        
+
+        <li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Basic_concepts$history" rel="nofollow, noindex">History</a></li>
+                
+                
+                
+                
+
+                
+
+                
+                
+                
+                <li class="page-print"><a href="#" onclick="return window.print();">Print this article</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+        
+  <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web" rel="v:url" property="v:title">Web technology for developers</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="../../API.html" rel="v:url" property="v:title">Web APIs</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="../Fetch_API.html" rel="v:url" property="v:title">Fetch API</a></li>
+    
+    <li class="crumb" typeof="v:Breadcrumb" property="v:title">Fetch basic concepts</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        
+        <div class="contributor-avatars" data-all-text="see all contributors" data-alternate-message="hide contributors">
+            <ul>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills" title="View profile: chrisdavidmills">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="chrisdavidmills" data-src="../../../../../../secure.gravatar.com/avatar/deeea0ba82390bd5acc539703c4b0cfb6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">chrisdavidmills</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Sheppy" title="View profile: Sheppy">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Sheppy" data-src="../../../../../../secure.gravatar.com/avatar/945076feb88f2d7003891ffbf06f32bf6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Sheppy</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/gapple" title="View profile: gapple">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="gapple" data-src="../../../../../../secure.gravatar.com/avatar/f5028c84d93e09d9df27aebb6d3fa8466c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">gapple</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/lawrencekgrant" title="View profile: lawrencekgrant">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="lawrencekgrant" data-src="../../../../../../secure.gravatar.com/avatar/273545c760528713138f889b2d13ea076c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">lawrencekgrant</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/gbharatwaj" title="View profile: gbharatwaj">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="gbharatwaj" data-src="../../../../../../secure.gravatar.com/avatar/3b49e22621c4d0c29f89b489f68602c56c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">gbharatwaj</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/smarvin" title="View profile: smarvin">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="smarvin" data-src="../../../../../../secure.gravatar.com/avatar/9a8369de651e02295d5f3b559aad11bd6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">smarvin</noscript></a>
+                </li>
+            
+            </ul>
+        </div>
+        
+
+        <h1>Fetch basic concepts</h1>
+
+      </div>
+      
+
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-present">
+
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+            
+              <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+              
+              <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#In_a_nutshell" rel="internal">In a nutshell</a></li><li><a href="#Guard" rel="internal">Guard</a>
+                </li></ol>
+              </div>
+              
+              </div>
+            
+
+            
+            
+              
+            
+
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-half wiki-column text-content">
+
+              
+
+              
+
+              
+                
+                
+                
+              
+              
+
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                
+                  
+                    <p></p><section id="Quick_Links" class="Quick_links"><!-- --></section><div class="overheadIndicator draft"> 
+    <p><strong>Draft</strong><br> 
+    This page is not complete.</p> 
+</div><p></p>
+
+<div class="summary">
+<p><a href="../Fetch_API.html">Fetch</a> is a modern concept equivalent to <a href="../XMLHttpRequest.html">XMLHttpRequest.</a> It offers a lot of the same functionality as the&nbsp; XMLHttpRequest, but is designed to be more extensible and efficient. This article explains some of the basic concepts of the Fetch API.</p>
+</div>
+
+<div class="note">
+<p>This article will be added to over time. If you find a Fetch concept that you feel needs explaining better, let someone know on the <a href="https://lists.mozilla.org/listinfo/dev-mdc" class="external">dev-mdc</a> mailing list, or <a href="https://wiki.mozilla.org/IRC" class="external">Mozilla IRC</a> (#mdn room.)</p>
+</div>
+
+<h2 id="In_a_nutshell">In a nutshell</h2>
+
+<p>At the heart of Fetch are the Interface abstractions of HTTP <a href="../Request.html" title="The Request interface of the Fetch API represents a resource request."><code>Request</code></a>s, <a href="../Response.html" title="The Response interface of the Fetch API represents the response to a request."><code>Response</code></a>s, <a href="../Headers.html" title="The Headers interface of the Fetch API&nbsp;allows you to perform various actions on HTTP request and response headers. These actions include retrieving, setting, adding to, and removing. A Headers object has an associated header list, which is initially empty and consists&nbsp;of zero or more name and value pairs. &nbsp;You can add to this using methods like append() (see Examples.)&nbsp;In all methods of this interface, header names are matched by case-insensitive byte sequence."><code>Headers</code></a>, and <a href="../Body.html" title="The Body mixin of the Fetch API represents the body of the response/request, allowing you to declare what its content type is and how it should be handled."><code>Body</code></a> payloads, along with a <a href="../GlobalFetch/fetch.html" title="The fetch() method of the GlobalFetch interface starts the process of fetching a resource. This returns a promise that resolves to the Response object representing the response to your request."><code>global fetch</code></a> method for initiating asynchronous resource requests. Because the main components of HTTP are abstracted as JavaScript objects, it is easy for other APIs to make use of such functionality.</p>
+
+<p><a href="../Service_Worker_API.html">Service Workers</a> is an example of an API that makes heavy use of Fetch.</p>
+
+<p>Fetch takes the asynchronous nature of such requests to one step further. The API is completely <a href="../../JavaScript/Reference/Global_Objects/Promise.html" title="The Promise object is used for deferred and asynchronous computations. A Promise represents an operation that hasn't completed yet, but is expected in the future."><code>Promise</code></a>-based.</p>
+
+<h2 id="Guard">Guard</h2>
+
+<p>Guard is a feature of <a href="../Headers.html" title="The Headers interface of the Fetch API&nbsp;allows you to perform various actions on HTTP request and response headers. These actions include retrieving, setting, adding to, and removing. A Headers object has an associated header list, which is initially empty and consists&nbsp;of zero or more name and value pairs. &nbsp;You can add to this using methods like append() (see Examples.)&nbsp;In all methods of this interface, header names are matched by case-insensitive byte sequence."><code>Headers</code></a> objects, with possible values of <code>immutable</code>, <code>request</code>, <code>request-no-cors</code>, <code>response</code>, or <code>none</code>, depending on where the header is used.</p>
+
+<p>When a new <a href="../Headers.html" title="The Headers interface of the Fetch API&nbsp;allows you to perform various actions on HTTP request and response headers. These actions include retrieving, setting, adding to, and removing. A Headers object has an associated header list, which is initially empty and consists&nbsp;of zero or more name and value pairs. &nbsp;You can add to this using methods like append() (see Examples.)&nbsp;In all methods of this interface, header names are matched by case-insensitive byte sequence."><code>Headers</code></a> object is created using the <a href="../Headers/Headers.html" title="The Headers() constructor creates a new Headers object."><code>Headers()</code></a> <a href="https://developer.mozilla.org/en-US/docs/Glossary/constructor" class="glossaryLink" title="constructor: A constructor belongs to a particular class object that is instantiated. The constructor initializes this&nbsp;object and can provide access to its private information. The concept of a constructor can be applied to most object-oriented programming languages. Essentially, a constructor in JavaScript is usually declared at the instance of a class.">constructor</a>, its guard is set to <code>none</code> (the default). When a <a href="../Request.html" title="The Request interface of the Fetch API represents a resource request."><code>Request</code></a> or <a href="../Response.html" title="The Response interface of the Fetch API represents the response to a request."><code>Response</code></a> object is created, it has an associated <a href="../Headers.html" title="The Headers interface of the Fetch API&nbsp;allows you to perform various actions on HTTP request and response headers. These actions include retrieving, setting, adding to, and removing. A Headers object has an associated header list, which is initially empty and consists&nbsp;of zero or more name and value pairs. &nbsp;You can add to this using methods like append() (see Examples.)&nbsp;In all methods of this interface, header names are matched by case-insensitive byte sequence."><code>Headers</code></a> object whose guard is set as summarized below:</p>
+
+<table class="standard-table">
+ <thead>
+  <tr>
+   <th scope="row">new object's type</th>
+   <th scope="col">creating constructor</th>
+   <th scope="col">guard setting of associated <a href="../Headers.html" title="The Headers interface of the Fetch API&nbsp;allows you to perform various actions on HTTP request and response headers. These actions include retrieving, setting, adding to, and removing. A Headers object has an associated header list, which is initially empty and consists&nbsp;of zero or more name and value pairs. &nbsp;You can add to this using methods like append() (see Examples.)&nbsp;In all methods of this interface, header names are matched by case-insensitive byte sequence."><code>Headers</code></a> object</th>
+  </tr>
+ </thead>
+ <tbody>
+  <tr>
+   <td rowspan="2"><a href="../Request.html" title="The Request interface of the Fetch API represents a resource request."><code>Request</code></a></td>
+   <td><a href="../Request/Request.html" title="The Request() constructor creates a new Request object."><code>Request()</code></a></td>
+   <td><code>request</code></td>
+  </tr>
+  <tr>
+   <td><a href="../Request/Request.html" title="The Request() constructor creates a new Request object."><code>Request()</code></a> with <a href="../Request/mode.html" title="The mode read-only property of the Request interface contains the mode of the request (e.g., cors, no-cors, cors-with-forced-preflight, same-origin, or navigate.) This is used to determine if cross-origin requests lead to valid responses, and which properties of the response are readable:"><code>mode</code></a> of <code>no-cors</code></td>
+   <td><code>request-no-cors</code></td>
+  </tr>
+  <tr>
+   <td rowspan="2"><a href="../Response.html" title="The Response interface of the Fetch API represents the response to a request."><code>Response</code></a></td>
+   <td><a href="../Response/Response.html" title="The Response() constructor creates a new Response object."><code>Response()</code></a></td>
+   <td><code>response</code></td>
+  </tr>
+  <tr>
+   <td><a href="../Response/error.html" title="The error() method of the Response interface returns a new Response object associated with a network error."><code>error()</code></a> or <a href="../Response/redirect.html" title="The redirect() method of the Response interface returns a Response resulting in a redirect to the specified URL."><code>redirect()</code></a> methods</td>
+   <td><code>immutable</code></td>
+  </tr>
+ </tbody>
+</table>
+
+<p>A header's guard affects&nbsp; the <a href="../Headers/set.html" title="The set() method of the Headers interface sets a new value for an existing header inside a Headers object, or adds the header if it does not already exist."><code>set()</code></a>, <a href="../Headers/delete.html" title="The delete() method of the Headers interface deletes a header from the current Headers object."><code>delete()</code></a>, and <a href="../Headers/append.html" title="The append() method of the Headers interface appends a new value onto an existing header inside a Headers object, or adds the header if it does not already exist."><code>append()</code></a> methods which change the header's contents. A <code>TypeError</code> is thrown if you try to modify a <a href="../Headers.html" title="The Headers interface of the Fetch API&nbsp;allows you to perform various actions on HTTP request and response headers. These actions include retrieving, setting, adding to, and removing. A Headers object has an associated header list, which is initially empty and consists&nbsp;of zero or more name and value pairs. &nbsp;You can add to this using methods like append() (see Examples.)&nbsp;In all methods of this interface, header names are matched by case-insensitive byte sequence."><code>Headers</code></a> object whose guard is <code>immutable</code>. However, the operation will work if</p>
+
+<ul>
+ <li>guard is <code title="">request</code> and the header <var>name</var> isn't a <a href="https://developer.mozilla.org/en-US/docs/Glossary/forbidden_header_name" class="glossaryLink" title="forbidden header name: Technical review completed.">forbidden header name</a> .</li>
+ <li>guard is <code title="">request-no-cors</code> and the header <var>name</var>/<var>value</var> is a <a href="https://developer.mozilla.org/en-US/docs/Glossary/simple_header" class="glossaryLink" title="simple header: A simple header is an HTTP header. Its name is either&nbsp;Accept, Accept-Language,&nbsp;Content-Language, or `Content-Type`. The MIME type of its parsed&nbsp;value (ignoring parameters) is either&nbsp;application/x-www-form-urlencoded, multipart/form-data, or text/plain.">simple header</a> .</li>
+ <li>guard is <code title="">response</code> and the header <var>name</var> isn't a <a href="https://developer.mozilla.org/en-US/docs/Glossary/forbidden_response_header_name" class="glossaryLink" title="forbidden response header name: A forbidden response header name is an&nbsp;HTTP header name (either `Set-Cookie` or&nbsp;`Set-Cookie2`)&nbsp;that cannot be modified programmatically.">forbidden response header name</a> .</li>
+</ul>
+                  
+                
+              </article>
+
+              
+
+    
+    
+    
+
+    
+    
+    
+
+    <div class="share">
+        <strong>Share:</strong>
+        <ul>
+            <li><a href="http://twitter.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FAPI%2FFetch_API%2FBasic_concepts%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dtwitter.com&amp;text=I+learned+about+Fetch+basic+concepts+on+MDN." target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Basic_concepts?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=twitter.com" data-title="I learned about Fetch basic concepts on MDN." class="share-link twitter"><i aria-hidden="true" class="icon-twitter"></i>Twitter</a></li>
+            <li><a href="http://facebook.com/sharer.php?s=100&amp;p[url]=https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Basic_concepts?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Basic_concepts?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" data-title="I learned about Fetch basic concepts on MDN." class="share-link facebook"><i aria-hidden="true" class="icon-facebook"></i>Facebook</a></li>
+            <li><a href="https://plus.google.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FAPI%2FFetch_API%2FBasic_concepts%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dplus.google.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Basic_concepts?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=plus.google.com" data-title="I learned about Fetch basic concepts on MDN." class="share-link gplus"><i aria-hidden="true" class="icon-google-plus"></i>Google+</a></li>
+        </ul>
+    </div>
+
+              
+
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                  
+                  
+  <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags icon-fw"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+      
+        <li><a href="../../../tag/API.html">API</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/concepts">concepts</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Fetch">Fetch</a></li>
+      
+        <li><a href="../../../tag/Fetch%20API.html">Fetch API</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/guard">guard</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/request">request</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/XMLHttpRequest">XMLHttpRequest</a></li>
+      
+    </ul>
+  </div>
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-group icon-fw"></i>&nbsp;<strong>Contributors to this page:</strong> 
+        <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills">chrisdavidmills</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Sheppy">Sheppy</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/gapple">gapple</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/lawrencekgrant">lawrencekgrant</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/gbharatwaj">gbharatwaj</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/smarvin">smarvin</a>
+    
+                    </div>
+                  
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o icon-fw"></i>&nbsp;<strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills">chrisdavidmills</a>,
+                      <time datetime="2016-04-13T12:08:21-07:00">Apr 13, 2016, 12:08:21 PM</time>
+                    </div>
+                  
+                </div>
+              
+            </div>
+
+            
+              <!-- quick links and zone subnav strip -->
+              <div id="wiki-left" class="column-strip wiki-column">
+
+              
+
+                
+
+                
+                  <!-- quick links -->
+                  
+  <div class="quick-links" id="quick-links">
+    <div class="title see-also">See also</div>
+    <ol><li><strong><a href="../Fetch_API.html">Fetch API</a></strong></li><li data-default-state="open"><a href="#"><strong>Guides</strong></a><ol><li><a href="Basic_concepts.html" title="At the heart of Fetch are the Interface abstractions of HTTP Requests, Responses, Headers, and Body payloads, along with a global fetch method for initiating asynchronous resource requests. Because the main components of HTTP are abstracted as JavaScript objects, it is easy for other APIs to make use of such functionality.">Fetch basic concepts</a></li><li><a href="Using_Fetch.html" title="This kind of functionality was previously achieved using XMLHttpRequest.&nbsp;Fetch provides a better alternative that can be easily used by other technologies such as Service Workers. Fetch also provides&nbsp;a single logical place to define other HTTP-related concepts such as CORS and extensions to HTTP.">Using Fetch</a></li></ol></li><li data-default-state="open"><a href="#"><strong>Interfaces</strong></a><ol><li><a href="../GlobalFetch.html"><code>GlobalFetch</code></a></li><li><a href="../Body.html"><code>Body</code></a></li><li><a href="../Headers.html"><code>Headers</code></a></li><li><a href="../Request.html"><code>Request</code></a></li><li><a href="../Response.html"><code>Response</code></a></li></ol></li></ol>
+  </div>
+                
+
+                <!-- approvals -->
+                
+
+              
+
+              </div>
+            
+          </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Web/API/Fetch_API/Basic_concepts$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Web/API/Fetch_API/Basic_concepts$history" label="View page history"></menuitem>
+  </menu>
+
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+        
+        <div class="contentinfo">
+          <p>© 2005-2016 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>
+          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+        
+        </div>
+      </div>
+      <div class="column-strip">
+        
+          
+  
+    <form class="languages go" method="get" action="https://developer.mozilla.org/en-US/docs/Web">
+      <label for="language">Other languages:</label>
+      <select id="language" class="wiki-l10n" name="next" dir="ltr">
+        <option value="/en-US/docs/Web/API/Fetch_API/Basic_concepts" selected="">
+          English (US)
+        </option>
+        
+          <option value="/zh-CN/docs/Web/API/Fetch_API/Basic_concepts">
+            中文 (简体)
+          </option>
+      </select>
+      <noscript>&lt;button type="submit"&gt;Go&lt;/button&gt;</noscript>
+    </form>
+  
+
+        
+      </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+  
+    
+    <!--[if lte IE 8]><script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/selectivizr.091e18cf669b.js" charset="utf-8"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/main.a7b27a25fb9c.js" charset="utf-8"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+    
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/syntax-prism-min.js" charset="utf-8"></script><script type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/wiki.bd71ca9fd27d.js" charset="utf-8" id="wikiscript"></script>
+
+  
+
+  <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/helpfulness.7b208a764d28.js" charset="utf-8"></script>
+
+  
+    <script type="text/javascript">
+        (function($) {
+            $('#wikiArticle').children('h2[id]').each(function() {
+                var id = $(this).attr('id');
+                var href = '/en-US/docs/Web/API/Fetch_API/Basic_concepts$edit#' + id;
+
+                $('<a>').attr({
+                    href: href,
+                    'class': 'button section-edit only-icon'
+                })
+                .append($('<i aria-hidden="true" class="icon-pencil"></i>'))
+                .append($('<span>'))
+                .find('span')
+                .text(gettext('Edit'))
+                .end()
+                .on('click', function(e) {
+                    e.preventDefault();
+
+                    mdn.analytics.trackEvent({
+                        category: 'Section Edit',
+                        action: id
+                    }, function() {
+                        window.location = href;
+                    });
+                })
+                .appendTo(this);
+            });
+        })(jQuery);
+    </script>
+  
+
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Basic_concepts by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 15:35:01 GMT -->
+</body></html>

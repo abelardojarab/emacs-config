@@ -1,0 +1,967 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/Games/Techniques/Controls_Gamepad_API by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 17:31:37 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <script async="" src="../../../../../www.google-analytics.com/analytics.js"></script><script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+  
+    
+  
+
+  
+  <title>Implementing controls using the Gamepad API</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+  
+    
+    
+    <link href="../../../../../developer.cdn.mozilla.net/static/build/styles/mdn.593f20d8c365.css" rel="stylesheet" type="text/css">
+
+    
+  
+    <link href="../../../../../developer.cdn.mozilla.net/static/build/styles/wiki.13dd9abdfb62.css" rel="stylesheet" type="text/css">
+
+    
+
+    
+      
+        <link rel="stylesheet" type="text/css" href="https://developer.mozilla.org/en-US/docs/Games$styles">
+      
+    
+
+  <!-- common social tags -->
+  
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../developer.cdn.mozilla.net/static/img/favicon144.a6e4162070f4.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../developer.cdn.mozilla.net/static/img/favicon114.0e9fabd44f85.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../developer.cdn.mozilla.net/static/img/favicon72.8ff9d87c82a0.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../developer.cdn.mozilla.net/static/img/favicon57.a2490b9a2d76.png">
+  <!-- basic favicon -->
+  
+    
+  
+  <link rel="shortcut icon" href="../../../../../developer.cdn.mozilla.net/static/img/favicon32.e02854fdcf73.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/html5shiv.3948ccddab6f.js" charset="utf-8"></script>
+  <![endif]-->
+
+  
+  <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Games/Techniques/Controls_Gamepad_API$json">
+  <link rel="canonical" href="Controls_Gamepad_API.html">
+
+  
+
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="Implementing controls using the Gamepad API">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Games/Techniques/Controls_Gamepad_API">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Games/Techniques/Controls_Gamepad_API">
+  <meta name="twitter:title" content="Implementing controls using the Gamepad API">
+  
+  <meta property="og:description" content="The Gamepad API is very easy to develop with. Now it's easier than ever to deliver console-like experience to the browser without the need of any plugins. You can play the full version of the Hungry Fridge game directly in your browser, install it from the Firefox Marketplace or check the source code of the demo along with all the other resources on the Gamepad API Content Kit.">
+  <meta name="description" content="The Gamepad API is very easy to develop with. Now it's easier than ever to deliver console-like experience to the browser without the need of any plugins. You can play the full version of the Hungry Fridge game directly in your browser, install it from the Firefox Marketplace or check the source code of the demo along with all the other resources on the Gamepad API Content Kit.">
+  <meta name="twitter:description" content="The Gamepad API is very easy to develop with. Now it's easier than ever to deliver console-like experience to the browser without the need of any plugins. You can play the full version of the Hungry Fridge game directly in your browser, install it from the Firefox Marketplace or check the source code of the demo along with all the other resources on the Gamepad API Content Kit.">
+  
+
+  
+    
+
+
+
+  
+</head>
+<body data-slug="Games/Techniques/Controls_Gamepad_API" contextmenu="edit-history-menu" data-search-url="" class="document zone ">
+
+  <script type="text/javascript">
+    (function(win) {
+        'use strict';
+
+        
+            (function(){
+  var FLAGS = {
+    'compat_api': false,'kumaediting': false,'page_move': false,'registration_disabled': false,'search_suggestions': false,'section_edit': true,'spam_admin_override': false,'spam_checks_enabled': true,'spam_spammer_override': false,'spam_submissions_enabled': false,'spam_testing_mode': false,'wiki_samples': true,'wiki_spam_exempted': false,'wiki_spam_training': true
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': true,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+
+        // This needs to be set before ckeditor.js loads
+        window.CKEDITOR_BASEPATH = 'https://developer.mozilla.org/static/js/libs/ckeditor/build/ckeditor/';
+
+        // This represents the site configuration
+        win.mdn = {
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+            
+            notifications: [],
+            
+            // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            },
+            // Assets that need to be dynamically injected
+            assets_disabled: {
+                css: {
+                    'editor-content': ['https://developer.cdn.mozilla.net/static/build/styles/editor-content.3d79df72080d.css',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/styles/wiki-compat-tables.f3a3bfce97a1.css',]
+                },
+                js: {
+                    'syntax-prism': ['https://developer.cdn.mozilla.net/static/build/js/syntax-prism.7a66ddfa68bf.js',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/js/wiki-compat-tables.14ce5dcb2c3d.js',]
+                }
+            }
+        };
+    })(this);
+</script>
+
+  
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+    
+      <li><a href="#q" id="skip-search">Skip to search</a></li>
+    
+  </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+    <a href="https://developer.mozilla.org/en-US/" class="logo">Mozilla Developer Network</a>
+
+    <div id="nav-sec">
+        
+                  <ul>
+                  <li>
+
+    
+
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                Sign in
+              </span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FGames%2FTechniques%2FControls_Gamepad_API" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/Games/Techniques/Controls_Gamepad_API" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/Games/Techniques/Controls_Gamepad_API" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2FGames%2FTechniques%2FControls_Gamepad_API" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+              
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+        
+    </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../../Web/API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+
+  
+      
+        <div class="zone-article-header" id="document-main"><div class="center">
+          <!-- zone title -->
+          <div class="zone-title"><a href="https://developer.mozilla.org/en-US/docs/Games">Game development</a></div>
+          <!-- zone image -->
+          <div class="zone-image"></div>
+        </div></div>
+      
+
+     <!-- end is_zone -->
+
+    <div class="wiki-main-content"><div class="center">
+      
+      <div class="article-meta">
+        <!-- action buttons -->
+        
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+  <ul class="page-buttons" data-sticky="false">
+      
+      <li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+              
+                <li class="smaller">No translations exist for this article.</li>
+              
+
+              
+                <li><a href="https://developer.mozilla.org/en-US/docs/Games/Techniques/Controls_Gamepad_API$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+              
+            </ul>
+          </div>
+        </div>
+      </li>
+
+      <li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Games/Techniques/Controls_Gamepad_API$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li>
+
+        
+
+        <li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Games/Techniques/Controls_Gamepad_API$history" rel="nofollow, noindex">History</a></li>
+                
+                
+                
+                
+
+                
+
+                
+                
+                
+                <li class="page-print"><a href="#" onclick="return window.print();">Print this article</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+        
+  <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Games" rel="v:url" property="v:title">Game development</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Games/Techniques" rel="v:url" property="v:title">Techniques for game development</a></li>
+    
+    <li class="crumb" typeof="v:Breadcrumb" property="v:title">Implementing controls using the Gamepad API</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        
+        <div class="contributor-avatars" data-all-text="see all contributors" data-alternate-message="hide contributors">
+            <ul>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills" title="View profile: chrisdavidmills">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="chrisdavidmills" data-src="../../../../../secure.gravatar.com/avatar/deeea0ba82390bd5acc539703c4b0cfb6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">chrisdavidmills</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/end3r" title="View profile: end3r">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="end3r" data-src="../../../../../secure.gravatar.com/avatar/a84d365d52c5f58dd52ed9dc1583f55d6c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">end3r</noscript></a>
+                </li>
+            
+            </ul>
+        </div>
+        
+
+        <h1>Implementing controls using the Gamepad API</h1>
+
+      </div>
+      
+
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-present">
+
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+            
+              <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+              
+              <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#Controls_for_web_games" rel="internal">Controls for web games</a></li><li><a href="#API_status_and_browser_support" rel="internal">API status and browser support</a></li><li><a href="#Which_gamepads_are_best" rel="internal">Which gamepads are best?</a></li><li><a href="#Case_Study_Hungry_Fridge" rel="internal">Case Study: Hungry Fridge</a></li><li><a href="#Demo" rel="internal">Demo</a></li><li><a href="#Implementation" rel="internal">Implementation</a><ol><li><a href="#Gamepad_object" rel="internal">Gamepad object</a></li><li><a href="#Querying_the_gamepad_object" rel="internal">Querying the gamepad object</a></li><li><a href="#Detecting_button_presses" rel="internal">Detecting button presses</a></li><li><a href="#Axis_threshold" rel="internal">Axis threshold</a></li></ol></li><li><a href="#Specification_update" rel="internal">Specification update</a><ol><li><a href="#Getting_the_gamepads" rel="internal">Getting the gamepads</a></li><li><a href="#Mapping_standard" rel="internal">Mapping standard</a></li><li><a href="#Events" rel="internal">Events</a></li></ol></li><li><a href="#Summary" rel="internal">Summary</a>
+                </li></ol>
+              </div>
+              
+              </div>
+            
+
+            
+            
+              
+            
+
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-half wiki-column text-content">
+
+              
+
+              
+
+              
+                
+                
+                
+              
+              
+
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                
+                  
+                    <p class="summary">This article looks at implementing an effective, cross browser control system for web games using the Gamepad API, allowing you to control your web games using console game controllers. It features a case study game — Hungry Fridge, created by <a href="http://enclavegames.com/" class="external">Enclave Games</a>.</p>
+
+<h2 id="Controls_for_web_games">Controls for web games</h2>
+
+<p>Historically playing games on a console connected to your TV was always a totally different experience to gaming on the PC, mostly because of the unique controls. Eventually extra drivers and plugins allowed us to use console gamepads with desktop games — either native games or those running in the browser. Now in the era of HTML5 we finally have the <a href="../../Web/API/Gamepad_API.html">Gamepad API</a>, which gives us the ability to play browser-based games using gamepad controllers without any plugins. The Gamepad API achieves this by providing an interface exposing button presses and axis changes that can be used inside JavaScript code to handle the input. These are good times for browser gaming.</p>
+
+<p><img src="../../../../../end3r.com/tmp/gamepad/gamepadapi-hungryfridge-img01.png" style="display: block; height: 400px; margin: 0px auto; width: 600px;" alt="gamepad-controls"></p>
+
+<h2 id="API_status_and_browser_support">API status and browser support</h2>
+
+<p>The <a href="http://www.w3.org/TR/gamepad/" class="external">Gamepad API</a> is still at Working Draft stage in the W3C process, which means its implementation might still change, but saying that the <a href="http://caniuse.com/gamepad" class="external">browser support</a> is already quite good. Firefox 29+ and Chrome 35+ support it out of the box. Opera supports the API in version 22+ (not surprising given that they now use Chrome's Blink engine.) And Microsoft implemented support for the API in Edge recently, which means four main browsers now supporting the Gamepad API.</p>
+
+<h2 id="Which_gamepads_are_best">Which gamepads are best?</h2>
+
+<p><img src="../../../../../end3r.com/tmp/gamepad/devices.jpg" style="display: block; height: 450px; margin: 0px auto; width: 600px;" alt="gamepad devices"></p>
+
+<p>The most popular gamepads right now are those from the XBox 360, XBox One, PS3 and PS4 — they have been heavily tested and work well with the Gamepad API implementation in browsers across Windows and Mac OS X.</p>
+
+<p>There's also a number of other devices with various different button layouts that more or less work across browser implementations. The code discussed in this article was tested with a few gamepads, but the author's favourite configuration is a wireless XBox 360 controller and the Firefox browser on Mac OS X.</p>
+
+<h2 id="Case_Study_Hungry_Fridge">Case Study: Hungry Fridge</h2>
+
+<p>The <a href="https://github.com/blog/1674-github-game-off-ii" class="external">GitHub Game Off II</a> competition ran in November 2013 and&nbsp;<a href="http://enclavegames.com/" class="external">Enclave Games</a> decided to take part in it. The theme for the competition was "change", so they submitted a game where you have to feed the Hungry Fridge by tapping the healthy food (apples, carrots, lettuces) and avoid the "bad" food (beer, burgers, pizza.) A countdown changes the type of food the Fridge wants to eat every few seconds, so you have to be careful and act quick. You can <a href="http://enclavegames.com/games/hungry-fridge/" class="external">try Hungry Fridge here</a>.</p>
+
+<p><img src="../../../../../end3r.com/tmp/gamepad/gamepadapi-hungryfridge-img02.png" style="display: block; height: 333px; margin: 0px auto; width: 500px;" alt="hungryfridge-mainmenu"></p>
+
+<p>The second, hidden "change" implementation is the ability to transform the static Fridge into a full-blown moving, shooting and eating machine. When you connect the controller, the game significantly changes (Hungry Fridge turns into the Super Turbo Hungry Fridge) and you're able to control the armoured fridge using the Gamepad API. You have to shoot down the food, but once again you also have to find the type of food the Fridge wants to eat at each point, or else you'll lose energy.</p>
+
+<p><img src="../../../../../end3r.com/tmp/gamepad/gamepadapi-hungryfridge-img03.png" style="display: block; height: 333px; margin: 0px auto; width: 500px;" alt="hungryfridge-howtoplay-gamepad"></p>
+
+<p>The game encapsulates two totally different types of "change" — good food versus bad food, and mobile versus desktop.</p>
+
+<p><img src="../../../../../end3r.com/tmp/gamepad/gamepadapi-hungryfridge-img04.png" style="display: block; height: 333px; margin: 0px auto; width: 500px;" alt="hungryfridge-gameplay-gamepad"></p>
+
+<h2 id="Demo">Demo</h2>
+
+<p>The full version of the Hungry Fridge game was built first, and then to showcase the Gamepad API in action and show the JavaScript source code, a <a href="https://end3r.github.io/Gamepad-API-Content-Kit/demo/demo.html" class="external">simple demo</a> was created. It's part of the <a href="https://end3r.github.io/Gamepad-API-Content-Kit/" class="external">Gamepad API Content Kit</a> available on GitHub where you can dive deep into the code and study exactly how it works.</p>
+
+<p><img src="../../../../../end3r.com/tmp/gamepad/super-turbo.png" style="display: block; height: 333px; margin: 0px auto; width: 500px;" alt="Hungry Fridge demo using Gamepad API"></p>
+
+<p>The code explained below is from the full version of the Hungry Fridge game, but it's almost identical to the one from the demo — the only difference is that the full version uses the <code>turbo</code> variable to decide whether or not the game will be launched using Super Turbo mode. It works independently, so it could be turned on even if the gamepad is not connected.</p>
+
+<div class="note">
+<p><strong>Note</strong>: Easter Egg time: There's a hidden option to launch Super Turbo Hungry Fridge on the desktop without having a gamepad connected — click the gamepad icon in the top right corner of the screen. It will launch the game in the Super Turbo mode and you'll be able to control the Fridge with the keyboard: A and D for turning the turret left and right, W for shooting and arrow keys for movement.</p>
+</div>
+
+<h2 id="Implementation">Implementation</h2>
+
+<p>There are two important events to use along with the Gamepad API — <code>gamepadconnected</code> and <code>gamepaddisconnected</code>. The first one is fired when the browser detects connection of a new gamepad while the second one is fired when a gamepad is disconnected (either physically by the user or due to inactivity.) In the demo, the <code>gamepadAPI</code> object is used to store everything related to the API:</p>
+
+<pre class="brush: js"><code>var gamepadAPI = {
+  controller: {},
+  turbo: false,
+  connect: function() {},
+  disconnect: function() {},
+  update: function() {},
+  buttonPressed: function() {},
+  buttons: [],
+  buttonsCache: [],
+  buttonsStatus: [],
+  axesStatus: []
+};</code></pre>
+
+<p>The <code>buttons</code> array contains the XBox 360 button layout:</p>
+
+<pre class="brush: js"><code>buttons: [
+  'DPad-Up','DPad-Down','DPad-Left','DPad-Right',
+  'Start','Back','Axis-Left','Axis-Right',
+  'LB','RB','Power','A','B','X','Y',
+],</code></pre>
+
+<p>This can be different for other types of gamepads like the PS3 controller (or a no-name, generic one), so you have to be careful and not just assume the button you're expecting will be the same button you'll actually get. Next we set up two event listeners to get the data:</p>
+
+<pre class="brush: js"><code>window.addEventListener("gamepadconnected", gamepadAPI.connect);
+window.addEventListener("gamepaddisconnected", gamepadAPI.disconnect);</code></pre>
+
+<p>Due to security policy, you have to interact with the controller first while the page is visible for the event to fire. If the API worked without any interaction from the user it could be used to fingerprint them without their knowledge.</p>
+
+<p>Both functions are fairly simple:</p>
+
+<pre class="brush: js"><code>connect: function(evt) {
+  gamepadAPI.controller = evt.gamepad;
+  gamepadAPI.turbo = true;
+  console.log('Gamepad connected.');
+},</code></pre>
+
+<p>The <code>connect()</code> function takes the event as a parameter and assigns the <code>gamepad</code> object to the <code>gamepadAPI.controller</code> variable. We are using only one gamepad for this game, so it's a single object instead of an array of gamepads. We then set the <code>turbo</code> property to <code>true</code>. (We could use the <code>gamepad.connected</code> boolean for this purpose, but we wanted to have a separate variable for turning on Turbo mode without needing to have a gamepad connected, for reasons explained above.)</p>
+
+<pre class="brush: js"><code>disconnect: function(evt) {
+  gamepadAPI.turbo = false;
+  delete gamepadAPI.controller;
+  console.log('Gamepad disconnected.');
+},</code></pre>
+
+<p>The <code>disconnect</code> function sets the <code>gamepad.turbo property</code> to <code>false</code> and removes the variable containing the gamepad object.</p>
+
+<h3 id="Gamepad_object">Gamepad object</h3>
+
+<p>There's lots of useful information contained in the <code>gamepad</code> object, with the states of buttons and axes being the most important:</p>
+
+<ul>
+ <li><code>id</code>: A string containing information about the controller.</li>
+ <li><code>index</code>: A unique indentifier for the connected device.</li>
+ <li><code>connected</code>: A boolean variable, <code>true</code> if the device is connected.</li>
+ <li><code>mapping</code>: The layout type of the buttons; <code>standard</code> is the only available option for now.</li>
+ <li><code>axes</code>: The state of each axis, represented by an array of floating point values.</li>
+ <li><code>buttons</code> : The state of each button, represented by an array of <code>GamepadButton</code> objects containing <code>pressed</code> and <code>value</code> properties.</li>
+</ul>
+
+<p>The <code>index</code> variable is useful if we're connecting more than one controller and want to identify them to act accordingly — for example when we have a two player game requiring two devices to be connected.</p>
+
+<h3 id="Querying_the_gamepad_object">Querying the gamepad object</h3>
+
+<p>Beside <code>connect()</code> and <code>disconnect()</code>, there are two more methods in the <code>gamepadAPI</code> object: <code>update()</code> and <code>buttonPressed()</code>. <code>update()</code> is executed on every frame inside the game loop, to update the actual status of the gamepad object regularly:</p>
+
+<pre class="brush: js"><code>update: function() {
+  // clear the buttons cache
+  gamepadAPI.buttonsCache = [];
+  // move the buttons status from the previous frame to the cache
+  for(var k=0; k&lt;gamepadAPI.buttonsStatus.length; k++) {
+    gamepadAPI.buttonsCache[k] = gamepadAPI.buttonsStatus[k];
+  }
+  // clear the buttons status
+  gamepadAPI.buttonsStatus = [];
+  // get the gamepad object
+  var c = gamepadAPI.controller || {};
+
+  // loop through buttons and push the pressed ones to the array
+  var pressed = [];
+  if(c.buttons) {
+    for(var b=0,t=c.buttons.length; b&lt;t; b++) {
+      if(c.buttons[b].pressed) {
+        pressed.push(gamepadAPI.buttons[b]);
+      }
+    }
+  }
+  // loop through axes and push their values to the array
+  var axes = [];
+  if(c.axes) {
+    for(var a=0,x=c.axes.length; a&lt;x; a++) {
+      axes.push(c.axes[a].toFixed(2));
+    }
+  }
+  // assign received values
+  gamepadAPI.axesStatus = axes;
+  gamepadAPI.buttonsStatus = pressed;
+  // return buttons for debugging purposes
+  return pressed;
+},</code></pre>
+
+<p>On every frame, <code>update()</code> saves buttons pressed during the previous frame to the <code>buttonsCache</code> array and takes fresh ones from the <code>gamepadAPI.controller</code> object. Then it loops through buttons and axes to get their actual states and values.</p>
+
+<h3 id="Detecting_button_presses">Detecting button presses</h3>
+
+<p>The <code>buttonPressed()</code> method is also placed in the main game loop to listen for button presses. It takes two parameters — the button we want to listen to and the (optional) way to tell the game that holding the button is accepted. Without it you'd have to release the button and press it again to have the desired effect.</p>
+
+<pre class="brush: js"><code>buttonPressed: function(button, hold) {
+  var newPress = false;
+  // loop through pressed buttons
+  for(var i=0,s=gamepadAPI.buttonsStatus.length; i&lt;s; i++) {
+    // if we found the button we're looking for...
+    if(gamepadAPI.buttonsStatus[i] == button) {
+      // set the boolean variable to true
+      newPress = true;
+      // if we want to check the single press
+      if(!hold) {
+        // loop through the cached states from the previous frame
+        for(var j=0,p=gamepadAPI.buttonsCache.length; j&lt;p; j++) {
+          // if the button was already pressed, ignore new press
+          if(gamepadAPI.buttonsCache[j] == button) {
+            newPress = false;
+          }
+        }
+      }
+    }
+  }
+  return newPress;
+},</code></pre>
+
+<p>There are two types of action to consider for a button: a single press and a hold. The <code>newPress</code> boolean variable will indicate whether there's a new press of a button or not. Next we loop through the array of pressed buttons — if the given button is the same as the one we're looking for, the <code>newPress</code> variable is set to <code>true</code>. To check if the press is a new one, so the player is not holding the key, we looping through the cached states of the buttons from the previous frame of the game loop. If we find it there it means that the button is being held, so there's no new press. At the end the <code>newPress</code> variable is returned. The <code>buttonPressed</code> function is used in the update loop of the game like this:</p>
+
+<pre class="brush: js"><code>if(gamepadAPI.turbo) {
+  if(gamepadAPI.buttonPressed('A','hold')) {
+    this.turbo_fire();
+  }
+  if(gamepadAPI.buttonPressed('B')) {
+    this.managePause();
+  }
+}</code></pre>
+
+<p>If <code>gamepadAPI.turbo</code> is <code>true</code> and the given buttons are pressed (or held), we execute the proper functions assigned to them. In this case, pressing or holding <code>A</code> will fire the bullet and pressing <code>B</code> will pause the game.</p>
+
+<h3 id="Axis_threshold">Axis threshold</h3>
+
+<p>The buttons have only two states: <code>0</code> or <code>1</code>, but the analog sticks can have many different values — they have a float range between <code>-1</code> and <code>1</code> along both the <code>X</code> and <code>Y</code> axes.</p>
+
+<p><img src="../../../../../end3r.com/tmp/gamepad/axis-threshold.png" style="display: block; height: 300px; margin: 0px auto; width: 400px;" alt="axis threshold"></p>
+
+<p>Gamepads can get dusty from lying around inactive, meaning that checking for exact -1 or 1 values can be a problem. For this reason it can be good to set a threshold for the value of the axis to take effect. For example, the Fridge tank will turn right only when the <code>X</code> value is bigger than <code>0.5</code>:</p>
+
+<pre><code>if(gamepadAPI.axesStatus[0].x &gt; 0.5) {
+  this.player.angle += 3;
+  this.turret.angle += 3;
+}</code></pre>
+
+<p>Even if we move it a little by mistake or the stick doesn't make it back to its original position, the tank won't turn unexpectedly.</p>
+
+<h2 id="Specification_update">Specification update</h2>
+
+<p>After more than a year of stability, in April 2015 the W3C Gamepad API spec was updated (<a href="https://w3c.github.io/gamepad/" class="external">see the latest</a>.) It hasn't changed much, but it's good to know whats going on — the updates are as follows.</p>
+
+<h3 id="Getting_the_gamepads">Getting the gamepads</h3>
+
+<p>The <a href="../../Web/API/Naviagator/getGamepads.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>Naviagator.getGamepads()</code></a> method has been updated with <a href="https://w3c.github.io/gamepad/#navigator-interface-extension" class="external">a longer explanation and an example piece of code</a>. Now the length of the array of gamepads has to be <code>n+1</code> where <code>n</code> is the number of connected devices — when there's one device connected and it has the index of 1, the array's length is 2 and it will look like this: <code>[null, [object Gamepad]]</code>. If the device is disconnected or unavailable, the value for it is set to <code>null</code>.</p>
+
+<h3 id="Mapping_standard">Mapping standard</h3>
+
+<p>The mapping type is now an enumerable object instead of a string:</p>
+
+<pre>enum GamepadMappingType {
+    "",
+    "standard"
+};</pre>
+
+<p>This enum defines the set of known mappings for a Gamepad. For now there's only the <code>standard</code> layout available, but new ones may appear in the future. If the layout is unknown, it is set to an empty string.</p>
+
+<h3 id="Events">Events</h3>
+
+<p>There were more events available in the spec than just <code>gamepadconnected</code> and <code>gamepaddisconnected</code> available, but they were removed from the specification as they were thought to not be very useful. The discussion is still ongoing as to whether they should be put back, and in what form.</p>
+
+<h2 id="Summary">Summary</h2>
+
+<p>The Gamepad API is very easy to develop with. Now it's easier than ever to deliver console-like experience to the browser without the need of any plugins. You can play the full version of the <a href="http://enclavegames.com/games/hungry-fridge/" class="external">Hungry Fridge</a> game directly in your browser, install it from the <a href="https://marketplace.firefox.com/app/hungry-fridge" class="external">Firefox Marketplace</a> or check the source code of the demo along with all the other resources on the <a href="https://github.com/EnclaveGames/Hungry-Fridge" class="external">Gamepad API Content Kit</a>.</p>
+                  
+                
+              </article>
+
+              
+
+    
+    
+    
+
+    
+    
+    
+
+    <div class="share">
+        <strong>Share:</strong>
+        <ul>
+            <li><a href="http://twitter.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FGames%2FTechniques%2FControls_Gamepad_API%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dtwitter.com&amp;text=I+learned+about+Implementing+controls+using+the+Gamepad+API+on+MDN." target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Games/Techniques/Controls_Gamepad_API?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=twitter.com" data-title="I learned about Implementing controls using the Gamepad API on MDN." class="share-link twitter"><i aria-hidden="true" class="icon-twitter"></i>Twitter</a></li>
+            <li><a href="http://facebook.com/sharer.php?s=100&amp;p[url]=https://developer.mozilla.org/en-US/docs/Games/Techniques/Controls_Gamepad_API?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Games/Techniques/Controls_Gamepad_API?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" data-title="I learned about Implementing controls using the Gamepad API on MDN." class="share-link facebook"><i aria-hidden="true" class="icon-facebook"></i>Facebook</a></li>
+            <li><a href="https://plus.google.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FGames%2FTechniques%2FControls_Gamepad_API%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dplus.google.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Games/Techniques/Controls_Gamepad_API?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=plus.google.com" data-title="I learned about Implementing controls using the Gamepad API on MDN." class="share-link gplus"><i aria-hidden="true" class="icon-google-plus"></i>Google+</a></li>
+        </ul>
+    </div>
+
+              
+
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                  
+                  
+  <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags icon-fw"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/controllers">controllers</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Controls">Controls</a></li>
+      
+        <li><a href="../../tag/Gamepad%20API.html">Gamepad API</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Gamepads">Gamepads</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Games">Games</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/JavaScript">JavaScript</a></li>
+      
+    </ul>
+  </div>
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-group icon-fw"></i>&nbsp;<strong>Contributors to this page:</strong> 
+        <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills">chrisdavidmills</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/end3r">end3r</a>
+    
+                    </div>
+                  
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o icon-fw"></i>&nbsp;<strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills">chrisdavidmills</a>,
+                      <time datetime="2015-09-14T03:26:48-07:00">Sep 14, 2015, 3:26:48 AM</time>
+                    </div>
+                  
+                </div>
+              
+            </div>
+
+            
+              <!-- quick links and zone subnav strip -->
+              <div id="wiki-left" class="column-strip wiki-column">
+
+              
+
+                
+                  <!-- zone subnav -->
+                  
+  <nav class="zone-subnav-container" role="navigation">
+    <div class="subnav" id="Subnav">
+      
+
+<ol>
+ <li><a href="#">Introduction</a>
+
+  <ol>
+   <li><a title="An introduction to the technologies useful for game developers and how to get started developing games using Web technologies. This article also looks at the business case for why it makes sense to create games for the Web" href="https://developer.mozilla.org/en-US/docs/Games/Introduction">Introduction to game development for the Web</a></li>
+   <li><a title="What is a video game, really? There are certain parts that are common between games (even if it doesn't seem like it). This article looks to explain concepts like main loops in a completely general context. When it does focus, it does so toward web standards." href="https://developer.mozilla.org/en-US/docs/Games/Anatomy">Anatomy of a video game</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Games/Examples">Examples</a></li>
+  </ol>
+ </li>
+ <li><a href="#">APIs for game development</a>
+  <ol>
+   <li><a href="../../Web/API/Canvas_API.html">Canvas</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+   <li><a href="../../../Apps/Fundamentals/User_notifications/Full_screen_api.html">Full Screen</a></li>
+   <li><a href="../../Web/API/Gamepad_API.html">Gamepad</a></li>
+   <li><a href="../../Web/API/IndexedDB_API.html">IndexedDB</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+   <li><a href="../../Web/API/Pointer_Lock_API.html">Pointer Lock</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Web/SVG">SVG</a></li>
+   <li><a href="../../Web/JavaScript/Reference/Global_Objects/TypedArray.html">Typed Arrays</a></li>
+   <li><a href="../../Web/API/Web_Audio_API.html">Web Audio</a></li>
+   <li><a href="../../Web/API/WebGL_API.html">WebGL</a></li>
+   <li><a href="../../Web/API/WebRTC_API.html">WebRTC</a></li>
+   <li><a href="../../Web/API/WebSockets_API.html">Web Sockets</a></li>
+   <li><a href="../../Web/API/WebVR_API.html">WebVR</a></li>
+   <li><a href="../../Web/API/Web_Workers_API.html">Web Workers</a></li>
+   <li><a href="../../User_maybe/webidl_mdn/XMLHttpRequest_API.html">XmlHttpRequest</a>
+    <ol>
+    </ol>
+   </li>
+  </ol>
+ </li>
+ <li><a href="https://developer.mozilla.org/en-US/docs/Games/Techniques">Techniques</a>
+  <ol>
+   <li><a title="Especially when creating medium to large-sized games, async scripts are an essential technique to take advantage of, so that your game's JavaScript can be compiled off the main thread and be cached for future game running" href="https://developer.mozilla.org/en-US/docs/Games/Techniques/Async_scripts">Using async scripts for asm.js</a></li>
+   <li><a title="How to make sure your game starts up quickly, smoothly, and without appearing to lock up the user's browser or device." href="https://developer.mozilla.org/en-US/docs/Apps/Developing/Optimizing_startup_performance">Optimizing startup performance</a></li>
+   <li><a title="In addition to providing support for audio and video communication, WebRTC lets you set up peer-to-peer data channels to exchange text or binary data actively between your players." href="https://developer.mozilla.org/en-US/docs/Games/Techniques/WebRTC_data_channels">Using WebRTC peer-to-peer data channels</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Games/Techniques/Efficient_animation_for_web_games">Efficient animation for web games</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Games/Techniques/3D_on_the_web">3D games on the Web</a>
+    <ol>
+     <li><a href="https://developer.mozilla.org/en-US/docs/Games/Techniques/3D_on_the_web">3D games on the Web overview</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/docs/Games/Techniques/3D_on_the_web/Basic_theory">Explaining basic 3D theory</a></li>
+     <li><a href="3D_on_the_web/Building_up_a_basic_demo_with_Three.html">Building up a basic demo with Three.js</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/docs/Games/Techniques/3D_on_the_web/Building_up_a_basic_demo_with_PlayCanvas">Building up a basic demo with PlayCanvas</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/docs/Games/Techniques/3D_on_the_web/WebVR">WebVR</a></li>
+    </ol>
+   </li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Games/Techniques/Audio_for_Web_Games">Audio for Web Games</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Games/Techniques/2D_collision_detection">2D collision detection</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Games/Techniques/3D_collision_detection">3D collision detection</a>
+    <ol>
+     <li><a href="https://developer.mozilla.org/en-US/docs/Games/Techniques/3D_collision_detection">3D collision detection overview</a></li>
+     <li><a href="3D_collision_detection/Bounding_volume_collision_detection_with_THREE.html">Bounding volume collision detection with THREE.js</a></li>
+    </ol>
+   </li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Games/Techniques/Tilemaps">Tiles and tilemaps</a>
+    <ol>
+     <li><a href="https://developer.mozilla.org/en-US/docs/Games/Techniques/Tilemaps">Tiles and tilemaps overview</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/docs/Games/Techniques/Tilemaps/Square_tilemaps_implementation%3A_Static_maps">Static maps</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/docs/Games/Techniques/Tilemaps/Square_tilemaps_implementation%3A_Scrolling_maps">Scrolling maps</a></li>
+    </ol>
+   </li>
+  </ol>
+ </li>
+ <li><a href="https://developer.mozilla.org/en-US/docs/Games/Tutorials">Tutorials</a>
+  <ol>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Games/Tutorials/2D_Breakout_game_pure_JavaScript">2D breakout game using pure JavaScript</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Games/Tutorials/2D_breakout_game_Phaser">2D breakout game using Phaser</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Games/Tutorials/HTML5_Gamedev_Phaser_Device_Orientation">2D maze game with device orientation</a></li>
+  </ol>
+ </li>
+ <li><a href="https://developer.mozilla.org/en-US/docs/Games/Publishing_games">Publishing games</a>
+  <ol>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Games/Publishing_games">Publishing games overview</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Games/Publishing_games/Game_distribution">Game distribution</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Games/Publishing_games/Game_promotion">Game promotion</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Games/Publishing_games/Game_monetization">Game monetization</a></li>
+  </ol>
+ </li>
+</ol>
+    </div>
+  </nav>&nbsp;
+                
+
+                
+
+                <!-- approvals -->
+                
+
+              
+
+              </div>
+            
+          </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Games/Techniques/Controls_Gamepad_API$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Games/Techniques/Controls_Gamepad_API$history" label="View page history"></menuitem>
+  </menu>
+
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+        
+        <div class="contentinfo">
+          <p>© 2005-2016 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>
+          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+        
+        </div>
+      </div>
+      <div class="column-strip">
+        
+          
+  
+
+        
+      </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+  
+    
+    <!--[if lte IE 8]><script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/selectivizr.091e18cf669b.js" charset="utf-8"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script type="text/javascript" src="../../../../../developer.cdn.mozilla.net/static/build/js/main.a7b27a25fb9c.js" charset="utf-8"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+    
+    <script async="" type="text/javascript" src="../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../developer.cdn.mozilla.net/static/build/js/syntax-prism-min.js" charset="utf-8"></script><script type="text/javascript" src="../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../developer.cdn.mozilla.net/static/build/js/wiki.bd71ca9fd27d.js" charset="utf-8" id="wikiscript"></script>
+
+  
+
+  <script async="" type="text/javascript" src="../../../../../developer.cdn.mozilla.net/static/build/js/helpfulness.7b208a764d28.js" charset="utf-8"></script>
+
+  
+    <script type="text/javascript">
+        (function($) {
+            $('#wikiArticle').children('h2[id]').each(function() {
+                var id = $(this).attr('id');
+                var href = '/en-US/docs/Games/Techniques/Controls_Gamepad_API$edit#' + id;
+
+                $('<a>').attr({
+                    href: href,
+                    'class': 'button section-edit only-icon'
+                })
+                .append($('<i aria-hidden="true" class="icon-pencil"></i>'))
+                .append($('<span>'))
+                .find('span')
+                .text(gettext('Edit'))
+                .end()
+                .on('click', function(e) {
+                    e.preventDefault();
+
+                    mdn.analytics.trackEvent({
+                        category: 'Section Edit',
+                        action: id
+                    }, function() {
+                        window.location = href;
+                    });
+                })
+                .appendTo(this);
+            });
+        })(jQuery);
+    </script>
+  
+
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/Games/Techniques/Controls_Gamepad_API by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 17:31:57 GMT -->
+</body></html>

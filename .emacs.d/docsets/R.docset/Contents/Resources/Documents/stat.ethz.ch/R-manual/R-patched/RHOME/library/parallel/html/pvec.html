@@ -1,0 +1,169 @@
+<html><!-- Mirrored from stat.ethz.ch/R-manual/R-patched/RHOME/library/parallel/html/pvec.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 04 May 2016 17:01:45 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><!-- /Added by HTTrack -->
+<title>Parallelize a Vector Map Function using Forking</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="R.css">
+</head><body>
+
+<table width="100%" summary="page for pvec {parallel}"><tbody><tr><td>pvec {parallel}</td><td style="text-align: right;">R Documentation</td></tr></tbody></table>
+
+<h2>Parallelize a Vector Map Function using Forking</h2>
+
+<h3>Description</h3>
+
+<p><code>pvec</code> parellelizes the execution of a function on vector elements
+by splitting the vector and submitting each part to one core. The
+function must be a vectorized map, i.e. it takes a vector input and
+creates a vector output of exactly the same length as the input which
+doesn't depend on the partition of the vector.
+</p>
+<p>It relies on forking and hence is not available on Windows unless
+<code>mc.cores = 1</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>pvec(v, FUN, ..., mc.set.seed = TRUE, mc.silent = FALSE,
+     mc.cores = getOption("mc.cores", 2L), mc.cleanup = TRUE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tbody><tr valign="top"><td><code>v</code></td>
+<td>
+<p>vector to operate on</p>
+</td></tr>
+<tr valign="top"><td><code>FUN</code></td>
+<td>
+<p>function to call on each part of the vector</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>any further arguments passed to <code>FUN</code> after the vector</p>
+</td></tr>
+<tr valign="top"><td><code>mc.set.seed</code></td>
+<td>
+<p>See <code><a href="mcparallel.html">mcparallel</a></code>.</p>
+</td></tr>
+<tr valign="top"><td><code>mc.silent</code></td>
+<td>
+<p>if set to <code>TRUE</code> then all output on ‘<span class="file">stdout</span>’ will
+be suppressed for all parallel processes forked (‘<span class="file">stderr</span>’ is not
+affected).</p>
+</td></tr>
+<tr valign="top"><td><code>mc.cores</code></td>
+<td>
+<p>The number of cores to use, i.e. at most how many
+child processes will be run simultaneously.  Must be at least one,
+and at least two for parallel operation.  The option is initialized
+from environment variable <span class="env">MC_CORES</span> if set.</p>
+</td></tr>
+<tr valign="top"><td><code>mc.cleanup</code></td>
+<td>
+<p>See the description of this argument in
+<code><a href="mclapply.html">mclapply</a></code>.</p>
+</td></tr>
+</tbody></table>
+
+
+<h3>Details</h3>
+
+<p><code>pvec</code> parallelizes <code>FUN(x, ...)</code> where <code>FUN</code> is a
+function that returns a vector of the same length as
+<code>x</code>. <code>FUN</code> must also be pure (i.e., without side-effects)
+since side-effects are not collected from the parallel processes. The
+vector is split into nearly identically sized subvectors on which
+<code>FUN</code> is run.  Although it is in principle possible to use
+functions that are not necessarily maps, the interpretation would be
+case-specific as the splitting is in theory arbitrary (a warning is
+given in such cases).
+</p>
+<p>The major difference between <code>pvec</code> and <code><a href="mclapply.html">mclapply</a></code> is
+that <code>mclapply</code> will run <code>FUN</code> on each element separately
+whereas <code>pvec</code> assumes that <code>c(FUN(x[1]), FUN(x[2]))</code> is
+equivalent to <code>FUN(x[1:2])</code> and thus will split into as many
+calls to <code>FUN</code> as there are cores (or elements, if fewer), each
+handling a subset vector.  This makes it more efficient than
+<code>mclapply</code> but requires the above assumption on <code>FUN</code>.
+</p>
+<p>If <code>mc.cores == 1</code> this evaluates <code>FUN(v, ...)</code> in the
+current process.
+</p>
+
+
+<h3>Value</h3>
+
+<p>The result of the computation – in a successful case it should be of
+the same length as <code>v</code>.  If an error occurred or the function was
+not a map the result may be shorter or longer, and a warning is given.
+</p>
+
+
+<h3>Note</h3>
+
+<p>Due to the nature of the parallelization, error handling does not
+follow the usual rules since errors will be returned as strings and
+results from killed child processes will show up simply as
+non-existent data.  Therefore it is the responsibility of the user to
+check the length of the result to make sure it is of the correct size.
+<code>pvec</code> raises a warning if that is the case since it does not
+know whether such an outcome is intentional or not.
+</p>
+<p>See <code><a href="mcfork.html">mcfork</a></code> for the inadvisability of using this with
+GUI front-ends.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Simon Urbanek and R Core.
+</p>
+<p>Derived from the multicore package.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="mcparallel.html">mcparallel</a></code>, <code><a href="mclapply.html">mclapply</a></code>,
+<code><a href="clusterApply.html">parLapply</a></code>, <code><a href="clusterApply.html">clusterMap</a></code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>x &lt;- pvec(1:1000, sqrt)
+stopifnot(all(x == sqrt(1:1000)))
+
+
+# One use is to convert date strings to unix time in large datasets
+# as that is a relatively slow operation.
+# So let's get some random dates first
+# (A small test only with 2 cores: set options("mc.cores")
+# and increase N for a larger-scale test.)
+N &lt;- 1e5
+dates &lt;- sprintf('%04d-%02d-%02d', as.integer(2000+rnorm(N)),
+                 as.integer(runif(N, 1, 12)), as.integer(runif(N, 1, 28)))
+
+system.time(a &lt;- as.POSIXct(dates))
+
+# But specifying the format is faster
+system.time(a &lt;- as.POSIXct(dates, format = "%Y-%m-%d"))
+
+# pvec ought to be faster, but system overhead can be high
+system.time(b &lt;- pvec(dates, as.POSIXct, format = "%Y-%m-%d"))
+stopifnot(all(a == b))
+
+# using mclapply for this would much slower because each value
+# will require a separate call to as.POSIXct()
+# as lapply(dates, as.POSIXct) does
+system.time(c &lt;- unlist(mclapply(dates, as.POSIXct,  format = "%Y-%m-%d")))
+stopifnot(all(a == c))
+</pre>
+
+<hr><div style="text-align: center;">[Package <em>parallel</em> version 3.2.2 <a href="00Index.html">Index</a>]</div>
+
+<!-- Mirrored from stat.ethz.ch/R-manual/R-patched/RHOME/library/parallel/html/pvec.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 04 May 2016 17:01:45 GMT -->
+
+</body></html>

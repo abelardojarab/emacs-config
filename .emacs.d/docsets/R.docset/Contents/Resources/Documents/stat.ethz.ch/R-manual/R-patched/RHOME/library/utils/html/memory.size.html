@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml">
+<!-- Mirrored from stat.ethz.ch/R-manual/R-patched/RHOME/library/utils/html/memory.size.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 04 May 2016 17:02:10 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head><title>Report on Memory Allocation</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for memory.size {utils}"><tr><td>memory.size {utils}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Report on Memory Allocation</h2>
+
+<h3>Description</h3>
+
+<p><code>memory.size</code> and <code>memory.limit</code> are used to manage the
+total memory allocation on Windows.  On other platforms these are
+stubs which report infinity with a warning.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+memory.size(max = FALSE)
+
+memory.limit(size = NA)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>max</code></td>
+<td>
+<p>logical. If true the maximum amount of memory obtained from
+the OS is reported, otherwise the amount currently in use.</p>
+</td></tr>
+<tr valign="top"><td><code>size</code></td>
+<td>
+<p>numeric. If <code>NA</code> report the memory size, otherwise
+request a new limit, in Mb.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>To restrict memory usage on a Unix-alike use the facilities of the
+shell used to launch <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span>, e.g. <code>limit</code> or <code>ulimit</code>.
+</p>
+
+
+<h3>Value</h3>
+
+<p>Size in bytes: always <code>Inf</code>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><a href="../../base/html/Memory-limits.html">Memory-limits</a> for other limits.
+</p>
+
+<hr /><div style="text-align: center;">[Package <em>utils</em> version 3.2.2 <a href="00Index.html">Index</a>]</div>
+</body>
+<!-- Mirrored from stat.ethz.ch/R-manual/R-patched/RHOME/library/utils/html/memory.size.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 04 May 2016 17:02:10 GMT -->
+</html>

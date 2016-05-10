@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml">
+<!-- Mirrored from stat.ethz.ch/R-manual/R-patched/RHOME/library/parallel/html/mcaffinity.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 04 May 2016 17:01:45 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head><title>Get or Set CPU Affinity Mask of the Current Process</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for mcaffinity {parallel}"><tr><td>mcaffinity {parallel}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Get or Set CPU Affinity Mask of the Current Process</h2>
+
+<h3>Description</h3>
+
+<p><code>mcaffinity</code> retrieves or sets the CPU affinity mask of the
+current process, i.e., the set of CPUs the process is allowed to be
+run on. (CPU here means logical CPU which can be CPU, core or
+hyperthread unit.)
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+mcaffinity(affinity = NULL)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>affinity</code></td>
+<td>
+<p>specification of the CPUs to lock this process to
+(numeric vector) or <code>NULL</code> if no change is requested</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p><code>mcaffinity</code> can be used to obtain (<code>affinity = NULL</code>)
+or set the CPU affinity mask of the current process. The affinity mask
+is a list of integer CPU identifiers (starting from 1) that this
+process is allowed to run on. Not all systems provide user access to
+the process CPU affinity, in cases where no support is present at all
+<code>mcaffinity()</code> will return <code>NULL</code>. Some systems may take
+into account only the number of CPUs present in the mask.
+</p>
+<p>Typically, it is legal to specify larger set than the number of
+logical CPUs (but at most as many as the OS can handle) and the system
+will return back the actually present set.
+</p>
+
+
+<h3>Value</h3>
+
+<p><code>NULL</code> if CPU affinity is not supported by the system or an
+integer vector with the set of CPUs in the active affinity mask for
+this process (this may be different than <code>affinity</code>).
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Simon Urbanek.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="mcparallel.html">mcparallel</a></code>
+</p>
+
+<hr /><div style="text-align: center;">[Package <em>parallel</em> version 3.2.2 <a href="00Index.html">Index</a>]</div>
+</body>
+<!-- Mirrored from stat.ethz.ch/R-manual/R-patched/RHOME/library/parallel/html/mcaffinity.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 04 May 2016 17:01:45 GMT -->
+</html>

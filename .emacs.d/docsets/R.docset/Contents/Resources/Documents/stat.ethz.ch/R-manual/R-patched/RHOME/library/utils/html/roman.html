@@ -1,0 +1,70 @@
+<html><!-- Mirrored from stat.ethz.ch/R-manual/R-patched/RHOME/library/utils/html/roman.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 04 May 2016 17:02:10 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><!-- /Added by HTTrack -->
+<title>Roman Numerals</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="R.css">
+</head><body>
+
+<table width="100%" summary="page for roman {utils}"><tbody><tr><td>roman {utils}</td><td style="text-align: right;">R Documentation</td></tr></tbody></table>
+
+<h2>Roman Numerals</h2>
+
+<h3>Description</h3>
+
+<p>Manipulate integers as roman numerals.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>as.roman(x)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tbody><tr valign="top"><td><code>x</code></td>
+<td>
+<p>a numeric vector, or a character vector of arabic or roman
+numerals.</p>
+</td></tr>
+</tbody></table>
+
+
+<h3>Details</h3>
+
+<p><code>as.roman</code> creates objects of class <code>"roman"</code> which are
+internally represented as integers, and have suitable methods for
+printing, formatting, subsetting, and coercion to <code>character</code>.
+</p>
+<p>Only numbers between 1 and 3899 have a unique representation as roman
+numbers.
+</p>
+
+
+<h3>References</h3>
+
+<p>Wikipedia contributors (2006). Roman numerals.
+Wikipedia, The Free Encyclopedia.
+https://en.wikipedia.org/w/index.php?title=Roman_numerals&amp;oldid=78252134.
+Accessed September 29, 2006.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>## First five roman 'numbers'.
+(y &lt;- as.roman(1 : 5))
+## Middle one.
+y[3]
+## Current year as a roman number.
+(y &lt;- as.roman(format(Sys.Date(), "%Y")))
+## 10 years ago ...
+y - 10
+</pre>
+
+<hr><div style="text-align: center;">[Package <em>utils</em> version 3.2.2 <a href="00Index.html">Index</a>]</div>
+
+<!-- Mirrored from stat.ethz.ch/R-manual/R-patched/RHOME/library/utils/html/roman.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 04 May 2016 17:02:10 GMT -->
+
+</body></html>

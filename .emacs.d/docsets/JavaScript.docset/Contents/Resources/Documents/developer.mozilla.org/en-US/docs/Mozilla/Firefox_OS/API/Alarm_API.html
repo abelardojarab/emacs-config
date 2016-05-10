@@ -1,0 +1,1042 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS/API/Alarm_API by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 15:31:19 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <script async="" src="../../../../../../www.google-analytics.com/analytics.js"></script><script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+  
+    
+  
+
+  
+  <title>Alarm API</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+  
+    
+    
+    <link href="../../../../../../developer.cdn.mozilla.net/static/build/styles/mdn.593f20d8c365.css" rel="stylesheet" type="text/css">
+
+    
+  
+    <link href="../../../../../../developer.cdn.mozilla.net/static/build/styles/wiki.13dd9abdfb62.css" rel="stylesheet" type="text/css">
+
+    
+
+    
+      
+        <link rel="stylesheet" type="text/css" href="https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS$styles">
+      
+    
+
+  <!-- common social tags -->
+  
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon144.a6e4162070f4.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon114.0e9fabd44f85.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon72.8ff9d87c82a0.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon57.a2490b9a2d76.png">
+  <!-- basic favicon -->
+  
+    
+  
+  <link rel="shortcut icon" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon32.e02854fdcf73.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/html5shiv.3948ccddab6f.js" charset="utf-8"></script>
+  <![endif]-->
+
+  
+  <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS/API/Alarm_API$json">
+  <link rel="canonical" href="Alarm_API.html">
+
+  
+    
+      <link rel="alternate" hreflang="es" href="https://developer.mozilla.org/es/docs/WebAPI/Alarm" title="Api de Alarma">
+    
+      <link rel="alternate" hreflang="fr" href="https://developer.mozilla.org/fr/docs/WebAPI/Alarm" title="Alarm API">
+    
+      <link rel="alternate" hreflang="ja" href="https://developer.mozilla.org/ja/docs/Web/API/Alarm_API" title="Alarm API">
+    
+      <link rel="alternate" hreflang="ko" href="https://developer.mozilla.org/ko/docs/WebAPI/Alarm" title="Alarm API">
+    
+      <link rel="alternate" hreflang="pt-BR" href="https://developer.mozilla.org/pt-BR/docs/WebAPI/Alarme" title="Alarme API">
+    
+      <link rel="alternate" hreflang="zh-TW" href="https://developer.mozilla.org/zh-TW/docs/WebAPI/Alarm" title="Alarm API">
+    
+  
+
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="Alarm API">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS/API/Alarm_API">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS/API/Alarm_API">
+  <meta name="twitter:title" content="Alarm API">
+  
+  <meta property="og:description" content="The Alarm API allows applications to schedule actions to be run in the future. For example, some applications like alarm-clock, calendar or auto-update might need to utilize the Alarm API to trigger particular device behaviors at specified time points.">
+  <meta name="description" content="The Alarm API allows applications to schedule actions to be run in the future. For example, some applications like alarm-clock, calendar or auto-update might need to utilize the Alarm API to trigger particular device behaviors at specified time points.">
+  <meta name="twitter:description" content="The Alarm API allows applications to schedule actions to be run in the future. For example, some applications like alarm-clock, calendar or auto-update might need to utilize the Alarm API to trigger particular device behaviors at specified time points.">
+  
+
+  
+    
+
+
+
+  
+</head>
+<body data-slug="Mozilla/Firefox_OS/API/Alarm_API" contextmenu="edit-history-menu" data-search-url="" class="document zone ">
+
+  <script type="text/javascript">
+    (function(win) {
+        'use strict';
+
+        
+            (function(){
+  var FLAGS = {
+    'compat_api': false,'kumaediting': false,'page_move': false,'registration_disabled': false,'search_suggestions': false,'section_edit': true,'spam_admin_override': false,'spam_checks_enabled': true,'spam_spammer_override': false,'spam_submissions_enabled': false,'spam_testing_mode': false,'wiki_samples': true,'wiki_spam_exempted': false,'wiki_spam_training': true
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': true,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+
+        // This needs to be set before ckeditor.js loads
+        window.CKEDITOR_BASEPATH = 'https://developer.mozilla.org/static/js/libs/ckeditor/build/ckeditor/';
+
+        // This represents the site configuration
+        win.mdn = {
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+            
+            notifications: [],
+            
+            // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            },
+            // Assets that need to be dynamically injected
+            assets_disabled: {
+                css: {
+                    'editor-content': ['https://developer.cdn.mozilla.net/static/build/styles/editor-content.3d79df72080d.css',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/styles/wiki-compat-tables.f3a3bfce97a1.css',]
+                },
+                js: {
+                    'syntax-prism': ['https://developer.cdn.mozilla.net/static/build/js/syntax-prism.7a66ddfa68bf.js',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/js/wiki-compat-tables.14ce5dcb2c3d.js',]
+                }
+            }
+        };
+    })(this);
+</script>
+
+  
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+    
+      <li><a href="#q" id="skip-search">Skip to search</a></li>
+    
+  </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+    <a href="https://developer.mozilla.org/en-US/" class="logo">Mozilla Developer Network</a>
+
+    <div id="nav-sec">
+        
+                  <ul>
+                  <li>
+
+    
+
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                Sign in
+              </span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FMozilla%2FFirefox_OS%2FAPI%2FAlarm_API" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/Mozilla/Firefox_OS/API/Alarm_API" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/Mozilla/Firefox_OS/API/Alarm_API" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2FMozilla%2FFirefox_OS%2FAPI%2FAlarm_API" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+              
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+        
+    </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../../../Web/API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+
+  
+      
+        <div class="zone-article-header" id="document-main"><div class="center">
+          <!-- zone title -->
+          <div class="zone-title"><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS">B2G OS</a></div>
+          <!-- zone image -->
+          <div class="zone-image"></div>
+        </div></div>
+      
+
+     <!-- end is_zone -->
+
+    <div class="wiki-main-content"><div class="center">
+      
+      <div class="article-meta">
+        <!-- action buttons -->
+        
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+  <ul class="page-buttons" data-sticky="false">
+      
+      <li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+              
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/es/docs/WebAPI/Alarm" title="Api de Alarma">Español</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/fr/docs/WebAPI/Alarm" title="Alarm API">Français</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/ja/docs/Web/API/Alarm_API" title="Alarm API">日本語</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/ko/docs/WebAPI/Alarm" title="Alarm API">한국어</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/pt-BR/docs/WebAPI/Alarme" title="Alarme API">Português (do&nbsp;Brasil)</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/zh-TW/docs/WebAPI/Alarm" title="Alarm API">正體中文 (繁體)</a></bdi></li>
+                
+              
+
+              
+                <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS/API/Alarm_API$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+              
+            </ul>
+          </div>
+        </div>
+      </li>
+
+      <li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS/API/Alarm_API$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li>
+
+        
+
+        <li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS/API/Alarm_API$history" rel="nofollow, noindex">History</a></li>
+                
+                
+                
+                
+
+                
+
+                
+                
+                
+                <li class="page-print"><a href="#" onclick="return window.print();">Print this article</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+        
+  <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Mozilla" rel="v:url" property="v:title">Mozilla</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS" rel="v:url" property="v:title">B2G OS</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="../API.html" rel="v:url" property="v:title">Firefox OS APIs</a></li>
+    
+    <li class="crumb" typeof="v:Breadcrumb" property="v:title">Alarm API</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        
+        <div class="contributor-avatars" data-all-text="see all contributors" data-alternate-message="hide contributors" data-has-hidden="1">
+            <ul>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/teoli" title="View profile: teoli">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="teoli" data-src="../../../../../../secure.gravatar.com/avatar/d0d90148e08e3b64ccf75c46f31442c56c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">teoli</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills" title="View profile: chrisdavidmills">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="chrisdavidmills" data-src="../../../../../../secure.gravatar.com/avatar/deeea0ba82390bd5acc539703c4b0cfb6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">chrisdavidmills</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/kscarfone" title="View profile: kscarfone">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="kscarfone" data-src="../../../../../../secure.gravatar.com/avatar/89c1e54a9703125168e40d22316d2b496c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">kscarfone</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/nikhilm" title="View profile: nikhilm">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="nikhilm" data-src="../../../../../../secure.gravatar.com/avatar/9d2d8883a6f23209c0ae4f093e1a8a276c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">nikhilm</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/kestutis" title="View profile: kestutis">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="kestutis" data-src="../../../../../../secure.gravatar.com/avatar/a082532621eb020ba74cb5eb93c449b16c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">kestutis</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Gene" title="View profile: Gene">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Gene" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Gene</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Jeremie" title="View profile: Jeremie">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Jeremie" data-src="../../../../../../secure.gravatar.com/avatar/ea74cf7f528273838138e9ae407cd8ef6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Jeremie</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/justinpotts" title="View profile: justinpotts">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="justinpotts" data-src="../../../../../../secure.gravatar.com/avatar/c92734304964fbe8d2f41da413a571a86c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">justinpotts</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/FredB" title="View profile: FredB">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="FredB" data-src="../../../../../../secure.gravatar.com/avatar/ae5b9bd466dae65a6be4e9ff223d2b2a6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">FredB</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/mnoorenberghe" title="View profile: mnoorenberghe">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="mnoorenberghe" data-src="../../../../../../secure.gravatar.com/avatar/b7e928b14ef7e22c266206f5852cc6b66c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">mnoorenberghe</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/alefteris" title="View profile: alefteris">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="alefteris" data-src="../../../../../../secure.gravatar.com/avatar/231c555830b49076218e46344822f4fc6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">alefteris</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Sheppy" title="View profile: Sheppy">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Sheppy" data-src="../../../../../../secure.gravatar.com/avatar/945076feb88f2d7003891ffbf06f32bf6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Sheppy</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/dbruant" title="View profile: dbruant">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="dbruant" data-src="../../../../../../secure.gravatar.com/avatar/b9b113093c351a599f86e0647c43add16c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">dbruant</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/vikashagrawal1990" title="View profile: vikashagrawal1990">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="vikashagrawal1990" data-src="../../../../../../secure.gravatar.com/avatar/cecf6a2072bb833e14352f9f3182c5846c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">vikashagrawal1990</noscript></a>
+                </li>
+            
+            </ul>
+        </div>
+        
+
+        <h1>Alarm API</h1>
+
+      </div>
+      
+
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-present">
+
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+            
+              <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+              
+              <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#example" rel="internal">Schedule alarms</a><ol><li><a href="#Alarms_ignoring_time_zones" rel="internal">Alarms ignoring time zones</a></li><li><a href="#Alarms_honoring_time_zones" rel="internal">Alarms honoring time zones</a></li></ol></li><li><a href="#Managing_alarms" rel="internal">Managing alarms</a><ol><li><a href="#mozAlarm" rel="internal">mozAlarm</a></li></ol></li><li><a href="#Handling_alarms" rel="internal">Handling alarms</a></li><li><a href="#Permissions_for_the_Alarm_API" rel="internal">Permissions for the Alarm API</a></li><li><a href="#Specifications" rel="internal">Specifications</a></li><li><a href="#Browser_compatibility" rel="internal">Browser compatibility</a></li><li><a href="#See_also" rel="internal">See also</a>
+                </li></ol>
+              </div>
+              
+              </div>
+            
+
+            
+            
+              
+            
+
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-half wiki-column text-content">
+
+              
+
+              
+
+              
+                
+                
+                
+              
+              
+
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                
+                  
+                    <p></p><section id="Quick_Links" class="Quick_links"><!-- --></section><p></p>
+
+<p class="summary">The <strong>Alarm API</strong> allows applications to schedule actions to be run in the future. For example, some applications like alarm-clock, calendar or auto-update might need to utilize the Alarm API to trigger particular device behaviors at specified time points.</p>
+
+<p>By itself, the Alarm API just allows to schedule alarms. An alarm is dispatched to applications through the System Message API, so applications which want to react to alarms have to register themselves to the <code>alarm</code> messages.</p>
+
+<p>Alarms are set using the <a href="../../../Web/API/Window/navigator/mozAlarms.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>window.navigator.mozAlarms</code></a> object which is an instance of the <a href="MozAlarmsManager.html" title="The documentation about this has not yet been written; please consider contributing!"><code>MozAlarmsManager</code></a> interface.</p>
+
+<div class="note">
+<p><em><strong>Note:</strong></em> The term alarm in the Alarms API is not the same as an alarm used by the Clock app. The Alarms API wakes up applications, the Clock wakes up humans. The Clock <a href="https://github.com/mozilla-b2g/gaia/blob/master/apps/clock/js/alarm.js" class="external">uses the Alarm API</a> to be notified when the time is right to wake up humans.</p>
+</div>
+
+<h2 name="example" id="example">Schedule alarms</h2>
+
+<p>The first things to do when using alarm is to schedule alarms. There are two kind of alarms based on the respect of the time zone. In both case it's done using the <a href="MozAlarmsManager/add.html" title="The documentation about this has not yet been written; please consider contributing!"><code>MozAlarmsManager.add</code></a> method.</p>
+
+<div class="note">
+<p><strong>Note:</strong> If an alarm is not targeted at a specific application, the system will dispatch all the alarms to all the applications listening for alarms.</p>
+</div>
+
+<div class="note">
+<p><strong>Note</strong>: You need to use the same URL for setting and receiving an alarm. For example, If you invoke <code>navigator.mozAlarms.add()</code> on foo.html or index.html?foo=bar, but have <code>{ "alarm": "/index.html" }</code> in your <a href="https://developer.mozilla.org/en-US/Apps/Build/Manifest#messages">manifest messages field</a>, you'll never receive the alarm.</p>
+</div>
+
+<h3 id="Alarms_ignoring_time_zones">Alarms ignoring time zones</h3>
+
+<p>Those kind of alarms is dispatched based on the local time of the device. If the user of the device changes its time zone, the alarm will be dispatched based on the new time zone. For example, if a user is in Paris and sets an alarm that should be dispatched at 12 PM CET (<em>Central European Time</em>) and that user travels to San Francisco, the alarm will be dispatched at 12 PM PDT (<em>Pacific Daylight Time</em>).</p>
+
+<pre class="brush: js">// This the date to schedule the alarm
+var myDate  = new Date("May 15, 2012 16:20:00");
+
+// This is arbitrary data pass to the alarm
+var data    = {
+  foo: "bar"
+}
+
+// The "ignoreTimezone" string is what make the alarm ignoring it
+var request = navigator.mozAlarms.add(myDate, "ignoreTimezone", data);
+
+request.onsuccess = function () {
+  console.log("The alarm has been scheduled");
+};
+
+request.onerror = function () { 
+  console.log("An error occurred: " + this.error.name);
+};
+</pre>
+
+<h3 id="Alarms_honoring_time_zones">Alarms honoring time zones</h3>
+
+<p>Those kind of alarms are dispatched based on the time in the time zone that defines when the alarm has been scheduled. If for some reason, the user of the device changes its time zone the alarm will be dispatched based on the original time zone. For example, if a user is in Paris and set an alarm that should be dispatched at 12pm CET (<em>Central European Time</em>) and if that user travel to San Francisco, the alarm will be dispatched at 3 AM PDT (<em>Pacific Daylight Time</em>).</p>
+
+<pre class="brush: js">// This the date to schedule the alarm
+var myDate  = new Date("May 15, 2012 16:20:00");
+
+// This is arbitrary data pass to the alarm
+var data    = {
+  foo: "bar"
+}
+
+// The "honorTimezone" string is what make the alarm honoring it
+var request = navigator.mozAlarms.add(myDate, "honorTimezone", data);
+
+request.onsuccess = function () {
+  console.log("The alarm has been scheduled");
+};
+
+request.onerror = function () { 
+  console.log("An error occurred: " + this.error.name);
+};
+</pre>
+
+<h2 id="Managing_alarms">Managing alarms</h2>
+
+<p>Once an alarm is scheduled, it's still possible to manage it.</p>
+
+<p>The <a href="MozAlarmsManager/getAll.html" title="The documentation about this has not yet been written; please consider contributing!"><code>MozAlarmsManager.getAll</code></a> method will return the complete list of alarms currently scheduled by the application. This list is an <code><a href="../../../Web/JavaScript/Reference/Global_Objects/Array.html" title="/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array">Array</a></code> of <a href="#mozAlarm">mozAlarm</a> objects.</p>
+
+<h3 id="mozAlarm">mozAlarm</h3>
+
+<p></p><p>Those objects are anonymous JavaScript objects with the following properties:</p>
+
+<dl><dt><code>id</code></dt>
+ <dd>A number representing the id of the alarm</dd>
+ <dt><code>date</code></dt>
+ <dd>A <a href="../../../JavaScript/Reference/Global_Objects/Date.png" title="/en-US/docs/JavaScript/Reference/Global_Objects/Date">Date</a> object representing the scheduled time for the alarm</dd>
+ <dt><code>respectTimezone</code></dt>
+ <dd>A string indicating if the alarm must respect or ignore the timezone information of the <code>date</code> object. Its value can be <code>ignoreTimezone</code> or <code>honorTimezone </code></dd>
+ <dt><code>data</code></dt>
+ <dd>A JavaScript object contaning any data that were stored with the alarm</dd>
+</dl><p></p>
+
+<pre class="brush: js">var request = navigator.mozAlarms.getAll();
+
+request.onsuccess = function () {
+  this.result.forEach(function (alarm) {
+    console.log('Id: ' + alarm.id);
+    console.log('date: ' + alarm.date);
+    console.log('respectTimezone: ' + alarm.respectTimezone);
+    console.log('data: ' + JSON.stringify(alarm.data));
+  });
+};
+
+request.onerror = function () { 
+  console.log("An error occurred: " + this.error.name);
+};
+</pre>
+
+<p>The <a href="MozAlarmsManager/remove.html" title="The documentation about this has not yet been written; please consider contributing!"><code>MozAlarmsManager.remove</code></a> method is used to unschedule an existing alarm.</p>
+
+<pre class="brush: js">var alarmId;
+
+// Set an alarm and store it's id
+var request = navigator.mozAlarms.add(new Date("May 15, 2012 16:20:00"), "honorTimezone");
+
+request.onsuccess = function () {
+  alarmId = this.result;
+}
+
+// ...
+
+// Later on, removing the alarm if it exists
+if (alarmId) {
+  navigator.mozAlarms.remove(alarmId);
+}
+</pre>
+
+<h2 id="Handling_alarms">Handling alarms</h2>
+
+<p>Any application can react when an alarm is dispatched by the system. In order to be able to handle any alarms, an application must register itself as an alarm handler. This is done through the System Messaging API in two steps:</p>
+
+<p>First, the applications must include <code>alarm</code> to the <a href="https://developer.mozilla.org/en-US/docs/Apps/Manifest#messages" title="/en-US/docs/Apps/Manifest#messages">messages property of its application manifest</a> with the URL to the document which registers the callback function to be used when an alarm is dispatched.</p>
+
+<pre class="brush: js">"messages": [
+  { "alarm": "/index.html" }
+]</pre>
+
+<p>Second, the application must bind a callback function with the <code>alarm</code> message. This is done using the <a href="../../../Web/API/Window/navigator/mozSetMessageHandler.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>navigator.mozSetMessageHandler</code></a> method. This callback function will receive a <a href="#mozAlarm">mozAlarm</a> object containing the data attached to the alarm.</p>
+
+<pre class="brush: js">navigator.mozSetMessageHandler("alarm", function (mozAlarm) { 
+  alert("alarm fired: " + JSON.stringify(mozAlarm.data)); 
+});
+</pre>
+
+<p>If an application wants to know if there is a pending alarm at the system level, it's possible to use the <a href="../../../Web/API/Window/navigator/mozHasPendingMessage.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>navigator.mozHasPendingMessage</code></a> method with the value <code>alarm</code>.</p>
+
+<pre class="brush: js">navigator.mozHasPendingMessage("alarm"); 
+</pre>
+
+<h2 id="Permissions_for_the_Alarm_API">Permissions for the Alarm API</h2>
+
+<p>Please note that while the Alarm API is not privileged or certified, you should still include <code>permissions</code> and <code>messages</code> entries in your <code>manifest.webapp</code> file when including it in an installable open Web app.</p>
+
+<pre class="language-html">"permissions": {
+&nbsp;&nbsp;&nbsp; "alarms": {
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; "description": "Required to schedule alarms"
+&nbsp;&nbsp;&nbsp; }
+&nbsp; },
+&nbsp; "messages": [
+&nbsp;&nbsp;&nbsp; { "alarm": "/index.html" }
+&nbsp; ]</pre>
+
+<h2 id="Specifications">Specifications</h2>
+
+<table class="standard-table">
+ <thead>
+  <tr>
+   <th scope="col">Specification</th>
+   <th scope="col">Status</th>
+   <th scope="col">Comment</th>
+  </tr>
+ </thead>
+ <tbody>
+  <tr>
+   <td><a href="https://www.w3.org/2012/sysapps/web-alarms/" class="external" lang="en" title="The 'Web Alarms API' specification" hreflang="en">Web Alarms API</a></td>
+   <td><span class="spec-WD">Working Draft</span></td>
+   <td>Initial specification.</td>
+  </tr>
+ </tbody>
+</table>
+
+<h2 id="Browser_compatibility">Browser compatibility</h2>
+
+<p></p><div class="htab"> 
+    <a name="AutoCompatibilityTable" id="AutoCompatibilityTable"></a> 
+    <ul> 
+        <li class="selected"><a>Desktop</a></li> 
+        <li><a>Mobile</a></li> 
+    </ul> 
+</div><p></p>
+
+<div id="compat-desktop">
+<table class="compat-table">
+ <tbody>
+  <tr>
+   <th>Feature</th>
+   <th>Chrome</th>
+   <th>Firefox (Gecko)</th>
+   <th>Internet Explorer</th>
+   <th>Opera</th>
+   <th>Safari</th>
+  </tr>
+  <tr>
+   <td>Basic support</td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td><a href="https://developer.mozilla.org/en-US/Firefox/Releases/16" title="Released on 2012-10-09.">16</a> (16) <span class="inlineIndicator prefixBox prefixBoxInline" title="prefix"><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Prefixes" title="The name of this feature is prefixed with 'moz' as this browser considers it experimental">moz</a></span></td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+  </tr>
+ </tbody>
+</table>
+</div>
+
+<div id="compat-mobile">
+<table class="compat-table">
+ <tbody>
+  <tr>
+   <th>Feature</th>
+   <th>Android</th>
+   <th>Chrome for Android</th>
+   <th>Firefox Mobile (Gecko)</th>
+   <th>Firefox OS</th>
+   <th>IE Mobile</th>
+   <th>Opera Mobile</th>
+   <th>Safari Mobile</th>
+  </tr>
+  <tr>
+   <td>Basic support</td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+   <td>10.0 (10) <span class="inlineIndicator prefixBox prefixBoxInline" title="prefix"><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Prefixes" title="The name of this feature is prefixed with 'moz' as this browser considers it experimental">moz</a></span></td>
+   <td>1.0.1</td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+  </tr>
+ </tbody>
+</table>
+</div>
+
+<h2 id="See_also">See also</h2>
+
+<ul>
+ <li><a href="https://developer.mozilla.org/en-US/Apps/Build/User_notifications/Using_Alarms_to_notify_users">Using Alarms to notify users</a></li>
+ <li><a href="../../../Web/API/Window/navigator/mozAlarms.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>navigator.mozAlarms</code></a></li>
+ <li><a href="MozAlarmsManager.html" title="The documentation about this has not yet been written; please consider contributing!"><code>MozAlarmsManager</code></a></li>
+ <li><a href="../../../Web/API/Window/navigator/mozSetMessageHandler.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>window.navigator.mozSetMessageHandler</code></a></li>
+</ul>
+                  
+                
+              </article>
+
+              
+
+    
+    
+    
+
+    
+    
+    
+
+    <div class="share">
+        <strong>Share:</strong>
+        <ul>
+            <li><a href="http://twitter.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FMozilla%2FFirefox_OS%2FAPI%2FAlarm_API%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dtwitter.com&amp;text=I+learned+about+Alarm+API+on+MDN." target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS/API/Alarm_API?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=twitter.com" data-title="I learned about Alarm API on MDN." class="share-link twitter"><i aria-hidden="true" class="icon-twitter"></i>Twitter</a></li>
+            <li><a href="http://facebook.com/sharer.php?s=100&amp;p[url]=https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS/API/Alarm_API?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS/API/Alarm_API?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" data-title="I learned about Alarm API on MDN." class="share-link facebook"><i aria-hidden="true" class="icon-facebook"></i>Facebook</a></li>
+            <li><a href="https://plus.google.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FMozilla%2FFirefox_OS%2FAPI%2FAlarm_API%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dplus.google.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS/API/Alarm_API?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=plus.google.com" data-title="I learned about Alarm API on MDN." class="share-link gplus"><i aria-hidden="true" class="icon-google-plus"></i>Google+</a></li>
+        </ul>
+    </div>
+
+              
+
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                  
+                  
+  <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags icon-fw"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/alarm">alarm</a></li>
+      
+        <li><a href="../../../tag/API.html">API</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/B2G">B2G</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Firefox OS">Firefox OS</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Reference">Reference</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Référence">Référence</a></li>
+      
+    </ul>
+  </div>
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-group icon-fw"></i>&nbsp;<strong>Contributors to this page:</strong> 
+        <a href="https://developer.mozilla.org/en-US/profiles/teoli">teoli</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills">chrisdavidmills</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/kscarfone">kscarfone</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/nikhilm">nikhilm</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/kestutis">kestutis</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Gene">Gene</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Jeremie">Jeremie</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/justinpotts">justinpotts</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/FredB">FredB</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/mnoorenberghe">mnoorenberghe</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/alefteris">alefteris</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Sheppy">Sheppy</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/dbruant">dbruant</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/vikashagrawal1990">vikashagrawal1990</a>
+    
+                    </div>
+                  
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o icon-fw"></i>&nbsp;<strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/teoli">teoli</a>,
+                      <time datetime="2016-02-10T07:00:54-08:00">Feb 10, 2016, 7:00:54 AM</time>
+                    </div>
+                  
+                </div>
+              
+            </div>
+
+            
+              <!-- quick links and zone subnav strip -->
+              <div id="wiki-left" class="column-strip wiki-column">
+
+              
+
+                
+
+                
+                  <!-- quick links -->
+                  
+  <div class="quick-links" id="quick-links">
+    <div class="title see-also">See also</div>
+    <ol><li><strong><a href="Alarm_API.html">Alarm API</a></strong></li><li data-default-state="open"><a href="#"><strong>Interfaces</strong></a><ol><li><a href="MozAlarmsManager.html"><code>MozAlarmsManager</code></a></li></ol></li><li data-default-state="open"><a href="#"><strong>Properties</strong></a><ol><li><a href="Navigator/mozAlarms.html"><code>Navigator.mozAlarms</code></a></li></ol></li><li data-default-state="open"><a href="#"><strong>Methods</strong></a><ol><li><a href="Navigator/mozSetMessageHandler.html"><code>Navigator.mozSetMessageHandler()</code></a></li></ol></li></ol>
+  </div>
+                
+
+                <!-- approvals -->
+                
+
+              
+
+              </div>
+            
+          </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Mozilla/Firefox_OS/API/Alarm_API$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Mozilla/Firefox_OS/API/Alarm_API$history" label="View page history"></menuitem>
+  </menu>
+
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+        
+        <div class="contentinfo">
+          <p>© 2005-2016 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>
+          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+        
+        </div>
+      </div>
+      <div class="column-strip">
+        
+          
+  
+    <form class="languages go" method="get" action="https://developer.mozilla.org/en-US/docs/Web">
+      <label for="language">Other languages:</label>
+      <select id="language" class="wiki-l10n" name="next" dir="ltr">
+        <option value="/en-US/docs/Mozilla/Firefox_OS/API/Alarm_API" selected="">
+          English (US)
+        </option>
+        
+          <option value="/es/docs/WebAPI/Alarm">
+            Español
+          </option>
+          <option value="/fr/docs/WebAPI/Alarm">
+            Français
+          </option>
+          <option value="/ja/docs/Web/API/Alarm_API">
+            日本語
+          </option>
+          <option value="/ko/docs/WebAPI/Alarm">
+            한국어
+          </option>
+          <option value="/pt-BR/docs/WebAPI/Alarme">
+            Português (do&nbsp;Brasil)
+          </option>
+          <option value="/zh-TW/docs/WebAPI/Alarm">
+            正體中文 (繁體)
+          </option>
+      </select>
+      <noscript>&lt;button type="submit"&gt;Go&lt;/button&gt;</noscript>
+    </form>
+  
+
+        
+      </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+  
+    
+    <!--[if lte IE 8]><script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/selectivizr.091e18cf669b.js" charset="utf-8"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/main.a7b27a25fb9c.js" charset="utf-8"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+    
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/syntax-prism-min.js" charset="utf-8"></script><script type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/wiki.bd71ca9fd27d.js" charset="utf-8" id="wikiscript"></script>
+
+  
+
+  <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/helpfulness.7b208a764d28.js" charset="utf-8"></script>
+
+  
+    <script type="text/javascript">
+        (function($) {
+            $('#wikiArticle').children('h2[id]').each(function() {
+                var id = $(this).attr('id');
+                var href = '/en-US/docs/Mozilla/Firefox_OS/API/Alarm_API$edit#' + id;
+
+                $('<a>').attr({
+                    href: href,
+                    'class': 'button section-edit only-icon'
+                })
+                .append($('<i aria-hidden="true" class="icon-pencil"></i>'))
+                .append($('<span>'))
+                .find('span')
+                .text(gettext('Edit'))
+                .end()
+                .on('click', function(e) {
+                    e.preventDefault();
+
+                    mdn.analytics.trackEvent({
+                        category: 'Section Edit',
+                        action: id
+                    }, function() {
+                        window.location = href;
+                    });
+                })
+                .appendTo(this);
+            });
+        })(jQuery);
+    </script>
+  
+
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/Mozilla/Firefox_OS/API/Alarm_API by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 15:31:21 GMT -->
+</body></html>

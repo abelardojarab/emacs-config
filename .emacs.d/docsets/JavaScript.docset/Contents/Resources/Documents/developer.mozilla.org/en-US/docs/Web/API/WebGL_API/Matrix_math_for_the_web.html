@@ -1,0 +1,1023 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Matrix_math_for_the_web by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 15:44:20 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <script async="" src="../../../../../../www.google-analytics.com/analytics.js"></script><script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+  
+    
+  
+
+  
+  <title>Matrix math for the web</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+  
+    
+    
+    <link href="../../../../../../developer.cdn.mozilla.net/static/build/styles/mdn.593f20d8c365.css" rel="stylesheet" type="text/css">
+
+    
+  
+    <link href="../../../../../../developer.cdn.mozilla.net/static/build/styles/wiki.13dd9abdfb62.css" rel="stylesheet" type="text/css">
+
+    
+
+    
+
+  <!-- common social tags -->
+  
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon144.a6e4162070f4.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon114.0e9fabd44f85.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon72.8ff9d87c82a0.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon57.a2490b9a2d76.png">
+  <!-- basic favicon -->
+  
+    
+  
+  <link rel="shortcut icon" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon32.e02854fdcf73.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/html5shiv.3948ccddab6f.js" charset="utf-8"></script>
+  <![endif]-->
+
+  
+  <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Matrix_math_for_the_web$json">
+  <link rel="canonical" href="Matrix_math_for_the_web.html">
+
+  
+
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="Matrix math for the web">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Matrix_math_for_the_web">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Matrix_math_for_the_web">
+  <meta name="twitter:title" content="Matrix math for the web">
+  
+  <meta property="og:description" content="Matrices can be used to represent transformations of objects in space, and are an important tool to use in visualizations on the Web. This article explores how to create matrices and use them with CSS3 transforms and the matrix3d transform type.">
+  <meta name="description" content="Matrices can be used to represent transformations of objects in space, and are an important tool to use in visualizations on the Web. This article explores how to create matrices and use them with CSS3 transforms and the matrix3d transform type.">
+  <meta name="twitter:description" content="Matrices can be used to represent transformations of objects in space, and are an important tool to use in visualizations on the Web. This article explores how to create matrices and use them with CSS3 transforms and the matrix3d transform type.">
+  
+
+  
+    
+
+
+
+  
+</head>
+<body data-slug="Web/API/WebGL_API/Matrix_math_for_the_web" contextmenu="edit-history-menu" data-search-url="" class="document  ">
+
+  <script type="text/javascript">
+    (function(win) {
+        'use strict';
+
+        
+            (function(){
+  var FLAGS = {
+    'compat_api': false,'kumaediting': false,'page_move': false,'registration_disabled': false,'search_suggestions': false,'section_edit': true,'spam_admin_override': false,'spam_checks_enabled': true,'spam_spammer_override': false,'spam_submissions_enabled': false,'spam_testing_mode': false,'wiki_samples': true,'wiki_spam_exempted': false,'wiki_spam_training': true
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': true,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+
+        // This needs to be set before ckeditor.js loads
+        window.CKEDITOR_BASEPATH = 'https://developer.mozilla.org/static/js/libs/ckeditor/build/ckeditor/';
+
+        // This represents the site configuration
+        win.mdn = {
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+            
+            notifications: [],
+            
+            // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            },
+            // Assets that need to be dynamically injected
+            assets_disabled: {
+                css: {
+                    'editor-content': ['https://developer.cdn.mozilla.net/static/build/styles/editor-content.3d79df72080d.css',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/styles/wiki-compat-tables.f3a3bfce97a1.css',]
+                },
+                js: {
+                    'syntax-prism': ['https://developer.cdn.mozilla.net/static/build/js/syntax-prism.7a66ddfa68bf.js',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/js/wiki-compat-tables.14ce5dcb2c3d.js',]
+                }
+            }
+        };
+    })(this);
+</script>
+
+  
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+    
+      <li><a href="#q" id="skip-search">Skip to search</a></li>
+    
+  </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+    <a href="https://developer.mozilla.org/en-US/" class="logo">Mozilla Developer Network</a>
+
+    <div id="nav-sec">
+        
+                  <ul>
+                  <li>
+
+    
+
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                Sign in
+              </span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FWebGL_API%2FMatrix_math_for_the_web" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/Web/API/WebGL_API/Matrix_math_for_the_web" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/Web/API/WebGL_API/Matrix_math_for_the_web" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FWebGL_API%2FMatrix_math_for_the_web" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+              
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+        
+    </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../../API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+
+   <!-- end is_zone -->
+
+    <div class="wiki-main-content" id="document-main"><div class="center">
+      
+      <div class="article-meta">
+        <!-- action buttons -->
+        
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+  <ul class="page-buttons" data-sticky="false">
+      
+      <li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+              
+                <li class="smaller">No translations exist for this article.</li>
+              
+
+              
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Matrix_math_for_the_web$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+              
+            </ul>
+          </div>
+        </div>
+      </li>
+
+      <li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Matrix_math_for_the_web$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li>
+
+        
+
+        <li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Matrix_math_for_the_web$history" rel="nofollow, noindex">History</a></li>
+                
+                
+                
+                
+
+                
+
+                
+                
+                
+                <li class="page-print"><a href="#" onclick="return window.print();">Print this article</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+        
+  <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web" rel="v:url" property="v:title">Web technology for developers</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="../../API.html" rel="v:url" property="v:title">Web APIs</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="../WebGL_API.html" rel="v:url" property="v:title">WebGL</a></li>
+    
+    <li class="crumb" typeof="v:Breadcrumb" property="v:title">Matrix math for the web</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        
+        <div class="contributor-avatars" data-all-text="see all contributors" data-alternate-message="hide contributors">
+            <ul>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Sheppy" title="View profile: Sheppy">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Sheppy" data-src="../../../../../../secure.gravatar.com/avatar/945076feb88f2d7003891ffbf06f32bf6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Sheppy</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/TatumCreative" title="View profile: TatumCreative">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="TatumCreative" data-src="../../../../../../secure.gravatar.com/avatar/3bec14d3db8ed72b447d97645a4899866c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">TatumCreative</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills" title="View profile: chrisdavidmills">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="chrisdavidmills" data-src="../../../../../../secure.gravatar.com/avatar/deeea0ba82390bd5acc539703c4b0cfb6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">chrisdavidmills</noscript></a>
+                </li>
+            
+            </ul>
+        </div>
+        
+
+        <h1>Matrix math for the web</h1>
+
+      </div>
+      
+
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-present">
+
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+            
+              <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+              
+              <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#What_is_a_transformation_matrix" rel="internal">What is a transformation matrix?</a><ol><li><a href="#Defining_a_multiplication_function" rel="internal">Defining a multiplication function</a></li><li><a href="#Multiplying_two_matrices" rel="internal">Multiplying two matrices</a></li><li><a href="#Usage" rel="internal">Usage</a></li></ol></li><li><a href="#Translation_matrix" rel="internal">Translation matrix</a></li><li><a href="#Manipulating_the_DOM_with_a_matrix" rel="internal">Manipulating the DOM with a matrix</a></li><li><a href="#Scale_matrix" rel="internal">Scale matrix</a></li><li><a href="#Rotation_matrix" rel="internal">Rotation matrix</a></li><li><a href="#Matrix_Composition" rel="internal">Matrix Composition</a><ol><li><a href="#Composing_multiple_transformations" rel="internal">Composing multiple transformations</a></li></ol></li><li><a href="#Why_matrices_are_important" rel="internal">Why matrices are important</a>
+                </li></ol>
+              </div>
+              
+              </div>
+            
+
+            
+            
+              
+            
+
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-half wiki-column text-content">
+
+              
+
+              
+
+              
+                
+                
+                
+              
+              
+
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                
+                  
+                    <p></p><section id="Quick_Links"><!-- --></section><p></p>
+
+<p class="summary"><span class="seoSummary">Matrices can be used to represent transformations of objects in space, and are an important tool to use in visualizations on the Web. This article explores how to create matrices and use them with <a href="https://developer.mozilla.org/en-US/docs/Web/Guide/CSS/Using_CSS_transforms">CSS3 transforms</a> and the <code>matrix3d</code> transform type.</span></p>
+
+<p>While this article uses CSS3 for the ease of explanations, matrices are a core concept used by many different technologies including WebGL and shaders. This article is also available as an <a href="https://github.com/TatumCreative/mdn-matrix-math" class="external">MDN content kit</a>. The live examples use a collection of <a href="https://github.com/TatumCreative/mdn-webgl" class="external">utility functions</a> availabile under a global object named "MDN".</p>
+
+<h2 id="What_is_a_transformation_matrix">What is a transformation matrix?</h2>
+
+<p>There are many types of matrices, but the ones we are interested in are the 3D transformation matrices. These matrices consist of a set of 16 values arranged in a 4x4 grid. In JavaScript, it is easy to represent a matrix as an array. The typical starting point is to show the identity matrix. When this matrix is multiplied against another point or matrix then the result will be identical.</p>
+
+<pre class="brush: js">var identityMatrix = [
+  1, 0, 0, 0,
+  0, 1, 0, 0,
+  0, 0, 1, 0,
+  0, 0, 0, 1
+];
+</pre>
+
+<p>Speaking of multiplication, what does this operation look like in a matrix? The easiest example is to show the multiplication of a single point. You may notice that a 3D point doesn't quite match up with a 4x4 matrix, so a fourth dimension W is added. For a typical position, setting this value to 1 will make the math work out. The W component has some additional uses that are out of scope for this article. Check out the <a href="WebGL_model_view_projection.html">WebGL model view projection</a> article for a look into how it comes in handy.</p>
+
+<p>Notice how the matrix and points line up:</p>
+
+<pre class="brush: js">[1, 0, 0, 0,
+ 0, 1, 0, 0,
+ 0, 0, 1, 0,
+ 0, 0, 0, 1]
+
+[4, 3, 2, 1]
+</pre>
+
+<h3 id="Defining_a_multiplication_function">Defining a multiplication function</h3>
+
+<p>In our example code we have defined a multiplication function — <code>multiplyMatrixAndPoint()</code>:</p>
+
+<pre class="brush: js">function multiplyMatrixAndPoint(matrix, point) {
+  
+  //Give a simple variable name to each part of the matrix, a column and row number
+  var c0r0 = matrix[ 0], c1r0 = matrix[ 1], c2r0 = matrix[ 2], c3r0 = matrix[ 3];
+  var c0r1 = matrix[ 4], c1r1 = matrix[ 5], c2r1 = matrix[ 6], c3r1 = matrix[ 7];
+  var c0r2 = matrix[ 8], c1r2 = matrix[ 9], c2r2 = matrix[10], c3r2 = matrix[11];
+  var c0r3 = matrix[12], c1r3 = matrix[13], c2r3 = matrix[14], c3r3 = matrix[15];
+  
+  //Now set some simple names for the point
+  var x = point[0];
+  var y = point[1];
+  var z = point[2];
+  var w = point[3];
+  
+  //Multiply the point against each part of the 1st column, then add together
+  var resultX = (x * c0r0) + (y * c0r1) + (z * c0r2) + (w * c0r3);
+  
+  //Multiply the point against each part of the 2nd column, then add together
+  var resultY = (x * c1r0) + (y * c1r1) + (z * c1r2) + (w * c1r3);
+  
+  //Multiply the point against each part of the 3rd column, then add together
+  var resultZ = (x * c2r0) + (y * c2r1) + (z * c2r2) + (w * c2r3);
+  
+  //Multiply the point against each part of the 4th column, then add together
+  var resultW = (x * c3r0) + (y * c3r1) + (z * c3r2) + (w * c3r3);
+  
+  return [resultX, resultY, resultZ, resultW]
+}
+</pre>
+
+<p>Now using the function above we can multiply a point by the matrix. Using the identity matrix it should return the exact same value:</p>
+
+<pre class="brush: js">// sets identityResult to [4,3,2,1]
+var identityResult = multiplyMatrixAndPoint(identityMatrix, [4,3,2,1]);
+</pre>
+
+<p>Returning the same point is not very useful, but there are other types of matrices that can perform helpful operations on points. The next sections will demonstrate some of these matrices.</p>
+
+<h3 id="Multiplying_two_matrices">Multiplying two matrices</h3>
+
+<p>In addition to multiplying a matrix and a point together, you can also multiply two matrices together. The function from above can be re-used to help out in this process:</p>
+
+<pre class="brush: js">function multiplyMatrices(matrixA, matrixB) {
+  
+  // Slice the second matrix up into columns
+  var column0 = [matrixB[0], matrixB[4], matrixB[8], matrixB[12]];
+  var column1 = [matrixB[1], matrixB[5], matrixB[9], matrixB[13]];
+  var column2 = [matrixB[2], matrixB[6], matrixB[10], matrixB[14]];
+  var column3 = [matrixB[3], matrixB[7], matrixB[11], matrixB[15]];
+  
+  // Multiply each column by the matrix
+  var result0 = multiplyMatrixAndPoint( matrixA, column0 );
+  var result1 = multiplyMatrixAndPoint( matrixA, column1 );
+  var result2 = multiplyMatrixAndPoint( matrixA, column2 );
+  var result3 = multiplyMatrixAndPoint( matrixA, column3 );
+  
+  // Turn the result columns back into a single matrix
+  return [
+    result0[0], result1[0], result2[0], result3[0],
+    result0[1], result1[1], result2[1], result3[1],
+    result0[2], result1[2], result2[2], result3[2],
+    result0[3], result1[3], result2[3], result3[3]
+  ]
+}
+</pre>
+
+<h3 id="Usage">Usage</h3>
+
+<p>Let's look at this function in action:</p>
+
+<pre class="brush: js">var someMatrix = [
+  4, 0, 0, 0,
+  0, 3, 0, 0,
+  0, 0, 5, 0,
+  4, 8, 4, 1
+]
+
+var identityMatrix = [
+  1, 0, 0, 0,
+  0, 1, 0, 0,
+  0, 0, 1, 0,
+  0, 0, 0, 1
+];
+
+// Returns a new array equivalent to someMatrix
+var someMatrixResult = multiplyMatrices(identityMatrix, someMatrix);
+</pre>
+
+<div class="warning">
+<p><strong>Important</strong>: These matrix functions are written for clarity of explanation, not for speed or memory management. These functions create a lot of new arrays, which can be particularly expensive for real time operations due to garbage collection. In real production code it would be best to use optimized functions. <a href="http://glmatrix.net/" class="external">glMatrix</a> is an example of a library that has a large focus on speed and performance. The focus in the glMatrix library is to have target arrays that are allocated before the update loop.</p>
+</div>
+
+<h2 id="Translation_matrix">Translation matrix</h2>
+
+<p>A translation matrix is based off the identity matrix. It moves the object in one of 3 directions, x, y, or z. The easiest way to think of a translation is like picking up a coffee cup. The coffee cup must be kept upright and oriented the same way so that no coffee is spilled. It can move up in the air off the table and around the air in space.</p>
+
+<p>Now the coffee can't actually be drank with only a translation matrix because the cup cannot be tilted. In a later section, a new matrix will be discussed that will be able to handle that task.</p>
+
+<pre class="brush: js">var x = 50;
+var y = 100;
+var z = 0;
+
+var translationMatrix = [
+    1,    0,    0,   0,
+    0,    1,    0,   0,
+    0,    0,    1,   0,
+    x,    y,    z,   1
+];
+</pre>
+
+<h2 id="Manipulating_the_DOM_with_a_matrix">Manipulating the DOM with a matrix</h2>
+
+<p>A really easy way to start using a matrix is to use the CSS3 <code>matrix3d</code> <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/transform">transform</a>. First we'll set up a simple <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/div" title="The HTML &lt;div&gt; element (or HTML Document Division Element) is the generic container for flow content, which does not inherently represent anything. It can be used to group elements for styling purposes (using the class or id attributes), or because they share attribute values, such as lang. It should be used only when no other semantic element (such as &lt;article&gt; or &lt;nav&gt;) is appropriate."><code>&lt;div&gt;</code></a> with some content. The style is not shown. But it is set to a fixed width and height and centered on the page. The <code>&lt;div&gt;</code> has a transition set for the transform so that matrix is animated in making it easy to see what is being done.</p>
+
+<pre class="brush: html">&lt;div id='move-me' class='transformable'&gt;
+  &lt;h2&gt;Move me with a matrix&lt;/h2&gt;
+  &lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipisicing elit...&lt;/p&gt;
+&lt;/div&gt;
+</pre>
+
+<p>Finally for each of the examples we will generate a 4x4 matrix, then update the <code>&lt;div&gt;</code>'s style to have a transform applied to it, set to a <code>matrix3d</code>. Bear in mind that even though the matrix is made up of 4 rows and 4 columns, it collapses into a single line of 16 values.</p>
+
+<pre class="brush: js">// Create the matrix3d style property from a matrix array
+function matrixArrayToCssMatrix(array) {
+  return "matrix3d(" + array.join(',') + ")";
+}
+	
+// Grab the DOM element
+var moveMe = document.getElementById('move-me');
+
+// Returns a result like: "matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 50, 100, 0, 1);"
+var matrix3dRule = matrixArrayToCssMatrix( translationMatrix );
+
+// Set the transform
+moveMe.style.transform = matrix3dRule;
+</pre>
+
+<p><a href="http://jsfiddle.net/g24mgw6y" class="button liveSample external">View on JSFiddle</a></p>
+
+<p><img src="../../../../../../mdn.mozillademos.org/files/11409/matrix-translation.jpg" style="height: 385px; width: 339px;" alt="An example of matrix translation"></p>
+
+<h2 id="Scale_matrix">Scale matrix</h2>
+
+<p>A scale matrix makes something larger or smaller in one of 3 dimension: width, height, and depth. In typical (cartesian) coordinates this would be stretching and shrinking in x, y, and z.</p>
+
+<pre class="brush: js">var w = 1.5; // width  (x)
+var h = 0.7; // height (y)
+var d = 1;   // depth  (z)
+
+var scaleMatrix = [
+    w,    0,    0,   0,
+    0,    h,    0,   0,
+    0,    0,    d,   0,
+    0,    0,    0,   1
+];
+</pre>
+
+<p><a href="http://jsfiddle.net/fndd6e1b" class="button liveSample external">View on JSFiddle</a></p>
+
+<p><img src="../../../../../../mdn.mozillademos.org/files/11407/matrix-scale.jpg" style="height: 291px; width: 398px;" alt="An example of matrix scaling"></p>
+
+<h2 id="Rotation_matrix">Rotation matrix</h2>
+
+<p>Rotation matrices start looking a little bit more complicated than scaling and transform matrices. They use trigonometric functions to perform the rotation. While this section won't break the steps down into exhaustive detail, take this example for illustration.</p>
+
+<pre class="brush: js">// Manually rotating a point about the origin without matrices
+var point = [10,2];
+
+// Calculate the distance from the origin
+var distance = Math.sqrt(point[0] * point[0] + point[1] * point[1]);
+
+// 60 degrees
+var rotationInRadians = Math.PI / 3; 
+
+var transformedPoint = [
+  Math.cos( rotationInRadians ) * distance,
+  Math.sin( rotationInRadians ) * distance
+];
+</pre>
+
+<p>It is possible to encode these type of steps into a matrix, and do it each of the x, y, and z dimensions. Below is the representation of a rotation about the X axis:</p>
+
+<pre class="brush: js">var sin = Math.sin;
+var cos = Math.cos;
+
+// NOTE: There is no perspective in these transformations, so a rotation
+//       at this point will only appear to only shrink the div
+
+var a = Math.PI * 0.3; //Rotation amount
+
+// Rotate around Z axis
+var rotateZMatrix = [
+  cos(a), -sin(a),    0,    0,
+  sin(a),  cos(a),    0,    0,
+       0,       0,    1,    0,
+       0,       0,    0,    1
+];
+</pre>
+
+<p><a href="http://jsfiddle.net/9vr2dorz" class="button liveSample external">View on JSFiddle</a></p>
+
+<p><img src="../../../../../../mdn.mozillademos.org/files/11405/matrix-rotation.jpg" style="height: 363px; width: 417px;" alt=""></p>
+
+<p>Here are a set of functions that return the rotation matrices. One big note is that there is no perspective applied, so it might not feel very 3D yet. The flatness is equivalent to when a camera zooms in really close onto an object in the distance — the sense of perspective disappears.</p>
+
+<pre class="brush: js">function rotateAroundXAxis(a) {
+  
+  return [
+       1,       0,        0,     0,
+       0,  cos(a),  -sin(a),     0,
+       0,  sin(a),   cos(a),     0,
+       0,       0,        0,     1
+  ];
+}
+
+function rotateAroundYAxis(a) {
+  
+  return [
+     cos(a),   0, sin(a),   0,
+          0,   1,      0,   0,
+    -sin(a),   0, cos(a),   0,
+          0,   0,      0,   1
+  ];
+}
+
+function rotateAroundZAxis(a) {
+  
+  return [
+    cos(a), -sin(a),    0,    0,
+    sin(a),  cos(a),    0,    0,
+         0,       0,    1,    0,
+         0,       0,    0,    1
+  ];
+}
+</pre>
+
+<p><a href="http://jsfiddle.net/tk072doc" class="button liveSample external">View on JSFiddle</a></p>
+
+<h2 id="Matrix_Composition">Matrix Composition</h2>
+
+<p>The real power of matrices come from matrix composition. When matrices of a certain class are multiplied together they preserve the history of the transformations and are reversible. This means that if a translation, rotation, and scale matrix are all combined together, when the order of the matrices is reversed and re-applied then the original points are returned.</p>
+
+<p>The order that matrices are multiplied in matters. When multiplying numbers a * b = c, and b * a = c are both true. For example 3 * 4 = 12, and 4 * 3 = 12. In math these numbers would be described as <strong>commutative</strong>. Matrices are not guaranteed to be the same if the order is switched, so matrices are <strong>non-commutative</strong>.</p>
+
+<p>Another mind-bender is that matrix multiplication in WebGL and CSS3 needs to happen in the reverse order that the operations intuitively happen. For instance, to scale something down by 80%, move it down 200 pixels, and then rotate about the origin 90 degrees would look something like the following in pseudo-code.</p>
+
+<pre>  transformation = rotate * translate * scale
+</pre>
+
+<h3 id="Composing_multiple_transformations">Composing multiple transformations</h3>
+
+<p>The function that we will be using is part of the <a href="https://github.com/TatumCreative/mdn-webgl" class="external">utility functions</a>. It takes an array of matrices and multiplies them together. In WebGL shader code, this is built into the language and the * operator can be used. Additionally this example uses a scale and translate function which return matrices as defined above.</p>
+
+<pre class="brush: js">var transformMatrix = MDN.multiplyArrayOfMatrices([
+  rotateAroundZAxis(Math.PI * 0.5),    // Step 3: rotate around 90 degrees
+  translate(0, 200, 0),                // Step 2: move down 100 pixels
+  scale(0.8, 0.8, 0.8),                // Step 1: scale down
+]);
+
+</pre>
+
+<p><a href="http://jsfiddle.net/qxxg3yvc" class="button liveSample external">View on JSFiddle</a></p>
+
+<p><img src="../../../../../../mdn.mozillademos.org/files/11403/matrix-composition.jpg" style="height: 292px; width: 488px;" alt="An example of matrix composition"></p>
+
+<p>Finally a fun step to show how matrices work is to reverse the steps to bring the matrix back to the original identity matrix.</p>
+
+<pre class="brush: js">var transformMatrix = MDN.multiplyArrayOfMatrices([
+  scale(1.25, 1.25, 1.25),             // Step 6: scale back up
+  translate(0, -200, 0),               // Step 5: move back up
+  rotateAroundZAxis(-Math.PI * 0.5),   // Step 4: rotate back
+  rotateAroundZAxis(Math.PI * 0.5),    // Step 3: rotate around 90 degrees
+  translate(0, 200, 0),                // Step 2: move down 100 pixels
+  scale(0.8, 0.8, 0.8),                // Step 1: scale down
+]);
+</pre>
+
+<h2 id="Why_matrices_are_important">Why matrices are important</h2>
+
+<p>Matrices are important because they comprise a small set of numbers that can describe a wide range of transformations in space. They can easily be shared around in programs. Different coordinate spaces can be described with matrices, and some matrix multiplication will move one set of data from one coordinate space to another coordinate space. Matrices effectively remember every part of the previous transforms that were used to generate them.</p>
+
+<p>For uses in WebGL, the graphics card is particularly good at multiplying a large number of points in space by matrices. Different operations like positioning points, calculating lighting, and posing animated characters all rely on this fundamental tool.</p>
+                  
+                
+              </article>
+
+              
+
+    
+    
+    
+
+    
+    
+    
+
+    <div class="share">
+        <strong>Share:</strong>
+        <ul>
+            <li><a href="http://twitter.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FAPI%2FWebGL_API%2FMatrix_math_for_the_web%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dtwitter.com&amp;text=I+learned+about+Matrix+math+for+the+web+on+MDN." target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Matrix_math_for_the_web?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=twitter.com" data-title="I learned about Matrix math for the web on MDN." class="share-link twitter"><i aria-hidden="true" class="icon-twitter"></i>Twitter</a></li>
+            <li><a href="http://facebook.com/sharer.php?s=100&amp;p[url]=https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Matrix_math_for_the_web?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Matrix_math_for_the_web?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" data-title="I learned about Matrix math for the web on MDN." class="share-link facebook"><i aria-hidden="true" class="icon-facebook"></i>Facebook</a></li>
+            <li><a href="https://plus.google.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FAPI%2FWebGL_API%2FMatrix_math_for_the_web%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dplus.google.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Matrix_math_for_the_web?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=plus.google.com" data-title="I learned about Matrix math for the web on MDN." class="share-link gplus"><i aria-hidden="true" class="icon-google-plus"></i>Google+</a></li>
+        </ul>
+    </div>
+
+              
+
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                  
+                  
+  <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags icon-fw"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/3D">3D</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/CSS3">CSS3</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Guide">Guide</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/matrices">matrices</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/matrix">matrix</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/transform3d">transform3d</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/WebGL">WebGL</a></li>
+      
+    </ul>
+  </div>
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-group icon-fw"></i>&nbsp;<strong>Contributors to this page:</strong> 
+        <a href="https://developer.mozilla.org/en-US/profiles/Sheppy">Sheppy</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/TatumCreative">TatumCreative</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills">chrisdavidmills</a>
+    
+                    </div>
+                  
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o icon-fw"></i>&nbsp;<strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/Sheppy">Sheppy</a>,
+                      <time datetime="2015-09-10T08:34:14-07:00">Sep 10, 2015, 8:34:14 AM</time>
+                    </div>
+                  
+                </div>
+              
+            </div>
+
+            
+              <!-- quick links and zone subnav strip -->
+              <div id="wiki-left" class="column-strip wiki-column">
+
+              
+
+                
+
+                
+                  <!-- quick links -->
+                  
+  <div class="quick-links" id="quick-links">
+    <div class="title see-also">See also</div>
+     
+ <ol> 
+  <li><a href="../WebGL_API.html"><strong>WebGL API</strong></a></li> 
+  <li data-default-state="open"><a href="Tutorial.html"><strong>WebGL tutorial</strong></a> 
+   <ol> 
+     <li><a href="Tutorial/Getting_started_with_WebGL.html">Getting started with WebGL</a></li> 
+     <li><a href="Tutorial/Adding_2D_content_to_a_WebGL_context.html">Adding 2D content to a WebGL context</a></li> 
+     <li><a href="Tutorial/Using_shaders_to_apply_color_in_WebGL.html">Using shaders to apply color in WebGL</a></li> 
+     <li><a href="Tutorial/Animating_objects_with_WebGL.html">Animating objects with WebGL</a></li> 
+     <li><a href="Tutorial/Creating_3D_objects_using_WebGL.html">Creating 3D objects using WebGL</a></li> 
+     <li><a href="Tutorial/Using_textures_in_WebGL.html">Using textures in WebGL</a></li> 
+     <li><a href="Tutorial/Lighting_in_WebGL.html">Lighting in WebGL</a></li> 
+     <li><a href="Tutorial/Animating_textures_in_WebGL.html">Animating textures in WebGL</a></li> 
+   </ol> 
+  </li> 
+  <li data-default-state="open"><a href="#"><strong>Examples and articles</strong></a> 
+   <ol> 
+    <li><a href="Matrix_math_for_the_web.html">Matrix math for the web</a></li> 
+    <li><a href="WebGL_model_view_projection.html">WebGL model view projection</a></li> 
+    <li><a href="WebGL_best_practices.html">WebGL best practices</a></li> 
+    <li><a href="Using_Extensions.html">Using WebGL extensions</a></li> 
+    <li><a href="https://developer.mozilla.org/en-US/demos/tag/tech:webgl">WebGL demos in MDN Demo Studio</a></li> 
+   </ol> 
+  </li> 
+  <li data-default-state="open"><a href="#"><strong>Interfaces</strong></a> 
+   <ol> 
+    <li><a href="../WebGLRenderingContext.html" title="The WebGLRenderingContext interface provides the OpenGL ES 2.0 rendering context for the drawing surface of an HTML &lt;canvas&gt; element."><code>WebGLRenderingContext</code></a></li> 
+    <li><a href="../WebGL2RenderingContext.html" title="The documentation about this has not yet been written; please consider contributing!"><code>WebGL2RenderingContext</code></a></li> 
+    <li><a href="../WebGLActiveInfo.html" title="The documentation about this has not yet been written; please consider contributing!"><code>WebGLActiveInfo</code></a></li> 
+    <li><a href="../WebGLBuffer.html" title="The documentation about this has not yet been written; please consider contributing!"><code>WebGLBuffer</code></a></li> 
+    <li><a href="../WebGLContextEvent.html" title="The documentation about this has not yet been written; please consider contributing!"><code>WebGLContextEvent</code></a></li> 
+    <li><a href="../WebGLFramebuffer.html" title="The documentation about this has not yet been written; please consider contributing!"><code>WebGLFramebuffer</code></a></li> 
+    <li><a href="../WebGLProgram.html" title="The WebGLProgram is part of the WebGL API and is a combination of two compiled WebGLShaders consisting of a vertex shader and a fragment shader (both written in GLSL). These are then linked into a usable program."><code>WebGLProgram</code></a></li> 
+    <li><a href="../WebGLQuery.html" title="The documentation about this has not yet been written; please consider contributing!"><code>WebGLQuery</code></a></li> 
+    <li><a href="../WebGLRenderbuffer.html" title="The documentation about this has not yet been written; please consider contributing!"><code>WebGLRenderbuffer</code></a></li> 
+    <li><a href="../WebGLSampler.html" title="The documentation about this has not yet been written; please consider contributing!"><code>WebGLSampler</code></a></li> 
+    <li><a href="../WebGLShader.html" title="The WebGLShader is part of the WebGL API and can either be a vertex or a fragment shader. A WebGLProgram requires both types of shaders."><code>WebGLShader</code></a></li> 
+    <li><a href="../WebGLShaderPrecisionFormat.html" title="The documentation about this has not yet been written; please consider contributing!"><code>WebGLShaderPrecisionFormat</code></a></li> 
+    <li><a href="../WebGLSync.html" title="The documentation about this has not yet been written; please consider contributing!"><code>WebGLSync</code></a></li> 
+    <li><a href="../WebGLTexture.html" title="The documentation about this has not yet been written; please consider contributing!"><code>WebGLTexture</code></a></li> 
+    <li><a href="../WebGLTransformFeedback.html" title="The documentation about this has not yet been written; please consider contributing!"><code>WebGLTransformFeedback</code></a></li> 
+    <li><a href="../WebGLUniformLocation.html" title="The documentation about this has not yet been written; please consider contributing!"><code>WebGLUniformLocation</code></a></li> 
+    <li><a href="../WebGLVertexArrayObject.html" title="The documentation about this has not yet been written; please consider contributing!"><code>WebGLVertexArrayObject</code></a></li> 
+   </ol> 
+  </li> 
+  <li><strong><a href="https://developer.mozilla.org/en-US/docs/MDN">Documentation:</a></strong></li> 
+  <li data-default-state="closed"><a href="#">Useful lists</a> 
+   <ol> 
+    <li><a href="https://developer.mozilla.org/en-US/docs/tag/WebGL">Pages tagged "WebGL"</a></li> 
+   </ol> 
+  </li> 
+  <li data-default-state="closed"><a href="#">Contribute</a> 
+   <ol> 
+    <li><a href="../../../MDN/Doc_status/API/WebGL.html">WebGL doc status</a></li> 
+    <li><a href="https://developer.mozilla.org/en-US/docs/MDN">The MDN project</a></li> 
+   </ol> 
+  </li> 
+ </ol> 
+
+  </div>
+                
+
+                <!-- approvals -->
+                
+
+              
+
+              </div>
+            
+          </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Web/API/WebGL_API/Matrix_math_for_the_web$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Web/API/WebGL_API/Matrix_math_for_the_web$history" label="View page history"></menuitem>
+  </menu>
+
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+        
+        <div class="contentinfo">
+          <p>© 2005-2016 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>
+          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+        
+        </div>
+      </div>
+      <div class="column-strip">
+        
+          
+  
+
+        
+      </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+  
+    
+    <!--[if lte IE 8]><script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/selectivizr.091e18cf669b.js" charset="utf-8"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/main.a7b27a25fb9c.js" charset="utf-8"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+    
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/syntax-prism-min.js" charset="utf-8"></script><script type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/wiki.bd71ca9fd27d.js" charset="utf-8" id="wikiscript"></script>
+
+  
+
+  <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/helpfulness.7b208a764d28.js" charset="utf-8"></script>
+
+  
+    <script type="text/javascript">
+        (function($) {
+            $('#wikiArticle').children('h2[id]').each(function() {
+                var id = $(this).attr('id');
+                var href = '/en-US/docs/Web/API/WebGL_API/Matrix_math_for_the_web$edit#' + id;
+
+                $('<a>').attr({
+                    href: href,
+                    'class': 'button section-edit only-icon'
+                })
+                .append($('<i aria-hidden="true" class="icon-pencil"></i>'))
+                .append($('<span>'))
+                .find('span')
+                .text(gettext('Edit'))
+                .end()
+                .on('click', function(e) {
+                    e.preventDefault();
+
+                    mdn.analytics.trackEvent({
+                        category: 'Section Edit',
+                        action: id
+                    }, function() {
+                        window.location = href;
+                    });
+                })
+                .appendTo(this);
+            });
+        })(jQuery);
+    </script>
+  
+
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Matrix_math_for_the_web by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 15:44:21 GMT -->
+</body></html>

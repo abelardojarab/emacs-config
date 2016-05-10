@@ -1,0 +1,811 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/Web/Guide/Events/Overview_of_Events_and_Handlers by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 18:38:11 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <script async="" src="../../../../../../www.google-analytics.com/analytics.js"></script><script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+  
+    
+  
+
+  
+  <title>Overview of Events and Handlers</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+  
+    
+    
+    <link href="../../../../../../developer.cdn.mozilla.net/static/build/styles/mdn.593f20d8c365.css" rel="stylesheet" type="text/css">
+
+    
+  
+    <link href="../../../../../../developer.cdn.mozilla.net/static/build/styles/wiki.13dd9abdfb62.css" rel="stylesheet" type="text/css">
+
+    
+
+    
+
+  <!-- common social tags -->
+  
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon144.a6e4162070f4.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon114.0e9fabd44f85.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon72.8ff9d87c82a0.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon57.a2490b9a2d76.png">
+  <!-- basic favicon -->
+  
+    
+  
+  <link rel="shortcut icon" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon32.e02854fdcf73.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/html5shiv.3948ccddab6f.js" charset="utf-8"></script>
+  <![endif]-->
+
+  
+  <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Overview_of_Events_and_Handlers$json">
+  <link rel="canonical" href="Overview_of_Events_and_Handlers.html">
+
+  
+    
+      <link rel="alternate" hreflang="ko" href="../../../../../ko/docs/Web/Guide/Events/Overview_of_Events_and_Handlers.html" title="Overview of Events and Handlers">
+    
+      <link rel="alternate" hreflang="zh-CN" href="../../../../../zh-CN/docs/Web/Guide/Events/Overview_of_Events_and_Handlers.html" title="Overview of Events and Handlers">
+    
+  
+
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="Overview of Events and Handlers">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Overview_of_Events_and_Handlers">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Overview_of_Events_and_Handlers">
+  <meta name="twitter:title" content="Overview of Events and Handlers">
+  
+  <meta property="og:description" content="Events and event handling provide a core technique in JavaScript for reacting to incidents occurring when a browser accesses a web page, including events from preparing a web page for display, from interacting with the content of the web page,&nbsp; relating to the device on which the browser is running, and from many other causes such as media stream playback or animation timing.">
+  <meta name="description" content="Events and event handling provide a core technique in JavaScript for reacting to incidents occurring when a browser accesses a web page, including events from preparing a web page for display, from interacting with the content of the web page,&nbsp; relating to the device on which the browser is running, and from many other causes such as media stream playback or animation timing.">
+  <meta name="twitter:description" content="Events and event handling provide a core technique in JavaScript for reacting to incidents occurring when a browser accesses a web page, including events from preparing a web page for display, from interacting with the content of the web page,&nbsp; relating to the device on which the browser is running, and from many other causes such as media stream playback or animation timing.">
+  
+
+  
+    
+
+
+
+  
+</head>
+<body data-slug="Web/Guide/Events/Overview_of_Events_and_Handlers" contextmenu="edit-history-menu" data-search-url="" class="document  ">
+
+  <script type="text/javascript">
+    (function(win) {
+        'use strict';
+
+        
+            (function(){
+  var FLAGS = {
+    'compat_api': false,'kumaediting': false,'page_move': false,'registration_disabled': false,'search_suggestions': false,'section_edit': true,'spam_admin_override': false,'spam_checks_enabled': true,'spam_spammer_override': false,'spam_submissions_enabled': false,'spam_testing_mode': false,'wiki_samples': true,'wiki_spam_exempted': false,'wiki_spam_training': true
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': true,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+
+        // This needs to be set before ckeditor.js loads
+        window.CKEDITOR_BASEPATH = 'https://developer.mozilla.org/static/js/libs/ckeditor/build/ckeditor/';
+
+        // This represents the site configuration
+        win.mdn = {
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+            
+            notifications: [],
+            
+            // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            },
+            // Assets that need to be dynamically injected
+            assets_disabled: {
+                css: {
+                    'editor-content': ['https://developer.cdn.mozilla.net/static/build/styles/editor-content.3d79df72080d.css',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/styles/wiki-compat-tables.f3a3bfce97a1.css',]
+                },
+                js: {
+                    'syntax-prism': ['https://developer.cdn.mozilla.net/static/build/js/syntax-prism.7a66ddfa68bf.js',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/js/wiki-compat-tables.14ce5dcb2c3d.js',]
+                }
+            }
+        };
+    })(this);
+</script>
+
+  
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+    
+      <li><a href="#q" id="skip-search">Skip to search</a></li>
+    
+  </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+    <a href="https://developer.mozilla.org/en-US/" class="logo">Mozilla Developer Network</a>
+
+    <div id="nav-sec">
+        
+                  <ul>
+                  <li>
+
+    
+
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                Sign in
+              </span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FGuide%2FEvents%2FOverview_of_Events_and_Handlers" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/Web/Guide/Events/Overview_of_Events_and_Handlers" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/Web/Guide/Events/Overview_of_Events_and_Handlers" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FGuide%2FEvents%2FOverview_of_Events_and_Handlers" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+              
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+        
+    </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../../API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+
+   <!-- end is_zone -->
+
+    <div class="wiki-main-content" id="document-main"><div class="center">
+      
+      <div class="article-meta">
+        <!-- action buttons -->
+        
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+  <ul class="page-buttons" data-sticky="false">
+      
+      <li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+              
+                
+                  <li><bdi><a rel="internal" href="../../../../../ko/docs/Web/Guide/Events/Overview_of_Events_and_Handlers.html" title="Overview of Events and Handlers">한국어</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="../../../../../zh-CN/docs/Web/Guide/Events/Overview_of_Events_and_Handlers.html" title="Overview of Events and Handlers">中文 (简体)</a></bdi></li>
+                
+              
+
+              
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Overview_of_Events_and_Handlers$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+              
+            </ul>
+          </div>
+        </div>
+      </li>
+
+      <li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Overview_of_Events_and_Handlers$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li>
+
+        
+
+        <li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Overview_of_Events_and_Handlers$history" rel="nofollow, noindex">History</a></li>
+                
+                
+                
+                
+
+                
+
+                
+                
+                
+                <li class="page-print"><a href="#" onclick="return window.print();">Print this article</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+        
+  <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web" rel="v:url" property="v:title">Web technology for developers</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web/Guide" rel="v:url" property="v:title">Web developer guides</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="../Events.html" rel="v:url" property="v:title">Event developer guide</a></li>
+    
+    <li class="crumb" typeof="v:Breadcrumb" property="v:title">Overview of Events and Handlers</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        
+        <div class="contributor-avatars" data-all-text="see all contributors" data-alternate-message="hide contributors" data-has-hidden="1">
+            <ul>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/dphenderson" title="View profile: dphenderson">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="dphenderson" data-src="../../../../../../secure.gravatar.com/avatar/9e88049ac408137be3385a2ad943b4d86c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">dphenderson</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/deveedutta" title="View profile: deveedutta">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="deveedutta" data-src="../../../../../../secure.gravatar.com/avatar/1a233b743029f3cb99f66963feaefa726c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">deveedutta</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/bhanubais" title="View profile: bhanubais">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="bhanubais" data-src="../../../../../../secure.gravatar.com/avatar/b0c8280751c7e244f4e067ccc0ae93176c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">bhanubais</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/groovecoder" title="View profile: groovecoder">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="groovecoder" data-src="../../../../../../secure.gravatar.com/avatar/ec25d046746de3be33779256f6957d8f6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">groovecoder</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/aosmond" title="View profile: aosmond">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="aosmond" data-src="../../../../../../secure.gravatar.com/avatar/bff3d32989145dfc299efa3b8dac36f76c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">aosmond</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Jeremie" title="View profile: Jeremie">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Jeremie" data-src="../../../../../../secure.gravatar.com/avatar/ea74cf7f528273838138e9ae407cd8ef6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Jeremie</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Sheppy" title="View profile: Sheppy">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Sheppy" data-src="../../../../../../secure.gravatar.com/avatar/945076feb88f2d7003891ffbf06f32bf6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Sheppy</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/acuster" title="View profile: acuster">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="acuster" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">acuster</noscript></a>
+                </li>
+            
+            </ul>
+        </div>
+        
+
+        <h1>Overview of Events and Handlers</h1>
+
+      </div>
+      
+
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-closed wiki-left-none">
+
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+            
+              <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+              
+              <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#The_event_design_pattern" rel="internal">The event design pattern</a></li><li><a href="#Button_Event_Handler" rel="internal">Button Event Handler Demo</a></li><li><a href="#Notable_events" rel="internal">Notable events</a></li><li><a href="#The_Event_object_hierarchy" rel="internal">The Event object hierarchy</a></li><li><a href="#Documents" rel="internal">Documents</a>
+                </li></ol>
+              </div>
+              
+              </div>
+            
+
+            
+            
+              
+            
+
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-main wiki-column text-content">
+
+              
+
+              
+
+              
+                
+                
+                
+              
+              
+
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                
+                  
+                    <div class="summary">
+<p>This overview of events and event handling explains the code design pattern used to react to incidents occurring when a browser accesses a web page, and it summarizes the types of such incidents modern web browsers can handle.</p>
+</div>
+
+<p>Events and event handling provide a core technique in JavaScript for reacting to incidents occurring when a browser accesses a web page, including events from preparing a web page for display, from interacting with the content of the web page,&nbsp; relating to the device on which the browser is running, and from many other causes such as media stream playback or animation timing.</p>
+
+<p>Events and event handling become central to web programming with the addition of the language to browsers, accompanying a switch in the rendering architecture of browsers from fetch and load page rendering to event driven, reflow based, page rendering. Initially, browsers wait, until they receive all of the resources associated with a page, to parse, process, draw, and present the page to the user. The displayed page remains unchanged until the browser requests a new page. With the change to dynamic page rendering, browsers loop continuously between processing, drawing, presenting content, and waiting for some new event trigger. Event triggers include the completion of the loading of a resource on the network <em>e.g.,</em> downloads an image that can now be drawn on the screen, the completion of parsing a resource by the browser <em>e.g.</em>, processes the HTML content of a page, the interaction of a user with the contents of the page <em>e.g.,</em> clicks a button. Douglas Crockford explains this change effectively in several lectures, notably his talk, <em>An Inconvenient API: The Theory of the DOM,</em> which shows the change in flow from the original browser flow</p>
+
+<div style="margin: 0 auto; width: 68%;"><img src="../../../../../../mdn.mozillademos.org/files/6641/Browser_sequence_comparitive.svg" style="height: 454px; width: 1857px;" alt="A comparison of the sequential and event-driven browser load sequences."></div>
+
+<p>to the event driven browser. The latter approach changes the last steps from a single flow into a perpetual loop, where waiting for and handling the incidence of new events follows painting. The innovation of the dynamic approach allows for a page to be partially rendered even when the browser has not finished retrieving all resources; this approach also allows for event driven actions, which JavaScript leverages. (The talk is available from several sources, including <a href="http://www.youtube.com/watch?v=Y2Y0U-2qJMs" class="external">this one</a>.) Currently, all execution environments for JavaScript code use events and event handling.</p>
+
+<h2 id="The_event_design_pattern">The event design pattern</h2>
+
+<p>The event system, at its core, is simply a programming design pattern. The pattern starts with an agreement over a kind of event and:</p>
+
+<ul>
+ <li>the name String used for the event,</li>
+ <li>the type of the data structure used to represent the key properties of that event, and</li>
+ <li>the JavaScript object which will 'emit' that event.</li>
+</ul>
+
+<p>The pattern is implemented by</p>
+
+<ul>
+ <li>defining a JavaScript function which takes as an argument the data structure which was agreed upon, and</li>
+ <li>registering the function using the name String with the object which will emit the event.</li>
+</ul>
+
+<p>The function is said to be a 'listener' or a 'handler' with both names used interchangibly. This pattern can easily be followed using completely custom code, as explained in the <a href="Creating_and_triggering_events.html">article on custom events</a>. The pattern is also used by modern web browsers which define many events emitted in response to user input or browser activity.</p>
+
+<p>Modern web browsers follow the event pattern using a standardized approach. Browsers use as the data structure for the properties of the event, an object derived from the <code>EventPrototype</code> object. Browsers use as the registration method for the function which will handle those data structures a method called <code>addEventListener</code> which expects as arguments a string event type name and the handler function. Finally, browsers define a large number of objects as event emitters and define a wide variety of event types generated by the objects.</p>
+
+<h2 name="Button_Event_Handler" id="Button_Event_Handler">Button Event Handler Demo</h2>
+
+<p>For example, browser <code>button</code> elements are intended to emit events named <code>'click'</code> in response to a mouse click or, when displyed in touch senstive surfaces, to a finger tap. We could define in the HTML page a <code>button</code> as:</p>
+
+<pre class="brush: html">&lt;button id="buttonOne"&gt;Click here to emit a 'click' event&lt;/button&gt;</pre>
+
+<p>and, in our JavaScript code, we could first define a function to listen to that <code>'click'</code> event:</p>
+
+<pre class="brush: js">var example_click_handler = function (ev){
+    var objKind = (ev instanceof Event) ? "EventPrototype" : "ObjectPrototype";
+    alert("We got a click event at " + ev.timeStamp + " with an argument object derived from: " + objKind );
+};</pre>
+
+<p>and second register our function with the the <code>Button</code> object, either on the scripting side using the DOM (Document Object Model) representation of the HTML page:</p>
+
+<pre class="brush: js">var buttonDOMElement = document.querySelector('#buttonOne');
+buttonDOMElement.addEventListener('click', example_click_handler);</pre>
+
+<p>or within the HTML page by adding the function as the value of the <code>'onclick'</code> attribute, although this second approach is usually only used in very simple web pages.</p>
+
+<p><iframe frameborder="0" id="frame_Button_Event_Handler" class="live-sample-frame sample-code-frame" src="../../../../../../mdn.mozillademos.org/en-US/docs/Web/Guide/Events/Overview_of_Events_and_Handlers%24samples/Button_Event_Handlerc41b.html?revision=1023414"></iframe></p>
+
+<p>This code relies on the agreement that there is a kind of event called <code>'click'</code> which will call any listener (or 'handler') function with an <code>Event</code> object argument (actually, in this case a derivative <code>MouseEvent</code> object) and which will be fired by HTML <code>button</code> elements after user interaction. The code has no visible effect until a user interacts with the button either by placing the mouse pointer over the HTML button and clicking on the left mouse button or by placing a finger or stylus of some kind on the screen above the HTML button; when that happens, the <code>buttonDOMElement</code> JavaScript object would call the <code>example_click_handler</code> function with an <code>Event</code> object as an argument. The function, in turn, would perform whatever action was chosen by the programmer, in this case to open an HTML alert dialog. Note that the handler has access to the <code>ev</code> object since it is passed as an argument; the object has information about the event, notably the time at which the event occurred.</p>
+
+<p>As a second example, much modern JavaScript integrated into web pages is wrapped into an event function call to ensure that the code is only executed when the HTML has been processed and is available for alteration or decoration. For example, code might be attached as:</p>
+
+<pre class="brush: js">var funcInit = function(){
+    // user code goes here and can safetly address all the HTML elements from the page
+    // since the document has successfully been 'loaded'
+}
+document.addEventListener('DOMContentLoaded', funcInit);
+</pre>
+
+<p>so that this code will only be executed after the <code>document</code> object emits the <code>'DOMContentLoaded'</code> event because the HTML has been parsed and Javasript objects created representing each of the nodes of the HTML document. Note that in this example, the code does not even name the event argument to the function because the code never needs to use the data structure describing the event; rather, the code merely needs to wait to run until after then event has happened.</p>
+
+<p>The pattern is therefore easy to learn and implement. The difficulty with events comes from learning the wide variety of events which are generated in modern web browsers. There is also some subtlety in learning how to write the handler functions since such code works asynchronously and potentially will run repeatedly but in slightly different situations.</p>
+
+<h2 id="Notable_events">Notable events</h2>
+
+<p>Web browsers define a large number of events so it is not practical to list them all. The <a href="../../Reference/Events.png">Event Reference</a> attempts to maintain a list of the standard Events used in modern web browsers.</p>
+
+<p>In general, we can distinguish events of different kinds based on the object emitting the event including:</p>
+
+<ul>
+ <li>the <code>window</code> object, such as due to resizing the browser,</li>
+ <li>the <code>window.screen</code> object, such as due to changes in device orientation,</li>
+ <li>the <code>document</code> object, including the loading, modification, user interaction, and unloading of the page,</li>
+ <li>the objects in the DOM (document object model) tree including user interactions or modifications,</li>
+ <li>the <code>XMLHttpRequest</code> objects used for network requests, and</li>
+ <li>the media objects such as <code>audio</code> and <code>video</code>, when the media stream players change state.</li>
+</ul>
+
+<p>although this list is currently incomplete.</p>
+
+<p>Some notable events are:</p>
+
+<div class="note">
+<p><strong>Note:</strong> This list of will need work to make relevant; that work is awaiting some global reorganization work on the documents. This will also need finding a good explanation of the events involved during page loading, such as discussed partially in <em><a href="http://ablogaboutcode.com/2011/06/14/how-javascript-loading-works-domcontentloaded-and-onload/" class="external">this web page</a> or in <a href="http://stackoverflow.com/questions/1795438/load-and-execution-sequence-of-a-web-page" class="external">this Stack Overflow question</a>. </em></p>
+</div>
+
+<ul>
+ <li>the global object <a href="../../API/Window.html"><code>window</code></a> emits an event called <a href="../../Events/load_(ProgressEvent).html"><code>'load'</code></a> when the page has finished rendering, meaning that all resources have been downloaded and acted upon, so that the scripts have been run and the images displayed,</li>
+ <li>the global object <a href="../../API/Window.html"><code>window</code></a> emits an event called <a href="../../Events/resize.html"><code>'resize'</code></a> when the height or the width of the browser window is changed by a user,</li>
+ <li>the DOM object <a href="../../API/Document.html"><code>document</code></a> representing the HTML document emits an event called<code> <a href="../../Events/DOMContentLoaded.html">'DOMContentLoaded'</a></code> when the document has finished loading,</li>
+ <li>the DOM node objects such as <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/div"><code>div</code></a> or <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button"><code>button</code></a> emit an event called <a href="../../Events/click.html"><code>'click'</code></a> when the user presses the mouse button while the mouse pointer is on top of the DOM node in the HTML page.</li>
+</ul>
+
+<p>&nbsp;</p>
+
+<h2 id="The_Event_object_hierarchy">The Event object hierarchy</h2>
+
+<p>The web browser defines many events of different kinds. Each definition includes, as the data structure passed to the handler function, an object which inherits from the <code>EventPrototype</code> object.</p>
+
+<p>A partial diagram of the class hierarchy of event objects is:</p>
+
+<div class="note">
+<p><strong>Note:</strong> This diagram is incomplete.</p>
+</div>
+
+<p><img src="../../../../../../mdn.mozillademos.org/files/6633/Js_Event_Object_Hierarchy.svg" style="height: 496px; width: 1417px;" alt=""></p>
+
+<p>The Web API Documentation contains <a href="../../API/Event.html">a page defining the Event object</a> which also includes the known DOM event subclasses of the <code>Event</code> object.</p>
+
+<h2 id="Documents">Documents</h2>
+
+<p>Three sources on the MDN (Mozilla Developer Network) web site are particularly useful for programmers wanting to work with events:</p>
+
+<ul>
+ <li>this <a href="../API/DOM/Events.png">Event Guide</a> which is part of the <a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Web Developers' Guide</a>,</li>
+ <li>the <a href="../../Reference/Events.png">Event Reference</a>,</li>
+ <li>the Web API documentation for the <a href="../../API/Event.html"><code>Event</code></a> object.</li>
+</ul>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+                  
+                
+              </article>
+
+              
+
+    
+    
+    
+
+    
+    
+    
+
+    <div class="share">
+        <strong>Share:</strong>
+        <ul>
+            <li><a href="http://twitter.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FGuide%2FEvents%2FOverview_of_Events_and_Handlers%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dtwitter.com&amp;text=I+learned+about+Overview+of+Events+and+Handlers+on+MDN." target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Overview_of_Events_and_Handlers?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=twitter.com" data-title="I learned about Overview of Events and Handlers on MDN." class="share-link twitter"><i aria-hidden="true" class="icon-twitter"></i>Twitter</a></li>
+            <li><a href="http://facebook.com/sharer.php?s=100&amp;p[url]=https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Overview_of_Events_and_Handlers?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Overview_of_Events_and_Handlers?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" data-title="I learned about Overview of Events and Handlers on MDN." class="share-link facebook"><i aria-hidden="true" class="icon-facebook"></i>Facebook</a></li>
+            <li><a href="https://plus.google.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FGuide%2FEvents%2FOverview_of_Events_and_Handlers%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dplus.google.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/Guide/Events/Overview_of_Events_and_Handlers?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=plus.google.com" data-title="I learned about Overview of Events and Handlers on MDN." class="share-link gplus"><i aria-hidden="true" class="icon-google-plus"></i>Google+</a></li>
+        </ul>
+    </div>
+
+              
+
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                  
+                  
+  <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags icon-fw"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Beginner">Beginner</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/NeedsBeginnerUpdate">NeedsBeginnerUpdate</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/NeedsUpdate">NeedsUpdate</a></li>
+      
+    </ul>
+  </div>
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-group icon-fw"></i>&nbsp;<strong>Contributors to this page:</strong> 
+        <a href="https://developer.mozilla.org/en-US/profiles/dphenderson">dphenderson</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/deveedutta">deveedutta</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/bhanubais">bhanubais</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/groovecoder">groovecoder</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/aosmond">aosmond</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Jeremie">Jeremie</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Sheppy">Sheppy</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/acuster">acuster</a>
+    
+                    </div>
+                  
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o icon-fw"></i>&nbsp;<strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/dphenderson">dphenderson</a>,
+                      <time datetime="2016-02-29T11:56:43-08:00">Feb 29, 2016, 11:56:43 AM</time>
+                    </div>
+                  
+                </div>
+              
+            </div>
+
+            
+          </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Web/Guide/Events/Overview_of_Events_and_Handlers$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Web/Guide/Events/Overview_of_Events_and_Handlers$history" label="View page history"></menuitem>
+  </menu>
+
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+        
+        <div class="contentinfo">
+          <p>© 2005-2016 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>
+          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+        
+        </div>
+      </div>
+      <div class="column-strip">
+        
+          
+  
+    <form class="languages go" method="get" action="https://developer.mozilla.org/en-US/docs/Web">
+      <label for="language">Other languages:</label>
+      <select id="language" class="wiki-l10n" name="next" dir="ltr">
+        <option value="/en-US/docs/Web/Guide/Events/Overview_of_Events_and_Handlers" selected="">
+          English (US)
+        </option>
+        
+          <option value="/ko/docs/Web/Guide/Events/Overview_of_Events_and_Handlers">
+            한국어
+          </option>
+          <option value="/zh-CN/docs/Web/Guide/Events/Overview_of_Events_and_Handlers">
+            中文 (简体)
+          </option>
+      </select>
+      <noscript>&lt;button type="submit"&gt;Go&lt;/button&gt;</noscript>
+    </form>
+  
+
+        
+      </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+  
+    
+    <!--[if lte IE 8]><script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/selectivizr.091e18cf669b.js" charset="utf-8"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/main.a7b27a25fb9c.js" charset="utf-8"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+    
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/syntax-prism-min.js" charset="utf-8"></script><script type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/wiki.bd71ca9fd27d.js" charset="utf-8" id="wikiscript"></script>
+
+  
+
+  <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/helpfulness.7b208a764d28.js" charset="utf-8"></script>
+
+  
+    <script type="text/javascript">
+        (function($) {
+            $('#wikiArticle').children('h2[id]').each(function() {
+                var id = $(this).attr('id');
+                var href = '/en-US/docs/Web/Guide/Events/Overview_of_Events_and_Handlers$edit#' + id;
+
+                $('<a>').attr({
+                    href: href,
+                    'class': 'button section-edit only-icon'
+                })
+                .append($('<i aria-hidden="true" class="icon-pencil"></i>'))
+                .append($('<span>'))
+                .find('span')
+                .text(gettext('Edit'))
+                .end()
+                .on('click', function(e) {
+                    e.preventDefault();
+
+                    mdn.analytics.trackEvent({
+                        category: 'Section Edit',
+                        action: id
+                    }, function() {
+                        window.location = href;
+                    });
+                })
+                .appendTo(this);
+            });
+        })(jQuery);
+    </script>
+  
+
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/Web/Guide/Events/Overview_of_Events_and_Handlers by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 18:38:14 GMT -->
+</body></html>

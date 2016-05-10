@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" style="background-color: rgb(255, 255, 255);" xmlns:xlink="http://www.w3.org/1999/xlink" width="643px" height="143px" version="1.1">
+	<defs/>
+	<g transform="translate(0.5,0.5)">
+		<rect x="1" y="1" width="640" height="140" fill="#ffffff" stroke="#000000" pointer-events="none"/>
+		<g transform="translate(279,17)">
+			<text x="41" y="12" fill="#000000" text-anchor="middle" font-size="12px" font-family="Helvetica">Audio context</text>
+		</g>
+		<path d="M 149 85 L 241.56 85" fill="none" stroke="#000000" stroke-width="8" stroke-miterlimit="10" pointer-events="none"/>
+		<path d="M 252.06 85 L 238.06 92 L 241.56 85 L 238.06 78 Z" fill="#000000" stroke="#000000" stroke-width="8" stroke-miterlimit="10" pointer-events="none"/>
+		<rect x="29" y="55" width="120" height="60" fill="#ffffff" stroke="#000000" pointer-events="none"/><g transform="translate(74,79)">
+		
+		<text x="18" y="12" fill="#000000" text-anchor="middle" font-size="12px" font-family="Helvetica">Inputs</text>
+	</g>
+	<rect x="261" y="55" width="120" height="60" fill="#ffffff" stroke="#000000" pointer-events="none"/>
+	<g transform="translate(302,79)">
+		<text x="15" y="12" fill="#000000" text-anchor="middle" font-size="12px" font-family="Helvetica">Effects</text>
+	</g>
+	<rect x="491" y="56" width="120" height="60" fill="#ffffff" stroke="#000000" pointer-events="none"/>
+	<g transform="translate(533,80)">
+		<text x="16" y="12" fill="#000000" text-anchor="middle" font-size="12px" font-family="Helvetica">Destination</text>
+	</g>
+	<path d="M 381 85 L 471.56 85.82" fill="none" stroke="#000000" stroke-width="8" stroke-miterlimit="10" pointer-events="none"/><path d="M 482.06 85.92 L 467.99 92.79 L 471.56 85.82 L 468.12 78.79 Z" fill="#000000" stroke="#000000" stroke-width="8" stroke-miterlimit="10" pointer-events="none"/>
+</g>
+</svg>

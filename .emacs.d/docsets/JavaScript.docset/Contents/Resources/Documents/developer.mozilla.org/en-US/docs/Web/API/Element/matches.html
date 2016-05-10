@@ -1,0 +1,948 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/Element/matches by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 14:50:04 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <script async="" src="../../../../../../www.google-analytics.com/analytics.js"></script><script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+  
+    
+  
+
+  
+  <title>Element.matches()</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+  
+    
+    
+    <link href="../../../../../../developer.cdn.mozilla.net/static/build/styles/mdn.593f20d8c365.css" rel="stylesheet" type="text/css">
+
+    
+  
+    <link href="../../../../../../developer.cdn.mozilla.net/static/build/styles/wiki.13dd9abdfb62.css" rel="stylesheet" type="text/css">
+
+    
+
+    
+
+  <!-- common social tags -->
+  
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon144.a6e4162070f4.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon114.0e9fabd44f85.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon72.8ff9d87c82a0.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon57.a2490b9a2d76.png">
+  <!-- basic favicon -->
+  
+    
+  
+  <link rel="shortcut icon" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon32.e02854fdcf73.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/html5shiv.3948ccddab6f.js" charset="utf-8"></script>
+  <![endif]-->
+
+  
+  <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Web/API/Element/matches$json">
+  <link rel="canonical" href="matches.html">
+
+  
+    
+      <link rel="alternate" hreflang="fr" href="../../../../../fr/docs/Web/API/Element/matches.html" title="Element.matches()">
+    
+      <link rel="alternate" hreflang="ru" href="../../../../../ru/docs/Web/API/Element/matches.html" title="Element.matches()">
+    
+      <link rel="alternate" hreflang="zh-CN" href="../../../../../zh-CN/docs/Web/API/Element/matches.html" title="Element.matches()">
+    
+  
+
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="Element.matches()">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Web/API/Element/matches">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Web/API/Element/matches">
+  <meta name="twitter:title" content="Element.matches()">
+  
+  <meta property="og:description" content="The Element.matches() method returns true if the element would be selected by the specified selector string; otherwise, returns false.">
+  <meta name="description" content="The Element.matches() method returns true if the element would be selected by the specified selector string; otherwise, returns false.">
+  <meta name="twitter:description" content="The Element.matches() method returns true if the element would be selected by the specified selector string; otherwise, returns false.">
+  
+
+  
+    
+
+
+
+  
+</head>
+<body data-slug="Web/API/Element/matches" contextmenu="edit-history-menu" data-search-url="" class="document  ">
+
+  <script type="text/javascript">
+    (function(win) {
+        'use strict';
+
+        
+            (function(){
+  var FLAGS = {
+    'compat_api': false,'kumaediting': false,'page_move': false,'registration_disabled': false,'search_suggestions': false,'section_edit': true,'spam_admin_override': false,'spam_checks_enabled': true,'spam_spammer_override': false,'spam_submissions_enabled': false,'spam_testing_mode': false,'wiki_samples': true,'wiki_spam_exempted': false,'wiki_spam_training': true
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': true,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+
+        // This needs to be set before ckeditor.js loads
+        window.CKEDITOR_BASEPATH = 'https://developer.mozilla.org/static/js/libs/ckeditor/build/ckeditor/';
+
+        // This represents the site configuration
+        win.mdn = {
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+            
+            notifications: [],
+            
+            // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            },
+            // Assets that need to be dynamically injected
+            assets_disabled: {
+                css: {
+                    'editor-content': ['https://developer.cdn.mozilla.net/static/build/styles/editor-content.3d79df72080d.css',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/styles/wiki-compat-tables.f3a3bfce97a1.css',]
+                },
+                js: {
+                    'syntax-prism': ['https://developer.cdn.mozilla.net/static/build/js/syntax-prism.7a66ddfa68bf.js',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/js/wiki-compat-tables.14ce5dcb2c3d.js',]
+                }
+            }
+        };
+    })(this);
+</script>
+
+  
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+    
+      <li><a href="#q" id="skip-search">Skip to search</a></li>
+    
+  </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+    <a href="https://developer.mozilla.org/en-US/" class="logo">Mozilla Developer Network</a>
+
+    <div id="nav-sec">
+        
+                  <ul>
+                  <li>
+
+    
+
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                Sign in
+              </span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FElement%2Fmatches" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/Web/API/Element/matches" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/Web/API/Element/matches" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FElement%2Fmatches" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+              
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+        
+    </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../../API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+
+   <!-- end is_zone -->
+
+    <div class="wiki-main-content" id="document-main"><div class="center">
+      
+      <div class="article-meta">
+        <!-- action buttons -->
+        
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+  <ul class="page-buttons" data-sticky="false">
+      
+      <li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+              
+                
+                  <li><bdi><a rel="internal" href="../../../../../fr/docs/Web/API/Element/matches.html" title="Element.matches()">Français</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="../../../../../ru/docs/Web/API/Element/matches.html" title="Element.matches()">Русский</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="../../../../../zh-CN/docs/Web/API/Element/matches.html" title="Element.matches()">中文 (简体)</a></bdi></li>
+                
+              
+
+              
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/matches$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+              
+            </ul>
+          </div>
+        </div>
+      </li>
+
+      <li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/matches$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li>
+
+        
+
+        <li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/matches$history" rel="nofollow, noindex">History</a></li>
+                
+                
+                
+                
+
+                
+
+                
+                
+                
+                <li class="page-print"><a href="#" onclick="return window.print();">Print this article</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+        
+  <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web" rel="v:url" property="v:title">Web technology for developers</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="../../API.html" rel="v:url" property="v:title">Web APIs</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="../Element.html" rel="v:url" property="v:title">Element</a></li>
+    
+    <li class="crumb" typeof="v:Breadcrumb" property="v:title">Element.matches()</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        
+        <div class="contributor-avatars" data-all-text="see all contributors" data-alternate-message="hide contributors" data-has-hidden="1">
+            <ul>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/mrenty" title="View profile: mrenty">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="mrenty" data-src="../../../../../../secure.gravatar.com/avatar/c8f29bcf27d5ddaeb1164f24f42a3ba26c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">mrenty</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/mwistrand" title="View profile: mwistrand">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="mwistrand" data-src="../../../../../../secure.gravatar.com/avatar/73186b255f276f8f5cb9d925ebeec3806c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">mwistrand</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/tiffon" title="View profile: tiffon">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="tiffon" data-src="../../../../../../secure.gravatar.com/avatar/59075534e3c88ab60360c198b7ab40b06c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">tiffon</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/1ce7ea" title="View profile: 1ce7ea">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="1ce7ea" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">1ce7ea</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/izolate" title="View profile: izolate">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="izolate" data-src="../../../../../../secure.gravatar.com/avatar/95996d5fa584f7fda41e616a7f50b3eb6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">izolate</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Sebastianz" title="View profile: Sebastianz">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Sebastianz" data-src="../../../../../../secure.gravatar.com/avatar/337fa9c543a4f881977b6d2fbbd2dea86c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Sebastianz</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/fscholz" title="View profile: fscholz">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="fscholz" data-src="../../../../../../secure.gravatar.com/avatar/e24391c9174352988d819a9b9ea77c9e6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">fscholz</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="../../../../profiles/DomenicDenicola.html" title="View profile: DomenicDenicola">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="DomenicDenicola" data-src="../../../../../../secure.gravatar.com/avatar/9fb9f68d6b789e732c2a0fa3accc2ffd6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">DomenicDenicola</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/teoli" title="View profile: teoli">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="teoli" data-src="../../../../../../secure.gravatar.com/avatar/d0d90148e08e3b64ccf75c46f31442c56c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">teoli</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Speich" title="View profile: Speich">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Speich" data-src="../../../../../../secure.gravatar.com/avatar/07fc23f2fd43f7463198bea20e5ca84d6c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Speich</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/hhubbell" title="View profile: hhubbell">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="hhubbell" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">hhubbell</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/ziyunfei" title="View profile: ziyunfei">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="ziyunfei" data-src="../../../../../../secure.gravatar.com/avatar/2dbf9c055c2b32d3ca45d25be01174236c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">ziyunfei</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/kscarfone" title="View profile: kscarfone">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="kscarfone" data-src="../../../../../../secure.gravatar.com/avatar/89c1e54a9703125168e40d22316d2b496c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">kscarfone</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/akre54" title="View profile: akre54">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="akre54" data-src="../../../../../../secure.gravatar.com/avatar/cdebe55961ee3852f4bb72c0d03e0df56c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">akre54</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/nairakhil13" title="View profile: nairakhil13">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="nairakhil13" data-src="../../../../../../secure.gravatar.com/avatar/88e859f8634b5fffd0a26e6500e751706c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">nairakhil13</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Sheppy" title="View profile: Sheppy">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Sheppy" data-src="../../../../../../secure.gravatar.com/avatar/945076feb88f2d7003891ffbf06f32bf6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Sheppy</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/mattbasta" title="View profile: mattbasta">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="mattbasta" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">mattbasta</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/kangax" title="View profile: kangax">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="kangax" data-src="../../../../../../secure.gravatar.com/avatar/f1fcf834ddad415f60d29c87cc10d4d46c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">kangax</noscript></a>
+                </li>
+            
+            </ul>
+        </div>
+        
+
+        <h1>Element.matches()</h1>
+
+      </div>
+      
+
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-present">
+
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+            
+              <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+              
+              <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#Syntax" rel="internal">Syntax</a></li><li><a href="#Example" rel="internal">Example</a></li><li><a href="#Exceptions" rel="internal">Exceptions</a></li><li><a href="#Polyfill" rel="internal">Polyfill</a></li><li><a href="#Specification" rel="internal">Specification</a></li><li><a href="#Browser_compatibility" rel="internal">Browser compatibility</a>
+                </li></ol>
+              </div>
+              
+              </div>
+            
+
+            
+            
+              
+            
+
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-half wiki-column text-content">
+
+              
+
+              
+
+              
+                
+                  <div class="warning warning-review">
+                    <p>
+                      This article needs a technical review. <a href="https://developer.mozilla.org/docs/MDN/Contribute/HowTo/Do_a_technical_review">How you can help.</a>
+                    </p>
+                  </div>
+                
+                
+                
+              
+              
+
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                
+                  
+                    <div><section id="Quick_Links" class="Quick_links"><!-- --></section></div>
+
+<p>The <strong><code>Element.matches()</code></strong> method returns <code>true</code> if the element would be selected by the specified selector string; otherwise, returns <code>false</code>.</p>
+
+<div class="warning">
+<p>Several browsers implement this, prefixed, under the non-standard name <code>matchesSelector()</code>.</p>
+</div>
+
+<h2 id="Syntax">Syntax</h2>
+
+<pre class="syntaxbox"><em>result</em> = <em>element</em>.matches(selectorString) 
+</pre>
+
+<ul>
+ <li><code>result</code> holds the return value <code>true</code> or <code>false</code>.</li>
+ <li><code>selectorString</code> is a string representing the selector to test.</li>
+</ul>
+
+<h2 id="Example">Example</h2>
+
+<pre class="brush: html">&lt;ul id="birds"&gt;
+  &lt;li&gt;Orange-winged parrot&lt;/li&gt;
+  &lt;li class="endangered"&gt;Philippine eagle&lt;/li&gt;
+  &lt;li&gt;Great white pelican&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;script type="text/javascript"&gt;
+  var birds = document.getElementsByTagName('li');
+
+  for (var i = 0; i &lt; birds.length; i++) {
+    if (birds[i].matches('.endangered')) {
+      console.log('The ' + birds[i].textContent + ' is endangered!');
+    }
+  }
+&lt;/script&gt;
+</pre>
+
+<p>This will log "The Philippine eagle is endangered!" to the console, since the element has indeed a <code>class</code> attribute with value <code>endangered</code>.</p>
+
+<h2 id="Exceptions">Exceptions</h2>
+
+<dl>
+ <dt><code>SYNTAX_ERR</code></dt>
+ <dd>The specified selector string is invalid.</dd>
+</dl>
+
+<h2 id="Polyfill">Polyfill</h2>
+
+<p>For browsers that do not support <code>Element.matches()</code> or <code>Element.matchesSelector()</code>, but carry support for <code>document.querySelectorAll()</code>, a polyfill exists:</p>
+
+<pre class="brush: js">​function matches(elm, selector) {
+    var matches = (elm.document || elm.ownerDocument).querySelectorAll(selector),
+        i = matches.length;
+&nbsp; &nbsp; while (--i &gt;= 0 &amp;&amp; matches.item(i) !== elm) {}
+&nbsp; &nbsp; return i &gt; -1;
+}</pre>
+
+<h2 id="Specification">Specification</h2>
+
+<table class="standard-table">
+ <thead>
+  <tr>
+   <th scope="col">Specification</th>
+   <th scope="col">Status</th>
+   <th scope="col">Comment</th>
+  </tr>
+ </thead>
+ <tbody>
+  <tr>
+   <td><a href="https://dom.spec.whatwg.org/#dom-element-matches" class="external" lang="en" hreflang="en">DOM<br><small lang="en-US">The definition of 'Element.prototype.matches' in that specification.</small></a></td>
+   <td><span class="spec-Living">Living Standard</span></td>
+   <td>Initial definition</td>
+  </tr>
+ </tbody>
+</table>
+
+<h2 id="Browser_compatibility">Browser compatibility</h2>
+
+<p></p><div class="htab"> 
+    <a name="AutoCompatibilityTable" id="AutoCompatibilityTable"></a> 
+    <ul> 
+        <li class="selected"><a>Desktop</a></li> 
+        <li><a>Mobile</a></li> 
+    </ul> 
+</div><p></p>
+
+<div id="compat-desktop">
+<table class="compat-table">
+ <tbody>
+  <tr>
+   <th>Feature</th>
+   <th>Chrome</th>
+   <th>Firefox (Gecko)</th>
+   <th>Internet Explorer</th>
+   <th>Opera</th>
+   <th>Safari (WebKit)</th>
+  </tr>
+  <tr>
+   <td>Original support with a non-standard name</td>
+   <td>
+    <p><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span><sup>[1]</sup></p>
+   </td>
+   <td><a href="https://developer.mozilla.org/en-US/Firefox/Releases/3.6" title="Released on 2010-01-21.">3.6</a> (1.9.2)<sup>[2]</sup></td>
+   <td>9.0<sup>[3]</sup></td>
+   <td>11.5<sup>[4]</sup><br>
+    15.0<sup>[1]</sup></td>
+   <td>5.0<sup>[1]</sup></td>
+  </tr>
+  <tr>
+   <td>Specified version</td>
+   <td>34</td>
+   <td><a href="https://developer.mozilla.org/en-US/Firefox/Releases/34" title="Released on 2014-12-01.">34</a> (34)</td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td>21.0</td>
+   <td>7.1</td>
+  </tr>
+ </tbody>
+</table>
+</div>
+
+<div id="compat-mobile">
+<table class="compat-table">
+ <tbody>
+  <tr>
+   <th>Feature</th>
+   <th>Android</th>
+   <th>Firefox Mobile (Gecko)</th>
+   <th>IE Phone</th>
+   <th>Opera Mobile</th>
+   <th>Safari Mobile</th>
+  </tr>
+  <tr>
+   <td>Original support with a non-standard name</td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td>1.0 (1.9.2)<sup>[2]</sup></td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+  </tr>
+  <tr>
+   <td>Specified version</td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td>34.0 (34)</td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td>8</td>
+  </tr>
+ </tbody>
+</table>
+</div>
+
+<p>[1] This feature was implemented with the non-standard name <code>webkitMatchesSelector</code>.</p>
+
+<p>[2] This feature was implemented with the non-standard name <code>mozMatchesSelector</code>. Prior to Gecko 2.0, invalid selector strings caused <code>false</code> to be returned instead of throwing an exception.</p>
+
+<p>[3] This feature was implemented with the non-standard name <code>msMatchesSelector</code>.</p>
+
+<p>[4] This feature was implemented with the non-standard name <code>oMatchesSelector</code>.</p>
+                  
+                
+              </article>
+
+              
+
+    
+    
+    
+
+    
+    
+    
+
+    <div class="share">
+        <strong>Share:</strong>
+        <ul>
+            <li><a href="http://twitter.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FAPI%2FElement%2Fmatches%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dtwitter.com&amp;text=I+learned+about+Element.matches%28%29+on+MDN." target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/API/Element/matches?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=twitter.com" data-title="I learned about Element.matches() on MDN." class="share-link twitter"><i aria-hidden="true" class="icon-twitter"></i>Twitter</a></li>
+            <li><a href="http://facebook.com/sharer.php?s=100&amp;p[url]=https://developer.mozilla.org/en-US/docs/Web/API/Element/matches?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/API/Element/matches?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" data-title="I learned about Element.matches() on MDN." class="share-link facebook"><i aria-hidden="true" class="icon-facebook"></i>Facebook</a></li>
+            <li><a href="https://plus.google.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FAPI%2FElement%2Fmatches%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dplus.google.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/API/Element/matches?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=plus.google.com" data-title="I learned about Element.matches() on MDN." class="share-link gplus"><i aria-hidden="true" class="icon-google-plus"></i>Google+</a></li>
+        </ul>
+    </div>
+
+              
+
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                  
+                  
+  <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags icon-fw"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+      
+        <li><a href="../../../tag/API.html">API</a></li>
+      
+        <li><a href="../../../tag/DOM.html">DOM</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Element">Element</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Method">Method</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Reference">Reference</a></li>
+      
+    </ul>
+  </div>
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-group icon-fw"></i>&nbsp;<strong>Contributors to this page:</strong> 
+        <a href="https://developer.mozilla.org/en-US/profiles/mrenty">mrenty</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/mwistrand">mwistrand</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/tiffon">tiffon</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/1ce7ea">1ce7ea</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/izolate">izolate</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Sebastianz">Sebastianz</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/fscholz">fscholz</a>, 
+    
+        <a href="../../../../profiles/DomenicDenicola.html">DomenicDenicola</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/teoli">teoli</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Speich">Speich</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/hhubbell">hhubbell</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/ziyunfei">ziyunfei</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/kscarfone">kscarfone</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/akre54">akre54</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/nairakhil13">nairakhil13</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Sheppy">Sheppy</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/mattbasta">mattbasta</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/kangax">kangax</a>
+    
+                    </div>
+                  
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o icon-fw"></i>&nbsp;<strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/mrenty">mrenty</a>,
+                      <time datetime="2016-03-24T03:34:17-07:00">Mar 24, 2016, 3:34:17 AM</time>
+                    </div>
+                  
+                </div>
+              
+            </div>
+
+            
+              <!-- quick links and zone subnav strip -->
+              <div id="wiki-left" class="column-strip wiki-column">
+
+              
+
+                
+
+                
+                  <!-- quick links -->
+                  
+  <div class="quick-links" id="quick-links">
+    <div class="title see-also">See also</div>
+    <ol><li><strong><a href="../Document_Object_Model.html">Document Object Model</a></strong></li><li><strong><a href="../Element.html"><code>Element</code></a></strong></li><li data-default-state="open"><a href="#"><strong>Properties</strong></a><ol><li><a href="accessKey.html" title="The Element.accessKey&nbsp;property sets the keystroke by which a user can press to jump to this element."><code>accessKey</code></a></li><li><a href="attributes.html" title="The Element.attributes property returns a live collection of all attribute nodes registered to the specified node. It is a NamedNodeMap, not an Array, so it has no Array methods and the Attr nodes' indexes may differ among browsers. To be more specific, attributes is a key/value pair of strings that represents any information regarding that attribute."><code>attributes</code></a></li><li><a href="../ParentNode/childElementCount.html" title="The ParentNode.childElementCount read-only property returns an unsigned long representing the number of child elements of the given element."><code>childElementCount</code></a></li><li><a href="../ParentNode/children.html" title="Node.children&nbsp;is a read-only property that returns a live HTMLCollection of the&nbsp;child elements of Node."><code>children</code></a></li><li><a href="classList.html" title="The Element.classList is a read-only property which returns&nbsp;live DOMTokenList&nbsp;collection of the class attributes of the element."><code>classList</code></a></li><li><a href="className.html" title="className gets and sets the value of the class attribute of the specified element."><code>className</code></a></li><li><a href="clientHeight.html" title="The Element.clientHeight read-only property is&nbsp;zero for elements with no CSS or inline layout boxes, otherwise it's&nbsp;&nbsp;the inner height of an element in pixels, including padding but not the horizontal scrollbar height, border, or margin."><code>clientHeight</code></a></li><li><a href="clientLeft.html" title="The width of the left border of an element in pixels. It includes the width of the vertical scrollbar if the text direction of the element is right–to–left and if there is an overflow causing a left vertical scrollbar to be rendered. clientLeft does not include the left margin or the left padding. clientLeft is read-only."><code>clientLeft</code></a></li><li><a href="clientTop.html" title="The width of the top border of an element in pixels. It does not include the top margin or padding. clientTop is read-only."><code>clientTop</code></a></li><li><a href="clientWidth.html" title="The Element.clientWidth property is zero for elements with no CSS or inline layout boxes, otherwise it's&nbsp;the inner width of an element in pixels. It includes padding but not the vertical scrollbar (if present, if rendered), border or margin."><code>clientWidth</code></a></li><li><a href="currentStyle.html" title="Element.currentStyle is a property which is a proprietary alternative to the standardized window.getComputedStyle method. It is available in old versions of Microsoft Internet Explorer."><code>currentStyle</code></a></li><li><a href="../ParentNode/firstElementChild.html" title="The ParentNode.firstElementChild read-only property returns the object's first child Element, or null if there are no child elements."><code>firstElementChild</code></a></li><li><a href="id.html" title="The Element.id property represents the element's identifier, reflecting the id global attribute."><code>id</code></a></li><li><a href="innerHTML.html" title="The Element.innerHTML property sets or gets the HTML syntax describing the element's descendants."><code>innerHTML</code></a></li><li><a href="../ParentNode/lastElementChild.html" title="The ParentNode.lastElementChild read-only property returns the object's last child Element or null if there are no child elements."><code>lastElementChild</code></a></li><li><a href="name.html" title="name gets or sets the name property of a DOM object; it only applies to the following elements: &lt;a&gt;, &lt;applet&gt;, &lt;button&gt;, &lt;form&gt;, &lt;frame&gt;, &lt;iframe&gt;, &lt;img&gt;, &lt;input&gt;, &lt;map&gt;, &lt;meta&gt;, &lt;object&gt;, &lt;param&gt;, &lt;select&gt;, and &lt;textarea&gt;."><code>name</code></a></li><li><a href="../NonDocumentTypeChildNode/nextElementSibling.html" title="The NonDocumentTypeChildNode.nextElementSibling read-only property returns the element immediately following the specified one in its parent's children list, or null if the specified element is the last one in the list."><code>nextElementSibling</code></a></li><li><a href="ongotpointercapture.html" title="ongotpointercapture is an EventHandler property of the Element interface that returns the event handler (function) for the gotpointercapture event type."><code>ongotpointercapture</code></a></li><li><a href="onlostpointercapture.html" title="onlostpointercapture is an EventHandler property of the Element interface that returns the event handler (function) for the lostpointercapture event type."><code>onlostpointercapture</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="onwheel.html" title="The onwheel property returns the onwheel event handler code on the current element."><code>onwheel</code></a></li><li><a href="outerHTML.html" title="The outerHTML attribute of the element DOM interface gets the serialized HTML fragment describing the element including its descendants. It can be set to replace the element with nodes parsed from the given string."><code>outerHTML</code></a></li><li><a href="../NonDocumentTypeChildNode/previousElementSibling.html" title="The NonDocumentTypeChildNode.previousElementSibling read-only property returns the Element immediately prior to the specified one in its parent's children list, or null if the specified element is the first one in the list."><code>previousElementSibling</code></a></li><li><a href="scrollHeight.html" title="The Element.scrollHeight read-only attribute is a measurement of the height of an element's content, including content not visible on the screen due to overflow. The scrollHeight value is equal to the minimum clientHeight the element would require in order to fit all the content in the viewpoint without using a vertical scrollbar. It includes the element padding but not its margin."><code>scrollHeight</code></a></li><li><a href="scrollLeft.html" title="The Element.scrollLeft property gets or sets the number of pixels that an element's content is scrolled to the left."><code>scrollLeft</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="scrollLeftMax.html" title="The Element.scrollLeftMax read-only property returns a Number representing the maximum left scroll offset possible for the element."><code>scrollLeftMax</code></a></li><li><a href="scrollTop.html" title="The Element.scrollTop property gets or sets the number of pixels that the content of an element is scrolled upward. An element's scrollTop is a measurement of the distance of an element's top to its topmost visible content. When an element content does not generate a vertical scrollbar, then its scrollTop value defaults to 0."><code>scrollTop</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="scrollTopMax.html" title="The Element.scrollTopMax read-only property returns a Number representing the maximum top scroll offset possible for the element."><code>scrollTopMax</code></a></li><li><a href="scrollWidth.html" title="The Element.scrollWidth read–only property returns either the width in pixels of the content of an element or the width of the element itself, whichever is greater. If the element is wider than its content area (for example, if there are scroll bars for scrolling through the content), the scrollWidth is larger than the clientWidth."><code>scrollWidth</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="tabStop.html" title="The tabStop property of the Element interface returns a Boolean indicating if the element can receive input focus via the tab key. If the specified element is a shadow host tab navigation is delegated to its children."><code>tabStop</code></a></li><li><a href="tagName.html" title="Returns the name of the element."><code>tagName</code></a></li></ol></li><li data-default-state="open"><a href="#"><strong>Methods</strong></a><ol><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="animate.html" title=""><code>animate()</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="closest.html" title="The Element.closest() method returns the closest ancestor of the current element (or the current element itself) which matches the selectors given in parameter. If there isn't such an ancestor, it returns null."><code>closest()</code></a></li><li><a href="getAttribute.html" title="getAttribute() returns the value of a specified attribute on the element."><code>getAttribute()</code></a></li><li><a href="getAttributeNode.html" title="Returns the specified attribute of the specified element, as an Attr node."><code>getAttributeNode()</code></a></li><li><a href="getAttributeNodeNS.html" title="Returns the Attr node for the attribute with the given namespace and name."><code>getAttributeNodeNS()</code></a></li><li><a href="getAttributeNS.html" title="getAttributeNS returns the string value of the attribute with the specified namespace and name. If the named attribute does not exist, the value returned will either be null or &quot;&quot; (the empty string); see Notes for details."><code>getAttributeNS()</code></a></li><li><a href="getBoundingClientRect.html" title="The&nbsp;Element.getBoundingClientRect()&nbsp;method returns the size of an element and its position relative to the viewport."><code>getBoundingClientRect()</code></a></li><li><a href="getClientRects.html" title="The Element.getClientRects() method returns a collection of rectangles that indicate the bounding rectangles for each box in a client."><code>getClientRects()</code></a></li><li><a href="getElementsByClassName.html" title="The Element.getElementsByClassName() method returns a live HTMLCollection containing all child elements which have all of the given class names. When called on the document object, the complete document is searched, including the root node."><code>getElementsByClassName()</code></a></li><li><a href="getElementsByTagName.html" title="The Element.getElementsByTagName() method returns a live HTMLCollection of elements with the given tag name. The subtree underneath the specified element is searched, excluding the element itself. The returned list is live, meaning that it updates itself with the DOM tree automatically. Consequently, there is no need to call several times Element.getElementsByTagName() with the same element and arguments."><code>getElementsByTagName()</code></a></li><li><a href="getElementsByTagNameNS.html" title="The Element.getElementsByTagNameNS() method returns a live HTMLCollection of elements with the given tag name belonging to the given namespace. It is similar to Document.getElementsByTagNameNS, except that its search is restricted to descendants of the specified element."><code>getElementsByTagNameNS()</code></a></li><li><a href="hasAttribute.html" title="The Element.hasAttribute() method returns a Boolean value indicating whether the specified element has the specified attribute or not."><code>hasAttribute()</code></a></li><li><a href="hasAttributeNS.html" title="hasAttributeNS returns a boolean value indicating whether the current element has the specified attribute."><code>hasAttributeNS()</code></a></li><li><a href="hasAttributes.html" title="The Element.hasAttributes() method returns a Boolean value, true or false, indicating if the current element has any attributes or not."><code>hasAttributes()</code></a></li><li><a href="insertAdjacentHTML.html" title="insertAdjacentHTML() parses the specified text as HTML or XML and inserts the resulting nodes into the DOM tree at a specified position. It does not reparse the element it is being used on and thus it does not corrupt the existing elements inside the element. This, and avoiding the extra step of serialization make it much faster than direct innerHTML manipulation."><code>insertAdjacentHTML()</code></a></li><li><em><code>matches()</code></em></li><li><a href="querySelector.html" title="Returns the first element that is a descendant of the element on which it is invoked that matches the specified group of selectors."><code>querySelector()</code></a></li><li><a href="querySelectorAll.html" title="Returns a non-live NodeList of all elements descended from the element on which it is invoked that match the specified group of CSS selectors."><code>querySelectorAll()</code></a></li><li><a href="releasePointerCapture.html" title="Releases (stops) pointer capture that was previously set for a specific (PointerEvent) pointer."><code>releasePointerCapture()</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="../ChildNode/remove.html" title="The ChildNode.remove() method removes the object from the tree it belongs to."><code>remove()</code></a></li><li><a href="removeAttribute.html" title="removeAttribute removes an attribute from the specified element."><code>removeAttribute()</code></a></li><li><a href="removeAttributeNode.html" title="removeAttributeNode removes the specified attribute from the current element."><code>removeAttributeNode()</code></a></li><li><a href="removeAttributeNS.html" title="removeAttributeNS removes the specified attribute from an element."><code>removeAttributeNS()</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="requestFullScreen.html" title="The Element.requestFullscreen() method issues an asynchronous request to make the element be displayed full-screen."><code>requestFullscreen()</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="requestPointerLock.html" title="The Element.requestPointerLock() method allows to asynchronously ask for the pointer to be locked on the given element."><code>requestPointerLock()</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="scrollIntoView.html" title="The Element.scrollIntoView() method scrolls the current element into the visible area of the browser window."><code>scrollIntoView()</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="scrollIntoViewIfNeeded.html" title="The Element.scrollIntoViewIfNeeded() method scrolls the current element into the visible area of the browser window if it's not already within the visible area of the browser window. If the element is already within the visible area of the browser window, then no scrolling takes place. This method is a proprietary variation of the standard Element.scrollIntoView() method."><code>scrollIntoViewIfNeeded()</code></a></li><li><a href="setAttribute.html" title="Adds a new attribute or changes the value of an existing attribute on the specified element."><code>setAttribute()</code></a></li><li><a href="setAttributeNode.html" title="setAttributeNode() adds a new Attr node to the specified element."><code>setAttributeNode()</code></a></li><li><a href="setAttributeNodeNS.html" title="setAttributeNodeNS adds a new namespaced attribute node to an element."><code>setAttributeNodeNS()</code></a></li><li><a href="setAttributeNS.html" title="setAttributeNS adds a new attribute or changes the value of an attribute with the given namespace and name."><code>setAttributeNS()</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="setCapture.html" title="Call this method during the handling of a mousedown event to retarget all mouse events to this element until the mouse button is released or document.releaseCapture()&nbsp;is called."><code>setCapture()</code></a></li><li><a href="setPointerCapture.html" title="Pointer capture allows events for a particular pointer event (PointerEvent) to be re-targeted to a particular element instead of the normal target (or hit test) at a pointer's location. This can be used to ensure that an element continues to receive pointer events even if the pointer device's contact moves off the element (for example by scrolling)."><code>setPointerCapture()</code></a></li></ol></li><li data-default-state="open"><a href="#"><strong>Inheritance:</strong></a><ol><li><a href="../Node.html"><code>Node</code></a></li><li><a href="../EventTarget.html"><code>EventTarget</code></a></li></ol></li><li data-default-state="open"><a href="#"><strong>Related pages for DOM</strong></a><ol><li><a href="../Attr.html"><code>Attr</code></a></li><li><a href="../ByteString.html"><code>ByteString</code></a></li><li><a href="../CDATASection.html"><code>CDATASection</code></a></li><li><a href="../CharacterData.html"><code>CharacterData</code></a></li><li><a href="../ChildNode.html"><code>ChildNode</code></a></li><li><a href="../Comment.html"><code>Comment</code></a></li><li><a href="../CustomEvent.html"><code>CustomEvent</code></a></li><li><a href="../DOMConfiguration.html"><code>DOMConfiguration</code></a></li><li><a href="../DOMError.html"><code>DOMError</code></a></li><li><a href="../DOMErrorHandler.html"><code>DOMErrorHandler</code></a></li><li><a href="../DOMException.html"><code>DOMException</code></a></li><li><a href="../DOMImplementation.html"><code>DOMImplementation</code></a></li><li><a href="../DOMImplementationList.html"><code>DOMImplementationList</code></a></li><li><a href="../DOMImplementationRegistry.html"><code>DOMImplementationRegistry</code></a></li><li><a href="../DOMImplementationSource.html"><code>DOMImplementationSource</code></a></li><li><a href="../DOMLocator.html"><code>DOMLocator</code></a></li><li><a href="../DOMObject.html"><code>DOMObject</code></a></li><li><a href="../DOMParser.html"><code>DOMParser</code></a></li><li><a href="../DOMPoint.html"><code>DOMPoint</code></a></li><li><a href="../DOMRect.html"><code>DOMRect</code></a></li><li><a href="../DOMString.html"><code>DOMString</code></a></li><li><a href="../DOMTimeStamp.html"><code>DOMTimeStamp</code></a></li><li><a href="../DOMTokenList.html"><code>DOMTokenList</code></a></li><li><a href="../DOMUserData.html"><code>DOMUserData</code></a></li><li><a href="../Document.html"><code>Document</code></a></li><li><a href="../DocumentFragment.html"><code>DocumentFragment</code></a></li><li><a href="../DocumentType.html"><code>DocumentType</code></a></li><li><a href="../ElementTraversal.html"><code>ElementTraversal</code></a></li><li><a href="../Entity.html"><code>Entity</code></a></li><li><a href="../EntityReference.html"><code>EntityReference</code></a></li><li><a href="../Event.html"><code>Event</code></a></li><li><a href="../EventTarget.html"><code>EventTarget</code></a></li><li><a href="../HTMLCollection.html"><code>HTMLCollection</code></a></li><li><a href="../MutationObserver.html"><code>MutationObserver</code></a></li><li><a href="../Node.html"><code>Node</code></a></li><li><a href="../NodeFilter.html"><code>NodeFilter</code></a></li><li><a href="../NodeIterator.html"><code>NodeIterator</code></a></li><li><a href="../NodeList.html"><code>NodeList</code></a></li><li><a href="../NonDocumentTypeChildNode.html"><code>NonDocumentTypeChildNode</code></a></li><li><a href="../ProcessingInstruction.html"><code>ProcessingInstruction</code></a></li><li><a href="../PromiseResolver.html"><code>PromiseResolver</code></a></li><li><a href="../Range.html"><code>Range</code></a></li><li><a href="../Text.html"><code>Text</code></a></li><li><a href="../TextDecoder.html"><code>TextDecoder</code></a></li><li><a href="../TextEncoder.html"><code>TextEncoder</code></a></li><li><a href="../TimeRanges.html"><code>TimeRanges</code></a></li><li><a href="../TreeWalker.html"><code>TreeWalker</code></a></li><li><a href="../TypeInfo.html"><code>TypeInfo</code></a></li><li><a href="../USVString.html"><code>USVString</code></a></li><li><a href="../UserDataHandler.html"><code>UserDataHandler</code></a></li><li><a href="../XMLDocument.html"><code>XMLDocument</code></a></li></ol></li></ol>
+  </div>
+                
+
+                <!-- approvals -->
+                
+
+              
+
+              </div>
+            
+          </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Web/API/Element/matches$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Web/API/Element/matches$history" label="View page history"></menuitem>
+  </menu>
+
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+        
+        <div class="contentinfo">
+          <p>© 2005-2016 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>
+          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+        
+        </div>
+      </div>
+      <div class="column-strip">
+        
+          
+  
+    <form class="languages go" method="get" action="https://developer.mozilla.org/en-US/docs/Web">
+      <label for="language">Other languages:</label>
+      <select id="language" class="wiki-l10n" name="next" dir="ltr">
+        <option value="/en-US/docs/Web/API/Element/matches" selected="">
+          English (US)
+        </option>
+        
+          <option value="/fr/docs/Web/API/Element/matches">
+            Français
+          </option>
+          <option value="/ru/docs/Web/API/Element/matches">
+            Русский
+          </option>
+          <option value="/zh-CN/docs/Web/API/Element/matches">
+            中文 (简体)
+          </option>
+      </select>
+      <noscript>&lt;button type="submit"&gt;Go&lt;/button&gt;</noscript>
+    </form>
+  
+
+        
+      </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+  
+    
+    <!--[if lte IE 8]><script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/selectivizr.091e18cf669b.js" charset="utf-8"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/main.a7b27a25fb9c.js" charset="utf-8"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+    
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/syntax-prism-min.js" charset="utf-8"></script><script type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/wiki.bd71ca9fd27d.js" charset="utf-8" id="wikiscript"></script>
+
+  
+
+  <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/helpfulness.7b208a764d28.js" charset="utf-8"></script>
+
+  
+    <script type="text/javascript">
+        (function($) {
+            $('#wikiArticle').children('h2[id]').each(function() {
+                var id = $(this).attr('id');
+                var href = '/en-US/docs/Web/API/Element/matches$edit#' + id;
+
+                $('<a>').attr({
+                    href: href,
+                    'class': 'button section-edit only-icon'
+                })
+                .append($('<i aria-hidden="true" class="icon-pencil"></i>'))
+                .append($('<span>'))
+                .find('span')
+                .text(gettext('Edit'))
+                .end()
+                .on('click', function(e) {
+                    e.preventDefault();
+
+                    mdn.analytics.trackEvent({
+                        category: 'Section Edit',
+                        action: id
+                    }, function() {
+                        window.location = href;
+                    });
+                })
+                .appendTo(this);
+            });
+        })(jQuery);
+    </script>
+  
+
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/Element/matches by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 14:50:07 GMT -->
+</body></html>

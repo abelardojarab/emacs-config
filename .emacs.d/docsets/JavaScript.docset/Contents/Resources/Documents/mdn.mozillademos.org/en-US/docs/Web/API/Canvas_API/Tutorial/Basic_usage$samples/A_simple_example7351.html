@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+    
+<!-- Mirrored from mdn.mozillademos.org/en-US/docs/Web/API/Canvas_API/Tutorial/Basic_usage$samples/A_simple_example?revision=797269 by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 17:32:27 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+        <link rel="stylesheet" type="text/css" href="../../../../../../../../developer.mozilla.org/en-US/docs/Template_CustomSampleCSS2af1.css?raw=1" />
+        
+    </head>
+    <body>
+        
+            <!DOCTYPE html>
+<html>
+ <head>
+  <meta charset="utf-8"/>
+  <script type="application/javascript">
+    function draw() {
+      var canvas = document.getElementById("canvas");
+      if (canvas.getContext) {
+        var ctx = canvas.getContext("2d");
+
+        ctx.fillStyle = "rgb(200,0,0)";
+        ctx.fillRect (10, 10, 55, 50);
+
+        ctx.fillStyle = "rgba(0, 0, 200, 0.5)";
+        ctx.fillRect (30, 30, 55, 50);
+      }
+    }
+  </script>
+ </head>
+ <body onload="draw();">
+   <canvas id="canvas" width="150" height="150"></canvas>
+ </body>
+
+<!-- Mirrored from mdn.mozillademos.org/en-US/docs/Web/API/Canvas_API/Tutorial/Basic_usage$samples/A_simple_example?revision=797269 by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 17:32:27 GMT -->
+</html>
+        
+        
+    </body>
+</html>

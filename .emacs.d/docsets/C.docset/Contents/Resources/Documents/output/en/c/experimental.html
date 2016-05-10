@@ -1,0 +1,353 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html class="client-nojs" dir="ltr" lang="en"><head>
+<meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+<title>Experimental C standard libraries</title>
+<meta charset="UTF-8">
+<meta content="MediaWiki 1.21.2" name="generator">
+
+
+<link href="../../favicon.ico" rel="shortcut icon">
+
+
+
+<link href="../../common/ext.css" rel="stylesheet">
+<meta content="" name="ResourceLoaderDynamicStyles">
+<link href="../../common/site_modules.css" rel="stylesheet">
+<style>a:lang(ar),a:lang(ckb),a:lang(fa),a:lang(kk-arab),a:lang(mzn),a:lang(ps),a:lang(ur){text-decoration:none}#toc{display:none}.editsection{display:none}
+/* cache key: mwiki1-mwiki_en_:resourceloader:filter:minify-css:7:472787eddcf4605d11de8c7ef047234f */</style>
+
+<script src="../../common/startup_scripts.js"></script>
+<script>if(window.mw){
+mw.config.set({"wgCanonicalNamespace":"","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":0,"wgPageName":"c/experimental","wgTitle":"c/experimental","wgCurRevisionId":85047,"wgArticleId":13901,"wgIsArticle":true,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":[],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"c/experimental","wgRestrictionEdit":[],"wgRestrictionMove":[]});
+}</script><script>if(window.mw){
+mw.loader.implement("user.options",function(){mw.user.options.set({"ccmeonemails":0,"cols":80,"date":"default","diffonly":0,"disablemail":0,"disablesuggest":0,"editfont":"default","editondblclick":0,"editsection":0,"editsectiononrightclick":0,"enotifminoredits":0,"enotifrevealaddr":0,"enotifusertalkpages":1,"enotifwatchlistpages":0,"extendwatchlist":0,"externaldiff":0,"externaleditor":0,"fancysig":0,"forceeditsummary":0,"gender":"unknown","hideminor":0,"hidepatrolled":0,"imagesize":2,"justify":0,"math":1,"minordefault":0,"newpageshidepatrolled":0,"nocache":0,"noconvertlink":0,"norollbackdiff":0,"numberheadings":0,"previewonfirst":0,"previewontop":1,"quickbar":5,"rcdays":7,"rclimit":50,"rememberpassword":0,"rows":25,"searchlimit":20,"showhiddencats":0,"showjumplinks":1,"shownumberswatching":1,"showtoc":0,"showtoolbar":1,"skin":"cppreference2","stubthreshold":0,"thumbsize":2,"underline":2,"uselivepreview":0,"usenewrc":0,"watchcreations":0,"watchdefault":0,"watchdeletion":0,
+"watchlistdays":3,"watchlisthideanons":0,"watchlisthidebots":0,"watchlisthideliu":0,"watchlisthideminor":0,"watchlisthideown":0,"watchlisthidepatrolled":0,"watchmoves":0,"wllimit":250,"variant":"en","language":"en","searchNs0":true,"searchNs1":false,"searchNs2":false,"searchNs3":false,"searchNs4":false,"searchNs5":false,"searchNs6":false,"searchNs7":false,"searchNs8":false,"searchNs9":false,"searchNs10":false,"searchNs11":false,"searchNs12":false,"searchNs13":false,"searchNs14":false,"searchNs15":false,"gadget-ColiruCompiler":1});;},{},{});mw.loader.implement("user.tokens",function(){mw.user.tokens.set({"editToken":"+\\","patrolToken":false,"watchToken":false});;},{},{});
+/* cache key: mwiki1-mwiki_en_:resourceloader:filter:minify-js:7:ca03345b1e2c4d90a25d968753a73b92 */
+}</script>
+<script>if(window.mw){
+mw.loader.load(["mediawiki.page.startup","mediawiki.legacy.wikibits","mediawiki.legacy.ajax"]);
+}</script>
+<!--[if lt IE 7]><style type="text/css">body{behavior:url("/mwiki/skins/cppreference2/csshover.min.htc")}</style><![endif]-->
+</head><body class="mediawiki ltr sitedir-ltr ns-0 ns-subject page-c_experimental skin-cppreference2 action-view cpp-navbar">
+        <!-- header -->
+        
+        <!-- /header -->
+        <!-- content -->
+        <div id="cpp-content-base">
+            <div id="content">
+                <a id="top"></a>
+                <div id="mw-js-message" style="display:none;"></div>
+                                <!-- firstHeading -->
+                <h1 class="firstHeading" id="firstHeading">Experimental C standard libraries</h1>
+                <!-- /firstHeading -->
+                <!-- bodyContent -->
+                <div id="bodyContent">
+                                        <!-- tagline -->
+                    <div id="siteSub">From cppreference.com</div>
+                    <!-- /tagline -->
+                                        <!-- subtitle -->
+                    <div id="contentSub"><span class="subpages">&lt; <a href="../c.html" title="c">c</a></span></div>
+                    <!-- /subtitle -->
+                                                            <!-- bodycontent -->
+                    <div class="mw-content-ltr" dir="ltr" id="mw-content-text" lang="en">
+<div class="t-navbar" style="">
+<div class="t-navbar-sep">&nbsp;</div>
+<div class="t-navbar-head">
+<a href="../c.html" title="c"> C</a><div class="t-navbar-menu"><div>
+<div><table cellpadding="0" class="t-nv-begin" style="line-height:1.1em;">
+<tbody><tr class="t-nv"><td colspan="5"> <a href="language.1.html" title="c/language"> Language</a> </td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="header.html" title="c/header"> headers</a> </td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="types.html" title="c/types"> Type support</a> </td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="memory.html" title="c/memory"> Dynamic memory management</a> </td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="error.html" title="c/error"> Error handling</a> </td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="program.html" title="c/program"> Program utilities</a> </td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="variadic.html" title="c/variadic"> Variadic function support</a> </td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="chrono.html" title="c/chrono"> Date and time utilities</a> </td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="string.html" title="c/string"> Strings library</a> </td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="algorithm.html" title="c/algorithm"> Algorithms</a> </td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="numeric.html" title="c/numeric"> Numerics</a> </td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="io.html" title="c/io"> Input/output support</a> </td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="locale.html" title="c/locale"> Localization support</a> </td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="thread.html" title="c/thread"> Thread support</a> <span class="t-mark-rev t-since-c11">(C11)</span> </td></tr>
+<tr class="t-nv"><td colspan="5"> <a href="atomic.html" title="c/atomic"> Atomic operations</a> <span class="t-mark-rev t-since-c11">(C11)</span> </td></tr>
+<tr class="t-nv"><td colspan="5"><div class="t-nv-ln-table"><div><strong class="selflink"><span class="t-lines"><span>Technical Specifications</span></span></strong></div></div></td></tr>
+</tbody></table></div>
+<div></div>
+</div></div>
+</div>
+<div class="t-navbar-sep">&nbsp;</div>
+<div class="t-navbar-head">
+<strong class="selflink"> Technical Specifications</strong><div class="t-navbar-menu"><div>
+<div><table cellpadding="0" class="t-nv-begin" style="">
+<tbody><tr class="t-nv"><td colspan="5"><div class="t-nv-ln-table"><div><a class="new" href="http://en.cppreference.com/mwiki/index.php" title="c/experimental/embedded (page does not exist)"><span class="t-lines"><span>extensions for embedded processors</span></span></a></div></div></td></tr>
+<tr class="t-nv"><td colspan="5"><div class="t-nv-ln-table"><div><a href="experimental/dynamic.html" title="c/experimental/dynamic"><span class="t-lines"><span>dynamic memory extensions</span></span></a></div></div></td></tr>
+<tr class="t-nv"><td colspan="5"><div class="t-nv-ln-table"><div><a class="new" href="http://en.cppreference.com/mwiki/index.php" title="c/experimental/fp (page does not exist)"><span class="t-lines"><span>floating-point extensions</span></span></a></div></div></td></tr>
+<tr class="t-nv"><td colspan="5"><div class="t-nv-ln-table"><div><a class="new" href="http://en.cppreference.com/mwiki/index.php" title="c/experimental/cplex (page does not exist)"><span class="t-lines"><span>parallel library extensions</span></span></a></div></div></td></tr>
+</tbody></table></div>
+<div></div>
+</div></div>
+</div>
+<div class="t-navbar-sep">&nbsp;</div>
+</div>
+<p>The C standards committee publishes experimental C language and library extensions for future standardization.
+</p>
+<p>Note: until 2012, these publications used the TR (technical report) format. Since 2012 ISO procedure changed to use the TS (technical specification) format.
+</p>
+<table class="wikitable">
+
+<tbody><tr>
+<th>ISO number</th>
+<th>Name</th>
+<th>Status</th>
+<th>links
+</th>
+</tr>
+<tr>
+<td> ISO/IEC TR
+<p>19769:2004
+</p>
+</td>
+<td> Extensions to support new character data types
+</td>
+<td> Published (<a class="external text" href="http://www.iso.org/iso/iso_catalogue/catalogue_tc/catalogue_detail.htm%3Fcsnumber%3D33907" rel="nofollow">ISO store</a>)
+<p>Final draft: <a class="external text" href="http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1040.pdf" rel="nofollow">n1040</a> (2003-11-07)<br>
+Merged into C11
+</p>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td> ISO/IEC TR
+<p>24731-1:2007
+</p>
+</td>
+<td> Bounds-checking interfaces
+</td>
+<td> Published (<a class="external text" href="http://www.iso.org/iso/catalogue_detail.htm%3Fcsnumber%3D38841" rel="nofollow">ISO store</a>)
+<p>Final draft: <a class="external text" href="http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1225.pdf" rel="nofollow">n1225</a> (2007-03-28)<br>
+Merged into C11
+</p>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td> ISO/IEC TR 18037:2008
+</td>
+<td> Extensions to support embedded processors
+</td>
+<td> Published (<a class="external text" href="http://www.iso.org/iso/catalogue_detail.htm%3Fcsnumber%3D51126" rel="nofollow">ISO store</a>)
+<p>Final draft: <a class="external text" href="http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1021.pdf" rel="nofollow">n1021</a> (2003-09-24)
+</p>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td> ISO/IEC TR
+<p>24732:2009
+</p>
+</td>
+<td> Extensions to support to support decimal floating-point arithmetic
+</td>
+<td> Published (<a class="external text" href="http://www.iso.org/iso/catalogue_detail.htm%3Fcsnumber%3D38842" rel="nofollow">ISO store</a>)
+<p>Final draft: <a class="external text" href="http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1241.pdf" rel="nofollow">n1241</a> (2007-07-05)<br>
+Superseded by TS 18661-2:2015
+</p>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td> ISO/IEC TR
+<p>24747:2009
+</p>
+</td>
+<td> Extensions to support mathematical special functions
+</td>
+<td> Published (<a class="external text" href="http://www.iso.org/iso/catalogue_detail.htm%3Fcsnumber%3D38857" rel="nofollow">ISO store</a>)
+<p>Draft: <a class="external text" href="http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1182.pdf" rel="nofollow">n1182</a> (2006-08-02)
+</p>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td> ISO/IEC TR
+<p>24731-2:2010
+</p>
+</td>
+<td> Extensions to support dynamic allocation functions
+</td>
+<td> Published 2010-11-24 (<a class="external text" href="http://www.iso.org/iso/catalogue_detail.htm%3Fcsnumber%3D51678" rel="nofollow">ISO store</a>)
+<p>Draft: <a class="external text" href="http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1248.pdf" rel="nofollow">n1248</a> (2007-08-15)
+</p>
+</td>
+<td> <a href="experimental/dynamic.html" title="c/experimental/dynamic">dynamic</a>
+</td>
+</tr>
+<tr>
+<td> ISO/IEC TS
+<p>17961:2013
+</p>
+</td>
+<td> Secure coding rules
+</td>
+<td> Published 2013-11-15 (<a class="external text" href="http://www.iso.org/iso/catalogue_detail.htm%3Fcsnumber%3D61134" rel="nofollow">ISO store</a>)
+<p>Draft: <a class="external text" href="http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1624.pdf" rel="nofollow">n1624</a> (2012-06-26)
+</p>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td> ISO/IEC TS
+<p>18661-1:2014
+</p>
+</td>
+<td> Floating-point extensions: Binary floating-point arithmetic
+</td>
+<td> Published 2014-07-21 (<a class="external text" href="http://www.iso.org/iso/catalogue_detail.htm%3Fcsnumber%3D63146" rel="nofollow">ISO store</a>)
+<p>Draft: <a class="external text" href="http://www.open-std.org/JTC1/sc22/wg14/www/docs/n1778.pdf" rel="nofollow">n1778</a> (2013-11-05)
+</p>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td> ISO/IEC TS
+<p>18661-2:2015
+</p>
+</td>
+<td> Floating-point extensions: Decimal floating-point arithmetic
+</td>
+<td> Published 2015-02-11, Revised 2015-05-18 (<a class="external text" href="http://www.iso.org/iso/home/store/catalogue_ics/catalogue_detail_ics.htm%3Fcsnumber%3D68882" rel="nofollow">ISO store</a>).
+<p>Post-publication draft: <a class="external text" href="http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1912.pdf" rel="nofollow">n1912</a> (2015-03-09)
+</p>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td> ISO/IEC TS
+<p>18661-3:2015
+</p>
+</td>
+<td> Floating-point extensions: Interchange and extended types
+</td>
+<td> Published 2015-10-06 (<a class="external text" href="http://www.iso.org/iso/home/store/catalogue_tc/catalogue_detail.htm%3Fcsnumber%3D65615" rel="nofollow">ISO store</a>)
+<p>Draft: <a class="external text" href="http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1945.pdf" rel="nofollow">n1945</a> (2014-06-10)
+</p>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td> ISO/IEC TS
+<p>18661-4:2015
+</p>
+</td>
+<td> Floating-point extensions: Supplementary functions
+</td>
+<td> Published 2015-10-06 (<a class="external text" href="http://www.iso.org/iso/home/store/catalogue_tc/catalogue_detail.htm%3Fcsnumber%3D65616" rel="nofollow">ISO store</a>)
+<p>Draft: <a class="external text" href="http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1950.pdf" rel="nofollow">n1950</a> (2015-06-10)
+</p>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td> ISO/IEC DTS
+<p>18661-5:xxxx
+</p>
+</td>
+<td> Floating-point extensions: Supplementary attributes
+</td>
+<td> DTS. Draft <a class="external text" href="http://www.open-std.org/jtc1/sc22/wg14/www/docs/n2004.pdf" rel="nofollow">n2004</a> (2016-03-07)
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td> ISO/IEC TR 24772-3
+</td>
+<td> Vulnerability descriptions for the programming language C
+</td>
+<td> Draft <a class="external text" href="http://www.open-std.org/jtc1/sc22/wg14/www/docs/n2018.pdf" rel="nofollow">n2018</a> (2016-03-08)
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+</td>
+<td> Extensions for parallel programming part 1
+</td>
+<td> Early draft: <a class="external text" href="http://www.open-std.org/jtc1/sc22/wg14/www/docs/n2017.pdf" rel="nofollow">n2017</a> (2016-03-10)
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+</td>
+<td> Transactional Memory TS
+</td>
+<td> Early draft: <a class="external text" href="http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1961.pdf" rel="nofollow">n1961</a> (2015-09-23)
+</td>
+<td>
+</td>
+</tr>
+</tbody></table>
+
+<!-- 
+NewPP limit report
+Preprocessor visited node count: 468/1000000
+Preprocessor generated node count: 2049/1000000
+Post‐expand include size: 19091/2097152 bytes
+Template argument size: 2221/2097152 bytes
+Highest expansion depth: 13/40
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key mwiki1-mwiki_en_:pcache:idhash:13901-0!*!0!*!*!*!* and timestamp 20160323212728 -->
+</div>                    <!-- /bodycontent -->
+                                        <!-- printfooter -->
+                    <div class="printfooter">
+                    Retrieved from &quot;<a href="http://en.cppreference.com/mwiki/index.php">http://en.cppreference.com/mwiki/index.php?title=c/experimental&amp;oldid=85047</a>&quot;                    </div>
+                    <!-- /printfooter -->
+                                                            <!-- catlinks -->
+                    <div class="catlinks catlinks-allhidden" id="catlinks"></div>                    <!-- /catlinks -->
+                                                            <div class="visualClear"></div>
+                    <!-- debughtml -->
+                                        <!-- /debughtml -->
+                </div>
+                <!-- /bodyContent -->
+            </div>
+        </div>
+        <!-- /content -->
+        <!-- footer -->
+        
+        <!-- /footer -->
+        <script>if(window.mw){
+mw.loader.state({"site":"loading","user":"missing","user.groups":"ready"});
+}</script>
+<script src="../../common/skin_scripts.js"></script>
+<script>if(window.mw){
+mw.loader.load(["mediawiki.action.view.postEdit","mediawiki.user","mediawiki.page.ready","mediawiki.searchSuggest","mediawiki.hidpi","ext.gadget.ColiruCompiler"], null, true);
+}</script>
+<script src="../../common/site_scripts.js"></script>
+
+<script type="text/javascript">
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-2828341-1']);
+_gaq.push(['_setDomainName', 'cppreference.com']);
+_gaq.push(['_trackPageview']);
+</script><!-- Served in 0.048 secs. -->
+	</body>
+
+
+
+<!-- Cached 20160323232655 -->
+
+</html>

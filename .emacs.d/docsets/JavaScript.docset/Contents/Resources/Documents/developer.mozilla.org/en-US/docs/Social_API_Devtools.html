@@ -1,0 +1,744 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/Social_API_Devtools by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 19:27:22 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <script async="" src="../../../www.google-analytics.com/analytics.js"></script><script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+  
+    
+  
+
+  
+  <title>Using the Firefox Devtools with the Social API</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+  
+    
+    
+    <link href="../../../developer.cdn.mozilla.net/static/build/styles/mdn.593f20d8c365.css" rel="stylesheet" type="text/css">
+
+    
+  
+    <link href="../../../developer.cdn.mozilla.net/static/build/styles/wiki.13dd9abdfb62.css" rel="stylesheet" type="text/css">
+
+    
+
+    
+
+  <!-- common social tags -->
+  
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../developer.cdn.mozilla.net/static/img/favicon144.a6e4162070f4.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../developer.cdn.mozilla.net/static/img/favicon114.0e9fabd44f85.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../developer.cdn.mozilla.net/static/img/favicon72.8ff9d87c82a0.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../developer.cdn.mozilla.net/static/img/favicon57.a2490b9a2d76.png">
+  <!-- basic favicon -->
+  
+    
+  
+  <link rel="shortcut icon" href="../../../developer.cdn.mozilla.net/static/img/favicon32.e02854fdcf73.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/html5shiv.3948ccddab6f.js" charset="utf-8"></script>
+  <![endif]-->
+
+  
+  <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Social_API_Devtools$json">
+  <link rel="canonical" href="Social_API_Devtools.html">
+
+  
+
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="Using the Firefox Devtools with the Social API">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Social_API_Devtools">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Social_API_Devtools">
+  <meta name="twitter:title" content="Using the Firefox Devtools with the Social API">
+  
+  <meta property="og:description" content="Firefox has a number of development tools that can be used to help with the development of Social API providers. However, until bug 839959 lands the process isn't as simple as it should be. In the meantime, this page describes some workarounds.">
+  <meta name="description" content="Firefox has a number of development tools that can be used to help with the development of Social API providers. However, until bug 839959 lands the process isn't as simple as it should be. In the meantime, this page describes some workarounds.">
+  <meta name="twitter:description" content="Firefox has a number of development tools that can be used to help with the development of Social API providers. However, until bug 839959 lands the process isn't as simple as it should be. In the meantime, this page describes some workarounds.">
+  
+
+  
+    
+
+
+
+  
+</head>
+<body data-slug="Social_API_Devtools" contextmenu="edit-history-menu" data-search-url="" class="document  ">
+
+  <script type="text/javascript">
+    (function(win) {
+        'use strict';
+
+        
+            (function(){
+  var FLAGS = {
+    'compat_api': false,'kumaediting': false,'page_move': false,'registration_disabled': false,'search_suggestions': false,'section_edit': true,'spam_admin_override': false,'spam_checks_enabled': true,'spam_spammer_override': false,'spam_submissions_enabled': false,'spam_testing_mode': false,'wiki_samples': true,'wiki_spam_exempted': false,'wiki_spam_training': true
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': true,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+
+        // This needs to be set before ckeditor.js loads
+        window.CKEDITOR_BASEPATH = 'https://developer.mozilla.org/static/js/libs/ckeditor/build/ckeditor/';
+
+        // This represents the site configuration
+        win.mdn = {
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+            
+            notifications: [],
+            
+            // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            },
+            // Assets that need to be dynamically injected
+            assets_disabled: {
+                css: {
+                    'editor-content': ['https://developer.cdn.mozilla.net/static/build/styles/editor-content.3d79df72080d.css',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/styles/wiki-compat-tables.f3a3bfce97a1.css',]
+                },
+                js: {
+                    'syntax-prism': ['https://developer.cdn.mozilla.net/static/build/js/syntax-prism.7a66ddfa68bf.js',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/js/wiki-compat-tables.14ce5dcb2c3d.js',]
+                }
+            }
+        };
+    })(this);
+</script>
+
+  
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+    
+      <li><a href="#q" id="skip-search">Skip to search</a></li>
+    
+  </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+    <a href="https://developer.mozilla.org/en-US/" class="logo">Mozilla Developer Network</a>
+
+    <div id="nav-sec">
+        
+                  <ul>
+                  <li>
+
+    
+
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                Sign in
+              </span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FSocial_API_Devtools" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/Social_API_Devtools" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/Social_API_Devtools" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2FSocial_API_Devtools" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+              
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+        
+    </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="Web/API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+
+   <!-- end is_zone -->
+
+    <div class="wiki-main-content" id="document-main"><div class="center">
+      
+      <div class="article-meta">
+        <!-- action buttons -->
+        
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+  <ul class="page-buttons" data-sticky="false">
+      
+      <li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+              
+                <li class="smaller">No translations exist for this article.</li>
+              
+
+              
+                <li><a href="https://developer.mozilla.org/en-US/docs/Social_API_Devtools$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+              
+            </ul>
+          </div>
+        </div>
+      </li>
+
+      <li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Social_API_Devtools$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li>
+
+        
+
+        <li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Social_API_Devtools$history" rel="nofollow, noindex">History</a></li>
+                
+                
+                
+                
+
+                
+
+                
+                
+                
+                <li class="page-print"><a href="#" onclick="return window.print();">Print this article</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+        
+  <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+    
+    <li class="crumb" typeof="v:Breadcrumb" property="v:title">Using the Firefox Devtools with the Social API</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        
+        <div class="contributor-avatars" data-all-text="see all contributors" data-alternate-message="hide contributors">
+            <ul>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Delapouite" title="View profile: Delapouite">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Delapouite" data-src="../../../secure.gravatar.com/avatar/1de6337421c1eac0227c88502b2759526c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Delapouite</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/kscarfone" title="View profile: kscarfone">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="kscarfone" data-src="../../../secure.gravatar.com/avatar/89c1e54a9703125168e40d22316d2b496c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">kscarfone</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Markh" title="View profile: Markh">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Markh" data-src="../../../secure.gravatar.com/avatar/892812c8e0a35b4cc1b131ad00c2ebbc6c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Markh</noscript></a>
+                </li>
+            
+            </ul>
+        </div>
+        
+
+        <h1>Using the Firefox Devtools with the Social API</h1>
+
+      </div>
+      
+
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-closed wiki-left-none">
+
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+            
+              <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+              
+              <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#Enable_Chrome_Devtools" rel="internal">Enable Chrome Devtools</a><code></code><code></code></li><li><a href="#Using_the_DOM_Inspector_and_Profiler" rel="internal">Using the DOM Inspector and Profiler</a><code></code></li><li><a href="#Using_the_Debugger_with_social_elements." rel="internal">Using the Debugger with social elements.</a>
+                </li></ol>
+              </div>
+              
+              </div>
+            
+
+            
+            
+              
+            
+
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-main wiki-column text-content">
+
+              
+
+              
+
+              
+                
+                  <div class="warning warning-review">
+                    <p>
+                      This article needs a technical review. <a href="https://developer.mozilla.org/docs/MDN/Contribute/HowTo/Do_a_technical_review">How you can help.</a>
+                    </p>
+                  </div>
+                
+                
+                
+              
+              
+
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                
+                  
+                    <p>Firefox has a number of <a href="https://developer.mozilla.org/en-US/docs/Tools">development tools</a> that can be used to help with the development of <a href="Mozilla/Projects/Social_API.html">Social API</a> providers. However, until <a class="external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=839959" title="https://bugzilla.mozilla.org/show_bug.cgi?id=839959">bug 839959</a> lands the process isn't as simple as it should be. In the meantime, this page describes some workarounds.</p>
+<h2 id="Enable_Chrome_Devtools">Enable Chrome Devtools</h2>
+<p>Both of the techniques below require the chrome devtools to be manually enabled. To do this, open <code>about:config</code> in a tab, and after verifying that you will be careful, toggle the boolean value <code>devtools.chrome.enabled</code> to true.</p>
+<h2 id="Using_the_DOM_Inspector_and_Profiler">Using the DOM Inspector and Profiler</h2>
+<ul>
+ <li>From the "Web Developer" menu, select "<a href="https://developer.mozilla.org/en-US/docs/Tools/Scratchpad">Scratchpad</a>". In the newly created scratchpad window, select the <em>Environment</em> menu and select the <em>Browser</em> option.</li>
+ <li>Paste the following code into the new scratchpad:</li>
+</ul>
+<pre class="brush: js">// Uncomment one of the following lines. NOTE: You must ensure the element you
+// want to inspect has been created - e.g., the sidebar must be visible, the flyouts
+// must have been opened once, etc.
+
+// The sidebar
+let w = document.getElementById("social-sidebar-browser").contentWindow;
+
+// The "flyout" panel
+// let w = document.getElementById("social-flyout-panel").firstChild.contentWindow;
+
+// The "notification" panel - this will show the most-recently-used panel
+// let w = document.getElementById("social-notification-panel").firstChild.contentWindow;
+
+if (!w) {
+    alert("This window is yet to be created");
+} else {
+    XPCOMUtils.defineLazyModuleGetter(this, "Toolbox",
+      "resource:///modules/devtools/Toolbox.jsm");
+    XPCOMUtils.defineLazyModuleGetter(this, "TargetFactory",
+      "resource:///modules/devtools/Target.jsm");
+    let target = TargetFactory.forWindow(w);
+    let toolbox = gDevTools.getToolbox(target);
+    toolbox ? toolbox.destroy() : gDevTools.showToolbox(target, undefined, "window");
+}</pre>
+<ul>
+ <li>Review the top few lines of the script, and ensure exactly one of the "<code>let w = ...</code>" lines is uncommented, depending on which social element you wish to inspect.</li>
+ <li>Press Ctrl+R (or Execute-&gt;Run) to run the scratchpad.</li>
+ <li>A developer toolbox window should appear - the "<a href="https://developer.mozilla.org/en-US/docs/Tools/Page_Inspector">Inspector</a>", "<a href="https://developer.mozilla.org/en-US/docs/Tools/Style_Editor">Style Editor</a>", and "<a href="https://developer.mozilla.org/en-US/docs/Tools/Profiler">Profiler</a>" tabs should all be showing the social element you enabled in the script. Executing the scratchpad a second time will hide the toolbox.</li>
+ <li><strong>Note that the Debugger and Web Console tabs are not showing the social content.</strong> This is currently expected - see below for how to enable the debugger.</li>
+</ul>
+<h2 id="Using_the_Debugger_with_social_elements.">Using the Debugger with social elements.</h2>
+<ul>
+ <li>From the "Web Developer" menu, select "Browser Debugger". Wait a few seconds for a new debugger window to open and initialize. You will probably be asked to confirm that a new debugging session should be started.</li>
+ <li>In the "Filter Scripts" box, start typing the name of the script you wish to debug (for example, enter the name of your sidebar URL to debug the sidebar).</li>
+ <li>In the script, add breakpoints etc. to the code in question, and start debugging!</li>
+</ul>
+<pre style="position: fixed; left: -1000px;">// want to inspect has been created - eg, the sidebar must be visible, the flyouts
+// must have been opened once, etc.
+
+// The sidebar:
+let w = document.getElementById("social-sidebar-browser").contentWindow;
+
+// The "flyout" panel.
+// let w = document.getElementById("social-flyout-panel").firstChild.contentWindow
+
+// The "notification" panel - this will show the most-recently-used panel.
+// let w = document.getElementById("social-notification-panel").firstChild.contentWindow;
+
+if (!w) {
+    alert("This window is yet to be created");
+} else {
+    XPCOMUtils.defineLazyModuleGetter(this, "Toolbox",
+      "resource:///modules/devtools/Toolbox.jsm");
+    XPCOMUtils.defineLazyModuleGetter(this, "TargetFactory",
+      "resource:///modules/devtools/Target.jsm");
+    let target = TargetFactory.forWindow(w);
+    let toolbox = gDevTools.getToolbox(target);
+    toolbox ? toolbox.destroy() : gDevTools.showToolbox(target, undefined, "window");
+}</pre>
+<pre style="position: fixed; left: -1000px;">// Uncomment one of the following lines.  NOTE: You must ensure the element you
+// want to inspect has been created - eg, the sidebar must be visible, the flyouts
+// must have been opened once, etc.
+
+// The sidebar:
+let w = document.getElementById("social-sidebar-browser").contentWindow;
+
+// The "flyout" panel.
+// let w = document.getElementById("social-flyout-panel").firstChild.contentWindow
+
+// The "notification" panel - this will show the most-recently-used panel.
+// let w = document.getElementById("social-notification-panel").firstChild.contentWindow;
+
+if (!w) {
+    alert("This window is yet to be created");
+} else {
+    XPCOMUtils.defineLazyModuleGetter(this, "Toolbox",
+      "resource:///modules/devtools/Toolbox.jsm");
+    XPCOMUtils.defineLazyModuleGetter(this, "TargetFactory",
+      "resource:///modules/devtools/Target.jsm");
+    let target = TargetFactory.forWindow(w);
+    let toolbox = gDevTools.getToolbox(target);
+    toolbox ? toolbox.destroy() : gDevTools.showToolbox(target, undefined, "window");
+}</pre>
+<pre style="position: fixed; left: -1000px;">// Uncomment one of the following lines.  NOTE: You must ensure the element you
+// want to inspect has been created - eg, the sidebar must be visible, the flyouts
+// must have been opened once, etc.
+
+// The sidebar:
+let w = document.getElementById("social-sidebar-browser").contentWindow;
+
+// The "flyout" panel.
+// let w = document.getElementById("social-flyout-panel").firstChild.contentWindow
+
+// The "notification" panel - this will show the most-recently-used panel.
+// let w = document.getElementById("social-notification-panel").firstChild.contentWindow;
+
+if (!w) {
+    alert("This window is yet to be created");
+} else {
+    XPCOMUtils.defineLazyModuleGetter(this, "Toolbox",
+      "resource:///modules/devtools/Toolbox.jsm");
+    XPCOMUtils.defineLazyModuleGetter(this, "TargetFactory",
+      "resource:///modules/devtools/Target.jsm");
+    let target = TargetFactory.forWindow(w);
+    let toolbox = gDevTools.getToolbox(target);
+    toolbox ? toolbox.destroy() : gDevTools.showToolbox(target, undefined, "window");
+}</pre>
+<pre style="position: fixed; left: -1000px;">// Uncomment one of the following lines.  NOTE: You must ensure the element you
+// want to inspect has been created - eg, the sidebar must be visible, the flyouts
+// must have been opened once, etc.
+
+// The sidebar:
+let w = document.getElementById("social-sidebar-browser").contentWindow;
+
+// The "flyout" panel.
+// let w = document.getElementById("social-flyout-panel").firstChild.contentWindow
+
+// The "notification" panel - this will show the most-recently-used panel.
+// let w = document.getElementById("social-notification-panel").firstChild.contentWindow;
+
+if (!w) {
+    alert("This window is yet to be created");
+} else {
+    XPCOMUtils.defineLazyModuleGetter(this, "Toolbox",
+      "resource:///modules/devtools/Toolbox.jsm");
+    XPCOMUtils.defineLazyModuleGetter(this, "TargetFactory",
+      "resource:///modules/devtools/Target.jsm");
+    let target = TargetFactory.forWindow(w);
+    let toolbox = gDevTools.getToolbox(target);
+    toolbox ? toolbox.destroy() : gDevTools.showToolbox(target, undefined, "window");
+}</pre>
+                  
+                
+              </article>
+
+              
+
+    
+    
+    
+
+    
+    
+    
+
+    <div class="share">
+        <strong>Share:</strong>
+        <ul>
+            <li><a href="http://twitter.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FSocial_API_Devtools%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dtwitter.com&amp;text=I+learned+about+Using+the+Firefox+Devtools+with+the+Social+API+on+MDN." target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Social_API_Devtools?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=twitter.com" data-title="I learned about Using the Firefox Devtools with the Social API on MDN." class="share-link twitter"><i aria-hidden="true" class="icon-twitter"></i>Twitter</a></li>
+            <li><a href="http://facebook.com/sharer.php?s=100&amp;p[url]=https://developer.mozilla.org/en-US/docs/Social_API_Devtools?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Social_API_Devtools?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" data-title="I learned about Using the Firefox Devtools with the Social API on MDN." class="share-link facebook"><i aria-hidden="true" class="icon-facebook"></i>Facebook</a></li>
+            <li><a href="https://plus.google.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FSocial_API_Devtools%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dplus.google.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Social_API_Devtools?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=plus.google.com" data-title="I learned about Using the Firefox Devtools with the Social API on MDN." class="share-link gplus"><i aria-hidden="true" class="icon-google-plus"></i>Google+</a></li>
+        </ul>
+    </div>
+
+              
+
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                  
+                  
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-group icon-fw"></i>&nbsp;<strong>Contributors to this page:</strong> 
+        <a href="https://developer.mozilla.org/en-US/profiles/Delapouite">Delapouite</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/kscarfone">kscarfone</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Markh">Markh</a>
+    
+                    </div>
+                  
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o icon-fw"></i>&nbsp;<strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/Delapouite">Delapouite</a>,
+                      <time datetime="2014-01-08T06:08:27-08:00">Jan 8, 2014, 6:08:27 AM</time>
+                    </div>
+                  
+                </div>
+              
+            </div>
+
+            
+          </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Social_API_Devtools$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Social_API_Devtools$history" label="View page history"></menuitem>
+  </menu>
+
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+        
+        <div class="contentinfo">
+          <p>© 2005-2016 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>
+          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+        
+        </div>
+      </div>
+      <div class="column-strip">
+        
+          
+  
+
+        
+      </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+  
+    
+    <!--[if lte IE 8]><script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/selectivizr.091e18cf669b.js" charset="utf-8"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script type="text/javascript" src="../../../developer.cdn.mozilla.net/static/build/js/main.a7b27a25fb9c.js" charset="utf-8"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+    
+    <script async="" type="text/javascript" src="../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../developer.cdn.mozilla.net/static/build/js/syntax-prism-min.js" charset="utf-8"></script><script type="text/javascript" src="../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../developer.cdn.mozilla.net/static/build/js/wiki.bd71ca9fd27d.js" charset="utf-8" id="wikiscript"></script>
+
+  
+
+  <script async="" type="text/javascript" src="../../../developer.cdn.mozilla.net/static/build/js/helpfulness.7b208a764d28.js" charset="utf-8"></script>
+
+  
+    <script type="text/javascript">
+        (function($) {
+            $('#wikiArticle').children('h2[id]').each(function() {
+                var id = $(this).attr('id');
+                var href = '/en-US/docs/Social_API_Devtools$edit#' + id;
+
+                $('<a>').attr({
+                    href: href,
+                    'class': 'button section-edit only-icon'
+                })
+                .append($('<i aria-hidden="true" class="icon-pencil"></i>'))
+                .append($('<span>'))
+                .find('span')
+                .text(gettext('Edit'))
+                .end()
+                .on('click', function(e) {
+                    e.preventDefault();
+
+                    mdn.analytics.trackEvent({
+                        category: 'Section Edit',
+                        action: id
+                    }, function() {
+                        window.location = href;
+                    });
+                })
+                .appendTo(this);
+            });
+        })(jQuery);
+    </script>
+  
+
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/Social_API_Devtools by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 19:27:22 GMT -->
+</body></html>

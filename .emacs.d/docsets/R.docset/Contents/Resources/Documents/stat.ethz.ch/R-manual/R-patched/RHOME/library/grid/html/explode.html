@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml">
+<!-- Mirrored from stat.ethz.ch/R-manual/R-patched/RHOME/library/grid/html/explode.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 04 May 2016 17:01:31 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head><title>Explode a path into its components.</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for explode {grid}"><tr><td>explode {grid}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>
+Explode a path into its components.
+</h2>
+
+<h3>Description</h3>
+
+<p>Explode a viewport path or grob path into its components.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+explode(x)
+## S3 method for class 'character'
+explode(x)
+## S3 method for class 'path'
+explode(x)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+
+<p>Typically a viewport path or a grob path, but a character vector
+containing zero or more path separators may also be given.
+</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>A character vector.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="vpPath.html">vpPath</a></code>, <code><a href="gPath.html">gPath</a></code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+explode("vp1::vp2")
+explode(vpPath("vp1", "vp2"))
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>grid</em> version 3.2.0 <a href="00Index.html">Index</a>]</div>
+</body>
+<!-- Mirrored from stat.ethz.ch/R-manual/R-patched/RHOME/library/grid/html/explode.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 04 May 2016 17:01:31 GMT -->
+</html>

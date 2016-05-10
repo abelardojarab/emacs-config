@@ -1,0 +1,1895 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 15:46:19 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <script async="" src="../../../../../../www.google-analytics.com/analytics.js"></script><script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+  
+    
+  
+
+  
+  <title>Regular Expressions</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+  
+    
+    
+    <link href="../../../../../../developer.cdn.mozilla.net/static/build/styles/mdn.593f20d8c365.css" rel="stylesheet" type="text/css">
+
+    
+  
+    <link href="../../../../../../developer.cdn.mozilla.net/static/build/styles/wiki.13dd9abdfb62.css" rel="stylesheet" type="text/css">
+
+    
+
+    
+
+  <!-- common social tags -->
+  
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon144.a6e4162070f4.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon114.0e9fabd44f85.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon72.8ff9d87c82a0.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon57.a2490b9a2d76.png">
+  <!-- basic favicon -->
+  
+    
+  
+  <link rel="shortcut icon" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon32.e02854fdcf73.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/html5shiv.3948ccddab6f.js" charset="utf-8"></script>
+  <![endif]-->
+
+  
+  <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions$json">
+  <link rel="canonical" href="Regular_Expressions.html">
+
+  
+    
+      <link rel="alternate" hreflang="bn-BD" href="https://developer.mozilla.org/bn-BD/docs/Web/JavaScript/Guide/Regular_Expressions" title="রেগুলার এক্সপ্রেশন">
+    
+      <link rel="alternate" hreflang="ca" href="https://developer.mozilla.org/ca/docs/Web/JavaScript/Guide/Regular_Expressions" title="Regular Expressions">
+    
+      <link rel="alternate" hreflang="de" href="https://developer.mozilla.org/de/docs/Web/JavaScript/Guide/Regular_Expressions" title="Reguläre Ausdrücke">
+    
+      <link rel="alternate" hreflang="es" href="https://developer.mozilla.org/es/docs/Web/JavaScript/Guide/Regular_Expressions" title="Expresiones Regulares">
+    
+      <link rel="alternate" hreflang="fr" href="https://developer.mozilla.org/fr/docs/Web/JavaScript/Guide/Expressions_régulières" title="Expressions rationnelles">
+    
+      <link rel="alternate" hreflang="ja" href="https://developer.mozilla.org/ja/docs/Web/JavaScript/Guide/Regular_Expressions" title="正規表現">
+    
+      <link rel="alternate" hreflang="ko" href="https://developer.mozilla.org/ko/docs/Web/JavaScript/Guide/정규식" title="정규식">
+    
+      <link rel="alternate" hreflang="pt-BR" href="https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Guide/Regular_Expressions" title="Regular Expressions">
+    
+      <link rel="alternate" hreflang="ru" href="https://developer.mozilla.org/ru/docs/Web/JavaScript/Guide/Regular_Expressions" title="Регулярные выражения">
+    
+      <link rel="alternate" hreflang="th" href="https://developer.mozilla.org/th/docs/Web/JavaScript/Guide/Regular_Expressions" title="Regular Expressions">
+    
+      <link rel="alternate" hreflang="uk" href="https://developer.mozilla.org/uk/docs/Web/JavaScript/Guide/Regular_Expressions" title="Регулярні Вирази">
+    
+      <link rel="alternate" hreflang="vi" href="https://developer.mozilla.org/vi/docs/Web/JavaScript/Guide/Regular_Expressions" title="Biểu thức chính quy">
+    
+      <link rel="alternate" hreflang="zh-CN" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Regular_Expressions" title="正则表达式">
+    
+      <link rel="alternate" hreflang="zh-TW" href="https://developer.mozilla.org/zh-TW/docs/Web/JavaScript/Guide/Regular_Expressions" title="正規表示式">
+    
+  
+
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="Regular Expressions">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions">
+  <meta name="twitter:title" content="Regular Expressions">
+  
+  <meta property="og:description" content="Regular expressions are patterns used to match character combinations in strings. In JavaScript, regular expressions are also objects. These patterns are used with the exec and test methods of RegExp, and with the match, replace, search, and split methods of String. This chapter describes JavaScript regular expressions.">
+  <meta name="description" content="Regular expressions are patterns used to match character combinations in strings. In JavaScript, regular expressions are also objects. These patterns are used with the exec and test methods of RegExp, and with the match, replace, search, and split methods of String. This chapter describes JavaScript regular expressions.">
+  <meta name="twitter:description" content="Regular expressions are patterns used to match character combinations in strings. In JavaScript, regular expressions are also objects. These patterns are used with the exec and test methods of RegExp, and with the match, replace, search, and split methods of String. This chapter describes JavaScript regular expressions.">
+  
+
+  
+    
+
+
+
+  
+</head>
+<body data-slug="Web/JavaScript/Guide/Regular_Expressions" contextmenu="edit-history-menu" data-search-url="" class="document  ">
+
+  <script type="text/javascript">
+    (function(win) {
+        'use strict';
+
+        
+            (function(){
+  var FLAGS = {
+    'compat_api': false,'kumaediting': false,'page_move': false,'registration_disabled': false,'search_suggestions': false,'section_edit': true,'spam_admin_override': false,'spam_checks_enabled': true,'spam_spammer_override': false,'spam_submissions_enabled': false,'spam_testing_mode': false,'wiki_samples': true,'wiki_spam_exempted': false,'wiki_spam_training': true
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': true,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+
+        // This needs to be set before ckeditor.js loads
+        window.CKEDITOR_BASEPATH = 'https://developer.mozilla.org/static/js/libs/ckeditor/build/ckeditor/';
+
+        // This represents the site configuration
+        win.mdn = {
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+            
+            notifications: [],
+            
+            // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            },
+            // Assets that need to be dynamically injected
+            assets_disabled: {
+                css: {
+                    'editor-content': ['https://developer.cdn.mozilla.net/static/build/styles/editor-content.3d79df72080d.css',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/styles/wiki-compat-tables.f3a3bfce97a1.css',]
+                },
+                js: {
+                    'syntax-prism': ['https://developer.cdn.mozilla.net/static/build/js/syntax-prism.7a66ddfa68bf.js',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/js/wiki-compat-tables.14ce5dcb2c3d.js',]
+                }
+            }
+        };
+    })(this);
+</script>
+
+  
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+    
+      <li><a href="#q" id="skip-search">Skip to search</a></li>
+    
+  </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+    <a href="https://developer.mozilla.org/en-US/" class="logo">Mozilla Developer Network</a>
+
+    <div id="nav-sec">
+        
+                  <ul>
+                  <li>
+
+    
+
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                Sign in
+              </span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FJavaScript%2FGuide%2FRegular_Expressions" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/Web/JavaScript/Guide/Regular_Expressions" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/Web/JavaScript/Guide/Regular_Expressions" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FJavaScript%2FGuide%2FRegular_Expressions" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+              
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+        
+    </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../../API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+
+   <!-- end is_zone -->
+
+    <div class="wiki-main-content" id="document-main"><div class="center">
+      
+      <div class="article-meta">
+        <!-- action buttons -->
+        
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+  <ul class="page-buttons" data-sticky="false">
+      
+      <li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+              
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/bn-BD/docs/Web/JavaScript/Guide/Regular_Expressions" title="রেগুলার এক্সপ্রেশন">বাংলা (বাংলাদেশ)</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/ca/docs/Web/JavaScript/Guide/Regular_Expressions" title="Regular Expressions">Català</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/de/docs/Web/JavaScript/Guide/Regular_Expressions" title="Reguläre Ausdrücke">Deutsch</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/es/docs/Web/JavaScript/Guide/Regular_Expressions" title="Expresiones Regulares">Español</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/fr/docs/Web/JavaScript/Guide/Expressions_régulières" title="Expressions rationnelles">Français</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/ja/docs/Web/JavaScript/Guide/Regular_Expressions" title="正規表現">日本語</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/ko/docs/Web/JavaScript/Guide/정규식" title="정규식">한국어</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Guide/Regular_Expressions" title="Regular Expressions">Português (do&nbsp;Brasil)</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/ru/docs/Web/JavaScript/Guide/Regular_Expressions" title="Регулярные выражения">Русский</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/th/docs/Web/JavaScript/Guide/Regular_Expressions" title="Regular Expressions">ไทย</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/uk/docs/Web/JavaScript/Guide/Regular_Expressions" title="Регулярні Вирази">Українська</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/vi/docs/Web/JavaScript/Guide/Regular_Expressions" title="Biểu thức chính quy">Tiếng Việt</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Regular_Expressions" title="正则表达式">中文 (简体)</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/zh-TW/docs/Web/JavaScript/Guide/Regular_Expressions" title="正規表示式">正體中文 (繁體)</a></bdi></li>
+                
+              
+
+              
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+              
+            </ul>
+          </div>
+        </div>
+      </li>
+
+      <li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li>
+
+        
+
+        <li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions$history" rel="nofollow, noindex">History</a></li>
+                
+                
+                
+                
+
+                
+
+                
+                
+                
+                <li class="page-print"><a href="#" onclick="return window.print();">Print this article</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+        
+  <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web" rel="v:url" property="v:title">Web technology for developers</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" rel="v:url" property="v:title">JavaScript</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="../Guide.html" rel="v:url" property="v:title">JavaScript Guide</a></li>
+    
+    <li class="crumb" typeof="v:Breadcrumb" property="v:title">Regular Expressions</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        
+        <div class="contributor-avatars" data-all-text="see all contributors" data-alternate-message="hide contributors" data-has-hidden="1">
+            <ul>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/fscholz" title="View profile: fscholz">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="fscholz" data-src="../../../../../../secure.gravatar.com/avatar/e24391c9174352988d819a9b9ea77c9e6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">fscholz</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/stevemao" title="View profile: stevemao">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="stevemao" data-src="../../../../../../secure.gravatar.com/avatar/084668018e4752a76a838f27e041d1826c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">stevemao</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Fishrock123" title="View profile: Fishrock123">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Fishrock123" data-src="../../../../../../secure.gravatar.com/avatar/ff4b6f3d62efd0176e361e3ea918768f6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Fishrock123</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Telic.detour" title="View profile: Telic.detour">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Telic.detour" data-src="../../../../../../secure.gravatar.com/avatar/741dddbd2829607d51fbc9372a2fe6906c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Telic.detour</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/gportioli" title="View profile: gportioli">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="gportioli" data-src="../../../../../../secure.gravatar.com/avatar/eb051e735b2a38cfbfd982ae9c0a87316c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">gportioli</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Carreau" title="View profile: Carreau">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Carreau" data-src="../../../../../../secure.gravatar.com/avatar/4d4ea6148fef59dff9fa0fc8c309496a6c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Carreau</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/teoli" title="View profile: teoli">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="teoli" data-src="../../../../../../secure.gravatar.com/avatar/d0d90148e08e3b64ccf75c46f31442c56c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">teoli</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Iiro" title="View profile: Iiro">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Iiro" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Iiro</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/nhahtdh" title="View profile: nhahtdh">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="nhahtdh" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">nhahtdh</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/gmanpersona" title="View profile: gmanpersona">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="gmanpersona" data-src="../../../../../../secure.gravatar.com/avatar/c144c854f4c728ecdc977df4c5407d566c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">gmanpersona</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Snyder-" title="View profile: Snyder-">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Snyder-" data-src="../../../../../../secure.gravatar.com/avatar/3afe55c7ceeb58e4f172e03af0e3b1476c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Snyder-</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/mrmaka" title="View profile: mrmaka">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="mrmaka" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">mrmaka</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/xzyfer" title="View profile: xzyfer">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="xzyfer" data-src="../../../../../../secure.gravatar.com/avatar/d010179687f24f5fc5a68cc504c2a3286c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">xzyfer</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/xfq" title="View profile: xfq">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="xfq" data-src="../../../../../../secure.gravatar.com/avatar/d37eb6e5701cb30b871077f04cf2ebb76c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">xfq</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/sfletche" title="View profile: sfletche">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="sfletche" data-src="../../../../../../secure.gravatar.com/avatar/0417cd57b3b0d659b40fbf2de21a5dee6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">sfletche</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/DanielRentz" title="View profile: DanielRentz">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="DanielRentz" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">DanielRentz</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/cerrahoglu.ali" title="View profile: cerrahoglu.ali">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="cerrahoglu.ali" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">cerrahoglu.ali</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/jdphenix" title="View profile: jdphenix">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="jdphenix" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">jdphenix</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Sheppy" title="View profile: Sheppy">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Sheppy" data-src="../../../../../../secure.gravatar.com/avatar/945076feb88f2d7003891ffbf06f32bf6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Sheppy</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/jbnicolai" title="View profile: jbnicolai">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="jbnicolai" data-src="../../../../../../secure.gravatar.com/avatar/87ae21ae50695ae9e522e7a41d480b306c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">jbnicolai</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/arai" title="View profile: arai">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="arai" data-src="../../../../../../secure.gravatar.com/avatar/0432a84805ea7033f4646049963e3bf16c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">arai</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/trevorh" title="View profile: trevorh">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="trevorh" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">trevorh</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/JanakaJR" title="View profile: JanakaJR">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="JanakaJR" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">JanakaJR</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/btrager" title="View profile: btrager">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="btrager" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">btrager</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/SphinxKnight" title="View profile: SphinxKnight">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="SphinxKnight" data-src="../../../../../../secure.gravatar.com/avatar/8fb358ea9b7af22f5021a29e122ea0696c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">SphinxKnight</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/neilpquinn" title="View profile: neilpquinn">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="neilpquinn" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">neilpquinn</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Lamina-Paj" title="View profile: Lamina-Paj">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Lamina-Paj" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Lamina-Paj</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/FernandoBasso" title="View profile: FernandoBasso">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="FernandoBasso" data-src="../../../../../../secure.gravatar.com/avatar/4eec321d4316e16f3cbb269410e2357b6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">FernandoBasso</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/bradleymeck" title="View profile: bradleymeck">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="bradleymeck" data-src="../../../../../../secure.gravatar.com/avatar/0b22453288cedbe28d53e89e0e0b793d6c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">bradleymeck</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/boobl" title="View profile: boobl">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="boobl" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">boobl</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/TTO" title="View profile: TTO">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="TTO" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">TTO</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/RustyDoorknobs" title="View profile: RustyDoorknobs">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="RustyDoorknobs" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">RustyDoorknobs</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Revolt" title="View profile: Revolt">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Revolt" data-src="../../../../../../secure.gravatar.com/avatar/29d50fcf7edb3d8a70ca56c6e9048bed6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Revolt</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/juicehonky" title="View profile: juicehonky">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="juicehonky" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">juicehonky</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/MartinRinehart" title="View profile: MartinRinehart">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="MartinRinehart" data-src="../../../../../../secure.gravatar.com/avatar/bfc93c0b6445bf138e06986214be58786c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">MartinRinehart</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/kscarfone" title="View profile: kscarfone">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="kscarfone" data-src="../../../../../../secure.gravatar.com/avatar/89c1e54a9703125168e40d22316d2b496c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">kscarfone</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/schooley" title="View profile: schooley">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="schooley" data-src="../../../../../../secure.gravatar.com/avatar/9a3eea0b50eb9de16541f2893d073fad6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">schooley</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/edymtt" title="View profile: edymtt">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="edymtt" data-src="../../../../../../secure.gravatar.com/avatar/0d5275fc418c9d3f0eeb9e4eeb0a888e6c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">edymtt</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/ironpingwin" title="View profile: ironpingwin">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="ironpingwin" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">ironpingwin</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Aqw" title="View profile: Aqw">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Aqw" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Aqw</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/hjghgfdfg" title="View profile: hjghgfdfg">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="hjghgfdfg" data-src="../../../../../../secure.gravatar.com/avatar/3d079e0f08e929cd3b23bc0fc68a98c96c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">hjghgfdfg</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/DarrinKoltow" title="View profile: DarrinKoltow">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="DarrinKoltow" data-src="../../../../../../secure.gravatar.com/avatar/cbba1db39430a10ceff09e2368c6b4426c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">DarrinKoltow</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/webapphero" title="View profile: webapphero">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="webapphero" data-src="../../../../../../secure.gravatar.com/avatar/9fc68cfd47b9ec35ef7e9b67fe5c08266c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">webapphero</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/rodneyrehm" title="View profile: rodneyrehm">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="rodneyrehm" data-src="../../../../../../secure.gravatar.com/avatar/1fe89044eef1cf027c146e8d7969d8ee6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">rodneyrehm</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/teddybeard" title="View profile: teddybeard">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="teddybeard" data-src="../../../../../../secure.gravatar.com/avatar/b835c69e05549ab110696744bde9350b6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">teddybeard</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/daniel0mullins" title="View profile: daniel0mullins">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="daniel0mullins" data-src="../../../../../../secure.gravatar.com/avatar/26fe4c67103fdea207197bb99dc5e9f56c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">daniel0mullins</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/ethertank" title="View profile: ethertank">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="ethertank" data-src="../../../../../../secure.gravatar.com/avatar/abac73ba2093b500bf7599c76d80280c6c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">ethertank</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Rob W" title="View profile: Rob W">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Rob W" data-src="../../../../../../secure.gravatar.com/avatar/c916d92c098426d84778a7910cc32b396c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Rob W</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/lmorchard" title="View profile: lmorchard">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="lmorchard" data-src="../../../../../../secure.gravatar.com/avatar/b45c48fc9e05922e2f368a9d7d7d8de16c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">lmorchard</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/sonujaiswar" title="View profile: sonujaiswar">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="sonujaiswar" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">sonujaiswar</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/mjhm" title="View profile: mjhm">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="mjhm" data-src="../../../../../../secure.gravatar.com/avatar/c7c553e50dba63827f185f72cae8d4926c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">mjhm</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Kizer" title="View profile: Kizer">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Kizer" data-src="../../../../../../secure.gravatar.com/avatar/012b2cb830f41375f267243428a4899c6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Kizer</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/bmenasha" title="View profile: bmenasha">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="bmenasha" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">bmenasha</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/BYK" title="View profile: BYK">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="BYK" data-src="../../../../../../secure.gravatar.com/avatar/5754ca44a9d2c6687a8c65f5ed91d51e6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">BYK</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/berkerpeksag" title="View profile: berkerpeksag">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="berkerpeksag" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">berkerpeksag</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/zachleat" title="View profile: zachleat">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="zachleat" data-src="../../../../../../secure.gravatar.com/avatar/e1899004c71c7043343196103e210be36c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">zachleat</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/user01" title="View profile: user01">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="user01" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">user01</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/BenoitL" title="View profile: BenoitL">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="BenoitL" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">BenoitL</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Mgjbot" title="View profile: Mgjbot">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Mgjbot" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Mgjbot</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Major Small" title="View profile: Major Small">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Major Small" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Major Small</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/JesseW" title="View profile: JesseW">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="JesseW" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">JesseW</noscript></a>
+                </li>
+            
+            </ul>
+        </div>
+        
+
+        <h1>Regular Expressions</h1>
+
+      </div>
+      
+
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-present">
+
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+            
+              <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+              
+              <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#Creating_a_regular_expression" rel="internal">Creating a regular expression</a></li><li><a href="#Writing_a_regular_expression_pattern" rel="internal">Writing a regular expression pattern</a><ol><li><a href="#Using_simple_patterns" rel="internal">Using simple patterns</a></li><li><a href="#Using_special_characters" rel="internal">Using special characters</a></li><li><a href="#Using_parentheses" rel="internal">Using parentheses</a></li></ol></li><li><a href="#Working_with_regular_expressions" rel="internal">Working with regular expressions</a><ol><li><a href="#Using_parenthesized_substring_matches" rel="internal">Using parenthesized substring matches</a></li><li><a href="#Advanced_searching_with_flags" rel="internal">Advanced searching with flags</a></li></ol></li><li><a href="#Examples" rel="internal">Examples</a><ol><li><a href="#Changing_the_order_in_an_input_string" rel="internal">Changing the order in an input string</a></li><li><a href="#Using_special_characters_to_verify_input" rel="internal">Using special characters to verify input</a></li></ol></li>
+                </ol>
+              </div>
+              
+              </div>
+            
+
+            
+            
+              
+            
+
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-half wiki-column text-content">
+
+              
+
+              
+
+              
+                
+                
+                
+              
+              
+
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                
+                  
+                    <div><section id="Quick_Links" class="Quick_links"><!-- --></section> <div class="prevnext" style="text-align: right;"> 
+    <p><a href="Text_formatting.html" style="float: left;">« Previous</a><a href="Indexed_collections.html">Next  »</a></p> 
+</div></div>
+
+<p class="summary">Regular expressions are patterns used to match character combinations in strings. In JavaScript, regular expressions are also objects. These patterns are used with the <a href="../Reference/Global_Objects/RegExp/exec.html" title="The exec() method executes a search for a match in a specified string. Returns a result array, or null."><code>exec</code></a> and&nbsp;<a href="../Reference/Global_Objects/RegExp/test.html" title="The test() method executes a search for a match between a regular expression and a specified string. Returns true or false."><code>test</code></a> methods of <a href="../Reference/Global_Objects/RegExp.html" title="The RegExp constructor creates a regular expression object for matching text with a pattern."><code>RegExp</code></a>, and with the&nbsp;<a href="../Reference/Global_Objects/String/match.html" title="The match() method retrieves the matches when matching a string against a regular expression."><code>match</code></a>, <a href="../Reference/Global_Objects/String/replace.html" title="The replace() method returns a new string with some or all matches of a pattern replaced by a replacement. The pattern can be a string or a RegExp, and the replacement can be a string or a function to be called for each match."><code>replace</code></a>,&nbsp;<a href="../Reference/Global_Objects/String/search.html" title="The search() method executes a search for a match between a regular expression and this String object."><code>search</code></a>, and&nbsp;<a href="../Reference/Global_Objects/String/split.html" title="Technical review completed."><code>split</code></a> methods of&nbsp;<a href="../Reference/Global_Objects/String.html" title="The String global object is a constructor for strings, or a sequence of characters."><code>String</code></a>. This chapter describes JavaScript regular expressions.</p>
+
+<h2 id="Creating_a_regular_expression">Creating a regular expression</h2>
+
+<p>You construct a regular expression in one of two ways:</p>
+
+<p>Using a regular expression literal, which consists of a pattern enclosed between slashes, as follows:</p>
+
+<pre class="brush: js">var re = /ab+c/;
+</pre>
+
+<p>Regular expression literals provide compilation of the regular expression when the script is loaded. When the regular expression will remain constant, use this for better performance.</p>
+
+<p>Or calling the constructor function of the <a href="../Reference/Global_Objects/RegExp.html" title="The RegExp constructor creates a regular expression object for matching text with a pattern."><code>RegExp</code></a> object, as follows:</p>
+
+<pre class="brush: js">var re = new RegExp("ab+c");
+</pre>
+
+<p>Using the constructor function provides runtime compilation of the regular expression. Use the constructor function when you know the regular expression pattern will be changing, or you don't know the pattern and are getting it from another source, such as user input.</p>
+
+<h2 id="Writing_a_regular_expression_pattern">Writing a regular expression pattern</h2>
+
+<p>A regular expression pattern is composed of simple characters, such as <code>/abc/</code>, or a combination of simple and special characters, such as <code>/ab*c/</code> or <code>/Chapter (\d+)\.\d*/</code>. The last example includes parentheses which are used as a memory device. The match made with this part of the pattern is remembered for later use, as described in <a href="#Using_parenthesized_substring_matches">Using parenthesized substring matches</a>.</p>
+
+<h3 id="Using_simple_patterns">Using simple patterns</h3>
+
+<p>Simple patterns are constructed of characters for which you want to find a direct match. For example, the pattern <code>/abc/</code> matches character combinations in strings only when exactly the characters 'abc' occur together and in that order. Such a match would succeed in the strings "Hi, do you know your abc's?" and "The latest airplane designs evolved from slabcraft." In both cases the match is with the substring 'abc'. There is no match in the string 'Grab crab' because while it contains the substring 'ab c', it does not contain the exact substring 'abc'.</p>
+
+<h3 id="Using_special_characters">Using special characters</h3>
+
+<p>When the search for a match requires something more than a direct match, such as finding one or more b's, or finding white space, the pattern includes special characters. For example, the pattern <code>/ab*c/</code> matches any character combination in which a single 'a' is followed by zero or more 'b's (<code>*</code> means 0 or more occurrences of the preceding item) and then immediately followed by 'c'. In the string "cbbabbbbcdebc," the pattern matches the substring 'abbbbc'.</p>
+
+<p>The following table provides a complete list and description of the special characters that can be used in regular expressions.</p>
+
+<table class="standard-table">
+ <caption>Special characters in regular expressions.</caption>
+ <thead>
+  <tr>
+   <th scope="col">Character</th>
+   <th scope="col">Meaning</th>
+  </tr>
+ </thead>
+ <tbody>
+  <tr>
+   <td><a href="#special-backslash" name="special-backslash" id="special-backslash"><code>\</code></a></td>
+   <td>
+    <p>Matches according to the following rules:<br>
+     <br>
+     A backslash that precedes a non-special character indicates that the next character is special and is not to be interpreted literally. For example, a '<code>b</code>' without a preceding '\' generally matches lowercase 'b's wherever they occur. But a '<code>\b</code>' by itself doesn't match any character; it forms the special <a href="#special-word-boundary" title="#special-word-boundary">word boundary character</a>.<br>
+     <br>
+     A backslash that precedes a special character indicates that the next character is not special and should be interpreted literally. For example, the pattern <code>/a*/</code> relies on the special character '<code>*</code>' to match 0 or more a's. By contrast, the pattern <code>/a\*/</code> removes the specialness of the '<code>*</code>' to enable matches with strings like 'a*'.<br>
+     <br>
+     Do not forget to escape \ itself while using the RegExp("pattern") notation because \ is also an escape character in strings.</p>
+   </td>
+  </tr>
+  <tr>
+   <td><a href="#special-caret" name="special-caret" id="special-caret"><code>^</code></a></td>
+   <td>Matches beginning of input. If the multiline flag is set to true, also matches immediately after a line break character.<br>
+    <br>
+    For example, <code>/^A/</code> does not match the 'A' in "an A", but does match the 'A' in "An E".<br>
+    <br>
+    The '<code>^</code>' has a different meaning when it appears as the first character in a character set pattern. See <a href="#special-negated-character-set" title="#special-negated-character-set">complemented character sets</a> for details and an example.</td>
+  </tr>
+  <tr>
+   <td><a href="#special-dollar" name="special-dollar" id="special-dollar"><code>$</code></a></td>
+   <td>
+    <p>Matches end of input. If the multiline flag is set to true, also matches immediately before a line break character.</p>
+
+    <p>For example, <code>/t$/</code> does not match the 't' in "eater", but does match it in "eat".</p>
+   </td>
+  </tr>
+  <tr>
+   <td><a href="#special-asterisk" name="special-asterisk" id="special-asterisk"><code>*</code></a></td>
+   <td>
+    <p>Matches the preceding expression 0 or more times. Equivalent to {0,}.</p>
+
+    <p>For example, <code>/bo*/</code> matches 'boooo' in "A ghost booooed" and 'b' in "A bird warbled", but nothing in "A goat grunted".</p>
+   </td>
+  </tr>
+  <tr>
+   <td><a href="#special-plus" name="special-plus" id="special-plus"><code>+</code></a></td>
+   <td>
+    <p>Matches the preceding expression 1 or more times. Equivalent to <code>{1,}</code>.</p>
+
+    <p>For example, <code>/a+/</code> matches the 'a' in "candy" and all the a's in "caaaaaaandy", but nothing in "cndy".</p>
+   </td>
+  </tr>
+  <tr>
+   <td><a href="#special-questionmark" name="special-questionmark" id="special-questionmark"><code>?</code></a></td>
+   <td>Matches the preceding expression 0 or 1 time. Equivalent to <code>{0,1}</code>.<br>
+    <br>
+    For example, <code>/e?le?/</code> matches the 'el' in "angel" and the 'le' in "angle" and also the 'l' in "oslo".<br>
+    <br>
+    If used immediately after any of the quantifiers *, +, ?, or {}, makes the quantifier non-greedy (matching the fewest possible characters), as opposed to the default, which is greedy (matching as many characters as possible). For example, applying <code>/\d+/</code> to "123abc" matches "123". But applying <code>/\d+?/</code> to that same string matches only the "1".<br>
+    <br>
+    Also used in lookahead assertions, as described in the <code>x(?=y)</code> and <code>x(?!y)</code> entries of this table.<br>
+    &nbsp;</td>
+  </tr>
+  <tr>
+   <td><a href="#special-dot" name="special-dot" id="special-dot"><code>.</code></a></td>
+   <td>
+    <p>(The decimal point) matches any single character except the newline character.</p>
+
+    <p>For example, <code>/.n/</code> matches 'an' and 'on' in "nay, an apple is on the tree", but not 'nay'.</p>
+   </td>
+  </tr>
+  <tr>
+   <td><a href="#special-capturing-parentheses" name="special-capturing-parentheses" id="special-capturing-parentheses"><code>(x)</code></a></td>
+   <td>
+    <p>Matches 'x' and remembers the match, as the following example shows. The parentheses are called <em>capturing parentheses</em>.<br>
+     <br>
+     The '<code>(foo)</code>' and '<code>(bar)</code>' in the pattern <code>/(foo) (bar) \1 \2/</code> match and remember the first two words in the string "foo bar foo bar". The <code>\1 </code>and <code>\2</code> in the pattern match the string's last two words. Note that <code>\1, \2, \n</code> are used in the matching part of the regex. In the replacement part of a regex the syntax <code>$1, $2, $n</code> must be used, e.g.: <code>'bar foo'.replace( /(...) (...)/, '$2 $1' )</code>.</p>
+   </td>
+  </tr>
+  <tr>
+   <td><a href="#special-non-capturing-parentheses" name="special-non-capturing-parentheses" id="special-non-capturing-parentheses"><code>(?:x)</code></a></td>
+   <td>Matches 'x' but does not remember the match. The parentheses are called <em>non-capturing parentheses</em>, and let you define subexpressions for regular expression operators to work with. Consider the sample expression <code>/(?:foo){1,2}/</code>. If the expression was <code>/foo{1,2}/</code>, the <code>{1,2}</code> characters would apply only to the last 'o' in 'foo'. With the non-capturing parentheses, the <code>{1,2}</code> applies to the entire word 'foo'.</td>
+  </tr>
+  <tr>
+   <td><a href="#special-lookahead" name="special-lookahead" id="special-lookahead"><code>x(?=y)</code></a></td>
+   <td>
+    <p>Matches 'x' only if 'x' is followed by 'y'. This is called a lookahead.</p>
+
+    <p>For example, <code>/Jack(?=Sprat)/</code> matches 'Jack' only if it is followed by 'Sprat'. <code>/Jack(?=Sprat|Frost)/</code> matches 'Jack' only if it is followed by 'Sprat' or 'Frost'. However, neither 'Sprat' nor 'Frost' is part of the match results.</p>
+   </td>
+  </tr>
+  <tr>
+   <td><a href="#special-negated-look-ahead" name="special-negated-look-ahead" id="special-negated-look-ahead"><code>x(?!y)</code></a></td>
+   <td>
+    <p>Matches 'x' only if 'x' is not followed by 'y'. This is called a negated lookahead.</p>
+
+    <p>For example, <code>/\d+(?!\.)/</code> matches a number only if it is not followed by a decimal point. The regular expression <code>/\d+(?!\.)/.exec("3.141")</code> matches '141' but not '3.141'.</p>
+   </td>
+  </tr>
+  <tr>
+   <td><a href="#special-or" name="special-or" id="special-or"><code>x|y</code></a></td>
+   <td>
+    <p>Matches either 'x' or 'y'.</p>
+
+    <p>For example, <code>/green|red/</code> matches 'green' in "green apple" and 'red' in "red apple."</p>
+   </td>
+  </tr>
+  <tr>
+   <td><a href="#special-quantifier" name="special-quantifier" id="special-quantifier"><code>{n}</code></a></td>
+   <td>Matches exactly n occurrences of the preceding expression. N must be a positive integer.<br>
+    <br>
+    For example, <code>/a{2}/</code> doesn't match the 'a' in "candy," but it does match all of the a's in "caandy," and the first two a's in "caaandy."</td>
+  </tr>
+  <tr>
+   <td><a href="#special-quantifier-range" name="special-quantifier-range" id="special-quantifier-range"><code>{n,m}</code></a></td>
+   <td>
+    <p>Where <code>n</code> and <code>m</code> are positive integers and <code>n &lt;= m</code>. Matches at least <code>n</code> and at most <code>m</code> occurrences of the preceding expression. When <code>m</code> is omitted, it's treated as ∞.</p>
+
+    <p>For example, <code>/a{1,3}/</code> matches nothing in "cndy", the 'a' in "candy," the first two a's in "caandy," and the first three a's in "caaaaaaandy". Notice that when matching "caaaaaaandy", the match is "aaa", even though the original string had more a's in it.</p>
+   </td>
+  </tr>
+  <tr>
+   <td><a href="#special-character-set" name="special-character-set" id="special-character-set"><code>[xyz]</code></a></td>
+   <td>Character set. This pattern type matches any one of the characters in the brackets, including <a href="Grammar_and_types.html#Unicode_escape_sequences" title="https://developer.mozilla.org/en-US/docs/JavaScript/Guide/Values,_variables,_and_literals#Unicode_escape_sequences">escape sequences</a>. Special characters like the dot(<code>.</code>) and asterisk (<code>*</code>) are not special inside a character set, so they don't need to be escaped. You can specify a range of characters by using a hyphen, as the following examples illustrate.<br>
+    <br>
+    The pattern<code> [a-d]</code>, which performs the same match as <code>[abcd]</code>, matches the 'b' in "brisket" and the 'c' in "city". The patterns <code>/[a-z.]+/ </code>and <code>/[\w.]+/</code> match the entire string "test.i.ng".</td>
+  </tr>
+  <tr>
+   <td><a href="#special-negated-character-set" name="special-negated-character-set" id="special-negated-character-set"><code>[^xyz]</code></a></td>
+   <td>
+    <p>A negated or complemented character set. That is, it matches anything that is not enclosed in the brackets. You can specify a range of characters by using a hyphen. Everything that works in the normal character set also works here.</p>
+
+    <p>For example, <code>[^abc]</code> is the same as <code>[^a-c]</code>. They initially match 'r' in "brisket" and 'h' in "chop."</p>
+   </td>
+  </tr>
+  <tr>
+   <td><a href="#special-backspace" name="special-backspace" id="special-backspace"><code>[\b]</code></a></td>
+   <td>Matches a backspace (U+0008). You need to use square brackets if you want to match a literal backspace character. (Not to be confused with <code>\b</code>.)</td>
+  </tr>
+  <tr>
+   <td><a href="#special-word-boundary" name="special-word-boundary" id="special-word-boundary"><code>\b</code></a></td>
+   <td>
+    <p>Matches a word boundary. A word boundary matches the position where a word character is not followed or preceeded by another word-character. Note that a matched word boundary is not included in the match. In other words, the length of a matched word boundary is zero. (Not to be confused with <code>[\b]</code>.)</p>
+
+    <p>Examples:<br>
+     <code>/\bm/</code> matches the 'm' in "moon" ;<br>
+     <code>/oo\b/</code> does not match the 'oo' in "moon", because 'oo' is followed by 'n' which is a word character;<br>
+     <code>/oon\b/</code> matches the 'oon' in "moon", because 'oon' is the end of the string, thus not followed by a word character;<br>
+     <code>/\w\b\w/</code> will never match anything, because a word character can never be followed by both a non-word and a word character.</p>
+
+    <div class="note">
+    <p><strong>Note:</strong>&nbsp;JavaScript's regular expression engine defines a <a href="http://www.ecma-international.org/ecma-262/5.1/#sec-15.10.2.6" class="external">specific set of characters</a> to be "word" characters. Any character not in that set is considered a word break. This set of characters is fairly limited: it consists solely of the&nbsp;Roman alphabet in both upper- and lower-case, decimal digits, and the underscore character. Accented characters, such as "é" or "ü" are, unfortunately, treated as word breaks.</p>
+    </div>
+   </td>
+  </tr>
+  <tr>
+   <td><a href="#special-non-word-boundary" name="special-non-word-boundary" id="special-non-word-boundary"><code>\B</code></a></td>
+   <td>
+    <p>Matches a non-word boundary. This matches a position where the previous and next character are of the same type: Either both must be words, or both must be non-words. The beginning and end of a string are considered non-words.</p>
+
+    <p>For example, <code>/\B../</code> matches 'oo' in "noonday", and <code>/y\B./</code> matches 'ye' in "possibly yesterday."</p>
+   </td>
+  </tr>
+  <tr>
+   <td><a href="#special-control" name="special-control" id="special-control"><code>\c<em>X</em></code></a></td>
+   <td>
+    <p>Where <em>X</em> is a character ranging from A to Z. Matches a control character in a string.</p>
+
+    <p>For example, <code>/\cM/</code> matches control-M (U+000D) in a string.</p>
+   </td>
+  </tr>
+  <tr>
+   <td><a href="#special-digit" name="special-digit" id="special-digit"><code>\d</code></a></td>
+   <td>
+    <p>Matches a digit character. Equivalent to <code>[0-9]</code>.</p>
+
+    <p>For example, <code>/\d/</code> or <code>/[0-9]/</code> matches '2' in "B2 is the suite number."</p>
+   </td>
+  </tr>
+  <tr>
+   <td><a href="#special-non-digit" name="special-non-digit" id="special-non-digit"><code>\D</code></a></td>
+   <td>
+    <p>Matches any non-digit character. Equivalent to <code>[^0-9]</code>.</p>
+
+    <p>For example, <code>/\D/</code> or <code>/[^0-9]/</code> matches 'B' in "B2 is the suite number."</p>
+   </td>
+  </tr>
+  <tr>
+   <td><a href="#special-form-feed" name="special-form-feed" id="special-form-feed"><code>\f</code></a></td>
+   <td>Matches a form feed (U+000C).</td>
+  </tr>
+  <tr>
+   <td><a href="#special-line-feed" name="special-line-feed" id="special-line-feed"><code>\n</code></a></td>
+   <td>Matches a line feed (U+000A).</td>
+  </tr>
+  <tr>
+   <td><a href="#special-carriage-return" name="special-carriage-return" id="special-carriage-return"><code>\r</code></a></td>
+   <td>Matches a carriage return (U+000D).</td>
+  </tr>
+  <tr>
+   <td><a href="#special-white-space" name="special-white-space" id="special-white-space"><code>\s</code></a></td>
+   <td>
+    <p>Matches a single white space character, including space, tab, form feed, line feed. Equivalent to <code>[ \f\n\r\t\v\u00a0\u1680\u180e\u2000-\u200a\u2028\u2029\u202f\u205f\u3000\ufeff]</code>.</p>
+
+    <p>For example, <code>/\s\w*/</code> matches ' bar' in "foo bar."</p>
+   </td>
+  </tr>
+  <tr>
+   <td><a href="#special-non-white-space" name="special-non-white-space" id="special-non-white-space"><code>\S</code></a></td>
+   <td>
+    <p>Matches a single character other than white space. Equivalent to <code>[^ \f\n\r\t\v\u00a0\u1680\u180e\u2000-\u200a\u2028\u2029\u202f\u205f\u3000\ufeff]</code>.</p>
+
+    <p>For example, <code>/\S\w*/</code> matches 'foo' in "foo bar."</p>
+   </td>
+  </tr>
+  <tr>
+   <td><a href="#special-tab" name="special-tab" id="special-tab"><code>\t</code></a></td>
+   <td>Matches a tab (U+0009).</td>
+  </tr>
+  <tr>
+   <td><a href="#special-vertical-tab" name="special-vertical-tab" id="special-vertical-tab"><code>\v</code></a></td>
+   <td>Matches a vertical tab (U+000B).</td>
+  </tr>
+  <tr>
+   <td><a href="#special-word" name="special-word" id="special-word"><code>\w</code></a></td>
+   <td>
+    <p>Matches any alphanumeric character including the underscore. Equivalent to <code>[A-Za-z0-9_]</code>.</p>
+
+    <p>For example, <code>/\w/</code> matches 'a' in "apple," '5' in "$5.28," and '3' in "3D."</p>
+   </td>
+  </tr>
+  <tr>
+   <td><a href="#special-non-word" name="special-non-word" id="special-non-word"><code>\W</code></a></td>
+   <td>
+    <p>Matches any non-word character. Equivalent to <code>[^A-Za-z0-9_]</code>.</p>
+
+    <p>For example, <code>/\W/</code> or <code>/[^A-Za-z0-9_]/</code> matches '%' in "50%."</p>
+   </td>
+  </tr>
+  <tr>
+   <td><a href="#special-backreference" name="special-backreference" id="special-backreference"><code>\<em>n</em></code></a></td>
+   <td>
+    <p>Where <em>n</em> is a positive integer, a back reference to the last substring matching the <em>n</em> parenthetical in the regular expression (counting left parentheses).</p>
+
+    <p>For example, <code>/apple(,)\sorange\1/</code> matches 'apple, orange,' in "apple, orange, cherry, peach."</p>
+   </td>
+  </tr>
+  <tr>
+   <td><a href="#special-null" name="special-null" id="special-null"><code>\0</code></a></td>
+   <td>Matches a NULL (U+0000) character. Do not follow this with another digit, because <code>\0&lt;digits&gt;</code> is an octal <a href="Grammar_and_types.html#Unicode_escape_sequences" title="https://developer.mozilla.org/en-US/docs/JavaScript/Guide/Values,_variables,_and_literals#Unicode_escape_sequences">escape sequence</a>.</td>
+  </tr>
+  <tr>
+   <td><a href="#special-hex-escape" name="special-hex-escape" id="special-hex-escape"><code>\xhh</code></a></td>
+   <td>Matches the character with the code hh (two hexadecimal digits)</td>
+  </tr>
+  <tr>
+   <td><a href="#special-unicode-escape" name="special-unicode-escape" id="special-unicode-escape"><code>\uhhhh</code></a></td>
+   <td>Matches the character with the code hhhh (four hexadecimal digits).</td>
+  </tr>
+  <tr>
+   <td><a href="#special-unicode-escape-es6" name="special-unicode-escape-es6" id="special-unicode-escape-es6"><code>\u{hhhh}</code></a></td>
+   <td>(only when u flag is set) Matches the character with the Unicode value hhhh (hexadecimal digits).</td>
+  </tr>
+ </tbody>
+</table>
+
+<p>Escaping user input to be treated as a literal string within a regular expression can be accomplished by simple replacement:</p>
+
+<pre class="brush: js">function escapeRegExp(string){
+  return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&amp;"); // $&amp; means the whole matched string
+}</pre>
+
+<h3 id="Using_parentheses">Using parentheses</h3>
+
+<p>Parentheses around any part of the regular expression pattern cause that part of the matched substring to be remembered. Once remembered, the substring can be recalled for other use, as described in <a href="#Using_parenthesized_substring_matches">Using Parenthesized Substring Matches</a>.</p>
+
+<p>For example, the pattern <code>/Chapter (\d+)\.\d*/</code> illustrates additional escaped and special characters and indicates that part of the pattern should be remembered. It matches precisely the characters 'Chapter ' followed by one or more numeric characters (<code>\d</code> means any numeric character and <code>+</code> means 1 or more times), followed by a decimal point (which in itself is a special character; preceding the decimal point with \ means the pattern must look for the literal character '.'), followed by any numeric character 0 or more times (<code>\d</code> means numeric character, <code>*</code> means 0 or more times). In addition, parentheses are used to remember the first matched numeric characters.</p>
+
+<p>This pattern is found in "Open Chapter 4.3, paragraph 6" and '4' is remembered. The pattern is not found in "Chapter 3 and 4", because that string does not have a period after the '3'.</p>
+
+<p>To match a substring without causing the matched part to be remembered, within the parentheses preface the pattern with <code>?:</code>. For example, <code>(?:\d+)</code> matches one or more numeric characters but does not remember the matched characters.</p>
+
+<h2 id="Working_with_regular_expressions">Working with regular expressions</h2>
+
+<p>Regular expressions are used with the <code>RegExp</code> methods <code>test</code> and <code>exec</code> and with the <code>String</code> methods <code>match</code>, <code>replace</code>, <code>search</code>, and <code>split</code>. These methods are explained in detail in the <a href="../Reference.html" title="en-US/docs/JavaScript/Reference">JavaScript reference</a>.</p>
+
+<table class="standard-table">
+ <caption>Methods that use regular expressions</caption>
+ <thead>
+  <tr>
+   <th scope="col">Method</th>
+   <th scope="col">Description</th>
+  </tr>
+ </thead>
+ <tbody>
+  <tr>
+   <td><a href="../Reference/Global_Objects/RegExp/exec.html" title="The exec() method executes a search for a match in a specified string. Returns a result array, or null."><code>exec</code></a></td>
+   <td>A <code>RegExp</code> method that executes a search for a match in a string. It returns an array of information.</td>
+  </tr>
+  <tr>
+   <td><a href="../Reference/Global_Objects/RegExp/test.html" title="The test() method executes a search for a match between a regular expression and a specified string. Returns true or false."><code>test</code></a></td>
+   <td>A <code>RegExp</code> method that tests for a match in a string. It returns true or false.</td>
+  </tr>
+  <tr>
+   <td><a href="../Reference/Global_Objects/String/match.html" title="The match() method retrieves the matches when matching a string against a regular expression."><code>match</code></a></td>
+   <td>A <code>String</code> method that executes a search for a match in a string. It returns an array of information or null on a mismatch.</td>
+  </tr>
+  <tr>
+   <td><a href="../Reference/Global_Objects/String/search.html" title="The search() method executes a search for a match between a regular expression and this String object."><code>search</code></a></td>
+   <td>A <code>String</code> method that tests for a match in a string. It returns the index of the match, or -1 if the search fails.</td>
+  </tr>
+  <tr>
+   <td><a href="../Reference/Global_Objects/String/replace.html" title="The replace() method returns a new string with some or all matches of a pattern replaced by a replacement. The pattern can be a string or a RegExp, and the replacement can be a string or a function to be called for each match."><code>replace</code></a></td>
+   <td>A <code>String</code> method that executes a search for a match in a string, and replaces the matched substring with a replacement substring.</td>
+  </tr>
+  <tr>
+   <td><a href="../Reference/Global_Objects/String/split.html" title="Technical review completed."><code>split</code></a></td>
+   <td>A <code>String</code> method that uses a regular expression or a fixed string to break a string into an array of substrings.</td>
+  </tr>
+ </tbody>
+</table>
+
+<p>When you want to know whether a pattern is found in a string, use the <code>test</code> or <code>search</code> method; for more information (but slower execution) use the <code>exec</code> or <code>match</code> methods. If you use <code>exec</code> or <code>match</code> and if the match succeeds, these methods return an array and update properties of the associated regular expression object and also of the predefined regular expression object, <code>RegExp</code>. If the match fails, the <code>exec</code> method returns <code>null</code> (which coerces to <code>false</code>).</p>
+
+<p>In the following example, the script uses the <code>exec</code> method to find a match in a string.</p>
+
+<pre class="brush: js">var myRe = /d(b+)d/g;
+var myArray = myRe.exec("cdbbdbsbz");
+</pre>
+
+<p>If you do not need to access the properties of the regular expression, an alternative way of creating <code>myArray</code> is with this script:</p>
+
+<pre class="brush: js">var myArray = /d(b+)d/g.exec("cdbbdbsbz");
+</pre>
+
+<p>If you want to construct the regular expression from a string, yet another alternative is this script:</p>
+
+<pre class="brush: js">var myRe = new RegExp("d(b+)d", "g");
+var myArray = myRe.exec("cdbbdbsbz");
+</pre>
+
+<p>With these scripts, the match succeeds and returns the array and updates the properties shown in the following table.</p>
+
+<table class="standard-table">
+ <caption>Results of regular expression execution.</caption>
+ <thead>
+  <tr>
+   <th scope="col">Object</th>
+   <th scope="col">Property or index</th>
+   <th scope="col">Description</th>
+   <th scope="col">In this example</th>
+  </tr>
+ </thead>
+ <tbody>
+  <tr>
+   <td rowspan="4"><code>myArray</code></td>
+   <td>&nbsp;</td>
+   <td>The matched string and all remembered substrings.</td>
+   <td><code>["dbbd", "bb"]</code></td>
+  </tr>
+  <tr>
+   <td><code>index</code></td>
+   <td>The 0-based index of the match in the input string.</td>
+   <td><code>1</code></td>
+  </tr>
+  <tr>
+   <td><code>input</code></td>
+   <td>The original string.</td>
+   <td><code>"cdbbdbsbz"</code></td>
+  </tr>
+  <tr>
+   <td><code>[0]</code></td>
+   <td>The last matched characters.</td>
+   <td><code>"dbbd"</code></td>
+  </tr>
+  <tr>
+   <td rowspan="2"><code>myRe</code></td>
+   <td><code>lastIndex</code></td>
+   <td>The index at which to start the next match. (This property is set only if the regular expression uses the g option, described in <a href="#Advanced_searching_with_flags">Advanced Searching With Flags</a>.)</td>
+   <td><code>5</code></td>
+  </tr>
+  <tr>
+   <td><code>source</code></td>
+   <td>The text of the pattern. Updated at the time that the regular expression is created, not executed.</td>
+   <td><code>"d(b+)d"</code></td>
+  </tr>
+ </tbody>
+</table>
+
+<p>As shown in the second form of this example, you can use a regular expression created with an object initializer without assigning it to a variable. If you do, however, every occurrence is a new regular expression. For this reason, if you use this form without assigning it to a variable, you cannot subsequently access the properties of that regular expression. For example, assume you have this script:</p>
+
+<pre class="brush: js">var myRe = /d(b+)d/g;
+var myArray = myRe.exec("cdbbdbsbz");
+console.log("The value of lastIndex is " + myRe.lastIndex);
+
+// "The value of lastIndex is 5"
+</pre>
+
+<p>However, if you have this script:</p>
+
+<pre class="brush: js">var myArray = /d(b+)d/g.exec("cdbbdbsbz");
+console.log("The value of lastIndex is " + /d(b+)d/g.lastIndex);
+
+// "The value of lastIndex is 0"
+</pre>
+
+<p>The occurrences of <code>/d(b+)d/g</code> in the two statements are different regular expression objects and hence have different values for their <code>lastIndex</code> property. If you need to access the properties of a regular expression created with an object initializer, you should first assign it to a variable.</p>
+
+<h3 id="Using_parenthesized_substring_matches">Using parenthesized substring matches</h3>
+
+<p>Including parentheses in a regular expression pattern causes the corresponding submatch to be remembered. For example, <code>/a(b)c/</code> matches the characters 'abc' and remembers 'b'. To recall these parenthesized substring matches, use the <code>Array</code> elements <code>[1]</code>, ..., <code>[n]</code>.</p>
+
+<p>The number of possible parenthesized substrings is unlimited. The returned array holds all that were found. The following examples illustrate how to use parenthesized substring matches.</p>
+
+<p>The following script uses the&nbsp;<a href="../Reference/Global_Objects/String/replace.html" title="The replace() method returns a new string with some or all matches of a pattern replaced by a replacement. The pattern can be a string or a RegExp, and the replacement can be a string or a function to be called for each match."><code>replace()</code></a> method to switch the words in the string. For the replacement text, the script uses the <code>$1</code> and <code>$2</code> in the replacement to denote the first and second parenthesized substring matches.</p>
+
+<pre class="brush: js">var re = /(\w+)\s(\w+)/;
+var str = "John Smith";
+var newstr = str.replace(re, "$2, $1");
+console.log(newstr);
+</pre>
+
+<p>This prints "Smith, John".</p>
+
+<h3 id="Advanced_searching_with_flags">Advanced searching with flags</h3>
+
+<p>Regular expressions have four optional flags that allow for global and case insensitive searching. These flags can be used separately or together in any order, and are included as part of the regular expression.</p>
+
+<table class="standard-table">
+ <caption>Regular expression flags</caption>
+ <thead>
+  <tr>
+   <th scope="col">Flag</th>
+   <th scope="col">Description</th>
+  </tr>
+ </thead>
+ <tbody>
+  <tr>
+   <td><code>g</code></td>
+   <td>Global search.</td>
+  </tr>
+  <tr>
+   <td>i</td>
+   <td>Case-insensitive search.</td>
+  </tr>
+  <tr>
+   <td>m</td>
+   <td>Multi-line search.</td>
+  </tr>
+  <tr>
+   <td>y</td>
+   <td>Perform a "sticky" search that matches starting at the current position in the target string. See&nbsp;<a href="../Reference/Global_Objects/RegExp/sticky.html" title="The sticky property reflects whether or not the search is sticky (searches in strings only from the index indicated by the lastIndex property of this regular expression). sticky is a read-only property of an individual regular expression object."><code>sticky</code></a></td>
+  </tr>
+ </tbody>
+</table>
+
+<p>To include a flag with the regular expression, use this syntax:</p>
+
+<pre class="brush: js">var re = /pattern/flags;
+</pre>
+
+<p>or</p>
+
+<pre class="brush: js">var re = new RegExp("pattern", "flags");
+</pre>
+
+<p>Note that the flags are an integral part of a regular expression. They cannot be added or removed later.</p>
+
+<p>For example, <code>re = /\w+\s/g</code> creates a regular expression that looks for one or more characters followed by a space, and it looks for this combination throughout the string.</p>
+
+<pre class="brush: js">var re = /\w+\s/g;
+var str = "fee fi fo fum";
+var myArray = str.match(re);
+console.log(myArray);
+</pre>
+
+<p>This displays ["fee ", "fi ", "fo "]. In this example, you could replace the line:</p>
+
+<pre class="brush: js">var re = /\w+\s/g;
+</pre>
+
+<p>with:</p>
+
+<pre class="brush: js">var re = new RegExp("\\w+\\s", "g");
+</pre>
+
+<p>and get the same result.</p>
+
+<p>The <code>m</code> flag is used to specify that a multiline input string should be treated as multiple lines. If the <code>m</code> flag is used, <code>^</code> and <code>$</code> match at the start or end of any line within the input string instead of the start or end of the entire string.</p>
+
+<h2 id="Examples">Examples</h2>
+
+<p>The following examples show some uses of regular expressions.</p>
+
+<h3 id="Changing_the_order_in_an_input_string">Changing the order in an input string</h3>
+
+<p>The following example illustrates the formation of regular expressions and the use of <code>string.split()</code> and <code>string.replace()</code>. It cleans a roughly formatted input string containing names (first name first) separated by blanks, tabs and exactly one semicolon. Finally, it reverses the name order (last name first) and sorts the list.</p>
+
+<pre class="brush: js">// The name string contains multiple spaces and tabs,
+// and may have multiple spaces between first and last names.
+var names = "Harry Trump ;Fred Barney; Helen Rigby ; Bill Abel ; Chris Hand ";
+
+var output = ["---------- Original String\n", names + "\n"];
+
+// Prepare two regular expression patterns and array storage.
+// Split the string into array elements.
+
+// pattern: possible white space then semicolon then possible white space
+var pattern = /\s*;\s*/;
+
+// Break the string into pieces separated by the pattern above and
+// store the pieces in an array called nameList
+var nameList = names.split(pattern);
+
+// new pattern: one or more characters then spaces then characters.
+// Use parentheses to "memorize" portions of the pattern.
+// The memorized portions are referred to later.
+pattern = /(\w+)\s+(\w+)/;
+
+// New array for holding names being processed.
+var bySurnameList = [];
+
+// Display the name array and populate the new array
+// with comma-separated names, last first.
+//
+// The replace method removes anything matching the pattern
+// and replaces it with the memorized string—second memorized portion
+// followed by comma space followed by first memorized portion.
+//
+// The variables $1 and $2 refer to the portions
+// memorized while matching the pattern.
+
+output.push("---------- After Split by Regular Expression");
+
+var i, len;
+for (i = 0, len = nameList.length; i &lt; len; i++){
+  output.push(nameList[i]);
+  bySurnameList[i] = nameList[i].replace(pattern, "$2, $1");
+}
+
+// Display the new array.
+output.push("---------- Names Reversed");
+for (i = 0, len = bySurnameList.length; i &lt; len; i++){
+  output.push(bySurnameList[i]);
+}
+
+// Sort by last name, then display the sorted array.
+bySurnameList.sort();
+output.push("---------- Sorted");
+for (i = 0, len = bySurnameList.length; i &lt; len; i++){
+  output.push(bySurnameList[i]);
+}
+
+output.push("---------- End");
+
+console.log(output.join("\n"));
+</pre>
+
+<h3 id="Using_special_characters_to_verify_input">Using special characters to verify input</h3>
+
+<p>In the following example, the user is expected to enter a phone number. When the user presses the "Check" button, the script checks the validity of the number. If the number is valid (matches the character sequence specified by the regular expression), the script shows a message thanking the user and confirming the number. If the number is invalid, the script informs the user that the phone number is not valid.</p>
+
+<p>Within non-capturing parentheses <code>(?:</code> , the regular expression looks for three numeric characters <code>\d{3}</code> OR <code>|</code> a left parenthesis <code>\(</code> followed by three digits<code> \d{3}</code>, followed by a close parenthesis <code>\)</code>, (end non-capturing parenthesis <code>)</code>), followed by one dash, forward slash, or decimal point and when found, remember the character <code>([-\/\.])</code>, followed by three digits <code>\d{3}</code>, followed by the remembered match of a dash, forward slash, or decimal point <code>\1</code>, followed by four digits <code>\d{4}</code>.</p>
+
+<p>The <code>Change</code> event activated when the user presses Enter sets the value of <code>RegExp.input</code>.</p>
+
+<pre class="brush: html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;  
+  &lt;head&gt;  
+    &lt;meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"&gt;  
+    &lt;meta http-equiv="Content-Script-Type" content="text/javascript"&gt;  
+    &lt;script type="text/javascript"&gt;  
+      var re = /(?:\d{3}|\(\d{3}\))([-\/\.])\d{3}\1\d{4}/;  
+      function testInfo(phoneInput){  
+        var OK = re.exec(phoneInput.value);  
+        if (!OK)  
+          window.alert(phoneInput.value + " isn't a phone number with area code!");  
+        else
+          window.alert("Thanks, your phone number is " + OK[0]);  
+      }  
+    &lt;/script&gt;  
+  &lt;/head&gt;  
+  &lt;body&gt;  
+    &lt;p&gt;Enter your phone number (with area code) and then click "Check".
+        &lt;br&gt;The expected format is like ###-###-####.&lt;/p&gt;
+    &lt;form action="#"&gt;  
+      &lt;input id="phone"&gt;&lt;button onclick="testInfo(document.getElementById('phone'));"&gt;Check&lt;/button&gt;
+    &lt;/form&gt;  
+  &lt;/body&gt;  
+&lt;/html&gt;
+</pre>
+
+<div><div class="prevnext" style="text-align: right;"> 
+    <p><a href="Text_formatting.html" style="float: left;">« Previous</a><a href="Indexed_collections.html">Next  »</a></p> 
+</div></div>
+                  
+                
+              </article>
+
+              
+
+    
+    
+    
+
+    
+    
+    
+
+    <div class="share">
+        <strong>Share:</strong>
+        <ul>
+            <li><a href="http://twitter.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FJavaScript%2FGuide%2FRegular_Expressions%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dtwitter.com&amp;text=I+learned+about+Regular+Expressions+on+MDN." target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=twitter.com" data-title="I learned about Regular Expressions on MDN." class="share-link twitter"><i aria-hidden="true" class="icon-twitter"></i>Twitter</a></li>
+            <li><a href="http://facebook.com/sharer.php?s=100&amp;p[url]=https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" data-title="I learned about Regular Expressions on MDN." class="share-link facebook"><i aria-hidden="true" class="icon-facebook"></i>Facebook</a></li>
+            <li><a href="https://plus.google.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FJavaScript%2FGuide%2FRegular_Expressions%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dplus.google.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=plus.google.com" data-title="I learned about Regular Expressions on MDN." class="share-link gplus"><i aria-hidden="true" class="icon-google-plus"></i>Google+</a></li>
+        </ul>
+    </div>
+
+              
+
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                  
+                  
+  <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags icon-fw"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Guide">Guide</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Intermediate">Intermediate</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/JavaScript">JavaScript</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Reference">Reference</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/regex">regex</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/RegExp">RegExp</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Regular Expressions">Regular Expressions</a></li>
+      
+    </ul>
+  </div>
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-group icon-fw"></i>&nbsp;<strong>Contributors to this page:</strong> 
+        <a href="https://developer.mozilla.org/en-US/profiles/fscholz">fscholz</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/stevemao">stevemao</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Fishrock123">Fishrock123</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Telic.detour">Telic.detour</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/gportioli">gportioli</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Carreau">Carreau</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/teoli">teoli</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Iiro">Iiro</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/nhahtdh">nhahtdh</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/gmanpersona">gmanpersona</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Snyder-">Snyder-</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/mrmaka">mrmaka</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/xzyfer">xzyfer</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/xfq">xfq</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/sfletche">sfletche</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/DanielRentz">DanielRentz</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/cerrahoglu.ali">cerrahoglu.ali</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/jdphenix">jdphenix</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Sheppy">Sheppy</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/jbnicolai">jbnicolai</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/arai">arai</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/trevorh">trevorh</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/JanakaJR">JanakaJR</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/btrager">btrager</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/SphinxKnight">SphinxKnight</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/neilpquinn">neilpquinn</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Lamina-Paj">Lamina-Paj</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/FernandoBasso">FernandoBasso</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/bradleymeck">bradleymeck</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/boobl">boobl</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/TTO">TTO</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/RustyDoorknobs">RustyDoorknobs</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Revolt">Revolt</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/juicehonky">juicehonky</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/MartinRinehart">MartinRinehart</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/kscarfone">kscarfone</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/schooley">schooley</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/edymtt">edymtt</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/ironpingwin">ironpingwin</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Aqw">Aqw</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/hjghgfdfg">hjghgfdfg</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/DarrinKoltow">DarrinKoltow</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/webapphero">webapphero</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/rodneyrehm">rodneyrehm</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/teddybeard">teddybeard</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/daniel0mullins">daniel0mullins</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/ethertank">ethertank</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Rob W">Rob W</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/lmorchard">lmorchard</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/sonujaiswar">sonujaiswar</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/mjhm">mjhm</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Kizer">Kizer</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/bmenasha">bmenasha</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/BYK">BYK</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/berkerpeksag">berkerpeksag</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/zachleat">zachleat</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/user01">user01</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/BenoitL">BenoitL</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Mgjbot">Mgjbot</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Major Small">Major Small</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/JesseW">JesseW</a>
+    
+                    </div>
+                  
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o icon-fw"></i>&nbsp;<strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/fscholz">fscholz</a>,
+                      <time datetime="2016-02-15T02:53:34-08:00">Feb 15, 2016, 2:53:34 AM</time>
+                    </div>
+                  
+                </div>
+              
+            </div>
+
+            
+              <!-- quick links and zone subnav strip -->
+              <div id="wiki-left" class="column-strip wiki-column">
+
+              
+
+                
+
+                
+                  <!-- quick links -->
+                  
+  <div class="quick-links" id="quick-links">
+    <div class="title see-also">See also</div>
+     
+ <ol> 
+  <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript"><strong><em>JavaScript</em></strong></a></li> 
+  <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript"><strong>Tutorials:</strong></a></li> 
+  <li data-default-state="open"><a href="../Guide.html">JavaScript Guide</a> 
+    <ol> 
+      <li><a href="Introduction.html">Introduction</a></li> 
+      <li><a href="Grammar_and_Types-2.html">Grammar and types</a></li> 
+      <li><a href="Control_flow_and_error_handling.html">Control flow and error handling</a></li> 
+      <li><a href="Loops_and_iteration.html">Loops and iteration</a></li> 
+      <li><a href="Functions.html">Functions</a></li> 
+      <li><a href="Expressions_and_Operators.html">Expressions and operators</a></li> 
+      <li><a href="Numbers_and_dates.html">Numbers and dates</a></li> 
+      <li><a href="Text_formatting.html">Text formatting</a></li> 
+      <li><a href="Regular_Expressions.html">Regular expressions</a></li> 
+      <li><a href="Indexed_collections.html">Indexed collections</a></li> 
+      <li><a href="Keyed_collections.html">Keyed collections</a></li> 
+      <li><a href="Working_with_Objects.html">Working with objects</a></li> 
+      <li><a href="Details_of_the_Object_Model.html">Details of the object model</a></li> 
+      <li><a href="Iterators_and_generators.html">Iterators and generators</a></li> 
+      <li><a href="Meta_programming.html">Meta programming</a></li> 
+   </ol> 
+  </li> 
+  <li data-default-state="closed"><a href="#">Introductory</a> 
+   <ol> 
+    <li><a href="https://developer.mozilla.org/en-US/Learn/Getting_started_with_the_web/JavaScript_basics">JavaScript basics</a></li> 
+    <li><a href="../JavaScript_technologies_overview.html">JavaScript technologies overview</a></li> 
+    <li><a href="../Introduction_to_Object-Oriented_JavaScript.html">Introduction to Object Oriented JavaScript</a></li> 
+   </ol> 
+  </li> 
+  <li data-default-state="closed"><a href="#">Intermediate</a> 
+   <ol> 
+    <li><a href="../A_re-introduction_to_JavaScript.html">A re-introduction to JavaScript</a></li> 
+    <li><a href="../Data_structures.html">JavaScript data structures</a></li> 
+    <li><a href="../Equality_comparisons_and_sameness.html">Equality comparisons and sameness</a></li> 
+    <li><a href="../Closures.html">Closures</a></li> 
+   </ol> 
+  </li> 
+  <li data-default-state="closed"><a href="#">Advanced</a> 
+   <ol> 
+    <li><a href="../Inheritance_and_the_prototype_chain.html">Inheritance and the prototype chain</a></li> 
+    <li><a href="../Reference/Strict_mode.html">Strict mode</a></li> 
+    <li><a href="../Typed_arrays.html">JavaScript typed arrays</a></li> 
+    <li><a href="../SIMD_types.html">SIMD types</a></li> 
+    <li><a href="../Memory_Management.html">Memory Management</a></li> 
+    <li><a href="../EventLoop.html">Concurrency model and Event Loop</a></li> 
+   </ol> 
+  </li> 
+  <li><strong><a href="../Reference.html">References:</a></strong></li> 
+  <li data-default-state="closed"><a href="../Reference/Global_Objects.html">Built-in objects</a> 
+   <ol><li><a href="../Reference/Global_Objects.html" title="This chapter documents all of JavaScript's standard, built-in objects, including their methods and properties.">Standard built-in objects</a></li><li><a href="../Reference/Global_Objects/Array.html" title="The JavaScript Array&nbsp;object is a global object that&nbsp;is used in the&nbsp;construction&nbsp;of&nbsp;arrays; which are high-level, list-like objects.">Array</a></li><li><a href="../Reference/Global_Objects/ArrayBuffer.html" title="The ArrayBuffer object is used to represent a generic, fixed-length raw binary data buffer. You can not directly manipulate the contents of an ArrayBuffer; instead, you create one of the typed array objects or a DataView object which represents the buffer in a specific format, and use that to read and write the contents of the buffer.">ArrayBuffer</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="../Reference/Global_Objects/Atomics.html" title="The Atomics object provides atomic operations as static methods. They are used with SharedArrayBuffer objects.">Atomics</a></li><li><a href="../Reference/Global_Objects/Boolean.html" title="The Boolean object is an object wrapper for a boolean value.">Boolean</a></li><li><a href="../Reference/Global_Objects/DataView.html" title="The DataView view provides a low-level interface for reading and writing multiple number types&nbsp;in an ArrayBuffer irrespective of the platform's endianness.">DataView</a></li><li><a href="../Reference/Global_Objects/Date.html" title="Creates a JavaScript Date instance that represents a single moment in time. Date objects are based on a time value that is the number of milliseconds since 1 January, 1970 UTC.">Date</a></li><li><a href="../Reference/Global_Objects/Error.html" title="The Error constructor creates an error object. Instances of Error objects are thrown when runtime errors occur. The Error object can also be used as a base object&nbsp;for user-defined exceptions. See below for standard built-in error types.">Error</a></li><li><a href="../Reference/Global_Objects/EvalError.html" title="The EvalError object indicates an error regarding the global eval() function. This exception is not thrown by JavaScript anymore, however the EvalError object remains for compatibility.">EvalError</a></li><li><a href="../Reference/Global_Objects/Float32Array.html" title="The Float32Array typed array represents an array of 32-bit floating point numbers (corresponding to the C float data type) in the platform byte order. If control over byte order is needed, use DataView instead. The contents are initialized to 0. Once established, you can reference elements in the array using the object's methods, or using standard array index syntax (that is, using bracket notation).">Float32Array</a></li><li><a href="../Reference/Global_Objects/Float64Array.html" title="The Float64Array typed array represents an array of 64-bit floating point numbers (corresponding to the C double data type) in the platform byte order. If control over byte order is needed, use DataView instead. The contents are initialized to 0. Once established, you can reference elements in the array using the object's methods, or using standard array index syntax (that is, using bracket notation).">Float64Array</a></li><li><a href="../Reference/Global_Objects/Function.html" title="The Function constructor creates a new Function object. In JavaScript every function is actually a Function object.">Function</a></li><li><a href="../Reference/Global_Objects/Generator.html" title="The Generator object is returned by a generator function&nbsp;and it conforms to both the iterator and the Iterable protocol.">Generator</a></li><li><a href="../Reference/Global_Objects/GeneratorFunction.html" title="The GeneratorFunction constructor creates a new generator function object. In JavaScript every generator function is actually a GeneratorFunction object.">GeneratorFunction</a></li><li><a href="../Reference/Global_Objects/Infinity.html" title="The global Infinity property is a numeric value representing infinity.">Infinity</a></li><li><a href="../Reference/Global_Objects/Int16Array.html" title="The Int16Array typed array represents an array of twos-complement 16-bit signed integers in the platform byte order. If control over byte order is needed, use DataView instead. The contents are initialized to 0. Once established, you can reference elements in the array using the object's methods, or using standard array index syntax (that is, using bracket notation).">Int16Array</a></li><li><a href="../Reference/Global_Objects/Int32Array.html" title="The Int32Array typed array represents an array of twos-complement 32-bit signed integers in the platform byte order. If control over byte order is needed, use DataView instead. The contents are initialized to 0. Once established, you can reference elements in the array using the object's methods, or using standard array index syntax (that is, using bracket notation).">Int32Array</a></li><li><a href="../Reference/Global_Objects/Int8Array.html" title="The Int8Array typed array represents an array of twos-complement 8-bit signed integers. The contents are initialized to 0. Once established, you can reference elements in the array using the object's methods, or using standard array index syntax (that is, using bracket notation).">Int8Array</a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="../Reference/Global_Objects/InternalError.html" title="The InternalError object indicates an error that occurred internally in the JavaScript engine. For example: &quot;InternalError: too much recursion&quot;.">InternalError</a></li><li><a href="../Reference/Global_Objects/Intl.html" title="The Intl object is the namespace for the ECMAScript Internationalization API, which provides language sensitive string comparison, number formatting, and date and time formatting. The constructors for Collator, NumberFormat, and DateTimeFormat objects are properties of the Intl object. This page documents these properties as well as functionality common to the internationalization constructors and other language sensitive functions.">Intl</a></li><li><a href="../Reference/Global_Objects/Collator.html" title="The Intl.Collator object is a constructor for collators, objects that enable language sensitive string comparison.">Intl.Collator</a></li><li><a href="../Reference/Global_Objects/DateTimeFormat.html" title="The Intl.DateTimeFormat object is a constructor for objects that enable language sensitive date and time formatting.">Intl.DateTimeFormat</a></li><li><a href="../Reference/Global_Objects/NumberFormat.html" title="The Intl.NumberFormat object is a constructor for objects that enable language sensitive number formatting.">Intl.NumberFormat</a></li><li><span class="sidebar-icon"><span title="This deprecated API should no longer be used, but will probably still work."><i class="icon-thumbs-down-alt"> </i></span></span><a href="../Reference/Global_Objects/Iterator.html" title="The Iterator function returns an object which implements legacy iterator protocol and iterates over enumerable properties of an object.">Iterator</a></li><li><a href="../Reference/Global_Objects/JSON.html" title="The JSON object contains methods for parsing JavaScript Object Notation (JSON) and converting values to JSON. It can't be called or constructed, and aside from its two method properties it has no interesting functionality of its own.">JSON</a></li><li><a href="../Reference/Global_Objects/Map.html" title="The Map object is a simple key/value map. Any value (both objects and primitive values) may be used as either a key or a value.">Map</a></li><li><a href="../Reference/Global_Objects/Math.html" title="Math is a built-in object that has properties and methods for mathematical constants and functions. Not a function object.">Math</a></li><li><a href="../Reference/Global_Objects/NaN.html" title="The global NaN property is a value representing Not-A-Number.">NaN</a></li><li><a href="../Reference/Global_Objects/Number.html" title="The Number JavaScript object is a wrapper object allowing you to work with numerical values. A Number object is created using the Number() constructor.">Number</a></li><li><a href="../Reference/Global_Objects/Object.html" title="The Object constructor creates an object wrapper.">Object</a></li><li><span class="sidebar-icon"><span title="This is an obsolete API and is no longer guaranteed to work."><i class="icon-trash"> </i></span></span><a href="../Reference/Global_Objects/ParallelArray.html" title="The goal of ParallelArray was to enable data-parallelism in web applications. The higher-order functions available on ParallelArray attempted to execute in parallel, though they may fall back to sequential execution if necessary. To ensure that your code executes in parallel, it is suggested that the functions should be limited to the parallelizable subset of JS that Firefox supports.">ParallelArray</a></li><li><a href="../Reference/Global_Objects/Promise.html" title="The Promise object is used for deferred and asynchronous computations. A Promise represents an operation that hasn't completed yet, but is expected in the future.">Promise</a></li><li><a href="../Reference/Global_Objects/Proxy.html" title="The Proxy object is used to define custom behavior for fundamental operations (e.g. property lookup, assignment, enumeration, function invocation, etc).">Proxy</a></li><li><a href="../Reference/Global_Objects/RangeError.html" title="The RangeError object indicates an error when a value is not in the set or range of allowed values.">RangeError</a></li><li><a href="../Reference/Global_Objects/ReferenceError.html" title="The ReferenceError object represents an error when a non-existent variable is referenced.">ReferenceError</a></li><li><a href="../Reference/Global_Objects/Reflect.html" title="Reflect is a built-in object that provides methods for interceptable JavaScript operations. The methods are the same as those of proxy handlers. Reflect is not a function object, so it's not constructible.">Reflect</a></li><li><a href="../Reference/Global_Objects/RegExp.html" title="The RegExp constructor creates a regular expression object for matching text with a pattern.">RegExp</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="../Reference/Global_Objects/SIMD.html" title="SIMD (pronounced &quot;sim-dee&quot;) is short for Single Instruction/Multiple Data which is one classification of computer architectures. SIMD operations perform the same computation on multiple data points resulting in data level parallelism and thus performance gains, for example for 3D graphics and video processing, physics simulations or cryptography, and other domains.">SIMD</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="../Reference/Global_Objects/Bool16x8.html" title="The SIMD.Bool16x8 data type is a 128-bit vector divided into 8 lanes storing boolean values.">SIMD.Bool16x8</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="../Reference/Global_Objects/Bool32x4.html" title="The SIMD.Bool32x4 data type is a 128-bit vector divided into 4 lanes storing boolean values.">SIMD.Bool32x4</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="../Reference/Global_Objects/Bool64x2.html" title="The SIMD.Bool64x2 data type is a 128-bit vector divided into 2 lanes storing boolean values.">SIMD.Bool64x2</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="../Reference/Global_Objects/Bool8x16.html" title="The SIMD.Bool8x16 data type is a 128-bit vector divided into 16 lanes storing boolean values.">SIMD.Bool8x16</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="../Reference/Global_Objects/Float32x4.html" title="The SIMD.Float32x4 data type is a 128-bit vector divided into 4 lanes storing single precision floating point values.">SIMD.Float32x4</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="../Reference/Global_Objects/Float64x2.html" title="The SIMD.Float64x2 data type is a 128-bit vector divided into 2 lanes storing double precision floating point values.">SIMD.Float64x2</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="../Reference/Global_Objects/Int16x8.html" title="The SIMD.Int16x8 data type is a 128-bit vector divided into 8 lanes storing 16-bit signed integer values.">SIMD.Int16x8</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="../Reference/Global_Objects/Int32x4.html" title="The SIMD.Int32x4 data type is a 128-bit vector divided into 4 lanes storing 32-bit signed integer values.">SIMD.Int32x4</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="../Reference/Global_Objects/Int8x16.html" title="The SIMD.Int8x16 data type is a 128-bit vector divided into 16 lanes storing 8-bit signed integer values.">SIMD.Int8x16</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="../Reference/Global_Objects/Uint16x8.html" title="The SIMD.Uint16x8 data type is a 128-bit vector divided into 8 lanes storing 16-bit unsigned integer values.">SIMD.Uint16x8</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="../Reference/Global_Objects/Uint32x4.html" title="The SIMD.Uint32x4 data type is a 128-bit vector divided into 4 lanes storing 32-bit unsigned integer values.">SIMD.Uint32x4</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="../Reference/Global_Objects/Uint8x16.html" title="The SIMD.Uint8x16 data type is a 128-bit vector divided into 16 lanes storing 8-bit unsigned integer values.">SIMD.Uint8x16</a></li><li><a href="../Reference/Global_Objects/Set.html" title="The Set object lets you store unique values of any type, whether primitive values or object references.">Set</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="../Reference/Global_Objects/SharedArrayBuffer.html" title="The SharedArrayBuffer object is used to represent a generic, fixed-length raw binary data buffer, similar to the ArrayBuffer object, but in a way that they can be used to create views on shared memory. Unlike an ArrayBuffer, a SharedArrayBuffer cannot become detached.">SharedArrayBuffer</a></li><li><span class="sidebar-icon"><span title="This deprecated API should no longer be used, but will probably still work."><i class="icon-thumbs-down-alt"> </i></span></span><a href="../Reference/Global_Objects/StopIteration.html" title="The StopIteration object is used to tell the end of the iteration in the legacy iterator protocol.">StopIteration</a></li><li><a href="../Reference/Global_Objects/String.html" title="The String global object is a constructor for strings, or a sequence of characters.">String</a></li><li><a href="../Reference/Global_Objects/Symbol.html" title="A symbol is a unique and immutable data type and may be used as an identifier for object properties. The symbol object is an implicit object wrapper for the symbol primitive data type.">Symbol</a></li><li><a href="../Reference/Global_Objects/SyntaxError.html" title="The SyntaxError object represents an error when trying to interpret syntactically invalid code.">SyntaxError</a></li><li><a href="../Reference/Global_Objects/TypeError.html" title="The TypeError object represents an error when a value is not of the expected type.">TypeError</a></li><li><a href="../Reference/Global_Objects/TypedArray.html" title="A TypedArray object describes an array-like view of an underlying binary data buffer. There is no global property named TypedArray, nor is there a directly visible TypedArray constructor.&nbsp; Instead, there are a number of different global properties, whose values are typed array constructors for specific element types, listed below. On the following pages you will find common properties and methods that can be used with any typed array containing elements of any type.">TypedArray</a></li><li><a href="../Reference/Global_Objects/URIError.html" title="The URIError object represents an error when a global URI handling function was used in a wrong way.">URIError</a></li><li><a href="../Reference/Global_Objects/Uint16Array.html" title="The Uint16Array typed array represents an array of 16-bit unsigned integers in the platform byte order. If control over byte order is needed, use DataView instead. The contents are initialized to 0. Once established, you can reference elements in the array using the object's methods, or using standard array index syntax (that is, using bracket notation).">Uint16Array</a></li><li><a href="../Reference/Global_Objects/Uint32Array.html" title="The Uint32Array typed array represents an array of 32-bit unsigned integers in the platform byte order. If control over byte order is needed, use DataView instead. The contents are initialized to 0. Once established, you can reference elements in the array using the object's methods, or using standard array index syntax (that is, using bracket notation).">Uint32Array</a></li><li><a href="../Reference/Global_Objects/Uint8Array.html" title="The Uint8Array typed array represents an array of 8-bit unsigned integers. The contents are initialized to 0. Once established, you can reference elements in the array using the object's methods, or using standard array index syntax (that is, using bracket notation).">Uint8Array</a></li><li><a href="../Reference/Global_Objects/Uint8ClampedArray.html" title="The Uint8ClampedArray typed array represents an array of 8-bit unsigned integers clamped to 0-255. The contents are initialized to 0. Once established, you can reference elements in the array using the object's methods, or using standard array index syntax (that is, using bracket notation).">Uint8ClampedArray</a></li><li><a href="../Reference/Global_Objects/WeakMap.html" title="The WeakMap object is a collection of key/value pairs in which the keys are weakly referenced.&nbsp; The keys must be objects and the values can be arbitrary values.">WeakMap</a></li><li><a href="../Reference/Global_Objects/WeakSet.html" title="The WeakSet object lets you store weakly held objects in a collection.">WeakSet</a></li><li><a href="../Reference/Global_Objects/decodeURI.html" title="The decodeURI() function decodes a Uniform Resource Identifier (URI) previously created by encodeURI or by a similar routine.">decodeURI()</a></li><li><a href="../Reference/Global_Objects/decodeURIComponent.html" title="The decodeURIComponent() function decodes a Uniform Resource Identifier (URI) component previously created by encodeURIComponent or by a similar routine.">decodeURIComponent()</a></li><li><a href="../Reference/Global_Objects/encodeURI.html" title="The encodeURI() function encodes a Uniform Resource Identifier (URI) by replacing each instance of certain characters by one, two, three, or four escape sequences representing the UTF-8 encoding of the character (will only be four escape sequences for characters composed of two &quot;surrogate&quot; characters).">encodeURI()</a></li><li><a href="../Reference/Global_Objects/encodeURIComponent.html" title="The encodeURIComponent() function encodes a Uniform Resource Identifier (URI) component by replacing each instance of certain characters by one, two, three, or four escape sequences representing the UTF-8 encoding of the character (will only be four escape sequences for characters composed of two &quot;surrogate&quot; characters).">encodeURIComponent()</a></li><li><span class="sidebar-icon"><span title="This deprecated API should no longer be used, but will probably still work."><i class="icon-thumbs-down-alt"> </i></span></span><a href="../Reference/Global_Objects/escape.html" title="The deprecated escape() function computes a new string in which certain characters have been replaced by a hexadecimal escape sequence. Use encodeURI or encodeURIComponent instead.">escape()</a></li><li><a href="../Reference/Global_Objects/eval.html" title="The eval() function evaluates JavaScript code represented as a string.">eval()</a></li><li><a href="../Reference/Global_Objects/isFinite.html" title="The global isFinite() function determines whether the passed value is a finite number. If needed, the parameter is first converted to a number.">isFinite()</a></li><li><a href="../Reference/Global_Objects/isNaN.html" title="The isNaN() function determines whether a value is NaN or not. Note: coercion inside the isNaN function has interesting rules; you may alternatively want to use Number.isNaN(), as defined in ECMAScript 6, or you can use typeof to determine if the value is Not-A-Number.">isNaN()</a></li><li><a href="../Reference/Global_Objects/null.html" title="The value null is a JavaScript literal representing null or an &quot;empty&quot; value, i.e. no object value is present. It is one of JavaScript's primitive values.">null</a></li><li><a href="../Reference/Global_Objects/parseFloat.html" title="The parseFloat() function parses a string argument and returns a floating point number.">parseFloat()</a></li><li><a href="../Reference/Global_Objects/parseInt.html" title="The parseInt() function parses a string argument and returns an integer of the specified radix (the base in mathematical numeral systems).">parseInt()</a></li><li><a href="../Reference/Global_Objects/undefined.html" title="The global undefined property represents the primitive value undefined. It is one of JavaScript's primitive types.">undefined</a></li><li><span class="sidebar-icon"><span title="This deprecated API should no longer be used, but will probably still work."><i class="icon-thumbs-down-alt"> </i></span></span><a href="../Reference/Global_Objects/unescape.html" title="The deprecated unescape() function computes a new string in which hexadecimal escape sequences are replaced with the character that it represents. The escape sequences might be introduced by a function like escape. Because unescape is deprecated, use decodeURI or decodeURIComponent instead.">unescape()</a></li><li><a href="../Reference/Global_Objects/uneval.html" title="The uneval() function creates a&nbsp;string representation of the source code of an Object.">uneval()</a></li></ol> 
+  </li> 
+  <li data-default-state="closed"><a href="../Reference/Operators.html">Expressions &amp; operators</a> 
+   <ol><li><a href="../Reference/Operators.html" title="This chapter documents all the JavaScript language operators, expressions and keywords.">Expressions and operators</a></li><li><a href="../Reference/Operators/Arithmetic_Operators.html" title="Arithmetic operators take numerical values (either literals or variables) as their operands and return a single numerical value. The standard arithmetic operators are addition (+), subtraction (-), multiplication (*), and division (/).">Arithmetic operators</a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="../Reference/Operators/Array_comprehensions.html" title="The array comprehension syntax is a JavaScript expression which allows you to quickly assemble a new array based on an existing one. Comprehensions exist in many programming languages.">Array comprehensions</a></li><li><a href="../Reference/Operators/Assignment_Operators.html" title="An assignment operator assigns a value to its left operand based on the value of its right operand.">Assignment operators</a></li><li><a href="../Reference/Operators/Bitwise_Operators.html" title="Bitwise operators treat their operands as a sequence of 32 bits (zeroes and ones), rather than as decimal, hexadecimal, or octal numbers. For example, the decimal number nine has a binary representation of 1001. Bitwise operators perform their operations on such binary representations, but they return standard JavaScript numerical values.">Bitwise operators</a></li><li><a href="../Reference/Operators/Comma_Operator.html" title="The comma operator evaluates each of its operands (from left to right)&nbsp;and returns the value of the last operand.">Comma operator</a></li><li><a href="../Reference/Operators/Comparison_Operators.html" title="JavaScript has both strict and type–converting comparisons. A strict comparison (e.g., ===) is only true if the operands are of the same type. The more commonly used abstract comparison (e.g. ==) converts the operands to the same Type before making the comparison. For relational abstract comparisons (e.g., &lt;=), the operands are first converted to primitives, then to the same type, before comparison.">Comparison operators</a></li><li><a href="../Reference/Operators/Conditional_Operator.html" title="The conditional (ternary) operator is the only JavaScript operator that takes three operands. This operator is frequently used as a shortcut for the if statement.">Conditional (ternary) Operator</a></li><li><a href="../Reference/Operators/Destructuring_assignment.html" title="The destructuring assignment syntax is a JavaScript expression that makes it possible to extract data from arrays or objects using a syntax that mirrors the construction of array and object literals.">Destructuring assignment</a></li><li><a href="../Reference/Operators/Expression_closures.html" title="Expression closures are a shorthand function syntax for writing simple functions.">Expression closures</a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="../Reference/Operators/Generator_comprehensions.html" title="The generator comprehension syntax is a JavaScript expression which allows you to quickly assemble a new generator function based on an existing iterable object. Comprehensions exist in many programming languages.">Generator comprehensions</a></li><li><a href="../Reference/Operators/Grouping.html" title="The grouping operator ( ) controls the precedence of evaluation in expressions.">Grouping operator</a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="../Reference/Operators/Legacy_generator_function.html" title="The function keyword can be used to define a legacy generator function inside an expression. To make the function a legacy generator, the function body should contain at least one yield expression.">Legacy generator function expression</a></li><li><a href="../Reference/Operators/Logical_Operators.html" title="Logical operators are typically used with Boolean (logical) values. When they are, they return a Boolean value. However, the &amp;&amp; and || operators actually return the value of one of the specified operands, so if these operators are used with non-Boolean values, they may return a non-Boolean value.">Logical Operators</a></li><li><a href="../Reference/Operators/Object_initializer.html" title="Objects can be initialized using new Object(), Object.create(), or using the literal notation (initializer notation). An object initializer is a list of zero or more pairs of property names and associated values of an object, enclosed in curly braces ({}).">Object initializer</a></li><li><a href="../Reference/Operators/Operator_Precedence.html" title="Operator precedence determines the order in which operators are evaluated. Operators with higher precedence are evaluated first.">Operator precedence</a></li><li><a href="../Reference/Operators/Property_Accessors.html" title="Property accessors provide access to an object's properties by using the dot notation or the bracket notation.">Property accessors</a></li><li><a href="../Reference/Operators/Spread_operator.html" title="The spread operator allows an expression to be expanded in places where multiple arguments (for function calls) or multiple elements (for array literals) are expected.">Spread operator</a></li><li><a href="../Reference/Operators/class.html" title="The class expression is one way to define a class in ECMAScript 2015 (ES6). Similar to function expressions, class expressions can be named or unnamed. If named, the name of the class is local the class body only. JavaScript classes are using prototype-based inheritance.">class expression</a></li><li><a href="../Reference/Operators/delete.html" title="The delete operator removes a property from an object.">delete operator</a></li><li><a href="../Reference/Operators/function.html" title="The function keyword can be used to define a function inside an expression.">function expression</a></li><li><a href="../Reference/Operators/function_.html" title="The function* keyword can be used to define a generator function inside an expression.">function* expression</a></li><li><a href="../Reference/Operators/in.html" title="The in operator returns true if the specified property is in the specified object.">in operator</a></li><li><a href="../Reference/Operators/instanceof.html" title="The instanceof operator tests whether an object has in its prototype chain the prototype property of a constructor.">instanceof</a></li><li><a href="../Reference/Operators/new.html" title="The new operator creates an instance of a user-defined object type or of one of the built-in object types that has a constructor function.">new operator</a></li><li><a href="../Reference/Operators/new-2.html" title="The new.target&nbsp;property lets you detect whether a function or constructor was called using the new operator. In constructors and functions instantiated with the new operator, new.target returns a reference to the constructor or function.&nbsp;In normal function calls, new.target is undefined.">new.target</a></li><li><a href="../Reference/Operators/super.html" title="The super keyword is used to call functions on an object's parent.">super</a></li><li><a href="../Reference/Operators/this.html" title="A function's this keyword behaves a little differently in JavaScript compared to other languages. It also has some differences between strict mode and non-strict mode.">this</a></li><li><a href="../Reference/Operators/typeof.html" title="The typeof operator returns a string indicating the type of the unevaluated operand.">typeof</a></li><li><a href="../Reference/Operators/void.html" title="The void operator evaluates the given expression and then returns undefined.">void operator</a></li><li><a href="../Reference/Operators/yield.html" title="The yield keyword is used to pause and resume a generator function (function* or legacy generator function).">yield</a></li><li><a href="../Reference/Operators/yield_-2.html" title="The yield* expression is used to delegate to another generator or iterable object.">yield*</a></li></ol> 
+  </li> 
+  <li data-default-state="closed"><a href="../Reference/Statements.html">Statements &amp; declarations</a> 
+   <ol><li><a href="../Reference/Statements.html" title="JavaScript applications consist of statements with an appropriate syntax. A single statement may span multiple lines. Multiple statements may occur on a single line if each statement is separated by a semicolon. This isn't a keyword, but a group of keywords.">Statements and declarations</a></li><li><a href="../Reference/Statements/Legacy_generator_function.html" title="The legacy generator function statement declares legacy generator functions with the specified parameters.">Legacy generator function</a></li><li><a href="../Reference/Statements/block.html" title="A block statement (or compound statement in other languages) is used to group zero or more statements. The block is delimited by a pair of curly brackets.">block</a></li><li><a href="../Reference/Statements/break.html" title="The break statement terminates the current loop, switch, or label statement and transfers program control to the statement following the terminated statement.">break</a></li><li><a href="../Reference/Statements/class.html" title="The class declaration creates a new class with a given name using prototype-based inheritance.">class</a></li><li><a href="../Reference/Statements/const.html" title="The const declaration creates a read-only reference to a value. It does not&nbsp;mean the value it holds is immutable, just that the variable identifier cannot be reassigned.">const</a></li><li><a href="../Reference/Statements/continue.html" title="The continue statement terminates execution of the statements in the current iteration of the current or labeled loop, and continues execution of the loop with the next iteration.">continue</a></li><li><a href="../Reference/Statements/debugger.html" title="The debugger statement invokes any available debugging functionality, such as setting a breakpoint. If no debugging functionality is available, this statement has no effect.">debugger</a></li><li><a href="../Reference/Statements/default.html" title="The default keyword can be used in two situations in JavaScript: within a&nbsp;switch statement, or with an&nbsp;export statement.">default</a></li><li><a href="../Reference/Statements/do...html" title="The do...while statement creates a loop that executes a specified statement until the test condition evaluates to false. The condition is evaluated after executing the statement, resulting in the specified statement executing at least once.">do...while</a></li><li><a href="../Reference/Statements/Empty.html" title="An empty statement is used to provide no statement, although the JavaScript syntax would expect one.">empty</a></li><li><a href="../Reference/Statements/export.html" title="The export statement is used to export functions, objects or primitives from a given file (or module).">export</a></li><li><a href="../Reference/Statements/for.html" title="The for statement creates a loop that consists of three optional expressions, enclosed in parentheses and separated by semicolons, followed by a statement or a set of statements executed in the loop.">for</a></li><li><span class="sidebar-icon"><span title="This deprecated API should no longer be used, but will probably still work."><i class="icon-thumbs-down-alt"> </i></span></span><a href="../Reference/Statements/for_each...html" title="The for each...in statement iterates a specified variable over all values of object's properties. For each distinct property, a specified statement is executed.">for each...in</a></li><li><a href="../Reference/Statements/for...html" title="The for...in statement iterates over the enumerable properties of an object, in arbitrary order. For each distinct property, statements can be executed.">for...in</a></li><li><a href="../Reference/Statements/for..-2.html" title="The for...of statement creates a loop Iterating over iterable objects (including Array, Map, Set, String, TypedArray, arguments object and so on), invoking a custom iteration hook with statements to be executed for the value of each distinct property.">for...of</a></li><li><a href="../Reference/Statements/function.html" title="The function declaration defines a function with the specified parameters.">function</a></li><li><a href="../Reference/Statements/function_.html" title="The function* declaration (function keyword followed by an asterisk) defines a generator function, which returns a Generator object.">function*</a></li><li><a href="../Reference/Statements/if...html" title="The if statement executes a statement if a specified condition is true. If the condition is false, another statement can be executed.">if...else</a></li><li><a href="../Reference/Statements/import.html" title="The import statement is used to import functions, objects or primitives that have been exported from an external module, another script, etc.">import</a></li><li><a href="../Reference/Statements/label.html" title="The labeled statement can be used with break or continue statements. It is prefixing a statement with an identifier which you can refer to.">label</a></li><li><a href="../Reference/Statements/let.html" title="The let statement declares a block scope local variable, optionally initializing it to a value.">let</a></li><li><a href="../Reference/Statements/return.html" title="The return statement ends function execution and specifies a value to be returned to the function caller.">return</a></li><li><a href="../Reference/Statements/switch.html" title="The switch statement evaluates an expression, matching the expression's value to a case clause, and executes statements associated with that case.">switch</a></li><li><a href="../Reference/Statements/throw.html" title="The throw statement throws a user-defined exception. Execution of the current function will stop (the statements after throw won't be executed), and control will be passed to the first catch block in the call stack. If no catch block exists among caller functions, the program will terminate.">throw</a></li><li><a href="../Reference/Statements/try...html" title="The try...catch statement marks a block of statements to try, and specifies a response, should an exception be thrown.">try...catch</a></li><li><a href="../Reference/Statements/var.html" title="The variable statement declares a variable, optionally initializing it to a value.">var</a></li><li><a href="../Reference/Statements/while.html" title="The while statement creates a loop that executes a specified statement as long as the test condition evaluates to true. The condition is evaluated before executing the statement.">while</a></li><li><span class="sidebar-icon"><span title="This deprecated API should no longer be used, but will probably still work."><i class="icon-thumbs-down-alt"> </i></span></span><a href="../Reference/Statements/with.html" title="The with statement extends the scope chain for a statement.">with</a></li></ol> 
+  </li> 
+  <li data-default-state="closed"><a href="../Reference/Functions.html">Functions</a> 
+   <ol><li><a href="../Reference/Functions.html" title="Generally speaking, a function is a &quot;subprogram&quot; that can be called by code external (or internal in the case of recursion) to the function. Like the program itself, a function is composed of a sequence of statements called the function body. Values can be passed to a function, and the function will&nbsp;return a value.">Functions</a></li><li><a href="../Reference/Functions/arguments.html" title="The arguments object is an Array-like object corresponding to the arguments passed to a function.">Arguments object</a></li><li><a href="../Reference/Functions/Arrow_functions.html" title="An arrow function expression (also known as fat arrow function) has a shorter syntax compared to function expressions and lexically binds&nbsp;the this value (does not bind&nbsp;its own&nbsp;this,&nbsp;arguments,&nbsp;super, or&nbsp;new.target). Arrow functions are always anonymous.">Arrow functions</a></li><li><a href="../Reference/Functions/Default_parameters.html" title="Default function parameters allow formal parameters to be initialized with default values if no value or undefined is passed.">Default parameters</a></li><li><a href="../Reference/Functions/Method_definitions.html" title="Starting with ECMAScript 2015 (ES6), a shorter syntax for method definitions on objects initializers is introduced. It is a shorthand for a function assigned to the method's name.">Method definitions</a></li><li><a href="../Reference/Functions/rest_parameters.html" title="The rest parameter syntax allows us to represent an indefinite number of arguments as an array.">Rest parameters</a></li><li><a href="../Reference/Functions/get.html" title="The get syntax binds an object property to a function that will be called when that property is looked up.">getter</a></li><li><a href="../Reference/Functions/set.html" title="The set syntax binds an object property to a function to be called when there is an attempt to set that property.">setter</a></li></ol> 
+  </li> 
+  <li data-default-state="closed"><a href="../Reference/Classes.html">Classes</a> 
+   <ol><li><a href="../Reference/Classes.html" title="Technical review completed.">Classes</a></li><li><a href="../Reference/Classes/constructor.html" title="The constructor method is a special method for creating and initializing an object created with a class.">constructor</a></li><li><a href="../Reference/Classes/extends.html" title="The extends keyword is used in a class declarations or class expressions to create a class with a child of another class.">extends</a></li><li><a href="../Reference/Classes/static.html" title="The static keyword defines a static method for a class.">static</a></li></ol> 
+  </li> 
+  <li data-default-state="closed"><a href="#">Misc</a> 
+   <ol> 
+    <li><a href="../Reference/Lexical_grammar.html">Lexical grammar</a></li> 
+    <li><a href="../Data_structures.html">JavaScript data structures</a></li> 
+    <li><a href="../Enumerability_and_ownership_of_properties.html">Enumerability and ownership of properties</a></li> 
+    <li><a href="../Reference/Iteration_protocols.html">Iteration protocols</a></li> 
+    <li><a href="../Reference/Strict_mode.html">Strict mode</a></li> 
+    <li><a href="../Reference/Strict_mode/Transitioning_to_strict_mode.html">Transitioning to strict mode</a></li> 
+    <li><a href="../Reference/Template_literals.html">Template strings</a></li> 
+    <li><a href="../Reference/Deprecated_and_obsolete_features.html">Deprecated features</a></li> 
+   </ol> 
+  </li> 
+  <li data-default-state="closed"><a href="../New_in_JavaScript.html">New in JavaScript</a> 
+   <ol><li><a href="../New_in_JavaScript.html" title="This chapter contains information about JavaScript's version history and implementation status for Mozilla/SpiderMonkey-based JavaScript applications, such as Firefox.">New in JavaScript</a></li><li><a href="../New_in_JavaScript/ECMAScript_5_support_in_Mozilla.html" title="ECMAScript 5.1, an older version of the standard upon which JavaScript is based, was approved in June 2011.">ECMAScript 5 support in Mozilla</a></li><li><a href="../New_in_JavaScript/ECMAScript_6_support_in_Mozilla.html" title="ECMAScript 2015 (6th Edition) is the current version of the ECMAScript Language Specification standard. Commonly referred to as &quot;ES6&quot;, it defines the standard for the JavaScript implementation in SpiderMonkey, the engine used in Firefox and other Mozilla applications.">ECMAScript 6 support in Mozilla</a></li><li><a href="../New_in_JavaScript/ECMAScript_Next_support_in_Mozilla.html" title="ECMAScript 7 is the next evolution of the ECMA-262 standard (commonly referred to as JavaScript). Even before ECMAScript 6 was finalized on June 17, 2015, new features were already being proposed. You can see the latest proposals on the tc39/ecma262 GitHub repository.">ECMAScript 7 support in Mozilla</a></li><li><a href="../New_in_JavaScript/Firefox_JavaScript_changelog.html" title="The following is a changelog for JavaScript features in Firefox releases.">Firefox JavaScript changelog</a></li><li><a href="../New_in_JavaScript/1.html" title="The following is a changelog for JavaScript from Netscape Navigator 2.0 to 3.0. The old Netscape documentation references this as &quot;Features added after version 1&quot;. Netscape Navigator 3.0 was released on August 19, 1996. Netscape Navigator 3.0 was the second major version of the browser with JavaScript support.">New in JavaScript 1.1</a></li><li><a href="../New_in_JavaScript/1-2.html" title="The following is a changelog for JavaScript from Netscape Navigator 3.0 to 4.0. The old Netscape documentation can be found on archive.org. Netscape Navigator 4.0 was released on June 11, 1997. Netscape Navigator 4.0 was the third major version of the browser with JavaScript support.">New in JavaScript 1.2</a></li><li><a href="../New_in_JavaScript/1-3.html" title="The following is a changelog for JavaScript from Netscape Navigator 4.0 to 4.5. The old Netscape documentation can be found on archive.org. Netscape Navigator 4.5 was released on October 19, 1998.">New in JavaScript 1.3</a></li><li><a href="../New_in_JavaScript/1-4.html" title="The following is a changelog for JavaScript 1.4, which was only used for Netscape's server side JavaScript released in 1999. The old Netscape documentation can be found on archive.org.">New in JavaScript 1.4</a></li><li><a href="../New_in_JavaScript/1-5.html" title="The following is a changelog for JavaScript 1.5. This version was included in Netscape Navigator 6.0 was released on November 14, 2000 and was also used in later versions of Netscape Navigator and Firefox 1.0. You can compare JavaScript 1.5 to JScript version 5.5 and Internet Explorer 5.5, which was released in July 2000. The corresponding ECMA standard is ECMA-262 Edition 3 (from December 1999).">New in JavaScript 1.5</a></li><li><a href="../New_in_JavaScript/1-6.html" title="The following is a changelog for JavaScript 1.6. This version was included in Firefox 1.5 (Gecko 1.8), which was released in November 2005. The corresponding ECMA standard is ECMA-262 Edition 3 and ECMAScript for XML (E4X) with some additional features. Several new features were introduced: E4X, several new Array methods, and Array and String generics.">New in JavaScript 1.6</a></li><li><a href="../New_in_JavaScript/1-7.html" title="The following is a changelog for JavaScript 1.7. This version was included in Firefox 2 (October 2006).">New in JavaScript 1.7</a></li><li><a href="../New_in_JavaScript/1-8.html" title="The following is a changelog for JavaScript 1.8. This version was included in Firefox 3 and is part of Gecko 1.9. See bug&nbsp;380236 for a tracking development bug for JavaScript 1.8.">New in JavaScript 1.8</a></li><li><a href="../New_in_JavaScript/1.8.html" title="The following is a changelog for JavaScript 1.8.1. This version was included in Firefox 3.5.">New in JavaScript 1.8.1</a></li><li><a href="../New_in_JavaScript/1.8-2.html" title="The following is a changelog for JavaScript 1.8.5. This version was included in Firefox 4.">New in JavaScript 1.8.5</a></li></ol> 
+  </li> 
+  <li><strong><a href="https://developer.mozilla.org/en-US/docs/MDN">Documentation:</a></strong></li> 
+  <li data-default-state="closed"><a href="#">Useful lists</a> 
+   <ol> 
+    <li><a href="../Index.html">All pages index</a></li> 
+    <li><a href="../Reference/Methods_Index.html">Methods index</a></li> 
+    <li><a href="../Reference/Properties_Index.html">Properties index</a></li> 
+    <li><a href="https://developer.mozilla.org/en-US/docs/tag/JavaScript">Pages tagged "JavaScript"</a></li> 
+   </ol> 
+  </li> 
+  <li data-default-state="closed"><a href="#">Contribute</a> 
+   <ol> 
+    <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Doc_status/JavaScript">JavaScript doc status</a></li> 
+    <li><a href="https://developer.mozilla.org/en-US/docs/MDN">The MDN project</a></li> 
+   </ol> 
+  </li> 
+ </ol> 
+
+  </div>
+                
+
+                <!-- approvals -->
+                
+
+              
+
+              </div>
+            
+          </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Web/JavaScript/Guide/Regular_Expressions$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Web/JavaScript/Guide/Regular_Expressions$history" label="View page history"></menuitem>
+  </menu>
+
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+        
+        <div class="contentinfo">
+          <p>© 2005-2016 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>
+          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+        
+        </div>
+      </div>
+      <div class="column-strip">
+        
+          
+  
+    <form class="languages go" method="get" action="https://developer.mozilla.org/en-US/docs/Web">
+      <label for="language">Other languages:</label>
+      <select id="language" class="wiki-l10n" name="next" dir="ltr">
+        <option value="/en-US/docs/Web/JavaScript/Guide/Regular_Expressions" selected="">
+          English (US)
+        </option>
+        
+          <option value="/bn-BD/docs/Web/JavaScript/Guide/Regular_Expressions">
+            বাংলা (বাংলাদেশ)
+          </option>
+          <option value="/ca/docs/Web/JavaScript/Guide/Regular_Expressions">
+            Català
+          </option>
+          <option value="/de/docs/Web/JavaScript/Guide/Regular_Expressions">
+            Deutsch
+          </option>
+          <option value="/es/docs/Web/JavaScript/Guide/Regular_Expressions">
+            Español
+          </option>
+          <option value="/fr/docs/Web/JavaScript/Guide/Expressions_r%C3%A9guli%C3%A8res">
+            Français
+          </option>
+          <option value="/ja/docs/Web/JavaScript/Guide/Regular_Expressions">
+            日本語
+          </option>
+          <option value="/ko/docs/Web/JavaScript/Guide/%EC%A0%95%EA%B7%9C%EC%8B%9D">
+            한국어
+          </option>
+          <option value="/pt-BR/docs/Web/JavaScript/Guide/Regular_Expressions">
+            Português (do&nbsp;Brasil)
+          </option>
+          <option value="/ru/docs/Web/JavaScript/Guide/Regular_Expressions">
+            Русский
+          </option>
+          <option value="/th/docs/Web/JavaScript/Guide/Regular_Expressions">
+            ไทย
+          </option>
+          <option value="/uk/docs/Web/JavaScript/Guide/Regular_Expressions">
+            Українська
+          </option>
+          <option value="/vi/docs/Web/JavaScript/Guide/Regular_Expressions">
+            Tiếng Việt
+          </option>
+          <option value="/zh-CN/docs/Web/JavaScript/Guide/Regular_Expressions">
+            中文 (简体)
+          </option>
+          <option value="/zh-TW/docs/Web/JavaScript/Guide/Regular_Expressions">
+            正體中文 (繁體)
+          </option>
+      </select>
+      <noscript>&lt;button type="submit"&gt;Go&lt;/button&gt;</noscript>
+    </form>
+  
+
+        
+      </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+  
+    
+    <!--[if lte IE 8]><script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/selectivizr.091e18cf669b.js" charset="utf-8"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/main.a7b27a25fb9c.js" charset="utf-8"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+    
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/syntax-prism-min.js" charset="utf-8"></script><script type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/wiki.bd71ca9fd27d.js" charset="utf-8" id="wikiscript"></script>
+
+  
+
+  <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/helpfulness.7b208a764d28.js" charset="utf-8"></script>
+
+  
+    <script type="text/javascript">
+        (function($) {
+            $('#wikiArticle').children('h2[id]').each(function() {
+                var id = $(this).attr('id');
+                var href = '/en-US/docs/Web/JavaScript/Guide/Regular_Expressions$edit#' + id;
+
+                $('<a>').attr({
+                    href: href,
+                    'class': 'button section-edit only-icon'
+                })
+                .append($('<i aria-hidden="true" class="icon-pencil"></i>'))
+                .append($('<span>'))
+                .find('span')
+                .text(gettext('Edit'))
+                .end()
+                .on('click', function(e) {
+                    e.preventDefault();
+
+                    mdn.analytics.trackEvent({
+                        category: 'Section Edit',
+                        action: id
+                    }, function() {
+                        window.location = href;
+                    });
+                })
+                .appendTo(this);
+            });
+        })(jQuery);
+    </script>
+  
+
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 15:46:25 GMT -->
+</body></html>

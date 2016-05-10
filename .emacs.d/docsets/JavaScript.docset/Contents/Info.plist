@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plist version="1.0">
+<dict>
+<key>CFBundleIdentifier</key>
+<string>javascript</string>
+<key>CFBundleName</key>
+<string>JavaScript</string>
+<key>isJavaScriptEnabled</key><true/><key>DocSetPlatformFamily</key>
+<string>javascript</string><key>dashIndexFilePath</key><string>developer.mozilla.org/en-US/docs/Web/JavaScript/Reference.html</string>
+</dict>
+</plist>
+

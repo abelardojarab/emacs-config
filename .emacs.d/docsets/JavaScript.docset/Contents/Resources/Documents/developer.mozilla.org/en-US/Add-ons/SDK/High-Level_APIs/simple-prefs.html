@@ -1,0 +1,1192 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/Add-ons/SDK/High-Level_APIs/simple-prefs by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 17:26:01 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <script async="" src="../../../../../www.google-analytics.com/analytics.js"></script><script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+  
+    
+  
+
+  
+  <title>simple-prefs</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+  
+    
+    
+    <link href="../../../../../developer.cdn.mozilla.net/static/build/styles/mdn.593f20d8c365.css" rel="stylesheet" type="text/css">
+
+    
+  
+    <link href="../../../../../developer.cdn.mozilla.net/static/build/styles/wiki.13dd9abdfb62.css" rel="stylesheet" type="text/css">
+
+    
+
+    
+      
+        <link rel="stylesheet" type="text/css" href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons$styles">
+      
+    
+
+  <!-- common social tags -->
+  
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../developer.cdn.mozilla.net/static/img/favicon144.a6e4162070f4.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../developer.cdn.mozilla.net/static/img/favicon114.0e9fabd44f85.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../developer.cdn.mozilla.net/static/img/favicon72.8ff9d87c82a0.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../developer.cdn.mozilla.net/static/img/favicon57.a2490b9a2d76.png">
+  <!-- basic favicon -->
+  
+    
+  
+  <link rel="shortcut icon" href="../../../../../developer.cdn.mozilla.net/static/img/favicon32.e02854fdcf73.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/html5shiv.3948ccddab6f.js" charset="utf-8"></script>
+  <![endif]-->
+
+  
+  <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/SDK/High-Level_APIs/simple-prefs$json">
+  <link rel="canonical" href="simple-prefs.html">
+
+  
+
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="simple-prefs">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/SDK/High-Level_APIs/simple-prefs">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/SDK/High-Level_APIs/simple-prefs">
+  <meta name="twitter:title" content="simple-prefs">
+  
+  <meta property="og:description" content="Store preferences across application restarts.">
+  <meta name="description" content="Store preferences across application restarts.">
+  <meta name="twitter:description" content="Store preferences across application restarts.">
+  
+
+  
+    
+
+
+
+  
+</head>
+<body data-slug="Mozilla/Add-ons/SDK/High-Level_APIs/simple-prefs" contextmenu="edit-history-menu" data-search-url="" class="document zone ">
+
+  <script type="text/javascript">
+    (function(win) {
+        'use strict';
+
+        
+            (function(){
+  var FLAGS = {
+    'compat_api': false,'kumaediting': false,'page_move': false,'registration_disabled': false,'search_suggestions': false,'section_edit': false,'spam_admin_override': false,'spam_checks_enabled': true,'spam_spammer_override': false,'spam_submissions_enabled': false,'spam_testing_mode': false,'wiki_samples': true,'wiki_spam_exempted': false,'wiki_spam_training': true
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': true,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+
+        // This needs to be set before ckeditor.js loads
+        window.CKEDITOR_BASEPATH = 'https://developer.mozilla.org/static/js/libs/ckeditor/build/ckeditor/';
+
+        // This represents the site configuration
+        win.mdn = {
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+            
+            notifications: [],
+            
+            // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            },
+            // Assets that need to be dynamically injected
+            assets_disabled: {
+                css: {
+                    'editor-content': ['https://developer.cdn.mozilla.net/static/build/styles/editor-content.3d79df72080d.css',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/styles/wiki-compat-tables.f3a3bfce97a1.css',]
+                },
+                js: {
+                    'syntax-prism': ['https://developer.cdn.mozilla.net/static/build/js/syntax-prism.7a66ddfa68bf.js',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/js/wiki-compat-tables.14ce5dcb2c3d.js',]
+                }
+            }
+        };
+    })(this);
+</script>
+
+  
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+    
+      <li><a href="#q" id="skip-search">Skip to search</a></li>
+    
+  </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+    <a href="https://developer.mozilla.org/en-US/" class="logo">Mozilla Developer Network</a>
+
+    <div id="nav-sec">
+        
+                  <ul>
+                  <li>
+
+    
+
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                Sign in
+              </span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2FAdd-ons%2FSDK%2FHigh-Level_APIs%2Fsimple-prefs" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/Add-ons/SDK/High-Level_APIs/simple-prefs" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/Add-ons/SDK/High-Level_APIs/simple-prefs" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2FAdd-ons%2FSDK%2FHigh-Level_APIs%2Fsimple-prefs" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+              
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+        
+    </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../../../docs/Web/API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+
+  
+      
+        <div class="zone-article-header" id="document-main"><div class="center">
+          <!-- zone title -->
+          <div class="zone-title"><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></div>
+          <!-- zone image -->
+          <div class="zone-image"></div>
+        </div></div>
+      
+
+     <!-- end is_zone -->
+
+    <div class="wiki-main-content"><div class="center">
+      
+      <div class="article-meta">
+        <!-- action buttons -->
+        
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+  <ul class="page-buttons" data-sticky="false">
+      
+      <li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+              
+                <li class="smaller">No translations exist for this article.</li>
+              
+
+              
+                <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/SDK/High-Level_APIs/simple-prefs$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+              
+            </ul>
+          </div>
+        </div>
+      </li>
+
+      <li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/SDK/High-Level_APIs/simple-prefs$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li>
+
+        
+
+        <li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/SDK/High-Level_APIs/simple-prefs$history" rel="nofollow, noindex">History</a></li>
+                
+                
+                
+                
+
+                
+
+                
+                
+                
+                <li class="page-print"><a href="#" onclick="return window.print();">Print this article</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+        
+  <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Mozilla" rel="v:url" property="v:title">Mozilla</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons" rel="v:url" property="v:title">Add-ons</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/SDK" rel="v:url" property="v:title">Add-on SDK</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="../High-Level_APIs.html" rel="v:url" property="v:title">High-Level APIs</a></li>
+    
+    <li class="crumb" typeof="v:Breadcrumb" property="v:title">simple-prefs</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        
+        <div class="contributor-avatars" data-all-text="see all contributors" data-alternate-message="hide contributors" data-has-hidden="1">
+            <ul>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/rolfedh" title="View profile: rolfedh">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="rolfedh" data-src="../../../../../secure.gravatar.com/avatar/4d9e73208c9af39018924d0e67821a796c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">rolfedh</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/freaktechnik" title="View profile: freaktechnik">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="freaktechnik" data-src="../../../../../secure.gravatar.com/avatar/3e69935b2119bb7d6adbe6e0c8f2a1086c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">freaktechnik</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/wbamberg" title="View profile: wbamberg">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="wbamberg" data-src="../../../../../secure.gravatar.com/avatar/576b94c81f8ad97e58d63f12e5fdb00c6c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">wbamberg</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="../../../profiles/PushpitaPikuDey.html" title="View profile: PushpitaPikuDey">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="PushpitaPikuDey" data-src="../../../../../secure.gravatar.com/avatar/f4b22e727bb1b32bf1957c666d72874d6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">PushpitaPikuDey</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/carlin-scott" title="View profile: carlin-scott">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="carlin-scott" data-src="../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">carlin-scott</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/PixnBits" title="View profile: PixnBits">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="PixnBits" data-src="../../../../../secure.gravatar.com/avatar/75286f6a869fb81ee9199dd4fa6b5e7c6c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">PixnBits</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Null" title="View profile: Null">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Null" data-src="../../../../../secure.gravatar.com/avatar/4a78126dfc066a4e9442c3ff9921f26d6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Null</noscript></a>
+                </li>
+            
+            </ul>
+        </div>
+        
+
+        <h1>simple-prefs</h1>
+
+      </div>
+      
+
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-present">
+
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+            
+              <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+              
+              <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#Usage" rel="internal">Usage</a><ol><li><a href="#Defining_and_initializing_preferences" rel="internal">Defining and initializing preferences</a><ol><li><a href="#Mandatory_Common_Attributes" rel="internal">Mandatory Common Attributes</a></li><li><a href="#Optional_Common_Attributes" rel="internal">Optional Common Attributes</a></li><li><a href="#Type-Specific_Attributes" rel="internal">Type-Specific Attributes</a></li><li><a href="#Preference_Types" rel="internal">Preference Types</a></li><li><a href="#Localization" rel="internal">Localization</a></li></ol></li><li><a href="#Getting_and_setting_preferences" rel="internal">Getting and setting preferences</a></li><li><a href="#Simple-prefs_in_the_preferences_system" rel="internal">Simple-prefs in the preferences system</a></li></ol></li><li><a href="#Globals" rel="internal">Globals</a><ol><li><a href="#Functions" rel="internal">Functions</a><ol><li><a href="#on(prefName_listener)" rel="internal"><code>on(prefName, listener)</code></a></li><li><a href="#removeListener(prefName_listener)" rel="internal"><code>removeListener(prefName, listener)</code></a></li></ol></li><li><a href="#Properties" rel="internal">Properties</a><ol><li><a href="#prefs" rel="internal"><code>prefs</code></a></li></ol></li></ol></li>
+                </ol>
+              </div>
+              
+              </div>
+            
+
+            
+            
+              
+            
+
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-half wiki-column text-content">
+
+              
+
+              
+
+              
+                
+                
+                
+              
+              
+
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                
+                  
+                    <p></p><section id="Quick_Links" class="Quick_links"><!-- --></section><p></p>
+
+<div class="note">
+<p>Experimental</p>
+</div>
+
+<p><span class="seoSummary">Store preferences across application restarts.</span> You can store booleans, integers, and string values, and users can configure these preferences in the <a href="https://support.mozilla.org/en-US/kb/Using extensions with Firefox#w_how-to-change-extension-settings" class="external">Add-ons Manager</a>. This gives users a consistent way to access and modify preferences across different add-ons.</p>
+
+<p>This API is for your add-on's preferences. If you need to get and set the general browser preferences, use <a href="../Low-Level_APIs/preferences_service.html">preferences/service</a>.</p>
+
+<h2 id="Usage">Usage</h2>
+
+<h3 id="Defining_and_initializing_preferences">Defining and initializing preferences</h3>
+
+<p>To define preferences and give them initial values, add a new JSON array called <code>preferences</code> to your <a href="https://developer.mozilla.org/en-US/Add-ons/SDK/Tools/package_json">package.json</a> file, and give it one entry for each preference:</p>
+
+<pre class="brush: json">{
+    "fullName": "Example Add-on",
+    ...
+    "preferences": [{
+        "name": "somePreference",
+        "title": "Some preference title",
+        "description": "Some short description for the preference",
+        "type": "string",
+        "value": "this is the default string value"
+    },
+    {
+        "description": "How many of them we have.",
+        "name": "myInteger",
+        "type": "integer",
+        "value": 8,
+        "title": "How Many?"
+    }]
+}</pre>
+
+<p>Each preference is defined by a group of attributes. There are:</p>
+
+<ul>
+ <li>mandatory attributes that all preferences must have</li>
+ <li>optional attributes</li>
+ <li>attributes that are specific to the preference's data type</li>
+</ul>
+
+<h4 id="Mandatory_Common_Attributes">Mandatory Common Attributes</h4>
+
+<p>These are attributes that all preferences must have.</p>
+
+<table class="standard-table">
+ <tbody>
+  <tr>
+   <th>Attribute</th>
+   <th>Description</th>
+  </tr>
+  <tr>
+   <td><code>type</code></td>
+   <td>The type of preference, as defined in the <a href="simple-prefs.html#Preference_Types">"Preference Types"</a> section below.</td>
+  </tr>
+  <tr>
+   <td><code>name</code></td>
+   <td>
+    <p>An identifier for the preference. This is used to access the preference from your add-on:</p>
+
+    <pre class="brush: js">console.log(require("sdk/simple-prefs").prefs.mySettingName);</pre>
+
+    <p>This means that it must be a valid JavaScript identifier.</p>
+   </td>
+  </tr>
+  <tr>
+   <td><code>title</code></td>
+   <td>This is used as a label for the preference in the Add-ons Manager user interface.</td>
+  </tr>
+ </tbody>
+</table>
+
+<h4 id="Optional_Common_Attributes">Optional Common Attributes</h4>
+
+<p>These are attributes that all preferences may have:</p>
+
+<table class="standard-table">
+ <colgroup>
+  <col>
+  <col>
+ </colgroup>
+ <tbody>
+  <tr>
+   <th>Attribute</th>
+   <th>Description</th>
+  </tr>
+  <tr>
+   <td><code>description</code></td>
+   <td>This appears below the preference title in the Add-ons Manager UI.</td>
+  </tr>
+  <tr>
+   <td><code>value</code></td>
+   <td>A default value for the preference. Depending on the preference type, this may be an integer, string, or boolean value.</td>
+  </tr>
+  <tr>
+   <td><code>hidden</code></td>
+   <td>
+    <p>A Boolean value which, if present and set to <code>true</code>, means that the preference won't appear in the Add-ons Manager interface, so users of your add-on won't be able to see or alter it.</p>
+
+    <pre class="brush: json">{
+    "name": "myHiddenInteger",
+    "type": "integer",
+    "title": "How Many?",
+    "hidden": true
+}</pre>
+
+    <p>Your add-on's code will still be able to access and modify it, just like any other preference you define.</p>
+   </td>
+  </tr>
+ </tbody>
+</table>
+
+<h4 id="Type-Specific_Attributes">Type-Specific Attributes</h4>
+
+<p>These are settings that are only applicable to certain preference types. They are documented along with the <a href="simple-prefs.html#Preference_Types">preference types themselves</a>.</p>
+
+<h4 id="Preference_Types">Preference Types</h4>
+
+<p>The setting types map to the <a href="https://developer.mozilla.org/en/Extensions/Inline_Options">inline settings types</a> used by the Add-on Manager. All the inline preferences are supported.</p>
+
+<table class="standard-table">
+ <tbody>
+  <tr>
+   <th>Type</th>
+   <th>Description</th>
+   <th>Example Specification</th>
+  </tr>
+  <tr>
+   <td><code>bool</code></td>
+   <td>Displayed as a checkbox and stores a boolean.</td>
+   <td class="brush: json">
+    <pre class="brush: json">{
+    "description": "Does it have tentacles?",
+    "type": "bool",
+    "name": "hasTentacles",
+    "value": true,
+    "title": "Tentacles"
+}</pre>
+   </td>
+  </tr>
+  <tr>
+   <td><code>boolint</code></td>
+   <td>
+    <p>Displayed as a checkbox and stores an integer.</p>
+
+    <p>A boolint is presented to the user as a checkbox, but instead of storing <code>true</code> or <code>false</code>, the "on" or "off" checkbox states are mapped to integers using "on" or "off" properties in the specification.</p>
+
+    <p>To provide this mapping the boolint requires two mandatory attributes called "on" and "off", both of which are supplied as strings.</p>
+
+    <p>Note that even so, the "value" property is supplied as an integer.</p>
+   </td>
+   <td class="brush: json">
+    <pre class="brush: json">{ 
+    "type": "boolint",
+    "name": "myBoolint",
+    "on": "1",
+    "off": "2",
+    "value": 1,
+    "title": "My Boolint"
+}</pre>
+   </td>
+  </tr>
+  <tr>
+   <td><code>integer</code></td>
+   <td>Displayed as a textbox and stores an integer.</td>
+   <td>
+    <pre class="brush: json">{
+    "description": "How many eyes?",
+    "type": "integer",
+    "name": "eyeCount",
+    "value": 8,
+    "title": "Eye count"
+}</pre>
+   </td>
+  </tr>
+  <tr>
+   <td><code>string</code></td>
+   <td>Displayed as a textbox and stores a string.</td>
+   <td>
+    <pre class="brush: json">{
+    "type": "string",
+    "name": "monsterName",
+    "value": "Kraken",
+    "title": "Monster name"
+}</pre>
+   </td>
+  </tr>
+  <tr>
+   <td><code>color</code></td>
+   <td>Displayed as a colorpicker and stores a string in the <code>#123456</code> format.</td>
+   <td>
+    <pre class="brush: json">{
+    "type": "color",
+    "name": "highlightColor",
+    "value": "#6a5acd",
+    "title": "Highlight color"
+}</pre>
+   </td>
+  </tr>
+  <tr>
+   <td><code>file</code></td>
+   <td>Displayed as a "Browse" button that opens a file picker and stores the full path and name of the file selected.</td>
+   <td>
+    <pre class="brush: json">{
+    "type": "file",
+    "name": "myFile",
+    "title": "Select a file"
+}</pre>
+   </td>
+  </tr>
+  <tr>
+   <td><code>directory</code></td>
+   <td>Displayed as a "Browse" button that opens a directory picker and stores the full path and name of the directory selected.</td>
+   <td>
+    <pre class="brush: json">{
+    "type": "directory",
+    "name": "myDirectory",
+    "title": "Select a directory"
+}</pre>
+   </td>
+  </tr>
+  <tr>
+   <td><code>menulist</code></td>
+   <td>
+    <p>Displayed as a drop-down list. The type of the stored value depends on the default value.</p>
+
+    <p>The options are specified by a mandatory "options" attribute, that is an array of objects with mandatory attributes "label" and "value"</p>
+
+    <p>&nbsp;</p>
+
+    <p>The values of the "value" attributes must be supplied as strings.</p>
+
+    <p>The values of the "label" attributes prefixed with "{name}_options.", where {name} is the name of the preference, are used as localization keys. If no matching entries are found, the value of the "label" attributes is used verbatim as labels.</p>
+   </td>
+   <td>
+    <pre class="brush: json">{
+    "name": "typeOfBreath",
+    "type": "menulist",
+    "title": "Type of breath",
+    "value": 0,
+    "options": [
+        {
+            "value": "0",
+            "label": "Fire"
+        },
+        {
+            "value": "1",
+            "label": "Cold"
+        },
+        {
+            "value": "2",
+            "label": "Disintegration"
+        }
+    ]
+}</pre>
+   </td>
+  </tr>
+  <tr>
+   <td><code>radio</code></td>
+   <td>
+    <p>Displayed as radio buttons. The type of the stored value depends on the default value.</p>
+
+    <p>The options are specified by a mandatory "options" attribute, that is an array of objects with mandatory attributes "label" and "value"</p>
+
+    <p>&nbsp;</p>
+
+    <p>The values of the "value" attributes must be supplied as strings.</p>
+
+    <p>The values of the "label" attributes prefixed with "{name}_options.", where {name} is the name of the preference, are used as localization keys. If no matching entries are found, the value of the "label" attributes is used verbatim as labels.</p>
+   </td>
+   <td>
+    <pre class="brush: json">{
+    "name": "alignment",
+    "type": "radio",
+    "title": "Alignment",
+    "value": "N",
+    "options": [
+        {
+            "value": "L",
+            "label": "Lawful"
+        },
+        {
+            "value": "N",
+            "label": "Neutral"
+        },
+        {
+            "value": "C",
+            "label": "Chaotic"
+        }
+    ]
+}</pre>
+   </td>
+  </tr>
+  <tr>
+   <td><code>control</code></td>
+   <td>
+    <p>Displays a button.</p>
+
+    <p>When the user clicks the button, the function listening to the <code>on()</code> function for this preference is called.</p>
+
+    <p>This type requires a mandatory attribute called "label" which is provided as a string. It is used to label the button.</p>
+   </td>
+   <td>
+    <p>In "package.json":</p>
+
+    <pre class="brush: json">{
+    "type": "control",
+    "label": "Click me!",
+    "name": "sayHello",
+    "title": "Say Hello"
+}</pre>
+
+    <p>In "main.js":</p>
+
+    <pre class="brush: json">var sp = require("sdk/simple-prefs");
+sp.on("sayHello", function() {
+  console.log("hello");
+});</pre>
+   </td>
+  </tr>
+ </tbody>
+</table>
+
+<h4 id="Localization">Localization</h4>
+
+<p>Using the SDK's localization system, you can provide translated forms of the <code>title</code> and <code>description</code> attributes. See the <a href="https://developer.mozilla.org/en-US/Add-ons/SDK/Tutorials/l10n#Using_Localized_Strings_in_Preferences">localization tutorial</a> for more details.</p>
+
+<h3 id="Getting_and_setting_preferences">Getting and setting preferences</h3>
+
+<p>Unless you've marked them as <code>hidden</code>, the user will be able to see and change the preferences in the <a href="https://support.mozilla.org/en-US/kb/Using extensions with Firefox#w_how-to-change-extension-settings" class="external">Add-on Manager</a>.</p>
+
+<p>You can also see them and change them programmatically using the <a href="simple-prefs.html#prefs"><code>prefs</code></a> property, and listen for changes to a preference using <a href="simple-prefs.html#on(prefName.2C_listener)"><code>on()</code></a>.</p>
+
+<h3 id="Simple-prefs_in_the_preferences_system">Simple-prefs in the preferences system</h3>
+
+<p>Preferences defined using simple-prefs are stored in the Firefox preferences system alongside all the other preferences. This means that they're visible in about:config, and they can be accessed using the global <a href="../Low-Level_APIs/preferences_service.html"><code>simple-preferences</code></a> module. By default, simple preferences are stored in a preference like:</p>
+
+<pre>extensions.&lt;addon-id&gt;.&lt;preference-name&gt;</pre>
+
+<p>For example, if you had a simple-pref named <code>"somePreference"</code> then you could get its value like so:</p>
+
+<pre class="brush: js">require('sdk/preferences/service').get(['extensions', require('sdk/self').id, 'somePreference'].join('.'))</pre>
+
+<p>This would give you the same value as:</p>
+
+<pre class="brush: js">require('sdk/simple-prefs').prefs['somePreference']</pre>
+
+<div class="geckoVersionNote">
+<p>The ability to change the default preferences branch is new in Add-on SDK 1.15.</p>
+</div>
+
+<p>The branch of the preferences tree under which simple-prefs are stored is, by default, the add-on ID. Sometimes you might need to use a different branch, especially if you are porting an add-on to the SDK. You can change the sub-branch of <code>extensions</code> using the <a href="https://developer.mozilla.org/en-US/Add-ons/SDK/Tools/package_json#preferences-branch"><code>preferences-branch</code></a> key in your add-on's package.json file.</p>
+
+<h2 id="Globals">Globals</h2>
+
+<h3 id="Functions">Functions</h3>
+
+<h4 id="on(prefName_listener)" class="addon-sdk-api-name"><code>on(prefName, listener)</code></h4>
+
+<p>Registers an event <code>listener</code> that will be called when a preference is changed.</p>
+
+<p>The event listener may take an optional parameter that specifies the name of the property which changed.</p>
+
+<div class="warning">
+<p>Preference change events are triggered for every character typed by the user. They are also triggered once during add-on initialization.</p>
+</div>
+
+<p><strong>Example:</strong></p>
+
+<pre class="brush: js">function onPrefChange(prefName) {
+  console.log("The preference " + 
+              prefName + 
+              " value has changed!");
+}
+require("sdk/simple-prefs").on("somePreference", onPrefChange);
+require("sdk/simple-prefs").on("someOtherPreference", onPrefChange);
+
+// `""` listens to all changes in the extension's branch
+require("sdk/simple-prefs").on("", onPrefChange);</pre>
+
+<h5 id="Parameters">Parameters</h5>
+
+<p><strong>prefName : String</strong><br>
+ The name of the preference to watch for changes.</p>
+
+<p><strong>listener : Function</strong><br>
+ The listener function that processes the event.</p>
+
+<h4 id="removeListener(prefName_listener)" class="addon-sdk-api-name"><code>removeListener(prefName, listener)</code></h4>
+
+<p>Unregisters an event <code>listener</code> for the specified preference.</p>
+
+<h5 id="Parameters_2">Parameters</h5>
+
+<p><strong>prefName : String</strong><br>
+ The name of the preference to watch for changes.</p>
+
+<p><strong>listener : Function</strong><br>
+ The listener function that processes the event.</p>
+
+<h3 id="Properties">Properties</h3>
+
+<h4 id="prefs" class="addon-sdk-api-name"><code>prefs</code></h4>
+
+<p>This property is an object containing the simple-prefs you have defined for your add-on. You can use it to access preference values and to change them. Suppose you've defined a preference like this:</p>
+
+<pre class="brush: json">  "preferences": [{
+      "name": "somePreference",
+      "title": "Some preference title",
+      "description": "Some short description for the preference",
+      "type": "string",
+      "value": "this is the default string value"
+  }]</pre>
+
+<p>You can access <code>somePreference</code> using the <code>prefs</code> property:</p>
+
+<pre class="brush: js">var preferences = require("sdk/simple-prefs").prefs;
+
+console.log(preferences.somePreference);
+preferences.somePreference = "this is a new value";
+
+console.log(prefs["somePreference"]); // bracket notation
+preferences["somePreference"] = "this is the default string value";
+
+</pre>
+
+<pre>console.log: my-addon: this is the default string value
+console.log: my-addon: this is a new value
+</pre>
+                  
+                
+              </article>
+
+              
+
+    
+    
+    
+
+    
+    
+    
+
+    <div class="share">
+        <strong>Share:</strong>
+        <ul>
+            <li><a href="http://twitter.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FMozilla%2FAdd-ons%2FSDK%2FHigh-Level_APIs%2Fsimple-prefs%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dtwitter.com&amp;text=I+learned+about+simple-prefs+on+MDN." target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/SDK/High-Level_APIs/simple-prefs?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=twitter.com" data-title="I learned about simple-prefs on MDN." class="share-link twitter"><i aria-hidden="true" class="icon-twitter"></i>Twitter</a></li>
+            <li><a href="http://facebook.com/sharer.php?s=100&amp;p[url]=https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/SDK/High-Level_APIs/simple-prefs?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/SDK/High-Level_APIs/simple-prefs?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" data-title="I learned about simple-prefs on MDN." class="share-link facebook"><i aria-hidden="true" class="icon-facebook"></i>Facebook</a></li>
+            <li><a href="https://plus.google.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FMozilla%2FAdd-ons%2FSDK%2FHigh-Level_APIs%2Fsimple-prefs%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dplus.google.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/SDK/High-Level_APIs/simple-prefs?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=plus.google.com" data-title="I learned about simple-prefs on MDN." class="share-link gplus"><i aria-hidden="true" class="icon-google-plus"></i>Google+</a></li>
+        </ul>
+    </div>
+
+              
+
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                  
+                  
+  <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags icon-fw"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Add-on SDK">Add-on SDK</a></li>
+      
+    </ul>
+  </div>
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-group icon-fw"></i>&nbsp;<strong>Contributors to this page:</strong> 
+        <a href="https://developer.mozilla.org/en-US/profiles/rolfedh">rolfedh</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/freaktechnik">freaktechnik</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/wbamberg">wbamberg</a>, 
+    
+        <a href="../../../profiles/PushpitaPikuDey.html">PushpitaPikuDey</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/carlin-scott">carlin-scott</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/PixnBits">PixnBits</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Null">Null</a>
+    
+                    </div>
+                  
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o icon-fw"></i>&nbsp;<strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/rolfedh">rolfedh</a>,
+                      <time datetime="2016-03-02T19:39:58-08:00">Mar 2, 2016, 7:39:58 PM</time>
+                    </div>
+                  
+                </div>
+              
+            </div>
+
+            
+              <!-- quick links and zone subnav strip -->
+              <div id="wiki-left" class="column-strip wiki-column">
+
+              
+
+                
+
+                
+                  <!-- quick links -->
+                  
+  <div class="quick-links" id="quick-links">
+    <div class="title see-also">See also</div>
+     
+  <ol> 
+    <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions"><strong>WebExtensions</strong></a></li> 
+ 
+    <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions#Getting_started">Getting started</a> 
+      <ol> 
+        <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Prerequisites">Prerequisites</a></li> 
+        <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Anatomy_of_a_WebExtension">Anatomy of a WebExtension</a></li> 
+        <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Packaging_and_Installation">Packaging and Installation</a> 
+        </li><li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Walkthrough">Walkthrough</a> 
+        </li><li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Examples">Examples</a> 
+      </li></ol> 
+    </li> 
+     
+    <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions#Guides">Guides</a> 
+      <ol> 
+        <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Content_scripts">Content scripts</a></li> 
+        <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Porting_from_Google_Chrome">Porting from Google Chrome</a> 
+        </li><li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Match_patterns">Match patterns</a> 
+        </li><li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Debugging">Debugging</a></li> 
+        <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Chrome_incompatibilities">Chrome incompatibilities</a> 
+      </li></ol> 
+    </li>   
+     
+    <li data-default-state="closed"><a href="../../WebExtensions/API.html">JavaScript APIs</a> 
+     <ol><li><a href="../../WebExtensions/API/alarms.html">alarms</a></li><li><a href="../../WebExtensions/API/bookmarks.html">bookmarks</a></li><li><a href="../../WebExtensions/API/browserAction.html">browserAction</a></li><li><a href="../../WebExtensions/API/contextMenus.html">contextMenus</a></li><li><a href="../../WebExtensions/API/cookies.html">cookies</a></li><li><a href="../../../docs/Mozilla/Add-ons/WebExtensions/API/events.png">events</a></li><li><a href="../../WebExtensions/API/extension.html">extension</a></li><li><a href="../../WebExtensions/API/extensionTypes.html">extensionTypes</a></li><li><a href="../../WebExtensions/API/i18n.html">i18n</a></li><li><a href="../../WebExtensions/API/idle.html">idle</a></li><li><a href="../../../docs/Mozilla/Add-ons/WebExtensions/API/notifications.png">notifications</a></li><li><a href="../../WebExtensions/API/pageAction.html">pageAction</a></li><li><a href="../../WebExtensions/API/runtime.html">runtime</a></li><li><a href="../../WebExtensions/API/storage.html">storage</a></li><li><a href="../../WebExtensions/API/tabs.html">tabs</a></li><li><a href="../../WebExtensions/API/webNavigation.html">webNavigation</a></li><li><a href="../../WebExtensions/API/webRequest.html">webRequest</a></li><li><a href="../../WebExtensions/API/windows.html">windows</a></li></ol> 
+    </li> 
+     
+    <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json">Manifest keys</a> 
+    <ol><li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/applications">applications</a></li><li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/background">background</a></li><li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/browser_action">browser_action</a></li><li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/content_scripts">content_scripts</a></li><li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/default_locale">default_locale</a></li><li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/description">description</a></li><li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/icons">icons</a></li><li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/manifest_version">manifest_version</a></li><li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/name">name</a></li><li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/page_action">page action</a></li><li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/permissions">permissions</a></li><li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/version">version</a></li><li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/web_accessible_resources">web_accessible_resources</a></li></ol> 
+    </li> 
+     
+    <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/SDK"><strong>Add-on SDK</strong></a></li> 
+    <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions#Getting_started">Getting started</a> 
+      <ol> 
+        <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/SDK/Tutorials/Installation">Installation</a></li> 
+        <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/SDK/Tutorials/Getting_started">Getting started</a></li> 
+        <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/SDK/Tutorials/Troubleshooting">Troubleshooting</a></li> 
+      </ol> 
+    </li> 
+     
+    <li data-default-state="open"><a href="../High-Level_APIs.html">High-Level APIs</a> 
+      <ol><li><a href="addon-page.html">addon-page</a></li><li><a href="base64.html">base64</a></li><li><a href="clipboard.html">clipboard</a></li><li><a href="context-menu.html">context-menu</a></li><li><a href="hotkeys.html">hotkeys</a></li><li><a href="indexed-db.html">indexed-db</a></li><li><a href="l10n.html">l10n</a></li><li><a href="notifications.html">notifications</a></li><li><a href="page-mod.html">page-mod</a></li><li><a href="page-worker.html">page-worker</a></li><li><a href="panel.html">panel</a></li><li><a href="passwords.html">passwords</a></li><li><a href="private-browsing.html">private-browsing</a></li><li><a href="querystring.html">querystring</a></li><li><a href="request.html">request</a></li><li><a href="selection.html">selection</a></li><li><a href="self.html">self</a></li><li><a href="simple-prefs.html">simple-prefs</a></li><li><a href="simple-storage.html">simple-storage</a></li><li><a href="system.html">system</a></li><li><a href="tabs.html">tabs</a></li><li><a href="timers.html">timers</a></li><li><a href="ui.html">ui</a></li><li><a href="url.html">url</a></li><li><a href="widget.html">widget</a></li><li><a href="windows.html">windows</a></li></ol> 
+    </li> 
+    <li data-default-state="closed"><a href="../../../docs/Mozilla/Add-ons/SDK/Low-Level_APIs.png">Low-Level APIs</a> 
+      <ol><li><a href="../Low-Level_APIs/_loader.html">/loader</a></li><li><a href="../Low-Level_APIs/chrome.html">chrome</a></li><li><a href="../Low-Level_APIs/console_plain-text.html">console/plain-text</a></li><li><a href="../Low-Level_APIs/console_traceback.html">console/traceback</a></li><li><a href="../Low-Level_APIs/content_content.html">content/content</a></li><li><a href="../Low-Level_APIs/content_loader.html">content/loader</a></li><li><a href="../Low-Level_APIs/content_mod.html">content/mod</a></li><li><a href="../Low-Level_APIs/content_symbiont.html">content/symbiont</a></li><li><a href="../Low-Level_APIs/content_worker.html">content/worker</a></li><li><a href="../Low-Level_APIs/core_heritage.html">core/heritage</a></li><li><a href="../Low-Level_APIs/core_namespace.html">core/namespace</a></li><li><a href="../Low-Level_APIs/core_promise.html">core/promise</a></li><li><a href="../Low-Level_APIs/dev_panel.html">dev/panel</a></li><li><a href="../Low-Level_APIs/event_core.html">event/core</a></li><li><a href="../Low-Level_APIs/event_target.html">event/target</a></li><li><a href="../Low-Level_APIs/frame_hidden-frame.html">frame/hidden-frame</a></li><li><a href="../Low-Level_APIs/frame_utils.html">frame/utils</a></li><li><a href="../Low-Level_APIs/fs_path.html">fs/path</a></li><li><a href="../Low-Level_APIs/io_byte-streams.html">io/byte-streams</a></li><li><a href="../Low-Level_APIs/io_file.html">io/file</a></li><li><a href="../Low-Level_APIs/io_text-streams.html">io/text-streams</a></li><li><a href="../Low-Level_APIs/lang_functional.html">lang/functional</a></li><li><a href="../Low-Level_APIs/lang_type.html">lang/type</a></li><li><a href="../Low-Level_APIs/loader_cuddlefish.html">loader/cuddlefish</a></li><li><a href="../Low-Level_APIs/loader_sandbox.html">loader/sandbox</a></li><li><a href="../Low-Level_APIs/net_url.html">net/url</a></li><li><a href="../Low-Level_APIs/net_xhr.html">net/xhr</a></li><li><a href="../Low-Level_APIs/places_bookmarks.html">places/bookmarks</a></li><li><a href="../Low-Level_APIs/places_favicon.html">places/favicon</a></li><li><a href="../Low-Level_APIs/places_history.html">places/history</a></li><li><a href="../Low-Level_APIs/platform_xpcom.html">platform/xpcom</a></li><li><a href="../Low-Level_APIs/preferences_event-target.html">preferences/event-target</a></li><li><a href="../Low-Level_APIs/preferences_service.html">preferences/service</a></li><li><a href="../Low-Level_APIs/remote_child.html">remote/child</a></li><li><a href="../Low-Level_APIs/remote_parent.html">remote/parent</a></li><li><a href="../Low-Level_APIs/stylesheet_style.html">stylesheet/style</a></li><li><a href="../Low-Level_APIs/stylesheet_utils.html">stylesheet/utils</a></li><li><a href="../Low-Level_APIs/system_child_process.html">system/child_process</a></li><li><a href="../Low-Level_APIs/system_environment.html">system/environment</a></li><li><a href="../Low-Level_APIs/system_events.html">system/events</a></li><li><a href="../Low-Level_APIs/system_runtime.html">system/runtime</a></li><li><a href="../Low-Level_APIs/system_unload.html">system/unload</a></li><li><a href="../Low-Level_APIs/system_xul-app.html">system/xul-app</a></li><li><a href="../Low-Level_APIs/tabs_utils.html">tabs/utils</a></li><li><a href="../Low-Level_APIs/test_assert.html">test/assert</a></li><li><a href="../Low-Level_APIs/test_harness.html">test/harness</a></li><li><a href="../Low-Level_APIs/test_httpd.html">test/httpd</a></li><li><a href="../Low-Level_APIs/test_runner.html">test/runner</a></li><li><a href="../Low-Level_APIs/test_utils.html">test/utils</a></li><li><a href="../Low-Level_APIs/ui_button_action.html">ui/button/action</a></li><li><a href="../Low-Level_APIs/ui_button_toggle.html">ui/button/toggle</a></li><li><a href="../Low-Level_APIs/ui_frame.html">ui/frame</a></li><li><a href="../Low-Level_APIs/ui_id.html">ui/id</a></li><li><a href="../Low-Level_APIs/ui_sidebar.html">ui/sidebar</a></li><li><a href="../Low-Level_APIs/ui_toolbar.html">ui/toolbar</a></li><li><a href="../Low-Level_APIs/util_array.html">util/array</a></li><li><a href="../Low-Level_APIs/util_collection.html">util/collection</a></li><li><a href="../Low-Level_APIs/util_deprecate.html">util/deprecate</a></li><li><a href="../Low-Level_APIs/util_list.html">util/list</a></li><li><a href="../Low-Level_APIs/util_match-pattern.html">util/match-pattern</a></li><li><a href="../Low-Level_APIs/util_object.html">util/object</a></li><li><a href="../Low-Level_APIs/util_uuid.html">util/uuid</a></li><li><a href="../Low-Level_APIs/window_utils.html">window/utils</a></li></ol> 
+    </li>  
+ 
+    <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/Firefox_for_Android"><strong>Firefox for Android</strong></a></li> 
+    <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/Firefox_for_Android">Getting started</a> 
+      <ol> 
+        <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/Firefox_for_Android/Walkthrough">Walkthrough</a></li> 
+        <li><a href="en-US/docs/Tools/Remote_Debugging/Debugging_Firefox_for_Android_with_WebIDE.html">Debugging</a></li> 
+        <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/Firefox_for_Android/Code_snippets">Code snippets</a></li> 
+      </ol> 
+    </li> 
+ 
+    <li><a href="../../../docs/Mozilla/Add-ons/Firefox_for_Android/API.png">APIs</a> 
+      <ol><li><a href="../../Firefox_for_Android/API/Accounts.html">Accounts.jsm</a></li><li><a href="../../Firefox_for_Android/API/BrowserApp.html">BrowserApp</a></li><li><a href="../../Firefox_for_Android/API/HelperApps.html">HelperApps.jsm</a></li><li><a href="../../../docs/Mozilla/Add-ons/Firefox_for_Android/API/Home.png">Home.jsm</a></li><li><a href="../../Firefox_for_Android/API/HomeProvider.html">HomeProvider.jsm</a></li><li><a href="../../Firefox_for_Android/API/JavaAddonManager.html">JavaAddonManager.jsm</a></li><li><a href="../../../docs/Mozilla/Add-ons/Firefox_for_Android/API/NativeWindow.png">NativeWindow</a></li><li><a href="../../Firefox_for_Android/API/Notifications.html">Notifications.jsm</a></li><li><a href="../../Firefox_for_Android/API/PageActions.html">PageActions.jsm</a></li><li><a href="../../Firefox_for_Android/API/Prompt.html">Prompt.jsm</a></li><li><a href="../../Firefox_for_Android/API/RuntimePermissions.html">RuntimePermissions.jsm</a></li><li><a href="../../Firefox_for_Android/API/Snackbars.html">Snackbars.jsm</a></li><li><a href="../../Firefox_for_Android/API/Sound.html">Sound.jsm</a></li><li><a href="../../Firefox_for_Android/API/Tab.html">Tab</a></li></ol> 
+    </li>  
+ 
+    <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/Overlay_Extensions"><strong>Legacy</strong></a></li> 
+     
+    <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/Bootstrapped_Extensions">Restartless extensions</a> 
+      <ol> 
+        <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/Bootstrapped_extensions">Overview</a></li> 
+      </ol> 
+    </li> 
+    <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/Overlay_Extensions">Overlay extensions</a> 
+      <ol> 
+        <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/Overlay_Extensions">Overview</a></li> 
+      </ol> 
+    </li> 
+ 
+    <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/Themes"><strong>Themes</strong></a></li> 
+     
+    <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/Themes/Background">Lightweight themes</a> 
+      <ol> 
+        <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/Themes/Background">Overview</a></li> 
+      </ol> 
+    </li> 
+    <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/Themes/Complete_themes">Complete themes</a> 
+      <ol> 
+        <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/Themes">Overview</a></li> 
+      </ol> 
+    </li> 
+ 
+    <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/Distribution"><strong>Publishing add-ons</strong></a></li> 
+    <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/Distribution">Guides</a> 
+      <ol> 
+        <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/Distribution">Signing and distribution overview</a></li> 
+        <li><a href="https://addons.mozilla.org/developers/addon/submit/">Submit an add-on</a></li> 
+        <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/AMO/Policy/Reviews">Review policies</a></li> 
+        <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/AMO/Policy/Agreement">Developer agreement</a></li> 
+        <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/AMO/Policy/Featured">Featured add-ons</a></li> 
+        <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/AMO/Policy/Contact">Contact addons.mozilla.org</a></li> 
+      </ol> 
+    </li> 
+ 
+    <li><a href="https://discourse.mozilla-community.org/c/add-ons"><strong>Community and support</strong></a></li> 
+    <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/Channels">Channels</a> 
+      <ol> 
+        <li><a href="https://blog.mozilla.org/addons">Add-ons blog</a></li> 
+        <li><a href="https://discourse.mozilla-community.org/c/add-ons">Add-on forums</a></li> 
+        <li><a href="http://stackoverflow.com/questions/tagged/firefox-addon">Stack Overflow</a></li> 
+        <li><a href="https://groups.google.com/forum/#!forum/mozilla.dev.extensions">Development newsgroup</a></li> 
+        <li><a href="irc://irc.mozilla.org/extdev">IRC Channel</a></li> 
+      </ol> 
+    </li> 
+  </ol> 
+
+  </div>
+                
+
+                <!-- approvals -->
+                
+
+              
+
+              </div>
+            
+          </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Mozilla/Add-ons/SDK/High-Level_APIs/simple-prefs$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Mozilla/Add-ons/SDK/High-Level_APIs/simple-prefs$history" label="View page history"></menuitem>
+  </menu>
+
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+        
+        <div class="contentinfo">
+          <p>© 2005-2016 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>
+          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+        
+        </div>
+      </div>
+      <div class="column-strip">
+        
+          
+  
+
+        
+      </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+  
+    
+    <!--[if lte IE 8]><script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/selectivizr.091e18cf669b.js" charset="utf-8"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script type="text/javascript" src="../../../../../developer.cdn.mozilla.net/static/build/js/main.a7b27a25fb9c.js" charset="utf-8"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+    
+    <script async="" type="text/javascript" src="../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../developer.cdn.mozilla.net/static/build/js/syntax-prism-min.js" charset="utf-8"></script><script type="text/javascript" src="../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../developer.cdn.mozilla.net/static/build/js/wiki.bd71ca9fd27d.js" charset="utf-8" id="wikiscript"></script>
+
+  
+
+  <script async="" type="text/javascript" src="../../../../../developer.cdn.mozilla.net/static/build/js/helpfulness.7b208a764d28.js" charset="utf-8"></script>
+
+  
+
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/Add-ons/SDK/High-Level_APIs/simple-prefs by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 17:26:01 GMT -->
+</body></html>

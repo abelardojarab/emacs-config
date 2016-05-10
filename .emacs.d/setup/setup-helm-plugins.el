@@ -227,10 +227,14 @@
             (setq helm-dash-min-length 2)
             (setq helm-dash-docsets-path (expand-file-name "docsets/" user-emacs-directory))
             (setq helm-dash-common-docsets '(
-                                             ;; "C" ;; does not work
-                                             ;; "C++" ;; does not work
-                                             "Emacs_Lisp" ;; works
+                                             ;; "Emacs_Lisp" ;; works
+                                             "C++" ;; works
+                                             "C" ;; works
                                              "Python_2" ;; works
+                                             "JavaScript" ;; works
+                                             "Bash" ;; works
+                                             "LaTeX" ;; works
+                                             "R" ;; works
                                              ))
 
             ;; (defun lisp-doc-hook ()

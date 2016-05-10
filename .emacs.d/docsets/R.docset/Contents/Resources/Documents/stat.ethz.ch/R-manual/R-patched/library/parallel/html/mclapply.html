@@ -1,0 +1,234 @@
+<html><!-- Mirrored from stat.ethz.ch/R-manual/R-patched/library/parallel/html/mclapply.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 04 May 2016 16:38:05 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><!-- /Added by HTTrack -->
+<title>Parallel Versions of 'lapply' and 'mapply' using Forking</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="R.css">
+</head><body>
+
+<table width="100%" summary="page for mclapply {parallel}"><tbody><tr><td>mclapply {parallel}</td><td style="text-align: right;">R Documentation</td></tr></tbody></table>
+
+<h2>Parallel Versions of <code>lapply</code> and <code>mapply</code> using Forking</h2>
+
+<h3>Description</h3>
+
+<p><code>mclapply</code> is a parallelized version of <code><a href="../../base/html/lapply.html">lapply</a></code>,
+it returns a list of the same length as <code>X</code>, each element of
+which is the result of applying <code>FUN</code> to the corresponding
+element of <code>X</code>.
+</p>
+<p>It relies on forking and hence is not available on Windows unless
+<code>mc.cores = 1</code>.
+</p>
+<p><code>mcmapply</code> is a parallelized version of <code><a href="../../base/html/mapply.html">mapply</a></code>, and
+<code>mcMap</code> corresponds to <code><a href="../../base/html/funprog.html">Map</a></code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>mclapply(X, FUN, ...,
+         mc.preschedule = TRUE, mc.set.seed = TRUE,
+         mc.silent = FALSE, mc.cores = getOption("mc.cores", 2L),
+         mc.cleanup = TRUE, mc.allow.recursive = TRUE)
+
+mcmapply(FUN, ...,
+         MoreArgs = NULL, SIMPLIFY = TRUE, USE.NAMES = TRUE,
+         mc.preschedule = TRUE, mc.set.seed = TRUE,
+         mc.silent = FALSE, mc.cores = getOption("mc.cores", 2L),
+         mc.cleanup = TRUE)
+
+mcMap(f, ...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tbody><tr valign="top"><td><code>X</code></td>
+<td>
+<p>a vector (atomic or list) or an expressions vector.  Other
+objects (including classed objects) will be coerced by
+<code><a href="../../base/html/list.html">as.list</a></code>.</p>
+</td></tr>
+<tr valign="top"><td><code>FUN</code></td>
+<td>
+<p>the function to be applied to (<code>mclapply</code>) each
+element of <code>X</code> or (<code>mcmapply</code>) in parallel to <code>...</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>f</code></td>
+<td>
+<p>the function to be applied in parallel to <code>...</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>For <code>mclapply</code>, optional arguments to <code>FUN</code>.
+For <code>mcmapply</code> and <code>mcMap</code>, vector or list inputs: see
+<code><a href="../../base/html/mapply.html">mapply</a></code>.</p>
+</td></tr>
+<tr valign="top"><td><code>MoreArgs, SIMPLIFY, USE.NAMES</code></td>
+<td>
+<p>see <code><a href="../../base/html/mapply.html">mapply</a></code>.</p>
+</td></tr>
+<tr valign="top"><td><code>mc.preschedule</code></td>
+<td>
+<p>if set to <code>TRUE</code> then the computation is
+first divided to (at most) as many jobs are there are cores and then
+the jobs are started, each job possibly covering more than one
+value.  If set to <code>FALSE</code> then one job is forked for each value
+of <code>X</code>.  The former is better for short computations or large
+number of values in <code>X</code>, the latter is better for jobs that
+have high variance of completion time and not too many values of
+<code>X</code> compared to <code>mc.cores</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>mc.set.seed</code></td>
+<td>
+<p>See <code><a href="mcparallel.html">mcparallel</a></code>.</p>
+</td></tr>
+<tr valign="top"><td><code>mc.silent</code></td>
+<td>
+<p>if set to <code>TRUE</code> then all output on
+‘<span class="file">stdout</span>’ will be suppressed for all parallel processes forked
+(‘<span class="file">stderr</span>’ is not affected).</p>
+</td></tr>
+<tr valign="top"><td><code>mc.cores</code></td>
+<td>
+<p>The number of cores to use, i.e. at most how many
+child processes will be run simultaneously.   The option is
+initialized from environment variable <span class="env">MC_CORES</span> if set.  Must
+be at least one, and parallelization requires at least two cores.</p>
+</td></tr>
+<tr valign="top"><td><code>mc.cleanup</code></td>
+<td>
+<p>if set to <code>TRUE</code> then all children that have
+been forked by this function will be killed (by sending
+<code>SIGTERM</code>) before this function returns.  Under normal
+circumstances <code>mclapply</code> waits for the children to deliver
+results, so this option usually has only effect when <code>mclapply</code>
+is interrupted. If set to <code>FALSE</code> then child processes are
+collected, but not forcefully terminated.  As a special case this
+argument can be set to the number of the signal that should be used
+to kill the children instead of <code>SIGTERM</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>mc.allow.recursive</code></td>
+<td>
+<p>Unless true, calling <code>mclapply</code> in a
+child process will use the child and not fork again.</p>
+</td></tr>
+</tbody></table>
+
+
+<h3>Details</h3>
+
+<p><code>mclapply</code> is a parallelized version of <code><a href="../../base/html/lapply.html">lapply</a></code>,
+provided <code>mc.cores &gt; 1</code>: for <code>mc.cores == 1</code> it simply calls
+<code>lapply</code>.
+</p>
+<p>By default (<code>mc.preschedule = TRUE</code>) the input <code>X</code> is split
+into as many parts as there are cores (currently the values are spread
+across the cores sequentially, i.e. first value to core 1, second to
+core 2, ... (core + 1)-th value to core 1 etc.) and then one process
+is forked to each core and the results are collected.
+</p>
+<p>Without prescheduling, a separate job is forked for each value of
+<code>X</code>.  To ensure that no more than <code>mc.cores</code> jobs are
+running at once, once that number has been forked the master process
+waits for a child to complete before the next fork.
+</p>
+<p>Due to the parallel nature of the execution random numbers are not
+sequential (in the random number sequence) as they would be when using
+<code>lapply</code>.  They are sequential for each forked process, but not
+all jobs as a whole.  See <code><a href="mcparallel.html">mcparallel</a></code> or the package's
+vignette for ways to make the results reproducible with
+<code>mc.preschedule = TRUE</code>.
+</p>
+<p>Note: the number of file descriptors (and processes) is usually
+limited by the operating system, so you may have trouble using more
+than 100 cores or so (see <code>ulimit -n</code> or similar in your OS
+documentation) unless you raise the limit of permissible open file
+descriptors (fork will fail with error <code>"unable to create a
+  pipe"</code>).
+</p>
+
+
+<h3>Value</h3>
+
+<p>For <code>mclapply</code>, a list of the same length as <code>X</code> and named
+by <code>X</code>.
+</p>
+<p>For <code>mcmapply</code>, a list, vector or array: see
+<code><a href="../../base/html/mapply.html">mapply</a></code>.
+</p>
+<p>For <code>mcMap</code>, a list.
+</p>
+<p>Each forked process runs its job inside <code>try(..., silent = TRUE)</code>
+so if errors occur they will be stored as class <code>"try-error"</code>
+objects in the return value and a warning will be given.  Note that
+the job will typically involve more than one value of <code>X</code> and
+hence a <code>"try-error"</code> object will be returned for all the values
+involved in the failure, even if not all of them failed.
+</p>
+
+
+<h3>Warning</h3>
+
+<p>It is <em>strongly discouraged</em> to use these functions in GUI or
+embedded environments, because it leads to several processes sharing
+the same GUI which will likely cause chaos (and possibly
+crashes).  Child processes should never use on-screen graphics
+devices.
+</p>
+<p>Some precautions have been taken to make this usable in
+<code>R.app</code> on OS X, but users of third-party front-ends
+should consult their documentation.
+</p>
+<p>Note that <span class="pkg">tcltk</span> counts as a GUI for these purposes since
+<code>Tcl</code> runs an event loop.  That event loop
+is inhibited in a child process but there could still be problems with
+Tk graphical connections.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Simon Urbanek and R Core.
+</p>
+<p>Derived from the multicore package.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="mcparallel.html">mcparallel</a></code>, <code><a href="pvec.html">pvec</a></code>,
+<code><a href="clusterApply.html">parLapply</a></code>, <code><a href="clusterApply.html">clusterMap</a></code>.
+</p>
+<p><code><a href="../../base/html/lapply.html">simplify2array</a></code> for results like <code><a href="../../base/html/lapply.html">sapply</a></code>.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>simplify2array(mclapply(rep(4, 5), rnorm))
+# use the same random numbers for all values
+set.seed(1)
+simplify2array(mclapply(rep(4, 5), rnorm, mc.preschedule = FALSE,
+                mc.set.seed = FALSE))
+
+## Contrast this with the examples for clusterCall
+library(boot)
+cd4.rg &lt;- function(data, mle) MASS::mvrnorm(nrow(data), mle$m, mle$v)
+cd4.mle &lt;- list(m = colMeans(cd4), v = var(cd4))
+mc &lt;- getOption("mc.cores", 2)
+run1 &lt;- function(...) boot(cd4, corr, R = 500, sim = "parametric",
+                           ran.gen = cd4.rg, mle = cd4.mle)
+## To make this reproducible:
+set.seed(123, "L'Ecuyer")
+res &lt;- mclapply(seq_len(mc), run1)
+cd4.boot &lt;- do.call(c, res)
+boot.ci(cd4.boot,  type = c("norm", "basic", "perc"),
+        conf = 0.9, h = atanh, hinv = tanh)
+</pre>
+
+<hr><div style="text-align: center;">[Package <em>parallel</em> version 3.2.2 <a href="00Index.html">Index</a>]</div>
+
+<!-- Mirrored from stat.ethz.ch/R-manual/R-patched/library/parallel/html/mclapply.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 04 May 2016 16:38:05 GMT -->
+
+</body></html>

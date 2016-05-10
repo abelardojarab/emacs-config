@@ -1,0 +1,95 @@
+<html><!-- Mirrored from stat.ethz.ch/R-manual/R-patched/library/mgcv/html/rig.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 04 May 2016 16:38:04 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><!-- /Added by HTTrack -->
+<title>Generate inverse Gaussian random deviates</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="R.css">
+</head><body>
+
+<table width="100%" summary="page for rig {mgcv}"><tbody><tr><td>rig {mgcv}</td><td style="text-align: right;">R Documentation</td></tr></tbody></table>
+
+<h2>Generate inverse Gaussian random deviates</h2>
+
+<h3>Description</h3>
+
+<p>Generates inverse Gaussian random deviates.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>rig(n,mean,scale)
+</pre>
+
+
+<h3>Arguments</h3>
+
+ 
+<table summary="R argblock">
+<tbody><tr valign="top"><td><code>n</code></td>
+<td>
+<p>the number of deviates required. If this has length &gt; 1 then the length is taken as the number of deviates required.</p>
+</td></tr>
+<tr valign="top"><td><code>mean</code></td>
+<td>
+<p>vector of mean values.</p>
+</td></tr>
+<tr valign="top"><td><code>scale</code></td>
+<td>
+<p>vector of scale parameter values (lambda, see below)</p>
+</td></tr>
+</tbody></table>
+
+
+<h3>Details</h3>
+
+<p> If x if the returned vector, then E(x) = <code>mean</code> while var(x) = <code>scale*mean^3</code>. For density and distribution functions 
+see the <code>statmod</code> package. The algorithm used is Algorithm 5.7 of Gentle (2003), based on Michael et al. (1976). Note that <code>scale</code> 
+here is the scale parameter in the GLM sense, which is the reciprocal of the usual ‘lambda’ parameter. 
+</p>
+
+
+<h3>Value</h3>
+
+ 
+<p>A vector of inverse Gaussian random deviates.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p> Simon N. Wood simon.wood@r-project.org
+</p>
+
+
+<h3>References</h3>
+
+<p>Gentle, J.E. (2003) Random Number Generation and Monte Carlo Methods (2nd ed.) Springer.
+</p>
+<p>Michael, J.R., W.R. Schucany &amp; R.W. Hass (1976) Generating random variates using transformations 
+with multiple roots. The American Statistician 30, 88-90.
+</p>
+<p>http://www.maths.bris.ac.uk/~sw15190/
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>require(mgcv)
+set.seed(7)
+## An inverse.gaussian GAM example, by modify `gamSim' output... 
+dat &lt;- gamSim(1,n=400,dist="normal",scale=1)
+dat$f &lt;- dat$f/4 ## true linear predictor 
+Ey &lt;- exp(dat$f);scale &lt;- .5 ## mean and GLM scale parameter
+## simulate inverse Gaussian response...
+dat$y &lt;- rig(Ey,mean=Ey,scale=.2)
+big &lt;- gam(y~ s(x0)+ s(x1)+s(x2)+s(x3),family=inverse.gaussian(link=log),
+          data=dat,method="REML")
+plot(big,pages=1)
+gam.check(big)
+summary(big)
+</pre>
+
+<hr><div style="text-align: center;">[Package <em>mgcv</em> version 1.8-12 <a href="00Index.html">Index</a>]</div>
+
+<!-- Mirrored from stat.ethz.ch/R-manual/R-patched/library/mgcv/html/rig.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 04 May 2016 16:38:04 GMT -->
+
+</body></html>

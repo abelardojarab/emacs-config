@@ -1,0 +1,1731 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/Window/open by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 15:05:54 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <script async="" src="../../../../../../www.google-analytics.com/analytics.js"></script><script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+  
+    
+  
+
+  
+  <title>Window.open()</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+  
+    
+    
+    <link href="../../../../../../developer.cdn.mozilla.net/static/build/styles/mdn.593f20d8c365.css" rel="stylesheet" type="text/css">
+
+    
+  
+    <link href="../../../../../../developer.cdn.mozilla.net/static/build/styles/wiki.13dd9abdfb62.css" rel="stylesheet" type="text/css">
+
+    
+
+    
+
+  <!-- common social tags -->
+  
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon144.a6e4162070f4.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon114.0e9fabd44f85.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon72.8ff9d87c82a0.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon57.a2490b9a2d76.png">
+  <!-- basic favicon -->
+  
+    
+  
+  <link rel="shortcut icon" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon32.e02854fdcf73.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/html5shiv.3948ccddab6f.js" charset="utf-8"></script>
+  <![endif]-->
+
+  
+  <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Web/API/Window/open$json">
+  <link rel="canonical" href="open.html">
+
+  
+    
+      <link rel="alternate" hreflang="es" href="https://developer.mozilla.org/es/docs/Web/API/Window/open" title="Window.open()">
+    
+      <link rel="alternate" hreflang="fr" href="https://developer.mozilla.org/fr/docs/Web/API/Window/open" title="window.open">
+    
+      <link rel="alternate" hreflang="ja" href="https://developer.mozilla.org/ja/docs/Web/API/window.open" title="window.open">
+    
+      <link rel="alternate" hreflang="pl" href="https://developer.mozilla.org/pl/docs/Web/API/Window/open" title="window.open">
+    
+      <link rel="alternate" hreflang="zh-CN" href="https://developer.mozilla.org/zh-CN/docs/Web/API/Window/open" title="window.open">
+    
+  
+
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="Window.open()">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Web/API/Window/open">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Web/API/Window/open">
+  <meta name="twitter:title" content="Window.open()">
+  
+  <meta property="og:description" content="Loads a resource into either a new browsing context (such as a window) or one that already exists, depending on the specified parameters.">
+  <meta name="description" content="Loads a resource into either a new browsing context (such as a window) or one that already exists, depending on the specified parameters.">
+  <meta name="twitter:description" content="Loads a resource into either a new browsing context (such as a window) or one that already exists, depending on the specified parameters.">
+  
+
+  
+    
+
+
+
+  
+</head>
+<body data-slug="Web/API/Window/open" contextmenu="edit-history-menu" data-search-url="" class="document  ">
+
+  <script type="text/javascript">
+    (function(win) {
+        'use strict';
+
+        
+            (function(){
+  var FLAGS = {
+    'compat_api': false,'kumaediting': false,'page_move': false,'registration_disabled': false,'search_suggestions': false,'section_edit': true,'spam_admin_override': false,'spam_checks_enabled': true,'spam_spammer_override': false,'spam_submissions_enabled': false,'spam_testing_mode': false,'wiki_samples': true,'wiki_spam_exempted': false,'wiki_spam_training': true
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': true,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+
+        // This needs to be set before ckeditor.js loads
+        window.CKEDITOR_BASEPATH = 'https://developer.mozilla.org/static/js/libs/ckeditor/build/ckeditor/';
+
+        // This represents the site configuration
+        win.mdn = {
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+            
+            notifications: [],
+            
+            // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            },
+            // Assets that need to be dynamically injected
+            assets_disabled: {
+                css: {
+                    'editor-content': ['https://developer.cdn.mozilla.net/static/build/styles/editor-content.3d79df72080d.css',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/styles/wiki-compat-tables.f3a3bfce97a1.css',]
+                },
+                js: {
+                    'syntax-prism': ['https://developer.cdn.mozilla.net/static/build/js/syntax-prism.7a66ddfa68bf.js',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/js/wiki-compat-tables.14ce5dcb2c3d.js',]
+                }
+            }
+        };
+    })(this);
+</script>
+
+  
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+    
+      <li><a href="#q" id="skip-search">Skip to search</a></li>
+    
+  </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+    <a href="https://developer.mozilla.org/en-US/" class="logo">Mozilla Developer Network</a>
+
+    <div id="nav-sec">
+        
+                  <ul>
+                  <li>
+
+    
+
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                Sign in
+              </span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FWindow%2Fopen" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/Web/API/Window/open" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/Web/API/Window/open" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FWindow%2Fopen" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+              
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+        
+    </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../../API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+
+   <!-- end is_zone -->
+
+    <div class="wiki-main-content" id="document-main"><div class="center">
+      
+      <div class="article-meta">
+        <!-- action buttons -->
+        
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+  <ul class="page-buttons" data-sticky="false">
+      
+      <li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+              
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/es/docs/Web/API/Window/open" title="Window.open()">Español</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/fr/docs/Web/API/Window/open" title="window.open">Français</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/ja/docs/Web/API/window.open" title="window.open">日本語</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/pl/docs/Web/API/Window/open" title="window.open">Polski</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/zh-CN/docs/Web/API/Window/open" title="window.open">中文 (简体)</a></bdi></li>
+                
+              
+
+              
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/open$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+              
+            </ul>
+          </div>
+        </div>
+      </li>
+
+      <li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/open$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li>
+
+        
+
+        <li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/open$history" rel="nofollow, noindex">History</a></li>
+                
+                
+                
+                
+
+                
+
+                
+                
+                
+                <li class="page-print"><a href="#" onclick="return window.print();">Print this article</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+        
+  <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web" rel="v:url" property="v:title">Web technology for developers</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="../../API.html" rel="v:url" property="v:title">Web APIs</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="../Window.html" rel="v:url" property="v:title">Window</a></li>
+    
+    <li class="crumb" typeof="v:Breadcrumb" property="v:title">Window.open()</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        
+        <div class="contributor-avatars" data-all-text="see all contributors" data-alternate-message="hide contributors" data-has-hidden="1">
+            <ul>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/mconley" title="View profile: mconley">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="mconley" data-src="../../../../../../secure.gravatar.com/avatar/4b4985a7acf7db49dfddd7815b55a0436c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">mconley</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/stephaniehobson" title="View profile: stephaniehobson">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="stephaniehobson" data-src="../../../../../../secure.gravatar.com/avatar/d70bd194080649fe6fac9c012d4de39c6c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">stephaniehobson</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/cvrebert" title="View profile: cvrebert">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="cvrebert" data-src="../../../../../../secure.gravatar.com/avatar/1432b541cac41e85e190050a5361b3966c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">cvrebert</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills" title="View profile: chrisdavidmills">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="chrisdavidmills" data-src="../../../../../../secure.gravatar.com/avatar/deeea0ba82390bd5acc539703c4b0cfb6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">chrisdavidmills</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/fscholz" title="View profile: fscholz">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="fscholz" data-src="../../../../../../secure.gravatar.com/avatar/e24391c9174352988d819a9b9ea77c9e6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">fscholz</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/idmean" title="View profile: idmean">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="idmean" data-src="../../../../../../secure.gravatar.com/avatar/fcb8958be3b2d1c5049f96e900c29b146c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">idmean</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/jxnday" title="View profile: jxnday">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="jxnday" data-src="../../../../../../secure.gravatar.com/avatar/26dc87ff88d501d541c0fc47af0c2c4c6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">jxnday</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Sheppy" title="View profile: Sheppy">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Sheppy" data-src="../../../../../../secure.gravatar.com/avatar/945076feb88f2d7003891ffbf06f32bf6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Sheppy</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/BrianDiPalma" title="View profile: BrianDiPalma">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="BrianDiPalma" data-src="../../../../../../secure.gravatar.com/avatar/b9d1a2d2be04d97a91cea414a4140eec6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">BrianDiPalma</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/WP-Makyen" title="View profile: WP-Makyen">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="WP-Makyen" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">WP-Makyen</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/kscarfone" title="View profile: kscarfone">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="kscarfone" data-src="../../../../../../secure.gravatar.com/avatar/89c1e54a9703125168e40d22316d2b496c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">kscarfone</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/teoli" title="View profile: teoli">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="teoli" data-src="../../../../../../secure.gravatar.com/avatar/d0d90148e08e3b64ccf75c46f31442c56c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">teoli</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Ichimonji10" title="View profile: Ichimonji10">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Ichimonji10" data-src="../../../../../../secure.gravatar.com/avatar/0d55b0822baba206e15373fbe457bf706c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Ichimonji10</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/libreGeekingKid" title="View profile: libreGeekingKid">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="libreGeekingKid" data-src="../../../../../../secure.gravatar.com/avatar/0a639064bc4b4ddea0d4f934e221d2f26c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">libreGeekingKid</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/mplungjan" title="View profile: mplungjan">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="mplungjan" data-src="../../../../../../secure.gravatar.com/avatar/ccd56fffb43d3445145e603bb63f31216c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">mplungjan</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Havvy" title="View profile: Havvy">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Havvy" data-src="../../../../../../secure.gravatar.com/avatar/e799a79441c7543be48562403411cd136c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Havvy</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/ethertank" title="View profile: ethertank">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="ethertank" data-src="../../../../../../secure.gravatar.com/avatar/abac73ba2093b500bf7599c76d80280c6c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">ethertank</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/dbruant" title="View profile: dbruant">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="dbruant" data-src="../../../../../../secure.gravatar.com/avatar/b9b113093c351a599f86e0647c43add16c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">dbruant</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/mnoorenberghe" title="View profile: mnoorenberghe">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="mnoorenberghe" data-src="../../../../../../secure.gravatar.com/avatar/b7e928b14ef7e22c266206f5852cc6b66c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">mnoorenberghe</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/j3s.ch" title="View profile: j3s.ch">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="j3s.ch" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">j3s.ch</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/syssgx" title="View profile: syssgx">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="syssgx" data-src="../../../../../../secure.gravatar.com/avatar/78b6abffa6ae386cc4c2dd052e79858f6c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">syssgx</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Varda" title="View profile: Varda">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Varda" data-src="../../../../../../secure.gravatar.com/avatar/2f9de2b3260a703d046f05dbd73dac326c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Varda</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/jswisher" title="View profile: jswisher">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="jswisher" data-src="../../../../../../secure.gravatar.com/avatar/38185c2812cbcae186ebbe4a829106616c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">jswisher</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/mooyah" title="View profile: mooyah">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="mooyah" data-src="../../../../../../secure.gravatar.com/avatar/0f642bb410664f63b1c0af471a7455e06c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">mooyah</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Neil" title="View profile: Neil">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Neil" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Neil</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/RobG" title="View profile: RobG">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="RobG" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">RobG</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Crash" title="View profile: Crash">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Crash" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Crash</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Dao" title="View profile: Dao">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Dao" data-src="../../../../../../secure.gravatar.com/avatar/13260fa2d08e92e3869ae7411518e7786c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Dao</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Ms2ger" title="View profile: Ms2ger">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Ms2ger" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Ms2ger</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Brettz9" title="View profile: Brettz9">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Brettz9" data-src="../../../../../../secure.gravatar.com/avatar/4c750582e23fcf068bdde51cc50416d16c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Brettz9</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/zencd" title="View profile: zencd">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="zencd" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">zencd</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/mattmccutchen" title="View profile: mattmccutchen">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="mattmccutchen" data-src="../../../../../../secure.gravatar.com/avatar/a09c08e1ae93a83e9102b6715fc75b4c6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">mattmccutchen</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Kbrosnan" title="View profile: Kbrosnan">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Kbrosnan" data-src="../../../../../../secure.gravatar.com/avatar/1c646a9a47fbb1d8e096afd3add71a666c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Kbrosnan</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/ahlongxp" title="View profile: ahlongxp">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="ahlongxp" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">ahlongxp</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Kreist" title="View profile: Kreist">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Kreist" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Kreist</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Johnjbarton" title="View profile: Johnjbarton">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Johnjbarton" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Johnjbarton</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/GT" title="View profile: GT">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="GT" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">GT</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Potappo" title="View profile: Potappo">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Potappo" data-src="../../../../../../secure.gravatar.com/avatar/f0ee74ffcc558dd3895fde235b2aec426c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Potappo</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Wjjohnst" title="View profile: Wjjohnst">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Wjjohnst" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Wjjohnst</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Waldo" title="View profile: Waldo">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Waldo" data-src="../../../../../../secure.gravatar.com/avatar/d26a0ca7ae1134e0e1dbdddf82e289296c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Waldo</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/JamesWatts" title="View profile: JamesWatts">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="JamesWatts" data-src="../../../../../../secure.gravatar.com/avatar/a337e706823569791c075c732e5d4c526c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">JamesWatts</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Coopster" title="View profile: Coopster">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Coopster" data-src="../../../../../../secure.gravatar.com/avatar/a8d7b2055b93ac314a0a1b7379ea2cdb6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Coopster</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Mgjbot" title="View profile: Mgjbot">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Mgjbot" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Mgjbot</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/TerraFrost" title="View profile: TerraFrost">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="TerraFrost" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">TerraFrost</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Mickeyboy" title="View profile: Mickeyboy">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Mickeyboy" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Mickeyboy</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/BenoitL" title="View profile: BenoitL">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="BenoitL" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">BenoitL</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Np" title="View profile: Np">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Np" data-src="../../../../../../secure.gravatar.com/avatar/9385da4a3618cdc385bd49fe3d951b786c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Np</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Zagor" title="View profile: Zagor">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Zagor" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Zagor</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Andreas Wuest" title="View profile: Andreas Wuest">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Andreas Wuest" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Andreas Wuest</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="../../../../profiles/Trapicki.html" title="View profile: Trapicki">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Trapicki" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Trapicki</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Nickolay" title="View profile: Nickolay">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Nickolay" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Nickolay</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Jarsyl" title="View profile: Jarsyl">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Jarsyl" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Jarsyl</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/QIREXRD" title="View profile: QIREXRD">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="QIREXRD" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">QIREXRD</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Dria" title="View profile: Dria">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Dria" data-src="../../../../../../secure.gravatar.com/avatar/c6c044311a2c98b383718e00964cda726c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Dria</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Callek" title="View profile: Callek">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Callek" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Callek</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Wladimir_Palant" title="View profile: Wladimir_Palant">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Wladimir_Palant" data-src="../../../../../../secure.gravatar.com/avatar/7806629160a492b05d21fd738953a4cf6c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Wladimir_Palant</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Anonymous" title="View profile: Anonymous">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Anonymous" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Anonymous</noscript></a>
+                </li>
+            
+            </ul>
+        </div>
+        
+
+        <h1>Window.open()</h1>
+
+      </div>
+      
+
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-present">
+
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+            
+              <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+              
+              <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#Syntax" rel="internal">Syntax</a></li><li><a href="#Return_value_and_parameters" rel="internal">Return value and parameters</a></li><li><a href="#Description" rel="internal">Description</a></li><li><a href="#Examples" rel="internal">Examples</a><ol><li><a href="#Position_and_size_features" rel="internal">Position and size features</a></li><li><a href="#Toolbar_and_chrome_features" rel="internal">Toolbar and chrome features</a></li><li><a href="#Window_functionality_features" rel="internal">Window functionality features</a></li><li><a href="#Features_requiring_privileges" rel="internal">Features requiring privileges</a></li></ol></li><li><a href="#Best_practices" rel="internal">Best practices</a></li><li><a href="#FAQ" rel="internal">FAQ</a></li><li><a href="#Usability_issues" rel="internal">Usability issues</a><ol><li><a href="#Avoid_resorting_to_window.open.28.29" rel="internal">Avoid resorting to <code>window.open()</code></a></li><li><a href="#Offer_to_open_a_link_in_a_new_window.2C_using_these_guidelines" rel="internal">Offer to open a link in a new window, using these guidelines</a><ol><li><a href="#Never_use_this_form_of_code_for_links:.3Ca_href.3D.22javascript:window.open.28....29.22_....3E" rel="internal">Never use this form of code for links: <code>&lt;a href="javascript:window.open(...)" ...&gt;</code></a></li><li><a href="#Never_use_.3Ca_href.3D.22.23.22_onclick.3D.22window.open.28....29.3B.22.3E" rel="internal">Never use <code>&lt;a href="#" onclick="window.open(...);"&gt;</code></a></li><li><a href="#Always_identify_links_which_will_create_.28or_will_re-use.29_a_new.2C_secondary_window" rel="internal">Always identify links which will create (or will re-use) a new, secondary window</a></li><li><a href="#Always_use_the_target_attribute" rel="internal">Always use the target attribute</a></li><li><a href="#Do_not_use_target.3D.22_blank.22" rel="internal">Do not use <code>target="_blank"</code></a></li></ol></li></ol></li><li><a href="#Glossary" rel="internal">Glossary</a></li><li><a href="#Specification" rel="internal">Specification</a></li><li><a href="#Notes" rel="internal">Notes</a><ol><li><a href="#Note_on_precedence" rel="internal">Note on precedence</a></li><li><a href="#Note_on_position_and_dimension_error_correction" rel="internal">Note on position and dimension error correction</a></li><li><a href="#Note_on_scrollbars" rel="internal">Note on scrollbars</a></li><li><a href="#Note_on_status_bar" rel="internal">Note on status bar</a></li><li><a href="#Note_on_security_issues_of_the_status_bar_presence" rel="internal">Note on security issues of the status bar presence</a></li><li><a href="#Note_on_fullscreen" rel="internal">Note on fullscreen</a></li><li><a href="#Note_on_outerHeight_versus_height" rel="internal">Note on outerHeight versus height</a></li><li><a href="#Note_on_refreshing_vs._opening_a_new_windowtab" rel="internal">Note on refreshing vs. opening a new window/tab</a></li></ol></li><li><a href="#Tutorials" rel="internal">Tutorials</a></li><li><a href="#References" rel="internal">References</a>
+                </li></ol>
+              </div>
+              
+              </div>
+            
+
+            
+            
+              
+            
+
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-half wiki-column text-content">
+
+              
+
+              
+
+              
+                
+                
+                
+              
+              
+
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                
+                  
+                    <p></p><section id="Quick_Links" class="Quick_links"><!-- --></section><p></p>
+
+<p>Loads a resource into either a new browsing context (such as a window) or one that already exists, depending on the specified parameters.</p>
+
+<h2 name="Syntax" id="Syntax">Syntax</h2>
+
+<pre class="syntaxbox"><code>var <var>windowObjectReference</var> = window.open(<var>strUrl</var>, <var>strWindowName</var>, [<var>strWindowFeatures</var>]);</code></pre>
+
+<h2 name="Return_value_and_parameters" id="Return_value_and_parameters">Return value and parameters</h2>
+
+<dl>
+ <dt><code>windowObjectReference</code></dt>
+ <dd>A reference to the newly created window. If the call failed, it will be <code>null</code>. The reference can be used to access properties and methods of the new window provided it complies with <a href="https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy">Same origin policy</a> security requirements.</dd>
+ <dt><code>strUrl</code></dt>
+ <dd>The URL to be loaded in the newly opened window. <code>strUrl</code> can be an HTML document on the web, image file or any resource supported by the browser.</dd>
+ <dt><code>strWindowName</code></dt>
+ <dd>A string name for the new window. The name can be used as the target of links and forms using the target attribute of an <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a" title="The HTML Anchor Element (&lt;a&gt;) defines a hyperlink to a location on the same page or any other page on the Web. It can also be used (in an obsolete way) to create an anchor point—a destination for hyperlinks within the content of a page, so that links aren't limited to connecting simply to the top of a page."><code>&lt;a&gt;</code></a> or <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/form" title="The HTML &lt;form&gt; element represents a document section that contains interactive controls to submit information to a web server."><code>&lt;form&gt;</code></a> element. The name should not contain any whitespace characters. Note that <code>strWindowName</code> does <strong>not</strong> specify the title of the new window.</dd>
+ <dt><code>strWindowFeatures</code></dt>
+ <dd>An optional parameter listing the features (size, position, scrollbars, etc.) of the new window as a string. The string must not contain any whitespace, and each feature name and its value must be separated by a comma. See <a href="#Position_and_size_features">Position and size features</a> below for details.</dd>
+</dl>
+
+<h2 name="Description" id="Description">Description</h2>
+
+<p>The <code>open()</code> method creates a new secondary browser window, similar to choosing New Window from the File menu. The <code>strUrl</code> parameter specifies the URL to be fetched and loaded in the new window. If <code>strUrl</code> is an empty string, then a new blank, empty window (URL <code>about:blank</code>) is created with the default toolbars of the main window.</p>
+
+<p>Note that remote URLs won't load immediately. When <code>window.open()</code> returns, the window always contains <code>about:blank</code>. The actual fetching of the URL is deferred and starts after the current script block finishes executing. The window creation and the loading of the referenced resource are done asynchronously.</p>
+
+<h2 name="Examples" id="Examples">Examples</h2>
+
+<pre class="brush:js">var windowObjectReference;
+var strWindowFeatures = "menubar=yes,location=yes,resizable=yes,scrollbars=yes,status=yes";
+
+function openRequestedPopup() {
+  windowObjectReference = window.open("http://www.cnn.com/", "CNN_WindowName", strWindowFeatures);
+}</pre>
+
+<pre class="brush:js">var windowObjectReference;
+
+function openRequestedPopup() {
+  windowObjectReference = window.open(
+    "http://www.domainname.ext/path/ImageFile.png",
+    "DescriptiveWindowName",
+    "resizable,scrollbars,status"
+  );
+}</pre>
+
+<p>If a window with the name <code>strWindowName</code> already exists, then <code>strUrl</code> is loaded into the <em>existing</em> window. In this case the return value of the method is the existing window and <code>strWindowFeatures</code> is ignored. Providing an empty string for <code>strUrl</code> is a way to get a reference to an open window by its name without changing the window's location. To open a <em>new</em> window on every call of <code>window.open()</code>, use the special value <code>_blank</code> for <code>strWindowName</code>.</p>
+
+<p><code>strWindowFeatures</code> is an optional string containing a comma-separated list of requested features of the new window. After a window is opened, JavaScript can't be used to change the features. If <code>strWindowName</code> does not specify an existing window and the <code>strWindowFeatures</code> parameter is not provided (or if the <code>strWindowFeatures</code> parameter is an empty string), then the new secondary window will render the default toolbars of the main window.</p>
+
+<p>If the <code>strWindowFeatures</code> parameter is used and no size features are defined, then the new window dimensions will be the same as the dimensions of the most recently rendered window.</p>
+
+<p>If the <code>strWindowFeatures</code> parameter is used and if no position features are defined, then the left and top coordinates of the new window dimension will be 22 pixels from where the most recently rendered window was. An offset is universally implemented by browser manufacturers (it is 29 pixels in MSIE 6 SP2 with the default theme) and its purpose is to help users to notice new windows opening. If the most recently used window was maximized, then there is no offset: the new window will be maximized as well.</p>
+
+<p><strong>If the <code>strWindowFeatures</code> parameter is used, the features that are not listed will be disabled or removed</strong> (except <code>titlebar</code> and <code>close</code> which are by default <code>yes</code>).</p>
+
+<div class="note">
+<p><strong>Tip</strong>: If using the <code>strWindowFeatures</code> parameter, only list the features to be enabled or rendered; the others (except <code>titlebar</code> and <code>close</code>) will be disabled or removed.</p>
+
+<p>Note that in some browsers, users can override the <code>strWindowFeatures</code> settings and enable (or prevent the disabling of) features.</p>
+</div>
+
+<p><img src="../../../../../../mdn.mozillademos.org/files/439/FirefoxChromeToolbarsDescription7a.gif" style="border: 1px dotted green;" alt="Firefox Chrome Toolbars Illustration"></p>
+
+<h3 name="Position_and_size_features" id="Position_and_size_features">Position and size features</h3>
+
+<div><div class="blockIndicator geckoMinVer standardNote standardNoteBlock"> 
+  <div style="text-align: center; font-weight: bold; padding-bottom: 0.5em;">Gecko 1.9.2 note</div> 
+  <div>Starting in Gecko 1.9.2 (Firefox 3.6), overriding the position of a window using window features will not change the persisted values saved by the session store feature. That means the next time the window is opened, it will still open in the saved location.</div> 
+</div></div>
+
+<p><a href="#Note_on_position_and_dimension_error_correction">Note on position and dimension error correction</a></p>
+
+<div class="bug"><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=176320" rel="external" class="external" title="https://bugzilla.mozilla.org/show_bug.cgi?id=176320">Bug 176320: Minimal innerWidth/innerHeight values for popup windows</a></div>
+
+<p><a href="#Note_on_precedence">Note on precedence</a></p>
+
+<dl>
+ <dt id="left">left</dt>
+ <dd>Specifies the distance the new window is placed from the left side of the work area for applications of the user's operating system to the leftmost border (resizing handle) of the browser window. The new window can not be initially positioned offscreen.</dd>
+ <dd>Supported in: <img src="../../../../../../mdn.mozillademos.org/files/566/MSIE_ico.png" alt="Internet Explorer 5+">, <img src="../../../../../../mdn.mozillademos.org/files/575/ns6.gif" alt="Netscape 6.x">, <img src="../../../../../../mdn.mozillademos.org/files/576/NS7_ico4.gif" alt="Netscape 7.x">, <img src="../../../../../../mdn.mozillademos.org/files/554/Mozilla1_ico.png" alt="Mozilla 1.x">, <img src="../../../../../../mdn.mozillademos.org/files/412/FF1x.png" alt="Firefox 1.x">, <img src="../../../../../../mdn.mozillademos.org/files/589/Opera6.gif" alt="Opera 6+"></dd>
+ <dt id="top">top</dt>
+ <dd>Specifies the distance the new window is placed from the top side of the work area for applications of the user's operating system to the topmost border (resizing handle) of the browser window. The new window can not be initially positioned offscreen.</dd>
+ <dd>Supported in: <img src="../../../../../../mdn.mozillademos.org/files/566/MSIE_ico.png" alt="Internet Explorer 5+">, <img src="../../../../../../mdn.mozillademos.org/files/575/ns6.gif" alt="Netscape 6.x">, <img src="../../../../../../mdn.mozillademos.org/files/576/NS7_ico4.gif" alt="Netscape 7.x">, <img src="../../../../../../mdn.mozillademos.org/files/554/Mozilla1_ico.png" alt="Mozilla 1.x">, <img src="../../../../../../mdn.mozillademos.org/files/412/FF1x.png" alt="Firefox 1.x">, <img src="../../../../../../mdn.mozillademos.org/files/589/Opera6.gif" alt="Opera 6+"></dd>
+ <dt id="height">height</dt>
+ <dd>Specifies the height of the content area, viewing area of the new secondary window in pixels. The height value includes the height of the horizontal scrollbar if present. The minimum required value is 100.</dd>
+ <dd><a href="#Note_on_outerHeight_versus_height">Note on outerHeight versus height (or innerHeight)</a></dd>
+ <dd>Supported in: <img src="../../../../../../mdn.mozillademos.org/files/566/MSIE_ico.png" alt="Internet Explorer 5+">, <img src="../../../../../../mdn.mozillademos.org/files/575/ns6.gif" alt="Netscape 6.x">, <img src="../../../../../../mdn.mozillademos.org/files/576/NS7_ico4.gif" alt="Netscape 7.x">, <img src="../../../../../../mdn.mozillademos.org/files/554/Mozilla1_ico.png" alt="Mozilla 1.x">, <img src="../../../../../../mdn.mozillademos.org/files/412/FF1x.png" alt="Firefox 1.x">, <img src="../../../../../../mdn.mozillademos.org/files/589/Opera6.gif" alt="Opera 6+"></dd>
+ <dt id="width">width</dt>
+ <dd>Specifies the width of the content area, viewing area of the new secondary window in pixels. The width value includes the width of the vertical scrollbar if present. The width value does not include the sidebar if it is expanded. The minimum required value is 100.</dd>
+ <dd>Supported in: <img src="../../../../../../mdn.mozillademos.org/files/566/MSIE_ico.png" alt="Internet Explorer 5+">, <img src="../../../../../../mdn.mozillademos.org/files/575/ns6.gif" alt="Netscape 6.x">, <img src="../../../../../../mdn.mozillademos.org/files/576/NS7_ico4.gif" alt="Netscape 7.x">, <img src="../../../../../../mdn.mozillademos.org/files/554/Mozilla1_ico.png" alt="Mozilla 1.x">, <img src="../../../../../../mdn.mozillademos.org/files/412/FF1x.png" alt="Firefox 1.x">, <img src="../../../../../../mdn.mozillademos.org/files/589/Opera6.gif" alt="Opera 6+"></dd>
+ <dt>screenX</dt>
+ <dd>Deprecated. Same as <a href="#left">left</a> but only supported by Netscape and Mozilla-based browsers.</dd>
+ <dd>Supported in: <img src="../../../../../../mdn.mozillademos.org/files/575/ns6.gif" alt="Netscape 6.x">, <img src="../../../../../../mdn.mozillademos.org/files/576/NS7_ico4.gif" alt="Netscape 7.x">, <img src="../../../../../../mdn.mozillademos.org/files/554/Mozilla1_ico.png" alt="Mozilla 1.x">, <img src="../../../../../../mdn.mozillademos.org/files/412/FF1x.png" alt="Firefox 1.x"></dd>
+ <dt>screenY</dt>
+ <dd>Deprecated. Same as <a href="#topS">top</a> but only supported by Netscape and Mozilla-based browsers.</dd>
+ <dd>Supported in: <img src="../../../../../../mdn.mozillademos.org/files/575/ns6.gif" alt="Netscape 6.x">, <img src="../../../../../../mdn.mozillademos.org/files/576/NS7_ico4.gif" alt="Netscape 7.x">, <img src="../../../../../../mdn.mozillademos.org/files/554/Mozilla1_ico.png" alt="Mozilla 1.x">, <img src="../../../../../../mdn.mozillademos.org/files/412/FF1x.png" alt="Firefox 1.x"></dd>
+ <dt>centerscreen</dt>
+ <dd>Centers the window in relation to its parent's size and position. Requires chrome=yes.</dd>
+ <dt>outerHeight</dt>
+ <dd>Specifies the height of the whole browser window in pixels. This outerHeight value includes any/all present toolbar, window horizontal scrollbar (if present) and top and bottom window resizing borders. Minimal required value is 100.</dd>
+ <dd><strong>Note</strong>: since titlebar is always rendered, then requesting outerHeight=100 will make the innerHeight of the browser window under the minimal 100 pixels.</dd>
+ <dd><a href="#Note_on_outerHeight_versus_height">Note on outerHeight versus height (or innerHeight)</a></dd>
+ <dd>Supported in: <img src="../../../../../../mdn.mozillademos.org/files/575/ns6.gif" alt="Netscape 6.x">, <img src="../../../../../../mdn.mozillademos.org/files/576/NS7_ico4.gif" alt="Netscape 7.x">, <img src="../../../../../../mdn.mozillademos.org/files/554/Mozilla1_ico.png" alt="Mozilla 1.x">, <img src="../../../../../../mdn.mozillademos.org/files/412/FF1x.png" alt="Firefox 1.x"></dd>
+ <dt>outerWidth</dt>
+ <dd>Specifies the width of the whole browser window in pixels. This outerWidth value includes the window vertical scrollbar (if present) and left and right window resizing borders.</dd>
+ <dd>Supported in: <img src="../../../../../../mdn.mozillademos.org/files/575/ns6.gif" alt="Netscape 6.x">, <img src="../../../../../../mdn.mozillademos.org/files/576/NS7_ico4.gif" alt="Netscape 7.x">, <img src="../../../../../../mdn.mozillademos.org/files/554/Mozilla1_ico.png" alt="Mozilla 1.x">, <img src="../../../../../../mdn.mozillademos.org/files/412/FF1x.png" alt="Firefox 1.x"></dd>
+ <dt>innerHeight</dt>
+ <dd>Same as <a href="#height">height</a> but only supported by Netscape and Mozilla-based browsers. Specifies the height of the content area, viewing area of the new secondary window in pixels. The <var>innerHeight</var> value includes the height of the horizontal scrollbar if present. Minimal required value is 100.</dd>
+ <dd><a href="#Note_on_outerHeight_versus_height">Note on outerHeight versus height (or innerHeight)</a></dd>
+ <dd>Supported in: <img src="../../../../../../mdn.mozillademos.org/files/575/ns6.gif" alt="Netscape 6.x">, <img src="../../../../../../mdn.mozillademos.org/files/576/NS7_ico4.gif" alt="Netscape 7.x">, <img src="../../../../../../mdn.mozillademos.org/files/554/Mozilla1_ico.png" alt="Mozilla 1.x">, <img src="../../../../../../mdn.mozillademos.org/files/412/FF1x.png" alt="Firefox 1.x"></dd>
+ <dt>innerWidth</dt>
+ <dd>Same as <a href="#width">width</a> but only supported by Netscape and Mozilla-based browsers. Specifies the width of the content area, viewing area of the new secondary window in pixels. The innerWidth value includes the width of the vertical scrollbar if present. The innerWidth value does not include the sidebar if it is expanded. Minimal required value is 100.</dd>
+ <dd>Supported in: <img src="../../../../../../mdn.mozillademos.org/files/575/ns6.gif" alt="Netscape 6.x">, <img src="../../../../../../mdn.mozillademos.org/files/576/NS7_ico4.gif" alt="Netscape 7.x">, <img src="../../../../../../mdn.mozillademos.org/files/554/Mozilla1_ico.png" alt="Mozilla 1.x">, <img src="../../../../../../mdn.mozillademos.org/files/412/FF1x.png" alt="Firefox 1.x"></dd>
+</dl>
+
+<h3 name="Toolbar_and_chrome_features" id="Toolbar_and_chrome_features">Toolbar and chrome features</h3>
+
+<dl>
+ <dt>NOTE: All features can be set to yes, 1 or just be present to be "on", set to <em>no</em> or<em> 0&nbsp;</em>or in most cases just not present to be "off"</dt>
+ <dd>example "status=yes", "status=1" and "status" have identical results</dd>
+ <dt>&nbsp;</dt>
+ <dt>menubar</dt>
+ <dd>If this feature is on, then the new secondary window renders the menubar.</dd>
+ <dd>Mozilla and Firefox users can force new windows to always render the menubar by setting <code>dom.disable_window_open_feature.menubar</code> to <var>true</var> in <a href="http://support.mozilla.com/en-US/kb/Editing+configuration+files#about_config" class="external">about:config</a> or in their <a href="http://support.mozilla.com/en-US/kb/Editing+configuration+files#user_js" class="external">user.js file</a>.</dd>
+ <dd>Supported in: <img src="../../../../../../mdn.mozillademos.org/files/566/MSIE_ico.png" alt="Internet Explorer 5+">, <img src="../../../../../../mdn.mozillademos.org/files/575/ns6.gif" alt="Netscape 6.x">, <img src="../../../../../../mdn.mozillademos.org/files/576/NS7_ico4.gif" alt="Netscape 7.x">, <img src="../../../../../../mdn.mozillademos.org/files/554/Mozilla1_ico.png" alt="Mozilla 1.x">, <img src="../../../../../../mdn.mozillademos.org/files/412/FF1x.png" alt="Firefox 1.x"></dd>
+ <dt>toolbar</dt>
+ <dd>If this feature is on, then the new secondary window renders the Navigation Toolbar (Back, Forward, Reload, Stop buttons). In addition to the Navigation Toolbar, Mozilla-based browsers will render the Tab Bar if it is visible, present in the parent window. (If this feature is set to <var>no</var> all toolbars in the window will be invisible, for example extension toolbars).</dd>
+ <dd>Mozilla and Firefox users can force new windows to always render the Navigation Toolbar by setting <code>dom.disable_window_open_feature.toolbar</code> to <var>true</var> in <a href="http://support.mozilla.com/en-US/kb/Editing+configuration+files#about_config" class="external">about:config</a> or in their <a href="http://support.mozilla.com/en-US/kb/Editing+configuration+files#user_js" class="external">user.js file</a>.</dd>
+ <dd>Supported in: <img src="../../../../../../mdn.mozillademos.org/files/566/MSIE_ico.png" alt="Internet Explorer 5+">, <img src="../../../../../../mdn.mozillademos.org/files/575/ns6.gif" alt="Netscape 6.x">, <img src="../../../../../../mdn.mozillademos.org/files/576/NS7_ico4.gif" alt="Netscape 7.x">, <img src="../../../../../../mdn.mozillademos.org/files/554/Mozilla1_ico.png" alt="Mozilla 1.x">, <img src="../../../../../../mdn.mozillademos.org/files/412/FF1x.png" alt="Firefox 1.x"></dd>
+ <dt>location</dt>
+ <dd>If this feature is on, then the new secondary window renders the Location bar in Mozilla-based browsers. MSIE 5+ and Opera 7.x renders the Address Bar.</dd>
+ <dd>Mozilla and Firefox users can force new windows to always render the location bar by setting <code>dom.disable_window_open_feature.location</code> to <var>true</var> in <a href="http://support.mozilla.com/en-US/kb/Editing+configuration+files#about_config" class="external">about:config</a> or in their <a href="http://support.mozilla.com/en-US/kb/Editing+configuration+files#user_js" class="external">user.js file</a>. <div class="blockIndicator standardNote standardNoteBlock"> 
+    <p><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Firefox/Releases/3">Firefox 3 note</a></p> 
+    <p style="font-weight: 400;">In Firefox 3, <code>dom.disable_window_open_feature.location</code> now defaults to <var>true</var>, forcing the presence of the Location Bar much like in IE7. See bug 337344 for more information.</p> 
+</div></dd>
+ <dd>Supported in: <img src="../../../../../../mdn.mozillademos.org/files/566/MSIE_ico.png" alt="Internet Explorer 5+">, <img src="../../../../../../mdn.mozillademos.org/files/575/ns6.gif" alt="Netscape 6.x">, <img src="../../../../../../mdn.mozillademos.org/files/576/NS7_ico4.gif" alt="Netscape 7.x">, <img src="../../../../../../mdn.mozillademos.org/files/554/Mozilla1_ico.png" alt="Mozilla 1.x">, <img src="../../../../../../mdn.mozillademos.org/files/412/FF1x.png" alt="Firefox 1.x">, <img src="../../../../../../mdn.mozillademos.org/files/589/Opera6.gif" alt="Opera 6+"></dd>
+ <dt>personalbar</dt>
+ <dd>If this feature is on, then the new secondary window renders the Personal Toolbar in Netscape 6.x, Netscape 7.x and Mozilla browser. It renders the Bookmarks Toolbar in Firefox. In addition to the Personal Toolbar, Mozilla browser will render the Site Navigation Bar if such toolbar is visible, present in the parent window.</dd>
+ <dd>Mozilla and Firefox users can force new windows to always render the Personal Toolbar/Bookmarks toolbar by setting <code>dom.disable_window_open_feature.personalbar</code> to <var>true</var> in <a href="http://support.mozilla.com/en-US/kb/Editing+configuration+files#about_config" class="external">about:config</a> or in their <a href="http://support.mozilla.com/en-US/kb/Editing+configuration+files#user_js" class="external">user.js file</a>.</dd>
+ <dd>Supported in: <img src="../../../../../../mdn.mozillademos.org/files/575/ns6.gif" alt="Netscape 6.x">, <img src="../../../../../../mdn.mozillademos.org/files/576/NS7_ico4.gif" alt="Netscape 7.x">, <img src="../../../../../../mdn.mozillademos.org/files/554/Mozilla1_ico.png" alt="Mozilla 1.x">, <img src="../../../../../../mdn.mozillademos.org/files/412/FF1x.png" alt="Firefox 1.x"></dd>
+ <dt>directories <span class="inlineIndicator obsolete obsoleteInline" title="(Firefox 4 / Thunderbird 3.3 / SeaMonkey 2.1)">Obsolete since Gecko 2</span></dt>
+ <dd>Obsolete synonym of personalbar. In IE, it rendered the Links bar. Supported in Gecko up to 1.9.2 and in IE up to 6.</dd>
+ <dt>status</dt>
+ <dd>If this feature is on, then the new secondary window has a status bar. Users can force the rendering of status bar in all Mozilla-based browsers, in MSIE 6 SP2 (<a href="#Note_on_security_issues_of_the_status_bar_presence">Note on status bar in XP SP2</a>) and in Opera 6+. The default preference setting in recent Mozilla-based browser releases and in Firefox 1.0 is to force the presence of the status bar.</dd>
+ <dd><a href="#Note_on_status_bar">Note on status bar</a></dd>
+ <dd>Supported in: <img src="../../../../../../mdn.mozillademos.org/files/566/MSIE_ico.png" alt="Internet Explorer 5+">, <img src="../../../../../../mdn.mozillademos.org/files/575/ns6.gif" alt="Netscape 6.x">, <img src="../../../../../../mdn.mozillademos.org/files/576/NS7_ico4.gif" alt="Netscape 7.x">, <img src="../../../../../../mdn.mozillademos.org/files/554/Mozilla1_ico.png" alt="Mozilla 1.x">, <img src="../../../../../../mdn.mozillademos.org/files/412/FF1x.png" alt="Firefox 1.x"></dd>
+</dl>
+
+<p>&nbsp;</p>
+
+<h3 name="Window_functionality_features" id="Window_functionality_features">Window functionality features</h3>
+
+<dl>
+ <dt>&nbsp;</dt>
+ <dt>attention <span class="badge nonstandardBadge" title="This API has not been standardized."><span class="badgeText">Non-standard</span></span></dt>
+ <dd>If this feature is specified, the window is able to open even if another application is already in the foreground. This feature is for Firefox OS applications only, and is currently restricted to certified applications. See "<a href="https://developer.mozilla.org/en-US/Apps/Build/App_permissions#Certified_app_permissions">Certified app permissions</a>" in <a href="https://developer.mozilla.org/en-US/Apps/Build/App_permissions">undefined</a> for more information.</dd>
+ <dd>Supported in: <img src="../../../../../../mdn.mozillademos.org/files/8003/firefox_os_logo_wordmark-75px.png" style="height: 25px; width: 83px;" alt=""></dd>
+ <dt>dependent</dt>
+ <dd>If on, the new window is said to be dependent of its parent window. A dependent window closes when its parent window closes. A dependent window is minimized on the Windows task bar only when its parent window is minimized. On Windows platforms, a dependent window does not show on the task bar. A dependent window also stays in front of the parent window.</dd>
+ <dd>Dependent windows are not implemented on MacOS X, this option will be ignored.</dd>
+ <dd>The dependent feature is currently under revision to be removed (<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=214867" class="external" title="Don't let web pages use dependent=yes in window.open()">bug&nbsp;214867</a>)</dd>
+ <dd>In MSIE 6, the nearest equivalent to this feature is the <code>showModelessDialog()</code> method.</dd>
+ <dd>Supported in: <img src="../../../../../../mdn.mozillademos.org/files/575/ns6.gif" alt="Netscape 6.x">, <img src="../../../../../../mdn.mozillademos.org/files/576/NS7_ico4.gif" alt="Netscape 7.x">, <img src="../../../../../../mdn.mozillademos.org/files/554/Mozilla1_ico.png" alt="Mozilla 1.x">, <img src="../../../../../../mdn.mozillademos.org/files/412/FF1x.png" alt="Firefox 1.x"></dd>
+ <dt>minimizable</dt>
+ <dd>This setting can only apply to dialog windows; "minimizable" requires <code>dialog=yes</code>. If <code>minimizable</code> is on, the new dialog window will have a minimize system command icon in the titlebar and it will be minimizable. Any non-dialog window is always minimizable and <code>minimizable=no</code> will be ignored.</dd>
+ <dd>Supported in: <img src="../../../../../../mdn.mozillademos.org/files/575/ns6.gif" alt="Netscape 6.x">, <img src="../../../../../../mdn.mozillademos.org/files/576/NS7_ico4.gif" alt="Netscape 7.x">, <img src="../../../../../../mdn.mozillademos.org/files/554/Mozilla1_ico.png" alt="Mozilla 1.x">, <img src="../../../../../../mdn.mozillademos.org/files/412/FF1x.png" alt="Firefox 1.x"></dd>
+ <dt>fullscreen</dt>
+ <dd>Do not use. Not implemented in Mozilla. There are no plans to implement this feature in Mozilla.</dd>
+ <dd>This feature no longer works in MSIE 6 SP2 the way it worked in MSIE 5.x. The Windows taskbar, as well as the titlebar and the status bar of the window are not visible, nor accessible when fullscreen is enabled in MSIE 5.x.</dd>
+ <dd><code>fullscreen</code> always upsets users with large monitor screen or with dual monitor screen. Forcing <code>fullscreen</code> onto other users is also extremely unpopular and is considered an outright rude attempt to impose web author's viewing preferences onto users.</dd>
+ <dd><a href="#Note_on_fullscreen">Note on fullscreen</a></dd>
+ <dd>Supported in: <img src="../../../../../../mdn.mozillademos.org/files/566/MSIE_ico.png" alt="Internet Explorer 5+"></dd>
+ <dd><code>fullscreen</code> does not really work in MSIE 6 SP2.</dd>
+ <dt>resizable</dt>
+ <dd>If this feature is on, the new secondary window will be resizable.</dd>
+ <dd><strong>Note</strong>: Starting with version 1.4, Mozilla-based browsers have a window resizing grippy at the right end of the status bar, this ensures that users can resize the browser window even if the web author requested this secondary window to be non-resizable. In such case, the maximize/restore icon in the window's titlebar will be disabled and the window's borders won't allow resizing but the window will still be resizable via that grippy in the status bar.
+ <p>Starting with Firefox 3, secondary windows are always resizable (<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=177838" class="external" title="FIXED: Make all popup windows resizable, ignoring resizable=no">bug&nbsp;177838</a>)</p>
+
+ <div class="note">
+ <p><strong>Tip</strong>: For accessibility reasons, it is strongly recommended to set this feature always on</p>
+ </div>
+ </dd>
+ <dd>Mozilla and Firefox users can force new windows to be easily resizable by setting<br>
+ <code>dom.disable_window_open_feature.resizable</code><br>
+ to <var>true</var> in <a href="http://support.mozilla.com/en-US/kb/Editing+configuration+files#about_config" class="external">about:config</a> or in their <a href="http://support.mozilla.com/en-US/kb/Editing+configuration+files#user_js" class="external">user.js file</a>.</dd>
+ <dd>Supported in: <img src="../../../../../../mdn.mozillademos.org/files/566/MSIE_ico.png" alt="Internet Explorer 5+">, <img src="../../../../../../mdn.mozillademos.org/files/575/ns6.gif" alt="Netscape 6.x">, <img src="../../../../../../mdn.mozillademos.org/files/576/NS7_ico4.gif" alt="Netscape 7.x">, <img src="../../../../../../mdn.mozillademos.org/files/554/Mozilla1_ico.png" alt="Mozilla 1.x">, <img src="../../../../../../mdn.mozillademos.org/files/412/FF1x.png" alt="Firefox 1.x"></dd>
+ <dt>scrollbars</dt>
+ <dd>If this feature is on, the new secondary window will show horizontal and/or vertical scrollbar(s) if the document doesn't fit into the window's viewport.
+ <div class="note">
+ <p><strong>Tip</strong>: For accessibility reasons, it is strongly encouraged to set this feature always on.</p>
+ </div>
+ </dd>
+ <dd>Mozilla and Firefox users can force this option to be always enabled for new windows by setting<br>
+ <code>dom.disable_window_open_feature.scrollbars</code><br>
+ to <var>true</var> in <a href="http://support.mozilla.com/en-US/kb/Editing+configuration+files#about_config" class="external">about:config</a> or in their <a href="http://support.mozilla.com/en-US/kb/Editing+configuration+files#user_js" class="external">user.js file</a>.</dd>
+ <dd><a href="#Note_on_scrollbars">Note on scrollbars</a></dd>
+ <dd>Supported in: <img src="../../../../../../mdn.mozillademos.org/files/566/MSIE_ico.png" alt="Internet Explorer 5+">, <img src="../../../../../../mdn.mozillademos.org/files/575/ns6.gif" alt="Netscape 6.x">, <img src="../../../../../../mdn.mozillademos.org/files/576/NS7_ico4.gif" alt="Netscape 7.x">, <img src="../../../../../../mdn.mozillademos.org/files/554/Mozilla1_ico.png" alt="Mozilla 1.x">, <img src="../../../../../../mdn.mozillademos.org/files/412/FF1x.png" alt="Firefox 1.x"></dd>
+</dl>
+
+<h3 name="Features_requiring_privileges" id="Features_requiring_privileges">Features requiring privileges</h3>
+
+<p>The following features require the <code>UniversalBrowserWrite</code> privilege, otherwise they will be ignored. Chrome scripts have this privilege automatically, others have to request it from the PrivilegeManager.</p>
+
+<dl>
+ <dt>chrome</dt>
+ <dd><strong>Note</strong>: Starting with Mozilla 1.7/Firefox 0.9, this feature requires the <code>UniversalBrowserWrite</code> privilege (<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=244965" class="external" title="FIXED: Untrusted web content can display content using &quot;chrome&quot; flag in window.open">bug&nbsp;244965</a>). Without this privilege, it is ignored.</dd>
+ <dd>If on, the page is loaded as window's only content, without any of the browser's interface elements. There will be no context menu defined by default and none of the standard keyboard shortcuts will work. The page is supposed to provide a user interface of its own, usually this feature is used to open XUL documents (standard dialogs like the JavaScript Console are opened this way).</dd>
+ <dd>Supported in: <img src="../../../../../../mdn.mozillademos.org/files/575/ns6.gif" alt="Netscape 6.x">, <img src="../../../../../../mdn.mozillademos.org/files/576/NS7_ico4.gif" alt="Netscape 7.x">, <img src="../../../../../../mdn.mozillademos.org/files/554/Mozilla1_ico.png" alt="Mozilla 1.x">, <img src="../../../../../../mdn.mozillademos.org/files/412/FF1x.png" alt="Firefox 1.x"></dd>
+ <dt>dialog</dt>
+ <dd><strong>Note</strong>: Starting with Firefox 44, this feature can only be used with chrome privileges. If content attempts to toggle this feature, it will be ignored.</dd>
+ <dd><span class="float-right"><a href="../../../../../../mdn.mozillademos.org/files/542/MenuSystemCommands.png" title="MenuSystemCommands.png"><img src="../../../../../../mdn.mozillademos.org/files/542/MenuSystemCommands.png?size=webview" style="float: left; height: 170px; width: 170px;" class="internal lwrap" alt="MenuSystemCommands.png"></a></span>The <code>dialog</code> feature removes all icons (restore, minimize, maximize) from the window's titlebar, leaving only the close button. Mozilla 1.2+ and Netscape 7.1 will render the other menu system commands (in FF 1.0 and in NS 7.0x, the command system menu is not identified with the Firefox/NS 7.0x icon on the left end of the titlebar: that's probably a bug. You can access the command system menu with a right-click on the titlebar). Dialog windows are windows which have no minimize system command icon and no maximize/restore down system command icon on the titlebar nor in correspondent menu item in the command system menu. They are said to be dialog because their normal, usual purpose is to only notify info and to be dismissed, closed. On Mac systems, dialog windows have a different window border and they may get turned into a sheet.</dd>
+ <dd>Supported in: <img src="../../../../../../mdn.mozillademos.org/files/575/ns6.gif" alt="Netscape 6.x">, <img src="../../../../../../mdn.mozillademos.org/files/576/NS7_ico4.gif" alt="Netscape 7.x">, <img src="../../../../../../mdn.mozillademos.org/files/554/Mozilla1_ico.png" alt="Mozilla 1.x">, <img src="../../../../../../mdn.mozillademos.org/files/412/FF1x.png" alt="Firefox 1.x"></dd>
+ <dt>modal</dt>
+ <dd><strong>Note</strong>: Starting with Mozilla 1.2.1, this feature requires the <code>UniversalBrowserWrite</code> privilege (<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=180048" class="external" title="FIXED: suggest an override for modal in window.open">bug&nbsp;180048</a>). Without this privilege, it is ignored.</dd>
+ <dd>If on, the new window is said to be modal. The user cannot return to the main window until the modal window is closed. A typical modal window is created by the <a href="alert.html" title="DOM/window.alert">alert() function</a>.</dd>
+ <dd>The exact behavior of modal windows depends on the platform and on the Mozilla release version.
+ <div class="note">
+ <p><strong>Note:</strong> As of <span title="(Firefox 3)">Gecko&nbsp;1.9</span>, the Internet Explorer equivalent to this feature is the <a href="showModalDialog.html" title="The Window.showModalDialog() creates and displays a modal dialog box containing a specified HTML document."><code>window.showModalDialog()</code></a> method. For compatibility reasons, it's now supported in Firefox. Note also that starting in <span title="(Firefox 4 / Thunderbird 3.3 / SeaMonkey 2.1)">Gecko&nbsp;2.0</span>, you can use <a href="showModalDialog.html" title="The Window.showModalDialog() creates and displays a modal dialog box containing a specified HTML document."><code>window.showModalDialog()</code></a> without UniversalBrowserWrite privileges.</p>
+ </div>
+ </dd>
+ <dd>Supported in: <img src="../../../../../../mdn.mozillademos.org/files/575/ns6.gif" alt="Netscape 6.x">, <img src="../../../../../../mdn.mozillademos.org/files/576/NS7_ico4.gif" alt="Netscape 7.x">, <img src="../../../../../../mdn.mozillademos.org/files/554/Mozilla1_ico.png" alt="Mozilla 1.x">, <img src="../../../../../../mdn.mozillademos.org/files/412/FF1x.png" alt="Firefox 1.x"></dd>
+ <dt>titlebar</dt>
+ <dd>By default, all new secondary windows have a titlebar. If set to <var>no or 0</var>, this feature removes the titlebar from the new secondary window.</dd>
+ <dd>Mozilla and Firefox users can force new windows to always render the titlebar by setting<br>
+ <code>dom.disable_window_open_feature.titlebar</code><br>
+ to <var>true</var> in <a href="http://support.mozilla.com/en-US/kb/Editing+configuration+files#about_config" class="external">about:config</a> or in their <a href="http://support.mozilla.com/en-US/kb/Editing+configuration+files#user_js" class="external">user.js file</a>.</dd>
+ <dd>Supported in: <img src="../../../../../../mdn.mozillademos.org/files/575/ns6.gif" alt="Netscape 6.x">, <img src="../../../../../../mdn.mozillademos.org/files/576/NS7_ico4.gif" alt="Netscape 7.x">, <img src="../../../../../../mdn.mozillademos.org/files/554/Mozilla1_ico.png" alt="Mozilla 1.x">, <img src="../../../../../../mdn.mozillademos.org/files/412/FF1x.png" alt="Firefox 1.x"></dd>
+ <dt>alwaysRaised</dt>
+ <dd>If on, the new window will always be displayed on top of other browser windows, regardless of whether it is active or not.</dd>
+ <dd>Supported in: <img src="../../../../../../mdn.mozillademos.org/files/575/ns6.gif" alt="Netscape 6.x">, <img src="../../../../../../mdn.mozillademos.org/files/576/NS7_ico4.gif" alt="Netscape 7.x">, <img src="../../../../../../mdn.mozillademos.org/files/554/Mozilla1_ico.png" alt="Mozilla 1.x">, <img src="../../../../../../mdn.mozillademos.org/files/412/FF1x.png" alt="Firefox 1.x"></dd>
+ <dt>alwaysLowered</dt>
+ <dd>If on, the new created window floats below, under its own parent when the parent window is not minimized. alwaysLowered windows are often referred as pop-under windows. The alwaysLowered window can not be on top of the parent but the parent window can be minimized. In NS 6.x, the alwaysLowered window has no minimize system command icon and no restore/maximize system command.</dd>
+ <dd>Supported in: <img src="../../../../../../mdn.mozillademos.org/files/575/ns6.gif" alt="Netscape 6.x">, <img src="../../../../../../mdn.mozillademos.org/files/576/NS7_ico4.gif" alt="Netscape 7.x">, <img src="../../../../../../mdn.mozillademos.org/files/554/Mozilla1_ico.png" alt="Mozilla 1.x">, <img src="../../../../../../mdn.mozillademos.org/files/412/FF1x.png" alt="Firefox 1.x"></dd>
+ <dt>z-lock</dt>
+ <dd>Same as <code>alwaysLowered</code>.</dd>
+ <dt>close</dt>
+ <dd>When set to <var>no or 0</var>, this feature removes the system close command icon and system close menu item. It will only work for dialog windows (<code>dialog</code> feature set). <code>close=no</code> will override <code>minimizable=yes</code>.</dd>
+ <dd>Mozilla and Firefox users can force new windows to always have a close button by setting<br>
+ <code>dom.disable_window_open_feature.close</code><br>
+ to <var>true</var> in <a href="http://support.mozilla.com/en-US/kb/Editing+configuration+files#about_config" class="external">about:config</a> or in their <a href="http://support.mozilla.com/en-US/kb/Editing+configuration+files#user_js" class="external">user.js file</a>.</dd>
+ <dd>Supported in: <img src="../../../../../../mdn.mozillademos.org/files/575/ns6.gif" alt="Netscape 6.x">, <img src="../../../../../../mdn.mozillademos.org/files/576/NS7_ico4.gif" alt="Netscape 7.x">, <img src="../../../../../../mdn.mozillademos.org/files/554/Mozilla1_ico.png" alt="Mozilla 1.x">, <img src="../../../../../../mdn.mozillademos.org/files/412/FF1x.png" alt="Firefox 1.x"></dd>
+</dl>
+
+<p>The position and size feature elements require a number to be set. The toolbars and window functionalities can be set with a <var>yes</var> or <var>no</var>; you can use <var>1</var> instead of <var>yes</var> and <var>0</var> instead of <var>no</var>. The toolbar and functionality feature elements also accept the shorthand form: you can turn a feature on by simply listing the feature name in the <var>features</var> string. If you supply the <var>features</var> parameter, then the <code>titlebar</code> and <code>close</code> are still <var>yes</var> by default, but the other features which have a <var>yes</var>/<var>no</var> choice will be <var>no</var> by default and will be turned off.</p>
+
+<p>Example:</p>
+
+<pre class="brush:js">var windowObjectReference; // global variable
+
+function openRequestedPopup() {
+  windowObjectReference = window.open(
+    "http://www.domainname.ext/path/ImgFile.png",
+    "DescriptiveWindowName",
+    "width=420,height=230,resizable,scrollbars=yes,status=1"
+  );
+}</pre>
+
+<p>In this example, the window will be resizable, it will render scrollbar(s) if needed, if the content overflows requested window dimensions and it will render the status bar. It will not render the menubar nor the location bar. Since the author knew about the size of the image (400 pixels wide and 200 pixels high), he added the margins applied to the root element in MSIE 6 which is 15 pixels for top margin, 15 pixels for the bottom margin, 10 pixels for the left margin and 10 pixels for the right margin.</p>
+
+<h2 name="Best_practices" id="Best_practices">Best practices</h2>
+
+<pre class="brush:js">&lt;script type="text/javascript"&gt;
+var windowObjectReference = null; // global variable
+
+function openFFPromotionPopup() {
+  if(windowObjectReference == null || windowObjectReference.closed)
+  /* if the pointer to the window object in memory does not exist
+     or if such pointer exists but the window was closed */
+
+  {
+    windowObjectReference = window.open("http://www.spreadfirefox.com/",
+   "PromoteFirefoxWindowName", "resizable,scrollbars,status");
+    /* then create it. The new window will be created and
+       will be brought on top of any other window. */
+  }
+  else
+  {
+    windowObjectReference.focus();
+    /* else the window reference must exist and the window
+       is not closed; therefore, we can bring it back on top of any other
+       window with the focus() method. There would be no need to re-create
+       the window or to reload the referenced resource. */
+  };
+}
+&lt;/script&gt;
+
+(...)
+
+&lt;p&gt;&lt;a
+ href="http://www.spreadfirefox.com/"
+ target="PromoteFirefoxWindowName"
+ onclick="openFFPromotionPopup(); return false;" 
+ title="This link will create a new window or will re-use an already opened one"
+&gt;Promote Firefox adoption&lt;/a&gt;&lt;/p&gt;
+</pre>
+
+<p>The above code solves a few usability problems related to links opening secondary window. The purpose of the <code>return false</code> in the code is to cancel default action of the link: if the onclick event handler is executed, then there is no need to execute the default action of the link. But if javascript support is disabled or non-existent on the user's browser, then the onclick event handler is ignored and the browser loads the referenced resource in the target frame or window that has the name "PromoteFirefoxWindowName". If no frame nor window has the name "PromoteFirefoxWindowName", then the browser will create a new window and will name it "PromoteFirefoxWindowName".</p>
+
+<p>More reading on the use of the target attribute:</p>
+
+<p><a href="http://www.w3.org/TR/html401/present/frames.html#h-16.3.2" class="external">HTML 4.01 Target attribute specifications</a></p>
+
+<p><a href="http://www.htmlhelp.com/faq/html/links.html#new-window" class="external">How do I create a link that opens a new window?</a></p>
+
+<p>You can also parameterize the function to make it versatile, functional in more situations, therefore re-usable in scripts and webpages:</p>
+
+<pre class="brush:js">&lt;script type="text/javascript"&gt;
+var windowObjectReference = null; // global variable
+
+function openRequestedPopup(strUrl, strWindowName) {
+  if(windowObjectReference == null || windowObjectReference.closed) {
+    windowObjectReference = window.open(strUrl, strWindowName,
+           "resizable,scrollbars,status");
+  } else {
+    windowObjectReference.focus();
+  };
+}
+&lt;/script&gt;
+ 
+(...)
+
+&lt;p&gt;&lt;a
+ href="http://www.spreadfirefox.com/"
+ target="PromoteFirefoxWindow"
+ onclick="openRequestedPopup(this.href, this.target); return false;"
+ title="This link will create a new window or will re-use an already opened one"
+&gt;Promote Firefox adoption&lt;/a&gt;&lt;/p&gt;
+</pre>
+
+<p>You can also make such function able to open only 1 secondary window and to reuse such single secondary window for other links in this manner:</p>
+
+<pre class="brush:js">&lt;script type="text/javascript"&gt;
+var windowObjectReference = null; // global variable
+var PreviousUrl; /* global variable which will store the
+                    url currently in the secondary window */
+
+function openRequestedSinglePopup(strUrl) {
+  if(windowObjectReference == null || windowObjectReference.closed) {
+    windowObjectReference = window.open(strUrl, "SingleSecondaryWindowName",
+         "resizable,scrollbars,status");
+  } else if(PreviousUrl != strUrl) {
+    windowObjectReference = window.open(strUrl, "SingleSecondaryWindowName",
+      "resizable=yes,scrollbars=yes,status=yes");
+    /* if the resource to load is different,
+       then we load it in the already opened secondary window and then
+       we bring such window back on top/in front of its parent window. */
+    windowObjectReference.focus();
+  } else {
+    windowObjectReference.focus();
+  };
+
+  PreviousUrl = strUrl;
+  /* explanation: we store the current url in order to compare url
+     in the event of another call of this function. */
+}
+&lt;/script&gt;
+
+(...)
+
+&lt;p&gt;&lt;a
+ href="http://www.spreadfirefox.com/"
+ target="SingleSecondaryWindowName"
+ onclick="openRequestedSinglePopup(this.href); return false;"
+ title="This link will create a new window or will re-use an already opened one"
+&gt;Promote Firefox adoption&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a
+ href="http://www.mozilla.org/support/firefox/faq"
+ target="SingleSecondaryWindowName"
+ onclick="openRequestedSinglePopup(this.href); return false;"
+ title="This link will create a new window or will re-use an already opened one"
+&gt;Firefox FAQ&lt;/a&gt;&lt;/p&gt;
+</pre>
+
+<h2 name="FAQ" id="FAQ">FAQ</h2>
+
+<dl>
+ <dt>How can I prevent the confirmation message asking the user whether he wants to close the window?</dt>
+ <dd>You can not. <strong>New windows not opened by javascript can not as a rule be closed by JavaScript.</strong> The JavaScript Console in Mozilla-based browsers will report the warning message: <code>"Scripts may not close windows that were not opened by script."</code> Otherwise the history of URLs visited during the browser session would be lost.</dd>
+ <dd><a href="close.html" title="DOM/window.close">More on the window.close()</a> method</dd>
+ <dt>How can I bring back the window if it is minimized or behind another window?</dt>
+ <dd>First check for the existence of the window object reference of such window and if it exists and if it has not been closed, then use the <a href="focus.html" title="DOM/window.focus">focus()</a> method. There is no other reliable way. You can examine an <a href="#Best_practices">example explaining how to use the focus() method</a>.</dd>
+ <dt>How do I force a maximized window?</dt>
+ <dd>You cannot. All browser manufacturers try to make the opening of new secondary windows noticed by users and noticeable by users to avoid confusion, to avoid disorienting users.</dd>
+ <dt>How do I turn off window resizability or remove toolbars?</dt>
+ <dd>You cannot force this. Users with Mozilla-based browsers have absolute control over window functionalities like resizability, scrollability and toolbars presence via user preferences in <code>about:config</code>. Since your users are the ones who are supposed to use such windows (and not you, being the web author), the best is to avoid interfering with their habits and preferences. We recommend to always set the resizability and scrollbars presence (if needed) to yes to insure accessibility to content and usability of windows. This is in the best interests of both the web author and the users.</dd>
+ <dt>How do I resize a window to fit its content?</dt>
+ <dd>You can not reliably because the users can prevent the window from being resized by unchecking the <code>Edit/Preferences/Advanced/Scripts &amp; Plug-ins/Allow Scripts to/ Move or resize existing windows</code> checkbox in Mozilla or <code>Tools/Options.../Content tab/Enable Javascript/Advanced button/Move or resize existing windows</code> checkbox in Firefox or by setting <code>dom.disable_window_move_resize</code> to <var>true</var> in <code>about:config</code> or by editing accordingly their <a href="http://www.mozilla.org/support/firefox/edit#user" class="external">user.js file</a>.</dd>
+ <dd>In general, users usually disable moving and resizing of existing windows because allowing authors' scripts to do so has been abused overwhelmingly in the past and the rare scripts that do not abuse such feature are often wrong, inaccurate when resizing the window. 99% of all those scripts disable window resizability and disable scrollbars when in fact they should enable both of these features to allow a cautious and sane fallback mechanism if their calculations are wrong.</dd>
+ <dd>The window method <a href="sizeToContent.html" title="DOM/window.sizeToContent">sizeToContent()</a> is also disabled if the user unchecks the preference <code>Move or resize existing windows</code> checkbox. Moving and resizing a window remotely on the user's screen via script will very often annoy the users, will disorient the user, and will be wrong at best. The web author expects to have full control of (and can decide about) every position and size aspects of the users' browser window ... which is simply not true.</dd>
+ <dt>How do I open a referenced resource of a link in a new tab? or in a specific tab?</dt>
+ <dd>To open a resource in a new tab see <a href="https://developer.mozilla.org/en-US/docs/XUL/tabbrowser">Tabbed browser</a>. Some <a href="https://developer.mozilla.org/en-US/Add-ons/Code_snippets/Tabbed_browser?redirectlocale=en-US&amp;redirectslug=Code_snippets%2FTabbed_browser">Code snippets</a> are available. If you are using the SDK, tabs are <a href="../../../../Add-ons/SDK/High-Level_APIs/tabs.html">handled a bit differently</a></dd>
+ <dd><a href="http://kmeleon.sourceforge.net/" class="external">K-meleon 1.1</a>, a Mozilla-based browser, gives complete control and power to the user regarding how links are opened. Only the user can set his advanced preferences to do that. Some advanced extensions also give Mozilla and Firefox a lot of power over how referenced resources are loaded.</dd>
+ <dd>In a few years, the <a href="http://www.w3.org/TR/2004/WD-css3-hyperlinks-20040224/#target0" class="external">target property of the CSS3 hyperlink module</a> may be implemented (if CSS3 Hyperlink module as it is right now is approved). And even if and when this happens, you can expect developers of browsers with tab-browsing to give the user entire veto power and full control over how links can open web pages. How to open a link should always be entirely under the control of the user.</dd>
+ <dt>How do I know whether a window I opened is still open?</dt>
+ <dd>You can test for the existence of the window object reference which is the returned value in case of success of the window.open() call and then verify that <em>w</em><var>indowObjectReference</var>.closed return value is <var>false</var>.</dd>
+ <dt>How can I tell when my window was blocked by a popup blocker?</dt>
+ <dd>With the built-in popup blockers of Mozilla/Firefox and Internet Explorer 6 SP2, you have to check the return value of <code>window.open()</code>: it will be <var>null</var> if the window wasn't allowed to open. However, for most other popup blockers, there is no reliable way.</dd>
+ <dt>What is the JavaScript relationship between the main window and the secondary window?</dt>
+ <dd>The <code>window.open()</code> method gives a main window a reference to a secondary window; the <a href="opener.html" title="DOM/window.opener">opener</a> property gives a secondary window a reference to its main window.</dd>
+ <dt>I can not access the properties of the new secondary window. I always get an error in the javascript console saying "Error<span class="nowiki">:</span> uncaught exception<span class="nowiki">:</span> Permission denied to get property &lt;property_name or method_name&gt;. Why is that?</dt>
+ <dd>It is because of the cross-domain script security restriction (also referred as the "Same Origin Policy"). A script loaded in a window (or frame) from a distinct origin (domain name) <strong>cannot get nor set</strong> properties of another window (or frame) or the properties of any of its HTML objects coming from another distinct origin (domain name). Therefore, before executing a script targeting a secondary window, the browser in the main window will verify that the secondary window has the same domain name.</dd>
+ <dd>More reading on the cross-domain script security restriction: <a href="http://www.mozilla.org/projects/security/components/same-origin.html" rel="freelink" class="external">http://www.mozilla.org/projects/secu...me-origin.html</a></dd>
+</dl>
+
+<h2 name="Usability_issues" id="Usability_issues">Usability issues</h2>
+
+<h3 name="Avoid_resorting_to_window.open.28.29" id="Avoid_resorting_to_window.open.28.29">Avoid resorting to <code>window.open()</code></h3>
+
+<p>Generally speaking, it is preferable to avoid resorting to window.open() for several reasons:</p>
+
+<ul>
+ <li>All Mozilla-based browsers offer <a href="https://developer.mozilla.org/en-US/docs/XUL/tabbrowser">tab-browsing</a> and this is the preferred mode of <a href="https://developer.mozilla.org/en-US/Add-ons/Code_snippets/Tabbed_browser?redirectlocale=en-US&amp;redirectslug=Code_snippets%2FTabbed_browser">opening referenced resources</a> (<a href="../../../../Add-ons/SDK/High-Level_APIs/tabs.html">SDK</a>)... not just in Mozilla-based browsers but in all other browsers offering tab-browsing. In other words, tab-capable browser users overall prefer opening new tabs than opening new windows in a majority of webpage situations. Tab-capable browsers have rapidly gained support and enthusiasm on internet in the last 3 years; this trend will not revert back. MSIE 7, released in October 2006, has full support for tab browsing.</li>
+ <li>There are now <a href="https://addons.mozilla.org/seamonkey/browse/type:1/cat:48/sort:updated" class="external">several Mozilla extensions</a> (like Multizilla) and <a href="https://addons.update.mozilla.org/firefox/browse/type:1/cat:14/sort:updated" class="external">Firefox extensions</a> (like <a href="https://addons.mozilla.org/firefox/addon/158" class="external">Tabbrowser preferences</a>), features, settings and advanced preferences based on tab-browsing and based on converting window.open() calls into opening tabs, based on neutralizing window.open() calls, in particular in neutralizing unrequested openings of new windows (often referred as blocking unrequested popups or as blocking script-initiated windows opening automatically). Such features found in extensions include opening a link in a new window or not, in the same window, in a new tab or not, in "background" or not. Coding carelessly to open new windows can no longer be assured of success, can not succeed by force and, if it does, it will annoy a majority of users.</li>
+ <li>New windows can have menubar missing, scrollbars missing, status bar missing, window resizability disabled, etc.; new tabs can not be missing those functionalities or toolbars (or at least, the toolbars which are present by default). Therefore, tab-browsing is preferred by a lot of users because the normal user-interface of the browser window they prefer is kept intact, remains stable.</li>
+ <li>Opening new windows, even with reduced features, uses considerably a lot of the user's system resources (cpu, RAM) and involves considerably a lot of coding in the source code (security management, memory management, various code branchings sometimes quite complex, window frame/chrome/toolbars building, window positioning and sizing, etc.). Opening new tabs is less demanding on the user's system resources (and faster to achieve) than opening new windows.</li>
+</ul>
+
+<h3 name="Offer_to_open_a_link_in_a_new_window.2C_using_these_guidelines" id="Offer_to_open_a_link_in_a_new_window.2C_using_these_guidelines">Offer to open a link in a new window, using these guidelines</h3>
+
+<p>If you want to offer to open a link in a new window, then follow tested and recommendable usability and accessibility guidelines:</p>
+
+<h4 name="Never_use_this_form_of_code_for_links:.3Ca_href.3D.22javascript:window.open.28....29.22_....3E" id="Never_use_this_form_of_code_for_links:.3Ca_href.3D.22javascript:window.open.28....29.22_....3E"><em>Never</em> use this form of code for links: <code>&lt;a href="javascript:window.open(...)" ...&gt;</code></h4>
+
+<p>"javascript:" links break accessibility and usability of webpages in every browser.</p>
+
+<ul>
+ <li>"javascript:" pseudo-links become dysfunctional when javascript support is disabled or inexistent. Several corporations allow their employees to surf on the web but under strict security policies: no javascript enabled, no java, no activeX, no Flash. For various reasons (security, public access, text browsers, etc..), about 5% to 10% of users on the web surf with javascript disabled.</li>
+ <li>"javascript:" links will interfere with advanced features in tab-capable browsers: eg. middle-click on links, Ctrl+click on links, tab-browsing features in extensions, etc.</li>
+ <li>"javascript:" links will interfere with the process of indexing webpages by search engines.</li>
+ <li>"javascript:" links interfere with assistive technologies (e.g. voice browsers) and several web-aware applications (e.g. <abbr title="Personal Digital Assistant">PDAs</abbr> and mobile browsers).</li>
+ <li>"javascript:" links also interfere with "mouse gestures" features implemented in browsers.</li>
+ <li>Protocol scheme "javascript:" will be reported as an error by link validators and link checkers.</li>
+</ul>
+
+<p><strong>Further reading:</strong></p>
+
+<ul>
+ <li><a href="http://www.useit.com/alertbox/20021223.html" class="external">Top Ten Web-Design Mistakes of 2002</a>, 6. JavaScript in Links, Jakob Nielsen, December 2002</li>
+ <li><a href="http://www.evolt.org/article/Links_and_JavaScript_Living_Together_in_Harmony/17/20938/" class="external">Links &amp; JavaScript Living Together in Harmony</a>, Jeff Howden, February 2002</li>
+ <li><a href="http://jibbering.com/faq/#FAQ4_24" class="external">comp.lang.javascript newsgroup discussion FAQ on "javascript:" links</a></li>
+</ul>
+
+<h4 name="Never_use_.3Ca_href.3D.22.23.22_onclick.3D.22window.open.28....29.3B.22.3E" id="Never_use_.3Ca_href.3D.22.23.22_onclick.3D.22window.open.28....29.3B.22.3E">Never use <code>&lt;a href="#" onclick="window.open(...);"&gt;</code></h4>
+
+<p>Such pseudo-link also breaks accessibility of links. <strong>Always use a real URL for the href attribute value</strong> so that if javascript support is disabled or inexistent or if the user agent does not support opening of secondary window (like MS-Web TV, text browsers, etc), then such user agents will still be able to load the referenced resource according to its default mode of opening/handling a referenced resource. This form of code also interferes with advanced features in tab-capable browsers: eg. middle-click on links, Ctrl+click on links, Ctrl+Enter on links, "mouse gestures" features.</p>
+
+<h4 name="Always_identify_links_which_will_create_.28or_will_re-use.29_a_new.2C_secondary_window" id="Always_identify_links_which_will_create_.28or_will_re-use.29_a_new.2C_secondary_window">Always identify links which will create (or will re-use) a new, secondary window</h4>
+
+<p>Identify links that will open new windows in a way that helps navigation for users by coding the title attribute of the link, by adding an icon at the end of the link or by coding the cursor accordingly.</p>
+
+<p>The purpose is to warn users in advance of context changes to minimize confusion on the user's part: changing the current window or popping up new windows can be very disorienting to users (Back toolbar button is disabled).</p>
+
+<blockquote>
+<p>"Users often don't notice that a new window has opened, especially if they are using a small monitor where the windows are maximized to fill up the screen. So a user who tries to return to the origin will be confused by a grayed out <em>Back</em> button."<br>
+ quote from <a href="http://www.useit.com/alertbox/990530.html" class="external">The Top Ten <em>New</em> Mistakes of Web Design</a>: 2. Opening New Browser Windows, Jakob Nielsen, May 1999</p>
+</blockquote>
+
+<p>When extreme changes in context are explicitly identified before they occur, then the users can determine if they wish to proceed or so they can be prepared for the change: not only they will not be confused or feel disoriented, but more experienced users can better decide how to open such links (in a new window or not, in the same window, in a new tab or not, in "background" or not).</p>
+
+<p><strong>References</strong></p>
+
+<ul>
+ <li>"If your link spawns a new window, or causes another windows to 'pop up' on your display, or move the focus of the system to a new FRAME or Window, then the nice thing to do is to tell the user that something like that will happen." <a href="http://www.w3.org/WAI/wcag-curric/sam77-0.htm" class="external">World Wide Web Consortium Accessibility Initiative regarding popups</a></li>
+ <li>"Use link titles to provide users with a preview of where each link will take them, before they have clicked on it." <a href="http://www.useit.com/alertbox/991003.html" class="external">Ten Good Deeds in Web Design</a>, Jakob Nielsen, October 1999</li>
+ <li><a href="http://www.useit.com/alertbox/980111.html" class="external">Using Link Titles to Help Users Predict Where They Are Going</a>, Jakob Nielsen, January 1998</li>
+</ul>
+
+<table class="standard-table">
+ <tbody>
+  <tr>
+   <td class="header" colspan="4">Example "New Window" Icons &amp; Cursors</td>
+  </tr>
+  <tr>
+   <td style="width: 25%;"><img src="../../../../../../mdn.mozillademos.org/files/571/newwindowYahoo.png" alt="New window icon from yahoo.com"></td>
+   <td style="width: 25%;"><img src="../../../../../../mdn.mozillademos.org/files/572/newwinMSIE.gif" alt="New window icon from microsoft.com"></td>
+   <td style="width: 25%;"><img src="../../../../../../mdn.mozillademos.org/files/628/Popup_requested_new_window.gif" alt="New window icon from webaim.org"></td>
+   <td style="width: 25%;"><img src="../../../../../../mdn.mozillademos.org/files/625/popupImageSun.gif" alt="New window icon from sun.com"></td>
+  </tr>
+  <tr>
+   <td><img src="../../../../../../mdn.mozillademos.org/files/587/opennews_rb.gif" alt="New window icon from bbc.co.uk"></td>
+   <td><img src="../../../../../../mdn.mozillademos.org/files/127/AIS_NewWindowIcon.png" alt="New window icon from Accessible Internet Solutions"></td>
+   <td><img src="../../../../../../mdn.mozillademos.org/files/604/pop-up-launcher.gif" alt="New window icon from accessify.com"></td>
+   <td><img src="../../../../../../mdn.mozillademos.org/files/853/Webstyleguide_com_newwind.gif" alt="New window icon from webstyleguide.com"></td>
+  </tr>
+  <tr>
+   <td><img src="../../../../../../mdn.mozillademos.org/files/605/popicon_1.gif" alt="New window icon from an unknown source"></td>
+   <td><img src="../../../../../../mdn.mozillademos.org/files/568/new.gif" alt="New window icon from an unknown source"></td>
+   <td><img src="../../../../../../mdn.mozillademos.org/files/855/WillCreateOrRecycleNewWindow.gif" alt="New window icon from an unknown source"></td>
+   <td><img src="../../../../../../mdn.mozillademos.org/files/588/OpenRequestedPopup.png" alt="New window icon from gtalbot.org"></td>
+  </tr>
+  <tr>
+   <td colspan="2"><img src="../../../../../../mdn.mozillademos.org/files/336/Cursor_LinkNewWindowTargetBlank.png" alt="New window cursor from draig.de"></td>
+   <td colspan="2"><img src="../../../../../../mdn.mozillademos.org/files/337/Cursor_newwindowSergeySokoloff.png" alt="New window cursor from mithgol.ru"></td>
+  </tr>
+ </tbody>
+</table>
+
+<h4 name="Always_use_the_target_attribute" id="Always_use_the_target_attribute">Always use the target attribute</h4>
+
+<p>If javascript support is disabled or non-existent, then the user agent will create a secondary window accordingly or will render the referenced resource according to its handling of the target attribute: e.g. some user agents which can not create new windows, like MS Web TV, will fetch the referenced resource and append it at the end of the current document. The goal and the idea is to try to provide - <strong>not impose</strong> - to the user a way to open the referenced resource, a mode of opening the link. Your code should not interfere with the features of the browser at the disposal of the user and your code should not interfere with the final decision resting with the user.</p>
+
+<h4 name="Do_not_use_target.3D.22_blank.22" id="Do_not_use_target.3D.22_blank.22">Do not use <code>target="_blank"</code></h4>
+
+<p>Always provide a meaningful name to your target attribute and try to reuse such target attribute in your page so that a click on another link may load the referenced resource in an already created and rendered window (therefore speeding up the process for the user) and therefore justifying the reason (and user system resources, time spent) for creating a secondary window in the first place. Using a single target attribute value and reusing it in links is much more user resources friendly as it only creates one single secondary window which is recycled. On the other hand, using "_blank" as the target attribute value will create several new and unnamed windows on the user's desktop which can not be recycled, reused. In any case, if your code is well done, it should not interfere with the user's final choice but rather merely offer him more choices, more ways to open links and more power to the tool he's using (a browser).</p>
+
+<h2 name="Glossary" id="Glossary">Glossary</h2>
+
+<dl>
+ <dt>Opener window, parent window, main window, first window</dt>
+ <dd>Terms often used to describe or to identify the same window. It is the window from which a new window will be created. It is the window on which the user clicked a link which lead to the creation of another, new window.</dd>
+ <dt>Sub-window, child window, secondary window, second window</dt>
+ <dd>Terms often used to describe or to identify the same window. It is the new window which was created.</dd>
+ <dt>Unrequested popup windows</dt>
+ <dd>Script-initiated windows opening automatically without the user's consent.</dd>
+</dl>
+
+<h2 name="Specification" id="Specification">Specification</h2>
+
+<table class="standard-table">
+ <thead>
+  <tr>
+   <th scope="col">Specification</th>
+   <th scope="col">Status</th>
+   <th scope="col">Comment</th>
+  </tr>
+ </thead>
+ <tbody>
+  <tr>
+   <td><a href="https://html.spec.whatwg.org/multipage/browsers.html#dom-open" class="external" lang="en" hreflang="en">WHATWG HTML Living Standard<br><small lang="en-US">The definition of 'Window.open()' in that specification.</small></a></td>
+   <td><span class="spec-Living">Living Standard</span></td>
+   <td>&nbsp;</td>
+  </tr>
+  <tr>
+   <td><a href="https://drafts.csswg.org/cssom-view/#the-features-argument-to-the-open()-method" class="external" lang="en" hreflang="en">CSS Object Model (CSSOM) View Module<br><small lang="en-US">The definition of 'The features argument to the open() method' in that specification.</small></a></td>
+   <td><span class="spec-WD">Working Draft</span></td>
+   <td>Defines the effect of the <code>features</code> argument</td>
+  </tr>
+ </tbody>
+</table>
+
+<h2 name="Notes" id="Notes">Notes</h2>
+
+<h3 name="Note_on_precedence" id="Note_on_precedence">Note on precedence</h3>
+
+<p>In cases where <code>left</code> and <code>screenX</code> (and/or <code>top</code> and <code>screenY</code>) have conflicting values, then <code>left</code> and <code>top</code> have precedence over <code>screenX</code> and <code>screenY</code> respectively. If <code>left</code> and <code>screenX</code> (and/or <code>top</code> and <code>screenY</code>) are defined in the <var>features</var> list, then <code>left</code> (and/or <code>top</code>) will be honored and rendered. In the following example the new window will be positioned at 100 pixels from the left side of the work area for applications of the user's operating system, not at 200 pixels.</p>
+
+<pre class="brush:js">windowObjectReference = window.open(
+  "http://news.bbc.co.uk/", 
+  "BBCWorldNewsWindowName", 
+  "left=100,screenX=200,resizable,scrollbars,status"
+);</pre>
+
+<p>If left is set but top has no value and screenY has a value, then left and screenY will be the coordinate positioning values of the secondary window.</p>
+
+<p>outerWidth has precedence over width and width has precedence over innerWidth. outerHeight has precedence over height and height has precedence over innerHeight. In the following example, Mozilla-browsers will create a new window with an outerWidth of 600 pixels wide and will ignore the request of a width of 500 pixels and will also ignore the request of an innerWidth of 400 pixels.</p>
+
+<pre class="brush:js">windowObjectReference = window.open(
+  "http://www.wwf.org/",
+  "WWildlifeOrgWindowName",
+  "outerWidth=600,width=500,innerWidth=400,resizable,scrollbars,status"
+);</pre>
+
+<h3 name="Note_on_position_and_dimension_error_correction" id="Note_on_position_and_dimension_error_correction">Note on position and dimension error correction</h3>
+
+<p>Requested position and requested dimension values in the <var>features</var> list will not be honored and <strong>will be corrected</strong> if any of such requested value does not allow the entire browser window to be rendered within the work area for applications of the user's operating system. <strong>No part of the new window can be initially positioned offscreen. This is by default in all Mozilla-based browser releases.</strong></p>
+
+<p><a href="http://msdn2.microsoft.com/en-us/library/ms997645.aspx#xpsp_topic5" class="external">MSIE 6 SP2 has a similar error correction mechanism</a> but it is not activated by default in all security levels: a security setting can disable such error correction mechanism.</p>
+
+<h3 name="Note_on_scrollbars" id="Note_on_scrollbars">Note on scrollbars</h3>
+
+<p>When content overflows window viewport dimensions, then scrollbar(s) (or some scrolling mechanism) are necessary to ensure that content can be accessed by users. Content can overflow window dimensions for several reasons which are outside the control of web authors:</p>
+
+<ul>
+ <li>user resizes the window</li>
+ <li>user increases the text size of fonts via View/Text Zoom (%) menuitem in Mozilla or View/Text Size/Increase or Decrease in Firefox</li>
+ <li>user sets a minimum font size for pages which is bigger than the font-size the web author requested. People over 40 years old or with particular viewing habit or reading preference often set a minimal font size in Mozilla-based browsers.</li>
+ <li>web author is not aware of default margin (and/or border and/or padding) values applying to root element or body node in various browsers and various browser versions</li>
+ <li>user uses an user stylesheet (<a href="http://www.mozilla.org/support/firefox/edit#content" class="external">userContent.css in Mozilla-based browsers</a>) for his viewing habits which increases document box dimensions (margin, padding, default font size)</li>
+ <li>user can customize individually the size (height or width) of most toolbars via operating system settings. E.g. window resizing borders, height of browser titlebar, menubar, scrollbars, font size are entirely customizable by the user in Windows XP operating system. These toolbars dimensions can also be set via browser themes and skins or by operating system themes</li>
+ <li>web author is unaware that the user default browser window has custom toolbar(s) for specific purpose(s); e.g.: prefs bar, web developer bar, accessibility toolbar, popup blocking and search toolbar, multi-feature toolbar, etc.</li>
+ <li>user uses assistive technologies or add-on features which modify the operating system's work area for applications: e.g. MS-Magnifier</li>
+ <li>user repositions and/or resizes directly or indirectly the operating system's work area for applications: e.g. user resizes the Windows taskbar, user positions the Windows taskbar on the left side (arabic language based) or right side (Hebrew language), user has a permanent MS-Office quick launch toolbar, etc.</li>
+ <li>some operating system (Mac OS X) forces presence of toolbars which can then fool the web author's anticipations, calculations of the effective dimensions of the browser window</li>
+</ul>
+
+<h3 name="Note_on_status_bar" id="Note_on_status_bar">Note on status bar</h3>
+
+<p>You should assume that a large majority of users' browsers will have the status bar or that a large majority of users will want to force the status bar presence: best is to always set this feature to yes. Also, if you specifically request to remove the status bar, then Firefox users will not be able to view the Site Navigation toolbar if it is installed. In Mozilla and in Firefox, all windows with a status bar have a window resizing grippy at its right-most side. The status bar also provides info on http connection, hypertext resource location, download progress bar, encryption/secure connection info with <abbr title="Secure Socket Layer">SSL</abbr> connection (displaying a yellow padlock icon), internet/security zone icons, privacy policy/cookie icon, etc. <strong>Removing the status bar usually removes a lot of functionality, features and information considered useful (and sometimes vital) by the users.</strong></p>
+
+<h3 name="Note_on_security_issues_of_the_status_bar_presence" id="Note_on_security_issues_of_the_status_bar_presence">Note on security issues of the status bar presence</h3>
+
+<p>In MSIE 6 for XP SP2: For windows opened using <code>window.open()</code>:</p>
+
+<blockquote>
+<p>"For windows opened using window.open():<br>
+ Expect the status bar to be present, and code for it. <strong>The status bar will be on by default</strong> and is 20-25 pixels in height. (...)"<br>
+ quote from <a href="http://msdn2.microsoft.com/en-us/library/ms997645.aspx#xpsp_topic5" class="external">Fine-Tune Your Web Site for Windows XP Service Pack 2, Browser Window Restrictions in XP SP2</a></p>
+</blockquote>
+
+<blockquote>
+<p>"(...) windows that are created using the window.open() method can be called by scripts and used to spoof a user interface or desktop or to hide malicious information or activity by sizing the window so that the status bar is not visible.<br>
+ Internet Explorer windows provide visible security information to the user to help them ascertain the source of the Web page and the security of the communication with that page. When these elements are not in view, the user might think they are on a more trusted page or interacting with a system process when they are actually interacting with a malicious host. (...)<br>
+ <strong>Script-initiated windows will be displayed fully, with the Internet Explorer title bar and status bar.</strong> (...)<br>
+ Script management of Internet Explorer status bar<br>
+ Detailed description<br>
+ <strong>Internet Explorer has been modified to not turn off the status bar for any windows. The status bar is always visible for all Internet Explorer windows.</strong> (...) Without this change, windows that are created using the window.open() method can be called by scripts and spoof a user interface or desktop or hide malicious information or activity by hiding important elements of the user interface from the user.<br>
+ The status bar is a security feature of Internet Explorer windows that provides Internet Explorer security zone information to the user. This zone cannot be spoofed (...)"<br>
+ quote from <a href="http://technet.microsoft.com/en-us/library/bb457150.aspx#ECAA" class="external">Changes to Functionality in Microsoft Windows XP Service Pack 2, Internet Explorer Window Restrictions</a></p>
+</blockquote>
+
+<h3 name="Note_on_fullscreen" id="Note_on_fullscreen">Note on fullscreen</h3>
+
+<p>In MSIE 6 for XP SP2:</p>
+
+<ul>
+ <li>"window.open() with fullscreen=yes will now result in a maximized window, not a kiosk mode window."</li>
+ <li>"The definition of the fullscreen=yes specification is changed to mean 'show the window as maximized,' which will keep the title bar, address bar, and status bar visible."</li>
+</ul>
+
+<p><em>References:</em></p>
+
+<ul>
+ <li><a href="http://msdn2.microsoft.com/en-us/library/ms997645.aspx#xpsp_topic5" class="external">Fine-Tune Your Web Site for Windows XP Service Pack 2</a></li>
+ <li><a href="http://technet.microsoft.com/en-us/library/bb457150.aspx#ECAA" class="external">Changes to Functionality in Microsoft Windows XP Service Pack 2, Script sizing of Internet Explorer windows</a></li>
+</ul>
+
+<h3 name="Note_on_outerHeight_versus_height" id="Note_on_outerHeight_versus_height">Note on outerHeight versus height</h3>
+
+<p><img src="../../../../../../mdn.mozillademos.org/files/442/FirefoxInnerVsOuterHeight.png" alt="innerHeight vs outerHeight illustration"></p>
+
+<h3 id="Note_on_refreshing_vs._opening_a_new_windowtab">Note on refreshing vs. opening a new window/tab</h3>
+
+<p>If the <code>strWindowName</code> parameter is omitted, a new window or tab is opened. If a window with the same name already exists, the existing window is refreshed.</p>
+
+<pre class="script-jem;brush:js">//Always opens a new window/tab
+window.open("map.php");
+
+//Refreshes an existing window/tab that was opened with the same name, if one exists
+window.open("map.php", "BiggerMap");</pre>
+
+<h2 name="Tutorials" id="Tutorials">Tutorials</h2>
+
+<ul>
+ <li><a href="http://www.infimum.dk/HTML/JSwindows.html" class="external">JavaScript windows (tutorial)</a> by Lasse Reichstein Nielsen</li>
+ <li><a href="http://accessify.com/features/tutorials/the-perfect-popup/" class="external" title="http://accessify.com/features/tutorials/the-perfect-popup/">The perfect pop-up (tutorial)</a> by Ian Lloyd</li>
+ <li><a href="http://www.gtalbot.org/FirefoxSection/Popup/PopupAndFirefox.html" class="external">Popup windows and Firefox (interactive demos)</a> by Gérard Talbot</li>
+</ul>
+
+<h2 name="References" id="References">References</h2>
+
+<ul>
+ <li><a href="http://www.cs.tut.fi/~jkorpela/www/links.html" class="external">Links Want To Be Links</a> by Jukka K. Korpela</li>
+ <li><a href="http://www.evolt.org/article/Links_and_JavaScript_Living_Together_in_Harmony/17/20938/" class="external">Links &amp; JavaScript Living Together in Harmony</a> by Jeff Howden</li>
+</ul>
+                  
+                
+              </article>
+
+              
+
+    
+    
+    
+
+    
+    
+    
+
+    <div class="share">
+        <strong>Share:</strong>
+        <ul>
+            <li><a href="http://twitter.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FAPI%2FWindow%2Fopen%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dtwitter.com&amp;text=I+learned+about+Window.open%28%29+on+MDN." target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/API/Window/open?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=twitter.com" data-title="I learned about Window.open() on MDN." class="share-link twitter"><i aria-hidden="true" class="icon-twitter"></i>Twitter</a></li>
+            <li><a href="http://facebook.com/sharer.php?s=100&amp;p[url]=https://developer.mozilla.org/en-US/docs/Web/API/Window/open?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/API/Window/open?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" data-title="I learned about Window.open() on MDN." class="share-link facebook"><i aria-hidden="true" class="icon-facebook"></i>Facebook</a></li>
+            <li><a href="https://plus.google.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FAPI%2FWindow%2Fopen%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dplus.google.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/API/Window/open?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=plus.google.com" data-title="I learned about Window.open() on MDN." class="share-link gplus"><i aria-hidden="true" class="icon-google-plus"></i>Google+</a></li>
+        </ul>
+    </div>
+
+              
+
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                  
+                  
+  <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags icon-fw"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+      
+        <li><a href="../../../tag/API.html">API</a></li>
+      
+        <li><a href="../../../tag/DOM.html">DOM</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Method">Method</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/NeedsCompatTable">NeedsCompatTable</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/NeedsMarkupWork">NeedsMarkupWork</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/NeedsUpdate">NeedsUpdate</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Window">Window</a></li>
+      
+    </ul>
+  </div>
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-group icon-fw"></i>&nbsp;<strong>Contributors to this page:</strong> 
+        <a href="https://developer.mozilla.org/en-US/profiles/mconley">mconley</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/stephaniehobson">stephaniehobson</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/cvrebert">cvrebert</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills">chrisdavidmills</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/fscholz">fscholz</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/idmean">idmean</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/jxnday">jxnday</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Sheppy">Sheppy</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/BrianDiPalma">BrianDiPalma</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/WP-Makyen">WP-Makyen</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/kscarfone">kscarfone</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/teoli">teoli</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Ichimonji10">Ichimonji10</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/libreGeekingKid">libreGeekingKid</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/mplungjan">mplungjan</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Havvy">Havvy</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/ethertank">ethertank</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/dbruant">dbruant</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/mnoorenberghe">mnoorenberghe</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/j3s.ch">j3s.ch</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/syssgx">syssgx</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Varda">Varda</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/jswisher">jswisher</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/mooyah">mooyah</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Neil">Neil</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/RobG">RobG</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Crash">Crash</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Dao">Dao</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Ms2ger">Ms2ger</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Brettz9">Brettz9</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/zencd">zencd</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/mattmccutchen">mattmccutchen</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Kbrosnan">Kbrosnan</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/ahlongxp">ahlongxp</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Kreist">Kreist</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Johnjbarton">Johnjbarton</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/GT">GT</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Potappo">Potappo</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Wjjohnst">Wjjohnst</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Waldo">Waldo</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/JamesWatts">JamesWatts</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Coopster">Coopster</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Mgjbot">Mgjbot</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/TerraFrost">TerraFrost</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Mickeyboy">Mickeyboy</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/BenoitL">BenoitL</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Np">Np</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Zagor">Zagor</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Andreas Wuest">Andreas Wuest</a>, 
+    
+        <a href="../../../../profiles/Trapicki.html">Trapicki</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Nickolay">Nickolay</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Jarsyl">Jarsyl</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/QIREXRD">QIREXRD</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Dria">Dria</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Callek">Callek</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Wladimir_Palant">Wladimir_Palant</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Anonymous">Anonymous</a>
+    
+                    </div>
+                  
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o icon-fw"></i>&nbsp;<strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/mconley">mconley</a>,
+                      <time datetime="2016-02-17T08:36:49-08:00">Feb 17, 2016, 8:36:49 AM</time>
+                    </div>
+                  
+                </div>
+              
+            </div>
+
+            
+              <!-- quick links and zone subnav strip -->
+              <div id="wiki-left" class="column-strip wiki-column">
+
+              
+
+                
+
+                
+                  <!-- quick links -->
+                  
+  <div class="quick-links" id="quick-links">
+    <div class="title see-also">See also</div>
+    <ol><li><strong><a href="../Window.html"><code>Window</code></a></strong></li><li data-default-state="open"><a href="#"><strong>Properties</strong></a><ol><li><a href="applicationCache.html" title="Returns a reference to the application cache object for the window."><code>applicationCache</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="caches.html" title="The Window.caches&nbsp;read-only property returns the CacheStorage object associated with the current origin. This object enables service worker functionality such as storing assets for offline use, and generating custom responses to requests."><code>caches</code></a></li><li><a href="closed.html" title="This read-only property indicates whether the referenced window is closed or not."><code>closed</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="controllers.html" title="Returns the XUL controllers of the chrome window."><code>controllers</code></a></li><li><a href="crypto.html" title="The Window.crypto read-only property returns the Crypto object associated to the global object. This object allows web pages access to certain cryptographic related services."><code>crypto</code></a></li><li><span class="sidebar-icon"><span title="This is an obsolete API and is no longer guaranteed to work."><i class="icon-trash"> </i></span></span><s class="obsoleteElement"><a href="defaultStatus.html" title="Gets/sets the status bar text for the given window."><code>defaultStatus</code></a></s></li><li><a href="devicePixelRatio.html" title="The Window.devicePixelRatio read-only property returns the ratio of the (vertical) size of one physical pixel on the current display device to the size of one device independent pixels(dips)."><code>devicePixelRatio</code></a></li><li><a href="dialogArguments.html" title="The dialogArguments property returns the parameters that were passed into the window.showModalDialog() method. This lets you determine what parameters were specified when the modal dialog was created."><code>dialogArguments</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><span class="sidebar-icon"><span title="This is an obsolete API and is no longer guaranteed to work."><i class="icon-trash"> </i></span></span><s class="obsoleteElement"><a href="directories.html" title="Returned the window personalbar toolbar object. Use the window.personalbar instead."><code>directories</code></a></s></li><li><a href="document.html" title="Returns a reference to the document contained in the window."><code>document</code></a></li><li><a href="frameElement.html" title="Returns the element (such as &lt;iframe&gt; or &lt;object&gt;) in which the window is embedded, or null if the window is top-level."><code>frameElement</code></a></li><li><a href="frames.html" title="Returns the window itself, which is an array-like object, listing the direct sub-frames of the current window."><code>frames</code></a></li><li><a href="fullScreen.html" title="This property indicates whether the window is displayed in full screen mode or not. It is only reliable in Gecko 1.9 (Firefox 3) and later, see the Notes below."><code>fullScreen</code></a></li><li><a href="history.html" title="The Window.history read-only property returns a reference to the History object, which provides an interface for manipulating the browser session history (pages visited in the tab or frame that the current page is loaded in)."><code>history</code></a></li><li><a href="../IDBEnvironment/indexedDB.html" title="The indexedDB property of the IDBEnvironment interface provides a mechanism for applications to asynchronously access the capabilities of indexed databases."><code>indexedDB</code></a></li><li><a href="innerHeight.html" title="Height (in pixels) of the browser window viewport including, if rendered, the horizontal scrollbar."><code>innerHeight</code></a></li><li><a href="innerWidth.html" title="Width (in pixels) of the browser window viewport including, if rendered, the vertical scrollbar."><code>innerWidth</code></a></li><li><a href="isSecureContext.html" title="The Window.isSecureContext&nbsp;read-only property indicates whether a context is capable of using features that require secure contexts."><code>isSecureContext</code></a></li><li><a href="length.html" title="Returns the number of frames (either &lt;frame&gt; or &lt;iframe&gt; elements) in the window."><code>length</code></a></li><li><a href="localStorage.html" title="The localStorage property allows you to access a local Storage object. localStorage is similar to sessionStorage. The only difference is that, while data stored in localStorage has no expiration time, data stored in sessionStorage gets cleared when the browsing session ends—that is, when the browser is closed."><code>localStorage</code></a></li><li><a href="location.html" title="The Window.location read-only property returns a Location object with information about the current location of the document."><code>location</code></a></li><li><a href="locationbar.html" title="Returns the locationbar object, whose visibility can be checked."><code>locationbar</code></a></li><li><a href="menubar.html" title="Returns the menubar object, whose visibility can be checked."><code>menubar</code></a></li><li><a href="messageManager.html" title="Returns the message manager object for this window. See The message manager for details."><code>messageManager</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="mozAnimationStartTime.html" title="Returns the time, in milliseconds since the epoch, at which animations started now should be considered to have started. This value should be used instead of, for example, Date.now(), because this value will be the same for all animations started in this window during this refresh interval, allowing them to remain in sync with one another."><code>mozAnimationStartTime</code></a></li><li><a href="mozInnerScreenX.html" title="Gets the X coordinate of the top-left corner of the window's viewport, in screen coordinates."><code>mozInnerScreenX</code></a></li><li><a href="mozInnerScreenY.html" title="Gets the Y coordinate of the top-left corner of the window's viewport, in screen coordinates."><code>mozInnerScreenY</code></a></li><li><a href="mozPaintCount.html" title="Returns the number of times the current document has been painted to the screen in this window."><code>mozPaintCount</code></a></li><li><a href="name.html" title="Gets/sets the name of the window."><code>name</code></a></li><li><a href="navigator.html" title="The Window.navigator read-only property returns a reference to the Navigator object, which can be queried for information about the application running the script."><code>navigator</code></a></li><li><a href="../GlobalEventHandlers/onabort.html" title="An event handler for abort events sent to the window. (Not available with Firefox 2 or Safari)"><code>onabort</code></a></li><li><a href="../WindowEventHandlers/onafterprint.html" title="The WindowEventHandlers.onafterprint property sets and returns the onafterprint EventHandler for the current window."><code>onafterprint</code></a></li><li><a href="../WindowEventHandlers/onbeforeprint.html" title="The onbeforeprint property sets and returns the onbeforeprint event handler code for the current window."><code>onbeforeprint</code></a></li><li><a href="../WindowEventHandlers/onbeforeunload.html" title="The WindowEventHandlers.onbeforeunload event handler property contains the code executed when the beforeunload is sent. This event fires when a window is about to unload its resources. The document is still visible and the event is still cancelable."><code>onbeforeunload</code></a></li><li><a href="../GlobalEventHandlers/onblur.html" title="The onblur property returns the onBlur event handler code, if any, that exists on the current element."><code>onblur</code></a></li><li><a href="../GlobalEventHandlers/onchange.html" title="The onchange property sets and returns the event handler for the change event."><code>onchange</code></a></li><li><a href="../GlobalEventHandlers/onclick.html" title="The onclick property returns the click event handler code on the current element."><code>onclick</code></a></li><li><a href="../GlobalEventHandlers/onclose.html" title="An event handler for close events sent to the window. (Not available with Firefox 2 or Safari)"><code>onclose</code></a></li><li><a href="../GlobalEventHandlers/oncontextmenu.html" title="An event handler property for right-click events on the window. Unless the default behavior is prevented (see examples below on how to do this), the browser context menu will activate (though IE8 has a bug with this and will not activate the context menu if a contextmenu event handler is defined). Note that this event will occur with any non-disabled right-click event and does not depend on an element possessing the &quot;contextmenu&quot; attribute."><code>oncontextmenu</code></a></li><li><a href="../GlobalEventHandlers/ondblclick.html" title="The ondblclick property returns the onDblClick event handler code on the current element."><code>ondblclick</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="ondevicelight.html" title="Specifies an event listener to receive devicelight events. These events occur when the device's light level sensor detects a change in the intensity of the ambient light level."><code>ondevicelight</code></a></li><li><a href="ondevicemotion.html" title="An event handler for the devicemotion events sent to the window."><code>ondevicemotion</code></a></li><li><a href="ondeviceorientation.html" title="An event handler for the deviceorientation events sent to the window."><code>ondeviceorientation</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="ondeviceproximity.html" title="Specifies an event listener to receive deviceproximity events. These events occur when the device sensor detects that an object becomes closer to or farther from the device."><code>ondeviceproximity</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><span class="sidebar-icon"><span title="This is an obsolete API and is no longer guaranteed to work."><i class="icon-trash"> </i></span></span><s class="obsoleteElement"><a href="ondragdrop.html" title="An event handler for drag and drop events sent to the window."><code>ondragdrop</code></a></s></li><li><a href="../GlobalEventHandlers/onerror.html" title="An event handler for the error event. Error events are fired at various targets for different kinds of errors:"><code>onerror</code></a></li><li><a href="../GlobalEventHandlers/onfocus.html" title="The onfocus property returns the onFocus event handler code on the current element."><code>onfocus</code></a></li><li><a href="../WindowEventHandlers/onhashchange.html" title="The hashchange event fires when a window's hash changes (see location.hash)."><code>onhashchange</code></a></li><li><a href="../GlobalEventHandlers/oninput.html" title="An event handler for the input event on the window.&nbsp;The input event is raised when an &lt;input&gt; element value changes."><code>oninput</code></a></li><li><a href="../GlobalEventHandlers/onkeydown.html" title="The onkeydown property returns the onKeyDown event handler code on the current element."><code>onkeydown</code></a></li><li><a href="../GlobalEventHandlers/onkeypress.html" title="The onkeypress property sets and returns the onKeyPress event handler code for the current element."><code>onkeypress</code></a></li><li><a href="../GlobalEventHandlers/onkeyup.html" title="The onkeyup property returns the onKeyUp event handler code for the current element."><code>onkeyup</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="../WindowEventHandlers/onlanguagechange.html" title="The WindowEventHandlers.onlanguagechange event handler is a property containing the code to execute when the languagechange event, of type Event, is received by the object implementing this interface, usually a Window, an HTMLBodyElement, or an HTMLIFrameElement. Such an event is sent by the browser to inform that the preferred languages list has been updated. The list is accessible via NavigatorLanguage.languages."><code>onlanguagechange</code></a></li><li><a href="../GlobalEventHandlers/onload.html" title="An event handler for the load event of a window."><code>onload</code></a></li><li><a href="../GlobalEventHandlers/onmousedown.html" title="The onmousedown property returns the onmousedown event handler code on the current element."><code>onmousedown</code></a></li><li><a href="../GlobalEventHandlers/onmousemove.html" title="The onmousemove property returns the mousemove event handler code on the current element."><code>onmousemove</code></a></li><li><a href="../GlobalEventHandlers/onmouseout.html" title="The onmouseout property returns the onMouseOut event handler code on the current element."><code>onmouseout</code></a></li><li><a href="../GlobalEventHandlers/onmouseover.html" title="The onmouseover property returns the onMouseOver event handler code on the current element."><code>onmouseover</code></a></li><li><a href="../GlobalEventHandlers/onmouseup.html" title="The onmouseup property returns the onMouseUp event handler code on the current element."><code>onmouseup</code></a></li><li><a href="onmozbeforepaint.html" title="An event handler for the MozBeforePaint event. This is used in concert with the window.mozRequestAnimationFrame() method to perform smooth, synchronized animations from&nbsp;JavaScript code."><code>onmozbeforepaint</code></a></li><li><a href="onpaint.html" title="An event handler for the paint event on the window. Not working in Gecko-based applications currently, see Notes section!"><code>onpaint</code></a></li><li><a href="../GlobalEventHandlers/onpointercancel.html" title="A global event handler for the pointercancel event."><code>onpointercancel</code></a></li><li><a href="../GlobalEventHandlers/onpointerdown.html" title="A global event handler for the pointerdown event."><code>onpointerdown</code></a></li><li><a href="../GlobalEventHandlers/onpointerenter.html" title="A global event handler for the pointerenter event."><code>onpointerenter</code></a></li><li><a href="../GlobalEventHandlers/onpointerleave.html" title="A global event handler for the pointerleave event."><code>onpointerleave</code></a></li><li><a href="../GlobalEventHandlers/onpointermove.html" title="A global event handler for the pointermove event."><code>onpointermove</code></a></li><li><a href="../GlobalEventHandlers/onpointerout.html" title="A global event handler for the pointerout event."><code>onpointerout</code></a></li><li><a href="../GlobalEventHandlers/onpointerover.html" title="A global event handler for the pointerover event."><code>onpointerover</code></a></li><li><a href="../GlobalEventHandlers/onpointerup.html" title="A global event handler for the pointerup event."><code>onpointerup</code></a></li><li><a href="../WindowEventHandlers/onpopstate.html" title="An event handler for the popstate event on the window."><code>onpopstate</code></a></li><li><a href="../GlobalEventHandlers/onreset.html" title="The GlobalEventHandlers.onreset property contains an EventHandler triggered when a reset event is received."><code>onreset</code></a></li><li><a href="../GlobalEventHandlers/onresize.html" title="The GlobalEventHandlers.onresize property contains an EventHandler triggered when a resize event is received."><code>onresize</code></a></li><li><a href="../GlobalEventHandlers/onscroll.html" title="An event handler for scroll events on&nbsp;element."><code>onscroll</code></a></li><li><a href="../GlobalEventHandlers/onselect.html" title="An event handler for the select event on the window."><code>onselect</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="../GlobalEventHandlers/onselectstart.html" title="The GlobalEventHandlers.onselectstart property represents the event handler that is called when a selectstart event reaches this object."><code>onselectstart</code></a></li><li><a href="../WindowEventHandlers/onstorage.html" title="The WindowEventHandlers.onstorage property contains an event handler that runs when&nbsp;the storage event fires. This occurs when a storage area is changed (e.g. a new item is stored.)"><code>onstorage</code></a></li><li><a href="../GlobalEventHandlers/onsubmit.html" title="An event handler for the submit event on the window."><code>onsubmit</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="../GlobalEventHandlers/ontouchcancel.html" title="A global event handler for the touchcancel event."><code>ontouchcancel</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="../GlobalEventHandlers/GlobalEventHanders.html" title="A global event handler for the touchmove event."><code>ontouchmove</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="../GlobalEventHandlers/ontouchstart.html" title="A global event handler for the touchstart event."><code>ontouchstart</code></a></li><li><a href="../WindowEventHandlers/onunload.html" title="The unload event is raised when the window is unloading its content and resources. The resources removal is processed after the unload event occurs."><code>onunload</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="onuserproximity.html" title="The Window.onuserproxymity property represents an EventHandler, that is a function to be called when the userproximity event occurs. These events are of type UserProximityEvent and occur when the the device sensor detects that an object becomes nearby."><code>onuserproximity</code></a></li><li><a href="opener.html" title="Returns a reference to the window that opened this current window."><code>opener</code></a></li><li><a href="outerHeight.html" title="Window.outerHeight gets the height in pixels of the whole browser window. It represents the height of the whole browser window including sidebar (if expanded), window chrome and window resizing borders/handles."><code>outerHeight</code></a></li><li><a href="outerWidth.html" title="Window.outerWidth gets the width of the outside of the browser window. It represents the width of the whole browser window including sidebar (if expanded), window chrome and window resizing borders/handles."><code>outerWidth</code></a></li><li><a href="parent.html" title="A reference to the parent of the current window or subframe."><code>parent</code></a></li><li><a href="performance.html" title="The Web Performance API allows web pages access to certain functions for measuring the performance of web pages and web applications, including the Navigation Timing API and high-resolution time data."><code>performance</code></a></li><li><a href="personalbar.html" title="Returns the personalbar object, whose visibility can be toggled in the window."><code>personalbar</code></a></li><li><span class="sidebar-icon"><span title="This is an obsolete API and is no longer guaranteed to work."><i class="icon-trash"> </i></span></span><s class="obsoleteElement"><a href="pkcs11.html" title="Returns the pkcs11 object, which is used to install drivers and other software associated with the pkcs11 protocol. If pkcs11 isn't supported, this property returns null."><code>pkcs11</code></a></s></li><li><a href="screen.html" title="Returns a reference to the screen object associated with the window.&nbsp;The screen object, implementing the Screen interface, is a special object for inspecting properties of the screen on which the current window is being rendered."><code>screen</code></a></li><li><a href="screenX.html" title="The Window.screenX read-only property returns the horizontal distance, in CSS pixels, of the left border of the user's browser from the left side of the screen."><code>screenX</code></a></li><li><a href="screenY.html" title="The Window.screenY read-only property returns the vertical distance, in CSS pixels of the top border of the user's browser from the top edge of the screen."><code>screenY</code></a></li><li><a href="scrollbars.html" title="Returns the scrollbars object, whose visibility can be checked."><code>scrollbars</code></a></li><li><a href="scrollMaxX.html" title="Returns the maximum number of pixels that the document can be scrolled horizontally."><code>scrollMaxX</code></a></li><li><a href="scrollMaxY.html" title="Returns the maximum number of pixels that the document can be scrolled vertically."><code>scrollMaxY</code></a></li><li><a href="scrollX.html" title="Returns the number of pixels that the document has already been scrolled horizontally."><code>scrollX</code></a></li><li><a href="scrollY.html" title="Returns the number of pixels that the document has already been scrolled vertically."><code>scrollY</code></a></li><li><a href="self.html" title="The Window.self read-only property returns the window itself, as a WindowProxy. It can be used with dot notation on a window object (that is, window.self) or standalone (self). The advantage of the standalone notation is that a similar notation exists for non-window contexts, such as in Web Workers. By using self, you can refer to the global scope in a way that will work not only in a window context (self will resolve to window.self) but also in a worker context (self will then resolve to WorkerGlobalScope.self)."><code>self</code></a></li><li><a href="sessionStorage.html" title="The sessionStorage property allows you to access a session Storage object. sessionStorage is similar to Window.localStorage, the only difference is while data stored in localStorage has no expiration set, data stored in sessionStorage gets cleared when the page session ends. A page session lasts for as long as the browser is open and survives over page reloads and restores. Opening a page in a new tab or window will cause a new session to be initiated, which differs from how session cookies work."><code>sessionStorage</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="sidebar.html" title="Returns a sidebar object, which contains several methods for registering add-ons with browser."><code>sidebar</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="speechSynthesis.html" title="The speechSynthesis read-only property of the Window object returns a SpeechSynthesis object, which is the entry point into using Web Speech API speech synthesis functionality."><code>speechSynthesis</code></a></li><li><a href="status.html" title="Sets the text in the status bar at the bottom of the browser or returns the previously set text."><code>status</code></a></li><li><a href="statusbar.html" title="Returns the statusbar object, whose visibility can be toggled in the window."><code>statusbar</code></a></li><li><a href="toolbar.html" title="Returns the toolbar object, whose visibility can be toggled in the window."><code>toolbar</code></a></li><li><a href="top.html" title="Returns a reference to the topmost window in the window hierarchy."><code>top</code></a></li><li><a href="URL.html" title="The Window.URL property returns an object that provides static methods used for creating and managing object URLs. It can also be called as a constructor to construct URL objects."><code>URL</code></a></li><li><a href="window.html" title="The window property of a window object points to the window object itself. Thus the following expressions all return the same window object:"><code>window</code></a></li></ol></li><li data-default-state="open"><a href="#"><strong>Methods</strong></a><ol><li><a href="alert.html" title="The Window.alert() method displays an alert dialog with the optional specified content and an OK button."><code>alert()</code></a></li><li><a href="../WindowBase64/atob.html" title="The WindowBase64.atob()&nbsp;function decodes a string of data which has been encoded using base-64 encoding. You can use the window.btoa() method to encode and transmit data which may otherwise cause communication problems, then transmit it and use the window.atob() method to decode the data again. For example, you can encode, transmit, and decode control characters such as ASCII values 0 through 31."><code>atob()</code></a></li><li><a href="back.html" title="Returns the window to the previous item in the history. This was a Gecko-specific method. Use the standard history.back method instead."><code>back()</code></a></li><li><a href="blur.html" title="Shifts focus away from the window."><code>blur()</code></a></li><li><a href="../WindowBase64/btoa.html" title="Creates a base-64 encoded ASCII string from a &quot;string&quot; of binary data."><code>btoa()</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="cancelAnimationFrame.html" title="Cancels an animation frame request previously scheduled through a call to window.requestAnimationFrame()."><code>cancelAnimationFrame()</code></a></li><li><a href="cancelIdleCallback.html" title="The&nbsp;Window.cancelIdleCallback()&nbsp;enables you to cancel a callback previously scheduled with Window.requestIdleCallback."><code>cancelIdleCallback</code></a></li><li><a href="captureEvents.html" title="Registers the window to capture all events of the specified type."><code>captureEvents()</code></a></li><li><a href="clearImmediate.html" title="This method clears the action specified by window.setImmediate."><code>clearImmediate()</code></a></li><li><a href="../WindowTimers/clearInterval.html" title="Cancels repeated action which was set up using setInterval."><code>clearInterval()</code></a></li><li><a href="../WindowTimers/clearTimeout.html" title="Clears the delay set by WindowTimers.setTimeout()."><code>clearTimeout()</code></a></li><li><a href="close.html" title="The Window.close() method closes the current window, or the window on which it was called."><code>close()</code></a></li><li><a href="confirm.html" title="The Window.confirm() method displays a modal dialog with an optional message and two buttons, OK and Cancel."><code>confirm()</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="convertPointFromNodeToPage.html" title="The Window.convertPointFromNodeToPage() method converts a Point object from coordinates based on the given CSS node to coordinates based on the page."><code>convertPointFromNodeToPage()</code></a></li><li><a href="../ImageBitmapFactories/createImageBitmap.html" title="The createImageBitmap method accepts a variety of different image sources, and returns a Promise which resolves to an ImageBitmap. Optionally the source is cropped to the rectangle of pixels originating at (sx, sy) with width sw, and height sh."><code>createImageBitmap()</code></a></li><li><a href="dump.html" title="Prints messages to the (native) console."><code>dump()</code></a></li><li><a href="event.html" title="window.event is a proprietary Microsoft Internet Explorer property which is only available while a DOM event handler is being called. Its value is the Event object currently being handled."><code>event</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="../GlobalFetch/fetch.html" title="The fetch() method of the GlobalFetch interface starts the process of fetching a resource. This returns a promise that resolves to the Response object representing the response to your request."><code>fetch()</code></a></li><li><a href="find.html" title="Finds a string in a window."><code>find()</code></a></li><li><a href="focus.html" title="Makes a request to bring the window to the front. It may fail due to user settings and the window isn't guaranteed to be frontmost before this method returns."><code>focus()</code></a></li><li><a href="forward.html" title="Moves the window one document forward in the history. This was a Gecko-specific method. Use the standard history.forward method instead."><code>forward()</code></a></li><li><a href="getAttention.html" title="Attempts to get the user's attention. How this happens varies based on OS and window manager."><code>getAttention()</code></a></li><li><a href="getComputedStyle.html" title="The Window.getComputedStyle() method gives the values of all the CSS properties of an element after applying the active stylesheets and resolving any basic computation those values may contain."><code>getComputedStyle()</code></a></li><li><a href="getDefaultComputedStyle-2.html" title="getDefaultComputedStyle() gives the default computed values of all the CSS properties of an element, ignoring author styling.&nbsp; That is, only user-agent and user styles are taken into account."><code>getDefaultComputedStyle()</code></a></li><li><a href="getSelection.html" title="Returns a Selection object representing the range of text selected by the user or the current position of the caret."><code>getSelection()</code></a></li><li><a href="home.html" title="Returns the window to the home page."><code>home()</code></a></li><li><a href="https://developer.mozilla.org/en-US/docs/Archive/Web/Window.importDialog" title="Because opening windows on mobile isn't necessarily appropriate, the Firefox Mobile team designed the importDialog() method to replace window.openDialog(). Instead of opening a new window, it merges the specified XUL&nbsp;dialog into the main window."><code>importDialog()</code></a></li><li><a href="matchMedia.html" title="Returns a new MediaQueryList object representing the parsed results of the specified media query string."><code>matchMedia()</code></a></li><li><a href="minimize.html" title="Sets a window to minimized state (a way to undo it programatically is by calling window.moveTo())."><code>minimize()</code></a></li><li><a href="moveBy.html" title="Moves the current window by a specified amount."><code>moveBy()</code></a></li><li><a href="moveTo.html" title="Moves the window to the specified coordinates."><code>moveTo()</code></a></li><li><em><code>open()</code></em></li><li><a href="openDialog.html" title="window.openDialog() is an extension to window.open(). It behaves the same, except that it can optionally take one or more parameters past windowFeatures, and windowFeatures itself is treated a little differently."><code>openDialog()</code></a></li><li><a href="postMessage.html" title="The window.postMessage method safely enables cross-origin communication. Normally, scripts on different pages are allowed to access each other if and only if the pages that executed them are at locations with the same protocol (usually both https), port number (443 being the default for https), and host (modulo document.domain being set by both pages to the same value). window.postMessage provides a controlled mechanism to circumvent this restriction in a way which is secure when properly used."><code>postMessage()</code></a></li><li><a href="print.html" title="Opens the Print Dialog to print the current document."><code>print()</code></a></li><li><a href="prompt.html" title="The Window.prompt() displays a dialog with an optional message prompting the user to input some text."><code>prompt()</code></a></li><li><a href="releaseEvents.html" title="Releases the window from trapping events of a specific type."><code>releaseEvents()</code></a></li><li><a href="requestAnimationFrame.html" title="You should call this method whenever you're ready to update your animation onscreen. This will request that your animation function be called before the browser performs the next repaint. The number of callbacks is usually 60 times per second, but will generally match the display refresh rate in most web browsers as per W3C recommendation. The callback rate may be reduced to a lower rate when running in background tabs or in hidden &lt;iframe&gt;s in order to improve performance and battery life."><code>requestAnimationFrame()</code></a></li><li><a href="requestIdleCallback.html" title="The&nbsp;Window.requestIdleCallback() method enables the scheduling of tasks during a browser's idle periods. This enables developers to perform background and low priority work on the main event loop, without impacting latency-critical events such as animation and input response."><code>requestIdleCallback</code></a></li><li><a href="resizeBy.html" title="Resizes the current window by a certain amount."><code>resizeBy()</code></a></li><li><a href="resizeTo.html" title="Dynamically resizes window."><code>resizeTo()</code></a></li><li><a href="restore.html" title="This method is currently not working, but you can use:"><code>restore()</code></a></li><li><span class="sidebar-icon"><span title="This is an obsolete API and is no longer guaranteed to work."><i class="icon-trash"> </i></span></span><s class="obsoleteElement"><a href="routeEvent.html" title=""><code>routeEvent()</code></a></s></li><li><a href="scroll.html" title="Scrolls the window to a particular place in the document."><code>scroll()</code></a></li><li><a href="scrollBy.html" title="Scrolls the document in the window by the given amount."><code>scrollBy()</code></a></li><li><a href="scrollByLines.html" title="Scrolls the document by the given number of lines."><code>scrollByLines()</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="scrollByPages.html" title="Scrolls the current document by the specified number of pages."><code>scrollByPages()</code></a></li><li><a href="scrollTo.html" title="Scrolls to a particular set of coordinates in the document."><code>scrollTo()</code></a></li><li><a href="setCursor.html" title="Changes the cursor for the current window."><code>setCursor()</code></a></li><li><a href="setImmediate.html" title="This method is used to break up long running operations and run a callback function immediately after the browser has completed other operations such as events and display updates."><code>setImmediate()</code></a></li><li><a href="../WindowTimers/setInterval.html" title="Repeatedly calls a function or executes a code snippet, with a fixed time delay between each call. Returns an intervalID."><code>setInterval()</code></a></li><li><a href="../WindowTimers/setTimeout.html" title="Calls a function or executes a code snippet after a specified delay."><code>setTimeout()</code></a></li><li><span class="sidebar-icon"><span title="This deprecated API should no longer be used, but will probably still work."><i class="icon-thumbs-down-alt"> </i></span></span><a href="showModalDialog.html" title="The Window.showModalDialog() creates and displays a modal dialog box containing a specified HTML document."><code>showModalDialog()</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="sizeToContent.html" title="The Window.sizeToContent() method sizes the window according to its content. In order for it to work, the DOM content should be loaded when this function is called, for example once the DOMContentLoaded event has been thrown."><code>sizeToContent()</code></a></li><li><a href="stop.html" title="This method stops window loading."><code>stop()</code></a></li><li><a href="updateCommands.html" title="Updates the state of commands of the current chrome window (UI)."><code>updateCommands()</code></a></li></ol></li></ol>
+  </div>
+                
+
+                <!-- approvals -->
+                
+
+              
+
+              </div>
+            
+          </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Web/API/Window/open$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Web/API/Window/open$history" label="View page history"></menuitem>
+  </menu>
+
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+        
+        <div class="contentinfo">
+          <p>© 2005-2016 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>
+          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+        
+        </div>
+      </div>
+      <div class="column-strip">
+        
+          
+  
+    <form class="languages go" method="get" action="https://developer.mozilla.org/en-US/docs/Web">
+      <label for="language">Other languages:</label>
+      <select id="language" class="wiki-l10n" name="next" dir="ltr">
+        <option value="/en-US/docs/Web/API/Window/open" selected="">
+          English (US)
+        </option>
+        
+          <option value="/es/docs/Web/API/Window/open">
+            Español
+          </option>
+          <option value="/fr/docs/Web/API/Window/open">
+            Français
+          </option>
+          <option value="/ja/docs/Web/API/window.open">
+            日本語
+          </option>
+          <option value="/pl/docs/Web/API/Window/open">
+            Polski
+          </option>
+          <option value="/zh-CN/docs/Web/API/Window/open">
+            中文 (简体)
+          </option>
+      </select>
+      <noscript>&lt;button type="submit"&gt;Go&lt;/button&gt;</noscript>
+    </form>
+  
+
+        
+      </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+  
+    
+    <!--[if lte IE 8]><script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/selectivizr.091e18cf669b.js" charset="utf-8"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/main.a7b27a25fb9c.js" charset="utf-8"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+    
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/syntax-prism-min.js" charset="utf-8"></script><script type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/wiki.bd71ca9fd27d.js" charset="utf-8" id="wikiscript"></script>
+
+  
+
+  <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/helpfulness.7b208a764d28.js" charset="utf-8"></script>
+
+  
+    <script type="text/javascript">
+        (function($) {
+            $('#wikiArticle').children('h2[id]').each(function() {
+                var id = $(this).attr('id');
+                var href = '/en-US/docs/Web/API/Window/open$edit#' + id;
+
+                $('<a>').attr({
+                    href: href,
+                    'class': 'button section-edit only-icon'
+                })
+                .append($('<i aria-hidden="true" class="icon-pencil"></i>'))
+                .append($('<span>'))
+                .find('span')
+                .text(gettext('Edit'))
+                .end()
+                .on('click', function(e) {
+                    e.preventDefault();
+
+                    mdn.analytics.trackEvent({
+                        category: 'Section Edit',
+                        action: id
+                    }, function() {
+                        window.location = href;
+                    });
+                })
+                .appendTo(this);
+            });
+        })(jQuery);
+    </script>
+  
+
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/Window/open by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 15:06:12 GMT -->
+</body></html>

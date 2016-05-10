@@ -1,0 +1,92 @@
+@font-face {
+    font-family: 'icons';
+    src: url('../fonts/icons.383e693f.eot') format('embedded-opentype'),
+         url('../fonts/icons.b8d8a63d.woff') format('woff'),
+         url('../fonts/icons.97b44a3a.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.tree-selector {
+    display: inline-block;
+    position: relative;
+    float: right;
+    width: auto;
+}
+.select-options {
+    display: none;
+    position: absolute;
+    right: 0;
+}
+.ts-select-trigger {
+    background-color: #fff;
+    margin-bottom: .2rem;
+    padding: .3rem;
+    border: 1px solid #999;
+    width: auto;
+    min-width: 100px;
+    border-radius: .2rem;
+    cursor: pointer;
+}
+.ts-select-trigger:hover {
+    background-color: #e8e8e8;
+}
+.selector-arrow {
+    display: inline-block;
+    position: relative;
+    padding-right: 1rem;
+}
+[data-icon-arrow]:before {
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-family: icons;
+    content: attr(data-icon-arrow);
+    speak: none;
+}
+.selected:before {
+    position: absolute;
+    margin: 0  0 -15px -25px;
+    font-family: icons;
+    content: "\e803";
+    speak: none;
+}
+.ts-modal {
+    border: 1px solid #d4d4d4;
+    border-radius: 6px;
+    min-width: 120%;
+    z-index: 10;
+}
+header {
+    background-color: #e0e0e0;
+    padding: .6rem .8rem .6rem .8rem;
+    border-top-right-radius: 6px;
+    border-top-left-radius: 6px;
+    font-weight: bold;
+    letter-spacing: .5px;
+}
+/* visibility of the filter field is configurable
+   and handled by JavaScript using the data-visible
+   attribute */
+.options-filter {
+    display: none;
+    padding: .8rem;
+}
+.options-filter input[type="text"] {
+    padding: 5px 2%;
+    border: 1px solid #b2b2b2;
+    width: 100%;
+    border-radius: .2rem;
+    box-shadow: 0 1px rgba(255, 255, 255, 0.5);
+}
+.options-filter input[type="text"]:focus {
+    border: 1px solid #42a4e0;
+    box-shadow: 0 0 0 2px rgba(73, 173, 227, 0.4);
+}
+
+
+footer {display:none !important} #main-header {display:none !important} #toc.fixed { position: static !important; overflow-y: visible !important; } .contributors {display:none !important} .wiki-left-present:not(.wiki-left-closed) #wiki-left {display:none !important} body {background-image:none !important; background-color:white !important} .wiki-left-present:not(.wiki-left-closed) #toc.fixed {width: 100% !important; max-height:none !important} #wiki-content {width:100% !important} #wiki-content {float:left !important} .notification-tray, .section-edit {display:none !important} .communitybox, #wiki-controls {display:none !important} .syntaxbox-help{display:none !important} .article-meta { display:none !important} #wiki-right {padding-bottom: 25px !important; width:100% !important} .column-strip.quick-links {margin-bottom:0px !important} .redesign-beta-notice {display:none !important} #tabzilla-panel {display:none !important} main>.center {padding-top:10px !important} .share {display:none !important} .breadcrumbs {display:none !important} .global-notice, .page-buttons {display:none !important} .crumbs {display:none !important} .languages {display:none !important} #toc {max-height:none !important} .offline-notice {display:none} #redirected-from {display:none} #masthead {display:none}
+#nav-toolbar {display:none}
+#page-buttons{display:none} .contributor-avatars {display:none !important} #sessionMsg.errormsg{display:none}
+.page-watch {display:none}

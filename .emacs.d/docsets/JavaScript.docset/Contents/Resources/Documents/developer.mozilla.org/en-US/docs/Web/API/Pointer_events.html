@@ -1,0 +1,1028 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/Pointer_events by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 15:42:23 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <script async="" src="../../../../../www.google-analytics.com/analytics.js"></script><script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+  
+    
+  
+
+  
+  <title>Pointer events</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+  
+    
+    
+    <link href="../../../../../developer.cdn.mozilla.net/static/build/styles/mdn.593f20d8c365.css" rel="stylesheet" type="text/css">
+
+    
+  
+    <link href="../../../../../developer.cdn.mozilla.net/static/build/styles/wiki.13dd9abdfb62.css" rel="stylesheet" type="text/css">
+
+    
+
+    
+
+  <!-- common social tags -->
+  
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../developer.cdn.mozilla.net/static/img/favicon144.a6e4162070f4.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../developer.cdn.mozilla.net/static/img/favicon114.0e9fabd44f85.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../developer.cdn.mozilla.net/static/img/favicon72.8ff9d87c82a0.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../developer.cdn.mozilla.net/static/img/favicon57.a2490b9a2d76.png">
+  <!-- basic favicon -->
+  
+    
+  
+  <link rel="shortcut icon" href="../../../../../developer.cdn.mozilla.net/static/img/favicon32.e02854fdcf73.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/html5shiv.3948ccddab6f.js" charset="utf-8"></script>
+  <![endif]-->
+
+  
+  <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Web/API/Pointer_events$json">
+  <link rel="canonical" href="Pointer_events.html">
+
+  
+
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="Pointer events">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Web/API/Pointer_events">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Web/API/Pointer_events">
+  <meta name="twitter:title" content="Pointer events">
+  
+  <meta property="og:description" content="Most of today's web content assumes the user's pointing device will be a mouse. However, since many devices support other types of pointing input devices, such as pen/stylus and touch surfaces, extensions to the existing pointing device event models are needed and pointer events address that need.">
+  <meta name="description" content="Most of today's web content assumes the user's pointing device will be a mouse. However, since many devices support other types of pointing input devices, such as pen/stylus and touch surfaces, extensions to the existing pointing device event models are needed and pointer events address that need.">
+  <meta name="twitter:description" content="Most of today's web content assumes the user's pointing device will be a mouse. However, since many devices support other types of pointing input devices, such as pen/stylus and touch surfaces, extensions to the existing pointing device event models are needed and pointer events address that need.">
+  
+
+  
+    
+
+
+
+  
+</head>
+<body data-slug="Web/API/Pointer_events" contextmenu="edit-history-menu" data-search-url="" class="document  ">
+
+  <script type="text/javascript">
+    (function(win) {
+        'use strict';
+
+        
+            (function(){
+  var FLAGS = {
+    'compat_api': false,'kumaediting': false,'page_move': false,'registration_disabled': false,'search_suggestions': false,'section_edit': false,'spam_admin_override': false,'spam_checks_enabled': true,'spam_spammer_override': false,'spam_submissions_enabled': false,'spam_testing_mode': false,'wiki_samples': true,'wiki_spam_exempted': false,'wiki_spam_training': true
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': true,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+
+        // This needs to be set before ckeditor.js loads
+        window.CKEDITOR_BASEPATH = 'https://developer.mozilla.org/static/js/libs/ckeditor/build/ckeditor/';
+
+        // This represents the site configuration
+        win.mdn = {
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+            
+            notifications: [],
+            
+            // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            },
+            // Assets that need to be dynamically injected
+            assets_disabled: {
+                css: {
+                    'editor-content': ['https://developer.cdn.mozilla.net/static/build/styles/editor-content.3d79df72080d.css',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/styles/wiki-compat-tables.f3a3bfce97a1.css',]
+                },
+                js: {
+                    'syntax-prism': ['https://developer.cdn.mozilla.net/static/build/js/syntax-prism.7a66ddfa68bf.js',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/js/wiki-compat-tables.14ce5dcb2c3d.js',]
+                }
+            }
+        };
+    })(this);
+</script>
+
+  
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+    
+      <li><a href="#q" id="skip-search">Skip to search</a></li>
+    
+  </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+    <a href="https://developer.mozilla.org/en-US/" class="logo">Mozilla Developer Network</a>
+
+    <div id="nav-sec">
+        
+                  <ul>
+                  <li>
+
+    
+
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                Sign in
+              </span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FPointer_events" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/Web/API/Pointer_events" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/Web/API/Pointer_events" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FPointer_events" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+              
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+        
+    </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+
+   <!-- end is_zone -->
+
+    <div class="wiki-main-content" id="document-main"><div class="center">
+      
+      <div class="article-meta">
+        <!-- action buttons -->
+        
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+  <ul class="page-buttons" data-sticky="false">
+      
+      <li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+              
+                <li class="smaller">No translations exist for this article.</li>
+              
+
+              
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Pointer_events$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+              
+            </ul>
+          </div>
+        </div>
+      </li>
+
+      <li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Pointer_events$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li>
+
+        
+
+        <li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Pointer_events$history" rel="nofollow, noindex">History</a></li>
+                
+                
+                
+                
+
+                
+
+                
+                
+                
+                <li class="page-print"><a href="#" onclick="return window.print();">Print this article</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+        
+  <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web" rel="v:url" property="v:title">Web technology for developers</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="../API.html" rel="v:url" property="v:title">Web APIs</a></li>
+    
+    <li class="crumb" typeof="v:Breadcrumb" property="v:title">Pointer events</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        
+        <div class="contributor-avatars" data-all-text="see all contributors" data-alternate-message="hide contributors">
+            <ul>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/teoli" title="View profile: teoli">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="teoli" data-src="../../../../../secure.gravatar.com/avatar/d0d90148e08e3b64ccf75c46f31442c56c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">teoli</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/bethge" title="View profile: bethge">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="bethge" data-src="../../../../../secure.gravatar.com/avatar/5f23aed81091c942c9cc00e119879fa96c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">bethge</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/AFBarstow" title="View profile: AFBarstow">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="AFBarstow" data-src="../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">AFBarstow</noscript></a>
+                </li>
+            
+            </ul>
+        </div>
+        
+
+        <h1>Pointer events</h1>
+
+      </div>
+      
+
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-present">
+
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+            
+              <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+              
+              <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#Terminology" rel="internal">Terminology</a></li><li><a href="#Interfaces" rel="internal">Interfaces</a><ol><li><a href="#PointerEvent_interface" rel="internal">PointerEvent interface</a></li><li><a href="#Event_types_and_Global_Event_Handlers" rel="internal">Event types and Global Event Handlers</a></li><li><a href="#Element_extensions" rel="internal">Element extensions</a></li><li><a href="#Navigator_extension" rel="internal">Navigator extension</a></li></ol></li><li><a href="#Examples" rel="internal">Examples</a><ol><li><a href="#Registering_event_handlers" rel="internal">Registering event handlers</a></li><li><a href="#Event_properties" rel="internal">Event properties</a></li></ol></li><li><a href="#Determining_the_Primary_Pointer" rel="internal">Determining the Primary Pointer</a></li><li><a href="#Determining_button_states" rel="internal">Determining button states</a></li><li><a href="#Pointer_capture" rel="internal">Pointer capture</a></li><li><a href="#touch-action_Property" rel="internal">touch-action Property</a></li><li><a href="#Compatibility_with_mouse_events" rel="internal">Compatibility with mouse events</a></li><li><a href="#Best_practices" rel="internal">Best practices</a></li><li><a href="#Implementation_and_deployment_status" rel="internal">Implementation and deployment status</a></li><li><a href="#Demos_and_examples" rel="internal">Demos and examples</a></li><li><a href="#Community" rel="internal">Community</a></li><li><a href="#Related_topics_and_resources" rel="internal">Related topics and resources</a>
+                </li></ol>
+              </div>
+              
+              </div>
+            
+
+            
+            
+              
+            
+
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-half wiki-column text-content">
+
+              
+
+              
+
+              
+                
+                
+                
+              
+              
+
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                
+                  
+                    <p></p><section id="Quick_Links" class="Quick_links"><!-- --></section><p></p>
+
+<p>Most of today's web content assumes the user's pointing device will be a mouse. However, since many devices support other types of pointing input devices, such as pen/stylus and touch surfaces, extensions to the existing pointing device event models are needed and <em><a href="#term_pointer_event">pointer events</a></em> address that need.</p>
+
+<p>Pointer events are DOM events that are fired for a pointing device. They are designed to create a single DOM event model to handle pointing input devices such as a mouse, pen/stylus or touch (such as one or more fingers). The <em><a href="#term_pointer">pointer</a></em> is a hardware-agnostic device that can target a specific set of screen coordinates. Having a single event model for pointers can simplify creating Web sites and applications and provide a good user experience regardless of the user's hardware. However, for scenarios when device-specific handling is desired, pointer events defines a <a href="PointerEvent/pointerType.html" title="Indicates the device type that caused the pointer event. The supported values are the following strings:"><code>property</code></a> to inspect the device type which produced the event.</p>
+
+<p>The events needed to handle generic pointer input are analogous to <a href="MouseEvent.html" title="The MouseEvent interface represents events that occur due to the user interacting with a pointing device (such as a mouse). Common events using this interface include click, dblclick, mouseup, mousedown."><code>mouse events</code></a> (<code>mousedown/pointerdown</code>, <code>mousemove/pointermove</code>, etc.). Consequently, pointer event types are intentionally similar to mouse event types. Additionally, a pointer event contains the usual properties present in mouse events (client coordinates, target element, button states, etc.) in addition to new properties for other forms of input: pressure, contact geometry, tilt, etc. In fact, the <a href="PointerEvent.html" title="A pointer is a hardware agnostic representation of input devices (such as a mouse, pen or contact point on a touch-enable surface). The pointer can target a specific coordinate (or set of coordinates) on the contact surface such as a screen."><code>PointerEvent</code></a> interface inherits all of the <a href="MouseEvent.html" title="The MouseEvent interface represents events that occur due to the user interacting with a pointing device (such as a mouse). Common events using this interface include click, dblclick, mouseup, mousedown."><code>MouseEvent's</code></a> properties thus facilitatig migrating content from mouse events to pointer events.</p>
+
+<h2 id="Terminology">Terminology</h2>
+
+<dl>
+ <dt>active pointer</dt>
+ <dd>Any <em><a href="#term_pointer">pointer</a></em> input device that can produce events. A pointer is considered active if it can still produce further events. For example a pen that is a down state is considered active because it can produce additional events when the pen is lifted or moved.</dd>
+ <dt id="term_digitizer">digitizer</dt>
+ <dd>A sensing device with a surface that can detect contact. Most commonly, the sensing device is a touch enable screen that can sense input from an input device such as a pen, stylus of finger.</dd>
+ <dt id="term_hit_test">hit test</dt>
+ <dd>The process the browser uses to determine a target element for a pointer event. Typically, this is determined by considering the pointer's location and also the visual layout of elements in a document on screen media.</dd>
+ <dt id="term_pointer">pointer</dt>
+ <dd>A hardware agnostic representation of input devices that can target a specific coordinate (or set of coordinates) on a screen. Examples of <em>pointer</em> input devices are mouse, pen/stylus, and touch contacts.</dd>
+ <dt>pointer capture</dt>
+ <dd>Pointer capture allows the events for a pointer to be retargeted to a particular element other than the normal hit test result of the pointer's location.</dd>
+ <dt id="term_pointer_event">pointer event</dt>
+ <dd>A DOM <a href="PointerEvent.html" title="A pointer is a hardware agnostic representation of input devices (such as a mouse, pen or contact point on a touch-enable surface). The pointer can target a specific coordinate (or set of coordinates) on the contact surface such as a screen."><code>event</code></a> fired for a <em><a href="#term_pointer">pointer</a></em>.</dd>
+</dl>
+
+<h2 id="Interfaces">Interfaces</h2>
+
+<p>The primary interface is the <a href="PointerEvent.html" title="A pointer is a hardware agnostic representation of input devices (such as a mouse, pen or contact point on a touch-enable surface). The pointer can target a specific coordinate (or set of coordinates) on the contact surface such as a screen."><code>PointerEvent</code></a> interface which has a <a href="PointerEvent/PointerEvent.html" title="The PointerEvent() constructor creates a new synthetic and untrusted PointerEvent."><code>constructor</code></a> plus several event types and associated global event handlers. The standard also includes some extensions to the <a href="Element.html" title="The Element interface represents an object of a Document. This interface describes methods and properties common to all kinds of elements. Specific behaviors are described in interfaces which inherit from Element but add additional functionality."><code>Element</code></a> and <a href="Navigator.html" title="The Navigator interface represents the state and the identity of the user agent. It allows scripts to query it and to register themselves to carry on some activities."><code>Navigator</code></a> interfaces. The following sub-sections contain short descriptions of each interface and property.</p>
+
+<h3 id="PointerEvent_interface">PointerEvent interface</h3>
+
+<p>The <a href="PointerEvent.html" title="A pointer is a hardware agnostic representation of input devices (such as a mouse, pen or contact point on a touch-enable surface). The pointer can target a specific coordinate (or set of coordinates) on the contact surface such as a screen."><code>PointerEvent</code></a> interface extends the <a href="MouseEvent.html" title="The MouseEvent interface represents events that occur due to the user interacting with a pointing device (such as a mouse). Common events using this interface include click, dblclick, mouseup, mousedown."><code>MouseEvent</code></a> interface and has the following properties (all of them are <span class="inlineIndicator readOnly readOnlyInline" title="This value may not be changed.">Read only </span>).</p>
+
+<ul>
+ <li><a href="PointerEvent/pointerId.html" title="An identifier assigned to a pointer event that is unique from the identifiers of all active pointer events at the time. Authors cannot assume values convey any particular meaning other than an identifier for the pointer that is unique from all other active pointers."><code>pointerId</code></a> - a unique identifier for the pointer causing the event.</li>
+ <li><a href="PointerEvent/width.html" title="The width of the pointer's contact geometry, along the X axis (in CSS pixels). Depending on the source of the pointer device (for example a finger), this value may be differ with each event for a given pointer."><code>width</code></a> - the width (magnitude on the X axis), in CSS pixels, of the contact geometry of the pointer.</li>
+ <li><a href="PointerEvent/height.html" title="The height of the pointer's contact geometry, along the Y axis (in CSS pixels). Depending on the source of the pointer device (for example a finger), this value may be differ with each event for a given pointer."><code>height</code></a> - the height (magnitude on the Y axis), in CSS pixels, of the contact geometry of the pointer.</li>
+ <li><a href="PointerEvent/pressure.html" title="The normalized pressure of the pointer input in the range of 0 to 1, where 0 and 1 represent the minimum and maximum pressure the hardware is capable of detecting, respectively. For hardware that does not support pressure, including but not limited to mouse, the value MUST be 0.5 when the pointer is active and 0 otherwise."><code>pressure</code></a> - the normalized pressure of the pointer input in the range of 0 to 1, where 0 and 1 represent the minimum and maximum pressure the hardware is capable of detecting, respectively.</li>
+ <li><a href="PointerEvent/tiltX.html" title="This property is the angle (in degrees) between the Y-Z plane of the pointer and the screen. This property is typically only useful for a pen/stylus pointer type. The range of values is -90 to 90 degrees and a positive value means a tilt to the right. For devices that do not support this property, the value will be 0."><code>tiltX</code></a> - the plane angle (in degrees, in the range of -90 to 90) between the Y-Z plane and the plane containing both the transducer (e.g. pen stylus) axis and the Y axis.</li>
+ <li><a href="PointerEvent/tiltY.html" title="This property is the angle (in degrees) between the X-Z plane of the pointer and the screen. This property is typically only useful for a pen/stylus pointer type. The range of values is -90 to 90 degrees and a positive value is a tilt toward the user. For devices that do not support this property, the value will be 0."><code>tiltY</code></a> - the plane angle (in degrees, in the range of -90 to 90) between the X-Z plane and the plane containing both the transducer (e.g. pen stylus) axis and the X axis.</li>
+ <li><a href="PointerEvent/pointerType.html" title="Indicates the device type that caused the pointer event. The supported values are the following strings:"><code>pointerType</code></a> - indicates the device type that caused the event (mouse, pen, touch, etc.)</li>
+ <li><a href="PointerEvent/isPrimary.html" title="The property indicates whether or not the pointer device that created the event is the primary pointer. Returns true if the pointer that caused the event to be fired is the primary device and returns false otherwise."><code>isPrimary</code></a> - indicates if the pointer represents the primary pointer of this pointer type.</li>
+</ul>
+
+<h3 id="Event_types_and_Global_Event_Handlers">Event types and Global Event Handlers</h3>
+
+<p>Pointer events have ten event types, seven of which have similar semantics to their mouse event counterpart (<code>down, up, move, over, out, enter, leave</code>). Below is a short description of each event type and its associated <a href="GlobalEventHandlers.html" title="The GlobalEventHandlers mixin describes the event handlers common to several interfaces like HTMLElement, Document, or Window. Each of these interfaces can implement more event handlers."><code>Global Event Handler</code></a>.</p>
+
+<table class="standard-table">
+ <tbody>
+  <tr>
+   <th scope="col">Event</th>
+   <th scope="col">On Event Handler</th>
+   <th scope="col">Description</th>
+  </tr>
+  <tr>
+   <td><code><a href="../Events/pointerover.html" title="/en-US/docs/Web/Events/pointerover">pointerover</a></code></td>
+   <td><a href="GlobalEventHandlers/onpointerover.html" title="A global event handler for the pointerover event."><code>onpointerover</code></a></td>
+   <td>fired when a pointing device is moved into an element's <a href="#term_hit_test">hit test</a> boundaries.</td>
+  </tr>
+  <tr>
+   <td><code><a href="../Events/pointerenter.html" title="/en-US/docs/Web/Events/pointerenter">pointerenter</a></code></td>
+   <td><a href="GlobalEventHandlers/onpointerenter.html" title="A global event handler for the pointerenter event."><code>onpointerenter</code></a></td>
+   <td>fired when when a pointing device is moved into the <a href="#term_hit_test">hit test</a> boundaries of an element or one of its descendants, including as a result of a pointerdown event from a device that does not support hover (see pointerdown).</td>
+  </tr>
+  <tr>
+   <td><code><a href="../Events/pointerdown.html" title="/en-US/docs/Web/Events/pointerdown">pointerdown</a></code></td>
+   <td><a href="GlobalEventHandlers/onpointerdown.html" title="A global event handler for the pointerdown event."><code>onpointerdown</code></a></td>
+   <td>fired when a pointer becomes <em>active</em>.</td>
+  </tr>
+  <tr>
+   <td><code><a href="../Events/pointermove.html" title="/en-US/docs/Web/Events/pointermove">pointermove</a></code></td>
+   <td><a href="GlobalEventHandlers/onpointermove.html" title="A global event handler for the pointermove event."><code>onpointermove</code></a></td>
+   <td>fired when a pointer changes coordinates.</td>
+  </tr>
+  <tr>
+   <td><code><a href="../Events/pointerup.html" title="/en-US/docs/Web/Events/pointerup">pointerup</a></code></td>
+   <td><a href="GlobalEventHandlers/onpointerup.html" title="A global event handler for the pointerup event."><code>onpointerup</code></a></td>
+   <td>fired when a pointer is no longer <em>active</em>.</td>
+  </tr>
+  <tr>
+   <td><code><a href="../Events/pointercancel.html" title="/en-US/docs/Web/Events/pointercancel">pointercancel</a></code></td>
+   <td><a href="GlobalEventHandlers/onpointercancel.html" title="A global event handler for the pointercancel event."><code>onpointercancel</code></a></td>
+   <td>a browser fires this event if it concludes the pointer will no longer be able to generate events (for example the related device is deactived).</td>
+  </tr>
+  <tr>
+   <td><code><a href="../Events/pointerout.html" title="/en-US/docs/Web/Events/pointerout">pointerout</a></code></td>
+   <td><a href="GlobalEventHandlers/onpointerout.html" title="A global event handler for the pointerout event."><code>onpointerout</code></a></td>
+   <td>fired for several reasons including: pointing device is moved out of the <a href="term_hit_test.html">hit test</a> boundaries of an element; firing the pointerup event for a device that does not support hover (see pointerup); after firing the pointercancel event (see pointercancel); when a pen stylus leaves the hover range detectable by the digitizer.</td>
+  </tr>
+  <tr>
+   <td><code><a href="../Events/pointerleave.html" title="/en-US/docs/Web/Events/pointerleave">pointerleave</a></code></td>
+   <td><a href="GlobalEventHandlers/onpointerleave.html" title="A global event handler for the pointerleave event."><code>onpointerleave</code></a></td>
+   <td>fired when a pointing device is moved out of the <a href="term_hit_test.html">hit test</a> boundaries of an element. For pen devices, this event is fired when the stylus leaves the hover range detectable by the digitizer.</td>
+  </tr>
+  <tr>
+   <td><code><a href="../Events/gotpointercapture.html" title="/en-US/docs/Web/Events/gotpointercapture">gotpointercapture</a></code></td>
+   <td>None (see <a href="#Element_extensions">Element extensions</a>)</td>
+   <td>fired when an element receives pointer capture.</td>
+  </tr>
+  <tr>
+   <td><code><a href="../Events/lostpointercapture.html" title="/en-US/docs/Web/Events/lostpointercapture">lostpointercapture</a></code></td>
+   <td>None (see <a href="#Element_extensions">Element extensions</a>)</td>
+   <td>fired after pointer capture is released for a pointer.</td>
+  </tr>
+ </tbody>
+</table>
+
+<h3 id="Element_extensions">Element extensions</h3>
+
+<p>There are four extensions to the <a href="Element.html" title="The Element interface represents an object of a Document. This interface describes methods and properties common to all kinds of elements. Specific behaviors are described in interfaces which inherit from Element but add additional functionality."><code>Element</code></a> interface:</p>
+
+<ul>
+ <li><a href="Element/ongotpointercapture.html" title="ongotpointercapture is an EventHandler property of the Element interface that returns the event handler (function) for the gotpointercapture event type."><code>ongotpointercapture</code></a> - an EventHandler that returns the event handler (function) for the gotpointercapture event type.</li>
+ <li><a href="Element/onlostpointercapture.html" title="onlostpointercapture is an EventHandler property of the Element interface that returns the event handler (function) for the lostpointercapture event type."><code>onlostpointercapture</code></a> - an EventHandler interface that returns the event handler (function) for the lostpointercapture event type.</li>
+ <li><a href="Element/setPointerCapture.html" title="Pointer capture allows events for a particular pointer event (PointerEvent) to be re-targeted to a particular element instead of the normal target (or hit test) at a pointer's location. This can be used to ensure that an element continues to receive pointer events even if the pointer device's contact moves off the element (for example by scrolling)."><code>setPointerCapture()</code></a> - this method designates a specific element as the <em>capture target</em> of future pointer events.</li>
+ <li><a href="Element/releasePointerCapture.html" title="Releases (stops) pointer capture that was previously set for a specific (PointerEvent) pointer."><code>releasePointerCapture()</code></a> - the method releases (stops) <em>pointer capture</em> that was previously set for a specific pointer event.</li>
+</ul>
+
+<h3 id="Navigator_extension">Navigator extension</h3>
+
+<p>The <a href="Navigator/maxTouchPoints.html" title="Return the maximum number of simultaneous touch contact points are supported by the current device."><code>Navigator.maxTouchPoints</code></a> property is used to determine the maximum number of simultaneous touch points that are supported at any single point in time.</p>
+
+<h2 id="Examples">Examples</h2>
+
+<p>This section contains examples of basic usage of using the pointer events interfaces.</p>
+
+<h3 id="Registering_event_handlers">Registering event handlers</h3>
+
+<p>This example registers a handler for every event type for the given element.</p>
+
+<pre class="brush: js">&lt;html&gt;
+&lt;script&gt;
+function over_handler(event) { }
+function enter_handler(event) { }
+function down_handler(event) { }
+function move_handler(event) { }
+function up_handler(event) { }
+function cancel_handler(event) { }
+function out_handler(event) { }
+function leave_handler(event) { }
+function gotcapture_handler(event) { }
+function lostcapture_handler(event) { }
+
+function init() {
+ var el=document.getElementById("target");
+ // Register pointer event handlers
+ el.onpointerover = over_handler;
+ el.onpointerenter = enter_handler;
+ el.onpointerdown = down_handler;
+ el.onpointermove = move_handler;
+ el.onpointerup = up_handler;
+ el.onpointercancel = cancel_handler;
+ el.onpointerout = out_handler;
+ el.onpointerleave = leave_handler;
+ el.gotpointercapture = gotcapture_handler;
+ el.lostpointercapture = lostcapture_handler;
+}
+&lt;/script&gt;
+&lt;body onload="init();"&gt;
+&lt;div id="target"&gt; Touch me ... &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</pre>
+
+<h3 id="Event_properties">Event properties</h3>
+
+<p>This example illustrates accessing all of a touch event's properties.</p>
+
+<pre class="brush: js">&lt;html&gt;
+&lt;script&gt;
+var id = -1;
+
+function process_id(event) {
+  // Process this event based on the event's identifier
+}
+function process_mouse(event) {
+  // Process the mouse pointer event
+}
+function process_pen(event) {
+  // Process the pen pointer event
+}
+function process_touch(event) {
+  // Process the touch pointer event
+}
+function process_tilt(tiltX, tiltY) {
+  // Tilt data handler
+}
+function process_pressure(pressure) {
+  // Pressure handler
+}
+function process_non_privary(event) {
+  // Pressure handler
+}
+
+function down_handler(ev) { 
+ // Calculate the touch point's contact area
+ var area = ev.width * ev.height;
+
+ // Compare cached id with this event's id and process accordingly
+ if (id == ev.identifier) process_id(ev);
+
+ // Call the appropriate pointer type handler
+ switch (ev.pointerType) {
+   case "mouse": 
+     process_mouse(ev); 
+     break;
+   case "pen": 
+     process_pen(ev); 
+     break;
+   case "touch": 
+     process_touch(ev); 
+     break;
+   default:
+     console.log("pointerType " + ev.pointerType + " is Not suported");
+ }
+
+ // Call the tilt handler
+ if (ev.tiltX != 0 &amp;&amp; ev.tiltY != 0) process_tilt(ev.tiltX, ev.tiltY);
+
+ // Call the pressure handler
+ process_pressure(ev.pressure);
+
+ // If this event is not primary, call the non primary handler
+ if (!ev.isPrimary) process_non_primary(evt);
+}
+
+function init() {
+ var el=document.getElementById("target");
+ // Register pointerdown handler
+ el.onpointerdown = down_handler;
+}
+&lt;/script&gt;
+&lt;body onload="init();"&gt;
+ &lt;div id="target"&gt; Touch me ... &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</pre>
+
+<h2 id="Determining_the_Primary_Pointer">Determining the Primary Pointer</h2>
+
+<p>In some scenarios there may be multiple pointers (for example a device with both a touchscreen and a mouse) or a pointer supports multiple contact points (for example a touchscreen that supports multiple finger touches). The application can use the <a href="PointerEvent/isPrimary.html" title="The property indicates whether or not the pointer device that created the event is the primary pointer. Returns true if the pointer that caused the event to be fired is the primary device and returns false otherwise."><code>isPrimary</code></a> property to identify a master pointer among the set of <em>active pointers</em> for each pointer type. If an application only wants to support a primary pointer, it can ignore all pointer events that are not primary.</p>
+
+<p>For mouse, there is only one pointer so it will always be the primary pointer. For touch input, a pointer is considered primary if the user touched the screen when there were no other active touches. For pen and stylus input, a pointer is considered primary if the user's pen initially contacted the screen when there were no other active pens contacting the screen.</p>
+
+<h2 id="Determining_button_states">Determining button states</h2>
+
+<p>Some pointer devices, such as mouse and pen, support multiple buttons and the button presses can be <em>chorded</em> i.e. depressing an additional button while another button on the pointer device is already depressed. To determine the state of button presses, pointer events uses the <a href="MouseEvent/button.html" title="The MouseEvent.button read-only property indicates which button was pressed on the mouse to trigger the event."><code>button</code></a> and <a href="MouseEvent/buttons.html" title="The MouseEvent.buttons read-only property indicates which buttons were pressed on the mouse to trigger the event."><code>buttons</code></a> properties of the <a href="MouseEvent.html" title="The MouseEvent interface represents events that occur due to the user interacting with a pointing device (such as a mouse). Common events using this interface include click, dblclick, mouseup, mousedown."><code>MouseEvent</code></a> interface (that <a href="PointerEvent.html" title="A pointer is a hardware agnostic representation of input devices (such as a mouse, pen or contact point on a touch-enable surface). The pointer can target a specific coordinate (or set of coordinates) on the contact surface such as a screen."><code>PointerEvent</code></a> inherits from). The following table provides the values of <code>button</code> and <code>buttons</code> for the various device button states.</p>
+
+<table class="standard-table">
+ <tbody>
+  <tr>
+   <th scope="col">Device Button State</th>
+   <th scope="col">button</th>
+   <th scope="col">buttons</th>
+  </tr>
+  <tr>
+   <td>Mouse move with no buttons pressed</td>
+   <td>-1</td>
+   <td>0</td>
+  </tr>
+  <tr>
+   <td>Left Mouse, Touch Contact, Pen contact (with no modifier buttons pressed)</td>
+   <td>0</td>
+   <td>1</td>
+  </tr>
+  <tr>
+   <td>Middle Mouse</td>
+   <td>1</td>
+   <td>4</td>
+  </tr>
+  <tr>
+   <td>Right Mouse, Pen contact with barrel button pressed</td>
+   <td>2</td>
+   <td>2</td>
+  </tr>
+  <tr>
+   <td>X1 (back) Mouse</td>
+   <td>3</td>
+   <td>8</td>
+  </tr>
+  <tr>
+   <td>X2 (forward) Mouse</td>
+   <td>4</td>
+   <td>16</td>
+  </tr>
+  <tr>
+   <td>Pen contact with eraser button pressed</td>
+   <td>5</td>
+   <td>32</td>
+  </tr>
+ </tbody>
+</table>
+
+<h2 id="Pointer_capture">Pointer capture</h2>
+
+<p>Pointer capture allows events for a particular <a href="PointerEvent.html" title="A pointer is a hardware agnostic representation of input devices (such as a mouse, pen or contact point on a touch-enable surface). The pointer can target a specific coordinate (or set of coordinates) on the contact surface such as a screen."><code>pointer event</code></a> to be re-targeted to a particular element instead of the normal <a href="#term_hit_test">hit test</a> at a pointer's location. This can be used to ensure that an element continues to receive pointer events even if the pointer device's contact moves off the element (for example by scrolling).</p>
+
+<p>The following example shows pointer capture being set on an element.</p>
+
+<pre class="brush: js">&lt;html&gt;
+&lt;script&gt;
+function downHandler(ev) {
+ var el=document.getElementById("target");
+ //Element 'target' will receive/capture further events
+ el.setPointerCapture(ev.pointerId);
+}
+function init() {
+ var el=document.getElementById("target");
+ el.onpointerdown = downHandler;
+}
+&lt;/script&gt;
+&lt;body onload="init();"&gt;
+&lt;div id="target"&gt; Touch me ... &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</pre>
+
+<p>The following example shows a pointer capture being released (when a <code><a href="../Events/pointercancel.html" title="/en-US/docs/Web/Events/pointercancel">pointercancel</a></code> event occurs. The browser does this automatically when a <code><a href="../Events/pointerup.html" title="/en-US/docs/Web/Events/pointerup">pointerup</a></code> or <code><a href="../Events/pointercancel.html" title="/en-US/docs/Web/Events/pointercancel">pointercancel</a></code> event occurs.</p>
+
+<pre class="brush: js">&lt;html&gt;
+&lt;script&gt;
+function downHandler(ev) {
+ var el=document.getElementById("target");
+ // Element "target" will receive/capture further events
+ el.setPointerCapture(ev.pointerId);
+}
+function cancelHandler(ev) {
+ var el=document.getElementById("target");
+ // Release the pointer capture
+ el.releasePointerCapture(ev.pointerId);
+}
+function init() {
+ var el=document.getElementById("target");
+ // Register pointerdown and pointercancel handlers
+ el.onpointerdown = downHandler;
+ el.onpointercancel = cancelHandler;
+}
+&lt;/script&gt;
+&lt;body onload="init();"&gt;
+&lt;div id="target"&gt; Touch me ... &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</pre>
+
+<h2 id="touch-action_Property">touch-action Property</h2>
+
+<p>The <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/touch-action" title="The touch-action CSS property specifies whether, and in what ways, a given region can be manipulated by the user (for instance, by panning or zooming)."><code>touch-action</code></a> CSS property is used to specifiy whether or not the browser should apply its default (<em>native</em>) touch behavior (such as zooming or panning) to a region. This property may be applied to all elements except: non-replaced inline elements, table rows, row groups, table columns, and column groups.</p>
+
+<p>A value of <code>auto</code> means the browser is free to apply its default touch behavior (to the specified region) and the value of <code>none</code> disables the browser's default touch behavior for the region. The values <code>pan-x</code> and <code>pan-y</code>, mean that touches that begin on the specified region are only for horizontal and vertical scrolling, respectively. The value <code>manipulation</code> means the browser may consider touches that begin on the element are only for scrolling and zooming.</p>
+
+<p>In the following example, the browser's default touch behavior is disabled for the <code>div</code> element.</p>
+
+<pre class="brush: html">&lt;html&gt;
+&lt;body&gt;
+ &lt;div style="touch-action:none;"&gt;Can't touch this ... &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</pre>
+
+<p>In the following example, default touch behavior is disabled for some <code>button</code> elements.</p>
+
+<pre class="brush: css">button#tiny {
+  touch-action: none;
+}
+</pre>
+
+<p>In the following example, when the <code>target</code> element is touched, it will only pan in the horizontal direction.</p>
+
+<pre class="brush: css">#target {
+  touch-action: pan-x;
+}
+</pre>
+
+<h2 id="Compatibility_with_mouse_events">Compatibility with mouse events</h2>
+
+<p>Although the pointer event interfaces enable applications to create enhanced user experiences on pointer enabled devices, the reality is the vast majority of today's web content is designed to only work with mouse input. Consequently, even if a browser supports pointer events, the browser must still process mouse events so content that assumes mouse-only input will work as is without direct modification. Ideally, a pointer enabled application does not need to explicitly handle mouse input. However, because the browser must process mouse events, there may be some compatibility issues that need to be handled. This section contains information about pointer event and mouse event interaction and the ramifications for application developers.</p>
+
+<p>The browser <em>may map generic pointer input to mouse events for compatibility with mouse-based content</em>. This mapping of events is called <em>compatibility mouse events</em>. Authors can prevent the production of certain compatibility mouse events by canceling the pointerdown event but note that:</p>
+
+<ul>
+ <li>Mouse events can only be prevented when the pointer is down.</li>
+ <li>Hovering pointers (e.g. a mouse with no buttons pressed) cannot have their mouse events prevented.</li>
+ <li>The mouseover, mouseout, mouseenter, and mouseleave events are never prevented (even if the pointer is down).</li>
+</ul>
+
+<h2 id="Best_practices">Best practices</h2>
+
+<p>Here are some <em>best practices</em> to consider when using pointer events:</p>
+
+<ul>
+ <li>Minimize the amount of work done that is done in the event handlers.</li>
+ <li>Add the event handlers to a specific target element (rather than the entire document or nodes higher up in the document tree).</li>
+ <li>The target element (node) should be large enough to accommodate the largest contact surface area (typically a finger touch). If the target area is too small, touching it could result in firing other events for adjacent elements.</li>
+</ul>
+
+<h2 id="Implementation_and_deployment_status">Implementation and deployment status</h2>
+
+<p>The <a href="PointerEvents.html#Browser_compatibility" class="new">pointer events browser compatibility data</a> indicates pointer event support among desktop and mobile browsers is relatively low, although additional implementations are in progress.</p>
+
+<p>Some new value have been proposed for the <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/touch-action" title="The documentation about this has not yet been written; please consider contributing!"><code>css touch-action</code></a> property as part of <a href="https://w3c.github.io/pointerevents/" class="external">Pointer Events Level 2</a> specification but currently those new values have no implementation support.</p>
+
+<h2 id="Demos_and_examples">Demos and examples</h2>
+
+<ul>
+ <li><a href="http://patrickhlauke.github.io/touch/" class="external">Touch/pointer tests and demos (by Patrick H. Lauke)</a></li>
+</ul>
+
+<h2 id="Community">Community</h2>
+
+<ul>
+ <li><a href="https://github.com/w3c/pointerevents" class="external">Pointer Events Working Group</a></li>
+ <li><a href="http://lists.w3.org/Archives/Public/public-pointer-events/" class="external">Mail list</a></li>
+ <li><a href="irc://irc.w3.org:6667/">W3C #pointerevents IRC channel</a></li>
+</ul>
+
+<h2 id="Related_topics_and_resources">Related topics and resources</h2>
+
+<ul>
+ <li><a href="http://www.w3.org/TR/touch-events/" class="external">Touch Events Standard</a></li>
+</ul>
+                  
+                
+              </article>
+
+              
+
+    
+    
+    
+
+    
+    
+    
+
+    <div class="share">
+        <strong>Share:</strong>
+        <ul>
+            <li><a href="http://twitter.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FAPI%2FPointer_events%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dtwitter.com&amp;text=I+learned+about+Pointer+events+on+MDN." target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/API/Pointer_events?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=twitter.com" data-title="I learned about Pointer events on MDN." class="share-link twitter"><i aria-hidden="true" class="icon-twitter"></i>Twitter</a></li>
+            <li><a href="http://facebook.com/sharer.php?s=100&amp;p[url]=https://developer.mozilla.org/en-US/docs/Web/API/Pointer_events?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/API/Pointer_events?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" data-title="I learned about Pointer events on MDN." class="share-link facebook"><i aria-hidden="true" class="icon-facebook"></i>Facebook</a></li>
+            <li><a href="https://plus.google.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FAPI%2FPointer_events%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dplus.google.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/API/Pointer_events?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=plus.google.com" data-title="I learned about Pointer events on MDN." class="share-link gplus"><i aria-hidden="true" class="icon-google-plus"></i>Google+</a></li>
+        </ul>
+    </div>
+
+              
+
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                  
+                  
+  <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags icon-fw"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+      
+        <li><a href="../../tag/API.html">API</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Overview">Overview</a></li>
+      
+    </ul>
+  </div>
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-group icon-fw"></i>&nbsp;<strong>Contributors to this page:</strong> 
+        <a href="https://developer.mozilla.org/en-US/profiles/teoli">teoli</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/bethge">bethge</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/AFBarstow">AFBarstow</a>
+    
+                    </div>
+                  
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o icon-fw"></i>&nbsp;<strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/teoli">teoli</a>,
+                      <time datetime="2016-02-11T01:42:27-08:00">Feb 11, 2016, 1:42:27 AM</time>
+                    </div>
+                  
+                </div>
+              
+            </div>
+
+            
+              <!-- quick links and zone subnav strip -->
+              <div id="wiki-left" class="column-strip wiki-column">
+
+              
+
+                
+
+                
+                  <!-- quick links -->
+                  
+  <div class="quick-links" id="quick-links">
+    <div class="title see-also">See also</div>
+    <ol><li><strong><a href="Pointer_events.html">Pointer events</a></strong></li><li data-default-state="open"><a href="#"><strong>Guides</strong></a><ol><li><a href="Pointer_events/Multi-touch_interaction.html" title="Pointer events extend DOM input events to support various pointing input devices such as pen/stylus and touch screens as well as mouse. The pointer is a hardware-agnostic device that can target a specific set of screen coordinates. Having a single event model for pointers can simplify creating Web sites and applications and provide a good user experience regardless of the user's hardware.">Multi-touch interaction</a></li><li><a href="Pointer_events/Pinch_zoom_gestures.html" title="Adding application-specific gestures to an application can significantly improve the user experience. There are many types of gestures from relatively simple ones like a single touch swipe through multi-touch gestures where the touch points move in different directions (for example twist or rotate).">Pinch zoom gestures</a></li><li><a href="Pointer_events/Using_Pointer_Events.html" title="This document demonstrates how to use pointer events and &lt;canvas&gt; to build a multi-touch enabled drawing application. This example is identical to the application described in the Touch events Overview except this example uses the pointer events input event model (instead of touch events. Another difference is that because pointer events are pointer device agnostic, the application accepts both touch input, pen and mouse input, the latter two for free.">Using Pointer Events</a></li></ol></li><li data-default-state="open"><a href="#"><strong>Interfaces</strong></a><ol><li><a href="PointerEvent.html"><code>PointerEvent</code></a></li></ol></li><li data-default-state="open"><a href="#"><strong>Properties</strong></a><ol><li><a href="Element/ongotpointercapture.html"><code>Element.ongotpointercapture</code></a></li><li><a href="Element/onlostpointercapture.html"><code>Element.onlostpointercapture</code></a></li><li><a href="GlobalEventHandlers/onpointerdown.html"><code>GlobalEventHandlers.onpointerdown</code></a></li><li><a href="GlobalEventHandlers/onpointermove.html"><code>GlobalEventHandlers.onpointermove</code></a></li><li><a href="GlobalEventHandlers/onpointerup.html"><code>GlobalEventHandlers.onpointerup</code></a></li><li><a href="GlobalEventHandlers/onpointercancel.html"><code>GlobalEventHandlers.onpointercancel</code></a></li><li><a href="GlobalEventHandlers/onpointerover.html"><code>GlobalEventHandlers.onpointerover</code></a></li><li><a href="GlobalEventHandlers/onpointerout.html"><code>GlobalEventHandlers.onpointerout</code></a></li><li><a href="GlobalEventHandlers/onpointerenter.html"><code>GlobalEventHandlers.onpointerenter</code></a></li><li><a href="GlobalEventHandlers/onpointerleave.html"><code>GlobalEventHandlers.onpointerleave</code></a></li><li><a href="Navigator/maxTouchPoints.html"><code>Navigator.maxTouchPoints</code></a></li></ol></li><li data-default-state="open"><a href="#"><strong>Methods</strong></a><ol><li><a href="Element/setPointerCapture.html"><code>Element.setPointerCapture()</code></a></li><li><a href="Element/releasePointerCapture.html"><code>Element.releasePointerCapture()</code></a></li></ol></li><li data-default-state="open"><a href="#"><strong>Events</strong></a><ol><li><a href="../Events/pointerover.html"><code>pointerover</code></a></li><li><a href="../Events/pointerenter.html"><code>pointerenter</code></a></li><li><a href="../Events/pointerdown.html"><code>pointerdown</code></a></li><li><a href="../Events/pointermove.html"><code>pointermove</code></a></li><li><a href="../Events/pointerup.html"><code>pointerup</code></a></li><li><a href="../Events/pointercancel.html"><code>pointercancel</code></a></li><li><a href="../Events/pointerout.html"><code>pointerout</code></a></li><li><a href="../Events/pointerleave.html"><code>pointerleave</code></a></li><li><a href="../Events/gotpointercapture.html"><code>gotpointercapture</code></a></li><li><a href="../Events/lostpointercapture.html"><code>lostpointercapture</code></a></li></ol></li></ol>
+  </div>
+                
+
+                <!-- approvals -->
+                
+
+              
+
+              </div>
+            
+          </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Web/API/Pointer_events$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Web/API/Pointer_events$history" label="View page history"></menuitem>
+  </menu>
+
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+        
+        <div class="contentinfo">
+          <p>© 2005-2016 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>
+          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+        
+        </div>
+      </div>
+      <div class="column-strip">
+        
+          
+  
+
+        
+      </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+  
+    
+    <!--[if lte IE 8]><script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/selectivizr.091e18cf669b.js" charset="utf-8"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script type="text/javascript" src="../../../../../developer.cdn.mozilla.net/static/build/js/main.a7b27a25fb9c.js" charset="utf-8"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+    
+    <script async="" type="text/javascript" src="../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../developer.cdn.mozilla.net/static/build/js/syntax-prism-min.js" charset="utf-8"></script><script type="text/javascript" src="../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../developer.cdn.mozilla.net/static/build/js/wiki.bd71ca9fd27d.js" charset="utf-8" id="wikiscript"></script>
+
+  
+
+  <script async="" type="text/javascript" src="../../../../../developer.cdn.mozilla.net/static/build/js/helpfulness.7b208a764d28.js" charset="utf-8"></script>
+
+  
+
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/Pointer_events by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 15:42:23 GMT -->
+</body></html>

@@ -1,0 +1,796 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/bindBuffer by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 15:44:46 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <script async="" src="../../../../../../www.google-analytics.com/analytics.js"></script><script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+  
+    
+  
+
+  
+  <title>WebGLRenderingContext.bindBuffer()</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+  
+    
+    
+    <link href="../../../../../../developer.cdn.mozilla.net/static/build/styles/mdn.593f20d8c365.css" rel="stylesheet" type="text/css">
+
+    
+  
+    <link href="../../../../../../developer.cdn.mozilla.net/static/build/styles/wiki.13dd9abdfb62.css" rel="stylesheet" type="text/css">
+
+    
+
+    
+
+  <!-- common social tags -->
+  
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon144.a6e4162070f4.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon114.0e9fabd44f85.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon72.8ff9d87c82a0.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon57.a2490b9a2d76.png">
+  <!-- basic favicon -->
+  
+    
+  
+  <link rel="shortcut icon" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon32.e02854fdcf73.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/html5shiv.3948ccddab6f.js" charset="utf-8"></script>
+  <![endif]-->
+
+  
+  <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/bindBuffer$json">
+  <link rel="canonical" href="bindBuffer.html">
+
+  
+
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="WebGLRenderingContext.bindBuffer()">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/bindBuffer">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/bindBuffer">
+  <meta name="twitter:title" content="WebGLRenderingContext.bindBuffer()">
+  
+  <meta property="og:description" content="The WebGLRenderingContext.bindBuffer() method of the WebGL API binds a given WebGLBuffer to a target.">
+  <meta name="description" content="The WebGLRenderingContext.bindBuffer() method of the WebGL API binds a given WebGLBuffer to a target.">
+  <meta name="twitter:description" content="The WebGLRenderingContext.bindBuffer() method of the WebGL API binds a given WebGLBuffer to a target.">
+  
+
+  
+    
+
+
+
+  
+</head>
+<body data-slug="Web/API/WebGLRenderingContext/bindBuffer" contextmenu="edit-history-menu" data-search-url="" class="document  ">
+
+  <script type="text/javascript">
+    (function(win) {
+        'use strict';
+
+        
+            (function(){
+  var FLAGS = {
+    'compat_api': false,'kumaediting': false,'page_move': false,'registration_disabled': false,'search_suggestions': false,'section_edit': false,'spam_admin_override': false,'spam_checks_enabled': true,'spam_spammer_override': false,'spam_submissions_enabled': false,'spam_testing_mode': false,'wiki_samples': true,'wiki_spam_exempted': false,'wiki_spam_training': true
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': true,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+
+        // This needs to be set before ckeditor.js loads
+        window.CKEDITOR_BASEPATH = 'https://developer.mozilla.org/static/js/libs/ckeditor/build/ckeditor/';
+
+        // This represents the site configuration
+        win.mdn = {
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+            
+            notifications: [],
+            
+            // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            },
+            // Assets that need to be dynamically injected
+            assets_disabled: {
+                css: {
+                    'editor-content': ['https://developer.cdn.mozilla.net/static/build/styles/editor-content.3d79df72080d.css',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/styles/wiki-compat-tables.f3a3bfce97a1.css',]
+                },
+                js: {
+                    'syntax-prism': ['https://developer.cdn.mozilla.net/static/build/js/syntax-prism.7a66ddfa68bf.js',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/js/wiki-compat-tables.14ce5dcb2c3d.js',]
+                }
+            }
+        };
+    })(this);
+</script>
+
+  
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+    
+      <li><a href="#q" id="skip-search">Skip to search</a></li>
+    
+  </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+    <a href="https://developer.mozilla.org/en-US/" class="logo">Mozilla Developer Network</a>
+
+    <div id="nav-sec">
+        
+                  <ul>
+                  <li>
+
+    
+
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                Sign in
+              </span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FWebGLRenderingContext%2FbindBuffer" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/Web/API/WebGLRenderingContext/bindBuffer" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/Web/API/WebGLRenderingContext/bindBuffer" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FWebGLRenderingContext%2FbindBuffer" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+              
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+        
+    </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../../API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+
+   <!-- end is_zone -->
+
+    <div class="wiki-main-content" id="document-main"><div class="center">
+      
+      <div class="article-meta">
+        <!-- action buttons -->
+        
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+  <ul class="page-buttons" data-sticky="false">
+      
+      <li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+              
+                <li class="smaller">No translations exist for this article.</li>
+              
+
+              
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/bindBuffer$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+              
+            </ul>
+          </div>
+        </div>
+      </li>
+
+      <li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/bindBuffer$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li>
+
+        
+
+        <li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/bindBuffer$history" rel="nofollow, noindex">History</a></li>
+                
+                
+                
+                
+
+                
+
+                
+                
+                
+                <li class="page-print"><a href="#" onclick="return window.print();">Print this article</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+        
+  <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web" rel="v:url" property="v:title">Web technology for developers</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="../../API.html" rel="v:url" property="v:title">Web APIs</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="../WebGLRenderingContext.html" rel="v:url" property="v:title">WebGLRenderingContext</a></li>
+    
+    <li class="crumb" typeof="v:Breadcrumb" property="v:title">WebGLRenderingContext.bindBuffer()</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        
+        <div class="contributor-avatars" data-all-text="see all contributors" data-alternate-message="hide contributors">
+            <ul>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/fscholz" title="View profile: fscholz">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="fscholz" data-src="../../../../../../secure.gravatar.com/avatar/e24391c9174352988d819a9b9ea77c9e6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">fscholz</noscript></a>
+                </li>
+            
+            </ul>
+        </div>
+        
+
+        <h1>WebGLRenderingContext.bindBuffer()</h1>
+
+      </div>
+      
+
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-present">
+
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+            
+              <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+              
+              <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a rel="internal" href="#Syntax">Syntax</a><ol><li><a rel="internal" href="#Parameters">Parameters</a></li><li><a rel="internal" href="#Return_value">Return value</a></li><li><a rel="internal" href="#Exceptions">Exceptions</a></li></ol></li><li><a rel="internal" href="#Examples">Examples</a><ol><li><a rel="internal" href="#Binding_a_buffer_to_a_target">Binding a buffer to a target</a></li><li><a rel="internal" href="#Getting_current_bindings">Getting current bindings</a></li></ol></li><li><a rel="internal" href="#Specifications">Specifications</a></li><li><a rel="internal" href="#Browser_compatibility">Browser compatibility</a></li><li><a rel="internal" href="#See_also">See also</a>
+                </li></ol>
+              </div>
+              
+              </div>
+            
+
+            
+            
+              
+            
+
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-half wiki-column text-content">
+
+              
+
+              
+
+              
+                
+                
+                
+              
+              
+
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                
+                  
+                    <div><section id="Quick_Links" class="Quick_links"><!-- --></section></div>
+
+<p>The <strong><code>WebGLRenderingContext.bindBuffer()</code></strong> method of the <a href="../WebGL_API.html">WebGL API</a> binds a given <a title="The WebGLBuffer interface is part of the WebGL API and represents an opaque buffer object storing data such as vertices or colors." href="../WebGLBuffer.html"><code>WebGLBuffer</code></a> to a target.</p>
+
+<h2 id="Syntax">Syntax</h2>
+
+<pre class="syntaxbox">void <var>gl</var>.bindBuffer(<var>target</var>, <var>buffer</var>);
+</pre>
+
+<h3 id="Parameters">Parameters</h3>
+
+<dl>
+ <dt>target</dt>
+ <dd>A <a title="The following types are used in WebGL interfaces." href="../WebGL_API/Types.html"><code>GLenum</code></a> specifying the binding point (target). Possible values:
+ <ul>
+  <li><code>gl.ARRAY_BUFFER</code>: Buffer containing vertex attributes, such as vertex coordinates, texture coordinate data, or vertex color data.</li>
+  <li><code>gl.ELEMENT_ARRAY_BUFFER</code>: Buffer used for element indices.</li>
+  <li>When using a <a title="The WebGL2RenderingContext interface provides the OpenGL ES 3.0 rendering context for the drawing surface of an HTML &lt;canvas&gt; element." href="/en-US/docs/Web/API/WebGL2RenderingContext">WebGL 2 context</a>, the following values are available additionally:
+   <ul>
+    <li><code>gl.COPY_READ_BUFFER</code>: Buffer for copying from one buffer object to another.</li>
+    <li><code>gl.COPY_WRITE_BUFFER</code>: Buffer for copying from one buffer object to another.</li>
+    <li><code>gl.TRANSFORM_FEEDBACK_BUFFER</code>: Buffer for transform feedback operations.</li>
+    <li><code>gl.UNIFORM_BUFFER</code>: Buffer used for storing uniform blocks.</li>
+    <li><code>gl.PIXEL_PACK_BUFFER</code>: Buffer used for pixel transfer operations.</li>
+    <li><code>gl.PIXEL_UNPACK_BUFFER</code>: Buffer used for pixel transfer operations.</li>
+   </ul>
+  </li>
+ </ul>
+ </dd>
+ <dt>buffer</dt>
+ <dd>A <a title="The WebGLBuffer interface is part of the WebGL API and represents an opaque buffer object storing data such as vertices or colors." href="../WebGLBuffer.html"><code>WebGLBuffer</code></a> to bind.</dd>
+</dl>
+
+<h3 id="Return_value">Return value</h3>
+
+<p>None.</p>
+
+<h3 id="Exceptions">Exceptions</h3>
+
+<p>Only one target can be bound to a given <a title="The WebGLBuffer interface is part of the WebGL API and represents an opaque buffer object storing data such as vertices or colors." href="../WebGLBuffer.html"><code>WebGLBuffer</code></a>. An attempt to bind the buffer to another target will throw an <code>INVALID_OPERATION</code> error and the current buffer binding will remain the same.</p>
+
+<h2 id="Examples">Examples</h2>
+
+<h3 id="Binding_a_buffer_to_a_target">Binding a buffer to a target</h3>
+
+<pre class="brush: js">var canvas = document.getElementById("canvas");
+var gl = canvas.getContext("webgl");
+var buffer = gl.createBuffer();
+
+gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+</pre>
+
+<h3 id="Getting_current_bindings">Getting current bindings</h3>
+
+<p>To check the current buffer bindings, query the <code>ARRAY_BUFFER_BINDING</code> and&nbsp;<code>ELEMENT_ARRAY_BUFFER_BINDING</code> constants.</p>
+
+<pre class="brush: js">gl.getParameter(gl.ARRAY_BUFFER_BINDING);
+gl.getParameter(gl.ELEMENT_ARRAY_BUFFER_BINDING);
+</pre>
+
+<h2 id="Specifications">Specifications</h2>
+
+<table class="standard-table">
+ <tbody>
+  <tr>
+   <th scope="col">Specification</th>
+   <th scope="col">Status</th>
+   <th scope="col">Comment</th>
+  </tr>
+  <tr>
+   <td><a hreflang="en" class="external" lang="en" href="https://www.khronos.org/registry/webgl/specs/latest/1.0/#5.14.5">WebGL 1.0<br><small lang="en-US">The definition of 'bindBuffer' in that specification.</small></a></td>
+   <td><span class="spec-REC">Recommendation</span></td>
+   <td>Initial definition for WebGL.</td>
+  </tr>
+  <tr>
+   <td><a hreflang="en" class="external" lang="en" href="https://www.khronos.org/opengles/sdk/docs/man/xhtml/glBindBuffer.xml">OpenGL ES 2.0<br><small lang="en-US">The definition of 'glBindBuffer' in that specification.</small></a></td>
+   <td><span class="spec-Standard">Standard</span></td>
+   <td>Man page of the (similar) OpenGL ES 2 API.</td>
+  </tr>
+  <tr>
+   <td><a hreflang="en" class="external" lang="en" href="https://www.khronos.org/registry/webgl/specs/latest/2.0/#3.7.1">WebGL 2.0<br><small lang="en-US">The definition of 'bindBuffer' in that specification.</small></a></td>
+   <td><span class="spec-ED">Editor's Draft</span></td>
+   <td>
+    <p>Updated definition for WebGL 2.</p>
+
+    <p>Adds new <code>target</code> buffers:<br>
+     <code>gl.COPY_READ_BUFFER</code>,<br>
+     <code>gl.COPY_WRITE_BUFFER</code>,<br>
+     <code>gl.TRANSFORM_FEEDBACK_BUFFER</code>,<br>
+     <code>gl.UNIFORM_BUFFER</code>,<br>
+     <code>gl.PIXEL_PACK_BUFFER</code>,<br>
+     <code>gl.PIXEL_UNPACK_BUFFER</code></p>
+   </td>
+  </tr>
+  <tr>
+   <td><a hreflang="en" class="external" lang="en" href="https://www.khronos.org/opengles/sdk/docs/man3/html/glBindBuffer.xhtml">OpenGL ES 3.0<br><small lang="en-US">The definition of 'glBindBuffer' in that specification.</small></a></td>
+   <td><span class="spec-Standard">Standard</span></td>
+   <td>Man page of the (similar) OpenGL ES 3 API.</td>
+  </tr>
+ </tbody>
+</table>
+
+<h2 id="Browser_compatibility">Browser compatibility</h2>
+
+<p></p><div class="htab"> 
+    <a name="AutoCompatibilityTable" id="AutoCompatibilityTable"></a> 
+    <ul> 
+        <li class="selected"><a>Desktop</a></li> 
+        <li><a>Mobile</a></li> 
+    </ul> 
+</div><p></p>
+
+<div id="compat-desktop">
+<table class="compat-table">
+ <tbody>
+  <tr>
+   <th>Feature</th>
+   <th>Chrome</th>
+   <th>Edge</th>
+   <th>Firefox (Gecko)</th>
+   <th>Internet Explorer</th>
+   <th>Opera</th>
+   <th>Safari</th>
+  </tr>
+  <tr>
+   <td>Basic support</td>
+   <td>9</td>
+   <td>12</td>
+   <td><a title="Released on 2011-03-22." href="https://developer.mozilla.org/en-US/Firefox/Releases/4">4.0</a> (2.0)</td>
+   <td>11</td>
+   <td>12</td>
+   <td>5.1</td>
+  </tr>
+  <tr>
+   <td>WebGL 2</td>
+   <td><span style="color: #f00;">No&nbsp;support</span> [2]</td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+   <td><em>Nightly build</em> [1]</td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+  </tr>
+ </tbody>
+</table>
+</div>
+
+<div id="compat-mobile">
+<table class="compat-table">
+ <tbody>
+  <tr>
+   <th>Feature</th>
+   <th>Android</th>
+   <th>Chrome for Android</th>
+   <th>Firefox Mobile (Gecko)</th>
+   <th>Firefox OS</th>
+   <th>IE Mobile</th>
+   <th>Opera Mobile</th>
+   <th>Safari Mobile</th>
+  </tr>
+  <tr>
+   <td>Basic support</td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td>25</td>
+   <td>4.0 (2.0)</td>
+   <td>1.0</td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td>12</td>
+   <td>8.0</td>
+  </tr>
+  <tr>
+   <td>WebGL 2</td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+  </tr>
+ </tbody>
+</table>
+</div>
+
+<p>[1] WebGL 2 is enabled by default in Firefox Nightly. To enable it in a release version of Firefox, set the preference <code>webgl.enable-prototype-webgl2</code> to <code>true</code> in about:config.</p>
+
+<p>[2] To use an experimental implementation of WebGL 2 in Chrome, you have to start Chrome with the runtime flag <code>--enable-unsafe-es3-apis</code>.</p>
+
+<h2 id="See_also">See also</h2>
+
+<ul>
+ <li><a title="The WebGLRenderingContext.createBuffer() method of the WebGL API creates and initializes a WebGLBuffer storing data such as vertices or colors." href="createBuffer.html"><code>WebGLRenderingContext.createBuffer()</code></a></li>
+ <li><a title="The WebGLRenderingContext.deleteBuffer() method of the WebGL API deletes a given WebGLBuffer. This method has no effect if the buffer has already been deleted." href="deleteBuffer.html"><code>WebGLRenderingContext.deleteBuffer()</code></a></li>
+ <li><a title="The WebGLRenderingContext.isBuffer() method of the WebGL API returns true if the passed WebGLBuffer is valid and false otherwise." href="isBuffer.html"><code>WebGLRenderingContext.isBuffer()</code></a></li>
+ <li>Other buffers: <a title="The WebGLFramebuffer interface is part of the WebGL API and represents a collection of buffers that serve as a rendering destination." href="../WebGLFramebuffer.html"><code>WebGLFramebuffer</code></a>, <a title="The WebGLRenderbuffer interface is part of the WebGL API and represents a buffer that can contain an image, or can be source or target of an rendering operation." href="../WebGLRenderbuffer.html"><code>WebGLRenderbuffer</code></a></li>
+</ul>
+                  
+                
+              </article>
+
+              
+
+    
+    
+    
+
+    
+    
+    
+
+    <div class="share">
+        <strong>Share:</strong>
+        <ul>
+            <li><a href="http://twitter.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FAPI%2FWebGLRenderingContext%2FbindBuffer%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dtwitter.com&amp;text=I+learned+about+WebGLRenderingContext.bindBuffer%28%29+on+MDN." target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/bindBuffer?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=twitter.com" data-title="I learned about WebGLRenderingContext.bindBuffer() on MDN." class="share-link twitter"><i aria-hidden="true" class="icon-twitter"></i>Twitter</a></li>
+            <li><a href="http://facebook.com/sharer.php?s=100&amp;p[url]=https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/bindBuffer?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/bindBuffer?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" data-title="I learned about WebGLRenderingContext.bindBuffer() on MDN." class="share-link facebook"><i aria-hidden="true" class="icon-facebook"></i>Facebook</a></li>
+            <li><a href="https://plus.google.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FAPI%2FWebGLRenderingContext%2FbindBuffer%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dplus.google.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/bindBuffer?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=plus.google.com" data-title="I learned about WebGLRenderingContext.bindBuffer() on MDN." class="share-link gplus"><i aria-hidden="true" class="icon-google-plus"></i>Google+</a></li>
+        </ul>
+    </div>
+
+              
+
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                  
+                  
+  <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags icon-fw"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+      
+        <li><a href="../../../tag/API.html">API</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Method">Method</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Reference">Reference</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/WebGL">WebGL</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/WebGLRenderingContext">WebGLRenderingContext</a></li>
+      
+    </ul>
+  </div>
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-group icon-fw"></i>&nbsp;<strong>Contributors to this page:</strong> 
+        <a href="https://developer.mozilla.org/en-US/profiles/fscholz">fscholz</a>
+    
+                    </div>
+                  
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o icon-fw"></i>&nbsp;<strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/fscholz">fscholz</a>,
+                      <time datetime="2016-04-20T13:50:38-07:00">Apr 20, 2016, 1:50:38 PM</time>
+                    </div>
+                  
+                </div>
+              
+            </div>
+
+            
+              <!-- quick links and zone subnav strip -->
+              <div id="wiki-left" class="column-strip wiki-column">
+
+              
+
+                
+
+                
+                  <!-- quick links -->
+                  
+  <div class="quick-links" id="quick-links">
+    <div class="title see-also">See also</div>
+    <ol><li><strong><a href="../WebGL_API.html">WebGL API</a></strong></li><li><strong><a href="../WebGLRenderingContext.html"><code>WebGLRenderingContext</code></a></strong></li><li data-default-state="open"><a href="#"><strong>Properties</strong></a><ol><li><a title="The WebGLRenderingContext.canvas property is a read-only reference to the HTMLCanvasElement or OffscreenCanvas object that is associated with the context. It might be null if it is not associated with a &lt;canvas&gt; element or an OffscreenCanvas object." href="/en-US/docs/Web/API/WebGLRenderingContext/canvas"><code>canvas</code></a></li><li><a title="The read-only WebGLRenderingContext.drawingBufferHeight property represents the actual height of the current drawing buffer. It should match the height attribute of the &lt;canvas&gt; element associated with this context, but might differ if the implementation is not able to provide the requested height." href="/en-US/docs/Web/API/WebGLRenderingContext/drawingBufferHeight"><code>drawingBufferHeight</code></a></li><li><a title="The read-only WebGLRenderingContext.drawingBufferWidth property represents the actual width of the current drawing buffer. It should match the width attribute of the &lt;canvas&gt; element associated with this context, but might differ if the implementation is not able to provide the requested width." href="/en-US/docs/Web/API/WebGLRenderingContext/drawingBufferWidth"><code>drawingBufferWidth</code></a></li></ol></li><li data-default-state="open"><a href="#"><strong>Methods</strong></a><ol><li><a title="The WebGLRenderingContext.activeTexture() method of the WebGL API specifies which texture unit to make active." href="activeTexture.html"><code>activeTexture()</code></a></li><li><a title="The WebGLRenderingContext.attachShader() method of the WebGL API attaches either a fragment or vertex WebGLShader to a WebGLProgram." href="attachShader.html"><code>attachShader()</code></a></li><li><a title="The WebGLRenderingContext.bindAttribLocation() method of the WebGL API binds a generic vertex index to an attribute variable." href="bindAttribLocation.html"><code>bindAttribLocation()</code></a></li><li><em><code>bindBuffer()</code></em></li><li><a title="The WebGLRenderingContext.bindFramebuffer() method of the WebGL API binds a given WebGLFramebuffer to a target." href="bindFramebuffer.html"><code>bindFramebuffer()</code></a></li><li><a title="The WebGLRenderingContext.bindRenderbuffer() method of the WebGL API binds a given WebGLRenderbuffer to a target, which must be gl.RENDERBUFFER." href="bindRenderbuffer.html"><code>bindRenderbuffer()</code></a></li><li><a title="The WebGLRenderingContext.bindTexture() method of the WebGL API binds a given WebGLTexture to a target (binding point)." href="bindTexture.html"><code>bindTexture()</code></a></li><li><a title="The WebGLRenderingContext.blendColor() method of the WebGL API is used to set the source and destination blending factors." href="blendColor.html"><code>blendColor()</code></a></li><li><a title="The WebGLRenderingContext.blendEquation() method of the WebGL API is used to set both the RGB blend equation and alpha blend equation to a single equation." href="blendEquation.html"><code>blendEquation()</code></a></li><li><a title="The WebGLRenderingContext.blendEquationSeparate() method of the WebGL API is used to set the RGB blend equation and alpha blend equation separately." href="blendEquationSeparate.html"><code>blendEquationSeparate()</code></a></li><li><a title="The WebGLRenderingContext.blendFunc() method of the WebGL API defines which function is used for blending pixel arithmetic." href="blendFunc.html"><code>blendFunc()</code></a></li><li><a title="The WebGLRenderingContext.blendFuncSeparate() method of the WebGL API defines which function is used for blending pixel arithmetic for RGB and alpha components separately." href="blendFuncSeparate.html"><code>blendFuncSeparate()</code></a></li><li><a title="The WebGLRenderingContext.bufferData() method of the WebGL API initializes and creates the buffer object's data store." href="bufferData.html"><code>bufferData()</code></a></li><li><a title="The WebGLRenderingContext.bufferSubData() method of the WebGL API updates a subset of a buffer object's data store." href="bufferSubData.html"><code>bufferSubData()</code></a></li><li><a title="The WebGLRenderingContext.checkFramebufferStatus() method of the WebGL API returns the completeness status of the WebGLFramebuffer object." href="checkFramebufferStatus.html"><code>checkFramebufferStatus()</code></a></li><li><a title="The WebGLRenderingContext.clear() method of the WebGL API clears buffers to preset values." href="clear.html"><code>clear()</code></a></li><li><a title="The WebGLRenderingContext.clearColor() method of the WebGL API specifies the color values used when clearing color buffers." href="clearColor.html"><code>clearColor()</code></a></li><li><a title="The WebGLRenderingContext.clearDepth() method of the WebGL API specifies the clear value for the depth buffer." href="clearDepth.html"><code>clearDepth()</code></a></li><li><a title="The WebGLRenderingContext.clearStencil() method of the WebGL API specifies the clear value for the stencil buffer." href="clearStencil.html"><code>clearStencil()</code></a></li><li><a title="The WebGLRenderingContext.colorMask() method of the WebGL API sets which color components to enable or to disable when drawing or rendering to a WebGLFramebuffer." href="colorMask.html"><code>colorMask()</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a title="The WebGLRenderingContext.commit() method pushes frames back to the original HTMLCanvasElement, if the context is not directly fixed to a specific canvas." href="commit.html"><code>commit()</code></a></li><li><a title="The WebGLRenderingContext.compileShader() method of the WebGL API compiles a GLSL shader into binary data so that it can be used by a WebGLProgram." href="compileShader.html"><code>compileShader()</code></a></li><li><a title="The WebGLRenderingContext.compressedTexImage2D() method of the WebGL API specifies a two-dimensional texture image in a compressed format." href="compressedTexImage2D.html"><code>compressedTexImage2D()</code></a></li><li><a title="The WebGLRenderingContext.compressedTexSubImage2D() method of the WebGL API specifies a two-dimensional sub-rectangle for a texture image in a compressed format." href="compressedTexSubImage2D.html"><code>compressedTexSubImage2D()</code></a></li><li><a title="The WebGLRenderingContext.copyTexImage2D() method of the WebGL API copies pixels from the current WebGLFramebuffer into a 2D texture image." href="copyTexImage2D.html"><code>copyTexImage2D()</code></a></li><li><a title="The WebGLRenderingContext.copyTexSubImage2D() method of the WebGL API copies pixels from the current WebGLFramebuffer into an existing 2D texture sub-image." href="copyTexSubImage2D.html"><code>copyTexSubImage2D()</code></a></li><li><a title="The WebGLRenderingContext.createBuffer() method of the WebGL API creates and initializes a WebGLBuffer storing data such as vertices or colors." href="createBuffer.html"><code>createBuffer()</code></a></li><li><a title="The WebGLRenderingContext.creatFramebuffer() method of the WebGL API creates and initializes a WebGLFramebuffer object." href="createFramebuffer.html"><code>createFramebuffer()</code></a></li><li><a title="The WebGLRenderingContext.createProgram() method of the WebGL API creates and initializes a WebGLProgram object." href="createProgram.html"><code>createProgram()</code></a></li><li><a title="The WebGLRenderingContext.createRenderbuffer() method of the WebGL API creates and initializes a WebGLRenderbuffer object." href="createRenderbuffer.html"><code>createRenderbuffer()</code></a></li><li><a title="The WebGLRenderingContext.createShader() method of the WebGL API creates a WebGLShader that can then be configured further using WebGLRenderingContext.shaderSource() and WebGLRenderingContext.compileShader()." href="createShader.html"><code>createShader()</code></a></li><li><a title="The WebGLRenderingContext.createTexture() method of the WebGL API creates and initializes a WebGLTexture object." href="createTexture.html"><code>createTexture()</code></a></li><li><a title="The WebGLRenderingContext.cullFace() method of the WebGL API specifies whether or not front- and/or back-facing polygons can be culled." href="cullFace.html"><code>cullFace()</code></a></li><li><a title="The WebGLRenderingContext.deleteBuffer() method of the WebGL API deletes a given WebGLBuffer. This method has no effect if the buffer has already been deleted." href="deleteBuffer.html"><code>deleteBuffer()</code></a></li><li><a title="The WebGLRenderingContext.deleteFramebuffer() method of the WebGL API deletes a given WebGLFramebuffer object. This method has no effect if the frame buffer has already been deleted." href="deleteFramebuffer.html"><code>deleteFramebuffer()</code></a></li><li><a title="The WebGLRenderingContext.deleteProgram() method of the WebGL API deletes a given WebGLProgram object. This method has no effect if the program has already been deleted." href="deleteProgram.html"><code>deleteProgram()</code></a></li><li><a title="The WebGLRenderingContext.deleteRenderbuffer() method of the WebGL API deletes a given WebGLRenderbuffer object. This method has no effect if the render buffer has already been deleted." href="deleteRenderbuffer.html"><code>deleteRenderbuffer()</code></a></li><li><a title="The WebGLRenderingContext.deleteShader() method of the WebGL API deletes a given WebGLShader object. This method has no effect if the shader has already been deleted." href="deleteShader.html"><code>deleteShader()</code></a></li><li><a title="The WebGLRenderingContext.deleteTexture() method of the WebGL API deletes a given WebGLTexture object. This method has no effect if the texture has already been deleted." href="deleteTexture.html"><code>deleteTexture()</code></a></li><li><a title="The WebGLRenderingContext.depthFunc() method of the WebGL API specifies a function that compares incoming pixel depth to the current depth buffer value." href="depthFunc.html"><code>depthFunc()</code></a></li><li><a title="The WebGLRenderingContext.depthMask() method of the WebGL API sets whether writing into the depth buffer is enabled or disabled." href="depthMask.html"><code>depthMask()</code></a></li><li><a title="The WebGLRenderingContext.depthRange() method of the WebGL API specifies the depth range mapping from normalized device coordinates to window or viewport coordinates." href="depthRange.html"><code>depthRange()</code></a></li><li><a title="The WebGLRenderingContext.detachShader() method of the WebGL API detaches a previously attached&nbsp;WebGLShader from a WebGLProgram." href="detachShader.html"><code>detachShader()</code></a></li><li><a title="The WebGLRenderingContext.disable() method of the WebGL API disables specific WebGL capabilities for this context." href="disable.html"><code>disable()</code></a></li><li><a title="The WebGLRenderingContext.disableVertexAttribArray() method of the WebGL API turns the generic vertex attribute array off at a given index position." href="disableVertexAttribArray.html"><code>disableVertexAttribArray()</code></a></li><li><a title="The WebGLRenderingContext.drawArrays() method of the WebGL API renders primitives from array data." href="drawArrays.html"><code>drawArrays()</code></a></li><li><a title="The WebGLRenderingContext.drawElements() method of the WebGL API renders primitives from array data." href="drawElements.html"><code>drawElements()</code></a></li><li><a title="The WebGLRenderingContext.enable() method of the WebGL API enables specific WebGL capabilities for this context." href="enable.html"><code>enable()</code></a></li><li><a title="The WebGLRenderingContext.enableVertexAttribArray() method of the WebGL API turns the generic vertex attribute array on at a given index position." href="enableVertexAttribArray.html"><code>enableVertexAttribArray()</code></a></li><li><a title="The WebGLRenderingContext.finish() method of the WebGL API blocks execution until all previously called commands are finished." href="finish.html"><code>finish()</code></a></li><li><a title="The WebGLRenderingContext.flush() method of the WebGL API empties different buffer commands, causing all commands to be executed as quickly as possible." href="flush.html"><code>flush()</code></a></li><li><a title="The WebGLRenderingContext.framebufferRenderbuffer() method of the WebGL API attaches a WebGLRenderbuffer object to a WebGLFramebuffer object." href="framebufferRenderbuffer.html"><code>framebufferRenderbuffer()</code></a></li><li><a title="The WebGLRenderingContext.framebufferTexture2D() method of the WebGL API attaches a texture to a WebGLFramebuffer." href="framebufferTexture2D.html"><code>framebufferTexture2D()</code></a></li><li><a title="The WebGLRenderingContext.frontFace() method of the WebGL API specifies whether polygons are front- or back-facing by setting a winding orientation." href="frontFace.html"><code>frontFace()</code></a></li><li><a title="The WebGLRenderingContext.generateMipmap() method of the WebGL AP generates a set of mipmaps for a WebGLTexture object." href="generateMipmap.html"><code>generateMipmap()</code></a></li><li><a title="The WebGLRenderingContext.getActiveAttrib() method of the WebGL API returns a WebGLActiveInfo object containing size, type, and name of a vertex attribute at a given position in a WebGLProgram." href="getActiveAttrib.html"><code>getActiveAttrib()</code></a></li><li><a title="The WebGLRenderingContext.getActiveUniform() method of the WebGL API returns a WebGLActiveInfo object containing size, type, and name of a uniform attribute at a given position in a WebGLProgram." href="getActiveUniform.html"><code>getActiveUniform()</code></a></li><li><a title="The WebGLRenderingContext.getAttachedShaders() method of the WebGL API returns a list of WebGLShader objects attached to a WebGLProgram." href="getAttachedShaders.html"><code>getAttachedShaders()</code></a></li><li><a title="The WebGLRenderingContext.getAttribLocation() method of the WebGL API returns the location of an attribute variable in a given WebGLProgram." href="getAttribLocation.html"><code>getAttribLocation()</code></a></li><li><a title="The WebGLRenderingContext.getBufferParameter() method of the WebGL API returns information about the buffer." href="getBufferParameter.html"><code>getBufferParameter()</code></a></li><li><a title="The WebGLRenderingContext.getContextAttributes() method returns a WebGLContextAttributes object that contains the actual context parameters. Might return null, if the context is lost." href="getContextAttributes.html"><code>getContextAttributes()</code></a></li><li><a title="The WebGLRenderingContext.getError() method of the WebGL API returns error information." href="getError.html"><code>getError()</code></a></li><li><a title="The WebGLRenderingContext.getExtension() method enables a WebGL extension." href="getExtension.html"><code>getExtension()</code></a></li><li><a title="The WebGLRenderingContext.getFramebufferAttachmentParameter() method of the WebGL API returns information about a framebuffer's attachment." href="getFramebufferAttachmentParameter.html"><code>getFramebufferAttachmentParameter()</code></a></li><li><a title="The WebGLRenderingContext.getParameter() method of the WebGL API returns a value for the passed parameter name." href="getParameter.html"><code>getParameter()</code></a></li><li><a title="The WebGLRenderingContext.getProgramInfoLog returns the information log for the specified WebGLProgram object. It contains errors that occurred during failed linking or validation of WebGLProgram objects." href="getProgramInfoLog.html"><code>getProgramInfoLog()</code></a></li><li><a title="The WebGLRenderingContext.getProgramParameter() method of the WebGL API returns information about the given program." href="getProgramParameter.html"><code>getProgramParameter()</code></a></li><li><a title="The WebGLRenderingContext.getRenderbufferParameter() method of the WebGL API returns information about the renderbuffer." href="getRenderbufferParameter.html"><code>getRenderbufferParameter()</code></a></li><li><a title="The WebGLRenderingContext.getShaderInfoLog returns the information log for the specified WebGLShader object. It contains warnings, debugging and compile information." href="getShaderInfoLog.html"><code>getShaderInfoLog()</code></a></li><li><a title="The WebGLRenderingContext.getShaderParameter() method of the WebGL API returns information about the given shader." href="getShaderParameter.html"><code>getShaderParameter()</code></a></li><li><a title="The WebGLRenderingContext.getShaderPrecisionFormat() method of the WebGL API returns a new WebGLShaderPrecisionFormat object describing the range and precision for the specified shader numeric format." href="getShaderPrecisionFormat.html"><code>getShaderPrecisionFormat()</code></a></li><li><a title="The WebGLRenderingContext.getShaderSource() method of the WebGL API returns the source code of a WebGLShader as a DOMString." href="getShaderSource.html"><code>getShaderSource()</code></a></li><li><a title="The WebGLRenderingContext.getSupportedExtensions() method returns a list of all the supported WebGL extensions." href="getSupportedExtensions.html"><code>getSupportedExtensions()</code></a></li><li><a title="The WebGLRenderingContext.getTexParameter() method of the WebGL API returns information about the given texture." href="getTexParameter.html"><code>getTexParameter()</code></a></li><li><a title="The WebGLRenderingContext.getUniform() method of the WebGL API returns the value of a uniform variable at a given location." href="getUniform.html"><code>getUniform()</code></a></li><li><a title="The WebGLRenderingContext.getUniformLocation() method of the WebGL API returns a WebGLUniformLocation of a uniform variable in a given WebGLProgram." href="getUniformLocation.html"><code>getUniformLocation()</code></a></li><li><a title="The WebGLRenderingContext.getVertexAttrib() method of the WebGL API returns information about a vertex attribute at a given position." href="getVertexAttrib.html"><code>getVertexAttrib()</code></a></li><li><a title="The WebGLRenderingContext.getVertexAttribOffset() method of the WebGL API returns the address of a specified vertex attribute." href="getVertexAttribOffset.html"><code>getVertexAttribOffset()</code></a></li><li><a title="The WebGLRenderingContext.hint() method of the WebGL API specifies hints for certain behaviors. The interpretation of these hints depend on the implementation." href="hint.html"><code>hint()</code></a></li><li><a title="The WebGLRenderingContext.isBuffer() method of the WebGL API returns true if the passed WebGLBuffer is valid and false otherwise." href="isBuffer.html"><code>isBuffer()</code></a></li><li><a title="The WebGLRenderingContext.isContextLost() method returns a Boolean indicating whether or not the WebGL context has been lost." href="isContextLost.html"><code>isContextLost()</code></a></li><li><a title="The WebGLRenderingContext.isEnabled() method of the WebGL API tests whether a specific WebGL capability is enabled or not for this context." href="isEnabled.html"><code>isEnabled()</code></a></li><li><a title="The WebGLRenderingContext.isFramebuffer() method of the WebGL API returns true if the passed WebGLFramebuffer is valid and false otherwise." href="isFramebuffer.html"><code>isFramebuffer()</code></a></li><li><a title="The WebGLRenderingContext.isProgram() method of the WebGL API returns true if the passed WebGLProgram is valid, false otherwise." href="isProgram.html"><code>isProgram()</code></a></li><li><a title="The WebGLRenderingContext.isRenderbuffer() method of the WebGL API returns true if the passed WebGLRenderbuffer is valid and false otherwise." href="isRenderbuffer.html"><code>isRenderbuffer()</code></a></li><li><a title="The WebGLRenderingContext.isShader() method of the WebGL API returns true if the passed WebGLShader is valid, false otherwise." href="isShader.html"><code>isShader()</code></a></li><li><a title="The WebGLRenderingContext.isTexture() method of the WebGL API returns true if the passed WebGLTexture is valid and false otherwise." href="isTexture.html"><code>isTexture()</code></a></li><li><a title="The WebGLRenderingContext.lineWidth() method of the WebGL API sets the line width of rasterized lines." href="lineWidth.html"><code>lineWidth()</code></a></li><li><a title="The WebGLRenderingContext.linkProgram() method of the WebGL API links a given WebGLProgram to the attached vertex and fragment shaders." href="linkProgram.html"><code>linkProgram()</code></a></li><li><a title="The WebGLRenderingContext.pixelstorei() method of the WebGL API specifies the pixel storage modes." href="pixelStorei.html"><code>pixelStorei()</code></a></li><li><a title="The WebGLRenderingContext.polygonOffset() method of the WebGL API specifies the scale factors and units to calculate depth values." href="polygonOffset.html"><code>polygonOffset()</code></a></li><li><a title="The WebGLRenderingContext.readPixels() method of the WebGL API reads a block of pixels from a specified rectangle of the current color framebuffer into an ArrayBufferView object." href="readPixels.html"><code>readPixels()</code></a></li><li><a title="The WebGLRenderingContext.renderbufferStorage() method of the WebGL API creates and initializes a renderbuffer object's data store." href="renderbufferStorage.html"><code>renderbufferStorage()</code></a></li><li><a title="The WebGLRenderingContext.sampleCoverage() method of the WebGL API specifies multi-sample coverage parameters for anti-aliasing effects." href="sampleCoverage.html"><code>sampleCoverage()</code></a></li><li><a title="The WebGLRenderingContext.scissor() method of the WebGL API sets a scissor box, which limits the drawing to a specified rectangle." href="scissor.html"><code>scissor()</code></a></li><li><a title="The WebGLRenderingContext.shaderSource() method of the WebGL API sets the source code of a WebGLShader." href="shaderSource.html"><code>shaderSource()</code></a></li><li><a title="The WebGLRenderingContext.stencilFunc() method of the WebGL API sets the front and back function and reference value for stencil testing." href="stencilFunc.html"><code>stencilFunc()</code></a></li><li><a title="The WebGLRenderingContext.stencilFuncSeparate() method of the WebGL API sets the front and/or back function and reference value for stencil testing." href="stencilFuncSeparate.html"><code>stencilFuncSeparate()</code></a></li><li><a title="The WebGLRenderingContext.stencilMask() method of the WebGL API controls enabling and disabling of both the front and back writing of individual bits in the stencil planes." href="stencilMask.html"><code>stencilMask()</code></a></li><li><a title="The WebGLRenderingContext.stencilMaskSeparate() method of the WebGL API controls enabling and disabling of front and/or back writing of individual bits in the stencil planes." href="stencilMaskSeparate.html"><code>stencilMaskSeparate()</code></a></li><li><a title="The WebGLRenderingContext.stencilOp() method of the WebGL API sets both the front and back-facing stencil test actions." href="stencilOp.html"><code>stencilOp()</code></a></li><li><a title="The WebGLRenderingContext.stencilOpSeparate() method of the WebGL API sets the front and/or back-facing stencil test actions." href="stencilOpSeparate.html"><code>stencilOpSeparate()</code></a></li><li><a title="The WebGLRenderingContext.texImage2D() method of the WebGL API specifies a two-dimensional texture image." href="texImage2D.html"><code>texImage2D()</code></a></li><li><a title="The WebGLRenderingContext.texParameter[fi]() methods of the WebGL API set texture parameters." href="texParameter.html"><code>texParameter[fi]()</code></a></li><li><a title="The WebGLRenderingContext.texSubImage2D() method of the WebGL API specifies a sub-rectangle of the current texture." href="texSubImage2D.html"><code>texSubImage2D()</code></a></li><li><a title="The WebGLRenderingContext.uniform[1234][fi][v]() methods of the WebGL API specify values of uniform variables." href="uniform.html"><code>uniform[1234][fi][v]()</code></a></li><li><a title="The WebGLRenderingContext.uniformMatrix[234]fv() methods of the WebGL API specify&nbsp; matrix values for uniform variables." href="uniformMatrix.html"><code>uniformMatrix[234]fv()</code></a></li><li><a title="The WebGLRenderingContext.useProgram() method of the WebGL API sets the specified WebGLProgram as part the current rendering state." href="useProgram.html"><code>useProgram()</code></a></li><li><a title="The WebGLRenderingContext.validateProgram() method of the WebGL API validates a WebGLProgram. It checks if it is successfully linked and if it can be used in the current WebGL state." href="validateProgram.html"><code>validateProgram()</code></a></li><li><a title="The WebGLRenderingContext.vertexAttrib[1234]f[v]() methods of the WebGL API specify values for generic vertex attributes." href="vertexAttrib.html"><code>vertexAttrib[1234]f[v]()</code></a></li><li><a title="The WebGLRenderingContext.vertexAttribPointer() method of the WebGL API specifies the data formats and locations of vertex attributes in a vertex attributes array." href="vertexAttribPointer.html"><code>vertexAttribPointer()</code></a></li><li><a title="The WebGLRenderingContext.viewport() method of the WebGL API sets the viewport, which specifies the affine transformation of x and y from normalized device coordinates to window coordinates." href="viewport.html"><code>viewport()</code></a></li></ol></li><li data-default-state="open"><a href="#"><strong>Events</strong></a><ol><li><a href="../../Events/webglcontextlost.html"><code>webglcontextlost</code></a></li><li><a href="../../Events/webglcontextrestored.html"><code>webglcontextrestored</code></a></li><li><a href="../../Events/webglcontextcreationerror.html"><code>webglcontextcreationerror</code></a></li></ol></li><li data-default-state="open"><a href="#"><strong>Related pages for WebGL</strong></a><ol><li><a href="../ANGLE_instanced_arrays.html"><code>ANGLE_instanced_arrays</code></a></li><li><a href="../EXT_blend_minmax.html"><code>EXT_blend_minmax</code></a></li><li><a href="../EXT_color_buffer_half_float.html"><code>EXT_color_buffer_half_float</code></a></li><li><a href="../EXT_disjoint_timer_query.html"><code>EXT_disjoint_timer_query</code></a></li><li><a href="../EXT_frag_depth.html"><code>EXT_frag_depth</code></a></li><li><a href="../EXT_sRGB.html"><code>EXT_sRGB</code></a></li><li><a href="../EXT_shader_texture_lod.html"><code>EXT_shader_texture_lod</code></a></li><li><a href="../EXT_texture_filter_anisotropic.html"><code>EXT_texture_filter_anisotropic</code></a></li><li><a href="../OES_element_index_uint.html"><code>OES_element_index_uint</code></a></li><li><a href="../OES_standard_derivatives.html"><code>OES_standard_derivatives</code></a></li><li><a href="../OES_texture_float.html"><code>OES_texture_float</code></a></li><li><a href="../OES_texture_float_linear.html"><code>OES_texture_float_linear</code></a></li><li><a href="../OES_texture_half_float.html"><code>OES_texture_half_float</code></a></li><li><a href="../OES_texture_half_float_linear.html"><code>OES_texture_half_float_linear</code></a></li><li><a href="../OES_vertex_array_object.html"><code>OES_vertex_array_object</code></a></li><li><a href="../WEBGL_color_buffer_float.html"><code>WEBGL_color_buffer_float</code></a></li><li><a href="../WEBGL_compressed_texture_atc.html"><code>WEBGL_compressed_texture_atc</code></a></li><li><a href="../WEBGL_compressed_texture_etc1.html"><code>WEBGL_compressed_texture_etc1</code></a></li><li><a href="../WEBGL_compressed_texture_pvrtc.html"><code>WEBGL_compressed_texture_pvrtc</code></a></li><li><a href="../WEBGL_compressed_texture_s3tc.html"><code>WEBGL_compressed_texture_s3tc</code></a></li><li><a href="../WEBGL_debug_renderer_info.html"><code>WEBGL_debug_renderer_info</code></a></li><li><a href="../WEBGL_debug_shaders.html"><code>WEBGL_debug_shaders</code></a></li><li><a href="../WEBGL_depth_texture.html"><code>WEBGL_depth_texture</code></a></li><li><a href="../WEBGL_draw_buffers.html"><code>WEBGL_draw_buffers</code></a></li><li><a href="../WEBGL_lose_context.html"><code>WEBGL_lose_context</code></a></li><li><a href="../WebGL2RenderingContext.html"><code>WebGL2RenderingContext</code></a></li><li><a href="../WebGLActiveInfo.html"><code>WebGLActiveInfo</code></a></li><li><a href="../WebGLBuffer.html"><code>WebGLBuffer</code></a></li><li><a href="../WebGLContextEvent.html"><code>WebGLContextEvent</code></a></li><li><a href="../WebGLFramebuffer.html"><code>WebGLFramebuffer</code></a></li><li><a href="../WebGLObject.html"><code>WebGLObject</code></a></li><li><a href="../WebGLProgram.html"><code>WebGLProgram</code></a></li><li><a href="../WebGLQuery.html"><code>WebGLQuery</code></a></li><li><a href="../WebGLRenderbuffer.html"><code>WebGLRenderbuffer</code></a></li><li><a href="../WebGLSampler.html"><code>WebGLSampler</code></a></li><li><a href="../WebGLShader.html"><code>WebGLShader</code></a></li><li><a href="../WebGLShaderPrecisionFormat.html"><code>WebGLShaderPrecisionFormat</code></a></li><li><a href="../WebGLSync.html"><code>WebGLSync</code></a></li><li><a href="../WebGLTexture.html"><code>WebGLTexture</code></a></li><li><a href="../WebGLTimerQueryEXT.html"><code>WebGLTimerQueryEXT</code></a></li><li><a href="../WebGLTransformFeedback.html"><code>WebGLTransformFeedback</code></a></li><li><a href="../WebGLUniformLocation.html"><code>WebGLUniformLocation</code></a></li><li><a href="../WebGLVertexArrayObject.html"><code>WebGLVertexArrayObject</code></a></li><li><a href="../WebGLVertexArrayObjectOES.html"><code>WebGLVertexArrayObjectOES</code></a></li></ol></li></ol>
+  </div>
+                
+
+                <!-- approvals -->
+                
+
+              
+
+              </div>
+            
+          </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Web/API/WebGLRenderingContext/bindBuffer$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Web/API/WebGLRenderingContext/bindBuffer$history" label="View page history"></menuitem>
+  </menu>
+
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+        
+        <div class="contentinfo">
+          <p>© 2005-2016 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>
+          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+        
+        </div>
+      </div>
+      <div class="column-strip">
+        
+          
+  
+
+        
+      </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+  
+    
+    <!--[if lte IE 8]><script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/selectivizr.091e18cf669b.js" charset="utf-8"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/main.a7b27a25fb9c.js" charset="utf-8"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+    
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/syntax-prism-min.js" charset="utf-8"></script><script type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/wiki.bd71ca9fd27d.js" charset="utf-8" id="wikiscript"></script>
+
+  
+
+  <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/helpfulness.7b208a764d28.js" charset="utf-8"></script>
+
+  
+
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/WebGLRenderingContext/bindBuffer by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 15:44:46 GMT -->
+</body></html>

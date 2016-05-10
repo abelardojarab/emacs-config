@@ -1,0 +1,710 @@
+<html><!-- Mirrored from stat.ethz.ch/R-manual/R-patched/library/base/html/connections.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 04 May 2016 16:35:56 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><!-- /Added by HTTrack -->
+<title>Functions to Manipulate Connections (Files, URLs, ...)</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="R.css">
+</head><body>
+
+<table width="100%" summary="page for connections {base}"><tbody><tr><td>connections {base}</td><td style="text-align: right;">R Documentation</td></tr></tbody></table>
+
+<h2>Functions to Manipulate Connections (Files, URLs, ...)</h2>
+
+<h3>Description</h3>
+
+<p>Functions to create, open and close connections, i.e.,
+“generalized files”, such as possibly compressed files, URLs,
+pipes, etc.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>file(description = "", open = "", blocking = TRUE,
+     encoding = getOption("encoding"), raw = FALSE)
+
+url(description, open = "", blocking = TRUE,
+    encoding = getOption("encoding"), method)
+
+gzfile(description, open = "", encoding = getOption("encoding"),
+       compression = 6)
+
+bzfile(description, open = "", encoding = getOption("encoding"),
+       compression = 9)
+
+xzfile(description, open = "", encoding = getOption("encoding"),
+       compression = 6)
+
+unz(description, filename, open = "", encoding = getOption("encoding"))
+
+pipe(description, open = "", encoding = getOption("encoding"))
+
+fifo(description, open = "", blocking = FALSE,
+     encoding = getOption("encoding"))
+
+socketConnection(host = "localhost", port, server = FALSE,
+                 blocking = FALSE, open = "a+",
+                 encoding = getOption("encoding"),
+                 timeout = getOption("timeout"))
+
+open(con, ...)
+## S3 method for class 'connection'
+open(con, open = "r", blocking = TRUE, ...)
+
+close(con, ...)
+## S3 method for class 'connection'
+close(con, type = "rw", ...)
+
+flush(con)
+
+isOpen(con, rw = "")
+isIncomplete(con)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tbody><tr valign="top"><td><code>description</code></td>
+<td>
+<p>character string.  A description of the connection:
+see ‘Details’.</p>
+</td></tr>
+<tr valign="top"><td><code>open</code></td>
+<td>
+<p>character string.  A description of how to open the connection
+(if it should be opened initially).  See section ‘Modes’ for
+possible values.</p>
+</td></tr>
+<tr valign="top"><td><code>blocking</code></td>
+<td>
+<p>logical.  See the ‘Blocking’ section.</p>
+</td></tr>
+<tr valign="top"><td><code>encoding</code></td>
+<td>
+<p>The name of the encoding to be assumed.  See the
+‘Encoding’ section.</p>
+</td></tr>
+<tr valign="top"><td><code>raw</code></td>
+<td>
+<p>logical.  If true, a ‘raw’ interface is used which
+will be more suitable for arguments which are not regular files,
+e.g. character devices.  This suppresses the check for a compressed
+file when opening for text-mode reading, and asserts that the
+‘file’ may not be seekable.</p>
+</td></tr>
+<tr valign="top"><td><code>method</code></td>
+<td>
+<p>character string, partially matched to
+<code>c("default", "internal", "wininet", "libcurl")</code>:
+see ‘Details’.</p>
+</td></tr>
+<tr valign="top"><td><code>compression</code></td>
+<td>
+<p>integer in 0–9.  The amount of compression to be
+applied when writing, from none to maximal available.  For
+<code>xzfile</code> can also be negative: see the ‘Compression’
+section.</p>
+</td></tr>
+<tr valign="top"><td><code>timeout</code></td>
+<td>
+<p>numeric: the timeout (in seconds) to be used for this
+connection.  Beware that some OSes may treat very large values as
+zero: however the POSIX standard requires values up to 31 days to be
+supported.</p>
+</td></tr>
+<tr valign="top"><td><code>filename</code></td>
+<td>
+<p>a filename within a zip file.</p>
+</td></tr>
+<tr valign="top"><td><code>host</code></td>
+<td>
+<p>character string.  Host name for the port.</p>
+</td></tr>
+<tr valign="top"><td><code>port</code></td>
+<td>
+<p>integer.  The TCP port number.</p>
+</td></tr>
+<tr valign="top"><td><code>server</code></td>
+<td>
+<p>logical.  Should the socket be a client or a server?</p>
+</td></tr>
+<tr valign="top"><td><code>con</code></td>
+<td>
+<p>a connection.</p>
+</td></tr>
+<tr valign="top"><td><code>type</code></td>
+<td>
+<p>character string.  Currently ignored.</p>
+</td></tr>
+<tr valign="top"><td><code>rw</code></td>
+<td>
+<p>character string.  Empty or <code>"read"</code> or <code>"write"</code>,
+partial matches allowed.</p>
+</td></tr>
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>arguments passed to or from other methods.</p>
+</td></tr>
+</tbody></table>
+
+
+<h3>Details</h3>
+
+<p>The first nine functions create connections.  By default the
+connection is not opened (except for a <code>socketConnection</code>), but may
+be opened by setting a non-empty value of argument <code>open</code>.
+</p>
+<p>For <code>file</code> the description is a path to the file to be opened or
+a complete URL (when it is the same as calling <code>url</code>), or
+<code>""</code> (the default) or <code>"clipboard"</code> (see the
+‘Clipboard’ section).  Use <code>"stdin"</code> to refer to the
+C-level ‘standard input’ of the process (which need not be
+connected to anything in a console or embedded version of <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span>, and is
+not in <code>RGui</code> on Windows).  See also <code><a href="showConnections.html">stdin</a>()</code> for
+the subtly different R-level concept of <code>stdin</code>.
+</p>
+<p>For <code>url</code> the description is a complete URL including scheme
+(such as <span class="samp">http://</span>, <span class="samp">https://</span>, <span class="samp">ftp://</span> or
+<span class="samp">file://</span>).  Method <code>"internal"</code> is that available since
+connections were introduced, method <code>"wininet"</code> is only available
+on Windows and method <code>"libcurl"</code> is optionally supported as from
+<span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> 3.2.0.  Method <code>"default"</code> (as from <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> 3.2.0) selects a
+suitable method depending on the URL scheme, e.g.  method
+<code>"libcurl"</code> for <span class="samp">https://</span> and <span class="samp">ftps://</span> URLs and
+<code>"internal"</code> otherwise.  The default method can be changed
+<em>via</em> <code><a href="options.html">options</a>(url.method = )</code> (including for when
+URLs are passed to <code>file</code>): if unset it is method
+<code>"default"</code>.  Proxies can be specified: see
+<code><a href="../../utils/html/download.file.html">download.file</a></code>.
+</p>
+<p>For <code>gzfile</code> the description is the path to a file compressed by
+<code>gzip</code>: it can also open for reading uncompressed files and
+those compressed by <code>bzip2</code>, <code>xz</code> or <code>lzma</code>.
+</p>
+<p>For <code>bzfile</code> the description is the path to a file compressed by
+<code>bzip2</code>.
+</p>
+<p>For <code>xzfile</code> the description is the path to a file compressed by
+<code>xz</code> (https://en.wikipedia.org/wiki/Xz) or (for reading
+only) <code>lzma</code> (https://en.wikipedia.org/wiki/LZMA).
+</p>
+<p><code>unz</code> reads (only) single files within zip files, in binary mode.
+The description is the full path to the zip file, with ‘<span class="file">.zip</span>’
+extension if required.
+</p>
+<p>For <code>pipe</code> the description is the command line to be piped to or
+from.  This is run in a shell, on Windows that specified by the
+<span class="env">COMSPEC</span> environment variable.
+</p>
+<p>For <code>fifo</code> the description is the path of the fifo.
+</p>
+<p>All platforms support <code>file</code>, <code>pipe</code>, <code>gzfile</code>,
+<code>bzfile</code>, <code>xzfile</code>, <code>unz</code> and <code>url("file://")</code>
+connections.  The other connections may be partially implemented or
+not implemented at all.  (They do work on most Unix platforms, and all
+on Windows.)
+</p>
+<p>The intention is that <code>file</code> and <code>gzfile</code> can be used
+generally for text input (from files, <span class="samp">http://</span> and
+<span class="samp">https://</span> URLs) and binary input respectively.
+</p>
+<p><code>open</code>, <code>close</code> and <code>seek</code> are generic functions: the
+following applies to the methods relevant to connections.
+</p>
+<p><code>open</code> opens a connection.  In general functions using
+connections will open them if they are not open, but then close them
+again, so to leave a connection open call <code>open</code> explicitly.
+</p>
+<p><code>close</code> closes and destroys a connection.  This will happen
+automatically in due course (with a warning) if there is no longer an
+<span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> object referring to the connection.
+</p>
+<p>A maximum of 128 connections can be allocated (not necessarily open)
+at any one time.  Three of these are pre-allocated (see
+<code><a href="showConnections.html">stdout</a></code>).   The OS will impose limits on the numbers of
+connections of various types, but these are usually larger than 125.
+</p>
+<p><code>flush</code> flushes the output stream of a connection open for
+write/append (where implemented, currently for file and clipboard
+connections, <code><a href="showConnections.html">stdout</a></code> and <code><a href="showConnections.html">stderr</a></code>).
+</p>
+<p>If for a <code>file</code> or (on most platforms) a <code>fifo</code> connection
+the description is <code>""</code>, the file/fifo is immediately opened (in
+<code>"w+"</code> mode unless <code>open = "w+b"</code> is specified) and unlinked
+from the file system.  This provides a temporary file/fifo to write to
+and then read from.
+</p>
+
+
+<h3>Value</h3>
+
+<p><code>file</code>, <code>pipe</code>, <code>fifo</code>, <code>url</code>, <code>gzfile</code>,
+<code>bzfile</code>, <code>xzfile</code>, <code>unz</code> and <code>socketConnection</code>
+return a connection object which inherits from class
+<code>"connection"</code> and has a first more specific class.
+</p>
+<p><code>open</code> and <code>flush</code> return <code>NULL</code>, invisibly.
+</p>
+<p><code>close</code> returns either <code>NULL</code> or an integer status,
+invisibly. The status is from when the connection was last closed and
+is available only for some types of connections (e.g., pipes, files and
+fifos): typically zero values indicate success.
+</p>
+<p><code>isOpen</code> returns a logical value, whether the connection is
+currently open.
+</p>
+<p><code>isIncomplete</code> returns a logical value, whether the last read
+attempt was blocked, or for an output text connection whether there is
+unflushed output.
+</p>
+
+
+<h3>URLs</h3>
+
+<p><code>url</code> and <code>file</code> support URL schemes <span class="samp">http://</span>,
+<span class="samp">https://</span>, <span class="samp">ftp://</span> and <span class="samp">file://</span>: the first three
+require OS support (which all known <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> platforms have).
+</p>
+<p><code>method = "libcurl"</code> allows more schemes: exactly which schemes
+is platform-dependent (see <code><a href="curlVersion.html">libcurlVersion</a></code>), but most
+platforms will support <span class="samp">https://</span> and <span class="samp">ftps://</span>.
+</p>
+<p>Most methods do not percent-encode special characters such as spaces
+in <span class="samp">http://</span> URLs (see <code><a href="../../utils/html/URLencode.html">URLencode</a></code>), but it seems the
+<code>"wininet"</code> method does.
+</p>
+<p>A note on <span class="samp">file://</span> URLs.  The most general form (from RFC1738) is
+<span class="samp">file://host/path/to/file</span>, but <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> only accepts the form with an
+empty <code>host</code> field referring to the local machine.
+</p>
+<p>On a Unix-alike, this is then <span class="samp">file:///path/to/file</span>, where
+<span class="samp">path/to/file</span> is relative to ‘<span class="file">/</span>’.  So although the third
+slash is strictly part of the specification not part of the path, this
+can be regarded as a way to specify the file ‘<span class="file">/path/to/file</span>’.  It
+is not possible to specify a relative path using a file URL.
+</p>
+<p>In this form the path is relative to the root of the filesystem, not a
+Windows concept.  The standard form on Windows is
+<span class="samp">file:///d:/R/repos</span>: for compatibility with earlier versions of
+<span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> and Unix versions, any other form is parsed as <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> as <span class="samp">file://</span>
+plus <code>path_to_file</code>.  Also, backslashes are accepted within the
+path even though RFC1738 does not allow them.
+</p>
+<p>No attempt is made to decode a percent-encoded <span class="samp">file:</span> URL: call
+<code><a href="../../utils/html/URLencode.html">URLdecode</a></code> if necessary.
+</p>
+<p>The <code>"internal"</code> method does not follow re-directed HTTP URLs:
+both methods <code>"wininet"</code> (the default on Windows) and
+<code>"libcurl"</code> do (including for HTTPS URLs).
+</p>
+<p>Server-side cached data is always accepted.
+</p>
+<p>Function <code><a href="../../utils/html/download.file.html">download.file</a></code> and contributed package
+RCurl provide more comprehensive facilities to download
+from URLs.
+</p>
+
+
+<h3>Modes</h3>
+
+<p>Possible values for the argument <code>open</code> are
+</p>
+
+<dl>
+<dt><code>"r"</code> or <code>"rt"</code></dt><dd><p>Open for reading in text mode.</p>
+</dd>
+<dt><code>"w"</code> or <code>"wt"</code></dt><dd><p>Open for writing in text mode.</p>
+</dd>
+<dt><code>"a"</code> or <code>"at"</code></dt><dd><p>Open for appending in text mode.</p>
+</dd>
+<dt><code>"rb"</code></dt><dd><p>Open for reading in binary mode.</p>
+</dd>
+<dt><code>"wb"</code></dt><dd><p>Open for writing in binary mode.</p>
+</dd>
+<dt><code>"ab"</code></dt><dd><p>Open for appending in binary mode.</p>
+</dd>
+<dt><code>"r+"</code>, <code>"r+b"</code></dt><dd><p>Open for reading and writing.</p>
+</dd>
+<dt><code>"w+"</code>, <code>"w+b"</code></dt><dd><p>Open for reading and writing,
+truncating file initially.</p>
+</dd>
+<dt><code>"a+"</code>, <code>"a+b"</code></dt><dd><p>Open for reading and appending.</p>
+</dd>
+</dl>
+
+<p>Not all modes are applicable to all connections: for example URLs can
+only be opened for reading.  Only file and socket connections can be
+opened for both reading and writing.  An unsupported mode is usually
+silently substituted.
+</p>
+<p>If a file or fifo is created on a Unix-alike, its permissions will be
+the maximal allowed by the current setting of <code>umask</code> (see
+<code><a href="files2.html">Sys.umask</a></code>).
+</p>
+<p>For many connections there is little or no difference between text and
+binary modes.  For file-like connections on Windows, translation of
+line endings (between LF and CRLF) is done in text mode only (but text
+read operations on connections such as <code><a href="readLines.html">readLines</a></code>,
+<code><a href="scan.html">scan</a></code> and <code><a href="source.html">source</a></code> work for any form of line
+ending).  Various <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> operations are possible in only one of the modes:
+for example <code><a href="pushBack.html">pushBack</a></code> is text-oriented and is only
+allowed on connections open for reading in text mode, and binary
+operations such as <code><a href="readBin.html">readBin</a></code>, <code><a href="load.html">load</a></code> and
+<code><a href="save.html">save</a></code> can only be done on binary-mode connections.
+</p>
+<p>The mode of a connection is determined when actually opened, which is
+deferred if <code>open = ""</code> is given (the default for all but socket
+connections).  An explicit call to <code>open</code> can specify the mode,
+but otherwise the mode will be <code>"r"</code>.  (<code>gzfile</code>,
+<code>bzfile</code> and <code>xzfile</code> connections are exceptions, as the
+compressed file always has to be opened in binary mode and no
+conversion of line-endings is done even on Windows, so the default
+mode is interpreted as <code>"rb"</code>.)  Most operations that need write
+access or text-only or binary-only mode will override the default mode
+of a non-yet-open connection.
+</p>
+<p>Append modes need to be considered carefully for compressed-file
+connections.  They do <strong>not</strong> produce a single compressed stream
+on the file, but rather append a new compressed stream to the file.
+Readers may or may not read beyond end of the first stream: currently
+<span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> does so for <code>gzfile</code>, <code>bzfile</code> and <code>xzfile</code>
+connections.
+</p>
+
+
+<h3>Compression</h3>
+
+<p><span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> supports <code>gzip</code>, <code>bzip2</code> and <code>xz</code>
+compression (added in <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> 2.10.0: also read-only support for its
+precursor <code>lzma</code> compression).
+</p>
+<p>For reading, the type of compression (if any) can be determined from
+the first few bytes of the file.  Thus for <code>file(raw = FALSE)</code>
+connections, if <code>open</code> is <code>""</code>, <code>"r"</code> or <code>"rt"</code>
+the connection can read any of the compressed file types as well as
+uncompressed files.  (Using <code>"rb"</code> will allow compressed files to
+be read byte-by-byte.)  Similarly, <code>gzfile</code> connections can read
+any of the forms of compression and uncompressed files in any read
+mode.
+</p>
+<p>(The type of compression is determined when the connection is created
+if <code>open</code> is unspecified and a file of that name exists.  If the
+intention is to open the connection to write a file with a
+<em>different</em> form of compression under that name, specify
+<code>open = "w"</code> when the connection is created or
+<code><a href="unlink.html">unlink</a></code> the file before creating the connection.)
+</p>
+<p>For write-mode connections, <code>compress</code> specifies how hard the
+compressor works to minimize the file size, and higher values need
+more CPU time and more working memory (up to ca 800Mb for
+<code>xzfile(compress = 9)</code>).  For <code>xzfile</code> negative values of
+<code>compress</code> correspond to adding the <code>xz</code> argument
+<span class="option">-e</span>: this takes more time (double?) to compress but may
+achieve (slightly) better compression.  The default (<code>6</code>) has
+good compression and modest (100Mb memory) usage: but if you are using
+<code>xz</code> compression you are probably looking for high compression.
+</p>
+<p>Choosing the type of compression involves tradeoffs: <code>gzip</code>,
+<code>bzip2</code> and <code>xz</code> are successively less widely supported,
+need more resources for both compression and decompression, and
+achieve more compression (although individual files may buck the
+general trend).  Typical experience is that <code>bzip2</code> compression
+is 15% better on text files than <code>gzip</code> compression, and
+<code>xz</code> with maximal compression 30% better.  The experience with
+<span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> <code><a href="save.html">save</a></code> files is similar, but on some large ‘<span class="file">.rda</span>’
+files <code>xz</code> compression is much better than the other two.  With
+current computers decompression times even with <code>compress = 9</code>
+are typically modest and reading compressed files is usually faster
+than uncompressed ones because of the reduction in disc activity.
+</p>
+
+
+<h3>Encoding</h3>
+
+<p>The encoding of the input/output stream of a connection can be
+specified by name in the same way as it would be given to
+<code><a href="iconv.html">iconv</a></code>: see that help page for how to find out what
+encoding names are recognized on your platform.  Additionally,
+<code>""</code> and <code>"native.enc"</code> both mean the ‘native’
+encoding, that is the internal encoding of the current locale and
+hence no translation is done.
+</p>
+<p>Re-encoding only works for connections in text mode: reading from a
+connection with re-encoding specified in binary mode will read the
+stream of bytes, but mixing text and binary mode reads (e.g., mixing
+calls to <code><a href="readLines.html">readLines</a></code> and <code><a href="readChar.html">readChar</a></code>) is likely
+to lead to incorrect results.
+</p>
+<p>The encodings <code>"UCS-2LE"</code> and <code>"UTF-16LE"</code> are treated
+specially, as they are appropriate values for Windows ‘Unicode’
+text files.  If the first two bytes are the Byte Order Mark
+<code>0xFEFF</code> then these are removed as some implementations of
+<code><a href="iconv.html">iconv</a></code> do not accept BOMs.  Note that whereas most
+implementations will handle BOMs using encoding <code>"UCS-2"</code> and
+choose the appropriate byte order, some (including earlier versions of
+<code>glibc</code>) will not.  There is a subtle distinction between
+<code>"UTF-16"</code> and <code>"UCS-2"</code> (see
+https://en.wikipedia.org/wiki/UTF-16: the use of characters in
+the ‘Supplementary Planes’ which need surrogate pairs is very
+rare so <code>"UCS-2LE"</code> is an appropriate first choice (as it is more
+widely implemented).
+</p>
+<p>As from <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> 3.0.0 the encoding <code>"UTF-8-BOM"</code> is accepted for
+reading and will remove a Byte Order Mark if present (which it often
+is for files and webpages generated by Microsoft applications).  If a
+BOM is required (it is not recommended) when writing it should be
+written explicitly, e.g. by <code>writeChar("\ufeff", con, eos
+  = NULL)</code> or <code>writeBin(as.raw(c(0xef, 0xbb, 0xbf)), binary_con)</code>
+</p>
+<p>Encoding names <code>"utf8"</code>, <code>"mac"</code> and <code>"macroman"</code> are
+not portable, and not supported on all current <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> platforms.
+<code>"UTF-8"</code> is portable and <code>"macintosh"</code> is the official
+(and most widely supported) name for ‘Mac Roman’.
+</p>
+<p>Requesting a conversion that is not supported is an error, reported
+when the connection is opened.  Exactly what happens when the
+requested translation cannot be done for invalid input is in general
+undocumented.  On output the result is likely to be that up to the
+error, with a warning.  On input, it will most likely be all or some
+of the input up to the error.
+</p>
+<p>It may be possible to deduce the current native encoding from
+<code><a href="locales.html">Sys.getlocale</a>("LC_CTYPE")</code>, but not all OSes record it.
+</p>
+
+
+<h3>Blocking</h3>
+
+<p>Whether or not the connection blocks can be specified for file, url
+(default yes), fifo and socket connections (default not).
+</p>
+<p>In blocking mode, functions using the connection do not return to the
+<span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> evaluator until the read/write is complete.  In non-blocking mode,
+operations return as soon as possible, so on input they will return
+with whatever input is available (possibly none) and for output they
+will return whether or not the write succeeded.
+</p>
+<p>The function <code><a href="readLines.html">readLines</a></code> behaves differently in respect of
+incomplete last lines in the two modes: see its help page.
+</p>
+<p>Even when a connection is in blocking mode, attempts are made to
+ensure that it does not block the event loop and hence the operation
+of GUI parts of <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span>.  These do not always succeed, and the whole <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span>
+process will be blocked during a DNS lookup on Unix, for example.
+</p>
+<p>Most blocking operations on HTTP/FTP URLs and on sockets are subject to the
+timeout set by <code>options("timeout")</code>.  Note that this is a timeout
+for no response, not for the whole operation.  The timeout is set at
+the time the connection is opened (more precisely, when the last
+connection of that type – <span class="samp">http:</span>, <span class="samp">ftp:</span> or socket – was
+opened).
+</p>
+
+
+<h3>Fifos</h3>
+
+<p>Fifos default to non-blocking.  That follows S version 4 and is
+probably most natural, but it does have some implications.  In
+particular, opening a non-blocking fifo connection for writing (only)
+will fail unless some other process is reading on the fifo.
+</p>
+<p>Opening a fifo for both reading and writing (in any mode: one can only
+append to fifos) connects both sides of the fifo to the <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> process,
+and provides an similar facility to <code>file()</code>.
+</p>
+
+
+<h3>Clipboard</h3>
+
+<p><code>file</code> can be used with <code>description = "clipboard"</code>
+in mode <code>"r"</code> only.  This reads the X11 primary selection (see
+http://standards.freedesktop.org/clipboards-spec/clipboards-latest.txt),
+which can also be specified as <code>"X11_primary"</code> and the secondary
+selection as <code>"X11_secondary"</code>.  On most systems the clipboard
+selection (that used by ‘Copy’ from an ‘Edit’ menu) can
+be specified as <code>"X11_clipboard"</code>.
+</p>
+<p>When a clipboard is opened for reading, the contents are immediately
+copied to internal storage in the connection.
+</p>
+<p>Unix users wishing to <em>write</em> to one of the X11 selections may be
+able to do so via <code>xclip</code>
+(http://sourceforge.net/projects/xclip/) or <code>xsel</code>
+(http://www.vergenet.net/~conrad/software/xsel/), for example by
+<code>pipe("xclip -i", "w")</code> for the primary selection.
+</p>
+<p>OS X users can use <code>pipe("pbpaste")</code> and
+<code>pipe("pbcopy", "w")</code> to read from and write to that system's
+clipboard.
+</p>
+
+
+<h3>Note</h3>
+
+<p><span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span>'s connections are modelled on those in S version 4 (see Chambers,
+1998).  However <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> goes well beyond the S model, for example in output
+text connections and URL, compressed and socket connections.
+</p>
+<p>The default open mode in <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> is <code>"r"</code> except for socket connections.
+This differs from S, where it is the equivalent of <code>"r+"</code>,
+known as <code>"*"</code>.
+</p>
+<p>On (rare) platforms where <code>vsnprintf</code> does not return the needed
+length of output there is a 100,000 byte output limit on the length of
+a line for text output on <code>fifo</code>, <code>gzfile</code>, <code>bzfile</code> and
+<code>xzfile</code> connections: longer lines will be truncated with a
+warning.
+</p>
+
+
+<h3>References</h3>
+
+<p>Chambers, J. M. (1998)
+<em>Programming with Data.  A Guide to the S Language.</em> Springer.
+</p>
+<p>Ripley, B. D. (2001) Connections. <em>R News</em>, <b>1/1</b>, 16–7.
+https://www.r-project.org/doc/Rnews/Rnews_2001-1.pdf
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="textconnections.html">textConnection</a></code>, <code><a href="seek.html">seek</a></code>,
+<code><a href="showConnections.html">showConnections</a></code>, <code><a href="pushBack.html">pushBack</a></code>.
+</p>
+<p>Functions making direct use of connections are (text-mode)
+<code><a href="readLines.html">readLines</a></code>, <code><a href="writeLines.html">writeLines</a></code>, <code><a href="cat.html">cat</a></code>,
+<code><a href="sink.html">sink</a></code>, <code><a href="scan.html">scan</a></code>, <code><a href="parse.html">parse</a></code>,
+<code><a href="dcf.html">read.dcf</a></code>, <code><a href="dput.html">dput</a></code>, <code><a href="dump.html">dump</a></code> and
+(binary-mode) <code><a href="readBin.html">readBin</a></code>, <code><a href="readChar.html">readChar</a></code>,
+<code><a href="readBin.html">writeBin</a></code>, <code><a href="readChar.html">writeChar</a></code>, <code><a href="load.html">load</a></code>
+and <code><a href="save.html">save</a></code>.
+</p>
+<p><code><a href="capabilities.html">capabilities</a></code> to see if HTTP/FTP <code>url</code>,
+<code>fifo</code> and <code>socketConnection</code> are supported by this build of <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span>.
+</p>
+<p><code><a href="gzcon.html">gzcon</a></code> to wrap <code>gzip</code> (de)compression around a
+connection.
+</p>
+<p><code><a href="options.html">options</a></code> <code>HTTPUserAgent</code>, <code>internet.info</code> and
+<code>timeout</code> are used by some of the methods for URL connections.
+</p>
+<p><code><a href="memCompress.html">memCompress</a></code> for more ways to (de)compress and references
+on data compression.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>zz &lt;- file("ex.data", "w")  # open an output file connection
+cat("TITLE extra line", "2 3 5 7", "", "11 13 17", file = zz, sep = "\n")
+cat("One more line\n", file = zz)
+close(zz)
+readLines("ex.data")
+unlink("ex.data")
+
+zz &lt;- gzfile("ex.gz", "w")  # compressed file
+cat("TITLE extra line", "2 3 5 7", "", "11 13 17", file = zz, sep = "\n")
+close(zz)
+readLines(zz &lt;- gzfile("ex.gz"))
+close(zz)
+unlink("ex.gz")
+
+zz &lt;- bzfile("ex.bz2", "w")  # bzip2-ed file
+cat("TITLE extra line", "2 3 5 7", "", "11 13 17", file = zz, sep = "\n")
+close(zz)
+print(readLines(zz &lt;- bzfile("ex.bz2")))
+close(zz)
+unlink("ex.bz2")
+
+## An example of a file open for reading and writing
+Tfile &lt;- file("test1", "w+")
+c(isOpen(Tfile, "r"), isOpen(Tfile, "w")) # both TRUE
+cat("abc\ndef\n", file = Tfile)
+readLines(Tfile)
+seek(Tfile, 0, rw = "r") # reset to beginning
+readLines(Tfile)
+cat("ghi\n", file = Tfile)
+readLines(Tfile)
+close(Tfile)
+unlink("test1")
+
+## We can do the same thing with an anonymous file.
+Tfile &lt;- file()
+cat("abc\ndef\n", file = Tfile)
+readLines(Tfile)
+close(Tfile)
+
+## Not run: ## fifo example -- may hang even with OS support for fifos
+if(capabilities("fifo")) {
+  zz &lt;- fifo("foo-fifo", "w+")
+  writeLines("abc", zz)
+  print(readLines(zz))
+  close(zz)
+  unlink("foo-fifo")
+}
+## End(Not run)
+
+## Unix examples of use of pipes
+
+# read listing of current directory
+readLines(pipe("ls -1"))
+
+# remove trailing commas.  Suppose
+
+## Not run: % cat data2_
+450, 390, 467, 654,  30, 542, 334, 432, 421,
+357, 497, 493, 550, 549, 467, 575, 578, 342,
+446, 547, 534, 495, 979, 479
+## End(Not run)
+# Then read this by
+scan(pipe("sed -e s/,$// data2_"), sep = ",")
+
+
+# convert decimal point to comma in output: see also write.table
+# both R strings and (probably) the shell need \ doubled
+zz &lt;- pipe(paste("sed s/\\\\./,/ &gt;", "outfile"), "w")
+cat(format(round(stats::rnorm(48), 4)), fill = 70, file = zz)
+close(zz)
+file.show("outfile", delete.file = TRUE)
+
+## Not run: 
+## example for a machine running a finger daemon
+
+con &lt;- socketConnection(port = 79, blocking = TRUE)
+writeLines(paste0(system("whoami", intern = TRUE), "\r"), con)
+gsub(" *$", "", readLines(con))
+close(con)
+
+## End(Not run)
+
+## Not run: 
+## Two R processes communicating via non-blocking sockets
+# R process 1
+con1 &lt;- socketConnection(port = 6011, server = TRUE)
+writeLines(LETTERS, con1)
+close(con1)
+
+# R process 2
+con2 &lt;- socketConnection(Sys.info()["nodename"], port = 6011)
+# as non-blocking, may need to loop for input
+readLines(con2)
+while(isIncomplete(con2)) {
+   Sys.sleep(1)
+   z &lt;- readLines(con2)
+   if(length(z)) print(z)
+}
+close(con2)
+
+## examples of use of encodings
+# write a file in UTF-8
+cat(x, file = (con &lt;- file("foo", "w", encoding = "UTF-8"))); close(con)
+# read a 'Windows Unicode' file
+A &lt;- read.table(con &lt;- file("students", encoding = "UCS-2LE")); close(con)
+
+## End(Not run)</pre>
+
+<hr><div style="text-align: center;">[Package <em>base</em> version 3.2.2 <a href="00Index.html">Index</a>]</div>
+
+<!-- Mirrored from stat.ethz.ch/R-manual/R-patched/library/base/html/connections.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 04 May 2016 16:35:56 GMT -->
+
+</body></html>

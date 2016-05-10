@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    
+<!-- Mirrored from mdn.mozillademos.org/en-US/docs/Web/API/Canvas_API/Tutorial/Pixel_manipulation_with_canvas$samples/A_color_picker?revision=824007 by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 17:32:28 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+        <link rel="stylesheet" type="text/css" href="../../../../../../../../developer.mozilla.org/en-US/docs/Template_CustomSampleCSS2af1.css?raw=1" />
+        
+    </head>
+    <body>
+        
+            <canvas id="canvas" width="300" height="227" style="float:left"></canvas>
+<div id="color" style="width:200px;height:50px;float:left"></div>
+        
+        
+            <script type="text/javascript">
+                var img = new Image();
+img.src = '../../../../../../../files/5397/rhino.jpg';
+var canvas = document.getElementById('canvas');
+var ctx = canvas.getContext('2d');
+img.onload = function() {
+  ctx.drawImage(img, 0, 0);
+  img.style.display = 'none';
+};
+var color = document.getElementById('color');
+function pick(event) {
+  var x = event.layerX;
+  var y = event.layerY;
+  var pixel = ctx.getImageData(x, y, 1, 1);
+  var data = pixel.data;
+  var rgba = 'rgba(' + data[0] + ',' + data[1] +
+             ',' + data[2] + ',' + data[3] + ')';
+  color.style.background =  rgba;
+  color.textContent = rgba;
+}
+canvas.addEventListener('mousemove', pick);
+            </script>
+        
+    </body>
+
+<!-- Mirrored from mdn.mozillademos.org/en-US/docs/Web/API/Canvas_API/Tutorial/Pixel_manipulation_with_canvas$samples/A_color_picker?revision=824007 by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 17:32:28 GMT -->
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+    
+<!-- Mirrored from mdn.mozillademos.org/ja/docs/Web/JavaScript/Reference/Global_Objects/Promise$samples/Creating_a_Promise?revision=944877 by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 16:55:14 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+        <link rel="stylesheet" type="text/css" href="../../../../../../../../developer.mozilla.org/en-US/docs/Template_CustomSampleCSS2af1.css?raw=1" />
+        
+    </head>
+    <body>
+        
+            <button id="btn">Make a promise!</button>
+<div id="log"></div>
+        
+        
+            <script type="text/javascript">
+                'use strict';
+var promiseCount = 0;
+
+function testPromise() {
+  var thisPromiseCount = ++promiseCount;
+
+  var log = document.getElementById('log');
+  log.insertAdjacentHTML('beforeend', thisPromiseCount + ') 開始 (<small>同期処理開始</small>)<br/>');
+
+  // 新しいプロミスを作成: 1～3秒後に結果を返すことを約束します
+  var p1 = new Promise(
+    // リゾルバ関数はプロミスの成功または失敗に応じて呼ばれます
+    function(resolve, reject) {
+      log.insertAdjacentHTML('beforeend', thisPromiseCount + ') プロミス開始 (<small>非同期処理開始</small>)<br/>');
+      // 非同期を作成するための一例です
+      window.setTimeout(
+        function() {
+          // 約束を果たしました!
+          resolve(thisPromiseCount); 
+        }, Math.random() * 2000 + 1000);
+    });
+
+  // プロミスが成功した時に何をするかを定めます
+  p1.then(
+    // メッセージと値を記録します
+    function(val) {
+      log.insertAdjacentHTML('beforeend', val + ') プロミス成功 (<small>非同期処理終了</small>)<br/>');
+    });
+
+  log.insertAdjacentHTML('beforeend', thisPromiseCount + ') プロミスは作成されました (<small>同期処理終了</small>)<br/>');
+} if ("Promise" in window) {
+  var btn = document.getElementById("btn");
+   btn.addEventListener("click",testPromise);
+}
+else {
+  log = document.getElementById('log');
+  log.innerHTML = "Live example not available as your browser doesn't support the <code>Promise<code> interface.";
+}
+            </script>
+        
+    </body>
+
+<!-- Mirrored from mdn.mozillademos.org/ja/docs/Web/JavaScript/Reference/Global_Objects/Promise$samples/Creating_a_Promise?revision=944877 by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 16:55:14 GMT -->
+</html>

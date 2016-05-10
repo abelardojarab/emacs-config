@@ -1,0 +1,840 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/Tools/Add-ons/DOM_Inspector/Introduction_to_DOM_Inspector by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 19:23:48 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <script async="" src="../../../../../../www.google-analytics.com/analytics.js"></script><script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+  
+    
+  
+
+  
+  <title>Introduction to DOM Inspector</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+  
+    
+    
+    <link href="../../../../../../developer.cdn.mozilla.net/static/build/styles/mdn.593f20d8c365.css" rel="stylesheet" type="text/css">
+
+    
+  
+    <link href="../../../../../../developer.cdn.mozilla.net/static/build/styles/wiki.13dd9abdfb62.css" rel="stylesheet" type="text/css">
+
+    
+
+    
+      
+        <link rel="stylesheet" type="text/css" href="https://developer.mozilla.org/en-US/docs/Tools$styles">
+      
+    
+
+  <!-- common social tags -->
+  
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon144.a6e4162070f4.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon114.0e9fabd44f85.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon72.8ff9d87c82a0.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon57.a2490b9a2d76.png">
+  <!-- basic favicon -->
+  
+    
+  
+  <link rel="shortcut icon" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon32.e02854fdcf73.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/html5shiv.3948ccddab6f.js" charset="utf-8"></script>
+  <![endif]-->
+
+  
+  <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Tools/Add-ons/DOM_Inspector/Introduction_to_DOM_Inspector$json">
+  <link rel="canonical" href="Introduction_to_DOM_Inspector.html">
+
+  
+    
+      <link rel="alternate" hreflang="fr" href="https://developer.mozilla.org/fr/docs/Inspecteur_DOM/Introduction_to_DOM_Inspector" title="Introduction à l'Inspecteur DOM">
+    
+      <link rel="alternate" hreflang="he" href="https://developer.mozilla.org/he/docs/DOMi/Introduction_to_DOM_Inspector" title="Introduction to DOM Inspector">
+    
+  
+
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="Introduction to DOM Inspector">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Tools/Add-ons/DOM_Inspector/Introduction_to_DOM_Inspector">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Tools/Add-ons/DOM_Inspector/Introduction_to_DOM_Inspector">
+  <meta name="twitter:title" content="Introduction to DOM Inspector">
+  
+  <meta property="og:description" content="The DOM Inspector is a Mozilla extension that you can access from the Tools  Web Development menu in SeaMonkey, or by selecting the DOM Inspector menu item from the Tools menu in Firefox and Thunderbird, or by using Ctrl/Cmd+Shift+I in either application. DOM Inspector is standalone; it supports all toolkit applications, and it's possible to embed it in your own XULRunner app. DOM Inspector can serve as a sanity check to verify the state of the DOM, or it can be used to manipulate the DOM by hand, if desired.">
+  <meta name="description" content="The DOM Inspector is a Mozilla extension that you can access from the Tools  Web Development menu in SeaMonkey, or by selecting the DOM Inspector menu item from the Tools menu in Firefox and Thunderbird, or by using Ctrl/Cmd+Shift+I in either application. DOM Inspector is standalone; it supports all toolkit applications, and it's possible to embed it in your own XULRunner app. DOM Inspector can serve as a sanity check to verify the state of the DOM, or it can be used to manipulate the DOM by hand, if desired.">
+  <meta name="twitter:description" content="The DOM Inspector is a Mozilla extension that you can access from the Tools  Web Development menu in SeaMonkey, or by selecting the DOM Inspector menu item from the Tools menu in Firefox and Thunderbird, or by using Ctrl/Cmd+Shift+I in either application. DOM Inspector is standalone; it supports all toolkit applications, and it's possible to embed it in your own XULRunner app. DOM Inspector can serve as a sanity check to verify the state of the DOM, or it can be used to manipulate the DOM by hand, if desired.">
+  
+
+  
+    
+
+
+
+  
+</head>
+<body data-slug="Tools/Add-ons/DOM_Inspector/Introduction_to_DOM_Inspector" contextmenu="edit-history-menu" data-search-url="" class="document zone ">
+
+  <script type="text/javascript">
+    (function(win) {
+        'use strict';
+
+        
+            (function(){
+  var FLAGS = {
+    'compat_api': false,'kumaediting': false,'page_move': false,'registration_disabled': false,'search_suggestions': false,'section_edit': true,'spam_admin_override': false,'spam_checks_enabled': true,'spam_spammer_override': false,'spam_submissions_enabled': false,'spam_testing_mode': false,'wiki_samples': true,'wiki_spam_exempted': false,'wiki_spam_training': true
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': true,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+
+        // This needs to be set before ckeditor.js loads
+        window.CKEDITOR_BASEPATH = 'https://developer.mozilla.org/static/js/libs/ckeditor/build/ckeditor/';
+
+        // This represents the site configuration
+        win.mdn = {
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+            
+            notifications: [],
+            
+            // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            },
+            // Assets that need to be dynamically injected
+            assets_disabled: {
+                css: {
+                    'editor-content': ['https://developer.cdn.mozilla.net/static/build/styles/editor-content.3d79df72080d.css',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/styles/wiki-compat-tables.f3a3bfce97a1.css',]
+                },
+                js: {
+                    'syntax-prism': ['https://developer.cdn.mozilla.net/static/build/js/syntax-prism.7a66ddfa68bf.js',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/js/wiki-compat-tables.14ce5dcb2c3d.js',]
+                }
+            }
+        };
+    })(this);
+</script>
+
+  
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+    
+      <li><a href="#q" id="skip-search">Skip to search</a></li>
+    
+  </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+    <a href="https://developer.mozilla.org/en-US/" class="logo">Mozilla Developer Network</a>
+
+    <div id="nav-sec">
+        
+                  <ul>
+                  <li>
+
+    
+
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                Sign in
+              </span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FTools%2FAdd-ons%2FDOM_Inspector%2FIntroduction_to_DOM_Inspector" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/Tools/Add-ons/DOM_Inspector/Introduction_to_DOM_Inspector" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/Tools/Add-ons/DOM_Inspector/Introduction_to_DOM_Inspector" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2FTools%2FAdd-ons%2FDOM_Inspector%2FIntroduction_to_DOM_Inspector" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+              
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+        
+    </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../../../Web/API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+
+  
+      
+        <div class="zone-article-header" id="document-main"><div class="center">
+          <!-- zone title -->
+          <div class="zone-title"><a href="https://developer.mozilla.org/en-US/docs/Tools">Firefox Developer Tools</a></div>
+          <!-- zone image -->
+          <div class="zone-image"></div>
+        </div></div>
+      
+
+     <!-- end is_zone -->
+
+    <div class="wiki-main-content"><div class="center">
+      
+      <div class="article-meta">
+        <!-- action buttons -->
+        
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+  <ul class="page-buttons" data-sticky="false">
+      
+      <li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+              
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/fr/docs/Inspecteur_DOM/Introduction_to_DOM_Inspector" title="Introduction à l'Inspecteur DOM">Français</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/he/docs/DOMi/Introduction_to_DOM_Inspector" title="Introduction to DOM Inspector">עברית</a></bdi></li>
+                
+              
+
+              
+                <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Add-ons/DOM_Inspector/Introduction_to_DOM_Inspector$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+              
+            </ul>
+          </div>
+        </div>
+      </li>
+
+      <li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Tools/Add-ons/DOM_Inspector/Introduction_to_DOM_Inspector$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li>
+
+        
+
+        <li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Add-ons/DOM_Inspector/Introduction_to_DOM_Inspector$history" rel="nofollow, noindex">History</a></li>
+                
+                
+                
+                
+
+                
+
+                
+                
+                
+                <li class="page-print"><a href="#" onclick="return window.print();">Print this article</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+        
+  <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Tools" rel="v:url" property="v:title">Firefox Developer Tools</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Tools/Add-ons" rel="v:url" property="v:title">Add-ons</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="../DOM_Inspector.html" rel="v:url" property="v:title">DOM Inspector</a></li>
+    
+    <li class="crumb" typeof="v:Breadcrumb" property="v:title">Introduction to DOM Inspector</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        
+        <div class="contributor-avatars" data-all-text="see all contributors" data-alternate-message="hide contributors" data-has-hidden="1">
+            <ul>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/wbamberg" title="View profile: wbamberg">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="wbamberg" data-src="../../../../../../secure.gravatar.com/avatar/576b94c81f8ad97e58d63f12e5fdb00c6c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">wbamberg</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/alex_mayorga" title="View profile: alex_mayorga">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="alex_mayorga" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">alex_mayorga</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/wellington7" title="View profile: wellington7">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="wellington7" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">wellington7</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Sevenspade" title="View profile: Sevenspade">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Sevenspade" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Sevenspade</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/penguin_traveller" title="View profile: penguin_traveller">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="penguin_traveller" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">penguin_traveller</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Sheppy" title="View profile: Sheppy">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Sheppy" data-src="../../../../../../secure.gravatar.com/avatar/945076feb88f2d7003891ffbf06f32bf6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Sheppy</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Olivier.parent" title="View profile: Olivier.parent">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Olivier.parent" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Olivier.parent</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/kohei.yoshino" title="View profile: kohei.yoshino">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="kohei.yoshino" data-src="../../../../../../secure.gravatar.com/avatar/f84bbc6968ecda0a64ab50d1060c320e6c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">kohei.yoshino</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/LouCypher" title="View profile: LouCypher">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="LouCypher" data-src="../../../../../../secure.gravatar.com/avatar/42fed69042fb042d6ef2c18b804d815d6c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">LouCypher</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Prometeo" title="View profile: Prometeo">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Prometeo" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Prometeo</noscript></a>
+                </li>
+            
+            </ul>
+        </div>
+        
+
+        <h1>Introduction to DOM Inspector</h1>
+
+      </div>
+      
+
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-present">
+
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+            
+              <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+              
+              <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#Inspecting_a_Document" rel="internal">Inspecting a Document</a><ol><li><a href="#File_.3E_Inspect_a_Window_.3E" rel="internal">Inspecting Content Documents</a></li><li><a href="#File_.3E_Inspect_a_Window_.3E" rel="internal">Inspecting Chrome Documents</a></li><li><a href="#File_.3E_Inspect_a_URL..." rel="internal">Inspecting arbitrary URLs</a></li></ol></li><li><a href="#Using_the_DOM_Inspector" rel="internal">Using the DOM Inspector</a><ol><li><a href="#DOM_Inspector_Information_Types" rel="internal">DOM Inspector viewers</a></li><li><a href="#Basic_actions_of_the_DOM_Nodes_viewer" rel="internal">Basic actions of the DOM Nodes viewer</a><ol><li><a href="#Selecting_elements_by_click" rel="internal">Selecting elements by click</a></li><li><a href="#Searching_for_Nodes_in_the_DOM" rel="internal">Searching for Nodes in the DOM</a></li><li><a href="#Updating_the_DOM_Dynamically" rel="internal">Updating the DOM Dynamically</a></li></ol></li></ol></li>
+                </ol>
+              </div>
+              
+              </div>
+            
+
+            
+            
+              
+            
+
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-half wiki-column text-content">
+
+              
+
+              
+
+              
+                
+                
+                
+              
+              
+
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                
+                  
+                    <p>The DOM Inspector is a Mozilla extension that you can access from the <strong>Tools &gt; Web Development</strong> menu in SeaMonkey, or by selecting the DOM Inspector menu item from the Tools menu in Firefox and Thunderbird, or by using Ctrl/Cmd+Shift+I in either application. DOM Inspector is standalone; it supports all toolkit applications, and it's possible to embed it in your own XULRunner app. DOM Inspector can serve as a sanity check to verify the state of the <a href="../../../../../en/DOM.png" title="en/DOM">DOM</a>, or it can be used to manipulate the DOM by hand, if desired.</p>
+<div class="note">
+ <strong>Note:</strong> Starting with Firefox 3, the DOM&nbsp;Inspector is not included in Firefox by default; instead, you must <a class="external link-https" href="https://addons.mozilla.org/en-US/firefox/addon/6622" title="https://addons.mozilla.org/en-US/firefox/addon/6622">download and install it</a> from the Mozilla add-ons web site.</div>
+<p>When you first start the DOM Inspector, you are presented with a two-pane application window that looks a little like the main Mozilla browser. Like the browser, the DOM Inspector includes an address bar, and some of the same menus. In SeaMonkey additional global menus will be available.</p>
+<p><img alt="domi.png" class="internal default" src="../../../../../../mdn.mozillademos.org/files/3118/domi.png"></p>
+<h2 id="Inspecting_a_Document">Inspecting a Document</h2>
+<p>When the DOM Inspector opens, it may or may not load an associated document, depending on the host application. If the DOM Inspector doesn't automatically load a document or loads a document other than the one you'd like to inspect, you can select the desired document a few different ways.</p>
+<h3 id="File_.3E_Inspect_a_Window_.3E" name="File_.3E_Inspect_a_Window_.3E">Inspecting Content Documents</h3>
+<p>The Inspect Content Document menupopup can be accessed from the File menu, and it will list currently loaded content documents. In Firefox and SeaMonkey browser, these will be the webpages you have opened in tabs. For Thunderbird and SeaMonkey Mail and News, any messages you're viewing will be listed here.<img alt="domi-inspect-content-popup.png" class="internal default" src="../../../../../../mdn.mozillademos.org/files/3124/domi-inspect-content-popup.png"></p>
+<h3 id="File_.3E_Inspect_a_Window_.3E" name="File_.3E_Inspect_a_Window_.3E">Inspecting Chrome Documents</h3>
+<p>The Inspect Chrome Document menupopup can be accessed from the File menu , and it will contain the list of currently loaded chrome windows and subdocuments. A browser window and the DOM Inspector are likely be already open and displayed in this list. The DOM Inspector keeps track of all the windows that are open, so to inspect the DOM of a particular window in the DOM Inspector, simply access that window as you would normally and then choose its title from this dynamically updated menulist.</p>
+<p><img alt="domi-inspect-chrome-popup.png" class="internal default" src="../../../../../../mdn.mozillademos.org/files/3123/domi-inspect-chrome-popup.png"></p>
+<h3 id="File_.3E_Inspect_a_URL..." name="File_.3E_Inspect_a_URL...">Inspecting arbitrary URLs</h3>
+<p>You may also inspect the DOM of arbitrary URLs by using the Inspect a URL menuitem in the File menu, or by just entering a URL into the DOM Inspector's address bar and clicking Inspect or pressing enter. For example, you can enter <a class="external" href="http://www.mozilla.org/" rel="freelink">http://www.mozilla.org</a> in the address bar and see the DOM structure of the mozilla.org home page.</p>
+<p>You <strong>should not</strong> use this approach to inspect chrome documents. Instead, ensure that the document loads via normal means and use the Inspect Chrome Document menupopup to select it for inspection.</p>
+<p><img alt="domi-inspect-chrome-popup.png" class="internal default" src="../../../../../../mdn.mozillademos.org/files/3127/dom-inspecting-mozilla.org.png"></p>
+<p>When you inspect a web page with this method, a browser pane at the bottom of the DOM Inspector window will open up, displaying the web page. This allows you to use the DOM Inspector without having to use a separate browser window, or without embedding a browser in your application at all. If you find that the browser pane takes up too much space, you may close it, but you will not be able to observe any of the visual consequences of your actions.</p>
+<h2 id="Using_the_DOM_Inspector" name="Using_the_DOM_Inspector">Using the DOM Inspector</h2>
+<p>Once you've opened the document for the page or chrome you are interested in, you'll see that it loads the DOM Nodes viewer in the document pane and the DOM Node viewer in the object pane. In the DOM Nodes viewer, there should be a structured, hierarchical view of the DOM. By clicking around in the document pane, you'll see that the viewers are linked; whenever you select a new node from the DOM Nodes viewer, the DOM Node viewer is automatically updated to reflect the information for that node. Linked viewers are the first major aspect to understand when learning how to use the DOM Inspector.</p>
+<h3 id="DOM_Inspector_Information_Types" name="DOM_Inspector_Information_Types">DOM Inspector viewers</h3>
+<p>Note that these viewers are just two viewers that the DOM Inspector provides. It's possible to use other viewers, but for now we'll stick to describing the DOM Nodes viewer and the DOM Node viewer.</p>
+<p>You can use the DOM Nodes viewer in the document pane of the DOM Inspector to find and inspect nodes&nbsp; you are interested in. One of the biggest and most immediate advantages that this brings to your web and application development is that it makes it possible to <em>find</em> the markup and the nodes in which the interesting parts of a page or a piece of the user interface are defined. One common use of the DOM Inspector is to find the name and location of particular icon being used in the user interface, which is not an easy task otherwise. If you're inspecting a chrome document, as you select nodes in the DOM Nodes viewer, the rendered versions of those nodes are highlighted in the user interface itself. (Note that there are bugs which prevent the flasher from DOM Inspector APIs from working correctly on certain platforms.)</p>
+<p>If you inspect the main browser window, for example, and select nodes in the DOM Nodes viewer (other than the elements which have no visible UI as is the case with the endless list of <code>script</code> elements that are loaded into <code>browser.xul</code>), you will see the various parts of the browser interface being highlighted with a blinking red border. You can traverse the structure and go from the topmost parts parts of the DOM tree to lower level nodes, such as the "search-go-button" icon that lets users perform a query using the selected search engine.</p>
+<p><img alt="domi-edit-search-onclick.png" class="internal default" src="../../../../../../mdn.mozillademos.org/files/3120/domi-edit-search-onclick.png"></p>
+<p>Now, once you have selected a node like the "search-go-button" node, you can select any one of several viewers to display information about that node in the object pane of the DOM Inspector application window, all of which are available from the menupopup accessed from the upper left corner of the the object pane.</p>
+<p><img alt="domi-object-viewers.png" class="internal default" src="../../../../../../mdn.mozillademos.org/files/3126/domi-object-viewers.png"></p>
+<p>In order to find out what the actual name of the file is being used to provide the search go icon, you can select the CSS Rules viewer from this menu and see the various selectors and rules that have been applied. The rule that applies the search icon to the element uses a class simple selector and uses a <code>list-style-image</code> property to point to a file in the current theme.</p>
+<p>The list of viewers available from the viewer menu gives you some idea about how extensive the DOM Inspector's inspecting capabilities are. The following descriptions provide an overview of what these viewers are about:</p>
+<p>The DOM Nodes viewer shows attributes of nodes that can take them, or the text content of text nodes, comments, and processing instructions. The attributes and text contents may also be edited.</p>
+<p>The Box Model viewer gives various metrics about XUL and HTML elements, including placement and size.</p>
+<p>The XBL Bindings viewer lists the XBL bindings attached to elements. If a binding extends another binding, the binding menulist will list them in descending order to to "root" binding.</p>
+<p>The CSS Rules viewer shows the CSS rules that are applied to the node. Alternatively, when used in conjunction with the Style Sheets viewer, the CSS Rules viewer lists all recognized rules from that style sheet in order. Properties may be also be edited. Rules applying to pseudo-elements do not appear.</p>
+<p>The JavaScript Object viewer gives a hierarchical tree of the object pane's subject. The JavaScript Object viewer also allows JavaScript to be evaluated by selecting the appropriate menuitem in the context menu.</p>
+<h3 id="Basic_actions_of_the_DOM_Nodes_viewer">Basic actions of the DOM Nodes viewer</h3>
+<h4 id="Selecting_elements_by_click">Selecting elements by click</h4>
+<p>Another powerful interactive feature of the DOM Inspector is that when you have the DOM Inspector open and have enabled this functionality by choosing <span style="font-weight: bold;">Edit</span><strong> &gt; Select Element by Click</strong> or by clicking the little magnifying glass icon in the upper left portion of the DOM Inspector application, you can click anywhere in a loaded web page or the the inspect chrome document, and the element you click will be shown in the document pane in the DOM Nodes viewer and information displayed in the object pane.</p>
+<h4 id="Searching_for_Nodes_in_the_DOM">Searching for Nodes in the DOM</h4>
+<p>Another way to inspect the DOM is to search for particular elements you're interested in by ID, class, or attribute. When you select <strong>Edit &gt; Find Nodes...</strong> or press <code>Ctrl + F</code>, the DOM Inspector displays a find dialog that lets you find elements in various ways, and that gives you incremental searching by way of the <code>&lt;F3&gt;</code> shortcut key.</p>
+<p><img alt="domi-find-appcontent.png" class="internal default" src="../../../../../../mdn.mozillademos.org/files/3121/domi-find-appcontent.png"></p>
+<h4 id="Updating_the_DOM_Dynamically">Updating the DOM Dynamically</h4>
+<p>Another feature to mention in this introduction is the ability is the ability the DOM Inspector gives you to dynamically update information reflected in the DOM about web pages, user interface, and other elements. Note that when the DOM Inspector displays information about a particular node or subtree, it presents individual nodes and their values (in the DOM, attributes are subnodes of elements, typically) in an active list. You can perform actions on the individual items in this list from the context menu and the Edit menu, both of which contain menutimes that allow you <em>edit</em> the values of those attributes.</p>
+<p><img alt="domi-edit-search-onclick.png" class="internal default" src="../../../../../../mdn.mozillademos.org/files/3120/domi-edit-search-onclick.png"></p>
+<p>This interactivity allows you to shrink and grow element size, change icons, and do other layout-tweaking updates—all without actually changing the DOM as it is defined in the file on disk.</p>
+<p>Loving the Inspector</p>
+<p>The DOM Inspector can take some figuring out, but once you get used to it, you may find that these structured views of web pages and interfaces were exactly the aspects of your own application development that were missing. The DOM Inspector not only presents all this information about pages in a clear and structured way, it gives you way to find and update those structures, and it's simple to access via shortcuts and menus already available in the Mozilla browser. Used in concert with Mozilla tools like <a class="external" href="http://www.mozilla.org/projects/venkman">Venkman</a>, the JavaScript debugger, the DOM Inspector can give you a <em>complete</em> view of any web page or DOM-based application interface.</p>
+                  
+                
+              </article>
+
+              
+
+    
+    
+    
+
+    
+    
+    
+
+    <div class="share">
+        <strong>Share:</strong>
+        <ul>
+            <li><a href="http://twitter.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FTools%2FAdd-ons%2FDOM_Inspector%2FIntroduction_to_DOM_Inspector%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dtwitter.com&amp;text=I+learned+about+Introduction+to+DOM+Inspector+on+MDN." target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Tools/Add-ons/DOM_Inspector/Introduction_to_DOM_Inspector?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=twitter.com" data-title="I learned about Introduction to DOM Inspector on MDN." class="share-link twitter"><i aria-hidden="true" class="icon-twitter"></i>Twitter</a></li>
+            <li><a href="http://facebook.com/sharer.php?s=100&amp;p[url]=https://developer.mozilla.org/en-US/docs/Tools/Add-ons/DOM_Inspector/Introduction_to_DOM_Inspector?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Tools/Add-ons/DOM_Inspector/Introduction_to_DOM_Inspector?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" data-title="I learned about Introduction to DOM Inspector on MDN." class="share-link facebook"><i aria-hidden="true" class="icon-facebook"></i>Facebook</a></li>
+            <li><a href="https://plus.google.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FTools%2FAdd-ons%2FDOM_Inspector%2FIntroduction_to_DOM_Inspector%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dplus.google.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Tools/Add-ons/DOM_Inspector/Introduction_to_DOM_Inspector?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=plus.google.com" data-title="I learned about Introduction to DOM Inspector on MDN." class="share-link gplus"><i aria-hidden="true" class="icon-google-plus"></i>Google+</a></li>
+        </ul>
+    </div>
+
+              
+
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                  
+                  
+  <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags icon-fw"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+      
+        <li><a href="../../../tag/DOM_Inspector.html">DOM_Inspector</a></li>
+      
+    </ul>
+  </div>
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-group icon-fw"></i>&nbsp;<strong>Contributors to this page:</strong> 
+        <a href="https://developer.mozilla.org/en-US/profiles/wbamberg">wbamberg</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/alex_mayorga">alex_mayorga</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/wellington7">wellington7</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Sevenspade">Sevenspade</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/penguin_traveller">penguin_traveller</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Sheppy">Sheppy</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Olivier.parent">Olivier.parent</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/kohei.yoshino">kohei.yoshino</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/LouCypher">LouCypher</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Prometeo">Prometeo</a>
+    
+                    </div>
+                  
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o icon-fw"></i>&nbsp;<strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/wbamberg">wbamberg</a>,
+                      <time datetime="2015-01-21T09:45:12-08:00">Jan 21, 2015, 9:45:12 AM</time>
+                    </div>
+                  
+                </div>
+              
+            </div>
+
+            
+              <!-- quick links and zone subnav strip -->
+              <div id="wiki-left" class="column-strip wiki-column">
+
+              
+
+                
+                  <!-- zone subnav -->
+                  
+  <nav class="zone-subnav-container" role="navigation">
+    <div class="subnav" id="Subnav">
+      
+
+<ol>
+ <li><a href="#">Creating</a>
+
+  <ol>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Scratchpad">Scratchpad</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Style_Editor">Style Editor</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Shader_Editor">Shader Editor</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Web_Audio_Editor">Web Audio Editor</a></li>
+  </ol>
+ </li>
+ <li><a href="#">Debugging</a>
+  <ol>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Page_Inspector">Page Inspector</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Web_Console">Console</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Debugger">Debugger</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Network_Monitor">Network Monitor</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Storage_Inspector">Storage Inspector</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/GCLI">Developer Toolbar</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/3D_View">3D View</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Eyedropper">Eyedropper</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/about:debugging">about:debugging</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/tools/Working_with_iframes">Selecting iframes</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/View_source">View Source</a></li>
+  </ol>
+ </li>
+ <li><a href="#">Mobile</a>
+  <ol>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Responsive_Design_Mode">Responsive Design Mode</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/WebIDE">WebIDE</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Remote_Debugging/Firefox_for_Android">Firefox for Android</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Firefox_OS_Simulator">Firefox OS Simulator</a></li>
+  </ol>
+ </li>
+ <li><a href="#">Performance</a>
+  <ol>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Performance">Performance Tool</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Memory">Memory</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Performance/Frame_rate">Frame rate graph</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Performance/Waterfall">Waterfall</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Performance/Call_Tree">Call Tree</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Performance/Flame_Chart">Flame Chart</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Paint_Flashing_Tool">Paint Flashing Tool</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Web_Console/Console_messages#Reflow_events">Reflow Event Logging</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Network_Monitor#Performance_analysis">Network Performance</a></li>
+  </ol>
+ </li>
+ <li><a href="#">Debugging the browser</a>
+  <ol>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Browser_Console">Browser Console</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Browser_Toolbox">Browser Toolbox</a></li>
+  </ol>
+ </li>
+ <li><a href="#">Extending the devtools</a>
+  <ol>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Adding_a_panel_to_the_toolbox">Adding a panel to the toolbox</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Example_add-ons">Example devtools add-ons</a></li>
+   <li><a href="https://wiki.mozilla.org/Remote_Debugging_Protocol">Remote Debugging Protocol</a></li>
+   <li><a href="https://wiki.mozilla.org/Remote_Debugging_Protocol_Stream_Transport">Stream Transport</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Editor">Source Editor</a></li>
+   <li><a href="../../Debugger-API.html">The <code>Debugger</code> Interface</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Web_Console/Custom_output">Web Console custom output</a></li>
+  </ol>
+ </li>
+ <li><a href="https://developer.mozilla.org/en-US/docs/Tools_Toolbox#Settings">Settings</a></li>
+ <li><a href="https://developer.mozilla.org/en-US/docs/Tools/Release_notes">Release notes</a></li>
+</ol>
+    </div>
+  </nav>&nbsp;
+                
+
+                
+
+                <!-- approvals -->
+                
+
+              
+
+              </div>
+            
+          </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Tools/Add-ons/DOM_Inspector/Introduction_to_DOM_Inspector$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Tools/Add-ons/DOM_Inspector/Introduction_to_DOM_Inspector$history" label="View page history"></menuitem>
+  </menu>
+
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+        
+        <div class="contentinfo">
+          <p>© 2005-2016 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>
+          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+        
+        </div>
+      </div>
+      <div class="column-strip">
+        
+          
+  
+    <form class="languages go" method="get" action="https://developer.mozilla.org/en-US/docs/Web">
+      <label for="language">Other languages:</label>
+      <select id="language" class="wiki-l10n" name="next" dir="ltr">
+        <option value="/en-US/docs/Tools/Add-ons/DOM_Inspector/Introduction_to_DOM_Inspector" selected="">
+          English (US)
+        </option>
+        
+          <option value="/fr/docs/Inspecteur_DOM/Introduction_to_DOM_Inspector">
+            Français
+          </option>
+          <option value="/he/docs/DOMi/Introduction_to_DOM_Inspector">
+            עברית
+          </option>
+      </select>
+      <noscript>&lt;button type="submit"&gt;Go&lt;/button&gt;</noscript>
+    </form>
+  
+
+        
+      </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+  
+    
+    <!--[if lte IE 8]><script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/selectivizr.091e18cf669b.js" charset="utf-8"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/main.a7b27a25fb9c.js" charset="utf-8"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+    
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/syntax-prism-min.js" charset="utf-8"></script><script type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/wiki.bd71ca9fd27d.js" charset="utf-8" id="wikiscript"></script>
+
+  
+
+  <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/helpfulness.7b208a764d28.js" charset="utf-8"></script>
+
+  
+    <script type="text/javascript">
+        (function($) {
+            $('#wikiArticle').children('h2[id]').each(function() {
+                var id = $(this).attr('id');
+                var href = '/en-US/docs/Tools/Add-ons/DOM_Inspector/Introduction_to_DOM_Inspector$edit#' + id;
+
+                $('<a>').attr({
+                    href: href,
+                    'class': 'button section-edit only-icon'
+                })
+                .append($('<i aria-hidden="true" class="icon-pencil"></i>'))
+                .append($('<span>'))
+                .find('span')
+                .text(gettext('Edit'))
+                .end()
+                .on('click', function(e) {
+                    e.preventDefault();
+
+                    mdn.analytics.trackEvent({
+                        category: 'Section Edit',
+                        action: id
+                    }, function() {
+                        window.location = href;
+                    });
+                })
+                .appendTo(this);
+            });
+        })(jQuery);
+    </script>
+  
+
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/Tools/Add-ons/DOM_Inspector/Introduction_to_DOM_Inspector by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 19:23:52 GMT -->
+</body></html>

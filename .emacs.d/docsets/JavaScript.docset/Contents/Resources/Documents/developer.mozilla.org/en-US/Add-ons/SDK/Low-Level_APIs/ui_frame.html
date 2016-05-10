@@ -1,0 +1,1379 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/Add-ons/SDK/Low-Level_APIs/ui_frame by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 17:26:23 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <script async="" src="../../../../../www.google-analytics.com/analytics.js"></script><script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+  
+    
+  
+
+  
+  <title>ui/frame</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+  
+    
+    
+    <link href="../../../../../developer.cdn.mozilla.net/static/build/styles/mdn.593f20d8c365.css" rel="stylesheet" type="text/css">
+
+    
+  
+    <link href="../../../../../developer.cdn.mozilla.net/static/build/styles/wiki.13dd9abdfb62.css" rel="stylesheet" type="text/css">
+
+    
+
+    
+      
+        <link rel="stylesheet" type="text/css" href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons$styles">
+      
+    
+
+  <!-- common social tags -->
+  
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../developer.cdn.mozilla.net/static/img/favicon144.a6e4162070f4.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../developer.cdn.mozilla.net/static/img/favicon114.0e9fabd44f85.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../developer.cdn.mozilla.net/static/img/favicon72.8ff9d87c82a0.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../developer.cdn.mozilla.net/static/img/favicon57.a2490b9a2d76.png">
+  <!-- basic favicon -->
+  
+    
+  
+  <link rel="shortcut icon" href="../../../../../developer.cdn.mozilla.net/static/img/favicon32.e02854fdcf73.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/html5shiv.3948ccddab6f.js" charset="utf-8"></script>
+  <![endif]-->
+
+  
+  <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/SDK/Low-Level_APIs/ui_frame$json">
+  <link rel="canonical" href="ui_frame.html">
+
+  
+
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="ui/frame">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/SDK/Low-Level_APIs/ui_frame">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/SDK/Low-Level_APIs/ui_frame">
+  <meta name="twitter:title" content="ui/frame">
+  
+  <meta property="og:description" content="Create HTML iframes, using bundled HTML, CSS and JavaScript, that can be added to a designated area of the Firefox user interface.">
+  <meta name="description" content="Create HTML iframes, using bundled HTML, CSS and JavaScript, that can be added to a designated area of the Firefox user interface.">
+  <meta name="twitter:description" content="Create HTML iframes, using bundled HTML, CSS and JavaScript, that can be added to a designated area of the Firefox user interface.">
+  
+
+  
+    
+
+
+
+  
+</head>
+<body data-slug="Mozilla/Add-ons/SDK/Low-Level_APIs/ui_frame" contextmenu="edit-history-menu" data-search-url="" class="document zone ">
+
+  <script type="text/javascript">
+    (function(win) {
+        'use strict';
+
+        
+            (function(){
+  var FLAGS = {
+    'compat_api': false,'kumaediting': false,'page_move': false,'registration_disabled': false,'search_suggestions': false,'section_edit': true,'spam_admin_override': false,'spam_checks_enabled': true,'spam_spammer_override': false,'spam_submissions_enabled': false,'spam_testing_mode': false,'wiki_samples': true,'wiki_spam_exempted': false,'wiki_spam_training': true
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': true,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+
+        // This needs to be set before ckeditor.js loads
+        window.CKEDITOR_BASEPATH = 'https://developer.mozilla.org/static/js/libs/ckeditor/build/ckeditor/';
+
+        // This represents the site configuration
+        win.mdn = {
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+            
+            notifications: [],
+            
+            // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            },
+            // Assets that need to be dynamically injected
+            assets_disabled: {
+                css: {
+                    'editor-content': ['https://developer.cdn.mozilla.net/static/build/styles/editor-content.3d79df72080d.css',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/styles/wiki-compat-tables.f3a3bfce97a1.css',]
+                },
+                js: {
+                    'syntax-prism': ['https://developer.cdn.mozilla.net/static/build/js/syntax-prism.7a66ddfa68bf.js',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/js/wiki-compat-tables.14ce5dcb2c3d.js',]
+                }
+            }
+        };
+    })(this);
+</script>
+
+  
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+    
+      <li><a href="#q" id="skip-search">Skip to search</a></li>
+    
+  </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+    <a href="https://developer.mozilla.org/en-US/" class="logo">Mozilla Developer Network</a>
+
+    <div id="nav-sec">
+        
+                  <ul>
+                  <li>
+
+    
+
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                Sign in
+              </span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2FAdd-ons%2FSDK%2FLow-Level_APIs%2Fui_frame" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/Add-ons/SDK/Low-Level_APIs/ui_frame" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/Add-ons/SDK/Low-Level_APIs/ui_frame" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2FAdd-ons%2FSDK%2FLow-Level_APIs%2Fui_frame" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+              
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+        
+    </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../../../docs/Web/API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+
+  
+      
+        <div class="zone-article-header" id="document-main"><div class="center">
+          <!-- zone title -->
+          <div class="zone-title"><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></div>
+          <!-- zone image -->
+          <div class="zone-image"></div>
+        </div></div>
+      
+
+     <!-- end is_zone -->
+
+    <div class="wiki-main-content"><div class="center">
+      
+      <div class="article-meta">
+        <!-- action buttons -->
+        
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+  <ul class="page-buttons" data-sticky="false">
+      
+      <li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+              
+                <li class="smaller">No translations exist for this article.</li>
+              
+
+              
+                <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/SDK/Low-Level_APIs/ui_frame$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+              
+            </ul>
+          </div>
+        </div>
+      </li>
+
+      <li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/SDK/Low-Level_APIs/ui_frame$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li>
+
+        
+
+        <li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/SDK/Low-Level_APIs/ui_frame$history" rel="nofollow, noindex">History</a></li>
+                
+                
+                
+                
+
+                
+
+                
+                
+                
+                <li class="page-print"><a href="#" onclick="return window.print();">Print this article</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+        
+  <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Mozilla" rel="v:url" property="v:title">Mozilla</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons" rel="v:url" property="v:title">Add-ons</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/SDK" rel="v:url" property="v:title">Add-on SDK</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="../../../docs/Mozilla/Add-ons/SDK/Low-Level_APIs.png" rel="v:url" property="v:title">Low-Level APIs</a></li>
+    
+    <li class="crumb" typeof="v:Breadcrumb" property="v:title">ui/frame</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        
+        <div class="contributor-avatars" data-all-text="see all contributors" data-alternate-message="hide contributors">
+            <ul>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/wbamberg" title="View profile: wbamberg">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="wbamberg" data-src="../../../../../secure.gravatar.com/avatar/576b94c81f8ad97e58d63f12e5fdb00c6c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">wbamberg</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/freaktechnik" title="View profile: freaktechnik">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="freaktechnik" data-src="../../../../../secure.gravatar.com/avatar/3e69935b2119bb7d6adbe6e0c8f2a1086c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">freaktechnik</noscript></a>
+                </li>
+            
+            </ul>
+        </div>
+        
+
+        <h1>ui/frame</h1>
+
+      </div>
+      
+
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-present">
+
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+            
+              <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+              
+              <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#Usage" rel="internal">Usage</a><ol><li><a href="#Constructing_frames" rel="internal">Constructing frames</a></li><li><a href="#Scripting_frames" rel="internal">Scripting frames</a></li><li><a href="#Communicating_with_frames" rel="internal">Communicating with frames</a><ol><li><a href="#From_frame_to_add-on" rel="internal">From frame to add-on</a></li><li><a href="#From_add-on_to_all_frames" rel="internal">From add-on to all frames</a></li><li><a href="#From_add-on_to_a_specific_frame" rel="internal">From add-on to a specific frame</a></li><li><a href="#Sending_JSON" rel="internal">Sending JSON</a></li></ol></li></ol></li><li><a href="#Globals" rel="internal">Globals</a><ol><li><a href="#Constructors" rel="internal">Constructors</a><ol><li><a href="#Frame(options)" rel="internal"><code>Frame(options)</code></a></li></ol></li></ol></li><li><a href="#Frame" rel="internal">Frame</a><ol><li><a href="#Methods" rel="internal">Methods</a><ol><li><a href="#postMessage(message_targetOrigin)" rel="internal"><code>postMessage(message, targetOrigin)</code></a></li><li><a href="#on(event_listener)" rel="internal"><code>on(event, listener)</code></a></li><li><a href="#once(event_listener)" rel="internal"><code>once(event, listener)</code></a></li><li><a href="#removeListener(event_listener)" rel="internal"><code>removeListener(event, listener)</code></a></li><li><a href="#off(event_listener)" rel="internal"><code>off(event, listener)</code></a></li><li><a href="#destroy()" rel="internal"><code>destroy()</code></a></li></ol></li><li><a href="#Properties" rel="internal">Properties</a><ol><li><a href="#url" rel="internal"><code>url</code></a></li></ol></li><li><a href="#Events" rel="internal">Events</a><ol><li><a href="#attach" rel="internal"><code>attach</code></a></li><li><a href="#detach" rel="internal"><code>detach</code></a></li><li><a href="#ready" rel="internal"><code>ready</code></a></li><li><a href="#load" rel="internal"><code>load</code></a></li><li><a href="#message" rel="internal"><code>message</code></a></li></ol></li></ol></li>
+                </ol>
+              </div>
+              
+              </div>
+            
+
+            
+            
+              
+            
+
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-half wiki-column text-content">
+
+              
+
+              
+
+              
+                
+                
+                
+              
+              
+
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                
+                  
+                    <section id="Quick_Links" class="Quick_links"><!-- --></section>
+
+<div class="note">
+<p>Experimental</p>
+</div>
+
+<p><span class="seoSummary">Create HTML <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe">iframes</a>, using bundled HTML, CSS and JavaScript, that can be added to a designated area of the Firefox user interface.</span> At the moment you can only add frames to a <a href="ui_toolbar.html">toolbar</a>.</p>
+
+<h2 id="Usage">Usage</h2>
+
+<p>This module exports the <a href="ui_frame.html#Frame(options)"><code>Frame</code></a> constructor, which can be used to create frame components. Right now it can be used in conjunction with a <a href="ui_toolbar.html"><code>Toolbar</code></a>: you create a <code>Frame</code>, then supply it to the <code>Toolbar</code>'s constructor, and the content is then displayed inside the toolbar.</p>
+
+<h3 id="Constructing_frames">Constructing frames</h3>
+
+<p>The <code>Frame</code> constructor takes one mandatory option, which is a url pointing to an HTML document supplied under your add-ons "data" directory.</p>
+
+<p>For example, this HTML document defines a <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/select"><code>&lt;select&gt;</code></a> element and a couple of <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/span"><code>&lt;span&gt;</code></a> elements, and includes a CSS file to style the content and a JavaScript script to implement behavior:</p>
+
+<pre class="brush: html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&nbsp; &lt;head&gt;
+&nbsp;&nbsp;&nbsp; &lt;link href="city-info.css" rel="stylesheet"&gt;&lt;/link&gt;
+&nbsp; &lt;/head&gt;
+
+&nbsp; &lt;body&gt;
+&nbsp;&nbsp;&nbsp; &lt;select name="city" id="city-selector"&gt;&lt;/select&gt;
+&nbsp;&nbsp;&nbsp; &lt;span id="time" class="info-element"&gt;&lt;/span&gt;
+&nbsp;&nbsp;&nbsp; &lt;span id="weather" class="info-element"&gt;&lt;/span&gt;
+
+&nbsp;&nbsp;&nbsp; &lt;script type="text/javascript" src="city-info.js"&gt;&lt;/script&gt;
+&nbsp; &lt;/body&gt;
+&lt;/html&gt;
+</pre>
+
+<p>If we save this document as "city-info.html" under the add-on's "data" directory, we can create a frame hosting it and add the frame to a toolbar like this:</p>
+
+<pre class="brush: js">var { Frame } = require("sdk/ui/frame");
+var { Toolbar } = require("sdk/ui/toolbar");
+
+var frame = new Frame({
+&nbsp; url: "./city-info.html"
+});
+
+var toolbar = Toolbar({
+&nbsp; name: "city-info",
+&nbsp; title: "City info",
+&nbsp; items: [frame]
+});</pre>
+
+<p>The toolbar is positioned between the address bar and the content window. It occupies the whole width of the browser window and is 18 pixels high on a normal-resolution display or 36 pixels high on a high-resolution (<a href="https://en.wikipedia.org/wiki/Retina_Display" class="external">HiDPI</a>) display. This toolbar might look something like:</p>
+
+<p><img src="../../../../../mdn.mozillademos.org/files/7855/frame-screenshot.png" style="display: block; margin-left: auto; margin-right: auto;" alt=""></p>
+
+<h3 id="Scripting_frames">Scripting frames</h3>
+
+<p>To add scripts to frames, include them directly from the frame's HTML content, as with a normal web page:</p>
+
+<pre class="brush: html">&lt;script type="text/javascript" src="frame.js"&gt;&lt;/script&gt;</pre>
+
+<p>As usual, the path to the script is relative to the HTML file's location.</p>
+
+<div class="note">
+<p>Messages logged from a frame script using the <a href="https://developer.mozilla.org/en-US/Add-ons/SDK/Tools/console">console</a> will not appear in the terminal when you run the add-on using <a href="https://developer.mozilla.org/en-US/Add-ons/SDK/Tools/jpm">jpm run</a>. However, they will appear in the <a href="https://developer.mozilla.org/en-US/docs/Tools/Browser_Console">Browser Console</a>. This issue is being tracked as <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=982385" class="external">bug 982385</a>.</p>
+</div>
+
+<h3 id="Communicating_with_frames">Communicating with frames</h3>
+
+<p>You can exchange messages between the main add-on code and scripts loaded into the frame using an API modeled on <code><a href="../../../docs/Web/API/Window/postMessage.html">window.postMessage()</a></code>. A frame creates a separate <code><a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe">iframe</a></code> instance for each browser window. So there are three cases to consider:</p>
+
+<ul>
+ <li>sending messages from a frame script to the main add-on code</li>
+ <li>sending messages from the main add-on code to all instances of a frame, across all browser windows</li>
+ <li>sending messages from the main add-on code to a single instance of a frame, attached to a specific browser window</li>
+</ul>
+
+<p>In all cases, <code>postMessage()</code> takes two arguments: the message itself and a <code>targetOrigin</code>. The <code>targetOrigin</code> argument can be either the URI of the document hosted by the target, or the wildcard "*". If you use the URI, then the message will only be dispatched to the window whose document matches that URI.</p>
+
+<p>If you know the target URI, you should use it, as this is more secure: it prevents another window from intercepting messages that were intended for someone else.</p>
+
+<h4 id="From_frame_to_add-on">From frame to add-on</h4>
+
+<p>To send a message from a frame script to the add-on, use <code>window.parent.postMessage()</code>. This takes two arguments, the message itself and a target origin.</p>
+
+<p>If the frame script initiates the conversation, you need to specify <code>"*"</code> as the origin:</p>
+
+<pre class="brush: js">window.parent.postMessage("ping", "*");</pre>
+
+<p>If the frame script has received a message from the add-on already, it can use the <code>origin</code> property of the <code>event</code> object passed to the message hander:</p>
+
+<pre class="brush: js">// listen for messages from the add-on, and send a reply
+window.addEventListener("message", function(event) {
+  event.source.postMessage("pong", event.origin)
+}, false);</pre>
+
+<p>This frame script listens to <a href="../../../docs/Web/Events/change.html"><code>change</code></a> events on the "city-selector" <code>&lt;select&gt;</code> element, and sends a message to the add-on containing the value for the newly selected element.</p>
+
+<pre class="brush: js">// city-info.js
+var citySelector = window.document.getElementById("city-selector");
+citySelector.addEventListener("change", cityChanged);
+
+function cityChanged() {
+  window.parent.postMessage(citySelector.value, "*");
+}</pre>
+
+<p>To listen for these messages in the main add-on code, you can assign a listener to the frame's <a href="ui_frame.html#message"><code>message</code></a> event. The <code>data</code> property of the event is the message payload.</p>
+
+<pre class="brush: js">var { Frame } = require("sdk/ui/frame");
+var { Toolbar } = require("sdk/ui/toolbar");
+
+var frame = new Frame({
+  url: "./city-info.html",
+  onMessage: (e) =&gt; {
+    console.log("New city: " + e.data);
+  }
+});
+
+var toolbar = Toolbar({
+  name: "city-info",
+  title: "City info",
+  items: [frame]
+});
+</pre>
+
+<h4 id="From_add-on_to_all_frames">From add-on to all frames</h4>
+
+<p>To send a message from the add-on code to all frames, attached to all open browser windows, you can use <a href="ui_frame.html#postMessage(message.2C_target)"><code>Frame.postMessage()</code></a>. You can specify the frame's <code>url</code> property as the <code>targetOrigin</code>:</p>
+
+<pre class="brush: js">frame.postMessage(message, frame.url);</pre>
+
+<p>This add-on listens for a frame script to send the "city changed" message above, and in response, updates all frames across all browser windows with that city's current weather (it just reads this from a dictionary, where in a real case it might ask a web service):</p>
+
+<pre class="brush: js">var { Frame } = require("sdk/ui/frame");
+var { Toolbar } = require("sdk/ui/toolbar");
+
+var weather = {
+  "London" : "Rainy",
+  "Toronto" : "Snowy",
+  "San Francisco" : "Foggy"
+}
+
+var frame = new Frame({
+  url: "./city-info.html",
+  onMessage: function() {
+    updateWeather(e.data);
+  }
+});
+
+var toolbar = Toolbar({
+  name: "city-info",
+  title: "City info",
+  items: [frame]
+});
+
+function updateWeather(location) {
+  frame.postMessage(weather[location], frame.url);
+}</pre>
+
+<p>To listen to these messages in the frame script, add a listener to the window's <code>message</code> event:</p>
+
+<pre class="brush: js">window.addEventListener("message", updateWeather, false);
+
+function updateWeather(message) {
+  var label = window.document.getElementById("weather");
+  label.textContent = message.data;
+}
+</pre>
+
+<h4 id="From_add-on_to_a_specific_frame">From add-on to a specific frame</h4>
+
+<p>You can send a message from the main add-on code to the frame hosted by a particular browser window. In this way you can customize the frame for each browser window. To do this, you call <code>postMessage()</code> not on the <code>Frame</code> itself but on the <code>source</code> attribute of the object passed into an event listener.</p>
+
+<p>For <code>targetOrigin</code>, you can use the <code>origin</code> property of the <code>event</code> object passed to the message listener:</p>
+
+<pre class="brush: js">var { Frame } = require("sdk/ui/frame");
+var { Toolbar } = require("sdk/ui/toolbar");
+
+var frame = new Frame({
+  url: "./city-info.html",
+  onMessage: function(e) {
+    // message only the frame that pinged us
+    e.source.postMessage("pong", e.origin);
+  }
+});
+
+var toolbar = Toolbar({
+  name: "ping-pong",
+  title: "Ping pong",
+  items: [frame]
+});</pre>
+
+<p>This does not have to be the <code>message</code> event: the other events <code>Frame</code> can emit: <a href="ui_frame.html#attach"><code>attach</code></a>, <a href="ui_frame.html#load"><code>load</code></a> and <a href="ui_frame.html#ready"><code>ready</code></a>, also provide access to <code>source</code> and <code>origin</code>.</p>
+
+<p>To receive such messages in the frame script, listen for the window's <code>message</code> event:</p>
+
+<pre class="brush: js">window.addEventListener("message", handlePong, false);</pre>
+
+<h4 id="Sending_JSON">Sending JSON</h4>
+
+<p>In all cases, you can send a string as a message or a JSON object. If you send a JSON object, the SDK takes care of serializing and deserializing it for you:</p>
+
+<pre class="brush: js">// frame.js
+
+var label = window.document.getElementById("linky");
+
+label.addEventListener("click", function() {
+  window.parent.postMessage({
+    "type" : "ping",
+    "reason" : "they clicked me"
+  }, "*");
+}, true);
+</pre>
+
+<pre class="brush: js">// main.js
+
+var { Frame } = require("sdk/ui/frame");
+
+var frame = new Frame({
+  url: "./frame.html"
+});
+
+frame.on("message", pong);
+
+function pong(e) {
+  if (e.data.type == "ping") {
+    console.log(e.data.reason);
+    e.source.postMessage("pong", event.origin);
+  }
+}</pre>
+
+<h2 id="Globals">Globals</h2>
+
+<h3 id="Constructors">Constructors</h3>
+
+<h4 id="Frame(options)" class="addon-sdk-api-name"><code>Frame(options)</code></h4>
+
+<p>Creates an frame. Once created, the frame needs to be added to a toolbar for it to be visible:</p>
+
+<pre class="brush: js">var { Frame } = require("sdk/ui/frame");
+var { Toolbar } = require("sdk/ui/toolbar");
+
+var frame = new Frame({
+  url: "./frame.html"
+});
+
+var toolbar = Toolbar({
+  name: "my-toolbar",
+  title: "My toolbar",
+  items: [frame]
+});</pre>
+
+<h5 id="Parameters">Parameters</h5>
+
+<p><strong>options : object</strong><br>
+ Required options:</p>
+
+<table class="standard-table">
+ <thead>
+  <tr>
+   <th scope="col">Name</th>
+   <th scope="col">Type</th>
+   <th scope="col">&nbsp;</th>
+  </tr>
+ </thead>
+ <tbody>
+  <tr>
+   <td>url</td>
+   <td>url, string</td>
+   <td>
+    <p>A URL pointing to the HTML file specifying the frame's content. The file must be bundled with the add-on under its "data" directory. You can specify the URL in one of two ways:</p>
+
+    <ul>
+     <li>as a <code>resource://</code> URL pointing at a file under your add-on's "data" directory, typically constructed using <a href="../High-Level_APIs/self.html#data"><code>self.data.url(filename)</code></a></li>
+     <li>as a relative path: a string in the form "./relativepath", where "relativepath" is a relative path to the file beginning in your add-on's "data" directory</li>
+    </ul>
+
+    <pre class="brush: js">var { Frame } = require("sdk/ui/frame");
+var self = require("sdk/self");
+
+var frame1 = new Frame({
+  url: require("sdk/self").data.url("content1.html")
+});
+
+var frame2 = new Frame({
+  url: "./content2.html"
+});</pre>
+   </td>
+  </tr>
+ </tbody>
+</table>
+
+<p>Optional options:</p>
+
+<table class="standard-table">
+ <thead>
+  <tr>
+   <th scope="col">Name</th>
+   <th scope="col">Type</th>
+   <th scope="col">&nbsp;</th>
+  </tr>
+ </thead>
+ <tbody>
+  <tr>
+   <td>name</td>
+   <td>string</td>
+   <td>
+    <p>The frame's name. This must be unique within your add-on.</p>
+
+    <p>This is used to generate an ID to to keep track of the frame. If you don't supply a name, the ID is derived from the frame's URL, meaning that if you don't supply a name, you may not create two frames with the same URL.</p>
+   </td>
+  </tr>
+  <tr>
+   <td>onAttach</td>
+   <td>function</td>
+   <td>
+    <p>Assign a listener to the frame's <a href="ui_frame.html#attach"><code>attach</code></a> event.</p>
+   </td>
+  </tr>
+  <tr>
+   <td>onDetach</td>
+   <td>function</td>
+   <td>
+    <p>Assign a listener to the frame's <a href="ui_frame.html#detach"><code>detach</code></a> event.</p>
+   </td>
+  </tr>
+  <tr>
+   <td>onLoad</td>
+   <td>function</td>
+   <td>
+    <p>Assign a listener to the frame's <a href="ui_frame.html#load"><code>load</code></a> event.</p>
+   </td>
+  </tr>
+  <tr>
+   <td>onReady</td>
+   <td>function</td>
+   <td>
+    <p>Assign a listener to the frame's <a href="ui_frame.html#ready"><code>ready</code></a> event.</p>
+   </td>
+  </tr>
+  <tr>
+   <td>onMessage</td>
+   <td>function</td>
+   <td>
+    <p>Assign a listener to the frame's <a href="ui_frame.html#message"><code>message</code></a> event.</p>
+   </td>
+  </tr>
+ </tbody>
+</table>
+
+<h2 id="Frame">Frame</h2>
+
+<h3 id="Methods">Methods</h3>
+
+<h4 id="postMessage(message_targetOrigin)" class="addon-sdk-api-name"><code>postMessage(message, targetOrigin)</code></h4>
+
+<p>Send a message to scripts loaded into the frame. This will send the message to message is all viewport documents (one per browser window) of the frame:</p>
+
+<pre class="brush: js">var { Frame } = require("sdk/ui/frame");
+var { Toolbar } = require("sdk/ui/toolbar");
+
+var frame = new Frame({
+  url: "./frame.html"
+});
+
+var toolbar = Toolbar({
+  name: "my-toolbar",
+  title: "My toolbar",
+  items: [frame]
+});
+
+frame.postMessage("ping", frame.url);</pre>
+
+<p>Frame scripts can receive these messages using <code>window.addEventListener()</code>:</p>
+
+<pre class="brush: js">function ponged(message) {
+  label.textContent = message.data;
+}
+
+window.addEventListener("message", ponged, false);</pre>
+
+<p>To send a message only to the frame instance hosted by a specific browser window call <code>postMessage()</code> on the source property of the object passed into any of the frame's event listeners.</p>
+
+<h5 id="Parameters_2">Parameters</h5>
+
+<p><strong>message : string</strong><br>
+ The message to send.</p>
+
+<p><strong>targetOrigin : string</strong><br>
+ Specifies the target of the message, as in <a href="../../../docs/Web/API/Window/postMessage.html"><code>window.postMessage()</code></a>. In this case you should pass the frame's <a href="ui_frame.html#url"><code>url</code></a> property as the <code>targetOrigin</code>:</p>
+
+<pre class="brush: js">frame.postMessage("ping", frame.url);</pre>
+
+<h4 id="on(event_listener)" class="addon-sdk-api-name"><code>on(event, listener)</code></h4>
+
+<p>Assign a listener to a frame event:</p>
+
+<pre class="brush: js">var { Frame } = require("sdk/ui/frame");
+
+var frame = new Frame({
+  url: "./frame.html"
+});
+
+frame.on("message", pong)
+
+function pong(e) {
+&nbsp; if (e.data == "ping") {
+    // message only the sender, and not any frames attached to other browser windows
+&nbsp;&nbsp;&nbsp; e.source.postMessage("pong", "*");
+&nbsp; }
+}</pre>
+
+<h5 id="Parameters_3">Parameters</h5>
+
+<p><strong>event : string</strong><br>
+ The name of the event to listen to. <code>Frame</code> supports the following events: <a href="ui_frame.html#Events"><code>attach</code>, <code>detach</code>, <code>load</code>, <code>ready</code>, and <code>message</code></a>.</p>
+
+<p><strong>listener : function</strong><br>
+ The listener function. This is passed an event object which always contains a <code>source</code> property, which has a <code>postMessage()</code> function modeled after <a href="../../../docs/Web/API/Window/postMessage.html"><code>window.postMessage()</code></a>.&nbsp; You can use this to communicate only with the specific frame instance that generated the event, and not to any frame instance attached to other browser windows.</p>
+
+<h4 id="once(event_listener)" class="addon-sdk-api-name"><code>once(event, listener)</code></h4>
+
+<p>Assign a listener to the first occurrence only of an event emitted by the frame. Frame supports the following events: <a href="ui_frame.html#Events"><code>attach</code>, <code>detach</code>, <code>load</code>, <code>ready</code>, and <code>message</code></a>. The listener is automatically removed after the first time the event is emitted.</p>
+
+<pre class="brush: js">var { Frame } = require("sdk/ui/frame");
+
+var frame = new Frame({
+  url: "./frame.html"
+});
+
+frame.once("message", pong)
+
+function pong(e) {
+&nbsp; if (e.data == "ping") {
+    // message only the sender, and not any frames attached to other browser windows
+&nbsp;&nbsp;&nbsp; e.source.postMessage("pong", "*");
+&nbsp; }
+}</pre>
+
+<h5 id="Parameters_4">Parameters</h5>
+
+<p><strong>event : string</strong><br>
+ The name of the event to listen to. Frame supports the following events: <a href="ui_frame.html#Events"><code>attach</code>, <code>detach</code>, <code>load</code>, <code>ready</code>, and <code>message</code></a>.</p>
+
+<p><strong>listener : function</strong><br>
+ The listener function. This is passed an event object which always contains a <code>source</code> property, which has a <code>postMessage()</code> function modeled after <a href="../../../docs/Web/API/Window/postMessage.html"><code>window.postMessage()</code></a>.&nbsp; You can use this to communicate only with the specific frame instance that generated the event, and not to any frame instance attached to other browser windows.</p>
+
+<h4 id="removeListener(event_listener)" class="addon-sdk-api-name"><code>removeListener(event, listener)</code></h4>
+
+<p>Removes an event listener. For example, this code is equivalent to <a href="ui_frame.html#once(event.2C_listener)"><code>once()</code></a>:</p>
+
+<pre class="brush: js">var { Frame } = require("sdk/ui/frame");
+
+var frame = new Frame({
+  url: "./frame.html"
+});
+
+frame.on("message", pong)
+
+function pong(e) {
+  if (e.data == "ping") {
+    e.source.postMessage("pong", "*");
+  }
+  frame.removeListener("message", pong)
+}</pre>
+
+<h5 id="Parameters_5">Parameters</h5>
+
+<p><strong>event : string</strong><br>
+ The event the listener is listening for. <code>Frame</code> supports the following events: <a href="ui_frame.html#Events"><code>attach</code>, <code>detach</code>, <code>load</code>, <code>ready</code>, and <code>message</code></a>.</p>
+
+<p><strong>listener : function</strong><br>
+ The listener to remove.</p>
+
+<h4 id="off(event_listener)" class="addon-sdk-api-name"><code>off(event, listener)</code></h4>
+
+<p>This function is an alias for <a href="ui_frame.html#removeListener(event.2C_listener)"><code>removeListener()</code></a>.</p>
+
+<h5 id="Parameters_6">Parameters</h5>
+
+<p><strong>event : string</strong><br>
+ The event the listener is listening for. <code>Frame</code> supports the following events: <a href="ui_frame.html#Events"><code>attach</code>, <code>detach</code>, <code>load</code>, <code>ready</code>, and <code>message</code></a>.</p>
+
+<p><strong>listener : function</strong><br>
+ The listener to remove.</p>
+
+<h4 id="destroy()" class="addon-sdk-api-name"><code>destroy()</code></h4>
+
+<p>Destroy the frame. After calling this function, the frame will no longer appear in the UI, and accessing any of its properties or methods will throw an error.</p>
+
+<h3 id="Properties">Properties</h3>
+
+<h4 id="url" class="addon-sdk-api-name"><code>url</code></h4>
+
+<p>URL for the content loaded into the frame. This is read-only. It's only accessible after the <a href="ui_frame.html#attach"><code>attach</code></a> event has occurred for this frame.</p>
+
+<h3 id="Events">Events</h3>
+
+<h4 id="attach" class="addon-sdk-api-name"><code>attach</code></h4>
+
+<p>This event is emitted whenever a new frame instance is constructed and the browser has started to load its document: for example, when the user opens a new browser window, if that window has a toolbar containing this frame. Since the event is dispatched asynchronously, the document may already be loaded by the time the event is received.</p>
+
+<p>At this point, you should not try to send messages to scripts hosted in the frame, because the frame scripts may not have been loaded.</p>
+
+<h5 id="Arguments">Arguments</h5>
+
+<p><strong>event</strong> : This contains two properties:</p>
+
+<ul>
+ <li><code>source</code>, which defines a <code>postMessage()</code> function which you can use to <a href="ui_frame.html#From_add-on_to_a_specific_frame">send messages back to this particular frame instance</a>. But note that at this point you should not try to send messages to scripts hosted in the frame, because the frame scripts may not have been loaded.</li>
+ <li><code>origin</code>, which you can use as the <code>targetOrigin</code> argument to <code>postMessage()</code> if you want to communicate with this particular frame instance.</li>
+</ul>
+
+<h4 id="detach" class="addon-sdk-api-name"><code>detach</code></h4>
+
+<p>This event is emitted when a frame instance is unloaded: for example, when the user closes a browser window, if that window has a toolbar containing this frame. After receiving this message, you ahould not attempt to communicate with the frame scripts.</p>
+
+<h4 id="ready" class="addon-sdk-api-name"><code>ready</code></h4>
+
+<p>This event is emitted while a frame instance is being loaded, at the point where it becomes possible to interact with the frame although sub-resources may still be in the process of loading. It's the equivalent of the point where the frame's <a href="../../../docs/Web/API/Document/readyState.html"><code>document.readyState</code></a> becomes <code>"interactive"</code>:</p>
+
+<pre class="brush: js">var { Frame } = require("sdk/ui/frame");
+
+var frame = new Frame({
+  url: "./frame.html"
+});
+
+frame.on("ready", ping);
+
+function ping(e) {
+  // message only this frame instance
+  e.source.postMessage("pong", e.origin);
+}</pre>
+
+<h5 id="Arguments_2">Arguments</h5>
+
+<p><strong>event</strong> : This contains two properties:</p>
+
+<ul>
+ <li><code>source</code>, which defines a <code>postMessage()</code> function which you can use to <a href="ui_frame.html#From_add-on_to_a_specific_frame">send messages back to this particular frame instance</a>.</li>
+ <li><code>origin</code>, which you can use as the <code>targetOrigin</code> argument to <code>postMessage()</code> if you want to communicate with this particular frame instance.</li>
+</ul>
+
+<h4 id="load" class="addon-sdk-api-name"><code>load</code></h4>
+
+<p>This event is emitted while a frame instance is completely loaded. It's the equivalent of the point where the frame's <a href="../../../docs/Web/API/Document/readyState.html"><code>document.readyState</code></a> becomes <code>"complete"</code>:</p>
+
+<pre class="brush: js">var { Frame } = require("sdk/ui/frame");
+
+var frame = new Frame({
+  url: "./frame.html"
+});
+
+frame.on("load", ping);
+
+function ping(e) {
+  e.source.postMessage("ping", "*");
+}</pre>
+
+<h5 id="Arguments_3">Arguments</h5>
+
+<p><strong>event</strong> : This contains two properties:</p>
+
+<ul>
+ <li><code>source</code>, which defines a <code>postMessage()</code> function which you can use to <a href="ui_frame.html#From_add-on_to_a_specific_frame">send messages back to this particular frame instance</a>.</li>
+ <li><code>origin</code>, which you can use as the <code>targetOrigin</code> argument to <code>postMessage()</code> if you want to communicate with this particular frame instance.</li>
+</ul>
+
+<h4 id="message" class="addon-sdk-api-name"><code>message</code></h4>
+
+<p>Listen to this event if you want to receive messages from frame scripts that are sent using <a href="ui_frame.html#From_frame_to_add-on"><code>window.parent.postMessage()</code></a>:</p>
+
+<pre class="brush: js">// frame.js
+
+var label = window.document.getElementById("linky");
+
+label.addEventListener("click", function() {
+  window.parent.postMessage("ping", "*");
+}, true);</pre>
+
+<pre class="brush: js">// main.js
+
+var { Frame } = require("sdk/ui/frame");
+
+var frame = new Frame({
+  url: "./frame.html"
+});
+
+frame.on("message", pong);
+
+function pong(e) {
+  if (e.data == "ping") {
+    e.source.postMessage("pong", e.origin);
+  }
+}</pre>
+
+<h5 id="Arguments_4">Arguments</h5>
+
+<p><strong>event</strong> : This contains three properties:</p>
+
+<ul>
+ <li><code>source</code>, which defines a <code>postMessage()</code> function which you can use to <a href="ui_frame.html#From_add-on_to_a_specific_frame">send messages back to this particular frame instance</a>.</li>
+ <li><code>origin</code>, which you can use as the <code>targetOrigin</code> argument to <code>postMessage()</code> if you want to communicate with this particular frame instance.</li>
+ <li><code>data</code>, which represents the event's payload. If the payload was a JSON object, you can access it like an object:</li>
+</ul>
+
+<pre class="brush: js">// frame.js
+
+var label = window.document.getElementById("linky");
+
+label.addEventListener("click", function() {
+  window.parent.postMessage({
+    "type" : "ping",
+    "reason" : "they clicked me"
+  }, "*");
+}, true);
+</pre>
+
+<pre class="brush: js">// main.js
+
+var { Frame } = require("sdk/ui/frame");
+
+var frame = new Frame({
+  url: "./frame.html"
+});
+
+frame.on("message", pong);
+
+function pong(e) {
+  if (e.data.type == "ping") {
+    console.log(e.data.reason);
+    e.source.postMessage("pong", e.origin);
+  }
+}</pre>
+                  
+                
+              </article>
+
+              
+
+    
+    
+    
+
+    
+    
+    
+
+    <div class="share">
+        <strong>Share:</strong>
+        <ul>
+            <li><a href="http://twitter.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FMozilla%2FAdd-ons%2FSDK%2FLow-Level_APIs%2Fui_frame%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dtwitter.com&amp;text=I+learned+about+ui%2Fframe+on+MDN." target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/SDK/Low-Level_APIs/ui_frame?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=twitter.com" data-title="I learned about ui/frame on MDN." class="share-link twitter"><i aria-hidden="true" class="icon-twitter"></i>Twitter</a></li>
+            <li><a href="http://facebook.com/sharer.php?s=100&amp;p[url]=https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/SDK/Low-Level_APIs/ui_frame?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/SDK/Low-Level_APIs/ui_frame?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" data-title="I learned about ui/frame on MDN." class="share-link facebook"><i aria-hidden="true" class="icon-facebook"></i>Facebook</a></li>
+            <li><a href="https://plus.google.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FMozilla%2FAdd-ons%2FSDK%2FLow-Level_APIs%2Fui_frame%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dplus.google.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/SDK/Low-Level_APIs/ui_frame?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=plus.google.com" data-title="I learned about ui/frame on MDN." class="share-link gplus"><i aria-hidden="true" class="icon-google-plus"></i>Google+</a></li>
+        </ul>
+    </div>
+
+              
+
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                  
+                  
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-group icon-fw"></i>&nbsp;<strong>Contributors to this page:</strong> 
+        <a href="https://developer.mozilla.org/en-US/profiles/wbamberg">wbamberg</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/freaktechnik">freaktechnik</a>
+    
+                    </div>
+                  
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o icon-fw"></i>&nbsp;<strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/wbamberg">wbamberg</a>,
+                      <time datetime="2016-01-15T10:33:56-08:00">Jan 15, 2016, 10:33:56 AM</time>
+                    </div>
+                  
+                </div>
+              
+            </div>
+
+            
+              <!-- quick links and zone subnav strip -->
+              <div id="wiki-left" class="column-strip wiki-column">
+
+              
+
+                
+
+                
+                  <!-- quick links -->
+                  
+  <div class="quick-links" id="quick-links">
+    <div class="title see-also">See also</div>
+     
+  <ol> 
+    <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions"><strong>WebExtensions</strong></a></li> 
+ 
+    <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions#Getting_started">Getting started</a> 
+      <ol> 
+        <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Prerequisites">Prerequisites</a></li> 
+        <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Anatomy_of_a_WebExtension">Anatomy of a WebExtension</a></li> 
+        <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Packaging_and_Installation">Packaging and Installation</a> 
+        </li><li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Walkthrough">Walkthrough</a> 
+        </li><li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Examples">Examples</a> 
+      </li></ol> 
+    </li> 
+     
+    <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions#Guides">Guides</a> 
+      <ol> 
+        <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Content_scripts">Content scripts</a></li> 
+        <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Porting_from_Google_Chrome">Porting from Google Chrome</a> 
+        </li><li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Match_patterns">Match patterns</a> 
+        </li><li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Debugging">Debugging</a></li> 
+        <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Chrome_incompatibilities">Chrome incompatibilities</a> 
+      </li></ol> 
+    </li>   
+     
+    <li data-default-state="closed"><a href="../../WebExtensions/API.html">JavaScript APIs</a> 
+     <ol><li><a href="../../WebExtensions/API/alarms.html">alarms</a></li><li><a href="../../WebExtensions/API/bookmarks.html">bookmarks</a></li><li><a href="../../WebExtensions/API/browserAction.html">browserAction</a></li><li><a href="../../WebExtensions/API/contextMenus.html">contextMenus</a></li><li><a href="../../WebExtensions/API/cookies.html">cookies</a></li><li><a href="../../../docs/Mozilla/Add-ons/WebExtensions/API/events.png">events</a></li><li><a href="../../WebExtensions/API/extension.html">extension</a></li><li><a href="../../WebExtensions/API/extensionTypes.html">extensionTypes</a></li><li><a href="../../WebExtensions/API/i18n.html">i18n</a></li><li><a href="../../WebExtensions/API/idle.html">idle</a></li><li><a href="../../../docs/Mozilla/Add-ons/WebExtensions/API/notifications.png">notifications</a></li><li><a href="../../WebExtensions/API/pageAction.html">pageAction</a></li><li><a href="../../WebExtensions/API/runtime.html">runtime</a></li><li><a href="../../WebExtensions/API/storage.html">storage</a></li><li><a href="../../WebExtensions/API/tabs.html">tabs</a></li><li><a href="../../WebExtensions/API/webNavigation.html">webNavigation</a></li><li><a href="../../WebExtensions/API/webRequest.html">webRequest</a></li><li><a href="../../WebExtensions/API/windows.html">windows</a></li></ol> 
+    </li> 
+     
+    <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json">Manifest keys</a> 
+    <ol><li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/applications">applications</a></li><li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/background">background</a></li><li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/browser_action">browser_action</a></li><li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/content_scripts">content_scripts</a></li><li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/default_locale">default_locale</a></li><li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/description">description</a></li><li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/icons">icons</a></li><li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/manifest_version">manifest_version</a></li><li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/name">name</a></li><li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/page_action">page action</a></li><li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/permissions">permissions</a></li><li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/version">version</a></li><li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/manifest.json/web_accessible_resources">web_accessible_resources</a></li></ol> 
+    </li> 
+     
+    <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/Add-on_SDK"><strong>Add-on SDK</strong></a></li> 
+    <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions#Getting_started">Getting started</a> 
+      <ol> 
+        <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/SDK/Tutorials/Installation">Installation</a></li> 
+        <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/SDK/Tutorials/Getting_started">Getting started</a></li> 
+        <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/SDK/Tutorials/Troubleshooting">Troubleshooting</a></li> 
+      </ol> 
+    </li> 
+     
+    <li data-default-state="closed"><a href="../High-Level_APIs.html">High-Level APIs</a> 
+      <ol><li><a href="../High-Level_APIs/addon-page.html">addon-page</a></li><li><a href="../High-Level_APIs/base64.html">base64</a></li><li><a href="../High-Level_APIs/clipboard.html">clipboard</a></li><li><a href="../High-Level_APIs/context-menu.html">context-menu</a></li><li><a href="../High-Level_APIs/hotkeys.html">hotkeys</a></li><li><a href="../High-Level_APIs/indexed-db.html">indexed-db</a></li><li><a href="../High-Level_APIs/l10n.html">l10n</a></li><li><a href="../High-Level_APIs/notifications.html">notifications</a></li><li><a href="../High-Level_APIs/page-mod.html">page-mod</a></li><li><a href="../High-Level_APIs/page-worker.html">page-worker</a></li><li><a href="../High-Level_APIs/panel.html">panel</a></li><li><a href="../High-Level_APIs/passwords.html">passwords</a></li><li><a href="../High-Level_APIs/private-browsing.html">private-browsing</a></li><li><a href="../High-Level_APIs/querystring.html">querystring</a></li><li><a href="../High-Level_APIs/request.html">request</a></li><li><a href="../High-Level_APIs/selection.html">selection</a></li><li><a href="../High-Level_APIs/self.html">self</a></li><li><a href="../High-Level_APIs/simple-prefs.html">simple-prefs</a></li><li><a href="../High-Level_APIs/simple-storage.html">simple-storage</a></li><li><a href="../High-Level_APIs/system.html">system</a></li><li><a href="../High-Level_APIs/tabs.html">tabs</a></li><li><a href="../High-Level_APIs/timers.html">timers</a></li><li><a href="../High-Level_APIs/ui.html">ui</a></li><li><a href="../High-Level_APIs/url.html">url</a></li><li><a href="../High-Level_APIs/widget.html">widget</a></li><li><a href="../High-Level_APIs/windows.html">windows</a></li></ol> 
+    </li> 
+    <li data-default-state="open"><a href="../../../docs/Mozilla/Add-ons/SDK/Low-Level_APIs.png">Low-Level APIs</a> 
+      <ol><li><a href="_loader.html">/loader</a></li><li><a href="chrome.html">chrome</a></li><li><a href="console_plain-text.html">console/plain-text</a></li><li><a href="console_traceback.html">console/traceback</a></li><li><a href="content_content.html">content/content</a></li><li><a href="content_loader.html">content/loader</a></li><li><a href="content_mod.html">content/mod</a></li><li><a href="content_symbiont.html">content/symbiont</a></li><li><a href="content_worker.html">content/worker</a></li><li><a href="core_heritage.html">core/heritage</a></li><li><a href="core_namespace.html">core/namespace</a></li><li><a href="core_promise.html">core/promise</a></li><li><a href="dev_panel.html">dev/panel</a></li><li><a href="event_core.html">event/core</a></li><li><a href="event_target.html">event/target</a></li><li><a href="frame_hidden-frame.html">frame/hidden-frame</a></li><li><a href="frame_utils.html">frame/utils</a></li><li><a href="fs_path.html">fs/path</a></li><li><a href="io_byte-streams.html">io/byte-streams</a></li><li><a href="io_file.html">io/file</a></li><li><a href="io_text-streams.html">io/text-streams</a></li><li><a href="lang_functional.html">lang/functional</a></li><li><a href="lang_type.html">lang/type</a></li><li><a href="loader_cuddlefish.html">loader/cuddlefish</a></li><li><a href="loader_sandbox.html">loader/sandbox</a></li><li><a href="net_url.html">net/url</a></li><li><a href="net_xhr.html">net/xhr</a></li><li><a href="places_bookmarks.html">places/bookmarks</a></li><li><a href="places_favicon.html">places/favicon</a></li><li><a href="places_history.html">places/history</a></li><li><a href="platform_xpcom.html">platform/xpcom</a></li><li><a href="preferences_event-target.html">preferences/event-target</a></li><li><a href="preferences_service.html">preferences/service</a></li><li><a href="remote_child.html">remote/child</a></li><li><a href="remote_parent.html">remote/parent</a></li><li><a href="stylesheet_style.html">stylesheet/style</a></li><li><a href="stylesheet_utils.html">stylesheet/utils</a></li><li><a href="system_child_process.html">system/child_process</a></li><li><a href="system_environment.html">system/environment</a></li><li><a href="system_events.html">system/events</a></li><li><a href="system_runtime.html">system/runtime</a></li><li><a href="system_unload.html">system/unload</a></li><li><a href="system_xul-app.html">system/xul-app</a></li><li><a href="tabs_utils.html">tabs/utils</a></li><li><a href="test_assert.html">test/assert</a></li><li><a href="test_harness.html">test/harness</a></li><li><a href="test_httpd.html">test/httpd</a></li><li><a href="test_runner.html">test/runner</a></li><li><a href="test_utils.html">test/utils</a></li><li><a href="ui_button_action.html">ui/button/action</a></li><li><a href="ui_button_toggle.html">ui/button/toggle</a></li><li><a href="ui_frame.html">ui/frame</a></li><li><a href="ui_id.html">ui/id</a></li><li><a href="ui_sidebar.html">ui/sidebar</a></li><li><a href="ui_toolbar.html">ui/toolbar</a></li><li><a href="util_array.html">util/array</a></li><li><a href="util_collection.html">util/collection</a></li><li><a href="util_deprecate.html">util/deprecate</a></li><li><a href="util_list.html">util/list</a></li><li><a href="util_match-pattern.html">util/match-pattern</a></li><li><a href="util_object.html">util/object</a></li><li><a href="util_uuid.html">util/uuid</a></li><li><a href="window_utils.html">window/utils</a></li></ol> 
+    </li>  
+ 
+    <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/Firefox_for_Android"><strong>Firefox for Android</strong></a></li> 
+    <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/Firefox_for_Android">Getting started</a> 
+      <ol> 
+        <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/Firefox_for_Android/Walkthrough">Walkthrough</a></li> 
+        <li><a href="en-US/docs/Tools/Remote_Debugging/Debugging_Firefox_for_Android_with_WebIDE.html">Debugging</a></li> 
+        <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/Firefox_for_Android/Code_snippets">Code snippets</a></li> 
+      </ol> 
+    </li> 
+ 
+    <li><a href="../../../docs/Mozilla/Add-ons/Firefox_for_Android/API.png">APIs</a> 
+      <ol><li><a href="../../Firefox_for_Android/API/Accounts.html">Accounts.jsm</a></li><li><a href="../../Firefox_for_Android/API/BrowserApp.html">BrowserApp</a></li><li><a href="../../Firefox_for_Android/API/HelperApps.html">HelperApps.jsm</a></li><li><a href="../../../docs/Mozilla/Add-ons/Firefox_for_Android/API/Home.png">Home.jsm</a></li><li><a href="../../Firefox_for_Android/API/HomeProvider.html">HomeProvider.jsm</a></li><li><a href="../../Firefox_for_Android/API/JavaAddonManager.html">JavaAddonManager.jsm</a></li><li><a href="../../../docs/Mozilla/Add-ons/Firefox_for_Android/API/NativeWindow.png">NativeWindow</a></li><li><a href="../../Firefox_for_Android/API/Notifications.html">Notifications.jsm</a></li><li><a href="../../Firefox_for_Android/API/PageActions.html">PageActions.jsm</a></li><li><a href="../../Firefox_for_Android/API/Prompt.html">Prompt.jsm</a></li><li><a href="../../Firefox_for_Android/API/Snackbars.html">Snackbars.jsm</a></li><li><a href="../../Firefox_for_Android/API/Sound.html">Sound.jsm</a></li><li><a href="../../Firefox_for_Android/API/Tab.html">Tab</a></li></ol> 
+    </li>  
+ 
+    <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/Legacy"><strong>Legacy</strong></a></li> 
+     
+    <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/Bootstrapped_Extensions">Restartless extensions</a> 
+      <ol> 
+        <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/Bootstrapped_extensions">Overview</a></li> 
+      </ol> 
+    </li> 
+    <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/Overlay_Extensions">Overlay extensions</a> 
+      <ol> 
+        <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/Overlay_Extensions">Overview</a></li> 
+      </ol> 
+    </li> 
+ 
+    <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/Themes"><strong>Themes</strong></a></li> 
+     
+    <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/Themes/Background">Lightweight themes</a> 
+      <ol> 
+        <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/Themes/Background">Overview</a></li> 
+      </ol> 
+    </li> 
+    <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/Themes/Complete_themes">Complete themes</a> 
+      <ol> 
+        <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/Themes">Overview</a></li> 
+      </ol> 
+    </li> 
+ 
+    <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/Distribution"><strong>Publishing add-ons</strong></a></li> 
+    <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/Distribution">Guides</a> 
+      <ol> 
+        <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/Distribution">Signing and distribution overview</a></li> 
+        <li><a href="https://addons.mozilla.org/developers/addon/submit/">Submit an add-on</a></li> 
+        <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/AMO/Policy/Reviews">Review policies</a></li> 
+        <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/AMO/Policy/Agreement">Developer agreement</a></li> 
+        <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/AMO/Policy/Featured">Featured add-ons</a></li> 
+        <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/AMO/Policy/Contact">Contact addons.mozilla.org</a></li> 
+      </ol> 
+    </li> 
+ 
+    <li><a href="https://discourse.mozilla-community.org/c/add-ons"><strong>Community and support</strong></a></li> 
+    <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/Channels">Channels</a> 
+      <ol> 
+        <li><a href="https://blog.mozilla.org/addons">Add-ons blog</a></li> 
+        <li><a href="https://discourse.mozilla-community.org/c/add-ons">Add-on forums</a></li> 
+        <li><a href="http://stackoverflow.com/questions/tagged/firefox-addon">Stack Overflow</a></li> 
+        <li><a href="https://groups.google.com/forum/#!forum/mozilla.dev.extensions">Development newsgroup</a></li> 
+        <li><a href="irc://irc.mozilla.org/extdev">IRC Channel</a></li> 
+      </ol> 
+    </li> 
+  </ol> 
+
+  </div>
+                
+
+                <!-- approvals -->
+                
+
+              
+
+              </div>
+            
+          </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Mozilla/Add-ons/SDK/Low-Level_APIs/ui_frame$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Mozilla/Add-ons/SDK/Low-Level_APIs/ui_frame$history" label="View page history"></menuitem>
+  </menu>
+
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+        
+        <div class="contentinfo">
+          <p>© 2005-2016 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>
+          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+        
+        </div>
+      </div>
+      <div class="column-strip">
+        
+          
+  
+
+        
+      </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+  
+    
+    <!--[if lte IE 8]><script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/selectivizr.091e18cf669b.js" charset="utf-8"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script type="text/javascript" src="../../../../../developer.cdn.mozilla.net/static/build/js/main.a7b27a25fb9c.js" charset="utf-8"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+    
+    <script async="" type="text/javascript" src="../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../developer.cdn.mozilla.net/static/build/js/syntax-prism-min.js" charset="utf-8"></script><script type="text/javascript" src="../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../developer.cdn.mozilla.net/static/build/js/wiki.bd71ca9fd27d.js" charset="utf-8" id="wikiscript"></script>
+
+  
+
+  <script async="" type="text/javascript" src="../../../../../developer.cdn.mozilla.net/static/build/js/helpfulness.7b208a764d28.js" charset="utf-8"></script>
+
+  
+    <script type="text/javascript">
+        (function($) {
+            $('#wikiArticle').children('h2[id]').each(function() {
+                var id = $(this).attr('id');
+                var href = '/en-US/docs/Mozilla/Add-ons/SDK/Low-Level_APIs/ui_frame$edit#' + id;
+
+                $('<a>').attr({
+                    href: href,
+                    'class': 'button section-edit only-icon'
+                })
+                .append($('<i aria-hidden="true" class="icon-pencil"></i>'))
+                .append($('<span>'))
+                .find('span')
+                .text(gettext('Edit'))
+                .end()
+                .on('click', function(e) {
+                    e.preventDefault();
+
+                    mdn.analytics.trackEvent({
+                        category: 'Section Edit',
+                        action: id
+                    }, function() {
+                        window.location = href;
+                    });
+                })
+                .appendTo(this);
+            });
+        })(jQuery);
+    </script>
+  
+
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/Add-ons/SDK/Low-Level_APIs/ui_frame by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 17:26:25 GMT -->
+</body></html>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 15.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="325px"
+	 height="257.5px" viewBox="129.5 102.5 325 257.5" enable-background="new 129.5 102.5 325 257.5" xml:space="preserve">
+<g id="Calque_4">
+</g>
+<g id="Calque_3">
+	<rect x="188.007" y="119.5" fill="#709ED0" stroke="#000000" width="196.834" height="216"/>
+	<text transform="matrix(1 0 0 1 231.6736 146.0732)" fill="#231F20" font-family="'ArialMT'" font-size="11">ChannelSplitterNode</text>
+	<polygon points="403.34,174.312 420.18,180.146 403.34,185.646 	"/>
+	<polygon points="403.34,197.833 420.18,203.667 403.34,209.167 	"/>
+	<polygon points="403.34,222.833 420.18,228.667 403.34,234.167 	"/>
+	<polygon points="403.34,244.572 420.18,250.406 403.34,255.906 	"/>
+	<polygon points="403.34,268.093 420.18,273.927 403.34,279.427 	"/>
+	<polygon points="403.34,293.093 420.18,298.927 403.34,304.427 	"/>
+	<line fill="none" stroke="#000000" stroke-miterlimit="10" x1="161.457" y1="240.32" x2="229.674" y2="240.32"/>
+</g>
+<g id="Calque_2">
+	<line fill="none" stroke="#000000" x1="403.34" y1="180.5" x2="229.674" y2="180.5"/>
+	<line fill="none" stroke="#000000" x1="403.34" y1="204.5" x2="229.674" y2="204.5"/>
+	<line fill="none" stroke="#000000" x1="403.34" y1="228.5" x2="229.674" y2="228.5"/>
+	<line fill="none" stroke="#000000" x1="403.34" y1="250.5" x2="229.674" y2="250.5"/>
+	<line fill="none" stroke="#000000" x1="403.34" y1="274.5" x2="229.674" y2="274.5"/>
+	<line fill="none" stroke="#000000" x1="403.34" y1="298.5" x2="229.674" y2="298.5"/>
+	<line fill="none" stroke="#000000" x1="229.674" y1="298.984" x2="229.674" y2="179.979"/>
+</g>
+<g id="Calque_1">
+	<g transform="translate(0.5,0.5)">
+		<rect x="275.84" y="172" pointer-events="none" fill="#FFFFFF" stroke="#000000" width="24" height="16"/>
+		<g transform="translate(293,183)">
+			<text transform="matrix(1 0 0 1 -7.385 0)" font-family="'Helvetica'" font-size="8">L</text>
+		</g>
+		<rect x="275.84" y="195" pointer-events="none" fill="#FFFFFF" stroke="#000000" width="24" height="16"/>
+		<g transform="translate(293,206)">
+			<text transform="matrix(1 0 0 1 -8.0491 0)" font-family="'Helvetica'" font-size="8">R</text>
+		</g>
+		<rect x="275.84" y="219" pointer-events="none" fill="#FFFFFF" stroke="#000000" width="24" height="16"/>
+		<g transform="translate(290,230)">
+			<text transform="matrix(1 0 0 1 -7.053 0)" font-family="'Helvetica'" font-size="8">SL</text>
+		</g>
+		<rect x="275.84" y="242" pointer-events="none" fill="#FFFFFF" stroke="#000000" width="24" height="16"/>
+		<g transform="translate(289,253)">
+			<text transform="matrix(1 0 0 1 -7.717 0)" font-family="'Helvetica'" font-size="8">SR</text>
+		</g>
+		<rect x="275.84" y="266" pointer-events="none" fill="#FFFFFF" stroke="#000000" width="24" height="16"/>
+		<g transform="translate(293,277)">
+			<text transform="matrix(1 0 0 1 -8.0491 0)" font-family="'Helvetica'" font-size="8">C</text>
+		</g>
+		<rect x="275.84" y="290" pointer-events="none" fill="#FFFFFF" stroke="#000000" width="24" height="16"/>
+		<g transform="translate(287,301)">
+			<text transform="matrix(1 0 0 1 -6.4963 0)" font-family="'Helvetica'" font-size="8">LFE</text>
+		</g>
+	</g>
+</g>
+</svg>

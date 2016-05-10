@@ -1,0 +1,2064 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Grammar_and_types by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 15:34:21 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <script async="" src="../../../../../../www.google-analytics.com/analytics.js"></script><script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+  
+    
+  
+
+  
+  <title>Grammar and types</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+  
+    
+    
+    <link href="../../../../../../developer.cdn.mozilla.net/static/build/styles/mdn.593f20d8c365.css" rel="stylesheet" type="text/css">
+
+    
+  
+    <link href="../../../../../../developer.cdn.mozilla.net/static/build/styles/wiki.13dd9abdfb62.css" rel="stylesheet" type="text/css">
+
+    
+
+    
+
+  <!-- common social tags -->
+  
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon144.a6e4162070f4.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon114.0e9fabd44f85.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon72.8ff9d87c82a0.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon57.a2490b9a2d76.png">
+  <!-- basic favicon -->
+  
+    
+  
+  <link rel="shortcut icon" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon32.e02854fdcf73.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/html5shiv.3948ccddab6f.js" charset="utf-8"></script>
+  <![endif]-->
+
+  
+  <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Grammar_and_types$json">
+  <link rel="canonical" href="Grammar_and_types.html">
+
+  
+    
+      <link rel="alternate" hreflang="ar" href="https://developer.mozilla.org/ar/docs/Web/JavaScript/Guide/Grammar_and_types" title="قواعد اللغة وأنواع">
+    
+      <link rel="alternate" hreflang="bn-BD" href="https://developer.mozilla.org/bn-BD/docs/Web/JavaScript/Guide/Grammar_and_types" title="ভ্যালু, ভ্যারিয়েবল, এবং  লিটারেল">
+    
+      <link rel="alternate" hreflang="cs" href="https://developer.mozilla.org/cs/docs/Web/JavaScript/Guide/Gramatika_a_typy" title="Gramatika a typy">
+    
+      <link rel="alternate" hreflang="de" href="https://developer.mozilla.org/de/docs/Web/JavaScript/Guide/Grammatik_und_Typen" title="Grammatik und Typen">
+    
+      <link rel="alternate" hreflang="es" href="https://developer.mozilla.org/es/docs/Web/JavaScript/Guide/Grammar_and_types" title="Gramatica y Tipos">
+    
+      <link rel="alternate" hreflang="fr" href="https://developer.mozilla.org/fr/docs/Web/JavaScript/Guide/Types_et_grammaire" title="Types et grammaire">
+    
+      <link rel="alternate" hreflang="hi-IN" href="https://developer.mozilla.org/hi-IN/docs/Web/JavaScript/Guide/Grammar_and_types" title="Grammar and types">
+    
+      <link rel="alternate" hreflang="hu" href="https://developer.mozilla.org/hu/docs/Web/JavaScript/Guide/Grammar_and_types" title="Grammar and types">
+    
+      <link rel="alternate" hreflang="id" href="https://developer.mozilla.org/id/docs/Web/JavaScript/Panduan/Values,_variables,_and_literals" title="Values, variables, dan literals">
+    
+      <link rel="alternate" hreflang="it" href="https://developer.mozilla.org/it/docs/Web/JavaScript/Guida/Grammar_and_types" title="Grammatica e tipi">
+    
+      <link rel="alternate" hreflang="ja" href="https://developer.mozilla.org/ja/docs/Web/JavaScript/Guide/Grammar_and_types" title="文法とデータ型">
+    
+      <link rel="alternate" hreflang="ko" href="https://developer.mozilla.org/ko/docs/Web/JavaScript/Guide/Values,_variables,_and_literals" title="문법과 타입">
+    
+      <link rel="alternate" hreflang="my" href="https://developer.mozilla.org/my/docs/Web/JavaScript/Guide/Grammar_and_types" title="Grammar and types">
+    
+      <link rel="alternate" hreflang="nl" href="https://developer.mozilla.org/nl/docs/Web/JavaScript/Guide/Grammar_and_types" title="Grammar and types">
+    
+      <link rel="alternate" hreflang="pl" href="https://developer.mozilla.org/pl/docs/Web/JavaScript/Guide/Składnia_i_typy" title="Składnia i typy">
+    
+      <link rel="alternate" hreflang="pt-BR" href="https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Guide/Values,_variables,_and_literals" title="Sintaxe e tipos">
+    
+      <link rel="alternate" hreflang="ru" href="https://developer.mozilla.org/ru/docs/Web/JavaScript/Guide/Grammar_and_types" title="Грамматика и типы">
+    
+      <link rel="alternate" hreflang="th" href="https://developer.mozilla.org/th/docs/Web/JavaScript/Guide/Values,_variables,_and_literals" title="ค่าข้อมูล, ตัวแปร, และตัวข้อมูล">
+    
+      <link rel="alternate" hreflang="tr" href="https://developer.mozilla.org/tr/docs/Web/JavaScript/Guide/Grammar_and_types" title="Grammar and types">
+    
+      <link rel="alternate" hreflang="uk" href="https://developer.mozilla.org/uk/docs/Web/JavaScript/Guide/Grammar_and_types" title="Grammar and types">
+    
+      <link rel="alternate" hreflang="vi" href="https://developer.mozilla.org/vi/docs/Web/JavaScript/Guide/cu-phap-lap-trinh" title="Cú pháp lập trình">
+    
+      <link rel="alternate" hreflang="zh-CN" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Grammar_and_types" title="语法和数据类型">
+    
+      <link rel="alternate" hreflang="zh-TW" href="https://developer.mozilla.org/zh-TW/docs/Web/JavaScript/Guide/Values,_variables,_and_literals" title="Grammar and types">
+    
+  
+
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="Grammar and types">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Grammar_and_types">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Grammar_and_types">
+  <meta name="twitter:title" content="Grammar and types">
+  
+  <meta property="og:description" content="This chapter discusses JavaScript's basic grammar, variable declarations, data types and literals.">
+  <meta name="description" content="This chapter discusses JavaScript's basic grammar, variable declarations, data types and literals.">
+  <meta name="twitter:description" content="This chapter discusses JavaScript's basic grammar, variable declarations, data types and literals.">
+  
+
+  
+    
+
+
+
+  
+</head>
+<body data-slug="Web/JavaScript/Guide/Grammar_and_types" contextmenu="edit-history-menu" data-search-url="" class="document  ">
+
+  <script type="text/javascript">
+    (function(win) {
+        'use strict';
+
+        
+            (function(){
+  var FLAGS = {
+    'compat_api': false,'kumaediting': false,'page_move': false,'registration_disabled': false,'search_suggestions': false,'section_edit': true,'spam_admin_override': false,'spam_checks_enabled': true,'spam_spammer_override': false,'spam_submissions_enabled': false,'spam_testing_mode': false,'wiki_samples': true,'wiki_spam_exempted': false,'wiki_spam_training': true
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': true,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+
+        // This needs to be set before ckeditor.js loads
+        window.CKEDITOR_BASEPATH = 'https://developer.mozilla.org/static/js/libs/ckeditor/build/ckeditor/';
+
+        // This represents the site configuration
+        win.mdn = {
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+            
+            notifications: [],
+            
+            // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            },
+            // Assets that need to be dynamically injected
+            assets_disabled: {
+                css: {
+                    'editor-content': ['https://developer.cdn.mozilla.net/static/build/styles/editor-content.3d79df72080d.css',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/styles/wiki-compat-tables.f3a3bfce97a1.css',]
+                },
+                js: {
+                    'syntax-prism': ['https://developer.cdn.mozilla.net/static/build/js/syntax-prism.7a66ddfa68bf.js',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/js/wiki-compat-tables.14ce5dcb2c3d.js',]
+                }
+            }
+        };
+    })(this);
+</script>
+
+  
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+    
+      <li><a href="#q" id="skip-search">Skip to search</a></li>
+    
+  </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+    <a href="https://developer.mozilla.org/en-US/" class="logo">Mozilla Developer Network</a>
+
+    <div id="nav-sec">
+        
+                  <ul>
+                  <li>
+
+    
+
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                Sign in
+              </span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FJavaScript%2FGuide%2FGrammar_and_types" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/Web/JavaScript/Guide/Grammar_and_types" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/Web/JavaScript/Guide/Grammar_and_types" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FJavaScript%2FGuide%2FGrammar_and_types" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+              
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+        
+    </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../../API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+
+   <!-- end is_zone -->
+
+    <div class="wiki-main-content" id="document-main"><div class="center">
+      
+      <div class="article-meta">
+        <!-- action buttons -->
+        
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+  <ul class="page-buttons" data-sticky="false">
+      
+      <li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+              
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/ar/docs/Web/JavaScript/Guide/Grammar_and_types" title="قواعد اللغة وأنواع">عربي</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/bn-BD/docs/Web/JavaScript/Guide/Grammar_and_types" title="ভ্যালু, ভ্যারিয়েবল, এবং  লিটারেল">বাংলা (বাংলাদেশ)</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/cs/docs/Web/JavaScript/Guide/Gramatika_a_typy" title="Gramatika a typy">Čeština</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/de/docs/Web/JavaScript/Guide/Grammatik_und_Typen" title="Grammatik und Typen">Deutsch</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/es/docs/Web/JavaScript/Guide/Grammar_and_types" title="Gramatica y Tipos">Español</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/fr/docs/Web/JavaScript/Guide/Types_et_grammaire" title="Types et grammaire">Français</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/hi-IN/docs/Web/JavaScript/Guide/Grammar_and_types" title="Grammar and types">हिन्दी (भारत)</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/hu/docs/Web/JavaScript/Guide/Grammar_and_types" title="Grammar and types">magyar</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/id/docs/Web/JavaScript/Panduan/Values,_variables,_and_literals" title="Values, variables, dan literals">Bahasa Indonesia</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/it/docs/Web/JavaScript/Guida/Grammar_and_types" title="Grammatica e tipi">Italiano</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/ja/docs/Web/JavaScript/Guide/Grammar_and_types" title="文法とデータ型">日本語</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/ko/docs/Web/JavaScript/Guide/Values,_variables,_and_literals" title="문법과 타입">한국어</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/my/docs/Web/JavaScript/Guide/Grammar_and_types" title="Grammar and types">မြန်မာဘာသာ</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/nl/docs/Web/JavaScript/Guide/Grammar_and_types" title="Grammar and types">Nederlands</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/pl/docs/Web/JavaScript/Guide/Składnia_i_typy" title="Składnia i typy">Polski</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Guide/Values,_variables,_and_literals" title="Sintaxe e tipos">Português (do&nbsp;Brasil)</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/ru/docs/Web/JavaScript/Guide/Grammar_and_types" title="Грамматика и типы">Русский</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/th/docs/Web/JavaScript/Guide/Values,_variables,_and_literals" title="ค่าข้อมูล, ตัวแปร, และตัวข้อมูล">ไทย</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/tr/docs/Web/JavaScript/Guide/Grammar_and_types" title="Grammar and types">Türkçe</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/uk/docs/Web/JavaScript/Guide/Grammar_and_types" title="Grammar and types">Українська</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/vi/docs/Web/JavaScript/Guide/cu-phap-lap-trinh" title="Cú pháp lập trình">Tiếng Việt</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Grammar_and_types" title="语法和数据类型">中文 (简体)</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/zh-TW/docs/Web/JavaScript/Guide/Values,_variables,_and_literals" title="Grammar and types">正體中文 (繁體)</a></bdi></li>
+                
+              
+
+              
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Grammar_and_types$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+              
+            </ul>
+          </div>
+        </div>
+      </li>
+
+      <li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Grammar_and_types$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li>
+
+        
+
+        <li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Grammar_and_types$history" rel="nofollow, noindex">History</a></li>
+                
+                
+                
+                
+
+                
+
+                
+                
+                
+                <li class="page-print"><a href="#" onclick="return window.print();">Print this article</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+        
+  <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web" rel="v:url" property="v:title">Web technology for developers</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" rel="v:url" property="v:title">JavaScript</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="../Guide.html" rel="v:url" property="v:title">JavaScript Guide</a></li>
+    
+    <li class="crumb" typeof="v:Breadcrumb" property="v:title">Grammar and types</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        
+        <div class="contributor-avatars" data-all-text="see all contributors" data-alternate-message="hide contributors" data-has-hidden="1">
+            <ul>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/josephma93" title="View profile: josephma93">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="josephma93" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">josephma93</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Sheppy" title="View profile: Sheppy">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Sheppy" data-src="../../../../../../secure.gravatar.com/avatar/945076feb88f2d7003891ffbf06f32bf6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Sheppy</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/stevemao" title="View profile: stevemao">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="stevemao" data-src="../../../../../../secure.gravatar.com/avatar/084668018e4752a76a838f27e041d1826c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">stevemao</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/levin81" title="View profile: levin81">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="levin81" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">levin81</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/fscholz" title="View profile: fscholz">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="fscholz" data-src="../../../../../../secure.gravatar.com/avatar/e24391c9174352988d819a9b9ea77c9e6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">fscholz</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/SphinxKnight" title="View profile: SphinxKnight">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="SphinxKnight" data-src="../../../../../../secure.gravatar.com/avatar/8fb358ea9b7af22f5021a29e122ea0696c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">SphinxKnight</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/yuraantonov" title="View profile: yuraantonov">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="yuraantonov" data-src="../../../../../../secure.gravatar.com/avatar/33216dc52432aa6b25933741e5fb007b6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">yuraantonov</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/mickbeaver" title="View profile: mickbeaver">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="mickbeaver" data-src="../../../../../../secure.gravatar.com/avatar/e1f60b715525f73a2c9d0d2be299f8cd6c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">mickbeaver</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/x2357" title="View profile: x2357">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="x2357" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">x2357</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/aungmyatk_o" title="View profile: aungmyatk_o">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="aungmyatk_o" data-src="../../../../../../secure.gravatar.com/avatar/306a4f4fe48809c8fc67d852d74d0a516c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">aungmyatk_o</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Pointy" title="View profile: Pointy">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Pointy" data-src="../../../../../../secure.gravatar.com/avatar/b19917aa04a6839aef577f1117c71d486c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Pointy</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/jsx" title="View profile: jsx">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="jsx" data-src="../../../../../../secure.gravatar.com/avatar/8cc61d4e2dc63e75976a334348d473bc6c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">jsx</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/iccir919" title="View profile: iccir919">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="iccir919" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">iccir919</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/andela-abankole" title="View profile: andela-abankole">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="andela-abankole" data-src="../../../../../../secure.gravatar.com/avatar/3f72408b494fffbed67ccc0d62961a9c6c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">andela-abankole</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/yuxuac" title="View profile: yuxuac">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="yuxuac" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">yuxuac</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/xrisk" title="View profile: xrisk">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="xrisk" data-src="../../../../../../secure.gravatar.com/avatar/7b1bf7ba783d6c61ebd53745370a84b66c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">xrisk</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/yuunaK" title="View profile: yuunaK">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="yuunaK" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">yuunaK</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/gportioli" title="View profile: gportioli">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="gportioli" data-src="../../../../../../secure.gravatar.com/avatar/eb051e735b2a38cfbfd982ae9c0a87316c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">gportioli</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/xiaolong" title="View profile: xiaolong">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="xiaolong" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">xiaolong</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/homyasusina" title="View profile: homyasusina">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="homyasusina" data-src="../../../../../../secure.gravatar.com/avatar/72c22b80c2768bb38e4201323c582c976c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">homyasusina</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/danielinux7" title="View profile: danielinux7">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="danielinux7" data-src="../../../../../../secure.gravatar.com/avatar/a4700abc9ace312fe70f5d9b93d0a4ef6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">danielinux7</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/harman052" title="View profile: harman052">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="harman052" data-src="../../../../../../secure.gravatar.com/avatar/5e70bfa9d75260a47869a57d3a278f816c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">harman052</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/githubatbatap" title="View profile: githubatbatap">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="githubatbatap" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">githubatbatap</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/xfq" title="View profile: xfq">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="xfq" data-src="../../../../../../secure.gravatar.com/avatar/d37eb6e5701cb30b871077f04cf2ebb76c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">xfq</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/nasifmdtanjim" title="View profile: nasifmdtanjim">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="nasifmdtanjim" data-src="../../../../../../secure.gravatar.com/avatar/178026253c60edde3a73b2eb685c84206c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">nasifmdtanjim</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/paulhig" title="View profile: paulhig">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="paulhig" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">paulhig</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/mgorgei" title="View profile: mgorgei">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="mgorgei" data-src="../../../../../../secure.gravatar.com/avatar/ac0b99568ad01771b065aa05b665305a6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">mgorgei</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Jeremie" title="View profile: Jeremie">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Jeremie" data-src="../../../../../../secure.gravatar.com/avatar/ea74cf7f528273838138e9ae407cd8ef6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Jeremie</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/kathirvel" title="View profile: kathirvel">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="kathirvel" data-src="../../../../../../secure.gravatar.com/avatar/174dbc8bb05ef57f2e135c7bd14b76c06c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">kathirvel</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/weeska" title="View profile: weeska">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="weeska" data-src="../../../../../../secure.gravatar.com/avatar/33e5c4d5495d7951588dbad472dcb5ad6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">weeska</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/tenebr050" title="View profile: tenebr050">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="tenebr050" data-src="../../../../../../secure.gravatar.com/avatar/2dd88be1dd3669406b07004bc7dbac786c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">tenebr050</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/yogiam" title="View profile: yogiam">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="yogiam" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">yogiam</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/hansifer" title="View profile: hansifer">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="hansifer" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">hansifer</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Tyler-Knappe" title="View profile: Tyler-Knappe">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Tyler-Knappe" data-src="../../../../../../secure.gravatar.com/avatar/c9e0d55c256143eb4a758c9411ef0c8d6c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Tyler-Knappe</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/heyoni" title="View profile: heyoni">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="heyoni" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">heyoni</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/FernandoBasso" title="View profile: FernandoBasso">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="FernandoBasso" data-src="../../../../../../secure.gravatar.com/avatar/4eec321d4316e16f3cbb269410e2357b6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">FernandoBasso</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/boobl" title="View profile: boobl">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="boobl" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">boobl</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/cluebcke" title="View profile: cluebcke">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="cluebcke" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">cluebcke</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/sbking" title="View profile: sbking">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="sbking" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">sbking</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/rajat_agarwal" title="View profile: rajat_agarwal">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="rajat_agarwal" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">rajat_agarwal</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/kscarfone" title="View profile: kscarfone">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="kscarfone" data-src="../../../../../../secure.gravatar.com/avatar/89c1e54a9703125168e40d22316d2b496c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">kscarfone</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="../../../../profiles/Domecraft.html" title="View profile: Domecraft">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Domecraft" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Domecraft</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/fergc" title="View profile: fergc">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="fergc" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">fergc</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/yairyog" title="View profile: yairyog">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="yairyog" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">yairyog</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/jswisher" title="View profile: jswisher">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="jswisher" data-src="../../../../../../secure.gravatar.com/avatar/38185c2812cbcae186ebbe4a829106616c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">jswisher</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Norbert" title="View profile: Norbert">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Norbert" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Norbert</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/jaffer.sadhiq@gmail.com" title="View profile: jaffer.sadhiq@gmail.com">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="jaffer.sadhiq@gmail.com" data-src="../../../../../../secure.gravatar.com/avatar/7373e4e78c6c94ce243d53991d34bde66c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">jaffer.sadhiq@gmail.com</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/trupanka" title="View profile: trupanka">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="trupanka" data-src="../../../../../../secure.gravatar.com/avatar/30d0eda0ccb196be77f051fcf64385e86c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">trupanka</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/TimCondit" title="View profile: TimCondit">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="TimCondit" data-src="../../../../../../secure.gravatar.com/avatar/738f76468b85820f2c3e84f4bc26d0766c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">TimCondit</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/tvillaluz" title="View profile: tvillaluz">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="tvillaluz" data-src="../../../../../../secure.gravatar.com/avatar/2c14e6362cac83d3cd95475889fe4edc6c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">tvillaluz</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/dbruant" title="View profile: dbruant">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="dbruant" data-src="../../../../../../secure.gravatar.com/avatar/b9b113093c351a599f86e0647c43add16c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">dbruant</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/ethertank" title="View profile: ethertank">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="ethertank" data-src="../../../../../../secure.gravatar.com/avatar/abac73ba2093b500bf7599c76d80280c6c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">ethertank</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/trevorh" title="View profile: trevorh">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="trevorh" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">trevorh</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/fusionchess" title="View profile: fusionchess">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="fusionchess" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">fusionchess</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/lmorchard" title="View profile: lmorchard">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="lmorchard" data-src="../../../../../../secure.gravatar.com/avatar/b45c48fc9e05922e2f368a9d7d7d8de16c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">lmorchard</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/liucailin" title="View profile: liucailin">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="liucailin" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">liucailin</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/uhoh-itsmaciek" title="View profile: uhoh-itsmaciek">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="uhoh-itsmaciek" data-src="../../../../../../secure.gravatar.com/avatar/9c205259b1c73df49d022c64e43bd4d86c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">uhoh-itsmaciek</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/milena" title="View profile: milena">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="milena" data-src="../../../../../../secure.gravatar.com/avatar/d036451856144b5b5986daf45cc254ba6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">milena</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/XP1" title="View profile: XP1">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="XP1" data-src="../../../../../../secure.gravatar.com/avatar/3f7435da4c99ff69c3fe375d192261086c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">XP1</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/rmcnew" title="View profile: rmcnew">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="rmcnew" data-src="../../../../../../secure.gravatar.com/avatar/d0fc893396f176fae02ec7a13edee37b6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">rmcnew</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/psylone" title="View profile: psylone">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="psylone" data-src="../../../../../../secure.gravatar.com/avatar/9767bd2a811cab859b83635e3636e6576c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">psylone</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/antiomiae" title="View profile: antiomiae">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="antiomiae" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">antiomiae</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Distracted Owl" title="View profile: Distracted Owl">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Distracted Owl" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Distracted Owl</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/jack_hsieh" title="View profile: jack_hsieh">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="jack_hsieh" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">jack_hsieh</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/gpvos" title="View profile: gpvos">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="gpvos" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">gpvos</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/unveiled14" title="View profile: unveiled14">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="unveiled14" data-src="../../../../../../secure.gravatar.com/avatar/96779b79aa772b588e3a38f1bc024e8a6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">unveiled14</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/timemachine3030" title="View profile: timemachine3030">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="timemachine3030" data-src="../../../../../../secure.gravatar.com/avatar/65e75b2b2168825e297074219b8830d16c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">timemachine3030</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Inimino" title="View profile: Inimino">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Inimino" data-src="../../../../../../secure.gravatar.com/avatar/e4e997037a6341e7881816db5ef23ba76c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Inimino</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/dublinan" title="View profile: dublinan">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="dublinan" data-src="../../../../../../secure.gravatar.com/avatar/10d8edd2d39c1e2e39944036adc570e46c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">dublinan</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/MatrixFrog" title="View profile: MatrixFrog">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="MatrixFrog" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">MatrixFrog</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/HugoDaniel" title="View profile: HugoDaniel">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="HugoDaniel" data-src="../../../../../../secure.gravatar.com/avatar/0628c38e469659bbefa57bae9bc7a4c26c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">HugoDaniel</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/EvanCarroll" title="View profile: EvanCarroll">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="EvanCarroll" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">EvanCarroll</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Tgr" title="View profile: Tgr">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Tgr" data-src="../../../../../../secure.gravatar.com/avatar/7cca5c3dcfdb11eed67a39f977646f7c6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Tgr</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/user01" title="View profile: user01">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="user01" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">user01</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/dazzledesign" title="View profile: dazzledesign">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="dazzledesign" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">dazzledesign</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Spooty" title="View profile: Spooty">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Spooty" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Spooty</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/JesseW" title="View profile: JesseW">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="JesseW" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">JesseW</noscript></a>
+                </li>
+            
+            </ul>
+        </div>
+        
+
+        <h1>Grammar and types</h1>
+
+      </div>
+      
+
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-present">
+
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+            
+              <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+              
+              <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#Basics" rel="internal">Basics</a></li><li><a href="#Comments" rel="internal">Comments</a></li><li><a href="#Declarations" rel="internal">Declarations</a><ol><li><a href="#Variables" rel="internal">Variables</a></li><li><a href="#Declaring_variables" rel="internal">Declaring variables</a></li><li><a href="#Evaluating_variables" rel="internal">Evaluating variables</a></li><li><a href="#Variable_scope" rel="internal">Variable scope</a></li><li><a href="#Variable_hoisting" rel="internal">Variable hoisting</a></li><li><a href="#Global_variables" rel="internal">Global variables</a></li><li><a href="#Constants" rel="internal">Constants</a></li></ol></li><li><a href="#Data_structures_and_types" rel="internal">Data structures and types</a><ol><li><a href="#Data_types" rel="internal">Data types</a></li><li><a href="#Data_type_conversion" rel="internal">Data type conversion</a></li><li><a href="#Converting_strings_to_numbers" rel="internal">Converting strings to numbers</a></li></ol></li><li><a href="#Literals" rel="internal">Literals</a><ol><li><a href="#Array_literals" rel="internal">Array literals</a><ol><li><a href="#Extra_commas_in_array_literals" rel="internal">Extra commas in array literals</a></li></ol></li><li><a href="#Boolean_literals" rel="internal">Boolean literals</a></li><li><a href="#Integers" rel="internal">Integers</a></li><li><a href="#Floating-point_literals" rel="internal">Floating-point literals</a></li><li><a href="#Object_literals" rel="internal">Object literals</a></li><li><a href="#RegExp_literals" rel="internal">RegExp literals</a></li><li><a href="#String_literals" rel="internal">String literals</a><ol><li><a href="#Using_special_characters_in_strings" rel="internal">Using special characters in strings</a></li><li><a href="#Escaping_characters" rel="internal">Escaping characters</a></li></ol></li></ol></li><li><a href="#More_information" rel="internal">More information</a>
+                </li></ol>
+              </div>
+              
+              </div>
+            
+
+            
+            
+              
+            
+
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-half wiki-column text-content">
+
+              
+
+              
+
+              
+                
+                
+                
+              
+              
+
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                
+                  
+                    <div><section id="Quick_Links" class="Quick_links"><!-- --></section> <div class="prevnext" style="text-align: right;"> 
+    <p><a href="Introduction.html" style="float: left;">« Previous</a><a href="Control_flow_and_error_handling.html">Next  »</a></p> 
+</div></div>
+
+<p class="summary">This chapter discusses JavaScript's basic grammar, variable declarations, data types and literals.</p>
+
+<h2 id="Basics">Basics</h2>
+
+<p>JavaScript borrows most of its syntax from Java, but is also influenced by Awk, Perl and Python.</p>
+
+<p>JavaScript is <strong>case-sensitive</strong> and uses the <strong>Unicode</strong> character set.</p>
+
+<p>In JavaScript, instructions are called <a href="https://developer.mozilla.org/en-US/docs/Glossary/Statement" class="glossaryLink" title="statements: Technical review completed.">statements</a> and are separated by a semicolon (;). Spaces, tabs and newline characters are called whitespace. The source text of JavaScript scripts gets scanned from left to right and is converted into a sequence of input elements which are tokens, control characters, line terminators, comments or whitespace. ECMAScript also defines certain keywords and literals and has rules for automatic insertion of semicolons (<a href="../Reference/Lexical_grammar.html#Automatic_semicolon_insertion">ASI</a>) to end statements. However, it is recommended to always add semicolons to end your statements; it will avoid side effects. For more information, see the detailed reference about JavaScript's <a href="../Reference/Lexical_grammar.html">lexical grammar</a>.</p>
+
+<h2 id="Comments">Comments</h2>
+
+<p>The syntax of <strong>comments</strong> is the same as in C++ and in many other languages:</p>
+
+<pre class="brush: js">// a one line comment
+ 
+/* this is a longer, 
+   multi-line comment
+ */
+ 
+/* You can't, however, /* nest comments */ SyntaxError */</pre>
+
+<h2 id="Declarations">Declarations</h2>
+
+<p>There are three kinds of declarations in JavaScript.</p>
+
+<dl>
+ <dt><a href="../Reference/Statements/var.html" title="The variable statement declares a variable, optionally initializing it to a value."><code>var</code></a></dt>
+ <dd>Declares a variable, optionally initializing it to a value.</dd>
+ <dt><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span> <a href="../Reference/Statements/let.html" title="The let statement declares a block scope local variable, optionally initializing it to a value."><code>let</code></a></dt>
+ <dd>Declares a block scope local variable, optionally initializing it to a value.</dd>
+ <dt><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span> <a href="../Reference/Statements/const.html" title="The const declaration creates a read-only reference to a value. It does not&nbsp;mean the value it holds is immutable, just that the variable identifier cannot be reassigned."><code>const</code></a></dt>
+ <dd>Declares a read-only named constant.</dd>
+</dl>
+
+<h3 id="Variables">Variables</h3>
+
+<p>You use variables as symbolic names for values in your application. The names of variables, called <a href="https://developer.mozilla.org/en-US/docs/Glossary/Identifier" class="glossaryLink" title="identifiers: A sequence of characters in the code that identifies a variable, function, or property.">identifiers</a>, conform to certain rules.</p>
+
+<p>A JavaScript identifier must start with a letter, underscore (_), or dollar sign ($); subsequent characters can also be digits (0-9). Because JavaScript is case sensitive, letters include the characters "A" through "Z" (uppercase) and the characters "a" through "z" (lowercase).</p>
+
+<p>You can use ISO 8859-1 or Unicode letters such as å and ü in identifiers. You can also use the <a href="../Reference/Lexical_grammar.html#String_literals">Unicode escape sequences</a> as characters in identifiers.</p>
+
+<p>Some examples of legal names are <code>Number_hits</code>, <code>temp99</code>, and <code>_name</code>.</p>
+
+<h3 id="Declaring_variables">Declaring variables</h3>
+
+<p>You can declare a variable in three ways:</p>
+
+<ul>
+ <li>With the keyword <a href="../Reference/Statements/var.html" title="The variable statement declares a variable, optionally initializing it to a value."><code>var</code></a>. For example, <code>var x = 42</code>. This syntax can be used to declare both local and global variables.</li>
+ <li>By simply assigning it a value. For example, <code>x = 42</code>. This always declares a global variable. It generates a strict JavaScript warning. You shouldn't use this variant.</li>
+ <li>With the keyword <a href="../Reference/Statements/let.html" title="The let statement declares a block scope local variable, optionally initializing it to a value."><code>let</code></a>. For example, <code>let y = 13</code>. This syntax can be used to declare a block scope local variable. See <a href="#Variable_scope">Variable scope</a> below.</li>
+</ul>
+
+<h3 id="Evaluating_variables">Evaluating variables</h3>
+
+<p>A variable declared using the <code>var</code> or <code>let</code> statement with no initial value specified has the value <a href="../Reference/Global_Objects/undefined.html" title="The global undefined property represents the primitive value undefined. It is one of JavaScript's primitive types."><code>undefined</code></a>.</p>
+
+<p>An attempt to access an undeclared variable will result in a <a href="../Reference/Global_Objects/ReferenceError.html" title="The ReferenceError object represents an error when a non-existent variable is referenced."><code>ReferenceError</code></a> exception being thrown:</p>
+
+<pre class="brush: js">var a;
+console.log("The value of a is " + a); // logs "The value of a is undefined"
+console.log("The value of b is " + b); // throws ReferenceError exception
+</pre>
+
+<p>You can use <code>undefined</code> to determine whether a variable has a value. In the following code, the variable <code>input</code> is not assigned a value, and the <code><a href="../Reference/Statements/if...html" title="en-US/docs/JavaScript/Reference/Statements/if...else">if</a></code> statement evaluates to <code>true</code>.</p>
+
+<pre class="brush: js">var input;
+if(input === undefined){
+  doThis();
+} else {
+  doThat();
+}
+</pre>
+
+<p>The <code>undefined</code> value behaves as <code>false</code> when used in a boolean context. For example, the following code executes the function <code>myFunction</code> because the <code>myArray</code> element is undefined:</p>
+
+<pre class="brush: js">var myArray = [];
+if (!myArray[0]) myFunction(); 
+</pre>
+
+<p>The <code>undefined</code> value converts to <code>NaN</code> when used in numeric context.</p>
+
+<pre class="brush: js">var a;
+a + 2;  // Evaluates to NaN</pre>
+
+<p>When you evaluate a <a href="../Reference/Global_Objects/null.html" title="The value null&nbsp;represents the intentional absence of any object value. It is one of JavaScript's primitive values."><code>null</code></a> variable, the null value behaves as 0 in numeric contexts and as false in boolean contexts. For example:</p>
+
+<pre class="brush: js">var n = null;
+console.log(n * 32); // Will log 0 to the console
+</pre>
+
+<h3 id="Variable_scope">Variable scope</h3>
+
+<p>When you declare a variable outside of any function, it is called a <em>global</em> variable, because it is available to any other code in the current document. When you declare a variable within a function, it is called a <em>local</em> variable, because it is available only within that function.</p>
+
+<p>JavaScript before ECMAScript 6 does not have <a href="Control_flow_and_error_handling.html#Block_statement" title="en-US/docs/Web/JavaScript/Guide/Control_flow_and_error_handling#Block_statement">block statement</a> scope; rather, a variable declared within a block is local to the <em>function (or global scope)</em> that the block resides within. For example the following code will log <code>5</code>, because the scope of <code>x</code> is the function (or global context) within which <code>x</code> is declared, not the block, which in this case is an <code>if</code> statement.</p>
+
+<pre class="brush: js">if (true) {
+  var x = 5;
+}
+console.log(x);  // 5
+</pre>
+
+<p>This behavior changes, when using the <code>let</code> declaration introduced in ECMAScript 6.</p>
+
+<pre class="brush: js">if (true) {
+  let y = 5;
+}
+console.log(y);  // ReferenceError: y is not defined
+</pre>
+
+<h3 id="Variable_hoisting">Variable hoisting</h3>
+
+<p>Another unusual thing about variables in JavaScript is that you can refer to a variable declared later, without getting an exception. This concept is known as <strong>hoisting</strong>; variables in JavaScript are in a sense "hoisted" or lifted to the top of the function or statement. However, variables that are hoisted&nbsp;will return a value of <code>undefined</code>. So even if you declare and initialize after you use or refer to this variable, it will still return undefined.</p>
+
+<pre class="brush: js">/**
+ * Example 1
+ */
+console.log(x === undefined); // true
+var x = 3;
+
+/**
+ * Example 2
+ */
+// will return a value of undefined
+var myvar = "my value";
+ 
+(function() {
+  console.log(myvar); // undefined
+  var myvar = "local value";
+})();
+</pre>
+
+<p>The above examples will be interpreted the same as:</p>
+
+<pre class="brush: js">/**
+ * Example 1
+ */
+var x;
+console.log(x === undefined); // true
+x = 3;
+ 
+/**
+ * Example 2
+ */
+var myvar = "my value";
+ 
+(function() {
+  var myvar;
+  console.log(myvar); // undefined
+  myvar = "local value";
+})();
+</pre>
+
+<p>Because of hoisting, all <code>var</code> statements in a function should be placed as near to the top of the function as possible. This best practice increases the clarity of the code.</p>
+
+<p>In ECMAScript 2015,&nbsp;<code>let (const)</code>&nbsp;<strong>will not hoist</strong>&nbsp;the variable to the top of the block. However, referencing&nbsp;the&nbsp;variable in the&nbsp;block before the variable declaration&nbsp;results in a&nbsp;<code><a href="../Reference/Global_Objects/ReferenceError.html" title="TypeError">ReferenceError</a>.</code>&nbsp;The variable is in a "temporal dead zone" from the start of the block until the declaration is processed.</p>
+
+<pre>console.log(x); // <code>ReferenceError</code>
+let x = 3;</pre>
+
+<h3 id="Global_variables">Global variables</h3>
+
+<p>Global variables are in fact properties of the <em>global object</em>. In web pages the global object is <a href="../../API/Window.html" title="The window object represents a window containing a DOM document; the document property points to the DOM document loaded in that window."><code>window</code></a>, so you can set and access global variables using the <code>window.<em>variable</em></code> syntax.</p>
+
+<p>Consequently, you can access global variables declared in one window or frame from another window or frame by specifying the window or frame name. For example, if a variable called <code>phoneNumber</code> is declared in a document, you can refer to this variable from an iframe as <code>parent.phoneNumber</code>.</p>
+
+<h3 id="Constants">Constants</h3>
+
+<p>You can create a read-only, named constant with the <a href="../Reference/Statements/const.html" title="The const declaration creates a read-only reference to a value. It does not&nbsp;mean the value it holds is immutable, just that the variable identifier cannot be reassigned."><code>const</code></a> keyword. The syntax of a constant identifier is the same as for a variable identifier: it must start with a letter, underscore or dollar sign and can contain alphabetic, numeric, or underscore characters.</p>
+
+<pre class="brush: js">const PI = 3.14;
+</pre>
+
+<p>A constant cannot change value through assignment or be re-declared while the script is running. It has to be initialized to a value.</p>
+
+<p>The scope rules for constants are the same as those for <code>let</code> block scope variables. If the <code>const</code> keyword is omitted, the identifier is assumed to represent a variable.</p>
+
+<p>You cannot declare a constant with the same name as a function or variable in the same scope. For example:</p>
+
+<pre class="brush: js">// THIS WILL CAUSE AN ERROR
+function f() {};
+const f = 5;
+
+// THIS WILL CAUSE AN ERROR ALSO
+function f() {
+  const g = 5;
+  var g;
+
+  //statements
+}
+</pre>
+
+<p><code>However, object attributes are not protected,&nbsp;so the following statement is executed without problems</code></p>
+
+<pre><code>const MY_OBJECT = {"key": "value"};
+MY_OBJECT.key = "otherValue";</code></pre>
+
+<h2 id="Data_structures_and_types">Data structures and types</h2>
+
+<h3 id="Data_types">Data types</h3>
+
+<p>The latest ECMAScript standard defines seven data types:</p>
+
+<ul>
+ <li>Six data types that are <a href="https://developer.mozilla.org/en-US/docs/Glossary/Primitive" class="glossaryLink" title="primitives: A primitive (primitive value, primitive data type) is data that is not an object and has no methods. In JavaScript, there are 6 primitive data types: string, number, boolean, null, undefined, symbol (new in ECMAScript 2015).">primitives</a>:
+  <ul>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Glossary/Boolean" class="glossaryLink" title="Boolean: In computer science, a boolean is a logical data type that can have only the values true or false.">Boolean</a>. <code>true</code> and <code>false</code>.</li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Glossary/null" class="glossaryLink" title="null: In computer science, a null value represents a reference that points, generally intentionally, to a nonexistent or invalid object or address. The meaning of a null reference varies among language implementations.">null</a>. A special keyword denoting a null value. Because JavaScript is case-sensitive, <code>null</code> is not the same as <code>Null</code>, <code>NULL</code>, or any other variant.</li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Glossary/undefined" class="glossaryLink" title="undefined: Technical review completed.">undefined</a>. A top-level property whose value is undefined.</li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Glossary/Number" class="glossaryLink" title="Number: In JavaScript, Number is a numeric data type in the double-precision 64-bit floating point format (IEEE 754). In other programming languages different numeric types can exist, for examples: Integers, Floats, Doubles, or Bignums.">Number</a>. <code>42</code> or <code>3.14159</code>.</li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Glossary/String" class="glossaryLink" title="String: In any computer programming language, a string is a sequence of characters used to represent text.">String</a>. "Howdy"</li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Glossary/Symbol" class="glossaryLink" title="Symbol: A Symbol is a primitive data type whose instances are unique and immutable. In some programming languages they are also called atoms.">Symbol</a> (new in ECMAScript 6). A data type whose instances are unique and immutable.</li>
+  </ul>
+ </li>
+ <li>and <a href="https://developer.mozilla.org/en-US/docs/Glossary/Object" class="glossaryLink" title="Object: Object refers to a data structure containing data and instructions for working with the data. Objects sometimes refer to real-world things, for example a car or map object in a racing game. JavaScript, Java, C++,&nbsp;Python, and Ruby are examples of object-oriented programming languages.">Object</a></li>
+</ul>
+
+<p>Although these data types are a relatively small amount, they enable you to perform useful functions with your applications. <a href="../Reference/Global_Objects/Object.html" title="The Object constructor creates an object wrapper."><code>Objects</code></a> and <a href="../Reference/Global_Objects/Function.html" title="The Function constructor creates a new Function object. In JavaScript every function is actually a Function object."><code>functions</code></a> are the other fundamental elements in the language. You can think of objects as named containers for values, and functions as procedures that your application can perform.</p>
+
+<h3 id="Data_type_conversion">Data type conversion</h3>
+
+<p>JavaScript is a dynamically typed language. That means you don't have to specify the data type of a variable when you declare it, and data types are converted automatically as needed during script execution. So, for example, you could define a variable as follows:</p>
+
+<pre class="brush: js">var answer = 42;
+</pre>
+
+<p>And later, you could assign the same variable a string value, for example:</p>
+
+<pre class="brush: js">answer = "Thanks for all the fish...";
+</pre>
+
+<p>Because JavaScript is dynamically typed, this assignment does not cause an error message.</p>
+
+<p>In expressions involving numeric and string values with the + operator, JavaScript converts numeric values to strings. For example, consider the following statements:</p>
+
+<pre class="brush: js">x = "The answer is " + 42 // "The answer is 42"
+y = 42 + " is the answer" // "42 is the answer"
+</pre>
+
+<p>In statements involving other operators, JavaScript does not convert numeric values to strings. For example:</p>
+
+<pre class="brush: js">"37" - 7 // 30
+"37" + 7 // "377"
+</pre>
+
+<h3 id="Converting_strings_to_numbers">Converting strings to numbers</h3>
+
+<p>In the case that a value representing a number is in memory as a string, there are methods for conversion.</p>
+
+<ul>
+ <li id="parseInt()_and_parseFloat()"><a href="../Reference/Global_Objects/parseInt.html" title="The parseInt() function parses a string argument and returns an integer of the specified radix (the base in mathematical numeral systems)."><code>parseInt()</code></a></li>
+ <li><a href="../Reference/Global_Objects/parseFloat.html" title="The parseFloat() function parses a string argument and returns a floating point number."><code>parseFloat()</code></a></li>
+</ul>
+
+<p><code>parseInt</code> will only return whole numbers, so its use is diminished for decimals. Additionally, a best practice for <code>parseInt</code> is to always include the radix parameter. The radix parameter is used to specify which numerical system is to be used.</p>
+
+<p>An alternative method of retrieving a number from a string is with the <code>+</code>&nbsp;(unary plus) operator:</p>
+
+<pre class="brush: js">"1.1" + "1.1" = "1.11.1"
+(+"1.1") + (+"1.1") = 2.2   
+// Note: the parentheses are added for clarity, not required.</pre>
+
+<h2 id="Literals">Literals</h2>
+
+<p>You use literals to represent values in JavaScript. These are fixed values, not variables, that you <em>literally</em> provide in your script. This section describes the following types of literals:</p>
+
+<ul>
+ <li><a href="#Array_literals">Array literals</a></li>
+ <li><a href="#Boolean_literals">Boolean literals</a></li>
+ <li><a href="#Floating-point_literals">Floating-point literals</a></li>
+ <li><a href="#Integers">Integers</a></li>
+ <li><a href="#Object_literals">Object literals</a></li>
+ <li><a href="#RegExp_literals">RegExp literals</a></li>
+ <li><a href="#String_literals">String literals</a></li>
+</ul>
+
+<h3 id="Array_literals">Array literals</h3>
+
+<p>An array literal is a list of zero or more expressions, each of which represents an array element, enclosed in square brackets (<code>[]</code>). When you create an array using an array literal, it is initialized with the specified values as its elements, and its length is set to the number of arguments specified.</p>
+
+<p>The following example creates the <code>coffees</code> array with three elements and a length of three:</p>
+
+<pre class="brush: js">var coffees = ["French Roast", "Colombian", "Kona"];
+</pre>
+
+<div class="note">
+<p><strong>Note :</strong> An array literal is a type of object initializer. See <a href="Working_with_Objects.html#Using_object_initializers" title="en-US/docs/JavaScript/Guide/Working with Objects#Using Object Initializers">Using Object Initializers</a>.</p>
+</div>
+
+<p>If an array is created using a literal in a top-level script, JavaScript interprets the array each time it evaluates the expression containing the array literal. In addition, a literal used in a function is created each time the function is called.</p>
+
+<p>Array literals are also <code>Array</code> objects. See <a href="../Reference/Global_Objects/Array.html" title="The JavaScript Array&nbsp;object is a global object that&nbsp;is used in the&nbsp;construction&nbsp;of&nbsp;arrays; which are high-level, list-like objects."><code>Array</code></a> and <a href="Indexed_collections.html">Indexed collections</a> for details on <code>Array</code> objects.</p>
+
+<h4 id="Extra_commas_in_array_literals">Extra commas in array literals</h4>
+
+<p>You do not have to specify all elements in an array literal. If you put two commas in a row, the array is created with <code>undefined</code> for the unspecified elements. The following example creates the <code>fish</code> array:</p>
+
+<pre class="brush: js">var fish = ["Lion", , "Angel"];
+</pre>
+
+<p>This array has two elements with values and one empty element (<code>fish[0]</code> is "Lion", <code>fish[1]</code> is <code>undefined</code>, and <code>fish[2]</code> is "Angel").</p>
+
+<p>If you include a trailing comma at the end of the list of elements, the comma is ignored. In the following example, the length of the array is three. There is no <code>myList[3]</code>. All other commas in the list indicate a new element.</p>
+
+<div class="note">
+<p><strong>Note :</strong> Trailing commas can create errors in older browser versions and it is a best practice to remove them.</p>
+</div>
+
+<pre class="brush: js">var myList = ['home', , 'school', ];
+</pre>
+
+<p>In the following example, the length of the array is four, and <code>myList[0]</code> and <code>myList[2]</code> are missing.</p>
+
+<pre class="brush: js">var myList = [ , 'home', , 'school'];
+</pre>
+
+<p>In the following example, the length of the array is four, and <code>myList[1]</code> and <code>myList[3]</code> are missing. Only the last comma is ignored.</p>
+
+<pre class="brush: js">var myList = ['home', , 'school', , ];
+</pre>
+
+<p>Understanding the behavior of extra commas is important to understanding JavaScript as a language, however when writing your own code: explicitly declaring the missing elements as <code>undefined</code> will increase your code's clarity and maintainability.</p>
+
+<h3 id="Boolean_literals">Boolean literals</h3>
+
+<p>The Boolean type has two literal values: <code>true</code> and <code>false</code>.</p>
+
+<p>Do not confuse the primitive Boolean values <code>true</code> and <code>false</code> with the true and false values of the Boolean object. The Boolean object is a wrapper around the primitive Boolean data type. See <a href="../Reference/Global_Objects/Boolean.html" title="The Boolean object is an object wrapper for a boolean value."><code>Boolean</code></a> for more information.</p>
+
+<h3 id="Integers">Integers</h3>
+
+<p>Integers can be expressed in decimal (base 10), hexadecimal (base 16), octal (base 8) and binary (base 2).</p>
+
+<ul>
+ <li>Decimal integer literal consists of a sequence of digits without a leading 0 (zero).</li>
+ <li>Leading 0 (zero) on an integer literal, or leading 0o (or 0O) indicates it is in octal. Octal integers can include only the digits 0-7.</li>
+ <li>Leading 0x (or 0X) indicates hexadecimal. Hexadecimal integers can include digits (0-9) and the letters a-f and A-F.</li>
+ <li>
+  <p>Leading 0b (or 0B) indicates&nbsp;binary. Binary integers can include digits only 0 and 1.</p>
+ </li>
+</ul>
+
+<p>Some examples of integer literals are:</p>
+
+<pre class="eval">0, 117 and -345 (decimal, base 10)
+015, 0001 and -0o77 (octal, base 8) 
+0x1123, 0x00111 and -0xF1A7 (hexadecimal, "hex" or base 16)
+0b11, 0b0011 and -0b11 (binary, base 2)
+</pre>
+
+<p>For more information, see <a href="../Reference/Lexical_grammar.html#Numeric_literals">Numeric literals in the Lexical grammar reference</a>.</p>
+
+<h3 id="Floating-point_literals">Floating-point literals</h3>
+
+<p>A floating-point literal can have the following parts:</p>
+
+<ul>
+ <li>A decimal integer which can be signed (preceded by "+" or "-"),</li>
+ <li>A decimal point ("."),</li>
+ <li>A fraction (another decimal number),</li>
+ <li>An exponent.</li>
+</ul>
+
+<p>The exponent part is an "e" or "E" followed by an integer, which can be signed (preceded by "+" or "-"). A floating-point literal must have at least one digit and either a decimal point or "e" (or "E").</p>
+
+<p>More succinctly, the syntax is:</p>
+
+<pre class="eval">[(+|-)][digits][.digits][(E|e)[(+|-)]digits]
+</pre>
+
+<p>For example:</p>
+
+<pre class="eval">3.1415926
+-.123456789
+-3.1E+12
+.1e-23
+</pre>
+
+<h3 id="Object_literals">Object literals</h3>
+
+<p>An object literal is a list of zero or more pairs of property names and associated values of an object, enclosed in curly braces (<code>{}</code>). You should not use an object literal at the beginning of a statement. This will lead to an error or not behave as you expect, because the { will be interpreted as the beginning of a block.</p>
+
+<p>The following is an example of an object literal. The first element of the <code>car</code> object defines a property, <code>myCar</code>, and assigns to it a new string, "<code>Saturn</code>"; the second element, the <code>getCar</code> property, is immediately assigned the result of invoking the function <code>(carTypes("Honda"));</code> the third element, the <code>special</code> property, uses an existing variable (<code>sales</code>).</p>
+
+<pre class="brush: js">var sales = "Toyota";
+
+function carTypes(name) {
+  if (name === "Honda") {
+    return name;
+  } else {
+    return "Sorry, we don't sell " + name + ".";
+  }
+}
+
+var car = { myCar: "Saturn", getCar: carTypes("Honda"), special: sales };
+
+console.log(car.myCar);   // Saturn
+console.log(car.getCar);  // Honda
+console.log(car.special); // Toyota 
+</pre>
+
+<p>Additionally, you can use a numeric or string literal for the name of a property or nest an object inside another. The following example uses these options.</p>
+
+<pre class="brush: js">var car = { manyCars: {a: "Saab", "b": "Jeep"}, 7: "Mazda" };
+
+console.log(car.manyCars.b); // Jeep
+console.log(car[7]); // Mazda
+</pre>
+
+<p>Object property names can be any string, including the empty string. If the property name would not be a valid JavaScript <a href="https://developer.mozilla.org/en-US/docs/Glossary/Identifier" class="glossaryLink" title="identifier: A sequence of characters in the code that identifies a variable, function, or property.">identifier</a> or number, it must be enclosed in quotes. Property names that are not valid identifiers also cannot be accessed as a dot (<code>.</code>) property, but can be accessed and set with the array-like notation("<code>[]</code>").</p>
+
+<pre class="brush: js">var unusualPropertyNames = {
+  "": "An empty string",
+  "!": "Bang!"
+}
+console.log(unusualPropertyNames."");   // SyntaxError: Unexpected string
+console.log(unusualPropertyNames[""]);  // An empty string
+console.log(unusualPropertyNames.!);    // SyntaxError: Unexpected token !
+console.log(unusualPropertyNames["!"]); // Bang!</pre>
+
+<p>In ES2015, object literals are extended to support setting the prototype at construction, shorthand for&nbsp;<code>foo: foo</code>&nbsp;assignments, defining methods, making super calls, and computing property names with expressions. Together, these also bring object literals and class declarations closer together, and let object-based design benefit from some of the same conveniences.</p>
+
+<pre class="brush: js">var obj = {
+    // __proto__
+    __proto__: theProtoObj,
+    // Shorthand for ‘handler: handler’
+    handler,
+    // Methods
+    toString() {
+     // Super calls
+     return "d " + super.toString();
+    },
+    // Computed (dynamic) property names
+    [ 'prop_' + (() =&gt; 42)() ]: 42
+};</pre>
+
+<p>Please note:</p>
+
+<pre class="brush: js">var foo = {a: "alpha", 2: "two"};
+console.log(foo.a);    // alpha
+console.log(foo[2]);   // two
+//console.log(foo.2);  // Error: missing ) after argument list
+//console.log(foo[a]); // Error: a is not defined
+console.log(foo["a"]); // alpha
+console.log(foo["2"]); // two
+</pre>
+
+<h3 id="RegExp_literals">RegExp literals</h3>
+
+<p>A regex literal is&nbsp;a pattern enclosed between slashes.&nbsp;The following is an example of an regex literal.</p>
+
+<pre class="brush: js">var re = /ab+c/;</pre>
+
+<h3 id="String_literals">String literals</h3>
+
+<p>A string literal is zero or more characters enclosed in double (<code>"</code>) or single (<code>'</code>) quotation marks. A string must be delimited by quotation marks of the same type; that is, either both single quotation marks or both double quotation marks. The following are examples of string literals:</p>
+
+<pre class="brush: js">"foo"
+'bar'
+"1234"
+"one line \n another line"
+"John's cat"
+</pre>
+
+<p>You can call any of the methods of the String object on a string literal value—JavaScript automatically converts the string literal to a temporary String object, calls the method, then discards the temporary String object. You can also use the <code>String.length</code> property with a string literal:</p>
+
+<pre class="brush: js">console.log("John's cat".length) 
+// Will print the number of symbols in the string including whitespace. 
+// In this case, 10.
+</pre>
+
+<p>In ES2015, template literals are also available.&nbsp;Template strings provide syntactic sugar for constructing strings. This is similar to string interpolation features in Perl, Python and more. Optionally, a tag can be added to allow the string construction to be customized, avoiding injection attacks or constructing higher level data structures from string contents.</p>
+
+<pre class="brush: js">// Basic literal string creation
+`In JavaScript '\n' is a line-feed.`
+
+// Multiline strings
+`In JavaScript this is
+ not legal.`
+
+// String interpolation
+var name = "Bob", time = "today";
+`Hello ${name}, how are you ${time}?`
+
+// Construct an HTTP request prefix is used to interpret the replacements and construction
+POST`http://foo.org/bar?a=${a}&amp;b=${b}
+     Content-Type: application/json
+     X-Credentials: ${credentials}
+     { "foo": ${foo},
+       "bar": ${bar}}`(myOnReadyStateChangeHandler);</pre>
+
+<p>You should use string literals unless you specifically need to use a String object. See <a href="../Reference/Global_Objects/String.html" title="The String global object is a constructor for strings, or a sequence of characters."><code>String</code></a> for details on <code>String</code> objects.</p>
+
+<h4 id="Using_special_characters_in_strings">Using special characters in strings</h4>
+
+<p>In addition to ordinary characters, you can also include special characters in strings, as shown in the following example.</p>
+
+<pre class="brush: js">"one line \n another line"
+</pre>
+
+<p>The following table lists the special characters that you can use in JavaScript strings.</p>
+
+<table class="standard-table">
+ <caption>Table: JavaScript special characters</caption>
+ <thead>
+  <tr>
+   <th scope="col">Character</th>
+   <th scope="col">Meaning</th>
+  </tr>
+ </thead>
+ <tbody>
+  <tr>
+   <td><code>\0</code></td>
+   <td>Null Byte</td>
+  </tr>
+  <tr>
+   <td><code>\b</code></td>
+   <td>Backspace</td>
+  </tr>
+  <tr>
+   <td><code>\f</code></td>
+   <td>Form feed</td>
+  </tr>
+  <tr>
+   <td><code>\n</code></td>
+   <td>New line</td>
+  </tr>
+  <tr>
+   <td><code>\r</code></td>
+   <td>Carriage return</td>
+  </tr>
+  <tr>
+   <td><code>\t</code></td>
+   <td>Tab</td>
+  </tr>
+  <tr>
+   <td><code>\v</code></td>
+   <td>Vertical tab</td>
+  </tr>
+  <tr>
+   <td><code>\'</code></td>
+   <td>Apostrophe or single quote</td>
+  </tr>
+  <tr>
+   <td><code>\"</code></td>
+   <td>Double quote</td>
+  </tr>
+  <tr>
+   <td><code>\\</code></td>
+   <td>Backslash character</td>
+  </tr>
+  <tr>
+   <td><code>\<em>XXX</em></code></td>
+   <td>The character with the Latin-1 encoding specified by up to three octal digits <em>XXX</em> between 0 and 377. For example, \251 is the octal sequence for the copyright symbol.</td>
+  </tr>
+  <tr>
+  </tr>
+  <tr>
+   <td><code>\x<em>XX</em></code></td>
+   <td>The character with the Latin-1 encoding specified by the two hexadecimal digits <em>XX</em> between 00 and FF. For example, \xA9 is the hexadecimal sequence for the copyright symbol.</td>
+  </tr>
+  <tr>
+  </tr>
+  <tr>
+   <td><code>\u<em>XXXX</em></code></td>
+   <td>The Unicode character specified by the four hexadecimal digits <em>XXXX</em>. For example, \u00A9 is the Unicode sequence for the copyright symbol. See <a href="../Reference/Lexical_grammar.html#String_literals">Unicode escape sequences</a>.</td>
+  </tr>
+  <tr>
+   <td><code>\u<em>{XXXXX}</em></code></td>
+   <td>Unicode code point escapes. For example, \u{2F804} is the same as the simple Unicode escapes \uD87E\uDC04.</td>
+  </tr>
+ </tbody>
+</table>
+
+<h4 id="Escaping_characters">Escaping characters</h4>
+
+<p>For characters not listed in the table, a preceding backslash is ignored, but this usage is deprecated and should be avoided.</p>
+
+<p>You can insert a quotation mark inside a string by preceding it with a backslash. This is known as <em>escaping</em> the quotation mark. For example:</p>
+
+<pre class="brush: js">var quote = "He read \"The Cremation of Sam McGee\" by R.W. Service.";
+console.log(quote);
+</pre>
+
+<p>The result of this would be:</p>
+
+<pre class="eval">He read "The Cremation of Sam McGee" by R.W. Service.
+</pre>
+
+<p>To include a literal backslash inside a string, you must escape the backslash character. For example, to assign the file path <code>c:\temp</code> to a string, use the following:</p>
+
+<pre class="brush: js">var home = "c:\\temp";
+</pre>
+
+<p>You can also escape line breaks by preceding them with backslash. The backslash and line break are both removed from the value of the string.</p>
+
+<pre class="brush: js">var str = "this string \
+is broken \
+across multiple\
+lines."
+console.log(str);   // this string is broken across multiplelines.
+</pre>
+
+<p>Although JavaScript does not have "heredoc" syntax, you can get close by adding a linebreak escape and an escaped linebreak at the end of each line:</p>
+
+<pre class="brush: js">var poem = 
+"Roses are red,\n\
+Violets are blue.\n\
+I'm schizophrenic,\n\
+And so am I."
+</pre>
+
+<h2 id="More_information">More information</h2>
+
+<p>This chapter focuses on basic syntax for declarations and types. To learn more about JavaScript's language constructs, see also the following chapters in this guide:</p>
+
+<ul>
+ <li><a href="Control_flow_and_error_handling.html">Control flow and error handling</a></li>
+ <li><a href="Loops_and_iteration.html">Loops and iteration</a></li>
+ <li><a href="Functions.html">Functions</a></li>
+ <li><a href="Expressions_and_Operators.html">Expressions and operators</a></li>
+</ul>
+
+<p>In the next chapter, we will have a look at control flow constructs and error handling.</p>
+
+<p></p><div class="prevnext" style="text-align: right;"> 
+    <p><a href="Introduction.html" style="float: left;">« Previous</a><a href="Control_flow_and_error_handling.html">Next  »</a></p> 
+</div><p></p>
+                  
+                
+              </article>
+
+              
+
+    
+    
+    
+
+    
+    
+    
+
+    <div class="share">
+        <strong>Share:</strong>
+        <ul>
+            <li><a href="http://twitter.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FJavaScript%2FGuide%2FGrammar_and_types%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dtwitter.com&amp;text=I+learned+about+Grammar+and+types+on+MDN." target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Grammar_and_types?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=twitter.com" data-title="I learned about Grammar and types on MDN." class="share-link twitter"><i aria-hidden="true" class="icon-twitter"></i>Twitter</a></li>
+            <li><a href="http://facebook.com/sharer.php?s=100&amp;p[url]=https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Grammar_and_types?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Grammar_and_types?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" data-title="I learned about Grammar and types on MDN." class="share-link facebook"><i aria-hidden="true" class="icon-facebook"></i>Facebook</a></li>
+            <li><a href="https://plus.google.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FJavaScript%2FGuide%2FGrammar_and_types%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dplus.google.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Grammar_and_types?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=plus.google.com" data-title="I learned about Grammar and types on MDN." class="share-link gplus"><i aria-hidden="true" class="icon-google-plus"></i>Google+</a></li>
+        </ul>
+    </div>
+
+              
+
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                  
+                  
+  <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags icon-fw"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Guide">Guide</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/JavaScript">JavaScript</a></li>
+      
+    </ul>
+  </div>
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-group icon-fw"></i>&nbsp;<strong>Contributors to this page:</strong> 
+        <a href="https://developer.mozilla.org/en-US/profiles/josephma93">josephma93</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Sheppy">Sheppy</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/stevemao">stevemao</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/levin81">levin81</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/fscholz">fscholz</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/SphinxKnight">SphinxKnight</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/yuraantonov">yuraantonov</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/mickbeaver">mickbeaver</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/x2357">x2357</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/aungmyatk_o">aungmyatk_o</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Pointy">Pointy</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/jsx">jsx</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/iccir919">iccir919</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/andela-abankole">andela-abankole</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/yuxuac">yuxuac</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/xrisk">xrisk</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/yuunaK">yuunaK</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/gportioli">gportioli</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/xiaolong">xiaolong</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/homyasusina">homyasusina</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/danielinux7">danielinux7</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/harman052">harman052</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/githubatbatap">githubatbatap</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/xfq">xfq</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/nasifmdtanjim">nasifmdtanjim</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/paulhig">paulhig</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/mgorgei">mgorgei</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Jeremie">Jeremie</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/kathirvel">kathirvel</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/weeska">weeska</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/tenebr050">tenebr050</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/yogiam">yogiam</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/hansifer">hansifer</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Tyler-Knappe">Tyler-Knappe</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/heyoni">heyoni</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/FernandoBasso">FernandoBasso</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/boobl">boobl</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/cluebcke">cluebcke</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/sbking">sbking</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/rajat_agarwal">rajat_agarwal</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/kscarfone">kscarfone</a>, 
+    
+        <a href="../../../../profiles/Domecraft.html">Domecraft</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/fergc">fergc</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/yairyog">yairyog</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/jswisher">jswisher</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Norbert">Norbert</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/jaffer.sadhiq@gmail.com">jaffer.sadhiq@gmail.com</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/trupanka">trupanka</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/TimCondit">TimCondit</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/tvillaluz">tvillaluz</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/dbruant">dbruant</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/ethertank">ethertank</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/trevorh">trevorh</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/fusionchess">fusionchess</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/lmorchard">lmorchard</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/liucailin">liucailin</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/uhoh-itsmaciek">uhoh-itsmaciek</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/milena">milena</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/XP1">XP1</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/rmcnew">rmcnew</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/psylone">psylone</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/antiomiae">antiomiae</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Distracted Owl">Distracted Owl</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/jack_hsieh">jack_hsieh</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/gpvos">gpvos</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/unveiled14">unveiled14</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/timemachine3030">timemachine3030</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Inimino">Inimino</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/dublinan">dublinan</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/MatrixFrog">MatrixFrog</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/HugoDaniel">HugoDaniel</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/EvanCarroll">EvanCarroll</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Tgr">Tgr</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/user01">user01</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/dazzledesign">dazzledesign</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Spooty">Spooty</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/JesseW">JesseW</a>
+    
+                    </div>
+                  
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o icon-fw"></i>&nbsp;<strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/josephma93">josephma93</a>,
+                      <time datetime="2016-04-30T18:13:55-07:00">Apr 30, 2016, 6:13:55 PM</time>
+                    </div>
+                  
+                </div>
+              
+            </div>
+
+            
+              <!-- quick links and zone subnav strip -->
+              <div id="wiki-left" class="column-strip wiki-column">
+
+              
+
+                
+
+                
+                  <!-- quick links -->
+                  
+  <div class="quick-links" id="quick-links">
+    <div class="title see-also">See also</div>
+     
+ <ol> 
+  <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript"><strong><em>JavaScript</em></strong></a></li> 
+  <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript"><strong>Tutorials:</strong></a></li> 
+  <li data-default-state="open"><a href="../Guide.html">JavaScript Guide</a> 
+    <ol> 
+      <li><a href="Introduction.html">Introduction</a></li> 
+      <li><a href="Grammar_and_Types-2.html">Grammar and types</a></li> 
+      <li><a href="Control_flow_and_error_handling.html">Control flow and error handling</a></li> 
+      <li><a href="Loops_and_iteration.html">Loops and iteration</a></li> 
+      <li><a href="Functions.html">Functions</a></li> 
+      <li><a href="Expressions_and_Operators.html">Expressions and operators</a></li> 
+      <li><a href="Numbers_and_dates.html">Numbers and dates</a></li> 
+      <li><a href="Text_formatting.html">Text formatting</a></li> 
+      <li><a href="Regular_Expressions.html">Regular expressions</a></li> 
+      <li><a href="Indexed_collections.html">Indexed collections</a></li> 
+      <li><a href="Keyed_collections.html">Keyed collections</a></li> 
+      <li><a href="Working_with_Objects.html">Working with objects</a></li> 
+      <li><a href="Details_of_the_Object_Model.html">Details of the object model</a></li> 
+      <li><a href="Iterators_and_generators.html">Iterators and generators</a></li> 
+      <li><a href="Meta_programming.html">Meta programming</a></li> 
+   </ol> 
+  </li> 
+  <li data-default-state="closed"><a href="#">Introductory</a> 
+   <ol> 
+    <li><a href="https://developer.mozilla.org/en-US/Learn/Getting_started_with_the_web/JavaScript_basics">JavaScript basics</a></li> 
+    <li><a href="../JavaScript_technologies_overview.html">JavaScript technologies overview</a></li> 
+    <li><a href="../Introduction_to_Object-Oriented_JavaScript.html">Introduction to Object Oriented JavaScript</a></li> 
+   </ol> 
+  </li> 
+  <li data-default-state="closed"><a href="#">Intermediate</a> 
+   <ol> 
+    <li><a href="../A_re-introduction_to_JavaScript.html">A re-introduction to JavaScript</a></li> 
+    <li><a href="../Data_structures.html">JavaScript data structures</a></li> 
+    <li><a href="../Equality_comparisons_and_sameness.html">Equality comparisons and sameness</a></li> 
+    <li><a href="../Closures.html">Closures</a></li> 
+   </ol> 
+  </li> 
+  <li data-default-state="closed"><a href="#">Advanced</a> 
+   <ol> 
+    <li><a href="../Inheritance_and_the_prototype_chain.html">Inheritance and the prototype chain</a></li> 
+    <li><a href="../Reference/Strict_mode.html">Strict mode</a></li> 
+    <li><a href="../Typed_arrays.html">JavaScript typed arrays</a></li> 
+    <li><a href="../SIMD_types.html">SIMD types</a></li> 
+    <li><a href="../Memory_Management.html">Memory Management</a></li> 
+    <li><a href="../EventLoop.html">Concurrency model and Event Loop</a></li> 
+   </ol> 
+  </li> 
+  <li><strong><a href="../Reference.html">References:</a></strong></li> 
+  <li data-default-state="closed"><a href="../Reference/Global_Objects.html">Built-in objects</a> 
+   <ol><li><a href="../Reference/Global_Objects.html" title="This chapter documents all of JavaScript's standard, built-in objects, including their methods and properties.">Standard built-in objects</a></li><li><a href="../Reference/Global_Objects/Array.html" title="The JavaScript Array&nbsp;object is a global object that&nbsp;is used in the&nbsp;construction&nbsp;of&nbsp;arrays; which are high-level, list-like objects.">Array</a></li><li><a href="../Reference/Global_Objects/ArrayBuffer.html" title="The ArrayBuffer object is used to represent a generic, fixed-length raw binary data buffer. You can not directly manipulate the contents of an ArrayBuffer; instead, you create one of the typed array objects or a DataView object which represents the buffer in a specific format, and use that to read and write the contents of the buffer.">ArrayBuffer</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="../Reference/Global_Objects/Atomics.html" title="The Atomics object provides atomic operations as static methods. They are used with SharedArrayBuffer objects.">Atomics</a></li><li><a href="../Reference/Global_Objects/Boolean.html" title="The Boolean object is an object wrapper for a boolean value.">Boolean</a></li><li><a href="../Reference/Global_Objects/DataView.html" title="The DataView view provides a low-level interface for reading and writing multiple number types&nbsp;in an ArrayBuffer irrespective of the platform's endianness.">DataView</a></li><li><a href="../Reference/Global_Objects/Date.html" title="Creates a JavaScript Date instance that represents a single moment in time. Date objects are based on a time value that is the number of milliseconds since 1 January, 1970 UTC.">Date</a></li><li><a href="../Reference/Global_Objects/Error.html" title="The Error constructor creates an error object. Instances of Error objects are thrown when runtime errors occur. The Error object can also be used as a base object&nbsp;for user-defined exceptions. See below for standard built-in error types.">Error</a></li><li><a href="../Reference/Global_Objects/EvalError.html" title="The EvalError object indicates an error regarding the global eval() function. This exception is not thrown by JavaScript anymore, however the EvalError object remains for compatibility.">EvalError</a></li><li><a href="../Reference/Global_Objects/Float32Array.html" title="The Float32Array typed array represents an array of 32-bit floating point numbers (corresponding to the C float data type) in the platform byte order. If control over byte order is needed, use DataView instead. The contents are initialized to 0. Once established, you can reference elements in the array using the object's methods, or using standard array index syntax (that is, using bracket notation).">Float32Array</a></li><li><a href="../Reference/Global_Objects/Float64Array.html" title="The Float64Array typed array represents an array of 64-bit floating point numbers (corresponding to the C double data type) in the platform byte order. If control over byte order is needed, use DataView instead. The contents are initialized to 0. Once established, you can reference elements in the array using the object's methods, or using standard array index syntax (that is, using bracket notation).">Float64Array</a></li><li><a href="../Reference/Global_Objects/Function.html" title="The Function constructor creates a new Function object. In JavaScript every function is actually a Function object.">Function</a></li><li><a href="../Reference/Global_Objects/Generator.html" title="The Generator object is returned by a generator function&nbsp;and it conforms to both the iterable protocol and the iterator protocol.">Generator</a></li><li><a href="../Reference/Global_Objects/GeneratorFunction.html" title="The GeneratorFunction constructor creates a new generator function object. In JavaScript every generator function is actually a GeneratorFunction object.">GeneratorFunction</a></li><li><a href="../Reference/Global_Objects/Infinity.html" title="The global Infinity property is a numeric value representing infinity.">Infinity</a></li><li><a href="../Reference/Global_Objects/Int16Array.html" title="The Int16Array typed array represents an array of twos-complement 16-bit signed integers in the platform byte order. If control over byte order is needed, use DataView instead. The contents are initialized to 0. Once established, you can reference elements in the array using the object's methods, or using standard array index syntax (that is, using bracket notation).">Int16Array</a></li><li><a href="../Reference/Global_Objects/Int32Array.html" title="The Int32Array typed array represents an array of twos-complement 32-bit signed integers in the platform byte order. If control over byte order is needed, use DataView instead. The contents are initialized to 0. Once established, you can reference elements in the array using the object's methods, or using standard array index syntax (that is, using bracket notation).">Int32Array</a></li><li><a href="../Reference/Global_Objects/Int8Array.html" title="The Int8Array typed array represents an array of twos-complement 8-bit signed integers. The contents are initialized to 0. Once established, you can reference elements in the array using the object's methods, or using standard array index syntax (that is, using bracket notation).">Int8Array</a></li><li><a href="../Reference/Global_Objects/InternalError.html" title="The InternalError object indicates an error that occurred internally in the JavaScript engine. For example: &quot;InternalError: too much recursion&quot;.">InternalError</a></li><li><a href="../Reference/Global_Objects/Intl.html" title="The Intl object is the namespace for the ECMAScript Internationalization API, which provides language sensitive string comparison, number formatting, and date and time formatting. The constructors for Collator, NumberFormat, and DateTimeFormat objects are properties of the Intl object. This page documents these properties as well as functionality common to the internationalization constructors and other language sensitive functions.">Intl</a></li><li><a href="../Reference/Global_Objects/Collator.html" title="The Intl.Collator object is a constructor for collators, objects that enable language sensitive string comparison.">Intl.Collator</a></li><li><a href="../Reference/Global_Objects/DateTimeFormat.html" title="The Intl.DateTimeFormat object is a constructor for objects that enable language sensitive date and time formatting.">Intl.DateTimeFormat</a></li><li><a href="../Reference/Global_Objects/NumberFormat.html" title="The Intl.NumberFormat object is a constructor for objects that enable language sensitive number formatting.">Intl.NumberFormat</a></li><li><span class="sidebar-icon"><span title="This deprecated API should no longer be used, but will probably still work."><i class="icon-thumbs-down-alt"> </i></span></span><a href="../Reference/Global_Objects/Iterator.html" title="The Iterator function returns an object which implements legacy iterator protocol and iterates over enumerable properties of an object.">Iterator</a></li><li><a href="../Reference/Global_Objects/JSON.html" title="The JSON object contains methods for parsing JavaScript Object Notation (JSON) and converting values to JSON. It can't be called or constructed, and aside from its two method properties it has no interesting functionality of its own.">JSON</a></li><li><a href="../Reference/Global_Objects/Map.html" title="The Map object is a simple key/value map. Any value (both objects and primitive values) may be used as either a key or a value.">Map</a></li><li><a href="../Reference/Global_Objects/Math.html" title="Math is a built-in object that has properties and methods for mathematical constants and functions. Not a function object.">Math</a></li><li><a href="../Reference/Global_Objects/NaN.html" title="The global NaN property is a value representing Not-A-Number.">NaN</a></li><li><a href="../Reference/Global_Objects/Number.html" title="The Number JavaScript object is a wrapper object allowing you to work with numerical values. A Number object is created using the Number() constructor.">Number</a></li><li><a href="../Reference/Global_Objects/Object.html" title="The Object constructor creates an object wrapper.">Object</a></li><li><span class="sidebar-icon"><span title="This is an obsolete API and is no longer guaranteed to work."><i class="icon-trash"> </i></span></span><a href="../Reference/Global_Objects/ParallelArray.html" title="The goal of ParallelArray was to enable data-parallelism in web applications. The higher-order functions available on ParallelArray attempted to execute in parallel, though they may fall back to sequential execution if necessary. To ensure that your code executes in parallel, it is suggested that the functions should be limited to the parallelizable subset of JS that Firefox supports.">ParallelArray</a></li><li><a href="../Reference/Global_Objects/Promise.html" title="The Promise object is used for deferred and asynchronous computations. A Promise represents an operation that hasn't completed yet, but is expected in the future.">Promise</a></li><li><a href="../Reference/Global_Objects/Proxy.html" title="The Proxy object is used to define custom behavior for fundamental operations (e.g. property lookup, assignment, enumeration, function invocation, etc).">Proxy</a></li><li><a href="../Reference/Global_Objects/RangeError.html" title="The RangeError object indicates an error when a value is not in the set or range of allowed values.">RangeError</a></li><li><a href="../Reference/Global_Objects/ReferenceError.html" title="The ReferenceError object represents an error when a non-existent variable is referenced.">ReferenceError</a></li><li><a href="../Reference/Global_Objects/Reflect.html" title="Reflect is a built-in object that provides methods for interceptable JavaScript operations. The methods are the same as those of proxy handlers. Reflect is not a function object, so it's not constructible.">Reflect</a></li><li><a href="../Reference/Global_Objects/RegExp.html" title="The RegExp constructor creates a regular expression object for matching text with a pattern.">RegExp</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="../Reference/Global_Objects/SIMD.html" title="SIMD (pronounced &quot;sim-dee&quot;) is short for Single Instruction/Multiple Data which is one classification of computer architectures. SIMD operations perform the same computation on multiple data points resulting in data level parallelism and thus performance gains, for example for 3D graphics and video processing, physics simulations or cryptography, and other domains.">SIMD</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="../Reference/Global_Objects/Bool16x8.html" title="The SIMD.Bool16x8 data type is a 128-bit vector divided into 8 lanes storing boolean values.">SIMD.Bool16x8</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="../Reference/Global_Objects/Bool32x4.html" title="The SIMD.Bool32x4 data type is a 128-bit vector divided into 4 lanes storing boolean values.">SIMD.Bool32x4</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="../Reference/Global_Objects/Bool64x2.html" title="The SIMD.Bool64x2 data type is a 128-bit vector divided into 2 lanes storing boolean values.">SIMD.Bool64x2</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="../Reference/Global_Objects/Bool8x16.html" title="The SIMD.Bool8x16 data type is a 128-bit vector divided into 16 lanes storing boolean values.">SIMD.Bool8x16</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="../Reference/Global_Objects/Float32x4.html" title="The SIMD.Float32x4 data type is a 128-bit vector divided into 4 lanes storing single precision floating point values.">SIMD.Float32x4</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="../Reference/Global_Objects/Float64x2.html" title="The SIMD.Float64x2 data type is a 128-bit vector divided into 2 lanes storing double precision floating point values.">SIMD.Float64x2</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="../Reference/Global_Objects/Int16x8.html" title="The SIMD.Int16x8 data type is a 128-bit vector divided into 8 lanes storing 16-bit signed integer values.">SIMD.Int16x8</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="../Reference/Global_Objects/Int32x4.html" title="The SIMD.Int32x4 data type is a 128-bit vector divided into 4 lanes storing 32-bit signed integer values.">SIMD.Int32x4</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="../Reference/Global_Objects/Int8x16.html" title="The SIMD.Int8x16 data type is a 128-bit vector divided into 16 lanes storing 8-bit signed integer values.">SIMD.Int8x16</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="../Reference/Global_Objects/Uint16x8.html" title="The SIMD.Uint16x8 data type is a 128-bit vector divided into 8 lanes storing 16-bit unsigned integer values.">SIMD.Uint16x8</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="../Reference/Global_Objects/Uint32x4.html" title="The SIMD.Uint32x4 data type is a 128-bit vector divided into 4 lanes storing 32-bit unsigned integer values.">SIMD.Uint32x4</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="../Reference/Global_Objects/Uint8x16.html" title="The SIMD.Uint8x16 data type is a 128-bit vector divided into 16 lanes storing 8-bit unsigned integer values.">SIMD.Uint8x16</a></li><li><a href="../Reference/Global_Objects/Set.html" title="The Set object lets you store unique values of any type, whether primitive values or object references.">Set</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="../Reference/Global_Objects/SharedArrayBuffer.html" title="The SharedArrayBuffer object is used to represent a generic, fixed-length raw binary data buffer, similar to the ArrayBuffer object, but in a way that they can be used to create views on shared memory. Unlike an ArrayBuffer, a SharedArrayBuffer cannot become detached.">SharedArrayBuffer</a></li><li><span class="sidebar-icon"><span title="This deprecated API should no longer be used, but will probably still work."><i class="icon-thumbs-down-alt"> </i></span></span><a href="../Reference/Global_Objects/StopIteration.html" title="The StopIteration object is used to tell the end of the iteration in the legacy iterator protocol.">StopIteration</a></li><li><a href="../Reference/Global_Objects/String.html" title="The String global object is a constructor for strings, or a sequence of characters.">String</a></li><li><a href="../Reference/Global_Objects/Symbol.html" title="A symbol is a unique and immutable data type and may be used as an identifier for object properties. The symbol object is an implicit object wrapper for the symbol primitive data type.">Symbol</a></li><li><a href="../Reference/Global_Objects/SyntaxError.html" title="The SyntaxError object represents an error when trying to interpret syntactically invalid code.">SyntaxError</a></li><li><a href="../Reference/Global_Objects/TypeError.html" title="The TypeError object represents an error when a value is not of the expected type.">TypeError</a></li><li><a href="../Reference/Global_Objects/TypedArray.html" title="A TypedArray object describes an array-like view of an underlying binary data buffer. There is no global property named TypedArray, nor is there a directly visible TypedArray constructor.&nbsp; Instead, there are a number of different global properties, whose values are typed array constructors for specific element types, listed below. On the following pages you will find common properties and methods that can be used with any typed array containing elements of any type.">TypedArray</a></li><li><a href="../Reference/Global_Objects/URIError.html" title="The URIError object represents an error when a global URI handling function was used in a wrong way.">URIError</a></li><li><a href="../Reference/Global_Objects/Uint16Array.html" title="The Uint16Array typed array represents an array of 16-bit unsigned integers in the platform byte order. If control over byte order is needed, use DataView instead. The contents are initialized to 0. Once established, you can reference elements in the array using the object's methods, or using standard array index syntax (that is, using bracket notation).">Uint16Array</a></li><li><a href="../Reference/Global_Objects/Uint32Array.html" title="The Uint32Array typed array represents an array of 32-bit unsigned integers in the platform byte order. If control over byte order is needed, use DataView instead. The contents are initialized to 0. Once established, you can reference elements in the array using the object's methods, or using standard array index syntax (that is, using bracket notation).">Uint32Array</a></li><li><a href="../Reference/Global_Objects/Uint8Array.html" title="The Uint8Array typed array represents an array of 8-bit unsigned integers. The contents are initialized to 0. Once established, you can reference elements in the array using the object's methods, or using standard array index syntax (that is, using bracket notation).">Uint8Array</a></li><li><a href="../Reference/Global_Objects/Uint8ClampedArray.html" title="The Uint8ClampedArray typed array represents an array of 8-bit unsigned integers clamped to 0-255. The contents are initialized to 0. Once established, you can reference elements in the array using the object's methods, or using standard array index syntax (that is, using bracket notation).">Uint8ClampedArray</a></li><li><a href="../Reference/Global_Objects/WeakMap.html" title="The WeakMap object is a collection of key/value pairs in which the keys are weakly referenced.&nbsp; The keys must be objects and the values can be arbitrary values.">WeakMap</a></li><li><a href="../Reference/Global_Objects/WeakSet.html" title="The WeakSet object lets you store weakly held objects in a collection.">WeakSet</a></li><li><a href="../Reference/Global_Objects/decodeURI.html" title="The decodeURI() function decodes a Uniform Resource Identifier (URI) previously created by encodeURI or by a similar routine.">decodeURI()</a></li><li><a href="../Reference/Global_Objects/decodeURIComponent.html" title="The decodeURIComponent() function decodes a Uniform Resource Identifier (URI) component previously created by encodeURIComponent or by a similar routine.">decodeURIComponent()</a></li><li><a href="../Reference/Global_Objects/encodeURI.html" title="The encodeURI() function encodes a Uniform Resource Identifier (URI) by replacing each instance of certain characters by one, two, three, or four escape sequences representing the UTF-8 encoding of the character (will only be four escape sequences for characters composed of two &quot;surrogate&quot; characters).">encodeURI()</a></li><li><a href="../Reference/Global_Objects/encodeURIComponent.html" title="The encodeURIComponent() function encodes a Uniform Resource Identifier (URI) component by replacing each instance of certain characters by one, two, three, or four escape sequences representing the UTF-8 encoding of the character (will only be four escape sequences for characters composed of two &quot;surrogate&quot; characters).">encodeURIComponent()</a></li><li><span class="sidebar-icon"><span title="This deprecated API should no longer be used, but will probably still work."><i class="icon-thumbs-down-alt"> </i></span></span><a href="../Reference/Global_Objects/escape.html" title="The deprecated escape() function computes a new string in which certain characters have been replaced by a hexadecimal escape sequence. Use encodeURI or encodeURIComponent instead.">escape()</a></li><li><a href="../Reference/Global_Objects/eval.html" title="The eval() function evaluates JavaScript code represented as a string.">eval()</a></li><li><a href="../Reference/Global_Objects/isFinite.html" title="The global isFinite() function determines whether the passed value is a finite number. If needed, the parameter is first converted to a number.">isFinite()</a></li><li><a href="../Reference/Global_Objects/isNaN.html" title="The isNaN() function determines whether a value is NaN or not. Note: coercion inside the isNaN function has interesting rules; you may alternatively want to use Number.isNaN(), as defined in ECMAScript 6, or you can use typeof to determine if the value is Not-A-Number.">isNaN()</a></li><li><a href="../Reference/Global_Objects/null.html" title="The value null&nbsp;represents the intentional absence of any object value. It is one of JavaScript's primitive values.">null</a></li><li><a href="../Reference/Global_Objects/parseFloat.html" title="The parseFloat() function parses a string argument and returns a floating point number.">parseFloat()</a></li><li><a href="../Reference/Global_Objects/parseInt.html" title="The parseInt() function parses a string argument and returns an integer of the specified radix (the base in mathematical numeral systems).">parseInt()</a></li><li><a href="../Reference/Global_Objects/undefined.html" title="The global undefined property represents the primitive value undefined. It is one of JavaScript's primitive types.">undefined</a></li><li><span class="sidebar-icon"><span title="This deprecated API should no longer be used, but will probably still work."><i class="icon-thumbs-down-alt"> </i></span></span><a href="../Reference/Global_Objects/unescape.html" title="The deprecated unescape() function computes a new string in which hexadecimal escape sequences are replaced with the character that it represents. The escape sequences might be introduced by a function like escape. Because unescape is deprecated, use decodeURI or decodeURIComponent instead.">unescape()</a></li><li><a href="../Reference/Global_Objects/uneval.html" title="The uneval() function creates a&nbsp;string representation of the source code of an Object.">uneval()</a></li></ol> 
+  </li> 
+  <li data-default-state="closed"><a href="../Reference/Operators.html">Expressions &amp; operators</a> 
+   <ol><li><a href="../Reference/Operators.html" title="This chapter documents all the JavaScript language operators, expressions and keywords.">Expressions and operators</a></li><li><a href="../Reference/Operators/Arithmetic_Operators.html" title="Arithmetic operators take numerical values (either literals or variables) as their operands and return a single numerical value. The standard arithmetic operators are addition (+), subtraction (-), multiplication (*), and division (/).">Arithmetic operators</a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="../Reference/Operators/Array_comprehensions.html" title="The array comprehension syntax is a JavaScript expression which allows you to quickly assemble a new array based on an existing one. Comprehensions exist in many programming languages.">Array comprehensions</a></li><li><a href="../Reference/Operators/Assignment_Operators.html" title="An assignment operator assigns a value to its left operand based on the value of its right operand.">Assignment operators</a></li><li><a href="../Reference/Operators/Bitwise_Operators.html" title="Bitwise operators treat their operands as a sequence of 32 bits (zeroes and ones), rather than as decimal, hexadecimal, or octal numbers. For example, the decimal number nine has a binary representation of 1001. Bitwise operators perform their operations on such binary representations, but they return standard JavaScript numerical values.">Bitwise operators</a></li><li><a href="../Reference/Operators/Comma_Operator.html" title="The comma operator evaluates each of its operands (from left to right)&nbsp;and returns the value of the last operand.">Comma operator</a></li><li><a href="../Reference/Operators/Comparison_Operators.html" title="JavaScript has both strict and type–converting comparisons. A strict comparison (e.g., ===) is only true if the operands are of the same type and the contents match. The more commonly-used abstract comparison (e.g. ==) converts the operands to the same type before making the comparison. For relational abstract comparisons (e.g., &lt;=), the operands are first converted to primitives, then to the same type, before comparison.">Comparison operators</a></li><li><a href="../Reference/Operators/Conditional_Operator.html" title="The conditional (ternary) operator is the only JavaScript operator that takes three operands. This operator is frequently used as a shortcut for the if statement.">Conditional (ternary) Operator</a></li><li><a href="../Reference/Operators/Destructuring_assignment.html" title="The destructuring assignment syntax is a JavaScript expression that makes it possible to extract data from arrays or objects into distinct variables.">Destructuring assignment</a></li><li><a href="../Reference/Operators/Expression_closures.html" title="Expression closures are a shorthand function syntax for writing simple functions.">Expression closures</a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="../Reference/Operators/Generator_comprehensions.html" title="The generator comprehension syntax is a JavaScript expression which allows you to quickly assemble a new generator function based on an existing iterable object. Comprehensions exist in many programming languages.">Generator comprehensions</a></li><li><a href="../Reference/Operators/Grouping.html" title="The grouping operator ( ) controls the precedence of evaluation in expressions.">Grouping operator</a></li><li><a href="../Reference/Operators/Legacy_generator_function.html" title="The function keyword can be used to define a legacy generator function inside an expression. To make the function a legacy generator, the function body should contain at least one yield expression.">Legacy generator function expression</a></li><li><a href="../Reference/Operators/Logical_Operators.html" title="Logical operators are typically used with Boolean (logical) values. When they are, they return a Boolean value. However, the &amp;&amp; and || operators actually return the value of one of the specified operands, so if these operators are used with non-Boolean values, they may return a non-Boolean value.">Logical Operators</a></li><li><a href="../Reference/Operators/Object_initializer.html" title="Objects can be initialized using new Object(), Object.create(), or using the literal notation (initializer notation). An object initializer is a list of zero or more pairs of property names and associated values of an object, enclosed in curly braces ({}).">Object initializer</a></li><li><a href="../Reference/Operators/Operator_Precedence.html" title="Operator precedence determines the order in which operators are evaluated. Operators with higher precedence are evaluated first.">Operator precedence</a></li><li><a href="../Reference/Operators/Property_Accessors.html" title="Property accessors provide access to an object's properties by using the dot notation or the bracket notation.">Property accessors</a></li><li><a href="../Reference/Operators/Spread_operator.html" title="The spread operator allows an expression to be expanded in places where multiple arguments (for function calls) or multiple elements (for array literals) or multiple variables&nbsp; (for&nbsp;destructuring assignment)&nbsp;are expected.">Spread operator</a></li><li><a href="../Reference/Operators/class.html" title="The class expression is one way to define a class in ECMAScript 2015 (ES6). Similar to function expressions, class expressions can be named or unnamed. If named, the name of the class is local the class body only. JavaScript classes are using prototype-based inheritance.">class expression</a></li><li><a href="../Reference/Operators/delete.html" title="The delete operator removes a property from an object.">delete operator</a></li><li><a href="../Reference/Operators/function.html" title="The function keyword can be used to define a function inside an expression.">function expression</a></li><li><a href="../Reference/Operators/function_.html" title="The function* keyword can be used to define a generator function inside an expression.">function* expression</a></li><li><a href="../Reference/Operators/in.html" title="The in operator returns true if the specified property is in the specified object.">in operator</a></li><li><a href="../Reference/Operators/instanceof.html" title="The instanceof operator tests whether an object has in its prototype chain the prototype property of a constructor.">instanceof</a></li><li><a href="../Reference/Operators/new.html" title="The new operator creates an instance of a user-defined object type or of one of the built-in object types that has a constructor function.">new operator</a></li><li><a href="../Reference/Operators/new-2.html" title="The new.target&nbsp;property lets you detect whether a function or constructor was called using the new operator. In constructors and functions instantiated with the new operator, new.target returns a reference to the constructor or function.&nbsp;In normal function calls, new.target is undefined.">new.target</a></li><li><a href="../Reference/Operators/super.html" title="The super keyword is used to call functions on an object's parent.">super</a></li><li><a href="../Reference/Operators/this.html" title="A function's this keyword behaves a little differently in JavaScript compared to other languages. It also has some differences between strict mode and non-strict mode.">this</a></li><li><a href="../Reference/Operators/typeof.html" title="The typeof operator returns a string indicating the type of the unevaluated operand.">typeof</a></li><li><a href="../Reference/Operators/void.html" title="The void operator evaluates the given expression and then returns undefined.">void operator</a></li><li><a href="../Reference/Operators/yield.html" title="The yield keyword is used to pause and resume a generator function (function* or legacy generator function).">yield</a></li><li><a href="../Reference/Operators/yield_.html" title="The yield* expression is used to delegate to another generator or iterable object.">yield*</a></li></ol> 
+  </li> 
+  <li data-default-state="closed"><a href="../Reference/Statements.html">Statements &amp; declarations</a> 
+   <ol><li><a href="../Reference/Statements.html" title="JavaScript applications consist of statements with an appropriate syntax. A single statement may span multiple lines. Multiple statements may occur on a single line if each statement is separated by a semicolon. This isn't a keyword, but a group of keywords.">Statements and declarations</a></li><li><a href="../Reference/Statements/Legacy_generator_function.html" title="The legacy generator function statement declares legacy generator functions with the specified parameters.">Legacy generator function</a></li><li><a href="../Reference/Statements/block.html" title="A block statement (or compound statement in other languages) is used to group zero or more statements. The block is delimited by a pair of curly brackets.">block</a></li><li><a href="../Reference/Statements/break.html" title="The break statement terminates the current loop, switch, or label statement and transfers program control to the statement following the terminated statement.">break</a></li><li><a href="../Reference/Statements/class.html" title="The class declaration creates a new class with a given name using prototype-based inheritance.">class</a></li><li><a href="../Reference/Statements/const.html" title="The const declaration creates a read-only reference to a value. It does not&nbsp;mean the value it holds is immutable, just that the variable identifier cannot be reassigned.">const</a></li><li><a href="../Reference/Statements/continue.html" title="The continue statement terminates execution of the statements in the current iteration of the current or labeled loop, and continues execution of the loop with the next iteration.">continue</a></li><li><a href="../Reference/Statements/debugger.html" title="The debugger statement invokes any available debugging functionality, such as setting a breakpoint. If no debugging functionality is available, this statement has no effect.">debugger</a></li><li><a href="../Reference/Statements/default.html" title="Technical review completed.">default</a></li><li><a href="../Reference/Statements/do...html" title="The do...while statement creates a loop that executes a specified statement until the test condition evaluates to false. The condition is evaluated after executing the statement, resulting in the specified statement executing at least once.">do...while</a></li><li><a href="../Reference/Statements/Empty.html" title="An empty statement is used to provide no statement, although the JavaScript syntax would expect one.">empty</a></li><li><a href="../Reference/Statements/export.html" title="The export statement is used to export functions, objects or primitives from a given file (or module).">export</a></li><li><a href="../Reference/Statements/for.html" title="The for statement creates a loop that consists of three optional expressions, enclosed in parentheses and separated by semicolons, followed by a statement or a set of statements executed in the loop.">for</a></li><li><span class="sidebar-icon"><span title="This deprecated API should no longer be used, but will probably still work."><i class="icon-thumbs-down-alt"> </i></span></span><a href="../Reference/Statements/for_each...html" title="The for each...in statement iterates a specified variable over all values of object's properties. For each distinct property, a specified statement is executed.">for each...in</a></li><li><a href="../Reference/Statements/for...html" title="The for...in statement iterates over the enumerable properties of an object, in arbitrary order. For each distinct property, statements can be executed.">for...in</a></li><li><a href="../Reference/Statements/for..-2.html" title="The for...of statement creates a loop iterating over iterable objects (including Array, Map, Set, String, TypedArray, arguments object and so on), invoking a custom iteration hook with statements to be executed for the value of each distinct property.">for...of</a></li><li><a href="../Reference/Statements/function.html" title="The function declaration defines a function with the specified parameters.">function</a></li><li><a href="../Reference/Statements/function_.html" title="The function* declaration (function keyword followed by an asterisk) defines a generator function, which returns a Generator object.">function*</a></li><li><a href="../Reference/Statements/if...html" title="The if statement executes a statement if a specified condition is true. If the condition is false, another statement can be executed.">if...else</a></li><li><a href="../Reference/Statements/import.html" title="The import statement is used to import functions, objects or primitives that have been exported from an external module, another script, etc.">import</a></li><li><a href="../Reference/Statements/label.html" title="The labeled statement can be used with break or continue statements. It is prefixing a statement with an identifier which you can refer to.">label</a></li><li><a href="../Reference/Statements/let.html" title="The let statement declares a block scope local variable, optionally initializing it to a value.">let</a></li><li><a href="../Reference/Statements/return.html" title="The return statement ends function execution and specifies a value to be returned to the function caller.">return</a></li><li><a href="../Reference/Statements/switch.html" title="The switch statement evaluates an expression, matching the expression's value to a case clause, and executes statements associated with that case.">switch</a></li><li><a href="../Reference/Statements/throw.html" title="The throw statement throws a user-defined exception. Execution of the current function will stop (the statements after throw won't be executed), and control will be passed to the first catch block in the call stack. If no catch block exists among caller functions, the program will terminate.">throw</a></li><li><a href="../Reference/Statements/try...html" title="The try...catch statement marks a block of statements to try, and specifies a response, should an exception be thrown.">try...catch</a></li><li><a href="../Reference/Statements/var.html" title="The variable statement declares a variable, optionally initializing it to a value.">var</a></li><li><a href="../Reference/Statements/while.html" title="The while statement creates a loop that executes a specified statement as long as the test condition evaluates to true. The condition is evaluated before executing the statement.">while</a></li><li><span class="sidebar-icon"><span title="This deprecated API should no longer be used, but will probably still work."><i class="icon-thumbs-down-alt"> </i></span></span><a href="../Reference/Statements/with.html" title="The with statement extends the scope chain for a statement.">with</a></li></ol> 
+  </li> 
+  <li data-default-state="closed"><a href="../Reference/Functions.html">Functions</a> 
+   <ol><li><a href="../Reference/Functions.html" title="Generally speaking, a function is a &quot;subprogram&quot; that can be called by code external (or internal in the case of recursion) to the function. Like the program itself, a function is composed of a sequence of statements called the function body. Values can be passed to a function, and the function will&nbsp;return a value.">Functions</a></li><li><a href="../Reference/Functions/arguments.html" title="The arguments object is an Array-like object corresponding to the arguments passed to a function.">Arguments object</a></li><li><a href="../Reference/Functions/Arrow_functions.html" title="An arrow function expression has a shorter syntax compared to function expressions and lexically binds&nbsp;the this value (does not bind&nbsp;its own&nbsp;this,&nbsp;arguments,&nbsp;super, or&nbsp;new.target). Arrow functions are always anonymous.">Arrow functions</a></li><li><a href="../Reference/Functions/Default_parameters.html" title="Default function parameters allow formal parameters to be initialized with default values if no value or undefined is passed.">Default parameters</a></li><li><a href="../Reference/Functions/Method_definitions.html" title="Starting with ECMAScript 2015 (ES6), a shorter syntax for method definitions on objects initializers is introduced. It is a shorthand for a function assigned to the method's name.">Method definitions</a></li><li><a href="../Reference/Functions/rest_parameters.html" title="The rest parameter syntax allows us to represent an indefinite number of arguments as an array.">Rest parameters</a></li><li><a href="../Reference/Functions/get.html" title="The get syntax binds an object property to a function that will be called when that property is looked up.">getter</a></li><li><a href="../Reference/Functions/set.html" title="The set syntax binds an object property to a function to be called when there is an attempt to set that property.">setter</a></li></ol> 
+  </li> 
+  <li data-default-state="closed"><a href="../Reference/Classes.html">Classes</a> 
+   <ol><li><a href="../Reference/Classes.html" title="JavaScript classes are introduced in ECMAScript 6 and are syntactical sugar over JavaScript's existing prototype-based inheritance. The class syntax is not introducing a new object-oriented inheritance model to JavaScript. JavaScript classes provide a much simpler and clearer syntax to create objects and deal with inheritance.">Classes</a></li><li><a href="../Reference/Classes/constructor.html" title="The constructor method is a special method for creating and initializing an object created with a class.">constructor</a></li><li><a href="../Reference/Classes/extends.html" title="The extends keyword is used in a class declarations or class expressions to create a class with a child of another class.">extends</a></li><li><a href="../Reference/Classes/static.html" title="The static keyword defines a static method for a class.">static</a></li></ol> 
+  </li> 
+  <li data-default-state="closed"><a href="../Reference/Errors.html">Errors</a> 
+   <ol><li><a href="../Reference/Errors.html" title="Errors, errors everywhere.">JavaScript error reference</a></li><li><a href="../Reference/Errors/Not_a_codepoint.html" title="RangeError">RangeError: argument is not a valid code point</a></li><li><a href="../Reference/Errors/Invalid_array_length.html" title="RangeError">RangeError: invalid array length</a></li><li><a href="../Reference/Errors/Precision_range.html" title="RangeError">RangeError: precision is out of range</a></li><li><a href="../Reference/Errors/Bad_radix.html" title="RangeError">RangeError: radix must be an integer</a></li><li><a href="../Reference/Errors/Resulting_string_too_large.html" title="RangeError">RangeError: repeat count must be less than infinity</a></li><li><a href="../Reference/Errors/Negative_repetition_count.html" title="RangeError">RangeError: repeat count must be non-negative</a></li><li><a href="../Reference/Errors/Malformed_formal_parameter.html" title="SyntaxError">SyntaxError: Malformed formal parameter</a></li><li><a href="../Reference/Errors/Read-only.html" title="TypeError">TypeError: "x" is read-only</a></li><li><a href="../Reference/Errors/Array_sort_argument.html" title="TypeError">TypeError: invalid Array.prototype.sort argument</a></li><li><a href="../Reference/Errors/Stmt_after_return.html" title="Warning">Warning: unreachable code after return statement</a></li></ol> 
+  </li> 
+  <li data-default-state="closed"><a href="#">Misc</a> 
+   <ol> 
+    <li><a href="../Reference/Lexical_grammar.html">Lexical grammar</a></li> 
+    <li><a href="../Data_structures.html">JavaScript data structures</a></li> 
+    <li><a href="../Enumerability_and_ownership_of_properties.html">Enumerability and ownership of properties</a></li> 
+    <li><a href="../Reference/Iteration_protocols.html">Iteration protocols</a></li> 
+    <li><a href="../Reference/Strict_mode.html">Strict mode</a></li> 
+    <li><a href="../Reference/Strict_mode/Transitioning_to_strict_mode.html">Transitioning to strict mode</a></li> 
+    <li><a href="../Reference/Template_literals.html">Template literals</a></li> 
+    <li><a href="../Reference/Deprecated_and_obsolete_features.html">Deprecated features</a></li> 
+   </ol> 
+  </li> 
+  <li data-default-state="closed"><a href="../New_in_JavaScript.html">New in JavaScript</a> 
+   <ol><li><a href="../New_in_JavaScript.html" title="This chapter contains information about JavaScript's version history and implementation status for Mozilla/SpiderMonkey-based JavaScript applications, such as Firefox.">New in JavaScript</a></li><li><a href="../New_in_JavaScript/ECMAScript_5_support_in_Mozilla.html" title="ECMAScript 5.1, an older version of the standard upon which JavaScript is based, was approved in June 2011.">ECMAScript 5 support in Mozilla</a></li><li><a href="../New_in_JavaScript/ECMAScript_6_support_in_Mozilla.html" title="ECMAScript 2015 (6th Edition) is the current version of the ECMAScript Language Specification standard. Commonly referred to as &quot;ES6&quot;, it defines the standard for the JavaScript implementation in SpiderMonkey, the engine used in Firefox and other Mozilla applications.">ECMAScript 6 support in Mozilla</a></li><li><a href="../New_in_JavaScript/ECMAScript_Next_support_in_Mozilla.html" title="ECMAScript Next refers to new features of the ECMA-262 standard (commonly referred to as JavaScript) introduced after ECMAScript 6 (ES2015). New versions of ECMAScript specifications are released yearly. This year, the ES2016 specification will be released and the ES2017 is the current ECMAScript draft specification.">ECMAScript Next support in Mozilla</a></li><li><a href="../New_in_JavaScript/Firefox_JavaScript_changelog.html" title="The following is a changelog for JavaScript features in Firefox releases.">Firefox JavaScript changelog</a></li><li><a href="../New_in_JavaScript/1.html" title="The following is a changelog for JavaScript from Netscape Navigator 2.0 to 3.0. The old Netscape documentation references this as &quot;Features added after version 1&quot;. Netscape Navigator 3.0 was released on August 19, 1996. Netscape Navigator 3.0 was the second major version of the browser with JavaScript support.">New in JavaScript 1.1</a></li><li><a href="../New_in_JavaScript/1-2.html" title="The following is a changelog for JavaScript from Netscape Navigator 3.0 to 4.0. The old Netscape documentation can be found on archive.org. Netscape Navigator 4.0 was released on June 11, 1997. Netscape Navigator 4.0 was the third major version of the browser with JavaScript support.">New in JavaScript 1.2</a></li><li><a href="../New_in_JavaScript/1-3.html" title="The following is a changelog for JavaScript from Netscape Navigator 4.0 to 4.5. The old Netscape documentation can be found on archive.org. Netscape Navigator 4.5 was released on October 19, 1998.">New in JavaScript 1.3</a></li><li><a href="../New_in_JavaScript/1-4.html" title="The following is a changelog for JavaScript 1.4, which was only used for Netscape's server side JavaScript released in 1999. The old Netscape documentation can be found on archive.org.">New in JavaScript 1.4</a></li><li><a href="../New_in_JavaScript/1-5.html" title="The following is a changelog for JavaScript 1.5. This version was included in Netscape Navigator 6.0 was released on November 14, 2000 and was also used in later versions of Netscape Navigator and Firefox 1.0. You can compare JavaScript 1.5 to JScript version 5.5 and Internet Explorer 5.5, which was released in July 2000. The corresponding ECMA standard is ECMA-262 Edition 3 (from December 1999).">New in JavaScript 1.5</a></li><li><a href="../New_in_JavaScript/1-6.html" title="The following is a changelog for JavaScript 1.6. This version was included in Firefox 1.5 (Gecko 1.8), which was released in November 2005. The corresponding ECMA standard is ECMA-262 Edition 3 and ECMAScript for XML (E4X) with some additional features. Several new features were introduced: E4X, several new Array methods, and Array and String generics.">New in JavaScript 1.6</a></li><li><a href="../New_in_JavaScript/1-7.html" title="The following is a changelog for JavaScript 1.7. This version was included in Firefox 2 (October 2006).">New in JavaScript 1.7</a></li><li><a href="../New_in_JavaScript/1-8.html" title="The following is a changelog for JavaScript 1.8. This version was included in Firefox 3 and is part of Gecko 1.9. See bug&nbsp;380236 for a tracking development bug for JavaScript 1.8.">New in JavaScript 1.8</a></li><li><a href="../New_in_JavaScript/1.8.html" title="The following is a changelog for JavaScript 1.8.1. This version was included in Firefox 3.5.">New in JavaScript 1.8.1</a></li><li><a href="../New_in_JavaScript/1.8-2.html" title="The following is a changelog for JavaScript 1.8.5. This version was included in Firefox 4.">New in JavaScript 1.8.5</a></li></ol> 
+  </li> 
+  <li><strong><a href="https://developer.mozilla.org/en-US/docs/MDN">Documentation:</a></strong></li> 
+  <li data-default-state="closed"><a href="#">Useful lists</a> 
+   <ol> 
+    <li><a href="../Index.html">All pages index</a></li> 
+    <li><a href="../Reference/Methods_Index.html">Methods index</a></li> 
+    <li><a href="../Reference/Properties_Index.html">Properties index</a></li> 
+    <li><a href="https://developer.mozilla.org/en-US/docs/tag/JavaScript">Pages tagged "JavaScript"</a></li> 
+   </ol> 
+  </li> 
+  <li data-default-state="closed"><a href="#">Contribute</a> 
+   <ol> 
+    <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Doc_status/JavaScript">JavaScript doc status</a></li> 
+    <li><a href="https://developer.mozilla.org/en-US/docs/MDN">The MDN project</a></li> 
+   </ol> 
+  </li> 
+ </ol> 
+
+  </div>
+                
+
+                <!-- approvals -->
+                
+
+              
+
+              </div>
+            
+          </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Web/JavaScript/Guide/Grammar_and_types$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Web/JavaScript/Guide/Grammar_and_types$history" label="View page history"></menuitem>
+  </menu>
+
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+        
+        <div class="contentinfo">
+          <p>© 2005-2016 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>
+          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+        
+        </div>
+      </div>
+      <div class="column-strip">
+        
+          
+  
+    <form class="languages go" method="get" action="https://developer.mozilla.org/en-US/docs/Web">
+      <label for="language">Other languages:</label>
+      <select id="language" class="wiki-l10n" name="next" dir="ltr">
+        <option value="/en-US/docs/Web/JavaScript/Guide/Grammar_and_types" selected="">
+          English (US)
+        </option>
+        
+          <option value="/ar/docs/Web/JavaScript/Guide/Grammar_and_types">
+            عربي
+          </option>
+          <option value="/bn-BD/docs/Web/JavaScript/Guide/Grammar_and_types">
+            বাংলা (বাংলাদেশ)
+          </option>
+          <option value="/cs/docs/Web/JavaScript/Guide/Gramatika_a_typy">
+            Čeština
+          </option>
+          <option value="/de/docs/Web/JavaScript/Guide/Grammatik_und_Typen">
+            Deutsch
+          </option>
+          <option value="/es/docs/Web/JavaScript/Guide/Grammar_and_types">
+            Español
+          </option>
+          <option value="/fr/docs/Web/JavaScript/Guide/Types_et_grammaire">
+            Français
+          </option>
+          <option value="/hi-IN/docs/Web/JavaScript/Guide/Grammar_and_types">
+            हिन्दी (भारत)
+          </option>
+          <option value="/hu/docs/Web/JavaScript/Guide/Grammar_and_types">
+            magyar
+          </option>
+          <option value="/id/docs/Web/JavaScript/Panduan/Values,_variables,_and_literals">
+            Bahasa Indonesia
+          </option>
+          <option value="/it/docs/Web/JavaScript/Guida/Grammar_and_types">
+            Italiano
+          </option>
+          <option value="/ja/docs/Web/JavaScript/Guide/Grammar_and_types">
+            日本語
+          </option>
+          <option value="/ko/docs/Web/JavaScript/Guide/Values,_variables,_and_literals">
+            한국어
+          </option>
+          <option value="/my/docs/Web/JavaScript/Guide/Grammar_and_types">
+            မြန်မာဘာသာ
+          </option>
+          <option value="/nl/docs/Web/JavaScript/Guide/Grammar_and_types">
+            Nederlands
+          </option>
+          <option value="/pl/docs/Web/JavaScript/Guide/Sk%C5%82adnia_i_typy">
+            Polski
+          </option>
+          <option value="/pt-BR/docs/Web/JavaScript/Guide/Values,_variables,_and_literals">
+            Português (do&nbsp;Brasil)
+          </option>
+          <option value="/ru/docs/Web/JavaScript/Guide/Grammar_and_types">
+            Русский
+          </option>
+          <option value="/th/docs/Web/JavaScript/Guide/Values,_variables,_and_literals">
+            ไทย
+          </option>
+          <option value="/tr/docs/Web/JavaScript/Guide/Grammar_and_types">
+            Türkçe
+          </option>
+          <option value="/uk/docs/Web/JavaScript/Guide/Grammar_and_types">
+            Українська
+          </option>
+          <option value="/vi/docs/Web/JavaScript/Guide/cu-phap-lap-trinh">
+            Tiếng Việt
+          </option>
+          <option value="/zh-CN/docs/Web/JavaScript/Guide/Grammar_and_types">
+            中文 (简体)
+          </option>
+          <option value="/zh-TW/docs/Web/JavaScript/Guide/Values,_variables,_and_literals">
+            正體中文 (繁體)
+          </option>
+      </select>
+      <noscript>&lt;button type="submit"&gt;Go&lt;/button&gt;</noscript>
+    </form>
+  
+
+        
+      </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+  
+    
+    <!--[if lte IE 8]><script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/selectivizr.091e18cf669b.js" charset="utf-8"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/main.a7b27a25fb9c.js" charset="utf-8"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+    
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/syntax-prism-min.js" charset="utf-8"></script><script type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/wiki.bd71ca9fd27d.js" charset="utf-8" id="wikiscript"></script>
+
+  
+
+  <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/helpfulness.7b208a764d28.js" charset="utf-8"></script>
+
+  
+    <script type="text/javascript">
+        (function($) {
+            $('#wikiArticle').children('h2[id]').each(function() {
+                var id = $(this).attr('id');
+                var href = '/en-US/docs/Web/JavaScript/Guide/Grammar_and_types$edit#' + id;
+
+                $('<a>').attr({
+                    href: href,
+                    'class': 'button section-edit only-icon'
+                })
+                .append($('<i aria-hidden="true" class="icon-pencil"></i>'))
+                .append($('<span>'))
+                .find('span')
+                .text(gettext('Edit'))
+                .end()
+                .on('click', function(e) {
+                    e.preventDefault();
+
+                    mdn.analytics.trackEvent({
+                        category: 'Section Edit',
+                        action: id
+                    }, function() {
+                        window.location = href;
+                    });
+                })
+                .appendTo(this);
+            });
+        })(jQuery);
+    </script>
+  
+
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Grammar_and_types by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 15:34:31 GMT -->
+</body></html>

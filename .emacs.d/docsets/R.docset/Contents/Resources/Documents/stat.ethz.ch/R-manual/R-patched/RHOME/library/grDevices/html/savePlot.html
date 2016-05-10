@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml">
+<!-- Mirrored from stat.ethz.ch/R-manual/R-patched/RHOME/library/grDevices/html/savePlot.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 04 May 2016 17:01:25 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head><title>Save Cairo X11 Plot to File</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for savePlot {grDevices}"><tr><td>savePlot {grDevices}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Save Cairo X11 Plot to File</h2>
+
+<h3>Description</h3>
+
+<p>Save the current page of a cairo <code><a href="x11.html">X11</a>()</code> device to a file.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+savePlot(filename = paste("Rplot", type, sep = "."),
+         type = c("png", "jpeg", "tiff", "bmp"),
+         device = dev.cur())
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>filename</code></td>
+<td>
+<p>filename to save to.</p>
+</td></tr>
+<tr valign="top"><td><code>type</code></td>
+<td>
+<p>file type: only <code>"png"</code> will be accepted for cairo
+version 1.0.</p>
+</td></tr>
+<tr valign="top"><td><code>device</code></td>
+<td>
+<p>the device to save from.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>Only cairo-based <code>X11</code> devices are supported.
+</p>
+<p>This works by copying the image surface to a file.  For PNG
+will always be a 24-bit per pixel PNG &lsquo;DirectClass&rsquo; file, for
+JPEG the quality is 75% and for TIFF there is no compression.
+</p>
+<p>For devices with buffering this copies the buffer's image surface, so
+works even if <code><a href="dev.flush.html">dev.hold</a></code> has been called.
+</p>
+<p>At present the plot is saved after rendering onto the canvas (default
+opaque white), so for the default <code>bg = "transparent"</code> the
+effective background colour is the canvas colour.
+</p>
+
+
+<h3>Value</h3>
+
+<p>Invisible <code>NULL</code>.
+</p>
+
+
+<h3>Note</h3>
+
+<p>There is a similar function of the same name but more types for
+<code>windows</code> devices on Windows.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="x11.html">X11</a></code>, <code><a href="dev2.html">dev.copy</a></code>, <code><a href="dev2.html">dev.print</a></code>
+</p>
+
+<hr /><div style="text-align: center;">[Package <em>grDevices</em> version 3.2.2 <a href="00Index.html">Index</a>]</div>
+</body>
+<!-- Mirrored from stat.ethz.ch/R-manual/R-patched/RHOME/library/grDevices/html/savePlot.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 04 May 2016 17:01:25 GMT -->
+</html>

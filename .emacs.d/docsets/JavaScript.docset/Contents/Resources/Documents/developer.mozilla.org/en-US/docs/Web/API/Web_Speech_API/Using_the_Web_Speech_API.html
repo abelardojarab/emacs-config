@@ -1,0 +1,908 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API/Using_the_Web_Speech_API by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 17:05:41 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <script async="" src="../../../../../../www.google-analytics.com/analytics.js"></script><script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+  
+    
+  
+
+  
+  <title>Using the Web Speech API</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+  
+    
+    
+    <link href="../../../../../../developer.cdn.mozilla.net/static/build/styles/mdn.593f20d8c365.css" rel="stylesheet" type="text/css">
+
+    
+  
+    <link href="../../../../../../developer.cdn.mozilla.net/static/build/styles/wiki.13dd9abdfb62.css" rel="stylesheet" type="text/css">
+
+    
+
+    
+
+  <!-- common social tags -->
+  
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon144.a6e4162070f4.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon114.0e9fabd44f85.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon72.8ff9d87c82a0.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon57.a2490b9a2d76.png">
+  <!-- basic favicon -->
+  
+    
+  
+  <link rel="shortcut icon" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon32.e02854fdcf73.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/html5shiv.3948ccddab6f.js" charset="utf-8"></script>
+  <![endif]-->
+
+  
+  <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API/Using_the_Web_Speech_API$json">
+  <link rel="canonical" href="Using_the_Web_Speech_API.html">
+
+  
+
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="Using the Web Speech API">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API/Using_the_Web_Speech_API">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API/Using_the_Web_Speech_API">
+  <meta name="twitter:title" content="Using the Web Speech API">
+  
+  <meta property="og:description" content="The Web Speech API provides two distinct areas of functionality — speech recognition, and speech synthesis (also know as text to speech, or tts) — which open up interesting new possibilities for accessibility, and control mechanisms. This article provides a simple introduction to both areas, along with demos.">
+  <meta name="description" content="The Web Speech API provides two distinct areas of functionality — speech recognition, and speech synthesis (also know as text to speech, or tts) — which open up interesting new possibilities for accessibility, and control mechanisms. This article provides a simple introduction to both areas, along with demos.">
+  <meta name="twitter:description" content="The Web Speech API provides two distinct areas of functionality — speech recognition, and speech synthesis (also know as text to speech, or tts) — which open up interesting new possibilities for accessibility, and control mechanisms. This article provides a simple introduction to both areas, along with demos.">
+  
+
+  
+    
+
+
+
+  
+</head>
+<body data-slug="Web/API/Web_Speech_API/Using_the_Web_Speech_API" contextmenu="edit-history-menu" data-search-url="" class="document  ">
+
+  <script type="text/javascript">
+    (function(win) {
+        'use strict';
+
+        
+            (function(){
+  var FLAGS = {
+    'compat_api': false,'kumaediting': false,'page_move': false,'registration_disabled': false,'search_suggestions': false,'section_edit': false,'spam_admin_override': false,'spam_checks_enabled': true,'spam_spammer_override': false,'spam_submissions_enabled': false,'spam_testing_mode': false,'wiki_samples': true,'wiki_spam_exempted': false,'wiki_spam_training': true
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': true,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+
+        // This needs to be set before ckeditor.js loads
+        window.CKEDITOR_BASEPATH = 'https://developer.mozilla.org/static/js/libs/ckeditor/build/ckeditor/';
+
+        // This represents the site configuration
+        win.mdn = {
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+            
+            notifications: [],
+            
+            // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            },
+            // Assets that need to be dynamically injected
+            assets_disabled: {
+                css: {
+                    'editor-content': ['https://developer.cdn.mozilla.net/static/build/styles/editor-content.3d79df72080d.css',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/styles/wiki-compat-tables.f3a3bfce97a1.css',]
+                },
+                js: {
+                    'syntax-prism': ['https://developer.cdn.mozilla.net/static/build/js/syntax-prism.7a66ddfa68bf.js',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/js/wiki-compat-tables.14ce5dcb2c3d.js',]
+                }
+            }
+        };
+    })(this);
+</script>
+
+  
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+    
+      <li><a href="#q" id="skip-search">Skip to search</a></li>
+    
+  </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+    <a href="https://developer.mozilla.org/en-US/" class="logo">Mozilla Developer Network</a>
+
+    <div id="nav-sec">
+        
+                  <ul>
+                  <li>
+
+    
+
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                Sign in
+              </span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FWeb_Speech_API%2FUsing_the_Web_Speech_API" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/Web/API/Web_Speech_API/Using_the_Web_Speech_API" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/Web/API/Web_Speech_API/Using_the_Web_Speech_API" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FWeb_Speech_API%2FUsing_the_Web_Speech_API" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+              
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+        
+    </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../../API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+
+   <!-- end is_zone -->
+
+    <div class="wiki-main-content" id="document-main"><div class="center">
+      
+      <div class="article-meta">
+        <!-- action buttons -->
+        
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+  <ul class="page-buttons" data-sticky="false">
+      
+      <li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+              
+                <li class="smaller">No translations exist for this article.</li>
+              
+
+              
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API/Using_the_Web_Speech_API$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+              
+            </ul>
+          </div>
+        </div>
+      </li>
+
+      <li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API/Using_the_Web_Speech_API$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li>
+
+        
+
+        <li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API/Using_the_Web_Speech_API$history" rel="nofollow, noindex">History</a></li>
+                
+                
+                
+                
+
+                
+
+                
+                
+                
+                <li class="page-print"><a href="#" onclick="return window.print();">Print this article</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+        
+  <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web" rel="v:url" property="v:title">Web technology for developers</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="../../API.html" rel="v:url" property="v:title">Web APIs</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="../Web_Speech_API.html" rel="v:url" property="v:title">Web Speech API</a></li>
+    
+    <li class="crumb" typeof="v:Breadcrumb" property="v:title">Using the Web Speech API</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        
+        <div class="contributor-avatars" data-all-text="see all contributors" data-alternate-message="hide contributors">
+            <ul>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/dbolter" title="View profile: dbolter">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="dbolter" data-src="../../../../../../secure.gravatar.com/avatar/d306c2d94128ba9f5f1830321f99e9c26c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">dbolter</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills" title="View profile: chrisdavidmills">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="chrisdavidmills" data-src="../../../../../../secure.gravatar.com/avatar/deeea0ba82390bd5acc539703c4b0cfb6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">chrisdavidmills</noscript></a>
+                </li>
+            
+            </ul>
+        </div>
+        
+
+        <h1>Using the Web Speech API</h1>
+
+      </div>
+      
+
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-closed wiki-left-none">
+
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+            
+              <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+              
+              <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#Speech_recognition" rel="internal">Speech recognition</a><ol><li><a href="#Demo" rel="internal">Demo</a></li><li><a href="#Browser_support" rel="internal">Browser support</a></li><li><a href="#HTML_and_CSS" rel="internal">HTML and CSS</a></li><li><a href="#JavaScript" rel="internal">JavaScript</a><ol><li><a href="#Chrome_support" rel="internal">Chrome support</a></li><li><a href="#The_grammar" rel="internal">The grammar</a></li><li><a href="#Plugging_the_grammar_into_our_speech_recognition" rel="internal">Plugging the grammar into our speech recognition</a></li><li><a href="#Starting_the_speech_recognition" rel="internal">Starting the speech recognition</a></li><li><a href="#Receiving_and_handling_results" rel="internal">Receiving and handling results</a></li><li><a href="#Handling_errors_and_unrecognised_speech" rel="internal">Handling errors and unrecognised speech</a></li></ol></li></ol></li><li><a href="#Speech_synthesis" rel="internal">Speech synthesis</a><ol><li><a href="#Demo_2" rel="internal">Demo</a></li><li><a href="#Browser_support_2" rel="internal">Browser support</a></li><li><a href="#HTML_and_CSS_2" rel="internal">HTML and CSS</a></li><li><a href="#JavaScript_2" rel="internal">JavaScript</a><ol><li><a href="#Setting_variables" rel="internal">Setting variables</a></li><li><a href="#Populating_the_select_element" rel="internal">Populating the select element</a></li><li><a href="#Speaking_the_entered_text" rel="internal">Speaking the entered text</a></li><li><a href="#Updating_the_displayed_pitch_and_rate_values" rel="internal">Updating the displayed pitch and rate values</a></li></ol></li></ol></li>
+                </ol>
+              </div>
+              
+              </div>
+            
+
+            
+            
+              
+            
+
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-main wiki-column text-content">
+
+              
+
+              
+
+              
+                
+                
+                
+              
+              
+
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                
+                  
+                    <p class="summary">The Web Speech API provides two distinct areas of functionality — speech recognition, and speech synthesis (also know as text to speech, or tts) — which open up interesting new possibilities for accessibility, and control mechanisms. This article provides a simple introduction to both areas, along with demos.</p>
+
+<h2 id="Speech_recognition">Speech recognition</h2>
+
+<p>Speech recognition involves receiving speech through a device's microphone, which is then checked by a speech recognition service against a list of grammar (basically, the vocabulary you want to have recognised in a particular app.) When a word or phrase is successfully recognised, it is returned as a result (or list of results) as a text string, and further actions can be initiated as a result.</p>
+
+<p>The Web Speech API has a main controller interface for this — <a href="../SpeechRecognition.html" title="The SpeechRecognition interface of the Web Speech API is the controller interface for the recognition service; this also handles the SpeechRecognitionEvent sent from the recognition service."><code>SpeechRecognition</code></a> — plus a number of closely-related interfaces for representing grammar, results, etc. Generally, the default speech recognition system available on the device will be used for the speech recognition — most modern OSes have a speech recognition system for issuing voice commands. Think about Dictation on Mac OS X, Siri on iOS, Cortana on Windows 10, Android Speech, etc.</p>
+
+<h3 id="Demo">Demo</h3>
+
+<p>To show simple usage of Web speech recognition, we've written a demo called <a href="https://github.com/mdn/web-speech-api/tree/master/speech-color-changer" class="external">Speech color changer</a>. When the screen is tapped/clicked, you can say an HTML color keyword, and the app's background color will change to that color.</p>
+
+<p><img src="../../../../../../mdn.mozillademos.org/files/11975/speech-color-changer.png" style="border: 1px solid black; display: block; height: 533px; margin: 0px auto; width: 300px;" alt="The UI of an app titled Speech Color changer. It invites the user to tap the screen and say a color, and then it turns the background of the app that colour. In this case it has turned the background red."></p>
+
+<p>To run the demo, you can clone (or <a href="https://github.com/mdn/web-speech-api/archive/master.zip" class="external">directly download</a>)&nbsp;the Github repo it is part of, open the HTML index file in a supporting desktop browser, navigate to the <a href="http://mdn.github.io/web-speech-api/speech-color-changer/" class="external">live demo URL</a> in a supporting mobile browser like Chrome, or load it onto a Firefox OS phone as an app via <a href="https://developer.mozilla.org/en-US/docs/Tools/WebIDE">WebIDE</a> (permissions are required to run the API on Firefox OS, see below.)</p>
+
+<h3 id="Browser_support">Browser support</h3>
+
+<p>Support for Web Speech API speech recognition is still getting there across mainstream browsers, and is currently limited to the following:</p>
+
+<ul>
+ <li>
+  <p>Firefox desktop and mobile support it in Gecko 44+, without prefixes, and it can be turned on by flipping the&nbsp;<code>media.webspeech.recognition.enable</code> flag to <code>true</code> in <code>about:config</code>. The permissions settings/UI haven't yet been sorted out however, so permission can't be granted to use it by the user, so it can't be used. This will be fixed soon.</p>
+ </li>
+ <li>
+  <p>Firefox OS 2.5+ supports it, but as a privileged API that requires permissions. You therefore need to set the following in the <a href="https://developer.mozilla.org/en-US/docs/Web/Apps/Build/Manifest">manifest.webapp</a> (and either install it via WebIDE, or get your app verified and made available on the <a href="https://marketplace.firefox.com/" class="external">Firefox Marketplace</a>):</p>
+
+  <pre class="brush: json line-numbers  language-json"><code class="language-json"><span class="key token">"permissions":</span> <span class="punctuation token">{</span>
+  <span class="key token">"audio-capture" :</span> <span class="punctuation token">{</span>
+    <span class="key token">"description" :</span> <span class="string token">"Audio capture"</span>
+  <span class="punctuation token">}</span><span class="punctuation token">,</span>
+  <span class="key token">"speech-recognition" :</span> <span class="punctuation token">{</span>
+    <span class="key token">"description" :</span> <span class="string token">"Speech recognition"</span>
+  <span class="punctuation token">}</span>
+<span class="punctuation token">}</span></code></pre>
+
+  <pre class="brush: json line-numbers  language-json"><code class="language-json"><span class="key token">"type":</span> <span class="string token">"privileged"</span></code></pre>
+ </li>
+ <li>
+  <p>Chrome for Desktop and Android have supported it since around version 33 but with prefixed interfaces, so you need to include prefixed versions of them, e.g. <code>webkitSpeechRecognition</code>.</p>
+ </li>
+</ul>
+
+<h3 id="HTML_and_CSS">HTML and CSS</h3>
+
+<p>The HTML and CSS for the app is really trivial. We simply have a title, instructions paragraph, and a div into which we output diagnostic messages.</p>
+
+<pre class="brush: html">&lt;h1&gt;Speech color changer&lt;/h1&gt;
+&lt;p&gt;Tap/click then say a color to change the background color of the app.&lt;/p&gt;
+&lt;div&gt;
+  &lt;p class="output"&gt;&lt;em&gt;...diagnostic messages&lt;/em&gt;&lt;/p&gt;
+&lt;/div&gt;</pre>
+
+<p>The CSS provides a very simple responsive styling so that it looks ok across devices.</p>
+
+<h3 id="JavaScript">JavaScript</h3>
+
+<p>Let's look at the JavaScript in a bit more detail.</p>
+
+<h4 id="Chrome_support">Chrome support</h4>
+
+<p>As mentioned earlier, Chrome currently supports speech recognition with prefixed properties, therefore at the start of our code we include these lines to feed the right objects to Chrome, and non-prefix browsers, like Firefox:</p>
+
+<pre class="brush: js">var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition
+var SpeechGrammarList = SpeechGrammarList || webkitSpeechGrammarList
+var SpeechRecognitionEvent = SpeechRecognitionEvent || webkitSpeechRecognitionEvent</pre>
+
+<h4 id="The_grammar">The grammar</h4>
+
+<p>The next part of our code defines the grammar we want our app to recognise. The following variable is defined to hold our grammar:</p>
+
+<pre class="brush: js">var grammar = '#JSGF V1.0; grammar colors; public &lt;color&gt; = aqua | azure | beige | bisque | black | <em>[LOTS MORE COLOURS]</em> ;'</pre>
+
+<p>The grammar format used is <a href="http://www.w3.org/TR/jsgf/" class="external-icon external">JSpeech Grammar Format</a> (<strong>JSGF</strong>) — you can find a lot more about it at the previous link to its spec. However, for now let's just run through it quickly:</p>
+
+<ul>
+ <li>The lines are separated by semi-colons, just like in JavaScript.</li>
+ <li>The first line — <code>#JSGF V1.0;</code> — states the format and version used. This always needs to be included first.</li>
+ <li>The second line indicates a type of term that we want to recognise. <code>public</code> declares that it is a public rule, the string in angle brackets defines the recognised name for this term (<code>color</code>), and the list of items that follow the equals sign are the alternative values that will be recognised and accepted as appropriate values for the term. Note how each is separated by a pipe character.</li>
+ <li>You can have as many terms defined as you want on separate lines following the above structure, and include fairly complex grammar definitions. For this basic demo, we are just keeping things simple.&nbsp;</li>
+</ul>
+
+<h4 id="Plugging_the_grammar_into_our_speech_recognition">Plugging the grammar into our speech recognition</h4>
+
+<p>The next thing to do is define a speech recogntion instance to control the recognition for our application. This is done using the <a href="../SpeechRecognition/SpeechRecognition.html" title="The SpeechRecognition() constructor creates a new SpeechRecognition object instance."><code>SpeechRecognition()</code></a> constructor. We also create a new speech grammar list to contain our grammar, using the <a href="../SpeechGrammarList/SpeechGrammarList.html" title="The SpeechGrammarList() constructor creates a new SpeechGrammarList object instance."><code>SpeechGrammarList()</code></a> constructor.</p>
+
+<pre class="brush: js">var recognition = new SpeechRecognition();
+var speechRecognitionList = new SpeechGrammarList();</pre>
+
+<p>We add our <code>grammar</code> to the list using the <a href="../SpeechGrammarList/addFromString.html" title="The addFromString() method of the SpeechGrammarList interface takes a grammar present in a specific DOMString within the code base (e.g. stored in a variable) and adds it to the SpeechGrammarList as a new SpeechGrammar object."><code>SpeechGrammarList.addFromString()</code></a> method. This accepts as parameters the string we want to add, plus optionally a weight value that specifies the importance of this grammar in relation of other grammars available in the list (can be from 0 to 1 inclusive.) The added grammar is available in the lst as a <a href="../SpeechGrammar.html" title="The SpeechGrammar interface of the Web Speech API represents a set of words or patterns of words that we want the recognition service to recognize."><code>SpeechGrammar</code></a> object instance.</p>
+
+<pre class="brush: js">speechRecognitionList.addFromString(grammar, 1);</pre>
+
+<p>We then add the <a href="../SpeechGrammarList.html" title="The SpeechGrammarList interface of the Web Speech API represents a list of SpeechGrammar objects containing words or patterns of words that we want the recognition service to recognize."><code>SpeechGrammarList</code></a> to the speech recognition instance by setting it to the value of the <a href="../SpeechRecognition/grammars.html" title="The grammars property of the SpeechRecognition interface returns and sets a collection of SpeechGrammar objects that represent the grammars that will be understood by the current SpeechRecognition."><code>SpeechRecognition.grammars</code></a> property. We also set a few other properties of the recognition instance before we move on:</p>
+
+<ul>
+ <li><a href="../SpeechRecognition/lang.html" title="The lang property of the SpeechRecognition interface returns and sets the language of the current SpeechRecognition. If not specified, this defaults to the HTML lang attribute value, or the user agent's language setting if that isn't set either."><code>SpeechRecognition.lang</code></a>: Sets the language of the recognition. Setting this is good practice, and therefore recommended.</li>
+ <li><a href="../SpeechRecognition/interimResults.html" title="The interimResults property of the SpeechRecognition interface controls whether interim results should be returned (true) or not (false.) Interim results are results that are not yet final (e.g. the SpeechRecognitionResult.isFinal property is false.)"><code>SpeechRecognition.interimResults</code></a>: Defines whether the speech recognition system should return interim results, or just final results. Final results are good enough for this simple demo.</li>
+ <li><a href="../SpeechRecognition/maxAlternatives.html" title="The maxAlternatives property of the SpeechRecognition interface sets the maximum number of SpeechRecognitionAlternatives provided per SpeechRecognitionResult."><code>SpeechRecognition.maxAlternatives</code></a>: Sets the number of alternative potential matches that should be returned per result. This can sometimes be useful, say if a result is not completely clear and you want to display a list if alternatives for the user to choose the correct one from. But it is not needed for this simple demo, so we are just specifying one (which is actually the default anyway.)</li>
+</ul>
+
+<pre class="brush: js">recognition.grammars = speechRecognitionList;
+//recognition.continuous = false;
+recognition.lang = 'en-US';
+recognition.interimResults = false;
+recognition.maxAlternatives = 1;</pre>
+
+<div class="note">
+<p><strong>Note</strong>: <a href="../SpeechRecognition/continuous.html" title="The continuous property of the SpeechRecognition interface controls whether continuous results are returned for each recognition, or only a single result."><code>SpeechRecognition.continuous</code></a> controls whether continuous results are captured, or just a single result each time recognition is started. It is commented out because currently it is not implemented in Gecko, so setting this was breaking the app. You can get a similar result by simply stopping the recognition after the first result is received, as you'll see later on.</p>
+</div>
+
+<h4 id="Starting_the_speech_recognition">Starting the speech recognition</h4>
+
+<p>After grabbing references to the output <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/div" title="The HTML &lt;div&gt; element (or HTML Document Division Element) is the generic container for flow content, which does not inherently represent anything. It can be used to group elements for styling purposes (using the class or id attributes), or because they share attribute values, such as lang. It should be used only when no other semantic element (such as &lt;article&gt; or &lt;nav&gt;) is appropriate."><code>&lt;div&gt;</code></a> and the HTML element (so we can output diagnostic messages and update the app background color later on), we implement an onclick handler so that when the screen is tapped/clicked, the speech recognition service will start. This is achieved by calling <a href="../SpeechRecognition/start.html" title="The start() method of the Web Speech API starts the speech recognition service listening to incoming audio with intent to recognize grammars associated with the current SpeechRecognition."><code>SpeechRecognition.start()</code></a>.</p>
+
+<pre class="brush: js">var diagnostic = document.querySelector('.output');
+var bg = document.querySelector('html');
+
+document.body.onclick = function() {
+  recognition.start();
+  console.log('Ready to receive a color command.');
+}</pre>
+
+<h4 id="Receiving_and_handling_results">Receiving and handling results</h4>
+
+<p>Once the speech recognition is started, there are many event handlers than can be used to retrieve results, and other pieces of surrounding information (see the <a href="../SpeechRecognition.html#Event_handlers"><code>SpeechRecognition</code> event handlers list</a>.) The most common one you'll probably use is <a href="../SpeechRecognition/onresult.html" title="The onresult property of the SpeechRecognition interface represents an event handler that will run when the speech recognition service returns a result — a word or phrase has been positively recognized and this has been communicated back to the app (when the result event fires.)"><code>SpeechRecognition.onresult</code></a>, which is fired once a successful result is received:</p>
+
+<pre class="brush: js">recognition.onresult = function(event) {
+  var color = event.results[0][0].transcript;
+  diagnostic.textContent = 'Result received: ' + color + '.';
+  bg.style.backgroundColor = color;
+  console.log('Confidence: ' + event.results[0][0].confidence);
+}</pre>
+
+<p>The second line here is a bit complex-looking, so let's explain it step by step. The <a href="../SpeechRecognitionEvent/results.html" title="The results read-only property of the SpeechRecognitionEvent interface returns a SpeechRecognitionResultList object representing all the speech recognition results for the current session."><code>SpeechRecognitionEvent.results</code></a> property returns a <a href="../SpeechRecognitionResultList.html" title="The SpeechRecognitionResultList interface of the Web Speech API represents a list of SpeechRecognitionResult objects, or a single one if results are being captured in continuous mode."><code>SpeechRecognitionResultList</code></a> object containing <a href="../SpeechRecognitionResult.html" title="The SpeechRecognitionResult interface of the Web Speech API represents a single recognition match, which may contain multiple SpeechRecognitionAlternative objects."><code>SpeechRecognitionResult</code></a> objects. It has a getter so it can be accessed like an array — so the first <code>[0]</code> returns the <code>SpeechRecognitionResult</code> at position 0. Each <code>SpeechRecognitionResult</code> object contains <a href="../SpeechRecognitionAlternative.html" title="The SpeechRecognitionAlternative interface of the Web Speech API represents a single word that has been recognised by the speech recognition service."><code>SpeechRecognitionAlternative</code></a> objects that contain individual recognised words. These also have getters so they can be accessed like arrays — the second <code>[0]</code> therefore returns the <code>SpeechRecognitionAlternative</code> at position 0. We then return its transcript property to get a string containing the individual recognised result as a string, set the background color to that color, and report the color recognised as a diagnostic message in the UI.</p>
+
+<p>We also use a <a href="../SpeechRecognition/onspeechend.html" title="The onspeechend property of the SpeechRecognition interface represents an event handler that will run when speech recognised by the speech recognition service has stopped being detected (when the speechend event fires.)"><code>SpeechRecognition.onspeechend</code></a> handler to stop the speech recognition service from running (using <a href="../SpeechRecognition/stop.html" title="The start() method of the Web Speech API stops the speech recognition service from listening to incoming audio, and attempts to return a SpeechRecognitionResult using the audio captured so far."><code>SpeechRecognition.stop()</code></a>) once a single word has been recognised and it has finished being spoken:</p>
+
+<pre class="brush: js">recognition.onspeechend = function() {
+  recognition.stop();
+}</pre>
+
+<h4 id="Handling_errors_and_unrecognised_speech">Handling errors and unrecognised speech</h4>
+
+<p>The last two handlers are there to handle cases where speech was recognised that wasn't in the defined grammar, or an error occured. <a href="../SpeechRecognition/onnomatch.html" title="The onnomatch property of the SpeechRecognition interface represents an event handler that will run when the speech recognition service returns a final result with no significant recognition (when the nomatch event fires.)"><code>SpeechRecognition.onnomatch</code></a> seems to be supposed to handle the first case mentioned, although note that at the moment it doesn't seem to fire correctly in Firefox or Chrome; it just returns whatever was recognised anyway:</p>
+
+<pre class="brush: js">recognition.onnomatch = function(event) {
+  diagnostic.textContent = 'I didnt recognise that color.';
+}</pre>
+
+<p><a href="../SpeechRecognition/onerror.html" title="The onerror property of the SpeechRecognition interface represents an event handler that will run when a speech recognition error occurs (when the error event fires.)"><code>SpeechRecognition.onerror</code></a> handles cases where there is an actual error with the recognition successfully — the <a href="../SpeechRecognitionError/error.html" title="The error read-only property of the SpeechRecognitionError interface returns the type of error raised."><code>SpeechRecognitionError.error</code></a> property contains the actual error returned:</p>
+
+<pre class="brush: js">recognition.onerror = function(event) {
+  diagnostic.textContent = 'Error occurred in recognition: ' + event.error;
+}</pre>
+
+<h2 id="Speech_synthesis">Speech synthesis</h2>
+
+<p>Speech synthesis (aka text-to-speech, or tts) involves receiving synthesising text contained within an app to speech, and broadcasting it out of a device's microphone.</p>
+
+<p>The Web Speech API has a main controller interface for this — <a href="../SpeechSynthesis.html" title="The SpeechSynthesis interface of the Web Speech API is the controller interface for the speech service; this can be used to retrieve information about the synthesis voices available on the device, start and pause speech, and other commands besides."><code>SpeechSynthesis</code></a> — plus a number of closely-related interfaces for representing text to be synthesised (known as utterances), voices to be used for the utterance, etc. Again, most OSes have some kind of speech synthesis system, which will be used by the API for this task as available.</p>
+
+<h3 id="Demo_2">Demo</h3>
+
+<p>To show simple usage of Web speech synthesis, we've provided a demo called <a href="https://github.com/mdn/web-speech-api/tree/gh-pages/speak-easy-synthesis" class="external">Speak easy synthesis</a>. This includes a set of form controls for entering text to be synthesised, and setting the pitch, rate, and voice to use when the text is uttered. After you have entered your text, you can press <kbd>Enter</kbd>/<kbd>Return</kbd> to hear it spoken.</p>
+
+<p><img src="../../../../../../mdn.mozillademos.org/files/11977/speak-easy-synthesis.png" style="border: 1px solid black; display: block; height: 533px; margin: 0px auto; width: 300px;" alt="UI of an app called speak easy synthesis. It has an input field in which to input text to be synthesised, slider controls to change the rate and pitch of the speech, and a drop down menu to choose between different voices."></p>
+
+<p>To run the demo, you can clone (or <a href="https://github.com/mdn/web-speech-api/archive/master.zip" class="external">directly download</a>)&nbsp;the Github repo it is part of, open the HTML index file in a supporting desktop browser, or navigate to the <a href="http://mdn.github.io/web-speech-api/speak-easy-synthesis/" class="external">live demo URL</a> in a supporting mobile browser like Chrome, or Firefox OS.</p>
+
+<h3 id="Browser_support_2">Browser support</h3>
+
+<p>Support for Web Speech API speech synthesis is still getting there across mainstream browsers, and is currently limited to the following:</p>
+
+<ul>
+ <li>
+  <p>Firefox desktop and mobile support it in Gecko 42+ (Windows)/44+, without prefixes, and it can be turned on by flipping the&nbsp;<code>media.webspeech.synth.enabled</code> flag to <code>true</code> in <code>about:config</code>.</p>
+ </li>
+ <li>
+  <p>Firefox OS 2.5+ supports it, by default, and without the need for any permissions.</p>
+ </li>
+ <li>
+  <p>Chrome for Desktop and Android have supported it since around version 33, without prefixes.</p>
+ </li>
+</ul>
+
+<h3 id="HTML_and_CSS_2">HTML and CSS</h3>
+
+<p>The HTML and CSS are again pretty trivial, simply containing a title, some instructions for use, and a form with some simple controls. The <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/select" title="The HTML select (&lt;select&gt;) element represents a control that presents a menu of options. The options within the menu are represented by &lt;option&gt; elements, which can be grouped by &lt;optgroup&gt; elements. Options can be pre-selected for the user."><code>&lt;select&gt;</code></a> element is initially empty, but is populated with <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/option" title="In a Web form, the HTML &lt;option&gt; element is used to create a control representing an item within a &lt;select&gt;, an &lt;optgroup&gt; or a &lt;datalist&gt; HTML5 element."><code>&lt;option&gt;</code></a>s via JavaScript (see later on.)</p>
+
+<pre class="brush: html">&lt;h1&gt;Speech synthesiser&lt;/h1&gt;
+
+&lt;p&gt;Enter some text in the input below and press return to hear it. change voices using the dropdown menu.&lt;/p&gt;
+    
+&lt;form&gt;
+  &lt;input type="text" class="txt"&gt;
+  &lt;div&gt;
+    &lt;label for="rate"&gt;Rate&lt;/label&gt;&lt;input type="range" min="0.5" max="2" value="1" step="0.1" id="rate"&gt;
+    &lt;div class="rate-value"&gt;1&lt;/div&gt;
+    &lt;div class="clearfix"&gt;&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div&gt;
+    &lt;label for="pitch"&gt;Pitch&lt;/label&gt;&lt;input type="range" min="0" max="2" value="1" step="0.1" id="pitch"&gt;
+    &lt;div class="pitch-value"&gt;1&lt;/div&gt;
+    &lt;div class="clearfix"&gt;&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;select&gt;
+
+  &lt;/select&gt;
+&lt;/form&gt;</pre>
+
+<h3 id="JavaScript_2">JavaScript</h3>
+
+<p>Let's investigate the JavaScript that powers this app.</p>
+
+<h4 id="Setting_variables">Setting variables</h4>
+
+<p>First of all, we capture references to all the DOM elements involved in the UI, but more interestingly, we capture a reference to <a href="../Window/speechSynthesis.html" title="The speechSynthesis read-only property of the Window object returns a SpeechSynthesis object, which is the entry point into using Web Speech API speech synthesis functionality."><code>Window.speechSynthesis</code></a>. This is API's entry point — it returns an instance of <a href="../SpeechSynthesis.html" title="The SpeechSynthesis interface of the Web Speech API is the controller interface for the speech service; this can be used to retrieve information about the synthesis voices available on the device, start and pause speech, and other commands besides."><code>SpeechSynthesis</code></a>, the controller interface for web speech synthesis.</p>
+
+<pre class="brush: js">var synth = window.speechSynthesis;
+
+var inputForm = document.querySelector('form');
+var inputTxt = document.querySelector('.txt');
+var voiceSelect = document.querySelector('select');
+
+var pitch = document.querySelector('#pitch');
+var pitchValue = document.querySelector('.pitch-value');
+var rate = document.querySelector('#rate');
+var rateValue = document.querySelector('.rate-value');
+
+var voices = [];
+</pre>
+
+<h4 id="Populating_the_select_element">Populating the select element</h4>
+
+<p>To populate the <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/select" title="The HTML select (&lt;select&gt;) element represents a control that presents a menu of options. The options within the menu are represented by &lt;option&gt; elements, which can be grouped by &lt;optgroup&gt; elements. Options can be pre-selected for the user."><code>&lt;select&gt;</code></a> element with the different voice options the device has available, we've written a <code>populateVoiceList()</code> function. We first invoke <a href="../SpeechSynthesis/getVoices.html" title="The getVoices() method of the SpeechSynthesis interface returns a list of SpeechSynthesisVoice objects representing all the available voices on the current device."><code>SpeechSynthesis.getVoices()</code></a>, which returns a list of all the available voices, represented by <a href="../SpeechSynthesisVoice.html" title="The SpeechSynthesisVoice interface of the Web Speech API represents a voice that the system supports. Every SpeechSynthesisVoice has its own relative speech service including information about language, name and URI."><code>SpeechSynthesisVoice</code></a> objects. We then loop through this list — for each voice we create an <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/option" title="In a Web form, the HTML &lt;option&gt; element is used to create a control representing an item within a &lt;select&gt;, an &lt;optgroup&gt; or a &lt;datalist&gt; HTML5 element."><code>&lt;option&gt;</code></a> element, set its text content to display the name of the voice (grabbed from <a href="../SpeechSynthesisVoice/name.html" title="The name read-only property of the SpeechSynthesisVoice interface returns a human-readable name that represents the voice."><code>SpeechSynthesisVoice.name</code></a>), the language of the voice (grabbed from <a href="../SpeechSynthesisVoice/lang.html" title="The lang read-only property of the SpeechSynthesisVoice interface returns a BCP 47 language tag indicating the language of the voice."><code>SpeechSynthesisVoice.lang</code></a>), and <code>-- DEFAULT</code> if the voice is the default voice for the synthesis engine (checked by seeing if <a href="../SpeechSynthesisVoice/default.html" title="The default read-only property of the SpeechSynthesisVoice interface returns a Boolean indicating whether the voice is the default voice for the current app (true), or not (false.)"><code>SpeechSynthesisVoice.default</code></a> returns <code>true</code>.)</p>
+
+<p>We also create <code>data-</code> attributes for each option, containing the name and language of the associated voice, so we can grab them easily later on, and then append the options as children of the select.</p>
+
+<pre class="brush: js">function populateVoiceList() {
+  voices = synth.getVoices();
+
+  for(i = 0; i &lt; voices.length ; i++) {
+    var option = document.createElement('option');
+    option.textContent = voices[i].name + ' (' + voices[i].lang + ')';
+    
+    if(voices[i].default) {
+      option.textContent += ' -- DEFAULT';
+    }
+
+    option.setAttribute('data-lang', voices[i].lang);
+    option.setAttribute('data-name', voices[i].name);
+    voiceSelect.appendChild(option);
+  }
+}</pre>
+
+<p>When we come to run the function, we do the following. This is because Firefox doesn't support <a href="../SpeechSynthesis/onvoiceschanged.html" title="The onvoiceschanged property of the SpeechSynthesis interface represents an event handler that will run when the list of SpeechSynthesisVoice objects that would be returned by the SpeechSynthesis.getVoices() method has changed (when the voiceschanged event fires.)"><code>SpeechSynthesis.onvoiceschanged</code></a>, and will just return a list of voices when <a href="../SpeechSynthesis/getVoices.html" title="The getVoices() method of the SpeechSynthesis interface returns a list of SpeechSynthesisVoice objects representing all the available voices on the current device."><code>SpeechSynthesis.getVoices()</code></a> is fired. With Chrome however, you have to wait for the event to fire before populaitng the list, hence the if statement seen below.</p>
+
+<pre class="brush: js">populateVoiceList();
+if (speechSynthesis.onvoiceschanged !== undefined) {
+  speechSynthesis.onvoiceschanged = populateVoiceList;
+}</pre>
+
+<h4 id="Speaking_the_entered_text">Speaking the entered text</h4>
+
+<p>Next, we create an event handler to start speaking the text entered into the text field. We are using an <a href="../GlobalEventHandlers/onsubmit.html">onsubmit</a> handler on the form so that the action happens when <kbd>Enter</kbd>/<kbd>Return</kbd> is pressed. We first create a new <a href="../SpeechSynthesisUtterance/SpeechSynthesisUtterance.html" title="The SpeechSynthesisUtterance() constructor of the SpeechSynthesisUtterance interface returns a new SpeechSynthesisUtterance object instance."><code>SpeechSynthesisUtterance()</code></a> instance using its constructor — this is passed the text input's value as a parameter.</p>
+
+<p>Next, we need to figure out which voice to use. We use the <a href="../HTMLSelectElement.html" title="The HTMLSelectElement interface represents a &lt;select&gt; HTML Element. These elements also share all of the properties and methods of other HTML elements via the HTMLElement interface."><code>HTMLSelectElement</code></a> <code>selectedOptions</code> property to return the currently selected <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/option" title="In a Web form, the HTML &lt;option&gt; element is used to create a control representing an item within a &lt;select&gt;, an &lt;optgroup&gt; or a &lt;datalist&gt; HTML5 element."><code>&lt;option&gt;</code></a> element. We then use this element's <code>data-name</code> attribute, finding the <a href="../SpeechSynthesisVoice.html" title="The SpeechSynthesisVoice interface of the Web Speech API represents a voice that the system supports. Every SpeechSynthesisVoice has its own relative speech service including information about language, name and URI."><code>SpeechSynthesisVoice</code></a> object whose name matches this attribute's value. We set the matching voice object to be the value of the <a href="../SpeechSynthesisUtterance/voice.html" title="The voice property of the SpeechSynthesisUtterance interface gets and sets the voice that will be used to speak the utterance."><code>SpeechSynthesisUtterance.voice</code></a> property.</p>
+
+<p>Finally, we set the <a href="../SpeechSynthesisUtterance/pitch.html" title="The pitch property of the SpeechSynthesisUtterance interface gets and sets the pitch at which the utterance will be spoken at."><code>SpeechSynthesisUtterance.pitch</code></a> and <a href="../SpeechSynthesisUtterance/rate.html" title="The rate property of the SpeechSynthesisUtterance interface gets and sets the speed at which the utterance will be spoken at."><code>SpeechSynthesisUtterance.rate</code></a> to the values of the relevant range form elements. Then, with all necessary preparations made, we start the utterance being spoken by invoking <a href="../SpeechSynthesis/speak.html" title="The speak() method of the SpeechSynthesis interface adds an utterance to the utterance queue; it will be spoken when any other utterances queued before it have been spoken."><code>SpeechSynthesis.speak()</code></a>, passing it the <a href="../SpeechSynthesisUtterance.html" title="The SpeechSynthesisUtterance interface of the Web Speech API represents a speech request. It contains the content the speech service should read and information about how to read it (e.g. language, pitch and volume.)"><code>SpeechSynthesisUtterance</code></a> instance as a parameter.</p>
+
+<pre class="brush: js">inputForm.onsubmit = function(event) {
+  event.preventDefault();
+
+  var utterThis = new SpeechSynthesisUtterance(inputTxt.value);
+  var selectedOption = voiceSelect.selectedOptions[0].getAttribute('data-name');
+  for(i = 0; i &lt; voices.length ; i++) {
+    if(voices[i].name === selectedOption) {
+      utterThis.voice = voices[i];
+    }
+  }
+  utterThis.pitch = pitch.value;
+  utterThis.rate = rate.value;
+  synth.speak(utterThis);</pre>
+
+<p>In the final part of the handler, we include an <a href="../SpeechSynthesisUtterance/onpause.html" title="The onpause property of the SpeechSynthesisUtterance interface represents an event handler that will run when the utterance is paused part way through (when the pause event fires.)"><code>SpeechSynthesisUtterance.onpause</code></a> handler to demonstrate how <a href="../SpeechSynthesisEvent.html" title="The SpeechSynthesisEvent interface of the Web Speech API contains information about the current state of SpeechSynthesisUtterance objects that have been processed in the speech service."><code>SpeechSynthesisEvent</code></a> can be put to good use. When <a href="../SpeechSynthesis/pause.html" title="The pause() method of the SpeechSynthesis interface puts the SpeechSynthesis object into a paused state."><code>SpeechSynthesis.pause()</code></a> is invoked, this returns a message reporting the character number and name that the speech was paused at.</p>
+
+<pre class="brush: js">   utterThis.onpause = function(event) {
+    var char = event.utterance.text.charAt(event.charIndex);
+    console.log('Speech paused at character ' + event.charIndex + ' of "' +
+    event.utterance.text + '", which is "' + char + '".');
+  }</pre>
+
+<p>Finally, we call <a href="../HTMLElement/blur.html">blur()</a> on the text input. This is mainly to hide the keyboard on Firefox OS.</p>
+
+<pre class="brush: js">  inputTxt.blur();
+}</pre>
+
+<h4 id="Updating_the_displayed_pitch_and_rate_values">Updating the displayed pitch and rate values</h4>
+
+<p>The last part of the code simply updates the <code>pitch</code>/<code>rate</code> values displayed in the UI, each time the slider positions are moved.</p>
+
+<pre class="brush: js">pitch.onchange = function() {
+  pitchValue.textContent = pitch.value;
+}
+
+rate.onchange = function() {
+  rateValue.textContent = rate.value;
+}</pre>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;</p>
+                  
+                
+              </article>
+
+              
+
+    
+    
+    
+
+    
+    
+    
+
+    <div class="share">
+        <strong>Share:</strong>
+        <ul>
+            <li><a href="http://twitter.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FAPI%2FWeb_Speech_API%2FUsing_the_Web_Speech_API%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dtwitter.com&amp;text=I+learned+about+Using+the+Web+Speech+API+on+MDN." target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API/Using_the_Web_Speech_API?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=twitter.com" data-title="I learned about Using the Web Speech API on MDN." class="share-link twitter"><i aria-hidden="true" class="icon-twitter"></i>Twitter</a></li>
+            <li><a href="http://facebook.com/sharer.php?s=100&amp;p[url]=https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API/Using_the_Web_Speech_API?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API/Using_the_Web_Speech_API?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" data-title="I learned about Using the Web Speech API on MDN." class="share-link facebook"><i aria-hidden="true" class="icon-facebook"></i>Facebook</a></li>
+            <li><a href="https://plus.google.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FAPI%2FWeb_Speech_API%2FUsing_the_Web_Speech_API%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dplus.google.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API/Using_the_Web_Speech_API?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=plus.google.com" data-title="I learned about Using the Web Speech API on MDN." class="share-link gplus"><i aria-hidden="true" class="icon-google-plus"></i>Google+</a></li>
+        </ul>
+    </div>
+
+              
+
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                  
+                  
+  <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags icon-fw"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+      
+        <li><a href="../../../tag/API.html">API</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Guide">Guide</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/recognition">recognition</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/speech">speech</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/synthesis">synthesis</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Tutorial">Tutorial</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Using">Using</a></li>
+      
+        <li><a href="../../../tag/Web%20Speech%20API.html">Web Speech API</a></li>
+      
+    </ul>
+  </div>
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-group icon-fw"></i>&nbsp;<strong>Contributors to this page:</strong> 
+        <a href="https://developer.mozilla.org/en-US/profiles/dbolter">dbolter</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills">chrisdavidmills</a>
+    
+                    </div>
+                  
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o icon-fw"></i>&nbsp;<strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/dbolter">dbolter</a>,
+                      <time datetime="2015-12-17T09:55:11-08:00">Dec 17, 2015, 9:55:11 AM</time>
+                    </div>
+                  
+                </div>
+              
+            </div>
+
+            
+          </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Web/API/Web_Speech_API/Using_the_Web_Speech_API$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Web/API/Web_Speech_API/Using_the_Web_Speech_API$history" label="View page history"></menuitem>
+  </menu>
+
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+        
+        <div class="contentinfo">
+          <p>© 2005-2016 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>
+          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+        
+        </div>
+      </div>
+      <div class="column-strip">
+        
+          
+  
+
+        
+      </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+  
+    
+    <!--[if lte IE 8]><script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/selectivizr.091e18cf669b.js" charset="utf-8"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/main.a7b27a25fb9c.js" charset="utf-8"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+    
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/syntax-prism-min.js" charset="utf-8"></script><script type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/wiki.bd71ca9fd27d.js" charset="utf-8" id="wikiscript"></script>
+
+  
+
+  <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/helpfulness.7b208a764d28.js" charset="utf-8"></script>
+
+  
+
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API/Using_the_Web_Speech_API by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 17:05:43 GMT -->
+</body></html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml">
+<!-- Mirrored from stat.ethz.ch/R-manual/R-patched/RHOME/library/tools/html/package.dependencies.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 04 May 2016 17:02:07 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head><title>Check Package Dependencies</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for package.dependencies {tools}"><tr><td>package.dependencies {tools}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Check Package Dependencies</h2>
+
+<h3>Description</h3>
+
+<p>Parses and checks the dependencies of a package against the currently
+installed version of R (and other packages).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+package.dependencies(x, check = FALSE,
+                     depLevel =
+                     c("Depends", "Imports", "Suggests"))
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>x</code></td>
+<td>
+<p>A matrix of package descriptions as returned by
+<code><a href="../../utils/html/available.packages.html">available.packages</a></code>.</p>
+</td></tr>
+<tr valign="top"><td><code>check</code></td>
+<td>
+<p>If <code>TRUE</code>, return logical vector of check results.
+If <code>FALSE</code>, return parsed list of dependencies.</p>
+</td></tr>
+<tr valign="top"><td><code>depLevel</code></td>
+<td>
+<p>Whether to look for <code>Depends</code> or <code>Suggests</code>
+level dependencies.  Can be abbreviated.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>Currently we only check if the package conforms with the currently
+running version of R.  In the future we might add checks for
+inter-package dependencies.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="../../utils/html/update.packages.html">update.packages</a></code>
+</p>
+
+<hr /><div style="text-align: center;">[Package <em>tools</em> version 3.2.2 <a href="00Index.html">Index</a>]</div>
+</body>
+<!-- Mirrored from stat.ethz.ch/R-manual/R-patched/RHOME/library/tools/html/package.dependencies.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 04 May 2016 17:02:07 GMT -->
+</html>

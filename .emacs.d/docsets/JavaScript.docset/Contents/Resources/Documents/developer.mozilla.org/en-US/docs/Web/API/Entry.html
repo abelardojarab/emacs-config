@@ -1,0 +1,1046 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/Entry by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 14:17:09 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <script async="" src="../../../../../www.google-analytics.com/analytics.js"></script><script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+  
+    
+  
+
+  
+  <title>Entry</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+  
+    
+    
+    <link href="../../../../../developer.cdn.mozilla.net/static/build/styles/mdn.593f20d8c365.css" rel="stylesheet" type="text/css">
+
+    
+  
+    <link href="../../../../../developer.cdn.mozilla.net/static/build/styles/wiki.13dd9abdfb62.css" rel="stylesheet" type="text/css">
+
+    
+
+    
+
+  <!-- common social tags -->
+  
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../developer.cdn.mozilla.net/static/img/favicon144.a6e4162070f4.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../developer.cdn.mozilla.net/static/img/favicon114.0e9fabd44f85.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../developer.cdn.mozilla.net/static/img/favicon72.8ff9d87c82a0.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../developer.cdn.mozilla.net/static/img/favicon57.a2490b9a2d76.png">
+  <!-- basic favicon -->
+  
+    
+  
+  <link rel="shortcut icon" href="../../../../../developer.cdn.mozilla.net/static/img/favicon32.e02854fdcf73.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/html5shiv.3948ccddab6f.js" charset="utf-8"></script>
+  <![endif]-->
+
+  
+  <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Web/API/Entry$json">
+  <link rel="canonical" href="Entry.html">
+
+  
+    
+      <link rel="alternate" hreflang="es" href="https://developer.mozilla.org/es/docs/Web/API/Entry" title="Entry">
+    
+  
+
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="Entry">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Web/API/Entry">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Web/API/Entry">
+  <meta name="twitter:title" content="Entry">
+  
+  <meta property="og:description" content="The Entry interface of the FileSystem API represents an entry in a file system. The entry can be a file or a directory. It includes methods for working with files—including copying, moving, removing, and reading files—as well as information about a file it points to—including the file name and its path from the root to the entry.">
+  <meta name="description" content="The Entry interface of the FileSystem API represents an entry in a file system. The entry can be a file or a directory. It includes methods for working with files—including copying, moving, removing, and reading files—as well as information about a file it points to—including the file name and its path from the root to the entry.">
+  <meta name="twitter:description" content="The Entry interface of the FileSystem API represents an entry in a file system. The entry can be a file or a directory. It includes methods for working with files—including copying, moving, removing, and reading files—as well as information about a file it points to—including the file name and its path from the root to the entry.">
+  
+
+  
+    
+
+
+
+  
+</head>
+<body data-slug="Web/API/Entry" contextmenu="edit-history-menu" data-search-url="" class="document  ">
+
+  <script type="text/javascript">
+    (function(win) {
+        'use strict';
+
+        
+            (function(){
+  var FLAGS = {
+    'compat_api': false,'kumaediting': false,'page_move': false,'registration_disabled': false,'search_suggestions': false,'section_edit': true,'spam_admin_override': false,'spam_checks_enabled': true,'spam_spammer_override': false,'spam_submissions_enabled': false,'spam_testing_mode': false,'wiki_samples': true,'wiki_spam_exempted': false,'wiki_spam_training': true
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': true,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+
+        // This needs to be set before ckeditor.js loads
+        window.CKEDITOR_BASEPATH = 'https://developer.mozilla.org/static/js/libs/ckeditor/build/ckeditor/';
+
+        // This represents the site configuration
+        win.mdn = {
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+            
+            notifications: [],
+            
+            // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            },
+            // Assets that need to be dynamically injected
+            assets_disabled: {
+                css: {
+                    'editor-content': ['https://developer.cdn.mozilla.net/static/build/styles/editor-content.3d79df72080d.css',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/styles/wiki-compat-tables.f3a3bfce97a1.css',]
+                },
+                js: {
+                    'syntax-prism': ['https://developer.cdn.mozilla.net/static/build/js/syntax-prism.7a66ddfa68bf.js',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/js/wiki-compat-tables.14ce5dcb2c3d.js',]
+                }
+            }
+        };
+    })(this);
+</script>
+
+  
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+    
+      <li><a href="#q" id="skip-search">Skip to search</a></li>
+    
+  </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+    <a href="https://developer.mozilla.org/en-US/" class="logo">Mozilla Developer Network</a>
+
+    <div id="nav-sec">
+        
+                  <ul>
+                  <li>
+
+    
+
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                Sign in
+              </span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FEntry" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/Web/API/Entry" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/Web/API/Entry" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FEntry" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+              
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+        
+    </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+
+   <!-- end is_zone -->
+
+    <div class="wiki-main-content" id="document-main"><div class="center">
+      
+      <div class="article-meta">
+        <!-- action buttons -->
+        
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+  <ul class="page-buttons" data-sticky="false">
+      
+      <li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+              
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/es/docs/Web/API/Entry" title="Entry">Español</a></bdi></li>
+                
+              
+
+              
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Entry$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+              
+            </ul>
+          </div>
+        </div>
+      </li>
+
+      <li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Entry$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li>
+
+        
+
+        <li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Entry$history" rel="nofollow, noindex">History</a></li>
+                
+                
+                
+                
+
+                
+
+                
+                
+                
+                <li class="page-print"><a href="#" onclick="return window.print();">Print this article</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+        
+  <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web" rel="v:url" property="v:title">Web technology for developers</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="../API.html" rel="v:url" property="v:title">Web APIs</a></li>
+    
+    <li class="crumb" typeof="v:Breadcrumb" property="v:title">Entry</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        
+        <div class="contributor-avatars" data-all-text="see all contributors" data-alternate-message="hide contributors" data-has-hidden="1">
+            <ul>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/jwhitlock" title="View profile: jwhitlock">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="jwhitlock" data-src="../../../../../secure.gravatar.com/avatar/40c605f51b728fc5655b5de202e898e16c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">jwhitlock</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/fscholz" title="View profile: fscholz">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="fscholz" data-src="../../../../../secure.gravatar.com/avatar/e24391c9174352988d819a9b9ea77c9e6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">fscholz</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/kscarfone" title="View profile: kscarfone">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="kscarfone" data-src="../../../../../secure.gravatar.com/avatar/89c1e54a9703125168e40d22316d2b496c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">kscarfone</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/ethertank" title="View profile: ethertank">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="ethertank" data-src="../../../../../secure.gravatar.com/avatar/abac73ba2093b500bf7599c76d80280c6c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">ethertank</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/teoli" title="View profile: teoli">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="teoli" data-src="../../../../../secure.gravatar.com/avatar/d0d90148e08e3b64ccf75c46f31442c56c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">teoli</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Sheppy" title="View profile: Sheppy">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Sheppy" data-src="../../../../../secure.gravatar.com/avatar/945076feb88f2d7003891ffbf06f32bf6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Sheppy</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/gjuggler" title="View profile: gjuggler">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="gjuggler" data-src="../../../../../secure.gravatar.com/avatar/2eaf63a7e9b6a250e96072017812cc406c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">gjuggler</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/grendel" title="View profile: grendel">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="grendel" data-src="../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">grendel</noscript></a>
+                </li>
+            
+            </ul>
+        </div>
+        
+
+        <h1>Entry</h1>
+
+      </div>
+      
+
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-present">
+
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+            
+              <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+              
+              <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#About_this_document" rel="internal">About this document</a></li><li><a href="#basic" rel="internal">Basic Concepts</a><ol><li><a href="#example" rel="internal">Example</a></li></ol></li><li><a href="#Method_overview" rel="internal">Method overview</a></li><li><a href="#Attributes" rel="internal">Attributes</a></li><li><a href="#Methods" rel="internal">Methods</a><ol><li><a href="#getMetadata" rel="internal">getMetadata()</a></li><li><a href="#moveTo" rel="internal">moveTo()</a></li><li><a href="#copyTo" rel="internal">copyTo()</a></li><li><a href="#toURL" rel="internal">toURL()</a></li><li><a href="#remove" rel="internal">remove()</a></li><li><a href="#getParent" rel="internal">getParent()</a></li></ol></li><li><a href="#Browser_compatibility" rel="internal">Browser compatibility</a></li><li><a href="#See_also" rel="internal">See also</a>
+                </li></ol>
+              </div>
+              
+              </div>
+            
+
+            
+            
+              
+            
+
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-half wiki-column text-content">
+
+              
+
+              
+
+              
+                
+                
+                
+              
+              
+
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                
+                  
+                    <div><section id="Quick_Links" class="Quick_links"><!-- --></section> <div class="overheadIndicator nonStandard nonStandardHeader"> 
+      <p><strong><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span> Non-standard</strong><br> 
+      This feature is non-standard and is not on a standards track. Do not use it on production sites facing the Web: it will not work for every user. There may also be large incompatibilities between implementations and the behavior may change in the future.</p> 
+      </div></div>
+
+<p>The <code>Entry</code> interface of the <a href="../../DOM/File_API/File_System_API.png">FileSystem API</a> represents an entry in a file system. The entry can be a file or a directory. It includes methods for working with files—including copying, moving, removing, and reading files—as well as information about a file it points to—including the file name and its path from the root to the entry.</p>
+
+<h2 id="About_this_document">About this document</h2>
+
+<p>This document was last updated on March 2, 2011 and follows the <a href="http://www.w3.org/TR/file-system-api/" class="external">W3C Specifications (Working Draft)</a> drafted on April 19, 2011.</p>
+
+<p>This specification is more or less abandoned as it didn't get significant traction.</p>
+
+<h2 name="basic" id="basic">Basic Concepts</h2>
+
+<p>The <code>Entry</code> interface includes methods that you would expect for manipulating files and directories, but it also include a really handy method for getting a URL of the entry: <code><a href="#toURL">toURL()</a></code>. It also introduces a new URL scheme: <code>filesystem:</code>.</p>
+
+<p>You can use the <code>filesystem:</code> scheme on Google Chrome to see all the files and folders that are stored in the origin of your app. Just use <code>filesystem:</code> scheme for the root directory of the origin of the app. For example, if your app is in <code><a href="http://ww.html5rocks.com/" rel="freelink" class="external">http://ww.html5rocks.com</a></code>, open<code> filesystem:<a href="http://www.html5rocks.com/temporary/" rel="freelink" class="external">http://www.html5rocks.com/temporary/</a></code> in a tab. Chrome shows a read-only list of all the files and folders stored the origin of your app.</p>
+
+<h3 name="example" id="example">Example</h3>
+
+<p>To see an example of how toURL() works, see the <a href="#toURL">method description</a>. The snippet below shows you how you can remove a file by name.</p>
+
+<pre class="brush: js">// Taking care of the browser-specific prefixes.
+window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem; 
+
+...
+
+// Opening a file system with temporary storage
+window.requestFileSystem(TEMPORARY, 1024*1024 /*1MB*/, function(fs) {
+  fs.root.getFile('log.txt', {}, function(fileEntry) {
+    
+    fileEntry.remove(function() {
+      console.log('File removed.');
+    }, onError);
+  
+  }, onError);
+}, onError); </pre>
+
+<h2 id="Method_overview">Method overview</h2>
+
+<table class="standard-table">
+ <tbody>
+  <tr>
+   <td><code>void <a href="#getMetadata">getMetadata</a> (in MetadataCallback <em>successCallback</em>, in optional ErrorCallback <em>errorCallback</em>);</code></td>
+  </tr>
+  <tr>
+   <td><code>void <a href="#moveTo">moveTo</a> (in DirectoryEntry <em>parent</em>, optional DOMString <em>newName</em>, in optional EntryCallback <em>successCallback</em>, in optional ErrorCallback <em>errorCallback</em>);</code></td>
+  </tr>
+  <tr>
+   <td><code>void <a href="#copyTo">copyTo</a> (in DirectoryEntry <em>parent</em>, in optional DOMString <em>newName</em>, in optional EntryCallback <em>successCallback</em>, in optional ErrorCallback <em>errorCallback</em>);</code></td>
+  </tr>
+  <tr>
+   <td><code>void <a href="#toURL">toURL</a> (in optional DOMString <em>mimeType</em>);</code></td>
+  </tr>
+  <tr>
+   <td><code>void <a href="#remove">remove</a> (in VoidCallback <em>successCallback</em>, in optional ErrorCallback <em>errorCallback</em>);</code></td>
+  </tr>
+  <tr>
+   <td><code>void <a href="#getParent">getParent</a> (in EntryCallback <em>successCallback</em>, in optional ErrorCallback <em>errorCallback</em>);</code></td>
+  </tr>
+ </tbody>
+</table>
+
+<h2 id="Attributes">Attributes</h2>
+
+<table class="standard-table">
+ <thead>
+  <tr>
+   <th scope="col">Attribute</th>
+   <th scope="col">Type</th>
+   <th scope="col">Description</th>
+  </tr>
+ </thead>
+ <tbody>
+  <tr>
+   <td><a name="attr_filesystem"><code>filesystem</code></a></td>
+   <td><code>readonly FileSystem</code></td>
+   <td>The file system where the entry resides.</td>
+  </tr>
+  <tr>
+   <td><a name="fullpath" id="attr_fullpath"><code>fullPath</code></a></td>
+   <td><code>readonly DOMString</code></td>
+   <td>The full absolute path from the root to the entry.
+    <p>An absolute path is a relative path from the root directory, prepended with a '<code>/</code>'. </p>
+   </td>
+  </tr>
+  <tr>
+   <td><a name="attr_isDirectory" id="attr_root"><code>isDirectory</code></a></td>
+   <td><code>readonly boolean</code></td>
+   <td>True if the entry is a directory.</td>
+  </tr>
+  <tr>
+   <td><a name="attr_isfile" id="attr_isfile"><code>isFile</code></a></td>
+   <td><code>readonly boolean</code></td>
+   <td>True if the entry is a file.</td>
+  </tr>
+  <tr>
+   <td><a name="attr_name" id="attr_name"><code>name</code></a></td>
+   <td><code>readonly DOMString</code></td>
+   <td>The name of the entry, excluding the path leading to it.</td>
+  </tr>
+ </tbody>
+</table>
+
+<h2 id="Methods">Methods</h2>
+
+<h3 name="getMetadata" id="getMetadata">getMetadata()</h3>
+
+<p>Look up last modification date of the entry.</p>
+
+<pre>void getMetadata (
+  in MetadataCallback ErrorCallback
+);</pre>
+
+<h5 id="Parameter">Parameter</h5>
+
+<dl>
+ <dt>successCallback</dt>
+ <dd>A callback that is called with the time of the last modification.</dd>
+ <dt>errorCallback</dt>
+ <dd>A callback that is called when errors happen.</dd>
+</dl>
+
+<h5 id="Returns">Returns</h5>
+
+<dl>
+ <dt><code>void</code></dt>
+</dl>
+
+<h3 name="moveTo" id="moveTo">moveTo()</h3>
+
+<p>Move an entry to a different location on the file system. Moving a file over an existing file replaces that existing file. A move of a directory on top of an existing empty directory replaces that directory.</p>
+
+<p>You can also use this method for renaming files. You can keep it in the same location and then define the <code>newName</code> parameter.</p>
+
+<p>You cannot do the following:</p>
+
+<ul>
+ <li>Move a directory inside itself or to any child at any depth</li>
+ <li>Move an entry into its parent if a name different from its current one isn't provided</li>
+ <li>Move a file to a path occupied by a directory or move a directory to a path occupied by a file</li>
+ <li>Move any element to a path occupied by a directory that is not empty.</li>
+</ul>
+
+<pre>void moveTo (
+  in DirectoryEntry <em>parent</em>, optional DOMString <em>newName</em>, optional EntryCallback <em>successCallback</em>, optional ErrorCallback <em>errorCallback</em>
+);</pre>
+
+<h5 id="Parameter_2">Parameter</h5>
+
+<dl>
+ <dt>parent</dt>
+ <dd>The directory to which to move the entry.</dd>
+ <dt>newName</dt>
+ <dd>The new name of the entry. If you do not specify a name, the browser preserves the entry's current name.</dd>
+ <dt>successCallback</dt>
+ <dd>A callback that is called when the file or directory has been successfully moved.</dd>
+ <dt>errorCallback</dt>
+ <dd>An optional callback that is called only when errors happen.</dd>
+</dl>
+
+<h5 id="Returns_2">Returns</h5>
+
+<dl>
+ <dt><code>void</code></dt>
+</dl>
+
+<h3 name="copyTo" id="copyTo">copyTo()</h3>
+
+<p>Copy an entry to a different location on the file system. You cannot copy an entry inside itself if it is a directory, nor can you copy it into its parent if you don't provide a new name. Directory copies are always recursive—that is, they copy all contents of the directory. You cannot change this behavior. Files are simply duplicated.</p>
+
+<pre>void copyTo (
+  in DirectoryEntry <em>parent</em>, optional DOMString <em>newName</em>, optional EntryCallback <em>successCallback</em>, optional ErrorCallback <em>errorCallback</em>
+);</pre>
+
+<h5 id="Parameter_3">Parameter</h5>
+
+<dl>
+ <dt>parent</dt>
+ <dd>The directory where you want the entry to move to.</dd>
+ <dt>newName</dt>
+ <dd>The new name of the entry. If you do not specify a name, the browser preserves the entry's current name.</dd>
+ <dt>successCallback</dt>
+ <dd>A callback that is called when the file or directory has been successfully copied.</dd>
+ <dt>errorCallback</dt>
+ <dd>An optional callback that is called only when errors happen.</dd>
+</dl>
+
+<h5 id="Returns_3">Returns</h5>
+
+<dl>
+ <dt><code>void</code></dt>
+</dl>
+
+<h3 name="toURL" id="toURL">toURL()</h3>
+
+<p>Returns a URL that can be used to identify this entry. It exposes a new URL scheme—<code>filesystem:</code>—that you can use to fill <code>src</code> or <code>href</code> attributes. For example, if you wanted to display an image and have its <a href="FileEntry.html">fileEntry</a>, calling <code>toURL()</code> gives you the image file's file system URL. You get something like: <code>filesystem:<a href="../../../../../example.com/temporary/lolcat.html" rel="freelink" class="external">http://example.com/temporary/lolcat.png</a>.</code></p>
+
+<p>The following is an example:</p>
+
+<pre class="brush: js">var img = document.createElement('img'); 
+// Get the URL of the entry, which returns: filesystem:<a href="../../../../../example.com/temporary/lolcat.html" rel="freelink" class="external">http://example.com/temporary/lolcat.png</a> 
+img.src = fileEntry.toURL(); 
+document.body.appendChild(img);</pre>
+
+<p>The file system URL does not expire. Because the method describes a location on disk, the URL is valid for as long as that location exists. You can delete the file and recreate it, and it's all good.</p>
+
+<p>You can supply the <code>mimeType</code> to simulate the optional MIME-type header associated with HTTP downloads.</p>
+
+<pre>DOMString toURL (
+  <em>in </em>optional DOMString mimeType
+);</pre>
+
+<h5 id="Parameter_4">Parameter</h5>
+
+<dl>
+ <dt>mimeType</dt>
+ <dd>The MIME type that you want to be used to interpret the file when it is loaded through this URL.</dd>
+</dl>
+
+<h5 id="Returns_4">Returns</h5>
+
+<dl>
+ <dt><code>DOMString</code></dt>
+</dl>
+
+<h3 name="remove" id="remove">remove()</h3>
+
+<p>Deletes a file or directory. You cannot delete an empty directory or the root directory of a file system. If you want to remove an empty directory, use <a href="DirectoryEntrySync.html#removeRecursively()"><code>removeRecursively()</code></a> instead.</p>
+
+<pre>void remove (
+  in VoidCallback <em>successCallback</em>, optional ErrorCallback <em>errorCallback</em>
+);</pre>
+
+<h5 id="Parameter_5">Parameter</h5>
+
+<dl>
+ <dt>successCallback</dt>
+ <dd>A callback that is called when the file is successfully deleted.</dd>
+ <dt>errorCallback</dt>
+ <dd>An optional callback that is called only when errors happen.</dd>
+</dl>
+
+<h5 id="Returns_5">Returns</h5>
+
+<dl>
+ <dt><code>void</code></dt>
+</dl>
+
+<h3 name="getParent" id="getParent">getParent()</h3>
+
+<p>Look up the parent <code>DirectoryEntry</code> containing the entry. If this entry is the root of its file system, then the parent is itself.</p>
+
+<pre>void getParent (
+ in EntryCallback <em>successCallback</em>, optional ErrorCallback <em>errorCallback</em>
+);</pre>
+
+<h5 id="Parameter_6">Parameter</h5>
+
+<dl>
+ <dt>parent</dt>
+ <dd>The directory where you want to move the entry.</dd>
+ <dt>newName</dt>
+ <dd>The new name of the entry. If you do not specify a name, the browser preserves the entry's current name.</dd>
+ <dt>successCallback</dt>
+ <dd>A callback that is called when the look-up entry is successful.</dd>
+ <dt>errorCallback</dt>
+ <dd>An optional callback that is called when errors happen.</dd>
+</dl>
+
+<h5 id="Returns_6">Returns</h5>
+
+<dl>
+ <dt><code>void</code></dt>
+</dl>
+
+<h2 name="Browser_compatibility" id="Browser_compatibility">Browser compatibility</h2>
+
+<div><div class="htab"> 
+    <a name="AutoCompatibilityTable" id="AutoCompatibilityTable"></a> 
+    <ul> 
+        <li class="selected"><a>Desktop</a></li> 
+        <li><a>Mobile</a></li> 
+    </ul> 
+</div></div>
+
+<div id="compat-desktop">
+<table class="compat-table">
+ <tbody>
+  <tr>
+   <th>Feature</th>
+   <th>Chrome</th>
+   <th>Firefox (Gecko)</th>
+   <th>Internet Explorer</th>
+   <th>Opera</th>
+   <th>Safari (WebKit)</th>
+  </tr>
+  <tr>
+   <td>Basic support</td>
+   <td>13<span class="inlineIndicator prefixBox prefixBoxInline" title="prefix"><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Prefixes" title="The name of this feature is prefixed with 'webkit' as this browser considers it experimental">webkit</a></span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+  </tr>
+ </tbody>
+</table>
+</div>
+
+<div id="compat-mobile">
+<table class="compat-table">
+ <tbody>
+  <tr>
+   <th>Feature</th>
+   <th>Android</th>
+   <th>Chrome for Android</th>
+   <th>Firefox Mobile (Gecko)</th>
+   <th>IE Phone</th>
+   <th>Opera Mobile</th>
+   <th>Safari Mobile</th>
+  </tr>
+  <tr>
+   <td>Basic support</td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td>0.16<span class="inlineIndicator prefixBox prefixBoxInline" title="prefix"><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Prefixes" title="The name of this feature is prefixed with 'webkit' as this browser considers it experimental">webkit</a></span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+   <td><span style="color: #f00;">Not&nbsp;supported</span></td>
+  </tr>
+ </tbody>
+</table>
+</div>
+
+<h2 id="See_also">See also</h2>
+
+<ul>
+ <li>Specification: <a href="http://dev.w3.org/2009/dap/file-system/pub/FileSystem/" class="external">File API: Directories and System Specification</a><span title="Working Draft" style="color: #fff; background: #e66e33; display: inline-block; font-size: x-small; margin-left: 6px; white-space: nowrap; padding: 2px 5px;">WD</span></li>
+ <li>Reference: <a href="../../DOM/File_API/File_System_API.png">File System API</a></li>
+ <li>Introduction: <a href="File_System_API/Introduction.html">Basic Concepts About the File System API</a></li>
+</ul>
+                  
+                
+              </article>
+
+              
+
+    
+    
+    
+
+    
+    
+    
+
+    <div class="share">
+        <strong>Share:</strong>
+        <ul>
+            <li><a href="http://twitter.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FAPI%2FEntry%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dtwitter.com&amp;text=I+learned+about+Entry+on+MDN." target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/API/Entry?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=twitter.com" data-title="I learned about Entry on MDN." class="share-link twitter"><i aria-hidden="true" class="icon-twitter"></i>Twitter</a></li>
+            <li><a href="http://facebook.com/sharer.php?s=100&amp;p[url]=https://developer.mozilla.org/en-US/docs/Web/API/Entry?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/API/Entry?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" data-title="I learned about Entry on MDN." class="share-link facebook"><i aria-hidden="true" class="icon-facebook"></i>Facebook</a></li>
+            <li><a href="https://plus.google.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FAPI%2FEntry%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dplus.google.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/API/Entry?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=plus.google.com" data-title="I learned about Entry on MDN." class="share-link gplus"><i aria-hidden="true" class="icon-google-plus"></i>Google+</a></li>
+        </ul>
+    </div>
+
+              
+
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                  
+                  
+  <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags icon-fw"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+      
+        <li><a href="../../tag/API.html">API</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/File">File</a></li>
+      
+        <li><a href="../../tag/File%20API.html">File API</a></li>
+      
+        <li><a href="../../tag/File%20System%20API.html">File System API</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/NeedsMarkupWork">NeedsMarkupWork</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Offline">Offline</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Reference">Reference</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Référence">Référence</a></li>
+      
+    </ul>
+  </div>
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-group icon-fw"></i>&nbsp;<strong>Contributors to this page:</strong> 
+        <a href="https://developer.mozilla.org/en-US/profiles/jwhitlock">jwhitlock</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/fscholz">fscholz</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/kscarfone">kscarfone</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/ethertank">ethertank</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/teoli">teoli</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Sheppy">Sheppy</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/gjuggler">gjuggler</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/grendel">grendel</a>
+    
+                    </div>
+                  
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o icon-fw"></i>&nbsp;<strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/jwhitlock">jwhitlock</a>,
+                      <time datetime="2015-08-12T06:32:34-07:00">Aug 12, 2015, 6:32:34 AM</time>
+                    </div>
+                  
+                </div>
+              
+            </div>
+
+            
+              <!-- quick links and zone subnav strip -->
+              <div id="wiki-left" class="column-strip wiki-column">
+
+              
+
+                
+
+                
+                  <!-- quick links -->
+                  
+  <div class="quick-links" id="quick-links">
+    <div class="title see-also">See also</div>
+    <ol><li><strong><a href="Entry.html"><code>Entry</code></a></strong></li><li data-default-state="open"><a href="#"><strong>Related pages for File System API</strong></a><ol><li><a href="DirectoryEntry.html"><code>DirectoryEntry</code></a></li><li><a href="DirectoryEntrySync.html"><code>DirectoryEntrySync</code></a></li><li><a href="DirectoryReader.html"><code>DirectoryReader</code></a></li><li><a href="DirectoryReaderSync.html"><code>DirectoryReaderSync</code></a></li><li><a href="EntrySync.html"><code>EntrySync</code></a></li><li><a href="FileEntry.html"><code>FileEntry</code></a></li><li><a href="FileEntrySync.html"><code>FileEntrySync</code></a></li><li><a href="FileError.html"><code>FileError</code></a></li><li><a href="FileException.html"><code>FileException</code></a></li><li><a href="IDBMutableFile.html"><code>FileHandle</code></a></li><li><a href="FileRequest.html"><code>FileRequest</code></a></li><li><a href="FileSystem.html"><code>FileSystem</code></a></li><li><a href="FileSystemSync.html"><code>FileSystemSync</code></a></li><li><a href="LocalFileSystem.html"><code>LocalFileSystem</code></a></li><li><a href="LocalFileSystemSync.html"><code>LocalFileSystemSync</code></a></li><li><a href="LockedFile.html"><code>LockedFile</code></a></li></ol></li></ol>
+  </div>
+                
+
+                <!-- approvals -->
+                
+
+              
+
+              </div>
+            
+          </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Web/API/Entry$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Web/API/Entry$history" label="View page history"></menuitem>
+  </menu>
+
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+        
+        <div class="contentinfo">
+          <p>© 2005-2016 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>
+          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+        
+        </div>
+      </div>
+      <div class="column-strip">
+        
+          
+  
+    <form class="languages go" method="get" action="https://developer.mozilla.org/en-US/docs/Web">
+      <label for="language">Other languages:</label>
+      <select id="language" class="wiki-l10n" name="next" dir="ltr">
+        <option value="/en-US/docs/Web/API/Entry" selected="">
+          English (US)
+        </option>
+        
+          <option value="/es/docs/Web/API/Entry">
+            Español
+          </option>
+      </select>
+      <noscript>&lt;button type="submit"&gt;Go&lt;/button&gt;</noscript>
+    </form>
+  
+
+        
+      </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+  
+    
+    <!--[if lte IE 8]><script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/selectivizr.091e18cf669b.js" charset="utf-8"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script type="text/javascript" src="../../../../../developer.cdn.mozilla.net/static/build/js/main.a7b27a25fb9c.js" charset="utf-8"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+    
+    <script async="" type="text/javascript" src="../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../developer.cdn.mozilla.net/static/build/js/syntax-prism-min.js" charset="utf-8"></script><script type="text/javascript" src="../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../developer.cdn.mozilla.net/static/build/js/wiki.bd71ca9fd27d.js" charset="utf-8" id="wikiscript"></script>
+
+  
+
+  <script async="" type="text/javascript" src="../../../../../developer.cdn.mozilla.net/static/build/js/helpfulness.7b208a764d28.js" charset="utf-8"></script>
+
+  
+    <script type="text/javascript">
+        (function($) {
+            $('#wikiArticle').children('h2[id]').each(function() {
+                var id = $(this).attr('id');
+                var href = '/en-US/docs/Web/API/Entry$edit#' + id;
+
+                $('<a>').attr({
+                    href: href,
+                    'class': 'button section-edit only-icon'
+                })
+                .append($('<i aria-hidden="true" class="icon-pencil"></i>'))
+                .append($('<span>'))
+                .find('span')
+                .text(gettext('Edit'))
+                .end()
+                .on('click', function(e) {
+                    e.preventDefault();
+
+                    mdn.analytics.trackEvent({
+                        category: 'Section Edit',
+                        action: id
+                    }, function() {
+                        window.location = href;
+                    });
+                })
+                .appendTo(this);
+            });
+        })(jQuery);
+    </script>
+  
+
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/Entry by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 14:17:12 GMT -->
+</body></html>

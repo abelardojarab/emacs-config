@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    
+<!-- Mirrored from mdn.mozillademos.org/en-US/docs/Web/API/FileReader/readAsDataURL$samples/Example?revision=994343 by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 17:31:20 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+        <link rel="stylesheet" type="text/css" href="../../../../../../../developer.mozilla.org/en-US/docs/Template_CustomSampleCSS2af1.css?raw=1" />
+        
+    </head>
+    <body>
+        
+            <input type="file" onchange="previewFile()"><br>
+<img src="#" height="200" alt="Image preview...">
+        
+        
+            <script type="text/javascript">
+                function previewFile() {
+  var preview = document.querySelector('img');
+  var file    = document.querySelector('input[type=file]').files[0];
+  var reader  = new FileReader();
+
+  reader.addEventListener("load", function () {
+    preview.src = reader.result;
+  }, false);
+
+  if (file) {
+    reader.readAsDataURL(file);
+  }
+}
+            </script>
+        
+    </body>
+
+<!-- Mirrored from mdn.mozillademos.org/en-US/docs/Web/API/FileReader/readAsDataURL$samples/Example?revision=994343 by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 17:31:20 GMT -->
+</html>

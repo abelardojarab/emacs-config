@@ -1,0 +1,1008 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Basic_concepts_behind_Web_Audio_API by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 15:25:46 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <script async="" src="../../../../../../www.google-analytics.com/analytics.js"></script><script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+  
+    
+  
+
+  
+  <title>Basic concepts behind Web Audio API</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+  
+    
+    
+    <link href="../../../../../../developer.cdn.mozilla.net/static/build/styles/mdn.593f20d8c365.css" rel="stylesheet" type="text/css">
+
+    
+  
+    <link href="../../../../../../developer.cdn.mozilla.net/static/build/styles/wiki.13dd9abdfb62.css" rel="stylesheet" type="text/css">
+
+    
+
+    
+
+  <!-- common social tags -->
+  
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon144.a6e4162070f4.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon114.0e9fabd44f85.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon72.8ff9d87c82a0.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon57.a2490b9a2d76.png">
+  <!-- basic favicon -->
+  
+    
+  
+  <link rel="shortcut icon" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon32.e02854fdcf73.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/html5shiv.3948ccddab6f.js" charset="utf-8"></script>
+  <![endif]-->
+
+  
+  <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Basic_concepts_behind_Web_Audio_API$json">
+  <link rel="canonical" href="Basic_concepts_behind_Web_Audio_API.html">
+
+  
+    
+      <link rel="alternate" hreflang="fr" href="https://developer.mozilla.org/fr/docs/Web/API/Web_Audio_API/Basic_concepts_behind_Web_Audio_API" title="Les concepts de base de la Web Audio API">
+    
+  
+
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="Basic concepts behind Web Audio API">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Basic_concepts_behind_Web_Audio_API">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Basic_concepts_behind_Web_Audio_API">
+  <meta name="twitter:title" content="Basic concepts behind Web Audio API">
+  
+  <meta property="og:description" content="This article explains some of the audio theory behind how the features of the Web Audio API work. It won't turn you into a master sound engineer, but it will give you enough background to understand why the Web Audio API works like it does, and allow you to make better informed decisions while developing with it.">
+  <meta name="description" content="This article explains some of the audio theory behind how the features of the Web Audio API work. It won't turn you into a master sound engineer, but it will give you enough background to understand why the Web Audio API works like it does, and allow you to make better informed decisions while developing with it.">
+  <meta name="twitter:description" content="This article explains some of the audio theory behind how the features of the Web Audio API work. It won't turn you into a master sound engineer, but it will give you enough background to understand why the Web Audio API works like it does, and allow you to make better informed decisions while developing with it.">
+  
+
+  
+    
+
+
+
+  
+</head>
+<body data-slug="Web/API/Web_Audio_API/Basic_concepts_behind_Web_Audio_API" contextmenu="edit-history-menu" data-search-url="" class="document  ">
+
+  <script type="text/javascript">
+    (function(win) {
+        'use strict';
+
+        
+            (function(){
+  var FLAGS = {
+    'compat_api': false,'kumaediting': false,'page_move': false,'registration_disabled': false,'search_suggestions': false,'section_edit': false,'spam_admin_override': false,'spam_checks_enabled': true,'spam_spammer_override': false,'spam_submissions_enabled': false,'spam_testing_mode': false,'wiki_samples': true,'wiki_spam_exempted': false,'wiki_spam_training': true
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': true,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+
+        // This needs to be set before ckeditor.js loads
+        window.CKEDITOR_BASEPATH = 'https://developer.mozilla.org/static/js/libs/ckeditor/build/ckeditor/';
+
+        // This represents the site configuration
+        win.mdn = {
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+            
+            notifications: [],
+            
+            // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            },
+            // Assets that need to be dynamically injected
+            assets_disabled: {
+                css: {
+                    'editor-content': ['https://developer.cdn.mozilla.net/static/build/styles/editor-content.3d79df72080d.css',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/styles/wiki-compat-tables.f3a3bfce97a1.css',]
+                },
+                js: {
+                    'syntax-prism': ['https://developer.cdn.mozilla.net/static/build/js/syntax-prism.7a66ddfa68bf.js',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/js/wiki-compat-tables.14ce5dcb2c3d.js',]
+                }
+            }
+        };
+    })(this);
+</script>
+
+  
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+    
+      <li><a href="#q" id="skip-search">Skip to search</a></li>
+    
+  </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+    <a href="https://developer.mozilla.org/en-US/" class="logo">Mozilla Developer Network</a>
+
+    <div id="nav-sec">
+        
+                  <ul>
+                  <li>
+
+    
+
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                Sign in
+              </span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FWeb_Audio_API%2FBasic_concepts_behind_Web_Audio_API" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/Web/API/Web_Audio_API/Basic_concepts_behind_Web_Audio_API" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/Web/API/Web_Audio_API/Basic_concepts_behind_Web_Audio_API" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FWeb_Audio_API%2FBasic_concepts_behind_Web_Audio_API" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+              
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+        
+    </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../../API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+
+   <!-- end is_zone -->
+
+    <div class="wiki-main-content" id="document-main"><div class="center">
+      
+      <div class="article-meta">
+        <!-- action buttons -->
+        
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+  <ul class="page-buttons" data-sticky="false">
+      
+      <li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+              
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/fr/docs/Web/API/Web_Audio_API/Basic_concepts_behind_Web_Audio_API" title="Les concepts de base de la Web Audio API">Français</a></bdi></li>
+                
+              
+
+              
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Basic_concepts_behind_Web_Audio_API$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+              
+            </ul>
+          </div>
+        </div>
+      </li>
+
+      <li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Basic_concepts_behind_Web_Audio_API$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li>
+
+        
+
+        <li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Basic_concepts_behind_Web_Audio_API$history" rel="nofollow, noindex">History</a></li>
+                
+                
+                
+                
+
+                
+
+                
+                
+                
+                <li class="page-print"><a href="#" onclick="return window.print();">Print this article</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+        
+  <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web" rel="v:url" property="v:title">Web technology for developers</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="../../API.html" rel="v:url" property="v:title">Web APIs</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="../Web_Audio_API.html" rel="v:url" property="v:title">Web Audio API</a></li>
+    
+    <li class="crumb" typeof="v:Breadcrumb" property="v:title">Basic concepts behind Web Audio API</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        
+        <div class="contributor-avatars" data-all-text="see all contributors" data-alternate-message="hide contributors" data-has-hidden="1">
+            <ul>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/padenotmoz" title="View profile: padenotmoz">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="padenotmoz" data-src="../../../../../../secure.gravatar.com/avatar/26d5e4c31bc56896f13d7ae0fbb24e966c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">padenotmoz</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/marie-ototoi" title="View profile: marie-ototoi">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="marie-ototoi" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">marie-ototoi</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/ColdSauce" title="View profile: ColdSauce">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="ColdSauce" data-src="../../../../../../secure.gravatar.com/avatar/26df488ac16e046e463a3dc9ceb38f2f6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">ColdSauce</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/jschertz" title="View profile: jschertz">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="jschertz" data-src="../../../../../../secure.gravatar.com/avatar/5c79c32a29e262bcaf8e230a95f415ee6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">jschertz</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills" title="View profile: chrisdavidmills">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="chrisdavidmills" data-src="../../../../../../secure.gravatar.com/avatar/deeea0ba82390bd5acc539703c4b0cfb6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">chrisdavidmills</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/fatsheepcn" title="View profile: fatsheepcn">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="fatsheepcn" data-src="../../../../../../secure.gravatar.com/avatar/879ed7b34b5b4cad1eebea44d6d0d4436c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">fatsheepcn</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/searsaw" title="View profile: searsaw">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="searsaw" data-src="../../../../../../secure.gravatar.com/avatar/6c0654e56c8c73ffee8f76fe03d18ccf6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">searsaw</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/autonome" title="View profile: autonome">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="autonome" data-src="../../../../../../secure.gravatar.com/avatar/16de8554bd4d2ec03c1c009935ea61c96c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">autonome</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Sheppy" title="View profile: Sheppy">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Sheppy" data-src="../../../../../../secure.gravatar.com/avatar/945076feb88f2d7003891ffbf06f32bf6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Sheppy</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/JesseTG" title="View profile: JesseTG">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="JesseTG" data-src="../../../../../../secure.gravatar.com/avatar/680a1dcca033e0959c1be87a1800ae606c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">JesseTG</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/anirudh_venkatesh" title="View profile: anirudh_venkatesh">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="anirudh_venkatesh" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">anirudh_venkatesh</noscript></a>
+                </li>
+            
+            </ul>
+        </div>
+        
+
+        <h1>Basic concepts behind Web Audio API</h1>
+
+      </div>
+      
+
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-closed wiki-left-none">
+
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+            
+              <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+              
+              <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#Audio_graphs" rel="internal">Audio graphs</a></li><li><a href="#Audio_data_what's_in_a_sample" rel="internal">Audio data: what's in a sample</a></li><li><a href="#Audio_buffers_frames_samples_and_channels" rel="internal">Audio buffers: frames, samples and channels</a><ol><li><a href="#Planar_versus_interleaved_buffers" rel="internal">Planar versus interleaved buffers</a></li></ol></li><li><a href="#Audio_channels" rel="internal">Audio channels</a><ol><li><a href="#Up-mixing_and_down-mixing" rel="internal">Up-mixing and down-mixing</a></li></ol></li><li><a href="#Visualizations" rel="internal">Visualizations</a></li><li><a href="#Spatialisations" rel="internal">Spatialisations</a></li><li><a href="#Fan-in_and_Fan-out" rel="internal">Fan-in and Fan-out</a>
+                </li></ol>
+              </div>
+              
+              </div>
+            
+
+            
+            
+              
+            
+
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-main wiki-column text-content">
+
+              
+
+              
+
+              
+                
+                
+                
+              
+              
+
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                
+                  
+                    <div class="summary">
+<p><span class="seoSummary">This article explains some of the audio theory behind how the features of the Web Audio API work. It won't turn you into a master sound engineer, but it will give you enough background to understand why the Web Audio API works like it does, and allow you to make better informed decisions while developing with it.</span></p>
+</div>
+
+<h2 id="Audio_graphs">Audio graphs</h2>
+
+<p>The Web Audio API involves handling audio operations inside an <strong>audio context</strong>, and has been designed to allow <strong>modular routing</strong>. Basic audio operations are performed with <strong>audio nodes</strong>, which are linked together to form an <strong>audio routing graph</strong>. Several sources — with different types of channel layout — are supported even within a single context. This modular design provides the flexibility to create complex audio functions with dynamic effects.</p>
+
+<p>Audio nodes are linked via their inputs and outputs, forming a chain that starts with one or more sources, goes through one or more nodes, then ends up at a destination (although you don't have to provide a destination if you, say, just want to visualize some audio data.) A simple, typical workflow for web audio would look something like this:</p>
+
+<ol>
+ <li>Create audio context</li>
+ <li>Inside the context, create sources — such as <code>&lt;audio&gt;</code>, oscillator, stream</li>
+ <li>Create effects nodes, such as reverb, biquad filter, panner, compressor</li>
+ <li>Choose final destination of audio, for example your system speakers</li>
+ <li>Connect the sources up to the effects, and the effects to the destination.</li>
+</ol>
+
+<p><img src="../../../../../../mdn.mozillademos.org/files/12237/webaudioAPI_en.svg" style="display: block; height: 143px; margin: 0px auto; width: 643px;" alt="A simple box diagram with an outer box labeled Audio context, and three inner boxes labeled Sources, Effects and Destination. The three inner boxes have arrow between them pointing from left to right, indicating the flow of audio information."></p>
+
+<p>Each input or output is composed of several <strong>channels, </strong>which represent a specific audio layout. Any discrete channel structure is supported, including <em>mono</em>, <em>stereo</em>, <em>quad</em>, <em>5.1</em>, and so on.</p>
+
+<p><img src="../../../../../../mdn.mozillademos.org/files/12239/audionodes_en.svg" style="display: block; height: 360px; margin: 0px auto; width: 630px;" alt="Show the ability of AudioNodes to connect via their inputs and outputs and the channels inside these inputs/outputs."></p>
+
+<p>Audio sources can come from a variety of places:</p>
+
+<ul>
+ <li>Generated directly by JavaScript by an audio node (such as an oscillator.)</li>
+ <li>Created from raw PCM data (the audio context has methods to decode supported audio formats.)</li>
+ <li>Taken from HTML media elements (such as <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video" title="Editorial review completed."><code>&lt;video&gt;</code></a> or <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/audio" title="The HTML &lt;audio&gt; element is used to embed sound content in documents. It may contain one or more audio sources, represented using the src attribute or the &lt;source&gt; element; the browser will choose the most suitable one."><code>&lt;audio&gt;</code></a>.)</li>
+ <li>Taken directly from a <a href="https://developer.mozilla.org/en-US/docs/WebRTC" title="/en-US/docs/WebRTC">WebRTC</a> <a href="../MediaStream.html" title="The MediaStream interface represents a stream of media content. A stream consists of several tracks such as&nbsp;video or audio tracks."><code>MediaStream</code></a> (such as a webcam or microphone.)</li>
+</ul>
+
+<h2 id="Audio_data_what's_in_a_sample">Audio data: what's in a sample</h2>
+
+<p>When an audio signal is processed, <strong>sampling</strong> means the conversion of a <a href="http://en.wikipedia.org/wiki/Continuous_signal" class="external" title="Continuous signal">continuous signal</a> to a <a href="http://en.wikipedia.org/wiki/Discrete_signal" class="external mw-redirect" title="Discrete signal">discrete signal</a>; put another way, a continuous sound wave such as a band playing live is converted to a sequence of samples (a discrete-time signal) that allow a computer to handle the audio in distinct blocks.</p>
+
+<p>A lot more information can be found at the Wikipedia page on <a href="http://en.wikipedia.org/wiki/Sampling_(signal_processing)" class="external">Sampling (signal processing)</a>.</p>
+
+<h2 id="Audio_buffers_frames_samples_and_channels">Audio buffers: frames, samples and channels</h2>
+
+<p>An <a href="../AudioBuffer.html" title="Objects of these types are designed to hold small audio snippets, typically less than 45&nbsp;s. For longer sounds, objects implementing the MediaElementAudioSourceNode are more suitable. The buffer contains data in the following format:&nbsp; non-interleaved IEEE754 32-bit linear PCM with a nominal range between -1 and +1, that is, 32bits floating point buffer, with each samples between -1.0 and 1.0. If the AudioBuffer has multiple channels, they are stored in separate buffer."><code>AudioBuffer</code></a> takes as its parameters a number of channels (1 for mono, 2 for stereo, etc), a length, meaning the number of sample frames inside the buffer, and a sample rate, which is the number of sample frames played per second.</p>
+
+<p>A sample is a single float32 value that represents the value of the audio stream at each specific point in time, in a specific channel (left or right, if in the case of stereo). A frame, or sample frame is the set of all values for all channels that will play at a specific point in time: all the samples of all the channels that play at the same time (two for a stereo sound, six for 5.1, etc.)</p>
+
+<p>The sample rate is the number of those samples (or frames, since all samples of a frame play at the same time) that will play in one second, measured in Hz. The higher the sample rate, the better the sound quality.</p>
+
+<p>Let's look at a Mono and a Stereo audio buffer, each one second long, and playing at 44100Hz:</p>
+
+<ul>
+ <li>The Mono buffer will have 44100 samples, and 44100 frames. The <code>length</code> property will be 44100.</li>
+ <li>The Stereo buffer will have 82100 samples, but still 44100 frames. The <code>length</code> property will still be 44100 since it's equal to the number of frames.</li>
+</ul>
+
+<p><img src="../../../../../../mdn.mozillademos.org/files/12519/sampleframe.svg" style="height: 110px; width: 622px;" alt="A diagram showing several frames in an audio buffer in a long line, each one containing two samples, as the buffer has two channels, it is stereo."></p>
+
+<p>When a buffer plays, you will hear the left most sample frame, and then the one right next to it, etc, etc. In the case of stereo, you will hear both channels at the same time. Sample frames are very useful, because they are independent of the number of channels, and represent time, in a useful way for doing precise audio manipulation.</p>
+
+<div class="note">
+<p><strong>Note</strong>: To get a time in seconds from a frame count, simply divide the number of frames by the sample rate. To get a number of frames from a number of samples, simply divide by the channel count.</p>
+</div>
+
+<p>Here's a couple of simple trivial examples:</p>
+
+<pre class="brush: js">var context = new AudioContext();
+var buffer = context.createBuffer(2, 22050, 44100);</pre>
+
+<div class="note">
+<p><strong>Note</strong>:&nbsp;In&nbsp;<a href="https://en.wikipedia.org/wiki/Digital_audio" class="external" title="Digital audio">digital audio</a>,&nbsp;<strong>44,100&nbsp;<a href="https://en.wikipedia.org/wiki/Hertz" class="external" title="Hertz">Hz</a></strong>&nbsp;(alternately represented as&nbsp;<strong>44.1&nbsp;kHz</strong>) is a common&nbsp;<a href="https://en.wikipedia.org/wiki/Sampling_frequency" class="external" title="Sampling frequency">sampling frequency</a>. Why 44.1kHz?&nbsp;Firstly, because the&nbsp;<a href="https://en.wikipedia.org/wiki/Hearing_range" class="external" title="Hearing range">hearing range</a>&nbsp;of human ears is roughly 20&nbsp;Hz to 20,000&nbsp;Hz, and via the&nbsp;<a href="https://en.wikipedia.org/wiki/Nyquist–Shannon_sampling_theorem" class="external" title="Nyquist–Shannon sampling theorem">Nyquist–Shannon sampling theorem</a>&nbsp;the sampling frequency must be greater than twice the maximum frequency one wishes to reproduce, the sampling rate therefore had to be greater than 40&nbsp;kHz. In addition to this, signals must be&nbsp;<a href="https://en.wikipedia.org/wiki/Low-pass_filter" class="external" title="Low-pass filter">low-pass filtered</a>&nbsp;before sampling, otherwise<a href="https://en.wikipedia.org/wiki/Aliasing" class="external" title="Aliasing">aliasing</a>&nbsp;occurs, and, while an ideal low-pass filter would perfectly pass frequencies below 20&nbsp;kHz (without attenuating them) and perfectly cut off frequencies above 20&nbsp;kHz, in practice a&nbsp;<a href="https://en.wikipedia.org/wiki/Transition_band" class="external" title="Transition band">transition band</a>is necessary, where frequencies are partly attenuated. The wider this transition band is, the easier and more economical it is to make an&nbsp;<a href="https://en.wikipedia.org/wiki/Anti-aliasing_filter" class="external" title="Anti-aliasing filter">anti-aliasing filter</a>. The 44.1&nbsp;kHz sampling frequency allows for a 2.05&nbsp;kHz transition band.</p>
+</div>
+
+<p>If you use this call, you will get a stereo buffer (two channels), that, when played back on an AudioContext running at 44100Hz (very common, most normal sound cards run at this rate), will last for 0.5 seconds: 22050 frames / 44100Hz = 0.5 seconds.</p>
+
+<pre class="brush: js">var context = new AudioContext();
+var buffer = context.createBuffer(1, 22050, 22050);</pre>
+
+<p>If you use this call, you will get a mono buffer (one channel), that, when played back on an AudioContext running at 44100Hz, will be automatically *resampled* to 44100Hz (and therefore yield 44100 frames), and last for 1.0 second: 44100 frames / 44100Hz = 1 second.</p>
+
+<div class="note">
+<p><strong>Note</strong>: audio resampling is very similar to image resizing: say you've got a 16 x 16 image, but you want it to fill a 32x32 area: you resize (resample) it. the result has less quality (it can be blurry or edgy, depending on the resizing algorithm), but it works, and the resized image takes up less space. Resampled audio is exactly the same — you save space, but in practice you will be unable to properly reproduce high frequency content (treble sound).</p>
+</div>
+
+<h3 id="Planar_versus_interleaved_buffers">Planar versus interleaved buffers</h3>
+
+<p>The Web Audio API uses a planar buffer format: the left and right channels are stored like this:</p>
+
+<pre>LLLLLLLLLLLLLLLLRRRRRRRRRRRRRRRR (for a buffer of 16 frames)</pre>
+
+<p>This is very common in audio processing: it makes it easy to process each channel independently.</p>
+
+<p>The alternative is to use an interleaved buffer format:</p>
+
+<pre>LRLRLRLRLRLRLRLRLRLRLRLRLRLRLRLR (for a buffer of 16 frames)</pre>
+
+<p>This format is very common for storing and playing back audio without much processing, for example a decoded MP3 stream.<br>
+ <br>
+ The Web Audio API exposes *only* planar buffers, because it's made for processing. It works with planar, but converts the audio to interleaved when it is sent to the<br>
+ sound card, for playback. Conversely, when an MP3 is decoded, it starts off in interleaved format, but is converted to planar for processing.</p>
+
+<h2 id="Audio_channels">Audio channels</h2>
+
+<p>Different audio buffers contain different numbers of channels, from the more basic mono (only one channel) and stereo (left and right channels) to more complex sets like quad and 5.1, which have different sound samples contained in each channel, leading to a richer sound experience. The channels are usually represented by standard abbreviations detaild in the table below:</p>
+
+<table class="standard-table">
+ <tbody>
+  <tr>
+   <td><em>Mono</em></td>
+   <td><code>0: M: mono</code></td>
+  </tr>
+  <tr>
+   <td><em>Stereo</em></td>
+   <td><code>0: L: left<br>
+    1: R: right</code></td>
+  </tr>
+  <tr>
+   <td><em>Quad</em></td>
+   <td><code>0: L: left<br>
+    1: R: right<br>
+    2: SL: surround left<br>
+    3: SR: surround right</code></td>
+  </tr>
+  <tr>
+   <td><em>5.1</em></td>
+   <td><code>0: L: left<br>
+    1: R: right<br>
+    2: C: center<br>
+    3: LFE: subwoofer<br>
+    4: SL: surround left<br>
+    5: SR: surround right</code></td>
+  </tr>
+ </tbody>
+</table>
+
+<h3 id="Up-mixing_and_down-mixing">Up-mixing and down-mixing</h3>
+
+<p>When the amount of channels doesn't match between an input and an output, up- or down-mixing happens according the following rules. This can be somewhat controlled by setting the <a href="../AudioNode/channelInterpretation.html" title="When the amount of channels doesn't match between an input and an output, up- or down-mixing happens according the following rules. This can be somewhat controlled by setting the AudioNode.channelInterpretation property to speakers or discrete."><code>AudioNode.channelInterpretation</code></a> property to <code>speakers</code> or <code>discrete</code>.</p>
+
+<table class="standard-table">
+ <thead>
+  <tr>
+   <th scope="row">Interpretation</th>
+   <th scope="col">Input channels</th>
+   <th scope="col">Output channels</th>
+   <th scope="col">Mixing rules</th>
+  </tr>
+ </thead>
+ <tbody>
+  <tr>
+   <th rowspan="13" colspan="1" scope="row"><code>speakers</code></th>
+   <td><code>1</code> <em>(Mono)</em></td>
+   <td><code>2</code> <em>(Stereo)</em></td>
+   <td><em>Up-mix from mono to stereo</em>.<br>
+    The <code>M</code> input channel is used for both output channels (<code>L</code> and <code>R</code>).<br>
+    <code>output.L = input.M<br>
+    output.R = input.M</code></td>
+  </tr>
+  <tr>
+   <td><code>1</code> <em>(Mono)</em></td>
+   <td><code>4</code> <em>(Quad)</em></td>
+   <td><em>Up-mix from mono to quad.</em><br>
+    The <code>M</code> input channel is used for non-surround output channels (<code>L</code> and <code>R</code>). Surround output channels (<code>SL</code> and <code>SR</code>) are silent.<br>
+    <code>output.L = input.M<br>
+    output.R = input.M<br>
+    output.SL = 0<br>
+    output.SR = 0</code></td>
+  </tr>
+  <tr>
+   <td><code>1</code> <em>(Mono)</em></td>
+   <td><code>6</code> <em>(5.1)</em></td>
+   <td><em>Up-mix from mono to 5.1.</em><br>
+    The <code>M</code> input channel is used for the center output channel (<code>C</code>). All the others (<code>L</code>, <code>R</code>, <code>LFE</code>, <code>SL</code>, and <code>SR</code>) are silent.<br>
+    <code>output.L = 0<br>
+    output.R = 0</code><br>
+    <code>output.C = input.M<br>
+    output.LFE = 0<br>
+    output.SL = 0<br>
+    output.SR = 0</code></td>
+  </tr>
+  <tr>
+   <td><code>2</code> <em>(Stereo)</em></td>
+   <td><code>1</code> <em>(Mono)</em></td>
+   <td><em>Down-mix from stereo to mono</em>.<br>
+    Both input channels (<code>L</code> and <code>R</code>) are equally combined to produce the unique output channel (<code>M</code>).<br>
+    <code>output.M = 0.5 * (input.L + input.R)</code></td>
+  </tr>
+  <tr>
+   <td><code>2</code> <em>(Stereo)</em></td>
+   <td><code>4</code> <em>(Quad)</em></td>
+   <td><em>Up-mix from stereo to quad.</em><br>
+    The <code>L</code> and <code>R </code>input channels are used for their non-surround respective output channels (<code>L</code> and <code>R</code>). Surround output channels (<code>SL</code> and <code>SR</code>) are silent.<br>
+    <code>output.L = input.L<br>
+    output.R = input.R<br>
+    output.SL = 0<br>
+    output.SR = 0</code></td>
+  </tr>
+  <tr>
+   <td><code>2</code> <em>(Stereo)</em></td>
+   <td><code>6</code> <em>(5.1)</em></td>
+   <td><em>Up-mix from stereo to 5.1.</em><br>
+    The <code>L</code> and <code>R </code>input channels are used for their non-surround respective output channels (<code>L</code> and <code>R</code>). Surround output channels (<code>SL</code> and <code>SR</code>), as well as the center (<code>C</code>) and subwoofer (<code>LFE</code>) channels, are left silent.<br>
+    <code>output.L = input.L<br>
+    output.R = input.R<br>
+    output.C = 0<br>
+    output.LFE = 0<br>
+    output.SL = 0<br>
+    output.SR = 0</code></td>
+  </tr>
+  <tr>
+   <td><code>4</code> <em>(Quad)</em></td>
+   <td><code>1</code> <em>(Mono)</em></td>
+   <td><em>Down-mix from quad to mono</em>.<br>
+    All four input channels (<code>L</code>, <code>R</code>, <code>SL</code>, and <code>SR</code>) are equally combined to produce the unique output channel (<code>M</code>).<br>
+    <code>output.M = 0.25 * (input.L + input.R + </code><code>input.SL + input.SR</code><code>)</code></td>
+  </tr>
+  <tr>
+   <td><code>4</code> <em>(Quad)</em></td>
+   <td><code>2</code> <em>(Stereo)</em></td>
+   <td><em>Down-mix from quad to stereo</em>.<br>
+    Both left input channels (<code>L</code> and <code>SL</code>) are equally combined to produce the unique left output channel (<code>L</code>). And similarly, both right input channels (<code>R</code> and <code>SR</code>) are equally combined to produce the unique right output channel (<code>R</code>).<br>
+    <code>output.L = 0.5 * (input.L + input.SL</code><code>)</code><br>
+    <code>output.R = 0.5 * (input.R + input.SR</code><code>)</code></td>
+  </tr>
+  <tr>
+   <td><code>4</code> <em>(Quad)</em></td>
+   <td><code>6</code> <em>(5.1)</em></td>
+   <td><em>Up-mix from quad to 5.1.</em><br>
+    The <code>L</code>, <code>R</code>, <code>SL</code>, and <code>SR</code> input channels are used for their respective output channels (<code>L</code> and <code>R</code>). Center (<code>C</code>) and subwoofer (<code>LFE</code>) channels are left silent.<br>
+    <code>output.L = input.L<br>
+    output.R = input.R<br>
+    output.C = 0<br>
+    output.LFE = 0<br>
+    output.SL = input.SL<br>
+    output.SR = input.SR</code></td>
+  </tr>
+  <tr>
+   <td><code>6</code> <em>(5.1)</em></td>
+   <td><code>1</code> <em>(Mono)</em></td>
+   <td><em>Down-mix from 5.1 to mono.</em><br>
+    The left (<code>L</code> and <code>SL</code>), right (<code>R</code> and <code>SR</code>) and central channels are all mixed together. The surround channels are slightly attenuated and the regular lateral channels are power-compensated to make them count as a single channel by multiplying by <code>√2/2</code>. The subwoofer (<code>LFE</code>) channel is lost.<br>
+    <code>output.M = 0.7071 * (input.L + input.R) + input.C + 0.5 * (input.SL + input.SR)</code></td>
+  </tr>
+  <tr>
+   <td><code>6</code> <em>(5.1)</em></td>
+   <td><code>2</code> <em>(Stereo)</em></td>
+   <td><em>Down-mix from 5.1 to stereo.</em><br>
+    The central channel (<code>C</code>) is summed with each lateral surround channel (<code>SL</code> or <code>SR</code>) and mixed to each lateral channel. As it is mixed down to two channels, it is mixed at a lower power: in each case it is multiplied by <code>√2/2</code>. The subwoofer (<code>LFE</code>) channel is lost.<br>
+    <code>output.L = input.L + 0.7071 * (input.C + input.SL)<br>
+    output.R = input.R </code><code>+ 0.7071 * (input.C + input.SR)</code></td>
+  </tr>
+  <tr>
+   <td><code>6</code> <em>(5.1)</em></td>
+   <td><code>4</code> <em>(Quad)</em></td>
+   <td><em>Down-mix from 5.1 to quad.</em><br>
+    The central (<code>C</code>) is mixed with the lateral non-surround channels (<code>L</code> and <code>R</code>). As it is mixed down to two channels, it is mixed at a lower power: in each case it is multiplied by <code>√2/2</code>. The surround channels are passed unchanged. The subwoofer (<code>LFE</code>) channel is lost.<br>
+    <code>output.L = input.L + 0.7071 * input.C<br>
+    output.R = input.R + 0.7071 * input.C<br>
+    <code>output.SL = input.SL<br>
+    output.SR = input.SR</code></code></td>
+  </tr>
+  <tr>
+   <td rowspan="1" colspan="2">Other, non-standard layouts</td>
+   <td>Non-standard channel layouts are handled as if <code>channelInterpretation</code> is set to <code>discrete</code>.<br>
+    The specification explicitly allows the future definition of new speaker layouts. This fallback is therefore not future proof as the behavior of the browsers for a specific amount of channels may change in the future.</td>
+  </tr>
+  <tr>
+   <th rowspan="2" colspan="1" scope="row"><code>discrete</code></th>
+   <td rowspan="1">any (<code>x</code>)</td>
+   <td rowspan="1">any (<code>y</code>) where <code>x&lt;y</code></td>
+   <td><em>Up-mix discrete channels.</em><br>
+    Fill each output channel with its input counterpart, that is the input channel with the same index. Channels with no corresponding input channels are left silent.</td>
+  </tr>
+  <tr>
+   <td rowspan="1">any (<code>x</code>)</td>
+   <td rowspan="1">any (<code>y</code>) where <code>x&gt;y</code></td>
+   <td><em>Down-mix discrete channels.</em><br>
+    Fill each output channel with its input counterpart, that is the input channel with the same index. Input channels with no corresponding output channels are dropped.</td>
+  </tr>
+ </tbody>
+</table>
+
+<h2 id="Visualizations">Visualizations</h2>
+
+<p>In general, audio visualizations are achieved by accessing an ouput of audio data over time (usually gain or frequency data), and then using a graphical technology to turn that into a visual output (such as a graph.) The Web Audio API has an <a href="../AnalyserNode.html" title="The AnalyserNode interface represents a node able to provide real-time frequency and time-domain analysis information. It is an AudioNode that passes the audio stream unchanged from the input to the output, but allows you to take the generated data, process it, and create audio visualizations."><code>AnalyserNode</code></a> available that doesn't alter the audio signal passing through it, but instead outputs audio data that can be passed to a visualization technology such as <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/canvas" title="The HTML &lt;canvas&gt; Element can be used to draw graphics via scripting (usually JavaScript). For example, it can be used to draw graphs, make photo compositions or even perform animations. You may (and should) provide alternate content inside the &lt;canvas&gt; block. That content will be rendered both on older browsers that don't support canvas and in browsers with JavaScript disabled."><code>&lt;canvas&gt;</code></a>.</p>
+
+<p><img src="../../../../../../mdn.mozillademos.org/files/12521/fttaudiodata_en.svg" style="height: 206px; width: 693px;" alt="Without modifying the audio stream, the node allows to get the frequency and time-domain data associated to it, using a FFT."></p>
+
+<p>You can grab data using the following methods:</p>
+
+<dl>
+ <dt><a href="../AnalyserNode/getFloatFrequencyData.html" title="A Float32Array."><code>AnalyserNode.getFloatFrequencyData()</code></a></dt>
+ <dd>Copies the current frequency data into a <a href="../../JavaScript/Reference/Global_Objects/Float32Array.html" title="The documentation about this has not yet been written; please consider contributing!"><code>Float32Array</code></a> array passed into it.</dd>
+</dl>
+
+<dl>
+ <dt><a href="../AnalyserNode/getByteFrequencyData.html" title="A Uint8Array."><code>AnalyserNode.getByteFrequencyData()</code></a></dt>
+ <dd>Copies the current frequency data into a <a href="../../JavaScript/Reference/Global_Objects/Uint8Array.html" title="The documentation about this has not yet been written; please consider contributing!"><code>Uint8Array</code></a> (unsigned byte array) passed into it.</dd>
+</dl>
+
+<dl>
+ <dt><a href="../AnalyserNode/getFloatTimeDomainData.html" title="A Float32Array."><code>AnalyserNode.getFloatTimeDomainData()</code></a></dt>
+ <dd>Copies the current waveform, or time-domain, data into a <a href="../../JavaScript/Reference/Global_Objects/Float32Array.html" title="The documentation about this has not yet been written; please consider contributing!"><code>Float32Array</code></a> array passed into it.</dd>
+ <dt><a href="../AnalyserNode/getByteTimeDomainData.html" title="A Uint8Array."><code>AnalyserNode.getByteTimeDomainData()</code></a></dt>
+ <dd>Copies the current waveform, or time-domain, data into a <a href="../../JavaScript/Reference/Global_Objects/Uint8Array.html" title="The documentation about this has not yet been written; please consider contributing!"><code>Uint8Array</code></a> (unsigned byte array) passed into it.</dd>
+</dl>
+
+<div class="note">
+<p><strong>Note</strong>: For more information, see our <a href="Visualizations_with_Web_Audio_API.html">Visualizations with Web Audio API</a> article.</p>
+</div>
+
+<h2 id="Spatialisations">Spatialisations</h2>
+
+<div>
+<p>An audio spatialisation (handled by the <a href="../PannerNode.html" title="A PannerNode always has exactly one input and one output: the input can be mono or stereo but the output is always stereo (2 channels) — you need stereo sound for panning effects!"><code>PannerNode</code></a> and <a href="../AudioListener.html" title="Technical review completed."><code>AudioListener</code></a> nodes in the Web Audio API) allows us to model the position and behavior of an audio signal at a certain point in space, and the listener hearing that audio.</p>
+
+<p>The panner's position is described with right-hand Cartesian coordinates; its movement using a velocity vector, necessary for creating Doppler effects, and its directionality using a directionality cone.The cone can be very large, e.g. for omnidirectional sources.</p>
+</div>
+
+<p><img src="../../../../../../mdn.mozillademos.org/files/12511/pannernode_en.svg" style="height: 340px; width: 799px;" alt="The PannerNode brings a spatial position and velocity and a directionality for a given signal."></p>
+
+<div>
+<p>The listener's position is described using right-hand Cartesian coordinates; its movement using a velocity vector and the direction the listener's head is pointing using two direction vectors: up and front. These respectively define the direction of the top of the listener's head, and the direction the listener's nose is pointing, and are at right angles to one another.</p>
+</div>
+
+<p><img src="../../../../../../mdn.mozillademos.org/files/12513/listener.svg" style="height: 249px; width: 720px;" alt="The PannerNode brings a spatial position and velocity and a directionality for a given signal."></p>
+
+<div class="note">
+<p><strong>Note</strong>: For more information, see our <a href="Web_audio_spatialization_basics.html">Web audio spatialization basics</a> article.</p>
+</div>
+
+<h2 id="Fan-in_and_Fan-out">Fan-in and Fan-out</h2>
+
+<p>In audio terms, <strong>fan-in</strong> describes the process by which a <a href="../ChannelMergerNode.html" title=""><code>ChannelMergerNode</code></a> takes a series of mono input sources and outputs a single multi-channel signal:</p>
+
+<p><img src="../../../../../../mdn.mozillademos.org/files/12517/fanin.svg" style="height: 258px; width: 325px;" alt=""></p>
+
+<p><strong>Fan-out</strong> describes the opposite process, whereby a <a href="../ChannelSplitterNode.html" title=""><code>ChannelSplitterNode</code></a> takes a multi-channel input source and outputs multiple mono output signals:</p>
+
+<p><img src="../../../../../../mdn.mozillademos.org/files/12515/fanout.svg" style="height: 258px; width: 325px;" alt=""></p>
+                  
+                
+              </article>
+
+              
+
+    
+    
+    
+
+    
+    
+    
+
+    <div class="share">
+        <strong>Share:</strong>
+        <ul>
+            <li><a href="http://twitter.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FAPI%2FWeb_Audio_API%2FBasic_concepts_behind_Web_Audio_API%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dtwitter.com&amp;text=I+learned+about+Basic+concepts+behind+Web+Audio+API+on+MDN." target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Basic_concepts_behind_Web_Audio_API?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=twitter.com" data-title="I learned about Basic concepts behind Web Audio API on MDN." class="share-link twitter"><i aria-hidden="true" class="icon-twitter"></i>Twitter</a></li>
+            <li><a href="http://facebook.com/sharer.php?s=100&amp;p[url]=https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Basic_concepts_behind_Web_Audio_API?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Basic_concepts_behind_Web_Audio_API?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" data-title="I learned about Basic concepts behind Web Audio API on MDN." class="share-link facebook"><i aria-hidden="true" class="icon-facebook"></i>Facebook</a></li>
+            <li><a href="https://plus.google.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FAPI%2FWeb_Audio_API%2FBasic_concepts_behind_Web_Audio_API%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dplus.google.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Basic_concepts_behind_Web_Audio_API?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=plus.google.com" data-title="I learned about Basic concepts behind Web Audio API on MDN." class="share-link gplus"><i aria-hidden="true" class="icon-google-plus"></i>Google+</a></li>
+        </ul>
+    </div>
+
+              
+
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                  
+                  
+  <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags icon-fw"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/audio">audio</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Audio">Audio</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/concepts">concepts</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Guide">Guide</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Media">Media</a></li>
+      
+        <li><a href="../../../tag/Web%20Audio%20API.html">Web Audio API</a></li>
+      
+    </ul>
+  </div>
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-group icon-fw"></i>&nbsp;<strong>Contributors to this page:</strong> 
+        <a href="https://developer.mozilla.org/en-US/profiles/padenotmoz">padenotmoz</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/marie-ototoi">marie-ototoi</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/ColdSauce">ColdSauce</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/jschertz">jschertz</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills">chrisdavidmills</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/fatsheepcn">fatsheepcn</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/searsaw">searsaw</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/autonome">autonome</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Sheppy">Sheppy</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/JesseTG">JesseTG</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/anirudh_venkatesh">anirudh_venkatesh</a>
+    
+                    </div>
+                  
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o icon-fw"></i>&nbsp;<strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/padenotmoz">padenotmoz</a>,
+                      <time datetime="2016-03-14T10:45:31-07:00">Mar 14, 2016, 10:45:31 AM</time>
+                    </div>
+                  
+                </div>
+              
+            </div>
+
+            
+          </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Web/API/Web_Audio_API/Basic_concepts_behind_Web_Audio_API$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Web/API/Web_Audio_API/Basic_concepts_behind_Web_Audio_API$history" label="View page history"></menuitem>
+  </menu>
+
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+        
+        <div class="contentinfo">
+          <p>© 2005-2016 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>
+          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+        
+        </div>
+      </div>
+      <div class="column-strip">
+        
+          
+  
+    <form class="languages go" method="get" action="https://developer.mozilla.org/en-US/docs/Web">
+      <label for="language">Other languages:</label>
+      <select id="language" class="wiki-l10n" name="next" dir="ltr">
+        <option value="/en-US/docs/Web/API/Web_Audio_API/Basic_concepts_behind_Web_Audio_API" selected="">
+          English (US)
+        </option>
+        
+          <option value="/fr/docs/Web/API/Web_Audio_API/Basic_concepts_behind_Web_Audio_API">
+            Français
+          </option>
+      </select>
+      <noscript>&lt;button type="submit"&gt;Go&lt;/button&gt;</noscript>
+    </form>
+  
+
+        
+      </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+  
+    
+    <!--[if lte IE 8]><script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/selectivizr.091e18cf669b.js" charset="utf-8"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/main.a7b27a25fb9c.js" charset="utf-8"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+    
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/syntax-prism-min.js" charset="utf-8"></script><script type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/wiki.bd71ca9fd27d.js" charset="utf-8" id="wikiscript"></script>
+
+  
+
+  <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/helpfulness.7b208a764d28.js" charset="utf-8"></script>
+
+  
+
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Basic_concepts_behind_Web_Audio_API by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 15:25:50 GMT -->
+</body></html>

@@ -1,0 +1,920 @@
+<html><!-- Mirrored from developer.mozilla.org/uk/docs/Web/JavaScript/Reference/Global_Objects/NumberFormat by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 19:37:12 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <script async="" src="../../../../../../../www.google-analytics.com/analytics.js"></script><script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+  
+    
+  
+
+  
+  <title>Intl.NumberFormat</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/uk/">
+  <link rel="copyright" href="#copyright">
+
+  
+    
+    
+    <link href="../../../../../../../developer.cdn.mozilla.net/static/build/styles/mdn.593f20d8c365.css" rel="stylesheet" type="text/css">
+
+    
+  
+    <link href="../../../../../../../developer.cdn.mozilla.net/static/build/styles/wiki.13dd9abdfb62.css" rel="stylesheet" type="text/css">
+
+    
+
+    
+
+  <!-- common social tags -->
+  
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/uk/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../../../developer.cdn.mozilla.net/static/img/favicon144.a6e4162070f4.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../../../developer.cdn.mozilla.net/static/img/favicon114.0e9fabd44f85.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../../../developer.cdn.mozilla.net/static/img/favicon72.8ff9d87c82a0.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../../../developer.cdn.mozilla.net/static/img/favicon57.a2490b9a2d76.png">
+  <!-- basic favicon -->
+  
+    
+  
+  <link rel="shortcut icon" href="../../../../../../../developer.cdn.mozilla.net/static/img/favicon32.e02854fdcf73.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/html5shiv.3948ccddab6f.js" charset="utf-8"></script>
+  <![endif]-->
+
+  
+  <link rel="alternate" type="application/json" href="https://developer.mozilla.org/uk/docs/Web/JavaScript/Reference/Global_Objects/NumberFormat$json">
+  <link rel="canonical" href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/NumberFormat.html">
+
+  
+    
+      <link rel="alternate" hreflang="de" href="../../../../../../de/docs/Web/JavaScript/Reference/Global_Objects/NumberFormat.html" title="Intl.NumberFormat">
+    
+      <link rel="alternate" hreflang="es" href="../../../../../../es/docs/Web/JavaScript/Referencia/Objetos_globales/NumberFormat.html" title="Intl.NumberFormat">
+    
+      <link rel="alternate" hreflang="fr" href="../../../../../../fr/docs/Web/JavaScript/Reference/Objets_globaux/NumberFormat.html" title="Intl.NumberFormat">
+    
+      <link rel="alternate" hreflang="ja" href="../../../../../../ja/docs/Web/JavaScript/Reference/Global_Objects/NumberFormat.html" title="Intl.NumberFormat">
+    
+      <link rel="alternate" hreflang="ru" href="../../../../../../ru/docs/Web/JavaScript/Reference/Global_Objects/NumberFormat.html" title="Intl.NumberFormat">
+    
+  
+
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="Intl.NumberFormat">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/NumberFormat">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/NumberFormat">
+  <meta name="twitter:title" content="Intl.NumberFormat">
+  
+  <meta property="og:description" content="The Intl.NumberFormat object is a constructor for objects that enable language sensitive number formatting.">
+  <meta name="description" content="The Intl.NumberFormat object is a constructor for objects that enable language sensitive number formatting.">
+  <meta name="twitter:description" content="The Intl.NumberFormat object is a constructor for objects that enable language sensitive number formatting.">
+  
+
+  
+    
+
+
+
+  
+</head>
+<body data-slug="Web/JavaScript/Reference/Global_Objects/NumberFormat" contextmenu="edit-history-menu" data-search-url="" class="document  ">
+
+  <script type="text/javascript">
+    (function(win) {
+        'use strict';
+
+        
+            (function(){
+  var FLAGS = {
+    'compat_api': false,'kumaediting': false,'page_move': false,'registration_disabled': false,'search_suggestions': false,'section_edit': false,'spam_admin_override': false,'spam_checks_enabled': true,'spam_spammer_override': false,'spam_submissions_enabled': false,'spam_testing_mode': false,'wiki_samples': true,'wiki_spam_exempted': false,'wiki_spam_training': true
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': true,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+
+        // This needs to be set before ckeditor.js loads
+        window.CKEDITOR_BASEPATH = 'https://developer.mozilla.org/static/js/libs/ckeditor/build/ckeditor/';
+
+        // This represents the site configuration
+        win.mdn = {
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+            
+            notifications: [],
+            
+            // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/uk/docs/get-documents'
+            },
+            // Assets that need to be dynamically injected
+            assets_disabled: {
+                css: {
+                    'editor-content': ['https://developer.cdn.mozilla.net/static/build/styles/editor-content.3d79df72080d.css',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/styles/wiki-compat-tables.f3a3bfce97a1.css',]
+                },
+                js: {
+                    'syntax-prism': ['https://developer.cdn.mozilla.net/static/build/js/syntax-prism.7a66ddfa68bf.js',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/js/wiki-compat-tables.14ce5dcb2c3d.js',]
+                }
+            }
+        };
+    })(this);
+</script>
+
+  
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Перейти до основного вмісту</a></li>
+    <li><a id="skip-language" href="#language">Вибір мови</a></li>
+    
+      <li><a href="#q" id="skip-search">Перейти до пошуку</a></li>
+    
+  </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+    <a href="https://developer.mozilla.org/uk/" class="logo">Mozilla Developer Network</a>
+
+    <div id="nav-sec">
+        
+                  <ul>
+                  <li>
+
+    
+
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                Увійти
+              </span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fuk%2Fdocs%2FWeb%2FJavaScript%2FReference%2FGlobal_Objects%2FNumberFormat" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/uk/docs/Web/JavaScript/Reference/Global_Objects/NumberFormat" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/uk/users/signin" class="login-link launch-persona-login" data-next="/uk/docs/Web/JavaScript/Reference/Global_Objects/NumberFormat" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fuk%2Fdocs%2FWeb%2FJavaScript%2FReference%2FGlobal_Objects%2FNumberFormat" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+              
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+        
+    </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/uk/docs/Web">Веб-платформа<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Технології</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/uk/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/uk/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/uk/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/uk/docs/Web/Guide/Graphics">Графіка</a></li>
+              <li><a href="https://developer.mozilla.org/uk/docs/Web/API">API / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/uk/docs/Web/Apps">Застосунки</a></li>
+              <li><a href="https://developer.mozilla.org/uk/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">Довідники та посібники</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/uk/docs/Learn">Вивчення Web</a></li>
+              <li><a href="https://developer.mozilla.org/uk/docs/Web/Tutorials">Посібники</a></li>
+              <li><a href="https://developer.mozilla.org/uk/docs/Web/Reference">Довідники</a></li>
+              <li><a href="https://developer.mozilla.org/uk/docs/Web/Guide">Посібники розробників</a></li>
+              <li><a href="https://developer.mozilla.org/uk/docs/Web/Accessibility">Доступність</a></li>
+              <li><a href="https://developer.mozilla.org/uk/docs/Web">...більше документації</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/uk/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/uk/docs/Mozilla/Add-ons">Додатки</a></li>
+              <li><a href="https://developer.mozilla.org/uk/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/uk/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/uk/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/uk/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/uk/docs/Tools">Інструменти розробника</a></li><li><a href="https://developer.mozilla.org/uk/docs/MDN/Feedback">Зворотній зв'язок<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Отримати допомогу Firefox<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Довідка веб-розробки<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/uk/docs/MDN/Community">Приєднатися до спільноти MDN</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Повідомити про проблему вмісту<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Повідомити про помилку<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/uk/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/uk/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Пошук</label>
+          <input type="search" id="main-q" name="q" placeholder="Пошук" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Пошук</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+
+   <!-- end is_zone -->
+
+    <div class="wiki-main-content" id="document-main"><div class="center">
+      
+      <div class="article-meta">
+        <!-- action buttons -->
+        
+
+  
+    
+  
+
+  
+
+  
+
+  <ul class="page-buttons" data-sticky="false">
+      
+      <li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Мови</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+              
+                
+                  <li><bdi><a rel="internal" href="../../../../../../de/docs/Web/JavaScript/Reference/Global_Objects/NumberFormat.html" title="Intl.NumberFormat">Deutsch</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="../../../../../../es/docs/Web/JavaScript/Referencia/Objetos_globales/NumberFormat.html" title="Intl.NumberFormat">Español</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="../../../../../../fr/docs/Web/JavaScript/Reference/Objets_globaux/NumberFormat.html" title="Intl.NumberFormat">Français</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="../../../../../../ja/docs/Web/JavaScript/Reference/Global_Objects/NumberFormat.html" title="Intl.NumberFormat">日本語</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="../../../../../../ru/docs/Web/JavaScript/Reference/Global_Objects/NumberFormat.html" title="Intl.NumberFormat">Русский</a></bdi></li>
+                
+              
+
+              
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/NumberFormat$locales" rel="nofollow, noindex" id="translations-add">Додати переклад</a></li>
+              
+            </ul>
+          </div>
+        </div>
+      </li>
+
+      <li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/NumberFormat$translate?tolocale=uk" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Редагувати<i aria-hidden="true" class="icon-pencil"></i></a></li>
+
+        
+
+        <li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Додатково</span><i aria-hidden="true" class="icon-cog"></i></button>
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Додатково</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/uk/docs/Web/JavaScript/Reference/Global_Objects/NumberFormat$history" rel="nofollow, noindex">Історія</a></li>
+                
+                
+                
+                
+
+                
+
+                
+                
+                
+                <li class="page-print"><a href="#" onclick="return window.print();">Роздрукувати цю статтю</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+        
+  <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="навігаційні ланцюги">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/uk" rel="v:url" property="v:title">MDN</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web" rel="v:url" property="v:title">Web technology for developers</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" rel="v:url" property="v:title">JavaScript</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="../../../../../../en-US/docs/Web/JavaScript/Reference.html" rel="v:url" property="v:title">JavaScript reference</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects.html" rel="v:url" property="v:title">Standard built-in objects</a></li>
+    
+    <li class="crumb" typeof="v:Breadcrumb" property="v:title">Intl.NumberFormat</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Попередній результат пошуку" data-empty-title="Немає попереднього результату пошуку"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Результати вашого пошуку</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Наступний результат пошуку" data-empty-title="Немає попереднього результату пошуку"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        
+        <div class="contributor-avatars" data-all-text="подивитися всіх учасників" data-alternate-message="сховати учасників">
+            <ul>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/uk/profiles/fscholz" title="Переглянути профіль: fscholz">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="fscholz" data-src="../../../../../../../secure.gravatar.com/avatar/e24391c9174352988d819a9b9ea77c9e6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">fscholz</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/uk/profiles/Mingun" title="Переглянути профіль: Mingun">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Mingun" data-src="../../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Mingun</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/uk/profiles/Sheppy" title="Переглянути профіль: Sheppy">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Sheppy" data-src="../../../../../../../secure.gravatar.com/avatar/945076feb88f2d7003891ffbf06f32bf6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Sheppy</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/uk/profiles/Norbert" title="Переглянути профіль: Norbert">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Norbert" data-src="../../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Norbert</noscript></a>
+                </li>
+            
+            </ul>
+        </div>
+        
+
+        <h1>Intl.NumberFormat</h1>
+
+      </div>
+      
+
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-present">
+
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+            
+              <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+              
+              <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">У цій статті<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#Syntax" rel="internal">Syntax</a><ol><li><a href="#Parameters" rel="internal">Parameters</a></li></ol></li><li><a href="#Description" rel="internal">Description</a><ol><li><a href="#Properties" rel="internal">Properties</a></li><li><a href="#Methods" rel="internal">Methods</a></li></ol></li><li><a href="#NumberFormat_instances" rel="internal"><code>NumberFormat</code> instances</a><ol><li><a href="#Properties_2" rel="internal">Properties</a></li><li><a href="#Methods_2" rel="internal">Methods</a></li></ol></li><li><a href="#Examples" rel="internal">Examples</a><ol><li><a href="#Basic_usage" rel="internal">Basic usage</a></li><li><a href="#Using_locales" rel="internal">Using <code>locales</code></a></li><li><a href="#Using_options" rel="internal">Using <code>options</code></a></li></ol></li><li><a href="#Specifications" rel="internal">Specifications</a></li><li><a href="#Browser_compatibility" rel="internal">Browser compatibility</a></li><li><a href="#See_also" rel="internal">See also</a>
+                </li></ol>
+              </div>
+              
+              </div>
+            
+
+            
+            
+              
+            
+
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-half wiki-column text-content">
+
+              
+
+              
+
+              
+                
+                
+                
+              
+              
+                <div id="doc-pending-fallback" class="warning">
+                  <p><bdi>Наші волонтери ще не переклали цю статтю мовою: <bdi>Українська</bdi>. <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/NumberFormat$translate?tolocale=uk">Приєднайтесь до нас і допоможіть зробити це!</a></bdi></p>
+                </div>
+              
+
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                
+                  <div><section id="Quick_Links" class="Quick_links"><!-- --></section></div>
+
+<p>The <strong><code>Intl.NumberFormat</code></strong> object is a constructor for objects that enable language sensitive number formatting.</p>
+
+<h2 id="Syntax">Syntax</h2>
+
+<pre class="syntaxbox"><code>new Intl.NumberFormat([<var>locales</var>[, <var>options</var>]])
+Intl.NumberFormat.call(<var>this</var>[, <var>locales</var>[, <var>options</var>]])
+</code></pre>
+
+<h3 id="Parameters">Parameters</h3>
+
+<dl>
+ <dt><code>locales</code></dt>
+ <dd>
+ <p>Optional. A string with a BCP 47 language tag, or an array of such strings. For the general form and interpretation of the <code>locales</code> argument, see the <a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl.html#Locale_identification_and_negotiation" title="The Intl object is the namespace for the ECMAScript Internationalization API, which provides language sensitive string comparison, number formatting, and date and time formatting. The constructors for Collator, NumberFormat, and DateTimeFormat objects are properties of the Intl object. This page documents these properties as well as functionality common to the internationalization constructors and other language sensitive functions.">Intl page</a>. The following Unicode extension key is allowed:</p>
+
+ <dl>
+  <dt><code>nu</code></dt>
+  <dd>The numbering system to be used. Possible values include: <code>"arab"</code>, <code>"arabext"</code>, <code>"bali"</code>, <code>"beng"</code>, <code>"deva"</code>, <code>"fullwide"</code>, <code>"gujr"</code>, <code>"guru"</code>, <code>"hanidec"</code>, <code>"khmr"</code>, <code>"knda"</code>, <code>"laoo"</code>, <code>"latn"</code>, <code>"limb"</code>, <code>"mlym"</code>, <code>"mong"</code>, <code>"mymr"</code>, <code>"orya"</code>, <code>"tamldec"</code>, <code>"telu"</code>, <code>"thai"</code>, <code>"tibt"</code>.</dd>
+ </dl>
+ </dd>
+ <dt><code>options</code></dt>
+ <dd>
+ <p>Optional. An object with some or all of the following properties:</p>
+
+ <dl>
+  <dt><code>localeMatcher</code></dt>
+  <dd>The locale matching algorithm to use. Possible values are <code>"lookup"</code> and <code>"best fit"</code>; the default is <code>"best fit"</code>. For information about this option, see the <a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl.html#Locale_negotiation" title="The Intl object is the namespace for the ECMAScript Internationalization API, which provides language sensitive string comparison, number formatting, and date and time formatting. The constructors for Collator, NumberFormat, and DateTimeFormat objects are properties of the Intl object. This page documents these properties as well as functionality common to the internationalization constructors and other language sensitive functions.">Intl page</a>.</dd>
+  <dt><code>style</code></dt>
+  <dd>The formatting style to use. Possible values are <code>"decimal"</code> for plain number formatting, <code>"currency"</code> for currency formatting, and <code>"percent"</code> for percent formatting; the default is <code>"decimal"</code>.</dd>
+  <dt><code>currency</code></dt>
+  <dd>The currency to use in currency formatting. Possible values are the ISO 4217 currency codes, such as <code>"USD"</code> for the US dollar, <code>"EUR"</code> for the euro, or <code>"CNY"</code> for the Chinese RMB&nbsp;— see the <a href="http://www.currency-iso.org/en/home/tables/table-a1.html" class="external">Current currency &amp; funds code list</a>. There is no default value; if the <code>style</code> is <code>"currency"</code>, the <code>currency</code> property must be provided.</dd>
+  <dt><code>currencyDisplay</code></dt>
+  <dd>How to display the currency in currency formatting. Possible values are <code>"symbol"</code> to use a localized currency symbol such as €, <code>"code"</code> to use the ISO currency code, <code>"name"</code> to use a localized currency name such as <code>"dollar"</code>; the default is <code>"symbol"</code>.</dd>
+  <dt><code>useGrouping</code></dt>
+  <dd>Whether to use grouping separators, such as thousands separators or thousand/lakh/crore separators. Possible values are <code>true</code> and <code>false</code>; the default is <code>true</code>.</dd>
+ </dl>
+
+ <p>The following properties fall into two groups: <code>minimumIntegerDigits</code>, <code>minimumFractionDigits</code>, and <code>maximumFractionDigits</code> in one group, <code>minimumSignificantDigits</code> and <code>maximumSignificantDigits</code> in the other. If at least one property from the second group is defined, then the first group is ignored.</p>
+
+ <dl>
+  <dt><code>minimumIntegerDigits</code></dt>
+  <dd>The minimum number of integer digits to use. Possible values are from 1 to 21; the default is 1.</dd>
+  <dt><code>minimumFractionDigits</code></dt>
+  <dd>The minimum number of fraction digits to use. Possible values are from 0 to 20; the default for plain number and percent formatting is 0; the default for currency formatting is the number of minor unit digits provided by the <a href="http://www.currency-iso.org/en/home/tables/table-a1.html" class="external">ISO 4217 currency code list</a> (2 if the list doesn't provide that information).</dd>
+  <dt><code>maximumFractionDigits</code></dt>
+  <dd>The maximum number of fraction digits to use. Possible values are from 0 to 20; the default for plain number formatting is the larger of <code>minimumFractionDigits</code> and 3; the default for currency formatting is the larger of <code>minimumFractionDigits</code> and the number of minor unit digits provided by the <a href="http://www.currency-iso.org/en/home/tables/table-a1.html" class="external">ISO 4217 currency code list</a> (2 if the list doesn't provide that information); the default for percent formatting is the larger of <code>minimumFractionDigits</code> and 0.</dd>
+  <dt><code>minimumSignificantDigits</code></dt>
+  <dd>The minimum number of significant digits to use. Possible values are from 1 to 21; the default is 1.</dd>
+  <dt><code>maximumSignificantDigits</code></dt>
+  <dd>The maximum number of significant digits to use. Possible values are from 1 to 21; the default is <code>minimumSignificantDigits</code>.</dd>
+ </dl>
+ </dd>
+</dl>
+
+<h2 id="Description">Description</h2>
+
+<h3 id="Properties">Properties</h3>
+
+<dl>
+ <dt><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/NumberFormat/prototype.html" title="The Intl.NumberFormat.prototype property represents the prototype object for the Intl.NumberFormat constructor."><code>Intl.NumberFormat.prototype</code></a></dt>
+ <dd>Allows the addition of properties to all objects.</dd>
+</dl>
+
+<h3 id="Methods">Methods</h3>
+
+<dl>
+ <dt><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/NumberFormat/supportedLocalesOf.html" title="The Intl.NumberFormat.supportedLocalesOf() method returns an array containing those of the provided locales that are supported in number formatting without having to fall back to the runtime's default locale."><code>Intl.NumberFormat.supportedLocalesOf()</code></a></dt>
+ <dd>Returns an array containing those of the provided locales that are supported without having to fall back to the runtime's default locale.</dd>
+</dl>
+
+<h2 id="NumberFormat_instances"><code>NumberFormat</code> instances</h2>
+
+<h3 id="Properties_2">Properties</h3>
+
+<p><code>NumberFormat</code> instances inherit the following properties from their prototype:</p>
+
+<div><dl><dt><code>Intl.NumberFormat.prototype.constructor</code></dt>
+ <dd>A reference to <code>Intl.NumberFormat</code>.</dd>
+ <dt><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/NumberFormat/format.html" title="The Intl.NumberFormat.prototype.format property returns a getter function that formats a number according to the locale and formatting options of this NumberFormat object."><code>Intl.NumberFormat.prototype.format</code></a></dt>
+ <dd>Getter; returns a function that formats a number according to the locale and formatting options of this <a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/NumberFormat.html" title="The Intl.NumberFormat object is a constructor for objects that enable language sensitive number formatting."><code>NumberFormat</code></a> object.</dd>
+</dl></div>
+
+<h3 id="Methods_2">Methods</h3>
+
+<p><code>NumberFormat</code> instances inherit the following methods from their prototype:</p>
+
+<div><dl><dt><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/NumberFormat/resolvedOptions.html" title="The Intl.NumberFormat.prototype.resolvedOptions() method returns a new object with properties reflecting the locale and number formatting options computed during initialization of this NumberFormat object."><code>Intl.NumberFormat.prototype.resolvedOptions()</code></a></dt>
+ <dd>Returns a new object with properties reflecting the locale and collation options computed during initialization of the object.</dd>
+</dl></div>
+
+<h2 id="Examples">Examples</h2>
+
+<h3 id="Basic_usage">Basic usage</h3>
+
+<p>In basic use without specifying a locale, a formatted string in the default locale and with default options is returned.</p>
+
+<pre class="brush: js">var number = 3500;
+
+console.log(new Intl.NumberFormat().format(number));
+// → '3,500' if in US English locale
+</pre>
+
+<h3 id="Using_locales">Using <code>locales</code></h3>
+
+<p>This example shows some of the variations in localized number formats. In order to get the format of the language used in the user interface of your application, make sure to specify that language (and possibly some fallback languages) using the <code>locales</code> argument:</p>
+
+<pre class="brush: js">var number = 123456.789;
+
+// German uses comma as decimal separator and period for thousands
+console.log(new Intl.NumberFormat('de-DE').format(number));
+// → 123.456,789
+
+// Arabic in most Arabic speaking countries uses real Arabic digits
+console.log(new Intl.NumberFormat('ar-EG').format(number));
+// → ١٢٣٤٥٦٫٧٨٩
+
+// India uses thousands/lakh/crore separators
+console.log(new Intl.NumberFormat('en-IN').format(number));
+// → 1,23,456.789
+
+// the nu extension key requests a numbering system, e.g. Chinese decimal
+console.log(new Intl.NumberFormat('zh-Hans-CN-u-nu-hanidec').format(number));
+// → 一二三,四五六.七八九
+
+// when requesting a language that may not be supported, such as
+// Balinese, include a fallback language, in this case Indonesian
+console.log(new Intl.NumberFormat(['ban', 'id']).format(number));
+// → 123.456,789
+</pre>
+
+<h3 id="Using_options">Using <code>options</code></h3>
+
+<p>The results can be customized using the <code>options</code> argument:</p>
+
+<pre class="brush: js">var number = 123456.789;
+
+// request a currency format
+console.log(new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(number));
+// → 123.456,79&nbsp;€
+
+// the Japanese yen doesn't use a minor unit
+console.log(new Intl.NumberFormat('ja-JP', { style: 'currency', currency: 'JPY' }).format(number));
+// → ￥123,457
+
+// limit to three significant digits
+console.log(new Intl.NumberFormat('en-IN', { maximumSignificantDigits: 3 }).format(number));
+// → 1,23,000
+</pre>
+
+<h2 id="Specifications">Specifications</h2>
+
+<table class="standard-table">
+ <tbody>
+  <tr>
+   <th scope="col">Specification</th>
+   <th scope="col">Status</th>
+   <th scope="col">Comment</th>
+  </tr>
+  <tr>
+   <td><a href="http://www.ecma-international.org/ecma-402/1.0/#sec-11.1" class="external" lang="en" hreflang="en">ECMAScript Internationalization API 1.0 (ECMA-402)<br><small lang="en-US">The definition of 'Intl.NumberFormat' in that specification.</small></a></td>
+   <td><span class="spec-Standard">Standard</span></td>
+   <td>Initial definition.</td>
+  </tr>
+  <tr>
+   <td><a href="http://www.ecma-international.org/ecma-402/2.0/#sec-11.1" class="external" lang="en" hreflang="en">ECMAScript Internationalization API 2.0 (ECMA-402)<br><small lang="en-US">The definition of 'Intl.NumberFormat' in that specification.</small></a></td>
+   <td><span class="spec-Standard">Standard</span></td>
+   <td>&nbsp;</td>
+  </tr>
+  <tr>
+   <td><a href="http://tc39.github.io/ecma402/#numberformat-objects" class="external" lang="en" hreflang="en">ECMAScript Internationalization API 3.0 (ECMA-402)<br><small lang="en-US">The definition of 'Intl.NumberFormat' in that specification.</small></a></td>
+   <td><span class="spec-Draft">Draft</span></td>
+   <td>&nbsp;</td>
+  </tr>
+ </tbody>
+</table>
+
+<h2 id="Browser_compatibility">Browser compatibility</h2>
+
+<div><div class="htab"> 
+    <a name="AutoCompatibilityTable" id="AutoCompatibilityTable"></a> 
+    <ul> 
+        <li class="selected"><a>Desktop</a></li> 
+        <li><a>Mobile</a></li> 
+    </ul> 
+</div></div>
+
+<div id="compat-desktop">
+<table class="compat-table">
+ <tbody>
+  <tr>
+   <th>Feature</th>
+   <th>Chrome</th>
+   <th>Firefox (Gecko)</th>
+   <th>Internet Explorer</th>
+   <th>Opera</th>
+   <th>Safari (WebKit)</th>
+  </tr>
+  <tr>
+   <td>Basic support</td>
+   <td>24</td>
+   <td><a href="https://developer.mozilla.org/en-US/Firefox/Releases/29" title="Released on 2014-04-29.">29</a> (29)</td>
+   <td>11</td>
+   <td>15</td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+  </tr>
+ </tbody>
+</table>
+</div>
+
+<div id="compat-mobile">
+<table class="compat-table">
+ <tbody>
+  <tr>
+   <th>Feature</th>
+   <th>Android</th>
+   <th>Chrome for Android</th>
+   <th>Firefox Mobile (Gecko)</th>
+   <th>IE Phone</th>
+   <th>Opera Mobile</th>
+   <th>Safari Mobile</th>
+  </tr>
+  <tr>
+   <td>Basic support</td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+   <td>26</td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+  </tr>
+ </tbody>
+</table>
+</div>
+
+<h2 id="See_also">See also</h2>
+
+<div><ul><li>Introduction: <a href="http://norbertlindenberg.com/2012/12/ecmascript-internationalization-api/index.html" class="external">The ECMAScript Internationalization API</a></li>
+ <li>Constructors
+  <ul><li><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Collator.html" title="The Intl.Collator object is a constructor for collators, objects that enable language sensitive string comparison."><code>Intl.Collator</code></a></li>
+   <li><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/DateTimeFormat.html" title="The Intl.DateTimeFormat object is a constructor for objects that enable language sensitive date and time formatting."><code>Intl.DateTimeFormat</code></a></li>
+   <li><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/NumberFormat.html" title="The Intl.NumberFormat object is a constructor for objects that enable language sensitive number formatting."><code>Intl.NumberFormat</code></a></li>
+  </ul></li>
+ <li>Methods
+  <ul><li><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/String/localeCompare.html" title="The localeCompare() method returns a number indicating whether a reference string comes before or after or is the same as the given string in sort order."><code>String.prototype.localeCompare()</code></a></li>
+   <li><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/toLocaleString.html" title="The toLocaleString() method returns a string with a language sensitive representation of this number."><code>Number.prototype.toLocaleString()</code></a></li>
+   <li><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleString.html" title="The toLocaleString() method returns a string with a language sensitive representation of this date. The new locales and options arguments let applications specify the language whose formatting conventions should be used and customize the behavior of the function. In older implementations, which ignore the locales and options arguments, the locale used and the form of the string returned are entirely implementation dependent."><code>Date.prototype.toLocaleString()</code></a></li>
+   <li><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleDateString.html" title="The toLocaleDateString() method returns a string with a language sensitive representation of the date portion of this date. The new locales and options arguments let applications specify the language whose formatting conventions should be used and allow to customize the behavior of the function. In older implementations, which ignore the locales and options arguments, the locale used and the form of the string returned are entirely implementation dependent."><code>Date.prototype.toLocaleDateString()</code></a></li>
+   <li><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleTimeString.html" title="The toLocaleTimeString() method returns a string with a language sensitive representation of the time portion of this date. The new locales and options arguments let applications specify the language whose formatting conventions should be used and customize the behavior of the function. In older implementations, which ignore the locales and options arguments, the locale used and the form of the string returned are entirely implementation dependent."><code>Date.prototype.toLocaleTimeString()</code></a></li>
+  </ul></li>
+</ul></div>
+                
+              </article>
+
+              
+
+    
+    
+    
+
+    
+    
+    
+
+    <div class="share">
+        <strong>Поширити:</strong>
+        <ul>
+            <li><a href="http://twitter.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FJavaScript%2FReference%2FGlobal_Objects%2FNumberFormat%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dtwitter.com&amp;text=%D0%AF+%D0%B4%D1%96%D0%B7%D0%BD%D0%B0%D0%B2%D1%81%D1%8F%28%D0%BB%D0%B0%D1%81%D1%8F%29+%D0%BF%D1%80%D0%BE+Intl.NumberFormat+%D0%BD%D0%B0+MDN." target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/NumberFormat?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=twitter.com" data-title="Я дізнався(лася) про Intl.NumberFormat на MDN." class="share-link twitter"><i aria-hidden="true" class="icon-twitter"></i>Twitter</a></li>
+            <li><a href="http://facebook.com/sharer.php?s=100&amp;p[url]=https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/NumberFormat?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/NumberFormat?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" data-title="Я дізнався(лася) про Intl.NumberFormat на MDN." class="share-link facebook"><i aria-hidden="true" class="icon-facebook"></i>Facebook</a></li>
+            <li><a href="https://plus.google.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FJavaScript%2FReference%2FGlobal_Objects%2FNumberFormat%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dplus.google.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/NumberFormat?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=plus.google.com" data-title="Я дізнався(лася) про Intl.NumberFormat на MDN." class="share-link gplus"><i aria-hidden="true" class="icon-google-plus"></i>Google +</a></li>
+        </ul>
+    </div>
+
+              
+
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Мітки документа й учасники</h2>
+                  
+                  
+  <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags icon-fw"></i>
+    <strong>Мітки:</strong>&nbsp;
+    <ul class="tags tags-small">
+      
+        <li><a href="https://developer.mozilla.org/uk/docs/tag/Internationalization">Internationalization</a></li>
+      
+        <li><a href="https://developer.mozilla.org/uk/docs/tag/JavaScript">JavaScript</a></li>
+      
+        <li><a href="https://developer.mozilla.org/uk/docs/tag/NumberFormat">NumberFormat</a></li>
+      
+    </ul>
+  </div>
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-group icon-fw"></i>&nbsp;<strong>Зробили внесок у цю сторінку:</strong> 
+        <a href="https://developer.mozilla.org/uk/profiles/fscholz">fscholz</a>, 
+    
+        <a href="https://developer.mozilla.org/uk/profiles/Mingun">Mingun</a>, 
+    
+        <a href="https://developer.mozilla.org/uk/profiles/Sheppy">Sheppy</a>, 
+    
+        <a href="https://developer.mozilla.org/uk/profiles/Norbert">Norbert</a>
+    
+                    </div>
+                  
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o icon-fw"></i>&nbsp;<strong>Востаннє оновлена:</strong>
+                      <a href="https://developer.mozilla.org/uk/profiles/fscholz">fscholz</a>,
+                      <time datetime="2015-12-28T14:11:12-08:00">28 груд. 2015 р., 14:11:12</time>
+                    </div>
+                  
+                </div>
+              
+            </div>
+
+            
+              <!-- quick links and zone subnav strip -->
+              <div id="wiki-left" class="column-strip wiki-column">
+
+              
+
+                
+
+                
+                  <!-- quick links -->
+                  
+  <div class="quick-links" id="quick-links">
+    <div class="title see-also">Див. також</div>
+    <ol><li><strong><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/index.html">Standard built-in objects</a></strong></li><li><strong><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/NumberFormat.html"><code>NumberFormat</code></a></strong></li><li data-default-state="open"><a href="#"><strong>Properties</strong></a><ol><li><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/NumberFormat/prototype.html" title="The Intl.NumberFormat.prototype property represents the prototype object for the Intl.NumberFormat constructor."><code>Intl.NumberFormat.prototype</code></a></li><li><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/NumberFormat/format.html" title="The Intl.NumberFormat.prototype.format property returns a getter function that formats a number according to the locale and formatting options of this NumberFormat object."><code>Intl.NumberFormat.prototype.format</code></a></li></ol></li><li data-default-state="open"><a href="#"><strong>Methods</strong></a><ol><li><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/NumberFormat/resolvedOptions.html" title="The Intl.NumberFormat.prototype.resolvedOptions() method returns a new object with properties reflecting the locale and number formatting options computed during initialization of this NumberFormat object."><code>Intl.NumberFormat.prototype.resolvedOptions()</code></a></li><li><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/NumberFormat/supportedLocalesOf.html" title="The Intl.NumberFormat.supportedLocalesOf() method returns an array containing those of the provided locales that are supported in number formatting without having to fall back to the runtime's default locale."><code>Intl.NumberFormat.supportedLocalesOf()</code></a></li></ol></li><li><strong>Related pages:</strong></li><li><strong><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl.html"><code>Intl</code></a></strong></li><li><strong><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Collator.html"><code>Collator</code></a></strong></li><li><strong><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/DateTimeFormat.html"><code>DateTimeFormat</code></a></strong></li><li><strong>Inheritance:</strong></li><li><strong><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Function.html"><code>Function</code></a></strong></li><li><a href="#"><strong>Properties</strong></a><ol><li><span class="sidebar-icon"><span title="This deprecated API should no longer be used, but will probably still work."><i class="icon-thumbs-down-alt"> </i></span></span><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/arguments.html" title="The function.arguments property refers to an an array-like object corresponding to the arguments passed to a function. Use the simple variable arguments instead."><code>Function.arguments</code></a></li><li><span class="sidebar-icon"><span title="This is an obsolete API and is no longer guaranteed to work."><i class="icon-trash"> </i></span></span><s class="obsoleteElement"><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/arity.html" title="The arity property used to return the number of arguments expected by the function, however, it no longer exists and has been replaced by the Function.prototype.length property."><code>Function.arity</code></a></s></li><li><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/caller.html" title="The function.caller property returns the function that invoked the specified function."><code>Function.caller</code></a></li><li><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/displayName.html" title="The function.displayName property returns the display name of the function."><code>Function.displayName</code></a></li><li><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/length.html" title="The length property specifies the number of arguments expected by the function."><code>Function.length</code></a></li><li><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/name.html" title="The function.name property returns the name of the function."><code>Function.name</code></a></li><li><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/prototype.html" title="The Function.prototype property represents the Function prototype object."><code>Function.prototype</code></a></li></ol></li><li><a href="#"><strong>Methods</strong></a><ol><li><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/apply.html" title="The apply() method calls a function with a given this value and arguments provided as an array (or an array-like object)."><code>Function.prototype.apply()</code></a></li><li><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind.html" title="The bind() method creates a new function that, when called, has its this keyword set to the provided value, with a given sequence of arguments preceding any provided when the new function is called."><code>Function.prototype.bind()</code></a></li><li><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/call.html" title="The call() method calls a function with a given this value and arguments provided individually."><code>Function.prototype.call()</code></a></li><li><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/isGenerator.html" title="The isGenerator() method determines whether or not a function is a generator."><code>Function.prototype.isGenerator()</code></a></li><li><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/toSource.html" title="The toSource() method returns a string representing the source code of the object."><code>Function.prototype.toSource()</code></a></li><li><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/toString.html" title="The toString() method returns a string representing the source code of the function."><code>Function.prototype.toString()</code></a></li></ol></li><li><strong><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Object.html"><code>Object</code></a></strong></li><li><a href="#"><strong>Properties</strong></a><ol><li><span class="sidebar-icon"><span title="This is an obsolete API and is no longer guaranteed to work."><i class="icon-trash"> </i></span></span><s class="obsoleteElement"><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/count.html" title="The __count__ property used to store the count of enumerable properties on the object, but it has been removed."><code>Object.prototype.__count__</code></a></s></li><li><span class="sidebar-icon"><span title="This is an obsolete API and is no longer guaranteed to work."><i class="icon-trash"> </i></span></span><s class="obsoleteElement"><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/noSuchMethod.html" title="The __noSuchMethod__ property used to reference a function to be executed when a non-existent method is called on an object, but this function is no longer available."><code>Object.prototype.__noSuchMethod__</code></a></s></li><li><span class="sidebar-icon"><span title="This is an obsolete API and is no longer guaranteed to work."><i class="icon-trash"> </i></span></span><s class="obsoleteElement"><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/Parent.html" title="The __parent__ property used to point to an object's context, but it has been removed."><code>Object.prototype.__parent__</code></a></s></li><li><span class="sidebar-icon"><span title="This deprecated API should no longer be used, but will probably still work."><i class="icon-thumbs-down-alt"> </i></span></span><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/proto.html" title="The __proto__ property of Object.prototype is an accessor property (a getter function and a setter function) that exposes the internal [[Prototype]] (either an object or null) of the object through which it is accessed."><code>Object.prototype.__proto__</code></a></li><li><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/constructor.html" title="Returns a reference to the Object function that created the instance's prototype. Note that the value of this property is a reference to the function itself, not a string containing the function's name. The value is only read-only for primitive values such as&nbsp;1,&nbsp;true and&nbsp;&quot;test&quot;."><code>Object.prototype.constructor</code></a></li></ol></li><li><a href="#"><strong>Methods</strong></a><ol><li><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/__defineGetter__.html" title="The __defineGetter__ method binds an object's property to a function to be called when that property is looked up."><code>Object.prototype.__defineGetter__()</code></a></li><li><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/__defineSetter__.html" title="The __defineSetter__ method binds an object's property to a function to be called when an attempt is made to set that property."><code>Object.prototype.__defineSetter__()</code></a></li><li><span class="sidebar-icon"><span title="This deprecated API should no longer be used, but will probably still work."><i class="icon-thumbs-down-alt"> </i></span></span><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/__lookupGetter__.html" title="The __lookupGetter__ method returns the function bound as a getter to the specified property."><code>Object.prototype.__lookupGetter__()</code></a></li><li><span class="sidebar-icon"><span title="This deprecated API should no longer be used, but will probably still work."><i class="icon-thumbs-down-alt"> </i></span></span><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/__lookupSetter__.html" title="The __lookupSetter__ method returns the function bound as a setter to the specified property."><code>Object.prototype.__lookupSetter__()</code></a></li><li><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/hasOwnProperty.html" title="The hasOwnProperty() method returns a boolean indicating whether the object has the specified property."><code>Object.prototype.hasOwnProperty()</code></a></li><li><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/isPrototypeOf.html" title="The isPrototypeOf() method tests for an object in another object's prototype chain."><code>Object.prototype.isPrototypeOf()</code></a></li><li><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/propertyIsEnumerable.html" title="The propertyIsEnumerable() method returns a Boolean indicating whether the specified property is enumerable."><code>Object.prototype.propertyIsEnumerable()</code></a></li><li><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/toLocaleString.html" title="The toLocaleString() method returns a string representing the object. This method is meant to be overridden by derived objects for locale-specific purposes."><code>Object.prototype.toLocaleString()</code></a></li><li><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/toSource.html" title="The toSource() method returns a string representing the source code of the object."><code>Object.prototype.toSource()</code></a></li><li><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/toString.html" title="The toString() method returns a string representing object."><code>Object.prototype.toString()</code></a></li><li><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/unwatch.html" title="The unwatch() method removes a watchpoint set with the watch() method."><code>Object.prototype.unwatch()</code></a></li><li><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/valueOf.html" title="Technical review completed."><code>Object.prototype.valueOf()</code></a></li><li><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/watch.html" title="The watch() method watches for a property to be assigned a value and runs a function when that occurs."><code>Object.prototype.watch()</code></a></li></ol></li></ol>
+  </div>
+                
+
+                <!-- approvals -->
+                
+
+              
+
+              </div>
+            
+          </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Web/JavaScript/Reference/Global_Objects/NumberFormat$edit" label="Редагувати сторінку"></menuitem>
+    <menuitem data-action="/uk/docs/Web/JavaScript/Reference/Global_Objects/NumberFormat$history" label="Переглянути історію сторінки"></menuitem>
+  </menu>
+
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+        
+        <div class="contentinfo">
+          <p>© 2005-2016 Mozilla Developer Network і окремі учасники.</p> <p>Вміст доступний на умовах <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">цих ліцензій</a>.</p>
+          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">Про MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Умови</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Конфіденційність</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Куки</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Зробіть внесок у код</a></li>
+          </ul>
+        <p></p>
+        
+        </div>
+      </div>
+      <div class="column-strip">
+        
+          
+  
+    <form class="languages go" method="get" action="https://developer.mozilla.org/uk/docs/Web">
+      <label for="language">Інші мови:</label>
+      <select id="language" class="wiki-l10n" name="next" dir="ltr">
+        <option value="/en-US/docs/Web/JavaScript/Reference/Global_Objects/NumberFormat" selected="">
+          English (US)
+        </option>
+        
+          <option value="/de/docs/Web/JavaScript/Reference/Global_Objects/NumberFormat">
+            Deutsch
+          </option>
+          <option value="/es/docs/Web/JavaScript/Referencia/Objetos_globales/NumberFormat">
+            Español
+          </option>
+          <option value="/fr/docs/Web/JavaScript/Reference/Objets_globaux/NumberFormat">
+            Français
+          </option>
+          <option value="/ja/docs/Web/JavaScript/Reference/Global_Objects/NumberFormat">
+            日本語
+          </option>
+          <option value="/ru/docs/Web/JavaScript/Reference/Global_Objects/NumberFormat">
+            Русский
+          </option>
+      </select>
+      <noscript>&lt;button type="submit"&gt;Перейти&lt;/button&gt;</noscript>
+    </form>
+  
+
+        
+      </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+  
+    
+    <!--[if lte IE 8]><script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/selectivizr.091e18cf669b.js" charset="utf-8"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script type="text/javascript" src="../../../../../../../developer.cdn.mozilla.net/static/build/js/main.a7b27a25fb9c.js" charset="utf-8"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+    
+    <script async="" type="text/javascript" src="../../../../../../../developer.cdn.mozilla.net/static/jsi18n/uk/javascript.c7ba80fc053a.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../../../developer.cdn.mozilla.net/static/build/js/syntax-prism-min.js" charset="utf-8"></script><script type="text/javascript" src="../../../../../../../developer.cdn.mozilla.net/static/jsi18n/uk/javascript.c7ba80fc053a.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../../../developer.cdn.mozilla.net/static/build/js/wiki.bd71ca9fd27d.js" charset="utf-8" id="wikiscript"></script>
+
+  
+
+  <script async="" type="text/javascript" src="../../../../../../../developer.cdn.mozilla.net/static/build/js/helpfulness.7b208a764d28.js" charset="utf-8"></script>
+
+  
+
+
+
+<!-- Mirrored from developer.mozilla.org/uk/docs/Web/JavaScript/Reference/Global_Objects/NumberFormat by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 19:37:12 GMT -->
+</body></html>

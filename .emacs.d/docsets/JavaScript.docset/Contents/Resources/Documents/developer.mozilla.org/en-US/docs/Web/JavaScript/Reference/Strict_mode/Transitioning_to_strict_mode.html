@@ -1,0 +1,953 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode/Transitioning_to_strict_mode by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 15:58:37 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <script async="" src="../../../../../../../www.google-analytics.com/analytics.js"></script><script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+  
+    
+  
+
+  
+  <title>Transitioning to strict mode</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+  
+    
+    
+    <link href="../../../../../../../developer.cdn.mozilla.net/static/build/styles/mdn.593f20d8c365.css" rel="stylesheet" type="text/css">
+
+    
+  
+    <link href="../../../../../../../developer.cdn.mozilla.net/static/build/styles/wiki.13dd9abdfb62.css" rel="stylesheet" type="text/css">
+
+    
+
+    
+
+  <!-- common social tags -->
+  
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../../../developer.cdn.mozilla.net/static/img/favicon144.a6e4162070f4.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../../../developer.cdn.mozilla.net/static/img/favicon114.0e9fabd44f85.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../../../developer.cdn.mozilla.net/static/img/favicon72.8ff9d87c82a0.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../../../developer.cdn.mozilla.net/static/img/favicon57.a2490b9a2d76.png">
+  <!-- basic favicon -->
+  
+    
+  
+  <link rel="shortcut icon" href="../../../../../../../developer.cdn.mozilla.net/static/img/favicon32.e02854fdcf73.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/html5shiv.3948ccddab6f.js" charset="utf-8"></script>
+  <![endif]-->
+
+  
+  <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode/Transitioning_to_strict_mode$json">
+  <link rel="canonical" href="Transitioning_to_strict_mode.html">
+
+  
+    
+      <link rel="alternate" hreflang="de" href="../../../../../../de/docs/Web/JavaScript/Reference/Strict_mode/wechsel_zum_strict_mode.html" title="Wechsel zum &quot;strict mode&quot;">
+    
+      <link rel="alternate" hreflang="fr" href="../../../../../../fr/docs/Web/JavaScript/Reference/Strict_mode/Passer_au_mode_strict.html" title="Passer au mode strict">
+    
+      <link rel="alternate" hreflang="ja" href="https://developer.mozilla.org/ja/docs/Web/JavaScript/Strict_mode/Transitioning_to_strict_mode" title="Transitioning to strict mode">
+    
+      <link rel="alternate" hreflang="ru" href="../../../../../../ru/docs/Web/JavaScript/Reference/Strict_mode/Transitioning_to_strict_mode.html" title="Переход к строгому режиму">
+    
+      <link rel="alternate" hreflang="zh-CN" href="../../../../../../zh-CN/docs/Web/JavaScript/Reference/Strict_mode/Transitioning_to_strict_mode.html" title="向严格模式过渡">
+    
+  
+
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="Transitioning to strict mode">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode/Transitioning_to_strict_mode">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode/Transitioning_to_strict_mode">
+  <meta name="twitter:title" content="Transitioning to strict mode">
+  
+  <meta property="og:description" content="ECMAScript 5 introduced strict mode which is now implemented in all major browsers (including IE10). While making web browsers interpret code as strict is easy (just add &quot;use strict&quot;; at the top of your source code), transitioning an existing code base to strict mode requires a bit more work.">
+  <meta name="description" content="ECMAScript 5 introduced strict mode which is now implemented in all major browsers (including IE10). While making web browsers interpret code as strict is easy (just add &quot;use strict&quot;; at the top of your source code), transitioning an existing code base to strict mode requires a bit more work.">
+  <meta name="twitter:description" content="ECMAScript 5 introduced strict mode which is now implemented in all major browsers (including IE10). While making web browsers interpret code as strict is easy (just add &quot;use strict&quot;; at the top of your source code), transitioning an existing code base to strict mode requires a bit more work.">
+  
+
+  
+    
+
+
+
+  
+</head>
+<body data-slug="Web/JavaScript/Reference/Strict_mode/Transitioning_to_strict_mode" contextmenu="edit-history-menu" data-search-url="" class="document  ">
+
+  <script type="text/javascript">
+    (function(win) {
+        'use strict';
+
+        
+            (function(){
+  var FLAGS = {
+    'compat_api': false,'kumaediting': false,'page_move': false,'registration_disabled': false,'search_suggestions': false,'section_edit': true,'spam_admin_override': false,'spam_checks_enabled': true,'spam_spammer_override': false,'spam_submissions_enabled': false,'spam_testing_mode': false,'wiki_samples': true,'wiki_spam_exempted': false,'wiki_spam_training': true
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': true,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+
+        // This needs to be set before ckeditor.js loads
+        window.CKEDITOR_BASEPATH = 'https://developer.mozilla.org/static/js/libs/ckeditor/build/ckeditor/';
+
+        // This represents the site configuration
+        win.mdn = {
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+            
+            notifications: [],
+            
+            // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            },
+            // Assets that need to be dynamically injected
+            assets_disabled: {
+                css: {
+                    'editor-content': ['https://developer.cdn.mozilla.net/static/build/styles/editor-content.3d79df72080d.css',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/styles/wiki-compat-tables.f3a3bfce97a1.css',]
+                },
+                js: {
+                    'syntax-prism': ['https://developer.cdn.mozilla.net/static/build/js/syntax-prism.7a66ddfa68bf.js',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/js/wiki-compat-tables.14ce5dcb2c3d.js',]
+                }
+            }
+        };
+    })(this);
+</script>
+
+  
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+    
+      <li><a href="#q" id="skip-search">Skip to search</a></li>
+    
+  </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+    <a href="https://developer.mozilla.org/en-US/" class="logo">Mozilla Developer Network</a>
+
+    <div id="nav-sec">
+        
+                  <ul>
+                  <li>
+
+    
+
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                Sign in
+              </span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FJavaScript%2FReference%2FStrict_mode%2FTransitioning_to_strict_mode" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/Web/JavaScript/Reference/Strict_mode/Transitioning_to_strict_mode" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/Web/JavaScript/Reference/Strict_mode/Transitioning_to_strict_mode" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FJavaScript%2FReference%2FStrict_mode%2FTransitioning_to_strict_mode" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+              
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+        
+    </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../../../API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+
+   <!-- end is_zone -->
+
+    <div class="wiki-main-content" id="document-main"><div class="center">
+      
+      <div class="article-meta">
+        <!-- action buttons -->
+        
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+  <ul class="page-buttons" data-sticky="false">
+      
+      <li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+              
+                
+                  <li><bdi><a rel="internal" href="../../../../../../de/docs/Web/JavaScript/Reference/Strict_mode/wechsel_zum_strict_mode.html" title="Wechsel zum &quot;strict mode&quot;">Deutsch</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="../../../../../../fr/docs/Web/JavaScript/Reference/Strict_mode/Passer_au_mode_strict.html" title="Passer au mode strict">Français</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/ja/docs/Web/JavaScript/Strict_mode/Transitioning_to_strict_mode" title="Transitioning to strict mode">日本語</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="../../../../../../ru/docs/Web/JavaScript/Reference/Strict_mode/Transitioning_to_strict_mode.html" title="Переход к строгому режиму">Русский</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="../../../../../../zh-CN/docs/Web/JavaScript/Reference/Strict_mode/Transitioning_to_strict_mode.html" title="向严格模式过渡">中文 (简体)</a></bdi></li>
+                
+              
+
+              
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode/Transitioning_to_strict_mode$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+              
+            </ul>
+          </div>
+        </div>
+      </li>
+
+      <li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode/Transitioning_to_strict_mode$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li>
+
+        
+
+        <li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode/Transitioning_to_strict_mode$history" rel="nofollow, noindex">History</a></li>
+                
+                
+                
+                
+
+                
+
+                
+                
+                
+                <li class="page-print"><a href="#" onclick="return window.print();">Print this article</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+        
+  <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web" rel="v:url" property="v:title">Web technology for developers</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" rel="v:url" property="v:title">JavaScript</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="../../Reference.html" rel="v:url" property="v:title">JavaScript reference</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="../Strict_mode.html" rel="v:url" property="v:title">Strict mode</a></li>
+    
+    <li class="crumb" typeof="v:Breadcrumb" property="v:title">Transitioning to strict mode</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        
+        <div class="contributor-avatars" data-all-text="see all contributors" data-alternate-message="hide contributors" data-has-hidden="1">
+            <ul>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/nsloc22" title="View profile: nsloc22">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="nsloc22" data-src="../../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">nsloc22</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/fscholz" title="View profile: fscholz">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="fscholz" data-src="../../../../../../../secure.gravatar.com/avatar/e24391c9174352988d819a9b9ea77c9e6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">fscholz</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/ziriab" title="View profile: ziriab">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="ziriab" data-src="../../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">ziriab</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/SphinxKnight" title="View profile: SphinxKnight">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="SphinxKnight" data-src="../../../../../../../secure.gravatar.com/avatar/8fb358ea9b7af22f5021a29e122ea0696c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">SphinxKnight</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/kscarfone" title="View profile: kscarfone">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="kscarfone" data-src="../../../../../../../secure.gravatar.com/avatar/89c1e54a9703125168e40d22316d2b496c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">kscarfone</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Sheppy" title="View profile: Sheppy">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Sheppy" data-src="../../../../../../../secure.gravatar.com/avatar/945076feb88f2d7003891ffbf06f32bf6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Sheppy</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/dbruant" title="View profile: dbruant">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="dbruant" data-src="../../../../../../../secure.gravatar.com/avatar/b9b113093c351a599f86e0647c43add16c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">dbruant</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/rwaldron" title="View profile: rwaldron">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="rwaldron" data-src="../../../../../../../secure.gravatar.com/avatar/36c697d974542aadaee06a0f39cb14376c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">rwaldron</noscript></a>
+                </li>
+            
+            </ul>
+        </div>
+        
+
+        <h1>Transitioning to strict mode</h1>
+
+      </div>
+      
+
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-present">
+
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+            
+              <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+              
+              <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a rel="internal" href="#Gradual_transition">Gradual transition</a></li><li><a rel="internal" href="#Differences_from_non-strict_to_strict">Differences from non-strict to strict</a><ol><li><a rel="internal" href="#Syntax_errors">Syntax errors</a></li><li><a rel="internal" href="#New_runtime_errors">New runtime errors</a><ol><li><a rel="internal" href="#Setting_a_value_to_an_undeclared_variable">Setting a value to an undeclared variable</a></li><li><a rel="internal" href="#Trying_to_delete_a_non-configurable_property">Trying to delete a non-configurable property</a></li><li><a rel="internal" href="#Poisoned_arguments_and_function_properties">Poisoned arguments and function properties</a></li></ol></li><li><a rel="internal" href="#Semantic_differences">Semantic differences</a><ol><li><a rel="internal" href="#this_in_function_calls"><code>this</code> in function calls</a></li><li><a rel="internal" href="#arguments_doesn't_alias_named_function_arguments"><code>arguments</code> doesn't alias named function arguments</a></li><li><a rel="internal" href="#Change_to_eval">Change to <code>eval</code></a></li></ol></li></ol></li><li><a rel="internal" href="#Strictness-neutral_code">Strictness-neutral code</a></li><li><a rel="internal" href="#See_also">See also</a>
+                </li></ol>
+              </div>
+              
+              </div>
+            
+
+            
+            
+              
+            
+
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-half wiki-column text-content">
+
+              
+
+              
+
+              
+                
+                
+                
+              
+              
+
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                
+                  
+                    <div><section id="Quick_Links" class="Quick_links"><!-- --></section></div>
+
+<p>ECMAScript 5 introduced <a title="/en-US/docs/JavaScript/Strict_mode" href="../Strict_mode.html">strict mode</a> which is now implemented in all major browsers (including IE10). While making web browsers interpret code as strict is easy (just add <code>"use strict";</code> at the top of your source code), transitioning an existing code base to strict mode requires a bit more work.</p>
+
+<p>This article aims at providing guidance for developers.</p>
+
+<h2 id="Gradual_transition">Gradual transition</h2>
+
+<p>Strict mode has been designed so that the transition to it can be made gradually. It is possible to change each file individually and even to transition code to strict mode down to the function granularity.</p>
+
+<h2 id="Differences_from_non-strict_to_strict">Differences from non-strict to strict</h2>
+
+<h3 id="Syntax_errors">Syntax errors</h3>
+
+<p>When adding <code>"use strict";</code>, the following cases will throw a <a title="The SyntaxError object represents an error when trying to interpret syntactically invalid code." href="../Global_Objects/SyntaxError.html"><code>SyntaxError</code></a> before the script is executing:</p>
+
+<ul>
+ <li>Octal syntax <code>var n = 023;</code></li>
+ <li><a title="/en-US/docs/JavaScript/Reference/Statements/with" href="../Statements/with.html"><code>with</code></a> statement</li>
+ <li>Using <code><a title="/en-US/docs/JavaScript/Reference/Operators/delete" href="../Operators/delete.html">delete</a></code> on a variable name <code>delete myVariable</code>;</li>
+ <li>Using <a href="../Global_Objects/eval.html"><code>eval</code></a> or <a href="../Functions/arguments.html"><code>arguments</code></a> as variable or function argument name</li>
+ <li>Using one of the newly <a href="../Lexical_grammar.html#Keywords">reserved keywords</a> (in prevision for ECMAScript 6): <code>implements</code>, <code>interface</code>, <code>let</code>, <code>package</code>, <code>private</code>, <code>protected</code>, <code>public</code>, <code>static</code>, and <code>yield</code></li>
+ <li>Declaring function in blocks <code>if(a&lt;b){ function f(){} }</code></li>
+ <li>Obvious errors
+  <ul>
+   <li>Declaring twice the same name for a property name in an object literal <code>{a: 1, b: 3, a: 7}</code> This is no longer the case in ECMAScript 6 (<a title="FIXED: Duplicate property name in object literal is allowed in ES6 strict mode" class="external" href="https://bugzilla.mozilla.org/show_bug.cgi?id=1041128">bug&nbsp;1041128</a>).</li>
+   <li>Declaring two function parameters&nbsp;with the same name <code>function f(a, b, b){}</code></li>
+  </ul>
+ </li>
+</ul>
+
+<p>These errors are good, because they reveal plain errors or bad practices. They occur before the code is running.</p>
+
+<h3 id="New_runtime_errors">New runtime errors</h3>
+
+<p>JavaScript used to silently fail in contexts where what was done was an error. Strict mode throws in such cases. If your code base contains such cases, testing will be necessary to be sure nothing is broken. Once again, it can happen at the function granularity level.</p>
+
+<h4 id="Setting_a_value_to_an_undeclared_variable">Setting a value to an undeclared variable</h4>
+
+<pre class="brush: js">function f(x){
+  "use strict";
+  var a = 12;
+  b = a + x*35; // error!
+}
+f();
+</pre>
+
+<p>This used to change a value on the global object which is rarely the expected effect. If you really want to set a value to the global object, pass it as an argument and explicitly assign it as a property:</p>
+
+<pre class="brush: js">var global = this; // in the top-level context, "this" always
+                   // refers to the global object
+function f(){
+  "use strict";
+  var a = 12;
+  global.b = a + x*35;
+}
+f();
+</pre>
+
+<h4 id="Trying_to_delete_a_non-configurable_property">Trying to delete a non-configurable property</h4>
+
+<pre class="brush: js">"use strict";
+delete Object.prototype; // error!
+</pre>
+
+<p>In non-strict, this would silently fail, in contradiction with the user expectation.</p>
+
+<h4 id="Poisoned_arguments_and_function_properties">Poisoned arguments and function properties</h4>
+
+<p>Accessing <code>arguments.callee</code>, <code>arguments.caller</code>, <code>anyFunction.caller</code>, or <code>anyFunction.arguments</code> throws an error in strict mode. The only legitimate use case would be to reuse a function as in:</p>
+
+<pre class="brush: js">// example taken from vanillajs: http://vanilla-js.com/
+var s = document.getElementById('thing').style;
+s.opacity = 1;
+(function(){ 
+  if((s.opacity-=.1) &lt; 0)
+    s.display="none";
+  else
+    setTimeout(arguments.callee, 40);
+})();</pre>
+
+<p>which can be rewritten as:</p>
+
+<pre class="brush: js">"use strict";
+var s = document.getElementById('thing').style;
+s.opacity = 1;
+(function fadeOut(){ // name the function
+  if((s.opacity-=.1) &lt; 0)
+    s.display="none";
+  else
+    setTimeout(fadeOut, 40); // use the name of the function
+})();</pre>
+
+<h3 id="Semantic_differences">Semantic differences</h3>
+
+<p>These differences are very subtle differences. It's possible that a test suite doesn't catch this kind of subtle difference. Careful review of your code base will probably be necessary to be sure these differences don't affect the semantics of your code. Fortunately, this careful review can be done gradually down the function granularity.</p>
+
+<h4 id="this_in_function_calls"><code>this</code> in function calls</h4>
+
+<p>In function calls like <code>f()</code>, the <code>this</code> value was the global object. In strict mode, it is now <code>undefined</code>. When a function was called with <code><a title="/en-US/docs/Core_JavaScript_1.5_Reference/Global_Objects/Function/call" href="../Global_Objects/Function/call.html">call</a></code> or <code><a title="/en-US/docs/Core_JavaScript_1.5_Reference/Global_Objects/Function/apply" href="../Global_Objects/Function/apply.html">apply</a></code>, if the value was a primitive value, this one was boxed into an object (or the global object for <code>undefined</code> and <code>null</code>). In strict mode, the value is passed directly without conversion or replacement.</p>
+
+<h4 id="arguments_doesn't_alias_named_function_arguments"><code>arguments</code> doesn't alias named function arguments</h4>
+
+<p>In non-strict mode, modifying a value in the <code>arguments</code> object modifies the corresponding named argument. This made optimizations complicated for JavaScript engine and made code harder to read/understand. In strict mode, the <code>arguments</code> object is created and initialized with the same values than the named arguments, but changes to either the <code>arguments</code> object or the named arguments aren't reflected in one another.</p>
+
+<h4 id="Change_to_eval">Change to <code>eval</code></h4>
+
+<p>In strict mode code, <code>eval</code> doesn't create a new variable in the scope from which it was called. Also, of course, in strict mode, the string is evaluated with strict mode rules. Thorough testing will need to be performed to make sure nothing breaks. Not using eval if you don't really need it may be another pragmatic solution.</p>
+
+<h2 id="Strictness-neutral_code">Strictness-neutral code</h2>
+
+<p>A potential "downside" of moving strict code to strict mode is that the semantics may be different in legacy browsers which do not implement strict mode. In some rare occasions (like bad concatenation or minification), your code also may not run in the mode you wrote and tested it in. Here are the rules to make your code strictness-neutral:</p>
+
+<ol>
+ <li>Write your code as strict and make sure no strict-only errors (from the above "New runtime errors" section) are thrown.</li>
+ <li>Stay away from semantic differences
+  <ol>
+   <li><code>eval</code>: use it only if you know what you're doing</li>
+   <li><code>arguments</code>: always access function arguments via their name or perform a copy of the arguments object using:<br>
+    <code>var args = Array.prototype.slice.call(arguments)</code><br>
+    as the first line of your function</li>
+   <li><code>this</code>: only use&nbsp;<code>this</code> when it refers to an object you created.</li>
+  </ol>
+ </li>
+</ol>
+
+<h2 id="See_also">See also</h2>
+
+<ul>
+ <li><a href="../Strict_mode.html">Strict mode</a></li>
+</ul>
+                  
+                
+              </article>
+
+              
+
+    
+    
+    
+
+    
+    
+    
+
+    <div class="share">
+        <strong>Share:</strong>
+        <ul>
+            <li><a href="http://twitter.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FJavaScript%2FReference%2FStrict_mode%2FTransitioning_to_strict_mode%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dtwitter.com&amp;text=I+learned+about+Transitioning+to+strict+mode+on+MDN." target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode/Transitioning_to_strict_mode?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=twitter.com" data-title="I learned about Transitioning to strict mode on MDN." class="share-link twitter"><i aria-hidden="true" class="icon-twitter"></i>Twitter</a></li>
+            <li><a href="http://facebook.com/sharer.php?s=100&amp;p[url]=https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode/Transitioning_to_strict_mode?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode/Transitioning_to_strict_mode?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" data-title="I learned about Transitioning to strict mode on MDN." class="share-link facebook"><i aria-hidden="true" class="icon-facebook"></i>Facebook</a></li>
+            <li><a href="https://plus.google.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FJavaScript%2FReference%2FStrict_mode%2FTransitioning_to_strict_mode%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dplus.google.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode/Transitioning_to_strict_mode?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=plus.google.com" data-title="I learned about Transitioning to strict mode on MDN." class="share-link gplus"><i aria-hidden="true" class="icon-google-plus"></i>Google+</a></li>
+        </ul>
+    </div>
+
+              
+
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                  
+                  
+  <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags icon-fw"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Advanced">Advanced</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/JavaScript">JavaScript</a></li>
+      
+    </ul>
+  </div>
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-group icon-fw"></i>&nbsp;<strong>Contributors to this page:</strong> 
+        <a href="https://developer.mozilla.org/en-US/profiles/nsloc22">nsloc22</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/fscholz">fscholz</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/ziriab">ziriab</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/SphinxKnight">SphinxKnight</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/kscarfone">kscarfone</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Sheppy">Sheppy</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/dbruant">dbruant</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/rwaldron">rwaldron</a>
+    
+                    </div>
+                  
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o icon-fw"></i>&nbsp;<strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/nsloc22">nsloc22</a>,
+                      <time datetime="2016-04-26T09:18:31-07:00">Apr 26, 2016, 9:18:31 AM</time>
+                    </div>
+                  
+                </div>
+              
+            </div>
+
+            
+              <!-- quick links and zone subnav strip -->
+              <div id="wiki-left" class="column-strip wiki-column">
+
+              
+
+                
+
+                
+                  <!-- quick links -->
+                  
+  <div class="quick-links" id="quick-links">
+    <div class="title see-also">See also</div>
+     
+ <ol> 
+  <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript"><strong><em>JavaScript</em></strong></a></li> 
+  <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript"><strong>Tutorials:</strong></a></li> 
+  <li data-default-state="closed"><a href="../../Guide.html">JavaScript Guide</a> 
+    <ol> 
+      <li><a href="../../Guide/Introduction.html">Introduction</a></li> 
+      <li><a href="../../Guide/Grammar_and_Types-2.html">Grammar and types</a></li> 
+      <li><a href="../../Guide/Control_flow_and_error_handling.html">Control flow and error handling</a></li> 
+      <li><a href="../../Guide/Loops_and_iteration.html">Loops and iteration</a></li> 
+      <li><a href="../../Guide/Functions.html">Functions</a></li> 
+      <li><a href="../../Guide/Expressions_and_Operators.html">Expressions and operators</a></li> 
+      <li><a href="../../Guide/Numbers_and_dates.html">Numbers and dates</a></li> 
+      <li><a href="../../Guide/Text_formatting.html">Text formatting</a></li> 
+      <li><a href="../../Guide/Regular_Expressions.html">Regular expressions</a></li> 
+      <li><a href="../../Guide/Indexed_collections.html">Indexed collections</a></li> 
+      <li><a href="../../Guide/Keyed_collections.html">Keyed collections</a></li> 
+      <li><a href="../../Guide/Working_with_Objects.html">Working with objects</a></li> 
+      <li><a href="../../Guide/Details_of_the_Object_Model.html">Details of the object model</a></li> 
+      <li><a href="../../Guide/Iterators_and_generators.html">Iterators and generators</a></li> 
+      <li><a href="../../Guide/Meta_programming.html">Meta programming</a></li> 
+   </ol> 
+  </li> 
+  <li data-default-state="closed"><a href="#">Introductory</a> 
+   <ol> 
+    <li><a href="https://developer.mozilla.org/en-US/Learn/Getting_started_with_the_web/JavaScript_basics">JavaScript basics</a></li> 
+    <li><a href="../../JavaScript_technologies_overview.html">JavaScript technologies overview</a></li> 
+    <li><a href="../../Introduction_to_Object-Oriented_JavaScript.html">Introduction to Object Oriented JavaScript</a></li> 
+   </ol> 
+  </li> 
+  <li data-default-state="closed"><a href="#">Intermediate</a> 
+   <ol> 
+    <li><a href="../../A_re-introduction_to_JavaScript.html">A re-introduction to JavaScript</a></li> 
+    <li><a href="../../Data_structures.html">JavaScript data structures</a></li> 
+    <li><a href="../../Equality_comparisons_and_sameness.html">Equality comparisons and sameness</a></li> 
+    <li><a href="../../Closures.html">Closures</a></li> 
+   </ol> 
+  </li> 
+  <li data-default-state="closed"><a href="#">Advanced</a> 
+   <ol> 
+    <li><a href="../../Inheritance_and_the_prototype_chain.html">Inheritance and the prototype chain</a></li> 
+    <li><a href="../Strict_mode.html">Strict mode</a></li> 
+    <li><a href="../../Typed_arrays.html">JavaScript typed arrays</a></li> 
+    <li><a href="../../SIMD_types.html">SIMD types</a></li> 
+    <li><a href="../../Memory_Management.html">Memory Management</a></li> 
+    <li><a href="../../EventLoop.html">Concurrency model and Event Loop</a></li> 
+   </ol> 
+  </li> 
+  <li><strong><a href="../../Reference.html">References:</a></strong></li> 
+  <li data-default-state="closed"><a href="../Global_Objects.html">Built-in objects</a> 
+   <ol><li><a title="This chapter documents all of JavaScript's standard, built-in objects, including their methods and properties." href="../Global_Objects.html">Standard built-in objects</a></li><li><a title="The JavaScript Array&nbsp;object is a global object that&nbsp;is used in the&nbsp;construction&nbsp;of&nbsp;arrays; which are high-level, list-like objects." href="../Global_Objects/Array.html">Array</a></li><li><a title="The ArrayBuffer object is used to represent a generic, fixed-length raw binary data buffer. You can not directly manipulate the contents of an ArrayBuffer; instead, you create one of the typed array objects or a DataView object which represents the buffer in a specific format, and use that to read and write the contents of the buffer." href="../Global_Objects/ArrayBuffer.html">ArrayBuffer</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a title="The Atomics object provides atomic operations as static methods. They are used with SharedArrayBuffer objects." href="../Global_Objects/Atomics.html">Atomics</a></li><li><a title="The Boolean object is an object wrapper for a boolean value." href="../Global_Objects/Boolean.html">Boolean</a></li><li><a title="The DataView view provides a low-level interface for reading and writing multiple number types&nbsp;in an ArrayBuffer irrespective of the platform's endianness." href="../Global_Objects/DataView.html">DataView</a></li><li><a title="Creates a JavaScript Date instance that represents a single moment in time. Date objects are based on a time value that is the number of milliseconds since 1 January, 1970 UTC." href="../Global_Objects/Date.html">Date</a></li><li><a title="The Error constructor creates an error object. Instances of Error objects are thrown when runtime errors occur. The Error object can also be used as a base object&nbsp;for user-defined exceptions. See below for standard built-in error types." href="../Global_Objects/Error.html">Error</a></li><li><a title="The EvalError object indicates an error regarding the global eval() function. This exception is not thrown by JavaScript anymore, however the EvalError object remains for compatibility." href="../Global_Objects/EvalError.html">EvalError</a></li><li><a title="The Float32Array typed array represents an array of 32-bit floating point numbers (corresponding to the C float data type) in the platform byte order. If control over byte order is needed, use DataView instead. The contents are initialized to 0. Once established, you can reference elements in the array using the object's methods, or using standard array index syntax (that is, using bracket notation)." href="../Global_Objects/Float32Array.html">Float32Array</a></li><li><a title="The Float64Array typed array represents an array of 64-bit floating point numbers (corresponding to the C double data type) in the platform byte order. If control over byte order is needed, use DataView instead. The contents are initialized to 0. Once established, you can reference elements in the array using the object's methods, or using standard array index syntax (that is, using bracket notation)." href="../Global_Objects/Float64Array.html">Float64Array</a></li><li><a title="The Function constructor creates a new Function object. In JavaScript every function is actually a Function object." href="../Global_Objects/Function.html">Function</a></li><li><a title="The Generator object is returned by a generator function&nbsp;and it conforms to both the iterable protocol and the iterator protocol." href="../Global_Objects/Generator.html">Generator</a></li><li><a title="The GeneratorFunction constructor creates a new generator function object. In JavaScript every generator function is actually a GeneratorFunction object." href="../Global_Objects/GeneratorFunction.html">GeneratorFunction</a></li><li><a title="The global Infinity property is a numeric value representing infinity." href="../Global_Objects/Infinity.html">Infinity</a></li><li><a title="The Int16Array typed array represents an array of twos-complement 16-bit signed integers in the platform byte order. If control over byte order is needed, use DataView instead. The contents are initialized to 0. Once established, you can reference elements in the array using the object's methods, or using standard array index syntax (that is, using bracket notation)." href="../Global_Objects/Int16Array.html">Int16Array</a></li><li><a title="The Int32Array typed array represents an array of twos-complement 32-bit signed integers in the platform byte order. If control over byte order is needed, use DataView instead. The contents are initialized to 0. Once established, you can reference elements in the array using the object's methods, or using standard array index syntax (that is, using bracket notation)." href="../Global_Objects/Int32Array.html">Int32Array</a></li><li><a title="The Int8Array typed array represents an array of twos-complement 8-bit signed integers. The contents are initialized to 0. Once established, you can reference elements in the array using the object's methods, or using standard array index syntax (that is, using bracket notation)." href="../Global_Objects/Int8Array.html">Int8Array</a></li><li><a title="The InternalError object indicates an error that occurred internally in the JavaScript engine. For example: &quot;InternalError: too much recursion&quot;." href="../Global_Objects/InternalError.html">InternalError</a></li><li><a title="The Intl object is the namespace for the ECMAScript Internationalization API, which provides language sensitive string comparison, number formatting, and date and time formatting. The constructors for Collator, NumberFormat, and DateTimeFormat objects are properties of the Intl object. This page documents these properties as well as functionality common to the internationalization constructors and other language sensitive functions." href="../Global_Objects/Intl.html">Intl</a></li><li><a title="The Intl.Collator object is a constructor for collators, objects that enable language sensitive string comparison." href="../Global_Objects/Collator.html">Intl.Collator</a></li><li><a title="The Intl.DateTimeFormat object is a constructor for objects that enable language sensitive date and time formatting." href="../Global_Objects/DateTimeFormat.html">Intl.DateTimeFormat</a></li><li><a title="The Intl.NumberFormat object is a constructor for objects that enable language sensitive number formatting." href="../Global_Objects/NumberFormat.html">Intl.NumberFormat</a></li><li><span class="sidebar-icon"><span title="This deprecated API should no longer be used, but will probably still work."><i class="icon-thumbs-down-alt"> </i></span></span><a title="The Iterator function returns an object which implements legacy iterator protocol and iterates over enumerable properties of an object." href="../Global_Objects/Iterator.html">Iterator</a></li><li><a title="The JSON object contains methods for parsing JavaScript Object Notation (JSON) and converting values to JSON. It can't be called or constructed, and aside from its two method properties it has no interesting functionality of its own." href="../Global_Objects/JSON.html">JSON</a></li><li><a title="The Map object is a simple key/value map. Any value (both objects and primitive values) may be used as either a key or a value." href="../Global_Objects/Map.html">Map</a></li><li><a title="Math is a built-in object that has properties and methods for mathematical constants and functions. Not a function object." href="../Global_Objects/Math.html">Math</a></li><li><a title="The global NaN property is a value representing Not-A-Number." href="../Global_Objects/NaN.html">NaN</a></li><li><a title="The Number JavaScript object is a wrapper object allowing you to work with numerical values. A Number object is created using the Number() constructor." href="../Global_Objects/Number.html">Number</a></li><li><a title="The Object constructor creates an object wrapper." href="../Global_Objects/Object.html">Object</a></li><li><span class="sidebar-icon"><span title="This is an obsolete API and is no longer guaranteed to work."><i class="icon-trash"> </i></span></span><a title="The goal of ParallelArray was to enable data-parallelism in web applications. The higher-order functions available on ParallelArray attempted to execute in parallel, though they may fall back to sequential execution if necessary. To ensure that your code executes in parallel, it is suggested that the functions should be limited to the parallelizable subset of JS that Firefox supports." href="../Global_Objects/ParallelArray.html">ParallelArray</a></li><li><a title="The Promise object is used for deferred and asynchronous computations. A Promise represents an operation that hasn't completed yet, but is expected in the future." href="../Global_Objects/Promise.html">Promise</a></li><li><a title="The Proxy object is used to define custom behavior for fundamental operations (e.g. property lookup, assignment, enumeration, function invocation, etc)." href="../Global_Objects/Proxy.html">Proxy</a></li><li><a title="The RangeError object indicates an error when a value is not in the set or range of allowed values." href="../Global_Objects/RangeError.html">RangeError</a></li><li><a title="The ReferenceError object represents an error when a non-existent variable is referenced." href="../Global_Objects/ReferenceError.html">ReferenceError</a></li><li><a title="Reflect is a built-in object that provides methods for interceptable JavaScript operations. The methods are the same as those of proxy handlers. Reflect is not a function object, so it's not constructible." href="../Global_Objects/Reflect.html">Reflect</a></li><li><a title="The RegExp constructor creates a regular expression object for matching text with a pattern." href="../Global_Objects/RegExp.html">RegExp</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a title="SIMD (pronounced &quot;sim-dee&quot;) is short for Single Instruction/Multiple Data which is one classification of computer architectures. SIMD operations perform the same computation on multiple data points resulting in data level parallelism and thus performance gains, for example for 3D graphics and video processing, physics simulations or cryptography, and other domains." href="../Global_Objects/SIMD.html">SIMD</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a title="The SIMD.Bool16x8 data type is a 128-bit vector divided into 8 lanes storing boolean values." href="../Global_Objects/Bool16x8.html">SIMD.Bool16x8</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a title="The SIMD.Bool32x4 data type is a 128-bit vector divided into 4 lanes storing boolean values." href="../Global_Objects/Bool32x4.html">SIMD.Bool32x4</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a title="The SIMD.Bool64x2 data type is a 128-bit vector divided into 2 lanes storing boolean values." href="../Global_Objects/Bool64x2.html">SIMD.Bool64x2</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a title="The SIMD.Bool8x16 data type is a 128-bit vector divided into 16 lanes storing boolean values." href="../Global_Objects/Bool8x16.html">SIMD.Bool8x16</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a title="The SIMD.Float32x4 data type is a 128-bit vector divided into 4 lanes storing single precision floating point values." href="../Global_Objects/Float32x4.html">SIMD.Float32x4</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a title="The SIMD.Float64x2 data type is a 128-bit vector divided into 2 lanes storing double precision floating point values." href="../Global_Objects/Float64x2.html">SIMD.Float64x2</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a title="The SIMD.Int16x8 data type is a 128-bit vector divided into 8 lanes storing 16-bit signed integer values." href="../Global_Objects/Int16x8.html">SIMD.Int16x8</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a title="The SIMD.Int32x4 data type is a 128-bit vector divided into 4 lanes storing 32-bit signed integer values." href="../Global_Objects/Int32x4.html">SIMD.Int32x4</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a title="The SIMD.Int8x16 data type is a 128-bit vector divided into 16 lanes storing 8-bit signed integer values." href="../Global_Objects/Int8x16.html">SIMD.Int8x16</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a title="The SIMD.Uint16x8 data type is a 128-bit vector divided into 8 lanes storing 16-bit unsigned integer values." href="../Global_Objects/Uint16x8.html">SIMD.Uint16x8</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a title="The SIMD.Uint32x4 data type is a 128-bit vector divided into 4 lanes storing 32-bit unsigned integer values." href="../Global_Objects/Uint32x4.html">SIMD.Uint32x4</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a title="The SIMD.Uint8x16 data type is a 128-bit vector divided into 16 lanes storing 8-bit unsigned integer values." href="../Global_Objects/Uint8x16.html">SIMD.Uint8x16</a></li><li><a title="The Set object lets you store unique values of any type, whether primitive values or object references." href="../Global_Objects/Set.html">Set</a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a title="The SharedArrayBuffer object is used to represent a generic, fixed-length raw binary data buffer, similar to the ArrayBuffer object, but in a way that they can be used to create views on shared memory. Unlike an ArrayBuffer, a SharedArrayBuffer cannot become detached." href="../Global_Objects/SharedArrayBuffer.html">SharedArrayBuffer</a></li><li><span class="sidebar-icon"><span title="This deprecated API should no longer be used, but will probably still work."><i class="icon-thumbs-down-alt"> </i></span></span><a title="The StopIteration object is used to tell the end of the iteration in the legacy iterator protocol." href="../Global_Objects/StopIteration.html">StopIteration</a></li><li><a title="The String global object is a constructor for strings, or a sequence of characters." href="../Global_Objects/String.html">String</a></li><li><a title="A symbol is a unique and immutable data type and may be used as an identifier for object properties. The symbol object is an implicit object wrapper for the symbol primitive data type." href="../Global_Objects/Symbol.html">Symbol</a></li><li><a title="The SyntaxError object represents an error when trying to interpret syntactically invalid code." href="../Global_Objects/SyntaxError.html">SyntaxError</a></li><li><a title="The TypeError object represents an error when a value is not of the expected type." href="../Global_Objects/TypeError.html">TypeError</a></li><li><a title="A TypedArray object describes an array-like view of an underlying binary data buffer. There is no global property named TypedArray, nor is there a directly visible TypedArray constructor.&nbsp; Instead, there are a number of different global properties, whose values are typed array constructors for specific element types, listed below. On the following pages you will find common properties and methods that can be used with any typed array containing elements of any type." href="../Global_Objects/TypedArray.html">TypedArray</a></li><li><a title="The URIError object represents an error when a global URI handling function was used in a wrong way." href="../Global_Objects/URIError.html">URIError</a></li><li><a title="The Uint16Array typed array represents an array of 16-bit unsigned integers in the platform byte order. If control over byte order is needed, use DataView instead. The contents are initialized to 0. Once established, you can reference elements in the array using the object's methods, or using standard array index syntax (that is, using bracket notation)." href="../Global_Objects/Uint16Array.html">Uint16Array</a></li><li><a title="The Uint32Array typed array represents an array of 32-bit unsigned integers in the platform byte order. If control over byte order is needed, use DataView instead. The contents are initialized to 0. Once established, you can reference elements in the array using the object's methods, or using standard array index syntax (that is, using bracket notation)." href="../Global_Objects/Uint32Array.html">Uint32Array</a></li><li><a title="The Uint8Array typed array represents an array of 8-bit unsigned integers. The contents are initialized to 0. Once established, you can reference elements in the array using the object's methods, or using standard array index syntax (that is, using bracket notation)." href="../Global_Objects/Uint8Array.html">Uint8Array</a></li><li><a title="The Uint8ClampedArray typed array represents an array of 8-bit unsigned integers clamped to 0-255. The contents are initialized to 0. Once established, you can reference elements in the array using the object's methods, or using standard array index syntax (that is, using bracket notation)." href="../Global_Objects/Uint8ClampedArray.html">Uint8ClampedArray</a></li><li><a title="The WeakMap object is a collection of key/value pairs in which the keys are weakly referenced.&nbsp; The keys must be objects and the values can be arbitrary values." href="../Global_Objects/WeakMap.html">WeakMap</a></li><li><a title="The WeakSet object lets you store weakly held objects in a collection." href="../Global_Objects/WeakSet.html">WeakSet</a></li><li><a title="The decodeURI() function decodes a Uniform Resource Identifier (URI) previously created by encodeURI or by a similar routine." href="../Global_Objects/decodeURI.html">decodeURI()</a></li><li><a title="The decodeURIComponent() function decodes a Uniform Resource Identifier (URI) component previously created by encodeURIComponent or by a similar routine." href="../Global_Objects/decodeURIComponent.html">decodeURIComponent()</a></li><li><a title="The encodeURI() function encodes a Uniform Resource Identifier (URI) by replacing each instance of certain characters by one, two, three, or four escape sequences representing the UTF-8 encoding of the character (will only be four escape sequences for characters composed of two &quot;surrogate&quot; characters)." href="../Global_Objects/encodeURI.html">encodeURI()</a></li><li><a title="The encodeURIComponent() function encodes a Uniform Resource Identifier (URI) component by replacing each instance of certain characters by one, two, three, or four escape sequences representing the UTF-8 encoding of the character (will only be four escape sequences for characters composed of two &quot;surrogate&quot; characters)." href="../Global_Objects/encodeURIComponent.html">encodeURIComponent()</a></li><li><span class="sidebar-icon"><span title="This deprecated API should no longer be used, but will probably still work."><i class="icon-thumbs-down-alt"> </i></span></span><a title="The deprecated escape() function computes a new string in which certain characters have been replaced by a hexadecimal escape sequence. Use encodeURI or encodeURIComponent instead." href="../Global_Objects/escape.html">escape()</a></li><li><a title="The eval() function evaluates JavaScript code represented as a string." href="../Global_Objects/eval.html">eval()</a></li><li><a title="The global isFinite() function determines whether the passed value is a finite number. If needed, the parameter is first converted to a number." href="../Global_Objects/isFinite.html">isFinite()</a></li><li><a title="The isNaN() function determines whether a value is NaN or not. Note: coercion inside the isNaN function has interesting rules; you may alternatively want to use Number.isNaN(), as defined in ECMAScript 6, or you can use typeof to determine if the value is Not-A-Number." href="../Global_Objects/isNaN.html">isNaN()</a></li><li><a title="The value null&nbsp;represents the intentional absence of any object value. It is one of JavaScript's primitive values." href="../Global_Objects/null.html">null</a></li><li><a title="The parseFloat() function parses a string argument and returns a floating point number." href="../Global_Objects/parseFloat.html">parseFloat()</a></li><li><a title="The parseInt() function parses a string argument and returns an integer of the specified radix (the base in mathematical numeral systems)." href="../Global_Objects/parseInt.html">parseInt()</a></li><li><a title="The global undefined property represents the primitive value undefined. It is one of JavaScript's primitive types." href="../Global_Objects/undefined.html">undefined</a></li><li><span class="sidebar-icon"><span title="This deprecated API should no longer be used, but will probably still work."><i class="icon-thumbs-down-alt"> </i></span></span><a title="The deprecated unescape() function computes a new string in which hexadecimal escape sequences are replaced with the character that it represents. The escape sequences might be introduced by a function like escape. Because unescape is deprecated, use decodeURI or decodeURIComponent instead." href="../Global_Objects/unescape.html">unescape()</a></li><li><a title="The uneval() function creates a&nbsp;string representation of the source code of an Object." href="../Global_Objects/uneval.html">uneval()</a></li></ol> 
+  </li> 
+  <li data-default-state="closed"><a href="../Operators.html">Expressions &amp; operators</a> 
+   <ol><li><a title="This chapter documents all the JavaScript language operators, expressions and keywords." href="../Operators.html">Expressions and operators</a></li><li><a title="Arithmetic operators take numerical values (either literals or variables) as their operands and return a single numerical value. The standard arithmetic operators are addition (+), subtraction (-), multiplication (*), and division (/)." href="../Operators/Arithmetic_Operators.html">Arithmetic operators</a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a title="The array comprehension syntax is a JavaScript expression which allows you to quickly assemble a new array based on an existing one. Comprehensions exist in many programming languages." href="../Operators/Array_comprehensions.html">Array comprehensions</a></li><li><a title="An assignment operator assigns a value to its left operand based on the value of its right operand." href="../Operators/Assignment_Operators.html">Assignment operators</a></li><li><a title="Bitwise operators treat their operands as a sequence of 32 bits (zeroes and ones), rather than as decimal, hexadecimal, or octal numbers. For example, the decimal number nine has a binary representation of 1001. Bitwise operators perform their operations on such binary representations, but they return standard JavaScript numerical values." href="../Operators/Bitwise_Operators.html">Bitwise operators</a></li><li><a title="The comma operator evaluates each of its operands (from left to right)&nbsp;and returns the value of the last operand." href="../Operators/Comma_Operator.html">Comma operator</a></li><li><a title="JavaScript has both strict and type–converting comparisons. A strict comparison (e.g., ===) is only true if the operands are of the same type and the contents match. The more commonly-used abstract comparison (e.g. ==) converts the operands to the same type before making the comparison. For relational abstract comparisons (e.g., &lt;=), the operands are first converted to primitives, then to the same type, before comparison." href="../Operators/Comparison_Operators.html">Comparison operators</a></li><li><a title="The conditional (ternary) operator is the only JavaScript operator that takes three operands. This operator is frequently used as a shortcut for the if statement." href="../Operators/Conditional_Operator.html">Conditional (ternary) Operator</a></li><li><a title="The destructuring assignment syntax is a JavaScript expression that makes it possible to extract data from arrays or objects into distinct variables." href="../Operators/Destructuring_assignment.html">Destructuring assignment</a></li><li><a title="Expression closures are a shorthand function syntax for writing simple functions." href="../Operators/Expression_closures.html">Expression closures</a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a title="The generator comprehension syntax is a JavaScript expression which allows you to quickly assemble a new generator function based on an existing iterable object. Comprehensions exist in many programming languages." href="../Operators/Generator_comprehensions.html">Generator comprehensions</a></li><li><a title="The grouping operator ( ) controls the precedence of evaluation in expressions." href="../Operators/Grouping.html">Grouping operator</a></li><li><a title="The function keyword can be used to define a legacy generator function inside an expression. To make the function a legacy generator, the function body should contain at least one yield expression." href="../Operators/Legacy_generator_function.html">Legacy generator function expression</a></li><li><a title="Logical operators are typically used with Boolean (logical) values. When they are, they return a Boolean value. However, the &amp;&amp; and || operators actually return the value of one of the specified operands, so if these operators are used with non-Boolean values, they may return a non-Boolean value." href="../Operators/Logical_Operators.html">Logical Operators</a></li><li><a title="Objects can be initialized using new Object(), Object.create(), or using the literal notation (initializer notation). An object initializer is a list of zero or more pairs of property names and associated values of an object, enclosed in curly braces ({})." href="../Operators/Object_initializer.html">Object initializer</a></li><li><a title="Operator precedence determines the order in which operators are evaluated. Operators with higher precedence are evaluated first." href="../Operators/Operator_Precedence.html">Operator precedence</a></li><li><a title="Property accessors provide access to an object's properties by using the dot notation or the bracket notation." href="../Operators/Property_Accessors.html">Property accessors</a></li><li><a title="The spread operator allows an expression to be expanded in places where multiple arguments (for function calls) or multiple elements (for array literals) or multiple variables&nbsp; (for&nbsp;destructuring assignment)&nbsp;are expected." href="../Operators/Spread_operator.html">Spread operator</a></li><li><a title="The class expression is one way to define a class in ECMAScript 2015 (ES6). Similar to function expressions, class expressions can be named or unnamed. If named, the name of the class is local the class body only. JavaScript classes are using prototype-based inheritance." href="../Operators/class.html">class expression</a></li><li><a title="The delete operator removes a property from an object." href="../Operators/delete.html">delete operator</a></li><li><a title="The function keyword can be used to define a function inside an expression." href="../Operators/function.html">function expression</a></li><li><a title="The function* keyword can be used to define a generator function inside an expression." href="../Operators/function_.html">function* expression</a></li><li><a title="The in operator returns true if the specified property is in the specified object." href="../Operators/in.html">in operator</a></li><li><a title="The instanceof operator tests whether an object has in its prototype chain the prototype property of a constructor." href="../Operators/instanceof.html">instanceof</a></li><li><a title="The new operator creates an instance of a user-defined object type or of one of the built-in object types that has a constructor function." href="../Operators/new.html">new operator</a></li><li><a title="The new.target&nbsp;property lets you detect whether a function or constructor was called using the new operator. In constructors and functions instantiated with the new operator, new.target returns a reference to the constructor or function.&nbsp;In normal function calls, new.target is undefined." href="../Operators/new-2.html">new.target</a></li><li><a title="The super keyword is used to call functions on an object's parent." href="../Operators/super.html">super</a></li><li><a title="A function's this keyword behaves a little differently in JavaScript compared to other languages. It also has some differences between strict mode and non-strict mode." href="../Operators/this.html">this</a></li><li><a title="The typeof operator returns a string indicating the type of the unevaluated operand." href="../Operators/typeof.html">typeof</a></li><li><a title="The void operator evaluates the given expression and then returns undefined." href="../Operators/void.html">void operator</a></li><li><a title="The yield keyword is used to pause and resume a generator function (function* or legacy generator function)." href="../Operators/yield.html">yield</a></li><li><a title="The yield* expression is used to delegate to another generator or iterable object." href="../Operators/yield_.html">yield*</a></li></ol> 
+  </li> 
+  <li data-default-state="closed"><a href="../Statements.html">Statements &amp; declarations</a> 
+   <ol><li><a title="JavaScript applications consist of statements with an appropriate syntax. A single statement may span multiple lines. Multiple statements may occur on a single line if each statement is separated by a semicolon. This isn't a keyword, but a group of keywords." href="../Statements.html">Statements and declarations</a></li><li><a title="The legacy generator function statement declares legacy generator functions with the specified parameters." href="../Statements/Legacy_generator_function.html">Legacy generator function</a></li><li><a title="A block statement (or compound statement in other languages) is used to group zero or more statements. The block is delimited by a pair of curly brackets." href="../Statements/block.html">block</a></li><li><a title="The break statement terminates the current loop, switch, or label statement and transfers program control to the statement following the terminated statement." href="../Statements/break.html">break</a></li><li><a title="The class declaration creates a new class with a given name using prototype-based inheritance." href="../Statements/class.html">class</a></li><li><a title="The const declaration creates a read-only reference to a value. It does not&nbsp;mean the value it holds is immutable, just that the variable identifier cannot be reassigned." href="../Statements/const.html">const</a></li><li><a title="The continue statement terminates execution of the statements in the current iteration of the current or labeled loop, and continues execution of the loop with the next iteration." href="../Statements/continue.html">continue</a></li><li><a title="The debugger statement invokes any available debugging functionality, such as setting a breakpoint. If no debugging functionality is available, this statement has no effect." href="../Statements/debugger.html">debugger</a></li><li><a title="Technical review completed." href="../Statements/default.html">default</a></li><li><a title="The do...while statement creates a loop that executes a specified statement until the test condition evaluates to false. The condition is evaluated after executing the statement, resulting in the specified statement executing at least once." href="../Statements/do...html">do...while</a></li><li><a title="An empty statement is used to provide no statement, although the JavaScript syntax would expect one." href="../Statements/Empty.html">empty</a></li><li><a title="The export statement is used to export functions, objects or primitives from a given file (or module)." href="../Statements/export.html">export</a></li><li><a title="The for statement creates a loop that consists of three optional expressions, enclosed in parentheses and separated by semicolons, followed by a statement or a set of statements executed in the loop." href="../Statements/for.html">for</a></li><li><span class="sidebar-icon"><span title="This deprecated API should no longer be used, but will probably still work."><i class="icon-thumbs-down-alt"> </i></span></span><a title="The for each...in statement iterates a specified variable over all values of object's properties. For each distinct property, a specified statement is executed." href="../Statements/for_each...html">for each...in</a></li><li><a title="The for...in statement iterates over the enumerable properties of an object, in arbitrary order. For each distinct property, statements can be executed." href="../Statements/for...html">for...in</a></li><li><a title="The for...of statement creates a loop iterating over iterable objects (including Array, Map, Set, String, TypedArray, arguments object and so on), invoking a custom iteration hook with statements to be executed for the value of each distinct property." href="../Statements/for..-2.html">for...of</a></li><li><a title="The function declaration defines a function with the specified parameters." href="../Statements/function.html">function</a></li><li><a title="The function* declaration (function keyword followed by an asterisk) defines a generator function, which returns a Generator object." href="../Statements/function_.html">function*</a></li><li><a title="The if statement executes a statement if a specified condition is true. If the condition is false, another statement can be executed." href="../Statements/if...html">if...else</a></li><li><a title="The import statement is used to import functions, objects or primitives that have been exported from an external module, another script, etc." href="../Statements/import.html">import</a></li><li><a title="The labeled statement can be used with break or continue statements. It is prefixing a statement with an identifier which you can refer to." href="../Statements/label.html">label</a></li><li><a title="The let statement declares a block scope local variable, optionally initializing it to a value." href="../Statements/let.html">let</a></li><li><a title="The return statement ends function execution and specifies a value to be returned to the function caller." href="../Statements/return.html">return</a></li><li><a title="The switch statement evaluates an expression, matching the expression's value to a case clause, and executes statements associated with that case." href="../Statements/switch.html">switch</a></li><li><a title="The throw statement throws a user-defined exception. Execution of the current function will stop (the statements after throw won't be executed), and control will be passed to the first catch block in the call stack. If no catch block exists among caller functions, the program will terminate." href="../Statements/throw.html">throw</a></li><li><a title="The try...catch statement marks a block of statements to try, and specifies a response, should an exception be thrown." href="../Statements/try...html">try...catch</a></li><li><a title="The variable statement declares a variable, optionally initializing it to a value." href="../Statements/var.html">var</a></li><li><a title="The while statement creates a loop that executes a specified statement as long as the test condition evaluates to true. The condition is evaluated before executing the statement." href="../Statements/while.html">while</a></li><li><span class="sidebar-icon"><span title="This deprecated API should no longer be used, but will probably still work."><i class="icon-thumbs-down-alt"> </i></span></span><a title="The with statement extends the scope chain for a statement." href="../Statements/with.html">with</a></li></ol> 
+  </li> 
+  <li data-default-state="closed"><a href="../Functions.html">Functions</a> 
+   <ol><li><a title="Generally speaking, a function is a &quot;subprogram&quot; that can be called by code external (or internal in the case of recursion) to the function. Like the program itself, a function is composed of a sequence of statements called the function body. Values can be passed to a function, and the function will&nbsp;return a value." href="../Functions.html">Functions</a></li><li><a title="The arguments object is an Array-like object corresponding to the arguments passed to a function." href="../Functions/arguments.html">Arguments object</a></li><li><a title="An arrow function expression has a shorter syntax compared to function expressions and lexically binds&nbsp;the this value (does not bind&nbsp;its own&nbsp;this,&nbsp;arguments,&nbsp;super, or&nbsp;new.target). Arrow functions are always anonymous." href="../Functions/Arrow_functions.html">Arrow functions</a></li><li><a title="Default function parameters allow formal parameters to be initialized with default values if no value or undefined is passed." href="../Functions/Default_parameters.html">Default parameters</a></li><li><a title="Starting with ECMAScript 2015 (ES6), a shorter syntax for method definitions on objects initializers is introduced. It is a shorthand for a function assigned to the method's name." href="../Functions/Method_definitions.html">Method definitions</a></li><li><a title="The rest parameter syntax allows us to represent an indefinite number of arguments as an array." href="../Functions/rest_parameters.html">Rest parameters</a></li><li><a title="The get syntax binds an object property to a function that will be called when that property is looked up." href="../Functions/get.html">getter</a></li><li><a title="The set syntax binds an object property to a function to be called when there is an attempt to set that property." href="../Functions/set.html">setter</a></li></ol> 
+  </li> 
+  <li data-default-state="closed"><a href="../Classes.html">Classes</a> 
+   <ol><li><a title="JavaScript classes are introduced in ECMAScript 6 and are syntactical sugar over JavaScript's existing prototype-based inheritance. The class syntax is not introducing a new object-oriented inheritance model to JavaScript. JavaScript classes provide a much simpler and clearer syntax to create objects and deal with inheritance." href="../Classes.html">Classes</a></li><li><a title="The constructor method is a special method for creating and initializing an object created with a class." href="../Classes/constructor.html">constructor</a></li><li><a title="The extends keyword is used in a class declarations or class expressions to create a class with a child of another class." href="../Classes/extends.html">extends</a></li><li><a title="The static keyword defines a static method for a class." href="../Classes/static.html">static</a></li></ol> 
+  </li> 
+  <li data-default-state="closed"><a href="../Errors.html">Errors</a> 
+   <ol><li><a title="Errors, errors everywhere." href="../Errors.html">JavaScript error reference</a></li><li><a title="RangeError" href="../Errors/Not_a_codepoint.html">RangeError: argument is not a valid code point</a></li><li><a title="RangeError" href="../Errors/Invalid_array_length.html">RangeError: invalid array length</a></li><li><a title="RangeError" href="../Errors/Precision_range.html">RangeError: precision is out of range</a></li><li><a title="RangeError" href="../Errors/Bad_radix.html">RangeError: radix must be an integer</a></li><li><a title="RangeError" href="../Errors/Resulting_string_too_large.html">RangeError: repeat count must be less than infinity</a></li><li><a title="RangeError" href="../Errors/Negative_repetition_count.html">RangeError: repeat count must be non-negative</a></li><li><a title="SyntaxError" href="../Errors/Malformed_formal_parameter.html">SyntaxError: Malformed formal parameter</a></li><li><a title="TypeError" href="../Errors/Read-only.html">TypeError: "x" is read-only</a></li><li><a title="TypeError" href="../Errors/Array_sort_argument.html">TypeError: invalid Array.prototype.sort argument</a></li><li><a title="Warning" href="../Errors/Stmt_after_return.html">Warning: unreachable code after return statement</a></li></ol> 
+  </li> 
+  <li data-default-state="open"><a href="#">Misc</a> 
+   <ol> 
+    <li><a href="../Lexical_grammar.html">Lexical grammar</a></li> 
+    <li><a href="../../Data_structures.html">JavaScript data structures</a></li> 
+    <li><a href="../../Enumerability_and_ownership_of_properties.html">Enumerability and ownership of properties</a></li> 
+    <li><a href="../Iteration_protocols.html">Iteration protocols</a></li> 
+    <li><a href="../Strict_mode.html">Strict mode</a></li> 
+    <li><a href="Transitioning_to_strict_mode.html">Transitioning to strict mode</a></li> 
+    <li><a href="../Template_literals.html">Template literals</a></li> 
+    <li><a href="../Deprecated_and_obsolete_features.html">Deprecated features</a></li> 
+   </ol> 
+  </li> 
+  <li data-default-state="closed"><a href="../../New_in_JavaScript.html">New in JavaScript</a> 
+   <ol><li><a title="This chapter contains information about JavaScript's version history and implementation status for Mozilla/SpiderMonkey-based JavaScript applications, such as Firefox." href="../../New_in_JavaScript.html">New in JavaScript</a></li><li><a title="ECMAScript 5.1, an older version of the standard upon which JavaScript is based, was approved in June 2011." href="../../New_in_JavaScript/ECMAScript_5_support_in_Mozilla.html">ECMAScript 5 support in Mozilla</a></li><li><a title="ECMAScript 2015 (6th Edition) is the current version of the ECMAScript Language Specification standard. Commonly referred to as &quot;ES6&quot;, it defines the standard for the JavaScript implementation in SpiderMonkey, the engine used in Firefox and other Mozilla applications." href="../../New_in_JavaScript/ECMAScript_6_support_in_Mozilla.html">ECMAScript 6 support in Mozilla</a></li><li><a title="ECMAScript Next refers to new features of the ECMA-262 standard (commonly referred to as JavaScript) introduced after ECMAScript 6 (ES2015). New versions of ECMAScript specifications are released yearly. This year, the ES2016 specification will be released and the ES2017 is the current ECMAScript draft specification." href="../../New_in_JavaScript/ECMAScript_Next_support_in_Mozilla.html">ECMAScript Next support in Mozilla</a></li><li><a title="The following is a changelog for JavaScript features in Firefox releases." href="../../New_in_JavaScript/Firefox_JavaScript_changelog.html">Firefox JavaScript changelog</a></li><li><a title="The following is a changelog for JavaScript from Netscape Navigator 2.0 to 3.0. The old Netscape documentation references this as &quot;Features added after version 1&quot;. Netscape Navigator 3.0 was released on August 19, 1996. Netscape Navigator 3.0 was the second major version of the browser with JavaScript support." href="../../New_in_JavaScript/1.html">New in JavaScript 1.1</a></li><li><a title="The following is a changelog for JavaScript from Netscape Navigator 3.0 to 4.0. The old Netscape documentation can be found on archive.org. Netscape Navigator 4.0 was released on June 11, 1997. Netscape Navigator 4.0 was the third major version of the browser with JavaScript support." href="../../New_in_JavaScript/1-2.html">New in JavaScript 1.2</a></li><li><a title="The following is a changelog for JavaScript from Netscape Navigator 4.0 to 4.5. The old Netscape documentation can be found on archive.org. Netscape Navigator 4.5 was released on October 19, 1998." href="../../New_in_JavaScript/1-3.html">New in JavaScript 1.3</a></li><li><a title="The following is a changelog for JavaScript 1.4, which was only used for Netscape's server side JavaScript released in 1999. The old Netscape documentation can be found on archive.org." href="../../New_in_JavaScript/1-4.html">New in JavaScript 1.4</a></li><li><a title="The following is a changelog for JavaScript 1.5. This version was included in Netscape Navigator 6.0 was released on November 14, 2000 and was also used in later versions of Netscape Navigator and Firefox 1.0. You can compare JavaScript 1.5 to JScript version 5.5 and Internet Explorer 5.5, which was released in July 2000. The corresponding ECMA standard is ECMA-262 Edition 3 (from December 1999)." href="../../New_in_JavaScript/1-5.html">New in JavaScript 1.5</a></li><li><a title="The following is a changelog for JavaScript 1.6. This version was included in Firefox 1.5 (Gecko 1.8), which was released in November 2005. The corresponding ECMA standard is ECMA-262 Edition 3 and ECMAScript for XML (E4X) with some additional features. Several new features were introduced: E4X, several new Array methods, and Array and String generics." href="../../New_in_JavaScript/1-6.html">New in JavaScript 1.6</a></li><li><a title="The following is a changelog for JavaScript 1.7. This version was included in Firefox 2 (October 2006)." href="../../New_in_JavaScript/1-7.html">New in JavaScript 1.7</a></li><li><a title="The following is a changelog for JavaScript 1.8. This version was included in Firefox 3 and is part of Gecko 1.9. See bug&nbsp;380236 for a tracking development bug for JavaScript 1.8." href="../../New_in_JavaScript/1-8.html">New in JavaScript 1.8</a></li><li><a title="The following is a changelog for JavaScript 1.8.1. This version was included in Firefox 3.5." href="../../New_in_JavaScript/1.8.html">New in JavaScript 1.8.1</a></li><li><a title="The following is a changelog for JavaScript 1.8.5. This version was included in Firefox 4." href="../../New_in_JavaScript/1.8-2.html">New in JavaScript 1.8.5</a></li></ol> 
+  </li> 
+  <li><strong><a href="https://developer.mozilla.org/en-US/docs/MDN">Documentation:</a></strong></li> 
+  <li data-default-state="closed"><a href="#">Useful lists</a> 
+   <ol> 
+    <li><a href="../../Index.html">All pages index</a></li> 
+    <li><a href="../Methods_Index.html">Methods index</a></li> 
+    <li><a href="../Properties_Index.html">Properties index</a></li> 
+    <li><a href="https://developer.mozilla.org/en-US/docs/tag/JavaScript">Pages tagged "JavaScript"</a></li> 
+   </ol> 
+  </li> 
+  <li data-default-state="closed"><a href="#">Contribute</a> 
+   <ol> 
+    <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Doc_status/JavaScript">JavaScript doc status</a></li> 
+    <li><a href="https://developer.mozilla.org/en-US/docs/MDN">The MDN project</a></li> 
+   </ol> 
+  </li> 
+ </ol> 
+
+  </div>
+                
+
+                <!-- approvals -->
+                
+
+              
+
+              </div>
+            
+          </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Web/JavaScript/Reference/Strict_mode/Transitioning_to_strict_mode$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Web/JavaScript/Reference/Strict_mode/Transitioning_to_strict_mode$history" label="View page history"></menuitem>
+  </menu>
+
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+        
+        <div class="contentinfo">
+          <p>© 2005-2016 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>
+          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+        
+        </div>
+      </div>
+      <div class="column-strip">
+        
+          
+  
+    <form class="languages go" method="get" action="https://developer.mozilla.org/en-US/docs/Web">
+      <label for="language">Other languages:</label>
+      <select id="language" class="wiki-l10n" name="next" dir="ltr">
+        <option value="/en-US/docs/Web/JavaScript/Reference/Strict_mode/Transitioning_to_strict_mode" selected="">
+          English (US)
+        </option>
+        
+          <option value="/de/docs/Web/JavaScript/Reference/Strict_mode/wechsel_zum_strict_mode">
+            Deutsch
+          </option>
+          <option value="/fr/docs/Web/JavaScript/Reference/Strict_mode/Passer_au_mode_strict">
+            Français
+          </option>
+          <option value="/ja/docs/Web/JavaScript/Strict_mode/Transitioning_to_strict_mode">
+            日本語
+          </option>
+          <option value="/ru/docs/Web/JavaScript/Reference/Strict_mode/Transitioning_to_strict_mode">
+            Русский
+          </option>
+          <option value="/zh-CN/docs/Web/JavaScript/Reference/Strict_mode/Transitioning_to_strict_mode">
+            中文 (简体)
+          </option>
+      </select>
+      <noscript>&lt;button type="submit"&gt;Go&lt;/button&gt;</noscript>
+    </form>
+  
+
+        
+      </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+  
+    
+    <!--[if lte IE 8]><script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/selectivizr.091e18cf669b.js" charset="utf-8"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script type="text/javascript" src="../../../../../../../developer.cdn.mozilla.net/static/build/js/main.a7b27a25fb9c.js" charset="utf-8"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+    
+    <script async="" type="text/javascript" src="../../../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../../../developer.cdn.mozilla.net/static/build/js/syntax-prism-min.js" charset="utf-8"></script><script type="text/javascript" src="../../../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../../../developer.cdn.mozilla.net/static/build/js/wiki.bd71ca9fd27d.js" charset="utf-8" id="wikiscript"></script>
+
+  
+
+  <script async="" type="text/javascript" src="../../../../../../../developer.cdn.mozilla.net/static/build/js/helpfulness.7b208a764d28.js" charset="utf-8"></script>
+
+  
+    <script type="text/javascript">
+        (function($) {
+            $('#wikiArticle').children('h2[id]').each(function() {
+                var id = $(this).attr('id');
+                var href = '/en-US/docs/Web/JavaScript/Reference/Strict_mode/Transitioning_to_strict_mode$edit#' + id;
+
+                $('<a>').attr({
+                    href: href,
+                    'class': 'button section-edit only-icon'
+                })
+                .append($('<i aria-hidden="true" class="icon-pencil"></i>'))
+                .append($('<span>'))
+                .find('span')
+                .text(gettext('Edit'))
+                .end()
+                .on('click', function(e) {
+                    e.preventDefault();
+
+                    mdn.analytics.trackEvent({
+                        category: 'Section Edit',
+                        action: id
+                    }, function() {
+                        window.location = href;
+                    });
+                })
+                .appendTo(this);
+            });
+        })(jQuery);
+    </script>
+  
+
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode/Transitioning_to_strict_mode by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 15:58:39 GMT -->
+</body></html>

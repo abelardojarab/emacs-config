@@ -1,0 +1,872 @@
+<html><!-- Mirrored from developer.mozilla.org/uk/docs/Web/JavaScript/Reference/Global_Objects/ReferenceError by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 19:37:16 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <script async="" src="../../../../../../../www.google-analytics.com/analytics.js"></script><script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+  
+    
+  
+
+  
+  <title>ReferenceError</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/uk/">
+  <link rel="copyright" href="#copyright">
+
+  
+    
+    
+    <link href="../../../../../../../developer.cdn.mozilla.net/static/build/styles/mdn.593f20d8c365.css" rel="stylesheet" type="text/css">
+
+    
+  
+    <link href="../../../../../../../developer.cdn.mozilla.net/static/build/styles/wiki.13dd9abdfb62.css" rel="stylesheet" type="text/css">
+
+    
+
+    
+
+  <!-- common social tags -->
+  
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/uk/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../../../developer.cdn.mozilla.net/static/img/favicon144.a6e4162070f4.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../../../developer.cdn.mozilla.net/static/img/favicon114.0e9fabd44f85.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../../../developer.cdn.mozilla.net/static/img/favicon72.8ff9d87c82a0.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../../../developer.cdn.mozilla.net/static/img/favicon57.a2490b9a2d76.png">
+  <!-- basic favicon -->
+  
+    
+  
+  <link rel="shortcut icon" href="../../../../../../../developer.cdn.mozilla.net/static/img/favicon32.e02854fdcf73.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/html5shiv.3948ccddab6f.js" charset="utf-8"></script>
+  <![endif]-->
+
+  
+  <link rel="alternate" type="application/json" href="https://developer.mozilla.org/uk/docs/Web/JavaScript/Reference/Global_Objects/ReferenceError$json">
+  <link rel="canonical" href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/ReferenceError.html">
+
+  
+    
+      <link rel="alternate" hreflang="fr" href="../../../../../../fr/docs/Web/JavaScript/Reference/Objets_globaux/ReferenceError.html" title="ReferenceError">
+    
+      <link rel="alternate" hreflang="ja" href="../../../../../../ja/docs/Web/JavaScript/Reference/Global_Objects/ReferenceError.html" title="ReferenceError">
+    
+      <link rel="alternate" hreflang="ru" href="../../../../../../ru/docs/Web/JavaScript/Reference/Global_Objects/ReferenceError.html" title="ReferenceError">
+    
+      <link rel="alternate" hreflang="zh-CN" href="../../../../../../zh-CN/docs/Web/JavaScript/Reference/Global_Objects/ReferenceError.html" title="ReferenceError">
+    
+  
+
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="ReferenceError">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ReferenceError">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ReferenceError">
+  <meta name="twitter:title" content="ReferenceError">
+  
+  <meta property="og:description" content="The ReferenceError object represents an error when a non-existent variable is referenced.">
+  <meta name="description" content="The ReferenceError object represents an error when a non-existent variable is referenced.">
+  <meta name="twitter:description" content="The ReferenceError object represents an error when a non-existent variable is referenced.">
+  
+
+  
+    
+
+
+
+  
+</head>
+<body data-slug="Web/JavaScript/Reference/Global_Objects/ReferenceError" contextmenu="edit-history-menu" data-search-url="" class="document  ">
+
+  <script type="text/javascript">
+    (function(win) {
+        'use strict';
+
+        
+            (function(){
+  var FLAGS = {
+    'compat_api': false,'kumaediting': false,'page_move': false,'registration_disabled': false,'search_suggestions': false,'section_edit': false,'spam_admin_override': false,'spam_checks_enabled': true,'spam_spammer_override': false,'spam_submissions_enabled': false,'spam_testing_mode': false,'wiki_samples': true,'wiki_spam_exempted': false,'wiki_spam_training': true
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': true,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+
+        // This needs to be set before ckeditor.js loads
+        window.CKEDITOR_BASEPATH = 'https://developer.mozilla.org/static/js/libs/ckeditor/build/ckeditor/';
+
+        // This represents the site configuration
+        win.mdn = {
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+            
+            notifications: [],
+            
+            // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/uk/docs/get-documents'
+            },
+            // Assets that need to be dynamically injected
+            assets_disabled: {
+                css: {
+                    'editor-content': ['https://developer.cdn.mozilla.net/static/build/styles/editor-content.3d79df72080d.css',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/styles/wiki-compat-tables.f3a3bfce97a1.css',]
+                },
+                js: {
+                    'syntax-prism': ['https://developer.cdn.mozilla.net/static/build/js/syntax-prism.7a66ddfa68bf.js',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/js/wiki-compat-tables.14ce5dcb2c3d.js',]
+                }
+            }
+        };
+    })(this);
+</script>
+
+  
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Перейти до основного вмісту</a></li>
+    <li><a id="skip-language" href="#language">Вибір мови</a></li>
+    
+      <li><a href="#q" id="skip-search">Перейти до пошуку</a></li>
+    
+  </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+    <a href="https://developer.mozilla.org/uk/" class="logo">Mozilla Developer Network</a>
+
+    <div id="nav-sec">
+        
+                  <ul>
+                  <li>
+
+    
+
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                Увійти
+              </span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fuk%2Fdocs%2FWeb%2FJavaScript%2FReference%2FGlobal_Objects%2FReferenceError" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/uk/docs/Web/JavaScript/Reference/Global_Objects/ReferenceError" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/uk/users/signin" class="login-link launch-persona-login" data-next="/uk/docs/Web/JavaScript/Reference/Global_Objects/ReferenceError" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fuk%2Fdocs%2FWeb%2FJavaScript%2FReference%2FGlobal_Objects%2FReferenceError" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+              
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+        
+    </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/uk/docs/Web">Веб-платформа<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Технології</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/uk/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/uk/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/uk/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/uk/docs/Web/Guide/Graphics">Графіка</a></li>
+              <li><a href="https://developer.mozilla.org/uk/docs/Web/API">API / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/uk/docs/Web/Apps">Застосунки</a></li>
+              <li><a href="https://developer.mozilla.org/uk/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">Довідники та посібники</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/uk/docs/Learn">Вивчення Web</a></li>
+              <li><a href="https://developer.mozilla.org/uk/docs/Web/Tutorials">Посібники</a></li>
+              <li><a href="https://developer.mozilla.org/uk/docs/Web/Reference">Довідники</a></li>
+              <li><a href="https://developer.mozilla.org/uk/docs/Web/Guide">Посібники розробників</a></li>
+              <li><a href="https://developer.mozilla.org/uk/docs/Web/Accessibility">Доступність</a></li>
+              <li><a href="https://developer.mozilla.org/uk/docs/Web">...більше документації</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/uk/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/uk/docs/Mozilla/Add-ons">Додатки</a></li>
+              <li><a href="https://developer.mozilla.org/uk/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/uk/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/uk/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/uk/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/uk/docs/Tools">Інструменти розробника</a></li><li><a href="https://developer.mozilla.org/uk/docs/MDN/Feedback">Зворотній зв'язок<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Отримати допомогу Firefox<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Довідка веб-розробки<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/uk/docs/MDN/Community">Приєднатися до спільноти MDN</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Повідомити про проблему вмісту<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Повідомити про помилку<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/uk/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/uk/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Пошук</label>
+          <input type="search" id="main-q" name="q" placeholder="Пошук" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Пошук</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+
+   <!-- end is_zone -->
+
+    <div class="wiki-main-content" id="document-main"><div class="center">
+      
+      <div class="article-meta">
+        <!-- action buttons -->
+        
+
+  
+    
+  
+
+  
+
+  
+
+  <ul class="page-buttons" data-sticky="false">
+      
+      <li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Мови</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+              
+                
+                  <li><bdi><a rel="internal" href="../../../../../../fr/docs/Web/JavaScript/Reference/Objets_globaux/ReferenceError.html" title="ReferenceError">Français</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="../../../../../../ja/docs/Web/JavaScript/Reference/Global_Objects/ReferenceError.html" title="ReferenceError">日本語</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="../../../../../../ru/docs/Web/JavaScript/Reference/Global_Objects/ReferenceError.html" title="ReferenceError">Русский</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="../../../../../../zh-CN/docs/Web/JavaScript/Reference/Global_Objects/ReferenceError.html" title="ReferenceError">中文 (简体)</a></bdi></li>
+                
+              
+
+              
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ReferenceError$locales" rel="nofollow, noindex" id="translations-add">Додати переклад</a></li>
+              
+            </ul>
+          </div>
+        </div>
+      </li>
+
+      <li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ReferenceError$translate?tolocale=uk" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Редагувати<i aria-hidden="true" class="icon-pencil"></i></a></li>
+
+        
+
+        <li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Додатково</span><i aria-hidden="true" class="icon-cog"></i></button>
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Додатково</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/uk/docs/Web/JavaScript/Reference/Global_Objects/ReferenceError$history" rel="nofollow, noindex">Історія</a></li>
+                
+                
+                
+                
+
+                
+
+                
+                
+                
+                <li class="page-print"><a href="#" onclick="return window.print();">Роздрукувати цю статтю</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+        
+  <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="навігаційні ланцюги">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/uk" rel="v:url" property="v:title">MDN</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web" rel="v:url" property="v:title">Web technology for developers</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" rel="v:url" property="v:title">JavaScript</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="../../../../../../en-US/docs/Web/JavaScript/Reference.html" rel="v:url" property="v:title">JavaScript reference</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects.html" rel="v:url" property="v:title">Standard built-in objects</a></li>
+    
+    <li class="crumb" typeof="v:Breadcrumb" property="v:title">ReferenceError</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Попередній результат пошуку" data-empty-title="Немає попереднього результату пошуку"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Результати вашого пошуку</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Наступний результат пошуку" data-empty-title="Немає попереднього результату пошуку"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        
+        <div class="contributor-avatars" data-all-text="подивитися всіх учасників" data-alternate-message="сховати учасників" data-has-hidden="1">
+            <ul>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/uk/profiles/fscholz" title="Переглянути профіль: fscholz">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="fscholz" data-src="../../../../../../../secure.gravatar.com/avatar/e24391c9174352988d819a9b9ea77c9e6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">fscholz</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/uk/profiles/Mingun" title="Переглянути профіль: Mingun">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Mingun" data-src="../../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Mingun</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/uk/profiles/arai" title="Переглянути профіль: arai">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="arai" data-src="../../../../../../../secure.gravatar.com/avatar/0432a84805ea7033f4646049963e3bf16c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">arai</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/uk/profiles/Sheppy" title="Переглянути профіль: Sheppy">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Sheppy" data-src="../../../../../../../secure.gravatar.com/avatar/945076feb88f2d7003891ffbf06f32bf6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Sheppy</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/uk/profiles/ethertank" title="Переглянути профіль: ethertank">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="ethertank" data-src="../../../../../../../secure.gravatar.com/avatar/abac73ba2093b500bf7599c76d80280c6c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">ethertank</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/uk/profiles/Sevenspade" title="Переглянути профіль: Sevenspade">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Sevenspade" data-src="../../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Sevenspade</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/uk/profiles/Potappo" title="Переглянути профіль: Potappo">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Potappo" data-src="../../../../../../../secure.gravatar.com/avatar/f0ee74ffcc558dd3895fde235b2aec426c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Potappo</noscript></a>
+                </li>
+            
+            </ul>
+        </div>
+        
+
+        <h1>ReferenceError</h1>
+
+      </div>
+      
+
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-present">
+
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+            
+              <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+              
+              <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">У цій статті<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#Syntax" rel="internal">Syntax</a><ol><li><a href="#Parameters" rel="internal">Parameters</a></li></ol></li><li><a href="#Description" rel="internal">Description</a></li><li><a href="#Properties" rel="internal">Properties</a></li><li><a href="#Methods" rel="internal">Methods</a></li><li><a href="#ReferenceError_instances" rel="internal"><code>ReferenceError</code> instances</a><ol><li><a href="#Properties_2" rel="internal">Properties</a></li><li><a href="#Methods_2" rel="internal">Methods</a></li></ol></li><li><a href="#Examples" rel="internal">Examples</a><ol><li><a href="#Catching_a_ReferenceError" rel="internal">Catching a <code>ReferenceError</code></a></li><li><a href="#Creating_a_ReferenceError" rel="internal">Creating a <code>ReferenceError</code></a></li></ol></li><li><a href="#Specifications" rel="internal">Specifications</a></li><li><a href="#Browser_compatibility" rel="internal">Browser compatibility</a></li><li><a href="#See_also" rel="internal">See also</a>
+                </li></ol>
+              </div>
+              
+              </div>
+            
+
+            
+            
+              
+            
+
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-half wiki-column text-content">
+
+              
+
+              
+
+              
+                
+                
+                
+              
+              
+                <div id="doc-pending-fallback" class="warning">
+                  <p><bdi>Наші волонтери ще не переклали цю статтю мовою: <bdi>Українська</bdi>. <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ReferenceError$translate?tolocale=uk">Приєднайтесь до нас і допоможіть зробити це!</a></bdi></p>
+                </div>
+              
+
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                
+                  <div><section id="Quick_Links" class="Quick_links"><!-- --></section></div>
+
+<p>The <code><strong>ReferenceError</strong></code> object represents an error when a non-existent variable is referenced.</p>
+
+<h2 id="Syntax">Syntax</h2>
+
+<pre class="syntaxbox"><code>new ReferenceError([<var>message</var>[, <var>fileName</var>[, <var>lineNumber</var>]]])</code></pre>
+
+<h3 id="Parameters">Parameters</h3>
+
+<dl>
+ <dt><code>message</code></dt>
+ <dd>Optional. Human-readable description of the error</dd>
+ <dt><code>fileName</code> <span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></dt>
+ <dd>Optional. The name of the file containing the code that caused the exception</dd>
+ <dt><code>lineNumber</code> <span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></dt>
+ <dd>Optional. The line number of the code that caused the exception</dd>
+</dl>
+
+<h2 id="Description">Description</h2>
+
+<p>A <code>ReferenceError</code> is thrown when trying to dereference a variable that has not been declared.</p>
+
+<h2 id="Properties">Properties</h2>
+
+<dl>
+ <dt><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/ReferenceError/prototype.html" title="The ReferenceError.prototype property represents the prototype for the ReferenceError constructor."><code>ReferenceError.prototype</code></a></dt>
+ <dd>Allows the addition of properties to an <code>ReferenceError</code> object.</dd>
+</dl>
+
+<h2 id="Methods">Methods</h2>
+
+<p>The global <code>ReferenceError</code> contains no methods of its own, however, it does inherit some methods through the prototype chain.</p>
+
+<h2 id="ReferenceError_instances"><code>ReferenceError</code> instances</h2>
+
+<h3 id="Properties_2">Properties</h3>
+
+<div><dl><dt><code>ReferenceError.prototype.constructor</code></dt>
+ <dd>Specifies the function that created an instance's prototype.</dd>
+ <dt><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/message.html" title="The message property is a human-readable description of the error."><code>ReferenceError.prototype.message</code></a></dt>
+ <dd>Error message. Although ECMA-262 specifies that <a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/ReferenceError.html" title="The ReferenceError object represents an error when a non-existent variable is referenced."><code>ReferenceError</code></a> should provide its own <code>message</code> property, in <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Projects/SpiderMonkey">SpiderMonkey</a>, it inherits <a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/message.html" title="The message property is a human-readable description of the error."><code>Error.prototype.message</code></a>.</dd>
+ <dt><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/name.html" title="The name property represents a name for the type of error. The initial value is &quot;Error&quot;."><code>ReferenceError.prototype.name</code></a></dt>
+ <dd>Error name. Inherited from <a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Error.html" title="The Error constructor creates an error object. Instances of Error objects are thrown when runtime errors occur. The Error object can also be used as a base objects for user-defined exceptions. See below for standard built-in error types."><code>Error</code></a>.</dd>
+ <dt><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/fileName.html" title="The fileName property contains the path to the file that raised this error."><code>ReferenceError.prototype.fileName</code></a></dt>
+ <dd>Path to file that raised this error. Inherited from <a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Error.html" title="The Error constructor creates an error object. Instances of Error objects are thrown when runtime errors occur. The Error object can also be used as a base objects for user-defined exceptions. See below for standard built-in error types."><code>Error</code></a>.</dd>
+ <dt><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/lineNumber.html" title="The lineNumber property contains the line number in the file that raised this error."><code>ReferenceError.prototype.lineNumber</code></a></dt>
+ <dd>Line number in file that raised this error. Inherited from <a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Error.html" title="The Error constructor creates an error object. Instances of Error objects are thrown when runtime errors occur. The Error object can also be used as a base objects for user-defined exceptions. See below for standard built-in error types."><code>Error</code></a>.</dd>
+ <dt><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/columnNumber.html" title="The columnNumber property contains the column number in the line of the file that raised this error."><code>ReferenceError.prototype.columnNumber</code></a></dt>
+ <dd>Column number in line that raised this error. Inherited from <a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Error.html" title="The Error constructor creates an error object. Instances of Error objects are thrown when runtime errors occur. The Error object can also be used as a base objects for user-defined exceptions. See below for standard built-in error types."><code>Error</code></a>.</dd>
+ <dt><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/stack.html" title="The non-standard stack property of Error objects offer a trace of which functions were called, in what order, from which line and file, and with what arguments. The stack string proceeds from the most recent calls to earlier ones, leading back to the original global scope call."><code>ReferenceError.prototype.stack</code></a></dt>
+ <dd>Stack trace. Inherited from <a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Error.html" title="The Error constructor creates an error object. Instances of Error objects are thrown when runtime errors occur. The Error object can also be used as a base objects for user-defined exceptions. See below for standard built-in error types."><code>Error</code></a>.</dd>
+</dl></div>
+
+<h3 id="Methods_2">Methods</h3>
+
+<div><p>Although the <a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/ReferenceError.html" title="The ReferenceError object represents an error when a non-existent variable is referenced."><code>ReferenceError</code></a> prototype object does not contain any methods of its own, <a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/ReferenceError.html" title="The ReferenceError object represents an error when a non-existent variable is referenced."><code>ReferenceError</code></a> instances do inherit some methods through the prototype chain.</p></div>
+
+<h2 id="Examples">Examples</h2>
+
+<h3 id="Catching_a_ReferenceError">Catching a <code>ReferenceError</code></h3>
+
+<pre class="brush: js">try {
+  var a = undefinedVariable;
+} catch (e) {
+  console.log(e instanceof ReferenceError); // true
+  console.log(e.message);                   // "undefinedVariable is not defined"
+  console.log(e.name);                      // "ReferenceError"
+  console.log(e.fileName);                  // "Scratchpad/1"
+  console.log(e.lineNumber);                // 2
+  console.log(e.columnNumber);              // 6
+  console.log(e.stack);                     // "@Scratchpad/2:2:7\n"
+}
+</pre>
+
+<h3 id="Creating_a_ReferenceError">Creating a <code>ReferenceError</code></h3>
+
+<pre class="brush: js">try {
+  throw new ReferenceError('Hello', 'someFile.js', 10);
+} catch (e) {
+  console.log(e instanceof ReferenceError); // true
+  console.log(e.message);                   // "Hello"
+  console.log(e.name);                      // "ReferenceError"
+  console.log(e.fileName);                  // "someFile.js"
+  console.log(e.lineNumber);                // 10
+  console.log(e.columnNumber);              // 0
+  console.log(e.stack);                     // "@Scratchpad/2:2:9\n"
+}
+</pre>
+
+<h2 id="Specifications">Specifications</h2>
+
+<table class="standard-table">
+ <tbody>
+  <tr>
+   <th scope="col">Specification</th>
+   <th scope="col">Status</th>
+   <th scope="col">Comment</th>
+  </tr>
+  <tr>
+   <td><a href="http://www.ecma-international.org/publications/files/ECMA-ST-ARCH/ECMA-262, 3rd edition, December 1999.pdf" class="external" lang="en" title="The 'ECMAScript 3rd Edition (ECMA-262)' specification" hreflang="en">ECMAScript 3rd Edition (ECMA-262)</a></td>
+   <td><span class="spec-Standard">Standard</span></td>
+   <td>Initial definition.</td>
+  </tr>
+  <tr>
+   <td><a href="http://www.ecma-international.org/ecma-262/5.1/#sec-15.11.6.3" class="external" lang="en" hreflang="en">ECMAScript 5.1 (ECMA-262)<br><small lang="en-US">The definition of 'ReferenceError' in that specification.</small></a></td>
+   <td><span class="spec-Standard">Standard</span></td>
+   <td>&nbsp;</td>
+  </tr>
+  <tr>
+   <td><a href="http://www.ecma-international.org/ecma-262/6.0/#sec-native-error-types-used-in-this-standard-referenceerror" class="external" lang="en" hreflang="en">ECMAScript 2015 (6th Edition, ECMA-262)<br><small lang="en-US">The definition of 'ReferenceError' in that specification.</small></a></td>
+   <td><span class="spec-Standard">Standard</span></td>
+   <td>&nbsp;</td>
+  </tr>
+  <tr>
+   <td><a href="https://tc39.github.io/ecma262/#sec-native-error-types-used-in-this-standard-referenceerror" class="external" lang="en" hreflang="en">ECMAScript 2017 Draft (ECMA-262)<br><small lang="en-US">The definition of 'ReferenceError' in that specification.</small></a></td>
+   <td><span class="spec-Draft">Draft</span></td>
+   <td>&nbsp;</td>
+  </tr>
+ </tbody>
+</table>
+
+<h2 id="Browser_compatibility">Browser compatibility</h2>
+
+<div><div class="htab"> 
+    <a name="AutoCompatibilityTable" id="AutoCompatibilityTable"></a> 
+    <ul> 
+        <li class="selected"><a>Desktop</a></li> 
+        <li><a>Mobile</a></li> 
+    </ul> 
+</div></div>
+
+<div id="compat-desktop">
+<table class="compat-table">
+ <tbody>
+  <tr>
+   <th>Feature</th>
+   <th>Chrome</th>
+   <th>Firefox (Gecko)</th>
+   <th>Internet Explorer</th>
+   <th>Opera</th>
+   <th>Safari</th>
+  </tr>
+  <tr>
+   <td>Basic support</td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+  </tr>
+ </tbody>
+</table>
+</div>
+
+<div id="compat-mobile">
+<table class="compat-table">
+ <tbody>
+  <tr>
+   <th>Feature</th>
+   <th>Android</th>
+   <th>Chrome for Android</th>
+   <th>Firefox Mobile (Gecko)</th>
+   <th>IE Mobile</th>
+   <th>Opera Mobile</th>
+   <th>Safari Mobile</th>
+  </tr>
+  <tr>
+   <td>Basic support</td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+  </tr>
+ </tbody>
+</table>
+</div>
+
+<h2 id="See_also">See also</h2>
+
+<ul>
+ <li><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Error.html" title="The Error constructor creates an error object. Instances of Error objects are thrown when runtime errors occur. The Error object can also be used as a base object&nbsp;for user-defined exceptions. See below for standard built-in error types."><code>Error</code></a></li>
+ <li><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/ReferenceError/prototype.html" title="The ReferenceError.prototype property represents the prototype for the ReferenceError constructor."><code>ReferenceError.prototype</code></a></li>
+</ul>
+                
+              </article>
+
+              
+
+    
+    
+    
+
+    
+    
+    
+
+    <div class="share">
+        <strong>Поширити:</strong>
+        <ul>
+            <li><a href="http://twitter.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FJavaScript%2FReference%2FGlobal_Objects%2FReferenceError%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dtwitter.com&amp;text=%D0%AF+%D0%B4%D1%96%D0%B7%D0%BD%D0%B0%D0%B2%D1%81%D1%8F%28%D0%BB%D0%B0%D1%81%D1%8F%29+%D0%BF%D1%80%D0%BE+ReferenceError+%D0%BD%D0%B0+MDN." target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ReferenceError?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=twitter.com" data-title="Я дізнався(лася) про ReferenceError на MDN." class="share-link twitter"><i aria-hidden="true" class="icon-twitter"></i>Twitter</a></li>
+            <li><a href="http://facebook.com/sharer.php?s=100&amp;p[url]=https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ReferenceError?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ReferenceError?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" data-title="Я дізнався(лася) про ReferenceError на MDN." class="share-link facebook"><i aria-hidden="true" class="icon-facebook"></i>Facebook</a></li>
+            <li><a href="https://plus.google.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FJavaScript%2FReference%2FGlobal_Objects%2FReferenceError%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dplus.google.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ReferenceError?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=plus.google.com" data-title="Я дізнався(лася) про ReferenceError на MDN." class="share-link gplus"><i aria-hidden="true" class="icon-google-plus"></i>Google +</a></li>
+        </ul>
+    </div>
+
+              
+
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Мітки документа й учасники</h2>
+                  
+                  
+  <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags icon-fw"></i>
+    <strong>Мітки:</strong>&nbsp;
+    <ul class="tags tags-small">
+      
+        <li><a href="https://developer.mozilla.org/uk/docs/tag/Error">Error</a></li>
+      
+        <li><a href="https://developer.mozilla.org/uk/docs/tag/JavaScript">JavaScript</a></li>
+      
+        <li><a href="https://developer.mozilla.org/uk/docs/tag/Object">Object</a></li>
+      
+        <li><a href="https://developer.mozilla.org/uk/docs/tag/Reference">Reference</a></li>
+      
+        <li><a href="https://developer.mozilla.org/uk/docs/tag/ReferenceError">ReferenceError</a></li>
+      
+    </ul>
+  </div>
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-group icon-fw"></i>&nbsp;<strong>Зробили внесок у цю сторінку:</strong> 
+        <a href="https://developer.mozilla.org/uk/profiles/fscholz">fscholz</a>, 
+    
+        <a href="https://developer.mozilla.org/uk/profiles/Mingun">Mingun</a>, 
+    
+        <a href="https://developer.mozilla.org/uk/profiles/arai">arai</a>, 
+    
+        <a href="https://developer.mozilla.org/uk/profiles/Sheppy">Sheppy</a>, 
+    
+        <a href="https://developer.mozilla.org/uk/profiles/ethertank">ethertank</a>, 
+    
+        <a href="https://developer.mozilla.org/uk/profiles/Sevenspade">Sevenspade</a>, 
+    
+        <a href="https://developer.mozilla.org/uk/profiles/Potappo">Potappo</a>
+    
+                    </div>
+                  
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o icon-fw"></i>&nbsp;<strong>Востаннє оновлена:</strong>
+                      <a href="https://developer.mozilla.org/uk/profiles/fscholz">fscholz</a>,
+                      <time datetime="2016-01-04T04:39:02-08:00">4 січ. 2016 р., 04:39:02</time>
+                    </div>
+                  
+                </div>
+              
+            </div>
+
+            
+              <!-- quick links and zone subnav strip -->
+              <div id="wiki-left" class="column-strip wiki-column">
+
+              
+
+                
+
+                
+                  <!-- quick links -->
+                  
+  <div class="quick-links" id="quick-links">
+    <div class="title see-also">Див. також</div>
+    <ol><li><strong><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/index.html">Standard built-in objects</a></strong></li><li><strong><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Error.html"><code>Error</code></a></strong></li><li data-default-state="open"><a href="#"><strong>Properties</strong></a><ol><li><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/prototype.html" title="The Error.prototype property represents the prototype for the Error constructor."><code>Error.prototype</code></a></li><li><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/columnNumber.html" title="The columnNumber property contains the column number in the line of the file that raised this error."><code>Error.prototype.columnNumber</code></a></li><li><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/fileName.html" title="The fileName property contains the path to the file that raised this error."><code>Error.prototype.fileName</code></a></li><li><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/lineNumber.html" title="The lineNumber property contains the line number in the file that raised this error."><code>Error.prototype.lineNumber</code></a></li><li><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/message.html" title="The message property is a human-readable description of the error."><code>Error.prototype.message</code></a></li><li><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/name.html" title="The name property represents a name for the type of error. The initial value is &quot;Error&quot;."><code>Error.prototype.name</code></a></li><li><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/Stack-2.html" title="The non-standard stack property of Error objects offer a trace of which functions were called, in what order, from which line and file, and with what arguments. The stack string proceeds from the most recent calls to earlier ones, leading back to the original global scope call."><code>Error.prototype.stack</code></a></li></ol></li><li data-default-state="open"><a href="#"><strong>Methods</strong></a><ol><li><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/toSource.html" title="The toSource() method returns code that could eval to the same error."><code>Error.prototype.toSource()</code></a></li><li><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/toString.html" title="The toString() method returns a string representing the specified Error object."><code>Error.prototype.toString()</code></a></li></ol></li><li><strong>Related pages:</strong></li><li><strong><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/EvalError.html"><code>EvalError</code></a></strong></li><li><strong><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/InternalError.html"><code>InternalError</code></a></strong></li><li><strong><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/RangeError.html"><code>RangeError</code></a></strong></li><li><strong><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/ReferenceError.html"><code>ReferenceError</code></a></strong></li><li><strong><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/SyntaxError.html"><code>SyntaxError</code></a></strong></li><li><strong><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/TypeError.html"><code>TypeError</code></a></strong></li><li><strong><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/URIError.html"><code>URIError</code></a></strong></li><li><strong>Inheritance:</strong></li><li><strong><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Function.html"><code>Function</code></a></strong></li><li><a href="#"><strong>Properties</strong></a><ol><li><span class="sidebar-icon"><span title="This deprecated API should no longer be used, but will probably still work."><i class="icon-thumbs-down-alt"> </i></span></span><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/arguments.html" title="The function.arguments property refers to an an array-like object corresponding to the arguments passed to a function. Use the simple variable arguments instead."><code>Function.arguments</code></a></li><li><span class="sidebar-icon"><span title="This is an obsolete API and is no longer guaranteed to work."><i class="icon-trash"> </i></span></span><s class="obsoleteElement"><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/arity.html" title="The arity property used to return the number of arguments expected by the function, however, it no longer exists and has been replaced by the Function.prototype.length property."><code>Function.arity</code></a></s></li><li><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/caller.html" title="The function.caller property returns the function that invoked the specified function."><code>Function.caller</code></a></li><li><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/displayName.html" title="The function.displayName property returns the display name of the function."><code>Function.displayName</code></a></li><li><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/length.html" title="The length property specifies the number of arguments expected by the function."><code>Function.length</code></a></li><li><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/name.html" title="The function.name property returns the name of the function."><code>Function.name</code></a></li><li><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/prototype.html" title="The Function.prototype property represents the Function prototype object."><code>Function.prototype</code></a></li></ol></li><li><a href="#"><strong>Methods</strong></a><ol><li><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/apply.html" title="The apply() method calls a function with a given this value and arguments provided as an array (or an array-like object)."><code>Function.prototype.apply()</code></a></li><li><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind.html" title="The bind() method creates a new function that, when called, has its this keyword set to the provided value, with a given sequence of arguments preceding any provided when the new function is called."><code>Function.prototype.bind()</code></a></li><li><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/call.html" title="The call() method calls a function with a given this value and arguments provided individually."><code>Function.prototype.call()</code></a></li><li><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/isGenerator.html" title="The isGenerator() method determines whether or not a function is a generator."><code>Function.prototype.isGenerator()</code></a></li><li><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/toSource.html" title="The toSource() method returns a string representing the source code of the object."><code>Function.prototype.toSource()</code></a></li><li><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/toString.html" title="The toString() method returns a string representing the source code of the function."><code>Function.prototype.toString()</code></a></li></ol></li><li><strong><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Object.html"><code>Object</code></a></strong></li><li><a href="#"><strong>Properties</strong></a><ol><li><span class="sidebar-icon"><span title="This is an obsolete API and is no longer guaranteed to work."><i class="icon-trash"> </i></span></span><s class="obsoleteElement"><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/count.html" title="The __count__ property used to store the count of enumerable properties on the object, but it has been removed."><code>Object.prototype.__count__</code></a></s></li><li><span class="sidebar-icon"><span title="This is an obsolete API and is no longer guaranteed to work."><i class="icon-trash"> </i></span></span><s class="obsoleteElement"><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/noSuchMethod.html" title="The __noSuchMethod__ property used to reference a function to be executed when a non-existent method is called on an object, but this function is no longer available."><code>Object.prototype.__noSuchMethod__</code></a></s></li><li><span class="sidebar-icon"><span title="This is an obsolete API and is no longer guaranteed to work."><i class="icon-trash"> </i></span></span><s class="obsoleteElement"><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/Parent.html" title="The __parent__ property used to point to an object's context, but it has been removed."><code>Object.prototype.__parent__</code></a></s></li><li><span class="sidebar-icon"><span title="This deprecated API should no longer be used, but will probably still work."><i class="icon-thumbs-down-alt"> </i></span></span><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/proto.html" title="The __proto__ property of Object.prototype is an accessor property (a getter function and a setter function) that exposes the internal [[Prototype]] (either an object or null) of the object through which it is accessed."><code>Object.prototype.__proto__</code></a></li><li><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/constructor.html" title="Returns a reference to the Object function that created the instance's prototype. Note that the value of this property is a reference to the function itself, not a string containing the function's name. The value is only read-only for primitive values such as&nbsp;1,&nbsp;true and&nbsp;&quot;test&quot;."><code>Object.prototype.constructor</code></a></li></ol></li><li><a href="#"><strong>Methods</strong></a><ol><li><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/__defineGetter__.html" title="The __defineGetter__ method binds an object's property to a function to be called when that property is looked up."><code>Object.prototype.__defineGetter__()</code></a></li><li><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/__defineSetter__.html" title="The __defineSetter__ method binds an object's property to a function to be called when an attempt is made to set that property."><code>Object.prototype.__defineSetter__()</code></a></li><li><span class="sidebar-icon"><span title="This deprecated API should no longer be used, but will probably still work."><i class="icon-thumbs-down-alt"> </i></span></span><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/__lookupGetter__.html" title="The __lookupGetter__ method returns the function bound as a getter to the specified property."><code>Object.prototype.__lookupGetter__()</code></a></li><li><span class="sidebar-icon"><span title="This deprecated API should no longer be used, but will probably still work."><i class="icon-thumbs-down-alt"> </i></span></span><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/__lookupSetter__.html" title="The __lookupSetter__ method returns the function bound as a setter to the specified property."><code>Object.prototype.__lookupSetter__()</code></a></li><li><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/hasOwnProperty.html" title="The hasOwnProperty() method returns a boolean indicating whether the object has the specified property."><code>Object.prototype.hasOwnProperty()</code></a></li><li><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/isPrototypeOf.html" title="The isPrototypeOf() method tests for an object in another object's prototype chain."><code>Object.prototype.isPrototypeOf()</code></a></li><li><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/propertyIsEnumerable.html" title="The propertyIsEnumerable() method returns a Boolean indicating whether the specified property is enumerable."><code>Object.prototype.propertyIsEnumerable()</code></a></li><li><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/toLocaleString.html" title="The toLocaleString() method returns a string representing the object. This method is meant to be overridden by derived objects for locale-specific purposes."><code>Object.prototype.toLocaleString()</code></a></li><li><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/toSource.html" title="The toSource() method returns a string representing the source code of the object."><code>Object.prototype.toSource()</code></a></li><li><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/toString.html" title="The toString() method returns a string representing object."><code>Object.prototype.toString()</code></a></li><li><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/unwatch.html" title="The unwatch() method removes a watchpoint set with the watch() method."><code>Object.prototype.unwatch()</code></a></li><li><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/valueOf.html" title="Technical review completed."><code>Object.prototype.valueOf()</code></a></li><li><a href="../../../../../../en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/watch.html" title="The watch() method watches for a property to be assigned a value and runs a function when that occurs."><code>Object.prototype.watch()</code></a></li></ol></li></ol>
+  </div>
+                
+
+                <!-- approvals -->
+                
+
+              
+
+              </div>
+            
+          </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Web/JavaScript/Reference/Global_Objects/ReferenceError$edit" label="Редагувати сторінку"></menuitem>
+    <menuitem data-action="/uk/docs/Web/JavaScript/Reference/Global_Objects/ReferenceError$history" label="Переглянути історію сторінки"></menuitem>
+  </menu>
+
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+        
+        <div class="contentinfo">
+          <p>© 2005-2016 Mozilla Developer Network і окремі учасники.</p> <p>Вміст доступний на умовах <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">цих ліцензій</a>.</p>
+          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">Про MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Умови</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Конфіденційність</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Куки</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Зробіть внесок у код</a></li>
+          </ul>
+        <p></p>
+        
+        </div>
+      </div>
+      <div class="column-strip">
+        
+          
+  
+    <form class="languages go" method="get" action="https://developer.mozilla.org/uk/docs/Web">
+      <label for="language">Інші мови:</label>
+      <select id="language" class="wiki-l10n" name="next" dir="ltr">
+        <option value="/en-US/docs/Web/JavaScript/Reference/Global_Objects/ReferenceError" selected="">
+          English (US)
+        </option>
+        
+          <option value="/fr/docs/Web/JavaScript/Reference/Objets_globaux/ReferenceError">
+            Français
+          </option>
+          <option value="/ja/docs/Web/JavaScript/Reference/Global_Objects/ReferenceError">
+            日本語
+          </option>
+          <option value="/ru/docs/Web/JavaScript/Reference/Global_Objects/ReferenceError">
+            Русский
+          </option>
+          <option value="/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/ReferenceError">
+            中文 (简体)
+          </option>
+      </select>
+      <noscript>&lt;button type="submit"&gt;Перейти&lt;/button&gt;</noscript>
+    </form>
+  
+
+        
+      </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+  
+    
+    <!--[if lte IE 8]><script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/selectivizr.091e18cf669b.js" charset="utf-8"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script type="text/javascript" src="../../../../../../../developer.cdn.mozilla.net/static/build/js/main.a7b27a25fb9c.js" charset="utf-8"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+    
+    <script async="" type="text/javascript" src="../../../../../../../developer.cdn.mozilla.net/static/jsi18n/uk/javascript.c7ba80fc053a.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../../../developer.cdn.mozilla.net/static/build/js/syntax-prism-min.js" charset="utf-8"></script><script type="text/javascript" src="../../../../../../../developer.cdn.mozilla.net/static/jsi18n/uk/javascript.c7ba80fc053a.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../../../developer.cdn.mozilla.net/static/build/js/wiki.bd71ca9fd27d.js" charset="utf-8" id="wikiscript"></script>
+
+  
+
+  <script async="" type="text/javascript" src="../../../../../../../developer.cdn.mozilla.net/static/build/js/helpfulness.7b208a764d28.js" charset="utf-8"></script>
+
+  
+
+
+
+<!-- Mirrored from developer.mozilla.org/uk/docs/Web/JavaScript/Reference/Global_Objects/ReferenceError by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 19:37:16 GMT -->
+</body></html>

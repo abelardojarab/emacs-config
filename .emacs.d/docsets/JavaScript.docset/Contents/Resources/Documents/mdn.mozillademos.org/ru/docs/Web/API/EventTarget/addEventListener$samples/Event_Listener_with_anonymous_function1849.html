@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    
+<!-- Mirrored from mdn.mozillademos.org/ru/docs/Web/API/EventTarget/addEventListener$samples/Event_Listener_with_anonymous_function?revision=989135 by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 18:30:03 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+        <link rel="stylesheet" type="text/css" href="../../../../../../../developer.mozilla.org/en-US/docs/Template_CustomSampleCSS2af1.css?raw=1" />
+        
+    </head>
+    <body>
+        
+            <table id="outside">
+    <tr><td id="t1">один</td></tr>
+    <tr><td id="t2">два</td></tr>
+</table>
+        
+        
+            <script type="text/javascript">
+                // Функция, изменяющая содержание t2
+function modifyText(new_text) {
+  var t2 = document.getElementById("t2");
+  t2.firstChild.nodeValue = new_text;    
+}
+ 
+// Функция, добавляющая слушатель к таблице
+el = document.getElementById("outside");
+el.addEventListener("click", function(){modifyText("четыре")}, false);
+            </script>
+        
+    </body>
+
+<!-- Mirrored from mdn.mozillademos.org/ru/docs/Web/API/EventTarget/addEventListener$samples/Event_Listener_with_anonymous_function?revision=989135 by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 18:30:03 GMT -->
+</html>

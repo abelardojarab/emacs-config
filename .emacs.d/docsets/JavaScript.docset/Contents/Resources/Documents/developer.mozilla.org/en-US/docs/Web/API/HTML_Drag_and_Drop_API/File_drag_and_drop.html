@@ -1,0 +1,718 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API/File_drag_and_drop by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 17:30:43 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <script async="" src="../../../../../../www.google-analytics.com/analytics.js"></script><script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+  
+    
+  
+
+  
+  <title>File drag and drop</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+  
+    
+    
+    <link href="../../../../../../developer.cdn.mozilla.net/static/build/styles/mdn.593f20d8c365.css" rel="stylesheet" type="text/css">
+
+    
+  
+    <link href="../../../../../../developer.cdn.mozilla.net/static/build/styles/wiki.13dd9abdfb62.css" rel="stylesheet" type="text/css">
+
+    
+
+    
+
+  <!-- common social tags -->
+  
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon144.a6e4162070f4.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon114.0e9fabd44f85.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon72.8ff9d87c82a0.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon57.a2490b9a2d76.png">
+  <!-- basic favicon -->
+  
+    
+  
+  <link rel="shortcut icon" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon32.e02854fdcf73.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/html5shiv.3948ccddab6f.js" charset="utf-8"></script>
+  <![endif]-->
+
+  
+  <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API/File_drag_and_drop$json">
+  <link rel="canonical" href="File_drag_and_drop.html">
+
+  
+
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="File drag and drop">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API/File_drag_and_drop">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API/File_drag_and_drop">
+  <meta name="twitter:title" content="File drag and drop">
+  
+  <meta property="og:description" content="HTML Drag and Drop interfaces enable web applications to &nbsp;drag and drop files on a web page. This document describes how an application can accept one or more files that are dragged from the underlying platform's file manager and dropped on a web page.">
+  <meta name="description" content="HTML Drag and Drop interfaces enable web applications to &nbsp;drag and drop files on a web page. This document describes how an application can accept one or more files that are dragged from the underlying platform's file manager and dropped on a web page.">
+  <meta name="twitter:description" content="HTML Drag and Drop interfaces enable web applications to &nbsp;drag and drop files on a web page. This document describes how an application can accept one or more files that are dragged from the underlying platform's file manager and dropped on a web page.">
+  
+
+  
+    
+
+
+
+  
+</head>
+<body data-slug="Web/API/HTML_Drag_and_Drop_API/File_drag_and_drop" contextmenu="edit-history-menu" data-search-url="" class="document  ">
+
+  <script type="text/javascript">
+    (function(win) {
+        'use strict';
+
+        
+            (function(){
+  var FLAGS = {
+    'compat_api': false,'kumaediting': false,'page_move': false,'registration_disabled': false,'search_suggestions': false,'section_edit': false,'spam_admin_override': false,'spam_checks_enabled': true,'spam_spammer_override': false,'spam_submissions_enabled': false,'spam_testing_mode': false,'wiki_samples': true,'wiki_spam_exempted': false,'wiki_spam_training': true
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': true,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+
+        // This needs to be set before ckeditor.js loads
+        window.CKEDITOR_BASEPATH = 'https://developer.mozilla.org/static/js/libs/ckeditor/build/ckeditor/';
+
+        // This represents the site configuration
+        win.mdn = {
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+            
+            notifications: [],
+            
+            // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            },
+            // Assets that need to be dynamically injected
+            assets_disabled: {
+                css: {
+                    'editor-content': ['https://developer.cdn.mozilla.net/static/build/styles/editor-content.3d79df72080d.css',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/styles/wiki-compat-tables.f3a3bfce97a1.css',]
+                },
+                js: {
+                    'syntax-prism': ['https://developer.cdn.mozilla.net/static/build/js/syntax-prism.7a66ddfa68bf.js',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/js/wiki-compat-tables.14ce5dcb2c3d.js',]
+                }
+            }
+        };
+    })(this);
+</script>
+
+  
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+    
+      <li><a href="#q" id="skip-search">Skip to search</a></li>
+    
+  </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+    <a href="https://developer.mozilla.org/en-US/" class="logo">Mozilla Developer Network</a>
+
+    <div id="nav-sec">
+        
+                  <ul>
+                  <li>
+
+    
+
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                Sign in
+              </span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FHTML_Drag_and_Drop_API%2FFile_drag_and_drop" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/Web/API/HTML_Drag_and_Drop_API/File_drag_and_drop" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/Web/API/HTML_Drag_and_Drop_API/File_drag_and_drop" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FHTML_Drag_and_Drop_API%2FFile_drag_and_drop" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+              
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+        
+    </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../../API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+
+   <!-- end is_zone -->
+
+    <div class="wiki-main-content" id="document-main"><div class="center">
+      
+      <div class="article-meta">
+        <!-- action buttons -->
+        
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+  <ul class="page-buttons" data-sticky="false">
+      
+      <li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+              
+                <li class="smaller">No translations exist for this article.</li>
+              
+
+              
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API/File_drag_and_drop$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+              
+            </ul>
+          </div>
+        </div>
+      </li>
+
+      <li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API/File_drag_and_drop$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li>
+
+        
+
+        <li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API/File_drag_and_drop$history" rel="nofollow, noindex">History</a></li>
+                
+                
+                
+                
+
+                
+
+                
+                
+                
+                <li class="page-print"><a href="#" onclick="return window.print();">Print this article</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+        
+  <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web" rel="v:url" property="v:title">Web technology for developers</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="../../API.html" rel="v:url" property="v:title">Web APIs</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="../HTML_Drag_and_Drop_API.html" rel="v:url" property="v:title">HTML Drag and Drop API</a></li>
+    
+    <li class="crumb" typeof="v:Breadcrumb" property="v:title">File drag and drop</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        
+        <div class="contributor-avatars" data-all-text="see all contributors" data-alternate-message="hide contributors">
+            <ul>
+            
+                <li class="shown">
+                <a href="../../../../profiles/PushpitaPikuDey.html" title="View profile: PushpitaPikuDey">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="PushpitaPikuDey" data-src="../../../../../../secure.gravatar.com/avatar/f4b22e727bb1b32bf1957c666d72874d6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">PushpitaPikuDey</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/AFBarstow" title="View profile: AFBarstow">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="AFBarstow" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">AFBarstow</noscript></a>
+                </li>
+            
+            </ul>
+        </div>
+        
+
+        <h1>File drag and drop</h1>
+
+      </div>
+      
+
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-present">
+
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+            
+              <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+              
+              <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#Define_the_drop_zone" rel="internal">Define the drop zone</a></li><li><a href="#Process_the_drop" rel="internal">Process the drop</a></li><li><a href="#Prevent_the_browser's_default_drag_behavior" rel="internal">Prevent the browser's default drag behavior</a></li><li><a href="#Cleanup" rel="internal">Cleanup</a></li><li><a href="#See_also" rel="internal">See also</a>
+                </li></ol>
+              </div>
+              
+              </div>
+            
+
+            
+            
+              
+            
+
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-half wiki-column text-content">
+
+              
+
+              
+
+              
+                
+                  <div class="warning warning-review">
+                    <p>
+                      This article needs a technical review. <a href="https://developer.mozilla.org/docs/MDN/Contribute/HowTo/Do_a_technical_review">How you can help.</a>
+                    </p>
+                  </div>
+                
+                
+                
+              
+              
+
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                
+                  
+                    <p></p><section id="Quick_Links" class="Quick_links"><!-- --></section><p></p>
+
+<p>HTML Drag and Drop interfaces enable web applications to &nbsp;drag and drop files on a web page. This document describes how an application can accept one or more files that are dragged from the underlying platform's <em>file manager</em> and dropped on a web page.</p>
+
+<p>The main steps to &nbsp;drag and drop are to define a <em>drop zone</em> (i.e. a target element for the file drop) and to define event handlers for the <code><a href="../../Events/drop.html" title="/en-US/docs/Web/Events/drop">drop</a></code>, <code><a href="../../Events/dragover.html" title="/en-US/docs/Web/Events/dragover">dragover</a></code> and <code><a href="../../Events/dragend.html" title="/en-US/docs/Web/Events/dragend">dragend</a></code> events. These steps are described below, including example code snippets. The full source code is available in <a href="http://mdn.github.io/drag-and-drop/File-drag.html" class="external">MDN's drag-and-drop repository</a> (<a href="https://github.com/mdn/drag-and-drop" class="external">pull requests</a> and/or <a href="https://github.com/mdn/drag-and-drop/issues" class="external">issues</a> are welcome).</p>
+
+<p class="note">Note: <a href="../HTML_Drag_and_Drop_API.html" title="HTML Drag and Drop interfaces enable applications to use drag and drop features in Firefox and other browsers."><code>HTML drag and drop</code></a> defines two different APIs to support dragging and dropping files. One API is the <a href="../DataTransfer.html" title="The DataTransfer object is used to hold the data that is being dragged during a drag and drop operation. It may hold one or more data items, each of one or more data types. For more information about drag and drop, see HTML Drag and Drop API."><code>DataTransfer</code></a> interface and the second API is the <a href="../DataTransferItem.html" title="The DataTransferItem object represents one drag data item. During a drag operation, each drag event has a dataTransfer property and that property is a list of drag data items. Each item in the list is a DataTransferItem object."><code>DataTransferItem</code></a> and <a href="../DataTransferItemList.html" title="The DataTransferItemList object is a list of drag data items. During a drag operation, each drag event has a dataTransfer property and that property is a DataTransferItemList."><code>DataTransferItemList</code></a> interfaces. This example illustrates the use of both APIs (and does not use any Gecko specific interfaces).</p>
+
+<h2 id="Define_the_drop_zone">Define the drop <em>zone</em></h2>
+
+<p>The <em>target element</em> of the <code><a href="../../Events/drop.html" title="/en-US/docs/Web/Events/drop">drop</a></code> event needs an <a href="../GlobalEventHandlers/ondrop.html" title="A global event handler for the drop event."><code>ondrop</code></a> global event handler. The following code snippet shows how this is done with a <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/div" title="The HTML &lt;div&gt; element (or HTML Document Division Element) is the generic container for flow content, which does not inherently represent anything. It can be used to group elements for styling purposes (using the class or id attributes), or because they share attribute values, such as lang. It should be used only when no other semantic element (such as &lt;article&gt; or &lt;nav&gt;) is appropriate."><code>&lt;div&gt;</code></a> element:</p>
+
+<pre class="brush: js">&lt;div id="drop_zone" ondrop="drop_handler(event);"&gt;
+  &lt;strong&gt;&lt;Drag one or more files to this Drop Zone ...&lt;/strong&gt;
+&lt;/div&gt;
+</pre>
+
+<p>Typically, an application will include a <code><a href="../../Events/dragover.html" title="/en-US/docs/Web/Events/dragover">dragover</a></code> event handler on the drop target element and that handler will turn off the browser's default drag behavior. To add this handler, you need to &nbsp;include a <a href="../GlobalEventHandlers/ondragover.html" title="A global event handler for the dragover event."><code>ondragover</code></a> global event handler:</p>
+
+<pre class="brush: js">&lt;div id="drop_zone" ondrop="drop_handler(event);" ondragover="dragover_handler(event);"&gt;
+  &lt;strong&gt;&lt;Drag one or more files to this Drop Zone ...&lt;/strong&gt;
+&lt;/div&gt;
+</pre>
+
+<p>Additionally, after a drag and drop operation has been completed, an application should remove the drag's data items (in this case one or more files). This cleanup is typically done when the <code><a href="../../Events/dragend.html" title="/en-US/docs/Web/Events/dragend">dragend</a></code> event is fired. The <a href="../GlobalEventHandlers/ondrop.html" title="A global event handler for the drop event."><code>ondrop</code></a> global event handler should be set on the drop target element:</p>
+
+<pre class="brush: js">&lt;div id="drop_zone" ondrop="drop_handler(event);" ondragover="dragover_handler(event);" ondragend="dragend_handler(event);"&gt;
+  &lt;strong&gt;&lt;Drag one or more files to this Drop Zone ...&lt;/strong&gt;
+&lt;/div&gt;
+</pre>
+
+<p>Lastly, an application may want to style the drop target element to visually indicate the element is a drop zone. In this example, the drop target element uses the following styling:</p>
+
+<pre class="brush: js">drop_zone {
+  border: 5px solid blue;
+  width:  200px;
+  height: 100px;
+}
+</pre>
+
+<h2 id="Process_the_drop">Process the drop</h2>
+
+<p>The <code><a href="../../Events/drop.html" title="/en-US/docs/Web/Events/drop">drop</a></code> event is fired when the user drops the file(s). In the following drop handler, if the browser supports <a href="../DataTransferItemList.html" title="The DataTransferItemList object is a list of drag data items. During a drag operation, each drag event has a dataTransfer property and that property is a DataTransferItemList."><code>DataTransferItemList</code></a> interface, the <a href="../DataTransferItemList/getAsFile.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>getAsFile()</code></a> method is used to access each file; otherwise the <a href="../DataTransfer.html" title="The DataTransfer object is used to hold the data that is being dragged during a drag and drop operation. It may hold one or more data items, each of one or more data types. For more information about drag and drop, see HTML Drag and Drop API."><code>DataTransfer</code></a> interface's <a href="../DataTransfer/files.html" title="The DataTransfer.files property is a list of the files in the drag operation. If the operation includes no files, the list is empty."><code>files</code></a> property is used to access each file.</p>
+
+<p>This example shows how to&nbsp;write&nbsp;the name of each dragged file to the console. In a <em>real</em> application, an application may want to process a file using&nbsp;&nbsp;the <a href="../File.html" title="The File interface provides information about files and allows JavaScript in a web page to access their content."><code>File API</code></a>.</p>
+
+<p>Note that in this example, any drag item that is not a file is ignored.</p>
+
+<pre class="brush: js">function drop_handler(ev) {
+  console.log("Drop");
+  ev.preventDefault();
+  // If dropped items aren't files, reject them
+  var dt = ev.dataTransfer;
+  if (dt.items) {
+    // Use DataTransferItemList interface to access the file(s)
+    for (var i=0; i &lt; dt.items.length; i++) {
+      if (dt.items[i].kind == "file") {
+        var f = dt.items[i].getAsFile();
+        console.log("... file[" + i + "].name = " + f.name);
+      }
+    }
+  } else {
+    // Use DataTransfer interface to access the file(s)
+    for (var i=0; i &lt; dt.files.length; i++) {
+      console.log("... file[" + i + "].name = " + dt.files[i].name);
+    }  
+  }
+}
+</pre>
+
+<h2 id="Prevent_the_browser's_default_drag_behavior">Prevent the browser's default drag behavior</h2>
+
+<p>The following <code><a href="../../Events/dragover.html" title="/en-US/docs/Web/Events/dragover">dragover</a></code> event handler calls <a href="../Event/preventDefault.html" title="Cancels the event if it is cancelable, without stopping further propagation of the event."><code>preventDefault()</code></a> to turn off the browser's default drag and drop handler.</p>
+
+<pre class="brush: js">function dragover_handler(ev) {
+  console.log("dragOver");
+  // Prevent default select and drag behavior
+  ev.preventDefault();
+}
+</pre>
+
+<h2 id="Cleanup">Cleanup</h2>
+
+<p>The <code><a href="../../Events/dragend.html" title="/en-US/docs/Web/Events/dragend">dragend</a></code> handler is fired when the drag operation ends (signaling the drop has occurred or the drag has been&nbsp;canceled). In the following handler, if the browser supports the <a href="../DataTransferItemList.html" title="The DataTransferItemList object is a list of drag data items. During a drag operation, each drag event has a dataTransfer property and that property is a DataTransferItemList."><code>DataTransferItemList</code></a> interface, the list's <a href="../DataTransferItemList/remove.html" title="The DataTransferItemList.remove() method removes the drag data item at the specified index from the list. If the index is less than zero or greater than one less than the length of the list, the list will not be changed."><code>remove()</code></a> method is used to delete the file drag data; otherwise the <a href="../DataTransfer.html" title="The DataTransfer object is used to hold the data that is being dragged during a drag and drop operation. It may hold one or more data items, each of one or more data types. For more information about drag and drop, see HTML Drag and Drop API."><code>DataTransfer</code></a> object's <a href="../DataTransfer/remove.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>remove()</code></a> method is used to delete the data.</p>
+
+<pre class="brush: js">function dragend_handler(ev) {
+  console.log("dragEnd");
+  // Remove all of the drag data
+  var dt = ev.dataTransfer;
+  if (dt.items) {
+    // Use DataTransferItemList interface to remove the drag data
+    for (var i = 0; i &lt; dt.items.length; i++) {
+      dt.items.remove(i);
+    }
+  } else {
+    // Use DataTransfer interface to remove the drag data
+    ev.dataTransfer.clearData();
+  }
+}
+</pre>
+
+<h2 name="See_also" id="See_also">See also</h2>
+
+<ul>
+ <li><a href="../HTML_Drag_and_Drop_API.html" title="HTML Drag and Drop interfaces enable applications to use drag and drop features in Firefox and other browsers."><code>HTML_Drag_and_Drop_API</code></a></li>
+ <li><a href="https://developer.mozilla.org/Web/Guide/HTML/Drag_operations" class="internal" title="Drag Operations">Drag Operations</a></li>
+ <li><a href="https://html.spec.whatwg.org/multipage/interaction.html#dnd" class="external" title="Drag and Drop Standard">HTML5 Living Standard: Drag and Drop</a></li>
+</ul>
+                  
+                
+              </article>
+
+              
+
+    
+    
+    
+
+    
+    
+    
+
+    <div class="share">
+        <strong>Share:</strong>
+        <ul>
+            <li><a href="http://twitter.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FAPI%2FHTML_Drag_and_Drop_API%2FFile_drag_and_drop%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dtwitter.com&amp;text=I+learned+about+File+drag+and+drop+on+MDN." target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API/File_drag_and_drop?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=twitter.com" data-title="I learned about File drag and drop on MDN." class="share-link twitter"><i aria-hidden="true" class="icon-twitter"></i>Twitter</a></li>
+            <li><a href="http://facebook.com/sharer.php?s=100&amp;p[url]=https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API/File_drag_and_drop?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API/File_drag_and_drop?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" data-title="I learned about File drag and drop on MDN." class="share-link facebook"><i aria-hidden="true" class="icon-facebook"></i>Facebook</a></li>
+            <li><a href="https://plus.google.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FAPI%2FHTML_Drag_and_Drop_API%2FFile_drag_and_drop%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dplus.google.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API/File_drag_and_drop?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=plus.google.com" data-title="I learned about File drag and drop on MDN." class="share-link gplus"><i aria-hidden="true" class="icon-google-plus"></i>Google+</a></li>
+        </ul>
+    </div>
+
+              
+
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                  
+                  
+  <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags icon-fw"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/drag and drop">drag and drop</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/drop zone">drop zone</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Guide">Guide</a></li>
+      
+    </ul>
+  </div>
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-group icon-fw"></i>&nbsp;<strong>Contributors to this page:</strong> 
+        <a href="../../../../profiles/PushpitaPikuDey.html">PushpitaPikuDey</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/AFBarstow">AFBarstow</a>
+    
+                    </div>
+                  
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o icon-fw"></i>&nbsp;<strong>Last updated by:</strong>
+                      <a href="../../../../profiles/PushpitaPikuDey.html">PushpitaPikuDey</a>,
+                      <time datetime="2016-02-12T16:05:30-08:00">Feb 12, 2016, 4:05:30 PM</time>
+                    </div>
+                  
+                </div>
+              
+            </div>
+
+            
+              <!-- quick links and zone subnav strip -->
+              <div id="wiki-left" class="column-strip wiki-column">
+
+              
+
+                
+
+                
+                  <!-- quick links -->
+                  
+  <div class="quick-links" id="quick-links">
+    <div class="title see-also">See also</div>
+    <ol><li><strong><a href="../HTML_Drag_and_Drop_API.html">HTML Drag and Drop API</a></strong></li><li data-default-state="open"><a href="#"><strong>Guides</strong></a><ol><li><a href="File_drag_and_drop.html" title="HTML Drag and Drop interfaces enable web applications to support dragging and dropping files on a web page. This document describes how an application can accept one or more files that are dragged from the underlying platform's file manager and dropped on a web page.">File drag and drop</a></li><li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Drag_and_drop" title="">Drag and drop</a></li><li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Drag_operations" title="">Drag operations</a></li></ol></li><li data-default-state="open"><a href="#"><strong>Interfaces</strong></a><ol><li><a href="../DataTransfer.html"><code>DataTransfer</code></a></li><li><a href="../DataTransferItem.html"><code>DataTransferItem</code></a></li><li><a href="../DataTransferItemList.html"><code>DataTransferItemList</code></a></li><li><a href="../DragEvent.html"><code>DragEvent</code></a></li></ol></li><li data-default-state="open"><a href="#"><strong>Events</strong></a><ol><li><a href="../../Events/dragstart.html"><code>dragstart</code></a></li><li><a href="../../Events/drag.html"><code>drag</code></a></li><li><a href="../../Events/dragenter.html"><code>dragenter</code></a></li><li><a href="../../Events/dragexit.html"><code>dragexit</code></a></li><li><a href="../../Events/dragleave.html"><code>dragleave</code></a></li><li><a href="../../Events/dragover.html"><code>dragover</code></a></li><li><a href="../../Events/drop.html"><code>drop</code></a></li><li><a href="../../Events/dragend.html"><code>dragend</code></a></li></ol></li></ol>
+  </div>
+                
+
+                <!-- approvals -->
+                
+
+              
+
+              </div>
+            
+          </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Web/API/HTML_Drag_and_Drop_API/File_drag_and_drop$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Web/API/HTML_Drag_and_Drop_API/File_drag_and_drop$history" label="View page history"></menuitem>
+  </menu>
+
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+        
+        <div class="contentinfo">
+          <p>© 2005-2016 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>
+          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+        
+        </div>
+      </div>
+      <div class="column-strip">
+        
+          
+  
+
+        
+      </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+  
+    
+    <!--[if lte IE 8]><script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/selectivizr.091e18cf669b.js" charset="utf-8"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/main.a7b27a25fb9c.js" charset="utf-8"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+    
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/syntax-prism-min.js" charset="utf-8"></script><script type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/wiki.bd71ca9fd27d.js" charset="utf-8" id="wikiscript"></script>
+
+  
+
+  <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/helpfulness.7b208a764d28.js" charset="utf-8"></script>
+
+  
+
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API/File_drag_and_drop by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 17:30:44 GMT -->
+</body></html>

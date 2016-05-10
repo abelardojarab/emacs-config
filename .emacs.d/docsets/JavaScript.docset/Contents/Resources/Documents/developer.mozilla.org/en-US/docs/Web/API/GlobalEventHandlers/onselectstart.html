@@ -1,0 +1,711 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/GlobalEventHandlers/onselectstart by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 14:42:40 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <script async="" src="../../../../../../www.google-analytics.com/analytics.js"></script><script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+  
+    
+  
+
+  
+  <title>GlobalEventHandlers.onselectstart</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+  
+    
+    
+    <link href="../../../../../../developer.cdn.mozilla.net/static/build/styles/mdn.593f20d8c365.css" rel="stylesheet" type="text/css">
+
+    
+  
+    <link href="../../../../../../developer.cdn.mozilla.net/static/build/styles/wiki.13dd9abdfb62.css" rel="stylesheet" type="text/css">
+
+    
+
+    
+
+  <!-- common social tags -->
+  
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon144.a6e4162070f4.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon114.0e9fabd44f85.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon72.8ff9d87c82a0.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon57.a2490b9a2d76.png">
+  <!-- basic favicon -->
+  
+    
+  
+  <link rel="shortcut icon" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon32.e02854fdcf73.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/html5shiv.3948ccddab6f.js" charset="utf-8"></script>
+  <![endif]-->
+
+  
+  <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Web/API/GlobalEventHandlers/onselectstart$json">
+  <link rel="canonical" href="onselectstart.html">
+
+  
+
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="GlobalEventHandlers.onselectstart">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Web/API/GlobalEventHandlers/onselectstart">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Web/API/GlobalEventHandlers/onselectstart">
+  <meta name="twitter:title" content="GlobalEventHandlers.onselectstart">
+  
+  <meta property="og:description" content="The GlobalEventHandlers.onselectstart property represents the event handler that is called when a selectstart event reaches this object.">
+  <meta name="description" content="The GlobalEventHandlers.onselectstart property represents the event handler that is called when a selectstart event reaches this object.">
+  <meta name="twitter:description" content="The GlobalEventHandlers.onselectstart property represents the event handler that is called when a selectstart event reaches this object.">
+  
+
+  
+    
+
+
+
+  
+</head>
+<body data-slug="Web/API/GlobalEventHandlers/onselectstart" contextmenu="edit-history-menu" data-search-url="" class="document  ">
+
+  <script type="text/javascript">
+    (function(win) {
+        'use strict';
+
+        
+            (function(){
+  var FLAGS = {
+    'compat_api': false,'kumaediting': false,'page_move': false,'registration_disabled': false,'search_suggestions': false,'section_edit': false,'spam_admin_override': false,'spam_checks_enabled': true,'spam_spammer_override': false,'spam_submissions_enabled': false,'spam_testing_mode': false,'wiki_samples': true,'wiki_spam_exempted': false,'wiki_spam_training': true
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': true,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+
+        // This needs to be set before ckeditor.js loads
+        window.CKEDITOR_BASEPATH = 'https://developer.mozilla.org/static/js/libs/ckeditor/build/ckeditor/';
+
+        // This represents the site configuration
+        win.mdn = {
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+            
+            notifications: [],
+            
+            // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            },
+            // Assets that need to be dynamically injected
+            assets_disabled: {
+                css: {
+                    'editor-content': ['https://developer.cdn.mozilla.net/static/build/styles/editor-content.3d79df72080d.css',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/styles/wiki-compat-tables.f3a3bfce97a1.css',]
+                },
+                js: {
+                    'syntax-prism': ['https://developer.cdn.mozilla.net/static/build/js/syntax-prism.7a66ddfa68bf.js',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/js/wiki-compat-tables.14ce5dcb2c3d.js',]
+                }
+            }
+        };
+    })(this);
+</script>
+
+  
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+    
+      <li><a href="#q" id="skip-search">Skip to search</a></li>
+    
+  </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+    <a href="https://developer.mozilla.org/en-US/" class="logo">Mozilla Developer Network</a>
+
+    <div id="nav-sec">
+        
+                  <ul>
+                  <li>
+
+    
+
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                Sign in
+              </span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FGlobalEventHandlers%2Fonselectstart" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/Web/API/GlobalEventHandlers/onselectstart" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/Web/API/GlobalEventHandlers/onselectstart" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FGlobalEventHandlers%2Fonselectstart" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+              
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+        
+    </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../../API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+
+   <!-- end is_zone -->
+
+    <div class="wiki-main-content" id="document-main"><div class="center">
+      
+      <div class="article-meta">
+        <!-- action buttons -->
+        
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+  <ul class="page-buttons" data-sticky="false">
+      
+      <li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+              
+                <li class="smaller">No translations exist for this article.</li>
+              
+
+              
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/GlobalEventHandlers/onselectstart$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+              
+            </ul>
+          </div>
+        </div>
+      </li>
+
+      <li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Web/API/GlobalEventHandlers/onselectstart$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li>
+
+        
+
+        <li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/GlobalEventHandlers/onselectstart$history" rel="nofollow, noindex">History</a></li>
+                
+                
+                
+                
+
+                
+
+                
+                
+                
+                <li class="page-print"><a href="#" onclick="return window.print();">Print this article</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+        
+  <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web" rel="v:url" property="v:title">Web technology for developers</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="../../API.html" rel="v:url" property="v:title">Web APIs</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="../GlobalEventHandlers.html" rel="v:url" property="v:title">GlobalEventHandlers</a></li>
+    
+    <li class="crumb" typeof="v:Breadcrumb" property="v:title">GlobalEventHandlers.onselectstart</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        
+        <div class="contributor-avatars" data-all-text="see all contributors" data-alternate-message="hide contributors">
+            <ul>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Konrud" title="View profile: Konrud">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Konrud" data-src="../../../../../../secure.gravatar.com/avatar/c9920def270741327307f1457ed4a2806c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Konrud</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/teoli" title="View profile: teoli">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="teoli" data-src="../../../../../../secure.gravatar.com/avatar/d0d90148e08e3b64ccf75c46f31442c56c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">teoli</noscript></a>
+                </li>
+            
+            </ul>
+        </div>
+        
+
+        <h1>GlobalEventHandlers.onselectstart</h1>
+
+      </div>
+      
+
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-present">
+
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+            
+              <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+              
+              <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#Syntax" rel="internal">Syntax</a></li><li><a href="#Example" rel="internal">Example</a></li><li><a href="#Specifications" rel="internal">Specifications</a></li><li><a href="#Browser_compatibility" rel="internal">Browser compatibility</a></li><li><a href="#See_also" rel="internal">See also</a>
+                </li></ol>
+              </div>
+              
+              </div>
+            
+
+            
+            
+              
+            
+
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-half wiki-column text-content">
+
+              
+
+              
+
+              
+                
+                
+                
+              
+              
+
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                
+                  
+                    <div><section id="Quick_Links" class="Quick_links"><!-- --></section><div class="notice experimental"> 
+    <p><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span> <strong>This is an experimental technology</strong><br>Because this technology's specification has not stabilized, check the <a href="#Browser_compatibility">compatibility table</a> for the proper prefixes to use in various browsers. Also note that the syntax and behavior of an experimental technology is subject to change in future versions of browsers as the spec changes.</p> 
+</div></div>
+
+<p>The <code><strong>GlobalEventHandlers.onselectstart</strong></code> property represents the event handler that is called when a <code><a href="../../Events/selectstart.html" title="/en-US/docs/Web/Events/selectstart">selectstart</a></code> event reaches this object.</p>
+
+<h2 id="Syntax">Syntax</h2>
+
+<pre class="syntaxbox"><em>obj</em>.onselectstart = <em>function</em>;
+</pre>
+
+<ul>
+ <li><code>function</code> is the name of a user-defined function, without the () suffix or any parameters, or an anonymous function declaration.</li>
+</ul>
+
+<h2 id="Example">Example</h2>
+
+<pre class="brush: html">document.onselectstart = function() { console.log("Selection started!"); }; 
+</pre>
+
+<h2 id="Specifications">Specifications</h2>
+
+<table class="spectable standard-table">
+ <tbody>
+  <tr>
+   <th scope="col">Specification</th>
+   <th scope="col">Status</th>
+   <th scope="col">Comment</th>
+  </tr>
+  <tr>
+   <td><a href="http://w3c.github.io/selection-api/" class="external" lang="en" hreflang="en">Selection API<br><small lang="en-US">The definition of 'GlobalEventHandlers.onselectstart' in that specification.</small></a></td>
+   <td><span class="spec-WD">Working Draft</span></td>
+   <td>Initial definition.</td>
+  </tr>
+ </tbody>
+</table>
+
+<h2 id="Browser_compatibility">Browser compatibility</h2>
+
+<p></p><div class="htab"> 
+    <a name="AutoCompatibilityTable" id="AutoCompatibilityTable"></a> 
+    <ul> 
+        <li class="selected"><a>Desktop</a></li> 
+        <li><a>Mobile</a></li> 
+    </ul> 
+</div><p></p>
+
+<div id="compat-desktop">
+<table class="compat-table">
+ <tbody>
+  <tr>
+   <th>Feature</th>
+   <th>Firefox (Gecko)</th>
+   <th>Chrome</th>
+   <th>Internet Explorer</th>
+   <th>Opera</th>
+   <th>Safari</th>
+  </tr>
+  <tr>
+   <td>Basic support</td>
+   <td><a href="https://developer.mozilla.org/en-US/Firefox/Releases/43" title="Released on 2015-12-15.">43</a> (43)<sup>[1]</sup></td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+  </tr>
+ </tbody>
+</table>
+</div>
+
+<div id="compat-mobile">
+<table class="compat-table">
+ <tbody>
+  <tr>
+   <th>Feature</th>
+   <th>Firefox Mobile (Gecko)</th>
+   <th>Android</th>
+   <th>IE Mobile</th>
+   <th>Opera Mobile</th>
+   <th>Safari Mobile</th>
+  </tr>
+  <tr>
+   <td><code>onselectionchange</code></td>
+   <td>43.0 (43)<sup>[1]</sup></td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+  </tr>
+ </tbody>
+</table>
+</div>
+
+<p>[1] This is implemented behind the <code>dom.select_events.enabled</code> preference, that default to <code>false</code>, except on Nightly.</p>
+
+<h2 id="See_also">See also</h2>
+
+<ul>
+ <li><code><a href="../../Events/selectstart.html" title="/en-US/docs/Web/Events/selectstart">selectstart</a></code></li>
+ <li><a href="../Document/onselectionchange.html" title="The Document.onselectionchange property represents the even handler that is called when a selectionchange event reaches this object."><code>Document.onselectionchange</code></a> and <code><a href="../../Events/selectionchange.html" title="/en-US/docs/Web/Events/selectionchange">selectionchange</a></code>.</li>
+</ul>
+                  
+                
+              </article>
+
+              
+
+    
+    
+    
+
+    
+    
+    
+
+    <div class="share">
+        <strong>Share:</strong>
+        <ul>
+            <li><a href="http://twitter.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FAPI%2FGlobalEventHandlers%2Fonselectstart%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dtwitter.com&amp;text=I+learned+about+GlobalEventHandlers.onselectstart+on+MDN." target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/API/GlobalEventHandlers/onselectstart?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=twitter.com" data-title="I learned about GlobalEventHandlers.onselectstart on MDN." class="share-link twitter"><i aria-hidden="true" class="icon-twitter"></i>Twitter</a></li>
+            <li><a href="http://facebook.com/sharer.php?s=100&amp;p[url]=https://developer.mozilla.org/en-US/docs/Web/API/GlobalEventHandlers/onselectstart?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/API/GlobalEventHandlers/onselectstart?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" data-title="I learned about GlobalEventHandlers.onselectstart on MDN." class="share-link facebook"><i aria-hidden="true" class="icon-facebook"></i>Facebook</a></li>
+            <li><a href="https://plus.google.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FAPI%2FGlobalEventHandlers%2Fonselectstart%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dplus.google.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/API/GlobalEventHandlers/onselectstart?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=plus.google.com" data-title="I learned about GlobalEventHandlers.onselectstart on MDN." class="share-link gplus"><i aria-hidden="true" class="icon-google-plus"></i>Google+</a></li>
+        </ul>
+    </div>
+
+              
+
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                  
+                  
+  <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags icon-fw"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+      
+        <li><a href="../../../tag/API.html">API</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Event Handler">Event Handler</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Experimental">Experimental</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/GlobalEventHandlers">GlobalEventHandlers</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Property">Property</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Reference">Reference</a></li>
+      
+    </ul>
+  </div>
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-group icon-fw"></i>&nbsp;<strong>Contributors to this page:</strong> 
+        <a href="https://developer.mozilla.org/en-US/profiles/Konrud">Konrud</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/teoli">teoli</a>
+    
+                    </div>
+                  
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o icon-fw"></i>&nbsp;<strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/Konrud">Konrud</a>,
+                      <time datetime="2016-01-04T02:51:19-08:00">Jan 4, 2016, 2:51:19 AM</time>
+                    </div>
+                  
+                </div>
+              
+            </div>
+
+            
+              <!-- quick links and zone subnav strip -->
+              <div id="wiki-left" class="column-strip wiki-column">
+
+              
+
+                
+
+                
+                  <!-- quick links -->
+                  
+  <div class="quick-links" id="quick-links">
+    <div class="title see-also">See also</div>
+    <ol><li><strong><a href="../Document_Object_Model.html">Document Object Model</a></strong></li><li><strong><a href="../GlobalEventHandlers.html"><code>GlobalEventHandlers</code></a></strong></li><li data-default-state="open"><a href="#"><strong>Properties</strong></a><ol><li><a href="onabort.html" title="An event handler for abort events sent to the window. (Not available with Firefox 2 or Safari)"><code>GlobalEventHandlers.onabort</code></a></li><li><a href="onblur.html" title="The onblur property returns the onBlur event handler code, if any, that exists on the current element."><code>GlobalEventHandlers.onblur</code></a></li><li><a href="onchange.html" title="The onchange property sets and returns the event handler for the change event."><code>GlobalEventHandlers.onchange</code></a></li><li><a href="onclick.html" title="The onclick property returns the click event handler code on the current element."><code>GlobalEventHandlers.onclick</code></a></li><li><a href="onclose.html" title="An event handler for close events sent to the window. (Not available with Firefox 2 or Safari)"><code>GlobalEventHandlers.onclose</code></a></li><li><a href="oncontextmenu.html" title="An event handler property for right-click events on the window. Unless the default behavior is prevented (see examples below on how to do this), the browser context menu will activate (though IE8 has a bug with this and will not activate the context menu if a contextmenu event handler is defined). Note that this event will occur with any non-disabled right-click event and does not depend on an element possessing the &quot;contextmenu&quot; attribute."><code>GlobalEventHandlers.oncontextmenu</code></a></li><li><a href="ondblclick.html" title="The ondblclick property returns the onDblClick event handler code on the current element."><code>GlobalEventHandlers.ondblclick</code></a></li><li><a href="onerror.html" title="An event handler for the error event. Error events are fired at various targets for different kinds of errors:"><code>GlobalEventHandlers.onerror</code></a></li><li><a href="onfocus.html" title="The onfocus property returns the onFocus event handler code on the current element."><code>GlobalEventHandlers.onfocus</code></a></li><li><a href="oninput.html" title="An event handler for the input event on the window.&nbsp;The input event is raised when an &lt;input&gt; element value changes."><code>GlobalEventHandlers.oninput</code></a></li><li><a href="onkeydown.html" title="The onkeydown property returns the onKeyDown event handler code on the current element."><code>GlobalEventHandlers.onkeydown</code></a></li><li><a href="onkeypress.html" title="The onkeypress property sets and returns the onKeyPress event handler code for the current element."><code>GlobalEventHandlers.onkeypress</code></a></li><li><a href="onkeyup.html" title="The onkeyup property returns the onKeyUp event handler code for the current element."><code>GlobalEventHandlers.onkeyup</code></a></li><li><a href="onload.html" title="An event handler for the load event of a window."><code>GlobalEventHandlers.onload</code></a></li><li><a href="onmousedown.html" title="The onmousedown property returns the onmousedown event handler code on the current element."><code>GlobalEventHandlers.onmousedown</code></a></li><li><a href="onmousemove.html" title="The onmousemove property returns the mousemove event handler code on the current element."><code>GlobalEventHandlers.onmousemove</code></a></li><li><a href="onmouseout.html" title="The onmouseout property returns the onMouseOut event handler code on the current element."><code>GlobalEventHandlers.onmouseout</code></a></li><li><a href="onmouseover.html" title="The onmouseover property returns the onMouseOver event handler code on the current element."><code>GlobalEventHandlers.onmouseover</code></a></li><li><a href="onmouseup.html" title="The onmouseup property returns the onMouseUp event handler code on the current element."><code>GlobalEventHandlers.onmouseup</code></a></li><li><a href="onpointercancel.html" title="A global event handler for the pointercancel event."><code>GlobalEventHandlers.onpointercancel</code></a></li><li><a href="onpointerdown.html" title="A global event handler for the pointerdown event."><code>GlobalEventHandlers.onpointerdown</code></a></li><li><a href="onpointerenter.html" title="A global event handler for the pointerenter event."><code>GlobalEventHandlers.onpointerenter</code></a></li><li><a href="onpointerleave.html" title="A global event handler for the pointerleave event."><code>GlobalEventHandlers.onpointerleave</code></a></li><li><a href="onpointermove.html" title="A global event handler for the pointermove event."><code>GlobalEventHandlers.onpointermove</code></a></li><li><a href="onpointerout.html" title="A global event handler for the pointerout event."><code>GlobalEventHandlers.onpointerout</code></a></li><li><a href="onpointerover.html" title="A global event handler for the pointerover event."><code>GlobalEventHandlers.onpointerover</code></a></li><li><a href="onpointerup.html" title="A global event handler for the pointerup event."><code>GlobalEventHandlers.onpointerup</code></a></li><li><a href="onreset.html" title="The GlobalEventHandlers.onreset property contains an EventHandler triggered when a reset event is received."><code>GlobalEventHandlers.onreset</code></a></li><li><a href="onresize.html" title="The GlobalEventHandlers.onresize property contains an EventHandler triggered when a resize event is received."><code>GlobalEventHandlers.onresize</code></a></li><li><a href="onscroll.html" title="An event handler for scroll events on&nbsp;element."><code>GlobalEventHandlers.onscroll</code></a></li><li><a href="onselect.html" title="An event handler for the select event on the window."><code>GlobalEventHandlers.onselect</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><em><code>GlobalEventHandlers.onselectstart</code></em></li><li><a href="onsubmit.html" title="An event handler for the submit event on the window."><code>GlobalEventHandlers.onsubmit</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="ontouchcancel.html" title="A global event handler for the touchcancel event."><code>GlobalEventHandlers.ontouchcancel</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="GlobalEventHanders.html" title="A global event handler for the touchmove event."><code>GlobalEventHandlers.ontouchmove</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="ontouchstart.html" title="A global event handler for the touchstart event."><code>GlobalEventHandlers.ontouchstart</code></a></li></ol></li><li data-default-state="open"><a href="#"><strong>Implemented by:</strong></a><ol><li><a href="../Document.html"><code>Document</code></a></li><li><a href="../HTMLElement.html"><code>HTMLElement</code></a></li><li><a href="../SVGElement.html"><code>SVGElement</code></a></li><li><a href="../Window.html"><code>Window</code></a></li><li><a href="../XULElement.html"><code>XULElement</code></a></li></ol></li><li data-default-state="open"><a href="#"><strong>Related pages for DOM</strong></a><ol><li><a href="../Attr.html"><code>Attr</code></a></li><li><a href="../ByteString.html"><code>ByteString</code></a></li><li><a href="../CDATASection.html"><code>CDATASection</code></a></li><li><a href="../CharacterData.html"><code>CharacterData</code></a></li><li><a href="../ChildNode.html"><code>ChildNode</code></a></li><li><a href="../Comment.html"><code>Comment</code></a></li><li><a href="../CustomEvent.html"><code>CustomEvent</code></a></li><li><a href="../DOMConfiguration.html"><code>DOMConfiguration</code></a></li><li><a href="../DOMError.html"><code>DOMError</code></a></li><li><a href="../DOMErrorHandler.html"><code>DOMErrorHandler</code></a></li><li><a href="../DOMException.html"><code>DOMException</code></a></li><li><a href="../DOMImplementation.html"><code>DOMImplementation</code></a></li><li><a href="../DOMImplementationList.html"><code>DOMImplementationList</code></a></li><li><a href="../DOMImplementationRegistry.html"><code>DOMImplementationRegistry</code></a></li><li><a href="../DOMImplementationSource.html"><code>DOMImplementationSource</code></a></li><li><a href="../DOMLocator.html"><code>DOMLocator</code></a></li><li><a href="../DOMObject.html"><code>DOMObject</code></a></li><li><a href="../DOMParser.html"><code>DOMParser</code></a></li><li><a href="../DOMPoint.html"><code>DOMPoint</code></a></li><li><a href="../DOMRect.html"><code>DOMRect</code></a></li><li><a href="../DOMString.html"><code>DOMString</code></a></li><li><a href="../DOMTimeStamp.html"><code>DOMTimeStamp</code></a></li><li><a href="../DOMTokenList.html"><code>DOMTokenList</code></a></li><li><a href="../DOMUserData.html"><code>DOMUserData</code></a></li><li><a href="../Document.html"><code>Document</code></a></li><li><a href="../DocumentFragment.html"><code>DocumentFragment</code></a></li><li><a href="../DocumentType.html"><code>DocumentType</code></a></li><li><a href="../Element.html"><code>Element</code></a></li><li><a href="../ElementTraversal.html"><code>ElementTraversal</code></a></li><li><a href="../Entity.html"><code>Entity</code></a></li><li><a href="../EntityReference.html"><code>EntityReference</code></a></li><li><a href="../Event.html"><code>Event</code></a></li><li><a href="../EventTarget.html"><code>EventTarget</code></a></li><li><a href="../HTMLCollection.html"><code>HTMLCollection</code></a></li><li><a href="../MutationObserver.html"><code>MutationObserver</code></a></li><li><a href="../Node.html"><code>Node</code></a></li><li><a href="../NodeFilter.html"><code>NodeFilter</code></a></li><li><a href="../NodeIterator.html"><code>NodeIterator</code></a></li><li><a href="../NodeList.html"><code>NodeList</code></a></li><li><a href="../NonDocumentTypeChildNode.html"><code>NonDocumentTypeChildNode</code></a></li><li><a href="../ProcessingInstruction.html"><code>ProcessingInstruction</code></a></li><li><a href="../PromiseResolver.html"><code>PromiseResolver</code></a></li><li><a href="../Range.html"><code>Range</code></a></li><li><a href="../Text.html"><code>Text</code></a></li><li><a href="../TextDecoder.html"><code>TextDecoder</code></a></li><li><a href="../TextEncoder.html"><code>TextEncoder</code></a></li><li><a href="../TimeRanges.html"><code>TimeRanges</code></a></li><li><a href="../TreeWalker.html"><code>TreeWalker</code></a></li><li><a href="../TypeInfo.html"><code>TypeInfo</code></a></li><li><a href="../USVString.html"><code>USVString</code></a></li><li><a href="../UserDataHandler.html"><code>UserDataHandler</code></a></li></ol></li></ol>
+  </div>
+                
+
+                <!-- approvals -->
+                
+
+              
+
+              </div>
+            
+          </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Web/API/GlobalEventHandlers/onselectstart$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Web/API/GlobalEventHandlers/onselectstart$history" label="View page history"></menuitem>
+  </menu>
+
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+        
+        <div class="contentinfo">
+          <p>© 2005-2016 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>
+          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+        
+        </div>
+      </div>
+      <div class="column-strip">
+        
+          
+  
+
+        
+      </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+  
+    
+    <!--[if lte IE 8]><script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/selectivizr.091e18cf669b.js" charset="utf-8"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/main.a7b27a25fb9c.js" charset="utf-8"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+    
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/syntax-prism-min.js" charset="utf-8"></script><script type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/wiki.bd71ca9fd27d.js" charset="utf-8" id="wikiscript"></script>
+
+  
+
+  <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/helpfulness.7b208a764d28.js" charset="utf-8"></script>
+
+  
+
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/GlobalEventHandlers/onselectstart by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 14:42:40 GMT -->
+</body></html>

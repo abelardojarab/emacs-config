@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+    
+<!-- Mirrored from mdn.mozillademos.org/en-US/docs/Web/API/Canvas_API/Tutorial/Applying_styles_and_colors$samples/A_demo_of_the_miterLimit_property?revision=891351 by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 17:14:18 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+        <link rel="stylesheet" type="text/css" href="../../../../../../../../developer.mozilla.org/en-US/docs/Template_CustomSampleCSS2af1.css?raw=1" />
+        
+    </head>
+    <body>
+        
+            <table>
+  <tr>
+    <td><canvas id="canvas" width="150" height="150"></canvas></td>
+    <td>Change the <code>miterLimit</code> by entering a new value below and clicking the redraw button.<br><br>
+      <form onsubmit="return draw();">
+        <label>Miter limit</label>
+        <input type="text" size="3" id="miterLimit"/>
+        <input type="submit" value="Redraw"/>
+      </form>
+    </td>
+  </tr>
+</table>
+        
+        
+            <script type="text/javascript">
+                function draw() {
+  var ctx = document.getElementById('canvas').getContext('2d');
+ 
+  // Clear canvas
+  ctx.clearRect(0,0,150,150);
+ 
+  // Draw guides
+  ctx.strokeStyle = '#09f';
+  ctx.lineWidth   = 2;
+  ctx.strokeRect(-5,50,160,50);
+ 
+  // Set line styles
+  ctx.strokeStyle = '#000';
+  ctx.lineWidth = 10;
+ 
+  // check input
+  if (document.getElementById('miterLimit').value.match(/\d+(\.\d+)?/)) {
+    ctx.miterLimit = parseFloat(document.getElementById('miterLimit').value);
+  } else {
+    alert('Value must be a positive number');
+  }
+ 
+  // Draw lines
+  ctx.beginPath();
+  ctx.moveTo(0,100);
+  for (i=0;i<24;i++){
+    var dy = i%2==0 ? 25 : -25 ;
+    ctx.lineTo(Math.pow(i,1.5)*2,75+dy);
+  }
+  ctx.stroke();
+  return false;
+} document.getElementById('miterLimit').value = document.getElementById('canvas').getContext('2d').miterLimit;
+draw();
+            </script>
+        
+    </body>
+
+<!-- Mirrored from mdn.mozillademos.org/en-US/docs/Web/API/Canvas_API/Tutorial/Applying_styles_and_colors$samples/A_demo_of_the_miterLimit_property?revision=891351 by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 17:14:18 GMT -->
+</html>

@@ -1,0 +1,1037 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/Using_the_Browser_API by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 15:10:02 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <script async="" src="../../../../../www.google-analytics.com/analytics.js"></script><script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+  
+    
+  
+
+  
+  <title>Using the Browser API</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+  
+    
+    
+    <link href="../../../../../developer.cdn.mozilla.net/static/build/styles/mdn.593f20d8c365.css" rel="stylesheet" type="text/css">
+
+    
+  
+    <link href="../../../../../developer.cdn.mozilla.net/static/build/styles/wiki.13dd9abdfb62.css" rel="stylesheet" type="text/css">
+
+    
+
+    
+
+  <!-- common social tags -->
+  
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../developer.cdn.mozilla.net/static/img/favicon144.a6e4162070f4.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../developer.cdn.mozilla.net/static/img/favicon114.0e9fabd44f85.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../developer.cdn.mozilla.net/static/img/favicon72.8ff9d87c82a0.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../developer.cdn.mozilla.net/static/img/favicon57.a2490b9a2d76.png">
+  <!-- basic favicon -->
+  
+    
+  
+  <link rel="shortcut icon" href="../../../../../developer.cdn.mozilla.net/static/img/favicon32.e02854fdcf73.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/html5shiv.3948ccddab6f.js" charset="utf-8"></script>
+  <![endif]-->
+
+  
+  <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Web/API/Using_the_Browser_API$json">
+  <link rel="canonical" href="Using_the_Browser_API.html">
+
+  
+    
+      <link rel="alternate" hreflang="es" href="https://developer.mozilla.org/es/docs/Web/API/Using_the_Browser_API" title="Using the browser API">
+    
+      <link rel="alternate" hreflang="fr" href="https://developer.mozilla.org/fr/docs/WebAPI/Browser" title="Using the Browser API">
+    
+      <link rel="alternate" hreflang="zh-CN" href="https://developer.mozilla.org/zh-CN/docs/Web/API/Using_the_Browser_API" title="Using the browser API">
+    
+      <link rel="alternate" hreflang="zh-TW" href="https://developer.mozilla.org/zh-TW/docs/WebAPI/Browser" title="Browser API">
+    
+  
+
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="Using the Browser API">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Web/API/Using_the_Browser_API">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Web/API/Using_the_Browser_API">
+  <meta name="twitter:title" content="Using the Browser API">
+  
+  <meta property="og:description" content="The HTML Browser API is an extension of the HTML iframe element that allows web apps to implement browsers or browser-like applications. It was original used in Firefox OS to implement browser applications, and since Firefox 47 it is also available to desktop chrome code.">
+  <meta name="description" content="The HTML Browser API is an extension of the HTML iframe element that allows web apps to implement browsers or browser-like applications. It was original used in Firefox OS to implement browser applications, and since Firefox 47 it is also available to desktop chrome code.">
+  <meta name="twitter:description" content="The HTML Browser API is an extension of the HTML iframe element that allows web apps to implement browsers or browser-like applications. It was original used in Firefox OS to implement browser applications, and since Firefox 47 it is also available to desktop chrome code.">
+  
+
+  
+    
+
+
+
+  
+</head>
+<body data-slug="Web/API/Using_the_Browser_API" contextmenu="edit-history-menu" data-search-url="" class="document  ">
+
+  <script type="text/javascript">
+    (function(win) {
+        'use strict';
+
+        
+            (function(){
+  var FLAGS = {
+    'compat_api': false,'kumaediting': false,'page_move': false,'registration_disabled': false,'search_suggestions': false,'section_edit': false,'spam_admin_override': false,'spam_checks_enabled': true,'spam_spammer_override': false,'spam_submissions_enabled': false,'spam_testing_mode': false,'wiki_samples': true,'wiki_spam_exempted': false,'wiki_spam_training': true
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': true,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+
+        // This needs to be set before ckeditor.js loads
+        window.CKEDITOR_BASEPATH = 'https://developer.mozilla.org/static/js/libs/ckeditor/build/ckeditor/';
+
+        // This represents the site configuration
+        win.mdn = {
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+            
+            notifications: [],
+            
+            // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            },
+            // Assets that need to be dynamically injected
+            assets_disabled: {
+                css: {
+                    'editor-content': ['https://developer.cdn.mozilla.net/static/build/styles/editor-content.3d79df72080d.css',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/styles/wiki-compat-tables.f3a3bfce97a1.css',]
+                },
+                js: {
+                    'syntax-prism': ['https://developer.cdn.mozilla.net/static/build/js/syntax-prism.7a66ddfa68bf.js',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/js/wiki-compat-tables.14ce5dcb2c3d.js',]
+                }
+            }
+        };
+    })(this);
+</script>
+
+  
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+    
+      <li><a href="#q" id="skip-search">Skip to search</a></li>
+    
+  </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+    <a href="https://developer.mozilla.org/en-US/" class="logo">Mozilla Developer Network</a>
+
+    <div id="nav-sec">
+        
+                  <ul>
+                  <li>
+
+    
+
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                Sign in
+              </span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FUsing_the_Browser_API" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/Web/API/Using_the_Browser_API" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/Web/API/Using_the_Browser_API" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FUsing_the_Browser_API" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+              
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+        
+    </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+
+   <!-- end is_zone -->
+
+    <div class="wiki-main-content" id="document-main"><div class="center">
+      
+      <div class="article-meta">
+        <!-- action buttons -->
+        
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+  <ul class="page-buttons" data-sticky="false">
+      
+      <li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+              
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/es/docs/Web/API/Using_the_Browser_API" title="Using the browser API">Español</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/fr/docs/WebAPI/Browser" title="Using the Browser API">Français</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/zh-CN/docs/Web/API/Using_the_Browser_API" title="Using the browser API">中文 (简体)</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/zh-TW/docs/WebAPI/Browser" title="Browser API">正體中文 (繁體)</a></bdi></li>
+                
+              
+
+              
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Using_the_Browser_API$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+              
+            </ul>
+          </div>
+        </div>
+      </li>
+
+      <li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Using_the_Browser_API$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li>
+
+        
+
+        <li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Using_the_Browser_API$history" rel="nofollow, noindex">History</a></li>
+                
+                
+                
+                
+
+                
+
+                
+                
+                
+                <li class="page-print"><a href="#" onclick="return window.print();">Print this article</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+        
+  <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web" rel="v:url" property="v:title">Web technology for developers</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="../API.html" rel="v:url" property="v:title">Web APIs</a></li>
+    
+    <li class="crumb" typeof="v:Breadcrumb" property="v:title">Using the Browser API</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        
+        <div class="contributor-avatars" data-all-text="see all contributors" data-alternate-message="hide contributors" data-has-hidden="1">
+            <ul>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Brettz9" title="View profile: Brettz9">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Brettz9" data-src="../../../../../secure.gravatar.com/avatar/4c750582e23fcf068bdde51cc50416d16c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Brettz9</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills" title="View profile: chrisdavidmills">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="chrisdavidmills" data-src="../../../../../secure.gravatar.com/avatar/deeea0ba82390bd5acc539703c4b0cfb6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">chrisdavidmills</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/wbamberg" title="View profile: wbamberg">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="wbamberg" data-src="../../../../../secure.gravatar.com/avatar/576b94c81f8ad97e58d63f12e5fdb00c6c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">wbamberg</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/jedireza" title="View profile: jedireza">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="jedireza" data-src="../../../../../secure.gravatar.com/avatar/692e5484ba83498566afbe8ef85e21666c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">jedireza</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/teoli" title="View profile: teoli">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="teoli" data-src="../../../../../secure.gravatar.com/avatar/d0d90148e08e3b64ccf75c46f31442c56c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">teoli</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/schien" title="View profile: schien">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="schien" data-src="../../../../../secure.gravatar.com/avatar/327fc1fa4ec8abed1ac864d8af36dc136c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">schien</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/calc" title="View profile: calc">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="calc" data-src="../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">calc</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/fabrice.desre" title="View profile: fabrice.desre">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="fabrice.desre" data-src="../../../../../secure.gravatar.com/avatar/bc49a1bf10e676d3040252dedf2bacc36c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">fabrice.desre</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/kscarfone" title="View profile: kscarfone">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="kscarfone" data-src="../../../../../secure.gravatar.com/avatar/89c1e54a9703125168e40d22316d2b496c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">kscarfone</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/SarahWalrus" title="View profile: SarahWalrus">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="SarahWalrus" data-src="../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">SarahWalrus</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/trevorh" title="View profile: trevorh">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="trevorh" data-src="../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">trevorh</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Jeremie" title="View profile: Jeremie">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Jeremie" data-src="../../../../../secure.gravatar.com/avatar/ea74cf7f528273838138e9ae407cd8ef6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Jeremie</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Sheppy" title="View profile: Sheppy">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Sheppy" data-src="../../../../../secure.gravatar.com/avatar/945076feb88f2d7003891ffbf06f32bf6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Sheppy</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/markg" title="View profile: markg">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="markg" data-src="../../../../../secure.gravatar.com/avatar/a6bdd84b4732a2c3c7ecadd886b3c64a6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">markg</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/ptheriault" title="View profile: ptheriault">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="ptheriault" data-src="../../../../../secure.gravatar.com/avatar/9a0a16bc1cb5b0144e373deb8e3578046c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">ptheriault</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/philikon" title="View profile: philikon">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="philikon" data-src="../../../../../secure.gravatar.com/avatar/1ed548343e31372354d14ea11049990a6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">philikon</noscript></a>
+                </li>
+            
+            </ul>
+        </div>
+        
+
+        <h1>Using the Browser API</h1>
+
+      </div>
+      
+
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-present">
+
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+            
+              <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+              
+              <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#Demo" rel="internal">Demo</a></li><li><a href="#The_HTML" rel="internal">The HTML</a></li><li><a href="#The_manifest.webapp" rel="internal">The manifest.webapp</a></li><li><a href="#The_JavaScript_implementation" rel="internal">The JavaScript implementation</a><ol><li><a href="#Wiring_up_the_back_and_forward_buttons" rel="internal">Wiring up the back and forward buttons</a></li><li><a href="#Enablingdisabling_the_back_and_forward_buttons" rel="internal">Enabling/disabling the back and forward buttons</a></li><li><a href="#Implementing_the_URL_bar" rel="internal">Implementing the URL bar</a></li><li><a href="#Zooming_in_and_out" rel="internal">Zooming in and out</a></li><li><a href="#Controlling_the_stopreload_button" rel="internal">Controlling the stop/reload button</a></li><li><a href="#Implementing_the_search_bar" rel="internal">Implementing the search bar</a></li><li><a href="#Reporting_errors" rel="internal">Reporting errors</a></li></ol></li><li><a href="#Other_methods_and_events" rel="internal">Other methods and events</a></li><li><a href="#See_also" rel="internal">See also</a>
+                </li></ol>
+              </div>
+              
+              </div>
+            
+
+            
+            
+              
+            
+
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-half wiki-column text-content">
+
+              
+
+              
+
+              
+                
+                
+                
+              
+              
+
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                
+                  
+                    <p></p><section id="Quick_Links" class="Quick_links"><!-- --></section><div class="overheadIndicator nonStandard nonStandardHeader"> 
+      <p><strong><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span> Non-standard</strong><br> 
+      This feature is non-standard and is not on a standards track. Do not use it on production sites facing the Web: it will not work for every user. There may also be large incompatibilities between implementations and the behavior may change in the future.</p> 
+      </div><p></p>
+
+<p>The HTML <strong>Browser API</strong> is an extension of the HTML <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe" title="The&nbsp;HTML Inline Frame Element&nbsp;(&lt;iframe&gt;) represents a nested browsing context, effectively embedding another HTML page into the current page. In HTML 4.01, a document may contain a head and a body or a head and a frame-set, but not both a body and a frame-set. However, an &lt;iframe&gt; can be used within a normal document body. Each browsing context has its own session history and active document. The browsing context that contains the embedded content is called the parent browsing context. The top-level browsing context (which has no parent) is typically the browser window."><code>&lt;iframe&gt;</code></a> element that allows web apps to implement browsers or browser-like applications. It was original used in Firefox OS to implement browser applications, and since Firefox 47 it is also available to desktop chrome code.</p>
+
+<p>It consists of two major parts:</p>
+
+<ul>
+ <li>Custom <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe" title="The&nbsp;HTML Inline Frame Element&nbsp;(&lt;iframe&gt;) represents a nested browsing context, effectively embedding another HTML page into the current page. In HTML 4.01, a document may contain a head and a body or a head and a frame-set, but not both a body and a frame-set. However, an &lt;iframe&gt; can be used within a normal document body. Each browsing context has its own session history and active document. The browsing context that contains the embedded content is called the parent browsing context. The top-level browsing context (which has no parent) is typically the browser window."><code>&lt;iframe&gt;</code></a> attributes: by adding a <code><a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe#attr-mozbrowser">mozbrowser</a></code> attribute to the <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe" title="The&nbsp;HTML Inline Frame Element&nbsp;(&lt;iframe&gt;) represents a nested browsing context, effectively embedding another HTML page into the current page. In HTML 4.01, a document may contain a head and a body or a head and a frame-set, but not both a body and a frame-set. However, an &lt;iframe&gt; can be used within a normal document body. Each browsing context has its own session history and active document. The browsing context that contains the embedded content is called the parent browsing context. The top-level browsing context (which has no parent) is typically the browser window."><code>&lt;iframe&gt;</code></a> element we can make it appear like a top-level browser window to the embedded content. This means that <span id="summary_alias_container"><span id="short_desc_nonedit_display"><a href="Window/top.html" title="Returns a reference to the topmost window in the window hierarchy."><code>window.top</code></a>, <a href="Window/parent.html" title="A reference to the parent of the current window or subframe."><code>window.parent</code></a>, <a href="Window/frameElement.html" title="Returns the element (such as &lt;iframe&gt; or &lt;object&gt;) in which the window is embedded, or null if the window is top-level."><code>window.frameElement</code></a>, etc. should <em>not</em> reflect the frame hierarchy.</span></span> We can also embed an open web app in the iframe if we include an additional <code><a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe#attr-mozapp">mozapp</a></code> attribute containing the path to the app's <a href="https://developer.mozilla.org/en-US/docs/Web/Apps/Build/Manifest">manifest</a>.</li>
+ <li>API extensions: the API includes several new methods and events to manipulate and listen for changes to the embedded content's state, interited by the <a href="HTMLIFrameElement.html" title="The HTMLIFrameElement interface provides special properties and methods (beyond those of the HTMLElement interface it also has available to it by inheritance) for manipulating the layout and presentation of inline frame elements."><code>HTMLIFrameElement</code></a> interface.</li>
+</ul>
+
+<p>In addition to that, it's also possible to embed a Firefox OS app in a browser <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe" title="The&nbsp;HTML Inline Frame Element&nbsp;(&lt;iframe&gt;) represents a nested browsing context, effectively embedding another HTML page into the current page. In HTML 4.01, a document may contain a head and a body or a head and a frame-set, but not both a body and a frame-set. However, an &lt;iframe&gt; can be used within a normal document body. Each browsing context has its own session history and active document. The browsing context that contains the embedded content is called the parent browsing context. The top-level browsing context (which has no parent) is typically the browser window."><code>&lt;iframe&gt;</code></a>. In that case the content is loaded within the appropriate app context (such as permissions).</p>
+
+<div class="note">
+<p><strong>Note</strong>: An <code>iframe</code> enhanced by the Browser API is commonly referred to as a "browser <code>iframe</code>". We'll be using this term throughout the current article, and other parts of the documentation.</p>
+</div>
+
+<h2 id="Demo">Demo</h2>
+
+<p>To demonstrate basic usage of this API, we have created a <a href="https://github.com/mdn/browser-api-demo" class="external">simple Browser API demo</a> that provides buttons allowing you to (re)load web pages, stop loading, move forward and back in history, and zoom in and out of the page.</p>
+
+<p><img src="../../../../../mdn.mozillademos.org/files/11883/browser-api-demo.png" style="display: block; height: 533px; margin: 0px auto; width: 300px;" alt=""></p>
+
+<p>To run the demo, the best approach is to clone the GitHub repo locally (or just <a href="https://github.com/mdn/browser-api-demo/archive/master.zip" class="external">download it directly</a> if you don't do GitHub), open WebIDE, open the repo as a Packaged App, then run it either on a simulator or a real device if you have one. See our <a href="https://developer.mozilla.org/en-US/docs/Tools/WebIDE">WebIDE</a> documentation for more assistance if needed.</p>
+
+<p>In any case, you should at least download the repo and refer to the code as you read the sections below.</p>
+
+<h2 id="The_HTML">The HTML</h2>
+
+<p>An <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe" title="The&nbsp;HTML Inline Frame Element&nbsp;(&lt;iframe&gt;) represents a nested browsing context, effectively embedding another HTML page into the current page. In HTML 4.01, a document may contain a head and a body or a head and a frame-set, but not both a body and a frame-set. However, an &lt;iframe&gt; can be used within a normal document body. Each browsing context has its own session history and active document. The browsing context that contains the embedded content is called the parent browsing context. The top-level browsing context (which has no parent) is typically the browser window."><code>&lt;iframe&gt;</code></a> is turned into a browser <code>iframe</code> by setting the <code><a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe#attr-mozbrowser">mozbrowser</a></code> attribute on it:</p>
+
+<pre class="brush: html">&lt;iframe src="http://mozilla.org" mozbrowser&gt;</pre>
+
+<p>Note that in order to embed an Open Web App, you have to also include a <code><a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe#attr-mozapp">mozapp</a></code> attribute, containing the path to the app's manifest:</p>
+
+<pre class="brush: html">&lt;iframe src="http://hostname.tld" mozapp='http://path/to/manifest.webapp' mozbrowser&gt;</pre>
+
+<p>In addition, the <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe" title="The&nbsp;HTML Inline Frame Element&nbsp;(&lt;iframe&gt;) represents a nested browsing context, effectively embedding another HTML page into the current page. In HTML 4.01, a document may contain a head and a body or a head and a frame-set, but not both a body and a frame-set. However, an &lt;iframe&gt; can be used within a normal document body. Each browsing context has its own session history and active document. The browsing context that contains the embedded content is called the parent browsing context. The top-level browsing context (which has no parent) is typically the browser window."><code>&lt;iframe&gt;</code></a> can be loaded in its own child process — separate to the page embedding this frame — by including the <code><a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe#attr-remote">remote</a></code> attribute.</p>
+
+<pre class="brush: html">&lt;iframe src="http://hostname.tld" mozbrowser remote&gt;</pre>
+
+<div class="warning">
+<p><strong>Warning:</strong> This last attribute is necessary for security reasons if you plan to load content from an untrusted/unknown origin. If you don't use it, you run the risk of your application being compromised by a malicious web site.</p>
+</div>
+
+<p>Aside from the <code>iframe</code>, there are some basic controls: <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button" title="The HTML &lt;button&gt; Element represents a clickable button."><code>&lt;button&gt;</code></a> elements, a simple <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/form" title="The HTML &lt;form&gt; element represents a document section that contains interactive controls to submit information to a web server."><code>&lt;form&gt;</code></a> to implement the browser controls, and a search bar. The search bar also contains buttons, as well as a form to type search requests into. You can see the <a href="https://github.com/mdn/browser-api-demo/blob/master/index.html" class="external">full HTML listing</a> here.</p>
+
+<h2 id="The_manifest.webapp">The manifest.webapp</h2>
+
+<p>There are a few special considerations needed for the <a href="https://developer.mozilla.org/en-US/docs/Web/Apps/Build/Manifest">app manifest</a> of any Firefox OS app that implements functionality based on the Browser API (see <a href="https://github.com/mdn/browser-api-demo/blob/master/manifest.webapp" class="external">our manifest source</a> here.)</p>
+
+<p>Any application that wants to embed a browser <code>iframe</code> must have the <code>browser</code> permission set:</p>
+
+<pre class="brush: json">{
+  "permissions": {
+    "browser": {}
+  }
+}</pre>
+
+<p>Because it is a privileged API, you need to also specify this, in the <code>type</code> field:</p>
+
+<pre class="brush: json">"type": "privileged"</pre>
+
+<p>Note that if you wish to embed an open web app in your browser <code>iframe</code>, you must also set the <code>embed-apps</code> permission:</p>
+
+<pre class="brush: json">{
+  "permissions": {
+    "browser": {},
+    "embed-apps": {}
+  }
+}</pre>
+
+<h2 id="The_JavaScript_implementation">The JavaScript implementation</h2>
+
+<p>To wire up the functionality required by our simple browser, we've written some basic JavaScript (see the <a href="https://github.com/mdn/browser-api-demo/blob/master/main.js" class="external">full JavaScript listing</a>.)</p>
+
+<h3 id="Wiring_up_the_back_and_forward_buttons">Wiring up the back and forward buttons</h3>
+
+<p>Early on in the code we implement two simple event listeners to move the browser back and forward in history when the relevant buttons are pressed:</p>
+
+<pre class="brush: js">back.addEventListener('touchend',function() {
+  browser.goBack();
+});
+
+fwd.addEventListener('touchend',function() {
+  browser.goForward();
+});</pre>
+
+<p>The functions can be handled using the Browser API <a href="HTMLIFrameElement/goBack.html" title="The goBack() method of the HTMLIFrameElement interface is used to navigate backwards in the browser &lt;iframe&gt;'s history."><code>HTMLIFrameElement.goBack()</code></a> and <a href="HTMLIFrameElement/goForward.html" title="The goForward() method of the HTMLIFrameElement is used to navigate forward in the browser &lt;iframe&gt;'s history."><code>HTMLIFrameElement.goForward()</code></a> methods. You'll also notice that we're also firing these functions on the <code><a href="../Events/touchend.html" title="/en-US/docs/Web/Events/touchend">touchend</a></code> event, which is effective as Firefox OS devices are generally touchscreen.</p>
+
+<h3 id="Enablingdisabling_the_back_and_forward_buttons">Enabling/disabling the back and forward buttons</h3>
+
+<p>You will also notice after a bit of surfing that the back and forward buttons are disabled when you cannot move backwards/forwards, and enabled when you can. We did this with the following functions:</p>
+
+<pre class="brush: js">function canMoveBwd() {
+  var request = browser.getCanGoBack();
+
+  request.onsuccess = function() {
+    if (request.result) {
+      back.disabled = false;
+      console.log("It's possible to navigate the history backward.");
+    } else {
+      back.disabled = true;
+      console.log("It's not possible to navigate the history backward.");
+    }
+  }
+}
+
+function canMoveFwd() {
+  var request = browser.getCanGoForward();
+
+  request.onsuccess = function() {
+    if (request.result) {
+      fwd.disabled = false;
+      console.log("It's possible to navigate the history forward.");
+    } else {
+      fwd.disabled = true;
+      console.log("It's not possible to navigate the history forward.");
+    }
+  }
+}</pre>
+
+<p>So here we have functions to detect whether we can navigate forwards/backwards in the history at any point. These use <a href="HTMLIFrameElement/getCanGoBack.html" title="The getCanGoBack() method of the HTMLIFrameElement interface is used to indicate whether it's possible to go back in the navigation history of the browser &lt;iframe&gt;."><code>HTMLIFrameElement.getCanGoBack()</code></a> and <a href="HTMLIFrameElement/getCanGoForward.html" title="The getCanGoForward() method of the HTMLIFrameElement is used to indicate whether it's possible to go forward in the navigation history of the browser &lt;iframe&gt;."><code>HTMLIFrameElement.getCanGoForward()</code></a>, which return a <a href="../../JavaScript/Reference/Global_Objects/Boolean.png" title="The Boolean object is an object wrapper for a boolean value."><code>Boolean</code></a> defining whether backward/forward navigation is possible at this point in the history. If <code>true</code> is returned, the relevant button is disabled, and if <code>false</code> is returned, the relevant button is enabled.</p>
+
+<p>Note that <a href="../JavaScript/Reference/Global_Objects/Promise.html" title="The Promise object is used for deferred and asynchronous computations. A Promise represents an operation that hasn't completed yet, but is expected in the future."><code>Promise</code></a> versions of Browser API DOM request methods also exist, so you can use async promise style syntax if you so wish. For example:</p>
+
+<pre class="brush: js">function canMoveBwd() {
+  browser.getCanGoBack().then(function(result) {
+    if (result) {
+      back.disabled = false;
+      console.log("It's possible to navigate the history backward.");
+    } else {
+      back.disabled = true;
+      console.log("It's not possible to navigate the history backward.");
+    }
+  });
+}</pre>
+
+<h3 id="Implementing_the_URL_bar">Implementing the URL bar</h3>
+
+<p>The URL bar for our simple browser is a <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/form" title="The HTML &lt;form&gt; element represents a document section that contains interactive controls to submit information to a web server."><code>&lt;form&gt;</code></a> containing a single text <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input" title="The HTML element &lt;input&gt; is used to create interactive controls for web-based forms in order to accept data from the user. How an &lt;input&gt; works varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a>. When you tap the URL bar, you can enter a URL using the built-in Firefox OS keyboard (although note that we haven't implemented anything sophisticated in this app, like autofilling the <code>http://</code>, etc.). When you press the keyboard's return button, the 'submit' event is fired, which we handle like this:</p>
+
+<pre class="brush: js">urlForm.addEventListener('submit',function(e) {
+  e.preventDefault();
+  browser.src = urlBar.value;
+  urlBar.blur();
+});</pre>
+
+<p>We first call <code><a href="Event/preventDefault.html">preventDefault()</a></code> to stop the form just submitting and reloading the page — which is really not what we want. We then set the browser <code>iframe</code>'s<code> src</code> attribute to equal the value of the URL bar, which causes the new URL to be loaded in the <code>iframe</code>. Finally, we call <code><a href="HTMLElement/blur.html">blur()</a></code> on the url bar to stop focusing it, so the keyboard moves off the screen, allowing us to get our full screen view back.</p>
+
+<p>There's another event listener added later on in the code that listens for the <code><a href="../Events/mozbrowserlocationchange.html" title="/en-US/docs/Web/Events/mozbrowserlocationchange">mozbrowserlocationchange</a></code> event. When this fires, we set the value inside the URL bar input to be equal to the event object <code>detail</code> property — this is so that the URL displayed continues to match the website being shown when the user navigates back and forth through the history.</p>
+
+<pre class="brush: js">browser.addEventListener('mozbrowserlocationchange', function (e) {
+  urlBar.value = e.detail;
+});</pre>
+
+<h3 id="Zooming_in_and_out">Zooming in and out</h3>
+
+<p>The browser content can be programmatically zoomed in and out using the <a href="HTMLIFrameElement/zoom.html" title="The zoom() method of the HTMLIFrameElement interface changes the zoom factor of the browser &lt;iframe&gt;'s content. This is particularly useful for zooming in/out on non-touch-enabled devices."><code>HTMLIFrameElement.zoom()</code></a> method. This takes a single method — a zoom factor — which dictates the percentage to zoom in or out by. For example, 1.1 would mean "zoom in by 10%", and 0.9 would mean "zoom out by 10%".</p>
+
+<pre class="brush: js">var zoomFactor = 1;
+
+  ...
+
+zoomIn.addEventListener('touchend',function() {
+  zoomFactor += 0.1;
+  browser.zoom(zoomFactor);
+});
+
+zoomOut.addEventListener('touchend',function() {
+  zoomFactor -= 0.1;
+  browser.zoom(zoomFactor);
+});</pre>
+
+<h3 id="Controlling_the_stopreload_button">Controlling the stop/reload button</h3>
+
+<p>Next, let's talk about the stop/reload button. As in a traditional browser, this is a single button that acts as a reload button when the page has finished loading, and a stop button while the page is loading (each with a different icon displayed). This is implemented in our sample app with the following functions:</p>
+
+<pre class="brush: js">browser.addEventListener('mozbrowserloadstart',function() {
+  stopReload.textContent = 'x';
+});
+
+browser.addEventListener('mozbrowserloadend',function(e) {
+&nbsp; canMoveBwd();
+&nbsp; canMoveFwd();
+&nbsp; stopReload.textContent = 'R';
+&nbsp; console.log(e.detail.backgroundColor);
+&nbsp; controls.style.background = e.detail.backgroundColor;
+});</pre>
+
+<p>When the <code><a href="../Events/mozbrowserloadstart.html" title="/en-US/docs/Web/Events/mozbrowserloadstart">mozbrowserloadstart</a></code> event fires, the latest page request has started loading, and we change the button to a cross to indicate "stop". When the <code><a href="../Events/mozbrowserloadend.html" title="/en-US/docs/Web/Events/mozbrowserloadend">mozbrowserloadend</a></code> event fires, the latest page request has finished loading, and at this point we want to change the icon back to the reload icon (in this case we are just using a capital "R"). Notice that this is also where we call the <code>canMoveBwd()</code> and <code>canMoveFwd()</code> functions we discussed earlier — it makes sense to update the status of the back and forward buttons after each page reload.</p>
+
+<p>In addition, the background of the controls UI bar is changed to the background color of the site that has just loaded, to provide a more integrated experience — this can be read out of the event object's <code>e.detail.backgroundColor</code> value. When the front page of <code>https://developer.mozilla.org</code> is loaded, for example, the <code>e.detail.backgroundColor</code> value reported is <code>rgb(0, 83, 159)</code>.</p>
+
+<p>Back to the stop/reload button — updating the icon is nice, but we also need to update the functionality that is invoked when each icon is displayed. We do this with the following function, which runs the <a href="HTMLIFrameElement/stop.html" title="The stop() method of the HTMLIFrameElement interface is used to stop loading the content of the &lt;iframe&gt;."><code>HTMLIFrameElement.stop()</code></a> method to stop the page loading if the button is displaying a cross, and the <a href="HTMLIFrameElement/reload.html" title="The reload() method of the HTMLIFrameElement interface is used to reload the content of the &lt;iframe&gt;."><code>HTMLIFrameElement.reload()</code></a> method to reload the page otherwise.</p>
+
+<pre class="brush: js">stopReload.addEventListener('touchend',function() {
+  if(stopReload.textContent === 'x') {
+    browser.stop();
+  } else {
+    browser.reload();
+  }
+});</pre>
+
+<h3 id="Implementing_the_search_bar">Implementing the search bar</h3>
+
+<p>Let's now turn our attention to implementing browser search using the Browser API. Tap the "S" button and try it out. Try searching for "Firefox" on the default page when the app first loads.</p>
+
+<p><img src="../../../../../mdn.mozillademos.org/files/11885/browser-api-search.png" style="display: block; height: 300px; margin: 0px auto; width: 533px;" alt=""></p>
+
+<p>So how do we do this? First, we declare a <code>searchActive</code> variable as <code>false</code>, which influences behaviour later on. Then, we disable the "previous" and "next" search item buttons so that they don't run anything unless there are search items to cycle between.</p>
+
+<pre class="brush: js">var searchActive = false;
+prev.disabled = true;
+next.disabled = true;</pre>
+
+<p>Next, we add an event listener to the <code>searchForm</code> so that when it is submitted, the <a href="HTMLIFrameElement/findAll.html" title="The findAll() method of the HTMLIFrameElement searches for a string in a&nbsp;browser&nbsp;&lt;iframe&gt;'s text content; if found, the first instance of the string relative to the caret position will be highlighted."><code>HTMLIFrameElement.findAll()</code></a> method is used to do a search for the string entered into the search input element (<code>searchBar</code>) within the text of the current page (the second parameter can be changed to <code>'case-insensitive'</code> if you want a case-insensitive search.) We then enable the previous and next buttons, set <code>searchActive</code> to <code>true</code>, and <code><a href="HTMLElement/blur.html">blur()</a></code> the search bar to make the keyboard disappear and stop taking up our screen once the search is submitted.</p>
+
+<pre class="brush: js">searchForm.addEventListener('submit',function(e) {
+  e.preventDefault();
+  browser.findAll(searchBar.value, 'case-sensitive');
+  searchActive = true;
+  prev.disabled = false;
+  next.disabled = false;
+  searchBar.blur();
+});</pre>
+
+<p>With this all done, you'll see your search results are highlighted; you can cycle through these using the <a href="HTMLIFrameElement/findNext.html" title="The findNext() method of the HTMLIFrameElement highlights the next or previous instance of a search result after a findAll() search has been carried out."><code>HTMLIFrameElement.findNext()</code></a> method (specify <code>forward</code> and <code>backward</code> to go in either direction through the results), which is what our next two event listeners do:</p>
+
+<pre class="brush: js">prev.addEventListener('touchend',function() {
+  browser.findNext("backward");
+});
+
+next.addEventListener('touchend',function() {
+  browser.findNext("forward");
+});</pre>
+
+<p>The last event listener in this section controls what happens when the search toggle button is pressed. We switch the class values on the element to toggle the show/hide. If <code>searchActive</code> is <code>true</code>, meaning that a search has been done, we want to disable the search as we hide the search options — we disable the buttons, make <code>searchActive false</code>, clear the entered search value, and run <a href="HTMLIFrameElement/clearMatch.html" title="The clearMatch() method of the HTMLIFrameElement clears any content highlighted by findAll() or findNext()."><code>HTMLIFrameElement.clearMatch()</code></a>, which gets rid of any stored/highlighted search results from the browser.</p>
+
+<pre class="brush: js">searchToggle.addEventListener('touchend',function() {
+  if(search.getAttribute('class') === 'search') {
+    search.setAttribute('class', 'search shifted');
+  } else if(search.getAttribute('class') === 'search shifted') {
+    search.setAttribute('class', 'search');
+    if(searchActive) {
+      browser.clearMatch();
+      searchActive = false;
+      prev.disabled = true;
+      next.disabled = true;
+      searchBar.value = '';
+    }
+  }
+});</pre>
+
+<p>Note that whenever one of the search-related methods is invoked, a <code><a href="../Events/mozbrowserfindchange.html" title="/en-US/docs/Web/Events/mozbrowserfindchange">mozbrowserfindchange</a></code> event is fired to allow you to react to search changes in a more precise way if desired:</p>
+
+<pre class="brush: js">//browser.addEventListener('mozbrowserfindchange', function(e) {
+ // can react to find changes if required
+//})</pre>
+
+<div class="note">
+<p><strong>Note</strong>: These search-related methods only work in Firefox 2.5+.</p>
+</div>
+
+<h3 id="Reporting_errors">Reporting errors</h3>
+
+<p>We've got one more piece of code to mention from our source:</p>
+
+<pre class="brush: js">browser.addEventListener('mozbrowsererror', function (e) {
+  console.log("Loading error: " + e.detail);
+});</pre>
+
+<p>This simple listener logs an error message to the console when an error with the browser <a href="Iframe.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>iframe</code></a> is encountered. Note that this doesn't include simple errors due to incorrect URLs being entered. See the <code><a href="../Events/mozbrowsererror.html" title="/en-US/docs/Web/Events/mozbrowsererror">mozbrowsererror</a></code> page for more details.</p>
+
+<h2 id="Other_methods_and_events">Other methods and events</h2>
+
+<p>We've only covered a fraction of the new methods and events that the Browser API adds. There are many others covering a variety of functions and edge case requirements:</p>
+
+<ul>
+ <li>For the full list of methods, check out the <a href="HTMLIFrameElement.html" title="The HTMLIFrameElement interface provides special properties and methods (beyond those of the HTMLElement interface it also has available to it by inheritance) for manipulating the layout and presentation of inline frame elements."><code>HTMLIFrameElement</code></a> page.</li>
+ <li>For the full list of events, see the <a href="../../Mozilla/Gecko/Chrome/API/Browser_API.html#Events">Browser API landing page events section</a>.</li>
+</ul>
+
+<h2 id="See_also">See also</h2>
+
+<ul>
+ <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe" title="The&nbsp;HTML Inline Frame Element&nbsp;(&lt;iframe&gt;) represents a nested browsing context, effectively embedding another HTML page into the current page. In HTML 4.01, a document may contain a head and a body or a head and a frame-set, but not both a body and a frame-set. However, an &lt;iframe&gt; can be used within a normal document body. Each browsing context has its own session history and active document. The browsing context that contains the embedded content is called the parent browsing context. The top-level browsing context (which has no parent) is typically the browser window."><code>&lt;iframe&gt;</code></a></li>
+ <li><a href="HTMLIFrameElement.html" title="The HTMLIFrameElement interface provides special properties and methods (beyond those of the HTMLElement interface it also has available to it by inheritance) for manipulating the layout and presentation of inline frame elements."><code>HTMLIFrameElement</code></a></li>
+</ul>
+                  
+                
+              </article>
+
+              
+
+    
+    
+    
+
+    
+    
+    
+
+    <div class="share">
+        <strong>Share:</strong>
+        <ul>
+            <li><a href="http://twitter.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FAPI%2FUsing_the_Browser_API%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dtwitter.com&amp;text=I+learned+about+Using+the+Browser+API+on+MDN." target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/API/Using_the_Browser_API?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=twitter.com" data-title="I learned about Using the Browser API on MDN." class="share-link twitter"><i aria-hidden="true" class="icon-twitter"></i>Twitter</a></li>
+            <li><a href="http://facebook.com/sharer.php?s=100&amp;p[url]=https://developer.mozilla.org/en-US/docs/Web/API/Using_the_Browser_API?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/API/Using_the_Browser_API?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" data-title="I learned about Using the Browser API on MDN." class="share-link facebook"><i aria-hidden="true" class="icon-facebook"></i>Facebook</a></li>
+            <li><a href="https://plus.google.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FAPI%2FUsing_the_Browser_API%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dplus.google.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/API/Using_the_Browser_API?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=plus.google.com" data-title="I learned about Using the Browser API on MDN." class="share-link gplus"><i aria-hidden="true" class="icon-google-plus"></i>Google+</a></li>
+        </ul>
+    </div>
+
+              
+
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                  
+                  
+  <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags icon-fw"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+      
+        <li><a href="../../tag/API.html">API</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/B2G">B2G</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Browser">Browser</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Guide">Guide</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Non-standard">Non-standard</a></li>
+      
+    </ul>
+  </div>
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-group icon-fw"></i>&nbsp;<strong>Contributors to this page:</strong> 
+        <a href="https://developer.mozilla.org/en-US/profiles/Brettz9">Brettz9</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills">chrisdavidmills</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/wbamberg">wbamberg</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/jedireza">jedireza</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/teoli">teoli</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/schien">schien</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/calc">calc</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/fabrice.desre">fabrice.desre</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/kscarfone">kscarfone</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/SarahWalrus">SarahWalrus</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/trevorh">trevorh</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Jeremie">Jeremie</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Sheppy">Sheppy</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/markg">markg</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/ptheriault">ptheriault</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/philikon">philikon</a>
+    
+                    </div>
+                  
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o icon-fw"></i>&nbsp;<strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/Brettz9">Brettz9</a>,
+                      <time datetime="2016-04-07T17:29:39-07:00">Apr 7, 2016, 5:29:39 PM</time>
+                    </div>
+                  
+                </div>
+              
+            </div>
+
+            
+              <!-- quick links and zone subnav strip -->
+              <div id="wiki-left" class="column-strip wiki-column">
+
+              
+
+                
+
+                
+                  <!-- quick links -->
+                  
+  <div class="quick-links" id="quick-links">
+    <div class="title see-also">See also</div>
+    <ol><li data-default-state="open"><a href="#"><strong>Methods</strong></a><ol><li><a href="HTMLIFrameElement/addNextPaintListener.html"><code>HTMLIFrameElement.addNextPaintListener()</code></a></li><li><a href="HTMLIFrameElement/clearMatch.html"><code>HTMLIFrameElement.clearMatch()</code></a></li><li><a href="HTMLIFrameElement/download.html"><code>HTMLIFrameElement.download()</code></a></li><li><a href="HTMLIFrameElement/executeScript.html"><code>HTMLIFrameElement.executeScript()</code></a></li><li><a href="HTMLIFrameElement/findAll.html"><code>HTMLIFrameElement.findAll()</code></a></li><li><a href="HTMLIFrameElement/findNext.html"><code>HTMLIFrameElement.findNext()</code></a></li><li><a href="HTMLIFrameElement/getActive.html"><code>HTMLIFrameElement.getActive()</code></a></li><li><a href="HTMLIFrameElement/getCanGoBack.html"><code>HTMLIFrameElement.getCanGoBack()</code></a></li><li><a href="HTMLIFrameElement/getCanGoForward.html"><code>HTMLIFrameElement.getCanGoForward()</code></a></li><li><a href="HTMLIFrameElement/getContentDimensions.html"><code>HTMLIFrameElement.getContentDimensions()</code></a></li><li><a href="HTMLIFrameElement/getMainfest.html"><code>HTMLIFrameElement.getMainfest()</code></a></li><li><a href="HTMLIFrameElement/getMuted.html"><code>HTMLIFrameElement.getMuted()</code></a></li><li><a href="HTMLIFrameElement/getScreenshot.html"><code>HTMLIFrameElement.getScreenshot()</code></a></li><li><a href="HTMLIFrameElement/getStructuredData.html"><code>HTMLIFrameElement.getStructuredData()</code></a></li><li><a href="HTMLIFrameElement/goBack.html"><code>HTMLIFrameElement.goBack()</code></a></li><li><a href="HTMLIFrameElement/goForward.html"><code>HTMLIFrameElement.goForward()</code></a></li><li><a href="HTMLIFrameElement/getVisible.html"><code>HTMLIFrameElement.getVisible()</code></a></li><li><a href="HTMLIFrameElement/getVolume.html"><code>HTMLIFrameElement.getVolume()</code></a></li><li><a href="HTMLIFrameElement/mute.html"><code>HTMLIFrameElement.mute()</code></a></li><li><a href="HTMLIFrameElement/purgeHistory.html"><code>HTMLIFrameElement.purgeHistory()</code></a></li><li><a href="HTMLIFrameElement/reload.html"><code>HTMLIFrameElement.reload()</code></a></li><li><a href="HTMLIFrameElement/removeNextPaintListener.html"><code>HTMLIFrameElement.removeNextPaintListener()</code></a></li><li><a href="HTMLIFrameElement/sendMouseEvent.html"><code>HTMLIFrameElement.sendMouseEvent()</code></a></li><li><a href="HTMLIFrameElement/sendTouchEvent.html"><code>HTMLIFrameElement.sendTouchEvent()</code></a></li><li><a href="HTMLIFrameElement/setActive.html"><code>HTMLIFrameElement.setActive()</code></a></li><li><a href="HTMLIFrameElement/setInputMethodActive.html"><code>HTMLIFrameElement.setInputMethodActive()</code></a></li><li><a href="HTMLIFrameElement/setNFCFocus-2.html"><code>HTMLIFrameElement.setNFCFocus()</code></a></li><li><a href="HTMLIFrameElement/setVisible.html"><code>HTMLIFrameElement.setVisible()</code></a></li><li><a href="HTMLIFrameElement/setVolume.html"><code>HTMLIFrameElement.setVolume()</code></a></li><li><a href="HTMLIFrameElement/stop.html"><code>HTMLIFrameElement.stop()</code></a></li><li><a href="HTMLIFrameElement/unmute.html"><code>HTMLIFrameElement.unmute()</code></a></li><li><a href="HTMLIFrameElement/zoom.html"><code>HTMLIFrameElement.zoom()</code></a></li></ol></li><li data-default-state="open"><a href="#"><strong>Events</strong></a><ol><li><a href="../Events/mozbrowseractivitydone.html"><code>mozbrowseractivitydone</code></a></li><li><a href="../Events/mozbrowserasyncscroll.html"><code>mozbrowserasyncscroll</code></a></li><li><a href="../Events/mozbrowseraudioplaybackchange.html"><code>mozbrowseraudioplaybackchange</code></a></li><li><a href="../Events/mozbrowsercaretstatechanged.html"><code>mozbrowsercaretstatechanged</code></a></li><li><a href="../Events/mozbrowserclose.html"><code>mozbrowserclose</code></a></li><li><a href="../Events/mozbrowsercontextmenu.html"><code>mozbrowsercontextmenu</code></a></li><li><a href="../Events/mozbrowserdocumentfirstpaint.html"><code>mozbrowserdocumentfirstpaint</code></a></li><li><a href="../Events/mozbrowsererror.html"><code>mozbrowsererror</code></a></li><li><a href="../Events/mozbrowserfindchange.html"><code>mozbrowserfindchange</code></a></li><li><a href="../Events/mozbrowserfirstpaint.html"><code>mozbrowserfirstpaint</code></a></li><li><a href="../Events/mozbrowsericonchange.html"><code>mozbrowsericonchange</code></a></li><li><a href="../Events/mozbrowserloadend.html"><code>mozbrowserloadend</code></a></li><li><a href="../Events/mozbrowserloadstart.html"><code>mozbrowserloadstart</code></a></li><li><a href="../Events/mozbrowserlocationchange.html"><code>mozbrowserlocationchange</code></a></li><li><a href="../Events/mozbrowsermanifestchange.html"><code>mozbrowsermanifestchange</code></a></li><li><a href="../Events/mozbrowsermetachange.html"><code>mozbrowsermetachange</code></a></li><li><a href="../Events/mozbrowseropensearch.html"><code>mozbrowseropensearch</code></a></li><li><a href="../Events/mozbrowseropentab.html"><code>mozbrowseropentab</code></a></li><li><a href="../Events/mozbrowseropenwindow.html"><code>mozbrowseropenwindow</code></a></li><li><a href="../Events/mozbrowserresize.html"><code>mozbrowserresize</code></a></li><li><a href="../Events/mozbrowserscroll.html"><code>mozbrowserscroll</code></a></li><li><a href="../Events/mozbrowserscrollareachanged.html"><code>mozbrowserscrollareachanged</code></a></li><li><a href="../Events/mozbrowserscrollviewchange.html"><code>mozbrowserscrollviewchange</code></a></li><li><a href="../Events/mozbrowsersecuritychange.html"><code>mozbrowsersecuritychange</code></a></li><li><a href="../Events/mozbrowserselectionstatechanged.html"><code>mozbrowserselectionstatechanged</code></a></li><li><a href="../Events/mozbrowsershowmodalprompt.html"><code>mozbrowsershowmodalprompt</code></a></li><li><a href="../Events/mozbrowsertitlechange.html"><code>mozbrowsertitlechange</code></a></li><li><a href="../Events/mozbrowserusernameandpasswordrequired.html"><code>mozbrowserusernameandpasswordrequired</code></a></li><li><a href="../Events/mozbrowservisibilitychange.html"><code>mozbrowservisibilitychange</code></a></li></ol></li></ol>
+  </div>
+                
+
+                <!-- approvals -->
+                
+
+              
+
+              </div>
+            
+          </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Web/API/Using_the_Browser_API$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Web/API/Using_the_Browser_API$history" label="View page history"></menuitem>
+  </menu>
+
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+        
+        <div class="contentinfo">
+          <p>© 2005-2016 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>
+          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+        
+        </div>
+      </div>
+      <div class="column-strip">
+        
+          
+  
+    <form class="languages go" method="get" action="https://developer.mozilla.org/en-US/docs/Web">
+      <label for="language">Other languages:</label>
+      <select id="language" class="wiki-l10n" name="next" dir="ltr">
+        <option value="/en-US/docs/Web/API/Using_the_Browser_API" selected="">
+          English (US)
+        </option>
+        
+          <option value="/es/docs/Web/API/Using_the_Browser_API">
+            Español
+          </option>
+          <option value="/fr/docs/WebAPI/Browser">
+            Français
+          </option>
+          <option value="/zh-CN/docs/Web/API/Using_the_Browser_API">
+            中文 (简体)
+          </option>
+          <option value="/zh-TW/docs/WebAPI/Browser">
+            正體中文 (繁體)
+          </option>
+      </select>
+      <noscript>&lt;button type="submit"&gt;Go&lt;/button&gt;</noscript>
+    </form>
+  
+
+        
+      </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+  
+    
+    <!--[if lte IE 8]><script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/selectivizr.091e18cf669b.js" charset="utf-8"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script type="text/javascript" src="../../../../../developer.cdn.mozilla.net/static/build/js/main.a7b27a25fb9c.js" charset="utf-8"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+    
+    <script async="" type="text/javascript" src="../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../developer.cdn.mozilla.net/static/build/js/syntax-prism-min.js" charset="utf-8"></script><script type="text/javascript" src="../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../developer.cdn.mozilla.net/static/build/js/wiki.bd71ca9fd27d.js" charset="utf-8" id="wikiscript"></script>
+
+  
+
+  <script async="" type="text/javascript" src="../../../../../developer.cdn.mozilla.net/static/build/js/helpfulness.7b208a764d28.js" charset="utf-8"></script>
+
+  
+
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/Using_the_Browser_API by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 15:10:05 GMT -->
+</body></html>

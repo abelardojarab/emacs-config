@@ -1,0 +1,86 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml">
+<!-- Mirrored from stat.ethz.ch/R-manual/R-patched/library/base/html/stopifnot.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 04 May 2016 16:35:57 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head><title>Ensure the Truth of R Expressions</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for stopifnot {base}"><tr><td>stopifnot {base}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Ensure the Truth of R Expressions</h2>
+
+<h3>Description</h3>
+
+<p>If any of the expressions in <code>...</code> are not <code><a href="all.html">all</a></code>
+<code>TRUE</code>, <code><a href="stop.html">stop</a></code> is called, producing an error message
+indicating the <em>first</em> of the elements of <code>...</code> which were
+not true.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+stopifnot(...)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>...</code></td>
+<td>
+<p>any number of (<code><a href="logical.html">logical</a></code>) <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> expressions,
+which should evaluate to <code><a href="logical.html">TRUE</a></code>.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>This function is intended for use in regression tests or also argument
+checking of functions, in particular to make them easier to read.
+</p>
+<p><code>stopifnot(A, B)</code> is conceptually equivalent to
+</p>
+<pre>{   if(any(is.na(A)) || !all(A)) stop(...) ;
+      if(any(is.na(B)) || !all(B)) stop(...) }
+</pre>
+
+
+<h3>Value</h3>
+
+<p>(<code><a href="NULL.html">NULL</a></code> if all statements in <code>...</code> are <code>TRUE</code>.)
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="stop.html">stop</a></code>, <code><a href="warning.html">warning</a></code>;
+<code><a href="../../tools/html/assertCondition.html">assertCondition</a></code> in package <span class="pkg">tools</span> complements
+<code>stopifnot()</code> for testing warnings and errors.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+stopifnot(1 == 1, all.equal(pi, 3.14159265), 1 &lt; 2) # all TRUE
+
+m &lt;- matrix(c(1,3,3,1), 2, 2)
+stopifnot(m == t(m), diag(m) == rep(1, 2)) # all(.) |=&gt;  TRUE
+
+op &lt;- options(error = expression(NULL))
+# "disable stop(.)"  &lt;&lt; Use with CARE! &gt;&gt;
+
+stopifnot(all.equal(pi, 3.141593),  2 &lt; 2, all(1:10 &lt; 12), "a" &lt; "b")
+stopifnot(all.equal(pi, 3.1415927), 2 &lt; 2, all(1:10 &lt; 12), "a" &lt; "b")
+
+options(op)  # revert to previous error handler
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>base</em> version 3.2.2 <a href="00Index.html">Index</a>]</div>
+</body>
+<!-- Mirrored from stat.ethz.ch/R-manual/R-patched/library/base/html/stopifnot.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 04 May 2016 16:35:57 GMT -->
+</html>

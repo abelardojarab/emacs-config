@@ -1,0 +1,166 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml">
+<!-- Mirrored from stat.ethz.ch/R-manual/R-patched/library/base/html/Quotes.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 04 May 2016 16:35:56 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head><title>Quotes</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for Quotes {base}"><tr><td>Quotes {base}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Quotes</h2>
+
+<h3>Description</h3>
+
+<p>Descriptions of the various uses of quoting in <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span>.
+</p>
+
+
+<h3>Details</h3>
+
+<p>Three types of quotes are part of the syntax of <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span>: single and double
+quotation marks and the backtick (or back quote, <span class="samp">`</span>).  In
+addition, backslash is used to escape the following character
+inside character constants.
+</p>
+
+
+<h3>Character constants</h3>
+
+<p>Single and double quotes delimit character constants.  They can be used
+interchangeably but double quotes are preferred (and character
+constants are printed using double quotes), so single quotes are
+normally only used to delimit character constants containing double
+quotes.
+</p>
+<p>Backslash is used to start an escape sequence inside character
+constants.  Escaping a character not in the following table is an
+error.
+</p>
+<p>Single quotes need to be escaped by backslash in single-quoted
+strings, and double quotes in double-quoted strings.
+</p>
+
+<table summary="Rd table">
+<tr>
+ <td style="text-align: left;">
+    <span class="samp">\n</span></td><td style="text-align: left;"> newline</td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    <span class="samp">\r</span></td><td style="text-align: left;"> carriage return</td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    <span class="samp">\t</span></td><td style="text-align: left;"> tab</td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    <span class="samp">\b</span></td><td style="text-align: left;"> backspace</td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    <span class="samp">\a</span></td><td style="text-align: left;"> alert (bell)</td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    <span class="samp">\f</span></td><td style="text-align: left;"> form feed</td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    <span class="samp">\v</span></td><td style="text-align: left;"> vertical tab</td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    <span class="samp">\\</span></td><td style="text-align: left;"> backslash <span class="samp">\</span></td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    <span class="samp">\'</span></td><td style="text-align: left;"> ASCII apostrophe <span class="samp">'</span></td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    <span class="samp">\"</span></td><td style="text-align: left;"> ASCII quotation mark <span class="samp">"</span></td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    <span class="samp">\`</span></td><td style="text-align: left;"> ASCII grave accent (backtick) <span class="samp">`</span></td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    <span class="samp">\nnn</span></td><td style="text-align: left;"> character with given octal code (1, 2 or 3 digits)</td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    <span class="samp">\xnn</span></td><td style="text-align: left;"> character with given hex code (1 or 2 hex digits)</td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    <span class="samp">\unnnn</span></td><td style="text-align: left;"> Unicode character with given code (1--4 hex digits)</td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+    <span class="samp">\Unnnnnnnn</span></td><td style="text-align: left;"> Unicode character with given code (1--8 hex digits)</td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+  </td>
+</tr>
+
+</table>
+
+<p>Alternative forms for the last two are <span class="samp">\u{nnnn}</span> and
+<span class="samp">\U{nnnnnnnn}</span>.  All except the Unicode escape sequences are
+also supported when reading character strings by <code><a href="scan.html">scan</a></code>
+and <code><a href="../../utils/html/read.table.html">read.table</a></code> if <code>allowEscapes = TRUE</code>.  Unicode
+escapes can be used to enter Unicode characters not in the current
+locale's charset (when the string will be stored internally in UTF-8).
+</p>
+<p>The parser does not allow the use of both octal/hex and Unicode
+escapes in a single string.
+</p>
+<p>These forms will also be used by <code><a href="print.default.html">print.default</a></code>
+when outputting non-printable characters (including backslash).
+</p>
+<p>Embedded nuls are not allowed in character strings, so using escapes
+(such as <span class="samp">\0</span>) for a nul will result in the string being
+truncated at that point (usually with a warning).
+</p>
+
+
+<h3>Names and Identifiers</h3>
+
+<p>Identifiers consist of a sequence of letters, digits, the period
+(<code>.</code>) and the underscore.  They must not start with a digit nor
+underscore, nor with a period followed by a digit.  <a href="Reserved.html">Reserved</a>
+words are not valid identifiers.
+</p>
+<p>The definition of a <em>letter</em> depends on the current locale, but
+only ASCII digits are considered to be digits.
+</p>
+<p>Such identifiers are also known as <em>syntactic names</em> and may be used
+directly in <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> code.  Almost always, other names can be used
+provided they are quoted.  The preferred quote is the backtick
+(<span class="samp">`</span>), and <code><a href="deparse.html">deparse</a></code> will normally use it, but under
+many circumstances single or double quotes can be used (as a character
+constant will often be converted to a name).  One place where
+backticks may be essential is to delimit variable names in formulae:
+see <code><a href="../../stats/html/formula.html">formula</a></code>.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="Syntax.html">Syntax</a></code> for other aspects of the syntax.
+</p>
+<p><code><a href="sQuote.html">sQuote</a></code> for quoting English text.
+</p>
+<p><code><a href="shQuote.html">shQuote</a></code> for quoting OS commands.
+</p>
+<p>The  &lsquo;R Language Definition&rsquo; manual.
+</p>
+
+<hr /><div style="text-align: center;">[Package <em>base</em> version 3.2.2 <a href="00Index.html">Index</a>]</div>
+</body>
+<!-- Mirrored from stat.ethz.ch/R-manual/R-patched/library/base/html/Quotes.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 04 May 2016 16:35:56 GMT -->
+</html>

@@ -1,0 +1,215 @@
+<html><!-- Mirrored from stat.ethz.ch/R-manual/R-patched/library/base/html/files.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 04 May 2016 16:35:56 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><!-- /Added by HTTrack -->
+<title>File Manipulation</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="R.css">
+</head><body>
+
+<table width="100%" summary="page for files {base}"><tbody><tr><td>files {base}</td><td style="text-align: right;">R Documentation</td></tr></tbody></table>
+
+<h2>File Manipulation</h2>
+
+<h3>Description</h3>
+
+<p>These functions provide a low-level interface to the computer's
+file system.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>file.create(..., showWarnings = TRUE)
+file.exists(...)
+file.remove(...)
+file.rename(from, to)
+file.append(file1, file2)
+file.copy(from, to, overwrite = recursive, recursive = FALSE,
+          copy.mode = TRUE, copy.date = FALSE)
+file.symlink(from, to)
+file.link(from, to)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tbody><tr valign="top"><td><code>..., file1, file2</code></td>
+<td>
+<p>character vectors, containing file names or paths.</p>
+</td></tr>
+<tr valign="top"><td><code>from, to</code></td>
+<td>
+<p>character vectors, containing file names or paths.
+For <code>file.copy</code> and <code>file.symlink</code>
+<code>to</code> can alternatively be the path to a single existing directory.</p>
+</td></tr>
+<tr valign="top"><td><code>overwrite</code></td>
+<td>
+<p>logical; should existing destination files be overwritten?</p>
+</td></tr>
+<tr valign="top"><td><code>showWarnings</code></td>
+<td>
+<p>logical; should the warnings on failure be shown?</p>
+</td></tr>
+<tr valign="top"><td><code>recursive</code></td>
+<td>
+<p>logical.  If <code>to</code> is a directory, should
+directories in <code>from</code> be copied (and their contents)?  (Like
+<code>cp -R</code> on POSIX OSes.)</p>
+</td></tr>
+<tr valign="top"><td><code>copy.mode</code></td>
+<td>
+<p>logical:  should file permission bits be copied where
+possible?</p>
+</td></tr>
+<tr valign="top"><td><code>copy.date</code></td>
+<td>
+<p>logical:  should file dates be preserved where
+possible? See <code><a href="Sys.setFileTime.html">Sys.setFileTime</a></code>.</p>
+</td></tr>
+</tbody></table>
+
+
+<h3>Details</h3>
+
+<p>The <code>...</code> arguments are concatenated to form one character
+string: you can specify the files separately or as one vector.
+All of these functions expand path names: see <code><a href="path.expand.html">path.expand</a></code>.
+</p>
+<p><code>file.create</code> creates files with the given names if they do not
+already exist and truncates them if they do.  They are created with
+the maximal read/write permissions allowed by the
+‘<a href="files2.html">umask</a>’ setting (where relevant).  By default a warning
+is given (with the reason) if the operation fails.
+</p>
+<p><code>file.exists</code> returns a logical vector indicating whether the
+files named by its argument exist.  (Here ‘exists’ is in the
+sense of the system's <code>stat</code> call: a file will be reported as
+existing only if you have the permissions needed by <code>stat</code>.
+Existence can also be checked by <code><a href="file.access.html">file.access</a></code>, which
+might use different permissions and so obtain a different result.
+Note that the existence of a file does not imply that it is readable:
+for that use <code><a href="file.access.html">file.access</a></code>.)  What constitutes a
+‘file’ is system-dependent, but should include directories.
+(However, directory names must not include a trailing backslash or
+slash on Windows.)  Note that if the file is a symbolic link on a
+Unix-alike, the result indicates if the link points to an actual file,
+not just if the link exists.
+Lastly, note the <em>different</em> function <code><a href="exists.html">exists</a></code> which
+checks for existence of <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> objects.
+</p>
+<p><code>file.remove</code> attempts to remove the files named in its argument.
+On most Unix platforms ‘file’ includes <em>empty</em>
+directories, symbolic links, fifos and sockets.  On Windows,
+‘file’ means a regular file and not, say, an empty directory.
+</p>
+<p><code>file.rename</code> attempts to rename files (and <code>from</code> and
+<code>to</code> must be of the same length).  Where file permissions allow
+this will overwrite an existing element of <code>to</code>.  This is subject
+to the limitations of the OS's corresponding system call (see
+something like <code>man 2 rename</code> on a Unix-alike): in particular
+in the interpretation of ‘file’: most platforms will not rename
+files across file systems.  (On Windows, <code>file.rename</code> can move
+files but not directories between volumes.)  On platforms which allow
+directories to be renamed, typically neither or both of <code>from</code>
+and <code>to</code> must a directory, and if <code>to</code> exists it must be an
+empty directory.
+</p>
+<p><code>file.append</code> attempts to append the files named by its
+second argument to those named by its first.  The <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> subscript
+recycling rule is used to align names given in vectors
+of different lengths.
+</p>
+<p><code>file.copy</code> works in a similar way to <code>file.append</code> but with
+the arguments in the natural order for copying.  Copying to existing
+destination files is skipped unless <code>overwrite = TRUE</code>.  The
+<code>to</code> argument can specify a single existing directory.  If
+<code>copy.mode = TRUE</code> file read/write/execute permissions are copied
+where possible, restricted by ‘<a href="files2.html">umask</a>’.  (On Windows this
+applies only to files.) Other security attributes such as ACLs are not
+copied.  On a POSIX filesystem the targets of symbolic links will be
+copied rather than the links themselves, and hard links are copied
+separately.
+</p>
+<p><code>file.symlink</code> and <code>file.link</code> make symbolic and hard links
+on those file systems which support them.  For <code>file.symlink</code> the
+<code>to</code> argument can specify a single existing directory.  (Unix and
+OS X native filesystems support both.  Windows has hard links to
+files on NTFS file systems and concepts related to symbolic links on
+recent versions: see the section below on the Windows version of this
+help page.  What happens on a FAT or SMB-mounted file system is OS-specific.)
+</p>
+
+
+<h3>Value</h3>
+
+<p>These functions return a logical vector indicating which
+operation succeeded for each of the files attempted.  Using a missing
+value for a file or path name will always be regarded as a failure.
+</p>
+<p>If <code>showWarnings = TRUE</code>, <code>file.create</code> will give a warning
+for an unexpected failure.
+</p>
+
+
+<h3>Case-insensitive file systems</h3>
+
+<p>Case-insensitive file systems are the norm on Windows and OS X,
+but can be found on all OSes (for example a FAT-formatted USB drive is
+probably case-insensitive).
+</p>
+<p>These functions will most likely match existing files regardless of case
+on such file systems: however this is an OS function and it is
+possible that file names might be mapped to upper or lower case.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Ross Ihaka, Brian Ripley
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="file.info.html">file.info</a></code>, <code><a href="file.access.html">file.access</a></code>, <code><a href="file.path.html">file.path</a></code>,
+<code><a href="file.show.html">file.show</a></code>, <code><a href="list.files.html">list.files</a></code>,
+<code><a href="unlink.html">unlink</a></code>, <code><a href="basename.html">basename</a></code>,
+<code><a href="path.expand.html">path.expand</a></code>.
+</p>
+<p><code><a href="files2.html">dir.create</a></code>.
+</p>
+<p><code><a href="Sys.glob.html">Sys.glob</a></code> to expand wildcards in file specifications.
+</p>
+<p><code><a href="../../utils/html/filetest.html">file_test</a></code>, <code><a href="Sys.readlink.html">Sys.readlink</a></code>.
+</p>
+<p>https://en.wikipedia.org/wiki/Hard_link and
+https://en.wikipedia.org/wiki/Symbolic_link for the concepts of
+links and their limitations.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>cat("file A\n", file = "A")
+cat("file B\n", file = "B")
+file.append("A", "B")
+file.create("A")
+file.append("A", rep("B", 10))
+if(interactive()) file.show("A")
+file.copy("A", "C")
+dir.create("tmp")
+file.copy(c("A", "B"), "tmp")
+list.files("tmp")
+setwd("tmp")
+file.remove("B")
+file.symlink(file.path("..", c("A", "B")), ".")
+setwd("..")
+unlink("tmp", recursive = TRUE)
+file.remove("A", "B", "C")
+</pre>
+
+<hr><div style="text-align: center;">[Package <em>base</em> version 3.2.2 <a href="00Index.html">Index</a>]</div>
+
+<!-- Mirrored from stat.ethz.ch/R-manual/R-patched/library/base/html/files.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 04 May 2016 16:35:56 GMT -->
+
+</body></html>

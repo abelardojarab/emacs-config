@@ -1,0 +1,1965 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 15:39:54 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <script async="" src="../../../../../../www.google-analytics.com/analytics.js"></script><script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+  
+    
+  
+
+  
+  <title>Using Web Workers</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+  
+    
+    
+    <link href="../../../../../../developer.cdn.mozilla.net/static/build/styles/mdn.593f20d8c365.css" rel="stylesheet" type="text/css">
+
+    
+  
+    <link href="../../../../../../developer.cdn.mozilla.net/static/build/styles/wiki.13dd9abdfb62.css" rel="stylesheet" type="text/css">
+
+    
+
+    
+
+  <!-- common social tags -->
+  
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon144.a6e4162070f4.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon114.0e9fabd44f85.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon72.8ff9d87c82a0.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon57.a2490b9a2d76.png">
+  <!-- basic favicon -->
+  
+    
+  
+  <link rel="shortcut icon" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon32.e02854fdcf73.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/html5shiv.3948ccddab6f.js" charset="utf-8"></script>
+  <![endif]-->
+
+  
+  <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers$json">
+  <link rel="canonical" href="Using_web_workers.html">
+
+  
+    
+      <link rel="alternate" hreflang="es" href="https://developer.mozilla.org/es/docs/Web/Guide/Performance/Usando_web_workers" title="Usando web workers">
+    
+      <link rel="alternate" hreflang="fr" href="https://developer.mozilla.org/fr/docs/Utilisation_des_web_workers" title="Utilisation des web workers">
+    
+      <link rel="alternate" hreflang="ja" href="https://developer.mozilla.org/ja/docs/Web/API/Web_Workers_API/Using_web_workers" title="Web Worker を使用する">
+    
+      <link rel="alternate" hreflang="ko" href="https://developer.mozilla.org/ko/docs/Web/API/Web_Workers_API/basic_usage" title="웹워커 사용하기">
+    
+      <link rel="alternate" hreflang="nl" href="https://developer.mozilla.org/nl/docs/Gebruik_maken_van_DOM_workers" title="Gebruik DOM workers">
+    
+      <link rel="alternate" hreflang="pl" href="https://developer.mozilla.org/pl/docs/Web/Guide/Performance/Uzycie_web_workers" title="Użycie web workers">
+    
+      <link rel="alternate" hreflang="ru" href="https://developer.mozilla.org/ru/docs/DOM/Using_web_workers" title="Использование Web Workers">
+    
+      <link rel="alternate" hreflang="zh-CN" href="https://developer.mozilla.org/zh-CN/docs/Web/API/Web_Workers_API/Using_web_workers" title="使用 Web Workers">
+    
+      <link rel="alternate" hreflang="zh-TW" href="https://developer.mozilla.org/zh-TW/docs/Web/Guide/Performance/Using_web_workers" title="使用 web workers">
+    
+  
+
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="Using Web Workers">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers">
+  <meta name="twitter:title" content="Using Web Workers">
+  
+  <meta property="og:description" content="A worker is an object created using a constructor (e.g. Worker()) that runs a named JavaScript file — this file contains the code that will run in the worker thread; workers run in another global context that is different from the current window. Thus, using the window shortcut to get the current global scope (instead of self) within a Worker will return an error.">
+  <meta name="description" content="A worker is an object created using a constructor (e.g. Worker()) that runs a named JavaScript file — this file contains the code that will run in the worker thread; workers run in another global context that is different from the current window. Thus, using the window shortcut to get the current global scope (instead of self) within a Worker will return an error.">
+  <meta name="twitter:description" content="A worker is an object created using a constructor (e.g. Worker()) that runs a named JavaScript file — this file contains the code that will run in the worker thread; workers run in another global context that is different from the current window. Thus, using the window shortcut to get the current global scope (instead of self) within a Worker will return an error.">
+  
+
+  
+    
+
+
+
+  
+</head>
+<body data-slug="Web/API/Web_Workers_API/Using_web_workers" contextmenu="edit-history-menu" data-search-url="" class="document  ">
+
+  <script type="text/javascript">
+    (function(win) {
+        'use strict';
+
+        
+            (function(){
+  var FLAGS = {
+    'compat_api': false,'kumaediting': false,'page_move': false,'registration_disabled': false,'search_suggestions': false,'section_edit': false,'spam_admin_override': false,'spam_checks_enabled': true,'spam_spammer_override': false,'spam_submissions_enabled': false,'spam_testing_mode': false,'wiki_samples': true,'wiki_spam_exempted': false,'wiki_spam_training': true
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': true,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+
+        // This needs to be set before ckeditor.js loads
+        window.CKEDITOR_BASEPATH = 'https://developer.mozilla.org/static/js/libs/ckeditor/build/ckeditor/';
+
+        // This represents the site configuration
+        win.mdn = {
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+            
+            notifications: [],
+            
+            // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            },
+            // Assets that need to be dynamically injected
+            assets_disabled: {
+                css: {
+                    'editor-content': ['https://developer.cdn.mozilla.net/static/build/styles/editor-content.3d79df72080d.css',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/styles/wiki-compat-tables.f3a3bfce97a1.css',]
+                },
+                js: {
+                    'syntax-prism': ['https://developer.cdn.mozilla.net/static/build/js/syntax-prism.7a66ddfa68bf.js',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/js/wiki-compat-tables.14ce5dcb2c3d.js',]
+                }
+            }
+        };
+    })(this);
+</script>
+
+  
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+    
+      <li><a href="#q" id="skip-search">Skip to search</a></li>
+    
+  </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+    <a href="https://developer.mozilla.org/en-US/" class="logo">Mozilla Developer Network</a>
+
+    <div id="nav-sec">
+        
+                  <ul>
+                  <li>
+
+    
+
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                Sign in
+              </span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FWeb_Workers_API%2FUsing_web_workers" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/Web/API/Web_Workers_API/Using_web_workers" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/Web/API/Web_Workers_API/Using_web_workers" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FWeb_Workers_API%2FUsing_web_workers" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+              
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+        
+    </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../../API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+
+   <!-- end is_zone -->
+
+    <div class="wiki-main-content" id="document-main"><div class="center">
+      
+      <div class="article-meta">
+        <!-- action buttons -->
+        
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+  <ul class="page-buttons" data-sticky="false">
+      
+      <li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+              
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/es/docs/Web/Guide/Performance/Usando_web_workers" title="Usando web workers">Español</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/fr/docs/Utilisation_des_web_workers" title="Utilisation des web workers">Français</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/ja/docs/Web/API/Web_Workers_API/Using_web_workers" title="Web Worker を使用する">日本語</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/ko/docs/Web/API/Web_Workers_API/basic_usage" title="웹워커 사용하기">한국어</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/nl/docs/Gebruik_maken_van_DOM_workers" title="Gebruik DOM workers">Nederlands</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/pl/docs/Web/Guide/Performance/Uzycie_web_workers" title="Użycie web workers">Polski</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/ru/docs/DOM/Using_web_workers" title="Использование Web Workers">Русский</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/zh-CN/docs/Web/API/Web_Workers_API/Using_web_workers" title="使用 Web Workers">中文 (简体)</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/zh-TW/docs/Web/Guide/Performance/Using_web_workers" title="使用 web workers">正體中文 (繁體)</a></bdi></li>
+                
+              
+
+              
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+              
+            </ul>
+          </div>
+        </div>
+      </li>
+
+      <li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li>
+
+        
+
+        <li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers$history" rel="nofollow, noindex">History</a></li>
+                
+                
+                
+                
+
+                
+
+                
+                
+                
+                <li class="page-print"><a href="#" onclick="return window.print();">Print this article</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+        
+  <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web" rel="v:url" property="v:title">Web technology for developers</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="../../API.html" rel="v:url" property="v:title">Web APIs</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="../Web_Workers_API.html" rel="v:url" property="v:title">Web Workers API</a></li>
+    
+    <li class="crumb" typeof="v:Breadcrumb" property="v:title">Using Web Workers</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        
+        <div class="contributor-avatars" data-all-text="see all contributors" data-alternate-message="hide contributors" data-has-hidden="1">
+            <ul>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/georapbox" title="View profile: georapbox">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="georapbox" data-src="../../../../../../secure.gravatar.com/avatar/574526218e30b956381dcd344bf28f5d6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">georapbox</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills" title="View profile: chrisdavidmills">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="chrisdavidmills" data-src="../../../../../../secure.gravatar.com/avatar/deeea0ba82390bd5acc539703c4b0cfb6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">chrisdavidmills</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/lifeiscontent" title="View profile: lifeiscontent">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="lifeiscontent" data-src="../../../../../../secure.gravatar.com/avatar/6c826fedce728989963254e4c34943c86c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">lifeiscontent</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/asieo" title="View profile: asieo">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="asieo" data-src="../../../../../../secure.gravatar.com/avatar/8dca6e2d175615bebe264c53e4ec84a26c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">asieo</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Sebastianz" title="View profile: Sebastianz">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Sebastianz" data-src="../../../../../../secure.gravatar.com/avatar/337fa9c543a4f881977b6d2fbbd2dea86c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Sebastianz</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/changbenny" title="View profile: changbenny">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="changbenny" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">changbenny</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/trusktr" title="View profile: trusktr">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="trusktr" data-src="../../../../../../secure.gravatar.com/avatar/f72db60af53ab4f9c96a51b592a56c666c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">trusktr</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/foxbrush" title="View profile: foxbrush">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="foxbrush" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">foxbrush</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Dattaya" title="View profile: Dattaya">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Dattaya" data-src="../../../../../../secure.gravatar.com/avatar/ae25da03e778146613d7190e3e43df856c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Dattaya</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Scruffy" title="View profile: Scruffy">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Scruffy" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Scruffy</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/fscholz" title="View profile: fscholz">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="fscholz" data-src="../../../../../../secure.gravatar.com/avatar/e24391c9174352988d819a9b9ea77c9e6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">fscholz</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/teoli" title="View profile: teoli">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="teoli" data-src="../../../../../../secure.gravatar.com/avatar/d0d90148e08e3b64ccf75c46f31442c56c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">teoli</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Ehsan" title="View profile: Ehsan">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Ehsan" data-src="../../../../../../secure.gravatar.com/avatar/5aef682fbfd7590b9d85d6e8dbab10eb6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Ehsan</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/denilsonsa" title="View profile: denilsonsa">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="denilsonsa" data-src="../../../../../../secure.gravatar.com/avatar/5048ffde7ab92aeeedf45959f6d13c246c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">denilsonsa</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/betoqueti" title="View profile: betoqueti">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="betoqueti" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">betoqueti</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/svincent" title="View profile: svincent">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="svincent" data-src="../../../../../../secure.gravatar.com/avatar/1acc0f9a7503e21e563f56fdff57138b6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">svincent</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/edicsa" title="View profile: edicsa">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="edicsa" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">edicsa</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/bergus" title="View profile: bergus">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="bergus" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">bergus</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/MDNion" title="View profile: MDNion">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="MDNion" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">MDNion</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/nurbek-ab" title="View profile: nurbek-ab">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="nurbek-ab" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">nurbek-ab</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/.vimrc" title="View profile: .vimrc">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt=".vimrc" data-src="../../../../../../secure.gravatar.com/avatar/1691450b8277170ba387ec4f9ae35e1d6c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">.vimrc</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Zearin_Galaurum" title="View profile: Zearin_Galaurum">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Zearin_Galaurum" data-src="../../../../../../secure.gravatar.com/avatar/70f5e0c17e73bf19fc7eb1a944f8e2d86c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Zearin_Galaurum</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/yjbanov" title="View profile: yjbanov">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="yjbanov" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">yjbanov</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/1011X" title="View profile: 1011X">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="1011X" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">1011X</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/nop" title="View profile: nop">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="nop" data-src="../../../../../../secure.gravatar.com/avatar/df628fe807823d2280d60174a87027906c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">nop</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/brianblakely" title="View profile: brianblakely">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="brianblakely" data-src="../../../../../../secure.gravatar.com/avatar/9481d4984e85f636fd5911554c4ef8856c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">brianblakely</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Luke314" title="View profile: Luke314">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Luke314" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Luke314</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Jeremie" title="View profile: Jeremie">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Jeremie" data-src="../../../../../../secure.gravatar.com/avatar/ea74cf7f528273838138e9ae407cd8ef6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Jeremie</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/PaulE" title="View profile: PaulE">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="PaulE" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">PaulE</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/MeoMix" title="View profile: MeoMix">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="MeoMix" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">MeoMix</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/sujaykathrotia" title="View profile: sujaykathrotia">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="sujaykathrotia" data-src="../../../../../../secure.gravatar.com/avatar/14ef625755a57cde3b80da81aebc83506c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">sujaykathrotia</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/kscarfone" title="View profile: kscarfone">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="kscarfone" data-src="../../../../../../secure.gravatar.com/avatar/89c1e54a9703125168e40d22316d2b496c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">kscarfone</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/dechov" title="View profile: dechov">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="dechov" data-src="../../../../../../secure.gravatar.com/avatar/0d0f02f1dce3e35fb71fbb22ebb774296c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">dechov</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Rob W" title="View profile: Rob W">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Rob W" data-src="../../../../../../secure.gravatar.com/avatar/c916d92c098426d84778a7910cc32b396c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Rob W</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Sheppy" title="View profile: Sheppy">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Sheppy" data-src="../../../../../../secure.gravatar.com/avatar/945076feb88f2d7003891ffbf06f32bf6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Sheppy</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/ScottMichaud" title="View profile: ScottMichaud">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="ScottMichaud" data-src="../../../../../../secure.gravatar.com/avatar/7cd370b3a426846a69406d85c484b44a6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">ScottMichaud</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/openjck" title="View profile: openjck">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="openjck" data-src="../../../../../../secure.gravatar.com/avatar/990aba50a39806f6cb0f97e00ad5685c6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">openjck</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/fusionchess" title="View profile: fusionchess">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="fusionchess" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">fusionchess</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/sunnylost" title="View profile: sunnylost">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="sunnylost" data-src="../../../../../../secure.gravatar.com/avatar/c5153e775b58787cf81bd0a2013c03686c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">sunnylost</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/cwmma" title="View profile: cwmma">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="cwmma" data-src="../../../../../../secure.gravatar.com/avatar/f015b4988bd660405cdf3c3d89c129a46c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">cwmma</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Vincent" title="View profile: Vincent">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Vincent" data-src="../../../../../../secure.gravatar.com/avatar/bcb4c76d4229df6e4684d5a98cd029996c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Vincent</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/deadsquid" title="View profile: deadsquid">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="deadsquid" data-src="../../../../../../secure.gravatar.com/avatar/8b0e4b98cd690db03e9c9b93b64b32756c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">deadsquid</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/qw3n" title="View profile: qw3n">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="qw3n" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">qw3n</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/jonfriskics" title="View profile: jonfriskics">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="jonfriskics" data-src="../../../../../../secure.gravatar.com/avatar/770a815b497726a019f71ba62f9895ad6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">jonfriskics</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/louisremi" title="View profile: louisremi">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="louisremi" data-src="../../../../../../secure.gravatar.com/avatar/1d924ae6b834d2c43d313a94137ac6fe6c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">louisremi</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/dbruant" title="View profile: dbruant">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="dbruant" data-src="../../../../../../secure.gravatar.com/avatar/b9b113093c351a599f86e0647c43add16c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">dbruant</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/allergic" title="View profile: allergic">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="allergic" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">allergic</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/tushartyagi" title="View profile: tushartyagi">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="tushartyagi" data-src="../../../../../../secure.gravatar.com/avatar/cdea9480510a4486e37a90c509b407076c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">tushartyagi</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/lmorchard" title="View profile: lmorchard">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="lmorchard" data-src="../../../../../../secure.gravatar.com/avatar/b45c48fc9e05922e2f368a9d7d7d8de16c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">lmorchard</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/ahcxlh" title="View profile: ahcxlh">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="ahcxlh" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">ahcxlh</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Yukoba" title="View profile: Yukoba">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Yukoba" data-src="../../../../../../secure.gravatar.com/avatar/c1bfcc72cfbe7ff6076a2c5478af09056c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Yukoba</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/fryn" title="View profile: fryn">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="fryn" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">fryn</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Mohammed_Hossam" title="View profile: Mohammed_Hossam">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Mohammed_Hossam" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Mohammed_Hossam</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Tyson" title="View profile: Tyson">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Tyson" data-src="../../../../../../secure.gravatar.com/avatar/bb91c84d976452e4848d432c0593d1f76c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Tyson</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/alimd" title="View profile: alimd">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="alimd" data-src="../../../../../../secure.gravatar.com/avatar/f2af3ff36c10d206b74f68aacf68e08d6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">alimd</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/ethertank" title="View profile: ethertank">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="ethertank" data-src="../../../../../../secure.gravatar.com/avatar/abac73ba2093b500bf7599c76d80280c6c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">ethertank</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/max_overdrive" title="View profile: max_overdrive">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="max_overdrive" data-src="../../../../../../secure.gravatar.com/avatar/30b8b809c6409a5bbc7a0fcfe8f18ddd6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">max_overdrive</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/yyss" title="View profile: yyss">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="yyss" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">yyss</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/bratsche" title="View profile: bratsche">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="bratsche" data-src="../../../../../../secure.gravatar.com/avatar/ed313a3544541a0211e19ff1f878b6db6c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">bratsche</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/ebidel" title="View profile: ebidel">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="ebidel" data-src="../../../../../../secure.gravatar.com/avatar/e7948aac7c52b26470be80311873a3986c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">ebidel</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/jswisher" title="View profile: jswisher">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="jswisher" data-src="../../../../../../secure.gravatar.com/avatar/38185c2812cbcae186ebbe4a829106616c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">jswisher</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/robflaherty" title="View profile: robflaherty">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="robflaherty" data-src="../../../../../../secure.gravatar.com/avatar/7fa6e5af2fd78ece17f6871d9bd30a056c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">robflaherty</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/kuvik3" title="View profile: kuvik3">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="kuvik3" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">kuvik3</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Waldo" title="View profile: Waldo">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Waldo" data-src="../../../../../../secure.gravatar.com/avatar/d26a0ca7ae1134e0e1dbdddf82e289296c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Waldo</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/inma_610" title="View profile: inma_610">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="inma_610" data-src="../../../../../../secure.gravatar.com/avatar/bdc39d1a570f34b1aca764a6dd6822586c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">inma_610</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/paul.irish" title="View profile: paul.irish">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="paul.irish" data-src="../../../../../../secure.gravatar.com/avatar/ffe68d6f71b225f7661d33f2a89082816c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">paul.irish</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/sebmozilla" title="View profile: sebmozilla">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="sebmozilla" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">sebmozilla</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Tiller" title="View profile: Tiller">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Tiller" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Tiller</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/GijsKruitbosch" title="View profile: GijsKruitbosch">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="GijsKruitbosch" data-src="../../../../../../secure.gravatar.com/avatar/410fad5de3812b3810955d277445bced6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">GijsKruitbosch</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/pnewhook" title="View profile: pnewhook">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="pnewhook" data-src="../../../../../../secure.gravatar.com/avatar/fae2af75c8c0ca925a229678b528bb046c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">pnewhook</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Brettz9" title="View profile: Brettz9">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Brettz9" data-src="../../../../../../secure.gravatar.com/avatar/4c750582e23fcf068bdde51cc50416d16c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Brettz9</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Wjjohnst" title="View profile: Wjjohnst">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Wjjohnst" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Wjjohnst</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Sephr" title="View profile: Sephr">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Sephr" data-src="../../../../../../secure.gravatar.com/avatar/f43206cf935c8a5d532285c0d67b20d16c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Sephr</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Blizzard" title="View profile: Blizzard">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Blizzard" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Blizzard</noscript></a>
+                </li>
+            
+            </ul>
+        </div>
+        
+
+        <h1>Using Web Workers</h1>
+
+      </div>
+      
+
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-closed wiki-left-none">
+
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+            
+              <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+              
+              <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#Web_Workers_API" rel="internal">Web Workers API</a></li><li><a href="#Dedicated_workers" rel="internal">Dedicated workers</a><ol><li><a href="#Worker_feature_detection" rel="internal">Worker feature detection</a></li><li><a href="#Spawning_a_dedicated_worker" rel="internal">Spawning a dedicated worker</a></li><li><a href="#Sending_messages_to_and_from_a_dedicated_worker" rel="internal">Sending messages to and from a dedicated worker</a></li><li><a href="#Terminating_a_worker" rel="internal">Terminating a worker</a></li><li><a href="#Handling_errors" rel="internal">Handling errors</a></li><li><a href="#Spawning_subworkers" rel="internal">Spawning subworkers</a></li><li><a href="#Importing_scripts_and_libraries" rel="internal">Importing scripts and libraries</a></li></ol></li><li><a href="#Shared_workers" rel="internal">Shared workers</a><ol><li><a href="#Spawning_a_shared_worker" rel="internal">Spawning a shared worker</a></li><li><a href="#Sending_messages_to_and_from_a_shared_worker" rel="internal">Sending messages to and from a shared worker</a></li></ol></li><li><a href="#About_thread_safety" rel="internal">About thread safety</a></li><li><a href="#Transferring_data_to_and_from_workers_further_details" rel="internal">Transferring data to and from workers: further details</a><ol><li><a href="#Passing_data_examples" rel="internal">Passing data examples</a><ol><li><a href="#Example_1_Create_a_generic_asynchronous_eval()" rel="internal">Example #1: Create a generic "asynchronous <code>eval()</code>"</a></li><li><a href="#Example_2_Advanced_passing_JSON_Data_and_creating_a_switching_system" rel="internal">Example #2: Advanced passing JSON Data and creating a switching system</a></li></ol></li><li><a href="#Passing_data_by_transferring_ownership_(transferable_objects)" rel="internal">Passing data by transferring ownership (transferable objects)</a></li></ol></li><li><a href="#Embedded_workers" rel="internal">Embedded workers</a></li><li><a href="#Further_examples" rel="internal">Further examples</a><ol><li><a href="#Performing_computations_in_the_background" rel="internal">Performing computations in the background</a><ol><li><a href="#The_JavaScript_code" rel="internal">The JavaScript code</a></li><li><a href="#The_HTML_code" rel="internal">The HTML code</a></li></ol></li><li><a href="#Performing_web_IO_in_the_background" rel="internal">Performing web I/O in the background</a></li><li><a href="#Dividing_tasks_among_multiple_workers" rel="internal">Dividing tasks among multiple workers</a></li></ol></li><li><a href="#Other_types_of_worker" rel="internal">Other types of worker</a></li><li><a href="#Functions_and_interfaces_available_in_workers" rel="internal">Functions and interfaces available in workers</a></li><li><a href="#Specifications" rel="internal">Specifications</a></li><li><a href="#Browser_compatibility" rel="internal">Browser compatibility</a></li><li><a href="#See_also" rel="internal">See also</a>
+                </li></ol>
+              </div>
+              
+              </div>
+            
+
+            
+            
+              
+            
+
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-main wiki-column text-content">
+
+              
+
+              
+
+              
+                
+                
+                
+              
+              
+
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                
+                  
+                    <div class="summary">
+<p>Web Workers provide a simple means for web content to run scripts in background threads. The worker thread can perform tasks without interfering with the user interface. In addition, they can perform I/O using <code><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIXMLHttpRequest" class="internal">XMLHttpRequest</a></code> (although the <code>responseXML</code> and <code>channel</code> attributes are always null). Once created, a worker can send messages to the JavaScript code that created it by posting messages to an event handler specified by that code (and vice versa.) This article provides a detailed introduction to using web workers.</p>
+</div>
+
+<h2 id="Web_Workers_API">Web Workers API</h2>
+
+<p>A worker is an object created using a constructor (e.g. <a href="../Worker/Worker.html" title="The Worker() constructor creates a Worker object that executes the script at the specified URL. This script must obey the same-origin policy."><code>Worker()</code></a>) that runs a named JavaScript file — this file contains the code that will run in the worker thread; workers run in another global context that is different from the current <a href="../Window.html" title="The window object represents a window containing a DOM document; the document property points to the DOM document loaded in that window."><code>window</code></a>. Thus, using the <a href="../Window.html" title="The window object represents a window containing a DOM document; the document property points to the DOM document loaded in that window."><code>window</code></a> shortcut to get the current global scope (instead of <a href="../Window/self.html" title="The Window.self read-only property returns the window itself, as a WindowProxy. It can be used with dot notation on a window object (that is, window.self) or standalone (self). The advantage of the standalone notation is that a similar notation exists for non-window contexts, such as in Web Workers. By using self, you can refer to the global scope in a way that will work not only in a window context (self will resolve to window.self) but also in a worker context (self will then resolve to WorkerGlobalScope.self)."><code>self</code></a>) within a <a href="../Worker.html" title="The Worker interface of the Web Workers API represents a background task that can be easily created and can send messages back to its creator. Creating a worker is as simple as calling the Worker()&nbsp;constructor and specifying a script to be run in the worker thread."><code>Worker</code></a> will return an error.</p>
+
+<p>The worker context is represented by a <a href="../DedicatedWorkerGlobalScope.html" title="The DedicatedWorkerGlobalScope object (the Worker global scope) is accessible through the self keyword. Some additional global functions, namespaces objects, and constructors, not typically associated with the worker global scope, but available on it, are listed in the JavaScript Reference. See also: Functions available to workers."><code>DedicatedWorkerGlobalScope</code></a> object in the case of dedicated workers (standard workers that are utilized by a single script; shared workers use <a href="../SharedWorkerGlobalScope.html" title="The SharedWorkerGlobalScope object (the SharedWorker global scope) is accessible through the self keyword. Some additional global functions, namespaces objects, and constructors, not typically associated with the worker global scope, but available on it, are listed in the JavaScript Reference. See the complete list of functions available to workers."><code>SharedWorkerGlobalScope</code></a>). A dedicated worker is only accessible from the script that first spawned it, whereas shared workers can be accessed from multiple scripts.</p>
+
+<div class="note">
+<p><strong>Note</strong>: See <a href="../Web_Workers_API.html">The Web Workers API landing page</a> for reference documentation on workers and additional guides.</p>
+</div>
+
+<p>You can run whatever code you like inside the worker thread, with some exceptions. For example, you can't directly manipulate the DOM from inside a worker, or use some default methods and properties of the <a href="../Window.html" title="The window object represents a window containing a DOM document; the document property points to the DOM document loaded in that window."><code>window</code></a> object. But you can use a large number of items available under <code>window</code>, including <a href="../WebSockets_API.html">WebSockets</a>, and data storage mechanisms like <a href="../IndexedDB_API.html">IndexedDB</a> and the Firefox OS-only <a href="../../../Mozilla/Firefox_OS/API/Data_Store_API.html">Data Store API</a>. See <a href="Functions_and_classes_available_to_workers.html">Functions and classes available to workers</a> for more details.</p>
+
+<p>Data is sent between workers and the main thread via a system of messages — both sides send their messages using the <code>postMessage()</code> method, and respond to messages via the <code>onmessage</code> event handler (the message is contained within the <code><a href="../../Events/Message-2.html" title="/en-US/docs/Web/Events/Message">Message</a></code> event's data attribute.) The data is copied rather than shared.</p>
+
+<p>Workers may, in turn, spawn new workers, as long as those workers are hosted within the same origin as the parent page. In addition, workers may use <a href="../XMLHttpRequest.html" class="internal"><code>XMLHttpRequest</code></a> for network I/O, with the exception that the <code>responseXML</code> and <code>channel</code> attributes on <code>XMLHttpRequest</code> always return <code>null</code>.</p>
+
+<h2 id="Dedicated_workers">Dedicated workers</h2>
+
+<p>As mentioned above, a dedicated worker is only accessible by the script that called it. In this section we'll discuss the JavaScript found in our <a href="https://github.com/mdn/simple-web-worker" class="external-icon external">Basic dedicated worker example</a> (<a href="http://mdn.github.io/simple-web-worker/" class="external-icon external">run dedicated worker</a>): This allows you to enter two numbers to be multiplied together. The numbers are sent to a dedicated worker, multiplied together, and the result is returned to the page and displayed.</p>
+
+<p>This example is rather trivial, but we decided to keep it simple while introducing you to basic worker concepts. More advanced details are covered later on in the article.</p>
+
+<h3 id="Worker_feature_detection">Worker feature detection</h3>
+
+<p>For slightly more controlled error handling and backwards compatibility, it is a good idea to wrap your worker accessing code in the following (<a href="https://github.com/mdn/simple-web-worker/blob/gh-pages/main.js" class="external">main.js</a>):</p>
+
+<pre class="brush: js">if (window.Worker) {
+
+  ...
+
+}</pre>
+
+<h3 id="Spawning_a_dedicated_worker">Spawning a dedicated worker</h3>
+
+<p>Creating a new worker is simple. All you need to do is call the <a href="../Worker/Worker.html" title="The Worker() constructor creates a Worker object that executes the script at the specified URL. This script must obey the same-origin policy."><code>Worker()</code></a> constructor, specifying the URI of a script to execute in the worker thread (<a href="https://github.com/mdn/simple-web-worker/blob/gh-pages/main.js" class="external">main.js</a>):</p>
+
+<div style="overflow: hidden;">
+<pre class="brush: js">var myWorker = new Worker("worker.js");
+</pre>
+</div>
+
+<h3 id="Sending_messages_to_and_from_a_dedicated_worker">Sending messages to and from a dedicated worker</h3>
+
+<p>The magic of workers happens via the <a href="../Worker/postMessage.html" title="The postMessage() method of the Worker interface sends a message to the worker's inner scope. This accepts a single parameter, which is the data to send to the worker. The data may be any value or JavaScript object handled by the structured clone algorithm, which includes cyclical references."><code>postMessage()</code></a> method and the <a href="../Worker/onmessage.html" title="The onmessage property of the Worker interface represents an EventHandler, that is a function to be called when the message event occurs. These events are of type MessageEvent and will be called when the worker's parent receives a message (i.e. from the DedicatedWorkerGlobalScope.postMessage method."><code>onmessage</code></a> event handler. When you want to send a message to the worker, you post messages to it like this (<a href="https://github.com/mdn/simple-web-worker/blob/gh-pages/main.js" class="external">main.js</a>):</p>
+
+<pre class="brush: js">first.onchange = function() {
+  myWorker.postMessage([first.value,second.value]);
+  console.log('Message posted to worker');
+}
+
+second.onchange = function() {
+  myWorker.postMessage([first.value,second.value]);
+  console.log('Message posted to worker');
+}</pre>
+
+<p>So here we have two <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input" title="The HTML element &lt;input&gt; is used to create interactive controls for web-based forms in order to accept data from the user. How an &lt;input&gt; works varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a> elements represented by the variables <code>first</code> and <code>second</code>; when the value of either is changed, <code>myWorker.postMessage([first.value,second.value])</code> is used to send the value inside both to the worker, as an array. You can send pretty much anything you like in the message.</p>
+
+<p>In the worker, we can respond when the message is received by writing an event handler block like this (<a href="https://github.com/mdn/simple-web-worker/blob/gh-pages/worker.js" class="external">worker.js</a>):</p>
+
+<pre class="brush: js">onmessage = function(e) {
+  console.log('Message received from main script');
+  var workerResult = 'Result: ' + (e.data[0] * e.data[1]);
+  console.log('Posting message back to main script');
+  postMessage(workerResult);
+}</pre>
+
+<p>The <code>onmessage</code> handler allows us to run some code whenever a message is received, with the message itself being available in the <code>message</code> event's <code>data</code> attribute. Here we simply multiply together the two numbers then use <code>postMessage()</code> again, to post the result back to the main thread.</p>
+
+<p>Back in the main thread, we use <code>onmessage</code> again, to respond to the message sent back from the worker:</p>
+
+<pre class="brush: js">myWorker.onmessage = function(e) {
+  result.textContent = e.data;
+  console.log('Message received from worker');
+}</pre>
+
+<p>Here we grab the message event data and set it as the <code>textContent</code> of the result paragraph, so the user can see the result of the calculation.</p>
+
+<div class="note">
+<p><strong>Note</strong>: The URI passed as a parameter to the <code>Worker</code> constructor must obey the <a href="https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy">same-origin policy</a> .</p>
+
+<p>There is currently disagreement among browsers vendors on what URIs are of the same-origin; Gecko 10.0 (Firefox 10.0 / Thunderbird 10.0 / SeaMonkey 2.7) and later do allow data URIs and Internet Explorer 10 does not allow Blob URIs as a valid script for workers.</p>
+</div>
+
+<div class="note"><strong>Note</strong>: Notice that <code>onmessage</code> and <code>postMessage()</code> need to be hung off the <code>Worker</code> object when used in the main script thread, but not when used in the worker. This is because, inside the worker, the worker is effectively the global scope.</div>
+
+<div class="note"><strong>Note</strong>: When a message is passed between the main thread and worker, it is copied or "transferred" (moved), not shared. Read <a href="#Transferring_data_to_and_from_workers:_further_details">Transferring data to and from workers: further details</a> for a much more thorough explanation.</div>
+
+<h3 id="Terminating_a_worker">Terminating a worker</h3>
+
+<p>If you need to immediately terminate a running worker from the main thread, you can do so by calling the worker's&nbsp;<a href="../Worker.html" title="The Worker interface of the Web Workers API represents a background task that can be easily created and can send messages back to its creator. Creating a worker is as simple as calling the Worker()&nbsp;constructor and specifying a script to be run in the worker thread."><code>terminate</code></a> method:</p>
+
+<pre class="brush: js">myWorker.terminate();</pre>
+
+<p>The worker thread is killed immediately without an opportunity to complete its operations or clean up after itself.</p>
+
+<p>In the worker thread, workers may close themselves by calling their own <a href="../WorkerGlobalScope.html" title="The WorkerGlobalScope interface of the Web Workers API is an interface representing the scope of any worker. Workers have no browsing context; this scope contains the information usually conveyed by Window objects — in this case event handlers, the console or the associated WorkerNavigator object. Each WorkerGlobalScope has its own event loop."><code>close</code></a> method:</p>
+
+<pre class="brush: js">close();</pre>
+
+<h3 id="Handling_errors">Handling errors</h3>
+
+<p>When a runtime error occurs in the worker, its <code>onerror</code> event handler is called. It receives an event named <code>error</code> which implements the <code>ErrorEvent</code> interface.</p>
+
+<p>The event doesn't bubble and is cancelable; to prevent the default action from taking place, the worker can call the error event's <a href="../Event/preventDefault.html" class="internal"> <code>preventDefault()</code> </a> method.</p>
+
+<p>The error event has the following three fields that are of interest:</p>
+
+<dl>
+ <dt><code>message</code></dt>
+ <dd>A human-readable error message.</dd>
+ <dt><code>filename</code></dt>
+ <dd>The name of the script fil&nbsp;in which the error occurred.</dd>
+ <dt><code>lineno</code></dt>
+ <dd>The line number of the script file on which the error occurred.</dd>
+</dl>
+
+<h3 id="Spawning_subworkers">Spawning subworkers</h3>
+
+<p>Workers may spawn more workers if they wish. So-called sub-workers must be hosted within the same origin as the parent page. Also, the URIs for subworkers are resolved relative to the parent worker's location rather than that of the owning page. This makes it easier for workers to keep track of where their dependencies are.</p>
+
+<h3 id="Importing_scripts_and_libraries">Importing scripts and libraries</h3>
+
+<p>Worker threads have access to a global function, <code>importScripts()</code>, which lets them import scripts in the same domain into their scope. It accepts zero or more URIs as parameters to resources to import; all of the following examples are valid:</p>
+
+<pre class="brush: js">importScripts();                        /* imports nothing */
+importScripts('foo.js');                /* imports just "foo.js" */
+importScripts('foo.js', 'bar.js');      /* imports two scripts */
+</pre>
+
+<p>The browser loads each listed script and executes it. Any global objects from each script may then be used by the worker. If the script can't be loaded, <code>NETWORK_ERROR</code> is thrown, and subsequent code will not be executed. Previously executed code (including code deferred using <a href="../WindowTimers/setTimeout.html" title="Calls a function or executes a code snippet after a specified delay."><code>window.setTimeout()</code></a>) will still be functional though. Function declarations <strong>after</strong> the <code>importScripts()</code> method are also kept, since these are always evaluated before the rest of the code.</p>
+
+<div class="note"><strong>Note</strong>: Scripts may be downloaded in any order, but will be executed in the order in which you pass the filenames into <code>importScripts()</code> . This is done synchronously; <code>importScripts()</code> does not return until all the scripts have been loaded and executed.</div>
+
+<h2 id="Shared_workers">Shared workers</h2>
+
+<p>A shared worker is accessible by multiple scripts — even if they are being accessed by different windows, iframes or even workers. In this section we'll discuss the JavaScript found in our <a href="https://github.com/mdn/simple-shared-worker" class="external-icon external">Basic shared worker example</a> (<a href="http://mdn.github.io/simple-shared-worker/" class="external-icon external">run shared worker</a>): This is very similar to the basic dedicated worker example, except that it has two functions available handled by different script files: <em>multiplying two numbers</em>, or <em>squaring a number</em>. Both scripts use the same worker to do the actual calculation required.</p>
+
+<p>Here we'll concentrate on the differences between dedicated and shared workers. Note that in this example we have two HTML pages, each with JavaScript applied that uses the same single worker file.</p>
+
+<div class="note">
+<p><strong>Note</strong>: If SharedWorker can be accessed from several browsing contexts, all those browsing contexts must share the exact same origin (same protocol, host, and port).</p>
+</div>
+
+<div class="note">
+<p><strong>Note</strong>: In Firefox, shared workers cannot be shared between documents loaded in private and non-private windows (<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1177621" class="external" title="FIXED: Do not share a SharedWorker between a private and a non-private document">bug&nbsp;1177621</a>).</p>
+</div>
+
+<h3 id="Spawning_a_shared_worker">Spawning a shared worker</h3>
+
+<p>Spawning a new worker is pretty much the same as with a dedicated worker, but with a different constructor name (see <a href="https://github.com/mdn/simple-shared-worker/blob/gh-pages/index.html" class="external">index.html</a> and <a href="http://mdn.github.io/simple-shared-worker/index2.html" class="external">index2.html</a>) — each one has to spin up the worker using code like the following:</p>
+
+<pre class="brush: js">var myWorker = new SharedWorker("worker.js");</pre>
+
+<p>One big difference is that with a shared worker you have to communicate via a <code>port</code> object — an explicit port is opened that the scripts can use to communicate with the worker (this is done implicitly in the case of dedicated workers).</p>
+
+<p>The port connection needs to be started either implicitly by use of the <code>onmessage </code>event handler or explicitly with the <code>start()</code> method before any messages can be posted. Although the <a href="https://github.com/mdn/simple-shared-worker/blob/gh-pages/multiply.js" class="external">multiply.js</a> and <a href="https://github.com/mdn/simple-shared-worker/blob/gh-pages/worker.js" class="external">worker.js</a> files in the demo currently call the <code>start()</code> method, those calls are not necessary since the <code>onmessage</code> event handler is being used. Calling <code>start()</code> is only needed if the <code>message</code> event is wired up via the <code>addEventListener()</code> method.</p>
+
+<p>When using the <code>start()</code> method to open the port connection, it needs to be called from both the parent thread and the worker thread if two-way communication is needed.</p>
+
+<pre class="brush: js">myWorker.port.start();  // called in parent thread</pre>
+
+<pre class="brush: js">port.start();  // called in worker thread, assuming the <code>port</code> variable references a port</pre>
+
+<h3 id="Sending_messages_to_and_from_a_shared_worker">Sending messages to and from a shared worker</h3>
+
+<p>Now messages can be sent to the worker as before, but the <code>postMessage()</code> method has to be invoked through the port object (again, you'll see similar constructs in both <a href="https://github.com/mdn/simple-shared-worker/blob/gh-pages/multiply.js" class="external">multiply.js</a> and <a href="https://github.com/mdn/simple-shared-worker/blob/gh-pages/square.js" class="external">square.js</a>):</p>
+
+<pre class="brush: js">squareNumber.onchange = function() {
+  myWorker.port.postMessage([squareNumber.value,squareNumber.value]);
+  console.log('Message posted to worker');
+}</pre>
+
+<p>Now, on to the worker. There is a bit more complexity here as well (<a href="https://github.com/mdn/simple-shared-worker/blob/gh-pages/worker.js" class="external">worker.js</a>):</p>
+
+<pre class="brush: js">self.addEventListener('connect', function(e) { // addEventListener() is needed
+  var port = e.ports[0];
+  port.onmessage = function(e) {
+    var workerResult = 'Result: ' + (e.data[0] * e.data[1]);
+    port.postMessage(workerResult);
+  }
+  <s>port.start();</s>  // not necessary since onmessage event handler is being used
+});</pre>
+
+<p>First, we use an <code>onconnect</code> handler to fire code when a connection to the port happens (i.e. when the <code>onmessage</code> event handler in the parent thread is setup, or when the <code>start()</code> method is explicitly called in the parent thread).</p>
+
+<p>We use the <code>ports</code> attribute of this event object to grab the port and store it in a variable.</p>
+
+<p>Next, we add a <code>message</code> handler on the port to do the calculation and return the result to the main thread. Setting up this <code>message</code> handler in the worker thread also implicitly opens the port connection back to the parent thread, so the call to <code>port.start()</code> is not actually needed, as noted above.</p>
+
+<p>Finally, back in the main script, we deal with the message (again, you'll see similar constructs in both <a href="https://github.com/mdn/simple-shared-worker/blob/gh-pages/multiply.js" class="external">multiply.js</a> and <a href="https://github.com/mdn/simple-shared-worker/blob/gh-pages/square.js" class="external">square.js</a>):</p>
+
+<pre class="brush: js">myWorker.port.onmessage = function(e) {
+  result2.textContent = e.data;
+  console.log('Message received from worker');
+}</pre>
+
+<p>When a message comes back through the port from the worker, we check what result type it is, then insert the calculation result inside the appropriate result paragraph.</p>
+
+<h2 id="About_thread_safety">About thread safety</h2>
+
+<p>The <a href="../Worker.html" title="The Worker interface of the Web Workers API represents a background task that can be easily created and can send messages back to its creator. Creating a worker is as simple as calling the Worker()&nbsp;constructor and specifying a script to be run in the worker thread."><code>Worker</code></a> interface spawns real OS-level threads, and mindful programmers may be concerned that concurrency can cause “interesting” effects in your code if you aren't careful.</p>
+
+<p>However, since web workers have carefully controlled communication points with other threads, it's actually very hard to cause concurrency problems. There's no access to non-threadsafe components or the DOM. And you have to pass specific data in and out of a thread through serialized objects. So you have to work really hard to cause problems in your code.</p>
+
+<h2 id="Transferring_data_to_and_from_workers_further_details">Transferring data to and from workers: further details</h2>
+
+<p>Data passed between the main page and workers is <strong>copied</strong>, not shared. Objects are serialized as they're handed to the worker, and subsequently, de-serialized on the other end. The page and worker <strong>do not share the same instance</strong>, so the end result is that <strong>a duplicate</strong> is created on each end. Most browsers implement this feature as <a href="Structured_clone_algorithm.html">structured cloning</a>.</p>
+
+<p>To illustrate this, let's create for didactical purpose a function named <code>emulateMessage()</code>, which will simulate the behavior of a value that is <em>cloned and not shared</em> during the passage from a <code>worker</code> to the main page or vice versa:</p>
+
+<pre class="brush: js">function emulateMessage (vVal) {
+    return eval("(" + JSON.stringify(vVal) + ")");
+}
+
+// Tests
+
+// test #1
+var example1 = new Number(3);
+console.log(typeof example1); // object
+console.log(typeof emulateMessage(example1)); // number
+
+// test #2
+var example2 = true;
+console.log(typeof example2); // boolean
+console.log(typeof emulateMessage(example2)); // boolean
+
+// test #3
+var example3 = new String("Hello World");
+console.log(typeof example3); // object
+console.log(typeof emulateMessage(example3)); // string
+
+// test #4
+var example4 = {
+    "name": "John Smith",
+    "age": 43
+};
+console.log(typeof example4); // object
+console.log(typeof emulateMessage(example4)); // object
+
+// test #5
+function Animal (sType, nAge) {
+    this.type = sType;
+    this.age = nAge;
+}
+var example5 = new Animal("Cat", 3);
+alert(example5.constructor); // Animal
+alert(emulateMessage(example5).constructor); // Object</pre>
+
+<p>A value that is cloned and not shared is called <em>message</em>. As you will probably know by now, <em>messages</em> can be sent to and from the main thread by using <code>postMessage()</code>, and the <code>message</code> event's <a href="../MessageEvent/data.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>data</code></a> attribute contains data passed back from the worker.</p>
+
+<p><strong>example.html</strong>: (the main page):</p>
+
+<pre class="brush: js">var myWorker = new Worker("my_task.js");
+
+myWorker.onmessage = function (oEvent) {
+  console.log("Worker said : " + oEvent.data);
+};
+
+myWorker.postMessage("ali");</pre>
+
+<p><strong>my_task.js</strong> (the worker):</p>
+
+<pre class="brush: js">postMessage("I\'m working before postMessage(\'ali\').");
+
+onmessage = function (oEvent) {
+  postMessage("Hi " + oEvent.data);
+};</pre>
+
+<p>The <a href="Structured_clone_algorithm.html">structured cloning</a> algorithm can accept JSON and a few things that JSON can't — like circular references.</p>
+
+<h3 id="Passing_data_examples">Passing data examples</h3>
+
+<h4 id="Example_1_Create_a_generic_asynchronous_eval()">Example #1: Create a generic "asynchronous <code>eval()</code>"</h4>
+
+<p>The following example shows how to use a worker in order to <strong>asynchronously</strong> execute any JavaScript code allowed in a worker, through <a href="../../JavaScript/Reference/Global_Objects/eval.html"><code>eval()</code></a> within the worker:</p>
+
+<pre class="brush: js">// Syntax: asyncEval(code[, listener])
+
+var asyncEval = (function () {
+  var aListeners = [], oParser = new Worker("data:text/javascript;charset=US-ASCII,onmessage%20%3D%20function%20%28oEvent%29%20%7B%0A%09postMessage%28%7B%0A%09%09%22id%22%3A%20oEvent.data.id%2C%0A%09%09%22evaluated%22%3A%20eval%28oEvent.data.code%29%0A%09%7D%29%3B%0A%7D");
+
+  oParser.onmessage = function (oEvent) {
+    if (aListeners[oEvent.data.id]) { aListeners[oEvent.data.id](oEvent.data.evaluated); }
+    delete aListeners[oEvent.data.id];
+  };
+
+  return function (sCode, fListener) {
+    aListeners.push(fListener || null);
+    oParser.postMessage({
+      "id": aListeners.length - 1,
+      "code": sCode
+    });
+  };
+})();</pre>
+
+<p>The <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/data_URIs">data URL</a> is equivalent to a network request, with the following response:</p>
+
+<pre class="brush: js">onmessage = function (oEvent) {
+  postMessage({
+    "id": oEvent.data.id,
+    "evaluated": eval(oEvent.data.code)
+  });
+}</pre>
+
+<p>Sample usage:</p>
+
+<pre class="brush: js">// asynchronous alert message...
+asyncEval("3 + 2", function (sMessage) {
+    alert("3 + 2 = " + sMessage);
+});
+
+// asynchronous print message...
+asyncEval("\"Hello World!!!\"", function (sHTML) {
+    document.body.appendChild(document.createTextNode(sHTML));
+});
+
+// asynchronous void...
+asyncEval("(function () {\n\tvar oReq = new XMLHttpRequest();\n\toReq.open(\"get\", \"http://www.mozilla.org/\", false);\n\toReq.send(null);\n\treturn oReq.responseText;\n})()");</pre>
+
+<h4 id="Example_2_Advanced_passing_JSON_Data_and_creating_a_switching_system">Example #2: Advanced passing JSON Data and creating a switching system</h4>
+
+<p>If you have to pass some complex data and have to call many different functions both on the main page and in the Worker, you can create a system like the following.</p>
+
+<p><strong>example.html</strong> (the main page):</p>
+
+<pre class="brush: html">&lt;!doctype html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta charset="UTF-8"  /&gt;
+&lt;title&gt;MDN Example - Queryable worker&lt;/title&gt;
+&lt;script type="text/javascript"&gt;
+  /*
+    QueryableWorker instances methods:
+     * sendQuery(queryable function name, argument to pass 1, argument to pass 2, etc. etc): calls a Worker's queryable function
+     * postMessage(string or JSON Data): see Worker.prototype.postMessage()
+     * terminate(): terminates the Worker
+     * addListener(name, function): adds a listener
+     * removeListener(name): removes a listener
+    QueryableWorker instances properties:
+     * defaultListener: the default listener executed only when the Worker calls the postMessage() function directly
+  */
+  function QueryableWorker (sURL, fDefListener, fOnError) {
+    var oInstance = this, oWorker = new Worker(sURL), oListeners = {};
+    this.defaultListener = fDefListener || function () {};
+    oWorker.onmessage = function (oEvent) {
+      if (oEvent.data instanceof Object &amp;&amp; oEvent.data.hasOwnProperty("vo42t30") &amp;&amp; oEvent.data.hasOwnProperty("rnb93qh")) {
+        oListeners[oEvent.data.vo42t30].apply(oInstance, oEvent.data.rnb93qh);
+      } else {
+        this.defaultListener.call(oInstance, oEvent.data);
+      }
+    };
+    if (fOnError) { oWorker.onerror = fOnError; }
+    this.sendQuery = function (/* queryable function name, argument to pass 1, argument to pass 2, etc. etc */) {
+      if (arguments.length &lt; 1) { throw new TypeError("QueryableWorker.sendQuery - not enough arguments"); return; }
+      oWorker.postMessage({ "bk4e1h0": arguments[0], "ktp3fm1": Array.prototype.slice.call(arguments, 1) });
+    };
+    this.postMessage = function (vMsg) {
+      oWorker.postMessage(vMsg);
+    };
+    this.terminate = function () {
+      oWorker.terminate();
+    };
+    this.addListener = function (sName, fListener) {
+      oListeners[sName] = fListener;
+    };
+    this.removeListener = function (sName) {
+      delete oListeners[sName];
+    };
+  };
+
+  // your custom "queryable" worker
+  var oMyTask = new QueryableWorker("my_task.js" /* , yourDefaultMessageListenerHere [optional], yourErrorListenerHere [optional] */);
+
+  // your custom "listeners"
+
+  oMyTask.addListener("printSomething", function (nResult) {
+    document.getElementById("firstLink").parentNode.appendChild(document.createTextNode(" The difference is " + nResult + "!"));
+  });
+
+  oMyTask.addListener("alertSomething", function (nDeltaT, sUnit) {
+    alert("Worker waited for " + nDeltaT + " " + sUnit + " :-)");
+  });
+&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;ul&gt;
+    &lt;li&gt;&lt;a id="firstLink" href="javascript:oMyTask.sendQuery('getDifference', 5, 3);"&gt;What is the difference between 5 and 3?&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href="javascript:oMyTask.sendQuery('waitSomething');"&gt;Wait 3 seconds&lt;/a&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;a href="javascript:oMyTask.terminate();"&gt;terminate() the Worker&lt;/a&gt;&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+
+<p><strong>my_task.js</strong> (the worker):</p>
+
+<pre class="brush: js">// your custom PRIVATE functions
+
+function myPrivateFunc1 () {
+  // do something
+}
+
+function myPrivateFunc2 () {
+  // do something
+}
+
+// etc. etc.
+
+// your custom PUBLIC functions (i.e. queryable from the main page)
+
+var queryableFunctions = {
+  // example #1: get the difference between two numbers:
+  getDifference: function (nMinuend, nSubtrahend) {
+      reply("printSomething", nMinuend - nSubtrahend);
+  },
+  // example #2: wait three seconds
+  waitSomething: function () {
+      setTimeout(function() { reply("alertSomething", 3, "seconds"); }, 3000);
+  }
+};
+
+// system functions
+
+function defaultQuery (vMsg) {
+  // your default PUBLIC function executed only when main page calls the queryableWorker.postMessage() method directly
+  // do something
+}
+
+function reply (/* listener name, argument to pass 1, argument to pass 2, etc. etc */) {
+  if (arguments.length &lt; 1) { throw new TypeError("reply - not enough arguments"); return; }
+  postMessage({ "vo42t30": arguments[0], "rnb93qh": Array.prototype.slice.call(arguments, 1) });
+}
+
+onmessage = function (oEvent) {
+  if (oEvent.data instanceof Object &amp;&amp; oEvent.data.hasOwnProperty("bk4e1h0") &amp;&amp; oEvent.data.hasOwnProperty("ktp3fm1")) {
+    queryableFunctions[oEvent.data.bk4e1h0].apply(self, oEvent.data.ktp3fm1);
+  } else {
+    defaultQuery(oEvent.data);
+  }
+};</pre>
+
+<p>It is possible to switch the content of each mainpage -&gt; worker and worker -&gt; mainpage message.</p>
+
+<h3 id="Passing_data_by_transferring_ownership_(transferable_objects)">Passing data by transferring ownership (transferable objects)</h3>
+
+<p>Google Chrome 17+ and Firefox 18+ contain an additional way to pass certain types of objects (transferable objects, that is objects implementing the <a href="../Transferable.html" title="The Transferable interface represents an object that can be transfered between different execution contexts, like the main thread and Web workers."><code>Transferable</code></a> interface) to or from a worker with high performance. Transferable objects are transferred from one context to another with a zero-copy operation, which results in a vast performance improvement when sending large data sets. Think of it as pass-by-reference if you're from the C/C++ world. However, unlike pass-by-reference, the 'version' from the calling context is no longer available once transferred. Its ownership is transferred to the new context. For example, when transferring an <a href="../../JavaScript/Reference/Global_Objects/ArrayBuffer.html" title="The documentation about this has not yet been written; please consider contributing!"><code>ArrayBuffer</code></a> from your main app to a worker script, the original <a href="../../JavaScript/Reference/Global_Objects/ArrayBuffer.html" title="The documentation about this has not yet been written; please consider contributing!"><code>ArrayBuffer</code></a> is cleared and no longer usable. Its content is (quite literally) transferred to the worker context.</p>
+
+<pre class="brush: js">// Create a 32MB "file" and fill it.
+var uInt8Array = new Uint8Array(1024*1024*32); // 32MB
+for (var i = 0; i &lt; uInt8Array.length; ++i) {
+  uInt8Array[i] = i;
+}
+
+worker.postMessage(uInt8Array.buffer, [uInt8Array.buffer]);
+</pre>
+
+<div class="note">
+<p><strong>Note</strong>: For more information on transferable objects, performance, and feature-detection for this method, read <a href="http://updates.html5rocks.com/2011/12/Transferable-Objects-Lightning-Fast" class="external">Transferable Objects: Lightning Fast!</a> on HTML5 Rocks.</p>
+</div>
+
+<h2 id="Embedded_workers">Embedded workers</h2>
+
+<p>There is not an "official" way to embed the code of a worker within a web page, like <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script" title="The HTML Script Element (&lt;script&gt;) is used to embed or reference an executable script within an HTML or XHTML document."><code>&lt;script&gt;</code></a> elements do for normal scripts. But a <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script" title="The HTML Script Element (&lt;script&gt;) is used to embed or reference an executable script within an HTML or XHTML document."><code>&lt;script&gt;</code></a> element that does not have a <code>src</code> attribute and has a <code>type</code> attribute that does not identify an executable mime-type can be considered a data block element that JavaScript could use. "Data blocks" is a more general feature of HTML5 that can carry almost any textual data. So, a worker could be embedded in this way:</p>
+
+<pre class="brush: html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta charset="UTF-8" /&gt;
+&lt;title&gt;MDN Example - Embedded worker&lt;/title&gt;
+&lt;script type="text/js-worker"&gt;
+  // This script WON'T be parsed by JS engines because its mime-type is text/js-worker.
+  var myVar = "Hello World!";
+  // Rest of your worker code goes here.
+&lt;/script&gt;
+&lt;script type="text/javascript"&gt;
+  // This script WILL be parsed by JS engines because its mime-type is text/javascript.
+  function pageLog (sMsg) {
+    // Use a fragment: browser will only render/reflow once.
+    var oFragm = document.createDocumentFragment();
+    oFragm.appendChild(document.createTextNode(sMsg));
+    oFragm.appendChild(document.createElement("br"));
+    document.querySelector("#logDisplay").appendChild(oFragm);
+  }
+&lt;/script&gt;
+&lt;script type="text/js-worker"&gt;
+  // This script WON'T be parsed by JS engines because its mime-type is text/js-worker.
+  onmessage = function (oEvent) {
+    postMessage(myVar);
+  };
+  // Rest of your worker code goes here.
+&lt;/script&gt;
+&lt;script type="text/javascript"&gt;
+  // This script WILL be parsed by JS engines because its mime-type is text/javascript.
+
+  // In the past...:
+  // blob builder existed
+  // ...but now we use Blob...:
+  var blob = new Blob(Array.prototype.map.call(document.querySelectorAll("script[type=\"text\/js-worker\"]"), function (oScript) { return oScript.textContent; }),{type: "text/javascript"});
+
+  // Creating a new document.worker property containing all our "text/js-worker" scripts.
+  document.worker = new Worker(window.URL.createObjectURL(blob));
+
+  document.worker.onmessage = function (oEvent) {
+    pageLog("Received: " + oEvent.data);
+  };
+
+  // Start the worker.
+  window.onload = function() { document.worker.postMessage(""); };
+&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;&lt;div id="logDisplay"&gt;&lt;/div&gt;&lt;/body&gt;
+&lt;/html&gt;</pre>
+
+<p>The embedded worker is now nested into a new custom <code>document.worker</code> property.</p>
+
+<h2 id="Further_examples">Further examples</h2>
+
+<p>This section provides further examples of how to use web workers.</p>
+
+<h3 id="Performing_computations_in_the_background">Performing computations in the background</h3>
+
+<p>Workers are mainly useful for allowing your code to perform processor-intensive calculations without blocking the user interface thread. In this example, a worker is used to calculate Fibonacci numbers.</p>
+
+<h4 id="The_JavaScript_code">The JavaScript code</h4>
+
+<p>The following JavaScript code is stored in the "fibonacci.js" file referenced by the HTML in the next section.</p>
+
+<pre class="brush: js">var results = [];
+
+function resultReceiver(event) {
+  results.push(parseInt(event.data));
+  if (results.length == 2) {
+    postMessage(results[0] + results[1]);
+  }
+}
+
+function errorReceiver(event) {
+  throw event.data;
+}
+
+onmessage = function(event) {
+  var n = parseInt(event.data);
+
+  if (n == 0 || n == 1) {
+    postMessage(n);
+    return;
+  }
+
+  for (var i = 1; i &lt;= 2; i++) {
+    var worker = new Worker("fibonacci.js");
+    worker.onmessage = resultReceiver;
+    worker.onerror = errorReceiver;
+    worker.postMessage(n - i);
+  }
+ };</pre>
+
+<p>The worker sets the property <code>onmessage</code> to a function which will receive messages sent when the worker object's <code>postMessage()</code> is called (note that this differs from defining a global <em>variable</em> of that name, or defining a <em>function</em> with that name. <code>var onmessage</code> and <code>function onmessage</code> will define global properties with those names, but they will not register the function to receive messages sent by the web page that created the worker). This starts the recursion, spawning new copies of itself to handle each iteration of the calculation.</p>
+
+<h4 id="The_HTML_code">The HTML code</h4>
+
+<pre class="brush: html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;meta charset="UTF-8"  /&gt;
+    &lt;title&gt;Test threads fibonacci&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+
+  &lt;div id="result"&gt;&lt;/div&gt;
+
+  &lt;script language="javascript"&gt;
+
+    var worker = new Worker("fibonacci.js");
+
+    worker.onmessage = function(event) {
+      document.getElementById("result").textContent = event.data;
+      dump("Got: " + event.data + "\n");
+    };
+
+    worker.onerror = function(error) {
+      dump("Worker error: " + error.message + "\n");
+      throw error;
+    };
+
+    worker.postMessage("5");
+
+  &lt;/script&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</pre>
+
+<p>The web page creates a <code>div</code> element with the ID <code>result</code> , which gets used to display the result, then spawns the worker. After spawning the worker, the <code>onmessage</code> handler is configured to display the results by setting the contents of the <code>div</code> element, and the <code>onerror</code> handler is set to <a href="https://developer.mozilla.org/en-US/docs/Debugging_JavaScript#dump.28.29">dump</a> the error message.</p>
+
+<p>Finally, a message is sent to the worker to start it.</p>
+
+<p><a href="https://developer.mozilla.org/samples/workers/fibonacci" class="external">Try this example</a>.</p>
+
+<h3 id="Performing_web_IO_in_the_background">Performing web I/O in the background</h3>
+
+<p>You can find an example of this in the article <a href="https://developer.mozilla.org/en-US/docs/Using_workers_in_extensions" class="internal">Using workers in extensions</a> .</p>
+
+<h3 id="Dividing_tasks_among_multiple_workers">Dividing tasks among multiple workers</h3>
+
+<p>As multi-core computers become increasingly common, it's often useful to divide computationally complex tasks among multiple workers, which may then perform those tasks on multiple-processor cores.</p>
+
+<h2 id="Other_types_of_worker">Other types of worker</h2>
+
+<p>In addition to dedicated and shared web workers, there are other types of worker available:</p>
+
+<ul>
+ <li><a href="../Service_Worker_API.html">ServiceWorkers</a> essentially act as proxy servers that sit between web applications, and the browser and network (when available). They are intended to (amongst other things) enable the creation of effective offline experiences, intercepting network requests and taking appropriate action based on whether the network is available and updated assets reside on the server. They will also allow access to push notifications and background sync APIs.</li>
+ <li>Chrome Workers are a Firefox-only type of worker that you can use if you are developing add-ons and want to use workers in extensions and have access to <a href="https://developer.mozilla.org/en/js-ctypes">js-ctypes</a> in your worker. See <a href="../ChromeWorker.html" title="If you're developing privileged code, and would like to create a worker that can use js-ctypes to perform calls to native code, you can do so by using ChromeWorker instead of the standard Worker object. It works exactly like a standard Worker, except that it has access to js-ctypes via a global ctypes object available in the global scope of the worker. Examples of ChromeWorker's using js-ctypes are availabe on Github and are linked to from the See Also section below. To use a postMessage with callback version of ChromeWorker that features promises, see PromiseWorker."><code>ChromeWorker</code></a> for more details.</li>
+ <li><a href="../Web_Audio_API.html#Audio_Workers">Audio Workers</a> provide the ability for direct scripted audio processing to be done in a web worker context.</li>
+</ul>
+
+<h2 id="Functions_and_interfaces_available_in_workers">Functions and interfaces available in workers</h2>
+
+<p>You can use most standard JavaScript features inside a web worker, including:</p>
+
+<ul>
+ <li><a href="../Navigator.html" title="The Navigator interface represents the state and the identity of the user agent. It allows scripts to query it and to register themselves to carry on some activities."><code>Navigator</code></a></li>
+ <li><a href="../XMLHttpRequest.html" title="XMLHttpRequest is an&nbsp;API that provides client functionality for transferring data between a client and a server. It provides an easy way to retrieve data from a URL without having to do a full page refresh. This enables a Web page to update just a part of the page without disrupting what the user is doing."><code>XMLHttpRequest</code></a></li>
+ <li><a href="../../JavaScript/Reference/Global_Objects/Array.html" title="The JavaScript Array&nbsp;object is a global object that&nbsp;is used in the&nbsp;construction&nbsp;of&nbsp;arrays; which are high-level, list-like objects."><code>Array</code></a>, <a href="../../JavaScript/Reference/Global_Objects/Date.html" title="Creates a JavaScript Date instance that represents a single moment in time. Date objects are based on a time value that is the number of milliseconds since 1 January, 1970 UTC."><code>Date</code></a>, <a href="../../JavaScript/Reference/Global_Objects/Math.html" title="Math is a built-in object that has properties and methods for mathematical constants and functions. Not a function object."><code>Math</code></a>, and <a href="../../JavaScript/Reference/Global_Objects/String.html" title="The String global object is a constructor for strings, or a sequence of characters."><code>String</code></a></li>
+ <li><a href="../Window/requestAnimationFrame-2.html" title="You should call this method whenever you're ready to update your animation onscreen. This will request that your animation function be called before the browser performs the next repaint. The number of callbacks is usually 60 times per second, but will generally match the display refresh rate in most web browsers as per W3C recommendation. The callback rate may be reduced to a lower rate when running in background tabs or in hidden &lt;iframe&gt;s in order to improve performance and battery life."><code>Window.requestAnimationFrame</code></a>, <a href="../WindowTimers/setTimeout.html" title="Calls a function or executes a code snippet after a specified delay."><code>WindowTimers.setTimeout</code></a>, and <a href="../WindowTimers/setInterval.html" title="Repeatedly calls a function or executes a code snippet, with a fixed time delay between each call. Returns an intervalID."><code>WindowTimers.setInterval</code></a></li>
+</ul>
+
+<p>The main thing you <em>can't</em> do in a Worker is directly affect the parent page. This includes manipulating the DOM and using that page's objects. You have to do it indirectly, by sending a message back to the main script via <a href="../DedicatedWorkerGlobalScope/postMessage.html" title="The postMessage() method of the DedicatedWorkerGlobalScope interface sends a message to the main thread that spawned it. This accepts a single parameter, which is the data to send to the worker. The data may be any value or JavaScript object handled by the structured clone algorithm, which includes cyclical references."><code>DedicatedWorkerGlobalScope.postMessage</code></a>, then actioning the changes from there.</p>
+
+<div class="note">
+<p><strong>Note</strong>: For a complete list of functions available to workers, see <a href="https://developer.mozilla.org/en-US/docs/Web/Reference/Functions_and_classes_available_to_workers">Functions and interfaces available to workers</a>.</p>
+</div>
+
+<h2 id="Specifications">Specifications</h2>
+
+<table class="standard-table">
+ <tbody>
+  <tr>
+   <th scope="col">Specification</th>
+   <th scope="col">Status</th>
+   <th scope="col">Comment</th>
+  </tr>
+  <tr>
+   <td><a href="https://html.spec.whatwg.org/multipage/#toc-workers" class="external" lang="en" title="The 'WHATWG HTML Living Standard' specification" hreflang="en">WHATWG HTML Living Standard</a></td>
+   <td><span class="spec-Living">Living Standard</span></td>
+   <td>No change from <a href="https://w3c.github.io/workers/" class="external" lang="en" title="The 'Web Workers' specification" hreflang="en">Web Workers</a>.</td>
+  </tr>
+  <tr>
+   <td><a href="https://w3c.github.io/workers/" class="external" lang="en" title="The 'Web Workers' specification" hreflang="en">Web Workers</a></td>
+   <td><span class="spec-ED">Editor's Draft</span></td>
+   <td>Initial definition.</td>
+  </tr>
+ </tbody>
+</table>
+
+<h2 id="Browser_compatibility">Browser compatibility</h2>
+
+<div><div class="htab"> 
+    <a name="AutoCompatibilityTable" id="AutoCompatibilityTable"></a> 
+    <ul> 
+        <li class="selected"><a>Desktop</a></li> 
+        <li><a>Mobile</a></li> 
+    </ul> 
+</div></div>
+
+<div id="compat-desktop">
+<table class="compat-table">
+ <tbody>
+  <tr>
+   <th>Feature</th>
+   <th>Chrome</th>
+   <th>Firefox (Gecko)</th>
+   <th>Internet Explorer</th>
+   <th>Opera</th>
+   <th>Safari (WebKit)</th>
+  </tr>
+  <tr>
+   <td>Basic support</td>
+   <td>4<sup>[1]</sup></td>
+   <td><a href="https://developer.mozilla.org/en-US/Firefox/Releases/3.5" title="Released on 2009-06-30.">3.5</a> (1.9.1)</td>
+   <td>10.0</td>
+   <td>10.6<sup>[1]</sup></td>
+   <td>4<sup>[2]</sup></td>
+  </tr>
+  <tr>
+   <td>Shared workers</td>
+   <td>4<sup>[1]</sup></td>
+   <td><a href="https://developer.mozilla.org/en-US/Firefox/Releases/29" title="Released on 2014-04-29.">29</a> (29)</td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+   <td>10.6</td>
+   <td>5<br>
+    <span style="color: #f00;">No&nbsp;support</span> 6.1<sup>[4]</sup></td>
+  </tr>
+  <tr>
+   <td>Passing data using <a href="Structured_clone_algorithm.html">structured cloning</a></td>
+   <td>13</td>
+   <td><a href="https://developer.mozilla.org/en-US/Firefox/Releases/8" title="Released on 2011-11-08.">8</a> (8)</td>
+   <td>10.0</td>
+   <td>11.5</td>
+   <td>6</td>
+  </tr>
+  <tr>
+   <td>Passing data using <a href="http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#transferable-objects" class="external">transferable objects</a></td>
+   <td>17 <span class="inlineIndicator prefixBox prefixBoxInline" title="prefix"><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Prefixes" title="The name of this feature is prefixed with 'webkit' as this browser considers it experimental">webkit</a></span><br>
+    21</td>
+   <td><a href="https://developer.mozilla.org/en-US/Firefox/Releases/18" title="Released on 2013-01-08.">18</a> (18)</td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+   <td>15</td>
+   <td>6</td>
+  </tr>
+  <tr>
+   <td>Global <a href="../Window/URL.html" title="The Window.URL property returns an object that provides static methods used for creating and managing object URLs. It can also be called as a constructor to construct URL objects."><code>URL</code></a></td>
+   <td>10<sup>[3]</sup><br>
+    23</td>
+   <td><a href="https://developer.mozilla.org/en-US/Firefox/Releases/21" title="Released on 2013-05-14.">21</a> (21)</td>
+   <td>11</td>
+   <td>15</td>
+   <td>6<sup>[3]</sup></td>
+  </tr>
+ </tbody>
+</table>
+</div>
+
+<div id="compat-mobile">
+<table class="compat-table">
+ <tbody>
+  <tr>
+   <th>Feature</th>
+   <th>Android</th>
+   <th>Chrome for Android</th>
+   <th>Firefox Mobile (Gecko)</th>
+   <th>Firefox OS (Gecko)</th>
+   <th>IE Phone</th>
+   <th>Opera Mobile</th>
+   <th>Safari Mobile</th>
+  </tr>
+  <tr>
+   <td>Basic support</td>
+   <td>4.4</td>
+   <td>4<sup>[1]</sup></td>
+   <td>3.5</td>
+   <td>1.0.1</td>
+   <td>10.0</td>
+   <td>11.5<sup>[1]</sup></td>
+   <td>5.1<sup>[2]</sup></td>
+  </tr>
+  <tr>
+   <td>Shared workers</td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+   <td>4<sup>[1]</sup></td>
+   <td>8</td>
+   <td>1.0.1</td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+  </tr>
+  <tr>
+   <td>Passing data using <a href="Structured_clone_algorithm.html">structured cloning</a></td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+   <td>4</td>
+   <td>8</td>
+   <td>1.0.1</td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+  </tr>
+  <tr>
+   <td>Passing data using <a href="http://www.w3.org/html/wg/drafts/html/master/infrastructure.html#transferable-objects" class="external">transferable objects</a></td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+   <td>18</td>
+   <td>1.0.1</td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+  </tr>
+ </tbody>
+</table>
+</div>
+
+<p>[1] Chrome and Opera give an error "<code>Uncaught SecurityError: Failed to construct 'Worker': Script at 'file:///Path/to/worker.js' cannot be accessed from origin 'null'.</code>" when you try to run a worker locally. It needs to be on a proper domain.</p>
+
+<p>[2] As of Safari 7.1.2, you can call <code>console.log</code> from inside a worker, but it won't print anything to the console. Older versions of Safari don't allow you to call <code>console.log</code> from inside a worker.</p>
+
+<p>[3] This feature is implemented prefixed as <code>webkitURL</code>.</p>
+
+<p>[4] Safari <a href="https://bugs.webkit.org/show_bug.cgi?id=116359" class="external">removed SharedWorker support</a>.</p>
+
+<h2 id="See_also">See also</h2>
+
+<ul>
+ <li><code><a href="../Worker.html" class="internal">Worker</a></code> interface</li>
+ <li><code><a href="../SharedWorker.html" class="internal">SharedWorker</a></code> interface</li>
+ <li><a href="Functions_and_classes_available_to_workers.html">Functions available to workers</a></li>
+ <li><a href="Using_web_workers.html">Advanced concepts and examples</a></li>
+</ul>
+                  
+                
+              </article>
+
+              
+
+    
+    
+    
+
+    
+    
+    
+
+    <div class="share">
+        <strong>Share:</strong>
+        <ul>
+            <li><a href="http://twitter.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FAPI%2FWeb_Workers_API%2FUsing_web_workers%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dtwitter.com&amp;text=I+learned+about+Using+Web+Workers+on+MDN." target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=twitter.com" data-title="I learned about Using Web Workers on MDN." class="share-link twitter"><i aria-hidden="true" class="icon-twitter"></i>Twitter</a></li>
+            <li><a href="http://facebook.com/sharer.php?s=100&amp;p[url]=https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" data-title="I learned about Using Web Workers on MDN." class="share-link facebook"><i aria-hidden="true" class="icon-facebook"></i>Facebook</a></li>
+            <li><a href="https://plus.google.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FAPI%2FWeb_Workers_API%2FUsing_web_workers%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dplus.google.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=plus.google.com" data-title="I learned about Using Web Workers on MDN." class="share-link gplus"><i aria-hidden="true" class="icon-google-plus"></i>Google+</a></li>
+        </ul>
+    </div>
+
+              
+
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                  
+                  
+  <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags icon-fw"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Advanced">Advanced</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Firefox">Firefox</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Guide">Guide</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/HTML5">HTML5</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/JavaScript">JavaScript</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Workers">Workers</a></li>
+      
+    </ul>
+  </div>
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-group icon-fw"></i>&nbsp;<strong>Contributors to this page:</strong> 
+        <a href="https://developer.mozilla.org/en-US/profiles/georapbox">georapbox</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills">chrisdavidmills</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/lifeiscontent">lifeiscontent</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/asieo">asieo</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Sebastianz">Sebastianz</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/changbenny">changbenny</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/trusktr">trusktr</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/foxbrush">foxbrush</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Dattaya">Dattaya</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Scruffy">Scruffy</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/fscholz">fscholz</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/teoli">teoli</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Ehsan">Ehsan</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/denilsonsa">denilsonsa</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/betoqueti">betoqueti</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/svincent">svincent</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/edicsa">edicsa</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/bergus">bergus</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/MDNion">MDNion</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/nurbek-ab">nurbek-ab</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/.vimrc">.vimrc</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Zearin_Galaurum">Zearin_Galaurum</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/yjbanov">yjbanov</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/1011X">1011X</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/nop">nop</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/brianblakely">brianblakely</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Luke314">Luke314</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Jeremie">Jeremie</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/PaulE">PaulE</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/MeoMix">MeoMix</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/sujaykathrotia">sujaykathrotia</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/kscarfone">kscarfone</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/dechov">dechov</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Rob W">Rob W</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Sheppy">Sheppy</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/ScottMichaud">ScottMichaud</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/openjck">openjck</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/fusionchess">fusionchess</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/sunnylost">sunnylost</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/cwmma">cwmma</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Vincent">Vincent</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/deadsquid">deadsquid</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/qw3n">qw3n</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/jonfriskics">jonfriskics</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/louisremi">louisremi</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/dbruant">dbruant</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/allergic">allergic</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/tushartyagi">tushartyagi</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/lmorchard">lmorchard</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/ahcxlh">ahcxlh</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Yukoba">Yukoba</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/fryn">fryn</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Mohammed_Hossam">Mohammed_Hossam</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Tyson">Tyson</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/alimd">alimd</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/ethertank">ethertank</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/max_overdrive">max_overdrive</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/yyss">yyss</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/bratsche">bratsche</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/ebidel">ebidel</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/jswisher">jswisher</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/robflaherty">robflaherty</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/kuvik3">kuvik3</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Waldo">Waldo</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/inma_610">inma_610</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/paul.irish">paul.irish</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/sebmozilla">sebmozilla</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Tiller">Tiller</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/GijsKruitbosch">GijsKruitbosch</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/pnewhook">pnewhook</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Brettz9">Brettz9</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Wjjohnst">Wjjohnst</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Sephr">Sephr</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Blizzard">Blizzard</a>
+    
+                    </div>
+                  
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o icon-fw"></i>&nbsp;<strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/georapbox">georapbox</a>,
+                      <time datetime="2016-04-29T00:24:21-07:00">Apr 29, 2016, 12:24:21 AM</time>
+                    </div>
+                  
+                </div>
+              
+            </div>
+
+            
+          </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Web/API/Web_Workers_API/Using_web_workers$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Web/API/Web_Workers_API/Using_web_workers$history" label="View page history"></menuitem>
+  </menu>
+
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+        
+        <div class="contentinfo">
+          <p>© 2005-2016 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>
+          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+        
+        </div>
+      </div>
+      <div class="column-strip">
+        
+          
+  
+    <form class="languages go" method="get" action="https://developer.mozilla.org/en-US/docs/Web">
+      <label for="language">Other languages:</label>
+      <select id="language" class="wiki-l10n" name="next" dir="ltr">
+        <option value="/en-US/docs/Web/API/Web_Workers_API/Using_web_workers" selected="">
+          English (US)
+        </option>
+        
+          <option value="/es/docs/Web/Guide/Performance/Usando_web_workers">
+            Español
+          </option>
+          <option value="/fr/docs/Utilisation_des_web_workers">
+            Français
+          </option>
+          <option value="/ja/docs/Web/API/Web_Workers_API/Using_web_workers">
+            日本語
+          </option>
+          <option value="/ko/docs/Web/API/Web_Workers_API/basic_usage">
+            한국어
+          </option>
+          <option value="/nl/docs/Gebruik_maken_van_DOM_workers">
+            Nederlands
+          </option>
+          <option value="/pl/docs/Web/Guide/Performance/Uzycie_web_workers">
+            Polski
+          </option>
+          <option value="/ru/docs/DOM/Using_web_workers">
+            Русский
+          </option>
+          <option value="/zh-CN/docs/Web/API/Web_Workers_API/Using_web_workers">
+            中文 (简体)
+          </option>
+          <option value="/zh-TW/docs/Web/Guide/Performance/Using_web_workers">
+            正體中文 (繁體)
+          </option>
+      </select>
+      <noscript>&lt;button type="submit"&gt;Go&lt;/button&gt;</noscript>
+    </form>
+  
+
+        
+      </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+  
+    
+    <!--[if lte IE 8]><script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/selectivizr.091e18cf669b.js" charset="utf-8"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/main.a7b27a25fb9c.js" charset="utf-8"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+    
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/syntax-prism-min.js" charset="utf-8"></script><script type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/wiki.bd71ca9fd27d.js" charset="utf-8" id="wikiscript"></script>
+
+  
+
+  <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/helpfulness.7b208a764d28.js" charset="utf-8"></script>
+
+  
+
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 15:40:03 GMT -->
+</body></html>

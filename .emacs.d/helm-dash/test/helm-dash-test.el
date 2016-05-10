@@ -77,7 +77,6 @@
 	(docset "C++"))
     (should (equal (helm-dash-sub-docset-name-in-pattern pattern docset) "printf"))))
 
-
 ;;;; helm-dash-result-url
 
 (ert-deftest helm-dash-result-url/checks-docset-types ()
@@ -105,6 +104,49 @@
     (helm-dash-add-to-kill-ring results))
   (should (equal (current-kill 0 t)
 		 "(helm-dash-browse-url '(Redis (\"func\" \"Documents/blpop.html\")))")))
+
+;;;; helm-dash-available-docsets
+
+(ert-deftest helm-dash-available-docsets-test ()
+  "Should return a list of available docsets."
+  (let ((docsets (helm-dash-available-docsets)))
+    (should (member "Ruby" docsets))
+    ;; ignored docset:
+    (should-not (member "Man_Pages" docsets))))
+
+;;;; helm-dash-activate-docset
+
+(ert-deftest helm-dash-activate-docset ()
+  (let ((helm-dash-common-docsets '("Redis" "Go" "CSS"))
+	(helm-dash-connections
+	 '(("Redis" "/tmp/.docsets/Redis.docset/Contents/Resources/docSet.dsidx" "DASH")
+	   ("Go" "/tmp/.docsets/Go.docset/Contents/Resources/docSet.dsidx" "DASH")
+	   ("CSS" "/tmp/.docsets/CSS.docset/Contents/Resources/docSet.dsidx" "ZDASH"))))
+    (helm-dash-activate-docset "Clojure")
+    (should (equal'("Clojure" "Redis" "Go" "CSS") helm-dash-common-docsets))
+    (should (equal nil helm-dash-connections))))
+
+;; helm-dash-buffer-local-docsets
+
+(ert-deftest helm-dash-buffer-local-docsets-narrowing ()
+  (let ((c-buffer nil)
+        (helm-dash-connections
+         '(("Go" "/tmp/.docsets/Go.docset/Contents/Resources/docSet.dsidx" "DASH")
+           ("C" "/tmp/.docsets/C.docset/Contents/Resources/docSet.dsidx" "DASH")
+           ("CSS" "/tmp/.docsets/CSS.docset/Contents/Resources/docSet.dsidx" "ZDASH"))))
+    (with-temp-buffer
+      (setq c-buffer (current-buffer))
+      (setq-local helm-dash-docsets (list "C"))
+
+      (with-temp-buffer
+        (setq-local helm-dash-docsets (list "Go"))
+        (should (equal (helm-dash-maybe-narrow-docsets "*")
+                       '(("Go" "/tmp/.docsets/Go.docset/Contents/Resources/docSet.dsidx" "DASH"))))
+
+        (with-current-buffer c-buffer
+          (should (equal (helm-dash-maybe-narrow-docsets "*")
+                         '(("C" "/tmp/.docsets/C.docset/Contents/Resources/docSet.dsidx" "DASH"))))
+          )))))
 
 (provide 'helm-dash-test)
 

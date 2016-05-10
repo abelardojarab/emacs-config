@@ -1,0 +1,969 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/Games/Techniques/3D_on_the_web/Building_up_a_basic_demo_with_Three.js by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 15:45:13 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <script async="" src="../../../../../../www.google-analytics.com/analytics.js"></script><script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+  
+    
+  
+
+  
+  <title>Building up a basic demo with Three.js</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+  
+    
+    
+    <link href="../../../../../../developer.cdn.mozilla.net/static/build/styles/mdn.593f20d8c365.css" rel="stylesheet" type="text/css">
+
+    
+  
+    <link href="../../../../../../developer.cdn.mozilla.net/static/build/styles/wiki.13dd9abdfb62.css" rel="stylesheet" type="text/css">
+
+    
+
+    
+      
+        <link rel="stylesheet" type="text/css" href="https://developer.mozilla.org/en-US/docs/Games$styles">
+      
+    
+
+  <!-- common social tags -->
+  
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon144.a6e4162070f4.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon114.0e9fabd44f85.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon72.8ff9d87c82a0.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon57.a2490b9a2d76.png">
+  <!-- basic favicon -->
+  
+    
+  
+  <link rel="shortcut icon" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon32.e02854fdcf73.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/html5shiv.3948ccddab6f.js" charset="utf-8"></script>
+  <![endif]-->
+
+  
+  <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Games/Techniques/3D_on_the_web/Building_up_a_basic_demo_with_Three.js$json">
+  <link rel="canonical" href="Building_up_a_basic_demo_with_Three.html">
+
+  
+
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="Building up a basic demo with Three.js">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Games/Techniques/3D_on_the_web/Building_up_a_basic_demo_with_Three.js">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Games/Techniques/3D_on_the_web/Building_up_a_basic_demo_with_Three.js">
+  <meta name="twitter:title" content="Building up a basic demo with Three.js">
+  
+  <meta property="og:description" content="In this article we'll take you through the real basics of using Three, including setting up a development environment, structuring the necessary HTML, the fundamental objects of Three, and how to build up a basic demo.">
+  <meta name="description" content="In this article we'll take you through the real basics of using Three, including setting up a development environment, structuring the necessary HTML, the fundamental objects of Three, and how to build up a basic demo.">
+  <meta name="twitter:description" content="In this article we'll take you through the real basics of using Three, including setting up a development environment, structuring the necessary HTML, the fundamental objects of Three, and how to build up a basic demo.">
+  
+
+  
+    
+
+
+
+  
+</head>
+<body data-slug="Games/Techniques/3D_on_the_web/Building_up_a_basic_demo_with_Three.js" contextmenu="edit-history-menu" data-search-url="" class="document zone ">
+
+  <script type="text/javascript">
+    (function(win) {
+        'use strict';
+
+        
+            (function(){
+  var FLAGS = {
+    'compat_api': false,'kumaediting': false,'page_move': false,'registration_disabled': false,'search_suggestions': false,'section_edit': false,'spam_admin_override': false,'spam_checks_enabled': true,'spam_spammer_override': false,'spam_submissions_enabled': false,'spam_testing_mode': false,'wiki_samples': true,'wiki_spam_exempted': false,'wiki_spam_training': true
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': true,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+
+        // This needs to be set before ckeditor.js loads
+        window.CKEDITOR_BASEPATH = 'https://developer.mozilla.org/static/js/libs/ckeditor/build/ckeditor/';
+
+        // This represents the site configuration
+        win.mdn = {
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+            
+            notifications: [],
+            
+            // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            },
+            // Assets that need to be dynamically injected
+            assets_disabled: {
+                css: {
+                    'editor-content': ['https://developer.cdn.mozilla.net/static/build/styles/editor-content.3d79df72080d.css',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/styles/wiki-compat-tables.f3a3bfce97a1.css',]
+                },
+                js: {
+                    'syntax-prism': ['https://developer.cdn.mozilla.net/static/build/js/syntax-prism.7a66ddfa68bf.js',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/js/wiki-compat-tables.14ce5dcb2c3d.js',]
+                }
+            }
+        };
+    })(this);
+</script>
+
+  
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+    
+      <li><a href="#q" id="skip-search">Skip to search</a></li>
+    
+  </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+    <a href="https://developer.mozilla.org/en-US/" class="logo">Mozilla Developer Network</a>
+
+    <div id="nav-sec">
+        
+                  <ul>
+                  <li>
+
+    
+
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                Sign in
+              </span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FGames%2FTechniques%2F3D_on_the_web%2FBuilding_up_a_basic_demo_with_Three.js" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/Games/Techniques/3D_on_the_web/Building_up_a_basic_demo_with_Three.js" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/Games/Techniques/3D_on_the_web/Building_up_a_basic_demo_with_Three.js" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="../../../../../users/github/login/index5b4a.html?next=%2Fen-US%2Fdocs%2FGames%2FTechniques%2F3D_on_the_web%2FBuilding_up_a_basic_demo_with_Three.js" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+              
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+        
+    </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../../../Web/API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+
+  
+      
+        <div class="zone-article-header" id="document-main"><div class="center">
+          <!-- zone title -->
+          <div class="zone-title"><a href="https://developer.mozilla.org/en-US/docs/Games">Game development</a></div>
+          <!-- zone image -->
+          <div class="zone-image"></div>
+        </div></div>
+      
+
+     <!-- end is_zone -->
+
+    <div class="wiki-main-content"><div class="center">
+      
+      <div class="article-meta">
+        <!-- action buttons -->
+        
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+  <ul class="page-buttons" data-sticky="false">
+      
+      <li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+              
+                <li class="smaller">No translations exist for this article.</li>
+              
+
+              
+                <li><a href="https://developer.mozilla.org/en-US/docs/Games/Techniques/3D_on_the_web/Building_up_a_basic_demo_with_Three.js$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+              
+            </ul>
+          </div>
+        </div>
+      </li>
+
+      <li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Games/Techniques/3D_on_the_web/Building_up_a_basic_demo_with_Three.js$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li>
+
+        
+
+        <li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Games/Techniques/3D_on_the_web/Building_up_a_basic_demo_with_Three.js$history" rel="nofollow, noindex">History</a></li>
+                
+                
+                
+                
+
+                
+
+                
+                
+                
+                <li class="page-print"><a href="#" onclick="return window.print();">Print this article</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+        
+  <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Games" rel="v:url" property="v:title">Game development</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Games/Techniques" rel="v:url" property="v:title">Techniques for game development</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Games/Techniques/3D_on_the_web" rel="v:url" property="v:title">3D games on the Web</a></li>
+    
+    <li class="crumb" typeof="v:Breadcrumb" property="v:title">Building up a basic demo with Three.js</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        
+        <div class="contributor-avatars" data-all-text="see all contributors" data-alternate-message="hide contributors">
+            <ul>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/end3r" title="View profile: end3r">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="end3r" data-src="../../../../../../secure.gravatar.com/avatar/a84d365d52c5f58dd52ed9dc1583f55d6c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">end3r</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills" title="View profile: chrisdavidmills">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="chrisdavidmills" data-src="../../../../../../secure.gravatar.com/avatar/deeea0ba82390bd5acc539703c4b0cfb6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">chrisdavidmills</noscript></a>
+                </li>
+            
+            </ul>
+        </div>
+        
+
+        <h1>Building up a basic demo with Three.js</h1>
+
+      </div>
+      
+
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-present">
+
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+            
+              <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+              
+              <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#Environment_setup" rel="internal">Environment setup</a></li><li><a href="#HTML_structure" rel="internal">HTML structure</a></li><li><a href="#Renderer" rel="internal">Renderer</a></li><li><a href="#Scene" rel="internal">Scene</a></li><li><a href="#Camera" rel="internal">Camera</a></li><li><a href="#Rendering_the_scene" rel="internal">Rendering the scene</a></li><li><a href="#Geometry" rel="internal">Geometry</a></li><li><a href="#Material" rel="internal">Material</a></li><li><a href="#Mesh" rel="internal">Mesh</a></li><li><a href="#Adding_the_cube_to_the_scene" rel="internal">Adding the cube to the scene</a></li><li><a href="#More_shapes_and_materials" rel="internal">More shapes and materials</a></li><li><a href="#Lights" rel="internal">Lights</a></li><li><a href="#Animation" rel="internal">Animation</a><ol><li><a href="#Rotation" rel="internal">Rotation</a></li><li><a href="#Scaling" rel="internal">Scaling</a></li><li><a href="#Moving" rel="internal">Moving</a></li></ol></li><li><a href="#Conclusion" rel="internal">Conclusion</a>
+                </li></ol>
+              </div>
+              
+              </div>
+            
+
+            
+            
+              
+            
+
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-half wiki-column text-content">
+
+              
+
+              
+
+              
+                
+                
+                
+              
+              
+
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                
+                  
+                    <p class="summary">A typical 3D scene in a game — even the simplest one — contains standard items like shapes located in a coordinate system, a camera to actually see them, lights and materials to make it look better, animations to make it look alive, etc.<strong> Three.js</strong>, as with any other 3D library, provides built-in helper functions to help you implement common 3D functionality more quickly. <span class="seoSummary">In this article we'll take you through the real basics of using Three, including setting up a development environment, structuring the necessary HTML, the fundamental objects of Three, and how to build up a basic demo.</span></p>
+
+<div class="note">
+<p><strong>Note</strong>: We chose Three because it is one of the most popular <a href="../../../Web/API/WebGL_API.html">WebGL</a> libraries, and it is easy to get started with. We are not trying to say it is better than any other WebGL library available, and you should feel free to try another library, such as <a href="http://www.ambiera.com/copperlicht/index.html" class="external">CopperLicht</a>, <a href="http://www.glge.org/" class="external">GLGE</a>, <a href="http://osgjs.org/" class="external">OSG.js</a>, <a href="https://code.google.com/p/o3d/" class="external">O3D</a>, or any others that you think will work for you.</p>
+</div>
+
+<h2 id="Environment_setup">Environment setup</h2>
+
+<p>To start developing with Three.js, you don't need much. You should:</p>
+
+<ul>
+ <li>Make sure you are using a modern browser with good <a href="../../../Web/API/WebGL_API.html">WebGL</a> support, such as the latest Firefox or Chrome.</li>
+ <li>Create a directory to store your experiments in.</li>
+ <li>Save a copy of the <a href="../../../../../../threejs.org/build/three.min.js" class="external">latest minimized Three.js library</a> inside your directory.</li>
+ <li>Open the <a href="http://threejs.org/docs/" class="external">Three.js documentation</a> in a separate tab — it is useful to refer to.</li>
+</ul>
+
+<h2 id="HTML_structure">HTML structure</h2>
+
+<p>Here's the HTML structure we will use.</p>
+
+<pre class="brush: html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+	&lt;meta charset="utf-8"&gt;
+	&lt;title&gt;MDN Games: Three.js demo&lt;/title&gt;
+	&lt;style&gt;
+		body { margin: 0; padding: 0; }
+		canvas { width: 100%; height: 100%; }
+	&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;script src="three.min.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+	var WIDTH = window.innerWidth;
+	var HEIGHT = window.innerHeight;
+	/* all our JavaScript code goes here */
+&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</pre>
+
+<p>It contains some basic information like the document <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/title" title="The HTML &lt;title&gt; element defines the title of the document, shown in a browser's title bar or on the page's tab. It can only contain text and any contained tags are not interpreted."><code>&lt;title&gt;</code></a>, and some CSS to set the <code>width</code> and <code>height</code> of the <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/canvas" title="The HTML &lt;canvas&gt; Element can be used to draw graphics via scripting (usually JavaScript). For example, it can be used to draw graphs, make photo compositions or even perform animations. You may (and should) provide alternate content inside the &lt;canvas&gt; block. That content will be rendered both on older browsers that don't support canvas and in browsers with JavaScript disabled."><code>&lt;canvas&gt;</code></a> element that Three.js will insert on the page to 100% so that it will fill the entire available viewport space. The first <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script" title="The HTML Script Element (&lt;script&gt;) is used to embed or reference an executable script within an HTML or XHTML document."><code>&lt;script&gt;</code></a> element includes the Three.js library in the page, and we will write our example code into the second one. There are two helper variables already included, which store the window's <code>width</code> and <code>height</code>.</p>
+
+<p>Before reading on, copy this code to a new text file, and save it in your working directory as <code>index.html</code>.</p>
+
+<h2 id="Renderer">Renderer</h2>
+
+<p>A renderer is a tool that displays scenes right in your browser. There are a few different renderers: WebGL is the default one, and the others you can use are Canvas, SVG, CSS and DOM. They differ in a way everything is rendered, so the WebGL implementation will work differently than the CSS one, but the idea is to have it look exactly the same for the end user. Thanks to this approach, a fallback can be used if the primary technology is not supported by the browser.</p>
+
+<pre class="brush: js">var renderer = new THREE.WebGLRenderer({antialias:true});
+renderer.setSize(WIDTH, HEIGHT);
+renderer.setClearColor(0xDDDDDD, 1);
+document.body.appendChild(renderer.domElement);
+</pre>
+
+<p>We are creating a new WebGL renderer, setting it's size to fit the whole available space on the screen and appending the DOM structure to the page. You probably noticed the <code>antialias</code> parameter in the first line — this enables the edges of the shapes to be rendered a little more smoothly. The <code>setClearColor()</code> method sets our background to a light gray colour instead of the default black one.</p>
+
+<p>Add this code into the second <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/script" title="The HTML Script Element (&lt;script&gt;) is used to embed or reference an executable script within an HTML or XHTML document."><code>&lt;script&gt;</code></a> element, just below the JavaScript comment.</p>
+
+<h2 id="Scene">Scene</h2>
+
+<p>A scene is the place where everything happens. When creating new objects in the demo, we will be adding them all to the scene to make them visible on the screen. In three.js, the scene is reperesented by a <code>Scene</code> object. Let's create it, by adding the following line below our previous lines:</p>
+
+<pre class="brush: js">var scene = new THREE.Scene();
+</pre>
+
+<p>Later on we will be using the <code>.add()</code> method to add objects to the scene.</p>
+
+<h2 id="Camera">Camera</h2>
+
+<p>We have the rendered scene, but we still need a camera to view the scene — imagine a movie set without any cameras. The following lines put the camera in place in the 3D coordinate system, and point it in the direction of our scene so people can actually see something:</p>
+
+<pre class="brush: js">var camera = new THREE.PerspectiveCamera(70, WIDTH/HEIGHT);
+camera.position.z = 50;
+scene.add(camera);
+</pre>
+
+<p>Add these lines to your code, below the prevous ones.</p>
+
+<p>There are other types of camera available (Cube, Orthographic), but the simplest is the Perspective one. To initialize it we have to set its field of view and aspect ratio — the first one is used to set how much is seen, and a proper aspect ratio is important for the objects on the screen to have the right proportions when rendered and not look stretched. Let's explain the values we are setting in the code above:</p>
+
+<ul>
+ <li>The value we set for the field of view, 70, is something we can experiment with — the higher the value, the greater the amount of scene the camera will show. Imagine a normal camera view, versus a fish eye effect, which allows a lot more to be seen. The default value is 50.</li>
+ <li>The aspect ratio is set to the current width and height of the window so it will be dynamically adjusted. We could set a fixed ratio — for example 16 ⁄ 9, which is the aspect ratio of a widescreen TV. The default value is 1.</li>
+ <li>The <code>z</code> position with the value of 50 units is the distance between the camera and the center of the scene on the <code>z</code> axis — here we're moving the camera back so the objects on the scene can be viewed. 50 feels ok as it's not too near and not too far and the sizes of the objects allow them to stay on the scene within the given field of view. The <code>x</code> and <code>y</code> values, if not specified, will default to 0.</li>
+</ul>
+
+<p>You should experiment with these values and see how they change what you see in the scene.</p>
+
+<div class="note">
+<p><strong>Note</strong>: The distance values (e.g. for the camera z position) are unitless, and can basically be anything you deem suitable for your scene — milimeters, meters, feet, or miles — it's up to you.</p>
+</div>
+
+<h2 id="Rendering_the_scene">Rendering the scene</h2>
+
+<p>Everything is ready, but we still can't see anything. Although we set the renderer up, we still have to actually render everything. Our <code>render()</code> function will do this job, with a little help from <code><a href="../../../Web/API/window/requestAnimationFrame.html">requestAnimationFrame()</a></code>, which causes the scene to be re-rendered constantly on every frame:</p>
+
+<pre class="brush: js">function render() {
+	requestAnimationFrame(render);
+	renderer.render(scene, camera);
+}
+render();
+</pre>
+
+<p>On every new frame the <code>render</code> function is invoked and the <code>renderer</code> renders the <code>scene</code> and the <code>camera</code>. Right after the function declaration we're invoking it for the first time to start the loop, after which it will be used indefinitely.</p>
+
+<p>Again add the new code below your previous additions, then try saving the file and loading it in your browser. You should now see a gray window. Congratulations!</p>
+
+<h2 id="Geometry">Geometry</h2>
+
+<p>Now the scene is properly rendering we can start adding 3D shapes to it. To speed up development Three.js provides a bunch of predefined primitives that you can to create shapes instantly in a single line of code. There's cubes, spheres, cylinders and more complicated shapes available. Drawing the needed vertices and faces for given shape is taken care of by the framework, so we can focus on the high level coding. Let's start by defining the geometry for a cube shape — add the following just above the <code>render()</code> function:</p>
+
+<pre class="brush: js">var boxGeometry = new THREE.BoxGeometry(10, 10, 10);
+</pre>
+
+<p>In this case we define a simple cube that is 10 x 10 x 10 units. The geometry itself is not enough though — we also need a material that will be used for our shape.</p>
+
+<h2 id="Material">Material</h2>
+
+<p>Material is that thing covering the object — the colors or texture on its surface. In our case we will use a simple blue color to paint our box. There are predefined materials that can be used: Basic, Phong, Lambert. We will play with the last two later on, but for now the Basic one should be enough:</p>
+
+<pre class="brush: js">var basicMaterial = new THREE.MeshBasicMaterial({color: 0x0095DD});
+</pre>
+
+<p>Add this line below the previous one.</p>
+
+<p>Our material is ready, but what to do next?</p>
+
+<h2 id="Mesh">Mesh</h2>
+
+<p>To apply the material to a geometry a mesh is used. It takes a shape and adds the specified material to every face:</p>
+
+<pre class="brush: js">var cube = new THREE.Mesh(boxGeometry, basicMaterial);
+</pre>
+
+<p>Again, add this line below the previous one.</p>
+
+<h2 id="Adding_the_cube_to_the_scene">Adding the cube to the scene</h2>
+
+<p>We've now created the actual cube using the geometry and material defined earlier. The last thing to do is to actually add the cube to our scene — add this line below the previous one:</p>
+
+<pre class="brush: js">scene.add(cube);
+</pre>
+
+<p>If you save and refresh now, your object will look like a square, because it's facing the camera. The good thing about objects is that we can move them on the scene however we want, for example rotating and scaling as we like. Let's apply a little bit of rotation to the cube, so we can see more than one face — again, add below the previous one:</p>
+
+<pre class="brush: js">cube.rotation.set(0.4, 0.2, 0);
+</pre>
+
+<p>Congratulations, you've created your first object in a 3D environment! It was easier than you thought, right? Here's how it should look:</p>
+
+<p><img src="../../../../../../mdn.mozillademos.org/files/11849/cube.png" style="display: block; height: 400px; margin: 0px auto; width: 600px;" alt="Blue cube on a gray background rendered with Three.js."></p>
+
+<p>And here's the code we have created so far:</p>
+
+<p></p><p><iframe frameborder="0" src="https://jsfiddle.net/end3r/bwup75fa/embedded/" height="350" width="100%"></iframe></p><p></p>
+
+<p>You can also <a href="https://github.com/end3r/MDN-Games-3D/blob/gh-pages/Three.js/cube.html" class="external">check it out on GitHub</a>.</p>
+
+<h2 id="More_shapes_and_materials">More shapes and materials</h2>
+
+<p>Now we will add more shapes to the scene and explore other shapes, materials, lighting, and more. Let's move the cube to the left to make space for some friends — add the following line just below the previous one:</p>
+
+<pre class="brush: js">cube.position.x = -25;
+</pre>
+
+<p>Now onto the shapes and materials: what would you say for a torus using the Phong material? Try adding the following lines just below the lines that define the cube.</p>
+
+<pre class="brush: js">var torusGeometry = new THREE.TorusGeometry(7, 1, 6, 12);
+var phongMaterial = new THREE.MeshPhongMaterial({color: 0xFF9500});
+var torus = new THREE.Mesh(torusGeometry, phongMaterial);
+scene.add(torus);
+</pre>
+
+<p>Thee lines will add a torus geometry; the <code>TorusGeometry()</code> method's parameters define and the parameters are <code>radius</code>, <code>tube diameter</code>, <code>radial segment count</code> and <code>tubular segment count</code>. The Phong material should look more glossy than the simple color of the box that was using the Basic material, although at the moment it will just look black.</p>
+
+<p>We can have even crazier predefined shapes; let's play some more — add the following lines below the ones that defined the torus:</p>
+
+<pre class="brush: js">var dodecahedronGeometry = new THREE.DodecahedronGeometry(7);
+var lambertMaterial = new THREE.MeshLambertMaterial({color: 0xEAEFF2});
+var dodecahedron = new THREE.Mesh(dodecahedronGeometry, lambertMaterial);
+dodecahedron.position.x = 25;
+scene.add(dodecahedron);
+</pre>
+
+<p>This time we are creating a dodecahedron, which is a shape containing twelve flat faces. The parameter <code>DodecahedronGeometry()</code> takes is the size of the object. We're using a Lambert material here, which is similar to Phong, but should be less glossy (again, black for now.) We're moving the object to the right, so it's not in the same place as the box or torus.</p>
+
+<p>As mentioned above, the new objects currently just look black. To have both the Phong and Lambert materials properly visible we need a source of light.</p>
+
+<h2 id="Lights">Lights</h2>
+
+<p>There are various types of light sources available in Three.js; the most basic one is the <code>PointLight</code>, which works like a flashlight — shinig a spotlight in a given direction. Add the following below your shapre definitions:</p>
+
+<pre class="brush: js">var light = new THREE.PointLight(0xFFFFFF);
+light.position.set(-10, 15, 50);
+scene.add(light);
+</pre>
+
+<p>We define a white point of light, set it's position a bit away from the center of the scene so it can light up some parts of the shapes, and add it to the scene. Now everything works as it should — all three shapes are visible. You should check the documentation for other types of light like Ambient, Directional, Hemisphere or Spot, and experiment with placing them on the scene to see the effects.</p>
+
+<p><img src="../../../../../../mdn.mozillademos.org/files/11851/shapes.png" style="height: 400px; width: 600px;" alt="Shapes: blue cube, dark yellow torus and dark gray dodecahedron on a gray background rendered with Three.js."></p>
+
+<p>This looks a little bit boring though. In a game something is usually happening — we can see animations and such — so let's try to breathe a little life into those shapes by animating them.</p>
+
+<h2 id="Animation">Animation</h2>
+
+<p>We already used rotation to adjust the position of the cube; we could also scale the shapes, or change thier positions. To show actual animation, we need to make changes to these values inside the render loop so, they are updated on every frame.</p>
+
+<h3 id="Rotation">Rotation</h3>
+
+<p>Rotating is quite easy — all you need to do is to add a defined value to the given direction of the rotation on each frame. Add this line of code right after the <code>requestAnimationFrame()</code> invocation in the <code>render</code> function:</p>
+
+<pre class="brush: js">cube.rotation.y += 0.01;
+</pre>
+
+<p>It will rotate the cube on every frame by a tiny bit, so it will look like a smooth animation.</p>
+
+<h3 id="Scaling">Scaling</h3>
+
+<p>We can also scale a given object. By applying a constant value we could make it grow or shrink once, but let's make it more interesting. First, we will need a helper variable called <code>t</code> for counting the elapsed time. Add it right before the <code>render()</code> function:</p>
+
+<pre class="brush: js">var t = 0;
+</pre>
+
+<p>Now let's increase the value by a given constant value on each frame of the animation; add the following lines just below the <code>requestAnimationFrame()</code> invocation:</p>
+
+<pre class="brush: js">t += 0.01;
+torus.scale.y = Math.abs(Math.sin(t));
+</pre>
+
+<p>This way we'll be able to use <code>Math.sin</code> and end up with quite an interesting result: this will scale the torus and repeat the whole process, as <code>sin</code> is a periodic function. We're wrapping the scale value in <code>Math.abs</code> to pass the absolute values (greater or equal to 0), because sin is between -1 and 0, and for negative values the torus might render unexpectedly (in this case it looks black half the time.)</p>
+
+<p>Now onto the movement part.</p>
+
+<h3 id="Moving">Moving</h3>
+
+<p>Beside rotation and scaling we can also move objects around the scene. Add the following, again just below the <code>requestAnimationFrame()</code> invocation:</p>
+
+<pre class="brush: js">dodecahedron.position.y = -7*Math.sin(t*2);
+</pre>
+
+<p>This will move the dodecahedron up and down by applying the <code>sin()</code> value to the y axis on each frame, with a little bit of adjustment to make it look cooler. Try changing the values to see how it affects the animations.</p>
+
+<h2 id="Conclusion">Conclusion</h2>
+
+<p>Here's the final piece of the code:</p>
+
+<p></p><p><iframe frameborder="0" src="https://jsfiddle.net/end3r/vx39q7t2/embedded/" height="350" width="100%"></iframe></p><p></p>
+
+<p>You can also <a href="https://github.com/end3r/MDN-Games-3D/blob/gh-pages/Three.js/shapes.html" class="external">see it on GitHub</a> and <a href="https://github.com/end3r/MDN-Games-3D/" class="external">fork the repository</a> if you want to play with it yourself locally. Now you know the basics of Three.js, you can get back to the parent page about <a href="https://developer.mozilla.org/en-US/docs/Games/Techniques/3D_on_the_web">3D on the Web</a>.</p>
+
+<p>You should also try learning raw WebGL, so you can get a better understanding of what's going on. See our <a href="../../../Web/API/WebGL_API.html">WebGL documentation</a>.</p>
+                  
+                
+              </article>
+
+              
+
+    
+    
+    
+
+    
+    
+    
+
+    <div class="share">
+        <strong>Share:</strong>
+        <ul>
+            <li><a href="http://twitter.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FGames%2FTechniques%2F3D_on_the_web%2FBuilding_up_a_basic_demo_with_Three.js%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dtwitter.com&amp;text=I+learned+about+Building+up+a+basic+demo+with+Three.js+on+MDN." target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Games/Techniques/3D_on_the_web/Building_up_a_basic_demo_with_Three.js?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=twitter.com" data-title="I learned about Building up a basic demo with Three.js on MDN." class="share-link twitter"><i aria-hidden="true" class="icon-twitter"></i>Twitter</a></li>
+            <li><a href="https://facebook.com/sharer.php?s=100&amp;p%5Burl%5D=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FGames%2FTechniques%2F3D_on_the_web%2FBuilding_up_a_basic_demo_with_Three.js%3Futm_campaign%3Dshare&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Games/Techniques/3D_on_the_web/Building_up_a_basic_demo_with_Three.js?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" data-title="I learned about Building up a basic demo with Three.js on MDN." class="share-link facebook"><i aria-hidden="true" class="icon-facebook"></i>Facebook</a></li>
+            <li><a href="https://plus.google.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FGames%2FTechniques%2F3D_on_the_web%2FBuilding_up_a_basic_demo_with_Three.js%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dplus.google.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Games/Techniques/3D_on_the_web/Building_up_a_basic_demo_with_Three.js?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=plus.google.com" data-title="I learned about Building up a basic demo with Three.js on MDN." class="share-link gplus"><i aria-hidden="true" class="icon-google-plus"></i>Google+</a></li>
+        </ul>
+    </div>
+
+              
+
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                  
+                  
+  <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags icon-fw"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/3D">3D</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Animation">Animation</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Beginner">Beginner</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/camera">camera</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Canvas">Canvas</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Games">Games</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/lighting">lighting</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/rendering">rendering</a></li>
+      
+        <li><a href="../../../tag/three.html">three.js</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Tutorial">Tutorial</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/WebGL">WebGL</a></li>
+      
+    </ul>
+  </div>
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-group icon-fw"></i>&nbsp;<strong>Contributors to this page:</strong> 
+        <a href="https://developer.mozilla.org/en-US/profiles/end3r">end3r</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills">chrisdavidmills</a>
+    
+                    </div>
+                  
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o icon-fw"></i>&nbsp;<strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/end3r">end3r</a>,
+                      <time datetime="2016-01-11T07:01:40-08:00">Jan 11, 2016, 7:01:40 AM</time>
+                    </div>
+                  
+                </div>
+              
+            </div>
+
+            
+              <!-- quick links and zone subnav strip -->
+              <div id="wiki-left" class="column-strip wiki-column">
+
+              
+
+                
+                  <!-- zone subnav -->
+                  
+  <nav class="zone-subnav-container" role="navigation">
+    <div class="subnav" id="Subnav">
+      
+
+<ol>
+ <li><a href="#">Introduction</a>
+
+  <ol>
+   <li><a title="An introduction to the technologies useful for game developers and how to get started developing games using Web technologies. This article also looks at the business case for why it makes sense to create games for the Web" href="https://developer.mozilla.org/en-US/docs/Games/Introduction">Introduction to game development for the Web</a></li>
+   <li><a title="What is a video game, really? There are certain parts that are common between games (even if it doesn't seem like it). This article looks to explain concepts like main loops in a completely general context. When it does focus, it does so toward web standards." href="https://developer.mozilla.org/en-US/docs/Games/Anatomy">Anatomy of a video game</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Games/Examples">Examples</a></li>
+  </ol>
+ </li>
+ <li><a href="#">APIs for game development</a>
+  <ol>
+   <li><a href="../../../Web/API/Canvas_API.html">Canvas</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+   <li><a href="../../../../Apps/Fundamentals/User_notifications/Full_screen_api.html">Full Screen</a></li>
+   <li><a href="../../../Web/API/Gamepad_API.html">Gamepad</a></li>
+   <li><a href="../../../Web/API/IndexedDB_API.html">IndexedDB</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+   <li><a href="../../../Web/API/Pointer_Lock_API.html">Pointer Lock</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Web/SVG">SVG</a></li>
+   <li><a href="../../../Web/JavaScript/Reference/Global_Objects/TypedArray.html">Typed Arrays</a></li>
+   <li><a href="../../../Web/API/Web_Audio_API.html">Web Audio</a></li>
+   <li><a href="../../../Web/API/WebGL_API.html">WebGL</a></li>
+   <li><a href="../../../Web/API/WebRTC_API.html">WebRTC</a></li>
+   <li><a href="../../../Web/API/WebSockets_API.html">Web Sockets</a></li>
+   <li><a href="../../../Web/API/WebVR_API.html">WebVR</a></li>
+   <li><a href="../../../Web/API/Web_Workers_API.html">Web Workers</a></li>
+   <li><a href="../../../User_maybe/webidl_mdn/XMLHttpRequest_API.html">XmlHttpRequest</a>
+    <ol>
+    </ol>
+   </li>
+  </ol>
+ </li>
+ <li><a href="https://developer.mozilla.org/en-US/docs/Games/Techniques">Techniques</a>
+  <ol>
+   <li><a title="Especially when creating medium to large-sized games, async scripts are an essential technique to take advantage of, so that your game's JavaScript can be compiled off the main thread and be cached for future game running" href="https://developer.mozilla.org/en-US/docs/Games/Techniques/Async_scripts">Using async scripts for asm.js</a></li>
+   <li><a title="How to make sure your game starts up quickly, smoothly, and without appearing to lock up the user's browser or device." href="https://developer.mozilla.org/en-US/docs/Apps/Developing/Optimizing_startup_performance">Optimizing startup performance</a></li>
+   <li><a title="In addition to providing support for audio and video communication, WebRTC lets you set up peer-to-peer data channels to exchange text or binary data actively between your players." href="https://developer.mozilla.org/en-US/docs/Games/Techniques/WebRTC_data_channels">Using WebRTC peer-to-peer data channels</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Games/Techniques/Efficient_animation_for_web_games">Efficient animation for web games</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Games/Techniques/3D_on_the_web">3D games on the Web</a>
+    <ol>
+     <li><a href="https://developer.mozilla.org/en-US/docs/Games/Techniques/3D_on_the_web">3D games on the Web overview</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/docs/Games/Techniques/3D_on_the_web/Basic_theory">Explaining basic 3D theory</a></li>
+     <li><a href="Building_up_a_basic_demo_with_Three.html">Building up a basic demo with Three.js</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/docs/Games/Techniques/3D_on_the_web/Building_up_a_basic_demo_with_PlayCanvas">Building up a basic demo with PlayCanvas</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/docs/Games/Techniques/3D_on_the_web/WebVR">WebVR</a></li>
+    </ol>
+   </li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Games/Techniques/Audio_for_Web_Games">Audio for Web Games</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Games/Techniques/2D_collision_detection">2D collision detection</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Games/Techniques/3D_collision_detection">3D collision detection</a>
+    <ol>
+     <li><a href="https://developer.mozilla.org/en-US/docs/Games/Techniques/3D_collision_detection">3D collision detection overview</a></li>
+     <li><a href="../3D_collision_detection/Bounding_volume_collision_detection_with_THREE.html">Bounding volume collision detection with THREE.js</a></li>
+    </ol>
+   </li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Games/Techniques/Tilemaps">Tiles and tilemaps</a>
+    <ol>
+     <li><a href="https://developer.mozilla.org/en-US/docs/Games/Techniques/Tilemaps">Tiles and tilemaps overview</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/docs/Games/Techniques/Tilemaps/Square_tilemaps_implementation%3A_Static_maps">Static maps</a></li>
+     <li><a href="https://developer.mozilla.org/en-US/docs/Games/Techniques/Tilemaps/Square_tilemaps_implementation%3A_Scrolling_maps">Scrolling maps</a></li>
+    </ol>
+   </li>
+  </ol>
+ </li>
+ <li><a href="https://developer.mozilla.org/en-US/docs/Games/Tutorials">Tutorials</a>
+  <ol>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Games/Tutorials/2D_Breakout_game_pure_JavaScript">2D breakout game using pure JavaScript</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Games/Tutorials/2D_breakout_game_Phaser">2D breakout game using Phaser</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Games/Tutorials/HTML5_Gamedev_Phaser_Device_Orientation">2D maze game with device orientation</a></li>
+  </ol>
+ </li>
+ <li><a href="https://developer.mozilla.org/en-US/docs/Games/Publishing_games">Publishing games</a>
+  <ol>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Games/Publishing_games">Publishing games overview</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Games/Publishing_games/Game_distribution">Game distribution</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Games/Publishing_games/Game_promotion">Game promotion</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/Games/Publishing_games/Game_monetization">Game monetization</a></li>
+  </ol>
+ </li>
+</ol>
+    </div>
+  </nav>&nbsp;
+                
+
+                
+
+                <!-- approvals -->
+                
+
+              
+
+              </div>
+            
+          </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Games/Techniques/3D_on_the_web/Building_up_a_basic_demo_with_Three.js$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Games/Techniques/3D_on_the_web/Building_up_a_basic_demo_with_Three.js$history" label="View page history"></menuitem>
+  </menu>
+
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+        
+        <div class="contentinfo">
+          <p>© 2005-2016 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>
+          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+        
+        </div>
+      </div>
+      <div class="column-strip">
+        
+          
+  
+
+        
+      </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+  
+    
+    <!--[if lte IE 8]><script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/selectivizr.091e18cf669b.js" charset="utf-8"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/main.a7b27a25fb9c.js" charset="utf-8"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+    
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/syntax-prism-min.js" charset="utf-8"></script><script type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/wiki.bd71ca9fd27d.js" charset="utf-8" id="wikiscript"></script>
+
+  
+
+  <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/helpfulness.7b208a764d28.js" charset="utf-8"></script>
+
+  
+
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/Games/Techniques/3D_on_the_web/Building_up_a_basic_demo_with_Three.js by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 15:45:20 GMT -->
+</body></html>

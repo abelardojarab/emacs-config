@@ -1,0 +1,2568 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIDOMWindowUtils by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 15:03:48 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <script async="" src="../../../../../../../../www.google-analytics.com/analytics.js"></script><script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+  
+    
+  
+
+  
+  <title>nsIDOMWindowUtils</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+  
+    
+    
+    <link href="../../../../../../../../developer.cdn.mozilla.net/static/build/styles/mdn.593f20d8c365.css" rel="stylesheet" type="text/css">
+
+    
+  
+    <link href="../../../../../../../../developer.cdn.mozilla.net/static/build/styles/wiki.13dd9abdfb62.css" rel="stylesheet" type="text/css">
+
+    
+
+    
+
+  <!-- common social tags -->
+  
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../../../../developer.cdn.mozilla.net/static/img/favicon144.a6e4162070f4.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../../../../developer.cdn.mozilla.net/static/img/favicon114.0e9fabd44f85.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../../../../developer.cdn.mozilla.net/static/img/favicon72.8ff9d87c82a0.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../../../../developer.cdn.mozilla.net/static/img/favicon57.a2490b9a2d76.png">
+  <!-- basic favicon -->
+  
+    
+  
+  <link rel="shortcut icon" href="../../../../../../../../developer.cdn.mozilla.net/static/img/favicon32.e02854fdcf73.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/html5shiv.3948ccddab6f.js" charset="utf-8"></script>
+  <![endif]-->
+
+  
+  <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIDOMWindowUtils$json">
+  <link rel="canonical" href="nsIDOMWindowUtils.html">
+
+  
+
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="nsIDOMWindowUtils">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIDOMWindowUtils">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIDOMWindowUtils">
+  <meta name="twitter:title" content="nsIDOMWindowUtils">
+  
+  <meta property="og:description" content="Implemented by: nsIDOMWindow. To get this interface, use:">
+  <meta name="description" content="Implemented by: nsIDOMWindow. To get this interface, use:">
+  <meta name="twitter:description" content="Implemented by: nsIDOMWindow. To get this interface, use:">
+  
+
+  
+    
+
+
+
+  
+</head>
+<body data-slug="Mozilla/Tech/XPCOM/Reference/Interface/nsIDOMWindowUtils" contextmenu="edit-history-menu" data-search-url="" class="document  ">
+
+  <script type="text/javascript">
+    (function(win) {
+        'use strict';
+
+        
+            (function(){
+  var FLAGS = {
+    'compat_api': false,'kumaediting': false,'page_move': false,'registration_disabled': false,'search_suggestions': false,'section_edit': false,'spam_admin_override': false,'spam_checks_enabled': true,'spam_spammer_override': false,'spam_submissions_enabled': false,'spam_testing_mode': false,'wiki_samples': true,'wiki_spam_exempted': false,'wiki_spam_training': true
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': true,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+
+        // This needs to be set before ckeditor.js loads
+        window.CKEDITOR_BASEPATH = 'https://developer.mozilla.org/static/js/libs/ckeditor/build/ckeditor/';
+
+        // This represents the site configuration
+        win.mdn = {
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+            
+            notifications: [],
+            
+            // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            },
+            // Assets that need to be dynamically injected
+            assets_disabled: {
+                css: {
+                    'editor-content': ['https://developer.cdn.mozilla.net/static/build/styles/editor-content.3d79df72080d.css',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/styles/wiki-compat-tables.f3a3bfce97a1.css',]
+                },
+                js: {
+                    'syntax-prism': ['https://developer.cdn.mozilla.net/static/build/js/syntax-prism.7a66ddfa68bf.js',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/js/wiki-compat-tables.14ce5dcb2c3d.js',]
+                }
+            }
+        };
+    })(this);
+</script>
+
+  
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+    
+      <li><a href="#q" id="skip-search">Skip to search</a></li>
+    
+  </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+    <a href="https://developer.mozilla.org/en-US/" class="logo">Mozilla Developer Network</a>
+
+    <div id="nav-sec">
+        
+                  <ul>
+                  <li>
+
+    
+
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                Sign in
+              </span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FMozilla%2FTech%2FXPCOM%2FReference%2FInterface%2FnsIDOMWindowUtils" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIDOMWindowUtils" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIDOMWindowUtils" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2FMozilla%2FTech%2FXPCOM%2FReference%2FInterface%2FnsIDOMWindowUtils" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+              
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+        
+    </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../../../../../Web/API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+
+   <!-- end is_zone -->
+
+    <div class="wiki-main-content" id="document-main"><div class="center">
+      
+      <div class="article-meta">
+        <!-- action buttons -->
+        
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+  <ul class="page-buttons" data-sticky="false">
+      
+      <li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+              
+                <li class="smaller">No translations exist for this article.</li>
+              
+
+              
+                <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIDOMWindowUtils$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+              
+            </ul>
+          </div>
+        </div>
+      </li>
+
+      <li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIDOMWindowUtils$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li>
+
+        
+
+        <li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIDOMWindowUtils$history" rel="nofollow, noindex">History</a></li>
+                
+                
+                
+                
+
+                
+
+                
+                
+                
+                <li class="page-print"><a href="#" onclick="return window.print();">Print this article</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+        
+  <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Mozilla" rel="v:url" property="v:title">Mozilla</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech" rel="v:url" property="v:title">Mozilla technologies</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM" rel="v:url" property="v:title">XPCOM</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference" rel="v:url" property="v:title">XPCOM reference</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface" rel="v:url" property="v:title">XPCOM Interface Reference</a></li>
+    
+    <li class="crumb" typeof="v:Breadcrumb" property="v:title">nsIDOMWindowUtils</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        
+        <div class="contributor-avatars" data-all-text="see all contributors" data-alternate-message="hide contributors" data-has-hidden="1">
+            <ul>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/maybe" title="View profile: maybe">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="maybe" data-src="../../../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">maybe</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Ede123" title="View profile: Ede123">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Ede123" data-src="../../../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Ede123</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Masayuki" title="View profile: Masayuki">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Masayuki" data-src="../../../../../../../../secure.gravatar.com/avatar/900caab146bc7a489b3854cf10acf93f6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Masayuki</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/trevorh" title="View profile: trevorh">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="trevorh" data-src="../../../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">trevorh</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/baku" title="View profile: baku">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="baku" data-src="../../../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">baku</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Sheppy" title="View profile: Sheppy">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Sheppy" data-src="../../../../../../../../secure.gravatar.com/avatar/945076feb88f2d7003891ffbf06f32bf6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Sheppy</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/madarche" title="View profile: madarche">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="madarche" data-src="../../../../../../../../secure.gravatar.com/avatar/a15ce308d52c691ba765d0ac972aac876c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">madarche</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Ann_Yiming" title="View profile: Ann_Yiming">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Ann_Yiming" data-src="../../../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Ann_Yiming</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Simon Lindholm" title="View profile: Simon Lindholm">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Simon Lindholm" data-src="../../../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Simon Lindholm</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/bhackett" title="View profile: bhackett">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="bhackett" data-src="../../../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">bhackett</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/mnoorenberghe" title="View profile: mnoorenberghe">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="mnoorenberghe" data-src="../../../../../../../../secure.gravatar.com/avatar/b7e928b14ef7e22c266206f5852cc6b66c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">mnoorenberghe</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/rmkn85" title="View profile: rmkn85">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="rmkn85" data-src="../../../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">rmkn85</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/automatedtester" title="View profile: automatedtester">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="automatedtester" data-src="../../../../../../../../secure.gravatar.com/avatar/636456ec259c737f73cecfa20d6878d56c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">automatedtester</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Waldo" title="View profile: Waldo">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Waldo" data-src="../../../../../../../../secure.gravatar.com/avatar/d26a0ca7ae1134e0e1dbdddf82e289296c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Waldo</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Gomita" title="View profile: Gomita">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Gomita" data-src="../../../../../../../../secure.gravatar.com/avatar/2df4580a6a33c37554fadf3fa5b133056c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Gomita</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Mook_sb" title="View profile: Mook_sb">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Mook_sb" data-src="../../../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Mook_sb</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Natch" title="View profile: Natch">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Natch" data-src="../../../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Natch</noscript></a>
+                </li>
+            
+            </ul>
+        </div>
+        
+
+        <h1>nsIDOMWindowUtils</h1>
+
+      </div>
+      
+
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-closed wiki-left-none">
+
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+            
+              <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+              
+              <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#Method_overview" rel="internal">Method overview</a></li><li><a href="#Attributes" rel="internal">Attributes</a></li><li><a href="#Constants" rel="internal">Constants</a></li><li><a href="#Methods" rel="internal">Methods</a><ol><li><a href="#activateNativeMenuItemAt()" rel="internal">activateNativeMenuItemAt()</a></li><li><a href="#clearMozAfterPaintEvents()" rel="internal">clearMozAfterPaintEvents()</a></li><li><a href="#compareCanvases()" rel="internal">compareCanvases()</a></li><li><a href="#computeAnimationDistance()" rel="internal">computeAnimationDistance()</a></li><li><a href="#createCompositionStringSynthesizer()" rel="internal">createCompositionStringSynthesizer()</a></li><li><a href="#disableNonTestMouseEvents()" rel="internal">disableNonTestMouseEvents()</a></li><li><a href="#dispatchDOMEventViaPresShell()" rel="internal">dispatchDOMEventViaPresShell()</a></li><li><a href="#elementFromPoint()" rel="internal">elementFromPoint()</a></li><li><a href="#enterModalState()" rel="internal">enterModalState()</a></li><li><a href="#findElementWithViewId()" rel="internal">findElementWithViewId()</a></li><li><a href="#focus()" rel="internal">focus()</a></li><li><a href="#forceUpdateNativeMenuAt()" rel="internal">forceUpdateNativeMenuAt()</a></li><li><a href="#garbageCollect()" rel="internal">garbageCollect()</a></li><li><a href="#getCursorType()" rel="internal">getCursorType()</a></li><li><a href="#getDocumentMetadata()" rel="internal">getDocumentMetadata()</a></li><li><a href="#getOuterWindowWithId()" rel="internal">getOuterWindowWithId()</a></li><li><a href="#getPCCountScriptCount()" rel="internal">getPCCountScriptCount()</a></li><li><a href="#getPCCountScriptSummary()" rel="internal">getPCCountScriptSummary()</a></li><li><a href="#getPCCountScriptContents()" rel="internal">getPCCountScriptContents()</a></li><li><a href="#getScrollXY()" rel="internal">getScrollXY()</a></li><li><a href="#getVisitedDependentComputedStyle()" rel="internal">getVisitedDependentComputedStyle()</a></li><li><a href="#isInModalState()" rel="internal">isInModalState()</a></li><li><a href="#leaveModalState()" rel="internal">leaveModalState()</a></li><li><a href="#loadSheet()" rel="internal">loadSheet()</a></li><li><a href="#nodesFromRect()" rel="internal">nodesFromRect()</a></li><li><a href="#processUpdates()" rel="internal">processUpdates()</a></li><li><a href="#purgePCCounts()" rel="internal">purgePCCounts()</a></li><li><a href="#redraw()" rel="internal">redraw()</a></li><li><a href="#removeSheet()" rel="internal">removeSheet()</a></li><li><a href="#RenderDocument" rel="internal">RenderDocument</a></li><li><a href="#resumeTimeouts()" rel="internal">resumeTimeouts()</a></li><li><a href="#sendCompositionEvent()" rel="internal">sendCompositionEvent()</a></li><li><a href="#getClassName()" rel="internal">getClassName()</a></li><li><a href="#sendContentCommandEvent()" rel="internal">sendContentCommandEvent()</a></li><li><a href="#sendKeyEvent()" rel="internal">sendKeyEvent()</a></li><li><a href="#sendMouseEvent()" rel="internal">sendMouseEvent()</a></li><li><a href="#sendMouseEventToWindow()" rel="internal">sendMouseEventToWindow()</a></li><li><a href="#sendMouseScrollEvent()" rel="internal">sendMouseScrollEvent()</a></li><li><a href="#sendWheelEvent()" rel="internal">sendWheelEvent()</a></li><li><a href="#sendNativeKeyEvent()" rel="internal">sendNativeKeyEvent()</a></li><li><a href="#sendNativeMouseEvent()" rel="internal">sendNativeMouseEvent()</a></li><li><a href="#sendQueryContentEvent()" rel="internal">sendQueryContentEvent()</a></li><li><a href="#sendSelectionSetEvent()" rel="internal">sendSelectionSetEvent()</a></li><li><a href="#sendSimpleGestureEvent()" rel="internal">sendSimpleGestureEvent()</a></li><li><a href="#sendTextEvent()" rel="internal">sendTextEvent()</a></li><li><a href="#sendTouchEvent()" rel="internal">sendTouchEvent()</a></li><li><a href="#setCSSViewport()" rel="internal">setCSSViewport()</a></li><li><a href="#setDisplayPort()" rel="internal">setDisplayPort()</a></li><li><a href="#setResolution()" rel="internal">setResolution()</a></li><li><a href="#startPCCountProfiling()" rel="internal">startPCCountProfiling()</a></li><li><a href="#stopPCCountProfiling()" rel="internal">stopPCCountProfiling()</a></li><li><a href="#suppressEventHandling()" rel="internal">suppressEventHandling()</a></li><li><a href="#suspendTimeouts()" rel="internal">suspendTimeouts()</a></li><li><a href="#wrapDOMFile()" rel="internal">wrapDOMFile()</a></li></ol></li>
+                </ol>
+              </div>
+              
+              </div>
+            
+
+            
+            
+              
+            
+
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-main wiki-column text-content">
+
+              
+
+              
+
+              
+                
+                  <div class="warning warning-review">
+                    <p>
+                      This article needs a technical review. <a href="https://developer.mozilla.org/docs/MDN/Contribute/HowTo/Do_a_technical_review">How you can help.</a>
+                    </p>
+                  </div>
+                
+                
+                
+              
+              
+
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                
+                  
+                    <p></p><div style="border: solid #ddd 2px; margin-bottom: 12px;"> 
+<div style="background: #eee; padding: 2px;"><code><a href="http://mxr.mozilla.org/mozilla-central/source/dom/interfaces/base/nsIDOMWindowUtils.idl" rel="custom" class="external">dom/interfaces/base/nsIDOMWindowUtils.idl</a></code><span style="text-align: right; float: right;"><a href="https://developer.mozilla.org/en-US/docs/Interfaces/About_Scriptable_Interfaces" style="color: #00cc00; font-weight: 700;">Scriptable</a></span></div> 
+<span style="padding: 4px 2px;"> 
+ 
+This interface is a DOM utility interface that provides useful DOM methods and attributes. 
+</span> 
+ 
+  <div style="height: 42px; position: relative; padding: 2px; width: auto;"> 
+ 
+  <div style="top: 22px; font-size: 11px; position: absolute;">1.0</div> 
+   
+  <div style="top: 22px; font-size: 11px; position: absolute; left: 0px; text-align: right; float: right; width: 100%;">44</div> 
+   
+  <div style="height: 8px; top: 16px; background: #dd0000; left: 0px; position: absolute; width: 8.333333333333332%;"></div> 
+   
+<div title="Introduced in Gecko 1.8 (Firefox 1.5 / Thunderbird 1.5 / SeaMonkey 1.0)" style="height: 8px; top: 16px; left: 8.333333333333332%; background: #00dd00; position: absolute; width: 91.66666666666667%;"></div> 
+ 
+<div style="top: 0px; font-size: 11px; position: absolute; left: 8.333333333333332%;">Introduced</div> 
+<div style="top: 22px; font-size: 11px; position: absolute; left: 8.333333333333332%;">Gecko 1.8</div> 
+ 
+    <div title="Last changed in Gecko 38.0 (Firefox 38.0 / Thunderbird 38.0 / SeaMonkey 2.35)" style="height: 8px; top: 16px; left: 87%; background: #eeee00; position: absolute; width: 1%; border-radius: 4px; -webkit-border-radius: 4px;"></div> 
+     
+</div> 
+ 
+<div style="background: #eee; padding: 2px;"> 
+Inherits from: <code><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsISupports" title="">nsISupports</a></code> 
+<span style="text-align: right; float: right;">Last changed in Gecko 38.0 (Firefox 38.0 / Thunderbird 38.0 / SeaMonkey 2.35)</span></div> 
+</div><p></p>
+
+<p>Implemented by: <code>nsIDOMWindow</code>. To get this interface, use:</p>
+
+<pre class="eval">var domWindowUtils = window.QueryInterface(Components.interfaces.nsIInterfaceRequestor)
+                     .getInterface(Components.interfaces.nsIDOMWindowUtils);
+</pre>
+
+<h2 name="Method_overview" id="Method_overview">Method overview</h2>
+
+<table class="standard-table">
+ <tbody>
+  <tr>
+   <td><code>void <a href="#activateNativeMenuItemAt()">activateNativeMenuItemAt</a>(in AString indexString);</code> </td>
+  </tr>
+  <tr>
+   <td><code>void <a href="#clearMozAfterPaintEvents()">clearMozAfterPaintEvents</a>();</code> </td>
+  </tr>
+  <tr>
+   <td><code>PRUint32 <a href="#compareCanvases()">compareCanvases</a>(in nsIDOMHTMLCanvasElement aCanvas1, in nsIDOMHTMLCanvasElement aCanvas2, out unsigned long aMaxDifference);</code> </td>
+  </tr>
+  <tr>
+   <td><code>double <a href="#computeAnimationDistance()">computeAnimationDistance</a>(in nsIDOMElement element, in AString property, in AString value1, in AString value2);</code> </td>
+  </tr>
+  <tr>
+   <td><code>nsICompositionStringSynthesizer <a href="#createCompositionStringSynthesizer()">createCompositionStringSynthesizer</a>();</code>  <span class="inlineIndicator obsolete obsoleteInline" title="(Firefox 38.0 / Thunderbird 38.0 / SeaMonkey 2.35)">Obsolete since Gecko 38.0</span></td>
+  </tr>
+  <tr>
+   <td><code>void <a href="#disableNonTestMouseEvents()">disableNonTestMouseEvents</a>(in boolean aDisable);</code> </td>
+  </tr>
+  <tr>
+   <td><code>boolean <a href="#dispatchDOMEventViaPresShell()">dispatchDOMEventViaPresShell</a>(in nsIDOMNode aTarget, in nsIDOMEvent aEvent, in boolean aTrusted);</code> </td>
+  </tr>
+  <tr>
+   <td><code>nsIDOMElement <a href="#elementFromPoint()">elementFromPoint</a>(in float aX, in float aY, in boolean aIgnoreRootScrollFrame, in boolean aFlushLayout);</code> </td>
+  </tr>
+  <tr>
+   <td><code>void <a href="#enterModalState()">enterModalState</a>();</code> </td>
+  </tr>
+  <tr>
+   <td><code><code><a href="nsIDOMElement.html" title="">nsIDOMElement</a></code> <a href="nsIDOMWindowUtils.html#findElementWithViewId()" title="en/XPCOM Interface Reference/nsIDOMWindowUtils#findElementWithViewId()">findElementWithViewId</a>(in nsViewID aId);</code>  <span class="inlineIndicator mobileOnly" title="Available">Mobile Only in Gecko 2.0</span></td>
+  </tr>
+  <tr>
+   <td><code>void <a href="#focus()">focus</a>(in nsIDOMElement aElement);</code> </td>
+  </tr>
+  <tr>
+   <td><code>void <a href="#forceUpdateNativeMenuAt()">forceUpdateNativeMenuAt</a>(in AString indexString);</code> </td>
+  </tr>
+  <tr>
+   <td><code>void <a href="#garbageCollect()">garbageCollect</a>([optional] in nsICycleCollectorListener aListener);</code> </td>
+  </tr>
+  <tr>
+   <td><code>short <a href="#getCursorType()">getCursorType</a>();</code> </td>
+  </tr>
+  <tr>
+   <td><code>AString <a href="#getDocumentMetadata()">getDocumentMetadata</a>(in AString aName);</code></td>
+  </tr>
+  <tr>
+   <td><code>nsIDOMWindow <a href="#getOuterWindowWithId()">getOuterWindowWithId</a>(in unsigned long long aOuterWindowID);</code> </td>
+  </tr>
+  <tr>
+   <td><code>long <a href="#getPCCountScriptCount()" title="#getPCCountScriptCount()">getPCCountScriptCount</a>();</code>  <span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></td>
+  </tr>
+  <tr>
+   <td><code>AString <a href="#getPCCountScriptSummary()" title="#getPCCountScriptSummary()">getPCCountScriptSummary</a>(in long aScript);</code>  <span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></td>
+  </tr>
+  <tr>
+   <td><code>AString <a href="#getPCCountScriptContents()" title="#getPCCountScriptContents()">getPCCountScriptContents</a>(in long aScript);</code>  <span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></td>
+  </tr>
+  <tr>
+   <td><code>void <a href="#getScrollXY()">getScrollXY</a>(in boolean aFlushLayout, out long aScrollX, out long aScrollY);</code> </td>
+  </tr>
+  <tr>
+   <td><code>AString <a href="#getVisitedDependentComputedStyle()">getVisitedDependentComputedStyle</a>(in nsIDOMElement aElement, in AString aPseudoElement, in AString aPropertyName);</code> </td>
+  </tr>
+  <tr>
+   <td><code>boolean <a href="#isInModalState()">isInModalState</a>();</code> </td>
+  </tr>
+  <tr>
+   <td><code>void <a href="#leaveModalState()">leaveModalState</a>();</code> </td>
+  </tr>
+  <tr>
+   <td><code>void <a href="#loadSheet()">loadSheet</a>(in nsIURI sheetURI, in unsigned long type);</code> </td>
+  </tr>
+  <tr>
+   <td><code>nsIDOMNodeList <a href="#nodesFromRect()">nodesFromRect</a>(in float aX, in float aY, in float aTopSize, in float aRightSize, in float aBottomSize, in float aLeftSize, in boolean aIgnoreRootScrollFrame, in boolean aFlushLayout);</code> </td>
+  </tr>
+  <tr>
+   <td><code>void <a href="#processUpdates()">processUpdates</a>();</code> &nbsp;<span class="inlineIndicator obsolete obsoleteInline" title="(Firefox 13.0 / Thunderbird 13.0 / SeaMonkey 2.10)">Obsolete since Gecko 13.0</span></td>
+  </tr>
+  <tr>
+   <td><code>void <a href="#purgePCCounts()" title="#purgePCCounts()">purgePCCounts</a>();</code>  <span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></td>
+  </tr>
+  <tr>
+   <td><code>unsigned long <a href="#redraw()">redraw</a>([optional] in unsigned long aCount);</code> </td>
+  </tr>
+  <tr>
+   <td><code>void <a href="#RenderDocument()">RenderDocument</a>(in nsConstRect aRect, in PRUint32 aFlags, in nscolor aBackgroundColor, in gfxContext aThebesContext);</code> <span class="inlineIndicator noscript noscriptInline" title="This method may only be called from C++; don't use it from JavaScript.">Native code only!</span> </td>
+  </tr>
+  <tr>
+   <td><code>void <a href="#removeSheet()">removeSheet</a>(in nsIURI sheetURI, in unsigned long type);</code> </td>
+  </tr>
+  <tr>
+   <td><code>void <a href="#resumeTimeouts()">resumeTimeouts</a>();</code> </td>
+  </tr>
+  <tr>
+   <td><code>void <a href="#sendCompositionEvent()">sendCompositionEvent</a>(in AString aType);</code> <span class="inlineIndicator obsolete obsoleteInline" title="(Firefox 9 / Thunderbird 9 / SeaMonkey 2.6)">Obsolete since Gecko 9</span></td>
+  </tr>
+  <tr>
+   <td><code>void <a href="#sendCompositionEvent()">sendCompositionEvent</a>(in AString aType, in AString aData, in AString aLocale);</code> <span class="inlineIndicator obsolete obsoleteInline" title="(Firefox 38.0 / Thunderbird 38.0 / SeaMonkey 2.35)">Obsolete since Gecko 38.0</span></td>
+  </tr>
+  <tr>
+   <td><code>void <a href="#sendContentCommandEvent()">sendContentCommandEvent</a>(in AString aType, [optional] in nsITransferable aTransferable);</code> </td>
+  </tr>
+  <tr>
+   <td><code>void <a href="#getClassName()">getClassName</a>(in object aObj);</code> </td>
+  </tr>
+  <tr>
+   <td><code>boolean <a href="#sendKeyEvent()">sendKeyEvent</a>(in AString aType, in long aKeyCode, in long aCharCode, in long aModifiers, [optional] in boolean aPreventDefault);</code>  <span class="inlineIndicator obsolete obsoleteInline" title="(Firefox 15.0 / Thunderbird 15.0 / SeaMonkey 2.12)">Obsolete since Gecko 15.0</span></td>
+  </tr>
+  <tr>
+   <td><code>boolean <a href="#sendKeyEvent()">sendKeyEvent</a>(in AString aType, in long aKeyCode, in long aCharCode, in long aModifiers, [optional] in unsigned long aAdditionalFlags);</code>  <span class="inlineIndicator deprecated deprecatedInline" title="(Firefox 38.0 / Thunderbird 38.0 / SeaMonkey 2.35)">Deprecated since Gecko 38.0</span></td>
+  </tr>
+  <tr>
+   <td><code>void <a href="#sendMouseEvent()">sendMouseEvent</a>(in AString aType, in float aX, in float aY, in long aButton, in long aClickCount, in long aModifiers, [optional] in boolean aIgnoreRootScrollFrame);</code> </td>
+  </tr>
+  <tr>
+   <td><code>void <a href="#sendMouseEventToWindow()">sendMouseEventToWindow</a>(in AString aType, in float aX, in float aY, in long aButton, in long aClickCount, in long aModifiers, [optional] in boolean aIgnoreRootScrollFrame);</code> </td>
+  </tr>
+  <tr>
+   <td><code>void <a href="#sendMouseScrollEvent()">sendMouseScrollEvent</a>(in AString aType, in float aX, in float aY, in long aButton, in long aScrollFlags, in long aDelta, in long aModifiers);</code>  <span class="inlineIndicator obsolete obsoleteInline" title="(Firefox 17.0 / Thunderbird 17.0 / SeaMonkey 2.14)">Obsolete since Gecko 17.0</span></td>
+  </tr>
+  <tr>
+   <td><code>void <a href="#sendWheelEvent">sendWheelEvent</a>(in float aX, in float aY, in double aDeltaX, in double aDeltaY, in double aDeltaZ, in unsigned long aDeltaMode, in long aModifiers, in long aLineOrPageDeltaX, in long aLineOrPageDeltaY, in unsigned long aOptions);</code> </td>
+  </tr>
+  <tr>
+   <td><code>void <a href="#sendNativeKeyEvent()">sendNativeKeyEvent</a>(in long aNativeKeyboardLayout, in long aNativeKeyCode, in long aModifierFlags, in AString aCharacters, in AString aUnmodifiedCharacters);</code> </td>
+  </tr>
+  <tr>
+   <td><code>void <a href="#sendNativeMouseEvent()">sendNativeMouseEvent</a>(in long aScreenX, in long aScreenY, in long aNativeMessage, in long aModifierFlags, in nsIDOMElement aElement);</code> </td>
+  </tr>
+  <tr>
+   <td><code><code><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIQueryContentEventResult" class="new" title="">nsIQueryContentEventResult</a></code> <a href="#sendQueryContentEvent()">sendQueryContentEvent</a>(in unsigned long aType, in unsigned long aOffset, in unsigned long aLength, in long aX, in long aY);</code>  <span class="inlineIndicator obsolete obsoleteInline" title="(Firefox 31.0 / Thunderbird 31.0 / SeaMonkey 2.28)">Obsolete since Gecko 31.0</span></td>
+  </tr>
+  <tr>
+   <td><code><code><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIQueryContentEventResult" class="new" title="">nsIQueryContentEventResult</a></code> <a href="#sendQueryContentEvent()">sendQueryContentEvent</a>(in unsigned long aType, in unsigned long aOffset, in unsigned long aLength, in long aX, in long aY, [optional] in unsigned long aAdditionalFlags);</code> </td>
+  </tr>
+  <tr>
+   <td><code>boolean <a href="#sendSelectionSetEvent()">sendSelectionSetEvent</a>(in unsigned long aOffset, in unsigned long aLength, in boolean aReverse);</code>  <span class="inlineIndicator obsolete obsoleteInline" title="(Firefox 31.0 / Thunderbird 31.0 / SeaMonkey 2.28)">Obsolete since Gecko 31.0</span></td>
+  </tr>
+  <tr>
+   <td><code>boolean <a href="#sendSelectionSetEvent()">sendSelectionSetEvent</a>(in unsigned long aOffset, in unsigned long aLength, [optional] in unsigned long aAdditionalFlags);</code> </td>
+  </tr>
+  <tr>
+   <td><code>void <a href="#sendSimpleGestureEvent()">sendSimpleGestureEvent</a>(in AString aType, in float aX, in float aY, in unsigned long aDirection, in double aDelta, in long aModifiers);</code> </td>
+  </tr>
+  <tr>
+   <td><code>void <a href="#sendTextEvent()">sendTextEvent</a>(in AString aCompositionString, in long aFirstClauseLength, in unsigned long aFirstClauseAttr, in long aSecondClauseLength, in unsigned long aSecondClauseAttr, in long aThirdClauseLength, in unsigned long aThirdClauseAttr, in long aCaretStart, in long aCaretLength);</code> <span class="inlineIndicator obsolete obsoleteInline" title="(Firefox 26 / Thunderbird 26 / SeaMonkey 2.23 / Firefox OS 1.2)">Obsolete since Gecko 26</span></td>
+  </tr>
+  <tr>
+   <td><code>boolean <a href="nsIDOMWindowUtils.html#sendTouchEvent()" title="en/XPCOM_Interface_Reference/nsIDOMWindowUtils#sendTouchEvent()">sendTouchEvent</a>(in AString aType, [array, size_is(count)] in PRUint32 aIdentifiers, [array, size_is(count)] in PRInt32 aXs, [array, size_is(count)] in PRInt32 aYs, [array, size_is(count)] in PRUint32 aRxs, [array, size_is(count)] in PRUint32 aRys, [array, size_is(count)] in float aRotationAngles, [array, size_is(count)] in float aForces, in PRUint32 count, in long aModifiers, [optional] in boolean aIgnoreRootScrollFrame);</code> </td>
+  </tr>
+  <tr>
+   <td><code>void <a href="#setCSSViewport()">setCSSViewport</a>(in float aWidthPx, in float aHeightPx);</code> </td>
+  </tr>
+  <tr>
+   <td><code>void <a href="#setDisplayPort()">setDisplayPort</a>(in float aXPx, in float aYPx, in float aWidthPx, in float aHeightPx);</code> </td>
+  </tr>
+  <tr>
+   <td><code>void <a href="#setResolution()">setResolution</a>(in float aXResolution, in float aYResolution);</code> </td>
+  </tr>
+  <tr>
+   <td><code>void <a href="#startPCCountProfiling()" title="/en/XPCOM_Interface_Reference/nsIDOMWindowUtils#startPCCountProfiling()">startPCCountProfiling</a>(); </code> <span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></td>
+  </tr>
+  <tr>
+   <td><code>void <a href="#stopPCCountProfiling()" title="/en/XPCOM_Interface_Reference/nsIDOMWindowUtils#stopPCCountProfiling()">stopPCCountProfiling</a>();</code>  <span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></td>
+  </tr>
+  <tr>
+   <td><code>void <a href="#suppressEventHandling()">suppressEventHandling</a>(in boolean aSuppress);</code> </td>
+  </tr>
+  <tr>
+   <td><code>void <a href="#suspendTimeouts()">suspendTimeouts</a>();</code> </td>
+  </tr>
+  <tr>
+   <td><code>nsIDOMFile <a href="#wrapDOMFile()" title="wrapDOMFile()">wrapDOMFile</a>(<code><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIFile" title="">nsIFile</a></code> aFile);</code> </td>
+  </tr>
+ </tbody>
+</table>
+
+<h2 name="Attributes" id="Attributes">Attributes</h2>
+
+<table class="standard-table">
+ <tbody>
+  <tr>
+   <td class="header">Attribute</td>
+   <td class="header">Type</td>
+   <td class="header">Description</td>
+  </tr>
+  <tr>
+   <td><code>currentInnerWindowID</code></td>
+   <td><code><a href="https://developer.mozilla.org/en/unsigned_long_long" title="en/unsigned long long">unsigned long long</a></code></td>
+   <td>
+    <p>The ID of the window's current inner window. <strong>Read only.</strong> </p>
+
+    <h6 name="Exceptions_thrown" id="Exceptions_thrown">Exceptions thrown</h6>
+
+    <dl>
+     <dt><code>NS_ERROR_NOT_AVAILABLE</code></dt>
+     <dd>There is no current inner window</dd>
+    </dl>
+   </td>
+  </tr>
+  <tr>
+   <td><code>displayDPI</code></td>
+   <td><code><a href="https://developer.mozilla.org/en/float" title="en/float">float</a></code></td>
+   <td>The DPI of the display. <strong>Read only.</strong> </td>
+  </tr>
+  <tr>
+   <td><code>docCharsetIsForced</code></td>
+   <td><code><a href="https://developer.mozilla.org/en/boolean" title="en/boolean">boolean</a></code></td>
+   <td>Whether the charset of the window's current document has been forced by the user. Cannot be accessed from unprivileged context (not content-accessible) <strong>Read only.</strong> </td>
+  </tr>
+  <tr>
+   <td><code>focusedInputType</code></td>
+   <td><code>string</code></td>
+   <td>The type of the currently-focused HTML <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input" title="The HTML &lt;input&gt; element is used to create interactive controls for web-based forms in order to accept data from the user. How an &lt;input&gt; works varies considerably depending on the value of its type attribute."><code>&lt;input&gt;</code></a> element, if one is focused.  <span class="inlineIndicator mobileOnly" title="Available">Mobile Only in Gecko 2.0</span></td>
+  </tr>
+  <tr>
+   <td><code>imageAnimationMode</code></td>
+   <td><code><a href="https://developer.mozilla.org/en/unsigned_short" title="en/unsigned short">unsigned short</a></code></td>
+   <td>Returns the image animation mode of the window. The attribute's value must be one of the animationMode values from <code><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/imgIContainer" title="">imgIContainer</a></code>.</td>
+  </tr>
+  <tr>
+   <td><code>IMEIsOpen</code></td>
+   <td><code><a href="https://developer.mozilla.org/en/boolean" title="en/boolean">boolean</a></code></td>
+   <td>Returns the IME open state. <code>True</code> if it's open, otherwise <code>false</code>. This attribute only works when <code>IMEStatus</code> is <code>IME_STATUS_ENABLED</code>. <strong>Read only.</strong> </td>
+  </tr>
+  <tr>
+   <td><code>IMEStatus</code></td>
+   <td><code><a href="https://developer.mozilla.org/en/unsigned_long" title="en/unsigned long">unsigned long</a></code></td>
+   <td>Returns the current IME status. Values correspond to the <code>IME_STATUS_*</code> constants defined below. <strong>Read only.</strong> </td>
+  </tr>
+  <tr>
+   <td><code>isMozAfterPaintPending</code></td>
+   <td><code><a href="https://developer.mozilla.org/en/boolean" title="en/boolean">boolean</a></code></td>
+   <td>Returns <code>true</code> if a <code>MozAfterPaint</code> event has been queued but not yet fired. <strong>Read only.</strong> </td>
+  </tr>
+  <tr>
+   <td><code>layerManagerType</code></td>
+   <td><code><a href="https://developer.mozilla.org/en/AString" title="en/AString">AString</a></code></td>
+   <td>What type of layer manager the widget associated with this window is using. "Basic" is unaccelerated; other types are accelerated. Throws an error if there is no widget associated with this window. <strong>Read only.</strong> </td>
+  </tr>
+  <tr>
+   <td><code>outerWindowID</code></td>
+   <td><code><a href="https://developer.mozilla.org/en/unsigned_long_long" title="en/unsigned long long">unsigned long long</a></code></td>
+   <td>The ID of the window's outer window. <strong>Read only.</strong> </td>
+  </tr>
+  <tr>
+   <td><code>paintingSuppressed</code></td>
+   <td><code>boolean</code></td>
+   <td>
+    <p><code>true</code> if painting is currently suppressed for this window; otherwise <code>false</code>. <strong>Read only.</strong> </p>
+
+    <p>This is used on mobile, for example, to prevent attempts to render content until enough of the page has been loaded to avoid content bouncing around excessively as more content is loaded.</p>
+   </td>
+  </tr>
+  <tr>
+   <td><code>screenPixelsPerCSSPixel</code></td>
+   <td><code><a href="https://developer.mozilla.org/en/float" title="en/float">float</a></code></td>
+   <td>Returns the number of screen pixels per CSS pixel. <strong>Read only.</strong> </td>
+  </tr>
+  <tr>
+   <td>audioMuted</td>
+   <td><code><a href="https://developer.mozilla.org/en/boolean" title="en/boolean">boolean</a></code></td>
+   <td>With this it's possible to mute all the MediaElements in this window. We have audioMuted and audioVolume to preserve the volume across mute/umute.</td>
+  </tr>
+  <tr>
+   <td>audioVolume</td>
+   <td><code><a href="https://developer.mozilla.org/en/float" title="en/float">float</a></code></td>
+   <td>Range: greater or equal to 0. The real volume level is affected by the volume of all ancestor windows.</td>
+  </tr>
+ </tbody>
+</table>
+
+<h2 name="Constants" id="Constants">Constants</h2>
+
+<table class="standard-table">
+ <tbody>
+  <tr>
+   <td class="header">Constant</td>
+   <td class="header">Value</td>
+   <td class="header">Description</td>
+  </tr>
+  <tr>
+   <td><code>MODIFIER_ALT</code></td>
+   <td><code>0x0001</code></td>
+   <td><code>getModifierState("Alt")</code> of the send event will return <code>true</code> if this is specified for <code>aModifiers</code> of <code>send*Event()</code> except <code>sendNative*Event()</code>. </td>
+  </tr>
+  <tr>
+   <td><code>MODIFIER_CONTROL</code></td>
+   <td><code>0x0002</code></td>
+   <td><code>getModifierState("Control")</code> of the send event will return <code>true</code> if this is specified for <code>aModifiers</code> of <code>send*Event()</code> except <code>sendNative*Event()</code>. </td>
+  </tr>
+  <tr>
+   <td><code>MODIFIER_SHIFT</code></td>
+   <td><code>0x0004</code></td>
+   <td><code>getModifierState("Shift")</code> of the send event will return <code>true</code> if this is specified for <code>aModifiers</code> of <code>send*Event()</code> except <code>sendNative*Event()</code>. </td>
+  </tr>
+  <tr>
+   <td><code>MODIFIER_META</code></td>
+   <td><code>0x0008</code></td>
+   <td><code>getModifierState("Meta")</code> of the send event will return <code>true</code> if this is specified for <code>aModifiers</code> of <code>send*Event()</code> except <code>sendNative*Event()</code>. </td>
+  </tr>
+  <tr>
+   <td><code>MODIFIER_ALTGRAPH</code></td>
+   <td><code>0x0010</code></td>
+   <td><code>getModifierState("AltGraph")</code> of the send event will return <code>true</code> if this is specified for <code>aModifiers</code> of <code>send*Event()</code> except <code>sendNative*Event()</code>. </td>
+  </tr>
+  <tr>
+   <td><code>MODIFIER_CAPSLOCK</code></td>
+   <td><code>0x0020</code></td>
+   <td><code>getModifierState("CapsLock")</code> of the send event will return <code>true</code> if this is specified for <code>aModifiers</code> of <code>send*Event()</code> except <code>sendNative*Event()</code>. </td>
+  </tr>
+  <tr>
+   <td><code>MODIFIER_FN</code></td>
+   <td><code>0x0040</code></td>
+   <td><code>getModifierState("Fn")</code> of the send event will return <code>true</code> if this is specified for <code>aModifiers</code> of <code>send*Event()</code> except <code>sendNative*Event()</code>. </td>
+  </tr>
+  <tr>
+   <td><code>MODIFIER_NUMLOCK</code></td>
+   <td><code>0x0080</code></td>
+   <td><code>getModifierState("NumLock")</code> of the send event will return <code>true</code> if this is specified for <code>aModifiers</code> of <code>send*Event()</code> except <code>sendNative*Event()</code>. </td>
+  </tr>
+  <tr>
+   <td><code>MODIFIER_SCROLL</code></td>
+   <td><code>0x0100</code></td>
+   <td><code>getModifierState("Scroll")</code> of the send event will return <code>true</code> if this is specified for <code>aModifiers</code> of <code>send*Event()</code> except <code>sendNative*Event()</code>. </td>
+  </tr>
+  <tr>
+   <td><code>MODIFIER_SYMBOLLOCK</code></td>
+   <td><code>0x0200</code></td>
+   <td><code>getModifierState("SymbolLock")</code> of the send event will return <code>true</code> if this is specified for <code>aModifiers</code> of <code>send*Event()</code> except <code>sendNative*Event()</code>. </td>
+  </tr>
+  <tr>
+   <td><code>MODIFIER_WIN</code></td>
+   <td><code>0x0400</code></td>
+   <td><code>getModifierState("Win")</code> of the send event will return <code>true</code> if this is specified for <code>aModifiers</code> of <code>send*Event()</code> except <code>sendNative*Event()</code>. </td>
+  </tr>
+  <tr>
+   <td><code>KEY_FLAG_PREVENT_DEFAULT</code></td>
+   <td><code>0x0001</code></td>
+   <td><code>getDefaultPrevented()</code> returns <code>true</code> if this is specified to <code>aAdditionalFlags</code> of <code>sendKeyEvent()</code>.  <span class="inlineIndicator deprecated deprecatedInline" title="(Firefox 38.0 / Thunderbird 38.0 / SeaMonkey 2.35)">Deprecated since Gecko 38.0</span></td>
+  </tr>
+  <tr>
+   <td><code>KEY_FLAG_LOCATION_STANDARD</code></td>
+   <td><code>0x0010</code></td>
+   <td><code>location</code> attrubute of the sending key event by <code>sendKeyEvent()</code> returns <code>KeyboardEvent.DOM_KEY_LOCATION_STANDARD</code> if this is specified to the <code>aAdditionalFlags</code>. <span class="inlineIndicator deprecated deprecatedInline" title="(Firefox 38.0 / Thunderbird 38.0 / SeaMonkey 2.35)">Deprecated since Gecko 38.0</span></td>
+  </tr>
+  <tr>
+   <td><code>KEY_FLAG_LOCATION_LEFT</code></td>
+   <td><code>0x0020</code></td>
+   <td><code>location</code> attrubute of the sending key event by <code>sendKeyEvent()</code> returns <code>KeyboardEvent.DOM_KEY_LOCATION_LEFT</code> if this is specified to the <code>aAdditionalFlags</code>. <span class="inlineIndicator deprecated deprecatedInline" title="(Firefox 38.0 / Thunderbird 38.0 / SeaMonkey 2.35)">Deprecated since Gecko 38.0</span></td>
+  </tr>
+  <tr>
+   <td><code>KEY_FLAG_LOCATION_RIGHT</code></td>
+   <td><code>0x0040</code></td>
+   <td><code>location</code> attrubute of the sending key event by <code>sendKeyEvent()</code> returns <code>KeyboardEvent.DOM_KEY_LOCATION_RIGHT</code> if this is specified to the <code>aAdditionalFlags</code>. <span class="inlineIndicator deprecated deprecatedInline" title="(Firefox 38.0 / Thunderbird 38.0 / SeaMonkey 2.35)">Deprecated since Gecko 38.0</span></td>
+  </tr>
+  <tr>
+   <td><code>KEY_FLAG_LOCATION_NUMPAD</code></td>
+   <td><code>0x0080</code></td>
+   <td><code>location</code> attrubute of the sending key event by <code>sendKeyEvent()</code> returns <code>KeyboardEvent.DOM_KEY_LOCATION_NUMPAD</code> if this is specified to the <code>aAdditionalFlags</code>. <span class="inlineIndicator deprecated deprecatedInline" title="(Firefox 38.0 / Thunderbird 38.0 / SeaMonkey 2.35)">Deprecated since Gecko 38.0</span></td>
+  </tr>
+  <tr>
+   <td><code>KEY_FLAG_LOCATION_MOBILE</code></td>
+   <td><code>0x0100</code></td>
+   <td><code>location</code> attrubute of the sending key event by <code>sendKeyEvent()</code> returns <code>KeyboardEvent.DOM_KEY_LOCATION_MOBILE</code> if this is specified to the <code>aAdditionalFlags</code>.<span class="inlineIndicator obsolete obsoleteInline" title="(Firefox 38.0 / Thunderbird 38.0 / SeaMonkey 2.35)">Obsolete since Gecko 38.0</span></td>
+  </tr>
+  <tr>
+   <td><code>KEY_FLAG_LOCATION_JOYSTICK</code></td>
+   <td><code>0x0200</code></td>
+   <td><code>location</code> attrubute of the sending key event by <code>sendKeyEvent()</code> returns <code>KeyboardEvent.DOM_KEY_LOCATION_JOYSTICK</code> if this is specified to the <code>aAdditionalFlags</code>.<span class="inlineIndicator obsolete obsoleteInline" title="(Firefox 38.0 / Thunderbird 38.0 / SeaMonkey 2.35)">Obsolete since Gecko 38.0</span></td>
+  </tr>
+  <tr>
+   <td><code>WHEEL_EVENT_CAUSED_BY_PIXEL_ONLEY_DEVICE</code></td>
+   <td><code>0x0001</code></td>
+   <td>Used for <code>aOptions</code> of <code>sendWheelEvent()</code>. If this is set, the synthesized wheel event emulates wheel events come from some devices without the line scroll amount by the event. It means that the <code>aLineOrPageDeltaX</code> and <code>aLineOrPageDeltaY</code> don't have proper values. </td>
+  </tr>
+  <tr>
+   <td><code>WHEEL_EVENT_CAUSED_BY_MOMENTUM</code></td>
+   <td><code>0x0002</code></td>
+   <td>Used for <code>aOptions</code> of <code>sendWheelEvent()</code>. If this is set, the synthesized wheel event emulates momentum scroll event. </td>
+  </tr>
+  <tr>
+   <td><code>WHEEL_EVENT_CUSTOMIZED_BY_USER_PREFS</code></td>
+   <td><code>0x0004</code></td>
+   <td>Used for <code>aOptions</code> of <code>sendWheelEvent()</code>. If this is set, the synthesized wheel event emulates an event whose delta values are computed from user prefs in widget level. </td>
+  </tr>
+  <tr>
+   <td><code>IME_STATUS_DISABLED</code></td>
+   <td><code>0</code></td>
+   <td>Users cannot use IME at all. This state is not the same as <code>ime-mode: disabled</code>. </td>
+  </tr>
+  <tr>
+   <td><code>IME_STATUS_ENABLED</code></td>
+   <td><code>1</code></td>
+   <td>Users can use all functions of IME. This state is same as <code>ime-mode: normal</code>. </td>
+  </tr>
+  <tr>
+   <td><code>IME_STATUS_PASSWORD</code></td>
+   <td><code>2</code></td>
+   <td>Users cannot use most IME functions. On GTK2, users can use "Simple IME" which only supports dead key inputting. This state is the same as <code>ime-mode: password.</code> </td>
+  </tr>
+  <tr>
+   <td><code>IME_STATUS_PLUGIN</code></td>
+   <td><code>3</code></td>
+   <td>Plug-in has focus. At this time we should not attempt to set the IME state. </td>
+  </tr>
+  <tr>
+   <td><code>COMPOSITION_ATTR_RAWINPUT</code></td>
+   <td><code>0x02</code></td>
+   <td>
+    <p>Synthesize a text event to the window.</p>
+
+    <p>Cannot be accessed from unprivileged context (not content-accessible) Will throw a DOM security error if called without UniversalXPConnect privileges.</p>
+    Currently, this method doesn't support 4 or more clauses composition string.  <span class="inlineIndicator obsolete obsoleteInline" title="(Firefox 38.0 / Thunderbird 38.0 / SeaMonkey 2.35)">Obsolete since Gecko 38.0</span></td>
+  </tr>
+  <tr>
+   <td><code>COMPOSITION_ATTR_SELECTEDRAWTEXT</code></td>
+   <td><code>0x03</code></td>
+   <td> <span class="inlineIndicator obsolete obsoleteInline" title="(Firefox 38.0 / Thunderbird 38.0 / SeaMonkey 2.35)">Obsolete since Gecko 38.0</span></td>
+  </tr>
+  <tr>
+   <td><code>COMPOSITION_ATTR_CONVERTEDTEXT</code></td>
+   <td><code>0x04</code></td>
+   <td> <span class="inlineIndicator obsolete obsoleteInline" title="(Firefox 38.0 / Thunderbird 38.0 / SeaMonkey 2.35)">Obsolete since Gecko 38.0</span></td>
+  </tr>
+  <tr>
+   <td><code>COMPOSITION_ATTR_SELECTEDCONVERTEDTEXT</code></td>
+   <td><code>0x05</code></td>
+   <td> <span class="inlineIndicator obsolete obsoleteInline" title="(Firefox 38.0 / Thunderbird 38.0 / SeaMonkey 2.35)">Obsolete since Gecko 38.0</span></td>
+  </tr>
+  <tr>
+   <td><code>QUERY_CONTENT_FLAG_USE_NATIVE_LINE_BREAK</code></td>
+   <td><code>0x0000</code></td>
+   <td>One of values of <code>aAdditionalFlags</code> of <code>sendQueryContentEvent()</code>. This flag must not be set with <code>QUERY_CONTENT_FLAG_USE_XP_LINE_BREAK</code>. When this is set (or not set <code><code>QUERY_CONTENT_FLAG_USE_XP_LINE_BREAK</code></code>), the <code>aOffset</code> and <code>aLength</code> are offset and length in/of the content generated with native line breaks (E.g., <code>"\r\n"</code> on Windows). Additionally, the offset, length and string of result are also computed with native line breaks. </td>
+  </tr>
+  <tr>
+   <td><code>QUERY_CONTENT_FLAG_USE_XP_LINE_BREAK</code></td>
+   <td><code>0x0001</code></td>
+   <td>One of values of <code>aAdditionalFlags</code> of <code>sendQueryContentEvent()</code>. This flag must not be set with <code>QUERY_CONTENT_FLAG_USE_NATIVE_LINE_BREAK</code>. When this is set, the <code>aOffset</code> and <code>aLength</code> are offset and length in/of the content generated with XP line breaks (I.e., <code>"\n"</code> on all platforms). Additionally, the offset, length and string of result are also computed with XP line breaks. This is more useful for Javascript in chrome. </td>
+  </tr>
+  <tr>
+   <td><code>QUERY_SELECTED_TEXT</code></td>
+   <td><code>3200</code></td>
+   <td><code>QUERY_SELECTED_TEXT</code> queries the first selection range's information. </td>
+  </tr>
+  <tr>
+   <td><code>QUERY_TEXT_CONTENT</code></td>
+   <td><code>3201</code></td>
+   <td><code>QUERY_TEXT_CONTENT</code> queries the text at the specified range. </td>
+  </tr>
+  <tr>
+   <td><code>QUERY_CARET_RECT</code></td>
+   <td><code>3203</code></td>
+   <td><code>QUERY_CARET_RECT</code> queries the (collapsed) caret rect of the offset. If the actual caret is there at the specified offset, this returns the actual caret rect. Otherwise, this guesses the caret rect from the metrics of the text. </td>
+  </tr>
+  <tr>
+   <td><code>QUERY_TEXT_RECT</code></td>
+   <td><code>3204</code></td>
+   <td><code>QUERY_TEXT_RECT</code> queries the specified text's rect. </td>
+  </tr>
+  <tr>
+   <td><code>QUERY_EDITOR_RECT</code></td>
+   <td><code>3205</code></td>
+   <td><code>QUERY_TEXT_RECT</code> queries the focused editor's rect. </td>
+  </tr>
+  <tr>
+   <td><code>QUERY_CHARACTER_AT_POINT</code></td>
+   <td><code>3208</code></td>
+   <td>
+    <p><code>QUERY_CHARACTER_AT_POINT</code> queries the character information at the specified point. The point is offset in the window.</p>
+    <div class="note"><strong>Note:</strong>&nbsp;If there are some panels at the point, this method send the query event to the panel's widget automatically.</div> </td>
+  </tr>
+  <tr>
+   <td><code>SELECTION_SET_FLAG_USE_NATIVE_LINE_BREAK</code></td>
+   <td><code>0x0000</code></td>
+   <td>One of values of <code>aAdditionalFlags</code> of <code>sendSelectionSetEvent()</code>. This flag must not be set with <code>SELECTION_SET_FLAG_USE_XP_LINE_BREAK</code>. When this is set (or not set <code>SELECTION_SET_FLAG_USE_XP_LINE_BREAK)</code>, the <code>aOffset</code> and <code>aLength</code> are offset and length in/of the content generated with native line breaks (E.g., <code>"\r\n"</code> on Windows) </td>
+  </tr>
+  <tr>
+   <td><code>SELECTION_SET_FLAG_USE_XP_LINE_BREAK</code></td>
+   <td><code>0x0001</code></td>
+   <td>One of values of <code>aAdditionalFlags</code> of <code>sendSelectionSetEvent()</code>. This flag must not be set with <code>SELECTION_SET_FLAG_USE_NATIVE_LINE_BREAK</code>. When this is set, the <code>aOffset</code> and <code>aLength</code> are offset and length in/of the content generated with XP line breaks (I.e., <code>"\n"</code> on all platforms). This is more useful for Javascript in chrome </td>
+  </tr>
+  <tr>
+   <td><code>SELECTION_SET_FLAG_REVERSE</code></td>
+   <td><code>0x0002</code></td>
+   <td>One of values of <code>aAdditionalFlags</code> of <code>sendSelectionSetEvent()</code>. If this is set, the selection is set from <code>aOffset + aLength</code> to <code>aOffset</code>.</td>
+  </tr>
+  <tr>
+   <td><code>AGENT_SHEET</code></td>
+   <td><code>0</code></td>
+   <td>A possible <code>type</code> of a style sheet loaded/removed with <code>loadSheet()</code>/<code>removeSheet()</code>. See <a href="http://www.w3.org/TR/CSS2/cascade.html#cascade" class="external">CSS2 specification</a> for details. </td>
+  </tr>
+  <tr>
+   <td><code>USER_SHEET</code></td>
+   <td><code>1</code></td>
+   <td>A possible <code>type</code> of a style sheet loaded/removed with <code>loadSheet()</code>/<code>removeSheet()</code>. See <a href="http://www.w3.org/TR/CSS2/cascade.html#cascade" class="external">CSS2 specification</a> for details. </td>
+  </tr>
+  <tr>
+   <td><code>AUTHOR_SHEET</code></td>
+   <td><code>2</code></td>
+   <td>A possible <code>type</code> of a style sheet loaded/removed with <code>loadSheet()</code>/<code>removeSheet()</code>. See <a href="http://www.w3.org/TR/CSS2/cascade.html#cascade" class="external">CSS2 specification</a> for details. </td>
+  </tr>
+ </tbody>
+</table>
+
+<h2 name="Methods" id="Methods">Methods</h2>
+
+<p></p><h3 name="activateNativeMenuItemAt()" id="activateNativeMenuItemAt()">activateNativeMenuItemAt()</h3><p></p>
+
+<p>See <code><a href="https://developer.mozilla.org/en-US/docs/XPCOM_Interface_Reference/nsIWidget#ActivateNativeMenuItemAt()" class="new">nsIWidget.ActivateNativeMenuItemAt()</a></code>.</p>
+
+<p>Cannot be accessed from unprivileged context (not content-accessible) Will throw a DOM security error if called without UniversalXPConnect privileges.</p>
+
+<pre class="eval">void activateNativeMenuItemAt(
+  in AString indexString
+);
+</pre>
+
+<h6 name="Parameters" id="Parameters">Parameters</h6>
+
+<dl>
+ <dt><code>indexString</code></dt>
+ <dd>&nbsp;</dd>
+</dl>
+
+<p></p><h3 name="clearMozAfterPaintEvents()" id="clearMozAfterPaintEvents()">clearMozAfterPaintEvents()</h3><p></p>
+
+<pre class="eval">void clearMozAfterPaintEvents();
+</pre>
+
+<h6 name="Parameters" id="Parameters">Parameters</h6>
+
+<p>None.</p>
+
+<p></p><h3 name="compareCanvases()" id="compareCanvases()">compareCanvases()</h3><p></p>
+
+<p>Compare the two canvases, returning the number of differing pixels and the maximum difference in a channel. This will throw an error if the dimensions of the two canvases are different.</p>
+
+<p>This method requires UniversalXPConnect privileges.</p>
+
+<pre class="eval">PRUint32 compareCanvases(
+  in nsIDOMHTMLCanvasElement aCanvas1,
+  in nsIDOMHTMLCanvasElement aCanvas2,
+  out unsigned long aMaxDifference
+);
+</pre>
+
+<h6 name="Parameters" id="Parameters">Parameters</h6>
+
+<dl>
+ <dt><code>aCanvas1</code></dt>
+ <dd>&nbsp;</dd>
+ <dt><code>aCanvas2</code></dt>
+ <dd>&nbsp;</dd>
+ <dt><code>aMaxDifference</code></dt>
+ <dd>&nbsp;</dd>
+</dl>
+
+<h6 name="Return_value" id="Return_value">Return value</h6>
+
+<p>&nbsp;</p>
+
+<p></p><h3 name="computeAnimationDistance()" id="computeAnimationDistance()">computeAnimationDistance()</h3><p></p>
+
+<p>Method for testing nsStyleAnimation::ComputeDistance.</p>
+
+<p>Returns the distance between the two values as reported by nsStyleAnimation::ComputeDistance for the given element and property.</p>
+
+<pre class="eval">double computeAnimationDistance(
+  in nsIDOMElement element,
+  in AString property,
+  in AString value1,
+  in AString value2
+);
+</pre>
+
+<h6 name="Parameters" id="Parameters">Parameters</h6>
+
+<dl>
+ <dt><code>element</code></dt>
+ <dd>&nbsp;</dd>
+ <dt><code>property</code></dt>
+ <dd>&nbsp;</dd>
+ <dt><code>value1</code></dt>
+ <dd>&nbsp;</dd>
+ <dt><code>value2</code></dt>
+ <dd>&nbsp;</dd>
+</dl>
+
+<h6 name="Return_value" id="Return_value">Return value</h6>
+
+<p>&nbsp;</p>
+
+<p></p><h3 name="createCompositionStringSynthesizer()" id="createCompositionStringSynthesizer()">createCompositionStringSynthesizer()</h3><p></p>
+
+<p><span class="inlineIndicator obsolete obsoleteInline" title="(Firefox 38 / Thunderbird 38 / SeaMonkey 2.35)">Obsolete since Gecko 38</span> Method for creating an instance which has <code><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsICompositionStringSynthesizer" title="">nsICompositionStringSynthesizer</a></code>.</p>
+
+<p>However, this is obsoleted since <span title="(Firefox 38 / Thunderbird 38 / SeaMonkey 2.35)">Gecko&nbsp;38</span>, use <code><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsITextInputProcessor" title="">nsITextInputProcessor</a></code> instead.</p>
+
+<pre>nsICompositionStringSynthesizer createCompositionStringSynthesizer();</pre>
+
+<h6 name="Parameters" id="Parameters">Return value</h6>
+
+<p>An instance of <code><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsICompositionStringSynthesizer" title="">nsICompositionStringSynthesizer</a></code>. It's associated with the DOM window which is associated with the instance of nsIDOMWindowUtils.</p>
+
+<p></p><h3 name="disableNonTestMouseEvents()" id="disableNonTestMouseEvents()">disableNonTestMouseEvents()</h3><p></p>
+
+<p>Disable or enable non synthetic test mouse events on *all* windows.</p>
+
+<p>Cannot be accessed from unprivileged context (not content-accessible). Will throw a DOM security error if called without UniversalXPConnect privileges.</p>
+
+<pre class="eval">void disableNonTestMouseEvents(
+  in boolean aDisable
+);
+</pre>
+
+<h6 name="Parameters" id="Parameters">Parameters</h6>
+
+<dl>
+ <dt><code>aDisable</code></dt>
+ <dd>If <code>true</code>, disable all non synthetic test mouse events on all windows. Otherwise, enable them.</dd>
+</dl>
+
+<p></p><h3 name="dispatchDOMEventViaPresShell()" id="dispatchDOMEventViaPresShell()">dispatchDOMEventViaPresShell()</h3><p></p>
+
+<p>Dispatches aEvent via the <code><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIPresShell" class="new" title="">nsIPresShell</a></code> object of the window's document. The event is dispatched to aTarget, which should be an object which implements <code><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIContent" class="new" title="">nsIContent</a></code> interface (#element, #text, etc).</p>
+
+<p>Cannot be accessed from unprivileged context (not content-accessible) Will throw a DOM security error if called without UniversalXPConnect privileges.</p>
+
+<p></p><div class="note"><strong>Note:</strong>&nbsp;Event handlers won't get aEvent as parameter, but a similar event. Also, aEvent should not be reused.</div><p></p>
+
+<pre class="eval">boolean dispatchDOMEventViaPresShell(
+  in nsIDOMNode aTarget,
+  in nsIDOMEvent aEvent,
+  in boolean aTrusted
+);
+</pre>
+
+<h6 name="Parameters" id="Parameters">Parameters</h6>
+
+<dl>
+ <dt><code>aTarget</code></dt>
+ <dd>&nbsp;</dd>
+ <dt><code>aEvent</code></dt>
+ <dd>&nbsp;</dd>
+ <dt><code>aTrusted</code></dt>
+ <dd>&nbsp;</dd>
+</dl>
+
+<h6 name="Return_value" id="Return_value">Return value</h6>
+
+<p>boolean to show if the event was successful</p>
+
+<p>&nbsp;</p>
+
+<p></p><h3 name="elementFromPoint()" id="elementFromPoint()">elementFromPoint()</h3><p></p>
+
+<p>Retrieve the element at point aX, aY in the window's document.</p>
+
+<pre class="eval">nsIDOMElement elementFromPoint(
+  in float aX,
+  in float aY,
+  in boolean aIgnoreRootScrollFrame,
+  in boolean aFlushLayout
+);
+</pre>
+
+<h6 name="Parameters" id="Parameters">Parameters</h6>
+
+<dl>
+ <dt><code>aX</code></dt>
+ <dd>&nbsp;</dd>
+ <dt><code>aY</code></dt>
+ <dd>&nbsp;</dd>
+ <dt><code>aIgnoreRootScrollFrame</code></dt>
+ <dd>Whether or not to ignore the root scroll frame when retrieving the element. If <code>false</code>, this method returns <code>null</code> for coordinates outside of the viewport.</dd>
+ <dt><code>aFlushLayout</code></dt>
+ <dd>Flushes layout if <code>true</code>. Otherwise, no flush occurs.</dd>
+</dl>
+
+<h6 name="Return_value" id="Return_value">Return value</h6>
+
+<p>&nbsp;</p>
+
+<p></p><h3 name="enterModalState()" id="enterModalState()">enterModalState()</h3><p></p>
+
+<p>Put the window into a state where scripts are frozen and events suppressed, for use when the window has launched a modal prompt.</p>
+
+<pre class="eval">void enterModalState();
+</pre>
+
+<h6 name="Parameters" id="Parameters">Parameters</h6>
+
+<p>None.</p>
+
+<p></p><h3 name="findElementWithViewId()" id="findElementWithViewId()">findElementWithViewId()</h3><p></p>
+
+<p></p><div class="overheadIndicator mobileOnly mobileOnlyHeader"> 
+    <p><strong>Mobile Only in Gecko 2.0</strong><br> 
+    Available only in Firefox Mobile as of Gecko 2.0 (Firefox 4 / Thunderbird 3.3 / SeaMonkey 2.1)</p> 
+</div><p></p>
+
+<p>Given a view ID&nbsp;from the compositor process, return the corresponding DOM&nbsp;element object.</p>
+
+<pre>nsIDOMElement findElementWithViewId(
+&nbsp; in nsViewID aId
+); 
+</pre>
+
+<h6 id="Parameters_2">Parameters</h6>
+
+<dl>
+ <dt><code>aId</code></dt>
+ <dd>The ID of the view for which to retrieve the corresponding <code><a href="nsIDOMElement.html" title="">nsIDOMElement</a></code>&nbsp;object.</dd>
+</dl>
+
+<h6 id="Return_value_2">Return value</h6>
+
+<p>The <code><a href="nsIDOMElement.html" title="">nsIDOMElement</a></code>&nbsp;object for the HTML&nbsp;element drawn by the specified view ID.</p>
+
+<div class="note"><strong>Note:</strong> For scrollable frames containing documents (that is, <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/frame" title="&lt;frame&gt; is an HTML element which defines a particular area in which another HTML document can be displayed. A frame should be used within a &lt;frameset&gt;."><code>&lt;frame&gt;</code></a>&nbsp;and <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe" title="The&nbsp;HTML Inline Frame Element&nbsp;(&lt;iframe&gt;) represents a nested browsing context, effectively embedding another HTML page into the current page. In HTML 4.01, a document may contain a head and a body or a head and a frame-set, but not both a body and a frame-set. However, an &lt;iframe&gt; can be used within a normal document body. Each browsing context has its own session history and active document. The browsing context that contains the embedded content is called the parent browsing context. The top-level browsing context (which has no parent) is typically the browser window."><code>&lt;iframe&gt;</code></a>), the enclosed document's root element is returned.</div>
+
+<p></p><h3 name="focus()" id="focus()">focus()</h3><p></p>
+
+<p>Focus the element aElement. The element should be in the same document that the window is displaying. Pass <code>null</code> to blur the element, if any, that currently has focus, and focus the document.</p>
+
+<p>Cannot be accessed from unprivileged context (not content-accessible) Will throw a DOM security error if called without UniversalXPConnect privileges.</p>
+
+<p>Do not use this method. Just use element.focus if available or <code><a href="https://developer.mozilla.org/en-US/docs/XPCOM_Interface_Reference/nsIFocusManager#SetFocus()">nsIFocusManager.SetFocus()</a></code> instead.</p>
+
+<pre class="eval">void focus(
+  in nsIDOMElement aElement
+);
+</pre>
+
+<h6 name="Parameters" id="Parameters">Parameters</h6>
+
+<dl>
+ <dt><code>aElement</code></dt>
+ <dd>The element to focus.</dd>
+</dl>
+
+<p></p><h3 name="forceUpdateNativeMenuAt()" id="forceUpdateNativeMenuAt()">forceUpdateNativeMenuAt()</h3><p></p>
+
+<p>See <code><a href="https://developer.mozilla.org/en-US/docs/XPCOM_Interface_Reference/nsIWidget#ForceUpdateNativeMenuAt()" class="new">nsIWidget.ForceUpdateNativeMenuAt()</a></code>.</p>
+
+<p>Cannot be accessed from unprivileged context (not content-accessible) Will throw a DOM security error if called without UniversalXPConnect privileges.</p>
+
+<pre class="eval">void forceUpdateNativeMenuAt(
+  in AString indexString
+);
+</pre>
+
+<h6 name="Parameters" id="Parameters">Parameters</h6>
+
+<dl>
+ <dt><code>indexString</code></dt>
+ <dd>&nbsp;</dd>
+</dl>
+
+<p></p><h3 name="garbageCollect()" id="garbageCollect()">garbageCollect()</h3><p></p>
+
+<p>Force a garbage collection followed by a cycle collection.</p>
+
+<p>Will throw a DOM security error if called without UniversalXPConnect privileges in non-debug builds. Available to all callers in debug builds.</p>
+
+<pre class="eval">void garbageCollect(
+  in nsICycleCollectorListener aListener <span class="inlineIndicator optional optionalInline">Optional</span> 
+);
+</pre>
+
+<h6 name="Parameters" id="Parameters">Parameters</h6>
+
+<dl>
+ <dt><code>aListener</code> <span class="inlineIndicator optional optionalInline">Optional</span> </dt>
+ <dd>Listener that receives information about the CC graph (see @mozilla.org/cycle-collector-logger;1 for a logger component)</dd>
+</dl>
+
+<p></p><h3 name="getCursorType()" id="getCursorType()">getCursorType()</h3><p></p>
+
+<p>Get current cursor type from this window.</p>
+
+<pre class="eval">short getCursorType();
+</pre>
+
+<h6 name="Parameters" id="Parameters">Parameters</h6>
+
+<p>None.</p>
+
+<h6 name="Return_value" id="Return_value">Return value</h6>
+
+<p>The current value of nsCursor.</p>
+
+<h3 name="getDocumentMetadata()" id="getDocumentMetadata()">getDocumentMetadata()</h3>
+
+<p>Function to get metadata associated with the window's current document.</p>
+
+<p>Will throw a DOM security error if called without UniversalXPConnect privileges.</p>
+
+<pre class="eval">AString getDocumentMetadata(
+  in AString aName
+);
+</pre>
+
+<h6 name="Parameters" id="Parameters">Parameters</h6>
+
+<dl>
+ <dt><code>aName</code></dt>
+ <dd>The name of the metadata. This should be all lowercase.</dd>
+</dl>
+
+<h6 name="Return_value" id="Return_value">Return value</h6>
+
+<p>The value of the metadata, or the empty string if it's not set.</p>
+
+<p></p><h3 name="getOuterWindowWithId()" id="getOuterWindowWithId()">getOuterWindowWithId()</h3><p></p>
+
+<p>Returns the <code><a href="nsIDOMWindow.html" title="">nsIDOMWindow</a></code> matching the specified outer window's ID.</p>
+
+<pre class="eval">nsIDOMWindow getOuterWindowWithId(
+  in unsigned long long aOuterWindowID
+);
+</pre>
+
+<h6 name="Parameters" id="Parameters">Parameters</h6>
+
+<dl>
+ <dt><code>aOuterWindowID</code></dt>
+ <dd>The ID of the outer window for which to return the window.</dd>
+</dl>
+
+<h6 name="Return_value" id="Return_value">Return value</h6>
+
+<p>An <code><a href="nsIDOMWindow.html" title="">nsIDOMWindow</a></code> object representing the outer window with the specified ID; if no matching window is found, returns <code>null</code>.</p>
+
+<p><br>
+ <a name="getPCCountScriptCount()"></a></p><h3 name="getPCCountScriptCount()" id="getPCCountScriptCount()">getPCCountScriptCount()</h3> <span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span><p></p>
+
+<p>Returns the number of scripts which profile information was constructed for.&nbsp; This should be used after a call to <code><a href="#stopPCCountProfiling()" title="#stopPCCountProfiling()">stopPCCountProfiling</a>()</code>.</p>
+
+<pre>long getPCCountScriptCount();</pre>
+
+<h6 id="Parameters_3">Parameters</h6>
+
+<p>None.</p>
+
+<p><a name="getPCCountScriptSummary()"></a></p><h3 name="getPCCountScriptSummary()" id="getPCCountScriptSummary()">getPCCountScriptSummary()</h3> <span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span><p></p>
+
+<p>Returns a summary of the profile information for a script.&nbsp; This should be used after a call to <code><a href="#stopPCCountProfiling()" title="#stopPCCountProfiling()">stopPCCountProfiling</a>()</code>.</p>
+
+<pre>AString getPCCountScriptSummary(in long aScript);</pre>
+
+<h6 id="Parameters_4">Parameters</h6>
+
+<dl>
+ <dt><code>aScript</code></dt>
+ <dd>Index of the profiled script to get the profile summary for.&nbsp; Should be less than <code><a href="#getPCCountScriptCount()" title="#getPCCountScriptCount()">getPCCountScriptCount</a>()</code>.</dd>
+</dl>
+
+<h6 id="Return_value_3">Return value</h6>
+
+<p>A JSON string summarizing the information profiled about the script.&nbsp; This includes counts for how often and in what ways the script executed.&nbsp; The structure of the JSON is unspecified and may vary between versions of Firefox.</p>
+
+<p><a name="getPCCountScriptContents()"></a></p><h3 name="getPCCountScriptContents()" id="getPCCountScriptContents()">getPCCountScriptContents()</h3> <span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span><p></p>
+
+<p>Returns detailed information about the profile information for a script.&nbsp; This should be used after a call to <code><a href="#stopPCCountProfiling()" title="#stopPCCountProfiling()">stopPCCountProfiling</a>()</code>.</p>
+
+<pre>AString getPCCountScriptContents(in long script);</pre>
+
+<h6 id="Parameters_5">Parameters</h6>
+
+<dl>
+ <dt><code>aScript</code></dt>
+ <dd>Index of the profiled script to get the profile contents for.&nbsp; Should be less than <code><a href="#getPCCountScriptCount()" title="#getPCCountScriptCount()">getPCCountScriptCount</a>()</code>.</dd>
+</dl>
+
+<h6 id="Return_value_4">Return value</h6>
+
+<p>A JSON string with all profile information accumulated for the script.&nbsp; This includes the text of the script and details about its internal representation in SpiderMonkey, and counts for how often and in what ways each operation in the script executed.&nbsp; The structure of the JSON is unspecified and may vary between versions of Firefox.</p>
+
+<p></p><h3 name="getScrollXY()" id="getScrollXY()">getScrollXY()</h3><p></p>
+
+<p>Returns the scroll position of the window's currently loaded document.</p>
+
+<pre class="eval">void getScrollXY(
+  in boolean aFlushLayout,
+  out long aScrollX,
+  out long aScrollY
+);
+</pre>
+
+<h6 name="Parameters" id="Parameters">Parameters</h6>
+
+<dl>
+ <dt><code>aFlushLayout</code></dt>
+ <dd>Flushes layout if <code>true</code>. Otherwise, no flush occurs.</dd>
+ <dt><code>aScrollX</code></dt>
+ <dd>&nbsp;</dd>
+ <dt><code>aScrollY</code></dt>
+ <dd>&nbsp;</dd>
+</dl>
+
+<p></p><h3 name="getVisitedDependentComputedStyle()" id="getVisitedDependentComputedStyle()">getVisitedDependentComputedStyle()</h3><p></p>
+
+<p>Perform the equivalent of: window.getComputedStyle(aElement, aPseudoElement). getPropertyValue(aPropertyName) except that, when the link whose presence in history is allowed to influence aElement's style is visited, get the value the property would have if allowed all properties to change as a result of :visited selectors (except for cases where getComputedStyle uses data from the frame).</p>
+
+<p>This is easier to implement than adding our property restrictions to this API, and is sufficient for the present testing requirements (which are essentially testing 'color').</p>
+
+<pre class="eval">AString getVisitedDependentComputedStyle(
+  in nsIDOMElement aElement,
+  in AString aPseudoElement,
+  in AString aPropertyName
+);
+</pre>
+
+<h6 name="Parameters" id="Parameters">Parameters</h6>
+
+<dl>
+ <dt><code>aElement</code></dt>
+ <dd>&nbsp;</dd>
+ <dt><code>aPseudoElement</code></dt>
+ <dd>&nbsp;</dd>
+ <dt><code>aPropertyName</code></dt>
+ <dd>&nbsp;</dd>
+</dl>
+
+<h6 name="Return_value" id="Return_value">Return value</h6>
+
+<p>&nbsp;</p>
+
+<p></p><h3 name="isInModalState()" id="isInModalState()">isInModalState()</h3><p></p>
+
+<p>Is the window is in a modal state? [See <code><a href="nsIDOMWindowUtils.html#enterModalState()">enterModalState()</a></code>]</p>
+
+<pre class="eval">boolean isInModalState();
+</pre>
+
+<h6 name="Parameters" id="Parameters">Parameters</h6>
+
+<p>None.</p>
+
+<h6 name="Return_value" id="Return_value">Return value</h6>
+
+<p>&nbsp;</p>
+
+<p></p><h3 name="leaveModalState()" id="leaveModalState()">leaveModalState()</h3><p></p>
+
+<p>Resume normal window state, where scripts can run and events are delivered.</p>
+
+<pre class="eval">void leaveModalState();
+</pre>
+
+<h6 name="Parameters" id="Parameters">Parameters</h6>
+
+<p>None.</p>
+
+<p>&nbsp;</p>
+
+<p></p><h3 name="loadSheet()" id="loadSheet()">loadSheet()</h3><p></p>
+
+<p>Synchronously loads a style sheet from |sheetURI| and adds it to the list of additional style sheets of the document.<br>
+ These additional style sheets are very much like user/agent sheets loaded with <code>loadAndRegisterSheet</code>. The only difference is that they are applied only on the document owned by this window.<br>
+ Sheets added via this API take effect immediately on the document.</p>
+
+<pre class="eval">unsigned long loadSheet(
+  in nsIURI sheetURI, in unsigned long type
+);
+</pre>
+
+<h6 name="Parameters" id="Parameters">Parameters</h6>
+
+<dl>
+ <dt><code>sheetURI</code></dt>
+ <dd>The <code><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIURI" title="">nsIURI</a></code> of the CSS file to be removed.</dd>
+ <dt><code>type</code></dt>
+ <dd>The type of the sheet (<code>AGENT_SHEET</code>, <code>USER_SHEET</code> or <code>AUTHOR_SHEET</code>).</dd>
+</dl>
+
+<p></p><h3 name="nodesFromRect()" id="nodesFromRect()">nodesFromRect()</h3><p></p>
+
+<p>Returns an <code><a href="nsIDOMNodeList.html" class="new" title="">nsIDOMNodeList</a></code> containing all nodes that intersect a specified rectangle within the window's document. The rectangle is specified using a central point and a distance to expand in all four cardinal directions. This is used to locate nodes that are within some number of pixels of a point; for example, you can use this to find candidate target nodes when the user taps on a touch screen.</p>
+
+<pre class="eval">nsIDOMNodeList nodesFromRect(
+  in float aX,
+  in float aY,
+  in float aTopSize,
+  in float aRightSize,
+  in float aBottomSize,
+  in float aLeftSize,
+  in boolean aIgnoreRootScrollFrame,
+  in boolean aFlushLayout
+);
+</pre>
+
+<h6 name="Parameters" id="Parameters">Parameters</h6>
+
+<dl>
+ <dt><code>aX</code></dt>
+ <dd>The X coordinate of the point at which to begin constructing the rectangle, in CSS&nbsp;pixels.</dd>
+ <dt><code>aY</code></dt>
+ <dd>The Y coordinate of the point at which to begin constructing the rectangle, in CSS&nbsp;pixels.</dd>
+ <dt><code>aTopSize</code></dt>
+ <dd>The number of CSS pixels to expand the rectangle upward from the point <code>(aX, aY)</code>.</dd>
+ <dt><code>aRightSize</code></dt>
+ <dd>The number of CSS pixels to expand the rectangle to the right from the point <code>(aX, aY)</code>.</dd>
+ <dt><code>aBottomSize</code></dt>
+ <dd>The number of CSS pixels to expand the rectangle downward from the point <code>(aX, aY)</code>.</dd>
+ <dt><code>aLeftSize</code></dt>
+ <dd>The number of CSS pixels to expand the rectangle to the left from the point <code>(aX, aY)</code>.</dd>
+ <dt><code>aIgnoreRootScrollFrame</code></dt>
+ <dd>Whether or not to ignore the root scroll frame when retrieving the nodes. If this is <code>false</code>, this method will return <code>null</code> for coordinates outside the viewport.</dd>
+ <dt><code>aFlushLayout</code></dt>
+ <dd>If <code>true</code>, layout is flushed before hit testing begins. This ensures that the node list is current. If you don't need an absolutely up to date node list, you can set this to <code>false</code>.</dd>
+</dl>
+
+<h6 name="Return_value" id="Return_value">Return value</h6>
+
+<p>An <code><a href="nsIDOMNodeList.html" class="new" title="">nsIDOMNodeList</a></code> referencing all the nodes that intersect the specified rectangle.</p>
+
+<p></p><div class="headingWithIndicator"> 
+        <h3 id="processUpdates()">processUpdates()</h3> 
+        <span class="indicatorInHeadline obsolete obsoleteMethod">Obsolete since Gecko 13.0 (Firefox 13.0 / Thunderbird 13.0 / SeaMonkey 2.10)</span> 
+        </div><p></p>
+
+<p>Force processing of any queued paints.</p>
+
+<pre class="eval">void processUpdates();
+</pre>
+
+<h6 name="Parameters" id="Parameters">Parameters</h6>
+
+<p>None.</p>
+
+<p><a name="purgePCCounts()"></a></p><h3 name="purgePCCounts()" id="purgePCCounts()">purgePCCounts()</h3> <span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span><p></p>
+
+<p>Purge all accumulated profile information for scripts which was generated after a call to <code><a href="#stopPCCountProfiling()" title="#stopPCCountProfiling()">stopPCCountProfiling</a>()</code>.</p>
+
+<pre>void purgePCCounts();</pre>
+
+<h6 id="Parameters_6">Parameters</h6>
+
+<p>None.</p>
+
+<p></p><h3 name="redraw()" id="redraw()">redraw()</h3><p></p>
+
+<p>Force an immediate redraw of this window. The parameter specifies the number of times to redraw, and the return value is the length, in milliseconds, that the redraws took. If aCount is not specified or is 0, it is taken to be 1.</p>
+
+<pre class="eval">unsigned long redraw(
+  in unsigned long aCount <span class="inlineIndicator optional optionalInline">Optional</span> 
+);
+</pre>
+
+<h6 name="Parameters" id="Parameters">Parameters</h6>
+
+<dl>
+ <dt><code>aCount</code> <span class="inlineIndicator optional optionalInline">Optional</span> </dt>
+ <dd>&nbsp;</dd>
+</dl>
+
+<h6 name="Return_value" id="Return_value">Return value</h6>
+
+<p>&nbsp;</p>
+
+<p></p><h3 name="removeSheet()" id="removeSheet()">removeSheet()</h3><p></p>
+
+<p>Remove the document style sheet at <code>sheetURI</code> from the list of additional style sheets of the document. The removal takes effect immediately.</p>
+
+<pre class="eval">unsigned long removeSheet(
+  in nsIURI sheetURI, in unsigned long type
+);
+</pre>
+
+<h6 name="Parameters" id="Parameters">Parameters</h6>
+
+<dl>
+ <dt><code>sheetURI</code></dt>
+ <dd>The <code><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIURI" title="">nsIURI</a></code> of the CSS file to be removed.</dd>
+ <dt><code>type</code></dt>
+ <dd>The type of the sheet (<code>AGENT_SHEET</code>, <code>USER_SHEET</code> or <code>AUTHOR_SHEET</code>).</dd>
+</dl>
+
+<p>&nbsp;</p>
+
+<p></p><div><span class="indicatorInHeadline noscript noscriptMethod" title="This method may only be called from C++; don't use it from JavaScript.">Native code only!</span><h3 id="RenderDocument">RenderDocument</h3></div><p></p>
+
+<p></p>
+
+<pre class="eval">void RenderDocument(
+  in nsConstRect aRect,
+  in PRUint32 aFlags,
+  in nscolor aBackgroundColor,
+  in gfxContext aThebesContext
+);
+</pre>
+
+<h6 name="Parameters" id="Parameters">Parameters</h6>
+
+<dl>
+ <dt><code>aRect</code></dt>
+ <dd>&nbsp;</dd>
+ <dt><code>aFlags</code></dt>
+ <dd>&nbsp;</dd>
+ <dt><code>aBackgroundColor</code></dt>
+ <dd>&nbsp;</dd>
+ <dt><code>aThebesContext</code></dt>
+ <dd>&nbsp;</dd>
+</dl>
+
+<p></p><h3 name="resumeTimeouts()" id="resumeTimeouts()">resumeTimeouts()</h3><p></p>
+
+<p>Resumes timeouts on this window and its descendant windows.</p>
+
+<pre class="eval">void resumeTimeouts();
+</pre>
+
+<h6 name="Parameters" id="Parameters">Parameters</h6>
+
+<p>None.</p>
+
+<p></p><h3 name="sendCompositionEvent()" id="sendCompositionEvent()">sendCompositionEvent()</h3><p></p>
+
+<p><span class="inlineIndicator obsolete obsoleteInline" title="(Firefox 38 / Thunderbird 38 / SeaMonkey 2.35)">Obsolete since Gecko 38</span> Synthesize a composition event to the window.</p>
+
+<p>Cannot be accessed from unprivileged context (not content-accessible) Will throw a DOM security error if called without UniversalXPConnect privileges.</p>
+
+<p>This is obsoleted since <span title="(Firefox 38 / Thunderbird 38 / SeaMonkey 2.35)">Gecko&nbsp;38</span>. Use <code><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsITextInputProcessor" title="">nsITextInputProcessor</a></code>, instead.</p>
+
+<pre>void sendCompositionEvent(
+  in AString aType,
+); <span class="inlineIndicator obsolete obsoleteInline" title="(Firefox 9 / Thunderbird 9 / SeaMonkey 2.6)">Obsolete since Gecko 9</span>
+</pre>
+
+<h6 name="Parameters" id="Parameters">Parameters</h6>
+
+<dl>
+ <dt><code>aType</code></dt>
+ <dd>The event type: <code>"compositionstart"</code> or <code>"compositionend"</code>.</dd>
+</dl>
+
+<pre>void sendCompositionEvent(
+&nbsp; in AString aType,
+&nbsp; in AString aData, 
+&nbsp; in AString aLocale
+);  <span class="inlineIndicator obsolete obsoleteInline" title="(Firefox 38 / Thunderbird 38 / SeaMonkey 2.35)">Obsolete since Gecko 38</span></pre>
+
+<h6 name="Parameters" id="Parameters">Parameters</h6>
+
+<dl>
+ <dt><code>aType</code></dt>
+ <dd>The event type: <code>"compositionstart"</code> or <code>"compositionend"</code> <span class="inlineIndicator obsolete obsoleteInline" title="(Firefox 36 / Thunderbird 36 / SeaMonkey 2.33)">Obsolete since Gecko 36</span>. Since <span title="(Firefox 36 / Thunderbird 36 / SeaMonkey 2.33)">Gecko&nbsp;36</span>, specifying <code>"compositionend"</code> isn't fired anything. Instead, use <code>"compositioncommitasis"</code> or <code>"compositioncommit".</code><br>
+ <br>
+ Or <code>"compositionupdate"</code>.  <span class="inlineIndicator obsolete obsoleteInline" title="(Firefox 35 / Thunderbird 35 / SeaMonkey 2.32)">Obsolete since Gecko 35</span> Note that, since <span title="(Firefox 35 / Thunderbird 35 / SeaMonkey 2.32)">Gecko&nbsp;35</span>, specifying <code>"compositionupdate"</code> isn't fired anything. Instead, <code><a href="../../../../../Web/Events/compositionupdate.html" title="/en-US/docs/Web/Events/compositionupdate">compositionupdate</a></code> event is fired automatically when it should be fired.<br>
+ <br>
+ Or <code>"compositioncommitasis"</code> or <code>"compositioncommit"</code>. <span class="badge geckoVersionBadge" title="(Firefox 36 / Thunderbird 36 / SeaMonkey 2.33)"><span class="badgeText">Requires Gecko 36</span></span> <code>"compositioncommitasis"</code> will cause commiting the composition with the last composing string. <code>"compositioncommit"</code> will cause commiting the composition with <code>aData</code>. Both <code><a href="../../../../../Web/Events/compositionupdate.html" title="/en-US/docs/Web/Events/compositionupdate">compositionupdate</a></code> event and <code><a href="../../../../../Web/Events/compositionend.html" title="/en-US/docs/Web/Events/compositionend">compositionend</a></code> event are fired automatically if they are necessary.</dd>
+ <dt>aData</dt>
+ <dd>The data value of dispatching composition event. If <code>aType</code> is "compositionstart" or "compositioncommitasis", this is ignored.</dd>
+ <dt>aLocale</dt>
+ <dd>The locale value of dispatching composition event.</dd>
+</dl>
+
+<p></p><h3 name="getClassName()" id="getClassName()">getClassName()</h3><p></p>
+
+<p>Returns the real classname (possibly of the mostly-transparent security wrapper) of aObj.</p>
+
+<p></p><h3 name="sendContentCommandEvent()" id="sendContentCommandEvent()">sendContentCommandEvent()</h3><p></p>
+
+<p>Generate a content command event.</p>
+
+<p>Cannot be accessed from unprivileged context (not content-accessible) Will throw a DOM security error if called without UniversalXPConnect privileges.</p>
+
+<pre class="eval">void sendContentCommandEvent(
+  in AString aType,
+  in nsITransferable aTransferable <span class="inlineIndicator optional optionalInline">Optional</span>
+);
+</pre>
+
+<h6 name="Parameters" id="Parameters">Parameters</h6>
+
+<dl>
+ <dt><code>aType</code></dt>
+ <dd>Type of command content event to send. Can be one of "cut", "copy", "paste", "delete", "undo", "redo", or "pasteTransferable".</dd>
+ <dt><code>aTransferable</code> <span class="inlineIndicator optional optionalInline">Optional</span></dt>
+ <dd>An instance of <code><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsITransferable" title="">nsITransferable</a></code> when aType is "pasteTransferable"</dd>
+</dl>
+
+<p></p><h3 name="sendKeyEvent()" id="sendKeyEvent()">sendKeyEvent()</h3><p></p>
+
+<p>Synthesize a key event to the window. The event types supported are: keydown, keyup, keypress.</p>
+
+<p>Key events generally end up being sent to the focused node.</p>
+
+<p>Cannot be accessed from unprivileged context (not content-accessible) Will throw a DOM security error if called without UniversalXPConnect privileges.</p>
+
+<p>However, this is deprecated since <span title="(Firefox 38 / Thunderbird 38 / SeaMonkey 2.35)">Gecko&nbsp;38</span> (and will be obsolete soon), use <code><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsITextInputProcessor" title="">nsITextInputProcessor</a></code> instead.</p>
+
+<pre>boolean sendKeyEvent(
+  in AString aType,
+  in long aKeyCode,
+  in long aCharCode,
+  in long aModifiers,
+  in unsigned long aAdditionalFlags <span class="inlineIndicator optional optionalInline">Optional</span>
+);  <span class="inlineIndicator deprecated deprecatedInline" title="(Firefox 38.0 / Thunderbird 38.0 / SeaMonkey 2.35)">Deprecated since Gecko 38.0</span></pre>
+
+<pre class="eval">boolean sendKeyEvent(
+  in AString aType,
+  in long aKeyCode,
+  in long aCharCode,
+  in long aModifiers,
+  in boolean aPreventDefault <span class="inlineIndicator optional optionalInline">Optional</span> 
+); <span class="inlineIndicator obsolete obsoleteInline" title="(Firefox 15.0 / Thunderbird 15.0 / SeaMonkey 2.12)">Obsolete since Gecko 15.0</span>
+</pre>
+
+<h6 name="Parameters" id="Parameters">Parameters</h6>
+
+<dl>
+ <dt><code>aType</code></dt>
+ <dd>Event type.</dd>
+ <dt><code>aKeyCode</code></dt>
+ <dd>Key code.</dd>
+ <dt><code>aCharCode</code></dt>
+ <dd>Character code.</dd>
+ <dt><code>aModifiers</code></dt>
+ <dd>Modifiers pressed.</dd>
+ <dd>Using constants defined in <code><a href="nsIDOMNSEvent.html" class="new" title="">nsIDOMNSEvent</a></code>. <span class="inlineIndicator obsolete obsoleteInline" title="(Firefox 15.0 / Thunderbird 15.0 / SeaMonkey 2.12)">Obsolete since Gecko 15.0</span></dd>
+ <dd>Using constants defined as MODIFIER_*. </dd>
+ <dt><code>aPreventDefault</code> <span class="inlineIndicator optional optionalInline">Optional</span>  <span class="inlineIndicator obsolete obsoleteInline" title="(Firefox 15.0 / Thunderbird 15.0 / SeaMonkey 2.12)">Obsolete since Gecko 15.0</span></dt>
+ <dd>If <code>true</code>, preventDefault() the event before dispatch.</dd>
+ <dt><code>aAdditionalFlags</code> <span class="inlineIndicator optional optionalInline">Optional</span> </dt>
+ <dd><code>0</code> or <code>KEY_FLAG_PREVENT_DEFAULT</code> and/or one of <code>KEY_FLAG_LOCATION_*</code>.</dd>
+ <dd>If <code>KEY_FLAG_PREVENT_DEFAULT</code> is specified, the dispatching key event's default is prevented.</dd>
+ <dd>If <code>KEY_FLAG_LOCATION_*</code> isn't set, an appropriate location is automatically computed from <code>aKeyCode</code>. If two or more <code>KEY_FLAG_LOCATION_*</code> is specified, this method will throw an exception.</dd>
+</dl>
+
+<h6 name="Return_value" id="Return_value">Return value</h6>
+
+<p><code>false</code> if the event had preventDefault() called on it, <code>true</code> otherwise. In other words, <code>true</code> if and only if the default action was taken.</p>
+
+<p></p><h3 name="sendMouseEvent()" id="sendMouseEvent()">sendMouseEvent()</h3><p></p>
+
+<p>Synthesize a mouse event. The event types supported are: mousedown, mouseup, mousemove, mouseover, mouseout, contextmenu.</p>
+
+<p>Events are sent in coordinates offset by aX and aY from the window.</p>
+
+<p></p><div class="note"><strong>Note:</strong>&nbsp;That additional events may be fired as a result of this call. For instance, typically a click event will be fired as a result of a mousedown and mouseup in sequence.</div><p></p>
+
+<p>Normally at this level of events, the mouseover and mouseout events are only fired when the window is entered or exited. For inter-element mouseover and mouseout events, a movemove event fired on the new element should be sufficient to generate the correct over and out events as well.</p>
+
+<p>Cannot be accessed from unprivileged context (not content-accessible) Will throw a DOM security error if called without UniversalXPConnect privileges.</p>
+
+<p>The event is dispatched via the toplevel window, so it could go to any window under the toplevel window, in some cases it could never reach this window at all.</p>
+
+<pre class="eval">void sendMouseEvent(
+  in AString aType,
+  in float aX,
+  in float aY,
+  in long aButton,
+  in long aClickCount,
+  in long aModifiers,
+  in boolean aIgnoreRootScrollFrame <span class="inlineIndicator optional optionalInline">Optional</span> 
+);
+</pre>
+
+<h6 name="Parameters" id="Parameters">Parameters</h6>
+
+<dl>
+ <dt><code>aType</code></dt>
+ <dd>Event type.</dd>
+ <dt><code>aX</code></dt>
+ <dd>X offset in CSS pixels.</dd>
+ <dt><code>aY</code></dt>
+ <dd>Y offset in CSS pixels.</dd>
+ <dt><code>aButton</code></dt>
+ <dd>Button to synthesize.</dd>
+ <dt><code>aClickCount</code></dt>
+ <dd>Number of clicks that have been performed.</dd>
+ <dt><code>aModifiers</code></dt>
+ <dd>Modifiers pressed.</dd>
+ <dd>Using constants defined in <code><a href="nsIDOMNSEvent.html" class="new" title="">nsIDOMNSEvent</a></code>. <span class="inlineIndicator obsolete obsoleteInline" title="(Firefox 15.0 / Thunderbird 15.0 / SeaMonkey 2.12)">Obsolete since Gecko 15.0</span></dd>
+ <dd>Using constants defined as MODIFIER_*. </dd>
+ <dt><code>aIgnoreRootScrollFrame</code> <span class="inlineIndicator optional optionalInline">Optional</span> </dt>
+ <dd>Whether the event should ignore viewport bounds during dispatch.</dd>
+</dl>
+
+<p></p><h3 name="sendMouseEventToWindow()" id="sendMouseEventToWindow()">sendMouseEventToWindow()</h3><p></p>
+
+<p>The same as <code><a href="nsIDOMWindowUtils.html#sendMouseEvent()">sendMouseEvent()</a></code> but ensures that the event is dispatched to this DOM window or one of its children.</p>
+
+<pre class="eval">void sendMouseEventToWindow(
+  in AString aType,
+  in float aX,
+  in float aY,
+  in long aButton,
+  in long aClickCount,
+  in long aModifiers,
+  in boolean aIgnoreRootScrollFrame <span class="inlineIndicator optional optionalInline">Optional</span>
+);
+</pre>
+
+<h6 name="Parameters" id="Parameters">Parameters</h6>
+
+<dl>
+ <dt><code>aType</code></dt>
+ <dd>&nbsp;</dd>
+ <dt><code>aX</code></dt>
+ <dd>&nbsp;</dd>
+ <dt><code>aY</code></dt>
+ <dd>&nbsp;</dd>
+ <dt><code>aButton</code></dt>
+ <dd>&nbsp;</dd>
+ <dt><code>aClickCount</code></dt>
+ <dd>&nbsp;</dd>
+ <dt><code>aModifiers</code></dt>
+ <dd>Modifiers pressed.</dd>
+ <dd>Using constants defined in <code><a href="nsIDOMNSEvent.html" class="new" title="">nsIDOMNSEvent</a></code>. <span class="inlineIndicator obsolete obsoleteInline" title="(Firefox 15.0 / Thunderbird 15.0 / SeaMonkey 2.12)">Obsolete since Gecko 15.0</span></dd>
+ <dd>Using constants defined as MODIFIER_*. </dd>
+ <dt><code>aIgnoreRootScrollFrame</code> <span class="inlineIndicator optional optionalInline">Optional</span></dt>
+ <dd>&nbsp;</dd>
+</dl>
+
+<p></p><h3 name="sendMouseScrollEvent()" id="sendMouseScrollEvent()">sendMouseScrollEvent()</h3><p></p>
+
+<p></p><div class="overheadIndicator obsolete obsoleteHeader"><p><strong><span title="This is an obsolete API and is no longer guaranteed to work."><i class="icon-trash"> </i></span> Obsolete since Gecko 17.0 (Firefox 17.0 / Thunderbird 17.0 / SeaMonkey 2.14)</strong><br>This feature is obsolete. Although it may still work in some browsers, its use is discouraged since it could be removed at any time. Try to avoid using it.</p></div><p></p>
+
+<p>Synthesize a mouse scroll event for a window. The event types supported are: DOMMouseScroll MozMousePixelScroll.</p>
+
+<p>Events are sent in coordinates offset by aX and aY from the window.</p>
+
+<p>Cannot be accessed from unprivileged context (not content-accessible) Will throw a DOM security error if called without UniversalXPConnect privileges.</p>
+
+<pre class="eval">void sendMouseScrollEvent(
+  in AString aType,
+  in float aX,
+  in float aY,
+  in long aButton,
+  in long aScrollFlags,
+  in long aDelta,
+  in long aModifiers
+);
+</pre>
+
+<h6 name="Parameters" id="Parameters">Parameters</h6>
+
+<dl>
+ <dt><code>aType</code></dt>
+ <dd>Event type.</dd>
+ <dt><code>aX</code></dt>
+ <dd>X offset in CSS pixels.</dd>
+ <dt><code>aY</code></dt>
+ <dd>Y offset in CSS pixels.</dd>
+ <dt><code>aButton</code></dt>
+ <dd>Button to synthesize.</dd>
+ <dt><code>aScrollFlags</code></dt>
+ <dd>Flag bits --- see nsMouseScrollFlags in nsGUIEvent.h.</dd>
+ <dt><code>aDelta</code></dt>
+ <dd>The direction and amount to scroll (in lines or pixels, depending on the event type)</dd>
+ <dt><code>aModifiers</code></dt>
+ <dd>Modifiers pressed.</dd>
+ <dd>Using constants defined in <code><a href="nsIDOMNSEvent.html" class="new" title="">nsIDOMNSEvent</a></code>. <span class="inlineIndicator obsolete obsoleteInline" title="(Firefox 15.0 / Thunderbird 15.0 / SeaMonkey 2.12)">Obsolete since Gecko 15.0</span></dd>
+ <dd>Using constants defined as MODIFIER_*. </dd>
+</dl>
+
+<p></p><h3 name="sendWheelEvent()" id="sendWheelEvent()">sendWheelEvent()</h3><p></p>
+
+<p>Synthesize a wheel event for a window. The event type is always "wheel".</p>
+
+<p>Events are sent in coordinates offset by aX and aY from the window.</p>
+
+<p>Cannot be accessed from unprivileged context (not content-accessible) Will throw a DOM security error if called without UniversalXPConnect privileges.</p>
+
+<pre class="eval">void sendWheelEvent(
+  in float aX,
+  in float aY,
+  in double aDeltaX,
+  in double aDeltaY,
+  in double aDeltaZ,
+  in unsigned long aDeltaMode,
+  in long aModifiers,
+  in long aLineOrPageDeltaX,
+  in long aLineOrPageDeltaY,
+  in unsigned long aOptions
+);
+</pre>
+
+<h6 name="Parameters" id="Parameters">Parameters</h6>
+
+<dl>
+ <dt><code>aX</code></dt>
+ <dd>X offset in CSS pixels.</dd>
+ <dt><code>aY</code></dt>
+ <dd>Y offset in CSS pixels.</dd>
+ <dt><code>aDeltaX</code></dt>
+ <dd>Delta value around x-axis.</dd>
+ <dt><code>aDeltaY</code></dt>
+ <dd>Delta value around y-axis.</dd>
+ <dt><code>aDeltaZ</code></dt>
+ <dd>Delta value around z-axis.</dd>
+ <dt><code>aDeltaMode</code></dt>
+ <dd>One of delta mode values which are defined by <a href="../../../../../Web/API/WheelEvent.html" title="The WheelEvent interface represents events that occur due to the user moving a mouse wheel or similar input device."><code>WheelEvent</code></a> (<code><a href="nsIDOMWheelEvent.html" class="new" title="">nsIDOMWheelEvent</a></code>).</dd>
+ <dt><code>aModifiers</code></dt>
+ <dd>Modifiers pressed. Using constants defined as MODIFIER_*.</dd>
+ <dt><code>aLineOrPageDeltaX</code></dt>
+ <dd>Scroll amount around x-axis by lines (if aDeltaMode is <code>DOM_DELTA_PIXEL</code> or <code>DOM_DELTA_LINE</code>) or pages (if aDeltaMode is <code>DOM_DELTA_PAGE</code>). If this values isn't 0, horizontal <code><a href="../../../../../Web/Events/DOMMouseScroll.html">DOMMouseScroll</a></code> event will be dispatched with this value. However, this value may be ignored by <code>nsEventStateManager</code> if some prefs are customized or <code>aOptions</code> value includes some flags.</dd>
+ <dt><code>aLineOrPageDeltaY</code></dt>
+ <dd>Scroll amount around y-axis by lines (if aDeltaMode is <code>DOM_DELTA_PIXEL</code> or <code>DOM_DELTA_LINE</code>) or pages (if aDeltaMode is <code>DOM_DELTA_PAGE</code>). If this values isn't 0, vertical <code><a href="../../../../../Web/Events/DOMMouseScroll.html">DOMMouseScroll</a></code> event will be dispatched with this value. However, this value may be ignored by <code>nsEventStateManager</code> if some prefs are customized or <code>aOptions</code> value includes some flags.</dd>
+ <dt><code>aOptions</code></dt>
+ <dd>0 or one or more <code>WHEEL_EVENT_*</code> flags.</dd>
+</dl>
+
+<p></p><h3 name="sendNativeKeyEvent()" id="sendNativeKeyEvent()">sendNativeKeyEvent()</h3><p></p>
+
+<p>This method lets you create and send keyboard events to a DOM&nbsp;window from a privileged context; for example, this can be used to automate testing. This delivers the key to the currently-focused widget by calling its See <code><a href="https://developer.mozilla.org/en-US/docs/XPCOM_Interface_Reference/nsIWidget#synthesizeNativeKeyEvent()" class="new">nsIWidget.synthesizeNativeKeyEvent()</a></code> method.</p>
+
+<p>This method throws a DOM security error if called without UniversalXPConnect privileges.</p>
+
+<pre class="eval">void sendNativeKeyEvent(
+  in long aNativeKeyboardLayout,
+  in long aNativeKeyCode,
+  in long aModifierFlags,
+  in AString aCharacters,
+  in AString aUnmodifiedCharacters
+);
+</pre>
+
+<h6 name="Parameters" id="Parameters">Parameters</h6>
+
+<dl>
+ <dt><code>aNativeKeyboardLayout</code></dt>
+ <dd>&nbsp;</dd>
+ <dt><code>aNativeKeyCode</code></dt>
+ <dd>The key code to send.</dd>
+ <dt><code>aModifierFlags</code></dt>
+ <dd>The modifier flags to send.</dd>
+ <dt><code>aCharacters</code></dt>
+ <dd>&nbsp;</dd>
+ <dt><code>aUnmodifiedCharacters</code></dt>
+ <dd>&nbsp;</dd>
+</dl>
+
+<p></p><h3 name="sendNativeMouseEvent()" id="sendNativeMouseEvent()">sendNativeMouseEvent()</h3><p></p>
+
+<p>See <code><a href="https://developer.mozilla.org/en-US/docs/XPCOM_Interface_Reference/nsIWidget#SynthesizeNativeMouseEvent()" class="new">nsIWidget.SynthesizeNativeMouseEvent()</a></code>.</p>
+
+<p>Will be called on the widget that contains aElement. Cannot be accessed from unprivileged context (not content-accessible) Will throw a DOM security error if called without UniversalXPConnect privileges.</p>
+
+<pre class="eval">void sendNativeMouseEvent(
+  in long aScreenX,
+  in long aScreenY,
+  in long aNativeMessage,
+  in long aModifierFlags,
+  in nsIDOMElement aElement
+);
+</pre>
+
+<h6 name="Parameters" id="Parameters">Parameters</h6>
+
+<dl>
+ <dt><code>aScreenX</code></dt>
+ <dd>&nbsp;</dd>
+ <dt><code>aScreenY</code></dt>
+ <dd>&nbsp;</dd>
+ <dt><code>aNativeMessage</code></dt>
+ <dd>&nbsp;</dd>
+ <dt><code>aModifierFlags</code></dt>
+ <dd>&nbsp;</dd>
+ <dt><code>aElement</code></dt>
+ <dd>&nbsp;</dd>
+</dl>
+
+<p></p><h3 name="sendQueryContentEvent()" id="sendQueryContentEvent()">sendQueryContentEvent()</h3><p></p>
+
+<p>Synthesize a query content event.</p>
+
+<pre class="eval">nsIQueryContentEventResult sendQueryContentEvent(
+  in unsigned long aType,
+  in unsigned long aOffset,
+  in unsigned long aLength,
+  in long aX,
+  in long aY,
+  in unsigned long aAdditionalFlags <span class="inlineIndicator optional optionalInline">Optional</span>
+); 
+</pre>
+
+<pre class="eval">nsIQueryContentEventResult sendQueryContentEvent(
+  in unsigned long aType,
+  in unsigned long aOffset,
+  in unsigned long aLength,
+  in long aX,
+  in long aY
+);  <span class="inlineIndicator obsolete obsoleteInline" title="(Firefox 31.0 / Thunderbird 31.0 / SeaMonkey 2.28)">Obsolete since Gecko 31.0</span>
+</pre>
+
+<h6 name="Parameters" id="Parameters">Parameters</h6>
+
+<dl>
+ <dt><code>aType</code></dt>
+ <dd>On of the following const values. And see also each comment for the other parameters and the result.</dd>
+ <dt><code>aOffset</code></dt>
+ <dd>&nbsp;</dd>
+ <dt><code>aLength</code></dt>
+ <dd>&nbsp;</dd>
+ <dt><code>aX</code></dt>
+ <dd>&nbsp;</dd>
+ <dt><code>aY</code></dt>
+ <dd>&nbsp;</dd>
+ <dt><code>aAdditionalFlags</code></dt>
+ <dd>See the explanation of <code>QUERY_CONTENT_FLAG_*</code>.</dd>
+</dl>
+
+<h6 name="Return_value" id="Return_value">Return value</h6>
+
+<p>&nbsp;</p>
+
+<p></p><h3 name="sendSelectionSetEvent()" id="sendSelectionSetEvent()">sendSelectionSetEvent()</h3><p></p>
+
+<p>Synthesize a selection set event to the window.</p>
+
+<p>This sets the selection as the specified information.</p>
+
+<pre class="eval">boolean sendSelectionSetEvent(
+  in unsigned long aOffset,
+  in unsigned long aLength,,
+  in unsigned long aAdditionalFlags <span class="inlineIndicator optional optionalInline">Optional</span>
+); 
+</pre>
+
+<pre class="eval">boolean sendSelectionSetEvent(
+  in unsigned long aOffset,
+  in unsigned long aLength,
+  in boolean aReverse
+);  <span class="inlineIndicator obsolete obsoleteInline" title="(Firefox 31.0 / Thunderbird 31.0 / SeaMonkey 2.28)">Obsolete since Gecko 31.0</span>
+</pre>
+
+<h6 name="Parameters" id="Parameters">Parameters</h6>
+
+<dl>
+ <dt><code>aOffset</code></dt>
+ <dd>The caret offset of the selection start.</dd>
+ <dt><code>aLength</code></dt>
+ <dd>The length of the selection. If this is too long, the extra length is ignored.</dd>
+ <dt><code>aReverse</code> <span class="inlineIndicator obsolete obsoleteInline" title="(Firefox 31.0 / Thunderbird 31.0 / SeaMonkey 2.28)">Obsolete since Gecko 31.0</span></dt>
+ <dd>If <code>true</code>, the selection set from |aOffset + aLength| to |aOffset|. Otherwise, set from |aOffset| to |aOffset + aLength|.</dd>
+ <dt><code>aAdditionalFlags</code></dt>
+ <dd>See the explanation of <code>SELECTION_SET_FLAG_*</code>.</dd>
+</dl>
+
+<h6 name="Return_value" id="Return_value">Return value</h6>
+
+<p><code>True</code>, if succeeded. Otherwise, <code>false</code>.</p>
+
+<p></p><h3 name="sendSimpleGestureEvent()" id="sendSimpleGestureEvent()">sendSimpleGestureEvent()</h3><p></p>
+
+<p>Synthesize a simple gesture event for a window. The event types supported are: MozSwipeGesture, MozMagnifyGestureStart, MozMagnifyGestureUpdate, MozMagnifyGesture, MozRotateGestureStart, MozRotateGestureUpdate, MozRotateGesture, MozPressTapGesture, and MozTapGesture.</p>
+
+<p>Cannot be accessed from unprivileged context (not content-accessible) Will throw a DOM security error if called without UniversalXPConnect privileges.</p>
+
+<pre class="eval">void sendSimpleGestureEvent(
+  in AString aType,
+  in float aX,
+  in float aY,
+  in unsigned long aDirection,
+  in double aDelta,
+  in long aModifiers
+);
+</pre>
+
+<h6 name="Parameters" id="Parameters">Parameters</h6>
+
+<dl>
+ <dt><code>aType</code></dt>
+ <dd>Event type.</dd>
+ <dt><code>aX</code></dt>
+ <dd>X offset in CSS pixels.</dd>
+ <dt><code>aY</code></dt>
+ <dd>Y offset in CSS pixels.</dd>
+ <dt><code>aDirection</code></dt>
+ <dd>Direction, using constants defined in <code><a href="nsIDOMSimpleGestureEvent.html" title="">nsIDOMSimpleGestureEvent</a></code>.</dd>
+ <dt><code>aDelta</code></dt>
+ <dd>Amount of magnification or rotation for magnify and rotation events.</dd>
+ <dt><code>aModifiers</code></dt>
+ <dd>Modifiers pressed, using constants defined in <code><a href="nsIDOMNSEvent.html" class="new" title="">nsIDOMNSEvent</a></code>.</dd>
+</dl>
+
+<p></p><h3 name="sendTextEvent()" id="sendTextEvent()">sendTextEvent()</h3><p></p>
+
+<p><span class="inlineIndicator obsolete obsoleteInline" title="(Firefox 26 / Thunderbird 26 / SeaMonkey 2.23 / Firefox OS 1.2)">Obsolete since Gecko 26</span> This can create composition string with 3 or less clauses. Use <a href="#createCompositionStringSynthesizer()">createCompositionStringSynthesizer</a>() instead. New API doesn't have this limitation.</p>
+
+<pre class="eval">void sendTextEvent(
+  in AString aCompositionString,
+  in long aFirstClauseLength,
+  in unsigned long aFirstClauseAttr,
+  in long aSecondClauseLength,
+  in unsigned long aSecondClauseAttr,
+  in long aThirdClauseLength,
+  in unsigned long aThirdClauseAttr,
+  in long aCaretStart,
+  in long aCaretLength
+);
+</pre>
+
+<h6 name="Parameters" id="Parameters">Parameters</h6>
+
+<dl>
+ <dt><code>aCompositionString</code></dt>
+ <dd>&nbsp;</dd>
+ <dt><code>aFirstClauseLength</code></dt>
+ <dd>&nbsp;</dd>
+ <dt><code>aFirstClauseAttr</code></dt>
+ <dd>&nbsp;</dd>
+ <dt><code>aSecondClauseLength</code></dt>
+ <dd>&nbsp;</dd>
+ <dt><code>aSecondClauseAttr</code></dt>
+ <dd>&nbsp;</dd>
+ <dt><code>aThirdClauseLength</code></dt>
+ <dd>&nbsp;</dd>
+ <dt><code>aThirdClauseAttr</code></dt>
+ <dd>&nbsp;</dd>
+ <dt><code>aCaretStart</code></dt>
+ <dd>&nbsp;</dd>
+ <dt><code>aCaretLength</code></dt>
+ <dd>&nbsp;</dd>
+</dl>
+
+<p></p><h3 name="sendTouchEvent()" id="sendTouchEvent()">sendTouchEvent()</h3><p></p>
+
+<p>Synthesizes a touch event and sends it to the window. This method supports multiple touches of the same type, but not multiple touches on the screen of different types.</p>
+
+<div class="note"><strong>Note:</strong> This method cannot be called from unprivileged content; that is, it's not accessible from web content. It will throw a DOM security error if called without UniversalXPConnect privileges.</div>
+
+<p>The event is dispatched via the top-level window, so it could go to any window under that top level. In some cases, it may not even reach the target window, if one of those other windows accepts it.</p>
+
+<pre>boolean sendTouchEvent(
+&nbsp; in AString aType,
+&nbsp; [array, size_is(count)] in PRUint32 aIdentifiers,
+&nbsp; [array, size_is(count)] in PRInt32 aXs,
+&nbsp; [array, size_is(count)] in PRInt32 aYs,
+&nbsp; [array, size_is(count)] in PRUint32 aRxs,
+&nbsp; [array, size_is(count)] in PRUint32 aRys,
+&nbsp; [array, size_is(count)] in float aRotationAngles,
+&nbsp; [array, size_is(count)] in float aForces,
+&nbsp; in PRUint32 count,
+&nbsp; in long aModifiers,
+&nbsp; [optional] in boolean aIgnoreRootScrollFrame
+);</pre>
+
+<h6 id="Parameters_7">Parameters</h6>
+
+<dl>
+ <dt><code>aType</code></dt>
+ <dd>The touch event type to dispatch to the window. This must be one of "touchstart", "touchend", "touchmove", or "touchcancel".</dd>
+ <dt><code>aIdentifiers</code></dt>
+ <dd>An array of the identifiers for each of the touches.</dd>
+ <dt><code>aXs</code></dt>
+ <dd>An array of X offsets in CSS pixels for each touch to be sent to the window.</dd>
+ <dt><code>aYs</code></dt>
+ <dd>An array of Y offsets in CSS pixels for each touch to be sent to the window.</dd>
+ <dt><code>aRxs</code></dt>
+ <dd>An array of touch X radii in CSS pixels for each touch to be sent to the window.</dd>
+ <dt><code>aRys</code></dt>
+ <dd>An array of touch Y radii in CSS pixels for each touch to be sent to the window.</dd>
+ <dt><code>aRotationAngles</code></dt>
+ <dd>An array of angles in degrees for each touch's touch oval.</dd>
+ <dt><code>aForces</code></dt>
+ <dd>An array of forces (from 0 to 1) indicating the amount of pressure applied at each touch point.</dd>
+ <dt><code>count</code></dt>
+ <dd>The number of touches; this is the number of entries in each of the preceding arrays.</dd>
+ <dt><code>aModifiers</code></dt>
+ <dd>Modifiers pressed.</dd>
+ <dd>Using constants defined in <code><a href="nsIDOMNSEvent.html" class="new" title="">nsIDOMNSEvent</a></code>. <span class="inlineIndicator obsolete obsoleteInline" title="(Firefox 15.0 / Thunderbird 15.0 / SeaMonkey 2.12)">Obsolete since Gecko 15.0</span></dd>
+ <dd>Using constants defined as MODIFIER_*. </dd>
+ <dt><code>aIgnoreRootScrollFrames</code></dt>
+ <dd>A Boolean value indicating whether or not the event should ignore viewport bounds during dispatch.</dd>
+</dl>
+
+<h6 id="Return_value_5">Return value</h6>
+
+<p><code>true</code> if the page called <a href="../../../../../Web/API/Event/preventDefault.html" title="Cancels the event if it is cancelable, without stopping further propagation of the event."><code>Event.preventDefault()</code></a>, indicating that default processing of the event should not occur.</p>
+
+<p></p><h3 name="setCSSViewport()" id="setCSSViewport()">setCSSViewport()</h3><p></p>
+
+<p>Sets the dimensions of the CSS viewport to the specified size in CSS pixels, regardless of the size of the enclosing widget/view. This triggers reflow.</p>
+
+<p>The caller of this method must have UniversalXPConnect privileges.</p>
+
+<div class="note"><strong>Note:</strong> After calling this method, the <a href="../../../../../Web/API/Window/innerWidth.html" title="Width (in pixels) of the browser window viewport including, if rendered, the vertical scrollbar."><code>window.innerWidth</code></a> and <a href="../../../../../Web/API/Window/innerHeight.html" title="Height (in pixels) of the browser window viewport including, if rendered, the horizontal scrollbar."><code>window.innerHeight</code></a> properties return the size of the viewport you've specified instead of the size of the browser widget.</div>
+
+<pre class="eval">void setCSSViewport(
+  in float aWidthPx,
+  in float aHeightPx
+);
+</pre>
+
+<h6 name="Parameters" id="Parameters">Parameters</h6>
+
+<dl>
+ <dt><code>aWidthPx</code></dt>
+ <dd>The width of the viewport in CSS pixels.</dd>
+ <dt><code>aHeightPx</code></dt>
+ <dd>The height of the viewport in CSS&nbsp;pixels.</dd>
+</dl>
+
+<p></p><h3 name="setDisplayPort()" id="setDisplayPort()">setDisplayPort()</h3><p></p>
+
+<p>Set the "displayport" to be &lt;xPx, yPx, widthPx, heightPx&gt; in units of CSS pixels, regardless of the size of the enclosing widget/view. This will *not* trigger reflow.</p>
+
+<p>&lt;x, y&gt; is relative to the top-left of the CSS viewport. This means that the pixels rendered to the displayport take scrolling into account, for example.</p>
+
+<p>The displayport will be used as the window's visible region for the purposes of invalidation and painting. The displayport can approximately be thought of as a "persistent" drawWindow() (albeit with coordinates relative to the CSS viewport): the bounds are remembered by the platform, and layer pixels are retained and updated inside the viewport bounds.</p>
+
+<p>It's legal to set a displayport that extends beyond the CSS viewport in any direction (left/right/top/bottom).</p>
+
+<p>It's also legal to set a displayport that extends beyond the document's bounds. The value of the pixels rendered outside the document bounds is not yet defined.</p>
+
+<p>The caller of this method must have UniversalXPConnect privileges.</p>
+
+<pre class="eval">void setDisplayPort(
+  in float aXPx,
+  in float aYPx,
+  in float aWidthPx,
+  in float aHeightPx
+);
+</pre>
+
+<h6 name="Parameters" id="Parameters">Parameters</h6>
+
+<dl>
+ <dt><code>aXPx</code></dt>
+ <dd>&nbsp;</dd>
+ <dt><code>aYPx</code></dt>
+ <dd>&nbsp;</dd>
+ <dt><code>aWidthPx</code></dt>
+ <dd>&nbsp;</dd>
+ <dt><code>aHeightPx</code></dt>
+ <dd>&nbsp;</dd>
+</dl>
+
+<p></p><h3 name="setResolution()" id="setResolution()">setResolution()</h3><p></p>
+
+<p>Get/set the resolution at which rescalable web content is drawn. Currently this is only (some) thebes content.</p>
+
+<p>Setting a new resolution does *not* trigger reflow. This API is entirely separate from textZoom and fullZoom; a resolution scale can be applied together with both textZoom and fullZoom.</p>
+
+<p>The effect of is API for gfx code to allocate more or fewer pixels for rescalable content by a factor of |resolution| in either or both dimensions. <code>setResolution</code> together with <code><a href="nsIDOMWindowUtils.html#setDisplayport()">setDisplayport()</a></code> can be used to implement a non-reflowing scale-zoom in concert with another entity that can draw with a scale. For example, to scale a content |window| inside a &lt;browser&gt; by a factor of 2.0.</p>
+
+<p>window.<code><a href="nsIDOMWindowUtils.html#setDisplayport()">setDisplayport()</a></code>(x, y, oldW / 2.0, oldH / 2.0); window.<code>setResolution</code>(2.0, 2.0); // elsewhere browser.setViewportScale(2.0, 2.0);</p>
+
+<p>The caller of this method must have UniversalXPConnect privileges.</p>
+
+<pre class="eval">void setResolution(
+  in float aXResolution,
+  in float aYResolution
+);
+</pre>
+
+<h6 name="Parameters" id="Parameters">Parameters</h6>
+
+<dl>
+ <dt><code>aXResolution</code></dt>
+ <dd>&nbsp;</dd>
+ <dt><code>aYResolution</code></dt>
+ <dd>&nbsp;</dd>
+</dl>
+
+<p><a name="startPCCountProfiling()"></a></p><h3 name="startPCCountProfiling()" id="startPCCountProfiling()">startPCCountProfiling()</h3> <span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span><p></p>
+
+<p>Begins detailed profiling of all executed JavaScript code in the browser.&nbsp; This slows down JavaScript execution, but accumulates information about what code has executed that may be queried after a call to <code><a href="#stopPCCountProfiling()" title="#stopPCCountProfiling()">stopPCCountProfiling</a>()</code>.</p>
+
+<pre>void startPCCountProfiling();
+</pre>
+
+<h6 id="Parameters_8">Parameters</h6>
+
+<p>None.</p>
+
+<p><a name="stopPCCountProfiling()"></a> </p><h3 name="stopPCCountProfiling()" id="stopPCCountProfiling()">stopPCCountProfiling()</h3> <span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span><p></p>
+
+<p>Stops profiling of executed JavaScript code.&nbsp; Profile information about code that has executed since a preceding call to <code><a href="#startPCCountProfiling()" title="#startPCCountProfiling()">startPCCountProfiling</a>()</code> will be constructed, and will be retained until a call to <code><a href="#purgePCCounts()" title="#purgePCCounts()">purgePCCounts</a>()</code>.&nbsp; This profile information may be queried using <code><a href="#getPCCountScriptCount()" title="#getPCCountScriptCount()">getPCCountScriptCount</a>()</code>, <code><a href="#getPCCountScriptSummary()" title="#getPCCountScriptSummary()">getPCCountScriptSummary</a>()</code>, and <code><a href="#getPCCountScriptContents()" title="#getPCCountScriptContents()">getPCCountScriptContents</a>()</code>.</p>
+
+<pre>void stopPCCountProfiling();</pre>
+
+<h6 id="Parameters_9">Parameters</h6>
+
+<p>None.</p>
+
+<p></p><h3 name="suppressEventHandling()" id="suppressEventHandling()">suppressEventHandling()</h3><p></p>
+
+<p>Suppresses/unsuppresses user initiated event handling in window's document and subdocuments.</p>
+
+<pre class="eval">void suppressEventHandling(
+  in boolean aSuppress
+);
+</pre>
+
+<h6 name="Parameters" id="Parameters">Parameters</h6>
+
+<dl>
+ <dt><code>aSuppress</code></dt>
+ <dd>&nbsp;</dd>
+</dl>
+
+<p></p><h3 name="suspendTimeouts()" id="suspendTimeouts()">suspendTimeouts()</h3><p></p>
+
+<p>Suspend/resume timeouts on this window and its descendant windows.</p>
+
+<pre class="eval">void suspendTimeouts();
+</pre>
+
+<h6 name="Parameters" id="Parameters">Parameters</h6>
+
+<p>None.</p>
+
+<p></p><h3 name="wrapDOMFile()" id="wrapDOMFile()">wrapDOMFile()</h3><p></p>
+
+<p>Wraps the specified <code><a href="nsIDOMFile.html" title="">nsIDOMFile</a></code> in a DOM <a href="../../../../../Web/API/File.html" title="The File interface provides information about files and allows JavaScript in a web page to access their content."><code>File</code></a> object.</p>
+
+<pre>nsIDOMFile wrapDOMFile(
+&nbsp; nsIFile aFile
+);
+</pre>
+
+<h6 id="Parameters_10">Parameters</h6>
+
+<dl>
+ <dt><code>aFile</code></dt>
+ <dd>The <code><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIFile" title="">nsIFile</a></code> object to wrap in a DOM <a href="../../../../../Web/API/File.html" title="The File interface provides information about files and allows JavaScript in a web page to access their content."><code>File</code></a> object.</dd>
+</dl>
+
+<h6 id="Return_value_6">Return value</h6>
+
+<p>An <code><a href="nsIDOMFile.html" title="">nsIDOMFile</a></code> object, which is a DOM <a href="../../../../../Web/API/File.html" title="The File interface provides information about files and allows JavaScript in a web page to access their content."><code>File</code></a>. You can then use that object with DOM methods that use the <a href="../../../../../Extensions/Using_the_DOM_File_API_in_chrome_code.html" title="Using the DOM File API in chrome code">File API</a>.</p>
+                  
+                
+              </article>
+
+              
+
+    
+    
+    
+
+    
+    
+    
+
+    <div class="share">
+        <strong>Share:</strong>
+        <ul>
+            <li><a href="http://twitter.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FMozilla%2FTech%2FXPCOM%2FReference%2FInterface%2FnsIDOMWindowUtils%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dtwitter.com&amp;text=I+learned+about+nsIDOMWindowUtils+on+MDN." target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIDOMWindowUtils?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=twitter.com" data-title="I learned about nsIDOMWindowUtils on MDN." class="share-link twitter"><i aria-hidden="true" class="icon-twitter"></i>Twitter</a></li>
+            <li><a href="http://facebook.com/sharer.php?s=100&amp;p[url]=https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIDOMWindowUtils?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIDOMWindowUtils?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" data-title="I learned about nsIDOMWindowUtils on MDN." class="share-link facebook"><i aria-hidden="true" class="icon-facebook"></i>Facebook</a></li>
+            <li><a href="https://plus.google.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FMozilla%2FTech%2FXPCOM%2FReference%2FInterface%2FnsIDOMWindowUtils%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dplus.google.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIDOMWindowUtils?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=plus.google.com" data-title="I learned about nsIDOMWindowUtils on MDN." class="share-link gplus"><i aria-hidden="true" class="icon-google-plus"></i>Google+</a></li>
+        </ul>
+    </div>
+
+              
+
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                  
+                  
+  <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags icon-fw"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+      
+        <li><a href="../../../../../tag/DOM.html">DOM</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Interfaces">Interfaces</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Interfaces:Scriptable">Interfaces:Scriptable</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/NeedsContent">NeedsContent</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/XPCOM Interface Reference">XPCOM Interface Reference</a></li>
+      
+    </ul>
+  </div>
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-group icon-fw"></i>&nbsp;<strong>Contributors to this page:</strong> 
+        <a href="https://developer.mozilla.org/en-US/profiles/maybe">maybe</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Ede123">Ede123</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Masayuki">Masayuki</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/trevorh">trevorh</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/baku">baku</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Sheppy">Sheppy</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/madarche">madarche</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Ann_Yiming">Ann_Yiming</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Simon Lindholm">Simon Lindholm</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/bhackett">bhackett</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/mnoorenberghe">mnoorenberghe</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/rmkn85">rmkn85</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/automatedtester">automatedtester</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Waldo">Waldo</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Gomita">Gomita</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Mook_sb">Mook_sb</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Natch">Natch</a>
+    
+                    </div>
+                  
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o icon-fw"></i>&nbsp;<strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/maybe">maybe</a>,
+                      <time datetime="2015-10-28T03:07:38-07:00">Oct 28, 2015, 3:07:38 AM</time>
+                    </div>
+                  
+                </div>
+              
+            </div>
+
+            
+          </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIDOMWindowUtils$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIDOMWindowUtils$history" label="View page history"></menuitem>
+  </menu>
+
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+        
+        <div class="contentinfo">
+          <p>© 2005-2016 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>
+          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+        
+        </div>
+      </div>
+      <div class="column-strip">
+        
+          
+  
+
+        
+      </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+  
+    
+    <!--[if lte IE 8]><script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/selectivizr.091e18cf669b.js" charset="utf-8"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script type="text/javascript" src="../../../../../../../../developer.cdn.mozilla.net/static/build/js/main.a7b27a25fb9c.js" charset="utf-8"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+    
+    <script async="" type="text/javascript" src="../../../../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../../../../developer.cdn.mozilla.net/static/build/js/syntax-prism-min.js" charset="utf-8"></script><script type="text/javascript" src="../../../../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../../../../developer.cdn.mozilla.net/static/build/js/wiki.bd71ca9fd27d.js" charset="utf-8" id="wikiscript"></script>
+
+  
+
+  <script async="" type="text/javascript" src="../../../../../../../../developer.cdn.mozilla.net/static/build/js/helpfulness.7b208a764d28.js" charset="utf-8"></script>
+
+  
+
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Reference/Interface/nsIDOMWindowUtils by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 15:03:53 GMT -->
+</body></html>

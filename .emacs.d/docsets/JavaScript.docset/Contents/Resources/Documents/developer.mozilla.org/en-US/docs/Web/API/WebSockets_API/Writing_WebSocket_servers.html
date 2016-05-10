@@ -1,0 +1,968 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/WebSockets_API/Writing_WebSocket_servers by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 15:45:05 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <script async="" src="../../../../../../www.google-analytics.com/analytics.js"></script><script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+  
+    
+  
+
+  
+  <title>Writing WebSocket servers</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+  
+    
+    
+    <link href="../../../../../../developer.cdn.mozilla.net/static/build/styles/mdn.593f20d8c365.css" rel="stylesheet" type="text/css">
+
+    
+  
+    <link href="../../../../../../developer.cdn.mozilla.net/static/build/styles/wiki.13dd9abdfb62.css" rel="stylesheet" type="text/css">
+
+    
+
+    
+
+  <!-- common social tags -->
+  
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon144.a6e4162070f4.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon114.0e9fabd44f85.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon72.8ff9d87c82a0.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon57.a2490b9a2d76.png">
+  <!-- basic favicon -->
+  
+    
+  
+  <link rel="shortcut icon" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon32.e02854fdcf73.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/html5shiv.3948ccddab6f.js" charset="utf-8"></script>
+  <![endif]-->
+
+  
+  <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API/Writing_WebSocket_servers$json">
+  <link rel="canonical" href="Writing_WebSocket_servers.html">
+
+  
+    
+      <link rel="alternate" hreflang="es" href="https://developer.mozilla.org/es/docs/WebSockets-840092-dup/Escribiendo_servidores_con_WebSocket" title="Escribir servidores WebSocket">
+    
+      <link rel="alternate" hreflang="fr" href="https://developer.mozilla.org/fr/docs/WebSockets/ecrire_des_serveurs_WebSocket" title="Ecrire des serveurs WebSocket">
+    
+      <link rel="alternate" hreflang="ja" href="https://developer.mozilla.org/ja/docs/WebSockets-840092-dup/Writing_WebSocket_servers" title="Writing WebSocket servers">
+    
+      <link rel="alternate" hreflang="zh-CN" href="https://developer.mozilla.org/zh-CN/docs/WebSockets/Writing_WebSocket_servers" title="编写 WebSocket 服务器">
+    
+  
+
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="Writing WebSocket servers">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API/Writing_WebSocket_servers">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API/Writing_WebSocket_servers">
+  <meta name="twitter:title" content="Writing WebSocket servers">
+  
+  <meta property="og:description" content="A WebSocket server is a TCP application listening on any port of a server that follows a specific protocol, simple as that. The task of creating a custom server tends to scare people; however, it can be easy to implement a simple WebSocket server on your platform of choice.">
+  <meta name="description" content="A WebSocket server is a TCP application listening on any port of a server that follows a specific protocol, simple as that. The task of creating a custom server tends to scare people; however, it can be easy to implement a simple WebSocket server on your platform of choice.">
+  <meta name="twitter:description" content="A WebSocket server is a TCP application listening on any port of a server that follows a specific protocol, simple as that. The task of creating a custom server tends to scare people; however, it can be easy to implement a simple WebSocket server on your platform of choice.">
+  
+
+  
+    
+
+
+
+  
+</head>
+<body data-slug="Web/API/WebSockets_API/Writing_WebSocket_servers" contextmenu="edit-history-menu" data-search-url="" class="document  ">
+
+  <script type="text/javascript">
+    (function(win) {
+        'use strict';
+
+        
+            (function(){
+  var FLAGS = {
+    'compat_api': false,'kumaediting': false,'page_move': false,'registration_disabled': false,'search_suggestions': false,'section_edit': false,'spam_admin_override': false,'spam_checks_enabled': true,'spam_spammer_override': false,'spam_submissions_enabled': false,'spam_testing_mode': false,'wiki_samples': true,'wiki_spam_exempted': false,'wiki_spam_training': true
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': true,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+
+        // This needs to be set before ckeditor.js loads
+        window.CKEDITOR_BASEPATH = 'https://developer.mozilla.org/static/js/libs/ckeditor/build/ckeditor/';
+
+        // This represents the site configuration
+        win.mdn = {
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+            
+            notifications: [],
+            
+            // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            },
+            // Assets that need to be dynamically injected
+            assets_disabled: {
+                css: {
+                    'editor-content': ['https://developer.cdn.mozilla.net/static/build/styles/editor-content.3d79df72080d.css',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/styles/wiki-compat-tables.f3a3bfce97a1.css',]
+                },
+                js: {
+                    'syntax-prism': ['https://developer.cdn.mozilla.net/static/build/js/syntax-prism.7a66ddfa68bf.js',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/js/wiki-compat-tables.14ce5dcb2c3d.js',]
+                }
+            }
+        };
+    })(this);
+</script>
+
+  
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+    
+      <li><a href="#q" id="skip-search">Skip to search</a></li>
+    
+  </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+    <a href="https://developer.mozilla.org/en-US/" class="logo">Mozilla Developer Network</a>
+
+    <div id="nav-sec">
+        
+                  <ul>
+                  <li>
+
+    
+
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                Sign in
+              </span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FWebSockets_API%2FWriting_WebSocket_servers" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/Web/API/WebSockets_API/Writing_WebSocket_servers" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/Web/API/WebSockets_API/Writing_WebSocket_servers" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FWebSockets_API%2FWriting_WebSocket_servers" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+              
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+        
+    </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../../API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+
+   <!-- end is_zone -->
+
+    <div class="wiki-main-content" id="document-main"><div class="center">
+      
+      <div class="article-meta">
+        <!-- action buttons -->
+        
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+  <ul class="page-buttons" data-sticky="false">
+      
+      <li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+              
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/es/docs/WebSockets-840092-dup/Escribiendo_servidores_con_WebSocket" title="Escribir servidores WebSocket">Español</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/fr/docs/WebSockets/ecrire_des_serveurs_WebSocket" title="Ecrire des serveurs WebSocket">Français</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/ja/docs/WebSockets-840092-dup/Writing_WebSocket_servers" title="Writing WebSocket servers">日本語</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/zh-CN/docs/WebSockets/Writing_WebSocket_servers" title="编写 WebSocket 服务器">中文 (简体)</a></bdi></li>
+                
+              
+
+              
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API/Writing_WebSocket_servers$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+              
+            </ul>
+          </div>
+        </div>
+      </li>
+
+      <li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API/Writing_WebSocket_servers$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li>
+
+        
+
+        <li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API/Writing_WebSocket_servers$history" rel="nofollow, noindex">History</a></li>
+                
+                
+                
+                
+
+                
+
+                
+                
+                
+                <li class="page-print"><a href="#" onclick="return window.print();">Print this article</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+        
+  <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web" rel="v:url" property="v:title">Web technology for developers</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="../../API.html" rel="v:url" property="v:title">Web APIs</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="../WebSockets_API.html" rel="v:url" property="v:title">WebSockets</a></li>
+    
+    <li class="crumb" typeof="v:Breadcrumb" property="v:title">Writing WebSocket servers</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        
+        <div class="contributor-avatars" data-all-text="see all contributors" data-alternate-message="hide contributors" data-has-hidden="1">
+            <ul>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/dawud-tan" title="View profile: dawud-tan">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="dawud-tan" data-src="../../../../../../secure.gravatar.com/avatar/e56cc0d52a0a3eaf09849c57472519d56c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">dawud-tan</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/teoli" title="View profile: teoli">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="teoli" data-src="../../../../../../secure.gravatar.com/avatar/d0d90148e08e3b64ccf75c46f31442c56c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">teoli</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/jswisher" title="View profile: jswisher">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="jswisher" data-src="../../../../../../secure.gravatar.com/avatar/38185c2812cbcae186ebbe4a829106616c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">jswisher</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/OscarCou" title="View profile: OscarCou">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="OscarCou" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">OscarCou</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/kscarfone" title="View profile: kscarfone">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="kscarfone" data-src="../../../../../../secure.gravatar.com/avatar/89c1e54a9703125168e40d22316d2b496c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">kscarfone</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/pkoli" title="View profile: pkoli">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="pkoli" data-src="../../../../../../secure.gravatar.com/avatar/2c53a0cdb353636e055e87596586ae706c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">pkoli</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/oddalot" title="View profile: oddalot">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="oddalot" data-src="../../../../../../secure.gravatar.com/avatar/bb8e1a7b0500b1fc18f69bc38ad0b90b6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">oddalot</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/laobubu" title="View profile: laobubu">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="laobubu" data-src="../../../../../../secure.gravatar.com/avatar/ebcd5f8f5e1cdbbd8b81058d52c252be6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">laobubu</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/styfle" title="View profile: styfle">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="styfle" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">styfle</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/anistark" title="View profile: anistark">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="anistark" data-src="../../../../../../secure.gravatar.com/avatar/956e7358fe55faf73f6a8864745334e26c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">anistark</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/rvighne" title="View profile: rvighne">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="rvighne" data-src="../../../../../../secure.gravatar.com/avatar/8b49ef334eb7698966100b39f19de8436c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">rvighne</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/mrbrc" title="View profile: mrbrc">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="mrbrc" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">mrbrc</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Arshabh" title="View profile: Arshabh">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Arshabh" data-src="../../../../../../secure.gravatar.com/avatar/8549c1e6f111e5bf7d7e046604f3971e6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Arshabh</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/kdbanman" title="View profile: kdbanman">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="kdbanman" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">kdbanman</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/bitrayne" title="View profile: bitrayne">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="bitrayne" data-src="../../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">bitrayne</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/dron" title="View profile: dron">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="dron" data-src="../../../../../../secure.gravatar.com/avatar/ce20f6dba643bcd8f7c10aa66833a1ca6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">dron</noscript></a>
+                </li>
+            
+            </ul>
+        </div>
+        
+
+        <h1>Writing WebSocket servers</h1>
+
+      </div>
+      
+
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-closed wiki-left-none">
+
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+            
+              <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+              
+              <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#Overview" rel="internal">Overview</a></li><li><a href="#Step_1_The_WebSocket_Handshake" rel="internal">Step 1: The WebSocket Handshake</a><ol><li><a href="#Client_Handshake_Request" rel="internal">Client Handshake Request</a></li><li><a href="#Server_Handshake_Response" rel="internal">Server Handshake Response</a></li><li><a href="#Keeping_track_of_clients" rel="internal">Keeping track of clients</a></li></ol></li><li><a href="#Step_2_Exchanging_Data_Frames" rel="internal">Step 2: Exchanging Data Frames</a><ol><li><a href="#Format" rel="internal">Format</a></li><li><a href="#Decoding_Payload_Length" rel="internal">Decoding Payload Length</a></li><li><a href="#Reading_and_Unmasking_the_Data" rel="internal">Reading and Unmasking the Data</a></li><li><a href="#Message_Fragmentation" rel="internal">Message Fragmentation</a></li></ol></li><li><a href="#Pings_and_Pongs_The_Heartbeat_of_WebSockets" rel="internal">Pings and Pongs: The Heartbeat of WebSockets</a></li><li><a href="#Step_4_Closing_the_connection" rel="internal">Step 4: Closing the connection</a></li><li><a href="#Miscellaneous_2" rel="internal">Miscellaneous</a><ol><li><a href="#Extensions" rel="internal">Extensions</a></li><li><a href="#Subprotocols" rel="internal">Subprotocols</a></li></ol></li><li><a href="#Related" rel="internal">Related</a>
+                </li></ol>
+              </div>
+              
+              </div>
+            
+
+            
+            
+              
+            
+
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-main wiki-column text-content">
+
+              
+
+              
+
+              
+                
+                
+                
+              
+              
+
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                
+                  
+                    <p></p>
+
+<h2 id="Overview">Overview</h2>
+
+<p>A WebSocket server is a TCP application listening on any port of a server that follows a specific protocol, simple as that. The task of creating a custom server tends to scare people; however, it can be easy to implement a simple WebSocket server on your platform of choice.</p>
+
+<p>A WebSocket server can be written in any server-side programming language that is capable of <a href="https://en.wikipedia.org/wiki/Berkeley_sockets" class="external">Berkeley sockets</a>, such as C(++) or Python or even <a href="https://developer.mozilla.org/en-US/docs/PHP">PHP</a> and <a href="https://developer.mozilla.org/en-US/docs/Archive/Web/Server-Side_JavaScript">server-side JavaScript</a>. This is not a tutorial in any specific language, but serves as a guide to facilitate writing your own server.</p>
+
+<p>You will need to already know how HTTP works and have medium programming experience. Depending on language support, knowledge of TCP sockets may be required. The scope of this guide is to present the minimum knowledge you need to write a WebSocket server.</p>
+
+<div class="note">
+<p>Read the latest official WebSockets specification, <a href="http://datatracker.ietf.org/doc/rfc6455/?include_text=1" class="external">RFC 6455</a>. Sections 1 and 4-7 are especially interesting to server implementors. Section 10 discusses security and you should definitely peruse it before exposing your server.</p>
+</div>
+
+<p>A WebSocket server is explained on a very low level here. WebSocket servers are often separate and specialized servers (for load-balancing or other practical reasons), so you will often use a <a href="https://en.wikipedia.org/wiki/Reverse_proxy" class="external">reverse proxy</a> (such as a regular HTTP server) to detect WebSocket handshakes, pre-process them, and send those clients to a real WebSocket server. This means that you don't have to bloat your server code with cookie and authentication handlers (for example).</p>
+
+<h2 id="Step_1_The_WebSocket_Handshake"><a name="Handshake">Step 1: The WebSocket Handshake</a></h2>
+
+<p>First of all, the server must listen for incoming socket connections&nbsp;using a standard TCP socket. Depending on your platform, this may be handled for you already. For an&nbsp;example, let's assume that your server is listening on example.com, port 8000, and your socket server responds to GET requests on <code>/chat</code>.</p>
+
+<div class="warning">
+<p><strong>Warning:</strong> The server may listen on any port it chooses, but if it chooses any port other than 80 or 443, it may have problems with firewalls and/or proxies. Connections on port 443 tend to succeed more often but of course, that requires a secure connection (TLS/SSL). Also, note that most browsers (notably Firefox 8+) do not allow connections to insecure WebSocket servers from secure pages.</p>
+</div>
+
+<p>The handshake is the "Web" in WebSockets. It's the bridge from HTTP to WS. In the handshake, details of the connection are negotiated, and either party can back out before completion if the terms are unfavorable. The server must be careful to understand everything the client asks for, otherwise security issues will be introduced.</p>
+
+<h3 id="Client_Handshake_Request">Client Handshake Request</h3>
+
+<p>Even though you're building a server, a client still has to start the WebSocket handshake process. So you must know how to interpret the client's request. The <strong>client</strong> will send a pretty standard HTTP request that looks like this (the HTTP version <strong>must</strong> be 1.1 or greater, and the method <strong>must</strong> be <code>GET</code>):</p>
+
+<pre>GET /chat HTTP/1.1
+Host: example.com:8000
+<strong>Upgrade: websocket</strong>
+<strong>Connection: Upgrade</strong>
+Sec-WebSocket-Key: dGhlIHNhbXBsZSBub25jZQ==
+Sec-WebSocket-Version: 13
+
+</pre>
+
+<p>The client can solicit extensions and/or subprotocols here; see <a href="#Miscellaneous">Miscellaneous</a> for details. Also, common headers like <code>User-Agent</code>, <code>Referer</code>,&nbsp;<code>Cookie</code>, or authentication headers might be there as well. Do whatever you want with those; they don't directly pertain to the WebSocket. It's also safe to ignore them. In many common setups, a reverse proxy has already dealt with them.</p>
+
+<p>If any header is not understood or has an incorrect value , the server should send a "<a href="https://developer.mozilla.org/en-US/docs/HTTP/Response_codes#400">400 Bad Request</a>" and immediately close the socket. As usual, it may also give the reason why the handshake failed in the HTTP response body, but the message may never be displayed (browsers&nbsp;do not display it). If the server doesn't understand that version of WebSockets, it should send a <code>Sec-WebSocket-Version</code> header back that contains the version(s) it does understand. (This guide explains v13, the newest).&nbsp;Now, let's move on to the most curious header, <code>Sec-WebSocket-Key</code>.</p>
+
+<div class="note">
+<p><strong>Tip:</strong> All <strong>browsers</strong> will send an <a href="https://developer.mozilla.org/en-US/docs/HTTP/Access_control_CORS#Origin"><code>Origin</code> header</a>. You can use this header for security (checking for same origin, whitelisting/ blacklisting, etc.) and send a <a href="https://developer.mozilla.org/en-US/docs/HTTP/Response_codes#403">403 Forbidden</a> if you don't like what you see. However, be warned that non-browser agents can just send a faked <code>Origin</code>. Most applications will reject requests without this header.</p>
+</div>
+
+<div class="note">
+<p><strong>Tip:</strong> The request-uri (<code>/chat</code> here) has no defined meaning in the spec. So many people cleverly use it to let one server handle multiple WebSocket applications. For example, <code>example.com/chat</code>&nbsp;could invoke a multiuser chat app, while <code>/game</code> on the same server might invoke a multiplayer game.</p>
+</div>
+
+<div class="note">
+<p><strong>Note:</strong> <a href="https://developer.mozilla.org/en-US/docs/HTTP/Response_codes">Regular HTTP status codes</a> can only be used before the handshake. After the handshake succeeds, you have to use a different set of codes (defined in section 7.4 of the spec).</p>
+</div>
+
+<h3 id="Server_Handshake_Response">Server Handshake Response</h3>
+
+<p>When it gets this request, the <strong>server</strong> should send a pretty odd-looking (but still HTTP) response that looks like this (remember each header ends with <code>\r\n</code> and put an extra <code>\r\n</code> after the last one):</p>
+
+<pre><strong>HTTP/1.1 101 Switching Protocols</strong>
+Upgrade: websocket
+Connection: Upgrade
+<strong>Sec-WebSocket-Accept: s3pPLMBiTxaQ9kYGzzhZRbK+xOo=
+
+</strong></pre>
+
+<p>Additionally, the server can decide on extension/subprotocol requests here; see <a href="#Miscellaneous">Miscellaneous</a> for details. The <code>Sec-WebSocket-Accept</code> part is interesting. The server must derive it from the <code>Sec-WebSocket-Key</code> that the client sent. To get it, c<span style="line-height: 1.5em;">oncatenate the client's </span><code style="font-size: 14px;">Sec-WebSocket-Key</code><span style="line-height: 1.5em;"> and "</span><code style="font-size: 14px;">258EAFA5-E914-47DA-95CA-C5AB0DC85B11</code><span style="line-height: 1.5em;">" together (it's a "</span><a href="https://en.wikipedia.org/wiki/Magic_string" class="external" style="line-height: 1.5em;">magic string</a><span style="line-height: 1.5em;">"),&nbsp;</span><span style="line-height: 1.5em;">take the </span><a href="https://en.wikipedia.org/wiki/SHA-1" class="external" style="line-height: 1.5em;">SHA-1 hash</a><span style="line-height: 1.5em;"> of the result, and&nbsp;</span><span style="line-height: 1.5em;">return the </span><a href="https://en.wikipedia.org/wiki/Base64" class="external" style="line-height: 1.5em;">base64</a><span style="line-height: 1.5em;"> encoding of the hash.</span></p>
+
+<div class="note">
+<p><strong>FYI:</strong> This seemingly overcomplicated process exists so that it's obvious to the client whether or not the server supports WebSockets. This is important because security issues might arise if the server accepts a WebSockets connection but interprets the data as a HTTP request.</p>
+</div>
+
+<p>So if the Key was "<code>dGhlIHNhbXBsZSBub25jZQ==</code>", the Accept will be "<code>s3pPLMBiTxaQ9kYGzzhZRbK+xOo=</code>". Once the server sends these headers, the handshake is complete and you can start swapping data!</p>
+
+<div class="note">
+<p>The server can send other headers like Set-Cookie, or ask for authentication or redirects via other status codes, before sending the reply handshake.</p>
+</div>
+
+<h3 id="Keeping_track_of_clients">Keeping track of clients</h3>
+
+<p>This doesn't directly relate to the WebSocket protocol, but it's worth mentioning here: your server will have to keep track of clients' sockets so you don't keep handshaking again with clients who have already completed the handshake. The same client IP address can try to connect multiple times (but the server can deny them if they attempt to many connections in order to save itself from <a href="https://en.wikipedia.org/wiki/Denial_of_service" class="external">Denial-of-Service attacks</a>).</p>
+
+<h2 id="Step_2_Exchanging_Data_Frames">Step 2: Exchanging Data Frames</h2>
+
+<p>Either the client or the server can choose to send a message at any time — that's the magic of WebSockets. However, extracting information from these so-called "frames" of data is a not-so-magical experience. Although all frames follow the same specific format, data going from the client to the server is masked using <a href="https://en.wikipedia.org/wiki/XOR_cipher" class="external">XOR encryption</a> (with a 32-bit key). Section 5 of the specification describes this in detail.</p>
+
+<h3 id="Format">Format</h3>
+
+<p>Each data frame (from the client to the server or vice-versa) follows this same format:</p>
+
+<pre style="float: left; margin-right: 20px;"> 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
++-+-+-+-+-------+-+-------------+-------------------------------+
+|F|R|R|R| opcode|M| Payload len |    Extended payload length    |
+|I|S|S|S|  (4)  |A|     (7)     |             (16/64)           |
+|N|V|V|V|       |S|             |   (if payload len==126/127)   |
+| |1|2|3|       |K|             |                               |
++-+-+-+-+-------+-+-------------+ - - - - - - - - - - - - - - - +
+|     Extended payload length continued, if payload len == 127  |
++ - - - - - - - - - - - - - - - +-------------------------------+
+|                               |Masking-key, if MASK set to 1  |
++-------------------------------+-------------------------------+
+| Masking-key (continued)       |          Payload Data         |
++-------------------------------- - - - - - - - - - - - - - - - +
+:                     Payload Data continued ...                :
++ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - +
+|                     Payload Data continued ...                |
++---------------------------------------------------------------+</pre>
+
+<p>RSV1-3 can be ignored, they are for extensions.</p>
+
+<p>The MASK bit simply tells whether the message is encoded. Messages from the client must be masked, so your server should expect this to be 1. (In fact, <a href="http://tools.ietf.org/html/rfc6455#section-5.1" class="external">section 5.1 of the spec</a> says that your server must disconnect from a client if that client sends an unmasked message.) When sending a frame back to the client, do not mask it and do not set the mask bit. We'll explain masking later. <em>Note: You have to mask messages even when using a secure socket.</em></p>
+
+<p>The opcode field defines how to interpret the payload data: <span style="font-family: courier new,andale mono,monospace; line-height: 1.5;">0x0&nbsp;</span><span style="line-height: 1.5;">for continuation,</span><span style="font-family: courier new,andale mono,monospace; line-height: 1.5;">&nbsp;</span><code style="font-style: normal; line-height: 1.5;">0x1</code><span style="line-height: 1.5;"> for text (which is always encoded in UTF-8), </span><code style="font-style: normal; line-height: 1.5;">0x2</code><span style="line-height: 1.5;"> for binary, and other so-called "control codes" that will be discussed later. In this version of WebSockets, <code>0x3</code> to <code>0x7</code> and <code>0xB</code> to <code>0xF</code> have no meaning.</span></p>
+
+<p>The FIN bit tells whether this is the last message in a series. If it's 0, then the server will keep listening for more parts of the message; otherwise, the server should consider the message delivered. More on this later.</p>
+
+<h3 id="Decoding_Payload_Length">Decoding Payload Length</h3>
+
+<p>To read the payload data, you must know when to stop reading. That's why the payload length is important to know. Unfortunately, this is somewhat complicated. To read it, follow these steps:</p>
+
+<ol>
+ <li>Read bits 9-15 (inclusive) and interpret that as an unsigned integer. If it's 125 or less, then that's the length; you're <strong>done</strong>. If it's 126, go to step 2. If it's 127, go to step 3.</li>
+ <li>Read the next 16 bits and interpret those as an unsigned integer. You're <strong>done</strong>.</li>
+ <li>Read the next 64 bits and interpret those as an unsigned integer (The most significant bit MUST be 0). You're <strong>done</strong>.</li>
+</ol>
+
+<h3 id="Reading_and_Unmasking_the_Data">Reading and Unmasking the Data</h3>
+
+<p>If the MASK bit was set (and it should be, for client-to-server messages), read the next 4 octets (32 bits); this is the masking key.&nbsp;<span style="line-height: 1.5;">Once the payload length and masking key is decoded, you can go ahead and read that number of bytes from the socket. Let's call the data <strong>ENCODED</strong>, and the key <strong>MASK</strong>. To get <strong>DECODED</strong>, loop through the octets (bytes a.k.a. characters for text data) of <strong>ENCODED</strong> and XOR the octet with the (i modulo 4)th octet of MASK. In pseudo-code (that happens to be valid JavaScript):</span></p>
+
+<pre>var DECODED = "";
+for (var i = 0; i &lt; ENCODED.length; i++) {
+    DECODED[i] = ENCODED[i] ^ MASK[i % 4];
+<span style="line-height: 1.5;">}</span></pre>
+
+<p><span style="line-height: 1.5;">Now you can figure out what <strong>DECODED</strong> means depending on your application.</span></p>
+
+<h3 id="Message_Fragmentation">Message Fragmentation</h3>
+
+<p>The FIN and opcode fields work together to send a message split up into separate frames. &nbsp;This is called message fragmentation. Fragmentation is only available on opcodes <code>0x0</code> to <code>0x2</code>.</p>
+
+<p><span style="line-height: 1.5;">Recall that the opcode tells what a frame is meant to do.&nbsp;If it's&nbsp;<code>0x1</code>, the payload is text. If it's&nbsp;<code>0x2</code>, the payload is binary data.</span><span style="line-height: 1.5;">&nbsp;However, if it's&nbsp;</span><code style="font-style: normal; line-height: 1.5;">0x0,</code><span style="line-height: 1.5;">&nbsp;the frame is a continuation frame. This means the server should concatenate the frame's payload to the last frame it received from that client.</span><span style="line-height: 1.5;">&nbsp;Here is a rough sketch, in which a server reacts to a client sending text messages. The first message is sent in a single frame, while the second message is sent across three frames. FIN and opcode details are shown only for the client:</span></p>
+
+<pre style="font-size: 14px;"><strong>Client:</strong> FIN=1, opcode=0x1, msg="hello"
+<strong>Server:</strong> <em>(process complete message immediately) </em>Hi.
+<strong>Client:</strong> FIN=0, opcode=0x1, msg="and a"
+<strong>Server:</strong> <em>(listening, new message containing text started)</em>
+<strong>Client:</strong> FIN=0, opcode=0x0, msg="happy new"
+<strong>Server:</strong> <em>(listening, payload concatenated to previous message)</em>
+<strong>Client:</strong> FIN=1, opcode=0x0, msg="year!"
+<strong>Server:</strong> <em>(process complete message) </em>Happy new year to you too!</pre>
+
+<p>Notice the first frame contains an entire message (has&nbsp;<code>FIN=1</code>&nbsp;and&nbsp;<code>opcode!=0x0</code>), so the server can process or respond as it sees fit. The second frame sent by the client has a text payload (<code>opcode=0x1</code>), but the entire message has not arrived yet (<code>FIN=0</code>). All remaining parts of that message are sent with continuation frames (<code>opcode=0x0</code>), and the final frame of the message is marked by&nbsp;<code>FIN=1</code>. <a href="http://tools.ietf.org/html/rfc6455#section-5.4" class="external">Section 5.4 of the spec</a>&nbsp;describes message fragmentation.</p>
+
+<h2 id="Pings_and_Pongs_The_Heartbeat_of_WebSockets">Pings and Pongs: The Heartbeat of WebSockets</h2>
+
+<p>At any point after the handshake, either the client or the server can choose to send a ping to the other party. When the ping is received, the recipient must send back a pong as soon as possible. You can use this to make sure that the client is still connected, for example.</p>
+
+<p>A ping or pong is just a regular frame, but it's a <strong>control frame</strong>. Pings have an opcode of&nbsp;<code>0x9</code>, and pongs have an opcode of <code>0xA</code>. When you get a ping, send back a pong with the exact same Payload Data as the ping (for pings and pongs, the max payload length is 125). You might also get a pong without ever sending a ping; ignore this if it happens.</p>
+
+<div class="note">
+<p>If you have gotten more than one ping before you get the chance to send a pong, you only send one pong.</p>
+</div>
+
+<h2 id="Step_4_Closing_the_connection">Step 4: Closing the connection</h2>
+
+<p>To close a connection either the client or server can send a control frame with data containing a specified control sequence to begin the closing handshake (detailed in <a href="http://tools.ietf.org/html/rfc6455#section-5.5.1" class="external">Section 5.5.1</a>). Upon receiving such a frame,&nbsp;the other peer sends a Close frame in response. The first peer then closes the connection. Any further data received after closing of connection&nbsp;is then discarded.&nbsp;</p>
+
+<h2 id="Miscellaneous_2"><a name="Miscellaneous">Miscellaneous</a></h2>
+
+<div class="note">
+<p>WebSocket codes, extensions, subprotocols, etc. are registered at the <a href="http://www.iana.org/assignments/websocket/websocket.xml" class="external">IANA WebSocket Protocol Registry</a>.</p>
+</div>
+
+<p>WebSocket extensions and subprotocols are negotiated via headers during <a href="#Handshake">the handshake</a>. Sometimes extensions and subprotocols seem too similar to be different things, but there is a clear distinction. Extensions control the WebSocket <strong>frame</strong> and <strong>modify</strong> the payload, while subprotocols structure the WebSocket <strong>payload</strong> and <strong>never modify</strong> anything. Extensions are optional and generalized (like compression); subprotocols are mandatory and localized (like ones for chat and for MMORPG games).</p>
+
+<h3 id="Extensions">Extensions</h3>
+
+<div class="note">
+<p><strong>This section needs expansion. Please edit if you are equipped to do so.</strong></p>
+</div>
+
+<p>Think of an extension as compressing a file before e-mailing it to someone. Whatever you do, you're sending the <em>same</em> data in different forms. The recipient will eventually be able to get the same data as your local copy, but it is sent differently. That's what an extension does. WebSockets defines a protocol and a simple way to send data, but an extension such as compression could allow sending the same data but in a shorter format.</p>
+
+<div class="note">
+<p>Extensions are explained in sections 5.8, 9, 11.3.2, and 11.4 of the spec.</p>
+</div>
+
+<p><em>TODO</em></p>
+
+<h3 id="Subprotocols">Subprotocols</h3>
+
+<p>Think of a subprotocol as a custom <a href="https://en.wikipedia.org/wiki/XML_schema" class="external">XML schema</a> or <a href="https://en.wikipedia.org/wiki/Document_Type_Definition" class="external">doctype declaration</a>. You're still using XML and its syntax, but you're additionally restricted by a structure you agreed on. WebSocket subprotocols are just like that. They do not introduce anything fancy, they just establish structure. Like a doctype or schema, both parties must agree on the subprotocol; unlike a doctype or schema, the subprotocol is implemented on the server and cannot be externally refered to by the client.</p>
+
+<div class="note">
+<p>Subprotocols are explained in sections 1.9, 4.2, 11.3.4, and 11.5 of the spec.</p>
+</div>
+
+<p>A client has to ask for a specific subprotocol. To do so, it will send something like this <strong>as part of the original handshake</strong>:</p>
+
+<pre>GET /chat HTTP/1.1
+...
+Sec-WebSocket-Protocol: soap, wamp
+
+</pre>
+
+<p>or, equivalently:</p>
+
+<pre>...
+Sec-WebSocket-Protocol: soap
+Sec-WebSocket-Protocol: wamp
+
+</pre>
+
+<p>Now the server must pick one of the protocols that the client suggested and it supports. If there are more than one, send the first one the client sent. Imagine our server can use both <code>soap</code> and <code>wamp</code>.&nbsp;Then, in the response handshake, it'll send:</p>
+
+<pre>Sec-WebSocket-Protocol: soap
+
+</pre>
+
+<div class="warning">
+<p>The server can't send more than one <code>Sec-Websocket-Protocol</code> header.<br>
+ <span style="line-height: 1.5;">If the server doesn't want to use a</span><span style="line-height: 1.5;">ny subprotocol, </span><strong style="line-height: 1.5;">it shouldn't send any <code>Sec-WebSocket-Protocol</code> header</strong><span style="line-height: 1.5;">. Sending a blank header is incorrect.<br>
+ The client may close the connection if it doesn't get the subprotocol it wants.</span></p>
+</div>
+
+<p>If you want your server to obey certain subprotocols, then naturally you'll need extra code on the server. Let's imagine we're using a subprotocol <code>json</code>. In this subprotocol, all data is passed as <a href="https://en.wikipedia.org/wiki/JSON" class="external">JSON</a>. If the client solicits this protocol and the server wants to use it, the server will need to have a JSON parser. Practically speaking, this will be part of a library, but the server will need to pass the data around.</p>
+
+<div class="note">
+<p><strong>Tip:</strong> To avoid name conflict, it's recommended to make your subprotocol name part of a domain string. If you are building a custom chat app that uses a proprietary format exclusive to Example Inc., then you might use this:&nbsp;<code>Sec-WebSocket-Protocol: chat.example.com</code>. For different versions, a widely-used method is to add a <code>/</code> followed by the version number, like <code>chat.example.com/2.0</code>. Note that this isn't required, it's just an optional convention, and you can use any string you wish.</p>
+</div>
+
+<h2 id="Related">Related</h2>
+
+<ul>
+ <li><a href="https://developer.mozilla.org/en-US/docs/WebSockets/Writing_WebSocket_server" title="/en-US/docs/WebSockets/Writing_WebSocket_server">Tutorial: Websocket server in C#</a></li>
+ <li><a href="https://developer.mozilla.org/en-US/docs/WebSockets/Writing_WebSocket_client_applications">Writing WebSocket client applications</a></li>
+ <li><a href="https://developer.mozilla.org/en-US/docs/WebSockets/WebSocket_Server_Vb.NET">Tutorial: Websocket server in VB.NET</a></li>
+</ul>
+                  
+                
+              </article>
+
+              
+
+    
+    
+    
+
+    
+    
+    
+
+    <div class="share">
+        <strong>Share:</strong>
+        <ul>
+            <li><a href="http://twitter.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FAPI%2FWebSockets_API%2FWriting_WebSocket_servers%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dtwitter.com&amp;text=I+learned+about+Writing+WebSocket+servers+on+MDN." target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API/Writing_WebSocket_servers?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=twitter.com" data-title="I learned about Writing WebSocket servers on MDN." class="share-link twitter"><i aria-hidden="true" class="icon-twitter"></i>Twitter</a></li>
+            <li><a href="http://facebook.com/sharer.php?s=100&amp;p[url]=https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API/Writing_WebSocket_servers?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API/Writing_WebSocket_servers?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" data-title="I learned about Writing WebSocket servers on MDN." class="share-link facebook"><i aria-hidden="true" class="icon-facebook"></i>Facebook</a></li>
+            <li><a href="https://plus.google.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FAPI%2FWebSockets_API%2FWriting_WebSocket_servers%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dplus.google.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API/Writing_WebSocket_servers?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=plus.google.com" data-title="I learned about Writing WebSocket servers on MDN." class="share-link gplus"><i aria-hidden="true" class="icon-google-plus"></i>Google+</a></li>
+        </ul>
+    </div>
+
+              
+
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                  
+                  
+  <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags icon-fw"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Guide">Guide</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/HTML5">HTML5</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/NeedsContent">NeedsContent</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/NeedsExample">NeedsExample</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Tutorial">Tutorial</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/WebSocket">WebSocket</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/WebSockets">WebSockets</a></li>
+      
+    </ul>
+  </div>
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-group icon-fw"></i>&nbsp;<strong>Contributors to this page:</strong> 
+        <a href="https://developer.mozilla.org/en-US/profiles/dawud-tan">dawud-tan</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/teoli">teoli</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/jswisher">jswisher</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/OscarCou">OscarCou</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/kscarfone">kscarfone</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/pkoli">pkoli</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/oddalot">oddalot</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/laobubu">laobubu</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/styfle">styfle</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/anistark">anistark</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/rvighne">rvighne</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/mrbrc">mrbrc</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Arshabh">Arshabh</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/kdbanman">kdbanman</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/bitrayne">bitrayne</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/dron">dron</a>
+    
+                    </div>
+                  
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o icon-fw"></i>&nbsp;<strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/dawud-tan">dawud-tan</a>,
+                      <time datetime="2015-11-05T07:13:09-08:00">Nov 5, 2015, 7:13:09 AM</time>
+                    </div>
+                  
+                </div>
+              
+            </div>
+
+            
+          </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Web/API/WebSockets_API/Writing_WebSocket_servers$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Web/API/WebSockets_API/Writing_WebSocket_servers$history" label="View page history"></menuitem>
+  </menu>
+
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+        
+        <div class="contentinfo">
+          <p>© 2005-2016 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>
+          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+        
+        </div>
+      </div>
+      <div class="column-strip">
+        
+          
+  
+    <form class="languages go" method="get" action="https://developer.mozilla.org/en-US/docs/Web">
+      <label for="language">Other languages:</label>
+      <select id="language" class="wiki-l10n" name="next" dir="ltr">
+        <option value="/en-US/docs/Web/API/WebSockets_API/Writing_WebSocket_servers" selected="">
+          English (US)
+        </option>
+        
+          <option value="/es/docs/WebSockets-840092-dup/Escribiendo_servidores_con_WebSocket">
+            Español
+          </option>
+          <option value="/fr/docs/WebSockets/ecrire_des_serveurs_WebSocket">
+            Français
+          </option>
+          <option value="/ja/docs/WebSockets-840092-dup/Writing_WebSocket_servers">
+            日本語
+          </option>
+          <option value="/zh-CN/docs/WebSockets/Writing_WebSocket_servers">
+            中文 (简体)
+          </option>
+      </select>
+      <noscript>&lt;button type="submit"&gt;Go&lt;/button&gt;</noscript>
+    </form>
+  
+
+        
+      </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+  
+    
+    <!--[if lte IE 8]><script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/selectivizr.091e18cf669b.js" charset="utf-8"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/main.a7b27a25fb9c.js" charset="utf-8"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+    
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/syntax-prism-min.js" charset="utf-8"></script><script type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/wiki.bd71ca9fd27d.js" charset="utf-8" id="wikiscript"></script>
+
+  
+
+  <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/helpfulness.7b208a764d28.js" charset="utf-8"></script>
+
+  
+
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/WebSockets_API/Writing_WebSocket_servers by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 15:45:07 GMT -->
+</body></html>

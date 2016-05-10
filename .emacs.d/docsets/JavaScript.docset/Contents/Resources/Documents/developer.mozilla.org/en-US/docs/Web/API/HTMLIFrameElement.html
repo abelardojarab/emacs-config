@@ -1,0 +1,1133 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 14:07:32 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <script async="" src="../../../../../www.google-analytics.com/analytics.js"></script><script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+  
+    
+  
+
+  
+  <title>HTMLIFrameElement</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+  
+    
+    
+    <link href="../../../../../developer.cdn.mozilla.net/static/build/styles/mdn.593f20d8c365.css" rel="stylesheet" type="text/css">
+
+    
+  
+    <link href="../../../../../developer.cdn.mozilla.net/static/build/styles/wiki.13dd9abdfb62.css" rel="stylesheet" type="text/css">
+
+    
+
+    
+
+  <!-- common social tags -->
+  
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../developer.cdn.mozilla.net/static/img/favicon144.a6e4162070f4.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../developer.cdn.mozilla.net/static/img/favicon114.0e9fabd44f85.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../developer.cdn.mozilla.net/static/img/favicon72.8ff9d87c82a0.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../developer.cdn.mozilla.net/static/img/favicon57.a2490b9a2d76.png">
+  <!-- basic favicon -->
+  
+    
+  
+  <link rel="shortcut icon" href="../../../../../developer.cdn.mozilla.net/static/img/favicon32.e02854fdcf73.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/html5shiv.3948ccddab6f.js" charset="utf-8"></script>
+  <![endif]-->
+
+  
+  <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement$json">
+  <link rel="canonical" href="HTMLIFrameElement.html">
+
+  
+    
+      <link rel="alternate" hreflang="fr" href="https://developer.mozilla.org/fr/docs/Web/API/HTMLIFrameElement" title="HTMLIFrameElement">
+    
+      <link rel="alternate" hreflang="ja" href="https://developer.mozilla.org/ja/docs/Web/API/HTMLIFrameElement" title="HTMLIFrameElement">
+    
+      <link rel="alternate" hreflang="pl" href="https://developer.mozilla.org/pl/docs/Web/API/HTMLIFrameElement" title="HTMLIFrameElement">
+    
+  
+
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="HTMLIFrameElement">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement">
+  <meta name="twitter:title" content="HTMLIFrameElement">
+  
+  <meta property="og:description" content="The HTMLIFrameElement interface provides special properties and methods (beyond those of the HTMLElement interface it also has available to it by inheritance) for manipulating the layout and presentation of inline frame elements.">
+  <meta name="description" content="The HTMLIFrameElement interface provides special properties and methods (beyond those of the HTMLElement interface it also has available to it by inheritance) for manipulating the layout and presentation of inline frame elements.">
+  <meta name="twitter:description" content="The HTMLIFrameElement interface provides special properties and methods (beyond those of the HTMLElement interface it also has available to it by inheritance) for manipulating the layout and presentation of inline frame elements.">
+  
+
+  
+    
+
+
+
+  
+</head>
+<body data-slug="Web/API/HTMLIFrameElement" contextmenu="edit-history-menu" data-search-url="" class="document  ">
+
+  <script type="text/javascript">
+    (function(win) {
+        'use strict';
+
+        
+            (function(){
+  var FLAGS = {
+    'compat_api': false,'kumaediting': false,'page_move': false,'registration_disabled': false,'search_suggestions': false,'section_edit': false,'spam_admin_override': false,'spam_checks_enabled': true,'spam_spammer_override': false,'spam_submissions_enabled': false,'spam_testing_mode': false,'wiki_samples': true,'wiki_spam_exempted': false,'wiki_spam_training': true
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': true,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+
+        // This needs to be set before ckeditor.js loads
+        window.CKEDITOR_BASEPATH = 'https://developer.mozilla.org/static/js/libs/ckeditor/build/ckeditor/';
+
+        // This represents the site configuration
+        win.mdn = {
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+            
+            notifications: [],
+            
+            // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            },
+            // Assets that need to be dynamically injected
+            assets_disabled: {
+                css: {
+                    'editor-content': ['https://developer.cdn.mozilla.net/static/build/styles/editor-content.3d79df72080d.css',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/styles/wiki-compat-tables.f3a3bfce97a1.css',]
+                },
+                js: {
+                    'syntax-prism': ['https://developer.cdn.mozilla.net/static/build/js/syntax-prism.7a66ddfa68bf.js',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/js/wiki-compat-tables.14ce5dcb2c3d.js',]
+                }
+            }
+        };
+    })(this);
+</script>
+
+  
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+    
+      <li><a href="#q" id="skip-search">Skip to search</a></li>
+    
+  </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+    <a href="https://developer.mozilla.org/en-US/" class="logo">Mozilla Developer Network</a>
+
+    <div id="nav-sec">
+        
+                  <ul>
+                  <li>
+
+    
+
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                Sign in
+              </span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FHTMLIFrameElement" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/Web/API/HTMLIFrameElement" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/Web/API/HTMLIFrameElement" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FHTMLIFrameElement" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+              
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+        
+    </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+
+   <!-- end is_zone -->
+
+    <div class="wiki-main-content" id="document-main"><div class="center">
+      
+      <div class="article-meta">
+        <!-- action buttons -->
+        
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+  <ul class="page-buttons" data-sticky="false">
+      
+      <li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+              
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/fr/docs/Web/API/HTMLIFrameElement" title="HTMLIFrameElement">Français</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/ja/docs/Web/API/HTMLIFrameElement" title="HTMLIFrameElement">日本語</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/pl/docs/Web/API/HTMLIFrameElement" title="HTMLIFrameElement">Polski</a></bdi></li>
+                
+              
+
+              
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+              
+            </ul>
+          </div>
+        </div>
+      </li>
+
+      <li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li>
+
+        
+
+        <li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement$history" rel="nofollow, noindex">History</a></li>
+                
+                
+                
+                
+
+                
+
+                
+                
+                
+                <li class="page-print"><a href="#" onclick="return window.print();">Print this article</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+        
+  <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web" rel="v:url" property="v:title">Web technology for developers</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="../API.html" rel="v:url" property="v:title">Web APIs</a></li>
+    
+    <li class="crumb" typeof="v:Breadcrumb" property="v:title">HTMLIFrameElement</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        
+        <div class="contributor-avatars" data-all-text="see all contributors" data-alternate-message="hide contributors" data-has-hidden="1">
+            <ul>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills" title="View profile: chrisdavidmills">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="chrisdavidmills" data-src="../../../../../secure.gravatar.com/avatar/deeea0ba82390bd5acc539703c4b0cfb6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">chrisdavidmills</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Sebastianz" title="View profile: Sebastianz">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Sebastianz" data-src="../../../../../secure.gravatar.com/avatar/337fa9c543a4f881977b6d2fbbd2dea86c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Sebastianz</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/teoli" title="View profile: teoli">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="teoli" data-src="../../../../../secure.gravatar.com/avatar/d0d90148e08e3b64ccf75c46f31442c56c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">teoli</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/Gabrys1" title="View profile: Gabrys1">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Gabrys1" data-src="../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Gabrys1</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/mbarak" title="View profile: mbarak">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="mbarak" data-src="../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">mbarak</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/kohei.yoshino" title="View profile: kohei.yoshino">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="kohei.yoshino" data-src="../../../../../secure.gravatar.com/avatar/f84bbc6968ecda0a64ab50d1060c320e6c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">kohei.yoshino</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/kscarfone" title="View profile: kscarfone">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="kscarfone" data-src="../../../../../secure.gravatar.com/avatar/89c1e54a9703125168e40d22316d2b496c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">kscarfone</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Jeremie" title="View profile: Jeremie">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Jeremie" data-src="../../../../../secure.gravatar.com/avatar/ea74cf7f528273838138e9ae407cd8ef6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Jeremie</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Sheppy" title="View profile: Sheppy">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Sheppy" data-src="../../../../../secure.gravatar.com/avatar/945076feb88f2d7003891ffbf06f32bf6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Sheppy</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/ethertank" title="View profile: ethertank">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="ethertank" data-src="../../../../../secure.gravatar.com/avatar/abac73ba2093b500bf7599c76d80280c6c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">ethertank</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/fscholz" title="View profile: fscholz">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="fscholz" data-src="../../../../../secure.gravatar.com/avatar/e24391c9174352988d819a9b9ea77c9e6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">fscholz</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/Nickolay" title="View profile: Nickolay">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="Nickolay" data-src="../../../../../i2.wp.com/developer.cdn.mozilla.net/media/img/avatareb45.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">Nickolay</noscript></a>
+                </li>
+            
+                <li class="hidden">
+                <a href="https://developer.mozilla.org/en-US/profiles/jswisher" title="View profile: jswisher">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="jswisher" data-src="../../../../../secure.gravatar.com/avatar/38185c2812cbcae186ebbe4a829106616c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">jswisher</noscript></a>
+                </li>
+            
+            </ul>
+        </div>
+        
+
+        <h1>HTMLIFrameElement</h1>
+
+      </div>
+      
+
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-present">
+
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+            
+              <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+              
+              <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#Properties" rel="internal">Properties</a></li><li><a href="#Methods" rel="internal">Methods</a><ol><li><a href="#Browser_API_methods" rel="internal">Browser API methods</a><ol><li><a href="#Navigation_methods" rel="internal">Navigation methods</a></li><li><a href="#Management_methods" rel="internal">Management methods</a></li><li><a href="#Audio-related_methods" rel="internal">Audio-related methods</a></li><li><a href="#Search_methods" rel="internal">Search methods</a></li><li><a href="#Event-related_methods" rel="internal">Event-related methods</a></li><li><a href="#Utility_methods" rel="internal">Utility methods</a></li></ol></li></ol></li><li><a href="#Specifications" rel="internal">Specifications</a></li><li><a href="#Browser_compatibility" rel="internal">Browser compatibility</a></li><li><a href="#See_also" rel="internal">See also</a>
+                </li></ol>
+              </div>
+              
+              </div>
+            
+
+            
+            
+              
+            
+
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-half wiki-column text-content">
+
+              
+
+              
+
+              
+                
+                
+                
+              
+              
+
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                
+                  
+                    <div><section id="Quick_Links" class="Quick_links"><!-- --></section></div>
+
+<p>The <strong><code>HTMLIFrameElement</code></strong> interface provides special properties and methods (beyond those of the <a href="HTMLElement.html" title="The HTMLElement interface represents any HTML element. Some elements directly implement this interface, others implement it via an interface that inherits it."><code>HTMLElement</code></a> interface it also has available to it by inheritance) for manipulating the layout and presentation of inline frame elements.</p>
+
+<h2 id="Properties">Properties</h2>
+
+<p><em>Inherits properties from its parent, <a href="HTMLElement.html" title="The HTMLElement interface represents any HTML element. Some elements directly implement this interface, others implement it via an interface that inherits it."><code>HTMLElement</code></a></em>.</p>
+
+<dl>
+ <dt><a href="HTMLIFrameElement/align.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>HTMLIFrameElement.align</code></a> <span title="This is an obsolete API and is no longer guaranteed to work."><i class="icon-trash"> </i></span></dt>
+ <dd>Is a <a href="DOMString.html" title="DOMString is a UTF-16 String. As JavaScript already uses such strings, DOMString is mapped directly to a String."><code>DOMString</code></a> that specifies the alignment of the frame with respect to the surrounding context.</dd>
+ <dt><a href="HTMLIFrameElement/allowfullscreen.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>HTMLIFrameElement.allowfullscreen</code></a> <span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></dt>
+ <dd>Is a <a href="../../JavaScript/Reference/Global_Objects/Boolean.png" title="The Boolean object is an object wrapper for a boolean value."><code>Boolean</code></a> that indicates whether or not the inline frame is willing to be placed into full screen mode. See <a href="Fullscreen_API.html" title="https://developer.mozilla.org/en/DOM/Using_full-screen_mode">Using full-screen mode</a> for details.</dd>
+ <dt><a href="HTMLIFrameElement/contentDocument.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>HTMLIFrameElement.contentDocument</code></a> <span class="inlineIndicator readOnly readOnlyInline" title="This value may not be changed.">Read only </span></dt>
+ <dd>Returns a <a href="Document.html" title="The Document interface represent any web page loaded in the browser and&nbsp; serves as an entry point into the web page's content, the DOM tree (including elements such as &lt;body&gt; or &lt;table&gt;). It provides functionality which is global to the document, such as obtaining the page's URL and creating new elements in the document."><code>Document</code></a>, the active document in the inline frame's nested browsing context.</dd>
+ <dt><a href="HTMLIFrameElement/contentWindow.html" title="The contentWindow property returns the Window object of an &lt;iframe&gt; element. You can use this Window object to access the iframe's document and its internal DOM. This attribute is read-only, but its properties can be manipulated like the global Window object."><code>HTMLIFrameElement.contentWindow</code></a> <span class="inlineIndicator readOnly readOnlyInline" title="This value may not be changed.">Read only </span></dt>
+ <dd>Returns a <a href="WindowProxy.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>WindowProxy</code></a>, the window proxy for the nested browsing context.</dd>
+ <dt><a href="HTMLIFrameElement/frameBorder.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>HTMLIFrameElement.frameBorder</code></a> <span title="This is an obsolete API and is no longer guaranteed to work."><i class="icon-trash"> </i></span></dt>
+ <dd>Is a <a href="DOMString.html" title="DOMString is a UTF-16 String. As JavaScript already uses such strings, DOMString is mapped directly to a String."><code>DOMString</code></a> that indicates whether to create borders between frames.</dd>
+ <dt><a href="HTMLIFrameElement/height.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>HTMLIFrameElement.height</code></a></dt>
+ <dd>Is a <a href="DOMString.html" title="DOMString is a UTF-16 String. As JavaScript already uses such strings, DOMString is mapped directly to a String."><code>DOMString</code></a> that reflects the <code><a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe#attr-height">height</a></code> HTML&nbsp;attribute, indicating the height of the frame.</dd>
+ <dt><a href="HTMLIFrameElement/longDesc.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>HTMLIFrameElement.longDesc</code></a> <span title="This is an obsolete API and is no longer guaranteed to work."><i class="icon-trash"> </i></span></dt>
+ <dd>Is a <a href="DOMString.html" title="DOMString is a UTF-16 String. As JavaScript already uses such strings, DOMString is mapped directly to a String."><code>DOMString</code></a> that contains the URI of a long description of the frame.</dd>
+ <dt><a href="HTMLIFrameElement/marginHeight.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>HTMLIFrameElement.marginHeight</code></a> <span title="This is an obsolete API and is no longer guaranteed to work."><i class="icon-trash"> </i></span></dt>
+ <dd>Is a <a href="DOMString.html" title="DOMString is a UTF-16 String. As JavaScript already uses such strings, DOMString is mapped directly to a String."><code>DOMString</code></a> being the height of the frame margin.</dd>
+ <dt><a href="HTMLIFrameElement/marginWidth.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>HTMLIFrameElement.marginWidth</code></a> <span title="This is an obsolete API and is no longer guaranteed to work."><i class="icon-trash"> </i></span></dt>
+ <dd>Is a <a href="DOMString.html" title="DOMString is a UTF-16 String. As JavaScript already uses such strings, DOMString is mapped directly to a String."><code>DOMString</code></a> being the width of the frame margin.</dd>
+ <dt><a href="HTMLIFrameElement/name.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>HTMLIFrameElement.name</code></a></dt>
+ <dd>Is a <a href="DOMString.html" title="DOMString is a UTF-16 String. As JavaScript already uses such strings, DOMString is mapped directly to a String."><code>DOMString</code></a> that reflects the <code><a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe#attr-name">name</a></code> HTML&nbsp;attribute, containing a name by which to refer to the frame.</dd>
+ <dt><a href="HTMLIFrameElement/referrerPolicy.html" title="The HTMLIFrameElement.referrerPolicy property reflect the HTML referrer attribute of the &lt;iframe&gt; element defining which referrer is sent when fetching the resource."><code>HTMLIFrameElement.referrerPolicy</code></a> <span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></dt>
+ <dd>Is a <a href="DOMString.html" title="DOMString is a UTF-16 String. As JavaScript already uses such strings, DOMString is mapped directly to a String."><code>DOMString</code></a> that reflects the <code><a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe#attr-referrerpolicy">referrerpolicy</a></code> HTML attribute indicating which referrer to use when fetching the linked resource.</dd>
+ <dt><a href="HTMLIFrameElement/sandbox.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>HTMLIFrameElement.sandbox</code></a></dt>
+ <dd>Is a <a href="DOMSettableTokenList.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>DOMSettableTokenList</code></a> that reflects the <code><a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe#attr-sandbox">sandbox</a></code> HTML&nbsp;attribute, indicating extra restrictions on the behavior of the nested content.</dd>
+ <dt><a href="HTMLIFrameElement/scrolling.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>HTMLIFrameElement.scrolling</code></a> <span title="This is an obsolete API and is no longer guaranteed to work."><i class="icon-trash"> </i></span></dt>
+ <dd>Is a <a href="DOMString.html" title="DOMString is a UTF-16 String. As JavaScript already uses such strings, DOMString is mapped directly to a String."><code>DOMString</code></a> that indicates whether the browser should provide scrollbars for the frame.</dd>
+ <dt><a href="HTMLIFrameElement/seamless.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>HTMLIFrameElement.seamless</code></a> <span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></dt>
+ <dd>Is a <a href="../../JavaScript/Reference/Global_Objects/Boolean.png" title="The Boolean object is an object wrapper for a boolean value."><code>Boolean</code></a> that reflects the <code><a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe#attr-seamless">seamless</a></code> HTML&nbsp;attribute, indicating that the inline frame should be rendered seamlessly within the parent document.</dd>
+ <dt><a href="HTMLIFrameElement/src.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>HTMLIFrameElement.src</code></a></dt>
+ <dd>Is a <a href="DOMString.html" title="DOMString is a UTF-16 String. As JavaScript already uses such strings, DOMString is mapped directly to a String."><code>DOMString</code></a> that reflects the <code><a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe#attr-src">src</a></code> HTML&nbsp;attribute, containing the address of the content to be embedded.</dd>
+ <dt><a href="HTMLIFrameElement/srcdoc.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>HTMLIFrameElement.srcdoc</code></a></dt>
+ <dd>Is a <a href="DOMString.html" title="DOMString is a UTF-16 String. As JavaScript already uses such strings, DOMString is mapped directly to a String."><code>DOMString</code></a> that represents the content to display in the frame.</dd>
+ <dt><a href="HTMLIFrameElement/width.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>HTMLIFrameElement.width</code></a></dt>
+ <dd>Is a <a href="DOMString.html" title="DOMString is a UTF-16 String. As JavaScript already uses such strings, DOMString is mapped directly to a String."><code>DOMString</code></a> that reflects the <code><a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe#attr-width">width</a></code>&nbsp;HTML&nbsp;attribute, indicating the width of the frame.</dd>
+</dl>
+
+<h2 id="Methods">Methods</h2>
+
+<p><em>Inherits properties from its parent, <a href="HTMLElement.html" title="The HTMLElement interface represents any HTML element. Some elements directly implement this interface, others implement it via an interface that inherits it."><code>HTMLElement</code></a></em>.</p>
+
+<h3 id="Browser_API_methods">Browser API methods</h3>
+
+<p>To support the requirement of a browser <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe" title="The&nbsp;HTML Inline Frame Element&nbsp;(&lt;iframe&gt;) represents a nested browsing context, effectively embedding another HTML page into the current page. In HTML 4.01, a document may contain a head and a body or a head and a frame-set, but not both a body and a frame-set. However, an &lt;iframe&gt; can be used within a normal document body. Each browsing context has its own session history and active document. The browsing context that contains the embedded content is called the parent browsing context. The top-level browsing context (which has no parent) is typically the browser window."><code>&lt;iframe&gt;</code></a>, <code>HTMLIFrameElement</code> has been extended with new methods that give the <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe" title="The&nbsp;HTML Inline Frame Element&nbsp;(&lt;iframe&gt;) represents a nested browsing context, effectively embedding another HTML page into the current page. In HTML 4.01, a document may contain a head and a body or a head and a frame-set, but not both a body and a frame-set. However, an &lt;iframe&gt; can be used within a normal document body. Each browsing context has its own session history and active document. The browsing context that contains the embedded content is called the parent browsing context. The top-level browsing context (which has no parent) is typically the browser window."><code>&lt;iframe&gt;</code></a> some super powers. These are non-standard (see <a href="#Browser_compatibility">Browser compatibility</a>.)</p>
+
+<h4 id="Navigation_methods">Navigation methods</h4>
+
+<p>The following navigation methods allow navigation through the browsing history of the <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe" title="The&nbsp;HTML Inline Frame Element&nbsp;(&lt;iframe&gt;) represents a nested browsing context, effectively embedding another HTML page into the current page. In HTML 4.01, a document may contain a head and a body or a head and a frame-set, but not both a body and a frame-set. However, an &lt;iframe&gt; can be used within a normal document body. Each browsing context has its own session history and active document. The browsing context that contains the embedded content is called the parent browsing context. The top-level browsing context (which has no parent) is typically the browser window."><code>&lt;iframe&gt;</code></a>. They are necessary to be able to implement back, forward, stop, and reload buttons.</p>
+
+<dl>
+ <dt><a href="HTMLIFrameElement/reload.html" title="The reload() method of the HTMLIFrameElement interface is used to reload the content of the &lt;iframe&gt;."><code>reload()</code></a></dt>
+ <dd>Allows reloading of the <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe" title="The&nbsp;HTML Inline Frame Element&nbsp;(&lt;iframe&gt;) represents a nested browsing context, effectively embedding another HTML page into the current page. In HTML 4.01, a document may contain a head and a body or a head and a frame-set, but not both a body and a frame-set. However, an &lt;iframe&gt; can be used within a normal document body. Each browsing context has its own session history and active document. The browsing context that contains the embedded content is called the parent browsing context. The top-level browsing context (which has no parent) is typically the browser window."><code>&lt;iframe&gt;</code></a> element content.</dd>
+ <dt><a href="HTMLIFrameElement/stop.html" title="The stop() method of the HTMLIFrameElement interface is used to stop loading the content of the &lt;iframe&gt;."><code>stop()</code></a></dt>
+ <dd>Allows stopping of the <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe" title="The&nbsp;HTML Inline Frame Element&nbsp;(&lt;iframe&gt;) represents a nested browsing context, effectively embedding another HTML page into the current page. In HTML 4.01, a document may contain a head and a body or a head and a frame-set, but not both a body and a frame-set. However, an &lt;iframe&gt; can be used within a normal document body. Each browsing context has its own session history and active document. The browsing context that contains the embedded content is called the parent browsing context. The top-level browsing context (which has no parent) is typically the browser window."><code>&lt;iframe&gt;</code></a>'s content loading.</dd>
+ <dt><a href="HTMLIFrameElement/getCanGoBack.html" title="The getCanGoBack() method of the HTMLIFrameElement interface is used to indicate whether it's possible to go back in the navigation history of the browser &lt;iframe&gt;."><code>getCanGoBack()</code></a></dt>
+ <dd>Indicates whether it's possible to navigate backwards.</dd>
+ <dt><a href="HTMLIFrameElement/goBack.html" title="The goBack() method of the HTMLIFrameElement interface is used to navigate backwards in the browser &lt;iframe&gt;'s history."><code>goBack()</code></a></dt>
+ <dd>Changes the location of the <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe" title="The&nbsp;HTML Inline Frame Element&nbsp;(&lt;iframe&gt;) represents a nested browsing context, effectively embedding another HTML page into the current page. In HTML 4.01, a document may contain a head and a body or a head and a frame-set, but not both a body and a frame-set. However, an &lt;iframe&gt; can be used within a normal document body. Each browsing context has its own session history and active document. The browsing context that contains the embedded content is called the parent browsing context. The top-level browsing context (which has no parent) is typically the browser window."><code>&lt;iframe&gt;</code></a> for the previous location in its browsing history.</dd>
+ <dt><a href="HTMLIFrameElement/getCanGoForward.html" title="The getCanGoForward() method of the HTMLIFrameElement is used to indicate whether it's possible to go forward in the navigation history of the browser &lt;iframe&gt;."><code>getCanGoForward()</code></a></dt>
+ <dd>Indicates whether it's possible to navigate forward.</dd>
+ <dt><a href="HTMLIFrameElement/goForward.html" title="The goForward() method of the HTMLIFrameElement is used to navigate forward in the browser &lt;iframe&gt;'s history."><code>goForward()</code></a></dt>
+ <dd>Changes the location of the <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe" title="The&nbsp;HTML Inline Frame Element&nbsp;(&lt;iframe&gt;) represents a nested browsing context, effectively embedding another HTML page into the current page. In HTML 4.01, a document may contain a head and a body or a head and a frame-set, but not both a body and a frame-set. However, an &lt;iframe&gt; can be used within a normal document body. Each browsing context has its own session history and active document. The browsing context that contains the embedded content is called the parent browsing context. The top-level browsing context (which has no parent) is typically the browser window."><code>&lt;iframe&gt;</code></a> for the next location in its browsing history.</dd>
+</dl>
+
+<h4 id="Management_methods">Management methods</h4>
+
+<p>The next set of methods manage the resources used by a browser <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe" title="The&nbsp;HTML Inline Frame Element&nbsp;(&lt;iframe&gt;) represents a nested browsing context, effectively embedding another HTML page into the current page. In HTML 4.01, a document may contain a head and a body or a head and a frame-set, but not both a body and a frame-set. However, an &lt;iframe&gt; can be used within a normal document body. Each browsing context has its own session history and active document. The browsing context that contains the embedded content is called the parent browsing context. The top-level browsing context (which has no parent) is typically the browser window."><code>&lt;iframe&gt;</code></a>. These are especially useful for implementing tabbed browser application.</p>
+
+<dl>
+ <dt><a href="HTMLIFrameElement/executeScript.html" title="The executeScript() method of the HTMLIFrameElement interface allows a specified script to be executed against a page loaded in the browser &lt;iframe&gt;."><code>executeScript()</code></a></dt>
+ <dd>Allows a specified script to be executed against a page loaded in the browser <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe" title="The&nbsp;HTML Inline Frame Element&nbsp;(&lt;iframe&gt;) represents a nested browsing context, effectively embedding another HTML page into the current page. In HTML 4.01, a document may contain a head and a body or a head and a frame-set, but not both a body and a frame-set. However, an &lt;iframe&gt; can be used within a normal document body. Each browsing context has its own session history and active document. The browsing context that contains the embedded content is called the parent browsing context. The top-level browsing context (which has no parent) is typically the browser window."><code>&lt;iframe&gt;</code></a>.</dd>
+ <dt><a href="HTMLIFrameElement/purgeHistory.html" title="The purgeHistory() method of the HTMLIFrameElement interface is used to clear the browsing history associated with the browser &lt;iframe&gt;. It only deletes history, not cookies or other stored information."><code>purgeHistory()</code></a></dt>
+ <dd>Clears all the resources (cookies, localStorage, cache, etc.) associated with the browser <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe" title="The&nbsp;HTML Inline Frame Element&nbsp;(&lt;iframe&gt;) represents a nested browsing context, effectively embedding another HTML page into the current page. In HTML 4.01, a document may contain a head and a body or a head and a frame-set, but not both a body and a frame-set. However, an &lt;iframe&gt; can be used within a normal document body. Each browsing context has its own session history and active document. The browsing context that contains the embedded content is called the parent browsing context. The top-level browsing context (which has no parent) is typically the browser window."><code>&lt;iframe&gt;</code></a>.</dd>
+ <dt><a href="HTMLIFrameElement/setVisible.html" title="The setVisible() method of the HTMLIFrameElement is used to change the visibility state of the browser &lt;iframe&gt;."><code>setVisible()</code></a></dt>
+ <dd>Changes the visibility state of a browser <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe" title="The&nbsp;HTML Inline Frame Element&nbsp;(&lt;iframe&gt;) represents a nested browsing context, effectively embedding another HTML page into the current page. In HTML 4.01, a document may contain a head and a body or a head and a frame-set, but not both a body and a frame-set. However, an &lt;iframe&gt; can be used within a normal document body. Each browsing context has its own session history and active document. The browsing context that contains the embedded content is called the parent browsing context. The top-level browsing context (which has no parent) is typically the browser window."><code>&lt;iframe&gt;</code></a>. This can influence resource allocation and some function usage such as <a href="Window/requestAnimationFrame-2.html" title="You should call this method whenever you're ready to update your animation onscreen. This will request that your animation function be called before the browser performs the next repaint. The number of callbacks is usually 60 times per second, but will generally match the display refresh rate in most web browsers as per W3C recommendation. The callback rate may be reduced to a lower rate when running in background tabs or in hidden &lt;iframe&gt;s in order to improve performance and battery life."><code>requestAnimationFrame</code></a>.</dd>
+ <dt><a href="HTMLIFrameElement/getVisible.html" title="The getVisible() method of the HTMLIFrameElement is used to request the current visible state of the browser &lt;iframe&gt;."><code>getVisible()</code></a></dt>
+ <dd>Indicates the current visibility state of the browser <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe" title="The&nbsp;HTML Inline Frame Element&nbsp;(&lt;iframe&gt;) represents a nested browsing context, effectively embedding another HTML page into the current page. In HTML 4.01, a document may contain a head and a body or a head and a frame-set, but not both a body and a frame-set. However, an &lt;iframe&gt; can be used within a normal document body. Each browsing context has its own session history and active document. The browsing context that contains the embedded content is called the parent browsing context. The top-level browsing context (which has no parent) is typically the browser window."><code>&lt;iframe&gt;</code></a>.</dd>
+ <dt><a href="HTMLIFrameElement/setActive.html" title="The setActive() method of the HTMLIFrameElement sets the current &lt;iframe&gt; as the active frame, which has an effect on how it is prioritized by the process manager."><code>setActive()</code></a></dt>
+ <dd>Sets the current <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe" title="The&nbsp;HTML Inline Frame Element&nbsp;(&lt;iframe&gt;) represents a nested browsing context, effectively embedding another HTML page into the current page. In HTML 4.01, a document may contain a head and a body or a head and a frame-set, but not both a body and a frame-set. However, an &lt;iframe&gt; can be used within a normal document body. Each browsing context has its own session history and active document. The browsing context that contains the embedded content is called the parent browsing context. The top-level browsing context (which has no parent) is typically the browser window."><code>&lt;iframe&gt;</code></a> as the active frame, which has an effect on how it is prioritized by the process manager.</dd>
+ <dt><a href="HTMLIFrameElement/getActive.html" title="The getActive() method of the HTMLIFrameElement indicates whether the current browser &lt;iframe&gt; is the currently active frame."><code>getActive()</code></a></dt>
+ <dd>Indicates whether the current browser <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe" title="The&nbsp;HTML Inline Frame Element&nbsp;(&lt;iframe&gt;) represents a nested browsing context, effectively embedding another HTML page into the current page. In HTML 4.01, a document may contain a head and a body or a head and a frame-set, but not both a body and a frame-set. However, an &lt;iframe&gt; can be used within a normal document body. Each browsing context has its own session history and active document. The browsing context that contains the embedded content is called the parent browsing context. The top-level browsing context (which has no parent) is typically the browser window."><code>&lt;iframe&gt;</code></a> is the currently active frame.</dd>
+ <dt><a href="HTMLIFrameElement/setInputMethodActive.html" title="The setInputMethodActive() method of the HTMLIFrameElement sets the current browser &lt;iframe&gt; as an active Input Method Editor (IME) window and other iframes as non-active IME windows. Useful when a top level app wants to activate a window as an IME."><code>setInputMethodActive()</code></a></dt>
+ <dd>Sets the current browser <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe" title="The&nbsp;HTML Inline Frame Element&nbsp;(&lt;iframe&gt;) represents a nested browsing context, effectively embedding another HTML page into the current page. In HTML 4.01, a document may contain a head and a body or a head and a frame-set, but not both a body and a frame-set. However, an &lt;iframe&gt; can be used within a normal document body. Each browsing context has its own session history and active document. The browsing context that contains the embedded content is called the parent browsing context. The top-level browsing context (which has no parent) is typically the browser window."><code>&lt;iframe&gt;</code></a> as an active IME window and other iframes as non-active IME windows. Useful when a top level app wants to activate a window as an IME (Input Method Editor, like a keyboard.)</dd>
+ <dt><a href="HTMLIFrameElement/setNfcFocus.html" title="The setNfcFocus() method of the HTMLIFrameElement interface sets whether an &lt;iframe&gt; can receive an NFC event."><code>setNfcFocus()</code></a> <span class="inlineIndicator optional optionalInline" title="Available">Firefox OS 2.2+ Only</span></dt>
+ <dd>Part of the Firefox OS <a href="../../Mozilla/Firefox_OS/API/NFC_API.html">NFC API</a>, extending the <a href="../../Mozilla/Gecko/Chrome/API/Browser_API.html">Browser API</a>, this sets whether a browser <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe" title="The&nbsp;HTML Inline Frame Element&nbsp;(&lt;iframe&gt;) represents a nested browsing context, effectively embedding another HTML page into the current page. In HTML 4.01, a document may contain a head and a body or a head and a frame-set, but not both a body and a frame-set. However, an &lt;iframe&gt; can be used within a normal document body. Each browsing context has its own session history and active document. The browsing context that contains the embedded content is called the parent browsing context. The top-level browsing context (which has no parent) is typically the browser window."><code>&lt;iframe&gt;</code></a> can receive an <a href="../../Mozilla/Firefox_OS/API/NFC_API.html">NFC</a> event.</dd>
+</dl>
+
+<h4 id="Audio-related_methods">Audio-related methods</h4>
+
+<p>The following methods allow direct control of sound in the browser element.</p>
+
+<dl>
+ <dt><a href="HTMLIFrameElement/getVolume.html" title="The getVolume() method of the HTMLIFrameElement gets the current volume of the browser &lt;iframe&gt;."><code>getVolume()</code></a> <span class="inlineIndicator optional optionalInline" title="Available">Firefox OS 2.5+ Only</span></dt>
+ <dd>Gets the current volume of the browser <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe" title="The&nbsp;HTML Inline Frame Element&nbsp;(&lt;iframe&gt;) represents a nested browsing context, effectively embedding another HTML page into the current page. In HTML 4.01, a document may contain a head and a body or a head and a frame-set, but not both a body and a frame-set. However, an &lt;iframe&gt; can be used within a normal document body. Each browsing context has its own session history and active document. The browsing context that contains the embedded content is called the parent browsing context. The top-level browsing context (which has no parent) is typically the browser window."><code>&lt;iframe&gt;</code></a>.</dd>
+ <dt><a href="HTMLIFrameElement/setVolume.html" title="The setVolume() method of the HTMLIFrameElement sets the current volume of the browser &lt;iframe&gt;."><code>setVolume()</code></a> <span class="inlineIndicator optional optionalInline" title="Available">Firefox OS 2.5+ Only</span></dt>
+ <dd>Sets the current volume of the browser <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe" title="The&nbsp;HTML Inline Frame Element&nbsp;(&lt;iframe&gt;) represents a nested browsing context, effectively embedding another HTML page into the current page. In HTML 4.01, a document may contain a head and a body or a head and a frame-set, but not both a body and a frame-set. However, an &lt;iframe&gt; can be used within a normal document body. Each browsing context has its own session history and active document. The browsing context that contains the embedded content is called the parent browsing context. The top-level browsing context (which has no parent) is typically the browser window."><code>&lt;iframe&gt;</code></a>.</dd>
+ <dt><a href="HTMLIFrameElement/mute.html" title="The mute() method of the HTMLIFrameElement mutes any audio playing in the browser &lt;iframe&gt;."><code>mute()</code></a> <span class="inlineIndicator optional optionalInline" title="Available">Firefox OS 2.5+ Only</span></dt>
+ <dd>Mutes any audio playing in the browser <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe" title="The&nbsp;HTML Inline Frame Element&nbsp;(&lt;iframe&gt;) represents a nested browsing context, effectively embedding another HTML page into the current page. In HTML 4.01, a document may contain a head and a body or a head and a frame-set, but not both a body and a frame-set. However, an &lt;iframe&gt; can be used within a normal document body. Each browsing context has its own session history and active document. The browsing context that contains the embedded content is called the parent browsing context. The top-level browsing context (which has no parent) is typically the browser window."><code>&lt;iframe&gt;</code></a>.</dd>
+ <dt><a href="HTMLIFrameElement/unmute.html" title="The unmute() method of the HTMLIFrameElement unmutes any audio playing in the browser &lt;iframe&gt;."><code>unmute()</code></a> <span class="inlineIndicator optional optionalInline" title="Available">Firefox OS 2.5+ Only</span></dt>
+ <dd>Unmutes any audio playing in the browser <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe" title="The&nbsp;HTML Inline Frame Element&nbsp;(&lt;iframe&gt;) represents a nested browsing context, effectively embedding another HTML page into the current page. In HTML 4.01, a document may contain a head and a body or a head and a frame-set, but not both a body and a frame-set. However, an &lt;iframe&gt; can be used within a normal document body. Each browsing context has its own session history and active document. The browsing context that contains the embedded content is called the parent browsing context. The top-level browsing context (which has no parent) is typically the browser window."><code>&lt;iframe&gt;</code></a>.</dd>
+ <dt><a href="HTMLIFrameElement/getMuted.html" title="The getMuted() method of the HTMLIFrameElement indicates whether the browser &lt;iframe&gt; is currently muted."><code>getMuted()</code></a> <span class="inlineIndicator optional optionalInline" title="Available">Firefox OS 2.5+ Only</span></dt>
+ <dd>Indicates whether the browser <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe" title="The&nbsp;HTML Inline Frame Element&nbsp;(&lt;iframe&gt;) represents a nested browsing context, effectively embedding another HTML page into the current page. In HTML 4.01, a document may contain a head and a body or a head and a frame-set, but not both a body and a frame-set. However, an &lt;iframe&gt; can be used within a normal document body. Each browsing context has its own session history and active document. The browsing context that contains the embedded content is called the parent browsing context. The top-level browsing context (which has no parent) is typically the browser window."><code>&lt;iframe&gt;</code></a> is currently muted.</dd>
+</dl>
+
+<h4 id="Search_methods">Search methods</h4>
+
+<p>New methods are provided to allow programmatic searches of browser&nbsp;<a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe" title="The&nbsp;HTML Inline Frame Element&nbsp;(&lt;iframe&gt;) represents a nested browsing context, effectively embedding another HTML page into the current page. In HTML 4.01, a document may contain a head and a body or a head and a frame-set, but not both a body and a frame-set. However, an &lt;iframe&gt; can be used within a normal document body. Each browsing context has its own session history and active document. The browsing context that contains the embedded content is called the parent browsing context. The top-level browsing context (which has no parent) is typically the browser window."><code>&lt;iframe&gt;</code></a>s to be carried out.</p>
+
+<dl>
+ <dt><a href="HTMLIFrameElement/findAll.html" title="The findAll() method of the HTMLIFrameElement searches for a string in a&nbsp;browser&nbsp;&lt;iframe&gt;'s text content; if found, the first instance of the string relative to the caret position will be highlighted."><code>findAll()</code></a> <span class="inlineIndicator optional optionalInline" title="Available">Firefox OS 2.5+ Only</span></dt>
+ <dd>Searches for a string in a&nbsp;browser&nbsp;<a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe" title="The&nbsp;HTML Inline Frame Element&nbsp;(&lt;iframe&gt;) represents a nested browsing context, effectively embedding another HTML page into the current page. In HTML 4.01, a document may contain a head and a body or a head and a frame-set, but not both a body and a frame-set. However, an &lt;iframe&gt; can be used within a normal document body. Each browsing context has its own session history and active document. The browsing context that contains the embedded content is called the parent browsing context. The top-level browsing context (which has no parent) is typically the browser window."><code>&lt;iframe&gt;</code></a>'s content; if found, the first instance of the string relative to the caret position will be highlighted.</dd>
+ <dt><a href="HTMLIFrameElement/findNext.html" title="The findNext() method of the HTMLIFrameElement highlights the next or previous instance of a search result after a findAll() search has been carried out."><code>findNext()</code></a> <span class="inlineIndicator optional optionalInline" title="Available">Firefox OS 2.5+ Only</span></dt>
+ <dd>Highlights the next or previous instance of a search result after a <a href="HTMLIFrameElement/findAll.html" title="The findAll() method of the HTMLIFrameElement searches for a string in a&nbsp;browser&nbsp;&lt;iframe&gt;'s text content; if found, the first instance of the string relative to the caret position will be highlighted."><code>findAll()</code></a> search has been carried out.</dd>
+ <dt><a href="HTMLIFrameElement/clearMatch.html" title="The clearMatch() method of the HTMLIFrameElement clears any content highlighted by findAll() or findNext()."><code>clearMatch()</code></a> <span class="inlineIndicator optional optionalInline" title="Available">Firefox OS 2.5+ Only</span></dt>
+ <dd>Clears any content highlighted by <a href="HTMLIFrameElement/findAll.html" title="The findAll() method of the HTMLIFrameElement searches for a string in a&nbsp;browser&nbsp;&lt;iframe&gt;'s text content; if found, the first instance of the string relative to the caret position will be highlighted."><code>findAll()</code></a> or <a href="HTMLIFrameElement/findNext.html" title="The findNext() method of the HTMLIFrameElement highlights the next or previous instance of a search result after a findAll() search has been carried out."><code>findNext()</code></a>.</dd>
+</dl>
+
+<h4 id="Event-related_methods">Event-related methods</h4>
+
+<p>In order to manage the browser <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe" title="The&nbsp;HTML Inline Frame Element&nbsp;(&lt;iframe&gt;) represents a nested browsing context, effectively embedding another HTML page into the current page. In HTML 4.01, a document may contain a head and a body or a head and a frame-set, but not both a body and a frame-set. However, an &lt;iframe&gt; can be used within a normal document body. Each browsing context has its own session history and active document. The browsing context that contains the embedded content is called the parent browsing context. The top-level browsing context (which has no parent) is typically the browser window."><code>&lt;iframe&gt;</code></a>'s content, many new events were added (see below). The following methods are used to deal with those events:</p>
+
+<dl>
+ <dt>The <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe" title="The&nbsp;HTML Inline Frame Element&nbsp;(&lt;iframe&gt;) represents a nested browsing context, effectively embedding another HTML page into the current page. In HTML 4.01, a document may contain a head and a body or a head and a frame-set, but not both a body and a frame-set. However, an &lt;iframe&gt; can be used within a normal document body. Each browsing context has its own session history and active document. The browsing context that contains the embedded content is called the parent browsing context. The top-level browsing context (which has no parent) is typically the browser window."><code>&lt;iframe&gt;</code></a> gains support for the methods of the <a href="EventTarget.html" title="EventTarget is an interface implemented by objects that can receive events and may have listeners for them."><code>EventTarget</code></a> interface</dt>
+ <dd><a href="EventTarget/addEventListener.html" title="The EventTarget.addEventListener() method registers the specified listener on the EventTarget it's called on. The event target may be an Element in a document, the Document itself, a Window, or any other object that supports events (such as XMLHttpRequest)."><code>addEventListener()</code></a>, <a href="EventTarget/removeEventListener.html" title="Removes the event listener previously registered with EventTarget.addEventListener()."><code>removeEventListener()</code></a>, and <a href="EventTarget/dispatchEvent.html" title="Dispatches an Event at the specified EventTarget, invoking the affected EventListeners in the appropriate order. The normal event processing rules (including the capturing and optional bubbling phase) apply to events dispatched manually with dispatchEvent()."><code>dispatchEvent()</code></a>.</dd>
+ <dt><a href="HTMLIFrameElement/sendMouseEvent.html" title="The sendMouseEvent() method of the HTMLIFrameElement interface allows you to fake a mouse event and send it to the browser &lt;iframe&gt;'s content."><code>sendMouseEvent()</code></a></dt>
+ <dd>Sends a <a href="MouseEvent.html" title="The MouseEvent interface represents events that occur due to the user interacting with a pointing device (such as a mouse). Common events using this interface include click, dblclick, mouseup, mousedown."><code>MouseEvent</code></a> to the <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe" title="The&nbsp;HTML Inline Frame Element&nbsp;(&lt;iframe&gt;) represents a nested browsing context, effectively embedding another HTML page into the current page. In HTML 4.01, a document may contain a head and a body or a head and a frame-set, but not both a body and a frame-set. However, an &lt;iframe&gt; can be used within a normal document body. Each browsing context has its own session history and active document. The browsing context that contains the embedded content is called the parent browsing context. The top-level browsing context (which has no parent) is typically the browser window."><code>&lt;iframe&gt;</code></a>'s content.</dd>
+ <dt><a href="HTMLIFrameElement/sendTouchEvent.html" title="The sendTouchEvent() method of the HTMLIFrameElement allows you to fake a touch event and send it to the browser &lt;iframe&gt;'s content."><code>sendTouchEvent()</code></a></dt>
+ <dd>Sends a <a href="TouchEvent.html" title="The TouchEvent interface represents an event sent when the state of contacts with a touch-sensitive surface changes. This surface can be a touch screen or trackpad, for example. The event can describe one or more points of contact with the screen and includes support for detecting movement, addition and removal of contact points, and so forth."><code>TouchEvent</code></a> to the <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe" title="The&nbsp;HTML Inline Frame Element&nbsp;(&lt;iframe&gt;) represents a nested browsing context, effectively embedding another HTML page into the current page. In HTML 4.01, a document may contain a head and a body or a head and a frame-set, but not both a body and a frame-set. However, an &lt;iframe&gt; can be used within a normal document body. Each browsing context has its own session history and active document. The browsing context that contains the embedded content is called the parent browsing context. The top-level browsing context (which has no parent) is typically the browser window."><code>&lt;iframe&gt;</code></a>'s content. Note that this method is available for touch enabled devices only.</dd>
+ <dt><a href="HTMLIFrameElement/addNextPaintListener.html" title="The addNextPaintListener() method of the HTMLIFrameElement is used to define a handler to listen for the next MozAfterPaint event coming from the browser &lt;iframe&gt;."><code>addNextPaintListener()</code></a></dt>
+ <dd>Defines a handler to listen for the next <code><a href="../Events/MozAfterPaint.html" title="/en-US/docs/Web/Events/MozAfterPaint">MozAfterPaint</a></code> event in the browser <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe" title="The&nbsp;HTML Inline Frame Element&nbsp;(&lt;iframe&gt;) represents a nested browsing context, effectively embedding another HTML page into the current page. In HTML 4.01, a document may contain a head and a body or a head and a frame-set, but not both a body and a frame-set. However, an &lt;iframe&gt; can be used within a normal document body. Each browsing context has its own session history and active document. The browsing context that contains the embedded content is called the parent browsing context. The top-level browsing context (which has no parent) is typically the browser window."><code>&lt;iframe&gt;</code></a>.</dd>
+ <dt><a href="HTMLIFrameElement/removeNextPaintListener.html" title="The removeNextPaintListener() method of the HTMLIFrameElement interface is used to remove a handler previously set with the addNextPaintListener method."><code>removeNextPaintListener()</code></a></dt>
+ <dd>Removes a handler previously set with <a href="HTMLIFrameElement/addNextPaintListener.html" title="The addNextPaintListener() method of the HTMLIFrameElement is used to define a handler to listen for the next MozAfterPaint event coming from the browser &lt;iframe&gt;."><code>addNextPaintListener()</code></a>.</dd>
+</dl>
+
+<h4 id="Utility_methods">Utility methods</h4>
+
+<p>Last, there are some utility methods, useful for apps that host a browser <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe" title="The&nbsp;HTML Inline Frame Element&nbsp;(&lt;iframe&gt;) represents a nested browsing context, effectively embedding another HTML page into the current page. In HTML 4.01, a document may contain a head and a body or a head and a frame-set, but not both a body and a frame-set. However, an &lt;iframe&gt; can be used within a normal document body. Each browsing context has its own session history and active document. The browsing context that contains the embedded content is called the parent browsing context. The top-level browsing context (which has no parent) is typically the browser window."><code>&lt;iframe&gt;</code></a>.</p>
+
+<dl>
+ <dt><a href="HTMLIFrameElement/download.html" title="The download() method of the HTMLIFrameElement interface downloads a specified URL, storing it at /sdcard/download."><code>download()</code></a></dt>
+ <dd>Downloads a specified URL, storing it at the specified filename/path.</dd>
+ <dt><a href="HTMLIFrameElement/getContentDimensions.html" title="The getContentDimensions() method of the HTMLIFrameElement interface retrieves the X and Y dimensions of the content window."><code>getContentDimensions()</code></a></dt>
+ <dd>Retrieves the X and Y dimensions of the content window.</dd>
+ <dt><a href="HTMLIFrameElement/getManifest.html" title="The getManifest() method of the HTMLIFrameElement interface retrieves the manifest of an app loaded in the browser &lt;iframe&gt; and returns it as JSON."><code>getManifest()</code></a> <span class="inlineIndicator optional optionalInline" title="Available">Firefox OS 2.5+ Only</span></dt>
+ <dd>Retrieves the manifest of an app loaded in the browser <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe" title="The&nbsp;HTML Inline Frame Element&nbsp;(&lt;iframe&gt;) represents a nested browsing context, effectively embedding another HTML page into the current page. In HTML 4.01, a document may contain a head and a body or a head and a frame-set, but not both a body and a frame-set. However, an &lt;iframe&gt; can be used within a normal document body. Each browsing context has its own session history and active document. The browsing context that contains the embedded content is called the parent browsing context. The top-level browsing context (which has no parent) is typically the browser window."><code>&lt;iframe&gt;</code></a> and returns it as JSON.</dd>
+ <dt><a href="HTMLIFrameElement/getScreenshot.html" title="The getScreenshot() method of the HTMLIFrameElement lets you request a screenshot of an content &lt;iframe&gt;, scaled to fit within a specified maximum width and height. The image will be cropped if necessary but will not be distorted vertically or horizontally."><code>getScreenshot()</code></a></dt>
+ <dd>Takes a screenshot of the browser <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe" title="The&nbsp;HTML Inline Frame Element&nbsp;(&lt;iframe&gt;) represents a nested browsing context, effectively embedding another HTML page into the current page. In HTML 4.01, a document may contain a head and a body or a head and a frame-set, but not both a body and a frame-set. However, an &lt;iframe&gt; can be used within a normal document body. Each browsing context has its own session history and active document. The browsing context that contains the embedded content is called the parent browsing context. The top-level browsing context (which has no parent) is typically the browser window."><code>&lt;iframe&gt;</code></a>'s content. This is particularly useful to get thumbnails of tabs in a tabbed browser app.</dd>
+ <dt><a href="HTMLIFrameElement/getStructuredData.html" title="The getStructuredData() method of the HTMLIFrameElement interface retrieves any structured microdata (and hCard and hCalendar microformat data) contained in the HTML loaded in the browser &lt;iframe&gt; and returns it as JSON."><code>getStructuredData()</code></a> <span class="inlineIndicator optional optionalInline" title="Available">Firefox OS 2.5+ Only</span></dt>
+ <dd>Retrieves any structured microdata (and hCard and hCalendar microformat data) contained in the HTML loaded in the browser <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe" title="The&nbsp;HTML Inline Frame Element&nbsp;(&lt;iframe&gt;) represents a nested browsing context, effectively embedding another HTML page into the current page. In HTML 4.01, a document may contain a head and a body or a head and a frame-set, but not both a body and a frame-set. However, an &lt;iframe&gt; can be used within a normal document body. Each browsing context has its own session history and active document. The browsing context that contains the embedded content is called the parent browsing context. The top-level browsing context (which has no parent) is typically the browser window."><code>&lt;iframe&gt;</code></a> and returns it as JSON.</dd>
+ <dt><a href="HTMLIFrameElement/zoom.html" title="The zoom() method of the HTMLIFrameElement interface changes the zoom factor of the browser &lt;iframe&gt;'s content. This is particularly useful for zooming in/out on non-touch-enabled devices."><code>zoom()</code></a></dt>
+ <dd>Changes the zoom factor of the browser <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe" title="The&nbsp;HTML Inline Frame Element&nbsp;(&lt;iframe&gt;) represents a nested browsing context, effectively embedding another HTML page into the current page. In HTML 4.01, a document may contain a head and a body or a head and a frame-set, but not both a body and a frame-set. However, an &lt;iframe&gt; can be used within a normal document body. Each browsing context has its own session history and active document. The browsing context that contains the embedded content is called the parent browsing context. The top-level browsing context (which has no parent) is typically the browser window."><code>&lt;iframe&gt;</code></a>'s content. This is particularly useful for zooming in/out on non-touch-enabled devices.</dd>
+</dl>
+
+<dl>
+</dl>
+
+<ul>
+</ul>
+
+<ul>
+</ul>
+
+<h2 id="Specifications">Specifications</h2>
+
+<table class="standard-table">
+ <tbody>
+  <tr>
+   <th scope="col">Specification</th>
+   <th scope="col">Status</th>
+   <th scope="col">Comment</th>
+  </tr>
+  <tr>
+   <td><a href="https://w3c.github.io/webappsec-referrer-policy/#referrer-policy-delivery-referrer-attribute" class="external" lang="en" hreflang="en">Referrer Policy<br><small lang="en-US">The definition of 'referrer attribute' in that specification.</small></a></td>
+   <td><span class="spec-WD">Working Draft</span></td>
+   <td>Added the <code>referrerPolicy</code> property.</td>
+  </tr>
+  <tr>
+   <td><a href="https://html.spec.whatwg.org/multipage/the-iframe-element.html#the-iframe-element" class="external" lang="en" hreflang="en">WHATWG HTML Living Standard<br><small lang="en-US">The definition of 'HTMLIFrameElement' in that specification.</small></a></td>
+   <td><span class="spec-Living">Living Standard</span></td>
+   <td>The following property has been added: <code>allowFullscreen</code>.</td>
+  </tr>
+  <tr>
+   <td><a href="http://www.w3.org/TR/html5/embedded-content-0.html#the-iframe-element" class="external" lang="en" hreflang="en">HTML5<br><small lang="en-US">The definition of 'HTMLIFrameElement' in that specification.</small></a></td>
+   <td><span class="spec-REC">Recommendation</span></td>
+   <td>The following properties are now obsolete: <code>scrolling</code>, <code>marginWidth</code>, <code>marginHeight</code>, <code>longDesc</code>, <code>frameBorder</code>, and <code>align</code>.<br>
+    The following properties have been added: <code>srcdoc</code>, <code>sandbox</code>, <code>seamless</code>, and <code>contentWindow</code>.</td>
+  </tr>
+  <tr>
+   <td><a href="http://www.w3.org/TR/DOM-Level-2-HTML/html.html#ID-50708718" class="external" lang="en" hreflang="en">Document Object Model (DOM) Level 2 HTML Specification<br><small lang="en-US">The definition of 'HTMLIFrameElement' in that specification.</small></a></td>
+   <td><span class="spec-REC">Recommendation</span></td>
+   <td>The <code>contentDocument</code> property has been added.</td>
+  </tr>
+  <tr>
+   <td><a href="http://www.w3.org/TR/REC-DOM-Level-1/level-one-html.html#ID-50708718" class="external" lang="en" hreflang="en">Document Object Model (DOM) Level 1 Specification<br><small lang="en-US">The definition of 'HTMLIFrameElement' in that specification.</small></a></td>
+   <td><span class="spec-REC">Recommendation</span></td>
+   <td>Initial definition.</td>
+  </tr>
+ </tbody>
+</table>
+
+<h2 id="Browser_compatibility">Browser compatibility</h2>
+
+<div><div class="htab"> 
+    <a name="AutoCompatibilityTable" id="AutoCompatibilityTable"></a> 
+    <ul> 
+        <li class="selected"><a>Desktop</a></li> 
+        <li><a>Mobile</a></li> 
+    </ul> 
+</div></div>
+
+<div id="compat-desktop">
+<table class="compat-table">
+ <tbody>
+  <tr>
+   <th>Feature</th>
+   <th>Chrome</th>
+   <th>Firefox (Gecko)</th>
+   <th>Internet Explorer</th>
+   <th>Opera</th>
+   <th>Safari (WebKit)</th>
+  </tr>
+  <tr>
+   <td>Basic support</td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td>1.0 (1.7 or earlier)</td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+  </tr>
+  <tr>
+   <td><code>srcdoc</code></td>
+   <td>4</td>
+   <td><a href="https://developer.mozilla.org/en-US/Firefox/Releases/25" title="Released on 2013-10-29.">25</a> (25)</td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+  </tr>
+  <tr>
+   <td><code>sandbox</code></td>
+   <td>4</td>
+   <td><a href="https://developer.mozilla.org/en-US/Firefox/Releases/17" title="Released on 2012-11-20.">17</a> (17)<sup>[1]</sup></td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+  </tr>
+  <tr>
+   <td><code>seamless</code> <span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></td>
+   <td>4</td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+  </tr>
+  <tr>
+   <td><code>contentDocument</code></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td>8.0<sup>[4]</sup></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+  </tr>
+  <tr>
+   <td><code>contentWindow</code></td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+  </tr>
+  <tr>
+   <td><code>allowFullScreen</code> <span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></td>
+   <td>17 <span class="inlineIndicator prefixBox prefixBoxInline" title="prefix"><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Prefixes" title="The name of this feature is prefixed with '-webkit' as this browser considers it experimental">-webkit</a></span><sup>[5]</sup></td>
+   <td><a href="https://developer.mozilla.org/en-US/Firefox/Releases/9" title="Released on 2011-12-20.">9.0</a> (9.0) <span class="inlineIndicator prefixBox prefixBoxInline" title="prefix"><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Prefixes" title="The name of this feature is prefixed with '-moz' as this browser considers it experimental">-moz</a></span><br>
+    <a href="https://developer.mozilla.org/en-US/Firefox/Releases/18" title="Released on 2013-01-08.">18.0</a> (18.0)</td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+  </tr>
+  <tr>
+   <td><code>referrerPolicy</code> <span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+   <td><a href="https://developer.mozilla.org/en-US/Firefox/Releases/42" title="Released on 2015-11-03.">42</a> (42) <sup>[3]</sup></td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+  </tr>
+  <tr>
+   <td>Browser API methods</td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+   <td><span style="color: #f00;">No&nbsp;support</span><sup>[6]</sup></td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+  </tr>
+ </tbody>
+</table>
+</div>
+
+<div id="compat-mobile">
+<table class="compat-table">
+ <tbody>
+  <tr>
+   <th>Feature</th>
+   <th>Android</th>
+   <th>Firefox Mobile (Gecko)</th>
+   <th>Firefox OS (Gecko)</th>
+   <th>IE Phone</th>
+   <th>Opera Mobile</th>
+   <th>Safari Mobile</th>
+  </tr>
+  <tr>
+   <td>Basic support</td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td>1.0 (1.0)</td>
+   <td>1.0.1</td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+  </tr>
+  <tr>
+   <td><code>srcdoc</code></td>
+   <td>4</td>
+   <td>25.0 (25)</td>
+   <td>1.1</td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+  </tr>
+  <tr>
+   <td><code>sandbox</code></td>
+   <td>4</td>
+   <td>17.0 (17)<sup>[1]</sup></td>
+   <td>1.0.1</td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+  </tr>
+  <tr>
+   <td><code>seamless</code> <span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></td>
+   <td>4</td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+  </tr>
+  <tr>
+   <td><code>contentDocument</code></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td>1.0.1</td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+   <td><span title="Please update this with the earliest version of support." style="color: #888;">(Yes)</span></td>
+  </tr>
+  <tr>
+   <td><code>contentWindow</code></td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td>1.0.1</td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+   <td><span title="Compatibility unknown; please update this." style="color: rgb(255, 153, 0);">?</span></td>
+  </tr>
+  <tr>
+   <td><code>allowFullScreen</code> <span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></td>
+   <td>17 <span class="inlineIndicator prefixBox prefixBoxInline" title="prefix"><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Prefixes" title="The name of this feature is prefixed with '-webkit' as this browser considers it experimental">-webkit</a></span><sup>[5]</sup></td>
+   <td>9.0 (9.0) <span class="inlineIndicator prefixBox prefixBoxInline" title="prefix"><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Prefixes" title="The name of this feature is prefixed with '-moz' as this browser considers it experimental">-moz</a></span><br>
+    18.0 (18.0)</td>
+   <td>1.0.1</td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+  </tr>
+  <tr>
+   <td><code>referrerPolicy</code> <span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+   <td>42.0 (42)<sup>[3]</sup></td>
+   <td>2.5</td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+  </tr>
+  <tr>
+   <td>Browser API methods</td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+   <td>1.0.1<sup>[2]</sup></td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+   <td><span style="color: #f00;">No&nbsp;support</span></td>
+  </tr>
+ </tbody>
+</table>
+</div>
+
+<ul>
+ <li>[1] Previously, the type of <code>sandbox</code> was a <a href="DOMString.html" title="DOMString is a UTF-16 String. As JavaScript already uses such strings, DOMString is mapped directly to a String."><code>DOMString</code></a> instead of a <a href="DOMSettableTokenList.html" class="new" title="The documentation about this has not yet been written; please consider contributing!"><code>DOMSettableTokenList</code></a>. This has been fixed with <a href="https://developer.mozilla.org/en-US/Firefox/Releases/29/Site_Compatibility">Gecko&nbsp;29.0</a> (Firefox 29 / Thunderbird 29 / SeaMonkey 2.26)) (<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=845067" class="external" title="Send Email screen update">bug&nbsp;845067</a>). Other browsers may still implement the property as <code>DOMString</code> since it was a late change in the specification.</li>
+ <li>[2] Requires privileged app, and <code>browser</code> and/or <code>embed-apps</code> permissions, depending on what you want to do. See <a href="Using_the_Browser_API.html#The_manifest.webapp">Using the Browser API</a> for more details. Most of the proprietary Browser API methods are supported from Firefox OS 1.0.1 onwards; they are marked where this is not the case.</li>
+ <li>[3] This property was named <code>referrer</code> from Firefox 42 to 44.</li>
+ <li>[4] For older version use <code>HTMLIFrameElement.contentWindow.document</code> instead.</li>
+ <li>[5] Daily test builds only.</li>
+ <li>[6] Supported in chrome code only.</li>
+</ul>
+
+<h2 id="See_also">See also</h2>
+
+<ul>
+ <li>The HTML element implementing this interface: <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe" title="The&nbsp;HTML Inline Frame Element&nbsp;(&lt;iframe&gt;) represents a nested browsing context, effectively embedding another HTML page into the current page. In HTML 4.01, a document may contain a head and a body or a head and a frame-set, but not both a body and a frame-set. However, an &lt;iframe&gt; can be used within a normal document body. Each browsing context has its own session history and active document. The browsing context that contains the embedded content is called the parent browsing context. The top-level browsing context (which has no parent) is typically the browser window."><code>&lt;iframe&gt;</code></a></li>
+</ul>
+                  
+                
+              </article>
+
+              
+
+    
+    
+    
+
+    
+    
+    
+
+    <div class="share">
+        <strong>Share:</strong>
+        <ul>
+            <li><a href="http://twitter.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FAPI%2FHTMLIFrameElement%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dtwitter.com&amp;text=I+learned+about+HTMLIFrameElement+on+MDN." target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=twitter.com" data-title="I learned about HTMLIFrameElement on MDN." class="share-link twitter"><i aria-hidden="true" class="icon-twitter"></i>Twitter</a></li>
+            <li><a href="http://facebook.com/sharer.php?s=100&amp;p[url]=https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" data-title="I learned about HTMLIFrameElement on MDN." class="share-link facebook"><i aria-hidden="true" class="icon-facebook"></i>Facebook</a></li>
+            <li><a href="https://plus.google.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FAPI%2FHTMLIFrameElement%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dplus.google.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=plus.google.com" data-title="I learned about HTMLIFrameElement on MDN." class="share-link gplus"><i aria-hidden="true" class="icon-google-plus"></i>Google+</a></li>
+        </ul>
+    </div>
+
+              
+
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                  
+                  
+  <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags icon-fw"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+      
+        <li><a href="../../tag/API.html">API</a></li>
+      
+        <li><a href="../../tag/HTML%20DOM.html">HTML DOM</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Interface">Interface</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Reference">Reference</a></li>
+      
+    </ul>
+  </div>
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-group icon-fw"></i>&nbsp;<strong>Contributors to this page:</strong> 
+        <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills">chrisdavidmills</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Sebastianz">Sebastianz</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/teoli">teoli</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Gabrys1">Gabrys1</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/mbarak">mbarak</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/kohei.yoshino">kohei.yoshino</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/kscarfone">kscarfone</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Jeremie">Jeremie</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Sheppy">Sheppy</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/ethertank">ethertank</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/fscholz">fscholz</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/Nickolay">Nickolay</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/jswisher">jswisher</a>
+    
+                    </div>
+                  
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o icon-fw"></i>&nbsp;<strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills">chrisdavidmills</a>,
+                      <time datetime="2016-03-17T03:31:44-07:00">Mar 17, 2016, 3:31:44 AM</time>
+                    </div>
+                  
+                </div>
+              
+            </div>
+
+            
+              <!-- quick links and zone subnav strip -->
+              <div id="wiki-left" class="column-strip wiki-column">
+
+              
+
+                
+
+                
+                  <!-- quick links -->
+                  
+  <div class="quick-links" id="quick-links">
+    <div class="title see-also">See also</div>
+    <ol><li><strong><a href="HTMLIFrameElement.html"><code>HTMLIFrameElement</code></a></strong></li><li data-default-state="open"><a href="#"><strong>Properties</strong></a><ol><li><a href="HTMLIFrameElement/contentWindow.html" title="The contentWindow property returns the Window object of an &lt;iframe&gt; element. You can use this Window object to access the iframe's document and its internal DOM. This attribute is read-only, but its properties can be manipulated like the global Window object."><code>contentWindow</code></a></li><li><span class="sidebar-icon"><span title="This is an experimental API that should not be used in production code."><i class="icon-beaker"> </i></span></span><a href="HTMLIFrameElement/referrerPolicy.html" title="The HTMLIFrameElement.referrerPolicy property reflect the HTML referrer attribute of the &lt;iframe&gt; element defining which referrer is sent when fetching the resource."><code>referrerPolicy</code></a></li></ol></li><li data-default-state="open"><a href="#"><strong>Methods</strong></a><ol><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="HTMLIFrameElement/addNextPaintListener.html" title="The addNextPaintListener() method of the HTMLIFrameElement is used to define a handler to listen for the next MozAfterPaint event coming from the browser &lt;iframe&gt;."><code>addNextPaintListener()</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="HTMLIFrameElement/clearMatch.html" title="The clearMatch() method of the HTMLIFrameElement clears any content highlighted by findAll() or findNext()."><code>clearMatch()</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="HTMLIFrameElement/download.html" title="The download() method of the HTMLIFrameElement interface downloads a specified URL, storing it at /sdcard/download."><code>download()</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="HTMLIFrameElement/executeScript.html" title="The executeScript() method of the HTMLIFrameElement interface allows a specified script to be executed against a page loaded in the browser &lt;iframe&gt;."><code>executeScript()</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="HTMLIFrameElement/findAll.html" title="The findAll() method of the HTMLIFrameElement searches for a string in a&nbsp;browser&nbsp;&lt;iframe&gt;'s text content; if found, the first instance of the string relative to the caret position will be highlighted."><code>findAll()</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="HTMLIFrameElement/findNext.html" title="The findNext() method of the HTMLIFrameElement highlights the next or previous instance of a search result after a findAll() search has been carried out."><code>findNext()</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="HTMLIFrameElement/getActive.html" title="The getActive() method of the HTMLIFrameElement indicates whether the current browser &lt;iframe&gt; is the currently active frame."><code>getActive()</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="HTMLIFrameElement/getCanGoBack.html" title="The getCanGoBack() method of the HTMLIFrameElement interface is used to indicate whether it's possible to go back in the navigation history of the browser &lt;iframe&gt;."><code>getCanGoBack()</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="HTMLIFrameElement/getCanGoForward.html" title="The getCanGoForward() method of the HTMLIFrameElement is used to indicate whether it's possible to go forward in the navigation history of the browser &lt;iframe&gt;."><code>getCanGoForward()</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="HTMLIFrameElement/getContentDimensions.html" title="The getContentDimensions() method of the HTMLIFrameElement interface retrieves the X and Y dimensions of the content window."><code>getContentDimensions()</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="HTMLIFrameElement/getManifest.html" title="The getManifest() method of the HTMLIFrameElement interface retrieves the manifest of an app loaded in the browser &lt;iframe&gt; and returns it as JSON."><code>getManifest()</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="HTMLIFrameElement/getMuted.html" title="The getMuted() method of the HTMLIFrameElement indicates whether the browser &lt;iframe&gt; is currently muted."><code>getMuted()</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="HTMLIFrameElement/getScreenshot.html" title="The getScreenshot() method of the HTMLIFrameElement lets you request a screenshot of an content &lt;iframe&gt;, scaled to fit within a specified maximum width and height. The image will be cropped if necessary but will not be distorted vertically or horizontally."><code>getScreenshot()</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="HTMLIFrameElement/getStructuredData.html" title="The getStructuredData() method of the HTMLIFrameElement interface retrieves any structured microdata (and hCard and hCalendar microformat data) contained in the HTML loaded in the browser &lt;iframe&gt; and returns it as JSON."><code>getStructuredData()</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="HTMLIFrameElement/getVisible.html" title="The getVisible() method of the HTMLIFrameElement is used to request the current visible state of the browser &lt;iframe&gt;."><code>getVisible()</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="HTMLIFrameElement/getVolume.html" title="The getVolume() method of the HTMLIFrameElement gets the current volume of the browser &lt;iframe&gt;."><code>getVolume()</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="HTMLIFrameElement/goBack.html" title="The goBack() method of the HTMLIFrameElement interface is used to navigate backwards in the browser &lt;iframe&gt;'s history."><code>goBack()</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="HTMLIFrameElement/goForward.html" title="The goForward() method of the HTMLIFrameElement is used to navigate forward in the browser &lt;iframe&gt;'s history."><code>goForward()</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="HTMLIFrameElement/mute.html" title="The mute() method of the HTMLIFrameElement mutes any audio playing in the browser &lt;iframe&gt;."><code>mute()</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="HTMLIFrameElement/purgeHistory.html" title="The purgeHistory() method of the HTMLIFrameElement interface is used to clear the browsing history associated with the browser &lt;iframe&gt;. It only deletes history, not cookies or other stored information."><code>purgeHistory()</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="HTMLIFrameElement/reload.html" title="The reload() method of the HTMLIFrameElement interface is used to reload the content of the &lt;iframe&gt;."><code>reload()</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="HTMLIframeElement/removeNextPaintListener-2.html" title="The removeNextPaintListener() method of the HTMLIFrameElement interface is used to remove a handler previously set with the addNextPaintListener method."><code>removeNextPaintListener()</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="HTMLIFrameElement/sendMouseEvent.html" title="The sendMouseEvent() method of the HTMLIFrameElement interface allows you to fake a mouse event and send it to the browser &lt;iframe&gt;'s content."><code>sendMouseEvent()</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="HTMLIFrameElement/sendTouchEvent.html" title="The sendTouchEvent() method of the HTMLIFrameElement allows you to fake a touch event and send it to the browser &lt;iframe&gt;'s content."><code>sendTouchEvent()</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="HTMLIFrameElement/setActive.html" title="The setActive() method of the HTMLIFrameElement sets the current &lt;iframe&gt; as the active frame, which has an effect on how it is prioritized by the process manager."><code>setActive()</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="HTMLIFrameElement/setInputMethodActive.html" title="The setInputMethodActive() method of the HTMLIFrameElement sets the current browser &lt;iframe&gt; as an active Input Method Editor (IME) window and other iframes as non-active IME windows. Useful when a top level app wants to activate a window as an IME."><code>setInputMethodActive()</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="HTMLIFrameElement/setNfcFocus.html" title="The setNfcFocus() method of the HTMLIFrameElement interface sets whether an &lt;iframe&gt; can receive an NFC event."><code>setNfcFocus()</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="HTMLIFrameElement/setVisible.html" title="The setVisible() method of the HTMLIFrameElement is used to change the visibility state of the browser &lt;iframe&gt;."><code>setVisible()</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="HTMLIFrameElement/setVolume.html" title="The setVolume() method of the HTMLIFrameElement sets the current volume of the browser &lt;iframe&gt;."><code>setVolume()</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="HTMLIFrameElement/stop.html" title="The stop() method of the HTMLIFrameElement interface is used to stop loading the content of the &lt;iframe&gt;."><code>stop()</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="HTMLIFrameElement/unmute.html" title="The unmute() method of the HTMLIFrameElement unmutes any audio playing in the browser &lt;iframe&gt;."><code>unmute()</code></a></li><li><span class="sidebar-icon"><span title="This API has not been standardized."><i class="icon-warning-sign"> </i></span></span><a href="HTMLIFrameElement/zoom.html" title="The zoom() method of the HTMLIFrameElement interface changes the zoom factor of the browser &lt;iframe&gt;'s content. This is particularly useful for zooming in/out on non-touch-enabled devices."><code>zoom()</code></a></li></ol></li><li data-default-state="open"><a href="#"><strong>Inheritance:</strong></a><ol><li><a href="HTMLElement.html"><code>HTMLElement</code></a></li><li><a href="Element.html"><code>Element</code></a></li><li><a href="Node.html"><code>Node</code></a></li><li><a href="EventTarget.html"><code>EventTarget</code></a></li></ol></li><li data-default-state="open"><a href="#"><strong>Events</strong></a><ol><li><a href="../Events/abort.html"><code>abort</code></a></li><li><a href="../Events/autocomplete.html"><code>autocomplete</code></a></li><li><a href="../Events/autocompleteerror.html"><code>autocompleteerror</code></a></li><li><a href="../Events/DOMContentLoaded.html"><code>DOMContentLoaded</code></a></li><li><a href="../Events/afterprint.html"><code>afterprint</code></a></li><li><a href="../Events/afterscriptexecute.html"><code>afterscriptexecute</code></a></li><li><a href="../Events/beforeprint.html"><code>beforeprint</code></a></li><li><a href="../Events/beforescriptexecute.html"><code>beforescriptexecute</code></a></li><li><a href="../Events/beforeunload.html"><code>beforeunload</code></a></li><li><a href="../Events/blur.html"><code>blur</code></a></li><li><a href="../Events/cancel.html"><code>cancel</code></a></li><li><a href="../Events/change.html"><code>change</code></a></li><li><a href="../Events/click.html"><code>click</code></a></li><li><a href="../Events/close.html"><code>close</code></a></li><li><a href="../Events/connect.html"><code>connect</code></a></li><li><a href="../Events/contextmenu.html"><code>contextmenu</code></a></li><li><a href="../Events/error.html"><code>error</code></a></li><li><a href="../Events/focus.html"><code>focus</code></a></li><li><a href="../Events/hashchange.html"><code>hashchange</code></a></li><li><a href="../Events/input.html"><code>input</code></a></li><li><a href="../Events/invalid.html"><code>invalid</code></a></li><li><a href="../Events/languagechange.html"><code>languagechange</code></a></li><li><a href="../Events/load.html"><code>load</code></a></li><li><a href="../Events/loadend.html"><code>loadend</code></a></li><li><a href="../Events/loadstart.html"><code>loadstart</code></a></li><li><a href="../Events/message.html"><code>message</code></a></li><li><a href="../Events/offline.html"><code>offline</code></a></li><li><a href="../Events/online.html"><code>online</code></a></li><li><a href="../Events/open.html"><code>open</code></a></li><li><a href="../Events/pagehide.html"><code>pagehide</code></a></li><li><a href="../Events/pageshow.html"><code>pageshow</code></a></li><li><a href="../Events/popstate.html"><code>popstate</code></a></li><li><a href="../Events/progress.html"><code>progress</code></a></li><li><a href="../Events/readystatechange.html"><code>readystatechange</code></a></li><li><a href="../Events/reset.html"><code>reset</code></a></li><li><a href="../Events/select.html"><code>select</code></a></li><li><a href="../Events/show.html"><code>show</code></a></li><li><a href="../Events/sort.html"><code>sort</code></a></li><li><a href="../Events/storage.html"><code>storage</code></a></li><li><a href="../Events/submit.html"><code>submit</code></a></li><li><a href="../Events/toggle.html"><code>toggle</code></a></li><li><a href="../Events/unload.html"><code>unload</code></a></li><li><a href="../Events/loadeddata.html"><code>loadeddata</code></a></li><li><a href="../Events/loadedmetadata.html"><code>loadedmetadata</code></a></li><li><a href="../Events/canplay.html"><code>canplay</code></a></li><li><a href="../Events/playing.html"><code>playing</code></a></li><li><a href="../Events/play.html"><code>play</code></a></li><li><a href="../Events/canplaythrough.html"><code>canplaythrough</code></a></li><li><a href="../Events/seeked.html"><code>seeked</code></a></li><li><a href="../Events/seeking.html"><code>seeking</code></a></li><li><a href="../Events/stalled.html"><code>stalled</code></a></li><li><a href="../Events/suspend.html"><code>suspend</code></a></li><li><a href="../Events/timeupdate.html"><code>timeupdate</code></a></li><li><a href="../Events/volumechange.html"><code>volumechange</code></a></li><li><a href="../Events/waiting.html"><code>waiting</code></a></li><li><a href="../Events/durationchange.html"><code>durationchange</code></a></li><li><a href="../Events/emptied.html"><code>emptied</code></a></li></ol></li><li data-default-state="open"><a href="#"><strong>Related pages for HTML DOM</strong></a><ol><li><a href="BeforeUnloadEvent.html"><code>BeforeUnloadEvent</code></a></li><li><a href="DOMStringMap.html"><code>DOMStringMap</code></a></li><li><a href="ErrorEvent.html"><code>ErrorEvent</code></a></li><li><a href="GlobalEventHandlers.html"><code>GlobalEventHandlers</code></a></li><li><a href="HTMLAnchorElement.html"><code>HTMLAnchorElement</code></a></li><li><a href="HTMLAreaElement.html"><code>HTMLAreaElement</code></a></li><li><a href="HTMLAudioElement.html"><code>HTMLAudioElement</code></a></li><li><a href="HTMLBRElement.html"><code>HTMLBRElement</code></a></li><li><a href="HTMLBaseElement.html"><code>HTMLBaseElement</code></a></li><li><a href="HTMLBaseFontElement.html"><code>HTMLBaseFontElement</code></a></li><li><a href="HTMLBodyElement.html"><code>HTMLBodyElement</code></a></li><li><a href="HTMLButtonElement.html"><code>HTMLButtonElement</code></a></li><li><a href="HTMLCanvasElement.html"><code>HTMLCanvasElement</code></a></li><li><a href="HTMLContentElement.html"><code>HTMLContentElement</code></a></li><li><a href="HTMLDListElement.html"><code>HTMLDListElement</code></a></li><li><a href="HTMLDataElement.html"><code>HTMLDataElement</code></a></li><li><a href="HTMLDataListElement.html"><code>HTMLDataListElement</code></a></li><li><a href="HTMLDialogElement.html"><code>HTMLDialogElement</code></a></li><li><a href="HTMLDivElement.html"><code>HTMLDivElement</code></a></li><li><a href="HTMLDocument.html"><code>HTMLDocument</code></a></li><li><a href="HTMLElement.html"><code>HTMLElement</code></a></li><li><a href="HTMLEmbedElement.html"><code>HTMLEmbedElement</code></a></li><li><a href="HTMLFieldSetElement.html"><code>HTMLFieldSetElement</code></a></li><li><a href="HTMLFormControlsCollection.html"><code>HTMLFormControlsCollection</code></a></li><li><a href="HTMLFormElement.html"><code>HTMLFormElement</code></a></li><li><a href="HTMLFrameSetElement.html"><code>HTMLFrameSetElement</code></a></li><li><a href="HTMLHRElement.html"><code>HTMLHRElement</code></a></li><li><a href="HTMLHeadElement.html"><code>HTMLHeadElement</code></a></li><li><a href="HTMLHeadingElement.html"><code>HTMLHeadingElement</code></a></li><li><a href="HTMLHtmlElement.html"><code>HTMLHtmlElement</code></a></li><li><a href="HTMLImageElement.html"><code>HTMLImageElement</code></a></li><li><a href="HTMLInputElement.html"><code>HTMLInputElement</code></a></li><li><a href="HTMLIsIndexElement.html"><code>HTMLIsIndexElement</code></a></li><li><a href="HTMLKeygenElement.html"><code>HTMLKeygenElement</code></a></li><li><a href="HTMLLIElement.html"><code>HTMLLIElement</code></a></li><li><a href="HTMLLabelElement.html"><code>HTMLLabelElement</code></a></li><li><a href="HTMLLegendElement.html"><code>HTMLLegendElement</code></a></li><li><a href="HTMLLinkElement.html"><code>HTMLLinkElement</code></a></li><li><a href="HTMLMapElement.html"><code>HTMLMapElement</code></a></li><li><a href="HTMLMediaElement.html"><code>HTMLMediaElement</code></a></li><li><a href="HTMLMetaElement.html"><code>HTMLMetaElement</code></a></li><li><a href="HTMLMeterElement.html"><code>HTMLMeterElement</code></a></li><li><a href="HTMLModElement.html"><code>HTMLModElement</code></a></li><li><a href="HTMLOListElement.html"><code>HTMLOListElement</code></a></li><li><a href="HTMLObjectElement.html"><code>HTMLObjectElement</code></a></li><li><a href="HTMLOptGroupElement.html"><code>HTMLOptGroupElement</code></a></li><li><a href="HTMLOptionElement.html"><code>HTMLOptionElement</code></a></li><li><a href="HTMLOptionsCollection.html"><code>HTMLOptionsCollection</code></a></li><li><a href="HTMLOutputElement.html"><code>HTMLOutputElement</code></a></li><li><a href="HTMLParagraphElement.html"><code>HTMLParagraphElement</code></a></li><li><a href="HTMLParamElement.html"><code>HTMLParamElement</code></a></li><li><a href="HTMLPictureElement.html"><code>HTMLPictureElement</code></a></li><li><a href="HTMLPreElement.html"><code>HTMLPreElement</code></a></li><li><a href="HTMLProgressElement.html"><code>HTMLProgressElement</code></a></li><li><a href="HTMLQuoteElement.html"><code>HTMLQuoteElement</code></a></li><li><a href="HTMLScriptElement.html"><code>HTMLScriptElement</code></a></li><li><a href="HTMLSelectElement.html"><code>HTMLSelectElement</code></a></li><li><a href="HTMLShadowElement.html"><code>HTMLShadowElement</code></a></li><li><a href="HTMLSourceElement.html"><code>HTMLSourceElement</code></a></li><li><a href="HTMLSpanElement.html"><code>HTMLSpanElement</code></a></li><li><a href="HTMLStyleElement.html"><code>HTMLStyleElement</code></a></li><li><a href="HTMLTableCaptionElement.html"><code>HTMLTableCaptionElement</code></a></li><li><a href="HTMLTableCellElement.html"><code>HTMLTableCellElement</code></a></li><li><a href="HTMLTableColElement.html"><code>HTMLTableColElement</code></a></li><li><a href="HTMLTableDataCellElement.html"><code>HTMLTableDataCellElement</code></a></li><li><a href="HTMLTableElement.html"><code>HTMLTableElement</code></a></li><li><a href="HTMLTableHeaderCellElement.html"><code>HTMLTableHeaderCellElement</code></a></li><li><a href="HTMLTableRowElement.html"><code>HTMLTableRowElement</code></a></li><li><a href="HTMLTableSectionElement.html"><code>HTMLTableSectionElement</code></a></li><li><a href="HTMLTemplateElement.png"><code>HTMLTemplateElement</code></a></li><li><a href="HTMLTextAreaElement.html"><code>HTMLTextAreaElement</code></a></li><li><a href="HTMLTimeElement.html"><code>HTMLTimeElement</code></a></li><li><a href="HTMLTitleElement.html"><code>HTMLTitleElement</code></a></li><li><a href="HTMLTrackElement.html"><code>HTMLTrackElement</code></a></li><li><a href="HTMLUListElement.html"><code>HTMLUListElement</code></a></li><li><a href="HTMLUnknownElement.html"><code>HTMLUnknownElement</code></a></li><li><a href="HTMLVideoElement.html"><code>HTMLVideoElement</code></a></li><li><a href="HashChangeEvent.html"><code>HashChangeEvent</code></a></li><li><a href="History.html"><code>History</code></a></li><li><a href="ImageData.html"><code>ImageData</code></a></li><li><a href="Location.html"><code>Location</code></a></li><li><a href="MessageChannel.html"><code>MessageChannel</code></a></li><li><a href="MessageEvent.html"><code>MessageEvent</code></a></li><li><a href="MessagePort.html"><code>MessagePort</code></a></li><li><a href="Navigator.html"><code>Navigator</code></a></li><li><a href="NavigatorGeolocation.html"><code>NavigatorGeolocation</code></a></li><li><a href="NavigatorID.html"><code>NavigatorID</code></a></li><li><a href="NavigatorLanguage.html"><code>NavigatorLanguage</code></a></li><li><a href="NavigatorOnLine.html"><code>NavigatorOnLine</code></a></li><li><a href="NavigatorPlugins.html"><code>NavigatorPlugins</code></a></li><li><a href="PageTransitionEvent.html"><code>PageTransitionEvent</code></a></li><li><a href="Plugin.html"><code>Plugin</code></a></li><li><a href="PluginArray.html"><code>PluginArray</code></a></li><li><a href="PopStateEvent.html"><code>PopStateEvent</code></a></li><li><a href="PortCollection.html"><code>PortCollection</code></a></li><li><a href="RadioNodeList.html"><code>RadioNodeList</code></a></li><li><a href="Transferable.html"><code>Transferable</code></a></li><li><a href="ValidityState.html"><code>ValidityState</code></a></li><li><a href="WebVTT.html"><code>WebVTT</code></a></li><li><a href="Window.html"><code>Window</code></a></li><li><a href="WindowBase64.html"><code>WindowBase64</code></a></li><li><a href="WindowEventHandlers.html"><code>WindowEventHandlers</code></a></li><li><a href="WindowTimers.html"><code>WindowTimers</code></a></li></ol></li></ol>
+  </div>
+                
+
+                <!-- approvals -->
+                
+
+              
+
+              </div>
+            
+          </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Web/API/HTMLIFrameElement$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Web/API/HTMLIFrameElement$history" label="View page history"></menuitem>
+  </menu>
+
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+        
+        <div class="contentinfo">
+          <p>© 2005-2016 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>
+          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+        
+        </div>
+      </div>
+      <div class="column-strip">
+        
+          
+  
+    <form class="languages go" method="get" action="https://developer.mozilla.org/en-US/docs/Web">
+      <label for="language">Other languages:</label>
+      <select id="language" class="wiki-l10n" name="next" dir="ltr">
+        <option value="/en-US/docs/Web/API/HTMLIFrameElement" selected="">
+          English (US)
+        </option>
+        
+          <option value="/fr/docs/Web/API/HTMLIFrameElement">
+            Français
+          </option>
+          <option value="/ja/docs/Web/API/HTMLIFrameElement">
+            日本語
+          </option>
+          <option value="/pl/docs/Web/API/HTMLIFrameElement">
+            Polski
+          </option>
+      </select>
+      <noscript>&lt;button type="submit"&gt;Go&lt;/button&gt;</noscript>
+    </form>
+  
+
+        
+      </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+  
+    
+    <!--[if lte IE 8]><script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/selectivizr.091e18cf669b.js" charset="utf-8"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script type="text/javascript" src="../../../../../developer.cdn.mozilla.net/static/build/js/main.a7b27a25fb9c.js" charset="utf-8"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+    
+    <script async="" type="text/javascript" src="../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../developer.cdn.mozilla.net/static/build/js/syntax-prism-min.js" charset="utf-8"></script><script type="text/javascript" src="../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../developer.cdn.mozilla.net/static/build/js/wiki.bd71ca9fd27d.js" charset="utf-8" id="wikiscript"></script>
+
+  
+
+  <script async="" type="text/javascript" src="../../../../../developer.cdn.mozilla.net/static/build/js/helpfulness.7b208a764d28.js" charset="utf-8"></script>
+
+  
+
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 14:07:47 GMT -->
+</body></html>

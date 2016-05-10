@@ -1,0 +1,74 @@
+<!doctype html>
+<html>
+
+<!-- Mirrored from mdn.mozillademos.org/files/5031/draggable_elements.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 16:13:51 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Draggable elements</title>
+<script type="text/javascript">
+(function () {
+	var
+		oActive, nMouseX, nMouseY, nStartX, nStartY,
+		bMouseUp = true, nZFocus = /* the highest z-Index present in your page plus 1: */ 100;
+
+	document.onmousedown = function (oPssEvt1) {
+		var bExit = true, oMsEvent1 = oPssEvt1 || /* IE */ window.event;
+		for (var iNode = oMsEvent1.target; iNode; iNode = iNode.parentNode) {
+			if (iNode.className === "draggable") { bExit = false; oActive = iNode; break; }
+		}
+		if (bExit) { return; }
+		bMouseUp = false;
+		nStartX = nStartY = 0;
+		for (var iOffPar = oActive; iOffPar; iOffPar = iOffPar.offsetParent) {
+			nStartX += iOffPar.offsetLeft;
+			nStartY += iOffPar.offsetTop;
+		}
+		nMouseX = oMsEvent1.clientX;
+		nMouseY = oMsEvent1.clientY;
+		oActive.style.zIndex = nZFocus++;
+		return false;
+	};
+
+	document.onmousemove = function (oPssEvt2) {
+		if (bMouseUp) { return; }
+		var oMsEvent2 = oPssEvt2 || /* IE */ window.event;
+		oActive.style.left = String(nStartX + oMsEvent2.clientX - nMouseX) + "px";
+		oActive.style.top = String(nStartY + oMsEvent2.clientY - nMouseY) + "px";
+	};
+
+	document.onmouseup = function () {
+		bMouseUp = true;
+	};
+})();
+
+</script>
+<style type="text/css">
+.draggable {
+	position: fixed;
+	left: 0;
+	top: 0;
+	width: auto;
+	height: auto;
+	cursor: move;
+}
+ 
+#myDiv {
+	width: 300px;
+	height: 200px;
+	left: 200px;
+	top: 200px;
+	background-color: #00ff00;
+}
+</style>
+</head>
+ 
+<body>
+ 
+<div class="draggable" id="myDiv"><p>Hello world!</p></div>
+<div class="draggable" style="background-color:#aaaaaa;">Another hello world!</div>
+ 
+</body>
+
+<!-- Mirrored from mdn.mozillademos.org/files/5031/draggable_elements.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 16:13:51 GMT -->
+</html>

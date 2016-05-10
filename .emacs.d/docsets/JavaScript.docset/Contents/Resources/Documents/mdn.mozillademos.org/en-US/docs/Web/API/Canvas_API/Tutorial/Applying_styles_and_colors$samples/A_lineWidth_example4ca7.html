@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+    
+<!-- Mirrored from mdn.mozillademos.org/en-US/docs/Web/API/Canvas_API/Tutorial/Applying_styles_and_colors$samples/A_lineWidth_example?revision=1019844 by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 17:32:26 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+        <link rel="stylesheet" type="text/css" href="../../../../../../../../developer.mozilla.org/en-US/docs/Template_CustomSampleCSS2af1.css?raw=1" />
+        
+    </head>
+    <body>
+        
+            <canvas id="canvas" width="150" height="150"></canvas>
+        
+        
+            <script type="text/javascript">
+                function draw() {
+  var ctx = document.getElementById('canvas').getContext('2d');
+  for (var i = 0; i < 10; i++){
+    ctx.lineWidth = 1+i;
+    ctx.beginPath();
+    ctx.moveTo(5+i*14,5);
+    ctx.lineTo(5+i*14,140);
+    ctx.stroke();
+  }
+} draw();
+            </script>
+        
+    </body>
+
+<!-- Mirrored from mdn.mozillademos.org/en-US/docs/Web/API/Canvas_API/Tutorial/Applying_styles_and_colors$samples/A_lineWidth_example?revision=1019844 by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 17:32:26 GMT -->
+</html>

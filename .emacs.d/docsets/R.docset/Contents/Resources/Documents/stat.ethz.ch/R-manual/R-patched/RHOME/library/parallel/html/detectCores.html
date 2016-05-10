@@ -1,0 +1,108 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml">
+<!-- Mirrored from stat.ethz.ch/R-manual/R-patched/RHOME/library/parallel/html/detectCores.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 04 May 2016 17:01:45 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head><title>Detect the Number of CPU Cores</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for detectCores {parallel}"><tr><td>detectCores {parallel}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Detect the Number of CPU Cores</h2>
+
+<h3>Description</h3>
+
+<p>Attempt to detect the number of CPU cores on the current host.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+detectCores(all.tests = FALSE, logical = FALSE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>all.tests</code></td>
+<td>
+<p>Logical: if true apply all known tests.</p>
+</td></tr>
+<tr valign="top"><td><code>logical</code></td>
+<td>
+<p>Logical: if possible, use the number of physical CPUs/cores
+(if <code>FALSE</code>) or logical CPUs (if <code>TRUE</code>).  The default is
+<code>TRUE</code> on Windows and <code>FALSE</code> elsewhere.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+<p>This attempts to detect the number of CPU cores in the current
+machine.
+</p>
+<p>It has methods to do so for Linux, OS X, FreeBSD, OpenBSD, Solaris,
+Irix and Windows.  <code>detectCores(TRUE)</code> could be tried on other
+Unix-alike systems.
+</p>
+<p>Currently <code>logical</code> is supported on Solaris and Windows only.
+</p>
+
+
+<h3>Value</h3>
+
+<p>An integer, <code>NA</code> if the answer is unknown.
+</p>
+<p>Exactly what this represents is OS-dependent: where possible by
+default it counts physical cores and not logical (e.g., hyperthreaded)
+CPUs.  However, on Linux, OS X, FreeBSD and OpenBSD it currently
+returns the number of logical CPUs.
+</p>
+<p>On Windows the default is the number of logical CPUs.
+
+</p>
+<p>Currently <code>logical</code> makes a difference on Sparc Solaris: there
+<code>logical = FALSE</code> returns the number of physical cores and
+<code>logical = TRUE</code> returns the number of available hardware
+threads. (Some Sparc CPUs which do have multiple cores per CPU, others
+have multiple threads per core and some have both.)  For example, the
+UltraSparc T2 CPU in the CRAN check server is a single physical CPU
+with 8 cores, and each core supports 8 hardware threads.  So
+<code>detectCores(logical = FALSE)</code> returns 8, and
+<code>detectCores(logical = TRUE)</code> returns 64.
+</p>
+<p>Where virtual machines are in use, one would hope that the result
+represents the number of CPUs available (or potentially available) to
+that particular VM.
+</p>
+
+
+<h3>Note</h3>
+
+<p>This is not suitable for use directly for the <code>mc.cores</code> argument
+of <code>mclapply</code> nor specifying the number of cores in
+<code>makeCluster</code>.  First because it may return <code>NA</code>, and second
+because it does not give the number of <em>allowed</em> cores.
+</p>
+
+
+<h3>Author(s)</h3>
+
+<p>Simon Urbanek and Brian Ripley
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+detectCores()
+detectCores(logical = TRUE)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>parallel</em> version 3.2.3 <a href="00Index.html">Index</a>]</div>
+</body>
+<!-- Mirrored from stat.ethz.ch/R-manual/R-patched/RHOME/library/parallel/html/detectCores.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 04 May 2016 17:01:45 GMT -->
+</html>

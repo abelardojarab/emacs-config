@@ -1,0 +1,3536 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/MDN/Doc_status/API/DOM by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 17:33:48 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <script async="" src="../../../../../../www.google-analytics.com/analytics.js"></script><script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+  
+    
+  
+
+  
+  <title>API: DOM documentation status</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+  
+    
+    
+    <link href="../../../../../../developer.cdn.mozilla.net/static/build/styles/mdn.593f20d8c365.css" rel="stylesheet" type="text/css">
+
+    
+  
+    <link href="../../../../../../developer.cdn.mozilla.net/static/build/styles/wiki.13dd9abdfb62.css" rel="stylesheet" type="text/css">
+
+    
+
+    
+
+  <!-- common social tags -->
+  
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon144.a6e4162070f4.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon114.0e9fabd44f85.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon72.8ff9d87c82a0.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon57.a2490b9a2d76.png">
+  <!-- basic favicon -->
+  
+    
+  
+  <link rel="shortcut icon" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon32.e02854fdcf73.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/html5shiv.3948ccddab6f.js" charset="utf-8"></script>
+  <![endif]-->
+
+  
+  <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/MDN/Doc_status/API/DOM$json">
+  <link rel="canonical" href="DOM.html">
+
+  
+    
+      <link rel="alternate" hreflang="fr" href="https://developer.mozilla.org/fr/docs/MDN/Doc_status/API/DOM" title="Statut de la documentation API : DOM">
+    
+      <link rel="alternate" hreflang="ko" href="https://developer.mozilla.org/ko/docs/MDN/Doc_status/API/DOM" title="API 문서화 현황 : DOM">
+    
+  
+
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="API: DOM documentation status">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/MDN/Doc_status/API/DOM">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/MDN/Doc_status/API/DOM">
+  <meta name="twitter:title" content="API: DOM documentation status">
+  
+  <meta property="og:description" content="See also localization status of this section.">
+  <meta name="description" content="See also localization status of this section.">
+  <meta name="twitter:description" content="See also localization status of this section.">
+  
+
+  
+    
+
+
+
+  
+</head>
+<body data-slug="MDN/Doc_status/API/DOM" contextmenu="edit-history-menu" data-search-url="" class="document  ">
+
+  <script type="text/javascript">
+    (function(win) {
+        'use strict';
+
+        
+            (function(){
+  var FLAGS = {
+    'compat_api': false,'kumaediting': false,'page_move': false,'registration_disabled': false,'search_suggestions': false,'section_edit': false,'spam_admin_override': false,'spam_checks_enabled': true,'spam_spammer_override': false,'spam_submissions_enabled': false,'spam_testing_mode': false,'wiki_samples': true,'wiki_spam_exempted': false,'wiki_spam_training': true
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': true,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+
+        // This needs to be set before ckeditor.js loads
+        window.CKEDITOR_BASEPATH = 'https://developer.mozilla.org/static/js/libs/ckeditor/build/ckeditor/';
+
+        // This represents the site configuration
+        win.mdn = {
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+            
+            notifications: [],
+            
+            // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            },
+            // Assets that need to be dynamically injected
+            assets_disabled: {
+                css: {
+                    'editor-content': ['https://developer.cdn.mozilla.net/static/build/styles/editor-content.3d79df72080d.css',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/styles/wiki-compat-tables.f3a3bfce97a1.css',]
+                },
+                js: {
+                    'syntax-prism': ['https://developer.cdn.mozilla.net/static/build/js/syntax-prism.7a66ddfa68bf.js',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/js/wiki-compat-tables.14ce5dcb2c3d.js',]
+                }
+            }
+        };
+    })(this);
+</script>
+
+  
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+    
+      <li><a href="#q" id="skip-search">Skip to search</a></li>
+    
+  </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+    <a href="https://developer.mozilla.org/en-US/" class="logo">Mozilla Developer Network</a>
+
+    <div id="nav-sec">
+        
+                  <ul>
+                  <li>
+
+    
+
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                Sign in
+              </span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FMDN%2FDoc_status%2FAPI%2FDOM" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/MDN/Doc_status/API/DOM" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/MDN/Doc_status/API/DOM" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2FMDN%2FDoc_status%2FAPI%2FDOM" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+              
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+        
+    </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../../../Web/API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+
+   <!-- end is_zone -->
+
+    <div class="wiki-main-content" id="document-main"><div class="center">
+      
+      <div class="article-meta">
+        <!-- action buttons -->
+        
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+  <ul class="page-buttons" data-sticky="false">
+      
+      <li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+              
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/fr/docs/MDN/Doc_status/API/DOM" title="Statut de la documentation API : DOM">Français</a></bdi></li>
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/ko/docs/MDN/Doc_status/API/DOM" title="API 문서화 현황 : DOM">한국어</a></bdi></li>
+                
+              
+
+              
+                <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Doc_status/API/DOM$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+              
+            </ul>
+          </div>
+        </div>
+      </li>
+
+      <li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/MDN/Doc_status/API/DOM$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li>
+
+        
+
+        <li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Doc_status/API/DOM$history" rel="nofollow, noindex">History</a></li>
+                
+                
+                
+                
+
+                
+
+                
+                
+                
+                <li class="page-print"><a href="#" onclick="return window.print();">Print this article</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+        
+  <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/MDN" rel="v:url" property="v:title">The MDN project</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/MDN/Doc_status" rel="v:url" property="v:title">Doc status by topic</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="../API.html" rel="v:url" property="v:title">API documentation status overview</a></li>
+    
+    <li class="crumb" typeof="v:Breadcrumb" property="v:title">API: DOM documentation status</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        
+        <div class="contributor-avatars" data-all-text="see all contributors" data-alternate-message="hide contributors">
+            <ul>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/jswisher" title="View profile: jswisher">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="jswisher" data-src="../../../../../../secure.gravatar.com/avatar/38185c2812cbcae186ebbe4a829106616c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">jswisher</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/fscholz" title="View profile: fscholz">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="fscholz" data-src="../../../../../../secure.gravatar.com/avatar/e24391c9174352988d819a9b9ea77c9e6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">fscholz</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/teoli" title="View profile: teoli">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="teoli" data-src="../../../../../../secure.gravatar.com/avatar/d0d90148e08e3b64ccf75c46f31442c56c02.png?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">teoli</noscript></a>
+                </li>
+            
+            </ul>
+        </div>
+        
+
+        <h1>API: DOM documentation status</h1>
+
+      </div>
+      
+
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-closed wiki-right-none wiki-left-present">
+
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+            
+
+            
+            
+              
+            
+
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-main wiki-column text-content">
+
+              
+
+              
+
+              
+                
+                
+                
+              
+              
+
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                
+                  
+                    <div><!-- --></div>
+
+<div><section id="Quick_Links" class="Quick_links"><!-- --></section></div>
+
+<p>This page tracks ongoing documentation work in the MDN <strong>DOM </strong>section. Feel free to contribute!</p>
+
+<div class="note">
+<p><strong>Note</strong>: This list is not yet complete as proper tagging of API pages is still to be done.</p>
+</div>
+
+<h2 id="Summary">Summary</h2>
+
+<p></p><table class="docstatussummary standard-table"> 
+  <thead> 
+    <tr> 
+ 
+    <th><a href="../../../Web/API/Index.html">Pages</a></th> 
+ 
+    <th><a href="DOM.html#Needs*_tags">Needs* tags</a></th> 
+ 
+    <th><a href="DOM.html#Missing_tags">Missing tags</a></th> 
+ 
+    <th><a href="DOM.html#Editorial_reviews">Editorial reviews</a></th> 
+ 
+    <th><a href="DOM.html#Technical_reviews">Technical reviews</a></th> 
+ 
+    <th><a href="DOM.html#Outdated_pages">Outdated pages</a></th> 
+ 
+    <th><a href="DOM.html#Missing_pages">Missing pages</a></th> 
+ 
+    <th><a href="DOM.html#Dev-doc-needed_bugs">Dev-doc-needed bugs</a></th> 
+ 
+    <th><a href="DOM.html#Documentation_requests">Documentation requests</a></th> 
+ 
+    </tr> 
+  </thead> 
+  <tbody> 
+    <tr> 
+ 
+    <td>581</td> 
+ 
+    <td style="background-color: rgb(255, 204, 204);">99 (18%) </td> 
+ 
+    <td style="background-color: rgb(204, 255, 153);">0 (0%) </td> 
+ 
+    <td style="background-color: rgb(204, 255, 153);">5 (1%) </td> 
+ 
+    <td style="background-color: rgb(255, 204, 204);">88 (16%) </td> 
+ 
+    <td style="background-color: rgb(255, 204, 204);">122 (21%) </td> 
+ 
+    <td style="background-color: rgb(255, 204, 204);">117 (21%) </td> 
+ 
+    <td style="background-color: rgb(255, 204, 204);">221 (39%) </td> 
+ 
+    <td style="background-color: rgb(255, 255, 153);">24 (5%) </td> 
+ 
+    </tr> 
+  </tbody> 
+</table> 
+ 
+<p>See also <a href="DOM.html#Localizations">localization status</a> of this section.</p> 
+ 
+ 
+ 
+ 
+ 
+ 
+<h2 id="Needs*_tags">Needs* tags</h2> 
+ 
+ 
+<p><strong>Found 99 pages.</strong> Learn more about <a href="https://developer.mozilla.org/en-US/docs/MDN/Contribute/Howto/Tag#Document_metadata">how to deal with meta-tags</a>.</p> 
+<div class="wideColumnBox wideColumnBoxList"> 
+<ul> 
+ 
+    <li> 
+        <strong>NeedsBrowserCompatibility</strong> 
+        <ul> 
+ 
+            <li><a href="../../../Web/API/Attr.html">Attr</a></li> 
+ 
+            <li><a href="../../../Web/API/CompositionEvent.html">CompositionEvent</a></li> 
+ 
+            <li><a href="../../../Web/API/console/assert-2.html">Console.assert()</a></li> 
+ 
+            <li><a href="../../../Web/API/Console/count.html">Console.count()</a></li> 
+ 
+            <li><a href="../../../Web/API/Console/dir.html">Console.dir()</a></li> 
+ 
+            <li><a href="../../../Web/API/Console/dirxml.html">Console.dirxml()</a></li> 
+ 
+            <li><a href="../../../Web/API/Console/error.html">Console.error()</a></li> 
+ 
+            <li><a href="../../../Web/API/Console/group.html">Console.group()</a></li> 
+ 
+            <li><a href="../../../Web/API/Console/groupCollapsed.html">Console.groupCollapsed()</a></li> 
+ 
+            <li><a href="../../../Web/API/Console/groupEnd.html">Console.groupEnd()</a></li> 
+ 
+            <li><a href="../../../Web/API/Console/log.html">Console.log()</a></li> 
+ 
+            <li><a href="../../../Web/API/Console/time.html">Console.time()</a></li> 
+ 
+            <li><a href="../../../Web/API/Console/timeStamp.html">Console.timeStamp()</a></li> 
+ 
+            <li><a href="../../../Web/API/Console/trace.html">Console.trace()</a></li> 
+ 
+            <li><a href="../../../Web/API/Console/warn.html">Console.warn()</a></li> 
+ 
+            <li><a href="../../../Web/API/DOMTokenList.html">DOMTokenList</a></li> 
+ 
+            <li><a href="../../../Web/API/Document/createProcessingInstruction.html">Document.createProcessingInstruction()</a></li> 
+ 
+            <li><a href="../../../Web/API/Document/execCommand.html">Document.execCommand()</a></li> 
+ 
+            <li><a href="../../../Web/API/Document/hasFocus.html">Document.hasFocus()</a></li> 
+ 
+            <li><a href="../../../Web/API/Element/getAttribute.html">Element.getAttribute()</a></li> 
+ 
+            <li><a href="../../../Web/API/Element/innerHTML.html">Element.innerHTML</a></li> 
+ 
+            <li><a href="../../../Web/API/Element/tagName.html">Element.tagName</a></li> 
+ 
+            <li><a href="../../../Web/API/Event/currentTarget.html">Event.currentTarget</a></li> 
+ 
+            <li><a href="../../../Web/API/KeyboardEvent/metaKey.html">KeyboardEvent.metaKey</a></li> 
+ 
+            <li><a href="../../../Web/API/Node/cloneNode.html">Node.cloneNode()</a></li> 
+ 
+            <li><a href="../../../Web/API/Node/ownerDocument.html">Node.ownerDocument</a></li> 
+ 
+            <li><a href="../../../Web/API/Node/parentElement.html">Node.parentElement</a></li> 
+ 
+            <li><a href="../../../Web/API/Node/parentNode.html">Node.parentNode</a></li> 
+ 
+            <li><a href="../../../Web/API/Node/prefix.html">Node.prefix</a></li> 
+ 
+            <li><a href="../../../Web/API/Window/cancelAnimationFrame.html">Window.cancelAnimationFrame()</a></li> 
+ 
+            <li><a href="../../../Web/API/Window/minimize.html">Window.minimize()</a></li> 
+ 
+            <li><a href="../../../Web/API/Window/showModalDialog.html">Window.showModalDialog()</a></li> 
+ 
+        </ul> 
+    </li> 
+ 
+    <li> 
+        <strong>NeedsCompatTable</strong> 
+        <ul> 
+ 
+            <li><a href="../../../Web/API/Console.html">Console</a></li> 
+ 
+            <li><a href="../../../Web/API/CustomEvent.html">CustomEvent</a></li> 
+ 
+            <li><a href="../../../Web/API/DOMUserData.html">DOMUserData</a></li> 
+ 
+            <li><a href="../../../Web/API/Document/contentType.html">Document.contentType</a></li> 
+ 
+            <li><a href="../../../Web/API/Document/createNodeIterator.html">Document.createNodeIterator()</a></li> 
+ 
+            <li><a href="../../../Web/API/Document/createProcessingInstruction.html">Document.createProcessingInstruction()</a></li> 
+ 
+            <li><a href="../../../Web/API/Document/xmlEncoding.html">Document.xmlEncoding</a></li> 
+ 
+            <li><a href="../../../Web/API/Element/getAttribute.html">Element.getAttribute()</a></li> 
+ 
+            <li><a href="../../../Web/API/Entity.html">Entity</a></li> 
+ 
+            <li><a href="../../../Web/API/EntityReference.html">EntityReference</a></li> 
+ 
+            <li><a href="../../../Web/API/Force_Touch_events.html">Force Touch events</a></li> 
+ 
+            <li><a href="../../../Web/API/MouseEvent/WEBKIT_FORCE_AT_FORCE_MOUSE_DOWN.html">MouseEvent.WEBKIT_FORCE_AT_FORCE_MOUSE_DOWN</a></li> 
+ 
+            <li><a href="../../../Web/API/MouseEvent/WEBKIT_FORCE_AT_MOUSE_DOWN.html">MouseEvent.WEBKIT_FORCE_AT_MOUSE_DOWN</a></li> 
+ 
+            <li><a href="../../../Web/API/MouseEvent/x.html">MouseEvent.x</a></li> 
+ 
+            <li><a href="../../../Web/API/MouseEvent/y.html">MouseEvent.y</a></li> 
+ 
+            <li><a href="../../../Web/API/Navigator/cookieEnabled.html">Navigator.cookieEnabled</a></li> 
+ 
+            <li><a href="../../../Web/API/Window/alert.html">Window.alert()</a></li> 
+ 
+            <li><a href="../../../Web/API/Window/confirm.html">Window.confirm()</a></li> 
+ 
+            <li><a href="../../../Web/API/Window/home.html">Window.home()</a></li> 
+ 
+            <li><a href="../../../Web/API/Window/print.html">Window.print()</a></li> 
+ 
+            <li><a href="../../../Web/API/Window/prompt.html">Window.prompt()</a></li> 
+ 
+            <li><a href="../../../Web/API/Window/screen.html">Window.screen</a></li> 
+ 
+            <li><a href="../../../Web/API/WindowTimers/setTimeout.html">WindowTimers.setTimeout()</a></li> 
+ 
+            <li><a href="../../../Web/API/XMLHttpRequest/Using_XMLHttpRequest.html">Using XMLHttpRequest</a></li> 
+ 
+        </ul> 
+    </li> 
+ 
+    <li> 
+        <strong>NeedsExample</strong> 
+        <ul> 
+ 
+            <li><a href="../../../Web/API/CustomEvent.html">CustomEvent</a></li> 
+ 
+            <li><a href="../../../Web/API/DeviceMotionEvent/rotationRate.html">DeviceMotionEvent.rotationRate</a></li> 
+ 
+            <li><a href="../../../Web/API/Document/adoptNode.html">Document.adoptNode()</a></li> 
+ 
+            <li><a href="../../../Web/API/Document/documentURI.html">Document.documentURI</a></li> 
+ 
+            <li><a href="../../../Web/API/Document/queryCommandState.html">Document.queryCommandState()</a></li> 
+ 
+            <li><a href="../../../Web/API/Element/tabStop.html">Element.tabStop</a></li> 
+ 
+            <li><a href="../../../Web/API/Event/Comparison_of_Event_Targets.html">Comparison of Event Targets</a></li> 
+ 
+            <li><a href="../../../Web/API/Event/originalTarget.html">Event.originalTarget</a></li> 
+ 
+            <li><a href="../../../Web/API/IdentityManager/get.html">IdentityManager.get()</a></li> 
+ 
+            <li><a href="../../../Web/API/IdentityManager/getVerifiedEmail.html">IdentityManager.getVerifiedEmail()</a></li> 
+ 
+            <li><a href="../../../Web/API/IdentityManager/watch.html">IdentityManager.watch()</a></li> 
+ 
+            <li><a href="../../../Web/API/MouseEvent/WEBKIT_FORCE_AT_FORCE_MOUSE_DOWN.html">MouseEvent.WEBKIT_FORCE_AT_FORCE_MOUSE_DOWN</a></li> 
+ 
+            <li><a href="../../../Web/API/MouseEvent/WEBKIT_FORCE_AT_MOUSE_DOWN.html">MouseEvent.WEBKIT_FORCE_AT_MOUSE_DOWN</a></li> 
+ 
+            <li><a href="../../../Web/API/Window/find.html">Window.find()</a></li> 
+ 
+        </ul> 
+    </li> 
+ 
+    <li> 
+        <strong>NeedsSpecTable</strong> 
+        <ul> 
+ 
+            <li><a href="../../../Web/API/DOMParser.html">DOMParser</a></li> 
+ 
+            <li><a href="../../../Web/API/Document/enableStyleSheetsForSet.html">Document.enableStyleSheetsForSet()</a></li> 
+ 
+            <li><a href="../../../Web/API/Element/name.html">Element.name</a></li> 
+ 
+            <li><a href="../../../Web/API/Window/screen.html">Window.screen</a></li> 
+ 
+        </ul> 
+    </li> 
+ 
+    <li> 
+        <strong>NeedsUpdate</strong> 
+        <ul> 
+ 
+            <li><a href="../../../Web/API/Document/adoptNode.html">Document.adoptNode()</a></li> 
+ 
+            <li><a href="../../../Web/API/Document_object_model/How_to_create_a_DOM_tree.html">How to create a DOM tree</a></li> 
+ 
+            <li><a href="../../../Web/API/Document_object_model/Using_the_W3C_DOM_Level_1_Core.html">Using the W3C DOM Level 1 Core</a></li> 
+ 
+            <li><a href="../../../Web/API/Document_Object_Model/Whitespace_in_the_DOM.html">Whitespace in the DOM</a></li> 
+ 
+            <li><a href="../../../Web/API/Element/name.html">Element.name</a></li> 
+ 
+            <li><a href="../../../Web/API/MutationObserver.html">MutationObserver</a></li> 
+ 
+            <li><a href="../../../Web/API/Window/frames.html">Window.frames</a></li> 
+ 
+            <li><a href="../../../Web/API/Window/open.html">Window.open()</a></li> 
+ 
+            <li><a href="../../../Web/API/XPathExpression.html">XPathExpression</a></li> 
+ 
+        </ul> 
+    </li> 
+ 
+    <li> 
+        <strong>NeedsMarkupWork</strong> 
+        <ul> 
+ 
+            <li><a href="../../../Web/API/Document/enableStyleSheetsForSet.html">Document.enableStyleSheetsForSet()</a></li> 
+ 
+            <li><a href="../../../Web/API/Document/getElementsByName.html">Document.getElementsByName()</a></li> 
+ 
+            <li><a href="../../../Web/API/Node/textContent.html">Node.textContent</a></li> 
+ 
+            <li><a href="../../../Web/API/UserDataHandler.html">UserDataHandler</a></li> 
+ 
+            <li><a href="../../../Web/API/Window/open.html">Window.open()</a></li> 
+ 
+        </ul> 
+    </li> 
+ 
+    <li> 
+        <strong>NeedsBrowserAgnosticism</strong> 
+        <ul> 
+ 
+            <li><a href="../../../Web/API/Document/enableStyleSheetsForSet.html">Document.enableStyleSheetsForSet()</a></li> 
+ 
+        </ul> 
+    </li> 
+ 
+    <li> 
+        <strong>NeedsContent</strong> 
+        <ul> 
+ 
+            <li><a href="../../../Web/API/Document/implementation.html">Document.implementation</a></li> 
+ 
+            <li><a href="../../../Web/API/Document/onoffline.html">Document.onoffline</a></li> 
+ 
+            <li><a href="../../../Web/API/EventListener.html">EventListener</a></li> 
+ 
+            <li><a href="../../../Web/API/MutationObserver.html">MutationObserver</a></li> 
+ 
+            <li><a href="../../../Web/API/MutationRecord.html">MutationRecord</a></li> 
+ 
+            <li><a href="../../../Web/API/Plugin.html">Plugin</a></li> 
+ 
+            <li><a href="../../../Web/API/PluginArray.html">PluginArray</a></li> 
+ 
+            <li><a href="../../../Web/API/TypeInfo.html">TypeInfo</a></li> 
+ 
+            <li><a href="../../../Web/API/Window/frames.html">Window.frames</a></li> 
+ 
+            <li><a href="../../../Web/API/Window/minimize.html">Window.minimize()</a></li> 
+ 
+            <li><a href="../../../Web/API/Window/restore.html">Window.restore()</a></li> 
+ 
+        </ul> 
+    </li> 
+ 
+    <li> 
+        <strong>NeedsMobileBrowserCompatibility</strong> 
+        <ul> 
+ 
+            <li><a href="../../../Web/API/Document/queryCommandState.html">Document.queryCommandState()</a></li> 
+ 
+            <li><a href="../../../Web/API/Element/outerHTML.html">Element.outerHTML</a></li> 
+ 
+            <li><a href="../../../Web/API/Event/cancelBubble.html">Event.cancelBubble</a></li> 
+ 
+            <li><a href="../../../Web/API/Event/returnValue.html">Event.returnValue</a></li> 
+ 
+            <li><a href="../../../Web/API/EventTarget/dispatchEvent.html">EventTarget.dispatchEvent()</a></li> 
+ 
+            <li><a href="../../../Web/API/Force_Touch_events.html">Force Touch events</a></li> 
+ 
+            <li><a href="../../../Web/API/MouseEvent/WEBKIT_FORCE_AT_FORCE_MOUSE_DOWN.html">MouseEvent.WEBKIT_FORCE_AT_FORCE_MOUSE_DOWN</a></li> 
+ 
+            <li><a href="../../../Web/API/MouseEvent/WEBKIT_FORCE_AT_MOUSE_DOWN.html">MouseEvent.WEBKIT_FORCE_AT_MOUSE_DOWN</a></li> 
+ 
+            <li><a href="../../../Web/API/MouseEvent/x.html">MouseEvent.x</a></li> 
+ 
+            <li><a href="../../../Web/API/MouseEvent/y.html">MouseEvent.y</a></li> 
+ 
+            <li><a href="../../../Web/API/Navigator/registerProtocolHandler.html">Navigator.registerProtocolHandler()</a></li> 
+ 
+            <li><a href="../../../Web/API/Node/isSupported.html">Node.isSupported()</a></li> 
+ 
+            <li><a href="../../../Web/API/UIEvent/cancelBubble.html">UIEvent.cancelBubble</a></li> 
+ 
+            <li><a href="../../../Web/API/Window/alert.html">Window.alert()</a></li> 
+ 
+            <li><a href="../../../Web/API/Window/confirm.html">Window.confirm()</a></li> 
+ 
+            <li><a href="../../../Web/API/Window/getSelection.html">Window.getSelection()</a></li> 
+ 
+            <li><a href="../../../Web/API/Window/print.html">Window.print()</a></li> 
+ 
+            <li><a href="../../../Web/API/Window/prompt.html">Window.prompt()</a></li> 
+ 
+            <li><a href="../../../Web/API/window/requestAnimationFrame.html">Window.requestAnimationFrame()</a></li> 
+ 
+        </ul> 
+    </li> 
+ 
+    <li> 
+        <strong>NeedsBeginnerUpdate</strong> 
+        <ul> 
+ 
+            <li><a href="../../../Web/API/Document_object_model/Locating_DOM_elements_using_selectors.html">Locating DOM elements using selectors</a></li> 
+ 
+        </ul> 
+    </li> 
+ 
+    <li> 
+        <strong>NeedsHelp</strong> 
+        <ul> 
+ 
+            <li><a href="../../../Web/API/Event/Comparison_of_Event_Targets.html">Comparison of Event Targets</a></li> 
+ 
+            <li><a href="../../../Web/API/Event/originalTarget.html">Event.originalTarget</a></li> 
+ 
+        </ul> 
+    </li> 
+ 
+    <li> 
+        <strong>NeedsRewrite</strong> 
+        <ul> 
+ 
+            <li><a href="../../../Web/API/Event/stopPropagation.html">Event.stopPropagation()</a></li> 
+ 
+        </ul> 
+    </li> 
+ 
+    <li> 
+        <strong>NeedsNewLayout</strong> 
+        <ul> 
+ 
+            <li><a href="../../../Web/API/HTMLMediaElement.html">HTMLMediaElement</a></li> 
+ 
+        </ul> 
+    </li> 
+ 
+    <li> 
+        <strong>NeedsLiveExample</strong> 
+        <ul> 
+ 
+            <li><a href="../../../Web/API/UIEvent/view.html">UIEvent.view</a></li> 
+ 
+        </ul> 
+    </li> 
+ 
+</ul> 
+</div> 
+ 
+<h2 id="Editorial_reviews">Editorial reviews</h2> 
+ 
+ 
+<p><strong>Found 5 pages.</strong> Learn more about <a href="https://developer.mozilla.org/en-US/docs/MDN/Contribute/Howto/Do_an_editorial_review">how to do an editorial review</a>.</p> 
+<div class="wideColumnBox wideColumnBoxList"> 
+<ul> 
+ 
+    <li><a href="../../../Web/API/console/assert-2.html">Console.assert()</a></li> 
+ 
+    <li><a href="../../../Web/API/DOMTokenList/supports.html">DOMTokenList.prototype.supports()</a></li> 
+ 
+    <li><a href="../../../Web/API/Document/hasFocus.html">Document.hasFocus()</a></li> 
+ 
+    <li><a href="../../../Web/API/Event/cancelBubble.html">Event.cancelBubble</a></li> 
+ 
+    <li><a href="../../../Web/API/Event/returnValue.html">Event.returnValue</a></li> 
+ 
+</ul> 
+</div> 
+ 
+<h2 id="Technical_reviews">Technical reviews</h2> 
+ 
+ 
+<p><strong>Found 88 pages.</strong> Learn more about <a href="https://developer.mozilla.org/en-US/docs/MDN/Contribute/Howto/Do_a_technical_review">how to do a technical review</a>.</p> 
+<div class="wideColumnBox wideColumnBoxList"> 
+<ul> 
+ 
+    <li><a href="../../../Web/API/ByteString.html">ByteString</a></li> 
+ 
+    <li><a href="../../../Web/API/Console/timeStamp.html">Console.timeStamp()</a></li> 
+ 
+    <li><a href="../../../Web/API/DOMPoint.html">DOMPoint</a></li> 
+ 
+    <li><a href="../../../Web/API/DOMPoint/DOMPoint.html">DOMPoint.DOMPoint()</a></li> 
+ 
+    <li><a href="../../../Web/API/DOMPointReadOnly.html">DOMPointReadOnly</a></li> 
+ 
+    <li><a href="../../../Web/API/DOMPointReadOnly/w.html">DOMPoint.w</a></li> 
+ 
+    <li><a href="../../../Web/API/DOMPointReadOnly/x.html">DOMPoint.x</a></li> 
+ 
+    <li><a href="../../../Web/API/DOMPointReadOnly/y.html">DOMPoint.y</a></li> 
+ 
+    <li><a href="../../../Web/API/DOMPointReadOnly/z.html">DOMPoint.z</a></li> 
+ 
+    <li><a href="../../../Web/API/DOMRect.html">DOMRect</a></li> 
+ 
+    <li><a href="../../../Web/API/DOMRectReadOnly/bottom.html">DOMRectReadOnly.bottom</a></li> 
+ 
+    <li><a href="../../../Web/API/DOMRectReadOnly/height.html">DOMRectReadOnly.height</a></li> 
+ 
+    <li><a href="../../../Web/API/DOMRectReadOnly/left.html">DOMRectReadOnly.left</a></li> 
+ 
+    <li><a href="../../../Web/API/DOMRectReadOnly/right.html">DOMRectReadOnly.right</a></li> 
+ 
+    <li><a href="../../../Web/API/DOMRectReadOnly/top.html">DOMRectReadOnly.top</a></li> 
+ 
+    <li><a href="../../../Web/API/DOMRectReadOnly/width.html">DOMRectReadOnly.width</a></li> 
+ 
+    <li><a href="../../../Web/API/DOMRectReadOnly/x.html">DOMRectReadOnly.x</a></li> 
+ 
+    <li><a href="../../../Web/API/DOMRectReadOnly/y.html">DOMRectReadOnly.y</a></li> 
+ 
+    <li><a href="../../../Web/API/DOMTokenList/supports.html">DOMTokenList.prototype.supports()</a></li> 
+ 
+    <li><a href="../../../Web/API/Document/caretRangeFromPoint.html">Document.caretRangeFromPoint()</a></li> 
+ 
+    <li><a href="../../../Web/API/Document/createTouchList.html">Document.createTouchList()</a></li> 
+ 
+    <li><a href="../../../Web/API/Document/execCommand.html">Document.execCommand()</a></li> 
+ 
+    <li><a href="../../../Web/API/Document/querySelectorAll.html">Document.querySelectorAll()</a></li> 
+ 
+    <li><a href="../../../Web/API/DragEvent/dataTransfer.html">DragEvent.dataTransfer</a></li> 
+ 
+    <li><a href="../../../Web/API/Element/getAttributeNS.html">Element.getAttributeNS()</a></li> 
+ 
+    <li><a href="../../../Web/API/Element/matches.html">Element.matches()</a></li> 
+ 
+    <li><a href="../../../Web/API/Element/ongotpointercapture.html">Element.ongotpointercapture</a></li> 
+ 
+    <li><a href="../../../Web/API/Element/onlostpointercapture.html">Element.onlostpointercapture</a></li> 
+ 
+    <li><a href="../../../Web/API/Element/onwheel.html">Element.onwheel</a></li> 
+ 
+    <li><a href="../../../Web/API/Element/releasePointerCapture.html">Element.releasePointerCapture()</a></li> 
+ 
+    <li><a href="../../../Web/API/Element/setPointerCapture.html">Element.setPointerCapture()</a></li> 
+ 
+    <li><a href="../../../Web/API/Element/tabStop.html">Element.tabStop</a></li> 
+ 
+    <li><a href="../../../Web/API/Event/Comparison_of_Event_Targets.html">Comparison of Event Targets</a></li> 
+ 
+    <li><a href="../../../Web/API/Event/cancelBubble.html">Event.cancelBubble</a></li> 
+ 
+    <li><a href="../../../Web/API/Event/eventPhase.html">Event.eventPhase</a></li> 
+ 
+    <li><a href="../../../Web/API/Event/returnValue.html">Event.returnValue</a></li> 
+ 
+    <li><a href="../../../Web/API/EventTarget/addEventListener.html">EventTarget.addEventListener()</a></li> 
+ 
+    <li><a href="../../../Web/API/EventTarget/attachEvent.html">EventTarget.attachEvent()</a></li> 
+ 
+    <li><a href="../../../Web/API/EventTarget/detachEvent.html">EventTarget.detachEvent()</a></li> 
+ 
+    <li><a href="../../../Web/API/EventTarget/fireEvent.html">EventTarget.fireEvent()</a></li> 
+ 
+    <li><a href="../../../Web/API/FileRequest.html">FileRequest</a></li> 
+ 
+    <li><a href="../../../Web/API/FileRequest/onprogress.html">FileRequest.onprogress</a></li> 
+ 
+    <li><a href="../../../Web/API/Force_Touch_events.html">Force Touch events</a></li> 
+ 
+    <li><a href="../../../Web/API/GestureEvent.html">GestureEvent</a></li> 
+ 
+    <li><a href="../../../Web/API/HTMLElement/outerText.html">HTMLElement.outerText</a></li> 
+ 
+    <li><a href="../../../Web/API/IDBVersionChangeEvent.html">IDBVersionChangeEvent</a></li> 
+ 
+    <li><a href="../../../Web/API/LocalMediaStream.html">LocalMediaStream</a></li> 
+ 
+    <li><a href="../../../Web/API/MSGestureEvent.html">MSGestureEvent</a></li> 
+ 
+    <li><a href="../../../Web/API/MouseEvent/WEBKIT_FORCE_AT_FORCE_MOUSE_DOWN.html">MouseEvent.WEBKIT_FORCE_AT_FORCE_MOUSE_DOWN</a></li> 
+ 
+    <li><a href="../../../Web/API/MouseEvent/WEBKIT_FORCE_AT_MOUSE_DOWN.html">MouseEvent.WEBKIT_FORCE_AT_MOUSE_DOWN</a></li> 
+ 
+    <li><a href="../../../Web/API/MouseEvent/webkitForce.html">MouseEvent.webkitForce</a></li> 
+ 
+    <li><a href="../../../Web/API/MutationRecord.html">MutationRecord</a></li> 
+ 
+    <li><a href="../../../Web/API/Navigator/requestMediaKeySystemAccess.html">Navigator.requestMediaKeySystemAccess()</a></li> 
+ 
+    <li><a href="../../../Web/API/Node/cloneNode.html">Node.cloneNode()</a></li> 
+ 
+    <li><a href="../../../Web/API/Node/insertBefore.html">Node.insertBefore()</a></li> 
+ 
+    <li><a href="../../../Web/API/Node/outerText.html">Node.outerText</a></li> 
+ 
+    <li><a href="../../../Web/API/NodeIterator/nextNode.html">NodeIterator.nextNode()</a></li> 
+ 
+    <li><a href="../../../Web/API/NodeIterator/previousNode.html">NodeIterator.previousNode()</a></li> 
+ 
+    <li><a href="../../../Web/API/Notification/permission.html">Notification.permission</a></li> 
+ 
+    <li><a href="../../../Web/API/PerformanceResourceTiming.html">PerformanceResourceTiming</a></li> 
+ 
+    <li><a href="../../../Web/API/PointerEvent/height.html">PointerEvent.height</a></li> 
+ 
+    <li><a href="../../../Web/API/PointerEvent/isPrimary.html">PointerEvent.isPrimary</a></li> 
+ 
+    <li><a href="../../../Web/API/PointerEvent/pointerId.html">PointerEvent.pointerId</a></li> 
+ 
+    <li><a href="../../../Web/API/PointerEvent/pointerType.html">PointerEvent.pointerType</a></li> 
+ 
+    <li><a href="../../../Web/API/PointerEvent/pressure.html">PointerEvent.pressure</a></li> 
+ 
+    <li><a href="../../../Web/API/PointerEvent/tiltX.html">PointerEvent.tiltX</a></li> 
+ 
+    <li><a href="../../../Web/API/PointerEvent/tiltY.html">PointerEvent.tiltY</a></li> 
+ 
+    <li><a href="../../../Web/API/PointerEvent/width.html">PointerEvent.width</a></li> 
+ 
+    <li><a href="../../../Web/API/Selection/isCollapsed.html">Selection.isCollapsed</a></li> 
+ 
+    <li><a href="../../../Web/API/SyncEvent/registration.html">registration</a></li> 
+ 
+    <li><a href="../../../Web/API/Touch/radiusY.html">Touch.radiusY</a></li> 
+ 
+    <li><a href="../../../Web/API/Touch/target.html">Touch.target</a></li> 
+ 
+    <li><a href="../../../Web/API/TouchEvent/TouchEvent.html">TouchEvent()</a></li> 
+ 
+    <li><a href="../../../Web/API/TouchEvent/altKey.html">TouchEvent.altKey</a></li> 
+ 
+    <li><a href="../../../Web/API/TouchEvent/ctrlKey.html">TouchEvent.ctrlKey</a></li> 
+ 
+    <li><a href="../../../Web/API/TouchEvent/metaKey.html">TouchEvent.metaKey</a></li> 
+ 
+    <li><a href="../../../Web/API/TouchEvent/shiftKey.html">TouchEvent.shiftKey</a></li> 
+ 
+    <li><a href="../../../Web/API/TouchList/identifiedTouch.html">TouchList.identifiedTouch()</a></li> 
+ 
+    <li><a href="../../../Web/API/UIEvent/sourceCapabilities.html">sourceCapabilities</a></li> 
+ 
+    <li><a href="../../../Web/API/USVString.html">USVString</a></li> 
+ 
+    <li><a href="../../../Web/API/ValidityState/tooLong.html">ValidityState.tooLong</a></li> 
+ 
+    <li><a href="../../../Web/API/Window/event.html">Window.event</a></li> 
+ 
+    <li><a href="../../../Web/API/Window/navigator/mozNetworkStats.html">mozNetworkStats</a></li> 
+ 
+    <li><a href="../../../Web/API/Window/postMessage.html">Window.postMessage()</a></li> 
+ 
+    <li><a href="../../../Web/API/Window/restore.html">Window.restore()</a></li> 
+ 
+    <li><a href="../../../Web/API/Window/cancelIdleCallback.html">cancelIdleCallback</a></li> 
+ 
+    <li><a href="../../../Web/API/Window/requestIdleCallback.html">requestIdleCallback</a></li> 
+ 
+    <li><a href="../../../Web/API/XSLTProcessor.html">XSLTProcessor</a></li> 
+ 
+</ul> 
+</div> 
+ 
+<h2 id="Outdated_pages">Outdated pages</h2> 
+ 
+ 
+<p><strong>Found 122 pages.</strong> These pages haven't been updated in over a year. Outdated pages can have problems with both content and format. Look at these pages and consider: Is this page talking about the Web of today? Does it look consistent with newer pages in this topic area? If not, make any needed changes.</p> 
+<div class="wideColumnBox wideColumnBoxList"> 
+<ul> 
+ 
+    <li><a href="../../../Web/API/BlobEvent/BlobEvent.html">BlobEvent()</a><br><small>436 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/BlobEvent/data.html">BlobEvent.data</a><br><small>436 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/ByteString.html">ByteString</a><br><small>424 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/CharacterData.html">CharacterData</a><br><small>436 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/Comment.html">Comment</a><br><small>436 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/Comment/Comment.html">Comment()</a><br><small>436 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/DOMConfiguration.html">DOMConfiguration</a><br><small>435 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/DOMImplementation.html">DOMImplementation</a><br><small>435 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/DOMImplementation/createDocument.html">DOMImplementation.createDocument()</a><br><small>435 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/DOMImplementation/createDocumentType.html">DOMImplementation.createDocumentType()</a><br><small>435 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/DOMImplementation/createHTMLDocument.html">DOMImplementation.createHTMLDocument()</a><br><small>435 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/DOMString/Binary.html">Binary strings</a><br><small>598 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/Document_object_model/How_to_create_a_DOM_tree.html">How to create a DOM tree</a><br><small>450 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/Document_object_model/Locating_DOM_elements_using_selectors.html">Locating DOM elements using selectors</a><br><small>785 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/Document_object_model/Using_the_W3C_DOM_Level_1_Core.html">Using the W3C DOM Level 1 Core</a><br><small>1041 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/Document_Object_Model/Whitespace_in_the_DOM.html">Whitespace in the DOM</a><br><small>514 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/DocumentFragment/DocumentFragment.html">DocumentFragment()</a><br><small>435 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/DocumentFragment/querySelectorAll.html">DocumentFragment.querySelectorAll()</a><br><small>435 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/Element/attributes.html">Element.attributes</a><br><small>422 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/Element/getAttributeNode.html">Element.getAttributeNode()</a><br><small>435 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/Element/getAttributeNodeNS.html">Element.getAttributeNodeNS()</a><br><small>435 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/Element/hasAttributeNS.html">Element.hasAttributeNS()</a><br><small>435 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/Element/onwheel.html">Element.onwheel</a><br><small>435 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/Element/removeAttribute.html">Element.removeAttribute()</a><br><small>435 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/Element/removeAttributeNS.html">Element.removeAttributeNS()</a><br><small>435 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/Element/removeAttributeNode.html">Element.removeAttributeNode()</a><br><small>435 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/Element/setAttributeNS.html">Element.setAttributeNS()</a><br><small>435 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/Element/setAttributeNode.html">Element.setAttributeNode()</a><br><small>435 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/Element/setAttributeNodeNS.html">Element.setAttributeNodeNS()</a><br><small>435 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/Element/setCapture.html">Element.setCapture()</a><br><small>396 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/Event/Comparison_of_Event_Targets.html">Comparison of Event Targets</a><br><small>558 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/Event/createEvent.html">Event.createEvent()</a><br><small>435 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/Event/initEvent.html">Event.initEvent()</a><br><small>435 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/EventListener.html">EventListener</a><br><small>375 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/File/fileName.html">File.fileName</a><br><small>435 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/File/fileSize.html">File.fileSize</a><br><small>435 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/FileRequest/onprogress.html">FileRequest.onprogress</a><br><small>435 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/FocusEvent.html">FocusEvent</a><br><small>435 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/IdentityManager/get.html">IdentityManager.get()</a><br><small>434 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/IdentityManager/getVerifiedEmail.html">IdentityManager.getVerifiedEmail()</a><br><small>434 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/IdentityManager/logout.html">IdentityManager.logout()</a><br><small>434 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/IdentityManager/request.html">IdentityManager.request()</a><br><small>434 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/IdentityManager/watch.html">IdentityManager.watch()</a><br><small>434 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/InputEvent/InputEvent.html">InputEvent()</a><br><small>435 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/KeyboardEvent/ctrlKey.html">KeyboardEvent.ctrlKey</a><br><small>435 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/KeyboardEvent/initKeyEvent.html">KeyboardEvent.initKeyEvent()</a><br><small>435 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/KeyboardEvent/isComposing.html">KeyboardEvent.isComposing</a><br><small>435 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/KeyboardEvent/shiftKey.html">KeyboardEvent.shiftKey</a><br><small>435 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/LocalMediaStream.html">LocalMediaStream</a><br><small>433 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/MouseEvent/ctrlKey.html">MouseEvent.ctrlKey</a><br><small>435 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/MouseEvent/shiftKey.html">MouseEvent.shiftKey</a><br><small>435 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/MouseWheelEvent.html">MouseWheelEvent</a><br><small>433 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/NamedNodeMap/getNamedItem.html">NamedNodeMap.getNamedItem()</a><br><small>375 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/Navigator/addIdleObserver.html">Navigator.addIdleObserver()</a><br><small>434 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/Navigator/buildID.html">Navigator.buildID</a><br><small>434 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/Navigator/id-2.html">Navigator.id</a><br><small>434 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/Navigator/productSub.html">Navigator.productSub</a><br><small>434 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/Node/baseURIObject.html">Node.baseURIObject</a><br><small>434 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/Node/firstChild.html">Node.firstChild</a><br><small>434 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/Node/hasChildNodes.html">Node.hasChildNodes()</a><br><small>434 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/Node/isDefaultNamespace.html">Node.isDefaultNamespace()</a><br><small>434 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/Node/lastChild.html">Node.lastChild</a><br><small>434 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/Node/lookupNamespaceURI.html">Node.lookupNamespaceURI()</a><br><small>434 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/Node/lookupPrefix.html">Node.lookupPrefix()</a><br><small>434 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/Node/nextSibling.html">Node.nextSibling</a><br><small>434 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/Node/nodeName.html">Node.nodeName</a><br><small>434 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/Node/nodePrincipal.html">Node.nodePrincipal</a><br><small>434 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/Node/nodeValue.html">Node.nodeValue</a><br><small>434 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/Node/normalize.html">Node.normalize()</a><br><small>434 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/Node/parentNode.html">Node.parentNode</a><br><small>413 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/Node/previousSibling.html">Node.previousSibling</a><br><small>434 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/NodeFilter/acceptNode.html">NodeFilter.acceptNode()</a><br><small>434 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/NodeIterator/detach.html">NodeIterator.detach()</a><br><small>434 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/NodeIterator/expandEntityReferences.html">NodeIterator.expandEntityReferences</a><br><small>434 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/NodeIterator/filter.html">NodeIterator.filter</a><br><small>434 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/NodeIterator/nextNode.html">NodeIterator.nextNode()</a><br><small>434 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/NodeIterator/pointerBeforeReferenceNode.html">NodeIterator.pointerBeforeReferenceNode</a><br><small>434 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/NodeIterator/previousNode.html">NodeIterator.previousNode()</a><br><small>434 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/NodeIterator/referenceNode.html">NodeIterator.referenceNode</a><br><small>434 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/NodeIterator/root.html">NodeIterator.root</a><br><small>434 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/NodeList/length.html">NodeList.length</a><br><small>434 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/NonDocumentTypeChildNode.html">NonDocumentTypeChildNode</a><br><small>434 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/Plugin.html">Plugin</a><br><small>434 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/PluginArray.html">PluginArray</a><br><small>434 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/ProcessingInstruction.html">ProcessingInstruction</a><br><small>434 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/Screen/mozEnabled.html">Screen.mozEnabled</a><br><small>434 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/Selection/isCollapsed.html">Selection.isCollapsed</a><br><small>431 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/StyleSheet.html">StyleSheet</a><br><small>434 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/Text.html">Text</a><br><small>434 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/Text/Text.html">Text()</a><br><small>434 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/Text/isElementContentWhitespace.html">Text.isElementContentWhitespace</a><br><small>434 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/Text/wholeText.html">Text.wholeText</a><br><small>434 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/TreeWalker/currentNode.html">TreeWalker.currentNode</a><br><small>434 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/TreeWalker/expandEntityReferences.html">TreeWalker.expandEntityReferences</a><br><small>434 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/TreeWalker/firstChild.html">TreeWalker.firstChild()</a><br><small>434 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/TreeWalker/lastChild.html">TreeWalker.lastChild()</a><br><small>434 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/TreeWalker/nextNode.html">TreeWalker.nextNode()</a><br><small>434 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/TreeWalker/nextSibling.html">TreeWalker.nextSibling()</a><br><small>434 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/TreeWalker/parentNode.html">TreeWalker.parentNode()</a><br><small>434 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/TreeWalker/previousNode.html">TreeWalker.previousNode()</a><br><small>434 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/TreeWalker/previousSibling.html">TreeWalker.previousSibling()</a><br><small>434 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/TreeWalker/root.html">TreeWalker.root</a><br><small>434 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/UIEvent/initUIEvent.html">UIEvent.initUIEvent()</a><br><small>434 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/UIEvent/isChar.html">UIEvent.isChar</a><br><small>434 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/UIEvent/view.html">UIEvent.view</a><br><small>434 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/USVString.html">USVString</a><br><small>422 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/UserDataHandler.html">UserDataHandler</a><br><small>434 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/WheelEvent/deltaX.html">WheelEvent.deltaX</a><br><small>436 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/WheelEvent/deltaY.html">WheelEvent.deltaY</a><br><small>436 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/WheelEvent/deltaZ.html">WheelEvent.deltaZ</a><br><small>436 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/Window/clearImmediate.html">Window.clearImmediate()</a><br><small>434 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/Window/forward.html">Window.forward()</a><br><small>434 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/Window/frameElement.html">Window.frameElement</a><br><small>393 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/Window/getAttention.html">Window.getAttention()</a><br><small>434 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/Window/home.html">Window.home()</a><br><small>434 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/Window/minimize.html">Window.minimize()</a><br><small>434 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/Window/navigator/mozNetworkStats.html">mozNetworkStats</a><br><small>421 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/Window/restore.html">Window.restore()</a><br><small>434 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/Window/scrollByPages.html">Window.scrollByPages()</a><br><small>434 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/Window/setImmediate.html">Window.setImmediate()</a><br><small>469 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/Window/updateCommands.html">Window.updateCommands()</a><br><small>434 days old</small></li> 
+ 
+    <li><a href="../../../Web/API/XMLDocument/load.html">XMLDocument.load()</a><br><small>434 days old</small></li> 
+ 
+</ul> 
+</div> 
+ 
+<h2 id="Missing_pages">Missing pages</h2> 
+ 
+ 
+<p><strong>Found 117 pages.</strong> These pages are not yet written. Please help to create them.</p> 
+<div class="wideColumnBox wideColumnBoxList"> 
+<ul> 
+ 
+    <li><a href="../../../Web/API/Attr/localName.html" class="new">Attr.localName</a></li> 
+ 
+    <li><a href="../../../Web/API/Attr/name.html" class="new">Attr.name</a></li> 
+ 
+    <li><a href="../../../Web/API/Attr/namespaceURI.html" class="new">Attr.namespaceURI</a></li> 
+ 
+    <li><a href="../../../Web/API/Attr/ownerElement.html" class="new">Attr.ownerElement</a></li> 
+ 
+    <li><a href="../../../Web/API/Attr/prefix.html" class="new">Attr.prefix</a></li> 
+ 
+    <li><a href="../../../Web/API/Attr/specified.html" class="new">Attr.specified</a></li> 
+ 
+    <li><a href="../../../Web/API/Attr/value.html" class="new">Attr.value</a></li> 
+ 
+    <li><a href="../../../Web/API/CharacterData/appendData.html" class="new">CharacterData.appendData</a></li> 
+ 
+    <li><a href="../../../Web/API/CharacterData/data.html" class="new">CharacterData.data</a></li> 
+ 
+    <li><a href="../../../Web/API/CharacterData/deleteData.html" class="new">CharacterData.deleteData</a></li> 
+ 
+    <li><a href="../../../Web/API/CharacterData/insertData.html" class="new">CharacterData.insertData</a></li> 
+ 
+    <li><a href="../../../Web/API/CharacterData/length.html" class="new">CharacterData.length</a></li> 
+ 
+    <li><a href="../../../Web/API/CharacterData/replaceData.html" class="new">CharacterData.replaceData</a></li> 
+ 
+    <li><a href="../../../Web/API/CharacterData/substringData.html" class="new">CharacterData.substringData</a></li> 
+ 
+    <li><a href="../../../Web/API/CustomEvent/detail.html" class="new">CustomEvent.detail</a></li> 
+ 
+    <li><a href="../../../Web/API/DOMError/DOMError.html" class="new">DOMError.DOMError</a></li> 
+ 
+    <li><a href="../../../Web/API/DOMError/message.html" class="new">DOMError.message</a></li> 
+ 
+    <li><a href="../../../Web/API/DOMError/name.html" class="new">DOMError.name</a></li> 
+ 
+    <li><a href="../../../Web/API/DOMException/code.html" class="new">DOMException.code</a></li> 
+ 
+    <li><a href="../../../Web/API/DOMParser/DOMParser.html" class="new">DOMParser.DOMParser</a></li> 
+ 
+    <li><a href="../../../Web/API/DOMParser/init.html" class="new">DOMParser.init</a></li> 
+ 
+    <li><a href="../../../Web/API/DOMParser/parseFromBuffer.html" class="new">DOMParser.parseFromBuffer</a></li> 
+ 
+    <li><a href="../../../Web/API/DOMParser/parseFromStream.html" class="new">DOMParser.parseFromStream</a></li> 
+ 
+    <li><a href="../../../Web/API/DOMParser/parseFromString.html" class="new">DOMParser.parseFromString</a></li> 
+ 
+    <li><a href="../../../Web/API/DOMPoint/w.html" class="new">DOMPoint.w</a></li> 
+ 
+    <li><a href="../../../Web/API/DOMPoint/x.html" class="new">DOMPoint.x</a></li> 
+ 
+    <li><a href="../../../Web/API/DOMPoint/y.html" class="new">DOMPoint.y</a></li> 
+ 
+    <li><a href="../../../Web/API/DOMPoint/z.html" class="new">DOMPoint.z</a></li> 
+ 
+    <li><a href="../../../Web/API/DOMRect/height.html" class="new">DOMRect.height</a></li> 
+ 
+    <li><a href="../../../Web/API/DOMRect/width.html" class="new">DOMRect.width</a></li> 
+ 
+    <li><a href="../../../Web/API/DOMRect/x.html" class="new">DOMRect.x</a></li> 
+ 
+    <li><a href="../../../Web/API/DOMRect/y.html" class="new">DOMRect.y</a></li> 
+ 
+    <li><a href="../../../Web/API/DOMTokenList/add.html" class="new">DOMTokenList.add</a></li> 
+ 
+    <li><a href="../../../Web/API/DOMTokenList/contains.html" class="new">DOMTokenList.contains</a></li> 
+ 
+    <li><a href="../../../Web/API/DOMTokenList/item.html" class="new">DOMTokenList.item</a></li> 
+ 
+    <li><a href="../../../Web/API/DOMTokenList/length.html" class="new">DOMTokenList.length</a></li> 
+ 
+    <li><a href="../../../Web/API/DOMTokenList/remove.html" class="new">DOMTokenList.remove</a></li> 
+ 
+    <li><a href="../../../Web/API/DOMTokenList/toString.html" class="new">DOMTokenList.toString</a></li> 
+ 
+    <li><a href="../../../Web/API/DOMTokenList/toggle.html" class="new">DOMTokenList.toggle</a></li> 
+ 
+    <li><a href="../../../Web/API/Document.html">Document</a></li> 
+ 
+    <li><a href="../../../Web/API/Document/Document.html" class="new">Document.Document</a></li> 
+ 
+    <li><a href="../../../Web/API/Document/contentLanguage.html" class="new">Document.contentLanguage</a></li> 
+ 
+    <li><a href="../../../Web/API/Document/createAttributeNS.html" class="new">Document.createAttributeNS</a></li> 
+ 
+    <li><a href="../../../Web/API/Document/docShell.html" class="new">Document.docShell</a></li> 
+ 
+    <li><a href="../../../Web/API/Document/documentLoadGroup.html" class="new">Document.documentLoadGroup</a></li> 
+ 
+    <li><a href="../../../Web/API/Document/getAnonymousElementByAttribute.html" class="new">Document.getAnonymousElementByAttribute</a></li> 
+ 
+    <li><a href="../../../Web/API/Document/getAnonymousNodes.html" class="new">Document.getAnonymousNodes</a></li> 
+ 
+    <li><a href="../../../Web/API/Document/getBindingParent.html" class="new">Document.getBindingParent</a></li> 
+ 
+    <li><a href="../../../Web/API/Document/getElementsByTagName.html">Document.getElementsByTagName</a></li> 
+ 
+    <li><a href="../../../Web/API/Document/hidden.html" class="new">Document.hidden</a></li> 
+ 
+    <li><a href="../../../Web/API/Document/insertAnonymousContent.html" class="new">Document.insertAnonymousContent</a></li> 
+ 
+    <li><a href="../../../Web/API/Document/isSrcdocDocument.html" class="new">Document.isSrcdocDocument</a></li> 
+ 
+    <li><a href="../../../Web/API/Document/loadBindingDocument.html" class="new">Document.loadBindingDocument</a></li> 
+ 
+    <li><a href="../../../Web/API/Document/mozExitPointerLock.html" class="new">Document.mozExitPointerLock</a></li> 
+ 
+    <li><a href="../../../Web/API/Document/mozHidden.html" class="new">Document.mozHidden</a></li> 
+ 
+    <li><a href="../../../Web/API/Document/mozPointerLockElement.html" class="new">Document.mozPointerLockElement</a></li> 
+ 
+    <li><a href="../../../Web/API/Document/mozVisibilityState.html" class="new">Document.mozVisibilityState</a></li> 
+ 
+    <li><a href="../../../Web/API/Document/obsoleteSheet.html" class="new">Document.obsoleteSheet</a></li> 
+ 
+    <li><a href="../../../Web/API/Document/oncopy.html" class="new">Document.oncopy</a></li> 
+ 
+    <li><a href="../../../Web/API/Document/oncut.html" class="new">Document.oncut</a></li> 
+ 
+    <li><a href="../../../Web/API/Document/onpaste.html" class="new">Document.onpaste</a></li> 
+ 
+    <li><a href="../../../Web/API/Document/onreadystatechange.html" class="new">Document.onreadystatechange</a></li> 
+ 
+    <li><a href="../../../Web/API/Document/onwheel.html" class="new">Document.onwheel</a></li> 
+ 
+    <li><a href="../../../Web/API/Document/referrerPolicy.html" class="new">Document.referrerPolicy</a></li> 
+ 
+    <li><a href="../../../Web/API/Document/removeAnonymousContent.html" class="new">Document.removeAnonymousContent</a></li> 
+ 
+    <li><a href="../../../Web/API/Document/styleSheetChangeEventsEnabled.html" class="new">Document.styleSheetChangeEventsEnabled</a></li> 
+ 
+    <li><a href="../../../Web/API/Document/undoManager.html" class="new">Document.undoManager</a></li> 
+ 
+    <li><a href="../../../Web/API/Document/visibilityState.html" class="new">Document.visibilityState</a></li> 
+ 
+    <li><a href="../../../Web/API/DocumentFragment/getElementById.html" class="new">DocumentFragment.getElementById</a></li> 
+ 
+    <li><a href="../../../Web/API/DocumentType/internalSubset.html" class="new">DocumentType.internalSubset</a></li> 
+ 
+    <li><a href="../../../Web/API/DocumentType/name.html" class="new">DocumentType.name</a></li> 
+ 
+    <li><a href="../../../Web/API/DocumentType/publicId.html" class="new">DocumentType.publicId</a></li> 
+ 
+    <li><a href="../../../Web/API/DocumentType/systemId.html" class="new">DocumentType.systemId</a></li> 
+ 
+    <li><a href="../../../Web/API/Element/fontSizeInflation.html" class="new">Element.fontSizeInflation</a></li> 
+ 
+    <li><a href="../../../Web/API/Element/getDestinationInsertionPoints.html" class="new">Element.getDestinationInsertionPoints</a></li> 
+ 
+    <li><a href="../../../Web/API/Element/mozMatchesSelector.html" class="new">Element.mozMatchesSelector</a></li> 
+ 
+    <li><a href="../../../Web/API/Element/requestFullScreen.html">Element.mozRequestFullScreen</a></li> 
+ 
+    <li><a href="../../../Web/API/Element/mozRequestPointerLock.html" class="new">Element.mozRequestPointerLock</a></li> 
+ 
+    <li><a href="../../../Web/API/Element/mozScrollSnap.html" class="new">Element.mozScrollSnap</a></li> 
+ 
+    <li><a href="../../../Web/API/Element/releaseCapture.html" class="new">Element.releaseCapture</a></li> 
+ 
+    <li><a href="../../../Web/API/Element/releasePointerCapture.html">Element.releasePointerCapture</a></li> 
+ 
+    <li><a href="../../../Web/API/Element/scroll.html" class="new">Element.scroll</a></li> 
+ 
+    <li><a href="../../../Web/API/Element/scrollBy.html" class="new">Element.scrollBy</a></li> 
+ 
+    <li><a href="../../../Web/API/Element/scrollByNoFlush.html" class="new">Element.scrollByNoFlush</a></li> 
+ 
+    <li><a href="../../../Web/API/Element/scrollTo.html" class="new">Element.scrollTo</a></li> 
+ 
+    <li><a href="../../../Web/API/Element/setPointerCapture.html">Element.setPointerCapture</a></li> 
+ 
+    <li><a href="../../../Web/API/Element/undoManager.html" class="new">Element.undoManager</a></li> 
+ 
+    <li><a href="../../../Web/API/Element/undoScope.html" class="new">Element.undoScope</a></li> 
+ 
+    <li><a href="../../../Web/API/Event/composedTarget.html" class="new">Event.composedTarget</a></li> 
+ 
+    <li><a href="../../../Web/API/Event/getPreventDefault.html" class="new">Event.getPreventDefault</a></li> 
+ 
+    <li><a href="../../../Web/API/Event/isSynthesized.html" class="new">Event.isSynthesized</a></li> 
+ 
+    <li><a href="../../../Web/API/Event/multipleActionsPrevented.html" class="new">Event.multipleActionsPrevented</a></li> 
+ 
+    <li><a href="../../../Web/API/EventTarget/getEventHandler.html" class="new">EventTarget.getEventHandler</a></li> 
+ 
+    <li><a href="../../../Web/API/EventTarget/ownerGlobal.html" class="new">EventTarget.ownerGlobal</a></li> 
+ 
+    <li><a href="../../../Web/API/EventTarget/setEventHandler.html" class="new">EventTarget.setEventHandler</a></li> 
+ 
+    <li><a href="../../../Web/API/HTMLCollection/length.html" class="new">HTMLCollection.length</a></li> 
+ 
+    <li><a href="../../../Web/API/HTMLCollection/namedItem.html" class="new">HTMLCollection.namedItem</a></li> 
+ 
+    <li><a href="../../../Web/API/MutationObserver/MutationObserver.html" class="new">MutationObserver.MutationObserver</a></li> 
+ 
+    <li><a href="../../../Web/API/MutationObserver/disconnect.html" class="new">MutationObserver.disconnect</a></li> 
+ 
+    <li><a href="../../../Web/API/MutationObserver/getObservingInfo.html" class="new">MutationObserver.getObservingInfo</a></li> 
+ 
+    <li><a href="../../../Web/API/MutationObserver/mergeAttributeRecords.html" class="new">MutationObserver.mergeAttributeRecords</a></li> 
+ 
+    <li><a href="../../../Web/API/MutationObserver/mutationCallback.html" class="new">MutationObserver.mutationCallback</a></li> 
+ 
+    <li><a href="../../../Web/API/MutationObserver/observe.html" class="new">MutationObserver.observe</a></li> 
+ 
+    <li><a href="../../../Web/API/MutationObserver/takeRecords.html" class="new">MutationObserver.takeRecords</a></li> 
+ 
+    <li><a href="../../../Web/API/Node/getBoundMutationObservers.html" class="new">Node.getBoundMutationObservers</a></li> 
+ 
+    <li><a href="../../../Web/API/Element/namespaceURI.html">Node.namespaceURI</a></li> 
+ 
+    <li><a href="../../../Web/API/ProcessingInstruction/target.html" class="new">ProcessingInstruction.target</a></li> 
+ 
+    <li><a href="../../../Web/API/Selection/GetRangesForInterval.html" class="new">Selection.GetRangesForInterval</a></li> 
+ 
+    <li><a href="../../../Web/API/Selection/addSelectionListener.html" class="new">Selection.addSelectionListener</a></li> 
+ 
+    <li><a href="../../../Web/API/Selection/caretBidiLevel.html" class="new">Selection.caretBidiLevel</a></li> 
+ 
+    <li><a href="../../../Web/API/Selection/interlinePosition.html" class="new">Selection.interlinePosition</a></li> 
+ 
+    <li><a href="../../../Web/API/Selection/removeSelectionListener.html" class="new">Selection.removeSelectionListener</a></li> 
+ 
+    <li><a href="../../../Web/API/Selection/scrollIntoView.html" class="new">Selection.scrollIntoView</a></li> 
+ 
+    <li><a href="../../../Web/API/Selection/toStringWithFormat.html" class="new">Selection.toStringWithFormat</a></li> 
+ 
+    <li><a href="../../../Web/API/Selection/type.html" class="new">Selection.type</a></li> 
+ 
+    <li><a href="../../../Web/API/TextDecoder/fatal.html" class="new">TextDecoder.fatal</a></li> 
+ 
+    <li><a href="../../../Web/API/XMLDocument/async.html" class="new">XMLDocument.async</a></li> 
+ 
+</ul> 
+</div> 
+ 
+ 
+ 
+ 
+ 
+ 
+    <h2 id="Dev-doc-needed_bugs">Dev-doc-needed bugs</h2> 
+    <p><strong>Found 221 bugs.</strong> Learn more about <a href="https://developer.mozilla.org/en-US/docs/MDN/Contribute/Howto/Resolve_a_dev-doc-needed_bug">how to resolve a dev-doc-needed bug</a>.</p> 
+     
+    <table class="standard-table"> 
+        <thead> 
+            <tr> 
+                <th>Bug</th> 
+                <th>Summary</th> 
+                <th>Release</th> 
+            </tr> 
+        </thead> 
+    <tbody> 
+     
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1205219" class="external">1205219</a></td> 
+        <td>[Presentation WebAPI] Support terminate semantics</td> 
+        <td>FxOS-S9 (16Oct)</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1192101" class="external">1192101</a></td> 
+        <td>[Presentation WebAPI] support PresentationRequest / PresentationAvailability / getSession(s)</td> 
+        <td>FxOS-S8 (02Oct)</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1069230" class="external">1069230</a></td> 
+        <td>[Stingray] Presentation API webidl implementation</td> 
+        <td>FxOS-S5 (21Aug)</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1080474" class="external">1080474</a></td> 
+        <td>[Presentation WebAPI] Device discovery mechanism</td> 
+        <td>2.2 S4 (23jan)</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1013913" class="external">1013913</a></td> 
+        <td>Add meta name="theme-color" to have configurable status bar color</td> 
+        <td>2.1 S3 (29aug)</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=899574" class="external">899574</a></td> 
+        <td>Notification API follow-up: provide a way to get current Notification objects</td> 
+        <td>1.3 Sprint 3 - 10/25</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1268361" class="external">1268361</a></td> 
+        <td>Strip leading '?' in `new URLSearchParams(query)`</td> 
+        <td>mozilla49</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1224186" class="external">1224186</a></td> 
+        <td>Implement DOMTokenList's new replace() method</td> 
+        <td>mozilla49</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1178337" class="external">1178337</a></td> 
+        <td>Valid referrer attribute values</td> 
+        <td>mozilla49</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1267932" class="external">1267932</a></td> 
+        <td>Update EventSource.webidl</td> 
+        <td>mozilla49</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=809865" class="external">809865</a></td> 
+        <td>Disable inputmode for Firefox 17 and Firefox 18</td> 
+        <td>---</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=962747" class="external">962747</a></td> 
+        <td>Hide Window.openDialog from content</td> 
+        <td>---</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=433616" class="external">433616</a></td> 
+        <td>[FIX]Need facility for managing documents referenced via local URI references</td> 
+        <td>---</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=609555" class="external">609555</a></td> 
+        <td>beforescriptexecute/afterscriptexecute should use moz prefix or should be defined in some specification</td> 
+        <td>---</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=916089" class="external">916089</a></td> 
+        <td>Meta-bug for DataStore</td> 
+        <td>---</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1080177" class="external">1080177</a></td> 
+        <td>Add "h" support to img srcset</td> 
+        <td>---</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=605271" class="external">605271</a></td> 
+        <td>Don't let scripts QI elements to non-classinfo interfaces</td> 
+        <td>---</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1256178" class="external">1256178</a></td> 
+        <td>Drop the moz prefix from the MozCSSKeyframeRule and MozCSSKeyframesRule interfaces</td> 
+        <td>mozilla48</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1259169" class="external">1259169</a></td> 
+        <td>nsICookieManager::remove() should be back-compatible for 1 or 2 releases.</td> 
+        <td>mozilla48</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1104955" class="external">1104955</a></td> 
+        <td>Implement IDL [Unscopable]</td> 
+        <td>mozilla48</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1261405" class="external">1261405</a></td> 
+        <td>PushPermissionDescriptor in Permissions.webidl is wrong ('userVisible' should be 'userVisibleOnly')</td> 
+        <td>mozilla48</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1265941" class="external">1265941</a></td> 
+        <td>Rename ReferrerPolicy "origin-only" attribute to "origin"</td> 
+        <td>mozilla48</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1055776" class="external">1055776</a></td> 
+        <td>Investigate moving namespaceURI, prefix, and localName to Element and Attr</td> 
+        <td>mozilla48</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1173320" class="external">1173320</a></td> 
+        <td>Allow FileList objects to contain Directory objects</td> 
+        <td>mozilla48</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=811259" class="external">811259</a></td> 
+        <td>implement Element.insertAdjacentText and Element.insertAdjacentElement</td> 
+        <td>mozilla48</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1257877" class="external">1257877</a></td> 
+        <td>Remove support for UTF-16 from TextEncoder</td> 
+        <td>mozilla48</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1260511" class="external">1260511</a></td> 
+        <td>navigator.registerProtocolHandler throws a number as an exception, rather than an Error object</td> 
+        <td>mozilla48</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1262739" class="external">1262739</a></td> 
+        <td>Remove support for splash_screens member in Manifest Processor</td> 
+        <td>mozilla48</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1216751" class="external">1216751</a></td> 
+        <td>provide forEach() method on iterable&lt;&gt; webidl interfaces</td> 
+        <td>mozilla47</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=993311" class="external">993311</a></td> 
+        <td>Convert Network Stats API to WebIDL</td> 
+        <td>mozilla47</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1251627" class="external">1251627</a></td> 
+        <td>Fix the exceptions XMLHttpRequest (XHR) send() throws to follow the spec more</td> 
+        <td>mozilla47</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=743198" class="external">743198</a></td> 
+        <td>Unprefix the DOM fullscreen API</td> 
+        <td>mozilla47</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1227906" class="external">1227906</a></td> 
+        <td>HTML `pattern` attribute should set `u` flag for regular expressions</td> 
+        <td>mozilla46</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1162658" class="external">1162658</a></td> 
+        <td>Update FormData to match latest spec</td> 
+        <td>mozilla46</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1227206" class="external">1227206</a></td> 
+        <td>Location.assign and Location.replace should use USVStrings instead DOMStrings</td> 
+        <td>mozilla45</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1213815" class="external">1213815</a></td> 
+        <td>searchParams is just on URL</td> 
+        <td>mozilla45</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1227458" class="external">1227458</a></td> 
+        <td>Alias setAttributeNode to setAttributeNodeNS and setNamedItem to setNamedItemNS</td> 
+        <td>mozilla45</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1214148" class="external">1214148</a></td> 
+        <td>AudioChannel API design doesn't fit into nested mozbrowser iframe case.</td> 
+        <td>mozilla45</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1167465" class="external">1167465</a></td> 
+        <td>Exposing Allowed Audio Channels in System App's Window</td> 
+        <td>mozilla44</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1196654" class="external">1196654</a></td> 
+        <td>[Browser API] Implement a proxy API allowing content to control it's embedding frame</td> 
+        <td>mozilla44</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=949376" class="external">949376</a></td> 
+        <td>event.initMessageEvent is not a function</td> 
+        <td>mozilla44</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1216193" class="external">1216193</a></td> 
+        <td>Implement webkitMatchesSelector</td> 
+        <td>mozilla44</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1145744" class="external">1145744</a></td> 
+        <td>Disallow Cache API in 3rd party windows when 3rd party cookies are disabled</td> 
+        <td>mozilla43</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1191178" class="external">1191178</a></td> 
+        <td>Add PerformanceRenderTiming and PerformanceCompositeTiming webidl</td> 
+        <td>mozilla43</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1165796" class="external">1165796</a></td> 
+        <td>Implement Performance Observer</td> 
+        <td>mozilla43</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1131470" class="external">1131470</a></td> 
+        <td>w3c screen orientation api has changed</td> 
+        <td>mozilla43</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1177688" class="external">1177688</a></td> 
+        <td>Implement Directory.getContents() and Directory.path</td> 
+        <td>mozilla42</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1148044" class="external">1148044</a></td> 
+        <td>Split nsIContentPolicy::TYPE_SUBDOCUMENT into TYPE_FRAME and TYPE_IFRAME so that Request.context can reflect the correct value</td> 
+        <td>mozilla42</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1177991" class="external">1177991</a></td> 
+        <td>document.adoptNode on a ShadowRoot should throw a HierarchyRequestError exception</td> 
+        <td>mozilla42</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1148593" class="external">1148593</a></td> 
+        <td>addEventListener should use JS::AutoSetAsyncStackForNewCalls</td> 
+        <td>mozilla42</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1164310" class="external">1164310</a></td> 
+        <td>Implement MS's proposal for a reduced subset of the new FileSystem API</td> 
+        <td>mozilla42</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1127380" class="external">1127380</a></td> 
+        <td>Implement AnimationPlayer.playbackRate</td> 
+        <td>mozilla42</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1176757" class="external">1176757</a></td> 
+        <td>shadowRoot.cloneNode() returns a DocumentFragment, should throw DataCloneError</td> 
+        <td>mozilla42</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1148030" class="external">1148030</a></td> 
+        <td>Split nsIContentPolicy::TYPE_OBJECT into TYPE_EMBED and TYPE_OBJECT so that Request.context can reflect the correct value</td> 
+        <td>mozilla42</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1177914" class="external">1177914</a></td> 
+        <td>document.importNode on a ShadowRoot should throw a NotSupportedError exception</td> 
+        <td>mozilla42</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1107443" class="external">1107443</a></td> 
+        <td>Make WindowProxy throw if you attempt to define a non-configurable property</td> 
+        <td>mozilla42</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1113086" class="external">1113086</a></td> 
+        <td>Implement AudioChannel API into BrowserElement</td> 
+        <td>mozilla42</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1123516" class="external">1123516</a></td> 
+        <td>implement support for maplike/setlike in Web IDL bindings</td> 
+        <td>mozilla42</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1165263" class="external">1165263</a></td> 
+        <td>Use origin for nsIPermissionManager</td> 
+        <td>mozilla42</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1174731" class="external">1174731</a></td> 
+        <td>Make searchParams attribute readonly</td> 
+        <td>mozilla41</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1143879" class="external">1143879</a></td> 
+        <td>Implement lang member of Web manifest</td> 
+        <td>mozilla41</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1153734" class="external">1153734</a></td> 
+        <td>Rename Animation to KeyframeEffect (and merge in AnimationEffect)</td> 
+        <td>mozilla40</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1160892" class="external">1160892</a></td> 
+        <td>Url.createObjectURL(blob) creates invalid URL on unicode non-ascii domain</td> 
+        <td>mozilla40</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1148496" class="external">1148496</a></td> 
+        <td>Allow to set an interface member as [Deprecated] in WebIDL</td> 
+        <td>mozilla40</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1152171" class="external">1152171</a></td> 
+        <td>Rename AnimationTimeline to DocumentTimeline</td> 
+        <td>mozilla40</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1154615" class="external">1154615</a></td> 
+        <td>Rename AnimationPlayer to Animation</td> 
+        <td>mozilla40</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=853162" class="external">853162</a></td> 
+        <td>Remove XMLHttpRequest sendAsBinary</td> 
+        <td>mozilla39</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1073379" class="external">1073379</a></td> 
+        <td>Make AnimationPlayer.startTime writeable</td> 
+        <td>mozilla39</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1130663" class="external">1130663</a></td> 
+        <td>requestsync-manager API to allow for an immediate sync</td> 
+        <td>mozilla38</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1134559" class="external">1134559</a></td> 
+        <td>DOMContentLoaded should not be cancelable</td> 
+        <td>mozilla38</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1017875" class="external">1017875</a></td> 
+        <td>Pref on the picture element by default</td> 
+        <td>mozilla38</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=782751" class="external">782751</a></td> 
+        <td>Implement the User Timing spec</td> 
+        <td>mozilla38</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1111633" class="external">1111633</a></td> 
+        <td>Implement Unresolved Element Pseudoclass for Custom Elements</td> 
+        <td>mozilla38</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1115130" class="external">1115130</a></td> 
+        <td>Output logging metadata from User Timing marks and measures</td> 
+        <td>mozilla38</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1073231" class="external">1073231</a></td> 
+        <td>Implement valid Request and Response clone() method</td> 
+        <td>mozilla38</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1018320" class="external">1018320</a></td> 
+        <td>Implement RequestSync API for FirefoxOS</td> 
+        <td>mozilla38</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1096328" class="external">1096328</a></td> 
+        <td>Remove nativeOwnership from Bindings.conf</td> 
+        <td>mozilla38</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1065366" class="external">1065366</a></td> 
+        <td>Implement ServiceWorkerGlobalScope update()</td> 
+        <td>mozilla37</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=704320" class="external">704320</a></td> 
+        <td>Implement &lt;meta name="referrer"&gt;</td> 
+        <td>mozilla36</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1070745" class="external">1070745</a></td> 
+        <td>Implement play and pause on AnimationPlayer</td> 
+        <td>mozilla36</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1036606" class="external">1036606</a></td> 
+        <td>Add options dict and vrDevice to mozRequestFullScreen</td> 
+        <td>mozilla36</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1067701" class="external">1067701</a></td> 
+        <td>Implement Animation.target</td> 
+        <td>mozilla35</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1047483" class="external">1047483</a></td> 
+        <td>Porting DOMFile/DOMBlob to WebIDL</td> 
+        <td>mozilla35</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1035060" class="external">1035060</a></td> 
+        <td>Implement AbortablePromise</td> 
+        <td>mozilla35</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=969490" class="external">969490</a></td> 
+        <td>Implement Components.utils.now() to match Performance.now() for non-window chrome code</td> 
+        <td>mozilla35</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1048293" class="external">1048293</a></td> 
+        <td>File::mozFullPath attribute should not be exposed to content.</td> 
+        <td>mozilla35</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=916607" class="external">916607</a></td> 
+        <td>Convert MozSmsSegmentInfo to WebIDL dictionary</td> 
+        <td>mozilla34</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=887541" class="external">887541</a></td> 
+        <td>Implement web components event retargeting.</td> 
+        <td>mozilla34</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1045993" class="external">1045993</a></td> 
+        <td>Implement AnimationEffect and AnimationEffect.name</td> 
+        <td>mozilla34</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1058470" class="external">1058470</a></td> 
+        <td>Update blob URL and origin related code</td> 
+        <td>mozilla34</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=966471" class="external">966471</a></td> 
+        <td>DOM Promise state, value and reason should be inspectable in the debugger (like Promise.jsm)</td> 
+        <td>mozilla33</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=857648" class="external">857648</a></td> 
+        <td>stack property on DOMException errors is missing/undefined</td> 
+        <td>mozilla33</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1000199" class="external">1000199</a></td> 
+        <td>Enable Web Components by default for certified apps</td> 
+        <td>mozilla33</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=966452" class="external">966452</a></td> 
+        <td>DOM Promises should report all unhandled rejections to the Console on GC (like Promise.jsm)</td> 
+        <td>mozilla33</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=870022" class="external">870022</a></td> 
+        <td>Implement `picture` element</td> 
+        <td>mozilla33</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=997285" class="external">997285</a></td> 
+        <td>Put Error.prototype on the proto chain of DOMExceptions</td> 
+        <td>mozilla32</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1003539" class="external">1003539</a></td> 
+        <td>HTMLTableElement.insertRow doesn't insert the row at the right place when table has a thead or tfoot, no tbody, and no rows</td> 
+        <td>mozilla32</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1020440" class="external">1020440</a></td> 
+        <td>Create DOM interfaces and stub for the requestAutocomplete method and events</td> 
+        <td>mozilla32</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=891952" class="external">891952</a></td> 
+        <td>Update empty string handling in named getters to spec changes</td> 
+        <td>mozilla32</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=936813" class="external">936813</a></td> 
+        <td>Implement "onresourcetimingbufferfull" callback for Resource Timing.</td> 
+        <td>mozilla32</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=983502" class="external">983502</a></td> 
+        <td>Implement and expose the feature detection API to privileged apps</td> 
+        <td>mozilla32</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=870021" class="external">870021</a></td> 
+        <td>Implement `srcset` attribute on `img`</td> 
+        <td>mozilla32</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=986837" class="external">986837</a></td> 
+        <td>Port most of the network stats API to WebIDL</td> 
+        <td>mozilla32</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=874212" class="external">874212</a></td> 
+        <td>Move document.all to WebIDL</td> 
+        <td>mozilla32</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=528456" class="external">528456</a></td> 
+        <td>Implement scoped selectors for querySelector(All)</td> 
+        <td>mozilla32</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=968272" class="external">968272</a></td> 
+        <td>use less conservative temporary storage policy in QuotaManager</td> 
+        <td>mozilla32</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=990220" class="external">990220</a></td> 
+        <td>Enable navigator.sendBeacon by default on desktop and Android</td> 
+        <td>mozilla31</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=355430" class="external">355430</a></td> 
+        <td>Stack information of uncaught Error object should be available in window.onerror</td> 
+        <td>mozilla31</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=822480" class="external">822480</a></td> 
+        <td>Add in the Resource Timing API</td> 
+        <td>mozilla31</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=897359" class="external">897359</a></td> 
+        <td>Remove unimplemented method in nsCrypto</td> 
+        <td>mozilla31</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=866528" class="external">866528</a></td> 
+        <td>Make nsIDOMActivityOptions a Dictionary</td> 
+        <td>mozilla31</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=986542" class="external">986542</a></td> 
+        <td>.onClick event handler function not firing if defined in a document that was in a now-removed iframe</td> 
+        <td>mozilla31</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=845690" class="external">845690</a></td> 
+        <td>Support meta viewport in Firefox OS apps</td> 
+        <td>mozilla30</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=966348" class="external">966348</a></td> 
+        <td>Rename Promise.cast to Promise.resolve</td> 
+        <td>mozilla30</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=923247" class="external">923247</a></td> 
+        <td>Nice feature to have is mute and volume per window</td> 
+        <td>mozilla30</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=969030" class="external">969030</a></td> 
+        <td>Remove the caller from document.all</td> 
+        <td>mozilla30</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=981036" class="external">981036</a></td> 
+        <td>Disallow calling WebIDL constructors as functions for system callers in non-release builds</td> 
+        <td>mozilla30</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=960945" class="external">960945</a></td> 
+        <td>MozConnection should be NoInterfaceObject</td> 
+        <td>mozilla30</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=964192" class="external">964192</a></td> 
+        <td>Remove the required argument to captureEvents/releaseEvents</td> 
+        <td>mozilla30</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=856140" class="external">856140</a></td> 
+        <td>Update document.register to adhere to the latest Custom Element spec</td> 
+        <td>mozilla30</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=936340" class="external">936340</a></td> 
+        <td>Implement navigator.sendBeacon</td> 
+        <td>mozilla30</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=981652" class="external">981652</a></td> 
+        <td>Dispatch "select" events from HTMLInputElement/HTMLTextAreaElement.setSelectionRange() and selection setters</td> 
+        <td>mozilla30</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=959988" class="external">959988</a></td> 
+        <td>Remove URLSearchParams.prototype.size</td> 
+        <td>mozilla29</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=879245" class="external">879245</a></td> 
+        <td>Implement thenables for promises</td> 
+        <td>mozilla29</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=887928" class="external">887928</a></td> 
+        <td>document.referrer should be based on the incumbent script for location-based navigation</td> 
+        <td>mozilla29</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=827161" class="external">827161</a></td> 
+        <td>Implement ValidityState.badInput</td> 
+        <td>mozilla29</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=959684" class="external">959684</a></td> 
+        <td>Implement URLSearchParams stringifier</td> 
+        <td>mozilla29</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=887538" class="external">887538</a></td> 
+        <td>Implement web components shadow element.</td> 
+        <td>mozilla29</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=887836" class="external">887836</a></td> 
+        <td>Implement URLSearchParams</td> 
+        <td>mozilla29</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=675579" class="external">675579</a></td> 
+        <td>The user setting input or textarea direction does not set the element's dir and does not fire the input event</td> 
+        <td>mozilla29</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=939332" class="external">939332</a></td> 
+        <td>Add Promise.all, Promise.cast, Promise.race</td> 
+        <td>mozilla29</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=949488" class="external">949488</a></td> 
+        <td>postMessage's targetOrigin argument should accept /</td> 
+        <td>mozilla29</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=806506" class="external">806506</a></td> 
+        <td>Implement web components ShadowRoot interface.</td> 
+        <td>mozilla28</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=933193" class="external">933193</a></td> 
+        <td>add getElementById on DocumentFragment</td> 
+        <td>mozilla28</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=909254" class="external">909254</a></td> 
+        <td>Stop using jsapi for HTMLCollection.namedItem</td> 
+        <td>mozilla28</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=854736" class="external">854736</a></td> 
+        <td>Implement web components content element.</td> 
+        <td>mozilla28</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=840488" class="external">840488</a></td> 
+        <td>Add a much faster way to do the "is script enabled for this global?" check</td> 
+        <td>mozilla28</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=850364" class="external">850364</a></td> 
+        <td>Implement setRangeText(DOMString) in HTMLInputElement</td> 
+        <td>mozilla27</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=920015" class="external">920015</a></td> 
+        <td>Expose DOM URL to js modules</td> 
+        <td>mozilla27</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=918940" class="external">918940</a></td> 
+        <td>Implement setRangeText(DOMString) for HTMLTextAreaElement</td> 
+        <td>mozilla27</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=920877" class="external">920877</a></td> 
+        <td>make media fragment: -moz-resolution work for blob files</td> 
+        <td>mozilla27</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=856977" class="external">856977</a></td> 
+        <td>Alert is still possible in onbeforeunload</td> 
+        <td>mozilla27</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=926890" class="external">926890</a></td> 
+        <td>Throw JavaScript exceptions for URL</td> 
+        <td>mozilla27</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=910220" class="external">910220</a></td> 
+        <td>HTMLDocument throws on assignment to named properties even in non-strict mode</td> 
+        <td>mozilla26</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=915450" class="external">915450</a></td> 
+        <td>[Web Notifications] cannot inspect notification properties (ie. title, tag, body, etc)</td> 
+        <td>mozilla26</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=677638" class="external">677638</a></td> 
+        <td>(MessageChannel) Implement HTML5's channel messaging API</td> 
+        <td>mozilla26</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=897913" class="external">897913</a></td> 
+        <td>Turn on Promise for b2g</td> 
+        <td>mozilla26</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=848294" class="external">848294</a></td> 
+        <td>Update MessageEvent to be compatible with the spec</td> 
+        <td>mozilla26</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=911213" class="external">911213</a></td> 
+        <td>Implement new promise constructor</td> 
+        <td>mozilla26</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=760851" class="external">760851</a></td> 
+        <td>Add toJSON accessors on Performance and related interfaces</td> 
+        <td>mozilla25</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=894448" class="external">894448</a></td> 
+        <td>Remove nativeOwnership = 'nsisupports'</td> 
+        <td>mozilla25</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=888576" class="external">888576</a></td> 
+        <td>Follow the spec for document.body</td> 
+        <td>mozilla25</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=892609" class="external">892609</a></td> 
+        <td>Implement [ArrayClass] support</td> 
+        <td>mozilla25</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=870856" class="external">870856</a></td> 
+        <td>Convert DOMError to WebIDL</td> 
+        <td>mozilla24</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=856410" class="external">856410</a></td> 
+        <td>Implement promises</td> 
+        <td>mozilla24</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=870787" class="external">870787</a></td> 
+        <td>Improve named getter for form</td> 
+        <td>mozilla24</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=855971" class="external">855971</a></td> 
+        <td>Switch HTMLDocument to WebIDL bindings</td> 
+        <td>mozilla23</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=525444" class="external">525444</a></td> 
+        <td>Expose text to speech (TTS) capability to content</td> 
+        <td>mozilla23</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=866272" class="external">866272</a></td> 
+        <td>expose privileged access to mcc+mnc pair for last home network and roaming network</td> 
+        <td>mozilla23</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=690938" class="external">690938</a></td> 
+        <td>Support Bluetooth controllers for gamepad API</td> 
+        <td>mozilla23</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=861495" class="external">861495</a></td> 
+        <td>Transplant getOuterWindowWithId from nsIDOMWindowUtils to a window-related service</td> 
+        <td>mozilla23</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=818976" class="external">818976</a></td> 
+        <td>Implement web components template.</td> 
+        <td>mozilla22</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=845010" class="external">845010</a></td> 
+        <td>Provide an API to retrieve the current document's scrollbar size (not only width)</td> 
+        <td>mozilla22</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=767944" class="external">767944</a></td> 
+        <td>Implement a manager for centralized quota and storage handling</td> 
+        <td>mozilla22</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=852846" class="external">852846</a></td> 
+        <td>Implement PutForwards for .style</td> 
+        <td>mozilla22</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=783129" class="external">783129</a></td> 
+        <td>Implement the document.register interface method</td> 
+        <td>mozilla22</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=830858" class="external">830858</a></td> 
+        <td>Implement a generic way to dispatch events to chrome only</td> 
+        <td>mozilla21</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=826166" class="external">826166</a></td> 
+        <td>Remove an ability to set higher JS versions via language attribute</td> 
+        <td>mozilla21</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=827546" class="external">827546</a></td> 
+        <td>|non editable element|.QueryInterface(Components.interfaces.nsIDOMNSEditableElement) does not throw anymore</td> 
+        <td>mozilla21</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=617532" class="external">617532</a></td> 
+        <td>implement the HTML5 "undo history" feature (UndoManager interface)</td> 
+        <td>mozilla20</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=821606" class="external">821606</a></td> 
+        <td>Turn on WebIDL bindings for Element and HTMLElement</td> 
+        <td>mozilla20</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=824970" class="external">824970</a></td> 
+        <td>convert nsIDOMRect to webidl</td> 
+        <td>mozilla20</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=821593" class="external">821593</a></td> 
+        <td>convert RGBColor to webidl</td> 
+        <td>mozilla20</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=656311" class="external">656311</a></td> 
+        <td>Remove XML Events, or improve the implementation</td> 
+        <td>mozilla19</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=749448" class="external">749448</a></td> 
+        <td>Remove XTF</td> 
+        <td>mozilla19</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=801402" class="external">801402</a></td> 
+        <td>Use EncodingUtils::FindEncodingForLabel instead of nsCharsetAlias::GetPreferred from HTML5 parser and DOM APIs</td> 
+        <td>mozilla19</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=809290" class="external">809290</a></td> 
+        <td>document.referrer should be based on the script entry point</td> 
+        <td>mozilla19</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=795930" class="external">795930</a></td> 
+        <td>ArchiveReader should live behind a pref</td> 
+        <td>mozilla19</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=776416" class="external">776416</a></td> 
+        <td>Remove exceptions to 5MB quota rule in localStorage</td> 
+        <td>mozilla18</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=783531" class="external">783531</a></td> 
+        <td>Implement a "select word at point" text selection routine in nsIDOMWindowUtils</td> 
+        <td>mozilla18</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=787378" class="external">787378</a></td> 
+        <td>Dispatch a "firstpaint" event for mozbrowsers</td> 
+        <td>mozilla18</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=564815" class="external">564815</a></td> 
+        <td>implement window.devicePixelRatio</td> 
+        <td>mozilla18</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=744907" class="external">744907</a></td> 
+        <td>Remove BlobBuilder</td> 
+        <td>mozilla18</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=784402" class="external">784402</a></td> 
+        <td>Pointer Lock must respect iframe sandbox flag</td> 
+        <td>mozilla18</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=769254" class="external">769254</a></td> 
+        <td>Clicking a target=_blank link inside &lt;iframe mozbrowser&gt; crashes Gecko, should pass opened URL to mozbrowseropenwindow event</td> 
+        <td>mozilla17</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=772434" class="external">772434</a></td> 
+        <td>Blob support for Zip file contents</td> 
+        <td>mozilla17</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=672814" class="external">672814</a></td> 
+        <td>Increase the set of script @type values that nsScriptLoader treats as JavaScript</td> 
+        <td>mozilla17</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=774705" class="external">774705</a></td> 
+        <td>Throw a TypeError when trying to construct an interface without a constructor</td> 
+        <td>mozilla17</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=600111" class="external">600111</a></td> 
+        <td>XMLHttpRequest.setRequestHeader() throws NS_ERROR_FAILURE inappropriately</td> 
+        <td>mozilla17</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=391834" class="external">391834</a></td> 
+        <td>Don't allow alert/confirm/prompt in onbeforeunload, onunload and onpagehide</td> 
+        <td>mozilla17</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=776376" class="external">776376</a></td> 
+        <td>Old FCKeditor versions (e.g. 2.6.6) stopped working due to navigator.productSub sniffing</td> 
+        <td>mozilla17</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=779626" class="external">779626</a></td> 
+        <td>Javascript-global-constructor objects should be passed a window reference</td> 
+        <td>mozilla17</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=743888" class="external">743888</a></td> 
+        <td>Replace SVGException and XPathException with DOMException</td> 
+        <td>mozilla16</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=769771" class="external">769771</a></td> 
+        <td>add ability to opt-in to content docshell for html:iframes inserted into chrome documents</td> 
+        <td>mozilla16</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=773734" class="external">773734</a></td> 
+        <td>Have a separate preference to only enable the gc/cc notifications</td> 
+        <td>mozilla16</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=591467" class="external">591467</a></td> 
+        <td>Implement HTML Microdata API</td> 
+        <td>mozilla16</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=695480" class="external">695480</a></td> 
+        <td>Remove support for Chrome -&gt; Content leaks</td> 
+        <td>mozilla15</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=752402" class="external">752402</a></td> 
+        <td>Blob constructor should take ArrayBufferView as a member of blobParts parameter in addition to ArrayBuffer</td> 
+        <td>mozilla15</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=756066" class="external">756066</a></td> 
+        <td>StorageEventInit.key should be nullable</td> 
+        <td>mozilla15</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=625664" class="external">625664</a></td> 
+        <td>accelerometer support using Windows 7 Sensor API</td> 
+        <td>mozilla15</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=663057" class="external">663057</a></td> 
+        <td>support RFC2231/5987 encoding for title parameter in HTTP link header fields</td> 
+        <td>mozilla15</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=510849" class="external">510849</a></td> 
+        <td>web storage (localStorage/sessionStorage) empty string as key not supported</td> 
+        <td>mozilla15</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=749920" class="external">749920</a></td> 
+        <td>Unprefix MozMutationObserver and add a warning about use of mutation events</td> 
+        <td>mozilla15</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=754553" class="external">754553</a></td> 
+        <td>Remove indexed property access from localStorage/sessionStorage</td> 
+        <td>mozilla15</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=702880" class="external">702880</a></td> 
+        <td>Allow pages to explicitly change visibilityState of child iframes</td> 
+        <td>mozilla15</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=641821" class="external">641821</a></td> 
+        <td>Implement mutation events replacement (sync approach) (using moz prefix)</td> 
+        <td>mozilla14</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=738647" class="external">738647</a></td> 
+        <td>DOMStorageImpl::GetKey shouldn't throw</td> 
+        <td>mozilla14</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=740771" class="external">740771</a></td> 
+        <td>Stringify null for Storage.getItem/setItem/removeItem</td> 
+        <td>mozilla14</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=532062" class="external">532062</a></td> 
+        <td>localStorage/sessionStorage should return undefined (not null) for undefined keys</td> 
+        <td>mozilla14</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=697132" class="external">697132</a></td> 
+        <td>Create API for content to keep the screensaver from turning on (or to prevent phone/tablet's screen from turning off)</td> 
+        <td>mozilla14</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=733035" class="external">733035</a></td> 
+        <td>need a way to postMessage from sandboxes (without source window object)</td> 
+        <td>mozilla14</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=740069" class="external">740069</a></td> 
+        <td>Land Paris Bindings and use them for XMLHttpRequest</td> 
+        <td>mozilla14</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=708176" class="external">708176</a></td> 
+        <td>[WebAPI] Allow privileged pages to access cross-origin properties in child iframes</td> 
+        <td>mozilla12</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=704175" class="external">704175</a></td> 
+        <td>requestAnimationFrame callback function name should be "sample", not "onBeforePaint"</td> 
+        <td>mozilla11</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=707576" class="external">707576</a></td> 
+        <td>Remove nsIDOMNSElement</td> 
+        <td>mozilla11</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=648801" class="external">648801</a></td> 
+        <td>Prototype a proxy-based NodeList implementation</td> 
+        <td>mozilla10</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=684821" class="external">684821</a></td> 
+        <td>Remove nsIDOMNSHTMLElement</td> 
+        <td>mozilla10</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=695935" class="external">695935</a></td> 
+        <td>Make document.mozRequestFullScreen() asynchronous</td> 
+        <td>mozilla10</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=687087" class="external">687087</a></td> 
+        <td>Support "chunked" data for XMLHttpRequest</td> 
+        <td>mozilla9</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=567357" class="external">567357</a></td> 
+        <td>Fire a DOMWindowCreated DOM event to match the observer notification in bug 549539</td> 
+        <td>mozilla2.0b6</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=323810" class="external">323810</a></td> 
+        <td>[FIXr]Move forcing into tabs and current windows out of Gecko</td> 
+        <td>mozilla1.9alpha1</td> 
+    </tr> 
+     
+     
+    </tbody> 
+    </table> 
+    <p>Browse as <a href="https://bugzilla.mozilla.org/buglist.cgi?bug_id=1205219,1192101,1069230,1080474,1013913,899574,1268361,1224186,1178337,1267932,809865,962747,433616,609555,916089,1080177,605271,1256178,1259169,1104955,1261405,1265941,1055776,1173320,811259,1257877,1260511,1262739,1216751,993311,1251627,743198,1227906,1162658,1227206,1213815,1227458,1214148,1167465,1196654,949376,1216193,1145744,1191178,1165796,1131470,1177688,1148044,1177991,1148593,1164310,1127380,1176757,1148030,1177914,1107443,1113086,1123516,1165263,1174731,1143879,1153734,1160892,1148496,1152171,1154615,853162,1073379,1130663,1134559,1017875,782751,1111633,1115130,1073231,1018320,1096328,1065366,704320,1070745,1036606,1067701,1047483,1035060,969490,1048293,916607,887541,1045993,1058470,966471,857648,1000199,966452,870022,997285,1003539,1020440,891952,936813,983502,870021,986837,874212,528456,968272,990220,355430,822480,897359,866528,986542,845690,966348,923247,969030,981036,960945,964192,856140,936340,981652,959988,879245,887928,827161,959684,887538,887836,675579,939332,949488,806506,933193,909254,854736,840488,850364,920015,918940,920877,856977,926890,910220,915450,677638,897913,848294,911213,760851,894448,888576,892609,870856,856410,870787,855971,525444,866272,690938,861495,818976,845010,767944,852846,783129,830858,826166,827546,617532,821606,824970,821593,656311,749448,801402,809290,795930,776416,783531,787378,564815,744907,784402,769254,772434,672814,774705,600111,391834,776376,779626,743888,769771,773734,591467,695480,752402,756066,625664,663057,510849,749920,754553,702880,641821,738647,740771,532062,697132,733035,740069,708176,704175,707576,648801,684821,695935,687087,567357,323810," class="external">bug list</a>.</p> 
+ 
+ 
+ 
+    <h2 id="Documentation_requests">Documentation requests</h2> 
+    <p><strong>Found 24 bugs.</strong> Documentation request bugs can contain various kinds work related to MDN pages. Read through the bug and ask questions in the bug if in doubt.</p> 
+     
+    <table class="standard-table"> 
+        <thead> 
+            <tr> 
+                <th>Bug</th> 
+                <th>Summary</th> 
+            </tr> 
+        </thead> 
+    <tbody> 
+     
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=729109" class="external">729109</a></td> 
+        <td>Make sure synchronous XHR examples don't appear on MDN</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=805571" class="external">805571</a></td> 
+        <td>Mozilla event reference needs XMLHttpRequest timeout event</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=827863" class="external">827863</a></td> 
+        <td>Fix touch events example code regarding pageX/pageY offset postion</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=891086" class="external">891086</a></td> 
+        <td>documentElement.scrollHeight/clientHeight documentation incorrect</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=952746" class="external">952746</a></td> 
+        <td>Document key codes</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=973223" class="external">973223</a></td> 
+        <td>Add browser compatibility info for Element.prototype.setCapture</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1074424" class="external">1074424</a></td> 
+        <td>Document registerElement</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1094394" class="external">1094394</a></td> 
+        <td>Missing Web Crypto Api documentation and examples</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1146459" class="external">1146459</a></td> 
+        <td>Document the Encrypted Media Extensions (EME) API on MDN</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1150158" class="external">1150158</a></td> 
+        <td>Document subpages of  DOMTokenList</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1168839" class="external">1168839</a></td> 
+        <td>Document members of HTMLImageElement</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1209624" class="external">1209624</a></td> 
+        <td>Sidebar missing change event</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1230772" class="external">1230772</a></td> 
+        <td>Document XPathResult.iterateNext()</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1249293" class="external">1249293</a></td> 
+        <td>Updating and/or clarifying support for location</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1250893" class="external">1250893</a></td> 
+        <td>page not found https://developer.mozilla.org/fr/docs/Web/API/NamedNodeMap/setNamedItem</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1253636" class="external">1253636</a></td> 
+        <td>Broken URL</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1256023" class="external">1256023</a></td> 
+        <td>Geo Location issue</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1258743" class="external">1258743</a></td> 
+        <td>Please provide example implementation of EventTarget</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1259708" class="external">1259708</a></td> 
+        <td>Element.getBoundingClientRect: CSS transforms consideration legit ?</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1261274" class="external">1261274</a></td> 
+        <td>Search for exact page title does not show that page in the results</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1262999" class="external">1262999</a></td> 
+        <td>Verify and sign use object reference as first argument</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1265467" class="external">1265467</a></td> 
+        <td>DOMImplementation.createHTMLDocument requires a 'title' param in IE</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1266395" class="external">1266395</a></td> 
+        <td>window.frameElement return null not only in top context</td> 
+    </tr> 
+     
+    <tr> 
+        <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1267942" class="external">1267942</a></td> 
+        <td>Note that DataTransfer.clearData can't be called from drop handler</td> 
+    </tr> 
+     
+     
+    </tbody> 
+    </table> 
+    <p>Browse as <a href="https://bugzilla.mozilla.org/buglist.cgi?bug_id=729109,805571,827863,891086,952746,973223,1074424,1094394,1146459,1150158,1168839,1209624,1230772,1249293,1250893,1253636,1256023,1258743,1259708,1261274,1262999,1265467,1266395,1267942," class="external">bug list</a>.</p> 
+ 
+ 
+ 
+ 
+ 
+ 
+<h2 id="Localizations">Localizations</h2> 
+<p>Please help us to localize this documentation into different languages. Read more about <a href="https://developer.mozilla.org/en-US/docs/MDN/Contribute/Localize/Translating_pages">how to translate</a>.</p> 
+<table class="standard-table"> 
+  <thead> 
+    <tr> 
+        <th>Language</th> 
+        <th>Pages</th> 
+        <th>Translated</th> 
+        <th>Translations up to date</th> 
+    </tr> 
+  </thead> 
+  <tbody> 
+     
+        <tr> 
+            <td><a href="https://developer.mozilla.org/fr/docs/MDN/Doc_status/API/DOM">fr</a></td> 
+            <td>685</td> 
+            <td>169 (24%)</td> 
+            <td>26 (15%)</td> 
+        </tr> 
+     
+        <tr> 
+            <td><a href="https://developer.mozilla.org/ko/docs/MDN/Doc_status/API/DOM">ko</a></td> 
+            <td>744</td> 
+            <td>41 (5%)</td> 
+            <td>8 (19%)</td> 
+        </tr> 
+     
+</tbody> 
+</table> 
+ 
+ 
+ 
+ 
+<div id="json" style="display: none;">{"pages":{"title":"Pages","link":"/en-US/docs/Web/API/Index","counter":581},"needsTags":{"title":"Needs* tags","link":"#Needs*_tags","counter":99,"help":"Learn more about &lt;a href=\"https://developer.mozilla.org/en-US/docs/MDN/Contribute/Howto/Tag#Document_metadata\"&gt;how to deal with meta-tags&lt;/a&gt;."},"requiredTags":{"title":"Missing tags","link":"#Missing_tags","counter":0,"help":"Learn more about &lt;a href=\"https://developer.mozilla.org/en-US/docs/MDN/Contribute/Howto/Tag\"&gt;how to tag pages&lt;/a&gt;."},"editorialReviews":{"title":"Editorial reviews","link":"#Editorial_reviews","counter":5,"help":"Learn more about &lt;a href=\"https://developer.mozilla.org/en-US/docs/MDN/Contribute/Howto/Do_an_editorial_review\"&gt;how to do an editorial review&lt;/a&gt;."},"technicalReviews":{"title":"Technical reviews","link":"#Technical_reviews","counter":88,"help":"Learn more about &lt;a href=\"https://developer.mozilla.org/en-US/docs/MDN/Contribute/Howto/Do_a_technical_review\"&gt;how to do a technical review&lt;/a&gt;."},"outdated":{"title":"Outdated pages","link":"#Outdated_pages","counter":122,"help":"These pages haven't been updated in over a year. Outdated pages can have problems with both content and format. Look at these pages and consider: Is this page talking about the Web of today? Does it look consistent with newer pages in this topic area? If not, make any needed changes."},"missing":{"title":"Missing pages","link":"#Missing_pages","counter":117,"help":"These pages are not yet written. Please help to create them."},"ddn":{"title":"Dev-doc-needed bugs","link":"#Dev-doc-needed_bugs","counter":221},"dr":{"title":"Documentation requests","link":"#Documentation_requests","counter":24}}</div><p></p>
+
+<h2 id="Notes">Notes</h2>
+
+<h3 id="Tagging_standard">Tagging standard</h3>
+
+<ul>
+ <li>Grouping tag is: "DOM"</li>
+</ul>
+
+<h3 id="Other_tasks_to_do">Other tasks to do</h3>
+
+<ul>
+ <li>TBD</li>
+</ul>
+
+<h3 id="Tutorial_to-do_list">Tutorial to-do list</h3>
+
+<ul>
+ <li>TBD</li>
+</ul>
+
+<h3 id="Notes_for_translators">Notes for translators</h3>
+
+<p>Any notes here? Where do we expect updates, so that localizers don't translate and update too often?</p>
+
+<h3 id="Specifications">Specifications</h3>
+
+<p>The interfaces defined in the following specifications are tracked by this status page:</p>
+
+<table class="spec-table standard-table">
+ <tbody>
+  <tr>
+   <th scope="col">Specification</th>
+   <th scope="col">Status</th>
+   <th scope="col">Comment</th>
+  </tr>
+  <tr>
+   <td><a href="https://dom.spec.whatwg.org/" class="external" lang="en" title="The 'DOM' specification" hreflang="en">DOM</a></td>
+   <td><span class="spec-Living">Living Standard</span></td>
+   <td>&nbsp;</td>
+  </tr>
+  <tr>
+   <td><a href="https://w3c.github.io/DOM-Parsing/" class="external" lang="en" title="The 'DOM Parsing and Serialization' specification" hreflang="en">DOM Parsing and Serialization</a></td>
+   <td><span class="spec-Living">Living Standard</span></td>
+   <td>&nbsp;</td>
+  </tr>
+  <tr>
+   <td><a href="http://www.w3.org/TR/REC-DOM-Level-1/" class="external" lang="en" title="The 'Document Object Model (DOM) Level 1 Specification' specification" hreflang="en">Document Object Model (DOM) Level 1 Specification</a></td>
+   <td><span class="spec-REC">Recommendation</span></td>
+   <td>&nbsp;</td>
+  </tr>
+  <tr>
+   <td><a href="http://www.w3.org/TR/DOM-Level-2-Core/" class="external" lang="en" title="The 'Document Object Model (DOM) Level 2 Core Specification' specification" hreflang="en">Document Object Model (DOM) Level 2 Core Specification</a></td>
+   <td><span class="spec-REC">Recommendation</span></td>
+   <td>&nbsp;</td>
+  </tr>
+  <tr>
+   <td><a href="http://www.w3.org/TR/DOM-Level-2-Style/" class="external" lang="en" title="The 'Document Object Model (DOM) Level 2 Style Specification' specification" hreflang="en">Document Object Model (DOM) Level 2 Style Specification</a></td>
+   <td><span class="spec-REC">Recommendation</span></td>
+   <td>&nbsp;</td>
+  </tr>
+  <tr>
+   <td><a href="http://www.w3.org/TR/DOM-Level-2-Traversal-Range/" class="external" lang="en" title="The 'Document Object Model (DOM) Level 2 Traversal and Range Specification' specification" hreflang="en">Document Object Model (DOM) Level 2 Traversal and Range Specification</a></td>
+   <td><span class="spec-REC">Recommendation</span></td>
+   <td>&nbsp;</td>
+  </tr>
+  <tr>
+   <td><a href="http://www.w3.org/TR/DOM-Level-3-Core/" class="external" lang="en" title="The 'Document Object Model (DOM) Level 3 Core Specification' specification" hreflang="en">Document Object Model (DOM) Level 3 Core Specification</a></td>
+   <td><span class="spec-REC">Recommendation</span></td>
+   <td>&nbsp;</td>
+  </tr>
+  <tr>
+   <td><a href="https://w3c.github.io/uievents/" class="external" lang="en" title="The 'Document Object Model (DOM) Level 3 Events Specification' specification" hreflang="en">Document Object Model (DOM) Level 3 Events Specification</a></td>
+   <td><span class="spec-WD">Working Draft</span></td>
+   <td>&nbsp;</td>
+  </tr>
+  <tr>
+   <td><a href="http://www.w3.org/TR/DOM-Level-3-XPath/" class="external" lang="en" title="The 'Document Object Model (DOM) Level 3 XPath Specification' specification" hreflang="en">Document Object Model (DOM) Level 3 XPath Specification</a></td>
+   <td><span class="spec-REC">Recommendation</span></td>
+   <td>&nbsp;</td>
+  </tr>
+  <tr>
+   <td><a href="http://www.w3.org/TR/ElementTraversal/" class="external" lang="en" title="The 'Element Traversal Specification' specification" hreflang="en">Element Traversal Specification</a></td>
+   <td><span class="spec-REC">Recommendation</span></td>
+   <td>&nbsp;</td>
+  </tr>
+  <tr>
+   <td><a href="http://www.w3.org/TR/hr-time/" class="external" lang="en" title="The 'High Resolution Time' specification" hreflang="en">High Resolution Time</a></td>
+   <td><span class="spec-REC">Recommendation</span></td>
+   <td>&nbsp;</td>
+  </tr>
+  <tr>
+   <td><a href="http://www.w3.org/TR/navigation-timing/" class="external" lang="en" title="The 'Navigation Timing' specification" hreflang="en">Navigation Timing</a></td>
+   <td><span class="spec-REC">Recommendation</span></td>
+   <td>&nbsp;</td>
+  </tr>
+  <tr>
+   <td><a href="https://dvcs.w3.org/hg/undomanager/raw-file/tip/undomanager.html" class="external" lang="en" title="The 'UndoManager and DOMTransaction' specification" hreflang="en">UndoManager and DOMTransaction</a></td>
+   <td><span class="spec-ED">Editor's Draft</span></td>
+   <td>&nbsp;</td>
+  </tr>
+  <tr>
+   <td><a href="https://w3c.github.io/pointerlock/" class="external" lang="en" title="The 'Pointer Lock' specification" hreflang="en">Pointer Lock</a></td>
+   <td><span class="spec-CR">Candidate Recommendation</span></td>
+   <td>&nbsp;</td>
+  </tr>
+  <tr>
+   <td><a href="https://xhr.spec.whatwg.org/" class="external" lang="en" title="The 'Progress Events' specification" hreflang="en">Progress Events</a></td>
+   <td><span class="spec-CR">Candidate Recommendation</span></td>
+   <td>&nbsp;</td>
+  </tr>
+  <tr>
+   <td><a href="https://w3c.github.io/clipboard-apis/" class="external" lang="en" title="The 'Clipboard API and events' specification" hreflang="en">Clipboard API and events</a></td>
+   <td><span class="spec-WD">Working Draft</span></td>
+   <td>&nbsp;</td>
+  </tr>
+  <tr>
+   <td><a href="https://w3c.github.io/uievents/" class="external" lang="en" title="The 'UI Events' specification" hreflang="en">UI Events</a></td>
+   <td><span class="spec-WD">Working Draft</span></td>
+   <td>&nbsp;</td>
+  </tr>
+  <tr>
+   <td><a href="https://xhr.spec.whatwg.org/" class="external" lang="en" title="The 'Progress Events' specification" hreflang="en">Progress Events</a></td>
+   <td><span class="spec-CR">Candidate Recommendation</span></td>
+   <td>&nbsp;</td>
+  </tr>
+  <tr>
+   <td><a href="https://url.spec.whatwg.org/" class="external" lang="en" title="The 'URL' specification" hreflang="en">URL</a></td>
+   <td><span class="spec-Living">Living Standard</span></td>
+   <td>&nbsp;</td>
+  </tr>
+  <tr>
+   <td><a href="http://www.w3.org/TR/page-visibility/" class="external" lang="en" title="The 'Page Visibility (Second Edition)' specification" hreflang="en">Page Visibility (Second Edition)</a></td>
+   <td><span class="spec-REC">Recommendation</span></td>
+   <td>&nbsp;</td>
+  </tr>
+  <tr>
+   <td><a href="http://www.w3.org/TR/touch-events/" class="external" lang="en" title="The 'Touch Events' specification" hreflang="en">Touch Events</a></td>
+   <td><span class="spec-REC">Recommendation</span></td>
+   <td>&nbsp;</td>
+  </tr>
+  <tr>
+   <td><a href="http://www.w3.org/TR/encoding/" class="external" lang="en" title="The 'Encoding' specification" hreflang="en">Encoding</a></td>
+   <td><span class="spec-CR">Candidate Recommendation</span></td>
+   <td>&nbsp;</td>
+  </tr>
+  <tr>
+   <td><a href="http://www.w3.org/TR/selectors-api/" class="external" lang="en" title="The 'Selectors API Level 1' specification" hreflang="en">Selectors API Level 1</a></td>
+   <td><span class="spec-WD">Working Draft</span></td>
+   <td>&nbsp;</td>
+  </tr>
+  <tr>
+   <td><a href="http://www.w3.org/TR/selectors-api/" class="external" lang="en" title="The 'Selectors API Level 1' specification" hreflang="en">Selectors API Level 1</a></td>
+   <td><span class="spec-WD">Working Draft</span></td>
+   <td>&nbsp;</td>
+  </tr>
+  <tr>
+   <td><a href="https://drafts.fxtf.org/geometry/" class="external" lang="en" title="The 'Geometry Interfaces Module Level 1' specification" hreflang="en">Geometry Interfaces Module Level 1</a></td>
+   <td><span class="spec-CR">Candidate Recommendation</span></td>
+   <td>&nbsp;</td>
+  </tr>
+ </tbody>
+</table>
+
+<p></p><div class="overheadIndicator communitybox"> 
+    <div class="column-container"> 
+        <div id="Help_topic" class="communitysubhead">Help the 'API/DOM' documentation project…</div> 
+        <div class="communitycontact">Topic driver : <a href="https://developer.mozilla.org/en-US/profiles/sheppy">Eric Shepherd</a> (IRC nickname: sheppy)</div> 
+        <div class="communitycontact">Look at the current <a href="https://developer.mozilla.org/en-US/docs/MDN/Doc_status">status</a> of the 'API/DOM' documentation.</div> 
+        <div class="communitysubhead communitycontact">Don't hesitate to contact us on <a href="irc://irc.mozilla.org/mdn">#mdn</a> or on the <em>dev-mdc</em> mailing-list:</div> 
+        <ul class="communitymailinglist"> 
+  <li><a href="https://lists.mozilla.org/listinfo/dev-mdc" class="external">Mailing list</a></li> 
+   
+   
+  <li><a href="http://groups.google.com/group/mozilla.dev.mdc" class="external">Google Group</a></li> 
+  <li><a href="http://groups.google.com/group/mozilla.dev.mdc/feeds" class="external">RSS feed</a></li> 
+</ul> 
+    </div> 
+</div><p></p>
+                  
+                
+              </article>
+
+              
+
+    
+    
+    
+
+    
+    
+    
+
+    <div class="share">
+        <strong>Share:</strong>
+        <ul>
+            <li><a href="http://twitter.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FMDN%2FDoc_status%2FAPI%2FDOM%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dtwitter.com&amp;text=I+learned+about+API%3A+DOM+documentation+status+on+MDN." target="_blank" data-url="https://developer.mozilla.org/en-US/docs/MDN/Doc_status/API/DOM?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=twitter.com" data-title="I learned about API: DOM documentation status on MDN." class="share-link twitter"><i aria-hidden="true" class="icon-twitter"></i>Twitter</a></li>
+            <li><a href="http://facebook.com/sharer.php?s=100&amp;p[url]=https://developer.mozilla.org/en-US/docs/MDN/Doc_status/API/DOM?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/MDN/Doc_status/API/DOM?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" data-title="I learned about API: DOM documentation status on MDN." class="share-link facebook"><i aria-hidden="true" class="icon-facebook"></i>Facebook</a></li>
+            <li><a href="https://plus.google.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FMDN%2FDoc_status%2FAPI%2FDOM%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dplus.google.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/MDN/Doc_status/API/DOM?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=plus.google.com" data-title="I learned about API: DOM documentation status on MDN." class="share-link gplus"><i aria-hidden="true" class="icon-google-plus"></i>Google+</a></li>
+        </ul>
+    </div>
+
+              
+
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                  
+                  
+  <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags icon-fw"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Documentation status">Documentation status</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/MDN Meta">MDN Meta</a></li>
+      
+    </ul>
+  </div>
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-group icon-fw"></i>&nbsp;<strong>Contributors to this page:</strong> 
+        <a href="https://developer.mozilla.org/en-US/profiles/jswisher">jswisher</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/fscholz">fscholz</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/teoli">teoli</a>
+    
+                    </div>
+                  
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o icon-fw"></i>&nbsp;<strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/jswisher">jswisher</a>,
+                      <time datetime="2015-09-26T07:57:34-07:00">Sep 26, 2015, 7:57:34 AM</time>
+                    </div>
+                  
+                </div>
+              
+            </div>
+
+            
+              <!-- quick links and zone subnav strip -->
+              <div id="wiki-left" class="column-strip wiki-column">
+
+              
+
+                
+                  <!-- zone subnav -->
+                  
+  <nav class="zone-subnav-container" role="navigation">
+    <div class="subnav" id="Subnav">
+      
+
+<ol><li><a href="https://developer.mozilla.org/en-US/docs/MDN/About">About MDN</a>
+
+  <ol><li><a href="https://developer.mozilla.org/en-US/docs/MDN/About">About MDN</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/MDN/About/Promote">Promote MDN</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Send feedback about MDN</a></li>
+  </ol></li>
+ <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Getting_started">Get started on MDN</a></li>
+ <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Contribute">Help improve MDN</a>
+  <ol><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Contribute">Help improve MDN</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Contribute/Howto">Things you can do</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Contribute/Localize">Localizing MDN</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Contribute/Editor">MDN editor UI</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Contribute/Tools">Tools for power users</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Contribute/Guidelines">Guidelines</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Contribute/Processes">Work processes</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Contribute/Structures">Content structures</a></li>
+  </ol></li>
+ <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Kuma">Kuma: MDN's wiki platform</a></li>
+ <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+ <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Doc_status">Doc status by topic</a>
+  <ol><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Doc_status">Doc status by topic</a></li>
+   <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Doc_status/Overview">Are we documented yet?</a></li>
+  </ol></li>
+</ol>
+    </div>
+  </nav>&nbsp;
+                
+
+                
+                  <!-- quick links -->
+                  
+  <div class="quick-links" id="quick-links">
+    <div class="title see-also">See also</div>
+     
+    <ol> 
+        <li><strong><a href="https://developer.mozilla.org/en-US/docs/MDN/Doc_status">Documentation status pages</a></strong></li> 
+        <li><strong><a href="https://developer.mozilla.org/en-US/docs/MDN/Doc_status/Overview">Overview</a></strong></li> 
+        <li><strong>Sections:</strong></li> 
+            <ol> 
+                <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Doc_status/Accessibility">Accessibility</a> 
+                </li><li><a href="../API.html">API</a> 
+                </li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Doc_status/Apps">Apps</a> 
+                </li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Doc_status/CSS">CSS</a> 
+                </li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Doc_status/DevTools">DevTools</a> 
+                </li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Doc_status/Firefox_OS">Firefox OS</a> 
+                </li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Doc_status/Games">Games</a> 
+                </li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Doc_status/HTML">HTML</a> 
+                </li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Doc_status/JavaScript">JavaScript</a> 
+                </li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Doc_status/Marketplace">Marketplace</a> 
+                </li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Doc_status/MathML">MathML</a> 
+                </li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Doc_status/SVG">SVG</a> 
+            </li></ol> 
+         
+        <li><strong>Maintenance pages:</strong></li> 
+            <ol> 
+                <li><a href="https://developer.mozilla.org/en-US/docs/needs-review/editorial">Editorial reviews</a></li> 
+                <li><a href="https://developer.mozilla.org/en-US/docs/needs-review/technical">Technical reviews</a></li> 
+                <li><a href="https://developer.mozilla.org/en-US/docs/with-errors">Pages with errors</a></li> 
+                <li><a href="https://developer.mozilla.org/en-US/docs/without-parent">Pages without a parent</a></li> 
+                <li><a href="https://developer.mozilla.org/en-US/docs/top-level">Top-level pages</a></li> 
+            </ol> 
+         
+        <li><strong>Localizations:</strong></li> 
+            <ol> 
+                <li><a href="https://developer.mozilla.org/bn-BD/docs/MDN/Doc_status/Overview">বাংলা (বাংলাদেশ) (bn-BD)</a> 
+                </li><li><a href="https://developer.mozilla.org/de/docs/MDN/Doc_status/Overview">Deutsch (de)</a> 
+                </li><li><a href="https://developer.mozilla.org/es/docs/MDN/Doc_status/Overview">Español (es)</a> 
+                </li><li><a href="https://developer.mozilla.org/fr/docs/MDN/Doc_status/Overview">Français (fr)</a> 
+                </li><li><a href="https://developer.mozilla.org/ja/docs/MDN/Doc_status/Overview">日本語 (ja)</a> 
+                </li><li><a href="https://developer.mozilla.org/pl/docs/MDN/Doc_status/Overview">Polski (pl)</a> 
+                </li><li><a href="https://developer.mozilla.org/pt-BR/docs/MDN/Doc_status/Overview">Português (do Brasil) (pt-BR)</a> 
+                </li><li><a href="https://developer.mozilla.org/ru/docs/MDN/Doc_status/Overview">Русский (ru)</a> 
+                </li><li><a href="https://developer.mozilla.org/zh-CN/docs/MDN/Doc_status/Overview">中文 (简体) (zh-CN)</a> 
+            </li></ol> 
+    </ol> 
+
+  </div>
+                
+
+                <!-- approvals -->
+                
+
+              
+
+              </div>
+            
+          </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/MDN/Doc_status/API/DOM$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/MDN/Doc_status/API/DOM$history" label="View page history"></menuitem>
+  </menu>
+
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+        
+        <div class="contentinfo">
+          <p>© 2005-2016 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>
+          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+        
+        </div>
+      </div>
+      <div class="column-strip">
+        
+          
+  
+    <form class="languages go" method="get" action="https://developer.mozilla.org/en-US/docs/Web">
+      <label for="language">Other languages:</label>
+      <select id="language" class="wiki-l10n" name="next" dir="ltr">
+        <option value="/en-US/docs/MDN/Doc_status/API/DOM" selected="">
+          English (US)
+        </option>
+        
+          <option value="/fr/docs/MDN/Doc_status/API/DOM">
+            Français
+          </option>
+          <option value="/ko/docs/MDN/Doc_status/API/DOM">
+            한국어
+          </option>
+      </select>
+      <noscript>&lt;button type="submit"&gt;Go&lt;/button&gt;</noscript>
+    </form>
+  
+
+        
+      </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+  
+    
+    <!--[if lte IE 8]><script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/selectivizr.091e18cf669b.js" charset="utf-8"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/main.a7b27a25fb9c.js" charset="utf-8"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+    
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/syntax-prism-min.js" charset="utf-8"></script><script type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/wiki.bd71ca9fd27d.js" charset="utf-8" id="wikiscript"></script>
+
+  
+
+  <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/helpfulness.7b208a764d28.js" charset="utf-8"></script>
+
+  
+
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/MDN/Doc_status/API/DOM by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 17:34:04 GMT -->
+</body></html>

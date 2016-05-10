@@ -1,0 +1,723 @@
+<html><!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/WebVR_API/WebVR_environment_setup by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 15:30:28 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html;charset=utf-8"><!-- /Added by HTTrack -->
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <script async="" src="../../../../../../www.google-analytics.com/analytics.js"></script><script>(function(d) { d.className = d.className.replace(/\bno-js/, ''); })(document.documentElement);</script>
+  
+    
+  
+
+  
+  <title>WebVR environment setup</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+  <link rel="home" href="https://developer.mozilla.org/en-US/">
+  <link rel="copyright" href="#copyright">
+
+  
+    
+    
+    <link href="../../../../../../developer.cdn.mozilla.net/static/build/styles/mdn.593f20d8c365.css" rel="stylesheet" type="text/css">
+
+    
+  
+    <link href="../../../../../../developer.cdn.mozilla.net/static/build/styles/wiki.13dd9abdfb62.css" rel="stylesheet" type="text/css">
+
+    
+
+    
+
+  <!-- common social tags -->
+  
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta property="og:site_name" content="Mozilla Developer Network">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:image" content="https://developer.cdn.mozilla.net/static/img/opengraph-logo.dc4e08e2f6af.png">
+  <meta name="twitter:site" content="@MozDevNet">
+  <meta name="twitter:creator" content="@MozDevNet">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="https://developer.mozilla.org/en-US/search/xml" title="Mozilla Developer Network">
+
+  <!-- third-generation iPad with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon144.a6e4162070f4.png">
+  <!-- iPhone with high-resolution Retina display: -->
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon114.0e9fabd44f85.png">
+  <!-- first- and second-generation iPad: -->
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon72.8ff9d87c82a0.png">
+  <!-- non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+  <link rel="apple-touch-icon-precomposed" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon57.a2490b9a2d76.png">
+  <!-- basic favicon -->
+  
+    
+  
+  <link rel="shortcut icon" href="../../../../../../developer.cdn.mozilla.net/static/img/favicon32.e02854fdcf73.png">
+  <!--[if IE]>
+  <meta http-equiv="imagetoolbar" content="no">
+  <script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/html5shiv.3948ccddab6f.js" charset="utf-8"></script>
+  <![endif]-->
+
+  
+  <link rel="alternate" type="application/json" href="https://developer.mozilla.org/en-US/docs/Web/API/WebVR_API/WebVR_environment_setup$json">
+  <link rel="canonical" href="WebVR_environment_setup.html">
+
+  
+    
+      <link rel="alternate" hreflang="ja" href="https://developer.mozilla.org/ja/docs/Web/API/WebVR_API/WebVR_environment_setup" title="WebVR環境の設定">
+    
+  
+
+  <!-- document-specific social tags -->
+  <meta property="og:title" content="WebVR environment setup">
+  <meta property="og:url" content="https://developer.mozilla.org/en-US/docs/Web/API/WebVR_API/WebVR_environment_setup">
+  <meta name="twitter:url" content="https://developer.mozilla.org/en-US/docs/Web/API/WebVR_API/WebVR_environment_setup">
+  <meta name="twitter:title" content="WebVR environment setup">
+  
+  <meta property="og:description" content="In this article, we'll take you through what you need to set up your WebVR testing environment — including necessary hardware and software — and share some troubleshooting tips.">
+  <meta name="description" content="In this article, we'll take you through what you need to set up your WebVR testing environment — including necessary hardware and software — and share some troubleshooting tips.">
+  <meta name="twitter:description" content="In this article, we'll take you through what you need to set up your WebVR testing environment — including necessary hardware and software — and share some troubleshooting tips.">
+  
+
+  
+    
+
+
+
+  
+</head>
+<body data-slug="Web/API/WebVR_API/WebVR_environment_setup" contextmenu="edit-history-menu" data-search-url="" class="document  ">
+
+  <script type="text/javascript">
+    (function(win) {
+        'use strict';
+
+        
+            (function(){
+  var FLAGS = {
+    'compat_api': false,'kumaediting': false,'page_move': false,'registration_disabled': false,'search_suggestions': false,'section_edit': false,'spam_admin_override': false,'spam_checks_enabled': true,'spam_spammer_override': false,'spam_submissions_enabled': false,'spam_testing_mode': false,'wiki_samples': true,'wiki_spam_exempted': false,'wiki_spam_training': true
+    },
+    SWITCHES = {
+    'wiki_error_on_delete': false,'wiki_force_immediate_rendering': false,'enable_optimizely': false,'welcome_email': true,'application_ACAO': true,'store_revision_ips': true,'dumb_doc_urls': true
+    },
+    SAMPLES = {
+    
+    };
+  window.waffle = {
+    "flag_is_active": function waffle_flag(flag_name) {
+      
+      return !!FLAGS[flag_name];
+    },
+    "switch_is_active": function waffle_switch(switch_name) {
+      
+      return !!SWITCHES[switch_name];
+    },
+    "sample_is_active": function waffle_sample(sample_name) {
+      
+      return !!SAMPLES[sample_name];
+    },
+    "FLAGS": FLAGS,
+    "SWITCHES": SWITCHES,
+    "SAMPLES": SAMPLES
+  };
+})();
+
+        
+
+        // This needs to be set before ckeditor.js loads
+        window.CKEDITOR_BASEPATH = 'https://developer.mozilla.org/static/js/libs/ckeditor/build/ckeditor/';
+
+        // This represents the site configuration
+        win.mdn = {
+            // Properties and settings for CKEditor will go here
+            ckeditor: {},
+            // Feature test results and methods will be placed here
+            features: {},
+            // The path to static assets (images, CSS, JS) in MDN
+            staticPath: 'https://developer.cdn.mozilla.net/static/',
+            // Optimizely API
+            optimizely: win['optimizely'] || [],
+            // Site notifications
+            
+            notifications: [],
+            
+            // Wiki-specific settings will be placed here
+            wiki: {
+                autosuggestTitleUrl: '/en-US/docs/get-documents'
+            },
+            // Assets that need to be dynamically injected
+            assets_disabled: {
+                css: {
+                    'editor-content': ['https://developer.cdn.mozilla.net/static/build/styles/editor-content.3d79df72080d.css',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/styles/wiki-compat-tables.f3a3bfce97a1.css',]
+                },
+                js: {
+                    'syntax-prism': ['https://developer.cdn.mozilla.net/static/build/js/syntax-prism.7a66ddfa68bf.js',],
+                    'wiki-compat-tables': ['https://developer.cdn.mozilla.net/static/build/js/wiki-compat-tables.14ce5dcb2c3d.js',]
+                }
+            }
+        };
+    })(this);
+</script>
+
+  
+
+  <ul id="nav-access">
+    <li><a href="#document-main" id="skip-main">Skip to main content</a></li>
+    <li><a id="skip-language" href="#language">Select language</a></li>
+    
+      <li><a href="#q" id="skip-search">Skip to search</a></li>
+    
+  </ul>
+
+  <!-- Header -->
+  <header id="main-header"><div class="center">
+
+    <div id="tabzilla">
+        <a href="http://www.mozilla.org/" class="no-track">mozilla</a>
+    </div>
+
+    <div class="clear header-clear"></div>
+
+    <a href="https://developer.mozilla.org/en-US/" class="logo">Mozilla Developer Network</a>
+
+    <div id="nav-sec">
+        
+                  <ul>
+                  <li>
+
+    
+
+    <form>
+      <div class="oauth-login-container">
+          <div class="oauth-login-options" tabindex="0">
+              <span class="oauth-login-options-text">
+                Sign in
+              </span>
+              <span class="oauth-icon oauth-github" data-service="GitHub" data-href="/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FWebVR_API%2FWebVR_environment_setup" title="GitHub"><i class="icon-github" aria-hidden="true"></i></span>
+              <span class="oauth-icon oauth-persona launch-persona-login wait-for-persona disabled" data-service="Persona" data-next="/en-US/docs/Web/API/WebVR_API/WebVR_environment_setup" title="Persona"><i class="icon-user" aria-hidden="true"></i></span>
+          </div>
+          <div class="oauth-login-picker" aria-hidden="true">
+              <ul>
+                  <li class="wait-for-persona disabled"><a href="https://developer.mozilla.org/en-US/users/signin" class="login-link launch-persona-login" data-next="/en-US/docs/Web/API/WebVR_API/WebVR_environment_setup" data-service="Persona"><i class="icon-user" aria-hidden="true"></i>Persona</a></li>
+                  <li><a href="https://developer.mozilla.org/users/github/login/?next=%2Fen-US%2Fdocs%2FWeb%2FAPI%2FWebVR_API%2FWebVR_environment_setup" class="login-link" data-service="GitHub"><i class="icon-github" aria-hidden="true"></i>GitHub</a></li>
+              </ul>
+              
+          </div>
+      </div>
+    </form>
+</li>
+                </ul>
+        
+    </div>
+
+    <nav id="main-nav" role="navigation"><ul><li><a href="https://developer.mozilla.org/en-US/docs/Web">Web Platform<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu submenu-cols-2 js-submenu" id="nav-platform-submenu">
+          <div class="submenu-column">
+            <div class="title">Technologies</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML">HTML</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS">CSS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/Graphics">Graphics</a></li>
+              <li><a href="../../API.html">APIs / DOM</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Apps">Apps</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/MathML">MathML</a></li>
+            </ul>
+          </div><div class="submenu-column last">
+            <div class="title">References &amp; Guides</div>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Learn">Learn the Web</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Tutorials">Tutorials</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Reference">References</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Guide">Developer Guides</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">Accessibility</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Web">...more docs</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Zones">Mozilla Docs<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-zones-submenu">
+          <div class="submenu-column">
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons">Add-ons</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox">Firefox</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Mozilla/Marketplace">Firefox Marketplace</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Firefox_OS">Firefox OS</a></li>
+              <li><a href="https://developer.mozilla.org/en-US/docs/Persona">Persona</a></li>
+            </ul>
+          </div>
+        </div>
+      </li><li><a href="https://developer.mozilla.org/en-US/docs/Tools">Developer Tools</a></li><li><a href="https://developer.mozilla.org/en-US/docs/MDN/Feedback">Feedback<i aria-hidden="true" class="icon-caret-down"></i></a>
+
+        <div class="submenu js-submenu" id="nav-contact-submenu">
+          <div class="submenu-column">
+            <ul>
+                <li><a href="https://support.mozilla.org/">Get Firefox help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+                <li><a href="http://stackoverflow.com/">Get web development help<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+            <ul>
+              <li><a href="https://developer.mozilla.org/en-US/docs/MDN/Community">Join the MDN community</a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.doc">Report a content problem<i aria-hidden="true" class="icon-external-link"></i></a></li>
+              <li><a href="https://bugzilla.mozilla.org/form.mdn">Report a bug<i aria-hidden="true" class="icon-external-link"></i></a></li>
+            </ul>
+          </div>
+        </div>
+
+      </li><li class="nav-search-link"><a href="https://developer.mozilla.org/en-US/search" title="Search"><i aria-hidden="true" class="icon-search"></i></a></li><li class="main-nav-search"><form action="https://developer.mozilla.org/en-US/search" method="get" role="search">
+        <div class="search-wrap">
+          <label for="main-q" class="offscreen">Search</label>
+          <input type="search" id="main-q" name="q" placeholder="Search" data-value="" value="">
+          <span class="search-trigger"><i aria-hidden="true" class="icon-search"></i></span>&nbsp;
+          <button type="submit" class="offscreen">Search</button>
+        </div>
+      </form></li></ul></nav>
+  </div></header>
+
+  <!-- Content will go here -->
+  <main id="content"><div class="center clear">
+  
+
+   <!-- end is_zone -->
+
+    <div class="wiki-main-content" id="document-main"><div class="center">
+      
+      <div class="article-meta">
+        <!-- action buttons -->
+        
+
+  
+    
+  
+
+  
+    
+  
+
+  
+
+  <ul class="page-buttons" data-sticky="false">
+      
+      <li><button id="languages-menu" class="transparent" aria-haspopup="true" aria-owns="languages-menu-submenu" aria-expanded="false"><span>Languages</span><i aria-hidden="true" class="icon-globe"></i></button>
+
+        <div class="submenu js-submenu" id="languages-menu-submenu">
+          <div class="submenu-column">
+            <ul id="translations">
+              
+                
+                  <li><bdi><a rel="internal" href="https://developer.mozilla.org/ja/docs/Web/API/WebVR_API/WebVR_environment_setup" title="WebVR環境の設定">日本語</a></bdi></li>
+                
+              
+
+              
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/WebVR_API/WebVR_environment_setup$locales" rel="nofollow, noindex" id="translations-add">Add a translation</a></li>
+              
+            </ul>
+          </div>
+        </div>
+      </li>
+
+      <li class="page-buttons-edit"><a href="https://developer.mozilla.org/en-US/docs/Web/API/WebVR_API/WebVR_environment_setup$edit" class="button" data-optimizely-hook="button-edit-doc" id="edit-button">Edit<i aria-hidden="true" class="icon-pencil"></i></a></li>
+
+        
+
+        <li><button id="advanced-menu" class="only-icon" aria-haspopup="true" aria-owns="advanced-menu-submenu" aria-expanded="false"><span>Advanced</span><i aria-hidden="true" class="icon-cog"></i></button>
+        <div class="submenu js-submenu" id="advanced-menu-submenu">
+          <!-- this page -->
+          <div class="submenu-column">
+            <div class="title">Advanced</div>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/WebVR_API/WebVR_environment_setup$history" rel="nofollow, noindex">History</a></li>
+                
+                
+                
+                
+
+                
+
+                
+                
+                
+                <li class="page-print"><a href="#" onclick="return window.print();">Print this article</a></li>
+            </ul>
+          </div>
+        </div>
+  </li></ul>
+
+        <!-- crumbs -->
+        
+  <nav class="crumbs" role="navigation"><ol xmlns:v="http://rdf.data-vocabulary.org/#" aria-label="breadcrumbs">
+    <li typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US" rel="v:url" property="v:title">MDN</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="https://developer.mozilla.org/en-US/docs/Web" rel="v:url" property="v:title">Web technology for developers</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="../../API.html" rel="v:url" property="v:title">Web APIs</a></li>
+    
+      <li class="crumb" typeof="v:Breadcrumb"><a href="../WebVR_API.html" rel="v:url" property="v:title">WebVR API</a></li>
+    
+    <li class="crumb" typeof="v:Breadcrumb" property="v:title">WebVR environment setup</li>
+  </ol></nav>
+      </div>
+
+      <!-- heading -->
+      <div id="wiki-document-head" class="document-head">
+          <span class="from-search-previous-box">
+            <a class="button from-search-previous only-icon disabled" title="Previous Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-left"></i></a>
+          </span>
+          <span class="from-search-navigate-wrap">
+            <a href="#" class="from-search-navigate"><span class="from-search-navigate-up"><i aria-hidden="true" class="icon-double-angle-up"></i></span><span class="from-search-navigate-down"><i aria-hidden="true" class="icon-double-angle-down"></i></span></a>
+          </span>
+          <div class="from-search-toc submenu">
+            <span class="title">Your Search Results</span>
+            <ol></ol>
+          </div>
+          <span class="from-search-next-box">
+            <a class="button from-search-next only-icon disabled" title="Next Search Result" data-empty-title="No Previous Search Result"><i aria-hidden="true" class="icon-chevron-right"></i></a>
+          </span>
+
+        
+        <div class="contributor-avatars" data-all-text="see all contributors" data-alternate-message="hide contributors">
+            <ul>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/rolfedh" title="View profile: rolfedh">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="rolfedh" data-src="../../../../../../secure.gravatar.com/avatar/4d9e73208c9af39018924d0e67821a796c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">rolfedh</noscript></a>
+                </li>
+            
+                <li class="shown">
+                <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills" title="View profile: chrisdavidmills">
+                <noscript data-width="34" data-height="34" data-class="avatar" data-alt="chrisdavidmills" data-src="../../../../../../secure.gravatar.com/avatar/deeea0ba82390bd5acc539703c4b0cfb6c02.jpeg?s=34&amp;r=pg&amp;d=https%3A%2F%2Fdeveloper.cdn.mozilla.net%2Fmedia%2Fimg%2Favatar.png">chrisdavidmills</noscript></a>
+                </li>
+            
+            </ul>
+        </div>
+        
+
+        <h1>WebVR environment setup</h1>
+
+      </div>
+      
+
+      <!-- start the main content container -->
+        <div id="wiki-column-container" class="wiki-right-present wiki-left-closed wiki-left-none">
+
+          <!-- content row with three strips -->
+          <div class="column-container column-container-reverse">
+
+            
+              <!-- TOC, approvals, etc -->
+              <div class="column-strip wiki-column" id="wiki-right">
+              
+              <!-- table of contents -->
+              <div id="toc" class="toc toggleable" data-closed="true">
+                <a href="#toc" class="title toggler" data-open-icon="icon-plus" data-closed-icon="icon-minus">In This Article<i></i></a>
+                <ol class="toggle-container">
+                  <li><a href="#Hardware" rel="internal">Hardware</a><ol><li><a href="#Head_mounted_displayspositional_trackers" rel="internal">Head mounted displays/positional trackers</a></li><li><a href="#A_computer_for_rendering_the_VR_scene" rel="internal">A computer for rendering the VR scene</a></li></ol></li><li><a href="#Software" rel="internal">Software</a><ol><li><a href="#Oculus_Rift_SDK" rel="internal">Oculus Rift SDK</a></li><li><a href="#Firefox_Nightly_and_WebVR_Enabler_Add-on_(or_equivalent)" rel="internal">Firefox Nightly and WebVR Enabler Add-on (or equivalent)</a></li><li><a href="#Display_configuration" rel="internal">Display configuration</a><ol><li><a href="#Windows" rel="internal">Windows</a></li><li><a href="#Mac" rel="internal">Mac</a></li></ol></li></ol></li><li><a href="#Troubleshooting" rel="internal">Troubleshooting</a>
+                </li></ol>
+              </div>
+              
+              </div>
+            
+
+            
+            
+              
+            
+
+            <!-- center: main article content -->
+            <div id="wiki-content" class="column-main wiki-column text-content">
+
+              
+
+              
+
+              
+                
+                  <div class="warning warning-review">
+                    <p>
+                      This article needs a technical review. <a href="https://developer.mozilla.org/docs/MDN/Contribute/HowTo/Do_a_technical_review">How you can help.</a>
+                    </p>
+                  </div>
+                
+                
+                
+              
+              
+
+              <!-- just the article content -->
+              <article id="wikiArticle">
+                
+                  
+                    <p></p><div class="overheadIndicator draft"> 
+    <p><strong>Draft</strong><br> 
+    This page is not complete.</p> 
+</div><p></p>
+
+<p class="summary">In this article, we'll take you through what you need to set up your WebVR testing environment — including necessary hardware and software — and share some troubleshooting tips.</p>
+
+<h2 id="Hardware">Hardware</h2>
+
+<p>Let's first look at the hardware required for WebVR.</p>
+
+<h3 id="Head_mounted_displayspositional_trackers">Head mounted displays/positional trackers</h3>
+
+<p>There are a few options available for VR HMD hardware at present, but the best/most reliable one is the <a href="https://developer.oculus.com/" class="external">Oculus Rift</a>, which comes with a robust head-mounted display and a positional tracking camera that mounts on a tripod or monitor. The Oculus Rift DK2 currently retails at $350, but prices are expected to come down as more headsets appear on the market, and the technology advances.</p>
+
+<p><img src="../../../../../../mdn.mozillademos.org/files/11037/hw-setup.png" style="display: block; height: 78px; margin: 0px auto; width: 70%;" alt=""></p>
+
+<p>For those of you who are not in the position to invest in a full-on VR hardware unit, there are cheaper alternatives. A VR HMD is just a high-resolution screen with a set of eye goggles in front of it. The display shows two slightly offset cropped and vignetted copies of a scene side by side, one for each eye, to create a stereoscopic view for the user — essential for creating the VR illusion.</p>
+
+<p><img src="../../../../../../mdn.mozillademos.org/files/10695/stereoscopic.png" style="display: block; height: 540px; margin: 0px auto; width: 960px;" alt=""></p>
+
+<p>To create something approximating the same experience, you could use a supporting browser such as Firefox for Android <a href="https://nightly.mozilla.org/" class="external">Nightly</a> — try running a VR app through this, and perhaps create some sort of head apparatus to mount your phone on. This was the idea behind <a href="https://www.google.com/get/cardboard/" class="external">Google Cardboard</a>. The main issue here is that you won't have a positional tracker, and the phone processor won't be as powerful as a desktop PC, so the experience is not quite as realistic (you won't get the same effect by turning your head, and it might be jerky.) But, as an affordable test alternative, it works ok.</p>
+
+<h3 id="A_computer_for_rendering_the_VR_scene">A computer for rendering the VR scene</h3>
+
+<p>Virtual Reality hardware needs to deliver high-precision, low-latency data to deliver an acceptable user experience — the display updates need to run at 60 fps otherwise the experience will seem juddery/jerky. A lot of data needs to be processed to keep this up. Therefore, computers running VR applications need to be quite powerful. Ideally, you should be using a high spec laptop or desktop computer with a dedicated graphics card/GPU. Something like a modern MacBook Pro 15"/17" or Mac Pro, or a Windows gaming PC should be perfect. If you have a slower computer, you will get a jerky display.</p>
+
+<h2 id="Software">Software</h2>
+
+<p>To run WebVR apps, you will need the software setup described below.</p>
+
+<h3 id="Oculus_Rift_SDK">Oculus Rift SDK</h3>
+
+<p>Assuming you will be using an Oculus Rift, you should <a href="https://developer.oculus.com/downloads/" class="external">download and install the Oculus Rift SDK</a> for your system. This includes the Oculus Rift runtime that is required to run any VR app, plus the <em>OculusWorldDemo</em> app, which is useful for troubleshooting.</p>
+
+<h3 id="Firefox_Nightly_and_WebVR_Enabler_Add-on_(or_equivalent)">Firefox Nightly and WebVR Enabler Add-on (or equivalent)</h3>
+
+<p>To setup your browser, follow these steps:</p>
+
+<ol>
+ <li>Firefox <a href="https://nightly.mozilla.org/" class="external">Nightly</a> and <a href="https://www.mozilla.org/en-US/firefox/developer/" class="external">Developer Edition</a> both support WebVR. Install one of those if you haven't already, or make sure your current install is up to date.</li>
+ <li>Next, install the <a href="http://www.mozvr.com/downloads/webvr-addon-0.1.0.xpi" class="external-icon external">WebVR Enabler Add-on</a> — this enables WebVR and disables multiprocess browsing (<a href="https://wiki.mozilla.org/Electrolysis" class="basiclink-blue external">E10S</a>), a new Firefox browsing feature that is currently incompatible with WebVR.</li>
+ <li>Finally, restart your browser.</li>
+</ol>
+
+<div class="note">
+<p><strong>Note</strong>: To enable WebVR support manually you can go to <a>about:config</a> and enable the <code>dom.vr*</code> prefs. The WebVR Enabler Add-on is much easier, however, as it does everything you need in one go.</p>
+</div>
+
+<div class="note">
+<p><strong>Note</strong>: For mobile users, Firefox for Android now also supports WebVR in <a href="http://nightly.mozilla.org/" class="external">Nightly builds</a>. The current implementation is rough and will evolve over time, so feedback is welcome!</p>
+</div>
+
+<div class="note">
+<p><strong>Note</strong>: There are also experimental Chrome builds available with WebVR support. To find out more, check out <a href="http://blog.tojicode.com/2014/07/bringing-vr-to-chrome.html" class="external-icon external">Bringing VR to Chrome</a> by Brandon Jones.</p>
+</div>
+
+<h3 id="Display_configuration">Display configuration</h3>
+
+<p>For optimal performance, it is <strong>very important</strong> to configure your displays as explained below. Not doing so contributes to excess judder and latency. We are working on improving all of these aspects and making WebVR truly plug-and-play, but for now best results require manual configuration.</p>
+
+<h4 id="Windows">Windows</h4>
+
+<p>In the control panel, first go to <em>Display &gt; Screen Resolution</em>. Set<em>:</em></p>
+
+<ul>
+ <li><em>Orientation</em> to <em>Landscape (flipped).</em></li>
+ <li><em>Multiple displays</em> to <em>Extend these displays</em>.</li>
+</ul>
+
+<p><img src="../../../../../../mdn.mozillademos.org/files/10683/win-screen-resolution.png" style="display: block; height: 573px; margin: 0px auto; width: 644px;" alt=""></p>
+
+<p>Next, go to <em>Advanced Settings &gt; Monitor &gt; Monitor Settings</em> and set <em>Screen refresh rate</em> to <em>60Hz</em>.</p>
+
+<p><img src="../../../../../../mdn.mozillademos.org/files/10685/win-monitor.png" style="display: block; height: 573px; margin: 0px auto; width: 644px;" alt=""></p>
+
+<h4 id="Mac">Mac</h4>
+
+<p>First, go to System Preferences &gt; Displays &gt; Display. Set:</p>
+
+<ul>
+ <li><em>Optimize for</em> to <em>Rift</em></li>
+ <li><em>Rotation</em> to <em>90°</em></li>
+ <li><em>Refresh</em> to <em>60Hz</em></li>
+</ul>
+
+<p><em><img src="../../../../../../mdn.mozillademos.org/files/10691/mac-displays.png" style="display: block; height: 528px; margin: 0px auto; width: 1342px;" alt=""></em></p>
+
+<p>Next, go to <em>System Preferences <span class="gray5 light px1">&gt; </span>Displays <span class="gray5 light px1">&gt; </span>Arrangement</em> and set <em>Arrangement</em> to <em>Mirrored</em>.</p>
+
+<p><img src="../../../../../../mdn.mozillademos.org/files/10693/mac-displays-mirrored.png" style="display: block; height: 528px; margin: 0px auto; width: 668px;" alt=""></p>
+
+<h2 id="Troubleshooting">Troubleshooting</h2>
+
+<p>In this section, we provide some troubleshooting tips.</p>
+
+<dl>
+ <dt>My HMD or positioning tracker camera won't work at all.</dt>
+ <dd>Try testing the system out with the <em>OculusWorldDemo</em> that comes with the Oculus Rift SDK, or an equivalent demo if you have different VR hardware. If your hardware units aren't working at all, make sure you have set them up exactly as explained in the accompanying manual. Classic mistakes include leaving the lens cap on the tracking camera and forgetting to plug in the USB cables.</dd>
+ <dt>My HMD or positioning tracker camera still won't work at all.</dt>
+ <dd>A common issue is that the tracking camera stops working, so you can still see the scene, but it doesn't rotate as your head does. A tip: the camera's blue light will be on if it is working. If WebVR apps still aren't working, and the <em>OculusWorldDemo is working</em>, try restarting your browser — Nightly is still very experimental, and just gets a bit stuck sometimes.</dd>
+ <dt>My graphics are still juddery/jerky, even though I've followed the <a href="#Display_configuration">Display configuration</a> instructions correctly.</dt>
+ <dd>Either your graphics card/GPU is too slow, you haven't got a dedicated graphics card/GPU, or your computer is not swapping to the graphics card when the Oculus Rift is turned on. This should be the case, but we can't guarantee it with all computers. Either way, you can test what is happening with an application like&nbsp;<a href="https://gfx.io/" class="external">gfxCardStatus</a> for Mac. It will let you see when the integrated vs. discrete GPU swaps happen, and even force a particular one to be used. If it returns the message "You are using a system that gfxCardStatus does not support. Please ensure that you are using a MacBook Pro with dual GPUs." then you probably don't have a GPU, and you need to get a faster processor or tolerate the jerkiness. For Windows, there is currently no equivalent app, and you'll have to make changes manually.</dd>
+ <dt>My existing second monitor is acting strangely alongside my VR device(s).</dt>
+ <dd>If you already have a second monitor (or external monitor in the case of laptops), you'd be advised to unplug it while using your VR devices. Sometimes you can get some strange effects.</dd>
+ <dt>What about Linux?</dt>
+ <dd>WebVR is/is not currently available for Linux? TBC.</dd>
+</dl>
+                  
+                
+              </article>
+
+              
+
+    
+    
+    
+
+    
+    
+    
+
+    <div class="share">
+        <strong>Share:</strong>
+        <ul>
+            <li><a href="http://twitter.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FAPI%2FWebVR_API%2FWebVR_environment_setup%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dtwitter.com&amp;text=I+learned+about+WebVR+environment+setup+on+MDN." target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/API/WebVR_API/WebVR_environment_setup?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=twitter.com" data-title="I learned about WebVR environment setup on MDN." class="share-link twitter"><i aria-hidden="true" class="icon-twitter"></i>Twitter</a></li>
+            <li><a href="http://facebook.com/sharer.php?s=100&amp;p[url]=https://developer.mozilla.org/en-US/docs/Web/API/WebVR_API/WebVR_environment_setup?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/API/WebVR_API/WebVR_environment_setup?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=facebook.com" data-title="I learned about WebVR environment setup on MDN." class="share-link facebook"><i aria-hidden="true" class="icon-facebook"></i>Facebook</a></li>
+            <li><a href="https://plus.google.com/share?url=https%3A%2F%2Fdeveloper.mozilla.org%2Fen-US%2Fdocs%2FWeb%2FAPI%2FWebVR_API%2FWebVR_environment_setup%3Futm_campaign%3Dshare%26utm_medium%3Ddoc%2Bshare%2Blink%26utm_source%3Dplus.google.com" target="_blank" data-url="https://developer.mozilla.org/en-US/docs/Web/API/WebVR_API/WebVR_environment_setup?utm_campaign=share&amp;utm_medium=doc+share+link&amp;utm_source=plus.google.com" data-title="I learned about WebVR environment setup on MDN." class="share-link gplus"><i aria-hidden="true" class="icon-google-plus"></i>Google+</a></li>
+        </ul>
+    </div>
+
+              
+
+                <!-- contributors -->
+                <div class="wiki-block contributors">
+                  <h2 class="offscreen">Document Tags and Contributors</h2>
+                  
+                  
+  <div class="tag-attach-list contributors-sub">
+    <i aria-hidden="true" class="icon-tags icon-fw"></i>
+    <strong>Tags:</strong>&nbsp;
+    <ul class="tags tags-small">
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/environment">environment</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Hardware">Hardware</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/software">software</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/troubleshooting">troubleshooting</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/Virtual Reality">Virtual Reality</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/VR">VR</a></li>
+      
+        <li><a href="https://developer.mozilla.org/en-US/docs/tag/WebVR">WebVR</a></li>
+      
+    </ul>
+  </div>
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-group icon-fw"></i>&nbsp;<strong>Contributors to this page:</strong> 
+        <a href="https://developer.mozilla.org/en-US/profiles/rolfedh">rolfedh</a>, 
+    
+        <a href="https://developer.mozilla.org/en-US/profiles/chrisdavidmills">chrisdavidmills</a>
+    
+                    </div>
+                  
+
+                  
+                    <div class="contributors-sub">
+                      <i aria-hidden="true" class="icon-clock-o icon-fw"></i>&nbsp;<strong>Last updated by:</strong>
+                      <a href="https://developer.mozilla.org/en-US/profiles/rolfedh">rolfedh</a>,
+                      <time datetime="2016-03-03T15:52:47-08:00">Mar 3, 2016, 3:52:47 PM</time>
+                    </div>
+                  
+                </div>
+              
+            </div>
+
+            
+          </div>
+        </div>
+      </div>
+    </div> <!-- ends "main-content" -->
+
+  <menu type="context" id="edit-history-menu">
+    <menuitem data-action="/en-US/docs/Web/API/WebVR_API/WebVR_environment_setup$edit" label="Edit page"></menuitem>
+    <menuitem data-action="/en-US/docs/Web/API/WebVR_API/WebVR_environment_setup$history" label="View page history"></menuitem>
+  </menu>
+
+  </div></main>
+
+  <!-- Footer -->
+  <footer><div class="center">
+    <div class="column-container">
+      <div class="column-main">
+        
+        <div class="contentinfo">
+          <p>© 2005-2016 Mozilla Developer Network and individual contributors.</p> <p>Content is available under <a href="https://developer.mozilla.org/en-US/docs/MDN/About#Copyrights_and_licenses">these licenses</a>.</p>
+          <ul>
+            <li><a href="https://developer.mozilla.org/docs/MDN/About">About MDN</a></li>
+            <li><a href="http://www.mozilla.org/about/legal/terms/mozilla">Terms</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/">Privacy</a></li>
+            <li><a href="http://www.mozilla.org/privacy/websites/#cookies">Cookies</a></li>
+            <li><a href="http://github.com/mozilla/kuma">Contribute to the code</a></li>
+          </ul>
+        <p></p>
+        
+        </div>
+      </div>
+      <div class="column-strip">
+        
+          
+  
+    <form class="languages go" method="get" action="https://developer.mozilla.org/en-US/docs/Web">
+      <label for="language">Other languages:</label>
+      <select id="language" class="wiki-l10n" name="next" dir="ltr">
+        <option value="/en-US/docs/Web/API/WebVR_API/WebVR_environment_setup" selected="">
+          English (US)
+        </option>
+        
+          <option value="/ja/docs/Web/API/WebVR_API/WebVR_environment_setup">
+            日本語
+          </option>
+      </select>
+      <noscript>&lt;button type="submit"&gt;Go&lt;/button&gt;</noscript>
+    </form>
+  
+
+        
+      </div>
+    </div>
+  </div></footer>
+
+  <!-- site js -->
+  
+    
+    <!--[if lte IE 8]><script type="text/javascript" src="https://developer.cdn.mozilla.net/static/build/js/selectivizr.091e18cf669b.js" charset="utf-8"></script><![endif]-->
+
+    <form id="_persona_login" method="post" action="https://developer.mozilla.org/users/persona/signin" data-csrf-token-url="/users/persona/csrf" data-request="{&quot;siteName&quot;: &quot;Mozilla Developer Network&quot;, &quot;siteLogo&quot;: &quot;/static/img/opengraph-logo.png&quot;}" data-persona-script="../../../../../../login.persona.org/include.js">
+  <input type="hidden" name="csrfmiddlewaretoken" value="" id="_persona_csrf_token">
+  <input type="hidden" name="next" value="" id="_persona_next_url">
+  <input type="hidden" name="process" value="" id="_persona_process">
+  <input type="hidden" name="assertion" id="_persona_assertion">
+</form>
+
+    <script type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/main.a7b27a25fb9c.js" charset="utf-8"></script>
+
+      <script>
+        if(window.mdn && mdn.analytics) mdn.analytics.trackOutboundLinks();
+      </script>
+
+    
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/syntax-prism-min.js" charset="utf-8"></script><script type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/jsi18n/en-us/javascript.4fef8f9a3076.js"></script>
+  
+    <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/wiki.bd71ca9fd27d.js" charset="utf-8" id="wikiscript"></script>
+
+  
+
+  <script async="" type="text/javascript" src="../../../../../../developer.cdn.mozilla.net/static/build/js/helpfulness.7b208a764d28.js" charset="utf-8"></script>
+
+  
+
+
+
+<!-- Mirrored from developer.mozilla.org/en-US/docs/Web/API/WebVR_API/WebVR_environment_setup by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 May 2016 15:30:30 GMT -->
+</body></html>

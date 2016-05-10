@@ -1,0 +1,110 @@
+<html><!-- Mirrored from stat.ethz.ch/R-manual/R-patched/library/utils/html/chooseCRANmirror.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 04 May 2016 16:39:51 GMT --><!-- Added by HTTrack --><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><!-- /Added by HTTrack -->
+<title>Select a CRAN Mirror</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="R.css">
+</head><body>
+
+<table width="100%" summary="page for chooseCRANmirror {utils}"><tbody><tr><td>chooseCRANmirror {utils}</td><td style="text-align: right;">R Documentation</td></tr></tbody></table>
+
+<h2>Select a CRAN Mirror</h2>
+
+<h3>Description</h3>
+
+<p>Interact with the user to choose a CRAN mirror.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>chooseCRANmirror(graphics = getOption("menu.graphics"), ind = NULL,
+                 useHTTPS = getOption("useHTTPS", TRUE),
+                 local.only = FALSE)
+
+getCRANmirrors(all = FALSE, local.only = FALSE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tbody><tr valign="top"><td><code>graphics</code></td>
+<td>
+<p>Logical.  If true, use a graphical list: on Windows or
+the OS X GUI use a list box, and on a Unix-alike  use a Tk widget if
+package <span class="pkg">tcltk</span> and an X server are available.  Otherwise use a
+text <code><a href="menu.html">menu</a></code>.</p>
+</td></tr>
+<tr valign="top"><td><code>ind</code></td>
+<td>
+<p>Optional numeric value giving which entry to select.</p>
+</td></tr>
+<tr valign="top"><td><code>useHTTPS</code></td>
+<td>
+<p>Whether to prefer HTTPS mirrors.</p>
+</td></tr>
+<tr valign="top"><td><code>all</code></td>
+<td>
+<p>Logical, get all known mirrors or only the ones flagged as OK.</p>
+</td></tr>
+<tr valign="top"><td><code>local.only</code></td>
+<td>
+<p>Logical, try to get most recent list from the CRAN
+master or use file on local disk only.</p>
+</td></tr>
+</tbody></table>
+
+
+<h3>Details</h3>
+
+<p>A list of mirrors is stored in file
+‘<span class="file"><var><a href="../../base/html/Rhome.html">R_HOME</a></var>/doc/CRAN_mirrors.csv</span>’, but first an on-line
+list of current mirrors is consulted, and the file copy used only if
+the on-line list is inaccessible.
+</p>
+<p>This function is called by a Windows GUI menu item and by
+<code><a href="contrib.url.html">contrib.url</a></code> if it finds the initial dummy value of
+<code><a href="../../base/html/options.html">options</a>("repos")</code>.
+</p>
+<p>The <code>useHTTPS</code> argument defaults to <code>TRUE</code>.  With
+<code>useHTTPS = TRUE</code>, HTTPS mirrors will be offered in preference to
+HTTP mirrors (which are listed in a sub-menu).  If it is set to
+<code>FALSE</code>, no HTTPS mirrors will be offered.  Choosing an HTTPS
+mirror provides some guarantees on the identity of the site chosen and
+so is recommended. (However, most but not all <span style="font-family: Courier New, Courier; color: #666666;"><b>R</b></span> builds support
+downloading from HTTPS sites.)
+</p>
+<p><code>ind</code> chooses a row in the list of current mirrors, by number. It
+is best used with <code>local.only = TRUE</code> and row numbers in
+‘<span class="file"><var><a href="../../base/html/Rhome.html">R_HOME</a></var>/doc/CRAN_mirrors.csv</span>’.
+</p>
+
+
+<h3>Value</h3>
+
+<p>None for <code>chooseCRANmirror()</code>, this function is invoked for its
+side effect of updating <code>options("repos")</code>.
+</p>
+<p><code>getCRANmirrors()</code> returns a data frame with mirror information.
+</p>
+
+
+<h3>Note</h3>
+
+<p>The online list of mirrors is always accessed using HTTPS.  If your 
+build of R does not support HTTPS, R uses the local copy
+in ‘<span class="file"><var><a href="../../base/html/Rhome.html">R_HOME</a></var>/doc/CRAN_mirrors.csv</span>’.  It can be
+updated from https://cran.r-project.org/CRAN_mirrors.csv.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="setRepositories.html">setRepositories</a></code>, <code><a href="chooseBioCmirror.html">chooseBioCmirror</a></code>,
+<code><a href="contrib.url.html">contrib.url</a></code>.
+</p>
+
+<hr><div style="text-align: center;">[Package <em>utils</em> version 3.2.2 <a href="00Index.html">Index</a>]</div>
+
+<!-- Mirrored from stat.ethz.ch/R-manual/R-patched/library/utils/html/chooseCRANmirror.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 04 May 2016 16:39:51 GMT -->
+
+</body></html>
