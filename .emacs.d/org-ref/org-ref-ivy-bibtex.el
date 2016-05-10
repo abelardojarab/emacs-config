@@ -23,7 +23,14 @@
 ;;
 
 ;;; Code:
-(require 'swiper)
+(unless (require 'ivy nil t)
+  (message "Org-ref is installing `ivy'...")
+  (let ((package-archives '(("gnu"         . "http://elpa.gnu.org/packages/")
+			    ("melpa" . "http://melpa.org/packages/"))))
+    (package-initialize)
+    (package-refresh-contents)
+    (package-install 'ivy))
+  (require 'ivy))
 (require 'org-ref-bibtex)
 
 ;;;###autoload
@@ -81,14 +88,14 @@ ENTRY is selected from `orhc-bibtex-candidates'."
   "Open the pdf associated with ENTRY.
 ENTRY is selected from `orhc-bibtex-candidates'."
   (with-ivy-window
-   (let ((pdf (expand-file-name
-	       (format "%s.pdf"
-		       (cdr (assoc "=key=" entry)))
-	       org-ref-pdf-directory)))
-     (if (file-exists-p pdf)
-	 (org-open-file pdf)
-       (message "No pdf found for %s" (cdr (assoc "=key=" entry)))))))
-  
+    (let ((pdf (expand-file-name
+		(format "%s.pdf"
+			(cdr (assoc "=key=" entry)))
+		org-ref-pdf-directory)))
+      (if (file-exists-p pdf)
+	  (org-open-file pdf)
+	(message "No pdf found for %s" (cdr (assoc "=key=" entry)))))))
+
 
 (defun or-ivy-bibtex-open-notes (entry)
   "Open the notes associated with ENTRY.
@@ -98,8 +105,8 @@ ENTRY is selected from `orhc-bibtex-candidates'."
 		(format "%s.org"
 			(cdr (assoc "=key=" entry)))
 		org-ref-notes-directory))))
-  
-  
+
+
 (defun or-ivy-bibtex-open-entry (entry)
   "Open the bibtex file at ENTRY.
 ENTRY is selected from `orhc-bibtex-candidates'."
@@ -239,7 +246,7 @@ Create email unless called from an email."
  'org-ref-ivy-insert-cite-link
  org-ref-ivy-cite-actions)
 
-     
+
 
 (defun org-ref-ivy-insert-label-link ()
   "Insert a label with ivy."

@@ -22,10 +22,15 @@
 ;; This file defines the completion engine for org-ref using `helm-bibtex'.
 
 ;;; Code:
-(require 'helm-config)
-(require 'helm)
-(require 'helm-bibtex)
 (require 'org-ref-helm)
+(unless (require 'helm-bibtex nil t)
+  (message "Org-ref is installing `helm-bibtex'...")
+  (let ((package-archives '(("gnu"         . "http://elpa.gnu.org/packages/")
+			    ("melpa" . "http://melpa.org/packages/"))))
+    (package-initialize)
+    (package-refresh-contents)
+    (package-install 'helm-bibtex))
+  (require 'helm-bibtex))
 
 ;;;###autoload
 (defun org-ref-bibtex-completion-completion ()
@@ -46,18 +51,17 @@
 (org-ref-bibtex-completion-completion)
 
 (defcustom org-ref-bibtex-completion-actions
-  '(("Insert citation" . bibtex-completion-insert-citation)
-    ("Open PDF file (if present)" . bibtex-completion-open-pdf)
-    ("Open URL or DOI in browser" . bibtex-completion-open-url-or-doi)
-    ("Insert reference" . bibtex-completion-insert-reference)
-    ("Insert BibTeX key" . bibtex-completion-insert-key)
-    ("Insert BibTeX entry" . bibtex-completion-insert-bibtex)
-    ("Attach PDF to email" . bibtex-completion-add-PDF-attachment)
+  '(("Insert citation" . helm-bibtex-insert-citation)
+    ("Open PDF file (if present)" . helm-bibtex-open-pdf)
+    ("Open URL or DOI in browser" . helm-bibtex-open-url-or-doi)
+    ("Insert reference" . helm-bibtex-insert-reference)
+    ("Insert BibTeX key" . helm-bibtex-insert-key)
+    ("Insert BibTeX entry" . helm-bibtex-insert-bibtex)
+    ("Attach PDF to email" . helm-bibtex-add-PDF-attachment)
     ("Edit notes" . bibtex-completion-edit-notes)
     ("Show entry" . bibtex-completion-show-entry)
     ("Add keywords to entries" . org-ref-helm-tag-entries)
-    ("Copy entry to clipboard" . bibtex-completion-copy-candidate)
-    ("Add keywords to entries" . org-ref-helm-tag-entries))
+    ("Copy entry to clipboard" . bibtex-completion-copy-candidate))
   "Cons cells of string and function to set the actions of `helm-bibtex' to.
 The car of cons cell is the string describing the function.
 The cdr of the the cons cell is the function to use."
@@ -169,7 +173,9 @@ Argument CANDIDATES helm candidates."
                 (concat
                  keywords
                  ", " (bibtex-autokey-get-field "keywords")))
-               (save-buffer)))))
+	       (when (looking-back ", ")
+	       	 (delete-backward-char 2))
+	       (save-buffer)))))
 
 
 

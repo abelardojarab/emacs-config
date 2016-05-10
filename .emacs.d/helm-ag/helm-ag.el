@@ -4,7 +4,7 @@
 
 ;; Author: Syohei YOSHIDA <syohex@gmail.com>
 ;; URL: https://github.com/syohex/emacs-helm-ag
-;; Version: 0.52
+;; Version: 0.54
 ;; Package-Requires: ((emacs "24.3") (helm "1.7.7"))
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -97,6 +97,11 @@ They are specified to `--ignore' options."
 (defcustom helm-ag-use-temp-buffer nil
   "Use temporary buffer for persistent action."
   :type 'boolean)
+
+(defcustom helm-ag-show-status-function 'helm-ag-show-status-default-mode-line
+  "Function called after that `ag' process is finished after `helm-do-ag'.
+Default behaviour shows finish and result in mode-line."
+  :type 'function)
 
 (defface helm-ag-edit-deleted-line
   '((t (:inherit font-lock-comment-face :strike-through t)))
@@ -282,7 +287,10 @@ They are specified to `--ignore' options."
     (funcall find-func filename)
     (goto-char (point-min))
     (when line
-      (forward-line (1- (string-to-number line))))))
+      (forward-line (1- (string-to-number line))))
+    (ignore-errors
+      (and (re-search-forward helm-ag--last-query (line-end-position) t)
+           (goto-char (match-beginning 0))))))
 
 (defun helm-ag--open-file-with-temp-buffer (filename)
   (switch-to-buffer (get-buffer-create " *helm-ag persistent*"))
@@ -858,19 +866,23 @@ Continue searching the parent directory? "))
                  (put-text-property start bound 'helm-cand-num num))
                (forward-line 1)))))
 
+(defun helm-ag-show-status-default-mode-line ()
+  (setq mode-line-format
+        '(" " mode-line-buffer-identification " "
+          (:eval (propertize
+                  (format
+                   "[AG process finished - (%s results)] "
+                   (helm-get-candidate-number))
+                  'face 'helm-grep-finish)))))
+
 (defun helm-ag--do-ag-propertize (input)
   (with-helm-window
     (helm-ag--remove-carrige-returns)
     (helm-ag--propertize-candidates input)
     (goto-char (point-min))
-    (setq mode-line-format
-          '(" " mode-line-buffer-identification " "
-            (:eval (propertize
-                    (format
-                     "[AG process finished - (%s results)] "
-                     (helm-get-candidate-number))
-                    'face 'helm-grep-finish))))
-    (force-mode-line-update)))
+    (when helm-ag-show-status-function
+      (funcall helm-ag-show-status-function)
+      (force-mode-line-update))))
 
 (defun helm-ag--construct-extension-options ()
   (cl-loop for ext in helm-do-ag--extensions
@@ -1022,7 +1034,8 @@ Continue searching the parent directory? "))
     (helm-attrset 'name (helm-ag--helm-header search-dir)
                   helm-source-do-ag)
     (helm :sources '(helm-source-do-ag) :buffer "*helm-ag*"
-          :input (helm-ag--insert-thing-at-point helm-ag-insert-at-point)
+          :input (or (helm-ag--marked-input)
+                     (helm-ag--insert-thing-at-point helm-ag-insert-at-point))
           :keymap helm-do-ag-map)))
 
 ;;;###autoload

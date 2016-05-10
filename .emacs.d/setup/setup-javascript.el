@@ -55,7 +55,8 @@
 ;; tern
 (use-package tern
   :defer t
-  :if (executable-find "node")
+  :if (and (executable-find "node")
+           (executable-find "npm"))
   :commands (tern-mode)
   :diminish tern-mode
   :load-path (lambda () (expand-file-name "tern/emacs/" user-emacs-directory))
@@ -74,6 +75,16 @@
 (use-package web-server
   :defer t
   :load-path (lambda () (expand-file-name "web-server/" user-emacs-directory)))
+
+;; js2-refactor
+(use-package js2-refactor
+  :defer t
+  :commands js2-refactor-mode
+  :diminish js2-refactor-mode
+  :load-path (lambda () (expand-file-name "js2-refactor/" user-emacs-directory))
+  :init (add-hook 'js2-mode-hook 'js2-refactor-mode)
+  :config
+  (js2r-add-keybindings-with-prefix "C-c r"))
 
 ;; ac-js2
 (use-package ac-js2

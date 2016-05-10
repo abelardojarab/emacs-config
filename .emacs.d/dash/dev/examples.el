@@ -69,6 +69,9 @@ new list."
     (-map-last 'even? 'square '(1 2 3 4)) => '(1 2 3 16)
     (--map-last (> it 2) (* it it) '(1 2 3 4)) => '(1 2 3 16)
     (--map-last (= it 2) 17 '(1 2 3 2)) => '(1 2 3 17)
+    ;; the next two tests assert that the input list is not modified #158
+    (let ((l '(1 2 3))) (list (--map-last (< it 2) (number-to-string it) l) l)) => '(("1" 2 3) (1 2 3))
+    (let ((l '(1 2 3))) (list (--map-last (< it 3) (number-to-string it) l) l)) => '((1 "2" 3) (1 2 3))
     (-map-last 'even? 'square '(1 3 5 7)) => '(1 3 5 7)
     (-map-last 'even? 'square '(2)) => '(4)
     (-map-last 'even? 'square nil) => nil)
@@ -128,7 +131,10 @@ new list."
   (defexamples -remove-last
     (-remove-last 'even? '(1 3 5 4 7 8 10 11)) => '(1 3 5 4 7 8 11)
     (-remove-last 'stringp '(1 2 "last" "second" "third")) => '(1 2 "last" "second")
-    (--remove-last (> it 3) '(1 2 3 4 5 6 7 8 9 10)) => '(1 2 3 4 5 6 7 8 9))
+    (--remove-last (> it 3) '(1 2 3 4 5 6 7 8 9 10)) => '(1 2 3 4 5 6 7 8 9)
+    ;; the next two tests assert that the input list is not modified #158
+    (let ((l '(1 2 3))) (list (--remove-last (< it 2) l) l)) => '((2 3) (1 2 3))
+    (let ((l '(1 2 3))) (list (--remove-last (< it 4) l) l)) => '((1 2) (1 2 3)))
 
   (defexamples -remove-item
     (-remove-item 3 '(1 2 3 2 3 4 5 3)) => '(1 2 2 4 5)
@@ -162,9 +168,21 @@ new list."
     (-take 3 '(1 2 3 4 5)) => '(1 2 3)
     (-take 17 '(1 2 3 4 5)) => '(1 2 3 4 5))
 
+  (defexamples -take-last
+    (-take-last 3 '(1 2 3 4 5)) => '(3 4 5)
+    (-take-last 17 '(1 2 3 4 5)) => '(1 2 3 4 5)
+    (-take-last 1 '(1 2 3 4 5)) => '(5)
+    (let ((l '(1 2 3 4 5)))
+      (setcar (-take-last 2 l) 1)
+      l) => '(1 2 3 4 5))
+
   (defexamples -drop
     (-drop 3 '(1 2 3 4 5)) => '(4 5)
     (-drop 17 '(1 2 3 4 5)) => '())
+
+  (defexamples -drop-last
+    (-drop-last 3 '(1 2 3 4 5)) => '(1 2)
+    (-drop-last 17 '(1 2 3 4 5)) => '())
 
   (defexamples -take-while
     (-take-while 'even? '(1 2 3 4)) => '()
@@ -996,9 +1014,17 @@ new list."
     (let (s) (-each-while '(2 4 5 6) 'even? (lambda (item) (!cons item s))) s) => '(4 2)
     (let (s) (--each-while '(1 2 3 4) (< it 3) (!cons it s)) s) => '(2 1))
 
+  (defexamples -each-indexed
+    (let (s) (-each-indexed '(a b c) (lambda (index item) (setq s (cons (list item index) s)))) s) => '((c 2) (b 1) (a 0))
+    (let (s) (--each-indexed '(a b c) (setq s (cons (list it it-index) s))) s) => '((c 2) (b 1) (a 0)))
+
   (defexamples -dotimes
     (let (s) (-dotimes 3 (lambda (n) (!cons n s))) s) => '(2 1 0)
-    (let (s) (--dotimes 5 (!cons it s)) s) => '(4 3 2 1 0)))
+    (let (s) (--dotimes 5 (!cons it s)) s) => '(4 3 2 1 0))
+
+  (defexamples -doto
+    (-doto '(1 2 3) (!cdr) (!cdr)) => '(3)
+    (-doto '(1 . 2) (setcar 3) (setcdr 4)) => '(3 . 4)))
 
 (def-example-group "Destructive operations" nil
   (defexamples !cons

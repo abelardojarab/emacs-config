@@ -4,9 +4,9 @@
 
 ;; Author: John Kitchin <jkitchin@andrew.cmu.edu>
 ;; URL: https://github.com/jkitchin/org-ref
-;; Version: 0.8.0
+;; Version: 0.8.1
 ;; Keywords: org-mode, cite, ref, label
-;; Package-Requires: ((dash "2.11.0") (helm "1.5.5") (helm-bibtex "2.0.0") (hydra "0.13.2") (key-chord "0") (s "1.10.0") (f "0.18.0") (emacs "24.4"))
+;; Package-Requires: ((dash "2.11.0") (parsebib "1.0") (hydra "0.13.2") (key-chord "0") (s "1.10.0") (f "0.18.0") (emacs "24.4"))
 
 ;; This file is not currently part of GNU Emacs.
 
@@ -238,7 +238,7 @@ for each entry.  It also tries to be compatible with `org-bibtex'.
 
 An alternative is
  (lambda ()
-  (helm-bibtex-edit-notes (car (org-ref-get-bibtex-key-and-file thekey))))
+  (bibtex-completion-edit-notes (car (org-ref-get-bibtex-key-and-file thekey))))
 
 Use that if you like the one file one note approach of `helm-bibtex'."
   :type 'function
@@ -1574,61 +1574,39 @@ set in `org-ref-default-bibliography'"
     (when (string= (or (f-ext (or (buffer-file-name) "")) "")  "bib")
       (setq org-ref-bibliography-files (list (buffer-file-name)))
       (throw 'result org-ref-bibliography-files))
+
     ;; otherwise, check current file for a bibliography source
-    (save-excursion (save-restriction
-      (widen)                
-      (goto-char (point-min))
-      ;;  look for a bibliography link
-      (when (re-search-forward "\\<bibliography:\\([^\]\|\n]+\\)" nil t)
-        (setq org-ref-bibliography-files
-              (mapcar 'org-ref-strip-string
-		      (split-string (match-string 1) ",")))
-        (throw 'result org-ref-bibliography-files))
+    (save-excursion
+      (save-restriction
+	(widen)
+	(goto-char (point-min))
 
-
-      ;; we did not find a bibliography link. now look for \bibliography
-      (goto-char (point-min))
-      (when (re-search-forward "\\\\bibliography{\\(.*?\\)}" nil t)
-        ;; split, and add .bib to each file
-        (setq org-ref-bibliography-files
-              (mapcar (lambda (x) (concat x ".bib"))
-                      (mapcar 'org-ref-strip-string
-                              (split-string (match-string 1) ","))))
-        (throw 'result org-ref-bibliography-files))
-
-      ;; no bibliography found. maybe we need a biblatex addbibresource
-      (goto-char (point-min))
-      ;;  look for a bibliography link
-      (when (re-search-forward "addbibresource:\\([^\]\|\n]+\\)" nil t)
-        (setq org-ref-bibliography-files
-              (mapcar 'org-ref-strip-string
-		      (split-string (match-string 1) ",")))
-        (throw 'result org-ref-bibliography-files))
-
-      ;; one last attempt at the latex addbibresource
-      (goto-char (point-min))
-      (when (re-search-forward "\\addbibresource{\\(.*?\\)}" nil t)
-	(setq org-ref-bibliography-files
-	      (mapcar 'org-ref-strip-string
-		      (split-string (match-string 1) ",")))
-	(throw 'result org-ref-bibliography-files))
-
-      ;; Try BIBINPUTS. It is a : separated string of paths.
-      (let ((bibinputs (getenv "BIBINPUTS")))
-	(when bibinputs
+	;; look for org-ref bibliography or addbibresource links
+	(setq org-ref-bibliography-files nil)
+	(while (re-search-forward
+		"\\<\\(bibliography\\|addbibresource\\):\\([^\]\|\n]+\\)"
+		nil t)
 	  (setq org-ref-bibliography-files
-		(apply
-		 'append
-		 (loop for path in (split-string  bibinputs ":")
-		       collect
-		       (-filter (lambda (f) (f-ext? f "bib"))
-				(f-files
-				 (substitute-in-file-name  path))))))
-	  (when org-ref-bibliography-files
-	    (throw 'result org-ref-bibliography-files))))
+		(append org-ref-bibliography-files
+			(mapcar 'org-ref-strip-string
+				(split-string (match-string 2) ",")))))
+	;; locate the corresponding bib files
+	(setq org-ref-bibliography-files
+	      (reftex-locate-bibliography-files default-directory
+						org-ref-bibliography-files))
+	(when org-ref-bibliography-files
+	  (throw 'result org-ref-bibliography-files))
 
-      ;; we did not find anything. use defaults
-      (setq org-ref-bibliography-files org-ref-default-bibliography))))
+	;; we did not find org-ref links. now look for latex links
+	(goto-char (point-min))
+	(setq org-ref-bibliography-files
+	      (reftex-locate-bibliography-files default-directory))
+	(when org-ref-bibliography-files
+	  (throw 'result org-ref-bibliography-files))))
+
+    ;; we did not find anything. use defaults
+    (setq org-ref-bibliography-files org-ref-default-bibliography))
+
 
   ;; set reftex-default-bibliography so we can search
   (set (make-local-variable 'reftex-default-bibliography) org-ref-bibliography-files)
@@ -2402,13 +2380,13 @@ file.  Makes a new buffer with clickable links."
 ;;** Sort fields in a bibtex entry
 ;;;###autoload
 (defun org-ref-sort-bibtex-entry ()
-  "Sort fields of entry in standard order and downcase them."
+  "Sort fields of entry in standard order."
   (interactive)
   (bibtex-beginning-of-entry)
   (let* ((entry (bibtex-parse-entry))
          (entry-fields)
          (other-fields)
-         (type (downcase (cdr (assoc "=type=" entry))))
+         (type (cdr (assoc "=type=" entry)))
          (key (cdr (assoc "=key=" entry)))
 	 (field-order (cdr (assoc type org-ref-bibtex-sort-order))))
 
@@ -2430,14 +2408,44 @@ file.  Makes a new buffer with clickable links."
 	      (lambda (field)
 		(when (member field entry-fields)
 		  (format "%s = %s,"
-			  (downcase field)
+			  field
 			  (cdr (assoc field entry))))) field-order "\n")
+	     (mapconcat
+	      (lambda (field)
+		(format "%s = %s,"
+			field
+			(cdr (assoc field entry))))
+	      other-fields "\n")
+	     "\n}\n\n"))
+    (bibtex-find-entry key)
+    (bibtex-fill-entry)
+    (bibtex-clean-entry)))
+
+;; downcase entries
+;;;###autoload
+(defun org-ref-downcase-bibtex-entry ()
+  "Downcase the entry type and fields."
+  (interactive)
+  (bibtex-beginning-of-entry)
+  (let* ((entry (bibtex-parse-entry))
+         (entry-fields)
+         (type (downcase (cdr (assoc "=type=" entry))))
+         (key (cdr (assoc "=key=" entry))))
+
+    (setq entry-fields (mapcar (lambda (x) (car x)) entry))
+    ;; we do not want to reenter these fields
+    (setq entry-fields (remove "=key=" entry-fields))
+    (setq entry-fields (remove "=type=" entry-fields))
+
+    (bibtex-kill-entry)
+    (insert
+     (concat "@" (downcase type) "{" key ",\n"
 	     (mapconcat
 	      (lambda (field)
 		(format "%s = %s,"
 			(downcase field)
 			(cdr (assoc field entry))))
-	      other-fields "\n")
+	      entry-fields "\n")
 	     "\n}\n\n"))
     (bibtex-find-entry key)
     (bibtex-fill-entry)
@@ -2871,7 +2879,7 @@ move to the beginning of the previous cite link after this one."
                 ;; get plurality on occurrence correct
                 (message (concat
                           (number-to-string count)
-                          " occurence"
+                          " occurrence"
                           (when (or (= count 0)
                                     (> count 1))
                             "s")))))
@@ -3198,30 +3206,30 @@ provide their own version."
 (defvar org-ref-biblink-re "^\\(bibliography\\(style\\)?\\|\\(printbibliography\\)\\):.*"
   "Regex for bibliography links used for showing biblinks at the end of the buffer.")
 
-(defun org-ref-show-biblinks (&optional _)
-  "Flag a region containing biblinks so they do not get folded.
-We assume these are at the end of the buffer, and do not look
-past the last headline."
-  (save-excursion
-    (goto-char (point-max))
-    (when (re-search-backward org-ref-biblink-re nil t)
-      (outline-flag-region (1- (point)) (point-max) nil))))
+;; (defun org-ref-show-biblinks (&optional _)
+;;   "Flag a region containing biblinks so they do not get folded.
+;; We assume these are at the end of the buffer, and do not look
+;; past the last headline."
+;;   (save-excursion
+;;     (goto-char (point-max))
+;;     (when (re-search-backward org-ref-biblink-re nil t)
+;;       (outline-flag-region (1- (point)) (point-max) nil))))
 
-(add-hook 'org-cycle-hook 'org-ref-show-biblinks)
-(add-hook 'org-occur-hook 'org-ref-show-biblinks)
+;; (add-hook 'org-cycle-hook 'org-ref-show-biblinks)
+;; (add-hook 'org-occur-hook 'org-ref-show-biblinks)
 
 ;; (remove-hook 'org-cycle-hook 'org-ref-show-biblinks)
 ;; (remove-hook 'org-occur-hook 'org-ref-show-biblinks)
 
 ;; This seems to redefine where the end of subtree is. We do not do this in an
 ;; export though.
-(defadvice org-end-of-subtree (after always-show-org-footer
-                                     ()
-                                     activate)
-  (unless org-export-current-backend
-    (when (>= (point) (1- (point-max)))
-      (re-search-backward org-ref-biblink-re nil t)
-      (setq ad-return-value (point)))))
+;; (defadvice org-end-of-subtree (after always-show-org-footer
+;;                                      ()
+;;                                      activate)
+;;   (unless org-export-current-backend
+;;     (when (>= (point) (1- (point-max)))
+;;       (re-search-backward org-ref-biblink-re nil t)
+;;       (setq ad-return-value (point)))))
 
 ;; (ad-remove-advice 'org-end-of-subtree  'after 'always-show-org-footer)
 

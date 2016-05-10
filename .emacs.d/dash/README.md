@@ -99,7 +99,9 @@ Functions returning a sublist of the original list.
 * [-non-nil](#-non-nil-list) `(list)`
 * [-slice](#-slice-list-from-optional-to-step) `(list from &optional to step)`
 * [-take](#-take-n-list) `(n list)`
+* [-take-last](#-take-last-n-list) `(n list)`
 * [-drop](#-drop-n-list) `(n list)`
+* [-drop-last](#-drop-last-n-list) `(n list)`
 * [-take-while](#-take-while-pred-list) `(pred list)`
 * [-drop-while](#-drop-while-pred-list) `(pred list)`
 * [-select-by-indices](#-select-by-indices-indices-list) `(indices list)`
@@ -273,6 +275,7 @@ Functions iterating over lists for side-effect only.
 
 * [-each](#-each-list-fn) `(list fn)`
 * [-each-while](#-each-while-list-pred-fn) `(list pred fn)`
+* [-each-indexed](#-each-indexed-list-fn) `(list fn)`
 * [-dotimes](#-dotimes-num-fn) `(num fn)`
 
 ### Destructive operations
@@ -365,6 +368,8 @@ See also: [`-map-when`](#-map-when-pred-rep-list), [`-replace-last`](#-replace-l
 Return a new list consisting of the result of (`fn` index item) for each item in `list`.
 
 In the anaphoric form `--map-indexed`, the index is exposed as `it-index`.
+
+See also: [`-each-indexed`](#-each-indexed-list-fn).
 
 ```el
 (-map-indexed (lambda (index item) (- item index)) '(1 2 3 4)) ;; => '(1 1 1 1)
@@ -532,18 +537,45 @@ section is returned.  Defaults to 1.
 
 Return a new list of the first `n` items in `list`, or all items if there are fewer than `n`.
 
+See also: [`-take-last`](#-take-last-n-list)
+
 ```el
 (-take 3 '(1 2 3 4 5)) ;; => '(1 2 3)
 (-take 17 '(1 2 3 4 5)) ;; => '(1 2 3 4 5)
+```
+
+#### -take-last `(n list)`
+
+Return the last `n` items of `list` in order.
+
+See also: [`-take`](#-take-n-list)
+
+```el
+(-take-last 3 '(1 2 3 4 5)) ;; => '(3 4 5)
+(-take-last 17 '(1 2 3 4 5)) ;; => '(1 2 3 4 5)
+(-take-last 1 '(1 2 3 4 5)) ;; => '(5)
 ```
 
 #### -drop `(n list)`
 
 Return the tail of `list` without the first `n` items.
 
+See also: [`-drop-last`](#-drop-last-n-list)
+
 ```el
 (-drop 3 '(1 2 3 4 5)) ;; => '(4 5)
 (-drop 17 '(1 2 3 4 5)) ;; => '()
+```
+
+#### -drop-last `(n list)`
+
+Remove the last `n` items of `list` and return a copy.
+
+See also: [`-drop`](#-drop-n-list)
+
+```el
+(-drop-last 3 '(1 2 3 4 5)) ;; => '(1 2)
+(-drop-last 17 '(1 2 3 4 5)) ;; => '()
 ```
 
 #### -take-while `(pred list)`
@@ -2135,6 +2167,19 @@ Return nil, used for side-effects only.
 ```el
 (let (s) (-each-while '(2 4 5 6) 'even? (lambda (item) (!cons item s))) s) ;; => '(4 2)
 (let (s) (--each-while '(1 2 3 4) (< it 3) (!cons it s)) s) ;; => '(2 1)
+```
+
+#### -each-indexed `(list fn)`
+
+Call (`fn` index item) for each item in `list`.
+
+In the anaphoric form `--each-indexed`, the index is exposed as `it-index`.
+
+See also: [`-map-indexed`](#-map-indexed-fn-list).
+
+```el
+(let (s) (-each-indexed '(a b c) (lambda (index item) (setq s (cons (list item index) s)))) s) ;; => '((c 2) (b 1) (a 0))
+(let (s) (--each-indexed '(a b c) (setq s (cons (list it it-index) s))) s) ;; => '((c 2) (b 1) (a 0))
 ```
 
 #### -dotimes `(num fn)`

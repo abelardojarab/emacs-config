@@ -86,7 +86,7 @@ Set to nil to avoid setting timestamps in the entries."
 (defcustom doi-utils-make-notes-function
   (lambda ()
     (bibtex-beginning-of-entry)
-    (helm-bibtex-edit-notes (cdr (assoc "=key=" (bibtex-parse-entry))) ))
+    (bibtex-completion-edit-notes (cdr (assoc "=key=" (bibtex-parse-entry))) ))
   "Function to create notes for a bibtex entry.
 
 Set `doi-utils-make-notes' to nil if you want no notes."
@@ -213,7 +213,7 @@ Argument REDIRECT-URL URL you are redirected to."
    redirect-url
    (lambda (status)
      (goto-char (point-min))
-     (re-search-forward "<iframe id=\"pdfDocument\" src=\"\\([^\"]*\\)\"" nil)
+     (re-search-forward "<iframe id=\"pdfDocument\" src=\"\\([^\"]*\\)\"" nil t)
      (setq *doi-utils-pdf-url* (match-string 1)
            *doi-utils-waiting* nil)))
   (while *doi-utils-waiting* (sleep-for 0.1))
@@ -1128,33 +1128,45 @@ error."
          (concat
           "http://search.crossref.org/dois?q="
           (url-hexify-string (org-ref-bib-citation))))
-      (setq json-string (buffer-substring url-http-end-of-headers (point-max)))
+      (save-excursion
+      	(goto-char (point-min))
+      	(while (re-search-forward "<i>\\|</i>" nil t)
+      	  (replace-match ""))
+	(goto-char (point-min))
+	(while (re-search-forward "&amp;" nil t)
+	  (replace-match "&"))
+      	(goto-char (point-min))
+      	(while (re-search-forward "&quot;" nil t)
+      	  (replace-match "\\\"" nil t)))
+      (setq raw-json-string (buffer-substring url-http-end-of-headers (point-max)))
+      ;; decode json string
+      (setq json-string (decode-coding-string (string-make-unibyte raw-json-string) 'utf-8))
       (setq json-data (json-read-from-string json-string)))
 
     (let* ((name (format "Crossref hits for %s" (org-ref-bib-citation)))
            (helm-candidates (mapcar (lambda (x)
                                       (cons
                                        (concat
-                                        (cdr (assoc 'fullCitation x))
-                                        " "
-                                        (cdr (assoc 'doi x)))
+                                        (cdr (assoc 'fullCitation x)))
                                        (cdr (assoc 'doi x))))
                                     json-data))
+
            (source `((name . ,name)
                      (candidates . ,helm-candidates)
                      ;; just return the candidate
                      (action . (("Insert doi and url field" . (lambda (doi)
-                                                                (bibtex-make-field "doi")
+                                                                (bibtex-make-field "doi" t)
                                                                 (backward-char)
                                                                 ;; crossref returns doi url, but I prefer only a doi for the doi field
                                                                 (insert (replace-regexp-in-string "^https?://dx.doi.org/" "" doi))
                                                                 (when (string= ""(reftex-get-bib-field "url" entry))
-                                                                  (bibtex-make-field "url")
+                                                                  (bibtex-make-field "url" t)
                                                                   (backward-char)
                                                                   (insert doi))))
                                 ("Open url" . (lambda (doi)
                                                 (browse-url doi))))))))
-      (helm :sources '(source)))))
+      (helm :sources source
+	    :buffer "*doi utils*"))))
 
 
 
@@ -1234,19 +1246,19 @@ error."
 	 (concat
 	  "http://search.crossref.org/dois?q="
 	  (url-hexify-string query)))
-      ;; remove html tags
+      ;; replace html entities
       (save-excursion
+      	(goto-char (point-min))
+      	(while (re-search-forward "<i>\\|</i>" nil t)
+      	  (replace-match ""))
 	(goto-char (point-min))
-	(while (re-search-forward "<i>" nil t)
-	  (replace-match ""))
-	(goto-char (point-min))
-	(while (re-search-forward "&quot;" nil t)
-	  (replace-match "\\\"" nil t))
-	(goto-char (point-min))
-	(while (re-search-forward "</i>" nil t)
-	  (replace-match "")))
+	(while (re-search-forward "&amp;" nil t)
+	  (replace-match "&"))
+      	(goto-char (point-min))
+      	(while (re-search-forward "&quot;" nil t)
+      	  (replace-match "\\\"" nil t)))
       (setq raw-json-string (buffer-substring url-http-end-of-headers (point-max)))
-      ;; encode json string
+      ;; decode json string
       (setq json-string (decode-coding-string (string-make-unibyte raw-json-string) 'utf-8))
       (setq json-data (json-read-from-string json-string)))
 
@@ -1281,7 +1293,8 @@ error."
 							      (recenter-top-bottom 0))))
 				("Open url" . (lambda (doi)
 						(browse-url doi))))))))
-      (helm :sources '(source)))))
+      (helm :sources source
+	    :buffer "*doi utils*"))))
 
 (defalias 'crossref-add-bibtex-entry 'doi-utils-add-entry-from-crossref-query
   "Alias function for convenience.")
