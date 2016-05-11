@@ -128,6 +128,7 @@
 
 ;; Window purpose
 (use-package window-purpose
+  :disabled t ;; caused issues with mode-icons and powerline
   :load-path (lambda () (expand-file-name "window-purpose/" user-emacs-directory))
   :init (progn
           ;; overriding `purpose-mode-map' with empty keymap, so it doesn't conflict

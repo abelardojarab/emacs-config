@@ -205,10 +205,6 @@ If you have not set a compilation-window in `ecb-compile-window-height' then
 the layout contains no persistent compilation window and the other windows get a
 little more place. "
               (ecb-set-methods-buffer)
-              (ecb-split-ver 0.4)
-              (ecb-set-analyse-buffer)
-              (ecb-split-ver 0.5)
-              (ecb-set-symboldef-buffer)
               (select-window (next-window (next-window)))
               (ecb-set-history-buffer)
               (ecb-split-ver 0.5)
@@ -226,15 +222,6 @@ little more place. "
 
             ;; Reparse after a file save
             (add-hook 'after-save-hook
-                      '(lambda()
-                         (when (bound-and-true-p ecb-minor-mode)
-                           ;; this is to get the methods buffer to refresh correctly.
-                           ;; semantic idle mode refresh doesn't seem to work all that well.
-                           (semantic-force-refresh)
-                           (ecb-rebuild-methods-buffer))))
-
-            ;; Reparse after a file load
-            (add-hook 'find-file-hook
                       '(lambda()
                          (when (bound-and-true-p ecb-minor-mode)
                            ;; this is to get the methods buffer to refresh correctly.

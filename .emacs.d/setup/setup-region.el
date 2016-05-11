@@ -39,8 +39,7 @@
             (define-key region-bindings-mode-map (kbd "<next>") 'shift-mark-forward-page)
             (define-key region-bindings-mode-map (kbd "<left>") 'shift-mark-backward-char)
             (define-key region-bindings-mode-map (kbd "<right>") 'shift-mark-forward-char)
-            (define-key region-bindings-mode-map (kbd "<home>") 'shift-mark-backward-paragraph)
-            (define-key region-bindings-mode-map (kbd "<end>") 'shift-mark-forward-paragraph)
+            (define-key region-bindings-mode-map (kbd "p") 'shift-mark-forward-paragraph)
 
             ;; movement bindings
             (define-key region-bindings-mode-map (kbd "u") 'move-text-up)
