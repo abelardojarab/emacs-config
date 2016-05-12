@@ -139,7 +139,7 @@ Style FvwmTaskBar NeverFocus, Layer 0
 *FvwmButtonsFore blick
 *FvwmButtons: Colorset 7
 *FvwmButtons: BoxSize fixed
-*FvwmButtons: Rows 17
+*FvwmButtons: Rows 18
 *FvwmButtons: Columns 1
 *FvwmButtons: Frame 1
 *FvwmButtons: (1x2+0+0, Swallow "FvwmPager" 'FvwmPager *')
@@ -150,6 +150,7 @@ Style FvwmTaskBar NeverFocus, Layer 0
 *FvwmButtons(Title Emacs, Icon emacs.png, Action 'Exec "Emacs Server" emacs &')
 *FvwmButtons(Title EmacsClient, Icon emacs.png, Action 'Exec "Emacs Client" emacsclient --server-file ~/.emacs.cache/server/server -c &')
 *FvwmButtons(Title CLion, Icon clion.png, Action 'Exec "CLion" clion.sh &')
+*FvwmButtons(Title Smartgit, Icon smartgit.png, Action 'Exec "Smartgit" /usr/share/smartgit/bin/smartgit.sh &')
 *FvwmButtons(Title Glade, Icon glade.png, Action 'Exec "Glade" glade-3 &')
 *FvwmButtons(Title Dia, Icon dia.png, Action 'Exec "Dia" dia &')
 *FvwmButtons(Title Gimp, Icon gimp.png, Action 'Exec "Gimp" gimp &')
