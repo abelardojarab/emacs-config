@@ -211,7 +211,7 @@ AddToMenu MainMenu "Main Menu" Title
 + "Office/Text" Popup OfficeTextSubMenu
 + "System Configuration" Popup ConfigSubMenu
 + "" Nop
-+ "RestartFvwm" Restart
++ "Restart Fvwm" Restart
 + "Quit Fvwm" Quit
 
 # FvwmIdent is an xwininfo replacement.
