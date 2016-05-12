@@ -139,10 +139,11 @@ Style FvwmTaskBar NeverFocus, Layer 0
 *FvwmButtonsFore blick
 *FvwmButtons: Colorset 7
 *FvwmButtons: BoxSize fixed
-*FvwmButtons: Rows 18
+*FvwmButtons: Rows 19
 *FvwmButtons: Columns 1
 *FvwmButtons: Frame 1
 *FvwmButtons: (1x2+0+0, Swallow "FvwmPager" 'FvwmPager *')
+*FvwmButtons(Title Chrome, Icon chrome.png, Action 'Exec "Google Chrome" google-chrome-beta &')
 *FvwmButtons(Title Firefox, Icon firefox.png, Action 'Exec "Firefox" firefox &')
 *FvwmButtons(Title Pidgin, Icon pidgin.png, Action 'Exec "Pidgin" pidgin &')
 *FvwmButtons(Title Terminal, Icon gnome-terminal.png, Action 'Exec "Terminal" gnome-terminal &')
