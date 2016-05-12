@@ -25,7 +25,14 @@
 ;;; Code:
 
 (use-package dired
-  :bind ("C-x C-j" . dired-jump)
+  :bind (("C-x C-j" . dired-jump)
+         :map dired-mode-map
+         (("." . dired-up-directory)
+          ("M-u" . dired-up-directory)
+          ("M-!" . async-shell-command)
+          ("RET" . dired-find-alternate-file)
+          ("C-c d" . dired-filter-by-directory)
+          ("C-c f" . dired-filter-by-file)))
   :config (progn
             (defun my/dired-mode-hook ()
               (setq-local truncate-lines t))
@@ -45,12 +52,8 @@
                   dired-auto-revert-buffer t
                   global-auto-revert-non-file-buffers t)
 
-            ;; key bindings
-            (bind-key "u" #'dired-up-directory dired-mode-map)
-            (bind-key "M-!" #'async-shell-command dired-mode-map)
-            (define-key dired-mode-map (kbd "RET") #'dired-find-alternate-file)
-
             ;; extra hooks
+            (add-hook 'dired-mode-hook (lambda () (dired-omit-mode)))
             (add-hook 'dired-mode-hook #'hl-line-mode)
             (add-hook 'dired-mode-hook #'my/dired-mode-hook)))
 

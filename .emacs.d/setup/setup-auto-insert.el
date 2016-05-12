@@ -54,7 +54,7 @@
             (define-auto-insert "\\.py$" ["py-auto-insert" autoinsert-yas-expand])
 
             (defadvice auto-insert (around yasnippet-expand-after-auto-insert activate)
-              "Expand Content Auto-inserted as yasnippet Templete,
+              "Expand Content Auto-inserted as yasnippet Template,
   so That WE could use yasnippet in autoinsert mode "
               (let ((is-new-File (and (not buffer-read-only)
                                       (or (eq this-command 'auto-insert)

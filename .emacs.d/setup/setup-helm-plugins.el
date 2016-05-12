@@ -218,6 +218,7 @@
 ;; Helm dash
 (use-package helm-dash
   :defer t
+  :if (executable-find "sqlite3")
   :commands (helm-dash)
   :load-path (lambda () (expand-file-name "helm-dash/" user-emacs-directory))
   :bind (:map ctl-x-map

@@ -130,6 +130,14 @@
                                     '(("^ +\\([-*]\\) "
                                        (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
 
+            ;; Allow quotes to be verbatim
+            (add-hook 'org-mode-hook
+                      (lambda ()
+                        (setcar (nthcdr 2 org-emphasis-regexp-components) " \t\n,'")
+                        (org-set-emph-re 'org-emphasis-regexp-components org-emphasis-regexp-components)
+                        (org-element--set-regexps)
+                        (custom-set-variables `(org-emphasis-alist ',org-emphasis-alist))))
+
             ;; Agenda settings
             (setq org-agenda-inhibit-startup t ;; 50x speedup
                   org-agenda-use-tag-inheritance nil ;; 3-4x speedup

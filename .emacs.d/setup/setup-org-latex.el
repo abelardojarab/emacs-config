@@ -162,7 +162,7 @@
          (setq TeX-master t)
          (turn-on-reftex)
          ;; enable auto-revert-mode to update reftex when bibtex file changes on disk
-         (global-auto-revert-mode t) ; careful: this can kill the undo
+         (global-auto-revert-mode t) ;; careful: this can kill the undo
          ;; history when you change the file
          ;; on-disk.
          (reftex-parse-all)

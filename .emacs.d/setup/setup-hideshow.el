@@ -134,8 +134,18 @@
                 (when (eq 'code (overlay-get ov 'hs))
                   (let* ((marker-string "*fringe-dummy*")
                          (marker-length (length marker-string))
-                         (display-string (format " (%d)..." (count-lines (overlay-start ov) (overlay-end ov)))))
-                    (overlay-put ov 'help-echo "Hiddent text. M-s <SPC> to show")
+                         (display-string (format " ... %s <%d> ... "
+                                                 (replace-regexp-in-string
+                                                  "\n" ""
+                                                  (replace-regexp-in-string
+                                                   "^[ \t]*" ""
+                                                   (replace-regexp-in-string
+                                                    "[ \t]*$" ""
+                                                    (buffer-substring (overlay-start ov)
+                                                                      (+ (overlay-start ov) 40)))))
+                                                 (count-lines (overlay-start ov)
+                                                              (overlay-end ov)))))
+                    (overlay-put ov 'help-echo "Hiddent text... ")
                     (put-text-property 0 marker-length 'display (list 'left-fringe 'hs-marker 'fringe-face) marker-string)
                     (overlay-put ov 'before-string marker-string)
                     (put-text-property 1 (length display-string) 'face 'mode-line display-string)
@@ -160,7 +170,17 @@
                         (search-forward "\r")
                         (forward-char -1)
                         (let* ((ov (make-overlay (point) end))
-                               (display-string (format " (%d)..." (count-lines begin end))))
+                               (display-string (format " ... %s <%d> ... "
+                                                       (replace-regexp-in-string
+                                                        "\n" ""
+                                                        (replace-regexp-in-string
+                                                         "^[ \t]*" ""
+                                                         (replace-regexp-in-string
+                                                          "[ \t]*$" ""
+                                                          (buffer-substring (overlay-start ov)
+                                                                            (+ (overlay-start ov) 40)))))
+                                                       (count-lines (overlay-start ov)
+                                                                    (overlay-end ov)))))
                           (put-text-property 0 marker-length 'display (list 'left-fringe 'hs-marker 'fringe-face) marker-string)
                           (overlay-put ov 'before-string marker-string)
                           (put-text-property 1 (length display-string) 'face 'mode-line display-string)

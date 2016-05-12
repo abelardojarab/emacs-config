@@ -51,6 +51,9 @@
 ;; try to improve slow performance on windows.
 (setq w32-get-true-file-attributes nil)
 
+;; auto revert files if they are modified in an external editor
+(global-auto-revert-mode t)
+
 ;; Garantee utf8 as input-method
 (set-input-method nil)
 (setq read-quoted-char-radix 10)

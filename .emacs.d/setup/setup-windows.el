@@ -128,7 +128,8 @@
 
 ;; Window purpose
 (use-package window-purpose
-  :disabled t ;; caused issues with mode-icons and powerline
+  :defer t
+  :commands purpose-mode
   :load-path (lambda () (expand-file-name "window-purpose/" user-emacs-directory))
   :init (progn
           ;; overriding `purpose-mode-map' with empty keymap, so it doesn't conflict
@@ -150,6 +151,13 @@
             ;; ensure that the buffer is replaced by a buffer with the same purpose
             ;; (or the window deleted, if no such buffer)
             (purpose-x-kill-setup)))
+
+;; Resize windows
+(use-package resize-window
+  :defer t
+  :commands resize-window
+  :load-path (lambda () (expand-file-name "resize-window/" user-emacs-directory)))
+
 
 (provide 'setup-windows)
 ;;; setup-windows.el ends here

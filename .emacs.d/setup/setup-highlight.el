@@ -62,6 +62,24 @@
   :config (progn (mapc (lambda (mode)
                          (add-hook mode 'highlight-symbol-mode))
                        '(prog-mode-hook))
+
+                 ;; http://emacs.stackexchange.com/questions/931
+                 (defun highlight-symbol-mode-post-command ()
+                   "After a command, change the temporary highlighting.
+Remove the temporary symbol highlighting and, unless a timeout is specified,
+create the new one."
+                   (if (eq this-command 'highlight-symbol-jump)
+                       (when highlight-symbol-on-navigation-p
+                         (highlight-symbol-temp-highlight))
+                     (highlight-symbol-update-timer highlight-symbol-idle-delay)))
+
+                 (defun highlight-symbol-update-timer (value)
+                   (when highlight-symbol-timer
+                     (cancel-timer highlight-symbol-timer))
+                   (setq highlight-symbol-timer
+                         (run-with-timer value nil 'highlight-symbol-temp-highlight)))
+
+                 (setq highlight-symbol-idle-delay .1)
                  (setq highlight-symbol-on-navigation-p t)))
 
 ;; Highlight blocks
