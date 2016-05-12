@@ -45,7 +45,7 @@ DestroyFunc InitFunction
 AddToFunc   InitFunction
 + I Exec exec xrdb ~/.Xresources
 + I Exec exec feh --bg-scale $[fvwm_wallpaper]
-+ I Exec exec plank
+# + I Exec exec plank
 + I Exec exec trayer --SetDockType true --distance 200 --padding 10 --transparent true --tint a6aaaa --alpha 50 --edge top --align right --expand true --widthtype percent --width 12 --heighttype pixel --height 24 --distancefrom right
 + I Exec exec /usr/lib/x86_64-linux-gnu/notify-osd
 + I Exec exec bash -c 'if [ $DISPLAY = ":99" ]; then insync start; fi'
@@ -139,18 +139,21 @@ Style FvwmTaskBar NeverFocus, Layer 0
 *FvwmButtonsFore blick
 *FvwmButtons: Colorset 7
 *FvwmButtons: BoxSize fixed
-*FvwmButtons: Rows 10
+*FvwmButtons: Rows 13
 *FvwmButtons: Columns 1
 *FvwmButtons: Frame 1
 *FvwmButtons: (1x2+0+0, Swallow "FvwmPager" 'FvwmPager *')
+*FvwmButtons(Title Firefox, Icon firefox.png, Action 'Exec "Firefox" firefox &')
 *FvwmButtons(Title Terminal, Icon gnome-terminal.png, Action 'Exec "Terminal" gnome-terminal &')
 *FvwmButtons(Title XTerm, Icon xterm.png, Action 'Exec "xterm" xterm -ls &')
 *FvwmButtons(Title Emacs, Icon emacs.png, Action 'Exec "Emacs Server" emacs &')
 *FvwmButtons(Title EmacsClient, Icon emacs.png, Action 'Exec "Emacs Client" emacsclient --server-file ~/.emacs.cache/server/server -c &')
-*FvwmButtons(Title Glade, Icon glade.png, Action 'Exec "Glade" glade-3 &')
-*FvwmButtons(Title PyCharm, Icon pycharm.png, Action 'Exec "PyCharm" pycharms.sh &')
 *FvwmButtons(Title CLion, Icon clion.png, Action 'Exec "CLion" clion.sh &')
-*FvwmButtons(Title Firefox, Icon firefox.png, Action 'Exec "Firefox" firefox &')
+*FvwmButtons(Title Glade, Icon glade.png, Action 'Exec "Glade" glade-3 &')
+*FvwmButtons(Title Dia, Icon dia.png, Action 'Exec "Dia" dia &')
+*FvwmButtons(Title Gimp, Icon gimp.png, Action 'Exec "Gimp" gimp &')
+*FvwmButtons(Title Inkscape, Icon inkscape.png, Action 'Exec "Inkscape" inkscape &')
+*FvwmButtons(Title Transmission, Icon transmission.png, Action 'Exec "Transmission" transmission-gtk &')
 
 # AutoHiding Console
 Style HiddenConsole Sticky, WindowListSkip, Notitle, StaysOnTop, !Handles, FixedSize, FixedPosition
@@ -169,29 +172,40 @@ MenuStyle * "$[infostore.font_mono]"
 
 DestroyMenu GraphicsCADSubMenu
 AddToMenu GraphicsCADSubMenu "Graphics/CAD" Title
-+ "dia"      Exec exec dia
-+ "Glade"    Exec exec glade-3
++ "dia"            Exec exec dia
++ "Gimp"           Exec exec gimp
++ "Inkscape"       Exec exec inkscape
++ "Glade"          Exec exec glade-3
 
 DestroyMenu NetSubMenu
-AddToMenu NetSubMenu "Net" Title
-+ "firefox"  Exec exec firefox
+AddToMenu NetSubMenu "Network/Internet" Title
++ "Firefox"        Exec exec firefox
++ "Transmission"   Exec exec transmission-gtk
++ "Pidgin"         Exec exec pidgin
 
 DestroyMenu OfficeTextSubMenu
 AddToMenu OfficeTextSubMenu "Office/Text" Title
-+ "Emacs Client"  Exec exec emacsclient
-+ "Emacs Server"  Exec exec emacs
-+ "LibreOffice"   Exec exec soffice
++ "Emacs Client"   Exec exec emacsclient
++ "Emacs Server"   Exec exec emacs
++ "LibreOffice Writer"    Exec exec libreoffice --writer
++ "LibreOffice Calc"      Exec exec libreoffice --calc
++ "LibreOffice Impress"   Exec exec libreoffice --impress
+
+DestroyMenu ConfigSubMenu
+AddToMenu ConfigSubMenu "System Configuration" Title
++ "Printers"   Exec exec system-config-printer
 
 # Replace Mouse Button 0 with my main ("start button") menu.
 Mouse 0 R N Menu MainMenu
 
 AddToMenu MainMenu "Main Menu" Title
-+ "Terminal" Exec exec gnome-terminal
 + "Home" Exec exec nautilus
++ "Terminal" Exec exec gnome-terminal
 + "xterm" Exec exec xterm -fg green -bg black -vb
-+ "Net" Popup NetSubMenu
++ "Network/Internet" Popup NetSubMenu
 + "Graphics/CAD" Popup GraphicsCADSubMenu
 + "Office/Text" Popup OfficeTextSubMenu
++ "System Configuration" Popup ConfigSubMenu
 + "" Nop
 + "RestartFvwm" Restart
 + "Quit Fvwm" Quit
