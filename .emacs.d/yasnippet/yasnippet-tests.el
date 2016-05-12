@@ -68,6 +68,26 @@
     (should (string= (yas--buffer-contents)
                      "bla from another BLA"))))
 
+(ert-deftest mirror-with-transformation-and-autofill ()
+  "Test interaction of autofill with mirror transforms"
+  (let ((words "one two three four five")
+        filled-words)
+    (with-temp-buffer
+      (c-mode)      ; In `c-mode' filling comments works by narrowing.
+      (yas-minor-mode +1)
+      (setq fill-column 10)
+      (auto-fill-mode +1)
+      (yas-expand-snippet "/* $0\n */")
+      (yas-mock-insert words)
+      (setq filled-words (delete-and-extract-region (point-min) (point-max)))
+      (yas-expand-snippet "/* $1\n */\n$2$2")
+      (should (string= (yas--buffer-contents)
+                       "/* \n */\n"))
+      (yas-mock-insert words)
+      (should (string= (yas--buffer-contents)
+                       (concat filled-words "\n"))))))
+
+
 (ert-deftest primary-field-transformation ()
   (with-temp-buffer
     (yas-minor-mode 1)
@@ -172,6 +192,68 @@
     (ert-simulate-command '(yas-next-field))
     (ert-simulate-command '(yas-prev-field))
     (should (looking-at "little sibling"))))
+
+(ert-deftest basic-indentation ()
+  (with-temp-buffer
+    (ruby-mode)
+    (yas-minor-mode 1)
+    (set (make-local-variable 'yas-indent-line) 'auto)
+    (set (make-local-variable 'yas-also-auto-indent-first-line) t)
+    (yas-expand-snippet "def ${1:method}${2:(${3:args})}\n$0\nend")
+    ;; Note that empty line is not indented.
+    (should (string= "def method(args)
+
+end" (buffer-string)))
+    (cl-loop repeat 3 do (ert-simulate-command '(yas-next-field)))
+    (yas-mock-insert (make-string (random 5) ?\ )) ; purposedly mess up indentation
+    (yas-expand-snippet "class << ${self}\n  $0\nend")
+    (ert-simulate-command '(yas-next-field))
+    (should (string= "def method(args)
+  class << self
+    
+  end
+end" (buffer-string)))
+    (should (= 4 (current-column)))))
+
+(ert-deftest indentation-markers ()
+  "Test a snippet with indentation markers (`$<')."
+  (with-temp-buffer
+    (ruby-mode)
+    (yas-minor-mode 1)
+    (set (make-local-variable 'yas-indent-line) nil)
+    (yas-expand-snippet "def ${1:method}${2:(${3:args})}\n$>Indent\nNo indent\\$>\nend")
+    (should (string= "def method(args)
+  Indent
+No indent$>
+end" (buffer-string)))))
+
+
+(ert-deftest navigate-a-snippet-with-multiline-mirrors-issue-665 ()
+  "In issue 665, a multi-line mirror is attempted.
+
+Indentation doesn't (yet) happen on these mirrors, but let this
+test guard against any misnavigations that might be introduced by
+an incorrect implementation of mirror auto-indentation"
+  (with-temp-buffer
+    (ruby-mode)
+    (yas-minor-mode 1)
+    (yas-expand-snippet "def initialize(${1:params})\n$2${1:$(
+mapconcat #'(lambda (arg)
+                 (format \"@%s = %s\" arg arg))
+             (split-string yas-text \", \")
+             \"\n\")}\nend")
+    (yas-mock-insert "bla, ble, bli")
+    (ert-simulate-command '(yas-next-field))
+    (let ((expected (mapconcat #'identity
+                               '("@bla = bla"
+                                 "[[:blank:]]*@ble = ble"
+                                 "[[:blank:]]*@bli = bli")
+                               "\n")))
+      (should (looking-at expected))
+      (yas-mock-insert "blo")
+      (ert-simulate-command '(yas-prev-field))
+      (ert-simulate-command '(yas-next-field))
+      (should (looking-at (concat "blo" expected))))))
 
 
 ;;; Snippet expansion and character escaping
@@ -831,7 +913,7 @@ add the snippets associated with the given mode."
 (defun yas-should-expand (keys-and-expansions)
   (dolist (key-and-expansion keys-and-expansions)
     (yas-exit-all-snippets)
-    (narrow-to-region (point) (point))
+    (erase-buffer)
     (insert (car key-and-expansion))
     (let ((yas-fallback-behavior nil))
       (ert-simulate-command '(yas-expand)))
@@ -845,7 +927,7 @@ add the snippets associated with the given mode."
 (defun yas-should-not-expand (keys)
   (dolist (key keys)
     (yas-exit-all-snippets)
-    (narrow-to-region (point) (point))
+    (erase-buffer)
     (insert key)
     (let ((yas-fallback-behavior nil))
       (ert-simulate-command '(yas-expand)))
