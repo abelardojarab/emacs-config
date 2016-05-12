@@ -47,7 +47,7 @@
 (use-package epl             :defer t :load-path (lambda () (expand-file-name "epl/" user-emacs-directory)))
 (use-package f               :defer t :load-path (lambda () (expand-file-name "f/" user-emacs-directory)))
 (use-package s               :defer t :load-path (lambda () (expand-file-name "s/" user-emacs-directory)))
-(use-package seq             :defer t :load-path (lambda () (expand-file-name "seq/" user-emacs-directory)))
+(use-package seq             :load-path (lambda () (expand-file-name "seq/" user-emacs-directory)))
 (use-package pkg-info        :defer t :load-path (lambda () (expand-file-name "pkg-info/" user-emacs-directory)))
 (use-package popup           :defer t :load-path (lambda () (expand-file-name "popup/" user-emacs-directory)))
 (use-package popwin          :defer t :load-path (lambda () (expand-file-name "popwin/" user-emacs-directory)))

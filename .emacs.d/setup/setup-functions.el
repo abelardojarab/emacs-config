@@ -36,11 +36,11 @@
 
 ;; Missing function
 (when (not (fboundp 'special-form-p))
-(defun special-form-p (object)
-  "Non-nil if and only if OBJECT is a special form."
-  (if (and (symbolp object) (fboundp object))
-      (setq object (indirect-function object)))
-  (and (subrp object) (eq (cdr (subr-arity object)) 'unevalled))))
+  (defun special-form-p (object)
+    "Non-nil if and only if OBJECT is a special form."
+    (if (and (symbolp object) (fboundp object))
+        (setq object (indirect-function object)))
+    (and (subrp object) (eq (cdr (subr-arity object)) 'unevalled))))
 
 ;; Missing function
 (when (not (fboundp 'define-error))
@@ -63,6 +63,31 @@ Defaults to `error'."
       (put name 'error-conditions
            (delete-dups (copy-sequence (cons name conditions))))
       (when message (put name 'error-message message)))))
+
+;; Missing function
+(when (not (fboundp 'seq-find))
+  (defun seq-find (predicate sequence &optional default)
+    "Return the first element for which (PREDICATE element) is non-nil in SEQUENCE.
+If no element is found, return DEFAULT.
+Note that `seq-find' has an ambiguity if the found element is
+identical to DEFAULT, as it cannot be known if an element was
+found or not."
+    (catch 'seq--break
+      (seq-doseq (elt sequence)
+        (when (funcall predicate elt)
+          (throw 'seq--break elt)))
+      default)))
+
+;; Missing function
+(when (not (fboundp 'seq-some))
+  (defun seq-some (predicate sequence)
+         "Return the first value for which if (PREDICATE element) is non-nil for in SEQUENCE."
+         (catch 'seq--break
+           (seq-doseq (elt sequence)
+                      (let ((result (funcall predicate elt)))
+                           (when result
+                             (throw 'seq--break result))))
+                             nil)))
 
 ;; Missing variable
 (defvar scheme-imenu-generic-expression "")
