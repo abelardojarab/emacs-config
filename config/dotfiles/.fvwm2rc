@@ -135,30 +135,29 @@ Style FvwmTaskBar NeverFocus, Layer 0
 
 # Set up the geometry so that the buttons stack vertically on the left.
 *FvwmButtonsFont  "$[infostore.font_mono]"
-*FvwmButtons: ButtonGeometry 100x50+1940+0
+*FvwmButtons: ButtonGeometry 100x50+0+0
 *FvwmButtonsFore blick
 *FvwmButtons: Colorset 7
 *FvwmButtons: BoxSize fixed
-*FvwmButtons: Rows 19
+*FvwmButtons: Rows 18
 *FvwmButtons: Columns 1
 *FvwmButtons: Frame 1
 *FvwmButtons: (1x2+0+0, Swallow "FvwmPager" 'FvwmPager *')
-*FvwmButtons(Title Chrome, Icon chrome.png, Action 'Exec "Google Chrome" google-chrome-beta &')
-*FvwmButtons(Title Firefox, Icon firefox.png, Action 'Exec "Firefox" firefox &')
-*FvwmButtons(Title Pidgin, Icon pidgin.png, Action 'Exec "Pidgin" pidgin &')
 *FvwmButtons(Title Terminal, Icon gnome-terminal.png, Action 'Exec "Terminal" gnome-terminal &')
 *FvwmButtons(Title XTerm, Icon xterm.png, Action 'Exec "xterm" xterm -ls &')
+*FvwmButtons(Title Chrome, Icon google-chrome.png, Action 'Exec "Google Chrome" google-chrome-beta &')
+*FvwmButtons(Title Firefox, Icon firefox.png, Action 'Exec "Firefox" firefox &')
+*FvwmButtons(Title Pidgin, Icon pidgin.png, Action 'Exec "Pidgin" pidgin &')
 *FvwmButtons(Title Emacs, Icon emacs.png, Action 'Exec "Emacs Server" emacs &')
 *FvwmButtons(Title EmacsClient, Icon emacs.png, Action 'Exec "Emacs Client" emacsclient --server-file ~/.emacs.cache/server/server -c &')
-*FvwmButtons(Title CLion, Icon clion.png, Action 'Exec "CLion" clion.sh &')
-*FvwmButtons(Title Smartgit, Icon smartgit.png, Action 'Exec "Smartgit" /usr/share/smartgit/bin/smartgit.sh &')
-*FvwmButtons(Title Glade, Icon glade.png, Action 'Exec "Glade" glade-3 &')
+*FvwmButtons(Title CLion, Icon kdevelop.png, Action 'Exec "CLion" clion.sh &')
+*FvwmButtons(Title Umbrello, Icon umbrello.png, Action 'Exec "Umbrello" umbrello &')
 *FvwmButtons(Title Dia, Icon dia.png, Action 'Exec "Dia" dia &')
 *FvwmButtons(Title Gimp, Icon gimp.png, Action 'Exec "Gimp" gimp &')
 *FvwmButtons(Title Inkscape, Icon inkscape.png, Action 'Exec "Inkscape" inkscape &')
 *FvwmButtons(Title Writer, Icon x-office-document.png, Action 'Exec "Writer" libreoffice --writer &')
 *FvwmButtons(Title Calc, Icon libreoffice-spreadsheet.png, Action 'Exec "Calc" libreoffice --calc &')
-*FvwmButtons(Title Impress, Icon libreoffice-presentation.png, Action 'Exec "Impress" libreoffice --impress &')
+*FvwmButtons(Title Draw, Icon libreoffice-drawing.png, Action 'Exec "Impress" libreoffice --draw &')
 *FvwmButtons(Title Transmission, Icon transmission.png, Action 'Exec "Transmission" transmission-gtk &')
 
 # AutoHiding Console
@@ -444,29 +443,52 @@ Mouse 2 T   A   Menu Window-Ops Nop
 Mouse 2 SF   A   Move-or-Raise
 Mouse 3 SF   A   Move-or-Raise
 
+DestroyFunc Move-or-Raise
 AddToFunc Move-or-Raise     "I" Raise
 + D Maximize-func
 + C Raise
 + C Focus
 + M Move
 
+DestroyFunc Move-or-Iconify
 AddToFunc Move-or-Iconify   "I" Raise
 + M Move
 + C Iconify
 
+DestroyFunc Resize-or-Raise
 AddToFunc Resize-or-Raise   "I" Raise
 + D Maximize-func
 + C Raise
 + C Focus
 + M Resize
 
+DestroyFunc Maximize-func
 AddToFunc Maximize-func     "M" Maximize   0   100
-+ I ThisWindow (!Maximized) Maximize ewmhiwa true 94 97
++ I ThisWindow (!Maximized) Maximize 100 -15p ewmhiwa true 98 98
 + I ThisWindow (Maximized) DestroyWindowStyle
-+ I TestRc (!Match) WindowStyle, ResizeHintOverride, FixedPosition, FixedSize
-+ I TestRc (!Match) Raise
-+ I TestRc (!Match) UpdateStyles
-+ I TestRc (NoMatch) Maximize ewmhiwa true 94 97
++ I TestRc (NoMatch) WindowStyle, ResizeHintOverride, FixedPosition, FixedSize
++ I TestRc (NoMatch) Raise
++ I TestRc (NoMatch) UpdateStyles
++ I TestRc (NoMatch) Maximize 100 -15p ewmhiwa true 98 98
+
+DestroyFunc FullscreenWithOffset
+AddToFunc   FullscreenWithOffset
++ I ThisWindow (!Maximized, !State 1) MaximizeWithFS 100 -20p ewmhiwa
++ I TestRc (NoMatch) ThisWindow (Maximized, State 1) UnMaximizeWithFS
+
+DestroyFunc MaximizeWithFS
+AddToFunc   MaximizeWithFS
++ I WindowStyle !Borders, !Handles, BorderWidth 0, HandleWidth 0, !Title, ResizeHintOverride
++ I UpdateStyles
++ I State 1 on
++ I Maximize $*
+
+DestroyFunc UnMaximizeWithFS
+AddToFunc   UnMaximizeWithFS
++ I Maximize
++ I State 1 off
++ I DestroyWindowStyle
++ I UpdateStyles
 
 DestroyFunc WheelScroll
 AddToFunc WheelScroll I PipeRead 'case $0 in \
