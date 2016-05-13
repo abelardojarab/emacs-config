@@ -1,5 +1,6 @@
 # .fvwm/.fvwm2rc
 SetEnv fvwm_wallpaper $[HOME]/workspace/emacsfull/Images/Wallpapers/debian_stream_clean.png
+SetEnv fvwm_home $[HOME]/.fvwm.cache
 
 # Pixmap
 ImagePath $[HOME]/workspace/emacsfull/Images/Icons:$[HOME]/Images/Icons:/usr/share/icons/fvwm:/usr/share/icons/hicolor/16x16
@@ -108,13 +109,13 @@ Style * WindowShadeSteps 20, WindowShadeScrolls
 
 # !Handles, !Borders, !Title
 Style * HandleWidth 4, BorderWidth 4
-Style "Wine"      FPLenient, NoFuncHint, NoDecorHint, NoOLDecor
-Style "glretrace" !Title
-Style "conky"     !Title, Sticky, WindowListSkip, StaysOnBottom, NeverFocus
-Style "plank"     !Title, !Handles, StaysOnTop, Sticky, NeverFocus, WindowListSkip
-Style "gkrellm"   !Title, !Handles, StaysOnTop, Sticky, NeverFocus, WindowListSkip, FixedPosition
-Style "trayer"    !Title, FixedPosition, Sticky
-Style "chrome"    !Title, FPLenient, NoFuncHint, NoDecorHint, NoOLDecor
+Style "wine"                  FPLenient, NoFuncHint, NoDecorHint, NoOLDecor
+Style "glretrace"             !Title
+Style "conky"                 !Title, Sticky, WindowListSkip, StaysOnBottom, NeverFocus
+Style "plank"                 !Title, !Handles, StaysOnTop, Sticky, NeverFocus, WindowListSkip
+Style "gkrellm"               !Title, !Handles, StaysOnTop, Sticky, NeverFocus, WindowListSkip, FixedPosition
+Style "trayer"                !Title, FixedPosition, Sticky
+Style "google-chrome-beta"    !Title, FPLenient, NoFuncHint, NoDecorHint, NoOLDecor
 
 # Speed up window operations at the expense of a bit of RAM.
 Style * BackingStore, SaveUnder
@@ -139,12 +140,12 @@ Style FvwmTaskBar NeverFocus, Layer 0
 *FvwmButtonsFore blick
 *FvwmButtons: Colorset 7
 *FvwmButtons: BoxSize fixed
-*FvwmButtons: Rows 18
+*FvwmButtons: Rows 22
 *FvwmButtons: Columns 1
 *FvwmButtons: Frame 1
 *FvwmButtons: (1x2+0+0, Swallow "FvwmPager" 'FvwmPager *')
+*FvwmButtons(Size 1x2, Swallow XClock 'Exec xclock -twentyfour -fg black -bg white -strftime "%a %d %b %Y %H:%M" &')
 *FvwmButtons(Title Terminal, Icon gnome-terminal.png, Action 'Exec "Terminal" gnome-terminal &')
-*FvwmButtons(Title XTerm, Icon xterm.png, Action 'Exec "xterm" xterm -ls &')
 *FvwmButtons(Title Chrome, Icon google-chrome.png, Action 'Exec "Google Chrome" google-chrome-beta &')
 *FvwmButtons(Title Firefox, Icon firefox.png, Action 'Exec "Firefox" firefox &')
 *FvwmButtons(Title Pidgin, Icon pidgin.png, Action 'Exec "Pidgin" pidgin &')
@@ -152,6 +153,8 @@ Style FvwmTaskBar NeverFocus, Layer 0
 *FvwmButtons(Title EmacsClient, Icon emacs.png, Action 'Exec "Emacs Client" emacsclient --server-file ~/.emacs.cache/server/server -c &')
 *FvwmButtons(Title CLion, Icon kdevelop.png, Action 'Exec "CLion" clion.sh &')
 *FvwmButtons(Title Umbrello, Icon umbrello.png, Action 'Exec "Umbrello" umbrello &')
+*FvwmButtons(Title CMake, Icon gproject-source.png, Action 'Exec "CMake" cmake-gui &')
+*FvwmButtons(Title RStudio, Icon rstudio.png, Action 'Exec "RStudio" rstudio &')
 *FvwmButtons(Title Dia, Icon dia.png, Action 'Exec "Dia" dia &')
 *FvwmButtons(Title Gimp, Icon gimp.png, Action 'Exec "Gimp" gimp &')
 *FvwmButtons(Title Inkscape, Icon inkscape.png, Action 'Exec "Inkscape" inkscape &')
@@ -159,6 +162,7 @@ Style FvwmTaskBar NeverFocus, Layer 0
 *FvwmButtons(Title Calc, Icon libreoffice-spreadsheet.png, Action 'Exec "Calc" libreoffice --calc &')
 *FvwmButtons(Title Draw, Icon libreoffice-drawing.png, Action 'Exec "Impress" libreoffice --draw &')
 *FvwmButtons(Title Transmission, Icon transmission.png, Action 'Exec "Transmission" transmission-gtk &')
+*FvwmButtons(Size 1x1, Swallow XBiff 'Exec xbiff &')
 
 # AutoHiding Console
 Style HiddenConsole Sticky, WindowListSkip, Notitle, StaysOnTop, !Handles, FixedSize, FixedPosition
@@ -185,15 +189,27 @@ AddToMenu GraphicsCADSubMenu "Graphics/CAD" Title
 DestroyMenu NetSubMenu
 AddToMenu NetSubMenu "Network/Internet" Title
 + "Firefox"        Exec exec firefox
++ "Midori"         Exec exec midori
++ "Google Chrome"  Exec exec google-chrome-beta
 + "Transmission"   Exec exec transmission-gtk
 + "Pidgin"         Exec exec pidgin
 
+DestroyMenu ProgrammingSubMenu
+AddToMenu ProgrammingSubMenu "Programming" Title
++ "Emacs Client"          Exec exec emacsclient
++ "Emacs Server"          Exec exec emacs
++ "RStudio"               Exec exec rstudio
++ "RKWard"                Exec exec rkward
++ "CMake GUI"             Exec exec cmake-gui
++ "qGit"                  Exec exec qgit
+
 DestroyMenu OfficeTextSubMenu
 AddToMenu OfficeTextSubMenu "Office/Text" Title
-+ "Emacs Client"   Exec exec emacsclient
-+ "Emacs Server"   Exec exec emacs
++ "Evince"                Exec exec evince
++ "Acrobat Reader"        Exec exec acroread
 + "LibreOffice Writer"    Exec exec libreoffice --writer
 + "LibreOffice Calc"      Exec exec libreoffice --calc
++ "LibreOffice Draw"      Exec exec libreoffice --draw
 + "LibreOffice Impress"   Exec exec libreoffice --impress
 
 DestroyMenu ConfigSubMenu
@@ -208,6 +224,7 @@ AddToMenu MainMenu "Main Menu" Title
 + "Terminal" Exec exec gnome-terminal
 + "xterm" Exec exec xterm -fg green -bg black -vb
 + "Network/Internet" Popup NetSubMenu
++ "Programming" Popup ProgrammingSubMenu
 + "Graphics/CAD" Popup GraphicsCADSubMenu
 + "Office/Text" Popup OfficeTextSubMenu
 + "System Configuration" Popup ConfigSubMenu
@@ -464,12 +481,12 @@ AddToFunc Resize-or-Raise   "I" Raise
 
 DestroyFunc Maximize-func
 AddToFunc Maximize-func     "M" Maximize   0   100
-+ I ThisWindow (!Maximized) Maximize 100 -15p ewmhiwa true 98 98
++ I ThisWindow (!Maximized) Maximize 100 -15p ewmhiwa true 100 100
 + I ThisWindow (Maximized) DestroyWindowStyle
 + I TestRc (NoMatch) WindowStyle, ResizeHintOverride, FixedPosition, FixedSize
 + I TestRc (NoMatch) Raise
 + I TestRc (NoMatch) UpdateStyles
-+ I TestRc (NoMatch) Maximize 100 -15p ewmhiwa true 98 98
++ I TestRc (NoMatch) Maximize 100 -15p ewmhiwa true 100 100
 
 DestroyFunc FullscreenWithOffset
 AddToFunc   FullscreenWithOffset
