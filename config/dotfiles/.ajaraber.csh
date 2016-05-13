@@ -42,3 +42,16 @@ set add_libs_post=/usr/lib64:/usr/lib
 # Front-load LD_LIBRARY_PATH
 alias python_ctk_load 'setenv LD_LIBRARY_PATH ${add_libs}:${add_libs_post}'
 alias python_ctk '${INTEL_CTK}/bin/python_ctk'
+
+# Altera options
+setenv QUARTUS_HOME /nfs/site/eda/data/tools.6/altera/quartusprime/15.1.0.185/common/quartus
+setenv QUARTUS_ROOTDIR $QUARTUS_HOME
+setenv QUARTUS_64BIT 1
+setenv QUARTUS_ROOTDIR_OVERRIDE $QUARTUS_HOME
+setenv PATH  "${QUARTUS_HOME}/bin:${PATH}"
+
+# Tue Apr 21 13:12:39 PDT 2015 - new License servers for Altera
+if (!($?LM_LICENSE_FILE)) then
+setenv LM_LICENSE_FILE ""
+endif
+setenv LM_LICENSE_FILE "1800@altera02p.elic.intel.com:1800@fmylic7001.fm.intel.com:1800@fmylic7008.fm.intel.com"
