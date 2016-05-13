@@ -146,7 +146,7 @@ Style FvwmTaskBar NeverFocus, Layer 0
 *FvwmButtons(Title Terminal, Icon gnome-terminal.png, Action 'Exec "Terminal" gnome-terminal &')
 *FvwmButtons(Title Chrome, Icon google-chrome.png, Action 'Exec "Google Chrome" google-chrome-beta &')
 *FvwmButtons(Title Firefox, Icon firefox.png, Action 'Exec "Firefox" firefox &')
-*FvwmButtons(Title Pidgin, Icon pidgin.png, Action 'Exec "Pidgin" pidgin &')
+*FvwmButtons(Title Midori, Icon midori.png, Action 'Exec "Midori" midori &')
 *FvwmButtons(Title Emacs, Icon emacs.png, Action 'Exec "Emacs Server" emacs &')
 *FvwmButtons(Title CLion, Icon kdevelop.png, Action 'Exec "CLion" clion.sh &')
 *FvwmButtons(Title Umbrello, Icon umbrello.png, Action 'Exec "Umbrello" umbrello &')
