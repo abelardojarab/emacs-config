@@ -144,7 +144,7 @@ Style FvwmTaskBar NeverFocus, Layer 0
 *FvwmButtons: Columns 1
 *FvwmButtons: Frame 1
 *FvwmButtons: (1x2+0+0, Swallow "FvwmPager" 'FvwmPager *')
-*FvwmButtons(Size 1x2, Swallow XClock 'Exec xclock -twentyfour -fg black -bg white -strftime "%a %d %b %Y %H:%M" &')
+*FvwmButtons(Size 1x2, Swallow XClock 'Exec xclock -twentyfour -fg white -bg gray -strftime "%a %d %b %Y %H:%M" &')
 *FvwmButtons(Title Terminal, Icon gnome-terminal.png, Action 'Exec "Terminal" gnome-terminal &')
 *FvwmButtons(Title Chrome, Icon google-chrome.png, Action 'Exec "Google Chrome" google-chrome-beta &')
 *FvwmButtons(Title Firefox, Icon firefox.png, Action 'Exec "Firefox" firefox &')
