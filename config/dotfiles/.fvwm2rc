@@ -145,7 +145,6 @@ Style FvwmTaskBar NeverFocus, Layer 0
 *FvwmButtons(Size 1x1, Swallow (NoKill, Respawn, UseOld) XClock 'Exec xclock -digital -twentyfour -fg black -bg gray -padding 1 -strftime "%H:%M %a %d %b %Y " &')
 *FvwmButtons(Title Terminal, Icon gnome-terminal.png, Action 'Exec "Terminal" gnome-terminal &')
 *FvwmButtons(Title Chrome, Icon google-chrome.png, Action 'Exec "Google Chrome" google-chrome-beta &')
-*FvwmButtons(Title Firefox, Icon firefox.png, Action 'Exec "Firefox" firefox &')
 *FvwmButtons(Title Midori, Icon midori.png, Action 'Exec "Midori" midori &')
 *FvwmButtons(Title Emacs, Icon emacs.png, Action 'Exec "Emacs Server" emacs &')
 *FvwmButtons(Title CLion, Icon kdevelop.png, Action 'Exec "CLion" clion.sh &')
@@ -157,6 +156,7 @@ Style FvwmTaskBar NeverFocus, Layer 0
 *FvwmButtons(Title Dia, Icon dia.png, Action 'Exec "Dia" dia &')
 *FvwmButtons(Title Gimp, Icon gimp.png, Action 'Exec "Gimp" gimp &')
 *FvwmButtons(Title Inkscape, Icon inkscape.png, Action 'Exec "Inkscape" inkscape &')
+*FvwmButtons(Title VMWare, Icon vmware.png, Action 'Exec "VMWare" vmware &')
 *FvwmButtons(Title Writer, Icon x-office-document.png, Action 'Exec "Writer" libreoffice --writer &')
 *FvwmButtons(Title Calc, Icon libreoffice-spreadsheet.png, Action 'Exec "Calc" libreoffice --calc &')
 *FvwmButtons(Title Draw, Icon libreoffice-drawing.png, Action 'Exec "Impress" libreoffice --draw &')
@@ -177,6 +177,12 @@ MenuStyle * VerticalItemSpacing 1 1, VerticalTitleSpacing 2 2
 MenuStyle * MenuColorset 7
 MenuStyle * ActiveColorset 8
 MenuStyle * "$[infostore.font_mono]"
+
+DestroyMenu UtilsSubMenu
+AddToMenu UtilsSubMenu "Utilities" Title
++ "Crossover"             Exec exec /opt/cxoffice/bin/crossover
++ "Virtualbox"            Exec exec virtualbox
++ "VMWare"                Exec exec vmware
 
 DestroyMenu GraphicsCADSubMenu
 AddToMenu GraphicsCADSubMenu "Graphics/CAD" Title
@@ -228,6 +234,7 @@ AddToMenu MainMenu "Main Menu" Title
 + "Programming" Popup ProgrammingSubMenu
 + "Graphics/CAD" Popup GraphicsCADSubMenu
 + "Office/Text" Popup OfficeTextSubMenu
++ "Utilities" Popup UtilsSubMenu
 + "System Configuration" Popup ConfigSubMenu
 + "" Nop
 + "Restart Fvwm" Restart
