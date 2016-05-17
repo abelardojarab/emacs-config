@@ -46,13 +46,14 @@
   "A UI Theme for Emacs based on material design colors")
 (display-color-cells (selected-frame))
 (let* ((class '((class color) (min-colors 89)))
-       (256color (eq (display-color-cells (selected-frame)) 256))
+       (256color  (eq (display-color-cells (selected-frame)) 256))
+       (truecolor (eq (display-color-cells (selected-frame)) 16777216))
 
-       (background (if window-system "#263238" "#262626")) ;; sidebar-container
-       (current-line (if window-system  "#37474f" "#3a3a3a")) ;; tree-row
-       (far-background (if window-system  "#1c1f26" "#121212")) ;; panel-control
-       (inactive-gray (if window-system "#78909c" "#8a8a8a"))
-       (header-color (if window-system "#455A64" "#5f5f5f"))
+       (background (if (or window-system truecolor) "#263238" "#262626")) ;; sidebar-container
+       (current-line (if (or window-system truecolor)  "#37474f" "#3a3a3a")) ;; tree-row
+       (far-background (if (or window-system truecolor)  "#1c1f26" "#121212")) ;; panel-control
+       (inactive-gray (if (or window-system truecolor) "#78909c" "#8a8a8a"))
+       (header-color (if (or window-system truecolor) "#455A64" "#5f5f5f"))
        (subtle "#a7adba") ;; tree-row-hover-disclosure-button-control
        (selection "#555555") ;; tab-control-dirty-tab-close-button
        (secondary-selection "#bf616a") ;; tab-control-hover-tab-close-button
@@ -112,6 +113,16 @@
 
    `(ace-jump-face-background ((,class (:foreground ,inactive-gray
                                         :weight normal))))
+
+   ;; avy-jump-mode
+   `(avy-background-face ((,class (:foreground ,inactive-gray
+                                   :weight normal))))
+   `(avy-lead-face-0 ((,class (:foreground ,foreground
+                               :background ,"#ef6c00"
+                                        :weight bold))))
+   `(avy-lead-face ((,class (:foreground ,foreground
+                             :background ,"#ef6c00"
+                             :weight bold))))
 
    ;; Flycheck
    `(flycheck-error ((,class (:underline (:style wave :color ,red)))))
@@ -210,7 +221,7 @@
    `(highlight ((,class (:inverse-video nil :background ,current-line))))
    `(gui-element ((,class (:background ,current-line :foreground ,foreground))))
    `(mode-line ((,class (:foreground ,foreground :background ,far-background))))
-   `(mode-line-buffer-id ((,class (:foreground ,foreground :background nil))))
+   `(mode-line-buffer-id ((,class (:foreground ,foreground :background nil :weight bold))))
    `(mode-line-inactive ((,class (:inherit mode-line
                                            :foreground ,subtle
                                            :background ,far-background :weight normal
@@ -524,6 +535,12 @@
    `(coffee-mode-class-name ((,class (:foreground ,orange :weight bold))))
    `(coffee-mode-function-param ((,class (:foreground ,purple))))
 
+   ;; elixir-mode
+   `(elixir-negation-face ((,class (:foreground ,red))))
+   `(elixir-attribute-face ((,class (:foreground ,purple))))
+   `(elixir-atom-face ((,class (:foreground ,aqua))))
+   `(elixir-ignored-var-face ((,class (:foreground ,comment))))
+
    ;; nxml
    `(nxml-name-face ((,class (:foreground unspecified :inherit font-lock-constant-face))))
    `(nxml-attribute-local-name-face ((,class (:foreground unspecified :inherit font-lock-variable-name-face))))
@@ -552,7 +569,7 @@
 
    ;; cfw emacs calendar
    `(cfw:face-title ((,class (:background ,background :foreground ,"#eceff1" :height 1.3 :weight bold))))
-   `(cfw:face-today ((,class (:background ,far-background :foreground ,foreground))))
+   `(cfw:face-today ((,class (:foreground ,foreground))))
    `(cfw:face-day-title ((,class (:background ,current-line :foreground ,foreground))))
    `(cfw:face-today-title ((,class (:background ,secondary-selection :foreground ,foreground))))
    `(cfw:face-header ((,class (:background ,current-line :foreground ,foreground))))
@@ -587,20 +604,22 @@
    ;; Company autocomplete
    ;; `(company-echo ((,class ())))
    ;; `(company-echo-common ((,class ())))
-   ;; `(company-preview ((,class ())))
-   `(company-preview-common ((,class (:foreground "#C0C0C0" :background "#FFFFD7")))) ; same background as highlight-line
+
+   `(company-preview ((,class (:foreground ,comment :background ,inactive-gray))))
+   `(company-preview-common ((,class (:foreground ,comment :background ,inactive-gray)))) ; same background as highlight-line
    ;; `(company-preview-search ((,class ())))
    `(company-scrollbar-bg ((,class (:background "#F0F0F0"))))
    `(company-scrollbar-fg ((,class (:background "#C0C0C0"))))
    `(company-template-field ((,class (:background ,inactive-gray))))
    `(company-tooltip ((,class (:weight bold :foreground, far-background :background ,inactive-gray))))
    `(company-tooltip-annotation ((,class (:weight normal :foreground ,comment :background ,inactive-gray))))
+   `(company-tooltip-annotation-selection ((,class (:weight normal :inherit company-tooltip-selection))))
    `(company-tooltip-common ((,class (:weight normal :inherit company-tooltip))))
    `(company-tooltip-common-selection ((,class (:weight normal :inherit company-tooltip-selection))))
    ;; `(company-tooltip-mouse ((,class ())))
    ;; `(company-tooltip-search ((,class ())))
    `(company-tooltip-selection ((,class (:weight bold :foreground ,foreground :background ,current-line))))
-   
+
    ;; Powerline
    `(powerline-active1 ((t (:foreground ,foreground :background ,selection))))
    `(powerline-active2 ((t (:foreground ,foreground :background ,inactive-gray))))
@@ -649,11 +668,11 @@
                                                         font-lock-builtin-face font-lock-preprocessor-face)))))
    `(font-latex-italic-face               ((t (:inherit italic :foreground ,foreground))))
    `(font-latex-math-face                 ((t (:foreground ,blue))))
-   `(font-latex-sectioning-0-face         ((t (:inherit outline-1 :height 1.1))))
-   `(font-latex-sectioning-1-face         ((t (:inherit outline-2 :height 1.1))))
-   `(font-latex-sectioning-2-face         ((t (:inherit outline-3 :height 1.1))))
-   `(font-latex-sectioning-3-face         ((t (:inherit outline-4 :height 1.1))))
-   `(font-latex-sectioning-4-face         ((t (:inherit outline-5 :height 1.1))))
+   `(font-latex-sectioning-0-face         ((t (:inherit outline-1 :height 1.4))))
+   `(font-latex-sectioning-1-face         ((t (:inherit outline-2 :height 1.35))))
+   `(font-latex-sectioning-2-face         ((t (:inherit outline-3 :height 1.3))))
+   `(font-latex-sectioning-3-face         ((t (:inherit outline-4 :height 1.25))))
+   `(font-latex-sectioning-4-face         ((t (:inherit outline-5 :height 1.2))))
    `(font-latex-sectioning-5-face         ((t (:inherit outline-6 :height 1.1))))
    `(font-latex-sedate-face               ((t (:foreground ,green))))
    `(font-latex-slide-title-face          ((t (:inherit font-lock-type-face :weight bold :height 1.2))))
@@ -771,6 +790,15 @@
    `(erc-timestamp-face ((,class (:foreground ,aqua))))
    `(erc-keyword-face ((,class (:foreground ,green))))
 
+   ;; erc-colorize
+   `(erc-distinct-1-face ((,class (:foreground ,"#E91E63"))))
+   `(erc-distinct-2-face ((,class (:foreground ,"#2196F3"))))
+   `(erc-distinct-3-face ((,class (:foreground ,"#DCE775"))))
+   `(erc-distinct-4-face ((,class (:foreground ,"#B388FF"))))
+   `(erc-distinct-5-face ((,class (:foreground ,"#EF6C00"))))
+   `(erc-distinct-6-face ((,class (:foreground ,"#26A69A"))))
+   `(erc-distinct-7-face ((,class (:foreground ,"#FFCDD2"))))
+
    ;; twittering-mode
    `(twittering-username-face ((,class (:inherit erc-pal-face))))
    `(twittering-uri-face ((,class (:foreground ,blue :inherit link))))
@@ -799,7 +827,18 @@
    `(elfeed-log-warn-level-face ((,class (:foreground ,orange))))
    `(elfeed-search-date-face ((,class (:foreground ,purple))))
    `(elfeed-search-feed-face ((,class (:foreground ,yellow))))
-   `(elfeed-search-tag-face ((,class (:foreground ,green)))))
+   `(elfeed-search-tag-face ((,class (:foreground ,green))))
+
+   ;; rpm-spec-mode
+   `(rpm-spec-dir-face ((,class (:foreground ,green))))
+   `(rpm-spec-doc-face ((,class (:foreground ,green))))
+   `(rpm-spec-ghost-face ((,class (:foreground ,red))))
+   `(rpm-spec-macro-face ((,class (:foreground ,yellow))))
+   `(rpm-spec-obsolete-tag-face ((,class (:foreground ,red))))
+   `(rpm-spec-package-face ((,class (:foreground ,red))))
+   `(rpm-spec-section-face ((,class (:foreground ,yellow))))
+   `(rpm-spec-tag-face ((,class (:foreground ,blue))))
+   `(rpm-spec-var-face ((,class (:foreground ,red)))))
 
   (custom-theme-set-variables
    'material
