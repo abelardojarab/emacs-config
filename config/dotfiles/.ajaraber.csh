@@ -1,6 +1,6 @@
 alias ls       'ls -l --color -sF'
 alias cd 'cd \!*; set prompt = "%{\033[34m%}[%n@%{\033[35m%}%m%{\033[33m%} %b%{\033[0m%}%c]$ "'
-alias emacs '/usr/intel/pkgs/emacs/24.5/bin/emacs'
+alias emacs '/usr/intel/pkgs/emacs/24.4/bin/emacs'
 alias emacsclient 'emacsclient -n'
 
 setenv JAVA_HOME /usr/intel/pkgs/java/1.8.0
@@ -43,8 +43,13 @@ set add_libs_post=/usr/lib64:/usr/lib
 alias python_ctk_load 'setenv LD_LIBRARY_PATH ${add_libs}:${add_libs_post}'
 alias python_ctk '${INTEL_CTK}/bin/python_ctk'
 
+setenv WORKDIR $PWD
+setenv USER_ITOOLS $WORKDIR/tools/common/itools
+setenv PROJECT_ITOOLS $USER_ITOOLS
+
 # Altera options
-setenv QUARTUS_HOME /nfs/site/eda/data/tools.6/altera/quartusprime/15.1.0.185/common/quartus
+# setenv QUARTUS_HOME /nfs/site/eda/data/tools.6/altera/quartusprime/15.1.0.185/common/quartus
+setenv QUARTUS_HOME /p/atp/tools/altera/quartus/Pro_15.1.2.Patch-2.20/quartus
 setenv QUARTUS_ROOTDIR $QUARTUS_HOME
 setenv QUARTUS_64BIT 1
 setenv QUARTUS_ROOTDIR_OVERRIDE $QUARTUS_HOME
@@ -55,3 +60,87 @@ if (!($?LM_LICENSE_FILE)) then
 setenv LM_LICENSE_FILE ""
 endif
 setenv LM_LICENSE_FILE "1800@altera02p.elic.intel.com:1800@fmylic7001.fm.intel.com:1800@fmylic7008.fm.intel.com"
+
+#Altera Quartus
+setenv LM_LICENSE_FILE "1800@altera02p.elic.intel.com"
+setenv LM_LICENSE_FILE "${LM_LICENSE_FILE}:1800@fmylic7001.fm.intel.com"
+setenv LM_LICENSE_FILE "${LM_LICENSE_FILE}:1800@fmylic7008.fm.intel.com"
+setenv LM_LICENSE_FILE "${LM_LICENSE_FILE}:1800@plxs0402.pdx.intel.com"
+#setenv LM_LICENSE_FILE "${LM_LICENSE_FILE}:2100@fmylic40a.fm.intel.com"
+
+# set license for VCS
+setenv SNPSLMD_LICENSE_FILE "26586@plxs0402.pdx.intel.com"
+setenv SNPSLMD_LICENSE_FILE "${SNPSLMD_LICENSE_FILE}:26586@plxs0405.pdx.intel.com"
+setenv SNPSLMD_LICENSE_FILE "${SNPSLMD_LICENSE_FILE}:26586@plxs0406.pdx.intel.com"
+setenv SNPSLMD_LICENSE_FILE "${SNPSLMD_LICENSE_FILE}:26586@plxs0408.pdx.intel.com"
+setenv SNPSLMD_LICENSE_FILE "${SNPSLMD_LICENSE_FILE}:26586@plxs0414.pdx.intel.com"
+setenv SNPSLMD_LICENSE_FILE "${SNPSLMD_LICENSE_FILE}:26586@plxs0415.pdx.intel.com"
+setenv SNPSLMD_LICENSE_FILE "${SNPSLMD_LICENSE_FILE}:26586@plxs0416.pdx.intel.com"
+setenv SNPSLMD_LICENSE_FILE "${SNPSLMD_LICENSE_FILE}:26586@plxs0418.pdx.intel.com"
+setenv SNPS_FPGA /p/atp/tools/synopsys/fpga/linux/fpga_e201009sp3
+
+# set OVM_HOME to OVM installation directory
+#setenv OVM_HOME /p/atp/ovm/ovm-2.0.2
+setenv OVM_HOME /p/atp/ovm/ovm-2.1.2
+
+# set VCS_HOME to VCS installation directory
+#setenv VCS_HOME /p/atp/tools/synopsys/D-2009.12-5
+#setenv VCS_HOME /p/atp/tools/synopsys/vcs-mx/I-2014.03-2
+setenv VCS_HOME /p/atp/tools/synopsys/vcs/G-2012.09
+
+if (-e /etc/redhat-release) then
+    setenv VCS_PLATFORM amd64
+    setenv VCS_ARCH_OVERRIDE linux
+else
+    setenv VCS_PLATFORM suse64
+endif
+
+#if !($?SC_INSTALL_DIR) then
+    setenv SC_INSTALL_DIR /p/atp/systemc/systemc-2.2.0
+#endif
+#if !($?CSI_TOP) then
+    setenv CSI_TOP /p/atp/qpi_bfm/csibfm-QPI1.1-OSCI2.2-gcc410-3.35
+#endif
+
+# set NOVAS_HOME and NOVAS_RC if using verdi
+setenv NOVAS_HOME /p/atp/tools/novas
+setenv NOVAS_RC $WORKDIR/tools/common/novas.rc
+
+# set XILINX_HOME and XILINX
+#setenv XILINX_HOME /p/atp/tools/xilinx/13.4
+#setenv XILINX $XILINX_HOME/ISE
+#setenv XILINX_EDK $XILINX_HOME/EDK
+#setenv XILINX_DSP $XILINX_HOME/ISE
+#setenv XILINX_PLANAHEAD $XILINX_HOME/PlanAhead
+
+# set LD_LIBARY_PATH
+setenv LD_LIBRARY_PATH ".:$VCS_HOME/amd64/lib:/usr/lib:/lib"
+setenv LD_LIBRARY_PATH ".:${SC_INSTALL_DIR}/lib-linux64"
+setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:${CSI_TOP}/sysverilog/Linux_x86_64/lib:${CSI_TOP}/lib/Linux_x86_64:${CSI_TOP}/csi/crm_1_1"
+setenv PERL5LIB /p/atp/tools/common
+
+# PATH
+setenv PATH ${PATH}:$VCS_HOME/bin:$SNPS_FPGA/bin
+
+# set path
+# set path = (. \
+#             $WORKDIR/tools/bin \
+#             /p/atp/tools/nedit/nedit-5.5-Linux-x86 \
+#             /p/atp/tools/tkdiff/tkdiff-unix \
+#             $NOVAS_HOME/bin \
+#             $QUARTUS_HOME/bin \
+#             $VCS_HOME/bin \
+#             $SNPS_FPGA/bin \
+#             /usr/intel/bin /bin /usr/bin /sbin /use/sbin /usr/bin/X11 /usr/local/bin )
+
+# some convience aliases
+# alias cdw 'cd $WORKDIR'
+# alias cdd cd $WORKDIR/design
+# alias cdr cd $WORKDIR/design
+# alias cdv cd $WORKDIR/verification
+# alias cdt cd $WORKDIR/tools
+
+#set SCRIPTS="$WORKDIR/tools/scripts"
+#source $SCRIPTS/vcs.setup
+#source $SCRIPTS/quartus.setup
+#source $SCRIPTS/svunit.setup

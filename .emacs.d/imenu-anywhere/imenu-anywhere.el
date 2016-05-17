@@ -227,6 +227,7 @@ list of one entry otherwise."
 
 (eval-after-load "helm"
   '(progn
+     (require 'helm-imenu)
      (defvar helm-source-imenu-anywhere
        (helm-build-sync-source "imenu-anywere"
          :candidates #'helm-imenu-anywhere-candidates
@@ -234,6 +235,7 @@ list of one entry otherwise."
                               (imenu-anywhere--goto-function "" elm)
                               (unless (fboundp 'semantic-imenu-tag-overlay)
                                 (helm-highlight-current-line)))
+         :fuzzy-match helm-imenu-fuzzy-match
          :persistent-help "Show this entry"
          :action (lambda (elm) (imenu-anywhere--goto-function "" elm)))
        "See (info \"(emacs)Imenu\") and `imenu-anywhere'")

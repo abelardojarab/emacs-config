@@ -1,6 +1,123 @@
 Python Mode News
 ================
 
+New in version 6.2.3
+---------------------
+
+New customizable `py-shell-fontify-style' offers some choice
+how to fontify py-shell buffer:
+
+"input" will leave previous IN/OUT unfontified.
+"all" keeps output fontified too.
+
+Default is nil, no fontification.
+
+New in version 6.2.2
+---------------------
+
+Edit-commands will reach beginning-of-line if reasonable
+Edit-commands suffixed "-bol" dropped 
+
+- Commands
+  - py-backward-indent
+    Go to the beginning of a section of equal indent
+  - py-forward-indent
+    Go to the end of a section of equal indentation
+  - py-copy-indent
+  - py-delete-indent
+  - py-kill-indent
+  - py-mark-indent
+  - py-comment-indent
+  - py-shift-indent-left
+  - py-shift-indent-right
+  - py-hide-indent
+  - py-show-indent
+
+- Make $PYTHONPATH configurable from Emacs
+  Emacs doesn't read settings from .bashrc
+
+- py-indent-paren-spanned-multilines-p new default `t'
+
+New in version 6.2.1
+---------------------
+
+- Handle PEP 492 async coroutines
+
+- Logic of py-indent-region WRT lp:1426903
+  In case first line accepts an indent,
+  keep the remaining lines' relative.
+  Otherwise lines in region get outmost indent,
+  same with optional argument
+
+- Commands
+  - py-match-paren
+    If at a beginning, jump to end and vice versa.
+    Matches lists, block, statement, string and comment
+
+  - ipython2.7
+  - ipython3
+
+  - py-beginning-of-for-block
+  - py-beginning-of-for-block-bol
+  - py-end-of-statement-bol
+  - py-end-of-top-level-bol
+
+  - py-flycheck-mode - toggle `flycheck-mode' from menu "Checks"
+
+  - py-execute-section - execute arbitrary chunks of code
+  - py-execute-section-python
+  - py-execute-section-python2
+  - py-execute-section-python3
+  - py-execute-section-ipython
+  - py-execute-section-ipython2.7
+  - py-execute-section-ipython3
+  - py-execute-section-jython
+
+  - py-sectionize-region
+  - py-backward-section
+  - py-forward-section
+
+  - py-narrow-to-block
+  - py-narrow-to-block-or-clause
+  - py-narrow-to-class
+  - py-narrow-to-clause
+  - py-narrow-to-def
+  - py-narrow-to-def-or-class
+  - py-narrow-to-statement
+
+- New helper functions, like
+  - py--end-of-block-bol-p
+  - py--end-of-clause-bol-p
+  etc.
+
+  Functions in a boolean sense just stating if being at an end or
+  start no longer a command. Renamed as interanal
+  functions with prefix `py--' now.
+
+- TAB-indent from column zero: go to outmost first, lp:1375122
+- (I)Python-shell setup made more reliable
+
+New customizables:
+
+- py-imenu-max-items, default is 99
+  Sets `imenu-max-items'
+
+- py-python-edit-version, default is ""
+  When not empty, fontify according to Python version specified.
+  
+- py-pdb-executable, default is nil
+  Indicate PATH/TO/pdb.
+
+- py-update-gud-pdb-history-p, default is t
+  If pdb should provide suggestions WRT file and pdb-path.
+
+- py-split-window-on-execute-threshold, default is 3
+  Don't split when max number of displayed windows is reached. 
+
+Renamed:
+- py-beginning-of-commented-section --> py-beginning-of-comments
+- py-narrow-to-defun --> py-narrow-to-def
+
 New in version 6.2.0
 ---------------------
 

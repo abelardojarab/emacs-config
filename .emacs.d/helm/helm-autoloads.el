@@ -1114,7 +1114,7 @@ Show help-echo informations in a popup tip at end of line.
 
 ;;;### (autoloads nil nil ("helm-core-pkg.el" "helm-easymenu.el"
 ;;;;;;  "helm-lib.el" "helm-multi-match.el" "helm-pkg.el" "helm-plugin.el"
-;;;;;;  "helm-source.el" "helm-types.el") (22295 52159 642862 245000))
+;;;;;;  "helm-source.el" "helm-types.el") (22331 14987 531750))
 
 ;;;***
 

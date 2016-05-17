@@ -27,11 +27,7 @@
 
 (setq python-mode-interactive-tests
       (list
-       'py-split-just-two-window-on-execute-lp-1361531-python-test
-       'py-split-just-two-window-on-execute-lp-1361531-ipython-test
-       'py-split-just-two-window-on-execute-lp-1361531-python2-test
-       'py-split-just-two-window-on-execute-lp-1361531-jython-test
-       'py-split-just-two-window-on-execute-lp-1361531-python3-test
+       'opening-brace-on-builtins-lp-1400951-test
        'more-docstring-filling-woes-lp-1102296-nil-test
        'more-docstring-filling-woes-lp-1102296-onetwo-test
        'more-docstring-filling-woes-lp-1102296-django-test
@@ -52,16 +48,6 @@
        'autopair-mode-test
        'py-execute-block-python-test
        'py-execute-statement-error-test
-       'py-multi-split-window-on-execute-lp-1361531-python-test
-       'py-multi-split-window-on-execute-lp-1361531-ipython-test
-       'py-multi-split-window-on-execute-lp-1361531-python2-test
-       'py-multi-split-window-on-execute-lp-1361531-jython-test
-       'py-multi-split-window-on-execute-lp-1361531-python3-test
-       'py-always-split-window-on-execute-lp-1361531-python-test
-       'py-always-split-window-on-execute-lp-1361531-ipython-test
-       'py-always-split-window-on-execute-lp-1361531-python2-test
-       'py-always-split-window-on-execute-lp-1361531-jython-test
-       'py-always-split-window-on-execute-lp-1361531-python3-test
        'py-shell-complete-test
        'py-shell-invoking-ipython-lp-835151-test
        'py-execute-def-ipython-test
@@ -146,20 +132,20 @@
        'py-execute-line-jython-noswitch-test
        'py-execute-line-jython-dedicated-test
        'py-execute-line-jython-dedicated-switch-test
-       'py-beginning-of-block-test
-       'py-end-of-block-test
-       'py-beginning-of-block-or-clause-test
-       'py-end-of-block-or-clause-test
-       'py-beginning-of-def-test
-       'py-end-of-def-test
-       'py-beginning-of-def-or-class-test
-       'py-end-of-def-or-class-test
+       'py-backward-block-test
+       'py-forward-block-test
+       'py-backward-block-or-clause-test
+       'py-forward-block-or-clause-test
+       'py-backward-def-test
+       'py-forward-def-test
+       'py-backward-def-or-class-test
+       'py-forward-def-or-class-test
        'py-electric-backspace-test
        'py-electric-delete-test
        'dict-error-test
        ;;         'py-expand-abbrev-pst-pdb.set_trace-test
-       'near-bob-beginning-of-statement-test
-       'bob-beginning-of-statement-test
+       'near-bob-backward-statement-test
+       'bob-backward-statement-test
        'honor-comments-indent-test
        'assignment-indent-test
        'if-elif-test
@@ -167,10 +153,10 @@
        'try-else-clause-test
        'try-except-test
        'assignment-after-block-test
-       'py-beginning-of-clause-test
-       'py-end-of-clause-test
-       'py-beginning-of-expression-test
-       'py-end-of-expression-test
+       'py-backward-clause-test
+       'py-forward-clause-test
+       'py-backward-expression-test
+       'py-forward-expression-test
        'py-expression-index-test
        'py-indent-after-assigment-test
        'leave-dict-test
@@ -184,7 +170,7 @@
        'close-block-test
        'py-shift-block-test
        'nesting-if-test
-       'py-end-of-print-statement-test
+       'py-forward-print-statement-test
        'nested-try-test
        'nested-if-test
        'nested-try-finally-test
@@ -192,7 +178,6 @@
        'python-dedicated-test
        'tqs-list-error-test
        'py-mark-def-commandp-test
-       'split-windows-on-execute-p-test
        'switch-windows-on-execute-p-test
        'py-install-directory-path-test
        'UnicodeEncodeError-python3-test
@@ -272,17 +257,17 @@
 '''
 ")
 
-(defun py-beginning-of-block-test (&optional arg load-branch-function)
+(defun py-backward-block-test (&optional arg load-branch-function)
   (interactive "p")
   (let ((teststring python-mode-teststring))
-    (py-bug-tests-intern 'py-beginning-of-block-test-base arg teststring)))
+    (py-bug-tests-intern 'py-backward-block-test-base arg teststring)))
 
-(defun py-beginning-of-block-test-base (arg)
+(defun py-backward-block-test-base (arg)
   (goto-char 627)
-  (py-beginning-of-block)
-  (assert (eq (point) 325) nil "py-beginning-of-block-test failed"))
+  (py-backward-block)
+  (assert (eq (point) 325) nil "py-backward-block-test failed"))
 
-(defun py-end-of-block-test (&optional arg load-branch-function)
+(defun py-forward-block-test (&optional arg load-branch-function)
   (interactive "p")
   (let ((teststring "class OrderedDict1(dict):
     \"\"\"
@@ -313,85 +298,85 @@
         else:
             pass
  "))
-    (py-bug-tests-intern 'py-end-of-block-base arg teststring)))
+    (py-bug-tests-intern 'py-forward-block-base arg teststring)))
 
-(defun py-end-of-block-base (arg)
+(defun py-forward-block-base (arg)
   (goto-char 326)
-  (assert (eq 562 (py-end-of-clause)) nil "py-end-of-block-test #1 failed")
-  (assert (eq 598 (py-end-of-clause)) nil "py-end-of-block-test #2 failed")
-  (assert (eq 629 (py-end-of-block)) nil "py-end-of-block-test #3 failed"))
+  (assert (eq 562 (py-forward-clause)) nil "py-forward-block-test #1 failed")
+  (assert (eq 598 (py-forward-clause)) nil "py-forward-block-test #2 failed")
+  (assert (eq 629 (py-forward-block)) nil "py-forward-block-test #3 failed"))
 
-(defun py-beginning-of-block-or-clause-test (&optional arg load-branch-function)
+(defun py-backward-block-or-clause-test (&optional arg load-branch-function)
   (interactive "p")
   (let ((teststring python-mode-teststring))
-    (py-bug-tests-intern 'py-beginning-of-block-or-clause-base arg teststring)))
+    (py-bug-tests-intern 'py-backward-block-or-clause-base arg teststring)))
 
-(defun py-beginning-of-block-or-clause-base (arg)
+(defun py-backward-block-or-clause-base (arg)
   (goto-char 627)
-  (py-beginning-of-block-or-clause)
-  (assert (looking-at "else") nil "py-beginning-of-block-or-clause-test failed")
-  (py-beginning-of-block-or-clause)
-  (assert (looking-at "elif") nil "py-beginning-of-block-or-clause-test failed")
-  (py-beginning-of-block-or-clause)
-  (assert (looking-at "if") nil "py-beginning-of-block-or-clause-test failed")
+  (py-backward-block-or-clause)
+  (assert (looking-at "else") nil "py-backward-block-or-clause-test failed")
+  (py-backward-block-or-clause)
+  (assert (looking-at "elif") nil "py-backward-block-or-clause-test failed")
+  (py-backward-block-or-clause)
+  (assert (looking-at "if") nil "py-backward-block-or-clause-test failed")
 
   )
 
-(defun py-end-of-block-or-clause-test (&optional arg load-branch-function)
+(defun py-forward-block-or-clause-test (&optional arg load-branch-function)
   (interactive "p")
   (let ((teststring python-mode-teststring))
-    (py-bug-tests-intern 'py-end-of-block-or-clause-base arg teststring)))
+    (py-bug-tests-intern 'py-forward-block-or-clause-base arg teststring)))
 
-(defun py-end-of-block-or-clause-base (arg)
+(defun py-forward-block-or-clause-base (arg)
   (goto-char 602)
-  (py-end-of-block-or-clause)
-  (assert (eq (point) 626) nil "py-end-of-block-or-clause-test failed"))
+  (py-forward-block-or-clause)
+  (assert (eq (point) 626) nil "py-forward-block-or-clause-test failed"))
 
-(defun py-beginning-of-def-test (&optional arg load-branch-function)
+(defun py-backward-def-test (&optional arg load-branch-function)
   (interactive "p")
   (let ((teststring python-mode-teststring))
-    (py-bug-tests-intern 'py-beginning-of-def-base arg teststring)))
+    (py-bug-tests-intern 'py-backward-def-base arg teststring)))
 
-(defun py-beginning-of-def-base (arg)
+(defun py-backward-def-base (arg)
   (goto-char 627)
-  (py-beginning-of-def)
-  (assert (eq (point) 238) nil "py-beginning-of-def-test failed")
+  (py-backward-def)
+  (assert (eq (point) 238) nil "py-backward-def-test failed")
   )
 
-(defun py-end-of-def-test (&optional arg load-branch-function)
+(defun py-forward-def-test (&optional arg load-branch-function)
   (interactive "p")
   (let ((teststring python-mode-teststring))
-    (py-bug-tests-intern 'py-end-of-def-base arg teststring)))
+    (py-bug-tests-intern 'py-forward-def-base arg teststring)))
 
-(defun py-end-of-def-base (arg)
+(defun py-forward-def-base (arg)
   (goto-char 627)
-  (py-beginning-of-def)
-  (py-end-of-def)
-  (assert (eq (point) 626) nil "py-end-of-def-test failed")
+  (py-backward-def)
+  (py-forward-def)
+  (assert (eq (point) 626) nil "py-forward-def-test failed")
   )
 
-(defun py-beginning-of-def-or-class-test (&optional arg load-branch-function)
+(defun py-backward-def-or-class-test (&optional arg load-branch-function)
   (interactive "p")
   (let ((teststring python-mode-teststring))
-    (py-bug-tests-intern 'py-beginning-of-def-or-class-base arg teststring)))
+    (py-bug-tests-intern 'py-backward-def-or-class-base arg teststring)))
 
-(defun py-beginning-of-def-or-class-base (arg)
+(defun py-backward-def-or-class-base (arg)
   (goto-char 627)
-  (py-beginning-of-def-or-class 4)
-  (assert (eq (point) 238) nil "py-beginning-of-def-or-class-test failed"))
+  (py-backward-def-or-class 4)
+  (assert (eq (point) 238) nil "py-backward-def-or-class-test failed"))
 
-(defun py-end-of-def-or-class-test (&optional arg load-branch-function)
+(defun py-forward-def-or-class-test (&optional arg load-branch-function)
   (interactive "p")
   (let ((teststring python-mode-teststring))
-    (py-bug-tests-intern 'py-end-of-def-or-class-base arg teststring)))
+    (py-bug-tests-intern 'py-forward-def-or-class-base arg teststring)))
 
-(defun py-end-of-def-or-class-base (arg)
+(defun py-forward-def-or-class-base (arg)
   (goto-char 627)
-  (assert (eq 238 (py-beginning-of-def-or-class)) nil "py-end-of-def-or-class-test #1 failed")
-  (assert (eq 146 (py-beginning-of-def-or-class)) nil "py-end-of-def-or-class-test #2 failed")
+  (assert (eq 238 (py-backward-def-or-class)) nil "py-forward-def-or-class-test #1 failed")
+  (assert (eq 146 (py-backward-def-or-class)) nil "py-forward-def-or-class-test #2 failed")
   (goto-char 201)
-  (assert (eq 232 (py-end-of-def-or-class)) nil "py-end-of-def-or-class-test #3 failed")
-  (assert (eq 626 (py-end-of-def-or-class '(4))) nil "py-end-of-def-or-class-test #4 failed"))
+  (assert (eq 232 (py-forward-def-or-class)) nil "py-forward-def-or-class-test #3 failed")
+  (assert (eq 626 (py-forward-def-or-class '(4))) nil "py-forward-def-or-class-test #4 failed"))
 
 (defun py-electric-backspace-test (&optional arg load-branch-function)
   (interactive "p")
@@ -462,7 +447,7 @@ class foo(bar):
 
 (defun dict-error-base (arg)
   (goto-char 78)
-  (assert (eq 166 (py-end-of-statement)) nil "dict-error-test failed"))
+  (assert (eq 166 (py-forward-statement)) nil "dict-error-test failed"))
 
 (defun py-expand-abbrev-pst-pdb.set_trace-test (&optional arg load-branch-function)
   (interactive "p")
@@ -486,28 +471,28 @@ pst
           ;;          (message "%s" (match-string-no-properties 1))
           nil "py-expand-abbrev-pst-pdb.set_trace-test failed"))
 
-(defun near-bob-beginning-of-statement-test (&optional arg load-branch-function)
+(defun near-bob-backward-statement-test (&optional arg load-branch-function)
   (interactive "p")
   (let ((teststring (concat py-test-shebang "
  # -*- coding: utf-8 -*-
 
 print u'\xA9'
 ")))
-    (py-bug-tests-intern 'near-bob-beginning-of-statement-base arg teststring)))
+    (py-bug-tests-intern 'near-bob-backward-statement-base arg teststring)))
 
-(defun near-bob-beginning-of-statement-base (arg)
+(defun near-bob-backward-statement-base (arg)
   (goto-char 50)
-  (assert (eq 0 (py-compute-indentation)) nil "near-bob-beginning-of-statement-test failed"))
+  (assert (eq 0 (py-compute-indentation)) nil "near-bob-backward-statement-test failed"))
 
-(defun bob-beginning-of-statement-test (&optional arg load-branch-function)
+(defun bob-backward-statement-test (&optional arg load-branch-function)
   (interactive "p")
   (let ((teststring "    #Foo.py
 "))
-    (py-bug-tests-intern 'bob-beginning-of-statement-base arg teststring)))
+    (py-bug-tests-intern 'bob-backward-statement-base arg teststring)))
 
-(defun bob-beginning-of-statement-base (arg)
-  (py-beginning-of-statement)
-  (assert (eq 1 (point))  "bob-beginning-of-statement-test failed"))
+(defun bob-backward-statement-base (arg)
+  (py-backward-statement)
+  (assert (eq 1 (point))  "bob-backward-statement-test failed"))
 
 (defun honor-comments-indent-test (&optional arg load-branch-function)
   (interactive "p")
@@ -632,7 +617,7 @@ b = \"asdf\"
   (forward-line -1)
   (assert (eq 0 (py-compute-indentation)) nil "assignment-after-block-test failed"))
 
-(defun py-beginning-of-clause-test (&optional arg load-branch-function)
+(defun py-backward-clause-test (&optional arg load-branch-function)
   (interactive "p")
   (let ((teststring "# Examples from http://diveintopython.org/
 
@@ -653,13 +638,13 @@ def main(argv):
         elif opt in (\"-g\", \"--grammar\"):
             grammar = arg
 "))
-    (py-bug-tests-intern 'py-beginning-of-clause-base arg teststring)))
+    (py-bug-tests-intern 'py-backward-clause-base arg teststring)))
 
-(defun py-beginning-of-clause-base (arg)
+(defun py-backward-clause-base (arg)
   (goto-char 364)
-  (assert (eq 346 (py-beginning-of-clause)) "py-beginning-of-clause-test failed"))
+  (assert (eq 346 (py-backward-clause)) "py-backward-clause-test failed"))
 
-(defun py-end-of-clause-test (&optional arg load-branch-function)
+(defun py-forward-clause-test (&optional arg load-branch-function)
   (interactive "p")
   (let ((teststring "# Examples from http://diveintopython.org/
 
@@ -680,13 +665,13 @@ def main(argv):
         elif opt in (\"-g\", \"--grammar\"):
             grammar = arg
 "))
-    (py-bug-tests-intern 'py-end-of-clause-base arg teststring)))
+    (py-bug-tests-intern 'py-forward-clause-base arg teststring)))
 
-(defun py-end-of-clause-base (arg)
+(defun py-forward-clause-base (arg)
   (goto-char 364)
-  (assert (eq 412 (py-end-of-clause)) "py-end-of-clause-test failed"))
+  (assert (eq 412 (py-forward-clause)) "py-forward-clause-test failed"))
 
-(defun py-beginning-of-expression-test (&optional arg load-branch-function)
+(defun py-backward-expression-test (&optional arg load-branch-function)
   (interactive "p")
   (let ((teststring "# Examples from http://diveintopython.org/
 
@@ -698,23 +683,23 @@ def main(argv):
         usage()
         sys.exit(2)
 "))
-    (py-bug-tests-intern 'py-beginning-of-expression-base arg teststring)))
+    (py-bug-tests-intern 'py-backward-expression-base arg teststring)))
 
-(defun py-beginning-of-expression-base (arg)
+(defun py-backward-expression-base (arg)
   (goto-char 227)
-  (assert (eq 221 (py-beginning-of-expression)) nil "py-beginning-of-expression-test #1 failed")
-  (assert (eq 205 (py-beginning-of-expression)) nil "py-beginning-of-expression-test #2 failed")
-  (assert (eq 177 (py-beginning-of-expression)) nil "py-beginning-of-expression-test #3 failed")
-  (assert (eq 170 (py-beginning-of-expression)) nil "py-beginning-of-expression-test #4 failed")
-  (assert (eq 116 (py-beginning-of-expression)) nil "py-beginning-of-expression-test #5 failed")
-  (assert (eq 103 (py-beginning-of-expression)) nil "py-beginning-of-expression-test #6 failed")
-  (assert (eq 90 (py-beginning-of-expression)) nil "py-beginning-of-expression-test #7 failed")
-  (assert (eq 75 (py-beginning-of-expression)) nil "py-beginning-of-expression-test #8 failed")
-  (assert (eq 65 (py-beginning-of-expression)) nil "py-beginning-of-expression-test #9 failed")
-  (assert (eq 49 (py-beginning-of-expression)) nil "py-beginning-of-expression-test #10 failed")
-  (assert (eq 45 (py-beginning-of-expression)) nil "py-beginning-of-expression-test #11 failed"))
+  (assert (eq 221 (py-backward-expression)) nil "py-backward-expression-test #1 failed")
+  (assert (eq 205 (py-backward-expression)) nil "py-backward-expression-test #2 failed")
+  (assert (eq 177 (py-backward-expression)) nil "py-backward-expression-test #3 failed")
+  (assert (eq 170 (py-backward-expression)) nil "py-backward-expression-test #4 failed")
+  (assert (eq 116 (py-backward-expression)) nil "py-backward-expression-test #5 failed")
+  (assert (eq 103 (py-backward-expression)) nil "py-backward-expression-test #6 failed")
+  (assert (eq 90 (py-backward-expression)) nil "py-backward-expression-test #7 failed")
+  (assert (eq 75 (py-backward-expression)) nil "py-backward-expression-test #8 failed")
+  (assert (eq 65 (py-backward-expression)) nil "py-backward-expression-test #9 failed")
+  (assert (eq 49 (py-backward-expression)) nil "py-backward-expression-test #10 failed")
+  (assert (eq 45 (py-backward-expression)) nil "py-backward-expression-test #11 failed"))
 
-(defun py-end-of-expression-test (&optional arg load-branch-function)
+(defun py-forward-expression-test (&optional arg load-branch-function)
   (interactive "p")
   (let ((teststring "# Examples from http://diveintopython.org/
 
@@ -726,20 +711,20 @@ def main(argv):
         usage()
         sys.exit(2)
 "))
-    (py-bug-tests-intern 'py-end-of-expression-base arg teststring)))
+    (py-bug-tests-intern 'py-forward-expression-base arg teststring)))
 
-(defun py-end-of-expression-base (arg)
+(defun py-forward-expression-base (arg)
   (goto-char 49)
-  (assert (eq 60 (py-end-of-expression)) nil "py-end-of-expression-test #1 failed")
-  (assert (eq 72 (py-end-of-expression)) nil "py-end-of-expression-test #2 failed)")
-  (assert (eq 85 (py-end-of-expression)) nil "py-end-of-expression-test #3 failed)")
-  (assert (eq 94 (py-end-of-expression)) nil "py-end-of-expression-test #4 failed)")
-  (assert (eq 113 (py-end-of-expression)) nil "py-end-of-expression-test #5 failed)")
-  (assert (eq 165 (py-end-of-expression)) nil "py-end-of-expression-test #6 failed)")
-  (assert (eq 176 (py-end-of-expression)) nil "py-end-of-expression-test #7 failed)")
-  (assert (eq 196 (py-end-of-expression)) nil "py-end-of-expression-test #8 failed)")
-  (assert (eq 212 (py-end-of-expression)) nil "py-end-of-expression-test #9 failed)")
-  (assert (eq 232 (py-end-of-expression)) nil "py-end-of-expression-test #10 failed)"))
+  (assert (eq 60 (py-forward-expression)) nil "py-forward-expression-test #1 failed")
+  (assert (eq 72 (py-forward-expression)) nil "py-forward-expression-test #2 failed)")
+  (assert (eq 85 (py-forward-expression)) nil "py-forward-expression-test #3 failed)")
+  (assert (eq 94 (py-forward-expression)) nil "py-forward-expression-test #4 failed)")
+  (assert (eq 113 (py-forward-expression)) nil "py-forward-expression-test #5 failed)")
+  (assert (eq 165 (py-forward-expression)) nil "py-forward-expression-test #6 failed)")
+  (assert (eq 176 (py-forward-expression)) nil "py-forward-expression-test #7 failed)")
+  (assert (eq 196 (py-forward-expression)) nil "py-forward-expression-test #8 failed)")
+  (assert (eq 212 (py-forward-expression)) nil "py-forward-expression-test #9 failed)")
+  (assert (eq 232 (py-forward-expression)) nil "py-forward-expression-test #10 failed)"))
 
 (defun py-expression-index-test (&optional arg load-branch-function)
   (interactive "p")
@@ -751,7 +736,7 @@ b = a[0].split(':')[1]
 
 (defun py-expression-index-base (arg)
   (goto-char 58)
-  (assert (eq 71 (py-end-of-expression)) nil "py-expression-index-test failed")
+  (assert (eq 71 (py-forward-expression)) nil "py-expression-index-test failed")
 )
 
 (defun py-insert-super-python2-test (&optional arg load-branch-function)
@@ -847,7 +832,7 @@ foo = {
   (when py-debug-p (switch-to-buffer (current-buffer))
 	(font-lock-fontify-buffer))
   (goto-char (point-min))
-  (py-end-of-statement)
+  (py-forward-statement)
   (assert (eq 431 (point)) nil "leave-dict-test failed"))
 
 (defun eofs-attribut-test (&optional arg load-branch-function)
@@ -860,7 +845,7 @@ foo = {
 
 (defun eofs-attribut-base (arg)
   (forward-line -2)
-  (assert (eq 142 (py-end-of-statement))  nil "eofs-attribut-test failed"))
+  (assert (eq 142 (py-forward-statement))  nil "eofs-attribut-test failed"))
 
 (defun args-list-first-line-indent-test (&optional arg load-branch-function)
   (interactive "p")
@@ -902,11 +887,11 @@ if foo:
 
 (defun py-partial-expression-base (arg)
   (goto-char 104)
-  (assert (eq 102 (py-beginning-of-partial-expression)) nil "py-partial-expression-test #1 failed")
-  (assert (eq 108 (py-end-of-partial-expression)) nil "py-partial-expression-test #2 failed")
+  (assert (eq 102 (py-backward-partial-expression)) nil "py-partial-expression-test #1 failed")
+  (assert (eq 108 (py-forward-partial-expression)) nil "py-partial-expression-test #2 failed")
   (goto-char 178)
-  (assert (eq 177 (py-beginning-of-partial-expression)) nil "py-partial-expression-test #3 failed")
-  (assert (eq 195 (py-end-of-partial-expression)) nil "py-partial-expression-test #3 failed")
+  (assert (eq 177 (py-backward-partial-expression)) nil "py-partial-expression-test #3 failed")
+  (assert (eq 195 (py-forward-partial-expression)) nil "py-partial-expression-test #3 failed")
   )
 
 (defun multiline-list-indent-test (&optional arg load-branch-function)
@@ -937,23 +922,6 @@ print u'\\xA9'
     (assert (window-full-height-p) "no-switch-no-split-test failed")
     (assert (eq (current-buffer) oldbuf))))
 
-(defun close-block-test (&optional arg load-branch-function)
-  (interactive "p")
-  (let ((teststring (concat py-test-shebang "
-# -*- coding: utf-8 -*-
-
-def main():
-    if len(sys.argv)==1:
-        usage()
-        sys.exit()
-if __name__==\"__main__\":
-    main()
-")))
-    (py-bug-tests-intern 'close-block-base arg teststring)))
-
-(defun close-block-base (arg)
-  (goto-char 102)
-  (assert (eq 4 (py-close-block)) nil "close-block-test failed"))
 
 (defun py-shift-block-test (&optional arg load-branch-function)
   (interactive "p")
@@ -998,7 +966,7 @@ else:
   (goto-char 105)
   (assert (eq 0 (py-compute-indentation)) nil "nesting-if-test failed"))
 
-(defun py-end-of-print-statement-test (&optional arg load-branch-function)
+(defun py-forward-print-statement-test (&optional arg load-branch-function)
   (interactive "p")
   (let ((teststring (concat py-test-shebang "
 # -*- coding: utf-8 -*-
@@ -1016,18 +984,18 @@ somme errors
           os.path.basename(sys.argv[0]))
 
 ")))
-    (py-bug-tests-intern 'py-end-of-print-statement-base arg teststring)))
+    (py-bug-tests-intern 'py-forward-print-statement-base arg teststring)))
 
-(defun py-end-of-print-statement-base (arg)
+(defun py-forward-print-statement-base (arg)
   (when py-debug-p (switch-to-buffer (current-buffer))
 	(font-lock-fontify-buffer))
   (goto-char 66)
   (sit-for 0.1)
-  (assert (eq 146 (py-end-of-statement)) nil "py-end-of-print-statement-test #1 failed")
+  (assert (eq 146 (py-forward-statement)) nil "py-forward-print-statement-test #1 failed")
 
-  (assert (eq 160 (py-end-of-statement)) nil "py-end-of-print-statement-test #2 failed")
+  (assert (eq 160 (py-forward-statement)) nil "py-forward-print-statement-test #2 failed")
 
-  (assert (eq 245 (py-end-of-statement)) nil "py-end-of-print-statement-test #3 failed")
+  (assert (eq 245 (py-forward-statement)) nil "py-forward-print-statement-test #3 failed")
 
   )
 
@@ -1138,7 +1106,7 @@ class foo(bar, baz):
 
 (defun tqs-list-error-base (arg)
   (goto-char 90)
-  (assert (eq 175   (py-end-of-statement)) nil "tqs-list-error-test failed"))
+  (assert (eq 175   (py-forward-statement)) nil "tqs-list-error-test failed"))
 
 (defun py-smart-indent-eight-test (&optional arg load-branch-function)
   (interactive "p")
@@ -1188,23 +1156,6 @@ print(\"I'm the switch-windows-on-execute-p-test\")
     (assert
      (string-match "*Python*" (buffer-name (current-buffer)))
      nil "switch-windows-on-execute-p-test failed")))
-
-(defun split-windows-on-execute-p-test (&optional arg load-branch-function)
-  (interactive "p")
-  (let ((teststring (concat py-test-shebang "
-# -*- coding: utf-8 -*-
-print(\"I'm the `split-windows-on-execute-p-test'\")
-")))
-    (py-bug-tests-intern 'split-windows-on-execute-p-base arg teststring)))
-
-(defun split-windows-on-execute-p-base (arg)
-  (delete-other-windows)
-  (let ((py-split-window-on-execute t)
-        (py-split-windows-on-execute-function 'split-window-vertically)
-        (py-switch-buffers-on-execute-p t)
-        (erg (current-window-configuration)))
-    (py-execute-buffer)
-    (assert (not (window-full-height-p)) nil "split-windows-on-execute-p-test failed")))
 
 ;; this test is not valable, as python-mode-map often changes
 (defun py-menu-pyshell-test (&optional arg load-branch-function)
@@ -1261,11 +1212,11 @@ self.nult['_foobar'] = []
 
 (defun before-inline-comment-base (arg)
   (goto-char 72)
-  (py-end-of-statement)
+  (py-forward-statement)
   (sit-for 0.1)
   (assert (eq 106 (point)) nil "before-inline-comment-test failed"))
 
-(defun py-end-of-def-inline-comment-test (&optional arg)
+(defun py-forward-def-inline-comment-test (&optional arg)
   (interactive "p")
   (let ((teststring "#! /usr/bin/env python
 # -*- coding: utf-8 -*-
@@ -1280,13 +1231,13 @@ def fooBaz( bar ):  # version 2003/9/7
       return False
   return True
 "))
-    (py-bug-tests-intern 'py-end-of-def-inline-comment-base arg teststring)))
+    (py-bug-tests-intern 'py-forward-def-inline-comment-base arg teststring)))
 
-(defun py-end-of-def-inline-comment-base (arg)
+(defun py-forward-def-inline-comment-base (arg)
   (let ((py-smart-indentation t))
     (goto-char 49)
-    (py-end-of-def-or-class)
-    (assert (eq 311 (point)) nil "py-end-of-def-inline-comment-test failed")))
+    (py-forward-def-or-class)
+    (assert (eq 311 (point)) nil "py-forward-def-inline-comment-test failed")))
 
 (defun py-compute-indentation-test (&optional arg)
   (interactive "p")
@@ -1307,7 +1258,7 @@ def foo()
   (goto-char 127)
   (assert (eq 8 (py-compute-indentation)) nil "py-compute-indentation-test #2 failed"))
 
-(defun py-end-of-statement-test-1 (&optional arg)
+(defun py-forward-statement-test-1 (&optional arg)
   (interactive "p")
   (let ((teststring "#! /usr/bin/python
 # -*- coding: utf-8 -*-
@@ -1316,20 +1267,20 @@ c = Cat()
 c.hello() #causes error, but emacs tracking fails
 import sys, os; os.remove('do/something/nasty') # lp:1025000
 "))
-    (py-bug-tests-intern 'py-end-of-statement-1-base arg teststring)))
+    (py-bug-tests-intern 'py-forward-statement-1-base arg teststring)))
 
-(defun py-end-of-statement-1-base (arg)
+(defun py-forward-statement-1-base (arg)
   (when py-debug-p (switch-to-buffer (current-buffer))
 	(font-lock-fontify-buffer))
   (goto-char (point-min))
-  (assert (eq 55 (py-end-of-statement)) nil "py-end-of-statement-test-1 #1 failed")
-  (assert (eq 65 (py-end-of-statement)) nil "py-end-of-statement-test-1 #2 failed")
-  (assert (eq 75 (py-end-of-statement)) nil "py-end-of-statement-test-1 #2 failed")
-  (assert (eq 131 (py-end-of-statement)) nil "py-end-of-statement-test-1 #3 failed")
-  (py-end-of-statement)
-  (assert (eq 163 (point)) nil "py-end-of-statement-test-1 #4 failed"))
+  (assert (eq 55 (py-forward-statement)) nil "py-forward-statement-test-1 #1 failed")
+  (assert (eq 65 (py-forward-statement)) nil "py-forward-statement-test-1 #2 failed")
+  (assert (eq 75 (py-forward-statement)) nil "py-forward-statement-test-1 #2 failed")
+  (assert (eq 131 (py-forward-statement)) nil "py-forward-statement-test-1 #3 failed")
+  (py-forward-statement)
+  (assert (eq 163 (point)) nil "py-forward-statement-test-1 #4 failed"))
 
-(defun py-end-of-statement-test-2 (&optional arg)
+(defun py-forward-statement-test-2 (&optional arg)
   (interactive "p")
   (let ((teststring "#! /usr/bin/python
 # -*- coding: utf-8 -*-
@@ -1338,50 +1289,30 @@ pdb.set_trace()
 result = w_behandlung(aus, i, line, klammer1=w.group(1), klammer2=w.group(2), klammer3=w.group(3), klammer4=w.group(4))
 aus.write(result + \"\\n\")
 "))
-    (py-bug-tests-intern 'py-end-of-statement-2-base arg teststring)))
+    (py-bug-tests-intern 'py-forward-statement-2-base arg teststring)))
 
-(defun py-end-of-statement-2-base (arg)
+(defun py-forward-statement-2-base (arg)
   (goto-char 59)
-  (py-end-of-statement)
-  (assert (eq 225 (point)) nil "py-end-of-statement-test-2 #1 failed"))
+  (py-forward-statement)
+  (assert (eq 225 (point)) nil "py-forward-statement-test-2 #1 failed"))
 
-(defun py-beginning-of-statement-test-1 (&optional arg)
-  (interactive "p")
-  (let ((teststring "#! /usr/bin/python
-# -*- coding: utf-8 -*-
-print dir()
-c = Cat()
-c.hello() #causes error, but emacs tracking fails
-import sys, os; os.remove('do/something/nasty') # lp:1025000
-"))
-    (py-bug-tests-intern 'py-beginning-of-statement-1-base arg teststring)))
-
-(defun py-beginning-of-statement-1-base (arg)
-  (py-beginning-of-statement)
-  (assert (eq 132 (point)) nil "py-beginning-of-statement-test-1 #1 failed")
-  (assert (eq 116 (py-beginning-of-statement)) nil "py-beginning-of-statement-test-1 #2 failed")
-  (assert (eq 66 (py-beginning-of-statement)) nil "py-beginning-of-statement-test-1 #3 failed")
-  (assert (eq 56 (py-beginning-of-statement)) nil "py-beginning-of-statement-test-1 #4 failed")
-  (assert (eq 44 (py-beginning-of-statement)) nil "py-beginning-of-statement-test-1 #5 failed"))
 
 (defun key-binding-tests (&optional arg)
   (interactive "p")
-  (let ((teststring "#! /usr/bin/env python
-# -*- coding: utf-8 -*-
-"))
+  (let ((teststring ""))
     (py-bug-tests-intern 'key-binding-base arg teststring)))
 
 (defun key-binding-base (arg)
+  (python-mode)
   (when py-debug-p (switch-to-buffer (current-buffer)))
   (assert (eq (key-binding [(:)]) 'py-electric-colon) nil "py-electric-colon key-binding test failed")
-
   (assert (eq (key-binding [(\#)]) 'py-electric-comment) nil "py-electric-comment key-binding test failed")
   (assert (eq (key-binding [(delete)]) 'py-electric-delete) nil "py-electric-delete key-binding test failed")
   (assert (eq (key-binding [(backspace)]) 'py-electric-backspace) nil "py-electric-backspace key-binding test failed")
   (assert (eq (key-binding [(control backspace)]) 'py-hungry-delete-backwards) nil "py-hungry-delete-backwards key-binding test failed")
   (assert (eq (key-binding [(control c) (delete)]) 'py-hungry-delete-forward) nil "py-hungry-delete-forward key-binding test failed")
-  (assert (eq (key-binding [(control meta a)]) 'py-beginning-of-def-or-class) nil "py-beginning-of-def-or-class key-binding test failed")
-  (assert (eq (key-binding [(control meta e)]) 'py-end-of-def-or-class) nil "py-end-of-def-or-class key-binding test failed")
+  (assert (eq (key-binding [(control meta a)]) 'py-backward-top-level) nil "py-backward-top-level key-binding test failed")
+  (assert (eq (key-binding [(control meta e)]) 'py-forward-top-level) nil "py-forward-def-or-class key-binding test failed")
   (assert (eq (key-binding [(control c)(control l)]) 'py-shift-left) nil "py-shift-left key-binding test failed")
   (assert (eq (key-binding [(control c)(control r)]) 'py-shift-right) nil "py-shift-right key-binding test failed")
   (assert (eq (key-binding [(control c)(<)]) 'py-shift-left) nil "py-shift-left key-binding test failed")
@@ -1414,10 +1345,11 @@ import sys, os; os.remove('do/something/nasty') # lp:1025000
   (assert (eq (key-binding [(control c)(control v)]) 'py-version) nil "py-version key-binding test failed")
   (assert (eq (key-binding [(control c)(control w)]) 'py-pychecker-run) nil "py-pychecker-run key-binding test failed")
   (assert (eq (key-binding (kbd "TAB")) 'py-indent-or-complete) nil "py-indent-or-complete key-binding test failed")
-  (assert (eq (key-binding [(control c)(control p)]) 'py-beginning-of-statement) nil "py-beginning-of-statement key-binding test failed")
-  (assert (eq (key-binding [(control c)(control n)]) 'py-end-of-statement) nil "py-end-of-statement key-binding test failed")
+  (assert (eq (key-binding [(control c)(control p)]) 'py-backward-statement) nil "py-backward-statement key-binding test failed")
+  (assert (eq (key-binding [(control c)(control n)]) 'py-forward-statement) nil "py-forward-statement key-binding test failed")
   (assert (eq (key-binding [(control j)]) 'py-newline-and-indent) nil "py-newline-and-indent key-binding test failed")
-  (assert (eq (key-binding (kbd "RET")) 'py-newline-and-indent) nil "py-newline-and-indent key-binding test failed"))
+  ;; (assert (eq (key-binding (kbd "RET")) 'py-newline-and-indent) nil "py-newline-and-indent key-binding test failed")
+  )
 
 (defun py-smart-operator-test (&optional arg)
   (interactive "p")
@@ -1717,55 +1649,55 @@ foo "))
 
   (goto-char 410)
   ;; (sit-for 0.1)
-  (assert (eq 332 (py-beginning-of-statement-bol)) nil "py-beginning-of-statement-bol-test of `py-moves-test' failed")
-  (message "%s" "py-beginning-of-statement-bol-test of `py-moves-test'  done")
+  (assert (eq 332 (py-backward-statement-bol)) nil "py-backward-statement-bol-test of `py-moves-test' failed")
+  (message "%s" "py-backward-statement-bol-test of `py-moves-test'  done")
   (goto-char 410)
   (sit-for 0.1)
-  (assert (eq 317 (py-beginning-of-block-bol)) nil "py-beginning-of-block-bol-test of `py-moves-test' failed")
-  (message "%s" "py-beginning-of-block-bol-test of `py-moves-test'  done")
+  (assert (eq 317 (py-backward-block-bol)) nil "py-backward-block-bol-test of `py-moves-test' failed")
+  (message "%s" "py-backward-block-bol-test of `py-moves-test'  done")
   (goto-char 410)
   ;; (sit-for 0.1)
-  (assert (eq 317 (py-beginning-of-clause-bol)) nil "py-beginning-of-clause-bol-test of `py-moves-test' failed")
-  (message "%s" "py-beginning-of-clause-bol-test of `py-moves-test'  done")
+  (assert (eq 317 (py-backward-clause-bol)) nil "py-backward-clause-bol-test of `py-moves-test' failed")
+  (message "%s" "py-backward-clause-bol-test of `py-moves-test'  done")
   (goto-char 410)
   ;; (sit-for 0.1)
-  (assert (eq 317 (py-beginning-of-block-or-clause-bol)) nil "py-beginning-of-block-or-clause-bol-test of `py-moves-test' failed")
-  (message "%s" "py-beginning-of-block-or-clause-bol-test of `py-moves-test'  done")
-  (assert (eq 1 (py-beginning-of-class-bol)) nil "py-beginning-of-class-bol-test of `py-moves-test' failed")
-  (message "%s" "py-beginning-of-class-bol-test of `py-moves-test'  done")
+  (assert (eq 317 (py-backward-block-or-clause-bol)) nil "py-backward-block-or-clause-bol-test of `py-moves-test' failed")
+  (message "%s" "py-backward-block-or-clause-bol-test of `py-moves-test'  done")
+  (assert (eq 1 (py-backward-class-bol)) nil "py-backward-class-bol-test of `py-moves-test' failed")
+  (message "%s" "py-backward-class-bol-test of `py-moves-test'  done")
   (goto-char 410)
   ;; (sit-for 0.1)
-  (assert (eq 234 (py-beginning-of-def-or-class-bol)) nil "py-beginning-of-def-or-class-bol-test of `py-moves-test' failed")
-  (message "%s" "py-beginning-of-def-or-class-bol-test of `py-moves-test'  done")
-  (message "%s" "py-end-of-block-bol-test of `py-moves-test'  done")
+  (assert (eq 234 (py-backward-def-or-class-bol)) nil "py-backward-def-or-class-bol-test of `py-moves-test' failed")
+  (message "%s" "py-backward-def-or-class-bol-test of `py-moves-test'  done")
+  (message "%s" "py-forward-block-bol-test of `py-moves-test'  done")
   (goto-char 576)
   ;; (sit-for 0.1)
-  (assert (eq 594 (py-end-of-clause-bol)) nil "py-end-of-clause-bol-test of `py-moves-test' failed")
-  (message "%s" "py-end-of-clause-bol-test of `py-moves-test'  done")
+  (assert (eq 594 (py-forward-clause-bol)) nil "py-forward-clause-bol-test of `py-moves-test' failed")
+  (message "%s" "py-forward-clause-bol-test of `py-moves-test'  done")
   (goto-char 576)
   ;; (sit-for 0.1)
-  (assert (eq 594 (py-end-of-block-or-clause-bol)) nil "py-end-of-block-or-clause-bol-test of `py-moves-test' failed")
-  (message "%s" "py-end-of-block-or-clause-bol-test of `py-moves-test'  done")
+  (assert (eq 594 (py-forward-block-or-clause-bol)) nil "py-forward-block-or-clause-bol-test of `py-moves-test' failed")
+  (message "%s" "py-forward-block-or-clause-bol-test of `py-moves-test'  done")
   (goto-char 410)
   ;; (sit-for 0.1)
-  (assert (eq 627 (py-end-of-def-bol)) nil "py-end-of-def-bol-test of `py-moves-test' failed")
-  (message "%s" "py-end-of-def-bol-test of `py-moves-test'  done")
+  (assert (eq 627 (py-forward-def-bol)) nil "py-forward-def-bol-test of `py-moves-test' failed")
+  (message "%s" "py-forward-def-bol-test of `py-moves-test'  done")
   (goto-char 410)
   ;; (sit-for 0.1)
-  (assert (eq 627 (py-end-of-class-bol)) nil "py-end-of-class-bol-test of `py-moves-test' failed")
-  (message "%s" "py-end-of-class-bol-test of `py-moves-test'  done")
+  (assert (eq 627 (py-forward-class-bol)) nil "py-forward-class-bol-test of `py-moves-test' failed")
+  (message "%s" "py-forward-class-bol-test of `py-moves-test'  done")
   (goto-char 410)
   ;; (sit-for 0.1)
-  (assert (eq 627 (py-end-of-def-or-class-bol)) nil "py-end-of-def-or-class-bol-test of `py-moves-test' failed")
-  (message "%s" "py-end-of-def-or-class-bol-test of `py-moves-test'  done")
+  (assert (eq 627 (py-forward-def-or-class-bol)) nil "py-forward-def-or-class-bol-test of `py-moves-test' failed")
+  (message "%s" "py-forward-def-or-class-bol-test of `py-moves-test'  done")
   (goto-char 410)
   ;; (sit-for 0.1)
-  (assert (eq 561 (py-end-of-statement-bol)) nil "py-end-of-statement-bol-test of `py-moves-test' failed")
-  (message "%s" "py-end-of-statement-bol-test of `py-moves-test'  done")
+  (assert (eq 561 (py-forward-statement-bol)) nil "py-forward-statement-bol-test of `py-moves-test' failed")
+  (message "%s" "py-forward-statement-bol-test of `py-moves-test'  done")
   (goto-char 410)
   ;; (sit-for 0.1)
-  (assert (eq 234 (py-beginning-of-def-bol)) nil "py-beginning-of-def-bol-test of `py-moves-test' failed")
-  (message "%s" "py-beginning-of-def-bol-test of `py-moves-test'  done")
+  (assert (eq 234 (py-backward-def-bol)) nil "py-backward-def-bol-test of `py-moves-test' failed")
+  (message "%s" "py-backward-def-bol-test of `py-moves-test'  done")
   )
 
 (defun py-guess-indent-offset-test (&optional arg)
@@ -1863,7 +1795,7 @@ def foo()
     (py-bug-tests-intern 'py-fill-string-django-base arg teststring)))
 
 (defun py-fill-string-django-base (arg)
-  (when py-debug-p (switch-to-buffer (current-buffer))) 
+  (when py-debug-p (switch-to-buffer (current-buffer)))
   (font-lock-fontify-buffer)
   (sit-for 0.1)
   (goto-char 99)
@@ -2029,51 +1961,51 @@ else:
 
 (defun py-nested-block-or-clause-base (arg)
   (goto-char 48)
-  (assert (eq 299 (py-end-of-block)) nil "py-nested-block-or-clause-test #1 failed")
+  (assert (eq 299 (py-forward-block)) nil "py-nested-block-or-clause-test #1 failed")
   (message "%s" "py-nested-block-or-clause-test #1  passed")
   (goto-char 60)
-  (assert (eq 196 (py-end-of-block)) nil "py-nested-block-or-clause-test #2 failed")
+  (assert (eq 196 (py-forward-block)) nil "py-nested-block-or-clause-test #2 failed")
   (message "%s" "py-nested-block-or-clause-test #2  passed")
   (goto-char 76)
-  (assert (eq 169 (py-end-of-block)) nil "py-nested-block-or-clause-test #3 failed")
+  (assert (eq 169 (py-forward-block)) nil "py-nested-block-or-clause-test #3 failed")
   (message "%s" "py-nested-block-or-clause-test #3  passed")
   (goto-char 48)
-  (assert (eq 196 (py-end-of-clause)) nil "py-nested-block-or-clause-test #4 failed")
+  (assert (eq 196 (py-forward-clause)) nil "py-nested-block-or-clause-test #4 failed")
   (message "%s" "py-nested-block-or-clause-test #4  passed")
   (goto-char 60)
-  (assert (eq 169 (py-end-of-clause)) nil "py-nested-block-or-clause-test #5 failed")
+  (assert (eq 169 (py-forward-clause)) nil "py-nested-block-or-clause-test #5 failed")
   (message "%s" "py-nested-block-or-clause-test #5  passed")
   (goto-char 85)
-  (assert (eq 101 (py-end-of-clause)) nil "py-nested-block-or-clause-test #6 failed")
+  (assert (eq 101 (py-forward-clause)) nil "py-nested-block-or-clause-test #6 failed")
   (message "%s" "py-nested-block-or-clause-test #6  passed")
   (goto-char 291)
-  (assert (eq 285 (py-beginning-of-clause)) nil "py-nested-block-or-clause-test #7 failed")
+  (assert (eq 285 (py-backward-clause)) nil "py-nested-block-or-clause-test #7 failed")
   (message "%s" "py-nested-block-or-clause-test #7  passed")
   (sit-for 0.1)
-  (assert (eq 197 (py-beginning-of-clause)) nil "py-nested-block-or-clause-test #8 failed")
+  (assert (eq 197 (py-backward-clause)) nil "py-nested-block-or-clause-test #8 failed")
   (message "%s" "py-nested-block-or-clause-test #8  passed")
-  (assert (eq 48 (py-beginning-of-block-or-clause)) nil "py-nested-block-or-clause-test #9 failed")
+  (assert (eq 48 (py-backward-block-or-clause)) nil "py-nested-block-or-clause-test #9 failed")
   (message "%s" "py-nested-block-or-clause-test #9  passed")
   (goto-char 284)
-  (assert (eq 266 (py-beginning-of-block-or-clause)) nil "py-nested-block-or-clause-test #10 failed")
+  (assert (eq 266 (py-backward-block-or-clause)) nil "py-nested-block-or-clause-test #10 failed")
   (message "%s" "py-nested-block-or-clause-test #10  passed")
-  (assert (eq 238 (py-beginning-of-block-or-clause)) nil "py-nested-block-or-clause-test #11 failed")
+  (assert (eq 238 (py-backward-block-or-clause)) nil "py-nested-block-or-clause-test #11 failed")
   (message "%s" "py-nested-block-or-clause-test #11  passed")
-  (assert (eq 212 (py-beginning-of-block-or-clause)) nil "py-nested-block-or-clause-test #12 failed")
+  (assert (eq 212 (py-backward-block-or-clause)) nil "py-nested-block-or-clause-test #12 failed")
   (message "%s" "py-nested-block-or-clause-test #12  passed")
-  (assert (eq 197 (py-beginning-of-block-or-clause)) nil "py-nested-block-or-clause-test #13 failed")
+  (assert (eq 197 (py-backward-block-or-clause)) nil "py-nested-block-or-clause-test #13 failed")
   (message "%s" "py-nested-block-or-clause-test #13  passed")
   (goto-char 196)
-  (assert (eq 174 (py-beginning-of-block-or-clause)) nil "py-nested-block-or-clause-test #14 failed")
+  (assert (eq 174 (py-backward-block-or-clause)) nil "py-nested-block-or-clause-test #14 failed")
   (message "%s" "py-nested-block-or-clause-test #14  passed")
   (goto-char 169)
-  (assert (eq 147 (py-beginning-of-block-or-clause)) nil "py-nested-block-or-clause-test #15 failed")
+  (assert (eq 147 (py-backward-block-or-clause)) nil "py-nested-block-or-clause-test #15 failed")
   (message "%s" "py-nested-block-or-clause-test #15  passed")
-  (assert (eq 110 (py-beginning-of-block-or-clause)) nil "py-nested-block-or-clause-test #16 failed")
+  (assert (eq 110 (py-backward-block-or-clause)) nil "py-nested-block-or-clause-test #16 failed")
   (message "%s" "py-nested-block-or-clause-test #16  passed")
-  (assert (eq 76 (py-beginning-of-block-or-clause)) nil "py-nested-block-or-clause-test #17 failed")
+  (assert (eq 76 (py-backward-block-or-clause)) nil "py-nested-block-or-clause-test #17 failed")
   (message "%s" "py-nested-block-or-clause-test #17  passed")
-  (assert (eq 60 (py-beginning-of-block-or-clause)) nil "py-nested-block-or-clause-test #18 failed")
+  (assert (eq 60 (py-backward-block-or-clause)) nil "py-nested-block-or-clause-test #18 failed")
   (message "%s" "py-nested-block-or-clause-test #18  passed")
   )
 
@@ -2157,16 +2089,16 @@ else:
 
 (defun nested-if-base (arg)
   (goto-char 118)
-  (py-beginning-of-block)
+  (py-backward-block)
   (when
       (assert (eq (char-after) ?i) nil "nested-if-test #1 failed")
     (message "%s" "nested-if-test #1 passed"))
-  (py-beginning-of-block)
+  (py-backward-block)
   (when
       (assert (eq (char-after) ?i) nil "nested-if-test #2 failed")
     (message "%s" "nested-if-test #2 passed"))
   (when
-      (assert (not (py-beginning-of-block)) nil "nested-if-test #3 failed"))
+      (assert (not (py-backward-block)) nil "nested-if-test #3 failed"))
   (message "%s" "nested-if-test #3 passed"))
 
 (defun py-execute-region-error-test (&optional arg)
@@ -2181,11 +2113,12 @@ else:
 
 (defun py-execute-region-error-base (arg)
   (when py-debug-p (switch-to-buffer (current-buffer)))
-  (goto-char 152)
-  (push-mark)
-  (end-of-line)
-  (setq erg (py-execute-region (line-beginning-position) (line-end-position)))
-  (message "erg: %s" erg))
+  (let (py-exception-buffer (buffer-name (current-buffer)))
+    (goto-char 152)
+    (push-mark)
+    (end-of-line)
+    (setq erg (py-execute-region (line-beginning-position) (line-end-position)))
+    (message "erg: %s" erg)))
 
 (defun py-execute-statement-error-test (&optional arg)
   (interactive "p")
@@ -2212,7 +2145,7 @@ else:
     (assert (search-backward "line 5") nil "py-execute-statement-error-test failed")
     (message "%s" "py-execute-statement-error-test passed")))
 
-(defun beginning-of-block-fails-from-wrong-indent-test (&optional arg)
+(defun backward-block-fails-from-wrong-indent-test (&optional arg)
   (interactive "p")
   (let ((teststring "#! /usr/bin/env python
 # -*- coding: utf-8 -*-
@@ -2221,11 +2154,11 @@ with file(\"roulette-\" + zeit + \".csv\", 'w') as datei:
         klauf.pylauf()
             datei.write(str(spiel[i]) + \"\\n\")
 "))
-  (py-bug-tests-intern 'beginning-of-block-fails-from-wrong-indent-base arg teststring)))
+  (py-bug-tests-intern 'backward-block-fails-from-wrong-indent-base arg teststring)))
 
-(defun beginning-of-block-fails-from-wrong-indent-base (arg)
+(defun backward-block-fails-from-wrong-indent-base (arg)
     (goto-char 102)
-    (assert (eq 48 (py-beginning-of-block)) nil "beginning-of-block-fails-from-wrong-indent-test failed"))
+    (assert (eq 48 (py-backward-block)) nil "backward-block-fails-from-wrong-indent-test failed"))
 
 (defun py-store-result-test (&optional arg)
   (interactive "p")
@@ -2255,9 +2188,6 @@ impo")))
   (py-shell-complete)
   (sit-for 2 t)
   (assert (looking-back "import") nil "py-shell-complete-test failed"))
-
-(defvar py-variables (list 'py-version 'py-indent-offset 'pdb-path 'py-verbose-p 'py-load-pymacs-p 'py-smart-operator-mode-p 'py-sexp-function 'py-autopair-mode 'py-no-completion-calls-dabbrev-expand-p 'py-indent-no-completion-p 'py-fontify-shell-buffer-p 'py-modeline-display-full-path-p 'py-modeline-acronym-display-home-p 'py-install-directory 'py-guess-py-install-directory-p 'py-extensions 'py-hide-show-minor-mode-p 'empty-comment-line-separates-paragraph-p 'py-org-cycle-p 'py-outline-minor-mode-p 'py-outline-mode-keywords 'py-start-run-py-shell 'py-start-run-ipython-shell 'py-close-provides-newline 'py-dedent-keep-relative-column 'py-indent-honors-inline-comment 'py-closing-list-dedents-bos 'py-electric-colon-active-p 'py-electric-colon-greedy-p 'py-electric-colon-newline-and-indent-p 'py-electric-comment-p 'py-electric-comment-add-space-p 'py-mark-decorators 'py-tab-indent 'py-complete-function 'py-encoding-string 'py-shebang-startstring 'py-python-command-args 'py-jython-command-args 'py-lhs-inbound-indent 'py-continuation-offset 'py-indent-tabs-mode 'py-smart-indentation 'py-block-comment-prefix 'py-indent-comments 'py-separator-char 'py-custom-temp-directory 'py-jump-on-exception 'py-ask-about-save 'py-pdbtrack-do-tracking-p 'py-pdbtrack-filename-mapping 'py-pdbtrack-minor-mode-string 'py-import-check-point-max 'py-jython-packages 'py-current-defun-show 'py-current-defun-delay 'py-honor-IPYTHONDIR-p 'py-ipython-history 'py-honor-PYTHONHISTORY-p 'py-master-file 'py-pychecker-command 'py-pychecker-command-args 'py-pep8-command 'py-pep8-command-args 'py-pyflakespep8-command 'py-pep8-command 'py-pep8-command-args 'py-pyflakespep8-command-args 'py-pyflakes-command 'py-pyflakes-command-args 'py-pep8-command-args 'py-pylint-command 'py-pylint-command-args 'py-shell-input-prompt-1-regexp 'py-shell-input-prompt-2-regexp 'py-shell-prompt-read-only 'py-switch-buffers-on-execute-p 'py-split-window-on-execute 'py-max-split-windows 'py-split-windows-on-execute-function 'py-hide-show-keywords 'py-hide-show-hide-docstrings 'python-mode-hook 'py--imenu-create-index-p 'py-imenu-create-index-function 'py-shell-name 'py-shell-toggle-1 'py-shell-toggle-2 'py-match-paren-mode 'py-kill-empty-line 'py-remove-cwd-from-path 'py-imenu-show-method-args-p 'py-history-filter-regexp 'py-use-local-default 'py-shell-local-path 'py-underscore-word-syntax-p 'py-edit-only-p 'py-force-py-shell-name-p 'python-mode-v5-behavior-p 'py-trailing-whitespace-smart-delete-p 'py--warn-tmp-files-left-p 'py-ipython-execute-delay 'strip-chars-before 'strip-chars-after 'py-fill-docstring-style 'py-number-face 'py-XXX-tag-face 'py-pseudo-keyword-face 'py-variable-name-face 'py-decorators-face 'py-builtins-face 'py-class-name-face 'py-exception-name-face 'python-mode-message-string 'py-local-command 'py-local-versioned-command 'py-shell-complete-debug 'py-encoding-string-re 'symbol-definition-start-re 'symbol-definition-start-re 'py-shebang-regexp 'py-separator-char 'py-temp-directory 'py-exec-command 'py-exec-string-command 'py-which-bufname 'py-pychecker-history 'py-pep8-history 'py-pyflakespep8-history 'py-pyflakes-history 'py-pylint-history 'ipython-de-input-prompt-regexp 'ipython-de-input-prompt-regexp 'py-force-local-shell-p 'py-bol-forms-last-indent 'python-mode-syntax-table 'outline-heading-end-regexp 'eldoc-documentation-function 'py-completion-last-window-configuration 'ipython-version 'py-shell-template 'py-execute-directory 'py-use-current-dir-when-execute-p 'py-exception-buffer 'py-output-buffer 'py-string-delim-re 'py-labelled-re 'py-expression-skip-regexp 'py-expression-skip-chars 'py-expression-looking-re 'py-not-expression-regexp 'py-not-expression-chars 'py-not-expression-chars 'py-partial-expression-skip-chars 'py-partial-expression-forward-regexp 'py-partial-expression-skip-backward-chars 'py-not-partial-expression-skip-chars 'py-partial-expression-looking-regexp 'py-not-partial-expression-regexp 'py-operator-regexp 'py-assignment-regexp 'py-delimiter-regexp 'py-line-number-offset 'match-paren-no-use-syntax-pps 'py-traceback-line-re 'py-traceback-line-re 'py-mode-syntax-table 'py-file-queue 'python-mode-abbrev-table 'py-pdbtrack-input-prompt 'py-pydbtrack-input-prompt 'py-pdbtrack-is-tracking-p 'py-shell-map 'py-font-lock-keywords 'py-dotted-expression-syntax-table 'jython-mode-hook 'py-shell-hook 'ipython-completion-command-string 'ipython0.10-completion-command-string 'ipython0.11-completion-command-string 'py-last-exeption-buffer 'python-preoutput-result 'py-imenu-class-regexp 'py-imenu-method-regexp 'py-imenu-method-no-arg-parens 'py-imenu-method-arg-parens 'py-imenu-generic-expression 'py-imenu-generic-regexp 'py-imenu-generic-parens 'py-mode-output-map 'py-menu 'py-already-guessed-indent-offset 'python-mode-map 'skeleton-further-elements 'virtualenv-workon-home 'virtualenv-name 'python-mode-syntax-table 'python-dotty-syntax-table 'py-shell-template 'py-block-closing-keywords-re 'py-finally-re 'py-except-re 'py-else-re 'py-no-outdent-re 'py-assignment-re 'py-block-re 'py-minor-block-re 'py-try-block-re 'py-class-re 'py-def-or-class-re 'py-def-re 'py-block-or-clause-re 'py-extended-block-or-clause-re 'py-clause-re 'py-elif-re 'py-if-re 'py-try-re 'py-mode-syntax-table 'py-pdbtrack-stack-entry-regexp 'py-pdbtrack-input-prompt 'py-pydbtrack-input-prompt 'py-pdbtrack-marker-regexp-file-group 'py-pdbtrack-marker-regexp-line-group 'py-pdbtrack-marker-regexp-funcname-group 'py-pdbtrack-track-range 'py-compilation-regexp-alist 'py-font-lock-syntactic-keywords 'virtualenv-name )
-  "Used for bug-tracking by `py-list-settings'")
 
 (defun py-list-settings ()
   "List py-variables with it's current value.

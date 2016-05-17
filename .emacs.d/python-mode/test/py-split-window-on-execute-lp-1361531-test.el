@@ -24,7 +24,14 @@
 
 ;;; Code:
 
- 
+(ert-deftest py--split-t-not-switch-wm-test ()
+  (py-test-with-temp-buffer
+      "print(\"I'm the py-split-window-on-execute-lp-1361531-python-test\")"
+    (let ((py-split-window-on-execute 1)
+	  py-switch-buffers-on-execute-p)
+      (py-execute-statement-python3))
+    (should (window-live-p (get-buffer "*Python3*")))))
+
 (defun py-split-window-on-execute-lp-1361531-python-test (&optional arg)
   (interactive "p")
   (let ((py-split-window-on-execute t)
@@ -39,7 +46,7 @@ print(\"I'm the py-split-window-on-execute-lp-1361531-python-test\")"))
   (py-execute-statement)
   (assert (eq 2 (count-windows)) nil "py-split-window-on-execute-lp-1361531-python-test failed")
   (py-kill-buffer-unconditional (current-buffer)))
- 
+
 (defun py-split-window-on-execute-lp-1361531-ipython-test (&optional arg)
   (interactive "p")
   (let ((py-split-window-on-execute t)
@@ -54,14 +61,14 @@ print(\"I'm the py-split-window-on-execute-lp-1361531-ipython-test\")"))
   (py-execute-statement)
   (assert (eq 2 (count-windows)) nil "py-split-window-on-execute-lp-1361531-ipython-test failed")
   (py-kill-buffer-unconditional (current-buffer)))
- 
-(defun py-split-window-on-execute-lp-1361531-python2-test (&optional arg)
-  (interactive "p")
+
+(defun py-split-window-on-execute-lp-1361531-python2-test ()
+  (interactive)
   (let ((py-split-window-on-execute t)
         (teststring "#! /usr/bin/env python2
 # -*- coding: utf-8 -*-
 print(\"I'm the py-split-window-on-execute-lp-1361531-python2-test\")"))
-    (py-bug-tests-intern 'py-split-window-on-execute-lp-1361531-python2-base arg teststring)))
+    (py-bug-tests-intern 'py-split-window-on-execute-lp-1361531-python2-base)))
 
 (defun py-split-window-on-execute-lp-1361531-python2-base ()
   (when py-debug-p (message "py-split-window-on-execute: %s" py-split-window-on-execute))
@@ -69,7 +76,7 @@ print(\"I'm the py-split-window-on-execute-lp-1361531-python2-test\")"))
   (py-execute-statement)
   (assert (eq 2 (count-windows)) nil "py-split-window-on-execute-lp-1361531-python2-test failed")
   (py-kill-buffer-unconditional (current-buffer)))
- 
+
 (defun py-split-window-on-execute-lp-1361531-jython-test (&optional arg)
   (interactive "p")
   (let ((py-split-window-on-execute t)
@@ -84,7 +91,7 @@ print(\"I'm the py-split-window-on-execute-lp-1361531-jython-test\")"))
   (py-execute-statement)
   (assert (eq 2 (count-windows)) nil "py-split-window-on-execute-lp-1361531-jython-test failed")
   (py-kill-buffer-unconditional (current-buffer)))
- 
+
 (defun py-split-window-on-execute-lp-1361531-python3-test (&optional arg)
   (interactive "p")
   (let ((py-split-window-on-execute t)
@@ -99,22 +106,6 @@ print(\"I'm the py-split-window-on-execute-lp-1361531-python3-test\")"))
   (py-execute-statement)
   (assert (eq 2 (count-windows)) nil "py-split-window-on-execute-lp-1361531-python3-test failed")
   (py-kill-buffer-unconditional (current-buffer)))
- 
-(defun py-split-window-on-execute-lp-1361531-bpython-test (&optional arg)
-  (interactive "p")
-  (let ((py-split-window-on-execute t)
-        (teststring "#! /usr/bin/env bpython
-# -*- coding: utf-8 -*-
-print(\"I'm the py-split-window-on-execute-lp-1361531-bpython-test\")"))
-    (py-bug-tests-intern 'py-split-window-on-execute-lp-1361531-bpython-base arg teststring)))
-
-(defun py-split-window-on-execute-lp-1361531-bpython-base ()
-  (when py-debug-p (message "py-split-window-on-execute: %s" py-split-window-on-execute))
-  (delete-other-windows)
-  (py-execute-statement)
-  (assert (eq 2 (count-windows)) nil "py-split-window-on-execute-lp-1361531-bpython-test failed")
-  (py-kill-buffer-unconditional (current-buffer)))
 
 (provide 'py-split-window-on-execute-lp-1361531-test)
 ;;; py-split-window-on-execute-lp-1361531-test.el here
- 
