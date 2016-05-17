@@ -8,7 +8,7 @@
 ;;             Clément Pit--Claudel <clement.pitclaudel@live.com>
 ;; URL: http://www.flycheck.org
 ;; Keywords: convenience, languages, tools
-;; Version: 27-cvs
+;; Version: 28-cvs
 ;; Package-Requires: ((dash "2.12.1") (pkg-info "0.4") (let-alist "1.0.4") (seq "1.11") (emacs "24.3"))
 
 ;; This file is not part of GNU Emacs.
@@ -84,6 +84,7 @@
 (require 'rx)                    ; Regexp fanciness in `flycheck-define-checker'
 (require 'help-mode)             ; `define-button-type'
 (require 'find-func)             ; `find-function-regexp-alist'
+(require 'json)                  ; `flycheck-parse-tslint'
 
 
 ;; Declare a bunch of dynamic variables that we need from other modes
@@ -210,7 +211,7 @@ attention to case differences."
     json-jsonlint
     json-python-json
     less
-    luacheck
+    lua-luacheck
     lua
     perl
     perl-perlcritic
@@ -250,6 +251,7 @@ attention to case differences."
     tex-chktex
     tex-lacheck
     texinfo
+    typescript-tslint
     verilog-verilator
     xml-xmlstarlet
     xml-xmllint
@@ -5350,6 +5352,30 @@ See URL `http://phpmd.org/' for more information about phpmd."
                       errors)))))))))
        (nreverse errors)))))
 
+(defun flycheck-parse-tslint (output checker buffer)
+  "Parse TSLint errors from JSON OUTPUT.
+
+CHECKER and BUFFER denoted the CHECKER that returned OUTPUT and
+the BUFFER that was checked respectively.
+
+See URL `https://palantir.github.io/tslint/' for more information
+about TSLint."
+  (let* ((json-array-type 'list)
+         (tslint-json-output (json-read-from-string output))
+         errors)
+    (dolist (emessage tslint-json-output)
+      (let-alist emessage
+        (push (flycheck-error-new-at
+               (+ 1 .startPosition.line)
+               (+ 1 .startPosition.character)
+               'warning .failure
+               :id .ruleName
+               :checker checker
+               :buffer buffer
+               :filename .name)
+              errors)))
+    (nreverse errors)))
+
 
 ;;; Error parsing with regular expressions
 (defun flycheck-get-regexp (patterns)
@@ -7280,11 +7306,11 @@ See URL `http://lesscss.org'."
           line-end))
   :modes less-css-mode)
 
-(flycheck-def-config-file-var flycheck-luacheckrc luacheck ".luacheckrc"
+(flycheck-def-config-file-var flycheck-luacheckrc lua-luacheck ".luacheckrc"
   :safe #'stringp
   :package-version '(flycheck . "0.23"))
 
-(flycheck-define-checker luacheck
+(flycheck-define-checker lua-luacheck
   "A Lua syntax checker using luacheck.
 
 See URL `https://github.com/mpeterv/luacheck'."
@@ -8083,8 +8109,22 @@ The value of this variable is a string denoting the crate type,
 for the `--crate-type' flag."
   :type 'string
   :safe #'stringp
-  :package-version '("flycheck" . "0.20"))
+  :package-version '(flycheck . "0.20"))
 (make-variable-buffer-local 'flycheck-rust-crate-type)
+
+(flycheck-def-option-var flycheck-rust-binary-name nil rust-cargo
+  "The name of the binary to pass to `cargo rustc --bin'.
+
+The value of this variable is a string denoting the name of the
+binary to build: Either the name of the crate, or the name of one
+of the files under `src/bin'.
+
+This variable is used only when `flycheck-rust-crate-type' is
+`bin', and is only useful for crates with multiple targets."
+  :type 'string
+  :safe #'stringp
+  :package-version '(flycheck . "28"))
+(make-variable-buffer-local 'flycheck-rust-binary-name)
 
 (flycheck-def-option-var flycheck-rust-library-path nil (rust-cargo rust)
   "A list of library directories for Rust.
@@ -8101,7 +8141,10 @@ Relative paths are relative to the file being checked."
 
 This syntax checker needs Cargo with rustc subcommand."
   :command ("cargo" "rustc"
-            (eval (if (string= flycheck-rust-crate-type "lib") "--lib" nil))
+            (eval (cond
+                   ((string= flycheck-rust-crate-type "lib") "--lib")
+                   (flycheck-rust-binary-name
+                    (list "--bin" flycheck-rust-binary-name))))
             "--" "-Z" "no-trans"
             (option-flag "--test" flycheck-rust-check-tests)
             (option-list "-L" flycheck-rust-library-path concat)
@@ -8549,6 +8592,42 @@ See URL `http://www.gnu.org/software/texinfo/'."
           "-:" line (optional ":" column) ": " (message)
           line-end))
   :modes texinfo-mode)
+
+(flycheck-def-config-file-var flycheck-typescript-tslint-config
+    typescript-tslint "tslint.json"
+  :safe #'stringp
+  :package-version '(flycheck . "27"))
+
+(flycheck-def-option-var flycheck-typescript-tslint-rulesdir
+    nil typescript-tslint
+  "The directory of custom rules for TSLint.
+
+The value of this variable is either a string containing the path
+to a directory with custom rules, or nil, to not give any custom
+rules to TSLint.
+
+Refer to the TSLint manual at URL
+`http://palantir.github.io/tslint/usage/cli/'
+for more information about the custom directory."
+  :type '(choice (const :tag "No custom rules directory" nil)
+                 (directory :tag "Custom rules directory"))
+  :safe #'stringp
+  :package-version '(flycheck . "27"))
+
+(flycheck-define-checker typescript-tslint
+  "TypeScript style checker using TSLint.
+
+Note that this syntax checker is not used if
+`flycheck-typescript-tslint-config' is nil or refers to a
+non-existing file.
+
+See URL `https://github.com/palantir/tslint'."
+  :command ("tslint" "--format" "json"
+            (config-file "--config" flycheck-typescript-tslint-config)
+            (option "--rules-dir" flycheck-typescript-tslint-rulesdir)
+            source)
+  :error-parser flycheck-parse-tslint
+  :modes (typescript-mode))
 
 (flycheck-def-option-var flycheck-verilator-include-path nil verilog-verilator
   "A list of include directories for Verilator.

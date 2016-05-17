@@ -4,7 +4,7 @@
 
 ;; Author: Justin Burkett <justin@burkett.cc>
 ;; URL: https://github.com/justbur/emacs-which-key
-;; Version: 1.1.4
+;; Version: 1.1.10
 ;; Keywords:
 ;; Package-Requires: ((emacs "24.3"))
 
@@ -67,7 +67,11 @@ this behavior."
   :group 'which-key
   :type 'float)
 
-(defcustom which-key-echo-keystrokes 0
+(defcustom which-key-echo-keystrokes (if (and echo-keystrokes
+                                              (> (+ echo-keystrokes 0.01)
+                                                 which-key-idle-delay))
+                                         (/ (float which-key-idle-delay) 4)
+                                       echo-keystrokes)
   "Value to use for `echo-keystrokes'.
 This only applies if `which-key-popup-type' is minibuffer or
 `which-key-show-prefix' is echo. It needs to be less than
@@ -241,8 +245,10 @@ a percentage out of the frame's height."
 are
 
 1. `which-key-key-order': by key (default)
-2. `which-key-description-order': by description
-3. `which-key-prefix-then-key-order': prefix (no prefix first) then key
+2. `which-key-key-order-alpha': by key using alphabetical order
+3. `which-key-description-order': by description
+4. `which-key-prefix-then-key-order': prefix (no prefix first) then key
+5. `which-key-local-then-key-order': local binding then key
 
 See the README and the docstrings for those functions for more
 information."
@@ -325,21 +331,6 @@ prefixes in `which-key-paging-prefixes'"
 (make-obsolete-variable 'which-key-prevent-C-h-from-cycling
                         "No longer applies. See `which-key-C-h-dispatch'"
                         "2015-12-2")
-
-(defcustom which-key-allow-evil-operators (boundp 'evil-this-operator)
-  "Allow popup to show for evil operators. The popup is normally
-  inhibited in the middle of commands, but setting this to
-  non-nil will override this behavior for evil operators."
-  :group 'which-key
-  :type 'boolean)
-
-(defcustom which-key-show-operator-state-maps nil
-  "Experimental: Try to show the right keys following an evil
-command that reads a motion, such as \"y\", \"d\" and \"c\" from
-normal state. This is experimental, because there might be some
-valid keys missing and it might be showing some invalid keys."
-  :group 'which-key
-  :type 'boolean)
 
 (defcustom which-key-hide-alt-key-translations t
   "Hide key translations using Alt key if non nil.
@@ -436,6 +427,10 @@ to a non-nil value for the execution of a command. Like this
 \(let \(\(which-key-inhibit t\)\)
 ...\)")
 
+(defvar which-key-keymap-history nil
+  "History of keymap selections in functions like
+`which-key-show-keymap'.")
+
 ;; Internal Vars
 (defvar which-key--buffer nil
   "Internal: Holds reference to which-key buffer.")
@@ -497,6 +492,57 @@ sequence. prefix-title is a string. The title is displayed
 alongside the actual current key sequence when
 `which-key-show-prefix' is set to either top or echo.")
 
+
+;; Third-party library support
+
+;; Evil
+(defcustom which-key-allow-evil-operators (boundp 'evil-this-operator)
+  "Allow popup to show for evil operators. The popup is normally
+  inhibited in the middle of commands, but setting this to
+  non-nil will override this behavior for evil operators."
+  :group 'which-key
+  :type 'boolean)
+
+(defcustom which-key-show-operator-state-maps nil
+  "Experimental: Try to show the right keys following an evil
+command that reads a motion, such as \"y\", \"d\" and \"c\" from
+normal state. This is experimental, because there might be some
+valid keys missing and it might be showing some invalid keys."
+  :group 'which-key
+  :type 'boolean)
+
+;; God-mode
+(defvar which-key--god-mode-support-enabled nil
+  "Support god-mode if non-nil. This is experimental,
+so you need to explicitly opt-in for now. Please report any
+problems at github.")
+
+(defvar which-key--god-mode-key-string nil
+  "Holds key string to use for god-mode support.")
+
+(defadvice god-mode-lookup-command
+    (around which-key--god-mode-lookup-command-advice disable)
+  (setq which-key--god-mode-key-string (ad-get-arg 0))
+  (unwind-protect
+      ad-do-it
+    (when (bound-and-true-p which-key-mode)
+      (which-key--hide-popup))))
+
+(defun which-key-enable-god-mode-support (&optional disable)
+  "Enable support for god-mode if non-nil. This is experimental,
+so you need to explicitly opt-in for now. Please report any
+problems at github. If DISABLE is non-nil disable support."
+  (interactive "P")
+  (setq which-key--god-mode-support-enabled (null disable))
+  (if disable
+      (ad-disable-advice
+       'god-mode-lookup-command
+       'around 'which-key--god-mode-lookup-command-advice)
+    (ad-enable-advice
+     'god-mode-lookup-command
+     'around 'which-key--god-mode-lookup-command-advice))
+  (ad-activate 'god-mode-lookup-command))
+
 ;;;###autoload
 (define-minor-mode which-key-mode
   "Toggle which-key-mode."
@@ -552,7 +598,7 @@ alongside the actual current key sequence when
 
 (defun which-key--setup ()
   "Initial setup for which-key.
-Reduce `echo-keystrokes' if necessary (it will interfer if it's
+Reduce `echo-keystrokes' if necessary (it will interfere if it's
 set too high) and setup which-key buffer."
   (when (or (eq which-key-show-prefix 'echo)
             (eq which-key-popup-type 'minibuffer))
@@ -563,7 +609,7 @@ set too high) and setup which-key buffer."
   (setq which-key--is-setup t))
 
 (defun which-key--setup-echo-keystrokes ()
-  "Reduce `echo-keystrokes' if necessary (it will interfer if
+  "Reduce `echo-keystrokes' if necessary (it will interfere if
 it's set too high)."
   (let (;(previous echo-keystrokes)
         )
@@ -1152,6 +1198,21 @@ coming before a prefix. Within these categories order using
         (and (not apref?) bpref?)
       (which-key-key-order acons bcons))))
 
+(defun which-key--local-binding-p (keydesc)
+  (eq (which-key--safe-lookup-key
+       (current-local-map) (kbd (which-key--current-key-string (car keydesc))))
+      (intern (cdr keydesc))))
+
+(defun which-key-local-then-key-order (acons bcons)
+  "Order first by whether A and/or B is a local binding with
+local bindings coming first. Within these categories order using
+`which-key-key-order'."
+  (let ((aloc? (which-key--local-binding-p acons))
+        (bloc? (which-key--local-binding-p bcons)))
+    (if (not (eq aloc? bloc?))
+        (and aloc? (not bloc?))
+      (which-key-key-order acons bcons))))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Functions for retrieving and formatting keys
 
@@ -1310,11 +1371,14 @@ ORIGINAL-DESCRIPTION is the description given by
                   (local 'which-key-local-map-description-face)
                   (t 'which-key-command-description-face))
       'help-echo (cond
-                  ((and (fboundp (intern original-description))
+                  ((and original-description
+                        (fboundp (intern original-description))
                         (documentation (intern original-description))
-                        tooltip-mode)
+                        ;; tooltip-mode doesn't exist in emacs-nox
+                        (boundp 'tooltip-mode) tooltip-mode)
                    (documentation (intern original-description)))
-                  ((and (fboundp (intern original-description))
+                  ((and original-description
+                        (fboundp (intern original-description))
                         (documentation (intern original-description))
                         (let* ((doc (documentation (intern original-description)))
                                (str (replace-regexp-in-string "\n" " " doc))
@@ -1921,7 +1985,7 @@ is selected interactively from all available keymaps."
                         (and (boundp m)
                              (keymapp (symbol-value m))
                              (not (equal (symbol-value m) (make-sparse-keymap)))))
-                      t nil 'variable-name-history))))
+                      t nil 'which-key-keymap-history))))
     (which-key--show-keymap (symbol-name keymap-sym) (symbol-value keymap-sym))))
 
 (defun which-key-show-minor-mode-keymap ()
@@ -1938,7 +2002,7 @@ is selected interactively by mode in `minor-mode-map-alist'."
                       (and (symbol-value (car entry))
                            (not (equal (cdr entry) (make-sparse-keymap)))))
                     minor-mode-map-alist))
-           nil t nil 'variable-name-history))))
+           nil t nil 'which-key-keymap-history))))
     (which-key--show-keymap (symbol-name mode-sym)
                             (cdr (assq mode-sym minor-mode-map-alist)))))
 
@@ -2050,6 +2114,11 @@ Finally, show the buffer."
               (error (progn
                        (message "which-key error in key-chord handling")
                        [key-chord])))))
+    (when (and which-key--god-mode-support-enabled
+               (bound-and-true-p god-local-mode)
+               (eq this-command 'god-mode-self-insert))
+      (setq prefix-keys (when which-key--god-mode-key-string
+                          (kbd which-key--god-mode-key-string))))
     (cond ((and (> (length prefix-keys) 0)
                 (or (keymapp (key-binding prefix-keys))
                     ;; Some keymaps are stored here like iso-transl-ctl-x-8-map
@@ -2063,6 +2132,9 @@ Finally, show the buffer."
                 ;; executed
                 (or (and which-key-allow-evil-operators
                          (bound-and-true-p evil-this-operator))
+                    (and which-key--god-mode-support-enabled
+                         (bound-and-true-p god-local-mode)
+                         (eq this-command 'god-mode-self-insert))
                     (null this-command)))
            (which-key--create-buffer-and-show prefix-keys)
            (when which-key-idle-secondary-delay
@@ -2108,6 +2180,25 @@ Finally, show the buffer."
                          which-key--on-last-page nil)
                    (cancel-timer which-key--paging-timer)
                    (which-key--start-timer))))))
+
+;; backport some functions for 24.3
+
+;; found at https://github.com/Lindydancer/andersl-old-emacs-support/blob/master/andersl-old-emacs-support.el
+(unless (fboundp 'frame-fringe-width)
+  (defun frame-fringe-width (&optional frame)
+    "Return fringe width of FRAME in pixels."
+    (let ((left-pair (assq 'left-fringe (frame-parameters frame)))
+          (right-pair (assq 'right-fringe (frame-parameters frame))))
+      (+ (if left-pair (cdr left-pair) 0)
+         (if right-pair (cdr right-pair) 0)))))
+
+(unless (fboundp 'frame-scroll-bar-width)
+  (defun frame-scroll-bar-width (&optional frame)
+    "Return scroll bar width of FRAME in pixels."
+    (let ((pair (assq 'scroll-bar-width (frame-parameters frame))))
+      (if pair
+          (cdr pair)
+        0))))
 
 (provide 'which-key)
 ;;; which-key.el ends here

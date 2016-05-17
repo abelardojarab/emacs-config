@@ -116,11 +116,10 @@ Arg MAP is the keymap to use, SUBKEY is the initial short key-binding to
 call COMMAND.
 
 Arg OTHER-SUBKEYS is an alist specifying other short key-bindings
-to use once started.
-e.g:
+to use once started e.g:
 
-\(helm-define-key-with-subkeys global-map
-   \(kbd \"C-x v n\") ?n 'git-gutter:next-hunk '((?p . git-gutter:previous-hunk))\)
+    \(helm-define-key-with-subkeys global-map
+       \(kbd \"C-x v n\") ?n 'git-gutter:next-hunk '((?p . git-gutter:previous-hunk))\)
 
 
 In this example, `C-x v n' will run `git-gutter:next-hunk'
@@ -135,7 +134,7 @@ For any other keys pressed, run their assigned command as defined
 in MAP and then exit the loop running EXIT-FN, if specified.
 
 NOTE: SUBKEY and OTHER-SUBKEYS bindings support char syntax only 
-(e.g ?n), so don't use strings or vectors to define them."
+\(e.g ?n), so don't use strings or vectors to define them."
   (declare (indent 1))
   (define-key map key
     (lambda ()
@@ -162,7 +161,6 @@ NOTE: SUBKEY and OTHER-SUBKEYS bindings support char syntax only
                                       unread-command-events)))
                        nil)))))
         (and exit-fn (funcall exit-fn))))))
-
 
 ;;; Keymap
 ;;
@@ -2351,10 +2349,10 @@ Unuseful when used outside helm, don't use it.")
   "Create and setup `helm-buffer'."
   (let ((root-dir default-directory))
     (with-current-buffer (get-buffer-create helm-buffer)
-      (helm-major-mode)
       (helm-log "Enabling major-mode %S" major-mode)
       (helm-log "kill local variables: %S" (buffer-local-variables))
       (kill-all-local-variables)
+      (helm-major-mode)
       (set (make-local-variable 'inhibit-read-only) t)
       (buffer-disable-undo)
       (erase-buffer)
@@ -3067,21 +3065,21 @@ to the matching method in use."
               (when (zerop count)
                 (cl-loop with multi-match = (string-match-p " " helm-pattern)
                          with patterns = (if multi-match
-                                             (split-string helm-pattern)
+                                             (mapcar #'helm--maybe-get-migemo-pattern
+                                                     (split-string helm-pattern))
                                              (split-string helm-pattern "" t))
                          for p in patterns
-                         for re = (helm--maybe-get-migemo-pattern p)
                          ;; Multi matches (regexps patterns).
                          if multi-match do
                          (progn
-                           (while (re-search-forward re nil t)
+                           (while (re-search-forward p nil t)
                              (add-text-properties
                               (match-beginning 0) (match-end 0)
                               '(face helm-match)))
                            (goto-char (point-min)))
                          ;; Fuzzy matches (literal patterns).
                          else do
-                         (when (search-forward re nil t)
+                         (when (search-forward p nil t)
                            (add-text-properties
                             (match-beginning 0) (match-end 0)
                             '(face helm-match))))))
@@ -3606,6 +3604,7 @@ If action buffer is selected, back to the helm buffer."
                  (set-window-buffer (get-buffer-window helm-action-buffer)
                                     helm-buffer)
                  (kill-buffer helm-action-buffer)
+                 (setq helm-saved-selection nil)
                  (helm-set-pattern helm-input 'noupdate))
                 (helm-saved-selection
                  (setq helm-saved-current-source (helm-get-current-source))

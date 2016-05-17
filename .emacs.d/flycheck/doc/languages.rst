@@ -569,9 +569,9 @@ to view the docstring of the syntax checker.  Likewise, you may use
 
 .. supported-language:: Lua
 
-   Flycheck checks Lua with `luacheck`, falling back to `lua`.
+   Flycheck checks Lua with `lua-luacheck`, falling back to `lua`.
 
-   .. syntax-checker:: luacheck
+   .. syntax-checker:: lua-luacheck
 
       Check syntax and lint with Luacheck_.
 
@@ -846,6 +846,13 @@ to view the docstring of the syntax checker.  Likewise, you may use
          The type of the crate to check, as string for the ``--crate-type``
          option.
 
+      .. option:: flycheck-rust-binary-name
+
+         The name of the binary to pass to ``cargo rustc --bin``, as a string.
+
+         Only required when `flycheck-rust-crate-type` is ``bin`` and the crate
+         has multiple targets.
+
       .. option:: flycheck-rust-library-path
 
          A list of additional library directories. Relative paths are relative
@@ -980,6 +987,18 @@ to view the docstring of the syntax checker.  Likewise, you may use
       Check syntax with :program:`makeinfo` from Texinfo_.
 
       .. _Texinfo: http://www.gnu.org/software/texinfo/
+
+.. supported-language:: TypeScript
+
+   .. syntax-checker:: typescript-tslint
+
+      Check syntax and style with `TSLint <https://github.com/palantir/tslint>`_.
+
+      .. syntax-checker-config-file:: flycheck-typescript-tslint-config
+
+      .. option:: flycheck-typescript-tslint-rulesdir
+
+         Additional rules directory, for user created rules.
 
 .. supported-language:: Verilog
 

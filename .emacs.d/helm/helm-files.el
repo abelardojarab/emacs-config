@@ -54,6 +54,7 @@
 
 (defvar recentf-list)
 (defvar helm-mm-matching-method)
+(defvar dired-async-mode)
 
 
 (defgroup helm-files nil
@@ -471,11 +472,12 @@ Don't set it directly, use instead `helm-ff-auto-update-initial-value'.")
    'helm-find-files-eshell-command-on-file
    "Find file as root `C-c r'" 'helm-find-file-as-root
    "Find alternate file" 'find-alternate-file
-   "Ediff File `C-='" 'helm-find-files-ediff-files
-   "Ediff Merge File `C-c ='" 'helm-find-files-ediff-merge-files
+   "Ediff File `C-c ='" 'helm-find-files-ediff-files
+   "Ediff Merge File `M-='" 'helm-find-files-ediff-merge-files
    "Delete File(s) `M-D'" 'helm-delete-marked-files
    "Copy file(s) `M-C, C-u to follow'" 'helm-find-files-copy
    "Rename file(s) `M-R, C-u to follow'" 'helm-find-files-rename
+   "Backup files" 'helm-find-files-backup
    "Symlink files(s) `M-S, C-u to follow'" 'helm-find-files-symlink
    "Relsymlink file(s) `C-u to follow'" 'helm-find-files-relsymlink
    "Hardlink file(s) `M-H, C-u to follow'" 'helm-find-files-hardlink
@@ -569,6 +571,22 @@ of current buffer."
            ;; staying in the directory visited instead of current.
            (or (car-safe helm-ff-history) default-directory))))))
 
+(defun helm-ff--count-and-collect-dups (files)
+  (cl-loop with dups = (make-hash-table :test 'equal)
+           for f in files
+           for file = (if (file-directory-p f)
+                          (concat (helm-basename f) "/")
+                          (helm-basename f))
+           for count = (gethash file dups)
+           if count do (puthash file (1+ count) dups)
+           else do (puthash file 1 dups)
+           finally return (cl-loop for k being the hash-keys in dups
+                                   using (hash-value v)
+                                   if (> v 1)
+                                   collect (format "%s(%s)" k v)
+                                   else
+                                   collect k)))
+
 (defun helm-find-files-do-action (action)
   "Generic function for creating actions from `helm-source-find-files'.
 ACTION must be an action supported by `helm-dired-action'."
@@ -584,11 +602,7 @@ ACTION must be an action supported by `helm-dired-action'."
          helm-ff-auto-update-initial-value
          (dest   (with-helm-display-marked-candidates
                    helm-marked-buffer-name
-                   (mapcar (lambda (f)
-                               (if (file-directory-p f)
-                                   (concat (helm-basename f) "/")
-                                 (helm-basename f)))
-                           ifiles)
+                   (helm-ff--count-and-collect-dups ifiles)
                    (with-helm-current-buffer
                      (helm-read-file-name
                       prompt
@@ -603,6 +617,13 @@ ACTION must be an action supported by `helm-dired-action'."
 (defun helm-find-files-copy (_candidate)
   "Copy files from `helm-find-files'."
   (helm-find-files-do-action 'copy))
+
+(defun helm-find-files-backup (_candidate)
+  "Backup files from `helm-find-files'.
+This reproduce the behavior of \"cp --backup=numbered from to\"."
+  (cl-assert (and (fboundp 'dired-async-mode) dired-async-mode) nil
+             "Backup only available when `dired-async-mode' is enabled")
+  (helm-find-files-do-action 'backup))
 
 (defun helm-find-files-rename (_candidate)
   "Rename files from `helm-find-files'."
@@ -857,7 +878,7 @@ See `helm-ff-serial-rename-1'."
                       :must-match t)))
          done)
     (with-helm-display-marked-candidates
-      helm-marked-buffer-name (mapcar 'helm-basename cands)
+      helm-marked-buffer-name (helm-ff--count-and-collect-dups cands)
       (if (y-or-n-p
            (format "Rename %s file(s) to <%s> like this ?\n%s "
                    (length cands) dir (format "%s <-> %s%s.%s"
@@ -952,58 +973,67 @@ See `helm-ff-serial-rename-1'."
 (defun helm-ff-query-replace-on-filenames (candidates)
   "Query replace on filenames of CANDIDATES.
 This doesn't replace inside the files, only modify filenames."
-  (let ((def (helm-basename (car candidates))))
-    (with-helm-display-marked-candidates
-      helm-marked-buffer-name
-      (mapcar 'helm-basename candidates)
-      (let* ((regexp (read-string "Replace regexp on filename(s): "
-                                  nil 'helm-ff-query-replace-history-from def))
-             (str    (read-string (format "Replace regexp `%s' with: " regexp)
-                                  nil 'helm-ff-query-replace-history-to def)))
-        (cl-loop with query = "y"
-                 with count = 0
-                 for old in candidates
-                 for new = (concat (helm-basedir old)
-                                   (replace-regexp-in-string
-                                    (cond ((string= regexp "%.")
-                                           (helm-basename old t))
-                                          ((string= regexp ".%")
-                                           (file-name-extension old))
-                                          (t regexp))
-                                    (save-match-data
-                                      (if (string-match "\\\\#" str)
-                                          (replace-match
-                                           (format "%03d" (1+ count)) t t str)
-                                          str))
-                                    (helm-basename old) t))
-                 ;; If `regexp' is not matched in `old'
-                 ;; `replace-regexp-in-string' will
-                 ;; return `old' unmodified.
-                 unless (string= old new)
-                 do (progn
-                      (unless (string= query "!")
-                        (while (not (member
-                                     (setq query
-                                           (string
-                                            (read-key
-                                             (propertize
-                                              (format
-                                               "Replace `%s' by `%s' [!,y,n,q]"
-                                               old new)
-                                              'face 'minibuffer-prompt))))
-                                     '("y" "!" "n" "q")))
-                          (message "Please answer by y,n,! or q") (sit-for 1)))
-                      (when (string= query "q")
-                        (cl-return (message "Operation aborted")))
-                      (unless (string= query "n")
-                        (rename-file old new)
-                        (cl-incf count)))
-                 finally (message "%d Files renamed" count))))
-    ;; This fix the emacs bug where "Emacs-Lisp:" is sent
-    ;; in minibuffer (not the echo area).
-    (sit-for 0.1)
-    (with-current-buffer (window-buffer (minibuffer-window))
-      (delete-minibuffer-contents))))
+  (with-helm-display-marked-candidates
+    helm-marked-buffer-name
+    (mapcar 'helm-basename candidates)
+    (let* ((regexp (read-string "Replace regexp on filename(s): "
+                                nil 'helm-ff-query-replace-history-from
+                                (helm-basename (car candidates))))
+           (str    (read-string (format "Replace regexp `%s' with: " regexp)
+                                nil 'helm-ff-query-replace-history-to)))
+      (cl-loop with query = "y"
+               with count = 0
+               for old in candidates
+               for new = (concat (helm-basedir old)
+                                 (replace-regexp-in-string
+                                  (cond ((string= regexp "%.")
+                                         (helm-basename old t))
+                                        ((string= regexp ".%")
+                                         (file-name-extension old))
+                                        ((string= regexp "%")
+                                         (helm-basename old))
+                                        (t regexp))
+                                  (save-match-data
+                                    (cond ((string-match "\\\\#" str)
+                                           (replace-match
+                                            (format "%03d" (1+ count)) t t str))
+                                          ((string= str "%u") #'upcase)
+                                          ((string= str "%d") #'downcase)
+                                          ((string= str "%c") #'capitalize)
+                                          (t str)))
+                                  (helm-basename old) t))
+               ;; If `regexp' is not matched in `old'
+               ;; `replace-regexp-in-string' will
+               ;; return `old' unmodified.
+               unless (string= old new)
+               do (progn
+                    (when (file-exists-p new)
+                      (setq new (concat (file-name-sans-extension new)
+                                        (format "(%s)" count)
+                                        (file-name-extension new t))))
+                    (unless (string= query "!")
+                      (while (not (member
+                                   (setq query
+                                         (string
+                                          (read-key
+                                           (propertize
+                                            (format
+                                             "Replace `%s' by `%s' [!,y,n,q]"
+                                             old new)
+                                            'face 'minibuffer-prompt))))
+                                   '("y" "!" "n" "q")))
+                        (message "Please answer by y,n,! or q") (sit-for 1)))
+                    (when (string= query "q")
+                      (cl-return (message "Operation aborted")))
+                    (unless (string= query "n")
+                      (rename-file old new)
+                      (cl-incf count)))
+               finally (message "%d Files renamed" count))))
+  ;; This fix the emacs bug where "Emacs-Lisp:" is sent
+  ;; in minibuffer (not the echo area).
+  (sit-for 0.1)
+  (with-current-buffer (window-buffer (minibuffer-window))
+    (delete-minibuffer-contents)))
 
 ;; The action.
 (defun helm-ff-query-replace-on-marked (_candidate)
@@ -2593,12 +2623,11 @@ Find inside `require' and `declare-function' sexp."
              when (eq (car (file-attributes cd)) t)
              return cd)))
 
-(defvar dired-async-mode)
 (cl-defun helm-dired-action (candidate
                              &key action follow (files (dired-get-marked-files)))
   "Execute ACTION on FILES to CANDIDATE.
 Where ACTION is a symbol that can be one of:
-'copy, 'rename, 'symlink,'relsymlink, 'hardlink.
+'copy, 'rename, 'symlink,'relsymlink, 'hardlink or 'backup.
 Argument FOLLOW when non--nil specify to follow FILES to destination for the actions
 copy and rename."
   (when (get-buffer dired-log-buffer) (kill-buffer dired-log-buffer))
@@ -2612,12 +2641,13 @@ copy and rename."
                   (rename     'dired-rename-file)
                   (symlink    'make-symbolic-link)
                   (relsymlink 'dired-make-relative-symlink)
-                  (hardlink   'dired-hardlink)))
+                  (hardlink   'dired-hardlink)
+                  (backup     'backup-file)))
         (marker (cl-case action
-                  ((copy rename)   dired-keep-marker-copy)
-                  (symlink        dired-keep-marker-symlink)
-                  (relsymlink     dired-keep-marker-relsymlink)
-                  (hardlink       dired-keep-marker-hardlink)))
+                  ((copy rename backup) dired-keep-marker-copy)
+                  (symlink              dired-keep-marker-symlink)
+                  (relsymlink           dired-keep-marker-relsymlink)
+                  (hardlink             dired-keep-marker-hardlink)))
         (dirflag (and (= (length files) 1)
                       (file-directory-p (car files))
                       (not (file-directory-p candidate))))
@@ -2745,11 +2775,7 @@ Ask to kill buffers associated with that file, too."
          (len (length files)))
     (with-helm-display-marked-candidates
       helm-marked-buffer-name
-      (mapcar (lambda (f)
-                  (if (file-directory-p f)
-                      (concat (helm-basename f) "/")
-                    (helm-basename f)))
-              files)
+      (helm-ff--count-and-collect-dups files)
       (if (not (y-or-n-p (format "Delete *%s File(s)" len)))
           (message "(No deletions performed)")
         (cl-dolist (i files)
@@ -3443,7 +3469,22 @@ separator."
 ;;
 ;;;###autoload
 (defun helm-find (arg)
-  "Preconfigured `helm' for the find shell command."
+  "Preconfigured `helm' for the find shell command.
+
+Recursively find files whose names are matched by all specified
+globbing PATTERNs under the current directory using the external
+program specified in `find-program' (usually \"find\").  Every
+input PATTERN is silently wrapped into two stars: *PATTERN*.
+
+With prefix argument, prompt for a directory to search.
+
+When user option `helm-findutils-search-full-path' is non-nil,
+match against complete paths, otherwise, against file names
+without directory part.
+
+The (possibly empty) list of globbing PATTERNs can be followed by
+the separator \"*\" plus any number of additional arguments that
+are passed to \"find\" literally."
   (interactive "P")
   (let ((directory
          (if arg

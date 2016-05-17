@@ -13,7 +13,6 @@ to a certain extent.
 
 ** Table of Contents                                                 :TOC@4:
  - [[#which-key-][which-key ]]
-   - [[#whats-new][What's New]]
    - [[#introduction][Introduction]]
    - [[#install][Install]]
      - [[#melpa][MELPA]]
@@ -39,9 +38,12 @@ to a certain extent.
        - [[#method-2-bind-your-own-keys][Method 2: Bind your own keys]]
      - [[#face-customization-options][Face Customization Options]]
      - [[#other-options][Other Options]]
+   - [[#support-for-third-party-libraries][Support for Third-Party Libraries]]
+     - [[#key-chord][Key-chord]]
+     - [[#evil-operators][Evil operators]]
+     - [[#god-mode][God-mode]]
    - [[#more-examples][More Examples]]
      - [[#nice-display-with-split-frame][Nice Display with Split Frame]]
-   - [[#status][Status]]
    - [[#thanks][Thanks]]
 
 ** Install
@@ -52,7 +54,6 @@ minor mode of course.
 
 *** Manually
 Add which-key.el to your =load-path= and require. Something like 
-
 #+BEGIN_SRC emacs-lisp
 (add-to-list 'load-path "path/to/which-key.el")
 (require 'which-key)
@@ -71,16 +72,8 @@ the constraints. The constraints are determined by several factors, including
 your Emacs settings, the size of the current Emacs frame, and the which-key
 settings, most of which are described below. 
 
-By default which-key makes substitutions for text all with the aim of saving
-space. The most noticeable are the "special keys" like SPC, TAB, RET, etc. This
-can be turned off (see [[#other-options][Other Options]]), but the default is to
-truncate these keys to one character and display them using =:inverse-video=
-(flips foreground and background colors). You can see the effect in the
-screenshots.
-
-There are other substitution abilities included, which are quite flexible
+There are many substitution abilities included, which are quite flexible
 (ability to use regexp for example). This makes which-key very customizable.
-This functionality is targeting [[https://github.com/syl20bnr/spacemacs][spacemacs]].
 
 *** Side Window Bottom Option
 Popup side window on bottom. This is the current default. To restore this setup use
@@ -297,17 +290,13 @@ available options.
 ;; (setq which-key-sort-order 'which-key-key-order-alpha)
 ;; same as default, except all prefix keys are grouped together at the end
 ;; (setq which-key-sort-order 'which-key-prefix-then-key-order)
+;; same as default, except all keys from local maps shown first
+;; (setq which-key-sort-order 'which-key-local-then-key-order)
 ;; sort based on the key description ignoring case
 ;; (setq which-key-sort-order 'which-key-description-order)
 #+END_SRC
 
 *** Paging Options
-[Note: This section is out of date given the new =C-h= commands feature
-described in the What's New section. I will update it soon.].
-- =C-h= commands! Now =C-h= will prompt you will several options instead of
-  going directly to the next page. You can (see =which-key-C-h-map=)
-  This is a fairly substantial change and might introduce a bug or two, so
-  please report anything you see that is strange and I will try to fix it.
 
 There are at least several prefixes that have many keys bound to them, like
 =C-x=. which-key displays as many keys as it can given your settings, but for
@@ -434,6 +423,24 @@ shown.
   ;; Set to t to show the count of keys shown vs. total keys in the mode line.
   (setq which-key-show-remaining-keys nil)
 #+END_SRC
+** Support for Third-Party Libraries
+   Some support is provided for third-party libraries which don't use standard
+   methods of looking up commands. Some of these need to be enabled
+   explicitly. This code includes some hacks, so please report any problems.
+*** Key-chord
+    Enabled by default.
+*** Evil operators
+    Evil motions and text objects following an operator like =d= are not all
+    looked up in a standard way. Support is controlled through
+    =which-key-allow-evil-operators= which should be non-nil if evil is loaded
+    before which-key and through =which-key-show-operator-state-maps= which
+    needs to be enabled explicitly because it is more of a hack. The former
+    allows for the inner and outer text object maps to show, while the latter
+    shows motions as well. 
+*** God-mode
+    Call =(which-key-enable-god-mode-support)= after loading god-mode to enable
+    support for god-mode key sequences. This is new and experimental, so please
+    report any issues.
 ** More Examples
 *** Nice Display with Split Frame
 Unlike guide-key, which-key looks good even if the frame is split into several
@@ -444,10 +451,6 @@ windows.
 #+CAPTION: which-key in a frame with 2 vertical splits
 [[./img/which-key-bottom-split.png]]
 
-** Status
-It requires testing on different platforms with different configurations, which
-is beyond my capabilities. The default configuration has been reasonably stable
-for me. 
 ** Thanks
 Special thanks to
 - @bmag for helping with the initial development and finding many

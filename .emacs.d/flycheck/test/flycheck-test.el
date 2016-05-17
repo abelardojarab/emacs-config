@@ -2843,71 +2843,6 @@ evaluating BODY."
 
 ;;; Error parsers for command syntax checkers
 
-(defconst flycheck-checkstyle-xml
-  "<?xml version=\"1.0\" encoding=\"utf-8\"?>
-<checkstyle version=\"4.3\">
-  <file name=\"test-javascript/missing-semicolon.js\">
-    <error line=\"3\" column=\"21\" severity=\"error\" message=\"Missing semicolon.\" source=\"Foo3\" />
-    <error line=\"3\" severity=\"warning\" message=\"Implied global &apos;alert&apos;\" source=\"Foo4\" />
-  </file>
-  <file name=\"test-javascript/missing-quote.js\">
-    <error line=\"undefined\" column=\"undefined\" severity=\"error\" message=\"Cannot read property &apos;id&apos; of undefined\" source=\"Foo1\" />
-  </file>
-</checkstyle>"
-  "Example Checkstyle output from jshint.")
-
-(defconst flycheck-checkstyle-expected-errors
-  (list
-   (flycheck-error-new
-    :filename "test-javascript/missing-semicolon.js"
-    :checker 'checker
-    :buffer 'buffer
-    :line 3
-    :column 21
-    :level 'error
-    :message "Missing semicolon."
-    :id "Foo3")
-   (flycheck-error-new
-    :filename "test-javascript/missing-semicolon.js"
-    :checker 'checker
-    :buffer 'buffer
-    :line 3
-    :column nil
-    :level 'warning
-    :message "Implied global 'alert'"
-    :id "Foo4")
-   (flycheck-error-new
-    :filename "test-javascript/missing-quote.js"
-    :checker 'checker
-    :buffer 'buffer
-    :line nil
-    :column nil
-    :level 'error
-    :message "Cannot read property 'id' of undefined"
-    :id "Foo1"))
-  "Errors to be parsed from `flycheck-checkstyle-xml'.")
-
-(ert-deftest flycheck-parse-checkstyle/with-builtin-xml ()
-  :tags '(error-parsing checkstyle-xml)
-  (let ((flycheck-xml-parser 'flycheck-parse-xml-region))
-    (should (equal (flycheck-parse-checkstyle flycheck-checkstyle-xml
-                                              'checker 'buffer)
-                   flycheck-checkstyle-expected-errors))))
-
-(ert-deftest flycheck-parse-checkstyle/with-libxml2 ()
-  :tags '(error-parsing checkstyle-xml)
-  (skip-unless (fboundp 'libxml-parse-xml-region))
-  (let ((flycheck-xml-parser 'libxml-parse-xml-region))
-    (should (equal (flycheck-parse-checkstyle flycheck-checkstyle-xml
-                                              'checker 'buffer)
-                   flycheck-checkstyle-expected-errors))))
-
-(ert-deftest flycheck-parse-checkstyle/automatic-parser ()
-  :tags '(error-parsing checkstyle-xml)
-  (should (equal (flycheck-parse-checkstyle flycheck-checkstyle-xml
-                                            'checker 'buffer)
-                 flycheck-checkstyle-expected-errors)))
-
 (defconst flycheck-cppcheck-xml
   "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
 <results version=\"2\">
@@ -2982,46 +2917,6 @@ of the file will be interrupted because there are too many #ifdef configurations
   <errors>
   </errors>
 </results>" nil nil))))
-
-(defconst flycheck-phpmd-xml
-  "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>
-<pmd version=\"1.5.0\" timestamp=\"2014-12-02T18:13:44+00:00\">
-  <file name=\"foo.php\">
-    <violation beginline=\"21\" endline=\"21\" rule=\"UnusedPrivateField\" ruleset=\"Unused Code Rules\" externalInfoUrl=\"http://phpmd.org/rules/unusedcode.html#unusedprivatefield\" priority=\"3\">
-      Avoid unused private fields such as '$FOO'.
-    </violation>
-    <violation beginline=\"24\" endline=\"27\" rule=\"UnusedPrivateMethod\" ruleset=\"Unused Code Rules\" package=\"Flycheck\" externalInfoUrl=\"http://phpmd.org/rules/unusedcode.html#unusedprivatemethod\" class=\"A\" method=\"bar\" priority=\"3\">
-      Avoid unused private methods such as 'bar'.
-    </violation>
-    <violation beginline=\"24\" endline=\"24\" rule=\"UnusedFormalParameter\" ruleset=\"Unused Code Rules\" externalInfoUrl=\"http://phpmd.org/rules/unusedcode.html#unusedformalparameter\" priority=\"3\">
-      Avoid unused parameters such as '$baz'.
-    </violation>
-  </file>
-</pmd>"
-  "Example phpmd output.")
-
-(ert-deftest flycheck-parse-phpmd ()
-  :tags '(error-parsing phpmd-xml)
-  (should (equal (flycheck-parse-phpmd flycheck-phpmd-xml 'foo 'buffer)
-                 (list
-                  (flycheck-error-new-at 21 nil 'warning
-                                         "Avoid unused private fields such as '$FOO'."
-                                         :id "UnusedPrivateField"
-                                         :checker 'foo
-                                         :buffer 'buffer
-                                         :filename "foo.php")
-                  (flycheck-error-new-at 24 nil 'warning
-                                         "Avoid unused private methods such as 'bar'."
-                                         :id "UnusedPrivateMethod"
-                                         :checker 'foo
-                                         :buffer 'buffer
-                                         :filename "foo.php")
-                  (flycheck-error-new-at 24 nil 'warning
-                                         "Avoid unused parameters such as '$baz'."
-                                         :id "UnusedFormalParameter"
-                                         :checker 'foo
-                                         :buffer 'buffer
-                                         :filename "foo.php")))))
 
 
 ;;; Built-in checkers
@@ -3797,13 +3692,13 @@ Why not:
    '(4 11 warning "variable 'var2' is never set"
        :id "W221" :checker luacheck)))
 
-(flycheck-ert-def-checker-test luacheck lua no-warnings
+(flycheck-ert-def-checker-test lua-luacheck lua no-warnings
   (let ((flycheck-luacheckrc "luacheckrc"))
     (flycheck-ert-should-syntax-check
      "language/lua/warnings.lua" 'lua-mode)))
 
 (flycheck-ert-def-checker-test lua lua nil
-  (let ((flycheck-disabled-checkers '(luacheck)))
+  (let ((flycheck-disabled-checkers '(lua-luacheck)))
     (flycheck-ert-should-syntax-check
      "language/lua/syntax-error.lua" 'lua-mode
      '(5 nil error "unfinished string near '\"oh no'"
@@ -4145,10 +4040,9 @@ Why not:
     (flycheck-ert-should-syntax-check
      "language/rust/src/multiline-error.rs" 'rust-mode
      '(7 9 error "mismatched types:
- expected `u8`,\n    found `i8`
-(expected u8,\n    found i8)" :checker rust :id "E0308")
+ expected `u8`,\n    found `i8`" :checker rust :id "E0308")
      '(7 9 info "run `rustc --explain E0308` to see a detailed explanation"
-        :checker rust))))
+         :checker rust))))
 
 (flycheck-ert-def-checker-test rust rust warning
   (let ((flycheck-disabled-checkers '(rust-cargo)))
@@ -4306,6 +4200,16 @@ Why not:
    '(7 nil error "misplaced }" :checker texinfo)
    '(9 nil warning "printindex before document beginning: @printindex cp"
        :checker texinfo)))
+
+(flycheck-ert-def-checker-test typescript-tslint typescript nil
+  (flycheck-ert-should-syntax-check
+   "language/typescript/sample.ts" 'typescript-mode
+   '(1 10 warning "unused variable: 'invalidAlignment'"
+       :checker typescript-tslint :id "no-unused-variable")
+   '(2 7 warning "unused variable: 'a'"
+       :checker typescript-tslint :id "no-unused-variable")
+   '(3 15 warning "missing semicolon"
+       :checker typescript-tslint :id "semicolon")))
 
 (flycheck-ert-def-checker-test verilog-verilator verilog error
   (flycheck-ert-should-syntax-check

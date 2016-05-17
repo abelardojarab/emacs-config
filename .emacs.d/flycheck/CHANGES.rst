@@ -1,5 +1,17 @@
-27-cvs (in development)
+28-cvs (in development)
 =======================
+
+- **Breaking changes**:
+
+  - Rename ``luacheck`` to ``lua-luacheck`` to comply with our naming
+    conventions
+
+- New features:
+
+  - Add option to set binary name for ``rust-cargo`` [GH-958]
+
+27 (May 08, 2016)
+=================
 
 - **Breaking changes**
 
@@ -9,6 +21,7 @@
 
   - Go with ``go-unconvert`` [GH-905]
   - Markdown with ``mdl`` [GH-839] [GH-916]
+  - TypeScript with ``tslint`` [GH-947] [GH-949]
 
 - Improvements:
 

@@ -55,6 +55,28 @@ Go
 
 Mention with ``@flycheck/go``.
 
+Javascript
+~~~~~~~~~~
+
+* Saša Jovanić (:gh:`Simplify`)
+
+Mention with ``@flycheck/javascript``.
+
+Rust
+~~~~
+
+* :gh:`fmdkdd`
+* Michael Pankov (:gh:`mkpankov`)
+
+Mention with ``@flycheck/rust``.
+
+TypeScript
+~~~~~~~~~~
+
+* Saša Jovanić (:gh:`Simplify`)
+
+Mention with ``@flycheck/typescript``.
+
 Acknowledgements
 ================
 
@@ -108,6 +130,7 @@ to Flycheck:
 * Drew Wells (:gh:`drewwells`)
 * Erik Hetzner (:gh:`egh`)
 * Fanael Linithien (:gh:`Fanael`)
+* :gh:`fmdkdd`
 * Gereon Frey (:gh:`gfrey`)
 * Gulshan Singh (:gh:`gsingh93`)
 * Iain Beeston (:gh:`iainbeeston`)
@@ -140,6 +163,7 @@ to Flycheck:
 * Robert Dallas Gray (:gh:`rdallasgray`)
 * Robert O'Connor (:gh:`robbyoconnor`)
 * Robert Zaremba (:gh:`robert-zaremba`)
+* Saša Jovanić (:gh:`Simplify`)
 * Sean Gillespie (:gh:`swgillespie`)
 * Sean Salmon (:gh:`phatcabbage`)
 * Sebastian Beyer (:gh:`sebastianbeyer`)
