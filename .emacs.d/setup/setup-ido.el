@@ -47,8 +47,17 @@
              ido-use-filename-at-point nil
              ido-use-url-at-point nil
              ido-enable-flex-matching t
+             ido-enable-prefix t
              ido-max-prospects 8
              ido-confirm-unique-completion t)
+
+            ;; This tab override shouldn't be necessary given ido's default
+            ;; configuration, but minibuffer-complete otherwise dominates the
+            ;; tab binding because of my custom tab-completion-everywhere
+            ;; configuration.
+            (add-hook 'ido-setup-hook
+                      (lambda ()
+                        (define-key ido-completion-map [tab] 'ido-complete)))
 
             ;; when using ido, the confirmation is rather annoying...
             (setq confirm-nonexistent-file-or-buffer nil)))
