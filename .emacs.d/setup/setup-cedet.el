@@ -37,7 +37,7 @@
 
 ;; To use additional features for names completion, and displaying of information for tags & classes,
 ;; you also need to load the semantic-ia package. This could be performed with following command:
-(require 'semantic/ia)
+;; (require 'semantic/ia) ;; makes typing slow
 
 ;; semantic support for clang
 (if (executable-find "clang")
