@@ -36,8 +36,8 @@
 (require 'semantic/wisent)
 
 ;; To use additional features for names completion, and displaying of information for tags & classes,
-;; you also need to load the semantic-ia package. This could be performed with following command:
-;; (require 'semantic/ia) ;; makes typing slow
+;; you also need to load the semantic-ia package. Unfortunately,this makes Emacs slow
+;; (require 'semantic/ia)
 
 ;; semantic support for clang
 (if (executable-find "clang")
@@ -65,7 +65,7 @@
   (semantic-load-enable-primary-ectags-support))
 
 ;; Enable semanticdb
-(require 'semantic/db)
+;; (require 'semantic/db) ;; makes typing slow
 
 ;; This prevents Emacs to become uresponsive
 (defun semanticdb-kill-hook ()
@@ -82,9 +82,9 @@
   (semanticdb-enable-gnu-global-databases 'c-mode t)
   (semanticdb-enable-gnu-global-databases 'c++-mode t))
 
-;; EDE
-(global-ede-mode 1)
-(ede-enable-generic-projects)
+;; EDE project managment
+;; (global-ede-mode 1)
+;; (ede-enable-generic-projects)
 
 ;; Default EDE directory
 (setq-default ede-project-placeholder-cache-file "~/.emacs.cache/ede-projects.el")
