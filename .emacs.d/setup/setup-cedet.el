@@ -31,7 +31,17 @@
 ;; Enable Semantic
 (add-to-list 'load-path (expand-file-name "cedet/lisp/cedet/" user-emacs-directory))
 (semantic-load-enable-minimum-features)
+
+;; Enable support for parsing additional languages
 (require 'semantic/wisent)
+
+;; To use additional features for names completion, and displaying of information for tags & classes,
+;; you also need to load the semantic-ia package. This could be performed with following command:
+(require 'semantic/ia)
+
+;; semantic support for clang
+(if (executable-find "clang")
+    (require 'semantic/bovine/clang))
 
 ;; Enable case-insensitive searching
 (set-default 'semantic-case-fold t)
@@ -43,11 +53,6 @@
 (setq semantic-idle-scheduler-work-idle-time 1800) ;; default is 60
 (setq semantic-idle-scheduler-max-buffer-size 1)
 
-;; Default directory
-(setq-default semanticdb-default-system-save-directory
-              (setq-default semanticdb-default-save-directory "~/.emacs.cache/semanticdb"))
-(setq-default ede-project-placeholder-cache-file "~/.emacs.cache/ede-projects.el")
-
 ;; Disable Semantics for large files
 (add-hook 'semantic--before-fetch-tags-hook
           (lambda () (if (and (> (point-max) 500)
@@ -55,24 +60,80 @@
                     nil
                   t)))
 
+;; etags support
+(when (cedet-ectag-version-check t)
+  (semantic-load-enable-primary-ectags-support))
+
+;; Enable semanticdb
+(require 'semantic/db)
+
 ;; This prevents Emacs to become uresponsive
 (defun semanticdb-kill-hook ()
   nil)
 (defun semanticdb-create-table-for-file-not-in-buffer (arg)
   nil)
 
-;; etags support
-(when (cedet-ectag-version-check t)
-  (semantic-load-enable-primary-ectags-support))
+;; Default semanticdb directory
+(setq-default semanticdb-default-system-save-directory
+              (setq-default semanticdb-default-save-directory "~/.emacs.cache/semanticdb"))
 
-;; global/gtags support
+;; semanticdb support for global/gtags
 (when (cedet-gnu-global-version-check t)
   (semanticdb-enable-gnu-global-databases 'c-mode t)
   (semanticdb-enable-gnu-global-databases 'c++-mode t))
 
-;; semantic support for clang
-(if (executable-find "clang")
-  (require 'semantic/bovine/clang))
+;; EDE
+(global-ede-mode 1)
+(ede-enable-generic-projects)
+
+;; Default EDE directory
+(setq-default ede-project-placeholder-cache-file "~/.emacs.cache/ede-projects.el")
+
+;; load contrib library
+(require 'eassist)
+
+;; Enable support for Qt
+(defun qt-cedet-setup ()
+  "Set up c-mode and related modes. Includes support for Qt code (signal, slots and alikes)."
+
+  ;; add knowledge of qt to emacs
+  (setq qt4-base-dir (concat (getenv "QTDIR") "/include"))
+  (semantic-add-system-include (concat qt4-base-dir "/Qt") 'c++-mode)
+  (semantic-add-system-include (concat qt4-base-dir "/QtGui") 'c++-mode)
+  (semantic-add-system-include (concat qt4-base-dir "/QtCore") 'c++-mode)
+  (semantic-add-system-include (concat qt4-base-dir "/QtTest") 'c++-mode)
+  (semantic-add-system-include (concat qt4-base-dir "/QtNetwork") 'c++-mode)
+  (semantic-add-system-include (concat qt4-base-dir "/QtSvg") 'c++-mode)
+  (add-to-list 'auto-mode-alist (cons qt4-base-dir 'c++-mode))
+  (add-to-list 'semantic-lex-c-preprocessor-symbol-file (concat qt4-base-dir "/Qt/qconfig.h"))
+  (add-to-list 'semantic-lex-c-preprocessor-symbol-file (concat qt4-base-dir "/Qt/qconfig-large.h"))
+  (add-to-list 'semantic-lex-c-preprocessor-symbol-file (concat qt4-base-dir "/Qt/qglobal.h"))
+
+  ;; qt keywords and stuff ...
+  ;; set up indenting correctly for new qt kewords
+  (setq c-protection-key (concat "\\<\\(public\\|public slot\\|protected"
+                                 "\\|protected slot\\|private\\|private slot"
+                                 "\\)\\>")
+        c-C++-access-key (concat "\\<\\(signals\\|public\\|protected\\|private"
+                                 "\\|public slots\\|protected slots\\|private slots"
+                                 "\\)\\>[ \t]*:"))
+
+  ;; modify the colour of slots to match public, private, etc ...
+  (font-lock-add-keywords 'c++-mode '(("\\<\\(slots\\|signals\\)\\>" . font-lock-type-face)))
+  ;; make new font for rest of qt keywords
+  (make-face 'qt-keywords-face)
+  (set-face-foreground 'qt-keywords-face "BlueViolet")
+  ;; qt keywords
+  (font-lock-add-keywords 'c++-mode '(("\\<Q_[A-Z]*\\>" . 'qt-keywords-face)))
+  (font-lock-add-keywords 'c++-mode '(("\\<SIGNAL\\|SLOT\\>" . 'qt-keywords-face)))
+  (font-lock-add-keywords 'c++-mode '(("\\<Q[A-Z][A-Za-z]*\\>" . 'qt-keywords-face)))
+  (font-lock-add-keywords 'c++-mode '(("\\<Q[A-Z_]+\\>" . 'qt-keywords-face)))
+  (font-lock-add-keywords 'c++-mode
+                          '(("\\<q\\(Debug\\|Wait\\|Printable\\|Max\\|Min\\|Bound\\)\\>" . 'font-lock-builtin-face)))
+
+  (setq c-macro-names-with-semicolon '("Q_OBJECT" "Q_PROPERTY" "Q_DECLARE" "Q_ENUMS"))
+  (c-make-macro-with-semi-re))
+(when (getenv "QTDIR") (add-hook 'c-mode-common-hook 'qt-cedet-setup))
 
 ;; Enable which-function-mode for selected major modes
 (setq which-func-modes '(org-mode markdown-mode
