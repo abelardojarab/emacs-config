@@ -120,5 +120,23 @@
             ;; Irony json projects
             (require 'irony-cdb-json)))
 
+;; Automatically insert prototype functions from .h
+;; when opening the corresponding .cpp file
+(use-package member-function
+  :config (progn
+            ;;expand member functions automatically when entering a cpp file
+            (defun c-file-enter ()
+              "Expands all member functions in the corresponding .h file"
+              (let* ((c-file (buffer-file-name (current-buffer)))
+                     (h-file-list (list (concat (substring c-file 0 -3 ) "hpp")
+                                        (concat (substring c-file 0 -1 ) "h"))))
+                (if (or (equal (substring c-file -2 ) ".c")
+                        (equal (substring c-file -4 ) ".cpp"))
+                    (mapcar (lambda (h-file)
+                              (if (file-exists-p h-file)
+                                  (expand-member-functions h-file c-file)))
+                            h-file-list))))
+            (add-hook 'c++-mode-hook c-file-enter)))
+
 (provide 'setup-c++)
 ;;; setup-c++.el ends here
