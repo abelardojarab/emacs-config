@@ -43,7 +43,7 @@
             (defconst initial-frame-width (frame-width)
 
               "The width of frame will be changed ,remember the init value.")
-            (setq ecb-compile-window-height 9
+            (setq ecb-compile-window-height nil
                   ecb-compile-window-width 'edit-window
                   ecb-compile-window-temporally-enlarge nil
                   ecb-eshell-fit-window-to-command-output nil
@@ -205,12 +205,12 @@ little more place. "
 If you have not set a compilation-window in `ecb-compile-window-height' then
 the layout contains no persistent compilation window and the other windows get a
 little more place. "
-              (ecb-set-methods-buffer)
-              (select-window (next-window (next-window)))
               (ecb-set-history-buffer)
               (ecb-split-ver 0.5)
               (ecb-set-sources-buffer)
-              (select-window (previous-window (previous-window (selected-window) 0))))
+              (select-window (next-window (next-window)))
+              (ecb-set-methods-buffer)
+              (select-window (previous-window (selected-window) 0)))
 
             ;; disable global semantic idle scheduler.
             ;; it doesn't really seem to work all that well in automatically
