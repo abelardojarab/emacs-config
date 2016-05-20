@@ -26,8 +26,7 @@
 
 (use-package swiper
   :defer t
-  :bind (:map ctl-x-map
-              ("o" . swiper))
+  :commands swiper
   :load-path (lambda () (expand-file-name "swiper/" user-emacs-directory))
   :config (progn
             (setq ivy-use-virtual-buffers t)
