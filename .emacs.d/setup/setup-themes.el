@@ -28,14 +28,6 @@
 (add-to-list 'load-path (expand-file-name "monokai-theme/" user-emacs-directory))
 (add-to-list 'custom-theme-load-path (expand-file-name "monokai-theme/" user-emacs-directory))
 
-;; Monokai theme
-(add-to-list 'load-path (expand-file-name "monokai-extended-theme/" user-emacs-directory))
-(add-to-list 'custom-theme-load-path (expand-file-name "monokai-extended-theme/" user-emacs-directory))
-
-;; Atom theme
-(add-to-list 'load-path (expand-file-name "atom-dark-theme/" user-emacs-directory))
-(add-to-list 'custom-theme-load-path (expand-file-name "atom-dark-theme/" user-emacs-directory))
-
 ;; Atom One Dark theme
 (add-to-list 'load-path (expand-file-name "atom-one-dark-theme/" user-emacs-directory))
 (add-to-list 'custom-theme-load-path (expand-file-name "atom-one-dark-theme/" user-emacs-directory))
@@ -132,7 +124,6 @@
 ;; (load-theme 'tao-yang t)
 ;; (load-theme 'tao-yin t)
 ;; (load-theme 'eink)
-;; (load-theme 'monokai-extended t)
 ;; (load-theme 'pastelmac t)
 ;; (load-theme 'solarized-dark t)
 ;; (load-theme 'material-light t)
@@ -140,14 +131,14 @@
 
 ;; Choose different themes depending if we are using GUI or not
 (if (display-graphic-p)
-    (load-theme 'material t)
-  (load-theme 'monokai t))
+    (load-theme 'monokai t)
+  (load-theme 'zenburn t))
 
 ;; Assure theme loading for client frames
 ;; http://sachachua.com/blog/2016/04/keep-emacs-alive-x-crashes-running-background-daemon/
 (defun my/setup-color-theme ()
   (interactive)
-  (load-theme 'material t))
+  (load-theme 'monokai t))
 (add-hook 'after-make-frame-functions
           (lambda (frame)
             (select-frame frame)

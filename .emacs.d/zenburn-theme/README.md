@@ -6,8 +6,8 @@
 ## About
 
 Zenburn for Emacs is a direct port of the popular
-[Zenburn](http://slinky.imukuppi.org/zenburnpage/) theme for vim,
-developed by Jani Nurminen. It's my personal belief (and
+[Zenburn](http://kippura.org/zenburnpage/) theme for vim,
+developed by [Jani Nurminen](https://github.com/jnurmine). It's my personal belief (and
 that of its many users I presume) that it's one of the best low
 contrast color themes out there and that it is exceptionally easy on
 the eyes.
@@ -32,10 +32,8 @@ Now you can load the theme with the interactive function `load-theme` like this:
 
 ### Package.el
 
-Zenburn is available in both [Marmalade](http://marmalade-repo.org)
+Zenburn is available in both [MELPA Stable](http://stable.melpa.org)
 and [MELPA](http://melpa.org).
-Keep in mind the fact the version in the Marmalade repo may not always
-be up-to-date.
 
 You can install `zenburn` with the following command:
 
@@ -55,6 +53,27 @@ Prelude user - you're probably already using Zenburn, since it's
 Prelude's default color theme. You can load Zenburn at any time by
 `M-x load-theme zenburn`.
 
+## Customization
+
+If you'd like to tweak the theme by changing just a few colors, you can
+do so by defining new values in the `zenburn-override-colors-alist`
+variable before loading the theme.
+
+For example, to customize just the lighter background colors, you could add
+to your init file:
+
+```elisp
+(defvar zenburn-override-colors-alist
+  '(("zenburn-bg+05" . "#282828")
+    ("zenburn-bg+1"  . "#2F2F2F")
+    ("zenburn-bg+2"  . "#3F3F3F")
+    ("zenburn-bg+3"  . "#4F4F4F")))
+(load-theme 'zenburn t)
+```
+
+To see the full list of color names you can override, consult the
+`zenburn-theme.el` source file.
+
 ## Ugly colors in the terminal Emacs version
 
 If your Emacs looks considerably uglier in a terminal (compared to the
@@ -64,7 +83,7 @@ GUI version) try adding this to your `.bashrc` or `.zshrc`:
 export TERM=xterm-256color
 ```
 
-Source the `.bashrc`(`.zshrc`) file and start Emacs again.
+Source the `.bashrc` (or `.zshrc`) file and start Emacs again.
 
 # Bugs & Improvements
 
