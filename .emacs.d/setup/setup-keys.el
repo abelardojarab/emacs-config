@@ -67,6 +67,8 @@
 ;; switch window
 (use-package switch-window
   :defer t
+  :bind (:map ctl-x-map
+              ("o" . switch-window))
   :if (display-graphic-p)
   :commands switch-window
   :load-path (lambda () (expand-file-name "switch-window/" user-emacs-directory)))
@@ -139,7 +141,7 @@
 (global-set-key (kbd "C-<f7>") 'helm-flycheck)
 
 ;; Code folding
-(global-set-key (kbd "<f8>") 'toggle-selective-display)
+(global-set-key (kbd "<f8>") 'hs-toggle-hiding-all)
 (global-set-key (kbd "C-<f8>") 'fold-dwim-toggle)
 
 ;; Refresh file
@@ -251,8 +253,8 @@
 (define-key my-keys-minor-mode-map (kbd "C-*") 'helm-swoop)
 
 ;; key bindings for shift select
-(define-key my-keys-minor-mode-map [S-prior]      'shift-mark-backward-page)
-(define-key my-keys-minor-mode-map [S-next]       'shift-mark-forward-page)
+(define-key my-keys-minor-mode-map [S-prior] 'shift-mark-backward-page)
+(define-key my-keys-minor-mode-map [S-next] 'shift-mark-forward-page)
 
 ;; Define custom key mode
 (define-minor-mode my-keys-minor-mode

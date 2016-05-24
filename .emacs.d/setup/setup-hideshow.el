@@ -109,9 +109,6 @@
             (add-hook hook 'hideshowvis-enable)))
   :config (progn
 
-            ;; Down arrow symbol
-            (define-fringe-bitmap 'hideshowvis-hideable-marker [0 0 254 124 56 16 0 0])
-
             (defun hs-minor-mode-settings ()
               "settings of `hs-minor-mode'."
               (defvar hs-headline-max-len 20 "*Maximum length of `hs-headline' to display.")
@@ -148,7 +145,7 @@
                     (overlay-put ov 'help-echo "Hiddent text... ")
                     (put-text-property 0 marker-length 'display (list 'left-fringe 'hs-marker 'fringe-face) marker-string)
                     (overlay-put ov 'before-string marker-string)
-                    (put-text-property 1 (length display-string) 'face 'mode-line display-string)
+                    (put-text-property 1 (length display-string) 'face 'outline-4 display-string)
                     (overlay-put ov 'display display-string))))
               (setq hs-set-up-overlay 'display-code-line-counts)
 
@@ -183,7 +180,7 @@
                                                                     (overlay-end ov)))))
                           (put-text-property 0 marker-length 'display (list 'left-fringe 'hs-marker 'fringe-face) marker-string)
                           (overlay-put ov 'before-string marker-string)
-                          (put-text-property 1 (length display-string) 'face 'mode-line display-string)
+                          (put-text-property 1 (length display-string) 'face 'outline-4 display-string)
                           (overlay-put ov 'display display-string)
                           (overlay-put ov 'priority 9999)
                           (overlay-put ov 'fringe-folding-p t))))

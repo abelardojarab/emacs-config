@@ -94,16 +94,21 @@
 
             ;; this is the list of avoided buffers
             (defvar crs-hated-buffers
-              '("KILL" "*Compile-Log*"))
+              '("*Compile-Log*"))
+            (add-to-list 'crs-hated-buffers "^ ")
             (add-to-list 'crs-hated-buffers "*Messages*")
             (add-to-list 'crs-hated-buffers "*Completions*")
             (add-to-list 'crs-hated-buffers "*scratch*")
-            (add-to-list 'crs-hated-buffers "*etags tmp*")
             (add-to-list 'crs-hated-buffers "*Python*")
-            (add-to-list 'crs-hated-buffers "vc")
+            (add-to-list 'crs-hated-buffers "*GNU Emacs*")
+            (add-to-list 'crs-hated-buffers "*compilation*")
+            (add-to-list 'crs-hated-buffers "*cmake*")
+            (add-to-list 'crs-hated-buffers "*etags tmp*")
+            (add-to-list 'crs-hated-buffers "TAGS")
+            (add-to-list 'crs-hated-buffers "*ECB")
+            (add-to-list 'crs-hated-buffers "*Buffer")
 
             ;; might as well use this for both
-            (setq iswitchb-buffer-ignore (append '("^ " "*Buffer") crs-hated-buffers))
             (defun crs-hated-buffers ()
               "List of buffers I never want to see, converted from names to buffers."
               (delete nil

@@ -134,10 +134,13 @@
   (add-hook 'c++-mode-hook #'cmake-ide--mode-hook)
 
   ;; When creating a file in Emacs, run CMake again to pick it up
-  (add-hook 'before-save-hook (lambda ()
-                                (when (and (cmake-ide--is-src-file (buffer-file-name))
-                                           (not (file-readable-p (buffer-file-name))))
-                                  (add-hook 'after-save-hook 'cmake-ide--new-file-saved nil 'local)))))
+  (add-hook 'before-save-hook #'cmake-ide--before-save))
+
+(defun cmake-ide--before-save ()
+  "When creating a file in Emacs, run CMake again to pick it up."
+  (when (and (cmake-ide--is-src-file (buffer-file-name))
+             (not (file-readable-p (buffer-file-name))))
+    (add-hook 'after-save-hook 'cmake-ide--new-file-saved nil 'local)))
 
 (defun cmake-ide--new-file-saved ()
   "Run CMake to pick up newly created files."
@@ -222,15 +225,17 @@ flags."
 
 
 (defun cmake-ide--set-flags-for-file (idb buffer)
-  "Set the compiler flags from IDB for BUFFER."
-  (let* ((file-name (buffer-file-name buffer))
+  "Set the compiler flags from IDB for BUFFER visiting file FILE-NAME."
+      (let* ((file-name (buffer-file-name buffer))
          (file-params (cmake-ide--idb-file-to-obj idb file-name))
-         (sys-includes (cmake-ide--params-to-sys-includes file-params)))
-    (cmake-ide--message "Setting flags for file %s" file-name)
+         (sys-includes (cmake-ide--params-to-sys-includes file-params))
+         (commands (cmake-ide--idb-param-all-files idb 'command))
+         (hdr-flags (cmake-ide--commands-to-hdr-flags commands)))
+        (cmake-ide--message "Setting flags for file %s" file-name)
     ;; set flags for all source files that registered
     (if (cmake-ide--is-src-file file-name)
         (cmake-ide--set-flags-for-src-file file-params buffer sys-includes)
-      (cmake-ide--set-flags-for-hdr-file idb buffer sys-includes))))
+      (cmake-ide--set-flags-for-hdr-file idb buffer (cmake-ide--flags-to-sys-includes hdr-flags)))))
 
 (defun cmake-ide--set-flags-for-src-file (file-params buffer sys-includes)
   "Set the compiler flags from FILE-PARAMS for source BUFFER with SYS-INCLUDES."
@@ -599,10 +604,13 @@ the object file's name just above."
 
 (defun cmake-ide--flags-to-sys-includes (flags)
   "From FLAGS (a list of flags) to a list of isystem includes."
-  (let ((sysincludes nil))
+    (let ((sysincludes nil))
     (while (member "-isystem" flags)
       (setq flags (cdr (member "-isystem" flags)))
-      (when flags (setq sysincludes (cons (car flags) sysincludes))))
+      (when flags
+        (if (member (car flags) sysincludes)
+            nil
+        (setq sysincludes (cons (car flags) sysincludes)))))
     sysincludes))
 
 

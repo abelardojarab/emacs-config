@@ -4,11 +4,7 @@ alias emacs '/usr/intel/pkgs/emacs/24.4/bin/emacs'
 alias emacsclient 'emacsclient -n'
 
 setenv JAVA_HOME /usr/intel/pkgs/java/1.8.0
-if ( -f /etc/SuSE-release && `grep --count 11 /etc/SuSE-release` > 0 ) then
-   setenv PATH ${HOME}/bin:${HOME}/bin/bin:$HOME/workspace/pythonlibs/bin:${HOME}/workspace/frametools/bin:${JAVA_HOME}/bin:${PATH}
-else
-   setenv PATH ${HOME}/workspace/frametools/bin:${HOME}/builds/nodejs/bin:${PATH}:$HOME/bin:${HOME}/bin/bin
-endif
+setenv PATH ${HOME}/bin:${HOME}/bin/bin:$HOME/workspace/pythonlibs/bin:${JAVA_HOME}/bin:${PATH}
 
 unsetenv PYTHONPATH
 setenv EC_DISABLE_VAL 1
@@ -44,10 +40,6 @@ set add_libs_post=/usr/lib64:/usr/lib
 alias python_ctk_load 'setenv LD_LIBRARY_PATH ${add_libs}:${add_libs_post}'
 alias python_ctk '${INTEL_CTK}/bin/python_ctk'
 
-setenv WORKDIR $PWD
-setenv USER_ITOOLS $WORKDIR/tools/common/itools
-setenv PROJECT_ITOOLS $USER_ITOOLS
-
 # Altera options
 # setenv QUARTUS_HOME /nfs/site/eda/data/tools.6/altera/quartusprime/15.1.0.185/common/quartus
 setenv QUARTUS_HOME /p/atp/tools/altera/quartus/Pro_15.1.2.Patch-2.20/quartus
@@ -81,7 +73,6 @@ setenv SNPSLMD_LICENSE_FILE "${SNPSLMD_LICENSE_FILE}:26586@plxs0418.pdx.intel.co
 setenv SNPS_FPGA /p/atp/tools/synopsys/fpga/linux/fpga_e201009sp3
 
 # set OVM_HOME to OVM installation directory
-#setenv OVM_HOME /p/atp/ovm/ovm-2.0.2
 setenv OVM_HOME /p/atp/ovm/ovm-2.1.2
 
 # set VCS_HOME to VCS installation directory
@@ -103,10 +94,6 @@ endif
     setenv CSI_TOP /p/atp/qpi_bfm/csibfm-QPI1.1-OSCI2.2-gcc410-3.35
 #endif
 
-# set NOVAS_HOME and NOVAS_RC if using verdi
-setenv NOVAS_HOME /p/atp/tools/novas
-setenv NOVAS_RC $WORKDIR/tools/common/novas.rc
-
 # set XILINX_HOME and XILINX
 #setenv XILINX_HOME /p/atp/tools/xilinx/13.4
 #setenv XILINX $XILINX_HOME/ISE
@@ -122,26 +109,3 @@ setenv PERL5LIB /p/atp/tools/common
 
 # PATH
 setenv PATH ${PATH}:$VCS_HOME/bin:$SNPS_FPGA/bin
-
-# set path
-# set path = (. \
-#             $WORKDIR/tools/bin \
-#             /p/atp/tools/nedit/nedit-5.5-Linux-x86 \
-#             /p/atp/tools/tkdiff/tkdiff-unix \
-#             $NOVAS_HOME/bin \
-#             $QUARTUS_HOME/bin \
-#             $VCS_HOME/bin \
-#             $SNPS_FPGA/bin \
-#             /usr/intel/bin /bin /usr/bin /sbin /use/sbin /usr/bin/X11 /usr/local/bin )
-
-# some convience aliases
-# alias cdw 'cd $WORKDIR'
-# alias cdd cd $WORKDIR/design
-# alias cdr cd $WORKDIR/design
-# alias cdv cd $WORKDIR/verification
-# alias cdt cd $WORKDIR/tools
-
-#set SCRIPTS="$WORKDIR/tools/scripts"
-#source $SCRIPTS/vcs.setup
-#source $SCRIPTS/quartus.setup
-#source $SCRIPTS/svunit.setup
