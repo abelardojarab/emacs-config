@@ -102,7 +102,7 @@ endif
 #setenv XILINX_PLANAHEAD $XILINX_HOME/PlanAhead
 
 # set LD_LIBRARY_PATH
-setenv LD_LIBRARY_PATH "${HOME}/lib"
+setenv LD_LIBRARY_PATH "${HOME}/bin/lib"
 setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:/usr/lib64:/usr/lib:/lib::/usr/intel/pkgs/pixman/0.19.2/lib:/usr/intel/pkgs/openssl/0.9.8o/lib"
 setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:${VCS_HOME}/amd64/lib"
 setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:${SC_INSTALL_DIR}/lib-linux64"
