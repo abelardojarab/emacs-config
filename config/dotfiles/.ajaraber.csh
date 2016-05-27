@@ -114,4 +114,4 @@ setenv PERL5LIB /p/atp/tools/common
 setenv PATH ${PATH}:$VCS_HOME/bin:$SNPS_FPGA/bin
 
 # PKG_CONFIG
-setenv PKG_CONFIG_PATH /nfs/pdx/home/ajaraber/bin/lib/pkgconfig:/nfs/site/itools/em64t_SLES11/pkgs/gtk+/2.24.20/lib/pkgconfig:/usr/lib64/pkgconfig
+setenv PKG_CONFIG_PATH /nfs/site/itools/em64t_SLES11/pkgs/gtk+/2.24.20/lib/pkgconfig:/nfs/pdx/home/ajaraber/bin/lib/pkgconfig:/usr/lib64/pkgconfig
