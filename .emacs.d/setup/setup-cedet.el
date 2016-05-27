@@ -66,6 +66,7 @@
 
 ;; Enable semanticdb, slows down Emacs
 ;; (require 'semantic/db)
+(global-semanticdb-minor-mode nil)
 
 ;; This prevents Emacs to become uresponsive
 (defun semanticdb-kill-hook ()
@@ -78,7 +79,7 @@
               (setq-default semanticdb-default-save-directory "~/.emacs.cache/semanticdb"))
 
 ;; semanticdb support for global/gtags
-(when (cedet-gnu-global-version-check t)
+(when (executable-find "global")
   (semanticdb-enable-gnu-global-databases 'c-mode t)
   (semanticdb-enable-gnu-global-databases 'c++-mode t))
 
