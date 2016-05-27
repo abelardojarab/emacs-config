@@ -113,5 +113,9 @@ setenv PERL5LIB /p/atp/tools/common
 # PATH
 setenv PATH ${PATH}:$VCS_HOME/bin:$SNPS_FPGA/bin
 
+# Clang
+setenv CLANG_ROOT "/usr/intel/pkgs/clang/3.8.0/bin"
+setenv PATH ${PATH}:$CLANG_ROOT
+
 # PKG_CONFIG
 setenv PKG_CONFIG_PATH /nfs/site/itools/em64t_SLES11/pkgs/gtk+/2.24.20/lib/pkgconfig:/nfs/pdx/home/ajaraber/bin/lib/pkgconfig:/usr/lib64/pkgconfig
