@@ -41,6 +41,11 @@
   "Powerline face 2."
   :group 'powerline)
 
+(defface mode-line-buffer-id-inactive
+  '((t (:inherit mode-line-buffer-id)))
+  "Powerline mode-line face"
+  :group 'powerline)
+
 (defcustom powerline-default-separator 'arrow
   "The separator to use for the default theme.
 
@@ -104,6 +109,11 @@ This is needed to make sure that text is properly aligned."
 
 (defcustom powerline-buffer-size-suffix t
   "Display the buffer size suffix."
+  :group 'powerline
+  :type 'boolean)
+
+(defcustom powerline-gui-use-vcs-glyph nil
+  "Display a unicode character to represent a version control system. Not always supported in GUI."
   :group 'powerline
   :type 'boolean)
 
@@ -440,13 +450,11 @@ static char * %s[] = {
 ;;;###autoload (autoload 'powerline-vc "powerline")
 (defpowerline powerline-vc
   (when (and (buffer-file-name (current-buffer)) vc-mode)
-    (if window-system
+    (if (and window-system (not powerline-gui-use-vcs-glyph))
 	(format-mode-line '(vc-mode vc-mode))
-      (let ((backend (vc-backend (buffer-file-name (current-buffer)))))
-	(when backend
-	  (format " %s %s"
-		  (char-to-string #xe0a0)
-		  (vc-working-revision (buffer-file-name (current-buffer)) backend)))))))
+      (format " %s%s"
+	      (char-to-string #xe0a0)
+	      (format-mode-line '(vc-mode vc-mode))))))
 
 ;;;###autoload (autoload 'powerline-buffer-size "powerline")
 (defpowerline powerline-buffer-size
@@ -467,9 +475,13 @@ static char * %s[] = {
    "\\`[ \t\n\r]+" ""
    (replace-regexp-in-string "[ \t\n\r]+\\'" "" s)))
 
+(defun powerline-strip-text-properties (txt)
+  (set-text-properties 0 (length txt) nil txt)
+  txt)
+
 ;;;###autoload (autoload 'powerline-buffer-id "powerline")
 (defpowerline powerline-buffer-id
-    (powerline-trim (format-mode-line mode-line-buffer-identification)))
+    (powerline-strip-text-properties (powerline-trim (format-mode-line mode-line-buffer-identification))))
 
 ;;;###autoload (autoload 'powerline-process "powerline")
 (defpowerline powerline-process
@@ -556,7 +568,7 @@ static char * %s[] = {
   (if values
       (let ((val (car values)))
         (+ (cond
-            ((stringp val) (length (format-mode-line val)))
+            ((stringp val) (string-width (format-mode-line val)))
             ((and (listp val) (eq 'image (car val)))
              (car (image-size val)))
             (t 0))

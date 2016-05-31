@@ -1,6 +1,6 @@
 alias ls       'ls -l --color -sF'
 alias cd 'cd \!*; set prompt = "%{\033[34m%}[%n@%{\033[35m%}%m%{\033[33m%} %b%{\033[0m%}%c]$ "'
-alias emacs '/usr/intel/pkgs/emacs/24.4/bin/emacs'
+alias emacs '/nfs/pdx/home/ajaraber/utils/emacs-24.5/src/emacs'
 alias emacsclient 'emacsclient -n'
 
 setenv JAVA_HOME /usr/intel/pkgs/java/1.8.0
@@ -71,6 +71,7 @@ setenv SNPSLMD_LICENSE_FILE "${SNPSLMD_LICENSE_FILE}:26586@plxs0415.pdx.intel.co
 setenv SNPSLMD_LICENSE_FILE "${SNPSLMD_LICENSE_FILE}:26586@plxs0416.pdx.intel.com"
 setenv SNPSLMD_LICENSE_FILE "${SNPSLMD_LICENSE_FILE}:26586@plxs0418.pdx.intel.com"
 setenv SNPS_FPGA /p/atp/tools/synopsys/fpga/linux/fpga_e201009sp3
+setenv PATH ${PATH}:$SNPS_FPGA/bin
 
 # set OVM_HOME to OVM installation directory
 setenv OVM_HOME /p/atp/ovm/ovm-2.1.2
@@ -79,6 +80,7 @@ setenv OVM_HOME /p/atp/ovm/ovm-2.1.2
 #setenv VCS_HOME /p/atp/tools/synopsys/D-2009.12-5
 #setenv VCS_HOME /p/atp/tools/synopsys/vcs-mx/I-2014.03-2
 setenv VCS_HOME /p/atp/tools/synopsys/vcs/G-2012.09
+setenv PATH ${PATH}:$VCS_HOME/bin
 
 if (-e /etc/redhat-release) then
     setenv VCS_PLATFORM amd64
@@ -101,6 +103,9 @@ endif
 #setenv XILINX_DSP $XILINX_HOME/ISE
 #setenv XILINX_PLANAHEAD $XILINX_HOME/PlanAhead
 
+# Boost
+setenv BOOST_ROOT /usr/intel/pkgs/boost/1.59.0
+
 # set LD_LIBRARY_PATH
 setenv LD_LIBRARY_PATH "${HOME}/bin/lib"
 setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}"
@@ -109,13 +114,6 @@ setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:${VCS_HOME}/amd64/lib"
 setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:${SC_INSTALL_DIR}/lib-linux64"
 setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:${CSI_TOP}/sysverilog/Linux_x86_64/lib:${CSI_TOP}/lib/Linux_x86_64:${CSI_TOP}/csi/crm_1_1"
 setenv PERL5LIB /p/atp/tools/common
-
-# PATH
-setenv PATH ${PATH}:$VCS_HOME/bin:$SNPS_FPGA/bin
-
-# Clang
-setenv CLANG_ROOT "/usr/intel/pkgs/clang/3.8.0/bin"
-setenv PATH ${PATH}:$CLANG_ROOT
 
 # PKG_CONFIG
 setenv PKG_CONFIG_PATH /nfs/site/itools/em64t_SLES11/pkgs/gtk+/2.24.20/lib/pkgconfig:/nfs/pdx/home/ajaraber/bin/lib/pkgconfig:/usr/lib64/pkgconfig

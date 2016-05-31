@@ -33,6 +33,8 @@
   "Run `checkstyle' on FILE-NAME and return the results."
   (with-temp-buffer
     (insert-file-contents file-name 'visit)
+    (delay-mode-hooks (emacs-lisp-mode))
+    (setq delay-mode-hooks nil)
     (with-demoted-errors "Error in checkdoc: %S"
       (checkdoc-current-buffer t)
       (with-current-buffer checkdoc-diagnostic-buffer
@@ -58,9 +60,10 @@
 (describe "Code style"
   (dolist (source (flycheck/find-all-elisp-files))
     (describe (format "File %s" (file-relative-name source))
+      (before-each
+        (assume (version<= "25" emacs-version) "Our style must match Emacs 25"))
+
       (it "has proper documentation format"
-        (assume (version<= "25" emacs-version)
-                "Our documentation style matches Emacs 25 only")
         (expect (flycheck/checkstyle source)
                 :to-equal ""))
 
@@ -69,8 +72,6 @@
       ;; indentation rules.
       (unless (equal (file-relative-name source) "test/init.el")
         (it "is properly indented"
-          (assume (version<= "25" emacs-version)
-                  "Our indentation targets Emacs 25 only")
           (with-temp-buffer
             (insert-file-contents source)
             (set-buffer-modified-p nil)

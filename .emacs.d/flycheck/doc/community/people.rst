@@ -55,6 +55,13 @@ Go
 
 Mention with ``@flycheck/go``.
 
+Haskell
+~~~~~~~
+
+* Sergey Vinokurov (:gh:`sergv`)
+
+Mention with ``@flycheck/haskell``.
+
 Javascript
 ~~~~~~~~~~
 
@@ -104,9 +111,6 @@ We would also like to thank the following people and projects:
   discussions and his important ideas about the shape and design of Flycheck,
   and his indispensible and dedicated work on MELPA, which drives the continuous
   distribution of Flycheck to its users.
-* Sylvain Benner (:gh:`syl20bnr`) for the awesomeness that is Spacemacs_.
-
-.. _Spacemacs: http://spacemacs.org
 
 Contributors
 ============
@@ -131,6 +135,7 @@ to Flycheck:
 * Erik Hetzner (:gh:`egh`)
 * Fanael Linithien (:gh:`Fanael`)
 * :gh:`fmdkdd`
+* Fred Morcos (:gh:`fredmorcos`)
 * Gereon Frey (:gh:`gfrey`)
 * Gulshan Singh (:gh:`gsingh93`)
 * Iain Beeston (:gh:`iainbeeston`)

@@ -1322,7 +1322,7 @@ print with the default `lpr' settings.
 
 NOTE: DO NOT set the \"-P\" flag in `lpr-switches', if you really
 have to modify this, do it in `lpr-printer-switch'.
-  
+
 Same as `dired-do-print' but for helm."
   (require 'lpr)
   (when (or helm-current-prefix-arg
@@ -1453,7 +1453,7 @@ If prefix numeric arg is given go ARG level up."
   (with-helm-alive-p
     (when (and (helm-file-completion-source-p)
                (not (helm-ff-invalid-tramp-name-p)))
-      (unless helm-find-files--level-tree-iterator 
+      (unless helm-find-files--level-tree-iterator
         (setq helm-find-files--level-tree-iterator
               (helm-iter-list (cdr helm-find-files--level-tree))))
       (setq helm-find-files--level-tree nil)
@@ -2499,8 +2499,8 @@ Use it for non--interactive calls of `helm-find-files'."
                :ff-transformer-show-only-basename
                helm-ff-transformer-show-only-basename
                :default def
-               :prompt "Find Files or Url: "
-               :buffer "*Helm Find Files*")
+               :prompt "Find files or url: "
+               :buffer "*helm find files*")
       (helm-attrset 'resume `(lambda ()
                                (setq helm-ff-default-directory
                                      ,helm-ff-default-directory
@@ -2529,7 +2529,7 @@ Use it for non--interactive calls of `helm-find-files'."
           ;; Switch back to helm-find-files.
           (helm-set-pattern "./" t) ; Back to initial directory of hff session.
           (helm-set-sources '(helm-source-find-files))
-          (helm--maybe-update-keymap))))) 
+          (helm--maybe-update-keymap)))))
 (put 'helm-find-files-toggle-to-bookmark 'helm-only t)
 
 (defun helm-find-files-initial-input (&optional input)
@@ -2947,7 +2947,7 @@ Else return ACTIONS unmodified."
                      :path 'full
                      :directories nil
                      :match match
-                     :skip-subdirs ignore-dirs) 
+                     :skip-subdirs ignore-dirs)
            do (file-cache-add-file f)))
 
 (defun helm-ff-cache-add-file (_candidate)
@@ -3079,7 +3079,7 @@ Don't use it in your own code unless you know what you are doing.")
                      (cl-loop for file in (helm-marked-candidates)
                               do (setq recentf-list (delq file recentf-list)))))))))
 
-(defvar helm-source-recentf nil 
+(defvar helm-source-recentf nil
   "See (info \"(emacs)File Conveniences\").
 Set `recentf-max-saved-items' to a bigger value if default is too small.")
 
@@ -3099,6 +3099,7 @@ Set `recentf-max-saved-items' to a bigger value if default is too small.")
 ;; <https://github.com/emacs-helm/helm-ls-hg>
 ;; Only hg and git are supported for now.
 (defvar helm--browse-project-cache (make-hash-table :test 'equal))
+(defvar helm-buffers-in-project-p)
 
 (defun helm-browse-project-get-buffers (root-directory)
   (cl-loop for b in (helm-buffer-list)
@@ -3134,17 +3135,20 @@ Set `recentf-max-saved-items' to a bigger value if default is too small.")
                                      "%s (%s)"
                                      name (abbreviate-file-name directory)))
                      :match-part (lambda (c)
-                                   (if helm-ff-transformer-show-only-basename
+                                   (if (with-helm-buffer
+                                         helm-ff-transformer-show-only-basename)
                                        (helm-basename c) c))
                      :filter-one-by-one
                      (lambda (c)
-                       (if helm-ff-transformer-show-only-basename
+                       (if (with-helm-buffer
+                             helm-ff-transformer-show-only-basename)
                            (cons (propertize (helm-basename c)
                                              'face 'helm-ff-file)
                                  c)
                            (propertize c 'face 'helm-ff-file)))
                      :keymap helm-generic-files-map
-                     :action 'helm-type-file-actions)) 
+                     :action 'helm-type-file-actions))
+        :ff-transformer-show-only-basename nil
         :buffer "*helm browse project*"))
 
 ;;;###autoload
@@ -3167,24 +3171,29 @@ and
 and
 <http://melpa.org/#/helm-ls-svn>."
   (interactive "P")
-  (cond ((and (require 'helm-ls-git nil t)
-              (fboundp 'helm-ls-git-root-dir)
-              (helm-ls-git-root-dir))
-         (helm-ls-git-ls))
-        ((and (require 'helm-ls-hg nil t)
-              (fboundp 'helm-hg-root)
-              (helm-hg-root))
-         (helm-hg-find-files-in-project))
-        ((and (require 'helm-ls-svn nil t)
-              (fboundp 'helm-ls-svn-root-dir)
-              (helm-ls-svn-root-dir))
-         (helm-ls-svn-ls))
-        (t (let ((cur-dir (helm-browse-project-get--root-dir
-                           (helm-current-directory))))
-             (if (or arg (gethash cur-dir helm--browse-project-cache))
-                 (helm-browse-project-find-files cur-dir (equal arg '(16)))
-                 (helm :sources (helm-browse-project-build-buffers-source cur-dir)
-                       :buffer "*helm browse project*"))))))
+  (let ((helm-type-buffer-actions
+         (remove (assoc "Browse project from buffer"
+                        helm-type-buffer-actions)
+                 helm-type-buffer-actions))
+        (helm-buffers-in-project-p t))
+    (cond ((and (require 'helm-ls-git nil t)
+                (fboundp 'helm-ls-git-root-dir)
+                (helm-ls-git-root-dir))
+           (helm-ls-git-ls))
+          ((and (require 'helm-ls-hg nil t)
+                (fboundp 'helm-hg-root)
+                (helm-hg-root))
+           (helm-hg-find-files-in-project))
+          ((and (require 'helm-ls-svn nil t)
+                (fboundp 'helm-ls-svn-root-dir)
+                (helm-ls-svn-root-dir))
+           (helm-ls-svn-ls))
+          (t (let ((cur-dir (helm-browse-project-get--root-dir
+                             (helm-current-directory))))
+               (if (or arg (gethash cur-dir helm--browse-project-cache))
+                   (helm-browse-project-find-files cur-dir (equal arg '(16)))
+                   (helm :sources (helm-browse-project-build-buffers-source cur-dir)
+                         :buffer "*helm browse project*")))))))
 
 (defun helm-browse-project-get--root-dir (directory)
   (cl-loop with dname = (file-name-as-directory directory)
@@ -3435,7 +3444,7 @@ separator."
                        '(" " mode-line-buffer-identification " "
                          (:eval (format "L%s" (helm-candidate-number-at-point))) " "
                          (:eval (propertize
-                                 (format "[Find process finished - (%s results)]" 
+                                 (format "[Find process finished - (%s results)]"
                                          (max (1- (count-lines
                                                    (point-min) (point-max)))
                                               0))
