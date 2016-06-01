@@ -34,7 +34,7 @@
 (use-package powerline
   :commands powerline-default-theme
   :load-path (lambda () (expand-file-name "powerline/" user-emacs-directory))
-  :init (setq powerline-default-separator 'wave)
+  :init (setq powerline-default-separator 'arrow-fade)
   :config (progn
             ;; Cleaning the mode line
             ;; https://www.masteringemacs.org/article/hiding-replacing-modeline-strings

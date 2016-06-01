@@ -60,10 +60,6 @@
   :load-path (lambda () (expand-file-name "highlight-symbol/" user-emacs-directory))
   :diminish highlight-symbol-mode
   :config (progn
-            ;; (mapc (lambda (mode)
-            ;;         (add-hook mode 'highlight-symbol-mode))
-            ;;       '(prog-mode-hook))
-
             ;; http://emacs.stackexchange.com/questions/931
             (defun highlight-symbol-mode-post-command ()
               "After a command, change the temporary highlighting.
