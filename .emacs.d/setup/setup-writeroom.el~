@@ -36,6 +36,7 @@
 
 ;; Focus on a particular section
 (use-package focus
+  :ensure t
   :load-path (lambda () (expand-file-name "focus/" user-emacs-directory)))
 
 (provide 'setup-writeroom)

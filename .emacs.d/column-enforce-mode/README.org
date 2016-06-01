@@ -1,0 +1,45 @@
+* column-enforce-mode
+  Highlight text that extends beyond a certain column.
+
+  This mode is meant to be a very lightweight, zero configuration, way to help enforce the 80 column rule. It can be configured for any N-column rule however.
+
+What it looks like enforcing the 80 column rule:
+
+[[http://i.imgur.com/EezaOo9.png]]
+** Usage
+   Start it up interactively on the current buffer,
+   #+BEGIN_SRC 
+   default startup:
+   M-x: column-enforce-mode 
+
+   or by specific rule function
+   M-x: 80-column-rule
+
+   or with a prefix arg specifying the column limit
+   C-u 90 M-x column-enforce-n
+   #+END_SRC
+   or tie it to a major mode:
+   #+BEGIN_SRC emacs-lisp
+     (add-hook 'c-mode-hook 'column-enforce-mode)
+   #+END_SRC
+   tie it to all source code modes:
+   #+BEGIN_SRC emacs-lisp
+     (add-hook 'prog-mode-hook 'column-enforce-mode)
+   #+END_SRC
+   or enable globally
+   #+BEGIN_SRC emacs-lisp
+     (global-column-enforce-mode t)
+   #+END_SRC
+** Allowing long comments
+   By default column-enforce-mode will mark comments that exceed the limit.
+   You can allow long comments in your code with:
+   #+BEGIN_SRC emacs-lisp
+     (setq column-enforce-comments nil)
+   #+END_SRC
+** Customizing the column
+#+BEGIN_SRC emacs-lisp
+  (setq column-enforce-column <your desired column>)
+#+END_SRC
+
+** Customizing the look
+Customize `column-enforce-face' to change the look of the mode

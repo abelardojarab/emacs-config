@@ -41,6 +41,9 @@
   :defer 2
   :if (executable-find "rdm")
   :after irony-mode
+  :bind (:map c++-mode-map
+              ("C-c I" . rtags-print-symbol-info)
+              ("C-c S" . rtags-find-symbol-at-point))
   :load-path (lambda () (expand-file-name "rtags/src" user-emacs-directory))
   :config (progn
           (setq rtags-use-helm t)
@@ -49,7 +52,7 @@
 
 ;; cmake-based IDE
 (use-package cmake-ide
-  :defer t
+  :defer 2
   :after irony-mode
   :commands use-cmake-ide
   :load-path (lambda () (expand-file-name "cmake-ide/" user-emacs-directory))

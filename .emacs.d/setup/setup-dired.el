@@ -43,8 +43,8 @@
             (add-to-list 'dired-omit-extensions ".DS_Store")
             (setq ls-lisp-dirs-first t
                   dired-listing-switches "-alhF --group-directories-first"
-                  dired-recursive-copies 'always
-                  dired-recursive-deletes 'always
+                  dired-recursive-copies 'top
+                  dired-recursive-deletes 'top
                   dired-dwim-target t
                   ;; -F marks links with @
                   dired-ls-F-marks-symlinks t

@@ -78,6 +78,11 @@
     (set-selection-coding-system 'utf-8-unix)
     (prefer-coding-system 'utf-8-unix)))
 
+;; ansi-term doesn’t obey usage of utf-8-unix
+(defadvice ansi-term (after advise-ansi-term-coding-system)
+  (set-buffer-process-coding-system 'utf-8-unix 'utf-8-unix))
+(ad-activate 'ansi-term)
+
 ;; update the copyright when present
 (add-hook 'before-save-hook 'copyright-update)
 

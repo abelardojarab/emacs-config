@@ -27,15 +27,16 @@
 
 (use-package eshell
   :commands (eshell eshell-vertical eshell-horizontal)
-  :init  (progn
-           (setq-default eshell-directory-name "~/.emacs.cache/eshell")
-           (setq eshell-glob-case-insensitive t
-                 eshell-scroll-to-bottom-on-input 'this
-                 eshell-buffer-shorthand t
-                 eshell-history-size 1024
-                 eshell-cmpl-ignore-case t
-                 eshell-aliases-file (concat user-emacs-directory ".eshell-aliases")
-                 eshell-last-dir-ring-size 512))
+  :init
+  (progn
+    (setq-default eshell-directory-name "~/.emacs.cache/eshell")
+    (setq eshell-glob-case-insensitive t
+          eshell-scroll-to-bottom-on-input 'this
+          eshell-buffer-shorthand t
+          eshell-history-size 1024
+          eshell-cmpl-ignore-case t
+          eshell-aliases-file (concat user-emacs-directory ".eshell-aliases")
+          eshell-last-dir-ring-size 512))
   :config (progn
             (add-hook 'shell-mode-hook 'goto-address-mode)
 
@@ -65,7 +66,7 @@
                 (other-window 1)
                 (eshell "new")
                 (rename-buffer (concat "*eshell: " name "*"))
-                (eshell-send-input)))))
+                (eshell-send-input))))
 
 ;; Configuration choices
 (add-hook 'sh-mode-hook

@@ -37,7 +37,8 @@
   :config (progn
             ;; Activate template autocompletion
             (abbrev-mode t)
-            (setq save-abbrevs t)
+            (setq save-abbrevs 'silently)
+            (setq-default abbrev-mode t)
             (dolist (hook '(prog-mode-hook
                             markdown-mode-hook
                             org-mode-hook

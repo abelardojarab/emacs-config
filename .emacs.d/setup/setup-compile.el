@@ -31,23 +31,22 @@
             ;; make sure ant's output is in a format emacs likes
             (setenv "ANT_ARGS" "-emacs")
 
-            ;; gdb should use many windows, to make it look like an IDE
+            ;; gdb should use multi-windowed like all the other debuggers out there.
             (setq gdb-many-windows t
+                  gdb-show-main t
                   gdb-max-frames 120)
 
             ;; Compilation
             ;; http://www.emacswiki.org/cgi-bin/wiki/ModeCompile
-            (setq
-             compilation-context-lines 1 compilation-context-lines 1
-             compilation-exit-message-function 'compilation-exit-autoclose
-             compilation-scroll-output 'first-error      ;; scroll until first error
-             compilation-read-command nil                  ;; don't need enter
-             compilation-window-height 12                ;; keep it readable
-             compilation-auto-jump-to-first-error t      ;; jump to first error auto
-             compilation-auto-jump-to-next-error t)      ;; jump to next error
+            (setq compilation-context-lines 1 compilation-context-lines 1
+                  compilation-exit-message-function 'compilation-exit-autoclose
+                  compilation-scroll-output 'first-error      ;; scroll until first error
+                  compilation-read-command nil                ;; don't need enter
+                  compilation-window-height 12                ;; keep it readable
+                  compilation-auto-jump-to-first-error t      ;; jump to first error auto
+                  compilation-auto-jump-to-next-error t)      ;; jump to next error
 
-
-	    ;; Close compile buffer if no errors nor warnings
+            ;; Close compile buffer if no errors nor warnings
             (defun bury-compile-buffer-if-successful (buffer string)
               "Bury a compilation buffer if succeeded without warnings "
               (if (and
@@ -61,7 +60,8 @@
                                   (lambda (buf)
                                     (bury-buffer buf)
                                     (switch-to-prev-buffer (get-buffer-window buf) 'kill))
-                                  buffer)))
+                                  buffer)
+                (message "No Compilation Errors!")))
             (add-hook 'compilation-finish-functions 'bury-compile-buffer-if-successful)
 
             ;; Helper for compilation. Close the compilation window if there was no error at all.

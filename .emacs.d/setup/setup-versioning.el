@@ -85,16 +85,31 @@
 
 ;; diff-hl
 (use-package diff-hl
+  :defer t
+  :commands (global-diff-hl-mode
+             diff-hl-mode
+             diff-hl-next-hunk
+             diff-hl-previous-hunk
+             diff-hl-mark-hunk
+             diff-hl-diff-goto-hunk
+             diff-hl-revert-hunk)
   :load-path (lambda () (expand-file-name "diff-hl/" user-emacs-directory))
   :config (progn
             (setq diff-hl-draw-borders t)
             (defadvice svn-sttus-update-modeline (after svn-update-diff-hl activate)
               (diff-hl-update))
-            (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh)))
+            (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh)
+
+            ;; Enable diff-hl
+            (global-diff-hl-mode)
+            (diff-hl-flydiff-mode)
+            (diff-hl-margin-mode)
+            (diff-hl-dired-mode)))
 
 ;; git-timemachine
 (use-package git-timemachine
-  :commands (git-timemachine git-timemachine-mode)
+  :commands (git-timemachine-toggle
+             git-timemachine-switch-branch)
   :load-path (lambda () (expand-file-name "git-timemachine/" user-emacs-directory)))
 
 ;; Show blame for current line

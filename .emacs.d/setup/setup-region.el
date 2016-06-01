@@ -27,6 +27,11 @@
 ;; Move text
 (use-package move-text)
 
+;; This is a fairly simple package that provides information about the active region.
+(use-package region-state
+  :load-path (lambda () (expand-file-name "region-state/" user-emacs-directory))
+  :config (region-state-mode))
+
 ;; Region bindings mode
 (use-package region-bindings-mode
   :load-path (lambda () (expand-file-name "region-bindings-mode/" user-emacs-directory))

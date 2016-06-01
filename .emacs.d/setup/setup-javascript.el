@@ -113,4 +113,16 @@
   :config (bind-key "C-c C-g" 'jsons-print-path js2-mode-map)
   :load-path (lambda () (expand-file-name "json-snatcher/" user-emacs-directory)))
 
+;; Bring node.js to Emacs
+(use-package nodejs-repl
+  :commands (nodejs-repl
+             nodejs-repl-send-buffer
+             nodejs-repl-switch-to-repl
+             nodejs-repl-send-region
+             nodejs-repl-send-last-sexp
+             nodejs-repl-execute
+             nodejs-repl-load-file)
+  :if (executable-find "node")
+  :load-path (lambda () (expand-file-name "nodejs-repl/" user-emacs-directory)))
+
 (provide 'setup-javascript)

@@ -30,7 +30,7 @@
 
 ;; GUI-specific thing
 (if (display-graphic-p)
-  (setenv "EMACS_GUI" "t"))
+    (setenv "EMACS_GUI" "t"))
 
 ;; Dont pause screen refresh
 (setq redisplay-dont-pause t)
@@ -79,8 +79,19 @@ non-nil."
             (toggle-truncate-lines -1)
             (setq truncate-lines nil)))
 
-;; Disable word wrapping
-(setq-default word-wrap nil)
+;; Visual fill column
+(use-package visual-fill-column
+  :defer t
+  :load-path (lambda () (expand-file-name "visual-fill-column/" user-emacs-directory)))
+
+;; Just like the previous package, this one is also subtle.
+;; It highlights characters that exceed a particular column margin. Very useful while coding.
+(use-package column-enforce-mode
+  :diminish column-enforce-mode
+  :init (setq column-enforce-column 99)
+  :load-path (lambda () (expand-file-name "column-enforce-mode/" user-emacs-directory))
+  :config (progn
+            (add-hook 'prog-mode-hook 'column-enforce-mode)))
 
 ;; Line numbers
 (use-package linum

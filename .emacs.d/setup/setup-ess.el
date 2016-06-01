@@ -27,7 +27,11 @@
 (use-package ess-site
   :load-path (lambda () (expand-file-name "ESS/lisp" user-emacs-directory))
   :mode ("\\.[rR]$" . R-mode)
-  :commands R-mode
+  :commands (R-mode
+             ess-eval-function
+             ess-eval-line
+             ess-eval-buffer
+             ess-switch-to-ESS)
   :config (progn
             (setq-default ess-dialect "R")
             (setq-default inferior-R-args " --no-restore-history --no-save ")

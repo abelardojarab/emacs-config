@@ -199,11 +199,17 @@
 ;; Turn off the bell http://www.emacswiki.org/cgi-bin/wiki?AlarmBell
 (setq ring-bell-function 'ignore)
 
+;; The default goes to the middle first. I prefer that the default goes to the top first. Let’s change this.
+(setq recenter-positions '(top middle bottom))
+
+;; Disable word wrapping
+(setq-default word-wrap nil)
+
 ;; Do not add empty lines at the end of our file if we press down key
 (setq next-line-add-newlines nil)
 
-;; Keep height of the echo area equal to only 1 line
-(setq message-truncate-lines t)
+;; Dont keep height of the echo area equal to only 1 line
+(setq message-truncate-lines nil)
 
 ;; Makes final line always be a return
 (setq require-final-newline t)

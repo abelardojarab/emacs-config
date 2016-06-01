@@ -152,7 +152,7 @@ found or not."
           (replace-match "" nil nil))
         (message (format "%d Trailing spaces removed from buffer." remove-count))))))
 
-;; do what i mean when indenting
+;; Do what i mean when indenting
 (defun unindent-dwim (&optional count-arg)
   "Keeps relative spacing in the region.  Unindents to the next multiple of the current tab-width"
   (interactive)
@@ -249,7 +249,7 @@ buffer."
   (beautify-region (point-min) (point-max))
   (when noninteractive (save-buffer)))
 
-;; Match parentheses
+;; Move to matching parenthesis
 (defun goto-match-paren-or-up (arg)
   "Go to the matching parenthesis if on parenthesis. Else go to
    the opening parenthesis one level up."
@@ -277,7 +277,7 @@ buffer."
         ((looking-at "\\s\)") (forward-char 1) (backward-list 1))
         (t                    (self-insert-command (or arg 1)))))
 
-;; Unindent blocks
+;; Indent and unindent blocks
 (defvar my-tab-width 4)
 (defun indent-block()
   (shift-region my-tab-width)
@@ -389,6 +389,7 @@ Now it correctly stops at the beginning of the line when the pointer is at the f
   (interactive)
   (set-selective-display (if selective-display nil 1)))
 
+;; Xah next/previous buffer functions
 (defvar xah-switch-buffer-ignore-dired t "If t, ignore dired buffer when calling `xah-next-user-buffer' or `xah-previous-user-buffer'")
 (setq xah-switch-buffer-ignore-dired t)
 
@@ -429,6 +430,68 @@ If `xah-switch-buffer-ignore-dired' is true, also skip directory buffer.
           (progn (previous-buffer)
                  (setq i (1+ i)))
         (progn (setq i 100))))))
+
+;; Align functions
+(defun align-whitespace (start end)
+  "Align columns by whitespace"
+  (interactive "r")
+  (align-regexp start end
+                "\\(\\s-*\\)\\s-" 1 0 t))
+
+(defun align-ampersand (start end)
+  "Align columns by ampersand"
+  (interactive "r")
+  (align-regexp start end
+                "\\(\\s-*\\)&" 1 1 t))
+
+(defun align-equals (start end)
+  "Align columns by equals sign"
+  (interactive "r")
+  (align-regexp start end
+                "\\(\\s-*\\)=" 1 0 t))
+
+(defun align-comma (start end)
+  "Align columns by comma"
+  (interactive "r")
+  (align-regexp start end
+                "\\(\\s-*\\)," 1 1 t))
+
+(defun align-dot (start end)
+  "Align columns by dot"
+  (interactive "r")
+  (align-regexp start end
+                "\\(\\s-*\\)\\\." 1 1 t))
+
+(defun align-colon (start end)
+  "Align columns by equals sign"
+  (interactive "r")
+  (align-regexp start end
+                "\\(\\s-*\\):" 1 0 t))
+
+;; Rotate the windows
+(defun rotate-windows ()
+  "Rotate your windows"
+  (interactive)
+  (cond ((not (> (count-windows)1))
+         (message "You can't rotate a single window!"))
+        (t
+         (setq i 1)
+         (setq numWindows (count-windows))
+         (while  (< i numWindows)
+           (let* (
+                  (w1 (elt (window-list) i))
+                  (w2 (elt (window-list) (+ (% i numWindows) 1)))
+
+                  (b1 (window-buffer w1))
+                  (b2 (window-buffer w2))
+
+                  (s1 (window-start w1))
+                  (s2 (window-start w2)))
+             (set-window-buffer w1  b2)
+             (set-window-buffer w2 b1)
+             (set-window-start w1 s2)
+             (set-window-start w2 s1)
+             (setq i (1+ i)))))))
 
 (provide 'setup-functions)
 ;;; setup-utilities.el ends here
