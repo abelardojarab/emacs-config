@@ -190,8 +190,8 @@
   (flet ((process-list ())) ad-do-it))
 
 ;; Enable tooltips
-(tooltip-mode t)
-(setq tooltip-use-echo-area t)
+(if (display-graphic-p)
+    (tooltip-mode t))
 
 ;; Bell instead of annoying beep
 (setq visible-bell t)
