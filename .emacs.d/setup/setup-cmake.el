@@ -48,18 +48,15 @@
 ;; git clone --recursive https://github.com/Andersbakken/rtags.git &
 ;; (LIBCLANG_LLVM_CONFIG_EXECUTABLE=path_to_llvm-config CC=gcc CXX=g++ cmake ../rtags -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_INSTALL_PREFIX=where_to_install_rtags)
 ;; cmake --build ./ --target install
-(defvar c-mode-base-map)
 (use-package rtags
-  :defer t
-  :if (and (executable-find "rc")
-           (executable-find "rp")
-           (executable-find "rdm"))
+  :defer 2
+  :if (executable-find "rdm")
+  :after irony-mode
   :load-path (lambda () (expand-file-name "rtags/src" user-emacs-directory))
-  :init (progn
+  :config (progn
+          (setq rtags-use-helm t)
           (setq rtags-autostart-diagnostics t)
-          (setq rtags-completions-enabled t))
-  :config (with-eval-after-load 'cc-mode
-            (rtags-enable-standard-keybindings c-mode-base-map)))
+          (setq rtags-completions-enabled t)))
 
 ;; cmake-based IDE
 (use-package cmake-ide
