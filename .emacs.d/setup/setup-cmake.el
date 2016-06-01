@@ -32,17 +32,6 @@
          ("\\.cmake\\'" . cmake-mode))
   :load-path (lambda () (expand-file-name "cmake-mode/" user-emacs-directory)))
 
-;; cmake utilities
-(use-package cpputils-cmake
-  :defer t
-  :disabled t
-  :commands cppcm-reload-all
-  :if (executable-find "cmake")
-  :load-path (lambda () (expand-file-name "cpputils-cmake/" user-emacs-directory))
-  :init (progn
-          (add-hook 'c-mode-hook 'cppcm-reload-all)
-          (add-hook 'c++-mode-hook 'cppcm-reload-all)))
-
 ;;;; rtags
 ;; sudo apt-get install libclang-dev / brew install llvm --with-clang
 ;; git clone --recursive https://github.com/Andersbakken/rtags.git &
@@ -71,6 +60,17 @@
               (cmake-ide-setup)
               (when (cmake-ide--locate-cmakelists)
                 (setq cmake-ide-dir (concat (cmake-ide--locate-cmakelists) "build/"))))))
+
+;; cmake utilities
+(use-package cpputils-cmake
+  :defer t
+  :commands cppcm-reload-all
+  :after cmake-ide
+  :if (executable-find "cmake")
+  :load-path (lambda () (expand-file-name "cpputils-cmake/" user-emacs-directory))
+  :init (progn
+          (add-hook 'c-mode-hook 'cppcm-reload-all)
+          (add-hook 'c++-mode-hook 'cppcm-reload-all)))
 
 (provide 'setup-cmake)
 ;;; setup-cmake.el ends here
