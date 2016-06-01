@@ -25,10 +25,12 @@
 ;;; Code:
 
 ;; Move text
-(use-package move-text)
+(use-package move-text
+  :commands (move-text-up move-text-down))
 
 ;; This is a fairly simple package that provides information about the active region.
 (use-package region-state
+  :commands region-state-mode
   :load-path (lambda () (expand-file-name "region-state/" user-emacs-directory))
   :config (region-state-mode))
 
