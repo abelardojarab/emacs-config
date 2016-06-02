@@ -29,35 +29,35 @@
   :config (progn
             (ido-mode 'both)
             (ido-everywhere 1)
-            (setq
-             ido-max-dir-file-cache 0
-             ido-show-dot-for-dired t
-             ido-default-file-method 'samewindow
-             ido-default-buffer-method 'selected-window
-             ido-save-directory-list-file "~/.emacs.cache/ido.last"
-             ido-ignore-buffers ;; ignore these guys
-             '("\\` " "^\*Mess" "^\*Back" ".*Completion" "^\*Ido" "^\*trace"
-               "^\*compilation" "^\*GTAGS" "^session\.*" "^\*")
-             ido-work-directory-list '("~/" "~/Desktop" "~/Documents" "~/workspace")
-             ido-case-fold t
-             ido-enable-last-directory-history t
-             ido-auto-merge-work-directories-length -1
-             ido-max-work-directory-list 15
-             ido-max-work-file-list 10
-             ido-use-filename-at-point nil
-             ido-use-url-at-point nil
-             ido-enable-flex-matching t
-             ido-enable-prefix t
-             ido-max-prospects 8
-             ido-confirm-unique-completion t)
+            (setq ido-max-dir-file-cache 0
+                  ido-show-dot-for-dired t
+                  ido-default-file-method 'samewindow
+                  ido-default-buffer-method 'selected-window
+                  ido-save-directory-list-file "~/.emacs.cache/ido.last"
+                  ido-ignore-buffers ;; ignore these guys
+                  '("\\` " "^\*Mess" "^\*Back" ".*Completion" "^\*Ido" "^\*trace"
+                    "^\*compilation" "^\*GTAGS" "^session\.*" "^\*")
+                  ido-work-directory-list '("~/" "~/Desktop" "~/Documents" "~/workspace")
+                  ido-case-fold t
+                  ido-enable-last-directory-history t
+                  ido-auto-merge-work-directories-length -1
+                  ido-max-work-directory-list 15
+                  ido-max-work-file-list 10
+                  ido-use-filename-at-point nil
+                  ido-use-url-at-point nil
+                  ido-enable-flex-matching t
+                  ido-enable-prefix t
+                  ido-max-prospects 8
+                  ido-confirm-unique-completion t
+                  ido-auto-merge-delay-time 0.7
+                  ido-auto-merge-work-directories-length -1)
 
             ;; This tab override shouldn't be necessary given ido's default
             ;; configuration, but minibuffer-complete otherwise dominates the
             ;; tab binding because of my custom tab-completion-everywhere
             ;; configuration.
             (add-hook 'ido-setup-hook
-                      (lambda ()
-                        (define-key ido-completion-map [tab] 'ido-complete)))
+                      (lambda () (define-key ido-completion-map [tab] 'ido-complete)))
 
             ;; when using ido, the confirmation is rather annoying...
             (setq confirm-nonexistent-file-or-buffer nil)))
