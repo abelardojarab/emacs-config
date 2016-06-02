@@ -256,11 +256,6 @@
 (add-hook 'text-mode-hook (function
                            (lambda () (ispell-minor-mode))))
 
-;; Pretty diff mode
-(autoload 'ediff-buffers "ediff" "Intelligent Emacs interface to diff" t)
-(autoload 'ediff-files "ediff" "Intelligent Emacs interface to diff" t)
-(autoload 'ediff-files-remote "ediff" "Intelligent Emacs interface to diff" t)
-
 ;; Change type files
 (setq auto-mode-alist
       (append '(("\\.cpp$" . c++-mode)

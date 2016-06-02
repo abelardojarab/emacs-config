@@ -34,145 +34,53 @@
 (use-package powerline
   :commands powerline-default-theme
   :load-path (lambda () (expand-file-name "powerline/" user-emacs-directory))
-  :init (setq powerline-default-separator 'arrow-fade)
-  :config (progn
-            ;; Cleaning the mode line
-            ;; https://www.masteringemacs.org/article/hiding-replacing-modeline-strings
-            (defvar mode-line-cleaner-alist
-              `((auto-complete-mode . " α")
-                (yas/minor-mode . "")
-                (paredit-mode . " π")
-                (eldoc-mode . "")
-                (abbrev-mode . "")
-                (git-gutter+-mode . "")
-                (smartparens-mode . " π")
+  :init (progn
 
-                ;; Major modes
-                (hi-lock-mode . ""))
+          ;; Cleaning the mode line
+          ;; https://www.masteringemacs.org/article/hiding-replacing-modeline-strings
+          (defvar mode-line-cleaner-alist
+            `((auto-complete-mode . " α")
+              (yas/minor-mode . "")
+              (eldoc-mode . "")
+              (abbrev-mode . "")
+              (git-gutter+-mode . "")
+              (smartparens-mode . " π")
+              (paredit-mode . " π")
+              (undo-tree-mode . " ϔ")
 
-              "Alist for `clean-mode-line'.
+              ;; Major modes
+              (hi-lock-mode . ""))
+
+            "Alist for `clean-mode-line'.
 When you add a new element to the alist, keep in mind that you
 must pass the correct minor/major mode symbol and a string you
 want to use in the modeline *in lieu of* the original.")
 
-            (defun clean-mode-line ()
-              (interactive)
-              (loop for cleaner in mode-line-cleaner-alist
-                    do (let* ((mode (car cleaner))
-                              (mode-str (cdr cleaner))
-                              (old-mode-str (cdr (assq mode minor-mode-alist))))
-                         (when old-mode-str
-                           (setcar old-mode-str mode-str))
-                         ;; major mode
-                         (when (eq mode major-mode)
-                           (setq mode-name mode-str)))))
-            (if (display-graphic-p)
-                (add-hook 'after-change-major-mode-hook 'clean-mode-line))
+          (defun clean-mode-line ()
+            (interactive)
+            (loop for cleaner in mode-line-cleaner-alist
+                  do (let* ((mode (car cleaner))
+                            (mode-str (cdr cleaner))
+                            (old-mode-str (cdr (assq mode minor-mode-alist))))
+                       (when old-mode-str
+                         (setcar old-mode-str mode-str))
+                       ;; major mode
+                       (when (eq mode major-mode)
+                         (setq mode-name mode-str)))))
+          (if (display-graphic-p)
+              (add-hook 'after-change-major-mode-hook 'clean-mode-line))
 
-            ;; Powerline setup
-            (add-hook 'desktop-after-read-hook 'powerline-reset)
-            (defun powerline-simpler-vc-mode (s)
-              (if s
-                  (replace-regexp-in-string "Git[:-]" "" s)
-                s))
+          (setq powerline-default-separator 'arrow-fade))
+  :config (progn
+            ;; (powerline-default-theme)
+            ))
 
-            ;; Some point, we could change the text of the minor modes, but we
-            ;; need to get the text properties and sub them /back in/. To be
-            ;; figured out later... Like:
-            ;;   (let* ((props (text-properties-at 1 s))
-            ;;          (apple (set-text-properties 0 1 props "⌘"))
-            ;;          (fly-c (set-text-properties 0 1 props "✓"))
-            ;;          (news2 (replace-regexp-in-string "FlyC" fly-c news1)))
-
-            (defun powerline-simpler-minor-display (s)
-              (replace-regexp-in-string
-               (concat " " (mapconcat 'identity '("Projectile" "Fill" "BufFace") "\\|")) "" s))
-
-            (defun powerline-ha-theme ()
-              "A powerline theme that removes many minor-modes that don't serve much purpose on the mode-line."
-              (interactive)
-              (setq-default mode-line-format
-                            '("%e"
-                              (:eval
-                               (let*
-                                   ((active
-                                     (powerline-selected-window-active))
-                                    (mode-line
-                                     (if active 'mode-line 'mode-line-inactive))
-                                    (face1
-                                     (if active 'powerline-active1 'powerline-inactive1))
-                                    (face2
-                                     (if active 'powerline-active2 'powerline-inactive2))
-                                    (separator-left
-                                     (intern
-                                      (format "powerline-%s-%s" powerline-default-separator
-                                              (car powerline-default-separator-dir))))
-                                    (separator-right
-                                     (intern
-                                      (format "powerline-%s-%s" powerline-default-separator
-                                              (cdr powerline-default-separator-dir))))
-                                    (lhs
-                                     (list
-                                      (powerline-raw "%*" nil 'l)
-                                      (powerline-buffer-id nil 'l)
-                                      (powerline-raw " ")
-                                      (funcall separator-left mode-line face1)
-
-                                      ;; Project
-                                      (powerline-raw '(:eval (format " Project[%s]"
-                                                                     (projectile-project-name))) face1)
-
-                                      ;; Git branch
-                                      (if (executable-find "git")
-                                          (let ((branch (s-trim
-                                                         (shell-command-to-string
-                                                          "git rev-parse --abbrev-ref HEAD"))))
-
-                                            ;; Display branch name
-                                            (if (equal (length (s-split-words branch)) 1)
-                                                (powerline-raw '(:eval (format " Git[%s]" branch) face1)))))
-
-                                      ;; Miscellaneous info
-                                      (powerline-raw " ")
-                                      (powerline-raw mode-line-misc-info face1 'r)))
-                                    (rhs
-                                     (list
-                                      (when (bound-and-true-p nyan-mode)
-                                        (powerline-raw (list (nyan-create)) face1 'l))
-                                      (powerline-raw "%4l" face1 'r)
-                                      (powerline-raw ":" face1)
-                                      (powerline-raw '(:eval
-                                                       (propertize "%3c" 'face
-                                                                   (if (>= (current-column) 90)
-                                                                       'font-lock-warning-face 'nil))) face1 'l)
-                                      (funcall separator-right face1 mode-line)
-                                      (powerline-raw " ")
-                                      (powerline-raw "%6p" nil 'r)
-                                      (powerline-hud face2 face1)))
-                                    (center
-                                     (list
-                                      (powerline-raw " " face1)
-                                      (funcall separator-left face1 face2)
-                                      (powerline-major-mode face2 'l)
-                                      (powerline-process face2)
-                                      (powerline-raw " :" face2)
-                                      (powerline-simpler-minor-display
-                                       (powerline-minor-modes face2 'l))
-
-                                      (powerline-raw " " face2)
-                                      (funcall separator-right face2 face1))))
-                                 (concat
-                                  (powerline-render lhs)
-                                  (powerline-fill-center face1
-                                                         (/
-                                                          (powerline-width center)
-                                                          2.0))
-                                  (powerline-render center)
-                                  (powerline-fill face1
-                                                  (powerline-width rhs))
-                                  (powerline-render rhs)))))))
-
-            (powerline-default-theme)))
+(use-package spaceline
+  :init (setq powerline-default-separator 'arrow-fade)
+  :load-path (lambda () (expand-file-name "spaceline/" user-emacs-directory))
+  :config (progn (require 'spaceline-config)
+                 (spaceline-spacemacs-theme)
+                 (spaceline-helm-mode)))
 
 (provide 'setup-modeline)
 ;;; setup-modeline.el ends here

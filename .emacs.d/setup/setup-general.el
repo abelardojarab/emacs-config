@@ -97,5 +97,22 @@
 (use-package yaxception
   :load-path (lambda () (expand-file-name "yaxception/" user-emacs-directory)))
 
+;; ediff
+(use-package ediff
+  :bind (:map ediff-mode-map
+              (("j" . ediff-next-difference)
+               ("k" . ediff-previous-difference)))
+  :init (progn
+          (defun my/setup-ediff ()
+            (interactive)
+            (ediff-setup-keymap))
+          (add-hook 'ediff-mode-hook 'my/setup-ediff))
+  :config (progn
+            (setq ediff-window-setup-function 'ediff-setup-windows-plain
+                  ;; Always split nicely for wide screens
+                  ediff-split-window-function 'split-window-horizontally
+                  ;; Ignore whitespace
+                  ediff-diff-options "-w")))
+
 (provide 'setup-general)
 ;;; setup-general.el ends here
