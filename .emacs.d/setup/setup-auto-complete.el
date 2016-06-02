@@ -152,10 +152,10 @@
   :if (executable-find "clang")
   :load-path (lambda () (expand-file-name "auto-complete-clang/" user-emacs-directory))
   :config (progn
-            (defun my-ac-cc-mode-setup ()
+            (defun my/ac-cc-mode-setup ()
               (setq ac-sources (append '(ac-source-clang) ac-sources)))
 
-            (add-hook 'c-mode-common-hook 'my-ac-cc-mode-setup)
+            (add-hook 'c-mode-common-hook 'my/ac-cc-mode-setup)
             (setq ac-clang-flags
                   (mapcar (lambda (item) (concat "-I" item))
                           (split-string
@@ -167,19 +167,30 @@
 (use-package auto-complete-c-headers
   :load-path (lambda () (expand-file-name "auto-complete-c-headers/" user-emacs-directory))
   :config (progn
-            (add-hook 'c++-mode-hook (lambda ()
-                                       '(setq ac-sources (append ac-sources '(ac-source-c-headers)))))
-            (add-hook 'c-mode-hook (lambda ()
-                                     '(setq ac-sources (append ac-sources '(ac-source-c-headers)))))))
+            (defun my/ac-c-headers-setup ()
+              (add-to-list 'ac-sources 'ac-source-c-headers))
+
+            (add-hook 'c-mode-common-hook 'my/ac-c-headers-setup)))
+
+;; Additional C-headers
+(use-package ac-c-headers
+  :load-path (lambda () (expand-file-name "ac-c-headers/" user-emacs-directory))
+  :config (progn
+            (defun my/ac-c-headers-setup ()
+              (add-to-list 'ac-sources 'ac-source-c-headers)
+              (add-to-list 'ac-sources 'ac-source-c-header-symbols t))
+
+            (add-hook 'c-mode-common-hook 'my/ac-c-headers-setup)))
 
 ;; Irony auto-complete
 (use-package ac-irony
   :if (file-exists-p "~/.emacs.cache/irony-server/bin/irony-server")
   :load-path (lambda () (expand-file-name "ac-irony/" user-emacs-directory))
   :config (progn
-            (defun my-ac-irony-setup ()
+            (defun my/ac-irony-setup ()
               (add-to-list 'ac-sources 'ac-source-irony))
-            (add-hook 'irony-mode-hook 'my-ac-irony-setup)))
+
+            (add-hook 'irony-mode-hook 'my/ac-irony-setup)))
 
 ;; Latex math auto-complete
 (use-package ac-math
@@ -208,6 +219,9 @@
 
 ;; ispell auto-complete for Org
 (use-package ac-ispell
+  :defer t
+  :disabled t
+  :commands ac-ispell-setup
   :load-path (lambda () (expand-file-name "ac-ispell/" user-emacs-directory))
   :if (executable-find "aspell")
   :init (progn
