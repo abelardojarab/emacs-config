@@ -58,30 +58,25 @@
             (set-face-attribute 'ac-selection-face nil :inherit 'fixed-pitch :bold nil)
 
             ;; General settings
-            (setq
-             ac-show-menu-immediately-on-auto-complete t
-             ac-dwim nil ;; get popups with docs even if word is uniquely completed
-             ac-auto-start 2
-             ac-override-local-map nil
-             ac-use-menu-map t
-             ac-use-fuzzy nil
-             ac-candidate-limit 10
-             ac-quick-help-height 30)
+            (setq ac-show-menu-immediately-on-auto-complete t
+                  ac-dwim nil ;; get popups with docs even if word is uniquely completed
+                  ac-auto-start 2
+                  ac-override-local-map nil
+                  ac-use-menu-map t
+                  ac-use-fuzzy nil
+                  ac-candidate-limit 10
+                  ac-quick-help-height 30)
 
             ;; Make it a bit faster
-            (setq
-             ac-delay 0.5 ;; same as Eclipse
-             ac-auto-show-menu 0.5
-             ac-quick-help-delay 0.5)
+            (setq ac-delay 0.5 ;; same as Eclipse
+                  ac-auto-show-menu 0.5
+                  ac-quick-help-delay 0.5)
 
             ;; this is used for trigger ac actions from org-mode also
             (add-to-list 'ac-trigger-commands 'org-self-insert-command)
 
             ;; disable auto-complete in comments
             (setq ac-disable-faces '(font-lock-string-face font-lock-doc-face))
-
-            ;; Default colors
-            (set-face-background 'ac-selection-face "darkgray")
 
             ;; support for imenu
             (defvar ac-imenu-index nil)
@@ -124,27 +119,24 @@
             (add-to-list 'ac-dictionary-directories "~/.emacs.cache/ac-dict")
             (setq ac-comphist-file  "~/.emacs.cache/ac-comphist.dat")
             (ac-config-default)
-            (setq-default ac-sources '(ac-source-yasnippet
-                                       ac-source-imenu
-                                       ac-source-abbrev
-                                       ac-source-words-in-same-mode-buffers))
+            (setq-default ac-sources '(ac-source-words-in-same-mode-buffers))
 
             ;; Enable auto-complete on more modes
             (dolist (mode '(magit-log-edit-mode
                             log-edit-mode org-mode text-mode haml-mode
                             sass-mode yaml-mode csv-mode espresso-mode haskell-mode
                             html-mode nxml-mode sh-mode smarty-mode clojure-mode
-                            lisp-mode textile-mode markdown-mode tuareg-mode
-                            csharp-mode js2-mode js3-mode css-mode less-css-mode
+                            lisp-mode markdown-mode csharp-mode js2-mode css-mode
                             vhdl-mode verilog-mode))
               (add-to-list 'ac-modes mode))
 
             ;; Let's have snippets and TAGS in the auto-complete dropdown
             (defun ac-common-setup ()
               (setq ac-sources (append ac-sources '(ac-source-yasnippet
-                                                    ac-source-imenu
                                                     ac-source-abbrev
-                                                    ac-source-words-in-same-mode-buffers))))
+                                                    ac-source-gtags
+                                                    ac-source-semantic))))
+
             (add-hook 'auto-complete-mode-hook 'ac-common-setup)))
 
 ;; Clang auto-complete
@@ -169,7 +161,6 @@
   :config (progn
             (defun my/ac-c-headers-setup ()
               (add-to-list 'ac-sources 'ac-source-c-headers))
-
             (add-hook 'c-mode-common-hook 'my/ac-c-headers-setup)))
 
 ;; Additional C-headers
@@ -179,7 +170,6 @@
             (defun my/ac-c-headers-setup ()
               (add-to-list 'ac-sources 'ac-source-c-headers)
               (add-to-list 'ac-sources 'ac-source-c-header-symbols t))
-
             (add-hook 'c-mode-common-hook 'my/ac-c-headers-setup)))
 
 ;; Irony auto-complete
@@ -189,7 +179,6 @@
   :config (progn
             (defun my/ac-irony-setup ()
               (add-to-list 'ac-sources 'ac-source-irony))
-
             (add-hook 'irony-mode-hook 'my/ac-irony-setup)))
 
 ;; Latex math auto-complete
@@ -220,7 +209,6 @@
 ;; ispell auto-complete for Org
 (use-package ac-ispell
   :defer t
-  :disabled t
   :commands ac-ispell-setup
   :load-path (lambda () (expand-file-name "ac-ispell/" user-emacs-directory))
   :if (executable-find "aspell")
@@ -228,7 +216,6 @@
           (setq ac-ispell-requires 4
                 ac-ispell-fuzzy-limit 0))
   :config (progn
-            (ac-ispell-setup)
             (add-hook 'markdown-mode-hook 'ac-ispell-ac-setup)
             (add-hook 'org-mode-hook 'ac-ispell-ac-setup)
             (add-hook 'git-commit-mode-hook 'ac-ispell-ac-setup)
