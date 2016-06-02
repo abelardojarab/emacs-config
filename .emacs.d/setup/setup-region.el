@@ -26,10 +26,12 @@
 
 ;; Move text
 (use-package move-text
+  :defer t
   :commands (move-text-up move-text-down))
 
 ;; This is a fairly simple package that provides information about the active region.
 (use-package region-state
+  :defer t
   :commands region-state-mode
   :load-path (lambda () (expand-file-name "region-state/" user-emacs-directory))
   :config (region-state-mode))
@@ -49,8 +51,8 @@
             (define-key region-bindings-mode-map (kbd "p") 'shift-mark-forward-paragraph)
 
             ;; movement bindings
-            (define-key region-bindings-mode-map (kbd "u") 'move-text-up)
-            (define-key region-bindings-mode-map (kbd "d") 'move-text-down)
+            (define-key region-bindings-mode-map (kbd "U") 'move-text-up)
+            (define-key region-bindings-mode-map (kbd "D") 'move-text-down)
             (define-key region-bindings-mode-map (kbd "<") 'decrease-left-margin)
             (define-key region-bindings-mode-map (kbd ">") 'increase-right-margin)
             (define-key region-bindings-mode-map (kbd "c") 'kill-ring-save)

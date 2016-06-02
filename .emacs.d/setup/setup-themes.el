@@ -76,6 +76,10 @@
 (add-to-list 'load-path (expand-file-name "spike-theme/" user-emacs-directory))
 (add-to-list 'custom-theme-load-path (expand-file-name "spike-theme/" user-emacs-directory))
 
+;; Dracula theme
+(add-to-list 'load-path (expand-file-name "dracula-theme/" user-emacs-directory))
+(add-to-list 'custom-theme-load-path (expand-file-name "dracula-theme/" user-emacs-directory))
+
 ;; Tomorrow theme
 (add-to-list 'load-path (expand-file-name "sanityinc-tomorrow-theme/" user-emacs-directory))
 (add-to-list 'custom-theme-load-path (expand-file-name "sanityinc-tomorrow-theme/" user-emacs-directory))
@@ -88,7 +92,7 @@
 (setq solarized-scale-org-headlines nil)
 
 ;; Different possible themes
-;; (load-theme 'atom-dark t)
+;; (load-theme 'atom-one-dark t)
 ;; (load-theme 'zenburn t)
 ;; (load-theme 'leuven t)
 ;; (load-theme 'zerodark t)
@@ -104,6 +108,7 @@
 ;; (load-theme 'material-light t)
 ;; (load-theme 'sanityinc-tomorrow-night t)
 ;; (load-theme 'spike t)
+;; (load-theme 'dracula t)
 
 ;; Choose different themes depending if we are using GUI or not
 (if (display-graphic-p)

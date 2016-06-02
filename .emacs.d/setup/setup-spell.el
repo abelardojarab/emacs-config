@@ -112,6 +112,7 @@
                 (define-key flyspell-mouse-map [mouse-3] #'undefined)))
 
             ;; Disable flyspell keybindings
+            (define-key flyspell-mode-map (kbd "C-;") nil)
             (define-key flyspell-mode-map (kbd "C-.") nil)))
 
 ;; write good mode
