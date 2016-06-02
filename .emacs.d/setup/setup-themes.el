@@ -36,10 +36,6 @@
 (add-to-list 'load-path (expand-file-name "zenburn-theme/" user-emacs-directory))
 (add-to-list 'custom-theme-load-path (expand-file-name "zenburn-theme/" user-emacs-directory))
 
-;; Faff theme
-(add-to-list 'load-path (expand-file-name "faff-theme/" user-emacs-directory))
-(add-to-list 'custom-theme-load-path (expand-file-name "faff-theme/" user-emacs-directory))
-
 ;; Material theme
 (add-to-list 'load-path (expand-file-name "material-theme/" user-emacs-directory))
 (add-to-list 'custom-theme-load-path (expand-file-name "material-theme/" user-emacs-directory))
@@ -48,14 +44,6 @@
 (add-to-list 'load-path (expand-file-name "leuven-theme/" user-emacs-directory))
 (add-to-list 'custom-theme-load-path (expand-file-name "leuven-theme/" user-emacs-directory))
 
-;; FlatUI theme
-(add-to-list 'load-path (expand-file-name "flatui-theme/" user-emacs-directory))
-(add-to-list 'custom-theme-load-path (expand-file-name "flatui-theme" user-emacs-directory))
-
-;; Pastelmac theme
-(add-to-list 'load-path (expand-file-name "pastelmac-theme/" user-emacs-directory))
-(add-to-list 'custom-theme-load-path (expand-file-name "pastelmac-theme/" user-emacs-directory))
-
 ;; Zerodark theme
 (add-to-list 'load-path (expand-file-name "zerodark-theme/" user-emacs-directory))
 (add-to-list 'custom-theme-load-path (expand-file-name "zerodark-theme/" user-emacs-directory))
@@ -63,18 +51,6 @@
 ;; E-Ink theme
 (add-to-list 'load-path (expand-file-name "eink-theme/" user-emacs-directory))
 (add-to-list 'custom-theme-load-path (expand-file-name "eink-theme/" user-emacs-directory))
-
-;; Paper theme
-(add-to-list 'load-path (expand-file-name "paper-theme/" user-emacs-directory))
-(add-to-list 'custom-theme-load-path (expand-file-name "paper-theme/" user-emacs-directory))
-
-;; Twilight bright theme
-(add-to-list 'load-path (expand-file-name "twilight-bright-theme/" user-emacs-directory))
-(add-to-list 'custom-theme-load-path (expand-file-name "twilight-bright-theme/" user-emacs-directory))
-
-;; Plan9 theme
-(add-to-list 'load-path (expand-file-name "plan9-theme/" user-emacs-directory))
-(add-to-list 'custom-theme-load-path (expand-file-name "plan9-theme/" user-emacs-directory))
 
 ;; Minimal theme
 (add-to-list 'load-path (expand-file-name "minimal-theme/" user-emacs-directory))
@@ -96,6 +72,10 @@
 (add-to-list 'load-path (expand-file-name "monotropic-theme/" user-emacs-directory))
 (add-to-list 'custom-theme-load-path (expand-file-name "monotropic-theme/" user-emacs-directory))
 
+;; Spike theme
+(add-to-list 'load-path (expand-file-name "spike-theme/" user-emacs-directory))
+(add-to-list 'custom-theme-load-path (expand-file-name "spike-theme/" user-emacs-directory))
+
 ;; Tomorrow theme
 (add-to-list 'load-path (expand-file-name "sanityinc-tomorrow-theme/" user-emacs-directory))
 (add-to-list 'custom-theme-load-path (expand-file-name "sanityinc-tomorrow-theme/" user-emacs-directory))
@@ -113,10 +93,6 @@
 ;; (load-theme 'leuven t)
 ;; (load-theme 'zerodark t)
 ;; (load-theme 'material t)
-;; (load-theme 'FlatUI t)
-;; (load-theme 'faff t)
-;; (load-theme 'twilight-bright)
-;; (load-theme 'plan9)
 ;; (load-theme 'white-sand) ;; best light theme
 ;; (load-theme 'minimal-light) ;; best ink theme
 ;; (load-theme 'monokai t) ;; best dark color scheme
@@ -124,10 +100,10 @@
 ;; (load-theme 'tao-yang t)
 ;; (load-theme 'tao-yin t)
 ;; (load-theme 'eink)
-;; (load-theme 'pastelmac t)
 ;; (load-theme 'solarized-dark t)
 ;; (load-theme 'material-light t)
 ;; (load-theme 'sanityinc-tomorrow-night t)
+;; (load-theme 'spike t)
 
 ;; Choose different themes depending if we are using GUI or not
 (if (display-graphic-p)
