@@ -190,6 +190,6 @@ export ALTERAOCLSDKROOT=/opt/Altera/15.1/hld
 export PATH=/opt/Altera/15.1/quartus/bin:$PATH
 
 # Extra settings
-export PATH=$PYTHONPATH/bin:$PATH:$HOME/workspace/frametools/bin
+export PATH=/usr/local/bin:$PYTHONPATH/bin:$PATH
 
 cd $HOME
