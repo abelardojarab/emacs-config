@@ -64,31 +64,6 @@ Defaults to `error'."
            (delete-dups (copy-sequence (cons name conditions))))
       (when message (put name 'error-message message)))))
 
-;; Missing function
-(when (not (fboundp 'seq-find))
-  (defun seq-find (predicate sequence &optional default)
-    "Return the first element for which (PREDICATE element) is non-nil in SEQUENCE.
-If no element is found, return DEFAULT.
-Note that `seq-find' has an ambiguity if the found element is
-identical to DEFAULT, as it cannot be known if an element was
-found or not."
-    (catch 'seq--break
-      (seq-doseq (elt sequence)
-        (when (funcall predicate elt)
-          (throw 'seq--break elt)))
-      default)))
-
-;; Missing function
-(when (not (fboundp 'seq-some))
-  (defun seq-some (predicate sequence)
-         "Return the first value for which if (PREDICATE element) is non-nil for in SEQUENCE."
-         (catch 'seq--break
-           (seq-doseq (elt sequence)
-                      (let ((result (funcall predicate elt)))
-                           (when result
-                             (throw 'seq--break result))))
-                             nil)))
-
 ;; Missing variable
 (defvar scheme-imenu-generic-expression "")
 
@@ -178,6 +153,17 @@ found or not."
                                  (and (< indent-amount 0) indent-amount)
                                  (* (or count 1) (- 0 tab-width))))))))
 
+;; http://endlessparentheses.com/fill-and-unfill-paragraphs-with-a-single-key.html?source=rss
+(defun fill-or-unfill ()
+  "Like `fill-paragraph', but unfill if used twice."
+  (interactive)
+  (let ((fill-column
+         (if (eq last-command 'endless/fill-or-unfill)
+             (progn (setq this-command nil)
+                    (point-max))
+           fill-column)))
+    (call-interactively #'fill-paragraph)))
+
 ;; Unfill paragraph
 (defun unfill-paragraph ()
   "Replace newline chars in current paragraph by single spaces.
@@ -207,32 +193,6 @@ This command does the reverse of `fill-paragraph'."
   (interactive)
   (goto-char (point-min))
   (while (search-forward "\n" nil t) (replace-match "\r\n")))
-
-;; Remove or add ending chars
-(defun compact-uncompact-block ()
-  "Remove or add line ending chars on current paragraph.
-This command is similar to a toggle of `fill-paragraph'.
-When there is a text selection, act on the region."
-  (interactive)
-  (let (currentStateIsCompact (bigFillColumnVal 4333999) (deactivate-mark nil))
-    (save-excursion
-      ;; Determine whether the text is currently compact.
-      (setq currentStateIsCompact
-            (if (eq last-command this-command)
-                (get this-command 'stateIsCompact-p)
-              (if (> (- (line-end-position) (line-beginning-position)) fill-column) t nil) ) )
-
-      (if (region-active-p)
-          (if currentStateIsCompact
-              (fill-region (region-beginning) (region-end))
-            (let ((fill-column bigFillColumnVal))
-              (fill-region (region-beginning) (region-end))) )
-        (if currentStateIsCompact
-            (fill-paragraph nil)
-          (let ((fill-column bigFillColumnVal))
-            (fill-paragraph nil)) ) )
-
-      (put this-command 'stateIsCompact-p (if currentStateIsCompact nil t)) ) ) )
 
 ;; Beautify region
 (defun beautify-region (beg end)
@@ -288,7 +248,7 @@ buffer."
   (setq deactivate-mark nil))
 
 (defun shift-region(numcols)
-  " my trick to expand the region to the beginning and end of the area selected
+  "Trick to expand the region to the beginning and end of the area selected
  much in the handy way I liked in the Dreamweaver editor."
   (if (< (point)(mark))
       (if (not(bolp))    (progn (beginning-of-line)(exchange-point-and-mark) (end-of-line)))

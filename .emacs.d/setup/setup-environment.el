@@ -117,6 +117,9 @@
  ((equal system-type 'darwin)
   (setq delete-by-moving-to-trash t
         trash-directory "~/.Trash/")
+  ;; Keep the Option key as Meta
+  (setq mac-option-modifier 'meta
+        mac-command-modifier 'meta)
   ;; BSD ls does not support --dired. Use GNU core-utils: brew install coreutils
   (when (executable-find "gls")
     (setq insert-directory-program "gls"))
@@ -225,8 +228,8 @@
 ;; if indent-tabs-mode is off, untabify before saving
 (add-hook 'write-file-hooks
           (lambda () (if (not indent-tabs-mode)
-                         (save-excursion
-                           (untabify (point-min) (point-max)))) nil))
+                    (save-excursion
+                      (untabify (point-min) (point-max)))) nil))
 
 ;; auto-indent pasted code
 (defadvice yank (after indent-region activate)

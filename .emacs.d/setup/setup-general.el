@@ -24,13 +24,6 @@
 
 ;;; Code:
 
-;; Exec path from shell in Mac OSX
-(use-package exec-path-from-shell
-  :if (equal system-type 'darwin)
-  :load-path (lambda () (expand-file-name "exec-path-from-shell/" user-emacs-directory))
-  :config (progn
-            (setq exec-path-from-shell-check-startup-files nil)))
-
 ;; Popup, used by auto-complete and other tools
 (use-package popup
   ;; We don't ensure this package, because we definitely don't want to have this
