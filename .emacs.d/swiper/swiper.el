@@ -4,8 +4,8 @@
 
 ;; Author: Oleh Krehel <ohwoeowho@gmail.com>
 ;; URL: https://github.com/abo-abo/swiper
-;; Version: 0.7.0
-;; Package-Requires: ((emacs "24.1"))
+;; Version: 0.8.0
+;; Package-Requires: ((emacs "24.1") (ivy "0.8.0"))
 ;; Keywords: matching
 
 ;; This file is part of GNU Emacs.
@@ -205,6 +205,8 @@
     emms-playlist-mode
     emms-stream-mode
     erc-mode
+    forth-mode
+    forth-block-mode
     org-agenda-mode
     dired-mode
     jabber-chat-mode
@@ -326,6 +328,7 @@ When non-nil, INITIAL-INPUT is the initial search pattern."
 (defun swiper-occur (&optional revert)
   "Generate a custom occur buffer for `swiper'.
 When REVERT is non-nil, regenerate the current *ivy-occur* buffer."
+  (require 'subr-x)
   (let* ((buffer (ivy-state-buffer ivy-last))
          (fname (propertize
                  (with-ivy-window
@@ -412,7 +415,6 @@ line numbers. For the buffer, use `ivy--regex' instead."
 (defun swiper--ivy (candidates &optional initial-input)
   "Select one of CANDIDATES and move there.
 When non-nil, INITIAL-INPUT is the initial search pattern."
-  (interactive)
   (swiper--init)
   (setq swiper-invocation-face
         (plist-get (text-properties-at (point)) 'face))
@@ -581,6 +583,10 @@ WND, when specified is the window."
                     (overlay-put overlay 'priority i)))
                 (cl-incf i)))))))))
 
+(defcustom swiper-action-recenter nil
+  "When non-nil, recenter after exiting `swiper'."
+  :type 'boolean)
+
 (defun swiper--action (x)
   "Goto line X."
   (let ((ln (1- (read (or (get-text-property 0 'display x)
@@ -600,6 +606,8 @@ WND, when specified is the window."
                  ln)
         (re-search-forward re (line-end-position) t)
         (swiper--ensure-visible)
+        (when swiper-action-recenter
+          (recenter))
         (when (/= (point) swiper--opoint)
           (unless (and transient-mark-mode mark-active)
             (when (eq ivy-exit 'done)

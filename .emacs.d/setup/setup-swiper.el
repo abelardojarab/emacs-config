@@ -26,7 +26,7 @@
 
 (use-package swiper
   :defer t
-  :commands swiper
+  :commands (swiper ivy-read)
   :load-path (lambda () (expand-file-name "swiper/" user-emacs-directory))
   :config (progn
             (setq ivy-use-virtual-buffers t)

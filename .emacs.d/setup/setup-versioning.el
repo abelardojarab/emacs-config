@@ -108,9 +108,31 @@
 
 ;; git-timemachine
 (use-package git-timemachine
-  :commands (git-timemachine-toggle
+  :commands (git-timemachine-start
+             git-timemachine-toggle
              git-timemachine-switch-branch)
-  :load-path (lambda () (expand-file-name "git-timemachine/" user-emacs-directory)))
+  :load-path (lambda () (expand-file-name "git-timemachine/" user-emacs-directory))
+  :config (progn
+            (defun my-git-timemachine-show-selected-revision ()
+              "Show last (current) revision of file."
+              (interactive)
+              (let (collection)
+                (setq collection
+                      (mapcar (lambda (rev)
+                                ;; re-shape list for the ivy-read
+                                (cons (concat (substring (nth 0 rev) 0 7) "|" (nth 5 rev) "|" (nth 6 rev)) rev))
+                              (git-timemachine--revisions)))
+                (ivy-read "commits:"
+                          collection
+                          :action (lambda (rev)
+                                    (git-timemachine-show-revision rev)))))
+
+            (defun git-timemachine-start ()
+              "Open git snapshot with the selected version.  Based on ivy-mode."
+              (interactive)
+              (unless (featurep 'git-timemachine)
+                (require 'git-timemachine))
+              (git-timemachine--start #'my-git-timemachine-show-selected-revision))))
 
 ;; Show blame for current line
 (use-package git-messenger

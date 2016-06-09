@@ -192,4 +192,7 @@ export PATH=/opt/Altera/15.1/quartus/bin:$PATH
 # Extra settings
 export PATH=/usr/local/bin:$PYTHONPATH/bin:$PATH
 
+# Disable spurious GTK messages
+export NO_AT_BRIDGE=1
+
 cd $HOME
