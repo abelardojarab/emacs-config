@@ -30,7 +30,7 @@ projectile.cache
 ede-projects.el*
 elpa/*
 url/*
-auto-save-list/*
+auto-save-list/
 tramp-autosave/*
 srecode-map.el*
 .org-id-locations
