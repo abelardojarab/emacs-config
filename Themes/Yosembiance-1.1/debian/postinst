@@ -1,5 +1,0 @@
-#!/bin/sh
-echo "Yosembiance installed successfully."
-sleep 2
-echo ""
-
