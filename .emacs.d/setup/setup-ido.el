@@ -59,6 +59,22 @@
             (add-hook 'ido-setup-hook
                       (lambda () (define-key ido-completion-map [tab] 'ido-complete)))
 
+            ;; Paste file name with ctrl-v
+            (defun ido-yank ()
+              (interactive)
+              (let ((path (current-kill 0)))
+                (if (file-exists-p path)
+                    (progn
+                      (let ((dir (file-name-directory path)))
+                        (if dir (ido-set-current-directory dir)))
+                      (setq ido-exit 'refresh)
+                      (setq ido-text-init (if (file-directory-p path) nil (file-name-nondirectory path)))
+                      (setq ido-rotate-temp t)
+                      (exit-minibuffer))
+                  (yank))))
+
+            (define-key ido-file-dir-completion-map (kbd "C-v") 'ido-yank)
+
             ;; when using ido, the confirmation is rather annoying...
             (setq confirm-nonexistent-file-or-buffer nil)))
 
