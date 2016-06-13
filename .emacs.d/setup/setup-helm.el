@@ -26,6 +26,7 @@
 
 ;; Helm
 (use-package helm-config
+  :diminish helm-mode
   :load-path (lambda () (expand-file-name "helm/" user-emacs-directory))
   :bind (("C-;" . helm-mini)
          ("C-0" . helm-buffers-list)
@@ -46,89 +47,25 @@
          ("f" . helm-find-files)
          ("r" . helm-recentf))
   :config (progn
-            (setq helm-delete-minibuffer-contents-from-point t)
-            (setq helm-buffer-max-length 35)
             (defadvice helm-buffers-sort-transformer (around ignore activate)
               (setq ad-return-value (ad-get-arg 0)))
+
+            (setq helm-candidate-number-limit 100)
+
+            ;; From https://gist.github.com/antifuchs/9238468
+            (setq helm-idle-delay 0.0 ;; update fast sources immediately (doesn't).
+                  helm-input-idle-delay 0.01  ;; this actually updates things quicker
+                  helm-yas-display-key-on-candidate t
+                  helm-quick-update t
+                  helm-M-x-requires-pattern nil
+                  helm-ff-skip-boring-files t)
 
             ;; use silver searcher when available
             (when (executable-find "ag-grep")
               (setq helm-grep-default-command "ag-grep -Hn --no-group --no-color %e %p %f"
                     helm-grep-default-recurse-command "ag-grep -H --no-group --no-color %e %p %f"))
 
-            ;; Make sure helm always pops up in bottom
-            (setq helm-split-window-in-side-p t)
-
-            (add-to-list 'display-buffer-alist
-                         '("\\`\\*helm.*\\*\\'"
-                           (display-buffer-in-side-window)
-                           (inhibit-same-window . t)
-                           (window-height . 0.2)))
-
-            ;; provide input in the header line and hide the mode lines above
-            (setq helm-echo-input-in-header-line t)
-
-            (defvar bottom-buffers nil
-              "List of bottom buffers before helm session.
-      Its element is a pair of `buffer-name' and `mode-line-format'.")
-
-            (defun bottom-buffers-init ()
-              (setq-local mode-line-format (default-value 'mode-line-format))
-              (setq bottom-buffers
-                    (cl-loop for w in (window-list)
-                             when (window-at-side-p w 'bottom)
-                             collect (with-current-buffer (window-buffer w)
-                                       (cons (buffer-name) mode-line-format)))))
-
-            (defun bottom-buffers-hide-mode-line ()
-              (setq-default cursor-in-non-selected-windows nil)
-              (mapc (lambda (elt)
-                      (with-current-buffer (car elt)
-                        (setq-local mode-line-format nil)))
-                    bottom-buffers))
-
-            (defun bottom-buffers-show-mode-line ()
-              (setq-default cursor-in-non-selected-windows t)
-              (when bottom-buffers
-                (mapc (lambda (elt)
-                        (with-current-buffer (car elt)
-                          (setq-local mode-line-format (cdr elt))))
-                      bottom-buffers)
-                (setq bottom-buffers nil)))
-
-            (defun helm-keyboard-quit-advice (orig-func &rest args)
-              (bottom-buffers-show-mode-line)
-              (apply orig-func args))
-
-            (add-hook 'helm-before-initialize-hook #'bottom-buffers-init)
-            (add-hook 'helm-after-initialize-hook #'bottom-buffers-hide-mode-line)
-            (add-hook 'helm-exit-minibuffer-hook #'bottom-buffers-show-mode-line)
-            (add-hook 'helm-cleanup-hook #'bottom-buffers-show-mode-line)
-            (advice-add 'helm-keyboard-quit :around #'helm-keyboard-quit-advice)
-
-            ;; remove header lines if only a single source
-            (setq helm-display-header-line nil)
-
-            (defvar helm-source-header-default-background (face-attribute 'helm-source-header :background))
-            (defvar helm-source-header-default-foreground (face-attribute 'helm-source-header :foreground))
-            (defvar helm-source-header-default-box (face-attribute 'helm-source-header :box))
-
-            (defun helm-toggle-header-line ()
-              (if (> (length helm-sources) 1)
-                  (set-face-attribute 'helm-source-header
-                                      nil
-                                      :foreground helm-source-header-default-foreground
-                                      :background helm-source-header-default-background
-                                      :box helm-source-header-default-box
-                                      :height 1.0)
-                (set-face-attribute 'helm-source-header
-                                    nil
-                                    :foreground (face-attribute 'helm-selection :background)
-                                    :background (face-attribute 'helm-selection :background)
-                                    :box nil
-                                    :height 0.1)))
-
-            (add-hook 'helm-before-initialize-hook 'helm-toggle-header-line)))
+            (helm-mode)))
 
 ;; Indent semantic entries
 (use-package helm-imenu

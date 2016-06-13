@@ -40,8 +40,7 @@ hopefully be in emacs 24: http://debbugs.gnu.org/cgi/bugreport.cgi?bug=6781"
       (make-directory server-auth-dir t))
   (and (>= emacs-major-version 23)
        (defun server-ensure-safe-dir (dir) "Noop" t))
-  (unless (file-exists-p "~/.emacs.cache/server/server")
-      (server-start)))
+  (server-start))
 
 ;; Ensure there is always at least one visible frame open at all times
 (defadvice server-save-buffers-kill-terminal (around dont-kill-last-client-frame activate)

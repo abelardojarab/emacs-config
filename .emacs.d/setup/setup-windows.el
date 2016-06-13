@@ -158,6 +158,10 @@
   :commands resize-window
   :load-path (lambda () (expand-file-name "resize-window/" user-emacs-directory)))
 
+;; Perspective
+(use-package perspective
+  :load-path (lambda () (expand-file-name "perspective/" user-emacs-directory))
+  :config (persp-mode))
 
 (provide 'setup-windows)
 ;;; setup-windows.el ends here

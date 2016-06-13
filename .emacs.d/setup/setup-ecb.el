@@ -269,7 +269,8 @@ little more place. "
             (speedbar-add-supported-extension ".ils")
 
             ;; Finally activate ecb
-            (ecb-activate)))
+
+            (if (display-graphic-p) (ecb-activate))))
 
 (provide 'setup-ecb)
 ;;; setup-ecb.el ends here
