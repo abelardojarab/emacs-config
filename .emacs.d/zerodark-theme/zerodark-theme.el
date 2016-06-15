@@ -222,6 +222,7 @@
    `(notmuch-crypto-signature-good ((,class (:background ,blue :foreground ,background :weight bold))))
    `(notmuch-crypto-signature-good-key ((,class (:background ,blue :foreground ,background :weight bold))))
    `(notmuch-crypto-signature-bad ((,class (:background ,red :foreground ,background :weight bold))))
+   `(notmuch-tag-face ((,class (:foreground ,blue :weight bold))))
 
    ;; company
    `(company-preview ((,class (:background ,background-darker :foreground ,default))))
@@ -229,7 +230,7 @@
    `(company-preview-search ((,class (:background ,blue :foreground ,default))))
    `(company-tooltip ((,class (:background ,background-darker :foreground ,default))))
    `(company-scrollbar-bg ((,class (:background ,background-darker))))
-   `(company-scrollbar-fg ((,class (:background ,default))))
+   `(company-scrollbar-fg ((,class (:background ,background-blue))))
    `(company-tooltip-common ((,class (:foreground ,purple :weight bold :background ,background-darker))))
    `(company-tooltip-annotation ((,class (:foreground ,blue :weight bold :background ,background-blue))))
    `(company-tooltip-common-selection ((,class (:foreground ,purple :background ,background-lighter :weight bold))))
@@ -423,6 +424,9 @@
    `(erc-input-face ((,class :foreground ,default :weight bold)))
    `(erc-prompt-face ((,class :foreground ,purple :background ,background-purple :weight bold :box 1)))
    `(erc-timestamp-face ((,class :foreground ,purple :weight bold)))
+
+   `(hydra-face-red ((,class :foreground ,red :weight bold)))
+   `(hydra-face-blue ((,class :foreground ,blue :weight bold)))
    )
 
   (custom-theme-set-variables
