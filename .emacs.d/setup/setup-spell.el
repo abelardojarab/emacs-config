@@ -29,8 +29,7 @@
   :config (progn
             ;; General configuration
             (setq ispell-highlight-face 'flyspell-incorrect
-                  ispell-silently-savep t
-                  ispell-alternate-dictionary (expand-file-name "dictionaries/words.txt" user-emacs-directory))
+                  ispell-silently-savep t)
             (add-to-list 'ispell-skip-region-alist '("[^\000-\377]+"))
 
             ;; find aspell and hunspell automatically
@@ -41,11 +40,11 @@
                                                "[A-Za-z]" "[^A-Za-z]" "[']" t
                                                ("-d" "en_US" "-i" "utf-8") nil utf-8)
 
-                                              ("english"
+                                              ("en_US"
                                                "[[:alpha:]]" "[^[:alpha:]]" "[']" t
                                                ("-d" "en_US") nil utf-8)))
               (setq ispell-really-hunspell t
-                    ispell-dictionary "english"
+                    ispell-dictionary "en_US"
                     ispell-program-name "hunspell"
                     ispell-extra-args (list "-d" (expand-file-name "dictionaries/en_US" user-emacs-directory))))
 
@@ -53,7 +52,8 @@
              ((executable-find "aspell")
               (setq ispell-dictionary "english"
                     ispell-program-name "aspell"
-                    ispell-extra-args '("--sug-mode=fast"))
+                    ispell-extra-args '("--sug-mode=fast")
+                    ispell-alternate-dictionary (expand-file-name "dictionaries/words.txt" user-emacs-directory))
               (when (eq system-type 'darwin)
                 (setq ispell-dictionary-alist
                       '((nil
@@ -77,12 +77,12 @@
                       '(lambda ()
                          (local-set-key (kbd "C-c s 2")
                                         (lambda () (interactive)
-                                          (ispell-change-dictionary "english")
+                                          (ispell-change-dictionary "en_US")
                                           (flyspell-mode 1)
                                           (flyspell-buffer)))
                          (local-set-key (kbd "C-c s 1")
                                         (lambda () (interactive)
-                                          (ispell-change-dictionary "spanish")
+                                          (ispell-change-dictionary "en_GB")
                                           (flyspell-mode 1)
                                           (flyspell-buffer)))
                          (local-set-key (kbd "C-c s 0")
@@ -114,6 +114,13 @@
             ;; Disable flyspell keybindings
             (define-key flyspell-mode-map (kbd "C-;") nil)
             (define-key flyspell-mode-map (kbd "C-.") nil)))
+
+;; flyspell popup correction
+(use-package flyspell-correct-popup
+  :after flyspell
+  :bind (:map flyspell-mode-map
+              ("C-c $" . flyspell-correct-word-generic))
+  :load-path (lambda () (expand-file-name "flyspell-correct/" user-emacs-directory)))
 
 ;; write good mode
 (use-package writegood-mode
