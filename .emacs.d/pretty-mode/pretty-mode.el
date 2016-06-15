@@ -1,4 +1,4 @@
-;;; pretty-mode.el --- Redisplay parts of the buffer as pretty symbols.
+;;; pretty-mode.el --- Redisplay parts of the buffer as pretty Unicode symbols.
 ;;; -*- coding: utf-8 -*-
 
 ;; Copyright © March 2008 Arthur Danskin <arthurdanskin@gmail.com>
@@ -6,7 +6,7 @@
 ;; Copyright © April 2013 Dmitri Akatov <akatov@gmail.com>
 
 ;; Filename: pretty-mode.el
-;; Description: Redisplay parts of the buffer as pretty symbols.
+;; Description: Redisplay parts of the buffer as pretty Unicode symbols.
 ;; Author: Arthur Danskin <arthurdanskin@gmail.com>
 ;; Maintainer: Dmitri Akatov <akatov@gmail.com>
 ;; URL: https://github.com/akatov/pretty-mode
@@ -538,7 +538,7 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
        ;;; 23CE ⏎ RETURN SYMBOL
        (?\u23CE :return (:function)
                 (:return "return" ess))
-                
+
        ;;; 2B9E ⮞ BLACK RIGHTWARDS EQUILATERAL ARROWHEAD
        (?\u2B9E :ForwardPipe (:function)
                 (:ForwardPipe "%>%" ess))
@@ -891,6 +891,10 @@ Should be a list of the form ((MODE ((REGEXP . GLYPH) ...)) ...)"
        ;; 29FB ⧻ TRIPLE PLUS
        (?\u29FB :+++ (:arithmetic :arithmetic-triple)
                 (:+++ "+++" haskell))        ; Control.Arrow
+
+       ;; 254C ╌ DOUBLE DASH (MINUS)
+       (?\u254C :-- (:arithmetic :arithmetic-double)
+                (:-- "--" haskell c c++ java javascript coffee))
 
        ;;; Undefined
 

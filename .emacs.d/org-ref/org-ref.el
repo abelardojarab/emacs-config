@@ -49,6 +49,11 @@
 (require 'parsebib)
 (require 'reftex-cite)
 
+(add-to-list 'load-path
+	     (expand-file-name
+	      "citeproc"
+	      (file-name-directory  (locate-library "org-ref"))))
+
 ;;for byte-compile error avoidance
 (defvar-local org-export-exclude-tags nil)
 (declare-function 'org-ref-email-bibtex-entry "org-ref-bibtex.el")
@@ -88,7 +93,7 @@ You should use full-paths for each file."
   nil
   "Directory where pdfs are stored by key.
 Put a trailing / in the name."
-  :type 'directory
+  :type '(choice directory (repeat directory))
   :group 'org-ref)
 
 
@@ -237,10 +242,12 @@ The default behavior adds entries to a long file with headlines
 for each entry.  It also tries to be compatible with `org-bibtex'.
 
 An alternative is
- (lambda ()
+ (lambda (thekey)
   (bibtex-completion-edit-notes (car (org-ref-get-bibtex-key-and-file thekey))))
 
-Use that if you like the one file one note approach of `helm-bibtex'."
+Use that if you prefer the `bibtex-completion' approach, which also
+supports an additional method for storing notes. See
+`bibtex-completion-notes-path' for more information."
   :type 'function
   :group 'org-ref)
 
@@ -717,7 +724,7 @@ Add tooltip to the link."
 
 (defun org-ref-make-org-link-cite-key-visible (&rest _)
   "Make the org-ref cite link visible in descriptive links."
-  (unless (string= (buffer-name) "*Org Agenda*")
+  (when (string-match-p "\\.org$\\|\\.txt$" (buffer-name))
     (save-match-data
       (let ((s (match-string 1))
 	    (s-begin (match-beginning 1))
@@ -1069,22 +1076,31 @@ Ignore figures in COMMENTED sections."
 		  (cl-incf counter)
 
 		  (let* ((start (org-element-property :begin link))
+			 (linenum (progn (goto-char start) (line-number-at-pos)))
+			 (fname (org-element-property :path link))
 			 (parent (car (cdr
 				       (org-element-property :parent link))))
 			 (caption (cl-caaar (plist-get parent :caption)))
 			 (name (plist-get parent :name)))
+
 		    (if caption
-			(format
-			 "[[elisp:(progn (switch-to-buffer \"%s\")(goto-char %s)(org-show-entry))][figure %s: %s]] %s\n"
-			 c-b start counter (or name "") caption)
-		      (format
-		       "[[elisp:(progn (switch-to-buffer \"%s\")(goto-char %s)(org-show-entry))][figure %s: %s]]\n"
-		       c-b start counter (or name "")))))))))
+			(format "[[file:%s::%s][Figure %s:]] %s\n" c-b linenum counter caption)
+		      ;; if it has no caption, try the name
+		      ;; if it has no name, use the file name
+		      (cond (name
+			     (format "[[file:%s::%s][Figure %s:]] %s\n" c-b linenum counter name))
+			    (fname
+			     (format "[[file:%s::%s][Figure %s:]] %s\n"
+				     c-b linenum counter fname))))))))))
       (switch-to-buffer "*List of Figures*")
       (setq buffer-read-only nil)
       (org-mode)
       (erase-buffer)
       (insert (mapconcat 'identity list-of-figures ""))
+      (goto-char (point-min))
+      ;; open links in the same window
+      (setq-local org-link-frame-setup
+		  '((file . find-file)))
       (setq buffer-read-only t)
       (use-local-map (copy-keymap org-mode-map))
       (local-set-key "q" #'(lambda () (interactive) (kill-buffer))))))
@@ -1514,10 +1530,10 @@ Optional argument ARG Does nothing."
 
 (defun org-ref-get-bibtex-key-under-cursor ()
   "Return key under the bibtex cursor.
-We search forward from
-point to get a comma, or the end of the link, and then backwards
-to get a comma, or the beginning of the link.  that delimits the
-keyword we clicked on.  We also strip the text properties."
+We search forward from point to get a comma, or the end of the link,
+and then backwards to get a comma, or the beginning of the link. that
+delimits the keyword we clicked on. We also strip the text
+properties."
   (let* ((object (org-element-context))
          (link-string (org-element-property :path object)))
     ;; you may click on the part before the citations. here we make
@@ -1558,15 +1574,51 @@ keyword we clicked on.  We also strip the text properties."
                       (buffer-substring key-beginning key-end))))
                 (set-text-properties 0 (length bibtex-key) nil bibtex-key)
                 bibtex-key))))
-      ;; link with description. assume only one key
-      link-string)))
+
+      ;; link with description and multiple keys
+      (if (and (org-element-property :contents-begin object)
+	       (string-match "," link-string)
+	       (equal (org-element-type object) 'link))
+	  ;; point is not on the link description
+	  (if (not (>= (point) (org-element-property :contents-begin object)))
+	      (let (link-string-beginning link-string-end)
+		(save-excursion
+		  (goto-char (org-element-property :begin object))
+		  (search-forward link-string nil t 1)
+		  (setq link-string-beginning (match-beginning 0))
+		  (setq link-string-end (match-end 0)))
+
+		(let (key-beginning key-end)
+		  ;; The key is the text between commas, or the link boundaries
+		  (save-excursion
+		    (if (search-forward "," link-string-end t 1)
+			(setq key-end (- (match-end 0) 1)) ; we found a match
+		      (setq key-end link-string-end))) ; no comma found so take the end
+		  ;; and backward to previous comma from point which defines the start character
+
+		  (save-excursion
+		    (if (search-backward "," link-string-beginning 1 1)
+			(setq key-beginning (+ (match-beginning 0) 1)) ; we found a match
+		      (setq key-beginning link-string-beginning))) ; no match found
+		  ;; save the key we clicked on.
+		  (let ((bibtex-key
+			 (org-ref-strip-string
+			  (buffer-substring key-beginning key-end))))
+		    (set-text-properties 0 (length bibtex-key) nil bibtex-key)
+		    bibtex-key)))
+	    ;; point is on the link description, assume we want the
+	    ;; last key
+	    (let ((last-key (replace-regexp-in-string "[a-zA-Z0-9-_]*," "" link-string)))
+	      last-key))
+	;; link with description. assume only one key
+	link-string))))
 
 
 (defun org-ref-find-bibliography ()
   "Find the bibliography in the buffer.
 This function sets and returns cite-bibliography-files, which is
 a list of files either from bibliography:f1.bib,f2.bib
-\bibliography{f1,f2}, internal bibliographies, from files in the
+\\bibliography{f1,f2}, internal bibliographies, from files in the
 BIBINPUTS env var, and finally falling back to what the user has
 set in `org-ref-default-bibliography'"
   (catch 'result
@@ -1864,7 +1916,7 @@ PATH is required for the org-link, but it does nothing here."
  (lambda (path desc format)
    (cond
     ((eq format 'latex)
-     (format "\\printindex")))))
+     (format "printindex")))))
 
 ;;* Utilities
 ;;** create text citations from a bibtex entry
@@ -1938,10 +1990,9 @@ the entry of interest in the bibfile.  but does not check that."
     (let* ((bibtex-expand-strings t)
            (entry (bibtex-parse-entry t))
            (key (reftex-get-bib-field "=key=" entry))
-           (pdf (format (concat
-			 (file-name-as-directory org-ref-pdf-directory)
-			 "%s.pdf")
-			key)))
+           (pdf (-first 'f-file?
+			(--map (f-join it (concat key ".pdf"))
+			       (-flatten (list org-ref-pdf-directory))))))
       (message "%s" pdf)
       (if (file-exists-p pdf)
           (org-open-link-from-string (format "[[file:%s]]" pdf))
@@ -2000,8 +2051,9 @@ construct the heading by hand."
 
 	  (insert (format "[[cite:%s]]" key))
 
-	  (setq pdf (expand-file-name
-		     (format "%s.pdf" key) org-ref-pdf-directory))
+	  (setq pdf (-first 'f-file?
+			    (--map (f-join it (concat key ".pdf"))
+				   (-flatten (list org-ref-pdf-directory)))))
 	  (if (file-exists-p pdf)
 	      (insert (format
 		       " [[file:%s][pdf]]\n\n"

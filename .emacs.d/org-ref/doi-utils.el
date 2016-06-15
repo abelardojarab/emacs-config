@@ -768,8 +768,9 @@ Argument BIBFILE the bibliography to use."
       (if (search-forward doi nil t)
           (message "%s is already in this file" doi)
         (goto-char (point-max))
-	(if require-final-newline
-	    (insert "\n")
+	(if (re-search-backward "^}$" nil t)
+	    (progn (forward-char 1)
+		   (insert "\n\n"))
 	  (insert "\n\n"))
         (doi-utils-insert-bibtex-entry-from-doi doi)
         (save-buffer)))))
@@ -1069,7 +1070,7 @@ Argument LINK-STRING Passed in on link click."
      (format "\\href{%s%s}{%s}"
 	     doi-utils-dx-doi-org-url
              doi
-             (or desc (concat "doi:%s" doi)))))))
+             (or desc (concat "doi:" doi)))))))
 
 
 ;;* Getting a doi for a bibtex entry missing one

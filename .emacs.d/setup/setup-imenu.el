@@ -31,7 +31,8 @@
             (set-default 'imenu-auto-rescan t)
             (mapc (lambda (mode)
                     (add-hook mode 'imenu-add-menubar-index))
-                  '(prog-mode-hook
+                  '(c-common-mode-hook
+                    python-mode-hook
                     reftex-mode-hook
                     reftex-load-hook
                     org-mode-hook))
