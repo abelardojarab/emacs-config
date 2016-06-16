@@ -48,7 +48,7 @@
                   ecb-compile-window-temporally-enlarge nil
                   ecb-eshell-fit-window-to-command-output nil
                   ecb-create-layout-file "~/.emacs.cache/ecb-user-layouts.el"
-                  ecb-windows-width 30
+                  ecb-windows-width 35
                   ecb-fix-window-size 'width
                   ecb-layout-name "bodil"
                   ecb-history-make-buckets 'mode
@@ -180,27 +180,26 @@ little more place. "
             (ecb-layout-define "left-speedbar-right" left-right
               "This function creates the following layout:
 
-   -------------------------------------------------------
-   |              |                                      |
-   |              |                                      |
-   |              |                                      |
-   |              |                                      |
-   |              |                                      |
-   |              |                                      |
-   |              |                                      |
-   |   Speedbar   |                 Edit                 |
-   |              |                                      |
-   |              |                                      |
-   |              |                                      |
-   |              |                                      |
-   |              |                                      |
-   |              |                                      |
-   |              |                                      |
-   -------------------------------------------------------
-   |                                                     |
-   |                    Compilation                      |
-   |                                                     |
-   -------------------------------------------------------
+   --------------------------------------------------------------
+   |              |                               |             |
+   |              |                               |             |
+   |              |                               |             |
+   |  History     |                               |             |
+   |              |                               |             |
+   |              |                               |             |
+   |              |                               |             |
+   |--------------|             Edit              |  Methods    |
+   |              |                               |             |
+   |              |                               |             |
+   |  Sources     |                               |             |
+   |              |                               |             |
+   |              |                               |             |
+   |              |                               |             |
+   --------------------------------------------------------------
+   |                                                            |
+   |                    Compilation                             |
+   |                                                            |
+   --------------------------------------------------------------
 
 If you have not set a compilation-window in `ecb-compile-window-height' then
 the layout contains no persistent compilation window and the other windows get a
@@ -214,11 +213,34 @@ little more place. "
                 (ecb-set-methods-buffer)
                 (select-window (previous-window (selected-window) 0))))
 
-            (ecb-layout-define "bodil" left nil
-                               (ecb-set-history-buffer)
-                               (ecb-split-ver 0.5)
-                               (ecb-set-methods-buffer)
-                               (select-window (next-window)))
+            (ecb-layout-define "bodil" left
+              "This function creates the following layout:
+   -------------------------------------------------------
+   |              |                                      |
+   |              |                                      |
+   |              |                                      |
+   |  Methods     |                 Edit                 |
+   |              |                                      |
+   |              |                                      |
+   |              |                                      |
+   |              |                                      |
+   |              |                                      |
+   |--------------|                                      |
+   |  Sou | Hist  |                                      |
+   -------------------------------------------------------
+   |                                                     |
+   |                    Compilation                      |
+   |                                                     |
+   -------------------------------------------------------
+If you have not set a compilation-window in `ecb-compile-window-height' then the
+layout contains no persistent compilation window and the other windows get a little
+more place."
+              (ecb-set-history-buffer)
+              (ecb-split-ver 0.3333)
+              (ecb-set-methods-buffer)
+              (ecb-split-ver 0.5)
+              (ecb-set-sources-buffer)
+              (select-window (next-window)))
 
             ;; disable global semantic idle scheduler.
             ;; it doesn't really seem to work all that well in automatically
@@ -226,7 +248,7 @@ little more place. "
             (add-hook 'ecb-activate-hook
                       '(lambda()
                          (semantic-mode t)
-                         (ecb-maximize-window-methods)
+                         ;; (ecb-maximize-window-methods)
                          (setq global-semantic-idle-scheduler-mode nil)))
 
             ;; Reparse after a file save

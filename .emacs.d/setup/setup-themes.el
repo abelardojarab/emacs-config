@@ -112,14 +112,14 @@
 
 ;; Choose different themes depending if we are using GUI or not
 (if (display-graphic-p)
-    (load-theme 'monokai t)
+    (load-theme 'leuven t)
   (load-theme 'zenburn t))
 
 ;; Assure theme loading for client frames
 ;; http://sachachua.com/blog/2016/04/keep-emacs-alive-x-crashes-running-background-daemon/
 (defun my/setup-color-theme ()
   (interactive)
-  (load-theme 'monokai t))
+  (load-theme 'leuven t))
 (add-hook 'after-make-frame-functions
           (lambda (frame)
             (select-frame frame)

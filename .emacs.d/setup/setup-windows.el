@@ -49,7 +49,7 @@
 
 ;; Avoid multiple windows when opening multiple files
 ;; http://stackoverflow.com/questions/1144729/how-do-i-prevent-emacs-from-horizontally-splitting-the-screen-when-opening-multip
-(add-hook 'window-setup-hook 'delete-other-windows)
+;; (add-hook 'window-setup-hook 'delete-other-windows)
 
 ;; Manage popup windows
 (use-package popwin
