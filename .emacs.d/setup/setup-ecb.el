@@ -47,14 +47,14 @@
                   ecb-compile-window-width 'edit-window
                   ecb-compile-window-temporally-enlarge nil
                   ecb-eshell-fit-window-to-command-output nil
-                  ecb-create-layout-file "~/.emacs.cache/auto-save-list/.ecb-user-layouts.el"
+                  ecb-create-layout-file "~/.emacs.cache/ecb-user-layouts.el"
                   ecb-windows-width 30
                   ecb-fix-window-size 'width
-                  ecb-layout-name "left-speedbar-right"
+                  ecb-layout-name "bodil"
                   ecb-history-make-buckets 'mode
                   ecb-kill-buffer-clears-history 'auto
                   ecb-tip-of-the-day nil
-                  ecb-tip-of-the-day-file "~/.emacs.cache/auto-save-list/.ecb-tip-of-day.el"
+                  ecb-tip-of-the-day-file "~/.emacs.cache/ecb-tip-of-day.el"
                   ecb-primary-secondary-mouse-buttons 'mouse-1--mouse-2
                   semantic-decoration-styles (list
                                               '("semantic-decoration-on-protected-members" . t)
@@ -208,9 +208,17 @@ little more place. "
               (ecb-set-history-buffer)
               (ecb-split-ver 0.5)
               (ecb-set-sources-buffer)
-              (select-window (next-window (next-window)))
-              (ecb-set-methods-buffer)
-              (select-window (previous-window (selected-window) 0)))
+
+              (progn
+                (select-window (next-window (next-window)))
+                (ecb-set-methods-buffer)
+                (select-window (previous-window (selected-window) 0))))
+
+            (ecb-layout-define "bodil" left nil
+                               (ecb-set-history-buffer)
+                               (ecb-split-ver 0.5)
+                               (ecb-set-methods-buffer)
+                               (select-window (next-window)))
 
             ;; disable global semantic idle scheduler.
             ;; it doesn't really seem to work all that well in automatically
