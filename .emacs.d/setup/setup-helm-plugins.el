@@ -136,9 +136,7 @@
   :commands (helm-swoop helm-swoop-from-isearch)
   :bind (("C-*" . helm-swoop)
          :map isearch-mode-map
-         ("C-*" . helm-swoop-from-isearch)
-         :map ctl-x-map
-         ("s" . helm-swoop))
+         ("C-*" . helm-swoop-from-isearch))
   :load-path (lambda () (expand-file-name "helm-swoop/" user-emacs-directory))
   :config (progn
 

@@ -26,11 +26,14 @@
 
 (use-package swiper
   :defer t
-  :commands (swiper ivy-read)
+  :commands (swiper ivy-read ivy-mode)
+  :bind (("C-f" . swiper)
+         :map ctl-x-map
+         ("s" . swiper))
   :load-path (lambda () (expand-file-name "swiper/" user-emacs-directory))
   :config (progn
             (setq ivy-use-virtual-buffers t)
-            (setq ivy-height 10)))
+            (setq ivy-height 15)))
 
 (provide 'setup-swiper)
 ;;; setup-swiper.el ends here
