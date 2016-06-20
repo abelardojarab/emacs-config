@@ -1,0 +1,49 @@
+Magit v2.7.1 Release Notes (draft)
+==================================
+
+Changes since v2.7.0
+--------------------
+
+* Added several new functions that are suitable values for
+  `magit-display-buffer-function':
+  `magit-display-buffer-same-window-except-diff-v1',
+  `magit-display-buffer-fullframe-status-v1',
+  `magit-display-buffer-fullframe-status-topleft-v1', and
+  `magit-display-buffer-fullcolumn-most-v1'.
+
+* Added new command `magit-list-repositories'.
+
+* Made `magit-insert-worktrees' use relative filenames.
+
+* Added support for showing and copying bad commit identified by git
+  bisect.
+
+* In addition to the directory, each member of the value of option
+  `magit-repository-directories' can now specify the depth to look for
+  repositories inside that directory, overriding the default depth
+  specified using the option `magit-repository-directories-depth'.
+
+* Added new command `magit-branch-orphan'.
+
+Fixes since v2.7.0
+------------------
+
+* magit-diff-show-or-scroll-{up,down} failed to scroll stash buffers.
+
+* `magit-diff-visit-file' didn't visit a blob when called inside a
+  `magit-stash-mode' buffer.
+
+* The function to read the --prefix arg from the subtree popup was
+  missing.
+
+* magit-popup-describe-function could create an extra window on wide
+  frames.
+
+* Sections in the process buffer sometimes had invalid parent
+  sections, causing movement and visibility commands to fail, and
+  expected Git errors not to be handled gracefully in some cases.
+
+* Git Rebase mode did not respect the Git variable `core.commentChar'.
+
+Authors
+-------
