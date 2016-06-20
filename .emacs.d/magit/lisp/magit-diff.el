@@ -171,6 +171,15 @@ many spaces.  Otherwise, highlight neither."
   :group 'magit-diff
   :type 'boolean)
 
+;;;; File Diff
+
+(defcustom magit-diff-buffer-file-locked t
+  "Whether `magit-diff-buffer-file' uses a decicated buffer."
+  :package-version '(magit . "2.7.0")
+  :group 'magit-commands
+  :group 'magit-diff
+  :type 'boolean)
+
 ;;;; Revision Mode
 
 (defgroup magit-revision nil
@@ -547,6 +556,7 @@ and https://debbugs.gnu.org/cgi/bugreport.cgi?bug=7847."
                      (nth 3 magit-refresh-args)))
            (list (default-value 'magit-diff-arguments) nil)))))
 
+;;;###autoload
 (defun magit-diff-popup (arg)
   "Popup console for diff commands."
   (interactive "P")
@@ -563,22 +573,23 @@ and https://debbugs.gnu.org/cgi/bugreport.cgi?bug=7847."
            (default-value 'magit-diff-arguments))))
     (magit-invoke-popup 'magit-diff-popup nil arg)))
 
-(defun magit-diff-buffer-file-popup (arg)
-  "Popup console for diff commans.
+;;;###autoload
+(defun magit-diff-buffer-file-popup ()
+  "Popup console for diff commands.
 
 This is a variant of `magit-diff-popup' which shows the same popup
 but which limits the diff to the file being visited in the current
 buffer."
-  (interactive "P")
+  (interactive)
   (-if-let (file (magit-file-relative-name))
       (let ((magit-diff-arguments
              (magit-popup-import-file-args
               (-if-let (buffer (magit-mode-get-buffer 'magit-diff-mode))
                   (with-current-buffer buffer
-                    (nth 2 magit-refresh-args))
+                    (nth 3 magit-refresh-args))
                 (default-value 'magit-diff-arguments))
               (list file))))
-        (magit-invoke-popup 'magit-diff-popup nil arg))
+        (magit-invoke-popup 'magit-diff-popup nil nil))
     (user-error "Buffer isn't visiting a file")))
 
 (defun magit-diff-refresh-popup (arg)
@@ -777,6 +788,22 @@ be committed."
   (magit-diff-setup "HEAD^" (list "--cached") args files))
 
 ;;;###autoload
+(defun magit-diff-buffer-file ()
+  "Show diff for the blob or file visited in the current buffer."
+  (interactive)
+  (require 'magit)
+  (-if-let (file (magit-file-relative-name))
+      (magit-mode-setup-internal #'magit-diff-mode
+                                 (list (or magit-buffer-refname
+                                           (magit-get-current-branch)
+                                           "HEAD")
+                                       nil
+                                       (cadr (magit-diff-arguments))
+                                       (list file))
+                                 magit-diff-buffer-file-locked)
+    (user-error "Buffer isn't visiting a file")))
+
+;;;###autoload
 (defun magit-diff-paths (a b)
   "Show changes between any two files on disk."
   (interactive (list (read-file-name "First file: " nil nil t)
@@ -964,6 +991,15 @@ which, as the name suggests always visits the actual file."
           (rev (cond (force-worktree nil)
                      ((derived-mode-p 'magit-revision-mode)
                       (car magit-refresh-args))
+                     ((derived-mode-p 'magit-stash-mode)
+                      (magit-section-case
+                        (file (-> it
+                                  magit-section-parent
+                                  magit-section-value))
+                        (hunk (-> it
+                                  magit-section-parent
+                                  magit-section-parent
+                                  magit-section-value))))
                      ((derived-mode-p 'magit-diff-mode)
                       (--when-let (car magit-refresh-args)
                         (and (string-match "\\.\\.\\([^.].*\\)?[ \t]*\\'" it)
@@ -1109,7 +1145,8 @@ commit or stash at point, then prompt for a commit."
      ((derived-mode-p 'git-rebase-mode)
       (save-excursion
         (goto-char (line-beginning-position))
-        (--if-let (and (looking-at git-rebase-line)
+        (--if-let (and git-rebase-line
+                       (looking-at git-rebase-line)
                        (match-string 2))
             (setq rev it
                   cmd 'magit-show-commit
@@ -1124,15 +1161,12 @@ commit or stash at point, then prompt for a commit."
         (stash
          (setq rev (magit-section-value it)
                cmd 'magit-stash-show
-               buf (magit-mode-get-buffer 'magit-diff-mode))))))
+               buf (magit-mode-get-buffer 'magit-stash-mode))))))
     (if rev
         (if (and buf
                  (setq win (get-buffer-window buf))
                  (with-current-buffer buf
-                   (equal (if (eq cmd 'magit-stash-show)
-                              (concat rev "^2^.." rev)
-                            rev)
-                          (car magit-refresh-args))))
+                   (equal rev (car magit-refresh-args))))
             (with-selected-window win
               (condition-case nil
                   (funcall fn)
@@ -1590,6 +1624,9 @@ or a ref which is not a branch, then it inserts nothing."
       (if (= (point) (+ beg 2))
           (progn (backward-delete-char 2)
                  (insert "(no message)\n"))
+        (goto-char beg)
+        (while (search-forward "\r\n" nil t) ; Remove trailing CRs.
+          (delete-region (match-beginning 0) (1+ (match-beginning 0))))
         (goto-char beg)
         (forward-line)
         (put-text-property beg (point) 'face 'magit-section-secondary-heading)

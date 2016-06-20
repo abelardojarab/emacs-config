@@ -227,7 +227,9 @@ optional NODISPLAY is non-nil also display it."
             (when magit-process-log-max
               (magit-process-truncate-log))
           (magit-process-mode)
-          (let ((inhibit-read-only t))
+          (let ((inhibit-read-only t)
+                (magit-insert-section--parent  nil)
+                (magit-insert-section--oldroot nil))
             (make-local-variable 'text-property-default-nonsticky)
             (magit-insert-section (processbuf)
               (insert "\n")))))
@@ -506,7 +508,8 @@ Magit status buffer."
 
 (defun magit-process-insert-section (pwd program args &optional errcode errlog)
   (let ((inhibit-read-only t)
-        (magit-insert-section--parent magit-root-section))
+        (magit-insert-section--parent magit-root-section)
+        (magit-insert-section--oldroot nil))
     (goto-char (1- (point-max)))
     (magit-insert-section (process)
       (insert (if errcode
@@ -811,10 +814,10 @@ as argument."
                             (--when-let (magit-section-content section)
                               (when (re-search-backward
                                      magit-process-error-message-re it t)
-                                (match-string 1))))))
+                                (match-string-no-properties 1))))))
                    "Git failed")))
       (if magit-process-raise-error
-          (signal 'magit-git-error (format "%s (in %s)" msg default-dir))
+          (signal 'magit-git-error (list (format "%s (in %s)" msg default-dir)))
         (--when-let (magit-mode-get-buffer 'magit-status-mode)
           (setq magit-this-error msg))
         (message "%s ... [%s buffer %s for details]" msg

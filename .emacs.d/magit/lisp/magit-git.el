@@ -187,7 +187,7 @@ change the upstream and many which create new branches."
 (defvar magit--refresh-cache nil)
 
 (defmacro magit--with-refresh-cache (key &rest body)
-  (declare (indent 1))
+  (declare (indent 1) (debug (form body)))
   (let ((k (cl-gensym)))
     `(if magit--refresh-cache
          (let ((,k ,key))
@@ -1029,6 +1029,31 @@ where COMMITS is the number of commits in TAG but not in REV."
                  (list (match-string 1 it)))
             (magit-git-items "ls-files" "-z" "--stage")))
 
+(defun magit-list-worktrees ()
+  (let (worktrees worktree)
+    (dolist (line (let ((magit-git-standard-options
+                         ;; KLUDGE At least in v2.8.3 this triggers a segfault.
+                         (remove "--no-pager" magit-git-standard-options)))
+                    (magit-git-lines "worktree" "list" "--porcelain")))
+      (cond ((string-prefix-p "worktree" line)
+             (push (setq worktree (list (substring line 9) nil nil nil))
+                   worktrees))
+            ((string-equal line "bare")
+             (let* ((default-directory (car worktree))
+                    (wt (and (not (magit-get-boolean "core.bare"))
+                             (magit-get "core.worktree"))))
+               (if (and wt (file-exists-p (expand-file-name wt)))
+                   (progn (setf (nth 0 worktree) (expand-file-name wt))
+                          (setf (nth 2 worktree) (magit-rev-parse "HEAD"))
+                          (setf (nth 3 worktree) (magit-get-current-branch)))
+                 (setf (nth 1 worktree) t))))
+            ((string-prefix-p "HEAD" line)
+             (setf (nth 2 worktree) (substring line 5)))
+            ((string-prefix-p "branch" line)
+             (setf (nth 3 worktree) (substring line 18)))
+            ((string-equal line "detached"))))
+    (nreverse worktrees)))
+
 (defun magit-ref-p (rev)
   (or (car (member rev (magit-list-refs)))
       (car (member rev (magit-list-refnames)))))
@@ -1162,7 +1187,7 @@ Return a list of two integers: (A>B B>A)."
   (declare (indent 2) (debug (form form body)))
   (let ((file (cl-gensym "file")))
     `(let ((,file (magit-convert-git-filename
-                   (magit-git-dir (make-temp-name "index.magit.")))))
+                   (make-temp-name (magit-git-dir "index.magit.")))))
        (setq ,file (or (file-remote-p ,file 'localname) ,file))
        (unwind-protect
            (progn (--when-let ,tree
@@ -1416,9 +1441,14 @@ Return a list of two integers: (A>B B>A)."
 
 (defun magit-set (val &rest keys)
   "Set Git config settings specified by KEYS to VAL."
-  (if val
-      (magit-git-string "config" (mapconcat 'identity keys ".") val)
-    (magit-git-string "config" "--unset" (mapconcat 'identity keys "."))))
+  (let ((key (mapconcat 'identity keys ".")))
+    (if val
+        (magit-git-success "config" key val)
+      (magit-git-success "config" "--unset" key))
+    val))
+
+(gv-define-setter magit-get (val &rest keys)
+  `(magit-set ,val ,@keys))
 
 ;;; magit-git.el ends soon
 
