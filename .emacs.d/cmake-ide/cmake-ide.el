@@ -47,38 +47,69 @@
 
 (declare-function rtags-call-rc "rtags")
 
-(defvar cmake-ide-flags-c
+(defcustom cmake-ide-flags-c
   nil
-  "The C compiler flags to use.  Should have -I flags for system includes.")
+  "The C compiler flags to use.  Should have -I flags for system includes."
+  :group 'cmake-ide
+  :type 'string
+  :safe #'stringp)
 
-(defvar cmake-ide-flags-c++
+(defcustom cmake-ide-flags-c++
   nil
-  "The C++ compiler flags to use.  Should have -I flags for system includes.")
+  "The C++ compiler flags to use.  Should have -I flags for system includes."
+  :group 'cmake-ide
+  :type 'string
+  :safe #'stringp
+  )
 
-(defvar cmake-ide-dir
+(defcustom cmake-ide-dir
   nil
-  "The build directory to run CMake in.  If nil, runs in a temp dir.  DEPRECATED, use cmake-ide-build-dir instead.")
+  "The build directory to run CMake in.  If nil, runs in a temp dir.  DEPRECATED, use cmake-ide-build-dir instead."
+  :group 'cmake-ide
+  :type 'directory
+  :safe #'stringp
+  )
 
-(defvar cmake-ide-build-dir
+(defcustom cmake-ide-build-dir
   nil
-  "The build directory to run CMake in.  If nil, runs in a temp dir.")
+  "The build directory to run CMake in.  If nil, runs in a temp dir."
+  :group 'cmake-ide
+  :type 'directory
+  :safe #'stringp
+  )
 
-(defvar cmake-ide-compile-command
+(defcustom cmake-ide-project-dir
   nil
-  "The command to use to compile the project.  Can also include running tests.")
+  "The project directory."
+  :group 'cmake-ide
+  :type 'directory
+  :safe #'stringp)
 
+(defcustom cmake-ide-compile-command
+  nil
+  "The command to use to compile the project.  Can also include running tests."
+  :group 'cmake-ide
+  :safe #'stringp)
 
-(defvar cmake-ide-cmake-command
+(defcustom cmake-ide-cmake-command
   "cmake"
-  "The command use to invoke cmake.")
+  "The command use to invoke cmake."
+  :group 'cmake-ide
+  :safe #'stringp)
 
-(defvar cmake-ide-header-search-other-file
+(defcustom cmake-ide-header-search-other-file
   t
-  "Whether or not to search for a corresponding source file for headers when setting flags for them.")
+  "Whether or not to search for a corresponding source file for headers when setting flags for them."
+  :group 'cmake-ide
+  :type 'booleanp
+  :safe #'booleanp)
 
-(defvar cmake-ide-header-search-first-including
+(defcustom cmake-ide-header-search-first-including
   t
-  "Whether or not to search for the first source file to include a header when setting flags for them.")
+  "Whether or not to search for the first source file to include a header when setting flags for them."
+  :group 'cmake-ide
+  :type 'booleanp
+  :safe #'booleanp)
 
 ;;; The buffers to set variables for
 (defvar cmake-ide--src-buffers nil)
@@ -95,6 +126,12 @@
   "A list of file extensions that qualify as source files."
   :group 'cmake-ide
   :type '(repeat string))
+
+(defcustom cmake-ide-cmakelists-dir
+  nil
+  "The directory where the main CMakelists.txt is."
+  :group 'cmake-ide
+  :type 'file)
 
 (defvar cmake-ide-try-unique-compiler-flags-for-headers
   nil
@@ -211,15 +248,28 @@ flags."
     (cmake-ide--run-rc)))
 
 
+;;;###autoload
+(defun cmake-ide-load-db ()
+  "Load compilation DB and set flags for current buffer."
+  (interactive)
+  (cmake-ide--message "cmake-ide-load-db for file %s" (buffer-file-name))
+  (cmake-ide-maybe-start-rdm)
+  (let* ((file-name buffer-file-name)
+         (buffers (list (current-buffer)))
+         (cmake-ide--src-buffers (if (cmake-ide--is-src-file file-name) buffers nil))
+         (cmake-ide--hdr-buffers (if (cmake-ide--is-src-file file-name) nil buffers)))
+    (cmake-ide--on-cmake-finished)))
+
+
 (defun cmake-ide--run-rc ()
   "Run rc to add definitions to the rtags daemon."
   (when (featurep 'rtags)
     (cmake-ide--message "Running rc for rtags")
     ;; change buffer so as to not insert text into a working file buffer
     (let ((cmake-ide-local-build-dir (cmake-ide--get-build-dir)))
-    (if (get-process "rdm")
-        (with-current-buffer (get-buffer cmake-ide-rdm-buffer-name)
-          (rtags-call-rc "-J" cmake-ide-local-build-dir))
+      (if (get-process "rdm")
+          (with-current-buffer (get-buffer cmake-ide-rdm-buffer-name)
+            (rtags-call-rc "-J" cmake-ide-local-build-dir))
         (with-temp-buffer
           (rtags-call-rc "-J" cmake-ide-local-build-dir))))))
 
@@ -402,7 +452,7 @@ the object file's name just above."
         (setq company-c-headers-path-system sys-includes))
 
       (when (and (featurep 'irony) (not (gethash (cmake-ide--get-build-dir) cmake-ide--irony)))
-        (irony-cdb-json-add-compile-commands-path (cmake-ide--locate-cmakelists) (cmake-ide--comp-db-file-name))
+        (irony-cdb-json-add-compile-commands-path (cmake-ide--locate-project-dir) (cmake-ide--comp-db-file-name))
         (puthash (cmake-ide--get-build-dir) t cmake-ide--irony))
 
       (when (featurep 'semantic)
@@ -475,7 +525,7 @@ the object file's name just above."
 
 (defun cmake-ide--is-src-file (name)
   "Test if NAME is a source file or not."
-  (some (lambda (x) (string-suffix-p x name)) cmake-ide-src-extensions))
+  (cl-some (lambda (x) (string-suffix-p x name)) cmake-ide-src-extensions))
 
 
 (defun cmake-ide--filter (pred seq)
@@ -659,7 +709,9 @@ the object file's name just above."
 
 (defun cmake-ide--locate-cmakelists ()
   "Find the topmost CMakeLists.txt file."
-  (cmake-ide--locate-cmakelists-impl default-directory nil))
+  (if cmake-ide-cmakelists-dir
+      (expand-file-name "CMakeLists.txt" cmake-ide-cmakelists-dir)
+    (cmake-ide--locate-cmakelists-impl default-directory nil)))
 
 (defun cmake-ide--locate-cmakelists-impl (dir last-found)
   "Find the topmost CMakeLists.txt from DIR using LAST-FOUND as a 'plan B'."
@@ -668,6 +720,9 @@ the object file's name just above."
         (cmake-ide--locate-cmakelists-impl (expand-file-name ".." new-dir) new-dir)
       last-found)))
 
+(defun cmake-ide--locate-project-dir ()
+  "Return the path to the project directory."
+  (or cmake-ide-project-dir (file-name-directory (cmake-ide--locate-cmakelists))))
 
 
 (defun cmake-ide--cdb-json-file-to-idb ()
@@ -675,11 +730,14 @@ the object file's name just above."
   ;; check the cache first
   (let ((idb (cmake-ide--cdb-idb-from-cache)))
     (unless idb
-      (cmake-ide--message "Converting JSON CDB to IDB")
-      (setq idb (cmake-ide--cdb-json-string-to-idb (cmake-ide--get-string-from-file (cmake-ide--comp-db-file-name))))
-      (puthash (cmake-ide--get-build-dir) idb cmake-ide--idbs)
-      (puthash (cmake-ide--get-build-dir) (cmake-ide--hash-file (cmake-ide--comp-db-file-name)) cmake-ide--cdb-hash)
-      (remhash (cmake-ide--get-build-dir) cmake-ide--irony))
+      (if (not (file-exists-p (cmake-ide--comp-db-file-name)))
+          (cmake-ide--message "Non-existent compilation DB file %s" (cmake-ide--comp-db-file-name))
+        (progn
+          (cmake-ide--message "Converting JSON CDB %s to IDB" (cmake-ide--comp-db-file-name))
+          (setq idb (cmake-ide--cdb-json-string-to-idb (cmake-ide--get-string-from-file (cmake-ide--comp-db-file-name))))
+          (puthash (cmake-ide--get-build-dir) idb cmake-ide--idbs)
+          (puthash (cmake-ide--get-build-dir) (cmake-ide--hash-file (cmake-ide--comp-db-file-name)) cmake-ide--cdb-hash)
+          (remhash (cmake-ide--get-build-dir) cmake-ide--irony))))
     idb))
 
 (defun cmake-ide--cdb-idb-from-cache ()
@@ -819,6 +877,7 @@ the object file's name just above."
   (when (featurep 'rtags)
     (unless (cmake-ide--process-running-p "rdm")
       (let ((buf (get-buffer-create cmake-ide-rdm-buffer-name)))
+        (cmake-ide--message "Starting rdm server")
         (with-current-buffer buf (start-process "rdm" (current-buffer)
                                                 cmake-ide-rdm-executable))))))
 

@@ -26,14 +26,18 @@
 
 (use-package swiper
   :defer t
-  :commands (swiper ivy-read ivy-mode)
-  :bind (("C-f" . swiper)
-         :map ctl-x-map
-         ("s" . swiper))
+  :commands (swiper swiper-all ivy-read ivy-mode)
+  :bind (:map ctl-x-map
+              ("s" . swiper-helm))
   :load-path (lambda () (expand-file-name "swiper/" user-emacs-directory))
   :config (progn
+            (set-variable 'ivy-on-del-error-function '(lambda()))
             (setq ivy-use-virtual-buffers t)
-            (setq ivy-height 15)))
+            (setq ivy-height 5)))
 
+(use-package swiper-helm
+  :defer t
+  :commands swiper-helm
+  :load-path (lambda () (expand-file-name "swiper-helm/" user-emacs-directory)))
 (provide 'setup-swiper)
 ;;; setup-swiper.el ends here

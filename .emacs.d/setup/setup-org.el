@@ -34,6 +34,7 @@
          ("C-c O" . org-open-at-point-global)
          :map org-mode-map
          ("C-TAB" . org-cycle)
+         ("C-c w" . org-formatted-copy)
          ("C-c k" . org-cut-subtree)
          ("C-c t" . org-show-todo-tree)
          ("C-c r" . org-refile)
@@ -120,16 +121,6 @@
             (setq org-blank-before-new-entry
                   '((heading . t)))
 
-            ;; Ellipsis
-            (unless (equal system-type 'windows-nt)
-              (setq org-ellipsis " ⤵"
-                    org-columns-ellipses "…"))
-
-            ;; Better bullets
-            (font-lock-add-keywords 'org-mode
-                                    '(("^ +\\([-*]\\) "
-                                       (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
-
             ;; Allow quotes to be verbatim
             (add-hook 'org-mode-hook
                       (lambda ()
@@ -166,11 +157,6 @@
 
             ;; Mouse in Org
             (require 'org-mouse)
-
-            ;; Show +/-'s as bullets
-            (font-lock-add-keywords 'org-mode
-                                    '(("^ +\\([-*]\\) "
-                                       (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
 
             ;; Fonts
             (add-hook 'org-mode-hook (lambda () (variable-pitch-mode t)))
@@ -221,25 +207,6 @@
                         (define-key org-mode-map (kbd "RET") 'org-return)
                         (define-key org-mode-map [C-M-return] 'org-insert-todo-heading)
                         (define-key org-mode-map [S-return] 'org-insert-subheading)))
-
-            ;; Custom commands
-            (defun my-agenda-prefix ()
-              (format "%s" (my-agenda-indent-string (org-current-level))))
-
-            (defun my-agenda-indent-string (level)
-              (if (= level 1)
-                  ""
-                (let ((str ""))
-                  (while (> level 2)
-                    (setq level (1- level)
-                          str (concat str "──")))
-                  (concat str "►"))))
-
-            (setq org-agenda-custom-commands
-                  '(("c" "TODOs"
-                     ((tags-todo "mytag"
-                                 ((org-agenda-prefix-format " %e %(my-agenda-prefix) ")
-                                  (org-tags-match-list-sublevels t)))))))
 
             ;; define todo states: set time stamps one waiting, delegated and done
             (setq org-todo-keywords
@@ -300,6 +267,29 @@
                    (interactive)
                    (org-text-wrapper "="))
 
+            ;; Org formatted copy
+            (if (equal system-type 'darwin)
+                (defun org-formatted-copy ()
+                  "Export region to HTML, and copy it to the clipboard."
+                  (interactive)
+                  (save-window-excursion
+                    (let* ((buf (org-export-to-buffer 'html "*Formatted Copy*" nil nil t t))
+                           (html (with-current-buffer buf (buffer-string))))
+                      (with-current-buffer buf
+                        (shell-command-on-region
+                         (point-min)
+                         (point-max)
+                         "textutil -stdin -format html -convert rtf -stdout | pbcopy"))
+                      (kill-buffer buf))))
+              (defun org-formatted-copy ()
+                "Export region to HTML, and copy it to the clipboard."
+                (interactive)
+                (org-export-to-file 'html "/tmp/org.html")
+                (apply
+                 'start-process "xclip" "*xclip*"
+                 (split-string
+                  "xclip -verbose -i /tmp/org.html -t text/html -selection clipboard" " "))))
+
             ;; convert csv to org-table considering "12,12"
             (defun org-convert-csv-table (beg end)
               (interactive (list (point) (mark)))
@@ -332,14 +322,7 @@
               (equal system-type 'windows-nt))
   :load-path (lambda () (expand-file-name "org-bullets/" user-emacs-directory))
   :config (progn
-            (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
-            (setq org-bullets-bullet-list
-                  '(
-                    "▣"
-                    "▪"
-                    "•"
-                    "◦"
-                    ))))
+            (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))))
 
 (provide 'setup-org)
 ;;; setup-org.el ends here

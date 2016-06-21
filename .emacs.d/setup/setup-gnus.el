@@ -41,7 +41,7 @@
                                                   (nntp "news.gwene.org")))
 
             ;; gnus setup
-            (gnus-registry-initialize)
+            ;; (gnus-registry-initialize)
             (setq gnus-treat-from-gravatar t)
             (setq mail-user-agent 'gnus-user-agent)
             (setq read-mail-command 'gnus-user-agent)

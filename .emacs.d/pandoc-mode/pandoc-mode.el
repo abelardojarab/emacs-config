@@ -1,11 +1,11 @@
-;;; pandoc-mode.el --- Minor mode for interacting with Pandoc
+;;; pandoc-mode.el --- Minor mode for interacting with Pandoc  -*- lexical-binding: t -*-
 
-;; Copyright (c) 2009-2015 Joost Kremers
+;; Copyright (c) 2009-2016 Joost Kremers
 
 ;; Author: Joost Kremers <joostkremers@fastmail.fm>
 ;; Maintainer: Joost Kremers <joostkremers@fastmail.fm>
 ;; Created: 31 Oct 2009
-;; Version: 2.13
+;; Version: 2.17
 ;; Keywords: text, pandoc
 ;; Package-Requires: ((hydra "0.10.0") (dash "2.10.0"))
 
@@ -145,7 +145,7 @@
   (let ((map (make-sparse-keymap)))
     (define-key map "\C-c/" #'pandoc-main-hydra/body)
     map)
-  "Keymap for pandoc-mode")
+  "Keymap for pandoc-mode.")
 
 ;;;###autoload
 (define-minor-mode pandoc-mode
@@ -204,7 +204,10 @@ N is the index of the extension in `pandoc--extensions'."
 (defun pandoc--create-settings-filename (type filename output-format)
   "Create a settings filename.
 TYPE is the type of settings file, either 'local or 'project.
-The return value is an absolute filename."
+FILENAME is name of the file for which the settings file is to be
+created, OUTPUT-FORMAT the output format of the settings file,
+which is recorded in its name.  The return value is an absolute
+filename."
   (setq filename (expand-file-name filename))
   (cond
    ((eq type 'local)
@@ -219,10 +222,10 @@ FORMAT is the output format to use."
 
 (defun pandoc--format-all-options (input-file &optional pdf)
   "Create a list of strings with pandoc options for the current buffer.
-INPUT-FILE is the name of the input file. If PDF is non-nil, an
+INPUT-FILE is the name of the input file.  If PDF is non-nil, an
 output file is always set, derived either from the input file or
 from the output file set for the \"latex\" output profile, and
-gets the suffix `.pdf'. If the output format is \"odt\", \"epub\"
+gets the suffix `.pdf'.  If the output format is \"odt\", \"epub\"
 or \"docx\" but no output file is specified, one will be created,
 since pandoc does not support output to stdout for those two
 formats."
@@ -246,7 +249,8 @@ formats."
     (delq nil (append (list read write output) cli-options (apply #'append list-options) (apply #'append alist-options)))))
 
 (defun pandoc--format-extensions (extensions)
-  "Create a string of extensions to be added to the Pandoc command line."
+  "Create a string of extensions to be added to the Pandoc command line.
+EXTENSIONS is an alist of (<extension> . <value>) pairs."
   (mapconcat (lambda (elt)
                (if (cdr elt)
                    (format "%s%s" (cdr elt) (car elt))
@@ -256,7 +260,9 @@ formats."
 
 (defun pandoc--format-output-option (input-file pdf)
   "Create the output option for calling Pandoc.
-Return a string that can be added to the call to Pandoc."
+INPUT-FILE is the name of the input file.  PDF is t if the output
+file is a pdf file.  Return a string that can be added to the
+call to Pandoc."
   (cond
    ((or (eq (pandoc--get 'output) t) ; if the user set the output file to T
         (and (null (pandoc--get 'output)) ; or if the user set no output file but either
@@ -282,7 +288,9 @@ Return a string that can be added to the call to Pandoc."
 (defun pandoc--format-list-options (option values)
   "Create a list of cli options for OPTION from the values in VALUES."
   (mapcar (lambda (value)
-            (format "--%s=%s" option value))
+            (format "--%s=%s" option (if (eq (get option 'pandoc-list-type) 'file)
+                                         (pandoc--expand-absolute-path value)
+                                       value)))
           values))
 
 (defun pandoc--format-alist-options (option alist)
@@ -313,8 +321,9 @@ Return a string that can be added to the call to Pandoc."
   "Create a list of options in `pandoc--cli-options'."
   (mapcar (lambda (option)
             (let ((value (pandoc--get option)))
-              (when (and value (memq option pandoc--filepath-options))
-                (setq value (expand-file-name value)))
+              (when (and value
+                         (memq option pandoc--filepath-options))
+                (setq value (pandoc--expand-absolute-path value)))
               (cond
                ((eq value t) (format "--%s" option))
                ((or (numberp value)
@@ -328,42 +337,46 @@ OUTPUT-FORMAT is passed unchanged to the functions associated
 with the @@-directives."
   (interactive (list (pandoc--get 'write)))
   (mapc #'funcall pandoc-directives-hook)
-  (let ((case-fold-search nil))
-    (mapc (lambda (directive)
-            (goto-char (point-min))
-            (while (re-search-forward (concat "\\([\\]?\\)@@" (car directive)) nil t)
-              (if (string= (match-string 1) "\\")
-                  (delete-region (match-beginning 1) (match-end 1))
-                (let ((@@-beg (match-beginning 0))
-                      (@@-end (match-end 0)))
-                  (cond
-                   ((eq (char-after) ?{) ; if there is an argument.
-                    ;; note: point is on the left brace, and scan-lists
-                    ;; returns the position *after* the right brace. we need
-                    ;; to adjust both values to get the actual argument.
-                    (let* ((arg-beg (1+ (point)))
-                           (arg-end (1- (scan-lists (point) 1 0)))
-                           (text (buffer-substring-no-properties arg-beg arg-end)))
-                      (goto-char @@-beg)
-                      (delete-region @@-beg (1+ arg-end))
-                      (insert (funcall (cdr directive) output-format text)))
-                    (goto-char @@-beg))
-                   ;; check if the next character is not a letter or number.
-                   ;; if it is, we're actually on a different directive.
-                   ((looking-at "[a-zA-Z0-9]") t)
-                   ;; otherwise there is no argument.
-                   (t (goto-char @@-beg)
-                      (delete-region @@-beg @@-end) ; else there is no argument
-                      (insert (funcall (cdr directive) output-format))
-                      (goto-char @@-beg)))))))
-          pandoc-directives)))
+  (let ((case-fold-search nil)
+        (directives-regexp (concat "\\([\\]?\\)@@" (regexp-opt (mapcar #'car pandoc-directives) t))))
+    (goto-char (point-min))
+    (while (re-search-forward directives-regexp nil t)
+      (if (string= (match-string 1) "\\")
+          (delete-region (match-beginning 1) (match-end 1))
+        (let ((@@-beg (match-beginning 0))
+              (@@-end (match-end 0))
+              (directive-fn (cdr (assoc (match-string 2) pandoc-directives))))
+          (cond
+           ((eq (char-after) ?{) ; if there is an argument.
+            ;; note: point is on the left brace, and scan-lists
+            ;; returns the position *after* the right brace. we need
+            ;; to adjust both values to get the actual argument.
+            (let* ((arg-beg (1+ (point)))
+                   (arg-end (1- (scan-lists (point) 1 0)))
+                   (text (buffer-substring-no-properties arg-beg arg-end)))
+              (goto-char @@-beg)
+              (delete-region @@-beg (1+ arg-end))
+              (insert (funcall directive-fn output-format text)))
+            (goto-char @@-beg))
+           ;; check if the next character is not a letter or number.
+           ;; if it is, we're actually on a different directive.
+           ((looking-at "[a-zA-Z0-9]") t)
+           ;; otherwise there is no argument.
+           (t (goto-char @@-beg)
+              (delete-region @@-beg @@-end) ; else there is no argument
+              (insert (funcall directive-fn output-format))
+              (goto-char @@-beg))))))))
 
-(defun pandoc--process-lisp-directive (output-format lisp)
-  "Process @@lisp directives."
+(defun pandoc--process-lisp-directive (_ lisp)
+  "Process @@lisp directives.
+The first argument is the output argument and is ignored.  LISP
+is the argument of the @@lisp directive."
   (format "%s" (eval (car (read-from-string lisp)))))
 
-(defun pandoc--process-include-directive (output-format include-file)
-  "Process @@include directives."
+(defun pandoc--process-include-directive (_ include-file)
+  "Process @@include directives.
+The first argument is the output argument and is ignored.
+INCLUDE-FILE is the argument of the @@include directive."
   (with-temp-buffer
     (insert-file-contents include-file)
     (buffer-string)))
@@ -383,24 +396,33 @@ with the @@-directives."
 (defun pandoc--call-external (output-format &optional pdf region)
   "Call pandoc on the current buffer.
 This function creates a temporary buffer and sets up the required
-local options. The contents of the current buffer is copied into
+local options.  The contents of the current buffer is copied into
 the temporary buffer, the @@-directives are processed, after
 which pandoc is called.
 
-OUTPUT-FORMAT is the format to use. If nil, the current buffer's
-output format is used. If PDF is non-nil, a pdf file is created.
+OUTPUT-FORMAT is the format to use.  If nil, the current buffer's
+output format is used.  If PDF is non-nil, a pdf file is created.
 REGION is a cons cell specifying the beginning and end of the
 region to be sent to pandoc.
 
 If the current buffer's \"master file\" option is set, that file
-is processed instead. The output format is taken from the current
-buffer, however, unless one is provided specifically. REGION is
+is processed instead.  The output format is taken from the current
+buffer, however, unless one is provided specifically.  REGION is
 also ignored in this case."
   (let* ((orig-buffer (current-buffer))
          (buffer (if (pandoc--get 'master-file)
                      (find-file-noselect (pandoc--get 'master-file))
                    (current-buffer)))
-         (filename (buffer-file-name buffer)))
+         (filename (buffer-file-name buffer))
+         (display-name (buffer-name)))
+    ;; If the buffer is visiting a file, we want to display the file name in
+    ;; messages. If the buffer is not visiting a file, we create a file name in
+    ;; case we need one, but we display the buffer name in messages.
+    (if filename
+        (setq display-name (file-name-nondirectory filename))
+      (setq filename (concat "./" (cl-remove-if-not (lambda (c)
+                                                      (string-match-p "[[:alpha:][:digit:]+_.-]" (char-to-string c)))
+                                                    (buffer-name)))))
     ;; if there's a master file, ignore the region
     (if (pandoc--get 'master-file)
         (setq region nil))
@@ -436,75 +458,90 @@ also ignored in this case."
               pandoc--options)
         (let ((option-list (pandoc--format-all-options filename pdf)))
           (insert-buffer-substring-no-properties buffer (car region) (cdr region))
-          (message "Running %s..." (file-name-nondirectory pandoc--local-binary))
+          (message "Running %s on %s"
+                   (file-name-nondirectory pandoc--local-binary)
+                   display-name)
           (pandoc-process-directives (pandoc--get 'write))
-          (with-pandoc-output-buffer
-            (erase-buffer)
-            (insert (format "Running `%s %s'\n\n" pandoc--local-binary (mapconcat #'identity option-list " "))))
+          (with-current-buffer (get-buffer-create pandoc--output-buffer)
+            (erase-buffer))
+          (pandoc--log 'log "%s\n%s" (make-string 50 ?=) (current-time-string))
+          (pandoc--log 'log "Calling %s with:\n\n%s %s" (file-name-nondirectory pandoc--local-binary) pandoc--local-binary (mapconcat #'identity option-list " "))
 	  (let ((coding-system-for-read 'utf-8)
-                (coding-system-for-write 'utf-8))
-            (if pandoc-use-async
-                (let ((process (apply #'start-process "pandoc-process" pandoc--output-buffer pandoc--local-binary option-list)))
-                  (set-process-sentinel process (lambda (p e)
-                                                  (if (string-equal e "finished\n")
-                                                      (message "Running %s... Finished." (file-name-nondirectory pandoc--local-binary))
-                                                    (message "Error in %s process." (file-name-nondirectory pandoc--local-binary))
-                                                    (display-buffer pandoc--output-buffer))))
-                  (process-send-region process (point-min) (point-max))
-                  (process-send-eof process))
+                (coding-system-for-write 'utf-8)
+                (log-success (lambda (file binary)
+                               (pandoc--log 'message "%s: %s finished successfully"
+                                      (file-name-nondirectory file)
+                                      (file-name-nondirectory binary))))
+                (log-failure (lambda (file binary)
+                               (pandoc--log 'message "%s: Error in %s process"
+                                      (file-name-nondirectory file)
+                                      (file-name-nondirectory binary)))))
+            (cond
+             (pandoc-use-async
+              (let ((process (apply #'start-process "pandoc-process" pandoc--output-buffer pandoc--local-binary option-list)))
+                (set-process-sentinel process (lambda (_ e)
+                                                (cond
+                                                 ((string-equal e "finished\n")
+                                                  (funcall log-success display-name pandoc--local-binary)
+                                                  (run-hooks 'pandoc-async-success-hook))
+                                                 (t (funcall log-failure display-name pandoc--local-binary)
+                                                    (display-buffer pandoc--output-buffer)))))
+                (process-send-region process (point-min) (point-max))
+                (process-send-eof process)))
+             ((not pandoc-use-async)
               (if (= 0 (apply #'call-process-region (point-min) (point-max) pandoc--local-binary nil pandoc--output-buffer t option-list))
-                  (message "Running %s... Finished." (file-name-nondirectory pandoc--local-binary))
-                (message "Error in %s process." (file-name-nondirectory pandoc--local-binary))
-                (display-buffer pandoc--output-buffer)))))))))
+                  (funcall log-success display-name pandoc--local-binary)
+                (funcall log-failure display-name pandoc--local-binary)
+                (display-buffer pandoc--output-buffer))))))))))
 
 (defun pandoc-run-pandoc (prefix)
   "Run pandoc on the current document.
-If called with a prefix argument, the user is asked for an output
-format. Otherwise, the output format currently set in the buffer
+If called with a PREFIX argument, the user is asked for an output
+format.  Otherwise, the output format currently set in the buffer
 is used.
 
 If the region is active, pandoc is run on the region instead of
 the buffer."
   (interactive "P")
   (pandoc--call-external (if prefix
-                             (completing-read "Output format to use: " pandoc--output-formats nil t)
-                           nil)
-                         nil
-                         (if (use-region-p)
-                             (cons (region-beginning) (region-end)))))
+                       (completing-read "Output format to use: " pandoc--output-formats nil t)
+                     nil)
+                   nil
+                   (if (use-region-p)
+                       (cons (region-beginning) (region-end)))))
 
 (defun pandoc-convert-to-pdf (prefix)
   "Convert the current document to pdf.
 If the output format of the current buffer is set to \"latex\" or
-\"beamer\", the buffer's options are used. If called with a
-prefix argument, or if the current buffer's output format is not
+\"beamer\", the buffer's options are used.  If called with a
+PREFIX argument, or if the current buffer's output format is not
 \"latex\" or \"beamer\", a LaTeX settings file is searched for
-and loaded when found. If no such settings file is found, all
+and loaded when found.  If no such settings file is found, all
 options are unset except for the input and output formats.
 
 If the region is active, pandoc is run on the region instead of
 the buffer."
-(interactive "P")
-(pandoc--call-external (if (or prefix (not (member (pandoc--get 'write) '("latex" "beamer"))))
-                           "latex"
-                         nil)
-                       t
-                       (if (use-region-p)
-                           (cons (region-beginning) (region-end)))))
+  (interactive "P")
+  (pandoc--call-external (if (or prefix (not (member (pandoc--get 'write) '("latex" "beamer"))))
+                       "latex"
+                     nil)
+                   t
+                   (if (use-region-p)
+                       (cons (region-beginning) (region-end)))))
 
 (defun pandoc-set-default-format ()
-  "Sets the current output format as default.
+  "Set the current output format as default.
 This is done by creating a symbolic link to the relevant settings
-files. (Therefore, this function is not available on Windows.)"
+files.  (Therefore, this function is not available on Windows.)"
   (interactive)
   (if (eq system-type 'windows-nt)
       (message "This option is not available on MS Windows")
     (let ((current-settings-file
            (file-name-nondirectory (pandoc--create-settings-filename 'local (buffer-file-name)
-                                                                     (pandoc--get 'write))))
+                                                               (pandoc--get 'write))))
           (current-project-file
            (file-name-nondirectory (pandoc--create-settings-filename 'project (buffer-file-name)
-                                                                     (pandoc--get 'write)))))
+                                                               (pandoc--get 'write)))))
       (when (not (file-exists-p current-settings-file))
         (pandoc--save-settings 'local (pandoc--get 'write)))
       (make-symbolic-link current-settings-file
@@ -529,16 +566,17 @@ appropriate output format."
 (defun pandoc-save-global-settings-file ()
   "Save the current settings to a global settings file."
   (interactive)
+  (unless (file-directory-p pandoc-data-dir)
+    (make-directory pandoc-data-dir))
   (pandoc--save-settings 'global (pandoc--get 'write)))
 
 (defun pandoc--save-settings (type format &optional no-confirm)
-  "Save the settings of the current buffer for FORMAT.
+  "Save the settings of the current buffer.
 TYPE must be a quoted symbol and specifies the type of settings
-file. If its value is 'local, a normal settings file is
-created for the current file. If TYPE's value is 'project, a
-project settings file is written. If optional argument NO-CONFIRM
-is non-nil, any existing settings file is overwritten without
-asking."
+file.  It can be `local', `project', or `global'.  FORMAT is the
+output format for which the settings are to be saved.  If
+NO-CONFIRM is non-nil, any existing settings file is overwritten
+without asking."
   (let* ((filename (buffer-file-name))
          (settings pandoc--local-settings)
          (settings-file (if (eq type 'global)
@@ -546,7 +584,7 @@ asking."
                           (pandoc--create-settings-filename type filename format))))
     (if (and (not no-confirm)
              (file-exists-p settings-file)
-             (not (y-or-n-p (format "%s file `%s' already exists. Overwrite? "
+             (not (y-or-n-p (format "%s file `%s' already exists.  Overwrite? "
                                     (capitalize (symbol-name type))
                                     (file-name-nondirectory settings-file)))))
         (message "%s file not written." (capitalize (symbol-name type)))
@@ -586,25 +624,24 @@ This function is for use in `pandoc-mode-hook'."
 If NO-CONFIRM is t, no confirmation is asked if the current
 settings have not been saved."
   (pandoc--load-settings-for-file (when (buffer-file-name)
-                                    (expand-file-name (buffer-file-name)))
-                                  format
-                                  no-confirm))
+                              (expand-file-name (buffer-file-name)))
+                            format
+                            no-confirm))
 
 (defun pandoc--load-settings-for-file (file format &optional no-confirm)
-  "Load the settings for FILE.
-Load FILE's own settings file if it exists, otherwise check for a
-project file and load that. If no project file exist, check if a
-global settings file exist.
+  "Load the settings file of FILE for FORMAT.
+Search for a local, a project and a global settings file, in that
+order, and load the first one that exists and is readable.
 
 If NO-CONFIRM is t, no confirmation is asked if the current
-settings have not been saved. FILE must be an absolute path name.
-If FILE is nil, a global settings file is read, if any. The
-settings are stored in the current buffer's
-`pandoc--local-settings'. Return nil if no settings or project
+settings have not been saved.  FILE must be an absolute path
+name.  If FILE is nil, a global settings file is read, if any.
+The settings are stored in the current buffer's
+`pandoc--local-settings'.  Return nil if no settings or project
 file is found for FILE, otherwise non-nil."
   (when (and (not no-confirm)
              pandoc--settings-modified-flag
-             (y-or-n-p (format "Current settings for format \"%s\" modified. Save first? " (pandoc--get 'write))))
+             (y-or-n-p (format "Current settings for format \"%s\" modified.  Save first? " (pandoc--get 'write))))
     (pandoc--save-settings 'local (pandoc--get 'write) t))
   (let (settings)
     ;; first try to read local settings
@@ -639,7 +676,7 @@ If FILE does not exist or cannot be read, return nil."
 (defun pandoc--read-old-settings-from-buffer ()
   "Read old-style settings from the current buffer.
 `pandoc--settings-modified-flag' is set, so that the user will be
-asked to save the settings on exit. Return an alist with the
+asked to save the settings on exit.  Return an alist with the
 options and their values."
   (goto-char (point-min))
   (let (options)                        ; we collect the options in a list
@@ -677,7 +714,7 @@ options and their values."
   (display-buffer pandoc--output-buffer))
 
 (defun pandoc-view-settings ()
-  "Displays the settings file in the *Pandoc output* buffer."
+  "Displays the settings file in a *Help* buffer."
   (interactive)
   ;; remove all options that do not have a value.
   (let* ((remove-defaults (lambda (alist)
@@ -693,13 +730,16 @@ options and their values."
     (when write-extensions
       (setcdr write-extensions (funcall remove-defaults (cdr write-extensions))))
     (setq settings (funcall remove-defaults settings))
-    (with-current-buffer pandoc--output-buffer
+    (with-help-window " *Pandoc Help*"
       (let ((print-length nil)
             (print-level nil)
             (print-circle nil))
-        (erase-buffer)
-        (pp settings (current-buffer))))
-    (display-buffer pandoc--output-buffer)))
+        (pp settings)))))
+
+(defun pandoc-view-log ()
+  "Display the log buffer in a temporary window."
+  (interactive)
+  (display-buffer pandoc--log-buffer))
 
 (defun pandoc-insert-@ ()
   "Insert a new labeled (@) list marker at point."
@@ -740,13 +780,13 @@ options and their values."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun pandoc-set-write (format)
-  "Sets the output format to FORMAT.
+  "Set the output format to FORMAT.
 If a settings and/or project file exists for FORMAT, they are
-loaded. If none exists, all options are unset (except the input
+loaded.  If none exists, all options are unset (except the input
 format)."
   (interactive (list (completing-read "Set output format to: " pandoc--output-formats nil t)))
   (when (and pandoc--settings-modified-flag
-             (y-or-n-p (format "Current settings for output format \"%s\" changed. Save? " (pandoc--get 'write))))
+             (y-or-n-p (format "Current settings for output format \"%s\" changed.  Save? " (pandoc--get 'write))))
     (pandoc--save-settings 'local (pandoc--get 'write) t))
   (unless (pandoc--load-settings-profile format t)
     (setq pandoc--local-settings (copy-tree pandoc--options))
@@ -763,57 +803,65 @@ format)."
 
 (defun pandoc-set-output (prefix)
   "Set the output file.
-If called with the prefix argument C-u - (or M--), the output
-file is unset. If called with any other prefix argument, the
-output file is created on the basis of the input file and the
-output format."
+If called with the PREFIX argument `\\[universal-argument] -' (or
+`\\[negative-argument]', the output file is unset.  If called
+with any other prefix argument, the output file is created on the
+basis of the input file and the output format."
   (interactive "P")
   (pandoc--set 'output
-               (cond
-                ((eq prefix '-) nil)
-                ((null prefix) (file-name-nondirectory (read-file-name "Output file: ")))
-                (t t))))
+         (cond
+          ((eq prefix '-) nil)
+          ((null prefix) (file-name-nondirectory (read-file-name "Output file: ")))
+          (t t))))
 
 (defun pandoc-set-data-dir (prefix)
   "Set the option `Data Directory'.
-If called with the prefix argument C-u - (or M--), the data
-directory is set to NIL, which means use $HOME/.pandoc."
+If called with the PREFIX argument `\\[universal-argument] -' (or
+`\\[negative-argument]'), the data directory is set to NIL, which
+means use $HOME/.pandoc."
   (interactive "P")
   (pandoc--set 'data-dir
-               (if (eq prefix '-)
-                   nil
-                 (read-directory-name "Data directory: " nil nil t))))
+         (if (eq prefix '-)
+             nil
+           (read-directory-name "Data directory: " nil nil t))))
 
 (defun pandoc-set-output-dir (prefix)
   "Set the option `Output Directory'.
-If called with the prefix argument C-u - (or M--), the output
-directory is set to NIL, which means use the directory of the
-input file."
+If called with the PREFIX argument `\\[universal-argument] -' (or
+`\\[negative-argument]'), the output directory is set to NIL,
+which means use the directory of the input file."
   (interactive "P")
   (pandoc--set 'output-dir
-               (if (eq prefix '-)
-                   nil
-                 (read-directory-name "Output directory: " nil nil t))))
+         (if (eq prefix '-)
+             nil
+           (read-directory-name "Output directory: " nil nil t))))
 
 (defun pandoc-set-extract-media (prefix)
   "Set the option `Extract media'.
-If called with the prefix argument C-u - (or M--), no media files
-are extracted."
+If called with the PREFIX argument `\\[universal-argument] -' (or
+`\\[negative-argument]'), no media files are extracted."
   (interactive "P")
   (pandoc--set 'extract-media
-               (if (eq prefix '-)
-                   nil
-                 (read-directory-name "Extract media files to directory: " nil nil t))))
+         (if (eq prefix '-)
+             nil
+           (read-directory-name "Extract media files to directory: " nil nil t))))
+
+(defun pandoc-set-file-scope (prefix)
+  "Set the option `File scope'.
+If called with the PREFIX argument `\\[universal-argument] -' (or
+`\\[negative-argument]'), document scope is used."
+  (interactive "P")
+  (pandoc--set 'file-scope (if (eq prefix '-) nil t)))
 
 (defun pandoc-set-master-file (prefix)
   "Set the master file.
-If called with the prefix argumen C-u - (or M--), the master file
-is set to nil, which means the current file is the master file."
+If called with the PREFIX argument `\\[universal-argument] -' (or
+`\\[negative-argument]'), the master file is set to nil, which
+means the current file is the master file."
   (interactive "P")
-  (pandoc--set 'master-file
-               (if (eq prefix '-)
-                   nil
-                 (read-file-name "Master file: "))))
+  (pandoc--set 'master-file (cond
+                       ((eq prefix '-) nil)
+                       (t (pandoc--read-file-name "Master file: " default-directory (not prefix))))))
 
 (defun pandoc-set-this-file-as-master ()
   "Set the current file as master file.
@@ -824,11 +872,12 @@ file."
   (pandoc--set 'master-file (buffer-file-name))
   (pandoc--save-settings 'project (pandoc--get 'write)))
 
-(defun pandoc-toggle-interactive (prefix option)
+(defun pandoc-toggle-interactive (prefix)
   "Toggle one of pandoc's binary options.
-If called with the prefix argument C-u - (or M--), the options is
-unset. If called with any other prefix argument, the option is
-set. Without any prefix argument, the option is toggled."
+If called with the PREFIX argument `\\[universal-argument] -' (or
+`\\[negative-argument]'), the options is unset.  If called with
+any other prefix argument, the option is set.  Without any prefix
+argument, the option is toggled."
   (interactive "P")
   (let* ((completion-ignore-case t)
          (option (cdr (assoc (completing-read (format "%s option: " (cond
@@ -837,18 +886,19 @@ set. Without any prefix argument, the option is toggled."
                                                                      (t "Set")))
                                               pandoc--switches nil t) pandoc--switches))))
     (pandoc--set option (cond
-                         ((eq prefix '-) nil)
-                         ((null prefix) (not (pandoc--get option)))
-                         (t t)))
+                   ((eq prefix '-) nil)
+                   ((null prefix) (not (pandoc--get option)))
+                   (t t)))
     (message "Option `%s' %s." (car (rassq option pandoc--switches)) (if (pandoc--get option)
-                                                                         "set"
-                                                                       "unset"))))
+                                                                   "set"
+                                                                 "unset"))))
 
 (easy-menu-define pandoc-mode-menu pandoc-mode-map "Pandoc menu"
   `("Pandoc"
     ["Run Pandoc" pandoc-run-pandoc :active t]
     ["Create PDF" pandoc-convert-to-pdf :active t]
     ["View Output Buffer" pandoc-view-output :active t]
+    ["View Log Buffer" pandoc-view-log :active t]
     ("Settings Files"
      ["Save File Settings" pandoc-save-settings-file :active t]
      ["Save Project File" pandoc-save-project-file :active t]
@@ -928,6 +978,11 @@ set. Without any prefix argument, the option is toggled."
        :style radio :selected (null (pandoc--get 'extract-media))]
       ["Extract Media Files" pandoc-set-extract-media :active t
        :style radio :selected (pandoc--get 'extract-media)])
+     ("Scope"
+      ["Document Scope" (pandoc--set 'file-scope nil) :active t
+       :style radio :selected (null (pandoc--get 'file-scope))]
+      ["File Scope" pandoc-set-file-scope :active t
+       :style radio :selected (pandoc--get 'file-scope)])
      ("Master File"
       ["No Master File" (pandoc-set-master-file '-) :active t :style radio :selected (null (pandoc--get 'master-file))]
       ["Use This File As Master File" pandoc-set-this-file-as-master :active t :style radio :selected (equal (pandoc--get 'master-file) (buffer-file-name))]
@@ -951,16 +1006,16 @@ set. Without any prefix argument, the option is toggled."
     ("Math Rendering"
      ,@pandoc--math-menu-list)))
 
-    ;; ("Options"
-    ;;  ,@pandoc--options-menu)
-    ;; ("Switches"
-    ;;  ;; put the binary options into the menu
-    ;;  ,@(mapcar (lambda (option)
-    ;;              (vector (car option) `(pandoc--toggle (quote ,(cdr option)))
-    ;;                      :active t
-    ;;                      :style 'toggle
-    ;;                      :selected `(pandoc--get (quote ,(cdr option)))))
-    ;;            pandoc--switches))
+;; ("Options"
+;;  ,@pandoc--options-menu)
+;; ("Switches"
+;;  ;; put the binary options into the menu
+;;  ,@(mapcar (lambda (option)
+;;              (vector (car option) `(pandoc--toggle (quote ,(cdr option)))
+;;                      :active t
+;;                      :style 'toggle
+;;                      :selected `(pandoc--get (quote ,(cdr option)))))
+;;            pandoc--switches))
 
 (easy-menu-add pandoc-mode-menu pandoc-mode-map)
 
@@ -974,6 +1029,7 @@ _r_: Run Pandoc               _I_: Input format
 _p_: Convert to pdf           _O_: Output format
 _V_: View output buffer       _s_: Settings files
 _S_: View current settings    _e_: Example lists
+_L_: View log buffer
 _o_: Options
 
 "
@@ -981,6 +1037,7 @@ _o_: Options
   ("p" pandoc-convert-to-pdf)
   ("V" pandoc-view-output)
   ("S" pandoc-view-settings)
+  ("L" pandoc-view-log)
   ("I" pandoc-input-format-hydra/body)
   ("O" pandoc-output-format-hydra/body)
   ("s" pandoc-settings-file-hydra/body)
@@ -1047,7 +1104,9 @@ _s_: Select and insert example label
   ("b" pandoc-main-hydra/body "Back"))
 
 (defun pandoc--extension-active-marker (extension rw)
-  "Return a marker indicating whether EXTENSION is active."
+  "Return a marker indicating whether EXTENSION is active.
+RW is either `read' or `write', indicating whether to take the
+input or the output format."
   (if (pandoc--extension-active-p extension rw)
       pandoc-extension-active-marker
     pandoc-extension-inactive-marker))
@@ -1093,6 +1152,7 @@ _o_: Output file           [%s(pandoc--pp-option 'output)]
 _O_: Output directory      [%s(pandoc--pp-option 'output-dir)]
 _d_: Data directory        [%s(pandoc--pp-option 'data-dir)]
 _e_: Extract media files   [%s(pandoc--pp-option 'extract-media)]
+_f_: File Scope            [%s(pandoc--pp-option 'file-scope)]
 _m_: Master file           [%s(pandoc--pp-option 'master-file)]
 _M_: Use current file as master file
 
@@ -1101,6 +1161,7 @@ _M_: Use current file as master file
   ("O" pandoc-set-output-dir)
   ("d" pandoc-set-data-dir)
   ("e" pandoc-set-extract-media)
+  ("f" pandoc-set-file-scope)
   ("m" pandoc-set-master-file)
   ("M" pandoc-set-this-file-as-master)
   ("q" nil "Quit")
@@ -1215,7 +1276,7 @@ _M_: Use current file as master file
   "Face name to use for '@@' in @@directives.")
 
 (defvar pandoc-directive-type-face 'pandoc-directive-type-face
-  "Face name to use for 'include' or 'lisp' in @@directives.")
+  "Face name to use for name of @@directives.")
 
 (defvar pandoc-directive-braces-face 'pandoc-directive-braces-face
   "Face name to use for braces in @@directives.")
@@ -1335,14 +1396,19 @@ _M_: Use current file as master file
 (defun pandoc-faces-load ()
   "Load pandoc-faces."
   (font-lock-add-keywords nil pandoc-faces-keywords)
-  (font-lock-fontify-buffer))
+  (if (fboundp 'font-lock-flush)
+      (font-lock-flush)
+    (with-no-warnings
+      (font-lock-fontify-buffer))))
 
 (defun pandoc-faces-unload ()
   "Unload pandoc-faces."
   (font-lock-remove-keywords nil pandoc-faces-keywords)
-  (font-lock-fontify-buffer))
+  (if (fboundp 'font-lock-flush)
+      (font-lock-flush)
+    (with-no-warnings
+      (font-lock-fontify-buffer))))
 
 (provide 'pandoc-mode)
-
 
 ;;; pandoc-mode.el ends here

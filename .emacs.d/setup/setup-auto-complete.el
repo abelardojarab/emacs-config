@@ -36,9 +36,9 @@
             (add-to-list 'completion-styles 'initials t)
 
             ;; hook AC into completion-at-point
-            (defun set-auto-complete-as-completion-at-point-function ()
-              (setq completion-at-point-functions '(auto-complete)))
-            (add-hook 'auto-complete-mode-hook 'set-auto-complete-as-completion-at-point-function)
+            ;; (defun set-auto-complete-as-completion-at-point-function ()
+            ;;   (setq completion-at-point-functions '(auto-complete)))
+            ;; (add-hook 'auto-complete-mode-hook 'set-auto-complete-as-completion-at-point-function)
 
             ;; ac-complete configuration
             (ac-config-default)
