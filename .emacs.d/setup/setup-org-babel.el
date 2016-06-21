@@ -38,14 +38,6 @@
 
 ;; Rendering plantuml
 (setq org-plantuml-jar-path (expand-file-name "jar/plantuml.jar" user-emacs-directory))
-(defun plantuml-render-buffer ()
-  (interactive)
-  (message "PLANTUML Start rendering")
-  (shell-command (concat "java -jar "
-                         (expand-file-name "jar/plantuml.jar" user-emacs-directory)
-                         " "
-                         buffer-file-name))
-  (message (concat "PLANTUML Rendered:  " (buffer-name))))
 
 ;; Automatically refresh inline images that are generated from Babel blocks
 (add-hook 'org-babel-after-execute-hook (lambda ()
@@ -79,8 +71,13 @@
 (add-to-list 'org-src-lang-modes
              '("r" . ess-mode))
 
-;; for Graphviz image in Org
-(add-to-list 'org-src-lang-modes (quote ("dot" . graphviz-dot)))
+;; To edit Graphviz code in Org
+(add-to-list 'org-src-lang-modes
+             '("dot" . graphviz-dot))
+
+;; To edit plantuml code in Org
+(add-to-list
+ 'org-src-lang-modes '("plantuml" . puml))
 
 ;; Abbrev
 (add-hook 'org-mode-hook (lambda () (abbrev-mode 1)))

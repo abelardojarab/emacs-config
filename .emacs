@@ -293,6 +293,9 @@
 ;; Setup Markdown
 (require 'setup-markdown)
 
+;; Setup PlantUML
+(require 'setup-plantuml)
+
 ;; Setup xUnit
 (require 'setup-xunit)
 
