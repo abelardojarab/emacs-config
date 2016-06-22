@@ -10,6 +10,26 @@ results of the check in the current buffer in two ways:
 * Indicate errors, warnings, etc. in the fringe according to
   `flycheck-indication-mode`.
 
+Additionally Flycheck indicates its current state and the number of errors and
+warnings in the mode line.
+
+The following screenshot illustrates how this looks like in the default Emacs
+color theme.  It shows an info, a warning and an error annotation, from top to
+bottom.  Please also note the fringe indicators on the left side and the
+emphasized mode line indicator in the bottom right corner:
+
+.. image:: /images/flycheck-error-reports.png
+   :alt: Flycheck showing info, warning and error annotations
+   :align: center
+
+.. note::
+
+   The colours of fringe icons and the whole appearance of the error highlights
+   depend on the active color theme.  Although red, orange and green or blue
+   seem to be somewhat standard colours for Flycheck’s annotations across many
+   popular themes, please take a closer look at your color theme if you’re in
+   doubt about the meaning of a Flycheck highlight.
+
 Error levels
 ============
 
@@ -33,7 +53,12 @@ Error highlights
 ================
 
 Flycheck highlights errors directly in the buffer according to
-`flycheck-highlighting-mode`:
+`flycheck-highlighting-mode`.  By default these highlights consist of a coloured
+wave underline which spans the whole symbol at the error location as in the
+screenshot above but the highlights are entirely customisable.  You can change
+the extents of highlighting or disable it completely with
+`flycheck-highlighting-mode`, or customise Flycheck’s faces to change the style
+of the underline or use different colours.
 
 .. defcustom:: flycheck-highlighting-mode
 
@@ -77,8 +102,25 @@ The highlights use the following faces depending on the error level:
 Fringe icons
 ============
 
-In GUI frames Flycheck also adds icons to the fringe—the left or right border of
-an Emacs window—to help you identify erroneous lines quickly:
+In GUI frames Flycheck also adds indicators to the fringe—the left or right
+border of an Emacs window that is—to help you identify erroneous lines quickly.
+These indicators consist of a rightward-pointing double arrow shape coloured in
+the colour of the corresponding error level.
+
+.. note::
+
+   Flycheck extensions can define custom error levels with different fringe
+   indicators.  Furthermore some Emacs distributions like Spacemacs redefine
+   Flycheck’s error levels to use different indicators.  If you're using such a
+   distribution please take a look at its documentation if you're unsure about
+   the appearance of Flycheck's indicators.
+
+   Note that we discourage you from changing the shape of Flycheck’s fringe
+   indicators.
+
+You can customise the location of these indicators (left or right fringe) with
+`flycheck-indication-mode` which also lets you turn off these indicators
+completely:
 
 .. defcustom:: flycheck-indication-mode
 
@@ -90,11 +132,63 @@ an Emacs window—to help you identify erroneous lines quickly:
    ``nil``
       Do not indicate errors and warnings in the fringe.
 
+The following faces control the colours of the fringe indicators.  However they
+do not let you change the shape of the indicators—to achieve this you'd have to
+redefine the error levels with `flycheck-define-error-level`.
+
 .. defface:: flycheck-fringe-error
              flycheck-fringe-warning
              flycheck-fringe-info
 
    The icon faces for ``error``, ``warning`` and ``info`` levels respectively.
+
+Mode line
+=========
+
+Like all minor modes Flycheck also has a mode line indicator.  You can see it in
+the bottom right corner of the above screenshot.  By default the indicator shows
+Flycheck’s current state via one of the following texts:
+
++-------------+----------------------------------------------------------------+
+|``FlyC*``    |Flycheck is checking the buffer currently.                      |
++-------------+----------------------------------------------------------------+
+|``FlyC``     |There are no errors or warnings in the current buffer.          |
++-------------+----------------------------------------------------------------+
+|``FlyC:3/5`` |There are three errors and five warnings in the current buffer. |
++-------------+----------------------------------------------------------------+
+|``FlyC-``    |Flycheck did not find a syntax checker for the current buffer.  |
+|             |Take a look at the :ref:`list of supported languages            |
+|             |<flycheck-languages>` and type `C-c ! v` to see what checkers   |
+|             |are available for the current buffer.                           |
++-------------+----------------------------------------------------------------+
+|``FlyC!``    |The last syntax check failed.  Inspect the ``*Messages*`` buffer|
+|             |look for error messages, and consider :ref:`reporting a bug     |
+|             |<flycheck-bug-reports>`.                                        |
++-------------+----------------------------------------------------------------+
+|``FlyC?``    |The last syntax check had a dubious result.  The definition of a|
+|             |syntax checker may have a bug.  Inspect the ``*Messages*``      |
+|             |buffer and consider :ref:`reporting a bug                       |
+|             |<flycheck-bug-reports>`.                                        |
++-------------+----------------------------------------------------------------+
+
+You can entirely customise the mode line indicator with `flycheck-mode-line`:
+
+.. option:: flycheck-mode-line
+
+   A “mode line construct” for Flycheck’s mode line indicator.
+
+.. seealso::
+
+   :infonode:`(elisp)Mode Line Data`
+      Documentation of mode line constructs.
+   flycheck-status-emoji_
+      A Flycheck extension which puts emojis into Flycheck's mode line
+      indicator.
+   :flyc:`flycheck-color-mode-line`
+      A Flycheck extension which colours the entire mode line according to
+      Flycheck's status.
+
+.. _flycheck-status-emoji: https://github.com/liblit/flycheck-status-emoji
 
 Error thresholds
 ================

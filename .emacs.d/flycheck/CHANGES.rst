@@ -1,5 +1,8 @@
-28-cvs (in development)
+29-cvs (in development)
 =======================
+
+28 (Jun 05, 2016)
+=================
 
 - **Breaking changes**:
 
@@ -15,6 +18,15 @@
     cppcheck [GH-960]
   - Add ``flycheck-cppcheck-suppressions`` to suppress warnings for cppcheck
     [GH-960]
+
+- Improvements:
+
+  - Check Racket syntax in Geiser Mode [GH-979]
+
+- Bug fixes
+
+  - Do not signal errors when tslint reports no output [GH-981]
+  - Do not generate invalid temporary filenames on Windows [GH-983]
 
 27 (May 08, 2016)
 =================

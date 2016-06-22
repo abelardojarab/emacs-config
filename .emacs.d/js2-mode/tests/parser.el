@@ -260,7 +260,7 @@ the test."
   "var x = {get [foo + bar]() {  return 42;\n}};")
 
 (js2-deftest-parse object-literal-generator
-  "var x = {*foo() {  yield 42;\n}};")
+  "var x = {*foo() {  yield* 42;\n}};")
 
 (js2-deftest-parse object-literal-computed-generator-key
   "var x = {*[foo + bar]() {  yield 42;\n}};")
@@ -968,22 +968,12 @@ the test."
   (js2-mode--and-parse)
   (js2-test-scope-of-nth-variable-satisifies-predicate "i" 0 #'js2-for-node-p))
 
-(js2-deftest const-scope-sloppy-script "{const a;} a;"
-  (js2-mode--and-parse)
-  (js2-test-scope-of-nth-variable-satisifies-predicate "a" 0 #'js2-script-node-p)
-  (js2-test-scope-of-nth-variable-satisifies-predicate "a" 1 #'js2-script-node-p))
-
-(js2-deftest const-scope-strict-script "'use strict'; { const a; } a;"
+(js2-deftest const-scope-inside-script "{ const a; } a;"
   (js2-mode--and-parse)
   (js2-test-scope-of-nth-variable-satisifies-predicate "a" 0 #'js2-block-node-p)
   (js2-test-scope-of-nth-variable-satisifies-predicate "a" 1 #'null))
 
-(js2-deftest const-scope-sloppy-function "function f() { { const a; } a; }"
-  (js2-mode--and-parse)
-  (js2-test-scope-of-nth-variable-satisifies-predicate "a" 0 #'js2-function-node-p)
-  (js2-test-scope-of-nth-variable-satisifies-predicate "a" 1 #'js2-function-node-p))
-
-(js2-deftest const-scope-strict-function "function f() { 'use strict'; { const a; } a; }"
+(js2-deftest const-scope-inside-function "function f() { { const a; } a; }"
   (js2-mode--and-parse)
   (js2-test-scope-of-nth-variable-satisifies-predicate "a" 0 #'js2-block-node-p)
   (js2-test-scope-of-nth-variable-satisifies-predicate "a" 1 #'null))

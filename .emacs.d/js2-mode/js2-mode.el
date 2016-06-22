@@ -277,6 +277,11 @@ end of the line, otherwise, at the beginning of the next line."
   :type 'boolean
   :group 'js2-mode)
 
+(defcustom js2-mode-assume-strict nil
+  "Non-nil to start files in strict mode automatically."
+  :type 'boolean
+  :group 'js2-mode)
+
 (defcustom js2-mode-show-strict-warnings t
   "Non-nil to emit Ecma strict-mode warnings.
 Some of the warnings can be individually disabled by other flags,
@@ -7988,7 +7993,7 @@ Scanner should be initialized."
           js2-nesting-of-function 0
           js2-labeled-stmt nil
           js2-recorded-identifiers nil  ; for js2-highlight
-          js2-in-use-strict-directive nil)
+          js2-in-use-strict-directive js2-mode-assume-strict)
     (while (/= (setq tt (js2-get-token)) js2-EOF)
       (if (= tt js2-FUNCTION)
           (progn
@@ -9605,16 +9610,10 @@ If NODE is non-nil, it is the AST node associated with the symbol."
          (pos (if node (js2-node-abs-pos node)))
          (len (if node (js2-node-len node))))
     (cond
-     ((and symbol ; already defined
-           (or (if js2-in-use-strict-directive
-                   ;; two const-bound vars in this block have same name
-                   (and (= sdt js2-CONST)
-                        (eq defining-scope js2-current-scope))
-                 (or (= sdt js2-CONST)          ; old version is const
-                     (= decl-type js2-CONST)))  ; new version is const
-               ;; two let-bound vars in this block have same name
-               (and (= sdt js2-LET)
-                    (eq defining-scope js2-current-scope))))
+     ((and symbol ; already defined in this block
+           (or (= sdt js2-LET)
+               (= sdt js2-CONST))
+           (eq defining-scope js2-current-scope))
       (js2-report-error
        (cond
         ((= sdt js2-CONST) "msg.const.redecl")
@@ -9624,9 +9623,7 @@ If NODE is non-nil, it is the AST node associated with the symbol."
         (t "msg.parm.redecl"))
        name pos len))
      ((or (= decl-type js2-LET)
-          ;; strict mode const is scoped to the current LexicalEnvironment
-          (and js2-in-use-strict-directive
-               (= decl-type js2-CONST)))
+          (= decl-type js2-CONST))
       (if (and (= decl-type js2-LET)
                (not ignore-not-in-block)
                (or (= (js2-node-type js2-current-scope) js2-IF)
@@ -9634,10 +9631,7 @@ If NODE is non-nil, it is the AST node associated with the symbol."
           (js2-report-error "msg.let.decl.not.in.block")
         (js2-define-new-symbol decl-type name node)))
      ((or (= decl-type js2-VAR)
-          (= decl-type js2-FUNCTION)
-          ;; sloppy mode const is scoped to the current VariableEnvironment
-          (and (not js2-in-use-strict-directive)
-               (= decl-type js2-CONST)))
+          (= decl-type js2-FUNCTION))
       (if symbol
           (if (and js2-strict-var-redeclaration-warning (= sdt js2-VAR))
               (js2-add-strict-warning "msg.var.redecl" name)
@@ -10992,15 +10986,13 @@ TYPE-STRING is a string `get', `set', `*', or nil, indicating a found keyword."
                                              ("async" . ASYNC))))
                    'FUNCTION))
          result end
-         (fn (js2-parse-function-expr (eq type 'ASYNC))))
-    ;; it has to be an anonymous function, as we already parsed the name
-    (if (/= (js2-node-type fn) js2-FUNCTION)
-        (js2-report-error "msg.bad.prop")
-      (if (cl-plusp (length (js2-function-name fn)))
-          (js2-report-error "msg.bad.prop")))
+         (pos (js2-current-token-beg))
+         (_ (js2-must-match js2-LP "msg.no.paren.parms"))
+         (fn (js2-parse-function 'FUNCTION_EXPRESSION pos
+                                 (string= type-string "*")
+                                 (eq type 'ASYNC)
+                                 nil)))
     (js2-node-set-prop fn 'METHOD_TYPE type)  ; for codegen
-    (when (string= type-string "*")
-      (setf (js2-function-node-generator-type fn) 'STAR))
     (unless pos (setq pos (js2-node-pos prop)))
     (setq end (js2-node-end fn)
           result (make-js2-method-node :pos pos

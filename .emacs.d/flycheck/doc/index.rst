@@ -40,6 +40,7 @@ run ``M-x eval-buffer``:
    (add-to-list 'package-archives
                 '("melpa" . "http://stable.melpa.org/packages/") t)
    (package-initialize)
+   (package-refresh-contents)
 
    (package-install 'flycheck)
 
@@ -62,7 +63,10 @@ We are currently in the process of converting the old Texinfo manual to Sphinx.
 Meanwhile you can read a simple HTML version of the old manual at
 :download:`flycheck.html <legacy/flycheck.html>`.
 
-.. todo:: Port the Texinfo manual
+.. todo:: Port the old manual
+
+   Meanwhile see :download:`flycheck.html <legacy/flycheck.html>` for a simple
+   HTML version of the old manual.
 
 .. toctree::
 
@@ -71,6 +75,7 @@ Meanwhile you can read a simple HTML version of the old manual at
    user/syntax-checks
    user/syntax-checkers
    user/error-reports
+   user/error-list
    user/error-interaction
    user/flycheck-versus-flymake
 
@@ -80,7 +85,11 @@ The Developer Guide
 The Developer Guide shows how to write syntax checkers for Flycheck and how to
 extend Flycheck.
 
-.. todo:: Port the extending section from the Texinfo manual
+
+.. todo:: Port the extending section from the old manual
+
+   Meanwhile see :download:`flycheck.html <legacy/flycheck.html>` for a simple
+   HTML version of the old manual.
 
 The Community Guide
 ===================

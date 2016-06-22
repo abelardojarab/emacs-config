@@ -1889,7 +1889,11 @@ ANY-KEYMAP ANY-DEFAULT ANY-HISTORY See `helm'."
   (helm-log "any-history = %S" any-history)
   (setq helm--prompt (or any-prompt "pattern: "))
   (let ((non-essential t)
+        ;; Prevent mouse jumping to the upper-right
+        ;; hand corner of the frame (#1538).
         mode-line-in-non-selected-windows
+        mouse-autoselect-window
+        focus-follows-mouse
         (input-method-verbose-flag helm-input-method-verbose-flag)
         (old--cua cua-mode)
         (helm--maybe-use-default-as-input
@@ -1959,7 +1963,9 @@ Call with a prefix arg to choose among existing helm
 buffers (sessions). When calling from lisp, specify a buffer-name
 as a string with ARG."
   (interactive "P")
-  (let (any-buffer helm-full-frame cur-dir)
+  (let (any-buffer
+        cur-dir
+        (helm-full-frame (default-value 'helm-full-frame)))
     (if arg
         (if (and (stringp arg) (bufferp (get-buffer arg)))
             (setq any-buffer arg)
@@ -3754,11 +3760,16 @@ DIRECTION is either 'next or 'previous."
                              (car-safe helm-mode-line-string)))
                      " " helm--mode-line-string-real " "
                      (:eval (make-string (window-width) ? )))
-                help-echo "Mouse is disabled"
                 keymap (keymap (mode-line keymap
                                           (mouse-1 . ignore)
+                                          (down-mouse-1 . ignore)
+                                          (drag-mouse-1 . ignore)
                                           (mouse-2 . ignore)
-                                          (mouse-3 . ignore))))
+                                          (down-mouse-2 . ignore)
+                                          (drag-mouse-2 . ignore)
+                                          (mouse-3 . ignore)
+                                          (down-mouse-3 . ignore)
+                                          (drag-mouse-3 . ignore))))
               helm--mode-line-string-real
               (substitute-command-keys (if (listp helm-mode-line-string)
                                            (cadr helm-mode-line-string)
