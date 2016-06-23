@@ -26,17 +26,23 @@
 
 (use-package projectile
   :diminish projectile-mode
+  :commands (projectile-global-mode projectile-ignored-projects projectile-compile-project)
+  :init (projectile-global-mode)
   :load-path (lambda () (expand-file-name "projectile/" user-emacs-directory))
   :config (progn
             (setq projectile-known-projects-file "~/.emacs.cache/projectile-bookmarks.eld")
             (setq projectile-cache-file "~/.emacs.cache/projectile.cache")
-            (setq projectile-switch-project-action 'projectile-dired)
             (setq projectile-enable-caching t)
-            (setq projectile-require-project-root nil)
-            (setq projectile-completion-system 'helm)
             (setq projectile-sort-order 'recently-active)
-            (setq projectile-globally-ignored-files (quote ("TAGS" "*.log" "*DS_Store")))
-            (projectile-global-mode 1)))
+            (setq projectile-indexing-method 'alien)
+            (setq projectile-globally-ignored-files (quote ("TAGS" "*.log" "*DS_Store" "node-modules")))))
+
+(use-package helm-projectile
+  :load-path (lambda () (expand-file-name "helm-projectile/" user-emacs-directory))
+  :config (progn
+            (helm-projectile-on)
+            (setq projectile-switch-project-action 'helm-projectile)
+            (setq projectile-completion-system 'helm)))
 
 (provide 'setup-projectile)
 ;;; setup-projectile.el ends here

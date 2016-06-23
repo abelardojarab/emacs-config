@@ -26,20 +26,10 @@
 
 ;; Syntax coloring
 (global-font-lock-mode t)
-(global-hi-lock-mode nil)
 (setq font-lock-maximum-decoration t)
 (setq font-lock-maximum-size (* 512 512))
 (setq font-lock-multiline t)
 (defun global-font-lock-mode-check-buffers () nil)
-
-;; Lazy font lock
-(setq font-lock-support-mode 'jit-lock-mode)
-(setq jit-lock-chunk-size 25
-      jit-lock-context-time 0.05 ;; jit-lock-context-time seconds of Emacs idle time, redisplay will refontify
-      jit-lock-defer-time 0.05   ;; improve scrolling speed
-      jit-lock-stealth-nice 0.05 ;; time to pause between chunks of stealth fontification
-      jit-lock-stealth-time 1   ;; time to wait before starting stealth fontification
-      jit-lock-stealth-verbose nil)
 
 ;; Do not fontify large files
 (defun my-find-file-check-make-large-file-read-only-hook ()

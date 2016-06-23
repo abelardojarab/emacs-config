@@ -125,7 +125,7 @@
 (global-set-key (kbd "<f4>") 'helm-semantic-or-imenu)
 
 ;; Smex
-(global-set-key (kbd "<f5>") 'smex)
+(global-set-key (kbd "<f5>") 'recompile)
 
 ;; Flyspell
 (defun flyspell-check-next-highlighted-word ()
@@ -249,7 +249,7 @@
 (define-key my-keys-minor-mode-map (kbd "C-`") 'helm-semantic-or-imenu)
 (define-key my-keys-minor-mode-map (kbd "<f12>") 'helm-buffers-list)
 (define-key my-keys-minor-mode-map (kbd "C-0") 'helm-buffers-list)
-(define-key my-keys-minor-mode-map (kbd "<f5>") 'smex)
+(define-key my-keys-minor-mode-map (kbd "<f5>") 'recompile)
 (define-key my-keys-minor-mode-map (kbd "C-*") 'helm-swoop)
 
 ;; key bindings for shift select

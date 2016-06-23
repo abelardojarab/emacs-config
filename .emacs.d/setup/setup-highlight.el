@@ -24,6 +24,9 @@
 
 ;;; Code:
 
+;; highlight phrases or regular expressions
+(global-hi-lock-mode nil)
+
 ;; higlight changes in documents
 (when (display-graphic-p)
   (global-highlight-changes-mode t)
