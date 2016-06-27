@@ -133,8 +133,6 @@
             ;; Let's have snippets and TAGS in the auto-complete dropdown
             (defun ac-common-setup ()
               (setq ac-sources (append ac-sources '(ac-source-yasnippet
-                                                    ac-source-abbrev
-                                                    ac-source-gtags
                                                     ac-source-semantic))))
 
             (add-hook 'auto-complete-mode-hook 'ac-common-setup)))
@@ -157,6 +155,7 @@
 
 ;; C-headers
 (use-package auto-complete-c-headers
+  :disabled t
   :load-path (lambda () (expand-file-name "auto-complete-c-headers/" user-emacs-directory))
   :config (progn
             (defun my/ac-c-headers-setup ()
@@ -165,6 +164,7 @@
 
 ;; Additional C-headers
 (use-package ac-c-headers
+  :disabled t
   :load-path (lambda () (expand-file-name "ac-c-headers/" user-emacs-directory))
   :config (progn
             (defun my/ac-c-headers-setup ()

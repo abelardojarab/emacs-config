@@ -250,9 +250,6 @@
 ;; Show column-number in the mode line
 (column-number-mode 1)
 
-;; Show file size in mode line
-(size-indication-mode 1)
-
 ;; Edition of EMACS edition modes
 (setq major-mode 'text-mode)
 (add-hook 'text-mode-hook 'text-mode-hook-identify)

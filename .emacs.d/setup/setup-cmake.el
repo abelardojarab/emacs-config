@@ -60,19 +60,7 @@
             (defun use-cmake-ide ()
               (cmake-ide-setup)
               (when (cmake-ide--locate-cmakelists)
-                (setq cmake-ide-dir (concat (cmake-ide--locate-cmakelists) "build/"))))))
-
-;; cmake utilities
-(use-package cpputils-cmake
-  :defer t
-  :commands cppcm-reload-all
-  :after cmake-ide
-  :if (executable-find "cmake")
-  :load-path (lambda () (expand-file-name "cpputils-cmake/" user-emacs-directory))
-  :init (progn
-          (add-hook 'c-mode-hook 'cppcm-reload-all)
-          (add-hook 'c++-mode-hook 'cppcm-reload-all)))
+                (setq cmake-ide-build-dir (concat (cmake-ide--locate-cmakelists) "cmake_build_dir/"))))))
 
 (provide 'setup-cmake)
 ;;; setup-cmake.el ends here
-

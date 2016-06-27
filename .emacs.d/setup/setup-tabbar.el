@@ -68,6 +68,11 @@
             (setq tabbar-separator '(0.5))
             (tabbar-ruler-group-user-buffers)
 
+            (defun tabbar-popup-close ()
+              "Tabbar pop up close."
+              (interactive)
+              (kill-buffer (current-buffer)))
+
             ;; Fix for tabbar under Emacs 24.4
             ;; store tabbar-cache into a real hash,
             ;; rather than in frame parameters

@@ -73,6 +73,8 @@
 
 ;; Colorize color strings
 (use-package rainbow-mode
+  :defer t
+  :commands rainbow-mode
   :load-path (lambda () (expand-file-name "rainbow-mode/" user-emacs-directory))
   :diminish rainbow-mode
   :config (progn (mapc (lambda (mode)

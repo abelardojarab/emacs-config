@@ -70,6 +70,7 @@
 
 ;; Etags table
 (use-package etags-table
+  :after projectile
   :config (progn
             (setq etags-table-alist
                   (list

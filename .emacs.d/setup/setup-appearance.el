@@ -87,6 +87,8 @@ non-nil."
 ;; Just like the previous package, this one is also subtle.
 ;; It highlights characters that exceed a particular column margin. Very useful while coding.
 (use-package column-enforce-mode
+  :defer t
+  :commands column-enforce-mode
   :diminish column-enforce-mode
   :init (setq column-enforce-column 99)
   :load-path (lambda () (expand-file-name "column-enforce-mode/" user-emacs-directory))
