@@ -45,6 +45,7 @@ public:
         CodeCompleteAt,
         CodeCompleteIncludeMacros,
         CodeCompleteIncludes,
+        CodeCompletionEnabled,
         CompilationFlagsOnly,
         CompilationFlagsSplitLine,
         Compile,
@@ -83,13 +84,13 @@ public:
         HasFileManager,
         Help,
         IncludeFile,
-        IMenu,
         IsIndexed,
         IsIndexing,
         JobCount,
         JSON,
         KindFilter,
         ListBuffers,
+        ListCursorKinds,
         ListSymbols,
         LoadCompilationDatabase,
         LogFile,
@@ -157,12 +158,7 @@ public:
     RClient();
     ~RClient();
     int exec();
-    enum ParseStatus {
-        Parse_Exec,
-        Parse_Ok,
-        Parse_Error
-    };
-    ParseStatus parse(int &argc, char **argv);
+    CommandLineParser::ParseStatus parse(int &argc, char **argv);
 
     Flags<Flag> flags() const { return mFlags; }
 
@@ -175,7 +171,7 @@ public:
     int minOffset() const { return mMinOffset; }
     int maxOffset() const { return mMaxOffset; }
 
-    const Set<String> &kindFilters() const { return mKindFilters; }
+    const QueryMessage::KindFilters &kindFilters() const { return mKindFilters; }
 
     const UnsavedFiles &unsavedFiles() const { return mUnsavedFiles; }
 
@@ -210,7 +206,7 @@ private:
     int mMax, mTimeout, mMinOffset, mMaxOffset, mConnectTimeout, mBuildIndex;
     LogLevel mLogLevel;
     Set<QueryMessage::PathFilter> mPathFilters;
-    Set<String> mKindFilters;
+    QueryMessage::KindFilters mKindFilters;
     UnsavedFiles mUnsavedFiles;
     List<std::shared_ptr<RCCommand> > mCommands;
     List<String> mRdmArgs;

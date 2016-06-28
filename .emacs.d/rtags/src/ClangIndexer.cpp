@@ -29,6 +29,7 @@
 #include "rct/EventLoop.h"
 #include "rct/SHA256.h"
 #include "RTags.h"
+#include "RTagsVersion.h"
 #include "VisitFileMessage.h"
 #include "VisitFileResponseMessage.h"
 #include "Location.h"
@@ -47,17 +48,19 @@ static inline void setType(Symbol &symbol, const CXType &type)
     symbol.typeName = RTags::eatString(clang_getTypeSpelling(type));
 }
 
-static inline void setRange(Symbol &symbol, const CXSourceRange &range)
+static inline void setRange(Symbol &symbol, const CXSourceRange &range, uint16_t *length = 0)
 {
     CXSourceLocation rangeStart = clang_getRangeStart(range);
     CXSourceLocation rangeEnd = clang_getRangeEnd(range);
-    unsigned int startLine, startColumn, endLine, endColumn;
-    clang_getSpellingLocation(rangeStart, 0, &startLine, &startColumn, 0);
-    clang_getSpellingLocation(rangeEnd, 0, &endLine, &endColumn, 0);
+    unsigned int startLine, startColumn, endLine, endColumn, startOffset, endOffset;
+    clang_getSpellingLocation(rangeStart, 0, &startLine, &startColumn, &startOffset);
+    clang_getSpellingLocation(rangeEnd, 0, &endLine, &endColumn, &endOffset);
     symbol.startLine = startLine;
     symbol.endLine = endLine;
     symbol.startColumn = startColumn;
     symbol.endColumn = endColumn;
+    if (length)
+        *length = static_cast<uint16_t>(endOffset - startOffset);
 }
 
 struct VerboseVisitorUserData {
@@ -175,6 +178,7 @@ bool ClangIndexer::exec(const String &data)
     mIndexDataMessage.setId(id);
 
     assert(mConnection->isConnected());
+    assert(mSource.fileId);
     mIndexDataMessage.files()[mSource.fileId] |= IndexDataMessage::Visited;
     parse() && visit() && diagnose();
     String message = mSourceFile.toTilde();
@@ -279,6 +283,7 @@ Location ClangIndexer::createLocation(const Path &sourceFile, unsigned int line,
                 if (resolved.isEmpty())
                     resolved = sourceFile.resolved();
 #endif
+                assert(id);
                 mIndexDataMessage.files()[id] = IndexDataMessage::NoFileFlag;
                 *blockedPtr = true;
                 return Location();
@@ -314,6 +319,7 @@ Location ClangIndexer::createLocation(const Path &sourceFile, unsigned int line,
         id = mVisitFileResponseMessageFileId;
         break;
     }
+    assert(id);
     Flags<IndexDataMessage::FileFlag> &flags = mIndexDataMessage.files()[id];
     if (mVisitFileResponseMessageVisit) {
         flags |= IndexDataMessage::Visited;
@@ -377,6 +383,9 @@ static inline void tokenize(const char *buf, int start,
             }
             break;
         case '\0':
+            if (templateCount) {
+                *templateStart = *templateEnd = -1;
+            }
             return;
         }
     }
@@ -491,6 +500,7 @@ String ClangIndexer::addNamePermutations(const CXCursor &cursor, Location locati
     ::tokenize(buf, pos,
                &templateStart, &templateEnd,
                &colonColonCount, colonColons);
+    assert((templateStart != -1) == (templateEnd != -1));
 
     // i == 0 --> with templates,
     // i == 1 without templates or without EnumConstantDecl part
@@ -550,7 +560,6 @@ String ClangIndexer::addNamePermutations(const CXCursor &cursor, Location locati
 
     return ret;
 }
-
 
 static inline CXCursor findDestructorForDelete(const CXCursor &deleteStatement)
 {
@@ -1078,13 +1087,16 @@ bool ClangIndexer::handleReference(const CXCursor &cursor, CXCursorKind kind, Lo
         }
     }
 
-#if CINDEX_VERSION >= CINDEX_VERSION_ENCODE(0, 16)
+#if CINDEX_VERSION >= CINDEX_VERSION_ENCODE(0, 35)
     if (result == Found) {
         c->size = reffedCursor.size;
         c->alignment = reffedCursor.alignment;
     } else {
         const CXType type = clang_getCursorType(ref);
-        if (type.kind != CXType_LValueReference && type.kind != CXType_RValueReference && type.kind != CXType_Unexposed) {
+        if (type.kind != CXType_LValueReference
+            && type.kind != CXType_RValueReference
+            && type.kind != CXType_Auto
+            && type.kind != CXType_Unexposed) {
             c->size = clang_Type_getSizeOf(type);
             c->alignment = std::max<int16_t>(-1, clang_Type_getAlignOf(type));
         }
@@ -1092,15 +1104,16 @@ bool ClangIndexer::handleReference(const CXCursor &cursor, CXCursorKind kind, Lo
 #endif
 
     CXSourceRange range = clang_getCursorExtent(cursor);
-    setRange(*c, range);
+    uint16_t symLength;
+    setRange(*c, range, &symLength);
     c->kind = kind;
     c->location = location;
-    c->symbolName = result == Found ? reffedCursor.symbolName : addNamePermutations(ref, refLoc, RTags::Type_Reference);
+
+    c->symbolName = RTags::eatString(clang_getCursorSpelling(cursor));
+    if (c->symbolName.isEmpty())
+        c->symbolName = (result == Found ? reffedCursor.symbolName : addNamePermutations(ref, refLoc, RTags::Type_Reference));
     if (isOperator) {
-        unsigned int start, end;
-        clang_getSpellingLocation(clang_getRangeStart(range), 0, 0, 0, &start);
-        clang_getSpellingLocation(clang_getRangeEnd(range), 0, 0, 0, &end);
-        c->symbolLength = end - start;
+        c->symbolLength = symLength;
     } else {
         c->symbolLength = result == Found ? reffedCursor.symbolLength : symbolLength(refKind, ref);
     }
@@ -1109,6 +1122,8 @@ bool ClangIndexer::handleReference(const CXCursor &cursor, CXCursorKind kind, Lo
         if (cursorPtr)
             *cursorPtr = 0;
         return false;
+    } else {
+        unit(location)->symbolNames[c->symbolName].insert(location);
     }
     setType(*c, clang_getCursorType(cursor));
     if (RTags::isFunction(refKind)) {
@@ -1187,10 +1202,9 @@ void ClangIndexer::handleLiteral(const CXCursor &cursor, CXCursorKind kind, Loca
         return;
     s.location = location;
     s.kind = kind;
-    s.size = clang_Type_getSizeOf(type);
     setType(s, type);
     CXSourceRange range = clang_getCursorExtent(cursor);
-    setRange(s, range);
+    setRange(s, range, &s.symbolLength);
 
     String symbolName;
     if (kind != CXCursor_StringLiteral) {
@@ -1232,6 +1246,7 @@ CXChildVisitResult ClangIndexer::handleStatement(const CXCursor &cursor, CXCurso
             c.location = location;
             c.kind = kind;
             c.symbolName = "{}";
+            c.symbolLength = 1;
             // should it have a symbolLength?
             mScopeStack.append(scope);
             visit(cursor);
@@ -1421,7 +1436,6 @@ CXChildVisitResult ClangIndexer::handleCursor(const CXCursor &cursor, CXCursorKi
         case CXCursor_LambdaExpr:
             c.symbolLength = 2;
             c.symbolName = c.typeName;
-            c.flags |= Symbol::Definition;
             break;
         default:
             unit(location)->symbols.remove(location);
@@ -1470,6 +1484,9 @@ CXChildVisitResult ClangIndexer::handleCursor(const CXCursor &cursor, CXCursorKi
         c.symbolName = addNamePermutations(cursor, location, RTags::Type_Cursor);
     }
 
+    if (clang_isCursorDefinition(cursor))
+        c.flags |= Symbol::Definition;
+
     const CXSourceRange range = clang_getCursorExtent(cursor);
     setRange(c, range);
 
@@ -1516,7 +1533,6 @@ CXChildVisitResult ClangIndexer::handleCursor(const CXCursor &cursor, CXCursorKi
         }
         break; }
     case CXCursor_EnumConstantDecl:
-        c.flags |= Symbol::Definition;
 #if CINDEX_VERSION >= CINDEX_VERSION_ENCODE(0, 2)
         c.enumValue = clang_getEnumConstantDeclValue(cursor);
 #endif
@@ -1588,7 +1604,6 @@ CXChildVisitResult ClangIndexer::handleCursor(const CXCursor &cursor, CXCursorKi
         // }
 
         clang_disposeTokens(mTranslationUnit->unit, tokens, numTokens);
-        c.flags |= Symbol::Definition;
         break; }
     case CXCursor_FieldDecl:
 #if CINDEX_VERSION >= CINDEX_VERSION_ENCODE(0, 30)
@@ -1596,15 +1611,14 @@ CXChildVisitResult ClangIndexer::handleCursor(const CXCursor &cursor, CXCursorKi
 #endif
         // fall through
     default:
-        if (clang_isCursorDefinition(cursor))
-            c.flags |= Symbol::Definition;
         break;
     }
 
-#if CINDEX_VERSION >= CINDEX_VERSION_ENCODE(0, 16)
+#if CINDEX_VERSION >= CINDEX_VERSION_ENCODE(0, 35)
     if (!(c.flags & (Symbol::Auto|Symbol::AutoRef))
         && c.type != CXType_LValueReference
         && c.type != CXType_RValueReference
+        && c.type != CXType_Auto
         && c.type != CXType_Unexposed) {
         c.size = clang_Type_getSizeOf(type);
         c.alignment = std::max<int16_t>(-1, clang_Type_getAlignOf(type));
@@ -1826,6 +1840,7 @@ static inline void encodeSymbols(Map<Location, Symbol> &symbols)
 
 bool ClangIndexer::writeFiles(const Path &root, String &error)
 {
+    const Path p = Sandbox::encoded(mSourceFile);
     const bool hasRoot = Sandbox::hasRoot();
     for (const auto &unit : mUnits) {
         if (!(mIndexDataMessage.files().value(unit.first) & IndexDataMessage::Visited)) {
@@ -1843,6 +1858,14 @@ bool ClangIndexer::writeFiles(const Path &root, String &error)
         String unitRoot = root;
         unitRoot << unit.first;
         Path::mkdir(unitRoot, Path::Recursive);
+        if (unit.first != mSource.fileId) {
+            FILE *f = fopen((unitRoot + "/info").constData(), "w");
+            if (!f)
+                return false;
+            fprintf(f, "Indexed by %s at %llu\n", p.constData(), static_cast<unsigned long long>(mIndexDataMessage.parseTime()));
+            fclose(f);
+        }
+
         // ::error() << "Writing file" << Location::path(unit.first) << unitRoot << unit.second->symbols.size()
         //           << unit.second->targets.size()
         //           << unit.second->usrs.size()
@@ -1888,10 +1911,10 @@ bool ClangIndexer::writeFiles(const Path &root, String &error)
         return false;
     }
 
-    const Path p = Sandbox::encoded(mSourceFile);
     const String args = Sandbox::encoded(String::join(mSource.toCommandLine(Source::Default|Source::IncludeCompiler|Source::IncludeSourceFile), ' '));
 
-    fprintf(f, "%s\n%s\n", p.constData(), args.constData());
+    fprintf(f, "%s\n%s\nIndexed at %llu\n", p.constData(), args.constData(),
+            static_cast<unsigned long long>(mIndexDataMessage.parseTime()));
     fclose(f);
 
     return true;
@@ -2012,6 +2035,12 @@ bool ClangIndexer::diagnose()
         CXDiagnostic diagnostic = clang_getDiagnostic(mTranslationUnit->unit, i);
         const CXSourceLocation diagLoc = clang_getDiagnosticLocation(diagnostic);
         const uint32_t fileId = createLocation(diagLoc, 0).fileId();
+        if (!fileId) {
+            clang_disposeDiagnostic(diagnostic);
+            // error() << "Couldn't get location for diagnostics" << clang_getCursor(mTranslationUnit->unit, diagLoc) << fileId << mSource.fileId
+            //         << clang_getDiagnosticSeverity(diagnostic);
+            continue;
+        }
         const CXDiagnosticSeverity sev = clang_getDiagnosticSeverity(diagnostic);
         // error() << "Got a dude" << clang_getCursor(mTranslationUnit->unit, diagLoc) << fileId << mSource.fileId
         //         << sev << CXDiagnostic_Error;
@@ -2019,6 +2048,7 @@ bool ClangIndexer::diagnose()
         const bool inclusionError = clang_getCursorKind(cursor) == CXCursor_InclusionDirective;
         if (inclusionError)
             mIndexDataMessage.setFlag(IndexDataMessage::InclusionError);
+        assert(fileId);
         Flags<IndexDataMessage::FileFlag> &flags = mIndexDataMessage.files()[fileId];
         if (fileId != mSource.fileId && !inclusionError && sev >= CXDiagnostic_Error && !(flags & IndexDataMessage::HeaderError)) {
             // We don't treat inclusions or code inside a macro expansion as a
@@ -2234,14 +2264,15 @@ void ClangIndexer::addFileSymbol(uint32_t file)
     const char *fn = path.fileName();
     ref->symbolNames[fn].insert(loc);
     Symbol &sym = ref->symbols[loc];
+    if (sym.isNull())
+        sym.flags |= Symbol::FileSymbol;
     sym.location = loc;
 }
 
 int ClangIndexer::symbolLength(CXCursorKind kind, const CXCursor &cursor)
 {
-    if (kind == CXCursor_VarDecl) {
-        if (RTags::resolveAuto(cursor))
-            return 4;
+    if (kind == CXCursor_VarDecl && RTags::resolveAuto(cursor)) {
+        return 4;
     }
 
     CXStringScope name = clang_getCursorSpelling(cursor);

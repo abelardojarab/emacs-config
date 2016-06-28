@@ -4,7 +4,7 @@
 
 ;; Author: Kelvin Smith <oneKelvinSmith@gmail.com>
 ;; URL: http://github.com/oneKelvinSmith/monokai-emacs
-;; Version: 2.0.1
+;; Version: 2.0.2
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -3087,49 +3087,49 @@ Also affects 'linum-mode' background."
      ((,class (:foreground ,monokai-orange))
       (,terminal-class (:foreground ,terminal-monokai-orange))))
 
+   `(js2-function-call
+     ((,class (:foreground ,monokai-fg))
+      (,terminal-class (:foreground ,terminal-monokai-fg))))
+
    `(js2-function-param
+     ((,class (:foreground ,monokai-orange))
+      (,terminal-class (:foreground ,terminal-monokai-orange))))
+
+   `(js2-instance-member
+     ((,class (:foreground ,monokai-violet))
+      (,terminal-class (:foreground ,terminal-monokai-violet))))
+
+   `(js2-jsdoc-html-tag-delimiter
      ((,class (:foreground ,monokai-green))
       (,terminal-class (:foreground ,terminal-monokai-green))))
 
-   `(js2-instance-member
-     ((,class (:foreground ,monokai-magenta))
-      (,terminal-class (:foreground ,terminal-monokai-magenta))))
-
-   `(js2-jsdoc-html-tag-delimiter
-     ((,class (:foreground ,monokai-cyan))
-      (,terminal-class (:foreground ,terminal-monokai-cyan))))
-
    `(js2-jsdoc-html-tag-name
-     ((,class (:foreground ,monokai-orange))
-      (,terminal-class (:foreground ,terminal-monokai-orange))))
-
-   `(js2-object-property
-     ((,class (:foreground ,monokai-orange))
-      (,terminal-class (:foreground ,terminal-monokai-orange))))
-
-   `(js2-function-call
-     ((,class (:foreground ,monokai-yellow))
-      (,terminal-class (:foreground ,terminal-monokai-yellow))))
+     ((,class (:foreground ,monokai-green))
+      (,terminal-class (:foreground ,terminal-monokai-green))))
 
    `(js2-jsdoc-tag
-     ((,class (:foreground ,monokai-cyan))
-      (,terminal-class (:foreground ,terminal-monokai-cyan))))
+     ((,class (:foreground ,monokai-violet))
+      (,terminal-class (:foreground ,terminal-monokai-violet))))
 
    `(js2-jsdoc-type
      ((,class (:foreground ,monokai-blue))
       (,terminal-class (:foreground ,terminal-monokai-blue))))
 
    `(js2-jsdoc-value
-     ((,class (:foreground ,monokai-violet))
-      (,terminal-class (:foreground ,terminal-monokai-violet))))
+     ((,class (:foreground ,monokai-orange))
+      (,terminal-class (:foreground ,terminal-monokai-orange))))
 
    `(js2-magic-paren
      ((,class (:underline t))
       (,terminal-class (:underline t))))
 
+   `(js2-object-property
+     ((,class (:foreground ,monokai-fg))
+      (,terminal-class (:foreground ,terminal-monokai-fg))))
+
    `(js2-private-function-call
-     ((,class (:foreground ,monokai-yellow))
-      (,terminal-class (:foreground ,terminal-monokai-yellow))))
+     ((,class (:foreground ,monokai-violet))
+      (,terminal-class (:foreground ,terminal-monokai-violet))))
 
    `(js2-private-member
      ((,class (:foreground ,monokai-blue))
@@ -5652,6 +5652,34 @@ Also affects 'linum-mode' background."
      ((,class (:foreground ,monokai-green))
       (,terminal-class (:foreground ,terminal-monokai-green))))
 
+   ;; which-key
+   `(which-key-key-face
+     ((,class (:foreground ,monokai-green
+			   :weight bold))
+      (,terminal-class (:foreground ,terminal-monokai-green
+				    :weight bold))))
+
+   `(which-key-separator-face
+     ((,class (:foreground ,monokai-comments))
+      (,terminal-class (:foreground ,terminal-monokai-comments))))
+
+   `(which-key-note-face
+     ((,class (:foreground ,monokai-comments))
+      (,terminal-class (:foreground ,terminal-monokai-comments))))
+
+   `(which-key-command-description-face
+     ((,class (:foreground ,monokai-fg))
+      (,terminal-class (:foreground ,terminal-monokai-fg))))
+
+   `(which-key-local-map-description-face
+     ((,class (:foreground ,monokai-yellow-hc))
+      (,terminal-class (:foreground ,terminal-monokai-yellow-hc))))
+
+   `(which-key-group-description-face
+     ((,class (:foreground ,monokai-red
+			   :weight bold))
+      (,terminal-class (:foreground ,terminal-monokai-red
+				    :weight bold))))
    ;; window-number-mode
    `(window-number-face
      ((,class (:foreground ,monokai-green))

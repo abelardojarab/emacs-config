@@ -47,7 +47,11 @@
   :config (progn
           (setq rtags-use-helm t)
           (setq rtags-autostart-diagnostics t)
-          (setq rtags-completions-enabled t)))
+          (setq rtags-completions-enabled t)
+
+          ;; Ensure rdm is running
+          (add-hook 'c-mode-common-hook 'rtags-start-process-unless-running)
+          (add-hook 'c++-mode-common-hook 'rtags-start-process-unless-running)))
 
 ;; cmake-based IDE
 (use-package cmake-ide

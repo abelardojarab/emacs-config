@@ -198,35 +198,51 @@ public:
         error("%s:%d:%d is not indexed", path.constData(), line, col);
         return Location();
     }
-    static String encode(const String &key, const Path &pwd = Path())
+    static bool parse(const String &str, const Path &pwd, Path::ResolveMode mode,
+                      Path *path, uint32_t *line, uint32_t *col)
     {
-        char path[PATH_MAX];
+        const size_t lastColon = str.lastIndexOf(':', str.size() - 2);
+        if (lastColon == String::npos)
+            return false;
+        const size_t secondLastColon = str.lastIndexOf(':', lastColon - 1);
+        if (secondLastColon == String::npos)
+            return false;
+        const char *cstr = str.constData();
+        char *end;
+        assert(line);
+        *line = static_cast<uint32_t>(strtoul(cstr + secondLastColon + 1, &end, 10));
+        if (*end != ':' || end == str + secondLastColon + 1)
+            return false;
+        assert(col);
+        *col = static_cast<uint32_t>(strtoul(cstr + lastColon + 1, &end, 10));
+        if ((*end && *end != ':') || end == str + lastColon + 1)
+            return false;
+
+        *path = Path::resolved(str.left(secondLastColon), mode, pwd);
+        return path->isFile();
+    }
+
+    static String encode(const String &str, const Path &pwd = Path())
+    {
         uint32_t line, col;
-        if (sscanf(key.constData(), "%[^':']:%u:%u", path, &line, &col) != 3)
+        Path path;
+        if (!parse(str, pwd, Path::MakeAbsolute, &path, &line, &col))
             return String();
-
-        Path resolved = Path::resolved(path, Path::MakeAbsolute, pwd);
-        if (!resolved.isFile())
-            return String();
-        {
-            char buf[8];
-            memcpy(buf, &line, sizeof(line));
-            memcpy(buf + 4, &col, sizeof(col));
-            resolved.append(buf, 8);
-        }
-
-        return resolved;
+        char buf[8];
+        memcpy(buf, &line, sizeof(line));
+        memcpy(buf + 4, &col, sizeof(col));
+        path.append(buf, 8);
+        return path;
     }
 
     static Location fromPathLineAndColumn(const String &str, const Path &pwd = Path())
     {
-        char path[PATH_MAX];
         uint32_t line, col;
-        if (sscanf(str.constData(), "%[^':']:%u:%u", path, &line, &col) != 3)
+        Path path;
+        if (!parse(str, pwd, Path::RealPath, &path, &line, &col))
             return Location();
 
-        const Path resolved = Path::resolved(path, Path::RealPath, pwd);
-        const uint32_t fileId = Location::fileId(resolved);
+        const uint32_t fileId = Location::fileId(path);
         if (!fileId)
             return Location();
         return Location(fileId, line, col);

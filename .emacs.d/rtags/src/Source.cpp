@@ -17,6 +17,7 @@
 
 #include "Location.h"
 #include "rct/EventLoop.h"
+#include "rct/Process.h"
 #include "RTags.h"
 #include "Server.h"
 
@@ -107,6 +108,11 @@ static inline Source::Language guessLanguageFromSourceFile(const Path &sourceFil
     return Source::NoLanguage;
 }
 
+
+static bool isWrapper(const char *name)
+{
+    return (!strcmp(name, "gcc-rtags-wrapper.sh") || !strcmp(name, "icecc"));
+}
 static Path findFileInPath(const Path &unresolved, const Path &cwd, const List<Path> &pathEnvironment)
 {
     // error() << "Coming in with" << front;
@@ -123,7 +129,7 @@ static Path findFileInPath(const Path &unresolved, const Path &cwd, const List<P
 
     if (!resolve.isEmpty()) {
         const Path resolved = resolve.resolved();
-        if (!strcmp(resolved.fileName(), "gcc-rtags-wrapper.sh")) {
+        if (isWrapper(resolved.fileName())) {
             file = unresolved.fileName();
         } else {
             return resolve;
@@ -135,7 +141,7 @@ static Path findFileInPath(const Path &unresolved, const Path &cwd, const List<P
         bool ok;
         const Path p = Path::resolved(file, Path::RealPath, path, &ok);
         if (ok) {
-            if (strcmp(p.fileName(), "gcc-rtags-wrapper.sh") && !access(p.nullTerminated(), R_OK | X_OK)) {
+            if (!isWrapper(p.fileName()) && !access(p.constData(), R_OK | X_OK)) {
                 debug() << "Found compiler" << p << "for" << unresolved;
                 return Path::resolved(file, Path::MakeAbsolute, path);
             }
@@ -234,6 +240,11 @@ static const char *blacklist[] = {
     "-MQ",
     "-MT",
     "-Og",
+    "-fbuild-session-file=",
+    "-fbuild-session-timestamp=",
+    "-fembed-bitcode",
+    "-fembed-bitcode-marker",
+    "-fmodules-validate-once-per-build-session",
     "-fno-var-tracking",
     "-fno-var-tracking-assignments",
     "-fvar-tracking",
@@ -269,7 +280,17 @@ static inline bool hasValue(const String &arg)
 
 static inline bool isBlacklisted(const String &arg)
 {
-    return bsearch(arg.constData(), blacklist,
+    const char *cstr;
+    const size_t idx = arg.indexOf('=');
+    String copy;
+    if (idx == String::npos) {
+        cstr = arg.c_str();
+    } else {
+        copy = arg.left(idx + 1);
+        cstr = copy.c_str();
+    }
+
+    return bsearch(cstr, blacklist,
                    sizeof(blacklist) / sizeof(blacklist[0]),
                    sizeof(blacklist[0]), compare);
 }
@@ -303,61 +324,46 @@ static Path resolveCompiler(const Path &unresolved, const Path &cwd, const List<
 }
 
 
-static inline bool isCompiler(const Path &fullPath)
+static inline bool isCompiler(const Path &fullPath, const List<Path> &pathEnvironment)
 {
-    assert(EventLoop::isMainThread());
-
-    if (const Server *server = Server::instance()) {
-        for (const auto &rx : server->options().extraCompilers) {
-            if (Rct::contains(fullPath, rx))
-                return true;
-        }
-    }
-
-    String compiler = fullPath.fileName();
-    if (compiler.endsWith(".exe"))
+    const char *fileName = fullPath.fileName();
+    if (!strcmp(fileName, "ccache"))
         return true;
+    assert(EventLoop::isMainThread());
+    static Hash<Path, bool> sCache;
 
-    String c;
-    int dash = compiler.lastIndexOf('-');
-    if (dash >= 0) {
-        c = String(compiler.constData() + dash + 1, compiler.size() - dash - 1);
-    } else {
-        c = String(compiler.constData(), compiler.size());
+    bool ok;
+    bool ret = sCache.value(fullPath, false, &ok);
+    if (ok)
+        return ret;
+
+    char path[PATH_MAX];
+    strcpy(path, "/tmp/rtags-compiler-check-XXXXXX.c");
+    const int fd = mkstemps(path, 2);
+    if (fd == -1) {
+        error("Failed to make temporary file errno: %d", errno);
+        return false;
     }
 
-    if (c.size() != compiler.size()) {
-        bool isVersion = true;
-        for (size_t i=0; i<c.size(); ++i) {
-            if ((c.at(i) < '0' || c.at(i) > '9') && c.at(i) != '.') {
-#ifdef OS_CYGWIN
-                // eat 'exe' if it exists
-                if (c.mid(i) == "exe")
-                    goto cont;
-#endif
-                isVersion = false;
-                break;
-            }
-        }
-#ifdef OS_CYGWIN
-  cont:
-#endif
-        if (isVersion) {
-            dash = compiler.lastIndexOf('-', dash - 1);
-            if (dash >= 0) {
-                c = compiler.mid(dash + 1, compiler.size() - c.size() - 2 - dash);
-            } else {
-                c = compiler.left(dash);
-            }
-        }
+    const char *contents = "int foo() { return 0; }";
+    const ssize_t len = strlen(contents);
+    if (write(fd, contents, len) != len) {
+        error("Failed to write to temporary file errno: %d", errno);
+        close(fd);
+        return false;
     }
 
+    close(fd);
 
-    return (c.startsWith("g++")
-            || c.startsWith("c++")
-            || c.startsWith("clang")
-            || c.startsWith("gcc")
-            || c.startsWith("cc"));
+    Path out = path;
+    out += ".out";
+    Process proc;
+    proc.exec(fullPath, List<String>() << "-x" << "c" << "-c" << path << "-o" << out, pathEnvironment);
+    assert(proc.isFinished());
+    sCache[fullPath] = !proc.returnCode();
+    unlink(path);
+    unlink(out.constData());
+    return !proc.returnCode();
 }
 
 struct Input {
@@ -612,7 +618,7 @@ List<Source> Source::parse(const String &cmdLine,
                 add = false;
                 const Path compiler = resolveCompiler(arg, cwd, pathEnvironment);
                 if (!access(compiler.nullTerminated(), R_OK | X_OK)) {
-                    validCompiler = isCompiler(compiler);
+                    validCompiler = isCompiler(compiler, pathEnvironment);
                     compilerId = Location::insertFile(compiler);
                 } else {
                     break;
@@ -620,14 +626,14 @@ List<Source> Source::parse(const String &cmdLine,
             } else {
                 const Path c = arg;
                 resolved = Path::resolved(arg, Path::RealPath, cwd);
-                if (!resolved.isHeader() && !resolved.isSource()) {
+                if ((!resolved.extension() || !resolved.isHeader()) && !resolved.isSource()) {
                     add = false;
                     if (i == 1) {
                         const Path inPath = findFileInPath(c, cwd, pathEnvironment);
                         if (!access(inPath.nullTerminated(), R_OK | X_OK)) {
                             extraCompiler = inPath;
                             if (!validCompiler)
-                                validCompiler = isCompiler(extraCompiler);
+                                validCompiler = isCompiler(extraCompiler, pathEnvironment);
                         }
                     }
                 }

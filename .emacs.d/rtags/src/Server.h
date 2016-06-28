@@ -51,41 +51,41 @@ public:
     ~Server();
     static Server *instance() { return sInstance; }
     enum Option {
-        NoOptions = 0x000000,
-        ClearProjects = 0x000001,
-        Wall = 0x000002,
-        IgnorePrintfFixits = 0x000004,
-        NoUnlimitedErrors = 0x000008,
-        SpellChecking = 0x000010,
-        DisallowMultipleSources = 0x000020,
-        NoStartupCurrentProject = 0x000040,
-        WatchSystemPaths = 0x000080,
-        NoFileManagerWatch = 0x000100,
-        NoFileSystemWatch = 0x000200,
-        NoNoUnknownWarningsOption = 0x000400,
-        SuspendRPOnCrash = 0x000800,
-        SeparateDebugAndRelease = 0x001000,
-        AllowPedantic = 0x002000,
-        StartSuspended = 0x004000,
-        EnableCompilerManager = 0x008000,
-        EnableNDEBUG = 0x010000,
-        Progress = 0x020000,
-        Weverything = 0x040000,
-        NoComments = 0x080000,
-        Launchd = 0x0100000,     /* Only valid for Darwin... but you're not out of bits yet. */
-        RPLogToSyslog = 0x0200000,
-        CompletionsNoFilter = 0x0400000,
-        WatchSourcesOnly = 0x0800000,
-        NoFileLock = 0x1000000,
-        PCHEnabled = 0x2000000,
-        NoFileManager = 0x4000000,
-        ValidateFileMaps = 0x8000000
+        NoOptions = 0x0,
+        ClearProjects = (1ull << 1),
+        Wall = (1ull << 2),
+        IgnorePrintfFixits = (1ull << 3),
+        SpellChecking = (1ull << 4),
+        DisallowMultipleSources = (1ull << 5),
+        NoStartupCurrentProject = (1ull << 6),
+        WatchSystemPaths = (1ull << 7),
+        NoFileManagerWatch = (1ull << 8),
+        NoFileSystemWatch = (1ull << 9),
+        NoNoUnknownWarningsOption = (1ull << 10),
+        SuspendRPOnCrash = (1ull << 11),
+        SeparateDebugAndRelease = (1ull << 12),
+        AllowPedantic = (1ull << 13),
+        StartSuspended = (1ull << 14),
+        EnableCompilerManager = (1ull << 15),
+        EnableNDEBUG = (1ull << 16),
+        Progress = (1ull << 17),
+        Weverything = (1ull << 18),
+        NoComments = (1ull << 19),
+        Launchd = (1ull << 20),     /* Only valid for Darwin... but you're not out of bits yet. */
+        RPLogToSyslog = (1ull << 21),
+        CompletionsNoFilter = (1ull << 22),
+        WatchSourcesOnly = (1ull << 23),
+        NoFileLock = (1ull << 24),
+        PCHEnabled = (1ull << 25),
+        NoFileManager = (1ull << 26),
+        ValidateFileMaps = (1ull << 27),
+        CompletionLogs = (1ull << 28)
     };
     struct Options {
         Options()
             : jobCount(0), headerErrorJobCount(0), maxIncludeCompletionDepth(0),
               rpVisitFileTimeout(0), rpIndexDataMessageTimeout(0), rpConnectTimeout(0),
-              rpConnectAttempts(0), rpNiceValue(0), threadStackSize(0), maxCrashCount(0),
+              rpConnectAttempts(0), rpNiceValue(0), maxCrashCount(0),
               completionCacheSize(0), testTimeout(60 * 1000 * 5),
               maxFileMapScopeCacheSize(512), tcpPort(0)
         {
@@ -95,8 +95,8 @@ public:
         Flags<Option> options;
         size_t jobCount, headerErrorJobCount, maxIncludeCompletionDepth;
         int rpVisitFileTimeout, rpIndexDataMessageTimeout,
-            rpConnectTimeout, rpConnectAttempts, rpNiceValue, threadStackSize, maxCrashCount,
-            completionCacheSize, testTimeout, maxFileMapScopeCacheSize;
+            rpConnectTimeout, rpConnectAttempts, rpNiceValue, maxCrashCount,
+            completionCacheSize, testTimeout, maxFileMapScopeCacheSize, errorLimit;
         uint16_t tcpPort;
         List<String> defaultArguments, excludeFilters;
         Set<String> blockedArguments;
@@ -104,7 +104,6 @@ public:
         List<Source::Define> defines;
         List<Path> tests;
         Set<Path> ignoredCompilers;
-        List<std::regex> extraCompilers;
         List<String> debugLocations;
     };
     bool init(const Options &options);
@@ -150,7 +149,7 @@ private:
     void sendDiagnostics(const std::shared_ptr<QueryMessage> &query, const std::shared_ptr<Connection> &conn);
     void clearProjects(const std::shared_ptr<QueryMessage> &query, const std::shared_ptr<Connection> &conn);
     void codeCompleteAt(const std::shared_ptr<QueryMessage> &query, const std::shared_ptr<Connection> &conn);
-    void cursorInfo(const std::shared_ptr<QueryMessage> &query, const std::shared_ptr<Connection> &conn);
+    void symbolInfo(const std::shared_ptr<QueryMessage> &query, const std::shared_ptr<Connection> &conn);
     void dependencies(const std::shared_ptr<QueryMessage> &query, const std::shared_ptr<Connection> &conn);
     void startClangThread(const std::shared_ptr<QueryMessage> &query, const std::shared_ptr<Connection> &conn);
     void dumpFileMaps(const std::shared_ptr<QueryMessage> &query, const std::shared_ptr<Connection> &conn);

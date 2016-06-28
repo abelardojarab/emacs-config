@@ -1,10 +1,12 @@
+(require 'smartparens)
+
 (defun sp-test-command-setup ()
   (cond
    ((not (boundp 'mode)) (emacs-lisp-mode))
    ((eq mode 'elisp) (emacs-lisp-mode))
    ((eq mode 'racket) (racket-mode))
    ((eq mode 'c) (c-mode))
-   ((eq mode 'python) (python-mode)))
+   ((eq mode 'python) (shut-up (python-mode))))
   (smartparens-mode 1))
 
 ;; TODO: don't use this, simply define the tests manually.  Gives more
@@ -22,7 +24,7 @@ TESTCASES is a list of strings:
 \(initial-state state-after-1-call state-after-2-calls...)
 
 that are used to test the resulting state after running the
-command. Each string may contain | to specify where point should
+command. Each string must contain | to specify where point should
 be."
   (declare (indent 1))
   `(ert-deftest ,(intern (concat "sp-test-command-"
@@ -188,6 +190,9 @@ be."
 
     ("(foo)\nbar ;; baz (f|oo) baz\n(quux)"
      "(foo)\nbar ;; baz (f|oo baz)\n(quux)"))
+   (((current-prefix-arg '(4)))
+    ("[(fo|o) bar baz]" "[(fo|o bar baz)]")
+    ("((progn| bar (baz) (baz)))" "((progn| bar (baz) (baz)))"))
 
    (((mode 'c))
     ("int funct() { int |foo =} bar;" "int funct() { int |foo = bar;}")
@@ -195,7 +200,10 @@ be."
     ("int funct() { int |foo =}; bar;" "int funct() { int |foo = bar;};"))
    (((mode 'racket)
      (sp-sexp-prefix '((racket-mode regexp "#?['`,]@?"))))
-    ("(f|oo)  #'(bar)" "(f|oo  #'(bar))"))))
+    ("(f|oo)  #'(bar)" "(f|oo  #'(bar))"))
+   (((sp-sexp-prefix '((emacs-lisp-mode regexp "\\(?:['`]*,@?\\|[',`]\\)"))))
+    ("(fo|o) `',(bar)" "(fo|o `',(bar))")
+    ("(fo|o) ,@(bar)" "(fo|o ,@(bar))"))))
 
 (sp-test-command sp-backward-slurp-sexp
   ((nil
@@ -205,7 +213,11 @@ be."
      "((foo)\n bar ;; baz (foo) baz\n qu|ux)")
 
     ("(foo)\nbar ;; baz (f|oo) baz\n(quux)"
-     "(foo)\nbar ;; (baz f|oo) baz\n(quux)"))))
+     "(foo)\nbar ;; (baz f|oo) baz\n(quux)"))
+
+   (((sp-sexp-prefix '((emacs-lisp-mode regexp "\\(?:['`]*,@?\\|[',`]\\)"))))
+    ("(foo `',(b|ar))" "(`',(foo b|ar))")
+    ("(foo ,@(b|ar))" "(,@(foo b|ar))"))))
 
 (sp-test-command sp-forward-barf-sexp
   ((nil
@@ -453,7 +465,7 @@ be."
     ("(define-key sp-keymap (kbd | \"C-{\") 'sp-beginning-of-next-sexp)" "(define-key sp-keymap (|kbd  \"C-{\") 'sp-beginning-of-next-sexp)" ))))
 
 (sp-test-command backward-delete-char
-  ((nil
+  ((((sp-navigate-consider-stringlike-sexp '(emacs-lisp-mode)))
     (";;asdas'|\n'asdasd'" ";;asdas|\n'asdasd'")
     ("foo \"|\" bar" "foo | bar")
     ("foo [|] bar" "foo | bar")
@@ -538,5 +550,13 @@ be."
       (sp-test-with-temp-elisp-buffer "(fo|o)"
         (let ((unread-command-events (list ?\a)))
           (call-interactively 'sp-rewrap-sexp))
+        (error "We should never get here"))
+    (user-error t)))
+
+(ert-deftest sp-test-command-sp-select-next-thing-empty-buffer ()
+  "Ensure we call user-error at buffer end."
+  (condition-case c
+      (sp-test-with-temp-elisp-buffer ""
+        (call-interactively 'sp-select-next-thing)
         (error "We should never get here"))
     (user-error t)))

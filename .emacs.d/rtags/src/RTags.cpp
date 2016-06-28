@@ -36,6 +36,7 @@
 #include "Project.h"
 #include "VisitFileMessage.h"
 #include "VisitFileResponseMessage.h"
+#include "RTagsVersion.h"
 
 #if CLANG_VERSION_MAJOR > 3 || (CLANG_VERSION_MAJOR == 3 && CLANG_VERSION_MINOR > 3)
 #include <clang-c/CXCompilationDatabase.h>
@@ -43,6 +44,11 @@
 
 
 namespace RTags {
+String versionString()
+{
+    return String::format<64>("%d.%d.%d", MajorVersion, MinorVersion, DatabaseVersion);
+}
+
 void encodePath(Path &path)
 {
     Sandbox::encode(path);
@@ -953,7 +959,14 @@ bool loadCompileCommands(const Hash<Path, CompilationDataBaseInfo> &infos, const
             const unsigned int num = clang_CompileCommand_getNumArgs(cmd);
             for (unsigned int j = 0; j < num; ++j) {
                 str = clang_CompileCommand_getArg(cmd, j);
-                args += clang_getCString(str);
+                const char *ch = clang_getCString(str);
+                if (strchr(ch, ' ')) {
+                    args += '"';
+                    args += ch;
+                    args += '"';
+                } else {
+                    args += ch;
+                }
                 clang_disposeString(str);
                 if (j < num - 1)
                     args += ' ';

@@ -63,6 +63,7 @@
 #include "SymbolInfoJob.h"
 #include "VisitFileMessage.h"
 #include "VisitFileResponseMessage.h"
+#include "RTagsVersion.h"
 
 #define TO_STR1(x) #x
 #define TO_STR(x) TO_STR1(x)
@@ -105,8 +106,7 @@ bool Server::init(const Options &options)
 
     mOptions = options;
     mSuspended = (options.options & StartSuspended);
-    if (!(options.options & NoUnlimitedErrors))
-        mOptions.defaultArguments << "-ferror-limit=0";
+    mOptions.defaultArguments << String::format<32>("-ferror-limit=%d", mOptions.errorLimit);
     if (options.options & Wall)
         mOptions.defaultArguments << "-Wall";
     if (options.options & Weverything)
@@ -154,12 +154,12 @@ bool Server::init(const Options &options)
     }
 
     if (!initServers()) {
-        error("Unable to listen on %s", mOptions.socketFile.constData());
+        error("Unable to listen on %s (errno: %d)", mOptions.socketFile.constData(), errno);
         return false;
     }
 
     {
-        Log l(LogLevel::Error);
+        Log l(LogLevel::Error, LogOutput::StdOut|LogOutput::TrailingNewLine);
         l << "Running with" << mOptions.jobCount << "jobs, using args:"
           << String::join(mOptions.defaultArguments, ' ') << '\n';
         l << "Includepaths:";
@@ -343,7 +343,7 @@ void Server::onNewMessage(const std::shared_ptr<Message> &message, const std::sh
         break;
     case LogOutputMessage::MessageId: {
         auto msg = std::static_pointer_cast<LogOutputMessage>(message);
-        error() << msg->raw();
+        logDirect(LogLevel::Error, msg->raw(), LogOutput::StdOut|LogOutput::TrailingNewLine);
         handleLogOutputMessage(msg, connection);
         break; }
     case VisitFileMessage::MessageId:
@@ -576,7 +576,8 @@ void Server::handleIndexDataMessage(const std::shared_ptr<IndexDataMessage> &mes
 
 void Server::handleQueryMessage(const std::shared_ptr<QueryMessage> &message, const std::shared_ptr<Connection> &conn)
 {
-    Log(message->flags() & QueryMessage::SilentQuery ? LogLevel::Warning : LogLevel::Error) << message->raw();
+    Log(message->flags() & QueryMessage::SilentQuery ? LogLevel::Warning : LogLevel::Error,
+        LogOutput::StdOut|LogOutput::TrailingNewLine) << message->raw();
     conn->setSilent(message->flags() & QueryMessage::Silent);
 
     switch (message->type()) {
@@ -652,7 +653,7 @@ void Server::handleQueryMessage(const std::shared_ptr<QueryMessage> &message, co
         clearProjects(message, conn);
         break;
     case QueryMessage::SymbolInfo:
-        cursorInfo(message, conn);
+        symbolInfo(message, conn);
         break;
     case QueryMessage::FollowLocation:
         followLocation(message, conn);
@@ -890,6 +891,27 @@ void Server::diagnose(const std::shared_ptr<QueryMessage> &query, const std::sha
 
     project->diagnose(fileId);
     conn->finish();
+    if (query->flags() & QueryMessage::CodeCompletionEnabled && !mCompletionThread) {
+        mCompletionThread = new CompletionThread(mOptions.completionCacheSize);
+        mCompletionThread->start();
+    }
+
+    if (mCompletionThread && !mCompletionThread->isCached(fileId, project)) {
+        Source source = project->sources(fileId).value(query->buildIndex());
+        if (source.isNull()) {
+            for (uint32_t dep : project->dependencies(fileId, Project::DependsOnArg)) {
+                source = project->sources(dep).value(query->buildIndex());
+                if (!source.isNull())
+                    break;
+            }
+
+            if (source.isNull()) {
+                return;
+            }
+        }
+
+        mCompletionThread->prepare(std::move(source), query->unsavedFiles().value(Location::path(fileId)));
+    }
 }
 
 void Server::generateTest(const std::shared_ptr<QueryMessage> &query, const std::shared_ptr<Connection> &conn)
@@ -966,22 +988,31 @@ void Server::generateTest(const std::shared_ptr<QueryMessage> &query, const std:
     project->endScope();
 }
 
-void Server::cursorInfo(const std::shared_ptr<QueryMessage> &query, const std::shared_ptr<Connection> &conn)
+void Server::symbolInfo(const std::shared_ptr<QueryMessage> &query, const std::shared_ptr<Connection> &conn)
 {
-    const Location loc = query->location();
-    if (loc.isNull()) {
-        conn->write("Not indexed");
-        conn->finish(1);
-        return;
-    }
-    std::shared_ptr<Project> project = projectForQuery(query);
-    if (!project || !project->dependencies().contains(loc.fileId())) {
+    const String data = query->query();
+    Deserializer deserializer(data);
+    Path path;
+    uint32_t line, column, line2, column2;
+    deserializer >> path >> line >> column >> line2 >> column2;
+    const uint32_t fileId = Location::fileId(path);
+    if (!fileId) {
         conn->write("Not indexed");
         conn->finish(1);
         return;
     }
 
-    SymbolInfoJob job(loc, query, project);
+    std::shared_ptr<Project> project = projectForQuery(query);
+    if (!project || !project->dependencies().contains(fileId)) {
+        conn->write("Not indexed");
+        conn->finish(1);
+        return;
+    }
+
+    const Location start(fileId, line, column);
+    const Location end = line2 ? Location(fileId, line2, column2) : Location();
+
+    SymbolInfoJob job(start, end, query, project);
     const int ret = job.run(conn);
     conn->finish(ret);
 }
@@ -1600,6 +1631,7 @@ void Server::suspend(const std::shared_ptr<QueryMessage> &query, const std::shar
     } else {
         project = currentProject();
     }
+    const bool old = mSuspended;
     switch (mode) {
     case All:
         mSuspended = true;
@@ -1641,6 +1673,9 @@ void Server::suspend(const std::shared_ptr<QueryMessage> &query, const std::shar
         break;
     }
     conn->finish();
+
+    if (old && !mSuspended)
+        mJobScheduler->startJobs();
 }
 
 void Server::setBuffers(const std::shared_ptr<QueryMessage> &query, const std::shared_ptr<Connection> &conn)
@@ -1955,14 +1990,14 @@ void Server::codeCompleteAt(const std::shared_ptr<QueryMessage> &query, const st
     if (query->flags() & QueryMessage::XML)
         flags |= CompletionThread::XML;
     if (query->flags() & QueryMessage::CodeCompleteIncludeMacros)
-        flags |= CompletionThread::CodeCompleteIncludeMacros;
+        flags |= CompletionThread::IncludeMacros;
     std::shared_ptr<Connection> c = conn;
     if (!(query->flags() & QueryMessage::SynchronousCompletions)) {
         c->finish();
         c.reset();
     }
     error() << "Got completion request for" << loc;
-    mCompletionThread->completeAt(source, loc, flags, query->unsavedFiles().value(loc.path()), c);
+    mCompletionThread->completeAt(std::move(source), loc, flags, query->unsavedFiles().value(loc.path()), c);
 }
 
 void Server::dumpJobs(const std::shared_ptr<Connection> &conn)

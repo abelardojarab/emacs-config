@@ -14,11 +14,18 @@
    along with RTags.  If not, see <http://www.gnu.org/licenses/>. */
 
 #include "CompletionThread.h"
+#include "Project.h"
 
 #include "rct/StopWatch.h"
 #include "RTags.h"
 #include "RTagsLogOutput.h"
 #include "Server.h"
+
+static uint64_t start = 0;
+#define LOG()                                                           \
+    if (Server::instance()->options().options & Server::CompletionLogs) \
+        error() << "CODE COMPLETION" << String::format<16>("%gs", static_cast<double>(Rct::monoMs() - ::start) / 1000.0)
+
 
 CompletionThread::CompletionThread(int cacheSize)
     : mShutdown(false), mCacheSize(cacheSize), mDump(0), mIndex(0)
@@ -95,11 +102,13 @@ void CompletionThread::run()
     mIndex = 0;
 }
 
-void CompletionThread::completeAt(const Source &source, Location location,
-                                  Flags<Flag> flags, const String &unsaved,
+void CompletionThread::completeAt(Source &&source, Location location,
+                                  Flags<Flag> flags, String &&unsaved,
                                   const std::shared_ptr<Connection> &conn)
 {
-    Request *request = new Request({ source, location, flags, unsaved, conn});
+    if (Server::instance()->options().options & Server::CompletionLogs)
+        error() << "CODE COMPLETION completeAt" << location << flags;
+    Request *request = new Request({ std::forward<Source>(source), location, flags, std::forward<String>(unsaved), conn});
     std::unique_lock<std::mutex> lock(mMutex);
     auto it = mPending.begin();
     while (it != mPending.end()) {
@@ -114,8 +123,25 @@ void CompletionThread::completeAt(const Source &source, Location location,
     mCondition.notify_one();
 }
 
+void CompletionThread::prepare(Source &&source, String &&unsaved)
+{
+    if (Server::instance()->options().options & Server::CompletionLogs)
+        error() << "CODE COMPLETION prepare" << source.sourceFile() << unsaved.size();
+    std::unique_lock<std::mutex> lock(mMutex);
+    for (auto req : mPending) {
+        if (req->source == source) {
+            req->unsaved = std::move(unsaved);
+            return;
+        }
+    }
+    Request *request = new Request({ std::forward<Source>(source), Location(), WarmUp, std::forward<String>(unsaved), std::shared_ptr<Connection>() });
+    mPending.push_back(request);
+    mCondition.notify_one();
+}
+
 String CompletionThread::dump()
 {
+
     Dump dump;
     dump.done = false;
     {
@@ -157,63 +183,10 @@ bool CompletionThread::compareCompletionCandidates(const Completions::Candidate 
     return l->completion < r->completion;
 }
 
-#if 0
-static inline const char *completionChunkKindSpelling(CXCompletionChunkKind kind)
-{
-    switch (kind) {
-    case CXCompletionChunk_Optional: return "Optional";
-    case CXCompletionChunk_TypedText: return "TypedText";
-    case CXCompletionChunk_Text: return "Text";
-    case CXCompletionChunk_Placeholder: return "Placeholder";
-    case CXCompletionChunk_Informative: return "Informative";
-    case CXCompletionChunk_CurrentParameter: return "CurrentParameter";
-    case CXCompletionChunk_LeftParen: return "LeftParen";
-    case CXCompletionChunk_RightParen: return "RightParen";
-    case CXCompletionChunk_LeftBracket: return "LeftBracket";
-    case CXCompletionChunk_RightBracket: return "RightBracket";
-    case CXCompletionChunk_LeftBrace: return "LeftBrace";
-    case CXCompletionChunk_RightBrace: return "RightBrace";
-    case CXCompletionChunk_LeftAngle: return "LeftAngle";
-    case CXCompletionChunk_RightAngle: return "RightAngle";
-    case CXCompletionChunk_Comma: return "Comma";
-    case CXCompletionChunk_ResultType: return "ResultType";
-    case CXCompletionChunk_Colon: return "Colon";
-    case CXCompletionChunk_SemiColon: return "SemiColon";
-    case CXCompletionChunk_Equal: return "Equal";
-    case CXCompletionChunk_HorizontalSpace: return "HorizontalSpace";
-    case CXCompletionChunk_VerticalSpace: return "VerticalSpace";
-    default: break;
-    }
-    return "";
-}
-#endif
-
 void CompletionThread::process(Request *request)
 {
-    // if (!request->unsaved.isEmpty()) {
-    //     int line = request->location.line();
-    //     int pos = 0;
-    //     while (line > 1) {
-    //         int p = request->unsaved.indexOf('\n', pos);
-    //         if (p == -1) {
-    //             pos = -1;
-    //             break;
-    //         }
-    //         pos = p + 1;
-    //         --line;
-    //     }
-    //     if (pos != -1) {
-    //         int end = request->unsaved.indexOf('\n', pos);
-    //         if (end == -1)
-    //             end = request->unsaved.size();
-    //         error("Completing at %s:%d:%d line: [%s]\n",
-    //               request->location.path().constData(),
-    //               request->location.line(),
-    //               request->location.column(),
-    //               request->unsaved.mid(pos, end - pos).constData());
-    //     }
-    // }
-
+    ::start = Rct::monoMs();
+    LOG() << "processing" << request->toString();
     StopWatch sw;
     int parseTime = 0;
     int reparseTime = 0;
@@ -221,14 +194,17 @@ void CompletionThread::process(Request *request)
     int processTime = 0;
     SourceFile *&cache = mCacheMap[request->source.fileId];
     if (cache && cache->source != request->source) {
+        LOG() << "cached sourcefile doesn't matched source, discarding" << request->source.sourceFile();
         delete cache;
         cache = 0;
     }
     if (!cache) {
         cache = new SourceFile;
+        LOG() << "creating source file for" << request->source.sourceFile();
         mCacheList.append(cache);
         while (mCacheMap.size() > mCacheSize) {
             SourceFile *c = mCacheList.removeFirst();
+            LOG() << "over cache limit. discarding" << c->source.sourceFile();
             mCacheMap.remove(c->source.fileId);
             delete c;
         }
@@ -260,6 +236,7 @@ void CompletionThread::process(Request *request)
 
     const auto &options = Server::instance()->options();
     if (!cache->translationUnit) {
+        LOG() << "No translationUnit for" << request->source.sourceFile() << "recreating";
         cache->completionsMap.clear();
         cache->completionsList.deleteAll();
         sw.restart();
@@ -282,39 +259,64 @@ void CompletionThread::process(Request *request)
         // error() << "PARSING" << clangLine;
         parseTime = cache->parseTime = sw.restart();
         if (cache->translationUnit) {
+            LOG() << "reparsing translation unit" << request->source.sourceFile();
             cache->translationUnit->reparse(&unsaved, request->unsaved.size() ? 1 : 0);
         }
         reparseTime = cache->reparseTime = sw.elapsed();
-        if (!cache->translationUnit)
+        if (!cache->translationUnit) {
+            LOG() << "Failed to parse translation unit" << request->source.sourceFile();
             return;
+        }
         cache->unsavedHash = hash;
         cache->lastModified = lastModified;
     } else if (cache->unsavedHash != hash || cache->lastModified != lastModified) {
+        LOG() << "cache mismatch for " << request->source.sourceFile()
+              << "discarding because of" << (cache->unsavedHash != hash ? "unsaved contents" : "modification time");
+
         cache->completionsMap.clear();
         cache->completionsList.deleteAll();
         cache->unsavedHash = hash;
         cache->lastModified = lastModified;
-    } else if (!(request->flags & Refresh)) {
+        // ### should we reparse here?
+    } else if (!(request->flags & (Refresh|WarmUp))) {
         const auto it = cache->completionsMap.find(request->location);
         if (it != cache->completionsMap.end()) {
-            cache->completionsList.moveToEnd(it->second);
-            error("Found completions (%zu) in cache %s:%d:%d",
-                  it->second->candidates.size(), sourceFile.constData(),
-                  request->location.line(), request->location.column());
-            printCompletions(it->second->candidates, request);
-            return;
+            if (!(it->second->flags & IncludeMacros) && request->flags & IncludeMacros) {
+                LOG() << "Found cached completions for" << request->location << "but request flags differ, discarding";
+                cache->completionsList.remove(it->second);
+                delete it->second;
+                cache->completionsMap.erase(it);
+                warning("Discarded cached completions because of mismatched macro inclusiveness");
+            } else {
+                LOG() << "Found cached completions " << request->location;
+
+                cache->completionsList.moveToEnd(it->second);
+                log(LogLevel::Error, LogOutput::StdOut|LogOutput::TrailingNewLine,
+                    "Found completions (%zu) in cache %s:%d:%d",
+                    it->second->candidates.size(), sourceFile.constData(),
+                    request->location.line(), request->location.column());
+                printCompletions(it->second->candidates, request);
+                return;
+            }
         }
+    }
+
+    if (request->flags & WarmUp) {
+        LOG() << "Warmed up unit" << request->source.sourceFile();
+        return;
     }
 
     sw.restart();
     unsigned int completionFlags = (CXCodeComplete_IncludeCodePatterns|CXCodeComplete_IncludeBriefComments);
-    if (request->flags & CodeCompleteIncludeMacros)
+    if (request->flags & IncludeMacros)
         completionFlags |= CXCodeComplete_IncludeMacros;
 
     CXCodeCompleteResults *results = clang_codeCompleteAt(cache->translationUnit->unit, sourceFile.constData(),
                                                           request->location.line(), request->location.column(),
                                                           &unsaved, unsaved.Length ? 1 : 0, completionFlags);
     completeTime = cache->codeCompleteTime = sw.restart();
+    LOG() << "Generated completions for" << request->location << (results ? "successfully" : "unsuccessfully") << "in" << completeTime << "ms";
+
     ++cache->completions;
     if (results) {
         std::vector<Completions::Candidate> nodes;
@@ -360,10 +362,12 @@ void CompletionThread::process(Request *request)
             node.signature.reserve(256);
             const int chunkCount = clang_getNumCompletionChunks(string);
             bool ok = true;
+            node.chunks.reserve(chunkCount);
             for (int j=0; j<chunkCount; ++j) {
                 const CXCompletionChunkKind chunkKind = clang_getCompletionChunkKind(string, j);
+                String text = RTags::eatString(clang_getCompletionChunkText(string, j));
                 if (chunkKind == CXCompletionChunk_TypedText) {
-                    node.completion = RTags::eatString(clang_getCompletionChunkText(string, j));
+                    node.completion = text;
                     if (node.completion.isEmpty()
                         || (node.completion.size() > 8
                             && node.completion.startsWith("operator")
@@ -373,10 +377,11 @@ void CompletionThread::process(Request *request)
                     }
                     node.signature.append(node.completion);
                 } else {
-                    node.signature.append(RTags::eatString(clang_getCompletionChunkText(string, j)));
+                    node.signature.append(text);
                     if (chunkKind == CXCompletionChunk_ResultType)
                         node.signature.append(' ');
                 }
+                node.chunks.emplace_back(std::move(text), chunkKind);
             }
             if (ok) {
                 const unsigned int annotations = clang_getCompletionNumAnnotations(string);
@@ -425,6 +430,7 @@ void CompletionThread::process(Request *request)
             } else {
                 enum { MaxCompletionCache = 10 }; // ### configurable?
                 c = new Completions(request->location);
+                c->flags = (request->flags & IncludeMacros);
                 cache->completionsList.append(c);
                 while (cache->completionsMap.size() > MaxCompletionCache) {
                     Completions *cc = cache->completionsList.takeFirst();
@@ -435,18 +441,61 @@ void CompletionThread::process(Request *request)
             c->candidates.resize(nodeCount);
             for (int i=0; i<nodeCount; ++i)
                 c->candidates[i] = std::move(*nodesPtr[i]);
-            printCompletions(c->candidates, request);
-            processTime = sw.elapsed();
+            if (!(request->flags & Refresh)) {
+                printCompletions(c->candidates, request);
+                processTime = sw.elapsed();
+                LOG() << "Sent" << nodeCount << "completions for" << request->location;
+            } else {
+                LOG() << "Prepared" << nodeCount << "completions for" << request->location;
+            }
             warning("Processed %s, parse %d/%d, complete %d, process %d => %d completions (unsaved %zu)%s",
                     request->location.toString().constData(),
                     parseTime, reparseTime, completeTime, processTime, nodeCount, request->unsaved.size(),
                     request->flags & Refresh ? " Refresh" : "");
-        } else {
+
+        } else if (!(request->flags & Refresh)) {
+            LOG() << "No completions available for" << request->location;
             printCompletions(List<Completions::Candidate>(), request);
             error() << "No completion results available" << request->location << results->NumResults;
+        } else {
+            LOG() << "No completions available for" << request->location << "refresh";
         }
         clang_disposeCodeCompleteResults(results);
     }
+}
+
+Value CompletionThread::Completions::Candidate::toValue(unsigned int flags) const
+{
+    Value ret;
+    if (!completion.isEmpty())
+        ret["completion"] = completion;
+    if (!signature.isEmpty())
+        ret["signature"] = signature;
+    if (!annotation.isEmpty())
+        ret["annotation"] = annotation;
+    if (!parent.isEmpty())
+        ret["parent"] = parent;
+    if (!briefComment.isEmpty())
+        ret["briefComment"] = briefComment;
+    ret["priority"] = priority;
+    ret["distance"] = distance;
+    String str;
+    str << cursorKind;
+    ret["kind"] = str;
+    if (flags & IncludeChunks && !chunks.isEmpty()) {
+        Value cc;
+        cc.arrayReserve(chunks.size());
+        for (const auto &chunk : chunks) {
+            Value c;
+            c["text"] = chunk.text;
+            String kind;
+            kind << chunk.kind;
+            c["kind"] = kind;
+            cc.push_back(c);
+        }
+        ret["chunks"] = cc;
+    }
+    return ret;
 }
 
 struct Output
@@ -491,27 +540,28 @@ void CompletionThread::printCompletions(const List<Completions::Candidate> &comp
             raw = true;
         }
         request->conn.reset();
-    }
-    log([&xml, &elisp, &outputs, &raw, &json](const std::shared_ptr<LogOutput> &output) {
-            // error() << "Got a dude" << output->testLog(RTags::DiagnosticsLevel);
-            if (output->testLog(RTags::DiagnosticsLevel)) {
-                std::shared_ptr<Output> out(new Output);
-                out->output = output;
-                if (output->flags() & RTagsLogOutput::Elisp) {
-                    out->flags |= CompletionThread::Elisp;
-                    elisp = true;
-                } else if (output->flags() & RTagsLogOutput::XML) {
-                    out->flags |= CompletionThread::XML;
-                    xml = true;
-                } else if (output->flags() & RTagsLogOutput::JSON) {
-                    out->flags |= CompletionThread::JSON;
-                    json = true;
-                } else {
-                    raw = true;
+    } else {
+        log([&xml, &elisp, &outputs, &raw, &json](const std::shared_ptr<LogOutput> &output) {
+                // error() << "Got a dude" << output->testLog(RTags::DiagnosticsLevel);
+                if (output->testLog(RTags::DiagnosticsLevel)) {
+                    std::shared_ptr<Output> out(new Output);
+                    out->output = output;
+                    if (output->flags() & RTagsLogOutput::Elisp) {
+                        out->flags |= CompletionThread::Elisp;
+                        elisp = true;
+                    } else if (output->flags() & RTagsLogOutput::XML) {
+                        out->flags |= CompletionThread::XML;
+                        xml = true;
+                    } else if (output->flags() & RTagsLogOutput::JSON) {
+                        out->flags |= CompletionThread::JSON;
+                        json = true;
+                    } else {
+                        raw = true;
+                    }
+                    outputs.append(out);
                 }
-                outputs.append(out);
-            }
-        });
+            });
+    }
 
     if (!outputs.isEmpty()) {
         String rawOut, xmlOut, jsonOut, elispOut;
@@ -524,7 +574,7 @@ void CompletionThread::printCompletions(const List<Completions::Candidate> &comp
         }
         if (elisp) {
             elispOut.reserve(16384);
-            elispOut += String::format<256>("(list 'completions (list \"%s\" (list",
+            elispOut << String::format<256>("(list 'completions (list \"%s\" (list",
                                             RTags::elispEscape(request->location.toString(Location::AbsolutePath)).constData());
         }
         for (const auto &val : completions) {
@@ -565,31 +615,90 @@ void CompletionThread::printCompletions(const List<Completions::Candidate> &comp
                     jsonOut += ',';
                 }
 
-                jsonOut += String::format<1024>("{\"completion\":%s,\"signature\":%s,\"kind\":\"%s\"}",
-                                                Rct::jsonEscape(val.completion).constData(),
-                                                Rct::jsonEscape(val.signature).constData(),
-                                                kind.constData());
-                                                          }
+                jsonOut += val.toValue(Completions::Candidate::IncludeChunks).toJSON();
             }
-            if (elisp)
-                elispOut += ")))";
-            if (xml)
-                xmlOut += "]]></completions>\n";
-            if (json)
-                jsonOut += "]}";
+        }
+        if (elisp)
+            elispOut += ")))";
+        if (xml)
+            xmlOut += "]]></completions>\n";
+        if (json)
+            jsonOut += "]}";
 
-            EventLoop::mainEventLoop()->callLater([outputs, xmlOut, elispOut, rawOut, jsonOut]() {
-                    for (auto &it : outputs) {
-                        if (it->flags & Elisp) {
-                            it->send(elispOut);
-                        } else if (it->flags & XML) {
-                            it->send(xmlOut);
-                        } else if (it->flags & JSON) {
-                            it->send(jsonOut);
-                        } else {
-                            it->send(rawOut);
-                        }
+        EventLoop::mainEventLoop()->callLater([outputs, xmlOut, elispOut, rawOut, jsonOut]() {
+                for (auto &it : outputs) {
+                    if (it->flags & Elisp) {
+                        it->send(elispOut);
+                    } else if (it->flags & XML) {
+                        it->send(xmlOut);
+                    } else if (it->flags & JSON) {
+                        it->send(jsonOut);
+                    } else {
+                        it->send(rawOut);
                     }
-                });
+                }
+            });
+    }
+}
+
+bool CompletionThread::isCached(uint32_t fileId, const std::shared_ptr<Project> &project) const
+{
+    for (SourceFile *file : mCacheList) {
+        if (file->source.fileId == fileId || project->dependsOn(file->source.fileId, fileId))
+            return true;
+    }
+    return false;
+}
+
+
+String CompletionThread::Request::toString() const
+{
+    String ret = location.toString(Location::NoColor);
+    if (!unsaved.isEmpty()) {
+        ret += String::format<64>(" - Unsaved: %zu", unsaved.size());
+    }
+
+    struct {
+        const char *name;
+        const Flag flag;
+    } const f[] = {
+        { "Refresh", Refresh },
+        { "Elisp", Elisp },
+        { "XML", XML },
+        { "JSON", JSON },
+        { "IncludeMacros", IncludeMacros },
+        { "WarmUp", WarmUp },
+    };
+
+    for (const auto &flag : f) {
+        if (flags & flag.flag) {
+            ret += String::format<64>(" - %s", flag.name);
         }
     }
+
+    if (!unsaved.isEmpty() && !location.isNull()) {
+        int line = location.line();
+        int pos = 0;
+        while (line > 1) {
+            int p = unsaved.indexOf('\n', pos);
+            if (p == -1) {
+                pos = -1;
+                break;
+            }
+            pos = p + 1;
+            --line;
+        }
+        if (pos != -1) {
+            int end = unsaved.indexOf('\n', pos);
+            if (end == -1)
+                end = unsaved.size();
+            ret += String::format<1024>(" - Completing at %s:%d:%d line: [%s]",
+                                        location.path().constData(),
+                                        location.line(),
+                                        location.column(),
+                                        unsaved.mid(pos, end - pos).constData());
+        }
+    }
+
+    return ret;
+}

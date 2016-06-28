@@ -36,6 +36,7 @@
 #include "RTags.h"
 #include "RTagsLogOutput.h"
 #include "Server.h"
+#include "RTagsVersion.h"
 
 enum { DirtyTimeout = 100 };
 
@@ -179,6 +180,8 @@ static bool loadDependencies(DataFile &file, Dependencies &dependencies)
     for (int i=0; i<size; ++i) {
         uint32_t fileId;
         file >> fileId;
+        if (!fileId)
+            return false;
         dependencies[fileId] = new DependencyNode(fileId);
     }
     for (int i=0; i<size; ++i) {
@@ -370,7 +373,7 @@ bool Project::init()
         mDependencies.deleteAll();
         mVisitedFiles.clear();
         mDiagnostics.clear();
-        error("Restore error %s: Failed load dependencies.", mPath.constData());
+        error("Restore error %s: Failed to load dependencies.", mPath.constData());
         reindex();
         return true;
     }
@@ -394,7 +397,7 @@ bool Project::init()
         int idx = 0;
         bool outputDirty = false;
         if (mDependencies.size() >= 100) {
-            logDirect(LogLevel::Error, String::format<128>("Restoring %s ", mPath.constData()), Flags<LogOutput::LogFlag>());
+            logDirect(LogLevel::Error, String::format<128>("Restoring %s ", mPath.constData()), LogOutput::StdOut);
             outputDirty = true;
         }
         const std::shared_ptr<Project> project = shared_from_this();
@@ -416,7 +419,7 @@ bool Project::init()
                     if (!err.isEmpty()) {
                         if (outputDirty) {
                             outputDirty = false;
-                            error("\n");
+                            logDirect(LogLevel::Error, String("\n"), LogOutput::StdOut);
                         }
                         error() << err;
                     }
@@ -430,12 +433,12 @@ bool Project::init()
             }
             if (++idx % 100 == 0) {
                 outputDirty = true;
-                logDirect(LogLevel::Error, ".", 1, Flags<LogOutput::LogFlag>());
+                logDirect(LogLevel::Error, ".", 1, LogOutput::StdOut);
                 // error("%d/%d (%.2f%%)", idx, count, (idx / static_cast<double>(count)) * 100.0);
             }
         }
         if (outputDirty)
-            logDirect(LogLevel::Error, "\n", 1, Flags<LogOutput::LogFlag>());
+            logDirect(LogLevel::Error, "\n", 1, LogOutput::StdOut);
         for (uint32_t r : removed) {
             removeDependencies(r);
         }
@@ -679,19 +682,21 @@ void Project::onJobFinished(const std::shared_ptr<IndexerJob> &job, const std::s
     updateDependencies(msg);
     if (success) {
         src->second.parsed = msg->parseTime();
-        error("[%3d%%] %d/%d %s %s. (%s)",
-              static_cast<int>(round((double(idx) / double(mJobCounter)) * 100.0)), idx, mJobCounter,
-              String::formatTime(time(0), String::Time).constData(),
-              msg->message().constData(),
-              (job->priority == IndexerJob::HeaderError
-               ? "header-error"
-               : String::format<16>("priority %d", job->priority).constData()));
+        logDirect(LogLevel::Error, String::format("[%3d%%] %d/%d %s %s. (%s)",
+                                                  static_cast<int>(round((double(idx) / double(mJobCounter)) * 100.0)), idx, mJobCounter,
+                                                  String::formatTime(time(0), String::Time).constData(),
+                                                  msg->message().constData(),
+                                                  (job->priority == IndexerJob::HeaderError
+                                                   ? "header-error"
+                                                   : String::format<16>("priority %d", job->priority).constData())),
+                  LogOutput::StdOut|LogOutput::TrailingNewLine);
     } else {
         assert(msg->indexerJobFlags() & IndexerJob::Crashed);
-        error("[%3d%%] %d/%d %s %s indexing crashed.",
-              static_cast<int>(round((double(idx) / double(mJobCounter)) * 100.0)), idx, mJobCounter,
-              String::formatTime(time(0), String::Time).constData(),
-              Location::path(fileId).toTilde().constData());
+        logDirect(LogLevel::Error, String::format("[%3d%%] %d/%d %s %s indexing crashed.",
+                                                  static_cast<int>(round((double(idx) / double(mJobCounter)) * 100.0)), idx, mJobCounter,
+                                                  String::formatTime(time(0), String::Time).constData(),
+                                                  Location::path(fileId).toTilde().constData()),
+                  LogOutput::StdOut|LogOutput::TrailingNewLine);
     }
 
     save();
@@ -701,7 +706,7 @@ void Project::onJobFinished(const std::shared_ptr<IndexerJob> &job, const std::s
         const String msg = String::format<1024>("Jobs took %.2fs%s. We're using %lldmb of memory. ",
                                                 timerElapsed, mJobsStarted > 1 ? String::format(", (avg %.2fs)", averageJobTime).constData() : "",
                                                 static_cast<unsigned long long>(MemoryMonitor::usage() / (1024 * 1024)));
-        error() << msg;
+        Log(LogLevel::Error, LogOutput::StdOut|LogOutput::TrailingNewLine) << msg;
         mJobsStarted = mJobCounter = 0;
 
         // error() << "Finished this
@@ -1050,6 +1055,7 @@ void Project::updateDependencies(const std::shared_ptr<IndexDataMessage> &msg)
     const bool prune = !(msg->flags() & (IndexDataMessage::InclusionError|IndexDataMessage::ParseFailure));
     Set<uint32_t> files;
     for (auto pair : msg->files()) {
+        assert(pair.first);
         DependencyNode *&node = mDependencies[pair.first];
         if (!node) {
             node = new DependencyNode(pair.first);
@@ -1068,6 +1074,8 @@ void Project::updateDependencies(const std::shared_ptr<IndexDataMessage> &msg)
 
     // // ### this probably deletes and recreates the same nodes very very often
     for (auto it : msg->includes()) {
+        assert(it.first);
+        assert(it.second);
         DependencyNode *&includer = mDependencies[it.first];
         DependencyNode *&inclusiary = mDependencies[it.second];
         files.insert(it.first);
@@ -1289,10 +1297,10 @@ void Project::findSymbols(const String &unencoded,
         const int count = symNames->count();
         // error() << "Looking at" << count << Location::path(dep.first)
         //         << lowerBound << string;
-        int idx = 0;
+        uint32_t idx = 0;
         if (!lowerBound.isEmpty()) {
             idx = symNames->lowerBound(lowerBound);
-            if (idx == -1) {
+            if (idx == std::numeric_limits<uint32_t>::max()) {
                 return;
             }
         }
@@ -1451,7 +1459,7 @@ Symbol Project::findSymbol(Location location, int *index)
         return Symbol();
 
     bool exact = false;
-    int idx = symbols->lowerBound(location, &exact);
+    uint32_t idx = symbols->lowerBound(location, &exact);
     if (exact) {
         if (index)
             *index = idx;
@@ -1460,7 +1468,7 @@ Symbol Project::findSymbol(Location location, int *index)
     switch (idx) {
     case 0:
         return Symbol();
-    case -1:
+    case std::numeric_limits<uint32_t>::max():
         idx = symbols->count() - 1;
         break;
     default:
@@ -1586,7 +1594,7 @@ static Set<Symbol> findReferences(const Set<Symbol> &inputs,
             auto targets = project->openTargets(dep);
             if (targets) {
                 // SBROOT
-                String tusr = Sandbox::encoded(input.usr);
+                const String tusr = Sandbox::encoded(input.usr);
                 const Set<Location> locations = targets->value(tusr);
                 // error() << "Got locations for usr" << input.usr << locations;
                 for (const auto &loc : locations) {
@@ -1596,13 +1604,13 @@ static Set<Symbol> findReferences(const Set<Symbol> &inputs,
                 }
             }
         };
-        const Set<uint32_t> seen = project->dependencies(input.location.fileId(), Project::DependsOnArg);
-        for (auto dep : seen)
+        const Set<uint32_t> deps = project->dependencies(input.location.fileId(), Project::DependsOnArg);
+        for (auto dep : deps)
             process(dep);
 
         if (ret.isEmpty()) {
             for (auto dep : project->dependencies()) {
-                if (!seen.contains(dep.first))
+                if (!deps.contains(dep.first))
                     process(dep.first);
             }
         }
@@ -1617,16 +1625,26 @@ static Set<Symbol> findReferences(const Symbol &in,
 {
     Set<Symbol> inputs;
     Symbol s;
+    Location location;
     if (in.isReference()) {
         const Symbol target = project->findTarget(in);
         if (!target.isNull()) {
-            s = target;
-        } else {
-            s = in;
+            if (target.kind != CXCursor_MacroExpansion) {
+                s = target;
+            } else {
+                s = in;
+                auto usrs = project->findTargetUsrs(s.location);
+                if (!usrs.isEmpty())
+                    s.usr = *usrs.begin();
+                // error() << "GOT USRS" << usrs;
+                s.location = location = target.location;
+            }
         }
-    } else {
-        s = in;
     }
+    if (s.isNull())
+        s = in;
+    if (location.isNull())
+        location = s.location;
 
     // error() << "findReferences" << s.location << in.location << s.kind;
     switch (s.kind) {
@@ -1649,7 +1667,7 @@ static Set<Symbol> findReferences(const Symbol &in,
     case CXCursor_Destructor:
     case CXCursor_ConversionFunction:
     case CXCursor_NamespaceAlias:
-        inputs = project->findByUsr(s.usr, s.location.fileId(),
+        inputs = project->findByUsr(s.usr, location.fileId(),
                                     s.isDefinition() ? Project::ArgDependsOn : Project::DependsOnArg,
                                     in.location);
         break;

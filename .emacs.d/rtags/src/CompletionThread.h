@@ -44,10 +44,13 @@ public:
         Elisp = 0x02,
         XML = 0x04,
         JSON = 0x08,
-        CodeCompleteIncludeMacros = 0x10
+        IncludeMacros = 0x10,
+        WarmUp = 0x20
     };
-    void completeAt(const Source &source, Location location, Flags<Flag> flags,
-                    const String &unsaved, const std::shared_ptr<Connection> &conn);
+    bool isCached(uint32_t fileId, const std::shared_ptr<Project> &project) const;
+    void completeAt(Source &&source, Location location, Flags<Flag> flags,
+                    String &&unsaved, const std::shared_ptr<Connection> &conn);
+    void prepare(Source &&source, String &&unsaved);
     void stop();
     String dump();
 private:
@@ -63,6 +66,7 @@ private:
             if (conn)
                 conn->finish();
         }
+        String toString() const;
         Source source;
         Location location;
         Flags<Flag> flags;
@@ -84,9 +88,28 @@ private:
             String completion, signature, annotation, parent, briefComment;
             int priority, distance;
             CXCursorKind cursorKind;
+            struct Chunk {
+                Chunk()
+                    : kind(CXCompletionChunk_Optional)
+                {}
+                Chunk(String &&t, CXCompletionChunkKind k)
+                    : text(std::forward<String>(t)), kind(k)
+                {}
+                String text;
+                CXCompletionChunkKind kind;
+            };
+            List<Chunk> chunks;
+
+            enum Flag {
+                None = 0x0,
+                IncludeChunks = 0x1
+            };
+            Value toValue(unsigned int flags) const;
         };
+
         List<Candidate> candidates;
         const Location location;
+        Flags<Flag> flags;
         Completions *next, *prev;
     };
 
@@ -165,7 +188,6 @@ private:
                 val = pos;
         }
     };
-
 
     // these datastructures are only touched from inside the thread so it doesn't
     // need to be protected by mMutex
