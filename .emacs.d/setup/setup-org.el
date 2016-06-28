@@ -26,6 +26,7 @@
 
 ;; Org mode
 (use-package org
+  :mode (("\\.org$" . org-mode))
   :load-path (lambda () (expand-file-name "org-mode/lisp" user-emacs-directory))
   :bind (("C-c C" . org-capture)
          ("C-c A" . org-agenda)
@@ -39,6 +40,7 @@
          ("C-c t" . org-show-todo-tree)
          ("C-c r" . org-refile)
          ("C-c v" . org-reveal))
+  :commands (org-mode org-capture org-store-link org-insert-link-global org-open-at-point-global)
   :init (progn
           (setq load-path (cons (expand-file-name "org-mode/contrib/lisp" user-emacs-directory) load-path))
           (defvar org-list-allow-alphabetical t)

@@ -29,6 +29,7 @@
   :diminish projectile-mode
   :commands (projectile-global-mode projectile-ignored-projects projectile-compile-project)
   :load-path (lambda () (expand-file-name "projectile/" user-emacs-directory))
+  :init (projectile-global-mode)
   :config (progn
             (setq projectile-known-projects-file "~/.emacs.cache/projectile-bookmarks.eld")
             (setq projectile-cache-file "~/.emacs.cache/projectile.cache")
@@ -38,9 +39,7 @@
             (setq projectile-globally-ignored-files (quote ("TAGS" "*.log" "*DS_Store" "node-modules")))))
 
 (use-package helm-projectile
-  :defer t
   :after (projectile helm-config)
-  :commands helm-projectile-on
   :load-path (lambda () (expand-file-name "helm-projectile/" user-emacs-directory))
   :init (progn
             (defun my/projectile-setup ()

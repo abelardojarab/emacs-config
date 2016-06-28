@@ -200,9 +200,11 @@
 
 ;; Autocomplete for Org
 (use-package auto-complete-pcmp
+  :after org
   :load-path (lambda () (expand-file-name "auto-complete-pcmp/" user-emacs-directory)))
 
 (use-package org-ac
+  :after org
   :load-path (lambda () (expand-file-name "org-ac/" user-emacs-directory))
   :config (org-ac/config-default))
 
@@ -223,6 +225,7 @@
 
 ;; Tips for auto-complete
 (use-package popup-pos-tip
+  :after popup
   :config (progn
             (defadvice popup-tip
                 (around popup-pos-tip-wrapper (string &rest args) activate)

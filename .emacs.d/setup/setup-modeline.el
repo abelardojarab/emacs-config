@@ -70,13 +70,13 @@ want to use in the modeline *in lieu of* the original.")
           (if (display-graphic-p)
               (add-hook 'after-change-major-mode-hook 'clean-mode-line))
 
-          (setq powerline-default-separator 'arrow-fade))
+          (setq powerline-default-separator 'wave))
   :config (progn
             ;; (powerline-default-theme)
             ))
 
 (use-package spaceline
-  :init (setq powerline-default-separator 'arrow-fade)
+  :init (setq powerline-default-separator 'wave)
   :load-path (lambda () (expand-file-name "spaceline/" user-emacs-directory))
   :config (progn (require 'spaceline-config)
                  (spaceline-spacemacs-theme)

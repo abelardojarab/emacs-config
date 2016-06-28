@@ -65,13 +65,22 @@
   :load-path (lambda () (expand-file-name "tabbar-ruler/" user-emacs-directory))
   :init (setq tabbar-ruler-global-tabbar 't) ;; If you want tabbar
   :config (progn
-            (setq tabbar-separator '(0.5))
-            (tabbar-ruler-group-user-buffers)
+            (global-set-key (kbd "C-c C-t") 'tabbar-ruler-move)
 
-            (defun tabbar-popup-close ()
-              "Tabbar pop up close."
-              (interactive)
-              (kill-buffer (current-buffer)))
+            ;; https://github.com/mattfidler/tabbar-ruler.el/issues/10
+            (setq tabbar-ruler-movement-timer-delay 1000000)
+
+            ;; Firefox style
+            (tabbar-ruler-style-firefox-circle)
+
+            ;; Tweaks
+            (setq tabbar-separator '(0.5))
+
+            ;; Fancy close image
+            (setq tabbar-ruler-fancy-close-image t)
+
+            ;; Group user buffers
+            (tabbar-ruler-group-user-buffers)
 
             ;; Fix for tabbar under Emacs 24.4
             ;; store tabbar-cache into a real hash,

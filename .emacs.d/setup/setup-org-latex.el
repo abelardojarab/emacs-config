@@ -24,175 +24,176 @@
 
 ;;; Code:
 
+(eval-after-load 'org
+  '(progn
+     ;; Tweaks for LaTeX exporting
+     (require 'ox-latex)
+     (setq org-latex-listings t)
+     (setq org-export-latex-quotes
+           '(("en" ("\\(\\s-\\|[[(]\\)\"" . "\\enquote{") ("\\(\\S-\\)\"" . "}") ("\\(\\s-\\|(\\)'" . "`"))))
 
-;; Tweaks for LaTeX exporting
-(require 'ox-latex)
-(setq org-latex-listings t)
-(setq org-export-latex-quotes
-      '(("en" ("\\(\\s-\\|[[(]\\)\"" . "\\enquote{") ("\\(\\S-\\)\"" . "}") ("\\(\\s-\\|(\\)'" . "`"))))
+     ;; for Tikz image in Org
+     (setq org-babel-latex-htlatex "htlatex")
+     (defmacro by-backend (&rest body)
+       `(case org-export-current-backend ,@body))
 
-;; for Tikz image in Org
-(setq org-babel-latex-htlatex "htlatex")
-(defmacro by-backend (&rest body)
-  `(case org-export-current-backend ,@body))
+     ;; Preview LaTeX equations in buffers by showing images (C-c C-x C-l)
+     (if (executable-find "convert")
+         (setq org-latex-create-formula-image-program 'imagemagick)
+       (setq org-latex-create-formula-image-program 'dvipng))
 
-;; Preview LaTeX equations in buffers by showing images (C-c C-x C-l)
-(if (executable-find "convert")
-    (setq org-latex-create-formula-image-program 'imagemagick)
-  (setq org-latex-create-formula-image-program 'dvipng))
+     ;; Directory where LaTeX previews are stored
+     (if (not (file-exists-p "~/.emacs.cache/ltxpng"))
+         (make-directory "~/.emacs.cache/ltxpng") t)
+     (setq org-latex-preview-ltxpng-directory "~/.emacs.cache/ltxpng/")
 
-;; Directory where LaTeX previews are stored
-(if (not (file-exists-p "~/.emacs.cache/ltxpng"))
-    (make-directory "~/.emacs.cache/ltxpng") t)
-(setq org-latex-preview-ltxpng-directory "~/.emacs.cache/ltxpng/")
+     ;; Bigger LaTeX fragments and other options for LaTeX export
+     (setq org-format-latex-options '(:scale 2.0
+                                             :html-foreground "Black" :html-background "Transparent"
+                                             :html-scale 1.0
+                                             :matchers ("begin" "$1" "$" "$$" "\\(" "\\[")))
 
-;; Bigger LaTeX fragments and other options for LaTeX export
-(setq org-format-latex-options '(:scale 2.0
-                                        :html-foreground "Black" :html-background "Transparent"
-                                        :html-scale 1.0
-                                        :matchers ("begin" "$1" "$" "$$" "\\(" "\\[")))
+     ;; Toggle previsualization of LaTeX equations in Org-mode
+     (when (display-graphic-p)
+       (defvar org-latex-fragment-last nil
+         "Holds last fragment/environment you were on.")
 
-;; Toggle previsualization of LaTeX equations in Org-mode
-(when (display-graphic-p)
-  (defvar org-latex-fragment-last nil
-    "Holds last fragment/environment you were on.")
+       (defun org-latex-fragment-toggle ()
+         "Toggle a latex fragment image "
+         (and (eq 'org-mode major-mode)
+              (let* ((el (org-element-context))
+                     (el-type (car el)))
+                (cond
+                 ;; were on a fragment and now on a new fragment
+                 ((and
+                   ;; fragment we were on
+                   org-latex-fragment-last
+                   ;; and are on a fragment now
+                   (or
+                    (eq 'latex-fragment el-type)
+                    (eq 'latex-environment el-type))
+                   ;; but not on the last one this is a little tricky. as you edit the
+                   ;; fragment, it is not equal to the last one. We use the begin
+                   ;; property which is less likely to change for the comparison.
+                   (not (= (org-element-property :begin el)
+                           (org-element-property :begin org-latex-fragment-last))))
+                  ;; go back to last one and put image back
+                  (save-excursion
+                    (goto-char (org-element-property :begin org-latex-fragment-last))
+                    (org-preview-latex-fragment))
+                  ;; now remove current image
+                  (goto-char (org-element-property :begin el))
+                  (let ((ov (loop for ov in (org--list-latex-overlays)
+                                  if
+                                  (and
+                                   (<= (overlay-start ov) (point))
+                                   (>= (overlay-end ov) (point)))
+                                  return ov)))
+                    (when ov
+                      (delete-overlay ov)))
+                  ;; and save new fragment
+                  (setq org-latex-fragment-last el))
 
-  (defun org-latex-fragment-toggle ()
-    "Toggle a latex fragment image "
-    (and (eq 'org-mode major-mode)
-         (let* ((el (org-element-context))
-                (el-type (car el)))
-           (cond
-            ;; were on a fragment and now on a new fragment
-            ((and
-              ;; fragment we were on
-              org-latex-fragment-last
-              ;; and are on a fragment now
-              (or
-               (eq 'latex-fragment el-type)
-               (eq 'latex-environment el-type))
-              ;; but not on the last one this is a little tricky. as you edit the
-              ;; fragment, it is not equal to the last one. We use the begin
-              ;; property which is less likely to change for the comparison.
-              (not (= (org-element-property :begin el)
-                      (org-element-property :begin org-latex-fragment-last))))
-             ;; go back to last one and put image back
-             (save-excursion
-               (goto-char (org-element-property :begin org-latex-fragment-last))
-               (org-preview-latex-fragment))
-             ;; now remove current image
-             (goto-char (org-element-property :begin el))
-             (let ((ov (loop for ov in (org--list-latex-overlays)
-                             if
-                             (and
-                              (<= (overlay-start ov) (point))
-                              (>= (overlay-end ov) (point)))
-                             return ov)))
-               (when ov
-                 (delete-overlay ov)))
-             ;; and save new fragment
-             (setq org-latex-fragment-last el))
+                 ;; were on a fragment and now are not on a fragment
+                 ((and
+                   ;; not on a fragment now
+                   (not (or
+                         (eq 'latex-fragment el-type)
+                         (eq 'latex-environment el-type)))
+                   ;; but we were on one
+                   org-latex-fragment-last)
+                  ;; put image back on
+                  (save-excursion
+                    (goto-char (org-element-property :begin org-latex-fragment-last))
+                    (org-preview-latex-fragment))
+                  ;; unset last fragment
+                  (setq org-latex-fragment-last nil))
 
-            ;; were on a fragment and now are not on a fragment
-            ((and
-              ;; not on a fragment now
-              (not (or
+                 ;; were not on a fragment, and now are
+                 ((and
+                   ;; we were not one one
+                   (not org-latex-fragment-last)
+                   ;; but now we are
+                   (or
                     (eq 'latex-fragment el-type)
                     (eq 'latex-environment el-type)))
-              ;; but we were on one
-              org-latex-fragment-last)
-             ;; put image back on
-             (save-excursion
-               (goto-char (org-element-property :begin org-latex-fragment-last))
-               (org-preview-latex-fragment))
-             ;; unset last fragment
-             (setq org-latex-fragment-last nil))
+                  (goto-char (org-element-property :begin el))
+                  ;; remove image
+                  (let ((ov (loop for ov in (org--list-latex-overlays)
+                                  if
+                                  (and
+                                   (<= (overlay-start ov) (point))
+                                   (>= (overlay-end ov) (point)))
+                                  return ov)))
+                    (when ov
+                      (delete-overlay ov)))
+                  (setq org-latex-fragment-last el))))))
 
-            ;; were not on a fragment, and now are
-            ((and
-              ;; we were not one one
-              (not org-latex-fragment-last)
-              ;; but now we are
-              (or
-               (eq 'latex-fragment el-type)
-               (eq 'latex-environment el-type)))
-             (goto-char (org-element-property :begin el))
-             ;; remove image
-             (let ((ov (loop for ov in (org--list-latex-overlays)
-                             if
-                             (and
-                              (<= (overlay-start ov) (point))
-                              (>= (overlay-end ov) (point)))
-                             return ov)))
-               (when ov
-                 (delete-overlay ov)))
-             (setq org-latex-fragment-last el))))))
+       (add-hook 'post-command-hook 'org-latex-fragment-toggle))
 
-  (add-hook 'post-command-hook 'org-latex-fragment-toggle))
+     ;; Force figure position
+     (setq org-latex-default-figure-position "!htb")
 
-;; Force figure position
-(setq org-latex-default-figure-position "!htb")
+     ;; Place table caption below table
+     (setq org-latex-table-caption-above nil)
 
-;; Place table caption below table
-(setq org-latex-table-caption-above nil)
+     ;; Use centered images in Org-mode
+     (advice-add 'org-latex--inline-image :around
+                 (lambda (orig link info)
+                   (concat
+                    "\\begin{center}"
+                    (funcall orig link info)
+                    "\\end{center}")))
 
-;; Use centered images in Org-mode
-(advice-add 'org-latex--inline-image :around
-            (lambda (orig link info)
-              (concat
-               "\\begin{center}"
-               (funcall orig link info)
-               "\\end{center}")))
+     ;; Add cite link
+     (org-add-link-type "cite" 'ebib
+                        (lambda (path desc format)
+                          (cond
+                           ((eq format 'html)  (format "(<cite>%s</cite>)" path))
+                           ((eq format 'latex) (format "\\cite{%s}" path)))))
 
-;; Add cite link
-(org-add-link-type "cite" 'ebib
-                   (lambda (path desc format)
-                     (cond
-                      ((eq format 'html)  (format "(<cite>%s</cite>)" path))
-                      ((eq format 'latex) (format "\\cite{%s}" path)))))
+     ;; Reftex
+     (require 'reftex-cite)
+     (setq reftex-default-bibliography '("~/workspace/Documents/Bibliography/biblio.bib")) ;; So that RefTeX in Org-mode knows bibliography
+     (defun org-mode-reftex-setup ()
+       (interactive)
+       (and (buffer-file-name) (file-exists-p (buffer-file-name))
+            (progn
+              ;; Reftex should use the org file as master file. See C-h v TeX-master for infos.
+              (setq TeX-master t)
+              (turn-on-reftex)
+              ;; enable auto-revert-mode to update reftex when bibtex file changes on disk
+              (global-auto-revert-mode t) ;; careful: this can kill the undo
+              ;; history when you change the file
+              ;; on-disk.
+              (reftex-parse-all)
+              ;; add a custom reftex cite format to insert links
+              ;; This also changes any call to org-citation!
+              (reftex-set-cite-format
+               '((?c . "\\citet{%l}") ;; natbib inline text
+                 (?i . "\\citep{%l}") ;; natbib with parens
+                 ))))
+       (define-key org-mode-map (kbd "C-c )") 'reftex-citation)
+       (define-key org-mode-map (kbd "C-c (") 'org-mode-reftex-search))
+     (add-hook 'org-mode-hook 'org-mode-reftex-setup)
 
-;; Reftex
-(require 'reftex-cite)
-(setq reftex-default-bibliography '("~/workspace/Documents/Bibliography/biblio.bib")) ;; So that RefTeX in Org-mode knows bibliography
-(defun org-mode-reftex-setup ()
-  (interactive)
-  (and (buffer-file-name) (file-exists-p (buffer-file-name))
-       (progn
-         ;; Reftex should use the org file as master file. See C-h v TeX-master for infos.
-         (setq TeX-master t)
-         (turn-on-reftex)
-         ;; enable auto-revert-mode to update reftex when bibtex file changes on disk
-         (global-auto-revert-mode t) ;; careful: this can kill the undo
-         ;; history when you change the file
-         ;; on-disk.
-         (reftex-parse-all)
-         ;; add a custom reftex cite format to insert links
-         ;; This also changes any call to org-citation!
-         (reftex-set-cite-format
-          '((?c . "\\citet{%l}") ;; natbib inline text
-            (?i . "\\citep{%l}") ;; natbib with parens
-            ))))
-  (define-key org-mode-map (kbd "C-c )") 'reftex-citation)
-  (define-key org-mode-map (kbd "C-c (") 'org-mode-reftex-search))
-(add-hook 'org-mode-hook 'org-mode-reftex-setup)
+     ;; Add defaults packages to include when exporting.
+     (setq org-latex-hyperref-template
+           "\\hypersetup{\n  pdfkeywords={%k},\n  pdfsubject={%d},\n  pdfcreator={%c},\n  citecolor=black,\n  filecolor=black,\n  colorlinks=true,\n  linkcolor=black,\n  urlcolor=black}\n")
+     (add-to-list 'org-latex-packages-alist '("" "graphicx"))
+     (add-to-list 'org-latex-packages-alist '("" "geometry"))
+     (add-to-list 'org-latex-packages-alist '("" "hyperref"))
+     (add-to-list 'org-latex-packages-alist '("" "caption"))
+     (add-to-list 'org-latex-packages-alist '("" "listings"))
+     (add-to-list 'org-latex-packages-alist '("" "color"))
+     (add-to-list 'org-latex-packages-alist '("" "mathptmx"))
 
-;; Add defaults packages to include when exporting.
-(setq org-latex-hyperref-template
-      "\\hypersetup{\n  pdfkeywords={%k},\n  pdfsubject={%d},\n  pdfcreator={%c},\n  citecolor=black,\n  filecolor=black,\n  colorlinks=true,\n  linkcolor=black,\n  urlcolor=black}\n")
-(add-to-list 'org-latex-packages-alist '("" "graphicx"))
-(add-to-list 'org-latex-packages-alist '("" "geometry"))
-(add-to-list 'org-latex-packages-alist '("" "hyperref"))
-(add-to-list 'org-latex-packages-alist '("" "caption"))
-(add-to-list 'org-latex-packages-alist '("" "listings"))
-(add-to-list 'org-latex-packages-alist '("" "color"))
-(add-to-list 'org-latex-packages-alist '("" "mathptmx"))
-
-;; Define the output styles
-(unless (boundp 'org-latex-classes)
-  (setq org-latex-classes nil))
-(add-to-list 'org-latex-classes
-             '("xelatex"
-               "\\documentclass[11pt,a4paper]{article}
+     ;; Define the output styles
+     (unless (boundp 'org-latex-classes)
+       (setq org-latex-classes nil))
+     (add-to-list 'org-latex-classes
+                  '("xelatex"
+                    "\\documentclass[11pt,a4paper]{article}
 \\usepackage[T1]{fontenc}
 \\usepackage{graphicx}
 \\usepackage{geometry}
@@ -265,15 +266,15 @@
       [NO-DEFAULT-PACKAGES]
       [NO-PACKAGES]
 \\hypersetup{pdfencoding=auto,colorlinks=true}"
-               ("\\section{%s}" . "\\section*{%s}")
-               ("\\subsection{%s}" . "\\subsection*{%s}")
-               ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-               ("\\paragraph{%s}" . "\\paragraph*{%s}")
-               ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+                    ("\\section{%s}" . "\\section*{%s}")
+                    ("\\subsection{%s}" . "\\subsection*{%s}")
+                    ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                    ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                    ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
 
-(add-to-list 'org-latex-classes
-             '("pdflatex"
-               "\\documentclass[11pt,a4paper]{article}
+     (add-to-list 'org-latex-classes
+                  '("pdflatex"
+                    "\\documentclass[11pt,a4paper]{article}
 \\usepackage[T1]{fontenc}
 \\usepackage{lmodern}
 \\usepackage{graphicx}
@@ -312,15 +313,15 @@
 \\title{}
       [NO-DEFAULT-PACKAGES]
       [NO-PACKAGES]"
-               ("\\section{%s}" . "\\section*{%s}")
-               ("\\subsection{%s}" . "\\subsection*{%s}")
-               ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-               ("\\paragraph{%s}" . "\\paragraph*{%s}")
-               ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+                    ("\\section{%s}" . "\\section*{%s}")
+                    ("\\subsection{%s}" . "\\subsection*{%s}")
+                    ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                    ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                    ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
 
-(add-to-list 'org-latex-classes
-             '("beamer"
-               "\\documentclass[11pt,presentation]{beamer}
+     (add-to-list 'org-latex-classes
+                  '("beamer"
+                    "\\documentclass[11pt,presentation]{beamer}
 \\usepackage[T1]{fontenc}
 \\usepackage{lmodern}
 \\usepackage{graphicx}
@@ -357,16 +358,16 @@
       [NO-DEFAULT-PACKAGES]
       [NO-PACKAGES]"
 
-               ;; Other section
-               ("\\section{%s}" . "\\section*{%s}")
-               ("\\begin{frame}[fragile]\\frametitle{%s}"
-                "\\end{frame}"
-                "\\begin{frame}[fragile]\\frametitle{%s}"
-                "\\end{frame}")))
+                    ;; Other section
+                    ("\\section{%s}" . "\\section*{%s}")
+                    ("\\begin{frame}[fragile]\\frametitle{%s}"
+                     "\\end{frame}"
+                     "\\begin{frame}[fragile]\\frametitle{%s}"
+                     "\\end{frame}")))
 
-(add-to-list 'org-latex-classes
-             '("ieeeproceedings"
-               "\\documentclass[conference]{IEEEtran}
+     (add-to-list 'org-latex-classes
+                  '("ieeeproceedings"
+                    "\\documentclass[conference]{IEEEtran}
 \\usepackage[T1]{fontenc}
 \\usepackage{lmodern}
 \\usepackage{graphicx}
@@ -432,34 +433,34 @@
 \\title{}
       [NO-DEFAULT-PACKAGES]
       [NO-PACKAGES]"
-               ("\\section{%s}" . "\\section*{%s}")
-               ("\\subsection{%s}" . "\\subsection*{%s}")
-               ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-               ("\\paragraph{%s}" . "\\paragraph*{%s}")
-               ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+                    ("\\section{%s}" . "\\section*{%s}")
+                    ("\\subsection{%s}" . "\\subsection*{%s}")
+                    ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                    ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                    ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
 
-;; Set default document stylesheet
-(if (executable-find "xelatex")
-    (setq org-latex-default-class "xelatex")
-  (setq org-latex-default-class "pdflatex"))
+     ;; Set default document stylesheet
+     (if (executable-find "xelatex")
+         (setq org-latex-default-class "xelatex")
+       (setq org-latex-default-class "pdflatex"))
 
-;; Let the exporter use the -shell-escape option to let latex execute external programs.
-(if (executable-find "xelatex")
-    (setq org-latex-pdf-process
-          '("xelatex -interaction nonstopmode -synctex=1 -shell-escape -output-directory %o %f"
-            "biber %b"
-            "xelatex -interaction nonstopmode -synctex=1 -shell-escape -output-directory %o %f"
-            "xelatex -interaction nonstopmode -synctex=1 -shell-escape -output-directory %o %f")) ;; multipass
-  (setq org-latex-pdf-process
-        '("pdflatex -interaction nonstopmode -shell-escape -output-directory %o %f"
-          "bibtex $(basename %b)"
-          "pdflatex -interaction nonstopmode -shell-escape -output-directory %o %f"
-          "pdflatex -interaction nonstopmode -shell-escape -output-directory %o %f"))
-  ) ;; multipass
+     ;; Let the exporter use the -shell-escape option to let latex execute external programs.
+     (if (executable-find "xelatex")
+         (setq org-latex-pdf-process
+               '("xelatex -interaction nonstopmode -synctex=1 -shell-escape -output-directory %o %f"
+                 "biber %b"
+                 "xelatex -interaction nonstopmode -synctex=1 -shell-escape -output-directory %o %f"
+                 "xelatex -interaction nonstopmode -synctex=1 -shell-escape -output-directory %o %f")) ;; multipass
+       (setq org-latex-pdf-process
+             '("pdflatex -interaction nonstopmode -shell-escape -output-directory %o %f"
+               "bibtex $(basename %b)"
+               "pdflatex -interaction nonstopmode -shell-escape -output-directory %o %f"
+               "pdflatex -interaction nonstopmode -shell-escape -output-directory %o %f"))
+       ) ;; multipass
 
-;; add emacs lisp support for minted
-(setq org-latex-custom-lang-environments
-      '((emacs-lisp "common-lispcode")))
+     ;; add emacs lisp support for minted
+     (setq org-latex-custom-lang-environments
+           '((emacs-lisp "common-lispcode")))))
 
 ;; Tweak the PDF viewer
 (eval-after-load "org"

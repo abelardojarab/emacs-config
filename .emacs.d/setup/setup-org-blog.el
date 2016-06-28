@@ -44,6 +44,7 @@
 
 ;; org2blog
 (use-package org2blog
+  :after org
   :load-path (lambda () (expand-file-name "org2blog/" user-emacs-directory))
   :config (progn
             (let (credentials)

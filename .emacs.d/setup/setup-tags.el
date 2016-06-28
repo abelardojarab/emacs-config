@@ -55,6 +55,7 @@
 ;; semantic-ia-fast-jump but this function is not defined in etags.el
 ;; of GNU emacs
 (use-package etags-select
+  :commands (etags-select-find-tag ido-find-tag)
   :load-path (lambda () (expand-file-name "etags-select/" user-emacs-directory))
   :config (progn
             ;; Use ido to list tags, but then select via etags-select (best of both worlds!)
