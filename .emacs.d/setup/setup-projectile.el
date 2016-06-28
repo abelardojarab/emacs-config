@@ -42,11 +42,21 @@
   :after (projectile helm-config)
   :load-path (lambda () (expand-file-name "helm-projectile/" user-emacs-directory))
   :init (progn
-            (defun my/projectile-setup ()
-              (helm-projectile-on)
-              (setq projectile-switch-project-action 'helm-projectile)
-              (setq projectile-completion-system 'helm))
-            (add-hook 'projectile-mode-hook 'my/projectile-setup)))
+          (defun my/projectile-setup ()
+            (helm-projectile-on)
+            (setq projectile-switch-project-action 'helm-projectile)
+            (setq projectile-completion-system 'helm))
+          (add-hook 'projectile-mode-hook 'my/projectile-setup))
+  :config (progn
+            (defun helm-projectile-on ()
+              "Turn on helm-projectile key bindings."
+              (interactive)
+              (helm-projectile-toggle 1))
+
+            (defun helm-projectile-off ()
+              "Turn off helm-projectile key bindings."
+              (interactive)
+              (helm-projectile-toggle -1))))
 
 (provide 'setup-projectile)
 ;;; setup-projectile.el ends here

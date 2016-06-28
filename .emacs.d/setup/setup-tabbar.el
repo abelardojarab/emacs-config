@@ -61,8 +61,7 @@
 ;; more tweaking to tabbar
 (use-package tabbar-ruler
   :if (display-graphic-p)
-  :after (spaceline tabbar)
-  :defer 4
+  :after (powerline tabbar mode-icons)
   :load-path (lambda () (expand-file-name "tabbar-ruler/" user-emacs-directory))
   :init (setq tabbar-ruler-global-tabbar 't) ;; If you want tabbar
   :config (progn
@@ -72,13 +71,7 @@
             (setq tabbar-ruler-movement-timer-delay 1000000)
 
             ;; Firefox style
-            (tabbar-ruler-style-firefox-circle)
-
-            ;; Tweaks
-            (setq tabbar-separator '(0.5))
-
-            ;; Fancy close image
-            (setq tabbar-ruler-fancy-close-image t)
+            ;; (tabbar-ruler-style-firefox-circle)
 
             ;; Group user buffers
             (tabbar-ruler-group-user-buffers)
@@ -149,8 +142,7 @@
                    (nth n my-buffer-list)))))
 
             ;; Enable tabbar
-            (tabbar-mode t)
-            ))
+            (tabbar-mode t)))
 
 (provide 'setup-tabbar)
 ;;; setup-tabbar.el ends here

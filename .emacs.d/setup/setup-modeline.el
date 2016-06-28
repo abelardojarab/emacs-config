@@ -32,10 +32,13 @@
 
 ;; Powerline
 (use-package powerline
+  :defer t
   :commands powerline-default-theme
   :load-path (lambda () (expand-file-name "powerline/" user-emacs-directory))
-  :init (progn
+  :init (progn (setq powerline-default-separator 'wave)))
 
+(use-package spaceline
+  :init (progn
           ;; Cleaning the mode line
           ;; https://www.masteringemacs.org/article/hiding-replacing-modeline-strings
           (defvar mode-line-cleaner-alist
@@ -46,7 +49,7 @@
               (git-gutter+-mode . "")
               (smartparens-mode . " π")
               (paredit-mode . " π")
-              (undo-tree-mode . " ϔ")
+              (undo-tree-mode . "")
 
               ;; Major modes
               (hi-lock-mode . ""))
@@ -71,18 +74,11 @@ want to use in the modeline *in lieu of* the original.")
               (add-hook 'after-change-major-mode-hook 'clean-mode-line))
 
           (setq powerline-default-separator 'wave))
-  :config (progn
-            (powerline-default-theme)
-            ))
-
-(use-package spaceline
-  :init (setq powerline-default-separator 'wave)
   :load-path (lambda () (expand-file-name "spaceline/" user-emacs-directory))
   :config (progn
             (require 'spaceline-config)
             (spaceline-spacemacs-theme)
-            (spaceline-helm-mode)
-            ))
+            (spaceline-helm-mode)))
 
 (provide 'setup-modeline)
 ;;; setup-modeline.el ends here

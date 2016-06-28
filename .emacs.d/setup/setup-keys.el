@@ -262,11 +262,11 @@
   t "" 'my-keys-minor-mode-map)
 (diminish 'my-keys-minor-mode)
 (my-keys-minor-mode 1)
-(defun my-minibuffer-setup-hook ()
+(defun my/minibuffer-setup-hook ()
   (my-keys-minor-mode 0))
 
 ;; Disable overwrite for some modes
-(add-hook 'org-mode-hook 'my-minibuffer-setup-hook)
+(add-hook 'org-mode-hook 'my/minibuffer-setup-hook)
 
 ;; Advice to set proper order for keymaps
 (defadvice load (after give-my-keybindings-priority)

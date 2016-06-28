@@ -46,8 +46,8 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(bmkp-last-as-first-bookmark-file "~/workspace/emacsfull/.emacs.d/bookmarks")
- '(cua-enable-cua-keys nil)
+ '(bmkp-last-as-first-bookmark-file "~/workspace/emacsfull/.emacs.cache/bookmarks")
+ '(cua-enable-cua-keys t)
  '(custom-safe-themes
    (quote
     ("a7b211f45891a56000b8f823ad9edb564d873a689c21d9fba114d7a703f9b322" "793d74f2269fd3c2df12900e725fbffca5aabe55ab3c9a5c9d5259e05f0c4de8" "0953e81e91886e57512ef653bf32890e829540484dc5e471c162adb797b9a86d" "95dd1eeafe55e8f94d9234ec5b4214d34bdeee930dd8f71044a0722a3878bcb2" "445b8fed4feed166c021f1102ee9e5233158b71eb5402182fc0a4c6b17d67ba8" "2ab5e12f7513825ba869ca3de0f6185a9deb82c6b1a222eb25b0e38a60c7a606" "a75137dcd452a69cd404b4d44f0e50986196bcd9cf92bae49f8aa01038228221" "a27c00821ccfd5a78b01e4f35dc056706dd9ede09a8b90c6955ae6a390eb1c1e" "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" "756597b162f1be60a12dbd52bab71d40d6a2845a3e3c2584c6573ee9c332a66e" "96ec5305ec9f275f61c25341363081df286d616a27a69904a35c9309cfa0fe1b" "6a37be365d1d95fad2f4d185e51928c789ef7a4ccf17e7ca13ad63a8bf5b922f" "fb4bf07618eab33c89d72ddc238d3c30918a501cf7f086f2edf8f4edba9bd59f" default)))
@@ -61,16 +61,6 @@
      ("/" "/"))))
  '(ede-locate-setup-options (quote (ede-locate-global ede-locate-locate)))
  '(ede-project-directories (quote ("~/workspace")))
- '(ergoemacs-ctl-c-or-ctl-x-delay 0.2)
- '(ergoemacs-handle-ctl-c-or-ctl-x (quote both))
- '(ergoemacs-ini-mode t)
- '(ergoemacs-keyboard-layout "us" t)
- '(ergoemacs-mode nil)
- '(ergoemacs-smart-paste nil)
- '(ergoemacs-theme "standard" t)
- '(ergoemacs-theme-options nil)
- '(ergoemacs-use-menus t)
- '(guide-key-mode t)
  '(initial-scratch-message
    ";; This buffer is for notes you don't want to save, and for Lisp evaluation.
 ;; If you want to create a file, visit that file with 【▤】【o】,
@@ -93,7 +83,7 @@
  '(set-mark-command-repeat-pop t)
  '(shift-select-mode t)
  '(smex-prompt-string "M-x ")
- '(transient-mark-mode nil))
+ '(transient-mark-mode t))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -180,16 +170,20 @@
 (require 'setup-org)
 
 ;; Setup Org (babel support)
-(require 'setup-org-babel)
+(use-package setup-org-babel
+  :commands org-mode)
 
 ;; Setup Org (image supporg)
-(require 'setup-org-image)
+(use-package setup-org-image
+  :commands org-mode)
 
 ;; Setup Org (latex support)
-(require 'setup-org-latex)
+(use-package setup-org-latex
+  :commands org-mode)
 
 ;; Setup Org (html support)
-(require 'setup-org-html)
+(use-package setup-org-html
+  :commands org-mode)
 
 ;; Setup Org (blogging support)
 (require 'setup-org-blog)
