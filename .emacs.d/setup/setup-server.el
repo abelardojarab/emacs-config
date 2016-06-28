@@ -46,9 +46,9 @@
                 (make-directory server-auth-dir t))
             (and (>= emacs-major-version 23)
                  (defun server-ensure-safe-dir (dir) "Noop" t))
-            (when (not (or
-                        (display-graphic-p)
-                        (eq 'windows-nt system-type)))
+            (when (and
+                   (display-graphic-p)
+                   (not (eq 'windows-nt system-type)))
               (server-start))))
   :config (progn
 
