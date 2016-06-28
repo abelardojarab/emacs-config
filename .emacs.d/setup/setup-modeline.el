@@ -72,15 +72,17 @@ want to use in the modeline *in lieu of* the original.")
 
           (setq powerline-default-separator 'wave))
   :config (progn
-            ;; (powerline-default-theme)
+            (powerline-default-theme)
             ))
 
 (use-package spaceline
   :init (setq powerline-default-separator 'wave)
   :load-path (lambda () (expand-file-name "spaceline/" user-emacs-directory))
-  :config (progn (require 'spaceline-config)
-                 (spaceline-spacemacs-theme)
-                 (spaceline-helm-mode)))
+  :config (progn
+            (require 'spaceline-config)
+            (spaceline-spacemacs-theme)
+            (spaceline-helm-mode)
+            ))
 
 (provide 'setup-modeline)
 ;;; setup-modeline.el ends here

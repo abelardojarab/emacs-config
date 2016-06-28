@@ -31,7 +31,6 @@
             (setq tabbar-use-images t)
             (setq tabbar-cycle-scope (quote tabs))
             (setq table-time-before-update 0.1)
-            (tabbar-mode)
 
             ;; Tweaking the tabbar
             (defadvice tabbar-buffer-tab-label (after fixup_tab_label_space_and_flag activate)
@@ -62,6 +61,8 @@
 ;; more tweaking to tabbar
 (use-package tabbar-ruler
   :if (display-graphic-p)
+  :after (spaceline tabbar)
+  :defer 4
   :load-path (lambda () (expand-file-name "tabbar-ruler/" user-emacs-directory))
   :init (setq tabbar-ruler-global-tabbar 't) ;; If you want tabbar
   :config (progn
@@ -145,7 +146,11 @@
                      (nth (+ (length my-buffer-list) n)
                           my-buffer-list)
                    (bury-buffer)
-                   (nth n my-buffer-list)))))))
+                   (nth n my-buffer-list)))))
+
+            ;; Enable tabbar
+            (tabbar-mode t)
+            ))
 
 (provide 'setup-tabbar)
 ;;; setup-tabbar.el ends here
