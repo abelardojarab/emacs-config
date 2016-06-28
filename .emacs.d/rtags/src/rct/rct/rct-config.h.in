@@ -1,0 +1,27 @@
+#ifndef RCT_CONFIG_H
+#define RCT_CONFIG_H
+
+#cmakedefine HAVE_BACKTRACE
+#cmakedefine HAVE_CLOCK_MONOTONIC_RAW
+#cmakedefine HAVE_CLOCK_MONOTONIC
+#cmakedefine HAVE_MACH_ABSOLUTE_TIME
+#cmakedefine HAVE_INOTIFY
+#cmakedefine HAVE_KQUEUE
+#cmakedefine HAVE_CHANGENOTIFICATION
+#cmakedefine HAVE_PROCESSORINFORMATION
+#cmakedefine HAVE_CYGWIN
+#cmakedefine HAVE_EPOLL
+#cmakedefine HAVE_NOSIGPIPE
+#cmakedefine HAVE_NOSIGNAL
+#cmakedefine HAVE_FSEVENTS
+#cmakedefine HAVE_STATMTIM
+#cmakedefine HAVE_CLOEXEC
+#cmakedefine HAVE_SCHEDIDLE
+#cmakedefine HAVE_SHMDEST
+#cmakedefine HAVE_SCRIPTENGINE
+#cmakedefine HAVE_UNORDERDED_MAP_WORKING_MOVE_CONSTRUCTOR
+#if !defined(HAVE_EPOLL) && !defined(HAVE_KQUEUE)
+#cmakedefine HAVE_SELECT
+#endif
+
+#endif
