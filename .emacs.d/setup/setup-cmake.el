@@ -57,6 +57,7 @@
 (use-package cmake-ide
   :defer 2
   :commands use-cmake-ide
+  :after (rtags flycheck)
   :load-path (lambda () (expand-file-name "cmake-ide/" user-emacs-directory))
   :init (if (executable-find "cmake")
             (add-hook 'c-mode-common-hook #'use-cmake-ide))
