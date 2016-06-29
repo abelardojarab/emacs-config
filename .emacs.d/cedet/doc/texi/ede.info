@@ -1,0 +1,2568 @@
+This is ede.info, produced by makeinfo version 6.1 from ede.texi.
+
+This file describes EDE, the Emacs Development Environment.
+
+   Copyright (C) 1998-2001, 2004-2005, 2008-2013, 2015 Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being "A GNU Manual," and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     "GNU Free Documentation License."
+
+     (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+     modify this GNU manual."
+INFO-DIR-SECTION Emacs misc features
+START-INFO-DIR-ENTRY
+* EDE: (ede).                   The Emacs Development Environment.
+END-INFO-DIR-ENTRY
+
+
+File: ede.info,  Node: Top,  Next: Introduction,  Up: (dir)
+
+EDE
+***
+
+EDE is the Emacs Development Environment: an Emacs extension that
+simplifies integrating project management workflows in Emacs.  It has
+features typical of other IDEs such as compiling and running programs.
+
+   Using an EDE project is as simple as enabling '(global-ede-mode 1)'
+and letting EDE identify the files associated with your build
+environment.  If you are just starting out, EDE can manage or create
+your makefiles and other build environment files, allowing you to
+concentrate on writing code rather than support files.
+
+   EDE is also a place to configure your projects so other tools in
+Emacs know more about your code, and can help you.  For example, the
+Semantic parser and smart completion engines use EDE project metadata to
+help parse your files and speed up file searches.
+
+   This file describes EDE, the Emacs Development Environment.
+
+   Copyright (C) 1998-2001, 2004-2005, 2008-2013, 2015 Free Software
+Foundation, Inc.
+
+     Permission is granted to copy, distribute and/or modify this
+     document under the terms of the GNU Free Documentation License,
+     Version 1.3 or any later version published by the Free Software
+     Foundation; with no Invariant Sections, with the Front-Cover texts
+     being "A GNU Manual," and with the Back-Cover Texts as in (a)
+     below.  A copy of the license is included in the section entitled
+     "GNU Free Documentation License."
+
+     (a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+     modify this GNU manual."
+
+* Menu:
+
+* Introduction::
+
+* Quick Start - wrapper::       Wrap existing project with EDE
+* Wrapper Projects::            Details about specific wrapper projects
+* Root Projects::               Details about setting up root projects
+* Generic Projects::            Details about using generic projects
+* Compilation Database projects:: Projects configured via a compilation database
+
+* Quick Start - from scratch::  Start a project from scratch
+* Managed Projects::            Using a managed project built from scratch
+
+* EDE Mode::                    Turning on EDE mode.
+* Miscellaneous commands::      Other project related commands.
+* Extending EDE::               Programming and extending EDE.
+* GNU Free Documentation License::  The license for this documentation.
+
+
+File: ede.info,  Node: Introduction,  Next: Quick Start - wrapper,  Prev: Top,  Up: Top
+
+1 Introduction
+**************
+
+EDE is a generic interface for managing projects.  For a user, it
+specifies a single set of menus and keybindings, while supporting
+pre-existing projects using a range of different tools.  For developers,
+it provides an interface to gain meta-data about a user project to
+improve a tools usefulness.
+
+   EDE can be used to either:
+   * Wrap an existing project
+   * Create and manage a project
+
+   All projects types in EDE support a few basic concepts about the
+project or its targets, although some project types do not support
+modifying targets or all project options.
+
+1.1 What is a project?
+======================
+
+In EDE, a project consists of a directory hierarchy, a set of meta data,
+command features, and a set of targets.  Not all projects support all
+types of meta data or commands.
+
+   The meta-data includes the project's version number, and might
+include additional features, such as C/C++ Include and System Include
+paths, or Java's classpath.
+
+   A project also has commands available, including a concept of
+compile, debug, and run.
+
+   The Project menu includes 'Add target' and 'Remove target' and a way
+to select a configuration, though not all project types support this.
+
+1.2 What is a target?
+=====================
+
+In EDE, targets are a way to subdivide your project into different
+units, usually grouped by purpose, or grouped by language type.
+Internally, all projects have targets, but some projects do not have any
+useful features associated with their targets.
+
+   For projects supporting targets, the different targets have
+additional metadata, such as which subset of files belong to a given
+target, and supports commands, such as how to compile or debug that
+target.
+
+   The Development menu includes a Target entry which has 'Add file' and
+'Remove file', though not all projects support this.
+
+
+File: ede.info,  Node: Quick Start - wrapper,  Next: Wrapper Projects,  Prev: Introduction,  Up: Top
+
+2 Quick Start - Wrapping an existing project
+********************************************
+
+If you already have a project, all you need to do is enable EDE in your
+'.emacs' file like this:
+
+     (global-ede-mode 1)
+
+   If there is a project type for your code, EDE will automatically
+detect it.  Some example *note Wrapper Projects:: include:
+
+   * Automake
+   * Linux kernel
+   * Emacs source
+   * Android SDK projects
+   * Arduino sketches
+   * Java projects including ant, maven, lein
+   * compdb & Ninja enabled projects
+
+   There are also two kinds of *note Root Projects::.
+
+   * C++
+   * Java
+
+   There are also a wide range of very simple *note Generic Projects::,
+such as:
+
+   * Projects identified by Version Control
+   * Makefile
+   * CMake
+   * SCons
+
+   If your project type isn't supported yet, you can add support with
+either the *note Root Projects:: for those supported langauges, or with
+the *note Generic Projects::.
+
+
+File: ede.info,  Node: Wrapper Projects,  Next: Root Projects,  Prev: Quick Start - wrapper,  Up: Top
+
+3 Wrapper Projects
+******************
+
+Wrapper projects can identify projects that have alreayd been setup by
+identifying key files.  If you work with these types of projects, you
+will be all set after you enable EDE with no extra configuration needed.
+
+* Menu:
+
+* Automake::                    Project for hand-written Automake.
+* Emacs::                       Project for working with Emacs.
+* Linux::                       Project for working with Linux kernels.
+* Java::                        Projects for different generic Java builds
+* Android projects::            Projects for Android development
+* Arduino projects::            Projects for Arduino sketches
+
+
+File: ede.info,  Node: Automake,  Next: Emacs,  Up: Wrapper Projects
+
+3.1 Hand Written Automake
+=========================
+
+The Automake project identifies projects where the Automake files have
+been hand written.  This project reads your Automake files, and can
+identify your targets and can build your project.
+
+   Each source file can be identified with one or more targets, and you
+can use the 'ede-compile-target' command, or build the whole project.
+
+   This project type can also keep your Automake files updated by adding
+new source files to different targets for you.
+
+   If you edit your Automake files by hand, be sure to use
+'ede-rescan-toplevel' to keep EDE up to date.
+
+
+File: ede.info,  Node: Emacs,  Next: Linux,  Prev: Automake,  Up: Wrapper Projects
+
+3.2 Emacs
+=========
+
+The Emacs project automatically identifies an Emacs source tree, and
+enables an EDE project mode for it.
+
+   It pre-populates the C Preprocessor symbol map for correct parsing,
+and has an optimized include file identification function.
+
+
+File: ede.info,  Node: Linux,  Next: Java,  Prev: Emacs,  Up: Wrapper Projects
+
+3.3 Linux Kernel
+================
+
+The 'ede-linux' project will automatically identify a Linux Kernel
+source tree, and enable and EDE project mode for it.
+
+   The Linux project enables the project and target compile menus.  It
+pre-populates the C Preprocessor symbol map for reasonable parsing, and
+has an optimized include file identification function.  It also supports
+Semantic code parsing with customized platform defines set.
+
+
+File: ede.info,  Node: Java,  Next: Android projects,  Prev: Linux,  Up: Wrapper Projects
+
+3.4 Java projects
+=================
+
+There are several Java projects for detecting some common Java build
+environments and setting them up for Semantic parsing and compilation.
+Supported projects are:
+
+   * Ant
+   * Maven
+   * Lein
+
+   @TODO Write some more.
+
+
+File: ede.info,  Node: Android projects,  Next: Arduino projects,  Prev: Java,  Up: Wrapper Projects
+
+3.5 Android projects
+====================
+
+An Android project will detect and support development of Android apps.
+Android projects use an 'AndroidManifest.xml' file.
+
+   Android projects can be created with 'ede-new' but depend on a
+correctly configured Android SDK via CEDET support.
+
+ -- Function: cedet-android-sdk-root
+     The root to the android SDK.
+
+   Android projects support different configurations including debug,
+release, and instrument.  It supports compile, debug, and upload, which
+will upload a program to your Android device.  It also supports several
+debugging tools via 'android.el'.
+
+   This project also supports Semantic by enabling smart completion of
+system symbols derived from the 'android.jar' file found in the SDK.
+
+
+File: ede.info,  Node: Arduino projects,  Prev: Android projects,  Up: Wrapper Projects
+
+3.6 Arduino projects
+====================
+
+An arduino project will read your preferences.  On Linux it will
+automatically find '~/.arduino/preferences.txt' file, and identify your
+sketches.  On windows, you will need to tell Emacs where your
+preferences are, perhaps like this:
+
+     (setq ede-arduino-preferences-file
+         (expand-file-name (substitute-in-file-name "$APPDATA/Arduino15/preferences.txt")))
+
+   You will still need the Arduino IDE to set up your preferences and
+locate your arduino.  After using the IDE, Emacs will be able to find
+your sketches, compile them, and upload them to your arduino.
+
+   If you have the 'arduino' command on your path, EDE will be able to
+find your SDK and compile your programs.
+
+   Arduino projects support compiling and uploading sketches to your
+Arduino.
+
+
+File: ede.info,  Node: Root Projects,  Next: Generic Projects,  Prev: Wrapper Projects,  Up: Top
+
+4 Root Projects
+***************
+
+Root projects are a way to configure Emacs to identify and customize a
+project that doesn't have an existing wrapper project, and without
+leaving special EDE project files behind.
+
+   Instead, you configure these projects in your '.emacs' file with just
+enough information to support Semantic, or whichever tool you are need
+EDE to support.
+
+* Menu:
+
+* ede-cpp-root::                This project marks the root of a C/C++ code project.
+* ede-java-root::               This project marks the root of a Java project.
+
+
+File: ede.info,  Node: ede-cpp-root,  Next: ede-java-root,  Up: Root Projects
+
+4.1 ede-cpp-root
+================
+
+The 'ede-cpp-root' project type allows you to configure a project in
+your '.emacs' file.  It allows EDE to provide the Semantic package with
+the ability to find header files quickly.
+
+   The 'ede-cpp-root' class knows a few things about C++ projects, such
+as the prevalence of "include" directories, and typical file-layout
+stuff.  If this isn't sufficient, you can subclass
+'ede-cpp-root-project' and add your own tweaks in just a few lines.  See
+the end of this file for an example.
+
+   In the most basic case, add this to your '.emacs' file, modifying
+appropriate bits as needed.
+
+     (ede-cpp-root-project "NAME" :file "/dir/to/some/file")
+
+   Replace NAME with whatever name you want, and the filename to an
+actual file at the root of your project.  It might be a Makefile, a
+README file.  Whatever.  It doesn't matter.  It's just a key to hang the
+rest of EDE off of.
+
+   The most likely reason to create this project, is to speed up
+searching for includes files, or to simplify bootstrapping Semantic's
+ability to find files without much user interaction.  In conjunction
+with Semantic completion, having a short include path is key.  You can
+override the default include path and system include path like this:
+
+     (ede-cpp-root-project "NAME" :file "FILENAME"
+         :include-path '( "/include" "../include" "/c/include" )
+         :system-include-path '( "/usr/include/c++/3.2.2/" )
+         :spp-table '( ("MOOSE" . "")
+                       ("CONST" . "const") ) )
+
+   In this case each item in the include path list is searched.  If the
+directory starts with "/", then that expands to the project root
+directory.  If a directory does not start with "/", then it is relative
+to the default-directory of the current buffer when the file name is
+expanded.
+
+   The include path only affects C/C++ header files.  Use the slot
+':header-match-regexp' to change it.
+
+   The ':system-include-path' allows you to specify full directory names
+to include directories where system header files can be found.  These
+will be applied to files in this project only.
+
+   The ':spp-table' provides a list of project specific #define style
+macros that are unique to this project, passed in to the compiler on the
+command line, or are in special headers.  See the
+'semantic-lex-c-preprocessor-symbol-map' for more on how to format this
+entry.
+
+   If there is a single file in your project, you can instead set the
+':spp-files' to a list of file names relative to the root of your
+project.  Specifying this is like setting the variable
+'semantic-lex-c-preprocessor-symbol-file' in semantic.
+
+   If you want to override the file-finding tool with your own function
+you can do this:
+
+     (ede-cpp-root-project "NAME" :file "FILENAME" :locate-fcn 'MYFCN)
+
+   Where MYFCN is a symbol for a function.  The locate function can be
+used in place of 'ede-expand-filename' so you can quickly customize your
+custom target to use specialized local routines instead of the default
+EDE routines.  The function symbol must take two arguments:
+
+NAME
+     The name of the file to find.
+DIR
+     The directory root for this cpp-root project.
+
+   When creating a project with 'ede-cpp-root', you can get additional
+configurations via *note Project Local Variables::.  Be aware that the
+format for project local variables is an association list.  You cannot
+use 'M-x ede-set' and have your project local variables persist between
+sessions.
+
+   If the cpp-root project style is right for you, but you want a
+dynamic loader, instead of hard-coding path name values in your
+'.emacs', you can do that too, but you will need to write some lisp
+code.
+
+   To do that, you need to add an entry to the 'ede-project-class-files'
+list, and also provide two functions to teach EDE how to load your
+project pattern
+
+   It would look like this:
+
+     (defun MY-FILE-FOR-DIR (&optional dir)
+       "Return a full file name to the project file stored in DIR."
+       <write your code here, or return nil>
+       )
+
+     (defun MY-ROOT-FCN ()
+       "Return the root fcn for `default-directory'"
+       ;; You might be able to use `ede-cpp-root-project-root'
+       ;; and not write this at all.
+       )
+
+     (defun MY-LOAD (dir)
+       "Load a project of type `cpp-root' for the directory DIR.
+     Return nil if there isn't one."
+       ;; Use your preferred construction method here.
+       (ede-cpp-root-project "NAME" :file (expand-file-name "FILE" dir)
+                                    :locate-fcn 'MYFCN)
+       )
+
+     (add-to-list 'ede-project-class-files
+                  (ede-project-autoload "cpp-root"
+                   :name "CPP ROOT"
+                   :file 'ede-cpp-root
+                   :proj-file 'MY-FILE-FOR-DIR
+                   :proj-root 'MY-ROOT-FCN
+                   :load-type 'MY-LOAD
+                   :class-sym 'ede-cpp-root)
+                  t)
+
+   This example only creates an auto-loader, and does not create a new
+kind of project.
+
+   See 'ede-cpp-root-project', for details about the class that defines
+the 'ede-cpp-root' project type.
+
+
+File: ede.info,  Node: ede-java-root,  Prev: ede-cpp-root,  Up: Root Projects
+
+4.2 ede-java-root
+=================
+
+Much like the project type *note ede-cpp-root::, the java variant is can
+be setup in your '.emacs' file and just marks a directory as the root of
+a java source tree.
+
+   The 'ede-java-root' project class knows a few things about Java
+projects.  In particular, you can use it to control your classpath at
+both the system level, and for your project.  If it is insufficient, you
+can subclass 'ede-java-root-project' and add your own tweaks in just a
+few lines.  See *note ede-cpp-root:: for an example using the C++
+variant.
+
+   In the most basic case, add this to your '.emacs' file, modifying
+appropriate bits as needed.
+
+     (ede-java-root-project "SOMENAME" :file "/dir/to/some/file" :srcroot '("src"))
+
+   Replace SOMENAME with whatever name you want, and the filename to an
+actual file at the root of your project.  It might be a Makefile, a
+README file.  Whatever.  It doesn't matter.  It's just a key to hang the
+rest of EDE off of.
+
+   Replace the value of :srcroot with a list of directories under the
+project root which contains Java sources.  For example, if you have:
+
+     ~/myprojects/P1/
+     ~/myprojects/P1/src/
+     ~/myprojects/P1/src/com/ericsoft/MyCode.java
+     ~/myprojects/P1/doc/
+
+   Then 'src' represents the directory under which all your Java code
+is.  It is important that 'src' is one step above the directory that is
+the base of your package name, such as 'com/ericsoft' in the example
+above so that new files can be discovered via fully qualified name.  You
+can have multiple such directories in one project, and each will be
+accessible.
+
+   You can specify your classpath like this:
+
+     (ede-java-root-project "NAME" :file "FILENAME"
+         :srcroot '("src")
+         :classpath '("/absolute/path.jar")
+         :localclasspath '( "/relative/path.jar" ))
+
+   In this example, ':classpath' specifies absolute paths somewhere on
+your system, and the explicit jar or source root directories Semantic
+will search when performing completions.
+
+   The ':localclasspath' is like ':classpath', but it will contain path
+names relative to the root of your project.
+
+   If you want to override the file-finding tool with your own function
+you can do this:
+
+     (ede-java-root-project "NAME" :file "FILENAME" :locate-fcn 'MYFCN)
+
+   Where MYFCN is a symbol for a function.  The locate function can be
+used in place of 'ede-expand-filename' so you can quickly customize your
+custom target to use specialized local routines instead of the default
+EDE routines.  The function symbol must take two arguments:
+
+NAME
+     The name of the file to find.
+DIR
+     The directory root for this java-root project.
+
+   If you would like to create your Java projects dynamically, instead
+of putting them all in your '.emacs', you can do that too.  See *note
+ede-cpp-root:: for details that can be applied to this project type.
+
+
+File: ede.info,  Node: Generic Projects,  Next: Compilation Database projects,  Prev: Root Projects,  Up: Top
+
+5 Generic Projects
+******************
+
+Generic projects makes it easy to configure different kinds of build
+systems as an EDE project when a specialized project type is not
+available.
+
+   Generic projects are disabled by default because they have the
+potential to interfere with other projects.  To use the generic project
+sytem to start detecting projects, you need to enable it.
+
+     (ede-enable-generic-projects)
+
+ -- Command: ede-enable-generic-projects
+     Enable generic project loaders.
+
+     This enables generic loaders for projects that are detected using
+     either a 'Makefile', 'SConstruct', or 'CMakeLists'.
+
+     You do not need to use this command if you create your own generic
+     project type.
+
+* Menu:
+
+* Customizing a Generic Project::
+* Creating new Generic Projects::
+
+
+File: ede.info,  Node: Customizing a Generic Project,  Next: Creating new Generic Projects,  Up: Generic Projects
+
+5.1 Customizing a Generic Project
+=================================
+
+To customize a project identified with EDE's generic project system, use
+the command
+
+     M-x customize-project RET
+
+   Generic projects support a special configuration which is saved when
+you finish customizing it.  The next time you open your project, your
+customizations will be restored.  The configurations are saved at the
+root of the identified project.
+
+   Generic projects support configuration of:
+   * Project compile command
+   * Project debug command
+   * Run project command
+   * C configuration, such as include paths, system includes, and custom
+     macros.
+   * Java configuration, such as classpath.
+
+   Because generic project config files are Emacs Lisp code, loading
+them is considered unsafe.  You will be asked before a configuration
+file is loaded into Emacs, or to add a given directory to your 'safe'
+list.
+
+
+File: ede.info,  Node: Creating new Generic Projects,  Prev: Customizing a Generic Project,  Up: Generic Projects
+
+5.2 Creating new Generic Projects
+=================================
+
+Adding support for a new generic project requires writing Emacs Lisp
+code, but the requirements are minimal.  You can then use
+'customize-project' to configure build commands, includes, and other
+options for that project.  The configuration is saved in 'EDEConfig.el'.
+
+   To add a new autoloader, use the below command.  See the next two
+sections for examples.
+
+ -- Function: ede-generic-new-autoloader internal-name external-name
+          projectfile class
+     Add a new EDE Autoload instance for identifying a generic project.
+     INTERNAL-NAME is a long name that identifies this project type.
+     EXTERNAL-NAME is a shorter human readable name to describe the
+     project.  PROJECTFILE is a file name that identifies a project of
+     this type to EDE, such as a 'Makefile', or 'SConstruct' file.
+     CLASS is the EIEIO It should subclass the class
+     "ede-generic-project" project.
+
+5.2.1 Add Generic Support for a Version Control system
+------------------------------------------------------
+
+If you want to create a generic project loader for your favorite Version
+Control system, you just need to add a new autoloader for it.  Here are
+two examples from 'ede/generic.el':
+
+       (ede-generic-new-autoloader "generic-git" "Generic Git"
+     			      ".git" 'ede-generic-vc-project)
+       (ede-generic-new-autoloader "generic-bzr" "Generic Bazaar"
+     			      ".bzr" 'ede-generic-vc-project)
+
+5.2.2 Add Generic Support for a build system
+--------------------------------------------
+
+If you want to create a generic project loader for your favorite build
+system, you need to define your own project and target classes, and
+create an autoloader.  The example for Makefiles looks like this:
+
+     ;;; MAKEFILE
+
+     (defclass ede-generic-makefile-project (ede-generic-project)
+       ((buildfile :initform "Makefile")
+        )
+       "Generic Project for makefiles.")
+
+     (defmethod ede-generic-setup-configuration ((proj ede-generic-makefile-project) config)
+       "Setup a configuration for Make."
+       (oset config build-command "make -k")
+       (oset config debug-command "gdb ")
+       )
+
+     (ede-generic-new-autoloader "generic-makefile" "Make"
+     			    "Makefile" 'ede-generic-makefile-project)
+
+   This example project will detect any directory with the file
+'Makefile' in it as belonging to this project type.  Customization of
+the project will allow you to make build and debug commands more
+precise.
+
+
+File: ede.info,  Node: Compilation Database projects,  Next: Quick Start - from scratch,  Prev: Generic Projects,  Up: Top
+
+6 Compilation Database projects
+*******************************
+
+compdb projects are created based on information in a compilaton
+database (http://clang.llvm.org/docs/JSONCompilationDatabase.html).
+This is a repository which descritbes the compilation commands required
+to build a project.  The database is usually expressed as JSON and can
+be produced as a file by tools such as CMake (http://www.cmake.org), or
+generated on-demand by tools such as Ninja
+(http://martine.github.io/ninja/).
+
+   Reading the Compilation Database enables the compdb project to be
+automatically configured from the existing project build environment.
+This is especially useful for C and C++ projects which can be tricky to
+configure for use with CEDET and other libraries.
+
+   Some of the other features supported by compdb projects are:
+
+   * Read Compilation Database on-demand and provides include paths and
+     preprocessor symbols to Semantic
+   * For GCC-compatible compilers, reads the internal include paths used
+     to parse standard libraries.  There is no need to use
+     'semantic-gcc-setup' *note (semantic)System Include Paths::.
+   * Most EDE commands supported, such as 'C-c . c' to build the current
+     target (source file)
+   * Autoloads based on the presence of a 'compile_commands.json' file
+     or 'ninja.build' file, with no additional configuration typically
+     required
+   * Supports multiple build configurations (eg Debug, Release) and
+     corresponding build directories.
+   * Integration with complementary libraries, such as *Note
+     (flymake)::.
+   * (For Ninja projects only) Automatically generates the compilation
+     database as required without needing to generate a file.
+   * (For Ninja projects only) Loads and caches available phony build
+     targets (eg "test") for convenient builds
+
+* Menu:
+
+* Compilation Database Quickstart::
+* Creating Compilation Database Projects::
+* Multiple Build Configurations::
+* Building compdb Projects::
+* Matching source and header files::
+* Rescanning the Compilation Database::
+* Compilation Database Troubleshooting::
+
+
+File: ede.info,  Node: Compilation Database Quickstart,  Next: Creating Compilation Database Projects,  Up: Compilation Database projects
+
+6.1 Compilation Database Quickstart
+===================================
+
+In order to use the compdb project type, you need to ensure your project
+has a compilation database.  If you are using CMake
+(http://www.cmake.org) you can do something like the following:
+
+     $ cd .../yourproj
+     $ cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=TRUE .
+
+   This will generate build files in the source directory, as well as a
+'compile_commands.json' file, which is the compilation database.
+
+   Note that if you are using the Ninja
+(http://martine.github.io/ninja/) build tool, you don't need to generate
+the <compile_commands.json> file, because ninja can generate the
+compilation database dynamically.
+
+   By default, compdb projects are automatically loaded when a
+'compile_commands.json' file or 'build.ninja' file is found in the
+current directory, or in a parent directory.  If you build your projects
+in the same directory as your source, no additional configuration is
+required.
+
+   Now open any of your source files in emacs, and you should see all
+the includes correctly parsed.  Use 'M-x
+semantic-c-describe-environment' to check that all include paths are
+recognised correctly.  If not, *Note Compilation Database
+Troubleshooting::.
+
+
+File: ede.info,  Node: Creating Compilation Database Projects,  Next: Multiple Build Configurations,  Prev: Compilation Database Quickstart,  Up: Compilation Database projects
+
+6.2 Creating Compilation Database Projects
+==========================================
+
+compdb projects can also be created manually by invoking either the
+'ede-compdb-project' or 'ede-ninja-project' functions.
+
+   In the most basic case, you can simply set the ':file' property to
+the relevant compilation database file, and the project will be loaded
+from the information in that file.
+
+     (ede-add-project-to-global-list
+      (ede-compdb-project "Myproj" :file "/path/to/src/compile_commands.json"))
+
+   The examples above assume that you are building your binaries into
+the same directory as the project source code.  If you want to use a
+different directory for the compilation database, then you can use a
+':compdb-file' property in conjunction with a ':file' property, as
+follows:
+
+     (ede-add-project-to-global-list
+      (ede-compdb-project "Myproj"
+                          :file "/path/to/src/CMakeLists.txt"
+                          :compdb-file "/path/to/build/compile_commands.json"))
+
+
+File: ede.info,  Node: Multiple Build Configurations,  Next: Building compdb Projects,  Prev: Creating Compilation Database Projects,  Up: Compilation Database projects
+
+6.3 Multiple Build Configurations
+=================================
+
+compdb can be configured to use multiple build directories.  This is
+desirable when developing for multiple configurations (eg a debug build
+for feature development, and a release build for performance/integration
+testing).  Furthermore, the build directories can be either "in-source"
+or "out-of-source", meaning they can be subdirectories of your project
+source tree, or elsewhere on the filesystem.
+
+   In EDE terminology, each of these different types of builds is a
+project configuration.  The current configuration is referred to as the
+configuration default.  In compdb, each project configuration is
+associated with a build directory, and the current configuration
+directory is used to locate the compilation database.
+
+   Multiple configurations and associated directories can be specified
+when a compdb project is created, using the ':configurations' and
+':configuration-directories' properites.  The ':configuration-default'
+property can be used to specify the current configuration, but if not
+present the first one in the list of configurations will be chosen.
+
+   Once the project is created, you can switch to a different
+configuration using the'ede-project-configurations-set' function, bound
+to 'C-c . b' by default.  You can also change directory for the current
+configuration by using 'ede-compdb-set-configuration-directory', which
+is bound to 'C-c . B' by default.
+
+* Menu:
+
+* Simple compdb Example::
+* Autoload compdb Example::
+
+
+File: ede.info,  Node: Simple compdb Example,  Next: Autoload compdb Example,  Up: Multiple Build Configurations
+
+6.3.1 Simple compdb Example
+---------------------------
+
+Here we are creating an compdb project for a CMake-based source tree in
+'~/src/myproj'.  It can be built as either "debug" or "release", with
+'build.dbg' and 'build.rel' as the corresponding directories.
+
+     (ede-add-project-to-global-list
+      (ede-compdb-project "Myproj"
+                          :file (expand-file-name "~/src/myproj/CMakeLists.txt")
+                          :configurations '("debug" "release")
+                          :configuration-directories '("build.dbg" "build.rel")
+                          :compdb-file "compile_commands.json"
+                          :build-command "cmake --build .."
+                          ))
+
+   Note that we need to provide a ':file' property which corresponds to
+a file in the root of the source tree.
+
+
+File: ede.info,  Node: Autoload compdb Example,  Prev: Simple compdb Example,  Up: Multiple Build Configurations
+
+6.3.2 Autoload compdb Example
+-----------------------------
+
+In this (admittedly complex) example, we have a possible four different
+types of build for each project.  Each build type is assigned a separate
+directory, relative to the project root.  At load time, we examine the
+project to see which, if any, of the build directories is present.  This
+directory is selected as the build directory, and additionally we set
+the ':configuration-default' to the corresponding value.
+
+   Furthermore, we're using the 'ede-project-autoload' mechanism to
+automatically create and load the project as required, *Note Detecting a
+Project::.
+
+     (defvar my-cmake-build-directories
+       '(("None" . "build")
+         ("Debug" . "build.dbg")
+         ("Release" . "build.rel")
+         ("RelWithDebInfo" . "build.r+d")))
+
+     (defun my-load-cmake-project (dir)
+       "Creates a project for the given directory sourced at dir"
+       (let ((default-directory dir)
+             (config-and-dir (car (cl-member-if
+               (lambda (c)
+                 (file-readable-p
+                 (expand-file-name "compile_commands.json" (concat dir (cdr c)))))
+                                                my-cmake-build-directories))))
+         (unless config-and-dir
+           (error "Couldn't determine build directory for project at %s" dir))
+         (ede-add-project-to-global-list
+          (ede-compdb-project
+           (file-name-nondirectory (directory-file-name dir))
+           :file (expand-file-name "CMakeLists.txt" dir)
+           :compdb-file (expand-file-name "compile_commands.json" (cdr config-and-dir))
+           :configuration-default (car config-and-dir)
+           :configuration-directories (mapcar #'cdr my-cmake-build-directories)
+           :configurations (mapcar #'car my-cmake-build-directories)
+           :build-command "cmake --build .."
+           ))))
+
+     (defun vc-project-root (dir)
+       (require 'vc)
+       (let* ((default-directory dir)
+              (backend (vc-responsible-backend dir)))
+         (and backend (vc-call-backend backend 'root default-directory))))
+
+     (ede-add-project-autoload
+      (ede-project-autoload "CMake"
+                            :file 'ede-compdb
+                            :proj-file "CMakeLists.txt"
+                            :proj-root 'vc-project-root
+                            :load-type 'my-load-cmake-project
+                            :class-sym 'ede-compdb-project))
+
+
+File: ede.info,  Node: Building compdb Projects,  Next: Matching source and header files,  Prev: Multiple Build Configurations,  Up: Compilation Database projects
+
+6.4 Building compdb Projects
+============================
+
+The current buffer can be compiled using the 'ede-compile-target'
+function, which is bound to 'C-c . c' by default, *Note Building and
+Debugging::.
+
+   When creating a compdb project, the ':build-command' attribute can be
+set to the command to be used to build the entire project.  This is
+invoked with 'ede-compile-project', which is bound to 'C-c . C' by
+default.  This command is run from the current configuration directory.
+
+   When 'ede-ninja-project' is used, some additional features are
+supported.  compdbsupports automatically loading the list of top-level
+phony projects, like 'all' and 'test'.  These are often useful during
+development, and compdb makes these available for use via the
+'ede-compile-selected' command.  This is bound to the 'Build Other
+Target...' menu item and 'C-c . C-c' by default.  These phony targets
+are queried using 'ninja -t targets' and cached per-project.
+
+
+File: ede.info,  Node: Matching source and header files,  Next: Rescanning the Compilation Database,  Prev: Building compdb Projects,  Up: Compilation Database projects
+
+6.5 Matching source and header files
+====================================
+
+One of the limitations of using the compilation database is that it only
+contains the compilation commands for source files.  However, related
+source files such as header files are not generally compiled
+independently, hence are not inserted into the compilation database.
+
+   compdb works around this limitation using some heuristics to locate a
+compilation database entry for each buffer file.  This is the process
+that is followed when a new file is opened within an existing compdb
+project.
+
+  1. If the current buffer file is in the compilation database, that is
+     used.
+  2. If the Projectile (http://batsov.com/projectile/) package is
+     configured for the current buffer, the 'projectile-get-other-files'
+     function will be used to search for a matching entry in the
+     compilation database.
+  3. The standard emacs "other" file mechanism is also used to search
+     for matching entries in the compilation database.  The definition
+     of an "other" file is almost exactly the same as that used by the
+     the built-in emacs function 'ff-get-other-file'.  By default,
+     'ff-get-other-file' will search the current directory for an
+     equivalent '.cpp' file, so if the current buffer is visiting an
+     '.hpp' file and the equivalent '.cpp' file is in the compilation
+     database, that is used.  Other directories can be searched, and
+     indeed custom functions can be provided to search for arbitary
+     files.
+  4. Otherwise the compilation database is searched, and the entry which
+     has the longest common prefix with the current buffer file is used.
+     So for example if you are visiting 'src/bar.hpp', and there is an
+     entry for 'src/foo.cpp', this will be used in preference to
+     'main.cpp'.
+
+   This technique ensures that every header file should be matched to a
+compilation database entry.  To see the compilation database entry for a
+given header file, just compile it!  (*Note Building compdb Projects::.)
+
+
+File: ede.info,  Node: Rescanning the Compilation Database,  Next: Compilation Database Troubleshooting,  Prev: Matching source and header files,  Up: Compilation Database projects
+
+6.6 Rescanning the Compilation Database
+=======================================
+
+compdb will rescan the compilation database when the
+'ede-rescan-toplevel' function (bound to 'C-c . g' by default) is
+invoked.
+
+   Typically this should not be needed, because compdb detects when the
+compilation database has changed, and rescans it.  Changes are detected
+by examining the size and modification date/time for the relevant file
+in the current build directory, which is the one specified by the
+':compdb-file' slot.  Generally this is set to 'compile_commands.json'
+for regular compdb projects, and 'build.ninja' for Ninja projects.
+
+   Note that changing build directories will often cause the compilation
+database to be rescanned, as it generally represents a detected change
+in size or modification date/time of the ':compdb-file'.
+
+   Each time the compilation database is rescanned, open buffers are
+updated to reference the corresponding compilation database entry, as
+described in the process above.
+
+   The hook 'ede-compdb-project-rescan-hook' is called for every open
+buffer after the compilation database is rescanned.
+
+   For Ninja projects, a list of build rules is required in order to
+query the compilation database.  The build rule names vary depending on
+which Ninja generator is used, and hence this may need customization.
+For example, CMake generates Ninja build rules for C++ files of the form
+'CXX_COMPILER_(name)'.  The ':build-rules' and ':build-rules-regexp'
+attributes should be used to specify the build rules on project
+creation.
+
+     (ede-ninja-project projname
+        :file projfile
+        :compdb-file compdb-file
+        :build-rules '("icc14.0.3_cxx" "gcc4.8.3_cxx")
+        :build-rules-regex "^\(C\|CXX\)_COMPILER"
+        )
+
+
+File: ede.info,  Node: Compilation Database Troubleshooting,  Prev: Rescanning the Compilation Database,  Up: Compilation Database projects
+
+6.7 Compilation Database Troubleshooting
+========================================
+
+Unfortunately there is too much variation between build systems to
+accomodate all of them with sensible defaults, and so you may find that
+compdb doesn't work as intended.  Here are a few steps you can take to
+investigate problems.
+
+  1. When opening a source file, you should first check that the include
+     paths are set correctly for your project.  To do this, you can use
+     the 'Show include summary' mouse menu item, or 'M-x
+     semantic-decoration-all-include-summary'.  This should tell you
+     whether or not the include paths are being correctly read from the
+     compilation database.
+  2. Check the contents of your '*compdb: projname*' buffer (where
+     'projname' is the name of your project).  This should contain the
+     compilation database for your project, in JSON format.  If the
+     buffer is not strictly JSON formatted, then it cannot be parsed by
+     compdb.  In particular, look for spurious output at the start or
+     end of the buffer.
+  3. For Ninja projects, if you have an empty compilation database in
+     the '*compdb: projname' buffer, you may need to configure your
+     build rules, *Note Rescanning the Compilation Database::.
+
+
+File: ede.info,  Node: Quick Start - from scratch,  Next: Managed Projects,  Prev: Compilation Database projects,  Up: Top
+
+7 Quick Start - Create project files from scratch
+*************************************************
+
+If you are starting a new managed project and would like EDE to create
+your build files for you using C/C++, Fortran, or Emacs Lisp, you just
+need enable EDE and use 'ede-new' to get started.
+
+   To enable EDE in your '.emacs' file.
+
+     (global-ede-mode 1)
+
+   Once you have EDE enabled, you can create a project.  This chapter
+provides an example C++ project that will create Automake files for
+compilation.  For complete details, see *note Managed Projects::.
+
+7.1 Step 1: Create root directory
+=================================
+
+First, lets create a directory for our project.  For this example, we'll
+start with something in '/tmp'.
+
+     C-x C-f /tmp/myproject/README RET
+     M-x make-directory RET RET
+
+   Now put some plain text in your README file to start.
+
+   Now, lets create the project:
+
+     M-x ede-new RET Automake RET myproject RET
+
+   Nothing visible happened, but if you use 'dired' to look at the
+directory, you should see this:
+
+       /tmp/myproject:
+       total used in directory 32 available 166643476
+       drwxr-xr-x  2 zappo users  4096 2012-02-23 22:10 .
+       drwxrwxrwt 73 root  root  20480 2012-02-23 22:10 ..
+       -rw-r--r--  1 zappo users   195 2012-02-23 22:10 Project.ede
+       -rw-r--r--  1 zappo users    10 2012-02-23 22:09 README
+
+7.2 Step 2: Create Subdirectories and Files
+===========================================
+
+We'll make a more complex project, so use dired to create some more
+directories using the '+' key, and typing in new directories:
+
+     + include RET
+     + src RET
+
+   Now I'll short-cut in this tutorial.  Create the following files:
+
+   'include/myproj.hh'
+     /** myproj.hh ---
+      */
+
+     #ifndef myproj_hh
+     #define myproj_hh 1
+
+     #define IMPORTANT_MACRO 1
+
+     int my_lib_function();
+
+     #endif // myproj_hh
+
+   'src/main.cpp'
+     /** main.cpp ---
+      */
+
+     #include <iostream>
+     #include "myproj.hh"
+
+     int main() {
+
+     }
+
+     #ifdef IMPORTANT_MACRO
+     int my_fcn() {
+
+     }
+     #endif
+
+   'src/mylib.cpp'
+     /** mylib.cpp ---
+      *
+      * Shared Library to build
+      */
+
+     int my_lib_function() {
+
+     }
+
+7.3 Step 3: Create subprojects
+==============================
+
+EDE needs subdirectories to also have projects in them.  You can now
+create those projects.
+
+   With 'main.cpp' as your current buffer, type:
+
+     M-x ede-new RET Automake RET src RET
+
+   and in 'myproj.hh' as your current buffer, type:
+
+     M-x ede-new RET Automake RET include RET
+
+   These steps effectively only create the Project.ede file in which you
+will start adding targets.
+
+7.4 Step 4: Create targets
+==========================
+
+In order to build a program, you must have targets in your EDE Projects.
+You can create targets either from a buffer, or from a 'dired' directory
+buffer.
+
+   Note: If for some reason a directory list buffer, or file does not
+have the 'Project' menu item, or if EDE keybindings don't work, just use
+'M-x revert-buffer RET' to force a refresh.  Sometimes creating a new
+project doesn't restart buffers correctly.
+
+   Lets start with the header file.  In 'include/myproj.hh', you could
+use the menu, but we will now start using the EDE command prefix which
+is 'C-c .'.
+
+     C-c . t includes RET miscellaneous RET y
+
+   This creates a misc target for holding your includes, and then adds
+myproj.hh to the target.  Automake (the tool) has better ways to do
+this, but for this project, it is sufficient.
+
+   Next, visit the 'src' directory using dired.  There should be a
+'Project' menu.  You can create a new target with
+
+     . t myprogram RET program RET
+
+   Note that '. t' is a command for creating a target.  This command is
+also in the menu.  This will create a target that will build a program.
+If you want, visit 'Project.ede' to see the structure built so far.
+
+   Next, place the cursor on 'main.cpp', and use '. a' to add that file
+to your target.
+
+     . a myprogram RET
+
+   Note that these prompts often have completion, so you can just press
+'TAB' to complete the name 'myprogram'.
+
+   If you had many files to add to the same target, you could mark them
+all in your dired buffer, and add them all at the same time.
+
+   Next, do the same for the library by placing the cursor on
+'mylib.cpp'.
+
+     . t mylib RET sharedobject RET
+     . a mylib RET
+
+7.5 Step 5: Compile, and fail
+=============================
+
+Next, we'll try to compile the project, but we aren't done yet, so it
+won't work right away.
+
+   Visit '/tmp/myproject/Project.ede'.  We're starting here because we
+don't have any program files in this directory yet.  Now we can use the
+compile command:
+
+     C-c . C
+
+   Because this is the very first time, it will create a bunch of files
+for you that are required by Automake.  It will then use automake to
+build the support infrastructure it needs.  This step is skipped if you
+choose just a 'Makefile' build system.
+
+   After the Automake init, it runs compile.  You will immediately
+discover the error in main.cpp can't find 'myproj.hh'.  We need to go
+fix this.
+
+7.6 Step 6: Customizing your project
+====================================
+
+To fix the failed compile, we need to add '/tmp/myproject/include' to
+the include path.
+
+   Visit 'main.cpp'.
+
+     M-x customize-project RET
+
+   Select the '[Settings]' subgroup of options.  Under 'Variable :'
+click '[INS]'.  At this point, you need to be somewhat savvy with
+Automake.  Add a variable named 'CPPFLAGS', and set the value to
+'../include'.
+
+   You should see something like this:
+
+     Variables :
+     [INS] [DEL] Cons-cell:
+                 Name: AM_CPPFLAGS
+                 Value: -I../include
+     [INS]
+     Variables to set in this Makefile.
+
+   Click '[Apply]'.  Feel free to visit 'Project.ede' to see how it
+changed the config file.
+
+   Compile the whole project again with 'C-c . C' from 'main.cpp'.  It
+should now compile.
+
+7.7 Step 7: Shared library dependency
+=====================================
+
+Note: Supporting shared libraries for Automake in this way is easy, but
+doing so from a project of type Makefile is a bit tricky.  If you are
+creating shared libraries too, stick to Automake projects.
+
+   Next, lets add a dependency from 'main.cpp' on our shared library.
+To do that, update main like this:
+
+     int main() {
+
+       my_lib_function();
+
+     }
+
+   Now compile with:
+
+     C-c . c
+
+   where the lower case 'c' compiles just that target.  You should see
+an error.
+
+   This time, we need to add a dependency from 'main.cpp' on our shared
+library.  To do that, we need to customize our target instead of the
+project.  This is because variables such as the include path are treated
+globally, whereas dependencies for a target are target specific.
+
+     M-x customize-target RET
+
+   On the first page, you will see an Ldlibs-local section.  Add mylib
+to it by first clicking '[INS]', and they adding the library.  It should
+look like this:
+
+     Ldlibs-Local :
+     [INS] [DEL] Local Library: libmylib.la
+     [INS]
+     Libraries that are part of this project. [Hide Rest]
+     The full path to these libraries should be specified, such as:
+     ../lib/libMylib.la  or ../ar/myArchive.a
+
+   You will also see other variables for library related flags and
+system libraries if you need them.  Click '[Accept]', and from
+'main.cpp', again compile the whole project to force all dependent
+elements to compile:
+
+     C-c . C
+
+7.8 Step 8: Run your program
+============================
+
+You can run your program directly from EDE.
+
+     C-c . R RET RET
+
+   If your program takes command line arguments, you can type them in
+when it offers the command line you want to use to run your program.
+
+
+File: ede.info,  Node: Managed Projects,  Next: EDE Mode,  Prev: Quick Start - from scratch,  Up: Top
+
+8 Managed Projects
+******************
+
+A managed project is one where everything needed to compile and
+distribute your project is handled by EDE. These projects are created
+with 'ede-new', files are grouped into targets, and compiler flags are
+setup through EDE. All Makefiles and build process files are then
+created for you.
+
+   Managed projects are useful for users just starting out, and have
+relatively simple requirements on the build system.  It is also OK to
+use EDE to get started, and hand-edit some parts of your configure.ac
+and add custom rules through the EDE customization interface as you
+learn more about build systems, or to just eventually delete
+'Project.ede' and start hand editing the generated files.
+
+* Menu:
+
+* Creating a project::          Creating a project.
+* Modifying your project::      Adding and removing files and targets.
+* Building and Debugging::      Initiating a build or debug session.
+                                your build environment.
+
+
+File: ede.info,  Node: Creating a project,  Next: Modifying your project,  Up: Managed Projects
+
+8.1 Creating a project
+======================
+
+To create a new project, first visit a file that you want to include in
+that project.  If you have a hierarchy of directories, first visit a
+file in the topmost directory.  From this buffer, type 'M-x ede-new', or
+click on the 'Create Project' item in the 'Development' menu.
+
+   The 'ede-new' command prompts for the type of project you would like
+to create.  It also prompts you for a name.  The name is what will be
+used when creating distribution files.
+
+   * For the 'Make' project type, EDE creates a "project file", called
+     'Project.ede', in each project directory.  Information about the
+     project is stored in this file.  This project autogenerates a
+     'Makefile'.
+
+   * For the 'Automake' project type, EDE creates a 'Project.ede'
+     project file similar to a 'Make' project.  Unlike a 'Make' project,
+     this project autogenerates a 'Makefile.am' file.  EDE handles the
+     Automake bootstrapping routines, which import and maintain a
+     'configure.am' script and other required files.
+
+   A subproject is merely a project in a subdirectory of another
+project.  You can create a subproject by using the 'ede-new' command (or
+the 'Create Project' menu item), while visiting a buffer in a
+subdirectory of the project root.  This new project is automatically
+added to the parent project, and will be automatically loaded when EDE
+reads the parent project.
+
+   When using a project command that involves a makefile, EDE uses the
+top-most project's makefile as a starting place for the build.  How the
+toplevel project handles subprojects in the build process is dependent
+on that project's type.
+
+
+File: ede.info,  Node: Modifying your project,  Next: Building and Debugging,  Prev: Creating a project,  Up: Managed Projects
+
+8.2 Modifying your project
+==========================
+
+In this chapter, we describe the generic features for manipulating
+projects, including the targets and files within them.  Subsequent
+chapters, which describe specific project types, will provide more
+detailed information about exactly what these features do.
+
+* Menu:
+
+* Add/Remove target::
+* Add/Remove files::
+* Customize Features::
+* Project Local Variables::
+* EDE Project Features::
+
+
+File: ede.info,  Node: Add/Remove target,  Next: Add/Remove files,  Up: Modifying your project
+
+8.2.1 Add/Remove target
+-----------------------
+
+To create a new target, type 'C-c . t' ('ede-new-target') or use the
+'Add Target' menu item in the 'Project Options' submenu.  This prompts
+for a target name, and adds the current buffer to that target.
+
+   The 'ede-new-target' command also prompts for a "target type".  Each
+target type has its own build process and class of files that it will
+accept.
+
+   To remove a target from the project, type 'M-x ede-delete-target', or
+use the 'Remove Target' menu item in the 'Project Options' submenu.
+
+
+File: ede.info,  Node: Add/Remove files,  Next: Customize Features,  Prev: Add/Remove target,  Up: Modifying your project
+
+8.2.2 Add/Remove files
+----------------------
+
+To add the current file to an existing target, type 'C-c . a'
+('ede-add-file'), or use the 'Add File' menu item in the 'Target
+Options' submenu.
+
+   You can add a file to more than one target; this is OK.
+
+   To remove the current file from a target, type 'C-c . d'
+('ede-remove-file'), or use the 'Remove File' menu item in the 'Target
+Options' submenu.  If the file belongs to multiple targets, this command
+prompts for each target it could be removed from.
+
+   While working in a project, if you visit a file that is not part of
+an existing target, EDE automatically prompts for a target.  If you do
+not wish to add the file to any target, you can choose 'none'.  You can
+customize this behavior with the variable 'ede-auto-add-method'.
+
+
+File: ede.info,  Node: Customize Features,  Next: Project Local Variables,  Prev: Add/Remove files,  Up: Modifying your project
+
+8.2.3 Customize Features
+------------------------
+
+A project, and its targets, are objects using the 'EIEIO' object system.
+*Note (eieio)Top::.  These objects have data fields containing important
+information related to your work.
+
+   If the high-level functions aren't enough, you can tweak all
+user-customizable fields at any time by running the command
+'customize-project' or 'customize-target'.  This loads the current
+project or target into a customization buffer, where you can tweak
+individual slots.  This is usually necessary for complex projects.
+
+   Some project modes do not have a project file, but directly read a
+Makefile or other existing file.  Instead of directly editing the
+object, you can edit the file by typing 'C-c . e'
+('ede-edit-file-target').  You should "rescan" the project afterwards
+(*note Miscellaneous commands::).
+
+
+File: ede.info,  Node: Project Local Variables,  Next: EDE Project Features,  Prev: Customize Features,  Up: Modifying your project
+
+8.2.4 Project Local Variables
+-----------------------------
+
+EDE projects can store and manager project local variables.  The
+variables are stored in the project, and will be restored when a project
+reloads.
+
+   Projects which are not stored on disk WILL NOT restore your project
+local variables later.
+
+   You can use *note Customize Features:: to of the project to edit the
+project local variables.  They are under the 'Settings' group as
+"Project Local Variables".
+
+   You can also use 'M-x ede-set' to set a new variable local in the
+mini buffer.
+
+   In multi-level projects such as Automake and Make generating
+projects, project local variables are installed from both the TOP most
+project, and the local directory's project.  In that way, you can have
+some variables across your whole project, and some specific to a
+subdirectory.
+
+   You can use project local variables to set any Emacs variable so that
+buffers belonging to different projects can have different settings.
+
+   NOTE: When you use project-local variables with *note ede-cpp-root::,
+the format is an association list.  For example:
+
+     (ede-cpp-root-project "SOMENAME"
+                            :file "/dir/to/some/file"
+                            :local-variables
+                            '((grep-command . "grep -nHi -e ")
+                              (compile-command . "make -f MyCustomMakefile all")))
+
+   The same is true when you use project-local variables with *note
+ede-java-root::.  For example:
+
+     (ede-java-root-project "SOMENAME"
+                            :file "/dir/to/some/file"
+                            :local-variables
+                            '((grep-command . "grep -nHi -e ")
+                              (compile-command . "ant")))
+
+
+File: ede.info,  Node: EDE Project Features,  Prev: Project Local Variables,  Up: Modifying your project
+
+8.2.5 EDE Project Features
+--------------------------
+
+This section details user facing features of an EDE 'Make' style
+project.  An 'Automake' project has similar options (but a direct
+Automake project does not).
+
+   To modify any of the specific features mentioned here, you need to
+customize the project or target with 'customize-project' or
+'customize-target'.
+
+   When you are customizing, you are directly manipulating slot values
+in EIEIO objects.  *Note Extending EDE::, if you are interested in
+additional details.
+
+* Menu:
+
+* Changing Compilers and Flags::
+* Configurations::
+
+
+File: ede.info,  Node: Changing Compilers and Flags,  Next: Configurations,  Up: EDE Project Features
+
+8.2.5.1 Changing Compilers and Flags
+....................................
+
+Targets that build stuff need compilers.  To change compilers, you need
+to customize the desired target.
+
+   In the '[Make]' section, you can choose a new compiler or linker from
+the list.  If a linker you need is not available, you will need to
+create a new one.  *Note Compiler and Linker objects::.
+
+   If an existing compiler or linker is close, but you need to modify
+some flag set such as adding an include path you will need to add a
+configuration variable.
+
+   To start, you should create the basic setup, and construct a makefile
+with 'ede-proj-regenerate'.  Look in the 'Makefile' to see what commands
+are inserted.  Once you have determined the variable you need to modify,
+you can add a configuration for it.  *Note Configurations::.
+
+
+File: ede.info,  Node: Configurations,  Prev: Changing Compilers and Flags,  Up: EDE Project Features
+
+8.2.5.2 Configurations
+......................
+
+Configurations specify different ways to build a project.  For example,
+you may configure a project to be in "debug" mode, or perhaps in
+"release" mode.
+
+   The project, and each target type all have a slot named
+'configuration-variables'.  To add new variables to a configuration find
+this slot in the custom buffer, and insert a new configuration.  Name it
+either "debug" or "release", then insert some number of name/value pairs
+to it.
+
+   You can have any number of valid configurations too.  To add a new
+configuration, customize your project.  Work in the '[Settings]' block
+for "configurations".  Add a new named configuration here.
+
+   To switch between different active configurations, modify the
+"configuration default" slot.
+
+
+File: ede.info,  Node: Building and Debugging,  Prev: Modifying your project,  Up: Managed Projects
+
+8.3 Building and Debugging
+==========================
+
+EDE provides the following "project-aware" compilation and debugging
+commands:
+
+'C-c . c'
+     Compile the current target ('ede-compile-target').
+'C-c . C'
+     Compile the entire project ('ede-compile-project').
+'c-c . D'
+     Debug the current target ('ede-debug-target').
+'M-x ede-make-dist'
+     Build a distribution file for your project.
+
+   These commands are also available from the 'Development' menu.
+
+
+File: ede.info,  Node: EDE Mode,  Next: Miscellaneous commands,  Prev: Managed Projects,  Up: Top
+
+9 EDE Mode
+**********
+
+EDE is implemented as a minor mode that adds project support to any
+buffer.  You can enable EDE for all buffers by running the command
+'global-ede-mode', or by putting this in your init file:
+
+     (global-ede-mode t)
+
+   Activating EDE adds a menu named 'Development' to the menu bar.  This
+menu provides several menu items for high-level EDE commands.  These
+menu items, and their corresponding keybindings, are independent of the
+type of project you are actually working on.
+
+
+File: ede.info,  Node: Miscellaneous commands,  Next: Extending EDE,  Prev: EDE Mode,  Up: Top
+
+10 Miscellaneous commands
+*************************
+
+@TODO - this section needs to be updated.
+
+   If you opt to go in and edit EDE project files directly--for
+instance, by using 'C-c . e' (*note Customize Features::)--you must then
+"rescan" the project files to update the internal data structures.  To
+rescan the current project, type 'C-c . g' ('ede-rescan-toplevel').
+
+   EDE can help you find files in your project, via the command 'C-c .
+f' ('ede-find-file').  This prompts for a file name; you need not
+specify the directory.  EDE then tries to visit a file with that name
+somewhere in your project.
+
+   EDE can use external tools to help with file finding.  To do this,
+customize 'ede-locate-setup-options'.
+
+ -- Variable: ede-locate-setup-options
+     List of locate objects to try out by default.  Listed in order of
+     preference.  If the first item cannot be used in a particular
+     project, then the next one is tried.  It is always assumed that
+     "ede-locate-base" is at end of the list.
+
+   EDE also provides a project display mode for the speedbar (*note
+(emacs)Speedbar::).  This allows you to view your source files as they
+are structured in your project: as a hierarchical tree, grouped
+according to target.
+
+   To activate the speedbar in this mode, type 'C-c . s'
+('ede-speedbar').
+
+* Menu:
+
+* Custom Locate::             Projects EDE doesn't manage.
+
+
+File: ede.info,  Node: Custom Locate,  Up: Miscellaneous commands
+
+10.1 Custom Locate
+==================
+
+The various simple project styles all have one major drawback, which is
+that the files in the project are not completely known to EDE.  When the
+EDE API is used to try and file files by some reference name in the
+project, then that could fail.
+
+   EDE can therefore use some external locate commands, such as the unix
+"locate" command, or "GNU Global".
+
+   Configuration of the tool you want to use such as 'locate', or
+'global' will need to be done without the aid of EDE. Once configured,
+however, EDE can use it.
+
+   To enable one of these tools, set the variable
+'ede-locate-setup-options' with the names of different locate objects.
+*note Miscellaneous commands::.
+
+   Configure this in your '.emacs' before loading in CEDET or EDE.  If
+you want to add support for GNU Global, your configuration would look
+like this:
+
+     (setq ede-locate-setup-options '(ede-locate-global ede-locate-base))
+
+   That way, when a search needs to be done, it will first try using
+GLOBAL.  If global is not available for that directory, then it will
+revert to the base locate object.  The base object always fails to find
+a file.
+
+   You can add your own locate tool but subclassing from
+'ede-locate-base'.  The subclass should also implement two methods.  See
+the code in 'ede-locate.el' for GNU Global as a simple example.
+
+   @TODO - Add ID Utils and CScope examples
+
+   More on idutils and cscope is in the CEDET manual, and they each have
+their own section.
+
+
+File: ede.info,  Node: Extending EDE,  Next: GNU Free Documentation License,  Prev: Miscellaneous commands,  Up: Top
+
+11 Extending EDE
+****************
+
+@TODO - This section was originally written for extending the proj
+project type, or the project that creates 'Project.ede' files and
+creates 'Makefiles' for you.  Mixed in is doc about creating new wrapper
+projects too.  This section needs an overhaul to make it easier to know
+what to do.  In the meantime, Carry on.
+
+   -
+
+   This chapter is intended for users who want to write new parts or fix
+bugs in EDE. A knowledge of Emacs Lisp, and some EIEIO(CLOS) is
+required.
+
+   EDE uses EIEIO, the CLOS package for Emacs, to define two object
+superclasses, specifically the PROJECT and TARGET. All commands in EDE
+are usually meant to address the current project, or current target.
+
+   All specific projects in EDE derive subclasses of the EDE
+superclasses.  In this way, specific behaviors such as how a project is
+saved, or how a target is compiled can be customized by a project author
+in detail.  EDE communicates to these project objects via an API using
+methods.  The commands you use in EDE mode are high-level functional
+wrappers over these methods.  *Note (eieio)Top::.  For details on using
+EIEIO to extending classes, and writing methods.
+
+   For the 'ede-project' type, the core target class is called
+'ede-proj-target'.  Inheriting from this will give you everything you
+need to start, including adding your sources into the makefile.  If you
+also need additional rules in the makefile, you will want to inherit
+from 'ede-proj-target-makefile' instead.  You may want to also add new
+fields to track important information.
+
+   If you are building currently unsupported code into a program or
+shared library, it is unlikely you need a new target at all.  Instead
+you would need to create a new compiler or linker object that compiles
+source code of the desired type.  *note Compiler and Linker objects::.
+
+   Once your new class exists, you will want to fill in some basic
+methods.  See the 'ede-skel.el' file for examples of these.  The files
+'ede-proj-info.el' and 'ede-proj-elisp.el' are two interesting examples.
+
+* Menu:
+
+* Development Overview::
+* Detecting a Project::
+* User interface methods::      Methods associated with keybindings
+* Base project methods::        The most basic methods on EDE objects.
+* Sourcecode objects::          Defining new sourcecode classes.
+* Compiler and Linker objects::  Defining new compilers and linkers.
+
+
+File: ede.info,  Node: Development Overview,  Next: Detecting a Project,  Up: Extending EDE
+
+11.1 Development Overview
+=========================
+
+EDE is made up of a series of classes implemented with EIEIO. These
+classes define an interface that can be used to create different types
+of projects.
+
+   EDE defines two superclasses which are 'ede-project' and
+'ede-target'.  All commands in EDE are usually meant to address the
+current project, or current target.
+
+   All specific projects in EDE derive subclasses of the EDE
+superclasses.  In this way, specific behaviors such as how a project is
+saved, or how a target is compiled can be customized by a project author
+in detail.  EDE communicates to these project objects via an API using
+methods.  The commands you use in EDE mode are high-level functional
+wrappers over these methods.
+
+   Some example project types are:
+
+'project-am'
+     Automake project which reads existing Automake files.
+'ede-proj-project'
+     This project type will create 'Makefiles', or 'Makefile.am' files
+     to compile your project.
+'ede-linux'
+     This project type will detect linux source trees.
+'ede-emacs'
+     This project will detect an Emacs source tree.
+
+   There are several other project types as well.
+
+   The first class you need to know to create a new project type is
+'ede-project-autoload'.  New instances of this class are needed to
+define how Emacs associates different files/buffers with different
+project types.  All the autoloads are kept in the variable
+'ede-project-class-files'.
+
+   The next most important class to know is 'ede-project'.  This is the
+baseclass defines how all projects behave.  The basic pattern for a
+project is that there is one project per directory, and the topmost
+project or directory defines the project as a whole.
+
+   Key features of 'ede-project' are things like name and version
+number.  It also holds a list of 'ede-target' objects and a list of sub
+projects, or more 'ede-project' objects.
+
+   New project types must subclass 'ede-project' to add special
+behavior.  New project types also need to subclass 'ede-target' to add
+specialty behavior.
+
+   In this way, the common EDE interface is designed to work against
+'ede-project', and thus all subclasses.
+
+   'ede-project' subclasses 'ede-project-placeholder'.  This is the
+minimum necessary project needed to be cached between runs of Emacs.
+This way, Emacs can track all projects ever seen, without loading those
+projects into memory.
+
+   Here is a high-level UML diagram for the EDE system created with
+COGRE..
+
+     +-----------------------+        +-----------------------+
+     |                       |        |ede-project-placeholder|
+     |ede-project-class-files|        +-----------------------+
+     |                       |        +-----------------------+
+     +-----------------------+        +-----------------------+
+                /\                                ^
+                \/                               /_\
+                 |                                |
+      +--------------------+                +-----------+         +----------+
+      |ede-project-autoload|                |ede-project|         |ede-target|
+      +--------------------+<>--------------+-----------+<>-------+----------+
+      +--------------------+                +-----------+         +----------+
+      +--------------------+                +-----------+         +----------+
+                                                  ^
+                                                 /_\
+                                                  |
+                            +---------------------+-----------------+
+                            |                     |                 |
+                            |                     |                 |
+                            |                     |                 |
+                   +----------------+   +-------------------+  +---------+
+                   |ede-proj-project|   |project-am-makefile|  |ede-emacs|
+                   +----------------+   +-------------------+  +---------+
+                   +----------------+   +-------------------+  +---------+
+                   +----------------+   +-------------------+  +---------+
+
+
+File: ede.info,  Node: Detecting a Project,  Next: User interface methods,  Prev: Development Overview,  Up: Extending EDE
+
+11.2 Detecting a Project
+========================
+
+Project detection happens with the list of 'ede-project-autoload'
+instances stored in 'ede-project-class-files'.  The full project
+detection scheme works like this:
+
+Step 1:
+     'find-file-hook' calls 'ede-turn-on-hook' on BUFFER.
+Step 2:
+     'ede-turn-on-hook' turns on 'ede-minor-mode'
+Step 3:
+     'ede-minor-mode' looks to see if BUFFER is associated with any open
+     projects.  If not, it calls 'ede-load-project-file' to find a
+     project associated with the current directory BUFFER is in.
+Step 4:
+     'ede-minor-mode' associates the found project with the current
+     buffer with a series of variables, such as 'ede-object', and
+     'ede-object-project' and 'ede-object-root-project'.
+
+   Once a buffer is associated, EDE minor mode commands will operate on
+that buffer.
+
+   The function 'ede-load-project-file' is at the heart of detecting
+projects, and it works by looping over all the known project autoload
+types in 'ede-project-autoload' using the utility
+'ede-directory-project-p'.
+
+   The function 'ede-directory-project-p' will call
+'ede-dir-to-projectfile' on every 'ede-project-autoload' until one of
+them returns true.  The method 'ede-dir-to-projectfile' in turn gets the
+':proj-file' slot from the autoload.  If it is a string (i.e., a project
+file name), it checks to see if that exists in BUFFER's directory.  If
+it is a function, then it calls that function and expects it to return a
+file name or nil.  If the file exists, then this directory is assumed to
+be part of a project, and 'ede-directory-project-p' returns the instance
+of 'ede-project-autoload' that matched.
+
+   If the current directory contains the file '.ede-ignore' then that
+directory is automatically assumed to contain no projects, even if there
+is a matching pattern.  Use this type of file in a directory that may
+contain many other sub projects, but still has a Makefile of some sort.
+
+   If the current directory is a project, then EDE scans upwards till it
+finds the top of the project.  It does this by calling
+'ede-toplevel-project'.  If this hasn't already been discovered, the
+directories as scanned upward one at a time until a directory with no
+project is found.  The last found project becomes the project root.  If
+the found instance of 'ede-project-autoload' has a valid 'proj-root'
+slot value, then that function is called instead of scanning the project
+by hand.  Some project types have a short-cut for determining the root
+of a project, so this comes in handy.
+
+   Getting back to 'ede-load-project-file', this now has an instance of
+'ede-project-autoload'.  It uses the 'load-type' slot to both autoload
+in the project type, and to create a new instance of the project type
+found for the root of the project.  That project is added to the global
+list of all projects.  All subprojects are then created and assembled
+into the project data structures.
+
+
+File: ede.info,  Node: User interface methods,  Next: Base project methods,  Prev: Detecting a Project,  Up: Extending EDE
+
+11.3 User interface methods
+===========================
+
+These methods are core behaviors associated with user commands.  If you
+do not implement a method, there is a reasonable default that may do
+what you need.
+
+'project-add-file'
+     Add a file to your project.  Override this if you want to put new
+     sources into different fields depending on extension, or other
+     details.
+'project-remove-file'
+     Reverse of project-add-file.
+'project-compile-target'
+     Override this if you want to do something special when the user
+     "compiles" this target.
+'project-debug-target'
+     What to do when a user wants to debug your target.
+'project-update-version'
+     Easily update the version number of your project.
+'project-edit-file-target'
+     Edit the file the project's information is stored in.
+'project-new-target'
+     Create a new target in a project.
+'project-delete-target'
+     Delete a target from a project.
+'project-make-dist'
+     Make a distribution (tar archive) of the project.
+'project-rescan'
+     Rescan a project file, changing the data in the existing objects.
+
+
+File: ede.info,  Node: Base project methods,  Next: Sourcecode objects,  Prev: User interface methods,  Up: Extending EDE
+
+11.4 Base project methods
+=========================
+
+These methods are important for querying base information from project
+and target types:
+
+'ede-name'
+     Return a string that is the name of this target.
+'ede-target-name'
+     Return a string that is the name of the target used by a Make
+     system.
+'ede-description'
+     A brief description of the project or target.  This is currently
+     used by the 'ede-speedbar' interface.
+'ede-want-file-p'
+     Return non-nil if a target will accept a given file.  It is
+     generally unnecessary to override this.  See the section on source
+     code.
+'ede-buffer-mine'
+     Return non-nil if a buffer belongs to this target.  Used during
+     association when a file is loaded.  It is generally unnecessary to
+     override this unless you keep auxiliary files.
+
+   These methods are used by the semantic package extensions.  *Note
+(semantic)Top::.
+
+'ede-buffer-header-file'
+     Return a header file belonging to a given buffer.  Prototypes are
+     place there when appropriate
+'ede-buffer-documentation-files'
+     Return the documentation file information about this file would be
+     stored in.
+'ede-documentation'
+     List all documentation a project or target is responsible for.
+
+
+File: ede.info,  Node: Sourcecode objects,  Next: Compiler and Linker objects,  Prev: Base project methods,  Up: Extending EDE
+
+11.5 Sourcecode objects
+=======================
+
+EDE projects track source file / target associates via source code
+objects.  The definitions for this is in 'ede-source.el'.  A source code
+object contains methods that know how to identify a file as being of
+that class, (i.e., a C file ends with '.c').  Some targets can handle
+many different types of sources which must all be compiled together.
+For example, a mixed C and C++ program would have instantiations of both
+sourcecode types.
+
+   When a target needs to know if it will accept a source file, it
+references its list of source code objects.  These objects then make
+that decision.
+
+   Source code objects are stored in the target objects as a list of
+symbols, where the symbol's value is the object.  This enables the
+project save file mechanism to work.
+
+   Here is an example for an instantiation of an Emacs Lisp source code
+object:
+
+     (defvar ede-source-emacs
+       (ede-sourcecode "ede-emacs-source"
+                       :name "Emacs Lisp"
+                       :sourcepattern "\\.el$"
+                       :garbagepattern '("*.elc"))
+       "Emacs Lisp source code definition.")
+
+   If you want to recycle parts of an existing sourcecode object, you
+can clone the original, and then just tweak the parts that are
+different.  For example:
+
+     (defvar ede-source-emacs-autoload
+       (clone ede-source-emacs "ede-source-emacs-autoload"
+              :name "Emacs Lisp Autoload"
+              :sourcepattern "-loaddefs\\.el")
+       "Emacs Lisp autoload source code.")
+
+   In this case, the garbage pattern is the same.
+
+
+File: ede.info,  Node: Compiler and Linker objects,  Prev: Sourcecode objects,  Up: Extending EDE
+
+11.6 Compiler and Linker objects
+================================
+
+In order for a target to create a 'Makefile', it must know how to
+compile the sources into the program or desired data file, and possibly
+link them together.
+
+   A compiler object instantiation is used to associate a given target
+with a given source code type.  Some targets can handle many types of
+sources, and thus has many compilers available to it.  Some targets may
+have multiple compilers for a given type of source code.
+
+   EDE will examine the actual source files in a target, cross reference
+that against the compiler list to come up with the final set of
+compilers that will be inserted into the Makefile.
+
+   Compiler instantiations must also insert variables specifying the
+compiler it plans to use, in addition to creating Automake settings for
+'configure.ac' when appropriate.
+
+   Compiler objects are stored in the target objects as a list of
+symbols, where the symbols value is the object.  This enables the
+project output mechanism to work more efficiently.
+
+   Targets will also have a special "compiler" slot which lets a user
+explicitly choose the compiler they want to use.
+
+   Here is an example for texinfo:
+
+     (defvar ede-makeinfo-compiler
+       (ede-compiler
+        "ede-makeinfo-compiler"
+        :name "makeinfo"
+        :variables '(("MAKEINFO" . "makeinfo"))
+        :commands '("makeinfo -o $ $<")
+        :autoconf '(("AC_CHECK_PROG" . "MAKEINFO, makeinfo"))
+        :sourcetype '(ede-makeinfo-source)
+        )
+       "Compile texinfo files into info files.")
+
+   When creating compiler instantiations, it may be useful to 'clone' an
+existing compiler variable.  Cloning allows you to only modify parts of
+the original, while keeping the rest of the same.  Modification of the
+original will result in the clone also being changed for shared value
+slots.
+
+   The second important object is the linker class.  The linker is
+similar to the compiler, except several compilers might be used to
+create some object files, and only one linker is used to link those
+objects together.
+
+   See 'ede-proj-obj.el' for examples of the combination.
+
+
+File: ede.info,  Node: GNU Free Documentation License,  Prev: Extending EDE,  Up: Top
+
+Appendix A GNU Free Documentation License
+*****************************************
+
+                     Version 1.3, 3 November 2008
+
+     Copyright (C) 2000, 2001, 2002, 2007, 2008, 2009 Free Software Foundation, Inc.
+     <http://fsf.org/>
+
+     Everyone is permitted to copy and distribute verbatim copies
+     of this license document, but changing it is not allowed.
+
+  0. PREAMBLE
+
+     The purpose of this License is to make a manual, textbook, or other
+     functional and useful document "free" in the sense of freedom: to
+     assure everyone the effective freedom to copy and redistribute it,
+     with or without modifying it, either commercially or
+     noncommercially.  Secondarily, this License preserves for the
+     author and publisher a way to get credit for their work, while not
+     being considered responsible for modifications made by others.
+
+     This License is a kind of "copyleft", which means that derivative
+     works of the document must themselves be free in the same sense.
+     It complements the GNU General Public License, which is a copyleft
+     license designed for free software.
+
+     We have designed this License in order to use it for manuals for
+     free software, because free software needs free documentation: a
+     free program should come with manuals providing the same freedoms
+     that the software does.  But this License is not limited to
+     software manuals; it can be used for any textual work, regardless
+     of subject matter or whether it is published as a printed book.  We
+     recommend this License principally for works whose purpose is
+     instruction or reference.
+
+  1. APPLICABILITY AND DEFINITIONS
+
+     This License applies to any manual or other work, in any medium,
+     that contains a notice placed by the copyright holder saying it can
+     be distributed under the terms of this License.  Such a notice
+     grants a world-wide, royalty-free license, unlimited in duration,
+     to use that work under the conditions stated herein.  The
+     "Document", below, refers to any such manual or work.  Any member
+     of the public is a licensee, and is addressed as "you".  You accept
+     the license if you copy, modify or distribute the work in a way
+     requiring permission under copyright law.
+
+     A "Modified Version" of the Document means any work containing the
+     Document or a portion of it, either copied verbatim, or with
+     modifications and/or translated into another language.
+
+     A "Secondary Section" is a named appendix or a front-matter section
+     of the Document that deals exclusively with the relationship of the
+     publishers or authors of the Document to the Document's overall
+     subject (or to related matters) and contains nothing that could
+     fall directly within that overall subject.  (Thus, if the Document
+     is in part a textbook of mathematics, a Secondary Section may not
+     explain any mathematics.)  The relationship could be a matter of
+     historical connection with the subject or with related matters, or
+     of legal, commercial, philosophical, ethical or political position
+     regarding them.
+
+     The "Invariant Sections" are certain Secondary Sections whose
+     titles are designated, as being those of Invariant Sections, in the
+     notice that says that the Document is released under this License.
+     If a section does not fit the above definition of Secondary then it
+     is not allowed to be designated as Invariant.  The Document may
+     contain zero Invariant Sections.  If the Document does not identify
+     any Invariant Sections then there are none.
+
+     The "Cover Texts" are certain short passages of text that are
+     listed, as Front-Cover Texts or Back-Cover Texts, in the notice
+     that says that the Document is released under this License.  A
+     Front-Cover Text may be at most 5 words, and a Back-Cover Text may
+     be at most 25 words.
+
+     A "Transparent" copy of the Document means a machine-readable copy,
+     represented in a format whose specification is available to the
+     general public, that is suitable for revising the document
+     straightforwardly with generic text editors or (for images composed
+     of pixels) generic paint programs or (for drawings) some widely
+     available drawing editor, and that is suitable for input to text
+     formatters or for automatic translation to a variety of formats
+     suitable for input to text formatters.  A copy made in an otherwise
+     Transparent file format whose markup, or absence of markup, has
+     been arranged to thwart or discourage subsequent modification by
+     readers is not Transparent.  An image format is not Transparent if
+     used for any substantial amount of text.  A copy that is not
+     "Transparent" is called "Opaque".
+
+     Examples of suitable formats for Transparent copies include plain
+     ASCII without markup, Texinfo input format, LaTeX input format,
+     SGML or XML using a publicly available DTD, and standard-conforming
+     simple HTML, PostScript or PDF designed for human modification.
+     Examples of transparent image formats include PNG, XCF and JPG.
+     Opaque formats include proprietary formats that can be read and
+     edited only by proprietary word processors, SGML or XML for which
+     the DTD and/or processing tools are not generally available, and
+     the machine-generated HTML, PostScript or PDF produced by some word
+     processors for output purposes only.
+
+     The "Title Page" means, for a printed book, the title page itself,
+     plus such following pages as are needed to hold, legibly, the
+     material this License requires to appear in the title page.  For
+     works in formats which do not have any title page as such, "Title
+     Page" means the text near the most prominent appearance of the
+     work's title, preceding the beginning of the body of the text.
+
+     The "publisher" means any person or entity that distributes copies
+     of the Document to the public.
+
+     A section "Entitled XYZ" means a named subunit of the Document
+     whose title either is precisely XYZ or contains XYZ in parentheses
+     following text that translates XYZ in another language.  (Here XYZ
+     stands for a specific section name mentioned below, such as
+     "Acknowledgements", "Dedications", "Endorsements", or "History".)
+     To "Preserve the Title" of such a section when you modify the
+     Document means that it remains a section "Entitled XYZ" according
+     to this definition.
+
+     The Document may include Warranty Disclaimers next to the notice
+     which states that this License applies to the Document.  These
+     Warranty Disclaimers are considered to be included by reference in
+     this License, but only as regards disclaiming warranties: any other
+     implication that these Warranty Disclaimers may have is void and
+     has no effect on the meaning of this License.
+
+  2. VERBATIM COPYING
+
+     You may copy and distribute the Document in any medium, either
+     commercially or noncommercially, provided that this License, the
+     copyright notices, and the license notice saying this License
+     applies to the Document are reproduced in all copies, and that you
+     add no other conditions whatsoever to those of this License.  You
+     may not use technical measures to obstruct or control the reading
+     or further copying of the copies you make or distribute.  However,
+     you may accept compensation in exchange for copies.  If you
+     distribute a large enough number of copies you must also follow the
+     conditions in section 3.
+
+     You may also lend copies, under the same conditions stated above,
+     and you may publicly display copies.
+
+  3. COPYING IN QUANTITY
+
+     If you publish printed copies (or copies in media that commonly
+     have printed covers) of the Document, numbering more than 100, and
+     the Document's license notice requires Cover Texts, you must
+     enclose the copies in covers that carry, clearly and legibly, all
+     these Cover Texts: Front-Cover Texts on the front cover, and
+     Back-Cover Texts on the back cover.  Both covers must also clearly
+     and legibly identify you as the publisher of these copies.  The
+     front cover must present the full title with all words of the title
+     equally prominent and visible.  You may add other material on the
+     covers in addition.  Copying with changes limited to the covers, as
+     long as they preserve the title of the Document and satisfy these
+     conditions, can be treated as verbatim copying in other respects.
+
+     If the required texts for either cover are too voluminous to fit
+     legibly, you should put the first ones listed (as many as fit
+     reasonably) on the actual cover, and continue the rest onto
+     adjacent pages.
+
+     If you publish or distribute Opaque copies of the Document
+     numbering more than 100, you must either include a machine-readable
+     Transparent copy along with each Opaque copy, or state in or with
+     each Opaque copy a computer-network location from which the general
+     network-using public has access to download using public-standard
+     network protocols a complete Transparent copy of the Document, free
+     of added material.  If you use the latter option, you must take
+     reasonably prudent steps, when you begin distribution of Opaque
+     copies in quantity, to ensure that this Transparent copy will
+     remain thus accessible at the stated location until at least one
+     year after the last time you distribute an Opaque copy (directly or
+     through your agents or retailers) of that edition to the public.
+
+     It is requested, but not required, that you contact the authors of
+     the Document well before redistributing any large number of copies,
+     to give them a chance to provide you with an updated version of the
+     Document.
+
+  4. MODIFICATIONS
+
+     You may copy and distribute a Modified Version of the Document
+     under the conditions of sections 2 and 3 above, provided that you
+     release the Modified Version under precisely this License, with the
+     Modified Version filling the role of the Document, thus licensing
+     distribution and modification of the Modified Version to whoever
+     possesses a copy of it.  In addition, you must do these things in
+     the Modified Version:
+
+       A. Use in the Title Page (and on the covers, if any) a title
+          distinct from that of the Document, and from those of previous
+          versions (which should, if there were any, be listed in the
+          History section of the Document).  You may use the same title
+          as a previous version if the original publisher of that
+          version gives permission.
+
+       B. List on the Title Page, as authors, one or more persons or
+          entities responsible for authorship of the modifications in
+          the Modified Version, together with at least five of the
+          principal authors of the Document (all of its principal
+          authors, if it has fewer than five), unless they release you
+          from this requirement.
+
+       C. State on the Title page the name of the publisher of the
+          Modified Version, as the publisher.
+
+       D. Preserve all the copyright notices of the Document.
+
+       E. Add an appropriate copyright notice for your modifications
+          adjacent to the other copyright notices.
+
+       F. Include, immediately after the copyright notices, a license
+          notice giving the public permission to use the Modified
+          Version under the terms of this License, in the form shown in
+          the Addendum below.
+
+       G. Preserve in that license notice the full lists of Invariant
+          Sections and required Cover Texts given in the Document's
+          license notice.
+
+       H. Include an unaltered copy of this License.
+
+       I. Preserve the section Entitled "History", Preserve its Title,
+          and add to it an item stating at least the title, year, new
+          authors, and publisher of the Modified Version as given on the
+          Title Page.  If there is no section Entitled "History" in the
+          Document, create one stating the title, year, authors, and
+          publisher of the Document as given on its Title Page, then add
+          an item describing the Modified Version as stated in the
+          previous sentence.
+
+       J. Preserve the network location, if any, given in the Document
+          for public access to a Transparent copy of the Document, and
+          likewise the network locations given in the Document for
+          previous versions it was based on.  These may be placed in the
+          "History" section.  You may omit a network location for a work
+          that was published at least four years before the Document
+          itself, or if the original publisher of the version it refers
+          to gives permission.
+
+       K. For any section Entitled "Acknowledgements" or "Dedications",
+          Preserve the Title of the section, and preserve in the section
+          all the substance and tone of each of the contributor
+          acknowledgements and/or dedications given therein.
+
+       L. Preserve all the Invariant Sections of the Document, unaltered
+          in their text and in their titles.  Section numbers or the
+          equivalent are not considered part of the section titles.
+
+       M. Delete any section Entitled "Endorsements".  Such a section
+          may not be included in the Modified Version.
+
+       N. Do not retitle any existing section to be Entitled
+          "Endorsements" or to conflict in title with any Invariant
+          Section.
+
+       O. Preserve any Warranty Disclaimers.
+
+     If the Modified Version includes new front-matter sections or
+     appendices that qualify as Secondary Sections and contain no
+     material copied from the Document, you may at your option designate
+     some or all of these sections as invariant.  To do this, add their
+     titles to the list of Invariant Sections in the Modified Version's
+     license notice.  These titles must be distinct from any other
+     section titles.
+
+     You may add a section Entitled "Endorsements", provided it contains
+     nothing but endorsements of your Modified Version by various
+     parties--for example, statements of peer review or that the text
+     has been approved by an organization as the authoritative
+     definition of a standard.
+
+     You may add a passage of up to five words as a Front-Cover Text,
+     and a passage of up to 25 words as a Back-Cover Text, to the end of
+     the list of Cover Texts in the Modified Version.  Only one passage
+     of Front-Cover Text and one of Back-Cover Text may be added by (or
+     through arrangements made by) any one entity.  If the Document
+     already includes a cover text for the same cover, previously added
+     by you or by arrangement made by the same entity you are acting on
+     behalf of, you may not add another; but you may replace the old
+     one, on explicit permission from the previous publisher that added
+     the old one.
+
+     The author(s) and publisher(s) of the Document do not by this
+     License give permission to use their names for publicity for or to
+     assert or imply endorsement of any Modified Version.
+
+  5. COMBINING DOCUMENTS
+
+     You may combine the Document with other documents released under
+     this License, under the terms defined in section 4 above for
+     modified versions, provided that you include in the combination all
+     of the Invariant Sections of all of the original documents,
+     unmodified, and list them all as Invariant Sections of your
+     combined work in its license notice, and that you preserve all
+     their Warranty Disclaimers.
+
+     The combined work need only contain one copy of this License, and
+     multiple identical Invariant Sections may be replaced with a single
+     copy.  If there are multiple Invariant Sections with the same name
+     but different contents, make the title of each such section unique
+     by adding at the end of it, in parentheses, the name of the
+     original author or publisher of that section if known, or else a
+     unique number.  Make the same adjustment to the section titles in
+     the list of Invariant Sections in the license notice of the
+     combined work.
+
+     In the combination, you must combine any sections Entitled
+     "History" in the various original documents, forming one section
+     Entitled "History"; likewise combine any sections Entitled
+     "Acknowledgements", and any sections Entitled "Dedications".  You
+     must delete all sections Entitled "Endorsements."
+
+  6. COLLECTIONS OF DOCUMENTS
+
+     You may make a collection consisting of the Document and other
+     documents released under this License, and replace the individual
+     copies of this License in the various documents with a single copy
+     that is included in the collection, provided that you follow the
+     rules of this License for verbatim copying of each of the documents
+     in all other respects.
+
+     You may extract a single document from such a collection, and
+     distribute it individually under this License, provided you insert
+     a copy of this License into the extracted document, and follow this
+     License in all other respects regarding verbatim copying of that
+     document.
+
+  7. AGGREGATION WITH INDEPENDENT WORKS
+
+     A compilation of the Document or its derivatives with other
+     separate and independent documents or works, in or on a volume of a
+     storage or distribution medium, is called an "aggregate" if the
+     copyright resulting from the compilation is not used to limit the
+     legal rights of the compilation's users beyond what the individual
+     works permit.  When the Document is included in an aggregate, this
+     License does not apply to the other works in the aggregate which
+     are not themselves derivative works of the Document.
+
+     If the Cover Text requirement of section 3 is applicable to these
+     copies of the Document, then if the Document is less than one half
+     of the entire aggregate, the Document's Cover Texts may be placed
+     on covers that bracket the Document within the aggregate, or the
+     electronic equivalent of covers if the Document is in electronic
+     form.  Otherwise they must appear on printed covers that bracket
+     the whole aggregate.
+
+  8. TRANSLATION
+
+     Translation is considered a kind of modification, so you may
+     distribute translations of the Document under the terms of section
+     4.  Replacing Invariant Sections with translations requires special
+     permission from their copyright holders, but you may include
+     translations of some or all Invariant Sections in addition to the
+     original versions of these Invariant Sections.  You may include a
+     translation of this License, and all the license notices in the
+     Document, and any Warranty Disclaimers, provided that you also
+     include the original English version of this License and the
+     original versions of those notices and disclaimers.  In case of a
+     disagreement between the translation and the original version of
+     this License or a notice or disclaimer, the original version will
+     prevail.
+
+     If a section in the Document is Entitled "Acknowledgements",
+     "Dedications", or "History", the requirement (section 4) to
+     Preserve its Title (section 1) will typically require changing the
+     actual title.
+
+  9. TERMINATION
+
+     You may not copy, modify, sublicense, or distribute the Document
+     except as expressly provided under this License.  Any attempt
+     otherwise to copy, modify, sublicense, or distribute it is void,
+     and will automatically terminate your rights under this License.
+
+     However, if you cease all violation of this License, then your
+     license from a particular copyright holder is reinstated (a)
+     provisionally, unless and until the copyright holder explicitly and
+     finally terminates your license, and (b) permanently, if the
+     copyright holder fails to notify you of the violation by some
+     reasonable means prior to 60 days after the cessation.
+
+     Moreover, your license from a particular copyright holder is
+     reinstated permanently if the copyright holder notifies you of the
+     violation by some reasonable means, this is the first time you have
+     received notice of violation of this License (for any work) from
+     that copyright holder, and you cure the violation prior to 30 days
+     after your receipt of the notice.
+
+     Termination of your rights under this section does not terminate
+     the licenses of parties who have received copies or rights from you
+     under this License.  If your rights have been terminated and not
+     permanently reinstated, receipt of a copy of some or all of the
+     same material does not give you any rights to use it.
+
+  10. FUTURE REVISIONS OF THIS LICENSE
+
+     The Free Software Foundation may publish new, revised versions of
+     the GNU Free Documentation License from time to time.  Such new
+     versions will be similar in spirit to the present version, but may
+     differ in detail to address new problems or concerns.  See
+     <http://www.gnu.org/copyleft/>.
+
+     Each version of the License is given a distinguishing version
+     number.  If the Document specifies that a particular numbered
+     version of this License "or any later version" applies to it, you
+     have the option of following the terms and conditions either of
+     that specified version or of any later version that has been
+     published (not as a draft) by the Free Software Foundation.  If the
+     Document does not specify a version number of this License, you may
+     choose any version ever published (not as a draft) by the Free
+     Software Foundation.  If the Document specifies that a proxy can
+     decide which future versions of this License can be used, that
+     proxy's public statement of acceptance of a version permanently
+     authorizes you to choose that version for the Document.
+
+  11. RELICENSING
+
+     "Massive Multiauthor Collaboration Site" (or "MMC Site") means any
+     World Wide Web server that publishes copyrightable works and also
+     provides prominent facilities for anybody to edit those works.  A
+     public wiki that anybody can edit is an example of such a server.
+     A "Massive Multiauthor Collaboration" (or "MMC") contained in the
+     site means any set of copyrightable works thus published on the MMC
+     site.
+
+     "CC-BY-SA" means the Creative Commons Attribution-Share Alike 3.0
+     license published by Creative Commons Corporation, a not-for-profit
+     corporation with a principal place of business in San Francisco,
+     California, as well as future copyleft versions of that license
+     published by that same organization.
+
+     "Incorporate" means to publish or republish a Document, in whole or
+     in part, as part of another Document.
+
+     An MMC is "eligible for relicensing" if it is licensed under this
+     License, and if all works that were first published under this
+     License somewhere other than this MMC, and subsequently
+     incorporated in whole or in part into the MMC, (1) had no cover
+     texts or invariant sections, and (2) were thus incorporated prior
+     to November 1, 2008.
+
+     The operator of an MMC Site may republish an MMC contained in the
+     site under CC-BY-SA on the same site at any time before August 1,
+     2009, provided the MMC is eligible for relicensing.
+
+ADDENDUM: How to use this License for your documents
+====================================================
+
+To use this License in a document you have written, include a copy of
+the License in the document and put the following copyright and license
+notices just after the title page:
+
+       Copyright (C)  YEAR  YOUR NAME.
+       Permission is granted to copy, distribute and/or modify this document
+       under the terms of the GNU Free Documentation License, Version 1.3
+       or any later version published by the Free Software Foundation;
+       with no Invariant Sections, no Front-Cover Texts, and no Back-Cover
+       Texts.  A copy of the license is included in the section entitled ``GNU
+       Free Documentation License''.
+
+   If you have Invariant Sections, Front-Cover Texts and Back-Cover
+Texts, replace the "with...Texts."  line with this:
+
+         with the Invariant Sections being LIST THEIR TITLES, with
+         the Front-Cover Texts being LIST, and with the Back-Cover Texts
+         being LIST.
+
+   If you have Invariant Sections without Cover Texts, or some other
+combination of the three, merge those two alternatives to suit the
+situation.
+
+   If your document contains nontrivial examples of program code, we
+recommend releasing these examples in parallel under your choice of free
+software license, such as the GNU General Public License, to permit
+their use in free software.
+
+
+
+Tag Table:
+Node: Top917
+Node: Introduction3265
+Node: Quick Start - wrapper5215
+Node: Wrapper Projects6255
+Node: Automake7029
+Node: Emacs7714
+Node: Linux8058
+Node: Java8573
+Node: Android projects8926
+Ref: cedet-android-sdk-root9354
+Node: Arduino projects9779
+Node: Root Projects10677
+Node: ede-cpp-root11326
+Node: ede-java-root16490
+Node: Generic Projects19448
+Node: Customizing a Generic Project20357
+Node: Creating new Generic Projects21379
+Ref: ede-generic-new-autoloader22025
+Node: Compilation Database projects24006
+Node: Compilation Database Quickstart26220
+Node: Creating Compilation Database Projects27592
+Node: Multiple Build Configurations28777
+Node: Simple compdb Example30469
+Node: Autoload compdb Example31408
+Node: Building compdb Projects33977
+Node: Matching source and header files35100
+Node: Rescanning the Compilation Database37309
+Node: Compilation Database Troubleshooting39253
+Node: Quick Start - from scratch40656
+Node: Managed Projects48505
+Node: Creating a project49593
+Node: Modifying your project51360
+Node: Add/Remove target51935
+Node: Add/Remove files52579
+Node: Customize Features53492
+Node: Project Local Variables54472
+Node: EDE Project Features56355
+Node: Changing Compilers and Flags57050
+Node: Configurations57977
+Node: Building and Debugging58866
+Node: EDE Mode59436
+Node: Miscellaneous commands60039
+Ref: ede-locate-setup-options60893
+Node: Custom Locate61517
+Node: Extending EDE63076
+Node: Development Overview65591
+Node: Detecting a Project69835
+Node: User interface methods72884
+Node: Base project methods74105
+Node: Sourcecode objects75472
+Node: Compiler and Linker objects77197
+Node: GNU Free Documentation License79439
+
+End Tag Table
