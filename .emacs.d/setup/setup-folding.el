@@ -1,4 +1,4 @@
-;;; setup-hideshow.el ---
+;;; setup-folding.el ---
 
 ;; Copyright (C) 2014, 2015, 2016  abelardo.jara-berrocal
 
@@ -98,16 +98,16 @@
 ;; Enable hideshowvis
 (use-package hideshowvis
   :if (display-graphic-p)
-  :commands hideshowvis-enable
+  :commands (hideshowvis-enable toggle-fold toggle-fold-all hs-toggle-hiding hs-toggle-hiding-all)
   :diminish hs-minor-mode
-  :init (progn
-          ;; enable `hs-minor-mode' at startup
-          (dolist (hook (list 'prog-mode-hook))
-            (add-hook hook (lambda () (hs-minor-mode 1))))
-
-          (dolist (hook (list 'prog-mode-hook))
-            (add-hook hook 'hideshowvis-enable)))
   :config (progn
+
+            ;; enable `hs-minor-mode' at startup
+            (dolist (hook (list 'prog-mode-hook))
+              (add-hook hook (lambda () (hs-minor-mode 1))))
+
+            (dolist (hook (list 'prog-mode-hook))
+              (add-hook hook 'hideshowvis-enable))
 
             (defun hs-minor-mode-settings ()
               "settings of `hs-minor-mode'."
@@ -222,5 +222,16 @@
 
             (hs-minor-mode-settings)))
 
-(provide 'setup-hideshow)
+;; Origami mode
+(use-package origami
+  :commands (origami-toggle-node origami-toggle-all-nodes origami-show-only-node origami-mode)
+  :bind (:map ctl-x-map
+              ("." . origami-toggle-all-nodes)
+              ("-" . origami-toggle-node)
+              ("+" . origami-show-only-node))
+  :load-path (lambda () (expand-file-name "origami/" user-emacs-directory))
+  :config (progn
+            (global-origami-mode)))
+
+(provide 'setup-folding)
 ;;; setup-hideshow.el ends here

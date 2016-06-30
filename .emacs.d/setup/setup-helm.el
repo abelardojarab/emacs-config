@@ -28,26 +28,20 @@
 (use-package helm-config
   :load-path (lambda () (expand-file-name "helm/" user-emacs-directory))
   :bind (("C-;" . helm-mini)
-         ("C-S-v" . helm-show-kill-ring)
-         ("M-y" . helm-show-kill-ring)
-
-
-         ("C-0" . helm-buffers-list)
          ("C-'" . helm-semantic-or-imenu)
-
          :map isearch-mode-map
          ("C-h" . helm-occur-from-isearch)
          :map ctl-x-map
+         ("z" . helm-buffers-list)
          ("p" . helm-show-kill-ring)
          ("x" . helm-M-x)
          ("n" . helm-mini)
          ("h" . helm-apropos)
-         ("i" . helm-semantic-or-imenu)
-         ("." . helm-semantic)
          ("u" . helm-resume)
          ("l" . helm-buffers-list)
          ("f" . helm-find-files)
-         ("r" . helm-recentf))
+         ("r" . helm-recentf)
+         ("<tab>" . helm-find-files))
   :config (progn
             (defadvice helm-buffers-sort-transformer (around ignore activate)
               (setq ad-return-value (ad-get-arg 0)))

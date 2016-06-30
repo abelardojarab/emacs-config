@@ -101,10 +101,7 @@
             (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh)
 
             ;; Enable diff-hl
-            (global-diff-hl-mode)
-            (diff-hl-flydiff-mode)
-            (diff-hl-margin-mode)
-            (diff-hl-dired-mode)))
+            (global-diff-hl-mode)))
 
 ;; git-timemachine
 (use-package git-timemachine

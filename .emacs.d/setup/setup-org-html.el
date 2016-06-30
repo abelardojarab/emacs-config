@@ -24,13 +24,11 @@
 
 ;;; Code:
 
-(eval-after-load 'org
-  '(progn
-     ;; CSS for the HTML
-     (setq org-html-style-include-scripts nil
-           org-html-style-include-default nil)
-     (setq org-html-style
-           "<link rel=\"stylesheet\" type=\"text/css\" href=\"http://thomasf.github.io/solarized-css/solarized-light.min.css\" />")))
+;; CSS for the HTML
+(setq org-html-style-include-scripts nil
+      org-html-style-include-default nil)
+(setq org-html-style
+      "<link rel=\"stylesheet\" type=\"text/css\" href=\"http://thomasf.github.io/solarized-css/solarized-light.min.css\" />")
 
 (provide 'setup-org-html)
 ;;; setup-org-html.el ends here

@@ -6,7 +6,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
-;; Added by Package.el.  This must come before configurations of
+;; Added by package.el.  This must come before configurations of
 ;; installed packages.  Don't delete this line.  If you don't want it,
 ;; just comment it out by adding a semicolon to the start of the line.
 ;; You may delete these explanatory comments.
@@ -170,20 +170,16 @@
 (require 'setup-org)
 
 ;; Setup Org (babel support)
-(use-package setup-org-babel
-  :commands org-mode)
+(require 'setup-org-babel)
 
 ;; Setup Org (image supporg)
-(use-package setup-org-image
-  :commands org-mode)
+(require 'setup-org-image)
 
 ;; Setup Org (latex support)
-(use-package setup-org-latex
-  :commands org-mode)
+(require 'setup-org-latex)
 
 ;; Setup Org (html support)
-(use-package setup-org-html
-  :commands org-mode)
+(require 'setup-org-html)
 
 ;; Setup Org (blogging support)
 (require 'setup-org-blog)
@@ -296,8 +292,8 @@
 ;; Setup shell
 (require 'setup-eshell)
 
-;; Setup hideshow
-(require 'setup-hideshow)
+;; Setup folding
+(require 'setup-folding)
 
 ;; Setup imenu
 (require 'setup-imenu)
