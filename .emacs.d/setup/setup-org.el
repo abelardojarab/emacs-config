@@ -69,6 +69,13 @@
                           (writegood-mode t)
                           (yas-minor-mode t))))
 
+            ;; Ignore tex commands during flyspell
+            (add-hook 'org-mode-hook (lambda () (setq ispell-parser 'tex)))
+            (defun flyspell-ignore-tex ()
+              (interactive)
+              (set (make-variable-buffer-local 'ispell-parser) 'tex))
+            (add-hook 'org-mode-hook 'flyspell-ignore-tex)
+
             ;; Set up Org default files
             (let ((todo_workspace "~/workspace/Documents/Org/todo.org")
                   (todo_dropbox "~/Dropbox/Documents/Org/todo.org")

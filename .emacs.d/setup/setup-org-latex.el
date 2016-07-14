@@ -30,6 +30,11 @@
 (setq org-export-latex-quotes
       '(("en" ("\\(\\s-\\|[[(]\\)\"" . "\\enquote{") ("\\(\\S-\\)\"" . "}") ("\\(\\s-\\|(\\)'" . "`"))))
 
+;; CDLaTeX is “is a minor mode that is normally used in combination with a
+;; major LaTeX mode like AUCTeX in order to speed-up insertion of environments
+;; and math templates”
+(add-hook 'org-mode-hook 'turn-on-org-cdlatex)
+
 ;; for Tikz image in Org
 (setq org-babel-latex-htlatex "htlatex")
 (defmacro by-backend (&rest body)
@@ -150,6 +155,12 @@
                       ((eq format 'html)  (format "(<cite>%s</cite>)" path))
                       ((eq format 'latex) (format "\\cite{%s}" path)))))
 
+;; Make RefTeX faster
+(setq reftex-enable-partial-scans t)
+(setq reftex-save-parse-info t)
+(setq reftex-use-multiple-selection-buffers t)
+(setq reftex-plug-into-AUCTeX t)
+
 ;; Reftex
 (require 'reftex-cite)
 (setq reftex-default-bibliography '("~/workspace/Documents/Bibliography/biblio.bib")) ;; So that RefTeX in Org-mode knows bibliography
@@ -159,21 +170,45 @@
        (progn
          ;; Reftex should use the org file as master file. See C-h v TeX-master for infos.
          (setq TeX-master t)
+         (load-library "reftex")
          (turn-on-reftex)
+         (and (buffer-file-name)
+              (file-exists-p (buffer-file-name))
+              (reftex-parse-all))
          ;; enable auto-revert-mode to update reftex when bibtex file changes on disk
-         (global-auto-revert-mode t) ;; careful: this can kill the undo
-         ;; history when you change the file
-         ;; on-disk.
-         (reftex-parse-all)
+         (global-auto-revert-mode t)
          ;; add a custom reftex cite format to insert links
          ;; This also changes any call to org-citation!
+         ;; RefTeX formats for biblatex (not natbib)
          (reftex-set-cite-format
-          '((?c . "\\citet{%l}") ;; natbib inline text
-            (?i . "\\citep{%l}") ;; natbib with parens
+          '((?\C-m . "\\cite[]{%l}")
+            (?t . "\\textcite{%l}")
+            (?a . "\\autocite[]{%l}")
+            (?p . "\\parencite{%l}")
+            (?f . "\\footcite[][]{%l}")
+            (?F . "\\fullcite[]{%l}")
+            (?x . "[]{%l}")
+            (?X . "{%l}")
             ))))
   (define-key org-mode-map (kbd "C-c )") 'reftex-citation)
   (define-key org-mode-map (kbd "C-c (") 'org-mode-reftex-search))
 (add-hook 'org-mode-hook 'org-mode-reftex-setup)
+
+(setq font-latex-match-reference-keywords
+      '(("cite" "[{")
+        ("cites" "[{}]")
+        ("autocite" "[{")
+        ("footcite" "[{")
+        ("footcites" "[{")
+        ("parencite" "[{")
+        ("textcite" "[{")
+        ("fullcite" "[{")
+        ("citetitle" "[{")
+        ("citetitles" "[{")
+        ("headlessfullcite" "[{")))
+
+(setq reftex-cite-prompt-optional-args nil)
+(setq reftex-cite-cleanup-optional-args t)
 
 ;; Add defaults packages to include when exporting.
 (setq org-latex-hyperref-template

@@ -111,6 +111,9 @@
                 (define-key flyspell-mouse-map [down-mouse-3] #'flyspell-correct-word)
                 (define-key flyspell-mouse-map [mouse-3] #'undefined)))
 
+            ;; 2. ignore message flags
+            (setq flyspell-issue-message-flag nil)
+
             ;; Disable flyspell keybindings
             (define-key flyspell-mode-map (kbd "C-;") nil)
             (define-key flyspell-mode-map (kbd "C-.") nil)))
