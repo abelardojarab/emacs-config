@@ -358,3 +358,4 @@
 
 ;; Setup desktop
 (require 'setup-desktop)
+(put 'downcase-region 'disabled nil)

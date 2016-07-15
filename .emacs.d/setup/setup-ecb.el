@@ -27,7 +27,7 @@
 ;; Code Browser
 (use-package ecb
   :load-path (lambda () (expand-file-name "ecb/" user-emacs-directory))
-  ;; :commands (ecb-activate) ;; enabling this line places ecb in autoload state
+  :commands (ecb-activate) ;; enabling this line places ecb in autoload state
   :init (progn
           (setq stack-trace-on-error t)
           (setq after-find-file-from-revert-buffer t))
@@ -41,8 +41,8 @@
               (ecb-rebuild-methods-buffer-for-non-semantic))
 
             (defconst initial-frame-width (frame-width)
-
               "The width of frame will be changed ,remember the init value.")
+
             (setq ecb-compile-window-height nil
                   ecb-compile-window-width 'edit-window
                   ecb-compile-window-temporally-enlarge nil
@@ -297,7 +297,6 @@ more place."
             (speedbar-add-supported-extension ".ils")
 
             ;; Finally activate ecb
-
             (if (display-graphic-p) (ecb-activate))))
 
 (provide 'setup-ecb)
