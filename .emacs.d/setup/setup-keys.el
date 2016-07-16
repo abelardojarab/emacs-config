@@ -78,9 +78,6 @@
 (define-key query-replace-map [return] 'act)
 (define-key query-replace-map [?\C-m] 'act)
 
-;; Zoom in/out like feature, without mouse wheel
-(global-set-key '[C--] 'text-scale-decrease)
-
 ;; Commands to make my programming environment nice
 (global-set-key (kbd "RET") 'newline-and-indent)
 (global-set-key "\C-l" 'goto-line)

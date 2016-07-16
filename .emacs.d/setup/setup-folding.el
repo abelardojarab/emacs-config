@@ -226,9 +226,8 @@
 (use-package origami
   :commands (origami-toggle-node origami-toggle-all-nodes origami-show-only-node origami-mode)
   :bind (:map ctl-x-map
-              ("." . origami-toggle-all-nodes)
-              ("-" . origami-toggle-node)
-              ("+" . origami-show-only-node))
+              ("-" . origami-toggle-all-nodes)
+              ("+" . origami-toggle-node))
   :load-path (lambda () (expand-file-name "origami/" user-emacs-directory))
   :config (progn
             (global-origami-mode)))

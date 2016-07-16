@@ -75,8 +75,8 @@
           (t ;; Linux
            (if (> (x-display-pixel-width) 2000)
                (progn ;; Ultra-HD monitor in Linux
-                 (setq main-programming-font (concat main-programming-font "-14"))
-                 (setq main-writing-font (concat main-writing-font "-15")))
+                 (setq main-programming-font (concat main-programming-font "-15"))
+                 (setq main-writing-font (concat main-writing-font "-16")))
              (if (> (x-display-pixel-width) 1800)
                  (progn ;; HD monitor in Linux
                    (setq main-programming-font (concat main-programming-font "-13"))

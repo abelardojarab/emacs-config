@@ -51,9 +51,9 @@
 (setq mouse-wheel-progressive-speed nil)
 
 ;; Zoom in/out like feature, with mouse wheel
-(global-unset-key (kbd "<C-wheel-up>")) ;; moved to <mode-line>
+(global-unset-key (kbd "<C-wheel-up>"))
 (global-unset-key (kbd "<C-wheel-down>"))
-(global-set-key (kbd "<C-wheel-up>") 'text-scale-increase) ;; moved to <mode-line>
+(global-set-key (kbd "<C-wheel-up>") 'text-scale-increase)
 (global-set-key (kbd "<C-wheel-down>") 'text-scale-decrease)
 
 ;; Get the scroll wheel to work
