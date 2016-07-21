@@ -29,12 +29,13 @@
 (require 'dash)
 (require 'f)
 (require 'org)
-(require 'org-ref)
 (require 's)
 
 ;; This is a local variable defined in `url-http'.  We need it to avoid
 ;; byte-compiler errors.
-(defvar-local url-http-end-of-headers nil)
+(defvar url-http-end-of-headers)
+(defvar org-ref-default-bibliography)
+(defvar org-ref-pdf-directory)
 
 ;;* The org-mode link
 ;; this just makes a clickable link that opens the entry.
@@ -128,6 +129,8 @@ Returns a formatted BibTeX entry."
            (temp-bibtex (format arxiv-entry-format-string "" title names year arxiv-number category abstract url))
            (key (with-temp-buffer
                   (insert temp-bibtex)
+		  (bibtex-mode)
+		  (bibtex-set-dialect (parsebib-find-bibtex-dialect) t)
                   (bibtex-generate-autokey))))
       (format arxiv-entry-format-string key title names year arxiv-number category abstract url))))
 
@@ -145,7 +148,7 @@ Returns a formatted BibTeX entry."
   (interactive
    (list (read-string "arxiv: ")
          ;;  now get the bibfile to add it to
-         (ido-completing-read
+         (completing-read
           "Bibfile: "
           (append (f-entries "." (lambda (f) (f-ext? f "bib")))
                   org-ref-default-bibliography))))
@@ -193,11 +196,11 @@ key."
   (interactive
    (list (read-string "arxiv: ")
          ;;  now get the bibfile to add it to
-         (ido-completing-read
+         (completing-read
           "Bibfile: "
           (append (f-entries "." (lambda (f) (f-ext? f "bib")))
                   org-ref-default-bibliography))
-         (ido-read-directory-name
+         (read-directory-name
           "PDF directory: "
           org-ref-pdf-directory)))
 

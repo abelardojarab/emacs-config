@@ -23,92 +23,35 @@
 ;; These are not specific to helm-bibtex.
 
 ;;; Code:
-(unless (require 'helm-config nil t)
-  (message "Org-ref is installing `helm'...")
-  (let ((package-archives '(("gnu"         . "http://elpa.gnu.org/packages/")
-			    ("melpa" . "http://melpa.org/packages/"))))
-    (package-initialize)
-    (package-refresh-contents)
-    (package-install 'helm))
-  (require 'helm-config))
+
+(declare-function 'org-ref-get-bibtex-key-and-file "org-ref-core.el")
+(declare-function 'org-ref-bad-file-link-candidates "org-ref-core.el")
+(declare-function 'org-ref-get-labels "org-ref-core.el")
+(declare-function 'org-ref-bad-cite-candidates "org-ref-core.el")
+(declare-function 'org-ref-bad-ref-candidates "org-ref-core.el")
+(declare-function 'org-ref-bad-label-candidates "org-ref-core.el")
+
 (require 'helm)
+(require 'org-element)
 
 ;;;###autoload
 (defun org-ref-helm-insert-label-link ()
-  "Insert a label link.
-Helm just shows you what labels already exist.  If you are on a
-label link, replace it."
+  "Insert label link at point.
+Helm will display existing labels in the current buffer to avoid
+duplication."
   (interactive)
-  (let* ((labels (org-ref-get-labels))
-         (cb (current-buffer)))
-    (helm :sources `(((name . "Existing labels")
-                      (candidates . ,labels)
-                      ;; default action is to open to the label
-                      (action . (lambda (label)
-                                  ;; unfortunately I do not have markers here
-                                  (org-open-link-from-string
-                                   (format "ref:%s" label))))
-                      ;; if you select a label, replace current one
-                      (action . (lambda (label)
-                                  (switch-to-buffer ,cb)
-                                  (cond
-                                   ;;  no prefix or on a link
-                                   ((equal helm-current-prefix-arg nil)
-                                    (let* ((object (org-element-context))
-                                           (last-char
-					    (save-excursion
-					      (goto-char (org-element-property :end object))
-					      (backward-char)
-					      (if (looking-at " ")
-						  " "
-						""))))
-                                      (when (-contains?
-					     '("label")
-					     (org-element-property :type object))
-                                        ;; we are on a link, so replace it.
-                                        (setf
-                                         (buffer-substring
-                                          (org-element-property :begin object)
-                                          (org-element-property :end object))
-                                         (concat
-                                          (replace-regexp-in-string
-                                           (org-element-property :path object)
-                                           label
-                                           (org-element-property :raw-link object))
-                                          last-char)))))))))
-                     ;; no matching selection creates a new label
-                     ((name . "Create new label")
-                      (dummy)
-                      ;; default action creates a new label, or replaces old one
-                      (action . (lambda (label)
-                                  (switch-to-buffer ,cb)
-                                  (let* ((object (org-element-context))
-                                         (last-char
-					  (save-excursion
-					    (goto-char (org-element-property :end object))
-					    (backward-char)
-					    (if (looking-at " ")
-						" "
-					      ""))))
-                                    (if (-contains? '("label")
-                                                    (org-element-property :type object))
-                                        ;; we are on a link, so replace it.
-                                        (setf
-                                         (buffer-substring
-                                          (org-element-property :begin object)
-                                          (org-element-property :end object))
-                                         (concat
-                                          (replace-regexp-in-string
-                                           (org-element-property :path object)
-                                           helm-pattern
-                                           (org-element-property :raw-link object))
-                                          last-char))
-                                      ;; new link
-                                      (insert
-                                       (concat
-                                        "label:"
-                                        (or label
-                                            helm-pattern))))))))))))
+  (let ((labels (org-ref-get-labels)))
+    (helm :sources `(,(helm-build-sync-source "Existing labels"
+			:candidates labels
+			:action (lambda (label)
+				  (with-helm-current-buffer
+				    (org-open-link-from-string
+				     (format "ref:%s" label)))))
+		     ,(helm-build-dummy-source "Create new label"
+			:action (lambda (label)
+				  (with-helm-current-buffer
+				    (insert (concat "label:" label))))))
+	  :buffer "*helm labels*")))
 
 
 ;;;###autoload
@@ -120,7 +63,6 @@ Use a double \\[universal-argument] \\[universal-argument] to insert a
 [[#custom-id]] link"
   (interactive)
   (let* ((labels (org-ref-get-labels))
-         (bs (buffer-string))
          (contexts (mapcar 'org-ref-get-label-context labels))
          (cb (current-buffer)))
 

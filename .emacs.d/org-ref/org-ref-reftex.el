@@ -28,6 +28,15 @@
 (require 'reftex-cite)
 (require 'org-ref-utils)
 
+(declare-function 'org-ref-find-bibliography "org-ref-core.el")
+(declare-function 'org-ref-get-bibtex-key-and-file "org-ref-core.el")
+(declare-function 'org-ref-bib-citation "org-ref-core.el")
+
+(defvar org-ref-cite-types)
+(defvar org-ref-open-notes-function)
+(defvar org-ref-get-pdf-filename-function)
+(defvar org-ref-open-pdf-function)
+
 ;;;###autoload
 (defun org-ref-reftex-completion ()
   "Use reftex and org-mode for completion."
@@ -38,14 +47,12 @@
 	org-ref-insert-label-function 'org-insert-link
 	org-ref-insert-ref-function 'org-insert-link
 	org-ref-cite-onclick-function 'org-ref-cite-onclick-minibuffer-menu)
-
-  ;; define key for inserting citations
-  (define-key org-mode-map
-    (kbd org-ref-insert-cite-key)
-    org-ref-insert-link-function)
   (message "reftex completion in org-ref loaded."))
 
 (org-ref-reftex-completion)
+(define-key org-mode-map
+  (kbd org-ref-insert-cite-key)
+  org-ref-insert-link-function)
 
 ;; Messages in the minbuffer conflict with the minibuffer menu. So we turn them
 ;; off.

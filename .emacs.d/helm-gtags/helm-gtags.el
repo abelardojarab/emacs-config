@@ -72,6 +72,10 @@
   "Ignore case in each search."
   :type 'boolean)
 
+(defcustom helm-gtags-cygwin-use-global-w32-port t
+  "Use the GNU global win32 port in Cygwin."
+  :type 'boolean)
+
 (defcustom helm-gtags-read-only nil
   "Gtags read only mode."
   :type 'boolean)
@@ -292,6 +296,9 @@ Always update if value of this variable is nil."
                for libpath = (file-name-as-directory (expand-file-name path))
                thereis (string= tagroot libpath))))
 
+(defsubst helm-gtags--convert-cygwin-windows-file-name-p ()
+  (and (eq system-type 'cygwin) helm-gtags-cygwin-use-global-w32-port))
+
 (defun helm-gtags--tag-directory ()
   (with-temp-buffer
     (helm-aif (getenv "GTAGSROOT")
@@ -302,7 +309,7 @@ Always update if value of this variable is nil."
       (when (looking-at "^\\([^\r\n]+\\)")
         (let ((tag-path (match-string-no-properties 1)))
           (file-name-as-directory
-           (if (eq system-type 'cygwin)
+           (if (helm-gtags--convert-cygwin-windows-file-name-p)
                (cygwin-convert-file-name-from-windows tag-path)
              tag-path)))))))
 
@@ -546,7 +553,7 @@ Always update if value of this variable is nil."
     (let* ((filename (helm-gtags--real-file-name))
            (from-here-opt (format "--from-here=%d:%s"
                                   (line-number-at-pos)
-                                  (if (eq system-type 'cygwin)
+                                  (if (helm-gtags--convert-cygwin-windows-file-name-p)
                                       (cygwin-convert-file-name-to-windows filename)
                                     filename))))
       (setq helm-gtags--last-input token)
@@ -974,7 +981,7 @@ Always update if value of this variable is nil."
         (message "Failed: %s TAGS(%d)" action (process-exit-status process))))))
 
 (defsubst helm-gtags--read-gtagslabel ()
-  (let ((labels '("default" "native" "ctags" "pygments")))
+  (let ((labels '("default" "native" "ctags" "new-ctags" "pygments")))
     (completing-read "GTAGSLABEL(Default: default): " labels nil t nil nil "default")))
 
 (defsubst helm-gtags--label-option (label)

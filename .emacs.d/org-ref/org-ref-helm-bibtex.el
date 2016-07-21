@@ -21,16 +21,26 @@
 ;;; Commentary:
 ;; This file defines the completion engine for org-ref using `helm-bibtex'.
 
+
+(declare-function 'org-ref-find-bibliography "org-ref-core.el")
+(declare-function 'org-ref-get-bibtex-key-and-file "org-ref-core.el")
+(declare-function 'org-ref-get-citation-string-at-point "org-ref-core.el")
+
+(defvar org-ref-get-pdf-filename-function)
+(defvar org-ref-default-citation-link)
+(defvar org-ref-cite-types)
+(defvar org-ref-insert-link-function)
+(defvar org-ref-insert-cite-function)
+(defvar org-ref-insert-label-function)
+(defvar org-ref-insert-ref-function)
+(defvar org-ref-cite-onclick-function)
+(defvar org-ref-insert-cite-key)
+
 ;;; Code:
+(require 'helm-config)
+(require 'helm)
+(require 'helm-bibtex)
 (require 'org-ref-helm)
-(unless (require 'helm-bibtex nil t)
-  (message "Org-ref is installing `helm-bibtex'...")
-  (let ((package-archives '(("gnu"         . "http://elpa.gnu.org/packages/")
-			    ("melpa" . "http://melpa.org/packages/"))))
-    (package-initialize)
-    (package-refresh-contents)
-    (package-install 'helm-bibtex))
-  (require 'helm-bibtex))
 
 ;;;###autoload
 (defun org-ref-bibtex-completion-completion ()
@@ -41,14 +51,12 @@
 	org-ref-insert-cite-function 'org-ref-helm-insert-cite-link
 	org-ref-insert-label-function 'org-ref-helm-insert-label-link
 	org-ref-insert-ref-function 'org-ref-helm-insert-ref-link
-	org-ref-cite-onclick-function 'org-ref-cite-click-helm)
-
-  ;; define key for inserting citations
-  (define-key org-mode-map
-    (kbd org-ref-insert-cite-key)
-    org-ref-insert-link-function))
+	org-ref-cite-onclick-function 'org-ref-cite-click-helm))
 
 (org-ref-bibtex-completion-completion)
+(define-key org-mode-map
+  (kbd org-ref-insert-cite-key)
+  org-ref-insert-link-function)
 
 (defcustom org-ref-bibtex-completion-actions
   '(("Insert citation" . helm-bibtex-insert-citation)
@@ -163,18 +171,33 @@ CANDIDATE is ignored."
 User is prompted for tags.  This function is called from `helm-bibtex'.
 Argument CANDIDATES helm candidates."
   (message "")
-  (let ((keywords (read-string "Keywords (comma separated): ")))
-    (cl-loop for key in (helm-marked-candidates)
-             do
-             (save-window-excursion
-               (bibtex-completion-show-entry key)
-               (bibtex-set-field
-                "keywords"
-                (concat
-                 keywords
-                 ", " (bibtex-autokey-get-field "keywords")))
-	       (when (looking-back ", ")
-	       	 (delete-backward-char 2))
+  (let* ((keys (helm-marked-candidates))
+	 (entry (bibtex-completion-get-entry (car keys)))
+	 (field (cdr (assoc-string "keywords" entry)))
+	 (value (when field (replace-regexp-in-string "^{\\|}$" "" field)))
+	 (keywords (read-string "Keywords (comma separated): " (when value
+								 (concat value ", ")))))
+    (cl-loop for key in keys
+	     do
+	     (save-window-excursion
+	       (bibtex-completion-show-entry key)
+	       ;; delete keyword field if empty
+	       (if (string-match "^\s-*" keywords)
+		   (save-restriction
+		     (bibtex-narrow-to-entry)
+		     (goto-char (car (cdr (bibtex-search-forward-field "keywords" t))))
+		     (bibtex-kill-field))
+		 (bibtex-set-field
+		  "keywords"
+		  (concat
+		   (if (listp keywords)
+		       (if (string-match value keywords)
+			   (and (replace-match "")
+				(mapconcat 'identity keywords ", "))
+			 (mapconcat 'identity keywords ", "))
+		     keywords))))
+	       (when (looking-back ", " (line-beginning-position))
+	       	 (delete-char 2))
 	       (save-buffer)))))
 
 
@@ -543,6 +566,86 @@ KEY is returned for the selected item(s) in helm."
                       (action . (lambda (f)
                                   (switch-to-buffer ,cb)
                                   (funcall f))))))))
+
+
+;; browse labels
+
+(defun org-ref-browser-label-source ()
+  (let ((labels (org-ref-get-labels)))
+    (helm-build-sync-source "Browse labels"
+      :follow 1
+      :candidates labels
+      :action '(("Browse labels" . (lambda (label)
+				     (with-selected-window (selected-window)
+				       (org-open-link-from-string
+					(format "ref:%s" label))))))
+      :persistent-action (lambda (label)
+			   (with-selected-window (selected-window)
+			     (org-open-link-from-string
+			      (format "ref:%s" label)))
+			   (helm-highlight-current-line nil nil nil nil 'pulse)))))
+
+;; browse citation links
+
+(defun org-ref-browser-transformer (candidates)
+  "Add counter to candidates."
+  (let ((counter 0))
+    (cl-loop for i in candidates
+	     collect (format "%s %s" (cl-incf counter) i))))
+
+(defun org-ref-browser-display (candidate)
+  "Strip counter from candidates."
+  (replace-regexp-in-string "^[0-9]+? " "" candidate))
+
+;;;###autoload
+(defun org-ref-browser (&optional arg)
+  "Quickly browse citation links.
+With a prefix ARG, browse labels."
+  (interactive "P")
+  (if arg
+      (helm :sources (org-ref-browser-label-source)
+	    :buffer "*helm labels*")
+    (let ((keys nil)
+	  (alist nil))
+      (widen)
+      (show-all)
+      (org-element-map (org-element-parse-buffer) 'link
+	(lambda (link)
+	  (let ((plist (nth 1 link)))
+	    (when (-contains? org-ref-cite-types (plist-get plist ':type))
+	      (let ((start (org-element-property :begin link)))
+		(dolist (key
+			 (org-ref-split-and-strip-string (plist-get plist ':path)))
+		  (setq keys (append keys (list key)))
+		  (setq alist (append alist (list (cons key start))))))))))
+      (let ((counter 0))
+      	;; the idea here is to create an alist with ("counter key" .
+      	;; position) to produce unique candidates
+      	(setq count-key-pos (mapcar (lambda (x)
+				      (cons
+				       (format "%s %s" (cl-incf counter) (car x)) (cdr x)))
+				    alist)))
+      ;; push mark to restore position with C-u C-SPC
+      (push-mark (point))
+      ;; move point to the first citation link in the buffer
+      (goto-char (cdr (assoc (caar alist) alist)))
+      (helm :sources
+	    (helm-build-sync-source "Browse citation links"
+	      :follow 1
+	      :candidates keys
+	      :candidate-transformer 'org-ref-browser-transformer
+	      :real-to-display 'org-ref-browser-display
+	      :persistent-action (lambda (candidate)
+	      			   (helm-goto-char
+	      			    (cdr (assoc candidate count-key-pos)))
+	      			   (helm-highlight-current-line nil nil nil nil 'pulse))
+	      :action `(("Open menu" . ,(lambda (candidate)
+	      				  (helm-goto-char
+	      				   (cdr (assoc candidate count-key-pos)))
+	      				  (org-open-at-point)))))
+	    :candidate-number-limit 10000
+	    :buffer "*helm browser*"))))
+
 
 (provide 'org-ref-helm-bibtex)
 ;;; org-ref-helm-bibtex.el ends here

@@ -379,7 +379,8 @@ to view the docstring of the syntax checker.  Likewise, you may use
 
       .. option:: flycheck-go-build-install-deps
 
-         Whether to install dependencies while checking.
+         Whether to install dependencies while checking with `go-build` or
+         `go-test`
 
       .. option:: flycheck-go-build-tags
 
@@ -388,6 +389,11 @@ to view the docstring of the syntax checker.  Likewise, you may use
    .. syntax-checker:: go-test
 
       Check syntax and types of Go tests with the `Go compiler`_.
+
+      .. option:: flycheck-go-build-install-deps
+         :noindex:
+
+         See `flycheck-go-build-install-deps`.
 
    .. syntax-checker:: go-errcheck
 
@@ -965,6 +971,11 @@ to view the docstring of the syntax checker.  Likewise, you may use
    .. syntax-checker:: slim
 
       Check Slim using the `Slim <http://slim-lang.com/>`_ compiler.
+
+   .. syntax-checker:: slim-lint
+
+      Check Slim best practices using the `slim-lint
+      <https://github.com/sds/slim-lint>`_ linter.
 
 .. supported-language:: SQL
 

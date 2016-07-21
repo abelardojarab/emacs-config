@@ -30,6 +30,21 @@
 
 ;;
 
+(declare-function 'org-ref-find-bibliography "org-ref-core.el")
+(declare-function 'org-ref-get-bibtex-key-and-file "org-ref-core.el")
+
+(defvar org-ref-pdf-directory)
+(defvar org-ref-notes-directory)
+(defvar org-ref-cite-types)
+(defvar org-ref-default-citation-link)
+(defvar org-ref-insert-link-function)
+(defvar org-ref-insert-cite-function)
+(defvar org-ref-insert-label-function)
+(defvar org-ref-insert-ref-function)
+(defvar org-ref-cite-onclick-function)
+(defvar org-ref-insert-cite-key)
+
+
 ;;; Code:
 (require 'org-ref-helm)
 (require 'org-ref-bibtex)
@@ -43,14 +58,13 @@
 	org-ref-insert-cite-function 'org-ref-helm-cite
 	org-ref-insert-label-function 'org-ref-helm-insert-label-link
 	org-ref-insert-ref-function 'org-ref-helm-insert-ref-link
-	org-ref-cite-onclick-function 'org-ref-cite-click-helm)
-
-  ;; define key for inserting citations
-  (define-key org-mode-map
-    (kbd org-ref-insert-cite-key)
-    org-ref-insert-link-function))
+	org-ref-cite-onclick-function 'org-ref-cite-click-helm))
 
 (org-ref-helm-cite-completion)
+
+(define-key org-mode-map
+  (kbd org-ref-insert-cite-key)
+  org-ref-insert-link-function)
 
 ;;* Variables
 (defvar org-ref-helm-cite-from nil
@@ -519,13 +533,13 @@ little more readable.")
   "Return string containing formatted citations for entries in
 `helm-marked-candidates'."
   (load-library
-   (ido-completing-read "Style: " '("unsrt" "author-year") nil nil "unsrt"))
+   (completing-read "Style: " '("unsrt" "author-year") nil nil "unsrt"))
 
   (with-temp-buffer
     (cl-loop for i from 1 to (length (helm-marked-candidates))
-	  for entry in (helm-marked-candidates)
-	  do
-	  (insert (format "%s. %s\n\n" i (orhc-formatted-citation entry))))
+	     for entry in (helm-marked-candidates)
+	     do
+	     (insert (format "%s. %s\n\n" i (orhc-formatted-citation entry))))
 
     (buffer-string)))
 

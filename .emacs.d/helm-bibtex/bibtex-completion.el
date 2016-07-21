@@ -405,9 +405,8 @@ file is specified, or if the specified file does not exist, or if
         (let ((value (replace-regexp-in-string "\\([^\\]\\);" "\\1\^^" value)))
           (cl-loop  ; Looping over the files:
            for record in (s-split "\^^" value)
-           ; Replace unescaped colons by something that is unlikely to
-           ; appear otherwise (later used for splitting):
-           for record = (replace-regexp-in-string "\\([^\\]\\):" "\\1\^_" record)
+           ; Replace unescaped colons by field separator:
+           for record = (replace-regexp-in-string "\\([^\\]\\|^\\):" "\\1\^_" record)
            ; Unescape stuff:
            for record = (replace-regexp-in-string "\\\\\\(.\\)" "\\1" record)
            ; Now we can safely split:
@@ -817,7 +816,7 @@ defined.  Surrounding curly braces are stripped."
     (message "No PDF(s) found.")))
 
 (define-minor-mode bibtex-completion-notes-mode
-  "Minor mode for managing helm-bibtex notes."
+  "Minor mode for managing notes."
   :keymap (let ((map (make-sparse-keymap)))
             (define-key map (kbd "C-c C-c") 'bibtex-completion-exit-notes-buffer)
             (define-key map (kbd "C-c C-w") 'org-refile)

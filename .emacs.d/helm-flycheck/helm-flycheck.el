@@ -1,11 +1,11 @@
 ;;; helm-flycheck.el --- Show flycheck errors with helm
 
-;; Copyright (C) 2013 Yasuyuki Oka <yasuyk@gmail.com>
+;; Copyright (C) 2013-2016 Yasuyuki Oka <yasuyk@gmail.com>
 
 ;; Author: Yasuyuki Oka <yasuyk@gmail.com>
-;; Version: 0.2
+;; Version: 0.4
 ;; URL: https://github.com/yasuyk/helm-flycheck
-;; Package-Requires: ((dash "2.4.0") (flycheck "0.20-cvs") (helm "1.5.7"))
+;; Package-Requires: ((dash "2.12.1") (flycheck "28") (helm-core "1.9.8"))
 ;; Keywords: helm, flycheck
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -45,7 +45,9 @@
     (candidates . helm-flycheck-candidates)
     (action-transformer helm-flycheck-action-transformer)
     (multiline)
-    (action . (("Go to" . helm-flycheck-action-goto-error)))))
+    (action . (("Go to" . helm-flycheck-action-goto-error)))
+    (follow . 1)))
+
 
 (defvar helm-flycheck-candidates nil)
 
@@ -107,7 +109,7 @@ Inspect the *Messages* buffer for details.")
 (defun helm-flycheck-action-transformer (actions candidate)
   "Return modified ACTIONS if CANDIDATE is status message."
   (if (stringp candidate)
-      (cond ((string= candidate helm-flycheck-status-message-no-errors))
+      (cond ((string= candidate helm-flycheck-status-message-no-errors) nil)
             ((string= candidate helm-flycheck-status-message-syntax-checking)
              '(("Reexecute helm-flycheck" . helm-flycheck-action-reexecute)))
             ((string= candidate helm-flycheck-status-message-checker-not-found)
@@ -136,11 +138,14 @@ Inspect the *Messages* buffer for details.")
                (-map #'overlay-start)
                -uniq
                (-sort #'<=))))
-      (goto-char error-pos))))
+      (goto-char error-pos)
+      (let ((recenter-redisplay nil))
+        (recenter)))))
 
 (defun helm-flycheck-action-reexecute (candidate)
   "Reexecute `helm-flycheck' without CANDIDATE."
-  (helm-run-after-quit 'helm-flycheck))
+  (catch 'exit
+    (helm-run-after-exit 'helm-flycheck)))
 
 (defun helm-flycheck-action-switch-to-messages-buffer (candidate)
   "Switch to *Messages* buffer without CANDIDATE."

@@ -60,7 +60,20 @@
 (require 'message)
 (require 's)
 
+(require 'org-ref-citeproc)
+
 ;;; Code:
+
+;; This is duplicated from org-ref-core to try to avoid a byte-compile error.
+(add-to-list 'load-path
+	     (expand-file-name
+	      "citeproc"
+	      (file-name-directory (or load-file-name (buffer-file-name)))))
+
+(add-to-list 'load-path
+	     (expand-file-name
+	      "citeproc/csl"
+	      (file-name-directory (or load-file-name (buffer-file-name)))))
 
 ;;* Custom variables
 (defgroup org-ref-bibtex nil
@@ -281,7 +294,7 @@ Entries come from `org-ref-bibtex-journal-abbreviations'."
   "Set a bibtex journal name to the string that represents FULL-JOURNAL-NAME.
 This is defined in `org-ref-bibtex-journal-abbreviations'."
   (interactive (list
-                (ido-completing-read
+                (completing-read
                  "Journal: "
                  (mapcar
                   (lambda (x)
@@ -635,7 +648,9 @@ _S_: Sentence case
   ("d" bibtex-kill-entry)
   ("L" org-ref-clean-bibtex-entry)
   ("y" (kill-new  (bibtex-autokey-get-field "=key=")))
-  ("f" bibtex-copy-summary-as-kill)
+  ("f" (progn
+	 (bibtex-beginning-of-entry)
+	 (kill-new (orhc-formatted-citation (bibtex-parse-entry t)))))
   ("k" helm-tag-bibtex-entry)
   ("K" (lambda ()
          (interactive)
@@ -644,10 +659,11 @@ _S_: Sentence case
                        (bibtex-autokey-get-field "keywords"))
           t)))
   ("b" org-ref-open-in-browser)
-  ("r" (lambda () (interactive)
+  ("r" (lambda ()
+	 (interactive)
          (bibtex-beginning-of-entry)
          (bibtex-kill-entry)
-         (find-file (ido-completing-read
+         (find-file (completing-read
                      "Bibtex file: "
                      (f-entries "." (lambda (f) (f-ext? f "bib")))))
          (goto-char (point-max))
@@ -806,7 +822,10 @@ If KEYWORDS is a list, it is converted to a comma-separated
 string.  The KEYWORDS are added to the beginning of the
 field.  Otherwise KEYWORDS should be a string of comma-separate
 keywords.  Optional argument ARG prefix arg to replace keywords."
-  (interactive "sKeywords: \nP")
+  (interactive
+   (list
+    (completing-read "Keyword: " (org-ref-bibtex-keywords))
+    current-prefix-arg))
   (bibtex-set-field
    "keywords"
    (if arg
@@ -1076,11 +1095,12 @@ Update the cache if necessary."
 
 ;;* org-ref bibtex formatted citation
 (defun orhc-formatted-citation (entry)
-  "Get a formatted string for entry."
+  "Get a formatted string for ENTRY."
+  (require 'unsrt)
   (let* ((adaptive-fill-function '(lambda () "    "))
 	 (indent-tabs-mode nil)
 	 (entry-type (downcase
-		      (cdr (assoc "=type=" (cdr entry)))))
+		      (cdr (assoc "=type=" entry))))
 	 (entry-styles (cdr (assoc 'entries bibliography-style)))
 	 (entry-fields
 	  (progn
@@ -1109,6 +1129,36 @@ Update the cache if necessary."
 			 ""))
       (buffer-string))))
 
+;; * Extract bibtex blocks from an org-file
+;;;###autoload
+(defun org-ref-extract-bibtex-blocks (bibfile)
+  "Extract all bibtex blocks in buffer to BIBFILE.
+If BIBFILE exists, append, unless you use a prefix arg (C-u), which
+will clobber the file."
+  (interactive
+   (list (read-file-name "Bibfile: " nil nil nil
+			 (file-name-nondirectory
+			  (concat (file-name-sans-extension
+				   (buffer-file-name))
+				  ".bib")))))
+
+  (let ((contents ""))
+    (when (and (file-exists-p bibfile)
+	       (not current-prefix-arg))
+      (setq contents (with-temp-buffer
+		       (insert-file-contents bibfile)
+		       (buffer-string))))
+
+    (save-excursion
+      (goto-char (point-min))
+      (while (re-search-forward "#\\+BEGIN_SRC bibtex" nil t)
+	(setq contents
+	      (concat
+	       contents
+	       (org-element-property :value (org-element-at-point))))))
+
+    (with-temp-file bibfile
+      (insert contents))))
 
 ;;* The end
 (provide 'org-ref-bibtex)

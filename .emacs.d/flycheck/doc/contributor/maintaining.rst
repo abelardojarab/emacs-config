@@ -2,6 +2,29 @@
  Maintainer’s Guide
 ====================
 
+Issue triage
+============
+
+Please label incoming tickets accordingly according to these rules:
+
+- Add the “bug” label to things that you think **must be fixed urgently**.
+  Please don’t use this label for bugs that do not severely impede Flycheck’s
+  functionality.
+- Add the “needs review” label to new bugs and pull requests that need to be
+  reviewed.
+- Add the “beginner friendly” label to really easy things.  If you add this
+  label please also add a comment that outlines a possible solution.
+- Add “blocked” to bugs that need further comment or help from the reporter, and
+  to pull requests that need to be improved.
+- Add “windows only” for bugs that appear to only affect Windows operating
+  systems.
+
+**If you’d like to review a bug or pull request please assign the corresponding
+ticket to you.**
+
+In issues for specific languages that Flycheck support please mention the
+corresponding :ref:`language team <flycheck-language-teams>` if one exists.
+
 Git workflow
 ============
 
@@ -22,12 +45,13 @@ Branch rules
 
 Our workflow implies a couple of rules about which branches to push code to:
 
-* Please do not commit directly to ``master`` unless it’s a trivial change,
-  a safe refactoring, a small bug or spelling fix, etc.  If in doubt please use
-  a separate branch and open a `pull request`_.
 * Please commit new features, larger changes and refactorings and updates to
   documentation to separate branches and open a pull request for review and
   discussion.
+* The ``master`` branch is protected.  Only :ref:`owners <flycheck-maintainers>`
+  can push directly to it.  Everyone else needs to open a pull request.  Github
+  requires maintainer approval and passing Travis CI tests before a pull request
+  can be merged to master.
 
 .. important::
 
@@ -35,31 +59,36 @@ Our workflow implies a couple of rules about which branches to push code to:
    purpose of the branch to other developers and maintainers.  ``fix-bug-42`` is
    not a great name, but ``42-fix-void-function-error-in-error-list`` is.
 
-   If your branch addresses a specific Github issue please name your branch
-   :samp:`{issue}-{description}`, where ``issue`` is the number of the Github
-   issue *without* any prefix and ``description`` is the description of the
-   branch.  This convention helps us to link branches to issues and has the
-   added bonus of automatically moving issues into "In progress" on our `Waffle
-   board`_.
-
-We do not enforce these rules to give you the freedom to ignore them when need
-be, like in the case of a very urgent but non-trivial bug fix.  But please do
-try to follow these rules most of the time as they help us to maintain a high
-code quality in ``master``.
-
-For :ref:`maintainers <flycheck-maintainers>` these rules are relaxed: They may
-commit to any branch at any time.  Nonetheless we also recommend that
-maintainers open pull requests for discussion.
-
 .. _pull request: https://help.github.com/articles/using-pull-requests/
-.. _waffle board: https://waffle.io/flycheck/flycheck
 
 .. _flycheck-pull-requests:
 
 Pull requests
 -------------
 
-.. todo:: Explain how to review and merge pull requests
+**All pull requests require approval of a maintainer**.
+
+To state your approval as a maintainer add a comment that contains ``LGTM``.
+The LGTM.co will look for these comments and unlock the pull request once enough
+maintainers approved it.  We require approvals from multiple maintainers, see
+``.lgtm`` for the exact amount of approvals required to accept a pull request.
+
+Review guidelines
+~~~~~~~~~~~~~~~~~
+
+.. todo:: Write pull request review guidelines
+
+Merge guidelines
+~~~~~~~~~~~~~~~~
+
+If a pull request was approved you may directly merge it.  For smaller pull
+requests please “Squash and Merge” to keep a linear history, otherwise merge
+normally.  What constitutes a "small" pull request is at your discretion.  Apply
+common sense :)
+
+You may also add the author of the pull request to the "Core developers" team to
+give them commit access to the Flycheck repository and ask them merge the pull
+request themselves.  That's a good way to gain new contributors.
 
 .. _flycheck-git-signatures:
 
@@ -97,6 +126,11 @@ extra tooling and some 3rd party services for Flycheck:
   configuration.
 * `Travis CI`_ runs our tests after every push and for every pull request.
   It's configured through ``.travis.yml``.
+* LGTM_ handles the pull request approval process through ``LGTM`` comments.
+  It's configured through ``.lgtm``, the list of maintainers that may approve
+  pull requests is in the ``MAINTAINERS`` file.
+* `CLA assistant`_ checks signatures to our CLA_ and allows contributors to sign
+  the CLA through their Github account.
 
 All :ref:`maintainers <flycheck-maintainers>` have administrative access to
 these services so in case of an issue just contact them.
@@ -104,6 +138,9 @@ these services so in case of an issue just contact them.
 .. _Github: https://github.com/flycheck
 .. _ReadTheDocs: https://readthedocs.org/projects/flycheck/
 .. _Travis CI: https://travis-ci.org/flycheck/flycheck
+.. _LGTM: https://lgtm.co/
+.. _CLA assistant: https://cla-assistant.io
+.. _CLA: https://gist.github.com/lunaryorn/c9c0d656fe7e704da2f734779242ec99
 
 .. _flycheck-maintenance-scripts:
 
@@ -189,3 +226,21 @@ Once the script is completed please
 .. _versions dashboard: https://readthedocs.org/dashboard/flycheck/versions/
 .. _Gitter: https://gitter.im/flycheck/flycheck
 .. _emacs_flycheck: https://twitter.com/emacs_flycheck
+
+New maintainers
+===============
+
+To propose a new maintainer open a pull request that adds the user to
+``MAINTAINERS`` and ``doc/community/people.rst``.  The pull request is subject
+to the :ref:`same rules <flycheck-pull-requests>` as all other pull requests.
+Notably it goes through the same approval process.
+
+Once merged please also
+
+- add the new maintainer to the ``Maintainers`` team of the Github
+  organisation.  This does not award additional privileges, it's just to support
+  ``@flycheck/maintainers`` mentions for the sake of convenience,
+- invite the new maintainer to the internal `Maintainers channel`_ on Gitter,
+- and announce the new maintainer on Flycheck's Twitter account.
+
+.. _Maintainers channel: https://gitter.im/flycheck/maintainers

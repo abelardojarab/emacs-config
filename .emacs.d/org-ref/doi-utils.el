@@ -34,6 +34,13 @@
 ;; - doi-utils-add-bibtex-entry-from-doi to add an entry to your default bibliography (cleaned with pdf if possible).
 ;; - doi-utils-update-bibtex-entry-from-doi with cursor in an entry to update its fields.
 
+
+(defvar org-ref-pdf-directory)
+(defvar org-ref-bibliography-notes)
+(defvar org-ref-default-bibliography)
+(defvar reftex-default-bibliography)
+(declare-function 'org-ref-bib-citation "org-ref-core.el")
+
 (require 'bibtex)
 (eval-when-compile
   (require 'cl))
@@ -41,7 +48,7 @@
 (require 'json)
 (require 'org)                          ; org-add-link-type
 (require 'org-bibtex)                   ; org-bibtex-yank
-
+(require 'url-http)
 
 ;;; Code:
 
@@ -752,7 +759,7 @@ Argument BIBFILE the bibliography to use."
            (t
             nil)))
          ;;  now get the bibfile to add it to
-         (ido-completing-read
+         (completing-read
           "Bibfile: "
           (append (f-entries "." (lambda (f)
 				   (and (not (string-match "#" f))
@@ -1118,6 +1125,7 @@ error."
   (interactive)
   (bibtex-beginning-of-entry)
   (let* ((entry (bibtex-parse-entry))
+	 (raw-json-string)
          (json-string)
          (json-data)
          (doi))
@@ -1234,11 +1242,12 @@ error."
                   ;; type or paste it in
                   (t
                    nil)))
-                (ido-completing-read
+                (completing-read
                  "Bibfile: "
                  (append (f-entries "." (lambda (f) (f-ext? f "bib")))
                          org-ref-default-bibliography))))
-  (let* ((json-string)
+  (let* ((raw-json-string)
+	 (json-string)
 	 (json-data)
 	 (doi))
 

@@ -18,8 +18,8 @@ Conduct <flycheck-conduct>`.
 
 .. _issue tracker: https://github.com/flycheck/flycheck/issues
 .. _Gitter chatroom: https://gitter.im/flycheck/flycheck
-.. _need your help with: https://github.com/flycheck/flycheck/issues?q=is%3Aissue+is%3Aopen+label%3A%22S-needs+your+love%22
-.. _beginner-friendly tasks: https://github.com/flycheck/flycheck/labels/E-beginner%20friendly
+.. _need your help with: https://github.com/flycheck/flycheck/issues?q=is%3Aopen+is%3Aissue+no%3Aassignee
+.. _beginner-friendly tasks: https://github.com/flycheck/flycheck/labels/beginner%20friendly
 
 .. _flycheck-bug-reports:
 
@@ -66,20 +66,14 @@ requests for improved Windows compatibility. If you know Windows and Emacs,
 please take a look at the list of open Windows issues and try to fix any of
 these.
 
-.. _list of open Windows issues: https://github.com/flycheck/flycheck/labels/B-Windows%20only
+.. _list of open Windows issues: https://github.com/flycheck/flycheck/labels/windows%20only
 
 Feature requests
 ================
 
 To request a new feature please open a new issue through our `issue form`_.
-
 A feature request needs to find a core developer or maintainer who adopts and
-implements it. Otherwise we will move the issue to the `S-needs your love`_
-column of our `Waffle board`_ where issues sit that wait for a pull request from
-the community.
-
-.. _S-needs your love: https://github.com/flycheck/flycheck/issues?q=is%3Aissue+is%3Aopen+label%3A%22S-needs+your+love%22
-.. _Waffle board: https://waffle.io/flycheck/flycheck
+implements it.
 
 The Build system
 ================
@@ -123,15 +117,30 @@ to syntax checkers of a specific language, it’s also a good idea to run
 particular language still work.  A successful ``make integ`` is by no means
 mandatory for pull requests, though, we will test your changes, too.
 
+.. important::
+
+   To contribute to Flycheck you must sign our CLA_ (Contributor License
+   Agreement).  The CLA Assistant bot will automatically ask you to do this when
+   you open a pull request, and let's you sign the CLA through your Github
+   account.
+
+   We require this process mostly to make you aware of the licensing
+   implications of contributing to Flycheck and to obtain your explicit approval
+   of our licenses for your contribution.
+
+   .. _CLA: https://gist.github.com/lunaryorn/c9c0d656fe7e704da2f734779242ec99
+
 All pull requests are reviewed by a :ref:`maintainer <flycheck-maintainers>`.
 Feel free to mention individual developers (e.g. ``@lunaryorn``) to request a
 review from a specific person, or ``@flycheck/maintainers`` if you have general
 questions or if your pull request was waiting for review too long.
 
-Additionally, all pull requests go through automated tests on `Travis CI`_ which
-check code style, run unit tests, etc. After the pull request was reviewed and
-if all tests passed a maintainer will eventually cherry-pick or merge your
-changes and close the pull request.
+Additionally all pull requests go through automated tests on `Travis CI`_ which
+check code style, run unit tests, etc.
+
+After the pull request was reviewed and if all tests passed maintainers will
+leave a ``LGTM`` comment at which point the pull request is ready for being
+merged.
 
 .. _Travis CI: https://travis-ci.org/flycheck/flycheck/pull_requests
 
@@ -191,55 +200,26 @@ Run ``make help`` to see a list of all available Make targets for the
 documentation.
 
 Documentation pull requests work in the same way as other pull requests.  To
-find documentation issues sort by the `A-documentation`_ label.
+find documentation issues sort by the `documentation`_ label.
 
 .. _ReStructuredText: http://docutils.sourceforge.net/rst.html
 .. _Sphinx: http://www.sphinx-doc.org
 .. _Homebrew: http://brew.sh
 .. _virtualenv: https://virtualenv.pypa.io/en/latest/
-.. _A-documentation: https://github.com/flycheck/flycheck/labels/A-documentation
+.. _documentation: https://github.com/flycheck/flycheck/labels/documentation
 
 Issue management
 ================
 
-We manage all issues and pull requests on our `Waffle board`_. The board has six
-columns which correspond to ``S-`` labels on Github:
+We use Github labels for basic issue management:
 
-- The *Backlog* (no ``S`` label) holds all incoming issues. Pull requests
-  waiting for review sit here, as well as bugs that were reported or stories and
-  tasks that are not ready to work on yet.
-- *Community* (``S-needs your love`` label) issues are those that we will not
-  work on ourselves. These issues need pull requests from the community to be
-  solved. Look at this column to find spots to contribute to.
-- *Blocked* (``S-blocked`` label) issues are waiting for something, like a
-  change in an upstream project or a feedback from another developer. A \ ``B-``
-  label may provide additional clue why the issue is blocked. Blocked issues may
-  also appear in the backlog, but in this column we actively seek to remove the
-  blockers and move the issue to *Ready*.
-- In *Ready* (``S-ready`` label) we keep issues that we are ready to work
-  on. This includes bugs which we can reproduce and fix, and pull requests that
-  were reviewed and are ready to be merged now. Look at this column to see
-  what’s coming next to Flycheck.
-- When we start to work on an issue it moves into *In Progress* (``S-in
-  progress`` label).
-- *To review* (``S-to review`` label) holds pull requests and patches which need
-  review by maintainers.  All pull requests, whether from developers or external
-  contributors start here.  Once a review is complete we will either merge the
-  pull request and thus move it to *Done*, or move the issue back to ``S-in
-  progress`` if the pull request still needs work.
-- Eventually issues move into *Done* when they are closed.
-
-In addition to these columns which reflect the basic issue workflow we
-also use a variety of labels to group issues:
-
-- Yellow, **A**-prefixed labels describes the area of Flycheck the issue belongs
-  to.
-- Orange, **B**-prefixed labels gives reasons why an issue is blocked.
-- Green, **E**-prefixed labels denotes the level of experience necessary to
-  address an issue.
-- Blue, **K**-prefixed labels tells the kind of an issue, i.e. whether it’s a
-  bug, a feature request, etc.
-- Grey, **R**-prefixed labels inform about the resolution of an issue.
+- **The red “bug” label denotes critical bugs in Flycheck that must be fixed
+  urgently.**
+- Violet labels describe the area of Flycheck the issue belongs to.
+- The green “beginner friendly” label denotes easy tasks for newcomers to the
+  project.
+- Orange labels denote blockers.
+- Grey labels indicate resolutions to issues.
 
 Out of tree contributions
 =========================
