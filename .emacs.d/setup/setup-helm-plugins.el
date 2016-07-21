@@ -27,12 +27,20 @@
 ;; Helm grepint
 (use-package helm-grepint
   :defer t
-  :commands (helm-grepint-grep helm-grep-do-git-grep)
+  :commands (helm-grepint-grep)
   :load-path (lambda () (expand-file-name "helm-grepint/" user-emacs-directory))
-  :bind (:map ctl-x-map
-              ("e" . helm-grepint-grep))
   :config (progn
             (helm-grepint-set-default-config)))
+
+;; Helm git-grep
+(use-package helm-git-grep
+  :defer t
+  :commands (helm-git-grep)
+  :load-path (lambda () (expand-file-name "helm-git-grep/" user-emacs-directory))
+  :bind (:map ctl-x-map
+              ("e" . helm-git-grep))
+  :config (progn
+            (setq helm-git-grep-candidate-number-limit nil)))
 
 ;; Helm ag/ack
 (use-package helm-ag
