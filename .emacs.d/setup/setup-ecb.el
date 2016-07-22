@@ -34,8 +34,6 @@
   :config (progn
 
             ;; ECB setup
-            (setq ecb-show-sources-in-directories-buffer 'always)
-            (setq ecb-tip-of-the-day nil)
             (if (ecb--semantic-active-p)
                 (ecb-update-methods-buffer--internal nil nil t)
               (ecb-rebuild-methods-buffer-for-non-semantic))
@@ -43,7 +41,9 @@
             (defconst initial-frame-width (frame-width)
               "The width of frame will be changed ,remember the init value.")
 
-            (setq ecb-compile-window-height nil
+            (setq ecb-tip-of-the-day nil
+                  ecb-show-sources-in-directories-buffer 'always
+                  ecb-compile-window-height nil
                   ecb-compile-window-width 'edit-window
                   ecb-compile-window-temporally-enlarge nil
                   ecb-eshell-fit-window-to-command-output nil
@@ -52,6 +52,7 @@
                   ecb-fix-window-size 'width
                   ecb-layout-name "bodil"
                   ecb-history-make-buckets 'mode
+                  ecb-highlight-tag-with-point-delay 180
                   ecb-kill-buffer-clears-history 'auto
                   ecb-tip-of-the-day nil
                   ecb-tip-of-the-day-file "~/.emacs.cache/ecb-tip-of-day.el"

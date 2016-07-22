@@ -98,6 +98,13 @@ non-nil."
 ;; Line numbers
 (use-package linum
   :config (progn
+            (add-hook 'prog-mode-hook
+                      (lambda ()
+                        ;; turn off `linum-mode' when there are more than 5000 lines
+                        (if (and (> (buffer-size)
+                                    (* 5000 80)))
+                            (linum-mode -1))))
+
             (defadvice linum-update-window (around linum-dynamic activate)
               (let* ((w (length (number-to-string
                                  (count-lines (point-min) (point-max)))))
@@ -118,18 +125,6 @@ non-nil."
 (use-package lawlist-scroll-mode
   :if (display-graphic-p)
   :init (set-scroll-bar-mode 'right))
-
-;; So, fringe is nice actually, but the background for it kind of sucks in leuven
-;; so I set it to the same color as the background
-(defun my/set-fringe-background ()
-       "Set the fringe background to the same color as the regular background."
-       (interactive)
-       (setq my/fringe-background-color
-             (face-background 'default))
-             (custom-set-faces
-              `(fringe ((t (:background ,my/fringe-background-color))))))
-
-(add-hook 'after-init-hook #'my/set-fringe-background)
 
 (provide 'setup-appearance)
 ;;; setup-appearance.el ends here
