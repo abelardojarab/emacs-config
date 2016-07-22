@@ -86,6 +86,7 @@
                 desktop-restore-frames nil
                 desktop-restore-in-current-display t
                 desktop-restore-forces-onscreen nil
+                desktop-restore-eager 0
                 desktop-auto-save-timeout 60
                 desktop-globals-to-save
                 '((extended-command-history . 30)
