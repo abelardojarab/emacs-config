@@ -69,15 +69,30 @@
     ## create FILE, put string into it. Then source.
     ## arguments are like in source and .ess.source
     cat(string, file = file)
-    on.exit(file.remove(file))
+    ## The following on.exit infloops in R 3.3.0
+    ## https://github.com/emacs-ess/ESS/issues/334
+    ## https://bugs.r-project.org/bugzilla/show_bug.cgi?id=16971
+    ## So we are cleanning it in .ess.source instead.
+    ## on.exit(file.remove(file))
     .ess.source(file, visibly = visibly, output = output,
                 max.deparse.length = max.deparse.length,
                 local = local, fake.source = TRUE)
 }
 
+.ess.strip.error <- function(msg, srcfile) {
+    pattern <- paste0(srcfile, ":[0-9]+:[0-9]+: ")
+    sub(pattern, "", msg)
+}
+
+.ess.file.remove <- function(file){
+    if (base::file.exists(file)) base::file.remove(file)
+    else FALSE
+}
+
 .ess.source <- function(file, visibly = TRUE, output = FALSE,
-                        max.deparse.length = 300,
-                        local = NULL, fake.source = FALSE)
+                        max.deparse.length = 300, local = NULL,
+                        fake.source = FALSE, keep.source = TRUE,
+                        message.prefix = "")
 {
     if (is.null(local)) {
         local <- if (.ess.Rversion > '2.13') parent.frame() else FALSE
@@ -86,16 +101,26 @@
     ss <- # drop 'keep.source' for older versions
         if(.ess.Rversion >= "2.8") base::source
         else function(..., keep.source) base::source(...)
-    out <- ss(file, echo = visibly, local = local, print.eval = output,
-              max.deparse.length = max.deparse.length,
-              keep.source = TRUE)$value
 
-    if (!fake.source) {
-        cat(sprintf("Sourced file %s\n", file))
+    out <- tryCatch(ss(file, echo = visibly, local = local, print.eval = output,
+                       max.deparse.length = max.deparse.length,
+                       keep.source = keep.source),
+                    error = function(x) {
+                        if(fake.source) {
+                            .ess.file.remove(file)
+                        }
+                        msg <- .ess.strip.error(x$message, file)
+                        stop(msg, call. = FALSE)
+                    })
+
+    if (fake.source) {
+        .ess.file.remove(file)
+    } else {
+        cat(sprintf("%sSourced file %s\n", message.prefix, file))
     }
 
     ## Return value for org-babel
-    invisible(out)
+    invisible(out$value)
 }
 
 if(.ess.Rversion < "1.8")

@@ -67,6 +67,7 @@
 (eval-when-compile
   (require 'cl))
 (autoload 'Rd-preview-help "ess-rd" "[autoload]" t)
+(require 'essddr "ess-rd.el")
 
 ;; ------------------
 (defvar ess-roxy-mode-map
@@ -731,19 +732,22 @@ list of strings."
     (goto-char stop-point)
     (line-end-position 0)))
 
-(defmacro ess-roxy-with-filling-context (&rest body)
+(defmacro ess-roxy-with-filling-context (examples &rest body)
   (declare (indent 0) (debug (&rest form)))
   `(let ((comment-start "#+'[ \t]+#")
          (comment-start-skip "#+'[ \t]+# *")
          (comment-use-syntax nil)
          (adaptive-fill-first-line-regexp (concat ess-roxy-re "[ \t]*"))
-         (temp-table (make-syntax-table S-syntax-table))
          (paragraph-start (concat "\\(" ess-roxy-re "\\(" paragraph-start
-                                  "\\|[ \t]*@" "\\)" "\\)\\|\\(" paragraph-start "\\)")))
-     ;; Prevent the roxy prefix to be interpreted as comment or string
-     ;; starter
-     (modify-syntax-entry ?# "w" temp-table)
-     (modify-syntax-entry ?' "w" temp-table)
+                                  "\\|[ \t]*@" "\\)" "\\)\\|\\(" paragraph-start "\\)"))
+         (temp-table (if ,examples
+                         (make-syntax-table S-syntax-table)
+                       Rd-mode-syntax-table)))
+     (when ,examples
+       ;; Prevent the roxy prefix to be interpreted as comment or string
+       ;; starter
+       (modify-syntax-entry ?# "w" temp-table)
+       (modify-syntax-entry ?' "w" temp-table))
      ;; Neutralise (comment-normalize-vars) because it modifies the
      ;; comment-start regexp in such a way that paragraph filling of
      ;; comments in @examples fields does not work
@@ -776,25 +780,25 @@ list of strings."
          (save-excursion
            (back-to-indentation)
            (looking-at "#")))
-    (ess-roxy-with-filling-context
+    (ess-roxy-with-filling-context t
       ad-do-it))
    ((and (not (ess-roxy-entry-p))
-         (ess-point-in-comment-p))
+         (ess-within-comment-p))
     ad-do-it)
    ;; Filling of call arguments with point on call name
    ((and ess-fill-calls
-         (ess-point-on-call-name-p))
+         (ess-within-call-name-p))
     (save-excursion
       (skip-chars-forward "^([")
       (forward-char)
       (ess-fill-args)))
    ;; Filling of continuations
    ((and ess-fill-continuations
-         (ess-point-in-continuation-p))
+         (ess-within-continuation-p))
     (ess-fill-continuations))
    ;; Filling of call arguments
    ((and ess-fill-calls
-         (ess-point-in-call-p))
+         (ess-within-call-p))
     (ess-fill-args))
    ;; Filling of roxy blocks
    ((ess-roxy-entry-p)
@@ -817,7 +821,7 @@ list of strings."
                        (concat ess-roxy-re "[ \t]*@examples\\b") "^[^#]")))
         ;; Refill the whole structural paragraph sequentially, field by
         ;; field, stopping at @examples
-        (ess-roxy-with-filling-context
+        (ess-roxy-with-filling-context nil
           (save-excursion
             (save-restriction
               (narrow-to-region par-start par-end)

@@ -1455,7 +1455,7 @@ the opening bracket of [^2], and then subsequent functions would kill [^2])."
 
 (ert-deftest test-markdown-complete/setext-header ()
   "Test `markdown-complete' for setext headers."
-  (markdown-test-string " test  \n=="
+  (markdown-test-string "test  \n=="
                         (call-interactively 'markdown-complete)
                         (should (string-equal (buffer-string) "test\n===="))))
 
@@ -3203,6 +3203,21 @@ x: x
      (should (eq (point) 159))
      (should (looking-at "^# Level one again")))))
 
+(ert-deftest test-markdown-outline/visibility-with-metadata ()
+  "Test outline visibility cycling with metadata blocks."
+  (markdown-test-string
+   "---
+layout = post
+date = 2015-08-13 11:35:25 EST
+---
+"
+   (let (last-command this-command)
+     ;; Cycle global visibility to "overview" mode
+     (setq this-command 'markdown-cycle)
+     (markdown-cycle t)
+     ;; Check that text is visible
+     (markdown-test-range-has-property (point-min) (point-max) 'invisible nil))))
+
 ;;; Movement tests:
 
 (ert-deftest test-markdown-movement/defun ()
@@ -3334,9 +3349,25 @@ like statement. Detail: https://github.com/jrblevin/markdown-mode/issues/75"
       (call-interactively #'markdown-backward-same-level)
       (should (looking-at-p "## Header 2-1")))))
 
+;;; Link tests:
+
+(ert-deftest test-markdown-link/follow ()
+  "Test link following in a browser and in Emacs."
+  (markdown-test-string "[text](http://path?query=foo#id)"
+    (let* ((opened-url nil)
+           (browse-url-browser-function
+            (lambda (url &rest args) (setq opened-url url))))
+      (markdown-follow-thing-at-point nil)
+      (should (equal opened-url "http://path?query=foo#id"))))
+  (when (featurep 'url-parse)
+    (markdown-test-string "[text](path?query=foo#id)"
+      (markdown-follow-thing-at-point nil)
+      (should (equal (file-name-nondirectory (buffer-file-name)) "path"))
+      (kill-buffer))))
+
 ;;; Wiki link tests:
 
-(ert-deftest test-markdown-wiki-link/file-local-variabls ()
+(ert-deftest test-markdown-wiki-link/file-local-variables ()
   "Test enabling wiki links via file-local variables."
   (markdown-test-file "wiki-links.text"
    (should-not markdown-enable-wiki-links)
@@ -3958,6 +3989,25 @@ Detail: https://github.com/jrblevin/markdown-mode/issues/79"
          (should (= (markdown-visual-lines-between-points
                      (window-start) (window-point))
                     final-win-st-diff)))))))
+
+;; Tests for imenu
+
+(ert-deftest test-markdown-imenu/metadata ()
+  "Don't correct header like statement in metadata.
+https://github.com/jrblevin/markdown-mode/issues/145"
+  (markdown-test-string "---
+title = \"Blah\"
+comments = false
+---
+
+# Header1
+
+## Header2
+"
+    (let ((headers (mapcar #'car (markdown-imenu-create-flat-index))))
+      (should (member "Header1" headers))
+      (should (member "Header2" headers))
+      (should-not (member "comments = false" headers)))))
 
 (provide 'markdown-test)
 

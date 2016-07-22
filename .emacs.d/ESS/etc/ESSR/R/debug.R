@@ -1,4 +1,3 @@
-
 ### BREAKPOINTS
 .ESSBP. <- new.env()
 
@@ -18,10 +17,13 @@
     coll <- list()
     for(p in packages){
         ## package might not be attached
-        try({objNS <- .ess_find_funcs(asNamespace(p))
+        try(
+        {
+            objNS <- .ess_find_funcs(asNamespace(p))
             objPKG <- .ess_find_funcs(as.environment(paste0('package:', p)))
-            coll[[length(coll) + 1]] <-
-                paste0(p, ':::`', setdiff(objNS, objPKG), '`')
+            objNS <- setdiff(objNS, objPKG)
+            if(length(objPKG))
+                coll[[length(coll) + 1]] <- paste0(p, ':::', objNS)
         }, silent = TRUE)
     }
     while(!identical(empty, env)){
@@ -32,8 +34,24 @@
          invert = TRUE, value = TRUE)
 }
 
-.ess_dbg_getTracedAndDebugged <- function(packages = c())
+.ess_dbg_flag_for_debuging <- function(fname){
+    all <- utils::getAnywhere(fname)
+    if(length(all$obj) == 0){
+        msg <- sprintf("No functions names '%s' found", fname)
+    } else {
+        msg <- sprintf("Flagged '%s' for debugging", fname)
+        tryCatch(lapply(all$obj, debug),
+                 error = function(e){
+                     msg <- paste0("Error: ", e$message)
+                 })
+    }
+    cat(msg)
+    .ess_mpi_message(msg)
+}
+
+.ess_dbg_getTracedAndDebugged <- function()
 {
+    packages <- base::.packages()
     tr_state <- tracingState(FALSE)
     on.exit(tracingState(tr_state))
     generics <- methods::getGenerics()
@@ -185,6 +203,25 @@
     as.logical(match(paste0("package:", pack_name), search()))
 }
 
+## magrittr debug_pipe
+.ess_pipe_browser <- function(x){
+    if(is.list(x))
+        evalq({
+            browser(skipCalls = 2)
+            x
+        }, envir = x)
+    else if(is.environment(x))
+        ## enclos argumentn has no effect for unclear reason, need to hack
+        eval(bquote({
+            x <- .(environment())
+            browser(skipCalls = 2)
+            x
+        }), envir = x)
+    else {
+        browser(skipCalls = 0)
+        x
+    }
+}
 
 ## Local Variables:
 ## eval: (ess-set-style 'RRR t)

@@ -32,7 +32,6 @@
          :map isearch-mode-map
          ("C-h" . helm-occur-from-isearch)
          :map ctl-x-map
-         ("z" . helm-buffers-list)
          ("p" . helm-show-kill-ring)
          ("x" . helm-M-x)
          ("n" . helm-mini)

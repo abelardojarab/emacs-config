@@ -226,11 +226,19 @@
 (use-package origami
   :commands (origami-toggle-node origami-toggle-all-nodes origami-show-only-node origami-mode)
   :bind (:map ctl-x-map
-              ("-" . origami-toggle-all-nodes)
-              ("+" . origami-toggle-node))
+              ("*" . origami-toggle-all-nodes)
+              ("." . origami-toggle-node))
   :load-path (lambda () (expand-file-name "origami/" user-emacs-directory))
   :config (progn
             (global-origami-mode)))
+
+;; Vi-like fold
+(use-package vimish-fold
+  :bind (:map ctl-x-map
+              ("-" . vimish-fold)
+              ("+" . vimish-fold-unfold))
+  :load-path (lambda () (expand-file-name "vimish-fold/" user-emacs-directory))
+  :config (vimish-fold-global-mode t))
 
 (provide 'setup-folding)
 ;;; setup-hideshow.el ends here

@@ -26,16 +26,16 @@
 
 ;; Redo
 (use-package redo+
-  :config (progn
-            (global-set-key (kbd "C-S-z") 'redo) ;; Mac style
-            (global-set-key (kbd "C-y") 'redo) ;; Microsoft Windows style
-            (setq undo-no-redo t)))
+  :bind ("C-y" . redo))
 
 ;; Better undo
 (use-package undo-tree
+  :bind (("C-S-z" . undo-tree-redo)
+         ("C-z" . undo-tree-undo) ;; Windows style
+         :map ctl-x-map
+         ("z" . undo-tree-visualize))
   :config (progn
-            (global-set-key (kbd "C-z") 'undo-tree-undo)
-            (global-set-key (kbd "C-S-z") 'undo-tree-redo)
+            (setq undo-no-redo t)
             (setq undo-tree-visualizer-diff t)
             (setq undo-tree-visualizer-timestamps t)
             (setq undo-tree-auto-save t)

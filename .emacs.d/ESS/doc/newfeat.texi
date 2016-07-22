@@ -1,22 +1,46 @@
 @comment @itemize @w{}
 @comment @item
 
+Changes and New Features in 16.09:
+@itemize @bullet
+@item @ESS{[R]}: Fix broken (un)flagging for debugging inside packages
+@end itemize
 
 Changes and New Features in 16.04:
 @itemize @bullet
 
+@item @ESS{[R]}: @code{developer} functionality has been refactored.
+The new user interface consists of a single command
+@code{ess-r-set-evaluation-env} bound by default to @kbd{C-c C-t
+C-s}. Once an evaluation environment has been set with, all subsequent
+ESS evaluation will source the code into that environment. By default,
+for file within R packages the evaluation environment is set to the
+package environment. Set @code{ess-r-package-auto-set-evaluation-env} to
+@code{nil} to disable this.
+@item @ESS{[R]}: New @code{ess-r-package-mode}
+This development mode provides features to make package development
+easier. Currently, most of the commands are based on the @code{devtools}
+packages and are accessible with @kbd{C-c C-w} prefix. See the
+documentation of @code{ess-r-package-mode} function for all available
+commands. With @kbd{C-u} prefix each command asks for extra arguments to
+the underlying devtools function. This mode is automatically enabled in
+all files within R packages and is indicated with @code{[pkg:NAME]} in
+the mode-line.
 @item @ESS{[R]}: Help lookup has been improved.
 It is now possible to get help for namespaced objects such as
-pkg::foobar. Furthemore, ESS recognises more reliably when you change
+pkg::foobar. Furthermore, ESS recognizes more reliably when you change
 @code{options('html_type')}.
+@item @ESS{[R]}: New specialized breakpoints for debugging magrittr pipes
+@item @ESS{}: ESS now implements a simple message passing interface
+to communicate between ESS and inferior process.
+@end itemize
 
-@item @ESS{[R]}: ``developer mode'' has been entirely refactored.
-To enter it, you now need @kbd{C-c C-t C-s} (`s' as mnemonic for ``source()'').
-Also, programmeRs with many installed packages typically want to set the
-new @code{ess-r-prompt-for-attached-pkgs-only} variable to @code{t} in
-order that not all installed packages are searched but only those currently
-on R's search() path.
-
+Bug fixes in 16.04:
+@itemize @bullet
+@item @ESS{[R]}: Roxygen blocks with backtics are now correctly filled
+@item @ESS{[R]}: Don't skip breakpoints in magrittr's @code{debug_pipe}
+@item @ESS{[R]}: Error highlighting now understands `testthat` type errors
+@item @ESS{[Julia]}: Added getwd and setwd generic commands
 @end itemize
 
 
@@ -41,7 +65,7 @@ of continued statements have been replaced by
 @code{ess-offset-continuations}. It can be set to either @code{cascade}
 or @code{straight} (the default). @code{ess-arg-function-offset} has
 been replaced by @code{ess-indent-from-lhs} and has been generalised to
-assignements. This setting now works with both statement blocks and
+assignments. This setting now works with both statement blocks and
 expressions and only takes effect for offsets set to @code{prev-call}
 and @code{open-delim} in order to produce a consistent indentation.
 

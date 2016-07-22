@@ -32,34 +32,11 @@
 
 (require 'ess-utils)
 
-(defface ess-r-package-indicator-face
-  '((((class grayscale)) (:background "DimGray"))
-    (((class color) (background light))
-     (:foreground "red4"  :bold t ))
-    (((class color) (background dark))
-     (:foreground "deep sky blue"  :bold t )))
-  "Face to highlight mode line process name when developer mode is on."
-  :group 'ess-r-package)
-
 (defcustom ess-r-package-auto-set-evaluation-env t
   "If non-nil, evaluation env is set to package env automatically.
-See also `ess-r-set-evaluation-namespace' and `ess-r-evaluation-env'."
+See also `ess-r-set-evaluation-env' and `ess-r-evaluation-env'."
   :group 'ess-r-package
   :type 'boolean)
-
-(defcustom ess-r-package-load-command "library('%n')"
-  "Loading command for `ess-r-package-add-package'.
-Can be a string containing a R command with:
-
-  %n to be replaced by the package name,
-  %d to be replaced by the package directory.
-
-Alternatively, can be a quoted Emacs function name such as
-`ess-r-devtools-load-package'.
-
-See also `ess-r-package-load-package' for related functionality."
-  :group 'ess-r-package
-  :type 'alist)
 
 (defvar-local ess-r-package-info nil
   "Current package info cache.
@@ -88,18 +65,6 @@ to an R package. If the file specified in `ess-r-package-root-file'
 of the package, the current directory is considered to be part of
 a R package.")
 
-(defun ess-r-package-load-package ()
-  (let* ((pkg-info (ess-r-package-get-info))
-         (cmd (if (stringp ess-r-package-load-command)
-                  (replace-regexp-in-string "%n" (car pkg-info)
-                   (replace-regexp-in-string "%d" (cdr pkg-info)
-                    ess-r-package-load-command))
-                ess-r-package-load-command)))
-    (cond ((stringp cmd)
-           (ess-eval-linewise (concat cmd "\n")))
-          ((functionp cmd)
-           (funcall cmd)))))
-
 
 ;;;*;;; Package UI
 
@@ -115,11 +80,8 @@ whether the current file is part of a package, or the value of
       (with-ess-process-buffer t
         ess-r-package-info)))
 
-(defun ess-r-package-select-package ()
-  "Select a package for ESS developer functions.
-
-The package metadata will be written in the file-local variables
-section."
+(defun ess-r-package-set-package ()
+  "Set a package for ESS r-package commands."
   (interactive)
   (let* ((pkg-path (read-directory-name
                     "Path: " (or (ess-r-package--find-package-path)
@@ -152,27 +114,30 @@ section."
   (when ess-r-package-auto-set-evaluation-env
     (let ((pkg (car (ess-r-package-get-info))))
       (when pkg
-        (ess-r-set-evaluation-namespace pkg)))))
+        (ess-r-set-evaluation-env pkg)))))
 
 (add-hook 'R-mode-hook 'ess-r-package-set-namespaced-evaluation)
 
-(defun ess-r-package-send-process (command &optional msg alt)
+(defun ess-r-package-send-process (command &optional msg alt default-alt)
   (ess-force-buffer-current)
   (let* ((pkg-info (or (ess-r-package-get-info)
-                       (ess-r-package-select-package)))
+                       (ess-r-package-set-package)))
          (name (car pkg-info))
          (path (concat "'" (cdr pkg-info) "'"))
-         (alt (cond ((stringp alt) alt)
-                    (alt "")))
-         (args (when alt
-                 (read-string "Arguments: " alt)))
-         (args (unless (or (null args)
-                           (string= "" args))
-                 (concat ", " args))))
+         (args (ess-r-command--process-alt-args alt default-alt)))
     (message msg name)
     (with-ess-process-buffer nil
       (setq ess-r-package-info pkg-info))
     (ess-eval-linewise (format command (concat path args)))))
+
+(defun ess-r-command--process-alt-args (alt &optional default-alt)
+  (let ((args (cond ((stringp alt) alt)
+                    (alt (read-string "Arguments: " default-alt))
+                    (t ""))))
+    (if (or (null args)
+            (string= "" args))
+        args
+      (concat ", " args))))
 
 
 ;;;*;;; Package Detection
@@ -193,22 +158,25 @@ defaults to the value returned by
 Root is determined by locating `ess-r-package-root-file'."
   (let* ((path (if (buffer-file-name)
                    (file-name-directory (buffer-file-name))
-                 default-directory)))
-    (or
-     ;; First check current directory
-     (and (file-exists-p (expand-file-name ess-r-package-root-file path))
-          path)
-     ;; Check for known directories in current path
-     (let ((current-dir (file-name-nondirectory (directory-file-name path)))
-           known-pkg-dir known-path found-path)
-       (while (and path (not found-path))
-         (setq current-dir (file-name-nondirectory (directory-file-name path)))
-         (if (and (setq known-pkg-dir (assoc current-dir ess-r-package-dirs))
-                  (setq known-path (ess--parent-dir path (cdr known-pkg-dir)))
-                  (file-exists-p (expand-file-name ess-r-package-root-file known-path)))
-             (setq found-path known-path)
-           (setq path (ess--parent-dir path 1))))
-       found-path))))
+                 default-directory))
+         (pkg-path
+          (or
+           ;; First check current directory
+           (and (file-exists-p (expand-file-name ess-r-package-root-file path))
+                path)
+           ;; Check for known directories in current path
+           (let ((current-dir (file-name-nondirectory (directory-file-name path)))
+                 known-pkg-dir known-path presumptive-path)
+             (while (and path (not presumptive-path))
+               (setq current-dir (file-name-nondirectory (directory-file-name path)))
+               (if (and (setq known-pkg-dir (assoc current-dir ess-r-package-dirs))
+                        (setq known-path (ess--parent-dir path (cdr known-pkg-dir)))
+                        (file-exists-p (expand-file-name ess-r-package-root-file known-path)))
+                   (setq presumptive-path known-path)
+                 (setq path (ess--parent-dir path 1))))
+             presumptive-path))))
+    (when pkg-path
+      (directory-file-name pkg-path))))
 
 (defun ess--parent-dir (path n)
   "Return Nth parent of PATH."
@@ -228,8 +196,8 @@ Root is determined by locating `ess-r-package-root-file'."
       (with-temp-buffer
         (insert-file-contents file)
         (goto-char (point-min))
-        (re-search-forward "package: \\(.*\\)")
-        (match-string 1)))))
+        (when (re-search-forward "package: \\(.*\\)" nil t)
+          (match-string 1))))))
 
 
 ;;;*;;; Devtools Integration
@@ -239,7 +207,7 @@ Root is determined by locating `ess-r-package-root-file'."
   (interactive "P")
   (ess-r-package-send-process "devtools::load_all(%s)\n"
                               "Loading %s"
-                              (when alt "recompile = TRUE")))
+                              alt "recompile = TRUE"))
 
 (defun ess-r-devtools-unload-package ()
   "Interface to `devtools::unload()'."
@@ -251,12 +219,25 @@ Root is determined by locating `ess-r-package-root-file'."
   "Interface for `devtools::check()'."
   (interactive "P")
   (ess-r-package-send-process "devtools::check(%s)\n"
-                              "Testing %s"
-                              (when alt "vignettes = FALSE")))
+                              "Checking %s"
+                              alt "vignettes = FALSE"))
 
 (defun ess-r-devtools-test-package (&optional alt)
-  "Interface for `devtools::test()'."
+  "Interface for `devtools::test()'.
+When called with a non-string prefix argument (as with C-u),
+check that the file name starts with `test-' and ends with
+`.R'. If that is the case, use the string in-between as default
+filter argument. Otherwise, use the whole base filename."
   (interactive "P")
+  (let (file-name)
+    (when (and alt
+               (not (stringp alt))
+               buffer-file-name
+               (setq file-name (file-name-nondirectory buffer-file-name)))
+      (setq alt (if (string-match "test-\\([[:alnum:]]+\\)\\.[rR]" file-name)
+                    (match-string-no-properties 1 file-name)
+                  (file-name-base buffer-file-name)))
+      (setq alt (concat "\"" alt "\""))))
   (ess-r-package-send-process "devtools::test(%s)\n"
                               "Testing %s"
                               alt))
@@ -309,6 +290,17 @@ checking results."
   (ess-r-package-send-process "devtools::install(%s)\n"
                               "Installing %s"
                               alt))
+
+(defun ess-r-devtools-install-github (&optional alt repo)
+  "Interface to `devtools::install_github()'.
+Asks for github repository in the form of user/repo, unless REPO
+is supplied. Prompts for additional arguments when called with a
+prefix."
+  (interactive "P")
+  (let ((command "devtools::install_github(%s%s)")
+        (repo (concat "'" (or repo (read-string "User/Repo: ")) "'"))
+        (args (ess-r-command--process-alt-args alt "ref = ")))
+    (ess-eval-linewise (format command repo args))))
 
 
 ;;;*;;; Minor Mode
@@ -370,18 +362,17 @@ disable the mode line entirely."
 
 ;;;*;;; Deprecated variables and functions
 (defun ess-developer (&optional val)
-  (error "As of ESS 16.03, `ess-developer' is deprecated. Use `ess-r-set-evaluation-namespace' instead."))
+  (error "As of ESS 16.04, `ess-developer' is deprecated. Use `ess-r-set-evaluation-env' instead."))
 
 (defalias 'ess-toggle-developer 'ess-developer)
 
-(make-obsolete-variable 'ess-developer "Please use `ess-developer-select-package' and `ess-r-set-evaluation-namespace' instead." "16.03")
-(make-obsolete-variable 'ess-developer-load-command "Please use `ess-r-package-load-command' instead." "16.03")
-(make-obsolete-variable 'ess-developer-root-file "Please use `ess-r-package-root-file' instead." "16.03")
-(make-obsolete-variable 'ess-developer-packages "Please use `ess-developer-select-package' and `ess-r-set-evaluation-namespace' instead." "16.03")
-(make-obsolete-variable 'ess-developer-load-on-add-commands "Please use `ess-developer-select-package' and `ess-r-set-evaluation-namespace' instead." "16.03")
-(make-obsolete-variable 'ess-developer-activate-in-package "Please use `ess-r-package-auto-activate' instead." "16.03")
-(make-obsolete-variable 'ess-developer-enter-hook "Please use `ess-r-package-enter-hook' instead." "16.03")
-(make-obsolete-variable 'ess-developer-exit-hook "Please use `ess-r-package-exit-hook' instead." "16.03")
+(make-obsolete-variable 'ess-developer "Please use `ess-developer-select-package' and `ess-r-set-evaluation-env' instead." "16.04")
+(make-obsolete-variable 'ess-developer-root-file "Please use `ess-r-package-root-file' instead." "16.04")
+(make-obsolete-variable 'ess-developer-packages "Please use `ess-r-package-set-package' and `ess-r-set-evaluation-env' instead." "16.04")
+(make-obsolete-variable 'ess-developer-load-on-add-commands "Please use `ess-r-package-set-package' and `ess-r-set-evaluation-env' instead." "16.04")
+(make-obsolete-variable 'ess-developer-activate-in-package "Please use `ess-r-package-auto-activate' instead." "16.04")
+(make-obsolete-variable 'ess-developer-enter-hook "Please use `ess-r-package-enter-hook' instead." "16.04")
+(make-obsolete-variable 'ess-developer-exit-hook "Please use `ess-r-package-exit-hook' instead." "16.04")
 
 
 (provide 'ess-r-package)

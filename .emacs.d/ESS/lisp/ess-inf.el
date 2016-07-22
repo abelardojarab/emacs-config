@@ -1280,31 +1280,7 @@ Hide all the junk output in temporary buffer."
 
 ;;*;; Evaluation primitives
 
-(defun ess-send-string--fallback (process string &optional visibly message)
-  (cond
-   ;; Wait after each line
-   ((eq visibly t)
-    (let ((ess--inhibit-presend-hooks t))
-      (ess-eval-linewise string)))
-   ;; Insert command and eval invisibly
-   ((or (stringp visibly)
-        (eq visibly 'nowait))
-    (with-current-buffer (process-buffer process)
-      (save-excursion
-        (goto-char (process-mark process))
-        (insert-before-markers
-         (propertize (format "%s\n"
-                             (replace-regexp-in-string
-                              "\n[ \t]" "\n+ "
-                              (if (stringp visibly) visibly string)))
-                     'font-lock-face 'comint-highlight-input)))
-      (process-send-string process (ess--concat-new-line-maybe string))))
-   (t
-    (process-send-string process (ess--concat-new-line-maybe string))))
-  (when message
-    (message message)))
-
-(ess-defgeneric ess-send-string (process string &optional visibly message)
+(ess-defgeneric ess-send-string (process string &optional visibly message type)
   "ESS wrapper for `process-send-string'.
 Run `comint-input-filter-functions' and current buffer's and
 PROCESS' `ess-presend-filter-functions' hooks on the input
@@ -1312,7 +1288,8 @@ STRING. VISIBLY can be nil, t, 'nowait or a string.  If string
 the behavior is as with 'nowait with the differences that
 inserted string is VISIBLY instead of STRING (evaluated command
 is still STRING).  In all other cases the behavior is as
-described in `ess-eval-visibly'. STRING need not end with \\n."
+described in `ess-eval-visibly'. STRING need not end with
+\\n. TYPE is a symbol indicating type of the string."
   ;; No support of `visibly' when there's no secondary prompt
   (let ((visibly (if (and (eq visibly t)
                           (null inferior-ess-secondary-prompt))
@@ -1322,19 +1299,41 @@ described in `ess-eval-visibly'. STRING need not end with \\n."
     (inferior-ess--interrupt-subjob-maybe process)
     (inferior-ess-mark-as-busy process)
     (:override
-     (ess-send-string--fallback process string visibly message))))
+     (cond
+      ;; Wait after each line
+      ((eq visibly t)
+       (let ((ess--inhibit-presend-hooks t))
+         (ess-eval-linewise string)))
+      ;; Insert command and eval invisibly
+      ((or (stringp visibly)
+           (eq visibly 'nowait))
+       (with-current-buffer (process-buffer process)
+         (save-excursion
+           (goto-char (process-mark process))
+           (insert-before-markers
+            (propertize (format "%s\n"
+                                (replace-regexp-in-string
+                                 "\n[ \t]" "\n+ "
+                                 (if (stringp visibly) visibly string)))
+                        'font-lock-face 'comint-highlight-input)))
+         (process-send-string process (ess--concat-new-line-maybe string))))
+      (t
+       (process-send-string process (ess--concat-new-line-maybe string))))
+     (when message
+       (message message)))))
 
-(ess-defgeneric ess-send-region (process start end &optional visibly message)
+(ess-defgeneric ess-send-region (process start end &optional visibly message type)
   "Low level ESS version of `process-send-region'.
 If VISIBLY call `ess-eval-linewise', else call
 `ess-send-string'. If MESSAGE is supplied, display it at the
 end. Run current buffer's and PROCESS'
-`ess-presend-filter-functions' hooks."
+`ess-presend-filter-functions' hooks. TYPE is a symbol indicating
+type of the region."
   (cond
    ((ess-tracebug-p)
-    (ess-tracebug-send-region proc start end visibly message inject))
+    (ess-tracebug-send-region proc start end visibly message type))
    (t (:override
-       (ess-send-string process (buffer-substring start end) visibly message)))))
+       (ess-send-string process (buffer-substring start end) visibly message type)))))
 
 ;;*;; Evaluation commands
 
@@ -1458,6 +1457,7 @@ wrapping the code into:
                  (if no-prompt-check
                      (sleep-for 0.02)   ; 0.1 is noticeable!
                    (ess-wait-for-process proc nil wait force-redisplay)
+                   (ess-mpi-handle-messages (current-buffer))
                    ;; Remove prompt
                    ;; If output is cat(..)ed this deletes the output
                    (goto-char (point-max))
@@ -1653,14 +1653,12 @@ they might throw off the debugger."
     (skip-chars-backward "\n\t ")
     (setq end (point))))
 
-(defun ess-eval-region (start end toggle &optional message inject)
+(defun ess-eval-region (start end toggle &optional message type)
   "Send the current region to the inferior ESS process.
 With prefix argument toggle the meaning of `ess-eval-visibly';
 this does not apply when using the S-plus GUI, see
-`ess-dde-send-region'.
-
-If INJECT is non-nil the region will be pre-processed in a
-dialect specific way to include source references"
+`ess-dde-send-region'. TYPE is a symbol indicating what type of
+region this is."
   (interactive "r\nP")
 
   (ess-force-buffer-current "Process to use: ")
@@ -1677,7 +1675,7 @@ dialect specific way to include source references"
         (message (or message "Eval region"))
         (proc (ess-get-process)))
     (save-excursion
-      (ess-send-region proc start end visibly message)))
+      (ess-send-region proc start end visibly message type)))
 
   (when ess-eval-deactivate-mark
     (ess-deactivate-mark))
@@ -2172,10 +2170,10 @@ to continue it."
           ess--local-mode-line-process-indicator
           "]: %s"))
   (use-local-map inferior-ess-mode-map)
-  (if ess-mode-syntax-table
-      (set-syntax-table ess-mode-syntax-table)
-    ;; FIXME: need to do something if not set!  Get from the proper place!
-    )
+  (let ((inf-syntax-table (or inferior-ess-mode-syntax-table
+                              ess-mode-syntax-table)))
+    (when inf-syntax-table
+      (set-syntax-table inf-syntax-table)))
 
   (ess-write-to-dribble-buffer
    (format "(i-ess 1): buf=%s, lang=%s, comint..echo=%s, comint..sender=%s,\n"
@@ -2236,8 +2234,8 @@ to continue it."
   (setq comint-input-autoexpand t) ; Only for completion, not on input.
 
   ;; timers
-  (add-hook 'ess-idle-timer-functions 'ess-cache-search-list nil 'local)
-  (add-hook 'ess-idle-timer-functions 'ess-synchronize-dirs nil 'local)
+  ;; (add-hook 'ess-idle-timer-functions 'ess-cache-search-list nil 'local)
+  ;; (add-hook 'ess-idle-timer-functions 'ess-synchronize-dirs nil 'local)
 
   ;;; Keep <tabs> out of the code.
   (set (make-local-variable 'indent-tabs-mode) nil)
@@ -2969,13 +2967,14 @@ P-STRING is the prompt string."
       ;; The following line circumvents an 18.57 bug in following-char
       (if (eobp) (backward-char 1))   ; Hopefully buffer is not empty!
       ;; Get onto a symbol
-      (catch 'nosym ; bail out if there's no symbol at all before point
-        (while (/= (char-syntax (following-char)) ?w)
-          (if (bobp) (throw 'nosym nil) (backward-char 1)))
-        (let*
-            ((end (progn (forward-sexp 1) (point)))
-             (beg (progn (backward-sexp 1) (point))))
-          (buffer-substring-no-properties beg end))))))
+      (catch 'nosym          ; bail out if there's no symbol at all before point
+        (while (let ((sc (char-syntax (following-char))))
+                 (not (or (= sc ?w) (= sc ?_))))
+          (if (bobp) (throw 'nosym nil) (backward-char 1))))
+      (let*
+          ((end (progn (forward-sexp 1) (point)))
+           (beg (progn (backward-sexp 1) (point))))
+        (buffer-substring-no-properties beg end)))))
 
 (defun ess-read-object-name-dump ()
   "Return the object name at point, or \"Temporary\" if none."
@@ -3059,7 +3058,7 @@ subprocess and Emacs buffer `default-directory'."
 
 (defun ess-synchronize-dirs ()
   "Set Emacs' current directory to be the same as the subprocess directory.
-Used in `ess-idle-timer-functions'."
+To be used in `ess-idle-timer-functions'."
   (when (and ess-can-eval-in-background
              ess-getwd-command)
     (ess-when-new-input last-sync-dirs
@@ -3089,7 +3088,7 @@ changed."
   (ess-process-put 'sp-for-ac-changed? t))
 
 (defun ess-cache-search-list ()
-  "Used in `ess-idle-timer-functions', to set
+  "To be used in `ess-idle-timer-functions', to set
 search path related variables."
   (when (and ess-can-eval-in-background
              inferior-ess-search-list-command)

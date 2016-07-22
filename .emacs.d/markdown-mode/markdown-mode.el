@@ -114,7 +114,7 @@
 ;;     (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
 ;;     (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
 ;;
-;;     (autoload 'gfm-mode "gfm-mode"
+;;     (autoload 'gfm-mode "markdown-mode"
 ;;        "Major mode for editing GitHub Flavored Markdown files" t)
 ;;     (add-to-list 'auto-mode-alist '("README\\.md\\'" . gfm-mode))
 
@@ -942,11 +942,13 @@
 (require 'outline)
 (require 'thingatpt)
 (require 'cl-lib)
+(require 'url-parse)
 
 (defvar jit-lock-start)
 (defvar jit-lock-end)
 
 (declare-function eww-open-file "eww")
+(declare-function url-path-and-query "url-parse")
 
 
 ;;; Constants =================================================================
@@ -1275,7 +1277,7 @@ Group 2 matches only the label, without the surrounding markup.
 Group 3 matches the closing square bracket.")
 
 (defconst markdown-regex-header
-  "^\\(?:\\(.+?\\)\n\\(?:\\(=+\\)\\|\\(-+\\)\\)\\|\\(#+\\)[ \t]+\\(.*?\\)[ \t]*\\(#*\\)\\)$"
+  "^\\(?:\\([^\r\n- ].*\\)\n\\(?:\\(=+\\)\\|\\(-+\\)\\)\\|\\(#+\\)[ \t]+\\(.*?\\)[ \t]*\\(#*\\)\\)$"
   "Regexp identifying Markdown headings.
 Group 1 matches the text of a setext heading.
 Group 2 matches the underline of a level-1 setext heading.
@@ -1284,40 +1286,8 @@ Group 4 matches the opening hash marks of an atx heading.
 Group 5 matches the text, without surrounding whitespace, of an atx heading.
 Group 6 matches the closing hash marks of an atx heading.")
 
-(defconst markdown-regex-header-1-atx
-  "^\\(#\\)[ \t]+\\(.*?\\)[ \t]*\\(#*\\)$"
-  "Regular expression for level 1 atx-style (hash mark) headers.")
-
-(defconst markdown-regex-header-2-atx
-  "^\\(##\\)[ \t]+\\(.*?\\)[ \t]*\\(#*\\)$"
-  "Regular expression for level 2 atx-style (hash mark) headers.")
-
-(defconst markdown-regex-header-3-atx
-  "^\\(###\\)[ \t]+\\(.*?\\)[ \t]*\\(#*\\)$"
-  "Regular expression for level 3 atx-style (hash mark) headers.")
-
-(defconst markdown-regex-header-4-atx
-  "^\\(####\\)[ \t]+\\(.*?\\)[ \t]*\\(#*\\)$"
-  "Regular expression for level 4 atx-style (hash mark) headers.")
-
-(defconst markdown-regex-header-5-atx
-  "^\\(#####\\)[ \t]+\\(.*?\\)[ \t]*\\(#*\\)$"
-  "Regular expression for level 5 atx-style (hash mark) headers.")
-
-(defconst markdown-regex-header-6-atx
-  "^\\(######\\)[ \t]+\\(.*?\\)[ \t]*\\(#*\\)$"
-  "Regular expression for level 6 atx-style (hash mark) headers.")
-
-(defconst markdown-regex-header-1-setext
-  "^\\(.*\\)\n\\(=+\\)$"
-  "Regular expression for level 1 setext-style (underline) headers.")
-
-(defconst markdown-regex-header-2-setext
-  "^\\(.*\\)\n\\(-+\\)$"
-  "Regular expression for level 2 setext-style (underline) headers.")
-
 (defconst markdown-regex-header-setext
-  "^\\(.+\\)\n\\(\\(?:=\\|-\\)+\\)$"
+  "^\\([^\r\n- ].*\\)\n\\(=+\\|-+\\)$"
   "Regular expression for generic setext-style (underline) headers.")
 
 (defconst markdown-regex-header-atx
@@ -1550,7 +1520,7 @@ Function is called repeatedly until it returns nil. For details, see
              (code-match (markdown-code-block-at-pos end))
              (new-end (or (and code-match (cl-second code-match)) new-end)))
         (unless (and (eq new-start start) (eq new-end end))
-          (cons new-start new-end))))))
+          (cons new-start (min new-end (point-max))))))))
 
 (defun markdown-font-lock-extend-region-function (start end _)
   "Used in `jit-lock-after-change-extend-region-functions'.
@@ -4847,14 +4817,16 @@ See `imenu-create-index-function' and `imenu--index-alist' for details."
     (save-excursion
       (goto-char (point-min))
       (while (re-search-forward markdown-regex-header (point-max) t)
-        (cond
-         ((setq heading (match-string-no-properties 1))
-          (setq pos (match-beginning 1)))
-         ((setq heading (match-string-no-properties 5))
-          (setq pos (match-beginning 4))))
-        (or (> (length heading) 0)
-            (setq heading empty-heading))
-        (setq index (append index (list (cons heading pos)))))
+        (when (and (not (markdown-code-block-at-point))
+                   (not (markdown-text-property-at-point 'markdown-yaml-metadata-begin)))
+          (cond
+           ((setq heading (match-string-no-properties 1))
+            (setq pos (match-beginning 1)))
+           ((setq heading (match-string-no-properties 5))
+            (setq pos (match-beginning 4))))
+          (or (> (length heading) 0)
+              (setq heading empty-heading))
+          (setq index (append index (list (cons heading pos))))))
       index)))
 
 
@@ -5563,9 +5535,21 @@ Derived from `org-end-of-subtree'."
 (defun markdown-outline-fix-visibility ()
   "Hide any false positive headings that should not be shown.
 For example, headings inside preformatted code blocks may match
-`outline-regexp' but should not be shown as headings when cycling."
+`outline-regexp' but should not be shown as headings when cycling.
+Also, the ending --- line in metadata blocks appears to be a
+setext header, but should not be folded."
   (save-excursion
     (goto-char (point-min))
+    ;; Unhide any false positives in metadata blocks
+    (when (markdown-text-property-at-point 'markdown-yaml-metadata-begin)
+      (let* ((body (progn (forward-line)
+                          (markdown-text-property-at-point
+                           'markdown-yaml-metadata-section)))
+             (end (progn (goto-char (cl-second body))
+                         (markdown-text-property-at-point
+                          'markdown-yaml-metadata-end))))
+        (outline-flag-region (point-min) (1+ (cl-second end)) nil)))
+    ;; Hide any false positives in code blocks
     (unless (outline-on-heading-p)
       (outline-next-visible-heading 1))
     (while (< (point) (point-max))
@@ -6179,9 +6163,25 @@ not at a link or the link reference is not defined returns nil."
    (t nil)))
 
 (defun markdown-follow-link-at-point ()
-  "Open the current non-wiki link in a browser."
+  "Open the current non-wiki link.
+If the link is a complete URL, open in browser with `browse-url'.
+Otherwise, open with `find-file' after stripping anchor and/or query string."
   (interactive)
-  (if (markdown-link-p) (browse-url (markdown-link-link))
+  (if (markdown-link-p)
+      (let* ((link (markdown-link-link))
+             (struct (url-generic-parse-url link))
+             (full (url-fullness struct))
+             (file link))
+        ;; Parse URL, determine fullness, strip query string
+        (if (fboundp 'url-path-and-query)
+            (setq file (car (url-path-and-query struct)))
+          (when (and (setq file (url-filename struct))
+                     (string-match "\\?" file))
+            (setq file (substring file 0 (match-beginning 0)))))
+        ;; Open full URLs in browser, files in Emacs
+        (if full
+            (browse-url link)
+          (when (and file (> (length file) 0)) (find-file file))))
     (error "Point is not at a Markdown link or URI")))
 
 
@@ -6276,8 +6276,12 @@ See `markdown-wiki-link-p' and `markdown-follow-wiki-link'."
 (defun markdown-unfontify-region-wiki-links (from to)
   "Remove wiki link faces from the region specified by FROM and TO."
   (interactive "*r")
-  (remove-text-properties from to '(font-lock-face markdown-link-face))
-  (remove-text-properties from to '(font-lock-face markdown-missing-link-face)))
+  (let ((modified (buffer-modified-p)))
+    (remove-text-properties from to '(font-lock-face markdown-link-face))
+    (remove-text-properties from to '(font-lock-face markdown-missing-link-face))
+    ;; remove-text-properties marks the buffer modified in emacs 24.3,
+    ;; undo that if it wasn't originally marked modified
+    (set-buffer-modified-p modified)))
 
 (defun markdown-fontify-region-wiki-links (from to)
   "Search region given by FROM and TO for wiki links and fontify them.

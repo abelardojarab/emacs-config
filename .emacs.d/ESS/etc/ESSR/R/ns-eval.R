@@ -12,18 +12,18 @@
                          file = tempfile("ESSDev"), verbose = FALSE,
                          fallback_env = parent.frame()) {
     cat(string, file = file)
-    on.exit(file.remove(file))
+    on.exit(.ess.file.remove(file))
     .ess.ns_source(file, visibly, output, package = package,
-                   verbose = verbose, fakeSource = TRUE,
+                   verbose = verbose, fake.source = TRUE,
                    fallback_env = fallback_env)
 }
 
-## sourcing SOURCE file into an environment. After having a look at each new
-## object in the environment, decide what to do with it. Handles plain objects,
-## functions, existing S3 methods, S4 classes and methods. .
-.ess.ns_source <- function(source, visibly, output, expr,
+## sourcing FILE into an environment. After having a look at each new object in
+## the environment, decide what to do with it. Handles plain objects, functions,
+## existing S3 methods, S4 classes and methods. .
+.ess.ns_source <- function(file, visibly, output, expr,
                            package = "", verbose = FALSE,
-                           fakeSource = FALSE,
+                           fake.source = FALSE,
                            fallback_env = parent.frame())
 {
     oldopts <- options(warn = 1)
@@ -48,8 +48,8 @@
     packages <- lapply(pkgEnvNames, function(envName) substring(envName, 9))
     importsEnvs <- lapply(packages, function(pkgName) parent.env(asNamespace(pkgName)))
 
-    ## Evaluate the SOURCE into new ENV
-    env <- .ess.ns_evalSource(source, visibly, output, substitute(expr), package)
+    ## Evaluate the FILE into new ENV
+    env <- .ess.ns_evalSource(file, visibly, output, substitute(expr), package, fake.source)
     envPackage <- getPackageName(env, FALSE)
     if (nzchar(envPackage) && envPackage != package)
         warning(gettextf("Supplied package, %s, differs from package inferred from source, %s",
@@ -230,24 +230,21 @@
     if(length(newMethods))
         newObjects <- c(newObjects, gettextf("METH[%s]", paste(newMethods, collapse = ", ")))
 
-    if (!fakeSource) {
-        cat(sprintf("[%s] Sourced file %s\n", package, source))
-    }
-
     if (verbose) {
-        if(length(objectsPkg))
-            cat(sprintf("\nPKG: %s   ", paste(objectsPkg, collapse = ", ")))
-        if(length(objectsNs))
-            cat(sprintf("NS: %s   ", paste(objectsNs, collapse = ", ")))
-        if(length(dependentPkgs))
-            .ess.ns_format_deps(dependentPkgs)
-        if(length(newObjects)) {
-            env_name <- if (identical(fallback_env, .GlobalEnv)) "GlobalEnv" else "Local"
-            cat(sprintf("%s: %s\n", env_name, paste(newObjects, collapse = ", ")))
-        }
-        if(length(c(objectsNs, objectsPkg, newObjects)) == 0)
-            cat(sprintf("*** Nothing explicitly assigned ***"))
-        cat("\n")
+        msgs <- unlist(list(
+            if(length(objectsPkg))
+                sprintf("PKG: %s", paste(objectsPkg, collapse = ", ")),
+            if(length(objectsNs))
+                sprintf("NS: %s", paste(objectsNs, collapse = ", ")),
+            if(length(dependentPkgs))
+                .ess.ns_format_deps(dependentPkgs),
+            if(length(newObjects)) {
+                env_name <- if (identical(fallback_env, .GlobalEnv)) "GlobalEnv" else "Local"
+                sprintf("%s: %s", env_name, paste(newObjects, collapse = ", "))
+            }))
+        if(length(msgs))
+            .ess_mpi_message(paste(msgs, collapse = "  "))
+
     }
 
     invisible(env)
@@ -271,7 +268,9 @@
     inserted
 }
 
-.ess.ns_evalSource <- function (source, visibly, output, expr, package = "")
+## our version of R's evalSource
+.ess.ns_evalSource <- function (file, visibly, output, expr,
+                                package = "", fake.source = FALSE)
 {
     envns <- tryCatch(asNamespace(package), error = function(cond) NULL)
     if(is.null(envns))
@@ -280,16 +279,18 @@
     env <- new.env(parent = envns)
     env[[".packageName"]] <- package
     methods:::setCacheOnAssign(env, TRUE)
-    if (missing(source))
+    if (missing(file))
         eval(expr, envir = env)
-    else  if (is(source, "character"))
-        for (text in source) {
-            base::source(text, local = env, echo = visibly,
-                         print.eval = output, keep.source = TRUE,
-                         max.deparse.length = 300)
+    else  if (is(file, "character"))
+        for (f in file) {
+            .ess.source(f, local = env, visibly = visibly,
+                        output = output, keep.source = TRUE,
+                        max.deparse.length = 300,
+                        fake.source = fake.source,
+                        message.prefix = sprintf("[%s] ", package))
         }
-    else stop(gettextf("Invalid source argument:  got an object of class \"%s\"",
-                       class(source)[[1]]), domain = NA)
+    else stop(gettextf("Invalid file argument:  got an object of class \"%s\"",
+                       class(file)[[1]]), domain = NA)
     env
 }
 
@@ -353,7 +354,7 @@
     lapply(pkgs, function(pkg) {
         isDep <- vapply(dependentPkgs, function(deps) pkg %in% deps, logical(1))
         pkgDependentObjs <- names(dependentPkgs[isDep])
-        cat(sprintf("DEP:%s [%s]   ", pkg, paste(pkgDependentObjs, collapse = ", ")))
+        sprintf("DEP:%s [%s]   ", pkg, paste(pkgDependentObjs, collapse = ", "))
     })
 }
 
