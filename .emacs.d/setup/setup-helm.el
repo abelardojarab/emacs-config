@@ -38,7 +38,7 @@
          ("h" . helm-apropos)
          ("u" . helm-resume)
          ("l" . helm-buffers-list)
-         ("f" . helm-find-files)
+         ("f" . helm-for-files)
          ("r" . helm-recentf)
          ("<tab>" . helm-find-files))
   :config (progn
@@ -53,7 +53,8 @@
                   helm-yas-display-key-on-candidate t
                   helm-quick-update t
                   helm-M-x-requires-pattern nil
-                  helm-ff-skip-boring-files t
+                  helm-candidate-number-limit 100 ;; limit max number of matches displayed for speed
+                  helm-ff-skip-boring-files t ;; ignore boring files like .o and .a
                   helm-move-to-line-cycle-in-source t ;; move to end or beginning of source when reaching top or bottom of source.
                   helm-ff-search-library-in-sexp t ;; search for library in `require' and `declare-function' sexp.
                   helm-scroll-amount 8 ;; scroll 8 lines other window using M-<next>/M-<prior>
@@ -67,6 +68,11 @@
             ;; use curl when available
             (when (executable-find "curl")
               (setq helm-google-suggest-use-curl-p t))
+
+            ;; replace locate with spotlight on Mac
+            (when (and (executable-find "mdfind")
+                       (equal system-type 'darwin))
+                (setq helm-locate-command "mdfind -name %s %s"))
 
             (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ;; rebind tab to run persistent action
             (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ;; make TAB works in terminal
