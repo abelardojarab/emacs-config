@@ -38,7 +38,7 @@
 
 ;;; Code:
 
-;;; Options
+;;; Options.
 
 (defgroup leuven nil
   "Leuven theme options.
@@ -50,7 +50,7 @@ The theme has to be reloaded after changing anything in this group."
   :type 'boolean
   :group 'leuven)
 
-;;; Theme Faces
+;;; Theme Faces.
 
 (deftheme leuven
   "Face colors with a light background.
@@ -66,17 +66,21 @@ more...")
       (code-block '(:foreground "#000088" :background "#FFFFE0"))
       (code-inline '(:foreground "#006400" :background "#FDFFF7"))
       (column '(:height 1.0 :weight normal :slant normal :underline nil :strike-through nil :foreground "#E6AD4F" :background "#FFF2DE"))
-      (diff-added '(:foreground "#008000" :background "#DDFFDD"))
+      (diff-added '(:background "#DDFFDD"))
       (diff-changed '(:foreground "#0000FF" :background "#DDDDFF"))
       (diff-header '(:foreground "#800000" :background "#FFFFAF"))
       (diff-hunk-header '(:foreground "#990099" :background "#FFEEFF"))
       (diff-none '(:foreground "gray33"))
-      (diff-removed '(:foreground "#A60000" :background "#FFDDDD"))
+      (diff-refine-added '(:background "#97F295"))
+      (diff-refine-removed '(:background "#FFB6BA"))
+      (diff-removed '(:background "#FEE8E9"))
       (directory '(:weight bold :foreground "blue" :background "#FFFFD2"))
+      (file '(:foreground "black"))
       ;; (highlight-line '(:background "#E4E4E3"))
       ;; (highlight-line '(:underline "#FFFF19" :background "#F6FECD"))
       (highlight-line '(:background "#FBFFAD"))
       (link '(:weight normal :underline t :foreground "#006DAF"))
+      (link-no-underline '(:weight normal :foreground "#006DAF"))
       (mail-header-name '(:family "Sans Serif" :weight normal :foreground "#A3A3A2"))
       (mail-header-other '(:family "Sans Serif" :slant normal :foreground "#666666"))
       (mail-read '(:foreground "#A9A9A9"))
@@ -108,7 +112,7 @@ more...")
       (vc-branch '(:box (:line-width 1 :color "#00CC33") :foreground "black" :background "#AAFFAA"))
       (xml-attribute '(:foreground "#F36335"))
       (xml-tag '(:foreground "#33658A" :background "#CEE0ED"))
-      (highlight-current-tag '(:background "#EEF3F6")) ; #FFEB26
+      (highlight-current-tag '(:background "#E8E8FF")) ; #EEF3F6 or #FFEB26
   )
 
   (custom-theme-set-faces
@@ -260,25 +264,27 @@ more...")
    `(diff-header ((,class ,diff-header)))
    `(diff-hunk-header ((,class ,diff-hunk-header)))
    `(diff-index ((,class ,diff-header)))
-   `(diff-indicator-added ((,class (:background "#AAFFAA"))))
+   `(diff-indicator-added ((,class (:foreground "#3A993A" :background "#DBFFDB"))))
    `(diff-indicator-changed ((,class (:background "#8080FF"))))
-   `(diff-indicator-removed ((,class (:background "#FFBBBB"))))
+   `(diff-indicator-removed ((,class (:foreground "#CC3333" :background "#FFDDDD"))))
+   `(diff-refine-added ((,class ,diff-refine-added)))
    `(diff-refine-change ((,class (:background "#DDDDFF"))))
+   `(diff-refine-removed ((,class ,diff-refine-removed)))
    `(diff-removed ((,class ,diff-removed)))
 
    ;; SMerge.
    `(smerge-refined-change ((,class (:background "#AAAAFF"))))
 
    ;; Ediff.
-   `(ediff-current-diff-A ((,class (:foreground "gray33" :background "#FFDDDD"))))
-   `(ediff-current-diff-B ((,class (:foreground "gray33" :background "#DDFFDD"))))
-   `(ediff-current-diff-C ((,class (:foreground "black" :background "cyan"))))
-   `(ediff-even-diff-A ((,class (:foreground "black" :background "light grey"))))
-   `(ediff-even-diff-B ((,class (:foreground "black" :background "light grey"))))
-   `(ediff-fine-diff-A ((,class (:foreground "#A60000" :background "#FFAAAA"))))
-   `(ediff-fine-diff-B ((,class (:foreground "#008000" :background "#55FF55"))))
-   `(ediff-odd-diff-A ((,class (:foreground "black" :background "light grey"))))
-   `(ediff-odd-diff-B ((,class (:foreground "black" :background "light grey"))))
+   `(ediff-current-diff-A ((,class (:background "#FFDDDD"))))
+   `(ediff-current-diff-B ((,class (:background "#DDFFDD"))))
+   `(ediff-current-diff-C ((,class (:background "cyan"))))
+   `(ediff-even-diff-A ((,class (:background "light grey"))))
+   `(ediff-even-diff-B ((,class (:background "light grey"))))
+   `(ediff-fine-diff-A ((,class (:background "#FFAAAA"))))
+   `(ediff-fine-diff-B ((,class (:background "#55FF55"))))
+   `(ediff-odd-diff-A ((,class (:background "light grey"))))
+   `(ediff-odd-diff-B ((,class (:background "light grey"))))
 
    ;; Flyspell.
    (if (version< emacs-version "24.4")
@@ -295,7 +301,7 @@ more...")
    ;; `(semantic-decoration-on-unknown-includes ((,class (:background ,choc-3))))
    ;; `(semantic-decoration-on-unparsed-includes ((,class (:underline ,orange-3))))
    `(semantic-highlight-func-current-tag-face ((,class ,highlight-current-tag)))
-   `(semantic-tag-boundary-face ((,class (:overline "#F0F0F0"))))
+   `(semantic-tag-boundary-face ((,class (:overline "#BF8DFF"))))
    ;; `(semantic-unmatched-syntax-face ((,class (:underline ,red-1))))
 
    `(Info-title-1-face ((,class ,ol1)))
@@ -348,7 +354,7 @@ more...")
    `(cfw:face-toolbar-button-on ((,class (:foreground "#5E5E5E" :background "#F6F6F6"))))
    `(change-log-date ((,class (:foreground "purple"))))
    `(change-log-file ((,class (:weight bold :foreground "#4183C4"))))
-   `(change-log-list ((,class (:foreground "cyan3"))))
+   `(change-log-list ((,class (:box (:line-width 1) :foreground "cyan3"))))
    `(change-log-name ((,class (:foreground "#008000"))))
    `(circe-highlight-all-nicks-face ((,class (:foreground "blue" :background "#F0F0F0")))) ; other nick names
    `(circe-highlight-nick-face ((,class (:foreground "#009300" :background "#F0F0F0")))) ; messages with my nick cited
@@ -453,7 +459,7 @@ more...")
    `(diredp-dir-priv ((,class ,directory)))
    `(diredp-exec-priv ((,class (:background "#03C03C"))))
    `(diredp-executable-tag ((,class (:foreground "ForestGreen" :background "white"))))
-   `(diredp-file-name ((,class (:foreground "black"))))
+   `(diredp-file-name ((,class ,file)))
    `(diredp-file-suffix ((,class (:foreground "#C0C0C0"))))
    `(diredp-flag-mark-line ((,class ,marked-line)))
    `(diredp-ignored-file-name ((,class ,shadow)))
@@ -490,6 +496,7 @@ more...")
    `(google-translate-suggestion-face ((t (:slant italic :underline t))))
    `(google-translate-listen-button-face ((t (:height 0.8))))
    `(helm-action ((,class (:foreground "black"))))
+   `(helm-bookmark-file ((,class ,file)))
    `(helm-bookmarks-su-face ((,class (:foreground "red"))))
    `(helm-buffer-directory ((,class ,directory)))
    `(helm-buffer-process ((,class (:foreground "#008200"))))
@@ -497,6 +504,7 @@ more...")
    `(helm-dir-heading ((,class (:foreground "blue" :background "pink"))))
    `(helm-dir-priv ((,class (:foreground "dark red" :background "light grey"))))
    `(helm-ff-directory ((,class ,directory)))
+   `(helm-ff-dotted-directory ((,class ,directory)))
    `(helm-ff-executable ((,class (:foreground "green3" :background "white"))))
    `(helm-ff-file ((,class (:foreground "black"))))
    `(helm-ff-invalid-symlink ((,class (:foreground "yellow" :background "red"))))
@@ -528,8 +536,8 @@ more...")
    `(helm-swoop-target-word-face ((,class (:weight bold :foreground nil :background "#FDBD33"))))
    `(helm-visible-mark ((,class ,marked-line)))
    `(helm-w3m-bookmarks-face ((,class (:underline t :foreground "cyan1"))))
-   `(highlight-changes ((,class (:foreground "#B5082E"))))
-   `(highlight-changes-delete ((,class (:strike-through t :foreground "#B5082E"))))
+   `(highlight-changes ((,class (:foreground nil)))) ;; blue "#2E08B5"
+   `(highlight-changes-delete ((,class (:strike-through nil :foreground nil)))) ;; red "#B5082E"
    `(highlight-symbol-face ((,class (:background "#FFFFA0"))))
    `(hl-line ((,class ,highlight-line)))
    `(hl-tags-face  ((,class ,highlight-current-tag)))
@@ -608,7 +616,7 @@ more...")
    ;; `(markdown-italic-face ((,class ())))
    ;; `(markdown-language-keyword-face ((,class ())))
    ;; `(markdown-line-break-face ((,class ())))
-   ;; `(markdown-link-face ((,class ())))
+   `(markdown-link-face ((,class ,link-no-underline)))
    ;; `(markdown-link-title-face ((,class ())))
    ;; `(markdown-list-face ((,class ())))
    ;; `(markdown-math-face ((,class ())))
@@ -620,6 +628,9 @@ more...")
    ;; `(markdown-strike-through-face ((,class ())))
    `(markdown-url-face ((,class ,link)))
    `(match ((,class ,match)))           ; Used for grep matches.
+   `(mc/cursor-bar-face ((,class (:height 1.0 :foreground "white" :background "#1664C4"))))
+   `(mc/cursor-face ((,class (:inverse-video t))))
+   `(mc/region-face ((,class (:inherit region))))
    `(mm-uu-extract ((,class ,code-block)))
    `(moccur-current-line-face ((,class (:foreground "black" :background "#FFFFCC"))))
    `(moccur-face ((,class (:foreground "black" :background "#FFFF99"))))
@@ -903,7 +914,7 @@ more...")
 
 (custom-theme-set-variables 'leuven
 
-  ;; highlight-sexp-mode
+  ;; highlight-sexp-mode.
   '(hl-sexp-background-color "#efebe9")
 
   '(ansi-color-faces-vector
@@ -917,7 +928,7 @@ more...")
 ;;;###autoload
 (when (and (boundp 'custom-theme-load-path)
            load-file-name)
-  ;; add theme folder to `custom-theme-load-path' when installing over MELPA
+  ;; Add theme folder to `custom-theme-load-path' when installing over MELPA.
   (add-to-list 'custom-theme-load-path
                (file-name-as-directory (file-name-directory load-file-name))))
 
