@@ -92,13 +92,18 @@
 (global-set-key [delete] 'delete-char)
 (global-set-key [kp-delete] 'delete-char)
 (global-set-key [(control o)] 'find-file)
-(global-set-key [(control n)] 'helm-find-files)
 (global-set-key [(control s)] 'save-buffer)
 (global-set-key [(meta s)] 'write-file)
 (global-set-key [(control q)] 'save-buffers-kill-emacs)
 (global-set-key [(meta q)] 'kill-this-buffer)
 (global-set-key [(control r)] 'replace-string)
 (global-set-key [(control a)] 'mark-whole-buffer)
+
+;; Buffer navigation
+(global-set-key [(control n)] 'xah-next-user-buffer)
+(global-set-key [(control p)] 'xah-previous-user-buffer)
+(global-set-key [(control b)] 'psw-switch-buffer)
+(global-set-key [(control t)] 'psw-switch-function)
 
 ;; Recent files
 (global-set-key "\C-x\ \C-r" 'recentf-open-files)
@@ -186,8 +191,8 @@
 (global-set-key (kbd "C->") (lambda () (interactive) (unindent-dwim -1)))
 
 ;; Beautify buffer
-(global-unset-key "\C-b")
-(global-set-key "\C-b" 'beautify-buffer)
+(global-unset-key "\C-u")
+(global-set-key "\C-u" 'beautify-buffer)
 
 ;; Escape key in minibuffer
 (define-key minibuffer-local-map [escape] 'abort-recursive-edit)
@@ -248,6 +253,12 @@
 (define-key my-keys-minor-mode-map (kbd "C-0") 'helm-buffers-list)
 (define-key my-keys-minor-mode-map (kbd "<f5>") 'recompile)
 (define-key my-keys-minor-mode-map (kbd "C-*") 'helm-swoop)
+
+;; key bindings for buffer navigation
+(define-key my-keys-minor-mode-map [(control n)] 'xah-next-user-buffer)
+(define-key my-keys-minor-mode-map [(control p)] 'xah-previous-user-buffer)
+(define-key my-keys-minor-mode-map [(control b)] 'psw-switch-buffer)
+(define-key my-keys-minor-mode-map [(control t)] 'psw-switch-function)
 
 ;; key bindings for shift select
 (define-key my-keys-minor-mode-map [S-prior] 'shift-mark-backward-page)
