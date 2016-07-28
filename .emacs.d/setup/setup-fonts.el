@@ -53,13 +53,13 @@
         ;; Adjust text size based on resolution
         (case system-type
           ('windows-nt
-           (if (> (x-display-pixel-width) 1800)
+           (if (> (x-display-pixel-width) 2000)
                (progn ;; HD monitor in Windows
                  (setq main-programming-font (concat main-programming-font "-13"))
                  (setq main-writing-font (concat main-writing-font "-16")))
              (progn
                (setq main-programming-font (concat main-programming-font "-12"))
-               (setq main-writing-font (concat main-writing-font "-15")))))
+               (setq main-writing-font (concat main-writing-font "-14")))))
           ('darwin
            (if (> (x-display-pixel-width) 1800)
                (if (> (x-display-pixel-width) 2000)
