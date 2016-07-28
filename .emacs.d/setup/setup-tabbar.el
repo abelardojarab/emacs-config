@@ -142,7 +142,8 @@
                    (nth n my-buffer-list)))))
 
             ;; Enable tabbar
-            (tabbar-mode t)))
+            ;; (tabbar-mode t)
+            ))
 
 (provide 'setup-tabbar)
 ;;; setup-tabbar.el ends here
