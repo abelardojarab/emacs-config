@@ -27,8 +27,6 @@
 (use-package swiper
   :defer t
   :commands (swiper swiper-all ivy-read ivy-mode)
-  :bind (:map ctl-x-map
-              ("s" . swiper-helm))
   :load-path (lambda () (expand-file-name "swiper/" user-emacs-directory))
   :config (progn
             (set-variable 'ivy-on-del-error-function '(lambda()))
@@ -37,6 +35,9 @@
 
 (use-package swiper-helm
   :defer t
+  :after swiper
+  :bind (:map ctl-x-map
+              ("s" . swiper-helm))
   :commands swiper-helm
   :load-path (lambda () (expand-file-name "swiper-helm/" user-emacs-directory)))
 (provide 'setup-swiper)
