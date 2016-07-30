@@ -624,12 +624,15 @@ CXChildVisitResult ClangIndexer::visitorHelper(CXCursor cursor, CXCursor, CXClie
     const CXChildVisitResult res = indexer->indexVisitor(cursor);
     if (res == CXChildVisit_Recurse)
         indexer->visit(cursor);
-    indexer->mLastCursor = cursor;
     return CXChildVisit_Continue;
 }
 
 CXChildVisitResult ClangIndexer::indexVisitor(CXCursor cursor)
 {
+    struct UpdateLastCursor {
+        ~UpdateLastCursor() { func(); }
+        std::function<void()> func;
+    } call = { [this, cursor]() { mLastCursor = cursor; } };
     ++mCursorsVisited;
     // error() << "indexVisitor" << cursor;
     // FILE *f = fopen("/tmp/clangindex.log", "a");
@@ -1355,11 +1358,20 @@ void ClangIndexer::handleBaseClassSpecifier(const CXCursor &cursor)
         // error() << "Couldn't find class for" << cursor << mLastClass;
         return;
     }
-    const CXCursor ref = clang_getCursorReferenced(cursor);
-    if (clang_isInvalid(clang_getCursorKind(ref))) // this happens when the base class is a template parameter
+    CXCursor ref = clang_getCursorReferenced(cursor);
+    if (clang_isInvalid(clang_getCursorKind(ref))) { // this happens when the base class is a template parameter
         return;
+    }
 
-    assert(lastClass.isClass());
+    while (true) {
+        const CXCursor templateRef = clang_getSpecializedCursorTemplate(ref);
+        if (!clang_isInvalid(clang_getCursorKind(templateRef))) {
+            ref = templateRef;
+        } else {
+            break;
+        }
+    }
+
     const String usr = ::usr(ref);
     if (usr.isEmpty()) {
         error() << "Couldn't find usr for" << clang_getCursorReferenced(cursor) << cursor << mLastClass;

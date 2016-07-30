@@ -78,7 +78,7 @@ static const List<Path> sSystemIncludePaths = {
 
 Server *Server::sInstance = 0;
 Server::Server()
-    : mSuspended(false), mPathEnvironment(Rct::pathEnvironment()), mExitCode(0), mLastFileId(0), mCompletionThread(0)
+    : mSuspended(false), mEnvironment(Rct::environment()), mExitCode(0), mLastFileId(0), mCompletionThread(0)
 {
     assert(!sInstance);
     sInstance = this;
@@ -439,7 +439,7 @@ String Server::guessArguments(const String &args, const Path &pwd, const Path &p
 
 bool Server::index(const String &args,
                    const Path &pwd,
-                   const List<Path> &pathEnvironment,
+                   const List<String> &environment,
                    const Path &projectRootOverride,
                    Flags<IndexMessage::Flag> indexMessageFlags,
                    std::shared_ptr<Project> *projectPtr,
@@ -475,14 +475,14 @@ bool Server::index(const String &args,
                 if (stdOut != arguments) {
                     warning() << "Changed\n" << arguments << "\nto\n" << stdOut;
                     parse = false;
-                    sources = Source::parse(stdOut, pwd, pathEnvironment, &unresolvedPaths);
+                    sources = Source::parse(stdOut, pwd, environment, &unresolvedPaths);
                 }
             }
         }
     }
 
     if (parse)
-        sources = Source::parse(arguments, pwd, pathEnvironment, &unresolvedPaths);
+        sources = Source::parse(arguments, pwd, environment, &unresolvedPaths);
 
     bool ret = false;
     int idx = 0;
@@ -541,7 +541,7 @@ void Server::handleIndexMessage(const std::shared_ptr<IndexMessage> &message, co
         Hash<Path, CompilationDataBaseInfo> infos;
         infos[message->compilationDatabaseDir().ensureTrailingSlash()] = {
             0,
-            message->pathEnvironment(),
+            message->environment(),
             message->flags() | IndexMessage::AppendCompilationDatabase
         };
         if (RTags::loadCompileCommands(infos, message->projectRoot())) {
@@ -555,7 +555,7 @@ void Server::handleIndexMessage(const std::shared_ptr<IndexMessage> &message, co
         }
     } else {
         const bool ret = index(message->arguments(), message->workingDirectory(),
-                               message->pathEnvironment(), message->projectRoot(), message->flags());
+                               message->environment(), message->projectRoot(), message->flags());
         if (conn)
             conn->finish(ret ? 0 : 1);
     }
@@ -603,7 +603,6 @@ void Server::handleQueryMessage(const std::shared_ptr<QueryMessage> &message, co
         sendDiagnostics(message, conn);
         break;
     case QueryMessage::CodeCompleteAt:
-    case QueryMessage::PrepareCodeCompleteAt:
         codeCompleteAt(message, conn);
         break;
     case QueryMessage::Suspend:
@@ -715,6 +714,8 @@ void Server::followLocation(const std::shared_ptr<QueryMessage> &query, const st
         conn->finish(1);
         return;
     }
+
+    prepareCompletion(query, loc.fileId(), project);
 
     {
         FollowLocationJob job(loc, query, project);
@@ -875,43 +876,36 @@ void Server::dumpFileMaps(const std::shared_ptr<QueryMessage> &query, const std:
 
 void Server::diagnose(const std::shared_ptr<QueryMessage> &query, const std::shared_ptr<Connection> &conn)
 {
-    const uint32_t fileId = Location::fileId(query->query());
-    if (!fileId) {
-        conn->write<256>("%s is not indexed", query->query().constData());
-        conn->finish();
-        return;
+    uint32_t fileId = 0;
+    if (!query->query().isEmpty()) {
+        fileId = Location::fileId(query->query());
+        if (!fileId) {
+            conn->write<256>("%s is not indexed", query->query().constData());
+            conn->finish();
+            return;
+        }
     }
 
     std::shared_ptr<Project> project = projectForQuery(query);
     if (!project) {
-        conn->write<256>("%s is not indexed", query->query().constData());
-        conn->finish();
-        return;
-    }
-
-    project->diagnose(fileId);
-    conn->finish();
-    if (query->flags() & QueryMessage::CodeCompletionEnabled && !mCompletionThread) {
-        mCompletionThread = new CompletionThread(mOptions.completionCacheSize);
-        mCompletionThread->start();
-    }
-
-    if (mCompletionThread && !mCompletionThread->isCached(fileId, project)) {
-        Source source = project->sources(fileId).value(query->buildIndex());
-        if (source.isNull()) {
-            for (uint32_t dep : project->dependencies(fileId, Project::DependsOnArg)) {
-                source = project->sources(dep).value(query->buildIndex());
-                if (!source.isNull())
-                    break;
-            }
-
-            if (source.isNull()) {
-                return;
-            }
+        if (!fileId)
+            project = mCurrentProject.lock();
+        if (!project) {
+            conn->write<256>("%s is not indexed", query->query().constData());
+            conn->finish();
+            return;
         }
-
-        mCompletionThread->prepare(std::move(source), query->unsavedFiles().value(Location::path(fileId)));
     }
+
+    if (fileId)
+        prepareCompletion(query, fileId, project);
+
+    if (query->flags() & QueryMessage::SynchronousDiagnostics) {
+        conn->write(project->diagnosticsToString(query->flags(), fileId));
+    } else {
+        project->diagnose(fileId);
+    }
+    conn->finish();
 }
 
 void Server::generateTest(const std::shared_ptr<QueryMessage> &query, const std::shared_ptr<Connection> &conn)
@@ -1009,6 +1003,8 @@ void Server::symbolInfo(const std::shared_ptr<QueryMessage> &query, const std::s
         return;
     }
 
+    prepareCompletion(query, fileId, project);
+
     const Location start(fileId, line, column);
     const Location end = line2 ? Location(fileId, line2, column2) : Location();
 
@@ -1059,10 +1055,15 @@ void Server::dependencies(const std::shared_ptr<QueryMessage> &query, const std:
 void Server::fixIts(const std::shared_ptr<QueryMessage> &query, const std::shared_ptr<Connection> &conn)
 {
     std::shared_ptr<Project> project = projectForQuery(query);
+    String out;
     if (project) {
-        const String out = project->fixIts(Location::fileId(query->query()));
-        if (!out.isEmpty())
-            conn->write(out);
+        uint32_t fileId = Location::fileId(query->query());
+        if (fileId) {
+            prepareCompletion(query, fileId, project);
+            out = project->fixIts(fileId);
+            if (!out.isEmpty())
+                conn->write(out);
+        }
     }
     conn->finish();
 }
@@ -1083,6 +1084,8 @@ void Server::referencesForLocation(const std::shared_ptr<QueryMessage> &query, c
         conn->finish();
         return;
     }
+
+    prepareCompletion(query, loc.fileId(), project);
 
     if (!project->dependencies().contains(loc.fileId())) {
         conn->write("Not indexed");
@@ -1171,6 +1174,7 @@ void Server::isIndexed(const std::shared_ptr<QueryMessage> &query, const std::sh
         if (project->match(match, &indexed)) {
             if (indexed) {
                 project->prepare(match.fileId());
+                prepareCompletion(query, match.fileId(), project);
             }
             ret = indexed ? "indexed" : "managed";
         }
@@ -1247,6 +1251,8 @@ void Server::preprocessFile(const std::shared_ptr<QueryMessage> &query, const st
         path.resolve();
         fileId = Location::fileId(path);
     }
+    if (fileId)
+        prepareCompletion(query, fileId, project);
     const Source source = project->sources(fileId).value(query->buildIndex());
     if (!source.isValid()) {
         conn->write<256>("%s build: %d not found", query->query().constData(), query->buildIndex());
@@ -1527,6 +1533,7 @@ void Server::sources(const std::shared_ptr<QueryMessage> &query, const std::shar
         if (project) {
             const uint32_t fileId = Location::fileId(path);
             if (fileId) {
+                prepareCompletion(query, fileId, project);
                 List<Source> sources = project->sources(fileId);
                 if (sources.isEmpty() && path.isHeader()) {
                     Set<uint32_t> seen;
@@ -1958,10 +1965,16 @@ void Server::codeCompleteAt(const std::shared_ptr<QueryMessage> &query, const st
     const uint32_t fileId = loc.fileId();
     Source source = project->sources(fileId).value(query->buildIndex());
     if (source.isNull()) {
-        for (uint32_t dep : project->dependencies(fileId, Project::DependsOnArg)) {
-            source = project->sources(dep).value(query->buildIndex());
-            if (!source.isNull())
-                break;
+        const Set<uint32_t> deps = project->dependencies(fileId, Project::DependsOnArg);
+        if (mCompletionThread)
+            source = mCompletionThread->findSource(deps);
+
+        if (source.isNull()) {
+            for (uint32_t dep : deps) {
+                source = project->sources(dep).value(query->buildIndex());
+                if (!source.isNull())
+                    break;
+            }
         }
 
         if (source.isNull()) {
@@ -1970,19 +1983,24 @@ void Server::codeCompleteAt(const std::shared_ptr<QueryMessage> &query, const st
             return;
         }
     }
+
     if (query->flags() & QueryMessage::CodeCompleteIncludes) {
         project->includeCompletions(query->flags(), conn, std::move(source));
         conn->finish();
         return;
     }
+
     if (!mCompletionThread) {
         mCompletionThread = new CompletionThread(mOptions.completionCacheSize);
         mCompletionThread->start();
     }
 
+    std::shared_ptr<Connection> c = conn;
+    if (!(query->flags() & QueryMessage::SynchronousCompletions)) {
+        c->finish();
+        c.reset();
+    }
     Flags<CompletionThread::Flag> flags;
-    if (query->type() == QueryMessage::PrepareCodeCompleteAt)
-        flags |= CompletionThread::Refresh;
     if (query->flags() & QueryMessage::Elisp)
         flags |= CompletionThread::Elisp;
     if (query->flags() & QueryMessage::JSON)
@@ -1991,12 +2009,8 @@ void Server::codeCompleteAt(const std::shared_ptr<QueryMessage> &query, const st
         flags |= CompletionThread::XML;
     if (query->flags() & QueryMessage::CodeCompleteIncludeMacros)
         flags |= CompletionThread::IncludeMacros;
-    std::shared_ptr<Connection> c = conn;
-    if (!(query->flags() & QueryMessage::SynchronousCompletions)) {
-        c->finish();
-        c.reset();
-    }
-    error() << "Got completion request for" << loc;
+    if (query->flags() & QueryMessage::CodeCompleteNoWait)
+        flags |= CompletionThread::NoWait;
     mCompletionThread->completeAt(std::move(source), loc, flags, query->unsavedFiles().value(loc.path()), c);
 }
 
@@ -2087,7 +2101,7 @@ bool Server::runTests()
                 ret = false;
                 continue;
             }
-            if (!index("clang " + source.convert<String>(), workingDirectory, mPathEnvironment, workingDirectory)) {
+            if (!index("clang " + source.convert<String>(), workingDirectory, mEnvironment, workingDirectory)) {
                 error() << "Failed to index" << ("clang " + source.convert<String>()) << workingDirectory;
                 ret = false;
                 continue;
@@ -2207,4 +2221,28 @@ bool Server::runTests()
     }
 
     return ret;
+}
+
+void Server::prepareCompletion(const std::shared_ptr<QueryMessage> &query, uint32_t fileId, const std::shared_ptr<Project> &project)
+{
+    if (query->flags() & QueryMessage::CodeCompletionEnabled && !mCompletionThread) {
+        mCompletionThread = new CompletionThread(mOptions.completionCacheSize);
+        mCompletionThread->start();
+    }
+
+    if (mCompletionThread && fileId) {
+        if (!mCompletionThread->isCached(fileId, project)) {
+            Source source = project->sources(fileId).value(query->buildIndex());
+            if (source.isNull()) {
+                for (const uint32_t dep : project->dependencies(fileId, Project::DependsOnArg)) {
+                    source = project->sources(dep).value(query->buildIndex());
+                    if (!source.isNull())
+                        break;
+                }
+            }
+
+            if (!source.isNull())
+                mCompletionThread->prepare(std::move(source), query->unsavedFiles().value(Location::path(fileId)));
+        }
+    }
 }

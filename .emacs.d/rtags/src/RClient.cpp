@@ -57,9 +57,7 @@ struct CommandLineParser::Option<RClient::OptionType> opts[] = {
     { RClient::None, 0, 0, 0, "Indexing commands:" },
     { RClient::Compile, "compile", 'c', optional_argument, "Pass compilation arguments to rdm." },
     { RClient::GuessFlags, "guess-flags", 0, no_argument, "Guess compile flags (used with -c)." },
-#if CLANG_VERSION_MAJOR > 3 || (CLANG_VERSION_MAJOR == 3 && CLANG_VERSION_MINOR > 3)
     { RClient::LoadCompilationDatabase, "load-compilation-database", 'J', optional_argument, "Load compile_commands.json from directory" },
-#endif
     { RClient::Suspend, "suspend", 'X', optional_argument, "Dump suspended files (don't track changes in these files) with no arg. Otherwise toggle suspension for arg." },
 
     { RClient::None, 0, 0, 0, "" },
@@ -72,6 +70,7 @@ struct CommandLineParser::Option<RClient::OptionType> opts[] = {
     { RClient::SymbolInfo, "symbol-info", 'U', required_argument, "Get cursor info for this location." },
     { RClient::Status, "status", 's', optional_argument, "Dump status of rdm. Arg can be symbols or symbolNames." },
     { RClient::Diagnose, "diagnose", 0, required_argument, "Resend diagnostics for file." },
+    { RClient::DiagnoseAll, "diagnose-all", 0, no_argument, "Resend diagnostics for all files." },
     { RClient::IsIndexed, "is-indexed", 'T', required_argument, "Check if rtags knows about, and is ready to return information about, this source file." },
     { RClient::IsIndexing, "is-indexing", 0, no_argument, "Check if rtags is currently indexing files." },
     { RClient::HasFileManager, "has-filemanager", 0, optional_argument, "Check if rtags has info about files in this directory." },
@@ -96,7 +95,6 @@ struct CommandLineParser::Option<RClient::OptionType> opts[] = {
     { RClient::ReloadFileManager, "reload-file-manager", 'B', no_argument, "Reload file manager." },
     { RClient::Man, "man", 0, no_argument, "Output XML for xmltoman to generate man page for rc :-)" },
     { RClient::CodeCompleteAt, "code-complete-at", 'l', required_argument, "Code complete at location: arg is file:line:col." },
-    { RClient::PrepareCodeCompleteAt, "prepare-code-complete-at", 'b', required_argument, "Prepare code completion at location: arg is file:line:col." },
     { RClient::SendDiagnostics, "send-diagnostics", 0, required_argument, "Only for debugging. Send data to all -G connections." },
     { RClient::DumpCompletions, "dump-completions", 0, no_argument, "Dump cached completions." },
     { RClient::DumpCompilationDatabase, "dump-compilation-database", 0, no_argument, "Dump compilation database for project." },
@@ -152,7 +150,8 @@ struct CommandLineParser::Option<RClient::OptionType> opts[] = {
     { RClient::CompilationFlagsSplitLine, "compilation-flags-split-line", 0, no_argument, "For --source, print one compilation flag per line." },
     { RClient::DumpIncludeHeaders, "dump-include-headers", 0, no_argument, "For --dump-file, also dump dependencies." },
     { RClient::SilentQuery, "silent-query", 0, no_argument, "Don't log this request in rdm." },
-    { RClient::SynchronousCompletions, "synchronous-completions", 0, no_argument, "Wait for completion results." },
+    { RClient::SynchronousCompletions, "synchronous-completions", 0, no_argument, "Wait for completion results and print them to stdout." },
+    { RClient::SynchronousDiagnostics, "synchronous-diagnostics", 0, no_argument, "Wait for diagnostics and print them to stdout." },
     { RClient::XML, "xml", 0, no_argument, "Output XML" },
     { RClient::NoSortReferencesByInput, "no-sort-references-by-input", 0, no_argument, "Don't sort references by input position." },
     { RClient::ProjectRoot, "project-root", 0, required_argument, "Override project root for compile commands." },
@@ -163,7 +162,8 @@ struct CommandLineParser::Option<RClient::OptionType> opts[] = {
     { RClient::Autotest, "autotest", 0, no_argument, "Turn on behaviors appropriate for running autotests." },
     { RClient::CodeCompleteIncludeMacros, "code-complete-include-macros", 0, no_argument, "Include macros in code completion results." },
     { RClient::CodeCompleteIncludes, "code-complete-includes", 0, no_argument, "Give includes in completion results." },
-    { RClient::CodeCompletionEnabled, "code-completion-enabled", 0, no_argument, "Inform rdm that we're code-completing. Use with --diagnose" },
+    { RClient::CodeCompleteNoWait, "code-complete-no-wait", 0, no_argument, "Don't wait for synchronous completion if the translation unit has to be created." },
+    { RClient::CodeCompletionEnabled, "code-completion-enabled", 'b', no_argument, "Inform rdm that we're code-completing. Use with --diagnose" },
     { RClient::NoSpellCheckinging, "no-spell-checking", 0, no_argument, "Don't produce spell check info in diagnostics." },
 #ifdef RTAGS_HAS_LUA
     { RClient::VisitASTScript, "visit-ast-script", 0, required_argument, "Use this script visit AST (@file.js|sourcecode)." },
@@ -295,7 +295,7 @@ public:
         msg.setFlag(IndexMessage::GuessFlags, rc->mGuessFlags);
         msg.setArguments(args);
         msg.setCompilationDatabaseDir(compilationDatabaseDir);
-        msg.setPathEnvironment(rc->pathEnvironment());
+        msg.setEnvironment(rc->environment());
         if (!rc->projectRoot().isEmpty())
             msg.setProjectRoot(rc->projectRoot());
 
@@ -470,6 +470,9 @@ CommandLineParser::ParseStatus RClient::parse(int &argc, char **argv)
         case CodeCompleteIncludes:
             mQueryFlags |= QueryMessage::CodeCompleteIncludes;
             break;
+        case CodeCompleteNoWait:
+            mQueryFlags |= QueryMessage::CodeCompleteNoWait;
+            break;
         case CodeCompletionEnabled:
             mQueryFlags |= QueryMessage::CodeCompletionEnabled;
             break;
@@ -520,6 +523,9 @@ CommandLineParser::ParseStatus RClient::parse(int &argc, char **argv)
             break;
         case SynchronousCompletions:
             mQueryFlags |= QueryMessage::SynchronousCompletions;
+            break;
+        case SynchronousDiagnostics:
+            mQueryFlags |= QueryMessage::SynchronousDiagnostics;
             break;
         case DisplayName:
             mQueryFlags |= QueryMessage::DisplayName;
@@ -606,7 +612,6 @@ CommandLineParser::ParseStatus RClient::parse(int &argc, char **argv)
         case Verbose:
             ++mLogLevel;
             break;
-        case PrepareCodeCompleteAt:
         case CodeCompleteAt: {
             const String encoded = Location::encode(optarg);
             if (encoded.isEmpty()) {
@@ -614,7 +619,7 @@ CommandLineParser::ParseStatus RClient::parse(int &argc, char **argv)
                 return CommandLineParser::Parse_Error;
             }
 
-            addQuery(type == CodeCompleteAt ? QueryMessage::CodeCompleteAt : QueryMessage::PrepareCodeCompleteAt, encoded);
+            addQuery(QueryMessage::CodeCompleteAt, encoded);
             break;
         }
         case Silent:
@@ -956,7 +961,6 @@ CommandLineParser::ParseStatus RClient::parse(int &argc, char **argv)
             addQuery(QueryMessage::SetBuffers, encoded);
             break; }
         case LoadCompilationDatabase: {
-#if CLANG_VERSION_MAJOR > 3 || (CLANG_VERSION_MAJOR == 3 && CLANG_VERSION_MINOR > 3)
             Path dir;
             if (optarg) {
                 dir = optarg;
@@ -986,7 +990,6 @@ CommandLineParser::ParseStatus RClient::parse(int &argc, char **argv)
                 return CommandLineParser::Parse_Error;
             }
             addCompile(dir);
-#endif
             break; }
         case HasFileManager: {
             Path p;
@@ -1065,6 +1068,9 @@ CommandLineParser::ParseStatus RClient::parse(int &argc, char **argv)
             break;
         case NoSortReferencesByInput:
             mQueryFlags |= QueryMessage::NoSortReferencesByInput;
+            break;
+        case DiagnoseAll:
+            addQuery(QueryMessage::Diagnose, String());
             break;
         case IsIndexed:
         case DumpFile:
@@ -1290,9 +1296,10 @@ void RClient::onNewMessage(const std::shared_ptr<Message> &message, const std::s
     }
 }
 
-List<Path> RClient::pathEnvironment() const
+List<String> RClient::environment() const
 {
-    if (mPathEnvironment.isEmpty())
-        mPathEnvironment = Rct::pathEnvironment();
-    return mPathEnvironment;
+    if (mEnvironment.isEmpty()) {
+        mEnvironment = Rct::environment();
+    }
+    return mEnvironment;
 }

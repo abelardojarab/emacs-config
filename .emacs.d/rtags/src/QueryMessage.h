@@ -55,7 +55,6 @@ public:
         IsIndexing,
         JobCount,
         ListSymbols,
-        PrepareCodeCompleteAt,
         PreprocessFile,
         Project,
         ReferencesLocation,
@@ -119,7 +118,9 @@ public:
         CodeCompleteIncludes = (1ull << 39),
         TokensIncludeSymbols = (1ull << 40),
         JSON = (1ull << 41),
-        CodeCompletionEnabled = (1ull << 42)
+        CodeCompletionEnabled = (1ull << 42),
+        SynchronousDiagnostics = (1ull << 43),
+        CodeCompleteNoWait = (1ull << 44)
     };
 
     QueryMessage(Type type = Invalid);

@@ -32,6 +32,8 @@
 (require 'company)
 (require 'company-template)
 
+(declare-function company-doc-buffer "ext:company")
+
 (defgroup company-rtags nil
   "Company completion back-end for RTags."
   :prefix "company-"
@@ -47,18 +49,6 @@ symbol is preceded by \".\", \"->\" or \"::\", ignoring
 If `company-begin-commands' is a list, it should include `c-electric-lt-gt'
 and `c-electric-colon', for automatic completion right after \">\" and
 \":\"."
-  :group 'company-rtags
-  :type 'boolean)
-
-(defcustom company-rtags-max-wait 100
-  "Max number of waits `company-rtags' will do before giving up.
-
-Maximum wait time is: (* company-rtags-max-wait company-async-wait)"
-  :group 'company-rtags
-  :type 'integer)
-
-(defcustom company-rtags-use-async t
-  "Whether to use async completions for `company-rtags'."
   :group 'company-rtags
   :type 'boolean)
 
@@ -113,16 +103,18 @@ Maximum wait time is: (* company-rtags-max-wait company-async-wait)"
 (defun company-rtags--make-candidate (candidate)
   (let* ((text (copy-sequence (nth 0 candidate)))
          (meta (nth 1 candidate))
+         (brief (nth 3 candidate))
          (metalength (length meta)))
     (put-text-property 0 1 'meta-insert meta text)
     (when (> metalength rtags-company-completions-maxwidth)
-      ;; (message "text %s meta %s metalength %d max %d"
-      ;;          text meta metalength rtags-company-completions-maxwidth)
+      ;; (message "text %s meta %s metalength %d max %d brief %s"
+      ;;          text meta metalength rtags-company-completions-maxwidth brief)
       (setq meta (concat (substring meta 0 (- rtags-company-completions-maxwidth 5)) "<...>)")))
     (put-text-property 0 1 'meta meta text)
+    (put-text-property 0 1 'brief brief text)
     text))
 
-(defun company-rtags--candidates (prefix)
+(defun company-rtags--candidates ()
   (if (member rtags-company-last-completion-prefix-type (list 'company-rtags-include 'company-rtags-include-quote))
       (let* ((file (and (string-match "^\\(.*?\\):\\([0-9]+\\):\\([0-9]+\\):?[ \t]*\\(.*\\)$" rtags-company-last-completion-location)
                         (match-string 1 rtags-company-last-completion-location)))
@@ -133,36 +125,29 @@ Maximum wait time is: (* company-rtags-max-wait company-async-wait)"
              (results))
         (while alternatives
           (let ((text (car alternatives)))
-            (when (or (not prefix)
-                      (string-prefix-p prefix text))
+            (when (or (not rtags-company-last-completion-prefix)
+                      (string-prefix-p rtags-company-last-completion-prefix text))
               (put-text-property 0 1 'meta-insert (concat text (if (eq rtags-company-last-completion-prefix-type 'company-rtags-include-quote) "\"" ">")) text)
               (push text results))
             (setq alternatives (cdr alternatives))))
         results)
     ;; this needs to call code-complete-at --synchronous-completions
-    (let ((updated (rtags-update-completions)))
-      (when updated
-        (when (numberp updated)
-          (let ((old rtags-last-completions)
-                (maxwait company-rtags-max-wait))
-            (while (and (eq old rtags-last-completions)
-                        (> maxwait 0))
-              (decf maxwait)
-              (sleep-for company-async-wait))))
-        (when (and rtags-last-completions
-                   (let ((pos (rtags-calculate-completion-point)))
-                     (and pos (string= (car rtags-last-completions)
-                                       (rtags-current-location pos t)))))
-          (let (results
-                (candidates (cadr rtags-last-completions)))
-            (while candidates
-              (when (company-rtags--valid-candidate prefix (car candidates))
-                (push (company-rtags--make-candidate (car candidates)) results))
-              (setq candidates (cdr candidates)))
-            (reverse results)))))))
+    (let ((buf (current-buffer)))
+      (with-temp-buffer
+        (rtags-call-rc :path (buffer-file-name buf)
+                       :unsaved (and (buffer-modified-p buf) buf)
+                       "--code-complete-at" rtags-company-last-completion-location "--synchronous-completions" "--elisp")
+        (rtags-company--make-candidates)))))
 
 (defun company-rtags--meta (candidate insert)
   (get-text-property 0 (if insert 'meta-insert 'meta) candidate))
+
+(defun company-rtags--doc-buffer (candidate)
+  (let ((brief (get-text-property 0 'brief candidate))
+        (meta (company-rtags--meta candidate nil)))
+    (if meta
+        (format "%s\n\n%s" meta brief)
+      brief)))
 
 (defun company-rtags--annotation (candidate insert)
   (let ((meta (company-rtags--meta candidate insert)))
@@ -174,30 +159,32 @@ Maximum wait time is: (* company-rtags-max-wait company-async-wait)"
 (defun rtags-company-completions-calculate-maxwidth ()
   (setq rtags-company-completions-maxwidth (max 10 (- (window-width) (- (rtags-calculate-completion-point) (point-at-bol))))))
 
+(defun rtags-company--make-candidates ()
+  (goto-char (point-min))
+  (when (looking-at "(")
+    (let ((data
+           (condition-case nil
+               (eval (read (current-buffer)))
+             (error
+              (message "****** Got Completion Error ******")
+              nil))))
+      (when (and (eq (car data) 'completions)
+                 (string= rtags-company-last-completion-location (caadr data)))
+        (let ((all (cadadr data))
+              (completions))
+          (while all
+            (when (company-rtags--valid-candidate rtags-company-last-completion-prefix (car all))
+              (push (company-rtags--make-candidate (car all)) completions))
+            (setq all (cdr all)))
+          (nreverse completions))))))
+
 (defun rtags-company-code-complete-at-sentinel (process event)
   (let ((status (process-status process)))
     (when (eq status 'exit)
       (with-current-buffer (process-buffer process)
-        (goto-char (point-min))
-        (when (looking-at "(")
-          (let ((data
-                 (condition-case nil
-                     (eval (read (current-buffer)))
-                   (error
-                    (message "****** Got Completion Error ******")
-                    (setq rtags-diagnostics-errors
-                          (append rtags-diagnostics-errors
-                                  (list (buffer-substring-no-properties (point-min) (point-max)))))
-                    nil))))
-            (when (and (eq (car data) 'completions)
-                       (string= rtags-company-last-completion-location (caadr data)))
-              (let ((all (cadadr data))
-                    (completions))
-                (while all
-                  (when (company-rtags--valid-candidate rtags-company-last-completion-prefix (car all))
-                    (push (company-rtags--make-candidate (car all)) completions))
-                  (setq all (cdr all)))
-                (funcall rtags-company-last-completion-callback (reverse completions))))))))
+        (let ((completions (rtags-company--make-candidates)))
+          (when completions
+            (funcall rtags-company-last-completion-callback completions)))))
     (when (memq status '(exit signal closed failed))
       (kill-buffer (process-buffer process)))))
 
@@ -208,17 +195,20 @@ Maximum wait time is: (* company-rtags-max-wait company-async-wait)"
       (rtags-call-rc :path (buffer-file-name buf)
                      :async (cons nil 'rtags-company-code-complete-at-sentinel)
                      :unsaved (and (buffer-modified-p buf) buf)
-                     "--code-complete-at" rtags-company-last-completion-location "--synchronous-completions" "--elisp"))))
-
+                     "--synchronous-completions"
+                     "--code-complete-no-wait"
+                     "--elisp"
+                     "--code-complete-at"
+                     rtags-company-last-completion-location))))
 
 (defun company-rtags (command &optional arg &rest ignored)
   "`company-mode' completion back-end for RTags."
   (interactive (list 'interactive))
+  ;; (message "company-rtags %s %s" (symbol-name command) arg)
   (cl-case command
     (init
      (setq rtags-company-last-completion-callback nil)
-     (setq rtags-company-last-completion-location nil)
-     (or rtags-autostart-diagnostics (rtags-diagnostics)))
+     (setq rtags-company-last-completion-location nil))
     (interactive
      (company-begin-backend 'company-rtags))
     (prefix
@@ -233,17 +223,15 @@ Maximum wait time is: (* company-rtags-max-wait company-async-wait)"
          (setq rtags-company-last-completion-prefix-type (company-rtags--prefix-type))
          (setq rtags-company-last-completion-location (rtags-current-location pos t))
          (rtags-company-completions-calculate-maxwidth)
-         (if (or (member rtags-company-last-completion-prefix-type (list 'company-rtags-include 'company-rtags-include-quote))
-                 (not company-rtags-use-async))
-             (company-rtags--candidates arg)
-           (rtags-prepare-completions)
-           (cons :async 'rtags-company-update-completions)))))
+         (company-rtags--candidates))))
     (meta
      (company-rtags--meta arg nil))
     (sorted (not (member rtags-company-last-completion-prefix-type (list 'company-rtags-include 'company-rtags-include-quote))))
     (annotation
      (and (not (member rtags-company-last-completion-prefix-type (list 'company-rtags-include 'company-rtags-include-quote)))
           (company-rtags--annotation arg nil)))
+    (doc-buffer
+     (company-doc-buffer (company-rtags--doc-buffer arg)))
     (post-completion
      (cond ((eq rtags-company-last-completion-prefix-type 'company-rtags-include)
             (unless (search-forward ">" (point-at-eol) t)

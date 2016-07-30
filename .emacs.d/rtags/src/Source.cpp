@@ -240,17 +240,27 @@ static const char *blacklist[] = {
     "-MQ",
     "-MT",
     "-Og",
+    "-Wl,--incremental-full",
+    "-Wl,--incremental-patch,1",
     "-fbuild-session-file=",
     "-fbuild-session-timestamp=",
     "-fembed-bitcode",
     "-fembed-bitcode-marker",
     "-fmodules-validate-once-per-build-session",
+    "-fno-delete-null-pointer-checks",
+    "-fno-use-linker-plugin"
+    "-fno-use-linker-plugin",
     "-fno-var-tracking",
     "-fno-var-tracking-assignments",
     "-fvar-tracking",
     "-fvar-tracking-assignments",
     "-fvar-tracking-assignments-toggle",
-    "-gcc-toolchain"
+    "-gcc-toolchain",
+    "-march=",
+    "-masm=",
+    "-mcpu=",
+    "-mfpmath=",
+    "-mtune="
 };
 
 static int compare(const void *s1, const void *s2)
@@ -358,7 +368,14 @@ static inline bool isCompiler(const Path &fullPath, const List<Path> &pathEnviro
     Path out = path;
     out += ".out";
     Process proc;
-    proc.exec(fullPath, List<String>() << "-x" << "c" << "-c" << path << "-o" << out, pathEnvironment);
+    List<String> args;
+    args << "-x" << "c" << "-c" << path << "-o" << out;
+    proc.exec(fullPath, args, pathEnvironment);
+    if (proc.returnCode() != 0) {
+        warning() << "Failed to compile" << fullPath << args << "\nwith $PATH:\n" << pathEnvironment
+                  << "\nstderr:\n" << proc.readAllStdErr()
+                  << "\nstdout:\n" << proc.readAllStdOut();
+    }
     assert(proc.isFinished());
     sCache[fullPath] = !proc.returnCode();
     unlink(path);
@@ -373,9 +390,16 @@ struct Input {
 
 List<Source> Source::parse(const String &cmdLine,
                            const Path &cwd,
-                           const List<Path> &pathEnvironment,
+                           const List<String> &environment,
                            List<Path> *unresolvedInputLocations)
 {
+    List<Path> pathEnvironment;
+    for (const String &env : environment) {
+        if (env.startsWith("PATH=")) {
+            pathEnvironment = env.mid(5).split(':', String::SkipEmpty);
+            break;
+        }
+    }
     assert(cwd.endsWith('/'));
     assert(!unresolvedInputLocations || unresolvedInputLocations->isEmpty());
     String args = cmdLine;
@@ -972,8 +996,11 @@ void Source::decode(Deserializer &s, EncodeMode mode)
         Sandbox::decode(arguments);
     }
 
+    assert(fileId);
     Location::set(source, fileId);
-    Location::set(compiler, compilerId);
-    Location::set(buildRoot, buildRootId);
+    if (compilerId)
+        Location::set(compiler, compilerId);
+    if (buildRootId)
+        Location::set(buildRoot, buildRootId);
     language = static_cast<Source::Language>(language);
 }

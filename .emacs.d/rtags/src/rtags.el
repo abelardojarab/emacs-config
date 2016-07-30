@@ -80,8 +80,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Variables
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defvar rtags-last-completions nil)
-(defvar rtags-last-prepare-completion-position nil) ;; cons (buffer . offset)
 (defvar rtags-path-filter nil)
 (defvar rtags-path-filter-regex nil)
 (defvar rtags-range-filter nil)
@@ -197,13 +195,6 @@ warnings and fixups."
   :group 'rtags
   :type 'boolean
   :safe 'booleanp)
-
-(defcustom rtags-completions-timer-interval 1
-  "Interval for completions timer. nil (Unset) means, don't preemptively
-prepare completions."
-  :group 'rtags
-  :type '(choice (const :tag "Unset" nil) number)
-  :safe 'numberp)
 
 (defun rtags--update-periodic-reparse-timer ()
   (when (and (not rtags-periodic-reparse-timer)
@@ -577,10 +568,27 @@ Effected interactive functions:
 (defface rtags-context nil "Context" :group 'rtags)
 
 (defface rtags-warnline
-  '((((class color) (background dark)) (:background "chartreuse4"))
-    (((class color) (background light)) (:background "LightGoldenrod1"))
-    (t (:bold t)))
+  '((((supports :underline (:style wave)))
+     :underline (:style wave :color "orange"))
+    (t
+     :underline t :inherit error))
   "Face used for marking error lines."
+  :group 'rtags)
+
+(defface rtags-errline
+  '((((supports :underline (:style wave)))
+     :underline (:style wave :color "red"))
+    (t
+     :underline t :inherit error))
+  "Face used for marking warning lines."
+  :group 'rtags)
+
+(defface rtags-fixitline
+  '((((supports :underline (:style wave)))
+     :underline (:style wave :color "chartreuse3"))
+    (t
+     :underline t :inherit error))
+  "Face used for marking fixit lines."
   :group 'rtags)
 
 (defface rtags-current-line
@@ -588,20 +596,6 @@ Effected interactive functions:
     (((class color) (background light)) (:background "LightGray"))
     (t (:bold t)))
   "Face used for highlighting current line."
-  :group 'rtags)
-
-(defface rtags-errline
-  '((((class color) (background dark)) (:background "red"))
-    (((class color) (background light)) (:background "red"))
-    (t (:bold t)))
-  "Face used for marking warning lines."
-  :group 'rtags)
-
-(defface rtags-fixitline
-  '((((class color) (background dark)) (:background "goldenrod4"))
-    (((class color) (background light)) (:background "goldenrod4"))
-    (t (:bold t)))
-  "Face used for marking fixit lines."
   :group 'rtags)
 
 (defface rtags-skippedline
@@ -1080,6 +1074,8 @@ to only call this when `rtags-socket-file' is defined.
                         (with-current-buffer unsaved
                           (rtags-buffer-size)))
                 arguments))
+        (when rtags-completions-enabled
+          (push "-b" arguments))
         (when silent-query
           (push "--silent-query" arguments))
         (when range-filter
@@ -2729,8 +2725,6 @@ This includes both declarations and definitions."
                 ((eq (car data) 'progress)
                  (setq rtags-last-index (nth 2 data)
                        rtags-last-total (nth 3 data)))
-                ((eq (car data) 'completions)
-                 (setq rtags-last-completions (cadr data)))
                 (t))
           (run-hooks 'rtags-diagnostics-hook)
           (forward-char 1)
@@ -2946,7 +2940,6 @@ This includes both declarations and definitions."
     (rtags-update-current-error)
     (when rtags-close-taglist-on-focus-lost
       (rtags-close-taglist))
-    (rtags-update-completions-timer)
     (rtags-restart-find-container-timer)
     (rtags-restart-tracking-timer)
     (when (and rtags-highlight-current-line (rtags-is-rtags-buffer))
@@ -2958,6 +2951,7 @@ This includes both declarations and definitions."
     (rtags-call-rc :path (buffer-file-name)
                    "--silent"
                    "-V" (buffer-file-name))))
+
 
 (add-hook 'after-save-hook 'rtags-after-save-hook)
 (add-hook 'post-command-hook 'rtags-post-command-hook)
@@ -3043,6 +3037,7 @@ This includes both declarations and definitions."
 (defun rtags-diagnostics-sentinel (process event)
   (let ((status (process-status process)))
     (when (memq status '(exit signal closed failed))
+      (setq rtags-last-update-current-project-buffer nil)
       (rtags-clear-diagnostics))))
 
 ;;;###autoload
@@ -3075,8 +3070,6 @@ This includes both declarations and definitions."
                 (set-process-filter rtags-diagnostics-process #'rtags-diagnostics-process-filter)
                 (set-process-sentinel rtags-diagnostics-process 'rtags-diagnostics-sentinel)
                 (set-process-query-on-exit-flag rtags-diagnostics-process nil)
-                (setq rtags-last-completions nil)
-                (setq rtags-last-prepare-completion-position nil)
                 (rtags-clear-diagnostics)
                 (rtags-schedule-buffer-list-update)))))
         (when (and (called-interactively-p 'any) (rtags-is-running))
@@ -3700,7 +3693,7 @@ other window instead of the current one."
       (when (and rtags-completions-enabled
                  (or (and (boundp 'company-mode) company-mode)
                      (and (boundp 'auto-complete-mode) auto-complete-mode)))
-        (push "--code-completion-enabled" arguments))
+        (push "-b" arguments))
       (when rc
         (apply #'start-file-process "rtags-update-current-project" nil rc arguments))))
   t)
@@ -4056,70 +4049,9 @@ force means do it regardless of rtags-enable-unsaved-reparsing "
       (with-temp-buffer
         (rtags-call-rc :path file "-x" file)))))
 
-(defvar rtags-completions-timer nil)
-;;;###autoload
-(defun rtags-update-completions-timer ()
-  (interactive)
-  (when rtags-completions-timer
-    (cancel-timer rtags-completions-timer)
-    (setq rtags-completions-timer nil))
-  (cond ((not rtags-completions-enabled))
-        ((not (numberp rtags-completions-timer-interval)))
-        ((< rtags-completions-timer-interval 0))
-        ((not (memq major-mode rtags-supported-major-modes)))
-        ((not (rtags-has-diagnostics)))
-        ((= rtags-completions-timer-interval 0) (rtags-prepare-completions))
-        (t (setq rtags-completions-timer (run-with-idle-timer rtags-completions-timer-interval nil #'rtags-prepare-completions)))))
-
 (defun rtags-code-complete-enabled ()
   (and rtags-completions-enabled
-       (memq major-mode rtags-supported-major-modes)
-       (rtags-has-diagnostics)))
-
-(defun rtags-prepare-completions ()
-  (interactive)
-  (when (rtags-code-complete-enabled)
-    (let ((pos (rtags-calculate-completion-point)))
-      (cond ((not pos) nil)
-            ((and (cdr rtags-last-prepare-completion-position)
-                  (= pos (cdr rtags-last-prepare-completion-position))
-                  (eq (current-buffer) (car rtags-last-prepare-completion-position)))
-             1)
-            (t
-             (setq rtags-last-prepare-completion-position (cons (current-buffer) pos))
-             (let ((path (buffer-file-name))
-                   (unsaved (and (buffer-modified-p) (current-buffer)))
-                   (location (rtags-current-location pos)))
-               (with-temp-buffer
-                 (rtags-call-rc :path path :output 0 :noerror t :unsaved unsaved
-                                "--prepare-code-complete-at" location (rtags-completion-include-macros))))
-             t)))))
-
-;; returns t if completions are good, 1 if completions are being
-;; updated and nil if completion-point is invalid or something like
-;; that
-;;;###autoload
-(defun rtags-update-completions (&optional force location)
-  (interactive)
-  (when (rtags-code-complete-enabled)
-    (unless location
-      (let ((pos (rtags-calculate-completion-point)))
-        (setq location (and pos (rtags-current-location pos t)))))
-    (let ((ret))
-      (when (cond ((null location) nil)
-                  (force)
-                  ((not rtags-last-completions))
-                  ((and location (string= (car rtags-last-completions) location))
-                   (setq ret t)
-                   nil)
-                  (t))
-        (setq ret 1)
-        (let ((path (buffer-file-name))
-              (unsaved (and (buffer-modified-p) (current-buffer))))
-          (with-temp-buffer
-            (rtags-call-rc :path path :noerror t :output 0 :unsaved unsaved
-                           "--code-complete-at" location "--elisp" (rtags-completion-include-macros)))))
-      ret)))
+       (memq major-mode rtags-supported-major-modes)))
 
 (defconst rtags-paren-start ?()
 (defconst rtags-paren-end ?))
