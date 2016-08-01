@@ -107,6 +107,7 @@
 
 ;; Show fringe status for eshell
 (use-package eshell-fringe-status
+  :if (display-graphic-p)
   :load-path (lambda () (expand-file-name "eshell-fringe-status/" user-emacs-directory))
   :after eshell
   :config (add-hook 'eshell-mode-hook 'eshell-fringe-status-mode))
