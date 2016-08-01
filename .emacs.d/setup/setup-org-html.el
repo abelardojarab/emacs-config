@@ -26,9 +26,11 @@
 
 ;; CSS for the HTML
 (setq org-html-style-include-scripts nil
-      org-html-style-include-default nil)
+      org-html-style-include-default nil
+      org-html-htmlize-output-type 'css)
+
 (setq org-html-style
-      "<link rel=\"stylesheet\" type=\"text/css\" href=\"http://thomasf.github.io/solarized-css/solarized-light.min.css\" />")
+      "<link rel=\"stylesheet\" type=\"text/css\" href=\"https://raw.githubusercontent.com/thi-ng/org-spec/master/css/style.css\"/>")
 
 (provide 'setup-org-html)
 ;;; setup-org-html.el ends here

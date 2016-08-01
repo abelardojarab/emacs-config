@@ -184,6 +184,14 @@
   (require 'w32browser-dlgopen)
   (setq dlgopen-executable-path (expand-file-name "elisp/getfile.exe" user-emacs-directory))))
 
+;; Make directory on-the-fly if non-existent
+;; http://mbork.pl/2016-07-25_Making_directories_on_the_fly
+(defun make-parent-directory ()
+  "Make sure the directory of `buffer-file-name' exists."
+  (make-directory (file-name-directory buffer-file-name) t))
+
+(add-hook 'find-file-not-found-functions #'make-parent-directory)
+
 ;; Emacs is a text editor, make sure your text files end in a newline
 (setq require-final-newline 'query)
 

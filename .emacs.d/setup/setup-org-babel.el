@@ -69,6 +69,9 @@
      ;; Don't ask for confirmation on every =C-c C-c= code-block compile.
      (setq org-confirm-babel-evaluate nil)
 
+     ;; Re-enable org-export babel evaluate
+     (setq org-export-babel-evaluate t)
+
      ;; The next block makes org-babel aware that a lower-case 'r' in a =src= block header should be processed as R.
      (add-to-list 'org-src-lang-modes
                   '("r" . ess-mode))
@@ -114,7 +117,7 @@
        "#+EXCLUDE_TAGS: noexport\n"
        "#+KEYWORDS:\n"
        "#+SELECT_TAGS: export\n"
-       "#+STYLE: <link rel=\"stylesheet\" type=\"text/css\" href=\"http://thomasf.github.io/solarized-css/solarized-light.min.css\" />\n")
+       "#+STYLE: <link rel=\"stylesheet\" type=\"text/css\" href=\"https://raw.githubusercontent.com/thi-ng/org-spec/master/css/style.css\" />\n")
      (define-abbrev org-mode-abbrev-table "sheader" "" 'skel-header-block)
 
      ;; Tell auto-insert what to use for .org files

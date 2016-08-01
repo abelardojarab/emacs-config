@@ -191,8 +191,8 @@
 (global-set-key (kbd "C->") (lambda () (interactive) (unindent-dwim -1)))
 
 ;; Beautify buffer
-(global-unset-key "\C-u")
-(global-set-key "\C-u" 'beautify-buffer)
+(global-unset-key "\C-c\C-b")
+(global-set-key "\C-c\C-b" 'beautify-buffer)
 
 ;; Escape key in minibuffer
 (define-key minibuffer-local-map [escape] 'abort-recursive-edit)

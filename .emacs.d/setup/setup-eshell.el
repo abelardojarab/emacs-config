@@ -24,9 +24,36 @@
 
 ;;; Code:
 
+(use-package ielm
+  :bind (("C-c C-z" . ielm-repl)
+         :map ielm-map
+         ("C-c C-z" . quit-window))
+  :after auto-complete
+  :config (progn
+            (defun ielm-repl ()
+              (interactive)
+              (pop-to-buffer (get-buffer-create "*ielm*"))
+              (ielm))
+
+            (defun ielm-auto-complete ()
+              "Enables `auto-complete' support in \\[ielm]."
+              (setq ac-sources '(ac-source-functions
+                                 ac-source-variables
+                                 ac-source-features
+                                 ac-source-symbols
+                                 ac-source-words-in-same-mode-buffers))
+              (add-to-list 'ac-modes 'inferior-emacs-lisp-mode)
+              (auto-complete-mode 1))
+            (add-hook 'ielm-mode-hook 'ielm-auto-complete)))
+
+(use-package eshell-fringe-status
+  :load-path (lambda () (expand-file-name "eshell-fringe-status/" user-emacs-directory))
+  :after eshell
+  :config (add-hook 'eshell-mode-hook 'eshell-fringe-status-mode))
 
 (use-package eshell
   :commands (eshell eshell-vertical eshell-horizontal)
+  :bind (("C-u" . eshell))
   :init  (progn
            (setq-default eshell-directory-name "~/.emacs.cache/eshell")
            (setq eshell-glob-case-insensitive t
@@ -38,6 +65,11 @@
                  eshell-last-dir-ring-size 512))
   :config (progn
             (add-hook 'shell-mode-hook 'goto-address-mode)
+
+            ;; Fix lack of eshell-mode-map
+            (if (not (boundp 'eshell-mode-map))
+                (defvar eshell-mode-map (make-sparse-keymap)))
+            (add-hook 'eshell-mode-hook '(lambda () (define-key eshell-mode-map "\C-u" 'quit-window)))
 
             ;; Vertical split eshell
             (defun eshell-vertical ()
