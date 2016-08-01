@@ -57,7 +57,8 @@
             ;; tab binding because of my custom tab-completion-everywhere
             ;; configuration.
             (add-hook 'ido-setup-hook
-                      (lambda () (define-key ido-completion-map [tab] 'ido-complete)))
+                      (lambda () (define-key ido-completion-map [tab] 'ido-complete)
+                        (define-key ido-completion-map [up] 'previous-history-element)))
 
             ;; Paste file name with ctrl-v
             (defun ido-yank ()

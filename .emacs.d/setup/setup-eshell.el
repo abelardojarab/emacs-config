@@ -46,30 +46,36 @@
               (auto-complete-mode 1))
             (add-hook 'ielm-mode-hook 'ielm-auto-complete)))
 
-(use-package eshell-fringe-status
-  :load-path (lambda () (expand-file-name "eshell-fringe-status/" user-emacs-directory))
-  :after eshell
-  :config (add-hook 'eshell-mode-hook 'eshell-fringe-status-mode))
-
 (use-package eshell
   :commands (eshell eshell-vertical eshell-horizontal)
   :bind (("C-u" . eshell))
+  :after helm
   :init  (progn
            (setq-default eshell-directory-name "~/.emacs.cache/eshell")
            (setq eshell-glob-case-insensitive t
                  eshell-scroll-to-bottom-on-input 'this
                  eshell-buffer-shorthand t
                  eshell-history-size 1024
+                 eshell-buffer-shorthand t
                  eshell-cmpl-ignore-case t
+                 eshell-cmpl-cycle-completions nil
                  eshell-aliases-file (concat user-emacs-directory ".eshell-aliases")
                  eshell-last-dir-ring-size 512))
   :config (progn
-            (add-hook 'shell-mode-hook 'goto-address-mode)
-
             ;; Fix lack of eshell-mode-map
             (if (not (boundp 'eshell-mode-map))
                 (defvar eshell-mode-map (make-sparse-keymap)))
-            (add-hook 'eshell-mode-hook '(lambda () (define-key eshell-mode-map "\C-u" 'quit-window)))
+            (add-hook 'eshell-mode-hook '(lambda ()
+                                           (define-key eshell-mode-map
+                                             [remap eshell-pcomplete]
+                                             'helm-esh-pcomplete)
+                                           (define-key eshell-mode-map
+                                             (kbd "M-p")
+                                             'helm-eshell-history)
+                                           (define-key eshell-mode-map
+                                             "\C-u"
+                                             'quit-window)
+                                           (eshell/export "NODE_NO_READLINE=1")))
 
             ;; Vertical split eshell
             (defun eshell-vertical ()
@@ -98,6 +104,19 @@
                 (eshell "new")
                 (rename-buffer (concat "*eshell: " name "*"))
                 (eshell-send-input)))))
+
+;; Show fringe status for eshell
+(use-package eshell-fringe-status
+  :load-path (lambda () (expand-file-name "eshell-fringe-status/" user-emacs-directory))
+  :after eshell
+  :config (add-hook 'eshell-mode-hook 'eshell-fringe-status-mode))
+
+;; Show git branches on the prompt
+(use-package eshell-prompt-extras
+  :load-path (lambda () (expand-file-name "eshell-prompt-extras/" user-emacs-directory))
+  :after eshell
+  :config
+  (setq eshell-prompt-function 'epe-theme-lambda))
 
 ;; Configuration choices
 (add-hook 'sh-mode-hook
