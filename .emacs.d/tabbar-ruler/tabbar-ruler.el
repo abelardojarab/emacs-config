@@ -295,7 +295,7 @@
 (require 'cl-lib)
 (require 'tabbar)
 (require 'easymenu)
-(require 'powerline)
+(require 'powerline nil t)
 (require 'mode-icons nil t)
 
 (defgroup tabbar-ruler nil
@@ -337,7 +337,7 @@
   :type 'integer
   :group 'tabbar-ruler)
 
-(defcustom tabbar-ruler-excluded-buffers '("*Messages*" "*Completions*" "*ESS*")
+(defcustom tabbar-ruler-excluded-buffers '("*Messages*" "*Completions*" "*ESS*" "*Packages*" "*log-edit-files*" "*helm-mini*" "*helm-mode-describe-variable*")
   "Excluded buffers in tabbar."
   :type '(repeat (string :tag "Buffer Name"))
   :group 'tabbar-ruler)
@@ -350,9 +350,9 @@
 (defcustom tabbar-ruler-use-mode-icons t
   "Use mode icons for tabbar-ruler."
   :type '(choice
-      (const :tag "No" nil)
-      (const :tag "If enabled" if-enabled)
-      (const :tag "Always" t))
+	  (const :tag "No" nil)
+	  (const :tag "If enabled" if-enabled)
+	  (const :tag "Always" t))
   :group 'tabbar-ruler)
 
 (defcustom tabbar-ruler-recolor-inactive-icons t
@@ -377,61 +377,61 @@
 (defcustom tabbar-ruler-fancy-tab-separator nil
   "Separate each tab with a fancy generated image."
   :type '(choice
-      (const :tag "Text" nil)
-      (const :tag "Alternate" alternate)
-      (const :tag "arrow" arrow)
-      (const :tag "arrow-fade" arrow-fade)
-      (const :tag "bar" bar)
-      (const :tag "box" box)
-      (const :tag "brace" brace)
-      (const :tag "butt" butt)
-      (const :tag "chamfer" chamfer)
-      (const :tag "contour" contour)
-      (const :tag "curve" curve)
-      (const :tag "rounded" rounded)
-      (const :tag "roundstub" roundstub)
-      (const :tag "slant" slant)
-      (const :tag "wave" wave)
-      (const :tag "zigzag" zigzag))
+	  (const :tag "Text" nil)
+	  (const :tag "Alternate" alternate)
+	  (const :tag "arrow" arrow)
+	  (const :tag "arrow-fade" arrow-fade)
+	  (const :tag "bar" bar)
+	  (const :tag "box" box)
+	  (const :tag "brace" brace)
+	  (const :tag "butt" butt)
+	  (const :tag "chamfer" chamfer)
+	  (const :tag "contour" contour)
+	  (const :tag "curve" curve)
+	  (const :tag "rounded" rounded)
+	  (const :tag "roundstub" roundstub)
+	  (const :tag "slant" slant)
+	  (const :tag "wave" wave)
+	  (const :tag "zigzag" zigzag))
   :group 'tabbar-ruler)
 
 
 (defcustom tabbar-ruler-fancy-current-tab-separator 'inherit
   "The current tab can have a different separator."
   :type '(choice
-      (const :tag "Inherit" inherit)
-      (const :tag "Text" nil)
-      (const :tag "Alternate" alternate)
-      (const :tag "arrow" arrow)
-      (const :tag "arrow-fade" arrow-fade)
-      (const :tag "bar" bar)
-      (const :tag "box" box)
-      (const :tag "brace" brace)
-      (const :tag "butt" butt)
-      (const :tag "chamfer" chamfer)
-      (const :tag "contour" contour)
-      (const :tag "curve" curve)
-      (const :tag "rounded" rounded)
-      (const :tag "roundstub" roundstub)
-      (const :tag "slant" slant)
-      (const :tag "wave" wave)
-      (const :tag "zigzag" zigzag))
+	  (const :tag "Inherit" inherit)
+	  (const :tag "Text" nil)
+	  (const :tag "Alternate" alternate)
+	  (const :tag "arrow" arrow)
+	  (const :tag "arrow-fade" arrow-fade)
+	  (const :tag "bar" bar)
+	  (const :tag "box" box)
+	  (const :tag "brace" brace)
+	  (const :tag "butt" butt)
+	  (const :tag "chamfer" chamfer)
+	  (const :tag "contour" contour)
+	  (const :tag "curve" curve)
+	  (const :tag "rounded" rounded)
+	  (const :tag "roundstub" roundstub)
+	  (const :tag "slant" slant)
+	  (const :tag "wave" wave)
+	  (const :tag "zigzag" zigzag))
   :group 'tabbar-ruler)
 
 (defcustom tabbar-ruler-tab-padding 2
   "Separate each tab with this padding.
 This is only enabled whin `tabbar-ruler-fancy-tab-separator' is non-nil"
   :type '(choice
-      (const :tag "No padding" nil)
-      (integer :tag "Padding in pixels"))
+	  (const :tag "No padding" nil)
+	  (integer :tag "Padding in pixels"))
   :group 'tabbar-ruler)
 
 (defcustom tabbar-ruler-padding-face nil
   "Color/Face of padding."
   :type '(choice
-      (face :tag "Face")
-      (const :tag "Background color" nil)
-      (color :tag "Color"))
+	  (face :tag "Face")
+	  (const :tag "Background color" nil)
+	  (color :tag "Color"))
   :group 'tabbar-ruler)
 
 (defcustom tabbar-ruler-pad-selected t
@@ -442,8 +442,8 @@ This is only enabled whin `tabbar-ruler-fancy-tab-separator' is non-nil"
 (defcustom tabbar-ruler-tab-height 25
   "Height for tabbar-ruler's separations."
   :type '(choice
-      (const :tag "Height of Text" nil)
-      (integer :tag "Overriding Height"))
+	  (const :tag "Height of Text" nil)
+	  (integer :tag "Overriding Height"))
   :group 'tabbar-ruler)
 
 
@@ -475,109 +475,109 @@ Optional single argument is the MODE for the new buffer.")
   "/* XPM */
 static char * c:\tmp\emacs_xpm[] = {
 \"16 16 103 2\",
-\"      c None\",
-\".     c #707070\",
-\"+     c #717171\",
-\"@     c #727272\",
-\"#     c #6C6C6C\",
-\"$     c #696969\",
-\"%     c #6E6E6E\",
-\"&     c #7C7C7C\",
-\"*     c #858585\",
-\"=     c #969696\",
-\"-     c #A3A3A3\",
-\";     c #A7A7A7\",
-\">     c #9A9A9A\",
-\",     c #747474\",
-\"'     c #838383\",
-\")     c #A5A5A5\",
-\"!     c #ACACAC\",
-\"~     c #A8A8A8\",
-\"{     c #A9A9A9\",
-\"]     c #B0B0B0\",
-\"^     c #C5C5C5\",
-\"/     c #F5F5F5\",
-\"(     c #D8D8D8\",
-\"_     c #777777\",
-\":     c #C6C6C6\",
-\"<     c #F7F7F7\",
-\"[     c #F1F1F1\",
-\"}     c #F2F2F2\",
-\"|     c #ECECEC\",
-\"1     c #E4E4E4\",
-\"2     c #DEDEDE\",
-\"3     c #F4F4F4\",
-\"4     c #FBFBFB\",
-\"5     c #8F8F8F\",
-\"6     c #6B6B6B\",
-\"7     c #AFAFAF\",
-\"8     c #F3F3F3\",
-\"9     c #E8E8E8\",
-\"0     c #C4C4C4\",
-\"a     c #CCCCCC\",
-\"b     c #D3D3D3\",
-\"c     c #B7B7B7\",
-\"d     c #737373\",
-\"e     c #757575\",
-\"f     c #828282\",
-\"g     c #909090\",
-\"h     c #C3C3C3\",
-\"i     c #EEEEEE\",
-\"j     c #BDBDBD\",
-\"k     c #A1A1A1\",
-\"l     c #979797\",
-\"m     c #888888\",
-\"n     c #8B8B8B\",
-\"o     c #959595\",
-\"p     c #BCBCBC\",
-\"q     c #E6E6E6\",
-\"r     c #C7C7C7\",
-\"s     c #8A8A8A\",
-\"t     c #818181\",
-\"u     c #7A7A7A\",
-\"v     c #BABABA\",
-\"w     c #D1D1D1\",
-\"x     c #DBDBDB\",
-\"y     c #D7D7D7\",
-\"z     c #DCDCDC\",
-\"A     c #F0F0F0\",
-\"B     c #7E7E7E\",
-\"C     c #6F6F6F\",
-\"D     c #A2A2A2\",
-\"E     c #F6F6F6\",
-\"F     c #EBEBEB\",
-\"G     c #D0D0D0\",
-\"H     c #BEBEBE\",
-\"I     c #BFBFBF\",
-\"J     c #A6A6A6\",
-\"K     c #7D7D7D\",
-\"L     c #787878\",
-\"M     c #6D6D6D\",
-\"N     c #D2D2D2\",
-\"O     c #8C8C8C\",
-\"P     c #868686\",
-\"Q     c #878787\",
-\"R     c #848484\",
-\"S     c #C2C2C2\",
-\"T     c #7F7F7F\",
-\"U     c #949494\",
-\"V     c #8D8D8D\",
-\"W     c #C0C0C0\",
-\"X     c #EDEDED\",
-\"Y     c #E0E0E0\",
-\"Z     c #9C9C9C\",
-\"`     c #939393\",
-\" .    c #8E8E8E\",
-\"..    c #767676\",
-\"+.    c #E9E9E9\",
-\"@.    c #E5E5E5\",
-\"#.    c #D6D6D6\",
-\"$.    c #9D9D9D\",
-\"%.    c #B8B8B8\",
-\"&.    c #D5D5D5\",
-\"*.    c #FFFFFF\",
-\"=.    c #929292\",
-\"-.    c #B1B1B1\",
+\"  	c None\",
+\". 	c #707070\",
+\"+ 	c #717171\",
+\"@ 	c #727272\",
+\"# 	c #6C6C6C\",
+\"$ 	c #696969\",
+\"% 	c #6E6E6E\",
+\"& 	c #7C7C7C\",
+\"* 	c #858585\",
+\"= 	c #969696\",
+\"- 	c #A3A3A3\",
+\"; 	c #A7A7A7\",
+\"> 	c #9A9A9A\",
+\", 	c #747474\",
+\"' 	c #838383\",
+\") 	c #A5A5A5\",
+\"! 	c #ACACAC\",
+\"~ 	c #A8A8A8\",
+\"{ 	c #A9A9A9\",
+\"] 	c #B0B0B0\",
+\"^ 	c #C5C5C5\",
+\"/ 	c #F5F5F5\",
+\"( 	c #D8D8D8\",
+\"_ 	c #777777\",
+\": 	c #C6C6C6\",
+\"< 	c #F7F7F7\",
+\"[ 	c #F1F1F1\",
+\"} 	c #F2F2F2\",
+\"| 	c #ECECEC\",
+\"1 	c #E4E4E4\",
+\"2 	c #DEDEDE\",
+\"3 	c #F4F4F4\",
+\"4 	c #FBFBFB\",
+\"5 	c #8F8F8F\",
+\"6 	c #6B6B6B\",
+\"7 	c #AFAFAF\",
+\"8 	c #F3F3F3\",
+\"9 	c #E8E8E8\",
+\"0 	c #C4C4C4\",
+\"a 	c #CCCCCC\",
+\"b 	c #D3D3D3\",
+\"c 	c #B7B7B7\",
+\"d 	c #737373\",
+\"e 	c #757575\",
+\"f 	c #828282\",
+\"g 	c #909090\",
+\"h 	c #C3C3C3\",
+\"i 	c #EEEEEE\",
+\"j 	c #BDBDBD\",
+\"k 	c #A1A1A1\",
+\"l 	c #979797\",
+\"m 	c #888888\",
+\"n 	c #8B8B8B\",
+\"o 	c #959595\",
+\"p 	c #BCBCBC\",
+\"q 	c #E6E6E6\",
+\"r 	c #C7C7C7\",
+\"s 	c #8A8A8A\",
+\"t 	c #818181\",
+\"u 	c #7A7A7A\",
+\"v 	c #BABABA\",
+\"w 	c #D1D1D1\",
+\"x 	c #DBDBDB\",
+\"y 	c #D7D7D7\",
+\"z 	c #DCDCDC\",
+\"A 	c #F0F0F0\",
+\"B 	c #7E7E7E\",
+\"C 	c #6F6F6F\",
+\"D 	c #A2A2A2\",
+\"E 	c #F6F6F6\",
+\"F 	c #EBEBEB\",
+\"G 	c #D0D0D0\",
+\"H 	c #BEBEBE\",
+\"I 	c #BFBFBF\",
+\"J 	c #A6A6A6\",
+\"K 	c #7D7D7D\",
+\"L 	c #787878\",
+\"M 	c #6D6D6D\",
+\"N 	c #D2D2D2\",
+\"O 	c #8C8C8C\",
+\"P 	c #868686\",
+\"Q 	c #878787\",
+\"R 	c #848484\",
+\"S 	c #C2C2C2\",
+\"T 	c #7F7F7F\",
+\"U 	c #949494\",
+\"V 	c #8D8D8D\",
+\"W 	c #C0C0C0\",
+\"X 	c #EDEDED\",
+\"Y 	c #E0E0E0\",
+\"Z 	c #9C9C9C\",
+\"` 	c #939393\",
+\" .	c #8E8E8E\",
+\"..	c #767676\",
+\"+.	c #E9E9E9\",
+\"@.	c #E5E5E5\",
+\"#.	c #D6D6D6\",
+\"$.	c #9D9D9D\",
+\"%.	c #B8B8B8\",
+\"&.	c #D5D5D5\",
+\"*.	c #FFFFFF\",
+\"=.	c #929292\",
+\"-.	c #B1B1B1\",
 \"          . + @ . # $           \",
 \"      + % . & * = - ; > ,       \",
 \"    + . ' ) ! ~ { ] ^ / ( _     \",
@@ -684,10 +684,10 @@ static char * c:\tmp\emacs_xpm[] = {
   "Tabbar close everything with the tabbaset same extension as the current."
   (interactive)
   (let ((cur (symbol-value (funcall tabbar-current-tabset-function)))
-    (ext (concat (regexp-quote (file-name-extension (buffer-name (car tabbar-last-tab)) t)) "$")))
+	(ext (concat (regexp-quote (file-name-extension (buffer-name (car tabbar-last-tab)) t)) "$")))
     (mapc (lambda(tab)
-        (when (string-match-p ext (buffer-name (car tab)))
-          (funcall tabbar-close-tab-function tab)))
+	    (when (string-match-p ext (buffer-name (car tab)))
+	      (funcall tabbar-close-tab-function tab)))
           cur)))
 
 (defun tabbar-popup-save-as ()
@@ -839,10 +839,10 @@ be \"Could not gzip the file!\"."
 (defcustom tabbar-ruler-style nil
   "Style of tabbar ruler."
   :type '(choice
-      (const :tag "Let variables decide" nil)
-      (const :tag "Text-mode tabbar" 'text)
-      (const :tag "Firefox style" 'firefox)
-      (const :tag "Firefox with circle close" 'firefox-circle))
+	  (const :tag "Let variables decide" nil)
+	  (const :tag "Text-mode tabbar" 'text)
+	  (const :tag "Firefox style" 'firefox)
+	  (const :tag "Firefox with circle close" 'firefox-circle))
   :group 'tabbar-ruler)
 
 (defcustom tabbar-ruler-use-variable-pitch t
@@ -852,34 +852,43 @@ This copies the :family and :foundry from the `variable-pitch' face."
   :type 'boolean
   :group 'tabbar-ruler)
 
+(defun tabbar-diff-face-p (face)
+  "Is FACE customized?"
+  (and (facep face)
+       (or (and (custom-facep face)
+		(or (get face 'saved-value)
+		    (get face 'saved-face)
+		    (get face 'saved-face-comment)))
+	   (ignore-errors (not (eq (default-value face) face))))))
+
 (defun tabbar-ruler-style-firefox (&optional frame)
   "Setup firefox style for FRAME."
   (setq tabbar-ruler-tab-padding 1
-    tabbar-ruler-pad-selected nil
-    tabbar-ruler-padding-face (tabbar-foreground 'tabbar-default)
-    tabbar-ruler-fancy-current-tab-separator 'wave
-    tabbar-ruler-fancy-tab-separator 'bar
-    tabbar-ruler-fancy-close-image nil)
+	tabbar-ruler-pad-selected nil
+	tabbar-ruler-padding-face (tabbar-foreground 'tabbar-default)
+	tabbar-ruler-fancy-current-tab-separator 'wave
+	tabbar-ruler-fancy-tab-separator 'bar
+	tabbar-ruler-fancy-close-image nil)
   (dolist (face '(tabbar-button
-          tabbar-separator
-          tabbar-unselected
-          tabbar-unselected-highlight
-          tabbar-unselected-modified))
-    (unless (get face 'save-value)
+		  tabbar-separator
+		  tabbar-unselected
+		  tabbar-unselected-highlight
+		  tabbar-unselected-modified))
+    (unless (tabbar-diff-face-p face)
       (set-face-attribute face frame
                           :background (tabbar-background 'tabbar-default)
                           :foreground (tabbar-foreground 'tabbar-default))))
   (dolist (face '(tabbar-button
-          tabbar-separator
-          tabbar-selected
-          tabbar-selected-highlight
-          tabbar-selected-modified
-          tabbar-unselected
-          tabbar-unselected-highlight
-          tabbar-unselected-modified))
-    (unless (get face 'save-value)
+  		  tabbar-separator
+  		  tabbar-selected
+  		  tabbar-selected-highlight
+  		  tabbar-selected-modified
+  		  tabbar-unselected
+  		  tabbar-unselected-highlight
+  		  tabbar-unselected-modified))
+    (unless (tabbar-diff-face-p face)
       (set-face-attribute face frame
-              :height 100))))
+			  :height 100))))
 
 (defun tabbar-ruler-style-firefox-circle (&optional frame)
   "Setup firefox with closed image for FRAME."
@@ -889,11 +898,11 @@ This copies the :family and :foundry from the `variable-pitch' face."
 (defun tabbar-ruler-style-text (&optional frame)
   "Setup text style."
   (setq tabbar-ruler-tab-padding nil
-    tabbar-ruler-pad-selected nil
-    tabbar-ruler-padding-face nil
-    tabbar-ruler-fancy-current-tab-separator 'inherit
-    tabbar-ruler-fancy-tab-separator nil
-    tabbar-ruler-fancy-close-image nil))
+	tabbar-ruler-pad-selected nil
+	tabbar-ruler-padding-face nil
+	tabbar-ruler-fancy-current-tab-separator 'inherit
+	tabbar-ruler-fancy-tab-separator nil
+	tabbar-ruler-fancy-close-image nil))
 
 ;;;###autoload
 (defun tabbar-install-faces (&optional frame)
@@ -905,69 +914,69 @@ This copies the :family and :foundry from the `variable-pitch' face."
         (copy-face 'default 'tabbar-selected frame)
         (copy-face 'shadow 'tabbar-unselected frame)
         (if tabbar-ruler-invert-deselected
-            (unless (get 'tabbar-selected 'save-value)
+            (unless (tabbar-diff-face-p 'tabbar-selected)
               (copy-face 'tabbar-selected 'tabbar-unselected)
               (set-face-attribute 'tabbar-selected frame)
               (invert-face 'tabbar-selected))
-          (unless (get 'tabbar-selected frame 'save-value)
-        (set-face-attribute 'tabbar-selected frame
-                :inherit 'mode-line-buffer-id
-                :background (face-attribute 'mode-line-inactive :background))))
-        (unless (get 'tabbar-unselected-highlight 'save-value)
-      (copy-face 'mode-line-buffer-id 'tabbar-unselected-highlight frame))
-        (unless (get 'tabbar-selected-highlight 'save-value)
-      (copy-face 'mode-line-inactive 'tabbar-selected-highlight frame)))
-    (unless (get 'tabbar-selected 'save-value)
+          (unless (tabbar-diff-face-p 'tabbar-selected)
+	    (set-face-attribute 'tabbar-selected frame
+				:inherit 'mode-line-buffer-id
+				:background (face-attribute 'mode-line-inactive :background))))
+        (unless (tabbar-diff-face-p 'tabbar-unselected-highlight)
+	  (copy-face 'mode-line-buffer-id 'tabbar-unselected-highlight frame))
+        (unless (tabbar-diff-face-p 'tabbar-selected-highlight)
+	  (copy-face 'mode-line-inactive 'tabbar-selected-highlight frame)))
+    (unless (tabbar-diff-face-p 'tabbar-selected)
       (copy-face 'default 'tabbar-selected frame))
-    (unless (get 'tabbar-unselected 'save-value)
+    (unless (tabbar-diff-face-p 'tabbar-unselected)
       (copy-face 'shadow 'tabbar-unselected frame))
 
     (if tabbar-ruler-invert-deselected
-    (unless (get 'tabbar-unselected 'save-value)
-      (copy-face 'tabbar-selected 'tabbar-unselected)
-      (set-face-attribute 'tabbar-unselected frame)
-      (invert-face 'tabbar-unselected))
-      (unless (get 'tabbar-unselected 'save-value)
-    (set-face-attribute 'tabbar-unselected frame
-                :inherit 'mode-line-buffer-id
-                :background (face-attribute 'mode-line-inactive :background))))
+	(unless (tabbar-diff-face-p 'tabbar-unselected)
+	  (copy-face 'tabbar-selected 'tabbar-unselected)
+	  (set-face-attribute 'tabbar-unselected frame)
+	  (invert-face 'tabbar-unselected))
+      (unless (tabbar-diff-face-p 'tabbar-unselected)
+	(set-face-attribute 'tabbar-unselected frame
+			    :inherit 'mode-line-buffer-id
+			    :background (face-attribute 'mode-line-inactive :background))))
 
 
-    (unless (get 'tabbar-selected-highlight 'save-value)
+    (unless (tabbar-diff-face-p 'tabbar-selected-highlight)
       (copy-face 'mode-line-buffer-id 'tabbar-selected-highlight frame))
-    (unless (get 'tabbar-unselected-highlight 'save-value)
+    (unless (tabbar-diff-face-p 'tabbar-unselected-highlight)
       (copy-face 'mode-line-inactive 'tabbar-unselected-highlight frame)))
 
-  (unless (get 'tabbar-separator 'save-value)
+  (unless (tabbar-diff-face-p 'tabbar-separator)
     (set-face-attribute 'tabbar-separator frame
-            :inherit 'tabbar-default))
+			:inherit 'tabbar-default))
 
-  (unless (get 'tabbar-button 'save-value)
+  (unless (tabbar-diff-face-p 'tabbar-button)
     (set-face-attribute 'tabbar-button frame
-            :inherit 'tabbar-default))
+			:inherit 'tabbar-default))
   (dolist (face '(tabbar-button
-          tabbar-separator
-          tabbar-selected
-          tabbar-selected-highlight
-          tabbar-selected-modified
-          tabbar-unselected
-          tabbar-unselected-highlight
-          tabbar-unselected-modified))
-    (unless (get face 'save-value)
+		  tabbar-separator
+		  tabbar-selected
+		  tabbar-selected-highlight
+		  tabbar-selected-modified
+		  tabbar-unselected
+		  tabbar-unselected-highlight
+		  tabbar-unselected-modified))
+    (unless (tabbar-diff-face-p face)
       (set-face-attribute face frame
-              :box nil
-              :height (face-attribute 'default :height frame)
-              :width (face-attribute 'default :width frame)))
+			  :box nil
+			  :height (face-attribute 'default :height frame)
+			  :width (face-attribute 'default :width frame)))
     (when tabbar-ruler-use-variable-pitch
-      (unless (get face 'save-value)
-    (set-face-attribute face frame
-                :family (face-attribute 'variable-pitch :family)
-                :foundry (face-attribute 'variable-pitch :foundry)))))
+      (unless (tabbar-diff-face-p face)
+	(set-face-attribute face frame
+			    :family (face-attribute 'variable-pitch :family)
+			    :foundry (face-attribute 'variable-pitch :foundry)))))
   (tabbar-ruler-remove-caches)
   (when tabbar-ruler-style
     (let ((fun (intern (format "tabbar-ruler-style-%s" tabbar-ruler-style))))
       (when (fboundp fun)
-    (funcall fun frame)))))
+	(funcall fun frame)))))
 
 (add-hook 'after-make-frame-functions 'tabbar-install-faces)
 (add-hook 'emacs-startup-hook 'tabbar-install-faces)
@@ -1010,12 +1019,12 @@ frame-local."
 (cl-defun tabbar-ruler-image (&key type disabled color face)
   "Returns the scroll-images"
   (let ((clr2 (or (and face (facep face) (tabbar-background face))
-          (and disabled (tabbar-hex-color (face-attribute 'mode-line-inactive :background)))
-          (tabbar-hex-color (face-attribute 'mode-line :background))))
+		  (and disabled (tabbar-hex-color (face-attribute 'mode-line-inactive :background)))
+		  (tabbar-hex-color (face-attribute 'mode-line :background))))
         (clr (or color
-         (and face (facep face) (tabbar-foreground face))
-         (and disabled (tabbar-hex-color (face-attribute 'mode-line-inactive :foreground)))
-         (tabbar-hex-color (face-attribute 'mode-line :foreground)))))
+		 (and face (facep face) (tabbar-foreground face))
+		 (and disabled (tabbar-hex-color (face-attribute 'mode-line-inactive :foreground)))
+		 (tabbar-hex-color (face-attribute 'mode-line :foreground)))))
     (if (eq type 'close)
         (format "/* XPM */
         static char * close_tab_xpm[] = {
@@ -1134,17 +1143,17 @@ an extra margin around the image.  If optional MASK is non-nil, mask
 property is included."
   (when image
     (let ((plist (cdr image))
-      (face (or face 'tabbar-default)))
+	  (face (or face 'tabbar-default)))
       (or (plist-get plist :ascent)
-      (setq plist (plist-put plist :ascent 'center)))
+	  (setq plist (plist-put plist :ascent 'center)))
       (or (plist-get plist :mask)
-      (when mask
-        (setq plist (plist-put plist :mask '(heuristic t)))))
+	  (when mask
+	    (setq plist (plist-put plist :mask '(heuristic t)))))
       (or (not (natnump margin))
-      ;; (plist-get plist :margin)
-      (plist-put plist :margin margin))
+	  ;; (plist-get plist :margin)
+	  (plist-put plist :margin margin))
       (and (facep face)
-       (plist-put plist :face face))
+	   (plist-put plist :face face))
       (setcdr image plist)))
   image)
 
@@ -1164,29 +1173,29 @@ Optional argument TYPE is a mouse click event type (see the function
 `tabbar-make-mouse-event' for details)."
   (let* ((mouse-event (tabbar-make-mouse-event type))
          (mouse-button (event-basic-type mouse-event))
-     tmp map)
+	 tmp map)
     (cond
-     ((eq mouse-button 'mouse-3)
-      (setq tabbar-last-tab tab)
-      (tabbar-context-menu))
+	 ((eq mouse-button 'mouse-3)
+	  (setq tabbar-last-tab tab)
+	  (tabbar-context-menu))
        ((eq action 'close-tab)
-    (when (and (eq mouse-button 'mouse-1) tabbar-close-tab-function)
-      (funcall tabbar-close-tab-function tab)))
+	(when (and (eq mouse-button 'mouse-1) tabbar-close-tab-function)
+	  (funcall tabbar-close-tab-function tab)))
        ((and (eq action 'icon) (setq tmp (key-binding [menu-bar languages])))
-    (with-current-buffer (tabbar-tab-value tab)
-      (setq map (copy-keymap tmp)
-        tmp (mouse-menu-major-mode-map))
-      (define-key map [major-mode-sep-b] '(menu-item  "---"))
-      (define-key map [major-mode] (cons (nth 1 tmp) tmp))
-      ;; (setq tmp (make-composed-map tmp (mouse-menu-major-mode-map)))
-      ;; (popup-menug tmp)
-      (popup-menu map))
-    (tabbar-ruler-modification-state-change)
-    (tabbar-display-update))
+	(with-current-buffer (tabbar-tab-value tab)
+	  (setq map (copy-keymap tmp)
+		tmp (mouse-menu-major-mode-map))
+	  (define-key map [major-mode-sep-b] '(menu-item  "---"))
+	  (define-key map [major-mode] (cons (nth 1 tmp) tmp))
+	  ;; (setq tmp (make-composed-map tmp (mouse-menu-major-mode-map)))
+	  ;; (popup-menug tmp)
+	  (popup-menu map))
+	(tabbar-ruler-modification-state-change)
+	(tabbar-display-update))
        (t (when tabbar-select-tab-function
-        (funcall tabbar-select-tab-function
-             (tabbar-make-mouse-event type) tab)
-        (tabbar-display-update))))))
+	    (funcall tabbar-select-tab-function
+		     (tabbar-make-mouse-event type) tab)
+	    (tabbar-display-update))))))
 
 (defun tabbar-reset ()
   "Reset memoized functions."
@@ -1257,7 +1266,7 @@ Pass mouse click events on a tab to `tabbar-click-on-tab'."
          (i 0))
     (while (< i height)
       (setq data (cons
-          (append (make-list width 1))
+		  (append (make-list width 1))
                   data))
       (setq i (+ i 1)))
     (pl/make-xpm "sep" color color data)))
@@ -1270,15 +1279,15 @@ Pass mouse click events on a tab to `tabbar-click-on-tab'."
   "Gets hex background of FACE.
 When FOREGROUND is non-nil, get the foreground instead."
   (let ((color (or (and (facep face)
-            (or (and foreground (face-foreground face nil 'default))
-                (face-background face nil 'default)))
-           (and (stringp face) face))))
+			(or (and foreground (face-foreground face nil 'default))
+			    (face-background face nil 'default)))
+		   (and (stringp face) face))))
     (when (member color (x-defined-colors))
       (setq color (x-color-values color)
-        color (concat"#"
-             (tabbar-background--(nth 0 color))
-             (tabbar-background--(nth 1 color))
-             (tabbar-background--(nth 2 color)))))
+	    color (concat"#"
+			 (tabbar-background--(nth 0 color))
+			 (tabbar-background--(nth 1 color))
+			 (tabbar-background--(nth 2 color)))))
     color))
 
 (defun tabbar-foreground (face)
@@ -1287,19 +1296,19 @@ When FOREGROUND is non-nil, get the foreground instead."
 
 
 (defun tabbar-line-right-separator (selected-p face background-face &optional dir
-                           normalize-face)
+					       normalize-face)
   "Right separator for tabbar.
 SELECTED-P tells if the item is seleceted."
   (when tabbar-ruler-fancy-tab-separator
     (let* ((dir (or dir "right"))
-       (fun
-        (if (and selected-p (not (eq tabbar-ruler-fancy-current-tab-separator 'inherit)))
-        (intern (format "powerline-%s-%s" tabbar-ruler-fancy-current-tab-separator dir))
-          (intern (format "powerline-%s-%s" tabbar-ruler-fancy-tab-separator dir))))
-       (normalize-face (or normalize-face face)))
+	   (fun
+	    (if (and selected-p (not (eq tabbar-ruler-fancy-current-tab-separator 'inherit)))
+		(intern (format "powerline-%s-%s" tabbar-ruler-fancy-current-tab-separator dir))
+	      (intern (format "powerline-%s-%s" tabbar-ruler-fancy-tab-separator dir))))
+	   (normalize-face (or normalize-face face)))
       (propertize "|"
-          'display (tabbar-normalize-image (funcall fun background-face face tabbar-ruler-tab-height) 0 normalize-face)
-          'face normalize-face))))
+		  'display (tabbar-normalize-image (funcall fun background-face face tabbar-ruler-tab-height) 0 normalize-face)
+		  'face normalize-face))))
 
 (defun tabbar-line-left-separator (selected-p face background-face)
   "Left separator for tabbar."
@@ -1311,90 +1320,90 @@ SELECTED-P tells if the item is seleceted."
 (defun tabbar-line-fix-display (text face tab keymap)
   "Fix display for TEXT given FACE, TAB and KEYMAP."
   (let* ((compose-p (get-text-property 0 'composition text))
-     (display-p (get-text-property 0 'display text))
-     (image-p (and display-p (eq (car display-p) 'image)))
-     (plist (and image-p (cdr display-p))))
+	 (display-p (get-text-property 0 'display text))
+	 (image-p (and display-p (eq (car display-p) 'image)))
+	 (plist (and image-p (cdr display-p))))
     (cond
      (image-p
       (setq plist (plist-put plist :ascent 'center)
-        plist (plist-put plist :face face))
+	    plist (plist-put plist :face face))
       (propertize " "
-          'display `(image ,@plist)
-          'face face
-          'tabbar-tab tab
-          'local-map keymap
-          'help-echo 'tabbar-help-on-tab
-          'pointer 'hand
-          'tabbar-action 'icon))
+		  'display `(image ,@plist)
+		  'face face
+		  'tabbar-tab tab
+		  'local-map keymap
+		  'help-echo 'tabbar-help-on-tab
+		  'pointer 'hand
+		  'tabbar-action 'icon))
      ((and display-p (stringp display-p)
-       (= 1 (length display-p)))
+	   (= 1 (length display-p)))
       (propertize display-p
-          'face face
-          'tabbar-tab tab
-          'local-map keymap
-          'help-echo 'tabbar-help-on-tab
-          'pointer 'hand
-          'tabbar-action 'icon))
+		  'face face
+		  'tabbar-tab tab
+		  'local-map keymap
+		  'help-echo 'tabbar-help-on-tab
+		  'pointer 'hand
+		  'tabbar-action 'icon))
      ((and compose-p (= 3 (length compose-p))
-       (setq compose-p (nth 2 compose-p))
-       (= 1 (length compose-p))
-       (setq compose-p (make-string 1 (aref compose-p 0))))
+	   (setq compose-p (nth 2 compose-p))
+	   (= 1 (length compose-p))
+	   (setq compose-p (make-string 1 (aref compose-p 0))))
       (propertize compose-p
-          'face face
-          'tabbar-tab tab
-          'local-map keymap
-          'help-echo 'tabbar-help-on-tab
-          'pointer 'hand
-          'tabbar-action 'icon))
+		  'face face
+		  'tabbar-tab tab
+		  'local-map keymap
+		  'help-echo 'tabbar-help-on-tab
+		  'pointer 'hand
+		  'tabbar-action 'icon))
      (t ""))))
 
 (defun tabbar-line-mode-icon (tab face keymap)
   "Create mode icon for TAB using FACE and KEYMAP"
   (setq tabbar-line-mode-icon nil)
-  (when (and window-system
-         (or (and (eq t tabbar-ruler-use-mode-icons) (featurep 'mode-icons))
-         (and (eq 'if-enabled tabbar-ruler-use-mode-icons)
-              (boundp 'mode-icons-mode)
-              mode-icons-mode)))
+  (when (and window-system 
+	     (or (and (eq t tabbar-ruler-use-mode-icons) (featurep 'mode-icons))
+		 (and (eq 'if-enabled tabbar-ruler-use-mode-icons)
+		      (boundp 'mode-icons-mode)
+		      mode-icons-mode)))
     (let ((mode-icon (and (fboundp #'mode-icons-get-icon-spec)
-              (with-current-buffer (tabbar-tab-value tab)
-                (mode-icons-get-icon-spec mode-name)))))
+			  (with-current-buffer (tabbar-tab-value tab)
+			    (mode-icons-get-icon-spec mode-name)))))
       (setq tabbar-line-mode-icon (propertize " " 'face face
-                          'tabbar-tab tab
-                          'local-map keymap
-                          'help-echo 'tabbar-help-on-tab
-                          'face face
-                          'pointer 'hand
-                          'tabbar-action 'icon))
+						  'tabbar-tab tab
+						  'local-map keymap
+						  'help-echo 'tabbar-help-on-tab
+						  'face face
+						  'pointer 'hand
+						  'tabbar-action 'icon))
       (if mode-icon
-      (tabbar-line-fix-display
-       (mode-icons--recolor-string (with-current-buffer (tabbar-tab-value tab) mode-name)
-                       (or (not tabbar-ruler-recolor-inactive-icons)
-                       (memq face '(tabbar-selected tabbar-selected-highlight tabbar-selected-modified)))
-                       face)
-       face tab keymap)
-    (if tabbar-ruler-mode-icon-for-unknown-modes
-        (propertize " "
-            'display (create-image mode-icon-unknown 'xpm t
-                           :ascent 'center
-                           :face face)
-            'face face
-            'tabbar-tab tab
-            'local-map keymap
-            'help-echo 'tabbar-help-on-tab
-            'pointer 'hand
-            'tabbar-action 'icon)
-      (setq tabbar-line-mode-icon nil))))))
+	  (tabbar-line-fix-display
+	   (mode-icons--recolor-string (with-current-buffer (tabbar-tab-value tab) mode-name)
+  				       (or (not tabbar-ruler-recolor-inactive-icons)
+					   (memq face '(tabbar-selected tabbar-selected-highlight tabbar-selected-modified)))
+				       face)
+	   face tab keymap)
+	(if tabbar-ruler-mode-icon-for-unknown-modes
+	    (propertize " "
+			'display (create-image mode-icon-unknown 'xpm t
+					       :ascent 'center
+					       :face face)
+			'face face
+			'tabbar-tab tab
+			'local-map keymap
+			'help-echo 'tabbar-help-on-tab
+			'pointer 'hand
+			'tabbar-action 'icon)
+	  (setq tabbar-line-mode-icon nil))))))
 
 (defun tabbar-line-padding (selected-p next-selected-p background-face)
   (when (and tabbar-ruler-fancy-tab-separator tabbar-ruler-tab-padding
-         (or (not selected-p) (and selected-p tabbar-ruler-pad-selected))
-         (or (not next-selected-p) (and next-selected-p tabbar-ruler-pad-selected)))
+	     (or (not selected-p) (and selected-p tabbar-ruler-pad-selected))
+	     (or (not next-selected-p) (and next-selected-p tabbar-ruler-pad-selected)))
     (propertize " " 'display (tabbar-normalize-image
-                  (tabbar-ruler-pad-xpm
-                   tabbar-ruler-tab-padding
-                   (tabbar-background (or tabbar-ruler-padding-face background-face))) 0 background-face)
-        'face background-face)))
+			      (tabbar-ruler-pad-xpm
+			       tabbar-ruler-tab-padding
+			       (tabbar-background (or tabbar-ruler-padding-face background-face))) 0 background-face)
+		'face background-face)))
 
 (defsubst tabbar-line-tab (tab &optional not-last sel)
   "Return the display representation of tab TAB.
@@ -1402,29 +1411,29 @@ That is, a propertized string used as an `header-line-format' template
 element.
 Call `tabbar-tab-label-function' to obtain a label for TAB."
   (let* ((selected-p (tabbar-selected-p tab (tabbar-current-tabset)))
-     (next-selected-p (and not-last (tabbar-selected-p (car not-last) (tabbar-current-tabset))))
-     (modified-p (buffer-modified-p (tabbar-tab-value tab)))
-     (keymap (tabbar-make-tab-keymap tab))
-     (left-fun
-      (if (and selected-p (not (eq tabbar-ruler-fancy-current-tab-separator 'inherit)))
-          (intern (format "powerline-%s-left" tabbar-ruler-fancy-current-tab-separator))
-        (intern (format "powerline-%s-left" tabbar-ruler-fancy-tab-separator))))
-     (face (if selected-p
-           (if modified-p
-               'tabbar-selected-modified
-             'tabbar-selected)
-         (if modified-p
-             'tabbar-unselected-modified
-           'tabbar-unselected)))
-     (close-button-image (tabbar-find-image
-                  `((:type xpm :data ,(tabbar-ruler-image :type 'close :disabled (not modified-p)
-                                      :face face)))))
-     (background-face 'tabbar-default)
-     (next-background-face 'tabbar-default)
-     (mode-icon (and (featurep 'mode-icons)
-             (with-current-buffer (tabbar-tab-value tab)
-               (assoc mode-name mode-icons))))
-     (pad-face (or tabbar-ruler-padding-face background-face)))
+	 (next-selected-p (and not-last (tabbar-selected-p (car not-last) (tabbar-current-tabset))))
+	 (modified-p (buffer-modified-p (tabbar-tab-value tab)))
+	 (keymap (tabbar-make-tab-keymap tab))
+	 (left-fun
+	  (if (and selected-p (not (eq tabbar-ruler-fancy-current-tab-separator 'inherit)))
+	      (intern (format "powerline-%s-left" tabbar-ruler-fancy-current-tab-separator))
+	    (intern (format "powerline-%s-left" tabbar-ruler-fancy-tab-separator))))
+	 (face (if selected-p
+		   (if modified-p
+		       'tabbar-selected-modified
+		     'tabbar-selected)
+		 (if modified-p
+		     'tabbar-unselected-modified
+		   'tabbar-unselected)))
+	 (close-button-image (tabbar-find-image
+			      `((:type xpm :data ,(tabbar-ruler-image :type 'close :disabled (not modified-p)
+								      :face face)))))
+	 (background-face 'tabbar-default)
+	 (next-background-face 'tabbar-default)
+	 (mode-icon (and (featurep 'mode-icons)
+			 (with-current-buffer (tabbar-tab-value tab)
+			   (assoc mode-name mode-icons))))
+	 (pad-face (or tabbar-ruler-padding-face background-face)))
     (setq close-button-image (tabbar-normalize-image close-button-image 0 face))
     (concat
      (tabbar-line-right-separator selected-p face background-face)
@@ -1449,7 +1458,7 @@ Call `tabbar-tab-label-function' to obtain a label for TAB."
       'pointer 'hand)
      (propertize (if (and modified-p tabbar-ruler-modified-symbol)
                      (with-temp-buffer
-               (insert (make-string 1 #x207A))
+ 		       (insert (make-string 1 #x207A))
                        (insert " ")
                        (buffer-substring (point-min) (point-max))) " ")
                  'face face
@@ -1460,7 +1469,7 @@ Call `tabbar-tab-label-function' to obtain a label for TAB."
                  'pointer 'hand)
      (if tabbar-ruler-fancy-close-image
          (propertize (with-temp-buffer
-               (insert (make-string 1 #x00D7))
+ 		       (insert (make-string 1 #x00D7)) 
                        (buffer-string))
                      'display close-button-image
                      'face face
@@ -1470,7 +1479,7 @@ Call `tabbar-tab-label-function' to obtain a label for TAB."
                      'tabbar-action 'close-tab)
        (propertize
         (with-temp-buffer
-      (insert (make-string 1 #x00D7))
+ 	  (insert (make-string 1 #x00D7)) 
           (insert " ")
           (buffer-string))
         'face face
@@ -1503,7 +1512,7 @@ Call `tabbar-tab-label-function' to obtain a label for TAB."
         (tabbar-scroll tabset -1)
         (setq tabs (tabbar-view tabset)))
       (while (and tabs (not atsel))
-    (setq elts  (cons (tabbar-line-tab (car tabs) (cdr tabs)) elts)
+	(setq elts  (cons (tabbar-line-tab (car tabs) (cdr tabs)) elts)
                 atsel (eq (car tabs) sel)
                 tabs  (cdr tabs)))
       (setq elts (nreverse elts))
@@ -1539,11 +1548,11 @@ Call `tabbar-tab-label-function' to obtain a label for TAB."
     (tabbar-set-template
        tabset
        (list (tabbar-line-buttons tabset)
-         (cond
-          (tabbar-ruler-fancy-tab-separator
-           (propertize " " 'display (funcall (intern (format "powerline-%s-right" tabbar-ruler-fancy-tab-separator))
-                         nil (get-text-property 0 'face (car elts)) tabbar-ruler-tab-height)))
-          (t ""))
+	     (cond
+	      (tabbar-ruler-fancy-tab-separator
+	       (propertize " " 'display (funcall (intern (format "powerline-%s-right" tabbar-ruler-fancy-tab-separator))
+						 nil (get-text-property 0 'face (car elts)) tabbar-ruler-tab-height)))
+	      (t ""))
              elts
              (propertize "%-"
                          'face (list :background padcolor
@@ -1654,7 +1663,7 @@ Call `tabbar-tab-label-function' to obtain a label for TAB."
               (when tabbar-ruler-popup-menu
                 (unless tabbar-ruler-menu-off
                   (unless (eq system-type 'darwin)
-            (menu-bar-mode -1))
+		    (menu-bar-mode -1))
                   (setq tabbar-ruler-menu-off 't)))
               (when tabbar-ruler-popup-toolbar
                 (unless (eq system-type 'darwin)
@@ -1730,7 +1739,7 @@ Call `tabbar-tab-label-function' to obtain a label for TAB."
               (when tabbar-ruler-popup-menu
                 (when tabbar-ruler-menu-off
                   (unless (eq system-type 'darwin)
-            (menu-bar-mode 1))
+		    (menu-bar-mode 1))
                   (setq tabbar-ruler-menu-off nil)))
               (when tabbar-ruler-popup-toolbar
                 (unless (eq system-type 'darwin)
@@ -1740,7 +1749,7 @@ Call `tabbar-tab-label-function' to obtain a label for TAB."
           (when tabbar-ruler-popup-menu
             (unless tabbar-ruler-menu-off
               (unless (eq system-type 'darwin)
-        (menu-bar-mode -1))
+		(menu-bar-mode -1))
               (setq tabbar-ruler-menu-off 't)))
           (when tabbar-ruler-popup-toolbar
             (unless (eq system-type 'darwin)
@@ -1826,6 +1835,8 @@ visiting a file.  The current buffer is always included."
                      ((buffer-live-p b) b)))
                 (buffer-list))))
 
+(setq tabbar-buffer-list-function #'tabbar-ruler-tabbar-buffer-list)
+
 (defvar tabbar-ruler-projectile-tabbar-buffer-group-calc nil
   "Buffer group for projectile.  Should be buffer local and speed up calculation of buffer groups.")
 (defun tabbar-ruler-projectile-tabbar-buffer-groups ()
@@ -1900,9 +1911,9 @@ Return a list of one element based on major mode."
               ;; function is called when updating the header line.
               (save-match-data (string-match "[^ ]" mode-name)))
          (let ((txt (format "%s" mode-name)))
-       ;; Take out mode-icons and show text
-       (set-text-properties 0 (length txt) nil txt)
-       txt)
+	   ;; Take out mode-icons and show text
+	   (set-text-properties 0 (length txt) nil txt)
+	   txt)
        (symbol-name major-mode))))))
 
 (defun tabbar-ruler-group-buffer-groups ()
