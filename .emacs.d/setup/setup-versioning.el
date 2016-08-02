@@ -66,6 +66,7 @@
              magit-status-internal)
   :bind (:map ctl-x-map
               ("v" . magit-status))
+  :after ido-ubiquitous
   :load-path (lambda () (expand-file-name "magit/lisp" user-emacs-directory))
   :init (eval-after-load 'info
           '(progn (info-initialize)
@@ -78,6 +79,7 @@
                   magit-set-upstream-on-push t
                   magit-diff-refine-hunk t
                   magit-auto-revert-mode-lighter nil
+
                   magit-completing-read-function 'magit-ido-completing-read)
 
             ;; Disable saving place on git commit logs
