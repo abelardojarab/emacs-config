@@ -78,7 +78,6 @@
                   magit-set-upstream-on-push t
                   magit-diff-refine-hunk t
                   magit-auto-revert-mode-lighter nil
-
                   magit-completing-read-function 'magit-ido-completing-read)
 
             ;; Disable saving place on git commit logs

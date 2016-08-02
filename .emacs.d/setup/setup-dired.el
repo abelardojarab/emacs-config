@@ -28,8 +28,6 @@
   :bind (("C-x C-j" . dired-jump)
          :map dired-mode-map
          (("." . dired-up-directory)
-          ("M-u" . dired-up-directory)
-          ("M-!" . async-shell-command)
           ("RET" . dired-find-alternate-file)
           ("C-c d" . dired-filter-by-directory)
           ("C-c f" . dired-filter-by-file)))

@@ -27,8 +27,7 @@
 ;; Helm
 (use-package helm-config
   :load-path (lambda () (expand-file-name "helm/" user-emacs-directory))
-  :bind (("C-;" . helm-mini)
-         ("C-'" . helm-semantic-or-imenu)
+  :bind (("C-'" . helm-semantic-or-imenu)
          :map isearch-mode-map
          ("C-h" . helm-occur-from-isearch)
          :map ctl-x-map
@@ -72,7 +71,7 @@
             ;; replace locate with spotlight on Mac
             (when (and (executable-find "mdfind")
                        (equal system-type 'darwin))
-                (setq helm-locate-command "mdfind -name %s %s"))
+              (setq helm-locate-command "mdfind -name %s %s"))
 
             (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ;; rebind tab to run persistent action
             (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ;; make TAB works in terminal

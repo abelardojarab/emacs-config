@@ -60,12 +60,37 @@
                   image-dired-cmd-create-temp-image-options
                   (replace-regexp-in-string "-strip" "-auto-orient -strip" image-dired-cmd-create-temp-image-options))))
 
-;;preview files in dired
+;; Preview files in dired
 (use-package peep-dired
   :load-path (lambda () (expand-file-name "peep-dired/" user-emacs-directory))
   :defer t ;; don't access `dired-mode-map' until `peep-dired' is loaded
   :bind (:map dired-mode-map
               ("P" . peep-dired)))
+
+;; Sunrise Commander
+(use-package sunrise-commander
+  :defer t
+  :commands (sunrise cb-sunrise-commander/dired-this-dir)
+  :load-path (lambda () (expand-file-name "sunrise-commander/" user-emacs-directory))
+  :bind (("C-;" . cb-sunrise-commander/dired-this-dir)
+         :map ctl-x-map
+         ("C-d" . sr-dired)
+         :map sr-mode-map
+         ("J" . sr-goto-dir)
+         ("j" . dired-next-line)
+         ("k" . dired-previous-line)
+         ("n" . sr-goto-dir)
+         ("C-k" . dired-do-kill-lines))
+  :init (progn
+          (defun cb-sunrise-commander/dired-this-dir ()
+            (interactive)
+            (sr-dired default-directory)))
+  :config (progn
+            (setq sr-windows-locked nil)
+            (setq sr-cursor-follows-mouse nil)
+            (setq sr-windows-default-ratio 60)
+            (setq sr-use-commander-keys nil)
+            (setq dired-auto-revert-buffer t)))
 
 (provide 'setup-dired-plugins)
 ;;; setup-dired-plugins.el ends here
