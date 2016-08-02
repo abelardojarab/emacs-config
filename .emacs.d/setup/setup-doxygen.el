@@ -33,7 +33,7 @@
               ("C-c c" . doxymacs-insert-function-comment))
   :if (executable-find "doxymacs_parser")
   :diminish doxymacs-mode
-  :load-path (lambda () (expand-file-name "doxymacs/" user-emacs-directory))
+  :load-path (lambda () (expand-file-name "doxymacs/lisp" user-emacs-directory))
   :init (add-hook 'c-mode-common-hook 'doxymacs-mode))
 
 (provide 'setup-doxygen)
