@@ -66,7 +66,6 @@
              magit-status-internal)
   :bind (:map ctl-x-map
               ("v" . magit-status))
-  :after ido-ubiquitous
   :load-path (lambda () (expand-file-name "magit/lisp" user-emacs-directory))
   :init (eval-after-load 'info
           '(progn (info-initialize)
