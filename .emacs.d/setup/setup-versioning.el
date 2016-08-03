@@ -126,7 +126,12 @@
                   magit-revert-buffers nil ;; obsolete
                   ;; see https://github.com/magit/magit/pull/2091
                   magit-keep-region-overlay t
-                  )
+                  ;; attempt to disable magit-auto-revert-immediately
+                  magit-auto-revert-immediately (null (and (boundp 'auto-revert-use-notify)
+                                                           auto-revert-use-notify))
+                  git-commit-fill-column 120
+                  git-commit-summary-max-length 80
+                  auto-revert-verbose nil)
 
             ;; Face setup
             (set-face-foreground 'magit-hash (face-foreground 'font-lock-type-face))
