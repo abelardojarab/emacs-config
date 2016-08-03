@@ -52,6 +52,9 @@
               (server-start))))
   :config (progn
 
+            ;; Avoid Emacs bug#20015,
+            (setq tramp-ssh-controlmaster-options "-o ControlMaster=auto -o ControlPath='tramp.%%C' -o ControlPersist=no")
+
             ;; Re-enable the SSH keyring in case Emacs does not refreshes it
             (defun my/ssh-refresh ()
               "Reset the environment variable SSH_AUTH_SOCK"

@@ -128,6 +128,39 @@
                   magit-keep-region-overlay t
                   )
 
+            ;; Face setup
+            (set-face-foreground 'magit-hash (face-foreground 'font-lock-type-face))
+
+            ;; defaults for popups
+            (setq magit-branch-popup-show-variables nil)
+            (defconst magit-pull-request-remote "upstream"
+              "Where to find pull requests.")
+            ;; From https://github.com/tarsius/magit-rockstar/
+            ;; Changed "origin" to `magit-pull-request-remote', remove log action,
+            ;; fetch it to <remote>/pull/<num> instead of pr-<num>.
+            (defun magit-branch-pull-request (number &optional branch checkout)
+              "Create a new branch from a Github pull request.
+Read \"NR[:BRANCH-NAME] from the user. If BRANCH-NAME is not
+provided use \"pr-NR\". Assume all pull requests can be found on
+`magit-pull-request-remote'. With a prefix argument checkout
+branch."
+              (interactive
+               (let ((input (magit-read-string "Branch pull request (NR[:BRANCH-NAME])")))
+                 (if (string-match "\\([1-9][0-9]*\\)\\(?::\\(.+\\)\\)?" input)
+                     (list (match-string 1 input)
+                           (match-string 2 input)
+                           current-prefix-arg)
+                   (user-error "Invalid input"))))
+              (unless branch
+                (setq branch number))
+              (magit-call-git "fetch" magit-pull-request-remote
+                              (format "pull/%s/head:refs/remotes/%s/pull/%s"
+                                      number magit-pull-request-remote branch))
+              (when checkout
+                (magit-run-git "checkout" branch)))
+            (magit-define-popup-action 'magit-fetch-popup
+              ?p "Fetch pull request" 'magit-branch-pull-request)
+
             ;; Show worktree section if there are worktrees, avoid overhead if
             ;; there aren't.
             (defvar-local np/magit-want-worktrees t)
@@ -159,7 +192,7 @@
                      'magit-status-sections-hook inserter
                      'magit-insert-unpulled-from-upstream nil 'local))
                 (setq-local np/magit-want-submodules nil)))
-                (add-hook 'magit-status-mode-hook #'np/magit-maybe-add-submodules)
+            (add-hook 'magit-status-mode-hook #'np/magit-maybe-add-submodules)
 
             ;; restore previously hidden windows
             (defadvice magit-quit-window (around magit-restore-screen activate)
