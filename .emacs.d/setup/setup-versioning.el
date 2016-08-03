@@ -74,6 +74,7 @@
 
           ;; we no longer need vc-git
           (delete 'Git vc-handled-backends)
+
           ;; make magit status go full-screen but remember previous window
           ;; settings
           ;; from: http://whattheemacsd.com/setup-magit.el-01.html
@@ -100,22 +101,65 @@
 
           (add-hook 'git-commit-mode-hook 'magit-commit-mode-init))
   :config (progn
-            (setq ;; don't put "origin-" in front of new branch names by default
-             magit-default-tracking-name-function 'magit-default-tracking-name-branch-only
-             ;; open magit status in same window as current buffer
-             magit-status-buffer-switch-function 'switch-to-buffer
-             ;; pop the process buffer if we're taking a while to complete
-             magit-process-popup-time 10
-             ;; ask me to save buffers
-             magit-save-some-buffers t
-             ;; ask me if I want a tracking upstream
-             magit-set-upstream-on-push 'askifnotset
-             ;; highlight word/letter changes in hunk diffs
-             magit-diff-refine-hunk t
-             ;; use ido to look for branches
-             magit-completing-read-function 'magit-ido-completing-read
-             ;; ask me if I want to include a revision when rewriting
-             magit-rewrite-inclusive 'ask)
+            ;; don't put "origin-" in front of new branch names by default
+            (setq magit-default-tracking-name-function 'magit-default-tracking-name-branch-only
+                  ;; open magit status in same window as current buffer
+                  magit-status-buffer-switch-function 'switch-to-buffer
+                  ;; pop the process buffer if we're taking a while to complete
+                  magit-process-popup-time 10
+                  ;; ask me to save buffers
+                  magit-save-some-buffers t
+                  ;; ask me if I want a tracking upstream
+                  magit-set-upstream-on-push 'askifnotset
+                  ;; highlight word/letter changes in hunk diffs
+                  magit-diff-refine-hunk t
+                  ;; use ido to look for branches
+                  magit-completing-read-function 'magit-ido-completing-read
+                  ;; ask me if I want to include a revision when rewriting
+                  magit-rewrite-inclusive 'ask
+                  ;; this is too expensive to have on by default
+                  magit-backup-mode nil
+                  ;; don't revert automatically,
+                  magit-refresh-file-buffer-hook nil ;; obsolete
+                  magit-turn-on-auto-revert-mode nil ;; obsolete
+                  magit-auto-revert-mode nil
+                  magit-revert-buffers nil ;; obsolete
+                  ;; see https://github.com/magit/magit/pull/2091
+                  magit-keep-region-overlay t
+                  )
+
+            ;; Show worktree section if there are worktrees, avoid overhead if
+            ;; there aren't.
+            (defvar-local np/magit-want-worktrees t)
+            (put 'np/magit-want-worktrees 'permanent-local t)
+            (defun np/magit-maybe-add-worktrees ()
+              (if (and np/magit-want-worktrees
+                       (not (memq #'magit-insert-worktrees magit-status-sections-hook))
+                       (> (length (magit-list-worktrees)) 1))
+                  (magit-add-section-hook
+                   'magit-status-sections-hook #'magit-insert-worktrees
+                   'magit-insert-status-headers 'append 'local)
+                (setq-local np/magit-want-worktrees nil)))
+            (add-hook 'magit-status-mode-hook #'np/magit-maybe-add-worktrees)
+
+            ;; Show submodule section if there are submodules, avoid overhead if
+            ;; there aren't.
+            (defvar-local np/magit-want-submodules t)
+            (put 'np/magit-want-submodules 'permanent-local t)
+            (defun np/magit-maybe-add-submodules ()
+              (if (and np/magit-want-submodules
+                       (not (memq #'magit-insert-submodules magit-status-sections-hook))
+                       (magit-get-submodules))
+                  (dolist (inserter '(magit-insert-modules-unpulled-from-upstream
+                                      magit-insert-modules-unpulled-from-pushremote
+                                      magit-insert-modules-unpushed-to-upstream
+                                      magit-insert-modules-unpushed-to-pushremote
+                                      magit-insert-submodules))
+                    (magit-add-section-hook
+                     'magit-status-sections-hook inserter
+                     'magit-insert-unpulled-from-upstream nil 'local))
+                (setq-local np/magit-want-submodules nil)))
+                (add-hook 'magit-status-mode-hook #'np/magit-maybe-add-submodules)
 
             ;; restore previously hidden windows
             (defadvice magit-quit-window (around magit-restore-screen activate)
