@@ -65,12 +65,18 @@
              projectile-vc
              magit-status-internal)
   :bind (:map ctl-x-map
-              ("v" . magit-status))
+              ("v" . magit-status)
+              :map magit-mode-map
+              (("C-c C-a" . magit-just-amend)
+               ("c" . magit-maybe-commit)))
   :load-path (lambda () (expand-file-name "magit/lisp" user-emacs-directory))
   :init (progn
           (eval-after-load 'info
             '(progn (info-initialize)
                     (add-to-list 'Info-directory-list (expand-file-name "magit/Documentation" user-emacs-directory))))
+
+          ;; Enable line highlight
+          (add-hook 'magit-mode-hook #'hl-line-mode)
 
           ;; we no longer need vc-git
           (delete 'Git vc-handled-backends)
@@ -101,6 +107,7 @@
 
           (add-hook 'git-commit-mode-hook 'magit-commit-mode-init))
   :config (progn
+
             ;; don't put "origin-" in front of new branch names by default
             (setq magit-default-tracking-name-function 'magit-default-tracking-name-branch-only
                   ;; open magit status in same window as current buffer
@@ -120,10 +127,10 @@
                   ;; this is too expensive to have on by default
                   magit-backup-mode nil
                   ;; don't revert automatically,
+                  magit-auto-revert-mode nil
                   magit-refresh-file-buffer-hook nil ;; obsolete
                   magit-turn-on-auto-revert-mode nil ;; obsolete
-                  magit-auto-revert-mode nil
-                  magit-revert-buffers nil ;; obsolete
+                  magit-revert-buffers 'silent ;; obsolete
                   ;; see https://github.com/magit/magit/pull/2091
                   magit-keep-region-overlay t
                   ;; attempt to disable magit-auto-revert-immediately
@@ -214,8 +221,6 @@ branch."
               (if show-options
                   (magit-key-mode-popup-committing)
                 (magit-commit)))
-
-            (define-key magit-mode-map "c" 'magit-maybe-commit)
 
             ;; Disable saving place on git commit logs
             (add-hook 'git-commit-mode-hook (toggle-save-place 0))))

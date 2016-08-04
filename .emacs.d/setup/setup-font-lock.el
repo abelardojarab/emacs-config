@@ -40,6 +40,14 @@
     (fundamental-mode)))
 (add-hook 'find-file-hook 'my-find-file-check-make-large-file-read-only-hook)
 
+;; In programming modes, make sure things like FIXME and TODO are highlighted so they stand out:
+(defun my/add-watchwords ()
+  "Highlight FIXME, TODO, and NOCOMMIT in code TODO"
+  (font-lock-add-keywords
+   nil '(("\\<\\(FIXME:?\\|TODO:?\\|NOCOMMIT:?\\)\\>"
+          1 '((:foreground "#d7a3ad") (:weight bold)) t))))
+(add-hook 'prog-mode-hook #'my/add-watchwords)
+
 ;; Displaying image tooltips in Emacs
 ;; http://kitchingroup.cheme.cmu.edu/blog/2016/03/21/Displaying-image-overlays-on-image-filenames-in-Emacs/
 (defvar image-tooltip-re (concat  "\\(?3:'\\|\"\\)\\(?1:.*\\."

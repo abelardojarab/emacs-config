@@ -102,6 +102,15 @@
   :diminish hs-minor-mode
   :config (progn
 
+            (defvar hs-special-modes-alist
+              (mapcar 'purecopy
+                      '((c-mode "{" "}" "/[*/]" nil nil)
+                        (c++-mode "{" "}" "/[*/]" nil nil)
+                        (bibtex-mode ("@\\S(*\\(\\s(\\)" 1))
+                        (java-mode "{" "}" "/[*/]" nil nil)
+                        (js-mode "{" "}" "/[*/]" nil)
+                        (javascript-mode  "{" "}" "/[*/]" nil))")"))
+
             ;; enable `hs-minor-mode' at startup
             (dolist (hook (list 'prog-mode-hook))
               (add-hook hook (lambda () (hs-minor-mode 1))))
