@@ -80,7 +80,7 @@ Exit the save between databases if there is user input."
                    (semanticdb-save-db db t))
                  semanticdb-database-list))))
     (if (fboundp 'save-excursion)
-        (save-mark-and-excursion ;; <-- added line
+        (save-excursion ;; <-- added line
          (semantic-exit-on-input 'semanticdb-idle-save
            (mapc (lambda (db)
                    (semantic-throw-on-input 'semanticdb-idle-save)
