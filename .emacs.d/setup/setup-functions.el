@@ -24,15 +24,15 @@
 
 ;;; Code:
 
-;; Missing nadvice library
-(when (not (fboundp 'advice-add))
-  (require 'nadvice))
-
 ;; Missing cl-lib function
 (defun cl--set-getf (plist tag val)
   (let ((p plist))
     (while (and p (not (eq (car p) tag))) (setq p (cdr (cdr p))))
     (if p (progn (setcar (cdr p) val) plist) (list* tag val plist))))
+
+;; Missing nadvice library
+(when (not (fboundp 'advice-add))
+  (require 'nadvice))
 
 ;; Missing function
 (when (not (fboundp 'special-form-p))
