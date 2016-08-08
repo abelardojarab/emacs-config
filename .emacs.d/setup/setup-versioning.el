@@ -220,10 +220,7 @@ branch."
               (interactive "P")
               (if show-options
                   (magit-key-mode-popup-committing)
-                (magit-commit)))
-
-            ;; Disable saving place on git commit logs
-            (add-hook 'git-commit-mode-hook (toggle-save-place 0))))
+                (magit-commit)))))
 
 ;; diff-hl
 (use-package diff-hl

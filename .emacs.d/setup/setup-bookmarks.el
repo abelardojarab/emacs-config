@@ -28,6 +28,7 @@
 (use-package bookmark+
   :load-path (lambda () (expand-file-name "bookmark+/" user-emacs-directory))
   :config (progn
+            (setq bookmark-save-flag 1)
             (setq-default bookmark-default-file "~/.emacs.cache/bookmarks")))
 
 ;; Bookmarks
@@ -36,7 +37,6 @@
   :config (progn
             (setq bm-highlight-style 'bm-highlight-line-and-fringe)
             (setq bm-restore-repository-on-load t)
-            (setq bookmark-save-flag 1)
 
             ;; make bookmarks persistent as default
             (setq-default bm-buffer-persistence t)
@@ -45,7 +45,7 @@
             (add-hook 'after-init-hook 'bm-repository-load)
 
             ;; Restoring bookmarks when on file find.
-            (add-hook 'find-file-hooks 'bm-buffer-restore)
+            (add-hook 'find-file-hook 'bm-buffer-restore)
 
             ;; Saving bookmark data on killing a buffer
             (add-hook 'kill-buffer-hook 'bm-buffer-save)

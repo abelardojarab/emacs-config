@@ -38,7 +38,6 @@
          ("u" . helm-resume)
          ("l" . helm-buffers-list)
          ("f" . helm-for-files)
-         ("r" . helm-recentf)
          ("<tab>" . helm-find-files))
   :config (progn
             (defadvice helm-buffers-sort-transformer (around ignore activate)

@@ -67,7 +67,10 @@
 (use-package saveplace
   :init (progn
           (setq save-place-file "~/.emacs.cache/emacs.saveplace")
-          (setq-default save-place t)))
+          (setq-default save-place t)
+
+          (if (fboundp 'save-place-mode)
+              (save-place-mode))))
 
 ;; Automatically save and restore sessions
 (use-package desktop
