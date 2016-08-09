@@ -46,7 +46,9 @@
                   c-eldoc-buffer-regenerate-time 60)))
 
 (use-package irony-eldoc
-  :if (file-exists-p "~/.emacs.cache/irony-server/bin/irony-server")
+  :if (or (file-exists-p "~/.emacs.cache/irony-server/bin/irony-server")
+          (executable-find "irony-server"))
+  :after irony
   :commands irony-eldoc
   :load-path (lambda () (expand-file-name "irony-eldoc/" user-emacs-directory))
   :init (progn
