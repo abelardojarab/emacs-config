@@ -30,22 +30,27 @@
   :init (progn
           (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
           (add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
-          (add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)))
+          (add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)
+
+          ;; enable eldoc in eval-expression
+          (add-hook 'eval-expression-minibuffer-setup-hook #'eldoc-mode)))
 
 (use-package c-eldoc
   :commands c-turn-on-eldoc-mode
   :load-path (lambda () (expand-file-name "c-eldoc/" user-emacs-directory))
-  :config (progn
+  :init (progn
             (add-hook 'c-mode-hook 'c-turn-on-eldoc-mode)
-            (add-hook 'c++-mode-hook 'c-turn-on-eldoc-mode)
-            (setq c-eldoc-buffer-regenerate-time 60)))
+            (add-hook 'c++-mode-hook 'c-turn-on-eldoc-mode))
+  :config (progn
+            (setq c-eldoc-cpp-commang "clang"
+                  c-eldoc-buffer-regenerate-time 60)))
 
 (use-package irony-eldoc
   :if (file-exists-p "~/.emacs.cache/irony-server/bin/irony-server")
   :commands irony-eldoc
   :load-path (lambda () (expand-file-name "irony-eldoc/" user-emacs-directory))
   :init (progn
-            (add-hook 'irony-mode-hook 'irony-eldoc)))
+          (add-hook 'irony-mode-hook 'irony-eldoc)))
 
 (provide 'setup-eldoc)
 ;;; setup-eldoc.el ends here
