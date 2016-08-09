@@ -105,14 +105,17 @@
 ;; Gtags
 (use-package ggtags
   :if (executable-find "global")
-  :commands (ggtags-mode ggtags-find-tag-dwim)
+  :after (eldoc etags)
+  :commands (ggtags-mode ggtags-find-tag-dwim ggtags-eldoc-function)
   :diminish ggtags-mode
   :load-path (lambda () (expand-file-name "ggtags/" user-emacs-directory))
   :init (progn
           (add-hook 'c-mode-common-hook
                     (lambda ()
                       (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
-                        (ggtags-mode 1)))))
+                        (ggtags-mode 1)
+                        (setq-local eldoc-documentation-function #'ggtags-eldoc-function)
+                        ))))
   :config (progn
             (defun gtags-update ()
               (interactive)

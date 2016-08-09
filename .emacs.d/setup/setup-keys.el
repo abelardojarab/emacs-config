@@ -61,7 +61,7 @@
 ;; popup-based buffer switcher
 (use-package popup-switcher
   :defer t
-  :commands (psw-switch-buffer psw-switch-function psw-switch-projectile-files psw-navigate-files)
+  :commands (psw-switch-recentf psw-switch-buffer psw-switch-function psw-switch-projectile-files psw-navigate-files)
   :load-path (lambda () (expand-file-name "popup-switcher/" user-emacs-directory)))
 
 ;; switch window
