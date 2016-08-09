@@ -100,10 +100,8 @@
 (global-set-key [(control a)] 'mark-whole-buffer)
 
 ;; Buffer navigation
-(global-set-key [(control n)] 'xah-next-user-buffer)
-(global-set-key [(control p)] 'xah-previous-user-buffer)
-(global-set-key [(control b)] 'psw-switch-buffer)
-(global-set-key [(control t)] 'psw-switch-function)
+(global-set-key [(control n)] 'scroll-down)
+(global-set-key [(control p)] 'scroll-up)
 
 ;; Recent files
 (global-set-key "\C-x\ \C-r" 'recentf-open-files)
@@ -226,6 +224,8 @@
 (define-key ctl-x-map (kbd "<") 'decrease-left-margin)
 (define-key ctl-x-map (kbd "F") 'toggle-frame-fullscreen)
 (define-key ctl-x-map (kbd "T") 'toggle-truncate-lines)
+(define-key ctl-x-map (kbd "/") 'psw-switch-function)
+(define-key ctl-x-map (kbd ".") 'psw-switch-recentf)
 
 ;; Extra Ctrl-x mappings for navigation
 (define-key ctl-x-map (kbd "<up>") 'windmove-up)
@@ -253,12 +253,9 @@
 (define-key my-keys-minor-mode-map (kbd "C-0") 'helm-buffers-list)
 (define-key my-keys-minor-mode-map (kbd "<f5>") 'recompile)
 (define-key my-keys-minor-mode-map (kbd "C-*") 'helm-swoop)
-
-;; key bindings for buffer navigation
-(define-key my-keys-minor-mode-map [(control n)] 'xah-next-user-buffer)
-(define-key my-keys-minor-mode-map [(control p)] 'xah-previous-user-buffer)
+(define-key my-keys-minor-mode-map [(control p)] 'scroll-down)
+(define-key my-keys-minor-mode-map [(control n)] 'scroll-up)
 (define-key my-keys-minor-mode-map [(control b)] 'psw-switch-buffer)
-(define-key my-keys-minor-mode-map [(control t)] 'psw-switch-function)
 
 ;; key bindings for shift select
 (define-key my-keys-minor-mode-map [S-prior] 'shift-mark-backward-page)

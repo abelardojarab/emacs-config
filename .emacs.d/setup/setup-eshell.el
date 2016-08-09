@@ -48,7 +48,7 @@
 
 (use-package eshell
   :commands (eshell eshell-vertical eshell-horizontal)
-  :bind (("C-u" . eshell))
+  :bind (("C-t" . eshell))
   :after helm
   :init  (progn
            (setq-default eshell-directory-name "~/.emacs.cache/eshell")
@@ -73,7 +73,7 @@
                                              (kbd "M-p")
                                              'helm-eshell-history)
                                            (define-key eshell-mode-map
-                                             "\C-u"
+                                             "\C-t"
                                              'quit-window)
                                            (eshell/export "NODE_NO_READLINE=1")))
 
