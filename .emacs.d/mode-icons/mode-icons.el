@@ -196,7 +196,7 @@ This was stole/modified from `c-save-buffer-state'"
     ("\\`Elixir\\'" #xf115 font-mfizz)
     ("\\`Erlang\\'" #xf116 font-mfizz)
     ("\\`Haskell\\'" #xf126 font-mfizz)
-    ("\\`Clojure\\'" #xf10a font-mfizz)
+    ("\\`Clojure\\'" #xf10b font-mfizz)
     ("\\`Java\\(/.*\\|\\)\\'" #xf12b font-mfizz)
     ("\\`C?Perl\\'" #xf148 font-mfizz)
     ("\\`Octave\\'" "octave" xpm)
@@ -206,6 +206,12 @@ This was stole/modified from `c-save-buffer-state'"
     ("\\`Dockerfile\\'" "docker" xpm)
     ("\\`Spacemacs buffer\\'" "spacemacs" png)
     ("\\` ?emoji\\'" "emoji" png)
+    ("\\`Org-Agenda" #xf046 FontAwesome)
+    ("\\`PS\\'" "powershell" xpm)
+    (mode-icons-powershell-p "powershell" xpm)
+    (mode-icons-cmd-p "cmd" xpm-bw)
+    (mode-icons-msys-p "msys" xpm)
+    (mode-icons-cygwin-p "cygwin" xpm)
     (read-only #xf023 FontAwesome)
     (writable #xf09c FontAwesome)
     (save #xf0c7 FontAwesome)
@@ -240,6 +246,7 @@ This was stole/modified from `c-save-buffer-state'"
     ("\\`Image\\[png\\]\\'" "png" ext)
     ("\\` ?AI\\'" #xf03c FontAwesome)
     ("\\` ?Isearch\\'" #xf002)
+    (default #xf059 FontAwesome)
     ;; Diminished modes
     ("\\` ?\\(?:ElDoc\\|Anzu\\|SP\\|Guide\\|PgLn\\|Undo-Tree\\|Ergo.*\\|,\\|Isearch\\|Ind\\)\\'" nil nil))
   "Icons for major and minor modes.
@@ -259,6 +266,7 @@ without the extension.  And the third being the type of icon."
                  (const :tag "Apple" apple)
                  (const :tag "Windows" win)
                  (const :tag "Unix" unix)
+                 (const :tag "Default Icon" default)
                  (function :tag "Enriched minor mode"))
                 (choice
                  (string :tag "Icon Name")
@@ -277,6 +285,23 @@ without the extension.  And the third being the type of icon."
                  (const :tag "Mode Icons Generated file-type" ext)
                  (symbol :tag "Font"))))
   :group 'mode-icons)
+
+(defun mode-icons-powershell-p (&optional match)
+  "Is the current mode a powershell process?"
+  (let ((proc (get-buffer-process (current-buffer))))
+    (and proc (string-match-p (or match "powershell") (car (process-command proc))))))
+
+(defun mode-icons-cmd-p ()
+  "Is the current mode a CMD shell?"
+  (mode-icons-powershell-p "cmdproxy"))
+
+(defun mode-icons-cygwin-p ()
+  "Is the current mode a CMD shell?"
+  (mode-icons-powershell-p "cygwin"))
+
+(defun mode-icons-msys-p ()
+  "Is the current mode a CMD shell?"
+  (mode-icons-powershell-p "msys"))
 
 (defvar mode-icons-get-xpm-string (make-hash-table :test 'equal))
 (defun mode-icons-get-xpm-string (icon-path)
@@ -329,13 +354,37 @@ Assumes that FOREGROUND and BACKGROUND are (r g b) lists."
 (defvar mode-icons-get-icon-display-xpm-bw-face (make-hash-table)
   "Hash table of dynamic images.")
 
+(defun mode-icons-background-color (&optional face)
+  "Get the background color of FACE.
+In order, will try to get the background color from:
+- FACE
+- `mode-line' face
+- `default' face
+- Assume white."
+  (color-name-to-rgb (or (face-background (or face 'mode-line))
+                         (face-background 'mode-line)
+                         (face-background 'default)
+                         "white")))
+
+(defun mode-icons-foreground-color (&optional face)
+  "Get the foreground color of FACE.
+In order, will try to get the foreground color from:
+- FACE
+- `mode-line' face
+- `default' face
+- Assume black."
+  (color-name-to-rgb (or (face-foreground (or face 'mode-line))
+                         (face-foreground 'mode-line)
+                         (face-foreground 'default)
+                         "black")))
+
 (defun mode-icons-get-icon-display-xpm-bw-face (icon-path &optional face)
   "Change xpm at ICON-PATH to match FACE.
 The white is changed to the background color.
 The black is changed to the foreground color.
 Grayscale colors are aslo changed by `mode-icons-interpolate-from-scale'."
-  (let* ((background (color-name-to-rgb (face-background (or face 'mode-line))))
-         (foreground (color-name-to-rgb (face-foreground (or face 'mode-line))))
+  (let* ((background (mode-icons-background-color face))
+         (foreground (mode-icons-foreground-color face))
          (lst (mode-icons-interpolate-from-scale foreground background))
          (name (concat "mode_icons_bw_" (substring (mode-icons-interpolate background foreground 0.0) 1) "_"
                        (substring (mode-icons-interpolate background foreground 1.0) 1) "_"
@@ -386,8 +435,8 @@ Returns a replacement list for `mode-icons-get-icon-display-xpm-replace'"
   "Desaturate the xpm at ICON-PATH.
 When FACE is non-nil, match the foreground and background colors
 in FACE instead of making the image black and white."
-  (let* ((background (color-name-to-rgb (face-background (or face 'mode-line))))
-         (foreground (color-name-to-rgb (face-foreground (or face 'mode-line))))
+  (let* ((background (mode-icons-background-color face))
+         (foreground (mode-icons-foreground-color face))
          (lst (mode-icons-desaturate-colors icon-path foreground background))
          (name (concat "mode_icons_desaturate_"
                        (or (and background foreground
@@ -429,6 +478,19 @@ This only works with xpm files."
 ACTIVE tells if current window is active."
   (or face (and active 'mode-line) 'mode-line-inactive))
 
+(defcustom mode-icons-line-height-adjust 0
+  "The manual adjustment of the mode-line height for images."
+  :type 'integer
+  :group 'mode-icons)
+
+(defun mode-icons-line-height (&optional window)
+  "Gets the height in pixels of WINDOW's mode-line, if accessible.
+This uses `window-mode-line-height' on emacs 24.4+.  Otherwise it assumes 16.
+
+This function also adjusts the line height by `mode-icons-line-height-adjust'."
+  (+ mode-icons-line-height-adjust
+     (or (and (fboundp 'window-mode-line-height) (window-mode-line-height window)) 16)))
+
 (defun mode-icons-get-icon-display (icon type &optional face active)
   "Get the value for the display property of ICON having TYPE.
 
@@ -462,14 +524,14 @@ ACTIVE is an indicator that the current window is active."
                                      t :ascent 'center
                                      :face face
                                      :xpm-bw t
-                                     :height (window-mode-line-height)
+                                     :height (mode-icons-line-height)
                                      :icon icon))
                       ((eq type 'xpm-bw)
                        (create-image icon-path
                                      (or (and (fboundp 'imagemagick-types)
                                               (memq 'png (imagemagick-types)) 'imagemagick)
                                          'xpm)
-                                     :height (window-mode-line-height)
+                                     :height (mode-icons-line-height)
                                      :ascent 'center
                                      :face face
                                      :icon icon))
@@ -481,7 +543,7 @@ ACTIVE is an indicator that the current window is active."
                                               (memq 'png (imagemagick-types)) 'imagemagick)
                                          'xpm) t
                                          :ascent 'center
-                                         :height (window-mode-line-height)
+                                         :height (mode-icons-line-height)
                                          :face face :icon icon))
                       (t
                        (create-image icon-path
@@ -490,7 +552,7 @@ ACTIVE is an indicator that the current window is active."
                                               'imagemagick)
                                          (or (and (eq type 'jpg) 'jpeg) type))
                                      nil 
-                                     :height (window-mode-line-height)
+                                     :height (mode-icons-line-height)
                                      :ascent 'center :face face :icon icon)))))
                   ((and (eq type 'emoji) (setq tmp (mode-icons--get-emoji " " (list "" icon type) face)))
                    (get-text-property 0 'display tmp))
@@ -575,7 +637,7 @@ Use EVENT to determine location."
   (let* ((bfn (buffer-file-name))
          (revert-p (not (or (and bfn (file-remote-p buffer-file-name))
                             (verify-visited-file-modtime (current-buffer)))))
-          (steal-p (and (not (or (and bfn (file-remote-p buffer-file-name))
+         (steal-p (and (not (or (and bfn (file-remote-p buffer-file-name))
                                 (member (file-locked-p bfn) '(nil t))))))
          (mod-p (buffer-modified-p (window-buffer window))))
     (format "Buffer is %s\nmouse-1: %s Buffer\nmouse-3: Toggle modification state"
@@ -688,7 +750,8 @@ When nil, don't stop the gimp inferior mode.")
         (save-excursion
           (run-scheme  (format "\"%s\" %s" mode-icons--gimp mode-icons--gimp-inferior-args))))
       (with-current-buffer (get-buffer "*scheme*")
-        (rename-buffer "*mode-icons-gimp*")))))
+        (rename-buffer "*mode-icons-gimp*")
+        (set-process-query-on-exit-flag (get-buffer-process (get-buffer "*mode-icons-gimp*")) nil)))))
 
 (defvar mode-icons--gimp-ready-p nil)
 
@@ -866,9 +929,9 @@ of 20px."
              (not (file-exists-p xpm)))
     (puthash xpm t mode-icons--convert-text-to-xpm)
     (let ((script (format mode-icons--font-to-xpm-gimp-script text font xpm))
-          (background (and face (color-name-to-rgb (face-background face))))
-          (foreground (and face (color-name-to-rgb (face-foreground face)))))
-      (when background
+          (background (mode-icons-background-color face))
+          (foreground (mode-icons-foreground-color face)))
+      (when face
         (setq background (mapcar (lambda(x)
                                    (round (* 255 x))) background)
               foreground (mapcar (lambda(x)
@@ -1033,7 +1096,7 @@ ACTIVE is a flag telling if the current window is active."
                                                   (memq 'png (imagemagick-types)))
                                              'imagemagick) 'png)
                                     nil
-                                    :height (window-mode-line-height)
+                                    :height (mode-icons-line-height)
                                     :ascent 'center
                                     :heuristic-mask t
                                     :face face)
@@ -1091,7 +1154,7 @@ ACTIVE is a flag for if  the current window is active."
                                     :face face
                                     ;; :background (emojify--get-image-background beg end)
                                     ;; no-op if imagemagick is not available
-                                    :height (window-mode-line-height))
+                                    :height (mode-icons-line-height))
                       'face face
                       'mode-icons-p icon-spec))))))
 
@@ -1136,8 +1199,11 @@ ACTIVE if a flag for if the current window is active."
                                                      (nth 1 icon-spec)))
          (put-text-property (point-min) (point-max)
                             'face face)
-         (put-text-property (point-min) (point-max)
-                            'mode-icons-p icon-spec)
+         (if (mode-icons-supported-font-p (nth 1 icon-spec) (nth 2 icon-spec))
+             (put-text-property (point-min) (point-max)
+                                'mode-icons-p icon-spec)
+           (put-text-property (point-min) (point-max)
+                              'mode-icons-p (list (nth 0 icon-spec) xpm-name 'xpm-bw)))
          (buffer-string))))))
 
 (defun mode-icons-propertize-mode (mode icon-spec &optional face active)
@@ -1159,6 +1225,7 @@ ACTIVE is a flag to tell if the current window is active."
                    'mode-icons-p icon-spec))
       ((mode-icons-supported-font-p (nth 1 icon-spec) (nth 2 icon-spec))
        ;; (propertize mode 'display (nth 1 icon-spec) 'mode-icons-p t)
+       ;;(mode-icons--get-font " AI" '("\\` ?AI\\'" 61500 FontAwesome) face active)
        (mode-icons--get-font mode icon-spec face active))
       ((and (stringp (nth 1 icon-spec)) (eq (nth 2 icon-spec) 'emoji))
        (mode-icons--get-emoji mode icon-spec face active))
@@ -1172,40 +1239,50 @@ ACTIVE is a flag to tell if the current window is active."
                                        (concat "ext-" (nth 1 icon-spec))
                                        'xpm-bw)))
       (t (setq tmp (mode-icons-get-icon-display (nth 1 icon-spec) (nth 2 icon-spec) face active))
+         ;; (when (string= (nth 0 icon-spec) "\\` ?AI\\'")
+         ;;   (message "plist: %s" tmp))
          (cond
-          ((and (plist-get tmp :xpm-bw) (plist-get tmp :icon))
-           (setq new-icon-spec (list (nth 0 icon-spec) (plist-get tmp :icon) 'xpm-bw)))
-          ((and (eq (plist-get tmp :type) 'xpm) (plist-get tmp :icon))
-           (setq new-icon-spec (list (nth 0 icon-spec) (plist-get tmp :icon) 'xpm)))
+          ((and (plist-get (cdr tmp) :xpm-bw) (plist-get (cdr tmp) :icon))
+           (setq new-icon-spec (list (nth 0 icon-spec) (plist-get (cdr tmp) :icon) 'xpm-bw)))
+          ((and (eq (plist-get (cdr tmp) :type) 'xpm) (plist-get (cdr tmp) :icon))
+           (setq new-icon-spec (list (nth 0 icon-spec) (plist-get (cdr tmp) :icon) 'xpm)))
           (t (setq new-icon-spec icon-spec)))
          (propertize (format "%s" mode) 'display tmp
                      'mode-icons-p new-icon-spec))))))
 
 (defvar mode-icons-get-icon-spec (make-hash-table :test 'equal)
   "Hash table of icon-specifications.")
-(defun mode-icons-get-icon-spec (mode)
+(defun mode-icons-get-icon-spec (mode &optional is-major-mode-p)
   "Get icon spec for MODE based on regular expression."
   (or (gethash mode mode-icons-get-icon-spec)
-      (puthash mode (let* (case-fold-search
-                           (icon-spec (catch 'found-mode
-                                        (dolist (item mode-icons)
-                                          (when (and (mode-icons-supported-p item)
-                                                     (or
-                                                      (and
-                                                       (stringp (car item))
-                                                       (stringp mode)
-                                                       (string-match-p (car item) mode))
-                                                      (and
-                                                       (symbolp (car item))
-                                                       (symbolp mode)
-                                                       (eq mode (car item)))))
-                                            (throw 'found-mode item)))
-                                        nil)))
-                      (when (and icon-spec (eq (nth 2 icon-spec) 'emoji)
-                                 (file-exists-p (mode-icons--get-emoji-xpm-file icon-spec)))
-                        (setq icon-spec (list (nth 0 icon-spec) (mode-icons--get-emoji-xpm-file icon-spec t) 'xpm)))
-                      icon-spec)
-               mode-icons-get-icon-spec)))
+      (let* (case-fold-search
+             (ignore-cache nil)
+             (icon-spec (catch 'found-mode
+                          (dolist (item mode-icons)
+                            (when (and (mode-icons-supported-p item)
+                                       (or
+                                        (and
+                                         (stringp (car item))
+                                         (stringp mode)
+                                         (string-match-p (car item) mode))
+                                        (and
+                                         (symbolp (car item))
+                                         (symbolp mode)
+                                         (eq mode (car item)))
+                                        (and
+                                         is-major-mode-p
+                                         (symbolp (car item))
+                                         (functionp (car item))
+                                         (and (ignore-errors (funcall (car item)))
+                                              (setq ignore-cache t)))))
+                              (throw 'found-mode item)))
+                          nil)))
+        (when (and icon-spec (eq (nth 2 icon-spec) 'emoji)
+                   (file-exists-p (mode-icons--get-emoji-xpm-file icon-spec)))
+          (setq icon-spec (list (nth 0 icon-spec) (mode-icons--get-emoji-xpm-file icon-spec t) 'xpm)))
+        (unless ignore-cache
+          (puthash mode icon-spec mode-icons-get-icon-spec))
+        icon-spec)))
 
 (defcustom mode-icons-show-mode-name nil
   "Show Icon and `mode-name'."
@@ -1220,14 +1297,21 @@ icon as well."
   :type 'boolean
   :group 'mode-icons)
 
+(defcustom mode-icons-use-default-icon nil
+  "Use the 'default icon when icon-name cannot be found."
+  :type 'boolean
+  :group 'mode-icons)
+
 (defun mode-icons-get-mode-icon (mode &optional face active)
   "Get the icon for MODE, if there is one.
 FACE represents the face used when the icon is a xpm-bw image.
 ACTIVE represents if the window is active."
   (let* ((mode-name (format-mode-line mode))
-         (icon-spec (mode-icons-get-icon-spec mode-name))
+         (icon-spec (mode-icons-get-icon-spec mode-name t))
          (face (mode-icons--get-face face active))
          ret)
+    (when (and (not icon-spec) mode-icons-use-default-icon)
+      (setq icon-spec (mode-icons-get-icon-spec 'default)))
     (if icon-spec
         (setq ret
               (if mode-icons-show-mode-name

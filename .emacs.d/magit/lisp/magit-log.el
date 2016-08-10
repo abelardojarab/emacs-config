@@ -688,6 +688,24 @@ is displayed in the current frame."
           (user-error "No revision buffer in this frame")))
     (magit-mode-bury-buffer (> arg 1))))
 
+;;;###autoload
+(defun magit-log-move-to-parent (&optional n)
+  "Move to the Nth parent of the current commit."
+  (interactive "p")
+  (when (derived-mode-p 'magit-log-mode)
+    (magit-section-when commit
+      (let ((parent-rev (format "%s^%s" (magit-section-value it) (or n 1))))
+        (-if-let (parent-hash (magit-rev-parse "--short" parent-rev))
+            (-if-let (section (--first (equal (magit-section-value it)
+                                              parent-hash)
+                                       (magit-section-siblings it 'next)))
+                (magit-section-goto section)
+              (user-error
+               (substitute-command-keys
+                (concat "Parent " parent-hash " not found.  Try typing "
+                        "\\[magit-log-double-commit-limit] first"))))
+          (user-error "Parent %s does not exist" parent-rev))))))
+
 ;;; Log Mode
 
 (defvar magit-log-mode-map
@@ -695,6 +713,7 @@ is displayed in the current frame."
     (set-keymap-parent map magit-mode-map)
     (define-key map "\C-c\C-b" 'magit-go-backward)
     (define-key map "\C-c\C-f" 'magit-go-forward)
+    (define-key map "\C-c\C-n" 'magit-log-move-to-parent)
     (define-key map "=" 'magit-log-toggle-commit-limit)
     (define-key map "+" 'magit-log-double-commit-limit)
     (define-key map "-" 'magit-log-half-commit-limit)
@@ -822,6 +841,7 @@ Do not add this to a hook variable."
 
 (defconst magit-log-bisect-vis-re
   (concat "^"
+          "\\(?4:[-_/|\\*o. ]*\\)"                 ; graph
           "\\(?1:[0-9a-fA-F]+\\) "                 ; sha1
           "\\(?:\\(?3:([^()]+)\\) \\)?"            ; refs
           "\\(?2:.*\\)$"))                         ; msg
@@ -895,7 +915,10 @@ Do not add this to a hook variable."
                 (`bisect-log magit-log-bisect-log-re)))
   (magit-bind-match-strings
       (hash msg refs graph author date gpg cherry _ refsub side) nil
-    (let ((align (not (member "--stat" (cadr magit-refresh-args)))))
+    (let ((align (not (member "--stat" (cadr magit-refresh-args))))
+          (non-graph-re (if (eq style 'bisect-vis)
+                            magit-log-bisect-vis-re
+                          magit-log-heading-re)))
       (magit-delete-line)
       (magit-insert-section section (commit hash)
         (pcase style
@@ -947,8 +970,9 @@ Do not add this to a hook variable."
           (save-excursion
             (backward-char)
             (magit-format-log-margin author date)))
-        (when (and (eq style 'log)
-                   (not (or (eobp) (looking-at magit-log-heading-re))))
+        (when (and graph
+                   (not (eobp))
+                   (not (looking-at non-graph-re)))
           (when (looking-at "")
             (magit-insert-heading)
             (delete-char 1)
@@ -962,7 +986,7 @@ Do not add this to a hook variable."
             (delete-char 1))
           (if (looking-at "^\\(---\\|\n\s\\|\ndiff\\)")
               (let ((limit (save-excursion
-                             (and (re-search-forward magit-log-heading-re nil t)
+                             (and (re-search-forward non-graph-re nil t)
                                   (match-beginning 0)))))
                 (unless (magit-section-content magit-insert-section--current)
                   (magit-insert-heading))
@@ -970,10 +994,10 @@ Do not add this to a hook variable."
                 (magit-diff-wash-diffs (list "--stat") limit))
             (when align
               (setq align (make-string (1+ abbrev) ? )))
-            (when (and (not (eobp)) (not (looking-at magit-log-heading-re)))
+            (when (and (not (eobp)) (not (looking-at non-graph-re)))
               (when align
                 (setq align (make-string (1+ abbrev) ? )))
-              (while (and (not (eobp)) (not (looking-at magit-log-heading-re)))
+              (while (and (not (eobp)) (not (looking-at non-graph-re)))
                 (when align
                   (save-excursion (insert align)))
                 (magit-format-log-margin)

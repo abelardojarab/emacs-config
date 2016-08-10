@@ -48,7 +48,8 @@
 
 (use-package eshell
   :commands (eshell eshell-vertical eshell-horizontal)
-  :bind (("C-t" . eshell))
+  :bind (:map ctl-x-map
+              ("t" . eshell))
   :after helm
   :init  (progn
            (setq-default eshell-directory-name "~/.emacs.cache/eshell")

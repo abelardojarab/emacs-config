@@ -169,5 +169,19 @@
   :load-path (lambda () (expand-file-name "perspective/" user-emacs-directory))
   :config (persp-mode))
 
+;; Switch window
+(use-package switch-window
+  :defer t
+  :bind (:map ctl-x-map
+              ("o" . switch-window))
+  :if (display-graphic-p)
+  :commands switch-window
+  :load-path (lambda () (expand-file-name "switch-window/" user-emacs-directory)))
+
+;; Window numbering
+(use-package window-numbering
+  :load-path (lambda () (expand-file-name "window-numbering/" user-emacs-directory))
+  :config (window-numbering-mode 1))
+
 (provide 'setup-windows)
 ;;; setup-windows.el ends here

@@ -319,7 +319,7 @@ more...")
    `(anzu-replace-highlight ((,class (:inherit query-replace))))
    `(anzu-replace-to ((,class (:weight bold :foreground "#BD33FD" :background "#FDBD33"))))
    `(auto-dim-other-buffers-face ((,class (:background "#F7F7F7"))))
-   `(avy-background-face ((,class (:background "red"))))
+   `(avy-background-face ((,class (:background "#A9A9A9"))))
    `(avy-lead-face ((,class (:weight bold :foreground "black" :background "#FEA500"))))
    `(bbdb-company ((,class (:slant italic :foreground "steel blue"))))
    `(bbdb-field-name ((,class (:weight bold :foreground "steel blue"))))
@@ -565,6 +565,7 @@ more...")
    `(info-xref ((,class (:underline t :foreground "#006DAF")))) ; unvisited cross-references
    `(info-xref-visited ((,class (:underline t :foreground "magenta4")))) ; previously visited cross-references
    ;; js2-highlight-vars-face (~ auto-highlight-symbol)
+   `(js2-external-variable ((,class (:background "#FFFFA0"))))
 
    ;; Org non-standard faces.
    `(leuven-org-deadline-overdue ((,class (:foreground "#F22659"))))
@@ -844,7 +845,7 @@ more...")
    ;; `(web-mode-css-string-face ((,class ())))
    ;; `(web-mode-css-variable-face ((,class ())))
    ;; `(web-mode-current-column-highlight-face ((,class ())))
-   ;; `(web-mode-current-element-highlight-face ((,class ())))
+   `(web-mode-current-element-highlight-face ((,class (:background "#BF8DFF")))) ; #FFEE80
    ;; `(web-mode-doctype-face ((,class ())))
    ;; `(web-mode-error-face ((,class ())))
    ;; `(web-mode-filter-face ((,class ())))

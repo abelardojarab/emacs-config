@@ -2751,7 +2751,7 @@ evaluating BODY."
   (let ((flycheck-disabled-checkers '(c/c++-clang)))
     (flycheck-ert-should-syntax-check
      "language/c_c++/error.cpp" 'c++-mode
-     '(2 18 error "'struct A' has no member named 'bar'"
+     '(2 20 error "'struct A' has no member named 'bar'"
          :checker c/c++-gcc))))
 
 (flycheck-ert-def-checker-test c/c++-gcc (c c++) fatal-error
@@ -3553,10 +3553,26 @@ Why not:
    '(4 2 error "Syntax error, maybe a missing semicolon?"
        :checker processing)))
 
-(flycheck-ert-def-checker-test puppet-parser puppet parser-error
+;; N.B. the puppet 4 and 3 tests are mutually exclusive
+;; due to one having column and the other not
+(flycheck-ert-def-checker-test puppet-parser puppet parser-error-puppet-4
+  (skip-unless (version<= "4" (shell-command-to-string
+                               "printf %s \"$(puppet --version)\"")))
   (flycheck-ert-should-syntax-check
    "language/puppet/parser-error.pp" 'puppet-mode
    '(3 9 error "Syntax error at '>'" :checker puppet-parser)))
+
+(flycheck-ert-def-checker-test puppet-parser puppet parser-error-puppet-3
+  (skip-unless (version<= (shell-command-to-string
+                           "printf %s \"$(puppet --version)\"") "4"))
+  (flycheck-ert-should-syntax-check
+   "language/puppet/puppet3-parser-error.pp" 'puppet-mode
+   '(4 nil error "Syntax error at 'helloagain'; expected '}'"
+       :checker puppet-parser))
+  (flycheck-ert-should-syntax-check
+   "language/puppet/puppet3-parser-multiline-error.pp" 'puppet-mode
+   '(4 nil error "Unclosed quote after '' in '\n}\n'"
+       :checker puppet-parser)))
 
 (flycheck-ert-def-checker-test puppet-lint puppet nil
   (flycheck-ert-should-syntax-check
@@ -3827,10 +3843,11 @@ Why not:
   (let ((flycheck-disabled-checkers '(rust-cargo)))
     (flycheck-ert-should-syntax-check
      "language/rust/src/multiline-error.rs" 'rust-mode
-     '(7 9 error "mismatched types:
- expected `u8`,\n    found `i8`" :checker rust :id "E0308")
+     '(7 9 error "mismatched types" :checker rust :id "E0308")
      '(7 9 info "run `rustc --explain E0308` to see a detailed explanation"
-         :checker rust))))
+         :checker rust)
+     '(7 9 info "expected type `u8`" :checker rust)
+     '(7 9 info "found type `i8`" :checker rust))))
 
 (flycheck-ert-def-checker-test rust rust warning
   (let ((flycheck-disabled-checkers '(rust-cargo)))
@@ -3843,12 +3860,11 @@ Why not:
   (let ((flycheck-disabled-checkers '(rust-cargo)))
     (flycheck-ert-should-syntax-check
      "language/rust/src/note-and-help.rs" 'rust-mode
-     '(11 9 info "`x` moved here because it has type `NonPOD`, which is moved by default"
-          :checker rust)
-     '(11 9 info "if you would like to borrow the value instead, use a `ref` binding as shown:"
-          :checker rust)
+     '(11 9 info "value moved here" :checker rust)
      '(12 9 error "use of moved value: `x`" :checker rust :id "E0382")
      '(12 9 info "run `rustc --explain E0382` to see a detailed explanation"
+          :checker rust)
+     '(12 9 info "move occurs because `x` has type `NonPOD`, which does not implement the `Copy` trait"
           :checker rust))))
 
 (flycheck-ert-def-checker-test rust rust crate-root-not-set
@@ -3887,6 +3903,19 @@ Why not:
      "language/scala/style-warning.scala" 'scala-mode
      '(5 9 warning "Redundant braces after class definition"
          :checker scala-scalastyle))))
+
+(flycheck-ert-def-checker-test scheme-chicken scheme nil
+  (let ((setup-geiser
+         (lambda ()
+           (setq-local geiser-scheme-implementation 'chicken)
+           (geiser-mode))))
+    (add-hook 'scheme-mode-hook setup-geiser)
+    (unwind-protect
+        (flycheck-ert-should-syntax-check
+         "language/chicken.scm" 'geiser-mode
+         '(2 nil warning "in procedure call to `g1', expected a value of type `(procedure (* *) *)' but was given a value of type `number'"
+             :checker scheme-chicken))
+      (remove-hook 'scheme-mode-hook setup-geiser))))
 
 (flycheck-ert-def-checker-test scss-lint scss nil
   (let ((flycheck-scss-lintrc "scss-lint.yml"))

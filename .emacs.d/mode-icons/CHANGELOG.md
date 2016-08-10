@@ -9,6 +9,14 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 - Icon for spacemacs buffer.
 - Icon for Isearch (from Font Awesome)
+- Icon for Org-Agenda (From Font Awesome)
+- Icon for Powershell
+- Icon for Windows cmd
+- Icon for MSYS shell
+- Icon for Cygwin shell
+- Added option mode-icons-line-height-adjust to allow imagmagick to
+  adjust icons up or down a bit compared to what emacs returns as the
+  mode-line height.
 
 ### Changed
 
@@ -21,6 +29,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
     immediately after activating an iconified mode.
 - Powerline now recolors lines correctly by modified powerline-raw
   function.
+- mode-icons now recolors font icons correctly when the font is
+  missing from the system
+- mode-icons now allows for a default icon.  This can be turned on
+  with the new option `mode-icons-use-default-icon`
 
 ## [0.4.0]
 

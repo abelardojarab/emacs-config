@@ -946,7 +946,10 @@ Example use:
                           (consp (car collection))
                           ;; Previously, the cdr of the selected candidate would be returned.
                           ;; Now, the whole candidate is returned.
-                          (assoc ivy--current collection)))
+                          (let (idx)
+                            (if (setq idx (get-text-property 0 'idx ivy--current))
+                                (nth idx collection)
+                              (assoc ivy--current collection)))))
                     ((equal ivy--current "")
                      ivy-text)
                     (t
@@ -1443,6 +1446,8 @@ customizations apply to the current completion session."
             (when recursive-ivy-last
               (ivy--reset-state (setq ivy-last recursive-ivy-last)))))
       (ivy-call)
+      (when (> (length ivy--current) 0)
+        (remove-text-properties 0 1 '(idx) ivy--current))
       (when (and recursive-ivy-last
                  ivy-recursive-restore)
         (ivy--reset-state (setq ivy-last recursive-ivy-last))))))
@@ -1539,7 +1544,11 @@ This is useful for recursive `ivy-read'."
                                       (cl-sort
                                        (copy-sequence collection)
                                        sort-fn))))
-               (setq coll (all-completions "" collection predicate))))
+               (setq coll (all-completions "" collection predicate)))
+             (let ((i 0))
+               (dolist (cm coll)
+                 (add-text-properties 0 1 `(idx ,i) cm)
+                 (cl-incf i))))
             ((or (functionp collection)
                  (byte-code-function-p collection)
                  (vectorp collection)
@@ -1805,6 +1814,29 @@ Minibuffer bindings:
 
 ;;* Implementation
 ;;** Regex
+(defun ivy-re-match (re-seq str)
+  "Return non-nil if RE-SEQ matches STR.
+
+RE-SEQ is a list of (RE . MATCH-P).
+
+RE is a regular expression.
+
+MATCH-P is t when RE should match STR and nil when RE should not
+match STR.
+
+Each element of RE-SEQ must match for the funtion to return true.
+
+This concept is used to generalize regular expressions for
+`ivy--regex-plus' and `ivy--regex-ignore-order'."
+  (let ((res t)
+        re)
+    (while (and res (setq re (pop re-seq)))
+      (setq res
+            (if (cdr re)
+                (string-match-p (car re) str)
+              (not (string-match-p (car re) str)))))
+    res))
+
 (defvar ivy--regex-hash
   (make-hash-table :test #'equal)
   "Store pre-computed regex.")
@@ -1979,6 +2011,11 @@ depending on the number of candidates."
     (goto-char (minibuffer-prompt-end))
     (delete-region (line-end-position) (point-max))))
 
+(defun ivy-cleanup-string (str)
+  "Remove unwanted text properties from STR."
+  (remove-text-properties 0 (length str) '(field) str)
+  str)
+
 (defvar ivy-set-prompt-text-properties-function
   'ivy-set-prompt-text-properties-default
   "Function to set the text properties of the default ivy prompt.
@@ -2044,11 +2081,16 @@ The returned value should be the updated PROMPT.")
         (save-excursion
           (goto-char (point-min))
           (delete-region (point-min) (minibuffer-prompt-end))
-          (if (> (+ (mod (+ (length n-str) (length d-str)) (window-width))
-                    (length ivy-text))
-                 (window-width))
-              (setq n-str (concat n-str "\n" d-str))
-            (setq n-str (concat n-str d-str)))
+          (let ((len-n (length n-str))
+                (len-d (length d-str))
+                (ww (window-width)))
+            (setq n-str
+                  (cond ((> (+ len-n len-d) ww)
+                         (concat n-str "\n" d-str "\n"))
+                        ((> (+ len-n len-d (length ivy-text)) ww)
+                         (concat n-str d-str "\n"))
+                        (t
+                         (concat n-str d-str)))))
           (when ivy-add-newline-after-prompt
             (setq n-str (concat n-str "\n")))
           (let ((regex (format "\\([^\n]\\{%d\\}\\)[^\n]" (window-width))))
@@ -2444,27 +2486,29 @@ Prefer first \"^*NAME\", then \"^NAME\"."
                 ivy--index)))))
 
 (defun ivy-recompute-index-swiper (_re-str cands)
-  (let ((tail (nthcdr ivy--index ivy--old-cands))
-        idx)
-    (if (and tail ivy--old-cands (not (equal "^" ivy--old-re)))
-        (progn
-          (while (and tail (null idx))
-            ;; Compare with eq to handle equal duplicates in cands
-            (setq idx (cl-position (pop tail) cands)))
-          (or
-           idx
-           (1- (length cands))))
-      (if ivy--old-cands
-          ivy--index
-        ;; already in ivy-state-buffer
-        (let ((n (line-number-at-pos))
-              (res 0)
-              (i 0))
-          (dolist (c cands)
-            (when (eq n (read (get-text-property 0 'swiper-line-number c)))
-              (setq res i))
-            (cl-incf i))
-          res)))))
+  (condition-case nil
+      (let ((tail (nthcdr ivy--index ivy--old-cands))
+            idx)
+        (if (and tail ivy--old-cands (not (equal "^" ivy--old-re)))
+            (progn
+              (while (and tail (null idx))
+                ;; Compare with eq to handle equal duplicates in cands
+                (setq idx (cl-position (pop tail) cands)))
+              (or
+               idx
+               (1- (length cands))))
+          (if ivy--old-cands
+              ivy--index
+            ;; already in ivy-state-buffer
+            (let ((n (line-number-at-pos))
+                  (res 0)
+                  (i 0))
+              (dolist (c cands)
+                (when (eq n (read (get-text-property 0 'swiper-line-number c)))
+                  (setq res i))
+                (cl-incf i))
+              res))))
+    (error 0)))
 
 (defun ivy-recompute-index-swiper-async (_re-str cands)
   (if (null ivy--old-cands)

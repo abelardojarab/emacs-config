@@ -979,6 +979,11 @@ Describe the selected candidate."
                          str))
   str)
 
+(defvar counsel-git-grep-projects-alist nil
+  "An alist of project directory to \"git-grep\" command.
+Allows to automatically use a custom \"git-grep\" command for all
+files in a project.")
+
 ;;;###autoload
 (defun counsel-git-grep (&optional cmd initial-input)
   "Grep for a string in the current git repository.
@@ -987,32 +992,53 @@ When CMD is non-nil, prompt for a specific \"git grep\" command.
 INITIAL-INPUT can be given as the initial minibuffer input."
   (interactive "P")
   (ivy-set-prompt 'counsel-git-grep counsel-prompt-function)
-  (cond
-    ((stringp cmd)
-     (setq counsel-git-grep-cmd cmd))
-    (cmd
-     (setq counsel-git-grep-cmd
-           (ivy-read "cmd: " counsel-git-grep-cmd-history
-                     :history 'counsel-git-grep-cmd-history
-                     :re-builder #'ivy--regex))
-     (setq counsel-git-grep-cmd-history
-           (delete-dups counsel-git-grep-cmd-history)))
-    (t
-     (setq counsel-git-grep-cmd counsel-git-grep-cmd-default)))
-  (setq counsel--git-grep-dir
-        (locate-dominating-file default-directory ".git"))
-  (if (null counsel--git-grep-dir)
-      (error "Not in a git repository")
-    (setq counsel--git-grep-count (counsel--gg-count "" t))
-    (ivy-read "git grep" 'counsel-git-grep-function
-              :initial-input initial-input
-              :matcher #'counsel-git-grep-matcher
-              :dynamic-collection (> counsel--git-grep-count 20000)
-              :keymap counsel-git-grep-map
-              :action #'counsel-git-grep-action
-              :unwind #'swiper--cleanup
-              :history 'counsel-git-grep-history
-              :caller 'counsel-git-grep)))
+  (let ((dd (expand-file-name default-directory))
+        proj)
+    (cond
+      ((stringp cmd)
+       (setq counsel-git-grep-cmd cmd))
+      (cmd
+       (if (setq proj
+                 (cl-find-if
+                  (lambda (x)
+                    (string-match (car x) dd))
+                  counsel-git-grep-projects-alist))
+           (setq counsel-git-grep-cmd (cdr proj))
+         (setq counsel-git-grep-cmd
+               (ivy-read "cmd: " counsel-git-grep-cmd-history
+                         :history 'counsel-git-grep-cmd-history
+                         :re-builder #'ivy--regex))
+         (setq counsel-git-grep-cmd-history
+               (delete-dups counsel-git-grep-cmd-history))))
+      (t
+       (setq counsel-git-grep-cmd counsel-git-grep-cmd-default)))
+    (setq counsel--git-grep-dir
+          (if proj
+              (car proj)
+            (locate-dominating-file default-directory ".git")))
+    (if (null counsel--git-grep-dir)
+        (error "Not in a git repository")
+      (unless proj
+        (setq counsel--git-grep-count (counsel--gg-count "" t)))
+      (ivy-read "git grep" (if proj
+                               'counsel-git-grep-proj-function
+                             'counsel-git-grep-function)
+                :initial-input initial-input
+                :matcher #'counsel-git-grep-matcher
+                :dynamic-collection (or proj (> counsel--git-grep-count 20000))
+                :keymap counsel-git-grep-map
+                :action #'counsel-git-grep-action
+                :unwind #'swiper--cleanup
+                :history 'counsel-git-grep-history
+                :caller 'counsel-git-grep))))
+
+(defun counsel-git-grep-proj-function (str)
+  (if (< (length str) 3)
+      (counsel-more-chars 3)
+    (let ((regex (setq ivy--old-re
+                       (ivy--regex str))))
+      (counsel--async-command (format counsel-git-grep-cmd regex))
+      nil)))
 
 (defun counsel-git-grep-switch-cmd ()
   "Set `counsel-git-grep-cmd' to a different value."
@@ -1280,6 +1306,9 @@ Skip some dotfiles unless `ivy-text' requires them."
 
 (declare-function ffap-guesser "ffap")
 
+(defvar counsel-find-file-speedup-remote t
+  "Speed up opening remote files by disabling `find-file-hook' for them.")
+
 ;;;###autoload
 (defun counsel-find-file (&optional initial-input)
   "Forward to `find-file'.
@@ -1291,7 +1320,12 @@ When INITIAL-INPUT is non-nil, use it in the minibuffer during completion."
             :action
             (lambda (x)
               (with-ivy-window
-                (find-file (expand-file-name x ivy--directory))))
+                (let ((find-file-hook (if (and
+                                           counsel-find-file-speedup-remote
+                                           (file-remote-p ivy--directory))
+                                          nil
+                                        find-file-hook)))
+                  (find-file (expand-file-name x ivy--directory)))))
             :preselect (when counsel-find-file-at-point
                          (require 'ffap)
                          (let ((f (ffap-guesser)))
@@ -1439,6 +1473,56 @@ INITIAL-INPUT can be given as the initial minibuffer input."
                           (find-file file))))
             :unwind #'counsel-delete-process
             :caller 'counsel-locate))
+
+;;** File Jump and Dired Jump
+
+;;;###autoload
+(defun counsel-file-jump (&optional initial-input initial-directory)
+  "Jump to a file from a list of all files directories
+below the current one.  INITIAL-INPUT can be given as the initial
+minibuffer input.  INITIAL-DIRECTORY, if non-nil, is used as the
+root directory for search."
+  (interactive
+   (list nil
+         (when current-prefix-arg
+           (read-directory-name "From directory: "))))
+  (let* ((default-directory (or initial-directory default-directory)))
+    (ivy-read "Find file: "
+              (split-string
+               (shell-command-to-string "find * -type f -not -path '*\/.git*'")
+               "\n" t)
+              :matcher #'counsel--find-file-matcher
+              :initial-input initial-input
+              :action (lambda (x)
+                        (with-ivy-window
+                          (find-file (expand-file-name x ivy--directory))))
+              :preselect (when counsel-find-file-at-point
+                           (require 'ffap)
+                           (let ((f (ffap-guesser)))
+                             (when f (expand-file-name f))))
+              :require-match 'confirm-after-completion
+              :history 'file-name-history
+              :keymap counsel-find-file-map
+              :caller 'counsel-file-jump)))
+
+;;;###autoload
+(defun counsel-dired-jump (&optional initial-input initial-directory)
+  "Jump to a directory (in dired) from a list of all directories
+below the current one.  INITIAL-INPUT can be given as the initial
+minibuffer input.  INITIAL-DIRECTORY, if non-nil, is used as the
+root directory for search."
+  (interactive
+   (list nil
+         (when current-prefix-arg
+           (read-directory-name "From directory: "))))
+  (let* ((default-directory (or initial-directory default-directory)))
+    (ivy-read "Directory: "
+              (split-string
+               (shell-command-to-string "find * -type d -not -path '*\/.git*'")
+               "\n" t)
+              :initial-input initial-input
+              :action (lambda (d) (dired-jump nil (expand-file-name d)))
+              :caller 'counsel-dired-jump)))
 
 ;;* Grep
 ;;** `counsel-ag'
@@ -1964,11 +2048,13 @@ INITIAL-INPUT can be given as the initial minibuffer input."
                 (point))))
     (setq ivy-completion-beg (point))
     (setq ivy-completion-end (point)))
-  (let ((candidates (cl-remove-if
-                     (lambda (s)
-                       (or (< (length s) 3)
-                           (string-match "\\`[\n[:blank:]]+\\'" s)))
-                     (delete-dups kill-ring))))
+  (let ((candidates
+         (mapcar #'ivy-cleanup-string
+                 (cl-remove-if
+                  (lambda (s)
+                    (or (< (length s) 3)
+                        (string-match "\\`[\n[:blank:]]+\\'" s)))
+                  (delete-dups kill-ring)))))
     (let ((ivy-format-function #'counsel--yank-pop-format-function)
           (ivy-height 5))
       (ivy-read "kill-ring: " candidates

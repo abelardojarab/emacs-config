@@ -1,14 +1,31 @@
 ;;  -*- lexical-binding: t -*-
 ;; COMMON INITIALIZATION, UTILITIES and INTERNALS which didn't fit anywhere else
 
-(eval-when-compile
-  (require 'cl))
+(require 'cl)
 (require 'font-lock)
 (require 'color)
 (require 'eieio)
 (require 'eieio-base)
 (require 'eieio-custom)
 (require 'format-spec)
+
+
+(defgroup polymode nil
+  "Object oriented framework for multiple modes based on indirect buffers"
+  :link '(emacs-commentary-link "polymode")
+  :group 'tools)
+
+(defgroup polymodes nil
+  "Polymode Configuration Objects"
+  :group 'polymode)
+
+(defgroup hostmodes nil
+  "Polymode Host Chunkmode Objects"
+  :group 'polymode)
+
+(defgroup innermodes nil
+  "Polymode Chunkmode Objects"
+  :group 'polymode)
 
 (defcustom polymode-display-process-buffers t
   "When non-nil, display weaving and exporting process buffers."
@@ -22,18 +39,49 @@ than the input file."
   :group 'polymode
   :type 'boolean)
 
+(defcustom polymode-mode-name-override-alist '((elisp . emacs-lisp))
+"An alist of inner mode overrides.
+When inner mode is automatically detected from the header of the
+inner chunk (such as in markdown mode), the detected symbol might
+not correspond to the desired mode. This alist maps discovered
+symbols into desired modes.
+
+For example
+
+  (add-to-list 'polymode-mode-name-override-alist '(julia . ess-julia))
+
+will cause installation of `ess-julia-mode' in markdown ```julia chunks."
+:group 'polymode
+:type 'alist)
+
 (defvar polymode-switch-buffer-hook nil
   "Hook run on switching to a different buffer.
 Each function is run with two arguments `old-buffer' and
 `new-buffer'. This hook is commonly used to transfer state
 between buffers. The hook is run in a new buffer, but you should
-not rely on that.")
+not rely on that. Slot :switch-buffer-functions in `pm-polymode'
+and `pm-chunkmode' objects provides same functionality for
+narrower scope.")
+
+(defvar polymode-init-host-hook nil
+  "Hook run on initialization of every hostmode.
+Ran in a base buffer from `pm-initialze'
+methods. Slot :init-functions in `pm-polymode' objects provides
+similar hook for more focused scope. See
+`polymode-init-inner-hook' and :init-functions slot in
+`pm-chunkmode' objects for similar hooks for inner chunkmodes.")
+
+(defvar polymode-init-inner-hook nil
+  "Hook run on initialization of every `pm-chunkmode' object.
+The hook is run in chunkmode's body buffer from `pm-initialze'
+`pm-chunkmode' methods. Slot :init-functions `pm-chunkmode'
+objects provides same functionality for narrower scope. See also
+`polymode-init-host-hook'.")
 
 ;; esential vars
 (defvar-local pm/polymode nil)
 (defvar-local pm/chunkmode nil)
 (defvar-local pm/type nil)
-(defvar-local pm--fontify-region-original nil)
 (defvar-local pm--indent-line-function-original nil)
 ;; (defvar-local pm--killed-once nil)
 (defvar-local polymode-mode nil
@@ -51,28 +99,205 @@ not rely on that.")
 (defvar pm/chunkmode)
 (defvar *span*)
 
-;; core api from polymode.el, which relies on polymode-methods.el.
-;; fixme: some of these are not api, rename
-(declare-function pm-base-buffer "polymode")
-(declare-function pm-get-innermost-span "polymode")
-(declare-function pm-map-over-spans "polymode")
-(declare-function pm-narrow-to-span "polymode")
-(declare-function poly-lock-fontify-region "poly-lock")
+(defvar pm-allow-fontification t)
+(defvar pm-allow-after-change-hook t)
+(defvar pm-allow-post-command-hook t)
+
+(defvar pm-initialization-in-progress nil
+  ;; We need this during cascading call-next-method in pm-initialize.
+  ;; -innermodes are initialized after the hostmode setup has taken place. This
+  ;; means that pm-get-span and all the functionality that relies on it will
+  ;; fail to work correctly during the initialization in the call-next-method.
+  ;; This is particularly relevant to font-lock setup and user hooks.
+  "Non nil during polymode objects initialization.
+If this variable is non-nil, various chunk manipulation commands
+relying on `pm-get-span' might not function correctly.")
 
 ;; methods api from polymode-methods.el
 (declare-function pm-initialize "polymode-methods")
-(declare-function pm-get-buffer "polymode-methods")
+(declare-function pm-get-buffer-create "polymode-methods")
 (declare-function pm-select-buffer "polymode-methods")
-(declare-function pm-install-buffer "polymode-methods")
 (declare-function pm-get-adjust-face "polymode-methods")
 (declare-function pm-get-span "polymode-methods")
 (declare-function pm-indent-line "polymode-methods")
 
-;; other locals
-(defvar-local pm--process-buffer nil)
+
+;;; CORE
+(defsubst pm-base-buffer ()
+  ;; fixme: redundant with :base-buffer
+  "Return base buffer of current buffer, or the current buffer if it's direct."
+  (or (buffer-base-buffer (current-buffer))
+      (current-buffer)))
+
+(defun pm-get-cached-span (&optional pos)
+  "Get cached span at POS"
+  (let ((span (get-text-property (or pos (point)) :pm-span)))
+    (when span
+      (save-restriction
+        (widen)
+        (let* ((beg (nth 1 span))
+               (end (max beg (1- (nth 2 span)))))
+          (when (<= end (point-max))
+            (and (eq span (get-text-property beg :pm-span))
+                 (eq span (get-text-property end :pm-span))
+                 span)))))))
+
+(defun pm-get-innermost-span (&optional pos no-cache)
+  "Get span object at POS.
+If NO-CACHE is non-nil, don't use cache and force re-computation
+of the span."
+  (save-excursion
+    (save-restriction
+      (widen)
+      (let* ((span (or (and (not no-cache)
+                            (pm-get-cached-span pos))
+                       (pm-get-span pm/polymode pos)))
+             (beg (nth 1 span))
+             (end (nth 2 span)))
+        ;; might be used by external applications like flyspell
+        (with-silent-modifications
+          (add-text-properties beg end
+                               (list :pm-span span
+                                     :pm-span-type (car span)
+                                     :pm-span-beg beg
+                                     :pm-span-end end)))
+        span))))
+
+(defun pm-span-to-range (span)
+  (and span (cons (nth 1 span) (nth 2 span))))
+
+(defun pm-get-innermost-range (&optional pos no-cache)
+  (pm-span-to-range (pm-get-innermost-span pos no-cache)))
+
+(defvar pm--select-buffer-visibly nil)
+
+(defun pm-switch-to-buffer (&optional pos-or-span)
+  "Bring the appropriate polymode buffer to front.
+This is done visually for the user with `switch-to-buffer'. All
+necessary adjustment like overlay and undo history transport are
+performed."
+  (let ((span (if (or (null pos-or-span)
+                      (number-or-marker-p pos-or-span))
+                  (pm-get-innermost-span pos-or-span)
+                pos-or-span))
+        (pm--select-buffer-visibly t))
+    (pm-select-buffer (car (last span)) span)))
+
+(defun pm-set-buffer (&optional pos-or-span)
+  "Set buffer to polymode buffer appropriate for POS-OR-SPAN.
+This is done with `set-buffer' and no visual adjustments are
+done."
+  (let ((span (if (or (null pos-or-span)
+                      (number-or-marker-p pos-or-span))
+                  (pm-get-innermost-span pos-or-span)
+                pos-or-span))
+        (pm--select-buffer-visibly nil))
+    (pm-select-buffer (car (last span)) span)))
+
+(defun pm-map-over-spans (fun beg end &optional count backwardp visiblyp no-cache)
+  "For all spans between BEG and END, execute FUN.
+FUN is a function of no args. It is executed with point at the
+beginning of the span. Buffer is *not* narrowed to the span. If
+COUNT is non-nil, jump at most that many times. If BACKWARDP is
+non-nil, map backwards. During the call of FUN, a dynamically
+bound variable *span* holds the current innermost span."
+  ;; Important! Never forget to save-excursion when calling
+  ;; map-overs-spans. Mapping can end different buffer and invalidate whatever
+  ;; caller that used your function.
+  (save-restriction
+    (widen)
+    (setq end (min end (point-max)))
+    (goto-char (if backwardp end beg))
+    (let* ((nr 1)
+           (*span* (pm-get-innermost-span (point) no-cache))
+           old-span
+           moved)
+      ;; if beg (end) coincide with span's end (beg) don't process previous (next) span
+      (if backwardp
+          (and (eq end (nth 1 *span*))
+               (setq moved t)
+               (not (bobp))
+               (forward-char -1))
+        (and (eq beg (nth 2 *span*))
+             (setq moved t)
+             (not (eobp))
+             (forward-char 1)))
+      (when moved
+        (setq *span* (pm-get-innermost-span (point) no-cache)))
+      (while (and (if backwardp
+                      (> (point) beg)
+                    (< (point) end))
+                  (or (null count)
+                      (< nr count)))
+        (let ((pm--select-buffer-visibly visiblyp))
+          (pm-select-buffer (car (last *span*)) *span*)) ;; object and span
+
+        ;; FUN might change buffer and invalidate our *span*. How can we
+        ;; intelligently check for this? After-change functions have not been
+        ;; run yet (or did they?). We can track buffer modification time
+        ;; explicitly (can we?)
+        (goto-char (nth 1 *span*))
+        (save-excursion
+          (funcall fun))
+
+        ;; enter next/previous chunk as head-tails don't include their boundaries
+        (if backwardp
+            (goto-char (max 1 (1- (nth 1 *span*))))
+          (goto-char (min (point-max) (1+ (nth 2 *span*)))))
+
+        (setq old-span *span*)
+        (setq *span* (pm-get-innermost-span (point) no-cache)
+              nr (1+ nr))
+
+        ;; Ensure progress and avoid infloop due to bad regexp or who knows
+        ;; what. Move char by char till we get higher/lower span. Cache is not
+        ;; used.
+        (while (and (not (eobp))
+                    (if backwardp
+                        (> (nth 2 *span*) (nth 1 old-span))
+                      (< (nth 1 *span*) (nth 2 old-span))))
+          (forward-char 1)
+          (setq *span* (pm-get-innermost-span (point) t)))))))
+
+(defun pm--reset-ppss-last (&optional span-start force)
+  "Reset `syntax-ppss-last' cache if it was recorded before SPAN-START.
+If SPAN-START is nil, use span at point. If force, reset
+regardless of the position `syntax-ppss-last' was recorder at."
+  ;; syntax-ppss has its own condition-case for this case, but that means
+  ;; throwing an error each time it calls parse-partial-sexp
+  (setq span-start (or span-start (car (pm-get-innermost-range))))
+  (when (or force
+            (and syntax-ppss-last
+                 (car syntax-ppss-last)
+                 ;; non-strict is intentional (occasionally ppss is screwed)
+                 (<= (car syntax-ppss-last) span-start)))
+    (setq syntax-ppss-last
+          (cons span-start (list 0 nil span-start nil nil nil 0)))))
+
+(defun pm-narrow-to-span (&optional span)
+  "Narrow to current chunk."
+  (interactive)
+  (unless (= (point-min) (point-max))
+    (let ((span (or span
+                    (pm-get-innermost-span))))
+      (let ((sbeg (nth 1 span))
+            (send (nth 2 span)))
+        (pm--reset-ppss-last sbeg t)
+        (narrow-to-region sbeg send)))))
+
+(defmacro pm-with-narrowed-to-span (span &rest body)
+  (declare (indent 1) (debug body))
+  `(save-restriction
+     (pm-narrow-to-span ,span)
+     ,@body))
 
 
 ;;; UTILITIES
+(defvar polymode-display-output-file t
+  "When non-nil automatically display output file in emacs.
+This is temporary variable, it might be changed or removed in the
+near future.")
+
 (defun pm--display-file (ofile)
   (when ofile
    ;; errors might occur (most notably with open-with package errors are intentional)
@@ -82,17 +307,26 @@ not rely on that.")
           ;; silently kill and re-open
           (when buff
             (with-current-buffer buff
-                (revert-buffer t t)))
-          (display-buffer (find-file-noselect ofile 'nowarn)))
+              (revert-buffer t t)))
+          (when polymode-display-output-file
+            (if (string-match-p "html\\|htm$")
+                (browse-url ofile)
+              (display-buffer (find-file-noselect ofile 'nowarn)))))
       (error (message "Error while displaying '%s': %s"
                       (file-name-nondirectory ofile)
                       (error-message-string err))))))
 
+(defun pm--symbol-name (str-or-symbol)
+  (if (symbolp str-or-symbol)
+      (symbol-name str-or-symbol)
+    str-or-symbol))
+
 (defun pm--get-mode-symbol-from-name (str &optional no-fallback)
   "Guess and return mode function."
-  (let* ((str (if (symbolp str)
-                  (symbol-name str)
-                str))
+  (let* ((str (pm--symbol-name
+               (or (cdr (assq (intern (pm--symbol-name str))
+                              polymode-mode-name-override-alist))
+                   str)))
          (mname (if (string-match-p "-mode$" str)
                     str
                   (concat str "-mode"))))
@@ -153,15 +387,27 @@ a warning."
                                      'polymode-comment 'end)))))))
 
 (defun pm--uncomment-region (beg end)
-  ;; remove all syntax-table properties. Should not cause any problem as it is
-  ;; always used before font locking
+  ;; Remove all syntax-table properties.
+  ;; fixme: this beggs for problems
   (when (> end 1)
     (with-silent-modifications
       (let ((props '(syntax-table nil rear-nonsticky nil polymode-comment nil)))
-        (remove-text-properties beg end props)
+        (remove-text-properties (max beg (point-min)) (min end (point-max)) props)
         ;; (remove-text-properties beg (1+ beg) props)
         ;; (remove-text-properties end (1- end) props)
         ))))
+
+(defun pm--synchronize-points (&rest ignore)
+  "Synchronize points in all buffers.
+IGNORE is there to allow this function in advises."
+  (when polymode-mode
+    (let ((pos (point))
+          (cbuff (current-buffer)))
+      (dolist (buff (oref pm/polymode -buffers))
+        (when (and (not (eq buff cbuff))
+                   (buffer-live-p buff))
+          (with-current-buffer buff
+            (goto-char pos)))))))
 
 (defun pm--completing-read (prompt collection &optional predicate require-match initial-input hist def inherit-input-method)
   "Wrapper for `completing-read'.
@@ -216,6 +462,9 @@ DEF from history."
   (and (stringp file)
        (file-exists-p file)
        (nth 5 (file-attributes file))))
+
+
+(defvar-local pm--process-buffer nil)
 
 (defun pm--run-shell-command (command sentinel buff-name message)
   "Run shell command interactively.
@@ -348,7 +597,7 @@ able to accept user interaction."
                                        (cons ?t (squote t-spec))))))
       (cons command (or ofile base-ofile)))))
 
-(defun pm--process-internal (processor from to ifile &optional callback shell-quote)
+(defun pm--process-internal (processor from to ifile &optional callback quote)
   (let ((is-exporter (object-of-class-p processor 'pm-exporter)))
     (if is-exporter
         (unless (and from to)
@@ -370,12 +619,12 @@ able to accept user interaction."
                       ;; if real user file, get it or fetch it
                       (or (get-file-buffer ifile)
                           (find-file-noselect ifile))))
-           (output-file-format (if is-exporter
-                                   polymode-exporter-output-file-format
-                                 polymode-weave-output-file-format)))
+           (output-format (if is-exporter
+                              polymode-exporter-output-file-format
+                            polymode-weave-output-file-format)))
       (with-current-buffer ibuffer
         (save-buffer)
-        (let ((comm.ofile (pm--output-command.file output-file-format sfrom sto)))
+        (let ((comm.ofile (pm--output-command.file output-format sfrom sto quote)))
           (message "%s '%s' with '%s' ..." (if is-exporter "Exporting" "Weaving")
                    (file-name-nondirectory ifile) (eieio-object-name processor))
           (let* ((pm--output-file (cdr comm.ofile))
@@ -393,7 +642,7 @@ able to accept user interaction."
                               (apply fun (car comm.ofile) args)))))
             ;; ofile is non-nil in two cases:
             ;;  -- synchronous back-ends (very uncommon)
-            ;;  -- when output is transitional (not real) and mod time of input < output  
+            ;;  -- when output is transitional (not real) and mod time of input < output
             (when ofile
               (if pm--export-spec
                   ;; same logic as in pm--wrap-callback
@@ -407,5 +656,4 @@ able to accept user interaction."
                                ofile))
                 (pm--display-file ofile)))))))))
 
-(provide 'polymode-common)
-
+(provide 'polymode-core)

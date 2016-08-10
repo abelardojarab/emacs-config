@@ -108,9 +108,7 @@
   :defer t
   :commands (helm-etags-select)
   :load-path (lambda () (expand-file-name "helm-etags-plus/" user-emacs-directory))
-  :bind (("M-." . helm-etags-select)
-         :map ctl-x-map
-         ("t" . helm-etags-select)))
+  :bind ("M-." . helm-etags-select))
 
 ;; Helm gtags
 (use-package helm-gtags

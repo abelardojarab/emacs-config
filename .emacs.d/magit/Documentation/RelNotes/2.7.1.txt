@@ -11,7 +11,8 @@ Changes since v2.7.0
   `magit-display-buffer-fullframe-status-topleft-v1', and
   `magit-display-buffer-fullcolumn-most-v1'.
 
-* Added new command `magit-list-repositories'.
+* Added new commands `magit-list-repositories' and
+  `magit-list-submodules'.
 
 * Made `magit-insert-worktrees' use relative filenames.
 
@@ -33,8 +34,13 @@ Changes since v2.7.0
 * Added support for globbing in file arguments of diff and log
   commands.
 
+* Added new command `magit-log-move-to-parent'.
+
 Fixes since v2.7.0
 ------------------
+
+* `magit-blame' failed when run in a blob buffer for a file located
+  in a subdirectory.
 
 * magit-diff-show-or-scroll-{up,down} failed to scroll stash buffers.
 

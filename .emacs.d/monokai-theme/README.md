@@ -49,6 +49,38 @@ To load it automatically on Emacs startup add this to your init file:
 (load-theme 'monokai t)
 ```
 
+## Customization
+
+Please see full list of variables in the `defcustom` section.
+
+i.e.:
+```lisp
+  (setq monokai-fg "#ABB2BF"
+        monokai-bg "#282C34"
+        monokai-blue "#61AFEF"
+        monokai-cyan "#56B6C2"
+        monokai-green "#98C379"
+        monokai-gray "#3E4451"
+        monokai-violet "#C678DD"
+        monokai-red "#E06C75"
+        monokai-orange "#D19A66"
+        monokai-yellow "#E5C07B")
+```
+
+## Windows
+
+If your're experiencing font issues using `org-mode` on Windows with emacs 25 try add this to
+your `init.el` or equivalent file:
+
+```lisp
+    (add-hook 'after-init-hook '(lambda () (load-theme 'monokai t)))
+
+    ;; FIX: Invalid font in org-mode on Windows
+    (when (and sys/win32p (> emacs-major-version 24))
+      (add-hook 'window-setup-hook '(lambda () (load-theme 'monokai t))))
+```
+For more info check this thread: [Invalid font in org-mode](https://github.com/oneKelvinSmith/monokai-emacs/issues/56)
+
 # Bugs & Improvements
 
 Please, report any problems that you find on the projects integrated

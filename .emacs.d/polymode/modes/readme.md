@@ -43,16 +43,17 @@ Assume the following `org-mode` file:
 
 ```
 
- - **span** is a homogeneous in terms of syntactic content fragment of text. In
-   the `org-mode` example above the org span starts at the beginning of the file
-   till and ends (but does not include), `#+begin_src`. Header span is
-   `#+begin_src emacs-lisp :var tbl='()`. The emacs lisp code span follows
-   next. `#+end_src` is the tail span.
+ - **span** - a syntactically homogeneous fragment of text. In the `org-mode`
+   example the org span starts at the beginning of the file ends with (but does
+   not include) `#+begin_src`. Header span is `#+begin_src emacs-lisp :var
+   tbl='()`. The emacs lisp code span follows next. `#+end_src` is the tail
+   span.
+ - **sub-mode** - an emacs mode from inside a span.
  - **chunk** is a well delimited fragment of text that consists of one or more
    spans. Most common types of chunks are `bchunk` (= *b*ody chunk) and hbtchunk
    (= *h*ead + *b*ody + *t*ail spans). In the above example, org-mode emacs-lisp
-   chunk starts with `#+begin_src` and ends with `#+end_src`.
- - **polymode** term is overloaded with three concurrent meanings which we will
+   chunk starts with `#+begin_src` and ends with `#+end_src` (inclusively).
+ - **polymode** is overloaded with three concurrent meanings which we will
    disambiguate from the context:
    1. Like emacs plain modes, polymodes represent an _abstract idea_ of a
       collection of related functionality that is available in emacs buffers.
@@ -67,10 +68,10 @@ Assume the following `org-mode` file:
  - **chunkmode** refers to one of the following:
    1. An abstract idea of the functionality available in chunks of the same type
       (e.g. `org-mode chunk`, `emacs-lisp chunk`).
-   2. Emacs mode function (e.g. `org-mode`), or a collection of such functions
-      (e.g. `fundamental-mode` for header/tail + `emacs-lisp-mode` for the
-      chunk's body) what instantiate all of the required functionality of the
-      plain emacs modes contained by that chunk.
+   2. Emacs mode function (e.g. `org-mode`), or a set of such functions (e.g.
+      `pm-head-tail-mode` for header/tail + `emacs-lisp-mode` for the chunk's
+      body) what instantiate all of the required functionality of the plain
+      emacs modes embodies by that chunk.
    3. Object of `pm-chunkmode` class. This object represents the behavior of the
       chunkmode and is stored in a buffer-local variable `pm/chunkmode`. There
       are several types of chunkmode objects. See [hierarchy](#class-hierarchy)
@@ -342,6 +343,9 @@ todo
 
 
 ## Internals
+
+Warning: Following description is subject to change and might not be up-to-date.
+
 ### API
 
 All API classes and methods are named with `pm-` prefix. <!-- Actual instances have -->
@@ -356,9 +360,8 @@ Buffer local objects:
 Generics:
 
    - `pm-initialize` 
-   - `pm-get-buffer`
+   - `pm-get-buffer-create`
    - `pm-select-buffer`
-   - `pm-install-buffer`
    - `pm-get-span`
    - `pm-indent-line`
    - `pm-get-adjust-face`
@@ -370,6 +373,8 @@ Utilities:
    - `pm-narrow-to-span`
 
 ### Initialization of polymodes
+
+Note: This description is obsolete. Internals have changed.
 
 When called, `poly-XXX-mode` (created with `define-polymode`) clones
 `pm-poly/XXX` object and calls `pm-initialize` generic on it. The actual
@@ -392,6 +397,6 @@ Discovery of the spans is done by `pm-select-buffer` generic which is commonly
 called first by `jit-lock`. `pm-select-buffer` fist checks if the corresponding
 `pm-chunkmode` object (and associated indirect buffer) has been already
 created. If so, `pm-select-buffer` simply selects that buffer. Otherwise, it
-calls `pm-install-buffer` generic which, in turn, creates `pm-chunkmode` object
-and the associated indirect buffer.
+calls `pm-get-buffer-create` generic which, in turn, creates `pm-chunkmode`
+object and the associated indirect buffer.
 

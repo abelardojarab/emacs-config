@@ -88,7 +88,7 @@
               (ivy-read "test" '(("foo" . "bar"))
                :action (lambda (x) (prin1 x))))
             "f C-m")
-           "(\"foo\" . \"bar\")"))
+           "(#(\"foo\" 0 1 (idx 0)) . \"bar\")"))
   (should (equal
            (ivy-with
             '(with-output-to-string
@@ -401,5 +401,11 @@
             "C-u 123 C-m")
            123)))
 
+(ert-deftest ivy-re-match ()
+  (should (ivy-re-match '(("counsel" . t)) "(defun counsel"))
+  (should (ivy-re-match '(("defun" . t) ("counsel" . t)) "(defun counsel"))
+  (should (ivy-re-match '(("counsel" . t) ("defun" . t)) "(defun counsel"))
+  (should (not (ivy-re-match '(("counsel" . nil) ("defun" . t)) "(defun counsel")))
+  (should (not (ivy-re-match '(("defun" . t) ("counsel" . nil)) "(defun counsel"))))
 
 (provide 'ivy-test)

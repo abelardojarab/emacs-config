@@ -4,7 +4,7 @@
 
 ;; Author: Kelvin Smith <oneKelvinSmith@gmail.com>
 ;; URL: http://github.com/oneKelvinSmith/monokai-emacs
-;; Version: 2.0.2
+;; Version: 2.1.0
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -93,6 +93,62 @@ Also affects 'linum-mode' background."
   :type 'number
   :group 'monokai)
 
+;; Primary colors
+(defcustom monokai-yellow "#E6DB74"
+  "Primary colors - yellow"
+  :type 'string
+  :group 'monokai)
+
+(defcustom monokai-orange "#FD971F"
+  "Primary colors - orange"
+  :type 'string
+  :group 'monokai)
+
+(defcustom monokai-red "#F92672"
+  "Primary colors - red"
+  :type 'string
+  :group 'monokai)
+
+(defcustom monokai-magenta "#FD5FF0"
+  "Primary colors - magenta"
+  :type 'string
+  :group 'monokai)
+
+(defcustom monokai-blue "#66D9EF"
+  "Primary colors - blue"
+  :type 'string
+  :group 'monokai)
+
+(defcustom monokai-green "#A6E22E"
+  "Primary colors - green"
+  :type 'string
+  :group 'monokai)
+
+(defcustom monokai-cyan "#A1EFE4"
+  "Primary colors - cyan"
+  :type 'string
+  :group 'monokai)
+
+(defcustom monokai-violet "#AE81FF"
+  "Primary colors - violet"
+  :type 'string
+  :group 'monokai)
+
+(defcustom monokai-gray "#3E3D31"
+  "Primary colors - gray"
+  :type 'string
+  :group 'monokai)
+
+(defcustom monokai-fg "#F8F8F2"
+  "Adaptive colors - foreground"
+  :type 'string
+  :group 'monokai)
+
+(defcustom monokai-bg "#272822"
+  "Adaptive colors - background"
+  :type 'string
+  :group 'monokai)
+
 (let* (;; Variable pitch
        (monokai-pitch (if monokai-use-variable-pitch
                           'variable-pitch
@@ -100,16 +156,6 @@ Also affects 'linum-mode' background."
 
        ;; Definitions for guis that support 256 colors
        (class                    '((class color) (min-colors 257)))
-       ;; Primary colors
-       (monokai-yellow           "#E6DB74")
-       (monokai-orange           "#FD971F")
-       (monokai-red              "#F92672")
-       (monokai-magenta          "#FD5FF0")
-       (monokai-violet           "#AE81FF")
-       (monokai-blue             "#66D9EF")
-       (monokai-cyan             "#A1EFE4")
-       (monokai-green            "#A6E22E")
-       (monokai-gray             "#3E3D31")
        ;; Darker and lighter accented colors
        (monokai-yellow-d         "#BEB244")
        (monokai-yellow-l         "#FFF7A8")
@@ -130,8 +176,6 @@ Also affects 'linum-mode' background."
        (monokai-gray-d           "#35331D")
        (monokai-gray-l           "#7B7962")
        ;; Adaptive colors
-       (monokai-fg               "#F8F8F2")
-       (monokai-bg               "#272822")
        (monokai-highlight-line   "#49483E")
        (monokai-highlight        "#FFB269")
        (monokai-emph             "#F8F8F0")
@@ -5241,10 +5285,8 @@ Also affects 'linum-mode' background."
       (,terminal-class (:foreground ,terminal-monokai-comments))))
 
    `(web-mode-constant-face
-     ((,class (:foreground ,monokai-blue
-                           :weight bold))
-      (,terminal-class (:foreground ,terminal-monokai-blue
-                                    :weight bold))))
+     ((,class (:foreground ,monokai-violet))
+      (,terminal-class (:foreground ,terminal-monokai-violet))))
 
    `(web-mode-current-element-highlight-face
      ((,class (:underline unspecified
@@ -5253,18 +5295,6 @@ Also affects 'linum-mode' background."
       (,terminal-class (:underline unspecified
                                    :weight unspecified
                                    :background ,terminal-monokai-highlight-line))))
-
-   `(web-mode-css-at-rule-face
-     ((,class (:foreground ,monokai-violet
-                           :slant italic))
-      (,terminal-class (:foreground ,terminal-monokai-violet
-                                    :slant italic))))
-
-   `(web-mode-css-pseudo-class-face
-     ((,class (:foreground ,monokai-green
-                           :slant italic))
-      (,terminal-class (:foreground ,terminal-monokai-green
-                                    :slant italic))))
 
    `(web-mode-doctype-face
      ((,class (:foreground ,monokai-comments
@@ -5279,30 +5309,36 @@ Also affects 'linum-mode' background."
       (,terminal-class (:underline t))))
 
    `(web-mode-function-name-face
+     ((,class (:foreground ,monokai-green))
+      (,terminal-class (:foreground ,terminal-monokai-green))))
+
+   `(web-mode-html-attr-name-face
      ((,class (:foreground ,monokai-blue))
       (,terminal-class (:foreground ,terminal-monokai-blue))))
 
-   `(web-mode-html-attr-name-face
-     ((,class (:foreground ,monokai-blue
-                           :slant normal))
-      (,terminal-class (:foreground ,terminal-monokai-blue
-                                    :slant normal))))
+   `(web-mode-html-attr-custom-face
+     ((,class (:inherit web-mode-html-attr-name-face))
+      (,terminal-class (:inherit web-mode-html-attr-name-face))))
+
+   `(web-mode-html-attr-engine-face
+     ((,class (:inherit web-mode-block-delimiter-face))
+      (,terminal-class (:inherit web-mode-block-delimiter-face))))
+
+   `(web-mode-html-attr-equal-face
+     ((,class (:inherit web-mode-html-attr-name-face))
+      (,terminal-class (:inherit web-mode-html-attr-name-face))))
 
    `(web-mode-html-attr-value-face
-     ((,class (:foreground ,monokai-cyan
-                           :slant italic))
-      (,terminal-class (:foreground ,terminal-monokai-cyan
-                                    :slant italic))))
+     ((,class (:foreground ,monokai-yellow))
+      (,terminal-class (:foreground ,terminal-monokai-yellow))))
 
    `(web-mode-html-tag-face
      ((,class (:foreground ,monokai-green))
       (,terminal-class (:foreground ,terminal-monokai-green))))
 
    `(web-mode-keyword-face
-     ((,class (:foreground ,monokai-yellow
-                           :weight normal))
-      (,terminal-class (:foreground ,terminal-monokai-yellow
-                                    :weight normal))))
+     ((,class (:foreground ,monokai-red))
+      (,terminal-class (:foreground ,terminal-monokai-red))))
 
    `(web-mode-preprocessor-face
      ((,class (:foreground ,monokai-yellow
@@ -5313,28 +5349,28 @@ Also affects 'linum-mode' background."
                                     :weight unspecified))))
 
    `(web-mode-string-face
-     ((,class (:foreground ,monokai-cyan))
-      (,terminal-class (:foreground ,terminal-monokai-cyan))))
-
-   `(web-mode-type-face
      ((,class (:foreground ,monokai-yellow))
       (,terminal-class (:foreground ,terminal-monokai-yellow))))
 
+   `(web-mode-type-face
+     ((,class (:inherit font-lock-type-face))
+      (,terminal-class (:inherit font-lock-type-face))))
+
    `(web-mode-variable-name-face
-     ((,class (:foreground ,monokai-blue))
-      (,terminal-class (:foreground ,terminal-monokai-blue))))
+     ((,class (:foreground ,monokai-orange))
+      (,terminal-class (:foreground ,terminal-monokai-orange))))
 
    `(web-mode-warning-face
      ((,class (:inherit font-lock-warning-face))
       (,terminal-class (:inherit font-lock-warning-face))))
 
-   `(web-mode-block-attr-name-face
-     ((,class (:inherit web-mode-html-attr-name-face))
-      (,terminal-class (:inherit web-mode-html-attr-name-face))))
+   `(web-mode-block-face
+     ((,class (:background unspecified))
+      (,terminal-class (:background unspecified))))
 
-   `(web-mode-block-attr-value-face
-     ((,class (:inherit web-mode-html-attr-value-face))
-      (,terminal-class (:inherit web-mode-html-attr-value-face))))
+   `(web-mode-block-delimiter-face
+     ((,class (:inherit font-lock-preprocessor-face))
+      (,terminal-class (:inherit font-lock-preprocessor-face))))
 
    `(web-mode-block-comment-face
      ((,class (:inherit web-mode-comment-face))
@@ -5344,27 +5380,37 @@ Also affects 'linum-mode' background."
      ((,class (:inherit font-lock-preprocessor-face))
       (,terminal-class (:inherit font-lock-preprocessor-face))))
 
-   `(web-mode-block-face
-     ((,class (:background unspecified))
-      (,terminal-class (:background unspecified))))
-
    `(web-mode-block-string-face
      ((,class (:inherit web-mode-string-face))
       (,terminal-class (:inherit web-mode-string-face))))
 
    `(web-mode-comment-keyword-face
-     ((,class (:box 1
-                    :weight bold))
-      (,terminal-class (:box 1
-                             :weight bold))))
+     ((,class (:box 1 :weight bold))
+      (,terminal-class (:box 1 :weight bold))))
+
+   `(web-mode-css-at-rule-face
+     ((,class (:inherit font-lock-constant-face))
+      (,terminal-class (:inherit font-lock-constant-face))))
+
+   `(web-mode-css-pseudo-class-face
+     ((,class (:inherit font-lock-builtin-face))
+      (,terminal-class (:inherit font-lock-builtin-face))))
 
    `(web-mode-css-color-face
      ((,class (:inherit font-lock-builtin-face))
       (,terminal-class (:inherit font-lock-builtin-face))))
 
+   `(web-mode-css-filter-face
+     ((,class (:inherit font-lock-function-name-face))
+      (,terminal-class (:inherit font-lock-function-name-face))))
+
    `(web-mode-css-function-face
      ((,class (:inherit font-lock-builtin-face))
       (,terminal-class (:inherit font-lock-builtin-face))))
+
+   `(web-mode-css-function-call-face
+     ((,class (:inherit font-lock-function-name-face))
+      (,terminal-class (:inherit font-lock-function-name-face))))
 
    `(web-mode-css-priority-face
      ((,class (:inherit font-lock-builtin-face))
@@ -5385,6 +5431,10 @@ Also affects 'linum-mode' background."
    `(web-mode-javascript-string-face
      ((,class (:inherit web-mode-string-face))
       (,terminal-class (:inherit web-mode-string-face))))
+
+   `(web-mode-json-comment-face
+     ((,class (:inherit web-mode-comment-face))
+      (,terminal-class (:inherit web-mode-comment-face))))
 
    `(web-mode-json-context-face
      ((,class (:foreground ,monokai-violet))
@@ -5415,8 +5465,8 @@ Also affects 'linum-mode' background."
       (,terminal-class (:inherit web-mode-string-face))))
 
    `(web-mode-symbol-face
-     ((,class (:foreground ,monokai-yellow))
-      (,terminal-class (:foreground ,terminal-monokai-yellow))))
+     ((,class (:foreground ,monokai-violet))
+      (,terminal-class (:foreground ,terminal-monokai-violet))))
 
    `(web-mode-whitespace-face
      ((,class (:background ,monokai-red))
@@ -5655,9 +5705,9 @@ Also affects 'linum-mode' background."
    ;; which-key
    `(which-key-key-face
      ((,class (:foreground ,monokai-green
-			   :weight bold))
+                           :weight bold))
       (,terminal-class (:foreground ,terminal-monokai-green
-				    :weight bold))))
+                                    :weight bold))))
 
    `(which-key-separator-face
      ((,class (:foreground ,monokai-comments))
@@ -5677,9 +5727,9 @@ Also affects 'linum-mode' background."
 
    `(which-key-group-description-face
      ((,class (:foreground ,monokai-red
-			   :weight bold))
+                           :weight bold))
       (,terminal-class (:foreground ,terminal-monokai-red
-				    :weight bold))))
+                                    :weight bold))))
    ;; window-number-mode
    `(window-number-face
      ((,class (:foreground ,monokai-green))

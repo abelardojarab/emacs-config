@@ -64,15 +64,6 @@
   :commands (psw-switch-recentf psw-switch-buffer psw-switch-function psw-switch-projectile-files psw-navigate-files)
   :load-path (lambda () (expand-file-name "popup-switcher/" user-emacs-directory)))
 
-;; switch window
-(use-package switch-window
-  :defer t
-  :bind (:map ctl-x-map
-              ("o" . switch-window))
-  :if (display-graphic-p)
-  :commands switch-window
-  :load-path (lambda () (expand-file-name "switch-window/" user-emacs-directory)))
-
 ;; Treat 'y' or <CR> as yes, 'n' as no.
 (fset 'yes-or-no-p 'y-or-n-p)
 (define-key query-replace-map [return] 'act)
@@ -224,8 +215,8 @@
 (define-key ctl-x-map (kbd "<") 'decrease-left-margin)
 (define-key ctl-x-map (kbd "F") 'toggle-frame-fullscreen)
 (define-key ctl-x-map (kbd "T") 'toggle-truncate-lines)
-(define-key ctl-x-map (kbd "/") 'psw-switch-function)
-(define-key ctl-x-map (kbd ".") 'psw-switch-recentf)
+(define-key ctl-x-map (kbd ".") 'psw-switch-function)
+(define-key ctl-x-map (kbd "/") 'psw-switch-recentf)
 
 ;; Extra Ctrl-x mappings for navigation
 (define-key ctl-x-map (kbd "<up>") 'windmove-up)

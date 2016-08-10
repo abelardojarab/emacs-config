@@ -1,9 +1,9 @@
 (require 'eieio)
-(require 'polymode-common)
+(require 'polymode-core)
 
 ;;; ROOT CLASS
 (if (fboundp 'eieio-named)
-    (progn 
+    (progn
       (defclass pm-root (eieio-instance-inheritor eieio-named)
         ((-props
           :initform '()
@@ -32,7 +32,7 @@
                                             "-" (int-to-string num)))
                                 (concat nm "-1")))))
             nobj))))
-  
+
   (defclass pm-root (eieio-instance-inheritor)
     ((-props
       :initform '()
@@ -43,7 +43,7 @@
     "Root polymode class."))
 
 ;;; CONFIG
-(defclass pm-polymode (pm-root) 
+(defclass pm-polymode (pm-root)
   ((hostmode
     :initarg :hostmode
     :initform 'pm-host/blank
@@ -104,6 +104,7 @@
     :initarg :map
     :initform 'polymode-mode-map
     :type (or symbol list)
+    :documentation
     "Has a similar role as the :keymap argument in
      `define-polymode' with the difference that this argument is
      inherited through cloning, but :keymap argument is not. That
@@ -127,7 +128,15 @@
      B, which in turn inherits from object A. Then A's init-functions
      are called first, then B's and then C's.
      Either customize this slot or use `object-add-to-list' function.")
-   
+   (switch-buffer-functions
+    :initarg :switch-buffer-functions
+    :initform '()
+    :type list
+    :documentation
+    "List of functions to run at polymode buffer switch.
+     Each function is run with two arguments, OLD-BUFFER and
+     NEW-BUFFER.")
+
    (-hostmode
     :type (or null pm-chunkmode)
     :documentation
@@ -143,7 +152,7 @@
     :type list
     :documentation
     "Holds all buffers associated with current buffer. Dynamically populated."))
-  
+
   "Configuration for a polymode. Each polymode buffer contains a local
 variable `pm/polymode' instantiated from this class or a subclass
 of this class.")
@@ -156,7 +165,7 @@ of this class.")
     :documentation
     "Symbol of the chunkmode. At run time this object is cloned
      and placed in -innermodes slot."))
-  
+
   "Configuration for a simple polymode that allows only one
 innermode. For example noweb.")
 
@@ -170,7 +179,7 @@ innermode. For example noweb.")
     "List of names of the chunkmode objects that are associated
      with this configuration. At initialization time, all of
      these are cloned and plased in -innermodes slot."))
-  
+
   "Configuration for a polymode that allows multiple (known in
 advance) innermodes.")
 
@@ -189,7 +198,7 @@ advance) innermodes.")
     :documentation
     "List of chunkmode objects that are auto-generated in
     `pm-get-span' method for this class."))
-  
+
   "Configuration for a polymode that allows multiple innermodes
 that are not known in advance. Examples are org-mode and markdown.")
 
@@ -231,19 +240,42 @@ that are not known in advance. Examples are org-mode and markdown.")
     background. If positive - lighten the background on dark
     themes and darken on light thems. If negative - darken in
     dark thems and lighten in light thems.")
-   
+   (init-functions
+    :initarg :init-functions
+    :initform '()
+    :type list
+    :documentation
+    "List of functions to called after the initialization of  chunkmode has finished.
+     Functions are called the buffer associated with this
+     chunkmode. All init-functions in the inheritance chain are
+     called. Parents hooks first. So, if current config object C
+     inherits from object B, which in turn inherits from object
+     A. Then A's init-functions are called first, then B's and
+     then C's. Either customize this slot or use
+     `object-add-to-list' function.")
+   (switch-buffer-functions
+    :initarg :switch-buffer-functions
+    :initform '()
+    :type list
+    :documentation
+    "List of functions to run at polymode buffer switch.
+     Each function is run with two arguments, OLD-BUFFER and
+     NEW-BUFFER. In contrast to identically named slot in
+     `pm-polymode' class, these functions are run only when
+     NEW-BUFFER is associated with this chunkmode.")
+
    (-buffer
     :type (or null buffer)
     :initform nil))
-  
-  "Representatioin of the chunkmode object.")
+
+  "Representatioin of a generic chunkmode object.")
 
 (defclass pm-bchunkmode (pm-chunkmode)
   ()
-  "Representation of the hostmode objects. Basemodes are the
-  main (parent) modes in the buffer. For example for a the
-  web-mdoe the hostmode is `html-mode', for nowweb mode the host
-  mode is usually `latex-mode', etc.")
+  "Representation of the body-only chunkmodes. Body-only
+  chunkmodes are commonly used as host modes. For example for a
+  the web-mdoe the hostmode is `html-mode', for nowweb mode the
+  host mode is usually `latex-mode', etc.")
 
 (defclass pm-hbtchunkmode (pm-chunkmode)
   ((head-mode
@@ -265,6 +297,7 @@ that are not known in advance. Examples are org-mode and markdown.")
     from :HEAD-MODE slot. If set to 'body, the tail's mode is the
     same as chunk's body mode. If set to 'host, the mode will be
     of the parent host.")
+
    (head-reg
     :initarg :head-reg
     :initform ""
@@ -281,6 +314,7 @@ that are not known in advance. Examples are org-mode and markdown.")
     :documentation "Regexp for chunk end (aka tail), or a
     function returning the start and end positions of the tail.
     See `pm--default-matcher' for an example function.")
+
    (adjust-face
     :initform 2)
    (head-adjust-face
@@ -298,7 +332,7 @@ that are not known in advance. Examples are org-mode and markdown.")
     :documentation
     "Can be a number, list or face. If nil, take the
     configuration from :head-adjust-face.")
-   
+
    (-head-buffer
     :type (or null buffer)
     :initform nil
@@ -308,8 +342,8 @@ that are not known in advance. Examples are org-mode and markdown.")
    (-tail-buffer
     :initform nil
     :type (or null buffer)))
-  
-  "Representation of an inner chunkmode.")
+
+  "Representation of an inner Head-Body-Tail chunkmode.")
 
 (defclass pm-hbtchunkmode-auto (pm-hbtchunkmode)
   ((retriever-regexp :initarg :retriever-regexp

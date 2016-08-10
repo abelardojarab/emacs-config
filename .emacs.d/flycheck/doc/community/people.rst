@@ -16,8 +16,8 @@ Maintainers
 * **Clément Pit--Claudel** (:gh:`cpitclaudel`, owner)
 
 We maintain Flycheck and all official extensions within the `Flycheck
-organisation`_, and set the direction and scope Flycheck.  We review and accept
-pull requests and feature proposals and fix bugs in Flycheck
+organisation`_, and set the direction and scope of Flycheck.  We review and
+accept pull requests and feature proposals and fix bugs in Flycheck.
 
 Emphasized users are also owners of the `Flycheck Organisation`_, and thus have
 administrative privileges for all repositories in Flycheck.  Notably only owners
@@ -79,6 +79,13 @@ Javascript
 
 Mention with ``@flycheck/javascript``.
 
+Puppet
+~~~~~~
+
+* Romanos Skiadas (:gh:`rski`)
+
+Mention with ``@flycheck/puppet``.
+
 Rust
 ~~~~
 
@@ -105,7 +112,7 @@ We would also like to thank the following people and projects:
   early stage and thus brought Flycheck to many new users.
 * Magnar Sveen (:gh:`magnars`) for his :gh:`dash.el <magnars/dash.el>` and
   :gh:`s.el <magnars/s.el>` libraries, which support considerable parts of
-  Flycheck internals, and greatly helped to overcome the Sebastian’s initial
+  Flycheck internals, and greatly helped to overcome Sebastian’s initial
   aversion to Emacs Lisp.
 * Martin Grenfell (:gh:`scrooloose`) for the Vim syntax checking extension
   :gh:`Syntastic <scrooloose/syntastic>` which saved Sebastian’s life back when
@@ -159,6 +166,7 @@ to Flycheck:
 * Lorenzo Villani (:gh:`lvillani`)
 * Magnar Sveen (:gh:`magnars`)
 * Malyshev Artem (:gh:`proofit404`)
+* Manuel Uberti (:gh:`manuel-uberti`)
 * Marcin Antczak (:gh:`marcinant`)
 * Marcus Majewski (:gh:`hekto`)
 * Marian Schubert (:gh:`maio`)

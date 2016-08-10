@@ -7,7 +7,7 @@
 ;; Author: Joost Kremers <joostkremers@fastmail.fm>
 ;; Maintainer: Joost Kremers <joostkremers@fastmail.fm>
 ;; Created: 2015
-;; Version: 1.7
+;; Version: 1.9
 ;; Package-Requires: ((emacs "24.3"))
 
 ;; This file is NOT part of GNU Emacs.
@@ -115,6 +115,7 @@ function is for use in the window parameter `split-window'."
       (when (and horizontal (not new))
 	(set-window-margins window (car margins) (cdr margins))))))
 
+;;;###autoload
 (defun visual-fill-column-split-window-sensibly (&optional window)
   "Split WINDOW sensibly, unsetting its margins first.
 This function unsets the window margins and calls
@@ -141,16 +142,34 @@ windows with wide margins."
       (set-window-parameter (selected-window) 'split-window #'visual-fill-column-split-window))
   (visual-fill-column--set-margins))
 
+(defun visual-fill-column-adjust (&optional _inc)
+  "Adjust the window margins and fringes.
+This function is for use as advice to `text-scale-adjust'.  It
+calls `visual-fill-column--adjust-window', but only if
+`visual-fill-column' is active."
+  (if visual-fill-column-mode
+      (visual-fill-column--adjust-window)))
+
 (defun visual-fill-column--window-max-text-width (&optional window)
   "Return the maximum possible text width of WINDOW.
 The maximum possible text width is the width of the current text
 area plus the margins, but excluding the fringes, scroll bar and
-right divider.  WINDOW defaults to the selected window."
+right divider.  WINDOW defaults to the selected window.  The
+return value is scaled to account for `text-scale-mode-amount'
+and `text-scale-mode-step'."
   (or window (setq window (selected-window)))
-  (let ((margins (window-margins window)))
-    (+ (window-width window)
-       (or (car margins) 0)
-       (or (cdr margins) 0))))
+  (let* ((margins (window-margins window))
+         (buffer (window-buffer window))
+         (scale (if (and (boundp 'text-scale-mode-step)
+                         (boundp 'text-scale-mode-amount))
+                    (with-current-buffer buffer
+                      (expt text-scale-mode-step
+                            text-scale-mode-amount))
+                  1.0)))
+    (truncate (/ (+ (window-width window)
+                    (or (car margins) 0)
+                    (or (cdr margins) 0))
+                 (float scale)))))
 
 (defun visual-fill-column--set-margins ()
   "Set window margins for the current window."

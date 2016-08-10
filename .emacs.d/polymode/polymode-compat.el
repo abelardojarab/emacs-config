@@ -1,6 +1,6 @@
 ;;; COMPATIBILITY and FIXES
 
-(require 'polymode-common)
+(require 'polymode-core)
 (require 'advice nil t)
 
 (defgroup polymode-compat nil
@@ -99,12 +99,33 @@ Return new name (symbol). FUN is an unquoted name of a function."
         (pm-apply-protected orig-fun args))
     (apply orig-fun args)))
 
-(defun pm-execute-inhibit-modification-hooks (orig-fun &rest args)
-  "Execute ORIG-FUN with `inhibit-modification-hooks' set to t.
-*span* in `pm-map-over-spans` has precedence over span at point."
+(defun pm-execute-with-no-polymode-hooks (orig-fun &rest args)
+  "Execute ORIG-FUN without allowing polymode core hooks.
+That is, bind `pm-allow-post-command-hook' and
+`pm-allow-after-change-hook' to nil. *span* in
+`pm-map-over-spans' has precedence over span at point."
+  ;; this advice is nowhere used yet
   (if (and polymode-mode pm/polymode)
-      (let ((inhibit-modification-hooks t))
+      (let ((pm-allow-post-command-hook t)
+            (pm-allow-after-change-hook t))
+        ;; This advice might be useful when functions can switch buffers to work
+        ;; inside the base buffer (like basic-save-buffer does). Thus, we sync
+        ;; points first.
+        (pm--synchronize-points)
+        ;; save-excursion might be also often necessary
         (apply orig-fun args))
+    (apply orig-fun args)))
+
+(defun pm-execute-with-save-excursion (orig-fun &rest args)
+  "Execute ORIG-FUN within save-excursion."
+  ;; This advice is required when other functions switch buffers to work inside
+  ;; base buffer and don't restore the point. For some not very clear reason
+  ;; this seem to be necessary for save-buffer which saves buffer but not point.
+  (if (and polymode-mode pm/polymode)
+      (progn
+        (pm--synchronize-points)
+        (save-excursion
+          (apply orig-fun args)))
     (apply orig-fun args)))
 
 (defun pm-around-advice (fun advice)
@@ -124,22 +145,23 @@ in a list. "
 (defun pm-execute-syntax-propertize-narrowed-to-span (orig-fun pos)
   "Execute `syntax-propertize' narrowed to the current span.
 Don't throw errors, but give relevant messages instead."
+  ;; in emacs 25.1 internal--syntax-propertize is called from C. We
+  ;; cannot advice it, but we can check for its argument. Very hackish
+  ;; but I don't see another way besides re-defining that function.
   (if (and polymode-mode pm/polymode)
       (condition-case err
-          ;; in emacs 25.1 internal--syntax-propertize is called from C. We
-          ;; cannot advice it, but we can check for its argument. Very hackish
-          ;; but I don't see another way besides re-defining that function.
-          (when (< syntax-propertize--done pos)
-            (pm-map-over-spans
-             (lambda ()
-               (when (< syntax-propertize--done pos)
-                 (pm-with-narrowed-to-span *span*
-                   (funcall orig-fun (min pos (point-max)))
-                   (let ((new--done syntax-propertize--done))
-                     (dolist (buff (oref pm/polymode -buffers))
-                       (with-current-buffer buff
-                         (setq-local syntax-propertize--done new--done)))))))
-             syntax-propertize--done pos))
+          (save-excursion
+            (when (< syntax-propertize--done pos)
+              (pm-map-over-spans
+               (lambda ()
+                 (when (< syntax-propertize--done pos)
+                   (pm-with-narrowed-to-span *span*
+                     (funcall orig-fun (min pos (point-max)))
+                     (let ((new--done syntax-propertize--done))
+                       (dolist (buff (oref pm/polymode -buffers))
+                         (with-current-buffer buff
+                           (setq-local syntax-propertize--done new--done)))))))
+               syntax-propertize--done pos)))
         (error (message "(syntax-propertize %s): %s [M-x pm-debug-info RET to see backtrace]"
                         pos (error-message-string err))
                (and pm-debug-mode
@@ -148,12 +170,6 @@ Don't throw errors, but give relevant messages instead."
 
 (pm-around-advice 'syntax-propertize 'pm-execute-syntax-propertize-narrowed-to-span)
 
-
-;;; Query Replace
-;; `query-replace` misbehaves because after each replacement modification hooks
-;; are triggered and poly buffer is switched
-;; https://github.com/vspinu/polymode/issues/92
-(pm-around-advice 'perform-replace 'pm-execute-inhibit-modification-hooks)
 
 
 ;;; Flyspel
@@ -169,6 +185,18 @@ Don't throw errors, but give relevant messages instead."
 ;; c-font-lock-fontify-region calls it directly
 ;; (pm-around-advice 'font-lock-default-fontify-region #'pm-substitute-beg-end)
 (pm-around-advice 'c-determine-limit #'pm-execute-narrowed-to-span)
+
+
+;;; Python
+(defun pm--python-dont-indent-to-0 (fun)
+  "Don't cycle to 0 indentation in polymode chunks."
+  (if (and polymode-mode pm/type)
+      (let ((last-command (unless (eq (pm--first-line-indent) (current-indentation))
+                            last-command)))
+        (funcall fun))
+    (funcall fun)))
+
+(pm-around-advice 'python-indent-line-function #'pm--python-dont-indent-to-0)
 
 
 ;;; Core Font Lock
@@ -188,6 +216,21 @@ Propagate only real change."
 
 ;;; Editing
 (pm-around-advice 'fill-paragraph #'pm-execute-narrowed-to-span)
+
+;; `save-buffer` misbehaves because after each replacement modification hooks
+;; are triggered and poly buffer is switched in unpredictable fashion.
+;;
+;; https://github.com/vspinu/polymode/issues/93 It can be
+;; reproduced with (add-hook 'before-save-hook 'delete-trailing-whitespace nil
+;; t) in the base buffer.
+;;
+;; save-excursion is probably not quite right fix for this but it seem to work
+(pm-around-advice 'basic-save-buffer #'pm-execute-with-save-excursion)
+
+;; Query replace were probably misbehaving due to unsaved match data.
+;; (https://github.com/vspinu/polymode/issues/92) The following is probably not
+;; necessary.
+;; (pm-around-advice 'perform-replace 'pm-execute-inhibit-modification-hooks)
 
 
 ;;; EVIL

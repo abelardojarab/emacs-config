@@ -67,6 +67,27 @@
   :bind (:map dired-mode-map
               ("P" . peep-dired)))
 
+;; neotree side bar
+(use-package neotree
+  :defer t
+  :commands (neotree-toggle)
+  :bind (("C-t" . neotree-toggle)
+         :map neotree-mode-map
+         (("<C-return>" . neotree-change-root)
+          ("C"          . neotree-change-root)
+          ("c"          . neotree-create-node)
+          ("+"          . neotree-create-node)
+          ("d"          . neotree-delete-node)
+          ("r"          . neotree-rename-node)))
+  :load-path (lambda () (expand-file-name "neotree/" user-emacs-directory))
+  :config (progn
+            ;;  every time when the neotree window is
+            ;; opened, it will try to find current
+            ;; file and jump to node.
+            (setq-default neo-smart-open t)
+            ;; Don't allow neotree to be the only open window
+            (setq-default neo-dont-be-alone t)))
+
 ;; Sunrise Commander
 (use-package sunrise-commander
   :defer t

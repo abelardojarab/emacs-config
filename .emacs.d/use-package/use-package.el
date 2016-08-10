@@ -5,8 +5,8 @@
 ;; Author: John Wiegley <jwiegley@gmail.com>
 ;; Maintainer: John Wiegley <jwiegley@gmail.com>
 ;; Created: 17 Jun 2012
-;; Modified: 26 Sep 2015
-;; Version: 2.1
+;; Modified: 6 Jul 2016
+;; Version: 2.2
 ;; Package-Requires: ((bind-key "1.0") (diminish "0.44"))
 ;; Keywords: dotemacs startup speed config package
 ;; URL: https://github.com/jwiegley/use-package
@@ -46,7 +46,7 @@
 (eval-when-compile (require 'cl))
 (eval-when-compile (require 'regexp-opt))
 
-(declare-function package-installed-p 'package)
+(declare-function package-installed-p "package")
 
 (defgroup use-package nil
   "A use-package declaration for simplifying your `.emacs'."
@@ -144,9 +144,9 @@ the user specified."
     :defines
     :functions
     :defer
+    :init
     :after
     :demand
-    :init
     :config
     :diminish
     :delight)
@@ -212,8 +212,8 @@ convert it to a string and return that."
   "Return a form which will load or require NAME depending on
 whether it's a string or symbol."
   (if (stringp name)
-      `(load ,name 'noerror)
-    `(require ',name nil 'noerror)))
+      `(load ,name ',noerror)
+    `(require ',name nil ',noerror)))
 
 (defun use-package-expand (name label form)
   "FORM is a list of forms, so `((foo))' if only `foo' is being called."
@@ -298,7 +298,7 @@ This is in contrast to merely setting it to 0."
   (let (p)
     (while plist
       (if (not (eq property (car plist)))
-	  (setq p (plist-put p (car plist) (nth 1 plist))))
+          (setq p (plist-put p (car plist) (nth 1 plist))))
       (setq plist (cddr plist)))
     p))
 
@@ -500,6 +500,8 @@ manually updated package."
 (defun use-package-ensure-elpa (package &optional no-refresh)
   (if (package-installed-p package)
       t
+    (if (and (not no-refresh) (assoc package package-pinned-packages))
+        (package-read-all-archive-contents))
     (if (or (assoc package package-archive-contents) no-refresh)
         (package-install package)
       (progn
@@ -1167,7 +1169,7 @@ this file.  Usage:
       (let ((body
              (macroexp-progn
               (use-package-process-keywords name args*
-                (and use-package-always-defer '(:deferred t))))))
+                (and use-package-always-defer (list :deferred t))))))
         (if use-package-debug
             (display-buffer
              (save-current-buffer

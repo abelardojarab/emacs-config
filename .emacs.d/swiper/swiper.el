@@ -311,7 +311,7 @@ numbers; replaces calculating the width from buffer line count."
                            (buffer-substring
                             (point)
                             (line-end-position)))))))
-              (remove-text-properties 0 (length str) '(field) str)
+              (setq str (ivy-cleanup-string str))
               (let ((line-number-str
                      (format swiper--format-spec (cl-incf line-number))))
                 (if swiper-include-line-number-in-search
@@ -399,21 +399,24 @@ When REVERT is non-nil, regenerate the current *ivy-occur* buffer."
   "Transform STR into a swiper regex.
 This is the regex used in the minibuffer where candidates have
 line numbers. For the buffer, use `ivy--regex' instead."
-  (let ((re (cond
-              ((equal str "")
-               "")
-              ((equal str "^")
-               (setq ivy--subexps 0)
-               ".")
-              ((string-match "^\\^" str)
-               (setq ivy--old-re "")
-               (let ((re (ivy--regex-plus (substring str 1))))
-                 (if (zerop ivy--subexps)
-                     (prog1 (format "^ ?\\(%s\\)" re)
-                       (setq ivy--subexps 1))
-                   (format "^ %s" re))))
-              (t
-               (ivy--regex-plus str)))))
+  (let* ((re-builder
+          (or (cdr (assoc 'swiper ivy-re-builders-alist))
+              (cdr (assoc t ivy-re-builders-alist))))
+         (re (cond
+               ((equal str "")
+                "")
+               ((equal str "^")
+                (setq ivy--subexps 0)
+                ".")
+               ((string-match "^\\^" str)
+                (setq ivy--old-re "")
+                (let ((re (funcall re-builder (substring str 1))))
+                  (if (zerop ivy--subexps)
+                      (prog1 (format "^ ?\\(%s\\)" re)
+                        (setq ivy--subexps 1))
+                    (format "^ %s" re))))
+               (t
+                (funcall re-builder str)))))
     (cond ((stringp re)
            (replace-regexp-in-string "\t" "    " re))
           ((and (consp re)
@@ -715,10 +718,13 @@ Run `swiper' for those buffers."
                            (eq (with-current-buffer b
                                  major-mode) 'dired-mode)))
                      (buffer-list)))
-           (re (funcall ivy--regex-function str))
-           (re (if (consp re) (caar re) re))
-           cands
-           match)
+           (re-full (funcall ivy--regex-function str))
+           re re-tail
+           cands match)
+      (if (stringp re-full)
+          (setq re re-full)
+        (setq re (caar re-full))
+        (setq re-tail (cdr re-full)))
       (dolist (buffer buffers)
         (with-current-buffer buffer
           (save-excursion
@@ -736,9 +742,12 @@ Run `swiper' for those buffers."
                (buffer-name)
                match)
               (put-text-property 0 1 'point (point) match)
-              (push match cands)))))
-      (setq ivy--old-re nil)
-      (setq ivy--old-cands (nreverse cands)))))
+              (when (or (null re-tail) (ivy-re-match re-tail match))
+                (push match cands))))))
+      (setq ivy--old-re re-full)
+      (if (null cands)
+          (list "")
+        (setq ivy--old-cands (nreverse cands))))))
 
 (defun swiper--all-format-function (cands)
   (let* ((ww (window-width))
