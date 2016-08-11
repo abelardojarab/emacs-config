@@ -151,7 +151,7 @@
                                                                       (+ (overlay-start ov) 40)))))
                                                  (count-lines (overlay-start ov)
                                                               (overlay-end ov)))))
-                    (overlay-put ov 'help-echo "Hiddent text... ")
+                    (overlay-put ov 'help-echo "Hidden text... ")
                     (put-text-property 0 marker-length 'display (list 'left-fringe 'hs-marker 'fringe-face) marker-string)
                     (overlay-put ov 'before-string marker-string)
                     (put-text-property 1 (length display-string) 'face 'outline-4 display-string)
@@ -233,21 +233,54 @@
 
 ;; Origami mode
 (use-package origami
-  :commands (origami-toggle-node origami-toggle-all-nodes origami-show-only-node origami-mode)
-  :bind (:map ctl-x-map
-              ("*" . origami-toggle-all-nodes)
-              ("." . origami-toggle-node))
+  :commands (origami-toggle-node
+             origami-toggle-all-nodes
+             origami-show-only-node
+             origami-recursively-toggle-node
+             origami-mode)
+  :bind (("C-c SPC" . origami-recursively-toggle-node)
+         ("C-c TAB" . origami-toggle-all-nodes)
+         ("C-c *" . origami-toggle-all-nodes)
+         ("C-c +" . origami-open-all-nodes))
   :load-path (lambda () (expand-file-name "origami/" user-emacs-directory))
   :config (progn
+
+            ;; Show fringe marker if running under graphical display
+            (when (display-graphic-p)
+                (defun origami-create-overlay (beg end offset buffer)
+                  (when (> (- end beg) 0)
+                    (let ((ov (make-overlay (+ beg offset) end buffer)))
+                      (overlay-put ov 'creator 'origami)
+                      (overlay-put ov 'isearch-open-invisible 'origami-isearch-show)
+                      (overlay-put ov 'isearch-open-invisible-temporary
+                                   (lambda (ov hide-p) (if hide-p (origami-hide-overlay ov)
+                                                    (origami-show-overlay ov))))
+                      ;; We create a header overlay even when disabled; this could be avoided,
+                      ;; especially if we called origami-reset for each buffer if customizations
+                      ;; changed.
+                      (let* ((range (origami-header-overlay-range ov))
+                             (header-ov (make-overlay (car range) (cdr range) buffer
+                                                      nil))
+                             (marker-string "*fringe-dummy*")
+                             (marker-length (length marker-string))
+                             ) ;; no front advance
+                        (overlay-put header-ov 'creator 'origami)
+                        (overlay-put header-ov 'fold-overlay ov)
+
+                        ;; Add the following to your .emacs and uncomment it in order to get a right arrow symbol
+                        (define-fringe-bitmap 'hs-marker [0 32 48 56 60 56 48 32])
+                        (put-text-property 0 marker-length 'display (list 'left-fringe 'hs-marker 'fringe-face) marker-string)
+
+                        (overlay-put header-ov 'modification-hooks '(origami-header-modify-hook))
+                        (overlay-put ov 'header-ov header-ov))
+                      ov))))
+
             (global-origami-mode)))
 
 ;; Vi-like fold
 (use-package vimish-fold
-  :bind (:map ctl-x-map
-              ("-" . vimish-fold)
-              ("+" . vimish-fold-unfold))
-  :load-path (lambda () (expand-file-name "vimish-fold/" user-emacs-directory))
-  :config (vimish-fold-global-mode t))
+  :commands (vimish-fold-mode vimish-fold-global-mode)
+  :load-path (lambda () (expand-file-name "vimish-fold/" user-emacs-directory)))
 
 (provide 'setup-folding)
 ;;; setup-hideshow.el ends here
