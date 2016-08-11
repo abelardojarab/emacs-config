@@ -100,6 +100,14 @@
   :if (display-graphic-p)
   :commands (hideshowvis-enable toggle-fold toggle-fold-all hs-toggle-hiding hs-toggle-hiding-all)
   :diminish hs-minor-mode
+  :init (progn
+          ;; enable `hs-minor-mode' at startup
+          (dolist (hook (list 'prog-mode-hook))
+            (add-hook hook (lambda () (hs-minor-mode 1))))
+
+          ;; enable 'hideshowvis-minor-mode at startup
+          (dolist (hook (list 'prog-mode-hook))
+            (add-hook hook 'hideshowvis-enable)))
   :config (progn
 
             (defvar hs-special-modes-alist
@@ -110,13 +118,6 @@
                         (java-mode "{" "}" "/[*/]" nil nil)
                         (js-mode "{" "}" "/[*/]" nil)
                         (javascript-mode  "{" "}" "/[*/]" nil))")"))
-
-            ;; enable `hs-minor-mode' at startup
-            (dolist (hook (list 'prog-mode-hook))
-              (add-hook hook (lambda () (hs-minor-mode 1))))
-
-            (dolist (hook (list 'prog-mode-hook))
-              (add-hook hook 'hideshowvis-enable))
 
             (defun hs-minor-mode-settings ()
               "settings of `hs-minor-mode'."
@@ -244,37 +245,6 @@
          ("C-c +" . origami-open-all-nodes))
   :load-path (lambda () (expand-file-name "origami/" user-emacs-directory))
   :config (progn
-
-            ;; Show fringe marker if running under graphical display
-            (when (display-graphic-p)
-                (defun origami-create-overlay (beg end offset buffer)
-                  (when (> (- end beg) 0)
-                    (let ((ov (make-overlay (+ beg offset) end buffer)))
-                      (overlay-put ov 'creator 'origami)
-                      (overlay-put ov 'isearch-open-invisible 'origami-isearch-show)
-                      (overlay-put ov 'isearch-open-invisible-temporary
-                                   (lambda (ov hide-p) (if hide-p (origami-hide-overlay ov)
-                                                    (origami-show-overlay ov))))
-                      ;; We create a header overlay even when disabled; this could be avoided,
-                      ;; especially if we called origami-reset for each buffer if customizations
-                      ;; changed.
-                      (let* ((range (origami-header-overlay-range ov))
-                             (header-ov (make-overlay (car range) (cdr range) buffer
-                                                      nil))
-                             (marker-string "*fringe-dummy*")
-                             (marker-length (length marker-string))
-                             ) ;; no front advance
-                        (overlay-put header-ov 'creator 'origami)
-                        (overlay-put header-ov 'fold-overlay ov)
-
-                        ;; Add the following to your .emacs and uncomment it in order to get a right arrow symbol
-                        (define-fringe-bitmap 'hs-marker [0 32 48 56 60 56 48 32])
-                        (put-text-property 0 marker-length 'display (list 'left-fringe 'hs-marker 'fringe-face) marker-string)
-
-                        (overlay-put header-ov 'modification-hooks '(origami-header-modify-hook))
-                        (overlay-put ov 'header-ov header-ov))
-                      ov))))
-
             (global-origami-mode)))
 
 ;; Vi-like fold
