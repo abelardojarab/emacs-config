@@ -136,7 +136,7 @@
   :bind (:map c++-mode-map
               ("C-c I" . rtags-print-symbol-info)
               ("C-c S" . rtags-find-symbol-at-point))
-  :load-path (lambda () (expand-file-name "rtags/src" user-emacs-directory))
+  :load-path (lambda () (expand-file-name "rtags/src/" user-emacs-directory))
   :config (progn
             (setq rtags-use-helm t)
             (setq rtags-autostart-diagnostics t)
@@ -151,6 +151,17 @@
 ;; when opening the corresponding .cpp file
 (use-package member-functions
   :config (setq mf--source-file-extension "cpp"))
+
+;; Basic C compile
+(use-package basic-c-compile
+  :commands (basic-c-compile-file basic-c-compile-run-c basic-c-compile-makefile)
+  :load-path (lambda () (expand-file-name "basic-c-compile/" user-emacs-directory))
+  :config (progn
+            (setq basic-c-compiler "gcc"
+                  basic-c-compile-all-files nil
+                  basic-c-compile-compiler-flags "-Wall -Werror -std=c++11"
+                  basic-c-compile-outfile-extension nil
+                  basic-c-compile-make-clean "gfind . -type f -executable -delete")))
 
 (provide 'setup-c++)
 ;;; setup-c++.el ends here
