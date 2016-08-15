@@ -198,4 +198,7 @@ export NO_AT_BRIDGE=1
 # Enable 256 colors
 export TERM=xterm-256color
 
+# Enable global GTAGS support
+export GTAGSLIBPATH=$HOME/.gtags/
+
 cd $HOME
