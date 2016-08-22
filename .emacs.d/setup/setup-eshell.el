@@ -48,8 +48,7 @@
 
 (use-package eshell
   :commands (eshell eshell-vertical eshell-horizontal)
-  :bind (:map ctl-x-map
-              ("t" . eshell))
+  :bind ("C-t" . eshell)
   :after helm
   :init  (progn
            (setq-default eshell-directory-name "~/.emacs.cache/eshell")
@@ -76,7 +75,7 @@
                                            (define-key eshell-mode-map
                                              "\C-t"
                                              'quit-window)
-                                           (eshell/export "NODE_NO_READLINE=1")))
+                                           (eshell/exxtport "NODE_NO_READLINE=1")))
 
             ;; Vertical split eshell
             (defun eshell-vertical ()

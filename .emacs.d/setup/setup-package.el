@@ -57,10 +57,16 @@
 (use-package xml-rpc         :defer t :load-path (lambda () (expand-file-name "xml-rpc/" user-emacs-directory)))
 (use-package dash            :defer t :load-path (lambda () (expand-file-name "dash/" user-emacs-directory)))
 (use-package buttercup       :defer t :load-path (lambda () (expand-file-name "buttercup/" user-emacs-directory)))
-(use-package with-editor     :defer t :load-path (lambda () (expand-file-name "with-editor/" user-emacs-directory)))
 (use-package fringe-helper   :defer t :load-path (lambda () (expand-file-name "fringe-helper" user-emacs-directory)))
 (use-package parsebib        :defer t :load-path (lambda () (expand-file-name "parsebib/" user-emacs-directory)))
 (use-package ebib            :defer t :load-path (lambda () (expand-file-name "ebib/" user-emacs-directory)))
+
+;; With-editor (emacsclient support)
+(use-package with-editor
+  :load-path (lambda () (expand-file-name "with-editor/" user-emacs-directory))
+  :init (progn
+            (add-hook 'shell-mode-hook  'with-editor-export-editor)
+            (add-hook 'eshell-mode-hook 'with-editor-export-editor)))
 
 (provide 'setup-package)
 ;;; setup-package.el ends here

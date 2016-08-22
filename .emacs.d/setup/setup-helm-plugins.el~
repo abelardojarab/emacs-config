@@ -93,7 +93,7 @@
 (use-package helm-ls-git
   :defer t
   :commands (helm-ls-git-ls helm-browse-project)
-  :bind (:map ctl-x-map
+  :map (:map ctl-x-map
              ("C-d" . helm-browse-project))
   :load-path (lambda () (expand-file-name "helm-ls-git/" user-emacs-directory)))
 

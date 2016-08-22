@@ -26,7 +26,29 @@
 
 (use-package hydra
   :load-path (lambda () (expand-file-name "hydra/" user-emacs-directory))
-  :defer t)
+  :config (progn
+            (defhydra hydra-toggle-map nil
+              "
+^Toggle^
+^^^^^^^^--------------------
+_d_: debug-on-error
+_D_: debug-on-quit
+_f_: auto-fill-mode
+_l_: toggle-truncate-lines
+_h_: hl-line-mode
+_r_: read-only-mode
+_q_: quit
+"
+              ("d" toggle-debug-on-error :exit t)
+              ("D" toggle-debug-on-quit :exit t)
+              ("f" auto-fill-mode :exit t)
+              ("l" toggle-truncate-lines :exit t)
+              ("r" read-only-mode :exit t)
+              ("h" hl-line-mode :exit t)
+              ("q" nil :exit t))
+
+            (global-set-key (kbd "C-x t") 'hydra-toggle-map/body))
+  )
 
 (provide 'setup-hydra)
 ;;; setup-hydra.el ends here

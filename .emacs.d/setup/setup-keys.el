@@ -146,10 +146,7 @@
 
 ;; List buffers
 (global-set-key (kbd "<f12>") 'helm-buffers-list)
-
-;; Hint: customize `magit-repo-dirs' so that you can
-;; quickly open magit on any one of your projects.
-(global-set-key (kbd "C-<f10>") 'helm-ls-git-ls)
+(global-set-key (kbd "C-<f12>") 'neotree-toggle)
 
 ;; Native file opening
 (cond

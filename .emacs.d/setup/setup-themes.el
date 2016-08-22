@@ -114,7 +114,7 @@
 ;; Console colors are enabled if "export TERM=xterm-256color" is added into .bashrc
 (if (display-graphic-p)
     (load-theme 'leuven t)
-  (load-theme 'monokai t))
+  (load-theme 'solarized-light t))
 
 ;; Assure theme loading for client frames
 ;; http://sachachua.com/blog/2016/04/keep-emacs-alive-x-crashes-running-background-daemon/
@@ -122,7 +122,7 @@
   (interactive)
   (if (display-graphic-p)
       (load-theme 'leuven t)
-    (load-theme 'monokai)))
+    (load-theme 'solarized-light t)))
 (add-hook 'after-make-frame-functions
           (lambda (frame)
             (select-frame frame)

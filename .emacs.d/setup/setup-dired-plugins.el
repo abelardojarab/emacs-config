@@ -71,7 +71,7 @@
 (use-package neotree
   :defer t
   :commands (neotree-toggle)
-  :bind (("C-t" . neotree-toggle)
+  :bind (
          :map neotree-mode-map
          (("<C-return>" . neotree-change-root)
           ("C"          . neotree-change-root)
@@ -94,8 +94,6 @@
   :commands (sunrise cb-sunrise-commander/dired-this-dir)
   :load-path (lambda () (expand-file-name "sunrise-commander/" user-emacs-directory))
   :bind (("C-;" . cb-sunrise-commander/dired-this-dir)
-         :map ctl-x-map
-         ("C-d" . sr-dired)
          :map sr-mode-map
          ("J" . sr-goto-dir)
          ("j" . dired-next-line)

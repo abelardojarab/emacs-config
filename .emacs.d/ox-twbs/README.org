@@ -1,0 +1,140 @@
+* ox-twbs
+
+** Summary
+
+Export [[http://orgmode.org/][org-mode]] docs as HTML compatible with [[http://getbootstrap.com/][Twitter Bootstrap]].
+
+** Example
+
+The following [[https://raw.githubusercontent.com/marsmining/ox-twbs/master/example/eg0.org][org source]] exports to [[http://clubctrl.com/org/prog/ox-twbs.html][this html]].
+
+** Description
+
+Output your org-mode docs with a simple, clean and modern look.
+
+This library implements a new HTML back-end for exporting org-mode
+docs as HTML compatible with Twitter Bootstrap. By default, HTML is
+exported with jQuery and Bootstrap resources included via [[http://osscdn.com][osscdn]].
+
+Derived from the built-in HTML back-end of [[http://www.gnu.org/software/emacs/][GNU Emacs]], =ox-html.el=,
+which was written by Carsten Dominik and Jambunathan K.
+
+** Install
+
+*** via package.el
+
+Latest builds available on [[http://melpa.org/#/][MELPA]] and for a bit more stability, use
+[[http://stable.melpa.org/#/][MELPA Stable]]. You can install ~ox-twbs~ using the following command:
+
+=M-x package-install [RET] ox-twbs [RET]=
+
+If the installation doesn't work try refreshing the package list:
+
+=M-x package-refresh-contents [RET]=
+
+*** Manual
+
+Put ~ox-twbs.el~ in your load path and require it. Alternatively, open
+=ox-twbs.el= in your buffer and run =package-install-file=, which will
+compile and install the package in your package folder.
+
+** Usage
+
+Open or create an org file and run ~org-twbs-export-to-html~. This
+will create an HTML file in the same dir as your org file.
+
+You will more likely want more control and automation of the export
+process. You can read [[http://orgmode.org/worg/org-tutorials/org-publish-html-tutorial.html][the org-mode docs]] on setting up your project. An
+example configuration might look like:
+
+#+BEGIN_SRC elisp
+  (setq org-publish-project-alist
+        '(("org-notes"
+           :base-directory "~/org/"
+           :publishing-directory "~/public_html/"
+           :publishing-function org-twbs-publish-to-html
+           :with-sub-superscript nil
+           )))
+#+END_SRC
+
+Using the above config, you can run: =org-publish-all=
+
+And you might create a function which publishes the current buffers
+file and opens it in your system's default browser. Here is what I
+use in my emacs config:
+
+#+BEGIN_SRC elisp
+  (defun my-org-publish-buffer ()
+    (interactive)
+    (save-buffer)
+    (save-excursion (org-publish-current-file))
+    (let* ((proj (org-publish-get-project-from-filename buffer-file-name))
+           (proj-plist (cdr proj))
+           (rel (file-relative-name buffer-file-name
+                                    (plist-get proj-plist :base-directory)))
+           (dest (plist-get proj-plist :publishing-directory)))
+      (browse-url (concat "file://"
+                          (file-name-as-directory (expand-file-name dest))
+                          (file-name-sans-extension rel)
+                          ".html"))))
+#+END_SRC
+
+And bind the above command. I'm on OSX and happen to use ~CMD-\~.
+
+#+BEGIN_SRC elisp
+  (add-hook 'org-mode-hook
+            (lambda ()
+              (local-set-key (kbd "s-\\") 'my-org-publish-buffer)))
+#+END_SRC
+
+** General Org Tips
+
+To specify a title of your org doc, other than the default:
+
+: #+TITLE: My Doc
+
+To quickly add blocks, check this [[http://orgmode.org/manual/Easy-Templates.html#Easy-Templates][easy template]] section of org manual.
+
+Be sure to understand how to [[http://orgmode.org/manual/Editing-source-code.html#Editing-source-code][edit source code blocks]].
+
+Controlling depth of section numbers, table of contents and headings
+can be controlled per document via a declaration like the following:
+
+: #+OPTIONS: num:5 whn:2 toc:4 H:6
+
+And to set these via your publish configuration using the
+=org-publish-project-alist=, the options would be =:section-numbers=,
+=:headline-levels= and =:with-toc=.
+
+The above options are described in the [[http://orgmode.org/manual/Export-settings.html][export settings]] section of the
+orgmode manual. This component introduces a new setting =whn= for per
+document, and =:with-headline-numbers= for publish config, which
+controls the display of section numbers. To disable, set to =nil=, to
+enable, set to =t=, and to control depth of display, use a whole
+number.
+
+** Note re: latest Org 8.3.x
+
+Traditionally preventing section numbers from display was
+accomplished via the =:section-numbers= option, however, in 8.3.x,
+setting it to =nil= now also eliminates the numbering from the parsed
+document, which then breaks toc and linking. Therefore, this module
+introduces a new option =:with-headline-numbers= which can be used for
+toggling display of section numbers.
+
+** Customize
+
+The first place to look is in the definition of [[https://github.com/marsmining/ox-twbs/blob/d5ae9c3fb224d081d59d3686d619edf152523f09/ox-twbs.el#L987-L1002][org-twbs-head]]. You can
+set this on a per-file basis using ~#+HTML_HEAD:~, or for publication
+projects using the ~:html-head~ property.
+
+** Todo
+
+Contributions are welcome! A list of potential fixes and enhancements
+follows:
+
+- Allow users to more easily add a Twitter Bootstrap theme
+- Document areas where this package deviates from org-mode manual on
+  [[http://orgmode.org/manual/HTML-export.html#HTML-export][HTML export]]
+- Improve Affix.js plugin scroll-spying/following
+- Ensure this package works well with org's sitemap function

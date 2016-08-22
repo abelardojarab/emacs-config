@@ -32,5 +32,11 @@
 (setq org-html-style
       "<link rel=\"stylesheet\" type=\"text/css\" href=\"https://raw.githubusercontent.com/thi-ng/org-spec/master/css/style.css\"/>")
 
+;; Org export compatible with Twitter Bootstrap
+(use-package ox-twbs
+  :load-path (lambda () (expand-file-name "ox-twbs/" user-emacs-directory))
+  :after org
+  :commands org-twbs-publish-to-html)
+
 (provide 'setup-org-html)
 ;;; setup-org-html.el ends here
