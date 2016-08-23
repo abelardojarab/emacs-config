@@ -78,7 +78,7 @@
 ;; Show inline arguments hint for the C/C++ function at point
 (use-package function-args
   :defer t
-  :commands moo-complete
+  :commands (moo-complete moo-jump-local)
   :load-path (lambda () (expand-file-name "function-args/" user-emacs-directory))
   :bind (:map c-mode-map
               ("C-c c" . moo-complete)
@@ -104,6 +104,7 @@
   :commands (irony-mode irony-install-server)
   :if (executable-find "clang")
   :load-path (lambda () (expand-file-name "irony-mode/" user-emacs-directory))
+  :after (ggtags eldoc function-args)
   :init (progn
           (when (or (file-exists-p "~/.emacs.cache/irony-server/bin/irony-server")
                     (file-exists-p "/usr/local/bin/irony-server")
@@ -157,7 +158,7 @@
   :commands (basic-c-compile-file basic-c-compile-run-c basic-c-compile-makefile)
   :load-path (lambda () (expand-file-name "basic-c-compile/" user-emacs-directory))
   :config (progn
-            (setq basic-c-compiler "gcc"
+            (setq basic-c-compiler "g++"
                   basic-c-compile-all-files nil
                   basic-c-compile-compiler-flags "-Wall -Werror -std=c++11"
                   basic-c-compile-outfile-extension nil

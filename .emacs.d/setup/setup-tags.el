@@ -94,37 +94,29 @@
 ;; Ctags
 (use-package ctags
   :if (executable-find "ctags")
+  :after projectile
   :config (progn
             ;; Helper functions for etags/ctags
             (defun create-ctags (dir-name)
               "Create tags file."
               (interactive "Directory: ")
               (shell-command
-               (format "ctags -f %s -e -R %s" path-to-ctags (directory-file-name dir-name))))))
+               (format "ctags -f %s -e -R %s" path-to-ctags (projectile-project-root))))))
 
 ;; Gtags
 (use-package ggtags
   :if (executable-find "global")
-  :after (eldoc etags)
+  :after eldoc
   :commands (ggtags-mode ggtags-find-tag-dwim ggtags-eldoc-function)
   :diminish ggtags-mode
   :load-path (lambda () (expand-file-name "ggtags/" user-emacs-directory))
-  :init (progn
-          (add-hook 'c-mode-common-hook
-                    (lambda ()
-                      (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
-                        (ggtags-mode 1)
-                        (setq-local eldoc-documentation-function #'ggtags-eldoc-function)
-                        ))))
   :config (progn
-            (defun gtags-update ()
-              (interactive)
-              (let (buffer)
-                (save-excursion
-                  (setq buffer (generate-new-buffer (generate-new-buffer-name "*rootdir*")))
-                  (set-buffer buffer)
-                  (call-process "global" nil t nil "-u")
-                  (kill-buffer buffer))))
+            (add-hook 'c-mode-common-hook
+                      (lambda ()
+                        (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
+                          (ggtags-mode 1)
+                          (setq-local eldoc-documentation-function #'ggtags-eldoc-function)
+                          (setq-local imenu-create-index-function #'ggtags-build-imenu-index))))
 
             (defun gtags-create-or-update ()
               "Create or update the GNU-Global tag file"
