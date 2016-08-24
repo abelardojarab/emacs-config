@@ -35,28 +35,55 @@
 (use-package bm
   :load-path (lambda () (expand-file-name "bm/" user-emacs-directory))
   :commands (bm-repository-load bm-buffer-restore bm-buffer-save bm-buffer-save-all bm-repository-save bm-toggle)
-  :bind (:map ctl-x-map
-              ("m" . bm-toggle))
+  :bind (
+         ;; bind left mouse clicks and scrolls in left margin/fringe
+         ("<left-fringe> <mouse-5>" . bm-next-mouse)
+         ("<left-margin> <mouse-5>" . bm-next-mouse)
+         ("<left-fringe> <mouse-4>" . bm-previous-mouse)
+         ("<left-margin> <mouse-4>" . bm-previous-mouse)
+         ("<left-fringe> <mouse-1>" . bm-toggle-mouse)
+         ("<left-margin> <mouse-1>" . bm-toggle-mouse)
+
+         :map ctl-x-map
+         ("m" . bm-toggle))
   :init (progn
+
+          ;; Loading the repository from file when on start up.
+          (add-hook 'after-init-hook 'bm-repository-load)
+
+          ;; Restoring bookmarks when on file find.
+          (add-hook 'find-file-hook 'bm-buffer-restore)
+
+          ;; Saving bookmark data on killing a buffer
+          (add-hook 'kill-buffer-hook 'bm-buffer-save)
+
+          ;; Saving the repository to file when on exit.
+          (add-hook 'kill-emacs-hook '(lambda nil
+                                        (bm-buffer-save-all)
+                                        (bm-repository-save))))
+  :config (progn
+            ;; Add fringe only if display is graphic (GUI)
+            (when (display-graphic-p)
+               (define-fringe-bitmap 'bm-marker-left [#xF8    ; ▮ ▮ ▮ ▮ ▮ 0 0 0
+                                                      #xFC    ; ▮ ▮ ▮ ▮ ▮ ▮ 0 0
+                                                      #xFE    ; ▮ ▮ ▮ ▮ ▮ ▮ ▮ 0
+                                                      #x0F    ; 0 0 0 0 ▮ ▮ ▮ ▮
+                                                      #x0F    ; 0 0 0 0 ▮ ▮ ▮ ▮
+                                                      #xFE    ; ▮ ▮ ▮ ▮ ▮ ▮ ▮ 0
+                                                      #xFC    ; ▮ ▮ ▮ ▮ ▮ ▮ 0 0
+                                                      #xF8])) ; ▮ ▮ ▮ ▮ ▮ 0 0 0
+
             (setq bm-highlight-style 'bm-highlight-line-and-fringe)
             (setq bm-restore-repository-on-load t)
+
+            ;; bm-repository
+            (setq bm-repository-file "~/.emacs.cache/bm-repository")
 
             ;; make bookmarks persistent as default
             (setq-default bm-buffer-persistence t)
 
-            ;; Loading the repository from file when on start up.
-            (add-hook 'after-init-hook 'bm-repository-load)
-
-            ;; Restoring bookmarks when on file find.
-            (add-hook 'find-file-hook 'bm-buffer-restore)
-
-            ;; Saving bookmark data on killing a buffer
-            (add-hook 'kill-buffer-hook 'bm-buffer-save)
-
-            ;; Saving the repository to file when on exit.
-            (add-hook 'kill-emacs-hook '(lambda nil
-                                          (bm-buffer-save-all)
-                                          (bm-repository-save)))))
+            ;; search all open buffers for bookmarks
+            (setq bm-cycle-all-buffers t)))
 
 (provide 'setup-bookmarks)
 ;;; setup-bookmarks.el ends here
