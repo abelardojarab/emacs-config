@@ -48,6 +48,9 @@
          ("m" . bm-toggle))
   :init (progn
 
+          ;; bm-repository
+          (setq bm-repository-file "~/.emacs.cache/bm-repository")
+
           ;; Loading the repository from file when on start up.
           (add-hook 'after-init-hook 'bm-repository-load)
 
@@ -75,9 +78,6 @@
 
             (setq bm-highlight-style 'bm-highlight-line-and-fringe)
             (setq bm-restore-repository-on-load t)
-
-            ;; bm-repository
-            (setq bm-repository-file "~/.emacs.cache/bm-repository")
 
             ;; make bookmarks persistent as default
             (setq-default bm-buffer-persistence t)
