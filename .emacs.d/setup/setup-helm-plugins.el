@@ -101,9 +101,11 @@
 (use-package helm-bm
   :defer t
   :commands (helm-bookmarks)
+  :after bm
   :load-path (lambda () (expand-file-name "helm-bm/" user-emacs-directory))
   :bind (:map ctl-x-map
-              ("l" . helm-bookmarks)))
+              ("l" . helm-bookmarks))
+  :config (setq helm-bookmark-show-location t))
 
 ;; Helm etags plus
 (use-package helm-etags+
@@ -134,9 +136,7 @@
 (use-package helm-make
   :defer t
   :commands (helm-make)
-  :load-path (lambda () (expand-file-name "helm-make/" user-emacs-directory))
-  :bind (:map ctl-x-map
-              ("m" . helm-make)))
+  :load-path (lambda () (expand-file-name "helm-make/" user-emacs-directory)))
 
 ;; Helm swoop
 (use-package helm-swoop

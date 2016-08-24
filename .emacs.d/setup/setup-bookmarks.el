@@ -34,7 +34,10 @@
 ;; Bookmarks
 (use-package bm
   :load-path (lambda () (expand-file-name "bm/" user-emacs-directory))
-  :config (progn
+  :commands (bm-repository-load bm-buffer-restore bm-buffer-save bm-buffer-save-all bm-repository-save bm-toggle)
+  :bind (:map ctl-x-map
+              ("m" . bm-toggle))
+  :init (progn
             (setq bm-highlight-style 'bm-highlight-line-and-fringe)
             (setq bm-restore-repository-on-load t)
 

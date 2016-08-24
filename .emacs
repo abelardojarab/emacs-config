@@ -48,7 +48,7 @@
  ;; If there is more than one, they won't work right.
  '(ansi-color-names-vector
    ["#272822" "#F92672" "#A6E22E" "#E6DB74" "#66D9EF" "#FD5FF0" "#A1EFE4" "#F8F8F2"])
- '(bmkp-last-as-first-bookmark-file "~/workspace/emacsfull/.emacs.cache/bookmarks")
+ '(bmkp-last-as-first-bookmark-file "~/workspace/emacsfull/.emacs.d/bookmarks")
  '(compilation-message-face (quote default))
  '(cua-enable-cua-keys nil)
  '(custom-safe-themes
