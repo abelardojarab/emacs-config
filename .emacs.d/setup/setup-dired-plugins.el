@@ -71,14 +71,15 @@
 (use-package neotree
   :defer t
   :commands (neotree-toggle)
-  :bind (
-         :map neotree-mode-map
-         (("<C-return>" . neotree-change-root)
-          ("C"          . neotree-change-root)
-          ("c"          . neotree-create-node)
-          ("+"          . neotree-create-node)
-          ("d"          . neotree-delete-node)
-          ("r"          . neotree-rename-node)))
+  :bind (:map ctl-x-map
+              ("C-t" . neotree-toggle)
+              :map neotree-mode-map
+              (("<C-return>" . neotree-change-root)
+               ("C"          . neotree-change-root)
+               ("c"          . neotree-create-node)
+               ("+"          . neotree-create-node)
+               ("d"          . neotree-delete-node)
+               ("r"          . neotree-rename-node)))
   :load-path (lambda () (expand-file-name "neotree/" user-emacs-directory))
   :config (progn
             ;;  every time when the neotree window is
@@ -91,7 +92,7 @@
 ;; Sunrise Commander
 (use-package sunrise-commander
   :defer t
-  :commands (sunrise cb-sunrise-commander/dired-this-dir)
+  :commands (sunrise sr-dired cb-sunrise-commander/dired-this-dir)
   :load-path (lambda () (expand-file-name "sunrise-commander/" user-emacs-directory))
   :bind (("C-;" . cb-sunrise-commander/dired-this-dir)
          :map sr-mode-map

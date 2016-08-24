@@ -94,9 +94,6 @@
 (global-set-key [(control n)] 'scroll-down)
 (global-set-key [(control p)] 'scroll-up)
 
-;; Recent files
-(global-set-key "\C-x\ \C-r" 'recentf-open-files)
-
 ;; Bookmarks
 (global-set-key (kbd "<f2>")   'bm-next)
 (global-set-key (kbd "<C-f2>") 'bm-toggle)
@@ -212,8 +209,7 @@
 (define-key ctl-x-map (kbd "<") 'decrease-left-margin)
 (define-key ctl-x-map (kbd "F") 'toggle-frame-fullscreen)
 (define-key ctl-x-map (kbd "T") 'toggle-truncate-lines)
-(define-key ctl-x-map (kbd ".") 'psw-switch-function)
-(define-key ctl-x-map (kbd "/") 'psw-switch-recentf)
+(define-key ctl-x-map (kbd "/") 'psw-switch-functions)
 
 ;; Extra Ctrl-x mappings for navigation
 (define-key ctl-x-map (kbd "<up>") 'windmove-up)

@@ -107,7 +107,7 @@
 (use-package ggtags
   :if (executable-find "global")
   :after (eldoc)
-  :commands (ggtags-mode ggtags-find-tag-dwim ggtags-eldoc-function)
+  :commands (ggtags-mode ggtags-find-tag-dwim ggtags-eldoc-function ggtags-show-definition)
   :diminish ggtags-mode
   :load-path (lambda () (expand-file-name "ggtags/" user-emacs-directory))
   :config (progn

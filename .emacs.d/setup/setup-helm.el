@@ -31,12 +31,13 @@
          :map isearch-mode-map
          ("C-h" . helm-occur-from-isearch)
          :map ctl-x-map
+         ("C-r" . helm-recentf)
          ("p" . helm-show-kill-ring)
          ("x" . helm-M-x)
          ("n" . helm-mini)
          ("h" . helm-apropos)
          ("u" . helm-resume)
-         ("l" . helm-buffers-list)
+         ("b" . helm-buffers-list)
          ("f" . helm-for-files)
          ("<tab>" . helm-find-files))
   :config (progn

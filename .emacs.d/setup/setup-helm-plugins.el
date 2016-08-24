@@ -38,7 +38,7 @@
   :commands (helm-git-grep)
   :load-path (lambda () (expand-file-name "helm-git-grep/" user-emacs-directory))
   :bind (:map ctl-x-map
-              ("e" . helm-git-grep))
+              ("g" . helm-git-grep))
   :config (progn
             (setq helm-git-grep-candidate-number-limit nil)))
 
@@ -79,7 +79,7 @@
   :commands (helm-flycheck)
   :load-path (lambda () (expand-file-name "helm-flycheck/" user-emacs-directory))
   :bind (:map ctl-x-map
-              ("c" . helm-flycheck)))
+              ("e" . helm-flycheck)))
 
 ;; Helm flyspell
 (use-package helm-flyspell
@@ -87,7 +87,7 @@
   :commands (helm-flyspell-correct)
   :load-path (lambda () (expand-file-name "helm-flyspell/" user-emacs-directory))
   :bind (:map ctl-x-map
-              ("S" . helm-flyspell-correct)))
+              ("c" . helm-flyspell-correct)))
 
 ;; Helm ls git
 (use-package helm-ls-git
@@ -103,7 +103,7 @@
   :commands (helm-bookmarks)
   :load-path (lambda () (expand-file-name "helm-bm/" user-emacs-directory))
   :bind (:map ctl-x-map
-              ("b" . helm-bookmarks)))
+              ("l" . helm-bookmarks)))
 
 ;; Helm etags plus
 (use-package helm-etags+
@@ -120,7 +120,7 @@
   :load-path (lambda () (expand-file-name "helm-gtags/" user-emacs-directory))
   :bind (("C-." . helm-gtags-dwim)
          :map ctl-x-map
-         ("g" . helm-gtags-dwim)))
+         ("." . helm-gtags-dwim)))
 
 ;; Helm yasnippet
 (use-package helm-c-yasnippet
