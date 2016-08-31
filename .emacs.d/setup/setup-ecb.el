@@ -50,7 +50,7 @@
                   ecb-create-layout-file "~/.emacs.cache/ecb-user-layouts.el"
                   ecb-windows-width 35
                   ecb-fix-window-size 'width
-                  ecb-layout-name "bodil"
+                  ecb-layout-name "leftright-sa-m"
                   ecb-history-make-buckets 'mode
                   ecb-highlight-tag-with-point-delay 180
                   ecb-kill-buffer-clears-history 'auto
@@ -138,7 +138,7 @@
 If you have not set a compilation-window in `ecb-compile-window-height' then
 the layout contains no persistent compilation window and the other windows get a
 little more place."
-              (ecb-set-speedbar-buffer)
+              (ecb-set-history-buffer)
               (ecb-split-ver 0.5)
               (ecb-set-methods-buffer)
               (select-window (next-window (next-window)))
@@ -220,14 +220,14 @@ little more place. "
    |              |                                      |
    |              |                                      |
    |              |                                      |
-   |  Methods     |                 Edit                 |
-   |              |                                      |
-   |              |                                      |
-   |              |                                      |
+   |  History     |                 Edit                 |
    |              |                                      |
    |              |                                      |
    |--------------|                                      |
-   |  Sou | Hist  |                                      |
+   |              |                                      |
+   |              |                                      |
+   |  Methods     |                                      |
+   |              |                                      |
    -------------------------------------------------------
    |                                                     |
    |                    Compilation                      |
