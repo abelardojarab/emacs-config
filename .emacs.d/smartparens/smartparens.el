@@ -365,7 +365,11 @@ Maximum length of opening or closing pair is
   ;; executes them, then reset the "counter".
   delayed-hook
   ;; TODO
-  delayed-insertion)
+  delayed-insertion
+  ;; The last point checked by sp--syntax-ppss and its result, used for
+  ;; memoization
+  last-syntax-ppss-point
+  last-syntax-ppss-result)
 
 (defvar sp-state nil
   "Smartparens state for the current buffer.")
@@ -1360,13 +1364,24 @@ sexp, otherwise the call may be very slow."
                    "\\`[ \t\n]*\\'"
                    (buffer-substring-no-properties :beg-in :end-in))))))
 
+(defun sp--syntax-ppss (&optional p)
+  "Memoize the last result of syntax-ppss."
+  (let ((p (or p (point))))
+    (if (eq p (sp-state-last-syntax-ppss-point sp-state))
+        (sp-state-last-syntax-ppss-result sp-state)
+      ;; Add hook to reset memoization if necessary
+      (unless (sp-state-last-syntax-ppss-point sp-state)
+        (add-hook 'before-change-functions 'sp--reset-memoization t t))
+      (setf (sp-state-last-syntax-ppss-point sp-state) p
+            (sp-state-last-syntax-ppss-result sp-state) (syntax-ppss p)))))
+
 (defun sp-point-in-string (&optional p)
   "Return non-nil if point is inside string or documentation string.
 
 If optional argument P is present test this instead of point."
   (ignore-errors
     (save-excursion
-      (nth 3 (syntax-ppss p)))))
+      (nth 3 (sp--syntax-ppss p)))))
 
 (defun sp-point-in-comment (&optional p)
   "Return non-nil if point is inside comment.
@@ -1375,7 +1390,7 @@ If optional argument P is present test this instead off point."
   (setq p (or p (point)))
   (ignore-errors
     (save-excursion
-      (or (nth 4 (syntax-ppss p))
+      (or (nth 4 (sp--syntax-ppss p))
           ;; this also test opening and closing comment delimiters... we
           ;; need to chack that it is not newline, which is in "comment
           ;; ender" class in elisp-mode, but we just want it to be
@@ -2441,6 +2456,11 @@ are of zero length, or if point moved backwards."
   (when sp-pair-overlay-list
     (setq sp-previous-point (point))))
 
+(defun sp--reset-memoization (&rest ignored)
+  "Reset memoization as a safety precaution."
+  (setf (sp-state-last-syntax-ppss-point sp-state) nil
+        (sp-state-last-syntax-ppss-result sp-state) nil))
+
 (defun sp-remove-active-pair-overlay ()
   "Deactivate the active overlay.  See `sp--get-active-overlay'."
   (interactive)
@@ -2792,30 +2812,36 @@ see `sp-pair' for description."
   (with-demoted-errors "sp--post-self-insert-hook-handler: %S"
     (when smartparens-mode
       (sp--with-case-sensitive
-        (let (op action)
-          (setq op sp-last-operation)
-          (when (region-active-p)
-            (sp-wrap--initialize))
-          (cond
-           (sp-wrap-overlays
-            (sp-wrap))
-           (t
-            ;; TODO: this does not pick correct pair!! it uses insert and not wrapping code
-            (sp--setaction action (-when-let ((_ . open-pairs) (sp--all-pairs-to-insert nil 'wrap))
-                                    (catch 'done
-                                      (-each open-pairs
-                                        (-lambda ((&keys :open open :close close))
-                                          (--when-let (sp--wrap-repeat-last (cons open close))
-                                            (throw 'done it)))))))
-            (sp--setaction action (sp-insert-pair))
-            (sp--setaction action (sp-skip-closing-pair))
-            ;; if nothing happened, we just inserted a character, so
-            ;; set the apropriate operation.  We also need to check
-            ;; for `sp--self-insert-no-escape' not to overwrite
-            ;; it.  See `sp-autoinsert-quote-if-followed-by-closing-pair'.
-            (when (and (not action)
-                       (not (eq sp-last-operation 'sp-self-insert-no-escape)))
-              (setq sp-last-operation 'sp-self-insert)))))))))
+       (catch 'done
+         (let (op action)
+           (setq op sp-last-operation)
+           (when (region-active-p)
+             (condition-case err
+                 (sp-wrap--initialize)
+               (user-error
+                (delete-char -1)
+                (message (error-message-string err))
+                (throw 'done nil))))
+           (cond
+            (sp-wrap-overlays
+             (sp-wrap))
+            (t
+             ;; TODO: this does not pick correct pair!! it uses insert and not wrapping code
+             (sp--setaction action (-when-let ((_ . open-pairs) (sp--all-pairs-to-insert nil 'wrap))
+                                     (catch 'done
+                                       (-each open-pairs
+                                         (-lambda ((&keys :open open :close close))
+                                           (--when-let (sp--wrap-repeat-last (cons open close))
+                                             (throw 'done it)))))))
+             (sp--setaction action (sp-insert-pair))
+             (sp--setaction action (sp-skip-closing-pair))
+             ;; if nothing happened, we just inserted a character, so
+             ;; set the apropriate operation.  We also need to check
+             ;; for `sp--self-insert-no-escape' not to overwrite
+             ;; it.  See `sp-autoinsert-quote-if-followed-by-closing-pair'.
+             (when (and (not action)
+                        (not (eq sp-last-operation 'sp-self-insert-no-escape)))
+               (setq sp-last-operation 'sp-self-insert))))))))))
 
 ;; Unfortunately, some modes rebind "inserting" keys to their own
 ;; handlers but do not hand over the insertion back to
@@ -3008,6 +3034,12 @@ overlay."
       ;; TODO: get rid of the following variables
       (setq sp-wrap-point (- (point) inserted-string-length))
       (setq sp-wrap-mark (mark))
+      (unless (or (sp-point-in-string (point))
+                  (sp-point-in-string (mark)))
+        (unless (sp-region-ok-p
+                 (if (> (point) (mark)) sp-wrap-point (point))
+                 (mark))
+          (user-error "Wrapping active region would break structure")))
       ;; if point > mark, we need to move point to mark and reinsert the
       ;; just inserted character.
       (when (> (point) (mark))
@@ -7950,8 +7982,8 @@ of the point."
      (t (= string-or-comment-count normal-count 0)))))
 
 (cl-defun sp-region-ok-p (start end)
-  (save-restriction
-    (save-excursion
+  (save-excursion
+    (save-restriction
       (narrow-to-region start end)
       (when (ignore-errors (scan-sexps (point-min) (point-max)) t)
         (let ((count (list 0 0))

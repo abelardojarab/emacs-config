@@ -1,6 +1,6 @@
 ;;; tests/parser.el --- Some tests for js2-mode.
 
-;; Copyright (C) 2009, 2011-2013  Free Software Foundation, Inc.
+;; Copyright (C) 2009, 2011-2016  Free Software Foundation, Inc.
 
 ;; This file is part of GNU Emacs.
 
@@ -933,6 +933,12 @@ the test."
 
 (js2-deftest-parse parse-harmony-class-allow-semicolon-element
   "class Foo {;}" :reference "class Foo {\n}")
+
+(js2-deftest-parse exponentiation
+  "a **= b ** c ** d * e ** f;")
+
+(js2-deftest-parse exponentiation-prohibits-unary-op
+  "var a = -b ** c" :syntax-error "b")
 
 ;;; Scopes
 

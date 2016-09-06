@@ -67,6 +67,7 @@
   "Create a DBLP url to look up QUERY."
   (format "http://dblp.uni-trier.de/search/publ/api?q=%s&format=xml" (url-encode-url query)))
 
+;;;###autoload
 (defun biblio-dblp-backend (command &optional arg &rest more)
   "A DBLP backend for biblio.el.
 COMMAND, ARG, MORE: See `biblio-backends'."

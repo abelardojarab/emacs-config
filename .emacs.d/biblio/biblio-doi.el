@@ -48,21 +48,17 @@ requests a generic format and crates the BibTeX on its own."
   ;; “Accept:” header; Zenodo recognize x-bibtex but not text/bibliography
   "text/bibliography;style=bibtex, application/x-bibtex")
 
-(defvar biblio-doi--saved-url-mime-accept-string nil)
-
 (defun biblio-doi--set-mime-accept ()
   "Set `url-mime-accept-string' before contacting the DOI server."
   ;; Ugly: let-binding or buffer-locally setting `url-mime-accept-string' does
   ;; not work, because `url-http-create-request' can be called from a
   ;; sentinel, or from an entirely new buffer (after a redirection).
-  (setq biblio-doi--saved-url-mime-accept-string url-mime-accept-string)
   (setq url-mime-accept-string biblio-doi--dx-mime-accept))
 
 (defun biblio-doi--restore-mime-accept ()
   "Restore `url-mime-accept-string'."
-  (when (equal url-mime-accept-string biblio-doi--dx-mime-accept)
-    (setq url-mime-accept-string biblio-doi--saved-url-mime-accept-string))
-  (setq biblio-doi--saved-url-mime-accept-string nil))
+  (kill-local-variable 'url-mime-accept-string)
+  (setq-default url-mime-accept-string nil))
 
 (defun biblio-doi--insert (bibtex buffer)
   "Insert formatted BIBTEX into BUFFER."

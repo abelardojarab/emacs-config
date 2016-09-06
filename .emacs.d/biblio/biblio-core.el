@@ -23,9 +23,8 @@
 
 ;;; Commentary:
 ;; A framework for browsing bibliographic search results.  This is the core
-;; package; for user interfaces, see any of `biblio-crossref', `biblio-dblp',
-;; `biblio-doi', `biblio-hal' and `biblio-dissemin', which are part of the
-;; `biblio' package.
+;; package; for user interfaces, see any of `biblio-crossref', `biblio-dblp', `biblio-doi',
+;; `biblio-arxiv', `biblio-hal' and `biblio-dissemin', which are part of the `biblio' package.
 
 ;;; Code:
 
@@ -372,11 +371,18 @@ Uses .url, and .doi as a fallback."
         (concat "https://doi.org/" (url-encode-url .doi))))))
 
 (defun biblio--selection-browse ()
-  "Open the current entry in a web browser."
+  "Open the web page of the current entry in a web browser."
   (interactive)
   (-if-let* ((url (biblio-get-url (biblio--selection-metadata-at-point))))
       (browse-url url)
     (user-error "This record does not contain a URL")))
+
+(defun biblio--selection-browse-direct ()
+  "Open the full text of the current entry in a web browser."
+  (interactive)
+  (-if-let* ((url (biblio-alist-get 'direct-url (biblio--selection-metadata-at-point))))
+      (browse-url url)
+    (user-error "This record does not contain a direct URL (try arXiv or HAL)")))
 
 (defun biblio--selection-next ()
   "Move to next seach result."
@@ -516,6 +522,8 @@ Interactively, query for ACTION from
     (define-key map (kbd "<down>") #'biblio--selection-next)
     (define-key map (kbd "C-n") #'biblio--selection-next)
     (define-key map (kbd "RET") #'biblio--selection-browse)
+    (define-key map (kbd "<C-return>") #'biblio--selection-browse-direct)
+    (define-key map (kbd "C-RET") #'biblio--selection-browse-direct)
     (define-key map (kbd "M-w") #'biblio--selection-copy)
     (define-key map (kbd "c") #'biblio--selection-copy)
     (define-key map (kbd "C-w") #'biblio--selection-copy-quit)
@@ -562,7 +570,8 @@ Interactively, query for ACTION from
          "\\[biblio--selection-insert],\\[biblio--selection-insert-quit]: Insert BibTex"
          "\\[biblio--selection-copy],\\[biblio--selection-copy-quit]: Copy BibTeX"
          "\\[biblio--selection-extended-action]: Extended action"
-         "\\[biblio--selection-change-buffer]: Change target buffer"))))))
+         "\\[biblio--selection-browse]: Open in browser"
+         "\\[biblio--selection-change-buffer]: Change buffer"))))))
 
 ;;; Printing search results
 
@@ -638,9 +647,28 @@ With non-nil LABEL, use that instead of URL to label the button."
 
 (defun biblio-insert-result (item &optional no-sep)
   "Print a (prepared) bibliographic search result ITEM.
-See also `crossref--extract-interesting-fields' and
-`dblp--extract-interesting-fields'.  With NO-SEP, do not add
-space after the record."
+With NO-SEP, do not add space after the record.
+
+This command expects ITEM to be a single alist, in the following format:
+
+  ((title . \"Title of entry\")
+   (authors . (\"Author 1\" \"Author 2\" …))
+   (container . \"Where this was published (which journal, conference, …)\")
+   (type . \"Type of document (journal paper, proceedings, report, …)\")
+   (category . \"Category of this document (aka primary topic)\")
+   (publisher . \"Publisher of this document\")
+   (references . \"Identifier(s) of this document (DOI, DPLB id, Handle, …)\")
+   (open-access-status . \"Open access status of this document\")
+   (url . \"Relevant URL\")
+   (direct-url . \"Direct URL of paper (typically PDF)\"))
+
+Each of `container', `type', `category', `publisher',
+`references', and `open-access-status' may be a list; in that
+case, entries of the list are displayed comma-separated.  All
+entries are optional.
+
+`crossref--extract-interesting-fields' and `dblp--extract-interesting-fields'
+provide examples of how to build such a result."
   (biblio--with-text-property 'biblio-metadata item
     (let-alist item
       (biblio-with-fontification 'font-lock-function-name-face
@@ -655,7 +683,9 @@ space after the record."
         (biblio--insert-detail "  Publisher: " .publisher t)
         (biblio--insert-detail "  References: " .references t)
         (biblio--insert-detail "  Open Access: " .open-access-status t)
-        (biblio--insert-detail "  URL: " (biblio-make-url-button .url) t))
+        (biblio--insert-detail "  URL: " (list (biblio-make-url-button .url)
+                                         (biblio-make-url-button .direct-url))
+                         t))
       (unless no-sep
         (insert "\n\n")))))
 
@@ -742,9 +772,11 @@ term to feed this backend.
 
 `url': (one argument, QUERY) Create a URL to query the backend's API.
 
-`parse-buffer': (on argument, BUFFER) Parse the contents of
-BUFFER (current at the time of the call) and return a list of
-results.
+`parse-buffer': (no arguments) Parse the contents of the current
+buffer and return a list of results.  At the time of the call,
+the current buffer contains the results of querying a url
+returned by (THIS-BACKEND `url' QUERY).  The format of individual
+results is described in the docstring of `biblio-insert-result').
 
 `forward-bibtex': (two arguments, METADATA and FORWARD-TO)
 Produce a BibTeX record from METADATA (one of the elements of the

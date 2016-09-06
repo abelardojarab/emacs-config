@@ -22,9 +22,9 @@
 ;;
 ;; Lookup publication records on Dissemin by DOI using `dissemin-lookup'.
 ;;
-;; This package also plugs into `biblio-selection-mode' (provided by the
-;; `biblio-core' package, by adding an entry to the extended actions menu (`x')
-;; to quickly locate the Dissemin record of e.g. a CrossRef entry.
+;; This package also plugs into `biblio-selection-mode' by adding an entry to
+;; the extended actions menu (`x') to quickly locate the Dissemin record of
+;; e.g. a CrossRef entry.
 
 ;;; Code:
 
@@ -139,7 +139,7 @@ Interactively, or if CLEANUP is non-nil, pass DOI through
 
 (defun biblio-dissemin--lookup-record (record)
   "Retrieve a RECORD from Dissemin, and display it.
-RECORD is a formatted record as expected by `biblio-lookup'."
+RECORD is a formatted record as expected by `biblio-insert-result'."
   (let-alist record
     (if .doi (dissemin-lookup .doi)
       (user-error "Dissemin needs a DOI, but this record does not contain one"))))

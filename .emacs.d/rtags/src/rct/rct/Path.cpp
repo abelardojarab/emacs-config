@@ -1,7 +1,7 @@
 #include "Path.h"
+#include "StackBuffer.h"
 
 #include <dirent.h>
-#include <fts.h>
 #include <limits.h>
 #include <stdio.h>
 #include <sys/stat.h>
@@ -35,8 +35,9 @@ Path Path::parentDir() const
 
 Path::Type Path::type() const
 {
-    struct stat st;
-    if (stat(constData(), &st) == -1)
+    bool ok;
+    struct stat st = stat(&ok);
+    if (!ok)
         return Invalid;
 
     switch (st.st_mode & S_IFMT) {
@@ -54,17 +55,19 @@ Path::Type Path::type() const
 
 bool Path::isSymLink() const
 {
-    struct stat st;
-    if (lstat(constData(), &st) == -1)
-        return false;
+    bool ok;
+    struct stat st = stat(&ok);
+    if (!ok)
+        return Invalid;
 
     return (st.st_mode & S_IFMT) == S_IFLNK;
 }
 
 mode_t Path::mode() const
 {
-    struct stat st;
-    if (stat(constData(), &st) == -1)
+    bool ok;
+    struct stat st = stat(&ok);
+    if (!ok)
         return 0;
 
     return st.st_mode;
@@ -73,21 +76,19 @@ mode_t Path::mode() const
 
 time_t Path::lastModified() const
 {
-    struct stat st;
-    if (stat(constData(), &st) == -1) {
-        warning("Stat failed for %s", constData());
+    bool ok;
+    struct stat st = stat(&ok);
+    if (!ok)
         return 0;
-    }
     return st.st_mtime;
 }
 
 time_t Path::lastAccess() const
 {
-    struct stat st;
-    if (stat(constData(), &st) == -1) {
-        warning("Stat failed for %s", constData());
+    bool ok;
+    struct stat st = stat(&ok);
+    if (!ok)
         return 0;
-    }
     return st.st_atime;
 }
 
@@ -99,11 +100,12 @@ bool Path::setLastModified(time_t lastModified) const
 
 int64_t Path::fileSize() const
 {
-    struct stat st;
-    if (!stat(constData(), &st)) {// && st.st_mode == S_IFREG)
-        return st.st_size;
-    }
-    return -1;
+    bool ok;
+    struct stat st = stat(&ok);
+    if (!ok)
+        return -1;
+
+    return st.st_size;
 }
 
 Path Path::resolved(const String &path, ResolveMode mode, const Path &cwd, bool *ok)
@@ -275,7 +277,7 @@ bool Path::isSource(const char *ext)
 
 bool Path::isSource() const
 {
-    if (exists()) {
+    if (isFile()) {
         const char *ext = extension();
         if (ext)
             return isSource(ext);
@@ -285,7 +287,7 @@ bool Path::isSource() const
 
 bool Path::isHeader() const
 {
-    return exists() && isHeader(extension());
+    return isFile() && isHeader(extension());
 }
 
 bool Path::isHeader(const char *ext)
@@ -375,43 +377,42 @@ bool Path::rm(const Path &file)
     return !unlink(file.constData());
 }
 
-static inline Path::Type ftsType(uint16_t type)
+bool Path::rmdir(const Path &dir)
 {
-    if (type & (FTS_F|FTS_SL|FTS_SLNONE))
-        return Path::File;
-    if (type & FTS_DP) // omitting FTS_D on purpose here
-        return Path::Directory;
-    return Path::Invalid;
-}
+    DIR *d = opendir(dir.constData());
+    size_t path_len = dir.size();
+    union {
+        char buf[PATH_MAX];
+        dirent dbuf;
+    };
 
-bool Path::rmdir(const Path& dir)
-{
-    if (!dir.isDir())
-        return false;
-    // hva slags drittapi er dette?
-    char* const dirs[2] = { const_cast<char*>(dir.constData()), 0 };
-    FTS* fdir = fts_open(dirs, FTS_NOCHDIR, 0);
-    if (!fdir)
-        return false;
-    FTSENT *node;
-    while ((node = fts_read(fdir))) {
-        if (node->fts_level > 0 && node->fts_name[0] == '.') {
-            fts_set(fdir, node, FTS_SKIP);
-        } else {
-            switch (ftsType(node->fts_info)) {
-            case File:
-                unlink(node->fts_path);
-                break;
-            case Directory:
-                ::rmdir(node->fts_path);
-                break;
-            default:
-                break;
+    if (d) {
+        dirent *p;
+
+        while (!readdir_r(d, &dbuf, &p) && p) {
+            /* Skip the names "." and ".." as we don't want to recurse on them. */
+            if (!strcmp(p->d_name, ".") || !strcmp(p->d_name, "..")) {
+                continue;
+            }
+
+            const size_t len = path_len + strlen(p->d_name) + 2;
+            StackBuffer<PATH_MAX> buffer(len);
+
+            if (buffer) {
+                struct stat statbuf;
+                snprintf(buffer, len, "%s/%s", dir.constData(), p->d_name);
+                if (!::stat(buffer, &statbuf)) {
+                    if (S_ISDIR(statbuf.st_mode)) {
+                        Path::rmdir(Path(buffer));
+                    } else {
+                        unlink(buffer);
+                    }
+                }
             }
         }
+        closedir(d);
     }
-    fts_close(fdir);
-    return !::rmdir(dir.constData());
+    return ::rmdir(dir.constData()) == 0;
 }
 
 static void visitorWrapper(Path path, const std::function<Path::VisitResult(const Path &path)> &callback, Set<Path> &seen)
@@ -532,9 +533,9 @@ String Path::readAll(size_t max) const
     return ret;
 }
 
-bool Path::write(const Path& path, const String& data, WriteMode mode)
+bool Path::write(const Path &path, const String &data, WriteMode mode)
 {
-    FILE* f = fopen(path.constData(), mode == Overwrite ? "w" : "a");
+    FILE *f = fopen(path.constData(), mode == Overwrite ? "w" : "a");
     if (!f)
         return false;
     const size_t ret = fwrite(data.constData(), sizeof(char), data.size(), f);
@@ -542,7 +543,7 @@ bool Path::write(const Path& path, const String& data, WriteMode mode)
     return ret == data.size();
 }
 
-bool Path::write(const String& data, WriteMode mode) const
+bool Path::write(const String &data, WriteMode mode) const
 {
     return Path::write(*this, data, mode);
 }
@@ -595,10 +596,11 @@ List<Path> Path::files(unsigned int filter, size_t max, bool recurse) const
 
 uint64_t Path::lastModifiedMs() const
 {
-    struct stat st;
-    if (stat(constData(), &st) == -1) {
+    bool ok;
+    struct stat st = stat(&ok);
+    if (!ok)
         return 0;
-    }
+
 #ifdef HAVE_STATMTIM
     return st.st_mtim.tv_sec * static_cast<uint64_t>(1000) + st.st_mtim.tv_nsec / static_cast<uint64_t>(1000000);
 #else

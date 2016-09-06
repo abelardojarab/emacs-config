@@ -227,7 +227,7 @@ static void saveDependencies(DataFile &file, const Dependencies &dependencies)
 
 Project::Project(const Path &path)
     : mPath(path), mSourceFilePathBase(RTags::encodeSourceFilePath(Server::instance()->options().dataDir, path)),
-      mJobCounter(0), mJobsStarted(0)
+      mJobCounter(0), mJobsStarted(0), mBytesWritten(0)
 {
     Path srcPath = mPath;
     RTags::encodePath(srcPath);
@@ -334,7 +334,7 @@ bool Project::init()
             mProjectFilePath.visit([](const Path &path) {
                     if (strcmp(path.fileName(), "sources")) {
                         if (path.isDir()) {
-                            Rct::removeDirectory(path);
+                            Path::rmdir(path);
                         } else {
                             path.rm();
                         }
@@ -662,6 +662,7 @@ static String formatDiagnostics(const Diagnostics &diagnostics, Flags<QueryMessa
 
 void Project::onJobFinished(const std::shared_ptr<IndexerJob> &job, const std::shared_ptr<IndexDataMessage> &msg)
 {
+    mBytesWritten += msg->bytesWritten();
     std::shared_ptr<IndexerJob> restart;
     const uint32_t fileId = msg->fileId();
     auto j = mActiveJobs.take(msg->key());
@@ -995,7 +996,7 @@ void Project::onFileRemoved(const Path &file)
     debug() << file << "was removed" << fileId;
     if (!fileId)
         return;
-    Rct::removeDirectory(Project::sourceFilePath(fileId));
+    Path::rmdir(Project::sourceFilePath(fileId));
 
     const uint64_t key = Source::key(fileId, 0);
     for (auto it = mSources.lower_bound(key); it != mSources.end(); ++it) {

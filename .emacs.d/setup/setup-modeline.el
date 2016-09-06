@@ -32,53 +32,24 @@
 
 ;; Powerline
 (use-package powerline
-  :defer t
-  :commands powerline-default-theme
   :load-path (lambda () (expand-file-name "powerline/" user-emacs-directory))
   :init (progn (setq powerline-default-separator 'wave)))
 
 (use-package spaceline
-  :init (progn
-          ;; Cleaning the mode line
-          ;; https://www.masteringemacs.org/article/hiding-replacing-modeline-strings
-          (defvar mode-line-cleaner-alist
-            `((auto-complete-mode . " α")
-              (yas/minor-mode . "")
-              (eldoc-mode . "")
-              (abbrev-mode . "")
-              (git-gutter+-mode . "")
-              (smartparens-mode . " π")
-              (paredit-mode . " π")
-              (undo-tree-mode . "")
-
-              ;; Major modes
-              (hi-lock-mode . ""))
-
-            "Alist for `clean-mode-line'.
-When you add a new element to the alist, keep in mind that you
-must pass the correct minor/major mode symbol and a string you
-want to use in the modeline *in lieu of* the original.")
-
-          (defun clean-mode-line ()
-            (interactive)
-            (loop for cleaner in mode-line-cleaner-alist
-                  do (let* ((mode (car cleaner))
-                            (mode-str (cdr cleaner))
-                            (old-mode-str (cdr (assq mode minor-mode-alist))))
-                       (when old-mode-str
-                         (setcar old-mode-str mode-str))
-                       ;; major mode
-                       (when (eq mode major-mode)
-                         (setq mode-name mode-str)))))
-          (if (display-graphic-p)
-              (add-hook 'after-change-major-mode-hook 'clean-mode-line))
-
-          (setq powerline-default-separator 'wave))
+  :init (setq powerline-default-separator 'wave)
   :load-path (lambda () (expand-file-name "spaceline/" user-emacs-directory))
   :config (progn
             (require 'spaceline-config)
             (spaceline-spacemacs-theme)
             (spaceline-helm-mode)))
+
+(use-package airline-themes
+  :after powerline
+  :load-path (lambda () (expand-file-name "airline-themes/" user-emacs-directory))
+  :config (progn
+            (kill-local-variable 'mode-line-format)
+            (airline-themes-set-modeline)
+            (load-theme 'airline-dark)))
 
 (provide 'setup-modeline)
 ;;; setup-modeline.el ends here

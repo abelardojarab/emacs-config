@@ -90,6 +90,7 @@
 (require 'biblio-dblp)
 (require 'biblio-hal)
 (require 'biblio-dissemin)
+(require 'biblio-download)
 
 (provide 'biblio)
 ;;; biblio.el ends here

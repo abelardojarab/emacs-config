@@ -79,7 +79,8 @@ public:
         PCHEnabled = (1ull << 25),
         NoFileManager = (1ull << 26),
         ValidateFileMaps = (1ull << 27),
-        CompletionLogs = (1ull << 28)
+        CompletionLogs = (1ull << 28),
+        AllowWErrorAndWFatalErrors = (1ull << 29)
     };
     struct Options {
         Options()
@@ -104,6 +105,7 @@ public:
         List<Source::Define> defines;
         List<Path> tests;
         Set<Path> ignoredCompilers;
+        Set<String> compilerWrappers;
         List<String> debugLocations;
     };
     bool init(const Options &options);

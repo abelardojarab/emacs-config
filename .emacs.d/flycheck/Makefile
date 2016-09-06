@@ -29,12 +29,18 @@ SELECTOR = (language $(LANGUAGE))
 endif
 
 # Internal variables
-EMACSBATCH = $(CASK) exec $(EMACS) -Q --batch -L . $(EMACSOPTS)
+EMACSBATCH = $(EMACS) -Q --batch -L . $(EMACSOPTS)
+RUNEMACS =
 
 # Program availability
+ifdef CASK
+RUNEMACS = $(CASK) exec $(EMACSBATCH)
 HAVE_CASK := $(shell sh -c "command -v $(CASK)")
 ifndef HAVE_CASK
 $(warning "$(CASK) is not available.  Please run make help")
+endif
+else
+RUNEMACS = $(EMACSBATCH)
 endif
 HAVE_INKSCAPE := $(shell sh -c "command -v $(INKSCAPE)")
 HAVE_CONVERT := $(shell sh -c "command -v $(CONVERT)")
@@ -59,7 +65,7 @@ flycheck-ert.elc: flycheck.elc
 flycheck-buttercup.elc: flycheck.elc
 
 $(OBJS): %.elc: %.el
-	$(EMACSBATCH) -l maint/flycheck-compile.el -f flycheck/batch-byte-compile $<
+	$(RUNEMACS) -l maint/flycheck-compile.el -f flycheck/batch-byte-compile $<
 
 doc/_static/logo.png: flycheck.svg
 ifndef HAVE_CONVERT
@@ -87,7 +93,23 @@ clean:
 	$(MAKE) -C doc clean
 
 .PHONY: purge
+purge:
 	$(GIT) clean -xfd
+
+.PHONY: format
+format:
+	$(RUNEMACS) -l maint/flycheck-format.el -f flycheck/batch-format
+
+.PHONY: check-format
+check-format:
+	$(RUNEMACS) -l maint/flycheck-format.el -f flycheck/batch-check-format
+
+.PHONY: checkdoc
+checkdoc:
+	$(RUNEMACS) -l maint/flycheck-checkdoc.el -f flycheck/batch-checkdoc
+
+.PHONY: check
+check: check-format checkdoc
 
 .PHONY: compile
 compile: $(OBJS)
@@ -98,12 +120,12 @@ specs: compile
 
 .PHONY: unit
 unit: compile
-	$(EMACSBATCH) --load test/run.el -f flycheck-run-tests-main \
+	$(RUNEMACS) --load test/run.el -f flycheck-run-tests-main \
 		'(and (not (tag external-tool)) $(SELECTOR))'
 
 .PHONY: integ
 integ: compile
-	$(EMACSBATCH) --load test/run.el -f flycheck-run-tests-main \
+	$(RUNEMACS) --load test/run.el -f flycheck-run-tests-main \
 		'(and (tag external-tool) $(SELECTOR))'
 
 .PHONY: images
@@ -115,7 +137,9 @@ help:
 	@echo ''
 	@echo 'Available targets:'
 	@echo '  init:    Initialise the project.  RUN FIRST!'
+	@echo '  check:   Check all Emacs Lisp sources (needs Emacs 25)'
 	@echo '  compile: Byte-compile Emacs Lisp sources'
+	@echo '  format:  Format all Emacs Lisp sources'
 	@echo '  specs:   Run all buttercup specs for Flycheck'
 	@echo '  unit:    Run all ERT unit tests for Flycheck (legacy)'
 	@echo '  integ:   Run all integration tests for Flycheck'

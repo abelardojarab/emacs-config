@@ -54,6 +54,7 @@ These teams provide support for particular languages in Flycheck.
 Elixir
 ~~~~~~
 
+* Aaron Jensen (:gh:`aaronjensen`)
 * Kári Tristan Helgason (:gh:`kthelgason`)
 
 Mention with ``@flycheck/elixir``.
@@ -78,6 +79,13 @@ Javascript
 * Saša Jovanić (:gh:`Simplify`)
 
 Mention with ``@flycheck/javascript``.
+
+Lua
+~~~
+
+* Gordon Gao (:gh:`ghprince`)
+
+Mention with ``@flycheck/lua``.
 
 Puppet
 ~~~~~~
@@ -135,6 +143,7 @@ Contributors
 The following people—listed in alphabetical order—contributed substantial code
 to Flycheck:
 
+* Aaron Jensen (:gh:`aaronjensen`)
 * Alain Kalker (:gh:`ackalker`)
 * Alex Reed (:gh:`acr4`)
 * Atila Neves (:gh:`atilaneves`)
@@ -155,12 +164,14 @@ to Flycheck:
 * :gh:`fmdkdd`
 * Fred Morcos (:gh:`fredmorcos`)
 * Gereon Frey (:gh:`gfrey`)
+* Gordon Gao (:gh:`ghprince`)
 * Gulshan Singh (:gh:`gsingh93`)
 * Iain Beeston (:gh:`iainbeeston`)
 * Ibrahim Awwal (:gh:`ibrahima`)
 * Jackson Ray Hamilton (:gh:`jacksonrayhamilton`)
 * Jim Hester (:gh:`jimhester`)
 * Jimmy Yuen Ho Wong (:gh:`wyuenho`)
+* Kári Tristan Helgason (:gh:`kthelgason`)
 * Krzysztof Witkowski (:gh:`kwitek`)
 * Lee Adams (:gh:`leeaustinadams`)
 * Lorenzo Villani (:gh:`lvillani`)

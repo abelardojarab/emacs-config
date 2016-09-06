@@ -74,6 +74,7 @@ docstring of `biblio-backends`.  Here is the definition of `biblio-dblp-backend`
 for example:
 
 ```elisp
+;;;###autoload
 (defun biblio-dblp-backend (command &optional arg &rest more)
   "A DBLP backend for biblio.el.
 COMMAND, ARG, MORE: See `biblio-backends'."

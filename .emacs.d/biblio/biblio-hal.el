@@ -55,7 +55,8 @@
           (cons 'references (biblio-remove-empty
                              (list .doiId_s .halId_s .arxivId_s)))
           (cons 'type .submitType_s)
-          (cons 'url .uri_s))))
+          (cons 'url .uri_s)
+          (cons 'direct-url (car (append .files_s nil))))))
 
 (defun biblio-hal--parse-search-results ()
   "Extract search results from HAL response."
@@ -74,8 +75,9 @@
             "title_s" "subtitle_s" "authFullName_s" "structName_s"
             "journalPublisher_s" "submitType_s" ;; "abstract_s"
             ;; "journalTitle_s" "volume_s" "issue_s"  "page_s" "writingDate_s"
-            "label_bibtex" "uri_s")))
+            "label_bibtex" "files_s" "uri_s")))
 
+;;;###autoload
 (defun biblio-hal-backend (command &optional arg &rest more)
   "A HAL backend for biblio.el.
 COMMAND, ARG, MORE: See `biblio-backends'."

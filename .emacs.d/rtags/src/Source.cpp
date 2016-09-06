@@ -249,7 +249,6 @@ static const char *blacklist[] = {
     "-fmodules-validate-once-per-build-session",
     "-fno-delete-null-pointer-checks",
     "-fno-use-linker-plugin"
-    "-fno-use-linker-plugin",
     "-fno-var-tracking",
     "-fno-var-tracking-assignments",
     "-fvar-tracking",
@@ -317,9 +316,11 @@ static inline String unquote(const String &arg)
     return arg;
 }
 
+static std::mutex sMutex;
+
 static Path resolveCompiler(const Path &unresolved, const Path &cwd, const List<Path> &pathEnvironment)
 {
-    assert(EventLoop::isMainThread()); // not threadsafe
+    std::unique_lock<std::mutex> lock(sMutex);
     static Hash<Path, Path> resolvedFromPath;
     Path &compiler = resolvedFromPath[unresolved];
     if (compiler.isEmpty())
@@ -334,12 +335,12 @@ static Path resolveCompiler(const Path &unresolved, const Path &cwd, const List<
 }
 
 
-static inline bool isCompiler(const Path &fullPath, const List<Path> &pathEnvironment)
+static inline bool isCompiler(const Path &fullPath, const List<String> &environment)
 {
-    const char *fileName = fullPath.fileName();
-    if (!strcmp(fileName, "ccache"))
+    std::unique_lock<std::mutex> lock(sMutex);
+    assert(Server::instance());
+    if (Server::instance()->options().compilerWrappers.contains(fullPath.fileName()))
         return true;
-    assert(EventLoop::isMainThread());
     static Hash<Path, bool> sCache;
 
     bool ok;
@@ -370,9 +371,9 @@ static inline bool isCompiler(const Path &fullPath, const List<Path> &pathEnviro
     Process proc;
     List<String> args;
     args << "-x" << "c" << "-c" << path << "-o" << out;
-    proc.exec(fullPath, args, pathEnvironment);
+    proc.exec(fullPath, args, environment);
     if (proc.returnCode() != 0) {
-        warning() << "Failed to compile" << fullPath << args << "\nwith $PATH:\n" << pathEnvironment
+        warning() << "Failed to compile" << fullPath << args << "\nwith ENV:\n" << environment
                   << "\nstderr:\n" << proc.readAllStdErr()
                   << "\nstdout:\n" << proc.readAllStdOut();
     }
@@ -642,7 +643,7 @@ List<Source> Source::parse(const String &cmdLine,
                 add = false;
                 const Path compiler = resolveCompiler(arg, cwd, pathEnvironment);
                 if (!access(compiler.nullTerminated(), R_OK | X_OK)) {
-                    validCompiler = isCompiler(compiler, pathEnvironment);
+                    validCompiler = isCompiler(compiler, environment);
                     compilerId = Location::insertFile(compiler);
                 } else {
                     break;
@@ -657,7 +658,7 @@ List<Source> Source::parse(const String &cmdLine,
                         if (!access(inPath.nullTerminated(), R_OK | X_OK)) {
                             extraCompiler = inPath;
                             if (!validCompiler)
-                                validCompiler = isCompiler(extraCompiler, pathEnvironment);
+                                validCompiler = isCompiler(extraCompiler, environment);
                         }
                     }
                 }
@@ -894,7 +895,7 @@ List<String> Source::toCommandLine(Flags<CommandLineFlag> flags, bool *usedPch) 
                             *usedPch = true;
                         ret << "-include-pch" << (inc.path + ".gch");
                     }
-                } else if (inc.path.exists()) {
+                } else {
                     ret << "-include" << inc.path;
                 }
                 break;

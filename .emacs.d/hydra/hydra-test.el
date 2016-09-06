@@ -25,6 +25,7 @@
 ;;; Code:
 
 (require 'ert)
+(require 'hydra)
 (setq text-quoting-style 'grave)
 (message "Emacs version: %s" emacs-version)
 
@@ -120,20 +121,17 @@ Call the head: `first-error'."
           (setq hydra-curr-body-fn
                 (quote hydra-error/body)))
         (condition-case err
-                        (progn
-                          (setq this-command
-                                (quote first-error))
-                          (call-interactively
-                           (function first-error)))
-                        ((quit error)
-                         (message "%S" err)
-                         (unless hydra-lv (sit-for 0.8))))
-        (when hydra-is-helpful
-          (if hydra-lv
-              (lv-message
-               (eval hydra-error/hint))
-            (message
-             (eval hydra-error/hint))))
+            (progn
+              (setq this-command
+                    (quote first-error))
+              (call-interactively
+               (function first-error)))
+          ((quit error)
+           (message "%S" err)
+           (unless hydra-lv (sit-for 0.8))))
+        (hydra-show-hint
+         hydra-error/hint
+         (quote hydra-error))
         (hydra-set-transient-map
          hydra-error/keymap
          (lambda nil
@@ -158,20 +156,17 @@ Call the head: `next-error'."
           (setq hydra-curr-body-fn
                 (quote hydra-error/body)))
         (condition-case err
-                        (progn
-                          (setq this-command
-                                (quote next-error))
-                          (call-interactively
-                           (function next-error)))
-                        ((quit error)
-                         (message "%S" err)
-                         (unless hydra-lv (sit-for 0.8))))
-        (when hydra-is-helpful
-          (if hydra-lv
-              (lv-message
-               (eval hydra-error/hint))
-            (message
-             (eval hydra-error/hint))))
+            (progn
+              (setq this-command
+                    (quote next-error))
+              (call-interactively
+               (function next-error)))
+          ((quit error)
+           (message "%S" err)
+           (unless hydra-lv (sit-for 0.8))))
+        (hydra-show-hint
+         hydra-error/hint
+         (quote hydra-error))
         (hydra-set-transient-map
          hydra-error/keymap
          (lambda nil
@@ -196,20 +191,17 @@ Call the head: `previous-error'."
           (setq hydra-curr-body-fn
                 (quote hydra-error/body)))
         (condition-case err
-                        (progn
-                          (setq this-command
-                                (quote previous-error))
-                          (call-interactively
-                           (function previous-error)))
-                        ((quit error)
-                         (message "%S" err)
-                         (unless hydra-lv (sit-for 0.8))))
-        (when hydra-is-helpful
-          (if hydra-lv
-              (lv-message
-               (eval hydra-error/hint))
-            (message
-             (eval hydra-error/hint))))
+            (progn
+              (setq this-command
+                    (quote previous-error))
+              (call-interactively
+               (function previous-error)))
+          ((quit error)
+           (message "%S" err)
+           (unless hydra-lv (sit-for 0.8))))
+        (hydra-show-hint
+         hydra-error/hint
+         (quote hydra-error))
         (hydra-set-transient-map
          hydra-error/keymap
          (lambda nil
@@ -223,12 +215,12 @@ Call the head: `previous-error'."
         (define-key global-map (kbd "M-g")
           nil))
       (define-key global-map [134217831 104]
-        (quote hydra-error/first-error))
+       (quote hydra-error/first-error))
       (define-key global-map [134217831 106]
-        (quote hydra-error/next-error))
+       (quote hydra-error/next-error))
       (define-key global-map [134217831 107]
-        (quote
-         hydra-error/previous-error))
+       (quote
+        hydra-error/previous-error))
       (defun hydra-error/body nil
         "Create a hydra with a \"M-g\" body and the heads:
 
@@ -244,12 +236,9 @@ The body can be accessed via `hydra-error/body'."
           (hydra-keyboard-quit)
           (setq hydra-curr-body-fn
                 (quote hydra-error/body)))
-        (when hydra-is-helpful
-          (if hydra-lv
-              (lv-message
-               (eval hydra-error/hint))
-            (message
-             (eval hydra-error/hint))))
+        (hydra-show-hint
+         hydra-error/hint
+         (quote hydra-error))
         (hydra-set-transient-map
          hydra-error/keymap
          (lambda nil
@@ -424,12 +413,9 @@ The body can be accessed via `hydra-toggle/body'."
           (hydra-keyboard-quit)
           (setq hydra-curr-body-fn
                 (quote hydra-toggle/body)))
-        (when hydra-is-helpful
-          (if hydra-lv
-              (lv-message
-               (eval hydra-toggle/hint))
-            (message
-             (eval hydra-toggle/hint))))
+        (hydra-show-hint
+         hydra-toggle/hint
+         (quote hydra-toggle))
         (hydra-set-transient-map
          hydra-toggle/keymap
          (lambda nil
@@ -530,11 +516,9 @@ Call the head: `next-line'."
           ((quit error)
            (message "%S" err)
            (unless hydra-lv (sit-for 0.8))))
-        (when hydra-is-helpful
-          (if hydra-lv
-              (lv-message
-               (eval hydra-vi/hint))
-            (message (eval hydra-vi/hint))))
+        (hydra-show-hint
+         hydra-vi/hint
+         (quote hydra-vi))
         (hydra-set-transient-map
          hydra-vi/keymap
          (lambda nil
@@ -567,11 +551,9 @@ Call the head: `previous-line'."
           ((quit error)
            (message "%S" err)
            (unless hydra-lv (sit-for 0.8))))
-        (when hydra-is-helpful
-          (if hydra-lv
-              (lv-message
-               (eval hydra-vi/hint))
-            (message (eval hydra-vi/hint))))
+        (hydra-show-hint
+         hydra-vi/hint
+         (quote hydra-vi))
         (hydra-set-transient-map
          hydra-vi/keymap
          (lambda nil
@@ -609,11 +591,9 @@ The body can be accessed via `hydra-vi/body'."
           (hydra-keyboard-quit)
           (setq hydra-curr-body-fn
                 (quote hydra-vi/body)))
-        (when hydra-is-helpful
-          (if hydra-lv
-              (lv-message
-               (eval hydra-vi/hint))
-            (message (eval hydra-vi/hint))))
+        (hydra-show-hint
+         hydra-vi/hint
+         (quote hydra-vi))
         (hydra-set-transient-map
          hydra-vi/keymap
          (lambda nil
@@ -713,12 +693,9 @@ Call the head: `(text-scale-set 0)'."
           ((quit error)
            (message "%S" err)
            (unless hydra-lv (sit-for 0.8))))
-        (when hydra-is-helpful
-          (if hydra-lv
-              (lv-message
-               (eval hydra-zoom/hint))
-            (message
-             (eval hydra-zoom/hint))))
+        (hydra-show-hint
+         hydra-zoom/hint
+         (quote hydra-zoom))
         (hydra-set-transient-map
          hydra-zoom/keymap
          (lambda nil
@@ -759,12 +736,9 @@ The body can be accessed via `hydra-zoom/body'."
           (hydra-keyboard-quit)
           (setq hydra-curr-body-fn
                 (quote hydra-zoom/body)))
-        (when hydra-is-helpful
-          (if hydra-lv
-              (lv-message
-               (eval hydra-zoom/hint))
-            (message
-             (eval hydra-zoom/hint))))
+        (hydra-show-hint
+         hydra-zoom/hint
+         (quote hydra-zoom))
         (hydra-set-transient-map
          hydra-zoom/keymap
          (lambda nil
@@ -864,12 +838,9 @@ Call the head: `(text-scale-set 0)'."
           ((quit error)
            (message "%S" err)
            (unless hydra-lv (sit-for 0.8))))
-        (when hydra-is-helpful
-          (if hydra-lv
-              (lv-message
-               (eval hydra-zoom/hint))
-            (message
-             (eval hydra-zoom/hint))))
+        (hydra-show-hint
+         hydra-zoom/hint
+         (quote hydra-zoom))
         (hydra-set-transient-map
          hydra-zoom/keymap
          (lambda nil
@@ -910,12 +881,9 @@ The body can be accessed via `hydra-zoom/body'."
           (hydra-keyboard-quit)
           (setq hydra-curr-body-fn
                 (quote hydra-zoom/body)))
-        (when hydra-is-helpful
-          (if hydra-lv
-              (lv-message
-               (eval hydra-zoom/hint))
-            (message
-             (eval hydra-zoom/hint))))
+        (hydra-show-hint
+         hydra-zoom/hint
+         (quote hydra-zoom))
         (hydra-set-transient-map
          hydra-zoom/keymap
          (lambda nil
@@ -1136,6 +1104,27 @@ _f_ auto-fill-mode:    %`auto-fill-function
          0 2 (face hydra-face-red)))
       ""))))
 
+(ert-deftest hydra-format-8 ()
+  (should
+   (equal
+    (hydra--format nil '(nil nil :hint nil) "test"
+                   '(("f" forward-char nil :exit nil)
+                     ("b" backward-char "back" :exit nil)))
+    '(format
+      #("test: [b]: back."
+        7 8 (face hydra-face-red))))))
+
+(ert-deftest hydra-format-9 ()
+  (should
+   (equal
+    (hydra--format nil '(nil nil :hint nil) "\n_f_(foo)"
+                   '(("f" forward-char nil :exit nil)))
+    '(concat
+      (format
+       "%s(foo)"
+       #("f" 0 1 (face hydra-face-red)))
+      ""))))
+
 (ert-deftest hydra-format-with-sexp-1 ()
   (should (equal
            (let ((hydra-fontify-head-function
@@ -1309,7 +1298,7 @@ _w_ Worf:                      % -8`hydra-tng/worf^^    _h_ Set phasers to      
               (goto-char (point-max))
               (search-backward "|")
               (delete-char 1)
-              (setq current-prefix-arg)
+              (setq current-prefix-arg nil)
               ,@body
               (insert "|")
               (when (region-active-p)

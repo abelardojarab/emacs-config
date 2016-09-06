@@ -92,11 +92,11 @@ String Symbol::toString(Flags<ToStringFlag> cursorInfoFlags,
             }
         }
         for (const auto &arg : arguments) {
-            const String symbolName = project->findSymbol(arg.first).symbolName;
+            const String symbolName = project->findSymbol(arg.cursor).symbolName;
             if (!symbolName.isEmpty()) {
                 args << symbolName;
             } else {
-                args << arg.first.toString(locationToStringFlags & ~Location::ShowContext);
+                args << arg.cursor.toString(locationToStringFlags & ~Location::ShowContext);
             }
         }
     } else {
@@ -239,8 +239,9 @@ Value Symbol::toValue(const std::shared_ptr<Project> &project,
             if (symbol.argumentUsage.index != String::npos) {
                 ret["invocation"] = symbol.argumentUsage.invocation.toString(locationToStringFlags);
                 ret["invokedFunction"] = symbol.argumentUsage.invokedFunction.toString(locationToStringFlags);
-                ret["functionArgumentLocation"] = symbol.argumentUsage.argument.first.toString(locationToStringFlags);
-                ret["functionArgumentLength"] = symbol.argumentUsage.argument.second;
+                ret["functionArgumentLocation"] = symbol.argumentUsage.argument.location.toString(locationToStringFlags);
+                ret["functionArgumentCursor"] = symbol.argumentUsage.argument.cursor.toString(locationToStringFlags);
+                ret["functionArgumentLength"] = symbol.argumentUsage.argument.length;
                 ret["argumentIndex"] = symbol.argumentUsage.index;
             }
             if (!symbol.symbolName.isEmpty())
@@ -261,8 +262,9 @@ Value Symbol::toValue(const std::shared_ptr<Project> &project,
                 Value args;
                 for (const auto &arg : symbol.arguments) {
                     Value a;
-                    a["location"] = arg.first.toString(locationToStringFlags);
-                    a["length"] = arg.second;
+                    a["location"] = arg.location.toString(locationToStringFlags);
+                    a["cursor"] = arg.cursor.toString(locationToStringFlags);
+                    a["length"] = arg.length;
                     args.push_back(a);
                 }
                 ret["arguments"] = args;
@@ -332,7 +334,7 @@ Value Symbol::toValue(const std::shared_ptr<Project> &project,
                     ret["targets"] = t;
                 }
             }
-            if (toStringFlags & IncludeReferences) {
+            if (flags & IncludeReferences) {
                 const auto references = project->findCallers(symbol);
                 if (!references.isEmpty()) {
                     Value r;
@@ -342,7 +344,7 @@ Value Symbol::toValue(const std::shared_ptr<Project> &project,
                     ret["references"] = r;
                 }
             }
-            if (toStringFlags & IncludeBaseClasses) {
+            if (flags & IncludeBaseClasses) {
                 List<Value> b;
                 for (const auto &base : symbol.baseClasses) {
                     for (const Symbol &s : project->findByUsr(base, symbol.location.fileId(), Project::ArgDependsOn, symbol.location)) {
@@ -355,7 +357,7 @@ Value Symbol::toValue(const std::shared_ptr<Project> &project,
                 }
             }
 
-            if (toStringFlags & IncludeParents) {
+            if (flags & IncludeParents) {
                 auto syms = project->openSymbols(symbol.location.fileId());
                 uint32_t idx = -1;
                 if (syms) {

@@ -74,7 +74,8 @@ static void signalHandler(int signal)
     _exit(1);
 }
 
-#define EXCLUDEFILTER_DEFAULT "*/CMakeFiles/*;*/cmake*/Modules/*;*/conftest.c*;/tmp/*"
+#define DEFAULT_EXCLUDEFILTER "*/CMakeFiles/*;*/cmake*/Modules/*;*/conftest.c*;/tmp/*;/private/tmp/*;/private/var/*"
+#define DEFAULT_COMPILER_WRAPPERS "ccache"
 #define DEFAULT_RP_VISITFILE_TIMEOUT 60000
 #define DEFAULT_RDM_MAX_FILE_MAP_CACHE_SIZE 500
 #define DEFAULT_RP_INDEXER_MESSAGE_TIMEOUT 60000
@@ -158,6 +159,7 @@ enum OptionType {
     NoStartupProject,
     NoNoUnknownWarningsOption,
     IgnoreCompiler,
+    CompilerWrappers,
     WatchSystemPaths,
     RpVisitFileTimeout,
     RpIndexerMessageTimeout,
@@ -174,6 +176,7 @@ enum OptionType {
     CompletionLogs,
     MaxIncludeCompletionDepth,
     AllowWpedantic,
+    AllowWErrorAndWFatalErrors,
     EnableCompilerManager,
     EnableNDEBUG,
     Progress,
@@ -308,6 +311,7 @@ int main(int argc, char** argv)
     serverOpts.rpConnectTimeout = DEFAULT_RP_CONNECT_TIMEOUT;
     serverOpts.rpConnectAttempts = DEFAULT_RP_CONNECT_ATTEMPTS;
     serverOpts.maxFileMapScopeCacheSize = DEFAULT_RDM_MAX_FILE_MAP_CACHE_SIZE;
+    serverOpts.errorLimit = DEFAULT_ERROR_LIMIT;
     serverOpts.rpNiceValue = INT_MIN;
     serverOpts.options = Server::Wall|Server::SpellChecking;
     serverOpts.maxCrashCount = DEFAULT_MAX_CRASH_COUNT;
@@ -331,7 +335,6 @@ int main(int argc, char** argv)
     assert(Path::home().endsWith('/'));
     int argCount = argList.size();
     char **args = argList.data();
-    bool defaultDataDir = true;
     int inactivityTimeout = 0;
 
     const struct CommandLineParser::Option<OptionType> opts[] = {
@@ -355,7 +358,7 @@ int main(int argc, char** argv)
         { CleanSlate, "clean-slate", 'C', no_argument, "Clear out all data." },
         { DisableSigHandler, "disable-sighandler", 'x', no_argument, "Disable signal handler to dump stack for crashes." },
         { Silent, "silent", 'S', no_argument, "No logging to stdout/stderr." },
-        { ExcludeFilter, "exclude-filter", 'X', required_argument, "Files to exclude from rdm, default \"" EXCLUDEFILTER_DEFAULT "\"." },
+        { ExcludeFilter, "exclude-filter", 'X', required_argument, "Files to exclude from rdm, default \"" DEFAULT_EXCLUDEFILTER "\"." },
         { SocketFile, "socket-file", 'n', required_argument, "Use this file for the server socket (default ~/.rdm)." },
         { DataDir, "data-dir", 'd', required_argument, "Use this directory to store persistent data (default ~/.rtags)." },
         { IgnorePrintfFixits, "ignore-printf-fixits", 'F', no_argument, "Disregard any clang fixit that looks like it's trying to fix format for printf and friends." },
@@ -367,6 +370,7 @@ int main(int argc, char** argv)
         { NoStartupProject, "no-startup-project", 'o', no_argument, "Don't restore the last current project on startup." },
         { NoNoUnknownWarningsOption, "no-no-unknown-warnings-option", 'Y', no_argument, "Don't pass -Wno-unknown-warning-option." },
         { IgnoreCompiler, "ignore-compiler", 'b', required_argument, "Ignore this compiler." },
+        { CompilerWrappers, "compiler-wrappers", 0, required_argument, "Consider these filenames compiler wrappers (split on ;), default " DEFAULT_COMPILER_WRAPPERS "\"." },
         { WatchSystemPaths, "watch-system-paths", 'w', no_argument, "Watch system paths for changes." },
         { RpVisitFileTimeout, "rp-visit-file-timeout", 'Z', required_argument, "Timeout for rp visitfile commands in ms (0 means no timeout) (default " STR(DEFAULT_RP_VISITFILE_TIMEOUT) ")." },
         { RpIndexerMessageTimeout, "rp-indexer-message-timeout", 'T', required_argument, "Timeout for rp indexer-message in ms (0 means no timeout) (default " STR(DEFAULT_RP_INDEXER_MESSAGE_TIMEOUT) ")." },
@@ -383,12 +387,13 @@ int main(int argc, char** argv)
         { CompletionLogs, "completion-logs", 0, no_argument, "Log more info about completions." },
         { MaxIncludeCompletionDepth, "max-include-completion-depth", 0, required_argument, "Max recursion depth for header completion (default " STR(DEFAULT_MAX_INCLUDE_COMPLETION_DEPTH) ")." },
         { AllowWpedantic, "allow-Wpedantic", 'P', no_argument, "Don't strip out -Wpedantic. This can cause problems in certain projects." },
+        { AllowWErrorAndWFatalErrors, "allow-Werror", 0, no_argument, "Don't strip out -Werror and -Wfatal-error. By default these are stripped out. " },
         { EnableCompilerManager, "enable-compiler-manager", 'R', no_argument, "Query compilers for their actual include paths instead of letting clang use its own." },
         { EnableNDEBUG, "enable-NDEBUG", 'g', no_argument, "Don't remove -DNDEBUG from compile lines." },
         { Progress, "progress", 'p', no_argument, "Report compilation progress in diagnostics output." },
         { MaxFileMapCacheSize, "max-file-map-cache-size", 'y', required_argument, "Max files to cache per query (Should not exceed maximum number of open file descriptors allowed per process) (default " STR(DEFAULT_RDM_MAX_FILE_MAP_CACHE_SIZE) ")." },
 #ifdef FILEMANAGER_OPT_IN
-        { FilemanagerWatch, "filemanager-watch", 'M', no_argument, "Use a file system watcher for filemanager." },
+        { FileManagerWatch, "filemanager-watch", 'M', no_argument, "Use a file system watcher for filemanager." },
 #else
         { NoFileManagerWatch, "no-filemanager-watch", 'M', no_argument, "Don't use a file system watcher for filemanager." },
 #endif
@@ -513,7 +518,6 @@ int main(int argc, char** argv)
             serverOpts.socketFile.resolve();
             break;
         case DataDir:
-            defaultDataDir = false;
             serverOpts.dataDir = String::format<128>("%s", Path::resolved(optarg).constData());
             break;
         case IgnorePrintfFixits:
@@ -552,6 +556,9 @@ int main(int argc, char** argv)
             break;
         case IgnoreCompiler:
             serverOpts.ignoredCompilers.insert(Path::resolved(optarg));
+            break;
+        case CompilerWrappers:
+            serverOpts.compilerWrappers = String(optarg).split(";", String::SkipEmpty).toSet();
             break;
         case WatchSystemPaths:
             serverOpts.options |= Server::WatchSystemPaths;
@@ -631,6 +638,9 @@ int main(int argc, char** argv)
             break;
         case AllowWpedantic:
             serverOpts.options |= Server::AllowPedantic;
+            break;
+        case AllowWErrorAndWFatalErrors:
+            serverOpts.options |= Server::AllowWErrorAndWFatalErrors;
             break;
         case EnableCompilerManager:
             serverOpts.options |= Server::EnableCompilerManager;
@@ -793,7 +803,9 @@ int main(int argc, char** argv)
     }
 
     if (serverOpts.excludeFilters.isEmpty())
-        serverOpts.excludeFilters = String(EXCLUDEFILTER_DEFAULT).split(';');
+        serverOpts.excludeFilters = String(DEFAULT_EXCLUDEFILTER).split(';');
+    if (serverOpts.compilerWrappers.isEmpty())
+        serverOpts.compilerWrappers = String(DEFAULT_COMPILER_WRAPPERS).split(';').toSet();
 
     if (!serverOpts.headerErrorJobCount) {
         serverOpts.headerErrorJobCount = std::max<size_t>(1, serverOpts.jobCount / 2);
@@ -859,14 +871,6 @@ int main(int argc, char** argv)
         close(fd);
         serverOpts.socketFile = buf;
         serverOpts.socketFile.resolve();
-    }
-    if (defaultDataDir) {
-        Path migration = String::format<128>("%s.rtags-file", Path::home().constData());
-        if (migration.isDir()) {
-            Rct::removeDirectory(serverOpts.dataDir);
-            rename(migration.constData(), serverOpts.dataDir.constData());
-            error() << "Migrated datadir from ~/.rtags-file ~/.rtags";
-        }
     }
     serverOpts.dataDir = serverOpts.dataDir.ensureTrailingSlash();
 

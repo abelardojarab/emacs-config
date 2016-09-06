@@ -80,6 +80,10 @@
 (add-to-list 'load-path (expand-file-name "dracula-theme/" user-emacs-directory))
 (add-to-list 'custom-theme-load-path (expand-file-name "dracula-theme/" user-emacs-directory))
 
+;; Grandshell theme
+(add-to-list 'load-path (expand-file-name "grandshell-theme/" user-emacs-directory))
+(add-to-list 'custom-theme-load-path (expand-file-name "grandshell-theme/" user-emacs-directory))
+
 ;; Tomorrow theme
 (add-to-list 'load-path (expand-file-name "sanityinc-tomorrow-theme/" user-emacs-directory))
 (add-to-list 'custom-theme-load-path (expand-file-name "sanityinc-tomorrow-theme/" user-emacs-directory))
@@ -109,6 +113,7 @@
 ;; (load-theme 'sanityinc-tomorrow-night t)
 ;; (load-theme 'spike t)
 ;; (load-theme 'dracula t)
+;; (load-theme 'grandshell t)
 
 ;; Choose different themes depending if we are using GUI or not
 ;; Console colors are enabled if "export TERM=xterm-256color" is added into .bashrc

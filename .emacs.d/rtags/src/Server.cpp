@@ -68,6 +68,9 @@
 #define TO_STR1(x) #x
 #define TO_STR(x) TO_STR1(x)
 #define CLANG_LIBDIR_STR TO_STR(CLANG_LIBDIR)
+#ifdef CLANG_INCLUDE
+#define CLANG_INCLUDE_STR TO_STR(CLANG_INCLUDE)
+#endif
 
 // Absolute paths to search (under) for (clang) system include files
 // Iterate until we find a dir at <abspath>/clang/<version>/include.
@@ -142,6 +145,10 @@ bool Server::init(const Options &options)
         }
 #endif
     } else {
+#ifdef CLANG_INCLUDE
+        mOptions.includePaths.append(Source::Include(Source::Include::Type_System, CLANG_INCLUDE_STR));
+#endif
+
         // Iterate until we find an existing directory
         for (Path systemInclude : sSystemIncludePaths) {
             systemInclude = systemInclude.ensureTrailingSlash();
@@ -989,11 +996,15 @@ void Server::symbolInfo(const std::shared_ptr<QueryMessage> &query, const std::s
     Path path;
     uint32_t line, column, line2, column2;
     deserializer >> path >> line >> column >> line2 >> column2;
-    const uint32_t fileId = Location::fileId(path);
+    uint32_t fileId = Location::fileId(path);
     if (!fileId) {
-        conn->write("Not indexed");
-        conn->finish(1);
-        return;
+        path.resolve();
+        fileId = Location::fileId(path);
+        if (!fileId) {
+            conn->write("Not indexed");
+            conn->finish(1);
+            return;
+        }
     }
 
     std::shared_ptr<Project> project = projectForQuery(query);
@@ -1265,7 +1276,7 @@ void Server::preprocessFile(const std::shared_ptr<QueryMessage> &query, const st
 
 void Server::clearProjects()
 {
-    Rct::removeDirectory(mOptions.dataDir);
+    Path::rmdir(mOptions.dataDir);
     setCurrentProject(std::shared_ptr<Project>());
     mProjects.clear();
     saveFileIds();
@@ -1400,7 +1411,7 @@ void Server::removeProject(const std::shared_ptr<QueryMessage> &query, const std
             Path path = cur->first;
             conn->write<128>("Deleted project: %s", path.constData());
             RTags::encodePath(path);
-            Rct::removeDirectory(mOptions.dataDir + path);
+            Path::rmdir(mOptions.dataDir + path);
             warning() << "Deleted" << (mOptions.dataDir + path);
             mProjects.erase(cur);
         }

@@ -32,7 +32,7 @@
 (require 'notifications)
 
 (defun biblio-tests--bypass-shut-up (&rest args)
-  "Show a (message ARGS) in a notiification."
+  "Show a (message ARGS) in a notification."
   (notifications-notify :body (apply #'format args)))
 
 (defconst stallman-bibtex "Stallman_1981, title={EMACS the extensible,
@@ -70,7 +70,7 @@ month={Apr}, pages={147–156}}")
   '(((backend . biblio-dblp-backend)
      (title . "Who builds a house without drawing blueprints?")
      (authors "Leslie Lamport") (container . "Commun. ACM") (type . "Journal Articles")
-     (url . "http://dblp.org/rec/journals/cacm/Lamport15"))
+     (url . "http://dblp.org/rec/journals/cacm/Lamport15") (direct-url . "http://example.com/paper.pdf"))
     ((backend . biblio-dblp-backend)
      (title . "Turing lecture: The computer science of concurrency: the early years.")
      (authors "Leslie Lamport") (container . "Commun. ACM") (type . "Journal Articles")
@@ -394,7 +394,7 @@ month={Apr}, pages={147–156}}")
           (with-current-buffer results-buffer
             (goto-char (1- (point-max)))
             (expect #'biblio--selection-browse
-                    :to-throw 'error '("This record does not contain a URL"))))
+                    :to-throw 'user-error '("This record does not contain a URL"))))
         (it "lets users click buttons"
           (with-current-buffer results-buffer
             (expect (search-forward "http" nil t) :to-be-truthy)
@@ -433,7 +433,7 @@ month={Apr}, pages={147–156}}")
           (it "complains about empty entries"
             (with-temp-buffer
               (expect #'biblio--selection-copy
-                      :to-throw 'error '("No entry at point"))))))
+                      :to-throw 'user-error '("No entry at point"))))))
 
       (describe "a buffer change command"
         :var (new-target)
@@ -464,6 +464,28 @@ month={Apr}, pages={147–156}}")
             (expect #'biblio-dissemin--lookup-record
                     :to-have-been-called-with
                     (biblio--selection-metadata-at-point))))
+        (it "complains about missing entries"
+          (with-temp-buffer
+            (expect (lambda ()
+                      (call-interactively #'biblio--selection-extended-action))
+                    :to-throw 'user-error))))
+
+      (describe "--selection-extended-action for downloading"
+        (before-each
+          (spy-on 'biblio-completing-read-alist
+                  :and-return-value #'biblio-download--action)
+          (spy-on #'biblio-download--action :and-call-through)
+          (spy-on #'read-file-name :and-return-value "/target.pdf")
+          (spy-on #'url-copy-file))
+        (it "runs an action as expected"
+          (with-current-buffer results-buffer
+            (call-interactively #'biblio--selection-extended-action)
+            (expect #'biblio-download--action
+                    :to-have-been-called-with
+                    (biblio--selection-metadata-at-point))
+            (expect #'url-copy-file
+                    :to-have-been-called-with
+                    "http://example.com/paper.pdf" "/target.pdf")))
         (it "complains about missing entries"
           (with-temp-buffer
             (expect (lambda ()
@@ -704,7 +726,8 @@ instead."
         :var (results-buffer)
         (before-each
           (biblio-tests--intercept-url-requests)
-          (spy-on #'read-string :and-return-value query))
+          (spy-on #'read-string :and-return-value query)
+          (spy-on #'browse-url))
 
         (it "downloads results properly"
           (expect
@@ -742,12 +765,23 @@ instead."
                  (expect (search-forward "References: " nil t) :to-be-truthy)
                  (expect (search-forward "URL: " nil t) :to-be-truthy)
                  (expect (button-label (button-at (1- (point-at-eol)))) :to-match "http://")
-                 (expect (search-backward "\n\n" nil t) :not :to-be-truthy))))
+                 (expect (search-backward "\n\n" nil t) :not :to-be-truthy)))
+             (it "complains about missing direct URLs"
+               (with-current-buffer results-buffer
+                 (biblio--selection-first)
+                 (expect #'biblio--selection-browse-direct
+                         :to-throw 'user-error '("This record does not contain a direct URL (try arXiv or HAL)")))))
             (`arxiv
              (it "shows affiliations"
                (with-current-buffer results-buffer
                  (biblio--selection-first)
-                 (expect (search-forward " (NMRC, University College, Cork, Ireland)" nil t) :to-be-truthy)))))
+                 (expect (search-forward " (NMRC, University College, Cork, Ireland)" nil t) :to-be-truthy)))
+             (it "opens the right URL when browsing to PDF"
+               (with-current-buffer results-buffer
+                 (biblio--selection-browse-direct)
+                 (expect 'browse-url
+                         :to-have-been-called-with
+                         "http://arxiv.org/pdf/cond-mat/0102536v1")))))
           (it "has no empty titles"
             (with-current-buffer results-buffer
               (expect (search-forward "\n\n> \n" nil t) :not :to-be-truthy)))
@@ -790,7 +824,8 @@ instead."
         (expect (buffer-string)
                 :to-equal (concat (biblio-format-bibtex (buffer-string)) "\n\n"))
         (expect (buffer-string)
-                :to-match "journal += {ACM SIGOA Newsletter}")))
+                :to-match "journal += {ACM SIGOA Newsletter}")
+        (expect url-mime-accept-string :to-equal nil)))
     (it "falls back to crosscite if doi.org returns a 406"
       (with-temp-buffer
         (let ((buf (current-buffer))
@@ -805,7 +840,8 @@ instead."
           (expect #'biblio-crossref-backend :not :to-have-been-called)
           (expect #'biblio-doi--crosscite-url :to-have-been-called)
           ;; Note lack of spacing, due to invalid BibTeX key being created by CrossCite
-          (expect (buffer-string) :to-match "author={Pit-Claudel")))))
+          (expect (buffer-string) :to-match "author={Pit-Claudel")
+          (expect url-mime-accept-string :to-equal nil)))))
 
   (describe "biblio-dissemin"
     (before-each

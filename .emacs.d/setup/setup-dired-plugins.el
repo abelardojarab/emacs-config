@@ -31,6 +31,7 @@
             (dired-async-mode 1)))
 
 (use-package direx
+  :after dired
   :load-path (lambda () (expand-file-name "direx/" user-emacs-directory))
   :config (progn
             (setq direx:closed-icon "+ ")
@@ -40,28 +41,42 @@
             (define-key direx:direx-mode-map [mouse-3] 'direx:mouse-1)))
 
 (use-package direx-project
+  :after dired
   :load-path (lambda () (expand-file-name "direx/" user-emacs-directory)))
 
 ;; highlight dired buffer with K-shell coloring
 (use-package dired-k
+  :after dired
   :load-path (lambda () (expand-file-name "dired-k/" user-emacs-directory))
   :bind (:map dired-mode-map
               ("K" . dired-k))
-  :config (progn
+  :commands (dired-k dired-k-no-revert)
+  :init (progn
             (add-hook 'dired-initial-position-hook 'dired-k)
             (add-hook 'dired-after-readin-hook #'dired-k-no-revert)))
 
 ;; Facility to see images inside dired
 (use-package image-dired
-  :defer t
+  :after dired
   :config (progn
             (setq image-dired-cmd-create-thumbnail-options
                   (replace-regexp-in-string "-strip" "-auto-orient -strip" image-dired-cmd-create-thumbnail-options)
                   image-dired-cmd-create-temp-image-options
                   (replace-regexp-in-string "-strip" "-auto-orient -strip" image-dired-cmd-create-temp-image-options))))
 
+(use-package helm-dired-history
+  :after (dired savehist helm)
+  :bind (:map dired-mode-map
+              ("," . helm-dired-history-view))
+  :load-path (lambda () (expand-file-name "helm-dired-history/" user-emacs-directory))
+  :config (progn
+            (savehist-mode 1)
+            (add-to-list 'savehist-additional-variables 'helm-dired-history-variable)
+            (define-key dired-mode-map "," 'helm-dired-history-view)))
+
 ;; Preview files in dired
 (use-package peep-dired
+  :after dired
   :load-path (lambda () (expand-file-name "peep-dired/" user-emacs-directory))
   :defer t ;; don't access `dired-mode-map' until `peep-dired' is loaded
   :bind (:map dired-mode-map

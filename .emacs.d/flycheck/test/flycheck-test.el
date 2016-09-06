@@ -3463,27 +3463,22 @@ Why not:
    "language/less/syntax-error.less" 'less-css-mode
    '(1 1 error "Unrecognised input" :checker less)))
 
-(flycheck-ert-def-checker-test luacheck lua syntax-error
+(flycheck-ert-def-checker-test lua-luacheck lua syntax-error
   (flycheck-ert-should-syntax-check
    "language/lua/syntax-error.lua" 'lua-mode
-   '(5 7 error "unfinished string" :id "E011" :checker luacheck)))
+   '(5 7 error "unfinished string" :id "E011" :checker lua-luacheck)))
 
-(flycheck-ert-def-checker-test luacheck lua warnings
+(flycheck-ert-def-checker-test lua-luacheck lua warnings
   (flycheck-ert-should-syntax-check
    "language/lua/warnings.lua" 'lua-mode
    '(1 1 warning "setting non-standard global variable 'global_var'"
-       :id "W111" :checker luacheck)
+       :id "W111" :checker lua-luacheck)
    '(3 16 warning "unused function 'test'"
-       :id "W211" :checker luacheck)
+       :id "W211" :checker lua-luacheck)
    '(3 21 warning "unused argument 'arg'"
-       :id "W212" :checker luacheck)
+       :id "W212" :checker lua-luacheck)
    '(4 11 warning "variable 'var2' is never set"
-       :id "W221" :checker luacheck)))
-
-(flycheck-ert-def-checker-test lua-luacheck lua no-warnings
-  (let ((flycheck-luacheckrc "luacheckrc"))
-    (flycheck-ert-should-syntax-check
-     "language/lua/warnings.lua" 'lua-mode)))
+       :id "W221" :checker lua-luacheck)))
 
 (flycheck-ert-def-checker-test lua lua nil
   (let ((flycheck-disabled-checkers '(lua-luacheck)))
@@ -3495,7 +3490,7 @@ Why not:
 (flycheck-ert-def-checker-test (perl perl-perlcritic) perl nil
   (flycheck-ert-should-syntax-check
    "language/perl.pl" '(perl-mode cperl-mode)
-   '(6 nil error "Global symbol \"$x\" requires explicit package name"
+   '(6 nil error "Global symbol \"$x\" requires explicit package name (did you forget to declare \"my $x\"?)"
        :checker perl)
    '(6 nil error "BEGIN not safe after errors--compilation aborted"
        :checker perl)
@@ -3586,13 +3581,13 @@ Why not:
   (let ((python-indent-guess-indent-offset nil))       ; Silence Python Mode!
     (flycheck-ert-should-syntax-check
      "language/python/syntax-error.py" 'python-mode
-     '(3 13 error "SyntaxError: invalid syntax" :id "E901"
+     '(3 13 error "SyntaxError: invalid syntax" :id "E999"
          :checker python-flake8))))
 
 (flycheck-ert-def-checker-test python-flake8 python nil
   (flycheck-ert-should-syntax-check
    "language/python/test.py" 'python-mode
-   '(5 1 warning "'antigravit' imported but unused" :id "F401"
+   '(5 1 warning "'.antigravit' imported but unused" :id "F401"
        :checker python-flake8)
    '(7 1 warning "expected 2 blank lines, found 1" :id "E302"
        :checker python-flake8)
@@ -3835,19 +3830,15 @@ Why not:
   (let ((flycheck-disabled-checkers '(rust-cargo)))
     (flycheck-ert-should-syntax-check
      "language/rust/src/syntax-error.rs" 'rust-mode
-     '(4 5 error "unresolved name `bla`" :checker rust :id "E0425")
-     '(4 5 info "run `rustc --explain E0425` to see a detailed explanation"
-         :checker rust))))
+     '(4 5 error "unresolved name `bla`" :checker rust :id "E0425"))))
 
 (flycheck-ert-def-checker-test rust rust multiline-error
   (let ((flycheck-disabled-checkers '(rust-cargo)))
     (flycheck-ert-should-syntax-check
      "language/rust/src/multiline-error.rs" 'rust-mode
-     '(7 9 error "mismatched types" :checker rust :id "E0308")
-     '(7 9 info "run `rustc --explain E0308` to see a detailed explanation"
-         :checker rust)
-     '(7 9 info "expected type `u8`" :checker rust)
-     '(7 9 info "found type `i8`" :checker rust))))
+     '(7 9 error "mismatched types (expected u8, found i8)" :checker rust :id "E0308")
+     '(7 9 info "expected type `u8`" :checker rust :id "E0308")
+     '(7 9 info "found type `i8`" :checker rust :id "E0308"))))
 
 (flycheck-ert-def-checker-test rust rust warning
   (let ((flycheck-disabled-checkers '(rust-cargo)))
@@ -3860,20 +3851,15 @@ Why not:
   (let ((flycheck-disabled-checkers '(rust-cargo)))
     (flycheck-ert-should-syntax-check
      "language/rust/src/note-and-help.rs" 'rust-mode
-     '(11 9 info "value moved here" :checker rust)
-     '(12 9 error "use of moved value: `x`" :checker rust :id "E0382")
-     '(12 9 info "run `rustc --explain E0382` to see a detailed explanation"
-          :checker rust)
-     '(12 9 info "move occurs because `x` has type `NonPOD`, which does not implement the `Copy` trait"
-          :checker rust))))
+     '(11 9 info "value moved here" :checker rust :id "E0382")
+     '(12 9 error "use of moved value: `x` (value used here after move)" :checker rust :id "E0382")
+     '(12 9 info "move occurs because `x` has type `NonPOD`, which does not implement the `Copy` trait" :checker rust :id "E0382"))))
 
 (flycheck-ert-def-checker-test rust rust crate-root-not-set
   (let ((flycheck-disabled-checkers '(rust-cargo)))
     (flycheck-ert-should-syntax-check
      "language/rust/src/importing.rs" 'rust-mode
-     '(1 5 error "unresolved import `super::imported`. There are too many initial `super`s." :checker rust :id "E0432")
-     '(1 5 info "run `rustc --explain E0432` to see a detailed explanation"
-         :checker rust))))
+     '(1 5 error "unresolved import `super::imported`. There are too many initial `super`s." :checker rust :id "E0432"))))
 
 (flycheck-ert-def-checker-test sass sass nil
   (flycheck-ert-should-syntax-check
