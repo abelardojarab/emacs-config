@@ -87,7 +87,13 @@
                                           (flyspell-buffer)))
                          (local-set-key (kbd "C-c s 0")
                                         (lambda () (interactive)
-                                          (flyspell-mode -1)))))))
+                                          (flyspell-mode -1)))))
+
+            ;; Ignored patterns
+            (add-to-list 'ispell-skip-region-alist '("[^\000-\377]+"))
+            (add-to-list 'ispell-skip-region-alist '(":\\(PROPERTIES\\|LOGBOOK\\):" . ":END:"))
+            (add-to-list 'ispell-skip-region-alist '("#\\+BEGIN_SRC" . "#\\+END_SRC"))
+            (add-to-list 'ispell-skip-region-alist '("#\\+BEGIN_EXAMPLE" . "#\\+END_EXAMPLE"))))
 
 ;; flyspell
 (use-package flyspell

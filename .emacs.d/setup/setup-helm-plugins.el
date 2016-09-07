@@ -144,9 +144,14 @@
   :commands (helm-swoop helm-swoop-from-isearch)
   :bind (("C-*" . helm-swoop)
          :map isearch-mode-map
-         ("C-*" . helm-swoop-from-isearch))
+         ("C-f" . helm-swoop-from-isearch)
+         :map minibuffer-local-isearch-map
+         ("C-f" . helm-swoop-from-isearch))
   :load-path (lambda () (expand-file-name "helm-swoop/" user-emacs-directory))
   :config (progn
+
+            ;; From helm-swoop to helm-multi-swoop-all
+            (define-key helm-swoop-map (kbd "C-f") 'helm-multi-swoop-all-from-helm-swoop)
 
             ;; From helm-swoop to helm-multi-swoop-all
             (define-key helm-swoop-map (kbd "M-i") 'helm-multi-swoop-all-from-helm-swoop)
@@ -167,7 +172,7 @@
             (setq helm-swoop-split-with-multiple-windows nil)
 
             ;; Split direcion. 'split-window-vertically or 'split-window-horizontally
-            (setq helm-swoop-split-direction 'split-window-horizontally)
+            (setq helm-swoop-split-direction 'split-window-vertically)
 
             ;; If nil, you can slightly boost invoke speed in exchange for text color
             (setq helm-swoop-speed-or-color nil)

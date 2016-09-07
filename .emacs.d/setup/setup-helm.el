@@ -54,7 +54,7 @@
                   helm-M-x-requires-pattern nil
                   helm-candidate-number-limit 100 ;; limit max number of matches displayed for speed
                   helm-ff-skip-boring-files t ;; ignore boring files like .o and .a
-                  helm-move-to-line-cycle-in-source t ;; move to end or beginning of source when reaching top or bottom of source.
+                  helm-move-to-line-cycle-in-source nil ;; move to end or beginning of source when reaching top or bottom of source.
                   helm-ff-search-library-in-sexp t ;; search for library in `require' and `declare-function' sexp.
                   helm-scroll-amount 8 ;; scroll 8 lines other window using M-<next>/M-<prior>
                   helm-ff-file-name-history-use-recentf t)
@@ -72,6 +72,17 @@
             (when (and (executable-find "mdfind")
                        (equal system-type 'darwin))
               (setq helm-locate-command "mdfind -name %s %s"))
+
+            ;; Via: https://www.reddit.com/r/emacs/comments/3asbyn/new_and_very_useful_helm_feature_enter_search/
+            (setq helm-echo-input-in-header-line t)
+            (defun helm-hide-minibuffer-maybe ()
+              (when (with-helm-buffer helm-echo-input-in-header-line)
+                (let ((ov (make-overlay (point-min) (point-max) nil nil t)))
+                  (overlay-put ov 'window (selected-window))
+                  (overlay-put ov 'face (let ((bg-color (face-background 'default nil)))
+                                          `(:background ,bg-color :foreground ,bg-color)))
+                  (setq-local cursor-type nil))))
+            (add-hook 'helm-minibuffer-set-up-hook 'helm-hide-minibuffer-maybe)
 
             (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ;; rebind tab to run persistent action
             (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ;; make TAB works in terminal
