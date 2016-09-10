@@ -126,5 +126,13 @@ non-nil."
   :if (display-graphic-p)
   :init (set-scroll-bar-mode 'right))
 
+;; nasty hack to fix display issue
+;; (add-hook 'post-command-hook
+;;           'my/redraw-display-hack)
+
+;; (defun my/redraw-display-hack()
+;;   (interactive)
+;;   (redraw-display))
+
 (provide 'setup-appearance)
 ;;; setup-appearance.el ends here
