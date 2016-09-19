@@ -7,10 +7,19 @@
   - Remove ``--config`` option in ``lua-luacheck`` in favour of ``luacheck``'s
     own ``.luacheckrc`` detection. Therefore ``flycheck-luacheckrc`` is
     no longer used [GH-1057]
+  - ``:modes`` is now mandatory for syntax checker definitions [GH-1071]
+  - Remove jade checker [GH-951] [GH-1084]
 
 - New syntax checkers:
 
   - Elixir with ``dogma`` [GH-969]
+  - sass and scss with ``sass-lint`` [GH-1070]
+  - Pug [GH-951] [GH-1084]
+
+- New features:
+
+  - Add ``flycheck-cargo-rustc-args`` to pass multiple arguments to cargo rustc
+    subcommand [GH-1079]
 
 29 (Aug 28, 2016)
 =================
@@ -39,7 +48,7 @@
     [GH-1007]
   - ``rust`` and ``rust-cargo`` checkers now support the new error format of
     rust 1.12 [GH-1016]
-  - `flycheck-verify-checker` and `flycheck-verify-setup` now include
+  - ``flycheck-verify-checker`` and ``flycheck-verify-setup`` now include
     information about configuration files of syntax checkers [GH-1021] [GH-1038]
 
 28 (Jun 05, 2016)

@@ -1,12 +1,12 @@
 ;;; ebib-utils.el --- Part of Ebib, a BibTeX database manager  -*- lexical-binding: t -*-
 
-;; Copyright (c) 2003-2014 Joost Kremers
+;; Copyright (c) 2003-2016 Joost Kremers
 ;; All rights reserved.
 
 ;; Author: Joost Kremers <joostkremers@fastmail.fm>
 ;; Maintainer: Joost Kremers <joostkremers@fastmail.fm>
 ;; Created: 2014
-;; Version: 2.5
+;; Version: 2.6
 ;; Keywords: text bibtex
 ;; Package-Requires: ((dash "2.5.0") (emacs "24.3"))
 
@@ -35,8 +35,8 @@
 
 ;;; Commentary:
 
-;; This file is part of Ebib, a BibTeX database manager for Emacs. It
-;; contains general macros, utilities and variables.
+;; This file is part of Ebib, a BibTeX database manager for Emacs.  It contains
+;; general macros, utilities and variables.
 
 ;;; Code:
 
@@ -223,7 +223,7 @@ The rest of the frame is used for the entry buffer, unless
                               mode-line-front-space
                               ebib--mode-line-modified
                               mode-line-buffer-identification
-                              (:eval (format "  (%s)" (ebib--get-dialect)))
+                              (:eval (format "  (%s)" (ebib--get-dialect ebib--cur-db)))
                               (:eval (if (and ebib--cur-db (ebib--cur-entry-key)) "     Entry %l" "     No Entries"))
                               (:eval (if (and ebib--cur-db (ebib-db-get-filter ebib--cur-db)) (format "  |%s|"(ebib--filters-pp-filter (ebib-db-get-filter ebib--cur-db))) "")))
   "The mode line for the index window.
@@ -243,17 +243,6 @@ mode line of the entry buffer is not changed."
   "Character indicating the modified status in the mode line."
   :group 'ebib-windows
   :type 'string)
-
-(defun ebib--mode-line-modified-p (&optional db)
-  "Return a string describing the modified status of DB.
-DB defaults to the current database."
-  (or db (setq db ebib--cur-db))
-  (if (not (ebib-db-modified-p db))
-      " "
-    (propertize ebib-modified-char
-                'face 'ebib-modified-face
-                'help-echo "Database modified\nmouse-1: Save database"
-                'local-map '(keymap (mode-line keymap (mouse-1 . ebib-save-current-database))))))
 
 (defcustom ebib-index-display-fields nil
   "List of the fields to display in the index buffer.
@@ -445,6 +434,14 @@ are searched, not their subdirectories."
   :group 'ebib
   :type '(repeat :tag "Search directories" (string :tag "Directory")))
 
+(defcustom ebib-truncate-file-names t
+  "Truncate file names in the file field.
+If t, file names entered in the file field are truncated relative
+to the directories in `ebib-file-search-dirs'."
+  :group 'ebib
+  :type '(choice (const :tag "Truncate File Names" t)
+                 (const :tag "Do not Truncate File Names" nil)))
+
 (defcustom ebib-name-transform-function 'identity
   "Function for transforming keys into file names.
 When `ebib-view-file' is called but no filename is listed in the
@@ -454,35 +451,16 @@ function."
   :type '(choice (const :tag "Do not apply any function" identity)
                  (function :tag "Apply function")))
 
-(defcustom ebib-notes-file-extension "org"
-  "Extension used for notes files.
-The extension should be specified without a dot."
+(defcustom ebib-file-name-mod-function nil
+  "Function to modify a file name in the file field.
+This function should take two arguments, the first being the file
+name (absolute or relative), the second either t or nil.  If t,
+the file name should be modified for storing, if nil the
+modifications should be undone so that the file name can be
+passed to an external viewer."
   :group 'ebib
-  :type '(string :tag "Extension"))
-
-(defcustom ebib-notes-file-symbol "[N]"
-  "Symbol (or string) used to indicate the existence of a notes file.
-If there is a notes file for the current entry, this symbol is
-displayed in the mode line of the entry buffer after the entry
-key."
-  :group 'ebib
-  :type '(string :tag "Notes file symbol"))
-
-(defcustom ebib-notes-directory nil
-  "Directory to save notes files to.
-If this is nil, the first directory in `ebib-file-search-dirs' is
-used."
-  :group 'ebib
-  :type '(choice (const :tag "Use first of `ebib-file-search-dirs'")
-                 (directory :tag "Specify directory")))
-
-(defcustom ebib-notes-name-transform-function nil
-  "Function for transforming keys into notes file names.
-If this is nil, the function `ebib-name-transform-function' is
-used instead."
-  :group 'ebib
-  :type '(choice (const :tag "Use `ebib-name-transform-function'" nil)
-                 (function :tag "Apply function")))
+  :type '(choice (const :tag "Do not modify file names" nil)
+                 (function :tag "Modification function")))
 
 (defcustom ebib-local-variable-indentation ""
   "Indentation of the local variable block."
@@ -679,7 +657,7 @@ BibTeX dialect is set to `BibTeX', this option is ignored."
 
 (defcustom ebib-hide-cursor t
   "Hide the cursor in the Ebib buffers.
-Normally, the cursor is hidden in Ebib buffers. with the
+Normally, the cursor is hidden in Ebib buffers, with the
 highlight indicating which entry, field or string is active.  By
 unsetting this option, you can make the cursor visible.  Note
 that changing this option does not take effect until you restart
@@ -895,6 +873,17 @@ conditions are AND'ed.)"
                       (cdr form)))
               forms)))
 
+(defun ebib--mode-line-modified-p (&optional db)
+  "Return a string describing the modified status of DB.
+DB defaults to the current database."
+  (or db (setq db ebib--cur-db))
+  (if (not (ebib-db-modified-p db))
+      " "
+    (propertize ebib-modified-char
+                'face 'ebib-modified-face
+                'help-echo "Database modified\nmouse-1: Save database"
+                'local-map '(keymap (mode-line keymap (mouse-1 . ebib-save-current-database))))))
+
 (defun ebib--log (type format-string &rest args)
   "Write a message to Ebib's log buffer.
 TYPE (a symbol) is the type of message: `log' writes the message
@@ -1032,11 +1021,6 @@ the extension and should not contain a dot."
           "."
           ext))
 
-(defun ebib--remove-from-string (string remove)
-  "Return a copy of STRING with all the occurrences of REMOVE taken out.
-REMOVE can be a regular expression."
-  (apply #'concat (split-string string remove)))
-
 (defun ebib--multiline-p (string)
   "Return non-nil if STRING is multiline."
   (if (stringp string)
@@ -1106,6 +1090,13 @@ block, the return value is nil."
     (when (and (string= (car vars) "Local Variables:")
                (string= (-last-item vars) "End:"))
       (--map (split-string it ": " t "[ \t]+") (-slice vars 1 -1)))))
+
+(defun ebib--get-dialect (db)
+  "Get the dialect of DB.
+If DB has no dialect, return the default dialect, as stored in
+`ebib-bibtex-dialect'."
+  (or (ebib-db-get-dialect db)
+      ebib-bibtex-dialect))
 
 (defun ebib--local-vars-add-dialect (vars dialect &optional overwrite)
   "Expand local variable block VARS with DIALECT.

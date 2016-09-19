@@ -43,7 +43,6 @@
 
 (require 'dash)
 (require 'cl-lib)
-(require 'epa-file)                     ; To test encrypted buffers
 (require 'ert)                          ; Unit test library
 (require 'shut-up)                      ; Silence Emacs and intercept `message'
 
@@ -482,7 +481,7 @@
 
 (ert-deftest flycheck-autoloads-file-p/autoloads-with-backing-file ()
   :tags '(utility)
-  (flycheck-ert-with-file-buffer (locate-library "dash-autoloads")
+  (flycheck-ert-with-file-buffer (locate-library "shut-up-autoloads")
     (should (flycheck-autoloads-file-p))))
 
 (ert-deftest flycheck-autoloads-file-p/a-plain-file ()
@@ -3017,7 +3016,7 @@ See https://github.com/flycheck/flycheck/issues/531 and Emacs bug #19206"))
   ;; collect the autoloads of newly installed packages before writing the
   ;; autoloads file.  See `https://github.com/flycheck/flycheck/issues/45' and
   ;; `https://github.com/bbatsov/prelude/issues/253' for details.
-  (flycheck-ert-with-file-buffer (locate-library "dash-autoloads")
+  (flycheck-ert-with-file-buffer (locate-library "shut-up-autoloads")
     (should-not (flycheck-may-use-checker 'emacs-lisp))
     (should-not (flycheck-may-use-checker 'emacs-lisp-checkdoc))))
 
@@ -3282,10 +3281,6 @@ Why not:
    '(8 5 warning "discarding unexpected <spam>"
        :checker html-tidy)))
 
-(flycheck-ert-def-checker-test jade jade nil
-  (flycheck-ert-should-syntax-check
-   "language/jade.jade" 'jade-mode
-   '(2 nil error "unexpected token \"indent\"" :checker jade)))
 
 (defconst flycheck-test-javascript-modes '(js-mode
                                            js2-mode
@@ -3547,6 +3542,22 @@ Why not:
    "language/processing/syntax_error/syntax_error.pde" 'processing-mode
    '(4 2 error "Syntax error, maybe a missing semicolon?"
        :checker processing)))
+
+(flycheck-ert-def-checker-test pug pug syntax-error
+  (flycheck-ert-should-syntax-check
+   "language/pug/pug.pug" 'pug-mode
+   '(2 1 error "unexpected token \"indent\"" :checker pug)))
+
+(flycheck-ert-def-checker-test pug pug include-extends-error
+  (flycheck-ert-should-syntax-check
+   "language/pug/pug-extends.pug" 'pug-mode
+   '(1 nil error "the \"basedir\" option is required to use includes and extends with \"absolute\" paths"
+       :checker pug)))
+
+(flycheck-ert-def-checker-test pug pug type-error
+  (flycheck-ert-should-syntax-check
+   "language/pug/pug-runtime-error.pug" 'pug-mode
+   '(5 nil  error "Cannot read property 'bar' of undefined"  :checker pug)))
 
 ;; N.B. the puppet 4 and 3 tests are mutually exclusive
 ;; due to one having column and the other not

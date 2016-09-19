@@ -1,7 +1,7 @@
 ;;; js2r-formatting.el --- Private helper functions for formatting
 
 ;; Copyright (C) 2012-2014 Magnar Sveen
-;; Copyright (C) 2015 Magnar Sveen and Nicolas Petton
+;; Copyright (C) 2015-2016 Magnar Sveen and Nicolas Petton
 
 ;; Author: Magnar Sveen <magnars@gmail.com>,
 ;;         Nicolas Petton <nicolas@petton.fr>
@@ -73,7 +73,8 @@
              (forward-char))
            (when (looking-at ,subexpr-str)
              (forward-char)
-             ,ws-fix-func)
+             (unless (js2-comment-node-p (js2-node-at-point))
+              ,ws-fix-func))
            (if (looking-at "\\s(")
                (forward-list)
              (forward-char)))
@@ -124,18 +125,23 @@
 					     ",")
 
 (defun js2r--looking-at-function-start ()
-  (and (looking-at "{")
-       (looking-back
-	;; This horrible-looking regexp is actually pretty simple.  It
-	;; matches "function <optional_name> (<optional_parameters,...>)"
-	;; allowing for whitespace.  TODO: support Unicode in function and
-	;; parameter names.
-	(concat "function[\s\n]*"
-		"\\\([a-zA-Z_$][a-zA-Z_$0-9]*[\s\n]*\\\)?"
-		"\(\\\([a-zA-Z_$][a-zA-Z_$0-9]*"
-		"[\s\n]*,[\s\n]*\\\)*[\s\n]*"
-		"\\\([a-zA-Z_$][a-zA-Z_$0-9]*[\s\n]*\\\)*"
-		"[\s\n]*\)[\s\n]*"))))
+  (or
+   (and (looking-at "{")
+        (looking-back
+         ;; This horrible-looking regexp is actually pretty simple.  It
+         ;; matches "function <optional_name> (<optional_parameters,...>)"
+         ;; allowing for whitespace.  TODO: support Unicode in function and
+         ;; parameter names.
+         (concat "function[\s\n]*"
+                 "\\\([a-zA-Z_$][a-zA-Z_$0-9]*[\s\n]*\\\)?"
+                 "\(\\\([a-zA-Z_$][a-zA-Z_$0-9]*"
+                 "[\s\n]*,[\s\n]*\\\)*[\s\n]*"
+                 "\\\([a-zA-Z_$][a-zA-Z_$0-9]*[\s\n]*\\\)*"
+                 "[\s\n]*\)[\s\n]*")))
+   ;; arrow functions
+   (and (looking-at "{")
+        (looking-back "=>[\s\n]*")
+        (not (js2r--point-inside-string-p)))))
 
 (defun js2r--goto-closest-function-start ()
   (while (not (js2r--looking-at-function-start))
@@ -158,6 +164,27 @@
 					     (js2r--looking-at-function-start)
 					     (js2r--goto-closest-function-start)
 					     ";")
+
+(defun js2r--looking-at-call-start ()
+  (looking-at "("))
+
+(defun js2r--goto-closest-call-start ()
+  (while (not (js2r--looking-at-call-start))
+    (if (eq (car (syntax-ppss)) 0)
+        (error "Cursor is not on a call")
+      (goto-char (nth 1 (syntax-ppss))))))
+
+(js2r--create-bracketed-whitespace-traverser js2r-expand-call-args
+               (js2r--ensure-newline)
+               (js2r--looking-at-call-start)
+               (js2r--goto-closest-call-start)
+               ",")
+
+(js2r--create-bracketed-whitespace-traverser js2r-contract-call-args
+               (js2r--ensure-just-one-space)
+               (js2r--looking-at-call-start)
+               (js2r--goto-closest-call-start)
+               ",")
 
 (provide 'js2r-formatting)
 ;;; js2-formatting.el ends here

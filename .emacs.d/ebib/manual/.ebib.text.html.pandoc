@@ -1,7 +1,7 @@
 ;; -*- mode: emacs-lisp -*-
 
-;; pandoc-mode settings settings file
-;; saved on 2014.01.01 15:55
+;; pandoc-mode local settings file for ebib.text
+;; saved on 2016.08.29 13:56
 
 ((html-q-tags)
  (no-tex-ligatures)
@@ -131,9 +131,9 @@
   ("yaml_metadata_block"))
  (output . "ebib-manual.html")
  (data-dir)
- (output-dir . "/home/joost/src/ebib/")
+ (output-dir . "/home/joost/src/ebib/docs/")
  (template)
- (css . ("ebib.css"))
+ (css "ebib.css")
  (reference-odt)
  (reference-docx)
  (epub-metadata)

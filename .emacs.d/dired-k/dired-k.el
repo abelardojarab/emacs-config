@@ -1,10 +1,10 @@
 ;;; dired-k.el --- highlight dired buffer by file size, modified time, git status -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2015 by Syohei YOSHIDA
+;; Copyright (C) 2016 by Syohei YOSHIDA
 
 ;; Author: Syohei YOSHIDA <syohex@gmail.com>
 ;; URL: https://github.com/syohex/emacs-dired-k
-;; Version: 0.16
+;; Version: 0.18
 ;; Package-Requires: ((cl-lib "0.5") (emacs "24"))
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -137,7 +137,7 @@
   (cond ((eq current-status 'modified) 'modified)
         ((eq new-status 'added) 'added)
         ((not current-status) new-status)
-        (t 'normal)))
+        (t current-status)))
 
 (defun dired-k--is-in-child-directory (here path)
   (let ((relpath (file-relative-name path here)))
@@ -167,6 +167,9 @@
                (full-path (concat root (dired-k--fix-up-filename file))))
           (when (and (not deep) (dired-k--is-in-child-directory here full-path))
             (let* ((subdir (dired-k--child-directory here full-path))
+                   (status (if (and (eq status 'ignored) (not (file-directory-p full-path)))
+                               'normal
+                             status))
                    (cur-status (gethash subdir files-status)))
               (puthash subdir (dired-k--subdir-status cur-status status)
                        files-status)))
@@ -182,7 +185,9 @@
         (deep (not (eq major-mode 'dired-mode)))
         (old-proc (get-buffer-process proc-buf)))
     (when (and old-proc (process-live-p old-proc))
-      (kill-process old-proc))
+      (kill-process old-proc)
+      (unless (buffer-live-p proc-buf)
+        (setq proc-buf (dired-k--process-buffer))))
     (with-current-buffer proc-buf
       (erase-buffer))
     (let ((proc (apply 'start-file-process "dired-k-git-status" proc-buf cmds)))
@@ -193,9 +198,10 @@
          (when (eq (process-status proc) 'exit)
            (if (/= (process-exit-status proc) 0)
                (message "Failed: %s" cmds)
-             (let ((stats (dired-k--parse-git-status root proc deep)))
-               (funcall callback stats curbuf)
-               (kill-buffer proc-buf)))))))))
+             (when (buffer-live-p (process-buffer proc))
+               (let ((stats (dired-k--parse-git-status root proc deep)))
+                 (funcall callback stats curbuf)
+                 (kill-buffer proc-buf))))))))))
 
 (defsubst dired-k--root-directory ()
   (locate-dominating-file default-directory ".git/"))

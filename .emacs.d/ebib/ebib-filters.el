@@ -1,12 +1,12 @@
 ;;; ebib-filters.el --- Part of Ebib, a BibTeX database manager  -*- lexical-binding: nil -*-
 
-;; Copyright (c) 2003-2014 Joost Kremers
+;; Copyright (c) 2003-2016 Joost Kremers
 ;; All rights reserved.
 
 ;; Author: Joost Kremers <joostkremers@fastmail.fm>
 ;; Maintainer: Joost Kremers <joostkremers@fastmail.fm>
 ;; Created: 2014
-;; Version: 2.5
+;; Version: 2.6
 ;; Keywords: text bibtex
 
 ;; Redistribution and use in source and binary forms, with or without
@@ -34,8 +34,8 @@
 
 ;;; Commentary:
 
-;; This file is part of Ebib, a BibTeX database manager for Emacs. It
-;; contains the filter code.
+;; This file is part of Ebib, a BibTeX database manager for Emacs.  It contains
+;; the filter code.
 ;;
 ;; Note: this file must be compiled with `lexical-binding' set to nil, due to
 ;; the local macro definition `contains' in `ebib--filters-run-filter'.
@@ -68,6 +68,41 @@
 (defvar ebib--filters-last-filter nil "The last used filter.")
 (defvar ebib--filters-modified nil "T if `ebib--filters-alist' has been modified.")
 
+(defun ebib--filters-create-filter (bool not)
+  "Create a filter interactively and store it in the current database.
+BOOL is the operator to be used, either `and' or `or'.  If NOT<0,
+a logical `not' is applied to the selection."
+  (let* ((dialect (ebib--get-dialect ebib--cur-db))
+         (field (completing-read (format "Filter: %s<field> contains <search string>%s. Enter field: "
+                                         (if (< not 0) "not " "")
+                                         (if (< not 0) "" ""))
+                                 (append (list "any" "=type=") (-union (ebib--list-fields-uniquely dialect) (cdr (assq dialect ebib-extra-fields))))
+                                 nil nil nil 'ebib--field-history)))
+    (let* ((prompt (format "Filter: %s%s contains <search string>%s. Enter %s: "
+                           (if (< not 0) "not " "")
+                           field
+                           (if (< not 0) "" "")
+                           (if (string= field "=type=") "entry type" "regexp")))
+           (regexp (cond
+                    ((string= field "=type=")
+                     (completing-read prompt (ebib--list-entry-types dialect t) nil t nil 'ebib--filters-history))
+                    ((cl-equalp field "keywords")
+                     (completing-read prompt (ebib--keywords-for-database ebib--cur-db)  nil nil nil 'ebib--keywords-history))
+                    (t
+                     (read-string prompt nil 'ebib--filters-history)))))
+      (ebib--execute-when
+        ((filtered-db)
+         (ebib-db-set-filter `(,bool ,(ebib-db-get-filter ebib--cur-db)
+                                 ,(if (>= not 0)
+                                      `(contains ,field ,regexp)
+                                    `(not (contains ,field ,regexp))))
+                         ebib--cur-db))
+        ((real-db)
+         (ebib-db-set-filter (if (>= not 0)
+                             `(contains ,field ,regexp)
+                           `(not (contains ,field ,regexp)))
+                         ebib--cur-db))))))
+
 ;; The filters keymap
 (eval-and-compile
   (define-prefix-command 'ebib-filters-map)
@@ -96,7 +131,7 @@
     ((filtered-db)
      (message (ebib--filters-pp-filter (ebib-db-get-filter ebib--cur-db))))
     ((default)
-     (error "No filter is active"))))
+     (error "[Ebib] No filter is active"))))
 
 (defun ebib-filters-view-all-filters ()
   "Display all filters in a *Help* buffer."
@@ -115,7 +150,7 @@
 PROMPT is the prompt string to be shown when asking the user for
 a filter.  Return the filter as a list (NAME FILTER)."
   (if (not ebib--filters-alist)
-      (error "No stored filters")
+      (error "[Ebib] No stored filters")
     (let* ((completion-ignore-case ebib-filters-ignore-case)
            (name (completing-read prompt
                                   (sort (copy-alist ebib--filters-alist)
@@ -129,7 +164,7 @@ a filter.  Return the filter as a list (NAME FILTER)."
   (let ((filter (ebib--filters-select-filter "Rename filter: "))
         (new-name (read-from-minibuffer "Enter new name: ")))
     (if (ebib--filters-exists-p new-name)
-        (error (format "A filter named `%s' already exists" new-name))
+        (error (format "[Ebib] A filter named `%s' already exists" new-name))
       (setcar filter new-name)
       (setq ebib--filters-modified t))))
 
@@ -310,7 +345,7 @@ Return a list (NAME FILTER) if found.  If there is no
 filter named NAME, raise an error, unless NOERROR is non-NIL."
   (or (assoc-string name ebib--filters-alist ebib-filters-ignore-case)
       (unless noerror
-        (error "Invalid filter %s" name))))
+        (error "[Ebib] Invalid filter %s" name))))
 
 (defun ebib--filters-exists-p (name)
   "Return non-NIL if a filter with NAME already exists."

@@ -26,6 +26,7 @@
 ;;; Code:
 
 (require 'flycheck-buttercup)
+(require 'epa)
 (require 'epg-config)                   ; For GPG configuration
 (require 'epa-file)                     ; To test encrypted buffers
 
@@ -39,9 +40,12 @@ This function is ABSOLUTELY INSECURE, use only and exclusively for testing."
   (let* ((process-connection-type nil)
          (gpg (start-process "flycheck-buttercup-gpg" nil
                              epg-gpg-program "--batch" "--no-tty"
+                             "--pinentry-mode" "loopback"
                              "--homedir" epg-gpg-home-directory
-                             "-c" "--passphrase"
-                             passphrase "-o" filename "-")))
+                             "-c"
+                             "--passphrase" passphrase
+                             "-o" filename
+                             "-")))
     (process-send-string gpg string)
     (process-send-eof gpg)
     ;; Wait until GPG exists
@@ -49,34 +53,35 @@ This function is ABSOLUTELY INSECURE, use only and exclusively for testing."
       (accept-process-output)
       (sleep-for 0.1))))
 
-(defun flycheck/gpg-available-p ()
+(defun flycheck/gnupg21-available-p ()
   "Whether GPG is available or not."
-  ;; `epg-check-configuration' errors if the configuration is invalid, and
-  ;; otherwise returns nil, hence ignore errors and default to `t' to get a
-  ;; proper truthy result
-  (ignore-errors (or (epg-check-configuration (epg-configuration)) t)))
+  (let ((config (epg-find-configuration 'OpenPGP 'force)))
+    ;; `epg-check-configuration' errors if the configuration is invalid, and
+    ;; otherwise returns nil, hence ignore errors and default to `t' to get a
+    ;; proper truthy result
+    (and config (ignore-errors (or (epg-check-configuration config "2.1") t)))))
 
 (describe "Utilities"
 
   (describe "flycheck-encrypted-buffer-p"
     (let ((gpg-tty (getenv "GPG_TTY"))
-          (gpg-agent-info (getenv "GPG_AGENT_INFO"))
           (old-home-dir epg-gpg-home-directory)
           temp-home-dir)
 
       (before-each
-        ;; Use a temporary directory as home directory for GPG, see
+        ;; Use a temporary directory as home directory for GPG to make sure that
+        ;; GPG runs against an existing home directory (some CI systems may have
+        ;; users without home directories).  See
         ;; https://github.com/flycheck/flycheck/pull/891
         (setq temp-home-dir (make-temp-file "flycheck-epg-gpg-home" 'dir-flag))
         (setq epg-gpg-home-directory temp-home-dir)
-        ;; Clear GPG Agent information from environment to prevent gpg from
+        ;; Clear GPG TTY information from environment to prevent gpg from
         ;; hanging, see https://github.com/flycheck/flycheck/pull/890
-        (mapc #'setenv '("GPG_TTY" "GPG_AGENT_INFO")))
+        (setenv "GPG_TTY"))
 
       (after-each
-        ;; Restore GPG Agent information
+        ;; Restore GPG TTY information
         (setenv "GPG_TTY" gpg-tty)
-        (setenv "GPG_AGENT_INFO" gpg-agent-info)
 
         ;; Delete our custom gpg home directory, and restore the old default
         (ignore-errors (delete-directory temp-home-dir 'recursive))
@@ -96,7 +101,8 @@ This function is ABSOLUTELY INSECURE, use only and exclusively for testing."
                 (ignore-errors (delete-file file-name))))))
 
       (it "recognizes an encrypted buffer"
-        (assume (flycheck/gpg-available-p) "gpg not installed")
+        (assume (version<= "25" emacs-version))
+        (assume (flycheck/gnupg21-available-p) "gpg not installed")
 
         ;; Create a temporary file name.  Do NOT use `make-temp-file' here,
         ;; because that hangs with the extension `.gpg'.
@@ -104,6 +110,7 @@ This function is ABSOLUTELY INSECURE, use only and exclusively for testing."
                            (concat (make-temp-name "flycheck-encrypted-file")
                                    ".txt.gpg")
                            temporary-file-directory))
+               (epa-pinentry-mode 'loopback)
                (passphrase "spam with eggs")
                ;; Teach EPA about the passphrase for our file to decrypt without
                ;; any user interaction.  `epa-file-passphrase-alist' stores

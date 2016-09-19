@@ -1,12 +1,12 @@
 ;;; ebib-keywords.el --- Part of Ebib, a BibTeX database manager  -*- lexical-binding: t -*-
 
-;; Copyright (c) 2003-2014 Joost Kremers
+;; Copyright (c) 2003-2016 Joost Kremers
 ;; All rights reserved.
 
 ;; Author: Joost Kremers <joostkremers@fastmail.fm>
 ;; Maintainer: Joost Kremers <joostkremers@fastmail.fm>
 ;; Created: 2014
-;; Version: 2.5
+;; Version: 2.6
 ;; Keywords: text bibtex
 
 ;; Redistribution and use in source and binary forms, with or without
@@ -34,8 +34,8 @@
 
 ;;; Commentary:
 
-;; This file is part of Ebib, a BibTeX database manager for Emacs. It
-;; contains the keywords code.
+;; This file is part of Ebib, a BibTeX database manager for Emacs.  It contains
+;; the keywords code.
 
 ;;; Code:
 

@@ -1,7 +1,7 @@
 ;;; js2r-vars.el --- Variable declaration manipulation functions for js2-refactor
 
 ;; Copyright (C) 2012-2014 Magnar Sveen
-;; Copyright (C) 2015 Magnar Sveen and Nicolas Petton
+;; Copyright (C) 2015-2016 Magnar Sveen and Nicolas Petton
 
 ;; Author: Magnar Sveen <magnars@gmail.com>,
 ;;         Nicolas Petton <nicolas@petton.fr>
@@ -154,8 +154,9 @@
           (goto-char (js2-node-abs-pos (car kids))))))
     (--each (js2r--local-var-positions (js2r--local-name-node-at-point))
       (goto-char it)
-      (when (looking-back "var ")
-        (delete-char -4))
+      (cond ((looking-back "var ") (delete-char -4))
+            ((looking-back "let ") (delete-char -4))
+            ((looking-back "const ") (delete-char -6)))
       (insert "this."))))
 
 ;; Inline var

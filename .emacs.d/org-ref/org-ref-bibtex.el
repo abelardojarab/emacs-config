@@ -107,6 +107,15 @@ I like \C-cj."
   "List of (string journal-full-name journal-abbreviation). Find
   new abbreviations at http://cassi.cas.org/search.jsp.")
 
+(defcustom org-ref-bibtex-assoc-pdf-with-entry-move-function 'rename-file
+  "Function to use when associating pdf files with bibtex entries.
+The value should be either `rename-file' or `copy-file'. The former
+will move and rename the original file. The latter will leave the
+original file in place while creating a renamed copy in
+`org-ref-pdf-directory'."
+  :type 'function
+  :group 'org-ref-bibtex)
+
 (setq org-ref-bibtex-journal-abbreviations
       '(("ACR" "Accounts of Chemical Research" "Acc. Chem. Res.")
         ("ACAT" "ACS Catalysis" "ACS Catal.")
@@ -619,19 +628,56 @@ calls functions with a DOI argument."
   (interactive)
   (org-ref-open-bibtex-pdf))
 
+(defun org-ref-bibtex-get-file-move-func (prefix)
+  "Determine whether to use `rename-file' or `copy-file' for `org-ref-bibtex-assoc-pdf-with-entry'.
+When called with a PREFIX argument,
+`org-ref-bibtex-assoc-pdf-with-entry-move-function' switches to the
+opposite function from that which is defined in
+`org-ref-assoc-pdf-with-entry-move-function'."
+  (message (format "%s" prefix))
+  (if (eq prefix nil)
+      org-ref-bibtex-assoc-pdf-with-entry-move-function
+    (if (eq org-ref-bibtex-assoc-pdf-with-entry-move-function 'rename-file)
+	'copy-file
+      'rename-file)))
+
+;;;###autoload
+(defun org-ref-bibtex-assoc-pdf-with-entry (&optional prefix)
+  "Prompt for pdf associated with entry at point and rename it.
+Check whether a pdf already exists in `org-ref-pdf-directory' with the
+name '[bibtexkey].pdf'. If the file does not exist, rename it to
+'[bibtexkey].pdf' using
+`org-ref-bibtex-assoc-pdf-with-entry-move-function' and place it in
+`org-ref-pdf-directory'. Optional PREFIX argument toggles between
+`rename-file' and `copy-file'."
+  (interactive "P")
+  (save-excursion
+    (bibtex-beginning-of-entry)
+    (let* ((file (read-file-name "Select file associated with entry: "))
+	   (bibtex-expand-strings t)
+           (entry (bibtex-parse-entry t))
+           (key (reftex-get-bib-field "=key=" entry))
+           (pdf (concat org-ref-pdf-directory (concat key ".pdf")))
+	   (file-move-func (org-ref-bibtex-get-file-move-func prefix)))
+      (if (file-exists-p pdf)
+	  (message (format "A file named %s already exists" pdf))
+	(progn
+	  (funcall file-move-func file pdf)
+	  (message (format "Created file %s" pdf)))))))
+
 
 ;;* Hydra menus
 ;;** Hydra menu for bibtex entries
 ;; hydra menu for actions on bibtex entries
 (defhydra org-ref-bibtex-hydra (:color blue)
   "
-_p_: Open pdf     _y_: Copy key               _n_: New entry     _w_: WOS
-_b_: Open url     _f_: Copy formatted entry   _o_: Copy entry    _c_: WOS citing
-_r_: Refile entry _k_: Add keywords           _d_: delete entry  _a_: WOS related
-_e_: Email entry  _K_: Edit keywords          _L_: clean entry   _P_: Pubmed
-_U_: Update entry _N_: Open notes             _R_: Crossref      _g_: Google Scholar
-_s_: Sort entry   _a_: Remove nonascii        _h_: helm-bibtex   _q_: quit
-_u_: Update field _F_: file funcs
+_p_: Open pdf     _y_: Copy key               _n_: New entry            _w_: WOS
+_b_: Open url     _f_: Copy formatted entry   _o_: Copy entry           _c_: WOS citing
+_r_: Refile entry _k_: Add keywords           _d_: delete entry         _a_: WOS related
+_e_: Email entry  _K_: Edit keywords          _L_: clean entry          _P_: Pubmed
+_U_: Update entry _N_: Open notes             _R_: Crossref             _g_: Google Scholar
+_s_: Sort entry   _a_: Remove nonascii        _h_: helm-bibtex          _q_: quit
+_u_: Update field _F_: file funcs             _A_: Assoc pdf with entry
 _T_: Title case
 _S_: Sentence case
 "
@@ -675,6 +721,7 @@ _S_: Sentence case
   ("u" doi-utils-update-field)
   ("F" org-ref-bibtex-file/body)
   ("h" helm-bibtex)
+  ("A" org-ref-bibtex-assoc-pdf-with-entry)
   ("a" org-ref-replace-nonascii)
   ("s" org-ref-sort-bibtex-entry)
   ("T" org-ref-title-case-article)

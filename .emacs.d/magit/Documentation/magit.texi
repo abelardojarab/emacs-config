@@ -1432,9 +1432,9 @@ Cycle the visibility of current section and its children.
 
 Cycle the visibility of diff-related sections in the current buffer.
 
-@kindex s-<tab>
+@kindex S-<tab>
 @cindex magit-section-cycle-global
-@item @kbd{s-<tab>} @tie{}@tie{}@tie{}@tie{}(@code{magit-section-cycle-global})
+@item @kbd{S-<tab>} @tie{}@tie{}@tie{}@tie{}(@code{magit-section-cycle-global})
 
 Cycle the visibility of all sections in the current buffer.
 @end table
@@ -4969,7 +4969,7 @@ Take the red pill.
 >>>>>>> feature
 @end example
 
-In this case you have chosen to take the red pill on one bracnh and on
+In this case you have chosen to take the red pill on one branch and on
 another you picked the blue pill.  Now that you are merging these two
 diverging branches, Git cannot possibly know which pill you want to
 take.
@@ -7371,6 +7371,10 @@ into separate libraries/packages, so that they can be used by other
 packages, without having to depend on Magit.  These libraries are
 described in separate manuals, see @ref{Top,,,with-editor,} and
 @ref{Top,,,magit-popup,}.
+
+If you are trying to find an unused key that you can bound to a
+command provided by your own Magit extension, then checkout
+@uref{https://github.com/magit/magit/wiki/Plugin-Dispatch-Key-Registry}.
 
 @menu
 * Calling Git::

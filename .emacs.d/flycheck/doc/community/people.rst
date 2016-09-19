@@ -12,7 +12,8 @@ Teams
 Maintainers
 -----------
 
-* **Sebastian Wiesner** (:gh:`lunaryorn`, owner, GPG key ``5C42FE98``)
+* **Sebastian Wiesner** (:gh:`lunaryorn`, owner, GPG key ``C4EC41E35C42FE98``,
+  `keybase <https://keybase.io/lunaryorn>`_)
 * **Clément Pit--Claudel** (:gh:`cpitclaudel`, owner)
 
 We maintain Flycheck and all official extensions within the `Flycheck
@@ -109,6 +110,18 @@ TypeScript
 
 Mention with ``@flycheck/typescript``.
 
+Packagers
+=========
+
+We would like to thank all people who package Flycheck on behalf of
+distributions and support our development efforts with their feedback, their
+patches and their testing:
+
+* Sean Whitton (:gh:`spwhitton`) and the `Debian Emacs addon team`_ (Debian
+  packages)
+
+.. _Debian Emacs addon team: https://pkg-emacsen.alioth.debian.org/
+
 Acknowledgements
 ================
 
@@ -153,6 +166,7 @@ to Flycheck:
 * Damon Haley (:gh:`dhaley`)
 * David Caldwell (:gh:`caldwell`)
 * David Holm (:gh:`dholm`)
+* DEADB17 (:gh:`DEADB17`)
 * Deokhwan Kim (:gh:`dkim`)
 * Derek Chen-Becker (:gh:`dchenbecker`)
 * Derek Harland (:gh:`donkopotamus`)

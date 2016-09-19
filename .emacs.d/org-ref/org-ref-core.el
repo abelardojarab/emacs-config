@@ -1124,28 +1124,35 @@ ARG does nothing."
             (org-element-map (org-element-parse-buffer 'element) 'table
               (lambda (table)
                 "create a link for to the table"
-		(when
-		    ;; ignore commented sections
-		    (save-excursion
+		(save-excursion
+		  (when
+		      ;; ignore commented sections
 		      (goto-char (org-element-property :begin table))
-		      (not (or (org-in-commented-heading-p)
-        (-intersection (org-get-tags-at) org-export-exclude-tags))))
-      (cl-incf counter)
-		  (let ((start (org-element-property :begin table))
-			(name  (org-element-property :name table))
-			(caption (cl-caaar (org-element-property :caption table))))
-		    (if caption
-			(format
-			 "[[elisp:(progn (switch-to-buffer \"%s\")(goto-char %s)(org-show-entry))][table %s: %s]] %s\n"
-			 c-b start counter (or name "") caption)
-		      (format
-		       "[[elisp:(progn (switch-to-buffer \"%s\")(goto-char %s)(org-show-entry))][table %s: %s]]\n"
-		       c-b start counter (or name "")))))))))
+		    (not (or (org-in-commented-heading-p)
+			     (-intersection (org-get-tags-at) org-export-exclude-tags)))
+		    (cl-incf counter)
+		    (let* ((start (org-element-property :begin table))
+			   (linenum (progn (goto-char start) (line-number-at-pos)))
+			   (caption (cl-caaar (org-element-property :caption table)))
+			   (name (org-element-property :name table)))
+		      (if caption
+			  (format "[[file:%s::%s][Table %s:]] %s\n" c-b linenum counter caption)
+			;; if it has no caption, try the name
+			;; if it has no name, use generic name
+			(cond (name
+			       (format "[[file:%s::%s][Table %s:]] %s\n" c-b linenum counter name))
+			      (t
+			       (format "[[file:%s::%s][Table %s:]] No caption\n"
+				       c-b linenum counter)))))))))))
       (switch-to-buffer "*List of Tables*")
       (setq buffer-read-only nil)
       (org-mode)
       (erase-buffer)
       (insert (mapconcat 'identity list-of-tables ""))
+      (goto-char (point-min))
+      ;; open links in the same window
+      (setq-local org-link-frame-setup
+		  '((file . find-file)))
       (setq buffer-read-only t)
       (use-local-map (copy-keymap org-mode-map))
       (local-set-key "q" #'(lambda () (interactive) (kill-buffer))))))
@@ -2195,11 +2202,13 @@ construct the heading by hand."
 (defun org-ref-extract-bibtex-entries ()
   "Extract the bibtex entries in the current buffer into a src block."
   (interactive)
-  (let ((bibtex-files (org-ref-find-bibliography))
-	(bibtex-entry-kill-ring '()))
+  (let* ((bibtex-files (org-ref-find-bibliography))
+	 (keys (reverse (org-ref-get-bibtex-keys)))
+	 (bibtex-entry-kill-ring-max (length keys))
+	 (bibtex-entry-kill-ring '()))
 
     (save-window-excursion
-      (cl-loop for key in (reverse (org-ref-get-bibtex-keys))
+      (cl-loop for key in keys
 	       do
 	       (bibtex-search-entry key t)
 	       (bibtex-kill-entry t)))
@@ -2637,11 +2646,15 @@ See functions in `org-ref-clean-bibtex-entry-hook'."
     (setq keys (org-ref-split-and-strip-string link-string))
     (setq years (mapcar 'org-ref-get-citation-year keys))
     (setq data (-zip-with 'cons years keys))
-    (setq data (cl-sort data (lambda (x y) (< (string-to-number (car x)) (string-to-number (car y))))))
+    (setq data (cl-sort data (lambda (x y)
+			       (< (string-to-number (car x))
+				  (string-to-number (car y))))))
     ;; now get the keys separated by commas
     (setq keys (mapconcat (lambda (x) (cdr x)) data ","))
-    ;; and replace the link with the sorted keys
-    (cl--set-buffer-substring begin end (concat type ":" keys))))
+    (save-excursion
+      (goto-char begin)
+      (re-search-forward link-string)
+      (replace-match keys))))
 
 ;;** Shift-arrow sorting of keys in a cite link
 (defun org-ref-swap-keys (i j keys)
@@ -2659,7 +2672,7 @@ See functions in `org-ref-clean-bibtex-entry-hook'."
   (let* ((object (org-element-context))
          (type (org-element-property :type object))
          (begin (org-element-property :begin object))
-         (end (org-element-property :end object))
+         (end (org-element-property :end object)) 
          (link-string (org-element-property :path object))
          key keys i)
     ;;   We only want this to work on citation links
@@ -2672,18 +2685,10 @@ See functions in `org-ref-clean-bibtex-entry-hook'."
         (org-ref-swap-keys i (- i 1) keys))
       (setq keys (mapconcat 'identity keys ","))
       ;; and replace the link with the sorted keys
-      (cl--set-buffer-substring
-       begin end
-       (concat
-        type ":" keys
-        ;; It seems the space at the end can get consumed, so we see if there
-        ;; is a space, and add it if so. Sometimes there is a comma or period,
-        ;; then we do not want a space.
-        (when
-            (save-excursion
-              (goto-char end)
-              (char-equal (char-before) (string-to-char " ")))
-          " ")))
+      (save-excursion
+	(goto-char begin)
+	(re-search-forward link-string)
+	(replace-match keys)) 
       ;; now go forward to key so we can move with the key
       (re-search-forward key)
       (goto-char (match-beginning 0)))))
@@ -2912,14 +2917,10 @@ move to the beginning of the previous cite link after this one."
               (message (org-ref-get-citation-string-at-point)))
 
              ;; message some context about the label we are referring to
-             ((string= type "ref")
-              (message "%scount: %s"
-                       (org-ref-get-label-context
-                        (org-element-property :path object))
-                       (org-ref-count-labels
-                        (org-element-property :path object))))
-
-             ((string= type "eqref")
+             ((or (string= type "ref")
+		  (string= type "eqref")
+		  (string= type "pageref")
+		  (string= type "nameref"))
               (message "%scount: %s"
                        (org-ref-get-label-context
                         (org-element-property :path object))
