@@ -107,5 +107,12 @@
                   ;; Ignore whitespace
                   ediff-diff-options "-w")))
 
+;; async
+(use-package async
+  :load-path (lambda () (expand-file-name "async/" user-emacs-directory))
+  :config (progn
+            (require 'dired-async)
+            (dired-async-mode 1)))
+
 (provide 'setup-general)
 ;;; setup-general.el ends here

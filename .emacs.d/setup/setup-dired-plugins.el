@@ -24,12 +24,6 @@
 
 ;;; Code:
 
-(use-package async
-  :load-path (lambda () (expand-file-name "async/" user-emacs-directory))
-  :config (progn
-            (require 'dired-async)
-            (dired-async-mode 1)))
-
 (use-package direx
   :after dired
   :load-path (lambda () (expand-file-name "direx/" user-emacs-directory))
