@@ -2,7 +2,8 @@
 ;;
 ;;; Code:
 
-;;;### (autoloads nil "ob-core" "ob-core.el" (22295 47913 952 0))
+;;;### (autoloads nil "ob-core" "ob-core.el" (22496 10639 141650
+;;;;;;  310000))
 ;;; Generated autoloads from ob-core.el
 
 (autoload 'org-babel-execute-safely-maybe "ob-core" "\
@@ -232,7 +233,8 @@ Mark current src block.
 
 ;;;***
 
-;;;### (autoloads nil "ob-keys" "ob-keys.el" (22295 47912 4019 0))
+;;;### (autoloads nil "ob-keys" "ob-keys.el" (22496 10639 141650
+;;;;;;  310000))
 ;;; Generated autoloads from ob-keys.el
 
 (autoload 'org-babel-describe-bindings "ob-keys" "\
@@ -242,7 +244,7 @@ Describe all keybindings behind `org-babel-key-prefix'.
 
 ;;;***
 
-;;;### (autoloads nil "ob-lob" "ob-lob.el" (22295 47913 1732 0))
+;;;### (autoloads nil "ob-lob" "ob-lob.el" (22496 10639 149650 310000))
 ;;; Generated autoloads from ob-lob.el
 
 (autoload 'org-babel-lob-execute-maybe "ob-lob" "\
@@ -253,16 +255,17 @@ if so then run the appropriate source block from the Library.
 \(fn)" t nil)
 
 (autoload 'org-babel-lob-get-info "ob-lob" "\
-Return a Library of Babel function call as a string.
-Return nil when not on an appropriate location.  Build string
-from `inline-babel-call' or `babel-call' DATUM, when provided.
+Return internal representation for Library of Babel function call.
+Consider DATUM, when provided, or element at point.  Return nil
+when not on an appropriate location.  Otherwise return a list
+compatible with `org-babel-get-src-block-info', which see.
 
 \(fn &optional DATUM)" nil nil)
 
 ;;;***
 
-;;;### (autoloads nil "ob-tangle" "ob-tangle.el" (22295 47912 4185
-;;;;;;  0))
+;;;### (autoloads nil "ob-tangle" "ob-tangle.el" (22496 10639 145650
+;;;;;;  310000))
 ;;; Generated autoloads from ob-tangle.el
 
 (autoload 'org-babel-tangle-file "ob-tangle" "\
@@ -290,8 +293,8 @@ used to limit the exported source code blocks by language.
 
 ;;;***
 
-;;;### (autoloads nil "org-agenda" "org-agenda.el" (22295 47914 501
-;;;;;;  0))
+;;;### (autoloads nil "org-agenda" "org-agenda.el" (22496 10639 153650
+;;;;;;  309000))
 ;;; Generated autoloads from org-agenda.el
 
 (autoload 'org-toggle-sticky-agenda "org-agenda" "\
@@ -328,7 +331,7 @@ More commands can be added by configuring the variable
 `org-agenda-custom-commands'.  In particular, specific tags and TODO keyword
 searches can be pre-defined in this way.
 
-If the current buffer is in Org-mode and visiting a file, you can also
+If the current buffer is in Org mode and visiting a file, you can also
 first press `<' once to indicate that the agenda should be temporarily
 \(until the next use of \\[org-agenda]) restricted to the current file.
 Pressing `<' twice means to restrict to the current subtree or region
@@ -522,7 +525,7 @@ in the file.  Otherwise, restriction will be to the current subtree.
 \(fn &optional TYPE)" t nil)
 
 (autoload 'org-calendar-goto-agenda "org-agenda" "\
-Compute the Org-mode agenda for the calendar date displayed at the cursor.
+Compute the Org agenda for the calendar date displayed at the cursor.
 This is a command that has to be installed in `calendar-mode-map'.
 
 \(fn)" t nil)
@@ -564,8 +567,8 @@ to override `appt-message-warning-time'.
 
 ;;;***
 
-;;;### (autoloads nil "org-archive" "org-archive.el" (22295 47913
-;;;;;;  1818 0))
+;;;### (autoloads nil "org-archive" "org-archive.el" (22496 10639
+;;;;;;  137650 310000))
 ;;; Generated autoloads from org-archive.el
 
 (autoload 'org-add-archive-files "org-archive" "\
@@ -620,8 +623,8 @@ This command is set with the variable `org-archive-default-command'.
 
 ;;;***
 
-;;;### (autoloads nil "org-attach" "org-attach.el" (22295 47914 624
-;;;;;;  0))
+;;;### (autoloads nil "org-attach" "org-attach.el" (22496 10639 145650
+;;;;;;  310000))
 ;;; Generated autoloads from org-attach.el
 
 (autoload 'org-attach "org-attach" "\
@@ -632,8 +635,8 @@ Shows a list of commands and prompts for another key to execute a command.
 
 ;;;***
 
-;;;### (autoloads nil "org-bbdb" "org-bbdb.el" (22295 47912 4253
-;;;;;;  0))
+;;;### (autoloads nil "org-bbdb" "org-bbdb.el" (22496 10639 145650
+;;;;;;  310000))
 ;;; Generated autoloads from org-bbdb.el
 
 (autoload 'org-bbdb-anniversaries "org-bbdb" "\
@@ -648,8 +651,8 @@ Return list of anniversaries for today and the next n-1 days (default n=7).
 
 ;;;***
 
-;;;### (autoloads nil "org-capture" "org-capture.el" (22295 47913
-;;;;;;  1877 0))
+;;;### (autoloads nil "org-capture" "org-capture.el" (22496 10639
+;;;;;;  137650 310000))
 ;;; Generated autoloads from org-capture.el
 
 (autoload 'org-capture-string "org-capture" "\
@@ -691,12 +694,12 @@ Set `org-capture-templates' to be similar to `org-remember-templates'.
 
 ;;;***
 
-;;;### (autoloads nil "org-clock" "org-clock.el" (22295 47912 4430
-;;;;;;  0))
+;;;### (autoloads nil "org-clock" "org-clock.el" (22496 10639 145650
+;;;;;;  310000))
 ;;; Generated autoloads from org-clock.el
 
 (autoload 'org-resolve-clocks "org-clock" "\
-Resolve all currently open org-mode clocks.
+Resolve all currently open Org clocks.
 If `only-dangling-p' is non-nil, only ask to resolve dangling
 \(i.e., not currently open and valid) clocks.
 
@@ -822,8 +825,8 @@ Otherwise, return nil.
 
 ;;;***
 
-;;;### (autoloads nil "org-colview" "org-colview.el" (22295 47915
-;;;;;;  1592 0))
+;;;### (autoloads nil "org-colview" "org-colview.el" (22496 10639
+;;;;;;  141650 310000))
 ;;; Generated autoloads from org-colview.el
 
 (autoload 'org-columns-remove-overlays "org-colview" "\
@@ -891,8 +894,8 @@ Turn on or update column view in the agenda.
 
 ;;;***
 
-;;;### (autoloads nil "org-compat" "org-compat.el" (22295 47912 4492
-;;;;;;  0))
+;;;### (autoloads nil "org-compat" "org-compat.el" (22496 10639 149650
+;;;;;;  310000))
 ;;; Generated autoloads from org-compat.el
 
 (autoload 'org-check-version "org-compat" "\
@@ -902,8 +905,8 @@ Try very hard to provide sensible version strings.
 
 ;;;***
 
-;;;### (autoloads nil "org-datetree" "org-datetree.el" (22295 47913
-;;;;;;  45 0))
+;;;### (autoloads nil "org-datetree" "org-datetree.el" (22496 10639
+;;;;;;  141650 310000))
 ;;; Generated autoloads from org-datetree.el
 
 (autoload 'org-datetree-find-date-create "org-datetree" "\
@@ -926,8 +929,8 @@ tree can be found.
 
 ;;;***
 
-;;;### (autoloads nil "org-element" "org-element.el" (22295 47914
-;;;;;;  715 0))
+;;;### (autoloads nil "org-element" "org-element.el" (22496 10639
+;;;;;;  141650 310000))
 ;;; Generated autoloads from org-element.el
 
 (autoload 'org-element-update-syntax "org-element" "\
@@ -999,7 +1002,8 @@ Providing it allows for quicker computation.
 
 ;;;***
 
-;;;### (autoloads nil "org-feed" "org-feed.el" (22295 47914 980 0))
+;;;### (autoloads nil "org-feed" "org-feed.el" (22496 10639 149650
+;;;;;;  310000))
 ;;; Generated autoloads from org-feed.el
 
 (autoload 'org-feed-update-all "org-feed" "\
@@ -1026,8 +1030,8 @@ Show the raw feed buffer of a feed.
 
 ;;;***
 
-;;;### (autoloads nil "org-footnote" "org-footnote.el" (22295 47913
-;;;;;;  1012 0))
+;;;### (autoloads nil "org-footnote" "org-footnote.el" (22496 10639
+;;;;;;  145650 310000))
 ;;; Generated autoloads from org-footnote.el
 
 (autoload 'org-footnote-action "org-footnote" "\
@@ -1048,7 +1052,7 @@ offer additional commands in a menu.
 
 ;;;***
 
-;;;### (autoloads nil "org-id" "org-id.el" (22295 47913 199 0))
+;;;### (autoloads nil "org-id" "org-id.el" (22496 10639 141650 310000))
 ;;; Generated autoloads from org-id.el
 
 (autoload 'org-id-get-create "org-id" "\
@@ -1141,8 +1145,8 @@ Store a link to the current entry, using its ID.
 
 ;;;***
 
-;;;### (autoloads nil "org-indent" "org-indent.el" (22295 47913 1927
-;;;;;;  0))
+;;;### (autoloads nil "org-indent" "org-indent.el" (22496 10639 145650
+;;;;;;  310000))
 ;;; Generated autoloads from org-indent.el
 
 (autoload 'org-indent-mode "org-indent" "\
@@ -1159,7 +1163,8 @@ during idle time.
 
 ;;;***
 
-;;;### (autoloads nil "org-irc" "org-irc.el" (22295 47913 1958 0))
+;;;### (autoloads nil "org-irc" "org-irc.el" (22496 10639 145650
+;;;;;;  310000))
 ;;; Generated autoloads from org-irc.el
 
 (autoload 'org-irc-store-link "org-irc" "\
@@ -1169,7 +1174,8 @@ Dispatch to the appropriate function to store a link to an IRC session.
 
 ;;;***
 
-;;;### (autoloads nil "org-lint" "org-lint.el" (22295 47913 313 0))
+;;;### (autoloads nil "org-lint" "org-lint.el" (22496 10639 141650
+;;;;;;  310000))
 ;;; Generated autoloads from org-lint.el
 
 (autoload 'org-lint "org-lint" "\
@@ -1185,19 +1191,19 @@ ARG can also be a list of checker names, as symbols, to run.
 
 ;;;***
 
-;;;### (autoloads nil "org-macs" "org-macs.el" (22295 47914 2539
-;;;;;;  0))
+;;;### (autoloads nil "org-macs" "org-macs.el" (22496 10639 145650
+;;;;;;  310000))
 ;;; Generated autoloads from org-macs.el
 
 (autoload 'org-load-noerror-mustsuffix "org-macs" "\
-Load FILE with optional arguments NOERROR and MUSTSUFFIX.  Drop the MUSTSUFFIX argument for XEmacs, which doesn't recognize it.
+Load FILE with optional arguments NOERROR and MUSTSUFFIX.
 
 \(fn FILE)" nil t)
 
 ;;;***
 
-;;;### (autoloads nil "org-mobile" "org-mobile.el" (22295 47914 1005
-;;;;;;  0))
+;;;### (autoloads nil "org-mobile" "org-mobile.el" (22496 10639 145650
+;;;;;;  310000))
 ;;; Generated autoloads from org-mobile.el
 
 (autoload 'org-mobile-push "org-mobile" "\
@@ -1216,8 +1222,8 @@ agenda view showing the flagged items.
 
 ;;;***
 
-;;;### (autoloads nil "org-plot" "org-plot.el" (22295 47914 1421
-;;;;;;  0))
+;;;### (autoloads nil "org-plot" "org-plot.el" (22496 10639 149650
+;;;;;;  310000))
 ;;; Generated autoloads from org-plot.el
 
 (autoload 'org-plot/gnuplot "org-plot" "\
@@ -1229,13 +1235,13 @@ line directly before or after the table.
 
 ;;;***
 
-;;;### (autoloads nil "org-table" "org-table.el" (22295 47914 47
-;;;;;;  0))
+;;;### (autoloads nil "org-table" "org-table.el" (22496 10639 137650
+;;;;;;  310000))
 ;;; Generated autoloads from org-table.el
 
 (autoload 'org-table-create-with-table\.el "org-table" "\
 Use the table.el package to insert a new table.
-If there is already a table at point, convert between Org-mode tables
+If there is already a table at point, convert between Org tables
 and table.el tables.
 
 \(fn)" t nil)
@@ -1510,13 +1516,13 @@ lines.
 
 (autoload 'org-table-convert "org-table" "\
 Convert from `org-mode' table to table.el and back.
-Obviously, this only works within limits.  When an Org-mode table is
-converted to table.el, all horizontal separator lines get lost, because
-table.el uses these as cell boundaries and has no notion of horizontal lines.
-A table.el table can be converted to an Org-mode table only if it does not
-do row or column spanning.  Multiline cells will become multiple cells.
-Beware, Org-mode does not test if the table can be successfully converted - it
-blindly applies a recipe that works for simple tables.
+Obviously, this only works within limits.  When an Org table is converted
+to table.el, all horizontal separator lines get lost, because table.el uses
+these as cell boundaries and has no notion of horizontal lines.  A table.el
+table can be converted to an Org table only if it does not do row or column
+spanning.  Multiline cells will become multiple cells.  Beware, Org mode
+does not test if the table can be successfully converted - it blindly
+applies a recipe that works for simple tables.
 
 \(fn)" t nil)
 
@@ -1907,8 +1913,8 @@ characters width of the plot.  ASK may also be the
 
 ;;;***
 
-;;;### (autoloads nil "org-timer" "org-timer.el" (22295 47913 2950
-;;;;;;  0))
+;;;### (autoloads nil "org-timer" "org-timer.el" (22496 10639 145650
+;;;;;;  310000))
 ;;; Generated autoloads from org-timer.el
 
 (autoload 'org-timer-start "org-timer" "\
@@ -1972,19 +1978,19 @@ using three `C-u' prefix arguments.
 
 ;;;***
 
-;;;### (autoloads nil "org-version" "org-version.el" (22295 47952
-;;;;;;  2684 0))
+;;;### (autoloads nil "org-version" "org-version.el" (22496 11206
+;;;;;;  533641 240000))
 ;;; Generated autoloads from org-version.el
 
 (autoload 'org-release "org-version" "\
-The release version of org-mode.
-  Inserted by installing org-mode or when a release is made.
+The release version of Org.
+Inserted by installing Org mode or when a release is made.
 
 \(fn)" nil nil)
 
 (autoload 'org-git-version "org-version" "\
 The Git version of org-mode.
-  Inserted by installing org-mode or when a release is made.
+Inserted by installing Org or when a release is made.
 
 \(fn)" nil nil)
 
@@ -1993,7 +1999,7 @@ The location of ODT styles.")
 
 ;;;***
 
-;;;### (autoloads nil "org" "org.el" (22295 47913 3707 0))
+;;;### (autoloads nil "org" "org.el" (22496 10639 149650 310000))
 ;;; Generated autoloads from org.el
 
 (autoload 'org-babel-do-load-languages "org" "\
@@ -2002,7 +2008,7 @@ Load the languages defined in `org-babel-load-languages'.
 \(fn SYM VALUE)" nil nil)
 
 (autoload 'org-babel-load-file "org" "\
-Load Emacs Lisp source code blocks in the Org-mode FILE.
+Load Emacs Lisp source code blocks in the Org FILE.
 This function exports the source code using `org-babel-tangle'
 and then loads the resulting file using `load-file'.  With prefix
 arg (noninteractively: 2nd arg) COMPILE the tangled Emacs Lisp
@@ -2011,7 +2017,7 @@ file to byte-code before it is loaded.
 \(fn FILE &optional COMPILE)" t nil)
 
 (autoload 'org-version "org" "\
-Show the org-mode version.
+Show the Org version.
 Interactively, or when MESSAGE is non-nil, show it in echo area.
 With prefix argument, or when HERE is non-nil, insert it at point.
 In non-interactive uses, a reduced version string is output unless
@@ -2033,15 +2039,15 @@ Set up hooks for clock persistence.
 Outline-based notes management and organizer, alias
 \"Carsten's outline-mode for keeping track of everything.\"
 
-Org-mode develops organizational tasks around a NOTES file which
-contains information about projects as plain text.  Org-mode is
-implemented on top of outline-mode, which is ideal to keep the content
+Org mode develops organizational tasks around a NOTES file which
+contains information about projects as plain text.  Org mode is
+implemented on top of Outline mode, which is ideal to keep the content
 of large files well structured.  It supports ToDo items, deadlines and
 time stamps, which magically appear in the diary listing of the Emacs
 calendar.  Tables are easily created with a built-in table editor.
 Plain text URL-like links connect to websites, emails (VM), Usenet
 messages (Gnus), BBDB entries, and any files related to the project.
-For printing and sharing of notes, an Org-mode file (or a part of it)
+For printing and sharing of notes, an Org file (or a part of it)
 can be exported as a structured ASCII or HTML file.
 
 The following commands are available:
@@ -2053,7 +2059,7 @@ The following commands are available:
 (autoload 'org-cycle "org" "\
 TAB-action and visibility cycling for Org-mode.
 
-This is the command invoked in Org-mode by the TAB key.  Its main purpose
+This is the command invoked in Org mode by the TAB key.  Its main purpose
 is outline visibility cycling, but it also invokes other actions
 in special contexts.
 
@@ -2109,8 +2115,8 @@ With a numeric prefix, show all headlines up to that level.
 
 (autoload 'orgstruct-mode "org" "\
 Toggle the minor mode `orgstruct-mode'.
-This mode is for using Org-mode structure commands in other
-modes.  The following keys behave as if Org-mode were active, if
+This mode is for using Org mode structure commands in other
+modes.  The following keys behave as if Org mode were active, if
 the cursor is on a headline, or on a plain list item (both as
 defined by Org-mode).
 
@@ -2129,7 +2135,7 @@ Unconditionally turn on `orgstruct++-mode'.
 (autoload 'org-run-like-in-org-mode "org" "\
 Run a command, pretending that the current buffer is in Org-mode.
 This will temporarily bind local variables that are typically bound in
-Org-mode to the values they have in Org-mode, and then interactively
+Org mode to the values they have in Org-mode, and then interactively
 call CMD.
 
 \(fn CMD)" nil nil)
@@ -2152,15 +2158,17 @@ active region.
 \(fn ARG)" t nil)
 
 (autoload 'org-insert-link-global "org" "\
-Insert a link like Org-mode does.
-This command can be called in any mode to insert a link in Org-mode syntax.
+Insert a link like Org mode does.
+This command can be called in any mode to insert a link in Org syntax.
 
 \(fn)" t nil)
 
 (autoload 'org-open-at-point-global "org" "\
-Follow a link like Org-mode does.
-This command can be called in any mode to follow a link that has
-Org-mode syntax.
+Follow a link or time-stamp like Org mode does.
+This command can be called in any mode to follow an external link
+or a time-stamp that has Org mode syntax.  Its behavior is
+undefined when called on internal links (e.g., fuzzy links).
+Raise an error when there is nothing to follow.  
 
 \(fn)" t nil)
 
@@ -2186,13 +2194,13 @@ If the current buffer does not, find the first agenda file.
 \(fn)" t nil)
 
 (autoload 'org-submit-bug-report "org" "\
-Submit a bug report on Org-mode via mail.
+Submit a bug report on Org via mail.
 
 Don't hesitate to report any problems or inaccurate documentation.
 
 If you don't have setup sending mail from (X)Emacs, please copy the
 output buffer into your mail program, as it gives us important
-information about your Org-mode version and configuration.
+information about your Org version and configuration.
 
 \(fn)" t nil)
 
@@ -2209,8 +2217,8 @@ Call the customize function with org as argument.
 
 ;;;***
 
-;;;### (autoloads nil "ox-ascii" "ox-ascii.el" (22295 47913 2872
-;;;;;;  0))
+;;;### (autoloads nil "ox-ascii" "ox-ascii.el" (22496 10639 145650
+;;;;;;  310000))
 ;;; Generated autoloads from ox-ascii.el
 
 (autoload 'org-ascii-export-as-ascii "ox-ascii" "\
@@ -2310,8 +2318,8 @@ Return output file name.
 
 ;;;***
 
-;;;### (autoloads nil "ox-beamer" "ox-beamer.el" (22295 47914 1481
-;;;;;;  0))
+;;;### (autoloads nil "ox-beamer" "ox-beamer.el" (22496 10639 141650
+;;;;;;  310000))
 ;;; Generated autoloads from ox-beamer.el
 
 (autoload 'org-beamer-mode "ox-beamer" "\
@@ -2446,7 +2454,8 @@ Return output file name.
 
 ;;;***
 
-;;;### (autoloads nil "ox-html" "ox-html.el" (22295 47913 2521 0))
+;;;### (autoloads nil "ox-html" "ox-html.el" (22496 10639 145650
+;;;;;;  310000))
 ;;; Generated autoloads from ox-html.el
 
 (put 'org-html-head-include-default-style 'safe-local-variable 'booleanp)
@@ -2502,10 +2511,10 @@ is non-nil.
 \(fn &optional ASYNC SUBTREEP VISIBLE-ONLY BODY-ONLY EXT-PLIST)" t nil)
 
 (autoload 'org-html-convert-region-to-html "ox-html" "\
-Assume the current region has org-mode syntax, and convert it to HTML.
+Assume the current region has Org syntax, and convert it to HTML.
 This can be used in any buffer.  For example, you can write an
-itemized list in org-mode syntax in an HTML buffer and use this
-command to convert it.
+itemized list in Org syntax in an HTML buffer and use this command
+to convert it.
 
 \(fn)" t nil)
 
@@ -2552,8 +2561,8 @@ Return output file name.
 
 ;;;***
 
-;;;### (autoloads nil "ox-icalendar" "ox-icalendar.el" (22295 47913
-;;;;;;  2914 0))
+;;;### (autoloads nil "ox-icalendar" "ox-icalendar.el" (22496 10639
+;;;;;;  145650 310000))
 ;;; Generated autoloads from ox-icalendar.el
 
 (autoload 'org-icalendar-export-to-ics "ox-icalendar" "\
@@ -2603,7 +2612,8 @@ The file is stored under the name chosen in
 
 ;;;***
 
-;;;### (autoloads nil "ox-latex" "ox-latex.el" (22295 47913 588 0))
+;;;### (autoloads nil "ox-latex" "ox-latex.el" (22496 10639 137650
+;;;;;;  310000))
 ;;; Generated autoloads from ox-latex.el
 
 (autoload 'org-latex-export-as-latex "ox-latex" "\
@@ -2639,9 +2649,9 @@ is non-nil.
 \(fn &optional ASYNC SUBTREEP VISIBLE-ONLY BODY-ONLY EXT-PLIST)" t nil)
 
 (autoload 'org-latex-convert-region-to-latex "ox-latex" "\
-Assume the current region has org-mode syntax, and convert it to LaTeX.
+Assume the current region has Org syntax, and convert it to LaTeX.
 This can be used in any buffer.  For example, you can write an
-itemized list in org-mode syntax in an LaTeX buffer and use this
+itemized list in Org syntax in an LaTeX buffer and use this
 command to convert it.
 
 \(fn)" t nil)
@@ -2728,7 +2738,7 @@ Return output file name.
 
 ;;;***
 
-;;;### (autoloads nil "ox-md" "ox-md.el" (22295 47914 1568 0))
+;;;### (autoloads nil "ox-md" "ox-md.el" (22496 10639 137650 310000))
 ;;; Generated autoloads from ox-md.el
 
 (autoload 'org-md-export-as-markdown "ox-md" "\
@@ -2757,9 +2767,9 @@ non-nil.
 \(fn &optional ASYNC SUBTREEP VISIBLE-ONLY)" t nil)
 
 (autoload 'org-md-convert-region-to-md "ox-md" "\
-Assume the current region has org-mode syntax, and convert it to Markdown.
+Assume the current region has Org syntax, and convert it to Markdown.
 This can be used in any buffer.  For example, you can write an
-itemized list in org-mode syntax in a Markdown buffer and use
+itemized list in Org syntax in a Markdown buffer and use
 this command to convert it.
 
 \(fn)" t nil)
@@ -2800,7 +2810,7 @@ Return output file name.
 
 ;;;***
 
-;;;### (autoloads nil "ox-odt" "ox-odt.el" (22295 47913 779 0))
+;;;### (autoloads nil "ox-odt" "ox-odt.el" (22496 10639 137650 310000))
 ;;; Generated autoloads from ox-odt.el
 
 (put 'org-odt-preferred-output-format 'safe-local-variable 'stringp)
@@ -2862,7 +2872,7 @@ is non-nil then the newly converted file is opened using
 
 ;;;***
 
-;;;### (autoloads nil "ox-org" "ox-org.el" (22295 47913 2802 0))
+;;;### (autoloads nil "ox-org" "ox-org.el" (22496 10639 145650 310000))
 ;;; Generated autoloads from ox-org.el
 
 (autoload 'org-org-export-as-org "ox-org" "\
@@ -2940,8 +2950,8 @@ Return output file name.
 
 ;;;***
 
-;;;### (autoloads nil "ox-publish" "ox-publish.el" (22295 47913 1692
-;;;;;;  0))
+;;;### (autoloads nil "ox-publish" "ox-publish.el" (22496 10639 137650
+;;;;;;  310000))
 ;;; Generated autoloads from ox-publish.el
 
 (defalias 'org-publish-project 'org-publish)
@@ -2984,8 +2994,8 @@ the project.
 
 ;;;***
 
-;;;### (autoloads nil "ox-texinfo" "ox-texinfo.el" (22295 47913 4356
-;;;;;;  0))
+;;;### (autoloads nil "ox-texinfo" "ox-texinfo.el" (22496 10639 145650
+;;;;;;  310000))
 ;;; Generated autoloads from ox-texinfo.el
 
 (autoload 'org-texinfo-publish-to-texinfo "ox-texinfo" "\
@@ -3000,16 +3010,16 @@ Return output file name.
 \(fn PLIST FILENAME PUB-DIR)" nil nil)
 
 (autoload 'org-texinfo-convert-region-to-texinfo "ox-texinfo" "\
-Assume the current region has org-mode syntax, and convert it to Texinfo.
+Assume the current region has Org syntax, and convert it to Texinfo.
 This can be used in any buffer.  For example, you can write an
-itemized list in org-mode syntax in an Texinfo buffer and use
-this command to convert it.
+itemized list in Org syntax in an Texinfo buffer and use this
+command to convert it.
 
 \(fn)" t nil)
 
 ;;;***
 
-;;;### (autoloads nil "ox" "ox.el" (22295 47913 1066 0))
+;;;### (autoloads nil "ox" "ox.el" (22496 10639 137650 310000))
 ;;; Generated autoloads from ox.el
 
 (autoload 'org-export-as "ox" "\

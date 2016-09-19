@@ -185,7 +185,7 @@ specially in `org-element--object-lex'.")
 		"\\)\\)")
 	org-element--object-regexp
 	(mapconcat #'identity
-		   (let ((link-types (regexp-opt org-link-types)))
+		   (let ((link-types (regexp-opt (org-link-types))))
 		     (list
 		      ;; Sub/superscript.
 		      "\\(?:[_^][-{(*+.,[:alnum:]]\\)"
@@ -421,6 +421,24 @@ Other brackets are treated as spaces.")
   "Table used internally to pair only curly brackets.
 Other brackets are treated as spaces.")
 
+(defun org-element--parse-paired-brackets (char)
+  "Parse paired brackets at point.
+CHAR is the opening bracket to consider, as a character.  Return
+contents between brackets, as a string, or nil.  Also move point
+past the brackets."
+  (when (eq char (char-after))
+    (let ((syntax-table (pcase char
+			  (?\{ org-element--pair-curly-table)
+			  (?\[ org-element--pair-square-table)
+			  (?\( org-element--pair-round-table)
+			  (_ nil)))
+	  (pos (point)))
+      (when syntax-table
+	(with-syntax-table syntax-table
+	  (let ((end (ignore-errors (scan-lists pos 1 0))))
+	    (when end
+	      (goto-char end)
+	      (buffer-substring-no-properties (1+ pos) (1- end)))))))))
 
 
 ;;; Accessors and Setters
@@ -716,7 +734,7 @@ Assume point is at beginning of drawer."
       (save-excursion
 	(let* ((drawer-end-line (match-beginning 0))
 	       (name (progn (looking-at org-drawer-regexp)
-			    (org-match-string-no-properties 1)))
+			    (match-string-no-properties 1)))
 	       (begin (car affiliated))
 	       (post-affiliated (point))
 	       ;; Empty drawers have no contents.
@@ -772,8 +790,8 @@ Assume point is at beginning of dynamic block."
       (let ((block-end-line (match-beginning 0)))
 	(save-excursion
 	  (let* ((name (progn (looking-at org-dblock-start-re)
-			      (org-match-string-no-properties 1)))
-		 (arguments (org-match-string-no-properties 3))
+			      (match-string-no-properties 1)))
+		 (arguments (match-string-no-properties 3))
 		 (begin (car affiliated))
 		 (post-affiliated (point))
 		 ;; Empty blocks have no contents.
@@ -831,7 +849,7 @@ a plist containing `:label', `:begin' `:end', `:contents-begin',
 Assume point is at the beginning of the footnote definition."
   (save-excursion
     (let* ((label (progn (looking-at org-footnote-definition-re)
-			 (org-match-string-no-properties 1)))
+			 (match-string-no-properties 1)))
 	   (begin (car affiliated))
 	   (post-affiliated (point))
 	   (ending
@@ -846,7 +864,7 @@ Assume point is at the beginning of the footnote definition."
 		;; before any affiliated keyword above.
 		(forward-line -1)
 		(while (and (> (point) post-affiliated)
-			    (org-looking-at-p org-element--affiliated-re))
+			    (looking-at-p org-element--affiliated-re))
 		  (forward-line -1))
 		(line-beginning-position 2))
 	       (t (match-beginning 0)))))
@@ -889,13 +907,13 @@ obtained through property drawer and default properties from the
 parser (e.g. `:end' and :END:).  Return value is a plist."
   (save-excursion
     (forward-line)
-    (when (org-looking-at-p org-planning-line-re) (forward-line))
+    (when (looking-at-p org-planning-line-re) (forward-line))
     (when (looking-at org-property-drawer-re)
       (forward-line)
       (let ((end (match-end 0)) properties)
 	(while (< (line-end-position) end)
 	  (looking-at org-property-re)
-	  (push (org-match-string-no-properties 3) properties)
+	  (push (match-string-no-properties 3) properties)
 	  (push (intern (concat ":" (upcase (match-string 2)))) properties)
 	  (forward-line))
 	properties))))
@@ -958,7 +976,7 @@ Assume point is at beginning of the headline."
 		 (goto-char (match-end 0))))
 	   (title-start (point))
 	   (tags (when (re-search-forward
-			(org-re "[ \t]+\\(:[[:alnum:]_@#%:]+:\\)[ \t]*$")
+			"[ \t]+\\(:[[:alnum:]_@#%:]+:\\)[ \t]*$"
 			(line-end-position)
 			'move)
 		   (goto-char (match-beginning 0))
@@ -1100,7 +1118,7 @@ Assume point is at beginning of the inline task."
 				 (aref (match-string 0) 2))))
 	   (title-start (point))
 	   (tags (when (re-search-forward
-			(org-re "[ \t]+\\(:[[:alnum:]_@#%:]+:\\)[ \t]*$")
+			"[ \t]+\\(:[[:alnum:]_@#%:]+:\\)[ \t]*$"
 			(line-end-position)
 			'move)
 		   (goto-char (match-beginning 0))
@@ -1111,7 +1129,7 @@ Assume point is at beginning of the inline task."
 	   (task-end (save-excursion
 		       (end-of-line)
 		       (and (re-search-forward org-outline-regexp-bol limit t)
-			    (org-looking-at-p "END[ \t]*$")
+			    (looking-at-p "END[ \t]*$")
 			    (line-beginning-position))))
 	   (standard-props (and task-end (org-element--get-node-properties)))
 	   (time-props (and task-end (org-element--get-time-properties)))
@@ -1214,7 +1232,7 @@ Assume point is at the beginning of the item."
     (beginning-of-line)
     (looking-at org-list-full-item-re)
     (let* ((begin (point))
-	   (bullet (org-match-string-no-properties 1))
+	   (bullet (match-string-no-properties 1))
 	   (checkbox (let ((box (match-string 3)))
 		       (cond ((equal "[ ]" box) 'off)
 			     ((equal "[X]" box) 'on)
@@ -1363,7 +1381,7 @@ CONTENTS is the contents of the element."
 	    (forward-line)
 	    (let ((origin (point)))
 	      (when (re-search-forward inlinetask-re limit t)
-		(if (org-looking-at-p "END[ \t]*$") (forward-line)
+		(if (looking-at-p "END[ \t]*$") (forward-line)
 		  (goto-char origin)))))
 	   ;; At some text line.  Check if it ends any previous item.
 	   (t
@@ -1405,7 +1423,7 @@ containing `:type', `:begin', `:end', `:contents-begin' and
 Assume point is at the beginning of the list."
   (save-excursion
     (let* ((struct (or structure (org-element--list-struct limit)))
-	   (type (cond ((org-looking-at-p "[ \t]*[A-Za-z0-9]") 'ordered)
+	   (type (cond ((looking-at-p "[ \t]*[A-Za-z0-9]") 'ordered)
 		       ((nth 5 (assq (point) struct)) 'descriptive)
 		       (t 'unordered)))
 	   (contents-begin (point))
@@ -1701,7 +1719,7 @@ Return a list whose CAR is `clock' and CDR is a plist containing
 	   (duration (and (search-forward " => " (line-end-position) t)
 			  (progn (skip-chars-forward " \t")
 				 (looking-at "\\(\\S-+\\)[ \t]*$"))
-			  (org-match-string-no-properties 1)))
+			  (match-string-no-properties 1)))
 	   (status (if duration 'closed 'running))
 	   (post-blank (let ((before-blank (progn (forward-line) (point))))
 			 (skip-chars-forward " \r\t\n" limit)
@@ -1850,7 +1868,7 @@ containing `:begin', `:end', `:value', `:post-blank' and
     (let ((begin (car affiliated))
 	  (post-affiliated (point))
 	  (value (progn (looking-at "\\(%%(.*\\)[ \t]*$")
-			(org-match-string-no-properties 1)))
+			(match-string-no-properties 1)))
 	  (pos-before-blank (progn (forward-line) (point)))
 	  (end (progn (skip-chars-forward " \r\t\n" limit)
 		      (if (eobp) (point) (line-beginning-position)))))
@@ -1892,12 +1910,20 @@ containing `:begin', `:end', `:number-lines', `:preserve-indent',
 	  (let* ((switches
 		  (progn
 		    (looking-at "^[ \t]*#\\+BEGIN_EXAMPLE\\(?: +\\(.*\\)\\)?")
-		    (org-match-string-no-properties 1)))
-		 ;; Switches analysis
+		    (match-string-no-properties 1)))
+		 ;; Switches analysis.
 		 (number-lines
-		  (cond ((not switches) nil)
-			((string-match "-n\\>" switches) 'new)
-			((string-match "+n\\>" switches) 'continued)))
+		  (and switches
+		       (string-match "\\([-+]\\)n\\(?: *\\([0-9]+\\)\\)?\\>"
+				     switches)
+		       (cons
+			(if (equal (match-string 1 switches) "-")
+			    'new
+			  'continued)
+			(if (not (match-end 2)) 0
+			  ;; Subtract 1 to give number of lines before
+			  ;; first line.
+			  (1- (string-to-number (match-string 2 switches)))))))
 		 (preserve-indent
 		  (and switches (string-match "-i\\>" switches)))
 		 ;; Should labels be retained in (or stripped from) example
@@ -1992,8 +2018,9 @@ Assume point is at export-block beginning."
 					(point)))
 	       (end (progn (skip-chars-forward " \r\t\n" limit)
 			   (if (eobp) (point) (line-beginning-position))))
-	       (value (buffer-substring-no-properties contents-begin
-						      contents-end)))
+	       (value (org-unescape-code-in-string
+		       (buffer-substring-no-properties contents-begin
+						       contents-end))))
 	  (list 'export-block
 		(nconc
 		 (list :type (and backend (upcase backend))
@@ -2114,7 +2141,7 @@ containing `:key', `:value', `:begin', `:end', `:post-blank' and
     (let ((begin (or (car affiliated) (point)))
 	  (post-affiliated (point))
 	  (key (progn (looking-at "[ \t]*#\\+\\(\\S-+*\\):")
-		      (upcase (org-match-string-no-properties 1))))
+		      (upcase (match-string-no-properties 1))))
 	  (value (org-trim (buffer-substring-no-properties
 			    (match-end 0) (point-at-eol))))
 	  (pos-before-blank (progn (forward-line) (point)))
@@ -2205,8 +2232,8 @@ containing `:key', `:value', `:begin', `:end', `:post-blank' and
   (looking-at org-property-re)
   (let ((case-fold-search t)
 	(begin (point))
-	(key   (org-match-string-no-properties 2))
-	(value (org-match-string-no-properties 3))
+	(key   (match-string-no-properties 2))
+	(value (match-string-no-properties 3))
 	(end (save-excursion
 	       (end-of-line)
 	       (if (re-search-forward org-property-re limit t)
@@ -2390,20 +2417,28 @@ Assume point is at the beginning of the block."
 		 (language
 		  (progn
 		    (looking-at
-		     (concat "^[ \t]*#\\+BEGIN_SRC"
-			     "\\(?: +\\(\\S-+\\)\\)?"
-			     "\\(\\(?: +\\(?:-l \".*?\"\\|[-+][A-Za-z]\\)\\)+\\)?"
-			     "\\(.*\\)[ \t]*$"))
-		    (org-match-string-no-properties 1)))
+		     "^[ \t]*#\\+BEGIN_SRC\
+\\(?: +\\(\\S-+\\)\\)?\
+\\(\\(?: +\\(?:-\\(?:l \".+\"\\|[ikr]\\)\\|[-+]n\\(?: *[0-9]+\\)?\\)\\)+\\)?\
+\\(.*\\)[ \t]*$")
+		    (match-string-no-properties 1)))
 		 ;; Get switches.
-		 (switches (org-match-string-no-properties 2))
+		 (switches (match-string-no-properties 2))
 		 ;; Get parameters.
-		 (parameters (org-match-string-no-properties 3))
-		 ;; Switches analysis
+		 (parameters (match-string-no-properties 3))
+		 ;; Switches analysis.
 		 (number-lines
-		  (cond ((not switches) nil)
-			((string-match "-n\\>" switches) 'new)
-			((string-match "+n\\>" switches) 'continued)))
+		  (and switches
+		       (string-match "\\([-+]\\)n\\(?: *\\([0-9]+\\)\\)?\\>"
+				     switches)
+		       (cons
+			(if (equal (match-string 1 switches) "-")
+			    'new
+			  'continued)
+			(if (not (match-end 2)) 0
+			  ;; Subtract 1 to give number of lines before
+			  ;; first line.
+			  (1- (string-to-number (match-string 2 switches)))))))
 		 (preserve-indent (and switches
 				       (string-match "-i\\>" switches)))
 		 (label-fmt
@@ -2505,7 +2540,7 @@ Assume point is at the beginning of the table."
 	      (point)))
 	   (tblfm (let (acc)
 		    (while (looking-at "[ \t]*#\\+TBLFM: +\\(.*\\)[ \t]*$")
-		      (push (org-match-string-no-properties 1) acc)
+		      (push (match-string-no-properties 1) acc)
 		      (forward-line))
 		    acc))
 	   (pos-before-blank (point))
@@ -2575,7 +2610,7 @@ containing `:begin', `:end', `:contents-begin', `:contents-end',
   "Interpret TABLE-ROW element as Org syntax.
 CONTENTS is the contents of the table row."
   (if (eq (org-element-property :type table-row) 'rule) "|-"
-    (concat "| " contents)))
+    (concat "|" contents)))
 
 
 ;;;; Verse Block
@@ -2687,7 +2722,7 @@ Assume point is at the first tilde marker."
     (unless (bolp) (backward-char 1))
     (when (looking-at org-emph-re)
       (let ((begin (match-beginning 2))
-	    (value (org-match-string-no-properties 4))
+	    (value (match-string-no-properties 4))
 	    (post-blank (progn (goto-char (match-end 2))
 			       (skip-chars-forward " \t")))
 	    (end (point)))
@@ -2763,7 +2798,7 @@ Assume point is at the beginning of the snippet."
 					(re-search-forward "@@" nil t)
 					(match-beginning 0))))
 	(let* ((begin (match-beginning 0))
-	       (back-end (org-match-string-no-properties 1))
+	       (back-end (match-string-no-properties 1))
 	       (value (buffer-substring-no-properties
 		       (match-end 0) contents-end))
 	       (post-blank (skip-chars-forward " \t"))
@@ -2835,43 +2870,34 @@ Assume point is at the beginning of the babel call."
   (save-excursion
     (catch :no-object
       (when (let ((case-fold-search nil))
-	      (looking-at
-	       "\\<call_\\([^ \t\n[{]+\\)\\(?:\\[\\([^]]*\\)\\]\\)?("))
-	(let ((begin (point))
-	      (call (match-string-no-properties 1))
-	      (inside-header
-	       (let ((h (org-string-nw-p (match-string-no-properties 2))))
-		 (and h (org-trim
-			 (replace-regexp-in-string "\n[ \t]*" " " h))))))
-	  (goto-char (1- (match-end 0)))
-	  (let* ((s (point))
-		 (e (with-syntax-table org-element--pair-round-table
-		      (or (ignore-errors (scan-lists s 1 0))
-			  ;; Invalid inline source block.
-			  (throw :no-object nil))))
-		 (arguments
-		  (let ((a (org-string-nw-p
-			    (buffer-substring-no-properties (1+ s) (1- e)))))
-		    (and a (org-trim
-			    (replace-regexp-in-string "\n[ \t]*" " " a)))))
-		 (end-header
-		  (progn
-		    (goto-char e)
-		    (and (looking-at "\\[\\([^]]*\\)\\]")
-			 (prog1 (org-string-nw-p (match-string-no-properties 1))
-			   (goto-char (match-end 0))))))
-		 (value (buffer-substring-no-properties begin (point)))
-		 (post-blank (skip-chars-forward " \t"))
-		 (end (point)))
-	    (list 'inline-babel-call
-		  (list :call call
-			:inside-header inside-header
-			:arguments arguments
-			:end-header end-header
-			:begin begin
-			:end end
-			:value value
-			:post-blank post-blank))))))))
+	      (looking-at "\\<call_\\([^ \t\n[(]+\\)[([]"))
+	(goto-char (match-end 1))
+	(let* ((begin (match-beginning 0))
+	       (call (match-string-no-properties 1))
+	       (inside-header
+		(let ((p (org-element--parse-paired-brackets ?\[)))
+		  (and (org-string-nw-p p)
+		       (replace-regexp-in-string "\n[ \t]*" " " (org-trim p)))))
+	       (arguments (org-string-nw-p
+			   (or (org-element--parse-paired-brackets ?\()
+			       ;; Parenthesis are mandatory.
+			       (throw :no-object nil))))
+	       (end-header
+		(let ((p (org-element--parse-paired-brackets ?\[)))
+		  (and (org-string-nw-p p)
+		       (replace-regexp-in-string "\n[ \t]*" " " (org-trim p)))))
+	       (value (buffer-substring-no-properties begin (point)))
+	       (post-blank (skip-chars-forward " \t"))
+	       (end (point)))
+	  (list 'inline-babel-call
+		(list :call call
+		      :inside-header inside-header
+		      :arguments arguments
+		      :end-header end-header
+		      :begin begin
+		      :end end
+		      :value value
+		      :post-blank post-blank)))))))
 
 (defun org-element-inline-babel-call-interpreter (inline-babel-call _)
   "Interpret INLINE-BABEL-CALL object as Org syntax."
@@ -2898,31 +2924,24 @@ Assume point is at the beginning of the inline src block."
   (save-excursion
     (catch :no-object
       (when (let ((case-fold-search nil))
-	      (looking-at "\\<src_\\([^ \t\n[{]+\\)\
-\\(?:\\[[ \t]*\\([^]]*?\\)[ \t]*\\]\\)?{"))
-	(let ((begin (point))
+	      (looking-at "\\<src_\\([^ \t\n[{]+\\)[{[]"))
+	(goto-char (match-end 1))
+	(let ((begin (match-beginning 0))
 	      (language (match-string-no-properties 1))
 	      (parameters
-	       (let ((p (org-string-nw-p (match-string-no-properties 2))))
-		 (and p (org-trim
-			 (replace-regexp-in-string "\n[ \t]*" " " p))))))
-	  (goto-char (1- (match-end 0)))
-	  (let* ((s (point))
-		 (e (with-syntax-table org-element--pair-curly-table
-		      (or (ignore-errors (scan-lists s 1 0))
-			  ;; Invalid inline source block.
-			  (throw :no-object nil))))
-		 (value (buffer-substring-no-properties
-			 (1+ s) (1- e)))
-		 (post-blank (progn (goto-char e)
-				    (skip-chars-forward " \t"))))
-	    (list 'inline-src-block
-		  (list :language language
-			:value value
-			:parameters parameters
-			:begin begin
-			:end (point)
-			:post-blank post-blank))))))))
+	       (let ((p (org-element--parse-paired-brackets ?\[)))
+		 (and (org-string-nw-p p)
+		      (replace-regexp-in-string "\n[ \t]*" " " (org-trim p)))))
+	      (value (or (org-element--parse-paired-brackets ?\{)
+			 (throw :no-object nil)))
+	      (post-blank (skip-chars-forward " \t")))
+	  (list 'inline-src-block
+		(list :language language
+		      :value value
+		      :parameters parameters
+		      :begin begin
+		      :end (point)
+		      :post-blank post-blank)))))))
 
 (defun org-element-inline-src-block-interpreter (inline-src-block _)
   "Interpret INLINE-SRC-BLOCK object as Org syntax."
@@ -3022,7 +3041,7 @@ and cdr a plist with `:begin', `:end' and `:post-blank' keywords.
 Otherwise, return nil.
 
 Assume point is at the beginning of the line break."
-  (when (and (org-looking-at-p "\\\\\\\\[ \t]*$")
+  (when (and (looking-at-p "\\\\\\\\[ \t]*$")
 	     (not (eq (char-before) ?\\)))
     (list 'line-break
 	  (list :begin (point)
@@ -3057,7 +3076,7 @@ Assume point is at the beginning of the link."
 			     (looking-at org-target-link-regexp)))
 	(setq type "radio"
 	      link-end (match-end 1)
-	      path (org-match-string-no-properties 1)
+	      path (match-string-no-properties 1)
 	      contents-begin (match-beginning 1)
 	      contents-end (match-end 1)))
        ;; Type 2: Standard link, i.e. [[http://orgmode.org][homepage]]
@@ -3079,7 +3098,7 @@ Assume point is at the beginning of the link."
 	(setq raw-link (org-link-expand-abbrev
 			(replace-regexp-in-string
 			 "[ \t]*\n[ \t]*" " "
-			 (org-match-string-no-properties 1))))
+			 (match-string-no-properties 1))))
 	;; Determine TYPE of link and set PATH accordingly.  According
 	;; to RFC 3986, remove whitespaces from URI in external links.
 	;; In internal ones, treat indentation as a single space.
@@ -3089,7 +3108,7 @@ Assume point is at the beginning of the link."
 	      (string-match "\\`\\.\\.?/" raw-link))
 	  (setq type "file")
 	  (setq path raw-link))
-	 ;; Explicit type (http, irc, bbdb...).  See `org-link-types'.
+	 ;; Explicit type (http, irc, bbdb...).
 	 ((string-match org-link-types-re raw-link)
 	  (setq type (match-string 1 raw-link))
 	  (setq path (substring raw-link (match-end 0))))
@@ -3097,8 +3116,8 @@ Assume point is at the beginning of the link."
 	 ((string-match "\\`id:\\([-a-f0-9]+\\)\\'" raw-link)
 	  (setq type "id" path (match-string 1 raw-link)))
 	 ;; Code-ref type: PATH is the name of the reference.
-	 ((and (org-string-match-p "\\`(" raw-link)
-	       (org-string-match-p ")\\'" raw-link))
+	 ((and (string-match-p "\\`(" raw-link)
+	       (string-match-p ")\\'" raw-link))
 	  (setq type "coderef")
 	  (setq path (substring raw-link 1 -1)))
 	 ;; Custom-id type: PATH is the name of the custom id.
@@ -3113,21 +3132,21 @@ Assume point is at the beginning of the link."
 	  (setq path raw-link))))
        ;; Type 3: Plain link, e.g., http://orgmode.org
        ((looking-at org-plain-link-re)
-	(setq raw-link (org-match-string-no-properties 0)
-	      type (org-match-string-no-properties 1)
+	(setq raw-link (match-string-no-properties 0)
+	      type (match-string-no-properties 1)
 	      link-end (match-end 0)
-	      path (org-match-string-no-properties 2)))
+	      path (match-string-no-properties 2)))
        ;; Type 4: Angular link, e.g., <http://orgmode.org>.  Unlike to
        ;; bracket links, follow RFC 3986 and remove any extra
        ;; whitespace in URI.
        ((looking-at org-angle-link-re)
-	(setq type (org-match-string-no-properties 1))
+	(setq type (match-string-no-properties 1))
 	(setq link-end (match-end 0))
 	(setq raw-link
 	      (buffer-substring-no-properties
 	       (match-beginning 1) (match-end 2)))
 	(setq path (replace-regexp-in-string
-		    "[ \t]*\n[ \t]*" "" (org-match-string-no-properties 2))))
+		    "[ \t]*\n[ \t]*" "" (match-string-no-properties 2))))
        (t (throw 'no-object nil)))
       ;; In any case, deduce end point after trailing white space from
       ;; LINK-END variable.
@@ -3194,12 +3213,12 @@ Assume point is at the macro."
   (save-excursion
     (when (looking-at "{{{\\([a-zA-Z][-a-zA-Z0-9_]*\\)\\(([ \t\n]*\\([^\000]*?\\))\\)?}}}")
       (let ((begin (point))
-	    (key (downcase (org-match-string-no-properties 1)))
-	    (value (org-match-string-no-properties 0))
+	    (key (downcase (match-string-no-properties 1)))
+	    (value (match-string-no-properties 0))
 	    (post-blank (progn (goto-char (match-end 0))
 			       (skip-chars-forward " \t")))
 	    (end (point))
-	    (args (let ((args (org-match-string-no-properties 3)))
+	    (args (let ((args (match-string-no-properties 3)))
 		    (and args (org-macro-extract-arguments args)))))
 	(list 'macro
 	      (list :key key
@@ -3230,7 +3249,7 @@ Assume point is at the radio target."
       (let ((begin (point))
 	    (contents-begin (match-beginning 1))
 	    (contents-end (match-end 1))
-	    (value (org-match-string-no-properties 1))
+	    (value (match-string-no-properties 1))
 	    (post-blank (progn (goto-char (match-end 0))
 			       (skip-chars-forward " \t")))
 	    (end (point)))
@@ -3424,7 +3443,7 @@ Assume point is at the target."
   (save-excursion
     (when (looking-at org-target-regexp)
       (let ((begin (point))
-	    (value (org-match-string-no-properties 1))
+	    (value (match-string-no-properties 1))
 	    (post-blank (progn (goto-char (match-end 0))
 			       (skip-chars-forward " \t")))
 	    (end (point)))
@@ -3462,7 +3481,7 @@ cdr a plist with `:type', `:raw-value', `:year-start',
 Otherwise, return nil.
 
 Assume point is at the beginning of the timestamp."
-  (when (org-looking-at-p org-element--timestamp-regexp)
+  (when (looking-at-p org-element--timestamp-regexp)
     (save-excursion
       (let* ((begin (point))
 	     (activep (eq (char-after) ?<))
@@ -3692,7 +3711,7 @@ Assume point is at the first equal sign marker."
     (unless (bolp) (backward-char 1))
     (when (looking-at org-emph-re)
       (let ((begin (match-beginning 2))
-	    (value (org-match-string-no-properties 4))
+	    (value (match-string-no-properties 4))
 	    (post-blank (progn (goto-char (match-end 2))
 			       (skip-chars-forward " \t")))
 	    (end (point)))
@@ -3898,7 +3917,7 @@ position of point and CDR is nil."
 	       (dualp (member kwd org-element-dual-keywords))
 	       (dual-value
 		(and dualp
-		     (let ((sec (org-match-string-no-properties 2)))
+		     (let ((sec (match-string-no-properties 2)))
 		       (if (or (not sec) (not parsedp)) sec
 			 (save-match-data
 			   (org-element--parse-objects
@@ -4535,14 +4554,14 @@ If there is no affiliated keyword, return the empty string."
      ;; List all ELEMENT's properties matching an attribute line or an
      ;; affiliated keyword, but ignore translated keywords since they
      ;; cannot belong to the property list.
-     (loop for prop in (nth 1 element) by 'cddr
-	   when (let ((keyword (upcase (substring (symbol-name prop) 1))))
-		  (or (string-match "^ATTR_" keyword)
-		      (and
-		       (member keyword org-element-affiliated-keywords)
-		       (not (assoc keyword
-				   org-element-keyword-translation-alist)))))
-	   collect prop)
+     (cl-loop for prop in (nth 1 element) by 'cddr
+	      when (let ((keyword (upcase (substring (symbol-name prop) 1))))
+		     (or (string-match "^ATTR_" keyword)
+			 (and
+			  (member keyword org-element-affiliated-keywords)
+			  (not (assoc keyword
+				      org-element-keyword-translation-alist)))))
+	      collect prop)
      "")))
 
 ;; Because interpretation of the parse tree must return the same
@@ -5073,8 +5092,8 @@ Properties are modified by side-effect."
 	       (not (eq (org-element-type (plist-get properties :parent))
 			'item)))
       (dolist (item (plist-get properties :structure))
-	(incf (car item) offset)
-	(incf (nth 6 item) offset)))
+	(cl-incf (car item) offset)
+	(cl-incf (nth 6 item) offset)))
     (dolist (key '(:begin :contents-begin :contents-end :end :post-affiliated))
       (let ((value (and (or (not props) (memq key props))
 			(plist-get properties key))))
@@ -5113,7 +5132,7 @@ updated before current modification are actually submitted."
 	    ;; Request processed.  Merge current and next offsets and
 	    ;; transfer ending position.
 	    (when next
-	      (incf (aref next 3) (aref request 3))
+	      (cl-incf (aref next 3) (aref request 3))
 	      (aset next 2 (aref request 2)))
 	    (setq org-element--cache-sync-requests
 		  (cdr org-element--cache-sync-requests))))
@@ -5589,7 +5608,7 @@ change, as an integer."
 	;; Current changes can be merged with first sync request: we
 	;; can save a partial cache synchronization.
 	(progn
-	  (incf (aref next 3) offset)
+	  (cl-incf (aref next 3) offset)
 	  ;; If last change happened within area to be removed, extend
 	  ;; boundaries of robust parents, if any.  Otherwise, find
 	  ;; first element to remove and update request accordingly.
@@ -5639,7 +5658,8 @@ change, as an integer."
 	  ;; No element to remove.  No need to re-parent either.
 	  ;; Simply shift additional elements, if any, by OFFSET.
 	  (when org-element--cache-sync-requests
-	    (incf (aref (car org-element--cache-sync-requests) 3) offset)))))))
+	    (cl-incf (aref (car org-element--cache-sync-requests) 3)
+		     offset)))))))
 
 
 ;;;; Public Functions
@@ -6008,7 +6028,7 @@ end of ELEM-A."
       (goto-char beg-B)
       (when specialp
 	(setq body-B (replace-regexp-in-string "\\`[ \t]*" "" body-B))
-	(org-indent-to-column ind-B))
+	(indent-to-column ind-B))
       (insert body-A)
       ;; Restore ex ELEM-A overlays.
       (let ((offset (- beg-B beg-A)))
@@ -6021,10 +6041,6 @@ end of ELEM-A."
 	(dolist (o (cdr overlays))
 	  (move-overlay (car o) (- (nth 1 o) offset) (- (nth 2 o) offset))))
       (goto-char (org-element-property :end elem-B)))))
-
-;; For backward-compatibility with Org <= 8.3
-(define-obsolete-function-alias
-  'org-element-remove-indentation 'org-remove-indentation "25.1")
 
 
 (provide 'org-element)

@@ -836,7 +836,12 @@ Some other text
   ;; Handle non-empty blank line at the end of buffer.
   (should
    (org-test-with-temp-text "#+BEGIN_EXPORT latex\nC\n#+END_EXPORT\n "
-     (= (org-element-property :end (org-element-at-point)) (point-max)))))
+     (= (org-element-property :end (org-element-at-point)) (point-max))))
+  ;; Un-escape commas in `:value'.
+  (should
+   (equal "* H\n"
+	  (org-test-with-temp-text "#+BEGIN_EXPORT org\n,* H\n#+END_EXPORT\n "
+	    (org-element-property :value (org-element-at-point))))))
 
 
 ;;;; Export Snippet
@@ -1150,6 +1155,11 @@ Some other text
    (eq 'inline-babel-call
        (org-test-with-temp-text
 	   "call_test[:results output](x=2)[:results\nhtml]"
+	 (org-element-type (org-element-context)))))
+  ;; Parse parameters containing round brackets.
+  (should
+   (eq 'inline-babel-call
+       (org-test-with-temp-text "call_test[:var x='(1)](x=2)"
 	 (org-element-type (org-element-context))))))
 
 
@@ -1215,7 +1225,12 @@ Some other text
   (should
    (equal "foo)"
 	  (org-test-with-temp-text "src_emacs-lisp{foo)}"
-	    (org-element-property :value (org-element-context))))))
+	    (org-element-property :value (org-element-context)))))
+  ;; Parse parameters containing square brackets.
+  (should
+   (eq 'inline-src-block
+       (org-test-with-temp-text "src_emacs-lisp[:var table=t[1,1]]{(+ 1 1)}"
+	 (org-element-type (org-element-context))))))
 
 
 ;;;; Inlinetask
@@ -1599,12 +1614,12 @@ e^{i\\pi}+1=0
    (equal
     "127.0.0.1"
     (org-test-with-temp-text "[[http://orgmode.org]]"
-      (flet ((link-translate (type path) (cons type "127.0.0.1")))
-	(let ((org-link-translation-function 'link-translate))
-	  (org-element-property
-	   :path
-	   (org-element-map (org-element-parse-buffer) 'link
-	     'identity nil t)))))))
+      (let ((org-link-translation-function
+	     (lambda (type _) (cons type "127.0.0.1"))))
+	(org-element-property
+	 :path
+	 (org-element-map (org-element-parse-buffer) 'link
+	   #'identity nil t))))))
   ;; ... id link.
   (should
    (equal

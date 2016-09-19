@@ -72,16 +72,17 @@
 ;;; Code:
 
 (require 'cl-lib)
+(require 'ob-exp)
 (require 'org-element)
 (require 'org-macro)
-(require 'ob-exp)
+(require 'tabulated-list)
 
 (declare-function org-publish "ox-publish" (project &optional force async))
 (declare-function org-publish-all "ox-publish" (&optional force async))
-(declare-function
- org-publish-current-file "ox-publish" (&optional force async))
-(declare-function org-publish-current-project "ox-publish"
-		  (&optional force async))
+(declare-function org-publish-current-file "ox-publish" (&optional force async))
+(declare-function org-publish-current-project "ox-publish" (&optional force async))
+(declare-function org-src-coderef-format "org-src" (&optional element))
+(declare-function org-src-coderef-regexp "org-src" (fmt &optional label))
 
 (defvar org-publish-project-alist)
 (defvar org-table-number-fraction)
@@ -1405,7 +1406,7 @@ for export.  Return options as a plist."
 		 (cons "TITLE"
 		       (or (org-entry-get (point) "EXPORT_TITLE" 'selective)
 			   (progn (looking-at org-complex-heading-regexp)
-				  (org-match-string-no-properties 4))))))
+				  (match-string-no-properties 4))))))
 	 ;; Look for both general keywords and back-end specific
 	 ;; options, with priority given to the latter.
 	 (options (append (and backend (org-export-get-all-options backend))
@@ -1474,7 +1475,7 @@ Assume buffer is in Org mode.  Narrowing, if any, is ignored."
 			  ((equal key "SETUPFILE")
 			   (let ((file
 				  (expand-file-name
-				   (org-remove-double-quotes (org-trim val)))))
+				   (org-unbracket-string "\"" "\"" (org-trim val)))))
 			     ;; Avoid circular dependencies.
 			     (unless (member file files)
 			       (with-temp-buffer
@@ -1621,7 +1622,7 @@ an alist where associations are (VARIABLE-NAME VALUE)."
 			       (push (read (format "(%s)" val)) alist)
 			     ;; Enter setup file.
 			     (let ((file (expand-file-name
-					  (org-remove-double-quotes val))))
+					  (org-unbracket-string "\"" "\"" val))))
 			       (unless (member file files)
 				 (with-temp-buffer
 				   (setq default-directory
@@ -2675,7 +2676,7 @@ the document.  Narrowing, if any, is ignored."
 				   end)
 			       (progn
 				 (forward-line -1)
-				 (or (org-looking-at-p "^[ \t]*$")
+				 (or (looking-at-p "^[ \t]*$")
 				     (org-with-limited-levels
 				      (org-at-heading-p)))))))))
 	      (delete-region start end)
@@ -2713,7 +2714,21 @@ from tree."
 		    ;; Move into secondary string, if any.
 		    (dolist (p (cdr (assq type
 					  org-element-secondary-value-alist)))
-		      (mapc walk-data (org-element-property p data)))))))))
+		      (mapc walk-data (org-element-property p data))))))))
+	   (definitions
+	     ;; Collect definitions before possibly pruning them so as
+	     ;; to avoid parsing them again if they are required.
+	     (org-element-map data '(footnote-definition footnote-reference)
+	       (lambda (f)
+		 (cond
+		  ((eq (org-element-type f) 'footnote-definition) f)
+		  ((eq (org-element-property :type f) 'standard) nil)
+		  (t (let ((label (org-element-property :label f)))
+		       (when label	;Skip anonymous references.
+			 (apply
+			  #'org-element-create
+			  'footnote-definition `(:label ,label :post-blank 1)
+			  (org-element-contents f))))))))))
     ;; If a select tag is active, also ignore the section before the
     ;; first headline, if any.
     (when selected
@@ -2722,15 +2737,155 @@ from tree."
 	  (org-element-extract-element first-element))))
     ;; Prune tree and communication channel.
     (funcall walk-data data)
-    (dolist (entry
-	     (append
-	      ;; Priority is given to back-end specific options.
-	      (org-export-get-all-options (plist-get info :back-end))
-	      org-export-options-alist))
+    (dolist (entry (append
+		    ;; Priority is given to back-end specific options.
+		    (org-export-get-all-options (plist-get info :back-end))
+		    org-export-options-alist))
       (when (eq (nth 4 entry) 'parse)
 	(funcall walk-data (plist-get info (car entry)))))
+    (let ((missing (org-export--missing-definitions data definitions)))
+      (funcall walk-data missing)
+      (org-export--install-footnote-definitions missing data))
     ;; Eventually set `:ignore-list'.
     (plist-put info :ignore-list ignore)))
+
+(defun org-export--missing-definitions (tree definitions)
+  "List footnote definitions missing from TREE.
+Missing definitions are searched within DEFINITIONS, which is
+a list of footnote definitions or in the widened buffer."
+  (let* ((list-labels
+	  (lambda (data)
+	    ;; List all footnote labels encountered in DATA.  Inline
+	    ;; footnote references are ignored.
+	    (org-element-map data 'footnote-reference
+	      (lambda (reference)
+		(and (eq (org-element-property :type reference) 'standard)
+		     (org-element-property :label reference))))))
+	 defined undefined missing-definitions)
+    ;; Partition DIRECT-REFERENCES between DEFINED and UNDEFINED
+    ;; references.
+    (let ((known-definitions
+	   (org-element-map tree '(footnote-reference footnote-definition)
+	     (lambda (f)
+	       (and (or (eq (org-element-type f) 'footnote-definition)
+			(eq (org-element-property :type f) 'inline))
+		    (org-element-property :label f)))))
+	  seen)
+      (dolist (l (funcall list-labels tree))
+	(cond ((member l seen))
+	      ((member l known-definitions) (push l defined))
+	      (t (push l undefined)))))
+    ;; Complete MISSING-DEFINITIONS by finding the definition of every
+    ;; undefined label, first by looking into DEFINITIONS, then by
+    ;; searching the widened buffer.  This is a recursive process
+    ;; since definitions found can themselves contain an undefined
+    ;; reference.
+    (while undefined
+      (let* ((label (pop undefined))
+	     (definition
+	       (cond
+		((cl-some
+		  (lambda (d) (and (equal (org-element-property :label d) label)
+			      d))
+		  definitions))
+		((pcase (org-footnote-get-definition label)
+		   (`(,_ ,beg . ,_)
+		    (org-with-wide-buffer
+		     (goto-char beg)
+		     (let ((datum (org-element-context)))
+		       (if (eq (org-element-type datum) 'footnote-reference)
+			   datum
+			 ;; Parse definition with contents.
+			 (save-restriction
+			   (narrow-to-region
+			    (org-element-property :begin datum)
+			    (org-element-property :end datum))
+			   (org-element-map (org-element-parse-buffer)
+			       'footnote-definition #'identity nil t))))))
+		   (_ nil)))
+		(t (user-error "Definition not found for footnote %s" label)))))
+	(push label defined)
+	(push definition missing-definitions)
+	;; Look for footnote references within DEFINITION, since
+	;; we may need to also find their definition.
+	(dolist (l (funcall list-labels definition))
+	  (unless (or (member l defined)    ;Known label
+		      (member l undefined)) ;Processed later
+	    (push l undefined)))))
+    ;; MISSING-DEFINITIONS may contain footnote references with inline
+    ;; definitions.  Make sure those are changed into real footnote
+    ;; definitions.
+    (mapcar (lambda (d)
+	      (if (eq (org-element-type d) 'footnote-definition) d
+		(let ((label (org-element-property :label d)))
+		  (apply #'org-element-create
+			 'footnote-definition `(:label ,label :post-blank 1)
+			 (org-element-contents d)))))
+	    missing-definitions)))
+
+(defun org-export--install-footnote-definitions (definitions tree)
+  "Install footnote definitions in tree.
+
+DEFINITIONS is the list of footnote definitions to install.  TREE
+is the parse tree.
+
+If there is a footnote section in TREE, definitions found are
+appended to it.  If `org-footnote-section' is non-nil, a new
+footnote section containing all definitions is inserted in TREE.
+Otherwise, definitions are appended at the end of the section
+containing their first reference."
+  (cond
+   ((null definitions))
+   ;; If there is a footnote section, insert definitions there.
+   ((let ((footnote-section
+	   (org-element-map tree 'headline
+	     (lambda (h) (and (org-element-property :footnote-section-p h) h))
+	     nil t)))
+      (and footnote-section
+	   (apply #'org-element-adopt-elements
+		  footnote-section
+		  (nreverse definitions)))))
+   ;; If there should be a footnote section, create one containing all
+   ;; the definitions at the end of the tree.
+   (org-footnote-section
+    (org-element-adopt-elements
+     tree
+     (org-element-create 'headline
+			 (list :footnote-section-p t
+			       :level 1
+			       :title org-footnote-section)
+			 (apply #'org-element-create
+				'section
+				nil
+				(nreverse definitions)))))
+   ;; Otherwise add each definition at the end of the section where it
+   ;; is first referenced.
+   (t
+    (letrec ((seen nil)
+	     (insert-definitions
+	      (lambda (data)
+		;; Insert footnote definitions in the same section as
+		;; their first reference in DATA.
+		(org-element-map data 'footnote-reference
+		  (lambda (reference)
+		    (when (eq (org-element-property :type reference) 'standard)
+		      (let ((label (org-element-property :label reference)))
+			(unless (member label seen)
+			  (push label seen)
+			  (let ((definition
+				  (cl-some
+				   (lambda (d)
+				     (and (equal (org-element-property :label d)
+						 label)
+					  d))
+				   definitions)))
+			    (org-element-adopt-elements
+			     (org-element-lineage reference '(section))
+			     definition)
+			    ;; Also insert definitions for nested
+			    ;; references, if any.
+			    (funcall insert-definitions definition))))))))))
+      (funcall insert-definitions tree)))))
 
 (defun org-export--remove-uninterpreted-data (data info)
   "Change uninterpreted elements back into Org syntax.
@@ -2815,131 +2970,6 @@ returned by the function."
   ;; Return modified parse tree.
   data)
 
-(defun org-export--merge-external-footnote-definitions (tree)
-  "Insert footnote definitions outside parsing scope in TREE.
-
-If there is a footnote section in TREE, definitions found are
-appended to it.  If `org-footnote-section' is non-nil, a new
-footnote section containing all definitions is inserted in TREE.
-Otherwise, definitions are appended at the end of the section
-containing their first reference.
-
-Only definitions actually referred to within TREE, directly or
-not, are considered."
-  (let* ((collect-labels
-	  (lambda (data)
-	    (org-element-map data 'footnote-reference
-	      (lambda (f)
-		(and (eq (org-element-property :type f) 'standard)
-		     (org-element-property :label f))))))
-	 (referenced-labels (funcall collect-labels tree)))
-    (when referenced-labels
-      (let* ((definitions)
-	     (push-definition
-	      (lambda (datum)
-		(cl-case (org-element-type datum)
-		  (footnote-definition
-		   (push (save-restriction
-			   (narrow-to-region (org-element-property :begin datum)
-					     (org-element-property :end datum))
-			   (org-element-map (org-element-parse-buffer)
-			       'footnote-definition #'identity nil t))
-			 definitions))
-		  (footnote-reference
-		   (let ((label (org-element-property :label datum))
-			 (cbeg (org-element-property :contents-begin datum)))
-		     (when (and label cbeg
-				(eq (org-element-property :type datum) 'inline))
-		       (push
-			(apply #'org-element-create
-			       'footnote-definition
-			       (list :label label :post-blank 1)
-			       (org-element-parse-secondary-string
-				(buffer-substring
-				 cbeg (org-element-property :contents-end datum))
-				(org-element-restriction 'footnote-reference)))
-			definitions))))))))
-	;; Collect all out of scope definitions.
-	(save-excursion
-	  (goto-char (point-min))
-	  (org-with-wide-buffer
-	   (while (re-search-backward org-footnote-re nil t)
-	     (funcall push-definition (org-element-context))))
-	  (goto-char (point-max))
-	  (org-with-wide-buffer
-	   (while (re-search-forward org-footnote-re nil t)
-	     (funcall push-definition (org-element-context)))))
-	;; Filter out definitions referenced neither in the original
-	;; tree nor in the external definitions.
-	(let* ((directly-referenced
-		(cl-remove-if-not
-		 (lambda (d)
-		   (member (org-element-property :label d) referenced-labels))
-		 definitions))
-	       (all-labels
-		(append (funcall collect-labels directly-referenced)
-			referenced-labels)))
-	  (setq definitions
-		(cl-remove-if-not
-		 (lambda (d)
-		   (member (org-element-property :label d) all-labels))
-		 definitions)))
-	;; Install definitions in subtree.
-	(cond
-	 ((null definitions))
-	 ;; If there is a footnote section, insert them here.
-	 ((let ((footnote-section
-		 (org-element-map tree 'headline
-		   (lambda (h)
-		     (and (org-element-property :footnote-section-p h) h))
-		   nil t)))
-	    (and footnote-section
-		 (apply #'org-element-adopt-elements (nreverse definitions)))))
-	 ;; If there should be a footnote section, create one containing
-	 ;; all the definitions at the end of the tree.
-	 (org-footnote-section
-	  (org-element-adopt-elements
-	   tree
-	   (org-element-create 'headline
-			       (list :footnote-section-p t
-				     :level 1
-				     :title org-footnote-section)
-			       (apply #'org-element-create
-				      'section
-				      nil
-				      (nreverse definitions)))))
-	 ;; Otherwise add each definition at the end of the section where
-	 ;; it is first referenced.
-	 (t
-	  (letrec ((seen nil)
-		   (insert-definitions
-		    (lambda (data)
-		      ;; Insert definitions in the same section as
-		      ;; their first reference in DATA.
-		      (org-element-map data 'footnote-reference
-			(lambda (f)
-			  (when (eq (org-element-property :type f) 'standard)
-			    (let ((label (org-element-property :label f)))
-			      (unless (member label seen)
-				(push label seen)
-				(let ((definition
-					(catch 'found
-					  (dolist (d definitions)
-					    (when (equal
-						   (org-element-property :label
-									 d)
-						   label)
-					      (setq definitions
-						    (delete d definitions))
-					      (throw 'found d))))))
-				  (when definition
-				    (org-element-adopt-elements
-				     (org-element-lineage f '(section))
-				     definition)
-				    (funcall insert-definitions
-					     definition)))))))))))
-	    (funcall insert-definitions tree))))))))
-
 ;;;###autoload
 (defun org-export-as
     (backend &optional subtreep visible-only body-only ext-plist)
@@ -3013,9 +3043,10 @@ Return code as a string."
 	 ;; again after executing Babel code.
 	 (org-set-regexps-and-options)
 	 (org-update-radio-target-regexp)
-	 (org-export-execute-babel-code)
-	 (org-set-regexps-and-options)
-	 (org-update-radio-target-regexp)
+	 (when org-export-babel-evaluate
+	   (org-babel-exp-process-buffer)
+	   (org-set-regexps-and-options)
+	   (org-update-radio-target-regexp))
 	 ;; Run last hook with current back-end's name as argument.
 	 ;; Update buffer properties and radio targets one last time
 	 ;; before parsing.
@@ -3063,8 +3094,6 @@ Return code as a string."
 	  parsed-keywords)
 	 ;; Parse buffer.
 	 (setq tree (org-element-parse-buffer nil visible-only))
-	 ;; Merge footnote definitions outside scope into parse tree.
-	 (org-export--merge-external-footnote-definitions tree)
 	 ;; Prune tree from non-exported elements and transform
 	 ;; uninterpreted elements or objects in both parse tree and
 	 ;; communication channel.
@@ -3261,8 +3290,7 @@ storing and resolving footnotes.  It is created automatically."
 				 (setq matched
 				       (replace-match "" nil nil matched 1)))
 			       (expand-file-name
-				(org-remove-double-quotes
-				 matched)
+				(org-unbracket-string "\"" "\"" matched)
 				dir)))
 			 (setq value (replace-match "" nil nil value)))))
 		 (only-contents
@@ -3385,7 +3413,7 @@ Return a string of lines to be included in the format expected by
 		 (memq (org-element-type element) '(headline inlinetask)))
 	;; Skip planning line and property-drawer.
 	(goto-char (point-min))
-	(when (org-looking-at-p org-planning-line-re) (forward-line))
+	(when (looking-at-p org-planning-line-re) (forward-line))
 	(when (looking-at org-property-drawer-re) (goto-char (match-end 0)))
 	(unless (bolp) (forward-line))
 	(narrow-to-region (point) (point-max))))
@@ -3551,14 +3579,6 @@ the included document."
 	(set-marker marker-max nil)))
     (org-element-normalize-string (buffer-string))))
 
-(defun org-export-execute-babel-code ()
-  "Execute every Babel code in the visible part of current buffer."
-  ;; Get a pristine copy of current buffer so Babel references can be
-  ;; properly resolved.
-  (let ((reference (org-export-copy-buffer)))
-    (unwind-protect (org-babel-exp-process-buffer reference)
-      (kill-buffer reference))))
-
 (defun org-export--copy-to-kill-ring-p ()
   "Return a non-nil value when output should be added to the kill ring.
 See also `org-export-copy-to-kill-ring'."
@@ -3710,16 +3730,28 @@ definition can be found, raise an error."
 		       (let ((hash (make-hash-table :test #'equal)))
 			 (plist-put info :footnote-definition-cache hash)
 			 hash))))
-	(or (gethash label cache)
-	    (puthash label
-		     (org-element-map (plist-get info :parse-tree)
-			 '(footnote-definition footnote-reference)
-		       (lambda (f)
-			 (and (equal (org-element-property :label f) label)
-			      (org-element-contents f)))
-		       info t)
-		     cache)
-	    (error "Definition not found for footnote %s" label))))))
+	(or
+	 (gethash label cache)
+	 (puthash label
+		  (org-element-map (plist-get info :parse-tree)
+		      '(footnote-definition footnote-reference)
+		    (lambda (f)
+		      (cond
+		       ;; Skip any footnote with a different label.
+		       ;; Also skip any standard footnote reference
+		       ;; with the same label since those cannot
+		       ;; contain a definition.
+		       ((not (equal (org-element-property :label f) label)) nil)
+		       ((eq (org-element-property :type f) 'standard) nil)
+		       ((org-element-contents f))
+		       ;; Even if the contents are empty, we can not
+		       ;; return nil since that would eventually raise
+		       ;; the error.  Instead, return the equivalent
+		       ;; empty string.
+		       (t "")))
+		    info t)
+		  cache)
+	 (error "Definition not found for footnote %s" label))))))
 
 (defun org-export--footnote-reference-map
     (function data info &optional body-first)
@@ -4042,7 +4074,7 @@ meant to be translated with `org-export-data' or alike."
 ;;;; For Links
 ;;
 ;; `org-export-custom-protocol-maybe' handles custom protocol defined
-;; with `org-add-link-type', which see.
+;; in `org-link-parameters'.
 ;;
 ;; `org-export-get-coderef-format' returns an appropriate format
 ;; string for coderefs.
@@ -4085,7 +4117,7 @@ The function ignores links with an implicit type (e.g.,
   (let ((type (org-element-property :type link)))
     (unless (or (member type '("coderef" "custom-id" "fuzzy" "radio"))
 		(not backend))
-      (let ((protocol (nth 2 (assoc type org-link-protocols))))
+      (let ((protocol (org-link-get-parameter type :export)))
 	(and (functionp protocol)
 	     (funcall protocol
 		      (org-link-unescape (org-element-property :path link))
@@ -4120,8 +4152,8 @@ This only applies to links without a description."
 	 (catch 'exit
 	   (dolist (rule (or rules org-export-default-inline-image-rule))
 	     (and (string= (org-element-property :type link) (car rule))
-		  (org-string-match-p (cdr rule)
-				      (org-element-property :path link))
+		  (string-match-p (cdr rule)
+				  (org-element-property :path link))
 		  (throw 'exit t)))))))
 
 (defun org-export-resolve-coderef (ref info)
@@ -4147,9 +4179,7 @@ error if no block contains REF."
 	      (when (re-search-backward ref-re nil t)
 		(cond
 		 ((org-element-property :use-labels el) ref)
-		 ((eq (org-element-property :number-lines el) 'continued)
-		  (+ (org-export-get-loc el info) (line-number-at-pos)))
-		 (t (line-number-at-pos)))))))
+		 (t (+ (or (org-export-get-loc el info) 0) (line-number-at-pos))))))))
 	info 'first-match)
       (signal 'org-link-broken (list ref))))
 
@@ -4306,7 +4336,7 @@ has type \"radio\"."
 
 (defun org-export-file-uri (filename)
   "Return file URI associated to FILENAME."
-  (cond ((org-string-match-p "\\`//" filename) (concat "file:" filename))
+  (cond ((string-match-p "\\`//" filename) (concat "file:" filename))
 	((not (file-name-absolute-p filename)) filename)
 	((org-file-remote-p filename) (concat "file:/" filename))
 	(t (concat "file://" (expand-file-name filename)))))
@@ -4341,7 +4371,7 @@ of a reference.  See also `org-export-format-reference'."
   "Format REFERENCE into a string.
 REFERENCE is a number representing a reference, as returned by
 `org-export-new-reference', which see."
-  (format "org%x" reference))
+  (format "org%07x" reference))
 
 (defun org-export-get-reference (datum info)
   "Return a unique reference for DATUM, as a string.
@@ -4349,7 +4379,7 @@ REFERENCE is a number representing a reference, as returned by
 DATUM is either an element or an object.  INFO is the current
 export state, as a plist.
 
-This functions checks `:crossrefs' property in INFO for search
+This function checks `:crossrefs' property in INFO for search
 cells matching DATUM before creating a new reference.  Returned
 reference consists of alphanumeric characters only."
   (let ((cache (plist-get info :internal-references)))
@@ -4451,32 +4481,34 @@ objects of the same type."
 ;; code in a format suitable for plain text or verbatim output.
 
 (defun org-export-get-loc (element info)
-  "Return accumulated lines of code up to ELEMENT.
+  "Return count of lines of code before ELEMENT.
 
-INFO is the plist used as a communication channel.
+ELEMENT is an example-block or src-block element.  INFO is the
+plist used as a communication channel.
 
-ELEMENT is excluded from count."
-  (let ((loc 0))
-    (org-element-map (plist-get info :parse-tree)
-	`(src-block example-block ,(org-element-type element))
-      (lambda (el)
-	(cond
-	 ;; ELEMENT is reached: Quit the loop.
-	 ((eq el element))
-	 ;; Only count lines from src-block and example-block elements
-	 ;; with a "+n" or "-n" switch.  A "-n" switch resets counter.
-	 ((not (memq (org-element-type el) '(src-block example-block))) nil)
-	 ((let ((linums (org-element-property :number-lines el)))
-	    (when linums
-	      ;; Accumulate locs or reset them.
-	      (let ((lines (org-count-lines
-			    (org-trim (org-element-property :value el)))))
-		(setq loc (if (eq linums 'new) lines (+ loc lines))))))
-	  ;; Return nil to stay in the loop.
-	  nil)))
-      info 'first-match)
-    ;; Return value.
-    loc))
+Count includes every line of code in example-block or src-block
+with a \"+n\" or \"-n\" switch before block.  Return nil if
+ELEMENT doesn't allow line numbering."
+  (pcase (org-element-property :number-lines element)
+    (`(new . ,n) n)
+    (`(continued . ,n)
+     (let ((loc 0))
+       (org-element-map (plist-get info :parse-tree) '(src-block example-block)
+	 (lambda (el)
+	   ;; ELEMENT is reached: Quit loop and return locs.
+	   (if (eq el element) (+ loc n)
+	     ;; Only count lines from src-block and example-block
+	     ;; elements with a "+n" or "-n" switch.
+	     (let ((linum (org-element-property :number-lines el)))
+	       (when linum
+		 (let ((lines (org-count-lines
+			       (org-trim (org-element-property :value el)))))
+		   ;; Accumulate locs or reset them.
+		   (pcase linum
+		     (`(new . ,n) (setq loc (+ n lines)))
+		     (`(continued . ,n) (cl-incf loc (+ n lines)))))))
+	     nil))		      ;Return nil to stay in the loop.
+	 info 'first-match)))))
 
 (defun org-export-unravel-code (element)
   "Clean source code and extract references out of it.
@@ -4499,15 +4531,8 @@ reference on that line (string)."
 			 (org-element-property :preserve-indent element))
 		     value
 		   (org-remove-indentation value)))))
-	 ;; Get format used for references.
-	 (label-fmt (regexp-quote
-		     (or (org-element-property :label-fmt element)
-			 org-coderef-label-format)))
 	 ;; Build a regexp matching a loc with a reference.
-	 (with-ref-re
-	  (format "^.*?\\S-.*?\\([ \t]*\\(%s\\)[ \t]*\\)$"
-		  (replace-regexp-in-string
-		   "%s" "\\([-a-zA-Z0-9_ ]+\\)" label-fmt nil t))))
+	 (ref-re (org-src-coderef-regexp (org-src-coderef-format element))))
     ;; Return value.
     (cons
      ;; Code with references removed.
@@ -4515,7 +4540,7 @@ reference on that line (string)."
       (mapconcat
        (lambda (loc)
 	 (cl-incf line)
-	 (if (not (string-match with-ref-re loc)) loc
+	 (if (not (string-match ref-re loc)) loc
 	   ;; Ref line: remove ref, and signal its position in REFS.
 	   (push (cons line (match-string 3 loc)) refs)
 	   (replace-match "" nil nil loc 1)))
@@ -4572,9 +4597,7 @@ code."
       (let* ((refs (and (org-element-property :retain-labels element)
 			(cdr code-info)))
 	     ;; Handle line numbering.
-	     (num-start (cl-case (org-element-property :number-lines element)
-			  (continued (org-export-get-loc element info))
-			  (new 0)))
+	     (num-start (org-export-get-loc element info))
 	     (num-fmt
 	      (and num-start
 		   (format "%%%ds  "
@@ -5413,9 +5436,6 @@ Return the new string."
 
 ;; defsubst org-export-get-parent must be defined before first use
 
-(define-obsolete-function-alias
-  'org-export-get-genealogy 'org-element-lineage "25.1")
-
 (defun org-export-get-parent-headline (blob)
   "Return BLOB parent headline or nil.
 BLOB is the element or object being considered."
@@ -6093,67 +6113,21 @@ removed beforehand.  Return the new stack."
   "Menu for asynchronous export results and running processes."
   (interactive)
   (let ((buffer (get-buffer-create "*Org Export Stack*")))
-    (set-buffer buffer)
-    (when (zerop (buffer-size)) (org-export-stack-mode))
-    (org-export-stack-refresh)
+    (with-current-buffer buffer
+      (org-export-stack-mode)
+      (tabulated-list-print t))
     (pop-to-buffer buffer))
   (message "Type \"q\" to quit, \"?\" for help"))
-
-(defun org-export--stack-source-at-point ()
-  "Return source from export results at point in stack."
-  (let ((source (car (nth (1- (org-current-line)) org-export-stack-contents))))
-    (if (not source) (error "Source unavailable, please refresh buffer")
-      (let ((source-name (if (stringp source) source (buffer-name source))))
-	(if (save-excursion
-	      (beginning-of-line)
-	      (looking-at (concat ".* +" (regexp-quote source-name) "$")))
-	    source
-	  ;; SOURCE is not consistent with current line.  The stack
-	  ;; view is outdated.
-	  (error "Source unavailable; type `g' to update buffer"))))))
 
 (defun org-export-stack-clear ()
   "Remove all entries from export stack."
   (interactive)
   (setq org-export-stack-contents nil))
 
-(defun org-export-stack-refresh (&rest _)
-  "Refresh the asynchronous export stack.
-Unavailable sources are removed from the list.  Return the new
-stack."
-  (let ((inhibit-read-only t))
-    (org-preserve-lc
-     (erase-buffer)
-     (insert (concat
-	      (mapconcat
-	       (lambda (entry)
-		 (let ((proc-p (processp (nth 2 entry))))
-		   (concat
-		    ;; Back-end.
-		    (format " %-12s  " (or (nth 1 entry) ""))
-		    ;; Age.
-		    (let ((data (nth 2 entry)))
-		      (if proc-p (format " %6s  " (process-status data))
-			;; Compute age of the results.
-			(org-format-seconds
-			 "%4h:%.2m  "
-			 (float-time (time-since data)))))
-		    ;; Source.
-		    (format " %s"
-			    (let ((source (car entry)))
-			      (if (stringp source) source
-				(buffer-name source)))))))
-	       ;; Clear stack from exited processes, dead buffers or
-	       ;; non-existent files.
-	       (setq org-export-stack-contents
-		     (cl-remove-if-not
-		      (lambda (el)
-			(if (processp (nth 2 el))
-			    (buffer-live-p (process-buffer (nth 2 el)))
-			  (let ((source (car el)))
-			    (if (bufferp source) (buffer-live-p source)
-			      (file-exists-p source)))))
-		      org-export-stack-contents)) "\n"))))))
+(defun org-export-stack-refresh ()
+  "Refresh the export stack."
+  (interactive)
+  (tabulated-list-print t))
 
 (defun org-export-stack-remove (&optional source)
   "Remove export results at point from stack.
@@ -6177,11 +6151,10 @@ within Emacs."
 
 (defvar org-export-stack-mode-map
   (let ((km (make-sparse-keymap)))
+    (set-keymap-parent km tabulated-list-mode-map)
     (define-key km " " 'next-line)
-    (define-key km "n" 'next-line)
     (define-key km "\C-n" 'next-line)
     (define-key km [down] 'next-line)
-    (define-key km "p" 'previous-line)
     (define-key km "\C-p" 'previous-line)
     (define-key km "\C-?" 'previous-line)
     (define-key km [up] 'previous-line)
@@ -6192,31 +6165,85 @@ within Emacs."
     km)
   "Keymap for Org Export Stack.")
 
-(define-derived-mode org-export-stack-mode special-mode "Org-Stack"
+(define-derived-mode org-export-stack-mode tabulated-list-mode "Org-Stack"
   "Mode for displaying asynchronous export stack.
 
 Type \\[org-export-stack] to visualize the asynchronous export
 stack.
 
-In an Org Export Stack buffer, use \\<org-export-stack-mode-map>\\[org-export-stack-view] to view export output
-on current line, \\[org-export-stack-remove] to remove it from the stack and \\[org-export-stack-clear] to clear
+In an Org Export Stack buffer, use \
+\\<org-export-stack-mode-map>\\[org-export-stack-view] to view export output
+on current line, \\[org-export-stack-remove] to remove it from the stack and \
+\\[org-export-stack-clear] to clear
 stack completely.
 
-Removing entries in an Org Export Stack buffer doesn't affect
-files or buffers, only the display.
+Removing entries in a stack buffer does not affect files
+or buffers, only display.
 
 \\{org-export-stack-mode-map}"
-  (abbrev-mode 0)
-  (auto-fill-mode 0)
-  (setq buffer-read-only t
-	buffer-undo-list t
-	truncate-lines t
-	header-line-format
-	'(:eval
-	  (format "  %-12s | %6s | %s" "Back-End" "Age" "Source")))
-  (org-add-hook 'post-command-hook 'org-export-stack-refresh nil t)
-  (setq-local revert-buffer-function
-	      'org-export-stack-refresh))
+  (setq tabulated-list-format
+	(vector (list "#" 4 #'org-export--stack-num-predicate)
+		(list "Back-End" 12 t)
+		(list "Age" 6 nil)
+		(list "Source" 0 nil)))
+  (setq tabulated-list-sort-key (cons "#" nil))
+  (setq tabulated-list-entries #'org-export--stack-generate)
+  (add-hook 'tabulated-list-revert-hook #'org-export--stack-generate nil t)
+  (add-hook 'post-command-hook #'org-export-stack-refresh nil t)
+  (tabulated-list-init-header))
+
+(defun org-export--stack-generate ()
+  "Generate the asynchronous export stack for display.
+Unavailable sources are removed from the list.  Return a list
+appropriate for `tabulated-list-print'."
+  ;; Clear stack from exited processes, dead buffers or non-existent
+  ;; files.
+  (setq org-export-stack-contents
+	(cl-remove-if-not
+	 (lambda (el)
+	   (if (processp (nth 2 el))
+	       (buffer-live-p (process-buffer (nth 2 el)))
+	     (let ((source (car el)))
+	       (if (bufferp source) (buffer-live-p source)
+		 (file-exists-p source)))))
+	 org-export-stack-contents))
+  ;; Update `tabulated-list-entries'.
+  (let ((counter 0))
+    (mapcar
+     (lambda (entry)
+       (let ((source (car entry)))
+	 (list source
+	       (vector
+		;; Counter.
+		(number-to-string (cl-incf counter))
+		;; Back-End.
+		(if (nth 1 entry) (symbol-name (nth 1 entry)) "")
+		;; Age.
+		(let ((info (nth 2 entry)))
+		  (if (processp info) (symbol-name (process-status info))
+		    (format-seconds "%h:%.2m" (float-time (time-since info)))))
+		;; Source.
+		(if (stringp source) source (buffer-name source))))))
+     org-export-stack-contents)))
+
+(defun org-export--stack-num-predicate (a b)
+  (< (string-to-number (aref (nth 1 a) 0))
+     (string-to-number (aref (nth 1 b) 0))))
+
+(defun org-export--stack-source-at-point ()
+  "Return source from export results at point in stack."
+  (let ((source (car (nth (1- (org-current-line)) org-export-stack-contents))))
+    (if (not source) (error "Source unavailable, please refresh buffer")
+      (let ((source-name (if (stringp source) source (buffer-name source))))
+	(if (save-excursion
+	      (beginning-of-line)
+	      (looking-at-p (concat ".* +" (regexp-quote source-name) "$")))
+	    source
+	  ;; SOURCE is not consistent with current line.  The stack
+	  ;; view is outdated.
+	  (error (substitute-command-keys
+		  "Source unavailable; type \\[org-export-stack-refresh] \
+to refresh buffer")))))))
 
 
 
@@ -6330,12 +6357,12 @@ back to standard interface."
 	    ;; on the first key, if any.  A nil value means KEY will
 	    ;; only be activated at first level.
 	    (if (or (eq access-key t) (eq access-key first-key))
-		(org-propertize key 'face 'org-warning)
+		(propertize key 'face 'org-warning)
 	      key)))
 	 (fontify-value
 	  (lambda (value)
 	    ;; Fontify VALUE string.
-	    (org-propertize value 'face 'font-lock-variable-name-face)))
+	    (propertize value 'face 'font-lock-variable-name-face)))
 	 ;; Prepare menu entries by extracting them from registered
 	 ;; back-ends and sorting them by access key and by ordinal,
 	 ;; if any.

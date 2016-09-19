@@ -26,16 +26,16 @@
 ;;
 ;;; Commentary:
 
-;; This file contains the code dealing with source code examples in Org-mode.
+;; This file contains the code dealing with source code examples in
+;; Org mode.
 
 ;;; Code:
 
+(require 'cl-lib)
 (require 'org-macs)
 (require 'org-compat)
 (require 'ob-keys)
 (require 'ob-comint)
-(eval-when-compile (require 'cl))
-(require 'cl-lib)
 
 (declare-function org-base-buffer "org" (buffer))
 (declare-function org-do-remove-indentation "org" (&optional n))
@@ -48,10 +48,8 @@
 (declare-function org-footnote-goto-definition "org-footnote"
 		  (label &optional location))
 (declare-function org-get-indentation "org" (&optional line))
-(declare-function org-pop-to-buffer-same-window "org-compat"
-		  (&optional buffer-or-name norecord label))
 (declare-function org-switch-to-buffer-other-window "org" (&rest args))
-(declare-function org-trim "org" (s))
+(declare-function org-trim "org" (s &optional keep-lead))
 
 (defvar org-element-all-elements)
 (defvar org-inhibit-startup)
@@ -376,7 +374,7 @@ Assume point is in the corresponding edit buffer."
 	(let ((ind (make-string indentation ?\s)))
 	  (goto-char (point-min))
 	  (while (not (eobp))
-	    (when (org-looking-at-p "[ \t]*\\S-") (insert ind))
+	    (when (looking-at-p "[ \t]*\\S-") (insert ind))
 	    (forward-line))))
       (buffer-string))))
 
@@ -494,26 +492,35 @@ as `org-src-fontify-natively' is non-nil."
     (when (fboundp lang-mode)
       (let ((string (buffer-substring-no-properties start end))
 	    (modified (buffer-modified-p))
-	    (org-buffer (current-buffer)) pos next)
+	    (org-buffer (current-buffer)))
 	(remove-text-properties start end '(face nil))
 	(with-current-buffer
 	    (get-buffer-create
-	     (concat " org-src-fontification:" (symbol-name lang-mode)))
-	  (delete-region (point-min) (point-max))
-	  (insert string " ") ;; so there's a final property change
+	     (format " *org-src-fontification:%s*" lang-mode))
+	  (erase-buffer)
+	  ;; Add string and a final space to ensure property change.
+	  (insert string " ")
 	  (unless (eq major-mode lang-mode) (funcall lang-mode))
 	  (org-font-lock-ensure)
-	  (setq pos (point-min))
-	  (while (setq next (next-single-property-change pos 'face))
-	    (put-text-property
-	     (+ start (1- pos)) (1- (+ start next)) 'face
-	     (get-text-property pos 'face) org-buffer)
-	    (setq pos next)))
+	  (let ((pos (point-min)) next)
+	    (while (setq next (next-property-change pos))
+	      ;; Handle additional properties from font-lock, so as to
+	      ;; preserve, e.g., composition.
+	      (dolist (prop (cons 'face font-lock-extra-managed-props))
+		(let ((new-prop (get-text-property pos prop)))
+		  (put-text-property
+		   (+ start (1- pos)) (1- (+ start next)) prop new-prop
+		   org-buffer)))
+	      (setq pos next))))
+	;; Add Org faces.
+	(let ((face-name (intern (format "org-block-%s" lang))))
+	  (when (facep face-name)
+	    (font-lock-append-text-property start end 'face face-name))
+	  (font-lock-append-text-property start end 'face 'org-block))
 	(add-text-properties
 	 start end
 	 '(font-lock-fontified t fontified t font-lock-multiline t))
 	(set-buffer-modified-p modified)))))
-
 
 
 ;;; Escape contents
@@ -606,22 +613,17 @@ See also `org-src-mode-hook'."
 		   (setq org-src--auto-save-timer nil)))))))))
 
 (defun org-src-mode-configure-edit-buffer ()
-  (when (org-bound-and-true-p org-src--from-org-mode)
-    (org-add-hook 'kill-buffer-hook #'org-src--remove-overlay nil 'local)
-    (if (org-bound-and-true-p org-src--allow-write-back)
+  (when (bound-and-true-p org-src--from-org-mode)
+    (add-hook 'kill-buffer-hook #'org-src--remove-overlay nil 'local)
+    (if (bound-and-true-p org-src--allow-write-back)
 	(progn
 	  (setq buffer-offer-save t)
 	  (setq buffer-file-name
 		(concat (buffer-file-name (marker-buffer org-src--beg-marker))
-			"[" (buffer-name) "]"))
-	  (if (featurep 'xemacs)
-	      (progn
-		(make-variable-buffer-local 'write-contents-hooks) ; needed only for 21.4
-		(setq write-contents-hooks '(org-edit-src-save)))
-	    (setq write-contents-functions '(org-edit-src-save))))
+			"[" (buffer-name) "]")))
       (setq buffer-read-only t))))
 
-(org-add-hook 'org-src-mode-hook #'org-src-mode-configure-edit-buffer)
+(add-hook 'org-src-mode-hook #'org-src-mode-configure-edit-buffer)
 
 
 
@@ -641,16 +643,19 @@ See also `org-src-mode-hook'."
   (when org-src--babel-info
     (org-src-associate-babel-session org-src--babel-info)))
 
-(org-add-hook 'org-src-mode-hook #'org-src-babel-configure-edit-buffer)
+(add-hook 'org-src-mode-hook #'org-src-babel-configure-edit-buffer)
+
+
+;;; Public API
 
 (defmacro org-src-do-at-code-block (&rest body)
-  "Execute a command from an edit buffer in the Org mode buffer."
+  "Execute BODY from an edit buffer in the Org mode buffer."
+  (declare (debug (body)))
   `(let ((beg-marker org-src--beg-marker))
      (when beg-marker
        (with-current-buffer (marker-buffer beg-marker)
 	 (goto-char beg-marker)
 	 ,@body))))
-(def-edebug-spec org-src-do-at-code-block (body))
 
 (defun org-src-do-key-sequence-at-code-block (&optional key)
   "Execute key sequence at code block in the source Org buffer.
@@ -676,10 +681,6 @@ Org-babel commands."
     (org-src-do-at-code-block
      (call-interactively (lookup-key org-babel-map key)))))
 
-
-
-;;; Public functions
-
 (defun org-src-edit-buffer-p (&optional buffer)
   "Non-nil when current buffer is a source editing buffer.
 If BUFFER is non-nil, test it instead."
@@ -689,29 +690,62 @@ If BUFFER is non-nil, test it instead."
 	 (local-variable-p 'org-src--end-marker buffer))))
 
 (defun org-src-switch-to-buffer (buffer context)
-  (case org-src-window-setup
-    (current-window (org-pop-to-buffer-same-window buffer))
-    (other-window
+  (pcase org-src-window-setup
+    (`current-window (pop-to-buffer-same-window buffer))
+    (`other-window
      (switch-to-buffer-other-window buffer))
-    (other-frame
-     (case context
-       (exit
+    (`other-frame
+     (pcase context
+       (`exit
 	(let ((frame (selected-frame)))
 	  (switch-to-buffer-other-frame buffer)
 	  (delete-frame frame)))
-       (save
+       (`save
 	(kill-buffer (current-buffer))
-	(org-pop-to-buffer-same-window buffer))
-       (t (switch-to-buffer-other-frame buffer))))
-    (reorganize-frame
+	(pop-to-buffer-same-window buffer))
+       (_ (switch-to-buffer-other-frame buffer))))
+    (`reorganize-frame
      (when (eq context 'edit) (delete-other-windows))
      (org-switch-to-buffer-other-window buffer)
      (when (eq context 'exit) (delete-other-windows)))
-    (switch-invisibly (set-buffer buffer))
-    (t
+    (`switch-invisibly (set-buffer buffer))
+    (_
      (message "Invalid value %s for `org-src-window-setup'"
 	      org-src-window-setup)
-     (org-pop-to-buffer-same-window buffer))))
+     (pop-to-buffer-same-window buffer))))
+
+(defun org-src-coderef-format (&optional element)
+  "Return format string for block at point.
+
+When optional argument ELEMENT is provided, use that block.
+Otherwise, assume point is either at a source block, at an
+example block.
+
+If point is in an edit buffer, retrieve format string associated
+to the remote source block."
+  (cond
+   ((and element (org-element-property :label-fmt element)))
+   ((org-src-edit-buffer-p) (org-src-do-at-code-block (org-src-coderef-format)))
+   ((org-element-property :label-fmt (org-element-at-point)))
+   (t org-coderef-label-format)))
+
+(defun org-src-coderef-regexp (fmt &optional label)
+  "Return regexp matching a coderef format string FMT.
+
+When optional argument LABEL is non-nil, match coderef for that
+label only.
+
+Match group 1 contains the full coderef string with surrounding
+white spaces.  Match group 2 contains the same string without any
+surrounding space.  Match group 3 contains the label.
+
+A coderef format regexp can only match at the end of a line."
+  (format "\\S-\\([ \t]*\\(%s\\)[ \t]*\\)$"
+	  (replace-regexp-in-string
+	   "%s"
+	   (if label (regexp-quote label) "\\([-a-zA-Z0-9_][-a-zA-Z0-9_ ]*\\)")
+	   (regexp-quote fmt)
+	   nil t)))
 
 (defun org-edit-footnote-reference ()
   "Edit definition of footnote reference at point."
@@ -788,7 +822,7 @@ Throw an error when not at such a table."
      element
      (org-src--construct-edit-buffer-name (buffer-name) "Table")
      #'text-mode t)
-    (when (org-bound-and-true-p flyspell-mode) (flyspell-mode -1))
+    (when (bound-and-true-p flyspell-mode) (flyspell-mode -1))
     (table-recognize)
     t))
 

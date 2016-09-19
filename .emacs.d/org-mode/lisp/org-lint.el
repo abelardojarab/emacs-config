@@ -96,6 +96,7 @@
 ;;   - incomplete drawers
 ;;   - indented diary-sexps
 ;;   - obsolete QUOTE section
+;;   - obsolete "file+application" link
 
 
 ;;; Code:
@@ -273,7 +274,11 @@
     :name 'quote-section
     :description "Report obsolete QUOTE section"
     :categories '(obsolete)
-    :trust 'low))
+    :trust 'low)
+   (make-org-lint-checker
+    :name 'file-application
+    :description "Report obsolete \"file+application\" link"
+    :categories '(link obsolete)))
   "List of all available checkers.")
 
 (defun org-lint--collect-duplicates
@@ -358,7 +363,7 @@ called with one argument, the key used for comparison."
       (lambda (k)
 	(let ((key (org-element-property :key k)))
 	  (and (or (let ((case-fold-search t))
-		     (org-string-match-p "\\`ATTR_[-_A-Za-z0-9]+\\'" key))
+		     (string-match-p "\\`ATTR_[-_A-Za-z0-9]+\\'" key))
 		   (member key keywords))
 	       (list (org-element-property :post-affiliated k)
 		     (format "Orphaned affiliated keyword: \"%s\"" key))))))))
@@ -370,7 +375,7 @@ called with one argument, the key used for comparison."
 				    t)))
 	reports)
     (while (re-search-forward regexp nil t)
-      (let ((key (upcase (org-match-string-no-properties 1))))
+      (let ((key (upcase (match-string-no-properties 1))))
 	(when (< (point)
 		 (org-element-property :post-affiliated (org-element-at-point)))
 	  (push
@@ -416,7 +421,7 @@ instead"
 		    (list (org-element-property :begin datum)
 			  (format "Deprecated syntax for \"%s\".  \
 Use header-args instead"
-				  (org-match-string-no-properties 1 value))))))
+				  (match-string-no-properties 1 value))))))
 	    (`node-property
 	     (and (member-ignore-case key deprecated-babel-properties)
 		  (list
@@ -447,7 +452,7 @@ Use :header-args: instead"
 	(list (org-element-property :post-affiliated b)
 	      "Invalid syntax in babel call block"))
        ((let ((h (org-element-property :end-header b)))
-	  (and h (org-string-match-p "\\`\\[.*\\]\\'" h)))
+	  (and h (string-match-p "\\`\\[.*\\]\\'" h)))
 	(list
 	 (org-element-property :post-affiliated b)
 	 "Babel call's end header must not be wrapped within brackets"))))))
@@ -547,7 +552,8 @@ Use :header-args: instead"
   (org-element-map ast 'keyword
     (lambda (k)
       (when (equal (org-element-property :key k) "SETUPFILE")
-	(let ((file (org-remove-double-quotes
+	(let ((file (org-unbracket-string
+		     "\"" "\""
 		     (org-element-property :value k))))
 	  (and (not (file-remote-p file))
 	       (not (file-exists-p file))
@@ -562,7 +568,7 @@ Use :header-args: instead"
 	       (path
 		(and (string-match "^\\(\".+\"\\|\\S-+\\)[ \t]*" value)
 		     (save-match-data
-		       (org-remove-double-quotes (match-string 1 value))))))
+		       (org-unbracket-string "\"" "\"" (match-string 1 value))))))
 	  (if (not path)
 	      (list (org-element-property :post-affiliated k)
 		    "Missing location argument in INCLUDE keyword")
@@ -733,7 +739,7 @@ Use \"export %s\" instead"
     (lambda (e)
       (let ((name (org-element-property :name e)))
 	(and name
-	     (org-string-match-p ":" name)
+	     (string-match-p ":" name)
 	     (list (progn
 		     (goto-char (org-element-property :begin e))
 		     (re-search-forward
@@ -757,7 +763,7 @@ Use \"export %s\" instead"
 (defun org-lint-incomplete-drawer (_)
   (let (reports)
     (while (re-search-forward org-drawer-regexp nil t)
-      (let ((name (org-trim (org-match-string-no-properties 0)))
+      (let ((name (org-trim (match-string-no-properties 0)))
 	    (element (org-element-at-point)))
 	(pcase (org-element-type element)
 	  ((or `drawer `property-drawer)
@@ -812,7 +818,7 @@ Use \"export %s\" instead"
 		 (regexp-opt org-element-dual-keywords)))
 	reports)
     (while (re-search-forward regexp nil t)
-      (let ((name (org-match-string-no-properties 1)))
+      (let ((name (match-string-no-properties 1)))
 	(unless (or (string-prefix-p "BEGIN" name t)
 		    (string-prefix-p "END" name t)
 		    (save-excursion
@@ -848,6 +854,14 @@ Use \"export %s\" instead"
 		 (string-prefix-p (concat org-comment-string " QUOTE ") title))
 	     (list (org-element-property :begin h)
 		   "Deprecated QUOTE section"))))))
+
+(defun org-lint-file-application (ast)
+  (org-element-map ast 'link
+    (lambda (l)
+      (let ((app (org-element-property :application l)))
+	(and app
+	     (list (org-element-property :begin l)
+		   (format "Deprecated \"file+%s\" link type" app)))))))
 
 (defun org-lint-wrong-header-argument (ast)
   (let* ((reports)
@@ -940,35 +954,22 @@ Use \"export %s\" instead"
 			       (and (boundp v) (symbol-value v))))
 			org-babel-common-header-args-w-values))
 	       (datum-header-values
-		(apply
-		 #'org-babel-merge-params
-		 org-babel-default-header-args
-		 (and language
-		      (let ((v (intern (concat "org-babel-default-header-args:"
-					       language))))
-			(and (boundp v) (symbol-value v))))
-		 (append
-		  (list (and (memq type '(babel-call inline-babel-call))
-			     org-babel-default-lob-header-args))
-		  (progn (goto-char (org-element-property :begin datum))
-			 (org-babel-params-from-properties language))
-		  (list
-		   (org-babel-parse-header-arguments
-		    (org-trim
-		     (pcase type
-		       (`src-block
-			(mapconcat
-			 #'identity
-			 (cons (org-element-property :parameters datum)
-			       (org-element-property :header datum))
-			 " "))
-		       (`inline-src-block
-			(or (org-element-property :parameters datum) ""))
-		       (_
-			(concat
-			 (org-element-property :inside-header datum)
-			 " "
-			 (org-element-property :end-header datum)))))))))))
+		(org-babel-parse-header-arguments
+		 (org-trim
+		  (pcase type
+		    (`src-block
+		     (mapconcat
+		      #'identity
+		      (cons (org-element-property :parameters datum)
+			    (org-element-property :header datum))
+		      " "))
+		    (`inline-src-block
+		     (or (org-element-property :parameters datum) ""))
+		    (_
+		     (concat
+		      (org-element-property :inside-header datum)
+		      " "
+		      (org-element-property :end-header datum))))))))
 	  (dolist (header datum-header-values)
 	    (let ((allowed-values
 		   (cdr (assoc-string (substring (symbol-name (car header)) 1)
@@ -1059,14 +1060,15 @@ for `tabulated-list-printer'."
 	(mapcar
 	 (lambda (report)
 	   (list
-	    (incf id)
+	    (cl-incf id)
 	    (apply #'vector
 		   (cons
 		    (progn
 		      (goto-char (car report))
 		      (beginning-of-line)
 		      (prog1 (number-to-string
-			      (incf last-line (count-lines last-pos (point))))
+			      (cl-incf last-line
+				       (count-lines last-pos (point))))
 			(setf last-pos (point))))
 		    (cdr report)))))
 	 ;; Insert trust level in generated reports.  Also sort them
@@ -1169,7 +1171,7 @@ checker by its name.
 ARG can also be a list of checker names, as symbols, to run."
   (interactive "P")
   (unless (derived-mode-p 'org-mode) (user-error "Not in an Org buffer"))
-  (when (org-called-interactively-p)
+  (when (called-interactively-p 'any)
     (message "Org linting process starting..."))
   (let ((checkers
 	 (pcase arg
@@ -1198,7 +1200,7 @@ ARG can also be a list of checker names, as symbols, to run."
 	    (cl-remove-if-not (lambda (c) (memq (org-lint-checker-name c) arg))
 			       org-lint--checkers))
 	   (_ (user-error "Invalid argument `%S' for `org-lint'" arg)))))
-    (if (not (org-called-interactively-p))
+    (if (not (called-interactively-p 'any))
 	(org-lint--generate-reports (current-buffer) checkers)
       (org-lint--display-reports (current-buffer) checkers)
       (message "Org linting process completed"))))

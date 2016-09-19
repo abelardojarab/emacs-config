@@ -24,7 +24,7 @@
 ;;
 ;;; Commentary:
 
-;; This file implements globally unique identifiers for Org-mode entries.
+;; This file implements globally unique identifiers for Org entries.
 ;; Identifiers are stored in the entry as an :ID: property.  Functions
 ;; are provided that create and retrieve such identifiers, and that find
 ;; entries based on the identifier.
@@ -73,8 +73,6 @@
 (require 'org)
 
 (declare-function message-make-fqdn "message" ())
-(declare-function org-pop-to-buffer-same-window
-		  "org-compat" (&optional buffer-or-name norecord label))
 
 ;;; Customization
 
@@ -83,8 +81,6 @@
   :tag "Org ID"
   :group 'org)
 
-(define-obsolete-variable-alias
-  'org-link-to-org-use-id 'org-id-link-to-org-use-id "24.3")
 (defcustom org-id-link-to-org-use-id nil
   "Non-nil means storing a link to an Org file will use entry IDs.
 \\<org-mode-map>\
@@ -204,7 +200,7 @@ This variable is only relevant when `org-id-track-globally' is set."
 When Org reparses files to remake the list of files and IDs it is tracking,
 it will normally scan the agenda files, the archives related to agenda files,
 any files that are listed as ID containing in the current register, and
-any Org-mode files currently visited by Emacs.
+any Org file currently visited by Emacs.
 You can list additional files here.
 This variable is only relevant when `org-id-track-globally' is set."
   :group 'org-id
@@ -295,7 +291,7 @@ Move the cursor to that entry in that buffer."
   (let ((m (org-id-find id 'marker)))
     (unless m
       (error "Cannot find entry with ID \"%s\"" id))
-    (org-pop-to-buffer-same-window (marker-buffer m))
+    (pop-to-buffer-same-window (marker-buffer m))
     (goto-char m)
     (move-marker m nil)
     (org-show-context)))
@@ -467,7 +463,7 @@ When CHECK is given, prepare detailed information about duplicate IDs."
 		 (if (symbolp org-id-extra-files)
 		     (symbol-value org-id-extra-files)
 		   org-id-extra-files)
-		 ;; Files associated with live org-mode buffers
+		 ;; Files associated with live Org buffers
 		 (delq nil
 		       (mapcar (lambda (b)
 				 (with-current-buffer b
@@ -495,7 +491,7 @@ When CHECK is given, prepare detailed information about duplicate IDs."
 		(goto-char (point-min))
 		(while (re-search-forward "^[ \t]*:ID:[ \t]+\\(\\S-+\\)[ \t]*$"
 					  nil t)
-		  (setq id (org-match-string-no-properties 1))
+		  (setq id (match-string-no-properties 1))
 		  (if (member id found)
 		      (progn
 			(message "Duplicate ID \"%s\", also in file %s"
@@ -679,7 +675,7 @@ optional argument MARKERP, return the position as a new marker."
     (move-marker m nil)
     (org-show-context)))
 
-(org-add-link-type "id" 'org-id-open)
+(org-link-set-parameters "id" :follow #'org-id-open)
 
 (provide 'org-id)
 

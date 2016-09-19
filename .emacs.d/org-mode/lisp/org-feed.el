@@ -91,7 +91,8 @@
 (require 'org)
 (require 'sha1)
 
-(declare-function url-retrieve-synchronously "url" (url))
+(declare-function url-retrieve-synchronously "url"
+                  (url &optional silent inhibit-cookies timeout))
 (declare-function xml-node-children "xml" (node))
 (declare-function xml-get-children "xml" (node child-name))
 (declare-function xml-get-attribute "xml" (node attribute))
@@ -439,7 +440,7 @@ it can be a list structured like an entry in `org-feed-alist'."
   (if (stringp feed) (setq feed (assoc feed org-feed-alist)))
   (unless feed
     (error "No such feed in `org-feed-alist"))
-  (org-pop-to-buffer-same-window
+  (pop-to-buffer-same-window
    (org-feed-update feed 'retrieve-only))
   (goto-char (point-min)))
 
@@ -624,7 +625,7 @@ containing the properties `:guid' and `:item-full-text'."
 		       (match-beginning 0)))
 	(setq item (buffer-substring beg end)
 	      guid (if (string-match "<guid\\>.*?>\\(.*?\\)</guid>" item)
-		       (xml-substitute-special (org-match-string-no-properties 1 item))))
+		       (xml-substitute-special (match-string-no-properties 1 item))))
 	(setq entry (list :guid guid :item-full-text item))
 	(push entry entries)
 	(widen)

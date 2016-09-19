@@ -1,4 +1,4 @@
-;;; org-list.el --- Plain lists for Org-mode         -*- lexical-binding: t; -*-
+;;; org-list.el --- Plain lists for Org              -*- lexical-binding: t; -*-
 ;;
 ;; Copyright (C) 2004-2016 Free Software Foundation, Inc.
 ;;
@@ -87,11 +87,14 @@
 (defvar org-closed-string)
 (defvar org-deadline-string)
 (defvar org-description-max-indent)
+(defvar org-done-keywords)
 (defvar org-drawer-regexp)
 (defvar org-element-all-objects)
 (defvar org-inhibit-startup)
 (defvar org-odd-levels-only)
+(defvar org-outline-regexp-bol)
 (defvar org-scheduled-string)
+(defvar org-todo-line-regexp)
 (defvar org-ts-regexp)
 (defvar org-ts-regexp-both)
 
@@ -120,17 +123,18 @@
 (declare-function org-element-update-syntax "org-element" ())
 (declare-function org-entry-get "org"
 		  (pom property &optional inherit literal-nil))
-(declare-function org-export-create-backend "org-export" (&rest rest))
-(declare-function org-export-data-with-backend "org-export" (data backend info))
-(declare-function org-export-get-backend "org-export" (name))
-(declare-function org-export-get-environment "org-export"
+(declare-function org-export-create-backend "ox" (&rest rest) t)
+(declare-function org-export-data-with-backend "ox" (data backend info))
+(declare-function org-export-get-backend "ox" (name))
+(declare-function org-export-get-environment "ox"
 		  (&optional backend subtreep ext-plist))
-(declare-function org-export-get-next-element "org-export"
+(declare-function org-export-get-next-element "ox"
 		  (blob info &optional n))
-(declare-function org-export-with-backend "org-export"
+(declare-function org-export-with-backend "ox"
 		  (backend data &optional contents info))
 (declare-function org-fix-tags-on-the-fly "org" ())
 (declare-function org-get-indentation "org" (&optional line))
+(declare-function org-get-todo-state "org" ())
 (declare-function org-in-block-p "org" (names))
 (declare-function org-in-regexp "org" (re &optional nlines visually))
 (declare-function org-inlinetask-goto-beginning "org-inlinetask" ())
@@ -139,6 +143,7 @@
 (declare-function org-inlinetask-outline-regexp "org-inlinetask" ())
 (declare-function org-level-increment "org" ())
 (declare-function org-narrow-to-subtree "org" ())
+(declare-function org-outline-level "org" ())
 (declare-function org-previous-line-empty-p "org" ())
 (declare-function org-reduced-level "org" (L))
 (declare-function org-remove-indentation "org" (code &optional n))
@@ -147,7 +152,7 @@
 (declare-function org-time-string-to-seconds "org" (s))
 (declare-function org-timer-hms-to-secs "org-timer" (hms))
 (declare-function org-timer-item "org-timer" (&optional arg))
-(declare-function org-trim "org" (s))
+(declare-function org-trim "org" (s &optional keep-lead))
 (declare-function org-uniquify "org" (list))
 (declare-function outline-flag-region "outline" (from to flag))
 (declare-function outline-invisible-p "outline" (&optional pos))
@@ -244,8 +249,6 @@ interface or run the following code after updating it:
   :set (lambda (var val) (set var val)
 	 (when (featurep 'org-element) (org-element-update-syntax))))
 
-(define-obsolete-variable-alias 'org-alphabetical-lists
-  'org-list-allow-alphabetical "24.4") ; Since 8.0
 (defcustom org-list-allow-alphabetical nil
   "Non-nil means single character alphabetical bullets are allowed.
 
@@ -322,8 +325,6 @@ This hook runs even if checkbox rule in
 implement alternative ways of collecting statistics
 information.")
 
-(define-obsolete-variable-alias 'org-hierarchical-checkbox-statistics
-  'org-checkbox-hierarchical-statistics "24.4") ;; Since 8.0
 (defcustom org-checkbox-hierarchical-statistics t
   "Non-nil means checkbox statistics counts only the state of direct children.
 When nil, all boxes below the cookie are counted.
@@ -332,8 +333,6 @@ with the word \"recursive\" in the value."
   :group 'org-plain-lists
   :type 'boolean)
 
-(org-defvaralias 'org-description-max-indent
-  'org-list-description-max-indent) ;; Since 8.0
 (defcustom org-list-description-max-indent 20
   "Maximum indentation for the second line of a description list.
 When the indentation would be larger than this, it will become
@@ -659,7 +658,7 @@ Assume point is at an item."
 		       (match-string-no-properties 2) ; counter
 		       (match-string-no-properties 3) ; checkbox
 		       ;; Description tag.
-		       (and (save-match-data (string-match "[-+*]" bullet))
+		       (and (string-match-p "[-+*]" bullet)
 			    (match-string-no-properties 4)))))))
 	   (end-before-blank
 	    (function
@@ -1026,7 +1025,7 @@ Possible types are `descriptive', `ordered' and `unordered'.  The
 type is determined by the first item of the list."
   (let ((first (org-list-get-list-begin item struct prevs)))
     (cond
-     ((string-match "[[:alnum:]]" (org-list-get-bullet first struct)) 'ordered)
+     ((string-match-p "[[:alnum:]]" (org-list-get-bullet first struct)) 'ordered)
      ((org-list-get-tag first struct) 'descriptive)
      (t 'unordered))))
 
@@ -1330,7 +1329,7 @@ This function modifies STRUCT."
 	   (size-offset (- item-size (length text-cut))))
       ;; 4. Insert effectively item into buffer.
       (goto-char item)
-      (org-indent-to-column ind)
+      (indent-to-column ind)
       (insert body item-sep)
       ;; 5. Add new item to STRUCT.
       (mapc (lambda (e)
@@ -1472,7 +1471,7 @@ This function returns, destructively, the new list structure."
 		      (save-excursion
 			(goto-char (org-list-get-last-item item struct prevs))
 			(point-at-eol)))
-		     ((string-match "\\`[0-9]+\\'" dest)
+		     ((string-match-p "\\`[0-9]+\\'" dest)
 		      (let* ((all (org-list-get-all-items item struct prevs))
 			     (len (length all))
 			     (index (mod (string-to-number dest) len)))
@@ -1646,7 +1645,7 @@ as returned by `org-list-prevs-alist'."
 	   (while item
 	     (let ((count (org-list-get-counter item struct)))
 	       ;; Virtually determine current bullet
-	       (if (and count (string-match "[a-zA-Z]" count))
+	       (if (and count (string-match-p "[a-zA-Z]" count))
 		   ;; Counters are not case-sensitive.
 		   (setq ascii (string-to-char (upcase count)))
 		 (setq ascii (1+ ascii)))
@@ -1889,8 +1888,8 @@ Initial position of cursor is restored after the changes."
 		((and inlinetask-re (looking-at inlinetask-re))
 		 (org-inlinetask-goto-beginning))
 		;; Shift only non-empty lines.
-		((org-looking-at-p "^[ \t]*\\S-")
-		 (org-indent-line-to (+ (org-get-indentation) delta))))
+		((looking-at-p "^[ \t]*\\S-")
+		 (indent-line-to (+ (org-get-indentation) delta))))
 	       (forward-line -1)))))
          (modify-item
           (function
@@ -1973,7 +1972,7 @@ Initial position of cursor is restored after the changes."
 		      (while (< (point) down)
 			;; Ignore empty lines.  Also ignore blocks and
 			;; drawers contents.
-			(unless (org-looking-at-p "[ \t]*$")
+			(unless (looking-at-p "[ \t]*$")
 			  (setq min-ind (min (org-get-indentation) min-ind))
 			  (cond
 			   ((and (looking-at "#\\+BEGIN\\(:\\|_\\S-+\\)")
@@ -2093,11 +2092,11 @@ Possible values are: `folded', `children' or `subtree'.  See
     (if (match-beginning 2)
 	(let ((start (1+ (match-end 2)))
 	      (ind (org-get-indentation)))
-	  (if (> start (+ ind org-description-max-indent)) (+ ind 5) start))
+	  (if (> start (+ ind org-list-description-max-indent)) (+ ind 5) start))
       (+ (progn (goto-char (match-end 1)) (current-column))
 	 (if (and org-list-two-spaces-after-bullet-regexp
-		  (org-string-match-p org-list-two-spaces-after-bullet-regexp
-				      (match-string 1)))
+		  (string-match-p org-list-two-spaces-after-bullet-regexp
+				  (match-string 1)))
 	     2
 	   1)))))
 
@@ -2808,7 +2807,7 @@ Return t at each successful move."
 	     ((and (= ind (car org-tab-ind-state))
 		   (ignore-errors (org-list-indent-item-generic 1 t struct))))
 	     (t (delete-region (point-at-bol) (point-at-eol))
-		(org-indent-to-column (car org-tab-ind-state))
+		(indent-to-column (car org-tab-ind-state))
 		(insert (cdr org-tab-ind-state) " ")
 		;; Break cycle
 		(setq this-command 'identity)))
@@ -2911,7 +2910,7 @@ ignores hidden links."
 			  (save-excursion (re-search-forward org-ts-regexp-both
 							     (point-at-eol) t)))
 		      (org-time-string-to-seconds (match-string 0)))
-		     (t (org-float-time now))))
+		     (t (float-time now))))
 		   ((= dcst ?x) (or (and (stringp (match-string 1))
 					 (match-string 1))
 				    ""))
@@ -2935,6 +2934,151 @@ ignores hidden links."
 	(run-hooks 'org-after-sorting-entries-or-items-hook)
 	(message "Sorting items...done")))))
 
+(defun org-toggle-item (arg)
+  "Convert headings or normal lines to items, items to normal lines.
+If there is no active region, only the current line is considered.
+
+If the first non blank line in the region is a headline, convert
+all headlines to items, shifting text accordingly.
+
+If it is an item, convert all items to normal lines.
+
+If it is normal text, change region into a list of items.
+With a prefix argument ARG, change the region in a single item."
+  (interactive "P")
+  (let ((shift-text
+	 (lambda (ind end)
+	   ;; Shift text in current section to IND, from point to END.
+	   ;; The function leaves point to END line.
+	   (let ((min-i 1000) (end (copy-marker end)))
+	     ;; First determine the minimum indentation (MIN-I) of
+	     ;; the text.
+	     (save-excursion
+	       (catch 'exit
+		 (while (< (point) end)
+		   (let ((i (org-get-indentation)))
+		     (cond
+		      ;; Skip blank lines and inline tasks.
+		      ((looking-at "^[ \t]*$"))
+		      ((looking-at org-outline-regexp-bol))
+		      ;; We can't find less than 0 indentation.
+		      ((zerop i) (throw 'exit (setq min-i 0)))
+		      ((< i min-i) (setq min-i i))))
+		   (forward-line))))
+	     ;; Then indent each line so that a line indented to
+	     ;; MIN-I becomes indented to IND.  Ignore blank lines
+	     ;; and inline tasks in the process.
+	     (let ((delta (- ind min-i)))
+	       (while (< (point) end)
+		 (unless (or (looking-at "^[ \t]*$")
+			     (looking-at org-outline-regexp-bol))
+		   (indent-line-to (+ (org-get-indentation) delta)))
+		 (forward-line))))))
+	(skip-blanks
+	 (lambda (pos)
+	   ;; Return beginning of first non-blank line, starting from
+	   ;; line at POS.
+	   (save-excursion
+	     (goto-char pos)
+	     (skip-chars-forward " \r\t\n")
+	     (point-at-bol))))
+	beg end)
+    ;; Determine boundaries of changes.
+    (if (org-region-active-p)
+	(setq beg (funcall skip-blanks (region-beginning))
+	      end (copy-marker (region-end)))
+      (setq beg (funcall skip-blanks (point-at-bol))
+	    end (copy-marker (point-at-eol))))
+    ;; Depending on the starting line, choose an action on the text
+    ;; between BEG and END.
+    (org-with-limited-levels
+     (save-excursion
+       (goto-char beg)
+       (cond
+	;; Case 1. Start at an item: de-itemize.  Note that it only
+	;;         happens when a region is active: `org-ctrl-c-minus'
+	;;         would call `org-cycle-list-bullet' otherwise.
+	((org-at-item-p)
+	 (while (< (point) end)
+	   (when (org-at-item-p)
+	     (skip-chars-forward " \t")
+	     (delete-region (point) (match-end 0)))
+	   (forward-line)))
+	;; Case 2. Start at an heading: convert to items.
+	((org-at-heading-p)
+	 (let* ((bul (org-list-bullet-string "-"))
+		(bul-len (length bul))
+		;; Indentation of the first heading.  It should be
+		;; relative to the indentation of its parent, if any.
+		(start-ind (save-excursion
+			     (cond
+			      ((not org-adapt-indentation) 0)
+			      ((not (outline-previous-heading)) 0)
+			      (t (length (match-string 0))))))
+		;; Level of first heading.  Further headings will be
+		;; compared to it to determine hierarchy in the list.
+		(ref-level (org-reduced-level (org-outline-level))))
+	   (while (< (point) end)
+	     (let* ((level (org-reduced-level (org-outline-level)))
+		    (delta (max 0 (- level ref-level)))
+		    (todo-state (org-get-todo-state)))
+	       ;; If current headline is less indented than the first
+	       ;; one, set it as reference, in order to preserve
+	       ;; subtrees.
+	       (when (< level ref-level) (setq ref-level level))
+	       ;; Remove stars and TODO keyword.
+	       (looking-at org-todo-line-regexp)
+	       (delete-region (point) (or (match-beginning 3)
+					  (line-end-position)))
+	       (insert bul)
+	       (indent-line-to (+ start-ind (* delta bul-len)))
+	       ;; Turn TODO keyword into a check box.
+	       (when todo-state
+		 (let* ((struct (org-list-struct))
+			(old (copy-tree struct)))
+		   (org-list-set-checkbox
+		    (line-beginning-position)
+		    struct
+		    (if (member todo-state org-done-keywords)
+			"[X]"
+		      "[ ]"))
+		   (org-list-write-struct struct
+					  (org-list-parents-alist struct)
+					  old)))
+	       ;; Ensure all text down to END (or SECTION-END) belongs
+	       ;; to the newly created item.
+	       (let ((section-end (save-excursion
+				    (or (outline-next-heading) (point)))))
+		 (forward-line)
+		 (funcall shift-text
+			  (+ start-ind (* (1+ delta) bul-len))
+			  (min end section-end)))))))
+	;; Case 3. Normal line with ARG: make the first line of region
+	;;         an item, and shift indentation of others lines to
+	;;         set them as item's body.
+	(arg (let* ((bul (org-list-bullet-string "-"))
+		    (bul-len (length bul))
+		    (ref-ind (org-get-indentation)))
+	       (skip-chars-forward " \t")
+	       (insert bul)
+	       (forward-line)
+	       (while (< (point) end)
+		 ;; Ensure that lines less indented than first one
+		 ;; still get included in item body.
+		 (funcall shift-text
+			  (+ ref-ind bul-len)
+			  (min end (save-excursion (or (outline-next-heading)
+						       (point)))))
+		 (forward-line))))
+	;; Case 4. Normal line without ARG: turn each non-item line
+	;;         into an item.
+	(t
+	 (while (< (point) end)
+	   (unless (or (org-at-heading-p) (org-at-item-p))
+	     (when (looking-at "\\([ \t]*\\)\\(\\S-\\)")
+	       (replace-match
+		(concat "\\1" (org-list-bullet-string "-") "\\2"))))
+	   (forward-line))))))))
 
 
 ;;; Send and receive lists
@@ -3026,8 +3170,6 @@ Point is left at list's end."
 	(delete-region top bottom)
 	(when (and (not (looking-at "[ \t]*$")) (looking-at org-list-end-re))
 	  (replace-match ""))))))
-(define-obsolete-function-alias
-  'org-list-parse-list 'org-list-to-lisp "Org 9.0")
 
 (defun org-list-make-subtree ()
   "Convert the plain list at point into a subtree."
@@ -3060,11 +3202,13 @@ for this list."
   (catch 'exit
     (unless (org-at-item-p) (error "Not at a list item"))
     (save-excursion
-      (re-search-backward "#\\+ORGLST" nil t)
-      (unless (looking-at "\\(?:[ \t]\\)?#\\+ORGLST:[ \t]+SEND[ \t]+\\(\\S-+\\)[ \t]+\\(\\S-+\\)")
-	(if maybe (throw 'exit nil)
-	  (error "Don't know how to transform this list"))))
-    (let* ((name (match-string 1))
+      (let ((case-fold-search t))
+	(re-search-backward "^[ \t]*#\\+ORGLST:" nil t)
+	(unless (looking-at
+		 "[ \t]*#\\+ORGLST:[ \t]+SEND[ \t]+\\(\\S-+\\)[ \t]+\\([^ \t\n]+\\)")
+	  (if maybe (throw 'exit nil)
+	    (error "Don't know how to transform this list")))))
+    (let* ((name (regexp-quote (match-string 1)))
 	   (transform (intern (match-string 2)))
 	   (bottom-point
 	    (save-excursion
@@ -3078,29 +3222,32 @@ for this list."
 	      (match-beginning 0)))
 	   (plain-list (save-excursion
 			 (goto-char top-point)
-			 (org-list-to-lisp)))
-	   beg)
+			 (org-list-to-lisp))))
       (unless (fboundp transform)
 	(error "No such transformation function %s" transform))
       (let ((txt (funcall transform plain-list)))
-	;; Find the insertion place
+	;; Find the insertion(s) place(s).
 	(save-excursion
 	  (goto-char (point-min))
-	  (unless (re-search-forward
-		   (concat "BEGIN RECEIVE ORGLST +"
-			   name
-			   "\\([ \t]\\|$\\)")
-                   nil t)
-	    (error "Don't know where to insert translated list"))
-	  (goto-char (match-beginning 0))
-	  (beginning-of-line 2)
-	  (setq beg (point))
-	  (unless (re-search-forward (concat "END RECEIVE ORGLST +" name) nil t)
-	    (error "Cannot find end of insertion region"))
-	  (delete-region beg (point-at-bol))
-	  (goto-char beg)
-	  (insert txt "\n")))
-      (message "List converted and installed at receiver location"))))
+	  (let ((receiver-count 0)
+		(begin-re (format "BEGIN +RECEIVE +ORGLST +%s\\([ \t]\\|$\\)"
+				  name))
+		(end-re (format "END +RECEIVE +ORGLST +%s\\([ \t]\\|$\\)"
+				name)))
+	    (while (re-search-forward begin-re nil t)
+	      (cl-incf receiver-count)
+	      (let ((beg (line-beginning-position 2)))
+		(unless (re-search-forward end-re nil t)
+		  (user-error "Cannot find end of receiver location at %d" beg))
+		(beginning-of-line)
+		(delete-region beg (point))
+		(insert txt "\n")))
+	    (cond
+	     ((> receiver-count 1)
+	      (message "List converted and installed at receiver locations"))
+	     ((= receiver-count 1)
+	      (message "List converted and installed at receiver location"))
+	     (t (user-error "No valid receiver location found")))))))))
 
 (defun org-list-to-generic (list params)
   "Convert a LIST parsed through `org-list-to-lisp' to a custom format.

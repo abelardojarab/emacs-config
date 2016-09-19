@@ -29,7 +29,6 @@
 
 ;;; Code:
 
-(eval-when-compile (require 'cl))
 (require 'cl-lib)
 (require 'ox-latex)
 
@@ -203,19 +202,14 @@ TYPE is a symbol among the following:
 `defaction' Return ARGUMENT within both square and angular brackets.
 `option'    Return ARGUMENT within square brackets."
   (if (not (string-match "\\S-" argument)) ""
-    (case type
-      (action (if (string-match "\\`<.*>\\'" argument) argument
-		(format "<%s>" argument)))
-      (defaction (cond
-		  ((string-match "\\`\\[<.*>\\]\\'" argument) argument)
-		  ((string-match "\\`<.*>\\'" argument)
-		   (format "[%s]" argument))
-		  ((string-match "\\`\\[\\(.*\\)\\]\\'" argument)
-		   (format "[<%s>]" (match-string 1 argument)))
-		  (t (format "[<%s>]" argument))))
-      (option (if (string-match "\\`\\[.*\\]\\'" argument) argument
-		(format "[%s]" argument)))
-      (otherwise argument))))
+    (cl-case type
+      (action (format "<%s>" (org-unbracket-string "<" ">" argument)))
+      (defaction
+	(format "[<%s>]"
+		(org-unbracket-string "<" ">" (org-unbracket-string "[" "]" argument))))
+      (option (format "[%s]" (org-unbracket-string "[" "]" argument)))
+      (otherwise (error "Invalid `type' argument to `org-beamer--normalize-argument': %s"
+			type)))))
 
 (defun org-beamer--element-has-overlay-p (element)
   "Non-nil when ELEMENT has an overlay specified.
@@ -225,7 +219,8 @@ Return overlay specification, as a string, or nil."
   (let ((first-object (car (org-element-contents element))))
     (when (eq (org-element-type first-object) 'export-snippet)
       (let ((value (org-element-property :value first-object)))
-	(and (string-match "\\`<.*>\\'" value) value)))))
+	(and (string-prefix-p "<" value) (string-suffix-p ">" value)
+	     value)))))
 
 
 
@@ -452,7 +447,7 @@ used as a communication channel."
 			(let ((label (org-beamer--get-label headline info)))
 			  ;; Labels containing colons need to be
 			  ;; wrapped within braces.
-			  (format (if (org-string-match-p ":" label)
+			  (format (if (string-match-p ":" label)
 				      "label={%s}"
 				    "label=%s")
 				  label)))))))
@@ -564,7 +559,8 @@ used as a communication channel."
 	  (let ((action (org-element-property :BEAMER_ACT headline)))
 	    (cond
 	     ((not action) (list (cons "a" "") (cons "A" "") (cons "R" "")))
-	     ((string-match "\\`\\[.*\\]\\'" action)
+	     ((and (string-prefix-p "[" action)
+		   (string-suffix-p "]" action))
 	      (list
 	       (cons "A" (org-beamer--normalize-argument action 'defaction))
 	       (cons "a" "")
@@ -740,7 +736,7 @@ used as a communication channel."
 	   (let ((destination (if (string= type "fuzzy")
 				  (org-export-resolve-fuzzy-link link info)
 				(org-export-resolve-id-link link info))))
-	     (case (org-element-type destination)
+	     (cl-case (org-element-type destination)
 	       (headline
 		(let ((label
 		       (format "sec-%s"
@@ -1107,7 +1103,7 @@ aid, but the tag does not have any semantic meaning."
   (let* ((envs (append org-beamer-environments-special
 		       org-beamer-environments-extra
 		       org-beamer-environments-default))
-	 (org-tag-alist
+	 (org-current-tag-alist
 	  (append '((:startgroup))
 		  (mapcar (lambda (e) (cons (concat "B_" (car e))
 				       (string-to-char (nth 1 e))))

@@ -27,8 +27,9 @@
 ;; Org-Babel support for evaluating R code
 
 ;;; Code:
-(require 'ob)
+
 (require 'cl-lib)
+(require 'ob)
 
 (declare-function orgtbl-to-tsv "org-table" (table params))
 (declare-function R "ext:essd-r" (&optional start-args))
@@ -36,8 +37,7 @@
 (declare-function ess-make-buffer-current "ext:ess-inf" ())
 (declare-function ess-eval-buffer "ext:ess-inf" (vis))
 (declare-function ess-wait-for-process "ext:ess-inf"
-		  (proc &optional sec-prompt wait force-redisplay))
-(declare-function org-number-sequence "org-compat" (from &optional to inc))
+		  (&optional proc sec-prompt wait force-redisplay))
 
 (defconst org-babel-header-args:R
   '((width		 . :any)
@@ -91,8 +91,10 @@ this variable.")
 (defvar ess-local-process-name)   ; dynamically scoped
 (defun org-babel-edit-prep:R (info)
   (let ((session (cdr (assoc :session (nth 2 info)))))
-    (when (and session (string-match "^\\*\\(.+?\\)\\*$" session))
-      (save-match-data (org-babel-R-initiate-session session nil)))))
+    (when (and session
+	       (string-prefix-p "*"  session)
+	       (string-suffix-p "*" session))
+      (org-babel-R-initiate-session session nil))))
 
 ;; The usage of utils::read.table() ensures that the command
 ;; read.table() can be found even in circumstances when the utils
@@ -221,7 +223,7 @@ This function is called by `org-babel-execute-src-block'."
 	       (cdr (nth i vars))
 	       (cdr (nth i (cdr (assoc :colname-names params))))
 	       (cdr (nth i (cdr (assoc :rowname-names params)))))))
-      (org-number-sequence 0 (1- (length vars)))))))
+      (number-sequence 0 (1- (length vars)))))))
 
 (defun org-babel-R-quote-tsv-field (s)
   "Quote field S for export to R."
@@ -314,8 +316,7 @@ Each member of this list is a list with three members:
 				:type :family :title :fonts :version
 				:paper :encoding :pagecentre :colormodel
 				:useDingbats :horizontal))
-	 (device (and (string-match ".+\\.\\([^.]+\\)" out-file)
-		      (match-string 1 out-file)))
+	 (device (file-name-extension out-file))
 	 (device-info (or (assq (intern (concat ":" device))
 				org-babel-R-graphics-devices)
                           (assq :png org-babel-R-graphics-devices)))
@@ -377,12 +378,12 @@ Has four %s escapes to be filled in:
      body result-type result-params column-names-p row-names-p)))
 
 (defun org-babel-R-evaluate-external-process
-  (body result-type result-params column-names-p row-names-p)
+    (body result-type result-params column-names-p row-names-p)
   "Evaluate BODY in external R process.
 If RESULT-TYPE equals `output' then return standard output as a
 string.  If RESULT-TYPE equals `value' then return the value of the
 last statement in BODY, as elisp."
-  (case result-type
+  (cl-case result-type
     (value
      (let ((tmp-file (org-babel-temp-file "R-")))
        (org-babel-eval org-babel-R-command
@@ -405,12 +406,12 @@ last statement in BODY, as elisp."
 (defvar ess-eval-visibly-p)
 
 (defun org-babel-R-evaluate-session
-  (session body result-type result-params column-names-p row-names-p)
+    (session body result-type result-params column-names-p row-names-p)
   "Evaluate BODY in SESSION.
 If RESULT-TYPE equals `output' then return standard output as a
 string.  If RESULT-TYPE equals `value' then return the value of the
 last statement in BODY, as elisp."
-  (case result-type
+  (cl-case result-type
     (value
      (with-temp-buffer
        (insert (org-babel-chomp body))

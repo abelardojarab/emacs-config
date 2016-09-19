@@ -25,7 +25,7 @@
 
 ;;; Code:
 
-(eval-when-compile (require 'cl))
+(require 'cl-lib)
 (require 'ox)
 
 (defvar orgtbl-exp-regexp)
@@ -68,6 +68,7 @@
     (special-block . org-texinfo-special-block)
     (src-block . org-texinfo-src-block)
     (statistics-cookie . org-texinfo-statistics-cookie)
+    (strike-through . org-texinfo-strike-through)
     (subscript . org-texinfo-subscript)
     (superscript . org-texinfo-superscript)
     (table . org-texinfo-table)
@@ -76,6 +77,7 @@
     (target . org-texinfo-target)
     (template . org-texinfo-template)
     (timestamp . org-texinfo-timestamp)
+    (underline . org-texinfo-underline)
     (verbatim . org-texinfo-verbatim)
     (verse-block . org-texinfo-verse-block))
   :filters-alist
@@ -286,24 +288,24 @@ When nil, no transformation is made."
 (defcustom org-texinfo-text-markup-alist '((bold . "@strong{%s}")
 					   (code . code)
 					   (italic . "@emph{%s}")
-					   (verbatim . verb)
-					   (comment . "@c %s"))
+					   (verbatim . verb))
   "Alist of Texinfo expressions to convert text markup.
 
-The key must be a symbol among `bold', `italic' and `comment'.
-The value is a formatting string to wrap fontified text with.
+The key must be a symbol among `bold', `code', `italic',
+`strike-through', `underscore' and `verbatim'.  The value is
+a formatting string to wrap fontified text with.
 
 Value can also be set to the following symbols: `verb' and
-`code'.  For the former, Org will use \"@verb\" to
-create a format string and select a delimiter character that
-isn't in the string.  For the latter, Org will use \"@code\"
-to typeset and try to protect special characters.
+`code'.  For the former, Org will use \"@verb\" to create
+a format string and select a delimiter character that isn't in
+the string.  For the latter, Org will use \"@code\" to typeset
+and try to protect special characters.
 
 If no association can be found for a given markup, text will be
 returned as-is."
   :group 'org-export-texinfo
   :type 'alist
-  :options '(bold code italic verbatim comment))
+  :options '(bold code italic strike-through underscore verbatim))
 
 ;;;; Drawers
 
@@ -424,9 +426,9 @@ Return new tree."
   "Return a character not used in string S.
 This is used to choose a separator for constructs like \\verb."
   (let ((ll "~,./?;':\"|!@#%^&-_=+abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ<>()[]{}"))
-    (loop for c across ll
-	  when (not (string-match (regexp-quote (char-to-string c)) s))
-	  return (char-to-string c))))
+    (cl-loop for c across ll
+	     when (not (string-match (regexp-quote (char-to-string c)) s))
+	     return (char-to-string c))))
 
 (defun org-texinfo--text-markup (text markup _info)
   "Format TEXT depending on MARKUP text markup.
@@ -546,7 +548,7 @@ holding export options."
 		     (name (symbol-name (or org-texinfo-coding-system
 					    buffer-file-coding-system))))
 		 (dolist (system org-texinfo-supported-coding-systems "UTF-8")
-		   (when (org-string-match-p (regexp-quote system) name)
+		   (when (string-match-p (regexp-quote system) name)
 		     (throw 'coding-system system))))))
 	    (language (plist-get info :language))
 	    (case-fold-search nil))
@@ -583,7 +585,7 @@ holding export options."
 		 (let ((dirdesc
 			(let ((desc (plist-get info :texinfo-dirdesc)))
 			  (cond ((not desc) nil)
-				((org-string-match-p "\\.$" desc) desc)
+				((string-suffix-p "." desc) desc)
 				(t (concat desc "."))))))
 		   (if dirdesc (format "%-23s %s" dirtitle dirdesc) dirtitle))
 		 "\n"
@@ -914,10 +916,10 @@ CONTENTS is nil.  INFO is a plist holding contextual information."
      ((string= key "TINDEX") (format "@tindex %s" value))
      ((string= key "VINDEX") (format "@vindex %s" value))
      ((string= key "TOC")
-      (cond ((org-string-match-p "\\<tables\\>" value)
+      (cond ((string-match-p "\\<tables\\>" value)
 	     (concat "@listoffloats "
 		     (org-export-translate "Table" :utf-8 info)))
-	    ((org-string-match-p "\\<listings\\>" value)
+	    ((string-match-p "\\<listings\\>" value)
 	     (concat "@listoffloats "
 		     (org-export-translate "Listing" :utf-8 info))))))))
 
@@ -960,15 +962,15 @@ INFO is a plist holding contextual information.  See
 	     (if (equal type "fuzzy")
 		 (org-export-resolve-fuzzy-link link info)
 	       (org-export-resolve-id-link link info))))
-	(case (org-element-type destination)
-	  ((nil)
+	(pcase (org-element-type destination)
+	  (`nil
 	   (format org-texinfo-link-with-unknown-path-format
 		   (org-texinfo--sanitize-content path)))
 	  ;; Id link points to an external file.
-	  (plain-text
+	  (`plain-text
 	   (if desc (format "@uref{file://%s,%s}" destination desc)
 	     (format "@uref{file://%s}" destination)))
-	  (headline
+	  (`headline
 	   (format "@ref{%s,%s}"
 		   (org-texinfo--get-node destination info)
 		   (cond
@@ -979,7 +981,7 @@ INFO is a plist holding contextual information.  See
 		      (org-export-get-headline-number destination info) "."))
 		    (t (org-export-data
 			(org-element-property :title destination) info)))))
-	  (otherwise
+	  (_
 	   (format "@ref{%s,,%s}"
 		   (org-texinfo--get-node destination info)
 		   (cond
@@ -1291,8 +1293,13 @@ holding contextual information."
   "Transcode a SPECIAL-BLOCK element from Org to Texinfo.
 CONTENTS holds the contents of the block.  INFO is a plist used
 as a communication channel."
-  (let ((type (org-element-property :type special-block)))
-    (format "@%s\n%s@end %s" type contents type)))
+  (let ((opt (org-export-read-attribute :attr_texinfo special-block :options))
+	(type (org-element-property :type special-block)))
+    (format "@%s%s\n%s@end %s"
+	    type
+	    (if opt (concat " " opt) opt)
+	    (or contents "")
+	    type)))
 
 ;;;; Src Block
 
@@ -1300,8 +1307,8 @@ as a communication channel."
   "Transcode a SRC-BLOCK element from Org to Texinfo.
 CONTENTS holds the contents of the item.  INFO is a plist holding
 contextual information."
-  (let* ((lisp (org-string-match-p "lisp"
-				   (org-element-property :language src-block)))
+  (let* ((lisp (string-match-p "lisp"
+			       (org-element-property :language src-block)))
 	 (code (org-texinfo--sanitize-content
 		(org-export-format-code-default src-block info)))
 	 (value (format
@@ -1323,6 +1330,15 @@ contextual information."
   "Transcode a STATISTICS-COOKIE object from Org to Texinfo.
 CONTENTS is nil.  INFO is a plist holding contextual information."
   (org-element-property :value statistics-cookie))
+
+
+;;;; Strike-through
+
+(defun org-texinfo-strike-through (_strike-through contents info)
+  "Transcode STRIKE-THROUGH from Org to Texinfo.
+CONTENTS is the text with strike-through markup.  INFO is a plist
+holding contextual information."
+  (org-texinfo--text-markup contents 'strike-through info))
 
 ;;;; Subscript
 
@@ -1384,7 +1400,7 @@ a communication channel."
 	      (let ((w (- (org-element-property :contents-end cell)
 			  (org-element-property :contents-begin cell))))
 		(aset widths idx (max w (aref widths idx))))
-	      (incf idx))
+	      (cl-incf idx))
 	    info)))
       info)
     (format "{%s}" (mapconcat (lambda (w) (make-string w ?a)) widths "} {"))))
@@ -1441,12 +1457,20 @@ CONTENTS is nil.  INFO is a plist holding contextual
 information."
   (let ((value (org-texinfo-plain-text
 		(org-timestamp-translate timestamp) info)))
-    (case (org-element-property :type timestamp)
-      ((active active-range)
+    (pcase (org-element-property :type timestamp)
+      ((or `active `active-range)
        (format (plist-get info :texinfo-active-timestamp-format) value))
-      ((inactive inactive-range)
+      ((or `inactive `inactive-range)
        (format (plist-get info :texinfo-inactive-timestamp-format) value))
-      (t (format (plist-get info :texinfo-diary-timestamp-format) value)))))
+      (_ (format (plist-get info :texinfo-diary-timestamp-format) value)))))
+
+;;;; Underline
+
+(defun org-texinfo-underline (_underline contents info)
+  "Transcode UNDERLINE from Org to Texinfo.
+CONTENTS is the text with underline markup.  INFO is a plist
+holding contextual information."
+  (org-texinfo--text-markup contents 'underline info))
 
 ;;;; Verbatim
 
@@ -1553,106 +1577,36 @@ Return output file name."
 
 ;;;###autoload
 (defun org-texinfo-convert-region-to-texinfo ()
-  "Assume the current region has org-mode syntax, and convert it to Texinfo.
+  "Assume the current region has Org syntax, and convert it to Texinfo.
 This can be used in any buffer.  For example, you can write an
-itemized list in org-mode syntax in an Texinfo buffer and use
-this command to convert it."
+itemized list in Org syntax in an Texinfo buffer and use this
+command to convert it."
   (interactive)
   (org-export-replace-region-by 'texinfo))
 
 (defun org-texinfo-compile (file)
   "Compile a texinfo file.
 
-FILE is the name of the file being compiled.  Processing is
-done through the command specified in `org-texinfo-info-process'.
+FILE is the name of the file being compiled.  Processing is done
+through the command specified in `org-texinfo-info-process',
+which see.  Output is redirected to \"*Org INFO Texinfo Output*\"
+buffer.
 
 Return INFO file name or an error if it couldn't be produced."
-  (let* ((base-name (file-name-sans-extension (file-name-nondirectory file)))
-	 (full-name (file-truename file))
-	 (out-dir (file-name-directory file))
-	 (time (current-time))
-	 ;; Properly set working directory for compilation.
-	 (default-directory (if (file-name-absolute-p file)
-				(file-name-directory full-name)
-			      default-directory))
-	 errors)
-    (message "Processing Texinfo file %s..." file)
-    (save-window-excursion
-      ;; Replace %b, %f and %o with appropriate values in each command
-      ;; before applying it.  Output is redirected to "*Org INFO
-      ;; Texinfo Output*" buffer.
-      (let ((outbuf (get-buffer-create "*Org INFO Texinfo Output*")))
-	(with-current-buffer outbuf (compilation-mode))
-	(dolist (command org-texinfo-info-process)
-	  (shell-command
-	   (replace-regexp-in-string
-	    "%b" (shell-quote-argument base-name)
-	    (replace-regexp-in-string
-	     "%f" (shell-quote-argument full-name)
-	     (replace-regexp-in-string
-	      "%o" (shell-quote-argument out-dir) command t t) t t) t t)
-	   outbuf))
-	;; Collect standard errors from output buffer.
-	(setq errors (org-texinfo-collect-errors outbuf)))
-      (let ((infofile (concat out-dir base-name ".info")))
-	;; Check for process failure.  Provide collected errors if
-	;; possible.
-	(if (or (not (file-exists-p infofile))
-		;; Only compare times up to whole seconds as some
-		;; filesystems (e.g. HFS+) do not retain any finer
-		;; granularity.
-		(time-less-p (cl-subseq (nth 5 (file-attributes infofile)) 0 2)
-			     (cl-subseq time 0 2)))
-	    (error "INFO file %s wasn't produced%s" infofile
-		   (if errors (concat ": " errors) ""))
-	  ;; Else remove log files, when specified, and signal end of
-	  ;; process to user, along with any error encountered.
-	  (when org-texinfo-remove-logfiles
-	    (dolist (ext org-texinfo-logfiles-extensions)
-	      (let ((file (concat out-dir base-name "." ext)))
-		(when (file-exists-p file) (delete-file file)))))
-	  (message (concat "Process completed"
-			   (if (not errors) "."
-			     (concat " with errors: " errors)))))
-	;; Return output file name.
-	infofile))))
-
-(defun org-texinfo-collect-errors (buffer)
-  "Collect some kind of errors from \"makeinfo\" command output.
-
-BUFFER is the buffer containing output.
-
-Return collected error types as a string, or nil if there was
-none."
-  (with-current-buffer buffer
-    (save-excursion
-      (goto-char (point-min))
-      ;; Find final "makeinfo" run.
-      (when t
-	(let ((case-fold-search t)
-	      (errors ""))
-	  (when (save-excursion
-		  (re-search-forward "perhaps incorrect sectioning?" nil t))
-	    (setq errors (concat errors " [incorrect sectioning]")))
-	  (when (save-excursion
-		  (re-search-forward "missing close brace" nil t))
-	    (setq errors (concat errors " [syntax error]")))
-	  (when (save-excursion
-		  (re-search-forward "Unknown command" nil t))
-	    (setq errors (concat errors " [undefined @command]")))
-	  (when (save-excursion
-		  (re-search-forward "No matching @end" nil t))
-	    (setq errors (concat errors " [block incomplete]")))
-	  (when (save-excursion
-		  (re-search-forward "requires a sectioning" nil t))
-	    (setq errors (concat errors " [invalid section command]")))
-	  (when (save-excursion
-		  (re-search-forward "\\[unexpected\ ]" nil t))
-	    (setq errors (concat errors " [unexpected error]")))
-	  (when (save-excursion
-		  (re-search-forward "misplaced " nil t))
-	    (setq errors (concat errors " [syntax error]")))
-	  (and (org-string-nw-p errors) (org-trim errors)))))))
+  (message "Processing Texinfo file %s..." file)
+  (let* ((log-name "*Org INFO Texinfo Output*")
+	 (log (get-buffer-create log-name))
+	 (output
+	  (org-compile-file file org-texinfo-info-process "info"
+			    (format "See %S for details" log-name)
+			    log)))
+    (when org-texinfo-remove-logfiles
+      (let ((base (file-name-sans-extension output)))
+	(dolist (ext org-texinfo-logfiles-extensions)
+	  (let ((file (concat base "." ext)))
+	    (when (file-exists-p file) (delete-file file))))))
+    (message "Process completed.")
+    output))
 
 
 (provide 'ox-texinfo)

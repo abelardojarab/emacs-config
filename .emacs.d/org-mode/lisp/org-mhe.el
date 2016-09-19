@@ -1,4 +1,4 @@
-;;; org-mhe.el --- Support for links to MH-E messages from within Org-mode
+;;; org-mhe.el --- Support for Links to MH-E Messages -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2004-2016 Free Software Foundation, Inc.
 
@@ -25,7 +25,7 @@
 ;;; Commentary:
 
 ;; This file implements links to MH-E messages from within Org-mode.
-;; Org-mode loads this module by default - if this is not what you want,
+;; Org mode loads this module by default - if this is not what you want,
 ;; configure the variable `org-modules'.
 
 ;;; Code:
@@ -74,8 +74,7 @@ supported by MH-E."
 (defvar mh-search-regexp-builder)
 
 ;; Install the link type
-(org-add-link-type "mhe" 'org-mhe-open)
-(add-hook 'org-store-link-functions 'org-mhe-store-link)
+(org-link-set-parameters "mhe" :follow #'org-mhe-open :store #'org-mhe-store-link)
 
 ;; Implementation
 (defun org-mhe-store-link ()
@@ -93,7 +92,7 @@ supported by MH-E."
 			      :subject subject :message-id message-id)
 	(setq desc (org-email-link-description))
 	(setq link (concat "mhe:" (org-mhe-get-message-real-folder) "#"
-			   (org-remove-angle-brackets message-id)))
+			   (org-unbracket-string "<" ">" message-id)))
 	(org-add-link-props :link link :description desc)
 	link))))
 

@@ -20,7 +20,7 @@
 
 ;;; Comments:
 
-;; Template test file for Org-mode tests
+;; Template test file for Org tests
 
 ;;; Code:
 
@@ -197,16 +197,18 @@
   (should
    (equal
     "2015-03-04"
-    (flet ((current-time () (apply #'encode-time
-				   (org-parse-time-string "2014-03-04"))))
+    (cl-letf (((symbol-function 'current-time)
+	       (lambda ()
+		 (apply #'encode-time (org-parse-time-string "2014-03-04")))))
       (org-read-date
        t nil "+1y" nil
        (apply #'encode-time (org-parse-time-string "2012-03-29"))))))
   (should
    (equal
     "2013-03-29"
-    (flet ((current-time () (apply #'encode-time
-				   (org-parse-time-string "2014-03-04"))))
+    (cl-letf (((symbol-function 'current-time)
+	       (lambda ()
+		 (apply #'encode-time (org-parse-time-string "2014-03-04")))))
       (org-read-date
        t nil "++1y" nil
        (apply #'encode-time (org-parse-time-string "2012-03-29"))))))
@@ -216,22 +218,25 @@
   (should
    (equal
     "2014-04-01"
-    (flet ((current-time () (apply #'encode-time
-				   (org-parse-time-string "2014-03-04"))))
+    (cl-letf (((symbol-function 'current-time)
+	       (lambda ()
+		 (apply #'encode-time (org-parse-time-string "2014-03-04")))))
       (let ((org-read-date-prefer-future t))
 	(org-read-date t nil "1")))))
   (should
    (equal
     "2013-03-04"
-    (flet ((current-time () (apply #'encode-time
-				   (org-parse-time-string "2012-03-29"))))
+    (cl-letf (((symbol-function 'current-time)
+	       (lambda ()
+		 (apply #'encode-time (org-parse-time-string "2012-03-29")))))
       (let ((org-read-date-prefer-future t))
 	(org-read-date t nil "3-4")))))
   (should
    (equal
     "2012-03-04"
-    (flet ((current-time () (apply #'encode-time
-				   (org-parse-time-string "2012-03-29"))))
+    (cl-letf (((symbol-function 'current-time)
+	       (lambda ()
+		 (apply #'encode-time (org-parse-time-string "2012-03-29")))))
       (let ((org-read-date-prefer-future nil))
 	(org-read-date t nil "3-4")))))
   ;; When set to `org-read-date-prefer-future' is set to `time', read
@@ -241,15 +246,17 @@
   (should
    (equal
     "2012-03-30"
-    (flet ((current-time () (apply #'encode-time
-				   (org-parse-time-string "2012-03-29 16:40"))))
+    (cl-letf (((symbol-function 'current-time)
+	       (lambda ()
+		 (apply #'encode-time (org-parse-time-string "2012-03-29 16:40")))))
       (let ((org-read-date-prefer-future 'time))
 	(org-read-date t nil "00:40" nil)))))
   (should-not
    (equal
     "2012-03-30"
-    (flet ((current-time () (apply #'encode-time
-				   (org-parse-time-string "2012-03-29 16:40"))))
+    (cl-letf (((symbol-function 'current-time)
+	       (lambda ()
+		 (apply #'encode-time (org-parse-time-string "2012-03-29 16:40")))))
       (let ((org-read-date-prefer-future 'time))
 	(org-read-date t nil "29 00:40" nil)))))
   ;; Caveat: `org-read-date-prefer-future' always refers to current
@@ -257,8 +264,9 @@
   (should
    (equal
     "2014-04-01"
-    (flet ((current-time
-	    () (apply #'encode-time (org-parse-time-string "2014-03-04"))))
+    (cl-letf (((symbol-function 'current-time)
+	       (lambda ()
+		 (apply #'encode-time (org-parse-time-string "2014-03-04")))))
       (let ((org-read-date-prefer-future t))
 	(org-read-date
 	 t nil "1" nil
@@ -266,8 +274,9 @@
   (should
    (equal
     "2014-03-25"
-    (flet ((current-time
-	    () (apply #'encode-time (org-parse-time-string "2014-03-04"))))
+    (cl-letf (((symbol-function 'current-time)
+	       (lambda ()
+		 (apply #'encode-time (org-parse-time-string "2014-03-04")))))
       (let ((org-read-date-prefer-future t))
 	(org-read-date
 	 t nil "25" nil
@@ -363,6 +372,35 @@
    (equal '(3 29 2014)
 	  (calendar-gregorian-from-absolute
 	   (org-closest-date "<2012-03-29 +2y>" "<2014-03-04>" 'future)))))
+
+(ert-deftest test-org/deadline-close-p ()
+  "Test `org-deadline-close-p' specifications."
+  ;; Pretend that the current time is 2016-06-03 Fri 01:43
+  (cl-letf (((symbol-function 'current-time)
+	     (lambda () '(22353 6425 905205 644000))))
+    ;; Timestamps are close if they are within `ndays' of lead time.
+    (org-test-with-temp-text "* Heading"
+      (should (org-deadline-close-p "2016-06-03 Fri" 0))
+      (should (org-deadline-close-p "2016-06-02 Thu" 0))
+      (should-not (org-deadline-close-p "2016-06-04 Sat" 0))
+      (should (org-deadline-close-p "2016-06-04 Sat" 1))
+      (should (org-deadline-close-p "2016-06-03 Fri 12:00" 0)))
+    ;; Read `ndays' from timestamp if argument not given.
+    (org-test-with-temp-text "* H"
+      (should (org-deadline-close-p "2016-06-04 Sat -1d"))
+      (should-not (org-deadline-close-p "2016-06-04 Sat -0d"))
+      (should (org-deadline-close-p "2016-06-10 Fri -1w"))
+      (should-not (org-deadline-close-p "2016-06-11 Sat -1w")))
+    ;; Prefer `ndays' argument over lead time in timestamp.
+    (org-test-with-temp-text "* H"
+      (should (org-deadline-close-p "2016-06-04 Sat -0d" 1))
+      (should-not (org-deadline-close-p "2016-06-04 Sat -0d" 0)))
+    ;; Completed tasks are never close.
+    (let ((org-todo-keywords '(("TODO" "|" "DONE"))))
+      (org-test-with-temp-text "* TODO Heading"
+	(should (org-deadline-close-p "2016-06-03")))
+      (org-test-with-temp-text "* DONE Heading"
+	(should-not (org-deadline-close-p "2016-06-03"))))))
 
 
 ;;; Drawers
@@ -972,7 +1010,7 @@
   (should
    (org-test-with-temp-text "| <point>a |\n| b |"
      (org-return)
-     (org-looking-at-p "b")))
+     (looking-at-p "b")))
   ;; Open link or timestamp under point when `org-return-follows-link'
   ;; is non-nil.
   (should
@@ -980,27 +1018,27 @@
      (let ((org-return-follows-link t)
 	   (org-link-search-must-match-exact-headline nil))
        (org-return))
-     (org-looking-at-p "<<target>>")))
+     (looking-at-p "<<target>>")))
   (should-not
    (org-test-with-temp-text "Link [[target<point>]] <<target>>"
      (let ((org-return-follows-link nil)) (org-return))
-     (org-looking-at-p "<<target>>")))
+     (looking-at-p "<<target>>")))
   (should
    (org-test-with-temp-text "* [[b][a<point>]]\n* b"
      (let ((org-return-follows-link t)) (org-return))
-     (org-looking-at-p "* b")))
+     (looking-at-p "* b")))
   (should
    (org-test-with-temp-text "Link [[target][/descipt<point>ion/]] <<target>>"
      (let ((org-return-follows-link t)
 	   (org-link-search-must-match-exact-headline nil))
        (org-return))
-     (org-looking-at-p "<<target>>")))
+     (looking-at-p "<<target>>")))
   (should-not
    (org-test-with-temp-text "Link [[target]]<point> <<target>>"
      (let ((org-return-follows-link t)
 	   (org-link-search-must-match-exact-headline nil))
        (org-return))
-     (org-looking-at-p "<<target>>")))
+     (looking-at-p "<<target>>")))
   ;; When `org-return-follows-link' is non-nil, tolerate links and
   ;; timestamps in comments, node properties, etc.
   (should
@@ -1008,22 +1046,22 @@
      (let ((org-return-follows-link t)
 	   (org-link-search-must-match-exact-headline nil))
        (org-return))
-     (org-looking-at-p "<<target>>")))
+     (looking-at-p "<<target>>")))
   (should-not
    (org-test-with-temp-text "# Comment [[target<point>]]\n <<target>>"
      (let ((org-return-follows-link nil)) (org-return))
-     (org-looking-at-p "<<target>>")))
+     (looking-at-p "<<target>>")))
   (should-not
    (org-test-with-temp-text "# Comment [[target]]<point>\n <<target>>"
      (let ((org-return-follows-link t)
 	   (org-link-search-must-match-exact-headline nil))
        (org-return))
-     (org-looking-at-p "<<target>>")))
+     (looking-at-p "<<target>>")))
   ;; However, do not open link when point is in a table.
   (should
    (org-test-with-temp-text "| [[target<point>]] |\n| between |\n| <<target>> |"
      (let ((org-return-follows-link t)) (org-return))
-     (org-looking-at-p "between")))
+     (looking-at-p "between")))
   ;; Special case: in a list, when indenting, do not break structure.
   (should
    (equal "- A\n  B"
@@ -1153,6 +1191,18 @@
 	    (goto-char (point-max))
 	    (let ((org-insert-heading-respect-content nil)) (org-insert-heading))
 	    (buffer-string))))
+  ;; Preserve list visibility when inserting an item.
+  (should
+   (equal
+    '(outline outline)
+    (org-test-with-temp-text "- A\n  - B\n- C\n  - D"
+      (let ((org-cycle-include-plain-lists t))
+	(org-cycle)
+	(forward-line 2)
+	(org-cycle)
+	(let ((org-insert-heading-respect-content nil)) (org-insert-heading))
+	(list (get-char-property (line-beginning-position 0) 'invisible)
+	      (get-char-property (line-end-position 2) 'invisible))))))
   ;; When called with two universal arguments, insert a new headline
   ;; at the end of the grandparent subtree.
   (should
@@ -1345,6 +1395,55 @@
 
 
 ;;; Headline
+
+(ert-deftest test-org/get-heading ()
+  "Test `org-get-heading' specifications."
+  ;; Return current heading, even if point is not on it.
+  (should
+   (equal "H"
+	  (org-test-with-temp-text "* H"
+	    (org-get-heading))))
+  (should
+   (equal "H"
+	  (org-test-with-temp-text "* H\nText<point>"
+	    (org-get-heading))))
+  ;; Without any optional argument, return TODO keywords and tags.
+  (should
+   (equal "TODO H"
+	  (org-test-with-temp-text "#+TODO: TODO | DONE\n* TODO H<point>"
+	    (org-get-heading))))
+  (should
+   (equal "H :tag:"
+	  (org-test-with-temp-text "* H :tag:"
+	    (org-get-heading))))
+  ;; With NO-TAGS argument, ignore tags.
+  (should
+   (equal "TODO H"
+	  (org-test-with-temp-text "#+TODO: TODO | DONE\n* TODO H<point>"
+	    (org-get-heading t))))
+  (should
+   (equal "H"
+	  (org-test-with-temp-text "* H :tag:"
+	    (org-get-heading t))))
+  ;; With NO-TODO, ignore TODO keyword.
+  (should
+   (equal "H"
+	  (org-test-with-temp-text "#+TODO: TODO | DONE\n* TODO H<point>"
+	    (org-get-heading nil t))))
+  (should
+   (equal "H :tag:"
+	  (org-test-with-temp-text "* H :tag:"
+	    (org-get-heading nil t))))
+  ;; TODO keywords are case-sensitive.
+  (should
+   (equal "Todo H"
+	  (org-test-with-temp-text "#+TODO: TODO | DONE\n* Todo H<point>"
+	    (org-get-heading nil t))))
+  ;; On an empty headline, return value is consistent.
+  (should (equal "" (org-test-with-temp-text "* " (org-get-heading))))
+  (should (equal "" (org-test-with-temp-text "* " (org-get-heading t))))
+  (should (equal "" (org-test-with-temp-text "* " (org-get-heading nil t))))
+  (should (equal "" (org-test-with-temp-text "* " (org-get-heading t t)))))
 
 (ert-deftest test-org/in-commented-heading-p ()
   "Test `org-in-commented-heading-p' specifications."
@@ -1886,13 +1985,13 @@ SCHEDULED: <2014-03-04 tue.>"
    (org-test-with-temp-text
        "* H1\n:PROPERTIES:\n:CUSTOM_ID: custom\n:END:\n* H2\n[[#custom<point>]]"
      (org-open-at-point)
-     (org-looking-at-p "\\* H1")))
+     (looking-at-p "\\* H1")))
   ;; Throw an error on false positives.
   (should-error
    (org-test-with-temp-text
        "* H1\n:DRAWER:\n:CUSTOM_ID: custom\n:END:\n* H2\n[[#custom<point>]]"
      (org-open-at-point)
-     (org-looking-at-p "\\* H1"))))
+     (looking-at-p "\\* H1"))))
 
 ;;;; Fuzzy Links
 
@@ -2043,26 +2142,13 @@ http://article.gmane.org/gmane.emacs.orgmode/21459/"
     (org-link-unescape
      (org-link-escape "http://some.host.com/form?&id=blah%2Bblah25")))))
 
-(ert-deftest test-org/org-link-escape-chars-browser ()
-  "Test of the constant `org-link-escape-chars-browser'.
-See there why this test is a candidate to be removed once Org
-drops support for Emacs 24.1 and 24.2."
-  (should
-   (string=
-    (concat "http://lists.gnu.org/archive/cgi-bin/namazu.cgi?query="
-	    "%22Release%208.2%22&idxname=emacs-orgmode")
-    (org-link-escape-browser ; Do not replace with `url-encode-url',
-			     ; see docstring above.
-     (concat "http://lists.gnu.org/archive/cgi-bin/namazu.cgi?query="
-	     "\"Release 8.2\"&idxname=emacs-orgmode")))))
-
 ;;;; Open at point
 
 (ert-deftest test-org/open-at-point-in-keyword ()
   "Does `org-open-at-point' open link in a keyword line?"
   (should
    (org-test-with-temp-text
-       "#+KEYWORD: <point>[[info:emacs#Top]]"
+       "<<top>>\n#+KEYWORD: <point>[[top]]"
      (org-open-at-point) t)))
 
 (ert-deftest test-org/open-at-point-in-property ()
@@ -2071,7 +2157,7 @@ drops support for Emacs 24.1 and 24.2."
    (org-test-with-temp-text
        "* Headline
 :PROPERTIES:
-:URL: <point>[[info:emacs#Top]]
+:URL: <point>[[*Headline]]
 :END:"
      (org-open-at-point) t)))
 
@@ -2079,27 +2165,15 @@ drops support for Emacs 24.1 and 24.2."
   "Does `org-open-at-point' open link in a commented line?"
   (should
    (org-test-with-temp-text
-    "# <point>[[info:emacs#Top]]"
+    "<<top>>\n# <point>[[top]]"
     (org-open-at-point) t)))
-
-(ert-deftest test-org/open-at-point/info ()
-  "Test `org-open-at-point' on info links."
-  (should
-   (org-test-with-temp-text
-    "<point>[[info:emacs#Top]]"
-    (org-open-at-point)
-    (and (switch-to-buffer "*info*")
-	 (prog1
-	     (looking-at "\nThe Emacs Editor")
-	   (kill-buffer))))))
 
 (ert-deftest test-org/open-at-point/inline-image ()
   "Test `org-open-at-point' on nested links."
   (should
-   (org-test-with-temp-text "[[info:org#Top][info:<point>emacs#Top]]"
+   (org-test-with-temp-text "<<top>>\n[[top][file:<point>unicorn.jpg]]"
      (org-open-at-point)
-     (prog1 (with-current-buffer "*info*" (looking-at "\nOrg Mode Manual"))
-       (kill-buffer "*info*")))))
+     (bobp))))
 
 (ert-deftest test-org/open-at-point/radio-target ()
   "Test `org-open-at-point' on radio targets."
@@ -2108,6 +2182,49 @@ drops support for Emacs 24.1 and 24.2."
      (org-update-radio-target-regexp)
      (org-open-at-point)
      (eq (org-element-type (org-element-context)) 'radio-target))))
+
+;;;; Stored links
+
+(ert-deftest test-org/store-link ()
+  "Test `org-store-link' specifications."
+  ;; On a headline, link to that headline.  Use heading as the
+  ;; description of the link.
+  (should
+   (let (org-store-link-props org-stored-links)
+     (org-test-with-temp-text-in-file "* H1"
+       (let ((file (buffer-file-name)))
+	 (equal (format "[[file:%s::*H1][H1]]" file)
+		(org-store-link nil))))))
+  ;; On a headline, remove any link from description.
+  (should
+   (let (org-store-link-props org-stored-links)
+     (org-test-with-temp-text-in-file "* [[#l][d]]"
+       (let ((file (buffer-file-name)))
+	 (equal (format "[[file:%s::*%s][d]]"
+			file
+			(org-link-escape "[[#l][d]]"))
+		(org-store-link nil))))))
+  (should
+   (let (org-store-link-props org-stored-links)
+     (org-test-with-temp-text-in-file "* [[l]]"
+       (let ((file (buffer-file-name)))
+	 (equal (format "[[file:%s::*%s][l]]" file (org-link-escape "[[l]]"))
+		(org-store-link nil))))))
+  (should
+   (let (org-store-link-props org-stored-links)
+     (org-test-with-temp-text-in-file "* [[l1][d1]] [[l2][d2]]"
+       (let ((file (buffer-file-name)))
+	 (equal (format "[[file:%s::*%s][d1 d2]]"
+			file
+			(org-link-escape "[[l1][d1]] [[l2][d2]]"))
+		(org-store-link nil))))))
+  ;; On a named element, link to that element.
+  (should
+   (let (org-store-link-props org-stored-links)
+     (org-test-with-temp-text-in-file "#+NAME: foo\nParagraph"
+       (let ((file (buffer-file-name)))
+	 (equal (format "[[file:%s::foo][foo]]" file)
+		(org-store-link nil)))))))
 
 
 ;;; Node Properties
@@ -2369,6 +2486,35 @@ drops support for Emacs 24.1 and 24.2."
        (org-hide-block-toggle)
        (org-end-of-line)
        (eobp)))))
+
+(ert-deftest test-org/open-line ()
+  "Test `org-open-line' specifications."
+  ;; Call `open-line' outside of tables.
+  (should
+   (equal "\nText"
+	  (org-test-with-temp-text "Text"
+	    (org-open-line 1)
+	    (buffer-string))))
+  ;; At a table, create a row above.
+  (should
+   (equal "\n|   |\n| a |"
+	  (org-test-with-temp-text "\n<point>| a |"
+	    (org-open-line 1)
+	    (buffer-string))))
+  ;; At the very first character of the buffer, also call `open-line'.
+  (should
+   (equal "\n| a |"
+	  (org-test-with-temp-text "| a |"
+	    (org-open-line 1)
+	    (buffer-string))))
+  ;; Narrowing does not count.
+  (should
+   (equal "Text\n|   |\n| a |"
+	  (org-test-with-temp-text "Text\n<point>| a |"
+	    (narrow-to-region (point) (point-max))
+	    (org-open-line 1)
+	    (widen)
+	    (buffer-string)))))
 
 (ert-deftest test-org/forward-sentence ()
   "Test `org-forward-sentence' specifications."
@@ -2851,7 +2997,7 @@ Outside."
   (should
    (org-test-with-temp-text "#+key1: v\n#+key<point>2: v\n#+key3: v"
      (org-drag-element-backward)
-     (org-looking-at-p "2")))
+     (looking-at-p "2")))
   ;; Error when trying to move first element of buffer.
   (should-error
    (org-test-with-temp-text "Paragraph 1.\n\nParagraph 2."
@@ -3033,7 +3179,7 @@ Text.
 	   (org-odd-levels-only nil))
        (org-demote))
      (org-move-to-column 10)
-     (org-looking-at-p ":tag:$")))
+     (looking-at-p ":tag:$")))
   (should-not
    (org-test-with-temp-text "* H  :tag:"
      (let ((org-tags-column 10)
@@ -3041,7 +3187,7 @@ Text.
 	   (org-odd-levels-only nil))
        (org-demote))
      (org-move-to-column 10)
-     (org-looking-at-p ":tag:$")))
+     (looking-at-p ":tag:$")))
   ;; When `org-adapt-indentation' is non-nil, always indent planning
   ;; info and property drawers accordingly.
   (should
@@ -3191,7 +3337,7 @@ Text.
 	   (org-odd-levels-only nil))
        (org-promote))
      (org-move-to-column 10)
-     (org-looking-at-p ":tag:$")))
+     (looking-at-p ":tag:$")))
   (should-not
    (org-test-with-temp-text "** H :tag:"
      (let ((org-tags-column 10)
@@ -3199,7 +3345,7 @@ Text.
 	   (org-odd-levels-only nil))
        (org-promote))
      (org-move-to-column 10)
-     (org-looking-at-p ":tag:$")))
+     (looking-at-p ":tag:$")))
   ;; When `org-adapt-indentation' is non-nil, always indent planning
   ;; info and property drawers.
   (should
@@ -3813,12 +3959,12 @@ Paragraph<point>"
   ;; Get "FILE" property.
   (should
    (org-test-with-temp-text-in-file "* H\nParagraph"
-     (org-file-equal-p (cdr (assoc "FILE" (org-entry-properties nil "FILE")))
-		       (buffer-file-name))))
+     (file-equal-p (cdr (assoc "FILE" (org-entry-properties nil "FILE")))
+		   (buffer-file-name))))
   (should
    (org-test-with-temp-text-in-file "* H\nParagraph"
-     (org-file-equal-p (cdr (assoc "FILE" (org-entry-properties)))
-		       (buffer-file-name))))
+     (file-equal-p (cdr (assoc "FILE" (org-entry-properties)))
+		   (buffer-file-name))))
   (should-not
    (org-test-with-temp-text "* H\nParagraph"
      (cdr (assoc "FILE" (org-entry-properties nil "FILE")))))
@@ -4275,6 +4421,52 @@ Paragraph<point>"
      (search-forward "H2")
      (org-invisible-p2))))
 
+(ert-deftest test-org/occur ()
+  "Test `org-occur' specifications."
+  ;; Count number of matches.
+  (should
+   (= 1
+      (org-test-with-temp-text "* H\nA\n* H2"
+	(org-occur "A"))))
+  (should
+   (= 2
+      (org-test-with-temp-text "* H\nA\n* H2\nA"
+	(org-occur "A"))))
+  ;; Test CALLBACK optional argument.
+  (should
+   (= 0
+      (org-test-with-temp-text "* H\nA\n* H2"
+	(org-occur "A" nil (lambda () (equal (org-get-heading) "H2"))))))
+  (should
+   (= 1
+      (org-test-with-temp-text "* H\nA\n* H2\nA"
+	(org-occur "A" nil (lambda () (equal (org-get-heading) "H2"))))))
+  ;; Case-fold searches according to `org-occur-case-fold-search'.
+  (should
+   (= 2
+      (org-test-with-temp-text "Aa"
+	(let ((org-occur-case-fold-search t)) (org-occur "A")))))
+  (should
+   (= 2
+      (org-test-with-temp-text "Aa"
+	(let ((org-occur-case-fold-search t)) (org-occur "a")))))
+  (should
+   (= 1
+      (org-test-with-temp-text "Aa"
+	(let ((org-occur-case-fold-search nil)) (org-occur "A")))))
+  (should
+   (= 1
+      (org-test-with-temp-text "Aa"
+	(let ((org-occur-case-fold-search nil)) (org-occur "a")))))
+  (should
+   (= 1
+      (org-test-with-temp-text "Aa"
+	(let ((org-occur-case-fold-search 'smart)) (org-occur "A")))))
+  (should
+   (= 2
+      (org-test-with-temp-text "Aa"
+	(let ((org-occur-case-fold-search 'smart)) (org-occur "a"))))))
+
 
 ;;; Tags
 
@@ -4331,6 +4523,32 @@ Paragraph<point>"
    (org-tag-alist-to-groups
     '((:startgroup) ("group") ("t1") ("t2") (:endgroup)))))
 
+(ert-deftest test-org/tag-align ()
+  "Test `org-align-tags-here' with different display width."
+  (should
+   ;;      12345678901234567890
+   (equal "* Test         :abc:"
+	  (org-test-with-temp-text "* Test :abc:"
+	    (let ((org-tags-column -20)
+		  (indent-tabs-mode nil))
+	     (org-fix-tags-on-the-fly))
+	    (buffer-string))))
+  (should
+   ;;      12345678901234567890
+   (equal "* Test      :日本語:"
+	  (org-test-with-temp-text "* Test :日本語:"
+	    (let ((org-tags-column -20)
+		  (indent-tabs-mode nil))
+	     (org-fix-tags-on-the-fly))
+	    (buffer-string)))))
+
+(ert-deftest test-org/tags-at ()
+  (should
+   (equal '("foo" "bar")
+	  (org-test-with-temp-text
+	   "* T<point>est :foo:bar:"
+	   (org-get-tags-at)))))
+
 
 ;;; Timestamps API
 
@@ -4341,9 +4559,9 @@ Paragraph<point>"
    (string-match
     "Te<2014-03-04 .*?>xt"
     (org-test-with-temp-text "Te<point>xt"
-      (flet ((org-read-date
-	      (&rest args)
-	      (apply #'encode-time (org-parse-time-string "2014-03-04"))))
+      (cl-letf (((symbol-function 'org-read-date)
+		 (lambda (&rest args)
+		   (apply #'encode-time (org-parse-time-string "2014-03-04")))))
 	(org-time-stamp nil)
 	(buffer-string)))))
   ;; With a prefix argument, also insert time.
@@ -4351,9 +4569,10 @@ Paragraph<point>"
    (string-match
     "Te<2014-03-04 .*? 00:41>xt"
     (org-test-with-temp-text "Te<point>xt"
-      (flet ((org-read-date
-	      (&rest args)
-	      (apply #'encode-time (org-parse-time-string "2014-03-04 00:41"))))
+      (cl-letf (((symbol-function 'org-read-date)
+		 (lambda (&rest args)
+		   (apply #'encode-time
+			  (org-parse-time-string "2014-03-04 00:41")))))
 	(org-time-stamp '(4))
 	(buffer-string)))))
   ;; With two universal prefix arguments, insert an active timestamp
@@ -4362,9 +4581,10 @@ Paragraph<point>"
    (string-match
     "Te<2014-03-04 .*? 00:41>xt"
     (org-test-with-temp-text "Te<point>xt"
-      (flet ((current-time
-	      ()
-	      (apply #'encode-time (org-parse-time-string "2014-03-04 00:41"))))
+      (cl-letf (((symbol-function 'current-time)
+		 (lambda ()
+		   (apply #'encode-time
+			  (org-parse-time-string "2014-03-04 00:41")))))
 	(org-time-stamp '(16))
 	(buffer-string)))))
   ;; When optional argument is non-nil, insert an inactive timestamp.
@@ -4372,9 +4592,9 @@ Paragraph<point>"
    (string-match
     "Te\\[2014-03-04 .*?\\]xt"
     (org-test-with-temp-text "Te<point>xt"
-      (flet ((org-read-date
-	      (&rest args)
-	      (apply #'encode-time (org-parse-time-string "2014-03-04"))))
+      (cl-letf (((symbol-function 'org-read-date)
+		 (lambda (&rest args)
+		   (apply #'encode-time (org-parse-time-string "2014-03-04")))))
 	(org-time-stamp nil t)
 	(buffer-string)))))
   ;; When called from a timestamp, replace existing one.
@@ -4382,18 +4602,18 @@ Paragraph<point>"
    (string-match
     "<2014-03-04 .*?>"
     (org-test-with-temp-text "<2012-03-29<point> thu.>"
-      (flet ((org-read-date
-	      (&rest args)
-	      (apply #'encode-time (org-parse-time-string "2014-03-04"))))
+      (cl-letf (((symbol-function 'org-read-date)
+		 (lambda (&rest args)
+		   (apply #'encode-time (org-parse-time-string "2014-03-04")))))
 	(org-time-stamp nil)
 	(buffer-string)))))
   (should
    (string-match
     "<2014-03-04 .*?>--<2014-03-04 .*?>"
     (org-test-with-temp-text "<2012-03-29<point> thu.>--<2014-03-04 tue.>"
-      (flet ((org-read-date
-	      (&rest args)
-	      (apply #'encode-time (org-parse-time-string "2014-03-04"))))
+      (cl-letf (((symbol-function 'org-read-date)
+		 (lambda (&rest args)
+		   (apply #'encode-time (org-parse-time-string "2014-03-04")))))
 	(org-time-stamp nil)
 	(buffer-string)))))
   ;; When replacing a timestamp, preserve repeater, if any.
@@ -4401,9 +4621,9 @@ Paragraph<point>"
    (string-match
     "<2014-03-04 .*? \\+2y>"
     (org-test-with-temp-text "<2012-03-29<point> thu. +2y>"
-      (flet ((org-read-date
-	      (&rest args)
-	      (apply #'encode-time (org-parse-time-string "2014-03-04"))))
+      (cl-letf (((symbol-function 'org-read-date)
+		 (lambda (&rest args)
+		   (apply #'encode-time (org-parse-time-string "2014-03-04")))))
 	(org-time-stamp nil)
 	(buffer-string)))))
   ;; When called twice in a raw, build a date range.
@@ -4411,9 +4631,9 @@ Paragraph<point>"
    (string-match
     "<2012-03-29 .*?>--<2014-03-04 .*?>"
     (org-test-with-temp-text "<2012-03-29 thu.><point>"
-      (flet ((org-read-date
-	      (&rest args)
-	      (apply #'encode-time (org-parse-time-string "2014-03-04"))))
+      (cl-letf (((symbol-function 'org-read-date)
+		 (lambda (&rest args)
+		   (apply #'encode-time (org-parse-time-string "2014-03-04")))))
 	(let ((last-command 'org-time-stamp)
 	      (this-command 'org-time-stamp))
 	  (org-time-stamp nil))
@@ -4553,7 +4773,7 @@ Paragraph<point>"
      (get-char-property (line-end-position) 'invisible)))
   ;; Test optional argument.
   (should
-   (org-test-with-temp-text ":D1:\nc1\n:END:\n\n:D2:\nc2\n:END:"
+   (org-test-with-temp-text "Text\n:D1:\nc1\n:END:\n\n:D2:\nc2\n:END:"
      (let ((drawer (save-excursion (search-forward ":D2")
 				   (org-element-at-point))))
        (org-flag-drawer t drawer)
@@ -4698,7 +4918,30 @@ Paragraph<point>"
     (should (equal '(0 1 3 4 5 7 12 13)
 		   (funcall list-visible-lines 'canonical t)))
     (should (equal '(0 1 3 4 5 7 8 9 11 12 13)
-		   (funcall list-visible-lines 'canonical nil)))))
+		   (funcall list-visible-lines 'canonical nil))))
+  ;; When point is hidden in a drawer or a block, make sure to make it
+  ;; visible.
+  (should-not
+   (org-test-with-temp-text "#+BEGIN_QUOTE\nText\n#+END_QUOTE"
+     (org-hide-block-toggle)
+     (search-forward "Text")
+     (org-show-set-visibility 'minimal)
+     (org-invisible-p2)))
+  (should-not
+   (org-test-with-temp-text ":DRAWER:\nText\n:END:"
+     (org-flag-drawer t)
+     (search-forward "Text")
+     (org-show-set-visibility 'minimal)
+     (org-invisible-p2)))
+  (should-not
+   (org-test-with-temp-text
+       "#+BEGIN_QUOTE\n<point>:DRAWER:\nText\n:END:\n#+END_QUOTE"
+     (org-flag-drawer t)
+     (forward-line -1)
+     (org-hide-block-toggle)
+     (search-forward "Text")
+     (org-show-set-visibility 'minimal)
+     (org-invisible-p2))))
 
 
 (provide 'test-org)

@@ -57,6 +57,7 @@
 
 (declare-function org-export-string-as "ox"
 		  (string backend &optional body-only ext-plist))
+(declare-function org-trim "org" (s &optional keep-lead))
 
 (defcustom org-mime-use-property-inheritance nil
   "Non-nil means al MAIL_ properties apply also for sublevels."
@@ -173,7 +174,7 @@ and images in a multipart/related part."
             "--" "}-<<alternative>>\n"))
     ('vm "?")))
 
-(defun org-mime-replace-images (str current-file)
+(defun org-mime-replace-images (str)
   "Replace images in html files with cid links."
   (let (html-images)
     (cons
@@ -185,7 +186,7 @@ and images in a multipart/related part."
          (let* ((url (and (string-match "src=\"\\([^\"]+\\)\"" text)
                           (match-string 1 text)))
                 (path (expand-file-name
-                       url (file-name-directory current-file)))
+                       url temporary-file-directory))
                 (ext (file-name-extension path))
                 (id (replace-regexp-in-string "[\/\\\\]" "_" path)))
            (add-to-list 'html-images
@@ -212,8 +213,6 @@ otherwise export the entire body."
                        (point-max)))
          (raw-body (concat org-mime-default-header
 			   (buffer-substring html-start html-end)))
-         (tmp-file (make-temp-name (expand-file-name
-				    "mail" temporary-file-directory)))
          (body (org-export-string-as raw-body 'org t))
          ;; because we probably don't want to export a huge style file
          (org-export-htmlize-output-type 'inline-css)
@@ -224,7 +223,7 @@ otherwise export the entire body."
          ;; to hold attachments for inline html images
          (html-and-images
           (org-mime-replace-images
-	   (org-export-string-as raw-body 'html t) tmp-file))
+	   (org-export-string-as raw-body 'html t)))
          (html-images (unless arg (cdr html-and-images)))
          (html (org-mime-apply-html-hook
                 (if arg
@@ -304,7 +303,7 @@ otherwise export the entire body."
      ((eq fmt 'org)
       (require 'ox-org)
       (insert (org-export-string-as
-	       (org-babel-trim (funcall bhook body 'org)) 'org t)))
+	       (org-trim (funcall bhook body 'org)) 'org t)))
      ((eq fmt 'ascii)
       (require 'ox-ascii)
       (insert (org-export-string-as
@@ -317,12 +316,12 @@ otherwise export the entire body."
 	     (org-export-htmlize-output-type 'inline-css)
 	     (html-and-images
 	      (org-mime-replace-images
-	       (org-export-string-as (funcall bhook body 'html) 'html t) file))
+	       (org-export-string-as (funcall bhook body 'html) 'html t)))
 	     (images (cdr html-and-images))
 	     (html (org-mime-apply-html-hook (car html-and-images))))
 	(insert (org-mime-multipart
 		 (org-export-string-as
-		  (org-babel-trim
+		  (org-trim
 		   (funcall bhook body (if (eq fmt 'html) 'org 'ascii)))
 		  (if (eq fmt 'html) 'org 'ascii) t)
 		 html)

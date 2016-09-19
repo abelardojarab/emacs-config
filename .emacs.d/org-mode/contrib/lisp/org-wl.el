@@ -109,8 +109,7 @@ googlegroups otherwise."
   "List of folder indicators.  See Wanderlust manual, section 3.")
 
 ;; Install the link type
-(org-add-link-type "wl" 'org-wl-open)
-(add-hook 'org-store-link-functions 'org-wl-store-link)
+(org-link-set-parameters "wl" :follow #'org-wl-open :store #'org-wl-store-link)
 
 ;; Implementation
 
@@ -192,7 +191,7 @@ ENTITY is a message entity."
 		 (message-id
 		  (org-wl-message-field 'message-id wl-message-entity))
 		 (message-id-no-brackets
-		  (org-remove-angle-brackets message-id))
+		  (org-unbracket-string "<" ">" message-id))
 		 (from (org-wl-message-field 'from wl-message-entity))
 		 (to (org-wl-message-field 'to wl-message-entity))
 		 (xref (org-wl-message-field 'xref wl-message-entity))
@@ -279,8 +278,8 @@ for namazu index."
 				      org-wl-namazu-default-index)
 				 org-wl-namazu-default-index
 			       (read-directory-name "Namazu index: ")))))
-      (if (not (elmo-folder-exists-p (org-no-warnings
-				      (wl-folder-get-elmo-folder folder))))
+      (if (not (elmo-folder-exists-p (with-no-warnings
+				       (wl-folder-get-elmo-folder folder))))
 	  (error "No such folder: %s" folder))
       (let ((old-buf (current-buffer))
 	    (old-point (point-marker)))
@@ -291,7 +290,7 @@ for namazu index."
 	  ;; in the old buffer.
 	  (goto-char old-point))
 	(when article
-	  (if (org-string-match-p "@" article)
+	  (if (string-match-p "@" article)
 	      (wl-summary-jump-to-msg-by-message-id (org-add-angle-brackets
 						     article))
 	    (or (wl-summary-jump-to-msg (string-to-number article))

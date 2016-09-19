@@ -39,7 +39,6 @@
 
 ;;; Code:
 (require 'ob)
-(eval-when-compile (require 'cl))
 
 (declare-function run-mozilla "ext:moz" (arg))
 
@@ -97,7 +96,9 @@ This function is called by `org-babel-execute-src-block'"
 If RESULTS look like a table, then convert them into an
 Emacs-lisp table, otherwise return the results as a string."
   (org-babel-read
-   (if (and (stringp results) (string-match "^\\[[^\000]+\\]$" results))
+   (if (and (stringp results)
+	    (string-prefix-p "[" results)
+	    (string-suffix-p "]" results))
        (org-babel-read
         (concat "'"
                 (replace-regexp-in-string

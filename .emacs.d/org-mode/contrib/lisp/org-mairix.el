@@ -82,8 +82,9 @@ correctly, you should not need to change this.
 
 ;;; The hooks to integrate mairix into org
 
-(org-add-link-type "mairix" 'org-mairix-open)
-(add-hook 'org-store-link-functions 'org-mairix-store-gnus-link)
+(org-link-set-parameters "mairix"
+			 :follow #'org-mairix-open
+			 :store #'org-mairix-store-gnus-link)
 
 ;;; Generic org-mairix functions
 
@@ -93,7 +94,7 @@ correctly, you should not need to change this.
           (if org-mairix-threaded-links "t:")
           (if org-mairix-augmented-links "a:")
           "@@"
-          (org-remove-angle-brackets message-id)))
+          (org-unbracket-string "<" ">" message-id)))
 
 (defun org-store-mairix-link-props (&rest plist)
   "Take a property list describing a mail, and add mairix link

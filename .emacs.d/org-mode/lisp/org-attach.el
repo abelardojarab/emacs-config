@@ -22,7 +22,7 @@
 
 ;;; Commentary:
 
-;; See the Org-mode manual for information on how to use it.
+;; See the Org manual for information on how to use it.
 ;;
 ;; Attachments are managed in a special directory called "data", which
 ;; lives in the same directory as the org file itself.  If this data
@@ -37,10 +37,9 @@
 
 ;;; Code:
 
-(eval-when-compile
-  (require 'cl))
-(require 'org-id)
+(require 'cl-lib)
 (require 'org)
+(require 'org-id)
 (require 'vc-git)
 
 (defgroup org-attach nil
@@ -336,12 +335,12 @@ This checks for the existence of a \".git\" directory in that directory."
                        org-attach-git-annex-cutoff))
               (call-process "git" nil nil nil "annex" "add" new-or-modified)
             (call-process "git" nil nil nil "add" new-or-modified))
-	    (incf changes))
+	    (cl-incf changes))
 	(dolist (deleted
 		 (split-string
 		  (shell-command-to-string "git ls-files -z --deleted") "\0" t))
 	  (call-process "git" nil nil nil "rm" deleted)
-	  (incf changes))
+	  (cl-incf changes))
 	(when (> changes 0)
 	  (shell-command "git commit -m 'Synchronized attachments'"))))))
 

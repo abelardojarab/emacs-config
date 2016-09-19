@@ -39,9 +39,8 @@
 
 ;;; Code:
 (require 'ob)
-(eval-when-compile (require 'cl))
 
-(declare-function org-time-string-to-time "org" (s))
+(declare-function org-time-string-to-time "org" (s &optional buffer pos))
 (declare-function org-combine-plists "org" (&rest plists))
 (declare-function orgtbl-to-generic "org-table" (table params))
 (declare-function gnuplot-mode "ext:gnuplot-mode" ())

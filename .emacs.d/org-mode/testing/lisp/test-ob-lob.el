@@ -33,48 +33,49 @@
        (or load-file-name buffer-file-name)))))))
 
 (ert-deftest test-ob-lob/ingest ()
-  "Test the ingestion of an org-mode file."
+  "Test the ingestion of an Org file."
   (should (< 0 (org-babel-lob-ingest
 		(expand-file-name "babel.org" org-test-example-dir)))))
 
 (ert-deftest test-ob-lob/call-with-header-arguments ()
   "Test the evaluation of a library of babel #+call: line."
   (letf (((symbol-function 'org-babel-insert-result)
-	     (symbol-function 'ignore)))
+	  (symbol-function 'ignore)))
     (org-test-at-id "fab7e291-fde6-45fc-bf6e-a485b8bca2f0"
       (move-beginning-of-line 1)
       (forward-line 6)
       (message (buffer-substring (point-at-bol) (point-at-eol)))
-      (should (string= "testing" (org-babel-lob-execute
-				  (org-babel-lob-get-info))))
+      (should (string= "testing" (org-babel-execute-src-block
+				  nil (org-babel-lob-get-info))))
       (forward-line 1)
-      (should (string= "testing" (caar (org-babel-lob-execute
-					(org-babel-lob-get-info)))))
+      (should (string= "testing" (caar (org-babel-execute-src-block
+					nil (org-babel-lob-get-info)))))
       (forward-line 1)
-      (should (string= "testing" (org-babel-lob-execute
-				  (org-babel-lob-get-info))))
+      (should (string= "testing" (org-babel-execute-src-block
+				  nil (org-babel-lob-get-info))))
       (forward-line 1)
-      (should (string= "testing" (caar (org-babel-lob-execute
-					(org-babel-lob-get-info)))))
+      (should (string= "testing" (caar (org-babel-execute-src-block
+					nil (org-babel-lob-get-info)))))
       (forward-line 1)
-      (should (string= "testing" (org-babel-lob-execute
-				  (org-babel-lob-get-info))))
+      (should (string= "testing" (org-babel-execute-src-block
+				  nil (org-babel-lob-get-info))))
       (forward-line 1)
-      (should (string= "testing" (caar (org-babel-lob-execute
-					(org-babel-lob-get-info)))))
+      (should (string= "testing" (caar (org-babel-execute-src-block
+					nil (org-babel-lob-get-info)))))
       (forward-line 1) (beginning-of-line) (forward-char 27)
-      (should (string= "testing" (org-babel-lob-execute
-				  (org-babel-lob-get-info))))
+      (should (string= "testing" (org-babel-execute-src-block
+				  nil (org-babel-lob-get-info))))
       (forward-line 1) (beginning-of-line) (forward-char 27)
-      (should (string= "testing" (caar (org-babel-lob-execute
-					(org-babel-lob-get-info)))))
+      (should (string= "testing" (caar (org-babel-execute-src-block
+					nil (org-babel-lob-get-info)))))
       (forward-line 1) (beginning-of-line)
-      (should (= 4 (org-babel-lob-execute (org-babel-lob-get-info))))
+      (should (= 4 (org-babel-execute-src-block nil (org-babel-lob-get-info))))
       (forward-line 1)
-      (should (string= "testing" (org-babel-lob-execute
-				  (org-babel-lob-get-info))))
+      (should (string= "testing" (org-babel-execute-src-block
+				  nil (org-babel-lob-get-info))))
       (forward-line 1)
-      (should (string= "123" (org-babel-lob-execute (org-babel-lob-get-info)))))))
+      (should (string= "123" (org-babel-execute-src-block
+			      nil (org-babel-lob-get-info)))))))
 
 (ert-deftest test-ob-lob/export-lob-lines ()
   "Test the export of a variety of library babel call lines."
@@ -82,12 +83,13 @@
 	(org-export-babel-evaluate t))
     (org-test-at-id "72ddeed3-2d17-4c7f-8192-a575d535d3fc"
       (org-narrow-to-subtree)
-      (let ((buf (current-buffer))
-	    (string (buffer-string)))
+      (let ((string (org-with-wide-buffer (buffer-string)))
+	    (narrowing (list (point-min) (point-max))))
 	(with-temp-buffer
 	  (org-mode)
 	  (insert string)
-	  (org-babel-exp-process-buffer buf)
+	  (apply #'narrow-to-region narrowing)
+	  (org-babel-exp-process-buffer)
 	  (message (buffer-string))
 	  (goto-char (point-min))
 	  (should (re-search-forward "^: 0" nil t))
@@ -105,7 +107,7 @@ for export
 #+begin_example
 #+call: rubbish()
 #+end_example"
-    (should (progn (org-export-execute-babel-code) t))))
+    (should (progn (org-babel-exp-process-buffer) t))))
 
 (ert-deftest test-ob-lob/caching-call-line ()
   (let ((temporary-value-for-test 0))
@@ -115,20 +117,14 @@ for export
   (setq temporary-value-for-test (+ 1 temporary-value-for-test))
 #+end_src
 
-#+call: call-line-caching-example(\"qux\") :cache yes
+<point>#+call: call-line-caching-example(\"qux\") :cache yes
 "
-      (goto-char (point-max)) (forward-line -1)
       ;; first execution should flip value to t
-      (should (equal (org-babel-lob-execute (org-babel-lob-get-info)) 1))
+      (should
+       (eq (org-babel-execute-src-block nil (org-babel-lob-get-info)) 1))
       ;; if cached, second evaluation will retain the t value
-      ;;
-      ;; Note: This instance tests for equality with "1".  We would
-      ;; prefer if the cached result returned was actually 1, however
-      ;; this is not the current behavior so this test is encoding
-      ;; undesired behavior (because the current goal is simply to see
-      ;; that caching is used on call lines).
-      ;;
-      (should (equal (org-babel-lob-execute (org-babel-lob-get-info)) "1")))))
+      (should
+       (eq (org-babel-execute-src-block nil (org-babel-lob-get-info)) 1)))))
 
 (ert-deftest test-ob-lob/named-caching-call-line ()
   (let ((temporary-value-for-test 0))
@@ -139,20 +135,14 @@ for export
 #+end_src
 
 #+name: call-line-caching-called
-#+call: call-line-caching-example(\"qux\") :cache yes
+<point>#+call: call-line-caching-example(\"qux\") :cache yes
 "
-      (goto-char (point-max)) (forward-line -1)
       ;; first execution should flip value to t
-      (should (equal (org-babel-lob-execute (org-babel-lob-get-info)) 1))
+      (should
+       (eq (org-babel-execute-src-block nil (org-babel-lob-get-info)) 1))
       ;; if cached, second evaluation will retain the t value
-      ;;
-      ;; Note: This instance tests for equality with "1".  We would
-      ;; prefer if the cached result returned was actually 1, however
-      ;; this is not the current behavior so this test is encoding
-      ;; undesired behavior (because the current goal is simply to see
-      ;; that caching is used on call lines).
-      ;;
-      (should (equal (org-babel-lob-execute (org-babel-lob-get-info)) "1")))))
+      (should
+       (eq (org-babel-execute-src-block nil (org-babel-lob-get-info)) 1)))))
 
 (provide 'test-ob-lob)
 

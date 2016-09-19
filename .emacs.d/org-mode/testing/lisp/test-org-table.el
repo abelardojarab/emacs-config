@@ -20,7 +20,7 @@
 
 ;;;; Comments:
 
-;; Template test file for Org-mode tests.  Many tests are also a howto
+;; Template test file for Org tests.  Many tests are also a howto
 ;; example collection as a user documentation, more or less all those
 ;; using `org-test-table-target-expect'.  See also the doc string of
 ;; `org-test-table-target-expect'.
@@ -877,9 +877,9 @@ See also http://orgmode.org/worg/org-tutorials/org-lookups.html ."
   (should (equal "[0,1]" (f '( "inf" "1") nil t nil))))
 
 (ert-deftest test-org-table/org-table-convert-refs-to-an/1 ()
-  "Simple reference @1$1."
+  "Simple reference @2$1."
   (should
-   (string= "A1" (org-table-convert-refs-to-an "@1$1"))))
+   (string= "A2" (org-table-convert-refs-to-an "@2$1"))))
 
 ;; TODO: Test broken
 ;; (ert-deftest test-org-table/org-table-convert-refs-to-an/2 ()
@@ -893,9 +893,9 @@ See also http://orgmode.org/worg/org-tutorials/org-lookups.html ."
    (string= "C& = remote(FOO, @@#B&)" (org-table-convert-refs-to-an "$3 = remote(FOO, @@#$2)"))))
 
 (ert-deftest test-org-table/org-table-convert-refs-to-rc/1 ()
-  "Simple reference @1$1."
+  "Simple reference @2$1."
   (should
-   (string= "@1$1" (org-table-convert-refs-to-rc "A1"))))
+   (string= "@2$1" (org-table-convert-refs-to-rc "A2"))))
 
 (ert-deftest test-org-table/org-table-convert-refs-to-rc/2 ()
   "Self reference $0."
@@ -1434,7 +1434,7 @@ See also `test-org-table/copy-field'."
   ;; Test :raw parameter.
   (when (featurep 'ox-latex)
     (should
-     (org-string-match-p
+     (string-match-p
       "/a/"
       (orgtbl-to-generic (org-table-to-lisp "| /a/ | b |")
 			 '(:backend latex :raw t)))))
@@ -1471,7 +1471,7 @@ See also `test-org-table/copy-field'."
 			   '(:environment "tabularx"))))
   ;; Test :booktabs parameter.
   (should
-   (org-string-match-p
+   (string-match-p
     "\\toprule" (orgtbl-to-latex (org-table-to-lisp "| a |") '(:booktabs t))))
   ;; Handle LaTeX snippets.
   (should
@@ -1479,7 +1479,7 @@ See also `test-org-table/copy-field'."
 	  (orgtbl-to-latex (org-table-to-lisp "| $x$ |") nil)))
   ;; Test pseudo objects and :raw parameter.
   (should
-   (org-string-match-p
+   (string-match-p
     "\\$x\\$" (orgtbl-to-latex (org-table-to-lisp "| $x$ |") '(:raw t)))))
 
 (ert-deftest test-org-table/to-html ()
@@ -1500,11 +1500,11 @@ See also `test-org-table/copy-field'."
 </table>"))
   ;; Test :attributes parameter.
   (should
-   (org-string-match-p
+   (string-match-p
     "<table>"
     (orgtbl-to-html (org-table-to-lisp "| a |") '(:attributes nil))))
   (should
-   (org-string-match-p
+   (string-match-p
     "<table border=\"2\">"
     (orgtbl-to-html (org-table-to-lisp "| a |") '(:attributes (:border "2"))))))
 
@@ -1576,7 +1576,21 @@ See also `test-org-table/copy-field'."
 	    (buffer-substring-no-properties
 	     (search-forward "# BEGIN RECEIVE ORGTBL table\n")
 	     (progn (search-forward "# END RECEIVE ORGTBL table")
-		    (match-beginning 0)))))))
+		    (match-beginning 0))))))
+  ;; Allow multiple receiver locations.
+  (should
+   (org-test-with-temp-text "
+# BEGIN RECEIVE ORGTBL table
+# END RECEIVE ORGTBL table
+
+#+ORGTBL: SEND table orgtbl-to-orgtbl :hlines nil
+<point>| a |
+
+# BEGIN RECEIVE ORGTBL table
+# END RECEIVE ORGTBL table"
+     (orgtbl-send-table)
+     (goto-char (point-min))
+     (search-forward "| a |" nil t 3))))
 
 
 ;;; Sorting
@@ -1828,7 +1842,7 @@ is t, then new columns should be added as needed"
 (ert-deftest test-org-table/named-field ()
   "Test formula with a named field."
   (should
-   (org-string-match-p
+   (string-match-p
     "| +| +1 +|"
     (org-test-with-temp-text "
 |   |      |
@@ -1837,7 +1851,7 @@ is t, then new columns should be added as needed"
       (org-table-calc-current-TBLFM)
       (buffer-string))))
   (should
-   (org-string-match-p
+   (string-match-p
     "| +| +1 +|"
     (org-test-with-temp-text "
 | _ | name |
@@ -1849,7 +1863,7 @@ is t, then new columns should be added as needed"
 (ert-deftest test-org-table/named-column ()
   "Test formula with a named field."
   (should
-   (org-string-match-p
+   (string-match-p
     "| +| +1 +| +1 +|"
     (org-test-with-temp-text "
 | ! | name |   |
@@ -1861,7 +1875,7 @@ is t, then new columns should be added as needed"
 (ert-deftest test-org-table/tab-indent ()
   "Test named fields with tab indentation."
   (should
-   (org-string-match-p
+   (string-match-p
     "| # | 111 |"
     (org-test-with-temp-text
 	"
@@ -1876,7 +1890,7 @@ is t, then new columns should be added as needed"
 (ert-deftest test-org-table/first-rc ()
   "Test \"$<\" and \"@<\" constructs in formulas."
   (should
-   (org-string-match-p
+   (string-match-p
     "| 1 | 2 |"
     (org-test-with-temp-text
 	"|   | 2 |
@@ -1884,7 +1898,7 @@ is t, then new columns should be added as needed"
       (org-table-calc-current-TBLFM)
       (buffer-string))))
   (should
-   (org-string-match-p
+   (string-match-p
     "| 2 |\n| 2 |"
     (org-test-with-temp-text
 	"| 2 |\n|   |
@@ -1895,17 +1909,36 @@ is t, then new columns should be added as needed"
 (ert-deftest test-org-table/last-rc ()
   "Test \"$>\" and \"@>\" constructs in formulas."
   (should
-   (org-string-match-p
+   (string-match-p
     "| 2 | 1 |"
     (org-test-with-temp-text
 	"| 2 |   |\n<point>#+TBLFM: $>=1"
       (org-table-calc-current-TBLFM)
       (buffer-string))))
   (should
-   (org-string-match-p
+   (string-match-p
     "| 2 |\n| 2 |"
     (org-test-with-temp-text
 	"| 2 |\n|   |\n<point>#+TBLFM: @>$1=@<"
+      (org-table-calc-current-TBLFM)
+      (buffer-string)))))
+
+(ert-deftest test-org-table/time-stamps ()
+  "Test time-stamps handling."
+  ;; Standard test.
+  (should
+   (string-match-p
+    "| 1 |"
+    (org-test-with-temp-text
+	"| <2016-07-07 Sun> | <2016-07-08 Fri> |   |\n<point>#+TBLFM: $3=$2-$1"
+      (org-table-calc-current-TBLFM)
+      (buffer-string))))
+  ;; Handle locale specific time-stamps.
+  (should
+   (string-match-p
+    "| 1 |"
+    (org-test-with-temp-text
+	"| <2016-07-07 Do> | <2016-07-08 Fr> |   |\n<point>#+TBLFM: $3=$2-$1"
       (org-table-calc-current-TBLFM)
       (buffer-string)))))
 
@@ -1975,6 +2008,33 @@ is t, then new columns should be added as needed"
 |  3 | ---$      |
 |  4 | too large |
 #+TBLFM: $2 = '(orgtbl-ascii-draw $1 0 3 3 \"$-\")")))
+
+(ert-deftest test-org-table/single-rowgroup ()
+  "Test column formula in a table with a single rowgroup."
+  (should
+   (equal
+    "
+|---+---|
+| 1 | 0 |
+|---+---|
+#+TBLFM: $2=$1-1"
+    (org-test-with-temp-text "
+|---+---|
+| 1 |   |
+|---+---|
+<point>#+TBLFM: $2=$1-1"
+      (org-table-calc-current-TBLFM)
+      (buffer-string))))
+  (should
+   (equal
+    "
+| 1 | 0 |
+#+TBLFM: $2=$1-1"
+    (org-test-with-temp-text "
+| 1 |   |
+<point>#+TBLFM: $2=$1-1"
+      (org-table-calc-current-TBLFM)
+      (buffer-string)))))
 
 
 (provide 'test-org-table)

@@ -25,12 +25,11 @@
 
 ;;; Code:
 
-(eval-when-compile
-  (require 'cl)
-  (require 'table nil 'noerror))
+(require 'cl-lib)
 (require 'format-spec)
 (require 'ox)
 (require 'org-compat)
+(require 'table nil 'noerror)
 
 ;;; Define Back-End
 
@@ -188,21 +187,14 @@ heuristically based on the values of `org-odt-lib-dir' and
 `org-odt-data-dir'.")
 
 (defconst org-odt-styles-dir
-  (let* ((styles-dir
-	  (catch 'styles-dir
-	    (message "Debug (ox-odt): Searching for OpenDocument styles files...")
-	    (dolist (styles-dir org-odt-styles-dir-list)
-	      (when styles-dir
-		(message "Debug (ox-odt): Trying %s..." styles-dir)
-		(when (and (file-readable-p
-			    (expand-file-name
-			     "OrgOdtContentTemplate.xml" styles-dir))
-			   (file-readable-p
-			    (expand-file-name
-			     "OrgOdtStyles.xml" styles-dir)))
-		  (message "Debug (ox-odt): Using styles under %s"
-			   styles-dir)
-		  (throw 'styles-dir styles-dir)))))))
+  (let ((styles-dir
+	 (cl-find-if
+	  (lambda (dir)
+	    (and dir
+		 (file-readable-p
+		  (expand-file-name "OrgOdtContentTemplate.xml" dir))
+		 (file-readable-p (expand-file-name "OrgOdtStyles.xml" dir))))
+	  org-odt-styles-dir-list)))
     (unless styles-dir
       (error "Error (ox-odt): Cannot find factory styles files, aborting"))
     styles-dir)
@@ -214,9 +206,9 @@ This directory contains the following XML files -
  `org-odt-styles-file' and `org-odt-content-template-file'.
 
 The default value of this variable varies depending on the
-version of org in use and is initialized from
-`org-odt-styles-dir-list'.  Note that the user could be using org
-from one of: org's own private git repository, GNU ELPA tar or
+version of Org in use and is initialized from
+`org-odt-styles-dir-list'.  Note that the user could be using Org
+from one of: Org own private git repository, GNU ELPA tar or
 standard Emacs.")
 
 (defconst org-odt-bookmark-prefix "OrgXref.")
@@ -281,7 +273,6 @@ except that the foreground and background colors are set
 according to the default face identified by the `htmlfontify'.")
 
 (defvar hfy-optimizations)
-(define-obsolete-variable-alias 'hfy-optimisations 'hfy-optimizations "25.1")
 (defvar org-odt-embedded-formulas-count 0)
 (defvar org-odt-embedded-images-count 0)
 (defvar org-odt-image-size-probe-method
@@ -387,26 +378,14 @@ visually."
 
 (require 'rng-loc)
 (defcustom org-odt-schema-dir
-  (let* ((schema-dir
-	  (catch 'schema-dir
-	    (message "Debug (ox-odt): Searching for OpenDocument schema files...")
-	    (dolist (schema-dir org-odt-schema-dir-list)
-	      (when schema-dir
-		(message "Debug (ox-odt): Trying %s..." schema-dir)
-		(when (and (file-expand-wildcards
-			    (expand-file-name "od-manifest-schema*.rnc"
-					      schema-dir))
-			   (file-expand-wildcards
-			    (expand-file-name "od-schema*.rnc"
-					      schema-dir))
-			   (file-readable-p
-			    (expand-file-name "schemas.xml" schema-dir)))
-		  (message "Debug (ox-odt): Using schema files under %s"
-			   schema-dir)
-		  (throw 'schema-dir schema-dir))))
-	    (message "Debug (ox-odt): No OpenDocument schema files installed")
-	    nil)))
-    schema-dir)
+  (cl-find-if
+   (lambda (dir)
+     (and dir
+	  (file-expand-wildcards
+	   (expand-file-name "od-manifest-schema*.rnc" dir))
+	  (file-expand-wildcards (expand-file-name "od-schema*.rnc" dir))
+	  (file-readable-p (expand-file-name "schemas.xml" dir))))
+   org-odt-schema-dir-list)
   "Directory that contains OpenDocument schema files.
 
 This directory contains:
@@ -993,11 +972,11 @@ See `org-odt--build-date-styles' for implementation details."
 			     (repeater-unit (org-element-property
 					     :repeater-unit timestamp)))
 			 (concat
-			  (case repeater-type
+			  (cl-case repeater-type
 			    (catchup "++") (restart ".+") (cumulate "+"))
 			  (when repeater-value
 			    (number-to-string repeater-value))
-			  (case repeater-unit
+			  (cl-case repeater-unit
 			    (hour "h") (day "d") (week "w") (month "m")
 			    (year "y"))))))
 	(concat
@@ -1163,7 +1142,7 @@ DEPTH is an integer specifying the depth of the table.  INFO is
 a plist containing current export properties.  Optional argument
 SCOPE, when non-nil, defines the scope of the table.  Return the
 table of contents as a string, or nil."
-  (assert (wholenump depth))
+  (cl-assert (wholenump depth))
   ;; When a headline is marked as a radio target, as in the example below:
   ;;
   ;; ** <<<Some Heading>>>
@@ -1210,7 +1189,7 @@ Use `org-odt-object-counters' to generate an automatic
 OBJECT-NAME and STYLE-NAME.  If OBJECT-PROPS is non-nil, add a
 new entry in `org-odt-automatic-styles'.  Return (OBJECT-NAME
 . STYLE-NAME)."
-  (assert (stringp object-type))
+  (cl-assert (stringp object-type))
   (let* ((object (intern object-type))
 	 (seqvar object)
 	 (seqno (1+ (or (plist-get org-odt-object-counters seqvar) 0)))
@@ -1232,7 +1211,7 @@ new entry in `org-odt-automatic-styles'.  Return (OBJECT-NAME
   (let ((checkbox (org-element-property :checkbox item)))
     (if (not checkbox) ""
       (format "<text:span text:style-name=\"%s\">%s</text:span>"
-	      "OrgCode" (case checkbox
+	      "OrgCode" (cl-case checkbox
 			  (on "[&#x2713;] ") ; CHECK MARK
 			  (off "[ ] ")
 			  (trans "[-] "))))))
@@ -1478,10 +1457,10 @@ original parsed data.  INFO is a plist holding export options."
       (re-search-forward "  </office:automatic-styles>" nil t)
       (goto-char (match-beginning 0))
       ;; - Dump automatic table styles.
-      (loop for (style-name props) in
-	    (plist-get org-odt-automatic-styles 'Table) do
-	    (when (setq props (or (plist-get props :rel-width) "96"))
-	      (insert (format org-odt-table-style-format style-name props))))
+      (cl-loop for (style-name props) in
+	       (plist-get org-odt-automatic-styles 'Table) do
+	       (when (setq props (or (plist-get props :rel-width) "96"))
+		 (insert (format org-odt-table-style-format style-name props))))
       ;; - Dump date-styles.
       (when (plist-get info :odt-use-date-fields)
 	(insert (org-odt--build-date-styles (car custom-time-fmts)
@@ -1927,9 +1906,9 @@ CONTENTS is nil.  INFO is a plist holding contextual information."
   "Return a character not used in string S.
 This is used to choose a separator for constructs like \\verb."
   (let ((ll "~,./?;':\"|!@#%^&-_=+abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ<>()[]{}"))
-    (loop for c across ll
-	  when (not (string-match (regexp-quote (char-to-string c)) s))
-	  return (char-to-string c))))
+    (cl-loop for c across ll
+	     when (not (string-match (regexp-quote (char-to-string c)) s))
+	     return (char-to-string c))))
 
 (defun org-odt-inline-src-block (_inline-src-block _contents _info)
   "Transcode an INLINE-SRC-BLOCK element from Org to ODT.
@@ -2014,13 +1993,13 @@ information."
      ((string= key "TOC")
       (let ((case-fold-search t))
 	(cond
-	 ((org-string-match-p "\\<headlines\\>" value)
+	 ((string-match-p "\\<headlines\\>" value)
 	  (let ((depth (or (and (string-match "\\<[0-9]+\\>" value)
 				(string-to-number (match-string 0 value)))
 			   (plist-get info :headline-levels)))
-		(localp (org-string-match-p "\\<local\\>" value)))
+		(localp (string-match-p "\\<local\\>" value)))
 	    (org-odt-toc depth info (and localp keyword))))
-	 ((org-string-match-p "tables\\|figures\\|listings" value)
+	 ((string-match-p "tables\\|figures\\|listings" value)
 	  ;; FIXME
 	  (ignore))))))))
 
@@ -2047,7 +2026,7 @@ CONTENTS is nil.  INFO is a plist holding contextual information."
 ;;;; Latex Fragment
 
 ;; (when latex-frag			; FIXME
-;; 	(setq href (org-propertize href :title "LaTeX Fragment"
+;; 	(setq href (propertize href :title "LaTeX Fragment"
 ;; 				   :description latex-frag)))
 ;; handle verbatim
 ;; provide descriptions
@@ -2073,14 +2052,14 @@ CONTENTS is nil.  INFO is a plist holding contextual information."
 ;;;; Links :: Label references
 
 (defun org-odt--enumerate (element info &optional predicate n)
-  (when predicate (assert (funcall predicate element info)))
+  (when predicate (cl-assert (funcall predicate element info)))
   (let* ((--numbered-parent-headline-at-<=-n
 	  (lambda (element n info)
-	    (loop for x in (org-element-lineage element)
-		  thereis (and (eq (org-element-type x) 'headline)
-			       (<= (org-export-get-relative-level x info) n)
-			       (org-export-numbered-headline-p x info)
-			       x))))
+	    (cl-loop for x in (org-element-lineage element)
+		     thereis (and (eq (org-element-type x) 'headline)
+				  (<= (org-export-get-relative-level x info) n)
+				  (org-export-numbered-headline-p x info)
+				  x))))
 	 (--enumerate
 	  (lambda (element scope info &optional predicate)
 	    (let ((counter 0))
@@ -2088,7 +2067,7 @@ CONTENTS is nil.  INFO is a plist holding contextual information."
 		  (org-element-type element)
 		(lambda (el)
 		  (and (or (not predicate) (funcall predicate el info))
-		       (incf counter)
+		       (cl-incf counter)
 		       (eq element el)
 		       counter))
 		info 'first-match))))
@@ -2120,9 +2099,9 @@ the generated string.
 Return value is a string if OP is set to `reference' or a cons
 cell like CAPTION . SHORT-CAPTION) where CAPTION and
 SHORT-CAPTION are strings."
-  (assert (memq (org-element-type element) '(link table src-block paragraph)))
+  (cl-assert (memq (org-element-type element) '(link table src-block paragraph)))
   (let* ((element-or-parent
-	  (case (org-element-type element)
+	  (cl-case (org-element-type element)
 	    (link (org-export-get-parent-element element))
 	    (t element)))
 	 ;; Get label and caption.
@@ -2135,7 +2114,7 @@ SHORT-CAPTION are strings."
 	 (short-caption nil))
     (when (or label caption)
       (let* ((default-category
-	       (case (org-element-type element)
+	       (cl-case (org-element-type element)
 		 (table "__Table__")
 		 (src-block "__Listing__")
 		 ((link paragraph)
@@ -2151,14 +2130,15 @@ SHORT-CAPTION are strings."
 		 (t (error "Don't know how to format label for element type: %s"
 			   (org-element-type element)))))
 	     seqno)
-	(assert default-category)
-	(destructuring-bind (counter label-style category predicate)
-	    (assoc-default default-category org-odt-category-map-alist)
+	(cl-assert default-category)
+	(pcase-let
+	    ((`(,counter ,label-style ,category ,predicate)
+	      (assoc-default default-category org-odt-category-map-alist)))
 	  ;; Compute sequence number of the element.
 	  (setq seqno (org-odt--enumerate element info predicate))
 	  ;; Localize category string.
 	  (setq category (org-export-translate category :utf-8 info))
-	  (case op
+	  (cl-case op
 	    ;; Case 1: Handle Label definition.
 	    (definition
 	      (cons
@@ -2201,7 +2181,7 @@ SHORT-CAPTION are strings."
 	 (target-dir "Images/")
 	 (target-file
 	  (format "%s%04d.%s" target-dir
-		  (incf org-odt-embedded-images-count) image-type)))
+		  (cl-incf org-odt-embedded-images-count) image-type)))
     (message "Embedding %s as %s..."
 	     (substring-no-properties path) target-file)
 
@@ -2280,7 +2260,7 @@ SHORT-CAPTION are strings."
   "Return ODT code for an inline image.
 LINK is the link pointing to the inline image.  INFO is a plist
 used as a communication channel."
-  (assert (eq (org-element-type element) 'link))
+  (cl-assert (eq (org-element-type element) 'link))
   (let* ((src (let* ((type (org-element-property :type element))
 		     (raw-path (org-element-property :path element)))
 		(cond ((member type '("http" "https"))
@@ -2295,7 +2275,7 @@ used as a communication channel."
 		"\n<draw:image xlink:href=\"%s\" xlink:type=\"simple\" xlink:show=\"embed\" xlink:actuate=\"onLoad\"/>"
 		(org-odt--copy-image-file src-expanded)))
 	 ;; Extract attributes from #+ATTR_ODT line.
-	 (attr-from (case (org-element-type element)
+	 (attr-from (cl-case (org-element-type element)
 		      (link (org-export-get-parent-element element))
 		      (t element)))
 	 ;; Convert attributes to a plist.
@@ -2398,7 +2378,7 @@ used as a communication channel."
 (defun org-odt--copy-formula-file (src-file)
   "Returns the internal name of the file"
   (let* ((target-dir (format "Formula-%04d/"
-			     (incf org-odt-embedded-formulas-count)))
+			     (cl-incf org-odt-embedded-formulas-count)))
 	 (target-file (concat target-dir "content.xml")))
     ;; Create a directory for holding formula file.  Also enter it in
     ;; to manifest.
@@ -2408,13 +2388,13 @@ used as a communication channel."
     ;; Copy over the formula file from user directory to zip
     ;; directory.
     (message "Embedding %s as %s..." src-file target-file)
-    (let ((case-fold-search nil))
+    (let ((ext (file-name-extension src-file)))
       (cond
        ;; Case 1: Mathml.
-       ((string-match "\\.\\(mathml\\|mml\\)\\'" src-file)
+       ((member ext '("mathml" "mml"))
 	(copy-file src-file (concat org-odt-zip-dir target-file) 'overwrite))
        ;; Case 2: OpenDocument formula.
-       ((string-match "\\.odf\\'" src-file)
+       ((string= ext "odf")
 	(org-odt--zip-extract src-file "content.xml"
 				(concat org-odt-zip-dir target-dir)))
        (t (error "%s is not a formula file" src-file))))
@@ -2425,8 +2405,8 @@ used as a communication channel."
 ;;;; Targets
 
 (defun org-odt--render-image/formula (cfg-key href width height &optional
-						captions user-frame-params
-						&rest title-and-desc)
+					      captions user-frame-params
+					      &rest title-and-desc)
   (let* ((frame-cfg-alist
 	  ;; Each element of this alist is of the form (CFG-HANDLE
 	  ;; INNER-FRAME-PARAMS OUTER-FRAME-PARAMS).
@@ -2488,11 +2468,11 @@ used as a communication channel."
 				(lambda (default user)
 				  "Merge default and user frame params."
 				  (if (not user) default
-				    (assert (= (length default) 3))
-				    (assert (= (length user) 3))
-				    (loop for u in user
-					  for d in default
-					  collect (or u d)))))))
+				    (cl-assert (= (length default) 3))
+				    (cl-assert (= (length user) 3))
+				    (cl-loop for u in user
+					     for d in default
+					     collect (or u d)))))))
     (cond
      ;; Case 1: Image/Formula has no caption.
      ;;         There is only one frame, one that surrounds the image
@@ -2543,7 +2523,7 @@ used as a communication channel."
 	      (org-element-property :name p))))
    ;; Link should point to an image file.
    (lambda (l)
-     (assert (eq (org-element-type l) 'link))
+     (cl-assert (eq (org-element-type l) 'link))
      (org-export-inline-image-p l (plist-get info :odt-inline-image-rules)))))
 
 (defun org-odt--enumerable-latex-image-p (element info)
@@ -2558,7 +2538,7 @@ used as a communication channel."
 	      (org-element-property :name p))))
    ;; Link should point to an image file.
    (lambda (l)
-     (assert (eq (org-element-type l) 'link))
+     (cl-assert (eq (org-element-type l) 'link))
      (org-export-inline-image-p l (plist-get info :odt-inline-image-rules)))))
 
 (defun org-odt--enumerable-formula-p (element info)
@@ -2570,12 +2550,12 @@ used as a communication channel."
 	 (org-element-property :name p)))
    ;; Link should point to a MathML or ODF file.
    (lambda (l)
-     (assert (eq (org-element-type l) 'link))
+     (cl-assert (eq (org-element-type l) 'link))
      (org-export-inline-image-p l (plist-get info :odt-inline-formula-rules)))))
 
 (defun org-odt--standalone-link-p (element _info &optional
-					     paragraph-predicate
-					     link-predicate)
+					   paragraph-predicate
+					   link-predicate)
   "Test if ELEMENT is a standalone link for the purpose ODT export.
 INFO is a plist holding contextual information.
 
@@ -2589,7 +2569,7 @@ PARAGRAPH-PREDICATE in addition to having no other content save for
 leading and trailing whitespaces.
 
 Return nil, otherwise."
-  (let ((p (case (org-element-type element)
+  (let ((p (cl-case (org-element-type element)
 	     (paragraph element)
 	     (link (and (or (not link-predicate)
 			    (funcall link-predicate element))
@@ -2599,16 +2579,16 @@ Return nil, otherwise."
       (when (or (not paragraph-predicate)
 		(funcall paragraph-predicate p))
 	(let ((contents (org-element-contents p)))
-	  (loop for x in contents
-		with inline-image-count = 0
-		always (case (org-element-type x)
-			 (plain-text
-			  (not (org-string-nw-p x)))
-			 (link
-			  (and (or (not link-predicate)
-				   (funcall link-predicate x))
-			       (= (incf inline-image-count) 1)))
-			 (t nil))))))))
+	  (cl-loop for x in contents
+		   with inline-image-count = 0
+		   always (cl-case (org-element-type x)
+			    (plain-text
+			     (not (org-string-nw-p x)))
+			    (link
+			     (and (or (not link-predicate)
+				      (funcall link-predicate x))
+				  (= (cl-incf inline-image-count) 1)))
+			    (t nil))))))))
 
 (defun org-odt-link--infer-description (destination info)
   ;; DESTINATION is a headline or an element (like paragraph,
@@ -2633,31 +2613,31 @@ Return nil, otherwise."
     (or
      (let* ( ;; Locate top-level list.
 	    (top-level-list
-	     (loop for x on data
-		   when (eq (org-element-type (car x)) 'plain-list)
-		   return x))
+	     (cl-loop for x on data
+		      when (eq (org-element-type (car x)) 'plain-list)
+		      return x))
 	    ;; Get list item nos.
 	    (item-numbers
-	     (loop for (plain-list item . rest) on top-level-list by #'cddr
-		   until (not (eq (org-element-type plain-list) 'plain-list))
-		   collect (when (eq (org-element-property :type
-							   plain-list)
-				     'ordered)
-			     (1+ (length (org-export-get-previous-element
-					  item info t))))))
+	     (cl-loop for (plain-list item . rest) on top-level-list by #'cddr
+		      until (not (eq (org-element-type plain-list) 'plain-list))
+		      collect (when (eq (org-element-property :type
+							      plain-list)
+					'ordered)
+				(1+ (length (org-export-get-previous-element
+					     item info t))))))
 	    ;; Locate top-most listified headline.
 	    (listified-headlines
-	     (loop for x on data
-		   when (and (eq (org-element-type (car x)) 'headline)
-			     (org-export-low-level-p (car x) info))
-		   return x))
+	     (cl-loop for x on data
+		      when (and (eq (org-element-type (car x)) 'headline)
+				(org-export-low-level-p (car x) info))
+		      return x))
 	    ;; Get listified headline numbers.
 	    (listified-headline-nos
-	     (loop for el in listified-headlines
-		   when (eq (org-element-type el) 'headline)
-		   collect (when (org-export-numbered-headline-p el info)
-			     (1+ (length (org-export-get-previous-element
-					  el info t)))))))
+	     (cl-loop for el in listified-headlines
+		      when (eq (org-element-type el) 'headline)
+		      collect (when (org-export-numbered-headline-p el info)
+				(1+ (length (org-export-get-previous-element
+					     el info t)))))))
        ;; Combine item numbers from both the listified headlines and
        ;; regular list items.
 
@@ -2676,11 +2656,11 @@ Return nil, otherwise."
 	    (and
 	     ;; Test if destination is a numbered headline.
 	     (org-export-numbered-headline-p destination info)
-	     (loop for el in (cons destination genealogy)
-		   when (and (eq (org-element-type el) 'headline)
-			     (not (org-export-low-level-p el info))
-			     (org-export-numbered-headline-p el info))
-		   return el))))
+	     (cl-loop for el in (cons destination genealogy)
+		      when (and (eq (org-element-type el) 'headline)
+				(not (org-export-low-level-p el info))
+				(org-export-numbered-headline-p el info))
+		      return el))))
        ;; We found one.
        (when headline
 	 (format "<text:bookmark-ref text:reference-format=\"chapter\" text:ref-name=\"OrgXref.%s\">%s</text:bookmark-ref>"
@@ -2689,10 +2669,10 @@ Return nil, otherwise."
 					       headline info) "."))))
      ;; Case 4: Locate a regular headline in the hierarchy.  Display
      ;; its title.
-     (let ((headline (loop for el in (cons destination genealogy)
-			   when (and (eq (org-element-type el) 'headline)
-				     (not (org-export-low-level-p el info)))
-			   return el)))
+     (let ((headline (cl-loop for el in (cons destination genealogy)
+			      when (and (eq (org-element-type el) 'headline)
+					(not (org-export-low-level-p el info)))
+			      return el)))
        ;; We found one.
        (when headline
 	 (format "<text:bookmark-ref text:reference-format=\"text\" text:ref-name=\"OrgXref.%s\">%s</text:bookmark-ref>"
@@ -2745,7 +2725,7 @@ INFO is a plist holding contextual information.  See
       (let ((destination (if (string= type "fuzzy")
 			     (org-export-resolve-fuzzy-link link info)
 			   (org-export-resolve-id-link link info))))
-	(case (org-element-type destination)
+	(cl-case (org-element-type destination)
 	  ;; Fuzzy link points to a headline.  If there's
 	  ;; a description, create a hyperlink.  Otherwise, try to
 	  ;; provide a meaningful description.
@@ -2841,7 +2821,7 @@ Style is a symbol among `quoted', `centered' and nil."
     (while (and (setq up (org-element-property :parent up))
 		(not (memq (org-element-type up)
 			   '(center-block quote-block section)))))
-    (case (org-element-type up)
+    (cl-case (org-element-type up)
       (center-block 'centered)
       (quote-block 'quoted))))
 
@@ -2853,7 +2833,7 @@ a plist used as a communication channel.  DEFAULT, CENTER and
 QUOTE are, respectively, style to use when paragraph belongs to
 no special environment, a center block, or a quote block."
   (format "\n<text:p text:style-name=\"%s\">%s</text:p>"
-	  (case (org-odt--paragraph-style paragraph)
+	  (cl-case (org-odt--paragraph-style paragraph)
 	    (quoted quote)
 	    (centered center)
 	    (otherwise default))
@@ -2885,7 +2865,7 @@ CONTENTS is the contents of the list.  INFO is a plist holding
 contextual information."
   (format "\n<text:list text:style-name=\"%s\" %s>\n%s</text:list>"
 	  ;; Choose style based on list type.
-	  (case (org-element-property :type plain-list)
+	  (cl-case (org-element-property :type plain-list)
 	    (ordered "OrgNumberedList")
 	    (unordered "OrgBulletedList")
 	    (descriptive-1 "OrgDescriptionList")
@@ -3107,10 +3087,10 @@ and prefix with \"OrgSrc\".  For example,
 	  (lambda (style _text-block _text-id _text-begins-block-p)
 	    (insert (format "<text:span text:style-name=\"%s\">" style))))
 	 (hfy-end-span-handler (lambda () (insert "</text:span>"))))
-    (org-no-warnings (htmlfontify-string line))))
+    (with-no-warnings (htmlfontify-string line))))
 
 (defun org-odt-do-format-code
-  (code info &optional lang refs retain-labels num-start)
+    (code info &optional lang refs retain-labels num-start)
   (let* ((lang (or (assoc-default lang org-src-lang-modes) lang))
 	 (lang-mode (and lang (intern (format "%s-mode" lang))))
 	 (code-lines (org-split-string code "\n"))
@@ -3130,19 +3110,20 @@ and prefix with \"OrgSrc\".  For example,
 	 (par-style (if use-htmlfontify-p "OrgSrcBlock"
 		      "OrgFixedWidthBlock"))
 	 (i 0))
-    (assert (= code-length (length (org-split-string code "\n"))))
+    (cl-assert (= code-length (length (org-split-string code "\n"))))
     (setq code
 	  (org-export-format-code
 	   code
 	   (lambda (loc line-num ref)
 	     (setq par-style
-		   (concat par-style (and (= (incf i) code-length) "LastLine")))
+		   (concat par-style (and (= (cl-incf i) code-length)
+					  "LastLine")))
 
 	     (setq loc (concat loc (and ref retain-labels (format " (%s)" ref))))
 	     (setq loc (funcall fontifier loc))
 	     (when ref
 	       (setq loc (org-odt--target loc (concat "coderef-" ref))))
-	     (assert par-style)
+	     (cl-assert par-style)
 	     (setq loc (format "\n<text:p text:style-name=\"%s\">%s</text:p>"
 			       par-style loc))
 	     (if (not line-num) loc
@@ -3168,9 +3149,7 @@ and prefix with \"OrgSrc\".  For example,
 	 ;; Does the src block contain labels?
 	 (retain-labels (org-element-property :retain-labels element))
 	 ;; Does it have line numbers?
-	 (num-start (case (org-element-property :number-lines element)
-		      (continued (org-export-get-loc element info))
-		      (new 0))))
+	 (num-start (org-export-get-loc element info)))
     (org-odt-do-format-code code info lang refs retain-labels num-start)))
 
 (defun org-odt-src-block (src-block _contents info)
@@ -3351,7 +3330,7 @@ channel."
 			(1+ horiz-span))))))
     (unless contents (setq contents ""))
     (concat
-     (assert paragraph-style)
+     (cl-assert paragraph-style)
      (format "\n<table:table-cell%s>\n%s\n</table:table-cell>"
 	     cell-attributes
 	     (let ((table-cell-contents (org-element-contents table-cell)))
@@ -3412,7 +3391,7 @@ communication channel."
   "Transcode a TABLE element from Org to ODT.
 CONTENTS is the contents of the table.  INFO is a plist holding
 contextual information."
-  (case (org-element-property :type table)
+  (cl-case (org-element-property :type table)
     ;; Case 1: table.el doesn't support export to OD format.  Strip
     ;; such tables from export.
     (table.el
@@ -3470,84 +3449,84 @@ contextual information.
 Use `org-odt--table' to typeset the table.  Handle details
 pertaining to indentation here."
   (let* ((--element-preceded-by-table-p
-	  (function
-	   (lambda (element info)
-	     (loop for el in (org-export-get-previous-element element info t)
-		   thereis (eq (org-element-type el) 'table)))))
+	  (lambda (element info)
+	    (cl-loop for el in (org-export-get-previous-element element info t)
+		     thereis (eq (org-element-type el) 'table))))
 	 (--walk-list-genealogy-and-collect-tags
-	  (function
-	   (lambda (table info)
-	     (let* ((genealogy (org-element-lineage table))
-		    (list-genealogy
-		     (when (eq (org-element-type (car genealogy)) 'item)
-		       (loop for el in genealogy
-			     when (memq (org-element-type el)
-					'(item plain-list))
-			     collect el)))
-		    (llh-genealogy
-		     (apply 'nconc
-			    (loop for el in genealogy
-				  when (and (eq (org-element-type el) 'headline)
-					    (org-export-low-level-p el info))
-				  collect
-				  (list el
-					(assq 'headline
-					      (org-element-contents
-					       (org-export-get-parent el)))))))
-		    parent-list)
-	       (nconc
-		;; Handle list genealogy.
-		(loop for el in list-genealogy collect
-		      (case (org-element-type el)
-			(plain-list
-			 (setq parent-list el)
-			 (cons "</text:list>"
-			       (format "\n<text:list text:style-name=\"%s\" %s>"
-				       (case (org-element-property :type el)
-					 (ordered "OrgNumberedList")
-					 (unordered "OrgBulletedList")
-					 (descriptive-1 "OrgDescriptionList")
-					 (descriptive-2 "OrgDescriptionList"))
-				       "text:continue-numbering=\"true\"")))
-			(item
-			 (cond
-			  ((not parent-list)
-			   (if (funcall --element-preceded-by-table-p table info)
-			       '("</text:list-header>" . "<text:list-header>")
-			     '("</text:list-item>" . "<text:list-header>")))
-			  ((funcall --element-preceded-by-table-p
-				    parent-list info)
-			   '("</text:list-header>" . "<text:list-header>"))
-			  (t '("</text:list-item>" . "<text:list-item>"))))))
-		;; Handle low-level headlines.
-		(loop for el in llh-genealogy
-		      with step = 'item collect
-		      (case step
-			(plain-list
-			 (setq step 'item) ; Flip-flop
-			 (setq parent-list el)
-			 (cons "</text:list>"
-			       (format "\n<text:list text:style-name=\"%s\" %s>"
-				       (if (org-export-numbered-headline-p
-					    el info)
-					   "OrgNumberedList"
-					 "OrgBulletedList")
-				       "text:continue-numbering=\"true\"")))
-			(item
-			 (setq step 'plain-list) ; Flip-flop
-			 (cond
-			  ((not parent-list)
-			   (if (funcall --element-preceded-by-table-p table info)
-			       '("</text:list-header>" . "<text:list-header>")
-			     '("</text:list-item>" . "<text:list-header>")))
-			  ((let ((section? (org-export-get-previous-element
-					    parent-list info)))
-			     (and section?
-				  (eq (org-element-type section?) 'section)
-				  (assq 'table (org-element-contents section?))))
-			   '("</text:list-header>" . "<text:list-header>"))
-			  (t
-			   '("</text:list-item>" . "<text:list-item>")))))))))))
+	  (lambda (table info)
+	    (let* ((genealogy (org-element-lineage table))
+		   (list-genealogy
+		    (when (eq (org-element-type (car genealogy)) 'item)
+		      (cl-loop for el in genealogy
+			       when (memq (org-element-type el)
+					  '(item plain-list))
+			       collect el)))
+		   (llh-genealogy
+		    (apply #'nconc
+			   (cl-loop
+			    for el in genealogy
+			    when (and (eq (org-element-type el) 'headline)
+				      (org-export-low-level-p el info))
+			    collect
+			    (list el
+				  (assq 'headline
+					(org-element-contents
+					 (org-export-get-parent el)))))))
+		   parent-list)
+	      (nconc
+	       ;; Handle list genealogy.
+	       (cl-loop
+		for el in list-genealogy collect
+		(cl-case (org-element-type el)
+		  (plain-list
+		   (setq parent-list el)
+		   (cons "</text:list>"
+			 (format "\n<text:list text:style-name=\"%s\" %s>"
+				 (cl-case (org-element-property :type el)
+				   (ordered "OrgNumberedList")
+				   (unordered "OrgBulletedList")
+				   (descriptive-1 "OrgDescriptionList")
+				   (descriptive-2 "OrgDescriptionList"))
+				 "text:continue-numbering=\"true\"")))
+		  (item
+		   (cond
+		    ((not parent-list)
+		     (if (funcall --element-preceded-by-table-p table info)
+			 '("</text:list-header>" . "<text:list-header>")
+		       '("</text:list-item>" . "<text:list-header>")))
+		    ((funcall --element-preceded-by-table-p
+			      parent-list info)
+		     '("</text:list-header>" . "<text:list-header>"))
+		    (t '("</text:list-item>" . "<text:list-item>"))))))
+	       ;; Handle low-level headlines.
+	       (cl-loop for el in llh-genealogy
+			with step = 'item collect
+			(cl-case step
+			  (plain-list
+			   (setq step 'item) ; Flip-flop
+			   (setq parent-list el)
+			   (cons "</text:list>"
+				 (format "\n<text:list text:style-name=\"%s\" %s>"
+					 (if (org-export-numbered-headline-p
+					      el info)
+					     "OrgNumberedList"
+					   "OrgBulletedList")
+					 "text:continue-numbering=\"true\"")))
+			  (item
+			   (setq step 'plain-list) ; Flip-flop
+			   (cond
+			    ((not parent-list)
+			     (if (funcall --element-preceded-by-table-p table info)
+				 '("</text:list-header>" . "<text:list-header>")
+			       '("</text:list-item>" . "<text:list-header>")))
+			    ((let ((section? (org-export-get-previous-element
+					      parent-list info)))
+			       (and section?
+				    (eq (org-element-type section?) 'section)
+				    (assq 'table (org-element-contents section?))))
+			     '("</text:list-header>" . "<text:list-header>"))
+			    (t
+			     '("</text:list-item>" . "<text:list-item>"))))))))))
 	 (close-open-tags (funcall --walk-list-genealogy-and-collect-tags
 				   table info)))
     ;; OpenDocument schema does not permit table to occur within a
@@ -3632,7 +3611,7 @@ channel."
     (if (not (plist-get info :odt-use-date-fields))
 	(let ((value (org-odt-plain-text
 		      (org-timestamp-translate timestamp) info)))
-	  (case (org-element-property :type timestamp)
+	  (cl-case (org-element-property :type timestamp)
 	    ((active active-range)
 	     (format "<text:span text:style-name=\"%s\">%s</text:span>"
 		     "OrgActiveTimestamp" value))
@@ -3640,7 +3619,7 @@ channel."
 	     (format "<text:span text:style-name=\"%s\">%s</text:span>"
 		     "OrgInactiveTimestamp" value))
 	    (otherwise value)))
-      (case type
+      (cl-case type
 	(active
 	 (format "<text:span text:style-name=\"%s\">%s</text:span>"
 		 "OrgActiveTimestamp"
@@ -3717,7 +3696,7 @@ contextual information."
     ;; Normalize processing-type to one of dvipng, mathml or verbatim.
     ;; If the desired converter is not available, force verbatim
     ;; processing.
-    (case processing-type
+    (cl-case processing-type
       ((t mathml)
        (if (and (fboundp 'org-format-latex-mathml-available-p)
 		(org-format-latex-mathml-available-p))
@@ -3743,18 +3722,18 @@ contextual information."
     (when (memq processing-type '(mathml dvipng imagemagick))
       (org-element-map tree '(latex-fragment latex-environment)
 	(lambda (latex-*)
-	  (incf count)
+	  (cl-incf count)
 	  (let* ((latex-frag (org-element-property :value latex-*))
 		 (input-file (plist-get info :input-file))
 		 (cache-dir (file-name-directory input-file))
 		 (cache-subdir (concat
-				(case processing-type
+				(cl-case processing-type
 				  ((dvipng imagemagick) "ltxpng/")
 				  (mathml "ltxmathml/"))
 				(file-name-sans-extension
 				 (file-name-nondirectory input-file))))
 		 (display-msg
-		  (case processing-type
+		  (cl-case processing-type
 		    ((dvipng imagemagick)
 		     (format "Creating LaTeX Image %d..." count))
 		    (mathml (format "Creating MathML snippet %d..." count))))
@@ -3768,7 +3747,7 @@ contextual information."
 						  nil processing-type)
 				(buffer-substring-no-properties
 				 (point-min) (point-max)))))
-		    (if (org-string-match-p "file:\\([^]]*\\)" link) link
+		    (if (string-match-p "file:\\([^]]*\\)" link) link
 		      (message "LaTeX Conversion failed.")
 		      nil))))
 	    (when org-link
@@ -3779,7 +3758,7 @@ contextual information."
 			  (org-element-parse-secondary-string org-link '(link))
 			  'link #'identity info t))
 		     (replacement
-		      (case (org-element-type latex-*)
+		      (cl-case (org-element-type latex-*)
 			;; Case 1: LaTeX environment.  Mimic
 			;; a "standalone image or formula" by
 			;; enclosing the `link' in a `paragraph'.
@@ -4106,9 +4085,9 @@ MathML source to kill ring depending on the value of
 	(setq frag (and (setq frag (and (region-active-p)
 					(buffer-substring (region-beginning)
 							  (region-end))))
-			(loop for e in org-latex-regexps
-			      thereis (when (string-match (nth 1 e) frag)
-					(match-string (nth 2 e) frag)))))
+			(cl-loop for e in org-latex-regexps
+				 thereis (when (string-match (nth 1 e) frag)
+					   (match-string (nth 2 e) frag)))))
 	(read-string "LaTeX Fragment: " frag nil frag))
      ,(let ((odf-filename (expand-file-name
 			   (concat

@@ -1,4 +1,4 @@
-;;; ob-shell.el --- org-babel functions for shell evaluation
+;;; ob-shell.el --- Babel Functions for Shell Evaluation -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2009-2016 Free Software Foundation, Inc.
 
@@ -28,31 +28,42 @@
 ;;; Code:
 (require 'ob)
 (require 'shell)
-(eval-when-compile (require 'cl))
+(require 'cl-lib)
 
-(declare-function org-babel-comint-in-buffer "ob-comint" (buffer &rest body))
+(declare-function org-babel-comint-in-buffer "ob-comint" (buffer &rest body)
+		  t)
 (declare-function org-babel-comint-wait-for-output "ob-comint" (buffer))
 (declare-function org-babel-comint-buffer-livep "ob-comint" (buffer))
-(declare-function org-babel-comint-with-output "ob-comint" (meta &rest body))
+(declare-function org-babel-comint-with-output "ob-comint" (meta &rest body)
+		  t)
+(declare-function org-trim "org" (s &optional keep-lead))
 (declare-function orgtbl-to-generic "org-table" (table params))
 
 (defvar org-babel-default-header-args:shell '())
+(defvar org-babel-shell-names)
+
+(defun org-babel-shell-initialize ()
+  "Define execution functions associated to shell names.
+This function has to be called whenever `org-babel-shell-names'
+is modified outside the Customize interface."
+  (interactive)
+  (dolist (name org-babel-shell-names)
+    (eval `(defun ,(intern (concat "org-babel-execute:" name))
+	       (body params)
+	     ,(format "Execute a block of %s commands with Babel." name)
+	     (let ((shell-file-name ,name))
+	       (org-babel-execute:shell body params))))))
 
 (defcustom org-babel-shell-names
   '("sh" "bash" "csh" "ash" "dash" "ksh" "mksh" "posh")
-  "List of names of shell supported by babel shell code blocks."
+  "List of names of shell supported by babel shell code blocks.
+Call `org-babel-shell-initialize' when modifying this variable
+outside the Customize interface."
   :group 'org-babel
-  :type 'string
-  :initialize
-  (lambda (symbol value)
-    (set-default symbol (second value))
-    (mapc
-     (lambda (name)
-       (eval `(defun ,(intern (concat "org-babel-execute:" name)) (body params)
-		,(format "Execute a block of %s commands with Babel." name)
-		(let ((shell-file-name ,name))
-		  (org-babel-execute:shell body params)))))
-     (second value))))
+  :type '(repeat (string :tag "Shell name: "))
+  :set (lambda (symbol value)
+	 (set-default symbol value)
+	 (org-babel-shell-initialize)))
 
 (defun org-babel-execute:shell (body params)
   "Execute a block of Shell commands with Babel.
@@ -137,7 +148,7 @@ This function is called by `org-babel-execute-src-block'."
 		     "hline"))))
     (mapcar
      (lambda (pair)
-       (if (string-match "bash$" shell-file-name)
+       (if (string-suffix-p "bash" shell-file-name)
 	   (org-babel-variable-assignments:bash
             (car pair) (cdr pair) sep hline)
          (org-babel-variable-assignments:sh-generic
@@ -164,7 +175,7 @@ var of the same value."
       (mapconcat echo-var var "\n"))
      (t (funcall echo-var var)))))
 
-(defun org-babel-sh-initiate-session (&optional session params)
+(defun org-babel-sh-initiate-session (&optional session _params)
   "Initiate a session named SESSION according to PARAMS."
   (when (and session (not (string= session "none")))
     (save-window-excursion
@@ -212,7 +223,7 @@ return the value of the last statement in BODY."
            (mapconcat
             #'org-babel-sh-strip-weird-long-prompt
             (mapcar
-             #'org-babel-trim
+             #'org-trim
              (butlast
               (org-babel-comint-with-output
                   (session org-babel-sh-eoe-output t body)
@@ -227,7 +238,7 @@ return the value of the last statement in BODY."
                      (accept-process-output
                       (get-buffer-process (current-buffer)))))
                  (append
-                  (split-string (org-babel-trim body) "\n")
+                  (split-string (org-trim body) "\n")
                   (list org-babel-sh-eoe-indicator))))
               2)) "\n"))
           ('otherwise                   ; external shell script
@@ -242,7 +253,7 @@ return the value of the last statement in BODY."
                    (insert body))
                  (set-file-modes script-file #o755)
                  (org-babel-eval script-file ""))
-             (org-babel-eval shell-file-name (org-babel-trim body)))))))
+             (org-babel-eval shell-file-name (org-trim body)))))))
     (when results
       (let ((result-params (cdr (assoc :result-params params))))
         (org-babel-result-cond result-params

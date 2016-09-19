@@ -29,10 +29,18 @@
 ;; (available in MELPA).
 
 ;;; Code:
+
 (require 'ob)
 
-(declare-function org-trim "org" (S))
+(declare-function org-trim "org" (s &optional keep-lead))
 (declare-function j-console-ensure-session "ext:j-console" ())
+
+(defcustom org-babel-J-command "jconsole"
+  "Command to call J."
+  :group 'org-babel
+  :version "25.2"
+  :package-version '(Org . "9.0")
+  :type 'string)
 
 (defun org-babel-expand-body:J (body _params &optional _processed-params)
   "Expand BODY according to PARAMS, return the expanded body.
@@ -59,6 +67,8 @@ PROCESSED-PARAMS isn't used yet."
 	 (org-babel-J-interleave-echos-except-functions s3)))
     (org-babel-J-interleave-echos body)))
 
+(defalias 'org-babel-execute:j 'org-babel-execute:J)
+
 (defun org-babel-execute:J (body params)
   "Execute a block of J code BODY.
 PARAMS are given by org-babel.
@@ -75,7 +85,7 @@ This function is called by `org-babel-execute-src-block'"
 	 (progn
 	   (with-temp-file tmp-script-file
 	     (insert full-body))
-	   (org-babel-eval (format "jconsole < %s" tmp-script-file) ""))
+	   (org-babel-eval (format "%s < %s" org-babel-J-command tmp-script-file) ""))
        (org-babel-J-eval-string full-body)))))
 
 (defun org-babel-J-eval-string (str)

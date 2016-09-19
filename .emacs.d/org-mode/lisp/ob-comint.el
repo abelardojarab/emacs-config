@@ -33,9 +33,7 @@
 (require 'ob-core)
 (require 'org-compat)
 (require 'comint)
-(eval-when-compile (require 'cl))
-(declare-function with-parsed-tramp-file-name "tramp" (filename var &rest body))
-(declare-function tramp-flush-directory-property "tramp" (vec directory))
+(require 'tramp)
 
 (defun org-babel-comint-buffer-livep (buffer)
   "Check if BUFFER is a comint buffer with a live process."
@@ -53,8 +51,9 @@ executed inside the protection of `save-excursion' and
        (error "Buffer %s does not exist or has no process" ,buffer))
      (save-match-data
        (with-current-buffer ,buffer
-	 (let ((comint-input-filter (lambda (_input) nil)))
-	   ,@body)))))
+	 (save-excursion
+	   (let ((comint-input-filter (lambda (_input) nil)))
+	     ,@body))))))
 (def-edebug-spec org-babel-comint-in-buffer (form body))
 
 (defmacro org-babel-comint-with-output (meta &rest body)
@@ -145,15 +144,14 @@ Don't return until FILE exists.  Code in STRING must ensure that
 FILE exists at end of evaluation."
   (unless (org-babel-comint-buffer-livep buffer)
     (error "Buffer %s does not exist or has no process" buffer))
-  (if (file-exists-p file) (delete-file file))
+  (when (file-exists-p file) (delete-file file))
   (process-send-string
    (get-buffer-process buffer)
    (if (= (aref string (1- (length string))) ?\n) string (concat string "\n")))
   ;; From Tramp 2.1.19 the following cache flush is not necessary
-  (if (file-remote-p default-directory)
-      (let (v)
-	(with-parsed-tramp-file-name default-directory nil
-	  (tramp-flush-directory-property v ""))))
+  (when (file-remote-p default-directory)
+    (with-parsed-tramp-file-name default-directory nil
+      (tramp-flush-directory-property v "")))
   (while (not (file-exists-p file)) (sit-for (or period 0.25))))
 
 (provide 'ob-comint)

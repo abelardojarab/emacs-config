@@ -40,8 +40,6 @@
 (require 'org-compat)
 (require 'org)
 
-(eval-when-compile
-  (require 'cl))
 (require 'cl-lib)
 
 (declare-function org-inlinetask-get-task-level "org-inlinetask" ())
@@ -129,15 +127,6 @@ buffer, which can take a few seconds on large buffers, is done
 during idle time."
   nil " Ind" nil
   (cond
-   ((and org-indent-mode (featurep 'xemacs))
-    (message "org-indent-mode does not work in XEmacs - refusing to turn it on")
-    (setq org-indent-mode nil))
-   ((and org-indent-mode
-	 (not (org-version-check "23.1.50" "Org Indent mode" :predicate)))
-    (message "org-indent-mode can crash Emacs 23.1 - refusing to turn it on!")
-    (ding)
-    (sit-for 1)
-    (setq org-indent-mode nil))
    (org-indent-mode
     ;; mode was turned on.
     (setq-local indent-tabs-mode nil)
@@ -148,13 +137,13 @@ during idle time."
       (setq-local org-hide-leading-stars-before-indent-mode
 		  org-hide-leading-stars)
       (setq-local org-hide-leading-stars t))
-    (org-add-hook 'filter-buffer-substring-functions
+    (add-hook 'filter-buffer-substring-functions
 		  (lambda (fun start end delete)
 		    (org-indent-remove-properties-from-string
 		     (funcall fun start end delete)))
 		  nil t)
-    (org-add-hook 'after-change-functions 'org-indent-refresh-maybe nil 'local)
-    (org-add-hook 'before-change-functions
+    (add-hook 'after-change-functions 'org-indent-refresh-maybe nil 'local)
+    (add-hook 'before-change-functions
 		  'org-indent-notify-modified-headline nil 'local)
     (and font-lock-mode (org-restart-font-lock))
     (org-indent-remove-properties (point-min) (point-max))
@@ -264,7 +253,7 @@ have `org-warning' face."
 			       ?*)))
 	 (line
 	  (cond
-	   ((and (org-bound-and-true-p org-inlinetask-show-first-star)
+	   ((and (bound-and-true-p org-inlinetask-show-first-star)
 		 (eq heading 'inlinetask))
 	    (concat org-indent-inlinetask-first-star
 		    (org-add-props (substring stars 1) nil 'face 'org-hide)))
@@ -323,7 +312,7 @@ stopped."
 	   ;; Headline or inline task.
 	   ((looking-at org-outline-regexp)
 	    (let* ((nstars (- (match-end 0) (match-beginning 0) 1))
-		   (type (or (org-looking-at-p limited-re) 'inlinetask)))
+		   (type (or (looking-at-p limited-re) 'inlinetask)))
 	      (org-indent-set-line-properties nstars 0 type)
 	      ;; At an headline, define new value for LEVEL.
 	      (unless (eq type 'inlinetask) (setq level nstars))))

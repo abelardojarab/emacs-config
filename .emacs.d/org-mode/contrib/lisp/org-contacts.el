@@ -232,7 +232,7 @@ A regexp matching strings of whitespace, `,' and `;'.")
 (defun org-contacts-db-need-update-p ()
   "Determine whether `org-contacts-db' needs to be refreshed."
   (or (null org-contacts-last-update)
-      (org-find-if (lambda (file)
+      (cl-find-if (lambda (file)
 		     (or (time-less-p org-contacts-last-update
 				      (elt (file-attributes file) 5))))
 		   (org-contacts-files))
@@ -317,16 +317,16 @@ cell corresponding to the contact properties.
     (cl-loop for contact in (org-contacts-db)
 	     if (or
 		 (and name-match
-		      (org-string-match-p name-match
+		      (string-match-p name-match
 					  (first contact)))
 		 (and prop-match
-		      (org-find-if (lambda (prop)
+		      (cl-find-if (lambda (prop)
 				     (and (string= (car prop-match) (car prop))
-					  (org-string-match-p (cdr prop-match) (cdr prop))))
+					  (string-match-p (cdr prop-match) (cdr prop))))
 				   (caddr contact)))
 		 (and tags-match
-		      (org-find-if (lambda (tag)
-				     (org-string-match-p tags-match tag))
+		      (cl-find-if (lambda (tag)
+				     (string-match-p tags-match tag))
 				   (org-split-string
 				    (or (cdr (assoc-string "ALLTAGS" (caddr contact))) "") ":"))))
 	     collect contact)))
@@ -487,13 +487,10 @@ prefixes rather than just the beginning of the string."
 	  completions))
 
 (defun org-contacts-test-completion-prefix (string collection predicate)
-  ;; Prevents `org-find-if' from redefining `predicate' and going into
-  ;; an infinite loop.
-  (lexical-let ((predicate predicate))
-    (org-find-if (lambda (el)
-		   (and (or (null predicate) (funcall predicate el))
-			(string= string el)))
-		 collection)))
+  (cl-find-if (lambda (el)
+		(and (or (null predicate) (funcall predicate el))
+		     (string= string el)))
+	      collection))
 
 (defun org-contacts-boundaries-prefix (string collection predicate suffix)
   (list* 'boundaries (completion-boundaries string collection predicate suffix)))
@@ -508,7 +505,7 @@ prefixes rather than just the beginning of the string."
 
 A group FOO is composed of contacts with the tag FOO."
   (let* ((completion-ignore-case org-contacts-completion-ignore-case)
-	 (group-completion-p (org-string-match-p
+	 (group-completion-p (string-match-p
 			      (concat "^" org-contacts-group-prefix) string)))
     (when group-completion-p
       (let ((completion-list
@@ -557,7 +554,7 @@ with BAR.
 See (org) Matching tags and properties for a complete
 description."
   (let* ((completion-ignore-case org-contacts-completion-ignore-case)
-	 (completion-p (org-string-match-p
+	 (completion-p (string-match-p
 			(concat "^" org-contacts-tags-props-prefix) string)))
     (when completion-p
       (let ((result
@@ -592,7 +589,7 @@ description."
   "Remove all ignore-list's elements from list and you can use
    regular expressions in the ignore list."
   (cl-remove-if (lambda (el)
-		  (org-find-if (lambda (x)
+		  (cl-find-if (lambda (x)
 				 (string-match-p x el))
 			       ignore-list))
 		list))
@@ -675,14 +672,9 @@ description."
     (when marker
       (switch-to-buffer-other-window (marker-buffer marker))
       (goto-char marker)
-      (when (eq major-mode 'org-mode)
-        (org-show-context 'agenda)
-        (save-excursion
-          (and (outline-next-heading)
-               ;; show the next heading
-               (org-flag-heading nil)))))))
+      (when (eq major-mode 'org-mode) (org-show-context 'agenda)))))
 
-(org-no-warnings (defvar date)) ;; unprefixed, from calendar.el
+(with-no-warnings (defvar date)) ;; unprefixed, from calendar.el
 (defun org-contacts-anniversaries (&optional field format)
   "Compute FIELD anniversary for each contact, returning FORMAT.
 Default FIELD value is \"BIRTHDAY\".
@@ -1115,8 +1107,7 @@ link string and return the pure link target."
 
 ;; Add the link type supported by org-contacts-strip-link
 ;; so everything is in order for its use in Org files
-(org-add-link-type "tel")
-
+(org-link-set-parameters "tel")
 
 (defun org-contacts-split-property (string &optional separators omit-nulls)
   "Custom version of `split-string'.

@@ -26,11 +26,11 @@
 ;;; Commentary:
 
 ;; This file implements links to BBDB database entries from within Org-mode.
-;; Org-mode loads this module by default - if this is not what you want,
+;; Org mode loads this module by default - if this is not what you want,
 ;; configure the variable `org-modules'.
 
 ;; It also implements an interface (based on Ivar Rummelhoff's
-;; bbdb-anniv.el) for those org-mode users, who do not use the diary
+;; bbdb-anniv.el) for those Org users, who do not use the diary
 ;; but who do want to include the anniversaries stored in the BBDB
 ;; into the org-agenda.  If you already include the `diary' into the
 ;; agenda, you might want to prefer to include the anniversaries in
@@ -124,7 +124,7 @@
 (declare-function calendar-leap-year-p "calendar" (year))
 (declare-function diary-ordinal-suffix "diary-lib" (n))
 
-(org-no-warnings (defvar date)) ;; unprefixed, from calendar.el
+(with-no-warnings (defvar date)) ;; unprefixed, from calendar.el
 
 ;; Customization
 
@@ -194,10 +194,12 @@ date year)."
   :group 'org-bbdb-anniversaries
   :require 'bbdb)
 
-
 ;; Install the link type
-(org-add-link-type "bbdb" 'org-bbdb-open 'org-bbdb-export)
-(add-hook 'org-store-link-functions 'org-bbdb-store-link)
+(org-link-set-parameters "bbdb"
+			 :follow #'org-bbdb-open
+			 :export #'org-bbdb-export
+			 :complete #'org-bbdb-complete-link
+			 :store #'org-bbdb-store-link)
 
 ;; Implementation
 (defun org-bbdb-store-link ()
@@ -279,14 +281,11 @@ italicized, in all other cases it is left unchanged."
   "Convert YYYY-MM-DD to (month date year).
 Argument TIME-STR is the value retrieved from BBDB.  If YYYY- is omitted
 it will be considered unknown."
-  (multiple-value-bind (a b c) (values-list (org-split-string time-str "-"))
-    (if (eq c nil)
-        (list (string-to-number a)
-              (string-to-number b)
-              nil)
-      (list (string-to-number b)
-            (string-to-number c)
-            (string-to-number a)))))
+  (pcase (org-split-string time-str "-")
+    (`(,a ,b nil) (list (string-to-number a) (string-to-number b) nil))
+    (`(,a ,b ,c) (list (string-to-number b)
+		       (string-to-number c)
+		       (string-to-number a)))))
 
 (defun org-bbdb-anniv-split (str)
   "Split multiple entries in the BBDB anniversary field.
@@ -324,9 +323,9 @@ The anniversaries are assumed to be stored `org-bbdb-anniversary-field'."
 		       (bbdb-split "\n" annivs)))
         (while annivs
           (setq split (org-bbdb-anniv-split (pop annivs)))
-          (multiple-value-bind (m d y)
-              (values-list (funcall org-bbdb-extract-date-fun (car split)))
-            (setq tmp (gethash (list m d) org-bbdb-anniv-hash))
+	  (pcase-let ((`(,m ,d ,y) (funcall org-bbdb-extract-date-fun
+					    (car split))))
+	    (setq tmp (gethash (list m d) org-bbdb-anniv-hash))
             (puthash (list m d) (cons (list y
                                             (bbdb-record-name rec)
                                             (cadr split))
@@ -418,33 +417,41 @@ This is used by Org to re-create the anniversary hash table."
   "Return list of anniversaries for today and the next n-1 days (default n=7)."
   (let ((n (or n 7)))
     (when (<= n 0)
-      (error "The (optional) argument of `org-bbdb-anniversaries-future' must be positive"))
+      (error "The (optional) argument of `org-bbdb-anniversaries-future' \
+must be positive"))
     (let (
 	  ;; List of relevant dates.
 	  (dates (org-bbdb-date-list date n))
-	  ;; Function to annotate text of each element of l with the anniversary date d.
+	  ;; Function to annotate text of each element of l with the
+	  ;; anniversary date d.
 	  (annotate-descriptions
 	   (lambda (d l)
 	     (mapcar (lambda (x)
-		       ;; The assumption here is that x is a bbdb link of the form
-		       ;; [[bbdb:name][description]].
-		       ;; This function rather arbitrarily modifies the description
-		       ;; by adding the date to it in a fixed format.
+		       ;; The assumption here is that x is a bbdb link
+		       ;; of the form [[bbdb:name][description]].
+		       ;; This function rather arbitrarily modifies
+		       ;; the description by adding the date to it in
+		       ;; a fixed format.
 		       (string-match "]]" x)
-		       (replace-match (format " -- %d-%02d-%02d\\&" (third d) (first d) (second d))
+		       (replace-match (format " -- %d-%02d-%02d\\&"
+					      (nth 2 d)
+					      (nth 0 d)
+					      (nth 1 d))
 				      nil nil x))
 		     l))))
-      ;; Map a function that generates anniversaries for each date over the dates
-      ;; and nconc the results into a single list. When it is no longer necessary
-      ;; to support older versions of emacs, this can be done with a cl-mapcan;
-      ;; for now, we use the (apply #'nconc ...) method for compatibility.
+      ;; Map a function that generates anniversaries for each date
+      ;; over the dates and nconc the results into a single list. When
+      ;; it is no longer necessary to support older versions of Emacs,
+      ;; this can be done with a cl-mapcan; for now, we use the (apply
+      ;; #'nconc ...) method for compatibility.
       (apply #'nconc
 	     (mapcar
 	      (lambda (d)
 		(let ((date d))
-		  ;; Rebind 'date' so that org-bbdb-anniversaries will be
-		  ;; fooled into giving us the list for the given date
-		  ;; and then annotate the descriptions for that date.
+		  ;; Rebind 'date' so that org-bbdb-anniversaries will
+		  ;; be fooled into giving us the list for the given
+		  ;; date and then annotate the descriptions for that
+		  ;; date.
 		  (funcall annotate-descriptions d (org-bbdb-anniversaries))))
 	      dates)))))
 

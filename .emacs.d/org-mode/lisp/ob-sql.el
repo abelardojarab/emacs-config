@@ -57,11 +57,11 @@
 
 ;;; Code:
 (require 'ob)
-(eval-when-compile (require 'cl))
 
 (declare-function org-table-import "org-table" (file arg))
 (declare-function orgtbl-to-csv "org-table" (table params))
 (declare-function org-table-to-lisp "org-table" (&optional txt))
+(declare-function cygwin-convert-file-name-to-windows "cygw32.c" (file &optional absolute-p))
 
 (defvar org-babel-default-header-args:sql '())
 
@@ -90,18 +90,41 @@
 	       (when password (concat "-p" password))
 	       (when database (concat "-D" database))))))
 
-(defun org-babel-sql-dbstring-postgresql (host user database)
+(defun org-babel-sql-dbstring-postgresql (host port user database)
   "Make PostgreSQL command line args for database connection.
 Pass nil to omit that arg."
   (combine-and-quote-strings
    (delq nil
 	 (list (when host (concat "-h" host))
+	       (when port (format "-p%d" port))
 	       (when user (concat "-U" user))
 	       (when database (concat "-d" database))))))
 
 (defun org-babel-sql-dbstring-oracle (host port user password database)
   "Make Oracle command line args for database connection."
   (format "%s/%s@%s:%s/%s" user password host port database))
+
+(defun org-babel-sql-dbstring-mssql (host user password database)
+  "Make sqlcmd commmand line args for database connection.
+`sqlcmd' is the preferred command line tool to access Microsoft
+SQL Server on Windows and Linux platform."
+  (mapconcat #'identity
+	     (delq nil
+		   (list (when host (format "-S \"%s\"" host))
+			 (when user (format "-U \"%s\"" user))
+			 (when password (format "-P \"%s\"" password))
+			 (when database (format "-d \"%s\"" database))))
+	     " "))
+
+(defun org-babel-sql-convert-standard-filename (file)
+  "Convert the file name to OS standard.
+If in Cygwin environment, uses Cygwin specific function to
+convert the file name. Otherwise, uses Emacs' standard conversion
+function."
+  (format "\"%s\""
+	  (if (fboundp 'cygwin-convert-file-name-to-windows)
+	      (cygwin-convert-file-name-to-windows file)
+	    (convert-standard-filename file))))
 
 (defun org-babel-execute:sql (body params)
   "Execute a block of Sql code with Babel.
@@ -129,10 +152,14 @@ This function is called by `org-babel-execute-src-block'."
 				      (or cmdline "")
 				      (org-babel-process-file-name in-file)
 				      (org-babel-process-file-name out-file)))
-                    (`msosql (format "osql %s -s \"\t\" -i %s -o %s"
-				     (or cmdline "")
-				     (org-babel-process-file-name in-file)
-				     (org-babel-process-file-name out-file)))
+		    (`mssql (format "sqlcmd %s -s \"\t\" %s -i %s -o %s"
+				    (or cmdline "")
+				    (org-babel-sql-dbstring-mssql
+				     dbhost dbuser dbpassword database)
+				    (org-babel-sql-convert-standard-filename
+				     (org-babel-process-file-name in-file))
+				    (org-babel-sql-convert-standard-filename
+				     (org-babel-process-file-name out-file))))
                     (`mysql (format "mysql %s %s %s < %s > %s"
 				    (org-babel-sql-dbstring-mysql
 				     dbhost dbport dbuser dbpassword database)
@@ -141,11 +168,14 @@ This function is called by `org-babel-execute-src-block'."
 				    (org-babel-process-file-name in-file)
 				    (org-babel-process-file-name out-file)))
 		    (`postgresql (format
-				  "psql --set=\"ON_ERROR_STOP=1\" %s -A -P \
+				  "%spsql --set=\"ON_ERROR_STOP=1\" %s -A -P \
 footer=off -F \"\t\"  %s -f %s -o %s %s"
+				  (if dbpassword
+				      (format "PGPASSWORD=%s " dbpassword)
+				    "")
 				  (if colnames-p "" "-t")
 				  (org-babel-sql-dbstring-postgresql
-				   dbhost dbuser database)
+				   dbhost dbport dbuser database)
 				  (org-babel-process-file-name in-file)
 				  (org-babel-process-file-name out-file)
 				  (or cmdline "")))
@@ -171,6 +201,9 @@ SET VERIFY OFF
 SET HEADING ON
 SET MARKUP HTML OFF SPOOL OFF
 SET COLSEP '|'
+
+")
+	 (`mssql "SET NOCOUNT ON
 
 ")
 	 (_ ""))

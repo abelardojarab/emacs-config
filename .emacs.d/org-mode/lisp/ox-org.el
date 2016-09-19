@@ -25,7 +25,7 @@
 ;;; Code:
 
 (require 'ox)
-(declare-function htmlize-buffer "htmlize" (&optional buffer))
+(declare-function htmlize-buffer "ext:htmlize" (&optional buffer))
 (defvar htmlize-output-type)
 
 (defgroup org-export-org nil
@@ -35,8 +35,6 @@
   :version "24.4"
   :package-version '(Org . "8.0"))
 
-(define-obsolete-variable-alias
-  'org-export-htmlized-org-css-url 'org-org-htmlized-css-url "24.4")
 (defcustom org-org-htmlized-css-url nil
   "URL pointing to the CSS defining colors for htmlized Emacs buffers.
 Normally when creating an htmlized version of an Org buffer,
@@ -63,6 +61,7 @@ setting of `org-html-htmlize-output-type' is `css'."
     (dynamic-block . org-org-identity)
     (entity . org-org-identity)
     (example-block . org-org-identity)
+    (export-block . org-org-export-block)
     (fixed-width . org-org-identity)
     (footnote-definition . ignore)
     (footnote-reference . org-org-identity)
@@ -109,6 +108,12 @@ setting of `org-html-htmlize-output-type' is `css'."
 	    (lambda (a s v b)
 	      (if a (org-org-export-to-org t s v b)
 		(org-open-file (org-org-export-to-org nil s v b))))))))
+
+(defun org-org-export-block (export-block _contents _info)
+  "Transcode a EXPORT-BLOCK element from Org to LaTeX.
+CONTENTS and INFO are ignored."
+  (and (equal (org-element-property :type export-block) "ORG")
+       (org-element-property :value export-block)))
 
 (defun org-org-identity (blob contents _info)
   "Transcode BLOB element or object back into Org syntax.
@@ -203,7 +208,7 @@ a communication channel."
 		  (mapconcat
 		   (lambda (d)
 		     (org-element-normalize-string
-		      (concat (format "[%s] "(car d))
+		      (concat (format "[fn:%s] "(car d))
 			      (org-export-data (cdr d) info))))
 		   footnotes-alist "\n"))))
    (make-string (or (org-element-property :post-blank section) 0) ?\n)))

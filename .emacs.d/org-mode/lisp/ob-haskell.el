@@ -41,9 +41,9 @@
 ;;; Code:
 (require 'ob)
 (require 'comint)
-(eval-when-compile (require 'cl))
 
 (declare-function org-remove-indentation "org" (code &optional n))
+(declare-function org-trim "org" (s &optional keep-lead))
 (declare-function haskell-mode "ext:haskell-mode" ())
 (declare-function run-haskell "ext:inf-haskell" (&optional arg))
 (declare-function inferior-haskell-load-file
@@ -69,31 +69,25 @@
          (session (org-babel-haskell-initiate-session session params))
          (raw (org-babel-comint-with-output
 		  (session org-babel-haskell-eoe t full-body)
-                (insert (org-babel-trim full-body))
+                (insert (org-trim full-body))
                 (comint-send-input nil t)
                 (insert org-babel-haskell-eoe)
                 (comint-send-input nil t)))
          (results (mapcar
-                   #'org-babel-haskell-read-string
+                   #'org-babel-strip-quotes
                    (cdr (member org-babel-haskell-eoe
-                                (reverse (mapcar #'org-babel-trim raw)))))))
+                                (reverse (mapcar #'org-trim raw)))))))
     (org-babel-reassemble-table
      (let ((result
-            (case result-type
-              (output (mapconcat #'identity (reverse (cdr results)) "\n"))
-              (value (car results)))))
+            (pcase result-type
+              (`output (mapconcat #'identity (reverse (cdr results)) "\n"))
+              (`value (car results)))))
        (org-babel-result-cond (cdr (assoc :result-params params))
 	 result (org-babel-script-escape result)))
      (org-babel-pick-name (cdr (assoc :colname-names params))
 			  (cdr (assoc :colname-names params)))
      (org-babel-pick-name (cdr (assoc :rowname-names params))
 			  (cdr (assoc :rowname-names params))))))
-
-(defun org-babel-haskell-read-string (string)
-  "Strip \\\"s from around a haskell string."
-  (if (string-match "^\"\\([^\000]+\\)\"$" string)
-      (match-string 1 string)
-    string))
 
 (defun org-babel-haskell-initiate-session (&optional _session _params)
   "Initiate a haskell session.
@@ -143,13 +137,14 @@ specifying a variable of the same value."
 (defvar org-export-copy-to-kill-ring)
 (declare-function org-export-to-file "ox"
 		  (backend file
-			   &optional async subtreep visible-only body-only ext-plist))
+			   &optional async subtreep visible-only body-only
+			   ext-plist post-process))
 (defun org-babel-haskell-export-to-lhs (&optional arg)
   "Export to a .lhs file with all haskell code blocks escaped.
 When called with a prefix argument the resulting
 .lhs file will be exported to a .tex file.  This function will
 create two new files, base-name.lhs and base-name.tex where
-base-name is the name of the current org-mode file.
+base-name is the name of the current Org file.
 
 Note that all standard Babel literate programming
 constructs (header arguments, no-web syntax etc...) are ignored."

@@ -65,7 +65,9 @@
   "Test of table output"
   (org-test-at-id "cc158527-b867-4b1d-8ae0-b8c713a90fd7"
     (org-babel-next-src-block)
-    (should (equal '((1 2 3) (2 3 4) (3 4 5)) (org-babel-execute-src-block)))))
+    (should
+     (equal
+      '((1 2 3) (2 3 4) (3 4 5)) (org-babel-execute-src-block)))))
 
 (provide 'test-ob-maxima)
 

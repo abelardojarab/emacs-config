@@ -1964,6 +1964,61 @@ Para2"
 		(org-export-get-footnote-number ref info nil)))
 	info)))))
 
+(ert-deftest test-org-export/get-footnote-definition ()
+  "Test `org-export-get-footnote-definition' specifications."
+  ;; Standard test.
+  (should
+   (equal "A\n"
+	  (org-element-interpret-data
+	   (org-test-with-parsed-data "Text[fn:1]\n\n[fn:1] A"
+	     (org-export-get-footnote-definition
+	      (org-element-map tree 'footnote-reference #'identity nil t)
+	      info)))))
+  ;; Raise an error if no definition is found.
+  (should-error
+   (org-test-with-parsed-data "Text[fn:1]"
+     (org-export-get-footnote-definition
+      (org-element-map tree 'footnote-reference #'identity nil t)
+      info)))
+  ;; Find inline definitions.
+  (should
+   (equal "A"
+	  (org-element-interpret-data
+	   (org-test-with-parsed-data "Text[fn:1:A]"
+	     (org-export-get-footnote-definition
+	      (org-element-map tree 'footnote-reference #'identity nil t)
+	      info)))))
+  ;; Find anonymous definitions.
+  (should
+   (equal "A"
+	  (org-element-interpret-data
+	   (org-test-with-parsed-data "Text[fn::A]"
+	     (org-export-get-footnote-definition
+	      (org-element-map tree 'footnote-reference #'identity nil t)
+	      info)))))
+  ;; Find empty definitions.
+  (should
+   (equal ""
+	  (org-element-interpret-data
+	   (org-test-with-parsed-data "Text[fn:1]\n\n[fn:1]"
+	     (org-export-get-footnote-definition
+	      (org-element-map tree 'footnote-reference #'identity nil t)
+	      info)))))
+  (should
+   (equal ""
+	  (org-element-interpret-data
+	   (org-test-with-parsed-data "Text[fn:1:]"
+	     (org-export-get-footnote-definition
+	      (org-element-map tree 'footnote-reference #'identity nil t)
+	      info)))))
+  (should
+   (equal ""
+	  (org-element-interpret-data
+	   (org-test-with-parsed-data "Text[fn::]"
+	     (org-export-get-footnote-definition
+	      (org-element-map tree 'footnote-reference #'identity nil t)
+	      info))))))
+
 (ert-deftest test-org-export/collect-footnote-definitions ()
   "Test `org-export-collect-footnote-definitions' specifications."
   (should
@@ -2028,7 +2083,7 @@ Para2"
 		      (car (org-element-contents
 			    (car (org-element-contents def))))))))
 	  info))))
-    ;; Test nested footnote in invisible definitions.
+    ;; Export nested footnote in invisible definitions.
     (should
      (= 2
 	(org-test-with-temp-text "Text[fn:1]\n\n[fn:1] B [fn:2]\n\n[fn:2] C."
@@ -2043,24 +2098,91 @@ Para2"
 		   (throw 'exit (length
 				 (org-export-collect-footnote-definitions
 				  i))))))))))))
-    ;; Test export of footnotes defined outside parsing scope.
+    ;; Export footnotes defined outside parsing scope.
     (should
-     (equal
-      "ParagraphOut of scope\n"
+     (string-match
+      "Out of scope"
       (org-test-with-temp-text "[fn:1] Out of scope
 * Title
 <point>Paragraph[fn:1]"
-	(let ((backend (org-test-default-backend)))
-	  (setf (org-export-backend-transcoders backend)
-		(append
-		 (list (cons 'footnote-reference
-			     (lambda (fn contents info)
-			       (org-element-interpret-data
-				(org-export-get-footnote-definition fn info))))
-		       (cons 'footnote-definition #'ignore)
-		       (cons 'headline #'ignore))
-		 (org-export-backend-transcoders backend)))
-	  (org-export-as backend 'subtree)))))
+	(org-export-as (org-test-default-backend) 'subtree))))
+    (should
+     (string-match
+      "Out of scope"
+      (org-test-with-temp-text "[fn:1] Out of scope
+* Title
+<point>Paragraph[fn:1]"
+	(narrow-to-region (point) (point-max))
+	(org-export-as (org-test-default-backend)))))
+    ;; Export nested footnotes defined outside parsing scope.
+    (should
+     (string-match
+      "Very out of scope"
+      (org-test-with-temp-text "
+\[fn:1] Out of scope[fn:2]
+
+\[fn:2] Very out of scope
+* Title
+<point>Paragraph[fn:1]"
+	(org-export-as (org-test-default-backend) 'subtree))))
+    (should
+     (string-match
+      "Very out of scope"
+      (org-test-with-temp-text "
+\[fn:1] Out of scope[fn:2]
+
+\[fn:2] Very out of scope
+* Title
+<point>Paragraph[fn:1]"
+	(narrow-to-region (point) (point-max))
+	(org-export-as (org-test-default-backend)))))
+    (should
+     (string-match
+      "D2"
+      (org-test-with-temp-text "
+\[fn:1] Out of scope[fn:2:D2]
+* Title
+<point>Paragraph[fn:1]"
+	(narrow-to-region (point) (point-max))
+	(org-export-as (org-test-default-backend)))))
+    ;; Export footnotes in pruned parts of tree.
+    (should
+     (string-match
+      "Definition"
+      (let ((org-export-exclude-tags '("noexport")))
+	(org-test-with-temp-text
+	    "* H\nText[fn:1]\n* H2 :noexport:\n[fn:1] Definition"
+	  (org-export-as (org-test-default-backend))))))
+    (should
+     (string-match
+      "Definition"
+      (let ((org-export-select-tags '("export")))
+	(org-test-with-temp-text
+	    "* H :export:\nText[fn:1]\n* H2\n[fn:1] Definition"
+	  (org-export-as (org-test-default-backend))))))
+    ;; Export nested footnotes in pruned parts of tree.
+    (should
+     (string-match
+      "D2"
+      (let ((org-export-exclude-tags '("noexport")))
+	(org-test-with-temp-text
+	    "* H\nText[fn:1]\n* H2 :noexport:\n[fn:1] D1[fn:2]\n\n[fn:2] D2"
+	  (org-export-as (org-test-default-backend))))))
+    (should
+     (string-match
+      "D2"
+      (let ((org-export-select-tags '("export")))
+	(org-test-with-temp-text
+	    "* H :export:\nText[fn:1]\n* H2\n[fn:1] D1[fn:2]\n\n[fn:2] D2"
+	  (org-export-as (org-test-default-backend))))))
+    ;; Handle uninterpreted data in pruned footnote definitions.
+    (should-not
+     (string-match
+      "|"
+      (let ((org-export-with-tables nil))
+	(org-test-with-temp-text
+	    "* H\nText[fn:1]\n* H2 :noexport:\n[fn:1]\n| a |"
+	  (org-export-as (org-test-default-backend))))))
     ;; Footnotes without a definition should throw an error.
     (should-error
      (org-test-with-parsed-data "Text[fn:1]"
@@ -2449,8 +2571,8 @@ Para2"
   (should
    (string-match
     "success"
-    (let ((org-link-types (copy-sequence org-link-types)))
-      (org-add-link-type "foo" nil (lambda (p d f) "success"))
+    (progn
+      (org-link-set-parameters "foo" :export (lambda (p d f) "success"))
       (org-export-string-as
        "[[foo:path]]"
        (org-export-create-backend
@@ -2464,9 +2586,9 @@ Para2"
   (should-not
    (string-match
     "success"
-    (let ((org-link-types (copy-sequence org-link-types)))
-      (org-add-link-type
-       "foo" nil (lambda (p d f) (and (eq f 'test) "success")))
+    (progn
+      (org-link-set-parameters
+       "foo" :export (lambda (p d f) (and (eq f 'test) "success")))
       (org-export-string-as
        "[[foo:path]]"
        (org-export-create-backend
@@ -2481,9 +2603,9 @@ Para2"
   (should-not
    (string-match
     "success"
-    (let ((org-link-types (copy-sequence org-link-types)))
-      (org-add-link-type
-       "foo" nil (lambda (p d f) (and (eq f 'test) "success")))
+    (progn
+      (org-link-set-parameters
+       "foo" :export (lambda (p d f) (and (eq f 'test) "success")))
       (org-export-string-as
        "[[foo:path]]"
        (org-export-create-backend
@@ -2586,6 +2708,125 @@ Paragraph[fn:1][fn:2][fn:lbl3:C<<target>>][[test]][[target]]
        (lambda (link) (org-export-resolve-fuzzy-link link info))
        info t))))
 
+(defun test-org-gen-loc-list(text type)
+  (org-test-with-parsed-data text
+    (org-element-map tree type
+      (lambda (el) (or (org-export-get-loc el info) 'no-loc)))))
+
+(ert-deftest test-org-export/get-loc ()
+  "Test `org-export-get-loc' specifications."
+  (should
+   ;; "-n" resets line number.
+   (equal '(0)
+	  (test-org-gen-loc-list "#+BEGIN_EXAMPLE -n\n  Text\n#+END_EXAMPLE"
+				 'example-block)))
+  ;; The first "+n" has 0 lines before it
+  (should
+   (equal '(0)
+	  (test-org-gen-loc-list "#+BEGIN_EXAMPLE +n\n  Text\n#+END_EXAMPLE"
+				 'example-block)))
+  ;; "-n 10" resets line number but has "9 lines" before it.
+  (should
+   (equal '(9)
+	  (test-org-gen-loc-list "#+BEGIN_EXAMPLE -n 10\n  Text\n#+END_EXAMPLE"
+				 'example-block)))
+  ;; -n10 with two lines then +n 15
+  (should
+   (equal '(9 25)
+	  (test-org-gen-loc-list "
+#+BEGIN_EXAMPLE -n 10
+  Text_10
+  Second line(11)
+#+END_EXAMPLE
+#+BEGIN_EXAMPLE +n 15
+  Text line (11 + 15)
+#+END_EXAMPLE"
+				 'example-block)))
+  (should
+   (equal '(9 19 0)
+	  (test-org-gen-loc-list "
+#+BEGIN_EXAMPLE -n 10
+  Text
+#+END_EXAMPLE
+#+BEGIN_EXAMPLE +n 10
+  Text
+#+END_EXAMPLE
+
+#+BEGIN_EXAMPLE -n
+  Text
+#+END_EXAMPLE"
+				 'example-block)))
+  ;; an Example Block without -n does not add to the line count.
+  (should
+   (equal '(9 no-loc 19)
+	  (test-org-gen-loc-list "
+#+BEGIN_EXAMPLE -n 10
+  Text
+#+END_EXAMPLE
+#+BEGIN_EXAMPLE
+  Text
+#+END_EXAMPLE
+#+BEGIN_EXAMPLE +n 10
+  Text
+#+END_EXAMPLE"
+				 'example-block)))
+  ;; "-n" resets line number.
+  (should
+   (equal
+    '(0)
+    (test-org-gen-loc-list "#+BEGIN_SRC emacs-lisp -n \n  (- 1 1) \n#+END_SRC"
+			   'src-block)))
+  ;; The first "+n" has 0 lines before it.
+  (should
+   (equal '(0)
+	  (test-org-gen-loc-list
+	   "#+BEGIN_SRC emacs-lisp +n \n  (+ 0 (- 1 1))\n#+END_SRC"
+	   'src-block)))
+  ;; "-n 10" resets line number but has "9 lines" before it.
+  (should
+   (equal '(9)
+	  (test-org-gen-loc-list
+	   "#+BEGIN_SRC emacs-lisp -n 10\n  (- 10 1)\n#+END_SRC"
+	   'src-block)))
+  (should
+   (equal '(9 25)
+	  (test-org-gen-loc-list "
+#+BEGIN_SRC emacs-lisp -n 10
+  (- 10 1)
+  (+ (- 10 1) 1)
+#+END_SRC
+#+BEGIN_SRC emacs-lisp +n 15
+  (+ (- 10 1) 2 (- 15 1))
+#+END_SRC"
+				 'src-block)))
+  (should
+   (equal '(9 19 0)
+	  (test-org-gen-loc-list "
+#+BEGIN_SRC emacs-lisp -n 10
+  (- 10 1)
+#+END_SRC
+#+BEGIN_SRC emacs-lisp +n 10
+  (+ (- 10 1) 1 (- 10 1))
+#+END_SRC
+#+BEGIN_SRC emacs-lisp -n
+  (- 1 1)
+#+END_SRC"
+				 'src-block)))
+  ;; A SRC Block without -n does not add to the line count.
+  (should
+   (equal '(9 no-loc 19)
+	  (test-org-gen-loc-list
+	   "#+BEGIN_SRC emacs-lisp -n 10
+  (+ (-10 1) 1)
+#+END_SRC
+#+BEGIN_SRC emacs-lisp
+  (+ 2 2)
+#+END_SRC
+#+BEGIN_SRC emacs-lisp +n 10
+  (+ (- 10 1) 1 (- 10 1))
+#+END_SRC"
+	   'src-block))))
+
 (ert-deftest test-org-export/resolve-coderef ()
   "Test `org-export-resolve-coderef' specifications."
   (let ((org-coderef-label-format "(ref:%s)"))
@@ -2596,10 +2837,32 @@ Paragraph[fn:1][fn:2][fn:lbl3:C<<target>>][[test]][[target]]
 	    "#+BEGIN_EXAMPLE -n -k -r\nText (ref:coderef)\n#+END_EXAMPLE"
 	  (org-export-resolve-coderef "coderef" info))))
     (should
+     (= 10
+	(org-test-with-parsed-data
+	 "#+BEGIN_EXAMPLE -n 10 -k -r\nText (ref:coderef)\n#+END_EXAMPLE"
+	 (org-export-resolve-coderef "coderef" info))))
+    (should
+     (= 135
+	(org-test-with-parsed-data
+	 "#+BEGIN_EXAMPLE -n 10 -k -r\nText \n#+END_EXAMPLE\n
+#+BEGIN_EXAMPLE +n 125 -k -r\nText (ref:coderef)\n#+END_EXAMPLE"
+	 (org-export-resolve-coderef "coderef" info))))
+    (should
      (= 1
 	(org-test-with-parsed-data
 	    "#+BEGIN_SRC emacs-lisp -n -k -r\n(+ 1 1) (ref:coderef)\n#+END_SRC"
 	  (org-export-resolve-coderef "coderef" info))))
+    (should
+     (= 10
+	(org-test-with-parsed-data
+	 "#+BEGIN_SRC emacs-lisp -n 10 -k -r\n(+ 1 1) (ref:coderef)\n#+END_SRC"
+	 (org-export-resolve-coderef "coderef" info))))
+    (should
+     (= 135
+	(org-test-with-parsed-data
+	 "#+BEGIN_SRC emacs-lisp -n 10 -k -r\n(+ 1 1) \n#+END_SRC\n
+#+BEGIN_SRC emacs-lisp +n 125 -k -r\n(+ 1 1) (ref:coderef)\n#+END_SRC"
+	 (org-export-resolve-coderef "coderef" info))))
     ;; A link to a "-n -r" block returns line number.
     (should
      (= 1
@@ -2607,10 +2870,33 @@ Paragraph[fn:1][fn:2][fn:lbl3:C<<target>>][[test]][[target]]
 	    "#+BEGIN_EXAMPLE -n -r\nText (ref:coderef)\n#+END_EXAMPLE"
 	  (org-export-resolve-coderef "coderef" info))))
     (should
+     (= 10
+	(org-test-with-parsed-data
+	 "#+BEGIN_EXAMPLE -n 10 -r\nText (ref:coderef)\n#+END_EXAMPLE"
+	 (org-export-resolve-coderef "coderef" info))))
+    (should
+     (= 135
+	(org-test-with-parsed-data
+	 "#+BEGIN_EXAMPLE +n 10 -r\nText \n#+END_EXAMPLE
+#+BEGIN_EXAMPLE +n 125 -r\nText (ref:coderef)\n#+END_EXAMPLE"
+	 (org-export-resolve-coderef "coderef" info))))
+
+    (should
      (= 1
 	(org-test-with-parsed-data
 	    "#+BEGIN_SRC emacs-lisp -n -r\n(+ 1 1) (ref:coderef)\n#+END_SRC"
 	  (org-export-resolve-coderef "coderef" info))))
+    (should
+     (= 10
+	(org-test-with-parsed-data
+	 "#+BEGIN_SRC emacs-lisp -n10 -r\n(+ 1 1) (ref:coderef)\n#+END_SRC"
+	 (org-export-resolve-coderef "coderef" info))))
+    (should
+     (= 135
+	(org-test-with-parsed-data
+	 "#+BEGIN_SRC emacs-lisp -n10 -r\n(+ 1 1) \n#+END_SRC
+#+BEGIN_SRC emacs-lisp +n125 -r\n(+ 1 1) (ref:coderef)\n#+END_SRC"
+	 (org-export-resolve-coderef "coderef" info))))
     ;; A link to a "-n" block returns coderef.
     (should
      (equal "coderef"
@@ -2887,7 +3173,7 @@ Another text. (ref:text)
 	      (org-export-get-reference headline info)))))
   ;; Use search cells defined in `:crossrefs'.
   (should
-   (equal "org1"
+   (equal "org0000001"
 	  (org-test-with-parsed-data "* Headline"
 	    (let* ((headline (org-element-map tree 'headline #'identity nil t))
 		   (search-cell (car (org-export-search-cells headline))))

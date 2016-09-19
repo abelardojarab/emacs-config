@@ -28,7 +28,6 @@
 
 ;;; Code:
 (require 'org-macs)
-(eval-when-compile (require 'cl))
 
 (defvar org-babel-error-buffer-name "*Org-Babel Error Output*")
 (declare-function org-babel-temp-file "ob-core" (prefix &optional suffix))
@@ -121,18 +120,18 @@ function in various versions of Emacs.
       (delete-file input-file))
 
     (when (and error-file (file-exists-p error-file))
-      (if (< 0 (nth 7 (file-attributes error-file)))
-	  (with-current-buffer (get-buffer-create error-buffer)
-	    (let ((pos-from-end (- (point-max) (point))))
-	      (or (bobp)
-		  (insert "\f\n"))
-	      ;; Do no formatting while reading error file,
-	      ;; because that can run a shell command, and we
-	      ;; don't want that to cause an infinite recursion.
-	      (format-insert-file error-file nil)
-	      ;; Put point after the inserted errors.
-	      (goto-char (- (point-max) pos-from-end)))
-	    (current-buffer)))
+      (when (< 0 (nth 7 (file-attributes error-file)))
+	(with-current-buffer (get-buffer-create error-buffer)
+	  (let ((pos-from-end (- (point-max) (point))))
+	    (or (bobp)
+		(insert "\f\n"))
+	    ;; Do no formatting while reading error file,
+	    ;; because that can run a shell command, and we
+	    ;; don't want that to cause an infinite recursion.
+	    (format-insert-file error-file nil)
+	    ;; Put point after the inserted errors.
+	    (goto-char (- (point-max) pos-from-end)))
+	  (current-buffer)))
       (delete-file error-file))
     exit-status))
 

@@ -30,10 +30,10 @@
 
 ;;; Code:
 (require 'ob)
-(eval-when-compile (require 'cl))
 
 (declare-function matlab-shell "ext:matlab-mode")
 (declare-function matlab-shell-run-region "ext:matlab-mode")
+(declare-function org-trim "org" (s &optional keep-lead))
 
 (defvar org-babel-default-header-args:matlab '())
 (defvar org-babel-default-header-args:octave '())
@@ -177,9 +177,9 @@ value of the last statement in BODY, as elisp."
   (let ((cmd (if matlabp
 		 org-babel-matlab-shell-command
 	       org-babel-octave-shell-command)))
-    (case result-type
-      (output (org-babel-eval cmd body))
-      (value (let ((tmp-file (org-babel-temp-file "octave-")))
+    (pcase result-type
+      (`output (org-babel-eval cmd body))
+      (`value (let ((tmp-file (org-babel-temp-file "octave-")))
 	       (org-babel-eval
 		cmd
 		(format org-babel-octave-wrapper-method body
@@ -188,17 +188,17 @@ value of the last statement in BODY, as elisp."
 	       (org-babel-octave-import-elisp-from-file tmp-file))))))
 
 (defun org-babel-octave-evaluate-session
-  (session body result-type &optional matlabp)
+    (session body result-type &optional matlabp)
   "Evaluate BODY in SESSION."
   (let* ((tmp-file (org-babel-temp-file (if matlabp "matlab-" "octave-")))
 	 (wait-file (org-babel-temp-file "matlab-emacs-link-wait-signal-"))
 	 (full-body
-	  (case result-type
-	    (output
+	  (pcase result-type
+	    (`output
 	     (mapconcat
 	      #'org-babel-chomp
 	      (list body org-babel-octave-eoe-indicator) "\n"))
-	    (value
+	    (`value
 	     (if (and matlabp org-babel-matlab-with-emacs-link)
 		 (concat
 		  (format org-babel-matlab-emacs-link-wrapper-method
@@ -231,21 +231,20 @@ value of the last statement in BODY, as elisp."
 		       org-babel-octave-eoe-output)
 		     t full-body)
 		  (insert full-body) (comint-send-input nil t)))) results)
-    (case result-type
-      (value
+    (pcase result-type
+      (`value
        (org-babel-octave-import-elisp-from-file tmp-file))
-      (output
-       (progn
-	 (setq results
-	       (if matlabp
-		   (cdr (reverse (delq "" (mapcar
-					   #'org-babel-octave-read-string
-					   (mapcar #'org-babel-trim raw)))))
-		 (cdr (member org-babel-octave-eoe-output
-			      (reverse (mapcar
-					#'org-babel-octave-read-string
-					(mapcar #'org-babel-trim raw)))))))
-	 (mapconcat #'identity (reverse results) "\n"))))))
+      (`output
+       (setq results
+	     (if matlabp
+		 (cdr (reverse (delq "" (mapcar
+					 #'org-babel-strip-quotes
+					 (mapcar #'org-trim raw)))))
+	       (cdr (member org-babel-octave-eoe-output
+			    (reverse (mapcar
+				      #'org-babel-strip-quotes
+				      (mapcar #'org-trim raw)))))))
+       (mapconcat #'identity (reverse results) "\n")))))
 
 (defun org-babel-octave-import-elisp-from-file (file-name)
   "Import data from FILE-NAME.
@@ -259,12 +258,6 @@ This removes initial blank and comment lines and then calls
 	     (setq end (point-at-bol)))
 	  (delete-region beg end)))
     (org-babel-import-elisp-from-file temp-file '(16))))
-
-(defun org-babel-octave-read-string (string)
-  "Strip \\\"s from around octave string."
-  (if (string-match "^\"\\([^\000]+\\)\"$" string)
-      (match-string 1 string)
-    string))
 
 (provide 'ob-octave)
 

@@ -61,7 +61,7 @@ the name of the original file and the name of the file
 produced.")
 
 (defgroup org-publish nil
-  "Options for publishing a set of Org-mode and related files."
+  "Options for publishing a set of files."
   :tag "Org Publishing"
   :group 'org)
 
@@ -110,6 +110,9 @@ Most properties are optional, but some should always be set:
     Directory (possibly remote) where output files will be
     published.
 
+If `:recursive' is non-nil files in sub-directories of
+`:base-directory' are considered.
+
 The `:exclude' property may be used to prevent certain files from
 being published.  Its value may be a string or regexp matching
 file names you don't want to be published.
@@ -141,12 +144,16 @@ date.
   `:preparation-function'
 
     Function to be called before publishing this project.  This
-    may also be a list of functions.
+    may also be a list of functions.  Preparation functions are
+    called with the project properties list as their sole
+    argument.
 
   `:completion-function'
 
     Function to be called after publishing this project.  This
-    may also be a list of functions.
+    may also be a list of functions.  Completion functions are
+    called with the project properties list as their sole
+    argument.
 
 Some properties control details of the Org publishing process,
 and are equivalent to the corresponding user variables listed in
@@ -405,9 +412,9 @@ This splices all the components into the list."
 	(pcase org-publish-sitemap-sort-files
 	  (`alphabetically
 	   (let* ((adir (file-directory-p a))
-		  (aorg (and (string-match "\\.org$" a) (not adir)))
+		  (aorg (and (string-suffix-p ".org" a) (not adir)))
 		  (bdir (file-directory-p b))
-		  (borg (and (string-match "\\.org$" b) (not bdir)))
+		  (borg (and (string-suffix-p ".org" b) (not bdir)))
 		  (A (if aorg (concat (file-name-directory a)
 				      (org-publish-find-title a)) a))
 		  (B (if borg (concat (file-name-directory b)
@@ -670,9 +677,9 @@ If `:auto-sitemap' is set, publish the sitemap too.  If
 `:makeindex' is set, also produce a file \"theindex.org\"."
   (dolist (project (org-publish-expand-projects projects))
     (let ((project-plist (cdr project)))
-      (let ((f (plist-get project-plist :preparation-function)))
-	(cond ((consp f) (mapc #'funcall f))
-	      ((functionp f) (funcall f))))
+      (let ((fun (plist-get project-plist :preparation-function)))
+	(cond ((consp fun) (dolist (f fun) (funcall f project-plist)))
+	      ((functionp fun) (funcall fun project-plist))))
       ;; Each project uses its own cache file.
       (org-publish-initialize-cache (car project))
       (when  (plist-get project-plist :auto-sitemap)
@@ -704,9 +711,9 @@ If `:auto-sitemap' is set, publish the sitemap too.  If
 	  (org-publish-index-generate-theindex
 	   project (plist-get project-plist :base-directory))
 	  (org-publish-file theindex project t)))
-      (let ((f (plist-get project-plist :completion-function)))
-	(cond ((consp f) (mapc #'funcall f))
-	      ((functionp f) (funcall f))))
+      (let ((fun (plist-get project-plist :completion-function)))
+	(cond ((consp fun) (dolist (f fun) (funcall f project-plist)))
+	      ((functionp fun) (funcall fun project-plist))))
       (org-publish-write-cache-file))))
 
 (defun org-publish-org-sitemap (project &optional sitemap-filename)
@@ -1211,7 +1218,8 @@ the file including them will be republished as well."
 			       "\\`\\(\".+?\"\\|\\S-+\\)\\(?:\\s-+\\|$\\)"
 			       value)
                               (let ((m (match-string 1 value)))
-                                (org-remove-double-quotes
+                                (org-unbracket-string
+				 "\"" "\""
 				 ;; Ignore search suffix.
                                  (if (string-match "\\(::\\(.*?\\)\\)\"?\\'" m)
                                      (substring m 0 (match-beginning 0))

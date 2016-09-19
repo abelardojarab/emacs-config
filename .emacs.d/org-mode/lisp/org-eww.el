@@ -6,7 +6,7 @@
 ;; Keywords: link, eww
 ;; Homepage: http://orgmode.org
 ;;
-;; This file is not part of GNU Emacs.
+;; This file is part of GNU Emacs.
 ;;
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -29,8 +29,8 @@
 
 ;; In an eww buffer function `org-eww-copy-for-org-mode' kills either
 ;; a region or the whole buffer if no region is set and transforms the
-;; text on the fly so that it can be pasted into an org-mode buffer
-;; with hot links.
+;; text on the fly so that it can be pasted into an Org buffer with
+;; hot links.
 
 ;; C-c C-x C-w (and also C-c C-x M-w) trigger
 ;; `org-eww-copy-for-org-mode'.
@@ -45,12 +45,20 @@
 
 ;;; Code:
 (require 'org)
+(require 'cl-lib)
+
+(defvar eww-current-title)
+(defvar eww-current-url)
+(defvar eww-data)
+(defvar eww-mode-map)
+
+(declare-function eww-current-url "eww")
 
 
 ;; Store Org-link in eww-mode buffer
-(add-hook 'org-store-link-functions 'org-eww-store-link)
+(org-link-set-parameters "eww" :follow #'eww :store #'org-eww-store-link)
 (defun org-eww-store-link ()
-  "Store a link to the url of a eww buffer."
+  "Store a link to the url of a Eww buffer."
   (when (eq major-mode 'eww-mode)
     (org-store-link-props
      :type "eww"
@@ -61,19 +69,19 @@
      :description (if (< emacs-major-version 25)
 		      (or eww-current-title eww-current-url)
 		    (or (plist-get eww-data :title)
-			  (eww-current-url))))))
+			(eww-current-url))))))
 
 
 ;; Some auxiliary functions concerning links in eww buffers
 (defun org-eww-goto-next-url-property-change ()
-  "Move cursor to the start of next link if exists.  Else no
-move.  Return point."
+  "Move to the start of next link if exists.
+Otherwise point is not moved.  Return point."
   (goto-char
    (or (next-single-property-change (point) 'shr-url)
        (point))))
 
 (defun org-eww-has-further-url-property-change-p ()
-  "Return t if there is a next url property change else nil."
+  "Non-nil if there is a next url property change."
   (save-excursion
     (not (eq (point) (org-eww-goto-next-url-property-change)))))
 
@@ -86,10 +94,10 @@ move.  Return point."
   "Copy current buffer content or active region with `org-mode' style links.
 This will encode `link-title' and `link-location' with
 `org-make-link-string', and insert the transformed test into the kill ring,
-so that it can be yanked into an Org-mode buffer with links working correctly.
+so that it can be yanked into an Org mode buffer with links working correctly.
 
 Further lines starting with a star get quoted with a comma to keep
-the structure of the org file."
+the structure of the Org file."
   (interactive)
   (let* ((regionp (org-region-active-p))
          (transform-start (point-min))
@@ -101,29 +109,30 @@ the structure of the org file."
       (setq transform-start (region-beginning))
       (setq transform-end (region-end))
       ;; Deactivate mark if current mark is activate.
-      (if (fboundp 'deactivate-mark) (deactivate-mark)))
+      (when (fboundp 'deactivate-mark) (deactivate-mark)))
     (message "Transforming links...")
     (save-excursion
       (goto-char transform-start)
-      (while (and (not out-bound)                 ; still inside region to copy
+      (while (and (not out-bound)	; still inside region to copy
                   (org-eww-has-further-url-property-change-p)) ; there is a next link
-        ;; store current point before jump next anchor
+        ;; Store current point before jump next anchor.
         (setq temp-position (point))
-        ;; move to next anchor when current point is not at anchor
+        ;; Move to next anchor when current point is not at anchor.
         (or (org-eww-url-below-point)
 	    (org-eww-goto-next-url-property-change))
-	(assert (org-eww-url-below-point) t
-                "program logic error: point must have an url below but it hasn't")
-	(if (<= (point) transform-end)  ; if point is inside transform bound
+	(cl-assert
+	 (org-eww-url-below-point) t
+	 "program logic error: point must have an url below but it hasn't")
+	(if (<= (point) transform-end) ; if point is inside transform bound
 	    (progn
-	      ;; get content between two links.
-	      (if (< temp-position (point))
-		  (setq return-content (concat return-content
-					       (buffer-substring
-						temp-position (point)))))
-	      ;; get link location at current point.
+	      ;; Get content between two links.
+	      (when (< temp-position (point))
+		(setq return-content (concat return-content
+					     (buffer-substring
+					      temp-position (point)))))
+	      ;; Get link location at current point.
 	      (setq link-location (org-eww-url-below-point))
-	      ;; get link title at current point.
+	      ;; Get link title at current point.
 	      (setq link-title
 		    (buffer-substring
 		     (point)
@@ -132,23 +141,17 @@ the structure of the org file."
               (setq return-content (concat return-content
                                            (org-make-link-string
                                             link-location link-title))))
-	  (goto-char temp-position)     ; reset point before jump next anchor
-	  (setq out-bound t)            ; for break out `while' loop
+	  (goto-char temp-position) ; reset point before jump next anchor
+	  (setq out-bound t)	    ; for break out `while' loop
 	  ))
-      ;; add the rest until end of the region to be copied
-      (if (< (point) transform-end)
-          (setq return-content
-                (concat return-content
-                        (buffer-substring (point) transform-end))))
-      ;; quote lines starting with *
-      (org-kill-new
-       (with-temp-buffer
-	 (insert return-content)
-	 (goto-char 0)
-	 (while (re-search-forward "^\*" nil t)
-	   (replace-match ",*"))
-	 (buffer-string)))
-      (message "Transforming links...done, use C-y to insert text into Org-mode file"))))
+      ;; Add the rest until end of the region to be copied.
+      (when (< (point) transform-end)
+	(setq return-content
+	      (concat return-content
+		      (buffer-substring (point) transform-end))))
+      ;; Quote lines starting with *.
+      (org-kill-new (replace-regexp-in-string "^\\*" ",*" return-content))
+      (message "Transforming links...done, use C-y to insert text into Org mode file"))))
 
 
 ;; Additional keys for eww-mode
@@ -161,9 +164,7 @@ the structure of the org file."
            (keymapp eww-mode-map)) ; eww is already up.
   (org-eww-extend-eww-keymap))
 
-(add-hook
- 'eww-mode-hook
- (lambda () (org-eww-extend-eww-keymap)))
+(add-hook 'eww-mode-hook #'org-eww-extend-eww-keymap)
 
 
 (provide 'org-eww)

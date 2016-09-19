@@ -1,5 +1,4 @@
-;;; org-crypt.el --- Public key encryption for org-mode entries
-
+;;; org-crypt.el --- Public Key Encryption for Org Entries -*- lexical-binding: t; -*-
 ;; Copyright (C) 2007-2016 Free Software Foundation, Inc.
 
 ;; Emacs Lisp Archive Entry
@@ -7,7 +6,7 @@
 ;; Keywords: org-mode
 ;; Author: John Wiegley <johnw@gnu.org>
 ;; Maintainer: Peter Jones <pjones@pmade.com>
-;; Description: Adds public key encryption to org-mode buffers
+;; Description: Adds public key encryption to Org buffers
 ;; URL: http://www.newartisans.com/software/emacs.html
 ;; Compatibility: Emacs22
 
@@ -142,7 +141,7 @@ See `org-crypt-disable-auto-save'."
       (message "org-decrypt: Decrypting entry with auto-save-mode enabled.  This may cause leakage."))
      ((eq org-crypt-disable-auto-save 'encrypt)
       (message "org-decrypt: Enabling re-encryption on auto-save.")
-      (org-add-hook 'auto-save-hook
+      (add-hook 'auto-save-hook
 		    (lambda ()
 		      (message "org-crypt: Re-encrypting all decrypted entries due to auto-save.")
 		      (org-encrypt-entries))
@@ -263,7 +262,7 @@ See `org-crypt-disable-auto-save'."
   "Add a hook to automatically encrypt entries before a file is saved to disk."
   (add-hook
    'org-mode-hook
-   (lambda () (org-add-hook 'before-save-hook 'org-encrypt-entries nil t))))
+   (lambda () (add-hook 'before-save-hook 'org-encrypt-entries nil t))))
 
 (add-hook 'org-reveal-start-hook 'org-decrypt-entry)
 

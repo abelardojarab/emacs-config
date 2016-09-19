@@ -28,12 +28,12 @@
 
 ;;; Code:
 (require 'ob)
-(eval-when-compile (require 'cl))
 
 (declare-function org-remove-indentation "org" )
+(declare-function org-trim "org" (s &optional keep-lead))
 (declare-function py-shell "ext:python-mode" (&optional argprompt))
 (declare-function py-toggle-shells "ext:python-mode" (arg))
-(declare-function run-python "ext:python" (cmd &optional dedicated show))
+(declare-function run-python "ext:python" (&optional cmd dedicated show))
 
 (defvar org-babel-tangle-lang-exts)
 (add-to-list 'org-babel-tangle-lang-exts '("python" . "py"))
@@ -48,7 +48,7 @@
   :type 'string)
 
 (defcustom org-babel-python-mode
-  (if (or (featurep 'xemacs) (featurep 'python-mode)) 'python-mode 'python)
+  (if (featurep 'python-mode) 'python-mode 'python)
   "Preferred python mode for use in running python interactively.
 This will typically be either `python' or `python-mode'."
   :group 'org-babel
@@ -248,36 +248,35 @@ open('%s', 'w').write( pprint.pformat(main()) )")
      body result-type result-params preamble)))
 
 (defun org-babel-python-evaluate-external-process
-  (body &optional result-type result-params preamble)
+    (body &optional result-type result-params preamble)
   "Evaluate BODY in external python process.
 If RESULT-TYPE equals `output' then return standard output as a
 string.  If RESULT-TYPE equals `value' then return the value of the
 last statement in BODY, as elisp."
   (let ((raw
-         (case result-type
-           (output (org-babel-eval org-babel-python-command
-                                   (concat (if preamble (concat preamble "\n"))
-                                           body)))
-           (value (let ((tmp-file (org-babel-temp-file "python-")))
-                    (org-babel-eval
-                     org-babel-python-command
-                     (concat
-                      (if preamble (concat preamble "\n") "")
-                      (format
-                       (if (member "pp" result-params)
-                           org-babel-python-pp-wrapper-method
-                         org-babel-python-wrapper-method)
-                       (mapconcat
-                        (lambda (line) (format "\t%s" line))
-                        (split-string
-                         (org-remove-indentation
-                          (org-babel-trim body))
-                         "[\r\n]") "\n")
-                       (org-babel-process-file-name tmp-file 'noquote))))
-                    (org-babel-eval-read-file tmp-file))))))
+         (pcase result-type
+           (`output (org-babel-eval org-babel-python-command
+				    (concat (if preamble (concat preamble "\n"))
+					    body)))
+           (`value (let ((tmp-file (org-babel-temp-file "python-")))
+		     (org-babel-eval
+		      org-babel-python-command
+		      (concat
+		       (if preamble (concat preamble "\n") "")
+		       (format
+			(if (member "pp" result-params)
+			    org-babel-python-pp-wrapper-method
+			  org-babel-python-wrapper-method)
+			(mapconcat
+			 (lambda (line) (format "\t%s" line))
+			 (split-string (org-remove-indentation (org-trim body))
+				       "[\r\n]")
+			 "\n")
+			(org-babel-process-file-name tmp-file 'noquote))))
+		     (org-babel-eval-read-file tmp-file))))))
     (org-babel-result-cond result-params
       raw
-      (org-babel-python-table-or-string (org-babel-trim raw)))))
+      (org-babel-python-table-or-string (org-trim raw)))))
 
 (defun org-babel-python-evaluate-session
     (session body &optional result-type result-params)
@@ -304,10 +303,10 @@ last statement in BODY, as elisp."
 			     (split-string body "[\r\n]"))
 		       (funcall send-wait)))
          (results
-          (case result-type
-            (output
+          (pcase result-type
+            (`output
              (mapconcat
-              #'org-babel-trim
+              #'org-trim
               (butlast
                (org-babel-comint-with-output
                    (session org-babel-python-eoe-indicator t body)
@@ -316,7 +315,7 @@ last statement in BODY, as elisp."
                  (insert org-babel-python-eoe-indicator)
                  (funcall send-wait))
                2) "\n"))
-            (value
+            (`value
              (let ((tmp-file (org-babel-temp-file "python-")))
                (org-babel-comint-with-output
                    (session org-babel-python-eoe-indicator nil body)
@@ -335,8 +334,9 @@ last statement in BODY, as elisp."
 
 (defun org-babel-python-read-string (string)
   "Strip \\='s from around Python string."
-  (if (string-match "^'\\([^\000]+\\)'$" string)
-      (match-string 1 string)
+  (if (and (string-prefix-p "'" string)
+	   (string-suffix-p "'" string))
+      (substring string 1 -1)
     string))
 
 (provide 'ob-python)

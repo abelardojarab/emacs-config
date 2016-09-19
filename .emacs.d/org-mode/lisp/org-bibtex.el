@@ -73,7 +73,7 @@
 ;; =====================================================================
 ;;
 ;; Additionally, the following functions are now available for storing
-;; bibtex entries within Org-mode documents.
+;; bibtex entries within Org documents.
 ;;
 ;; - Run `org-bibtex' to export the current file to a .bib.
 ;;
@@ -92,17 +92,17 @@
 ;;
 ;;; History:
 ;;
-;; The link creation part has been part of Org-mode for a long time.
+;; The link creation part has been part of Org for a long time.
 ;;
 ;; Creating better capture template information was inspired by a request
 ;; of Austin Frank: http://article.gmane.org/gmane.emacs.orgmode/4112
 ;; and then implemented by Bastien Guerry.
 ;;
 ;; Eric Schulte eventually added the functions for translating between
-;; Org-mode headlines and Bibtex entries, and for fleshing out the Bibtex
-;; fields of existing Org-mode headlines.
+;; Org headlines and Bibtex entries, and for fleshing out the Bibtex
+;; fields of existing Org headlines.
 ;;
-;; Org-mode loads this module by default - if this is not what you want,
+;; Org mode loads this module by default - if this is not what you want,
 ;; configure the variable `org-modules'.
 
 ;;; Code:
@@ -121,7 +121,6 @@
 (declare-function bibtex-generate-autokey "bibtex" ())
 (declare-function bibtex-parse-entry "bibtex" (&optional content))
 (declare-function bibtex-url "bibtex" (&optional pos no-browse))
-(declare-function org-babel-trim "ob" (string &optional regexp))
 
 
 ;;; Bibtex data
@@ -313,7 +312,7 @@ and `org-exclude-tags-from-inheritence'."
                (org-entry-get (point) (upcase property))
                (org-entry-get (point) (concat org-bibtex-prefix
                                               (upcase property)))))))
-    (when it (org-babel-trim it))))
+    (when it (org-trim it))))
 
 (defun org-bibtex-put (property value)
   (let ((prop (upcase (if (keywordp property)
@@ -435,10 +434,11 @@ With optional argument OPTIONAL, also prompt for optional fields."
 		      (funcall val :required (funcall val type org-bibtex-types)))
 		    (when optional (funcall val :optional (funcall val type org-bibtex-types)))))
       (when (consp field) ; or'd pair of fields e.g., (:editor :author)
-        (let ((present (first (remove
+        (let ((present (nth 0 (remove
 			       nil
 			       (mapcar
-				(lambda (f) (when (org-bibtex-get (funcall name f)) f))
+				(lambda (f)
+				  (when (org-bibtex-get (funcall name f)) f))
 				field)))))
           (setf field (or present (funcall keyword
 					   (completing-read
@@ -453,8 +453,9 @@ With optional argument OPTIONAL, also prompt for optional fields."
 
 
 ;;; Bibtex link functions
-(org-add-link-type "bibtex" 'org-bibtex-open)
-(add-hook 'org-store-link-functions 'org-bibtex-store-link)
+(org-link-set-parameters "bibtex"
+			 :follow #'org-bibtex-open
+			 :store #'org-bibtex-store-link)
 
 (defun org-bibtex-open (path)
   "Visit the bibliography entry on PATH."
@@ -547,7 +548,7 @@ With optional argument OPTIONAL, also prompt for optional fields."
 (add-hook 'org-execute-file-search-functions 'org-execute-file-search-in-bibtex)
 
 
-;;; Bibtex <-> Org-mode headline translation functions
+;;; Bibtex <-> Org headline translation functions
 (defun org-bibtex (filename)
   "Export each headline in the current file to a bibtex entry.
 Headlines are exported using `org-bibtex-headline'."
@@ -627,10 +628,10 @@ This uses `bibtex-parse-entry'."
   (interactive)
   (let ((keyword (lambda (str) (intern (concat ":" (downcase str)))))
 	(clean-space (lambda (str) (replace-regexp-in-string
-				    "[[:space:]\n\r]+" " " str)))
+			       "[[:space:]\n\r]+" " " str)))
 	(strip-delim
-	 (lambda (str)	     ; strip enclosing "..." and {...}
-	   (dolist (pair '((34 . 34) (123 . 125) (123 . 125)))
+	 (lambda (str)		     ; strip enclosing "..." and {...}
+	   (dolist (pair '((34 . 34) (123 . 125)))
 	     (when (and (> (length str) 1)
 			(= (aref str 0) (car pair))
 			(= (aref str (1- (length str))) (cdr pair)))
@@ -638,10 +639,10 @@ This uses `bibtex-parse-entry'."
     (push (mapcar
            (lambda (pair)
              (cons (let ((field (funcall keyword (car pair))))
-                     (case field
+                     (pcase field
                        (:=type= :type)
                        (:=key= :key)
-                       (otherwise field)))
+                       (_ field)))
                    (funcall clean-space (funcall strip-delim (cdr pair)))))
            (save-excursion (bibtex-beginning-of-entry) (bibtex-parse-entry)))
           org-bibtex-entries)))
@@ -682,7 +683,7 @@ Return the number of saved entries."
     (org-bibtex-put org-bibtex-type-property-name
 		    (downcase (funcall val :type)))
     (dolist (pair entry)
-      (case (car pair)
+      (pcase (car pair)
 	(:title    nil)
 	(:type     nil)
 	(:key      (org-bibtex-put org-bibtex-key-property (cdr pair)))
@@ -694,11 +695,11 @@ Return the number of saved entries."
 			   "[^[:alnum:]_@#%]" ""
 			   (replace-regexp-in-string "[ \t]+" "_" kw))))
 		     (org-bibtex-put (car pair) (cdr pair))))
-	(otherwise (org-bibtex-put (car pair)  (cdr pair)))))
+	(_ (org-bibtex-put (car pair) (cdr pair)))))
     (mapc togtag org-bibtex-tags)))
 
 (defun org-bibtex-yank ()
-  "If kill ring holds a bibtex entry yank it as an Org-mode headline."
+  "If kill ring holds a bibtex entry yank it as an Org headline."
   (interactive)
   (let (entry)
     (with-temp-buffer (yank 1) (setf entry (org-bibtex-read)))
@@ -707,7 +708,7 @@ Return the number of saved entries."
       (error "Yanked text does not appear to contain a BibTeX entry"))))
 
 (defun org-bibtex-import-from-file (file)
-  "Read bibtex entries from FILE and insert as Org-mode headlines after point."
+  "Read bibtex entries from FILE and insert as Org headlines after point."
   (interactive "fFile: ")
   (dotimes (_ (org-bibtex-read-file file))
     (save-excursion (org-bibtex-write))

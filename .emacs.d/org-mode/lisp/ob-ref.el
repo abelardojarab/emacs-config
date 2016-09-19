@@ -52,9 +52,6 @@
 (require 'ob-core)
 (require 'cl-lib)
 
-(declare-function org-at-item-p "org-list" ())
-(declare-function org-at-table-p "org" (&optional table-type))
-(declare-function org-babel-lob-execute "ob-lob" (info))
 (declare-function org-babel-lob-get-info "ob-lob" (&optional datum))
 (declare-function org-element-at-point "org-element" ())
 (declare-function org-element-property "org-element" (property element))
@@ -65,10 +62,8 @@
 (declare-function org-id-find-id-in-file "org-id" (id file &optional markerp))
 (declare-function org-in-commented-heading-p "org" (&optional no-inheritance))
 (declare-function org-narrow-to-subtree "org" ())
-(declare-function org-pop-to-buffer-same-window "org-compat"
-		  (&optional buffer-or-name norecord label))
 (declare-function org-show-context "org" (&optional key))
-
+(declare-function org-trim "org" (s &optional keep-lead))
 
 (defvar org-babel-ref-split-regexp
   "[ \f\t\n\r\v]*\\(.+?\\)[ \f\t\n\r\v]*=[ \f\t\n\r\v]*\\(.+\\)[ \f\t\n\r\v]*")
@@ -96,7 +91,8 @@ the variable."
 					org-babel-current-src-block-location)))
 			 (org-babel-read ref))))
 	      (if (equal out ref)
-		  (if (string-match "^\".*\"$" ref)
+		  (if (and (string-prefix-p "\"" ref)
+			   (string-suffix-p "\"" ref))
 		      (read ref)
 		    (org-babel-ref-resolve ref))
 		out))))))
@@ -108,7 +104,7 @@ the variable."
 	     (m (when file (org-id-find-id-in-file id file 'marker))))
 	(when (and file m)
 	  (message "file:%S" file)
-	  (org-pop-to-buffer-same-window (marker-buffer m))
+	  (pop-to-buffer-same-window (marker-buffer m))
 	  (goto-char m)
 	  (move-marker m nil)
 	  (org-show-context)
@@ -175,8 +171,8 @@ the variable."
 			     (pcase (org-element-type e)
 			       (`babel-call
 				(throw :found
-				       (org-babel-lob-execute
-					(org-babel-lob-get-info e))))
+				       (org-babel-execute-src-block
+					nil (org-babel-lob-get-info e) params)))
 			       (`src-block
 				(throw :found
 				       (org-babel-execute-src-block
@@ -245,7 +241,7 @@ to \"0:-1\"."
 
 (defun org-babel-ref-split-args (arg-string)
   "Split ARG-STRING into top-level arguments of balanced parenthesis."
-  (mapcar #'org-babel-trim (org-babel-balanced-split arg-string 44)))
+  (mapcar #'org-trim (org-babel-balanced-split arg-string 44)))
 
 
 (provide 'ob-ref)

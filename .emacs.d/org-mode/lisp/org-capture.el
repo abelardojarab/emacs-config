@@ -1,4 +1,4 @@
-;;; org-capture.el --- Fast note taking in Org-mode  -*- lexical-binding: t; -*-
+;;; org-capture.el --- Fast note taking in Org       -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2010-2016 Free Software Foundation, Inc.
 
@@ -55,8 +55,6 @@
 		  (date &optional keep-restriction))
 (declare-function org-decrypt-entry "org-crypt" ())
 (declare-function org-encrypt-entry "org-crypt" ())
-(declare-function org-pop-to-buffer-same-window "org-compat"
-		  (&optional buffer-or-name norecord label))
 (declare-function org-table-analyze "org-table" ())
 (declare-function org-table-goto-line "org-table" (N))
 
@@ -107,9 +105,9 @@ description  A short string describing the template, will be shown during
              selection.
 
 type         The type of entry.  Valid types are:
-               entry       an Org-mode node, with a headline.  Will be
-                           filed as the child of the target entry or as
-                           a top-level entry.
+               entry       an Org node, with a headline.  Will be filed
+                           as the child of the target entry or as a
+                           top-level entry.
                item        a plain list item, will be placed in the
                            first plain list at the target
                            location.
@@ -120,7 +118,7 @@ type         The type of entry.  Valid types are:
                plain       text to be inserted as it is.
 
 target       Specification of where the captured item should be placed.
-             In Org-mode files, targets usually define a node.  Entries will
+             In Org files, targets usually define a node.  Entries will
              become children of this node, other types will be added to the
              table or list in the body of this node.
 
@@ -166,8 +164,8 @@ target       Specification of where the captured item should be placed.
                 File to the entry that is currently being clocked
 
              (function function-finding-location)
-                Most general way, write your own function to find both
-                file and location
+                Most general way: write your own function which both visits
+                the file and moves point to the right location
 
 template     The template for creating the capture item.  If you leave this
              empty, an appropriate default template will be used.  See below
@@ -290,7 +288,7 @@ gnus                    |  %:from %:fromname %:fromaddress
                         |  %:date %:date-timestamp (as active timestamp)
                         |  %:date-timestamp-inactive (as inactive timestamp)
 gnus                    |  %:group, for messages also all email fields
-w3, w3m                 |  %:type %:url
+eww, w3, w3m            |  %:type %:url
 info                    |  %:type %:file %:node
 calendar                |  %:type %:date
 
@@ -299,7 +297,12 @@ you can escape ambiguous cases with a backward slash, e.g., \\%i."
   :group 'org-capture
   :version "24.1"
   :type
-  '(repeat
+  (let ((file-variants '(choice :tag "Filename       "
+				(file :tag "Literal")
+				(function :tag "Function")
+				(variable :tag "Variable")
+				(sexp :tag "Form"))))
+  `(repeat
     (choice :value ("" "" entry (file "~/org/notes.org") "")
 	    (list :tag "Multikey description"
 		  (string :tag "Keys       ")
@@ -316,45 +319,45 @@ you can escape ambiguous cases with a backward slash, e.g., \\%i."
 		  (choice :tag "Target location"
 			  (list :tag "File"
 				(const :format "" file)
-				(file :tag "  File"))
+				,file-variants)
 			  (list :tag "ID"
 				(const :format "" id)
 				(string :tag "  ID"))
 			  (list :tag "File & Headline"
 				(const :format "" file+headline)
-				(file   :tag "  File    ")
+				,file-variants
 				(string :tag "  Headline"))
 			  (list :tag "File & Outline path"
 				(const :format "" file+olp)
-				(file   :tag "  File    ")
+				,file-variants
 				(repeat :tag "Outline path" :inline t
 					(string :tag "Headline")))
 			  (list :tag "File & Regexp"
 				(const :format "" file+regexp)
-				(file   :tag "  File  ")
+				,file-variants
 				(regexp :tag "  Regexp"))
 			  (list :tag "File & Date tree"
 				(const :format "" file+datetree)
-				(file :tag "  File"))
+				,file-variants)
 			  (list :tag "File & Date tree, prompt for date"
 				(const :format "" file+datetree+prompt)
-				(file :tag "  File"))
+				,file-variants)
 			  (list :tag "File & Week tree"
 				(const :format "" file+weektree)
-				(file :tag "  File"))
+				,file-variants)
 			  (list :tag "File & Week tree, prompt for date"
 				(const :format "" file+weektree+prompt)
-				(file :tag "  File"))
+				,file-variants)
 			  (list :tag "File & function"
 				(const :format "" file+function)
-				(file :tag "  File    ")
+				,file-variants
 				(sexp :tag "  Function"))
 			  (list :tag "Current clocking task"
 				(const :format "" clock))
 			  (list :tag "Function"
 				(const :format "" function)
 				(sexp :tag "  Function")))
-		  (choice :tag "Template"
+		  (choice :tag "Template       "
 			  (string)
 			  (list :tag "File"
 				(const :format "" file)
@@ -375,7 +378,7 @@ you can escape ambiguous cases with a backward slash, e.g., \\%i."
 				   ((const :format "%v " :clock-resume) (const t))
 				   ((const :format "%v " :unnarrowed) (const t))
 				   ((const :format "%v " :table-line-pos) (const t))
-				   ((const :format "%v " :kill-buffer) (const t))))))))
+				   ((const :format "%v " :kill-buffer) (const t)))))))))
 
 (defcustom org-capture-before-finalize-hook nil
   "Hook that is run right before a capture process is finalized.
@@ -446,7 +449,7 @@ to avoid conflicts with other active capture processes."
 
 (defvar org-capture-mode-map (make-sparse-keymap)
   "Keymap for `org-capture-mode', a minor mode.
-Use this map to set additional keybindings for when Org-mode is used
+Use this map to set additional keybindings for when Org mode is used
 for a capture buffer.")
 
 (defvar org-capture-mode-hook nil
@@ -590,7 +593,7 @@ of the day at point (if any) or the current HH:MM time."
        ((equal entry "C")
 	(customize-variable 'org-capture-templates))
        ((equal entry "q")
-	(error "Abort"))
+	(user-error "Abort"))
        (t
 	(org-capture-set-plist entry)
 	(org-capture-get-template)
@@ -625,7 +628,7 @@ of the day at point (if any) or the current HH:MM time."
 	       (equal (car (org-capture-get :target)) 'function))
 	    ((error quit)
 	     (if (and (buffer-base-buffer (current-buffer))
-		      (string-match "\\`CAPTURE-" (buffer-name)))
+		      (string-prefix-p "CAPTURE-" (buffer-name)))
 		 (kill-buffer (current-buffer)))
 	     (set-window-configuration (org-capture-get :return-to-wconf))
 	     (error "Capture template `%s': %s"
@@ -822,11 +825,9 @@ already gone.  Any prefix argument will be passed to the refile command."
     (org-capture-finalize)
     (save-window-excursion
       (with-current-buffer (or base (current-buffer))
-	(save-excursion
-	  (save-restriction
-	    (widen)
-	    (goto-char pos)
-	    (call-interactively 'org-refile)))))
+	(org-with-wide-buffer
+	 (goto-char pos)
+	 (call-interactively 'org-refile))))
     (when kill-buffer (kill-buffer base))))
 
 (defun org-capture-kill ()
@@ -951,7 +952,9 @@ Store them in the capture property list."
 			       (not org-time-was-given))
 			   (not (= (time-to-days prompt-time) (org-today))))
 		      ;; Use 00:00 when no time is given for another date than today?
-		      (apply 'encode-time (append '(0 0 0) (cdddr (decode-time prompt-time)))))
+		      (apply #'encode-time
+			     (append '(0 0 0)
+				     (cl-cdddr (decode-time prompt-time)))))
 		     ((string-match "\\([^ ]+\\)--?[^ ]+[ ]+\\(.*\\)" org-read-date-final-answer)
 		      ;; Replace any time range by its start
 		      (apply 'encode-time
@@ -999,16 +1002,13 @@ Store them in the capture property list."
 
 (defun org-capture-expand-file (file)
   "Expand functions and symbols for FILE.
-When FILE is a function, call it.  When it is a form, evaluate
-it.  When it is a variable, retrieve the value.  When it is
-a string, return it.  However, if it is the empty string, return
-`org-default-notes-file' instead."
+When FILE is a function, call it.  When it is a variable,
+retrieve its value.  When it is the empty string, return
+`org-default-notes-file'.  In any other case, return FILE as-is."
   (cond
    ((equal file "") org-default-notes-file)
-   ((org-string-nw-p file) file)
    ((functionp file) (funcall file))
    ((and (symbolp file) (boundp file)) (symbol-value file))
-   ((consp file) (eval file))
    (t file)))
 
 (defun org-capture-target-buffer (file)
@@ -1303,16 +1303,14 @@ Of course, if exact position has been required, just put it there."
 		      (point-at-bol))
 		  (point))))))
     (with-current-buffer (buffer-base-buffer (current-buffer))
-      (save-excursion
-	(save-restriction
-	  (widen)
-	  (goto-char pos)
-	  (let ((bookmark-name (plist-get org-bookmark-names-plist
-					  :last-capture)))
-	    (when bookmark-name
-	      (with-demoted-errors
-		(bookmark-set bookmark-name))))
-	  (move-marker org-capture-last-stored-marker (point)))))))
+      (org-with-wide-buffer
+       (goto-char pos)
+       (let ((bookmark-name (plist-get org-bookmark-names-plist
+				       :last-capture)))
+	 (when bookmark-name
+	   (with-demoted-errors
+	       (bookmark-set bookmark-name))))
+       (move-marker org-capture-last-stored-marker (point))))))
 
 (defun org-capture-narrow (beg end)
   "Narrow, unless configuration says not to narrow."
@@ -1402,7 +1400,7 @@ The user is queried for the template."
     (unless entry (error "No capture template selected"))
     (org-capture-set-plist entry)
     (org-capture-set-target-location)
-    (org-pop-to-buffer-same-window (org-capture-get :buffer))
+    (pop-to-buffer-same-window (org-capture-get :buffer))
     (goto-char (org-capture-get :pos))))
 
 (defun org-capture-get-indirect-buffer (&optional buffer prefix)
@@ -1412,7 +1410,7 @@ Use PREFIX as a prefix for the name of the indirect buffer."
   (let ((n 1) (base (buffer-name buffer)) bname)
     (setq bname (concat prefix "-" base))
     (while (buffer-live-p (get-buffer bname))
-      (setq bname (concat prefix "-" (number-to-string (incf n)) "-" base)))
+      (setq bname (concat prefix "-" (number-to-string (cl-incf n)) "-" base)))
     (condition-case nil
         (make-indirect-buffer buffer bname 'clone)
       (error
@@ -1467,7 +1465,7 @@ only the bare key is returned."
 	    (cond
 	     ((and (= 2 (length (car tbl))) (= (length (caar tbl)) 1))
 	      ;; This is a description on this level
-	      (setq dkey (caar tbl) ddesc (cadar tbl))
+	      (setq dkey (caar tbl) ddesc (cl-cadar tbl))
 	      (pop tbl)
 	      (push dkey des-keys)
 	      (push dkey allowed-keys)
@@ -1504,7 +1502,7 @@ only the bare key is returned."
 	    (setq pressed (char-to-string (read-char-exclusive))))
 	  (when (equal pressed "\C-g")
 	    (kill-buffer buffer)
-	    (error "Abort"))
+	    (user-error "Abort"))
 	  (when (and (not (assoc pressed table))
 		     (not (member pressed des-keys))
 		     (assoc pressed specials))
@@ -1699,11 +1697,7 @@ The template may still contain \"%?\" for cursor positioning."
 		     (end (copy-marker (match-end 0)))
 		     (prompt (nth 0 items))
 		     (default (nth 1 items))
-		     (completions (nthcdr 2 items))
-		     (histvar
-		      (intern
-		       (concat "org-capture-template-prompt-history::"
-			       (or prompt "")))))
+		     (completions (nthcdr 2 items)))
 		(unless (org-capture-escaped-%)
 		  (delete-region beg end)
 		  (set-marker beg nil)
@@ -1766,7 +1760,7 @@ The template may still contain \"%?\" for cursor positioning."
 			    (concat (or prompt "Enter string")
 				    (and default (format " [%s]" default))
 				    ": ")
-			    completions nil nil nil histvar default)
+			    completions nil nil nil nil default)
 			   strings)
 		     (insert (car strings)))))))))
 
@@ -1899,6 +1893,9 @@ Assume sexps have been marked with
 		       (if jump-to-captured '(:jump-to-captured t)))))
 
 	   org-remember-templates))))
+;;; The function was made obsolete by commit 65399674d5 of
+;;; 2013-02-22.  This make-obsolete call was added 2016-09-01.
+(make-obsolete 'org-capture-import-remember-templates "use the `org-capture-templates' variable instead." "Org 9.0")
 
 (provide 'org-capture)
 

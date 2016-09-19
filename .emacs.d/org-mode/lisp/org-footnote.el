@@ -52,7 +52,7 @@
 (declare-function org-inside-latex-macro-p "org" ())
 (declare-function org-mark-ring-push "org" (&optional pos buffer))
 (declare-function org-show-context "org" (&optional key))
-(declare-function org-trim "org" (s))
+(declare-function org-trim "org" (s &optional keep-lead))
 (declare-function outline-next-heading "outline")
 
 (defvar electric-indent-mode)
@@ -244,7 +244,7 @@ otherwise."
 		    (concat org-outline-regexp-bol
 			    "\\|^\\([ \t]*\n\\)\\{2,\\}") nil t))))
 	(when (re-search-backward org-footnote-definition-re lim t)
-	  (let ((label (org-match-string-no-properties 1))
+	  (let ((label (match-string-no-properties 1))
 		(beg (match-beginning 0))
 		(beg-def (match-end 0))
 		(end (if (progn
@@ -562,11 +562,10 @@ value if point was successfully moved."
   "Return LABEL without \"fn:\" prefix.
 If LABEL is the empty string or constituted of white spaces only,
 return nil instead."
-  (let ((label (org-trim label)))
-    (cond
-     ((equal "" label) nil)
-     ((string-match "\\`fn:" label) (replace-match "" nil nil label))
-     (t label))))
+  (pcase (org-trim label)
+    ("" nil)
+    ((pred (string-prefix-p "fn:")) (substring label 3))
+    (_ label)))
 
 (defun org-footnote-get-definition (label)
   "Return label, boundaries and definition of the footnote LABEL."

@@ -52,7 +52,6 @@
 ;;; Code:
 (require 'ob)
 (require 'sha1)
-(eval-when-compile (require 'cl))
 
 (declare-function processing-sketch-run "ext:processing-mode" ())
 
@@ -96,7 +95,7 @@
 			(progn
 			  (setq sketch-dir-candidate
 				(make-temp-file "processing" t))
-			  (when (org-string-match-p
+			  (when (string-match-p
 				 "-"
 				 (file-name-nondirectory sketch-dir-candidate))
 			    (delete-directory sketch-dir-candidate)

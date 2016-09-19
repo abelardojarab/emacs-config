@@ -57,7 +57,7 @@ See `org-archive-to-archive-sibling' for more information."
 
 (defcustom org-archive-mark-done nil
   "Non-nil means mark entries as DONE when they are moved to the archive file.
-This can be a string to set the keyword to use.  When t, Org-mode will
+This can be a string to set the keyword to use.  When non-nil, Org will
 use the first keyword in its list that means done."
   :group 'org-archive
   :type '(choice
@@ -171,7 +171,7 @@ archive file is."
 	       (if (eq (match-string 1) ":") (org-at-property-p)
 		 (eq (org-element-type (org-element-at-point)) 'keyword)))
 	 (let ((file (org-extract-archive-file
-		      (org-match-string-no-properties 2))))
+		      (match-string-no-properties 2))))
 	   (when (and (org-string-nw-p file) (file-exists-p file))
 	     (push file files))))))
     (setq files (nreverse files))
@@ -287,7 +287,7 @@ this heading."
 	    ;; which would lead to duplication of subtrees
 	    (let (this-command) (org-copy-subtree 1 nil t))
 	    (set-buffer buffer)
-	    ;; Enforce org-mode for the archive buffer
+	    ;; Enforce Org mode for the archive buffer
 	    (if (not (derived-mode-p 'org-mode))
 		;; Force the mode for future visits.
 		(let ((org-insert-mode-line-in-empty-file t)
@@ -318,7 +318,7 @@ this heading."
 		  (progn
 		    (if (re-search-forward
 			 (concat "^" (regexp-quote heading)
-				 (org-re "[ \t]*\\(:[[:alnum:]_@#%:]+:\\)?[ \t]*\\($\\|\r\\)"))
+				 "[ \t]*\\(:[[:alnum:]_@#%:]+:\\)?[ \t]*\\($\\|\r\\)")
 			 nil t)
 			(goto-char (match-end 0))
 		      ;; Heading not found, just insert it at the end

@@ -1065,9 +1065,7 @@ contextual information."
   (let* ((code (org-element-property :value inline-src-block)))
     (cond
      (org-groff-source-highlight
-      (let* ((tmpdir (if (featurep 'xemacs)
-                         temp-directory
-                       temporary-file-directory))
+      (let* ((tmpdir temporary-file-directory)
              (in-file  (make-temp-name
                         (expand-file-name "srchilite" tmpdir)))
              (out-file (make-temp-name
@@ -1488,9 +1486,7 @@ contextual information."
          (custom-env (and lang
                           (cadr (assq (intern lang)
                                       org-groff-custom-lang-environments))))
-         (num-start (case (org-element-property :number-lines src-block)
-                      (continued (org-export-get-loc src-block info))
-                      (new 0)))
+         (num-start (org-export-get-loc src-block info))
          (retain-labels (org-element-property :retain-labels src-block))
          (caption (and (not (org-export-read-attribute
 			     :attr_groff src-block :disable-caption))
@@ -1506,9 +1502,7 @@ contextual information."
 
      ;; Case 2.  Source fontification.
      (org-groff-source-highlight
-      (let* ((tmpdir (if (featurep 'xemacs)
-			 temp-directory
-		       temporary-file-directory))
+      (let* ((tmpdir temporary-file-directory)
 	     (in-file  (make-temp-name
 			(expand-file-name "srchilite" tmpdir)))
 	     (out-file (make-temp-name

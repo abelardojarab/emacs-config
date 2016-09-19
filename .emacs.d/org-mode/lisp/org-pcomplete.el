@@ -1,4 +1,4 @@
-;;; org-pcomplete.el --- In-buffer completion code
+;;; org-pcomplete.el --- In-buffer Completion Code -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2004-2016 Free Software Foundation, Inc.
 ;;
@@ -27,21 +27,16 @@
 
 ;;;; Require other packages
 
-(eval-when-compile
-  (require 'cl))
-
 (require 'org-macs)
 (require 'org-compat)
 (require 'pcomplete)
 
-(declare-function org-split-string "org" (string &optional separators))
-(declare-function org-make-org-heading-search-string "org"
-		  (&optional string))
+(declare-function org-make-org-heading-search-string "org" (&optional string))
 (declare-function org-get-buffer-tags "org" ())
 (declare-function org-get-tags "org" ())
 (declare-function org-buffer-property-keys "org"
 		  (&optional specials defaults columns ignore-malformed))
-(declare-function org-entry-properties "org" (&optional pom which specific))
+(declare-function org-entry-properties "org" (&optional pom which))
 (declare-function org-tag-alist-to-string "org" (alist &optional skip-key))
 
 ;;;; Customization variables
@@ -59,7 +54,7 @@
   "Examine the thing at point and let the caller know what it is.
 The return value is a string naming the thing at point."
   (let ((beg1 (save-excursion
-		(skip-chars-backward (org-re "[:alnum:]-_@"))
+		(skip-chars-backward "[:alnum:]-_@")
 		(point)))
 	(beg (save-excursion
 	       (skip-chars-backward "a-zA-Z0-9-_:$")
@@ -95,10 +90,10 @@ The return value is a string naming the thing at point."
 	     (skip-chars-backward "[ \t\n]")
 	     ;; org-drawer-regexp matches a whole line but while
 	     ;; looking-back, we just ignore trailing whitespaces
-	     (or (org-looking-back (substring org-drawer-regexp 0 -1)
-				   (line-beginning-position))
-		 (org-looking-back org-property-re
-				   (line-beginning-position)))))
+	     (or (looking-back (substring org-drawer-regexp 0 -1)
+			       (line-beginning-position))
+		 (looking-back org-property-re
+			       (line-beginning-position)))))
       (cons "prop" nil))
      ((and (equal (char-before beg1) ?:)
 	   (not (equal (char-after (point-at-bol)) ?*)))
@@ -254,7 +249,7 @@ When completing for #+STARTUP, for example, this function returns
 	       (buffer-name (buffer-base-buffer)))))))
 
 
-(declare-function org-export-backend-options "org-export" (cl-x))
+(declare-function org-export-backend-options "ox" (cl-x) t)
 (defun pcomplete/org-mode/file-option/options ()
   "Complete arguments for the #+OPTIONS file option."
   (while (pcomplete-here
@@ -267,7 +262,7 @@ When completing for #+STARTUP, for example, this function returns
 	      "|:" "tags:" "tasks:" "<:" "todo:")
 	    ;; OPTION items from registered back-ends.
 	    (let (items)
-	      (dolist (backend (org-bound-and-true-p
+	      (dolist (backend (bound-and-true-p
 				org-export-registered-backends))
 		(dolist (option (org-export-backend-options backend))
 		  (let ((item (nth 2 option)))
@@ -279,7 +274,7 @@ When completing for #+STARTUP, for example, this function returns
   (while (pcomplete-here
 	  (pcomplete-uniqify-list
 	   (mapcar (lambda (item) (format "%s:" (car item)))
-		   (org-bound-and-true-p org-html-infojs-opts-table))))))
+		   (bound-and-true-p org-html-infojs-opts-table))))))
 
 (defun pcomplete/org-mode/file-option/bind ()
   "Complete arguments for the #+BIND file option, which are variable names."

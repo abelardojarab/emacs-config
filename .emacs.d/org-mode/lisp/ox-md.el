@@ -28,7 +28,7 @@
 
 ;;; Code:
 
-(eval-when-compile (require 'cl))
+(require 'cl-lib)
 (require 'ox-html)
 (require 'ox-publish)
 
@@ -50,6 +50,25 @@ This variable can be set to either `atx' or `setext'."
 	  (const :tag "Use \"atx\" style" atx)
 	  (const :tag "Use \"Setext\" style" setext)))
 
+
+;;;; Footnotes
+
+(defcustom org-md-footnotes-section "%s%s"
+  "Format string for the footnotes section.
+The first %s placeholder will be replaced with the localized Footnotes section
+heading, the second with the contents of the Footnotes section."
+ :group 'org-export-md
+ :type 'string
+ :version "25.1"
+ :package-version '(Org . "9.0"))
+
+(defcustom org-md-footnote-format "<sup>%s</sup>"
+  "Format string for the footnote reference.
+The %s will be replaced by the footnote reference itself."
+  :group 'org-export-md
+  :type 'string
+  :version "25.1"
+  :package-version '(Org . "9.0"))
 
 
 ;;; Define Back-End
@@ -89,7 +108,10 @@ This variable can be set to either `atx' or `setext'."
 		     (src-block . org-md-example-block)
 		     (template . org-md-template)
 		     (verbatim . org-md-verbatim))
-  :options-alist '((:md-headline-style nil nil org-md-headline-style)))
+  :options-alist
+  '((:md-footnote-format nil nil org-md-footnote-format)
+    (:md-footnotes-section nil nil org-md-footnotes-section)
+    (:md-headline-style nil nil org-md-headline-style)))
 
 
 ;;; Filters
@@ -146,8 +168,8 @@ CONTENTS is nil.  INFO is a plist used as a communication
 channel."
   (let ((value (org-element-property :value verbatim)))
     (format (cond ((not (string-match "`" value)) "`%s`")
-		  ((or (string-match "\\``" value)
-		       (string-match "`\\'" value))
+		  ((or (string-prefix-p "`" value)
+		       (string-suffix-p "`" value))
 		   "`` %s ``")
 		  (t "``%s``"))
 	    value)))
@@ -215,20 +237,29 @@ a communication channel."
 			  (car (last (org-export-get-headline-number
 				      headline info))))
 			 "."))))
-	  (concat bullet (make-string (- 4 (length bullet)) ?\s) heading tags
-		  "\n\n"
-		  (and contents
-		       (replace-regexp-in-string "^" "    " contents)))))
-       ;; Use "Setext" style.
-       ((eq style 'setext)
-	(concat heading tags anchor "\n"
-		(make-string (length heading) (if (= level 1) ?= ?-))
-		"\n\n"
-		contents))
-       ;; Use "atx" style.
-       (t (concat (make-string level ?#) " " heading tags anchor "\n\n"
-		  contents))))))
+	  (concat bullet (make-string (- 4 (length bullet)) ?\s) heading tags "\n\n"
+		  (and contents (replace-regexp-in-string "^" "    " contents)))))
+       (t (concat (org-md--headline-title style level title anchor tags) contents))))))
 
+
+;; Headline Title
+
+(defun org-md--headline-title (style level title &optional anchor tags)
+  "Generate a headline title in the preferred Markdown headline style.
+STYLE is the preferred style (`atx' or `setext').  LEVEL is the
+header level.  TITLE is the headline title.  ANCHOR is the HTML
+anchor tag for the section as a string.  TAGS are the tags set on
+the section."
+  (let ((anchor-lines (and anchor (concat anchor "\n\n"))))
+    ;; Use "Setext" style
+    (if (and (eq style 'setext) (< level 3))
+        (let* ((underline-char (if (= level 1) ?= ?-))
+               (underline (concat (make-string (length title) underline-char)
+				  "\n")))
+          (concat "\n" anchor-lines title tags "\n" underline "\n"))
+        ;; Use "Atx" style
+        (let ((level-mark (make-string level ?#)))
+          (concat "\n" anchor-lines level-mark " " title tags "\n\n")))))
 
 ;;;; Horizontal Rule
 
@@ -266,10 +297,10 @@ a communication channel."
 			   "."))))
     (concat bullet
 	    (make-string (- 4 (length bullet)) ? )
-	    (case (org-element-property :checkbox item)
-	      (on "[X] ")
-	      (trans "[-] ")
-	      (off "[ ] "))
+	    (pcase (org-element-property :checkbox item)
+	      (`on "[X] ")
+	      (`trans "[-] ")
+	      (`off "[ ] "))
 	    (let ((tag (org-element-property :tag item)))
 	      (and tag (format "**%s:** "(org-export-data tag info))))
 	    (and contents
@@ -317,12 +348,12 @@ a communication channel."
       (let ((destination (if (string= type "fuzzy")
 			     (org-export-resolve-fuzzy-link link info)
 			   (org-export-resolve-id-link link info))))
-	(case (org-element-type destination)
-	  (plain-text			; External file.
+	(pcase (org-element-type destination)
+	  (`plain-text			; External file.
 	   (let ((path (funcall link-org-files-as-md destination)))
 	     (if (not contents) (format "<%s>" path)
 	       (format "[%s](%s)" contents path))))
-	  (headline
+	  (`headline
 	   (format
 	    "[%s](#%s)"
 	    ;; Description.
@@ -336,7 +367,7 @@ a communication channel."
 	    ;; Reference.
 	    (or (org-element-property :CUSTOM_ID destination)
 		(org-export-get-reference destination info))))
-	  (t
+	  (_
 	   (let ((description
 		  (or (org-string-nw-p contents)
 		      (let ((number (org-export-get-ordinal destination info)))
@@ -395,8 +426,8 @@ CONTENTS is the paragraph contents.  INFO is a plist used as
 a communication channel."
   (let ((first-object (car (org-element-contents paragraph))))
     ;; If paragraph starts with a #, protect it.
-    (if (and (stringp first-object) (string-match "\\`#" first-object))
-	(replace-regexp-in-string "\\`#" "\\#" contents nil t)
+    (if (and (stringp first-object) (string-prefix-p "#" first-object))
+	(concat "\\" contents)
       contents)))
 
 
@@ -467,13 +498,48 @@ a communication channel."
 
 ;;;; Template
 
+(defun org-md--footnote-formatted (footnote info)
+  "Formats a single footnote entry FOOTNOTE.
+FOOTNOTE is a cons cell of the form (number . definition).
+INFO is a plist with contextual information."
+  (let* ((fn-num (car footnote))
+         (fn-text (cdr footnote))
+         (fn-format (plist-get info :md-footnote-format))
+         (fn-anchor (format "fn.%d" fn-num))
+         (fn-href (format " href=\"#fnr.%d\"" fn-num))
+         (fn-link-to-ref (org-html--anchor fn-anchor fn-num fn-href info)))
+    (concat (format fn-format fn-link-to-ref) " " fn-text "\n")))
+
+(defun org-md--footnote-section (info)
+  "Format the footnote section.
+INFO is a plist used as a communication channel."
+  (let* ((fn-alist (org-export-collect-footnote-definitions info))
+         (fn-alist (cl-loop for (n _type raw) in fn-alist collect
+                            (cons n (org-trim (org-export-data raw info)))))
+         (headline-style (plist-get info :md-headline-style))
+         (section-title (org-html--translate "Footnotes" info)))
+    (when fn-alist
+      (format (plist-get info :md-footnotes-section)
+              (org-md--headline-title headline-style 1 section-title)
+              (mapconcat (lambda (fn) (org-md--footnote-formatted fn info))
+                         fn-alist
+                         "\n")))))
+
 (defun org-md-inner-template (contents info)
   "Return body of document after converting it to Markdown syntax.
 CONTENTS is the transcoded contents string.  INFO is a plist
 holding export options."
   ;; Make sure CONTENTS is separated from table of contents and
   ;; footnotes with at least a blank line.
-  (org-trim (org-html-inner-template (concat "\n" contents "\n") info)))
+  (concat
+   ;; Table of contents.
+   (let ((depth (plist-get info :with-toc)))
+     (when depth (org-html-toc depth info)))
+   ;; Document contents.
+   contents
+   "\n"
+   ;; Footnotes section.
+   (org-md--footnote-section info)))
 
 (defun org-md-template (contents _info)
   "Return complete document string after Markdown conversion.
@@ -514,9 +580,9 @@ non-nil."
 
 ;;;###autoload
 (defun org-md-convert-region-to-md ()
-  "Assume the current region has org-mode syntax, and convert it to Markdown.
+  "Assume the current region has Org syntax, and convert it to Markdown.
 This can be used in any buffer.  For example, you can write an
-itemized list in org-mode syntax in a Markdown buffer and use
+itemized list in Org syntax in a Markdown buffer and use
 this command to convert it."
   (interactive)
   (org-export-replace-region-by 'md))

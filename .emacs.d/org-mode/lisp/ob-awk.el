@@ -27,13 +27,12 @@
 ;;
 ;; - :in-file takes a path to a file of data to be processed by awk
 ;;
-;; - :stdin takes an Org-mode data or code block reference, the value
-;;          of which will be passed to the awk process through STDIN
+;; - :stdin takes an Org data or code block reference, the value of
+;;          which will be passed to the awk process through STDIN
 
 ;;; Code:
 (require 'ob)
 (require 'org-compat)
-(eval-when-compile (require 'cl))
 
 (declare-function org-babel-ref-resolve "ob-ref" (ref))
 (declare-function orgtbl-to-generic "org-table" (table params))

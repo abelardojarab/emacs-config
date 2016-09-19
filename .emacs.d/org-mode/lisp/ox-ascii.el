@@ -27,9 +27,9 @@
 
 ;;; Code:
 
-(eval-when-compile (require 'cl))
 (require 'ox)
 (require 'ox-publish)
+(require 'cl-lib)
 
 (declare-function aa2u "ext:ascii-art-to-unicode" ())
 
@@ -511,7 +511,7 @@ that is according to the widest non blank line in CONTENTS."
 		;; possible.
 		(save-excursion
 		  (while (not (eobp))
-		    (unless (org-looking-at-p "[ \t]*$")
+		    (unless (looking-at-p "[ \t]*$")
 		      (end-of-line)
 		      (let ((column (current-column)))
 			(cond
@@ -524,8 +524,8 @@ that is according to the widest non blank line in CONTENTS."
 				 (if (eq how 'right) 1 2))))
 		  (if (zerop offset) (throw 'exit contents)
 		    (while (not (eobp))
-		      (unless (org-looking-at-p "[ \t]*$")
-			(org-indent-to-column offset))
+		      (unless (looking-at-p "[ \t]*$")
+			(indent-to-column offset))
 		      (forward-line)))))
 	      (buffer-string))))))))
 
@@ -549,23 +549,24 @@ INFO is a plist used as a communication channel."
 (defun org-ascii--current-text-width (element info)
   "Return maximum text width for ELEMENT's contents.
 INFO is a plist used as a communication channel."
-  (case (org-element-type element)
+  (pcase (org-element-type element)
     ;; Elements with an absolute width: `headline' and `inlinetask'.
-    (inlinetask (plist-get info :ascii-inlinetask-width))
-    (headline
+    (`inlinetask (plist-get info :ascii-inlinetask-width))
+    (`headline
      (- (plist-get info :ascii-text-width)
 	(let ((low-level-rank (org-export-low-level-p element info)))
 	  (if low-level-rank (* low-level-rank 2)
 	    (plist-get info :ascii-global-margin)))))
     ;; Elements with a relative width: store maximum text width in
     ;; TOTAL-WIDTH.
-    (otherwise
+    (_
      (let* ((genealogy (org-element-lineage element nil t))
 	    ;; Total width is determined by the presence, or not, of an
 	    ;; inline task among ELEMENT parents.
 	    (total-width
-	     (if (loop for parent in genealogy
-		       thereis (eq (org-element-type parent) 'inlinetask))
+	     (if (cl-some (lambda (parent)
+			    (eq (org-element-type parent) 'inlinetask))
+			  genealogy)
 		 (plist-get info :ascii-inlinetask-width)
 	       ;; No inlinetask: Remove global margin from text width.
 	       (- (plist-get info :ascii-text-width)
@@ -584,19 +585,20 @@ INFO is a plist used as a communication channel."
        (- total-width
 	  ;; Each `quote-block' and `verse-block' above narrows text
 	  ;; width by twice the standard margin size.
-	  (+ (* (loop for parent in genealogy
-		      when (memq (org-element-type parent)
-				 '(quote-block verse-block))
-		      count parent)
-		2 (plist-get info :ascii-quote-margin))
+	  (+ (* (cl-count-if (lambda (parent)
+			       (memq (org-element-type parent)
+				     '(quote-block verse-block)))
+			     genealogy)
+		2
+		(plist-get info :ascii-quote-margin))
 	     ;; Apply list margin once per "top-level" plain-list
 	     ;; containing current line
-	     (* (let ((count 0))
-		  (dolist (e genealogy count)
-		    (and (eq (org-element-type e) 'plain-list)
-			 (not (eq (org-element-type (org-export-get-parent e))
-				  'item))
-			 (incf count))))
+	     (* (cl-count-if
+		 (lambda (e)
+		   (and (eq (org-element-type e) 'plain-list)
+			(not (eq (org-element-type (org-export-get-parent e))
+				 'item))))
+		 genealogy)
 		(plist-get info :ascii-list-margin))
 	     ;; Text width within a plain-list is restricted by
 	     ;; indentation of current item.  If that's the case,
@@ -604,9 +606,9 @@ INFO is a plist used as a communication channel."
 	     ;; parent item, if any.
 	     (let ((item
 		    (if (eq (org-element-type element) 'item) element
-		      (loop for parent in genealogy
-			    when (eq (org-element-type parent) 'item)
-			    return parent))))
+		      (cl-find-if (lambda (parent)
+				    (eq (org-element-type parent) 'item))
+				  genealogy))))
 	       (if (not item) 0
 		 ;; Compute indentation offset of the current item,
 		 ;; that is the sum of the difference between its
@@ -633,9 +635,9 @@ Return value is a symbol among `left', `center', `right' and
   (let (justification)
     (while (and (not justification)
 		(setq element (org-element-property :parent element)))
-      (case (org-element-type element)
-	(center-block (setq justification 'center))
-	(special-block
+      (pcase (org-element-type element)
+	(`center-block (setq justification 'center))
+	(`special-block
 	 (let ((name (org-element-property :type element)))
 	   (cond ((string= name "JUSTIFYRIGHT") (setq justification 'right))
 		 ((string= name "JUSTIFYLEFT") (setq justification 'left)))))))
@@ -733,9 +735,9 @@ caption keyword."
 	     (org-export-get-ordinal
 	      element info nil 'org-ascii--has-caption-p))
 	    (title-fmt (org-ascii--translate
-			(case (org-element-type element)
-			  (table "Table %d:")
-			  (src-block "Listing %d:"))
+			(pcase (org-element-type element)
+			  (`table "Table %d:")
+			  (`src-block "Listing %d:"))
 			info)))
 	(org-ascii--fill-string
 	 (concat (format title-fmt reference)
@@ -806,7 +808,7 @@ generation.  INFO is a plist used as a communication channel."
 	  ;; filling (like contents of a description list item).
 	  (let* ((initial-text
 		  (format (org-ascii--translate "Listing %d:" info)
-			  (incf count)))
+			  (cl-incf count)))
 		 (initial-width (string-width initial-text)))
 	    (concat
 	     initial-text " "
@@ -846,7 +848,7 @@ generation.  INFO is a plist used as a communication channel."
 	  ;; filling (like contents of a description list item).
 	  (let* ((initial-text
 		  (format (org-ascii--translate "Table %d:" info)
-			  (incf count)))
+			  (cl-incf count)))
 		 (initial-width (string-width initial-text)))
 	    (concat
 	     initial-text " "
@@ -886,7 +888,13 @@ is a plist used as a communication channel."
 			  (gethash link (plist-get info :exported-data)))
 			 (not (member footprint seen)))
 		(push footprint seen) link)))))
-    (org-element-map element 'link unique-link-p info nil nil t)))
+    (org-element-map (if (eq (org-element-type element) 'section)
+			 element
+		       ;; In a headline, only retrieve links in title
+		       ;; and relative section, not in children.
+		       (list (org-element-property :title element)
+			     (car (org-element-contents element))))
+	'link unique-link-p info nil 'headline t)))
 
 (defun org-ascii--describe-links (links width info)
   "Return a string describing a list of links.
@@ -942,10 +950,10 @@ channel."
   "Return checkbox string for ITEM or nil.
 INFO is a plist used as a communication channel."
   (let ((utf8p (eq (plist-get info :ascii-charset) 'utf-8)))
-    (case (org-element-property :checkbox item)
-      (on (if utf8p "☑ " "[X] "))
-      (off (if utf8p "☐ " "[ ] "))
-      (trans (if utf8p "☒ " "[-] ")))))
+    (pcase (org-element-property :checkbox item)
+      (`on (if utf8p "☑ " "[X] "))
+      (`off (if utf8p "☐ " "[ ] "))
+      (`trans (if utf8p "☒ " "[-] ")))))
 
 
 
@@ -1423,12 +1431,12 @@ contextual information."
 	  ;; First parent of ITEM is always the plain-list.  Get
 	  ;; `:type' property from it.
 	  (org-list-bullet-string
-	   (case list-type
-	     (descriptive
+	   (pcase list-type
+	     (`descriptive
 	      (concat checkbox
 		      (org-export-data (org-element-property :tag item) info)
 		      ": "))
-	     (ordered
+	     (`ordered
 	      ;; Return correct number for ITEM, paying attention to
 	      ;; counters.
 	      (let* ((struct (org-element-property :structure item))
@@ -1440,7 +1448,7 @@ contextual information."
 				       (org-list-prevs-alist struct)
 				       (org-list-parents-alist struct)))))))
 		(replace-regexp-in-string "[0-9]+" num bul)))
-	     (t (let ((bul (org-element-property :bullet item)))
+	     (_ (let ((bul (org-element-property :bullet item)))
 		  ;; Change bullets into more visible form if UTF-8 is active.
 		  (if (not utf8p) bul
 		    (replace-regexp-in-string
@@ -1474,14 +1482,14 @@ information."
       (org-ascii--justify-element
        (let ((case-fold-search t))
 	 (cond
-	  ((org-string-match-p "\\<headlines\\>" value)
+	  ((string-match-p "\\<headlines\\>" value)
 	   (let ((depth (and (string-match "\\<[0-9]+\\>" value)
 			     (string-to-number (match-string 0 value))))
-		 (localp (org-string-match-p "\\<local\\>" value)))
+		 (localp (string-match-p "\\<local\\>" value)))
 	     (org-ascii--build-toc info depth keyword localp)))
-	  ((org-string-match-p "\\<tables\\>" value)
+	  ((string-match-p "\\<tables\\>" value)
 	   (org-ascii--list-tables keyword info))
-	  ((org-string-match-p "\\<listings\\>" value)
+	  ((string-match-p "\\<listings\\>" value)
 	   (org-ascii--list-listings keyword info))))
        keyword info)))))
 

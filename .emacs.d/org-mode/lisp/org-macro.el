@@ -43,6 +43,7 @@
 ;; {{{email}}} and {{{title}}} macros.
 
 ;;; Code:
+(require 'cl-lib)
 (require 'org-macs)
 (require 'org-compat)
 
@@ -57,8 +58,9 @@
 (declare-function org-element-type "org-element" (element))
 (declare-function org-file-contents "org" (file &optional noerror))
 (declare-function org-mode "org" ())
-(declare-function org-remove-double-quotes "org" (s))
-(declare-function org-with-wide-buffer "org-macs" (&rest body))
+(declare-function vc-backend "vc-hooks" (f))
+(declare-function vc-call "vc-hooks" (fun file &rest args) t)
+(declare-function vc-exec-after "vc-dispatcher" (code))
 
 ;;; Variables
 
@@ -101,7 +103,7 @@ Return an alist containing all macro templates found."
 				   (push (cons name template) templates))))
 			   ;; Enter setup file.
 			   (let ((file (expand-file-name
-					(org-remove-double-quotes val))))
+					(org-unbracket-string "\"" "\"" val))))
 			     (unless (member file files)
 			       (with-temp-buffer
 				 (setq default-directory
@@ -146,7 +148,8 @@ function installs the following ones: \"property\",
 	(mapc update-templates
 	      (list (cons "input-file" (file-name-nondirectory visited-file))
 		    (cons "modification-time"
-			  (format "(eval (format-time-string \"$1\" '%s))"
+			  (format "(eval (format-time-string \"$1\" (or (and (org-string-nw-p \"$2\") (org-macro--vc-modified-time %s)) '%s)))"
+				  (prin1-to-string visited-file)
 				  (prin1-to-string
 				   (nth 5 (file-attributes visited-file)))))))))
     (setq org-macro-templates templates)))
@@ -187,54 +190,54 @@ found in the buffer with no definition in TEMPLATES.
 Optional argument KEYWORDS, when non-nil is a list of keywords,
 as strings, where macro expansion is allowed."
   (org-with-wide-buffer
-    (goto-char (point-min))
-    (let ((properties-regexp
-	   (format "\\`EXPORT_%s\\+?\\'" (regexp-opt keywords)))
-	  record)
-      (while (re-search-forward "{{{[-A-Za-z0-9_]" nil t)
-	(let* ((datum (save-match-data (org-element-context)))
-	       (type (org-element-type datum))
-	       (macro
-		(cond
-		 ((eq type 'macro) datum)
-		 ;; In parsed keywords and associated node properties,
-		 ;; force macro recognition.
-		 ((or (and (eq type 'keyword)
-			   (member (org-element-property :key datum) keywords))
-		      (and (eq type 'node-property)
-			   (org-string-match-p
-			    properties-regexp
-			    (org-element-property :key datum))))
-		  (save-restriction
-		    (narrow-to-region (match-beginning 0) (line-end-position))
-		    (org-element-map (org-element-parse-buffer) 'macro
-		      #'identity nil t))))))
-	  (when macro
-	    (let* ((value (org-macro-expand macro templates))
-		   (begin (org-element-property :begin macro))
-		   (signature (list begin
-				    macro
-				    (org-element-property :args macro))))
-	      ;; Avoid circular dependencies by checking if the same
-	      ;; macro with the same arguments is expanded at the same
-	      ;; position twice.
-	      (cond ((member signature record)
-		     (error "Circular macro expansion: %s"
-			    (org-element-property :key macro)))
-		    (value
-		     (push signature record)
-		     (delete-region
-		      begin
-		      ;; Preserve white spaces after the macro.
-		      (progn (goto-char (org-element-property :end macro))
-			     (skip-chars-backward " \t")
-			     (point)))
-		     ;; Leave point before replacement in case of
-		     ;; recursive expansions.
-		     (save-excursion (insert value)))
-		    (finalize
-		     (error "Undefined Org macro: %s; aborting"
-			    (org-element-property :key macro)))))))))))
+   (goto-char (point-min))
+   (let ((properties-regexp
+	  (format "\\`EXPORT_%s\\+?\\'" (regexp-opt keywords)))
+	 record)
+     (while (re-search-forward "{{{[-A-Za-z0-9_]" nil t)
+       (let* ((datum (save-match-data (org-element-context)))
+	      (type (org-element-type datum))
+	      (macro
+	       (cond
+		((eq type 'macro) datum)
+		;; In parsed keywords and associated node properties,
+		;; force macro recognition.
+		((or (and (eq type 'keyword)
+			  (member (org-element-property :key datum) keywords))
+		     (and (eq type 'node-property)
+			  (string-match-p
+			   properties-regexp
+			   (org-element-property :key datum))))
+		 (save-restriction
+		   (narrow-to-region (match-beginning 0) (line-end-position))
+		   (org-element-map (org-element-parse-buffer) 'macro
+		     #'identity nil t))))))
+	 (when macro
+	   (let* ((value (org-macro-expand macro templates))
+		  (begin (org-element-property :begin macro))
+		  (signature (list begin
+				   macro
+				   (org-element-property :args macro))))
+	     ;; Avoid circular dependencies by checking if the same
+	     ;; macro with the same arguments is expanded at the same
+	     ;; position twice.
+	     (cond ((member signature record)
+		    (error "Circular macro expansion: %s"
+			   (org-element-property :key macro)))
+		   (value
+		    (push signature record)
+		    (delete-region
+		     begin
+		     ;; Preserve white spaces after the macro.
+		     (progn (goto-char (org-element-property :end macro))
+			    (skip-chars-backward " \t")
+			    (point)))
+		    ;; Leave point before replacement in case of
+		    ;; recursive expansions.
+		    (save-excursion (insert value)))
+		   (finalize
+		    (error "Undefined Org macro: %s; aborting"
+			   (org-element-property :key macro)))))))))))
 
 (defun org-macro-escape-arguments (&rest args)
   "Build macro's arguments string from ARGS.
@@ -276,6 +279,30 @@ Return a list of arguments, as strings.  This is the opposite of
 		(if (zerop (mod len 2)) "\000" ","))))
     s nil t)
    "\000"))
+
+(defun org-macro--vc-modified-time (file)
+  (save-window-excursion
+    (when (vc-backend file)
+      (let ((buf (get-buffer-create " *org-vc*"))
+	    (case-fold-search t)
+	    date)
+	(unwind-protect
+	    (progn
+	      (vc-call print-log file buf nil nil 1)
+	      (with-current-buffer buf
+		(vc-exec-after
+		 (lambda ()
+		   (goto-char (point-min))
+		   (when (re-search-forward "Date:?[ \t]*" nil t)
+		     (let ((time (parse-time-string
+				  (buffer-substring
+				   (point) (line-end-position)))))
+		       (when (cl-some #'identity time)
+			 (setq date (apply #'encode-time time))))))))
+	      (let ((proc (get-buffer-process buf)))
+		(while (and proc (accept-process-output proc .5 nil t)))))
+	  (kill-buffer buf))
+	date))))
 
 
 (provide 'org-macro)

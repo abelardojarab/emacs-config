@@ -1,4 +1,4 @@
-;;; org-inlinetask.el --- Tasks independent of outline hierarchy
+;;; org-inlinetask.el --- Tasks Independent of Outline Hierarchy -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2009-2016 Free Software Foundation, Inc.
 ;;
@@ -167,9 +167,9 @@ The number of levels is controlled by `org-inlinetask-min-level'."
 	   (stars-re (org-inlinetask-outline-regexp))
 	   (task-beg-re (concat stars-re "\\(?:.*\\)"))
 	   (task-end-re (concat stars-re "END[ \t]*$")))
-      (or (org-looking-at-p task-beg-re)
+      (or (looking-at-p task-beg-re)
 	  (and (re-search-forward "^\\*+[ \t]+" nil t)
-	       (progn (beginning-of-line) (org-looking-at-p task-end-re)))))))
+	       (progn (beginning-of-line) (looking-at-p task-end-re)))))))
 
 (defun org-inlinetask-goto-beginning ()
   "Go to the beginning of the inline task at point."
@@ -177,7 +177,7 @@ The number of levels is controlled by `org-inlinetask-min-level'."
   (let ((case-fold-search t)
 	(inlinetask-re (org-inlinetask-outline-regexp)))
     (re-search-backward inlinetask-re nil t)
-    (when (org-looking-at-p (concat inlinetask-re "END[ \t]*$"))
+    (when (looking-at-p (concat inlinetask-re "END[ \t]*$"))
       (re-search-backward inlinetask-re nil t))))
 
 (defun org-inlinetask-goto-end ()
@@ -271,8 +271,7 @@ If the task has an end part, also demote it."
 
 (defvar org-indent-indentation-per-level) ; defined in org-indent.el
 
-(defface org-inlinetask
-  (org-compatible-face 'shadow '((t (:bold t))))
+(defface org-inlinetask '((t :inherit shadow))
   "Face for inlinetask headlines."
   :group 'org-faces)
 
@@ -286,7 +285,7 @@ If the task has an end part, also demote it."
 		     ",\\}\\)\\(\\*\\* .*\\)"))
 	 ;; Virtual indentation will add the warning face on the first
 	 ;; star.  Thus, in that case, only hide it.
-	 (start-face (if (and (org-bound-and-true-p org-indent-mode)
+	 (start-face (if (and (bound-and-true-p org-indent-mode)
 			      (> org-indent-indentation-per-level 1))
 			 'org-hide
 		       'org-warning)))
@@ -321,15 +320,15 @@ If the task has an end part, also demote it."
 (defun org-inlinetask-hide-tasks (state)
   "Hide inline tasks in buffer when STATE is `contents' or `children'.
 This function is meant to be used in `org-cycle-hook'."
-  (case state
-    (contents
+  (pcase state
+    (`contents
      (let ((regexp (org-inlinetask-outline-regexp)))
        (save-excursion
 	 (goto-char (point-min))
 	 (while (re-search-forward regexp nil t)
 	   (org-inlinetask-toggle-visibility)
 	   (org-inlinetask-goto-end)))))
-    (children
+    (`children
      (save-excursion
        (while (and (outline-next-heading) (org-inlinetask-at-task-p))
 	 (org-inlinetask-toggle-visibility)

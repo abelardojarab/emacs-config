@@ -55,9 +55,8 @@
 (defvar vm-folder-directory)
 
 ;; Install the link type
-(org-add-link-type "vm" 'org-vm-open)
-(org-add-link-type "vm-imap" 'org-vm-imap-open)
-(add-hook 'org-store-link-functions 'org-vm-store-link)
+(org-link-set-parameters "vm" :follow #'org-vm-open :store #'org-vm-store-link)
+(org-link-set-parameters "vm-imap" :follow #'org-vm-imap-open)
 
 ;; Implementation
 (defun org-vm-store-link ()
@@ -87,7 +86,7 @@
                      (string-match (concat "^" (regexp-quote vm-folder-directory))
                                    folder))
                 (setq folder (replace-match "" t t folder)))))
-        (setq message-id (org-remove-angle-brackets message-id))
+        (setq message-id (org-unbracket-string "<" ">" message-id))
 	(org-store-link-props :type link-type :from from :to to :subject subject
 			      :message-id message-id :date date)
 	(setq desc (org-email-link-description))
@@ -117,12 +116,10 @@
 	(cond
 	 ((featurep 'tramp)
 	  ;; use tramp to access the file
-	  (if (featurep 'xemacs)
-	      (setq folder (format "[%s@%s]%s" user host file))
-	    (setq folder (format "/%s@%s:%s" user host file))))
+	  (setq folder (format "/%s@%s:%s" user host file)))
 	 (t
 	  ;; use ange-ftp or efs
-	  (require (if (featurep 'xemacs) 'efs 'ange-ftp))
+	  (require 'ange-ftp)
 	  (setq folder (format "/%s@%s:%s" user host file))))))
   (when folder
     (funcall (cdr (assq 'vm org-link-frame-setup)) folder readonly)
