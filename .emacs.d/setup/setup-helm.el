@@ -29,7 +29,9 @@
   :load-path (lambda () (expand-file-name "helm/" user-emacs-directory))
   :bind (("C-'" . helm-semantic-or-imenu)
          :map isearch-mode-map
-         ("C-h" . helm-occur-from-isearch)
+         ("C-f" . helm-occur-from-isearch)
+         :map minibuffer-local-isearch-map
+         ("C-f" . helm-occur-from-isearch)
          :map ctl-x-map
          ("C-r" . helm-recentf)
          ("p" . helm-show-kill-ring)

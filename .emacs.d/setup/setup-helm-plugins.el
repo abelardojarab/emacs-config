@@ -142,11 +142,7 @@
 (use-package helm-swoop
   :defer t
   :commands (helm-swoop helm-swoop-from-isearch)
-  :bind (("C-*" . helm-swoop)
-         :map isearch-mode-map
-         ("C-f" . helm-swoop-from-isearch)
-         :map minibuffer-local-isearch-map
-         ("C-f" . helm-swoop-from-isearch))
+  :bind ("C-*" . helm-swoop)
   :load-path (lambda () (expand-file-name "helm-swoop/" user-emacs-directory))
   :config (progn
 
