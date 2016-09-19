@@ -208,6 +208,8 @@
 
 ;; Org-Ref
 (use-package org-ref
+  :disabled t
+  :after (helm async)
   :load-path (lambda () (expand-file-name "org-ref/" user-emacs-directory))
   :config (progn
             (setq org-ref-bibliography-notes "~/workspace/Documents/Bibliography/notes.org"
