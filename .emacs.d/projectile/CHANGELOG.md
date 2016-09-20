@@ -2,17 +2,37 @@
 
 ## master (unreleased)
 
+### New Features
+
+* Consider Ensime configuration file as root marker, `.ensime`.
+
+### Changes
+
+* Ignore backup files in `projectile-get-other-files`.
+* Ignore Ensime cache directory, `.ensime_cache`.
+* [#364](https://github.com/bbatsov/projectile/issues/364): `projectile-add-known-project` can now be used interactively.
+
+### Bugs fixed
+
+* [#1024](https://github.com/bbatsov/projectile/issues/1024): Do not cache ignored project files.
+* [#1022](https://github.com/bbatsov/projectile/issues/1022): Scan for Fossil's checkout DB, not its config DB.
+* [#1007](https://github.com/bbatsov/projectile/issues/1007): Make use of `projectile-go-function`.
+
+## 0.14.0 (2016-07-08)
+
 ### New features
 
+* Add [elixir](http://elixir-lang.org) project type.
 * Add [emacs-cask](https://github.com/cask/cask) project type.
 * Add [boot-clj](https://github.com/boot-clj/boot) project type.
+* Add [racket](http://racket-lang.org) project type.
 * Add support for projects using gradlew script.
 * Prefer Haskell stack projects over cabal projects.
 * Add ability to use elisp functions for test, compile and run commands.
 * Consider `TAGS` and `GTAGS` root markers.
 * Add relation between the `.h`, `.cxx`, `.ixx` and `.hxx` files in `projectile-other-file-alist`.
 * Add relation between the `.hpp` and `.cc` files in `projectile-other-file-alist`.
-* Add support to specify project name either via `.dir-locals.el` or by providing a customized `projectile-project-name-function'.
+* Add support to specify project name either via `.dir-locals.el` or by providing a customized `projectile-project-name-function`.
 * Add a command to switch between open projects (`projectile-switch-open-project`).
 * Add a command to edit the .dir-locals.el file of the project (`projectile-edit-dir-locals`).
 * Add file local variable `projectile-project-root`, which allows overriding the project root on a per-file basis. This allows navigating a different project from, say, an org file in a another git repository.
@@ -23,21 +43,24 @@
 * New command `projectile-run-eshell` (<kbd>C-c p x e</kbd>).
 * New command `projectile-run-term` (<kbd>C-c p x t</kbd>).
 * Let user unignore files in `.projectile` with the ! prefix.
+* Add a command to add all projects in a directory to the cache (`projectile-discover-projects-in-directory`).
 
 ### Changes
 
 * Prefer ag's internal .gitignore parsing.
-* Always use external find-tag implementations.
+* Added variable to control use of external find-tag implementations.
+* Specify `--with-keep.source` argument when installing R projects
 
 ### Bugs fixed
 
 * [#871](https://github.com/bbatsov/projectile/issues/871): Stop advice for `compilation-find-file` to override other advices.
-* [#557](https://github.com/bbatsov/projectile/issues/557): stack overflow in `projectile-find-tag'.
+* [#557](https://github.com/bbatsov/projectile/issues/557): stack overflow in `projectile-find-tag`.
 * [#955](https://github.com/bbatsov/projectile/issues/955): Error while toggling between test and source file.
 * [#952](https://github.com/bbatsov/projectile/issues/952): VCS submodules brought in even thought not descendent of project root.
 * [#576](https://github.com/bbatsov/projectile/issues/576): `projectile-replace` stomps regular expressions.
 * [#957](https://github.com/bbatsov/projectile/pull/957): When opening a specified file from the terminal, do not error inside of `projectile-cache-current-file`.
 * [#984](https://github.com/bbatsov/projectile/pull/984): Error when a project is a symlink that changes target.
+* [#1013](https://github.com/bbatsov/projectile/issues/1013): `projectile-project-buffer-p` may return incorrect result on Windows.
 
 ## 0.13.0 (2015-10-21)
 

@@ -1,21 +1,19 @@
-# helm-themes.el
-
+# helm-themes.el [![melpa badge][melpa-badge]][melpa-link] [![melpa stable badge][melpa-stable-badge]][melpa-stable-link]
 
 ## Introduction
 
 `helm-themes.el` provides Emacs themes selection with helm interface.
 
-Persistent action can set theme temporary.
+You can set theme temporary by persistent action.
 
 ## Screenshot
 
-![helm-themes-screenshot](https://github.com/syohex/emacs-helm-themes/raw/master/image/helm-themes-screenshot.png)
+![helm-themes-screenshot](image/helm-themes-screenshot.png)
 
 
-Requirements
-------------
-* Emacs 24.1 or higher.
-* helm 1.0 or higher
+## Requirements
+* Emacs 24.3 or higher.
+* helm 1.7.7 or higher
 
 
 ## Caution
@@ -29,9 +27,18 @@ setting for some faces.
 
 Set themes with helm interface. This persistent action can set theme temporary.
 
-    M-x helm-themes
+```
+M-x helm-themes
+```
 
 ## Sample Configuration
 
-    (require 'helm-config)
-    (require 'helm-themes)
+```lisp
+(require 'helm-config)
+(require 'helm-themes)
+```
+
+[melpa-link]: https://melpa.org/#/helm-themes
+[melpa-stable-link]: https://stable.melpa.org/#/helm-themes
+[melpa-badge]: https://melpa.org/packages/helm-themes-badge.svg
+[melpa-stable-badge]: https://stable.melpa.org/packages/helm-themes-badge.svg

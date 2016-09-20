@@ -138,44 +138,6 @@
   :commands (helm-make)
   :load-path (lambda () (expand-file-name "helm-make/" user-emacs-directory)))
 
-;; Helm swoop
-(use-package helm-swoop
-  :defer t
-  :commands (helm-swoop helm-swoop-from-isearch)
-  :bind ("C-*" . helm-swoop)
-  :load-path (lambda () (expand-file-name "helm-swoop/" user-emacs-directory))
-  :config (progn
-
-            ;; From helm-swoop to helm-multi-swoop-all
-            (define-key helm-swoop-map (kbd "C-f") 'helm-multi-swoop-all-from-helm-swoop)
-
-            ;; From helm-swoop to helm-multi-swoop-all
-            (define-key helm-swoop-map (kbd "M-i") 'helm-multi-swoop-all-from-helm-swoop)
-
-            ;; Instead of helm-multi-swoop-all, you can also use helm-multi-swoop-current-mode
-            (define-key helm-swoop-map (kbd "M-m") 'helm-multi-swoop-current-mode-from-helm-swoop)
-
-            ;; Move up and down like isearch
-            (define-key helm-swoop-map (kbd "C-r") 'helm-previous-line)
-            (define-key helm-swoop-map (kbd "C-s") 'helm-next-line)
-            (define-key helm-multi-swoop-map (kbd "C-r") 'helm-previous-line)
-            (define-key helm-multi-swoop-map (kbd "C-s") 'helm-next-line)
-
-            ;; Save buffer when helm-multi-swoop-edit complete
-            (setq helm-multi-swoop-edit-save t)
-
-            ;; If this value is t, split window inside the current window
-            (setq helm-swoop-split-with-multiple-windows nil)
-
-            ;; Split direcion. 'split-window-vertically or 'split-window-horizontally
-            (setq helm-swoop-split-direction 'split-window-vertically)
-
-            ;; If nil, you can slightly boost invoke speed in exchange for text color
-            (setq helm-swoop-speed-or-color nil)
-
-            ;; ;; Go to the opposite side of line from the end or beginning of line
-            (setq helm-swoop-move-to-line-cycle t)))
-
 ;; Biblio (helm-bibtex requirement)
 ;; extensible Emacs package for browsing and fetching references
 (use-package biblio

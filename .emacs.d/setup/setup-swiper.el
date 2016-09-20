@@ -35,7 +35,7 @@
 
 (use-package swiper-helm
   :defer t
-  :after swiper
+  :after (swiper helm)
   :bind (:map ctl-x-map
               ("s" . swiper-helm))
   :commands swiper-helm

@@ -1,11 +1,11 @@
 ;;; helm-themes.el --- Color theme selection with helm interface -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014 by Syohei YOSHIDA
+;; Copyright (C) 2016 by Syohei YOSHIDA
 
 ;; Author: Syohei YOSHIDA <syohex@gmail.com>
 ;; URL: https://github.com/syohex/emacs-helm-themes
-;; Version: 0.04
-;; Package-Requires: ((helm "1.0"))
+;; Version: 0.05
+;; Package-Requires: ((helm-core "2.0") (emacs "24.4"))
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -28,20 +28,26 @@
 
 ;;; Code:
 
-(require 'helm-config)
+(require 'helm)
 
-(defun helm-themes--delete-theme ()
+;; Loading mutiple themes makes Emacs too slow
+(defsubst helm-themes--delete-theme ()
   (mapc 'disable-theme custom-enabled-themes))
 
 (defun helm-themes--load-theme (theme-str)
   (helm-themes--delete-theme)
-  (load-theme (intern theme-str) t))
+  (if (string= theme-str "default")
+      t
+    (load-theme (intern theme-str) t)))
+
+(defun helm-themes--candidates ()
+  (cons 'default (custom-available-themes)))
 
 (defvar helm-themes-source
-  '((name . "Selection Theme")
-    (candidates . custom-available-themes)
-    (action . helm-themes--load-theme)
-    (persistent-action . helm-themes--load-theme)))
+  (helm-build-sync-source "Selection Theme"
+    :candidates 'helm-themes--candidates
+    :action 'helm-themes--load-theme
+    :persistent-action 'helm-themes--load-theme))
 
 ;;;###autoload
 (defun helm-themes ()

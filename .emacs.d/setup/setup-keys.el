@@ -236,7 +236,6 @@
 (define-key my-keys-minor-mode-map (kbd "<f12>") 'helm-buffers-list)
 (define-key my-keys-minor-mode-map (kbd "C-0") 'helm-buffers-list)
 (define-key my-keys-minor-mode-map (kbd "<f5>") 'recompile)
-(define-key my-keys-minor-mode-map (kbd "C-*") 'helm-swoop)
 (define-key my-keys-minor-mode-map [(control p)] 'scroll-down)
 (define-key my-keys-minor-mode-map [(control n)] 'scroll-up)
 (define-key my-keys-minor-mode-map [(control b)] 'psw-switch-buffer)

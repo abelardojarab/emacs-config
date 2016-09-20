@@ -30,7 +30,8 @@ Features
 #. Highlight (definition) tag at point.
 #. Abbreviated display of file names.
 #. Support all Global search backends: ``grep``, ``idutils`` etc.
-#. Support `exuberant ctags <http://ctags.sourceforge.net/>`_ backend.
+#. Support `exuberant ctags <http://ctags.sourceforge.net/>`_ and
+   ``pygments`` backend.
 #. Support all Global's output formats: ``grep``, ``ctags-x``,
    ``cscope`` etc.
 #. Support projects on remote hosts (e.g. via ``tramp``).
@@ -313,6 +314,14 @@ Integration with other packages
 NEWS
 ~~~~
 
+(devel) 0.8.12
+++++++++++++++
+
+#. ``ggtags-navigation-mode`` is more discreet in displaying lighter
+   when ``ggtags-enable-navigation-keys`` is set to nil.
+#. ``ggtags-make-project`` tries harder to find TAG files respecting
+   ``GTAGSDBPATH``.
+
 [2015-12-15 Tue] 0.8.11
 +++++++++++++++++++++++
 
@@ -378,7 +387,7 @@ NEWS
 [2014-04-12 Sat] 0.8.3
 ++++++++++++++++++++++
 
-#. Tweak mode-line ligter in ``ggtags-navigation-mode``.
+#. Tweak mode-line lighter in ``ggtags-navigation-mode``.
 
 [2014-04-05 Sat] 0.8.2
 ++++++++++++++++++++++
