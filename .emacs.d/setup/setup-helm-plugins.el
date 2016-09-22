@@ -53,7 +53,7 @@
             ;; Fallback to ack if the silver searcher is not found
             (unless (or (executable-find "ag")
                         (executable-find "pt"))
-              (setq helm-ag-base-command "ack --nocolor --nogroup"))))
+              (setq helm-ag-base-command "awk --nocolor --nogroup"))))
 
 ;; Helm describe modes
 (use-package helm-describe-modes
