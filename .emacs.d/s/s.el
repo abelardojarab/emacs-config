@@ -70,13 +70,13 @@ See also `s-split'."
         (setq op (goto-char (point-min)))
         (while (and (re-search-forward separator nil t)
                     (< 0 n))
-          (let ((sub (buffer-substring-no-properties op (match-beginning 0))))
+          (let ((sub (buffer-substring op (match-beginning 0))))
             (unless (and omit-nulls
                          (equal sub ""))
               (push sub r)))
           (setq op (goto-char (match-end 0)))
           (setq n (1- n)))
-        (let ((sub (buffer-substring-no-properties op (point-max))))
+        (let ((sub (buffer-substring op (point-max))))
           (unless (and omit-nulls
                        (equal sub ""))
             (push sub r))))
@@ -184,7 +184,7 @@ See also `s-split'."
     (insert s)
     (let ((fill-column len))
       (fill-region (point-min) (point-max)))
-    (buffer-substring-no-properties (point-min) (point-max))))
+    (buffer-substring (point-min) (point-max))))
 
 (defun s-center (len s)
   "If S is shorter than LEN, pad it with spaces so it is centered."
@@ -292,6 +292,10 @@ This is a simple wrapper around the built-in `string-match-p'."
   "Is S nil or the empty string?"
   (or (null s) (string= "" s)))
 
+(defun s-blank-str? (s)
+  "Is S nil or the empty string or string only contains whitespace?"
+  (or (s-blank? s) (s-blank? (s-trim s))))
+
 (defun s-present? (s)
   "Is S anything but nil or the empty string?"
   (not (s-blank? s)))
@@ -333,13 +337,13 @@ This is a simple wrapper around the built-in `string-match-p'."
   (replace-regexp-in-string (regexp-quote old) new s t t))
 
 (defun s--aget (alist key)
-  (cdr (assoc key alist)))
+  (cdr (assoc-string key alist)))
 
 (defun s-replace-all (replacements s)
   "REPLACEMENTS is a list of cons-cells. Each `car` is replaced with `cdr` in S."
   (replace-regexp-in-string (regexp-opt (mapcar 'car replacements))
                             (lambda (it) (s--aget replacements it))
-                            s))
+                            s t t))
 
 (defun s-downcase (s)
   "Convert S to lower case.
@@ -429,7 +433,7 @@ SUBEXP-DEPTH is 0 by default."
                 (< pos (length string)))
       (let ((m (match-end subexp-depth)))
         (push (cons (match-beginning subexp-depth) (match-end subexp-depth)) result)
-        (setq pos m)))
+        (setq pos (match-end 0))))
     (nreverse result)))
 
 (defun s-match (regexp s &optional start)
@@ -558,7 +562,7 @@ transformation."
                           (if extra
                               (funcall replacer var extra)
                             (funcall replacer var))))))
-                   (if v v (signal 's-format-resolve md)))
+                   (if v (format "%s" v) (signal 's-format-resolve md)))
                (set-match-data replacer-match-data)))) template
                ;; Need literal to make sure it works
                t t)

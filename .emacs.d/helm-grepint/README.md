@@ -22,22 +22,36 @@ The following enables the aforementioned:
 ### Key bindings within helm
 
 - RET selects an item and closes the helm session.
-- Right arrow selects the item, but does not close the helm session. This
+- Right arrow selects the item, but does not close the helm session.  This
   is similar as `helm-occur`.
 
 ### Additional features
 
-This has a second interactive function `helm-grepint-grep-root`. This runs the
-grepping inside a root directory. By default this has been defined for the
+This has a second interactive function `helm-grepint-grep-root`.  This runs the
+grepping inside a root directory.  By default this has been defined for the
 git-grep where it greps from the git root directory.
 
 ### Customization
 
 Look into the function `helm-grepint-set-default-config` to see how the default
-cases are configured. Also look into `helm-grepint-add-grep-config` for more
+cases are configured.  Also look into `helm-grepint-add-grep-config` for more
 details on what is required for a new grep to be defined.
 
 ### Changes
+
+Version 1.1.0
+
+- Fix incompatibilities with recent helm versions.
+- Add `helm-grepint-candidate-number-limit` variable to control the number
+  of candidates instead of hard-coding 500.
+- Create a new example configuration which adds the ag-presearch
+  functionality.  The example configurations are now versioned:
+  `helm-grepint-set-default-config-v1.0.0` and
+  `helm-grepint-set-default-config-v1.1.0`.
+- Change the `helm-grepint-set-default-config` function to an alias of
+  `helm-grepint-set-default-config-v1.0.0`.  Add new alias
+  `helm-grepint-set-default-config-latest` which points to
+  `helm-grepint-set-default-config-v1.1.0`.
 
 Version 1.0.0
 
@@ -46,9 +60,9 @@ Version 1.0.0
 
 Version 0.5.5
 
-- Fix swooping into multiple files within a helm session. Previously it
+- Fix swooping into multiple files within a helm session.  Previously it
   would change default-directory every swoop.
-- Add action to open the helm buffer in grep-mode. This enables the use of
+- Add action to open the helm buffer in grep-mode.  This enables the use of
   e.g. `wgrep`.
 - Add `helm-grepint-grep-ask-root` and set it as default for ag.
 
@@ -157,9 +171,21 @@ Function `helm-grepint-grep` is run in a root directory.
 
 See the usage for ARG in `helm-grepint--grep`.
 
-#### `(helm-grepint-set-default-config)`
+#### `(helm-grepint-set-default-config-v1\.0\.0)`
 
 Set the default grep configuration into ‘helm-grepint-grep-configs’ and ‘helm-grepint-grep-list’.
+
+#### `(helm-grepint-set-default-config-v1\.1\.0)`
+
+Set default grep configuration.
+
+Run ‘helm-grepint-set-default-config-v1.0.0’ and then this function.
+
+Adds configuration for running ag if file set in
+‘helm-grepint-default-config-ag-presearch-marker-file’ is found
+in a git repository before the git root.  The use case is running
+this in huge git repositories and wanting to limit the searching
+to a subdirectory.
 
 -----
 <div style="padding-top:15px;color: #d0d0d0;">

@@ -114,5 +114,22 @@
             (require 'dired-async)
             (dired-async-mode 1)))
 
+;; Unicode viewer (charmap)
+(use-package charmap
+  :commands charmap
+  :defer t
+  :load-path (lambda () (expand-file-name "charmap/" user-emacs-directory))
+  :config (setq charmap-text-scale-adjust 2))
+
+;; Calendar viewer
+(use-package calfw
+  :commands cfw:open-org-calendar
+  :after org
+  :load-path (lambda () (expand-file-name "calfw/" user-emacs-directory))
+  :defer 0.5
+  :config
+  (progn
+    (use-package calfw-org)))
+
 (provide 'setup-general)
 ;;; setup-general.el ends here

@@ -126,13 +126,12 @@ non-nil."
   :if (display-graphic-p)
   :init (set-scroll-bar-mode 'right))
 
-;; nasty hack to fix display issue
-;; (add-hook 'post-command-hook
-;;           'my/redraw-display-hack)
-
-;; (defun my/redraw-display-hack()
-;;   (interactive)
-;;   (redraw-display))
+;; Showkey as typed
+(use-package showkey
+  :if (display-graphic-p)
+  :defer t
+  :load-path (lambda () (expand-file-name "dadams/" user-emacs-directory))
+  :commands (showkey-tooltip-mode showkey-log-mode))
 
 (provide 'setup-appearance)
 ;;; setup-appearance.el ends here

@@ -32,7 +32,8 @@
   (defexamples s-word-wrap
     (s-word-wrap 10 "This is too long") => "This is\ntoo long"
     (s-word-wrap 10 "This is way way too long") => "This is\nway way\ntoo long"
-    (s-word-wrap 10 "It-wraps-words-but-does-not-break-them") => "It-wraps-words-but-does-not-break-them")
+    (s-word-wrap 10 "It-wraps-words-but-does-not-break-them") => "It-wraps-words-but-does-not-break-them"
+    (s-word-wrap 100 (propertize "foo bar" 'face 'font-lock-keyword-face)) => (propertize "foo bar" 'face 'font-lock-keyword-face))
 
   (defexamples s-center
     (s-center 5 "a") => "  a  "
@@ -109,12 +110,7 @@
     (s-prepend "abc" "def") => "abcdef")
 
   (defexamples s-append
-    (s-append "abc" "def") => "defabc")
-
-  (defexamples s-wrap
-    (s-wrap "[" "]" "foobar") => "[foobar]"
-    (s-wrap "(" "" "foobar") => "(foobar"
-    (s-wrap "" ")" "foobar") => "foobar)"))
+    (s-append "abc" "def") => "defabc"))
 
 (def-example-group "To and from lists"
   (defexamples s-lines
@@ -144,7 +140,9 @@
     (s-matched-positions-all "{{\\(.+?\\)}}" "{{Hello}} World, {{Emacs}}!" 0) => '((0 . 9) (17 . 26))
     (s-matched-positions-all "{{\\(.+?\\)}}" "{{Hello}} World, {{Emacs}}!" 1) => '((2 . 7) (19 . 24))
     (s-matched-positions-all "l"           "{{Hello}} World, {{Emacs}}!" 0) => '((4 . 5) (5 . 6) (13 . 14))
-    (s-matched-positions-all "abc"         "{{Hello}} World, {{Emacs}}!") => nil)
+    (s-matched-positions-all "abc"         "{{Hello}} World, {{Emacs}}!") => nil
+    (s-matched-positions-all "=\\(.+?\\)=" "=Hello= World, =Emacs=!" 0) => '((0 . 7) (15 . 22))
+    (s-matched-positions-all "=\\(.+?\\)=" "=Hello= World, =Emacs=!" 1) => '((1 . 6) (16 . 21)))
 
   (defexamples s-slice-at
     (s-slice-at "-" "abc") => '("abc")
@@ -174,7 +172,8 @@
     (s-split-up-to "|" "foo||bar|baz|qux" 10 t) => '("foo" "bar" "baz" "qux")
     (s-split-up-to "|" "foo|bar|baz|" 2) => '("foo" "bar" "baz|")
     (s-split-up-to "|" "foo|bar|baz|" 2 t) => '("foo" "bar" "baz|")
-    (s-split-up-to "|" "foo|bar|baz|qux|" 2) => '("foo" "bar" "baz|qux|"))
+    (s-split-up-to "|" "foo|bar|baz|qux|" 2) => '("foo" "bar" "baz|qux|")
+    (s-split-up-to "|" (propertize "foo" 'face 'font-lock-keyword-face) 1) => (list (propertize "foo" 'face 'font-lock-keyword-face)))
 
   (defexamples s-join
     (s-join "+" '("abc" "def" "ghi")) => "abc+def+ghi"
@@ -309,7 +308,7 @@
     (s-presence "foo") => "foo")
 
   (defexamples s-format
-     ;; One with an alist works
+    ;; One with an alist works
     (s-format
      "help ${name}! I'm ${malady}"
      'aget
@@ -330,6 +329,26 @@
      'gethash
      #s(hash-table test equal data ("name" "nic" "malady" "on fire")))
     => "help nic! I'm on fire"
+
+    ;; Don't have to be string
+    (let ((me (make-hash-table :test #'equal)))
+      (puthash "name" "Nick" me)
+      (puthash "sex" 'male me)
+      (puthash "age" 2 me)
+      (s-format "I'm ${name}, ${sex}, ${age} years old"
+                'gethash
+                me))
+    => "I'm Nick, male, 2 years old"
+
+    (s-format "I'm ${name}, ${sex}, ${age} years old"
+              'aget
+              '((name . "Nick") (sex . male) (age . 2)))
+    => "I'm Nick, male, 2 years old"
+
+    (s-format "I'm $0, $1, $2 years old"
+              'elt
+              '("Nick" male  2))
+    => "I'm Nick, male, 2 years old"
 
     ;; Replacing case has no effect on s-format
     (let ((case-replace t))
@@ -430,4 +449,13 @@
     (s-word-initials "some words") => "sw"
     (s-word-initials "under_scored_words") => "usw"
     (s-word-initials "camelCasedWords") => "cCW"
-    (s-word-initials "dashed-words") => "dw"))
+    (s-word-initials "dashed-words") => "dw")
+
+  (defexamples s-blank-str?
+    (s-blank-str? "  \t \r\s  ") => t
+    (s-blank-str? "    ") => t
+    (s-blank-str? "\t\r") => t
+    (s-blank-str? "\t") => t
+    (s-blank-str? "t") => nil
+    (s-blank-str? "\s") => t
+    (s-blank-str? " ") => t))
