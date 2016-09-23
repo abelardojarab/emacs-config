@@ -98,6 +98,11 @@
               :map c++-mode-map
               ("C-c s" . srefactor-refactor-at-point)))
 
+;; Devhelp support
+(use-package devhelp
+  :defer t
+  :commands (devhelp-word-at-point devhelp-toggle-automatic-assistant))
+
 ;; Irony server
 (use-package irony
   :defer t
