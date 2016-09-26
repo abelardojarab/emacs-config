@@ -24,7 +24,7 @@
 
 ;;; Code:
 
-(use-package dired
+(use-package dired-x
   :bind (("C-x C-j" . dired-jump)
          :map dired-mode-map
          (("." . dired-up-directory)
@@ -35,11 +35,17 @@
   :config (progn
             (defun my/dired-mode-hook ()
               (setq-local truncate-lines t))
-            (require 'dired-x)
             (add-hook 'dired-mode-hook 'projectile-mode)
-            (setq-default dired-omit-mode t)
             (put 'dired-find-alternate-file 'disabled nil)
+
+            ;; toggle `dired-omit-mode' with C-x M-o
+            (setq dired-omit-verbose nil)
+            (setq-default dired-omit-mode t)
+            (add-hook 'dired-mode-hook #'dired-omit-mode)
             (add-to-list 'dired-omit-extensions ".DS_Store")
+            (setq dired-omit-files
+                  (concat dired-omit-files "\\|^.DS_STORE$\\|^.projectile$"))
+
             (setq ls-lisp-dirs-first t
                   dired-listing-switches "-alhF --group-directories-first"
                   dired-recursive-copies 'top

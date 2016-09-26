@@ -84,6 +84,10 @@
 (add-to-list 'load-path (expand-file-name "grandshell-theme/" user-emacs-directory))
 (add-to-list 'custom-theme-load-path (expand-file-name "grandshell-theme/" user-emacs-directory))
 
+;; Monochrome theme
+(add-to-list 'load-path (expand-file-name "sexy-monochrome-theme/" user-emacs-directory))
+(add-to-list 'custom-theme-load-path (expand-file-name "sexy-monochrome-theme/" user-emacs-directory))
+
 ;; Tomorrow theme
 (add-to-list 'load-path (expand-file-name "sanityinc-tomorrow-theme/" user-emacs-directory))
 (add-to-list 'custom-theme-load-path (expand-file-name "sanityinc-tomorrow-theme/" user-emacs-directory))
@@ -114,6 +118,7 @@
 ;; (load-theme 'spike t)
 ;; (load-theme 'dracula t)
 ;; (load-theme 'grandshell t)
+;; (load-theme 'sexy-monochrome)
 
 ;; Choose different themes depending if we are using GUI or not
 ;; Console colors are enabled if "export TERM=xterm-256color" is added into .bashrc

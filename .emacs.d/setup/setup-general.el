@@ -92,9 +92,6 @@
 
 ;; ediff
 (use-package ediff
-  :bind (:map ediff-mode-map
-              (("j" . ediff-next-difference)
-               ("k" . ediff-previous-difference)))
   :init (progn
           (defun my/setup-ediff ()
             (interactive)
