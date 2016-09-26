@@ -289,6 +289,9 @@
 ;; Setup compile
 (require 'setup-compile)
 
+;; Setup gdb integration
+(require 'setup-gdb)
+
 ;; Setup Yasnippet
 (require 'setup-yasnippet)
 

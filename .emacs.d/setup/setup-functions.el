@@ -463,18 +463,20 @@ If `xah-switch-buffer-ignore-dired' is true, also skip directory buffer.
 (defconst my/loading-char ?*)
 (defvar my/loading-string "")
 (defvar my/start-time (current-time))
+(defvar exordium-progress-bar nil)
 
 (defun update-progress-bar ()
   "Add one more step to the progress bar"
   ;; Use this for debugging, each step should take approximately the same time
   ;; (message "update-progress-bar: %s"
   ;;          (format "%.1fs" (float-time (time-subtract (current-time) my/start-time))))
-  (setq my/loading-string
-        (concat my/loading-string
-                (make-string my/loading-step-size
-                             my/loading-char)))
-  (setq mode-line-format my/loading-string)
-  (redisplay))
+  (when exordium-progress-bar
+    (setq my/loading-string
+          (concat my/loading-string
+                  (make-string my/loading-step-size
+                               my/loading-char)))
+    (setq mode-line-format my/loading-string)
+    (redisplay)))
 
 (provide 'setup-functions)
 ;;; setup-utilities.el ends here

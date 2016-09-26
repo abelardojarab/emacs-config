@@ -31,11 +31,6 @@
             ;; make sure ant's output is in a format emacs likes
             (setenv "ANT_ARGS" "-emacs")
 
-            ;; gdb should use multi-windowed like all the other debuggers out there.
-            (setq gdb-many-windows t
-                  gdb-show-main t
-                  gdb-max-frames 120)
-
             ;; Compilation
             ;; http://www.emacswiki.org/cgi-bin/wiki/ModeCompile
             (setq compilation-context-lines 1 compilation-context-lines 1

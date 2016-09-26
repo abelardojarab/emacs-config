@@ -33,16 +33,19 @@
 ;; Powerline
 (use-package powerline
   :defer t
+  :after projectile
   :load-path (lambda () (expand-file-name "powerline/" user-emacs-directory))
   :init (progn (setq powerline-default-separator 'wave)))
 
 (use-package spaceline
   :init (setq powerline-default-separator 'wave)
+  :after powerline
   :load-path (lambda () (expand-file-name "spaceline/" user-emacs-directory))
   :config (progn
             (require 'spaceline-config)
             (spaceline-spacemacs-theme)
-            (spaceline-helm-mode)))
+            (spaceline-helm-mode)
+            ))
 
 (use-package airline-themes
   :disabled t
