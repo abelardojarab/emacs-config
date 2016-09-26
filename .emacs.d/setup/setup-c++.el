@@ -131,28 +131,6 @@
             ;; Irony json projects
             (require 'irony-cdb-json)))
 
-;; rtags
-;; sudo apt-get install libclang-dev / brew install llvm --with-clang
-;; git clone --recursive https://github.com/Andersbakken/rtags.git &
-;; (LIBCLANG_LLVM_CONFIG_EXECUTABLE=path_to_llvm-config CC=gcc CXX=g++ cmake ../rtags -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_INSTALL_PREFIX=where_to_install_rtags)
-;; cmake --build ./ --target install
-(use-package rtags
-  :defer 2
-  :if (executable-find "rdm")
-  :bind (:map c++-mode-map
-              ("C-c I" . rtags-print-symbol-info)
-              ("C-c S" . rtags-find-symbol-at-point))
-  :load-path (lambda () (expand-file-name "rtags/src/" user-emacs-directory))
-  :config (progn
-            (setq rtags-use-helm t)
-            (setq rtags-autostart-diagnostics t)
-            (setq rtags-completions-enabled t)
-
-            ;; Ensure rdm is running
-            (add-hook 'c-mode-common-hook 'rtags-start-process-unless-running)
-            (add-hook 'c++-mode-common-hook 'rtags-start-process-unless-running)))
-
-
 ;; Automatically insert prototype functions from .h
 ;; when opening the corresponding .cpp file
 (use-package member-functions

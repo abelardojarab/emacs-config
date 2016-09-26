@@ -62,13 +62,18 @@
              magit-blame
              magit-mode
              magit-blame-mode
+             magit-quit-session
+             magit-status-internal
              projectile-vc
-             magit-status-internal)
+             git-visit-diffs
+             git-visit-diffs-prev
+             git-visit-diffs-next)
   :bind (:map ctl-x-map
               ("v" . magit-status)
               :map magit-mode-map
               (("C-c C-a" . magit-just-amend)
-               ("c" . magit-maybe-commit)))
+               ("c" . magit-maybe-commit)
+               ("q" . magit-quit-session)))
   :load-path (lambda () (expand-file-name "magit/lisp" user-emacs-directory))
   :init (progn
           (eval-after-load 'info
@@ -88,6 +93,27 @@
             (window-configuration-to-register :magit-fullscreen)
             ad-do-it
             (delete-other-windows))
+
+          ;; Make `magit-log' run alone in the frame, and then restore the old window
+          ;; configuration when you quit out of magit.
+          ;; from: https://github.com/philippe-grenet/exordium/blob/master/modules/init-git.el
+          (defadvice magit-log (around magit-fullscreen activate)
+            (window-configuration-to-register :magit-fullscreen)
+            ad-do-it
+            (delete-other-windows))
+
+          (defun magit-quit-session ()
+            "Restores the previous window configuration and kills the magit buffer"
+            (interactive)
+            (kill-buffer)
+            (jump-to-register :magit-fullscreen))
+
+          ;; Don't show "MRev" in the modeline
+          (when (bound-and-true-p magit-auto-revert-mode)
+            (diminish 'magit-auto-revert-mode))
+
+          ;; Turn off the horrible warning about magit auto-revert of saved buffers
+          (setq magit-last-seen-setup-instructions "1.4.0")
 
           ;; Close popup when commiting - this stops the commit window
           ;; hanging around
@@ -220,7 +246,99 @@ branch."
               (interactive "P")
               (if show-options
                   (magit-key-mode-popup-committing)
-                (magit-commit)))))
+                (magit-commit)))
+
+            ;; This extension finds all the changes ("hunks") between a working copy of a
+            ;; git repository and a reference (branch name or hashref) and presents them
+            ;; as a series of narrowed buffers.
+            ;;
+            ;; Interactive functions:
+            ;;
+            ;; git-visit-diffs (ref) : prompts for a ref, to be passed to `git diff`;
+            ;; collects the hunks and view the first hunk, if any. Operates from the
+            ;; current directory.
+            ;; git-visit-diffs-next () : view the next hunk, if any.
+            ;; git-visit-diffs-prev () : view the previous hunk, if any.
+
+            ;; Global variables and types
+
+            (defvar *git-visit-current-hunk-list*)
+            (defvar *git-visit-previous-hunk-list*)
+            (define-error 'git-error "Git error")
+
+            ;; Utility functions
+            (defun git-visit-visit-modified-region (filename line count)
+              "Visit a hunk in a narrowed buffer"
+              (find-file filename)
+              (widen)
+              (goto-line line)
+              (beginning-of-line)
+              (let ((beginning-position (line-beginning-position)))
+                (next-line count)
+                (narrow-to-region beginning-position (line-beginning-position))
+                (beginning-of-buffer)))
+
+
+            (defun git-visit-get-hunk-list (dir ref)
+              "Return a list of changes between the current working copy and a git ref"
+              ;; one triplet per change, like this: ((file1 13 8) (file1 19 63) (file2 24 12))
+              (save-excursion
+                (let (hunk-list file)
+                  (with-temp-buffer
+                    ;; (with-current-buffer (get-buffer-create "*git-visit-output*") (erase-buffer)
+                    (if (zerop (call-process "git" nil (current-buffer) t "diff" ref))
+                        (progn
+                          (beginning-of-buffer)
+                          (while (re-search-forward "\\+\\+\\+ \\(.*\\)\\|@@ -[0-9]+,[0-9]+ \\+\\([0-9]+\\),\\([0-9]+\\) @@" nil t)
+                            (if (match-string 1)
+                                (setq file
+                                      (and
+                                       (not (string-equal (match-string 1) "/dev/null"))
+                                       (concat dir (substring (match-string 1) 2))))
+                              (if file
+                                  (setq hunk-list
+                                        (cons (list file
+                                                    (string-to-number (match-string 2))
+                                                    (string-to-number (match-string 3)) )
+                                              hunk-list))) )))
+                      (signal 'git-error (buffer-substring-no-properties (buffer-end -1) (buffer-end 1)))))
+                  hunk-list)))
+
+            ;; Interactive functions
+            (defun git-visit-diffs-next ()
+              "Show next diff in narrowed buffer."
+              (interactive)
+              (if *git-visit-current-hunk-list*
+                  (let ((next-hunk (car *git-visit-current-hunk-list*)))
+                    (setq *git-visit-previous-hunk-list* (cons next-hunk *git-visit-previous-hunk-list*))
+                    (setq *git-visit-current-hunk-list* (cdr *git-visit-current-hunk-list*))
+                    (apply 'git-visit-visit-modified-region next-hunk))
+                (message "at end of hunk list")))
+
+            (defun git-visit-diffs-prev ()
+              "Show previous diff in narrowed buffer."
+              (interactive)
+              (if (and *git-visit-previous-hunk-list* (cdr *git-visit-previous-hunk-list*))
+                  (let ((next-hunk (cadr *git-visit-previous-hunk-list*)))
+                    (setq *git-visit-current-hunk-list* (cons (car *git-visit-previous-hunk-list*) *git-visit-current-hunk-list*))
+                    (setq *git-visit-previous-hunk-list* (cdr *git-visit-previous-hunk-list*))
+                    (apply 'git-visit-visit-modified-region next-hunk))
+                (message "at beginning of hunk list")))
+
+            (defun git-visit-diffs (ref)
+              "Finds the diffs between REF and working copy. Shows the first diff in a narrowed buffer."
+              (interactive "sref: ")
+              (let ((dir (ignore-errors
+                           (file-name-as-directory (car (process-lines "git" "rev-parse" "--show-toplevel"))))))
+                (if (not dir)
+                    (error (message "%s" "cannot locate repository root"))
+                  (condition-case error
+                      (progn
+                        (setq *git-visit-current-hunk-list* (git-visit-get-hunk-list dir ref))
+                        (setq *git-visit-previous-hunk-list* nil)
+                        ;; (print *git-visit-current-hunk-list* (get-buffer "*scratch*"))
+                        (git-visit-diffs-next))
+                    (git-error (message (cadr error)))))))))
 
 ;; diff-hl
 (use-package diff-hl

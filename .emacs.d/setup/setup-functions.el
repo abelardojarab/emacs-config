@@ -453,5 +453,28 @@ If `xah-switch-buffer-ignore-dired' is true, also skip directory buffer.
              (set-window-start w2 s1)
              (setq i (1+ i)))))))
 
+;; Set this constant to the number of times `update-progress-bar' is called during init
+;; Taken from: https://github.com/philippe-grenet/exordium/blob/master/modules/init-progress-bar.el
+(defconst my/loading-step-count 22)
+
+;;; Don't change any of these:
+(defconst my/loading-step-size
+  (/ (window-total-size nil 'width) my/loading-step-count))
+(defconst my/loading-char ?*)
+(defvar my/loading-string "")
+(defvar my/start-time (current-time))
+
+(defun update-progress-bar ()
+  "Add one more step to the progress bar"
+  ;; Use this for debugging, each step should take approximately the same time
+  ;; (message "update-progress-bar: %s"
+  ;;          (format "%.1fs" (float-time (time-subtract (current-time) my/start-time))))
+  (setq my/loading-string
+        (concat my/loading-string
+                (make-string my/loading-step-size
+                             my/loading-char)))
+  (setq mode-line-format my/loading-string)
+  (redisplay))
+
 (provide 'setup-functions)
 ;;; setup-utilities.el ends here
