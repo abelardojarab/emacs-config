@@ -350,13 +350,13 @@ Now it correctly stops at the beginning of the line when the pointer is at the f
   (set-selective-display (if selective-display nil 1)))
 
 ;; Xah next/previous buffer functions
-(defvar xah-switch-buffer-ignore-dired t "If t, ignore dired buffer when calling `xah-next-user-buffer' or `xah-previous-user-buffer'")
-(setq xah-switch-buffer-ignore-dired t)
+(defvar my/switch-buffer-ignore-dired t "If t, ignore dired buffer when calling `my/next-user-buffer' or `my/previous-user-buffer'")
+(setq my/switch-buffer-ignore-dired t)
 
-(defun xah-next-user-buffer ()
+(defun my/next-user-buffer ()
   "Switch to the next user buffer.
  “user buffer” is a buffer whose name does not start with “*”.
-If `xah-switch-buffer-ignore-dired' is true, also skip directory buffer.
+If `my/switch-buffer-ignore-dired' is true, also skip directory buffer.
 2015-01-05 URL `http://ergoemacs.org/emacs/elisp_next_prev_user_buffer.html'"
   (interactive)
   (next-buffer)
@@ -365,17 +365,17 @@ If `xah-switch-buffer-ignore-dired' is true, also skip directory buffer.
       (if (or
            (string-equal "*" (substring (buffer-name) 0 1))
            (if (string-equal major-mode "dired-mode")
-               xah-switch-buffer-ignore-dired
+               my/switch-buffer-ignore-dired
              nil
              ))
           (progn (next-buffer)
                  (setq i (1+ i)))
         (progn (setq i 100))))))
 
-(defun xah-previous-user-buffer ()
+(defun my/previous-user-buffer ()
   "Switch to the previous user buffer.
  “user buffer” is a buffer whose name does not start with “*”.
-If `xah-switch-buffer-ignore-dired' is true, also skip directory buffer.
+If `my/switch-buffer-ignore-dired' is true, also skip directory buffer.
 2015-01-05 URL `http://ergoemacs.org/emacs/elisp_next_prev_user_buffer.html'"
   (interactive)
   (previous-buffer)
@@ -384,7 +384,7 @@ If `xah-switch-buffer-ignore-dired' is true, also skip directory buffer.
       (if (or
            (string-equal "*" (substring (buffer-name) 0 1))
            (if (string-equal major-mode "dired-mode")
-               xah-switch-buffer-ignore-dired
+               my/switch-buffer-ignore-dired
              nil
              ))
           (progn (previous-buffer)
@@ -463,20 +463,93 @@ If `xah-switch-buffer-ignore-dired' is true, also skip directory buffer.
 (defconst my/loading-char ?*)
 (defvar my/loading-string "")
 (defvar my/start-time (current-time))
-(defvar exordium-progress-bar nil)
+(defvar my/progress-bar nil)
 
 (defun update-progress-bar ()
   "Add one more step to the progress bar"
   ;; Use this for debugging, each step should take approximately the same time
   ;; (message "update-progress-bar: %s"
   ;;          (format "%.1fs" (float-time (time-subtract (current-time) my/start-time))))
-  (when exordium-progress-bar
+  (when my/progress-bar
     (setq my/loading-string
           (concat my/loading-string
                   (make-string my/loading-step-size
                                my/loading-char)))
     (setq mode-line-format my/loading-string)
     (redisplay)))
+
+;;; Files
+(defun my/directory-tree (dir)
+  "Returns the list of subdirs of 'dir' excluding any dot
+dirs. Input is a string and output is a list of strings."
+  (let* ((dir   (directory-file-name dir))
+         (dirs  '())
+         (files (directory-files dir nil nil t)))
+    (dolist (f files)
+      (unless (string-equal "." (substring f 0 1))
+        (let ((f (concat dir "/" f)))
+          (when (file-directory-p f)
+            (setq dirs (append (cons f (my/directory-tree f))
+                               dirs))))))
+    dirs))
+
+(defun my/read-file-lines (file)
+  "Return a list of lines (strings) of the specified file"
+  (with-temp-buffer
+    (insert-file-contents file)
+    (split-string (buffer-string) "\n" t)))
+
+(defun my/read-file-as-string (file)
+  "Return the content of the specified file as a string."
+  (with-temp-buffer
+    (insert-file-contents file)
+    (buffer-string)))
+
+(defun my/parent-directory (dir)
+  "Return the path of the dir's parent directory"
+  (file-name-directory (directory-file-name dir)))
+
+;;; String manipulation functions
+
+(require 'subr-x)
+
+;; string-prefix-p has been in Emacs for years, but string-suffix-p was
+;; introduced only in Emacs 24.4.
+
+(unless (fboundp 'string-suffix-p)
+  (defun string-suffix-p (suffix string  &optional ignore-case)
+    "Return non-nil if SUFFIX is a suffix of STRING.
+If IGNORE-CASE is non-nil, the comparison is done without paying
+attention to case differences."
+    (let ((start-pos (- (length string) (length suffix))))
+      (and (>= start-pos 0)
+           (eq t (compare-strings suffix nil nil
+                                  string start-pos nil ignore-case))))))
+
+;; Other string functions introduced in Emacs 24.4:
+(unless (fboundp 'string-trim-left)
+  (defsubst string-trim-left (string)
+    "Remove leading whitespace from STRING."
+    (if (string-match "\\`[ \t\n\r]+" string)
+        (replace-match "" t t string)
+      string)))
+
+(unless (fboundp 'string-trim-right)
+  (defsubst string-trim-right (string)
+    "Remove trailing whitespace from STRING."
+    (if (string-match "[ \t\n\r]+\\'" string)
+        (replace-match "" t t string)
+      string)))
+
+(unless (fboundp 'string-trim)
+  (defsubst string-trim (string)
+    "Remove leading and trailing whitespace from STRING."
+    (string-trim-left (string-trim-right string))))
+
+(unless (fboundp 'string-truncate)
+  (defun string-truncate (string n)
+    "Return STRING minus the last N characters."
+    (substring string 0 (max 0(- (length string) n)))))
 
 (provide 'setup-functions)
 ;;; setup-utilities.el ends here

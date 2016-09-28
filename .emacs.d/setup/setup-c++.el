@@ -38,7 +38,7 @@
               (c-set-style "bsd")
               (c-set-offset 'substatement-open 0)
               (c-toggle-electric-state -1)
-              (setq c-default-style "bsd")
+              (setq-default c-default-style "bsd")
               (setq c-basic-offset 4)
               (setq c-indent-level 4)
               (setq-default tab-width 4)

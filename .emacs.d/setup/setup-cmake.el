@@ -40,6 +40,197 @@
             (setq rtags-use-helm t)
             (setq rtags-autostart-diagnostics t)
             (setq rtags-completions-enabled t)
+            (setq my/rtags-cmake-build-dir "cmake_build_dir/")
+
+            ;; Start rdm as a subprocess, with output in a buffer
+            (defun my/rtags-start-rdm-maybe ()
+              "Start rdm if not already running. Return t if started and nil
+otherwise."
+              (unless (my/rtags-rdm-running-p)
+                (my/rtags-start-rdm-impl nil)
+                t))
+
+            (defun my/rtags-rdm-running-p ()
+              "Predicate testing if rdm is running"
+              (let ((process (get-process "rdm")))
+                (or
+                 ;; Rdm runs in a process started from Emacs
+                 (and (processp process)
+                      (not (eq (process-status process) 'exit))
+                      (not (eq (process-status process) 'signal)))
+                 ;; User has started rdm outside of Emacs
+                 ;; Note: sadly this does not work on macOS
+                 (let ((uuid (user-uid)))
+                   (dolist (pid (reverse (list-system-processes)))
+                     (let* ((attrs (process-attributes pid))
+                            (pname (cdr (assoc 'comm attrs)))
+                            (puid  (cdr (assoc 'euid attrs))))
+                       (when (and (eq puid uuid)
+                                  (string= pname "rdm"))
+                         (return t))))))))
+
+            (defun my/rtags-start-rdm-impl (&optional open-buffer)
+              "Start rdm in a subprocess. Open the rdm log buffer if
+open-buffer is true."
+              (let ((buffer (get-buffer-create "*RTags rdm*")))
+                (when open-buffer
+                  (switch-to-buffer buffer))
+                (with-current-buffer buffer
+                  (rtags-rdm-mode)
+                  (read-only-mode))
+                (let ((process (if my/rtags-rdm-args
+                                   (start-process "rdm" buffer "rdm" my/rtags-rdm-args)
+                                 (start-process "rdm" buffer "rdm"))))
+                  (message "Started rdm - PID %d" (process-id process)))))
+
+            (defun rtags-start ()
+              "Start the rdm deamon in a subprocess and display output in a
+buffer. Also start the RTag diagostics mode."
+              (interactive)
+              (setq rtags-autostart-diagnostics t)
+              (my/rtags-start-rdm-impl t))
+
+            (defun rtags-stop ()
+              "Stop both RTags diagnostics and rdm, if they are running."
+              (interactive)
+              ;; Stop RTags Diagnostics and kill its buffer without prompt
+              (when (and rtags-diagnostics-process
+                         (not (eq (process-status rtags-diagnostics-process) 'exit)))
+                (kill-process rtags-diagnostics-process))
+              (when (get-buffer "*RTags Diagnostics*")
+                (let ((kill-buffer-query-functions nil))
+                  (kill-buffer "*RTags Diagnostics*")))
+              ;; Stop rdm and kill its buffer without prompt
+              (rtags-quit-rdm)
+              (when (get-buffer "*RTags rdm*")
+                (let ((kill-buffer-query-functions nil))
+                  (kill-buffer "*RTags rdm*"))))
+
+            (defun rtags-show-rdm-buffer ()
+              "Show/hide the rdm log buffer"
+              (interactive)
+              (let* ((buffer-name "*RTags rdm*")
+                     (buffer (get-buffer buffer-name))
+                     (window (and buffer (get-buffer-window buffer))))
+                (cond (window
+                       (bury-buffer buffer)
+                       (delete-window window))
+                      (buffer
+                       (display-buffer buffer))
+                      (t
+                       (message "rtags rdm is not running (use M-x rtags-start)")))))
+
+;;; Mode for rdm log output
+;;; See http://ergoemacs.org/emacs/elisp_syntax_coloring.html
+
+            (defsubst rtags-rdm-record-search-forward (&optional regexp bound)
+              "Search forward from point for a log line matching REGEXP.
+Set point to the end of the occurrence found, and return point.
+An optional second argument BOUND bounds the search: the match
+found must not extend after that position. This function also
+sets `match-data' to the entire match."
+              (let ((org-pos (point)))
+                (block while-loop
+                  ;; While there are more matches for REGEXP
+                  (while (re-search-forward regexp bound t)
+                    (if (re-search-backward "^" org-pos t)
+                        (let ((begin-pos (point)))
+                          ;; If we found a matching log line, set match data and return
+                          (if (re-search-forward "$" bound t)
+                              (progn
+                                (set-match-data (list begin-pos (point)))
+                                (return-from while-loop (point)))
+                            (return-from while-loop))))))))
+
+            (defun rtags-rdm-match-record-error (bound)
+              "Search forward from point to BOUND for error."
+              (rtags-rdm-record-search-forward "\\(error:\\)" bound))
+
+            (defun rtags-rdm-match-record-warning (bound)
+              "Search forward from point to BOUND for warning."
+              (rtags-rdm-record-search-forward "\\(warning:\\)" bound))
+
+            (defun rtags-rdm-match-record-note (bound)
+              "Search forward from point to BOUND for note."
+              (rtags-rdm-record-search-forward "\\(note:\\)" bound))
+
+            (defun rtags-rdm-match-record-done (bound)
+              "Search forward from point to BOUND for Jobs."
+              (rtags-rdm-record-search-forward "\\(Jobs\\)" bound))
+
+            (defconst rtags-rdm-mode-keywords
+              (list '(rtags-rdm-match-record-error 0 'compilation-error)
+                    '(rtags-rdm-match-record-warning 0 'compilation-warning)
+                    '(rtags-rdm-match-record-note 0 'compilation-info)
+                    '(rtags-rdm-match-record-done 0 'underline))
+              "Describes how to syntax highlight keywords in rtags-rdm-mode.")
+
+            (defconst rtags-rdm-mode-syntax-table
+              ;; Defines a "comment" as anything that starts with a square bracket, e.g.
+              ;; [100%] /path/to/file.cpp in 437ms. (1259 syms, etc) (dirty)
+              (let ((synTable (make-syntax-table)))
+                (modify-syntax-entry ?\[ "< b" synTable)
+                (modify-syntax-entry ?\n "> b" synTable)
+                synTable))
+
+            (define-derived-mode rtags-rdm-mode fundamental-mode
+              "rdm-log"
+              "Mode for viewing rdm logs"
+              :syntax-table rtags-rdm-mode-syntax-table
+              ;; Syntax highlighting:
+              (setq font-lock-defaults '(rtags-rdm-mode-keywords t t)))
+
+            
+;;; Using the diagnostics buffer
+
+            (defun rtags-show-diagnostics-buffer ()
+              "Show/hide the diagnostics buffer in a dedicated
+window (similar to `rtags-diagnostics' but without reparsing)."
+              (interactive)
+              (if (rtags-has-diagnostics)
+                  (let* ((buffer-name "*RTags Diagnostics*")
+                         (buffer (get-buffer buffer-name))
+                         (window (get-buffer-window buffer)))
+                    (cond (window
+                           (bury-buffer buffer)
+                           (delete-window window))
+                          (buffer
+                           (display-buffer buffer-name)
+                           (other-window 1)
+                           (goto-char (point-min))
+                           (fit-window-to-buffer (get-buffer-window (current-buffer)) 10 2)
+                           (set-window-dedicated-p (get-buffer-window (current-buffer)) t)
+                           (other-window -1))))
+                (message "rtags diagnostics is not running.")))
+
+            (define-key c-mode-base-map [(control c)(r)(d)] 'rtags-show-diagnostics-buffer)
+
+            ;; Used in powerline:
+            (defun rtags-diagnostics-has-errors ()
+              "Return t or nil depending if RTags diagnostics displays errors"
+              (let ((diag-buff (get-buffer "*RTags Diagnostics*")))
+                (if (and diag-buff
+                         rtags-diagnostics-process
+                         (not (eq (process-status rtags-diagnostics-process) 'exit))
+                         (not (eq (process-status rtags-diagnostics-process) 'signal)))
+                    (> (buffer-size diag-buff) 0)
+                  nil)))
+
+            ;; AC source for #include
+            ;; The following function fixes a bug in achead:documentation-for-candidate
+            (defun my-documentation-for-candidate (candidate)
+              "Generate documentation for a candidate `candidate'. For now,
+just returns the path and content of the header file which
+`candidate' specifies."
+              (let ((path
+                     (assoc-default candidate achead:ac-latest-results-alist 'string=)))
+                (ignore-errors
+                  (with-temp-buffer
+                    (insert path)
+                    (unless (file-directory-p path)
+                      (insert "\n--------------------------\n")
+                      (insert-file-contents path nil 0 200)) ;; first 200 content bytes
+                    (buffer-string)))))
 
             ;; Ensure rdm is running
             (add-hook 'c-mode-common-hook 'rtags-start-process-unless-running)
@@ -74,7 +265,7 @@
               "Minor mode for using RTags with zero-configuration, for CMake
 enabled projects."
               :lighter "Cm"
-              :global  nil ; buffer local
+              :global  nil ;; buffer local
               (when rtags-cmake-mode
                 ;; This is a workaround for C/C++ mode hooks being called twice:
                 ;; http://debbugs.gnu.org/cgi/bugreport.cgi?bug=16759
@@ -128,8 +319,7 @@ is-cmake is for recursion."
                      (my/rtags-cmake-find-project-root-impl (my/parent-directory dir)
                                                             is-cmake))))
 
-;;; Index the project
-
+            ;; Index the project
             (defun my/rtags-cmake-index-project-maybe (project-dir)
               "Index the project at project-dir unless we have done that before."
               (unless (assoc project-dir my/rtags-cmake-mode-known-projects)
@@ -137,7 +327,7 @@ is-cmake is for recursion."
                 (let ((build-dir (my/rtags-cmake-get-build-dir project-dir)))
                   (if (not (file-exists-p (concat (file-name-as-directory build-dir)
                                                   "compile_commands.json")))
-                      (message "Rtags can't find compilation DB in: %s" build-dir)
+                      (message "rtags can't find compilation DB in: %s" build-dir)
                     ;; Tell rdm to index the compilation DB and add this project to the
                     ;; list of projects that have been indexed already
                     (my/rtags-cmake-index-project-impl build-dir)
@@ -166,13 +356,13 @@ directory."
                           (or (my/rtags-cmake-get-key-from-file rtags-file "build") "")
                         (my/rtags-cmake-get-expanded-build-dir))))
                 (if (string-prefix-p "/" build-dir)
-                    build-dir ; already an absolute path
+                    build-dir ;; already an absolute path
                   (concat project-dir build-dir))))
 
             (defun my/rtags-cmake-get-key-from-file (file key)
               "Read the specified file and return the value associated with
 the specified key, or nil if no such key."
-              (let* ((records          (my/read-file-lines file))
+              (let* ((records (my/read-file-lines file))
                      (matching-records (remove-if-not #'(lambda (record)
                                                           (string-prefix-p key record))
                                                       records)))
@@ -269,7 +459,7 @@ a list of five sublists:
                     (exclude-list     ())
                     (exclude-src-list ())
                     (macro-list       ()))
-                (dolist (record (exordium-read-file-lines compile-includes-file))
+                (dolist (record (my/read-file-lines compile-includes-file))
                   (incf line-number)
                   (setq value (second (split-string record " ")))
                   (cond ((or (eq "" record)
@@ -314,7 +504,7 @@ the list of excluded regexs"
 excluding any that match any regex in the specified excluded
 regex list."
               (let ((result ()))
-                (dolist (subdir (cons dir (exordium-directory-tree dir)))
+                (dolist (subdir (cons dir (my/directory-tree dir)))
                   (when (and (rtags-directory-contains-sources-p subdir)
                              (not (rtags-is-excluded-p subdir excluded-regexs)))
                     (setq result (cons subdir result))))
@@ -347,14 +537,14 @@ could not be loaded. The property list looks like this:
                                  (setq path (expand-file-name path
                                                               (or rtags-compile-includes-base-dir
                                                                   dir))))
-                               (message "Scanning source dir: %s ..." path)
+                               (message "rtags is scanning source dir: %s ..." path)
                                (setq dirs (nconc dirs (rtags-scan-subdirectories path excl-regexs))))
                              (setq result (list :src-dirs dirs)))
                            ;; Same with includes
                            (let (dirs)
                              (dolist (path incl-dirs)
                                (setq path (expand-file-name path rtags-compile-includes-base-dir))
-                               (message "Scanning include dir: %s ..." path)
+                               (message "rtags is scanning include dir: %s ..." path)
                                (setq dirs (nconc dirs (rtags-scan-subdirectories path excl-regexs))))
                              (setq result (nconc result (list :include-dirs dirs))))
                            ;; Add exclude-src and macros into the result
@@ -411,9 +601,9 @@ the specified directory."
                       (newline)
                       ;; Note: dynamic binding of variable default-directory
                       (dolist (default-directory (plist-get plist :src-dirs))
-                        (message "Processing directory: %s ..." default-directory)
+                        (message "rtags is processing directory: %s ..." default-directory)
                         (let ((files (mapcan #'file-expand-wildcards
-                                             exordium-rtags-source-file-extensions))
+                                             my/rtags-source-file-extensions))
                               ;; rdm does not like directories starting with "~/"
                               (dirname (if (string-prefix-p "~/" default-directory)
                                            (substitute-in-file-name
@@ -463,9 +653,7 @@ the specified directory."
               (setq font-lock-defaults '((rtags-compile-includes-mode-keywords))))
 
             (add-to-list 'auto-mode-alist
-                         '("compile_includes" . rtags-compile-includes-mode))
-
-            ))
+                         '("compile_includes" . rtags-compile-includes-mode))))
 
 ;; cmake syntax highlighting
 (use-package cmake-mode
