@@ -180,7 +180,8 @@ export ALDEC_LICENSE_FILE=$HOME/flexlm/aldec.dat
 export LM_LICENSE_FILE=$LM_LICENSE_FILE:$HOME/flexlm/matlab.dat
 export PATH=/opt/PyCharm/4.0.6/bin:/opt/IBM/SPSS/Statistics/22/bin:$PYTHONPATH/bin:$PATH:$HOME/workspace/frametools/bin
 
-# Include this in your bashrc to use.
+# Set up general GTAGS location
+export GTAGSLIBPATH=$HOME/.gtags/
 
 # Regular Colors
 Black="\[\033[0;30m\]"        # Black

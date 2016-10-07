@@ -37,6 +37,7 @@
             (setq large-file-warning-threshold (* 50 1024 1024)) ; 50MB
             (setq tags-revert-without-query t)
             (setq tags-always-build-completion-table t)
+            (setenv "GTAGSLIBPATH" (expand-file-name "~/.gtags"))
             (if (file-exists-p (expand-file-name "~/.emacs.cache/TAGS"))
                 (visit-tags-table (expand-file-name "~/.emacs.cache/TAGS"))
               (with-temp-buffer (write-file (expand-file-name "~/.emacs.cache/TAGS"))))
