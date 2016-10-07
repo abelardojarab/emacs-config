@@ -84,9 +84,10 @@
                     (ess-R-fl-keyword:%op% . t)))
 
             ;; Enable auto-complete
-            (add-hook 'R-mode-hook  '(lambda ()
-                                       (auto-complete-mode)
-                                       (setq ess-use-auto-complete t)))
+            (when (featurep 'auto-complete)
+              (add-hook 'R-mode-hook  '(lambda ()
+                                         (auto-complete-mode)
+                                         (setq ess-use-auto-complete t))))
 
             ;; config
             (setq ess-indent-level 2)

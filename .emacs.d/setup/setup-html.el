@@ -34,13 +34,18 @@
                   web-mode-script-padding 2
                   web-mode-markup-indent-offset 2
                   web-mode-code-indent-offset 2
-                  web-mode-enable-current-element-highlight t
-                  web-mode-ac-sources-alist
-                  '(("css" . (ac-source-css-property))
-                    ("html" . (ac-source-words-in-buffer ac-source-abbrev))))
+                  web-mode-enable-current-element-highlight t)
+
+            ;; When using auto-complete
+            (if (featurep 'auto-complete)
+                (setq web-mode-ac-sources-alist
+                      '(("css" . (ac-source-css-property))
+                        ("html" . (ac-source-words-in-buffer ac-source-abbrev)))))
+
             (add-hook 'web-mode-hook 'autopair-mode)))
 
 (use-package ac-html
+  :after auto-complete
   :load-path (lambda () (expand-file-name "ac-html/" user-emacs-directory))
   :config (progn
             (defun setup-ac-for-html ()

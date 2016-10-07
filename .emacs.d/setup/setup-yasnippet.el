@@ -31,7 +31,7 @@
   :config (progn
             (if (file-exists-p "~/.emacs.d/snippets")
                 (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
-                (setq yas-snippet-dirs '()))
+              (setq yas-snippet-dirs '()))
             (setq yas-snippet-dirs (cons (expand-file-name "snippets" user-emacs-directory)
                                          (yas-snippet-dirs)))
             (setq yas-snippet-dirs (cons (expand-file-name "snippets-extra" user-emacs-directory)
@@ -79,15 +79,16 @@
                         (define-key yas-keymap [tab] 'yas-next-field)))
 
             ;; Auto-complete enhancement
-            (defun yas/set-ac-modes ()
-              "Add modes in `yas-snippet-dirs' to `ac-modes'. Call (yas/set-ac-modes) BEFORE (global-auto-complete-mode 1) or (ac-config-default)."
-              (eval-after-load "auto-complete"
-                '(setq ac-modes
-                       (append
-                        (apply 'append (mapcar (lambda (dir) (mapcar 'intern (directory-files dir nil "-mode$")))
-                                               (yas-snippet-dirs)))
-                        ac-modes))))
-            (yas/set-ac-modes)
+            (when (featurep 'auto-complete)
+              (defun yas/set-ac-modes ()
+                "Add modes in `yas-snippet-dirs' to `ac-modes'. Call (yas/set-ac-modes) BEFORE (global-auto-complete-mode 1) or (ac-config-default)."
+                (eval-after-load "auto-complete"
+                  '(setq ac-modes
+                         (append
+                          (apply 'append (mapcar (lambda (dir) (mapcar 'intern (directory-files dir nil "-mode$")))
+                                                 (yas-snippet-dirs)))
+                          ac-modes))))
+              (yas/set-ac-modes))
 
             ;; Visual indication that available snippet exists
             (setq default-cursor-color "gray")

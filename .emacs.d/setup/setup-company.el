@@ -22,21 +22,26 @@
 ;;
 
 ;;; Code:
-
 (use-package company
-  :disabled t
   :defer 2
   :diminish company-mode
   :load-path (lambda () (expand-file-name "company-mode/" user-emacs-directory))
   :config (progn
+            ;; (add-hook 'prog-mode-hook 'company-mode)
+            (global-company-mode)
+
+            ;; Use Company for completion
+            (bind-key [remap completion-at-point] #'company-complete company-mode-map)
             (setq company-backends '(company-yasnippet
                                      company-semantic
-                                     company-dabbrev))
+                                     company-dabbrev
+                                     company-gtags))
             (add-to-list 'company-backends 'company-dabbrev-code)
 
             (setq company-idle-delay 0.1
                   company-minimum-prefix-length 2
                   company-show-numbers t
+                  company-tooltip-align-annotations t
                   company-dabbrev-downcase nil
                   company-dabbrev-ignore-case t)
 
@@ -45,6 +50,11 @@
             (define-key company-active-map (kbd "TAB") 'company-complete-selection)
             (define-key company-active-map (kbd "<tab>") 'company-complete-selection)
             (define-key company-active-map (kbd "RET") 'company-complete-selection)))
+
+;; Documentation popups for Company
+(use-package company-quickhelp
+  :load-path (lambda () (expand-file-name "company-quickhelp/" user-emacs-directory))
+  :config (add-hook 'global-company-mode-hook #'company-quickhelp-mode))
 
 (provide 'setup-company)
 ;;; setup-company.el ends here

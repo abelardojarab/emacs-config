@@ -36,7 +36,10 @@
 
             ;; Python configuration
             (add-hook 'python-mode-hook 'autopair-mode)
-            (add-hook 'python-mode-hook 'auto-complete-mode)
+
+            ;; When using auto-complete
+            (if (featurep 'auto-complete)
+                (add-hook 'python-mode-hook 'auto-complete-mode))
 
             ;; Python hook
             (add-hook 'python-mode-hook

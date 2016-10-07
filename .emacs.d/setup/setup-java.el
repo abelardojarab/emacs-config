@@ -25,10 +25,11 @@
 ;;; Code:
 
 (use-package ajc-java-complete-config
+  :after auto-complete
   :load-path (lambda () (expand-file-name "ajc-java-complete/" user-emacs-directory))
   :config (progn
-			(add-hook 'java-mode-hook 'ajc-java-complete-mode)
-			(setq ajc-tag-file-list (list (expand-file-name "ajc-java-complete/java_base.tag" user-emacs-directory)))))
+            (add-hook 'java-mode-hook 'ajc-java-complete-mode)
+            (setq ajc-tag-file-list (list (expand-file-name "ajc-java-complete/java_base.tag" user-emacs-directory)))))
 
 (provide 'setup-java)
 ;;; setup-java.el ends here

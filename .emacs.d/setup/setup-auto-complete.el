@@ -153,25 +153,6 @@
  /usr/include
  /usr/include/c++")))))
 
-;; C-headers
-(use-package auto-complete-c-headers
-  :disabled t
-  :load-path (lambda () (expand-file-name "auto-complete-c-headers/" user-emacs-directory))
-  :config (progn
-            (defun my/ac-c-headers-setup ()
-              (add-to-list 'ac-sources 'ac-source-c-headers))
-            (add-hook 'c-mode-common-hook 'my/ac-c-headers-setup)))
-
-;; Additional C-headers
-(use-package ac-c-headers
-  :disabled t
-  :load-path (lambda () (expand-file-name "ac-c-headers/" user-emacs-directory))
-  :config (progn
-            (defun my/ac-c-headers-setup ()
-              (add-to-list 'ac-sources 'ac-source-c-headers)
-              (add-to-list 'ac-sources 'ac-source-c-header-symbols t))
-            (add-hook 'c-mode-common-hook 'my/ac-c-headers-setup)))
-
 ;; Irony auto-complete
 (use-package ac-irony
   :if (file-exists-p "~/.emacs.cache/irony-server/bin/irony-server")

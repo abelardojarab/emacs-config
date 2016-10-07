@@ -25,7 +25,8 @@
 ;;; Code:
 
 ;; Enable Lisp auto-complete
-(add-to-list 'ac-modes 'lisp-mode)
+(if (featurep 'auto-complete)
+  (add-to-list 'ac-modes 'lisp-mode))
 
 ;; imenu support
 (add-hook 'lisp-mode-hook

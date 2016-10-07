@@ -62,8 +62,10 @@
   :load-path (lambda () (expand-file-name "tern/emacs/" user-emacs-directory))
   :init (add-hook 'js2-mode-hook 'tern-mode)
   :config (progn
-     (require 'tern-auto-complete)
-     (tern-ac-setup)))
+            ;; When using auto-complete
+            (when (featurep 'auto-complete)
+              (require 'tern-auto-complete)
+              (tern-ac-setup))))
 
 ;; skewer mode
 (use-package skewer-mode

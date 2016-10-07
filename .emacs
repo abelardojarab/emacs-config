@@ -301,7 +301,10 @@
 (require 'setup-auto-insert)
 
 ;; Setup Auto-Complete
-(require 'setup-auto-complete)
+;; (require 'setup-auto-complete)
+
+;; Setup Company
+(require 'setup-company)
 
 ;; Setup bookmarks
 (require 'setup-bookmarks)
