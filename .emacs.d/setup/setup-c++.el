@@ -109,7 +109,7 @@
   :commands (irony-mode irony-install-server)
   :if (executable-find "clang")
   :load-path (lambda () (expand-file-name "irony-mode/" user-emacs-directory))
-  :after (ggtags eldoc function-args)
+  :after (ggtags eldoc function-args company)
   :init (progn
           (when (or (file-exists-p "~/.emacs.cache/irony-server/bin/irony-server")
                     (file-exists-p "/usr/local/bin/irony-server")
@@ -129,7 +129,10 @@
             (setq irony-user-dir "~/.emacs.cache/irony-user-dir/")
 
             ;; Irony json projects
-            (require 'irony-cdb-json)))
+            (require 'irony-cdb-json)
+
+            ;; Hooks
+            (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)))
 
 ;; Automatically insert prototype functions from .h
 ;; when opening the corresponding .cpp file
