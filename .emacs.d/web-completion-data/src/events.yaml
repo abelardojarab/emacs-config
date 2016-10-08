@@ -1,0 +1,444 @@
+# Attribute events
+#
+# Note: only attributes with doc (that have 'd' property) are generated.
+
+types:
+  media: &MEDIATAGS
+    - audio
+    - embed
+    - img
+    - object
+    - video
+
+attributes:
+
+  # body only:
+  
+  - onafterprint:
+      t: [ body ]
+      d: |
+        onafterprint [HTML5]
+        
+        Function to call after the user has printed the document.
+
+  - onbeforeprint:
+      t: [ body ]
+      d: |
+        onbeforeprint [HTML5]
+        
+        Function to call when the user requests printing of the document.
+
+  - onbeforeunload:
+      t: [ body ]
+      d: |
+        onbeforeunload [HTML5]
+        
+        Function to call when the document is about to be unloaded.
+
+  - onerror:
+      t: [ body ]
+      d: |
+        onerror [HTML5]
+        
+        Function to call when the document fails to load properly.
+
+  - onhashchange:
+      t: [ body ]
+      d: "onhashchange [HTML5]\n\nFunction to call when the fragment identifier part (starting with the hash ('#') character) of the document's current address has changed."
+
+  - onlanguagechange:
+      t: [ body ]
+      d: |
+        onlanguagechange [experimental]
+        
+        Function to call when the preferred languages changed.
+
+  - onload:
+      t: [ body ]
+      d: |
+        onload [HTML5]
+        
+        Function to call when the document has finished loading.
+
+  - onmessage:
+      t: [ body ]
+      d: |
+        onmessage [HTML5]
+        
+        Function to call when the document has received a message.
+
+  - onoffline:
+      t: [ body ]
+      d: |
+        onoffline [HTML5]
+        
+        Function to call when network communication has failed.
+
+  - ononline:
+      t: [ body ]
+      d: |
+        ononline [HTML5]
+        
+        Function to call when network communication has been restored.
+
+  - onpopstate:
+      t: [ body ]
+      d: |
+        onpopstate [HTML5]
+        
+        Function to call when the user has navigated session history.
+
+  - onresize:
+      t: [ body ]
+      d: |
+        onresize [HTML5]
+        
+        Function to call when the document has been resized.
+
+  - onstorage:
+      t: [ body ]
+      d: |
+        onstorage [HTML5]
+        
+        Function to call when the storage area has changed.
+
+  - onunload:
+      t: [ body ]
+      d: |
+        onunload [HTML5]
+        
+        Function to call when the document is going away.
+
+  # marquee
+  - onbounce:
+      t: [ marquee ]
+      d: ""
+        
+  - onfinish:
+      t: [ marquee ]
+      d: ""
+
+  - onstart:
+      t: [ marquee ]
+      d: ""
+
+  # form
+  - onblur:
+      t: [ global ]
+      d: |
+        Fires the moment that the element loses focus    
+  - onchange:
+      t: [ global ]
+      d: |
+        Fires the moment when the value of the element is changed
+  - oncontextmenu:
+      t: [ global ]
+      d: |
+        [HTML5]
+        
+        Script to be run when a context menu is triggered
+  - onfocus:
+      t: [ global ]
+      d: |
+        Fires the moment when the element gets focus
+  - oninput:
+      t: [ global ]
+      d: |
+        [HTML5]
+        
+        Script to be run when an element gets user input
+  - oninvalid:
+      t: [ global ]
+      d: |
+        [HTML5]
+        
+        Script to be run when an element is invalid
+  - onreset:
+      t: [ global ]
+      d: |
+        [HTML5]
+        
+        Fires when the Reset button in a form is clicked
+  - onsearch:
+      t: [ global ]
+      d: |
+        Fires when the user writes something in a search field (for <input="search">)
+  - onselect:
+      t: [ global ]
+      d: |
+        Fires after some text has been selected in an element
+  - onsubmit:
+      t: [ global ]
+      d: |
+        Fires when a form is submitted
+
+  # keyboard
+  - onkeydown:
+      t: [ global ]
+      d: Fires when a user is pressing a key
+  - onkeypress:
+      t: [ global ]
+      d: Fires when a user presses a key
+  - onkeyup:
+      t: [ global ]
+      d: Fires when a user releases a key
+
+  # mouse
+  - onclick:
+      t: [ global ]
+      d: |
+        Fires on a mouse click on the element
+  - ondblclick:
+      t: [ global ]
+      d: |
+        Fires on a mouse double-click on the element
+  - ondrag:
+      t: [ global ]
+      d: |
+        [HTML5]
+        
+        Script to be run when an element is dragged
+  - ondragend:
+      t: [ global ]
+      d: |
+        [HTML5]
+        
+        Script to be run at the end of a drag operation
+  - ondragenter:
+      t: [ global ]
+      d: |
+        [HTML5]
+        
+        Script to be run when an element has been dragged to a valid drop target
+  - ondragleave:
+      t: [ global ]
+      d: |
+        [HTML5]
+        
+        Script to be run when an element leaves a valid drop target
+  - ondragover:
+      t: [ global ]
+      d: |
+        [HTML5]
+        
+        Script to be run when an element is being dragged over a valid drop target
+  - ondragstart:
+      t: [ global ]
+      d: |
+        [HTML5]
+        
+        Script to be run at the start of a drag operation
+  - ondrop:
+      t: [ global ]
+      d: |
+        [HTML5]
+        
+        Script to be run when dragged element is being dropped
+  - onmousedown:
+      t: [ global ]
+      d: |
+        Fires when a mouse button is pressed down on an element
+  - onmousemove:
+      t: [ global ]
+      d: |
+        Fires when the mouse pointer is moving while it is over an element
+  - onmouseout:
+      t: [ global ]
+      d: |
+        Fires when the mouse pointer moves out of an element
+  - onmouseover:
+      t: [ global ]
+      d: |
+        Fires when the mouse pointer moves over an element
+  - onmouseup:
+      t: [ global ]
+      d: |
+        Fires when a mouse button is released over an element
+  - onmousewheel:
+      t: [ global ]
+      d: |
+        Deprecated. Use the onwheel attribute instead
+  - onscroll:
+      t: [ global ]
+      d: |
+        [HTML5]
+        
+        Script to be run when an element s scrollbar is being scrolled
+  - onwheel:
+      t: [ global ]
+      d: |
+        [HTML5]
+        
+        Fires when the mouse wheel rolls up or down over an element  
+
+  # clipboard
+  - oncopy:
+      t: [ global ]
+      d: |
+        Fires when the user copies the content of an element
+  - oncut:
+      t: [ global ]
+      d: |
+        Fires when the user cuts the content of an element
+  - onpaste:
+      t: [ global ]
+      d: |
+        Fires when the user pastes some content in an element
+
+  # media
+  - onabort:
+      t: *MEDIATAGS
+      d: |
+        Script to be run on abort
+  - oncanplay:
+      t: *MEDIATAGS
+      d: |
+        [HTML5]
+        
+        Script to be run when a file is ready to start playing (when it has buffered enough to begin)
+  - oncanplaythrough:
+      t: *MEDIATAGS
+      d: |
+        [HTML5]
+        
+        Script to be run when a file can be played all the way to the end without pausing for buffering
+  - oncuechange:
+      t: *MEDIATAGS
+      d: |
+        [HTML5]
+        
+        Script to be run when the cue changes in a <track> element
+  - ondurationchange:
+      t: *MEDIATAGS
+      d: |
+        [HTML5]
+        
+        Script to be run when the length of the media changes
+  - onemptied:
+      t: *MEDIATAGS
+      d: |
+        [HTML5]
+        
+        Script to be run when something bad happens and the file is suddenly unavailable (like unexpectedly disconnects)
+  - onended:
+      t: *MEDIATAGS
+      d: |
+        [HTML5]
+        
+        Script to be run when the media has reach the end (a useful event for messages like "thanks for listening")
+  - onerror:
+      t: *MEDIATAGS
+      d: |
+        [HTML5]
+        
+        Script to be run when an error occurs when the file is being loaded
+  - onloadeddata:
+      t: *MEDIATAGS
+      d: |
+        [HTML5]
+        
+        Script to be run when media data is loaded
+  - onloadedmetadata:
+      t: *MEDIATAGS
+      d: |
+        [HTML5]
+        
+        Script to be run when meta data (like dimensions and duration) are loaded
+  - onloadstart:
+      t: *MEDIATAGS
+      d: |
+        [HTML5]
+        
+        Script to be run just as the file begins to load before anything is actually loaded
+  - onpause:
+      t: *MEDIATAGS
+      d: |
+        [HTML5]
+        
+        Script to be run when the media is paused either by the user or programmatically
+  - onplay:
+      t: *MEDIATAGS
+      d: |
+        [HTML5]
+        
+        Script to be run when the media is ready to start playing
+  - onplaying:
+      t: *MEDIATAGS
+      d: |
+        [HTML5]
+        
+        Script to be run when the media actually has started playing
+  - onprogress:
+      t: *MEDIATAGS
+      d: |
+        [HTML5]
+        
+        Script to be run when the browser is in the process of getting the media data
+  - onratechange:
+      t: *MEDIATAGS
+      d: |
+        [HTML5]
+        
+        Script to be run each time the playback rate changes (like when a user switches to a slow motion or fast forward mode)
+  - onseeked:
+      t: *MEDIATAGS
+      d: |
+        [HTML5]
+        
+        Script to be run when the seeking attribute is set to false indicating that seeking has ended
+  - onseeking:
+      t: *MEDIATAGS
+      d: |
+        [HTML5]
+        
+        Script to be run when the seeking attribute is set to true indicating that seeking is active
+  - onstalled:
+      t: *MEDIATAGS
+      d: |
+        [HTML5]
+        
+        Script to be run when the browser is unable to fetch the media data for whatever reason
+  - onsuspend:
+      t: *MEDIATAGS
+      d: |
+        [HTML5]
+        
+        Script to be run when fetching the media data is stopped before it is completely loaded for whatever reason
+  - ontimeupdate:
+      t: *MEDIATAGS
+      d: |
+        [HTML5]
+        
+        Script to be run when the playing position has changed (like when the user fast forwards to a different point in the media)
+  - onvolumechange:
+      t: *MEDIATAGS
+      d: |
+        [HTML5]
+        
+        Script to be run each time the volume is changed which (includes setting the volume to "mute")
+  - onwaiting:
+      t: *MEDIATAGS
+      d: |
+        [HTML5]
+        
+        Script to be run when the media has paused but is expected to resume (like when the media pauses to buffer more data)
+
+  # misc
+  - onerror:
+      t: [ style, script ]
+      d: |
+        [HTML5]
+
+        Fires when an error occurs while loading an external file
+  - onshow:
+      t: [ menu ]
+      d: |
+        [HTML5]
+        
+        Fires when a <menu> element is shown as a context menu
+  - ontoggle:
+      t: [ details ]
+      d: |
+        [HTML5]
+        
+        Fires when the user opens or closes the <details> element

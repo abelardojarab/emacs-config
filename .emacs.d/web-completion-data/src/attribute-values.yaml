@@ -1,0 +1,1168 @@
+# origin - http://www.w3.org/TR/html5/
+#          http://www.w3.org/TR/html5/index.html#attributes-1
+#
+# example:
+# ----------------------------
+# type:
+#   charset: &CHARSETS
+#     utf-7: 
+#     utf-8: Unicode (UTF-8)
+# attributes:
+#   - accept-charset:
+#       t: form
+#       v: *CHARSETS
+#   - charset:
+#       t: [meta, script]
+#       v: *CHARSETS
+#   - type:
+#       t: button
+#       v:
+#         button: Does nothing
+#         reset: Resets the form
+#         submit: Submits the form
+# #                dumplicate test for ol type
+#   - type:
+#       t: ol
+#       v: [A, i, I ]
+# #                dumplicate
+#   - type:
+#       t: ol
+#       v: [1, a]
+#   - spellcheck:
+#       t:
+#         textarea: This is some text here
+#       v: on
+# ----------------------------
+
+# Some reusable values. 
+types:
+  charset: &CHARSET
+    950: Chinese Traditional (Mac)
+    ASMO-708: Arabic (ASMO 708)
+    CP1026: IBM EBCDIC (Turkish Latin-5)
+    CP870: IBM EBCDIC (Multilingual Latin-2)
+    DOS-720: Arabic (DOS)
+    DOS-862: Hebrew (DOS)
+    EUC-CN: Chinese Simplified (EUC)
+    IBM437: OEM United States
+    Johab: Korean (Johab)
+    Windows-1252: Western European (Windows)
+    X-EBCDIC-Spain: IBM EBCDIC (Spain)
+    big5: Chinese Traditional (Big5)
+    cp866: Cyrillic (DOS)
+    csISO2022JP: Japanese (JIS-Allow 1 byte Kana)
+    ebcdic-cp-us: IBM EBCDIC (US-Canada)
+    euc-jp: Japanese (EUC)
+    euc-kr: Korean (EUC)
+    gb2312: Chinese Simplified (GB2312)
+    hz-gb-2312: Chinese Simplified (HZ)
+    ibm737: Greek (DOS)
+    ibm775: Baltic (DOS)
+    ibm850: Western European (DOS)
+    ibm852: Central European (DOS)
+    ibm857: Turkish (DOS)
+    ibm861: Icelandic (DOS)
+    ibm869: Greek, Modern (DOS)
+    iso-2022-jp: Japanese (JIS-Allow 1 byte Kana - SO/SI)
+    iso-2022-kr: Korean (ISO)
+    iso-8859-15: Latin 9 (ISO)
+    iso-8859-1: Western European (ISO)
+    iso-8859-2: Central European (ISO)
+    iso-8859-3: Latin 3 (ISO)
+    iso-8859-4: Baltic (ISO)
+    iso-8859-5: Cyrillic (ISO)
+    iso-8859-6: Arabic (ISO)
+    iso-8859-7: Greek (ISO)
+    iso-8859-8-i: Hebrew (ISO-Logical)
+    iso-8859-8: Hebrew (ISO-Visual)
+    iso-8859-9: Turkish (ISO)
+    koi8-r: Cyrillic (KOI8-R)
+    koi8-u: Cyrillic (KOI8-U)
+    ks_c_5601-1987: Korean
+    macintosh: Western European (Mac)
+    shift_jis: Japanese (Shift-JIS)
+    unicode: Unicode
+    unicodeFFFE: Unicode (Big-Endian)
+    us-ascii: US-ASCII
+    utf-7: Unicode (UTF-7)
+    utf-8: Unicode (UTF-8)
+    windows-1250: Central European (Windows)
+    windows-1251: Cyrillic (Windows)
+    windows-1253: Greek (Windows)
+    windows-1254: Turkish (Windows)
+    windows-1255: Hebrew (Windows)
+    windows-1256: Arabic (Windows)
+    windows-1257: Baltic (Windows)
+    windows-1258: Vietnamese (Windows)
+    windows-874: Thai (Windows)
+    x-Chinese-CNS: Chinese Traditional (CNS)
+    x-Chinese-Eten: Chinese Traditional (Eten)
+    x-EBCDIC-Arabic: IBM EBCDIC (Arabic)
+    x-EBCDIC-CyrillicRussian: IBM EBCDIC (Cyrillic Russian)
+    x-EBCDIC-CyrillicSerbianBulgarian: IBM EBCDIC (Cyrillic Serbian-Bulgarian)
+    x-EBCDIC-DenmarkNorway: IBM EBCDIC (Denmark-Norway)
+    x-EBCDIC-FinlandSweden: IBM EBCDIC (Finland-Sweden)
+    x-EBCDIC-Germany: IBM EBCDIC (Germany)
+    x-EBCDIC-Greek: IBM EBCDIC (Greek)
+    x-EBCDIC-GreekModern: IBM EBCDIC (Greek Modern)
+    x-EBCDIC-Hebrew: IBM EBCDIC (Hebrew)
+    x-EBCDIC-Icelandic: IBM EBCDIC (Icelandic)
+    x-EBCDIC-Italy: IBM EBCDIC (Italy)
+    x-EBCDIC-JapaneseAndJapaneseLatin: IBM EBCDIC (Japanese and Japanese-Latin)
+    x-EBCDIC-JapaneseAndKana: IBM EBCDIC (Japanese and Japanese Katakana)
+    x-EBCDIC-JapaneseAndUSCanada: IBM EBCDIC (Japanese and US-Canada)
+    x-EBCDIC-JapaneseKatakana: IBM EBCDIC (Japanese katakana)
+    x-EBCDIC-KoreanAndKoreanExtended: IBM EBCDIC (Korean and Korean Extended)
+    x-EBCDIC-KoreanExtended: IBM EBCDIC (Korean Extended)
+    x-EBCDIC-SimplifiedChinese: IBM EBCDIC (Simplified Chinese)
+    x-EBCDIC-Thai: IBM EBCDIC (Thai)
+    x-EBCDIC-TraditionalChinese: IBM EBCDIC (Traditional Chinese)
+    x-EBCDIC-Turkish: IBM EBCDIC (Turkish)
+    x-EBCDIC-UK: IBM EBCDIC (UK)
+    x-Europa: Europa
+    x-IA5-German: German (IA5)
+    x-IA5-Norwegian: Norwegian (IA5)
+    x-IA5-Swedish: Swedish (IA5)
+    x-IA5: Western European (IA5)
+    x-ebcdic-cp-us-euro: IBM EBCDIC (US-Canada-Euro)
+    x-ebcdic-denmarknorway-euro: IBM EBCDIC (Denmark-Norway-Euro)
+    x-ebcdic-finlandsweden-euro: IBM EBCDIC (Finland-Sweden-Euro)
+    x-ebcdic-france-euro: IBM EBCDIC (France-Euro)
+    x-ebcdic-germany-euro: IBM EBCDIC (Germany-Euro)
+    x-ebcdic-icelandic-euro: IBM EBCDIC (Icelandic-Euro)
+    x-ebcdic-international-euro: IBM EBCDIC (International-Euro)
+    x-ebcdic-italy-euro: IBM EBCDIC (Italy-Euro)
+    x-ebcdic-spain-euro: IBM EBCDIC (Spain-Euro)
+    x-ebcdic-uk-euro: IBM EBCDIC (UK-Euro)
+    x-euc-jp: Japanese (EUC)
+    x-iscii-as: ISCII Assamese
+    x-iscii-be: ISCII Bengali
+    x-iscii-de: ISCII Devanagari
+    x-iscii-gu: ISCII Gujarathi
+    x-iscii-ka: ISCII Kannada
+    x-iscii-ma: ISCII Malayalam
+    x-iscii-or: ISCII Oriya
+    x-iscii-pa: ISCII Panjabi
+    x-iscii-ta: ISCII Tamil
+    x-iscii-te: ISCII Telugu
+    x-mac-arabic: Arabic (Mac)
+    x-mac-ce: Central European (Mac)
+    x-mac-chinesesimp: Chinese Simplified (Mac)
+    x-mac-chinesetrad: Chinese Traditional (Mac)
+    x-mac-cyrillic: Cyrillic (Mac)
+    x-mac-greek: Greek (Mac)
+    x-mac-hebrew: Hebrew (Mac)
+    x-mac-icelandic: Icelandic (Mac)
+    x-mac-japanese: Japanese (Mac)
+    x-mac-korean: Korean (Mac)
+    x-mac-turkish: Turkish (Mac)
+
+  langtags: &LANGTAG
+    aa: "Description: Afar\nAdded: 2005-10-16\n"
+    ab: "Description: Abkhazian\nAdded: 2005-10-16\nSuppress-Script: Cyrl"
+    af: "Description: Afrikaans\nAdded: 2005-10-16\nSuppress-Script: Latn"
+    am: "Description: Amharic\nAdded: 2005-10-16\nSuppress-Script: Ethi"
+    an: "Description: Aragonese\nAdded: 2005-10-16\nSuppress-Script: Cyrl"
+    ar: "Description: Arabic\nAdded: 2005-10-16\nSuppress-Script: Arab\nScope: macrolanguage"
+    as: "Description: Assamese\nAdded: 2005-10-16\nSuppress-Script: Beng"
+    ay: "Description: Aymara\nAdded: 2005-10-16\nSuppress-Script: Latn\nScope: macrolanguage"
+    az: "Description: Azerbaijani\nAdded: 2005-10-16\nScope: macrolanguage"
+    ba: "Description: Bashkir\nAdded: 2005-10-16"
+    be: "Description: Belarusian\nAdded: 2005-10-16\nSuppress-Script: Cyrl"
+    bg: "Description: Bulgarian\nAdded: 2005-10-16\nSuppress-Script: Cyrl"
+    bh: "Description: Bihari languages\nAdded: 2005-10-16\nScope: collection"
+    bi: "Description: Bislama\nAdded: 2005-10-16"
+    bn: "Description: Bengali\nAdded: 2005-10-16\nSuppress-Script: Beng"
+    bo: "Description: Tibetan\nAdded: 2005-10-16"
+    br: "Description: Breton\nAdded: 2005-10-16"
+    ca: "Description: Catalan\nDescription: Valencian\nAdded: 2005-10-16\nSuppress-Script: Latn"
+    co: "Description: Corsican\nAdded: 2005-10-16"
+    cs: "Description: Czech\nAdded: 2005-10-16\nSuppress-Script: Latn"
+    cy: "Description: Welsh\nAdded: 2005-10-16\nSuppress-Script: Latn"
+    da: "Description: Danish\nAdded: 2005-10-16\nSuppress-Script: Latn"
+    de: "Description: German\nAdded: 2005-10-16\nSuppress-Script: Latn"
+    dz: "Description: Dzongkha\nAdded: 2005-10-16\nSuppress-Script: Tibt"
+    el: "Description: Modern Greek (1453-)\nAdded: 2005-10-16\nSuppress-Script: Grek"
+    en: "Description: English\nAdded: 2005-10-16\nSuppress-Script: Latn\n"
+    eo: "Description: Esperanto\nAdded: 2005-10-16\nSuppress-Script: Latn"
+    es: "Description: Spanish\nDescription: Castilian\nAdded: 2005-10-16\nSuppress-Script: Latn"
+    et: "Description: Estonian\nAdded: 2005-10-16\nSuppress-Script: Latn\nScope: macrolanguage"
+    eu: "Description: Basque\nAdded: 2005-10-16\nSuppress-Script: Latn"
+    fa: "Description: Persian\nAdded: 2005-10-16\nSuppress-Script: Arab\nScope: macrolanguage"
+    fi: "Description: Finnish\nAdded: 2005-10-16\nSuppress-Script: Latn"
+    fj: "Description: Fijian\nAdded: 2005-10-16\nSuppress-Script: Latn"
+    fo: "Description: Faroese\nAdded: 2005-10-16\nSuppress-Script: Latn"
+    fr: "Description: French\nAdded: 2005-10-16\nSuppress-Script: Latn"
+    fy: "Description: Western Frisian\nAdded: 2005-10-16\nSuppress-Script: Latn"
+    ga: "Description: Irish\nAdded: 2005-10-16\nSuppress-Script: Latn"
+    gd: "Description: Scottish Gaelic\nDescription: Gaelic\nAdded: 2005-10-16"
+    gl: "Description: Galician\nAdded: 2005-10-16\nSuppress-Script: Latn"
+    gn: "Description: Guarani\nAdded: 2005-10-16\nSuppress-Script: Latn\nScope: macrolanguage"
+    gu: "Description: Gujarati\nAdded: 2005-10-16\nSuppress-Script: Gujr"
+    gv: "Description: Manx\nAdded: 2005-10-16\nSuppress-Script: Latn"
+    ha: "Hausa"
+    he: "Description: Hebrew\nAdded: 2005-10-16\nSuppress-Script: Hebr"
+    hi: "Hindi\nAdded: 2005-10-16\nSuppress-Script: Deva"
+    hr: "Description: Croatian\nAdded: 2005-10-16\nSuppress-Script: Latn\nMacrolanguage: sh"
+    ht: "Description: Haitian\nDescription: Haitian Creole\nAdded: 2005-10-16\nSuppress-Script: Latn"
+    hu: "Description: Hungarian\nAdded: 2005-10-16\nSuppress-Script: Latn"
+    hy: "Description: Armenian\nAdded: 2005-10-16\nSuppress-Script: Armn"
+    ia: "Description: Interlingua (International Auxiliary Language\n  Association)\nAdded: 2005-10-16"
+    id: "Description: Indonesian\nAdded: 2005-10-16\nSuppress-Script: Latn\nMacrolanguage: ms"
+    ie: "Description: Interlingue\nDescription: Occidental\nAdded: 2005-10-16"
+    ii: "Description: Sichuan Yi\nDescription: Nuosu\nAdded: 2005-10-16"
+    ik: "Description: Inupiaq\nAdded: 2005-10-16\nScope: macrolanguage"
+    in: "Description: Indonesian\nAdded: 2005-10-16\nDeprecated: 1989-01-01\nPreferred-Value: id\nSuppress-Script: Latn\nMacrolanguage: ms"
+    io: "Description: Ido\nAdded: 2005-10-16"
+    is: "Description: Icelandic\nAdded: 2005-10-16\nSuppress-Script: Latn"
+    it: "Description: Italian\nAdded: 2005-10-16\nSuppress-Script: Latn"
+    iu: "Description: Inuktitut\nAdded: 2005-10-16\nScope: macrolanguage"
+    iw: "Description: Hebrew\nAdded: 2005-10-16\nDeprecated: 1989-01-01\nPreferred-Value: he\nSuppress-Script: Hebr"
+    ja: "Description: Japanese\nAdded: 2005-10-16\nSuppress-Script: Jpan"
+    ji: "Description: Yiddish\nAdded: 2005-10-16\nDeprecated: 1989-01-01\nPreferred-Value: yi"
+    jv: "Description: Javanese\nAdded: 2005-10-16"
+    ka: "Description: Georgian\nAdded: 2005-10-16\nSuppress-Script: Geor"
+    kk: "Description: Kazakh\nAdded: 2005-10-16\nSuppress-Script: Cyrl"
+    kl: "Description: Kalaallisut\nDescription: Greenlandic\nAdded: 2005-10-16\nSuppress-Script: Latn"
+    km: "Description: Central Khmer\nAdded: 2005-10-16\nSuppress-Script: Khmr"
+    kn: "Description: Kannada\nAdded: 2005-10-16\nSuppress-Script: Knda"
+    ko: "Description: Korean\nAdded: 2005-10-16\nSuppress-Script: Kore"
+    ks: "Description: Kashmiri\nAdded: 2005-10-16"
+    ku: "Description: Kurdish\nAdded: 2005-10-16\nScope: macrolanguage"
+    ky: "Description: Kirghiz\nDescription: Kyrgyz\nAdded: 2005-10-16"
+    la: "Description: Latin\nAdded: 2005-10-16\nSuppress-Script: Latn"
+    li: "Limburgish ( Limburger)"
+    ln: "Description: Lingala\nAdded: 2005-10-16\nSuppress-Script: Latn"
+    lo: "Description: Lao\nAdded: 2005-10-16\nSuppress-Script: Laoo"
+    lt: "Description: Lithuanian\nAdded: 2005-10-16\nSuppress-Script: Latn"
+    lv: "Description: Latvian\nAdded: 2005-10-16\nSuppress-Script: Latn\nScope: macrolanguage"
+    mg: "Description: Malagasy\nAdded: 2005-10-16\nSuppress-Script: Latn\nScope: macrolanguage"
+    mi: "Maori"
+    mk: "Description: Macedonian\nAdded: 2005-10-16\nSuppress-Script: Cyrl"
+    ml: "Description: Malayalam\nAdded: 2005-10-16\nSuppress-Script: Mlym"
+    mn: "Mongolian\nAdded: 2005-10-16"
+    mo: "Description: Moldavian\nDescription: Moldovan\nAdded: 2005-10-16\nDeprecated: 2008-11-22\nPreferred-Value: ro\nSuppress-Script: Latn"
+    mr: "Marathi"
+    ms: "Malay"
+    mt: "Description: Maltese\nAdded: 2005-10-16\nSuppress-Script: Latn"
+    my: "Description: Burmese\nAdded: 2005-10-16\nSuppress-Script: Mymr"
+    na: "Description: Nauru\nAdded: 2005-10-16\nSuppress-Script: Latn"
+    ne: "Description: Nepali (macrolanguage)\nAdded: 2005-10-16\nSuppress-Script: Deva\nScope: macrolanguage"
+    nl: "Description: Dutch\nDescription: Flemish\nAdded: 2005-10-16\nSuppress-Script: Latn"
+    no: "Norwegian"
+    oc: "Description: Occitan (post 1500)\nAdded: 2005-10-16"
+    om: "Description: Oromo\nAdded: 2005-10-16\nSuppress-Script: Latn\nScope: macrolanguage"
+    or: "Oriya"
+    pa: "Description: Panjabi\nDescription: Punjabi\nAdded: 2005-10-16\nSuppress-Script: Guru"
+    pl: "Description: Polish\nAdded: 2005-10-16\nSuppress-Script: Latn"
+    ps: "Description: Pushto\nDescription: Pashto\nAdded: 2005-10-16\nSuppress-Script: Arab\nScope: macrolanguage"
+    pt: "Description: Portuguese\nAdded: 2005-10-16\nSuppress-Script: Latn"
+    qu: "Description: Quechua\nAdded: 2005-10-16\nSuppress-Script: Latn\nScope: macrolanguage"
+    rm: "Description: Romansh\nSuppress-Script: Latn\nAdded: 2005-10-16"
+    rn: "Description: Rundi\nAdded: 2005-10-16\nSuppress-Script: Latn"
+    ro: "Description: Romanian\nDescription: Moldavian\nDescription: Moldovan\nAdded: 2005-10-16\nSuppress-Script: Latn"
+    ru: "Description: Russian\nAdded: 2005-10-16\nSuppress-Script: Cyrl"
+    rw: "Description: Kinyarwanda\nAdded: 2005-10-16\nSuppress-Script: Latn"
+    sa: "Sanskrit\nAdded: 2005-10-16"
+    sd: "Sindhi\nAdded: 2005-10-16"
+    sg: "Description: Sango\nAdded: 2005-10-16\nSuppress-Script: Latn"
+    sh: "Serbo-Croatian"
+    si: "Description: Sinhala\nDescription: Sinhalese\nAdded: 2005-10-16\nSuppress-Script: Sinh"
+    sk: "Slovak\nAdded: 2005-10-16\nSuppress-Script: Latn"
+    sl: "Description: Slovenian\nAdded: 2005-10-16\nSuppress-Script: Latn"
+    sm: "Description: Samoan\nAdded: 2005-10-16\nSuppress-Script: Latn"
+    sn: "Description: Shona\nAdded: 2005-10-16"
+    so: "Description: Somali\nAdded: 2005-10-16\nSuppress-Script: Latn"
+    sq: "Description: Albanian\nAdded: 2005-10-16\nSuppress-Script: Latn\nScope: macrolanguage"
+    sr: "Description: Serbian\nAdded: 2005-10-16\nMacrolanguage: sh"
+    ss: "Description: Swati\nAdded: 2005-10-16\nSuppress-Script: Latn"
+    st: "Description: Southern Sotho\nAdded: 2005-10-16\nSuppress-Script: Latn"
+    su: "Sundanese"
+    sv: "Swedish\nAdded: 2005-10-16\nSuppress-Script: Latn"
+    sw: "Description: Swahili (macrolanguage)\nAdded: 2005-10-16\nSuppress-Script: Latn\nScope: macrolanguage"
+    ta: "Description: Tamil\nAdded: 2005-10-16\nSuppress-Script: Taml"
+    te: "Description: Telugu\nAdded: 2005-10-16\nSuppress-Script: Telu"
+    tg: "Description: Tajik\nAdded: 2005-10-16"
+    th: "Description: Thai\nAdded: 2005-10-16\nSuppress-Script: Thai"
+    ti: "Tigrinya"
+    tk: "Description: Turkmen\nAdded: 2005-10-16"
+    tl: "Description: Tagalog\nAdded: 2005-10-16\nSuppress-Script: Latn"
+    tn: "Setswana"
+    to: "Tonga"
+    tr: "Description: Turkish\nAdded: 2005-10-16\nSuppress-Script: Latn"
+    ts: "Description: Tsonga\nAdded: 2005-10-16\nSuppress-Script: Latn"
+    tt: "Description: Tatar\nAdded: 2005-10-16"
+    tw: "Description: Twi\nAdded: 2005-10-16\nMacrolanguage: ak"
+    ug: "Description: Uighur\nDescription: Uyghur\nAdded: 2005-10-16"
+    uk: "Description: Ukrainian\nAdded: 2005-10-16\nSuppress-Script: Cyrl"
+    ur: "Description: Uyghur\nAdded: 2005-10-16"
+    uz: "Description: Uzbek\nAdded: 2005-10-16\nScope: macrolanguage"
+    vi: "Description: Vietnamese\nAdded: 2005-10-16\nSuppress-Script: Latn"
+    vo: "Description: Volapük\nAdded: 2005-10-16"
+    wa: "Description: Chichewa\nAdded: 2005-10-16\nSuppress-Script: Latn"
+    wo: "Description: Wolof\nAdded: 2005-10-16"
+    xh: "Description: Xhosa\nAdded: 2005-10-16\nSuppress-Script: Latn"
+    yi: "Description: Nuosu\nAdded: 2005-10-16"
+    yo: "Description: Yoruba\nAdded: 2005-10-16"
+    zh-Hans: "Description: simplified Chinese\nAdded: 2003-05-30"
+    zh-Hant: "Description: traditional Chinese\nAdded: 2003-05-30"
+    zh: "Description: Chinese\nAdded: 2005-10-16\nScope: macrolanguage"
+    zu: "Description: Zulu\nAdded: 2005-10-16\nSuppress-Script: Latn"
+
+  cssdeclare: &CSS
+
+    color: Sets the color of text\nCSS1
+    opacity: Sets the opacity level for an element\nCSS3
+    background: Sets all the background properties in one declaration\nCSS1
+    background-attachment: Sets whether a background image is fixed or scrolls with the rest of the page\nCSS1
+    background-color: Sets the background color of an element\nCSS1
+    background-image: Sets the background image for an element\nCSS1
+    background-position: Sets the starting position of a background image\nCSS1
+    background-repeat: Sets how a background image will be repeated\nCSS1
+    background-clip: Specifies the painting area of the background\nCSS3
+    background-origin: Specifies the positioning area of the background images\nCSS3
+    background-size: Specifies the size of the background images\nCSS3
+    border: Sets all the border properties in one declaration\nCSS1
+    border-bottom: Sets all the bottom border properties in one declaration\nCSS1
+    border-bottom-color: Sets the color of the bottom border 	1\nCSS
+    border-bottom-left-radius: Defines the shape of the border of the bottom-left corner\nCSS3
+    border-bottom-right-radius: Defines the shape of the border of the bottom-right corner\nCSS3
+    border-bottom-style: Sets the style of the bottom border\nCSS1
+    border-bottom-width: Sets the width of the bottom border\nCSS1
+    border-color: Sets the color of the four borders\nCSS1
+    border-image: A shorthand property for setting all the border-image-* properties\nCSS3
+    border-image-outset: Specifies the amount by which the border image area extends beyond the border box\nCSS3
+    border-image-repeat: Specifies whether the image-border should be repeated, rounded or stretched\nCSS3
+    border-image-slice: Specifies the inward offsets of the image-border\nCSS3
+    border-image-source: Specifies an image to be used as a border\nCSS3
+    border-image-width: Specifies the widths of the image-border\nCSS3
+    border-left: Sets all the left border properties in one declaration\nCSS1
+    border-left-color: Sets the color of the left border\nCSS1
+    border-left-style: Sets the style of the left border\nCSS1
+    border-left-width: Sets the width of the left border\nCSS1
+    border-radius: A shorthand property for setting all the four border-*-radius properties\nCSS3
+    border-right: Sets all the right border properties in one declaration\nCSS1
+    border-right-color: Sets the color of the right border\nCSS1
+    border-right-style: Sets the style of the right border\nCSS1
+    border-right-width: Sets the width of the right border\nCSS1
+    border-style: Sets the style of the four borders\nCSS1
+    border-top: Sets all the top border properties in one declaration\nCSS1
+    border-top-color: Sets the color of the top border\nCSS1
+    border-top-left-radius: Defines the shape of the border of the top-left corner\nCSS3
+    border-top-right-radius: Defines the shape of the border of the top-right corner\nCSS3
+    border-top-style: Sets the style of the top border\nCSS1
+    border-top-width: Sets the width of the top border\nCSS1
+    border-width: Sets the width of the four borders\nCSS1
+    box-decoration-break: Sets the behaviour of the background and border of an element at page-break, or, for in-line elements, at line-break.\nCSS3
+    box-shadow: Attaches one or more drop-shadows to the box\nCSS3
+
+    bottom: Specifies the bottom position of a positioned element\nCSS2
+    clear: Specifies which sides of an element where other floating elements are not allowed\nCSS1
+    clip: Clips an absolutely positioned element\nCSS2
+    display: Specifies how a certain HTML element should be displayed\nCSS1
+    float: Specifies whether or not a box should float\nCSS1
+    height: Sets the height of an element\nCSS1
+    left: Specifies the left position of a positioned element\nCSS2
+    overflow: "Specifies what happens if content overflows an element's box\nCSS2"
+    overflow-x: "Specifies whether or not to clip the left/right edges of the content, if it overflows the element's content area\nCSS3"
+    overflow-y: "Specifies whether or not to clip the top/bottom edges of the content, if it overflows the element's content area\nCSS3"
+    padding: Sets all the padding properties in one declaration\nCSS1
+    padding-bottom: Sets the bottom padding of an element\nCSS1
+    padding-left: Sets the left padding of an element\nCSS1
+    padding-right: Sets the right padding of an element\nCSS1
+    padding-top: Sets the top padding of an element\nCSS1
+    position: Specifies the type of positioning method used for an element (static, relative, absolute or fixed)\nCSS2
+    right: Specifies the right position of a positioned element\nCSS2
+    top: Specifies the top position of a positioned element\nCSS2
+    visibility: Specifies whether or not an element is visible\nCSS2
+    width: Sets the width of an element\nCSS1
+    vertical-align: Sets the vertical alignment of an element\nCSS1
+    z-index: Sets the stack order of a positioned element\nCSS2
+
+    align-content: Specifies the alignment between the lines inside a flexible container when the items do not use all available space.\nCSS3
+    align-items: Specifies the alignment for items inside a flexible container.\nCSS3
+    align-self: Specifies the alignment for selected items inside a flexible container.\nCSS3
+    flex: Specifies the length of the item, relative to the rest\nCSS3
+    flex-basis: Specifies the initial length of a flexible item\nCSS3
+    flex-direction: Specifies the direction of the flexible items\nCSS3
+    flex-flow: A shorthand property for the flex-direction and the flex-wrap properties\nCSS3
+    flex-grow: Specifies how much the item will grow relative to the rest\nCSS3
+    flex-shrink: Specifies how the item will shrink relative to the rest\nCSS3
+    flex-wrap: Specifies whether the flexible items should wrap or not\nCSS3
+    justify-content: Specifies the alignment between the items inside a flexible container when the items do not use all available space.\nCSS3
+    margin: Sets all the margin properties in one declaration\nCSS1
+    margin-bottom: Sets the bottom margin of an element\nCSS1
+    margin-left: Sets the left margin of an element\nCSS1
+    margin-right: Sets the right margin of an element\nCSS1
+    margin-top: Sets the top margin of an element\nCSS1
+    max-height: Sets the maximum height of an element\nCSS2
+    max-width: Sets the maximum width of an element\nCSS2
+    min-height: Sets the minimum height of an element\nCSS2
+    min-width: Sets the minimum width of an element\nCSS2
+    order: Sets the order of the flexible item, relative to the rest\nCSS3
+    hanging-punctuation: Specifies whether a punctuation character may be placed outside the line box\nCSS3
+    hyphens: Sets how to split words to improve the layout of paragraphs\nCSS3
+    letter-spacing: Increases or decreases the space between characters in a text\nCSS1
+    line-break: Specifies how/if to break lines\nCSS3
+    line-height: Sets the line height\nCSS1
+    overflow-wrap: Specifies whether or not the browser may break lines within words in order to prevent overflow (when a string is too long to fit its containing box)\nCSS3
+    tab-size: Specifies the length of the tab-character\nCSS3
+    text-align: Specifies the horizontal alignment of text\nCSS1
+    text-align-last: Describes how the last line of a block or a line right before a forced line break is aligned when text-align is "justify"\nCSS3
+    text-combine-upright: Specifies the combination of multiple characters into the space of a single character\nCSS3
+    text-indent: Specifies the indentation of the first line in a text-block\nCSS1
+    text-justify: Specifies the justification method used when text-align is "justify"\nCSS3
+    text-transform: Controls the capitalization of text\nCSS1
+    white-space: Specifies how white-space inside an element is handled\nCSS1
+    word-break: Specifies line breaking rules for non-CJK scripts\nCSS3
+    word-spacing: Increases or decreases the space between words in a text\nCSS1
+    word-wrap: Allows long, unbreakable words to be broken and wrap to the next line\nCSS3
+    text-decoration: Specifies the decoration added to text\nCSS1
+    text-decoration-color: Specifies the color of the text-decoration\nCSS3
+    text-decoration-line: Specifies the type of line in a text-decoration\nCSS3
+    text-decoration-style: Specifies the style of the line in a text decoration\nCSS3
+    text-shadow: Adds shadow to text\nCSS3
+    text-underline-position: Specifies the position of the underline which is set using the text-decoration property\nCSS3
+
+    "@font-face": A rule that allows websites to download and use fonts other than the "web-safe" fonts\nCSS3
+    "@font-feature-values": Allows authors to use a common name in font-variant-alternate for feature activated differently in OpenType\nCSS3
+    font: Sets all the font properties in one declaration\nCSS1
+    font-family: Specifies the font family for text\nCSS1
+    font-feature-settings: Allows control over advanced typographic features in OpenType fonts\nCSS3
+    font-kerning: Controls the usage of the kerning information (how letters are spaced)\nCSS3
+    font-language-override: Controls the usage of language-specific glyphs in a typeface\nCSS3
+    font-size: Specifies the font size of text\nCSS1
+    font-size-adjust: Preserves the readability of text when font fallback occurs\nCSS3
+    font-stretch: Selects a normal, condensed, or expanded face from a font family\nCSS3
+    font-style: Specifies the font style for text\nCSS1
+    font-synthesis: Controls which missing typefaces (bold or italic) may be synthesized by the browser\nCSS3
+    font-variant: Specifies whether or not a text should be displayed in a small-caps font\nCSS1
+    font-variant-alternates: Controls the usage of alternate glyphs associated to alternative names defined in @font-feature-values\nCSS3
+    font-variant-caps: Controls the usage of alternate glyphs for capital letters\nCSS3
+    font-variant-east-asian: Controls the usage of alternate glyphs for East Asian scripts (e.g Japanese and Chinese)\nCSS3
+    font-variant-ligatures: Controls which ligatures and contextual forms are used in textual content of the elements it applies to\nCSS3
+    font-variant-numeric: Controls the usage of alternate glyphs for numbers, fractions, and ordinal markers\nCSS3
+    font-variant-position: Controls the usage of alternate glyphs of smaller size positioned as superscript or subscript regarding the baseline of the font\nCSS3
+    font-weight: Specifies the weight of a font\nCSS1
+
+    direction: Specifies the text direction/writing direction\nCSS2
+    text-orientation: Defines the orientation of the text in a line\nCSS3
+    unicode-bidi: Used together with the direction property to set or return whether the text should be overridden to support multiple languages in the same document\nCSS2
+    writing-mode: CSS3
+    border-collapse: Specifies whether or not table borders should be collapsed\nCSS2
+    border-spacing: Specifies the distance between the borders of adjacent cells\nCSS2
+    caption-side: Specifies the placement of a table caption\nCSS2
+    empty-cells: Specifies whether or not to display borders and background on empty cells in a table\nCSS2
+    table-layout: Sets the layout algorithm to be used for a table\nCSS2
+
+    counter-increment: Increments one or more counters\nCSS2
+    counter-reset: Creates or resets one or more counters\nCSS2
+    list-style: Sets all the properties for a list in one declaration\nCSS1
+    list-style-image: Specifies an image as the list-item marker\nCSS1
+    list-style-position: Specifies if the list-item markers should appear inside or outside the content flow\nCSS1
+    list-style-type: Specifies the type of list-item marker\nCSS1
+
+    "@keyframes": Specifies the animation\nCSS3
+    animation: A shorthand property for all the animation properties below, except the animation-play-state property\nCSS3
+    animation-delay: Specifies when the animation will start\nCSS3
+    animation-direction: Specifies whether or not the animation should play in reverse on alternate cycles\nCSS3
+    animation-duration: Specifies how many seconds or milliseconds an animation takes to complete one cycle\nCSS3
+    animation-fill-mode: Specifies what values are applied by the animation outside the time it is executing\nCSS3
+    animation-iteration-count: Specifies the number of times an animation should be played\nCSS3
+    animation-name: Specifies a name for the @keyframes animation\nCSS3
+    animation-timing-function: Specifies the speed curve of the animation\nCSS3
+    animation-play-state: Specifies whether the animation is running or paused\nCSS3
+
+    backface-visibility: Defines whether or not an element should be visible when not facing the screen\nCSS3
+    perspective: Specifies the perspective on how 3D elements are viewed\nCSS3
+    perspective-origin: Specifies the bottom position of 3D elements\nCSS3
+    transform: Applies a 2D or 3D transformation to an element\nCSS3
+    transform-origin: Allows you to change the position on transformed elements\nCSS3
+    transform-style: Specifies how nested elements are rendered in 3D space\nCSS3
+
+    transition: A shorthand property for setting the four transition properties\nCSS3
+    transition-property: Specifies the name of the CSS property the transition effect is for\nCSS3
+    transition-duration: Specifies how many seconds or milliseconds a transition effect takes to complete\nCSS3
+    transition-timing-function: Specifies the speed curve of the transition effect\nCSS3
+    transition-delay: Specifies when the transition effect will start\nCSS3
+
+    box-sizing: Tells the browser what the sizing properties (width and height) should include\nCSS3
+    content: Used with the :before and :after pseudo-elements, to insert generated content\nCSS2
+    cursor: Specifies the type of cursor to be displayed\nCSS2
+    icon: Provides the author the ability to style an element with an iconic equivalent\nCSS3
+    ime-mode: Controls the state of the input method editor for text fields\nCSS3
+    nav-down: Specifies where to navigate when using the arrow-down navigation key\nCSS3
+    nav-index: Specifies the tabbing order for an element\nCSS3
+    nav-left: Specifies where to navigate when using the arrow-left navigation key\nCSS3
+    nav-right: Specifies where to navigate when using the arrow-right navigation key\nCSS3
+    nav-up: Specifies where to navigate when using the arrow-up navigation key\nCSS3
+    outline: Sets all the outline properties in one declaration\nCSS2
+    outline-color: Sets the color of an outline\nCSS2
+    outline-offset: Offsets an outline, and draws it beyond the border edge\nCSS3
+    outline-style: Sets the style of an outline\nCSS2
+    outline-width: Sets the width of an outline\nCSS2
+    resize: Specifies whether or not an element is resizable by the user\nCSS3
+    text-overflow: Specifies what should happen when text overflows the containing element\nCSS3
+
+    break-after: Specifies the page-, column-, or region-break behavior after the generated box\nCSS3
+    break-before: Specifies the page-, column-, or region-break behavior before the generated box\nCSS3
+    break-inside: Specifies the page-, column-, or region-break behavior inside the generated box\nCSS3
+    column-count: Specifies the number of columns an element should be divided into\nCSS3
+    column-fill: Specifies how to fill columns\nCSS3
+    column-gap: Specifies the gap between the columns\nCSS3
+    column-rule: A shorthand property for setting all the column-rule-* properties\nCSS3
+    column-rule-color: Specifies the color of the rule between columns\nCSS3
+    column-rule-style: Specifies the style of the rule between columns\nCSS3
+    column-rule-width: Specifies the width of the rule between columns\nCSS3
+    column-span: Specifies how many columns an element should span across\nCSS3
+    column-width: Specifies the width of the columns\nCSS3
+    columns: A shorthand property for setting column-width and column-count\nCSS3
+    widows: Sets the minimum number of lines that must be left at the top of a page when a page break occurs inside an element\nCSS2
+
+    orphans: Sets the minimum number of lines that must be left at the bottom of a page when a page break occurs inside an element\nCSS2
+    page-break-after: Sets the page-breaking behavior after an element\nCSS2
+    page-break-before: Sets the page-breaking behavior before an element\nCSS2
+    page-break-inside: Sets the page-breaking behavior inside an element\nCSS2
+
+    marks: Adds crop and/or cross marks to the document\nCSS3
+    quotes: Sets the type of quotation marks for embedded quotations\nCSS2
+
+    filter: Defines effects (e.g. blurring or color shifting) on an element before the element is displayed\nCSS3
+
+    image-orientation: Specifies a rotation in the right or clockwise direction that a user agent applies to an image (This property is likely going to be deprecated and its functionality moved to HTML)\nCSS3
+    image-rendering: Gives a hint to the browser about what aspects of an image are most important to preserve when the image is scaled\nCSS3
+    image-resolution: Specifies the intrinsic resolution of all raster images used in/on the element\nCSS3
+    object-fit: Specifies how the contents of a replaced element should be fitted to the box established by its used height and width\nCSS3
+    object-position: Specifies the alignment of the replaced element inside its box\nCSS3
+
+    mask: CSS3
+    mask-type: CSS3
+
+    mark: A shorthand property for setting the mark-before and mark-after properties\nCSS3
+    mark-after: Allows named markers to be attached to the audio stream\nCSS3
+    mark-before: Allows named markers to be attached to the audio stream\nCSS3
+    phonemes: Specifies a phonetic pronunciation for the text contained by the corresponding element\nCSS3
+    rest: A shorthand property for setting the rest-before and rest-after properties\nCSS3
+    rest-after: "Specifies a rest or prosodic boundary to be observed after speaking an element's content\nCSS3"
+    rest-before: "Specifies a rest or prosodic boundary to be observed before speaking an element's content\nCSS3"
+
+    
+    volume: Volume refers to the median volume of the waveform.
+    speak: Specifies whether text will be rendered aurally and if so, in what manner.
+    speak-as: |
+      The "speak-as" property determines in what manner text gets rendered aurally, based upon a predefined list of possibilities.
+       Value: normal | spell-out || digits || [ literal-punctuation | no-punctuation ]
+      CSS3
+    pause-before: "Specify a pause to be observed before speaking an element's content."
+    pause-after: "Specify a pause to be observed after speaking an element's content."
+    pause: "The 'pause' property is a shorthand for setting 'pause-before' and 'pause-after'. If two values are given, the first value is 'pause-before' and the second is 'pause-after'. If only one value is given, it applies to both properties. "
+    cue-before: "Auditory icons are another way to distinguish semantic elements. Sounds may be played before and/or after the element to delimit it."
+    cue-after: "Auditory icons are another way to distinguish semantic elements. Sounds may be played before and/or after the element to delimit it."
+    cue: The 'cue' property is a shorthand for setting 'cue-before' and 'cue-after'.
+    play-during: "Similar to the 'cue-before' and 'cue-after' properties, this property specifies a sound to be played as a background while an element's content is spoken."
+    azimuth: This property is most likely to be implemented by mixing the same signal into different channels at differing volumes
+    elevation: The precise means used to achieve this effect and the number of speakers used to do so are undefined.
+    speech-rate: This property specifies the speaking rate.\nNote that both absolute and relative keyword values are allowed (compare with 'font-size'). 
+    voice-family: The value is a comma-separated, prioritized list of voice family names (compare with 'font-family'). 
+    pitch: Specifies the average pitch (a frequency) of the speaking voice.\n <frequency> | x-low | low | medium | high | x-high | inherit
+    pitch-range: The perceived pitch of a human voice is determined by the fundamental frequency and typically has a value of 120Hz for a male voice and 210Hz for a female voice.
+    stress: Specifies the height of "local peaks" in the intonation contour of a voice.
+    richness: Specifies the richness, or brightness, of the speaking voice.
+    speak-punctuation: This property specifies how punctuation is spoken.
+    speak-numeral: This property controls how numerals are spoken.
+    speak-header: "This property specifies whether table headers are spoken before every cell, or only before a cell when that cell is associated with a different header than the previous cell.\n Value: once | always"
+    
+    voice-balance: Specifies the balance between left and right channels\nCSS3
+    voice-duration: "Specifies how long it should take to render the selected element's content\nCSS3"
+    
+    voice-pitch: Specifies the average pitch (a frequency) of the speaking voice\nCSS3
+    voice-pitch-range: Specifies variation in average pitch\nCSS3
+    voice-rate: Controls the speaking rate\nCSS3
+    voice-stress: Indicates the strength of emphasis to be applied\nCSS3
+    voice-volume: Refers to the amplitude of the waveform output by the speech synthesises\nCSS3
+
+    marquee-direction: Sets the direction of the moving content\nCSS3
+    marquee-play-count: Sets how many times the content move\nCSS3
+    marquee-speed: Sets how fast the content scrolls\nCSS3
+    marquee-style: Sets the style of the moving content\nCSS3
+
+  media: &MEDIATYPES
+    application/atom+xml: Atom feeds
+    application/dart: Dart files 
+    application/ecmascript: ECMAScript/JavaScript; Defined in RFC 4329 (equivalent to application/javascript but with stricter processing rules)
+    application/EDI-X12: EDI X12 data; Defined in RFC 1767
+    application/EDIFACT: EDI EDIFACT data; Defined in RFC 1767
+    application/json: JavaScript Object Notation JSON; Defined in RFC 4627
+    application/javascript: ECMAScript/JavaScript; Defined in RFC 4329 (equivalent to application/ecmascript but with looser processing rules) It is not accepted in IE 8 or earlier - text/javascript is accepted but it is defined as obsolete in RFC 4329. The "type" attribute of the <script> tag in HTML5 is optional. In practice, omitting the media type of JavaScript programs is the most interoperable solution, since all browsers have always assumed the correct default even before HTML5.
+    application/octet-stream: Arbitrary binary data. Generally speaking this type identifies files that are not associated with a specific application. Contrary to past assumptions by software packages such as Apache this is not a type that should be applied to unknown files. In such a case, a server or application should not indicate a content type, as it may be incorrect, but rather, should omit the type in order to allow the recipient to guess the type.
+    application/ogg: Ogg, a multimedia bitstream container format; Defined in RFC 5334
+    application/pdf: Portable Document Format, PDF has been in use for document exchange on the Internet since 1993; Defined in RFC 3778
+    application/postscript: PostScript; Defined in RFC 2046
+    application/rdf+xml: Resource Description Framework; Defined by RFC 3870
+    application/rss+xml: RSS feeds
+    application/soap+xml: SOAP; Defined by RFC 3902
+    application/font-woff: Web Open Font Format; (candidate recommendation; use application/x-font-woff until standard is official)
+    application/xhtml+xml: XHTML; Defined by RFC 3236
+    application/xml: XML files; Defined by RFC 3023
+    application/xml-dtd: DTD files; Defined by RFC 3023
+    application/xop+xml: XOP
+    application/x-yaml:
+    application/yaml:
+    application/zip: ZIP archive files; Registered
+    application/gzip: Gzip, Defined in RFC 6713
+    application/x-nacl: Native Client web module (supplied via Google Web Store only)
+    application/x-pnacl: Portable Native Client web module (may supplied by any website as it is safer than x-nacl)
+
+    audio/basic: μ-law audio at 8 kHz, 1 channel; Defined in RFC 2046
+    audio/L24: 24bit Linear PCM audio at 8–48 kHz, 1-N channels; Defined in RFC 3190
+    audio/mp4: MP4 audio
+    audio/mpeg: MP3 or other MPEG audio; Defined in RFC 3003
+    audio/ogg: Ogg Vorbis, Speex, Flac and other audio; Defined in RFC 5334
+    audio/opus: Opus audio
+    audio/vorbis: Vorbis encoded audio; Defined in RFC 5215
+    audio/vnd.rn-realaudio: RealAudio; Documented in RealPlayer Help
+    audio/vnd.wave: WAV audio; Defined in RFC 2361
+    audio/webm: WebM open media format
+
+    image/gif: GIF image; Defined in RFC 2045 and RFC 2046
+    image/jpeg: JPEG JFIF image; Defined in RFC 2045 and RFC 2046
+    image/pjpeg: JPEG JFIF image; Associated with Internet Explorer; Listed in ms775147(v=vs.85) - Progressive JPEG, initiated before global browser support for progressive JPEGs (Microsoft and Firefox).
+    image/png: Portable Network Graphics; Registered, Defined in RFC 2083
+    image/svg+xml: SVG vector image; Defined in SVG Tiny 1.2 Specification Appendix M
+    image/tiff: TIF image;
+    image/vnd.djvu: DjVu image and multipage document format.
+
+    message/http: Defined in RFC 7230
+    message/imdn+xml: IMDN Instant Message Disposition Notification; Defined in RFC 5438
+    message/partial: Email; Defined in RFC 2045 and RFC 2046
+    message/rfc822: Email; EML files, MIME files, MHT files, MHTML files; Defined in RFC 2045 and RFC 2046
+
+    model/iges: IGS files, IGES files; Defined in RFC 2077
+    model/mesh: MSH files, MESH files; Defined in RFC 2077, SILO files
+    model/vrml: WRL files, VRML files; Defined in RFC 2077
+    model/x3d+binary: X3D ISO standard for representing 3D computer graphics, X3DB binary files - never Internet Assigned Numbers Authority approved
+    model/x3d+fastinfoset: X3D ISO standard for representing 3D computer graphics, X3DB binary files (application in process, this replaces any use of model/x3d+binary)
+    model/x3d-vrml: X3D ISO standard for representing 3D computer graphics, X3DV VRML files (application in process, previous uses may have been model/x3d+vrml)
+    model/x3d+xml: X3D ISO standard for representing 3D computer graphics, X3D XML files
+
+    module: ECMAScript 6 module desclare. Usually <script type="module">
+
+    multipart/mixed: MIME Email; Defined in RFC 2045 and RFC 2046
+    multipart/alternative: MIME Email; Defined in RFC 2045 and RFC 2046
+    multipart/related: MIME Email; Defined in RFC 2387 and used by MHTML (HTML mail)
+    multipart/form-data: MIME Webform; Defined in RFC 2388
+    multipart/signed: Defined in RFC 1847
+    multipart/encrypted: Defined in RFC 1847
+
+    text/cmd: commands; subtype resident in Gecko browsers like Firefox 3.5
+    text/css: Cascading Style Sheets; Defined in RFC 2318
+    text/csv: Comma-separated values; Defined in RFC 4180
+    text/html: HTML; Defined in RFC 2854
+    text/javascript (Obsolete): JavaScript; Defined in and made obsolete in RFC 4329 in order to discourage its usage in favor of application/javascript. However, text/javascript is allowed in HTML 4 and 5 and, unlike application/javascript, has cross-browser support. The "type" attribute of the <script> tag in HTML5 is optional and there is no need to use it at all since all browsers have always assumed the correct default (even in HTML 4 where it was required by the specification).
+    text/plain: Textual data; Defined in RFC 2046 and RFC 3676
+    text/rtf: RTF; Defined by Paul Lindner
+    text/vcard: vCard (contact information); Defined in RFC 6350
+    text/vnd.abc: ABC music notation; Registered
+    text/yaml:
+    text/x-yaml:
+    text/xml: Extensible Markup Language; Defined in RFC 3023
+
+    video/avi: Covers most Windows-compatible formats including .avi and .divx
+    video/mpeg: MPEG-1 video with multiplexed audio; Defined in RFC 2045 and RFC 2046
+    video/mp4: MP4 video; Defined in RFC 4337
+    video/ogg: Ogg Theora or other video (with audio); Defined in RFC 5334
+    video/quicktime: QuickTime video; Registered
+    video/webm: WebM Matroska-based open media format
+    video/x-matroska: Matroska open media format
+    video/x-ms-wmv: Windows Media Video; Documented in Microsoft KB 288102
+    video/x-flv: Flash video (FLV files)
+
+    application/vnd.debian.binary-package: deb (file format), a software package format used by the Debian project; Registered
+    application/vnd.oasis.opendocument.text: OpenDocument Text; Registered
+    application/vnd.oasis.opendocument.spreadsheet: OpenDocument Spreadsheet; Registered
+    application/vnd.oasis.opendocument.presentation: OpenDocument Presentation; Registered
+    application/vnd.oasis.opendocument.graphics: OpenDocument Graphics; Registered
+    application/vnd.ms-excel: Microsoft Excel files
+    application/vnd.openxmlformats-officedocument.spreadsheetml.sheet: Microsoft Excel 2007 files
+    application/vnd.ms-powerpoint: Microsoft Powerpoint files
+    application/vnd.openxmlformats-officedocument.presentationml.presentation: Microsoft Powerpoint 2007 files
+    application/vnd.openxmlformats-officedocument.wordprocessingml.document: Microsoft Word 2007 files
+    application/vnd.mozilla.xul+xml: Mozilla XUL files
+    application/vnd.google-earth.kml+xml: KML files (e.g. for Google Earth)
+    application/vnd.google-earth.kmz: KMZ files (e.g. for Google Earth)
+    application/vnd.android.package-archive: For download apk files.
+    application/vnd.ms-xpsdocument: XPS document
+
+    application/x-7z-compressed: 7-Zip compression format.
+    application/x-chrome-extension: Google Chrome/Chrome OS extension, app, or theme package 
+    application/x-dvi: device-independent document in DVI format
+    application/x-font-ttf: TrueType Font No registered MIME type, but this is the most commonly used
+    application/x-javascript:
+    application/x-latex: LaTeX files
+    application/x-mpegURL: .m3u8 variant playlist
+    application/x-rar-compressed: RAR archive files
+    application/x-shockwave-flash: Adobe Flash files for example with the extension .swf
+    application/x-stuffit: StuffIt archive files
+    application/x-tar: Tarball files
+    application/x-www-form-urlencoded: Form Encoded Data; Documented in HTML 4.01 Specification, Section 17.13.4.1
+    application/x-xpinstall: Add-ons to Mozilla applications (Firefox, Thunderbird, SeaMonkey, and the discontinued Sunbird)
+    audio/x-aac: .aac audio files
+    audio/x-caf: "Apple's CAF audio files"
+    image/x-xcf: GIMP image file
+    text/x-gwt-rpc: GoogleWebToolkit data
+    text/x-jquery-tmpl: jQuery template data
+    text/x-markdown: Markdown formatted text
+    application/x-pkcs12: a variant of PKCS standard files
+
+    # some templates     
+    riot/tag:
+    text/basis-template:
+    text/ng-template:
+    text/template:
+    text/x-dot-template:
+    text/x-handlebars-template:
+    text/x-handlebars:
+    text/x-kendo-template:
+    text/x-template:
+      
+  boolean1: &ONOFF
+    on:
+    off:
+  boolean2: &TRUEFALSE
+    true:
+    false:
+  boolean3: &YESNO
+    yes:
+    no:
+
+attributes:
+  - accept:
+      t: input
+      v: [audio/*, video/*, image/*]
+  - accept-charset:
+      t: form
+      v: *CHARSET
+  - autocomplete:
+      t: [form, input, select, textarea]
+      v: *ONOFF
+  - border:
+      t: table
+      v: 1
+  - charset:
+      t: [meta, script, link]
+      v: *CHARSET
+  - contenteditable:
+      t: global
+      v: *TRUEFALSE
+  - crossorigin:
+      t: [audio, img, link, script, video]
+      v:
+        anonymous: Cross-origin CORS requests for the element will have the omit credentials flag set.
+        use-credentials: Cross-origin CORS requests for the element will not have the omit credentials flag set.
+  - dir:
+      t: global
+      v: [ltr, rtl, auto ]
+  - enctype:
+      t: form
+      v: ["application/x-www-form-urlencoded", "multipart/form-data", "text/plain"]
+  - formenctype:
+      t: [button, input]
+      v: ["application/x-www-form-urlencoded", "multipart/form-data", "text/plain"]
+  - formmethod:
+      t: [button, input]
+      v: ["GET", "POST"]
+  - hreflang:
+      t: [a, area, link]
+      v: *LANGTAG 
+  - http-equiv:
+      t: meta
+      v:
+        content-type: |
+          Specifies the character encoding for the document.
+          Example:
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+        default-style: |
+          Specified the preferred style sheet to use.
+          Example:
+          <meta http-equiv="default-style" content="the document's preferred stylesheet">
+          Note:
+          The value of the content attribute above must match the value of the title attribute on a link element in the same document, or it must match the value of the title attribute on a style element in the same document.
+        refresh: |
+          Defines a time interval for the document to refresh itself.
+          Example:
+          <meta http-equiv="refresh" content="300">
+  - kind:
+      t: track
+      v: 
+        subtitles: "Transcription or translation of the dialogue, suitable for when the sound is available but not understood (e.g. because the user does not understand the language of the media resource's audio track). Overlaid on the video."
+        captions: Transcription or translation of the dialogue, sound effects, relevant musical cues, and other relevant audio information, suitable for when sound is unavailable or not clearly audible (e.g. because it is muted, drowned-out by ambient noise, or because the user is deaf). Overlaid on the video; labeled as appropriate for the hard-of-hearing.
+        descriptions: Textual descriptions of the video component of the media resource, intended for audio synthesis when the visual component is obscured, unavailable, or not usable (e.g. because the user is interacting with the application without a screen while driving, or because the user is blind). Synthesized as audio.
+        chapters: "Chapter titles, intended to be used for navigating the media resource. Displayed as an interactive (potentially nested) list in the user agent's interface."
+        metadata: Tracks intended for use from script. Not displayed by the user agent. 
+  - lang:
+      t: global
+      v: *LANGTAG
+  - media:
+      t: link
+      v:
+        and: Specifies an AND operator
+        not: Specifies a NOT operator
+        all: Default. Suitable for all devices
+        aural: Speech synthesizers
+        braille: Braille feedback devices
+        handheld: Handheld devices (small screen, limited bandwidth)
+        projection: Projectors
+        print: 	Print preview mode/printed pages
+        screen: Computer screens
+        tty: Teletypes and similar media using a fixed-pitch character grid
+        tv: Television type devices (low resolution, limited scroll ability)
+        width: |
+          Specifies the width of the targeted display area.
+          "min-" and "max-" prefixes can be used.
+          Example: media="screen and (min-width:500px)"
+        min-width: Specifies the width of the targeted display area.
+        max-width: Specifies the width of the targeted display area.
+        height: |
+          Specifies the height of the  targeted display area.
+          "min-" and "max-" prefixes can be used.
+          Example: media="screen and (max-height:700px)"
+        min-height: Specifies the height of the  targeted display area.
+        max-height: Specifies the height of the  targeted display area.
+        device-width: |
+          Specifies the width of the target display/paper.
+          "min-" and "max-" prefixes can be used.
+          Example: media="screen and (device-width:500px)"
+        min-device-width: Specifies the width of the target display/paper.
+        max-device-width: Specifies the width of the target display/paper.
+        device-height: |
+          Specifies the height of the target display/paper.
+          "min-" and "max-" prefixes can be used.
+          Example: media="screen and (device-height:500px)"
+        min-device-height: Specifies the height of the target display/paper.
+        max-device-height: Specifies the height of the target display/paper.
+        orientation: |
+          Specifies the orientation of the target display/paper.
+          Possible values: "portrait" or "landscape"
+          Example: media="all and (orientation: landscape)"
+        portrait: "Example: (orientation: landscape)"
+        landscape: "Example: (orientation: landscape)"
+        aspect-ratio: |
+          Specifies the width/height ratio of the targeted display area.
+          Example: media="screen and (aspect-ratio:16/9)"
+        min-aspect-ratio: |
+          Specifies the width/height ratio of the targeted display area.
+          Example: media="screen and (min-aspect-ratio:16/9)"
+        max-aspect-ratio: |
+          Specifies the width/height ratio of the targeted display area.
+          Example: media="screen and (max-aspect-ratio:16/9)"
+        device-aspect-ratio: |
+          Specifies the device-width/device-height ratio of the target display/paper.
+          Example: media="screen and (aspect-ratio:16/9)"
+        min-device-aspect-ratio: |
+          Specifies the device-width/device-height ratio of the target display/paper.
+          Example: media="screen and (min-aspect-ratio:16/9)"
+        max-device-aspect-ratio: |
+          Specifies the device-width/device-height ratio of the target display/paper.
+          Example: media="screen and (max-aspect-ratio:16/9)"
+        color: |
+          Specifies the bits per color of target display.
+          Example: media="screen and (color:3)"
+        min-color: Specifies the bits per color of target display.
+        max-color: Specifies the bits per color of target display.
+        color-index: |
+          Specifies the number of colors the target display can handle.
+          Example: media="screen and (color-index:256)"
+        min-color-index: |
+          Specifies the number of colors the target display can handle.
+          Example: media="screen and (min-color-index:256)"
+        max-color-index: |
+          Specifies the number of colors the target display can handle.
+          Example: media="screen and (max-color-index:256)"
+        monochrome: |
+          Specifies the bits per pixel in a monochrome frame buffer.
+          "min-" and "max-" prefixes can be used.
+          Example: media="screen and (monochrome:2)"
+        min-monochrome: |
+          Specifies the bits per pixel in a monochrome frame buffer.
+          "min-" and "max-" prefixes can be used.
+          Example: media="screen and (min-monochrome:2)"
+        max-monochrome: |
+          Specifies the bits per pixel in a monochrome frame buffer.
+          "min-" and "max-" prefixes can be used.
+          Example: media="screen and (max-monochrome:2)"
+        resolution: |
+          Specifies the pixel density (dpi or dpcm) of the target display/paper.
+          "min-" and "max-" prefixes can be used.
+          Example: media="print and (resolution:300dpi)"
+        min-resolution: |
+          Specifies the pixel density (dpi or dpcm) of the target display/paper.
+          "min-" and "max-" prefixes can be used.
+          Example: media="print and (min-resolution:300dpi)"
+        max-resolution: |
+          Specifies the pixel density (dpi or dpcm) of the target display/paper.
+          "min-" and "max-" prefixes can be used.
+          Example: media="print and (max-resolution:300dpi)"
+        scan: |
+          Specifies scanning method of a tv display.
+          Possible values are "progressive" and "interlace".
+          Example: media="tv and (scan:interlace)"
+        progressive: Value for "scan"
+        interlace: Value for "scam"
+        grid: |
+          Specifies if the output device is grid or bitmap.
+          Possible values are "1" for grid, and "0" otherwise.
+          Example: media="handheld and (grid:1)"
+  - method:
+      t: form
+      v: ["GET", "POST"]
+  - rel:
+      t: link
+      v:
+        alternate: |
+          Links to an alternate version of the document (i.e. print page, translated or mirror).
+          <link rel="alternate" type="application/atom+xml" title="Foo news" href="/blog/news/atom">
+        author: Links to the author of the document
+        help: |
+          Links to a help document.
+          <link rel="help" href="/help/">       
+        icon: |
+          Imports an icon to represent the document.
+          <link rel="icon" href="/favicon.ico" type="image/x-icon">
+        license: Links to copyright information for the document
+        next: Indicates that the document is a part of a series, and that the next document in the series is the referenced document
+        prefetch: Specifies that the target resource should be cached
+        prev: Indicates that the document is a part of a series, and that the previous document in the series is the referenced document
+        search: Links to a search tool for the document
+        stylesheet: |
+          URL to a style sheet to import
+          <link rel="stylesheet" type="text/css" href="theme.css">
+
+  - rel:
+      t: a
+      v:
+        alternate: Links to an alternate version of the document (i.e. print page, translated or mirror)
+        author: Links to the author of the document
+        bookmark: Permanent URL used for bookmarking
+        help: Links to a help document
+        license: Links to copyright information for the document
+        next: The next document in a selection
+        nofollow: |
+          Links to an unendorsed document, like a paid link.
+          ("nofollow" is used by Google, to specify that the Google search spider should not follow that link)
+        noreferrer: Specifies that the browser should not send a HTTP referer header if the user follows the hyperlink
+        prefetch: Specifies that the target document should be cached
+        prev: The previous document in a selection
+        search: Links to a search tool for the document
+        tag: A tag (keyword) for the current document
+
+  - preload:
+      t: [audio, video]
+      v: 
+        auto: The author thinks that the browser should load the entire audio file when the page loads
+        metadata: The author thinks that the browser should load only metadata when the page loads
+        none: The author thinks that the browser should NOT load the audio file when the page loads
+  - sandbox:
+      t: iframe
+      v:
+        allow-same-origin: Allows the iframe content to be treated as being from the same origin as the containing document
+        allow-top-navigation: Allows the iframe content to navigate (load) content from the containing document
+        allow-forms: Allows form submission
+        allow-scripts: Allows script execution
+  - spellcheck:
+      t: global
+      v: *TRUEFALSE
+  - scope:
+      t: th
+      v: 
+        col: Specifies that the cell is a header for a column
+        row: Specifies that the cell is a header for a row
+        colgroup: Specifies that the cell is a header for a group of columns
+        rowgroup: Specifies that the cell is a header for a group of rows
+  - shape:
+      t: area
+      v:
+        default: Specifies the entire region
+        rect: Defines a rectangular region
+        circle: Defines a circular region
+        poly: Defines a polygonal region
+  - sizes:
+      t: link
+      v:
+        any: |
+          Specifies that the icon is scalable (like an SVG image)
+          Examples:
+            <link rel="icon" href="icon.svg" sizes="any" type="image/svg+xml"> (any size)
+        "16x16": |
+          <link rel="icon" href="favicon.png" sizes="16x16" type="image/png"> (1 size)
+        "32x32": |
+          <link rel="icon" href="favicon.png" sizes="32x32" type="image/png"> (2 size)
+        "64x64":
+  - srclang:
+      t: track
+      v: *LANGTAG
+  - step:
+      t: input
+      v: any
+  - style: 
+      t: global
+      v: *CSS
+  - target:
+      t: [a, area, base, form]
+      v: 
+        _blank: Load in a new window
+        _self: Load in the same frame as it was clicked
+        _parent: Load in the parent frameset
+        _top: Load in the full body of the window
+  - translate:
+      t: global
+      v: *YESNO
+  - type:
+      t: [a, area, link]
+      v: *MEDIATYPES
+  - type:
+      t: button
+      v: 
+        button: Clickable button. Does nothing.
+        submit: Submits the form.
+        reset: Resets the form.
+  - type:
+      t: [embed, object, script, source, style]
+      v: *MEDIATYPES
+  - type:
+      t: input
+      v: 
+        hidden: An arbitrary string
+        text: |
+          Text with no line breaks.
+          A text field
+        search: |
+          [HTML5]
+          Text with no line breaks.
+          Search field
+        tel: |
+          [HTML5]
+          Text with no line breaks.
+          A text field
+        url: |
+          [HTML5]
+          An absolute URL
+          A text field
+        email: |
+          [HTML5]
+          An e-mail address or list of e-mail addresses
+          A text field
+        password: |
+          Text with no line breaks (sensitive information).
+          A text field that obscures data entry
+        date: |
+          [HTML5]
+          A date (year, month, day) with no time zone.
+          A date control
+        datetime: |
+          [HTML5]
+          Defines a date and time control (year, month, day, hour, minute, second, and fraction of a second, based on UTC time zone)
+        datetime-local: |
+          [HTML5]
+          Defines a date and time control (year, month, day, hour, minute, second, and fraction of a second (no time zone)
+        week: |
+          [HTML5]
+          Defines a week and year control (no time zone)
+        month: |
+          [HTML5]
+          Defines a month and year control (no time zone)
+        time: |
+          [HTML5]
+          A time (hour, minute, seconds, fractional seconds) with no time zone.
+          A time control
+        number: |
+          [HTML5]
+          A numerical value.
+          A text field or spinner control
+        range: |
+          [HTML5]
+          A numerical value, with the extra semantic that the exact value is not important.
+          A slider control or similar
+        color: |
+          [HTML5]
+          An sRGB color with 8-bit red, green, and blue components.
+          A color well
+        checkbox: |
+          A set of zero or more values from a predefined list.
+          A checkbox
+        radio: |
+          An enumerated value.
+          A radio button
+        file: |
+          File Upload
+          Zero or more files each with a MIME type and optionally a file name
+          A label and a button
+        submit: |
+          Submit Button
+          An enumerated value, with the extra semantic that it must be the last value selected and initiates form submission
+          A button
+        image: |
+          Image Button
+          A coordinate, relative to a particular image's size, with the extra semantic that it must be the last value selected and initiates form submission
+          Either a clickable image, or a button
+        reset: Reset Button 	A button
+        button:
+  - type:
+      t: ol
+      v: 
+        1: |
+          Decimal numbers
+          1. 2. 3. ... 3999. 4000. 4001. ...
+        a: |
+          Lowercase latin alphabet
+          a. b. c. ... ewu. ewv. eww. ...
+        A: |
+          Uppercase latin alphabet
+          A. B. C. ... EWU. EWV. EWW. ...
+        i: |
+          Lowercase roman numerals
+          i. ii. iii. ... mmmcmxcix. i̅v̅. i̅v̅i. ...
+        I: |
+          Uppercase roman numerals
+          I. II. III. ... MMMCMXCIX. I̅V̅. I̅V̅I. ...
+  - wrap:
+      t: textarea
+      v:
+        soft: The text in the textarea is not wrapped when submitted in a form. This is default
+        hard: The text in the textarea is wrapped (contains newlines) when submitted in a form. When "hard" is used, the cols attribute must be specified
+  - name:
+      t: meta
+      v:        
+        application-name:
+        author:
+        description:
+        generator:
+        keywords:
+        viewport:
+        MobileOptimized:
+        HandheldFriendly:
+  - content:
+      t: meta
+      v:
+        width: |
+          The width of the virtual viewport of the device.
+            Ex: width=device-width, initial-scale=1.0
+        device-width: |
+          "The physical width of the device's screen."
+            Ex: width=device-width, initial-scale=1.0
+        height: "The height of the \"virtual viewport\" of the device."
+        device-height: |
+          The physical height of the device's screen.
+            Ex: width=device-width, initial-scale=1.0
+        initial-scale: |
+          The initial zoom when visiting the page. 1.0 does not zoom.
+            Ex: width=device-width, initial-scale=1.0
+        minimum-scale: |
+          The minimum amount the visitor can zoom on the page. 1.0 does not zoom.
+            Ex: width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no
+        maximum-scale: |
+          The maximum amount the visitor can zoom on the page. 1.0 does not zoom.
+            Ex: width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no
+        user-scalable: |
+          Allows the device to zoom in and out. Values are yes or no.
+            Ex: width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no
+          

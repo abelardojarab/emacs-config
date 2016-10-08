@@ -1,0 +1,26 @@
+{
+  "name": "web-completion-data",
+  "version": "1.0.0",
+  "description": "Convert Yaml data to web-completion-data",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/osv/web-completion-data.git"
+  },
+  "author": "Olexandr Sydorchuk",
+  "license": "WTFPL",
+  "bugs": {
+    "url": "https://github.com/osv/web-completion-data/issues"
+  },
+  "homepage": "https://github.com/osv/web-completion-data#readme",
+  "dependencies": {
+    "colors": "^1.1.2",
+    "js-yaml": "^3.5.3",
+    "minimist": "^1.2.0",
+    "mkdirp": "^0.5.1",
+    "underscore": "^1.8.3",
+    "yaml-js": "^0.1.3"
+  }
+}

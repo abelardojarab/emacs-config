@@ -1,0 +1,2609 @@
+tags:
+  a: |
+    The HTML <a> Element (or the HTML Anchor Element) defines a hyperlink, the named target destination for a hyperlink, or both.
+    
+    Content categories:
+    Flow content, phrasing content, interactive content, palpable content.
+    
+    Permitted content:
+    Transparent, containing either flow content or phrasing content.
+    
+    Tag omission:
+    None, both the starting and ending tag are mandatory.
+    
+    Permitted parent elements:
+    Any element that accepts phrasing content, or any element that accepts flow content.
+    
+    DOM interface:
+    HTMLAnchorElement
+
+  abbr: |
+    The HTML <abbr> Element (or HTML Abbreviation Element) represents an abbreviation and optionally provides a full description for it. If present, the title attribute must contain this full description and nothing else.
+    
+    Usage note:
+    When present, the grammatical number of the text in the title attribute should match that of the content of the <abbr> element. This is also the case in languages with more than two grammatical numbers (for example, Arabic not only has singular and plural categories, but also a dual category).
+    
+    Content categories:
+    Flow content, phrasing content, palpable content
+    
+    Permitted content:
+    Phrasing content.
+    
+    Tag omission:
+    None, both the starting and ending tag are mandatory.
+    
+    Permitted parent elements:
+    Any element that accepts phrasing content.
+    
+    DOM interface:
+    HTMLElement Up to Gecko 1.9.2 (Firefox 3.6) inclusive, Firefox implemented the HTMLSpanElement interface for this element.
+    
+    Default styling:
+    The purpose of this element is purely for the convenience of the author and all browsers display it inline (display: inline) by default, though its default styling varies from one browser to another:
+    
+    Some browsers, like Internet Explorer, do not style it differently than a <span> element.
+    Opera, Firefox, and some others add a dotted underline to the content of the element.
+    A few browsers not only add a dotted underline, but also put it in small caps; to avoid this styling, adding something like font-variant: none in the CSS takes care of this case.
+
+  acronym: |
+    !Obsolete!
+    The HTML Acronym Element (<acronym>) allows authors to clearly indicate a sequence of characters that compose an acronym or abbreviation for a word.
+    
+    THIS ELEMENT HAS BEEN REMOVED IN HTML5 AND SHOULDN'T BE USED ANYMORE. INSTEAD WEB DEVELOPERS SHOULD USE THE <ABBR> ELEMENT.
+
+  address: |
+    The HTML <address> Element may be used by authors to supply contact information for its nearest <article> or <body> ancestor; in the latter case, it applies to the whole document.
+    
+    Usage note:
+    To represent an arbitrary address, one that is not related to the contact information, use a <p> element rather than the <address> element.
+    This element should not contain more information than the contact information, like a publication date (which belongs in a <time> element).
+    Typically an <address> element can be placed inside the <footer> element of the current section, if any.
+    
+    Content categories:
+    Flow content, palpable content.
+    
+    Permitted content:
+    Flow content, but with no nested <address> element, no heading content (<hgroup>, <h1>, <h2>, <h3>, <h4>, <h5>, <h6>), no sectioning content (<article>, <aside>, <section>, <nav>), and no <header> or <footer> element.
+    
+    Tag omission:
+    None, both the starting and ending tag are mandatory.
+    
+    Permitted parent elements:
+    Any element that accepts flow content.
+    
+    DOM interface:
+    HTMLElement Prior to Gecko 2.0 (Firefox 4), Gecko implemented this element using the HTMLSpanElement interface.
+
+  applet: |
+    The HTML Applet Element (<applet>) identifies the inclusion of a Java applet.
+    
+    OBSOLETE
+    THIS FEATURE IS OBSOLETE. ALTHOUGH IT MAY STILL WORK IN SOME BROWSERS, ITS USE IS DISCOURAGED SINCE IT COULD BE REMOVED AT ANY TIME. TRY TO AVOID USING IT.
+
+  area: |
+    The HTML <area> element defines a hot-spot region on an image, and optionally associates it with a hypertext link. This element is used only within a <map> element.
+    
+    Content categories:
+    Flow content, phrasing content.
+    
+    Permitted content:
+    None, it is an empty element.
+    
+    Tag omission:
+    None, both the starting and ending tag are mandatory.
+    
+    Permitted parent elements:
+    Any element that accepts phrasing content. The <area> element must have an ancestor <map>, but it need not be a direct parent.
+    
+    DOM interface:
+    HTMLAreaElement
+
+  article: |
+    The HTML <article> Element represents a self-contained composition in a document, page, application, or site, which is intended to be independently distributable or reusable, e.g., in syndication. This could be a forum post, a magazine or newspaper article, a blog entry, a user-submitted comment, an interactive widget or gadget, or any other independent item of content. Each <article> should be identified, typically by including a heading (h1-h6 element) as a child of the <article> element.
+    
+    Usage notes:
+    When an <article> element is nested, the inner element represents an article related to the outer element. For example, the comments of a blog post can be <article> elements nested in the <article> representing the blog post.
+    Author information of an <article> element can be provided through the <address> element, but it doesn't apply to nested <article> elements.
+    The publication date and time of an <article> element can be described using the pubdate attribute of a <time> element.
+    
+    Content categories:
+    Flow content, sectioning content, palpable content.
+    
+    Permitted content:
+    Flow content.
+    
+    Tag omission:
+    None, both the starting and ending tag are mandatory.
+    
+    Permitted parent elements:
+    Any element that accepts flow content. Note that an <article> element must not be a descendant of an <address> element.
+    
+    DOM interface:
+    HTMLElement
+
+  aside: |
+    The HTML element  represents a section of the page with content connected tangentially to the rest , which could be considered separate from that content. These sections are often represented as sidebars or inserts. They often contain the definitions on the sidebars, such as definitions from the glossary ; there may also be other types of information , such as related advertisements ; the biography of the author ; web applications ; profile information or related links on the blog.
+    
+    Usage notes:
+    Do not use the <aside> element to tag parenthesized text, as this kind of text is considered part of the main flow.
+    
+    Content categories:
+    Flow content, sectioning content, palpable content.
+    
+    Permitted content:
+    Flow content.
+    
+    Tag omission:
+    None, both the starting and ending tag are mandatory.
+    
+    Permitted parent elements:
+    Any element that accepts flow content. Note that an <aside> element must not be a descendant of an <address> element.
+    
+    DOM interface:
+    HTMLElement
+
+  audio: |
+    The HTML <audio> element is used to embed sound content in documents. It may contain several audio sources, represented using the src attribute or the <source> element; the browser will choose the most suitable one.
+    
+    Fallback content for browser not supporting the <audio> element can be added too.
+    
+    You can use the enhanced audio API features — which are Gecko-specific — to directly generate and manipulate audio streams from JavaScript code. See Introducing the audio API extension for details.
+    
+    Content categories:
+    Flow content, phrasing content, embedded content. If it has a controls attribute: interactive content and palpable content.
+    
+    Permitted content:
+    If the element has a src attribute: zero or more <track> element, followed by transparent content that contains no media elements, that is no <audio> or <video>
+    Else: zero or more <source> element, followed by zero or more <track> element, followed by transparent content that contains no media elements, that is no <audio> or <video>.
+    
+    Tag omission:
+    None, both the starting and ending tag are mandatory.
+    
+    Permitted parent elements:
+    Any element that accepts embedded content.
+    
+    DOM interface:
+    HTMLAudioElement
+
+  b: |
+    The HTML <b> Element represents a span of text stylistically different from normal text, without conveying any special importance or relevance. It is typically used for keywords in a summary, product names in a review, or other spans of text whose typical presentation would be boldfaced. Another example of its use is to mark the lead sentence of each paragraph of an article.
+    
+    Usage notes:
+    Do not confuse the <b> element with the <strong>, <em>, or <mark> elements. The <strong> element represents text of certain importance, <em> puts some emphasis on the text and the <mark> element represents text of certain relevance. The <b> element doesn't convey such special semantic information; use it only when no others fit.
+    Similarly, do not mark titles and headings using the <b> element. For this purpose, use the <h1> to <h6> tags. Further, stylesheets can change the default style of these elements, with the result that they are not necessarily displayed in bold.
+    It is a good practice to use the class attribute on the <b> in order to convey additional semantic information (for example <b class="lede"> for the first sentence in a paragraph). This eases the development of several stylings of a web document, without the need to change its HTML code.
+    Historically, the <b> element was meant to make text boldface. Styling information has been deprecated since HTML4, so the meaning of the <b> element has been changed.
+    If there is no semantic purpose on using the <b> element, using css property font-weight with bold value would be a better choice for making text bold.
+    
+    Content categories:
+    Flow content, phrasing content, palpable content.
+    
+    Permitted content:
+    Phrasing content.
+    
+    Tag omission:
+    None, both the starting and ending tag are mandatory.
+    
+    Permitted parent elements:
+    Any element that accepts phrasing content.
+    
+    DOM interface:
+    HTMLElement Up to Gecko 1.9.2 (Firefox 4) inclusive, Firefox implements the HTMLSpanElement interface for this element.
+
+  base: |
+    The HTML Base Element (<base>) specifies the base URL to use for all relative URLs contained within a document.There is maximum one <base> element in a document.
+    
+    Usage note: 
+    If multiple <base> elements are specified, only the first href and first target value are used; all others are ignored.
+    
+    Content categories:
+    Metadata content.
+    
+    Permitted content:
+    None, it is an empty element.
+    
+    Tag omission:
+    There must be no closing tag.
+    
+    Permitted parent elements:
+    Any <head> that doesn't contain any other <base> element.
+    
+    DOM interface:
+    HTMLBaseElement
+
+  basefont: |
+    OBSOLETE
+    The HTML basefont element (<basefont>) establishes a default font size for a document. Font size then can be varied relative to the base font size using the <font> element.
+    
+    Usage note:
+    
+    Do not use this element! Though once (imprecisely) normalized in HTML 3.2, it wasn't supported in all major browsers. Further, browsers, and even successive versions of browsers, never implemented it in the same way: practically, using it has always brought indeterminate results.
+    
+    The <basefont> element was deprecated in the standard at the same time as all elements related to styling only. Starting with HTML 4, HTML does not convey styling information anymore (outside the <style> element or the style attribute of each element). In HTML5, this element has been removed completely. For any new web development, styling should be written using CSS only.
+    
+    The former behavior of the <font> element can be achieved, and even better controlled using the font, font-family, font-size, font-size-adjust, font-stretch, font-style, font-variant, font-weight, @font-face properties.
+    
+    DOM interface:
+    This element implements the HTMLBaseFontElement interface.
+    
+    Only IE supports this.
+
+  bdi: |
+    The HTML <bdi> Element (or Bi-Directional Isolation Element) isolates a span of text that might be formatted in a different direction from other text outside it.
+    
+    This element is useful when embedding text with an unknown directionality, from a database for example, inside text with a fixed directionality.
+    
+    Though the same visual effect can be achieved using the CSS rule unicode-bidi: isolate on a <span> or another text-formatting element, the semantic meaning is only conveyed by the <bdi> element. Especially, browsers are allowed to ignore CSS styling. In such a case, the text would still be correctly displayed using the HTML element, but will become garbage when using the CSS styling to convey semantic.
+    
+    Content categories:
+    Flow content, phrasing content, palpable content.
+    
+    Permitted content:
+    Phrasing content.
+    
+    Tag omission:
+    None, both the starting and ending tag are mandatory.
+    
+    Permitted parent elements:
+    Any element that accepts phrasing content.
+    
+    DOM interface:
+    HTMLElement
+    
+    Attributes:
+    Like all other HTML elements, this element has the global attributes, with a slight semantic difference: the dir attribute is not inherited. If not set, its default value is the auto which let the browser decide the direction based on the element's content.
+
+  bdo: |
+    The HTML <bdo> Element (or HTML bidirectional override element) is used to override the current directionality of text. It causes the directionality of the characters to be ignored in favor of the specified directionality.
+    
+    Content categories:
+    Flow content, phrasing content, palpable content.
+    
+    Permitted content:
+    Phrasing content.
+    
+    Tag omission:
+    None, both the starting and ending tag are mandatory.
+    
+    Permitted parent elements:
+    Any element that accepts phrasing content.
+    
+    DOM interface:
+    HTMLElement Up to Gecko 1.9.2 (Firefox 4) inclusive, Firefox implements the HTMLSpanElement interface for this element.
+
+  bgsound: |
+    DO NOT USE THIS!
+    Use <audio> instead.
+    
+    Non-standard
+    This feature is non-standard and is not on a standards track. Do not use it on production sites facing the Web: it will not work for every user. There may also be large incompatibilities between implementations and the behavior may change in the future.
+    
+    The HTML Background Sound Element () is an Internet Explorer element associating a background sound with a page.
+
+  big: |
+    The HTML Big Element (<big>) makes the text font size one size bigger (for example, from small to medium, or from large to x-large) up to the browser's maximum font size.
+    
+    OBSOLETE
+    
+    Usage note: 
+    As it was purely presentational, this element has been removed in HTML5 and shouldn't be used anymore. Instead web developers should use CSS properties.
+
+  blink: |
+    Deprecated.
+    Non-standard.
+    WARNING: DO NOT USE THIS.
+    The HTML Blink Element (<blink>) is a non-standard element causing the enclosed text to flash slowly.
+
+  blockquote: |
+    The HTML <blockquote> Element (or HTML Block Quotation Element) indicates that the enclosed text is an extended quotation. Usually, this is rendered visually by indentation (see Notes for how to change it). A URL for the source of the quotation may be given using the cite attribute, while a text representation of the source can be given using the <cite> element.
+    
+    Content categories:
+    Flow content, sectioning root, palpable content.
+    
+    Permitted content:
+    Flow content.
+    
+    Tag omission:
+    None, both the starting and ending tag are mandatory.
+    
+    Permitted parent elements:
+    Any element that accepts flow content.
+    
+    DOM interface:
+    HTMLQuoteElement
+
+  body: |
+    The HTML <body> element represents the content of an HTML document. There is only one <body> element in a document.
+    
+    Content categories:
+    Sectioning root.
+    
+    Permitted content:
+    Flow content.
+    
+    Tag omission:
+    The start tag may be omitted if the first thing inside it is not a space character, comment, <script> element or <style> element. The end tag may be omitted if the body element has contents or has a start tag, and is not immediately followed by a comment.
+    
+    Permitted parent elements:
+    It must be the second element of an <html> element.
+    
+    DOM interface:
+    HTMLBodyElement
+    The <body> element exposes the HTMLBodyElement interface.
+    You can access the body element through the document.body attribute.
+
+  br: |
+    The HTML <br> Element (or HTML Line Break Element) produces a line break in text (carriage-return). It is useful for writing a poem or an address, where the division of lines is significant.
+    
+    Notes:
+    Do not use <br> to increase the gap between lines of text; use the CSS margin property or the <p> element.
+    
+    Content categories:
+    Flow content, phrasing content.
+    
+    Permitted content:
+    None, it is an empty element.
+    
+    Tag omission:
+    Must have a start tag, and must not have an end tag. In XHTML documents, write this element as <br />.
+    
+    Permitted parent elements:
+    Any element that accepts phrasing content.
+    
+    DOM interface:
+    HTMLBRElement
+    
+
+  button: |
+    The HTML <button> Element represents a clickable button.
+    
+    Content categories:
+    Flow content, phrasing content, Interactive content, listed, labelable, and submittable form-associated element, palpable content.
+    
+    Permitted content:
+    Phrasing content.
+    
+    Tag omission:
+    None, both the starting and ending tag are mandatory. 
+    
+    Permitted parent elements:
+    Any element that accepts phrasing content.
+    
+    DOM interface:
+    HTMLButtonElement
+    
+    Element type:
+    Inline
+
+  canvas: |
+    The HTML <canvas> Element can be used to draw graphics via scripting (usually JavaScript). For example, it can be used to draw graphs, make photo compositions or even perform animations. You may (and should) provide alternate content inside the <canvas> block. That content will be rendered both on older browsers that don't support canvas and in browsers with JavaScript disabled.
+    
+    For more articles on canvas, see the canvas topic page.
+    
+    Content categories:
+    Flow content, phrasing content, embedded content, palpable content.
+    
+    Permitted content:
+    Transparent but with no interactive content descendants except for <a> elements, <button> elements, <input> elements whose type attribute is checkbox, radio, or button.
+    
+    Tag omission:
+    None, both the starting and ending tag are mandatory.
+    
+    Permitted parent elements:
+    Any element that accepts phrasing_content.
+    
+    DOM interface:
+    HTMLCanvasElement
+    
+    Notes:
+    
+    The displayed size of the canvas can be changed using a stylesheet. The image is scaled during rendering to fit the styled size.
+    
+    If you use canvas and doesn’t need to be transparent, set the moz-opaque attribute on the canvas tag. This information can be used internally to optimize rendering. However, this attribute has not been standardized and does only work in Mozilla-based rendering engines.
+
+  caption: |
+    The HTML <caption> Element (or HTML Table Caption Element) represents the title of a table. Though it is always the first descendant of a <table>, its styling, using CSS, may place it elsewhere, relative to the table.
+    
+    Usage note: 
+    When the <table> element that is the parent of this <caption> is the only descendant of a <figure> element, use the <figcaption> element instead.
+    
+    Content categories:
+    None.
+    
+    Permitted content:
+    Flow content.
+    
+    Tag omission:
+    None, both the starting and ending tag are mandatory.
+    
+    Permitted parent elements:
+    A <table> element, as its first descendant.
+    
+    DOM interface:
+    HTMLTableCaptionElement
+
+  center: |
+    !DEPRECATED!
+    
+    The HTML Center Element (<center>) is a block-level element that can contain paragraphs and other block-level and inline elements. The entire content of this element is centered horizontally within its containing element (typically, the <body>). This tag has been deprecated in HTML 4 (and XHTML 1) in favor of the CSS text-align property, which can be applied to the <div> element or to an individual <p>.
+    
+    DOM Interface:
+    This element implements the HTMLElement interface.
+
+  cite: |
+    The HTML <cite> Element (or HTML Citation Element) represents a reference to a creative work. It must include the title of a work, the name of the author, or a URL reference, which may be in an abbreviated form according to the conventions used for the addition of citation metadata.
+    
+    Usage Notes:
+    
+    A creative work may include a book, a paper, an essay, a poem, a score, a song, a script, a film, a TV show, a game, a sculpture, a painting, a theater production, a play, an opera, a musical, an exhibition, a legal case report, a computer program, , a web site, a web page, a blog post or comment, a forum post or comment, a tweet, a written or oral statement, etc.
+    Use the cite attribute on a <blockquote> or <q> element to reference an online resource for a source.
+    
+    Content categories:
+    Flow content, phrasing content, palpable content.
+    
+    Permitted content:
+    Phrasing content.
+    
+    Tag omission:
+    None, both the starting and ending tag are mandatory.
+    
+    Permitted parent elements:
+    Any element that accepts phrasing content.
+    
+    DOM interface:
+    HTMLElement Up to Gecko 1.9.2 (Firefox 4) inclusive, Firefox implements the HTMLSpanElement interface for this element.
+
+  code: |
+    The HTML <code> Element represents a fragment of computer code. By default, it is displayed in the browser's default monospace font.
+    
+    Content categories:
+    Flow content, phrasing content, palpable content.
+    
+    Permitted content:
+    Phrasing content.
+    
+    Tag omission:
+    None, both the starting and ending tag are mandatory.
+    
+    Permitted parent elements:
+    Any element that accepts phrasing content.
+    
+    DOM interface:
+    HTMLElement Up to Gecko 1.9.2 (Firefox 4) inclusive, Firefox implements the HTMLSpanElement interface for this element.
+    
+    Note:
+    A CSS rule can be defined for the code selector to override the browser's default font face. Preferences set by the user might take precedence over the specified CSS.
+
+  col: |
+    The HTML <col> Element (or HTML Table Column Element) defines a column within a table and is used for defining common semantics on all common cells. It is generally found within a <colgroup> element.
+    
+    Content categories:
+    None.
+    
+    Permitted content:
+    None, it is an empty element.
+    
+    Tag omission:
+    The start tag is mandatory, but, as it is a void element, the use of an end tag is forbidden.
+    
+    Permitted parent elements:
+    <colgroup> only, though it can be implicitly defined as its start tag is not mandatory. The <colgroup> must not have a span attribute.
+    
+    DOM interface:
+    HTMLTableColElement
+
+  colgroup: |
+    The HTML <colgroup> Element (or HTML Table Column Group Element) defines a group of columns within a table.
+    
+    Content categories:
+    None.
+    
+    Permitted content:
+    If the span attribute is present: none, it is an empty element.
+    If the attribute is not present: zero or more <col> element.
+    
+    Tag omission:
+    The start tag may be omitted, if it has a <col> element as its first child and if it is not preceded by a <colgroup> whose end tag has been omitted.
+    
+    Permitted parent elements:
+    A <table> element. The <colgroup> must appear after any optional <caption> element but before any <thead>, <th>, <tbody>, <tfoot> and <tr> element.
+    
+    DOM interface:
+    HTMLTableColElement
+
+  command:
+
+  content: |
+    The HTML content element <content> is used with shadow trees as an insertion point.
+    
+    For more information about shadow trees, see the Shadow DOM draft specification.
+    
+    Content categories:
+    Transparent content.
+    
+    Tag omission:
+    None, both the starting and ending tag are mandatory.
+    
+    DOM interface:
+    HTMLContentElement
+
+  data: |
+    The HTML <data> Element links a given content with a machine-readable translation. If the content is time- or date-related, the <time> must be used.
+    
+    Content categories:
+    Flow content, phrasing content, palpable content.
+    
+    Permitted content:
+    Phrasing content.
+    
+    Tag omission:
+    None, both the starting and ending tag are mandatory.
+    
+    Permitted parent elements:
+    Any element that accepts phrasing content.
+    
+    DOM interface:
+    HTMLDataElement
+
+  datalist: |
+    The HTML <datalist> Element contains a set of <option> elements that represent the values available for other controls.
+    
+    Content categories:
+    Flow content, phrasing content.
+    
+    Permitted content:
+    Either phrasing content or zero or more <option> elements.
+    
+    Tag omission:
+    None, both the starting and ending tag are mandatory.
+    
+    Permitted parent elements:
+    Any element that accepts phrasing content.
+    
+    DOM interface:
+    HTMLDataListElement
+
+  dd: |
+    The HTML <dd> Element (or HTML Description Element) indicates the description of a term in a description list (<dl>) element. This element can occur only as a child element of a definition list and it must follow a <dt> element.
+    
+    Content categories:
+    None
+    
+    Permitted content:
+    Flow content.
+    
+    Tag omission:
+    Must have a start tag. The end tag may be omitted if this element is immediately followed by another <dd> element, or if there is no more content in the parent element.
+    
+    Permitted parent elements:
+    After a <dt> or a <dl> element, inside a <dl>.
+    
+    DOM interface:
+    HTMLElement Up to Gecko 1.9.2 (Firefox 4) inclusive, Firefox implements the HTMLSpanElement interface for this element.
+
+  decorator: |
+    This article hasn't been written yet. Please consider contributing!
+
+  del: |
+    The HTML <del> element (or HTML Deleted Text Element) represents a range of text that has been deleted from a document. This element is often (but need not be) rendered with strike-through text.
+    
+    Content categories:
+    Phrasing content or flow content.
+    
+    Permitted content:
+    Transparent.
+    
+    Tag omission:
+    None, both the starting and ending tag are mandatory.
+    
+    Permitted parent elements:
+    Any element that accepts phrasing content.
+    
+    DOM interface:
+    HTMLModElement
+
+  details: |
+    The HTML <details> Element is used as a disclosure widget from which the user can retrieve additional information.
+    
+    This is an experimental technology.
+    
+    Browser Compatibility:
+    Desktop: C O S
+    Mobile: A
+    
+    Content categories:
+    Flow content, sectioning root, interactive content, palpable content.
+    
+    Permitted content:
+    One <summary> element followed by flow content.
+    
+    Tag omission:
+    None, both the starting and ending tag are mandatory.
+    
+    Permitted parent elements:
+    Any element that accepts flow content.
+    
+    DOM interface:
+    HTMLDetailsElement
+
+  dfn: |
+    The HTML <dfn> element (or HTML Definition Element) represents the defining instance of a term.
+    
+    HTML5 Usage Notes:
+    The <dfn> element marks the term being defined; the definition of the term should be given by the surrounding <p>, <section> or definition list group (usually a <dt>, <dd> pair).
+    The exact value of the term being defined is determined by the following rules:
+    1. If the <dfn> element has a title attribute, then the term is the value of that attribute.
+    2. Else, if it contains only an <abbr> element with a title attribute, then the term is the value of that attribute.
+    3. Otherwise, the text content of the <dfn> element is the term being defined.
+    
+    Content categories:
+    Flow content, phrasing content, palpable content.
+    
+    Permitted content:
+    Phrasing content, but no <dfn> element must be a descendant.
+    
+    Tag omission:
+    None, both the starting and ending tag are mandatory.
+    
+    Permitted parent elements:
+    Any element that accepts phrasing content.
+    
+    DOM interface:
+    HTMLElement
+    
+    Notes:
+    In HTML5, the title attribute has special meaning, as noted above.
+
+  dialog: |
+    The HTML <dialog> element represents a dialog box or other interactive component, such as an inspector or window. <form> elements can be integrated within a dialog by specifying them with the attribute method="dialog". When such a form is submitted, the dialog is closed with a returnValue attribute set to the value of the submit button used.
+    
+    This is an experimental technology.
+    
+    Browser Compatibility:
+    Desktop: F O
+    Mobile: None
+    
+    Content categories:
+    Flow content, sectioning root.
+    
+    Permitted content:
+    Flow content.
+    
+    Tag omission:
+    None, both the starting and ending tag are mandatory.
+    
+    Permitted parent elements:
+    Any element that accepts flow content.
+    
+    DOM interface:
+    HTMLDialogElement
+
+  dir: |
+    !OBSOLETE!
+    
+    The HTML directory element (<dir>) represents a directory, namely a collection of filenames.
+    
+    This feature is obsolete. Although it may still work in some browsers, its use is discouraged since it could be removed at any time. Try to avoid using it.
+    
+    Usage note: 
+    Do not use this element. Though present in the early HTML specification, it has been deprecated in HTML 4, then is obsolete in HTML5. Use the <ul> instead.
+    
+
+  div: |
+    The HTML <div> element (or HTML Document Division Element) is the generic container for flow content, which does not inherently represent anything. It can be used to group elements for styling purposes (using the class or id attributes), or because they share attribute values, such as lang. It should be used only when no other semantic element (such as <article> or <nav>) is appropriate.
+    
+    Content categories:
+    Flow content, palpable content.
+    
+    Permitted content:
+    Flow content.
+    
+    Tag omission:
+    None, both the starting and ending tag are mandatory.
+    
+    Permitted parent elements:
+    Any element that accepts flow content.
+    
+    DOM interface:
+    HTMLDivElement
+
+  dl: |
+    The HTML <dl> Element (or HTML Description List Element) encloses a list of pairs of terms and descriptions. Common uses for this element are to implement a glossary or to display metadata (a list of key-value pairs).
+    
+    Prior to HTML5, <dl> was known as a Definition List.
+    
+    Content categories:
+    Flow content, and if the <dl> element's children include one name-value pair, palpable content.
+    
+    Permitted content:
+    Zero or more <dt> elements, each followed by one or more <dd> elements.
+    
+    Tag omission:
+    None, both the starting and ending tag are mandatory.
+    
+    Permitted parent elements:
+    Any element that accepts flow content.
+    
+    DOM interface:
+    HTMLDListElement
+    
+    Tip: 
+    It can be handy to define a key-value seperator in the CSS3, such as: dt:after {content: ": ";}
+    
+    Notes:
+    
+    Do not use this element, (nor <ul> elements), to merely create indention on a page. Although it works, this is a bad practice and obscures the meaning of definition lists.
+    
+    To change the indention of a description term, use the CSS margin property.
+
+  dt: |
+    The HTML <dt> element (or HTML Definition Term Element) identifies a term in a definition list. This element can occur only as a child element of a <dl>. It is usually followed by a <dd> element; however, multiple <dt> elements in a row indicate several terms that are all defined by the immediate next <dd> element.
+    
+    Content categories:
+    None.
+    
+    Permitted content:
+    FIXME: Flow content, but with no <header>, <footer>, sectioning content or heading content descendants.
+    
+    Tag omission:
+    Must have a start tag. The end tag may be omitted if this element is immediately followed by another <dd> element, or if there is no more content in the parent element.
+    
+    Permitted parent elements:
+    Before a <dt> or a <dd> element, inside a <dl>.
+    
+    DOM interface:
+    HTMLElement Up to Gecko 1.9.2 (Firefox 4) inclusive, Firefox implements the HTMLSpanElement interface for this element.
+
+  element: |
+    The HTML <element> element is used to define new custom DOM elements.
+    
+    Content categories:
+    Transparent content.
+    
+    Tag omission:
+    None, both the starting and ending tag are mandatory.
+    
+    DOM interface:
+    HTMLElement
+
+  em: |
+    The HTML <em> element (or HTML Emphasis Element) marks text that has stress emphasis. The <em> element can be nested, with each level of nesting indicating a greater degree of emphasis.
+    
+    Usage Note: 
+    Typically this element is displayed in italic type. However, it should not be used simply to apply italic styling; use the CSS styling for that purpose. Use the <cite> element to mark the title of a work (book, play, song, etc.); it is also typically styled with italic type, but carries different meaning. Use the <strong> element to mark text that has greater importance than surrounding text.
+    
+    Content categories:
+    Flow content, phrasing content, palpable content.
+    
+    Permitted content:
+    Phrasing content.
+    
+    Tag omission:
+    None, both the starting and ending tag are mandatory.
+    
+    Permitted parent elements:
+    Any element that accepts phrasing content.
+    
+    DOM interface:
+    HTMLElement Up to Gecko 1.9.2 (Firefox 4) inclusive, Firefox implements the HTMLSpanElement interface for this element.
+    
+    Notes:
+    The <em> element is often used to indicate an implicit or explicit contrast.
+    
+    <i> vs. <em>
+    It is often confusing to new developers why there are so many elements to express emphasis on some text. <i> and <em> are perhaps one of the most common. Why use <em></em> vs <i></i>? They produce exactly the same result, right?
+    
+    Not exactly. The visual result is, by default, the same - both tags render its content in italics. But the semantic meaning is different. The <em> tag represents stress emphasis of its contents, while the <i> tag represents text that is set off from the normal prose, such as the name of a movie or book, a foreign word, or when the text refers to the definition of a word instead of representing its semantic meaning.
+    
+    An example for <em> could be: "Just do it already!", or: "We had to do something about it". A person or software reading the text would pronounce the words in italics with an emphasis.
+    
+    An example for <i> could be: "The Queen Mary sailed last night". Here, there is no added emphasis or importance on the word "Queen Mary". It is merely indicated that the object in question is not a queen named Mary, but a ship named Queen Mary . Another example for <i> could be: "The word the is an article".
+
+  embed: |
+    The HTML <embed> Element represents an integration point for an external application or interactive content (in other words, a plug-in).
+    
+    Note: 
+    This topic documents only the element that is defined as part of HTML5. It does not address earlier, non-standardized implementation of the element.
+    
+    Content categories:
+    Flow content, phrasing content, embedded content, interactive content, palpable content.
+    
+    Permitted content:
+    None, it is an empty element.
+    
+    Tag omission:
+    Must have a start tag, and must not have an end tag.
+    
+    Permitted parent elements:
+    Any element that accepts embedded content.
+    
+    DOM interface:
+    HTMLEmbedElement
+
+  fieldset: |
+    The HTML <fieldset> element is used to group several controls as well as labels (<label>) within a web form.
+    
+    Content categories:
+    Flow content, sectioning root, listed, form-associated element, palpable content.
+    
+    Permitted content:
+    An optional <legend> element, followed by flow content.
+    
+    Tag omission:
+    None, both the starting and ending tag are mandatory.
+    
+    Permitted parent elements:
+    Any element that accepts flow content.
+    
+    DOM interface:
+    HTMLFieldSetElement
+
+  figcaption: |
+    The HTML <figcaption> Element represents a caption or a legend associated with a figure or an illustration described by the rest of the data of the <figure> element which is its immediate ancestor which means <figcaption> can be the first or last element inside a <figure> block. Also, the HTML Figcaption Element is optional; if not provided, then the parent figure element will have no caption.
+    
+    Content categories:
+    None.
+    
+    Permitted content:
+    Flow content.
+    
+    Tag omission:
+    None, both the starting and ending tag are mandatory.
+    
+    Permitted parent elements:
+    A <figure> element; the <figcaption> element must be its first or last child.
+    
+    DOM interface:
+    HTMLElement
+
+  figure: |
+    The HTML <figure> Element represents self-contained content, frequently with a caption (<figcaption>), and is typically referenced as a single unit. While it is related to the main flow, its position is independent of the main flow. Usually this is an image, an illustration, a diagram, a code snippet, or a schema that is referenced in the main text, but that can be moved to another page or to an appendix without affecting the main flow.
+    
+    Usage notes:
+    Being a sectioning root, the outline of the content of the <figure> element is excluded from the main outline of the document.
+    A caption can be associated with the <figure> element by inserting a <figcaption> inside it (as the first or the last child).
+    
+    Content categories:
+    Flow content, sectioning root, palpable content.
+    
+    Permitted content:
+    A <figcaption> element, followed by flow content; or flow content followed by a <figcaption> element; or flow content.
+    
+    Tag omission:
+    None, both the starting and ending tag are mandatory.
+    
+    Permitted parent elements:
+    Any element that accepts Flow content.
+    
+    DOM interface:
+    HTMLElement
+
+  font: |
+    OBSOLETE
+    The HTML Font Element (<font>) defines the font size, color and face for its content.
+
+  footer: |
+    The HTML <footer> Element represents a footer for its nearest sectioning content or sectioning root element (i.e, its nearest parent <article>, <aside>, <nav>, <section>, <blockquote>, <body>, <details>, <fieldset>, <figure>, <td>). A footer typically contains information about the author of the section, copyright data or links to related documents.
+    
+    Usage notes:
+    Enclose information about the author in an <address> element that can be included into the <footer> element.
+    The <footer> element is not sectioning content and therefore doesn't introduce a new section in the outline.
+    
+    Content categories:
+    Flow content, palpable content.
+    
+    Permitted content:
+    Flow content, but with no <footer> or <header> descendants.
+    
+    Tag omission:
+    None, both the starting and ending tag are mandatory.
+    
+    Permitted parent elements:
+    Any element that accepts flow content. Note that a <footer> element must not be a descendant of an <address>, <header> or another <footer> element.
+    
+    DOM interface:
+    HTMLElement
+
+  form: |
+    The HTML <form> element represents a document section that contains interactive controls to submit information to a web server.
+    
+    It is possible to use the :valid and :invalid CSS pseudo-classes to style a <form> element.
+    
+    Content categories:
+    Flow content, palpable content.
+    
+    Permitted content:
+    Flow content, but not containing <form> elements.
+    
+    Tag omission:
+    None, both the starting and ending tag are mandatory.
+    
+    Permitted parent elements:
+    Any element that accepts flow content.
+    
+    DOM interface:
+    HTMLFormElement
+    
+    Google Chrome notes:
+    The Google Chrome UI for auto-complete request varies, depending on whether autocomplete is set to off on input elements as well as their form. Specifically, when a form has autocomplete set to off and its input element's autocomplete field is not set, then if the user asks for autofill suggestions for the input element, Chrome might display a message saying "autocomplete has been disabled for this form." On the other hand, if both the form and the input element have autocomplete set to off, the browser will not display that message. For this reason, you should set autocomplete to off for each input that has custom auto-completion.
+
+  frame: |
+    Deprecated.
+    
+    <frame> is an HTML element which defines a particular area in which another HTML document can be displayed. A frame should be used within a <frameset>.
+    
+    Using the <frame> element is not encouraged because of certain disadvantages such as performance problems and lack of accessibility for users with screen readers. Instead of the <frame> element, <iframe> may be preferred.
+
+  frameset: |
+    Deprecated.
+    
+    <frameset> is an HTML element which is used to contain <frame> elements.
+    
+    Note: 
+    Because the use of frames is now discouraged in favor of using <iframe>, this element is not typically used by modern web sites.
+
+  h1: |
+    Heading elements implement six levels of document headings, <h1> is the most important and <h6> is the least. A heading element briefly describes the topic of the section it introduces. Heading information may be used by user agents, for example, to construct a table of contents for a document automatically.
+    
+    Content categories:
+    Flow content, heading content, palpable content.
+    
+    Permitted content:
+    Phrasing content.
+    
+    Tag omission:
+    None, both the starting and ending tag are mandatory.
+    
+    Permitted parent elements:
+    Any element that accepts flow content; or as a child of an <hgroup> element.
+    
+    DOM interface:
+    HTMLHeadingElement
+    
+    Notes:
+    Do not use lower levels to decrease heading font size: use the CSS font-size property instead.
+    
+    Avoid skipping heading levels: always start from <h1>, next use <h2> and so on. Also try to have only one first level heading on a page.
+    
+    In HTML5, use the <section> element to define the outline of a document. Headings provide titles for sections and subsections. You can also group a heading and its content using the <div> element.
+
+  h2: |
+    Heading elements implement six levels of document headings, <h1> is the most important and <h6> is the least. A heading element briefly describes the topic of the section it introduces. Heading information may be used by user agents, for example, to construct a table of contents for a document automatically.
+    
+    Content categories:
+    Flow content, heading content, palpable content.
+    
+    Permitted content:
+    Phrasing content.
+    
+    Tag omission:
+    None, both the starting and ending tag are mandatory.
+    
+    Permitted parent elements:
+    Any element that accepts flow content; or as a child of an <hgroup> element.
+    
+    DOM interface:
+    HTMLHeadingElement
+    
+    Notes:
+    Do not use lower levels to decrease heading font size: use the CSS font-size property instead.
+    
+    Avoid skipping heading levels: always start from <h1>, next use <h2> and so on. Also try to have only one first level heading on a page.
+    
+    In HTML5, use the <section> element to define the outline of a document. Headings provide titles for sections and subsections. You can also group a heading and its content using the <div> element.
+
+  h3: |
+    Heading elements implement six levels of document headings, <h1> is the most important and <h6> is the least. A heading element briefly describes the topic of the section it introduces. Heading information may be used by user agents, for example, to construct a table of contents for a document automatically.
+    
+    Content categories:
+    Flow content, heading content, palpable content.
+    
+    Permitted content:
+    Phrasing content.
+    
+    Tag omission:
+    None, both the starting and ending tag are mandatory.
+    
+    Permitted parent elements:
+    Any element that accepts flow content; or as a child of an <hgroup> element.
+    
+    DOM interface:
+    HTMLHeadingElement
+    
+    Notes:
+    Do not use lower levels to decrease heading font size: use the CSS font-size property instead.
+    
+    Avoid skipping heading levels: always start from <h1>, next use <h2> and so on. Also try to have only one first level heading on a page.
+    
+    In HTML5, use the <section> element to define the outline of a document. Headings provide titles for sections and subsections. You can also group a heading and its content using the <div> element.
+
+  h4: |
+    Heading elements implement six levels of document headings, <h1> is the most important and <h6> is the least. A heading element briefly describes the topic of the section it introduces. Heading information may be used by user agents, for example, to construct a table of contents for a document automatically.
+    
+    Content categories:
+    Flow content, heading content, palpable content.
+    
+    Permitted content:
+    Phrasing content.
+    
+    Tag omission:
+    None, both the starting and ending tag are mandatory.
+    
+    Permitted parent elements:
+    Any element that accepts flow content; or as a child of an <hgroup> element.
+    
+    DOM interface:
+    HTMLHeadingElement
+    
+    Notes:
+    Do not use lower levels to decrease heading font size: use the CSS font-size property instead.
+    
+    Avoid skipping heading levels: always start from <h1>, next use <h2> and so on. Also try to have only one first level heading on a page.
+    
+    In HTML5, use the <section> element to define the outline of a document. Headings provide titles for sections and subsections. You can also group a heading and its content using the <div> element.
+
+  h5: |
+    Heading elements implement six levels of document headings, <h1> is the most important and <h6> is the least. A heading element briefly describes the topic of the section it introduces. Heading information may be used by user agents, for example, to construct a table of contents for a document automatically.
+    
+    Content categories:
+    Flow content, heading content, palpable content.
+    
+    Permitted content:
+    Phrasing content.
+    
+    Tag omission:
+    None, both the starting and ending tag are mandatory.
+    
+    Permitted parent elements:
+    Any element that accepts flow content; or as a child of an <hgroup> element.
+    
+    DOM interface:
+    HTMLHeadingElement
+    
+    Notes:
+    Do not use lower levels to decrease heading font size: use the CSS font-size property instead.
+    
+    Avoid skipping heading levels: always start from <h1>, next use <h2> and so on. Also try to have only one first level heading on a page.
+    
+    In HTML5, use the <section> element to define the outline of a document. Headings provide titles for sections and subsections. You can also group a heading and its content using the <div> element.
+
+  h6: |
+    Heading elements implement six levels of document headings, <h1> is the most important and <h6> is the least. A heading element briefly describes the topic of the section it introduces. Heading information may be used by user agents, for example, to construct a table of contents for a document automatically.
+    
+    Content categories:
+    Flow content, heading content, palpable content.
+    
+    Permitted content:
+    Phrasing content.
+    
+    Tag omission:
+    None, both the starting and ending tag are mandatory.
+    
+    Permitted parent elements:
+    Any element that accepts flow content; or as a child of an <hgroup> element.
+    
+    DOM interface:
+    HTMLHeadingElement
+    
+    Notes:
+    Do not use lower levels to decrease heading font size: use the CSS font-size property instead.
+    
+    Avoid skipping heading levels: always start from <h1>, next use <h2> and so on. Also try to have only one first level heading on a page.
+    
+    In HTML5, use the <section> element to define the outline of a document. Headings provide titles for sections and subsections. You can also group a heading and its content using the <div> element.
+
+  head: |
+    The HTML Head Element (<head>) provides general information (metadata) about the document, including its title and links to or definitions of scripts and style sheets.
+    
+    Content categories: 
+    None.
+    
+    Permitted content: 
+    If the element is an <iframe>srcdoc, or if title information is available from a higher level protocol, zero or more elements of metadata content.
+    Otherwise, one or more elements of metadata content where exactly one is a <title> element.
+    
+    Tag omission:
+    The start tag may be omitted if the first thing inside the head element is an element.
+    The end tag may be omitted if the first thing following the head element is not a space character or a comment.
+    
+    Permitted parent elements:
+    As the first child of an <html> element.
+    
+    DOM interface:
+    HTMLHeadElement
+    
+    Attributes:
+    This element includes the global attributes.
+    profile: obsolete
+    
+    Notes:
+    Most browsers automatically construct a <head> element if the tags are omitted in the markup. However some do not.
+    These browsers were tested as not creating a head element automatically: Android <=1.6, iPhone <=3.1.3, Nokia 90, Opera <=9.27, and Safari <=3.2.1.
+    
+    Specifications:
+    WHATWG HTML Living Standard == Living Standard
+    HTML5 == Candidate Recommendation
+    HTML 4.01 Specification == Recommendation
+    
+    Browser compatibility:
+    Desktop: Basic: C F I O S
+    Mobile: Basic: A F I O S
+
+  header: |
+    The HTML <header> Element represents a group of introductory or navigational aids. It may contain some heading elements but also other elements like a logo, wrapped section's header, a search form, and so on.
+    
+    Usage note:
+    The <header> element is not sectioning content and therefore doesn't introduce a new section in the outline.
+    
+    Content categories:
+    Flow content, palpable content.
+    
+    Permitted content:
+    Flow content, but with no <header> or <footer> descendant.
+    
+    Tag omission:
+    None, both the starting and ending tag are mandatory.
+    
+    Permitted parent elements:
+    Any element that accepts flow content. Note that a <header> element must not be a descendant of an <address>, <footer> or another <header> element..
+    
+    DOM interface:
+    HTMLElement
+
+  hgroup: |
+    The HTML <hgroup> Element (HTML Headings Group Element) represents the heading of a section. It defines a single title that participates in the outline of the document as the heading of the implicit or explicit section that it belongs to.
+    
+    Its text for the outline algorithm is the text of the first HTML Heading Element of highest rank (i.e., the first <h1>, <h2>, <h3>, <h4>, <h5> or <h6> with the smallest number among its descendants) and the rank is the rank of this very same HTML Heading Element.
+    
+    Therefore this element groups several headings, contributing only the main one to the outline of the document. It allows associating secondary titles, like subheadings, alternative titles, or even taglines, with the main heading, without polluting the outline of the document.
+    
+    Content categories:
+    Flow content, heading content, palpable content.
+    
+    Permitted content:
+    One or more <h1>, <h2>, <h3>, <h4>, <h5>, and/or <h6>.
+    
+    Tag omission:
+    None, both the starting and ending tag are mandatory.
+    
+    Permitted parent elements:
+    Any element that accepts flow content.
+    
+    DOM interface:
+    HTMLElement
+
+  hr: |
+    The HTML <hr> element represents a thematic break between paragraph-level elements (for example, a change of scene in a story, or a shift of topic with a section). In previous versions of HTML, it represented a horizontal rule. It may still be displayed as a horizontal rule in visual browsers, but is now defined in semantic terms, rather than presentational terms.
+    
+    Content categories:
+    Flow content.
+    
+    Permitted content:
+    None, it is an empty element.
+    
+    Tag omission:
+    It must have start tag, but must not have an end tag.
+    
+    Permitted parent elements:
+    Any element that accepts flow content.
+    
+    DOM interface:
+    HTMLHRElement
+    
+    Notes:
+    To change look of rule or gaps between it and paragraphs, use cascading style sheets.
+
+  href:
+
+  html: |
+    The HTML root element (<html>) represents the root of an HTML document. All other elements must be descendants of this element.
+    
+    Content categories:
+    None.
+    
+    Permitted content:
+    One <head> element, followed by one <body> element.
+      
+    Tag omission:
+    The start tag may be omitted if the first thing inside the <html> element is not a comment.
+    The end tag may be omitted if the <html> element is not immediately followed by a comment, and it contains a <body> element either that is not empty, or whose start tag is present.
+    
+    Permitted parent elements:
+    As the root element of a document, or wherever a subdocument fragment is allowed in a compound document.
+    
+    DOM interface:
+    HTMLhtmlElement
+    
+    Notes:
+    Since the <html> element is the first in a document other than comments, it is called the root element. Although this tag can be implied, or not required, with HTML, it is required to be opened and closed in XHTML.
+
+  i: |
+    The HTML <i> Element represents a range of text that is set off from the normal text for some reason, for example, technical terms, foreign language phrases, or fictional character thoughts. It is typically displayed in italic type.
+    
+    Content categories:
+    Flow content, phrasing content, palpable content.
+    
+    Permitted content:
+    Phrasing content.
+    
+    Tag omission:
+    None, both the starting and ending tag are mandatory.
+    
+    Permitted parent elements:
+    Any element that accepts phrasing content.
+    
+    DOM interface:
+    HTMLElement Up to Gecko 1.9.2 (Firefox 4) inclusive, Firefox implements the HTMLSpanElement interface for this element.
+
+  iframe: |
+    The HTML <iframe> Element (or HTML inline frame element) represents a nested browsing context, effectively embedding another HTML page into the current page. In HTML 4.01, a document may contain a head and a body or a head and a frame-set, but not both a body and a frame-set. However, an <iframe> can be used within a normal document body. Each browsing context has its own session history and active document. The browsing context that contains the embedded content is called the parent browsing context. The top-level browsing context (which has no parent) is typically the browser window.
+    
+    Content categories:
+    Flow content, phrasing content, embedded content, interactive content, palpable content.
+    
+    Permitted content:
+    Special, see prose.
+    
+    Tag omission:
+    None, both the starting and ending tag are mandatory.
+    
+    Permitted parent elements:
+    Any element that accepts embedded content.
+    
+    DOM interface:
+    HTMLIFrameElement
+
+  image:
+
+  img: |
+    The HTML <img> Element (or HTML Image Element) represents an image of the document.
+    
+    Usage note:
+    Browsers do not always display the image referenced by the element. This is the case for non-graphical browsers (including those used by people with vision impairments), or if the user chooses not to display images, or if the browser is unable to display the image because it is invalid or an unsupported type. In these cases, the browser may replace the image with the text defined in this element's alt attribute.
+    
+    Content categories:
+    Flow content, phrasing content, embedded content, palpable content. If the element has a usemap attribute, it also is a part of the interactive content category.
+    
+    Permitted content:
+    None, it is an empty element.
+    
+    Tag omission:
+    Must have a start tag and must not have an end tag.
+    
+    Permitted parent elements:
+    Any element that accepts embedded content.
+    
+    DOM interface:
+    HTMLImageElement
+    
+    Interaction with CSS:
+    
+    Regarding CSS, an <img> is a replaced element. It has no baseline, meaning, when used in an inline formatting context with vertical-align: baseline, the bottom of the image will be posed on the container's baseline.
+    
+    Depending of its type, an image may have an intrinsic dimension, but this is not a necessary condition: a SVG image has no intrinsic dimension, a raster image has one.
+
+  input: |
+    The HTML <input> element is used to create interactive controls for web-based forms in order to accept data from the user. The semantics of an <input> varies considerably depending on the value of its type attribute.
+    
+    Content categories:
+    Flow content, listed, submittable, resettable, form-associated element, phrasing content.
+    If the type has not the hidden value, labellable element, palpable content.
+    
+    Permitted content:
+    None, it is an empty element.
+    
+    Tag omission:
+    Must have a start tag and must not have an end tag.
+    
+    Permitted parent elements:
+    Any element that accepts phrasing content.
+    
+    DOM interface:
+    HTMLInputElement
+
+  ins: |
+    The HTML <ins> Element (or HTML Inserted Text) HTML represents a range of text that has been added to a document.
+    
+    Content categories:
+    Phrasing content or flow content.
+    
+    Permitted content:
+    Transparent.
+    
+    Tag omission:
+    None, both the starting and ending tag are mandatory.
+    
+    Permitted parent elements:
+    Any element that accepts phrasing content.
+    
+    DOM interface:
+    HTMLModElement
+
+  isindex: |
+    Deprecated.
+    
+    <isindex> is an HTML element which is used for putting a text field in the document for querying document. <isindex> is intented to use inside of <head> element by W3C, however browsers provide support wherever it is used in the document.
+    
+    This element deprecated in HTML 4.01. Because, it is not a good idea to use <isindex> for any purpose. Same effect can be created with a HTML form in a modern way.
+
+  kbd: |
+    The HTML <kbd> Element (or HTML Keyboard Input Element) represents user input and produces an inline element displayed in the browser's default monotype font.
+    
+    Content categories:
+    Flow content, phrasing content, palpable content.
+    
+    Permitted content:
+    Phrasing content.
+    
+    Tag omission:
+    None, both the starting and ending tag are mandatory.
+    
+    Permitted parent elements:
+    Any element that accepts phrasing content.
+    
+    DOM interface:
+    HTMLElement Up to Gecko 1.9.2 (Firefox 4) inclusive, Firefox implements the interface HTMLSpanElement for this element.
+    
+    Note:
+    A CSS rule can be defined for the kbd selector to override the browser's default font face. Preferences set by the user might take precedence over the specified CSS.
+
+  keygen: |
+    The HTML keygen element exists to facilitate generation of key material, and submission of the public key as part of an HTML form. This mechanism is designed for use with Web-based certificate management systems. It is expected that the keygen element will be used in an HTML form along with other information needed to construct a certificate request, and that the result of the process will be a signed certificate.
+    
+    Content categories:
+    Flow content, phrasing content, interactive content, listed, labelable, submittable, resettable  form-associated element, palpable content.
+    
+    Permitted content:
+    None, it is an empty element.
+    
+    Tag omission:
+    Must have a start tag and must not have an end tag.
+    
+    Permitted parent elements:
+    Any element that accepts phrasing content.
+    
+    DOM interface:
+    HTMLKeygenElement
+
+  label: |
+    The HTML <label> Element represents a caption for an item in a user interface. It can be associated with a control either by placing the control element inside the label element, or by using the for attribute. Such a control is called the labeled control of the label element.
+    
+    Content categories:
+    Flow content, phrasing content, interactive content, form-associated element, palpable content.
+    
+    Permitted content:
+    Phrasing content, but no descendant label elements. No labelable elements other than the labeled control are allowed.
+    
+    Tag omission:
+    None, both the starting and ending tag are mandatory.
+    
+    Permitted parent elements:
+    Any element that accepts phrasing content.
+    
+    DOM interface:
+    HTMLLabelElement
+
+  legend: |
+    The HTML <legend> Element (or HTML Legend Field Element) represents a caption for the content of its parent <fieldset>.
+    
+    Content categories:
+    None.
+    
+    Permitted content:
+    Phrasing content.
+    
+    Tag omission:
+    None, both the starting and ending tag are mandatory.
+    
+    Permitted parent elements:
+    A <fieldset> whose first child is this <legend> element.
+    
+    DOM interface:
+    HTMLLegendElement
+
+  li: |
+    The HTML List item element (<li>) is used to represent a list item. It should be contained in an ordered list (<ol>), an unordered list (<ul>) or a menu (<menu>), where it represents a single entity in that list. In menus and unordered lists, list items are ordinarily displayed using bullet points. In ordered lists, they are usually displayed with some ascending counter on the left such as a number or letter.
+    
+    Content categories:
+    None.
+    
+    Permitted content:
+    Flow content.
+    
+    Tag omission:
+    The end tag can be omitted if it is immediately followed by another <li> element or if there is no more content in its parent element.
+    
+    Permitted parent elements:
+    An <ul>, <ol> or <menu> element. Though not a non-conforming usage, the obsolete <dir> may also be a parent.
+    
+    DOM interface:
+    HTMLLIElement
+
+  link: |
+    The HTML Link Element (<link>) specifies relationships between the current document and an external resource. Possible uses for this element include defining a relational framework for navigation. This Element is most used to link to style sheets.
+    
+    Content categories:
+    Metadata content. If itemprop is present: flow content phrasing content.
+    
+    Permitted content:
+    None, it is an empty element.
+    
+    Tag omission:
+    As it is a void element, the start tag must be present and the end tag must not be present.
+    
+    Permitted parent elements:
+    Any element that accepts metadata elements. If itemprop is present: any element that accepts phrasing content.
+    
+    DOM interface:
+    HTMLLinkElement
+    
+    Notes:
+    A <link> tag can occur only in the head element; however, there can be multiple occurrences of <link>.
+    
+    The HTML and XHTML specifications define event handlers for the <link> element, but it is unclear how they would be used.
+
+  listing: |
+    Obsolete.
+    The <pre> and <code> elements to be used instead.
+    
+    The HTML Listing Element (<listing>) renders text between the start and end tags without interpreting the HTML in between and using a monospaced font. The HTML 2 standard recommended that lines shouldn't be broken when not greater than 132 characters.
+    
+    The HTML Listing Element (<listing>) renders text between the start and end tags without interpreting the HTML in between and using a monospaced font. The HTML 2 standard recommended that lines shouldn't be broken when not greater than 132 characters.
+    
+    Note: Do not use this element.
+
+  main: |
+    The HTML <main> element represents the main content of  the <body> of a document or application. The main content area consists of content that is directly related to, or expands upon the central topic of a document or the central functionality of an application. This content should be unique to the document, excluding any content that is repeated across a set of documents such as sidebars, navigation links, copyright information, site logos, and search forms (unless, of course, the document's main function is as a search form).
+    
+    Note: 
+    <main> must not be a descendent of an <article>, <aside>, <footer>, <header>, or <nav> element.
+    Authors must not include more than one main element in a document.
+    
+    Content categories:
+    Flow content, palpable content.
+    
+    Permitted content:
+    Flow content.
+    
+    Tag omission:
+    None; both the starting and ending tags are mandatory.
+    
+    Permitted parent elements:
+    Any element that accepts flow content, but may not be a descendent of an <article>, <aside>, <footer>, <header>, or <nav> element.
+    
+    DOM interface:
+    HTMLElement
+
+  map: |
+    The HTML <map> element is used with <area> elements to define an image map (a clickable link area).
+    
+    Content categories:
+    Flow content, phrasing content, palpable content.
+    
+    Permitted content:
+    Any transparent element.
+    
+    Tag omission:
+    None, both the starting and ending tag are mandatory.
+    
+    Permitted parent elements:
+    Any element that accepts phrasing content.
+    
+    DOM interface:
+    HTMLMapElement
+
+  mark: |
+    The HTML <mark> Element represents highlighted text, i.e., a run of text marked for reference purpose, due to its relevance in a particular context. For example it can be used in a page showing search results to highlight every instance of the searched for word.
+    
+    Usage notes:
+    
+    In a quotation or another block, the highlighted text typically marks text that is referenced outside the quote, or marked for specific scrutiny even though the original author didn't consider it important.
+    In the main text, the highlighted text typically marks text that may be of special relevance for the user's current activity, like search results.
+    Do not use the <mark> element for syntax highlighting; use the <span> element for this purpose.
+    Do not confuse the <mark> element with the <strong> element. The <strong> element is used to denote spans of text of importance in context of the text, when the <mark> element is used to denote spans of text of relevance to a different context.
+    
+    Content categories:
+    Flow content, phrasing content, palpable content.
+    
+    Permitted content:
+    Phrasing content.
+    
+    Tag omission:
+    None, both the starting and ending tag are mandatory.
+    
+    Permitted parent elements:
+    Any element that accepts phrasing content.
+    
+    DOM interface:
+    HTMLElement
+
+  marquee: |
+    The HTML <marquee> element is used to insert a scrolling area of text.
+    
+    Non-standard
+    This feature is non-standard and is not on a standards track. Do not use it on production sites facing the Web: it will not work for every user. There may also be large incompatibilities between implementations and the behavior may change in the future.
+    
+    Notes:
+    The marquee element is originally an IE invention.
+    The marquee element is not valid according to the HTML or XHTML specifications. Page authors concerned with validation should not use this tag.
+    The marquee element is implemented in Mozilla (Firefox) by using an XBL binding; see /layout/style/xbl-marquee/xbl-marquee.xml.
+
+  menu: |
+    The HTML <menu> element represents a group of commands that a user can perform or activate. This includes both toolbar menus, which might appear across the top of a screen, as well as popup menus, such as those that might appear underneath a button after it has been clicked.
+    
+    This is an experimental technology.
+    
+    Browser compatibility:
+    Unknown
+    
+    Usage note: 
+    The <menu> and <ul> elements both represent an unordered list of items. The key difference is that <ul> primarily contains items for display, whilst <menu> is intended for interactive items, to act on.
+    
+    Content categories:
+    Flow content. Additionally, if in the toolbar menu state, palpable content. (Toolbar menu is the default state, unless the parent element is a <menu> in the popup menu state.)
+    
+    Permitted content:
+    If the element is in the toolbar menu state: flow content, or alternatively, zero or more occurences of <li>, <script> and <template>.
+    If the element is in the popup menu state: zero or more occurences, in any order, of <menu> (popup menu state only), <menuitem>, <hr>, <script>, and <template>.
+    
+    Tag omission:
+    None, both the starting and ending tag are mandatory.
+    
+    Permitted parent elements:
+    Any element that accepts flow content.
+    
+    DOM interface:
+    HTMLMenuElement
+
+  menuitem: |
+    The HTML <menuitem> element represents a command that a user is able to invoke through a popup menu. This includes context menus, as well as menus that might be attached to a menu button.
+    
+    A command can either be defined explicitly, with a textual label and optional icon to describe its appearance, or alternatively as an indirect command whose behavior is defined by a separate element. Commands can also optionally include a checkbox or be grouped to share radio buttons. (Menu items for indirect commands gain checkboxes or radio buttons when defined against elements <input type="checkbox"> and <input type="radio">.)
+    
+    This is an experimental technology.
+    
+    Content categories:
+    None.
+    
+    Permitted content:
+    None, it is an empty element.
+    
+    Tag omission:
+    Must have a start tag and must not have an end tag.
+    
+    Permitted parent elements:
+    The <menu> element, where that element is in the popup menu state. (If specified, the type attribute of the <menu> element must be popup; if missing, the parent element of the <menu> must itself be a <menu> in the popup menu state.)
+    
+    DOM interface:
+    HTMLMenuItemElement
+
+  meta: |
+    The HTML <meta> Element represents any metadata information that cannot be represented by one of the other meta-related elements (<base>, <link>, <script>, <style> or <title>). According to the attributes set, the kind of metadata can be one of the following:
+    
+    if the name is set, a document-level metadata, applying to the whole page;
+    if the http-equiv is set, a pragma directive, i.e. information normally given from the webserver on how the webpage should be served;
+    if the charset is set, a charset declaration, i.e. the charset used for the serialized-form of the webpage; HTML5
+    if the itemprop is set, a user-defined metadata, transparent for the user-agent as the semantics of the metadata is user-specific. Living Standard Unimplemented.
+    
+    Content categories:
+    Metadata content. If the itemprop attribute is present: flow content, phrasing content.
+    
+    Permitted content:
+    None, it is an empty element.
+    
+    Tag omission:
+    As it is a void element, the start tag must be present and the end tag must not be present.
+    
+    Permitted parent elements:
+    <meta charset>, <meta http-equiv>: a <head> element. If the http-equiv is not an encoding declaration, it can also be inside a <noscript> element, itself inside a <head> element.
+    <meta name>: any element that accepts metadata content.
+    <meta itemprop>: any element that accepts metadata content or parsing content.
+    
+    DOM interface:
+    HTMLMetaElement
+
+  meter: |
+    The HTML <meter> Element represents either a scalar value within a known range or a fractional value.
+    
+    Usage note: 
+    Unless the value attribute is between 0 and 1 (inclusive), the min attribute and max attribute should define the range so that the value attribute's value is within it.
+    
+    Content categories:
+    Flow content, phrasing content, labelable content, palpable content.
+    
+    Permitted content:
+    Phrasing content, but there must be no <meter> element among its descendants.
+    
+    Tag omission:
+    None, both the starting and ending tag are mandatory.
+    
+    Permitted parent elements:
+    Any element that accepts phrasing content.
+    
+    DOM interface:
+    HTMLMeterElement
+
+  multicol:
+
+  nav: |
+    The HTML Navigation Element (<nav>) represents a section of a page that links to other pages or to parts within the page: a section with navigation links.
+    
+    Usage notes:
+    
+    Not all links of a document must be in a <nav> element, which is intended only for major block of navigation links; typically the <footer> element often has a list of links that don't need to be in a <nav> element.
+    A document may have several <nav> elements, for example, one for site navigation and one for intra-page navigation.
+    User agents, such as screen readers targeting disabled users, can use this element to determine whether to omit the initial rendering of this content.
+    
+    Content categories:
+    Flow content, sectioning content, palpable content.
+    
+    Permitted content:
+    Flow content.
+    
+    Tag omission:
+    None, both the starting and ending tag are mandatory.
+    
+    Permitted parent elements:
+    Any element that accepts flow content.
+    
+    DOM interface:
+    HTMLElement
+
+  nextid:
+
+  nobr: |
+    The HTML <nobr> element prevents a text from breaking into a new line automagically, so it is displayed on one long line and scrolling might be necessary. This tag is not standard HTML and should not be used.
+    
+    Non-standard.
+    
+    This tag is not standard HTML and should not be used. Instead use the CSS property white-space like this:
+    <span style="white-space: nowrap">Long line with no breaks</span>
+    
+    
+
+  noembed:
+
+  noframes: |
+    <noframes> is an HTML element which is used to supporting browsers which are not able to support <frame> elements or configured to do so.
+    
+    You can use any HTML element inside of <noframes> which are expected to be seen inside of <body> element, except <frameset> and <frame> elements.
+    
+    Note: 
+    Because of the fact that all mainstream browsers support frames, usage of this element is not necessary in general cases. It is also entirely obsolete in HTML5 and should be avoided to conform to the standard.
+
+  noscript: |
+    The HTML <noscript> Element defines a section of html to be inserted if a script type on the page is unsupported or if scripting is currently turned off in the browser.
+    
+    Content categories:
+    Metadata content, flow content, phrasing content.
+    
+    Permitted content:
+    When scripting is disabled and when it is a descendant of the <head> element: in any order, zero or more <link> elements, zero or more <style> elements, and zero or more <meta> elements.
+    When scripting is disabled and when it isn't a descendant of the <head> element: any transparent content, but no <noscript> element must be among its descendants.
+    Otherwise: flow content or phrasing content.
+    
+    Tag omission:
+    None, both the starting and ending tag are mandatory.
+    
+    Permitted parent elements:
+    Any element that accepts phrasing content, if there are no ancestor <noscript> element, or in a <head> element (but only for an HTML document), here again if there are no ancestor <noscript> element.
+    
+    DOM interface:
+    HTMLElement
+
+  object: |
+    The HTML <object> Element (or HTML Embedded Object Element) represents an external resource, which can be treated as an image, a nested browsing context, or a resource to be handled by a plugin.
+    
+    Content categories:
+    Flow content; phrasing content; embedded content, palpable content; if the element has a usemap attribute, interactive content; listed, submittable form-associated element.
+    
+    Permitted content:
+    zero or more <param> elements, then Transparent content.
+    
+    Tag omission:
+    None, both the starting and ending tag are mandatory.
+    
+    Permitted parent elements:
+    Any element that accepts embedded content.
+    
+    DOM interface:
+    HTMLObjectElement
+
+  ol: |
+    The HTML <ol> Element (or HTML Ordered List Element) represents an ordered list of items. Typically, ordered-list items are displayed with a preceding numbering, which can be of any form, like numerals, letters or Romans numerals or even simple bullets. This numbered style is not defined in the HTML description of the page, but in its associated CSS, using the list-style-type property.
+    
+    There is no limitation to the depth and imbrication of lists defined with the <ol> and <ul> elements.
+    
+    Usage note: 
+    The <ol> and <ul> both represent a list of items. They differ in the way that, with the <ol> element, the order is meaningful. As a rule of thumb to determine which one to use, try changing the order of the list items; if the meaning is changed, the <ol> element should be used, else the <ul> is adequate.
+    
+    Content categories:
+    Flow content, and if the <ol> element's children include at least one <li> element, palpable content.
+    
+    Permitted content:
+    Zero or more <li> elements.
+    
+    Tag omission:
+    None, both the starting and ending tag are mandatory.
+    
+    Permitted parent elements:
+    Any element that accepts flow content.
+    
+    DOM interface:
+    HTMLOListElement
+
+  optgroup: |
+    In a Web form, the HTML <optgroup> element  creates a grouping of options within a <select> element.
+    
+    Content categories:
+    None.
+    
+    Permitted content:
+    Zero or more <option> elements.
+    
+    Tag omission:
+    The start tag is mandatory. The end tag is optional if this element is immediately followed by another <optgroup> element, or if the parent element has no more content.
+    
+    Permitted parent elements:
+    A <select> element.
+    
+    DOM interface:
+    HTMLOptGroupElement
+
+  option: |
+    In a Web form, the HTML <option> element is used to create a control representing an item within a <select>, an <optgroup> or a <datalist> HTML5 element.
+    
+    Content categories:
+    None.
+    
+    Permitted content:
+    Text with eventually escaped characters (like &eacute;).
+    
+    Tag omission:
+    The start tag is mandatory. The end tag is optional if this element is immediately followed by another <option> element or an <optgroup>, or if the parent element has no more content.
+    
+    Permitted parent elements:
+    A <select>, an <optgroup> or a <datalist> element.
+    
+    DOM interface:
+    HTMLOptionElement
+
+  output: |
+    The HTML <output> element represents the result of a calculation or user action.
+    
+    Content categories:
+    Flow content, phrasing content, listed, labelable, resettable  form-associated element, palpable content.
+    
+    Permitted content:
+    Phrasing content.
+    
+    Tag omission:
+    None, both the starting and ending tag are mandatory.
+    
+    Permitted parent elements:
+    Any element that accepts phrasing content.
+    
+    DOM interface:
+    HTMLOutputElement
+
+  p: |
+    The HTML <p> element (or HTML Paragraph Element) represents a paragraph of text.
+    
+    Content categories:
+    Flow content, palpable content.
+    
+    Permitted content:
+    Phrasing content.
+    
+    Tag omission:
+    The start tag is mandatory. The end tag may be omitted if the <p> element is immediately followed by an <address>, <article>, <aside>, <blockquote>, <div>, <dl>, <fieldset>, <footer>, <form>, <h1>, <h2>, <h3>, <h4>, <h5>, <h6>, <header>, <hr>, <menu>, <nav>, <ol>, <pre>, <section>, <table>, <ul> or another <p> element, or if there is no more content in the parent element and the parent element is not an <a> element.
+    
+    Permitted parent elements:
+    Any element that accepts flow content.
+    
+    DOM interface:
+    HTMLParagraphElement
+
+  param: |
+    The HTML <param> Element (or HTML Parameter Element) defines parameters for <object>.
+    
+    Content categories:
+    None.
+    
+    Permitted content:
+    None, it is an empty element.
+    
+    Tag omission:
+    As it is a void element, the start tag must be present and the end tag must not be present.
+    
+    Permitted parent elements:
+    An <object> before any flow content.
+    
+    DOM interface:
+    HTMLParamElement
+
+  picture: |
+    The HTML <picture> element is a container used to specified multiple <source> for a specific <img> contained in it. The browser will choose the most suitable source according to the current layout (constraints of the box the image will appear in) of the page and the device it will be displayed on (like a normal or hiDPI device).
+    
+    This is an experimental technology.
+    
+    Content categories:
+    Flow content, phrasing content, embedded content.
+    
+    Permitted content:
+    Zero or more <source> elements, followed by one <img>element, optionally intermixed with script-supporting elements.
+    
+    Tag omission:
+    None, both the starting and ending tag are mandatory.
+    
+    Permitted parent elements:
+    Any element that allows embedded content.
+    
+    DOM interface:
+    HTMLPictureElement
+
+  plaintext: |
+    !OBSOLETE!
+    The HTML Plaintext Element (<plaintext>) renders everything following the start tag as raw text, without interpreting any HTML. There is no closing tag, since everything after it is considered raw text.
+    
+    The <pre> and <code> elements to be used instead.
+
+  portfolio:
+
+  pre: |
+    The HTML <pre> Element (or HTML Preformatted Text) represents preformatted text. Text within this element is typically displayed in a non-proportional font exactly as it is laid out in the file. Whitespaces inside this element are displayed as typed.
+    
+    Content categories:
+    Flow content, palpable content.
+    
+    Permitted content:
+    Phrasing content.
+    
+    Tag omission:
+    None, both the starting and ending tag are mandatory.
+    
+    Permitted parent elements:
+    Any element that accepts flow content.
+    
+    DOM interface:
+    HTMLPreElement
+    
+
+  progress: |
+    The HTML <progress> Element is used to view the completion progress of a task. While the specifics of how it's displayed is left up to the browser developer, it's typically displayed as a progress bar. Javascript can be used to manipulate the value of progress bar.
+    
+    Content categories:
+    Flow content, phrasing content, labelable content, palpable content.
+    
+    Permitted content:
+    Phrasing content, but there must be no <progress> element among its descendants.
+    
+    Tag omission:
+    None, both the starting and ending tag are mandatory.
+    
+    Permitted parent elements:
+    Any element that accepts phrasing content.
+    
+    DOM interface:
+    HTMLProgressElement
+
+  q: |
+    The HTML <q> Element (or HTML Quote Element) indicates that the enclosed text is a short inline quotation. This element is intended for short quotations that don't require paragraph breaks; for long quotations use <blockquote> element.
+    
+    Content categories:
+    Flow content, phrasing content, palpable content.
+    
+    Permitted content:
+    Phrasing content.
+    
+    Tag omission:
+    None, both the starting and ending tag are mandatory.
+    
+    Permitted parent elements:
+    Any element that accepts phrasing content.
+    
+    DOM interface:
+    HTMLQuoteElement
+    
+    Notes:
+    
+    Most modern standards-aware browsers, like Mozilla Firefox, Opera, and Safari, should add quotes around text enclosed within the <q> element.
+    
+    Some browsers, like Internet Explorer, may not make any sort of style change for quotations, but it is possible to apply a style rule.
+
+  rb:
+
+  rp: |
+    The HTML <rp> element is used to provide fall-back parenthesis for browsers non-supporting ruby annotations. Ruby annotations are for showing pronounciation of East Asian characters, like using Japanese furigana or Taiwainese bopomofo characters. The <rp> element is used in the case of lack of <ruby> element support its content has what should be displayed in order to indicate the presence of a ruby annotation, usually parentheses.
+    
+    Content categories:
+    None.
+    
+    Permitted content:
+    Phrasing content.
+    
+    Tag omission:
+    None, both the starting and ending tag are mandatory.
+    
+    Permitted parent elements:
+    A <ruby> element. <rp> must be positioned immediately before or after an <rt> element.
+    
+    DOM interface:
+    HTMLElement
+
+  rt: |
+    The HTML <rt> Element embraces pronunciation of character presented in a ruby annotations, which are for showing pronunciation of East Asian characters and the <rt> element is used inside of <ruby> element.
+    
+    Content categories:
+    None.
+    
+    Permitted content:
+    Phrasing content.
+    
+    Tag omission:
+    None, both the starting and ending tag are mandatory.
+    
+    Permitted parent elements:
+    A <ruby> element.
+    
+    DOM interface:
+    HTMLElement
+
+  ruby: |
+    The HTML <ruby> Element represents a ruby annotation. Ruby annotations are for showing pronounciation of East Asian characters.
+    
+    Content categories:
+    Flow content, phrasing content, palpable content.
+    
+    Permitted content:
+    Phrasing content.
+    
+    Tag omission:
+    None, both the starting and ending tag are mandatory.
+    
+    Permitted parent elements:
+    See prose
+    
+    DOM interface:
+    HTMLElement
+
+  s: |
+    The HTML Strikethrough Element (<s>) renders text with a strikethrough, or a line through it. Use the <s> element to represent things that are no longer relevant or no longer accurate. However, <s> is not appropriate when indicating document edits; for that, use the <del> and <ins> elements, as appropriate.
+    
+    Content categories:
+    Phrasing content or flow content.
+    
+    Permitted content:
+    Transparent.
+    
+    Tag omission:
+    None, both the starting and ending tag are mandatory.
+    
+    Permitted parent elements:
+    Any element that accepts phrasing content.
+    
+    DOM interface:
+    HTMLElement
+
+  samp: |
+    The HTML <samp> element is an element intended to identify sample output from a computer program. It is usually displayed in the browser's default monotype font (such as Lucida Console).
+    
+    Content categories:
+    Flow content, phrasing content, palpable content.
+    
+    Permitted content:
+    Phrasing content.
+    
+    Tag omission:
+    None, both the starting and ending tag are mandatory.
+    
+    Permitted parent elements:
+    Any element that accepts phrasing content.
+    
+    DOM interface:
+    HTMLElement
+    
+    Note:
+    A CSS rule can be defined for the samp selector to override the browser's default font face. Preferences set by the user might take precedence over the specified CSS.
+
+  script: |
+    The HTML <script> element is used to embed or reference an executable script within an HTML or XHTML document.
+    
+    Scripts without async or defer attributes, as well as inline scripts, are fetched and executed immediately, before the browser continues to parse the page.
+    
+    Content categories:
+    Metadata content, Flow content, Phrasing content.
+    
+    Permitted content:
+    Dynamic script such as text/javascript.
+    
+    Tag omission:
+    None, both the starting and ending tag are mandatory.
+    
+    Permitted parent elements:
+    Any element that accepts metadata content, or any element that accepts phrasing content.
+    
+    DOM interface:
+    HTMLScriptElement
+    
+    Async support:
+    In older browsers that don't support the async attribute, parser-inserted scripts block the parser; script-inserted scripts execute asynchronously in IE and WebKit, but synchronously in Opera and pre-4.0 Firefox. In Firefox 4.0, the async DOM property defaults to true for script-created scripts, so the default behavior matches the behavior of IE and WebKit. To request script-inserted external scripts be executed in the insertion order in browsers where the document.createElement("script").async evaluates to true (such as Firefox 4.0), set .async=false on the scripts you want to maintain order. Never call document.write() from an async script. In Gecko 1.9.2, calling document.write() has an unpredictable effect. In Gecko 2.0, calling document.write() from an async script has no effect (other than printing a warning to the error console).
+    
+    Gecko-specific notes:
+    Starting in Gecko 2.0 (Firefox 4 / Thunderbird 3.3 / SeaMonkey 2.1), inserting script elements that have been created by calling document.createElement("script") into the DOM no longer enforces execution in insertion order. This change lets Gecko properly abide by the HTML5 specification. To make script-inserted external scripts execute in their insertion order, set .async=false on them.
+
+  section: |
+    The HTML Section Element (<section>) represents a generic section of a document, i.e., a thematic grouping of content, typically with a heading. Each <section> should be identified, typically by including a heading (h1-h6 element) as a child of the <section> element.
+    
+    Usage notes:
+    If it makes sense to separately syndicate the content of a <section> element, use an <article> element instead.
+    Do not use the <section> element as a generic container; this is what <div> is for, especially when the sectioning is only for styling purposes. A rule of thumb is that a section should logically appear in the outline of a document.
+    
+    Content categories:
+    Flow content, Sectioning content, palpable content.
+    
+    Permitted content:
+    Flow content.
+    
+    Tag omission:
+    None, both the starting and ending tag are mandatory.
+    
+    Permitted parent elements:
+    Any element that accepts flow content. Note that a <section> element must not be a descendant of an <address> element.
+    
+    DOM interface:
+    HTMLElement
+
+  select: |
+    The HTML select (<select>) element represents a control that presents a menu of options. The options within the menu are represented by <option> elements, which can be grouped by <optgroup> elements. Options can be pre-selected for the user.
+    
+    Content categories:
+    flow content, phrasing content, interactive content, listed, labelable, resettable, and submittable form-associated element
+    
+    Permitted content:
+    Zero or more <option> or <optgroup> elements.
+    
+    Tag omission:
+    none, both the start tag and the end tag are mandatory
+    
+    Permitted parent elements:
+    any element that accepts phrasing content.
+    
+    Notes:
+    
+    The content of this element is static and not editable.
+    
+    The following is an example of how to simulate a select list with editable options, but be warned that screen readers and assistive devices will not interpret the form correctly; this example would be invalid html if the correct elements were used:
+    
+    This is an example of an editable select through a <fieldset> of radioboxes and textboxes (written in pure CSS, without JavaScript), 
+
+  shadow: |
+    This article hasn't been written yet. Please consider contributing!
+
+  small: |
+    The HTML Small Element (<small>) makes the text font size one size smaller (for example, from large to medium, or from small to x-small) down to the browser's minimum font size.  In HTML5, this element is repurposed to represent side-comments and small print, including copyright and legal text, independent of its styled presentation.
+    
+    Content categories:
+    Flow content, phrasing content.
+    
+    Permitted content:
+    Phrasing content.
+    
+    Tag omission:
+    None, must have both a start tag and an end tag.
+    
+    Permitted parent elements:
+    Any element that accepts phrasing content, or any element that accepts flow content.
+    
+    Notes:
+    Although the <small> element, like the <b> and <i> elements, may be perceived to violate the principle of separation between structure and presentation, all three are valid in HTML5. Authors are encouraged to use their best judgement when determining whether to use <small> or CSS.
+
+  source: |
+    The HTML <source> element is used to specify multiple media resources for <picture>, <audio> and <video> elements. It is an empty element. It is commonly used to serve the same media in multiple formats supported by different browsers.
+    
+    Content categories:
+    None.
+    
+    Permitted content:
+    None, it is an empty element.
+    
+    Tag omission:
+    It must have start tag, but must not have an end tag.
+    
+    Permitted parent elements:
+    A media element (<audio> or <video>, and it should be placed before any flow content or <track> element.
+    
+    DOM interface:
+    HTMLSourceElement
+
+  spacer: |
+    OBSOLETE
+    
+    <spacer> is an HTML element which is used for inserting white spaces to web pages. It was created by NetScape for achieving same effect as a single-pixel layout GIF image, which was something web designers used to use to add white spaces to web pages, without actually using a GIF. However <spacer> is not supported by any major browser and same effects can be created with various CSS rules. In Mozilla applications, support for this element was removed in Gecko 2.0. Therefore usage of <spacer> is unnecessary.
+    
+    
+
+  span: |
+    The HTML <span> element is a generic inline container for phrasing content, which does not inherently represent anything. It can be used to group elements for styling purposes (using the class or id attributes), or because they share attribute values, such as lang. It should be used only when no other semantic element is appropriate. <span> is very much like a <div> element, but <div> is a block-level element whereas a <span> is an inline element.
+    
+    Content categories:
+    Flow content, phrasing content.
+    
+    Permitted content:
+    Phrasing content.
+    
+    Tag omission:
+    None, both the starting and ending tag are mandatory.
+    
+    Permitted parent elements:
+    Any element that accepts phrasing content, or any element that accepts flow content.
+    
+    DOM interface:
+    HTMLSpanElement (before HTML 5, the interface was HTMLElement.
+
+  strike: |
+    !OBSOLETE!
+    
+    The HTML Strikethrough Element (<strike>) renders text with a strikethrough, or a line through it.
+    
+    Usage Note: 
+    As with all purely styling elements, <strike> has been deprecated in HTML 4 and XHTML 1, and obsoleted in HTML5. If semantically appropriate, i.e., if it represents deleted content, use the <del> instead; in all other cases use a <span> element and style it with the CSS text-decoration property, with the line-through value.
+
+  strong: |
+    The HTML Strong Element (<strong>) gives text strong importance, and is typically displayed in bold.
+    
+    Content categories:
+    Flow content, phrasing content.
+    
+    Permitted content:
+    Phrasing content.
+    
+    Tag omission:
+    None, must have both a start tag and an end tag.
+    
+    Permitted parent elements:
+    Any element that accepts phrasing content, or any element that accepts flow content.
+    
+    Bold vs. Strong
+    
+    It is often confusing to new developers why there are so many ways to express the same thing on a rendered website. Bold and Strong are perhaps one of the most common. Why use <strong></strong> vs <b></b>? You have to type a whole lot more with strong and it produces the exact same result, right?
+    
+    Perhaps not; strong is a logical state, and bold is a physical state. Logical states separate presentation from the content, and by doing so allow for it to be expressed in many different ways. Perhaps instead of rendering some text as bold you want to render it red, or a different size, or underlined, or whatever. It makes more sense to change the presentational properties of strong than it does bold. This is because bold is a physical state; there is no separation of presentation and content, and making bold do anything other than bold text would be confusing and illogical.
+    
+    It is important to note that <b></b> does have other uses, when one wants to draw attention without increasing importance.
+    
+    Emphasis vs. Strong
+    
+    While in HTML4, Strong simply indicated a stronger emphasis, in HTML5, the element is described as representing "strong importance for its contents." This is an important distinction to make. While Emphasis is used to change the meaning of a sentence ("I love carrots" vs. "I love carrots"), Strong is used to give portions of a sentence added importance (e.g., "Warning! This is very dangerous.") Both Strong and Emphasis can be nested to increase the relative degree of importance or stress emphasis, respectively.
+
+  style: |
+    The HTML <style> element contains style information for a document, or a part of document. The specific style information is contained inside of this element, usually in the CSS.
+    
+    Content categories:
+    Metadata content, and if the scoped attribute is present: flow content.
+    
+    Permitted content:
+    Style information matching the language of the type attribute.
+    
+    Tag omission:
+    None, both the starting and ending tag are mandatory.
+    
+    Permitted parent elements:
+    ... (maybe head)
+    
+    DOM interface:
+    HTMLStyleElement
+
+  sub: |
+    The HTML Subscript Element (<sub>) defines a span of text that should be displayed, for typographic reasons, lower, and often smaller, than the main span of text.
+    
+    Usage note:
+    
+    This element should be used for typographical reasons only, i.e. changing the position of the text changing its meaning like in mathematical (like t2, though the use of a MathML formula should be considered) or chemical formulas (like H2O).
+    This element must not be used for styling purpose like the styling of the product name Latex. In that case CSS style should be used: the vertical-align property with the sub value will achieve the same effect.
+    
+    Content categories:
+    Flow content and phrasing content.
+    
+    Permitted content:
+    Phrasing content.
+    
+    Tag omission:
+    None as both the start and end tag are mandatory.
+    
+    Permitted parent elements:
+    Any element that can contain phrasing content.
+
+  summary: |
+    The HTML summary element (<summary>) is used as a summary, caption or legend for the content of a <details> element.
+    
+    This is an experimental technology.
+    
+    Browser conpatibility:
+    Desktop: C
+    Mobile: A
+    
+    Note: 
+    If the <summary> element is omitted the heading "details" will be used.
+    
+    Permitted content:
+    Phrasing content.
+    
+    Tag omission:
+    None, both the start tag and the end tag are mandatory.
+    
+    Permitted parent element:
+    The <details> element.
+
+  sup: |
+    The HTML Superscript Element (<sup>) defines a span of text that should be displayed, for typographic reasons, higher, and often smaller, than the main span of text.
+    
+    Usage note:
+    
+    This element should be used for typographical reasons only, i.e. changing the position of the text changing its meaning like in mathematical (like f4, though the use of a MathML formula should be considered) or in French abbreviations (like Mlle, Mme or Cie).
+    This element must not be used for styling purpose like the styling of the product name Latex. In that case CSS style should be used: the vertical-align property with the super value will achieve the same effect.
+    
+    Content categories:
+    Flow content and phrasing content.
+    
+    Permitted content:
+    Phrasing content.
+    
+    Tag omission:
+    None as both the start and end tag are mandatory.
+    
+    Permitted parent elements:
+    Any element that can contain phrasing content.
+
+  svg:
+
+  table: |
+    The HTML Table Element (<table>) represents data in two dimensions or more.
+    
+    Note: 
+    Prior to the creation of CSS, HTML <table> elements were often used as a method for page layout. This usage has been discouraged since HTML 4, and the <table> element should not be used for layout purposes.
+    
+    Content categories:
+    Flow content.
+    
+    Permitted content:
+    In this order:
+      an optional <caption> element,
+      zero or more <colgroup> elements,
+      an optional <thead> element,
+      one of the two alternatives:
+        one <tfoot> element, followed by:
+          zero or more <tbody> elements,
+          or one or more <tr> elements,
+        a second alternative followed by an optional <tfoot> element:
+          either zero or more <tbody> elements,
+          or one or more <tr> elements
+    
+    Tag omission:
+    None, both the start tag and the end tag are mandatory.
+    
+    Permitted parent elements:
+    Any element that accepts flow content.
+    
+    DOM interface:
+    This element implements the HTMLTableElement interface.
+
+  tbody: |
+    The HTML Table Body Element (<tbody>) defines one or more rows as the body of its parent <table> element when no <tr> elements are children of the parent.  In conjunction with a preceding <tfoot> and <thead> element, (<tbody>) provides additional semantic information for devices such as printers and displays. Of the parent table's child elements, (<tbody>) will represent the content, if longer than a page, that will most likely differ for each page printed. The <tfoot> and <thead> elements' content will be consistent for each page printed. For displays, (<tbody>) will enable separate scrolling from the <tfoot>, <thead> and <caption> elements of the same parent <table> element.
+    
+    Content categories:
+    None.
+    
+    Permitted content:
+    Zero or more <tr> elements.
+    
+    Tag omission:
+    The <tbody> element is not a required child element for a parent <table> element  to graphically render. However, it must not be present, if its parent <table> element  has a <tr> element as a child.
+    
+    Permitted parent elements:
+    Within the required parent <table> element, the <tbody> element can be added after a <caption>, <colgroup>, <thead> and a <tfoot> element.
+    
+    DOM interface:
+    This element implements the HTMLTableSectionElement interface.
+
+  td: |
+    The Table cell HTML element (<td>) defines a cell of a table that contains data. It participates in the table model.
+    
+    Content categories:
+    None.
+    
+    Permitted content:
+    Flow content.
+    
+    Tag omission:
+    The start tag is mandatory.
+    The end tag may be omitted, if it is immediately followed by a <th> or <td> element or if there are no more data in its parent element.
+    
+    Permitted parent elements:
+    A <tr> element.
+    
+    DOM interface:
+    This element implements the HTMLTableDataCellElement interface.
+
+  template: |
+    The HTML template element <template> is a mechanism for holding client-side content that is not to be rendered when a page is loaded but may subsequently be instantiated during runtime using JavaScript. Think of a template as a content fragment that is being stored for subsequent use in the document. The parser does process the content of the <template> element during the page load to ensure that it is valid, however.
+    
+    Content categories:
+    Metadata content, flow content, phrasing content, script-supporting element.
+    
+    Permitted content:
+    Metadata content, flow content, any valid HTML content that is permitted to occur within the <ol>, <dl>, <figure>, <ruby>, <object>, <video>, <audio>, <table>, <colgroup>, <thead>, <tbody>, <tfoot>, <tr>, <fieldset>, <select>, <details> elements and <menu> whose type attribute is in popup menu state.
+    
+    Tag omission:
+    None, both the starting and ending tag are mandatory.
+    
+    Permitted parent elements:
+    <body>, <frameset>, <head> and <colgroup> without a span attribute.
+    
+    DOM interface:
+    HTMLTemplateElement
+
+  textarea: |
+    The HTML <textarea> element represents a multi-line plain-text editing control.
+    
+    Content categories:
+    Flow content, phrasing content, Interactive content, listed, labelable, resettable, and submittable form-associated element.
+    
+    Permitted content:
+    Character data.
+    
+    Tag omission:
+    None, both the starting and ending tag are mandatory.
+    
+    Permitted parent elements:
+    Any element that accepts phrasing content.
+    
+    DOM interface:
+    HTMLTextareaElement
+
+  tfoot: |
+    The HTML Table Foot Element (<tfoot>) defines a set of rows summarizing the columns of the table.
+    
+    Content categories:
+    None.
+    
+    Permitted content:
+    Zero or more <tr> elements.
+    
+    Tag omission:
+    The start tag is mandatory. The end tag may be omitted if the <tbody> element is immediately followed by an, eventually implicitly-defined, <tbody>, of if there is no more content in the parent <table> element.
+    
+    Permitted parent elements:
+    A <table> element. The <tfoot> must appears after any <caption>, <colgroup> or <thead> element. It can be before or after all <tbody> and <tr> elements, but not intermixed with them.
+    HTML 4 The <tfoot> element cannot be placed after any <tbody> and <tr> element. This restriction has been softened in HTML5.
+    
+    DOM interface:
+    This element implements the HTMLTableSectionElement interface.
+
+  th: |
+    The HTML Table Header Cell Element (<th>) defines a cell that is a header for a group of cells of a table. The group of cells that the header refers to is defined by the scope and headers attribute.
+    
+    Content categories:
+    None.
+    
+    Permitted content:
+    Phrasing content.
+    
+    Tag omission:
+    The start tag is mandatory.
+    The end tag may be omitted, if it is immediately followed by a <th> or <td> element or if there are no more data in its parent element.
+    
+    Permitted parent elements:
+    A <tr> element.
+    
+    DOM interface:
+    This element implements the HTMLTableHeaderCellElement interface.
+
+  thead: |
+    The HTML Table Head Element (<thead>) defines a set of rows defining the head of the columns of the table.
+    
+    Content categories:
+    None.
+    
+    Permitted content:
+    Zero or more <tr> elements.
+    
+    Tag omission:
+    The start tag is mandatory. The end tag may be omitted if the <thead> element is immediately followed by a <tbody> or <tfoot> element.
+    
+    Permitted parent elements:
+    A <table> element. The <thead> must appear after any <caption> or <colgroup> element, even implicitly defined, but before any <tbody>, <tfoot> and <tr> element.
+    
+    DOM interface:
+    This element implements the HTMLTableSectionElement interface.
+
+  time: |
+    The HTML <time> element represents either a time on a 24-hour clock or a precise date in the Gregorian calendar (with optional time and timezone information).
+    
+    This element is intended to be used presenting dates and times in a machine readable format. This can be helpful for user agents to offer any event scheduling for user's calendar. 
+    
+    Usage note: 
+    This element is not appropriate for instances where a specific date cannot be calculated, nor should it be used for dates prior to the introduction to the Gregorian calendar (due to complications with calculating those dates).
+    
+    Content categories:
+    Flow content, phrasing content, palpable content.
+    
+    Permitted content:
+    Phrasing content, but no descendant time elements.
+    
+    Tag omission:
+    None; both the starting and ending tags are mandatory.
+    
+    Permitted parent elements:
+    Any element that accepts phrasing content.
+    
+    DOM interface:
+    HTMLTimeElement
+
+  title: |
+    The HTML <title> element (HTML Title Element) defines the title of the document, shown in a browser's title bar or on the page's tab. It can only contain text and any contained tags are not interpreted.
+    
+    Content categories:
+    Metadata content.
+    
+    Permitted content:
+    Text.
+    
+    Tag omission:
+    All tags required. Note that leaving off </title> should cause the browser to ignore the rest of the page.
+    
+    Permitted parent elements:
+    A <head> element that contains no other <title> element.
+    
+    DOM interface:
+    HTMLTitleElement
+
+  tr: |
+    The HTML Table Row Element (<tr>) defines a row of cells in a table. Those can be a mix of <td> and <th> elements.
+    
+    Content categories:
+    None.
+    
+    Permitted content:
+    Zero or more <td> or <th> elements, or a mix of them.
+    
+    Tag omission:
+    The start tag is mandatory. The end tag may be omitted if the <tr> element is immediately followed by a <tr> element, or if the parent table group (<thead>, <tbody> or <tfoot>) element doesn't have any more content.
+    
+    Permitted parent elements:
+    A <table>, <thead>, <tbody> or <tfoot> element.
+    
+    DOM interface:
+    This element implements the HTMLTableRowElement interface.
+
+  track: |
+    The HTML <track> element is used as a child of the media elements—<audio> and <video>. It lets you specify timed text tracks (or time-based data), for example to automaticaly handle subtitles.
+    
+    The type of data that track adds to the media is set in the kind attribute, which can take values of subtitles, captions, descriptions, chapters or metadata. The element points to a source file containing timed text that the browser exposes when the user requests additional data.
+    
+    A media element cannot have more than one track with the same kind, srclang, and label.
+    
+    Content categories:
+    None.
+    
+    Permitted content:
+    None, it is an empty element.
+    
+    Tag omission:
+    As it is a void element, the start tag must be present and the end tag must not be present.
+    
+    Permitted parent elements:
+    A media element, before any flow content.
+    
+    DOM interface
+    This element implements the HTMLTrackElement interface.
+
+  tt: |
+    OBSOLETE
+    The HTML Teletype Text Element (<tt>) produces an inline element displayed in the browser's default monotype font. This element was intended to style text as it would display on a fixed width display, such as a teletype. It probably is more common to display fixed width type using the <code> element.
+    
+    
+
+  u: |
+    The HTML Underline Element (<u>) renders text with an underline, a line under the baseline of its content.
+    
+    In HTML5, this element represents a span of text with an unarticulated, though explicitly rendered, non-textual annotation, such as labeling the text as being a proper name in Chinese text (a Chinese proper name mark), or labeling the text as being misspelled.
+    
+    Usage Note: 
+    As with all purely styling elements, <u> has been deprecated in HTML 4 and XHTML 1, but it has been re-introduced in HTML5 with other semantics. If you want to underline text in a non-semantic manner, you should use a <span> element, or another semantically appropriate element, and style it with the CSS text-decoration property, with the underline value.
+    
+    DOM interface:
+    This element implements the HTMLElement interface.
+
+  ul: |
+    The HTML unordered list element (<ul>) represents an unordered list of items, namely a collection of items that do not have a numerical ordering, and their order in the list is meaningless. Typically, unordered-list items are displayed with a bullet, which can be of several forms, like a dot, a circle or a squared. The bullet style is not defined in the HTML description of the page, but in its associated CSS, using the list-style-type property.
+    
+    There is no limitation to the depth and imbrication of lists defined with the <ol> and <ul> elements.
+    
+    Usage note: 
+    The <ol> and <ul> elements both represent a list of items. They differ in that, with the <ol> element, the order is meaningful. As a rule of thumb to determine which one to use, try changing the order of the list items; if the meaning is changed, the <ol> element should be used, otherwise you can use <ul>.
+    
+    Content categories:
+    Flow content.
+    
+    Permitted content:
+    zero or more <li> elements, eventually mixed with <ol> and <ul> elements.
+    
+    Tag omission:
+    none, both the start tag and the end tag are mandatory.
+    
+    Permitted parent elements:
+    any element that accept flowing content.
+    
+    DOM interface:
+    This element implements the HTMLUListElement interface.
+
+  var: |
+    The HTML Variable Element (<var>) represents a variable in a mathematical expression or a programming context.
+    
+    Permitted content:
+    Phrasing content.
+    
+    Tag omission:
+    Both start and end tags are required.
+    
+    Permitted parent elements:
+    Any element that accepts phrasing content.
+    
+    DOM Interface:
+    This element implements the HTMLElement interface.
+
+  video: |
+    The HTML <video> element is used to embed video content. It may contain several video sources, represented using the src attribute or the <source> element; the browser will choose the most suitable one.
+    
+    For a list of supported formats, see Media formats supported by the audio and video elements.
+    
+    Content categories:
+    Flow content, phrasing content, embedded content. If it has a controls attribute: interactive content and palpable content.
+    
+    Permitted content:
+    If the element has a src attribute: zero or more <track> element, followed by transparent content that contains no media elements, that is no <audio> or <video>
+    Else: zero or more <source> element, followed by zero or more <track> element, followed by transparent content that contains no media elements, that is no <audio> or <video>.
+    
+    Tag omission:
+    None, both the starting and ending tag are mandatory.
+    
+    Permitted parent elements:
+    Any element that accepts embedded content.
+    
+    DOM interface:
+    HTMLVideoElement
+
+  wbr: |
+    The Word Break Opportunity (<wbr>) HTML element represents a position within text where the browser may optionally break a line, though its line-breaking rules would not otherwise create a break at that location.
+    
+    On UTF-8 encoded pages, <wbr> behaves like the U+200B ZERO-WIDTH SPACE code point. In particular, it behaves like a Unicode bidi BN code point, meaning it has no effect on bidi-ordering: <div dir=rtl>123,<wbr>456</div> displays, when not broken on two lines, 123,456 and not 456,123.
+    
+    For the same reason, the <﻿wbr﻿> element does not introduce a hyphen at the line break point. To make a hyphen appear only at the end of a line, use the soft hyphen character entity (&﻿shy;) instead.
+    
+    This element was first implemented in Internet Explorer 5.5 and was officially defined in HTML5.
+    
+    Permitted content:
+    Empty
+    
+    Tag omission:
+    It is an empty element; it must have a start tag, but must not have an end tag.
+    
+    Permitted parent elements:
+    Any element that accepts phrasing content.
+    
+    DOM Interface
+    This element implements the HTMLElement interface.
+
+  xmp: |
+    !OBSOLETE!
+    The HTML Example Element (<xmp>) renders text between the start and end tags without interpreting the HTML in between and using a monospaced font. The HTML2 specification recommended that it should be rendered wide enough to allow 80 characters per line.
+    
+    Note: 
+    Do not use this element.
+    It has been deprecated since HTML3.2 and was not implemented in a consistent way. It was completely removed from the language in HTML5.
+    Use the <pre> element or, if semantically adequate, the <code> element instead. Note that you will need to escape the '<' character as '&lt;' to make sure it is not interpreted as markup.
+    A monospaced font can also be obtained on any element, by applying an adequate CSS style using monospace as the generic-font value for the font-family property.
+    
+    DOM interface:
+    This element implements the HTMLElement interface.
