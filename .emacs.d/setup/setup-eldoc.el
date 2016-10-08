@@ -72,6 +72,7 @@ Advises `eldoc-print-current-symbol-info'."
           (my/contextual-help-mode 1)))
 
 (use-package irony-eldoc
+  :disabled t
   :if (or (file-exists-p "~/.emacs.cache/irony-server/bin/irony-server")
           (executable-find "irony-server"))
   :after (irony eldoc)
