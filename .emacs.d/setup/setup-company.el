@@ -27,16 +27,20 @@
   :diminish company-mode
   :load-path (lambda () (expand-file-name "company-mode/" user-emacs-directory))
   :config (progn
-            (add-hook 'prog-mode-hook 'company-mode)
             (global-company-mode)
+
+            ;; Use Emacs' built-in TAB completion hooks to trigger AC (Emacs >= 23.2)
+            (setq tab-always-indent 'complete)  ;; use 'complete when auto-complete is disabled
+            (add-to-list 'completion-styles 'initials t)
 
             ;; Use Company for completion
             (bind-key [remap completion-at-point] #'company-complete company-mode-map)
-            (setq company-backends '(company-yasnippet
+            (setq company-backends '(
+                                     ;; company-yasnippet
                                      company-semantic
-                                     company-dabbrev
+                                     company-dabbrev-code
+                                     ;; company-dabbrev
                                      company-gtags))
-            (add-to-list 'company-backends 'company-dabbrev-code)
 
             (setq company-idle-delay 0.1
                   company-minimum-prefix-length 2
@@ -63,11 +67,15 @@
 (use-package company-irony
   :after (company irony)
   :load-path (lambda () (expand-file-name "company-irony/" user-emacs-directory))
-  :config (add-hook 'c-mode-common-hook
-            (lambda ()
-              (when (derived-mode-p 'c-mode 'c++-mode)
-                (progn
-                  (add-to-list 'company-backends 'company-irony))))))
+  :config (add-hook 'irony-mode-hook
+                    (lambda ()
+                      (setq company-backends '(
+                                               ;; company-yasnippet
+                                               company-semantic
+                                               company-gtags
+                                               company-irony
+                                               ;; company-dabbrev
+                                               company-dabbrev-code)))))
 
 (provide 'setup-company)
 ;;; setup-company.el ends here
