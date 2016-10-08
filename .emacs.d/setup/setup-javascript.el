@@ -90,10 +90,21 @@
 
 ;; ac-js2
 (use-package ac-js2
+  :after (auto-complete j2-mode)
   :load-path (lambda () (expand-file-name "ac-js2/" user-emacs-directory))
   :config (progn
-            (add-hook 'js2-mode-hook 'ac-js2-mode)
-            (setq-default ac-js2-evaluate-calls t)))
+            (when (featurep 'auto-complete)
+              (add-hook 'js2-mode-hook 'ac-js2-mode)
+              (setq-default ac-js2-evaluate-calls t))))
+
+(use-package company-tern
+  :disabled t
+  :after (company tern)
+  :load-path (lambda () (expand-file-name "company-tern/" user-emacs-directory))
+  :config (progn
+            (add-hook 'js2-mode-hook (lambda ()
+                                       (add-to-list 'company-backends 'company-tern)))
+            (setq company-tern-meta-as-single-line t)))
 
 ;; json-reformat
 (use-package json-reformat

@@ -27,7 +27,7 @@
   :diminish company-mode
   :load-path (lambda () (expand-file-name "company-mode/" user-emacs-directory))
   :config (progn
-            ;; (add-hook 'prog-mode-hook 'company-mode)
+            (add-hook 'prog-mode-hook 'company-mode)
             (global-company-mode)
 
             ;; Use Company for completion
@@ -43,7 +43,9 @@
                   company-show-numbers t
                   company-tooltip-align-annotations t
                   company-dabbrev-downcase nil
-                  company-dabbrev-ignore-case t)
+                  company-dabbrev-ignore-case t
+                  company-semantic-insert-arguments t
+                  company-gtags-insert-arguments t)
 
             (define-key company-active-map (kbd "C-n") 'company-select-next)
             (define-key company-active-map (kbd "C-p") 'company-select-previous)
@@ -53,8 +55,19 @@
 
 ;; Documentation popups for Company
 (use-package company-quickhelp
+  :after company
   :load-path (lambda () (expand-file-name "company-quickhelp/" user-emacs-directory))
   :config (add-hook 'global-company-mode-hook #'company-quickhelp-mode))
+
+;; Company integration with irony
+(use-package company-irony
+  :after (company irony)
+  :load-path (lambda () (expand-file-name "company-irony/" user-emacs-directory))
+  :config (add-hook 'c-mode-common-hook
+            (lambda ()
+              (when (derived-mode-p 'c-mode 'c++-mode)
+                (progn
+                  (add-to-list 'company-backends 'company-irony))))))
 
 (provide 'setup-company)
 ;;; setup-company.el ends here

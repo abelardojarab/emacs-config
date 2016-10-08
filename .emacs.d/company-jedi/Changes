@@ -1,0 +1,16 @@
+Revision history for company-jedi.el
+
+Revision 0.04 2015/12/17 syohex
+   - Update requirement version of jedi for tooltip documentation
+   - Enable sorting candidate(#9 Thanks Dennis Again)
+
+Revision 0.03 2015/06/24 syohex
+   - Support many company-mode features, doc-buffer, annotation etc
+     (Thanks Mario Rodas!!)
+   - Update requirement version of jedi
+
+Revision 0.02 2015/05/17 syohex
+   - Update requirement version of jedi for showing document
+
+Revision 0.01 2015/03/05 syohex
+   - Initial release

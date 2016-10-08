@@ -45,7 +45,16 @@
             (setq jedi:setup-keys nil)
             (setq jedi:complete-on-dot t)
             (setq jedi:tooltip-method t)
-            (ac-flyspell-workaround)))
+            (if (featurep 'auto-complete)
+              (ac-flyspell-workaround))))
+
+;; Company backend for Python jedi
+(use-package company-jedi
+  :after (company jedi python-mode)
+  :load-path (lambda () (expand-file-name "company-jedi/" user-emacs-directory))
+  :config (setq-default
+           jedi:complete-on-dot t
+           jedi:get-in-function-call-delay 0.2))
 
 (provide 'setup-python-plugins)
 ;;; setup-python-plugins.el ends here

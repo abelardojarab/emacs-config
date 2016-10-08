@@ -24,6 +24,9 @@
 
 ;;; Code:
 
+(use-package web-completion-data
+  :load-path (lambda () (expand-file-name "web-completion-data/" user-emacs-directory)))
+
 (use-package web-mode
   :mode ("\\.css?\\'" "\\.html?\\'")
   :commands web-mode
@@ -67,6 +70,13 @@
 
             (add-hook 'web-mode-hook 'setup-ac-for-html)
             (add-hook 'html-mode-hook 'setup-ac-for-html)))
+
+(use-package company-web
+  :after (company web-mode web-completion-data)
+  :load-path (lambda () (expand-file-name "company-web/" user-emacs-directory))
+  :config (progn
+            (add-hook 'web-mode-hook (lambda ()
+                                       (set (make-local-variable 'company-backends) '(company-web-html))))))
 
 (provide 'setup-html)
 ;;; setup-org-html.el ends here
