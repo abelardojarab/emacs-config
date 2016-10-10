@@ -82,7 +82,10 @@ non-nil."
 ;; Visual fill column
 (use-package visual-fill-column
   :defer t
-  :load-path (lambda () (expand-file-name "visual-fill-column/" user-emacs-directory)))
+  :commands visual-fill-column-mode
+  :load-path (lambda () (expand-file-name "visual-fill-column/" user-emacs-directory))
+  :config (setq-default visual-fill-column-center-text t
+                        visual-fill-column-fringes-outside-margins nil))
 
 ;; Just like the previous package, this one is also subtle.
 ;; It highlights characters that exceed a particular column margin. Very useful while coding.

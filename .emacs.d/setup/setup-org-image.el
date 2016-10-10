@@ -26,7 +26,8 @@
 
 ;; Manipulate images using ImageMagick
 (use-package image+
-  :if (executable-find "convert")
+  :if (and (executable-find "convert")
+           (display-graphic-p))
   :load-path (lambda () (expand-file-name "image+/" user-emacs-directory))
   :init (require 'image)
   :config (progn
@@ -43,8 +44,13 @@
 
 ;; Integrating graphics with text inside Emacs
 (use-package iimage
+  :if (display-graphic-p)
   :commands (iimage-mode org-turn-on-iimage org-insert-screenshot org-toggle-iimage org-reload-image-at-point org-resize-image-at-point)
   :config (progn
+
+            ;; https://www.reddit.com/r/emacs/comments/55zk2d/adjust_the_size_of_pictures_to_be_shown_inside/
+            (setq org-image-actual-width (/ (display-pixel-width) 3))
+
             (add-to-list 'iimage-mode-image-regex-alist '("@startuml\s+\\(.+\\)" . 1))
             (add-to-list 'iimage-mode-image-regex-alist (cons (concat "\[\[file:\(~?" iimage-mode-image-filename-regex "\)\]") 1))
 

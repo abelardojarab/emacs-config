@@ -111,7 +111,6 @@
                   org-cycle-separator-lines 1
                   org-cycle-include-plain-lists 'integrate
                   org-startup-with-inline-images nil
-                  org-image-actual-width '(100)
                   org-startup-truncated t
                   org-blank-before-new-entry '((heading . auto) (plain-list-item . auto))
                   org-refile-targets '((org-agenda-files :maxlevel . 9))
