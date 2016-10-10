@@ -39,7 +39,7 @@
             (defadvice popup-menu-show-quick-help
                 (around pos-tip-popup-menu-show-quick-help () activate)
               "Show quick help using `pos-tip-show'."
-              (if (eq window-system 'x)
+              (if (display-graphic-p)
                   (let ((doc (popup-menu-document
                               menu (or item
                                        (popup-selected-item menu)))))
@@ -77,6 +77,10 @@
              uniquify-after-kill-buffer-p t
              ;; don't muck with special buffers
              uniquify-ignore-buffers-re "^\\*")))
+
+;; unfill autofill
+(use-package unfill
+  :commands (unfill-region unfill-paragraph toggle-fill-unfill))
 
 ;; Browse kill ring
 (use-package browse-kill-ring
@@ -124,9 +128,8 @@
   :after org
   :load-path (lambda () (expand-file-name "calfw/" user-emacs-directory))
   :defer 0.5
-  :config
-  (progn
-    (use-package calfw-org)))
+  :config (progn
+            (use-package calfw-org)))
 
 (provide 'setup-general)
 ;;; setup-general.el ends here

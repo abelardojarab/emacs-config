@@ -153,32 +153,6 @@ Defaults to `error'."
                                  (and (< indent-amount 0) indent-amount)
                                  (* (or count 1) (- 0 tab-width))))))))
 
-;; http://endlessparentheses.com/fill-and-unfill-paragraphs-with-a-single-key.html?source=rss
-(defun fill-or-unfill ()
-  "Like `fill-paragraph', but unfill if used twice."
-  (interactive)
-  (let ((fill-column
-         (if (eq last-command 'endless/fill-or-unfill)
-             (progn (setq this-command nil)
-                    (point-max))
-           fill-column)))
-    (call-interactively #'fill-paragraph)))
-
-;; Unfill paragraph
-(defun unfill-paragraph ()
-  "Replace newline chars in current paragraph by single spaces.
-This command does the reverse of `fill-paragraph'."
-  (interactive)
-  (let ((fill-column 90002000))
-    (fill-paragraph nil)))
-
-;; Unfill region
-(defun unfill-region (begin end)
-  "Remove all linebreaks in a region but leave paragraphs,
- indented text (quotes,code) and lines starting with an asterix (lists) intact."
-  (interactive "r")
-  (replace-regexp "\\([^\n]\\)\n\\([^ *\n]\\)" "\\1 \\2" nil begin end))
-
 ;; dos2unix
 (defun dos2unix ()
   "Replace DOS eolns CR LF with Unix eolns CR"

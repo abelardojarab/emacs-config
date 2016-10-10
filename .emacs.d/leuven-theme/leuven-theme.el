@@ -4,7 +4,7 @@
 
 ;; Author: Fabrice Niessen <(concat "fniessen" at-sign "pirilampo.org")>
 ;; URL: https://github.com/fniessen/emacs-leuven-theme
-;; Version: 20160608.1740
+;; Version: 20161009.1549
 ;; Keywords: color theme
 
 ;; This file is part of GNU Emacs.
@@ -66,6 +66,9 @@ more...")
       (code-block '(:foreground "#000088" :background "#FFFFE0"))
       (code-inline '(:foreground "#006400" :background "#FDFFF7"))
       (column '(:height 1.0 :weight normal :slant normal :underline nil :strike-through nil :foreground "#E6AD4F" :background "#FFF2DE"))
+      (completion-selected-candidate '(:weight bold :foreground "white" :background "#0052A4"))
+      (completion-other-candidates '(:weight bold :foreground "black" :background "#EBF4FE"))
+      (completion-inline '(:foreground "#C0C0C0" :inherit hl-line)) ; Like Google.
       (diff-added '(:background "#DDFFDD"))
       (diff-changed '(:foreground "#0000FF" :background "#DDDDFF"))
       (diff-header '(:foreground "#800000" :background "#FFFFAF"))
@@ -76,9 +79,11 @@ more...")
       (diff-removed '(:background "#FEE8E9"))
       (directory '(:weight bold :foreground "blue" :background "#FFFFD2"))
       (file '(:foreground "black"))
-      ;; (highlight-line '(:background "#E4E4E3"))
-      ;; (highlight-line '(:underline "#FFFF19" :background "#F6FECD"))
-      (highlight-line '(:background "#FBFFAD"))
+      (highlight-blue '(:background "#E4F1F9"))
+      (highlight-gray '(:background "#E4E4E3"))
+      (highlight-green '(:background "#D5F1CF"))
+      (highlight-red '(:background "#FFC8C8"))
+      (highlight-yellow '(:underline "#FFFF19" :background "#F6FECD"))
       (link '(:weight normal :underline t :foreground "#006DAF"))
       (link-no-underline '(:weight normal :foreground "#006DAF"))
       (mail-header-name '(:family "Sans Serif" :weight normal :foreground "#A3A3A2"))
@@ -108,7 +113,7 @@ more...")
       (subject '(:family "Sans Serif" :weight bold :foreground "black"))
       (symlink '(:foreground "#1F8DD6"))
       (tab '(:foreground "#E8E8E8" :background "white"))
-      (volatile-highlight '(:underline nil :background "#FFF876")) ; flash-region
+      (volatile-highlight '(:underline nil :foreground "black" :background "#E6B064")) ; flash-region
       (vc-branch '(:box (:line-width 1 :color "#00CC33") :foreground "black" :background "#AAFFAA"))
       (xml-attribute '(:foreground "#F36335"))
       (xml-tag '(:foreground "#33658A" :background "#CEE0ED"))
@@ -125,20 +130,20 @@ more...")
    `(cursor ((,class (:background "#21BDFF"))))
 
    ;; Highlighting faces.
-   `(fringe ((,class (:foreground "#9B9B9B" :background "white"))))
-   `(highlight ((,class ,volatile-highlight)))
+   `(fringe ((,class (:foreground "#FFDD31" :background "white"))))
+   `(highlight ((,class ,highlight-blue)))
    `(region ((,class ,region)))
-   `(secondary-selection ((,class ,match))) ; used by Org-mode for highlighting matched entries and keywords
+   `(secondary-selection ((,class ,match))) ; Used by Org-mode for highlighting matched entries and keywords.
    `(isearch ((,class (:weight bold :underline "#FF9632" :foreground nil :background "#FDBD33"))))
    `(isearch-fail ((,class (:weight bold :foreground "black" :background "#FF9999"))))
    `(lazy-highlight ((,class (:underline "#FF9632" :background "#FFFF00")))) ; isearch others
-   `(trailing-whitespace ((,class (:background "#FFFF57"))))
+   `(trailing-whitespace ((,class (:foreground "#B3B3B3" :background "#FFFFAB"))))
    `(query-replace ((,class (:inherit isearch))))
    `(whitespace-hspace ((,class (:foreground "#D2D2D2")))) ; see also `nobreak-space'
    `(whitespace-indentation ((,class ,tab)))
    `(whitespace-line ((,class (:foreground "#CC0000" :background "#FFFF88"))))
    `(whitespace-tab ((,class ,tab)))
-   `(whitespace-trailing ((,class (:foreground "#B3B3B3" :background "#FFFF57"))))
+   `(whitespace-trailing ((,class (:foreground "#B3B3B3" :background "#FFFFAB"))))
 
    ;; Mode line faces.
    `(mode-line ((,class (:box (:line-width 1 :color "#1A2F54") :foreground "#85CEEB" :background "#335EA8"))))
@@ -176,7 +181,7 @@ more...")
    `(link ((,class ,link)))
    `(link-visited ((,class (:underline t :foreground "#E5786D"))))
    `(button ((,class (:underline t :foreground "#006DAF"))))
-   `(header-line ((,class (:weight bold :underline "black" :overline "black" :foreground "black" :background "#FFFF88"))))
+   `(header-line ((,class (:weight bold :underline "#BF8DFF" :overline "#BF8DFF" :foreground "black" :background "#E8E8FF"))))
 
    ;; Gnus faces.
    `(gnus-button ((,class (:weight normal))))
@@ -309,13 +314,13 @@ more...")
    `(Info-title-3-face ((,class ,ol3)))
    `(Info-title-4-face ((,class ,ol4)))
    `(ace-jump-face-foreground ((,class (:weight bold :foreground "black" :background "#FEA500"))))
-   `(ahs-face ((,class (:background "#84CFFF"))))
-   `(ahs-definition-face ((,class (:weight bold :background "#84CFFF"))))
-   `(ahs-plugin-defalt-face ((,class (:background "#FFB6C6"))))
+   `(ahs-face ((,class (:background "#E2E6D6")))) ; #84CFFF (blue).
+   `(ahs-definition-face ((,class (:background "#FFE4FF"))))
+   `(ahs-plugin-defalt-face ((,class (:background "#E2E6D6")))) ; #FFB6C6 (rose) = current.
    `(anzu-match-1 ((,class (:foreground "black" :background "aquamarine"))))
    `(anzu-match-2 ((,class (:foreground "black" :background "springgreen"))))
    `(anzu-match-3 ((,class (:foreground "black" :background "red"))))
-   `(anzu-mode-line ((,class (:weight bold :foreground "#FFFE00" :background "black"))))
+   `(anzu-mode-line ((,class (:weight bold :foreground "white" :background "#33A030"))))
    `(anzu-replace-highlight ((,class (:inherit query-replace))))
    `(anzu-replace-to ((,class (:weight bold :foreground "#BD33FD" :background "#FDBD33"))))
    `(auto-dim-other-buffers-face ((,class (:background "#F7F7F7"))))
@@ -325,10 +330,10 @@ more...")
    `(bbdb-field-name ((,class (:weight bold :foreground "steel blue"))))
    `(bbdb-field-value ((,class (:foreground "steel blue"))))
    `(bbdb-name ((,class (:underline t :foreground "#FF6633"))))
-   `(bmkp-light-autonamed ((,class (:background "#BFFFFE"))))
-   `(bmkp-light-fringe-autonamed ((,class (:foreground "#242527" :background "#01FFFB")))) ; default
-   `(bmkp-light-fringe-non-autonamed ((,class (:foreground "#FCEDFD" :background "#C595EE"))))
-   `(bmkp-light-non-autonamed ((,class (:foreground "#C4FFC4"))))
+   `(bmkp-light-fringe-autonamed ((,class (:foreground "#5A5A5A" :background "#D4D4D4"))))
+   `(bmkp-light-autonamed ((,class (:background "#F0F0F0"))))
+   `(bmkp-light-fringe-non-autonamed ((,class (:foreground "#FFFFCC" :background "#01FFFB")))) ; default
+   `(bmkp-light-non-autonamed ((,class (:background "#BFFFFE"))))
    `(browse-kill-ring-separator-face ((,class (:foreground "red"))))
    `(calendar-month-header ((,class (:weight bold :foreground "#4F4A3D" :background "#FFFFCC"))))
    `(calendar-today ((,class (:weight bold :foreground "#4F4A3D" :background "#FFFFCC"))))
@@ -366,19 +371,26 @@ more...")
    ;; `(comint-highlight-prompt ((,class (:weight bold :foreground "black" :background "gold"))))
    `(comint-highlight-prompt ((,class (:weight bold :foreground "#0000FF" :inherit nil))))
 
-   `(ac-candidate-face ((,class (:foreground "#5B6367" :background "lightgray")))) ; popup-face
-   `(ac-candidate-mouse-face ((,class (:foreground "white" :background "blue")))) ; popup-menu-mouse-face
-   `(ac-completion-face ((,class (:underline nil :foreground "#C0C0C0" :background "#FBFFAD")))) ; like Google
-   `(ac-selection-face ((,class (:foreground "white" :background "steelblue")))) ; popup-menu-selection-face
+   ;; `(ac-selection-face ((,class ,completion-selected-candidate)))
+   `(ac-selection-face ((,class (:weight bold :foreground "white" :background "orange")))) ; TEMP For diff'ing AC from Comp.
+   `(ac-candidate-face ((,class ,completion-other-candidates)))
+   `(ac-completion-face ((,class ,completion-inline)))
+   `(ac-candidate-mouse-face ((,class (:inherit highlight))))
+   `(popup-scroll-bar-background-face ((,class (:background "#EBF4FE"))))
+   `(popup-scroll-bar-foreground-face ((,class (:background "#D1DAE4")))) ; Scrollbar (visible).
 
-   `(company-preview-common ((,class (:foreground "#C0C0C0" :background "#F6FECD")))) ; same background as `highlight-line'
-   `(company-scrollbar-bg ((,class (:background "#F0F0F0"))))
-   `(company-scrollbar-fg ((,class (:background "#C0C0C0"))))
-   `(company-tooltip ((,class (:weight bold :foreground "#171D28" :background "#E6E6E6"))))
-   `(company-tooltip-annotation ((,class (:weight normal :foreground "#378FC1" :background "#E6E6E6"))))
-   `(company-tooltip-common ((,class (:weight normal :foreground "#5B6367" :inherit company-tooltip))))
-   `(company-tooltip-common-selection ((,class (:weight normal :inherit company-tooltip-selection))))
-   `(company-tooltip-selection ((,class (:weight bold :background "#93B0D8"))))
+   `(company-tooltip-common-selection ((,class (:weight normal :foreground "#F9ECCC" :inherit company-tooltip-selection)))) ; Prefix + common part in tooltip (for selection).
+   `(company-tooltip-selection ((,class ,completion-selected-candidate))) ; Suffix in tooltip (for selection).
+   `(company-tooltip-annotation-selection ((,class (:weight normal :foreground "#F9ECCC")))) ; Annotation (for selection).
+
+   `(company-tooltip-common ((,class (:weight normal :foreground "#B000B0" :inherit company-tooltip)))) ; Prefix + common part in tooltip.
+   `(company-tooltip ((,class ,completion-other-candidates))) ; Suffix in tooltip.
+   `(company-tooltip-annotation ((,class (:weight normal :foreground "#2415FF")))) ; Annotation.
+
+   `(company-preview-common ((,class ,completion-inline)))
+
+   `(company-scrollbar-bg ((,class (:background "#EBF4FE"))))
+   `(company-scrollbar-fg ((,class (:background "#D1DAE4")))) ; Scrollbar (visible).
 
    `(compare-windows ((,class (:background "#FFFF00"))))
    ;; `(completions-common-part ((,class (:foreground "red" :weight bold))))
@@ -527,10 +539,10 @@ more...")
    ;; `(helm-ls-git-untracked-face ((,class (:foreground ""))))
    `(helm-match ((,class ,match)))
    `(helm-moccur-buffer ((,class (:foreground "#0066CC"))))
-   `(helm-selection ((,class ,volatile-highlight)))
-   `(helm-selection-line ((,class ,volatile-highlight)))
+   `(helm-selection ((,class ,highlight-blue)))
+   `(helm-selection-line ((,class ,highlight-gray)))
    `(helm-separator ((,class (:foreground "red"))))
-   `(helm-source-header ((,class (:family "Sans Serif" :height 1.3 :weight bold :foreground "white" :background "#2F69BF"))))
+   `(helm-source-header ((,class ,ol1)))
    `(helm-swoop-target-line-block-face ((,class (:background "#CCCC00" :foreground "#222222"))))
    `(helm-swoop-target-line-face ((,class ,volatile-highlight)))
    `(helm-swoop-target-word-face ((,class (:weight bold :foreground nil :background "#FDBD33"))))
@@ -539,7 +551,7 @@ more...")
    `(highlight-changes ((,class (:foreground nil)))) ;; blue "#2E08B5"
    `(highlight-changes-delete ((,class (:strike-through nil :foreground nil)))) ;; red "#B5082E"
    `(highlight-symbol-face ((,class (:background "#FFFFA0"))))
-   `(hl-line ((,class ,highlight-line)))
+   `(hl-line ((,class ,highlight-green))) ; Highlight current line.
    `(hl-tags-face  ((,class ,highlight-current-tag)))
    `(holiday-face ((,class (:foreground "#777777" :background "#E4EBFE"))))
    `(html-helper-bold-face ((,class (:weight bold :foreground "black"))))
@@ -565,7 +577,20 @@ more...")
    `(info-xref ((,class (:underline t :foreground "#006DAF")))) ; unvisited cross-references
    `(info-xref-visited ((,class (:underline t :foreground "magenta4")))) ; previously visited cross-references
    ;; js2-highlight-vars-face (~ auto-highlight-symbol)
-   `(js2-external-variable ((,class (:background "#FFFFA0"))))
+   '(js2-function-param ((t (:foreground "LightGoldenrod"))))
+   `(js2-error ((t (:box (:line-width 1 :color "#FF0000"))))) ; DONE.
+   `(js2-external-variable ((,class (:foreground "#FF0000")))) ; DONE.
+   `(js2-function-param ((t (:foreground "SeaGreen"))))
+   `(js2-instance-member ((t (:foreground "DarkOrchid"))))
+   `(js2-jsdoc-html-tag-delimiter ((t (:foreground "green"))))
+   `(js2-jsdoc-html-tag-name ((t (:foreground "yellow"))))
+   `(js2-jsdoc-tag ((t (:foreground "SlateGray"))))
+   `(js2-jsdoc-type ((t (:foreground "SteelBlue"))))
+   `(js2-jsdoc-value ((t (:foreground "PeachPuff3"))))
+   `(js2-magic-paren ((t (:underline t))))
+   `(js2-private-function-call ((t (:foreground "goldenrod"))))
+   `(js2-private-member ((t (:foreground "PeachPuff3"))))
+   `(js2-warning ((t (:underline "orange"))))
 
    ;; Org non-standard faces.
    `(leuven-org-deadline-overdue ((,class (:foreground "#F22659"))))
@@ -601,7 +626,7 @@ more...")
    `(makefile-space-face ((,class (:background "hot pink"))))
    `(makefile-targets ((,class (:weight bold :foreground "blue"))))
    ;; `(markdown-blockquote-face ((,class ())))
-   ;; `(markdown-bold-face ((,class (:weight bold :foreground "black"))))
+   `(markdown-bold-face ((,class (:inherit bold))))
    ;; `(markdown-comment-face ((,class ())))
    ;; `(markdown-footnote-face ((,class ())))
    ;; `(markdown-header-delimiter-face ((,class ())))
@@ -614,7 +639,7 @@ more...")
    `(markdown-header-face-6 ((,class ,ol6)))
    ;; `(markdown-header-rule-face ((,class ())))
    `(markdown-inline-code-face ((,class ,code-inline)))
-   ;; `(markdown-italic-face ((,class ())))
+   `(markdown-italic-face ((,class (:inherit italic))))
    ;; `(markdown-language-keyword-face ((,class ())))
    ;; `(markdown-line-break-face ((,class ())))
    `(markdown-link-face ((,class ,link-no-underline)))
@@ -666,7 +691,7 @@ more...")
    `(org-archived ((,class (:foreground "gray70"))))
    `(org-beamer-tag ((,class (:box (:line-width 1 :color "#FABC18") :foreground "#2C2C2C" :background "#FFF8D0"))))
    `(org-block ((,class ,code-block)))
-   `(org-block-background ((,class (:background "#FFFFE0"))))
+   `(org-block-background ((,class (:background "#FFFFE0")))) ;; :inherit fixed-pitch))))
    `(org-block-begin-line ((,class (:underline "#A7A6AA" :foreground "#555555" :background "#E2E1D5"))))
    `(org-block-end-line ((,class (:overline "#A7A6AA" :foreground "#555555" :background "#E2E1D5"))))
    `(org-checkbox ((,class (:weight bold :box (:line-width 1 :style pressed-button) :foreground "#434343" :background "#A3A3A3"))))
@@ -712,7 +737,7 @@ more...")
    `(org-scheduled-today ((,class (:weight bold :foreground "#4F4A3D" :background "#FFFFCC"))))
    `(org-sexp-date ((,class (:foreground "#3774CC"))))
    `(org-special-keyword ((,class (:weight bold :foreground "#00BB00" :background "#EAFFEA"))))
-   `(org-table ((,class (:foreground "dark green" :background "#EAFFEA"))))
+   `(org-table ((,class (:foreground "dark green" :background "#EAFFEA")))) ;; :inherit fixed-pitch))))
    `(org-tag ((,class (:weight normal :slant italic :foreground "#9A9FA4" :background "white"))))
    `(org-target ((,class (:foreground "#FF6DAF"))))
    `(org-time-grid ((,class (:foreground "#CFCFCF"))))
@@ -805,6 +830,7 @@ more...")
    `(vc-annotate-face-FF993F ((,class (:foreground "#FF993F" :background "black"))))
    `(vc-annotate-face-FFC63F ((,class (:foreground "#FF993F" :background "black"))))
    `(vc-annotate-face-FFF33F ((,class (:foreground "#FFF33F" :background "black"))))
+   `(vhl/default-face ((,class ,volatile-highlight))) ; `volatile-highlights.el'.
    `(w3m-anchor ((,class ,link)))
    `(w3m-arrived-anchor ((,class (:foreground "purple1"))))
    `(w3m-bitmap-image-face ((,class (:foreground "gray4" :background "green"))))
@@ -909,8 +935,8 @@ more...")
    `(woman-bold ((,class (:weight bold :foreground "#F13D3D"))))
    `(woman-italic ((,class (:weight bold :slant italic :foreground "#46BE1B"))))
    `(woman-symbol ((,class (:weight bold :foreground "purple"))))
-   `(yas/field-debug-face ((,class (:background "ivory2"))))
-   `(yas/field-highlight-face ((,class (:background "DarkSeaGreen1"))))
+   `(yas-field-debug-face ((,class (:background "red"))))
+   `(yas-field-highlight-face ((,class (:box (:line-width 1 :color "#838383") :foreground "black" :background "#D4DCD8"))))
    ))
 
 (custom-theme-set-variables 'leuven
@@ -932,6 +958,12 @@ more...")
   ;; Add theme folder to `custom-theme-load-path' when installing over MELPA.
   (add-to-list 'custom-theme-load-path
                (file-name-as-directory (file-name-directory load-file-name))))
+
+;;;###autoload
+(when (string-match "/etc/themes/$"
+                    (file-name-directory (or load-file-name (buffer-file-name))))
+  (message "To stay up-to-date, you should better install and use leuven-theme from MELPA.")
+  (sit-for 2))
 
 (provide-theme 'leuven)
 

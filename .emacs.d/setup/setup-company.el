@@ -35,11 +35,8 @@
 
             ;; Use Company for completion
             (bind-key [remap completion-at-point] #'company-complete company-mode-map)
-            (setq company-backends '(
-                                     ;; company-yasnippet
-                                     company-semantic
+            (setq company-backends '(company-semantic
                                      company-dabbrev-code
-                                     ;; company-dabbrev
                                      company-gtags))
 
             (setq company-idle-delay 0.1
@@ -61,7 +58,13 @@
 (use-package company-quickhelp
   :after company
   :load-path (lambda () (expand-file-name "company-quickhelp/" user-emacs-directory))
-  :config (add-hook 'global-company-mode-hook #'company-quickhelp-mode))
+  :if (display-graphic-p)
+  :config (progn
+            (setq company-quickhelp-delay 0.2)
+            (add-hook 'global-company-mode-hook #'company-quickhelp-mode)
+
+            ;; Update front-end tooltip
+            (setq company-frontends (delq 'company-echo-metadata-frontend company-frontends))))
 
 ;; Company integration with irony
 (use-package company-irony

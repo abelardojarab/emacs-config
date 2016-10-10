@@ -48,7 +48,9 @@
             (setq tramp-default-method "ssh"))
 
           ;; Set control master options before loading tramp
-          (setq tramp-ssh-controlmaster-options "-o ControlMaster=auto -o ControlPath='tramp.%%C' -o ControlPersist=no"))
+          (setq tramp-ssh-controlmaster-options (concat "-o ControlPath=/tmp/tramp.%%r@%%h:%%p "
+                                                        "-o ControlMaster=auto "
+                                                        "-o ControlPersist=no")))
   :config (progn
             ;; Fix auto save problem
             (setq tramp-persistency-file-name "~/.emacs.cache/tramp")
