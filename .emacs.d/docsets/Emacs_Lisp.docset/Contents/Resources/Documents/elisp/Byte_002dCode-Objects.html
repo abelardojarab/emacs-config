@@ -1,0 +1,134 @@
+<html><!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright (C) 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." --><!-- Created by GNU Texinfo 6.1, http://www.gnu.org/software/texinfo/ --><head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rev="made" href="mailto:bug-gnu-emacs@gnu.org">
+<link rel="icon" type="image/png" href="/graphics/gnu-head-mini.png">
+<meta name="ICBM" content="42.256233,-71.006581">
+<meta name="DC.title" content="gnu.org">
+
+<title>Byte-Code Objects</title>
+
+<style type="text/css">
+@import url('/software/emacs/manual.css');
+</style>
+</head>
+
+<body lang="en">
+<a name="Byte_002dCode-Objects"></a>
+<div class="header" style="background-color:#DDDDFF">
+<p>
+Next: <a href="Disassembly.html#Disassembly" accesskey="n" rel="next">Disassembly</a>, Previous: <a href="Compiler-Errors.html#Compiler-Errors" accesskey="p" rel="prev">Compiler Errors</a>, Up: <a href="Byte-Compilation.html#Byte-Compilation" accesskey="u" rel="up">Byte Compilation</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+
+<a name="Byte_002dCode-Function-Objects"></a>
+<h3 class="section">16.7 Byte-Code Function Objects</h3>
+<a name="index-compiled-function"></a>
+<a name="index-byte_002dcode-function"></a>
+<a name="index-byte_002dcode-object"></a>
+
+<p>Byte-compiled functions have a special data type: they are
+<em>byte-code function objects</em>.  Whenever such an object appears as
+a function to be called, Emacs uses the byte-code interpreter to
+execute the byte-code.
+</p>
+<p>Internally, a byte-code function object is much like a vector; its
+elements can be accessed using <code>aref</code>.  Its printed
+representation is like that for a vector, with an additional ‘<samp>#</samp>’
+before the opening ‘<samp>[</samp>’.  It must have at least four elements;
+there is no maximum number, but only the first six elements have any
+normal use.  They are:
+</p>
+<dl compact="compact">
+<dt><var>argdesc</var></dt>
+<dd><p>The descriptor of the arguments.  This can either be a list of
+arguments, as described in <a href="Argument-List.html#Argument-List">Argument List</a>, or an integer encoding
+the required number of arguments.  In the latter case, the value of
+the descriptor specifies the minimum number of arguments in the bits
+zero to 6, and the maximum number of arguments in bits 8 to 14.  If
+the argument list uses <code>&amp;rest</code>, then bit 7 is set; otherwise it’s
+cleared.
+</p>
+<p>If <var>argdesc</var> is a list, the arguments will be dynamically bound
+before executing the byte code.  If <var>argdesc</var> is an integer, the
+arguments will be instead pushed onto the stack of the byte-code
+interpreter, before executing the code.
+</p>
+</dd>
+<dt><var>byte-code</var></dt>
+<dd><p>The string containing the byte-code instructions.
+</p>
+</dd>
+<dt><var>constants</var></dt>
+<dd><p>The vector of Lisp objects referenced by the byte code.  These include
+symbols used as function names and variable names.
+</p>
+</dd>
+<dt><var>stacksize</var></dt>
+<dd><p>The maximum stack size this function needs.
+</p>
+</dd>
+<dt><var>docstring</var></dt>
+<dd><p>The documentation string (if any); otherwise, <code>nil</code>.  The value may
+be a number or a list, in case the documentation string is stored in a
+file.  Use the function <code>documentation</code> to get the real
+documentation string (see <a href="Accessing-Documentation.html#Accessing-Documentation">Accessing Documentation</a>).
+</p>
+</dd>
+<dt><var>interactive</var></dt>
+<dd><p>The interactive spec (if any).  This can be a string or a Lisp
+expression.  It is <code>nil</code> for a function that isn’t interactive.
+</p></dd>
+</dl>
+
+<p>Here’s an example of a byte-code function object, in printed
+representation.  It is the definition of the command
+<code>backward-sexp</code>.
+</p>
+<div class="example">
+<pre class="example">#[256
+  "\211\204^G^@\300\262^A\301^A[!\207"
+  [1 forward-sexp]
+  3
+  1793299
+  "^p"]
+</pre></div>
+
+<p>The primitive way to create a byte-code object is with
+<code>make-byte-code</code>:
+</p>
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/func/make%2Dbyte%2Dcode"></a><a name="index-make_002dbyte_002dcode"></a>Function: <strong>make-byte-code</strong> <em>&amp;rest elements</em></dt>
+<dd><p>This function constructs and returns a byte-code function object
+with <var>elements</var> as its elements.
+</p></dd></dl>
+
+<p>You should not try to come up with the elements for a byte-code
+function yourself, because if they are inconsistent, Emacs may crash
+when you call the function.  Always leave it to the byte compiler to
+create these objects; it makes the elements consistent (we hope).
+</p>
+
+<div class="header" style="background-color:#DDDDFF">
+<p>
+Next: <a href="Disassembly.html#Disassembly" accesskey="n" rel="next">Disassembly</a>, Previous: <a href="Compiler-Errors.html#Compiler-Errors" accesskey="p" rel="prev">Compiler Errors</a>, Up: <a href="Byte-Compilation.html#Byte-Compilation" accesskey="u" rel="up">Byte Compilation</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+
+
+</body></html>

@@ -1,0 +1,86 @@
+<html><!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright (C) 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." --><!-- Created by GNU Texinfo 6.1, http://www.gnu.org/software/texinfo/ --><head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rev="made" href="mailto:bug-gnu-emacs@gnu.org">
+<link rel="icon" type="image/png" href="/graphics/gnu-head-mini.png">
+<meta name="ICBM" content="42.256233,-71.006581">
+<meta name="DC.title" content="gnu.org">
+
+<title>Motion and Syntax</title>
+
+<style type="text/css">
+@import url('/software/emacs/manual.css');
+</style>
+</head>
+
+<body lang="en">
+<a name="Motion-and-Syntax"></a>
+<div class="header" style="background-color:#DDDDFF">
+<p>
+Next: <a href="Parsing-Expressions.html#Parsing-Expressions" accesskey="n" rel="next">Parsing Expressions</a>, Previous: <a href="Syntax-Properties.html#Syntax-Properties" accesskey="p" rel="prev">Syntax Properties</a>, Up: <a href="Syntax-Tables.html#Syntax-Tables" accesskey="u" rel="up">Syntax Tables</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+
+<a name="Motion-and-Syntax-1"></a>
+<h3 class="section">34.5 Motion and Syntax</h3>
+<a name="index-moving-across-syntax-classes"></a>
+<a name="index-skipping-characters-of-certain-syntax"></a>
+
+<p>This section describes functions for moving across characters that
+have certain syntax classes.
+</p>
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/func/skip%2Dsyntax%2Dforward"></a><a name="index-skip_002dsyntax_002dforward"></a>Function: <strong>skip-syntax-forward</strong> <em>syntaxes &amp;optional limit</em></dt>
+<dd><p>This function moves point forward across characters having syntax
+classes mentioned in <var>syntaxes</var> (a string of syntax class
+characters).  It stops when it encounters the end of the buffer, or
+position <var>limit</var> (if specified), or a character it is not supposed
+to skip.
+</p>
+<p>If <var>syntaxes</var> starts with ‘<samp>^</samp>’, then the function skips
+characters whose syntax is <em>not</em> in <var>syntaxes</var>.
+</p>
+<p>The return value is the distance traveled, which is a nonnegative
+integer.
+</p></dd></dl>
+
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/func/skip%2Dsyntax%2Dbackward"></a><a name="index-skip_002dsyntax_002dbackward"></a>Function: <strong>skip-syntax-backward</strong> <em>syntaxes &amp;optional limit</em></dt>
+<dd><p>This function moves point backward across characters whose syntax
+classes are mentioned in <var>syntaxes</var>.  It stops when it encounters
+the beginning of the buffer, or position <var>limit</var> (if specified), or
+a character it is not supposed to skip.
+</p>
+<p>If <var>syntaxes</var> starts with ‘<samp>^</samp>’, then the function skips
+characters whose syntax is <em>not</em> in <var>syntaxes</var>.
+</p>
+<p>The return value indicates the distance traveled.  It is an integer that
+is zero or less.
+</p></dd></dl>
+
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/func/backward%2Dprefix%2Dchars"></a><a name="index-backward_002dprefix_002dchars"></a>Function: <strong>backward-prefix-chars</strong></dt>
+<dd><p>This function moves point backward over any number of characters with
+expression prefix syntax.  This includes both characters in the
+expression prefix syntax class, and characters with the ‘<samp>p</samp>’ flag.
+</p></dd></dl>
+
+
+
+
+
+
+</body></html>

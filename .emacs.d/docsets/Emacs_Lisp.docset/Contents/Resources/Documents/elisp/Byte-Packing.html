@@ -1,0 +1,74 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright (C) 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 6.1, http://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rev="made" href="mailto:bug-gnu-emacs@gnu.org">
+<link rel="icon" type="image/png" href="/graphics/gnu-head-mini.png">
+<meta name="ICBM" content="42.256233,-71.006581">
+<meta name="DC.title" content="gnu.org">
+
+<title>Byte Packing</title>
+
+<style type="text/css">
+@import url('/software/emacs/manual.css');
+</style>
+</head>
+
+<body lang="en">
+<a name="Byte-Packing"></a>
+<div class="header" style="background-color:#DDDDFF">
+<p>
+Previous: <a href="Serial-Ports.html#Serial-Ports" accesskey="p" rel="prev">Serial Ports</a>, Up: <a href="Processes.html#Processes" accesskey="u" rel="up">Processes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+
+<a name="Packing-and-Unpacking-Byte-Arrays"></a>
+<h3 class="section">36.20 Packing and Unpacking Byte Arrays</h3>
+<a name="index-byte-packing-and-unpacking"></a>
+
+<p>This section describes how to pack and unpack arrays of bytes,
+usually for binary network protocols.  These functions convert byte arrays
+to alists, and vice versa.  The byte array can be represented as a
+unibyte string or as a vector of integers, while the alist associates
+symbols either with fixed-size objects or with recursive sub-alists.
+To use the functions referred to in this section, load the
+<code>bindat</code> library.
+</p>
+<a name="index-serializing"></a>
+<a name="index-deserializing"></a>
+<a name="index-packing"></a>
+<a name="index-unpacking"></a>
+<p>Conversion from byte arrays to nested alists is also known as
+<em>deserializing</em> or <em>unpacking</em>, while going in the opposite
+direction is also known as <em>serializing</em> or <em>packing</em>.
+</p>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top">&bull; <a href="Bindat-Spec.html#Bindat-Spec" accesskey="1">Bindat Spec</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Describing data layout.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Bindat-Functions.html#Bindat-Functions" accesskey="2">Bindat Functions</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Doing the unpacking and packing.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Bindat-Examples.html#Bindat-Examples" accesskey="3">Bindat Examples</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Samples of what bindat.el can do for you!
+</td></tr>
+</table>
+
+
+
+
+</body>
+</html>

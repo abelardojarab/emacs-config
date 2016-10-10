@@ -1,0 +1,73 @@
+<html><!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright (C) 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." --><!-- Created by GNU Texinfo 6.1, http://www.gnu.org/software/texinfo/ --><head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rev="made" href="mailto:bug-gnu-emacs@gnu.org">
+<link rel="icon" type="image/png" href="/graphics/gnu-head-mini.png">
+<meta name="ICBM" content="42.256233,-71.006581">
+<meta name="DC.title" content="gnu.org">
+
+<title>Decompression</title>
+
+<style type="text/css">
+@import url('/software/emacs/manual.css');
+</style>
+</head>
+
+<body lang="en">
+<a name="Decompression"></a>
+<div class="header" style="background-color:#DDDDFF">
+<p>
+Next: <a href="Base-64.html#Base-64" accesskey="n" rel="next">Base 64</a>, Previous: <a href="Transposition.html#Transposition" accesskey="p" rel="prev">Transposition</a>, Up: <a href="Text.html#Text" accesskey="u" rel="up">Text</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+
+<a name="Dealing-With-Compressed-Data"></a>
+<h3 class="section">31.23 Dealing With Compressed Data</h3>
+
+<p>When <code>auto-compression-mode</code> is enabled, Emacs automatically
+uncompresses compressed files when you visit them, and automatically
+recompresses them if you alter and save them.  See <a href="http://www.gnu.org/software/emacs/manual/html_node/emacs/Compressed-Files.html#Compressed-Files">Compressed
+Files</a> in <cite>The GNU Emacs Manual</cite>.
+</p>
+<p>The above feature works by calling an external executable (e.g.,
+<code>gzip</code>).  Emacs can also be compiled with support for built-in
+decompression using the zlib library, which is faster than calling an
+external program.
+</p>
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/func/zlib%2Davailable%2Dp"></a><a name="index-zlib_002davailable_002dp"></a>Function: <strong>zlib-available-p</strong></dt>
+<dd><p>This function returns non-<code>nil</code> if built-in zlib decompression is
+available.
+</p></dd></dl>
+
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/func/zlib%2Ddecompress%2Dregion"></a><a name="index-zlib_002ddecompress_002dregion"></a>Function: <strong>zlib-decompress-region</strong> <em>start end</em></dt>
+<dd><p>This function decompresses the region between <var>start</var> and
+<var>end</var>, using built-in zlib decompression.  The region should
+contain data that were compressed with gzip or zlib.  On success, the
+function replaces the contents of the region with the decompressed
+data.  On failure, the function leaves the region unchanged and
+returns <code>nil</code>.  This function can be called only in unibyte
+buffers.
+</p></dd></dl>
+
+
+
+
+
+
+
+</body></html>

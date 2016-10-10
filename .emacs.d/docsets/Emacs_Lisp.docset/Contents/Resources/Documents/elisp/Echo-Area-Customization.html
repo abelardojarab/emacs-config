@@ -1,0 +1,96 @@
+<html><!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright (C) 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." --><!-- Created by GNU Texinfo 6.1, http://www.gnu.org/software/texinfo/ --><head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rev="made" href="mailto:bug-gnu-emacs@gnu.org">
+<link rel="icon" type="image/png" href="/graphics/gnu-head-mini.png">
+<meta name="ICBM" content="42.256233,-71.006581">
+<meta name="DC.title" content="gnu.org">
+
+<title>Echo Area Customization</title>
+
+<style type="text/css">
+@import url('/software/emacs/manual.css');
+</style>
+</head>
+
+<body lang="en">
+<a name="Echo-Area-Customization"></a>
+<div class="header" style="background-color:#DDDDFF">
+<p>
+Previous: <a href="Logging-Messages.html#Logging-Messages" accesskey="p" rel="prev">Logging Messages</a>, Up: <a href="The-Echo-Area.html#The-Echo-Area" accesskey="u" rel="up">The Echo Area</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+
+<a name="Echo-Area-Customization-1"></a>
+<h4 class="subsection">37.4.4 Echo Area Customization</h4>
+<a name="index-echo-area-customization"></a>
+
+<p>These variables control details of how the echo area works.
+</p>
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/Variable/cursor%2Din%2Decho%2Darea"></a><a name="index-cursor_002din_002decho_002darea"></a>Variable: <strong>cursor-in-echo-area</strong></dt>
+<dd><p>This variable controls where the cursor appears when a message is
+displayed in the echo area.  If it is non-<code>nil</code>, then the cursor
+appears at the end of the message.  Otherwise, the cursor appears at
+point—not in the echo area at all.
+</p>
+<p>The value is normally <code>nil</code>; Lisp programs bind it to <code>t</code>
+for brief periods of time.
+</p></dd></dl>
+
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/Variable/echo%2Darea%2Dclear%2Dhook"></a><a name="index-echo_002darea_002dclear_002dhook"></a>Variable: <strong>echo-area-clear-hook</strong></dt>
+<dd><p>This normal hook is run whenever the echo area is cleared—either by
+<code>(message nil)</code> or for any other reason.
+</p></dd></dl>
+
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/Option/echo%2Dkeystrokes"></a><a name="index-echo_002dkeystrokes"></a>User Option: <strong>echo-keystrokes</strong></dt>
+<dd><p>This variable determines how much time should elapse before command
+characters echo.  Its value must be a number, and specifies the
+number of seconds to wait before echoing.  If the user types a prefix
+key (such as <kbd>C-x</kbd>) and then delays this many seconds before
+continuing, the prefix key is echoed in the echo area.  (Once echoing
+begins in a key sequence, all subsequent characters in the same key
+sequence are echoed immediately.)
+</p>
+<p>If the value is zero, then command input is not echoed.
+</p></dd></dl>
+
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/Variable/message%2Dtruncate%2Dlines"></a><a name="index-message_002dtruncate_002dlines"></a>Variable: <strong>message-truncate-lines</strong></dt>
+<dd><p>Normally, displaying a long message resizes the echo area to display
+the entire message.  But if the variable <code>message-truncate-lines</code>
+is non-<code>nil</code>, the echo area does not resize, and the message is
+truncated to fit it.
+</p></dd></dl>
+
+<p>The variable <code>max-mini-window-height</code>, which specifies the
+maximum height for resizing minibuffer windows, also applies to the
+echo area (which is really a special use of the minibuffer window;
+see <a href="Minibuffer-Misc.html#Minibuffer-Misc">Minibuffer Misc</a>).
+</p>
+
+<div class="header" style="background-color:#DDDDFF">
+<p>
+Previous: <a href="Logging-Messages.html#Logging-Messages" accesskey="p" rel="prev">Logging Messages</a>, Up: <a href="The-Echo-Area.html#The-Echo-Area" accesskey="u" rel="up">The Echo Area</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+
+
+</body></html>

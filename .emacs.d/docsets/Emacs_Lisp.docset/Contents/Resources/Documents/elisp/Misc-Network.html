@@ -1,0 +1,104 @@
+<html><!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright (C) 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." --><!-- Created by GNU Texinfo 6.1, http://www.gnu.org/software/texinfo/ --><head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rev="made" href="mailto:bug-gnu-emacs@gnu.org">
+<link rel="icon" type="image/png" href="/graphics/gnu-head-mini.png">
+<meta name="ICBM" content="42.256233,-71.006581">
+<meta name="DC.title" content="gnu.org">
+
+<title>Misc Network</title>
+
+<style type="text/css">
+@import url('/software/emacs/manual.css');
+</style>
+</head>
+
+<body lang="en">
+<a name="Misc-Network"></a>
+<div class="header" style="background-color:#DDDDFF">
+<p>
+Next: <a href="Serial-Ports.html#Serial-Ports" accesskey="n" rel="next">Serial Ports</a>, Previous: <a href="Low_002dLevel-Network.html#Low_002dLevel-Network" accesskey="p" rel="prev">Low-Level Network</a>, Up: <a href="Processes.html#Processes" accesskey="u" rel="up">Processes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+
+<a name="Misc-Network-Facilities"></a>
+<h3 class="section">36.18 Misc Network Facilities</h3>
+
+<p>These additional functions are useful for creating and operating
+on network connections.  Note that they are supported only on some
+systems.
+</p>
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/func/network%2Dinterface%2Dlist"></a><a name="index-network_002dinterface_002dlist"></a>Function: <strong>network-interface-list</strong></dt>
+<dd><p>This function returns a list describing the network interfaces
+of the machine you are using.  The value is an alist whose
+elements have the form <code>(<var>name</var> . <var>address</var>)</code>.
+<var>address</var> has the same form as the <var>local-address</var>
+and <var>remote-address</var> arguments to <code>make-network-process</code>.
+</p></dd></dl>
+
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/func/network%2Dinterface%2Dinfo"></a><a name="index-network_002dinterface_002dinfo"></a>Function: <strong>network-interface-info</strong> <em>ifname</em></dt>
+<dd><p>This function returns information about the network interface named
+<var>ifname</var>.  The value is a list of the form
+<code>(<var>addr</var> <var>bcast</var> <var>netmask</var> <var>hwaddr</var> <var>flags</var>)</code>.
+</p>
+<dl compact="compact">
+<dt><var>addr</var></dt>
+<dd><p>The Internet protocol address.
+</p></dd>
+<dt><var>bcast</var></dt>
+<dd><p>The broadcast address.
+</p></dd>
+<dt><var>netmask</var></dt>
+<dd><p>The network mask.
+</p></dd>
+<dt><var>hwaddr</var></dt>
+<dd><p>The layer 2 address (Ethernet MAC address, for instance).
+</p></dd>
+<dt><var>flags</var></dt>
+<dd><p>The current flags of the interface.
+</p></dd>
+</dl>
+</dd></dl>
+
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/func/format%2Dnetwork%2Daddress"></a><a name="index-format_002dnetwork_002daddress"></a>Function: <strong>format-network-address</strong> <em>address &amp;optional omit-port</em></dt>
+<dd><p>This function converts the Lisp representation of a network address to
+a string.
+</p>
+<p>A five-element vector <code>[<var>a</var> <var>b</var> <var>c</var> <var>d</var> <var>p</var>]</code>
+represents an IPv4 address <var>a</var>.<var>b</var>.<var>c</var>.<var>d</var> and port
+number <var>p</var>.  <code>format-network-address</code> converts that to the
+string <code>"<var>a</var>.<var>b</var>.<var>c</var>.<var>d</var>:<var>p</var>"</code>.
+</p>
+<p>A nine-element vector <code>[<var>a</var> <var>b</var> <var>c</var> <var>d</var> <var>e</var>
+<var>f</var> <var>g</var> <var>h</var> <var>p</var>]</code> represents an IPv6 address along
+with a port number.  <code>format-network-address</code> converts that to
+the string
+<code>"[<var>a</var>:<var>b</var>:<var>c</var>:<var>d</var>:<var>e</var>:<var>f</var>:<var>g</var>:<var>h</var>]:<var>p</var>"</code>.
+</p>
+<p>If the vector does not include the port number, <var>p</var>, or if
+<var>omit-port</var> is non-<code>nil</code>, the result does not include the
+<code>:<var>p</var></code> suffix.
+</p></dd></dl>
+
+
+
+
+
+
+</body></html>

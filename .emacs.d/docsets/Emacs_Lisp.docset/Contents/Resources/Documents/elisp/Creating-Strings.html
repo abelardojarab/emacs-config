@@ -1,0 +1,294 @@
+<html><!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright (C) 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." --><!-- Created by GNU Texinfo 6.1, http://www.gnu.org/software/texinfo/ --><head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rev="made" href="mailto:bug-gnu-emacs@gnu.org">
+<link rel="icon" type="image/png" href="/graphics/gnu-head-mini.png">
+<meta name="ICBM" content="42.256233,-71.006581">
+<meta name="DC.title" content="gnu.org">
+
+<title>Creating Strings</title>
+
+<style type="text/css">
+@import url('/software/emacs/manual.css');
+</style>
+</head>
+
+<body lang="en">
+<a name="Creating-Strings"></a>
+<div class="header" style="background-color:#DDDDFF">
+<p>
+Next: <a href="Modifying-Strings.html#Modifying-Strings" accesskey="n" rel="next">Modifying Strings</a>, Previous: <a href="Predicates-for-Strings.html#Predicates-for-Strings" accesskey="p" rel="prev">Predicates for Strings</a>, Up: <a href="Strings-and-Characters.html#Strings-and-Characters" accesskey="u" rel="up">Strings and Characters</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+
+<a name="Creating-Strings-1"></a>
+<h3 class="section">4.3 Creating Strings</h3>
+<a name="index-creating-strings"></a>
+<a name="index-string-creation"></a>
+
+<p>The following functions create strings, either from scratch, or by
+putting strings together, or by taking them apart.
+</p>
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/func/make%2Dstring"></a><a name="index-make_002dstring"></a>Function: <strong>make-string</strong> <em>count character</em></dt>
+<dd><p>This function returns a string made up of <var>count</var> repetitions of
+<var>character</var>.  If <var>count</var> is negative, an error is signaled.
+</p>
+<div class="example">
+<pre class="example">(make-string 5 ?x)
+     ⇒ "xxxxx"
+(make-string 0 ?x)
+     ⇒ ""
+</pre></div>
+
+<p>Other functions to compare with this one include <code>make-vector</code>
+(see <a href="Vectors.html#Vectors">Vectors</a>) and <code>make-list</code> (see <a href="Building-Lists.html#Building-Lists">Building Lists</a>).
+</p></dd></dl>
+
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/func/string"></a><a name="index-string"></a>Function: <strong>string</strong> <em>&amp;rest characters</em></dt>
+<dd><p>This returns a string containing the characters <var>characters</var>.
+</p>
+<div class="example">
+<pre class="example">(string ?a ?b ?c)
+     ⇒ "abc"
+</pre></div>
+</dd></dl>
+
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/func/substring"></a><a name="index-substring"></a>Function: <strong>substring</strong> <em>string &amp;optional start end</em></dt>
+<dd><p>This function returns a new string which consists of those characters
+from <var>string</var> in the range from (and including) the character at the
+index <var>start</var> up to (but excluding) the character at the index
+<var>end</var>.  The first character is at index zero.  With one argument,
+this function just copies <var>string</var>.
+</p>
+<div class="example">
+<pre class="example">(substring "abcdefg" 0 3)
+     ⇒ "abc"
+</pre></div>
+
+<p>In the above example, the index for ‘<samp>a</samp>’ is 0, the index for
+‘<samp>b</samp>’ is 1, and the index for ‘<samp>c</samp>’ is 2.  The index 3—which
+is the fourth character in the string—marks the character position
+up to which the substring is copied.  Thus, ‘<samp>abc</samp>’ is copied from
+the string <code>"abcdefg"</code>.
+</p>
+<p>A negative number counts from the end of the string, so that -1
+signifies the index of the last character of the string.  For example:
+</p>
+<div class="example">
+<pre class="example">(substring "abcdefg" -3 -1)
+     ⇒ "ef"
+</pre></div>
+
+<p>In this example, the index for ‘<samp>e</samp>’ is -3, the index for
+‘<samp>f</samp>’ is -2, and the index for ‘<samp>g</samp>’ is -1.
+Therefore, ‘<samp>e</samp>’ and ‘<samp>f</samp>’ are included, and ‘<samp>g</samp>’ is excluded.
+</p>
+<p>When <code>nil</code> is used for <var>end</var>, it stands for the length of the
+string.  Thus,
+</p>
+<div class="example">
+<pre class="example">(substring "abcdefg" -3 nil)
+     ⇒ "efg"
+</pre></div>
+
+<p>Omitting the argument <var>end</var> is equivalent to specifying <code>nil</code>.
+It follows that <code>(substring <var>string</var> 0)</code> returns a copy of all
+of <var>string</var>.
+</p>
+<div class="example">
+<pre class="example">(substring "abcdefg" 0)
+     ⇒ "abcdefg"
+</pre></div>
+
+<p>But we recommend <code>copy-sequence</code> for this purpose (see <a href="Sequence-Functions.html#Sequence-Functions">Sequence Functions</a>).
+</p>
+<p>If the characters copied from <var>string</var> have text properties, the
+properties are copied into the new string also.  See <a href="Text-Properties.html#Text-Properties">Text Properties</a>.
+</p>
+<p><code>substring</code> also accepts a vector for the first argument.
+For example:
+</p>
+<div class="example">
+<pre class="example">(substring [a b (c) "d"] 1 3)
+     ⇒ [b (c)]
+</pre></div>
+
+<p>A <code>wrong-type-argument</code> error is signaled if <var>start</var> is not
+an integer or if <var>end</var> is neither an integer nor <code>nil</code>.  An
+<code>args-out-of-range</code> error is signaled if <var>start</var> indicates a
+character following <var>end</var>, or if either integer is out of range
+for <var>string</var>.
+</p>
+<p>Contrast this function with <code>buffer-substring</code> (see <a href="Buffer-Contents.html#Buffer-Contents">Buffer Contents</a>), which returns a string containing a portion of the text in
+the current buffer.  The beginning of a string is at index 0, but the
+beginning of a buffer is at index 1.
+</p></dd></dl>
+
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/func/substring%2Dno%2Dproperties"></a><a name="index-substring_002dno_002dproperties"></a>Function: <strong>substring-no-properties</strong> <em>string &amp;optional start end</em></dt>
+<dd><p>This works like <code>substring</code> but discards all text properties from
+the value.  Also, <var>start</var> may be omitted or <code>nil</code>, which is
+equivalent to 0.  Thus, <code><span class="nolinebreak">(substring-no-properties</span>&nbsp;<var>string</var>)</code><!-- /@w --> returns a copy of <var>string</var>, with all text
+properties removed.
+</p></dd></dl>
+
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/func/concat"></a><a name="index-concat"></a>Function: <strong>concat</strong> <em>&amp;rest sequences</em></dt>
+<dd><a name="index-copying-strings"></a>
+<a name="index-concatenating-strings"></a>
+<p>This function returns a new string consisting of the characters in the
+arguments passed to it (along with their text properties, if any).  The
+arguments may be strings, lists of numbers, or vectors of numbers; they
+are not themselves changed.  If <code>concat</code> receives no arguments, it
+returns an empty string.
+</p>
+<div class="example">
+<pre class="example">(concat "abc" "-def")
+     ⇒ "abc-def"
+(concat "abc" (list 120 121) [122])
+     ⇒ "abcxyz"
+;; <span class="roman"><code>nil</code> is an empty sequence.</span>
+(concat "abc" nil "-def")
+     ⇒ "abc-def"
+(concat "The " "quick brown " "fox.")
+     ⇒ "The quick brown fox."
+(concat)
+     ⇒ ""
+</pre></div>
+
+<p>This function always constructs a new string that is not <code>eq</code> to
+any existing string, except when the result is the empty string (to
+save space, Emacs makes only one empty multibyte string).
+</p>
+<p>For information about other concatenation functions, see the
+description of <code>mapconcat</code> in <a href="Mapping-Functions.html#Mapping-Functions">Mapping Functions</a>,
+<code>vconcat</code> in <a href="Vector-Functions.html#Vector-Functions">Vector Functions</a>, and <code>append</code> in <a href="Building-Lists.html#Building-Lists">Building Lists</a>.  For concatenating individual command-line arguments into a
+string to be used as a shell command, see <a href="Shell-Arguments.html#Shell-Arguments">combine-and-quote-strings</a>.
+</p></dd></dl>
+
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/func/split%2Dstring"></a><a name="index-split_002dstring"></a>Function: <strong>split-string</strong> <em>string &amp;optional separators omit-nulls trim</em></dt>
+<dd><p>This function splits <var>string</var> into substrings based on the regular
+expression <var>separators</var> (see <a href="Regular-Expressions.html#Regular-Expressions">Regular Expressions</a>).  Each match
+for <var>separators</var> defines a splitting point; the substrings between
+splitting points are made into a list, which is returned.
+</p>
+<p>If <var>omit-nulls</var> is <code>nil</code> (or omitted), the result contains
+null strings whenever there are two consecutive matches for
+<var>separators</var>, or a match is adjacent to the beginning or end of
+<var>string</var>.  If <var>omit-nulls</var> is <code>t</code>, these null strings are
+omitted from the result.
+</p>
+<p>If <var>separators</var> is <code>nil</code> (or omitted), the default is the
+value of <code>split-string-default-separators</code>.
+</p>
+<p>As a special case, when <var>separators</var> is <code>nil</code> (or omitted),
+null strings are always omitted from the result.  Thus:
+</p>
+<div class="example">
+<pre class="example">(split-string "  two words ")
+     ⇒ ("two" "words")
+</pre></div>
+
+<p>The result is not <code>("" "two" "words" "")</code>, which would rarely be
+useful.  If you need such a result, use an explicit value for
+<var>separators</var>:
+</p>
+<div class="example">
+<pre class="example">(split-string "  two words "
+              split-string-default-separators)
+     ⇒ ("" "two" "words" "")
+</pre></div>
+
+<p>More examples:
+</p>
+<div class="example">
+<pre class="example">(split-string "Soup is good food" "o")
+     ⇒ ("S" "up is g" "" "d f" "" "d")
+(split-string "Soup is good food" "o" t)
+     ⇒ ("S" "up is g" "d f" "d")
+(split-string "Soup is good food" "o+")
+     ⇒ ("S" "up is g" "d f" "d")
+</pre></div>
+
+<p>Empty matches do count, except that <code>split-string</code> will not look
+for a final empty match when it already reached the end of the string
+using a non-empty match or when <var>string</var> is empty:
+</p>
+<div class="example">
+<pre class="example">(split-string "aooob" "o*")
+     ⇒ ("" "a" "" "b" "")
+(split-string "ooaboo" "o*")
+     ⇒ ("" "" "a" "b" "")
+(split-string "" "")
+     ⇒ ("")
+</pre></div>
+
+<p>However, when <var>separators</var> can match the empty string,
+<var>omit-nulls</var> is usually <code>t</code>, so that the subtleties in the
+three previous examples are rarely relevant:
+</p>
+<div class="example">
+<pre class="example">(split-string "Soup is good food" "o*" t)
+     ⇒ ("S" "u" "p" " " "i" "s" " " "g" "d" " " "f" "d")
+(split-string "Nice doggy!" "" t)
+     ⇒ ("N" "i" "c" "e" " " "d" "o" "g" "g" "y" "!")
+(split-string "" "" t)
+     ⇒ nil
+</pre></div>
+
+<p>Somewhat odd, but predictable, behavior can occur for certain
+“non-greedy” values of <var>separators</var> that can prefer empty
+matches over non-empty matches.  Again, such values rarely occur in
+practice:
+</p>
+<div class="example">
+<pre class="example">(split-string "ooo" "o*" t)
+     ⇒ nil
+(split-string "ooo" "\\|o+" t)
+     ⇒ ("o" "o" "o")
+</pre></div>
+
+<p>If the optional argument <var>trim</var> is non-<code>nil</code>, it should be a
+regular expression to match text to trim from the beginning and end of
+each substring.  If trimming makes the substring empty, it is treated
+as null.
+</p>
+<p>If you need to split a string into a list of individual command-line
+arguments suitable for <code>call-process</code> or <code>start-process</code>,
+see <a href="Shell-Arguments.html#Shell-Arguments">split-string-and-unquote</a>.
+</p></dd></dl>
+
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/Variable/split%2Dstring%2Ddefault%2Dseparators"></a><a name="index-split_002dstring_002ddefault_002dseparators"></a>Variable: <strong>split-string-default-separators</strong></dt>
+<dd><p>The default value of <var>separators</var> for <code>split-string</code>.  Its
+usual value is <code>"[&nbsp;\f\t\n\r\v]+"</code><!-- /@w -->.
+</p></dd></dl>
+
+
+<div class="header" style="background-color:#DDDDFF">
+<p>
+Next: <a href="Modifying-Strings.html#Modifying-Strings" accesskey="n" rel="next">Modifying Strings</a>, Previous: <a href="Predicates-for-Strings.html#Predicates-for-Strings" accesskey="p" rel="prev">Predicates for Strings</a>, Up: <a href="Strings-and-Characters.html#Strings-and-Characters" accesskey="u" rel="up">Strings and Characters</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+
+
+</body></html>

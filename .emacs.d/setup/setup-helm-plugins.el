@@ -198,22 +198,52 @@
             (setq helm-dash-min-length 2)
             (setq helm-dash-docsets-path (expand-file-name "docsets/" user-emacs-directory))
             (setq helm-dash-common-docsets '(
-                                             ;; "Emacs_Lisp" ;; works
-                                             "C++" ;; works
-                                             "C" ;; works
-                                             "Python_2" ;; works
-                                             "JavaScript" ;; works
-                                             "Bash" ;; works
-                                             "LaTeX" ;; works
-                                             "R" ;; works
+                                             "Emacs_Lisp"
                                              ))
 
-            ;; (defun lisp-doc-hook ()
-            ;;   (interactive)
-            ;;   (setq-local helm-dash-docsets '("Emacs_Lisp")))
-            ;; (add-hook 'lisp-mode-hook 'lisp-doc-hook)
+            ;; Mode-specific hooks
+            (defun c-doc-hook ()
+              (interactive)
+              (setq-local helm-dash-docsets '("C")))
+            (add-hook 'c-mode-hook 'c-doc-hook)
+
+            (defun c++-doc-hook ()
+              (interactive)
+              (setq-local helm-dash-docsets '("C" "C++")))
+            (add-hook 'c++-mode-hook 'c++-doc-hook)
+
+            (defun python-doc-hook ()
+              (interactive)
+              (setq-local helm-dash-docsets '("Python_2")))
+            (add-hook 'python-mode-hook 'python-doc-hook)
+
+            (defun javascript-doc-hook ()
+              (interactive)
+              (setq-local helm-dash-docsets '("JavaScript")))
+            (add-hook 'python-mode-hook 'javascript-doc-hook)
+
+            (defun ess-doc-hook ()
+              (interactive)
+              (setq-local helm-dash-docsets '("R")))
+            (add-hook 'ess-mode-hook 'ess-doc-hook)
+
+            (defun shell-doc-hook ()
+              (interactive)
+              (setq-local helm-dash-docsets '("Bash")))
+            (add-hook 'shell-mode-hook 'shell-doc-hook)
 
             ))
+
+;; helm company
+(use-package helm-company
+  :defer t
+  :bind (:map ctl-x-map
+              (":" . helm-company)
+              :map company-mode-map
+              ("C-:" . helm-company))
+  :after (helm company)
+  :load-path (lambda () (expand-file-name "helm-company/" user-emacs-directory))
+  :commands (helm-company))
 
 (provide 'setup-helm-plugins)
 ;;; setup-helm-plugins.el ends here

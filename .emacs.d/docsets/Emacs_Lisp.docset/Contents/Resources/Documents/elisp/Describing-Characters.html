@@ -1,0 +1,148 @@
+<html><!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright (C) 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." --><!-- Created by GNU Texinfo 6.1, http://www.gnu.org/software/texinfo/ --><head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rev="made" href="mailto:bug-gnu-emacs@gnu.org">
+<link rel="icon" type="image/png" href="/graphics/gnu-head-mini.png">
+<meta name="ICBM" content="42.256233,-71.006581">
+<meta name="DC.title" content="gnu.org">
+
+<title>Describing Characters</title>
+
+<style type="text/css">
+@import url('/software/emacs/manual.css');
+</style>
+</head>
+
+<body lang="en">
+<a name="Describing-Characters"></a>
+<div class="header" style="background-color:#DDDDFF">
+<p>
+Next: <a href="Help-Functions.html#Help-Functions" accesskey="n" rel="next">Help Functions</a>, Previous: <a href="Keys-in-Documentation.html#Keys-in-Documentation" accesskey="p" rel="prev">Keys in Documentation</a>, Up: <a href="Documentation.html#Documentation" accesskey="u" rel="up">Documentation</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+
+<a name="Describing-Characters-for-Help-Messages"></a>
+<h3 class="section">23.4 Describing Characters for Help Messages</h3>
+<a name="index-describe-characters-and-events"></a>
+
+<p>These functions convert events, key sequences, or characters to
+textual descriptions.  These descriptions are useful for including
+arbitrary text characters or key sequences in messages, because they
+convert non-printing and whitespace characters to sequences of printing
+characters.  The description of a non-whitespace printing character is
+the character itself.
+</p>
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/func/key%2Ddescription"></a><a name="index-key_002ddescription"></a>Function: <strong>key-description</strong> <em>sequence &amp;optional prefix</em></dt>
+<dd><a name="index-Emacs-event-standard-notation"></a>
+<p>This function returns a string containing the Emacs standard notation
+for the input events in <var>sequence</var>.  If <var>prefix</var> is
+non-<code>nil</code>, it is a sequence of input events leading up to
+<var>sequence</var> and is included in the return value.  Both arguments
+may be strings, vectors or lists.  See <a href="Input-Events.html#Input-Events">Input Events</a>, for more
+information about valid events.
+</p>
+<div class="smallexample">
+<pre class="smallexample">(key-description [?\M-3 delete])
+     ⇒ "M-3 &lt;delete&gt;"
+</pre><pre class="smallexample">(key-description [delete] "\M-3")
+     ⇒ "M-3 &lt;delete&gt;"
+</pre></div>
+
+<p>See also the examples for <code>single-key-description</code>, below.
+</p></dd></dl>
+
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/func/single%2Dkey%2Ddescription"></a><a name="index-single_002dkey_002ddescription"></a>Function: <strong>single-key-description</strong> <em>event &amp;optional no-angles</em></dt>
+<dd><a name="index-event-printing"></a>
+<a name="index-character-printing"></a>
+<a name="index-control-character-printing"></a>
+<a name="index-meta-character-printing"></a>
+<p>This function returns a string describing <var>event</var> in the standard
+Emacs notation for keyboard input.  A normal printing character
+appears as itself, but a control character turns into a string
+starting with ‘<samp>C-</samp>’, a meta character turns into a string starting
+with ‘<samp>M-</samp>’, and space, tab, etc., appear as ‘<samp>SPC</samp>’,
+‘<samp>TAB</samp>’, etc.  A function key symbol appears inside angle brackets
+‘<samp>&lt;…&gt;</samp>’.  An event that is a list appears as the name of the
+symbol in the <small>CAR</small> of the list, inside angle brackets.
+</p>
+<p>If the optional argument <var>no-angles</var> is non-<code>nil</code>, the angle
+brackets around function keys and event symbols are omitted; this is
+for compatibility with old versions of Emacs which didn’t use the
+brackets.
+</p>
+<div class="smallexample">
+<pre class="smallexample">(single-key-description ?\C-x)
+     ⇒ "C-x"
+</pre><pre class="smallexample">(key-description "\C-x \M-y \n \t \r \f123")
+     ⇒ "C-x SPC M-y SPC C-j SPC TAB SPC RET SPC C-l 1 2 3"
+</pre><pre class="smallexample">(single-key-description 'delete)
+     ⇒ "&lt;delete&gt;"
+</pre><pre class="smallexample">(single-key-description 'C-mouse-1)
+     ⇒ "&lt;C-mouse-1&gt;"
+</pre><pre class="smallexample">(single-key-description 'C-mouse-1 t)
+     ⇒ "C-mouse-1"
+</pre></div>
+</dd></dl>
+
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/func/text%2Dchar%2Ddescription"></a><a name="index-text_002dchar_002ddescription"></a>Function: <strong>text-char-description</strong> <em>character</em></dt>
+<dd><p>This function returns a string describing <var>character</var> in the
+standard Emacs notation for characters that appear in text—like
+<code>single-key-description</code>, except that control characters are
+represented with a leading caret (which is how control characters in
+Emacs buffers are usually displayed).  Another difference is that
+<code>text-char-description</code> recognizes the 2**7 bit as the Meta
+character, whereas <code>single-key-description</code> uses the 2**27 bit
+for Meta.
+</p>
+<div class="smallexample">
+<pre class="smallexample">(text-char-description ?\C-c)
+     ⇒ "^C"
+</pre><pre class="smallexample">(text-char-description ?\M-m)
+     ⇒ "\xed"
+</pre><pre class="smallexample">(text-char-description ?\C-\M-m)
+     ⇒ "\x8d"
+</pre><pre class="smallexample">(text-char-description (+ 128 ?m))
+     ⇒ "M-m"
+</pre><pre class="smallexample">(text-char-description (+ 128 ?\C-m))
+     ⇒ "M-^M"
+</pre></div>
+</dd></dl>
+
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/Command/read%2Dkbd%2Dmacro"></a><a name="index-read_002dkbd_002dmacro"></a>Command: <strong>read-kbd-macro</strong> <em>string &amp;optional need-vector</em></dt>
+<dd><p>This function is used mainly for operating on keyboard macros, but it
+can also be used as a rough inverse for <code>key-description</code>.  You
+call it with a string containing key descriptions, separated by spaces;
+it returns a string or vector containing the corresponding events.
+(This may or may not be a single valid key sequence, depending on what
+events you use; see <a href="Key-Sequences.html#Key-Sequences">Key Sequences</a>.)  If <var>need-vector</var> is
+non-<code>nil</code>, the return value is always a vector.
+</p></dd></dl>
+
+
+<div class="header" style="background-color:#DDDDFF">
+<p>
+Next: <a href="Help-Functions.html#Help-Functions" accesskey="n" rel="next">Help Functions</a>, Previous: <a href="Keys-in-Documentation.html#Keys-in-Documentation" accesskey="p" rel="prev">Keys in Documentation</a>, Up: <a href="Documentation.html#Documentation" accesskey="u" rel="up">Documentation</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+
+
+</body></html>

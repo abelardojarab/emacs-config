@@ -1,0 +1,77 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright (C) 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 6.1, http://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rev="made" href="mailto:bug-gnu-emacs@gnu.org">
+<link rel="icon" type="image/png" href="/graphics/gnu-head-mini.png">
+<meta name="ICBM" content="42.256233,-71.006581">
+<meta name="DC.title" content="gnu.org">
+
+<title>Coding Systems</title>
+
+<style type="text/css">
+@import url('/software/emacs/manual.css');
+</style>
+</head>
+
+<body lang="en">
+<a name="Coding-Systems"></a>
+<div class="header" style="background-color:#DDDDFF">
+<p>
+Next: <a href="Input-Methods.html#Input-Methods" accesskey="n" rel="next">Input Methods</a>, Previous: <a href="Translation-of-Characters.html#Translation-of-Characters" accesskey="p" rel="prev">Translation of Characters</a>, Up: <a href="Non_002dASCII-Characters.html#Non_002dASCII-Characters" accesskey="u" rel="up">Non-ASCII Characters</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+
+<a name="Coding-Systems-1"></a>
+<h3 class="section">32.10 Coding Systems</h3>
+
+<a name="index-coding-system"></a>
+<p>When Emacs reads or writes a file, and when Emacs sends text to a
+subprocess or receives text from a subprocess, it normally performs
+character code conversion and end-of-line conversion as specified
+by a particular <em>coding system</em>.
+</p>
+<p>How to define a coding system is an arcane matter, and is not
+documented here.
+</p>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top">&bull; <a href="Coding-System-Basics.html#Coding-System-Basics" accesskey="1">Coding System Basics</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Basic concepts.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Encoding-and-I_002fO.html#Encoding-and-I_002fO" accesskey="2">Encoding and I/O</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How file I/O functions handle coding systems.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Lisp-and-Coding-Systems.html#Lisp-and-Coding-Systems" accesskey="3">Lisp and Coding Systems</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Functions to operate on coding system names.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="User_002dChosen-Coding-Systems.html#User_002dChosen-Coding-Systems" accesskey="4">User-Chosen Coding Systems</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Asking the user to choose a coding system.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Default-Coding-Systems.html#Default-Coding-Systems" accesskey="5">Default Coding Systems</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Controlling the default choices.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Specifying-Coding-Systems.html#Specifying-Coding-Systems" accesskey="6">Specifying Coding Systems</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Requesting a particular coding system
+                                    for a single file operation.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Explicit-Encoding.html#Explicit-Encoding" accesskey="7">Explicit Encoding</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Encoding or decoding text without doing I/O.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Terminal-I_002fO-Encoding.html#Terminal-I_002fO-Encoding" accesskey="8">Terminal I/O Encoding</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Use of encoding for terminal I/O.
+</td></tr>
+</table>
+
+
+
+
+</body>
+</html>

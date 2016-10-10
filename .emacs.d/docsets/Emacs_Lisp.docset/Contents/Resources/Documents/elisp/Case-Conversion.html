@@ -1,0 +1,162 @@
+<html><!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright (C) 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." --><!-- Created by GNU Texinfo 6.1, http://www.gnu.org/software/texinfo/ --><head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rev="made" href="mailto:bug-gnu-emacs@gnu.org">
+<link rel="icon" type="image/png" href="/graphics/gnu-head-mini.png">
+<meta name="ICBM" content="42.256233,-71.006581">
+<meta name="DC.title" content="gnu.org">
+
+<title>Case Conversion</title>
+
+<style type="text/css">
+@import url('/software/emacs/manual.css');
+</style>
+</head>
+
+<body lang="en">
+<a name="Case-Conversion"></a>
+<div class="header" style="background-color:#DDDDFF">
+<p>
+Next: <a href="Case-Tables.html#Case-Tables" accesskey="n" rel="next">Case Tables</a>, Previous: <a href="Formatting-Strings.html#Formatting-Strings" accesskey="p" rel="prev">Formatting Strings</a>, Up: <a href="Strings-and-Characters.html#Strings-and-Characters" accesskey="u" rel="up">Strings and Characters</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+
+<a name="Case-Conversion-in-Lisp"></a>
+<h3 class="section">4.8 Case Conversion in Lisp</h3>
+<a name="index-upper-case"></a>
+<a name="index-lower-case"></a>
+<a name="index-character-case"></a>
+<a name="index-case-conversion-in-Lisp"></a>
+
+<p>The character case functions change the case of single characters or
+of the contents of strings.  The functions normally convert only
+alphabetic characters (the letters ‘<samp>A</samp>’ through ‘<samp>Z</samp>’ and
+‘<samp>a</samp>’ through ‘<samp>z</samp>’, as well as non-<acronym>ASCII</acronym> letters); other
+characters are not altered.  You can specify a different case
+conversion mapping by specifying a case table (see <a href="Case-Tables.html#Case-Tables">Case Tables</a>).
+</p>
+<p>These functions do not modify the strings that are passed to them as
+arguments.
+</p>
+<p>The examples below use the characters ‘<samp>X</samp>’ and ‘<samp>x</samp>’ which have
+<acronym>ASCII</acronym> codes 88 and 120 respectively.
+</p>
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/func/downcase"></a><a name="index-downcase"></a>Function: <strong>downcase</strong> <em>string-or-char</em></dt>
+<dd><p>This function converts <var>string-or-char</var>, which should be either a
+character or a string, to lower case.
+</p>
+<p>When <var>string-or-char</var> is a string, this function returns a new
+string in which each letter in the argument that is upper case is
+converted to lower case.  When <var>string-or-char</var> is a character,
+this function returns the corresponding lower case character (an
+integer); if the original character is lower case, or is not a letter,
+the return value is equal to the original character.
+</p>
+<div class="example">
+<pre class="example">(downcase "The cat in the hat")
+     ⇒ "the cat in the hat"
+
+(downcase ?X)
+     ⇒ 120
+</pre></div>
+</dd></dl>
+
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/func/upcase"></a><a name="index-upcase"></a>Function: <strong>upcase</strong> <em>string-or-char</em></dt>
+<dd><p>This function converts <var>string-or-char</var>, which should be either a
+character or a string, to upper case.
+</p>
+<p>When <var>string-or-char</var> is a string, this function returns a new
+string in which each letter in the argument that is lower case is
+converted to upper case.  When <var>string-or-char</var> is a character,
+this function returns the corresponding upper case character (an
+integer); if the original character is upper case, or is not a letter,
+the return value is equal to the original character.
+</p>
+<div class="example">
+<pre class="example">(upcase "The cat in the hat")
+     ⇒ "THE CAT IN THE HAT"
+
+(upcase ?x)
+     ⇒ 88
+</pre></div>
+</dd></dl>
+
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/func/capitalize"></a><a name="index-capitalize"></a>Function: <strong>capitalize</strong> <em>string-or-char</em></dt>
+<dd><a name="index-capitalization"></a>
+<p>This function capitalizes strings or characters.  If
+<var>string-or-char</var> is a string, the function returns a new string
+whose contents are a copy of <var>string-or-char</var> in which each word
+has been capitalized.  This means that the first character of each
+word is converted to upper case, and the rest are converted to lower
+case.
+</p>
+<p>The definition of a word is any sequence of consecutive characters that
+are assigned to the word constituent syntax class in the current syntax
+table (see <a href="Syntax-Class-Table.html#Syntax-Class-Table">Syntax Class Table</a>).
+</p>
+<p>When <var>string-or-char</var> is a character, this function does the same
+thing as <code>upcase</code>.
+</p>
+<div class="example">
+<pre class="example">(capitalize "The cat in the hat")
+     ⇒ "The Cat In The Hat"
+</pre><pre class="example">
+</pre><pre class="example">(capitalize "THE 77TH-HATTED CAT")
+     ⇒ "The 77th-Hatted Cat"
+</pre><pre class="example">
+</pre><pre class="example">(capitalize ?x)
+     ⇒ 88
+</pre></div>
+</dd></dl>
+
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/func/upcase%2Dinitials"></a><a name="index-upcase_002dinitials"></a>Function: <strong>upcase-initials</strong> <em>string-or-char</em></dt>
+<dd><p>If <var>string-or-char</var> is a string, this function capitalizes the
+initials of the words in <var>string-or-char</var>, without altering any
+letters other than the initials.  It returns a new string whose
+contents are a copy of <var>string-or-char</var>, in which each word has
+had its initial letter converted to upper case.
+</p>
+<p>The definition of a word is any sequence of consecutive characters that
+are assigned to the word constituent syntax class in the current syntax
+table (see <a href="Syntax-Class-Table.html#Syntax-Class-Table">Syntax Class Table</a>).
+</p>
+<p>When the argument to <code>upcase-initials</code> is a character,
+<code>upcase-initials</code> has the same result as <code>upcase</code>.
+</p>
+<div class="example">
+<pre class="example">(upcase-initials "The CAT in the hAt")
+     ⇒ "The CAT In The HAt"
+</pre></div>
+</dd></dl>
+
+<p>See <a href="Text-Comparison.html#Text-Comparison">Text Comparison</a>, for functions that compare strings; some of
+them ignore case differences, or can optionally ignore case differences.
+</p>
+
+<div class="header" style="background-color:#DDDDFF">
+<p>
+Next: <a href="Case-Tables.html#Case-Tables" accesskey="n" rel="next">Case Tables</a>, Previous: <a href="Formatting-Strings.html#Formatting-Strings" accesskey="p" rel="prev">Formatting Strings</a>, Up: <a href="Strings-and-Characters.html#Strings-and-Characters" accesskey="u" rel="up">Strings and Characters</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+
+
+</body></html>

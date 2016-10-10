@@ -1,0 +1,102 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright (C) 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 6.1, http://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rev="made" href="mailto:bug-gnu-emacs@gnu.org">
+<link rel="icon" type="image/png" href="/graphics/gnu-head-mini.png">
+<meta name="ICBM" content="42.256233,-71.006581">
+<meta name="DC.title" content="gnu.org">
+
+<title>Basic Parameters</title>
+
+<style type="text/css">
+@import url('/software/emacs/manual.css');
+</style>
+</head>
+
+<body lang="en">
+<a name="Basic-Parameters"></a>
+<div class="header" style="background-color:#DDDDFF">
+<p>
+Next: <a href="Position-Parameters.html#Position-Parameters" accesskey="n" rel="next">Position Parameters</a>, Up: <a href="Window-Frame-Parameters.html#Window-Frame-Parameters" accesskey="u" rel="up">Window Frame Parameters</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+
+<a name="Basic-Parameters-1"></a>
+<h4 class="subsubsection">28.4.3.1 Basic Parameters</h4>
+
+<p>These frame parameters give the most basic information about the
+frame.  <code>title</code> and <code>name</code> are meaningful on all terminals.
+</p>
+<dl compact="compact">
+<dd><a name="index-display_002c-a-frame-parameter"></a>
+</dd>
+<dt><code>display</code></dt>
+<dd><p>The display on which to open this frame.  It should be a string of the
+form &lsquo;<samp><var>host</var>:<var>dpy</var>.<var>screen</var></samp>&rsquo;, just like the
+<code>DISPLAY</code> environment variable.  See <a href="Multiple-Terminals.html#Multiple-Terminals">Multiple Terminals</a>, for
+more details about display names.
+</p>
+<a name="index-display_002dtype_002c-a-frame-parameter"></a>
+</dd>
+<dt><code>display-type</code></dt>
+<dd><p>This parameter describes the range of possible colors that can be used
+in this frame.  Its value is <code>color</code>, <code>grayscale</code> or
+<code>mono</code>.
+</p>
+<a name="index-title_002c-a-frame-parameter"></a>
+</dd>
+<dt><code>title</code></dt>
+<dd><p>If a frame has a non-<code>nil</code> title, it appears in the window
+system&rsquo;s title bar at the top of the frame, and also in the mode line
+of windows in that frame if <code>mode-line-frame-identification</code> uses
+&lsquo;<samp>%F</samp>&rsquo; (see <a href="_0025_002dConstructs.html#g_t_0025_002dConstructs">%-Constructs</a>).  This is normally the case when
+Emacs is not using a window system, and can only display one frame at
+a time.  See <a href="Frame-Titles.html#Frame-Titles">Frame Titles</a>.
+</p>
+<a name="index-name_002c-a-frame-parameter"></a>
+</dd>
+<dt><code>name</code></dt>
+<dd><p>The name of the frame.  The frame name serves as a default for the frame
+title, if the <code>title</code> parameter is unspecified or <code>nil</code>.  If
+you don&rsquo;t specify a name, Emacs sets the frame name automatically
+(see <a href="Frame-Titles.html#Frame-Titles">Frame Titles</a>).
+</p>
+<p>If you specify the frame name explicitly when you create the frame, the
+name is also used (instead of the name of the Emacs executable) when
+looking up X resources for the frame.
+</p>
+</dd>
+<dt><code>explicit-name</code></dt>
+<dd><p>If the frame name was specified explicitly when the frame was created,
+this parameter will be that name.  If the frame wasn&rsquo;t explicitly
+named, this parameter will be <code>nil</code>.
+</p></dd>
+</dl>
+
+
+<div class="header" style="background-color:#DDDDFF">
+<p>
+Next: <a href="Position-Parameters.html#Position-Parameters" accesskey="n" rel="next">Position Parameters</a>, Up: <a href="Window-Frame-Parameters.html#Window-Frame-Parameters" accesskey="u" rel="up">Window Frame Parameters</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

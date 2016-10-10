@@ -1,0 +1,304 @@
+<html><!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright (C) 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." --><!-- Created by GNU Texinfo 6.1, http://www.gnu.org/software/texinfo/ --><head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rev="made" href="mailto:bug-gnu-emacs@gnu.org">
+<link rel="icon" type="image/png" href="/graphics/gnu-head-mini.png">
+<meta name="ICBM" content="42.256233,-71.006581">
+<meta name="DC.title" content="gnu.org">
+
+<title>Process Information</title>
+
+<style type="text/css">
+@import url('/software/emacs/manual.css');
+</style>
+</head>
+
+<body lang="en">
+<a name="Process-Information"></a>
+<div class="header" style="background-color:#DDDDFF">
+<p>
+Next: <a href="Input-to-Processes.html#Input-to-Processes" accesskey="n" rel="next">Input to Processes</a>, Previous: <a href="Deleting-Processes.html#Deleting-Processes" accesskey="p" rel="prev">Deleting Processes</a>, Up: <a href="Processes.html#Processes" accesskey="u" rel="up">Processes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+
+<a name="Process-Information-1"></a>
+<h3 class="section">36.6 Process Information</h3>
+<a name="index-process-information"></a>
+
+<p>Several functions return information about processes.
+</p>
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/Command/list%2Dprocesses"></a><a name="index-list_002dprocesses"></a>Command: <strong>list-processes</strong> <em>&amp;optional query-only buffer</em></dt>
+<dd><p>This command displays a listing of all living processes.  In addition,
+it finally deletes any process whose status was ‘<samp>Exited</samp>’ or
+‘<samp>Signaled</samp>’.  It returns <code>nil</code>.
+</p>
+<p>The processes are shown in a buffer named <samp>*Process List*</samp>
+(unless you specify otherwise using the optional argument <var>buffer</var>),
+whose major mode is Process Menu mode.
+</p>
+<p>If <var>query-only</var> is non-<code>nil</code>, it only lists processes
+whose query flag is non-<code>nil</code>.  See <a href="Query-Before-Exit.html#Query-Before-Exit">Query Before Exit</a>.
+</p></dd></dl>
+
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/func/process%2Dlist"></a><a name="index-process_002dlist"></a>Function: <strong>process-list</strong></dt>
+<dd><p>This function returns a list of all processes that have not been deleted.
+</p>
+<div class="smallexample">
+<pre class="smallexample">(process-list)
+     ⇒ (#&lt;process display-time&gt; #&lt;process shell&gt;)
+</pre></div>
+</dd></dl>
+
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/func/get%2Dprocess"></a><a name="index-get_002dprocess"></a>Function: <strong>get-process</strong> <em>name</em></dt>
+<dd><p>This function returns the process named <var>name</var> (a string), or
+<code>nil</code> if there is none.  The argument <var>name</var> can also be a
+process object, in which case it is returned.
+</p>
+<div class="smallexample">
+<pre class="smallexample">(get-process "shell")
+     ⇒ #&lt;process shell&gt;
+</pre></div>
+</dd></dl>
+
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/func/process%2Dcommand"></a><a name="index-process_002dcommand"></a>Function: <strong>process-command</strong> <em>process</em></dt>
+<dd><p>This function returns the command that was executed to start
+<var>process</var>.  This is a list of strings, the first string being the
+program executed and the rest of the strings being the arguments that
+were given to the program.  For a network, serial, or pipe connection,
+this is either <code>nil</code>, which means the process is running or
+<code>t</code> (process is stopped).
+</p>
+<div class="smallexample">
+<pre class="smallexample">(process-command (get-process "shell"))
+     ⇒ ("bash" "-i")
+</pre></div>
+</dd></dl>
+
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/func/process%2Dcontact"></a><a name="index-process_002dcontact"></a>Function: <strong>process-contact</strong> <em>process &amp;optional key</em></dt>
+<dd><p>This function returns information about how a network, a serial, or a
+pipe connection was set up.  When <var>key</var> is <code>nil</code>, it returns
+<code>(<var>hostname</var> <var>service</var>)</code> for a network connection,
+<code>(<var>port</var> <var>speed</var>)</code> for a serial connection, and <code>t</code>
+for a pipe connection.  For an ordinary child process, this function
+always returns <code>t</code> when called with a <code>nil</code> <var>key</var>.
+</p>
+<p>If <var>key</var> is <code>t</code>, the value is the complete status information
+for the connection, server, serial port, or pipe; that is, the list of
+keywords and values specified in <code>make-network-process</code>,
+<code>make-serial-process</code>, or <code>make-pipe-process</code>, except that
+some of the values represent the current status instead of what you
+specified.
+</p>
+<p>For a network process, the values include (see
+<code>make-network-process</code> for a complete list):
+</p>
+<dl compact="compact">
+<dt><code>:buffer</code></dt>
+<dd><p>The associated value is the process buffer.
+</p></dd>
+<dt><code>:filter</code></dt>
+<dd><p>The associated value is the process filter function.  See <a href="Filter-Functions.html#Filter-Functions">Filter Functions</a>.
+</p></dd>
+<dt><code>:sentinel</code></dt>
+<dd><p>The associated value is the process sentinel function.  See <a href="Sentinels.html#Sentinels">Sentinels</a>.
+</p></dd>
+<dt><code>:remote</code></dt>
+<dd><p>In a connection, the address in internal format of the remote peer.
+</p></dd>
+<dt><code>:local</code></dt>
+<dd><p>The local address, in internal format.
+</p></dd>
+<dt><code>:service</code></dt>
+<dd><p>In a server, if you specified <code>t</code> for <var>service</var>,
+this value is the actual port number.
+</p></dd>
+</dl>
+
+<p><code>:local</code> and <code>:remote</code> are included even if they were not
+specified explicitly in <code>make-network-process</code>.
+</p>
+<p>For a serial connection, see <code>make-serial-process</code> and
+<code>serial-process-configure</code> for the list of keys.  For a pipe
+connection, see <code>make-pipe-process</code> for the list of keys.
+</p>
+<p>If <var>key</var> is a keyword, the function returns the value corresponding
+to that keyword.
+</p></dd></dl>
+
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/func/process%2Did"></a><a name="index-process_002did"></a>Function: <strong>process-id</strong> <em>process</em></dt>
+<dd><p>This function returns the <acronym>PID</acronym> of <var>process</var>.  This is an
+integral number that distinguishes the process <var>process</var> from all
+other processes running on the same computer at the current time.  The
+<acronym>PID</acronym> of a process is chosen by the operating system kernel
+when the process is started and remains constant as long as the
+process exists.  For network, serial, and pipe connections, this
+function returns <code>nil</code>.
+</p></dd></dl>
+
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/func/process%2Dname"></a><a name="index-process_002dname"></a>Function: <strong>process-name</strong> <em>process</em></dt>
+<dd><p>This function returns the name of <var>process</var>, as a string.
+</p></dd></dl>
+
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/func/process%2Dstatus"></a><a name="index-process_002dstatus"></a>Function: <strong>process-status</strong> <em>process-name</em></dt>
+<dd><p>This function returns the status of <var>process-name</var> as a symbol.
+The argument <var>process-name</var> must be a process, a buffer, or a
+process name (a string).
+</p>
+<p>The possible values for an actual subprocess are:
+</p>
+<dl compact="compact">
+<dt><code>run</code></dt>
+<dd><p>for a process that is running.
+</p></dd>
+<dt><code>stop</code></dt>
+<dd><p>for a process that is stopped but continuable.
+</p></dd>
+<dt><code>exit</code></dt>
+<dd><p>for a process that has exited.
+</p></dd>
+<dt><code>signal</code></dt>
+<dd><p>for a process that has received a fatal signal.
+</p></dd>
+<dt><code>open</code></dt>
+<dd><p>for a network, serial, or pipe connection that is open.
+</p></dd>
+<dt><code>closed</code></dt>
+<dd><p>for a network, serial, or pipe connection that is closed.  Once a
+connection is closed, you cannot reopen it, though you might be able
+to open a new connection to the same place.
+</p></dd>
+<dt><code>connect</code></dt>
+<dd><p>for a non-blocking connection that is waiting to complete.
+</p></dd>
+<dt><code>failed</code></dt>
+<dd><p>for a non-blocking connection that has failed to complete.
+</p></dd>
+<dt><code>listen</code></dt>
+<dd><p>for a network server that is listening.
+</p></dd>
+<dt><code>nil</code></dt>
+<dd><p>if <var>process-name</var> is not the name of an existing process.
+</p></dd>
+</dl>
+
+<div class="smallexample">
+<pre class="smallexample">(process-status (get-buffer "*shell*"))
+     ⇒ run
+</pre></div>
+
+<p>For a network, serial, or pipe connection, <code>process-status</code>
+returns one of the symbols <code>open</code>, <code>stop</code>, or <code>closed</code>.
+The latter means that the other side closed the connection, or Emacs
+did <code>delete-process</code>.  The value <code>stop</code> means that
+<code>stop-process</code> was called on the connection.
+</p></dd></dl>
+
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/func/process%2Dlive%2Dp"></a><a name="index-process_002dlive_002dp"></a>Function: <strong>process-live-p</strong> <em>process</em></dt>
+<dd><p>This function returns non-<code>nil</code> if <var>process</var> is alive.  A
+process is considered alive if its status is <code>run</code>, <code>open</code>,
+<code>listen</code>, <code>connect</code> or <code>stop</code>.
+</p></dd></dl>
+
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/func/process%2Dtype"></a><a name="index-process_002dtype"></a>Function: <strong>process-type</strong> <em>process</em></dt>
+<dd><p>This function returns the symbol <code>network</code> for a network
+connection or server, <code>serial</code> for a serial port connection,
+<code>pipe</code> for a pipe connection, or <code>real</code> for a subprocess
+created for running a program.
+</p></dd></dl>
+
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/func/process%2Dexit%2Dstatus"></a><a name="index-process_002dexit_002dstatus"></a>Function: <strong>process-exit-status</strong> <em>process</em></dt>
+<dd><p>This function returns the exit status of <var>process</var> or the signal
+number that killed it.  (Use the result of <code>process-status</code> to
+determine which of those it is.)  If <var>process</var> has not yet
+terminated, the value is 0.  For network, serial, and pipe connections
+that are already closed, the value is either 0 or 256, depending on
+whether the connection was closed normally or abnormally.
+</p></dd></dl>
+
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/func/process%2Dtty%2Dname"></a><a name="index-process_002dtty_002dname"></a>Function: <strong>process-tty-name</strong> <em>process</em></dt>
+<dd><p>This function returns the terminal name that <var>process</var> is using for
+its communication with Emacs—or <code>nil</code> if it is using pipes
+instead of a pty (see <code>process-connection-type</code> in
+<a href="Asynchronous-Processes.html#Asynchronous-Processes">Asynchronous Processes</a>).  If <var>process</var> represents a program
+running on a remote host, the terminal name used by that program on
+the remote host is provided as process property <code>remote-tty</code>.  If
+<var>process</var> represents a network, serial, or pipe connection, the
+value is <code>nil</code>.
+</p></dd></dl>
+
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/func/process%2Dcoding%2Dsystem"></a><a name="index-process_002dcoding_002dsystem"></a>Function: <strong>process-coding-system</strong> <em>process</em></dt>
+<dd><a name="Coding-systems-for-a-subprocess"></a><p>This function returns a cons cell <code>(<var>decode</var> . <var>encode</var>)</code>,
+describing the coding systems in use for decoding output from, and
+encoding input to, <var>process</var> (see <a href="Coding-Systems.html#Coding-Systems">Coding Systems</a>).
+</p></dd></dl>
+
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/func/set%2Dprocess%2Dcoding%2Dsystem"></a><a name="index-set_002dprocess_002dcoding_002dsystem"></a>Function: <strong>set-process-coding-system</strong> <em>process &amp;optional decoding-system encoding-system</em></dt>
+<dd><p>This function specifies the coding systems to use for subsequent output
+from and input to <var>process</var>.  It will use <var>decoding-system</var> to
+decode subprocess output, and <var>encoding-system</var> to encode subprocess
+input.
+</p></dd></dl>
+
+<p>Every process also has a property list that you can use to store
+miscellaneous values associated with the process.
+</p>
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/func/process%2Dget"></a><a name="index-process_002dget"></a>Function: <strong>process-get</strong> <em>process propname</em></dt>
+<dd><p>This function returns the value of the <var>propname</var> property
+of <var>process</var>.
+</p></dd></dl>
+
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/func/process%2Dput"></a><a name="index-process_002dput"></a>Function: <strong>process-put</strong> <em>process propname value</em></dt>
+<dd><p>This function sets the value of the <var>propname</var> property
+of <var>process</var> to <var>value</var>.
+</p></dd></dl>
+
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/func/process%2Dplist"></a><a name="index-process_002dplist"></a>Function: <strong>process-plist</strong> <em>process</em></dt>
+<dd><p>This function returns the process plist of <var>process</var>.
+</p></dd></dl>
+
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/func/set%2Dprocess%2Dplist"></a><a name="index-set_002dprocess_002dplist"></a>Function: <strong>set-process-plist</strong> <em>process plist</em></dt>
+<dd><p>This function sets the process plist of <var>process</var> to <var>plist</var>.
+</p></dd></dl>
+
+
+<div class="header" style="background-color:#DDDDFF">
+<p>
+Next: <a href="Input-to-Processes.html#Input-to-Processes" accesskey="n" rel="next">Input to Processes</a>, Previous: <a href="Deleting-Processes.html#Deleting-Processes" accesskey="p" rel="prev">Deleting Processes</a>, Up: <a href="Processes.html#Processes" accesskey="u" rel="up">Processes</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+
+
+</body></html>

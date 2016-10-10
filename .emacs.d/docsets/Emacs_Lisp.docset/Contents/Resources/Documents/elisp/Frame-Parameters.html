@@ -1,0 +1,74 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright (C) 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 6.1, http://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rev="made" href="mailto:bug-gnu-emacs@gnu.org">
+<link rel="icon" type="image/png" href="/graphics/gnu-head-mini.png">
+<meta name="ICBM" content="42.256233,-71.006581">
+<meta name="DC.title" content="gnu.org">
+
+<title>Frame Parameters</title>
+
+<style type="text/css">
+@import url('/software/emacs/manual.css');
+</style>
+</head>
+
+<body lang="en">
+<a name="Frame-Parameters"></a>
+<div class="header" style="background-color:#DDDDFF">
+<p>
+Next: <a href="Terminal-Parameters.html#Terminal-Parameters" accesskey="n" rel="next">Terminal Parameters</a>, Previous: <a href="Frame-Geometry.html#Frame-Geometry" accesskey="p" rel="prev">Frame Geometry</a>, Up: <a href="Frames.html#Frames" accesskey="u" rel="up">Frames</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+
+<a name="Frame-Parameters-1"></a>
+<h3 class="section">28.4 Frame Parameters</h3>
+<a name="index-frame-parameters"></a>
+
+<p>A frame has many parameters that control its appearance and behavior.
+Just what parameters a frame has depends on what display mechanism it
+uses.
+</p>
+<p>Frame parameters exist mostly for the sake of graphical displays.
+Most frame parameters have no effect when applied to a frame on a text
+terminal; only the <code>height</code>, <code>width</code>, <code>name</code>,
+<code>title</code>, <code>menu-bar-lines</code>, <code>buffer-list</code> and
+<code>buffer-predicate</code> parameters do something special.  If the
+terminal supports colors, the parameters <code>foreground-color</code>,
+<code>background-color</code>, <code>background-mode</code> and
+<code>display-type</code> are also meaningful.  If the terminal supports
+frame transparency, the parameter <code>alpha</code> is also meaningful.
+</p>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top">&bull; <a href="Parameter-Access.html#Parameter-Access" accesskey="1">Parameter Access</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to change a frame&rsquo;s parameters.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Initial-Parameters.html#Initial-Parameters" accesskey="2">Initial Parameters</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Specifying frame parameters when you make a frame.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Window-Frame-Parameters.html#Window-Frame-Parameters" accesskey="3">Window Frame Parameters</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">List of frame parameters for window systems.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Geometry.html#Geometry" accesskey="4">Geometry</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Parsing geometry specifications.
+</td></tr>
+</table>
+
+
+
+
+</body>
+</html>

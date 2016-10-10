@@ -1,0 +1,115 @@
+<html><!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright (C) 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." --><!-- Created by GNU Texinfo 6.1, http://www.gnu.org/software/texinfo/ --><head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rev="made" href="mailto:bug-gnu-emacs@gnu.org">
+<link rel="icon" type="image/png" href="/graphics/gnu-head-mini.png">
+<meta name="ICBM" content="42.256233,-71.006581">
+<meta name="DC.title" content="gnu.org">
+
+<title>Text Terminal Colors</title>
+
+<style type="text/css">
+@import url('/software/emacs/manual.css');
+</style>
+</head>
+
+<body lang="en">
+<a name="Text-Terminal-Colors"></a>
+<div class="header" style="background-color:#DDDDFF">
+<p>
+Next: <a href="Resources.html#Resources" accesskey="n" rel="next">Resources</a>, Previous: <a href="Color-Names.html#Color-Names" accesskey="p" rel="prev">Color Names</a>, Up: <a href="Frames.html#Frames" accesskey="u" rel="up">Frames</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+
+<a name="Text-Terminal-Colors-1"></a>
+<h3 class="section">28.22 Text Terminal Colors</h3>
+<a name="index-colors-on-text-terminals"></a>
+
+<p>Text terminals usually support only a small number of colors, and
+the computer uses small integers to select colors on the terminal.
+This means that the computer cannot reliably tell what the selected
+color looks like; instead, you have to inform your application which
+small integers correspond to which colors.  However, Emacs does know
+the standard set of colors and will try to use them automatically.
+</p>
+<p>The functions described in this section control how terminal colors
+are used by Emacs.
+</p>
+<p>Several of these functions use or return <em>rgb values</em>, described
+in <a href="Color-Names.html#Color-Names">Color Names</a>.
+</p>
+<p>These functions accept a display (either a frame or the name of a
+terminal) as an optional argument.  We hope in the future to make
+Emacs support different colors on different text terminals; then this
+argument will specify which terminal to operate on (the default being
+the selected frame’s terminal; see <a href="Input-Focus.html#Input-Focus">Input Focus</a>).  At present,
+though, the <var>frame</var> argument has no effect.
+</p>
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/func/tty%2Dcolor%2Ddefine"></a><a name="index-tty_002dcolor_002ddefine"></a>Function: <strong>tty-color-define</strong> <em>name number &amp;optional rgb frame</em></dt>
+<dd><p>This function associates the color name <var>name</var> with
+color number <var>number</var> on the terminal.
+</p>
+<p>The optional argument <var>rgb</var>, if specified, is an rgb value, a list
+of three numbers that specify what the color actually looks like.
+If you do not specify <var>rgb</var>, then this color cannot be used by
+<code>tty-color-approximate</code> to approximate other colors, because
+Emacs will not know what it looks like.
+</p></dd></dl>
+
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/func/tty%2Dcolor%2Dclear"></a><a name="index-tty_002dcolor_002dclear"></a>Function: <strong>tty-color-clear</strong> <em>&amp;optional frame</em></dt>
+<dd><p>This function clears the table of defined colors for a text terminal.
+</p></dd></dl>
+
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/func/tty%2Dcolor%2Dalist"></a><a name="index-tty_002dcolor_002dalist"></a>Function: <strong>tty-color-alist</strong> <em>&amp;optional frame</em></dt>
+<dd><p>This function returns an alist recording the known colors supported by
+a text terminal.
+</p>
+<p>Each element has the form <code>(<var>name</var> <var>number</var> . <var>rgb</var>)</code>
+or <code>(<var>name</var> <var>number</var>)</code>.  Here, <var>name</var> is the color
+name, <var>number</var> is the number used to specify it to the terminal.
+If present, <var>rgb</var> is a list of three color values (for red, green,
+and blue) that says what the color actually looks like.
+</p></dd></dl>
+
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/func/tty%2Dcolor%2Dapproximate"></a><a name="index-tty_002dcolor_002dapproximate"></a>Function: <strong>tty-color-approximate</strong> <em>rgb &amp;optional frame</em></dt>
+<dd><p>This function finds the closest color, among the known colors
+supported for <var>display</var>, to that described by the rgb value
+<var>rgb</var> (a list of color values).  The return value is an element of
+<code>tty-color-alist</code>.
+</p></dd></dl>
+
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/func/tty%2Dcolor%2Dtranslate"></a><a name="index-tty_002dcolor_002dtranslate"></a>Function: <strong>tty-color-translate</strong> <em>color &amp;optional frame</em></dt>
+<dd><p>This function finds the closest color to <var>color</var> among the known
+colors supported for <var>display</var> and returns its index (an integer).
+If the name <var>color</var> is not defined, the value is <code>nil</code>.
+</p></dd></dl>
+
+
+<div class="header" style="background-color:#DDDDFF">
+<p>
+Next: <a href="Resources.html#Resources" accesskey="n" rel="next">Resources</a>, Previous: <a href="Color-Names.html#Color-Names" accesskey="p" rel="prev">Color Names</a>, Up: <a href="Frames.html#Frames" accesskey="u" rel="up">Frames</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+
+
+</body></html>

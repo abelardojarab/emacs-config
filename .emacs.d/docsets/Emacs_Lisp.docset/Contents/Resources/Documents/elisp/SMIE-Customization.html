@@ -1,0 +1,93 @@
+<html><!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright (C) 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." --><!-- Created by GNU Texinfo 6.1, http://www.gnu.org/software/texinfo/ --><head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rev="made" href="mailto:bug-gnu-emacs@gnu.org">
+<link rel="icon" type="image/png" href="/graphics/gnu-head-mini.png">
+<meta name="ICBM" content="42.256233,-71.006581">
+<meta name="DC.title" content="gnu.org">
+
+<title>SMIE Customization</title>
+
+<style type="text/css">
+@import url('/software/emacs/manual.css');
+</style>
+</head>
+
+<body lang="en">
+<a name="SMIE-Customization"></a>
+<div class="header" style="background-color:#DDDDFF">
+<p>
+Previous: <a href="SMIE-Indentation-Example.html#SMIE-Indentation-Example" accesskey="p" rel="prev">SMIE Indentation Example</a>, Up: <a href="SMIE.html#SMIE" accesskey="u" rel="up">SMIE</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+
+<a name="Customizing-Indentation"></a>
+<h4 class="subsubsection">22.7.1.9 Customizing Indentation</h4>
+
+<p>If you are using a mode whose indentation is provided by SMIE, you can
+customize the indentation to suit your preferences.  You can do this
+on a per-mode basis (using the option <code>smie-config</code>), or a
+per-file basis (using the function <code>smie-config-local</code> in a
+file-local variable specification).
+</p>
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/Option/smie%2Dconfig"></a><a name="index-smie_002dconfig"></a>User Option: <strong>smie-config</strong></dt>
+<dd><p>This option lets you customize indentation on a per-mode basis.
+It is an alist with elements of the form <code>(<var>mode</var> . <var>rules</var>)</code>.
+For the precise form of rules, see the variable’s documentation; but
+you may find it easier to use the command <code>smie-config-guess</code>.
+</p></dd></dl>
+
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/Command/smie%2Dconfig%2Dguess"></a><a name="index-smie_002dconfig_002dguess"></a>Command: <strong>smie-config-guess</strong></dt>
+<dd><p>This command tries to work out appropriate settings to produce
+your preferred style of indentation.  Simply call the command while
+visiting a file that is indented with your style.
+</p></dd></dl>
+
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/Command/smie%2Dconfig%2Dsave"></a><a name="index-smie_002dconfig_002dsave"></a>Command: <strong>smie-config-save</strong></dt>
+<dd><p>Call this command after using <code>smie-config-guess</code>, to save your
+settings for future sessions.
+</p></dd></dl>
+
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/Command/smie%2Dconfig%2Dshow%2Dindent"></a><a name="index-smie_002dconfig_002dshow_002dindent"></a>Command: <strong>smie-config-show-indent</strong> <em>&amp;optional move</em></dt>
+<dd><p>This command displays the rules that are used to indent the current
+line.
+</p></dd></dl>
+
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/Command/smie%2Dconfig%2Dset%2Dindent"></a><a name="index-smie_002dconfig_002dset_002dindent"></a>Command: <strong>smie-config-set-indent</strong></dt>
+<dd><p>This command adds a local rule to adjust the indentation of the current line.
+</p></dd></dl>
+
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/func/smie%2Dconfig%2Dlocal"></a><a name="index-smie_002dconfig_002dlocal"></a>Function: <strong>smie-config-local</strong> <em>rules</em></dt>
+<dd><p>This function adds <var>rules</var> as indentation rules for the current buffer.
+These add to any mode-specific rules defined by the <code>smie-config</code> option.
+To specify custom indentation rules for a specific file, add an entry
+to the file’s local variables of the form:
+<code>eval: (smie-config-local '(<var>rules</var>))</code>.
+</p></dd></dl>
+
+
+
+
+
+
+
+</body></html>

@@ -28,7 +28,6 @@
   :bind (("C-c C-z" . ielm-repl)
          :map ielm-map
          ("C-c C-z" . quit-window))
-  :after auto-complete
   :config (progn
             (defun ielm-repl ()
               (interactive)
@@ -45,8 +44,9 @@
                                    ac-source-symbols
                                    ac-source-words-in-same-mode-buffers))
                 (add-to-list 'ac-modes 'inferior-emacs-lisp-mode)
-                (auto-complete-mode 1)))
-            (add-hook 'ielm-mode-hook 'ielm-auto-complete)))
+                (auto-complete-mode 1))
+              (add-hook 'ielm-mode-hook 'ielm-auto-complete))
+            ))
 
 (use-package eshell
   :commands (eshell eshell-vertical eshell-horizontal)
@@ -120,23 +120,30 @@
 (use-package eshell-prompt-extras
   :load-path (lambda () (expand-file-name "eshell-prompt-extras/" user-emacs-directory))
   :after eshell
-  :config
-  (setq eshell-prompt-function 'epe-theme-lambda))
+  :config (setq eshell-prompt-function 'epe-theme-lambda))
 
-;; Configuration choices
-(add-hook 'sh-mode-hook
-          (lambda ()
-            (show-paren-mode -1)
-            (flycheck-mode -1)
-            (setq blink-matching-paren nil)))
+(use-package sh-mode
+  :config (progn
+            (add-to-list 'auto-mode-alist '("\\.sh\\'" . sh-mode))
 
-;; When compiling from shell, display error result as in compilation
-;; buffer, with links to errors.
-(add-hook 'sh-mode-hook 'compilation-shell-minor-mode)
-(add-hook 'sh-mode-hook 'ansi-color-for-comint-mode-on)
+            ;; create keymap
+            (setq sh-mode-map (make-sparse-keymap))
+
+            ;; Configuration choices
+            (add-hook 'sh-mode-hook
+                      (lambda ()
+                        (show-paren-mode -1)
+                        (flycheck-mode -1)
+                        (setq blink-matching-paren nil)))
+
+            ;; When compiling from shell, display error result as in compilation
+            ;; buffer, with links to errors.
+            (add-hook 'sh-mode-hook 'compilation-shell-minor-mode)
+            (add-hook 'sh-mode-hook 'ansi-color-for-comint-mode-on)))
 
 ;; CShell mode
 (use-package csh-mode
+  :after sh-mode
   :config (progn
             (dolist (elt interpreter-mode-alist)
               (when (member (car elt) (list "csh" "tcsh"))

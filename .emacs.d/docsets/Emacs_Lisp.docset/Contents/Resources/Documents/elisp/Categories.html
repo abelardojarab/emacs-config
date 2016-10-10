@@ -1,0 +1,230 @@
+<html><!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright (C) 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." --><!-- Created by GNU Texinfo 6.1, http://www.gnu.org/software/texinfo/ --><head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rev="made" href="mailto:bug-gnu-emacs@gnu.org">
+<link rel="icon" type="image/png" href="/graphics/gnu-head-mini.png">
+<meta name="ICBM" content="42.256233,-71.006581">
+<meta name="DC.title" content="gnu.org">
+
+<title>Categories</title>
+
+<style type="text/css">
+@import url('/software/emacs/manual.css');
+</style>
+</head>
+
+<body lang="en">
+<a name="Categories"></a>
+<div class="header" style="background-color:#DDDDFF">
+<p>
+Previous: <a href="Syntax-Table-Internals.html#Syntax-Table-Internals" accesskey="p" rel="prev">Syntax Table Internals</a>, Up: <a href="Syntax-Tables.html#Syntax-Tables" accesskey="u" rel="up">Syntax Tables</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+
+<a name="Categories-1"></a>
+<h3 class="section">34.8 Categories</h3>
+<a name="index-categories-of-characters"></a>
+<a name="index-character-categories"></a>
+
+<p><em>Categories</em> provide an alternate way of classifying characters
+syntactically.  You can define several categories as needed, then
+independently assign each character to one or more categories.  Unlike
+syntax classes, categories are not mutually exclusive; it is normal for
+one character to belong to several categories.
+</p>
+<a name="index-category-table"></a>
+<p>Each buffer has a <em>category table</em> which records which categories
+are defined and also which characters belong to each category.  Each
+category table defines its own categories, but normally these are
+initialized by copying from the standard categories table, so that the
+standard categories are available in all modes.
+</p>
+<p>Each category has a name, which is an <acronym>ASCII</acronym> printing character in
+the range ‘<samp>&nbsp;</samp>’<!-- /@w --> to ‘<samp>~</samp>’.  You specify the name of a category
+when you define it with <code>define-category</code>.
+</p>
+<a name="index-category-set"></a>
+<p>The category table is actually a char-table (see <a href="Char_002dTables.html#Char_002dTables">Char-Tables</a>).
+The element of the category table at index <var>c</var> is a <em>category
+set</em>—a bool-vector—that indicates which categories character <var>c</var>
+belongs to.  In this category set, if the element at index <var>cat</var> is
+<code>t</code>, that means category <var>cat</var> is a member of the set, and that
+character <var>c</var> belongs to category <var>cat</var>.
+</p>
+<p>For the next three functions, the optional argument <var>table</var>
+defaults to the current buffer’s category table.
+</p>
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/func/define%2Dcategory"></a><a name="index-define_002dcategory"></a>Function: <strong>define-category</strong> <em>char docstring &amp;optional table</em></dt>
+<dd><p>This function defines a new category, with name <var>char</var> and
+documentation <var>docstring</var>, for the category table <var>table</var>.
+</p>
+<p>Here’s an example of defining a new category for characters that have
+strong right-to-left directionality (see <a href="Bidirectional-Display.html#Bidirectional-Display">Bidirectional Display</a>)
+and using it in a special category table.  To obtain the information
+about the directionality of characters, the example code uses the
+‘<samp>bidi-class</samp>’ Unicode property (see <a href="Character-Properties.html#Character-Properties">bidi-class</a>).
+</p>
+<div class="example">
+<pre class="example">(defvar special-category-table-for-bidi
+  ;;     Make an empty category-table.
+  (let ((category-table (make-category-table))
+        ;; Create a char-table which gives the 'bidi-class' Unicode
+        ;; property for each character.
+        (uniprop-table (unicode-property-table-internal 'bidi-class)))
+    (define-category ?R "Characters of bidi-class R, AL, or RLO"
+                     category-table)
+    ;; Modify the category entry of each character whose 'bidi-class'
+    ;; Unicode property is R, AL, or RLO -- these have a
+    ;; right-to-left directionality.
+    (map-char-table
+     #'(lambda (key val)
+         (if (memq val '(R AL RLO))
+             (modify-category-entry key ?R category-table)))
+     uniprop-table)
+    category-table))
+</pre></div>
+</dd></dl>
+
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/func/category%2Ddocstring"></a><a name="index-category_002ddocstring"></a>Function: <strong>category-docstring</strong> <em>category &amp;optional table</em></dt>
+<dd><p>This function returns the documentation string of category <var>category</var>
+in category table <var>table</var>.
+</p>
+<div class="example">
+<pre class="example">(category-docstring ?a)
+     ⇒ "ASCII"
+(category-docstring ?l)
+     ⇒ "Latin"
+</pre></div>
+</dd></dl>
+
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/func/get%2Dunused%2Dcategory"></a><a name="index-get_002dunused_002dcategory"></a>Function: <strong>get-unused-category</strong> <em>&amp;optional table</em></dt>
+<dd><p>This function returns a category name (a character) which is not
+currently defined in <var>table</var>.  If all possible categories are in use
+in <var>table</var>, it returns <code>nil</code>.
+</p></dd></dl>
+
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/func/category%2Dtable"></a><a name="index-category_002dtable"></a>Function: <strong>category-table</strong></dt>
+<dd><p>This function returns the current buffer’s category table.
+</p></dd></dl>
+
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/func/category%2Dtable%2Dp"></a><a name="index-category_002dtable_002dp"></a>Function: <strong>category-table-p</strong> <em>object</em></dt>
+<dd><p>This function returns <code>t</code> if <var>object</var> is a category table,
+otherwise <code>nil</code>.
+</p></dd></dl>
+
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/func/standard%2Dcategory%2Dtable"></a><a name="index-standard_002dcategory_002dtable"></a>Function: <strong>standard-category-table</strong></dt>
+<dd><p>This function returns the standard category table.
+</p></dd></dl>
+
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/func/copy%2Dcategory%2Dtable"></a><a name="index-copy_002dcategory_002dtable"></a>Function: <strong>copy-category-table</strong> <em>&amp;optional table</em></dt>
+<dd><p>This function constructs a copy of <var>table</var> and returns it.  If
+<var>table</var> is not supplied (or is <code>nil</code>), it returns a copy of the
+standard category table.  Otherwise, an error is signaled if <var>table</var>
+is not a category table.
+</p></dd></dl>
+
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/func/set%2Dcategory%2Dtable"></a><a name="index-set_002dcategory_002dtable"></a>Function: <strong>set-category-table</strong> <em>table</em></dt>
+<dd><p>This function makes <var>table</var> the category table for the current
+buffer.  It returns <var>table</var>.
+</p></dd></dl>
+
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/func/make%2Dcategory%2Dtable"></a><a name="index-make_002dcategory_002dtable"></a>Function: <strong>make-category-table</strong></dt>
+<dd><p>This creates and returns an empty category table.  In an empty category
+table, no categories have been allocated, and no characters belong to
+any categories.
+</p></dd></dl>
+
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/func/make%2Dcategory%2Dset"></a><a name="index-make_002dcategory_002dset"></a>Function: <strong>make-category-set</strong> <em>categories</em></dt>
+<dd><p>This function returns a new category set—a bool-vector—whose initial
+contents are the categories listed in the string <var>categories</var>.  The
+elements of <var>categories</var> should be category names; the new category
+set has <code>t</code> for each of those categories, and <code>nil</code> for all
+other categories.
+</p>
+<div class="example">
+<pre class="example">(make-category-set "al")
+     ⇒ #&amp;128"\0\0\0\0\0\0\0\0\0\0\0\0\2\20\0\0"
+</pre></div>
+</dd></dl>
+
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/func/char%2Dcategory%2Dset"></a><a name="index-char_002dcategory_002dset"></a>Function: <strong>char-category-set</strong> <em>char</em></dt>
+<dd><p>This function returns the category set for character <var>char</var> in the
+current buffer’s category table.  This is the bool-vector which
+records which categories the character <var>char</var> belongs to.  The
+function <code>char-category-set</code> does not allocate storage, because
+it returns the same bool-vector that exists in the category table.
+</p>
+<div class="example">
+<pre class="example">(char-category-set ?a)
+     ⇒ #&amp;128"\0\0\0\0\0\0\0\0\0\0\0\0\2\20\0\0"
+</pre></div>
+</dd></dl>
+
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/func/category%2Dset%2Dmnemonics"></a><a name="index-category_002dset_002dmnemonics"></a>Function: <strong>category-set-mnemonics</strong> <em>category-set</em></dt>
+<dd><p>This function converts the category set <var>category-set</var> into a string
+containing the characters that designate the categories that are members
+of the set.
+</p>
+<div class="example">
+<pre class="example">(category-set-mnemonics (char-category-set ?a))
+     ⇒ "al"
+</pre></div>
+</dd></dl>
+
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/func/modify%2Dcategory%2Dentry"></a><a name="index-modify_002dcategory_002dentry"></a>Function: <strong>modify-category-entry</strong> <em>char category &amp;optional table reset</em></dt>
+<dd><p>This function modifies the category set of <var>char</var> in category
+table <var>table</var> (which defaults to the current buffer’s category
+table).  <var>char</var> can be a character, or a cons cell of the form
+<code>(<var>min</var> . <var>max</var>)</code>; in the latter case, the function
+modifies the category sets of all characters in the range between
+<var>min</var> and <var>max</var>, inclusive.
+</p>
+<p>Normally, it modifies a category set by adding <var>category</var> to it.
+But if <var>reset</var> is non-<code>nil</code>, then it deletes <var>category</var>
+instead.
+</p></dd></dl>
+
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/Command/describe%2Dcategories"></a><a name="index-describe_002dcategories"></a>Command: <strong>describe-categories</strong> <em>&amp;optional buffer-or-name</em></dt>
+<dd><p>This function describes the category specifications in the current
+category table.  It inserts the descriptions in a buffer, and then
+displays that buffer.  If <var>buffer-or-name</var> is non-<code>nil</code>, it
+describes the category table of that buffer instead.
+</p></dd></dl>
+
+<div class="header" style="background-color:#DDDDFF">
+<p>
+Previous: <a href="Syntax-Table-Internals.html#Syntax-Table-Internals" accesskey="p" rel="prev">Syntax Table Internals</a>, Up: <a href="Syntax-Tables.html#Syntax-Tables" accesskey="u" rel="up">Syntax Tables</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+
+
+</body></html>

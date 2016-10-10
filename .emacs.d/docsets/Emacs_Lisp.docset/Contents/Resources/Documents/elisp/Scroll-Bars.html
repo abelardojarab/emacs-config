@@ -1,0 +1,218 @@
+<html><!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright (C) 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." --><!-- Created by GNU Texinfo 6.1, http://www.gnu.org/software/texinfo/ --><head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rev="made" href="mailto:bug-gnu-emacs@gnu.org">
+<link rel="icon" type="image/png" href="/graphics/gnu-head-mini.png">
+<meta name="ICBM" content="42.256233,-71.006581">
+<meta name="DC.title" content="gnu.org">
+
+<title>Scroll Bars</title>
+
+<style type="text/css">
+@import url('/software/emacs/manual.css');
+</style>
+</head>
+
+<body lang="en">
+<a name="Scroll-Bars"></a>
+<div class="header" style="background-color:#DDDDFF">
+<p>
+Next: <a href="Window-Dividers.html#Window-Dividers" accesskey="n" rel="next">Window Dividers</a>, Previous: <a href="Fringes.html#Fringes" accesskey="p" rel="prev">Fringes</a>, Up: <a href="Display.html#Display" accesskey="u" rel="up">Display</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+
+<a name="Scroll-Bars-1"></a>
+<h3 class="section">37.14 Scroll Bars</h3>
+<a name="index-scroll-bars"></a>
+
+<p>Normally the frame parameter <code>vertical-scroll-bars</code> controls
+whether the windows in the frame have vertical scroll bars, and whether
+they are on the left or right.  The frame parameter
+<code>scroll-bar-width</code> specifies how wide they are (<code>nil</code> meaning
+the default).
+</p>
+<p>The frame parameter <code>horizontal-scroll-bars</code> controls whether
+the windows in the frame have horizontal scroll bars.  The frame
+parameter <code>scroll-bar-height</code> specifies how high they are
+(<code>nil</code> meaning the default).  See <a href="Layout-Parameters.html#Layout-Parameters">Layout Parameters</a>.
+</p>
+<a name="index-horizontal_002dscroll_002dbars_002davailable_002dp"></a>
+<p>Horizontal scroll bars are not available on all platforms.  The
+function <code>horizontal-scroll-bars-available-p</code> which takes no
+argument returns non-<code>nil</code> if they are available on your system.
+</p>
+<p>The following three functions take as argument a live frame which
+defaults to the selected one.
+</p>
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/func/frame%2Dcurrent%2Dscroll%2Dbars"></a><a name="index-frame_002dcurrent_002dscroll_002dbars"></a>Function: <strong>frame-current-scroll-bars</strong> <em>&amp;optional frame</em></dt>
+<dd><p>This function reports the scroll bar types for frame <var>frame</var>.  The
+value is a cons cell <code>(<var>vertical-type</var> .
+<var>horizontal-type</var>)</code>, where <var>vertical-type</var> is either
+<code>left</code>, <code>right</code>, or <code>nil</code> (which means no vertical scroll
+bar.)  <var>horizontal-type</var> is either <code>bottom</code> or <code>nil</code>
+(which means no horizontal scroll bar).
+</p></dd></dl>
+
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/func/frame%2Dscroll%2Dbar%2Dwidth"></a><a name="index-frame_002dscroll_002dbar_002dwidth"></a>Function: <strong>frame-scroll-bar-width</strong> <em>&amp;optional Lisp_Object &amp;optional frame</em></dt>
+<dd><p>This function returns the width of vertical scroll bars of <var>frame</var>
+in pixels.
+</p></dd></dl>
+
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/func/frame%2Dscroll%2Dbar%2Dheight"></a><a name="index-frame_002dscroll_002dbar_002dheight"></a>Function: <strong>frame-scroll-bar-height</strong> <em>&amp;optional Lisp_Object &amp;optional frame</em></dt>
+<dd><p>This function returns the height of horizontal scroll bars of
+<var>frame</var> in pixels.
+</p></dd></dl>
+
+<p>You can override the frame specific settings for individual windows by
+using the following function:
+</p>
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/func/set%2Dwindow%2Dscroll%2Dbars"></a><a name="index-set_002dwindow_002dscroll_002dbars"></a>Function: <strong>set-window-scroll-bars</strong> <em>window &amp;optional width vertical-type height horizontal-type</em></dt>
+<dd><p>This function sets the width and/or height and the types of scroll bars
+for window <var>window</var>.
+</p>
+<p><var>width</var> specifies the width of the vertical scroll bar in pixels
+(<code>nil</code> means use the width specified for the frame).
+<var>vertical-type</var> specifies whether to have a vertical scroll bar and,
+if so, where.  The possible values are <code>left</code>, <code>right</code>,
+<code>t</code>, which means to use the frame’s default, and <code>nil</code> for no
+vertical scroll bar.
+</p>
+<p><var>height</var> specifies the height of the horizontal scroll bar in pixels
+(<code>nil</code> means use the height specified for the frame).
+<var>horizontal-type</var> specifies whether to have a horizontal scroll bar.
+The possible values are <code>bottom</code>, <code>t</code>, which means to use the
+frame’s default, and <code>nil</code> for no horizontal scroll bar.
+</p>
+<p>If <var>window</var> is <code>nil</code>, the selected window is used.
+</p></dd></dl>
+
+<p>The following four functions take as argument a live window which
+defaults to the selected one.
+</p>
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/func/window%2Dscroll%2Dbars"></a><a name="index-window_002dscroll_002dbars"></a>Function: <strong>window-scroll-bars</strong> <em>&amp;optional window</em></dt>
+<dd><p>This function returns a list of the form <code>(<var>width</var>
+<var>columns</var> <var>vertical-type</var> <var>height</var> <var>lines</var>
+<var>horizontal-type</var>)</code>.
+</p>
+<p>The value <var>width</var> is the value that was specified for the width of
+the vertical scroll bar (which may be <code>nil</code>); <var>columns</var> is the
+(possibly rounded) number of columns that the vertical scroll bar
+actually occupies.
+</p>
+<p>The value <var>height</var> is the value that was specified for the height of
+the horizontal scroll bar (which may be <code>nil</code>); <var>lines</var> is the
+(possibly rounded) number of lines that the horizontally scroll bar
+actually occupies.
+</p></dd></dl>
+
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/func/window%2Dcurrent%2Dscroll%2Dbars"></a><a name="index-window_002dcurrent_002dscroll_002dbars"></a>Function: <strong>window-current-scroll-bars</strong> <em>&amp;optional window</em></dt>
+<dd><p>This function reports the scroll bar type for window <var>window</var>.  The
+value is a cons cell <code>(<var>vertical-type</var> .
+<var>horizontal-type</var>)</code>.  Unlike <code>window-scroll-bars</code>, this reports
+the scroll bar type actually used, once frame defaults and
+<code>scroll-bar-mode</code> are taken into account.
+</p></dd></dl>
+
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/func/window%2Dscroll%2Dbar%2Dwidth"></a><a name="index-window_002dscroll_002dbar_002dwidth"></a>Function: <strong>window-scroll-bar-width</strong> <em>&amp;optional window</em></dt>
+<dd><p>This function returns the width in pixels of <var>window</var>’s vertical
+scrollbar.
+</p></dd></dl>
+
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/func/window%2Dscroll%2Dbar%2Dheight"></a><a name="index-window_002dscroll_002dbar_002dheight"></a>Function: <strong>window-scroll-bar-height</strong> <em>&amp;optional window</em></dt>
+<dd><p>This function returns the height in pixels of <var>window</var>’s horizontal
+scrollbar.
+</p></dd></dl>
+
+<p>If you don’t specify these values for a window with
+<code>set-window-scroll-bars</code>, the buffer-local variables
+<code>vertical-scroll-bar</code>, <code>horizontal-scroll-bar</code>,
+<code>scroll-bar-width</code> and <code>scroll-bar-height</code> in the buffer being
+displayed control the window’s scroll bars.  The function
+<code>set-window-buffer</code> examines these variables.  If you change them
+in a buffer that is already visible in a window, you can make the window
+take note of the new values by calling <code>set-window-buffer</code>
+specifying the same buffer that is already displayed.
+</p>
+<p>You can control the appearance of scroll bars for a particular buffer by
+setting the following variables which automatically become buffer-local
+when set.
+</p>
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/Variable/vertical%2Dscroll%2Dbar"></a><a name="index-vertical_002dscroll_002dbar"></a>Variable: <strong>vertical-scroll-bar</strong></dt>
+<dd><p>This variable specifies the location of the vertical scroll bar.  The
+possible values are <code>left</code>, <code>right</code>, <code>t</code>, which means to
+use the frame’s default, and <code>nil</code> for no scroll bar.
+</p></dd></dl>
+
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/Variable/horizontal%2Dscroll%2Dbar"></a><a name="index-horizontal_002dscroll_002dbar"></a>Variable: <strong>horizontal-scroll-bar</strong></dt>
+<dd><p>This variable specifies the location of the horizontal scroll bar.  The
+possible values are <code>bottom</code>, <code>t</code>, which means to use the
+frame’s default, and <code>nil</code> for no scroll bar.
+</p></dd></dl>
+
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/Variable/scroll%2Dbar%2Dwidth"></a><a name="index-scroll_002dbar_002dwidth"></a>Variable: <strong>scroll-bar-width</strong></dt>
+<dd><p>This variable specifies the width of the buffer’s vertical scroll bars,
+measured in pixels.  A value of <code>nil</code> means to use the value
+specified by the frame.
+</p></dd></dl>
+
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/Variable/scroll%2Dbar%2Dheight"></a><a name="index-scroll_002dbar_002dheight"></a>Variable: <strong>scroll-bar-height</strong></dt>
+<dd><p>This variable specifies the height of the buffer’s horizontal scroll
+bar, measured in pixels.  A value of <code>nil</code> means to use the value
+specified by the frame.
+</p></dd></dl>
+
+<p>Finally you can toggle the display of scroll bars on all frames by
+customizing the variables <code>scroll-bar-mode</code> and
+<code>horizontal-scroll-bar-mode</code>.
+</p>
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/Option/scroll%2Dbar%2Dmode"></a><a name="index-scroll_002dbar_002dmode"></a>User Option: <strong>scroll-bar-mode</strong></dt>
+<dd><p>This variable controls whether and where to put vertical scroll bars in
+all frames.  The possible values are <code>nil</code> for no scroll bars,
+<code>left</code> to put scroll bars on the left and <code>right</code> to put
+scroll bars on the right.
+</p></dd></dl>
+
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/Option/horizontal%2Dscroll%2Dbar%2Dmode"></a><a name="index-horizontal_002dscroll_002dbar_002dmode"></a>User Option: <strong>horizontal-scroll-bar-mode</strong></dt>
+<dd><p>This variable controls whether to display horizontal scroll bars on all
+frames.
+</p></dd></dl>
+
+
+
+<div class="header" style="background-color:#DDDDFF">
+<p>
+Next: <a href="Window-Dividers.html#Window-Dividers" accesskey="n" rel="next">Window Dividers</a>, Previous: <a href="Fringes.html#Fringes" accesskey="p" rel="prev">Fringes</a>, Up: <a href="Display.html#Display" accesskey="u" rel="up">Display</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+
+
+</body></html>

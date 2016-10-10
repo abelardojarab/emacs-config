@@ -1,0 +1,136 @@
+<html><!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright (C) 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." --><!-- Created by GNU Texinfo 6.1, http://www.gnu.org/software/texinfo/ --><head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rev="made" href="mailto:bug-gnu-emacs@gnu.org">
+<link rel="icon" type="image/png" href="/graphics/gnu-head-mini.png">
+<meta name="ICBM" content="42.256233,-71.006581">
+<meta name="DC.title" content="gnu.org">
+
+<title>File Name Completion</title>
+
+<style type="text/css">
+@import url('/software/emacs/manual.css');
+</style>
+</head>
+
+<body lang="en">
+<a name="File-Name-Completion"></a>
+<div class="header" style="background-color:#DDDDFF">
+<p>
+Next: <a href="Standard-File-Names.html#Standard-File-Names" accesskey="n" rel="next">Standard File Names</a>, Previous: <a href="Unique-File-Names.html#Unique-File-Names" accesskey="p" rel="prev">Unique File Names</a>, Up: <a href="File-Names.html#File-Names" accesskey="u" rel="up">File Names</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+
+<a name="File-Name-Completion-1"></a>
+<h4 class="subsection">24.8.6 File Name Completion</h4>
+<a name="index-file-name-completion-subroutines"></a>
+<a name="index-completion_002c-file-name"></a>
+
+<p>This section describes low-level subroutines for completing a file
+name.  For higher level functions, see <a href="Reading-File-Names.html#Reading-File-Names">Reading File Names</a>.
+</p>
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/func/file%2Dname%2Dall%2Dcompletions"></a><a name="index-file_002dname_002dall_002dcompletions"></a>Function: <strong>file-name-all-completions</strong> <em>partial-filename directory</em></dt>
+<dd><p>This function returns a list of all possible completions for a file
+whose name starts with <var>partial-filename</var> in directory
+<var>directory</var>.  The order of the completions is the order of the files
+in the directory, which is unpredictable and conveys no useful
+information.
+</p>
+<p>The argument <var>partial-filename</var> must be a file name containing no
+directory part and no slash (or backslash on some systems).  The current
+buffer’s default directory is prepended to <var>directory</var>, if
+<var>directory</var> is not absolute.
+</p>
+<p>In the following example, suppose that <samp>~rms/lewis</samp> is the current
+default directory, and has five files whose names begin with ‘<samp>f</samp>’:
+<samp>foo</samp>, <samp>file~</samp>, <samp>file.c</samp>, <samp>file.c.~1~</samp>, and
+<samp>file.c.~2~</samp>.
+</p>
+<div class="example">
+<pre class="example">(file-name-all-completions "f" "")
+     ⇒ ("foo" "file~" "file.c.~2~"
+                "file.c.~1~" "file.c")
+</pre><pre class="example">
+</pre><pre class="example">(file-name-all-completions "fo" "")
+     ⇒ ("foo")
+</pre></div>
+</dd></dl>
+
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/func/file%2Dname%2Dcompletion"></a><a name="index-file_002dname_002dcompletion"></a>Function: <strong>file-name-completion</strong> <em>filename directory &amp;optional predicate</em></dt>
+<dd><p>This function completes the file name <var>filename</var> in directory
+<var>directory</var>.  It returns the longest prefix common to all file names
+in directory <var>directory</var> that start with <var>filename</var>.  If
+<var>predicate</var> is non-<code>nil</code> then it ignores possible completions
+that don’t satisfy <var>predicate</var>, after calling that function
+with one argument, the expanded absolute file name.
+</p>
+<p>If only one match exists and <var>filename</var> matches it exactly, the
+function returns <code>t</code>.  The function returns <code>nil</code> if directory
+<var>directory</var> contains no name starting with <var>filename</var>.
+</p>
+<p>In the following example, suppose that the current default directory
+has five files whose names begin with ‘<samp>f</samp>’: <samp>foo</samp>,
+<samp>file~</samp>, <samp>file.c</samp>, <samp>file.c.~1~</samp>, and
+<samp>file.c.~2~</samp>.
+</p>
+<div class="example">
+<pre class="example">(file-name-completion "fi" "")
+     ⇒ "file"
+</pre><pre class="example">
+</pre><pre class="example">(file-name-completion "file.c.~1" "")
+     ⇒ "file.c.~1~"
+</pre><pre class="example">
+</pre><pre class="example">(file-name-completion "file.c.~1~" "")
+     ⇒ t
+</pre><pre class="example">
+</pre><pre class="example">(file-name-completion "file.c.~3" "")
+     ⇒ nil
+</pre></div>
+</dd></dl>
+
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/Option/completion%2Dignored%2Dextensions"></a><a name="index-completion_002dignored_002dextensions"></a>User Option: <strong>completion-ignored-extensions</strong></dt>
+<dd><p><code>file-name-completion</code> usually ignores file names that end in any
+string in this list.  It does not ignore them when all the possible
+completions end in one of these suffixes.  This variable has no effect
+on <code>file-name-all-completions</code>.
+</p>
+<p>A typical value might look like this:
+</p>
+<div class="example">
+<pre class="example">completion-ignored-extensions
+     ⇒ (".o" ".elc" "~" ".dvi")
+</pre></div>
+
+<p>If an element of <code>completion-ignored-extensions</code> ends in a slash
+‘<samp>/</samp>’, it signals a directory.  The elements which do <em>not</em> end
+in a slash will never match a directory; thus, the above value will not
+filter out a directory named <samp>foo.elc</samp>.
+</p></dd></dl>
+
+
+<div class="header" style="background-color:#DDDDFF">
+<p>
+Next: <a href="Standard-File-Names.html#Standard-File-Names" accesskey="n" rel="next">Standard File Names</a>, Previous: <a href="Unique-File-Names.html#Unique-File-Names" accesskey="p" rel="prev">Unique File Names</a>, Up: <a href="File-Names.html#File-Names" accesskey="u" rel="up">File Names</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+
+
+</body></html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright (C) 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 6.1, http://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rev="made" href="mailto:bug-gnu-emacs@gnu.org">
+<link rel="icon" type="image/png" href="/graphics/gnu-head-mini.png">
+<meta name="ICBM" content="42.256233,-71.006581">
+<meta name="DC.title" content="gnu.org">
+
+<title>Primitive Function Type</title>
+
+<style type="text/css">
+@import url('/software/emacs/manual.css');
+</style>
+</head>
+
+<body lang="en">
+<a name="Primitive-Function-Type"></a>
+<div class="header" style="background-color:#DDDDFF">
+<p>
+Next: <a href="Byte_002dCode-Type.html#Byte_002dCode-Type" accesskey="n" rel="next">Byte-Code Type</a>, Previous: <a href="Macro-Type.html#Macro-Type" accesskey="p" rel="prev">Macro Type</a>, Up: <a href="Programming-Types.html#Programming-Types" accesskey="u" rel="up">Programming Types</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+
+<a name="Primitive-Function-Type-1"></a>
+<h4 class="subsection">2.3.15 Primitive Function Type</h4>
+<a name="index-primitive-function"></a>
+
+<p>A <em>primitive function</em> is a function callable from Lisp but
+written in the C programming language.  Primitive functions are also
+called <em>subrs</em> or <em>built-in functions</em>.  (The word &ldquo;subr&rdquo; is
+derived from &ldquo;subroutine&rdquo;.)  Most primitive functions evaluate all
+their arguments when they are called.  A primitive function that does
+not evaluate all its arguments is called a <em>special form</em>
+(see <a href="Special-Forms.html#Special-Forms">Special Forms</a>).
+</p>
+<p>It does not matter to the caller of a function whether the function is
+primitive.  However, this does matter if you try to redefine a primitive
+with a function written in Lisp.  The reason is that the primitive
+function may be called directly from C code.  Calls to the redefined
+function from Lisp will use the new definition, but calls from C code
+may still use the built-in definition.  Therefore, <strong>we discourage
+redefinition of primitive functions</strong>.
+</p>
+<p>The term <em>function</em> refers to all Emacs functions, whether written
+in Lisp or C.  See <a href="Function-Type.html#Function-Type">Function Type</a>, for information about the
+functions written in Lisp.
+</p>
+<p>Primitive functions have no read syntax and print in hash notation
+with the name of the subroutine.
+</p>
+<div class="example">
+<pre class="example">(symbol-function 'car)          ; <span class="roman">Access the function cell</span>
+                                ;   <span class="roman">of the symbol.</span>
+     &rArr; #&lt;subr car&gt;
+(subrp (symbol-function 'car))  ; <span class="roman">Is this a primitive function?</span>
+     &rArr; t                       ; <span class="roman">Yes.</span>
+</pre></div>
+
+
+
+
+</body>
+</html>

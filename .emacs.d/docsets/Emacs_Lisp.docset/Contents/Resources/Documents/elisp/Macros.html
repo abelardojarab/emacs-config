@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright (C) 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 6.1, http://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rev="made" href="mailto:bug-gnu-emacs@gnu.org">
+<link rel="icon" type="image/png" href="/graphics/gnu-head-mini.png">
+<meta name="ICBM" content="42.256233,-71.006581">
+<meta name="DC.title" content="gnu.org">
+
+<title>Macros</title>
+
+<style type="text/css">
+@import url('/software/emacs/manual.css');
+</style>
+</head>
+
+<body lang="en">
+<a name="Macros"></a>
+<div class="header" style="background-color:#DDDDFF">
+<p>
+Next: <a href="Customization.html#Customization" accesskey="n" rel="next">Customization</a>, Previous: <a href="Functions.html#Functions" accesskey="p" rel="prev">Functions</a>, Up: <a href="index.html#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+
+<a name="Macros-1"></a>
+<h2 class="chapter">13 Macros</h2>
+<a name="index-macros"></a>
+
+<p><em>Macros</em> enable you to define new control constructs and other
+language features.  A macro is defined much like a function, but instead
+of telling how to compute a value, it tells how to compute another Lisp
+expression which will in turn compute the value.  We call this
+expression the <em>expansion</em> of the macro.
+</p>
+<p>Macros can do this because they operate on the unevaluated expressions
+for the arguments, not on the argument values as functions do.  They can
+therefore construct an expansion containing these argument expressions
+or parts of them.
+</p>
+<p>If you are using a macro to do something an ordinary function could
+do, just for the sake of speed, consider using an inline function
+instead.  See <a href="Inline-Functions.html#Inline-Functions">Inline Functions</a>.
+</p>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top">&bull; <a href="Simple-Macro.html#Simple-Macro" accesskey="1">Simple Macro</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">A basic example.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Expansion.html#Expansion" accesskey="2">Expansion</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How, when and why macros are expanded.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Compiling-Macros.html#Compiling-Macros" accesskey="3">Compiling Macros</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How macros are expanded by the compiler.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Defining-Macros.html#Defining-Macros" accesskey="4">Defining Macros</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">How to write a macro definition.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Problems-with-Macros.html#Problems-with-Macros" accesskey="5">Problems with Macros</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Don&rsquo;t evaluate the macro arguments too many times.
+                              Don&rsquo;t hide the user&rsquo;s variables.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Indenting-Macros.html#Indenting-Macros" accesskey="6">Indenting Macros</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Specifying how to indent macro calls.
+</td></tr>
+</table>
+
+
+
+
+</body>
+</html>

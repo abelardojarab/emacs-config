@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright (C) 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 6.1, http://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rev="made" href="mailto:bug-gnu-emacs@gnu.org">
+<link rel="icon" type="image/png" href="/graphics/gnu-head-mini.png">
+<meta name="ICBM" content="42.256233,-71.006581">
+<meta name="DC.title" content="gnu.org">
+
+<title>Profiling</title>
+
+<style type="text/css">
+@import url('/software/emacs/manual.css');
+</style>
+</head>
+
+<body lang="en">
+<a name="Profiling"></a>
+<div class="header" style="background-color:#DDDDFF">
+<p>
+Previous: <a href="Test-Coverage.html#Test-Coverage" accesskey="p" rel="prev">Test Coverage</a>, Up: <a href="Debugging.html#Debugging" accesskey="u" rel="up">Debugging</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+
+<a name="Profiling-1"></a>
+<h3 class="section">17.5 Profiling</h3>
+<a name="index-profiling"></a>
+<a name="index-profile"></a>
+<a name="index-measuring-resource-usage"></a>
+<a name="index-memory-usage"></a>
+
+<p>If your program is working correctly, but you want to make it run more
+quickly or efficiently, the first thing to do is <em>profile</em> your
+code so that you know how it is using resources.  If you find that one
+particular function is responsible for a significant portion of the
+runtime, you can start looking for ways to optimize that piece.
+</p>
+<p>Emacs has built-in support for this.  To begin profiling, type
+<kbd>M-x profiler-start</kbd>.  You can choose to profile by processor
+usage, memory usage, or both.  After doing some work, type
+<kbd>M-x profiler-report</kbd> to display a summary buffer for each
+resource that you chose to profile.  The names of the report buffers
+include the times at which the reports were generated, so you can
+generate another report later on without erasing previous results.
+When you have finished profiling, type <kbd>M-x profiler-stop</kbd> (there
+is a small overhead associated with profiling).
+</p>
+<p>The profiler report buffer shows, on each line, a function that was
+called, followed by how much resource (processor or memory) it used in
+absolute and percentage times since profiling started.  If a given
+line has a &lsquo;<samp>+</samp>&rsquo; symbol at the left-hand side, you can expand that
+line by typing <tt class="key">RET</tt>, in order to see the function(s) called by
+the higher-level function.  Use a prefix argument (<tt class="key">C-u RET</tt>) to
+see the whole call tree below a function.  Pressing <tt class="key">RET</tt> again
+will collapse back to the original state.
+</p>
+<p>Press <kbd>j</kbd> or <kbd>mouse-2</kbd> to jump to the definition of a function.
+Press <kbd>d</kbd> to view a function&rsquo;s documentation.
+You can save a profile to a file using <kbd>C-x C-w</kbd>.
+You can compare two profiles using <kbd>=</kbd>.
+</p>
+
+<a name="index-elp_002eel"></a>
+<a name="index-timing-programs"></a>
+<p>The <samp>elp</samp> library offers an alternative approach.  See the file
+<samp>elp.el</samp> for instructions.
+</p>
+<a name="index-benchmark_002eel"></a>
+<a name="index-benchmarking"></a>
+<p>You can check the speed of individual Emacs Lisp forms using the
+<samp>benchmark</samp> library.  See the functions <code>benchmark-run</code> and
+<code>benchmark-run-compiled</code> in <samp>benchmark.el</samp>.
+</p>
+<a name="index-_002d_002denable_002dprofiling-option-of-configure"></a>
+<p>To profile Emacs at the level of its C code, you can build it using the
+<samp>--enable-profiling</samp> option of <code>configure</code>.  When Emacs
+exits, it generates a file <samp>gmon.out</samp> that you can examine using
+the <code>gprof</code> utility.  This feature is mainly useful for
+debugging Emacs.  It actually stops the Lisp-level <kbd>M-x
+profiler-&hellip;</kbd> commands described above from working.
+</p><hr>
+<div class="header" style="background-color:#DDDDFF">
+<p>
+Previous: <a href="Test-Coverage.html#Test-Coverage" accesskey="p" rel="prev">Test Coverage</a>, Up: <a href="Debugging.html#Debugging" accesskey="u" rel="up">Debugging</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

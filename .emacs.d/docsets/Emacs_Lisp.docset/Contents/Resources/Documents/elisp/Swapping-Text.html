@@ -1,0 +1,98 @@
+<html><!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright (C) 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." --><!-- Created by GNU Texinfo 6.1, http://www.gnu.org/software/texinfo/ --><head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rev="made" href="mailto:bug-gnu-emacs@gnu.org">
+<link rel="icon" type="image/png" href="/graphics/gnu-head-mini.png">
+<meta name="ICBM" content="42.256233,-71.006581">
+<meta name="DC.title" content="gnu.org">
+
+<title>Swapping Text</title>
+
+<style type="text/css">
+@import url('/software/emacs/manual.css');
+</style>
+</head>
+
+<body lang="en">
+<a name="Swapping-Text"></a>
+<div class="header" style="background-color:#DDDDFF">
+<p>
+Next: <a href="Buffer-Gap.html#Buffer-Gap" accesskey="n" rel="next">Buffer Gap</a>, Previous: <a href="Indirect-Buffers.html#Indirect-Buffers" accesskey="p" rel="prev">Indirect Buffers</a>, Up: <a href="Buffers.html#Buffers" accesskey="u" rel="up">Buffers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+
+<a name="Swapping-Text-Between-Two-Buffers"></a>
+<h3 class="section">26.12 Swapping Text Between Two Buffers</h3>
+<a name="index-swap-text-between-buffers"></a>
+<a name="index-virtual-buffers"></a>
+
+<p>Specialized modes sometimes need to let the user access from the
+same buffer several vastly different types of text.  For example, you
+may need to display a summary of the buffer text, in addition to
+letting the user access the text itself.
+</p>
+<p>This could be implemented with multiple buffers (kept in sync when
+the user edits the text), or with narrowing (see <a href="Narrowing.html#Narrowing">Narrowing</a>).  But
+these alternatives might sometimes become tedious or prohibitively
+expensive, especially if each type of text requires expensive
+buffer-global operations in order to provide correct display and
+editing commands.
+</p>
+<p>Emacs provides another facility for such modes: you can quickly swap
+buffer text between two buffers with <code>buffer-swap-text</code>.  This
+function is very fast because it doesn’t move any text, it only
+changes the internal data structures of the buffer object to point to
+a different chunk of text.  Using it, you can pretend that a group of
+two or more buffers are actually a single virtual buffer that holds
+the contents of all the individual buffers together.
+</p>
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/func/buffer%2Dswap%2Dtext"></a><a name="index-buffer_002dswap_002dtext"></a>Function: <strong>buffer-swap-text</strong> <em>buffer</em></dt>
+<dd><p>This function swaps the text of the current buffer and that of its
+argument <var>buffer</var>.  It signals an error if one of the two buffers
+is an indirect buffer (see <a href="Indirect-Buffers.html#Indirect-Buffers">Indirect Buffers</a>) or is a base buffer
+of an indirect buffer.
+</p>
+<p>All the buffer properties that are related to the buffer text are
+swapped as well: the positions of point and mark, all the markers, the
+overlays, the text properties, the undo list, the value of the
+<code>enable-multibyte-characters</code> flag (see <a href="Text-Representations.html#Text-Representations">enable-multibyte-characters</a>), etc.
+</p>
+<p><strong>Warning:</strong> If this function is called from within a
+<code>save-excursion</code> form, the current buffer will be set to
+<var>buffer</var> upon leaving the form, since the marker used by
+<code>save-excursion</code> to save the position and buffer will be swapped
+as well.
+</p></dd></dl>
+
+<p>If you use <code>buffer-swap-text</code> on a file-visiting buffer, you
+should set up a hook to save the buffer’s original text rather than
+what it was swapped with.  <code>write-region-annotate-functions</code>
+works for this purpose.  You should probably set
+<code>buffer-saved-size</code> to -2 in the buffer, so that changes
+in the text it is swapped with will not interfere with auto-saving.
+</p>
+
+<div class="header" style="background-color:#DDDDFF">
+<p>
+Next: <a href="Buffer-Gap.html#Buffer-Gap" accesskey="n" rel="next">Buffer Gap</a>, Previous: <a href="Indirect-Buffers.html#Indirect-Buffers" accesskey="p" rel="prev">Indirect Buffers</a>, Up: <a href="Buffers.html#Buffers" accesskey="u" rel="up">Buffers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+
+
+</body></html>

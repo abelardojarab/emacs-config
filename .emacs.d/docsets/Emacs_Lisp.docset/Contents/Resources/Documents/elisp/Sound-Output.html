@@ -1,0 +1,110 @@
+<html><!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright (C) 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." --><!-- Created by GNU Texinfo 6.1, http://www.gnu.org/software/texinfo/ --><head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rev="made" href="mailto:bug-gnu-emacs@gnu.org">
+<link rel="icon" type="image/png" href="/graphics/gnu-head-mini.png">
+<meta name="ICBM" content="42.256233,-71.006581">
+<meta name="DC.title" content="gnu.org">
+
+<title>Sound Output</title>
+
+<style type="text/css">
+@import url('/software/emacs/manual.css');
+</style>
+</head>
+
+<body lang="en">
+<a name="Sound-Output"></a>
+<div class="header" style="background-color:#DDDDFF">
+<p>
+Next: <a href="X11-Keysyms.html#X11-Keysyms" accesskey="n" rel="next">X11 Keysyms</a>, Previous: <a href="Terminal-Output.html#Terminal-Output" accesskey="p" rel="prev">Terminal Output</a>, Up: <a href="System-Interface.html#System-Interface" accesskey="u" rel="up">System Interface</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+
+<a name="Sound-Output-1"></a>
+<h3 class="section">38.15 Sound Output</h3>
+<a name="index-sound"></a>
+
+<p>To play sound using Emacs, use the function <code>play-sound</code>.  Only
+certain systems are supported; if you call <code>play-sound</code> on a
+system which cannot really do the job, it gives an error.
+</p>
+<p>The sound must be stored as a file in RIFF-WAVE format (‘<samp>.wav</samp>’)
+or Sun Audio format (‘<samp>.au</samp>’).
+</p>
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/func/play%2Dsound"></a><a name="index-play_002dsound"></a>Function: <strong>play-sound</strong> <em>sound</em></dt>
+<dd><p>This function plays a specified sound.  The argument, <var>sound</var>, has
+the form <code>(sound <var>properties</var>...)</code>, where the <var>properties</var>
+consist of alternating keywords (particular symbols recognized
+specially) and values corresponding to them.
+</p>
+<p>Here is a table of the keywords that are currently meaningful in
+<var>sound</var>, and their meanings:
+</p>
+<dl compact="compact">
+<dt><code>:file <var>file</var></code></dt>
+<dd><p>This specifies the file containing the sound to play.
+If the file name is not absolute, it is expanded against
+the directory <code>data-directory</code>.
+</p>
+</dd>
+<dt><code>:data <var>data</var></code></dt>
+<dd><p>This specifies the sound to play without need to refer to a file.  The
+value, <var>data</var>, should be a string containing the same bytes as a
+sound file.  We recommend using a unibyte string.
+</p>
+</dd>
+<dt><code>:volume <var>volume</var></code></dt>
+<dd><p>This specifies how loud to play the sound.  It should be a number in the
+range of 0 to 1.  The default is to use whatever volume has been
+specified before.
+</p>
+</dd>
+<dt><code>:device <var>device</var></code></dt>
+<dd><p>This specifies the system device on which to play the sound, as a
+string.  The default device is system-dependent.
+</p></dd>
+</dl>
+
+<p>Before actually playing the sound, <code>play-sound</code>
+calls the functions in the list <code>play-sound-functions</code>.
+Each function is called with one argument, <var>sound</var>.
+</p></dd></dl>
+
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/Command/play%2Dsound%2Dfile"></a><a name="index-play_002dsound_002dfile"></a>Command: <strong>play-sound-file</strong> <em>file &amp;optional volume device</em></dt>
+<dd><p>This function is an alternative interface to playing a sound <var>file</var>
+specifying an optional <var>volume</var> and <var>device</var>.
+</p></dd></dl>
+
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/Variable/play%2Dsound%2Dfunctions"></a><a name="index-play_002dsound_002dfunctions"></a>Variable: <strong>play-sound-functions</strong></dt>
+<dd><p>A list of functions to be called before playing a sound.  Each function
+is called with one argument, a property list that describes the sound.
+</p></dd></dl>
+
+
+<div class="header" style="background-color:#DDDDFF">
+<p>
+Next: <a href="X11-Keysyms.html#X11-Keysyms" accesskey="n" rel="next">X11 Keysyms</a>, Previous: <a href="Terminal-Output.html#Terminal-Output" accesskey="p" rel="prev">Terminal Output</a>, Up: <a href="System-Interface.html#System-Interface" accesskey="u" rel="up">System Interface</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+
+
+</body></html>

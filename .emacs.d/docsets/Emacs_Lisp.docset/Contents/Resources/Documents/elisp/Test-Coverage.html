@@ -1,0 +1,85 @@
+<html><!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright (C) 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." --><!-- Created by GNU Texinfo 6.1, http://www.gnu.org/software/texinfo/ --><head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rev="made" href="mailto:bug-gnu-emacs@gnu.org">
+<link rel="icon" type="image/png" href="/graphics/gnu-head-mini.png">
+<meta name="ICBM" content="42.256233,-71.006581">
+<meta name="DC.title" content="gnu.org">
+
+<title>Test Coverage</title>
+
+<style type="text/css">
+@import url('/software/emacs/manual.css');
+</style>
+</head>
+
+<body lang="en">
+<a name="Test-Coverage"></a>
+<div class="header" style="background-color:#DDDDFF">
+<p>
+Next: <a href="Profiling.html#Profiling" accesskey="n" rel="next">Profiling</a>, Previous: <a href="Syntax-Errors.html#Syntax-Errors" accesskey="p" rel="prev">Syntax Errors</a>, Up: <a href="Debugging.html#Debugging" accesskey="u" rel="up">Debugging</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+
+<a name="Test-Coverage-1"></a>
+<h3 class="section">17.4 Test Coverage</h3>
+<a name="index-coverage-testing"></a>
+
+<a name="index-testcover_002dstart"></a>
+<a name="index-testcover_002dmark_002dall"></a>
+<a name="index-testcover_002dnext_002dmark"></a>
+<p>You can do coverage testing for a file of Lisp code by loading the
+<code>testcover</code> library and using the command <kbd>M-x
+testcover-start <span class="key">RET</span> <var>file</var> <span class="key">RET</span></kbd> to instrument the
+code.  Then test your code by calling it one or more times.  Then use
+the command <kbd>M-x testcover-mark-all</kbd> to display colored highlights
+on the code to show where coverage is insufficient.  The command
+<kbd>M-x testcover-next-mark</kbd> will move point forward to the next
+highlighted spot.
+</p>
+<p>Normally, a red highlight indicates the form was never completely
+evaluated; a brown highlight means it always evaluated to the same
+value (meaning there has been little testing of what is done with the
+result).  However, the red highlight is skipped for forms that can’t
+possibly complete their evaluation, such as <code>error</code>.  The brown
+highlight is skipped for forms that are expected to always evaluate to
+the same value, such as <code>(setq x 14)</code>.
+</p>
+<p>For difficult cases, you can add do-nothing macros to your code to
+give advice to the test coverage tool.
+</p>
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/macro/1value"></a><a name="index-1value"></a>Macro: <strong>1value</strong> <em>form</em></dt>
+<dd><p>Evaluate <var>form</var> and return its value, but inform coverage testing
+that <var>form</var>’s value should always be the same.
+</p></dd></dl>
+
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/macro/noreturn"></a><a name="index-noreturn"></a>Macro: <strong>noreturn</strong> <em>form</em></dt>
+<dd><p>Evaluate <var>form</var>, informing coverage testing that <var>form</var> should
+never return.  If it ever does return, you get a run-time error.
+</p></dd></dl>
+
+<p>Edebug also has a coverage testing feature (see <a href="Coverage-Testing.html#Coverage-Testing">Coverage Testing</a>).  These features partly duplicate each other, and it would
+be cleaner to combine them.
+</p>
+
+
+
+
+
+
+</body></html>

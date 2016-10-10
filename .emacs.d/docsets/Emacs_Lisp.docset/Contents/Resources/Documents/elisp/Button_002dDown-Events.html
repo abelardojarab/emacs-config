@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright (C) 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 6.1, http://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rev="made" href="mailto:bug-gnu-emacs@gnu.org">
+<link rel="icon" type="image/png" href="/graphics/gnu-head-mini.png">
+<meta name="ICBM" content="42.256233,-71.006581">
+<meta name="DC.title" content="gnu.org">
+
+<title>Button-Down Events</title>
+
+<style type="text/css">
+@import url('/software/emacs/manual.css');
+</style>
+</head>
+
+<body lang="en">
+<a name="Button_002dDown-Events"></a>
+<div class="header" style="background-color:#DDDDFF">
+<p>
+Next: <a href="Repeat-Events.html#Repeat-Events" accesskey="n" rel="next">Repeat Events</a>, Previous: <a href="Drag-Events.html#Drag-Events" accesskey="p" rel="prev">Drag Events</a>, Up: <a href="Input-Events.html#Input-Events" accesskey="u" rel="up">Input Events</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+
+<a name="Button_002dDown-Events-1"></a>
+<h4 class="subsection">20.7.6 Button-Down Events</h4>
+<a name="index-button_002ddown-event"></a>
+
+<p>Click and drag events happen when the user releases a mouse button.
+They cannot happen earlier, because there is no way to distinguish a
+click from a drag until the button is released.
+</p>
+<p>If you want to take action as soon as a button is pressed, you need to
+handle <em>button-down</em> events.<a name="DOCF11" href="#FOOT11"><sup>11</sup></a>  These occur as soon as a button is
+pressed.  They are represented by lists that look exactly like click
+events (see <a href="Click-Events.html#Click-Events">Click Events</a>), except that the <var>event-type</var> symbol
+name contains the prefix &lsquo;<samp>down-</samp>&rsquo;.  The &lsquo;<samp>down-</samp>&rsquo; prefix follows
+modifier key prefixes such as &lsquo;<samp>C-</samp>&rsquo; and &lsquo;<samp>M-</samp>&rsquo;.
+</p>
+<p>The function <code>read-key-sequence</code> ignores any button-down events
+that don&rsquo;t have command bindings; therefore, the Emacs command loop
+ignores them too.  This means that you need not worry about defining
+button-down events unless you want them to do something.  The usual
+reason to define a button-down event is so that you can track mouse
+motion (by reading motion events) until the button is released.
+See <a href="Motion-Events.html#Motion-Events">Motion Events</a>.
+</p>
+<div class="footnote">
+<hr>
+<h4 class="footnotes-heading">Footnotes</h4>
+
+<h3><a name="FOOT11" href="#DOCF11">(11)</a></h3>
+<p>Button-down is the
+conservative antithesis of drag.</p>
+</div>
+
+
+
+</body>
+</html>

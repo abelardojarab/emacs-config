@@ -1,0 +1,82 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright (C) 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 6.1, http://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rev="made" href="mailto:bug-gnu-emacs@gnu.org">
+<link rel="icon" type="image/png" href="/graphics/gnu-head-mini.png">
+<meta name="ICBM" content="42.256233,-71.006581">
+<meta name="DC.title" content="gnu.org">
+
+<title>Property Lists</title>
+
+<style type="text/css">
+@import url('/software/emacs/manual.css');
+</style>
+</head>
+
+<body lang="en">
+<a name="Property-Lists"></a>
+<div class="header" style="background-color:#DDDDFF">
+<p>
+Previous: <a href="Association-Lists.html#Association-Lists" accesskey="p" rel="prev">Association Lists</a>, Up: <a href="Lists.html#Lists" accesskey="u" rel="up">Lists</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+
+<a name="Property-Lists-1"></a>
+<h3 class="section">5.9 Property Lists</h3>
+<a name="index-property-list"></a>
+<a name="index-plist"></a>
+
+<p>A <em>property list</em> (<em>plist</em> for short) is a list of paired
+elements.  Each of the pairs associates a property name (usually a
+symbol) with a property or value.  Here is an example of a property
+list:
+</p>
+<div class="example">
+<pre class="example">(pine cones numbers (1 2 3) color &quot;blue&quot;)
+</pre></div>
+
+<p>This property list associates <code>pine</code> with <code>cones</code>,
+<code>numbers</code> with <code>(1 2 3)</code>, and <code>color</code> with
+<code>&quot;blue&quot;</code>.  The property names and values can be any Lisp objects,
+but the names are usually symbols (as they are in this example).
+</p>
+<p>Property lists are used in several contexts.  For instance, the
+function <code>put-text-property</code> takes an argument which is a
+property list, specifying text properties and associated values which
+are to be applied to text in a string or buffer.  See <a href="Text-Properties.html#Text-Properties">Text Properties</a>.
+</p>
+<p>Another prominent use of property lists is for storing symbol
+properties.  Every symbol possesses a list of properties, used to
+record miscellaneous information about the symbol; these properties
+are stored in the form of a property list.  See <a href="Symbol-Properties.html#Symbol-Properties">Symbol Properties</a>.
+</p>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top">&bull; <a href="Plists-and-Alists.html#Plists-and-Alists" accesskey="1">Plists and Alists</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Comparison of the advantages of property
+                                  lists and association lists.
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="Plist-Access.html#Plist-Access" accesskey="2">Plist Access</a>:</td><td>&nbsp;&nbsp;</td><td align="left" valign="top">Accessing property lists stored elsewhere.
+</td></tr>
+</table>
+
+
+
+
+</body>
+</html>

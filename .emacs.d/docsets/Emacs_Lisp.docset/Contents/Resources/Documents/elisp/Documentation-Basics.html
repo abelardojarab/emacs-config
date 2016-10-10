@@ -1,0 +1,97 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright (C) 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." -->
+<!-- Created by GNU Texinfo 6.1, http://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rev="made" href="mailto:bug-gnu-emacs@gnu.org">
+<link rel="icon" type="image/png" href="/graphics/gnu-head-mini.png">
+<meta name="ICBM" content="42.256233,-71.006581">
+<meta name="DC.title" content="gnu.org">
+
+<title>Documentation Basics</title>
+
+<style type="text/css">
+@import url('/software/emacs/manual.css');
+</style>
+</head>
+
+<body lang="en">
+<a name="Documentation-Basics"></a>
+<div class="header" style="background-color:#DDDDFF">
+<p>
+Next: <a href="Accessing-Documentation.html#Accessing-Documentation" accesskey="n" rel="next">Accessing Documentation</a>, Up: <a href="Documentation.html#Documentation" accesskey="u" rel="up">Documentation</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+
+<a name="Documentation-Basics-1"></a>
+<h3 class="section">23.1 Documentation Basics</h3>
+<a name="index-documentation-conventions"></a>
+<a name="index-writing-a-documentation-string"></a>
+<a name="index-string_002c-writing-a-doc-string"></a>
+
+<p>A documentation string is written using the Lisp syntax for strings,
+with double-quote characters surrounding the text.  It is, in fact, an
+actual Lisp string.  When the string appears in the proper place in a
+function or variable definition, it serves as the function&rsquo;s or
+variable&rsquo;s documentation.
+</p>
+<a name="index-function_002ddocumentation-property"></a>
+<p>In a function definition (a <code>lambda</code> or <code>defun</code> form), the
+documentation string is specified after the argument list, and is
+normally stored directly in the function object.  See <a href="Function-Documentation.html#Function-Documentation">Function Documentation</a>.  You can also put function documentation in the
+<code>function-documentation</code> property of a function name
+(see <a href="Accessing-Documentation.html#Accessing-Documentation">Accessing Documentation</a>).
+</p>
+<a name="index-variable_002ddocumentation-property"></a>
+<p>In a variable definition (a <code>defvar</code> form), the documentation
+string is specified after the initial value.  See <a href="Defining-Variables.html#Defining-Variables">Defining Variables</a>.  The string is stored in the variable&rsquo;s
+<code>variable-documentation</code> property.
+</p>
+<a name="index-DOC-_0028documentation_0029-file"></a>
+<p>Sometimes, Emacs does not keep documentation strings in memory.
+There are two such circumstances.  Firstly, to save memory, the
+documentation for preloaded functions and variables (including
+primitives) is kept in a file named <samp>DOC</samp>, in the directory
+specified by <code>doc-directory</code> (see <a href="Accessing-Documentation.html#Accessing-Documentation">Accessing Documentation</a>).
+Secondly, when a function or variable is loaded from a byte-compiled
+file, Emacs avoids loading its documentation string (see <a href="Docs-and-Compilation.html#Docs-and-Compilation">Docs and Compilation</a>).  In both cases, Emacs looks up the documentation string
+from the file only when needed, such as when the user calls <kbd>C-h
+f</kbd> (<code>describe-function</code>) for a function.
+</p>
+<p>Documentation strings can contain special <em>key substitution
+sequences</em>, referring to key bindings which are looked up only when
+the user views the documentation.  This allows the help commands to
+display the correct keys even if a user rearranges the default key
+bindings.  See <a href="Keys-in-Documentation.html#Keys-in-Documentation">Keys in Documentation</a>.
+</p>
+<p>In the documentation string of an autoloaded command
+(see <a href="Autoload.html#Autoload">Autoload</a>), these key-substitution sequences have an
+additional special effect: they cause <kbd>C-h f</kbd> on the command to
+trigger autoloading.  (This is needed for correctly setting up the
+hyperlinks in the <samp>*Help*</samp> buffer.)
+</p>
+
+<div class="header" style="background-color:#DDDDFF">
+<p>
+Next: <a href="Accessing-Documentation.html#Accessing-Documentation" accesskey="n" rel="next">Accessing Documentation</a>, Up: <a href="Documentation.html#Documentation" accesskey="u" rel="up">Documentation</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+
+
+
+</body>
+</html>

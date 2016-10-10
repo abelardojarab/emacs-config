@@ -1,0 +1,71 @@
+<html><!-- This is the GNU Emacs Lisp Reference Manual
+corresponding to Emacs version 25.1.
+
+Copyright (C) 1990-1996, 1998-2016 Free Software Foundation, Inc.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.3 or
+any later version published by the Free Software Foundation; with the
+Invariant Sections being "GNU General Public License," with the
+Front-Cover Texts being "A GNU Manual," and with the Back-Cover
+Texts as in (a) below.  A copy of the license is included in the
+section entitled "GNU Free Documentation License."
+
+(a) The FSF's Back-Cover Text is: "You have the freedom to copy and
+modify this GNU manual.  Buying copies from the FSF supports it in
+developing GNU and promoting software freedom." --><!-- Created by GNU Texinfo 6.1, http://www.gnu.org/software/texinfo/ --><head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rev="made" href="mailto:bug-gnu-emacs@gnu.org">
+<link rel="icon" type="image/png" href="/graphics/gnu-head-mini.png">
+<meta name="ICBM" content="42.256233,-71.006581">
+<meta name="DC.title" content="gnu.org">
+
+<title>Marker Insertion Types</title>
+
+<style type="text/css">
+@import url('/software/emacs/manual.css');
+</style>
+</head>
+
+<body lang="en">
+<a name="Marker-Insertion-Types"></a>
+<div class="header" style="background-color:#DDDDFF">
+<p>
+Next: <a href="Moving-Markers.html#Moving-Markers" accesskey="n" rel="next">Moving Markers</a>, Previous: <a href="Information-from-Markers.html#Information-from-Markers" accesskey="p" rel="prev">Information from Markers</a>, Up: <a href="Markers.html#Markers" accesskey="u" rel="up">Markers</a> &nbsp; [<a href="index.html#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="Index.html#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+
+<a name="Marker-Insertion-Types-1"></a>
+<h3 class="section">30.5 Marker Insertion Types</h3>
+
+<a name="index-insertion-type-of-a-marker"></a>
+<p>When you insert text directly at the place where a marker points,
+there are two possible ways to relocate that marker: it can point before
+the inserted text, or point after it.  You can specify which one a given
+marker should do by setting its <em>insertion type</em>.  Note that use of
+<code>insert-before-markers</code> ignores markers’ insertion types, always
+relocating a marker to point after the inserted text.
+</p>
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/func/set%2Dmarker%2Dinsertion%2Dtype"></a><a name="index-set_002dmarker_002dinsertion_002dtype"></a>Function: <strong>set-marker-insertion-type</strong> <em>marker type</em></dt>
+<dd><p>This function sets the insertion type of marker <var>marker</var> to
+<var>type</var>.  If <var>type</var> is <code>t</code>, <var>marker</var> will advance when
+text is inserted at its position.  If <var>type</var> is <code>nil</code>,
+<var>marker</var> does not advance when text is inserted there.
+</p></dd></dl>
+
+<dl>
+<dt><a class="dashAnchor" name="//apple_ref/func/marker%2Dinsertion%2Dtype"></a><a name="index-marker_002dinsertion_002dtype"></a>Function: <strong>marker-insertion-type</strong> <em>marker</em></dt>
+<dd><p>This function reports the current insertion type of <var>marker</var>.
+</p></dd></dl>
+
+<p>All functions that create markers without accepting an argument that
+specifies the insertion type, create them with insertion type
+<code>nil</code> (see <a href="Creating-Markers.html#Creating-Markers">Creating Markers</a>).  Also, the mark has, by
+default, insertion type <code>nil</code>.
+</p>
+
+
+
+
+
+</body></html>
