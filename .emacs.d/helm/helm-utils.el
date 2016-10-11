@@ -212,16 +212,6 @@ In this case last position is added to the register
   :group 'helm-faces)
 
 
-;; CUA workaround
-(defadvice cua-delete-region (around helm-avoid-cua activate)
-  (ignore-errors ad-do-it))
-
-(defadvice copy-region-as-kill (around helm-avoid-cua activate)
-  (if cua-mode
-      (ignore-errors ad-do-it)
-    ad-do-it))
-
-
 ;;; Utils functions
 ;;
 ;;
@@ -276,10 +266,11 @@ Default is `helm-current-buffer'."
   "Goto LINENO opening only outline headline if needed.
 Animation is used unless NOANIM is non--nil."
   (helm-log-run-hook 'helm-goto-line-before-hook)
+  (helm-match-line-cleanup)
   (goto-char (point-min))
   (helm-goto-char (point-at-bol lineno))
   (unless noanim
-    (helm-highlight-current-line nil nil nil nil 'pulse)))
+    (helm-highlight-current-line)))
 
 (defun helm-save-pos-to-register-before-jump ()
   "Save current buffer position to `helm-save-pos-before-jump-register'.
@@ -404,28 +395,30 @@ from its directory."
   "Sort predicate function for helm candidates.
 Args S1 and S2 can be single or \(display . real\) candidates,
 that is sorting is done against real value of candidate."
-  (let* ((pattern (regexp-quote helm-pattern))
-         (reg1  (concat "\\_<" pattern "\\_>"))
-         (reg2  (concat "\\_<" pattern))
+  (let* ((qpattern (regexp-quote helm-pattern))
+         (reg1  (concat "\\_<" qpattern "\\_>"))
+         (reg2  (concat "\\_<" qpattern))
          (reg3  helm-pattern)
-         (split (split-string pattern))
+         (split (split-string helm-pattern))
          (str1  (if (consp s1) (cdr s1) s1))
          (str2  (if (consp s2) (cdr s2) s2))
          (score (lambda (str r1 r2 r3 lst)
-                    (+ (if (string-match (concat "\\`" pattern) str) 1 0)
+                    (+ (if (string-match (concat "\\`" qpattern) str) 1 0)
                        (cond ((string-match r1 str) 5)
-                             ((and (string-match " " pattern)
-                                   (string-match (concat "\\_<" (car lst)) str)
+                             ((and (string-match " " qpattern)
+                                   (string-match
+                                    (concat "\\_<" (regexp-quote (car lst))) str)
                                    (cl-loop for r in (cdr lst)
                                             always (string-match r str))) 4)
-                             ((and (string-match " " pattern)
-                                   (cl-loop for r in lst always (string-match r str))) 3)
+                             ((and (string-match " " qpattern)
+                                   (cl-loop for r in lst
+                                            always (string-match r str))) 3)
                              ((string-match r2 str) 2)
                              ((string-match r3 str) 1)
                              (t 0)))))
          (sc1 (funcall score str1 reg1 reg2 reg3 split))
          (sc2 (funcall score str2 reg1 reg2 reg3 split)))
-    (cond ((or (zerop (string-width pattern))
+    (cond ((or (zerop (string-width qpattern))
                (and (zerop sc1) (zerop sc2)))
            (string-lessp str1 str2))
           ((= sc1 sc2)
@@ -436,10 +429,10 @@ that is sorting is done against real value of candidate."
   "Extract hostname from an incomplete tramp file name.
 Return nil on valid file name remote or not."
   (let* ((str (helm-basename fname))
-         (split (split-string str ":"))
-         (meth (car (member (car split) (mapcar 'car tramp-methods))))) 
-    (when (and meth (<= (length split) 2))
-      (cadr split))))
+         (split (split-string str ":" t))
+         (meth (car (member (car split)
+                            (helm-ff-get-tramp-methods))))) 
+    (when meth (car (last split)))))
 
 (cl-defun helm-file-human-size (size &optional (kbsize helm-default-kbsize))
   "Return a string showing SIZE of a file in human readable form.
@@ -591,7 +584,7 @@ If STRING is non--nil return instead a space separated string."
 (defvar helm-match-line-overlay nil)
 (defvar helm--match-item-overlays nil)
 
-(defun helm-highlight-current-line (&optional start end buf face pulse)
+(defun helm-highlight-current-line (&optional start end buf face)
   "Highlight and underline current position"
   (let* ((start (or start (line-beginning-position)))
          (end (or end (1+ (line-end-position))))
@@ -634,10 +627,7 @@ If STRING is non--nil return instead a space separated string."
                                 helm--match-item-overlays)
                           (overlay-put ov 'face 'helm-match-item)
                           (overlay-put ov 'priority 1)))))))
-    (recenter)
-    (when pulse
-      (sit-for 0.3)
-      (helm-match-line-cleanup))))
+    (recenter)))
 
 (defun helm-match-line-cleanup ()
   (when helm-match-line-overlay
@@ -657,8 +647,12 @@ If STRING is non--nil return instead a space separated string."
              (eq helm-split-window-state 'vertical))
     (set-window-text-height (helm-window) helm-resize-on-pa-text-height)))
 
+(defun helm-match-line-cleanup-pulse ()
+  (run-with-timer 0.3 nil #'helm-match-line-cleanup))
+
 (add-hook 'helm-after-persistent-action-hook 'helm-persistent-autoresize-hook)
 (add-hook 'helm-cleanup-hook 'helm-match-line-cleanup)
+(add-hook 'helm-after-action-hook 'helm-match-line-cleanup-pulse)
 (add-hook 'helm-after-persistent-action-hook 'helm-match-line-update)
 
 ;;; Popup buffer-name or filename in grep/moccur/imenu-all.
@@ -678,15 +672,16 @@ If STRING is non--nil return instead a space separated string."
              (member (assoc-default 'name (helm-get-current-source))
                      helm-sources-using-help-echo-popup))
     (setq helm--show-help-echo-timer
-          (run-with-idle-timer
+          (run-with-timer
            1 nil
            (lambda ()
-             (with-helm-window
-               (helm-aif (get-text-property (point-at-bol) 'help-echo)
-                   (popup-tip (concat " " (abbreviate-file-name it))
-                              :around nil
-                              :point (save-excursion
-                                       (end-of-visual-line) (point))))))))))
+             (save-selected-window
+               (with-helm-window
+                 (helm-aif (get-text-property (point-at-bol) 'help-echo)
+                     (popup-tip (concat " " (abbreviate-file-name it))
+                                :around nil
+                                :point (save-excursion
+                                         (end-of-visual-line) (point)))))))))))
 
 ;;;###autoload
 (define-minor-mode helm-popup-tip-mode

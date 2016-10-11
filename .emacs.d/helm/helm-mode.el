@@ -19,6 +19,7 @@
 
 (require 'cl-lib)
 (require 'helm)
+(require 'helm-lib)
 (require 'helm-files)
 
 
@@ -219,13 +220,13 @@ If COLLECTION is an `obarray', a TEST should be needed. See `obarray'."
                  ;; Also, the history collections generally collect their
                  ;; elements as string, so intern them to call predicate.
                  ((and (symbolp collection) (boundp collection) test)
-                  (let ((predicate `(lambda (elm)
-                                      (condition-case err
-                                          (if (eq (quote ,test) 'commandp)
-                                              (funcall (quote ,test) (intern elm))
-                                              (funcall (quote ,test) elm))
-                                        (wrong-type-argument
-                                         (funcall (quote ,test) (intern elm)))))))
+                  (let ((predicate (lambda (elm)
+                                     (condition-case _err
+                                         (if (eq test 'commandp)
+                                             (funcall test (intern elm))
+                                             (funcall test elm))
+                                       (wrong-type-argument
+                                        (funcall test (intern elm)))))))
                     (all-completions input (symbol-value collection) predicate)))
                  ((and (symbolp collection) (boundp collection))
                   (all-completions input (symbol-value collection)))
@@ -309,6 +310,7 @@ If COLLECTION is an `obarray', a TEST should be needed. See `obarray'."
                             (keymap helm-comp-read-map)
                             (name "Helm Completions")
                             candidates-in-buffer
+                            match-part
                             exec-when-only-one
                             quit-when-no-cand
                             (volatile t)
@@ -403,6 +405,9 @@ Keys description:
   `helm-source-in-buffer' which is much faster.
   Argument VOLATILE have no effect when CANDIDATES-IN-BUFFER is non--nil.
 
+- MATCH-PART: Allow matching only one part of candidate.
+  See match-part documentation in `helm-source'.
+
 Any prefix args passed during `helm-comp-read' invocation will be recorded
 in `helm-current-prefix-arg', otherwise if prefix args were given before
 `helm-comp-read' invocation, the value of `current-prefix-arg' will be used.
@@ -462,6 +467,7 @@ that use `helm-comp-read' See `helm-M-x' for example."
            (src-hist (helm-build-sync-source (format "%s History" name)
                          :candidates history-get-candidates
                          :fuzzy-match fuzzy
+                         :match-part match-part
                          :filtered-candidate-transformer
                          (append '((lambda (candidates sources)
                                      (cl-loop for i in candidates
@@ -479,6 +485,7 @@ that use `helm-comp-read' See `helm-M-x' for example."
                          :action action-fn))
            (src (helm-build-sync-source name
                   :candidates get-candidates
+                  :match-part match-part
                   :filtered-candidate-transformer fc-transformer
                   :requires-pattern requires-pattern
                   :persistent-action persistent-action
@@ -490,6 +497,7 @@ that use `helm-comp-read' See `helm-M-x' for example."
                   :volatile volatile))
            (src-1 (helm-build-in-buffer-source name
                     :data get-candidates
+                    :match-part match-part
                     :filtered-candidate-transformer fc-transformer
                     :requires-pattern requires-pattern
                     :persistent-action persistent-action
@@ -819,6 +827,7 @@ Keys description:
           (and helm-ff-auto-update-initial-value
                (not (minibuffer-window-active-p (minibuffer-window)))))
          helm-full-frame
+         helm-follow-mode-persistent
          (hist (and history (helm-comp-read-get-candidates
                              history nil nil alistp)))
          (minibuffer-completion-confirm must-match)

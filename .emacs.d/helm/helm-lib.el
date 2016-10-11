@@ -104,6 +104,33 @@ When only `add-text-properties' is available APPEND is ignored."
                  symbols)
      ,@body))
 
+;;; Command loop helper
+;;
+(defun helm-this-command ()
+  "Returns the actual command in action.
+Like `this-command' but return the real command,
+and not `exit-minibuffer' or other unwanted functions."
+  (cl-loop with bl = '(helm-maybe-exit-minibuffer
+                       helm-confirm-and-exit-minibuffer
+                       helm-exit-minibuffer
+                       exit-minibuffer)
+           for count from 1 to 50
+           for btf = (backtrace-frame count)
+           for fn = (cl-second btf)
+           if (and
+               ;; In some case we may have in the way an
+               ;; advice compiled resulting in byte-code,
+               ;; ignore it (Issue #691).
+               (symbolp fn)
+               (commandp fn)
+               (not (memq fn bl)))
+           return fn
+           else
+           if (and (eq fn 'call-interactively)
+                   (> (length btf) 2))
+           return (cadr (cdr btf))))
+
+
 ;;; Iterators
 ;;
 (defun helm-iter-list (seq)
@@ -164,12 +191,9 @@ of `cl-return' is possible to exit the loop."
       (let ((clause1 (car clauses)))
         `(let ((,sym ,(car clause1)))
            (helm-aif ,sym
-               ,@(cdr clause1)
+               (progn ,@(cdr clause1))
              (helm-acond ,@(cdr clauses))))))))
 
-(defun helm-current-line-contents ()
-  "Current line string without properties."
-  (buffer-substring-no-properties (point-at-bol) (point-at-eol)))
 
 ;;; Fuzzy matching routines
 ;;
@@ -403,6 +427,35 @@ ARGS is (cand1 cand2 ...) or ((disp1 . real1) (disp2 . real2) ...)
         collect (cons (car arg) (funcall function (cdr arg)))
         else
         collect (funcall function arg)))
+
+(defun helm-append-at-nth (seq elm index)
+  "Append ELM at INDEX in SEQ."
+  (let ((len (length seq)))
+    (cond ((> index len) (setq index len))
+          ((< index 0) (setq index 0)))
+    (if (zerop index)
+        (append elm seq)
+      (cl-loop for i in seq
+               for count from 1 collect i
+               when (= count index)
+               if (listp elm) append elm
+               else collect elm))))
+
+(defun helm-source-by-name (name &optional sources)
+  "Get a Helm source in SOURCES by NAME.
+
+Optional argument SOURCES is a list of Helm sources. The default
+value is computed with `helm-get-sources' which is faster
+than specifying SOURCES because sources are cached."
+  (cl-loop with src-list = (if sources
+                               (cl-loop for src in sources
+                                        collect (if (listp src)
+                                                    src
+                                                    (symbol-value src)))
+                               (helm-get-sources))
+           for source in src-list
+           thereis (and (string= name (assoc-default 'name source)) source)))
+
 
 ;;; Strings processing.
 ;;
@@ -465,6 +518,10 @@ Add spaces at end if needed to reach WIDTH when STR is shorter than WIDTH."
   "Quote whitespace, if some, in string CANDIDATE."
   (replace-regexp-in-string " " "\\\\ " candidate))
 
+(defun helm-current-line-contents ()
+  "Current line string without properties."
+  (buffer-substring-no-properties (point-at-bol) (point-at-eol)))
+
 
 ;;; Symbols routines
 ;;
@@ -492,8 +549,11 @@ Add spaces at end if needed to reach WIDTH when STR is shorter than WIDTH."
 
 (defun helm-describe-face (face)
   "FACE is symbol or string."
-  (cl-letf (((symbol-function 'message) #'ignore))
-    (describe-face (helm-symbolify face))))
+  (let ((faces (helm-marked-candidates)))
+    (cl-letf (((symbol-function 'message) #'ignore))
+      (describe-face (if (cdr faces)
+                         (mapcar 'helm-symbolify faces)
+                         (helm-symbolify face))))))
 
 (defun helm-find-function (func)
   "FUNC is symbol or string."

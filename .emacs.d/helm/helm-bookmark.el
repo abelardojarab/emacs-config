@@ -19,6 +19,7 @@
 (require 'cl-lib)
 (require 'bookmark)
 (require 'helm)
+(require 'helm-lib)
 (require 'helm-help)
 (require 'helm-types)
 (require 'helm-utils)
@@ -477,9 +478,11 @@ than `w3m-browse-url' use it."
     (define-key map (kbd "C-x C-d") 'helm-bookmark-run-browse-project)
     map))
 
-(defclass helm-bookmark-overwrite-inheritor (helm-source) ())
+(defclass helm-bookmark-override-inheritor (helm-source) ())
 
-(defmethod helm--setup-source ((source helm-bookmark-overwrite-inheritor))
+(defmethod helm--setup-source ((source helm-bookmark-override-inheritor))
+  ;; Ensure `helm-source-in-buffer' method is called.
+  (call-next-method)
   (setf (slot-value source 'action)
         (helm-append-at-nth
          (remove '("Jump to BM other window" . helm-bookmark-jump-other-window)
@@ -488,7 +491,7 @@ than `w3m-browse-url' use it."
   (setf (slot-value source 'keymap) helm-bookmark-find-files-map))
 
 (defclass helm-bookmark-find-files-class (helm-source-filtered-bookmarks
-                                          helm-bookmark-overwrite-inheritor)
+                                          helm-bookmark-override-inheritor)
   ())
 
 (defvar helm-source-bookmark-helm-find-files
@@ -516,13 +519,28 @@ than `w3m-browse-url' use it."
 ;;; Addressbook.
 ;;
 ;;
+(defun helm-bookmark-addressbook-search-fn (pattern)
+  (helm-awhile (next-single-property-change (point) 'email)
+    (goto-char it)
+    (end-of-line)
+    (when (string-match pattern
+                        (get-text-property
+                         0 'email (buffer-substring
+                                   (point-at-bol) (point-at-eol))))
+      (cl-return
+       (+ (point) (match-end 0))))))
+
 (defclass helm-bookmark-addressbook-class (helm-source-in-buffer)
   ((init :initform (lambda ()
                      (require 'addressbook-bookmark nil t)
                      (bookmark-maybe-load-default-file)
                      (helm-init-candidates-in-buffer
                          'global
-                       (helm-bookmark-addressbook-setup-alist))))
+                       (cl-loop for b in (helm-bookmark-addressbook-setup-alist)
+                                collect (propertize
+                                         b 'email (bookmark-prop-get
+                                                   b 'email))))))
+   (search :initform 'helm-bookmark-addressbook-search-fn)
    (persistent-action :initform
                       (lambda (candidate)
                         (let ((bmk (helm-bookmark-get-bookmark-from-name
@@ -540,13 +558,11 @@ than `w3m-browse-url' use it."
          (bookmark      (helm-bookmark-get-bookmark-from-name
                          (car contacts)))
          (append   (message-buffers)))
-    (addressbook-set-mail-buffer-1 bookmark append)
+    (addressbook-set-mail-buffer-1 bookmark append cc)
     (helm-aif (cdr contacts)
-        (progn
-          (when cc (addressbook-set-mail-buffer-1 (car it) nil cc))
-          (cl-loop for bmk in (cdr it) do
-                   (addressbook-set-mail-buffer-1
-                    (helm-bookmark-get-bookmark-from-name bmk) 'append cc))))))
+        (cl-loop for bmk in it do
+                 (addressbook-set-mail-buffer-1
+                  (helm-bookmark-get-bookmark-from-name bmk) 'append cc)))))
 
 (defun helm-bookmark-addressbook-setup-alist ()
   "Specialized filter function for addressbook bookmarks."
