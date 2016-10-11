@@ -1,21 +1,83 @@
-# helm-git-grep.el  [![licence][gplv3-badge]][gplv3-link] [![travis badge][travis-badge]][travis-link] [![melpa badge][melpa-badge]][melpa-link] [![melpa stable badge][melpa-stable-badge]][melpa-stable-link]
+# helm-git-grep.el
+
+[![License GPL 3][gplv3-badge]][LICENCE]
+[![travis badge][travis-badge]][travis-link]
+[![coveralls badge][coveralls-badge]][coveralls-link]
+[![melpa badge][melpa-badge]][melpa-link]
+[![melpa stable badge][melpa-stable-badge]][melpa-stable-link]
+
+[gplv3-badge]:https://img.shields.io/github/license/yasuyk/helm-git-grep.svg
+[LICENCE]: https://github.com/yasuyk/helm-git-grep/blob/master/LICENSE
+[travis-badge]: https://travis-ci.org/yasuyk/helm-git-grep.svg
+[travis-link]: https://travis-ci.org/yasuyk/helm-git-grep
+[coveralls-badge]: https://coveralls.io/repos/github/yasuyk/helm-git-grep/badge.svg?branch=master
+[coveralls-link]:https://coveralls.io/github/yasuyk/helm-git-grep?branch=master
+[melpa-link]: http://melpa.org/#/helm-git-grep
+[melpa-stable-link]: http://stable.melpa.org/#/helm-git-grep
+[melpa-badge]: http://melpa.org/packages/helm-git-grep-badge.svg
+[melpa-stable-badge]: http://stable.melpa.org/packages/helm-git-grep-badge.svg
 
 [helm] for [git-grep(1)][git-grep], an incremental [git-grep(1)][git-grep].
 
 ![helm-git-grep](https://cloud.githubusercontent.com/assets/833383/10489416/0d7e15d6-726b-11e5-9d3e-3f7fc7ee1221.gif)
 
+# Table of Contents
 
+  * [helm\-git\-grep\.el](#helm-git-grepel)
+  * [Table of Contents](#table-of-contents)
+    * [Features](#features)
+    * [Minimum requirements](#minimum-requirements)
+    * [Optional requirements](#optional-requirements)
+    * [Installation](#installation)
+    * [Configuration](#configuration)
+    * [Basic usage](#basic-usage)
+        * [<kbd>M\-x</kbd> helm\-git\-grep](#m-x-helm-git-grep)
+        * [<kbd>M\-x</kbd> helm\-git\-grep\-at\-point](#m-x-helm-git-grep-at-point)
+        * [Actions](#actions)
+    * [Advanced usage](#advanced-usage)
+        * [Keymap helm\-git\-grep\-map](#keymap-helm-git-grep-map)
+        * [<kbd>C\-c i</kbd> helm\-git\-grep\-toggle\-ignore\-case](#c-c-i-helm-git-grep-toggle-ignore-case)
+    * [Customization](#customization)
+      * [Variables](#variables)
+        * [helm\-git\-grep\-sources](#helm-git-grep-sources)
+        * [helm\-git\-grep\-candidate\-number\-limit](#helm-git-grep-candidate-number-limit)
+        * [helm\-git\-grep\-max\-length\-history](#helm-git-grep-max-length-history)
+        * [helm\-git\-grep\-use\-ioccur\-style\-keys](#helm-git-grep-use-ioccur-style-keys)
+        * [helm\-git\-grep\-ignore\-case](#helm-git-grep-ignore-case)
+        * [helm\-git\-grep\-at\-point\-deactivate\-mark](#helm-git-grep-at-point-deactivate-mark)
+        * [helm\-git\-grep\-base\-directory](#helm-git-grep-base-directory)
+        * [helm\-git\-grep\-pathspecs](#helm-git-grep-pathspecs)
+      * [Faces](#faces)
+        * [helm\-git\-grep\-match](#helm-git-grep-match)
+        * [helm\-git\-grep\-file](#helm-git-grep-file)
+        * [helm\-git\-grep\-line](#helm-git-grep-line)
+
+Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc.go)
 ## Features
 
 - Grep submodules too, if submodules exists.
-- Open in other window, other frame, or [`elscreen`](https://github.com/shosti/elscreen).
+- Open in other window, other frame, or [`elscreen`].
 - Toggle ignore case option when incremental greping.
-- Save grep result in grep buffer which is writable with [`wgrep`](https://github.com/mhayashi1120/Emacs-wgrep).
+- Save grep result in grep buffer which is writable with [`wgrep`].
 
-## Requirements
+## Minimum requirements
 
 - [helm]
 - [git]
+
+## Optional requirements
+
+- [wgrep]
+
+    wgrep enable a grep buffer editable and apply those changes to the file buffer.
+
+- [elscreen]
+
+    You can open a file in elscleen.
+
+- [git] >= 1.9.0
+
+    You must have the git version 1.9.0 or above to use [pathspec] feature.
 
 ## Installation
 
@@ -95,17 +157,68 @@ A buffer name is `*helm git grep*` without ignore case option.
 
 ### Variables
 
-#### `helm-git-grep-candidate-number-limit`(Default: `300`)
+#### `helm-git-grep-sources`
+
+**(Default: `'(helm-source-git-grep helm-source-git-submodule-grep)`)**
+
+Default helm sources for `helm-git-grep`.
+
+If you don't want to search in submodules, Set only `helm-source-git-grep` like this:
+
+    (setq helm-git-grep-sources '(helm-source-git-grep))
+
+#### `helm-git-grep-candidate-number-limit`
+
+**(Default: `300`)**
 
 Limit candidate number `helm-git-grep`.
 
-#### `helm-git-grep-max-length-history`(Default: `100`)
+#### `helm-git-grep-max-length-history`
+
+**(Default: `100`)**
 
 Max number of elements to save in `helm-git-grep-history`.
 
-#### `helm-git-grep-use-ioccur-style-keys`(Default: `t`)
+#### `helm-git-grep-use-ioccur-style-keys`
+
+**(Default: `t`)**
 
 Use Arrow keys to jump to occurrences.
+
+#### `helm-git-grep-ignore-case`
+
+**(Default: `t`)**
+
+Ignore case when matching.
+
+#### `helm-git-grep-at-point-deactivate-mark`
+
+**(Default: `nil`)**
+
+Deactivate the mark when `helm-git-grep-at-point` is invoked.
+
+#### `helm-git-grep-base-directory`
+
+**(Default: `'root`)**
+
+Base directory for search by git-grep(1).
+
+Possible value are:
+
+- root: git root directory
+- current: current directory (default directory of current buffer)
+
+#### `helm-git-grep-pathspecs`
+
+**(Default: `nil`)**
+
+Pattern used to limit paths in git-grep(1) commands.
+
+Each pathspec have not to be quoted by singe quotation like executing git command in inferior shell.  Because `helm-git-grep` run git command by `start-process`, and `start-process` is not executed in inferior shell. So, if pathspec is quoted by singe quotation, pathspec can't work in git-grep(1) by `helm-git-grep`.
+
+For more information about pathspec, See [pathspec] in Git gitglossary Documentation.
+
+If there is something wrong about pathspec configuration, you can check limit paths by pathspec using `helm-git-grep-ls-files-limited-by-pathspec`.
 
 ### Faces
 
@@ -121,18 +234,9 @@ Face used to highlight git-grep(1) results filenames.
 
 Face used to highlight git-grep(1) number lines.
 
-## Note
-
-I'm poor at English. Please point out or correct errors in this document, if any.
-
 [helm]:https://github.com/emacs-helm/helm
 [git]:http://git-scm.com/
 [git-grep]:http://git-scm.com/docs/git-grep
-[travis-badge]: https://travis-ci.org/yasuyk/helm-git-grep.svg
-[travis-link]: https://travis-ci.org/yasuyk/helm-git-grep
-[melpa-link]: http://melpa.org/#/helm-git-grep
-[melpa-stable-link]: http://stable.melpa.org/#/helm-git-grep
-[melpa-badge]: http://melpa.org/packages/helm-git-grep-badge.svg
-[melpa-stable-badge]: http://stable.melpa.org/packages/helm-git-grep-badge.svg
-[gplv3-badge]:http://img.shields.io/badge/license-GPLv3-blue.svg
-[gplv3-link]:https://www.gnu.org/copyleft/gpl.html
+[elscreen]:https://github.com/shosti/elscreen
+[wgrep]:https://github.com/mhayashi1120/Emacs-wgrep
+[pathspec]:https://git-scm.com/docs/gitglossary#def_pathspec

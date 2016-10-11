@@ -1,29 +1,62 @@
+
 EMACS ?= emacs
 CASK ?= cask
+SRC ?= helm-git-grep.el
+FIXTURE_GIT_VERSION ?= v1.0.0
+FIXTURE_GIT_WORK_DIR ?= test/fixture/git
+TEST_CHECKDOC_EL ?=  test/test-checkdoc.el
+LOADPATH = -L .
+ELPA_DIR = $(shell EMACS=$(EMACS) $(CASK) package-directory)
 
-test: test-compile unit-tests
 
-unit-tests: elpa
+.PHONY : test
+test: test-checkdoc unit-tests
+
+.PHONY : unit-tests
+# `clean-elc` task needs to remove byte-compiled files to collect coverage by undercover.el.
+unit-tests: clean-elc elpa fixture
+	@echo "-- Running unit-tests --"
 	${CASK} exec ert-runner
 
-elpa:
-	mkdir -p elpa
-	${CASK} install 2> elpa/install.log
-
+.PHONY : clean-elpa
 clean-elpa:
-	rm -rf elpa
+	rm -rf .cask
 
+.PHONY : clean-elc
 clean-elc:
-	rm -f *.elc test/*.elc
+	cask clean-elc
 
-clean: clean-elpa clean-elc
+.PHONY : clean
+clean: clean-elpa clean-elc clean-fixture
 
+.PHONY : print-deps
 print-deps:
 	${EMACS} --version
 	@echo CASK=${CASK}
 
-test-compile: elpa
-	$(CASK) exec $(EMACS) -batch -Q -L . -eval "(progn (setq byte-compile-error-on-warn t) (batch-byte-compile))" helm-git-grep.el
+.PHONY : test-checkdoc
+test-checkdoc: elpa
+	@echo "-- test ckeckdoc --"
+	$(CASK) exec $(EMACS) -batch -Q $(LOADPATH) -l $(TEST_CHECKDOC_EL)
 
+.PHONY : travis-ci
 travis-ci: print-deps test
+
+.PHONY : elpa
+elpa: $(ELPA_DIR)
+
+$(ELPA_DIR): Cask
+	$(CASK) install
+	touch $@
+
+.PHONY : fixture
+fixture: $(FIXTURE_GIT_WORK_DIR)
+
+$(FIXTURE_GIT_WORK_DIR):
+	@echo "--  clone git repository for test fixture --"
+	git clone --depth 1 -b $(FIXTURE_GIT_VERSION) https://github.com/git/git.git $@
+
+.PHONY : clean-fixture
+clean-fixture:
+	rm -rf $(FIXTURE_GIT_WORK_DIR)
 

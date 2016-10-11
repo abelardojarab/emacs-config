@@ -75,10 +75,6 @@
   (file-name-directory (directory-file-name flycheck-test-directory))
   "The source directory.")
 
-(defconst flycheck-test-package-directory
-  (expand-file-name (format ".cask/%s/elpa/" emacs-version)
-                    flycheck-test-source-directory))
-
 
 ;;; Customization
 (ert-deftest flycheck-checkers/there-are-registered-checkers ()
@@ -822,6 +818,13 @@
            (flycheck-executable-find (lambda (e) (setq was-called t))))
       (should (flycheck-may-use-checker 'emacs-lisp))
       (should was-called))))
+
+(ert-deftest flycheck-may-enable-checker/emacs-lisp ()
+  :tags '(checker-api)
+  (flycheck-ert-with-resource-buffer "language/emacs-lisp/warnings.el"
+    (emacs-lisp-mode)
+    (should (flycheck-may-enable-checker 'emacs-lisp))
+    (should (equal '(emacs-lisp) flycheck-enabled-checkers))))
 
 
 ;;; Generic syntax checkers
@@ -3318,17 +3321,16 @@ Why not:
   (let ((flycheck-disabled-checkers '(javascript-jshint)))
     (flycheck-ert-should-syntax-check
      "language/javascript/syntax-error.js" flycheck-test-javascript-modes
-     '(3 26 error "Parsing error: Unexpected token )" :checker javascript-eslint))))
+     '(3 25 error "Parsing error: Unexpected token )" :checker javascript-eslint))))
 
 (flycheck-ert-def-checker-test javascript-eslint javascript warning
   :tags '(checkstyle-xml)
-  (let ((flycheck-eslintrc "eslint.json")
-        (flycheck-disabled-checkers '(javascript-jshint javascript-jscs)))
+  (let ((flycheck-disabled-checkers '(javascript-jshint javascript-jscs)))
     (flycheck-ert-should-syntax-check
      "language/javascript/warnings.js" flycheck-test-javascript-modes
-     '(3 2 warning "Use the function form of \"use strict\"." :id "strict"
+     '(3 2 warning "Use the function form of 'use strict'." :id "strict"
          :checker javascript-eslint)
-     '(4 9 warning "\"foo\" is defined but never used" :id "no-unused-vars"
+     '(4 9 warning "'foo' is defined but never used." :id "no-unused-vars"
          :checker javascript-eslint))))
 
 (flycheck-ert-def-checker-test javascript-gjslint javascript nil
@@ -3843,13 +3845,11 @@ Why not:
      "language/rust/src/syntax-error.rs" 'rust-mode
      '(4 5 error "unresolved name `bla`" :checker rust :id "E0425"))))
 
-(flycheck-ert-def-checker-test rust rust multiline-error
+(flycheck-ert-def-checker-test rust rust type-error
   (let ((flycheck-disabled-checkers '(rust-cargo)))
     (flycheck-ert-should-syntax-check
      "language/rust/src/multiline-error.rs" 'rust-mode
-     '(7 9 error "mismatched types (expected u8, found i8)" :checker rust :id "E0308")
-     '(7 9 info "expected type `u8`" :checker rust :id "E0308")
-     '(7 9 info "found type `i8`" :checker rust :id "E0308"))))
+     '(7 9 error "mismatched types (expected u8, found i8)" :checker rust :id "E0308"))))
 
 (flycheck-ert-def-checker-test rust rust warning
   (let ((flycheck-disabled-checkers '(rust-cargo)))
@@ -3871,6 +3871,12 @@ Why not:
     (flycheck-ert-should-syntax-check
      "language/rust/src/importing.rs" 'rust-mode
      '(1 5 error "unresolved import `super::imported`. There are too many initial `super`s." :checker rust :id "E0432"))))
+
+(flycheck-ert-def-checker-test rust rust macro-error
+  (let ((flycheck-disabled-checkers '(rust-cargo)))
+    (flycheck-ert-should-syntax-check
+     "language/rust/src/macro-error.rs" 'rust-mode
+     '(2 3 info "invalid reference to argument `0` (no arguments given)" :checker rust))))
 
 (flycheck-ert-def-checker-test sass sass nil
   (flycheck-ert-should-syntax-check
@@ -3901,18 +3907,32 @@ Why not:
      '(5 9 warning "Redundant braces after class definition"
          :checker scala-scalastyle))))
 
+(defvar geiser-impl--implementation)
+
+(defun flycheck/chicken-mode ()
+  "Enable Scheme and Geiser mode for Chicken scheme."
+  (interactive)
+  (scheme-mode)
+  (setq-local geiser-impl--implementation 'chicken)
+  (geiser-mode))
+
 (flycheck-ert-def-checker-test scheme-chicken scheme nil
-  (let ((setup-geiser
-         (lambda ()
-           (setq-local geiser-scheme-implementation 'chicken)
-           (geiser-mode))))
-    (add-hook 'scheme-mode-hook setup-geiser)
-    (unwind-protect
-        (flycheck-ert-should-syntax-check
-         "language/chicken.scm" 'geiser-mode
-         '(2 nil warning "in procedure call to `g1', expected a value of type `(procedure (* *) *)' but was given a value of type `number'"
-             :checker scheme-chicken))
-      (remove-hook 'scheme-mode-hook setup-geiser))))
+  (flycheck-ert-should-syntax-check
+   "language/chicken/error.scm" 'flycheck/chicken-mode
+   '(2 nil warning "in procedure call to `g1', expected a value of type `(procedure (* *) *)' but was given a value of type `number'"
+       :checker scheme-chicken)))
+
+(flycheck-ert-def-checker-test scheme-chicken scheme syntax-error
+  (flycheck-ert-should-syntax-check
+   "language/chicken/syntax-error.scm" 'flycheck/chicken-mode
+   '(1 nil error "not enough arguments\n\n\t(define)\n\n\tExpansion history:\n\n\t<syntax>\t  (##core#begin (define))\n\t<syntax>\t  (define)\t<--"
+       :checker scheme-chicken)))
+
+(flycheck-ert-def-checker-test scheme-chicken scheme syntax-read-error
+  (flycheck-ert-should-syntax-check
+   "language/chicken/syntax-read-error.scm" 'flycheck/chicken-mode
+   '(1 nil error "invalid sharp-sign read syntax: #\\n"
+       :checker scheme-chicken)))
 
 (flycheck-ert-def-checker-test scss-lint scss nil
   (let ((flycheck-scss-lintrc "scss-lint.yml"))

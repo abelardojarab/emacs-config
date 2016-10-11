@@ -1,0 +1,71 @@
+Magit v2.8.1 Release Notes (draft)
+==================================
+
+Changes since v2.8.0
+--------------------
+
+* The new option `magit-branch-adjust-remote-upstream-alist' can be
+  used to configure what branch to use as upstream when branching a
+  remote branch.  Without setting this option the upstream ends up
+  being the same branch as the one referred to by the push-remote.
+
+* The command `magit-branch-spinoff' learned to remove only a subset
+  of commits from the previously current branch, instead of resetting
+  it to its upstream, when the region selects commits reachable from
+  HEAD.
+
+* The new option `magit-diff-highlight-hunk-region-using-face' and
+  `magit-diff-unmarked-lines-keep-foreground' (which was previously
+  defined as an undocumented variable) allow tuning the appearance
+  of the hunk-internal region.
+
+  The new function `magit-diff-highlight-hunk-region-using-face',
+  provides a new style; it makes the hunk-internal region bold (or
+  italic).  I recommend you customize the above option to use this
+  instead of one of the functions mentioned below.
+
+  The new functions `magit-diff-highlight-hunk-region-using-overlay'
+  and `magit-diff-highlight-hunk-region-using-overlay' draw one-pixel
+  lines before and after the hunk-internal region.  Both of these
+  functions have glitches and due to limitations of Emacs' display
+  engine it is not possible to fix those.  #2758
+
+* Added command `magit-find-git-config-file' and variants, to make it
+  easier to open a file located in the git directory, when ".git" is
+  a regular file.
+
+* The environment variable `INSIDE_EMACS' is now set when calling git.
+
+* The `--gpg-sign=' option is now available from the revert popup
+  also.
+
+* The `--sort=' option is now available from the show-refs popup.
+  (Use "C-u y" to show the popup instead of invoking its default
+  action as "y" does.)
+
+Fixes since v2.8.0
+------------------
+
+* Command `magit-list-repositories' failed on empty Git repositories.
+
+* The Git variable `pull.rebase' was ignored when determining whether
+  the current branch is being rebased onto its upstream in order to
+  display that information in the status buffer.
+
+* When `--force-with-lease' was added to the `magit-push-popup',
+  `--force' was removed, but sometimes the former just isn't enough.
+
+* On 32bit systems `magit-format-log-margin' failed because it tried
+  to truncate a time float that was to large for that.  #2765
+
+* On Emacs v25.1 the hunk-internal region flashed briefly on
+  mouse-down-1 events and the delimiting horizontal lines could end
+  up having the height of a regular line instead of just a single
+  pixel.  #2758
+
+* The caching mechanism that was supposed to ensure that sections of
+  unpulled and unpushed remain collapsed even when they disappear for
+  a while was broken.
+
+Authors
+-------

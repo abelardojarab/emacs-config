@@ -80,6 +80,9 @@
             '(progn (info-initialize)
                     (add-to-list 'Info-directory-list (expand-file-name "magit/Documentation" user-emacs-directory))))
 
+          ;; https://github.com/syl20bnr/spacemacs/issues/7225
+          (setq with-editor-file-name-history-exclude 1)
+
           ;; Enable line highlight
           (add-hook 'magit-mode-hook #'hl-line-mode)
 

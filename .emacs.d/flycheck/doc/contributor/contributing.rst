@@ -1,3 +1,5 @@
+.. _flycheck-contributors-guide:
+
 =====================
  Contributor’s Guide
 =====================
@@ -18,7 +20,7 @@ Conduct <flycheck-conduct>`.
 
 .. _issue tracker: https://github.com/flycheck/flycheck/issues
 .. _Gitter chatroom: https://gitter.im/flycheck/flycheck
-.. _need your help with: https://github.com/flycheck/flycheck/issues?q=is%3Aopen+is%3Aissue+no%3Aassignee
+.. _need your help with: https://github.com/flycheck/flycheck/issues?q=is%3Aissue+is%3Aopen+label%3A%22needs+help%22
 .. _beginner-friendly tasks: https://github.com/flycheck/flycheck/labels/beginner%20friendly
 
 .. _flycheck-bug-reports:
@@ -49,7 +51,7 @@ than too little. Here’s a list of facts that are important:
 
 .. _search existing issues: https://github.com/flycheck/flycheck/issues?q=is%3Aissue
 .. _issue form: https://github.com/flycheck/flycheck/issues/new
-.. _reproduce the issue in emacs -Q: http://www.lunaryorn.com/2015/11/29/reproduce-bugs-in-emacs-Q.html
+.. _reproduce the issue in emacs -Q: http://www.lunaryorn.com/posts/reproduce-bugs-in-emacs-Q.html
 
 .. _flycheck-windows-issues:
 
@@ -113,8 +115,8 @@ Flycheck. Github provides great documentation about `Pull Requests`_.
 
 Please make your pull requests against the ``master`` branch.
 
-Use ``make specs test`` to test your pull request locally. When making changes
-to syntax checkers of a specific language, it’s also a good idea to run
+Use ``make check specs unit`` to test your pull request locally. When making
+changes to syntax checkers of a specific language, it’s also a good idea to run
 :samp:`make LANGUAGE={language} integ` and check whether the tests for the
 particular language still work.  A successful ``make integ`` is by no means
 mandatory for pull requests, though, we will test your changes, too.
@@ -137,6 +139,14 @@ Feel free to mention individual developers (e.g. ``@lunaryorn``) to request a
 review from a specific person, or ``@flycheck/maintainers`` if you have general
 questions or if your pull request was waiting for review too long.
 
+.. important::
+
+   We have a comprehensive :ref:`flycheck-style-guide` that explains what
+   features we will accept, how our code should look likewise, what tests we
+   require, how commit messages should look like, and so on.
+
+   Take a look at it to see what we look for in a code review.
+
 Additionally all pull requests go through automated tests on `Travis CI`_ which
 check code style, run unit tests, etc.
 
@@ -146,34 +156,6 @@ merged.
 
 .. _Travis CI: https://travis-ci.org/flycheck/flycheck/pull_requests
 
-Commit guidelines
------------------
-
-The art of writing good commit messages is a wide subject. This model commit
-message illustrates our style::
-
-   Fix a foo bug
-
-   The first line is the summary, 50 characters or less.  Write in the
-   imperative and in present tense: “Fix bug”, not “fixed bug” or “fixes
-   bug”.
-
-   After the summary more paragraphs with detailed explanations may follow,
-   wrapped at 72 characters.  Separate multiple paragraphs by blank lines.
-
-   You may use simple formatting like *emphasis* or _underline_, but keep
-   it to a minimum.  Commit messages are not in Markdown :)
-
-   Commit messages may reference issues by number, like this: See GH-42.
-   Please use `GH-` to prefix issue numbers.  You may also close issues
-   like this: Fixes GH-42 and closes GH-42.
-
-`Git Commit`_ and Magit_ provide Emacs mode for Git commit messages, which helps
-you to comply to these guidelines.
-
-.. _Git Commit: https://github.com/magit/magit/
-.. _Magit: https://github.com/magit/magit/
-
 Writing documentation
 =====================
 
@@ -182,7 +164,7 @@ reStructuredText_ and built with Sphinx_.  The source of the manual resides in
 the ``doc/`` directory.
 
 You need Python 3.4 or newer to install Sphinx_ for Flycheck’s documentation.
-On OS X it is recommended that you use Homebrew_ to install the latest Python
+On macOS it is recommended that you use Homebrew_ to install the latest Python
 version with ``brew install python3``.  On Linux you should be able to obtain
 Python 3.4 from the package manager of your distribution.
 

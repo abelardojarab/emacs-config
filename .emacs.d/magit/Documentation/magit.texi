@@ -2103,7 +2103,11 @@ While bisecting, insert section logging bisect progress.
 @defun magit-insert-untracked-files
 
 Maybe insert a list or tree of untracked files.
-Do so depending on the value of @code{status.showUntrackedFiles}.
+
+Do so depending on the value of @code{status.showUntrackedFiles}.  Note
+that even if the value is @code{all}, Magit still initially only shows
+directories.  But the directory sections can then be expanded using
+@code{TAB}.
 @end defun
 
 @defun magit-insert-unstaged-changes
@@ -2988,18 +2992,25 @@ This command moves forward in current buffer's history.
 @cindex magit-diff-visit-file
 @item @kbd{RET} @tie{}@tie{}@tie{}@tie{}(@code{magit-diff-visit-file})
 
-From a diff, visit the corresponding file at the appropriate
-position.
-
-When the file is already being displayed in another window of the
-same frame, then just select that window and adjust point.  With a
-prefix argument also display in another window.
+From a diff, visit the corresponding file at the appropriate position.
 
 If the diff shows changes in the worktree, the index, or @code{HEAD}, then
-visit the actual file.  Otherwise when the diff is about an older
-commit, then visit the respective blob using @code{magit-find-file}.  Also
-see @code{magit-diff-visit-file-worktree}, which, as the name suggests,
-always visits the actual file.
+visit the actual file.  Otherwise, when the diff is about an older
+commit or a range, then visit the appropriate blob.
+
+If point is on a removed line, then visit the blob for the first
+parent of the commit which removed that line, i.e. the last
+commit where that line still existed.  Otherwise visit the blob
+for the commit whose changes are being shown.
+
+When the diff is about a range of commits, then, for the time
+being, the point this function jumps to often is only an
+approximation.
+
+When the file or blob to be displayed is already being displayed in
+another window of the same frame, then just select that window and
+adjust point.  Otherwise, or with a prefix argument, display the
+buffer in another window.
 
 @kindex C-<return>
 @cindex magit-diff-visit-file-worktree
@@ -3093,6 +3104,40 @@ Otherwise, highlight neither.
 @defopt magit-diff-hide-trailing-cr-characters
 
 Whether to hide ^M characters at the end of a line in diffs.
+@end defopt
+
+@defopt magit-diff-highlight-hunk-region-functions
+
+This option specifies the functions used to highlight the
+hunk-internal region.
+
+@code{magit-diff-highlight-hunk-region-dim-outside} overlays the outside of
+the hunk internal selection with a face that causes the added and
+removed lines to have the same background color as context lines.
+This function should not be removed from the value of this option.
+
+@code{magit-diff-highlight-hunk-region-using-overlays} and
+@code{magit-diff-highlight-hunk-region-using-underline} emphasize the
+region by placing delimiting horizonal lines before and after it.
+Both of these functions have glitches which cannot be fixed due to
+limitations of Emacs' display engine.  For more information see
+@uref{https://github.com/magit/magit/issues/2758} ff.
+
+Instead of, or in addition to, using delimiting horizontal lines,
+to emphasize the boundaries, you may which to emphasize the text
+itself, using @code{magit-diff-highlight-hunk-region-using-face}.
+
+In terminal frames it's not possible to draw lines as the overlay
+and underline variants normally do, so there they fall back to
+calling the face function instead.
+@end defopt
+
+@defopt magit-diff-unmarked-lines-keep-foreground
+
+This option controls whether added and removed lines outside the
+hunk-internal region only lose their distinct background color or
+also the foreground color.  Whether the outside of the region is
+dimmed at all depends on @code{magit-diff-highlight-hunk-region-functions}.
 @end defopt
 
 @node Revision buffer
@@ -4544,6 +4589,17 @@ branch will be used as the starting point as usual, but the upstream
 of the starting-point may be used as the upstream of the new branch,
 instead of the starting-point itself.
 
+If optional FROM is non-nil, then the source branch is reset to
+that commit, instead of to the last commit it shares with its
+upstream.  Interactively, FROM is non-nil, when the region
+selects some commits, and among those commits, FROM it is the
+commit that is the fewest commits ahead of the source branch.
+
+The commit at the other end of the selection actually does not
+matter, all commits between FROM and @code{HEAD} are moved to the new
+branch.  If FROM is not reachable from @code{HEAD} or is reachable from the
+source branch's upstream, then an error is raised.
+
 @kindex b x
 @cindex magit-branch-reset
 @item @kbd{b x} @tie{}@tie{}@tie{}@tie{}(@code{magit-branch-reset})
@@ -4627,6 +4683,55 @@ feature --upstream--> master --upstream--> origin/master
 Which you prefer is a matter of personal preference.  If you do
 prefer the former, then you should add branches such as @code{master},
 @code{next}, and @code{maint} to the value of this options.
+@end defopt
+
+@defopt magit-branch-adjust-remote-upstream-alist
+
+The value of this option is an alist of branches to be used as
+the upstream when branching a remote branch.
+
+When creating a local branch from an ephemeral branch located on a
+remote, e.g. a feature or hotfix branch, then that remote branch
+should usually not be used as the upstream branch, since the
+push-remote already allows accessing it and having both the upstream
+and the push-remote reference the same related branch would be
+wasteful.  Instead a branch like "maint" or "master" should be used
+as the upstream.
+
+This option allows specifing the branch that should be used as the
+upstream when branching certain remote branches.  The value is an
+alist of the form @code{((UPSTREAM . RULE)...)}.  The first matching
+element is used, the following elements are ignored.
+
+UPSTREAM is the branch to be used as the upstream for branches
+specified by RULE.  It can be a local or a remote branch.
+
+RULE can either be a regular expression, matching branches whose
+upstream should be the one specified by UPSTREAM.  Or it can be a
+list of the only branches that should @strong{not} use UPSTREAM; all other
+branches will.  Matching is done after stripping the remote part of
+the name of the branch that is being branched from.
+
+If you use a finite set of non-ephemeral branches across all your
+repositories, then you might use something like:
+
+@lisp
+(("origin/master" "master" "next" "maint"))
+@end lisp
+
+Or if the names of all your ephemeral branches contain a slash,
+at least in some repositories, then a good value could be:
+
+@lisp
+(("origin/master" . "/"))
+@end lisp
+
+Of course you can also fine-tune:
+
+@lisp
+(("origin/maint" . "\\`hotfix/")
+ ("origin/master" . "\\`feature/"))
+@end lisp
 @end defopt
 
 @cindex magit-branch-orphan
@@ -5820,9 +5925,9 @@ Try to preserve the stash index.  If that fails because there are
 staged changes, apply without preserving the stash index and forgo
 removing the stash.
 
-@kindex z d
+@kindex z k
 @cindex magit-stash-drop
-@item @kbd{z d} @tie{}@tie{}@tie{}@tie{}(@code{magit-stash-drop})
+@item @kbd{z k} @tie{}@tie{}@tie{}@tie{}(@code{magit-stash-drop})
 
 Remove a stash from the stash list.  When the region is active, offer
 to drop all contained stashes.

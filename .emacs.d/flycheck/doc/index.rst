@@ -38,7 +38,7 @@ run ``M-x eval-buffer``:
 
    (require 'package)
    (add-to-list 'package-archives
-                '("melpa" . "http://stable.melpa.org/packages/") t)
+                '("MELPA Stable" . "http://stable.melpa.org/packages/") t)
    (package-initialize)
    (package-refresh-contents)
 
@@ -51,6 +51,8 @@ For a permanent installation of Flycheck follow the :ref:`Installation
 features go through :ref:`Quickstart <flycheck-quickstart>` guide.
 
 .. _`known windows issues`: https://github.com/flycheck/flycheck/labels/B-Windows%20only
+
+.. _flycheck-user-guide:
 
 The User Guide
 ==============
@@ -86,6 +88,8 @@ extend Flycheck.
    Meanwhile see :download:`flycheck.html <legacy/flycheck.html>` for a simple
    HTML version of the old manual.
 
+.. _flycheck-community-guide:
+
 The Community Guide
 ===================
 
@@ -99,6 +103,8 @@ community.
    community/get-help
    community/people
 
+.. _flycheck-contributor-guide:
+
 The Contributor Guide
 =====================
 
@@ -107,6 +113,7 @@ The Contributor Guide explains how to contribute to Flycheck.
 .. toctree::
 
    contributor/contributing
+   contributor/style-guide
    contributor/maintaining
 
 Indices and Tables
