@@ -2,130 +2,128 @@
 
 ;; Author: Anthony DiGirolamo <anthony.digirolamo@gmail.com>
 ;; URL: http://github.com/AnthonyDiGirolamo/airline-themes
-;; Version: 1.5
+;; Version: 1.7
 ;; Keywords: evil, mode-line, powerline, airline, themes
 ;; Package-Requires: ((powerline "2.3"))
 
 ;;; Commentary:
 ;;
-;; vim-airline themes https://github.com/bling/vim-airline for emacs powerline https://github.com/milkypostman/powerline
+;; vim-airline themes https://github.com/vim-airline/vim-airline for emacs powerline https://github.com/milkypostman/powerline
 ;;
 
 ;;; Code:
 
 (require 'powerline)
+(require 'cl-lib)
 
 (defface airline-normal-outer  '((t (:foreground "#141413" :background "#aeee00" :weight normal))) "Airline Normal Outer Face"  :group 'airline-themes)
 (defface airline-normal-inner  '((t (:foreground "#f4cf86" :background "#45413b" :weight normal))) "Airline Normal Inner Face"  :group 'airline-themes)
 (defface airline-normal-center '((t (:foreground "#8cffba" :background "#242321" :weight normal))) "Airline Normal Center Face" :group 'airline-themes)
+
 (defface airline-insert-outer  '((t (:foreground "#141413" :background "#0a9dff" :weight normal))) "Airline Insert Outer Face"  :group 'airline-themes)
 (defface airline-insert-inner  '((t (:foreground "#f4cf86" :background "#005faf" :weight normal))) "Airline Insert Inner Face"  :group 'airline-themes)
 (defface airline-insert-center '((t (:foreground "#0a9dff" :background "#242321" :weight normal))) "Airline Insert Center Face" :group 'airline-themes)
+
 (defface airline-visual-outer  '((t (:foreground "#141413" :background "#ffa724" :weight normal))) "Airline Visual Outer Face"  :group 'airline-themes)
 (defface airline-visual-inner  '((t (:foreground "#000000" :background "#fade3e" :weight normal))) "Airline Visual Inner Face"  :group 'airline-themes)
 (defface airline-visual-center '((t (:foreground "#000000" :background "#b88853" :weight normal))) "Airline Visual Center Face" :group 'airline-themes)
+
 (defface airline-replace-outer '((t (:foreground "#141413" :background "#aeee00" :weight normal))) "Airline Replace Outer Face" :group 'airline-themes)
+(defface airline-replace-inner  '((t (:foreground "#f4cf86" :background "#45413b" :weight normal))) "Airline Replace Inner Face"  :group 'airline-themes)
+(defface airline-replace-center '((t (:foreground "#8cffba" :background "#242321" :weight normal))) "Airline Replace Center Face" :group 'airline-themes)
+
 (defface airline-emacs-outer   '((t (:foreground "#d7d7ff" :background "#5f00af" :weight normal))) "Airline Emacs Outer Face"   :group 'airline-themes)
+(defface airline-emacs-inner  '((t (:foreground "#f4cf86" :background "#45413b" :weight normal))) "Airline Emacs Inner Face"  :group 'airline-themes)
+(defface airline-emacs-center '((t (:foreground "#8cffba" :background "#242321" :weight normal))) "Airline Emacs Center Face" :group 'airline-themes)
+
+(defface airline-inactive3 '((t (:foreground "#45413b" :background "#242321" :weight normal))) "Airline Inactive Center Face" :group 'airline-themes)
 
 ;;;###autoload
 (when load-file-name
   (add-to-list 'custom-theme-load-path
                (file-name-as-directory (file-name-directory load-file-name))))
 
-;;;###autoload
 (defcustom airline-shortened-directory-length 30
   "Set the desired directory length."
 
   :group 'airline-themes
   :type '(integer))
 
-;;;###autoload
 (defcustom airline-eshell-colors t
   "Set eshell prompt colors to match the airline theme.
 
-Valid Values: Enabled, Disabled"
+Valid Values: t (enabled), nil (disabled)"
   :group 'airline-themes
   :type '(choice (const :tag "Enabled" t)
                  (const :tag "Disabled" nil)))
 
-;;;###autoload
 (defcustom airline-helm-colors t
   "Set helm colors to match the airline theme.
 
-Valid Values: Enabled, Disabled"
+Valid Values: t (enabled), nil (disabled)"
   :group 'airline-themes
   :type '(choice (const :tag "Enabled" t)
                  (const :tag "Disabled" nil)))
 
-;;;###autoload
 (defcustom airline-cursor-colors t
   "Set the cursor color based on the current evil state.
 
-Valid Values: Enabled, Disabled"
+Valid Values: t (enabled), nil (disabled)"
   :group 'airline-themes
   :type '(choice (const :tag "Enabled" t)
                  (const :tag "Disabled" nil)))
 
-;;;###autoload
 (defcustom airline-display-directory 'airline-directory-shortened
   "Display the currend directory along with the filename.
 
-Valid Values: Full, Shortened, Disabled"
+Valid Values: airline-directory-full, airline-directory-shortened, nil (disabled)"
   :group 'airline-themes
   :type '(choice (const :tag "Full" airline-directory-full)
                  (const :tag "Shortened" airline-directory-shortened)
                  (const :tag "Disabled" nil)))
 
-;;;###autoload
 (defcustom airline-utf-glyph-separator-left #x2b80
   "The unicode character number used for the left side separator."
   :group 'airline-themes
   :type '(choice (const :tag "powerline #xe0b0"     #xe0b0)
                  (const :tag "vim-powerline #x2b80" #x2b80)))
 
-;;;###autoload
 (defcustom airline-utf-glyph-separator-right #x2b82
   "The unicode character number used for the right side separator."
   :group 'airline-themes
   :type '(choice (const :tag "powerline #xe0b2"     #xe0b2)
                  (const :tag "vim-powerline #x2b82" #x2b82)))
 
-;;;###autoload
 (defcustom airline-utf-glyph-subseparator-left #x2b81
   "The unicode character number used for the left side subseparator."
   :group 'airline-themes
   :type '(choice (const :tag "powerline #xe0b1"     #xe0b1)
                  (const :tag "vim-powerline #x2b81" #x2b81)))
 
-;;;###autoload
 (defcustom airline-utf-glyph-subseparator-right #x2b83
   "The unicode character number used for the right side subseparator."
   :group 'airline-themes
   :type '(choice (const :tag "powerline #xe0b3"     #xe0b3)
                  (const :tag "vim-powerline #x2b83" #x2b83)))
 
-;;;###autoload
 (defcustom airline-utf-glyph-branch #x2b60
   "The unicode character number used for the branch symbol."
   :group 'airline-themes
   :type '(choice (const :tag "powerline #xe0a0"     #xe0a0)
                  (const :tag "vim-powerline #x2b60" #x2b60)))
 
-;;;###autoload
 (defcustom airline-utf-glyph-readonly #x2b64
   "The unicode character number used for the readonly symbol."
   :group 'airline-themes
   :type '(choice (const :tag "powerline #xe0a2"     #xe0a2)
                  (const :tag "vim-powerline #x2b64" #x2b64)))
 
-;;;###autoload
 (defcustom airline-utf-glyph-linenumber #x2b61
   "The unicode character number used for the linenumber symbol."
   :group 'airline-themes
   :type '(choice (const :tag "powerline #xe0a1"     #xe0a1)
                  (const :tag "vim-powerline #x2b61" #x2b61)))
 
-;;;###autoload
 (defun airline-themes-set-eshell-prompt ()
   "Set the eshell prompt"
 
@@ -160,7 +158,6 @@ Valid Values: Full, Shortened, Disabled"
            (propertize " $ " 'face `())
            ))))
 
-;;;###autoload
 (defun airline-themes-set-modeline ()
   "Set the airline mode-line-format"
   (interactive)
@@ -207,6 +204,8 @@ Valid Values: Full, Shortened, Disabled"
                                    (cond ((eq evil-state (intern "normal")) 'airline-normal-inner)
                                          ((eq evil-state (intern "insert")) 'airline-insert-inner)
                                          ((eq evil-state (intern "visual")) 'airline-visual-inner)
+                                         ((eq evil-state (intern "replace")) 'airline-replace-inner)
+                                         ((eq evil-state (intern "emacs"))   'airline-emacs-inner)
                                          (t                                 'airline-normal-inner))
                                  'airline-normal-inner)
                              'powerline-inactive2))
@@ -217,9 +216,11 @@ Valid Values: Full, Shortened, Disabled"
                                    (cond ((eq evil-state (intern "normal")) 'airline-normal-center)
                                          ((eq evil-state (intern "insert")) 'airline-insert-center)
                                          ((eq evil-state (intern "visual")) 'airline-visual-center)
+                                         ((eq evil-state (intern "replace")) 'airline-replace-center)
+                                         ((eq evil-state (intern "emacs"))   'airline-emacs-center)
                                          (t                                 'airline-normal-center))
                                  'airline-normal-center)
-                             'powerline-inactive2))
+                             'airline-inactive3))
 
                           ;; Left Hand Side
                           (lhs-mode (if (featurep 'evil)
@@ -341,7 +342,6 @@ Valid Values: Full, Shortened, Disabled"
   (powerline-reset)
   (kill-local-variable 'mode-line-format))
 
-;;;###autoload
 (defun airline-themes-set-deftheme (theme-name)
   "Set appropriate face attributes"
 
@@ -371,16 +371,20 @@ Valid Values: Full, Shortened, Disabled"
    `(airline-visual-inner  ((t ( :foreground ,visual-inner-foreground  :background ,visual-inner-background))))
    `(airline-visual-center ((t ( :foreground ,visual-center-foreground :background ,visual-center-background))))
    `(airline-replace-outer ((t ( :foreground ,replace-outer-foreground :background ,replace-outer-background))))
+   `(airline-replace-inner  ((t ( :foreground ,replace-inner-foreground  :background ,replace-inner-background))))
+   `(airline-replace-center ((t ( :foreground ,replace-center-foreground :background ,replace-center-background))))
    `(airline-emacs-outer   ((t ( :foreground ,emacs-outer-foreground   :background ,emacs-outer-background))))
+   `(airline-emacs-inner  ((t ( :foreground ,emacs-inner-foreground  :background ,emacs-inner-background))))
+   `(airline-emacs-center ((t ( :foreground ,emacs-center-foreground :background ,emacs-center-background))))
    `(powerline-inactive1   ((t ( :foreground ,inactive1-foreground     :background ,inactive1-background))))
    `(powerline-inactive2   ((t ( :foreground ,inactive2-foreground     :background ,inactive2-background))))
+   `(airline-inactive3   ((t ( :foreground ,inactive3-foreground     :background ,inactive3-background))))
    `(mode-line             ((t ( :foreground ,normal-center-foreground :background ,normal-center-background :box nil :underline nil :overline nil))))
    `(mode-line-inactive    ((t ( :foreground ,inactive1-foreground     :background ,inactive1-background     :box nil :underline nil :overline nil))))
    `(mode-line-buffer-id   ((t ( :foreground ,normal-outer-foreground  :background ,normal-outer-background  :box nil :underline nil :overline nil))))
    `(minibuffer-prompt     ((t ( :foreground ,normal-outer-foreground  :background ,normal-outer-background  :box nil))))
   ))
 
-;;;###autoload
 (defun airline-curr-dir-git-branch-string (pwd)
   "Returns current git branch as a string, or the empty string if
 PWD is not in a git repo (or the git command is not found)."
@@ -392,7 +396,6 @@ PWD is not in a git repo (or the git command is not found)."
           (concat (substring git-output 0 -1))
         "(no branch)"))))
 
-;;;###autoload
 (defun airline-get-vc ()
   "Reimplementation of powerline-vc function to give the same result in gui as the terminal."
   (interactive)
@@ -403,16 +406,15 @@ PWD is not in a git repo (or the git command is not found)."
                 (magit-get-current-branch)
               (format-mode-line '(vc-mode vc-mode))))))
 
-;;;###autoload
 (defun airline-shorten-directory (dir max-length)
-  "Return a shortened ersion of `DIR'.
+  "Return a shortened version of `DIR'.
 
 Replacing elements with single characters starting from the left to try and get
 the path down to `MAX-LENGTH'"
 
   (let* ((components (split-string (abbreviate-file-name dir) "/"))
          (len (+ (1- (length components))
-                 (reduce '+ components :key 'length)))
+                 (cl-reduce '+ components :key 'length)))
          (str ""))
     (while (and (> len max-length)
                 (cdr components))
@@ -421,7 +423,7 @@ the path down to `MAX-LENGTH'"
                               (string (elt (car components) 0) ?/)))
             len (- len (1- (length (car components))))
             components (cdr components)))
-    (concat str (reduce (lambda (a b) (concat a "/" b)) components))
+    (concat str (cl-reduce (lambda (a b) (concat a "/" b)) components))
   )
 )
 
