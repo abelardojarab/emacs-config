@@ -113,6 +113,7 @@
 ;; (load-theme 'tao-yin t)
 ;; (load-theme 'eink)
 ;; (load-theme 'solarized-dark t)
+;; (load-theme 'monotropic t)
 ;; (load-theme 'material-light t)
 ;; (load-theme 'sanityinc-tomorrow-night t)
 ;; (load-theme 'spike t)
@@ -123,7 +124,7 @@
 ;; Choose different themes depending if we are using GUI or not
 ;; Console colors are enabled if "export TERM=xterm-256color" is added into .bashrc
 (if (display-graphic-p)
-    (load-theme 'material t)
+    (load-theme 'monotropic t)
   (load-theme 'monokai t))
 
 ;; Assure theme loading for client frames
@@ -131,7 +132,7 @@
 (defun my/setup-color-theme ()
   (interactive)
   (if (display-graphic-p)
-      (load-theme 'material t)
+      (load-theme 'monotropic t)
     (load-theme 'monokai t)))
 (add-hook 'after-make-frame-functions
           (lambda (frame)
