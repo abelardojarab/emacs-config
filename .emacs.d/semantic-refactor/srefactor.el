@@ -227,18 +227,14 @@ Based on the type of list passed above, either use
 (defun srefactor--c-tag-start-with-comment (tag)
   (save-excursion
     (goto-char (semantic-tag-start tag))
-    (if (eq (semantic-tag-class tag) 'function)
-        (if (semantic-documentation-comment-preceeding-tag tag)
-            (search-backward-regexp "/\\*")
-          (goto-char (semantic-tag-end tag))
-          (c-beginning-of-statement-1))
-      (when (semantic-documentation-comment-preceeding-tag tag)
-        (search-backward-regexp "/\\*")))
+    (when (semantic-documentation-comment-preceeding-tag tag)
+      (search-backward-regexp "/\\*" nil t)
+      (beginning-of-line)
+      (looking-at "^[ ]*\\/\\*"))
     (point)))
 
 (defun srefactor--copy-tag ()
   "Take the current tag, and place it in the tag ring."
-  (interactive)
   (semantic-fetch-tags)
   (let ((ft (semantic-obtain-foreign-tag)))
     (when ft
@@ -1313,7 +1309,6 @@ complicated language construct, Semantic cannot retrieve it."
   "Extract region based on type.
 
 EXTRACT-TYPE can be 'function or 'macro."
-  (interactive)
   (if (region-active-p)
       (unwind-protect
           (progn
