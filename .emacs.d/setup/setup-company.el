@@ -66,19 +66,22 @@
             ;; Update front-end tooltip
             (setq company-frontends (delq 'company-echo-metadata-frontend company-frontends))))
 
+;; Company C-headers
+(use-package company-c-headers
+  :after company
+  :if (executable-find "clang")
+  :load-path (lambda () (expand-file-name "company-c-headers/" user-emacs-directory))
+  :config (add-hook 'c-common-mode-hook
+                    (lambda ()
+                      (add-to-list 'company-backends 'company-c-headers))))
+
 ;; Company integration with irony
 (use-package company-irony
   :after (company irony)
   :load-path (lambda () (expand-file-name "company-irony/" user-emacs-directory))
   :config (add-hook 'irony-mode-hook
                     (lambda ()
-                      (setq company-backends '(
-                                               ;; company-yasnippet
-                                               company-semantic
-                                               company-gtags
-                                               company-irony
-                                               ;; company-dabbrev
-                                               company-dabbrev-code)))))
+                      (add-to-list 'company-backends 'company-irony))))
 
 (provide 'setup-company)
 ;;; setup-company.el ends here
