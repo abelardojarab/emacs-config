@@ -73,15 +73,25 @@
   :load-path (lambda () (expand-file-name "company-c-headers/" user-emacs-directory))
   :config (add-hook 'c-common-mode-hook
                     (lambda ()
-                      (add-to-list 'company-backends 'company-c-headers))))
+                      (setq company-backends '(company-semantic
+                                               company-dabbrev-code
+                                               company-gtags
+                                               company-c-headers
+                                               company-clang)))))
 
 ;; Company integration with irony
 (use-package company-irony
-  :after (company irony)
+  :if (executable-find "irony-server")
+  :after (company-c-headers irony)
   :load-path (lambda () (expand-file-name "company-irony/" user-emacs-directory))
   :config (add-hook 'irony-mode-hook
                     (lambda ()
-                      (add-to-list 'company-backends 'company-irony))))
+                      (setq company-backends '(company-semantic
+                                               company-dabbrev-code
+                                               company-gtags
+                                               company-c-headers
+                                               company-clang
+                                               company-irony)))))
 
 (provide 'setup-company)
 ;;; setup-company.el ends here
