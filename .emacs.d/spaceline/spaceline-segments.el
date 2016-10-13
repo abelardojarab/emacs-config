@@ -83,11 +83,12 @@
 
 (spaceline-define-segment buffer-id
   "Name of buffer."
-  (powerline-buffer-id 'mode-line-buffer-id))
+  (s-trim (powerline-buffer-id 'mode-line-buffer-id)))
 
 (spaceline-define-segment remote-host
   "Hostname for remote buffers."
-  (when (file-remote-p default-directory 'host)
+  (when (and default-directory
+             (file-remote-p default-directory 'host))
     (concat "@" (file-remote-p default-directory 'host))))
 
 (spaceline-define-segment major-mode
@@ -140,9 +141,23 @@
   "The current column number."
   "%2c")
 
+(declare-function pdf-view-current-page 'pdf-view)
+(declare-function pdf-cache-number-of-pages 'pdf-view)
+
+(defun spaceline--pdfview-page-number ()
+  (format "(%d/%d)"
+          ;; `pdf-view-current-page' is a macro in an optional dependency
+          ;; any better solutions?
+          (eval `(pdf-view-current-page))
+	  (pdf-cache-number-of-pages)))
+
 (spaceline-define-segment line-column
-  "The current line and column numbers."
-  "%l:%2c")
+  "The current line and column numbers, or `(current page/number of pages)`
+in pdf-view mode (enabled by the `pdf-tools' package)."
+  (if (eq 'pdf-view-mode major-mode)
+      (spaceline--pdfview-page-number)
+    "%l:%2c"))
+
 
 (spaceline-define-segment buffer-position
   "The current approximate buffer position, in percent."
@@ -234,8 +249,11 @@ a function that returns a name to use.")
              (t
               (string-match "\\*helm:? \\(mode \\)?\\([^\\*]+\\)\\*" name)
               (concat "HELM " (capitalize (match-string 2 name))))))
-     'face 'bold))
-  :face highlight-face)
+     'face 'bold)))
+
+(spaceline-define-segment helm-done
+  "Done."
+  (propertize "(DONE)" 'face 'bold))
 
 (spaceline-define-segment helm-number
   "Number of helm candidates."
@@ -447,15 +465,16 @@ This segment overrides the modeline functionality of `org-pomodoro' itself."
 (spaceline-define-segment workspace-number
   "The current workspace name or number. Requires `eyebrowse-mode' to be
 enabled."
-  (when (bound-and-true-p eyebrowse-mode)
+  (when (and (bound-and-true-p eyebrowse-mode)
+             (< 1 (length (eyebrowse--get 'window-configs))))
     (let* ((num (eyebrowse--get 'current-slot))
            (tag (when num (nth 2 (assoc num (eyebrowse--get 'window-configs)))))
            (str (if (and tag (< 0 (length tag)))
                     tag
                   (when num (int-to-string num)))))
-      (if spaceline-workspace-numbers-unicode
-          (spaceline--unicode-number str)
-        (propertize str 'face 'bold)))))
+      (or (when spaceline-workspace-numbers-unicode
+            (spaceline--unicode-number str))
+          (propertize str 'face 'bold)))))
 
 (defvar spaceline-display-default-perspective nil
   "If non-nil, the default perspective name is displayed in the mode-line.")
@@ -491,13 +510,17 @@ enabled."
   "Face for flycheck info feedback in the modeline."
   :group 'spaceline)
 
+(defvar spaceline-flycheck-bullet "•%s"
+  "The bullet used for the flycheck segment. This should be a
+  format string with a single `%s'-expression corresponding to
+  the number of errors.")
 (defmacro spaceline--flycheck-lighter (state)
   "Return flycheck information for the given error type STATE."
   `(let* ((counts (flycheck-count-errors flycheck-current-errors))
           (errorp (flycheck-has-current-errors-p ',state))
           (err (or (cdr (assq ',state counts)) "?"))
           (running (eq 'running flycheck-last-status-change)))
-     (if (or errorp running) (format "•%s" err))))
+     (if (or errorp running) (format spaceline-flycheck-bullet err))))
 
 (dolist (state '(error warning info))
   (let ((segment-name (intern (format "flycheck-%S" state)))
@@ -543,7 +566,9 @@ enabled."
                   'help-echo "Virtual environment (via pyenv)"))))
 
 (spaceline-define-segment which-function
-  (when (and active (bound-and-true-p which-function-mode))
+  (when (and active
+             (bound-and-true-p which-function-mode)
+             (bound-and-true-p which-func-mode))
     (let* ((current (format-mode-line which-func-current)))
       (when (string-match "{\\(.*\\)}" current)
         (setq current (match-string 1 current)))

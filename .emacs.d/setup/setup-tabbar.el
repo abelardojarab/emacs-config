@@ -61,7 +61,7 @@
 ;; more tweaking to tabbar
 (use-package tabbar-ruler
   :if (display-graphic-p)
-  :after (powerline tabbar mode-icons)
+  :after (powerline tabbar mode-icons projectile)
   :load-path (lambda () (expand-file-name "tabbar-ruler/" user-emacs-directory))
   :init (setq tabbar-ruler-global-tabbar 't) ;; If you want tabbar
   :config (progn
@@ -70,11 +70,8 @@
             ;; https://github.com/mattfidler/tabbar-ruler.el/issues/10
             (setq tabbar-ruler-movement-timer-delay 1000000)
 
-            ;; Firefox style
-            ;; (tabbar-ruler-style-firefox-circle)
-
             ;; Group user buffers
-            (tabbar-ruler-group-user-buffers)
+            (tabbar-ruler-group-by-projectile-project)
 
             ;; Fix for tabbar under Emacs 24.4
             ;; store tabbar-cache into a real hash,
@@ -141,7 +138,7 @@
                    (bury-buffer)
                    (nth n my-buffer-list)))))
 
-            ;; Enable tabbar
+            ;; Enable tab-bar
             (tabbar-mode t)))
 
 (provide 'setup-tabbar)

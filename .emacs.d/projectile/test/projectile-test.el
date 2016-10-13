@@ -136,11 +136,8 @@
 
 (ert-deftest projectile-add-unignored-files-no-vcs ()
   (noflet ((projectile-project-vcs () 'none))
-    ;; Fail when no VCS command for ignored files is found
+    ;; on an unsupported VCS we simply return the list of globally unignored files
     (let ((projectile-globally-unignored-files '("unignored-file")))
-      (should-error (projectile-add-unignored '("file"))))
-    ;; But only fail if unignored files are requested
-    (let (projectile-globally-unignored-files)
       (should (equal (projectile-add-unignored '("file")) '("file"))))))
 
 (ert-deftest projectile-add-unignored-directories ()
@@ -198,19 +195,9 @@
 
 (ert-deftest projectile-test-setup-hook-functions-projectile-mode ()
   (projectile-mode 1)
-  (should (and (memq 'projectile-cache-files-find-file-hook find-file-hook)
-               (memq 'projectile-cache-projects-find-file-hook find-file-hook)))
+  (should (memq 'projectile-find-file-hook-function find-file-hook))
   (projectile-mode -1)
-  (should (and (not (memq 'projectile-cache-files-find-file-hook find-file-hook))
-               (not (memq 'projectile-cache-projects-find-file-hook find-file-hook)))))
-
-(ert-deftest projectile-test-setup-hook-functions-projectile-global-mode ()
-  (projectile-global-mode 1)
-  (should (and (memq 'projectile-cache-files-find-file-hook find-file-hook)
-               (memq 'projectile-cache-projects-find-file-hook find-file-hook)))
-  (projectile-global-mode -1)
-  (should (and (not (memq 'projectile-cache-files-find-file-hook find-file-hook))
-               (not (memq 'projectile-cache-projects-find-file-hook find-file-hook)))))
+  (should (not (memq 'projectile-find-file-hook-function find-file-hook))))
 
 (ert-deftest projectile-test-relevant-known-projects ()
   (let ((projectile-known-projects '("/path/to/project1" "/path/to/project2")))
@@ -608,7 +595,7 @@
                        "include2/test1.service.spec.js"
                        "include1/test2.js"
                        "include2/test2.js")))
-    
+
     (should (equal '("include1/test1.h" "include2/test1.h")
                    (projectile-get-other-files "src/test1.c" source-tree)))
     (should (equal '("include1/test1.h" "include2/test1.h" "include1/test1.hpp")
@@ -697,29 +684,31 @@
 
 (ert-deftest projectile-test-exclude-out-of-project-submodules ()
   (projectile-test-with-files
-      (;; VSC root is here
-       "project/"
-       "project/.git/"
-       "project/.gitmodules"
-       ;; Current project root is here:
-       "project/web-ui/"
-       "project/web-ui/.projectile"
-       ;; VCS git submodule will return the following submodules,
-       ;; relative to current project root, 'project/web-ui/':
-       "project/web-ui/vendor/client-submodule/"
-       "project/server/vendor/server-submodule/")
-    (let ((project (file-truename (expand-file-name "project/web-ui"))))
-      (noflet ((projectile-files-via-ext-command
-                (arg) (when (string= default-directory project)
-                        '("vendor/client-submodule"
-                          "../server/vendor/server-submodule")))
-               (projectile-project-root
-                () project))
+   (;; VSC root is here
+    "project/"
+    "project/.git/"
+    "project/.gitmodules"
+    ;; Current project root is here:
+    "project/web-ui/"
+    "project/web-ui/.projectile"
+    ;; VCS git submodule will return the following submodules,
+    ;; relative to current project root, 'project/web-ui/':
+    "project/web-ui/vendor/client-submodule/"
+    "project/server/vendor/server-submodule/")
+   (let ((project (file-truename (expand-file-name "project/web-ui"))))
+     (noflet ((projectile-files-via-ext-command
+               (arg) (when (string= default-directory project)
+                       '("vendor/client-submodule"
+                         "../server/vendor/server-submodule")))
+              (projectile-project-root
+               () project))
 
-        ;; assert that it only returns the submodule 'project/web-ui/vendor/client-submodule/'
-        (should (equal (list (expand-file-name "vendor/client-submodule/" project))
-                       (projectile-get-all-sub-projects project)))))))
+       ;; assert that it only returns the submodule 'project/web-ui/vendor/client-submodule/'
+       (should (equal (list (expand-file-name "vendor/client-submodule/" project))
+                      (projectile-get-all-sub-projects project)))))))
 
 ;; Local Variables:
 ;; indent-tabs-mode: nil
 ;; End:
+
+;;; projectile-test.el ends here

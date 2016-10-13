@@ -4,15 +4,10 @@
 
 To add a project to Projectile, open a file in the project and enable `projectile-mode` in that buffer. If you have a projects directory, you can tell Projectile about all of the projects in it with the command `M-x projectile-discover-projects-in-directory`.
 
-To make Projectile automatically remember projects that you access files in, enable Projectile globally:
+To make Projectile automatically remember projects that you access files in, enable Projectile mode:
 
 ```el
-(projectile-global-mode)
-```
-To enable Projectile only in certain modes, add `projectile-mode` to the major mode's hook, like this:
-
-```el
-(add-hook 'ruby-mode-hook 'projectile-mode)
+(projectile-mode)
 ```
 
 If you're going to use the default `ido` completion it's
@@ -39,6 +34,7 @@ Keybinding         | Description
 <kbd>C-c p s g</kbd> | Run grep on the files in the project.
 <kbd>M-- C-c p s g</kbd> | Run grep on `projectile-grep-default-files` in the project.
 <kbd>C-c p v</kbd> | Run `vc-dir` on the root directory of the project.
+<kbd>C-c p V</kbd> | Browse dirty version controlled projects.
 <kbd>C-c p b</kbd> | Display a list of all project buffers currently open.
 <kbd>C-c p 4 b</kbd> | Switch to a project buffer and show it in another window.
 <kbd>C-c p 4 C-o</kbd> | Display a project buffer in another window without selecting it.

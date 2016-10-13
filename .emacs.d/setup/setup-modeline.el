@@ -35,6 +35,7 @@
   :after projectile
   :load-path (lambda () (expand-file-name "powerline/" user-emacs-directory))
   :init (progn
+          (setq powerline-height 22)
           (setq powerline-default-separator 'wave)))
 
 (use-package spaceline

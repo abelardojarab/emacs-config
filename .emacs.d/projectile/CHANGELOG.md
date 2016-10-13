@@ -5,18 +5,22 @@
 ### New Features
 
 * Consider Ensime configuration file as root marker, `.ensime`.
+* [#1057](https://github.com/bbatsov/projectile/issues/1057): Make it possible to disable automatic project tracking via `projectile-track-known-projects-automatically`.
 
 ### Changes
 
 * Ignore backup files in `projectile-get-other-files`.
 * Ignore Ensime cache directory, `.ensime_cache`.
 * [#364](https://github.com/bbatsov/projectile/issues/364): `projectile-add-known-project` can now be used interactively.
+* `projectile-mode` is now a global mode.
 
 ### Bugs fixed
 
+* [#1063](https://github.com/bbatsov/projectile/issues/1063): Support Fossil checkouts on Windows.
 * [#1024](https://github.com/bbatsov/projectile/issues/1024): Do not cache ignored project files.
 * [#1022](https://github.com/bbatsov/projectile/issues/1022): Scan for Fossil's checkout DB, not its config DB.
 * [#1007](https://github.com/bbatsov/projectile/issues/1007): Make use of `projectile-go-function`.
+* [#1011](https://github.com/bbatsov/projectile/issues/1011): Save project files before running project tests.
 
 ## 0.14.0 (2016-07-08)
 
@@ -44,6 +48,7 @@
 * New command `projectile-run-term` (<kbd>C-c p x t</kbd>).
 * Let user unignore files in `.projectile` with the ! prefix.
 * Add a command to add all projects in a directory to the cache (`projectile-discover-projects-in-directory`).
+* Add a command to list dirty version controlled projects (`projectile-browse-dirty-projects`).
 
 ### Changes
 

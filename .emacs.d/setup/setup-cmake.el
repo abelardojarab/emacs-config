@@ -666,7 +666,7 @@ the specified directory."
 ;; cmake-based IDE
 (use-package cmake-ide
   :defer 2
-  :commands use-cmake-ide
+  :commands (use-cmake-ide cmake-ide--locate-cmakelists)
   :after (rtags flycheck)
   :load-path (lambda () (expand-file-name "cmake-ide/" user-emacs-directory))
   :init (if (executable-find "cmake")
@@ -676,6 +676,18 @@ the specified directory."
               (cmake-ide-setup)
               (when (cmake-ide--locate-cmakelists)
                 (setq cmake-ide-build-dir (concat (cmake-ide--locate-cmakelists) "cmake_build_dir/"))))))
+
+;; minor-mode integrating the CMake build process
+(use-package cmake-project
+  :after cmake-ide
+  :if (executable-find "cmake")
+  :load-path (lambda () (expand-file-name "cmake-project/" user-emacs-directory))
+  :config (progn
+            (defun cmake-project-hook ()
+              (if (cmake-ide--locate-cmakelists) (cmake-project-mode)))
+            (setq cmake-project-default-build-dir-name (concat (cmake-ide--locate-cmakelists) "cmake_build_dir/"))
+            (add-hook 'c-mode-hook 'cmake-project-hook)
+            (add-hook 'c++-mode-hook 'cmake-project-hook)))
 
 (provide 'setup-cmake)
 ;;; setup-cmake.el ends here
