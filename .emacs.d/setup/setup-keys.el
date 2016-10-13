@@ -41,6 +41,9 @@
 (global-set-key [S-prior]      'shift-mark-backward-page)
 (global-set-key [S-next]       'shift-mark-forward-page)
 
+;; http://stackoverflow.com/questions/25469319/prevent-emacs-from-opening-a-buffer-in-a-new-frame
+(setq menu-bar-select-buffer-function 'switch-to-buffer)
+
 ;; Smart tab
 (use-package smart-tab
   :diminish smart-tab-mode
