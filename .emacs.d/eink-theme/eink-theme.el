@@ -89,6 +89,11 @@
    `(mode-line-inactive ((t (:background ,bg-light :foreground ,bg-light :height 0.8))))
    `(mode-line-minor-mode ((t (:weight ultra-light))))
    `(modeline ((t (:background ,bg :foreground ,fg :height 0.8))))
+   `(region ((t (:background "#eeeee8" :foreground ,fg))))
+   `(slime-repl-inputed-output-face ((t (:foreground ,fg))))
+   `(whitespace-line ((t (:background ,bg-highlight-2 :foreground ,fg))))
+
+   ;; org
    `(org-agenda-date ((t (:foreground ,fg :height 1.2))))
    `(org-agenda-date-today ((t (:foreground ,fg :weight bold :height 1.4))))
    `(org-agenda-date-weekend ((t (:foreground ,fg :weight normal))))
@@ -113,9 +118,6 @@
    `(org-special-keyword ((t (:foreground ,fg))))
    `(org-todo ((t (:foreground ,fg))))
    `(org-verse ((t (:inherit org-block :slant italic))))
-   `(region ((t (:background "#eeeee8" :foreground ,fg))))
-   `(slime-repl-inputed-output-face ((t (:foreground ,fg))))
-   `(whitespace-line ((t (:background ,bg-highlight-2 :foreground ,fg))))
 
    ;; magit
    `(magit-header ((t (:weight bold))))
@@ -123,9 +125,17 @@
    `(magit-item-highlight ((t (:weight bold))))
    `(magit-section-heading ((t (:weight bold :height 1.2))))
    `(magit-section-highlight ((t (:inherit default))))
-   `(magit-diff-context-highlight ((t (:weight bold))))
+   `(magit-diff-context-highlight ((t (:foreground ,fg))))
    `(magit-branch-local ((t (:weight bold))))
    `(magit-branch-remote ((t (:weight bold))))
+
+   ;; diff
+   `(diff-refine-added ((t (:background "#a4f4a3"))))
+   `(diff-refine-removed ((t (:background "#f9cbca"))))
+   `(magit-diff-added-highlight ((t (:weight demibold :background "#e9ffe9"))))
+   `(magit-diff-added ((t (:background "#e9ffe9"))))
+   `(magit-diff-removed-highlight ((t (:weight demibold :background "#ffecec"))))
+   `(magit-diff-removed ((t (:background "#ffecec"))))
 
    ;; compile
    `(compilation-error ((t (:inherit error))))
@@ -190,7 +200,20 @@
    `(idle-highlight ((t (:background ,bg-highlight))))
    `(yas-field-highlight-face ((t (:background "#eeeee8" :foreground ,fg))))
    `(eshell-prompt ((t (:foreground ,fg :weight bold))))
-   `(cider-result-overlay-face ((t (:weight bold))))))
+   `(cider-result-overlay-face ((t (:weight bold))))
+
+   ;; evil-quickscope
+   `(evil-quickscope-first-face ((t (:foreground ,fg :background "#eeeee8"))))
+   `(evil-quickscope-second-face ((t (:foreground ,fg :background ,bg-highlight-3))))
+
+   ;; evil-snipe
+   `(evil-snipe-first-match-face ((t (:foreground ,fg :background "#eeeee8"))))
+   `(evil-snipe-matches-face ((t (:foreground ,fg :background ,bg-highlight-3))))
+
+   ;; evil
+   `(evil-ex-lazy-highlight ((t (:background ,bg-highlight-2))))
+   `(evil-ex-substitute-matches ((t (:background ,bg-highlight-2))))
+   `(evil-ex-substitute-replacement ((t (:background ,bg-highlight :underline nil :foreground ,fg))))))
 
 ;;;###autoload
 (when load-file-name
