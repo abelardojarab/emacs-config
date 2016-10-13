@@ -683,9 +683,17 @@ the specified directory."
   :if (executable-find "cmake")
   :load-path (lambda () (expand-file-name "cmake-project/" user-emacs-directory))
   :config (progn
+
+            (setq cmake-project-default-build-dir-name (concat
+                                                        (cmake-ide--locate-cmakelists)
+                                                        "cmake_build_dir/"))
+
             (defun cmake-project-hook ()
-              (if (cmake-ide--locate-cmakelists) (cmake-project-mode)))
-            (setq cmake-project-default-build-dir-name (concat (cmake-ide--locate-cmakelists) "cmake_build_dir/"))
+              (when (cmake-ide--locate-cmakelists)
+                (if (not (file-exists-p cmake-project-default-build-dir-name))
+                    (make-directory cmake-project-default-build-dir-name) t)
+                (cmake-project-mode)))
+
             (add-hook 'c-mode-hook 'cmake-project-hook)
             (add-hook 'c++-mode-hook 'cmake-project-hook)))
 
