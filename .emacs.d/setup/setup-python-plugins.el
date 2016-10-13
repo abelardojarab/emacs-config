@@ -35,8 +35,8 @@
   :defer t
   :load-path (lambda () (expand-file-name "epc/" user-emacs-directory)))
 
+;; only use Jedi if python interpreter is present
 (use-package jedi
-  ;; only use Jedi if python packages are present
   :if (executable-find "python")
   :commands (jedi:setup)
   :load-path (lambda () (expand-file-name "jedi/" user-emacs-directory))
@@ -52,9 +52,15 @@
 (use-package company-jedi
   :after (company jedi python-mode)
   :load-path (lambda () (expand-file-name "company-jedi/" user-emacs-directory))
-  :config (setq-default
-           jedi:complete-on-dot t
-           jedi:get-in-function-call-delay 0.2))
+  :config (progn
+            (setq-default jedi:complete-on-dot t
+                          jedi:get-in-function-call-delay 0.2)
+
+            (setq-default company-backends '(company-jedi
+                                             company-yasnippet
+                                             company-semantic
+                                             company-gtags
+                                             company-dabbrev-code))))
 
 (provide 'setup-python-plugins)
 ;;; setup-python-plugins.el ends here

@@ -35,9 +35,10 @@
 
             ;; Use Company for completion
             (bind-key [remap completion-at-point] #'company-complete company-mode-map)
-            (setq company-backends '(company-semantic
-                                     company-dabbrev-code
-                                     company-gtags))
+            (setq company-backends '(company-yasnippet
+                                     company-semantic
+                                     company-gtags
+                                     company-dabbrev-code))
 
             (setq company-idle-delay 0.1
                   company-minimum-prefix-length 2
@@ -73,11 +74,11 @@
   :load-path (lambda () (expand-file-name "company-c-headers/" user-emacs-directory))
   :config (add-hook 'c-common-mode-hook
                     (lambda ()
-                      (setq company-backends '(company-semantic
-                                               company-dabbrev-code
-                                               company-gtags
-                                               company-c-headers
-                                               company-clang)))))
+                      (setq-default company-backends '(company-semantic
+                                                       company-gtags
+                                                       company-c-headers
+                                                       company-dabbrev-code
+                                                       company-clang)))))
 
 ;; Company integration with irony
 (use-package company-irony
@@ -86,12 +87,13 @@
   :load-path (lambda () (expand-file-name "company-irony/" user-emacs-directory))
   :config (add-hook 'irony-mode-hook
                     (lambda ()
-                      (setq company-backends '(company-semantic
-                                               company-dabbrev-code
-                                               company-gtags
-                                               company-c-headers
-                                               company-clang
-                                               company-irony)))))
+                      (setq-default company-backends '(company-irony
+                                                       company-yasnippet
+                                                       company-semantic
+                                                       company-gtags
+                                                       company-c-headers
+                                                       company-dabbrev-code
+                                                       company-clang)))))
 
 (provide 'setup-company)
 ;;; setup-company.el ends here
