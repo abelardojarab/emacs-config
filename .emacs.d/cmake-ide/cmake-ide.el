@@ -1,6 +1,6 @@
 ;;; cmake-ide.el --- Calls CMake to find out include paths and other compiler flags -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014 Atila Neves
+;; Copyright (C) 2014, 2016 Atila Neves
 
 ;; Author:  Atila Neves <atila.neves@gmail.com>
 ;; Version: 0.5
@@ -811,7 +811,7 @@ the object file's name just above."
 
 (defun cmake-ide--idb-file-to-obj (idb file-name)
   "Get object from IDB for FILE-NAME."
-  (car (gethash file-name idb)))
+  (ignore-errors (car (gethash file-name idb))))
 
 (defun cmake-ide--idb-param-all-files (idb parameter)
   "For all files in IDB, return a list of PARAMETER."

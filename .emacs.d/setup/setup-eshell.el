@@ -122,6 +122,7 @@
   :after eshell
   :config (setq eshell-prompt-function 'epe-theme-lambda))
 
+;; Shell-mode
 (use-package sh-mode
   :config (progn
             (add-to-list 'auto-mode-alist '("\\.sh\\'" . sh-mode))
@@ -132,6 +133,8 @@
             ;; Configuration choices
             (add-hook 'sh-mode-hook
                       (lambda ()
+                        (setq sh-indentation 2)
+                        (setq sh-basic-offset 2)
                         (show-paren-mode -1)
                         (flycheck-mode -1)
                         (setq blink-matching-paren nil)))

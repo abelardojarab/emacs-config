@@ -38,7 +38,8 @@
             (setq company-backends '(company-yasnippet
                                      company-semantic
                                      company-gtags
-                                     company-dabbrev-code))
+                                     company-dabbrev-code
+                                     company-dabbrev))
 
             (setq company-idle-delay 0.1
                   company-minimum-prefix-length 2
@@ -77,23 +78,38 @@
                       (setq-default company-backends '(company-semantic
                                                        company-gtags
                                                        company-c-headers
-                                                       company-dabbrev-code
-                                                       company-clang)))))
+                                                       company-dabbrev-code)))))
 
 ;; Company integration with irony
 (use-package company-irony
   :if (executable-find "irony-server")
   :after (company-c-headers irony)
   :load-path (lambda () (expand-file-name "company-irony/" user-emacs-directory))
-  :config (add-hook 'irony-mode-hook
-                    (lambda ()
-                      (setq-default company-backends '(company-irony
-                                                       company-yasnippet
-                                                       company-semantic
-                                                       company-gtags
-                                                       company-c-headers
-                                                       company-dabbrev-code
-                                                       company-clang)))))
+  :config (progn
+            (add-hook 'irony-mode-hook
+                      (lambda ()
+                        (if (executable-find "rtags")
+                            (setq-default company-backends '(company-rtags
+                                                             company-gtags
+                                                             company-irony
+                                                             company-yasnippet
+                                                             company-semantic
+                                                             company-c-headers
+                                                             company-dabbrev-code))
+                          (setq-default company-backends '(company-gtags
+                                                           company-irony
+                                                           company-yasnippet
+                                                           company-semantic
+                                                           company-c-headers
+                                                           company-dabbrev-code)))))))
+
+;; Company integration with rtags
+(use-package company-rtags
+  :if (executable-find "rtags")
+  :load-path (lambda () (expand-file-name "rtags/src/" user-emacs-directory))
+  :after (company rtags)
+  :config (progn
+            (setq rtags-completions-enabled t)))
 
 (provide 'setup-company)
 ;;; setup-company.el ends here

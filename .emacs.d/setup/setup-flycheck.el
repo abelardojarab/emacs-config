@@ -87,6 +87,18 @@
             (add-hook 'flycheck-mode-hook #'flycheck-irony-setup)
             (flycheck-add-next-checker 'irony '(warning . c/c++-cppcheck))))
 
+;; Flycheck rtags
+(use-package flycheck-rtags
+  :after (flycheck rtags)
+  :if (executable-find "rtags")
+  :load-path (lambda () (expand-file-name "rtags/src/" user-emacs-directory))
+  :config (progn
+            (defun my/flycheck-rtags-setup ()
+              (flycheck-select-checker 'rtags))
+
+            ;; c-mode-common-hook is also called by c++-mode
+            (add-hook 'c-mode-common-hook #'my/flycheck-rtags-setup)))
+
 ;; Tooltips
 (use-package flycheck-tip
   :after flycheck

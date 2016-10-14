@@ -39,7 +39,6 @@
   :config (progn
             (setq rtags-use-helm t)
             (setq rtags-autostart-diagnostics t)
-            (setq rtags-completions-enabled t)
             (setq my/rtags-cmake-build-dir "cmake_build_dir/")
 
             ;; Start rdm as a subprocess, with output in a buffer
@@ -683,10 +682,10 @@ the specified directory."
   :if (executable-find "cmake")
   :load-path (lambda () (expand-file-name "cmake-project/" user-emacs-directory))
   :config (progn
-
-            (setq cmake-project-default-build-dir-name (concat
-                                                        (cmake-ide--locate-cmakelists)
-                                                        "cmake_build_dir/"))
+            (when (cmake-ide--locate-cmakelists)
+              (setq cmake-project-default-build-dir-name (concat
+                                                          (cmake-ide--locate-cmakelists)
+                                                          "cmake_build_dir/")))
 
             (defun cmake-project-hook ()
               (when (cmake-ide--locate-cmakelists)
