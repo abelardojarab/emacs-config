@@ -343,6 +343,13 @@ branch."
                         (git-visit-diffs-next))
                     (git-error (message (cadr error)))))))))
 
+;; magit integration with git flow
+(use-package magit-gitflow
+  :load-path (lambda () (expand-file-name "magit-gitflow/" user-emacs-directory))
+  :commands (turn-on-magit-gitflow)
+  :defer t
+  :init (add-hook 'magit-mode-hook #'turn-on-magit-gitflow 'append))
+
 ;; diff-hl
 (use-package diff-hl
   :defer t

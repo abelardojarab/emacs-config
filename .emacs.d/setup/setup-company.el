@@ -42,9 +42,11 @@
                                      company-dabbrev))
 
             (setq company-idle-delay 0.1
+                  company-selection-wrap-around t
                   company-minimum-prefix-length 2
                   company-show-numbers t
                   company-tooltip-align-annotations t
+                  company-tooltip-limit 20
                   company-dabbrev-downcase nil
                   company-dabbrev-ignore-case t
                   company-semantic-insert-arguments t
