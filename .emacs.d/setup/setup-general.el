@@ -115,6 +115,15 @@
             (require 'dired-async)
             (dired-async-mode 1)))
 
+;; eval-expr
+(use-package eval-expr
+  :config (progn
+            (setq eval-expr-print-function 'pp
+                  eval-expr-print-level 20
+                  eval-expr-print-length 100)
+            (defun eval-expr-minibuffer-setup ()
+              (set-syntax-table emacs-lisp-mode-syntax-table))))
+
 ;; Unicode viewer (charmap)
 (use-package charmap
   :commands charmap

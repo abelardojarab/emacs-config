@@ -76,6 +76,8 @@
                ("q" . magit-quit-session)))
   :load-path (lambda () (expand-file-name "magit/lisp" user-emacs-directory))
   :init (progn
+          (setenv "GIT_PAGER" "")
+
           (eval-after-load 'info
             '(progn (info-initialize)
                     (add-to-list 'Info-directory-list (expand-file-name "magit/Documentation" user-emacs-directory))))

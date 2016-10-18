@@ -52,6 +52,13 @@
 (put 'narrow-to-page 'disabled nil)
 (put 'narrow-to-defun 'disabled nil)
 
+;; Enable disabled commands
+(put 'downcase-region  'disabled nil) ;; Let downcasing work
+(put 'erase-buffer     'disabled nil)
+(put 'eval-expression  'disabled nil) ;; Let ESC-ESC work
+(put 'set-goal-column  'disabled nil)
+(put 'upcase-region    'disabled nil) ;; Let upcasing work
+
 ;; Printing
 (setq ps-paper-type 'a4
       ps-font-size 7.0
