@@ -134,22 +134,25 @@
   (if (display-graphic-p)
       (load-theme 'monokai t)
     (load-theme 'monokai t)))
-(add-hook 'after-make-frame-functions
-          (lambda (frame)
-            (select-frame frame)
-            (my/setup-color-theme)))
 
 ;; So, fringe is nice actually, but the background for it kind of sucks in leuven
 ;; so I set it to the same color as the background
-(defun my/set-fringe-background ()
+(defun my/set-faces ()
   "Set the fringe background to the same color as the regular background."
   (interactive)
   (setq my/fringe-background-color
         (face-background 'default))
   (custom-set-faces
    `(fringe ((t (:background ,my/fringe-background-color))))))
+(add-hook 'after-init-hook #'my/set-faces)
 
-(add-hook 'after-init-hook #'my/set-fringe-background)
+;; Inherit theme for new frames
+(setq frame-inherited-parameters '(width height face background-mode
+                                         tool-bar-lines menu-bar-lines
+                                         scroll-bar-width right-fringe left-fringe
+                                         vertical-scroll-bars
+                                         background-color foreground-color
+                                         font alpha))
 
 (provide 'setup-themes)
 ;;; setup-themes.el ends here

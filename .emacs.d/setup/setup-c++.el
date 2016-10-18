@@ -108,6 +108,7 @@
   :defer t
   :commands (irony-mode irony-install-server)
   :if (executable-find "clang")
+  :diminish irony-mode
   :load-path (lambda () (expand-file-name "irony-mode/" user-emacs-directory))
   :after (ggtags eldoc function-args company)
   :init (progn

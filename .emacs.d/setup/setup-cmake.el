@@ -681,6 +681,7 @@ the specified directory."
   :after cmake-ide
   :if (executable-find "cmake")
   :load-path (lambda () (expand-file-name "cmake-project/" user-emacs-directory))
+  :diminish cmake-project-mode
   :config (progn
             (if (cmake-ide--locate-cmakelists)
                 (setq-default cmake-project-build-directory (concat
