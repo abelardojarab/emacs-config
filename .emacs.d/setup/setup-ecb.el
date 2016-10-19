@@ -247,7 +247,6 @@ more place."
             (add-hook 'ecb-activate-hook
                       '(lambda()
                          (semantic-mode t)
-                         ;; (ecb-maximize-window-methods)
                          (setq global-semantic-idle-scheduler-mode nil)))
 
             ;; Reparse after a file save
@@ -257,7 +256,8 @@ more place."
                            ;; this is to get the methods buffer to refresh correctly.
                            ;; semantic idle mode refresh doesn't seem to work all that well.
                            (semantic-force-refresh)
-                           (ecb-rebuild-methods-buffer))))
+                           (ecb-rebuild-methods-buffer)
+                           (ecb-window-sync))))
 
             ;; Reparse after a file load
             (add-hook 'find-file-hook
@@ -266,11 +266,24 @@ more place."
                            ;; this is to get the methods buffer to refresh correctly.
                            ;; semantic idle mode refresh doesn't seem to work all that well.
                            (semantic-force-refresh)
-                           (ecb-rebuild-methods-buffer))))
+                           (ecb-rebuild-methods-buffer)
+                           (ecb-window-sync))))
+
+            ;; Reparse after a file load
+            (add-hook 'kill-buffer-hook
+                      '(lambda()
+                         (when (bound-and-true-p ecb-minor-mode)
+                           ;; this is to get the methods buffer to refresh correctly.
+                           ;; semantic idle mode refresh doesn't seem to work all that well.
+                           (semantic-force-refresh)
+                           (ecb-rebuild-methods-buffer)
+                           (ecb-window-sync))))
 
             ;; Redefine fonts, not needed
             (set-face-attribute 'ecb-default-general-face nil
                                 :inherit 'default)
+            (set-face-attribute 'ecb-default-highlight-face nil
+                                :inherit 'hl-line)
 
             ;; Speedbar
             (require 'sr-speedbar)
