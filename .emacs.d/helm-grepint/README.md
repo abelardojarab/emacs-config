@@ -7,29 +7,43 @@
 
 ### Description
 
-This package solves the following problem for me:
+This package solves the following problems for me:
 - A single function call interface to grep and therefore keybinding.
 - Selects the grep based on context: Inside a git-repository, runs
-  git-grep, otherwise runs ag.
+  `git-grep`, otherwise runs `ag`.
 - Uses helm to select candidates and jumps to the given line with RET.
+
+And the following additional problems (as of version 1.2.0):
+- A second interactive function `helm-grepint-grep-root`.  This runs the
+  grepping inside a root directory.  By default this has been defined for
+  the git-grep where it greps from the git root directory.
+- Inside a huge git repository one can create a file defined in the
+  variable `helm-grepint-default-config-ag-presearch-marker-file` and it
+  will set that directory as the root directory for grepping.  It uses `ag`
+  instead of `git-grep` as the grep.
+- The grepping is case-insensitive by default, but if an upper-case letter
+  is given case-sensitive grepping is done.
 
 The following enables the aforementioned:
 
         (require 'helm-grepint)
-        (helm-grepint-set-default-config)
+        (helm-grepint-set-default-config-latest)
         (global-set-key (kbd "C-c g") #'helm-grepint-grep)
+        (global-set-key (kbd "C-c G") #'helm-grepint-grep-root)
+
+The original configuration (i.e. without the above additional features) is
+available with the following:
+
+        (helm-grepint-set-default-config)
 
 ### Key bindings within helm
 
-- RET selects an item and closes the helm session.
-- Right arrow selects the item, but does not close the helm session.  This
-  is similar as `helm-occur`.
-
-### Additional features
-
-This has a second interactive function `helm-grepint-grep-root`.  This runs the
-grepping inside a root directory.  By default this has been defined for the
-git-grep where it greps from the git root directory.
+- `RET`/`F1` selects an item and closes the helm session.
+- `F2` displays the grep results in a `grep-mode` buffer.
+- `Right-arrow` selects the item, but does not close the helm session.  This
+  is similar as `helm-occur`.  Default helmkeybindings for this feature are
+  also available (`C-j` and `C-z`).
+- `M-c` cycles case sensitiveness.
 
 ### Customization
 
@@ -38,6 +52,24 @@ cases are configured.  Also look into `helm-grepint-add-grep-config` for more
 details on what is required for a new grep to be defined.
 
 ### Changes
+
+Version 1.2.0
+
+- Obsoleted `helm-grepint-get-grep-config` in favor of
+  `helm-grepint-grep-config`.
+- Make the ignore-case a separate argument in the grep configuration.  This
+  way it can be toggled on and off easily.
+- Add case-fold-search support (case-(in)sensitiveness).  Add Helm
+  keybinding `M-c` to control it.
+- Add smart case-sensitiveness checking.
+- Add a new configuration `helm-grepint-set-default-config-v1.2.0` which
+  makes the smart cases-sensitiveness as the default.  The configuration is
+  now the `helm-grepint-set-default-config-latest`.
+
+Version 1.1.1
+
+- Add `--ignore-case` argument for `git-grep` to make it consistent with
+  `ag` in the `helm-grepint-set-default-config`.
 
 Version 1.1.0
 
@@ -91,9 +123,15 @@ The configuration can have the following items:
    as the root directory when running ‘helm-grepint-grep-root’.  If
    this is nil, ‘helm-grepint-grep-root’ behaves exactly as ‘helm-grepint-grep’.
 
-#### `(helm-grepint-get-grep-config NAME)`
+:ignore-case-argument
+ - The argument for the grep command that makes grepping ignore
+   character case.  Traditionally this is ‘--ignore-case’ for a
+   number of different greps.  This needs to be defined or the
+   ‘helm-grepint-cycle-character-case’ function has no effect.
 
-Get the configuration associated with NAME.
+#### `(helm-grepint-grep-config NAME &optional NEW-CONFIG)`
+
+Get a grep configuration with NAME or set it to NEW-CONFIG.
 
 #### `(helm-grepint-grep-config-property NAME PROPERTY &rest NEW-VALUE)`
 
@@ -115,11 +153,11 @@ used as is.
 
 #### `(helm-grepint-select-grep ASK-GREP)`
 
-Select the grep based on :enable-function from `helm-grepint-grep-configs`.
+Select the grep based on :enable-function from ‘helm-grepint-grep-configs’.
 
 If ASK-GREP is non-nil, select the grep by asking with
-`completing-read`.  The greps are compared in order of
-`helm-grepint-grep-list`.  If the grep does not
+‘completing-read’.  The greps are compared in order of
+‘helm-grepint-grep-list’.  If the grep does not
 have :enable-function property, select it automatically.
 
 #### `(helm-grepint-grep-default-root)`
@@ -156,20 +194,24 @@ Propertize each CANDIDATE provided by ‘helm-grepint-helm-source’.
 
 Uses ‘helm-grep-highlight-match’ from helm-grep to provide line highlight.
 
+#### `(helm-grepint-cycle-character-case)`
+
+Select the next one from the ‘helm-grepint-character-cases’ list.
+
 #### `(helm-grepint-grep &optional ARG)`
 
 Run grep in the current directory.
 
-See the usage for ARG in `helm-grepint--grep`.
+See the usage for ARG in ‘helm-grepint--grep’.
 
 The grep function is determined by the contents of
 ‘helm-grepint-grep-configs’ and the order of ‘helm-grepint-grep-list’.
 
 #### `(helm-grepint-grep-root &optional ARG)`
 
-Function `helm-grepint-grep` is run in a root directory.
+Function ‘helm-grepint-grep’ is run in a root directory.
 
-See the usage for ARG in `helm-grepint--grep`.
+See the usage for ARG in ‘helm-grepint--grep’.
 
 #### `(helm-grepint-set-default-config-v1\.0\.0)`
 
@@ -186,6 +228,16 @@ Adds configuration for running ag if file set in
 in a git repository before the git root.  The use case is running
 this in huge git repositories and wanting to limit the searching
 to a subdirectory.
+
+#### `(helm-grepint-set-default-config-v1\.2\.0)`
+
+Set default grep configuration.
+
+Run ‘helm-grepint-set-default-config-v1.1.0’ and then this function.
+
+Makes the ‘smart’ character-case as the default.  Changes the
+order of cycling the character-cases.  After the ‘smart’ comes
+case-sensitive.
 
 -----
 <div style="padding-top:15px;color: #d0d0d0;">

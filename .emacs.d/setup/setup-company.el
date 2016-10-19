@@ -35,8 +35,7 @@
 
             ;; Use Company for completion
             (bind-key [remap completion-at-point] #'company-complete company-mode-map)
-            (setq company-backends '(company-yasnippet
-                                     company-semantic
+            (setq company-backends '(company-semantic
                                      company-gtags
                                      company-dabbrev-code
                                      company-dabbrev))
@@ -90,17 +89,15 @@
   :config (progn
             (add-hook 'irony-mode-hook
                       (lambda ()
-                        (if (executable-find "rtags")
+                        (if (executable-find "rdm")
                             (setq-default company-backends '(company-rtags
                                                              company-gtags
                                                              company-irony
-                                                             company-yasnippet
                                                              company-semantic
                                                              company-c-headers
                                                              company-dabbrev-code))
                           (setq-default company-backends '(company-gtags
                                                            company-irony
-                                                           company-yasnippet
                                                            company-semantic
                                                            company-c-headers
                                                            company-dabbrev-code)))))))
@@ -112,6 +109,15 @@
   :after (company rtags)
   :config (progn
             (setq rtags-completions-enabled t)))
+
+;; Company bibtex integration
+(use-package company-bibtex
+  :if (or (executable-find "bibtex")
+          (executable-find "biber"))
+  :load-path (lambda () (expand-file-name "company-bibtex/" user-emacs-directory))
+  :after (company org-mode)
+  :config (progn
+            (add-to-list 'company-backends 'company-bibtex)))
 
 (provide 'setup-company)
 ;;; setup-company.el ends here

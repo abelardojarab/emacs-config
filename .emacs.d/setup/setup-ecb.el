@@ -275,8 +275,6 @@ more place."
                          (when (bound-and-true-p ecb-minor-mode)
                            ;; this is to get the methods buffer to refresh correctly.
                            ;; semantic idle mode refresh doesn't seem to work all that well.
-                           (semantic-force-refresh)
-                           (ecb-rebuild-methods-buffer)
                            (ecb-window-sync))))
 
             ;; Redefine fonts, not needed

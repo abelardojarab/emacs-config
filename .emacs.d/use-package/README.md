@@ -104,8 +104,21 @@ The `:bind` keyword takes either a cons or a list of conses:
 
 The `:commands` keyword likewise takes either a symbol or a list of symbols.
 
-NOTE: special keys like `tab` or `F1`-`Fn` are written in square brackets,
-i.e. `[tab]` instead of `"tab"`.
+NOTE: Special keys like `tab` or `F1`-`Fn` can be written in square brackets,
+i.e. `[tab]` instead of `"tab"`. The syntax for the keybindings is similar to
+the "kbd" syntax: see [https://www.gnu.org/software/emacs/manual/html_node/emacs/Init-Rebinding.html](https://www.gnu.org/software/emacs/manual/html_node/emacs/Init-Rebinding.html)
+for more information.
+
+Examples:
+
+``` elisp
+(use-package helm
+  :bind (("M-x" . helm-M-x)
+         ("M-<f5>" . helm-find-files)
+         ([f10] . helm-buffers-list)
+         ([S-f10] . helm-recentf)))
+```
+
 
 ### Binding to keymaps
 
@@ -360,7 +373,7 @@ If you need to install a different package from the one named by
 `use-package`, you can specify it like this:
 
 ``` elisp
-(use-package tex-site
+(use-package tex
   :ensure auctex)
 ```
 
