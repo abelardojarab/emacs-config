@@ -8,7 +8,7 @@
 ;;             Clément Pit--Claudel <clement.pitclaudel@live.com>
 ;; URL: http://www.flycheck.org
 ;; Keywords: convenience, languages, tools
-;; Version: 30-cvs
+;; Version: 31-cvs
 ;; Package-Requires: ((dash "2.12.1") (pkg-info "0.4") (let-alist "1.0.4") (seq "1.11") (emacs "24.3"))
 
 ;; This file is not part of GNU Emacs.
@@ -213,6 +213,7 @@ attention to case differences."
     php-phpmd
     php-phpcs
     processing
+    protobuf-protoc
     pug
     puppet-parser
     puppet-lint
@@ -246,6 +247,7 @@ attention to case differences."
     slim
     slim-lint
     sql-sqlint
+    systemd-analyze
     tex-chktex
     tex-lacheck
     texinfo
@@ -7974,6 +7976,26 @@ See https://github.com/processing/processing/wiki/Command-Line"
   ;; This syntax checker needs a file name
   :predicate (lambda () (buffer-file-name)))
 
+(flycheck-define-checker protobuf-protoc
+  "A protobuf syntax checker using the protoc compiler.
+
+See URL `https://developers.google.com/protocol-buffers/'."
+  :command ("protoc" "--error_format" "gcc"
+            (eval (concat "--java_out=" (flycheck-temp-dir-system)))
+            ;; Add the file directory of protobuf path to resolve import directives
+            (eval (concat "--proto_path=" (file-name-directory (buffer-file-name))))
+            source-inplace)
+  :error-patterns
+  ((info line-start (file-name) ":" line ":" column
+         ": note: " (message) line-end)
+   (error line-start (file-name) ":" line ":" column
+          ": " (message) line-end)
+   (error line-start
+          (message "In file included from") " " (file-name) ":" line ":"
+          column ":" line-end))
+  :modes protobuf-mode
+  :predicate (lambda () (buffer-file-name)))
+
 (flycheck-define-checker pug
   "A Pug syntax checker using the pug compiler.
 
@@ -9138,6 +9160,15 @@ See URL `https://github.com/purcell/sqlint'."
                                  (one-or-more not-newline)))
           line-end))
   :modes (sql-mode))
+
+(flycheck-define-checker systemd-analyze
+  "A systemd unit checker using systemd-analyze(1).
+
+See URL `https://www.freedesktop.org/software/systemd/man/systemd-analyze.html'."
+  :command ("systemd-analyze" "verify" source-original)
+  :error-patterns
+  ((error line-start "[" (file-name) ":" line "] " (message) line-end))
+  :modes (systemd-mode))
 
 (flycheck-def-config-file-var flycheck-chktexrc tex-chktex ".chktexrc"
   :safe #'stringp)

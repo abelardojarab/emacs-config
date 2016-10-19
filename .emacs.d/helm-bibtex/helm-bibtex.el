@@ -1,4 +1,4 @@
-;;; helm-bibtex.el --- A BibTeX bibliography manager based on Helm
+;;; helm-bibtex.el --- A bibliography manager based on Helm
 
 ;; Author: Titus von der Malsburg <malsburg@posteo.de>
 ;; Maintainer: Titus von der Malsburg <malsburg@posteo.de>
@@ -20,8 +20,8 @@
 
 ;;; Commentary:
 
-;; A BibTeX bibliography manager based on Helm and the
-;; bibtex-completion backend
+;; A bibliography manager for Emacs, based on Helm and the
+;; bibtex-completion backend.
 ;;
 ;; News:
 ;; - 04/18/2016: Improved support for Mendely/Jabref/Zotero way of
@@ -32,29 +32,22 @@
 ;;   importing BibTeX from CrossRef and other sources.  See new
 ;;   fallback options and the section "Importing BibTeX from CrossRef"
 ;;   on the GitHub page.
-;; - 02/25/2016: Support for pre- and postnotes for pandoc-citeproc
-;;   citations.
-;; - 11/23/2015: Added support for keeping all notes in one
-;;   org-file.  See customization variable `bibtex-completion-notes-path'.
-;; - 11/10/2015: Added support for PDFs specified in a BibTeX
-;;   field.  See customization variable `bibtex-completion-pdf-field'.
-;; - 11/09/2015: Improved insertion of LaTeX cite commands.
 ;;
 ;; See NEWS.org for old news.
 ;;
 ;; Key features:
 ;; - Quick access to your bibliography from within Emacs
-;; - Tightly integrated workflows
+;; - Powerful search capabilities
 ;; - Provides instant search results as you type
-;; - Powerful search expressions
+;; - Tightly integrated with LaTeX authoring, emails, Org mode, etc.
 ;; - Open the PDFs, URLs, or DOIs associated with an entry
 ;; - Insert LaTeX cite commands, Ebib links, or Pandoc citations,
 ;;   BibTeX entries, or plain text references at point, attach PDFs to
 ;;   emails
-;; - Attach notes to publications
+;; - Support for note taking
 ;; - Quick access to online bibliographic databases such as Pubmed,
 ;;   arXiv, Google Scholar, Library of Congress, etc.
-;; - Import BibTeX entries from CrossRef and other sources.
+;; - Imports BibTeX entries from CrossRef and other sources.
 ;;
 ;; See the github page for details:
 ;;
@@ -144,15 +137,19 @@ nil, the window will split below."
     (1- (window-body-width))))
 
 (defun helm-bibtex-candidates-formatter (candidates _)
-  (let ((width (with-helm-window (helm-bibtex-window-width))))
-    (bibtex-completion-candidates-formatter candidates width)))
+  (cl-loop
+   with width = (with-helm-window (helm-bibtex-window-width))
+   for entry in candidates
+   for entry = (cdr entry)
+   for entry-key = (bibtex-completion-get-value "=key=" entry)
+   collect (cons (bibtex-completion-format-entry entry width) entry-key)))
 
 ;; Warp bibtex-completion actions with some helm-specific code:
 
 (defmacro helm-bibtex-helmify-action (action name)
   "Wraps the function ACTION in another function named NAME which
 passes the candidates marked in helm to ACTION.  Also uses
-with-helm-current-buffer such that when ACTION inserts text and
+with-helm-current-buffer such that when ACTION inserts text
 it comes out in the right buffer."
   `(defun ,name (_)
      (let ((keys (helm-marked-candidates :with-wildcard t)))
@@ -161,11 +158,15 @@ it comes out in the right buffer."
 
 (helm-bibtex-helmify-action bibtex-completion-open-pdf helm-bibtex-open-pdf)
 (helm-bibtex-helmify-action bibtex-completion-open-url-or-doi helm-bibtex-open-url-or-doi)
+(helm-bibtex-helmify-action bibtex-completion-open-any helm-bibtex-open-any)
 (helm-bibtex-helmify-action bibtex-completion-insert-citation helm-bibtex-insert-citation)
 (helm-bibtex-helmify-action bibtex-completion-insert-reference helm-bibtex-insert-reference)
 (helm-bibtex-helmify-action bibtex-completion-insert-key helm-bibtex-insert-key)
 (helm-bibtex-helmify-action bibtex-completion-insert-bibtex helm-bibtex-insert-bibtex)
 (helm-bibtex-helmify-action bibtex-completion-add-PDF-attachment helm-bibtex-add-PDF-attachment)
+(helm-bibtex-helmify-action bibtex-completion-edit-notes helm-bibtex-edit-notes)
+(helm-bibtex-helmify-action bibtex-completion-show-entry helm-bibtex-show-entry)
+(helm-bibtex-helmify-action bibtex-completion-add-pdf-to-library helm-bibtex-add-pdf-to-library)
 
 ;; Helm sources:
 
@@ -175,15 +176,16 @@ it comes out in the right buffer."
     :candidates 'bibtex-completion-candidates
     :filtered-candidate-transformer 'helm-bibtex-candidates-formatter
     :action (helm-make-actions
-             "Open PDF file (if present)" 'helm-bibtex-open-pdf
+             "Open PDF, URL or DOI"       'helm-bibtex-open-any             
              "Open URL or DOI in browser" 'helm-bibtex-open-url-or-doi
              "Insert citation"            'helm-bibtex-insert-citation
              "Insert reference"           'helm-bibtex-insert-reference
              "Insert BibTeX key"          'helm-bibtex-insert-key
              "Insert BibTeX entry"        'helm-bibtex-insert-bibtex
              "Attach PDF to email"        'helm-bibtex-add-PDF-attachment
-             "Edit notes"                 'bibtex-completion-edit-notes
-             "Show entry"                 'bibtex-completion-show-entry))
+             "Edit notes"                 'helm-bibtex-edit-notes
+             "Show entry"                 'helm-bibtex-show-entry
+             "Add PDF to library"         'helm-bibtex-add-pdf-to-library))
   "Source for searching in BibTeX files.")
 
 (defvar helm-source-fallback-options
@@ -192,7 +194,7 @@ it comes out in the right buffer."
     (candidates      . bibtex-completion-fallback-candidates)
     (no-matchplugin)
     (nohighlight)
-    (action          . bibtex-completion-fallback-action))
+    (action          . (lambda (candidate) (bibtex-completion-fallback-action candidate helm-pattern))))
   "Source for online look-up.")
 
 ;; Helm-bibtex command:
@@ -205,11 +207,20 @@ With a prefix ARG, the cache is invalidated and the bibliography
 reread."
   (interactive "P")
   (when arg
-    (setq bibtex-completion-bibliography-hash ""))
+    (bibtex-completion-clear-cache))
   (helm :sources (list helm-source-bibtex helm-source-fallback-options)
         :full-frame helm-bibtex-full-frame
         :buffer "*helm bibtex*"
         :candidate-number-limit 500))
+
+;;;###autoload
+(defun helm-bibtex-with-local-bibliography (&optional arg)
+  "Search BibTeX entries with local bibliography.
+
+With a prefix ARG the cache is invalidated and the bibliography reread."
+  (interactive "P")
+  (let ((bibtex-completion-bibliography (bibtex-completion-find-local-bibliography)))
+    (helm-bibtex arg)))
 
 (provide 'helm-bibtex)
 

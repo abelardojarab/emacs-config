@@ -1,4 +1,4 @@
-;;; ivy-bibtex.el --- A BibTeX bibliography manager based on Ivy
+;;; ivy-bibtex.el --- A bibliography manager based on Ivy
 
 ;; Author: Justin Burkett <justin@burkett.cc>
 ;; Maintainer: Titus von der Malsburg <malsburg@posteo.de>
@@ -25,6 +25,12 @@
 ;; this is the ivy version.
 ;;
 ;; News:
+;; - 09/29/2016: Performance improvements in ivy-bibtex.  Note: If
+;;   you changed your default action in ivy-bibtex, you have to rename
+;;   the action, e.g. from `bibtex-completion-insert-key` to
+;;   `ivy-bibtex-insert-key`.  For details see
+;;   https://github.com/tmalsburg/helm-bibtex#change-the-default-action
+;; - 09/20/2016: Added fallback options to ivy frontend.
 ;; - 04/18/2016: Improved support for Mendely/Jabref/Zotero way of
 ;;   referencing PDFs.
 ;; - 04/12/2016: Published ivy version of helm-bibtex.
@@ -72,41 +78,83 @@
 (require 'ivy)
 (require 'bibtex-completion)
 
-(defcustom ivy-bibtex-default-action 'bibtex-completion-open-pdf
+(defcustom ivy-bibtex-default-action 'ivy-bibtex-open-any
   "The default action for the `ivy-bibtex` command."
   :group 'bibtex-completion
   :type 'function)
   
-(defun ivy-bibtex-candidates-formatter (candidates)
-  (let ((width (frame-width)))
-    (bibtex-completion-candidates-formatter candidates width)))
+(defun ivy-bibtex-display-transformer (candidate)
+  (let* ((width (frame-width))
+         (idx (get-text-property 0 'idx candidate))
+         (entry (cdr (nth idx (ivy-state-collection ivy-last)))))
+    (bibtex-completion-format-entry entry width)))
+
+(defmacro ivy-bibtex-ivify-action (action name)
+  "Wraps the function ACTION in another function named NAME which
+extracts the key from the candidate selected in ivy and passes it to ACTION."
+  `(defun ,name (candidate)
+     (let ((key (cdr (assoc "=key=" (cdr candidate)))))
+       (,action (list key)))))
+
+(ivy-bibtex-ivify-action bibtex-completion-open-any ivy-bibtex-open-any)
+(ivy-bibtex-ivify-action bibtex-completion-open-pdf ivy-bibtex-open-pdf)
+(ivy-bibtex-ivify-action bibtex-completion-open-url-or-doi ivy-bibtex-open-url-or-doi)
+(ivy-bibtex-ivify-action bibtex-completion-insert-citation ivy-bibtex-insert-citation)
+(ivy-bibtex-ivify-action bibtex-completion-insert-reference ivy-bibtex-insert-reference)
+(ivy-bibtex-ivify-action bibtex-completion-insert-key ivy-bibtex-insert-key)
+(ivy-bibtex-ivify-action bibtex-completion-insert-bibtex ivy-bibtex-insert-bibtex)
+(ivy-bibtex-ivify-action bibtex-completion-add-PDF-attachment ivy-bibtex-add-PDF-attachment)
+(ivy-bibtex-ivify-action bibtex-completion-edit-notes ivy-bibtex-edit-notes)
+(ivy-bibtex-ivify-action bibtex-completion-show-entry ivy-bibtex-show-entry)
+(ivy-bibtex-ivify-action bibtex-completion-add-pdf-to-library ivy-bibtex-add-pdf-to-library)
+
+(defun ivy-bibtex-fallback (search-expression)
+  "Select a fallback option for SEARCH-EXPRESSION. This is meant to be used as an action in `ivy-read`, with `ivy-text` as search expression."
+  (ivy-read "Fallback options: "
+            (bibtex-completion-fallback-candidates)
+            :caller 'ivy-bibtex-fallback
+            :action (lambda (candidate) (bibtex-completion-fallback-action (cdr candidate) search-expression))))
 
 ;;;###autoload
 (defun ivy-bibtex (&optional arg)
   "Search BibTeX entries using ivy.
 
-With a prefix ARG the cache is invalidated and the bibliography
-reread."
+With a prefix ARG the cache is invalidated and the bibliography reread."
   (interactive "P")
   (when arg
-    (setq bibtex-completion-bibliography-hash ""))
+    (bibtex-completion-clear-cache))
   (bibtex-completion-init)
   (ivy-read "BibTeX Items: "
-            (bibtex-completion-candidates 'ivy-bibtex-candidates-formatter)
+            (bibtex-completion-candidates)
             :caller 'ivy-bibtex
             :action ivy-bibtex-default-action))
 
+;;;###autoload
+(defun ivy-bibtex-with-local-bibliography (&optional arg)
+  "Search BibTeX entries with local bibliography.
+
+With a prefix ARG the cache is invalidated and the bibliography reread."
+  (interactive "P")
+  (let ((bibtex-completion-bibliography (bibtex-completion-find-local-bibliography)))
+    (ivy-bibtex arg)))
+
+(ivy-set-display-transformer
+ 'ivy-bibtex
+ 'ivy-bibtex-display-transformer)
+
 (ivy-set-actions
  'ivy-bibtex
- '(("p" bibtex-completion-open-pdf "Open PDF file (if present)")
-   ("u" bibtex-completion-open-url-or-doi "Open URL or DOI in browser")
-   ("c" bibtex-completion-insert-citation "Insert citation")
-   ("r" bibtex-completion-insert-reference "Insert reference")
-   ("k" bibtex-completion-insert-key "Insert BibTeX key")
-   ("b" bibtex-completion-insert-bibtex "Insert BibTeX entry")
-   ("a" bibtex-completion-add-PDF-attachment "Attach PDF to email")
-   ("e" bibtex-completion-edit-notes "Edit notes")
-   ("s" bibtex-completion-show-entry "Show entry"))) 
+ '(("p" ivy-bibtex-open-pdf "Open PDF file (if present)")
+   ("u" ivy-bibtex-open-url-or-doi "Open URL or DOI in browser")
+   ("c" ivy-bibtex-insert-citation "Insert citation")
+   ("r" ivy-bibtex-insert-reference "Insert reference")
+   ("k" ivy-bibtex-insert-key "Insert BibTeX key")
+   ("b" ivy-bibtex-insert-bibtex "Insert BibTeX entry")
+   ("a" ivy-bibtex-add-PDF-attachment "Attach PDF to email")
+   ("e" ivy-bibtex-edit-notes "Edit notes")
+   ("s" ivy-bibtex-show-entry "Show entry")
+   ("l" ivy-bibtex-add-pdf-to-library "Add PDF to library")
+   ("f" (lambda (_candidate) (ivy-bibtex-fallback ivy-text)) "Fallback options"))) 
 
 (provide 'ivy-bibtex)
 

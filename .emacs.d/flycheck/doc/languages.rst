@@ -706,6 +706,14 @@ to view the docstring of the syntax checker.  Likewise, you may use
 
       Check syntax using the `Processing <https://processing.org/>`_ compiler.
 
+.. supported-language:: Protobuf
+
+   .. syntax-checker:: protobuf-protoc
+
+      Check syntax using the protoc_ compiler.
+
+      .. _protoc: https://developers.google.com/protocol-buffers/
+
 .. supported-language:: Pug
 
    .. syntax-checker:: pug
@@ -1074,6 +1082,14 @@ to view the docstring of the syntax checker.  Likewise, you may use
    .. syntax-checker:: sql-sqlint
 
       Check SQL syntax with `Sqlint <https://github.com/purcell/sqlint>`_.
+
+.. supported-language:: systemd Unit Configuration
+
+   .. syntax-checker:: systemd-analyze
+
+      Check systemd unit configuration file syntax with `systemd-analyze`_.
+
+      .. _systemd-analyze: https://www.freedesktop.org/software/systemd/man/systemd-analyze.html
 
 .. supported-language:: TeX/LaTeX
 

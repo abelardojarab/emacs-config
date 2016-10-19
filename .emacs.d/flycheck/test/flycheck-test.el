@@ -3545,6 +3545,12 @@ Why not:
    '(4 2 error "Syntax error, maybe a missing semicolon?"
        :checker processing)))
 
+(flycheck-ert-def-checker-test protobuf-protoc protobuf syntax-error
+  (flycheck-ert-should-syntax-check
+   "language/protobuf.proto" 'protobuf-mode
+   '(2 23 error "Missing field number."
+       :checker protobuf-protoc)))
+
 (flycheck-ert-def-checker-test pug pug syntax-error
   (flycheck-ert-should-syntax-check
    "language/pug/pug.pug" 'pug-mode
@@ -4009,6 +4015,16 @@ Why not:
    "language/sql.sql" 'sql-mode
    `(1 15 error "unterminated quoted string at or near \"';\n  \" (scan.l:1087)"
        :checker sql-sqlint)))
+
+(flycheck-ert-def-checker-test systemd-analyze systemd nil
+  (flycheck-ert-should-syntax-check
+   "language/systemd-analyze-test.service" 'systemd-mode
+   '(3 nil error "Invalid URL, ignoring: foo://bar"
+       :checker systemd-analyze)
+   '(6 nil error "Unknown lvalue 'ExecSmart' in section 'Service'"
+       :checker systemd-analyze)
+   '(8 nil error "Unknown section 'Dog'. Ignoring."
+       :checker systemd-analyze)))
 
 (flycheck-ert-def-checker-test tex-chktex (tex latex) nil
   (flycheck-ert-should-syntax-check

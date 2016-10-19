@@ -135,13 +135,13 @@ should be a single character."
 
 (defcustom bibtex-completion-fallback-options
   '(("CrossRef                                  (biblio.el)"
-     . (lambda () (biblio-lookup #'biblio-crossref-backend helm-pattern)))
+     . (lambda (search-expression) (biblio-lookup #'biblio-crossref-backend search-expression)))
     ("arXiv                                     (biblio.el)"
-     . (lambda () (biblio-lookup #'biblio-arxiv-backend helm-pattern)))
+     . (lambda (search-expression) (biblio-lookup #'biblio-arxiv-backend search-expression)))
     ("DBLP (computer science bibliography)      (biblio.el)"
-     . (lambda () (biblio--lookup-1 #'biblio-dblp-backend helm-pattern)))
+     . (lambda (search-expression) (biblio--lookup-1 #'biblio-dblp-backend search-expression)))
     ("HAL (French open archive)                 (biblio.el)"
-     . (lambda () (biblio--lookup-1 #'biblio-hal-backend helm-pattern)))
+     . (lambda (search-expression) (biblio--lookup-1 #'biblio-hal-backend search-expression)))
     ("Google Scholar                            (web)"
      . "https://scholar.google.co.uk/scholar?q=%s")
     ("Pubmed                                    (web)"
@@ -269,15 +269,8 @@ the directories listed in `bibtex-completion-library-path'."
   :group 'bibtex-completion
   :type 'string)
 
-(defvar bibtex-completion-bibliography-hash nil
-  "The hash of the content of the configured bibliography
-files.  If this hash has not changed since the bibliography was
-last parsed, a cached version of the parsed bibliography will be
-used.")
-
-(defvar bibtex-completion-cached-candidates nil
-  "The a list of candidates obtained when the configured
-bibliography files were last parsed.")
+(defvar bibtex-completion-cache nil
+  "A cache storing the hash of the bibliography content and the corresponding list of entries, for each bibliography file, obtained when the bibliography was last parsed. When the current bibliography hash is identical to the cached hash, the cached list of candidates is reused, otherwise the bibliography file is reparsed.")
 
 
 (defun bibtex-completion-init ()
@@ -288,72 +281,143 @@ actually exist."
                   (user-error "BibTeX file %s could not be found." file)))
         (-flatten (list bibtex-completion-bibliography))))
 
-(defun bibtex-completion-candidates (&optional formatter)
+(defun bibtex-completion-clear-cache (&optional files)
+  "Clears FILES from cache. If FILES is omitted, all files in `bibtex-completion-biblography' are cleared."
+  (setq bibtex-completion-cache
+        (cl-remove-if
+         (lambda (x)
+           (member (car x)
+                   (or files
+                       (-flatten (list bibtex-completion-bibliography)))))
+         bibtex-completion-cache)))
+    
+(defun bibtex-completion-candidates ()
   "Reads the BibTeX files and returns a list of conses, one for
 each entry.  The first element of these conses is a string
 containing authors, editors, title, year, type, and key of the
 entry.  This is string is used for matching.  The second element
-is the entry (only the fields listed above) as an alist.
+is the entry (only the fields listed above) as an alist."
+  (let ((files (nreverse (-flatten (list bibtex-completion-bibliography))))
+        reparsed-files)
+    ;; Open each bibliography file in a temporary buffer,
+    ;; check hash of bibliography and reparse if necessary:
+    (cl-loop
+     for file in files
+     do
+     (with-temp-buffer
+       (insert-file-contents file)
+       (let ((bibliography-hash (secure-hash 'sha256 (current-buffer))))
+         (unless (string= (cadr (assoc file bibtex-completion-cache))
+                          bibliography-hash)
+           (bibtex-completion-clear-cache (list file))
+           (message "Parsing bibliography file %s ..." file)
+           (push (-cons* file
+                         bibliography-hash
+                         (bibtex-completion-parse-bibliography))
+                 bibtex-completion-cache)
+           ;; Mark file as reparsed.
+           ;; This will be useful to resolve cross-references:
+           (push file reparsed-files)))))
+    ;; If some files were reparsed, resolve cross-references:
+    (when reparsed-files
+      (message "Resolving cross-references ...")
+      (bibtex-completion-resolve-crossrefs files reparsed-files))
+    ;; Finally return the list of candidates:
+    (nreverse
+     (cl-loop
+      for file in files
+      append (cddr (assoc file bibtex-completion-cache))))))
 
-If non-nil, the entries are passed to the function FORMATTER
-before being saved."
-  ;; Open configured bibliographies in temporary buffer:
-  (with-temp-buffer
-    (mapc #'insert-file-contents
-          (-flatten (list bibtex-completion-bibliography)))
-    ;; Check hash of bibliography and reparse if necessary:
-    (let ((bibliography-hash (secure-hash 'sha256 (current-buffer))))
-      (unless (and bibtex-completion-cached-candidates
-                   (string= bibtex-completion-bibliography-hash bibliography-hash))
-        (message "Loading bibliography ...")
-        (let* ((entries (bibtex-completion-parse-bibliography))
-               (entries (bibtex-completion-resolve-crossrefs entries))
-               (entries (bibtex-completion-prepare-entries entries))
-               (entries (nreverse entries))
-               (entries
-                (--map (cons (bibtex-completion-clean-string
-                                  (s-join " " (-map #'cdr it))) it)
-                           entries)))
-          (setq bibtex-completion-cached-candidates
-                (if (functionp formatter)
-                    (funcall formatter entries)
-                  entries)))
-        (setq bibtex-completion-bibliography-hash bibliography-hash))
-      bibtex-completion-cached-candidates)))
+(defun bibtex-completion-resolve-crossrefs (files reparsed-files)
+  "Expand all entries with fields from cross-referenced entries in FILES, assuming that only those files in REPARSED-FILES were reparsed whereas the other files in FILES were up-to-date."
+  (cl-loop
+   with entry-hash = (bibtex-completion-make-entry-hash files reparsed-files)
+   for file in files
+   for entries = (cddr (assoc file bibtex-completion-cache))
+   if (member file reparsed-files)
+   ;; The file was reparsed.
+   ;; Resolve crossrefs then make candidates for all entries:
+   do (setf
+       (cddr (assoc file bibtex-completion-cache))
+       (cl-loop
+        for entry in entries
+        ;; Entries are alists of \(FIELD . VALUE\) pairs.
+        for crossref = (bibtex-completion-get-value "crossref" entry)
+        collect (bibtex-completion-make-candidate
+                 (if crossref
+                     (bibtex-completion-remove-duplicated-fields
+                      ;; Insert an empty field so we can discard the crossref info if needed:
+                      (append entry
+                              (acons "" ""
+                                     (gethash (downcase crossref) entry-hash))))
+                   entry))))
+   else
+   ;; The file was not reparsed.
+   ;; Resolve crossrefs then make candidates for the entries with a crossref field:
+   do (setf
+       (cddr (assoc file bibtex-completion-cache)) 
+       (cl-loop
+        for entry in entries
+        ;; Entries are \(STRING . ALIST\) conses.
+        for entry-alist = (cdr entry)
+        for crossref = (bibtex-completion-get-value "crossref" entry-alist)
+        collect (if crossref
+                    (bibtex-completion-make-candidate
+                     (bibtex-completion-remove-duplicated-fields
+                      ;; Discard crossref info and resolve crossref again:
+                      (append (--take-while (> (length (car it)) 0) entry-alist)
+                              (acons "" ""
+                                     (gethash (downcase crossref) entry-hash)))))
+                  entry)))))
 
-(defun bibtex-completion-resolve-crossrefs (entries)
-  "Expand all entries with fields from cross-references entries."
-   (cl-loop
-    with entry-hash =
-      (cl-loop
-       with ht = (make-hash-table :test #'equal :size (length entries))
-       for entry in entries
-       for key = (bibtex-completion-get-value "=key=" entry)
-       ;; Other types than proceedings and books can be
-       ;; cross-referenced, but I suppose that isn't really used:
-       if (member (downcase (bibtex-completion-get-value "=type=" entry))
-                  '("proceedings" "book"))
-       do (puthash (downcase key) entry ht)
-       finally return ht)
-    for entry in entries
-    for crossref = (bibtex-completion-get-value "crossref" entry)
-    if crossref
-      collect (append entry (gethash (downcase crossref) entry-hash))
-    else
-      collect entry))
+(defun bibtex-completion-make-entry-hash (files reparsed-files)
+  "Return a hash table of all bibliography entries in FILES, assuming that only those files in REPARSED-FILES were reparsed whereas the other files in FILES were up-to-date."
+  (cl-loop
+   with entries =
+     (cl-loop
+      for file in files
+      for entries = (cddr (assoc file bibtex-completion-cache))
+      if (member file reparsed-files)
+      ;; Entries are alists of \(FIELD . VALUE\) pairs.
+      append entries
+      ;; Entries are \(STRING . ALIST\) conses.
+      else
+      append (mapcar 'cdr entries))
+   with ht = (make-hash-table :test #'equal :size (length entries))
+   for entry in entries
+   for key = (bibtex-completion-get-value "=key=" entry)
+   ;; Other types than proceedings and books can be
+   ;; cross-referenced, but I suppose that isn't really used:
+   if (member (downcase (bibtex-completion-get-value "=type=" entry))
+              '("proceedings" "book"))
+   do (puthash (downcase key) entry ht)
+   finally return ht))
+
+(defun bibtex-completion-make-candidate (entry)
+  "Return a candidate for ENTRY."
+  (cons (bibtex-completion-clean-string
+         (s-join " " (-map #'cdr entry)))
+        entry))
 
 (defun bibtex-completion-parse-bibliography ()
   "Parse the BibTeX entries listed in the current buffer and
-return a list of entry keys in the order in which the entries
-appeared in the BibTeX files."
+return a list of entries in the order in which they appeared in the BibTeX file. Also do some preprocessing of the entries."
   (goto-char (point-min))
   (cl-loop
+   with fields = (append '("title" "year" "crossref")
+                         (-map (lambda (it) (if (symbolp it) (symbol-name it) it))
+                               bibtex-completion-additional-search-fields))
    for entry-type = (parsebib-find-next-item)
    while entry-type
    unless (member-ignore-case entry-type '("preamble" "string" "comment"))
-   collect (-map (lambda (it)
-                   (cons (downcase (car it)) (cdr it)))
-                 (parsebib-read-entry entry-type))))
+   collect (let* ((entry (parsebib-read-entry entry-type))
+                  (fields (cons (if (assoc-string "author" entry 'case-fold)
+                                    "author"
+                                  "editor")
+                                fields)))
+             (-map (lambda (it)
+                     (cons (downcase (car it)) (cdr it)))
+                   (bibtex-completion-prepare-entry entry fields)))))
 
 (defun bibtex-completion-get-entry (entry-key)
   "Given a BibTeX key this function scans all bibliographies
@@ -363,9 +427,7 @@ appended to the requested entry."
   (let* ((entry (bibtex-completion-get-entry1 entry-key))
          (crossref (bibtex-completion-get-value "crossref" entry))
          (crossref (when crossref (bibtex-completion-get-entry1 crossref))))
-    (cl-remove-duplicates (append entry crossref)
-                          :test (lambda (x y) (string= (s-downcase x) (s-downcase y)))
-                          :key 'car :from-end t)))
+    (bibtex-completion-remove-duplicated-fields (append entry crossref))))
 
 (defun bibtex-completion-get-entry1 (entry-key &optional do-not-find-pdf)
   (with-temp-buffer
@@ -377,16 +439,6 @@ appended to the requested entry."
                                (regexp-quote entry-key) "[[:space:]]*,"))
     (let ((entry-type (match-string 1)))
       (reverse (bibtex-completion-prepare-entry (parsebib-read-entry entry-type) nil do-not-find-pdf)))))
-
-(defun bibtex-completion-prepare-entries (entries)
-  "Do some preprocessing of the entries."
-  (cl-loop
-   with fields = (append '("title" "year" "crossref")
-                         (-map (lambda (it) (if (symbolp it) (symbol-name it) it))
-                               bibtex-completion-additional-search-fields))
-   for entry in entries
-   collect (bibtex-completion-prepare-entry entry
-            (cons (if (assoc-string "author" entry 'case-fold) "author" "editor") fields))))
 
 (defun bibtex-completion-find-pdf-in-field (key-or-entry)
   "Returns the path of the PDF specified in the field
@@ -400,7 +452,7 @@ file is specified, or if the specified file does not exist, or if
            (value (bibtex-completion-get-value bibtex-completion-pdf-field entry)))
       (cond
        ((not value) nil)         ; Field not defined.
-       ((f-file? value) value)   ; A bare full path was found.
+       ((f-file? value) (list value))   ; A bare full path was found.
        (t                        ; Zotero/Mendeley/JabRef format:
         (let ((value (replace-regexp-in-string "\\([^\\]\\);" "\\1\^^" value)))
           (cl-loop  ; Looping over the files:
@@ -489,32 +541,28 @@ find a PDF file."
       ;; Normalize case of entry type:
       (setcdr (assoc "=type=" entry) (downcase (cdr (assoc "=type=" entry))))
       ;; Remove duplicated fields:
-      (cl-remove-duplicates entry
-                            :test (lambda (x y) (string= (s-downcase x) (s-downcase y)))
-                            :key 'car :from-end t))))
+      (bibtex-completion-remove-duplicated-fields entry))))
+
+(defun bibtex-completion-remove-duplicated-fields (entry)
+  "Remove duplicated fields from ENTRY."
+  (cl-remove-duplicates entry
+                        :test (lambda (x y) (string= (s-downcase x) (s-downcase y)))
+                        :key 'car :from-end t))
 
 
 
-(defun bibtex-completion-candidates-formatter (candidates width)
-  "Formats BibTeX entries for display in results list."
-  (cl-loop
-   for entry in candidates
-   for entry = (cdr entry)
-   for entry-key = (bibtex-completion-get-value "=key=" entry)
-   if (assoc-string "author" entry 'case-fold)
-     for fields = '("author" "title" "year" "=has-pdf=" "=has-note=" "=type=")
-   else
-     for fields = '("editor" "title" "year" "=has-pdf=" "=has-note=" "=type=")
-   for fields = (-map (lambda (it)
-                        (bibtex-completion-clean-string
+(defun bibtex-completion-format-entry (entry width)
+  "Formats a BibTeX entry for display in results list."
+  (let* ((fields (list (if (assoc-string "author" entry 'case-fold) "author" "editor")
+                       "title" "year" "=has-pdf=" "=has-note=" "=type="))
+         (fields (-map (lambda (it)
+                         (bibtex-completion-clean-string
                           (bibtex-completion-get-value it entry " ")))
-                      fields)
-   for fields = (-update-at 0 'bibtex-completion-shorten-authors fields)
-   collect
-   (cons (s-format "$0 $1 $2 $3$4 $5" 'elt
-                   (-zip-with (lambda (f w) (truncate-string-to-width f w 0 ?\s))
-                              fields (list 36 (- width 53) 4 1 1 7)))
-         entry-key)))
+                       fields))
+         (fields (-update-at 0 'bibtex-completion-shorten-authors fields)))
+    (s-format "$0 $1 $2 $3$4 $5" 'elt
+              (-zip-with (lambda (f w) (truncate-string-to-width f w 0 ?\s))
+                         fields (list 36 (- width 53) 4 1 1 7)))))
 
 
 (defun bibtex-completion-clean-string (s)
@@ -537,53 +585,43 @@ values."
                concat (car p))
     nil))
 
-(defun bibtex-completion-normalize-candidate (candidate)
-  "Extract key from CANDIDATE."
-  (cond ((stringp candidate)
-         candidate)
-        ((stringp (cdr-safe candidate))
-         (cdr candidate))))
-
-(defun bibtex-completion-normalize-candidates (candidates)
-  "Normalize CANDIDATES to a list of candidates for each action
-function."
-  (cond
-   ;; single cons cell
-   ((stringp (cdr-safe candidates))
-    (list (cdr candidates)))
-   ((listp candidates)
-    (-map #'bibtex-completion-normalize-candidate candidates))
-   (t
-    (list candidates))))
-
 
-(defun bibtex-completion-open-pdf (candidates)
+(defun bibtex-completion-open-pdf (keys)
   "Open the PDFs associated with the marked entries using the
 function specified in `bibtex-completion-pdf-open-function'.  All paths
 in `bibtex-completion-library-path' are searched.  If there are several
 matching PDFs for an entry, the first is opened."
   (--if-let
       (-flatten
-       (-map 'bibtex-completion-find-pdf
-             (bibtex-completion-normalize-candidates candidates)))
+       (-map 'bibtex-completion-find-pdf keys))
       (-each it bibtex-completion-pdf-open-function)
     (message "No PDF(s) found.")))
 
-(defun bibtex-completion-open-url-or-doi (candidates)
+(defun bibtex-completion-open-url-or-doi (keys)
   "Open the associated URL or DOI in a browser."
-  (let ((keys (bibtex-completion-normalize-candidates candidates)))
-    (dolist (key keys)
-      (let* ((entry (bibtex-completion-get-entry key))
-             (url (bibtex-completion-get-value "url" entry))
-             (doi (bibtex-completion-get-value "doi" entry))
-             (browse-url-browser-function
-              (or bibtex-completion-browser-function
-                  browse-url-browser-function)))
-        (if url (browse-url url)
-          (if doi (browse-url
-                   (s-concat "http://dx.doi.org/" doi)))
+  (dolist (key keys)
+    (let* ((entry (bibtex-completion-get-entry key))
+           (url (bibtex-completion-get-value "url" entry))
+           (doi (bibtex-completion-get-value "doi" entry))
+           (browse-url-browser-function
+            (or bibtex-completion-browser-function
+                browse-url-browser-function)))
+      (if url
+          (browse-url url)
+        (if doi (browse-url
+                 (s-concat "http://dx.doi.org/" doi))
           (message "No URL or DOI found for this entry: %s"
                    key))))))
+
+(defun bibtex-completion-open-any (keys)
+  "Open the PDFs associated with the marked entries using the
+function specified in `bibtex-completion-pdf-open-function'.  If no PDF is
+found, try to open a URL or DOI in the browser instead."
+  (dolist (key keys)
+    (let ((pdf (bibtex-completion-find-pdf key)))
+      (if pdf
+          (funcall bibtex-completion-pdf-open-function (car pdf))
+        (bibtex-completion-open-url-or-doi (list key))))))
 
 (defun bibtex-completion-format-citation-default (keys)
   "Default formatter for keys, separates multiple keys with commas."
@@ -593,22 +631,62 @@ matching PDFs for an entry, the first is opened."
   "History list for LaTeX citation commands.")
 
 (defun bibtex-completion-format-citation-cite (keys)
-  "Formatter for LaTeX citation commands.  Prompts for the command and
-for arguments if the commands can take any."
-  (let* ((initial (when bibtex-completion-cite-default-as-initial-input bibtex-completion-cite-default-command))
-         (default (unless bibtex-completion-cite-default-as-initial-input bibtex-completion-cite-default-command))
-         (default-info (if default (format " (default \"%s\")" default) ""))
-         (cite-command (completing-read
-                        (format "Cite command%s: " default-info)
-                        bibtex-completion-cite-commands nil nil initial
-                        'bibtex-completion-cite-command-history default nil)))
-    (if (member cite-command '("nocite" "supercite"))  ; These don't want arguments.
-        (format "\\%s{%s}" cite-command (s-join ", " keys))
-      (let ((prenote  (if bibtex-completion-cite-prompt-for-optional-arguments (read-from-minibuffer "Prenote: ") ""))
-            (postnote (if bibtex-completion-cite-prompt-for-optional-arguments (read-from-minibuffer "Postnote: ") "")))
-        (if (and (string= "" prenote) (string= "" postnote))
+  "Formatter for LaTeX citation commands. Prompts for the command and
+for arguments if the commands can take any. If point is inside or just after a citation command, only adds KEYS to it."
+  (let (macro)
+    (cond
+     ((and (require 'reftex-parse nil t)
+           (setq macro (reftex-what-macro 1))
+           (stringp (car macro))
+           (string-match "\\`\\\\cite\\|cite\\'" (car macro)))
+      ;; We are inside a cite macro. Insert key at point, with appropriate delimiters.
+      (delete-horizontal-space)
+      (concat (pcase (preceding-char)
+                (?\{ "")
+                (?, " ")
+                (_ ", "))
+              (s-join ", " keys)
+              (if (member (following-char) '(?\} ?,))
+		     ""
+                ", ")))
+     ((and (equal (preceding-char) ?\})
+           (require 'reftex-parse nil t)
+           (save-excursion
+             (forward-char -1)
+             (setq macro (reftex-what-macro 1)))
+           (stringp (car macro))
+           (string-match "\\`\\\\cite\\|cite\\'" (car macro)))
+      ;; We are right after a cite macro. Append key and leave point at the end.
+      (delete-char -1)
+      (delete-horizontal-space t)
+      (concat (pcase (preceding-char)
+                (?\{ "")
+                (?, " ")
+                (_ ", "))
+              (s-join ", " keys)
+              "}"))
+     (t
+      ;; We are not inside or right after a cite macro. Insert a full citation.
+      (let* ((initial (when bibtex-completion-cite-default-as-initial-input
+                        bibtex-completion-cite-default-command))
+             (default (unless bibtex-completion-cite-default-as-initial-input
+                        bibtex-completion-cite-default-command))
+             (default-info (if default (format " (default \"%s\")" default) ""))
+             (cite-command (completing-read
+                            (format "Cite command%s: " default-info)
+                            bibtex-completion-cite-commands nil nil initial
+                            'bibtex-completion-cite-command-history default nil)))
+        (if (member cite-command '("nocite" "supercite"))  ; These don't want arguments.
             (format "\\%s{%s}" cite-command (s-join ", " keys))
-          (format "\\%s[%s][%s]{%s}" cite-command prenote postnote (s-join ", " keys)))))))
+          (let ((prenote (if bibtex-completion-cite-prompt-for-optional-arguments
+                             (read-from-minibuffer "Prenote: ")
+                           ""))
+                (postnote (if bibtex-completion-cite-prompt-for-optional-arguments
+                              (read-from-minibuffer "Postnote: ")
+                            "")))
+            (if (and (string= "" prenote) (string= "" postnote))
+                (format "\\%s{%s}" cite-command (s-join ", " keys))
+              (format "\\%s[%s][%s]{%s}" cite-command prenote postnote (s-join ", " keys))))))))))
 
 (defun bibtex-completion-format-citation-pandoc-citeproc (keys)
   "Formatter for pandoc-citeproc citations."
@@ -632,20 +710,18 @@ omitted."
                 for pdfs = (bibtex-completion-find-pdf key)
                 append (--map (format "[[%s][%s]]" it key) pdfs))))
 
-(defun bibtex-completion-insert-citation (candidates)
+(defun bibtex-completion-insert-citation (keys)
   "Insert citation at point.  The format depends on
 `bibtex-completion-format-citation-functions'."
-  (let ((keys (bibtex-completion-normalize-candidates candidates))
-        (format-function
+  (let ((format-function
          (cdr (or (assoc major-mode bibtex-completion-format-citation-functions)
                   (assoc 'default   bibtex-completion-format-citation-functions)))))
     (insert
      (funcall format-function keys))))
 
-(defun bibtex-completion-insert-reference (candidates)
+(defun bibtex-completion-insert-reference (keys)
   "Insert a reference for each selected entry."
-  (let* ((keys (bibtex-completion-normalize-candidates candidates))
-         (refs (--map
+  (let* ((refs (--map
                 (s-word-wrap fill-column
                              (concat "\n- " (bibtex-completion-apa-format-reference it)))
                 keys)))
@@ -655,9 +731,7 @@ omitted."
   "Returns a plain text reference in APA format for the
 publication specified by KEY."
   (let*
-   ((key (bibtex-completion-normalize-candidate key))
-    (entry (bibtex-completion-get-entry
-            (bibtex-completion-normalize-candidate key)))
+   ((entry (bibtex-completion-get-entry key))
     (ref (pcase (downcase (bibtex-completion-get-value "=type=" entry))
            ("article"
             (s-format
@@ -801,20 +875,17 @@ defined.  Surrounding curly braces are stripped."
           value))
       default)))
 
-(defun bibtex-completion-insert-key (candidates)
+(defun bibtex-completion-insert-key (keys)
   "Insert BibTeX key at point."
-  (let ((keys (bibtex-completion-normalize-candidates candidates)))
-    (insert
-     (funcall 'bibtex-completion-format-citation-default keys))))
+  (insert
+   (funcall 'bibtex-completion-format-citation-default keys)))
 
-(defun bibtex-completion-insert-bibtex (candidates)
+(defun bibtex-completion-insert-bibtex (keys)
   "Insert BibTeX key at point."
-  (let ((keys (bibtex-completion-normalize-candidates candidates)))
-    (insert (s-join "\n" (--map (bibtex-completion-make-bibtex it) keys)))))
+  (insert (s-join "\n" (--map (bibtex-completion-make-bibtex it) keys))))
 
 (defun bibtex-completion-make-bibtex (key)
-  (let* ((entry (bibtex-completion-get-entry
-                 (bibtex-completion-normalize-candidate key)))
+  (let* ((entry (bibtex-completion-get-entry key))
          (entry-type (bibtex-completion-get-value "=type=" entry)))
     (format "@%s{%s,\n%s}\n"
             entry-type key
@@ -829,12 +900,11 @@ defined.  Surrounding curly braces are stripped."
              concat
              (format "  %s = %s,\n" name value)))))
 
-(defun bibtex-completion-add-PDF-attachment (candidates)
+(defun bibtex-completion-add-PDF-attachment (keys)
   "Attach the PDFs of the selected entries where available."
   (--if-let
       (-flatten
-       (-map 'bibtex-completion-find-pdf
-             (bibtex-completion-normalize-candidates candidates)))
+       (-map 'bibtex-completion-find-pdf keys))
       (-each it 'mml-attach-file)
     (message "No PDF(s) found.")))
 
@@ -867,9 +937,9 @@ line."
         (delete-window window)
       (switch-to-buffer (other-buffer)))))
 
-(defun bibtex-completion-edit-notes (key)
-  "Open the notes associated with the entry using `find-file'."
-  (let ((key (bibtex-completion-normalize-candidate key)))
+(defun bibtex-completion-edit-notes (keys)
+  "Open the notes associated with the selected entries using `find-file'."
+  (dolist (key keys)
     (if (and bibtex-completion-notes-path
              (f-directory? bibtex-completion-notes-path))
                                         ; One notes file per publication:
@@ -911,11 +981,11 @@ line."
   (or (get-file-buffer file)
       (find-buffer-visiting file)))
 
-(defun bibtex-completion-show-entry (key)
-  "Show the entry in the BibTeX file."
+(defun bibtex-completion-show-entry (keys)
+  "Show the first selected entry in the BibTeX file."
   (catch 'break
     (dolist (bibtex-file (-flatten (list bibtex-completion-bibliography)))
-      (let ((key (bibtex-completion-normalize-candidate key))
+      (let ((key (car keys))
             (buf (bibtex-completion-buffer-visiting bibtex-file)))
         (find-file bibtex-file)
         (goto-char (point-min))
@@ -927,15 +997,36 @@ line."
           (unless buf
             (kill-buffer)))))))
 
-(defun bibtex-completion-fallback-action (url-or-function)
+(defun bibtex-completion-add-pdf-to-library (keys)
+  "Add a PDF to the library for the first selected entry. The PDF can be added either from an open buffer or a file."
+  (let* ((key (car keys))
+         (source (char-to-string
+                  (read-char-choice "Add pdf from [b]uffer or [f]ile? " '(?b ?f))))
+         (buffer (when (string= source "b")
+                   (read-buffer-to-switch "Add pdf buffer: ")))
+         (file (when (string= source "f")
+                 (expand-file-name (read-file-name "Add pdf file: " nil nil t))))
+         (path (-flatten (list bibtex-completion-library-path)))
+         (path (if (cdr path)
+                   (completing-read "Add pdf to: " path nil t)
+                 (car path)))
+         (pdf (expand-file-name (concat key ".pdf") path)))
+    (cond
+     (buffer
+      (with-current-buffer buffer
+        (write-file pdf)))
+     (file
+      (copy-file file pdf)))))
+
+(defun bibtex-completion-fallback-action (url-or-function search-expression)
   (let ((browse-url-browser-function
           (or bibtex-completion-browser-function
               browse-url-browser-function)))
     (cond
       ((stringp url-or-function)
-        (browse-url (format url-or-function (url-hexify-string helm-pattern))))
+        (browse-url (format url-or-function (url-hexify-string search-expression))))
       ((functionp url-or-function)
-        (funcall url-or-function))
+        (funcall url-or-function search-expression))
       (t (error "Don't know how to interpret this: %s" url-or-function)))))
 
 (defun bibtex-completion-fallback-candidates ()
@@ -945,9 +1036,22 @@ entry for each BibTeX file that will open that file for editing."
   (let ((bib-files (-flatten (list bibtex-completion-bibliography))))
     (-concat
       (--map (cons (s-concat "Create new entry in " (f-filename it))
-                   `(lambda () (find-file ,it) (goto-char (point-max)) (newline)))
+                   `(lambda (_search-expression) (find-file ,it) (goto-char (point-max)) (newline)))
              bib-files)
       bibtex-completion-fallback-options)))
+
+(defun bibtex-completion-find-local-bibliography ()
+  "Return a list of BibTeX files associated with the current file. If the current file is a BibTeX file, return this file. Otherwise, try to use `reftex' to find the associated BibTeX files. If this fails, return `bibtex-completion-bibliography'."
+  (or (and (buffer-file-name)
+           (string= (or (f-ext (buffer-file-name)) "") "bib")
+           (list (buffer-file-name)))
+      (and (buffer-file-name)
+           (require 'reftex-parse nil t)
+           (reftex-locate-bibliography-files
+            (if (fboundp 'TeX-master-directory)
+                (TeX-master-directory)
+              (file-name-directory (buffer-file-name)))))
+      bibtex-completion-bibliography))
 
 (provide 'bibtex-completion)
 

@@ -62,14 +62,14 @@
 
 (defcustom org-ref-bibtex-completion-actions
   '(("Insert citation" . helm-bibtex-insert-citation)
-    ("Open PDF file (if present)" . helm-bibtex-open-pdf)
+    ("Open PDF, URL or DOI" . helm-bibtex-open-any)
     ("Open URL or DOI in browser" . helm-bibtex-open-url-or-doi)
     ("Insert reference" . helm-bibtex-insert-reference)
     ("Insert BibTeX key" . helm-bibtex-insert-key)
     ("Insert BibTeX entry" . helm-bibtex-insert-bibtex)
     ("Attach PDF to email" . helm-bibtex-add-PDF-attachment)
-    ("Edit notes" . bibtex-completion-edit-notes)
-    ("Show entry" . bibtex-completion-show-entry)
+    ("Edit notes" . helm-bibtex-edit-notes)
+    ("Show entry" . helm-bibtex-show-entry)
     ("Add keywords to entries" . org-ref-helm-tag-entries)
     ("Copy entry to clipboard" . bibtex-completion-copy-candidate))
   "Cons cells of string and function to set the actions of `helm-bibtex' to.
@@ -107,7 +107,7 @@ The cdr of the the cons cell is the function to use."
 ;;* Helm bibtex setup.
 (setq bibtex-completion-additional-search-fields '(keywords))
 
-(defun bibtex-completion-candidates-formatter (candidates _source)
+(defun helm-bibtex-candidates-formatter (candidates _source)
   "Formats BibTeX entries for display in results list.
 Argument CANDIDATES helm candidates.
 Argument SOURCE the helm source.
@@ -133,7 +133,7 @@ fields, the keywords I think."
    collect
    (cons (s-format "$0 $1 $2 $3 $4$5 $6" 'elt
                    (-zip-with (lambda (f w) (truncate-string-to-width f w 0 ?\s))
-                              fields (list 36 (- width 85) 4 1 1 7 7)))
+                              fields (list 36 (- width 85) 4 1 1 7 31)))
          entry-key)))
 
 
@@ -162,11 +162,6 @@ CANDIDATE is ignored."
 	(kill-new (buffer-string))))))
 
 
-(helm-add-action-to-source
- "Copy entry to clipboard"
- 'bibtex-completion-copy-candidate
- helm-source-bibtex)
-
 
 (defun org-ref-helm-tag-entries (_candidates)
   "Set tags on selected bibtex entries from `helm-bibtex'.
@@ -177,14 +172,15 @@ Argument CANDIDATES helm candidates."
 	 (entry (bibtex-completion-get-entry (car keys)))
 	 (field (cdr (assoc-string "keywords" entry)))
 	 (value (when field (replace-regexp-in-string "^{\\|}$" "" field)))
-	 (keywords (read-string "Keywords (comma separated): " (when value
-								 (concat value ", ")))))
+	 (keywords (read-string "Keywords (comma separated): "
+				(when (and value (not (equal "" value)))
+				  (concat value ", ")))))
     (cl-loop for key in keys
 	     do
 	     (save-window-excursion
-	       (bibtex-completion-show-entry key)
+	       (bibtex-completion-show-entry (list key))
 	       ;; delete keyword field if empty
-	       (if (string-match "^\s-*" keywords)
+	       (if (equal "" keywords)
 		   (save-restriction
 		     (bibtex-narrow-to-entry)
 		     (goto-char (car (cdr (bibtex-search-forward-field "keywords" t))))
@@ -194,22 +190,14 @@ Argument CANDIDATES helm candidates."
 		  (concat
 		   (if (listp keywords)
 		       (if (string-match value keywords)
-			   (and (replace-match "")
-				(mapconcat 'identity keywords ", "))
-			 (mapconcat 'identity keywords ", "))
-		     keywords))))
-	       (when (looking-back ", " (line-beginning-position))
-	       	 (delete-char 2))
+		  	   (and (replace-match "")
+		  		(mapconcat 'identity keywords ", "))
+		  	 (mapconcat 'identity keywords ", "))
+		     ;; remove trailing comma
+		     (replace-regexp-in-string ", $" "" keywords)))))
 	       (save-buffer)))))
 
 
-
-
-;; Add a new action
-(helm-add-action-to-source
- "Add keywords to entries"
- 'org-ref-helm-tag-entries
- helm-source-bibtex)
 
 
 (defun org-ref-bibtex-completion-format-org (keys)
@@ -403,7 +391,8 @@ Checks for pdf and doi, and add appropriate functions."
          (key (car results))
          (pdf-file (funcall org-ref-get-pdf-filename-function key))
 	 (pdf-bibtex-completion (car (bibtex-completion-find-pdf key)))
-	 (pdf-mendeley (org-ref-get-mendeley-filename key))
+	 (entry (bibtex-completion-get-entry key))
+	 (notes-p (cdr (assoc "=has-note=" entry)))
          (bibfile (cdr results))
          (url (save-excursion
                 (with-temp-buffer
@@ -441,13 +430,6 @@ Checks for pdf and doi, and add appropriate functions."
     			     (funcall org-ref-open-pdf-function)))
     	    candidates))
 
-	  ;; try with mendeley function
-    	  ((file-exists-p pdf-mendeley)
-    	   (cl-pushnew
-    	    '("Open pdf" . (lambda ()
-    			     (funcall org-ref-open-pdf-function)))
-    	    candidates))
-
 	  ;; try with doi
     	  (t
     	   (cl-pushnew
@@ -458,10 +440,13 @@ Checks for pdf and doi, and add appropriate functions."
     				     (doi-utils-get-bibtex-entry-pdf))))
     	    candidates)))
 
-
-    (cl-pushnew
-     '("Open notes" . org-ref-open-notes-at-point)
-     candidates)
+    (if notes-p
+	(cl-pushnew
+	 '("Open notes" . org-ref-open-notes-at-point)
+	 candidates)
+      (cl-pushnew
+       '("Add notes" . org-ref-open-notes-at-point)
+       candidates))
 
     ;; conditional url and doi functions
     (when (or url doi)
@@ -636,12 +621,7 @@ KEY is returned for the selected item(s) in helm."
       :action '(("Browse labels" . (lambda (label)
 				     (with-selected-window (selected-window)
 				       (org-open-link-from-string
-					(format "ref:%s" label))))))
-      :persistent-action (lambda (label)
-			   (with-selected-window (selected-window)
-			     (org-open-link-from-string
-			      (format "ref:%s" label)))
-			   (helm-highlight-current-line nil nil nil nil 'pulse)))))
+					(format "ref:%s" label)))))))))
 
 ;; browse citation links
 
@@ -695,8 +675,7 @@ With a prefix ARG, browse labels."
 	      :real-to-display 'org-ref-browser-display
 	      :persistent-action (lambda (candidate)
 	      			   (helm-goto-char
-	      			    (cdr (assoc candidate count-key-pos)))
-	      			   (helm-highlight-current-line nil nil nil nil 'pulse))
+	      			    (cdr (assoc candidate count-key-pos))))
 	      :action `(("Open menu" . ,(lambda (candidate)
 	      				  (helm-goto-char
 	      				   (cdr (assoc candidate count-key-pos)))

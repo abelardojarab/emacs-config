@@ -1,5 +1,13 @@
-30-cvs (in development)
+31-cvs (in development)
 =======================
+
+- New syntax checkers:
+
+  - Protobuf with ``protoc`` [GH-1125]
+  - systemd-analyze with ``systemd-analyze`` [GH-1135]
+
+30 (Oct 12, 2016)
+=================
 
 - **Breaking changes**
 
