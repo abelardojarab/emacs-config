@@ -39,6 +39,12 @@
                                      company-gtags
                                      company-dabbrev-code
                                      company-dabbrev))
+            (add-hook 'text-mode-hook
+                      (lambda ()
+                        (setq-default company-backends '(company-semantic
+                                                         company-dabbrev-code
+                                                         company-dabbrev
+                                                         company-bibtex))))
 
             (setq company-idle-delay 0.1
                   company-selection-wrap-around t
