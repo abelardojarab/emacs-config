@@ -137,11 +137,11 @@
 
 (ert-deftest ivy--regex-fuzzy ()
   (should (string= (ivy--regex-fuzzy "tmux")
-                   "\\(t\\).*\\(m\\).*\\(u\\).*\\(x\\)"))
+                   "\\(t\\).*?\\(m\\).*?\\(u\\).*?\\(x\\)"))
   (should (string= (ivy--regex-fuzzy "^tmux")
-                   "^\\(t\\).*\\(m\\).*\\(u\\).*\\(x\\)"))
+                   "^\\(t\\).*?\\(m\\).*?\\(u\\).*?\\(x\\)"))
   (should (string= (ivy--regex-fuzzy "^tmux$")
-                   "^\\(t\\).*\\(m\\).*\\(u\\).*\\(x\\)$"))
+                   "^\\(t\\).*?\\(m\\).*?\\(u\\).*?\\(x\\)$"))
   (should (string= (ivy--regex-fuzzy "")
                    ""))
   (should (string= (ivy--regex-fuzzy "^")
@@ -407,5 +407,21 @@
   (should (ivy-re-match '(("counsel" . t) ("defun" . t)) "(defun counsel"))
   (should (not (ivy-re-match '(("counsel" . nil) ("defun" . t)) "(defun counsel")))
   (should (not (ivy-re-match '(("defun" . t) ("counsel" . nil)) "(defun counsel"))))
+
+(ert-deftest ivy-read-preselect ()
+  (should (equal
+           (ivy-with
+            '(ivy-read "test: "
+              (list "abc" "default" "def")
+              :preselect 1)
+            "RET")
+           "default"))
+  (should (equal
+           (ivy-with
+            '(ivy-read "test: "
+              (list "abc" "default" "def")
+              :preselect "defa")
+            "RET")
+           "default")))
 
 (provide 'ivy-test)

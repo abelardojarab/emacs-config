@@ -152,7 +152,7 @@
                   ;; highlight word/letter changes in hunk diffs
                   magit-diff-refine-hunk t
                   ;; use ido to look for branches
-                  magit-completing-read-function 'magit-ido-completing-read
+                  magit-completing-read-function 'ivy-completing-read
                   ;; ask me if I want to include a revision when rewriting
                   magit-rewrite-inclusive 'ask
                   ;; this is too expensive to have on by default
@@ -206,24 +206,24 @@ branch."
 
             ;; Show worktree section if there are worktrees, avoid overhead if
             ;; there aren't.
-            (defvar-local np/magit-want-worktrees t)
-            (put 'np/magit-want-worktrees 'permanent-local t)
-            (defun np/magit-maybe-add-worktrees ()
-              (if (and np/magit-want-worktrees
+            (defvar-local my/magit-want-worktrees t)
+            (put 'my/magit-want-worktrees 'permanent-local t)
+            (defun my/magit-maybe-add-worktrees ()
+              (if (and my/magit-want-worktrees
                        (not (memq #'magit-insert-worktrees magit-status-sections-hook))
                        (> (length (magit-list-worktrees)) 1))
                   (magit-add-section-hook
                    'magit-status-sections-hook #'magit-insert-worktrees
                    'magit-insert-status-headers 'append 'local)
-                (setq-local np/magit-want-worktrees nil)))
-            (add-hook 'magit-status-mode-hook #'np/magit-maybe-add-worktrees)
+                (setq-local my/magit-want-worktrees nil)))
+            (add-hook 'magit-status-mode-hook #'my/magit-maybe-add-worktrees)
 
             ;; Show submodule section if there are submodules, avoid overhead if
             ;; there aren't.
-            (defvar-local np/magit-want-submodules t)
-            (put 'np/magit-want-submodules 'permanent-local t)
-            (defun np/magit-maybe-add-submodules ()
-              (if (and np/magit-want-submodules
+            (defvar-local my/magit-want-submodules t)
+            (put 'my/magit-want-submodules 'permanent-local t)
+            (defun my/magit-maybe-add-submodules ()
+              (if (and my/magit-want-submodules
                        (not (memq #'magit-insert-submodules magit-status-sections-hook))
                        (magit-get-submodules))
                   (dolist (inserter '(magit-insert-modules-unpulled-from-upstream
@@ -234,8 +234,8 @@ branch."
                     (magit-add-section-hook
                      'magit-status-sections-hook inserter
                      'magit-insert-unpulled-from-upstream nil 'local))
-                (setq-local np/magit-want-submodules nil)))
-            (add-hook 'magit-status-mode-hook #'np/magit-maybe-add-submodules)
+                (setq-local my/magit-want-submodules nil)))
+            (add-hook 'magit-status-mode-hook #'my/magit-maybe-add-submodules)
 
             ;; restore previously hidden windows
             (defadvice magit-quit-window (around magit-restore-screen activate)

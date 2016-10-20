@@ -1,7 +1,7 @@
 emacs ?= emacs
 elmake = $(emacs) -batch -l makefi.el -f
 
-LOAD = -l colir.el -l ivy.el -l swiper.el -l counsel.el
+LOAD = -l colir.el -l ivy-overlay.el -l ivy.el -l swiper.el -l counsel.el
 
 all: test
 
@@ -12,6 +12,7 @@ compile:
 	$(emacs) -batch --eval "(progn (add-to-list 'load-path default-directory) (mapc #'byte-compile-file '(\"ivy.el\" \"swiper.el\" \"counsel.el\")))"
 
 plain:
+	$(emacs) --version
 	$(emacs) -Q $(LOAD) --eval "(progn (package-initialize) (ivy-mode))"
 
 obsolete:

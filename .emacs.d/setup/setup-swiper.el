@@ -26,12 +26,12 @@
 
 (use-package swiper
   :defer t
-  :commands (swiper swiper-all ivy-read ivy-mode)
+  :commands (swiper swiper-all ivy-read ivy-completing-read ivy-mode)
   :load-path (lambda () (expand-file-name "swiper/" user-emacs-directory))
   :config (progn
             (set-variable 'ivy-on-del-error-function '(lambda()))
             (setq ivy-use-virtual-buffers t)
-            (setq ivy-height 5)))
+            (setq ivy-height 10)))
 
 (use-package swiper-helm
   :defer t
