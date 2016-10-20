@@ -78,12 +78,15 @@
 ;; Show inline arguments hint for the C/C++ function at point
 (use-package function-args
   :defer t
-  :commands (moo-complete moo-jump-local)
+  :commands (moo-complete moo-jump-local function-args-mode)
   :load-path (lambda () (expand-file-name "function-args/" user-emacs-directory))
   :bind (:map c-mode-map
               ("C-c c" . moo-complete)
               :map c++-mode-map
               ("C-c c" . moo-complete))
+  :init (progn
+          (add-hook 'c++-mode-hook 'function-args-mode)
+          (add-hook 'c-mode-hook 'function-args-mode))
   :config (progn
             (fa-config-default)
             (define-key function-args-mode-map (kbd "M-o") nil)))
@@ -107,16 +110,15 @@
 (use-package irony
   :defer t
   :commands (irony-mode irony-install-server)
-  :if (executable-find "clang")
+  :if (or (file-exists-p "~/.emacs.cache/irony-server/bin/irony-server")
+          (file-exists-p "/usr/local/bin/irony-server")
+          (executable-find "irony-server"))
   :diminish irony-mode
   :load-path (lambda () (expand-file-name "irony-mode/" user-emacs-directory))
   :after (ggtags eldoc function-args company)
   :init (progn
-          (when (or (file-exists-p "~/.emacs.cache/irony-server/bin/irony-server")
-                    (file-exists-p "/usr/local/bin/irony-server")
-                    (executable-find "irony-server"))
             (add-hook 'c++-mode-hook 'irony-mode)
-            (add-hook 'c-mode-hook 'irony-mode)))
+            (add-hook 'c-mode-hook 'irony-mode))
   :config (progn
             (if (file-exists-p "/usr/local/bin/irony-server")
                 (setq irony-server-install-prefix "/usr/local/"))

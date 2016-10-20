@@ -80,22 +80,28 @@
   :after company
   :if (executable-find "clang")
   :load-path (lambda () (expand-file-name "company-c-headers/" user-emacs-directory))
-  :config (add-hook 'c-common-mode-hook
-                    (lambda ()
-                      (setq-default company-backends '(company-semantic
-                                                       company-gtags
-                                                       company-c-headers
-                                                       company-dabbrev-code)))))
+  :config (progn
+            (add-to-list 'company-backends 'company-c-headers)
+            (add-hook 'c-common-mode-hook
+                      (lambda ()
+                        (setq-default company-backends '(company-semantic
+                                                         company-gtags
+                                                         company-c-headers
+                                                         company-dabbrev-code))))))
 
 ;; Company integration with irony
 (use-package company-irony
-  :if (executable-find "irony-server")
-  :after (company-c-headers irony)
+  :after irony
+  :if (or (file-exists-p "~/.emacs.cache/irony-server/bin/irony-server")
+          (file-exists-p "/usr/local/bin/irony-server")
+          (executable-find "irony-server"))
   :load-path (lambda () (expand-file-name "company-irony/" user-emacs-directory))
   :config (progn
+            (add-to-list 'company-backends 'company-irony)
             (add-hook 'irony-mode-hook
                       (lambda ()
-                        (if (executable-find "rdm")
+                        (if (and (executable-find "rdm")
+                                 (cmake-ide--locate-cmakelists))
                             (setq-default company-backends '(company-rtags
                                                              company-gtags
                                                              company-irony
@@ -110,10 +116,11 @@
 
 ;; Company integration with rtags
 (use-package company-rtags
-  :if (executable-find "rtags")
+  :if (executable-find "rdm")
   :load-path (lambda () (expand-file-name "rtags/src/" user-emacs-directory))
   :after (company rtags)
   :config (progn
+            (add-to-list 'company-backends 'company-rtags)
             (setq rtags-completions-enabled t)))
 
 ;; Company bibtex integration

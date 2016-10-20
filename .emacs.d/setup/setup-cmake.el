@@ -179,9 +179,7 @@ sets `match-data' to the entire match."
               ;; Syntax highlighting:
               (setq font-lock-defaults '(rtags-rdm-mode-keywords t t)))
 
-            
-;;; Using the diagnostics buffer
-
+            ;; Using the diagnostics buffer
             (defun rtags-show-diagnostics-buffer ()
               "Show/hide the diagnostics buffer in a dedicated
 window (similar to `rtags-diagnostics' but without reparsing)."
@@ -288,8 +286,7 @@ enabled projects."
               (add-hook 'c-mode-hook   #'rtags-cmake-mode)
               (add-hook 'c++-mode-hook #'rtags-cmake-mode))
 
-;;; Find the (CMake) project root directory
-
+            ;; Find the (CMake) project root directory
             (defun my/rtags-cmake-find-buffer-project-root ()
               "Check if the current buffer's project is a CMake project, and
   if so return the root directory of the project. Otherwise
@@ -340,8 +337,7 @@ is-cmake is for recursion."
               (with-current-buffer (rtags-get-buffer)
                 (rtags-call-rc "-J" comp-db-dir)))
 
-;;; Find the compilation database (e.g. the build directory)
-
+            ;; Find the compilation database (e.g. the build directory)
             (defun my/rtags-cmake-get-build-dir (project-dir)
               "Return the absolute path of the build directory for the
 project located in the specified project-dir. If a file .rtags
@@ -673,8 +669,8 @@ the specified directory."
   :config (progn
             (defun use-cmake-ide ()
               (cmake-ide-setup)
-              (when (cmake-ide--locate-cmakelists)
-                (setq cmake-ide-build-dir (concat (cmake-ide--locate-cmakelists) "cmake_build_dir/"))))))
+              (if (cmake-ide--locate-cmakelists)
+                  (setq cmake-ide-build-dir (concat (cmake-ide--locate-cmakelists) "cmake_build_dir/"))))))
 
 ;; minor-mode integrating the CMake build process
 (use-package cmake-project
@@ -695,8 +691,7 @@ the specified directory."
                     (make-directory cmake-project-default-build-dir-name) t)
                 (cmake-project-mode)))
 
-            (add-hook 'c-mode-hook 'cmake-project-hook)
-            (add-hook 'c++-mode-hook 'cmake-project-hook)))
+            (add-hook 'c-common-mode-hook 'cmake-project-hook)))
 
 (provide 'setup-cmake)
 ;;; setup-cmake.el ends here
