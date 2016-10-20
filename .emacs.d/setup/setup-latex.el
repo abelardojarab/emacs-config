@@ -24,6 +24,38 @@
 
 ;;; Code:
 
+(use-package auctex
+  :load-path (lambda () (expand-file-name "auctex/" user-emacs-directory))
+  :init (progn
+          (add-hook 'LaTeX-mode-hook #'LaTeX-preview-setup)
+          (add-hook 'LaTeX-mode-hook #'flyspell-mode)
+          (add-hook 'LaTeX-mode-hook #'turn-on-reftex)
+          (setq TeX-auto-save t
+                TeX-parse-self t
+                TeX-save-query nil
+                TeX-PDF-mode t)
+          (setq-default TeX-master nil)
+
+          ;; Auto-fill for LaTeX
+          (defun my/latex-auto-fill ()
+            "Turn on auto-fill for LaTeX mode."
+            (turn-on-auto-fill)
+            (set-fill-column 80)
+            (setq default-justification 'left))
+          (add-hook 'LaTeX-mode-hook #'my/latex-auto-fill)))
+
+(use-package reftex
+  :commands turn-on-reftex
+  :init (progn
+          (setq reftex-plug-into-AUCTeX t)))
+
+(use-package bibtex
+  :mode ("\\.bib" . bibtex-mode)
+  :init
+  (progn
+    (setq bibtex-align-at-equal-sign t)
+    (add-hook 'bibtex-mode-hook (lambda () (set-fill-column 120)))))
+
 (use-package latex-pretty-symbols
   :commands latex-unicode-simplified
   :load-path (lambda () (expand-file-name "latex-pretty-symbols/" user-emacs-directory))
@@ -44,6 +76,10 @@
                 magic-latex-enable-block-align     nil
                 magic-latex-enable-inline-image    nil
                 magic-latex-enable-minibuffer-echo t))
+
+;; Fast input methods for LaTeX environments and math
+(use-package cdlatex
+  :load-path (lambda () (expand-file-name "cdlatex/" user-emacs-directory)))
 
 (provide 'setup-latex)
 ;;; setup-latex.el ends here
