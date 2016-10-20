@@ -64,6 +64,15 @@
              magit-blame-mode
              magit-quit-session
              magit-status-internal
+             magit-checkout
+             magit-fetch
+             magit-fetch-popup
+             magit-branch
+             magit-branch-popup
+             magit-push
+             magit-push-popup
+             magit-pull
+             magit-pull-popup
              projectile-vc
              git-visit-diffs
              git-visit-diffs-prev
