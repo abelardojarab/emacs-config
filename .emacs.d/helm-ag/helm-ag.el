@@ -4,8 +4,8 @@
 
 ;; Author: Syohei YOSHIDA <syohex@gmail.com>
 ;; URL: https://github.com/syohex/emacs-helm-ag
-;; Version: 0.56
-;; Package-Requires: ((emacs "24.3") (helm "1.7.7"))
+;; Version: 0.57
+;; Package-Requires: ((emacs "24.4") (helm "2.0"))
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -37,6 +37,7 @@
 (require 'helm-grep)
 (require 'helm-utils)
 (require 'compile)
+(require 'subr-x)
 
 (declare-function helm-read-file-name "helm-mode")
 (declare-function helm-grep-get-file-extensions "helm-grep")
@@ -97,6 +98,10 @@ They are specified to `--ignore' options."
 (defcustom helm-ag-use-temp-buffer nil
   "Use temporary buffer for persistent action."
   :type 'boolean)
+
+(defcustom helm-ag-ignore-buffer-patterns nil
+  "Use temporary buffer for persistent action."
+  :type '(repeat regexp))
 
 (defcustom helm-ag-show-status-function 'helm-ag-show-status-default-mode-line
   "Function called after that `ag' process is finished after `helm-do-ag'.
@@ -193,10 +198,19 @@ Default behaviour shows finish and result in mode-line."
         (list query)
       (nconc (nreverse options) (list query)))))
 
-(defsubst helm-ag--file-visited-buffers ()
-  (cl-loop for buf in (buffer-list)
-           when (buffer-file-name buf)
-           collect it))
+(defsubst helm-ag--search-buffer-p (bufname)
+  (cl-loop for regexp in helm-ag-ignore-buffer-patterns
+           never (string-match-p regexp bufname)))
+
+(defun helm-ag--file-visited-buffers ()
+  (let ((bufs (cl-loop for buf in (buffer-list)
+                       when (buffer-file-name buf)
+                       collect it)))
+    (if (not helm-ag-ignore-buffer-patterns)
+        bufs
+      (cl-loop for buf in bufs
+               when (helm-ag--search-buffer-p buf)
+               collect buf))))
 
 (defun helm-ag--construct-targets (targets)
   (let ((default-directory helm-ag--default-directory))
@@ -285,7 +299,7 @@ Default behaviour shows finish and result in mode-line."
     ;; 'pt' always show filename if matched file is only one.
     (setq this-file nil))
   (let* ((file-line (helm-grep-split-line candidate))
-         (filename (or this-file (cl-first file-line)))
+         (filename (or this-file (cl-first file-line) candidate))
          (line (if this-file
                    (cl-first (split-string candidate ":"))
                  (cl-second file-line)))
@@ -460,16 +474,19 @@ Default behaviour shows finish and result in mode-line."
   (interactive)
   (setq helm-ag--context-stack nil))
 
-(defsubst helm-ag--marked-input ()
+(defun helm-ag--marked-input (escape)
   (when (use-region-p)
-    (prog1 (buffer-substring-no-properties (region-beginning) (region-end))
-      (deactivate-mark))))
+    (let ((input (buffer-substring-no-properties (region-beginning) (region-end))))
+      (deactivate-mark)
+      (if (not escape)
+          input
+        (replace-regexp-in-string " " "\\\\ " input)))))
 
 (defun helm-ag--query ()
   (let* ((searched-word (helm-ag--searched-word))
-         (marked-word (helm-ag--marked-input))
+         (marked-word (helm-ag--marked-input nil))
          (query (read-string "Pattern: " (or marked-word searched-word) 'helm-ag--command-history)))
-    (when (string= query "")
+    (when (string-empty-p query)
       (error "Input is empty!!"))
     (setq helm-ag--last-query query)))
 
@@ -612,7 +629,7 @@ Default behaviour shows finish and result in mode-line."
             (if (not marked-lines)
                 (setq buf-content (buffer-substring-no-properties
                                    body-start (point-max)))
-              (setq buf-content (concat (mapconcat 'identity marked-lines "\n") "\n")))))
+              (setq buf-content (concat (string-join marked-lines "\n") "\n")))))
         (insert buf-content)
         (add-text-properties (point-min) (point-max)
                              '(read-only t rear-nonsticky t front-sticky t))
@@ -845,7 +862,7 @@ Continue searching the parent directory? "))
             (car patterns))
       (cl-case helm-ag--command-feature
         (pt input)
-        (pt-regexp (mapconcat 'identity patterns ".*"))
+        (pt-regexp (string-join patterns ".*"))
         (otherwise (cl-loop for s in patterns
                             if (helm-ag--convert-invert-pattern s)
                             concat (concat "(?=" it ")")
@@ -921,16 +938,22 @@ Continue searching the parent directory? "))
                          "\\*" ""
                          (replace-regexp-in-string "\\." "\\\\." ext)))))
 
+(defun helm-ag--show-result-p (options has-query)
+  (or has-query
+      (cl-loop for opt in options
+               thereis (string-prefix-p "-g" opt))))
+
 (defun helm-ag--construct-do-ag-command (pattern)
   (let* ((opt-query (helm-ag--parse-options-and-query pattern))
          (options (car opt-query))
-         (query (cdr opt-query)))
+         (query (cdr opt-query))
+         (has-query (not (string= query ""))))
     (when helm-ag-use-emacs-lisp-regexp
       (setq query (helm-ag--elisp-regexp-to-pcre query)))
-    (unless (string= query "")
+    (when (helm-ag--show-result-p options has-query)
       (append (car helm-do-ag--commands)
-              (cl-remove-if (lambda (x) (string= "--" x)) options)
-              (list "--" (helm-ag--join-patterns query))
+              options
+              (and has-query (list (helm-ag--join-patterns query)))
               (cdr helm-do-ag--commands)))))
 
 (defun helm-ag--do-ag-set-command ()
@@ -1063,7 +1086,7 @@ Continue searching the parent directory? "))
     (helm-attrset 'name (helm-ag--helm-header search-dir)
                   helm-source-do-ag)
     (helm :sources '(helm-source-do-ag) :buffer "*helm-ag*" :keymap helm-do-ag-map
-          :input (or (helm-ag--marked-input)
+          :input (or (helm-ag--marked-input t)
                      (helm-ag--insert-thing-at-point helm-ag-insert-at-point)))))
 
 ;;;###autoload

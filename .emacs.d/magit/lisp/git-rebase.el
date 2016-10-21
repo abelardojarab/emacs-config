@@ -105,9 +105,7 @@
   :group 'faces
   :group 'git-rebase)
 
-(defface git-rebase-hash
-  '((((class color) (background light)) :foreground "grey60")
-    (((class color) (background  dark)) :foreground "grey40"))
+(defface git-rebase-hash '((t (:inherit magit-hash)))
   "Face for commit hashes."
   :group 'git-rebase-faces)
 
@@ -119,6 +117,16 @@
   '((t (:inherit font-lock-comment-face :strike-through t)))
   "Face for commented action and exec lines."
   :group 'git-rebase-faces)
+
+(defface git-rebase-comment-hash
+  '((t (:inherit git-rebase-hash :weight bold)))
+  "Face for commit hashes in commit message comments."
+  :group 'git-rebase-faces)
+
+(defface git-rebase-comment-heading
+  '((t :inherit font-lock-keyword-face))
+  "Face used for headings in rebase message comments."
+  :group 'git-commit-faces)
 
 ;;; Keymaps
 
@@ -172,8 +180,8 @@
 (defvar git-rebase-command-descriptions
   '((with-editor-finish        . "tell Git to make it happen")
     (with-editor-cancel        . "tell Git that you changed your mind, i.e. abort")
-    (previous-line             . "move point to previous line")
-    (next-line                 . "move point to next line")
+    (git-rebase-backward-line  . "move point to previous line")
+    (forward-line              . "move point to next line")
     (git-rebase-move-line-up   . "move the commit at point up")
     (git-rebase-move-line-down . "move the commit at point down")
     (git-rebase-show-commit    . "show the commit at point in another buffer")
@@ -395,7 +403,7 @@ running 'man git-rebase' at the command line) for details."
         (concat "^\\(" (regexp-quote comment-start) "?"
                 "\\(?:[fprse]\\|pick\\|reword\\|edit\\|squash\\|fixup\\|exec\\)\\) "
                 "\\(?:\\([^ \n]+\\) \\(.*\\)\\)?"))
-  (setq font-lock-defaults '(git-rebase-mode-font-lock-keywords t t))
+  (setq font-lock-defaults (list (git-rebase-mode-font-lock-keywords) t t))
   (unless git-rebase-show-instructions
     (let ((inhibit-read-only t))
       (flush-lines git-rebase-comment-re)))
@@ -411,7 +419,9 @@ running 'man git-rebase' at the command line) for details."
     (setq save-place nil)))
 
 (defun git-rebase-cancel-confirm (force)
-  (or (not (buffer-modified-p)) force (y-or-n-p "Abort this rebase? ")))
+  (or (not (buffer-modified-p))
+      force
+      (magit-confirm 'abort-rebase "Abort this rebase")))
 
 (defun git-rebase-autostash-save ()
   (--when-let (magit-file-line (magit-git-dir "rebase-merge/autostash"))
@@ -427,7 +437,8 @@ running 'man git-rebase' at the command line) for details."
 (defun git-rebase-match-killed-action (limit)
   (re-search-forward (concat git-rebase-comment-re "[^ \n].*") limit t))
 
-(defconst git-rebase-mode-font-lock-keywords
+(defun git-rebase-mode-font-lock-keywords ()
+  "Font lock keywords for Git-Rebase mode."
   `(("^\\([efprs]\\|pick\\|reword\\|edit\\|squash\\|fixup\\) \\([^ \n]+\\) \\(.*\\)"
      (1 'font-lock-keyword-face)
      (2 'git-rebase-hash)
@@ -436,8 +447,12 @@ running 'man git-rebase' at the command line) for details."
      (1 'font-lock-keyword-face)
      (2 'git-rebase-description))
     (git-rebase-match-comment-line 0 'font-lock-comment-face)
-    (git-rebase-match-killed-action 0 'git-rebase-killed-action t))
-  "Font lock keywords for Git-Rebase mode.")
+    (git-rebase-match-killed-action 0 'git-rebase-killed-action t)
+    (,(format "^%s Rebase \\([^ ]*\\) onto \\([^ ]*\\)" comment-start)
+     (1 'git-rebase-comment-hash t)
+     (2 'git-rebase-comment-hash t))
+    (,(format "^%s \\(Commands:\\)" comment-start)
+     (1 'git-rebase-comment-heading t))))
 
 (defun git-rebase-mode-show-keybindings ()
   "Modify the \"Commands:\" section of the comment Git generates
@@ -489,6 +504,8 @@ By default, this is the same except for the \"pick\" command."
 
 (eval-after-load 'recentf
   '(add-to-list 'recentf-exclude git-rebase-filename-regexp))
+
+(add-to-list 'with-editor-file-name-history-exclude git-rebase-filename-regexp)
 
 (provide 'git-rebase)
 ;; Local Variables:

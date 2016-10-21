@@ -11,7 +11,7 @@
 ;;	Marius Vollmer <marius.vollmer@gmail.com>
 ;; Maintainer: Jonas Bernoulli <jonas@bernoul.li>
 
-;; Package-Requires: ((emacs "24.4") (dash "20160820.501") (with-editor "20160812.1457"))
+;; Package-Requires: ((emacs "24.4") (dash "20160820.501") (with-editor "20160929.734"))
 ;; Keywords: git tools vc
 ;; Homepage: https://github.com/magit/magit
 
@@ -101,11 +101,10 @@
 ;; files.
 
 ;; Finally this package highlights style errors, like lines that are
-;; too long, or when the second line is not empty.  It may even nag you
-;; when you attempt to finish the commit without having fixed these
-;; issues.  Some people like that nagging, I don't, so you'll have to
-;; enable it.  Which brings me to the last point.  Like any
-;; respectable Emacs package, this one too is highly customizable:
+;; too long, or when the second line is not empty.  It may even nag
+;; you when you attempt to finish the commit without having fixed
+;; these issues.  The style checks and many other settings can easily
+;; be configured:
 ;;
 ;;   M-x customize-group RET git-commit RET
 
@@ -123,6 +122,8 @@
 ;;;; Declarations
 
 (defvar flyspell-generic-check-word-predicate)
+(defvar font-lock-beg)
+(defvar font-lock-end)
 
 (declare-function magit-expand-git-file-name 'magit-git)
 
@@ -176,8 +177,7 @@ The major mode configured here is turned on by the minor mode
   "Hook run at the end of `git-commit-setup'."
   :group 'git-commit
   :type 'hook
-  :options '(
-             git-commit-save-message
+  :options '(git-commit-save-message
              git-commit-setup-changelog-support
              git-commit-turn-on-auto-fill
              git-commit-turn-on-flyspell
@@ -201,8 +201,23 @@ usually honor this wish and return non-nil."
   :type 'hook
   :group 'git-commit)
 
-(defcustom git-commit-summary-max-length 50
-  "Fontify characters beyond this column in summary lines as errors."
+(defcustom git-commit-style-convention-checks '(non-empty-second-line)
+  "List of checks performed by `git-commit-check-style-conventions'.
+Valid members are `non-empty-second-line' and `overlong-first-line'.
+That function is a member of `git-commit-finish-query-functions'."
+  :options '(non-empty-second-line overlong-summary-line)
+  :type '(list :convert-widget custom-hook-convert-widget)
+  :group 'git-commit)
+
+(defcustom git-commit-summary-max-length 68
+  "Column beyond which characters in the summary lines are highlighted.
+
+The highlighting indicates that the summary is getting too long
+by some standards.  It does in no way imply that going over the
+limit a few characters or in some cases even many characters is
+anything that deserves shaming.  It's just a friendly reminder
+that if you can make the summary shorter, then you might want
+to consider doing so."
   :group 'git-commit
   :safe 'numberp
   :type 'number)
@@ -345,6 +360,8 @@ usually honor this wish and return non-nil."
 (eval-after-load 'recentf
   '(add-to-list 'recentf-exclude git-commit-filename-regexp))
 
+(add-to-list 'with-editor-file-name-history-exclude git-commit-filename-regexp)
+
 (defun git-commit-setup-font-lock-in-buffer ()
   (and buffer-file-name
        (string-match-p git-commit-filename-regexp buffer-file-name)
@@ -457,18 +474,23 @@ finally check current non-comment text."
 
 (defun git-commit-check-style-conventions (force)
   "Check for violations of certain basic style conventions.
+
 For each violation ask the user if she wants to proceed anyway.
-This makes sure the summary line isn't too long and that the
-second line is empty."
+Option `git-commit-check-style-conventions' controls which
+conventions are checked."
   (or force
       (save-excursion
         (goto-char (point-min))
         (re-search-forward (git-commit-summary-regexp) nil t)
         (if (equal (match-string 1) "")
             t ; Just try; we don't know whether --allow-empty-message was used.
-          (and (or (equal (match-string 2) "")
+          (and (or (not (memq 'overlong-summary-line
+                              git-commit-style-convention-checks))
+                   (equal (match-string 2) "")
                    (y-or-n-p "Summary line is too long.  Commit anyway? "))
-               (or (not (match-string 3))
+               (or (not (memq 'non-empty-second-line
+                              git-commit-style-convention-checks))
+                   (not (match-string 3))
                    (y-or-n-p "Second line is not empty.  Commit anyway? ")))))))
 
 (defun git-commit-cancel-message ()

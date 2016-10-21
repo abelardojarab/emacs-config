@@ -2207,14 +2207,21 @@ without having to using one of the diff popups.
   commit where that line still existed.  Otherwise visit the blob
   for the commit whose changes are being shown.
 
-  When the diff is about a range of commits, then, for the time
-  being, the point this function jumps to often is only an
-  approximation.
-
   When the file or blob to be displayed is already being displayed in
   another window of the same frame, then just select that window and
   adjust point.  Otherwise, or with a prefix argument, display the
   buffer in another window.
+
+- User Option: magit-diff-visit-previous-blob
+
+  This option controls whether ~magit-diff-visit-file~ may visit the
+  previous blob.  When this is ~t~ and point is on a removed line in a
+  diff for a committed change, then ~magit-diff-visit-file~ visits the
+  blob from the last revision which still had that line.
+
+  Currently this is only supported for committed changes, for staged
+  and unstaged changes ~magit-diff-visit-file~ always visits the file in
+  the working tree.
 
 - Key: C-<return>, magit-diff-visit-file-worktree
 
@@ -3448,11 +3455,20 @@ features are available from separate popups.
 
   You might prefer to always use some remote branch as upstream.
   If the chosen starting-point is (1) a local branch, (2) whose
-  name is a member of the value of this option, (3) the upstream of
-  that local branch is a remote branch with the same name, and (4)
-  that remote branch can be fast-forwarded to the local branch,
-  then the chosen branch is used as starting-point, but its own
-  upstream is used as the upstream of the new branch.
+  name matches a member of the value of this option, (3) the
+  upstream of that local branch is a remote branch with the same
+  name, and (4) that remote branch can be fast-forwarded to the
+  local branch, then the chosen branch is used as starting-point,
+  but its own upstream is used as the upstream of the new branch.
+
+  Members of this option's value are treated as branch names that
+  have to match exactly unless they contain a character that makes
+  them invalid as a branch name.  Recommended characters to use
+  to trigger interpretation as a regexp are "*" and "^".  Some
+  other characters which you might expect to be invalid, actually
+  are not, e.g. ".+$" are all perfectly valid.  More precisely,
+  if `git check-ref-format --branch STRING' exits with a non-zero
+  status, then treat STRING as a regexp.
 
   Assuming the chosen branch matches these conditions you would end
   up with with e.g.:
@@ -5885,17 +5901,18 @@ And now for the asynchronous variants.
 - Function: magit-section-match condition &optional section
 
   Return ~t~ if SECTION matches CONDITION.  SECTION defaults to the
-  section at point.
+  section at point.  If SECTION is not specified and there also is no
+  section at point, then return ~nil~.
 
-  Conditions can take the following forms:
+  CONDITION can take the following forms:
   - ~(CONDITION...)~
 
     matches if any of the CONDITIONs matches.
 
   - ~[TYPE...]~
 
-    matches if the first TYPE matches the type of the section at
-    point, the second matches that of its parent, and so on.
+    matches if the first TYPE matches the type of the section, the
+    second matches that of its parent, and so on.
 
   - ~[* TYPE...]~
 
@@ -5904,7 +5921,8 @@ And now for the asynchronous variants.
 
   - ~TYPE~
 
-    matches TYPE regardless of its parents.
+    matches sections of TYPE regardless of the types of the parent
+    sections.
 
   Each TYPE is a symbol.  Note that it is not necessary to specify all
   TYPEs up to the root section as printed by ~magit-describe-type~,
@@ -5914,9 +5932,11 @@ And now for the asynchronous variants.
 
   If the section at point matches CONDITION evaluate BODY.
 
-  If the section matches evaluate BODY forms sequentially and return
-  the value of the last one, or if there are no BODY forms return the
-  value of the section.  If the section does not match return nil.
+  If the section matches, then evaluate BODY forms sequentially with
+  ~it~ bound to the section and return the value of the last form.  If
+  there are no BODY forms, then return the value of the section.  If
+  the section does not match or if there is no section at point then
+  return nil.
 
   See ~magit-section-match~ for the forms CONDITION can take.
 

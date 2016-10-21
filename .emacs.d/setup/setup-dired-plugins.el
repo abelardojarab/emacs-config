@@ -24,6 +24,7 @@
 
 ;;; Code:
 
+;; Simple directory explorer. It also works as a generic tree explore library
 (use-package direx
   :after dired
   :load-path (lambda () (expand-file-name "direx/" user-emacs-directory))
@@ -35,10 +36,10 @@
             (define-key direx:direx-mode-map [mouse-3] 'direx:mouse-1)))
 
 (use-package direx-project
-  :after dired
+  :after direx
   :load-path (lambda () (expand-file-name "direx/" user-emacs-directory)))
 
-;; highlight dired buffer with K-shell coloring
+;; Highlight dired buffer with K-shell coloring
 (use-package dired-k
   :after dired
   :load-path (lambda () (expand-file-name "dired-k/" user-emacs-directory))
@@ -48,6 +49,15 @@
   :init (progn
             (add-hook 'dired-initial-position-hook 'dired-k)
             (add-hook 'dired-after-readin-hook #'dired-k-no-revert)))
+
+;; Display file icons in dired
+(use-package dired-icon
+  :after dired
+  :load-path (lambda () (expand-file-name "dired-icon/" user-emacs-directory))
+  :if (display-graphic-p)
+  :commands (dired-icon-mode)
+  :init (progn
+          (add-hook 'dired-mode-hook 'dired-icon-mode)))
 
 ;; Facility to see images inside dired
 (use-package image-dired
