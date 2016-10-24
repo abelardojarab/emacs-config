@@ -124,7 +124,7 @@
 ;; Choose different themes depending if we are using GUI or not
 ;; Console colors are enabled if "export TERM=xterm-256color" is added into .bashrc
 (if (display-graphic-p)
-    (load-theme 'eink t)
+    (load-theme 'monokai t)
   (load-theme 'monokai t))
 
 ;; So, fringe is nice actually, but the background for it kind of sucks in leuven
