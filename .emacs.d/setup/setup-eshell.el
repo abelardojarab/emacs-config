@@ -123,7 +123,7 @@
   :config (setq eshell-prompt-function 'epe-theme-lambda))
 
 ;; Shell-mode
-(use-package sh-mode
+(use-package sh-script
   :config (progn
             (add-to-list 'auto-mode-alist '("\\.sh\\'" . sh-mode))
 
