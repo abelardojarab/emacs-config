@@ -88,6 +88,10 @@
 (add-to-list 'load-path (expand-file-name "sexy-monochrome-theme/" user-emacs-directory))
 (add-to-list 'custom-theme-load-path (expand-file-name "sexy-monochrome-theme/" user-emacs-directory))
 
+;; Spacemacs theme
+(add-to-list 'load-path (expand-file-name "spacemacs-theme/" user-emacs-directory))
+(add-to-list 'custom-theme-load-path (expand-file-name "spacemacs-theme/" user-emacs-directory))
+
 ;; Tomorrow theme
 (add-to-list 'load-path (expand-file-name "sanityinc-tomorrow-theme/" user-emacs-directory))
 (add-to-list 'custom-theme-load-path (expand-file-name "sanityinc-tomorrow-theme/" user-emacs-directory))
@@ -124,7 +128,7 @@
 ;; Choose different themes depending if we are using GUI or not
 ;; Console colors are enabled if "export TERM=xterm-256color" is added into .bashrc
 (if (display-graphic-p)
-    (load-theme 'monokai t)
+    (load-theme 'spacemacs-light t)
   (load-theme 'monokai t))
 
 ;; So, fringe is nice actually, but the background for it kind of sucks in leuven
