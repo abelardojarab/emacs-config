@@ -147,7 +147,13 @@
                   org-agenda-ndays 14
                   org-agenda-include-diary t
                   org-agenda-window-setup 'current-window
-                  org-deadline-warning-days 7)
+                  org-agenda-skip-scheduled-if-done t
+                  org-agenda-skip-deadline-if-done t
+                  org-deadline-warning-days 7
+                  org-agenda-time-grid
+                  '((daily today require-timed)
+                    "----------------"
+                    (800 1000 1200 1400 1600 1800)))
 
             ;; Export options
             (setq org-export-time-stamp-file nil)
@@ -188,9 +194,24 @@
             (require 'ox-md)
 
             ;; Org Templates
-            (add-to-list 'org-structure-template-alist '("E" "#+BEGIN_SRC emacs-lisp\n?\n#+END_SRC\n"))
-            (add-to-list 'org-structure-template-alist '("S" "#+BEGIN_SRC shell-script\n?\n#+END_SRC\n"))
-            (add-to-list 'org-structure-template-alist '("L" "#+BEGIN_SRC latex\n\\begin{align*}\n?\\end{align*}\n#+END_SRC"))
+            (setq org-structure-template-alist
+                  '(("s" "#+begin_src ?\n\n#+end_src" "<src lang=\"?\">\n\n</src>")
+                    ("e" "#+begin_example\n?\n#+end_example" "<example>\n?\n</example>")
+                    ("q" "#+begin_quote\n?\n#+end_quote" "<quote>\n?\n</quote>")
+                    ("v" "#+BEGIN_VERSE\n?\n#+END_VERSE" "<verse>\n?\n</verse>")
+                    ("c" "#+BEGIN_COMMENT\n?\n#+END_COMMENT")
+                    ("p" "#+BEGIN_PRACTICE\n?\n#+END_PRACTICE")
+                    ("l" "#+begin_src emacs-lisp\n?\n#+end_src" "<src lang=\"emacs-lisp\">\n?\n</src>")
+                    ("L" "#+latex: " "<literal style=\"latex\">?</literal>")
+                    ("h" "#+begin_html\n?\n#+end_html" "<literal style=\"html\">\n?\n</literal>")
+                    ("H" "#+html: " "<literal style=\"html\">?</literal>")
+                    ("E" "#+BEGIN_SRC emacs-lisp\n?\n#+END_SRC\n")
+                    ("S" "#+BEGIN_SRC shell-script\n?\n#+END_SRC\n")
+                    ("L" "#+BEGIN_SRC latex\n\\begin{align*}\n?\\end{align*}\n#+END_SRC")
+                    ("a" "#+begin_ascii\n?\n#+end_ascii")
+                    ("A" "#+ascii: ")
+                    ("i" "#+index: ?" "#+index: ?")
+                    ("I" "#+include %file ?" "<include file=%file markup=\"?\">")))
 
             ;; Fix shift problem in Org mode
             (setq org-CUA-compatible t)
@@ -226,6 +247,23 @@
                     ("HOLD" . 'font-lock-keyword-face)
                     ("TASK" . 'font-lock-builtin-face)
                     ("CANCELLED" . 'font-lock-doc-face)))
+
+            ;; Tag tasks with GTD-ish contexts
+            (setq org-tag-alist '(("@work" . ?b)
+                                  ("@home" . ?h)
+                                  ("@location" . ?l)
+                                  ("@writing" . ?w)
+                                  ("@errands" . ?e)
+                                  ("@family" . ?f)
+                                  ("@coding" . ?c)
+                                  ("@phone" . ?p)
+                                  ("@reading" . ?r)
+                                  ("time" . ?q)
+                                  ("high-energy" . ?1)))
+
+            ;; Enable filtering by effort estimates
+            (add-to-list 'org-global-properties
+                         '("Effort_ALL". "0:05 0:15 0:30 1:00 2:00 3:00 4:00"))
 
             ;; Make org do not open other frames
             (setq org-link-frame-setup (quote ((vm . vm-visit-folder-other-frame)
