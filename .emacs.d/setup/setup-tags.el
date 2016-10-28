@@ -37,11 +37,11 @@
             (setq large-file-warning-threshold (* 50 1024 1024)) ; 50MB
             (setq tags-revert-without-query t)
             (setq tags-always-build-completion-table t)
-            (setenv "GTAGSLIBPATH" (expand-file-name "~/.gtags"))
-            (if (file-exists-p (expand-file-name "~/.emacs.cache/TAGS"))
-                (visit-tags-table (expand-file-name "~/.emacs.cache/TAGS"))
-              (with-temp-buffer (write-file (expand-file-name "~/.emacs.cache/TAGS"))))
-            (setq tags-file-name (expand-file-name "~/.emacs.cache/TAGS"))
+            (setenv "GTAGSLIBPATH" "~/.gtags")
+            (if (file-exists-p "~/.emacs.cache/TAGS")
+                (visit-tags-table "~/.emacs.cache/TAGS")
+              (with-temp-buffer (write-file "~/.emacs.cache/TAGS")))
+            (setq tags-file-name "~/.emacs.cache/TAGS")
             (setq tags-table-list (list tags-file-name))
             (setq tags-add-tables t)
 
@@ -77,7 +77,7 @@
             (setq etags-table-alist
                   (list
                    ;; For jumping to standard headers:
-                   '(".*\\.\\([ch]\\|cpp\\)" (expand-file-name "~/.emacs.cache/TAGS"))))
+                   '(".*\\.\\([ch]\\|cpp\\)" "~/.emacs.cache/TAGS")))
 
             ;; Max depth to search up for a tags file.  nil means don't search.
             (setq etags-table-search-up-depth 2)

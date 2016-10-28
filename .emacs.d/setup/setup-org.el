@@ -86,10 +86,10 @@
 
                 ;; Set base Org directory
                 (if (file-exists-p todo_dropbox)
-                    (setq org-directory (expand-file-name "~/Dropbox/Documents/Org"))
+                    (setq org-directory "~/Dropbox/Documents/Org")
                   (if (file-exists-p todo_workspace)
-                      (setq org-directory (expand-file-name "~/workspace/Documents/Org"))
-                    (setq org-directory (expand-file-name "~/Google Drive/Documents/Org"))))
+                      (setq org-directory "~/workspace/Documents/Org")
+                    (setq org-directory "~/Google Drive/Documents/Org")))
 
                 ;; Set remaining Org files
                 (setq diary-file (concat org-directory "/diary"))
