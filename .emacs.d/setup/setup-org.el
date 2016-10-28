@@ -100,6 +100,8 @@
                 (setq org-mobile-file (concat org-directory "/mobileorg.org"))
                 (setq org-mobile-directory (concat org-directory "/mobile-org"))
                 (setq org-agenda-files (list
+                                        (concat org-directory "/diary.org")
+                                        (concat org-directory "/agenda.org")
                                         (concat org-directory "/todo.org")
                                         (concat org-directory "/notes.org")
                                         (concat org-directory "/mobileorg.org")
@@ -161,13 +163,6 @@
             (setq org-export-with-sub-superscripts '{})
             (setq org-export-allow-bind-keywords t)
             (setq org-export-async-debug t)
-
-            ;; Stop Org splitting window
-            (setq org-link-frame-setup (quote ((vm . vm-visit-folder-other-frame)
-                                               (vm-imap . vm-visit-imap-folder-other-frame)
-                                               (gnus . org-gnus-no-new-news)
-                                               (file . find-file)
-                                               (wl . wl-other-frame))))
 
             ;; Mouse in Org
             (require 'org-mouse)
@@ -251,12 +246,13 @@
             ;; Tag tasks with GTD-ish contexts
             (setq org-tag-alist '(("@work" . ?b)
                                   ("@home" . ?h)
-                                  ("@location" . ?l)
+                                  ("@place" . ?p)
                                   ("@writing" . ?w)
                                   ("@errands" . ?e)
                                   ("@family" . ?f)
                                   ("@coding" . ?c)
-                                  ("@phone" . ?p)
+                                  ("@tasks" . ?e)
+                                  ("@learning" . ?l)
                                   ("@reading" . ?r)
                                   ("time" . ?q)
                                   ("high-energy" . ?1)))
