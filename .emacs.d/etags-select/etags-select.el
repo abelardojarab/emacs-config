@@ -1,6 +1,6 @@
 ;;; etags-select.el --- Select from multiple tags
 
-;; Copyright (C) 2007  Scott Frazer
+;; Copyright (C) 2007, 2016  Scott Frazer
 
 ;; Author: Scott Frazer <frazer.scott@gmail.com>
 ;; Maintainer: Scott Frazer <frazer.scott@gmail.com>

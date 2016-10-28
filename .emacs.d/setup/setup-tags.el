@@ -37,11 +37,16 @@
             (setq large-file-warning-threshold (* 50 1024 1024)) ; 50MB
             (setq tags-revert-without-query t)
             (setq tags-always-build-completion-table t)
+
+            ;; Assure .gtags directory exists
+            (if (not (file-exists-p "~/.gtags"))
+                (make-directory "~/.gtags") t)
             (setenv "GTAGSLIBPATH" "~/.gtags")
-            (if (file-exists-p "~/.emacs.cache/TAGS")
-                (visit-tags-table "~/.emacs.cache/TAGS")
-              (with-temp-buffer (write-file "~/.emacs.cache/TAGS")))
-            (setq tags-file-name "~/.emacs.cache/TAGS")
+
+            (if (file-exists-p "~/.gtags/TAGS")
+                (visit-tags-table "~/.gtags/TAGS")
+              (with-temp-buffer (write-file "~/.gtags/TAGS")))
+            (setq tags-file-name "~/.gtags/TAGS")
             (setq tags-table-list (list tags-file-name))
             (setq tags-add-tables t)
 
@@ -50,7 +55,67 @@
               "Create tags file."
               (interactive "Directory: ")
               (eshell-command
-               (format "find %s -type f -name \"*.[ch]\" | etags -" dir-name)))))
+               (format "find %s -type f -name \"*.[ch]\" | etags -" dir-name)))
+
+            ;; Fix etags bugs (https://groups.google.com/forum/#!msg/gnu.emacs.help/Ew0sTxk0C-g/YsTPVEKTBAAJ)
+            (defvar etags--table-line-limit 10)
+
+            (defun etags-tags-completion-table ()   ; Doc string?
+              (let (table
+                    (progress-reporter
+                     (make-progress-reporter
+                      (format "Making tags completion table for %s..." buffer-file-name)
+                      (point-min) (point-max))))
+                (save-excursion
+                  (goto-char (point-min))
+                  ;; This regexp matches an explicit tag name or the place where
+                  ;; it would start.
+                  (while (not (eobp))
+                    (if (not (re-search-forward
+                              "[\f\t\n\r()=,; ]?\177\\\(?:\\([^\n\001]+\\)\001\\)?"
+                              ;; Avoid lines that are too long (bug#20703).
+                              (+ (point) etags--table-line-limit) t))
+                        (forward-line 1)
+                      (push (prog1 (if (match-beginning 1)
+                                       ;; There is an explicit tag name.
+                                       (buffer-substring (match-beginning 1) (match-end 1))
+                                     ;; No explicit tag name.  Backtrack a little,
+                                     ;; and look for the implicit one.
+                                     (goto-char (match-beginning 0))
+                                     (skip-chars-backward "^\f\t\n\r()=,; ")
+                                     (prog1
+                                         (buffer-substring (point) (match-beginning 0))
+                                       (goto-char (match-end 0))))
+                              (progress-reporter-update progress-reporter (point)))
+                            table))))
+                table))
+
+            (defun tags-completion-table ()
+              "Build `tags-completion-table' on demand.
+The tags included in the completion table are those in the current
+tags table and its (recursively) included tags tables."
+              (or tags-completion-table
+                  ;; No cached value for this buffer.
+                  (condition-case ()
+                      (let (current-table combined-table)
+                        (message "Making tags completion table for %s..." buffer-file-name)
+                        (save-excursion
+                          ;; Iterate over the current list of tags tables.
+                          (while (visit-tags-table-buffer (and combined-table t))
+                            ;; Find possible completions in this table.
+                            (setq current-table (funcall tags-completion-table-function))
+                            ;; Merge this buffer's completions into the combined table.
+                            (if combined-table
+                                (mapatoms
+                                 (lambda (sym) (intern (symbol-name sym) combined-table))
+                                 current-table)
+                              (setq combined-table current-table))))
+                        (message "Making tags completion table for %s...done"
+                                 buffer-file-name)
+                        ;; Cache the result in a buffer-local variable.
+                        (setq tags-completion-table combined-table))
+                    (quit (message "Tags completion table construction cancelled")
+                          (setq tags-completion-table nil)))))))
 
 ;; Implementing my own copy of this function since it is required by
 ;; semantic-ia-fast-jump but this function is not defined in etags.el
@@ -77,7 +142,7 @@
             (setq etags-table-alist
                   (list
                    ;; For jumping to standard headers:
-                   '(".*\\.\\([ch]\\|cpp\\)" "~/.emacs.cache/TAGS")))
+                   '(".*\\.\\([ch]\\|cpp\\)" "~/.gtags/TAGS")))
 
             ;; Max depth to search up for a tags file.  nil means don't search.
             (setq etags-table-search-up-depth 2)
