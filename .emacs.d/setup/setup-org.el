@@ -251,7 +251,7 @@
                                   ("@errands" . ?e)
                                   ("@family" . ?f)
                                   ("@coding" . ?c)
-                                  ("@tasks" . ?e)
+                                  ("@tasks" . ?t)
                                   ("@learning" . ?l)
                                   ("@reading" . ?r)
                                   ("time" . ?q)
