@@ -55,7 +55,7 @@
               "Create tags file."
               (interactive "Directory: ")
               (eshell-command
-               (format "find %s -type f -name \"*.[ch]\" | etags -" dir-name)))
+               (format "find %s -follow -type f -name \"*.[ch]\" | etags -" dir-name)))
 
             ;; Fix etags bugs (https://groups.google.com/forum/#!msg/gnu.emacs.help/Ew0sTxk0C-g/YsTPVEKTBAAJ)
             (defvar etags--table-line-limit 10)
