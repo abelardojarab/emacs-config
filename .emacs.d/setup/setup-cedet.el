@@ -81,11 +81,11 @@ Exit the save between databases if there is user input."
                  semanticdb-database-list))))
     (if (fboundp 'save-excursion)
         (save-excursion ;; <-- added line
-         (semantic-exit-on-input 'semanticdb-idle-save
-           (mapc (lambda (db)
-                   (semantic-throw-on-input 'semanticdb-idle-save)
-                   (semanticdb-save-db db t))
-                 semanticdb-database-list))))))
+          (semantic-exit-on-input 'semanticdb-idle-save
+            (mapc (lambda (db)
+                    (semantic-throw-on-input 'semanticdb-idle-save)
+                    (semanticdb-save-db db t))
+                  semanticdb-database-list))))))
 
 ;; Enable semanticdb, slows down Emacs
 ;; (require 'semantic/db)
@@ -106,15 +106,58 @@ Exit the save between databases if there is user input."
   (semanticdb-enable-gnu-global-databases 'c-mode t)
   (semanticdb-enable-gnu-global-databases 'c++-mode t))
 
+;; Load contrib library
+(require 'eassist)
+
 ;; EDE project managment, slows down Emacs
-;; (global-ede-mode 1)
-;; (ede-enable-generic-projects)
+(global-ede-mode 1)
+(ede-enable-generic-projects)
+(setq ede-project-directories t)
 
 ;; Default EDE directory
 (setq-default ede-project-placeholder-cache-file "~/.emacs.cache/ede-projects.el")
 
-;; load contrib library
-(require 'eassist)
+;; Enable the wrapper for compilation database projects
+(use-package ede-compdb
+  :load-path (lambda () (expand-file-name "ede-compdb/" user-emacs-directory))
+  :config (progn
+            (defvar my/cmake-build-directories
+              '(("cmake_build_dir" . "build")
+                ("Debug" . "build.dbg")
+                ("Release" . "build.rel")
+                ("RelWithDebInfo" . "build.r+d")))
+
+            (defun my/load-cmake-project (dir)
+              "Creates a project for the given directory sourced at dir"
+              (let ((default-directory dir)
+                    (config-and-dir (car (cl-member-if (lambda (c)
+                                                         (file-readable-p
+                                                          (expand-file-name "compile_commands.json" (concat dir (cdr c)))))
+                                                       my/cmake-build-directories))))
+                (unless config-and-dir
+                  (error "Couldn't determine build directory for project at %s" dir))
+                (ede-add-project-to-global-list
+                 (ede-compdb-project
+                  (file-name-nondirectory (directory-file-name dir))
+                  :file (expand-file-name "CMakeLists.txt" dir)
+                  :compdb-file (expand-file-name "compile_commands.json" (cdr config-and-dir))
+                  :configuration-default (car config-and-dir)
+                  :configuration-directories (mapcar #'cdr my/cmake-build-directories)
+                  :configurations (mapcar #'car my/cmake-build-directories)
+                  :build-command "cmake --build .."))))
+
+            (ede-add-project-autoload
+             (ede-project-autoload "generic-cmake"
+                                   :name "generic-cmake"
+                                   :file 'ede-compdb
+                                   :proj-file "CMakeLists.txt"
+                                   :proj-root 'cmake-project-find-root-directory
+                                   :load-type 'my/load-cmake-project
+                                   :class-sym 'ede-compdb-project))))
+
+;; Extensions to Emacs Development Environment for use with CMake-based projects
+(use-package ede-cmake
+  :load-path (lambda () (expand-file-name "ede-cmake/" user-emacs-directory)))
 
 ;; Enable which-function-mode for selected major modes
 (setq which-func-modes '(org-mode markdown-mode
