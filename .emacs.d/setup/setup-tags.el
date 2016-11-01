@@ -62,8 +62,7 @@
 
             ;; Fix etags bugs (https://groups.google.com/forum/#!msg/gnu.emacs.help/Ew0sTxk0C-g/YsTPVEKTBAAJ)
             (defvar etags--table-line-limit 10)
-
-            (defun etags-tags-completion-table ()   ; Doc string?
+            (defun etags-tags-completion-table ()
               (let (table
                     (progress-reporter
                      (make-progress-reporter
