@@ -44,3 +44,4 @@ Cask
 %backup%~
 .nfs*
 *.gz
+TAGS

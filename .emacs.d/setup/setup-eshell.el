@@ -79,7 +79,7 @@
                                            (define-key eshell-mode-map
                                              "\C-t"
                                              'quit-window)
-                                           (eshell/exxtport "NODE_NO_READLINE=1")))
+                                           (eshell/export "NODE_NO_READLINE=1")))
 
             ;; Vertical split eshell
             (defun eshell-vertical ()

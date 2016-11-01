@@ -44,7 +44,8 @@
             (setenv "GTAGSLIBPATH" "~/.gtags")
 
             (if (file-exists-p "~/.gtags/TAGS")
-                (visit-tags-table "~/.gtags/TAGS")
+                (ignore-errors
+                  (visit-tags-table "~/.gtags/TAGS"))
               (with-temp-buffer (write-file "~/.gtags/TAGS")))
             (setq tags-file-name "~/.gtags/TAGS")
             (setq tags-table-list (list tags-file-name))
@@ -55,7 +56,9 @@
               "Create tags file."
               (interactive "Directory: ")
               (eshell-command
-               (format "find %s -follow -type f -name \"*.[ch]\" | etags -" dir-name)))
+               (format "find %s -follow -type f -name \"*.[ch][ p][ p]\" | etags - -o %s/TAGS"
+                       (projectile-project-root)
+                       (projectile-project-root))))
 
             ;; Fix etags bugs (https://groups.google.com/forum/#!msg/gnu.emacs.help/Ew0sTxk0C-g/YsTPVEKTBAAJ)
             (defvar etags--table-line-limit 10)
@@ -167,7 +170,7 @@ tags table and its (recursively) included tags tables."
               "Create tags file."
               (interactive "Directory: ")
               (shell-command
-               (format "ctags -f %s -e -R %s" path-to-ctags (projectile-project-root))))))
+               (format "ctags -e -f %s -R %s" "~/.gtags/TAGS" (projectile-project-root))))))
 
 ;; Gtags
 (use-package ggtags
