@@ -83,60 +83,61 @@ Python 3 is recommended."
 
 (defun dired-icon--guess-mime-type (file-name)
   "Guess the mime type from a file name FILE-NAME."
-   (cond
-    ;; Use the file command to detect, for local readable files only.
-    ((and (executable-find dired-icon-file-executable)
-          (not (file-remote-p file-name))
-          (file-readable-p file-name))
-     (with-temp-buffer
-       (when (call-process dired-icon-file-executable nil t nil
-                           "-b" "--mime-type" (file-chase-links file-name))
-         (substring (buffer-string) 0 -1))))
-    ;; Use mailcap-extension-to-mime as a fallback
-    (t (if (file-directory-p file-name)
-           "inode/directory"
-         (let ((ext (file-name-extension file-name)))
-           (when ext (mailcap-extension-to-mime ext)))))))
+  (cond
+   ;; Use the file command to detect, for local readable files only.
+   ((and (executable-find dired-icon-file-executable)
+         (not (file-remote-p file-name))
+         (file-readable-p file-name))
+    (with-temp-buffer
+      (when (call-process dired-icon-file-executable nil t nil
+                          "-b" "--mime-type" (file-chase-links file-name))
+        (substring (buffer-string) 0 -1))))
+   ;; Use mailcap-extension-to-mime as a fallback
+   (t (if (file-directory-p file-name)
+          "inode/directory"
+        (let ((ext (file-name-extension file-name)))
+          (when ext (mailcap-extension-to-mime ext)))))))
 
 (defun dired-icon--get-icons (file-names)
   "Create an alist, which maps the files FILE-NAMES to image objects."
-  (cond
-   ;; GTK 3
-   ((and (executable-find dired-icon-python-executable)
-         (= 0 (call-process dired-icon-python-executable nil nil nil
-                            (expand-file-name
-                             "get-icon-path-gtk3.py"
-                             dired-icon--script-directory) "test")))
-    (with-temp-buffer
-      ;; insert the list of mimetypes into the temp buffer
-      (dolist (fn file-names)
-        (goto-char (point-min))  ;; reverse the file name insertion order
-        (insert (concat (dired-icon--guess-mime-type fn) "\n")))
-      ;; replace the current buffer with an icon file name in each line
-      (call-process-region (point-min) (point-max)
-                           dired-icon-python-executable
-                           t t nil
-                           (expand-file-name
-                            "get-icon-path-gtk3.py"
-                            dired-icon--script-directory)
-                           (number-to-string dired-icon-gtk-image-size))
-      ;; create an image object for each icon
-      (let ((icon-images nil))
-        (dolist (icon-fname (split-string (buffer-string) "\n" nil))
-          (if (string= icon-fname "")
-              (push nil icon-images)
-            (let ((image (gethash icon-fname dired-icon--image-hash)))
-              (unless image
-                (setq image (create-image icon-fname))
-                (puthash icon-fname image dired-icon--image-hash))
-              (push image icon-images))))
-        ;; The first element is an nil caused by the file end \n. Remove
-        ;; it.
-        (pop icon-images)
-        (cl-pairlis file-names icon-images))))
-   (t  ;; other unsupported systems
-    (cl-pairlis file-names
-                (make-list (length file-names) nil)))))
+  (ignore-errors
+    (cond
+     ;; GTK 3
+     ((and (executable-find dired-icon-python-executable)
+           (= 0 (call-process dired-icon-python-executable nil nil nil
+                              (expand-file-name
+                               "get-icon-path-gtk3.py"
+                               dired-icon--script-directory) "test")))
+      (with-temp-buffer
+        ;; insert the list of mimetypes into the temp buffer
+        (dolist (fn file-names)
+          (goto-char (point-min))  ;; reverse the file name insertion order
+          (insert (concat (dired-icon--guess-mime-type fn) "\n")))
+        ;; replace the current buffer with an icon file name in each line
+        (call-process-region (point-min) (point-max)
+                             dired-icon-python-executable
+                             t t nil
+                             (expand-file-name
+                              "get-icon-path-gtk3.py"
+                              dired-icon--script-directory)
+                             (number-to-string dired-icon-gtk-image-size))
+        ;; create an image object for each icon
+        (let ((icon-images nil))
+          (dolist (icon-fname (split-string (buffer-string) "\n" nil))
+            (if (string= icon-fname "")
+                (push nil icon-images)
+              (let ((image (gethash icon-fname dired-icon--image-hash)))
+                (unless image
+                  (setq image (create-image icon-fname))
+                  (puthash icon-fname image dired-icon--image-hash))
+                (push image icon-images))))
+          ;; The first element is an nil caused by the file end \n. Remove
+          ;; it.
+          (pop icon-images)
+          (cl-pairlis file-names icon-images))))
+     (t  ;; other unsupported systems
+      (cl-pairlis file-names
+                  (make-list (length file-names) nil))))))
 
 (defun dired-icon--get-files ()
   "List all files in the current dired buffer."

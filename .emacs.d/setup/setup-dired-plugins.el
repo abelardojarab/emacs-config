@@ -24,20 +24,32 @@
 
 ;;; Code:
 
+
 ;; Simple directory explorer. It also works as a generic tree explore library
 (use-package direx
   :after dired
   :load-path (lambda () (expand-file-name "direx/" user-emacs-directory))
+  :bind (:map dired-mode-map
+              ("b" . direx:jump-to-directory))
   :config (progn
             (setq direx:closed-icon "+ ")
             (setq direx:leaf-icon "| ")
             (setq direx:open-icon "> ")
+            (define-key direx:direx-mode-map (kbd "b") 'dired-jump)
             (define-key direx:direx-mode-map [mouse-1] 'direx:mouse-2)
             (define-key direx:direx-mode-map [mouse-3] 'direx:mouse-1)))
 
 (use-package direx-project
   :after direx
   :load-path (lambda () (expand-file-name "direx/" user-emacs-directory)))
+
+;; Enable copying and pasting files
+(use-package dired-ranger
+  :load-path (lambda () (expand-file-name "dired-hacks/" user-emacs-directory))
+  :bind (:map dired-mode-map
+              ("W" . dired-ranger-copy)
+              ("X" . dired-ranger-move)
+              ("Y" . dired-ranger-paste)))
 
 ;; Highlight dired buffer with K-shell coloring
 (use-package dired-k
@@ -101,7 +113,7 @@
                ("r"          . neotree-rename-node)))
   :load-path (lambda () (expand-file-name "neotree/" user-emacs-directory))
   :config (progn
-            ;;  every time when the neotree window is
+            ;; every time when the neotree window is
             ;; opened, it will try to find current
             ;; file and jump to node.
             (setq-default neo-smart-open t)
