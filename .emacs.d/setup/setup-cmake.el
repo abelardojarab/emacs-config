@@ -693,5 +693,59 @@ the specified directory."
 
             (add-hook 'c-common-mode-hook 'cmake-project-hook)))
 
+;; EDE project managment, slows down Emacs
+(global-ede-mode 1)
+(ede-enable-generic-projects)
+(setq ede-project-directories t)
+
+;; Default EDE directory
+(setq-default ede-project-placeholder-cache-file "~/.emacs.cache/ede-projects.el")
+
+;; Enable the wrapper for compilation database projects
+(use-package ede-compdb
+  :load-path (lambda () (expand-file-name "ede-compdb/" user-emacs-directory))
+  :config (progn
+            (defvar my/cmake-build-directories
+              '(("None" . "build")
+                ("Debug" . "build.dbg")
+                ("Release" . "build.rel")
+                ("RelWithDebInfo" . "build.r+d")))
+
+            (defun my/load-cmake-project (dir)
+              "Creates a project for the given directory sourced at dir"
+              (let ((default-directory dir)
+                    (config-and-dir (car (cl-member-if (lambda (c)
+                                                         (file-readable-p
+                                                          (expand-file-name "compile_commands.json" (concat dir (cdr c)))))
+                                                       my/cmake-build-directories))))
+                (ede-add-project-to-global-list
+                 (ede-compdb-project
+                  (file-name-nondirectory (directory-file-name dir))
+                  :file (expand-file-name "CMakeLists.txt" (cmake-ide--locate-cmakelists))
+                  :compdb-file (expand-file-name "compile_commands.json" cmake-project-build-directory)
+                  :configuration-default "RelWithDebInfo"
+                  :configuration-directories (mapcar #'cdr my/cmake-build-directories)
+                  :configurations (mapcar #'car my/cmake-build-directories)
+                  :build-command "cmake --build .."))))
+
+            (defun vc-project-root (dir)
+              (require 'vc)
+              (let* ((default-directory dir)
+                     (backend (vc-responsible-backend dir)))
+                (and backend (vc-call-backend backend 'root (projectile-root-directory)))))
+
+            (ede-add-project-autoload
+             (ede-project-autoload "generic-cmake"
+                                   :name "generic-cmake"
+                                   :file 'ede-compdb
+                                   :proj-file "CMakeLists.txt"
+                                   :proj-root 'vc-project-root
+                                   :load-type 'my/load-cmake-project
+                                   :class-sym 'ede-compdb-project))))
+
+;; Extensions to Emacs Development Environment for use with CMake-based projects
+(use-package ede-cmake
+  :load-path (lambda () (expand-file-name "ede-cmake/" user-emacs-directory)))
+
 (provide 'setup-cmake)
 ;;; setup-cmake.el ends here
