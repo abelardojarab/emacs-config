@@ -60,6 +60,9 @@
                     nil
                   t)))
 
+;; Enable decoration mode
+(global-semantic-decoration-mode t)
+
 ;; etags support
 (when (cedet-ectag-version-check t)
   (semantic-load-enable-primary-ectags-support))
