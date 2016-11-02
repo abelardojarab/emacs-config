@@ -3,7 +3,7 @@
 ;;; Code:
 
 
-;;;### (autoloads nil "cogre/ascii" "ascii.el" (22388 4915 0 0))
+;;;### (autoloads nil "cogre/ascii" "ascii.el" (0 0 0 0))
 ;;; Generated autoloads from ascii.el
 
 (autoload 'cogre-export-ascii "cogre/ascii" "\
@@ -11,10 +11,11 @@ Export the current diagram into an ASCII buffer.
 
 \(fn)" t nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "cogre/ascii" '("cogre-")))
+
 ;;;***
 
-;;;### (autoloads nil "cogre/convert" "convert.el" (22388 4915 0
-;;;;;;  0))
+;;;### (autoloads nil "cogre/convert" "convert.el" (0 0 0 0))
 ;;; Generated autoloads from convert.el
 
 (autoload 'cogre-export-dot "cogre/convert" "\
@@ -38,10 +39,11 @@ DOT is a part of GraphVis.
 
 \(fn)" t nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "cogre/convert" '("cogre-")))
+
 ;;;***
 
-;;;### (autoloads nil "cogre/dot-mode" "dot-mode.el" (22388 4915
-;;;;;;  0 0))
+;;;### (autoloads nil "cogre/dot-mode" "dot-mode.el" (0 0 0 0))
 ;;; Generated autoloads from dot-mode.el
 
 (autoload 'cogre-dot-mode "cogre/dot-mode" "\
@@ -55,9 +57,11 @@ as a parsing engine.
 
 (add-to-list 'auto-mode-alist '("\\.dot\\'" . cogre-dot-mode))
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "cogre/dot-mode" '("cogre-dot-")))
+
 ;;;***
 
-;;;### (autoloads nil "cogre/layout" "layout.el" (22388 4915 0 0))
+;;;### (autoloads nil "cogre/layout" "layout.el" (0 0 0 0))
 ;;; Generated autoloads from layout.el
 
 (autoload 'cogre-layout "cogre/layout" "\
@@ -68,7 +72,7 @@ This function depends on graphviz `dot' program.
 
 ;;;***
 
-;;;### (autoloads nil "cogre/mode" "mode.el" (22388 4915 0 0))
+;;;### (autoloads nil "cogre/mode" "mode.el" (0 0 0 0))
 ;;; Generated autoloads from mode.el
 
 (autoload 'cogre-mode "cogre/mode" "\
@@ -79,10 +83,11 @@ Connected Graph Editor Mode.
 
 (add-to-list 'auto-mode-alist (cons "\\.cgr\\'" 'cogre-mode))
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "cogre/mode" '("cogre-")))
+
 ;;;***
 
-;;;### (autoloads nil "cogre/periodic" "periodic.el" (22388 4915
-;;;;;;  0 0))
+;;;### (autoloads nil "cogre/periodic" "periodic.el" (0 0 0 0))
 ;;; Generated autoloads from periodic.el
 
 (autoload 'cogre-periodic "cogre/periodic" "\
@@ -90,10 +95,12 @@ Create a periodic table of COGRE objects.
 
 \(fn)" t nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "cogre/periodic" '("cogre-periodic-")))
+
 ;;;***
 
-;;;### (autoloads nil "cogre/picture-hack" "picture-hack.el" (22388
-;;;;;;  4915 0 0))
+;;;### (autoloads nil "cogre/picture-hack" "picture-hack.el" (0 0
+;;;;;;  0 0))
 ;;; Generated autoloads from picture-hack.el
 
 (autoload 'cogre-picture-insert-rectangle "cogre/picture-hack" "\
@@ -102,10 +109,11 @@ Leaves the region surrounding the rectangle.
 
 \(fn RECTANGLE)" nil nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "cogre/picture-hack" '("picture-")))
+
 ;;;***
 
-;;;### (autoloads nil "cogre/semantic" "semantic.el" (22388 4915
-;;;;;;  0 0))
+;;;### (autoloads nil "cogre/semantic" "semantic.el" (0 0 0 0))
 ;;; Generated autoloads from semantic.el
 
 (autoload 'cogre-semantic-tag-to-node "cogre/semantic" "\
@@ -129,10 +137,11 @@ The parent to CLASS, CLASS, and all of CLASSes children will be shown.
 
 \(fn CLASS)" t nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "cogre/semantic" '("cogre-")))
+
 ;;;***
 
-;;;### (autoloads nil "cogre/srecode" "srecode.el" (22388 4915 0
-;;;;;;  0))
+;;;### (autoloads nil "cogre/srecode" "srecode.el" (0 0 0 0))
 ;;; Generated autoloads from srecode.el
 
 (autoload 'cogre-srecode-setup "cogre/srecode" "\
@@ -152,9 +161,11 @@ Add macros to dictionary DICT based on the current DOT buffer.
 
 \(fn DICT)" nil nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "cogre/srecode" '("srecode-" "cogre-srecode-")))
+
 ;;;***
 
-;;;### (autoloads nil "cogre/uml" "uml.el" (22388 4915 0 0))
+;;;### (autoloads nil "cogre/uml" "uml.el" (0 0 0 0))
 ;;; Generated autoloads from uml.el
 
 (autoload 'cogre-uml-enable-unicode "cogre/uml" "\
@@ -176,10 +187,11 @@ Return it as a list of lists.  Each entry is of the form:
 
 \(fn G)" t nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "cogre/uml" '("cogre-")))
+
 ;;;***
 
-;;;### (autoloads nil "cogre/wisent-dot" "wisent-dot.el" (22388 4915
-;;;;;;  0 0))
+;;;### (autoloads nil "cogre/wisent-dot" "wisent-dot.el" (0 0 0 0))
 ;;; Generated autoloads from wisent-dot.el
 
 (autoload 'wisent-dot-setup-parser "cogre/wisent-dot" "\
@@ -191,10 +203,14 @@ Setup buffer for parse.
 
 (add-hook 'cogre-dot-mode-hook 'wisent-dot-setup-parser)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "cogre/wisent-dot" '("semantic-tag-components")))
+
 ;;;***
 
-;;;### (autoloads nil nil ("wisent-dot-wy.el") (22388 5000 928950
-;;;;;;  0))
+;;;### (autoloads nil "wisent-dot-wy" "wisent-dot-wy.el" (0 0 0 0))
+;;; Generated autoloads from wisent-dot-wy.el
+
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "wisent-dot-wy" '("wisent-dot-")))
 
 ;;;***
 

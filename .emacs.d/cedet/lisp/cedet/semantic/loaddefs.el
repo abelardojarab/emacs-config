@@ -3,8 +3,7 @@
 ;;; Code:
 
 
-;;;### (autoloads nil "analyze/debug" "analyze/debug.el" (22388 4915
-;;;;;;  0 0))
+;;;### (autoloads nil "analyze/debug" "analyze/debug.el" (0 0 0 0))
 ;;; Generated autoloads from analyze/debug.el
 
 (autoload 'semantic-analyze-debug-assist "analyze/debug" "\
@@ -12,10 +11,191 @@ Debug semantic analysis at the current point.
 
 \(fn)" t nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "analyze/debug" '("semantic-analyzer-debug-")))
+
 ;;;***
 
-;;;### (autoloads nil "semantic/adebug" "adebug.el" (22388 4915 0
+;;;### (autoloads nil "analyze/fcn" "analyze/fcn.el" (0 0 0 0))
+;;; Generated autoloads from analyze/fcn.el
+
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "analyze/fcn" '("semantic-analyze-")))
+
+;;;***
+
+;;;### (autoloads nil "ast" "ast.el" (0 0 0 0))
+;;; Generated autoloads from ast.el
+
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "ast" '("semantic-ast-")))
+
+;;;***
+
+;;;### (autoloads nil "bovine/c-by" "bovine/c-by.el" (0 0 0 0))
+;;; Generated autoloads from bovine/c-by.el
+
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "bovine/c-by" '("semantic-c-by--")))
+
+;;;***
+
+;;;### (autoloads nil "bovine/debug" "bovine/debug.el" (0 0 0 0))
+;;; Generated autoloads from bovine/debug.el
+
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "bovine/debug" '("semantic-")))
+
+;;;***
+
+;;;### (autoloads nil "bovine/erlang" "bovine/erlang.el" (0 0 0 0))
+;;; Generated autoloads from bovine/erlang.el
+
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "bovine/erlang" '("semantic-erlang-")))
+
+;;;***
+
+;;;### (autoloads nil "bovine/erlang-by" "bovine/erlang-by.el" (0
+;;;;;;  0 0 0))
+;;; Generated autoloads from bovine/erlang-by.el
+
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "bovine/erlang-by" '("semantic-erlang-by--")))
+
+;;;***
+
+;;;### (autoloads nil "bovine/f90-by" "bovine/f90-by.el" (0 0 0 0))
+;;; Generated autoloads from bovine/f90-by.el
+
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "bovine/f90-by" '("semantic-f90-by--")))
+
+;;;***
+
+;;;### (autoloads nil "bovine/grammar-macros" "bovine/grammar-macros.el"
+;;;;;;  (0 0 0 0))
+;;; Generated autoloads from bovine/grammar-macros.el
+
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "bovine/grammar-macros" '("bovine-grammar-")))
+
+;;;***
+
+;;;### (autoloads nil "bovine/make-by" "bovine/make-by.el" (0 0 0
 ;;;;;;  0))
+;;; Generated autoloads from bovine/make-by.el
+
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "bovine/make-by" '("semantic-make-by--")))
+
+;;;***
+
+;;;### (autoloads nil "bovine/scm-by" "bovine/scm-by.el" (0 0 0 0))
+;;; Generated autoloads from bovine/scm-by.el
+
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "bovine/scm-by" '("semantic-scm-by--")))
+
+;;;***
+
+;;;### (autoloads nil "canned-configs" "canned-configs.el" (0 0 0
+;;;;;;  0))
+;;; Generated autoloads from canned-configs.el
+
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "canned-configs" '("semantic-load-")))
+
+;;;***
+
+;;;### (autoloads nil "chart" "chart.el" (0 0 0 0))
+;;; Generated autoloads from chart.el
+
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "chart" '("semantic-chart-")))
+
+;;;***
+
+;;;### (autoloads nil "db-debug" "db-debug.el" (0 0 0 0))
+;;; Generated autoloads from db-debug.el
+
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "db-debug" '("semanticdb-")))
+
+;;;***
+
+;;;### (autoloads nil "db-ebrowse" "db-ebrowse.el" (0 0 0 0))
+;;; Generated autoloads from db-ebrowse.el
+
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "db-ebrowse" '("semanticdb-" "c++-mode")))
+
+;;;***
+
+;;;### (autoloads nil "db-el" "db-el.el" (0 0 0 0))
+;;; Generated autoloads from db-el.el
+
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "db-el" '("semanticdb-" "emacs-lisp-mode" "object-print")))
+
+;;;***
+
+;;;### (autoloads nil "db-javascript" "db-javascript.el" (0 0 0 0))
+;;; Generated autoloads from db-javascript.el
+
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "db-javascript" '("semanticdb-" "javascript-mode")))
+
+;;;***
+
+;;;### (autoloads nil "db-ref" "db-ref.el" (0 0 0 0))
+;;; Generated autoloads from db-ref.el
+
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "db-ref" '("semanticdb-")))
+
+;;;***
+
+;;;### (autoloads nil "decorate" "decorate.el" (0 0 0 0))
+;;; Generated autoloads from decorate.el
+
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "decorate" '("semantic-")))
+
+;;;***
+
+;;;### (autoloads nil "ede-grammar" "ede-grammar.el" (0 0 0 0))
+;;; Generated autoloads from ede-grammar.el
+
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "ede-grammar" '("ede-" "project-compile-target" "semantic-ede-")))
+
+;;;***
+
+;;;### (autoloads nil "fw" "fw.el" (0 0 0 0))
+;;; Generated autoloads from fw.el
+
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "fw" '("semantic")))
+
+;;;***
+
+;;;### (autoloads nil "gram-wy-fallback" "gram-wy-fallback.el" (0
+;;;;;;  0 0 0))
+;;; Generated autoloads from gram-wy-fallback.el
+
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "gram-wy-fallback" '("semantic-grammar-wy--")))
+
+;;;***
+
+;;;### (autoloads nil "grammar" "grammar.el" (0 0 0 0))
+;;; Generated autoloads from grammar.el
+
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "grammar" '("semantic-")))
+
+;;;***
+
+;;;### (autoloads nil "grammar-wy" "grammar-wy.el" (0 0 0 0))
+;;; Generated autoloads from grammar-wy.el
+
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "grammar-wy" '("semantic-grammar-wy--")))
+
+;;;***
+
+;;;### (autoloads nil "java" "java.el" (0 0 0 0))
+;;; Generated autoloads from java.el
+
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "java" '("semantic-")))
+
+;;;***
+
+;;;### (autoloads nil "sb" "sb.el" (0 0 0 0))
+;;; Generated autoloads from sb.el
+
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "sb" '("semantic-sb-")))
+
+;;;***
+
+;;;### (autoloads nil "semantic/adebug" "adebug.el" (0 0 0 0))
 ;;; Generated autoloads from adebug.el
 
 (autoload 'data-debug-insert-tag-parts-from-point "semantic/adebug" "\
@@ -81,10 +261,11 @@ Report debug info for checking STARTFILE for up-to-date tags.
 
 \(fn STARTFILE)" t nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "semantic/adebug" '("data-debug-insert-")))
+
 ;;;***
 
-;;;### (autoloads nil "semantic/analyze" "analyze.el" (22388 4915
-;;;;;;  0 0))
+;;;### (autoloads nil "semantic/analyze" "analyze.el" (0 0 0 0))
 ;;; Generated autoloads from analyze.el
 
 (autoload 'semantic-analyze-current-context "semantic/analyze" "\
@@ -100,10 +281,12 @@ if a cached copy of the return object is found.
 
 \(fn &optional POSITION)" t nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "semantic/analyze" '("semantic-a")))
+
 ;;;***
 
 ;;;### (autoloads nil "semantic/analyze/complete" "analyze/complete.el"
-;;;;;;  (22388 4915 0 0))
+;;;;;;  (0 0 0 0))
 ;;; Generated autoloads from analyze/complete.el
 
 (autoload 'semantic-analyze-type-constants "semantic/analyze/complete" "\
@@ -135,10 +318,12 @@ in a buffer.
 
 \(fn CONTEXT &rest FLAGS)" t nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "semantic/analyze/complete" '("semantic-analyze-")))
+
 ;;;***
 
-;;;### (autoloads nil "semantic/analyze/refs" "analyze/refs.el" (22388
-;;;;;;  4915 0 0))
+;;;### (autoloads nil "semantic/analyze/refs" "analyze/refs.el" (0
+;;;;;;  0 0 0))
 ;;; Generated autoloads from analyze/refs.el
 
 (autoload 'semantic-analyze-current-tag "semantic/analyze/refs" "\
@@ -151,10 +336,11 @@ Toggle between the implementation, and a prototype of tag under point.
 
 \(fn)" t nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "semantic/analyze/refs" '("semantic-")))
+
 ;;;***
 
-;;;### (autoloads nil "semantic/bovine" "bovine.el" (22388 4915 0
-;;;;;;  0))
+;;;### (autoloads nil "semantic/bovine" "bovine.el" (0 0 0 0))
 ;;; Generated autoloads from bovine.el
 
 (autoload 'semantic-bovinate-stream "semantic/bovine" "\
@@ -169,10 +355,11 @@ list of semantic tokens found.
 
 (defalias 'semantic-parse-stream-default 'semantic-bovinate-stream)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "semantic/bovine" '("semantic-")))
+
 ;;;***
 
-;;;### (autoloads nil "semantic/bovine/c" "bovine/c.el" (22388 4915
-;;;;;;  0 0))
+;;;### (autoloads nil "semantic/bovine/c" "bovine/c.el" (0 0 0 0))
 ;;; Generated autoloads from bovine/c.el
 
 (autoload 'semantic-default-c-setup "semantic/bovine/c" "\
@@ -185,10 +372,12 @@ Add a preprocessor symbol SYM with a REPLACEMENT value.
 
 \(fn SYM REPLACEMENT)" t nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "semantic/bovine/c" '("semantic" "c++-mode" "c-mode" "arduino-mode")))
+
 ;;;***
 
-;;;### (autoloads nil "semantic/bovine/clang" "bovine/clang.el" (22388
-;;;;;;  4915 0 0))
+;;;### (autoloads nil "semantic/bovine/clang" "bovine/clang.el" (0
+;;;;;;  0 0 0))
 ;;; Generated autoloads from bovine/clang.el
 
 (autoload 'semantic-clang-activate "semantic/bovine/clang" "\
@@ -196,10 +385,12 @@ Activate clang completions for C/C++.
 
 \(fn)" t nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "semantic/bovine/clang" '("semantic-clang-")))
+
 ;;;***
 
-;;;### (autoloads nil "semantic/bovine/el" "bovine/el.el" (22388
-;;;;;;  4915 0 0))
+;;;### (autoloads nil "semantic/bovine/el" "bovine/el.el" (0 0 0
+;;;;;;  0))
 ;;; Generated autoloads from bovine/el.el
 
 (autoload 'semantic-default-elisp-setup "semantic/bovine/el" "\
@@ -207,10 +398,12 @@ Setup hook function for Emacs Lisp files and Semantic.
 
 \(fn)" nil nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "semantic/bovine/el" '("lisp-mode" "emacs-lisp-mode" "semantic-")))
+
 ;;;***
 
-;;;### (autoloads nil "semantic/bovine/f90" "bovine/f90.el" (22388
-;;;;;;  4915 0 0))
+;;;### (autoloads nil "semantic/bovine/f90" "bovine/f90.el" (0 0
+;;;;;;  0 0))
 ;;; Generated autoloads from bovine/f90.el
 
 (autoload 'semantic-default-f90-setup "semantic/bovine/f90" "\
@@ -218,10 +411,12 @@ Set up a buffer for semantic parsing of the F90 language.
 
 \(fn)" nil nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "semantic/bovine/f90" '("semantic-")))
+
 ;;;***
 
-;;;### (autoloads nil "semantic/bovine/gcc" "bovine/gcc.el" (22388
-;;;;;;  4915 0 0))
+;;;### (autoloads nil "semantic/bovine/gcc" "bovine/gcc.el" (0 0
+;;;;;;  0 0))
 ;;; Generated autoloads from bovine/gcc.el
 
 (autoload 'semantic-gcc-setup "semantic/bovine/gcc" "\
@@ -229,10 +424,12 @@ Setup Semantic C/C++ parsing based on GCC output.
 
 \(fn)" t nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "semantic/bovine/gcc" '("semantic-")))
+
 ;;;***
 
 ;;;### (autoloads nil "semantic/bovine/grammar" "bovine/grammar.el"
-;;;;;;  (22388 4915 0 0))
+;;;;;;  (0 0 0 0))
 ;;; Generated autoloads from bovine/grammar.el
 
 (autoload 'bovine-grammar-mode "semantic/bovine/grammar" "\
@@ -244,10 +441,12 @@ Major mode for editing Bovine grammars.
 
 (eval-after-load "speedbar" '(speedbar-add-supported-extension ".by"))
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "semantic/bovine/grammar" '("bovine-")))
+
 ;;;***
 
-;;;### (autoloads nil "semantic/bovine/make" "bovine/make.el" (22388
-;;;;;;  4915 0 0))
+;;;### (autoloads nil "semantic/bovine/make" "bovine/make.el" (0
+;;;;;;  0 0 0))
 ;;; Generated autoloads from bovine/make.el
 
 (autoload 'semantic-default-make-setup "semantic/bovine/make" "\
@@ -255,10 +454,12 @@ Set up a Makefile buffer for parsing with semantic.
 
 \(fn)" nil nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "semantic/bovine/make" '("semantic-" "makefile-mode")))
+
 ;;;***
 
-;;;### (autoloads nil "semantic/bovine/scm" "bovine/scm.el" (22388
-;;;;;;  4915 0 0))
+;;;### (autoloads nil "semantic/bovine/scm" "bovine/scm.el" (0 0
+;;;;;;  0 0))
 ;;; Generated autoloads from bovine/scm.el
 
 (autoload 'semantic-default-scheme-setup "semantic/bovine/scm" "\
@@ -266,10 +467,11 @@ Setup hook function for Emacs Lisp files and Semantic.
 
 \(fn)" nil nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "semantic/bovine/scm" '("semantic-")))
+
 ;;;***
 
-;;;### (autoloads nil "semantic/complete" "complete.el" (22388 4915
-;;;;;;  0 0))
+;;;### (autoloads nil "semantic/complete" "complete.el" (0 0 0 0))
 ;;; Generated autoloads from complete.el
 
 (defvar semantic-displayor-tooltip-mode 'standard "\
@@ -359,9 +561,11 @@ will perform the completion.
 
 \(fn)" t nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "semantic/complete" '("semantic-" "initialize-instance" "constructor")))
+
 ;;;***
 
-;;;### (autoloads nil "semantic/ctxt" "ctxt.el" (22388 4915 0 0))
+;;;### (autoloads nil "semantic/ctxt" "ctxt.el" (0 0 0 0))
 ;;; Generated autoloads from ctxt.el
 
 (autoload 'semantic-ctxt-current-mode "semantic/ctxt" "\
@@ -372,10 +576,11 @@ determine which major mode apply at point.
 
 \(fn &optional POINT)" nil nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "semantic/ctxt" '("semantic-")))
+
 ;;;***
 
-;;;### (autoloads nil "semantic/custom" "custom.el" (22388 4915 0
-;;;;;;  0))
+;;;### (autoloads nil "semantic/custom" "custom.el" (0 0 0 0))
 ;;; Generated autoloads from custom.el
 
 (define-widget 'tag-edit 'group "\
@@ -418,9 +623,11 @@ If TAG is not provided, then the tag under point is used.
 
 \(fn &optional TAG)" t nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "semantic/custom" '("semantic-tag-")))
+
 ;;;***
 
-;;;### (autoloads nil "semantic/db" "db.el" (22388 4915 0 0))
+;;;### (autoloads nil "semantic/db" "db.el" (0 0 0 0))
 ;;; Generated autoloads from db.el
 
 (defvar semanticdb-current-database nil "\
@@ -438,10 +645,12 @@ DONTLOAD does not affect the creation of new database objects.
 
 \(fn FILE &optional DONTLOAD)" nil nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "semantic/db" '("semanticdb-" "object-print")))
+
 ;;;***
 
-;;;### (autoloads nil "semantic/db-cscope" "db-cscope.el" (22388
-;;;;;;  4915 0 0))
+;;;### (autoloads nil "semantic/db-cscope" "db-cscope.el" (0 0 0
+;;;;;;  0))
 ;;; Generated autoloads from db-cscope.el
 
 (autoload 'semanticdb-enable-cscope-databases "semantic/db-cscope" "\
@@ -458,18 +667,20 @@ values.
 
 \(fn &optional NOERROR)" nil nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "semantic/db-cscope" '("semanticdb-" "object-print")))
+
 ;;;***
 
-;;;### (autoloads nil "semantic/db-file" "db-file.el" (22388 4915
-;;;;;;  0 0))
+;;;### (autoloads nil "semantic/db-file" "db-file.el" (0 0 0 0))
 ;;; Generated autoloads from db-file.el
 
 (eieio-defclass-autoload 'semanticdb-project-database-file '(semanticdb-project-database eieio-persistent) "semantic/db-file" "Database of file tables saved to disk.")
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "semantic/db-file" '("semanticdb-" "object-write")))
+
 ;;;***
 
-;;;### (autoloads nil "semantic/db-find" "db-find.el" (22388 4915
-;;;;;;  0 0))
+;;;### (autoloads nil "semantic/db-find" "db-find.el" (0 0 0 0))
 ;;; Generated autoloads from db-find.el
 
 (defvar semanticdb-find-default-throttle '(local project unloaded system recursive) "\
@@ -634,10 +845,12 @@ associated with that tag should be loaded into a buffer.
 
 \(fn CLASS &optional PATH FIND-FILE-MATCH)" nil nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "semantic/db-find" '("semantic")))
+
 ;;;***
 
-;;;### (autoloads nil "semantic/db-global" "db-global.el" (22388
-;;;;;;  4915 0 0))
+;;;### (autoloads nil "semantic/db-global" "db-global.el" (0 0 0
+;;;;;;  0))
 ;;; Generated autoloads from db-global.el
 
 (autoload 'semanticdb-enable-gnu-global-databases "semantic/db-global" "\
@@ -654,10 +867,11 @@ values.
 
 \(fn MODE &optional NOERROR)" t nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "semantic/db-global" '("semanticdb-" "object-print")))
+
 ;;;***
 
-;;;### (autoloads nil "semantic/db-javap" "db-javap.el" (22388 4915
-;;;;;;  0 0))
+;;;### (autoloads nil "semantic/db-javap" "db-javap.el" (0 0 0 0))
 ;;; Generated autoloads from db-javap.el
 
 (autoload 'semanticdb-javap-get-java-lang-classes "semantic/db-javap" "\
@@ -666,10 +880,11 @@ into the tags)
 
 \(fn)" nil nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "semantic/db-javap" '("semantic" "object-print" "initialize-instance")))
+
 ;;;***
 
-;;;### (autoloads nil "semantic/db-mode" "db-mode.el" (22388 4915
-;;;;;;  0 0))
+;;;### (autoloads nil "semantic/db-mode" "db-mode.el" (0 0 0 0))
 ;;; Generated autoloads from db-mode.el
 
 (autoload 'semanticdb-minor-mode-p "semantic/db-mode" "\
@@ -678,8 +893,9 @@ Return non-nil if `semanticdb-minor-mode' is active.
 \(fn)" nil nil)
 
 (defvar global-semanticdb-minor-mode nil "\
-Non-nil if Global-Semanticdb minor mode is enabled.
-See the command `global-semanticdb-minor-mode' for a description of this minor mode.
+Non-nil if Global Semanticdb minor mode is enabled.
+See the `global-semanticdb-minor-mode' command
+for a description of this minor mode.
 Setting this variable directly does not take effect;
 either customize it (see the info node `Easy Customization')
 or call the function `global-semanticdb-minor-mode'.")
@@ -695,10 +911,12 @@ database, which can be saved for future Emacs sessions.
 
 \(fn &optional ARG)" t nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "semantic/db-mode" '("semanticdb-")))
+
 ;;;***
 
-;;;### (autoloads nil "semantic/db-mozrepl" "db-mozrepl.el" (22388
-;;;;;;  4915 0 0))
+;;;### (autoloads nil "semantic/db-mozrepl" "db-mozrepl.el" (0 0
+;;;;;;  0 0))
 ;;; Generated autoloads from db-mozrepl.el
 
 (autoload 'semanticdb-mozrepl-activate "semantic/db-mozrepl" "\
@@ -710,10 +928,12 @@ will ask the user.
 
 \(fn)" t nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "semantic/db-mozrepl" '("semanticdb-" "javascript-mode")))
+
 ;;;***
 
-;;;### (autoloads nil "semantic/db-search" "db-search.el" (22388
-;;;;;;  4915 0 0))
+;;;### (autoloads nil "semantic/db-search" "db-search.el" (0 0 0
+;;;;;;  0))
 ;;; Generated autoloads from db-search.el
 
 (autoload 'semanticdb-find-nonterminal-by-token "semantic/db-search" "\
@@ -796,10 +1016,12 @@ Return a list ((DB-TABLE . TOKEN-OR-TOKEN-LIST) ...).
 
 \(fn FUNCTION &optional DATABASES SEARCH-PARTS SEARCH-INCLUDES DIFF-MODE FIND-FILE-MATCH IGNORE-SYSTEM)" nil nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "semantic/db-search" '("semanticdb-")))
+
 ;;;***
 
-;;;### (autoloads nil "semantic/db-typecache" "db-typecache.el" (22388
-;;;;;;  4915 0 0))
+;;;### (autoloads nil "semantic/db-typecache" "db-typecache.el" (0
+;;;;;;  0 0 0))
 ;;; Generated autoloads from db-typecache.el
 
 (eieio-defclass-autoload 'semanticdb-typecache 'nil "semantic/db-typecache" "Structure for maintaining a typecache.")
@@ -815,9 +1037,11 @@ FIND-FILE-MATCH is non-nil to force all found tags to be loaded into a buffer.
 
 \(fn TYPE &optional PATH FIND-FILE-MATCH)" nil nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "semantic/db-typecache" '("semantic")))
+
 ;;;***
 
-;;;### (autoloads nil "semantic/debug" "debug.el" (22388 4915 0 0))
+;;;### (autoloads nil "semantic/debug" "debug.el" (0 0 0 0))
 ;;; Generated autoloads from debug.el
 
 (defvar semantic-debug-parser-source nil "\
@@ -842,10 +1066,12 @@ Parse the current buffer and run in debug mode.
 
 \(fn)" t nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "semantic/debug" '("semantic-debug-")))
+
 ;;;***
 
 ;;;### (autoloads nil "semantic/decorate/include" "decorate/include.el"
-;;;;;;  (22388 4915 0 0))
+;;;;;;  (0 0 0 0))
 ;;; Generated autoloads from decorate/include.el
 
 (autoload 'semantic-decoration-include-visit "semantic/decorate/include" "\
@@ -858,15 +1084,18 @@ Do a reset of unparsed includes in the current buffer.
 
 \(fn)" nil nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "semantic/decorate/include" '("semantic")))
+
 ;;;***
 
 ;;;### (autoloads nil "semantic/decorate/mode" "decorate/mode.el"
-;;;;;;  (22388 4915 0 0))
+;;;;;;  (0 0 0 0))
 ;;; Generated autoloads from decorate/mode.el
 
 (defvar global-semantic-decoration-mode nil "\
-Non-nil if Global-Semantic-Decoration mode is enabled.
-See the command `global-semantic-decoration-mode' for a description of this minor mode.
+Non-nil if Global Semantic-Decoration mode is enabled.
+See the `global-semantic-decoration-mode' command
+for a description of this minor mode.
 Setting this variable directly does not take effect;
 either customize it (see the info node `Easy Customization')
 or call the function `global-semantic-decoration-mode'.")
@@ -880,9 +1109,11 @@ by `semantic-decoration-styles'.
 
 \(fn &optional ARG)" t nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "semantic/decorate/mode" '("semantic-" "define-semantic-decoration-style")))
+
 ;;;***
 
-;;;### (autoloads nil "semantic/dep" "dep.el" (22388 4915 0 0))
+;;;### (autoloads nil "semantic/dep" "dep.el" (0 0 0 0))
 ;;; Generated autoloads from dep.el
 
 (autoload 'semantic-add-system-include "semantic/dep" "\
@@ -915,9 +1146,11 @@ macro `defcustom-mode-local-semantic-dependency-system-include-path'.
 
 \(fn &optional MODE)" t nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "semantic/dep" '("semantic-" "defcustom-mode-local-semantic-dependency-system-include-path")))
+
 ;;;***
 
-;;;### (autoloads nil "semantic/doc" "doc.el" (22388 4915 0 0))
+;;;### (autoloads nil "semantic/doc" "doc.el" (0 0 0 0))
 ;;; Generated autoloads from doc.el
 
 (autoload 'semantic-documentation-for-tag "semantic/doc" "\
@@ -931,10 +1164,12 @@ If nosnarf if 'lex, then only return the lex token.
 
 \(fn &optional TAG NOSNARF)" nil nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "semantic/doc" '("semantic-doc")))
+
 ;;;***
 
-;;;### (autoloads nil "semantic/ectags/db" "ectags/db.el" (22388
-;;;;;;  4915 0 0))
+;;;### (autoloads nil "semantic/ectags/db" "ectags/db.el" (0 0 0
+;;;;;;  0))
 ;;; Generated autoloads from ectags/db.el
 
 (autoload 'semanticdb-enable-ectags "semantic/ectags/db" "\
@@ -945,10 +1180,12 @@ version needed by Semantic ectags support.
 
 \(fn MODE)" t nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "semantic/ectags/db" '("semanticdb-ectags-create-table-for-file-not-in-buffer")))
+
 ;;;***
 
-;;;### (autoloads nil "semantic/ectags/lang" "ectags/lang.el" (22388
-;;;;;;  4915 0 0))
+;;;### (autoloads nil "semantic/ectags/lang" "ectags/lang.el" (0
+;;;;;;  0 0 0))
 ;;; Generated autoloads from ectags/lang.el
 
 (autoload 'semantic-load-enable-primary-ectags-support "semantic/ectags/lang" "\
@@ -958,10 +1195,12 @@ semantic parser.
 
 \(fn)" t nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "semantic/ectags/lang" '("semantic-ectags-")))
+
 ;;;***
 
-;;;### (autoloads nil "semantic/ectags/lang2" "ectags/lang2.el" (22388
-;;;;;;  4915 0 0))
+;;;### (autoloads nil "semantic/ectags/lang2" "ectags/lang2.el" (0
+;;;;;;  0 0 0))
 ;;; Generated autoloads from ectags/lang2.el
 
 (autoload 'semantic-load-enable-secondary-ectags-support "semantic/ectags/lang2" "\
@@ -971,10 +1210,12 @@ Any mode that has been tested to work will be added to this function.
 
 \(fn)" t nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "semantic/ectags/lang2" '("emacs-lisp-mode" "c++-mode" "c-mode")))
+
 ;;;***
 
-;;;### (autoloads nil "semantic/ectags/parse" "ectags/parse.el" (22388
-;;;;;;  4915 0 0))
+;;;### (autoloads nil "semantic/ectags/parse" "ectags/parse.el" (0
+;;;;;;  0 0 0))
 ;;; Generated autoloads from ectags/parse.el
 
 (autoload 'semantic-ectags-parse-buffer "semantic/ectags/parse" "\
@@ -983,10 +1224,12 @@ Convert the output tags into Semantic tags.
 
 \(fn)" t nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "semantic/ectags/parse" '("semantic-ectags-")))
+
 ;;;***
 
-;;;### (autoloads nil "semantic/ectags/util" "ectags/util.el" (22388
-;;;;;;  4915 0 0))
+;;;### (autoloads nil "semantic/ectags/util" "ectags/util.el" (0
+;;;;;;  0 0 0))
 ;;; Generated autoloads from ectags/util.el
 
 (autoload 'cedet-ectag-version-check "semantic/ectags/util" "\
@@ -997,9 +1240,11 @@ return nil.
 
 \(fn &optional NOERROR)" t nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "semantic/ectags/util" '("semantic-ectags-")))
+
 ;;;***
 
-;;;### (autoloads nil "semantic/edit" "edit.el" (22388 4915 0 0))
+;;;### (autoloads nil "semantic/edit" "edit.el" (0 0 0 0))
 ;;; Generated autoloads from edit.el
 
 (autoload 'semantic-change-function "semantic/edit" "\
@@ -1020,9 +1265,11 @@ the semantic cache to see what needs to be changed.
 
 (defalias 'semantic-parse-changes-default 'semantic-edits-incremental-parser)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "semantic/edit" '("semantic-")))
+
 ;;;***
 
-;;;### (autoloads nil "semantic/elp" "elp.el" (22388 4915 0 0))
+;;;### (autoloads nil "semantic/elp" "elp.el" (0 0 0 0))
 ;;; Generated autoloads from elp.el
 
 (autoload 'semantic-elp-analyze "semantic/elp" "\
@@ -1035,9 +1282,11 @@ Load an old run from FILE, and show it.
 
 \(fn FILE)" t nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "semantic/elp" '("semantic-elp-" "data-debug/eieio-insert-slots")))
+
 ;;;***
 
-;;;### (autoloads nil "semantic/find" "find.el" (22388 4915 0 0))
+;;;### (autoloads nil "semantic/find" "find.el" (0 0 0 0))
 ;;; Generated autoloads from find.el
 
 (autoload 'semantic-find-tag-by-overlay "semantic/find" "\
@@ -1117,10 +1366,11 @@ TABLE is a tag table.  See `semantic-something-to-tag-table'.
 
 \(fn &optional TABLE)" nil nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "semantic/find" '("semantic-")))
+
 ;;;***
 
-;;;### (autoloads nil "semantic/format" "format.el" (22388 4915 0
-;;;;;;  0))
+;;;### (autoloads nil "semantic/format" "format.el" (0 0 0 0))
 ;;; Generated autoloads from format.el
 
 (autoload 'semantic-format-tag-name "semantic/format" "\
@@ -1155,9 +1405,11 @@ Optional argument COLOR means highlight the prototype with font-lock colors.
 
 \(fn TAG &optional PARENT COLOR)" nil nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "semantic/format" '("semantic-")))
+
 ;;;***
 
-;;;### (autoloads nil "semantic/html" "html.el" (22388 4915 0 0))
+;;;### (autoloads nil "semantic/html" "html.el" (0 0 0 0))
 ;;; Generated autoloads from html.el
 
 (autoload 'semantic-default-html-setup "semantic/html" "\
@@ -1165,9 +1417,11 @@ Set up a buffer for parsing of HTML files.
 
 \(fn)" nil nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "semantic/html" '("html-helper-mode" "semantic-")))
+
 ;;;***
 
-;;;### (autoloads nil "semantic/ia" "ia.el" (22388 4915 0 0))
+;;;### (autoloads nil "semantic/ia" "ia.el" (0 0 0 0))
 ;;; Generated autoloads from ia.el
 
 (autoload 'semantic-ia-complete-symbol "semantic/ia" "\
@@ -1224,9 +1478,11 @@ parts of the parent classes are displayed.
 
 \(fn TYPENAME)" t nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "semantic/ia" '("semantic-ia-")))
+
 ;;;***
 
-;;;### (autoloads nil "semantic/ia-sb" "ia-sb.el" (22388 4915 0 0))
+;;;### (autoloads nil "semantic/ia-sb" "ia-sb.el" (0 0 0 0))
 ;;; Generated autoloads from ia-sb.el
 
 (autoload 'semantic-speedbar-analysis "semantic/ia-sb" "\
@@ -1236,9 +1492,11 @@ list of possible completions.
 
 \(fn)" t nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "semantic/ia-sb" '("semantic-ia-s")))
+
 ;;;***
 
-;;;### (autoloads nil "semantic/idle" "idle.el" (22388 4915 0 0))
+;;;### (autoloads nil "semantic/idle" "idle.el" (0 0 0 0))
 ;;; Generated autoloads from idle.el
 
 (autoload 'semantic-idle-scheduler-mode "semantic/idle" "\
@@ -1256,8 +1514,9 @@ minor mode is enabled.
 \(fn &optional ARG)" t nil)
 
 (defvar global-semantic-idle-scheduler-mode nil "\
-Non-nil if Global-Semantic-Idle-Scheduler mode is enabled.
-See the command `global-semantic-idle-scheduler-mode' for a description of this minor mode.
+Non-nil if Global Semantic-Idle-Scheduler mode is enabled.
+See the `global-semantic-idle-scheduler-mode' command
+for a description of this minor mode.
 Setting this variable directly does not take effect;
 either customize it (see the info node `Easy Customization')
 or call the function `global-semantic-idle-scheduler-mode'.")
@@ -1272,9 +1531,11 @@ If ARG is positive or nil, enable, if it is negative, disable.
 
 \(fn &optional ARG)" t nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "semantic/idle" '("semantic-" "global-semantic-idle-summary-mode" "define-semantic-idle-service")))
+
 ;;;***
 
-;;;### (autoloads nil "semantic/imenu" "imenu.el" (22388 4915 0 0))
+;;;### (autoloads nil "semantic/imenu" "imenu.el" (0 0 0 0))
 ;;; Generated autoloads from imenu.el
 
 (defvar semantic-imenu-summary-function 'semantic-format-tag-abbreviate "\
@@ -1306,9 +1567,11 @@ Optional argument STREAM is an optional stream of tags used to create menus.
 
 \(fn &optional STREAM)" nil nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "semantic/imenu" '("semantic-")))
+
 ;;;***
 
-;;;### (autoloads nil "semantic/lex" "lex.el" (22388 4915 0 0))
+;;;### (autoloads nil "semantic/lex" "lex.el" (0 0 0 0))
 ;;; Generated autoloads from lex.el
 
 (autoload 'semantic-lex "semantic/lex" "\
@@ -1327,10 +1590,11 @@ scanning, use `narrow-to-region'.
 
 \(fn START END &optional DEPTH LENGTH)" nil nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "semantic/lex" '("semantic-" "define-lex")))
+
 ;;;***
 
-;;;### (autoloads nil "semantic/lex-spp" "lex-spp.el" (22388 4915
-;;;;;;  0 0))
+;;;### (autoloads nil "semantic/lex-spp" "lex-spp.el" (0 0 0 0))
 ;;; Generated autoloads from lex-spp.el
 
 (autoload 'semantic-lex-spp-table-write-slot-value "semantic/lex-spp" "\
@@ -1339,9 +1603,11 @@ The VALUE is a spp lexical table.
 
 \(fn VALUE)" nil nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "semantic/lex-spp" '("semantic-lex-" "define-lex-spp-")))
+
 ;;;***
 
-;;;### (autoloads nil "semantic/m3" "m3.el" (22388 4915 0 0))
+;;;### (autoloads nil "semantic/m3" "m3.el" (0 0 0 0))
 ;;; Generated autoloads from m3.el
 
 (autoload 'semantic-m3-install "semantic/m3" "\
@@ -1370,15 +1636,18 @@ Return a list of menu items for dealing with analyzer refs.
 
 \(fn)" nil nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "semantic/m3" '("semantic-m3-")))
+
 ;;;***
 
-;;;### (autoloads nil "semantic/mru-bookmark" "mru-bookmark.el" (22388
-;;;;;;  4915 0 0))
+;;;### (autoloads nil "semantic/mru-bookmark" "mru-bookmark.el" (0
+;;;;;;  0 0 0))
 ;;; Generated autoloads from mru-bookmark.el
 
 (defvar global-semantic-mru-bookmark-mode nil "\
-Non-nil if Global-Semantic-Mru-Bookmark mode is enabled.
-See the command `global-semantic-mru-bookmark-mode' for a description of this minor mode.
+Non-nil if Global Semantic-Mru-Bookmark mode is enabled.
+See the `global-semantic-mru-bookmark-mode' command
+for a description of this minor mode.
 Setting this variable directly does not take effect;
 either customize it (see the info node `Easy Customization')
 or call the function `global-semantic-mru-bookmark-mode'.")
@@ -1391,9 +1660,11 @@ If ARG is positive or nil, enable, if it is negative, disable.
 
 \(fn &optional ARG)" t nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "semantic/mru-bookmark" '("semantic-" "global-semantic-mru-bookmark-mode" "initialize-instance")))
+
 ;;;***
 
-;;;### (autoloads nil "semantic/scope" "scope.el" (22388 4915 0 0))
+;;;### (autoloads nil "semantic/scope" "scope.el" (0 0 0 0))
 ;;; Generated autoloads from scope.el
 
 (autoload 'semantic-calculate-scope "semantic/scope" "\
@@ -1404,10 +1675,11 @@ The class returned from the scope calculation is variable
 
 \(fn &optional POINT)" t nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "semantic/scope" '("semantic")))
+
 ;;;***
 
-;;;### (autoloads nil "semantic/senator" "senator.el" (22388 4915
-;;;;;;  0 0))
+;;;### (autoloads nil "semantic/senator" "senator.el" (0 0 0 0))
 ;;; Generated autoloads from senator.el
 
 (defvar senator-step-at-tag-classes nil "\
@@ -1556,9 +1828,11 @@ Transpose the current tag, and the following tag.
 
 \(fn)" t nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "semantic/senator" '("semantic-up-reference" "senator-")))
+
 ;;;***
 
-;;;### (autoloads nil "semantic/sort" "sort.el" (22388 4915 0 0))
+;;;### (autoloads nil "semantic/sort" "sort.el" (0 0 0 0))
 ;;; Generated autoloads from sort.el
 
 (autoload 'semantic-flatten-tags-table "semantic/sort" "\
@@ -1586,10 +1860,11 @@ include the default behavior, and merely extend your own.
 
 \(fn TAG)" nil nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "semantic/sort" '("semantic-")))
+
 ;;;***
 
-;;;### (autoloads nil "semantic/symref" "symref.el" (22388 4915 0
-;;;;;;  0))
+;;;### (autoloads nil "semantic/symref" "symref.el" (0 0 0 0))
 ;;; Generated autoloads from symref.el
 
 (autoload 'semantic-symref-find-references-by-name "semantic/symref" "\
@@ -1649,42 +1924,52 @@ Returns an object of class `semantic-symref-result'.
 
 \(fn TEXT &optional SCOPE)" t nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "semantic/symref" '("semantic-symref-")))
+
 ;;;***
 
 ;;;### (autoloads nil "semantic/symref/cscope" "symref/cscope.el"
-;;;;;;  (22388 4915 0 0))
+;;;;;;  (0 0 0 0))
 ;;; Generated autoloads from symref/cscope.el
 
 (eieio-defclass-autoload 'semantic-symref-tool-cscope '(semantic-symref-tool-baseclass) "semantic/symref/cscope" "A symref tool implementation using CScope.\nThe CScope command can be used to generate lists of tags in a way\nsimilar to that of `grep'.  This tool will parse the output to generate\nthe hit list.\n\nSee the function `cedet-cscope-search' for more details.")
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "semantic/symref/cscope" '("semantic-symref-p")))
+
 ;;;***
 
 ;;;### (autoloads nil "semantic/symref/global" "symref/global.el"
-;;;;;;  (22388 4915 0 0))
+;;;;;;  (0 0 0 0))
 ;;; Generated autoloads from symref/global.el
 
 (eieio-defclass-autoload 'semantic-symref-tool-global '(semantic-symref-tool-baseclass) "semantic/symref/global" "A symref tool implementation using GNU Global.\nThe GNU Global command can be used to generate lists of tags in a way\nsimilar to that of `grep'.  This tool will parse the output to generate\nthe hit list.\n\nSee the function `cedet-gnu-global-search' for more details.")
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "semantic/symref/global" '("semantic-symref-p")))
+
 ;;;***
 
-;;;### (autoloads nil "semantic/symref/grep" "symref/grep.el" (22388
-;;;;;;  4915 0 0))
+;;;### (autoloads nil "semantic/symref/grep" "symref/grep.el" (0
+;;;;;;  0 0 0))
 ;;; Generated autoloads from symref/grep.el
 
 (eieio-defclass-autoload 'semantic-symref-tool-grep '(semantic-symref-tool-baseclass) "semantic/symref/grep" "A symref tool implementation using grep.\nThis tool uses EDE to find he root of the project, then executes\nfind-grep in the project.  The output is parsed for hits\nand those hits returned.")
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "semantic/symref/grep" '("semantic-symref-")))
+
 ;;;***
 
 ;;;### (autoloads nil "semantic/symref/idutils" "symref/idutils.el"
-;;;;;;  (22388 4915 0 0))
+;;;;;;  (0 0 0 0))
 ;;; Generated autoloads from symref/idutils.el
 
 (eieio-defclass-autoload 'semantic-symref-tool-idutils '(semantic-symref-tool-baseclass) "semantic/symref/idutils" "A symref tool implementation using ID Utils.\nThe udutils command set can be used to generate lists of tags in a way\nsimilar to that of `grep'.  This tool will parse the output to generate\nthe hit list.\n\nSee the function `cedet-idutils-search' for more details.")
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "semantic/symref/idutils" '("semantic-symref-p")))
+
 ;;;***
 
-;;;### (autoloads nil "semantic/symref/list" "symref/list.el" (22388
-;;;;;;  4915 0 0))
+;;;### (autoloads nil "semantic/symref/list" "symref/list.el" (0
+;;;;;;  0 0 0))
 ;;; Generated autoloads from symref/list.el
 
 (autoload 'semantic-symref "semantic/symref/list" "\
@@ -1717,9 +2002,11 @@ Display the references in`semantic-symref-results-mode'.
 
 \(fn SYM)" t nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "semantic/symref/list" '("semantic-symref-")))
+
 ;;;***
 
-;;;### (autoloads nil "semantic/tag" "tag.el" (22388 4915 0 0))
+;;;### (autoloads nil "semantic/tag" "tag.el" (0 0 0 0))
 ;;; Generated autoloads from tag.el
 
 (autoload 'semantic-tag-components "semantic/tag" "\
@@ -1731,10 +2018,11 @@ tag of class 'function.
 
 \(fn TAG)" nil nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "semantic/tag" '("semantic-")))
+
 ;;;***
 
-;;;### (autoloads nil "semantic/tag-file" "tag-file.el" (22388 4915
-;;;;;;  0 0))
+;;;### (autoloads nil "semantic/tag-file" "tag-file.el" (0 0 0 0))
 ;;; Generated autoloads from tag-file.el
 
 (autoload 'semantic-go-to-tag "semantic/tag-file" "\
@@ -1752,10 +2040,11 @@ Depends on `semantic-dependency-include-path' for searching.  Always searches
 
 \(fn &optional TAG)" nil nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "semantic/tag-file" '("semantic-prototype-file")))
+
 ;;;***
 
-;;;### (autoloads nil "semantic/tag-ls" "tag-ls.el" (22388 4915 0
-;;;;;;  0))
+;;;### (autoloads nil "semantic/tag-ls" "tag-ls.el" (0 0 0 0))
 ;;; Generated autoloads from tag-ls.el
 
 (autoload 'semantic-tag-prototype-p "semantic/tag-ls" "\
@@ -1765,10 +2054,12 @@ something without an implementation.
 
 \(fn TAG)" nil nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "semantic/tag-ls" '("semantic-")))
+
 ;;;***
 
-;;;### (autoloads nil "semantic/tag-write" "tag-write.el" (22388
-;;;;;;  4915 0 0))
+;;;### (autoloads nil "semantic/tag-write" "tag-write.el" (0 0 0
+;;;;;;  0))
 ;;; Generated autoloads from tag-write.el
 
 (autoload 'semantic-tag-write-list-slot-value "semantic/tag-write" "\
@@ -1777,9 +2068,11 @@ The VALUE is a list of tags.
 
 \(fn VALUE)" nil nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "semantic/tag-write" '("semantic-tag-write-")))
+
 ;;;***
 
-;;;### (autoloads nil "semantic/texi" "texi.el" (22388 4915 0 0))
+;;;### (autoloads nil "semantic/texi" "texi.el" (0 0 0 0))
 ;;; Generated autoloads from texi.el
 
 (autoload 'semantic-default-texi-setup "semantic/texi" "\
@@ -1787,15 +2080,18 @@ Set up a buffer for parsing of Texinfo files.
 
 \(fn)" nil nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "semantic/texi" '("semantic-")))
+
 ;;;***
 
-;;;### (autoloads nil "semantic/util-modes" "util-modes.el" (22388
-;;;;;;  4915 0 0))
+;;;### (autoloads nil "semantic/util-modes" "util-modes.el" (0 0
+;;;;;;  0 0))
 ;;; Generated autoloads from util-modes.el
 
 (defvar global-semantic-highlight-edits-mode nil "\
-Non-nil if Global-Semantic-Highlight-Edits mode is enabled.
-See the command `global-semantic-highlight-edits-mode' for a description of this minor mode.
+Non-nil if Global Semantic-Highlight-Edits mode is enabled.
+See the `global-semantic-highlight-edits-mode' command
+for a description of this minor mode.
 Setting this variable directly does not take effect;
 either customize it (see the info node `Easy Customization')
 or call the function `global-semantic-highlight-edits-mode'.")
@@ -1822,8 +2118,9 @@ minor mode is enabled.
 \(fn &optional ARG)" t nil)
 
 (defvar global-semantic-show-unmatched-syntax-mode nil "\
-Non-nil if Global-Semantic-Show-Unmatched-Syntax mode is enabled.
-See the command `global-semantic-show-unmatched-syntax-mode' for a description of this minor mode.
+Non-nil if Global Semantic-Show-Unmatched-Syntax mode is enabled.
+See the `global-semantic-show-unmatched-syntax-mode' command
+for a description of this minor mode.
 Setting this variable directly does not take effect;
 either customize it (see the info node `Easy Customization')
 or call the function `global-semantic-show-unmatched-syntax-mode'.")
@@ -1853,8 +2150,9 @@ minor mode is enabled.
 \(fn &optional ARG)" t nil)
 
 (defvar global-semantic-show-parser-state-mode nil "\
-Non-nil if Global-Semantic-Show-Parser-State mode is enabled.
-See the command `global-semantic-show-parser-state-mode' for a description of this minor mode.
+Non-nil if Global Semantic-Show-Parser-State mode is enabled.
+See the `global-semantic-show-parser-state-mode' command
+for a description of this minor mode.
 Setting this variable directly does not take effect;
 either customize it (see the info node `Easy Customization')
 or call the function `global-semantic-show-parser-state-mode'.")
@@ -1885,8 +2183,9 @@ minor mode is enabled.
 \(fn &optional ARG)" t nil)
 
 (defvar global-semantic-stickyfunc-mode nil "\
-Non-nil if Global-Semantic-Stickyfunc mode is enabled.
-See the command `global-semantic-stickyfunc-mode' for a description of this minor mode.
+Non-nil if Global Semantic-Stickyfunc mode is enabled.
+See the `global-semantic-stickyfunc-mode' command
+for a description of this minor mode.
 Setting this variable directly does not take effect;
 either customize it (see the info node `Easy Customization')
 or call the function `global-semantic-stickyfunc-mode'.")
@@ -1915,8 +2214,9 @@ minor mode is enabled.
 \(fn &optional ARG)" t nil)
 
 (defvar global-semantic-highlight-func-mode nil "\
-Non-nil if Global-Semantic-Highlight-Func mode is enabled.
-See the command `global-semantic-highlight-func-mode' for a description of this minor mode.
+Non-nil if Global Semantic-Highlight-Func mode is enabled.
+See the `global-semantic-highlight-func-mode' command
+for a description of this minor mode.
 Setting this variable directly does not take effect;
 either customize it (see the info node `Easy Customization')
 or call the function `global-semantic-highlight-func-mode'.")
@@ -1947,10 +2247,12 @@ minor mode is enabled.
 
 \(fn &optional ARG)" t nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "semantic/util-modes" '("semantic-")))
+
 ;;;***
 
 ;;;### (autoloads nil "semantic/wisent/bison-wisent" "wisent/bison-wisent.el"
-;;;;;;  (22388 4915 0 0))
+;;;;;;  (0 0 0 0))
 ;;; Generated autoloads from wisent/bison-wisent.el
 
 (autoload 'bison->wisent "semantic/wisent/bison-wisent" "\
@@ -1961,10 +2263,12 @@ Deletes all actions, replacing them with small comments.
 
 \(fn)" t nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "semantic/wisent/bison-wisent" '("bison->wisent-" "yacc->wisent")))
+
 ;;;***
 
-;;;### (autoloads nil "semantic/wisent/calc" "wisent/calc.el" (22388
-;;;;;;  4915 0 0))
+;;;### (autoloads nil "semantic/wisent/calc" "wisent/calc.el" (0
+;;;;;;  0 0 0))
 ;;; Generated autoloads from wisent/calc.el
 
 (autoload 'wisent-calc "semantic/wisent/calc" "\
@@ -1978,10 +2282,12 @@ Test the wisent calculator.
 
 \(fn)" t nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "semantic/wisent/calc" '("wisent-calc-")))
+
 ;;;***
 
-;;;### (autoloads nil "semantic/wisent/debug" "wisent/debug.el" (22388
-;;;;;;  4915 0 0))
+;;;### (autoloads nil "semantic/wisent/debug" "wisent/debug.el" (0
+;;;;;;  0 0 0))
 ;;; Generated autoloads from wisent/debug.el
 
 (autoload 'wisent-debug-on-entry "semantic/wisent/debug" "\
@@ -2002,10 +2308,12 @@ FUNCTION must be a semantic action symbol that exists in AUTOMATON.
 
 \(fn AUTOMATON FUNCTION)" t nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "semantic/wisent/debug" '("wisent-debug-")))
+
 ;;;***
 
 ;;;### (autoloads nil "semantic/wisent/grammar" "wisent/grammar.el"
-;;;;;;  (22388 4915 0 0))
+;;;;;;  (0 0 0 0))
 ;;; Generated autoloads from wisent/grammar.el
 
 (autoload 'wisent-grammar-mode "semantic/wisent/grammar" "\
@@ -2017,10 +2325,20 @@ Major mode for editing Wisent grammars.
 
 (eval-after-load "speedbar" '(speedbar-add-supported-extension ".wy"))
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "semantic/wisent/grammar" '("wisent-")))
+
+;;;***
+
+;;;### (autoloads nil "semantic/wisent/java" "wisent/java.el" (0
+;;;;;;  0 0 0))
+;;; Generated autoloads from wisent/java.el
+
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "semantic/wisent/java" '("semantic-" "wisent-java-")))
+
 ;;;***
 
 ;;;### (autoloads nil "semantic/wisent/java-tags" "wisent/java-tags.el"
-;;;;;;  (22388 4915 0 0))
+;;;;;;  (0 0 0 0))
 ;;; Generated autoloads from wisent/java-tags.el
 
 (autoload 'wisent-java-default-setup "semantic/wisent/java-tags" "\
@@ -2029,10 +2347,12 @@ Use the alternate LALR(1) parser.
 
 \(fn)" nil nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "semantic/wisent/java-tags" '("semantic-" "wisent-java-parse-error")))
+
 ;;;***
 
 ;;;### (autoloads nil "semantic/wisent/javascript" "wisent/javascript.el"
-;;;;;;  (22388 4915 0 0))
+;;;;;;  (0 0 0 0))
 ;;; Generated autoloads from wisent/javascript.el
 
 (autoload 'wisent-javascript-setup-parser "semantic/wisent/javascript" "\
@@ -2040,10 +2360,12 @@ Setup buffer for parse.
 
 \(fn)" nil nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "semantic/wisent/javascript" '("js-mode" "semantic-" "wisent-javascript-expand-tag")))
+
 ;;;***
 
 ;;;### (autoloads nil "semantic/wisent/python" "wisent/python.el"
-;;;;;;  (22388 4915 0 0))
+;;;;;;  (0 0 0 0))
 ;;; Generated autoloads from wisent/python.el
 
 (autoload 'wisent-python-default-setup "semantic/wisent/python" "\
@@ -2051,20 +2373,101 @@ Setup buffer for parse.
 
 \(fn)" nil nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "semantic/wisent/python" '("wisent-python-" "semantic-" "python-")))
+
 ;;;***
 
-;;;### (autoloads nil nil ("analyze/fcn.el" "ast.el" "bovine/c-by.el"
-;;;;;;  "bovine/debug.el" "bovine/erlang-by.el" "bovine/erlang.el"
-;;;;;;  "bovine/f90-by.el" "bovine/grammar-macros.el" "bovine/make-by.el"
-;;;;;;  "bovine/scm-by.el" "canned-configs.el" "chart.el" "db-debug.el"
-;;;;;;  "db-ebrowse.el" "db-el.el" "db-javascript.el" "db-mk.el"
-;;;;;;  "db-ref.el" "decorate.el" "ede-grammar.el" "fw.el" "gram-wy-fallback.el"
-;;;;;;  "grammar-wy.el" "grammar.el" "java.el" "sb.el" "symref/filter.el"
-;;;;;;  "util.el" "wisent.el" "wisent/calc-wy.el" "wisent/comp.el"
-;;;;;;  "wisent/expr.el" "wisent/grammar-macros.el" "wisent/java-tags-wy.el"
-;;;;;;  "wisent/java-wy.el" "wisent/java.el" "wisent/javascript-wy.el"
-;;;;;;  "wisent/python-wy.el" "wisent/wisent.el") (22388 5001 309643
+;;;### (autoloads nil "symref/filter" "symref/filter.el" (0 0 0 0))
+;;; Generated autoloads from symref/filter.el
+
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "symref/filter" '("semantic-symref-")))
+
+;;;***
+
+;;;### (autoloads nil "util" "util.el" (0 0 0 0))
+;;; Generated autoloads from util.el
+
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "util" '("semantic-")))
+
+;;;***
+
+;;;### (autoloads nil "wisent" "wisent.el" (0 0 0 0))
+;;; Generated autoloads from wisent.el
+
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "wisent" '("wisent-" "define-wisent-lexer")))
+
+;;;***
+
+;;;### (autoloads nil "wisent/calc-wy" "wisent/calc-wy.el" (0 0 0
 ;;;;;;  0))
+;;; Generated autoloads from wisent/calc-wy.el
+
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "wisent/calc-wy" '("wisent-calc-")))
+
+;;;***
+
+;;;### (autoloads nil "wisent/comp" "wisent/comp.el" (0 0 0 0))
+;;; Generated autoloads from wisent/comp.el
+
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "wisent/comp" '("wisent-")))
+
+;;;***
+
+;;;### (autoloads nil "wisent/expr" "wisent/expr.el" (0 0 0 0))
+;;; Generated autoloads from wisent/expr.el
+
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "wisent/expr" '("wisent-expr")))
+
+;;;***
+
+;;;### (autoloads nil "wisent/grammar-macros" "wisent/grammar-macros.el"
+;;;;;;  (0 0 0 0))
+;;; Generated autoloads from wisent/grammar-macros.el
+
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "wisent/grammar-macros" '("wisent-grammar-")))
+
+;;;***
+
+;;;### (autoloads nil "wisent/java-tags-wy" "wisent/java-tags-wy.el"
+;;;;;;  (0 0 0 0))
+;;; Generated autoloads from wisent/java-tags-wy.el
+
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "wisent/java-tags-wy" '("wisent-java-tags-")))
+
+;;;***
+
+;;;### (autoloads nil "wisent/java-wy" "wisent/java-wy.el" (0 0 0
+;;;;;;  0))
+;;; Generated autoloads from wisent/java-wy.el
+
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "wisent/java-wy" '("wisent-java-")))
+
+;;;***
+
+;;;### (autoloads nil "wisent/javascript-wy" "wisent/javascript-wy.el"
+;;;;;;  (0 0 0 0))
+;;; Generated autoloads from wisent/javascript-wy.el
+
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "wisent/javascript-wy" '("javascript-lexer" "wisent-javascript-wy--")))
+
+;;;***
+
+;;;### (autoloads nil "wisent/python-wy" "wisent/python-wy.el" (0
+;;;;;;  0 0 0))
+;;; Generated autoloads from wisent/python-wy.el
+
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "wisent/python-wy" '("wisent-python-wy--")))
+
+;;;***
+
+;;;### (autoloads nil "wisent/wisent" "wisent/wisent.el" (0 0 0 0))
+;;; Generated autoloads from wisent/wisent.el
+
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "wisent/wisent" '("wisent-" "$region" "$nterm" "$action")))
+
+;;;***
+
+;;;### (autoloads nil nil ("db-mk.el") (0 0 0 0))
 
 ;;;***
 

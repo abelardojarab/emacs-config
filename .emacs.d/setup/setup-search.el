@@ -25,9 +25,7 @@
 ;;; Code:
 
 ;; Better search, similar to vim
-(use-package isearch+
-  :init (progn
-          (require 'isearch-prop))
+(use-package isearch-prop
   :config (progn
             ;; Activate highlight in search and replace
             (setq search-highlight t)

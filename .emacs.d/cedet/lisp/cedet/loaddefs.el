@@ -3,8 +3,14 @@
 ;;; Code:
 
 
-;;;### (autoloads nil "cedet-android" "cedet-android.el" (22388 4915
-;;;;;;  0 0))
+;;;### (autoloads nil "cedet" "cedet.el" (0 0 0 0))
+;;; Generated autoloads from cedet.el
+
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "cedet" '("cedet-")))
+
+;;;***
+
+;;;### (autoloads nil "cedet-android" "cedet-android.el" (0 0 0 0))
 ;;; Generated autoloads from cedet-android.el
 
 (autoload 'cedet-android-create-project "cedet-android" "\
@@ -61,20 +67,43 @@ Update the classpath for `cedet-java' to include the android compile-time librar
 
 \(fn)" t nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "cedet-android" '("cedet-android-")))
+
 ;;;***
 
-;;;### (autoloads nil "cedet-edebug" "cedet-edebug.el" (22388 4915
-;;;;;;  0 0))
+;;;### (autoloads nil "cedet-compat" "cedet-compat.el" (0 0 0 0))
+;;; Generated autoloads from cedet-compat.el
+
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "cedet-compat" '("cedet-split-string-1")))
+
+;;;***
+
+;;;### (autoloads nil "cedet-cscope" "cedet-cscope.el" (0 0 0 0))
+;;; Generated autoloads from cedet-cscope.el
+
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "cedet-cscope" '("cedet-cscope-")))
+
+;;;***
+
+;;;### (autoloads nil "cedet-edebug" "cedet-edebug.el" (0 0 0 0))
 ;;; Generated autoloads from cedet-edebug.el
 
 (add-hook 'edebug-setup-hook (lambda nil (require 'cedet-edebug) (defalias 'edebug-prin1-to-string 'cedet-edebug-prin1-to-string) (define-key edebug-mode-map "A" 'data-debug-edebug-expr)))
 
 (add-hook 'debugger-mode-hook (lambda nil (require 'cedet-edebug) (define-key debugger-mode-map "A" 'data-debug-edebug-expr)))
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "cedet-edebug" '("cedet-edebug-")))
+
 ;;;***
 
-;;;### (autoloads nil "cedet-global" "cedet-global.el" (22388 4915
-;;;;;;  0 0))
+;;;### (autoloads nil "cedet-files" "cedet-files.el" (0 0 0 0))
+;;; Generated autoloads from cedet-files.el
+
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "cedet-files" '("cedet-")))
+
+;;;***
+
+;;;### (autoloads nil "cedet-global" "cedet-global.el" (0 0 0 0))
 ;;; Generated autoloads from cedet-global.el
 
 (autoload 'cedet-gnu-global-version-check "cedet-global" "\
@@ -85,10 +114,12 @@ return nil.
 
 \(fn &optional NOERROR)" t nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "cedet-global" '("cedet-g")))
+
 ;;;***
 
-;;;### (autoloads nil "cedet-graphviz" "cedet-graphviz.el" (22388
-;;;;;;  4915 0 0))
+;;;### (autoloads nil "cedet-graphviz" "cedet-graphviz.el" (0 0 0
+;;;;;;  0))
 ;;; Generated autoloads from cedet-graphviz.el
 
 (defvar cedet-graphviz-dot-command "dot" "\
@@ -109,10 +140,18 @@ return nil.
 
 \(fn &optional NOERROR)" t nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "cedet-graphviz" '("cedet-graphviz-")))
+
 ;;;***
 
-;;;### (autoloads nil "cedet-java" "cedet-java.el" (22388 4915 0
-;;;;;;  0))
+;;;### (autoloads nil "cedet-idutils" "cedet-idutils.el" (0 0 0 0))
+;;; Generated autoloads from cedet-idutils.el
+
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "cedet-idutils" '("cedet-idutils-")))
+
+;;;***
+
+;;;### (autoloads nil "cedet-java" "cedet-java.el" (0 0 0 0))
 ;;; Generated autoloads from cedet-java.el
 
 (autoload 'cedet-java-version-check "cedet-java" "\
@@ -129,9 +168,11 @@ Display in a javap output buffer.
 
 \(fn CLASS)" t nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "cedet-java" '("cedet-ja")))
+
 ;;;***
 
-;;;### (autoloads nil "cedet-m3" "cedet-m3.el" (22388 4915 0 0))
+;;;### (autoloads nil "cedet-m3" "cedet-m3.el" (0 0 0 0))
 ;;; Generated autoloads from cedet-m3.el
 
 (autoload 'cedet-m3-minor-mode "cedet-m3" "\
@@ -144,8 +185,9 @@ Return non-nil if the minor mode is enabled.
 \(fn &optional ARG)" t nil)
 
 (defvar global-cedet-m3-minor-mode nil "\
-Non-nil if Global-Cedet-M3 minor mode is enabled.
-See the command `global-cedet-m3-minor-mode' for a description of this minor mode.
+Non-nil if Global Cedet-M3 minor mode is enabled.
+See the `global-cedet-m3-minor-mode' command
+for a description of this minor mode.
 Setting this variable directly does not take effect;
 either customize it (see the info node `Easy Customization')
 or call the function `global-cedet-m3-minor-mode'.")
@@ -159,9 +201,11 @@ If ARG is nil, then toggle.
 
 \(fn &optional ARG)" t nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "cedet-m3" '("cedet-m3-" "global-cedet-m3-minor-mode")))
+
 ;;;***
 
-;;;### (autoloads nil "cogre" "cogre.el" (22388 4915 0 0))
+;;;### (autoloads nil "cogre" "cogre.el" (0 0 0 0))
 ;;; Generated autoloads from cogre.el
 
 (eieio-defclass-autoload 'cogre-graph-element '(eieio-named) "cogre" "A Graph Element.\nGraph elements are anything that is drawn into a `cogre-base-graph'.\nGraph elements have a method for marking themselves dirty.")
@@ -181,10 +225,11 @@ Optional argument GRAPH-CLASS indicates the type of graph to create.
 
 \(fn NAME &optional GRAPH-CLASS)" t nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "cogre" '("cogre-" "initialize-instance" "eieio-done-customizing")))
+
 ;;;***
 
-;;;### (autoloads nil "data-debug" "data-debug.el" (22388 4915 0
-;;;;;;  0))
+;;;### (autoloads nil "data-debug" "data-debug.el" (0 0 0 0))
 ;;; Generated autoloads from data-debug.el
 
 (autoload 'data-debug-new-buffer "data-debug" "\
@@ -192,14 +237,17 @@ Create a new data-debug buffer with NAME.
 
 \(fn NAME)" nil nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "data-debug" '("data-debug-")))
+
 ;;;***
 
-;;;### (autoloads nil "ede" "ede.el" (22388 4915 0 0))
+;;;### (autoloads nil "ede" "ede.el" (0 0 0 0))
 ;;; Generated autoloads from ede.el
 
 (defvar global-ede-mode nil "\
-Non-nil if Global-Ede mode is enabled.
-See the command `global-ede-mode' for a description of this minor mode.
+Non-nil if Global Ede mode is enabled.
+See the `global-ede-mode' command
+for a description of this minor mode.
 Setting this variable directly does not take effect;
 either customize it (see the info node `Easy Customization')
 or call the function `global-ede-mode'.")
@@ -217,9 +265,11 @@ an EDE controlled project.
 
 \(fn &optional ARG)" t nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "ede" '("ede" "project-" "global-ede-mode-map")))
+
 ;;;***
 
-;;;### (autoloads nil "fame" "fame.el" (22388 4915 0 0))
+;;;### (autoloads nil "fame" "fame.el" (0 0 0 0))
 ;;; Generated autoloads from fame.el
 
 (autoload 'define-fame-channel "fame" "\
@@ -238,9 +288,11 @@ messages to CHANNEL.
 
 \(fn CHANNEL &optional DEFAULT DOCSTRING)" nil t)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "fame" '("fame-")))
+
 ;;;***
 
-;;;### (autoloads nil "inversion" "inversion.el" (22388 4915 0 0))
+;;;### (autoloads nil "inversion" "inversion.el" (0 0 0 0))
 ;;; Generated autoloads from inversion.el
 
 (autoload 'inversion-require-emacs "inversion" "\
@@ -249,17 +301,20 @@ Only checks one based on which kind of Emacs is being run.
 
 \(fn EMACS-VER XEMACS-VER SXEMACS-VER)" nil nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "inversion" '("inversion-")))
+
 ;;;***
 
-;;;### (autoloads nil "mode-local" "mode-local.el" (22388 4915 0
-;;;;;;  0))
+;;;### (autoloads nil "mode-local" "mode-local.el" (0 0 0 0))
 ;;; Generated autoloads from mode-local.el
 
 (put 'define-overloadable-function 'doc-string-elt 3)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "mode-local" '("make-obsolete-overload" "mode-local-" "deactivate-mode-local-bindings" "def" "describe-mode-local-bindings" "overload-" "fetch-overload" "function-overload-p" "set" "with-mode-local" "activate-mode-local-bindings" "new-mode-local-bindings" "get-mode-local-parent")))
+
 ;;;***
 
-;;;### (autoloads nil "pprint" "pprint.el" (22388 4915 0 0))
+;;;### (autoloads nil "pprint" "pprint.el" (0 0 0 0))
 ;;; Generated autoloads from pprint.el
 
 (autoload 'pprint-to-string "pprint" "\
@@ -286,9 +341,18 @@ See a pretty-printed representation of FUNCTION-NAME.
 
 \(fn FUNCTION-NAME)" t nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "pprint" '("pprint-")))
+
 ;;;***
 
-;;;### (autoloads nil "semantic" "semantic.el" (22388 4915 0 0))
+;;;### (autoloads nil "pulse" "pulse.el" (0 0 0 0))
+;;; Generated autoloads from pulse.el
+
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "pulse" '("pulse")))
+
+;;;***
+
+;;;### (autoloads nil "semantic" "semantic.el" (0 0 0 0))
 ;;; Generated autoloads from semantic.el
 
 (defvar semantic-default-submodes '(global-semantic-idle-scheduler-mode global-semanticdb-minor-mode) "\
@@ -319,7 +383,8 @@ The following modes are more targeted at people who want to see
 
 (defvar semantic-mode nil "\
 Non-nil if Semantic mode is enabled.
-See the command `semantic-mode' for a description of this minor mode.
+See the `semantic-mode' command
+for a description of this minor mode.
 Setting this variable directly does not take effect;
 either customize it (see the info node `Easy Customization')
 or call the function `semantic-mode'.")
@@ -342,11 +407,21 @@ Semantic mode.
 
 \(fn &optional ARG)" t nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "semantic" '("semantic-" "bovinate")))
+
 ;;;***
 
-;;;### (autoloads nil nil ("cedet-compat.el" "cedet-cscope.el" "cedet-files.el"
-;;;;;;  "cedet-idutils.el" "cedet.el" "pulse.el" "srecode.el" "working.el")
-;;;;;;  (22388 5000 199593 0))
+;;;### (autoloads nil "srecode" "srecode.el" (0 0 0 0))
+;;; Generated autoloads from srecode.el
+
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "srecode" '("srecode-version")))
+
+;;;***
+
+;;;### (autoloads nil "working" "working.el" (0 0 0 0))
+;;; Generated autoloads from working.el
+
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "working" '("working-")))
 
 ;;;***
 

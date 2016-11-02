@@ -141,12 +141,13 @@
 (setq org-latex-table-caption-above nil)
 
 ;; Use centered images in Org-mode
+(ignore-errors 
 (advice-add 'org-latex--inline-image :around
             (lambda (orig link info)
               (concat
                "\\begin{center}"
                (funcall orig link info)
-               "\\end{center}")))
+               "\\end{center}"))))
 
 ;; Add cite link
 (org-add-link-type "cite" 'ebib

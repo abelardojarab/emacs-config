@@ -2,8 +2,8 @@
 
 ;; Copyright (C) 1999-2012, 2014, 2015, 2016 Free Software Foundation, Inc.
 
-;; Author: Abelardo Jara <abelardojara@Abelardos-MacBook-Pro.local>
-;; Created: 2016-06-29 11:25:42-0700
+;; Author: Lab <lab@cpt-swdev1>
+;; Created: 2016-11-02 15:45:03-0700
 ;; Keywords: syntax
 ;; X-RCS: $Id$
 

@@ -119,6 +119,14 @@ tags table and its (recursively) included tags tables."
                     (quit (message "Tags completion table construction cancelled")
                           (setq tags-completion-table nil)))))))
 
+;; Emacs 25 backend for gtags/xref
+(use-package gxref
+  :if (and (executable-find "global")
+           (boundp 'xref-backend-functions))
+  :load-path (lambda () (expand-file-name "gxref/" user-emacs-directory))
+  :config (progn
+            (add-to-list 'xref-backend-functions 'gxref-xref-backend)))
+
 ;; Implementing my own copy of this function since it is required by
 ;; semantic-ia-fast-jump but this function is not defined in etags.el
 ;; of GNU emacs

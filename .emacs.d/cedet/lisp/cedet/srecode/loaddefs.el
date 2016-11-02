@@ -3,7 +3,7 @@
 ;;; Code:
 
 
-;;;### (autoloads nil "android" "android.el" (22388 4915 0 0))
+;;;### (autoloads nil "android" "android.el" (0 0 0 0))
 ;;; Generated autoloads from android.el
 
 (autoload 'srecode-semantic-handle-:android "android" "\
@@ -11,10 +11,67 @@ Add android specific symbols into DICT based on the current project.
 
 \(fn DICT)" nil nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "android" '("srecode-android-read-resource-id")))
+
 ;;;***
 
-;;;### (autoloads nil "srecode/compile" "compile.el" (22388 4915
-;;;;;;  0 0))
+;;;### (autoloads nil "args" "args.el" (0 0 0 0))
+;;; Generated autoloads from args.el
+
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "args" '("srecode-")))
+
+;;;***
+
+;;;### (autoloads nil "ctxt" "ctxt.el" (0 0 0 0))
+;;; Generated autoloads from ctxt.el
+
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "ctxt" '("srecode-")))
+
+;;;***
+
+;;;### (autoloads nil "dictionary" "dictionary.el" (0 0 0 0))
+;;; Generated autoloads from dictionary.el
+
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "dictionary" '("srecode-" "initialize-instance")))
+
+;;;***
+
+;;;### (autoloads nil "extract" "extract.el" (0 0 0 0))
+;;; Generated autoloads from extract.el
+
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "extract" '("srecode-")))
+
+;;;***
+
+;;;### (autoloads nil "fields" "fields.el" (0 0 0 0))
+;;; Generated autoloads from fields.el
+
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "fields" '("srecode-" "initialize-instance")))
+
+;;;***
+
+;;;### (autoloads nil "filters" "filters.el" (0 0 0 0))
+;;; Generated autoloads from filters.el
+
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "filters" '("srecode-comment-prefix")))
+
+;;;***
+
+;;;### (autoloads nil "find" "find.el" (0 0 0 0))
+;;; Generated autoloads from find.el
+
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "find" '("srecode-")))
+
+;;;***
+
+;;;### (autoloads nil "semantic" "semantic.el" (0 0 0 0))
+;;; Generated autoloads from semantic.el
+
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "semantic" '("srecode-semantic-")))
+
+;;;***
+
+;;;### (autoloads nil "srecode/compile" "compile.el" (0 0 0 0))
 ;;; Generated autoloads from compile.el
 
 (autoload 'srecode-compile-templates "srecode/compile" "\
@@ -22,9 +79,11 @@ Compile a semantic recode template file into a mode-local variable.
 
 \(fn)" t nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "srecode/compile" '("srecode-")))
+
 ;;;***
 
-;;;### (autoloads nil "srecode/cpp" "cpp.el" (22388 4915 0 0))
+;;;### (autoloads nil "srecode/cpp" "cpp.el" (0 0 0 0))
 ;;; Generated autoloads from cpp.el
 
 (autoload 'srecode-semantic-handle-:c "srecode/cpp" "\
@@ -43,10 +102,11 @@ Also adds the following:
 
 \(fn DICT)" nil nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "srecode/cpp" '("srecode-")))
+
 ;;;***
 
-;;;### (autoloads nil "srecode/document" "document.el" (22388 4915
-;;;;;;  0 0))
+;;;### (autoloads nil "srecode/document" "document.el" (0 0 0 0))
 ;;; Generated autoloads from document.el
 
 (autoload 'srecode-document-insert-comment "srecode/document" "\
@@ -84,9 +144,11 @@ If there is only one tag in the region, complain.
 
 \(fn BEG END)" t nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "srecode/document" '("srecode-document-")))
+
 ;;;***
 
-;;;### (autoloads nil "srecode/el" "el.el" (22388 4915 0 0))
+;;;### (autoloads nil "srecode/el" "el.el" (0 0 0 0))
 ;;; Generated autoloads from el.el
 
 (autoload 'srecode-semantic-handle-:el "srecode/el" "\
@@ -104,10 +166,12 @@ Adds the following:
 
 \(fn DICT)" nil nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "srecode/el" '("srecode-semantic-apply-tag-to-dict")))
+
 ;;;***
 
-;;;### (autoloads nil "srecode/expandproto" "expandproto.el" (22388
-;;;;;;  4915 0 0))
+;;;### (autoloads nil "srecode/expandproto" "expandproto.el" (0 0
+;;;;;;  0 0))
 ;;; Generated autoloads from expandproto.el
 
 (autoload 'srecode-insert-prototype-expansion "srecode/expandproto" "\
@@ -115,10 +179,11 @@ Insert get/set methods for the current class.
 
 \(fn)" t nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "srecode/expandproto" '("srecode-")))
+
 ;;;***
 
-;;;### (autoloads nil "srecode/getset" "getset.el" (22388 4915 0
-;;;;;;  0))
+;;;### (autoloads nil "srecode/getset" "getset.el" (0 0 0 0))
 ;;; Generated autoloads from getset.el
 
 (autoload 'srecode-insert-getset "srecode/getset" "\
@@ -130,10 +195,11 @@ will be derived.
 
 \(fn &optional CLASS-IN FIELD-IN)" t nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "srecode/getset" '("srecode-")))
+
 ;;;***
 
-;;;### (autoloads nil "srecode/insert" "insert.el" (22388 4915 0
-;;;;;;  0))
+;;;### (autoloads nil "srecode/insert" "insert.el" (0 0 0 0))
 ;;; Generated autoloads from insert.el
 
 (autoload 'srecode-insert "srecode/insert" "\
@@ -142,9 +208,11 @@ DICT-ENTRIES are additional dictionary values to add.
 
 \(fn TEMPLATE-NAME &rest DICT-ENTRIES)" t nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "srecode/insert" '("srecode-")))
+
 ;;;***
 
-;;;### (autoloads nil "srecode/java" "java.el" (22388 4915 0 0))
+;;;### (autoloads nil "srecode/java" "java.el" (0 0 0 0))
 ;;; Generated autoloads from java.el
 
 (autoload 'srecode-semantic-handle-:java "srecode/java" "\
@@ -157,7 +225,7 @@ FILENAME_AS_CLASS - file converted to a Java class name.
 
 ;;;***
 
-;;;### (autoloads nil "srecode/m3" "m3.el" (22388 4915 0 0))
+;;;### (autoloads nil "srecode/m3" "m3.el" (0 0 0 0))
 ;;; Generated autoloads from m3.el
 
 (autoload 'srecode-m3-items "srecode/m3" "\
@@ -167,7 +235,7 @@ Return a list of menu items based on SRecode features.
 
 ;;;***
 
-;;;### (autoloads nil "srecode/map" "map.el" (22388 4915 0 0))
+;;;### (autoloads nil "srecode/map" "map.el" (0 0 0 0))
 ;;; Generated autoloads from map.el
 
 (autoload 'srecode-get-maps "srecode/map" "\
@@ -176,9 +244,11 @@ Optional argument RESET forces a reset of the current map.
 
 \(fn &optional RESET)" t nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "srecode/map" '("srecode-")))
+
 ;;;***
 
-;;;### (autoloads nil "srecode/mode" "mode.el" (22388 4915 0 0))
+;;;### (autoloads nil "srecode/mode" "mode.el" (0 0 0 0))
 ;;; Generated autoloads from mode.el
 
 (autoload 'srecode-minor-mode "srecode/mode" "\
@@ -193,8 +263,9 @@ minor mode is enabled.
 \(fn &optional ARG)" t nil)
 
 (defvar global-srecode-minor-mode nil "\
-Non-nil if Global-Srecode minor mode is enabled.
-See the command `global-srecode-minor-mode' for a description of this minor mode.
+Non-nil if Global Srecode minor mode is enabled.
+See the `global-srecode-minor-mode' command
+for a description of this minor mode.
 Setting this variable directly does not take effect;
 either customize it (see the info node `Easy Customization')
 or call the function `global-srecode-minor-mode'.")
@@ -209,9 +280,11 @@ If ARG is positive or nil, enable, if it is negative, disable.
 
 (add-to-list 'auto-mode-alist '("\\.srt$" . srecode-template-mode))
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "srecode/mode" '("srecode-")))
+
 ;;;***
 
-;;;### (autoloads nil "srecode/srt" "srt.el" (22388 4915 0 0))
+;;;### (autoloads nil "srecode/srt" "srt.el" (0 0 0 0))
 ;;; Generated autoloads from srt.el
 
 (autoload 'srecode-semantic-handle-:srt "srecode/srt" "\
@@ -223,10 +296,11 @@ MODE - The mode of this buffer.  If not declared yet, guess.
 
 \(fn DICT)" nil nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "srecode/srt" '("srecode-read-")))
+
 ;;;***
 
-;;;### (autoloads nil "srecode/srt-mode" "srt-mode.el" (22388 4915
-;;;;;;  0 0))
+;;;### (autoloads nil "srecode/srt-mode" "srt-mode.el" (0 0 0 0))
 ;;; Generated autoloads from srt-mode.el
 
 (autoload 'srecode-template-mode "srecode/srt-mode" "\
@@ -236,10 +310,11 @@ Major-mode for writing SRecode macros.
 
 (defalias 'srt-mode 'srecode-template-mode)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "srecode/srt-mode" '("semantic-" "srecode-")))
+
 ;;;***
 
-;;;### (autoloads nil "srecode/template" "template.el" (22388 4915
-;;;;;;  0 0))
+;;;### (autoloads nil "srecode/template" "template.el" (0 0 0 0))
 ;;; Generated autoloads from template.el
 
 (autoload 'srecode-template-setup-parser "srecode/template" "\
@@ -247,9 +322,11 @@ Setup buffer for parse.
 
 \(fn)" nil nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "srecode/template" '("semantic-tag-components")))
+
 ;;;***
 
-;;;### (autoloads nil "srecode/texi" "texi.el" (22388 4915 0 0))
+;;;### (autoloads nil "srecode/texi" "texi.el" (0 0 0 0))
 ;;; Generated autoloads from texi.el
 
 (autoload 'srecode-semantic-handle-:texi "srecode/texi" "\
@@ -267,11 +344,21 @@ Adds the following:
 
 \(fn DICT)" nil nil)
 
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "srecode/texi" '("semantic-insert-foreign-tag" "srecode-texi-")))
+
 ;;;***
 
-;;;### (autoloads nil nil ("args.el" "ctxt.el" "dictionary.el" "extract.el"
-;;;;;;  "fields.el" "filters.el" "find.el" "semantic.el" "srt-wy.el"
-;;;;;;  "table.el") (22388 5002 460603 0))
+;;;### (autoloads nil "srt-wy" "srt-wy.el" (0 0 0 0))
+;;; Generated autoloads from srt-wy.el
+
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "srt-wy" '("wisent-srecode-template-lexer" "srecode-template-")))
+
+;;;***
+
+;;;### (autoloads nil "table" "table.el" (0 0 0 0))
+;;; Generated autoloads from table.el
+
+(if (fboundp 'register-definition-prefixes) (register-definition-prefixes "table" '("srecode-" "object-sort-list")))
 
 ;;;***
 

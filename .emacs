@@ -14,6 +14,8 @@
 
 (setq debug-on-quit t)
 (setq debug-on-error t)
+(defvar debian-aspell-only-dictionary-alist nil)
+
 (defconst debian-emacs-flavor 'emacs24
   "A symbol representing the particular debian flavor of emacs running.
  Something like 'emacs20, 'xemacs20, etc.")
