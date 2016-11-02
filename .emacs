@@ -169,7 +169,8 @@
 (require 'setup-search)
 
 ;; Setup tramp
-(require 'setup-tramp)
+(ignore-errors
+  (require 'setup-tramp))
 
 (update-progress-bar)
 
@@ -213,7 +214,8 @@
 (require 'setup-highlight)
 
 ;; Setup CEDET
-(require 'setup-cedet)
+(ignore-errors
+  (require 'setup-cedet))
 
 (update-progress-bar)
 
@@ -235,7 +237,8 @@
 (require 'setup-gnuplot)
 
 ;; Setup Org
-(require 'setup-org)
+(ignore-errors
+  (require 'setup-org))
 
 (update-progress-bar)
 
@@ -439,7 +442,8 @@
 (require 'setup-post)
 
 ;; Setup ECB
-(require 'setup-ecb)
+(ignore-errors
+  (require 'setup-ecb))
 
 (update-progress-bar)
 
@@ -470,8 +474,9 @@
 (setq debug-on-error nil)
 
 ;; Setup server
-(require 'setup-server)
+(ignore-errors
+  (require 'setup-server))
 
 ;; Setup desktop
-(require 'setup-desktop)
-(put 'downcase-region 'disabled nil)
+(ignore-errors
+  (require 'setup-desktop))

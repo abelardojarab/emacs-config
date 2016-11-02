@@ -82,7 +82,6 @@
                 desktop-base-lock-name      "lock"
                 desktop-path                (list desktop-dirname)
                 desktop-save                t
-                desktop-files-not-to-save   "^$" ;; reload tramp paths
                 desktop-load-locked-desktop t
                 desktop-save 'ask-if-new
                 desktop-file-name-format 'absolute
@@ -106,12 +105,7 @@
                   tags-file-name
                   register-alist)
                 desktop-locals-to-save
-                (nconc '(word-wrap line-move-visual) desktop-locals-to-save))
-          (setq desktop-files-not-to-save
-                "\\(^/[^/:]*:\\|(ftp)$\\)\\|\\(^/tmp/\\)\\|\\(.gpg$\\)")
-          (setq desktop-buffers-not-to-save
-                (concat "\\(" "^nn\\.a[0-9]+\\|\\ECB\\|\\.log\\|(ftp)"
-                        "\\)$")))
+                (nconc '(word-wrap line-move-visual) desktop-locals-to-save)))
   :config (progn
             ;; Don't save Magit and Git related buffers
             (dolist (mode '(magit-mode magit-log-mode dired-mode Info-mode fundamental-mode DocView-mode))
