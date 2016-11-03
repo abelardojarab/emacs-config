@@ -23,7 +23,6 @@
 ;;
 
 ;;; Code:
-
 (use-package etags
   :config (progn
             (unless (fboundp 'push-tag-mark)

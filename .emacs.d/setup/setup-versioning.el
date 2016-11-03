@@ -381,6 +381,11 @@ branch."
             ;; Enable diff-hl
             (global-diff-hl-mode)))
 
+;; git emacs utilities
+(use-package git-emacs
+  :load-path (lambda () (expand-file-name "git-emacs/" user-emacs-directory))
+  :config (require 'git-modeline))
+
 ;; git-timemachine
 (use-package git-timemachine
   :commands (git-timemachine-start
