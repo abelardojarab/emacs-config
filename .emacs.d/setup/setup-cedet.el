@@ -56,9 +56,9 @@
 ;; Disable Semantics for large files
 (add-hook 'semantic--before-fetch-tags-hook
           (lambda () (if (and (> (point-max) 500)
-                         (not (semantic-parse-tree-needs-rebuild-p)))
-                    nil
-                  t)))
+                              (not (semantic-parse-tree-needs-rebuild-p)))
+                         nil
+                       t)))
 
 ;; Enable decoration mode
 (global-semantic-decoration-mode t)

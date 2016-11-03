@@ -34,14 +34,12 @@
 ;; Setup functions
 (require 'setup-functions)
 
-(update-progress-bar)
-
 ;; CEDET
+(setq byte-compile-warnings nil)
+(setq vc-follow-symlinks t)
 ;;(add-to-list 'load-path (expand-file-name "cedet/" user-emacs-directory))
 ;;(add-to-list 'load-path (expand-file-name "cedet/contrib/" user-emacs-directory))
 ;;(require 'cedet-remove-builtin)
-(setq byte-compile-warnings nil)
-(setq vc-follow-symlinks t)
 ;;(load-file (expand-file-name "cedet/cedet-devel-load.el" user-emacs-directory))
 ;;(load-file (expand-file-name "cedet/contrib/cedet-contrib-load.el" user-emacs-directory))
 
@@ -162,8 +160,6 @@
 ;; Setup abbrev
 (require 'setup-dabbrev)
 
-(update-progress-bar)
-
 ;; Setup files
 (require 'setup-file)
 
@@ -174,8 +170,6 @@
 (ignore-errors
   (require 'setup-tramp))
 
-(update-progress-bar)
-
 ;; Setup appearance
 (require 'setup-appearance)
 
@@ -184,8 +178,6 @@
 
 ;; Setup font lock
 (require 'setup-font-lock)
-
-(update-progress-bar)
 
 ;; Setup region
 (require 'setup-region)
@@ -196,8 +188,6 @@
 ;; Setup scrolling
 (require 'setup-scroll)
 
-(update-progress-bar)
-
 ;; Setup themes
 (require 'setup-themes)
 
@@ -206,8 +196,6 @@
 
 ;; Setup indentation
 (require 'setup-indent)
-
-(update-progress-bar)
 
 ;; Setup Ido (optional, disabled GUI for open file, caused crash too?)
 (require 'setup-ido)
@@ -219,8 +207,6 @@
 (ignore-errors
   (require 'setup-cedet))
 
-(update-progress-bar)
-
 ;; Setup C++
 (require 'setup-c++)
 
@@ -229,8 +215,6 @@
 
 ;; Setup cmake
 (require 'setup-cmake)
-
-(update-progress-bar)
 
 ;; Setup spelling (optional)
 (require 'setup-spell)
@@ -242,8 +226,6 @@
 (ignore-errors
   (require 'setup-org))
 
-(update-progress-bar)
-
 ;; Setup Org (babel support)
 (require 'setup-org-babel)
 
@@ -252,8 +234,6 @@
 
 ;; Setup Org (latex support)
 (require 'setup-org-latex)
-
-(update-progress-bar)
 
 ;; Setup Org (html support)
 (require 'setup-org-html)
@@ -264,8 +244,6 @@
 ;; Setup modeline
 (require 'setup-modeline)
 
-(update-progress-bar)
-
 ;; Setup tabbar (optional)
 (require 'setup-tabbar)
 
@@ -275,8 +253,6 @@
 ;; Setup hydra
 (require 'setup-hydra)
 
-(update-progress-bar)
-
 ;; Setup web support
 (require 'setup-web)
 
@@ -285,8 +261,6 @@
 
 ;; Setup tags (optional)
 (require 'setup-tags)
-
-(update-progress-bar)
 
 ;; Setup flycheck
 (require 'setup-flycheck)
@@ -300,8 +274,6 @@
 ;; Setup Yasnippet
 (require 'setup-yasnippet)
 
-(update-progress-bar)
-
 ;; Setup Auto-Insert
 (require 'setup-auto-insert)
 
@@ -314,8 +286,6 @@
 ;; Setup bookmarks
 (require 'setup-bookmarks)
 
-(update-progress-bar)
-
 ;; Setup recentf (causes crash?)
 (require 'setup-recentf)
 
@@ -324,8 +294,6 @@
 
 ;; Setup versioning (optional)
 (require 'setup-versioning)
-
-(update-progress-bar)
 
 ;; Setup eldoc
 (require 'setup-eldoc)
@@ -336,8 +304,6 @@
 ;; Setup Python
 (require 'setup-python)
 
-(update-progress-bar)
-
 ;; Setup Python Jedi
 (require 'setup-python-plugins)
 
@@ -346,8 +312,6 @@
 
 ;; Setup HTML
 (require 'setup-html)
-
-(update-progress-bar)
 
 ;; Setup LaTeX
 (require 'setup-latex)
@@ -358,8 +322,6 @@
 ;; Setup YAML
 (require 'setup-yaml)
 
-(update-progress-bar)
-
 ;; Setup Java
 (require 'setup-java)
 
@@ -368,8 +330,6 @@
 
 ;; Setup VHDL mode
 (require 'setup-verilog)
-
-(update-progress-bar)
 
 ;; Setup Spice mode
 (require 'setup-spice)
@@ -380,8 +340,6 @@
 ;; Setup R/ess
 (require 'setup-ess)
 
-(update-progress-bar)
-
 ;; Setup sqlite
 (require 'setup-sqlite)
 
@@ -390,8 +348,6 @@
 
 ;; Setup PlantUML
 (require 'setup-plantuml)
-
-(update-progress-bar)
 
 ;; Setup xUnit
 (require 'setup-xunit)
@@ -402,8 +358,6 @@
 ;; Setup folding
 (require 'setup-folding)
 
-(update-progress-bar)
-
 ;; Setup imenu
 (require 'setup-imenu)
 
@@ -412,8 +366,6 @@
 
 ;; Setup swiper
 (require 'setup-swiper)
-
-(update-progress-bar)
 
 ;; Setup helm
 (require 'setup-helm)
@@ -424,8 +376,6 @@
 ;; Setup projectile
 (require 'setup-projectile)
 
-(update-progress-bar)
-
 ;; Setup dired
 (require 'setup-dired)
 
@@ -434,8 +384,6 @@
 
 ;; Setup polymode
 (require 'setup-polymode)
-
-(update-progress-bar)
 
 ;; Setup gnus
 (require 'setup-gnus)
@@ -447,8 +395,6 @@
 (ignore-errors
   (require 'setup-ecb))
 
-(update-progress-bar)
-
 ;; Setup mouse
 (require 'setup-mouse)
 
@@ -458,8 +404,6 @@
 ;; Setup write room
 (require 'setup-writeroom)
 
-(update-progress-bar)
-
 ;; Setup keys
 (require 'setup-keys)
 
@@ -468,8 +412,6 @@
 
 ;; Setup ergoemacs
 (require 'setup-ergoemacs)
-
-(update-progress-bar)
 
 ;; Disable checks
 (setq debug-on-quit nil)
