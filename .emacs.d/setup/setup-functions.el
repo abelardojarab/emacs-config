@@ -32,9 +32,7 @@
     (while (and p (not (eq (car p) tag))) (setq p (cdr (cdr p))))
     (if p (progn (setcar (cdr p) val) plist) (list* tag val plist))))
 
-;; Missing nadvice library
-;; (when (not (fboundp 'advice-add))
-;;  (require 'nadvice))
+(require 'eieio-core)
 
 ;; Missing function
 (when (not (fboundp 'special-form-p))

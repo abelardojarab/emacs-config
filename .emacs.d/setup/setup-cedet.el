@@ -29,7 +29,7 @@
     (make-directory "~/.emacs.cache/semanticdb") t)
 
 ;; Enable Semantic
-(add-to-list 'load-path (expand-file-name "cedet/lisp/cedet/" user-emacs-directory))
+;; (add-to-list 'load-path (expand-file-name "cedet/lisp/cedet/" user-emacs-directory))
 (semantic-load-enable-minimum-features)
 
 ;; To use additional features for names completion, and displaying of information for tags & classes,
