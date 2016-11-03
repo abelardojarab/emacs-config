@@ -37,13 +37,13 @@
 (update-progress-bar)
 
 ;; CEDET
-(add-to-list 'load-path (expand-file-name "cedet/" user-emacs-directory))
-(add-to-list 'load-path (expand-file-name "cedet/contrib/" user-emacs-directory))
-(require 'cedet-remove-builtin)
+;;(add-to-list 'load-path (expand-file-name "cedet/" user-emacs-directory))
+;;(add-to-list 'load-path (expand-file-name "cedet/contrib/" user-emacs-directory))
+;;(require 'cedet-remove-builtin)
 (setq byte-compile-warnings nil)
 (setq vc-follow-symlinks t)
-(load-file (expand-file-name "cedet/cedet-devel-load.el" user-emacs-directory))
-(load-file (expand-file-name "cedet/contrib/cedet-contrib-load.el" user-emacs-directory))
+;;(load-file (expand-file-name "cedet/cedet-devel-load.el" user-emacs-directory))
+;;(load-file (expand-file-name "cedet/contrib/cedet-contrib-load.el" user-emacs-directory))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
