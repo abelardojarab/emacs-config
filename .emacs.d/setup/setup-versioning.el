@@ -275,7 +275,6 @@ branch."
             ;; git-visit-diffs-prev () : view the previous hunk, if any.
 
             ;; Global variables and types
-
             (defvar *git-visit-current-hunk-list*)
             (defvar *git-visit-previous-hunk-list*)
             (define-error 'git-error "Git error")
@@ -381,7 +380,7 @@ branch."
             ;; Enable diff-hl
             (global-diff-hl-mode)))
 
-;; git emacs utilities
+;; emacs git utilities
 (use-package git-emacs
   :load-path (lambda () (expand-file-name "git-emacs/" user-emacs-directory))
   :config (require 'git-modeline))
@@ -393,7 +392,7 @@ branch."
              git-timemachine-switch-branch)
   :load-path (lambda () (expand-file-name "git-timemachine/" user-emacs-directory))
   :config (progn
-            (defun my-git-timemachine-show-selected-revision ()
+            (defun my/git-timemachine-show-selected-revision ()
               "Show last (current) revision of file."
               (interactive)
               (let (collection)
@@ -412,7 +411,7 @@ branch."
               (interactive)
               (unless (featurep 'git-timemachine)
                 (require 'git-timemachine))
-              (git-timemachine--start #'my-git-timemachine-show-selected-revision))))
+              (git-timemachine--start #'my/git-timemachine-show-selected-revision))))
 
 ;; Show blame for current line
 (use-package git-messenger
