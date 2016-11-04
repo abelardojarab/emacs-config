@@ -454,13 +454,33 @@ an alist that supports the keys `:right-align' and `:pad-right'."
   :group 'magit-faces)
 
 (defface magit-signature-bad
-  '((t :foreground "red"))
+  '((t :foreground "red" :weight bold))
   "Face for bad signatures."
   :group 'magit-faces)
 
 (defface magit-signature-untrusted
   '((t :foreground "cyan"))
   "Face for good untrusted signatures."
+  :group 'magit-faces)
+
+(defface magit-signature-expired
+  '((t :foreground "orange"))
+  "Face for signatures that have expired."
+  :group 'magit-faces)
+
+(defface magit-signature-expired-key
+  '((t :inherit magit-signature-expired))
+  "Face for signatures made by an expired key."
+  :group 'magit-faces)
+
+(defface magit-signature-revoked
+  '((t :foreground "violet red"))
+  "Face for signatures made by a revoked key."
+  :group 'magit-faces)
+
+(defface magit-signature-error
+  '((t :foreground "firebrick3"))
+  "Face for signatures that cannot be checked (e.g. missing key)."
   :group 'magit-faces)
 
 (defface magit-cherry-unmatched
@@ -2325,11 +2345,11 @@ If DEFAULT is non-nil, use this as the default value instead of
 
 ;;;###autoload
 (defun magit-worktree-checkout (path branch)
+  "Checkout BRANCH in a new worktree at PATH."
   (interactive
    (let ((branch (magit-read-local-branch "Checkout")))
      (list (read-directory-name (format "Checkout %s in new worktree: " branch))
            branch)))
-  "Checkout BRANCH in a new worktree at PATH."
   (magit-run-git "worktree" "add" (expand-file-name path) branch)
   (magit-diff-visit-directory path))
 
@@ -2968,7 +2988,7 @@ control which repositories are displayed."
   "Show the status for the repository at point."
   (interactive)
   (--if-let (tabulated-list-get-id)
-      (magit-status-internal it)
+      (magit-status-internal (expand-file-name it))
     (user-error "There is no repository at point")))
 
 (define-derived-mode magit-repolist-mode tabulated-list-mode "Repos"
