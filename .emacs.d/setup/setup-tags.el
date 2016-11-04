@@ -33,7 +33,7 @@
                 (ring-insert find-tag-marker-ring (point-marker))))
 
             ;; Increase the warning threshold to be more than normal TAGS file sizes
-            (setq large-file-warning-threshold (* 50 1024 1024)) ; 50MB
+            (setq large-file-warning-threshold nil) ;; disable warnings
             (setq tags-revert-without-query t)
             (setq tags-always-build-completion-table t)
 
