@@ -81,15 +81,16 @@
   "Face of directory"
   :group 'dired-k)
 
-(defface dired-k--dummy
-  '((((class color) (background light))
-     (:background "red"))
-    (((class color) (background dark))
-     (:background "blue")))
-  "Don't use this theme")
+;;(defface dired-k--dummy
+;;  '((((class color) (background light))
+;;     (:background "red"))
+;;    (((class color) (background dark))
+;;     (:background "blue")))
+;;  "Don't use this theme")
 
 (defsubst dired-k--light-p ()
-  (string= (face-background 'dired-k--dummy) "red"))
+  (ignore-errors
+    (string= (face-background 'dired-k--dummy) "red")))
 
 (defcustom dired-k-size-colors
   '((1024 . "chartreuse4") (2048 . "chartreuse3") (3072 . "chartreuse2")
