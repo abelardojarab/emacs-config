@@ -25,7 +25,7 @@
 ;;
 ;;; Commentary:
 
-;; This file contains the code dealing with plain lists in Org-mode.
+;; This file contains the code dealing with plain lists in Org mode.
 
 ;; The core concept behind lists is their structure.  A structure is
 ;; a snapshot of the list, in the shape of a data tree (see
@@ -164,7 +164,7 @@
 ;;; Configuration variables
 
 (defgroup org-plain-lists nil
-  "Options concerning plain lists in Org-mode."
+  "Options concerning plain lists in Org mode."
   :tag "Org Plain lists"
   :group 'org-structure)
 
@@ -241,7 +241,7 @@ This variable needs to be set before org.el is loaded.  If you
 need to make a change while Emacs is running, use the customize
 interface or run the following code after updating it:
 
-  \\[org-element-update-syntax]"
+  `\\[org-element-update-syntax]'"
   :group 'org-plain-lists
   :type '(choice (const :tag "dot like in \"2.\"" ?.)
 		 (const :tag "paren like in \"2)\"" ?\))
@@ -260,7 +260,7 @@ This variable needs to be set before org.el is loaded.  If you
 need to make a change while Emacs is running, use the customize
 interface or run the following code after updating it:
 
-  \\[org-element-update-syntax]"
+  `\\[org-element-update-syntax]'"
   :group 'org-plain-lists
   :version "24.1"
   :type 'boolean
@@ -282,12 +282,19 @@ spaces instead of one after the bullet in each item of the list."
 (defcustom org-list-automatic-rules '((checkbox . t)
 				      (indent . t))
   "Non-nil means apply set of rules when acting on lists.
+\\<org-mode-map>
 By default, automatic actions are taken when using
- \\[org-meta-return], \\[org-metaright], \\[org-metaleft],
- \\[org-shiftmetaright], \\[org-shiftmetaleft],
- \\[org-ctrl-c-minus], \\[org-toggle-checkbox] or
- \\[org-insert-todo-heading].  You can disable individually these
- rules by setting them to nil.  Valid rules are:
+  `\\[org-meta-return]',
+  `\\[org-metaright]',
+  `\\[org-metaleft]',
+  `\\[org-shiftmetaright]',
+  `\\[org-shiftmetaleft]',
+  `\\[org-ctrl-c-minus]',
+  `\\[org-toggle-checkbox]',
+  `\\[org-insert-todo-heading]'.
+
+You can disable individually these rules by setting them to nil.
+Valid rules are:
 
 checkbox  when non-nil, checkbox statistics is updated each time
           you either insert a new checkbox or toggle a checkbox.
@@ -307,13 +314,15 @@ indent    when non-nil, indenting or outdenting list top-item
 
 (defcustom org-list-use-circular-motion nil
   "Non-nil means commands implying motion in lists should be cyclic.
-
+\\<org-mode-map>
 In that case, the item following the last item is the first one,
 and the item preceding the first item is the last one.
 
-This affects the behavior of \\[org-move-item-up],
- \\[org-move-item-down], \\[org-next-item] and
- \\[org-previous-item]."
+This affects the behavior of
+  `\\[org-move-item-up]',
+  `\\[org-move-item-down]',
+  `\\[org-next-item]',
+  `\\[org-previous-item]'."
   :group 'org-plain-lists
   :version "24.1"
   :type 'boolean)
@@ -3100,13 +3109,13 @@ For example, the following list:
 
 is parsed as
 
- \(ordered
-  \(\"first item\"
-   \(unordered
-    \(\"sub-item one\")
-    \(\"[X] sub-item two\"))
+ (ordered
+  (\"first item\"
+   (unordered
+    (\"sub-item one\")
+    (\"[X] sub-item two\"))
    \"more text in first item\")
-  \(\"[@3] last item\"))
+  (\"[@3] last item\"))
 
 Point is left at list's end."
   (letrec ((struct (org-list-struct))
@@ -3506,28 +3515,31 @@ PARAMS is a plist used to tweak the behavior of the transcoder."
 (defun org-list-to-latex (list &optional params)
   "Convert LIST into a LaTeX list.
 LIST is a parsed plain list, as returned by `org-list-to-lisp'.
-Return converted list as a string."
+PARAMS is a property list with overruling parameters for
+`org-list-to-generic'.  Return converted list as a string."
   (require 'ox-latex)
   (org-list-to-generic list (org-combine-plists '(:backend latex) params)))
 
 (defun org-list-to-html (list &optional params)
   "Convert LIST into a HTML list.
 LIST is a parsed plain list, as returned by `org-list-to-lisp'.
-Return converted list as a string."
+PARAMS is a property list with overruling parameters for
+`org-list-to-generic'.  Return converted list as a string."
   (require 'ox-html)
   (org-list-to-generic list (org-combine-plists '(:backend html) params)))
 
 (defun org-list-to-texinfo (list &optional params)
   "Convert LIST into a Texinfo list.
 LIST is a parsed plain list, as returned by `org-list-to-lisp'.
-Return converted list as a string."
+PARAMS is a property list with overruling parameters for
+`org-list-to-generic'.  Return converted list as a string."
   (require 'ox-texinfo)
   (org-list-to-generic list (org-combine-plists '(:backend texinfo) params)))
 
 (defun org-list-to-subtree (list &optional params)
   "Convert LIST into an Org subtree.
-LIST is as returned by `org-list-parse-list'.  PARAMS is a property list
-with overruling parameters for `org-list-to-generic'."
+LIST is as returned by `org-list-to-lisp'.  PARAMS is a property
+list with overruling parameters for `org-list-to-generic'."
   (let* ((blank (pcase (cdr (assq 'heading org-blank-before-new-entry))
 		  (`t t)
 		  (`auto (save-excursion

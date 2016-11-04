@@ -80,12 +80,12 @@ This will typically be 'lua-mode."
   "Execute a block of Lua code with Babel.
 This function is called by `org-babel-execute-src-block'."
   (let* ((session (org-babel-lua-initiate-session
-		   (cdr (assoc :session params))))
-         (result-params (cdr (assoc :result-params params)))
-         (result-type (cdr (assoc :result-type params)))
+		   (cdr (assq :session params))))
+         (result-params (cdr (assq :result-params params)))
+         (result-type (cdr (assq :result-type params)))
 	 (return-val (when (and (eq result-type 'value) (not session))
-		       (cdr (assoc :return params))))
-	 (preamble (cdr (assoc :preamble params)))
+		       (cdr (assq :return params))))
+	 (preamble (cdr (assq :preamble params)))
          (full-body
 	  (org-babel-expand-body:generic
 	   (concat body (if return-val (format "\nreturn %s" return-val) ""))
@@ -94,10 +94,10 @@ This function is called by `org-babel-execute-src-block'."
 		  session full-body result-type result-params preamble)))
     (org-babel-reassemble-table
      result
-     (org-babel-pick-name (cdr (assoc :colname-names params))
-			  (cdr (assoc :colnames params)))
-     (org-babel-pick-name (cdr (assoc :rowname-names params))
-			  (cdr (assoc :rownames params))))))
+     (org-babel-pick-name (cdr (assq :colname-names params))
+			  (cdr (assq :colnames params)))
+     (org-babel-pick-name (cdr (assq :rowname-names params))
+			  (cdr (assq :rownames params))))))
 
 (defun org-babel-prep-session:lua (session params)
   "Prepare SESSION according to the header arguments in PARAMS.
@@ -146,7 +146,7 @@ specifying a variable of the same value."
              "="
              (org-babel-lua-var-to-lua (cdr var)))
           (concat "{" (mapconcat #'org-babel-lua-var-to-lua var ", ") "}")))
-    (if (equal var 'hline)
+    (if (eq var 'hline)
         org-babel-lua-hline-to
       (format
        (if (and (stringp var) (string-match "[\n\r]" var)) "\"\"%S\"\"" "%S")
@@ -158,8 +158,8 @@ If the results look like a list or tuple, then convert them into an
 Emacs-lisp table, otherwise return the results as a string."
   (let ((res (org-babel-script-escape results)))
     (if (listp res)
-        (mapcar (lambda (el) (if (equal el 'None)
-                            org-babel-lua-None-to el))
+        (mapcar (lambda (el) (if (eq el 'None)
+				 org-babel-lua-None-to el))
                 res)
       res)))
 
@@ -274,7 +274,7 @@ fd:write(t2s(main()))
 fd:close()")
 
 (defun org-babel-lua-evaluate
-  (session body &optional result-type result-params preamble)
+    (session body &optional result-type result-params preamble)
   "Evaluate BODY as Lua code."
   (if session
       (org-babel-lua-evaluate-session
@@ -283,7 +283,7 @@ fd:close()")
      body result-type result-params preamble)))
 
 (defun org-babel-lua-evaluate-external-process
-  (body &optional result-type result-params preamble)
+    (body &optional result-type result-params preamble)
   "Evaluate BODY in external lua process.
 If RESULT-TYPE equals 'output then return standard output as a
 string.  If RESULT-TYPE equals 'value then return the value of the

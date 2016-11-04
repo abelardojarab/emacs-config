@@ -269,7 +269,7 @@ be replaced with content and expanded:
               A default value and a completion table ca be specified like this:
               %^{prompt|default|completion2|completion3|...}.
   %?          After completing the template, position cursor here.
-  %\\N         Insert the text entered at the nth %^{prompt}, where N
+  %\\1 ... %\\N Insert the text entered at the nth %^{prompt}, where N
               is a number, starting from 1.
 
 Apart from these general escapes, you can access information specific to
@@ -463,8 +463,9 @@ Turning on this mode runs the normal hook `org-capture-mode-hook'."
   (setq-local
    header-line-format
    (substitute-command-keys
-    "\\<org-capture-mode-map>Capture buffer.  Finish \\[org-capture-finalize], \
-refile \\[org-capture-refile], abort \\[org-capture-kill].")))
+    "\\<org-capture-mode-map>Capture buffer.  Finish \
+`\\[org-capture-finalize]', refile `\\[org-capture-refile]', \
+abort `\\[org-capture-kill]'.")))
 (define-key org-capture-mode-map "\C-c\C-c" 'org-capture-finalize)
 (define-key org-capture-mode-map "\C-c\C-k" 'org-capture-kill)
 (define-key org-capture-mode-map "\C-c\C-w" 'org-capture-refile)
@@ -533,7 +534,8 @@ to avoid duplicates.)"
 
 (defcustom org-capture-use-agenda-date nil
   "Non-nil means use the date at point when capturing from agendas.
-When nil, you can still capture using the date at point with \\[org-agenda-capture]."
+When nil, you can still capture using the date at point with
+`\\[org-agenda-capture]'."
   :group 'org-capture
   :version "24.3"
   :type 'boolean)
@@ -542,17 +544,20 @@ When nil, you can still capture using the date at point with \\[org-agenda-captu
 (defun org-capture (&optional goto keys)
   "Capture something.
 \\<org-capture-mode-map>
-This will let you select a template from `org-capture-templates', and then
-file the newly captured information.  The text is immediately inserted
-at the target location, and an indirect buffer is shown where you can
-edit it.  Pressing \\[org-capture-finalize] brings you back to the previous state
-of Emacs, so that you can continue your work.
+This will let you select a template from `org-capture-templates', and
+then file the newly captured information.  The text is immediately
+inserted at the target location, and an indirect buffer is shown where
+you can edit it.  Pressing `\\[org-capture-finalize]' brings you back to the \
+previous
+state of Emacs, so that you can continue your work.
 
-When called interactively with a \\[universal-argument] prefix argument GOTO, don't capture
-anything, just go to the file/headline where the selected template
-stores its notes.  With a double prefix argument \
-\\[universal-argument] \\[universal-argument], go to the last note
-stored.
+When called interactively with a `\\[universal-argument]' prefix argument \
+GOTO, don't
+capture anything, just go to the file/headline where the selected
+template stores its notes.
+
+With a `\\[universal-argument] \\[universal-argument]' prefix argument, go to \
+the last note stored.
 
 When called with a `C-0' (zero) prefix, insert a template at point.
 
@@ -625,7 +630,7 @@ of the day at point (if any) or the current HH:MM time."
 	    (org-capture-insert-template-here)
 	  (condition-case error
 	      (org-capture-place-template
-	       (equal (car (org-capture-get :target)) 'function))
+	       (eq (car (org-capture-get :target)) 'function))
 	    ((error quit)
 	     (if (and (buffer-base-buffer (current-buffer))
 		      (string-prefix-p "CAPTURE-" (buffer-name)))
@@ -675,7 +680,7 @@ captured item after finalizing."
     (setq stay-with-capture t))
   (unless (and org-capture-mode
 	       (buffer-base-buffer (current-buffer)))
-    (error "This does not seem to be a capture buffer for Org-mode"))
+    (error "This does not seem to be a capture buffer for Org mode"))
 
   (run-hooks 'org-capture-prepare-finalize-hook)
 
@@ -711,7 +716,7 @@ captured item after finalizing."
 	      (m2 (org-capture-get :end-marker 'local)))
 	  (if (and m1 m2 (= m1 beg) (= m2 end))
 	      (progn
-		(setq m2 (if (cdr (assoc 'heading org-blank-before-new-entry))
+		(setq m2 (if (cdr (assq 'heading org-blank-before-new-entry))
 			     m2 (1+ m2))
 		      m2 (if (< (point-max) m2) (point-max) m2))
 		(setq abort-note 'clean)
@@ -799,11 +804,12 @@ captured item after finalizing."
     ;; Special cases
     (cond
      (abort-note
-      (cond
-       ((equal abort-note 'clean)
-	(message "Capture process aborted and target buffer cleaned up"))
-       ((equal abort-note 'dirty)
-	(error "Capture process aborted, but target buffer could not be cleaned up correctly"))))
+      (cl-case abort-note
+	(clean
+	 (message "Capture process aborted and target buffer cleaned up"))
+	(dirty
+	 (error "Capture process aborted, but target buffer could not be \
+cleaned up correctly"))))
      (stay-with-capture
       (org-capture-goto-last-stored)))
     ;; Return if we did store something

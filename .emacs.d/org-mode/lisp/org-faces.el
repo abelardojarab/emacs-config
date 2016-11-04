@@ -395,11 +395,10 @@ follows a #+DATE:, #+AUTHOR: or #+EMAIL: keyword."
 
 (defface org-block '((t :inherit shadow))
   "Face text in #+begin ... #+end blocks.
-In addition to this face that take precedence for particular
-languages.  For instance, to change the block face for Emacs-Lisp
-blocks define a `org-block-emacs-lisp' face."
+For source-blocks `org-src-block-faces' takes precedence.
+See also `org-fontify-quote-and-verse-blocks'."
   :group 'org-faces
-  :version "22.1")
+  :version "25.2")
 
 (defface org-block-begin-line '((t (:inherit org-meta-line)))
   "Face used for the line delimiting the begin of source blocks."

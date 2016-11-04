@@ -240,7 +240,7 @@ Otherwise rely on `org-expiry-confirm-flag' to decide."
   (interactive "P")
   (save-excursion
     (when (called-interactively-p) (org-reveal))
-    (when (org-expiry-expired-p 'any)
+    (when (org-expiry-expired-p)
       (org-back-to-heading)
       (looking-at org-complex-heading-regexp)
       (let* ((ov (make-overlay (point) (match-end 0)))
@@ -253,7 +253,7 @@ Otherwise rely on `org-expiry-confirm-flag' to decide."
 		     (not (interactive)))
 		(and org-expiry-confirm-flag
 		     (y-or-n-p (format "Entry expired by %d days.  Process? " d))))
-	  (funcall 'org-expiry-handler-function))
+	  (funcall org-expiry-handler-function))
 	(delete-overlay ov)))))
 
 (defun org-expiry-process-entries (beg end)

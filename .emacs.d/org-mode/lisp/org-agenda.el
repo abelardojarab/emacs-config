@@ -24,7 +24,7 @@
 ;;
 ;;; Commentary:
 
-;; This file contains the code for creating and using the Agenda for Org-mode.
+;; This file contains the code for creating and using the Agenda for Org.
 ;;
 ;; The functions `org-batch-agenda', `org-batch-agenda-csv', and
 ;; `org-batch-store-agenda-views' are implemented as macros to provide
@@ -134,7 +134,7 @@ addresses the separator between the current and the previous block."
 	  (string)))
 
 (defgroup org-agenda-export nil
-  "Options concerning exporting agenda views in Org-mode."
+  "Options concerning exporting agenda views in Org mode."
   :tag "Org Agenda Export"
   :group 'org-agenda)
 
@@ -236,7 +236,7 @@ you can \"misuse\" it to also add other text to the header."
   :type 'boolean)
 
 (defgroup org-agenda-custom-commands nil
-  "Options concerning agenda views in Org-mode."
+  "Options concerning agenda views in Org mode."
   :tag "Org Agenda Custom Commands"
   :group 'org-agenda)
 
@@ -440,8 +440,9 @@ This will be spliced into the custom type of
 (defcustom org-agenda-custom-commands
   '(("n" "Agenda and all TODOs" ((agenda "") (alltodo ""))))
   "Custom commands for the agenda.
+\\<org-mode-map>
 These commands will be offered on the splash screen displayed by the
-agenda dispatcher \\[org-agenda].  Each entry is a list like this:
+agenda dispatcher `\\[org-agenda]'.  Each entry is a list like this:
 
    (key desc type match settings files)
 
@@ -606,14 +607,17 @@ subtree to see if any of the subtasks have project status.
 See also the variable `org-tags-match-list-sublevels' which applies
 to projects matched by this search as well.
 
-After defining this variable, you may use \\[org-agenda-list-stuck-projects]
-or `C-c a #' to produce the list."
+After defining this variable, you may use `\\[org-agenda-list-stuck-projects]'
+\(bound to `C-c a #') to produce the list."
   :group 'org-agenda-custom-commands
   :type '(list
 	  (string :tag "Tags/TODO match to identify a project")
-	  (repeat :tag "Projects are *not* stuck if they have an entry with TODO keyword any of" (string))
-	  (repeat :tag "Projects are *not* stuck if they have an entry with TAG being any of" (string))
-	  (regexp :tag "Projects are *not* stuck if this regexp matches inside the subtree")))
+	  (repeat :tag "Projects are *not* stuck if they have an entry with \
+TODO keyword any of" (string))
+	  (repeat :tag "Projects are *not* stuck if they have an entry with \
+TAG being any of" (string))
+	  (regexp :tag "Projects are *not* stuck if this regexp matches inside \
+the subtree")))
 
 (defgroup org-agenda-skip nil
   "Options concerning skipping parts of agenda files."
@@ -1047,9 +1051,9 @@ current item's tree, in an indirect buffer."
 (defcustom org-agenda-entry-text-maxlines 5
   "Number of text lines to be added when `E' is pressed in the agenda.
 
-Note that this variable only used during agenda display.  Add add entry text
+Note that this variable only used during agenda display.  To add entry text
 when exporting the agenda, configure the variable
-`org-agenda-add-entry-ext-maxlines'."
+`org-agenda-add-entry-text-maxlines'."
   :group 'org-agenda
   :type 'integer)
 
@@ -1939,7 +1943,7 @@ category, you can use:
   "When non-nil, switch to columns view right after creating the agenda."
   :group 'org-agenda-column-view
   :type 'boolean
-  :version "25.1"
+  :version "25.2"
   :package-version '(Org . "9.0")
   :safe #'booleanp)
 
@@ -2697,7 +2701,7 @@ searches can be pre-defined in this way.
 
 If the current buffer is in Org mode and visiting a file, you can also
 first press `<' once to indicate that the agenda should be temporarily
-\(until the next use of \\[org-agenda]) restricted to the current file.
+\(until the next use of `\\[org-agenda]') restricted to the current file.
 Pressing `<' twice means to restrict to the current subtree or region
 \(if active)."
   (interactive "P")
@@ -3613,22 +3617,22 @@ FILTER-ALIST is an alist of filters we need to apply when
      ((equal (current-buffer) abuf) nil)
      (awin (select-window awin))
      ((not (setq wconf (current-window-configuration))))
-     ((equal org-agenda-window-setup 'current-window)
+     ((eq org-agenda-window-setup 'current-window)
       (pop-to-buffer-same-window abuf))
-     ((equal org-agenda-window-setup 'other-window)
+     ((eq org-agenda-window-setup 'other-window)
       (org-switch-to-buffer-other-window abuf))
-     ((equal org-agenda-window-setup 'other-frame)
+     ((eq org-agenda-window-setup 'other-frame)
       (switch-to-buffer-other-frame abuf))
      ((eq org-agenda-window-setup 'only-window)
       (delete-other-windows)
       (pop-to-buffer-same-window abuf))
-     ((equal org-agenda-window-setup 'reorganize-frame)
+     ((eq org-agenda-window-setup 'reorganize-frame)
       (delete-other-windows)
       (org-switch-to-buffer-other-window abuf)))
-    (setq org-agenda-tag-filter (cdr (assoc 'tag filter-alist)))
-    (setq org-agenda-category-filter (cdr (assoc 'cat filter-alist)))
-    (setq org-agenda-effort-filter (cdr (assoc 'effort filter-alist)))
-    (setq org-agenda-regexp-filter (cdr (assoc 're filter-alist)))
+    (setq org-agenda-tag-filter (cdr (assq 'tag filter-alist)))
+    (setq org-agenda-category-filter (cdr (assq 'cat filter-alist)))
+    (setq org-agenda-effort-filter (cdr (assq 'effort filter-alist)))
+    (setq org-agenda-regexp-filter (cdr (assq 're filter-alist)))
     ;; Additional test in case agenda is invoked from within agenda
     ;; buffer via elisp link.
     (unless (equal (current-buffer) abuf)
@@ -4017,12 +4021,16 @@ This check for agenda markers in all agenda buffers currently active."
 (defvar org-agenda-show-log-scoped) ;; dynamically scope in `org-timeline' or `org-agenda-list'
 
 (defun org-timeline (&optional dotodo)
-  "Show a time-sorted view of the entries in the current org file.
-Only entries with a time stamp of today or later will be listed.  With
-\\[universal-argument] prefix, all unfinished TODO items will also be shown,
+  "Show a time-sorted view of the entries in the current Org file.
+
+Only entries with a time stamp of today or later will be listed.
+
+With `\\[universal-argument]' prefix, all unfinished TODO items will also be \
+shown,
 under the current date.
-If the buffer contains an active region, only check the region for
-dates."
+
+If the buffer contains an active region, only check the region
+for dates."
   (interactive "P")
   (let* ((dopast t)
 	 (org-agenda-show-log-scoped org-agenda-show-log)
@@ -4718,7 +4726,7 @@ Press `\\[org-agenda-manipulate-query-add]', \
 (defun org-todo-list (&optional arg)
   "Show all (not done) TODO entries from all agenda file in a single list.
 The prefix arg can be used to select a specific TODO keyword and limit
-the list to these.  When using \\[universal-argument], you will be prompted
+the list to these.  When using `\\[universal-argument]', you will be prompted
 for a keyword.  A numeric prefix directly selects the Nth keyword in
 `org-todo-keywords-1'."
   (interactive "P")
@@ -5200,7 +5208,7 @@ date.  It also removes lines that contain only whitespace."
   (while (re-search-forward "^ +\n" nil t)
     (replace-match ""))
   (goto-char (point-min))
-  (if (re-search-forward "^Org-mode dummy\n?" nil t)
+  (if (re-search-forward "^Org mode dummy\n?" nil t)
       (replace-match ""))
   (run-hooks 'org-agenda-cleanup-fancy-diary-hook))
 
@@ -5234,9 +5242,9 @@ Needed to avoid empty dates which mess up holiday display."
   ;; Catch the error if dealing with the new add-to-diary-alist
   (when org-disable-agenda-to-diary
     (condition-case nil
-	(org-add-to-diary-list original-date "Org-mode dummy" "")
+	(org-add-to-diary-list original-date "Org mode dummy" "")
       (error
-       (org-add-to-diary-list original-date  "Org-mode dummy" "" nil)))))
+       (org-add-to-diary-list original-date  "Org mode dummy" "" nil)))))
 
 (defun org-add-to-diary-list (&rest args)
   (if (fboundp 'diary-add-to-list)
@@ -6231,7 +6239,7 @@ scheduled items with an hour specification like [h]h:mm."
 		(cond
 		 ;; Nullify delay when a repeater triggered already
 		 ;; and the delay is of the form --Xd.
-		 ((and (save-match-data (string-match "--[0-9]+[hdwmy]" s))
+		 ((and (string-match-p "--[0-9]+[hdwmy]" s)
 		       (/= schedule last-repeat))
 		  0)
 		 (suppress-delay
@@ -6262,7 +6270,7 @@ scheduled items with an hour specification like [h]h:mm."
 	  ;; doesn't apply to habits.
 	  (when (pcase org-agenda-skip-scheduled-if-deadline-is-shown
 		  ((guard
-		    (or (not (assq (line-beginning-position 0) deadline-pos))
+		    (or (not (memq (line-beginning-position 0) deadline-pos))
 			habitp))
 		   nil)
 		  (`repeated-after-deadline
@@ -6719,12 +6727,12 @@ and stored in the variable `org-prefix-format-compiled'."
 	    c (or (match-string 3 s) "")
 	    opt (match-beginning 1)
 	    start (1+ (match-beginning 0)))
-      (if (equal var 'time) (setq org-prefix-has-time t))
-      (if (equal var 'tag)  (setq org-prefix-has-tag  t))
-      (if (equal var 'effort) (setq org-prefix-has-effort t))
-      (if (equal var 'breadcrumbs) (setq org-prefix-has-breadcrumbs t))
+      (if (eq var 'time) (setq org-prefix-has-time t))
+      (if (eq var 'tag)  (setq org-prefix-has-tag  t))
+      (if (eq var 'effort) (setq org-prefix-has-effort t))
+      (if (eq var 'breadcrumbs) (setq org-prefix-has-breadcrumbs t))
       (setq f (concat "%" (match-string 2 s) "s"))
-      (when (equal var 'category)
+      (when (eq var 'category)
 	(setq org-prefix-category-length
 	      (floor (abs (string-to-number (match-string 2 s)))))
 	(setq org-prefix-category-max-length
@@ -6947,8 +6955,14 @@ The optional argument TYPE tells the agenda type."
 (defsubst org-cmp-effort (a b)
   "Compare the effort values of string A and B."
   (let* ((def (if org-sort-agenda-noeffort-is-high 32767 -1))
-	 (ea (or (get-text-property (1- (length a)) 'effort-minutes a) def))
-	 (eb (or (get-text-property (1- (length b)) 'effort-minutes b) def)))
+	 ;; `effort-minutes' property is not directly accessible from
+	 ;; the strings, but is stored as a property in `txt'.
+	 (ea (or (get-text-property
+		  0 'effort-minutes (get-text-property 0 'txt a))
+		 def))
+	 (eb (or (get-text-property
+		  0 'effort-minutes (get-text-property 0 'txt b))
+		 def)))
     (cond ((> ea eb) +1)
 	  ((< ea eb) -1))))
 
@@ -7468,15 +7482,18 @@ With two prefix arguments, remove the effort filters."
 
 (defun org-agenda-filter-by-tag (arg &optional char exclude)
   "Keep only those lines in the agenda buffer that have a specific tag.
-The tag is selected with its fast selection letter, as
-configured.  With a single \\[universal-argument] prefix ARG,
-exclude the agenda search.  With a double \\[universal-argument]
-prefix ARG, filter the literal tag.  I.e. don't filter on all its
-group members.
 
-A lisp caller can specify CHAR.  EXCLUDE means that the new tag should be
-used to exclude the search - the interactive user can also press `-' or `+'
-to switch between filtering and excluding."
+The tag is selected with its fast selection letter, as configured.
+
+With a `\\[universal-argument]' prefix, exclude the agenda search.
+
+With a `\\[universal-argument] \\[universal-argument]' prefix, filter the literal tag, \
+i.e. don't
+filter on all its group members.
+
+A lisp caller can specify CHAR.  EXCLUDE means that the new tag
+should be used to exclude the search - the interactive user can
+also press `-' or `+' to switch between filtering and excluding."
   (interactive "P")
   (let* ((alist org-tag-alist-for-agenda)
 	 (tag-chars (mapconcat
@@ -8158,9 +8175,11 @@ so that the date SD will be in that range."
 
 (defun org-agenda-log-mode (&optional special)
   "Toggle log mode in an agenda buffer.
+
 With argument SPECIAL, show all possible log items, not only the ones
 configured in `org-agenda-log-mode-items'.
-With a double \\[universal-argument] prefix arg, show *only* \
+
+With a `\\[universal-argument] \\[universal-argument]' prefix, show *only* \
 log items, nothing else."
   (interactive "P")
   (org-agenda-check-type t 'agenda 'timeline)
@@ -8175,8 +8194,7 @@ log items, nothing else."
   (setq org-agenda-start-with-log-mode org-agenda-show-log)
   (org-agenda-set-mode-name)
   (org-agenda-redo)
-  (message "Log mode is %s"
-	   (if org-agenda-show-log "on" "off")))
+  (message "Log mode is %s" (if org-agenda-show-log "on" "off")))
 
 (defun org-agenda-archives-mode (&optional with-files)
   "Toggle inclusion of items in trees marked with :ARCHIVE:.
@@ -8382,8 +8400,9 @@ When called with a prefix argument, include all archive files as well."
       (org-show-context 'agenda)
       (recenter (/ (window-height) 2))
       (org-back-to-heading t)
-      (if (re-search-forward org-complex-heading-regexp nil t)
-	  (goto-char (match-beginning 4))))
+      (let ((case-fold-search nil))
+	(when (re-search-forward org-complex-heading-regexp nil t)
+	  (goto-char (match-beginning 4)))))
     (run-hooks 'org-agenda-after-show-hook)
     (and highlight (org-highlight (point-at-bol) (point-at-eol)))))
 
@@ -8500,11 +8519,16 @@ If this information is not given, the function uses the tree at point."
 (defun org-agenda-refile (&optional goto rfloc no-update)
   "Refile the item at point.
 
-When GOTO is 0 or \\='(64) or a triple \\[universal-argument] prefix argument,
-clear the refile cache.
-When GOTO is \\='(16) or a double \\[universal-argument] prefix argument,
-go to the location of the last refiled item.
+When called with `\\[universal-argument] \\[universal-argument]', \
+go to the location of the last
+refiled item.
+
+When called with `\\[universal-argument] \\[universal-argument] \
+\\[universal-argument]' prefix or when GOTO is 0, clear
+the refile cache.
+
 RFLOC can be a refile location obtained in a different way.
+
 When NO-UPDATE is non-nil, don't redo the agenda buffer."
   (interactive "P")
   (cond
@@ -8621,10 +8645,12 @@ if it was hidden in the outline."
 (defvar org-agenda-show-window nil)
 (defun org-agenda-show-and-scroll-up (&optional arg)
   "Display the Org file which contains the item at point.
+
 When called repeatedly, scroll the window that is displaying the buffer.
-With a \\[universal-argument] prefix, use `org-show-entry' instead of
-`show-subtree' to display the item, so that drawers and logbooks stay
-folded."
+
+With a `\\[universal-argument]' prefix, use `org-show-entry' instead of \
+`outline-show-subtree'
+to display the item, so that drawers and logbooks stay folded."
   (interactive "P")
   (let ((win (selected-window)))
     (if (and (window-live-p org-agenda-show-window)
@@ -8750,8 +8776,10 @@ This calls the command `org-tree-to-indirect-buffer' from the original buffer.
 
 With a numerical prefix ARG, go up to this level and then take that tree.
 With a negative numeric ARG, go up by this number of levels.
-With a \\[universal-argument] prefix, make a separate frame for this tree (i.e. don't
-use the dedicated frame)."
+
+With a `\\[universal-argument]' prefix, make a separate frame for this tree, \
+i.e. don't use
+the dedicated frame."
   (interactive "P")
   (if current-prefix-arg
       (org-agenda-do-tree-to-indirect-buffer arg)
@@ -10032,7 +10060,7 @@ tag and (if present) the flagging note."
       (goto-char (point-min))
       (select-window win)
       (message "%s" (substitute-command-keys "Flagging note pushed to \
-kill ring.  Press \\[org-agenda-show-the-flagging-note] again to remove \
+kill ring.  Press `\\[org-agenda-show-the-flagging-note]' again to remove \
 tag and note")))))
 
 (defun org-agenda-remove-flag (marker)
@@ -10056,7 +10084,8 @@ tag and note")))))
 ;;;###autoload
 (defun org-agenda-to-appt (&optional refresh filter &rest args)
   "Activate appointments found in `org-agenda-files'.
-With a \\[universal-argument] prefix, refresh the list of
+
+With a `\\[universal-argument]' prefix, refresh the list of \
 appointments.
 
 If FILTER is t, interactively prompt the user for a regular
@@ -10123,8 +10152,8 @@ to override `appt-message-warning-time'."
                       (and (stringp filter) (string-match filter evt))
                       (and (functionp filter) (funcall filter x))
                       (and (listp filter)
-                           (let ((cat-filter (cadr (assoc 'category filter)))
-                                 (evt-filter (cadr (assoc 'headline filter))))
+                           (let ((cat-filter (cadr (assq 'category filter)))
+                                 (evt-filter (cadr (assq 'headline filter))))
                              (or (and (stringp cat-filter)
                                       (string-match cat-filter cat))
                                  (and (stringp evt-filter)

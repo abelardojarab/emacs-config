@@ -85,7 +85,7 @@ output.
 Types defined in this variable take precedence over those defined
 in `org-columns-summary-types-default', which see."
   :group 'org-properties
-  :version "25.1"
+  :version "25.2"
   :package-version '(Org . "9.0")
   :type '(alist :key-type (string :tag "       Label")
 		:value-type (function :tag "Summarize")))
@@ -394,7 +394,7 @@ DATELINE is non-nil when the face used should be
 	  (line-beginning-position 2)
 	  'read-only
 	  (substitute-command-keys
-	   "Type \\<org-columns-map>\\[org-columns-edit-value] \
+	   "Type \\<org-columns-map>`\\[org-columns-edit-value]' \
 to edit property")))))))
 
 (defun org-columns-add-ellipses (string width)
@@ -679,7 +679,7 @@ an integer, select that value."
 	     (t (car allowed))))
 	   (action (lambda () (org-entry-put pom key new))))
       (cond
-       ((equal major-mode 'org-agenda-mode)
+       ((eq major-mode 'org-agenda-mode)
 	(org-columns--call action)
 	;; The following let preserves the current format, and makes
 	;; sure that in only a single file things need to be updated.
@@ -774,7 +774,7 @@ Also sets `org-columns-top-level-marker' to the new position."
 Column view applies to the whole buffer if point is before the
 first headline.  Otherwise, it applies to the first ancestor
 setting \"COLUMNS\" property.  If there is none, it defaults to
-the current headline.  With a \\[universal-argument] prefix \
+the current headline.  With a `\\[universal-argument]' prefix \
 argument, turn on column
 view for the whole buffer unconditionally.
 

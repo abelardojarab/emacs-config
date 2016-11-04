@@ -268,6 +268,42 @@
                                                (file . find-file)
                                                (wl . wl-other-frame))))
 
+            ;; Repair export blocks to match new format
+            ;; #+BEGIN_EXPORT backend
+            ;; ...
+            ;; #+END_EXPORT
+            (defun org-repair-export-blocks ()
+              "Repair export blocks and INCLUDE keywords in current buffer."
+              (interactive)
+              (when (eq major-mode 'org-mode)
+                (let ((case-fold-search t)
+                      (back-end-re (regexp-opt
+                                    '("HTML" "ASCII" "LATEX" "ODT" "MARKDOWN" "MD" "ORG"
+                                      "MAN" "BEAMER" "TEXINFO" "GROFF" "KOMA-LETTER")
+                                    t)))
+                  (org-with-wide-buffer
+                   (goto-char (point-min))
+                   (let ((block-re (concat "^[ \t]*#\\+BEGIN_" back-end-re)))
+                     (save-excursion
+                       (while (re-search-forward block-re nil t)
+                         (let ((element (save-match-data (org-element-at-point))))
+                           (when (eq (org-element-type element) 'special-block)
+                             (save-excursion
+                               (goto-char (org-element-property :end element))
+                               (save-match-data (search-backward "_"))
+                               (forward-char)
+                               (insert "EXPORT")
+                               (delete-region (point) (line-end-position)))
+                             (replace-match "EXPORT \\1" nil nil nil 1))))))
+                   (let ((include-re
+                          (format "^[ \t]*#\\+INCLUDE: .*?%s[ \t]*$" back-end-re)))
+                     (while (re-search-forward include-re nil t)
+                       (let ((element (save-match-data (org-element-at-point))))
+                         (when (and (eq (org-element-type element) 'keyword)
+                                    (string= (org-element-property :key element) "INCLUDE"))
+                           (replace-match "EXPORT \\1" nil nil nil 1)))))))))
+
+
             ;; Add missing function
             (defun org-reverse-string (string)
               (apply 'string (reverse (string-to-list string))))

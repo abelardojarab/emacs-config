@@ -673,7 +673,7 @@ TAGS      the tags string, separated with colons (string or nil).
 
 The function result will be used as headline text."
   :group 'org-export-odt
-  :version "25.1"
+  :version "25.2"
   :package-version '(Org . "8.3")
   :type 'function)
 
@@ -694,7 +694,7 @@ The function must accept six parameters:
 
 The function should return the string to be exported."
   :group 'org-export-odt
-  :version "25.1"
+  :version "25.2"
   :package-version '(Org . "8.3")
   :type 'function)
 
@@ -753,7 +753,7 @@ A rule consists in an association whose key is the type of link
 to consider, and value is a regexp that will be matched against
 link's path."
   :group 'org-export-odt
-  :version "25.1"
+  :version "25.2"
   :package-version '(Org . "8.3")
   :type '(alist :key-type (string :tag "Type")
 		:value-type (regexp :tag "Path")))
@@ -1747,8 +1747,8 @@ CONTENTS is nil.  INFO is a plist holding contextual information."
 			      info))))
 		   ;; Inline definitions are secondary strings.  We
 		   ;; need to wrap them within a paragraph.
-		   (if (memq (org-element-type (car (org-element-contents raw)))
-			     org-element-all-elements)
+		   (if (eq (org-element-class (car (org-element-contents raw)))
+			   'element)
 		       def
 		     (format
 		      "\n<text:p text:style-name=\"Footnote\">%s</text:p>"
@@ -3256,23 +3256,23 @@ styles congruent with the ODF-1.2 specification."
 	     (cell-style-selectors (nth 2 style-spec))
 	     (cell-type
 	      (cond
-	       ((and (cdr (assoc 'use-first-column-styles cell-style-selectors))
+	       ((and (cdr (assq 'use-first-column-styles cell-style-selectors))
 		     (= c 0)) "FirstColumn")
-	       ((and (cdr (assoc 'use-last-column-styles cell-style-selectors))
+	       ((and (cdr (assq 'use-last-column-styles cell-style-selectors))
 		     (= (1+ c) (cdr table-dimensions)))
 		"LastColumn")
-	       ((and (cdr (assoc 'use-first-row-styles cell-style-selectors))
+	       ((and (cdr (assq 'use-first-row-styles cell-style-selectors))
 		     (= r 0)) "FirstRow")
-	       ((and (cdr (assoc 'use-last-row-styles cell-style-selectors))
+	       ((and (cdr (assq 'use-last-row-styles cell-style-selectors))
 		     (= (1+ r) (car table-dimensions)))
 		"LastRow")
-	       ((and (cdr (assoc 'use-banding-rows-styles cell-style-selectors))
+	       ((and (cdr (assq 'use-banding-rows-styles cell-style-selectors))
 		     (= (% r 2) 1)) "EvenRow")
-	       ((and (cdr (assoc 'use-banding-rows-styles cell-style-selectors))
+	       ((and (cdr (assq 'use-banding-rows-styles cell-style-selectors))
 		     (= (% r 2) 0)) "OddRow")
-	       ((and (cdr (assoc 'use-banding-columns-styles cell-style-selectors))
+	       ((and (cdr (assq 'use-banding-columns-styles cell-style-selectors))
 		     (= (% c 2) 1)) "EvenColumn")
-	       ((and (cdr (assoc 'use-banding-columns-styles cell-style-selectors))
+	       ((and (cdr (assq 'use-banding-columns-styles cell-style-selectors))
 		     (= (% c 2) 0)) "OddColumn")
 	       (t ""))))
 	(concat template-name cell-type)))))
@@ -3334,8 +3334,7 @@ channel."
      (format "\n<table:table-cell%s>\n%s\n</table:table-cell>"
 	     cell-attributes
 	     (let ((table-cell-contents (org-element-contents table-cell)))
-	       (if (memq (org-element-type (car table-cell-contents))
-			 org-element-all-elements)
+	       (if (eq (org-element-class (car table-cell-contents)) 'element)
 		   contents
 		 (format "\n<text:p text:style-name=\"%s\">%s</text:p>"
 			 paragraph-style contents))))
@@ -3572,7 +3571,7 @@ pertaining to indentation here."
     ;;
     ;; - Description lists are simulated as plain lists.
     ;; - Low-level headlines can be listified.
-    ;; - In Org-mode, a table can occur not only as a regular list
+    ;; - In Org mode, a table can occur not only as a regular list
     ;;   item, but also within description lists and low-level
     ;;   headlines.
 
@@ -3827,7 +3826,7 @@ contextual information."
   ;;
   (org-element-map tree 'plain-list
     (lambda (el)
-      (when (equal (org-element-property :type el) 'descriptive)
+      (when (eq (org-element-property :type el) 'descriptive)
 	(org-element-set-element
 	 el
 	 (apply 'org-element-adopt-elements

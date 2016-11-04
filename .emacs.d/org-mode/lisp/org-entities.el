@@ -31,7 +31,7 @@
 (declare-function org-table-align            "org-table" ())
 
 (defgroup org-entities nil
-  "Options concerning entities in Org-mode."
+  "Options concerning entities in Org mode."
   :tag "Org Entities"
   :group 'org)
 
@@ -88,6 +88,8 @@ packages to be loaded, add these packages to `org-latex-packages-alist'."
      ("aacute" "\\'{a}" nil "&aacute;" "a" "á" "á")
      ("Acirc" "\\^{A}" nil "&Acirc;" "A" "Â" "Â")
      ("acirc" "\\^{a}" nil "&acirc;" "a" "â" "â")
+     ("Amacr" "\\bar{A}" nil "&Amacr;" "A" "Ã" "Ã")
+     ("amacr" "\\bar{a}" nil "&amacr;" "a" "ã" "ã")
      ("Atilde" "\\~{A}" nil "&Atilde;" "A" "Ã" "Ã")
      ("atilde" "\\~{a}" nil "&atilde;" "a" "ã" "ã")
      ("Auml" "\\\"{A}" nil "&Auml;" "Ae" "Ä" "Ä")
@@ -558,7 +560,7 @@ This first checks the user list, then the built-in list."
   "Create a Help buffer with all available entities."
   (interactive)
   (with-output-to-temp-buffer "*Org Entity Help*"
-    (princ "Org-mode entities\n=================\n\n")
+    (princ "Org mode entities\n=================\n\n")
     (let ((ll (append '("* User-defined additions (variable org-entities-user)")
 		      org-entities-user
 		      org-entities))

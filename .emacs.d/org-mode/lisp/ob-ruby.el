@@ -68,16 +68,16 @@
   "Execute a block of Ruby code with Babel.
 This function is called by `org-babel-execute-src-block'."
   (let* ((session (org-babel-ruby-initiate-session
-		   (cdr (assoc :session params))))
-         (result-params (cdr (assoc :result-params params)))
-         (result-type (cdr (assoc :result-type params)))
+		   (cdr (assq :session params))))
+         (result-params (cdr (assq :result-params params)))
+         (result-type (cdr (assq :result-type params)))
          (full-body (org-babel-expand-body:generic
 		     body params (org-babel-variable-assignments:ruby params)))
          (result (if (member "xmp" result-params)
 		     (with-temp-buffer
 		       (require 'rcodetools)
 		       (insert full-body)
-		       (xmp (cdr (assoc :xmp-option params)))
+		       (xmp (cdr (assq :xmp-option params)))
 		       (buffer-string))
 		   (org-babel-ruby-evaluate
 		    session full-body result-type result-params))))
@@ -85,10 +85,10 @@ This function is called by `org-babel-execute-src-block'."
      (org-babel-result-cond result-params
        result
        (org-babel-ruby-table-or-string result))
-     (org-babel-pick-name (cdr (assoc :colname-names params))
-			  (cdr (assoc :colnames params)))
-     (org-babel-pick-name (cdr (assoc :rowname-names params))
-			  (cdr (assoc :rownames params))))))
+     (org-babel-pick-name (cdr (assq :colname-names params))
+			  (cdr (assq :colnames params)))
+     (org-babel-pick-name (cdr (assq :rowname-names params))
+			  (cdr (assq :rownames params))))))
 
 (defun org-babel-prep-session:ruby (session params)
   "Prepare SESSION according to the header arguments specified in PARAMS."
@@ -129,7 +129,7 @@ Convert an elisp value into a string of ruby source code
 specifying a variable of the same value."
   (if (listp var)
       (concat "[" (mapconcat #'org-babel-ruby-var-to-ruby var ", ") "]")
-    (if (equal var 'hline)
+    (if (eq var 'hline)
 	org-babel-ruby-hline-to
       (format "%S" var))))
 
@@ -139,8 +139,8 @@ If RESULTS look like a table, then convert them into an
 Emacs-lisp table, otherwise return the results as a string."
   (let ((res (org-babel-script-escape results)))
     (if (listp res)
-        (mapcar (lambda (el) (if (equal el 'nil)
-                            org-babel-ruby-nil-to el))
+        (mapcar (lambda (el) (if (not el)
+				 org-babel-ruby-nil-to el))
                 res)
       res)))
 

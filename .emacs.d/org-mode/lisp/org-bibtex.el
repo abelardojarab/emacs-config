@@ -293,7 +293,7 @@ It is relevant only if `org-bibtex-tags-are-keywords' is non-nil.
 Tag inheritence itself is controlled by `org-use-tag-inheritence'
 and `org-exclude-tags-from-inheritence'."
   :group 'org-bibtex
-  :version "25.1"
+  :version "25.2"
   :package-version '(Org . "8.3")
   :type 'boolean)
 
@@ -371,7 +371,7 @@ and `org-exclude-tags-from-inheritence'."
 			       (mapcar
 				(lambda (field)
 				  (let ((value (or (org-bibtex-get (funcall from field))
-						   (and (equal :title field)
+						   (and (eq :title field)
 							(nth 4 (org-heading-components))))))
 				    (when value (cons (funcall from field) value))))
 				(funcall flatten

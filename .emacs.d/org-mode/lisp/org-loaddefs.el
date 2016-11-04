@@ -715,7 +715,7 @@ searches can be pre-defined in this way.
 
 If the current buffer is in Org mode and visiting a file, you can also
 first press `<' once to indicate that the agenda should be temporarily
-\(until the next use of \\[org-agenda]) restricted to the current file.
+\(until the next use of `\\[org-agenda]') restricted to the current file.
 Pressing `<' twice means to restrict to the current subtree or region
 \(if active).
 
@@ -844,7 +844,7 @@ in `org-agenda-text-search-extra-files'.
 (autoload 'org-todo-list "org-agenda" "\
 Show all (not done) TODO entries from all agenda file in a single list.
 The prefix arg can be used to select a specific TODO keyword and limit
-the list to these.  When using \\[universal-argument], you will be prompted
+the list to these.  When using `\\[universal-argument]', you will be prompted
 for a keyword.  A numeric prefix directly selects the Nth keyword in
 `org-todo-keywords-1'.
 
@@ -914,8 +914,8 @@ This is a command that has to be installed in `calendar-mode-map'.
 
 (autoload 'org-agenda-to-appt "org-agenda" "\
 Activate appointments found in `org-agenda-files'.
-With a \\[universal-argument] prefix, refresh the list of
-appointments.
+
+With a `\\[universal-argument]' prefix, refresh the list of appointments.
 
 If FILTER is t, interactively prompt the user for a regular
 expression, and filter out entries that don't match it.
@@ -1056,16 +1056,17 @@ Capture STRING with the template selected by KEYS.
 (autoload 'org-capture "org-capture" "\
 Capture something.
 \\<org-capture-mode-map>
-This will let you select a template from `org-capture-templates', and then
-file the newly captured information.  The text is immediately inserted
-at the target location, and an indirect buffer is shown where you can
-edit it.  Pressing \\[org-capture-finalize] brings you back to the previous state
-of Emacs, so that you can continue your work.
+This will let you select a template from `org-capture-templates', and
+then file the newly captured information.  The text is immediately
+inserted at the target location, and an indirect buffer is shown where
+you can edit it.  Pressing `\\[org-capture-finalize]' brings you back to the previous
+state of Emacs, so that you can continue your work.
 
-When called interactively with a \\[universal-argument] prefix argument GOTO, don't capture
-anything, just go to the file/headline where the selected template
-stores its notes.  With a double prefix argument \\[universal-argument] \\[universal-argument], go to the last note
-stored.
+When called interactively with a `\\[universal-argument]' prefix argument GOTO, don't
+capture anything, just go to the file/headline where the selected
+template stores its notes.
+
+With a `\\[universal-argument] \\[universal-argument]' prefix argument, go to the last note stored.
 
 When called with a `C-0' (zero) prefix, insert a template at point.
 
@@ -1101,14 +1102,19 @@ If `only-dangling-p' is non-nil, only ask to resolve dangling
 
 (autoload 'org-clock-in "org-clock" "\
 Start the clock on the current item.
+
 If necessary, clock-out of the currently active clock.
-With a prefix argument SELECT (\\[universal-argument]), offer a list of recently clocked
-tasks to clock into.  When SELECT is \\[universal-argument] \\[universal-argument], clock into the current task
-and mark it as the default task, a special task that will always be offered
-in the clocking selection, associated with the letter `d'.
-When SELECT is \\[universal-argument] \\[universal-argument] \\[universal-argument], clock in by using the last clock-out
-time as the start time (see `org-clock-continuously' to
-make this the default behavior.)
+
+With a `\\[universal-argument]' prefix argument SELECT, offer a list of recently clocked
+tasks to clock into.
+
+When SELECT is `\\[universal-argument] \\[universal-argument]', clock into the current task and mark it as
+the default task, a special task that will always be offered in the
+clocking selection, associated with the letter `d'.
+
+When SELECT is `\\[universal-argument] \\[universal-argument] \\[universal-argument]', clock in by using the last clock-out
+time as the start time.  See `org-clock-continuously' to make this
+the default behavior.
 
 \(fn &optional SELECT START-TIME)" t nil)
 
@@ -1159,12 +1165,15 @@ PROPNAME lets you set a custom text property instead of :org-clock-minutes.
 Show subtree times in the entire buffer.
 
 By default, show the total time for the range defined in
-`org-clock-display-default-range'.  With \\[universal-argument] prefix, show
-the total time for today instead.  With \\[universal-argument] \\[universal-argument] prefix, use
-a custom range, entered at the prompt.  With \\[universal-argument] \\[universal-argument] \\[universal-argument]
-prefix, display the total time in the echo area.
+`org-clock-display-default-range'.  With `\\[universal-argument]' prefix, show
+the total time for today instead.
 
-Use \\[org-clock-remove-overlays] to remove the subtree times.
+With `\\[universal-argument] \\[universal-argument]' prefix, use a custom range, entered at prompt.
+
+With `\\[universal-argument] \\[universal-argument] \\[universal-argument]' prefix, display the total time in the
+echo area.
+
+Use `\\[org-clock-remove-overlays]' to remove the subtree times.
 
 \(fn &optional ARG)" t nil)
 
@@ -1240,7 +1249,7 @@ Turn on column view on an Org mode file.
 Column view applies to the whole buffer if point is before the
 first headline.  Otherwise, it applies to the first ancestor
 setting \"COLUMNS\" property.  If there is none, it defaults to
-the current headline.  With a \\[universal-argument] prefix argument, turn on column
+the current headline.  With a `\\[universal-argument]' prefix argument, turn on column
 view for the whole buffer unconditionally.
 
 When COLUMNS-FMT-STRING is non-nil, use it as the column format.
@@ -1594,7 +1603,6 @@ Store the relation between files and corresponding IDs.
 This will scan all agenda files, all associated archives, and all
 files currently mentioned in `org-id-locations'.
 When FILES is given, scan these files instead.
-When CHECK is given, prepare detailed information about duplicate IDs.
 
 \(fn &optional FILES SILENT)" t nil)
 
@@ -1664,9 +1672,9 @@ Dispatch to the appropriate function to store a link to an IRC session.
 (autoload 'org-lint "org-lint" "\
 Check current Org buffer for syntax mistakes.
 
-By default, run all checkers.  With a single prefix ARG \\[universal-argument],
-select one category of checkers only.  With a double prefix
-\\[universal-argument] \\[universal-argument], select one precise checker by its name.
+By default, run all checkers.  With a `\\[universal-argument]' prefix ARG, select one
+category of checkers only.  With a `\\[universal-argument] \\[universal-argument]' prefix, run one precise
+checker by its name.
 
 ARG can also be a list of checker names, as symbols, to run.
 
@@ -2096,9 +2104,9 @@ blank, and the content is appended to the field above.
 
 (autoload 'org-table-edit-field "org-table" "\
 Edit table field in a different window.
-This is mainly useful for fields that contain hidden parts.
-When called with a \\[universal-argument] prefix, just make the full field visible so that
-it can be edited in place.
+This is mainly useful for fields that contain hidden parts.  When called
+with a `\\[universal-argument]' prefix, just make the full field visible so that it can be
+edited in place.
 
 \(fn ARG)" t nil)
 
@@ -2445,12 +2453,14 @@ be set to provide ORGTBL directives for the generated table.
 \(fn TABLE PARAMS)" nil nil)
 
 (autoload 'orgtbl-ascii-plot "org-table" "\
-Draw an ascii bar plot in a column.
-With cursor in a column containing numerical values, this
-function will draw a plot in a new column.
+Draw an ASCII bar plot in a column.
+
+With cursor in a column containing numerical values, this function
+will draw a plot in a new column.
+
 ASK, if given, is a numeric prefix to override the default 12
-characters width of the plot.  ASK may also be the
-\\[universal-argument] prefix, which will prompt for the width.
+characters width of the plot.  ASK may also be the `\\[universal-argument]' prefix,
+which will prompt for the width.
 
 \(fn &optional ASK)" t nil)
 
@@ -2476,16 +2486,18 @@ the region 0:00:00.
 
 (autoload 'org-timer "org-timer" "\
 Insert a H:MM:SS string from the timer into the buffer.
-The first time this command is used, the timer is started.  When used with
-a \\[universal-argument] prefix, force restarting the timer.
-When used with a double prefix argument \\[universal-argument], change all the timer string
-in the region by a fixed amount.  This can be used to recalibrate a timer
-that was not started at the correct moment.
+The first time this command is used, the timer is started.
 
-If NO-INSERT-P is non-nil, return the string instead of inserting
+When used with a `\\[universal-argument]' prefix, force restarting the timer.
+
+When used with a `\\[universal-argument] \\[universal-argument]' prefix, change all the timer strings
+in the region by a fixed amount.  This can be used to re-calibrate
+a timer that was not started at the correct moment.
+
+If NO-INSERT is non-nil, return the string instead of inserting
 it in the buffer.
 
-\(fn &optional RESTART NO-INSERT-P)" t nil)
+\(fn &optional RESTART NO-INSERT)" t nil)
 
 (autoload 'org-timer-change-times-in-region "org-timer" "\
 Change all h:mm:ss time in region by a DELTA.
@@ -2609,57 +2621,60 @@ The following commands are available:
 \(fn)" t nil)
 
 (autoload 'org-cycle "org" "\
-TAB-action and visibility cycling for Org-mode.
+TAB-action and visibility cycling for Org mode.
 
-This is the command invoked in Org mode by the TAB key.  Its main purpose
-is outline visibility cycling, but it also invokes other actions
+This is the command invoked in Org mode by the `TAB' key.  Its main
+purpose is outline visibility cycling, but it also invokes other actions
 in special contexts.
 
-- When this function is called with a prefix argument, rotate the entire
-  buffer through 3 states (global cycling)
+When this function is called with a `\\[universal-argument]' prefix, rotate the entire
+buffer through 3 states (global cycling)
   1. OVERVIEW: Show only top-level headlines.
   2. CONTENTS: Show all headlines of all levels, but no body text.
   3. SHOW ALL: Show everything.
-  With a double \\[universal-argument] prefix argument, switch to the startup visibility,
-  determined by the variable `org-startup-folded', and by any VISIBILITY
-  properties in the buffer.
-  With a triple \\[universal-argument] prefix argument, show the entire buffer, including any drawers.
 
-- When inside a table, re-align the table and move to the next field.
+With a `\\[universal-argument] \\[universal-argument]' prefix argument, switch to the startup visibility,
+determined by the variable `org-startup-folded', and by any VISIBILITY
+properties in the buffer.
 
-- When point is at the beginning of a headline, rotate the subtree started
-  by this line through 3 different states (local cycling)
+With a `\\[universal-argument] \\[universal-argument] \\[universal-argument]' prefix argument, show the entire buffer, including
+any drawers.
+
+When inside a table, re-align the table and move to the next field.
+
+When point is at the beginning of a headline, rotate the subtree started
+by this line through 3 different states (local cycling)
   1. FOLDED:   Only the main headline is shown.
   2. CHILDREN: The main headline and the direct children are shown.
                From this state, you can move to one of the children
                and zoom in further.
   3. SUBTREE:  Show the entire subtree, including body text.
-  If there is no subtree, switch directly from CHILDREN to FOLDED.
+If there is no subtree, switch directly from CHILDREN to FOLDED.
 
-- When point is at the beginning of an empty headline and the variable
-  `org-cycle-level-after-item/entry-creation' is set, cycle the level
-  of the headline by demoting and promoting it to likely levels.  This
-  speeds up creation document structure by pressing TAB once or several
-  times right after creating a new headline.
+When point is at the beginning of an empty headline and the variable
+`org-cycle-level-after-item/entry-creation' is set, cycle the level
+of the headline by demoting and promoting it to likely levels.  This
+speeds up creation document structure by pressing `TAB' once or several
+times right after creating a new headline.
 
-- When there is a numeric prefix, go up to a heading with level ARG, do
-  a `show-subtree' and return to the previous cursor position.  If ARG
-  is negative, go up that many levels.
+When there is a numeric prefix, go up to a heading with level ARG, do
+a `show-subtree' and return to the previous cursor position.  If ARG
+is negative, go up that many levels.
 
-- When point is not at the beginning of a headline, execute the global
-  binding for TAB, which is re-indenting the line.  See the option
-  `org-cycle-emulate-tab' for details.
+When point is not at the beginning of a headline, execute the global
+binding for `TAB', which is re-indenting the line.  See the option
+`org-cycle-emulate-tab' for details.
 
-- Special case: if point is at the beginning of the buffer and there is
-  no headline in line 1, this function will act as if called with prefix arg
-  (\\[universal-argument] TAB, same as S-TAB) also when called without prefix arg.
-  But only if also the variable `org-cycle-global-at-bob' is t.
+As a special case, if point is at the beginning of the buffer and there is
+no headline in line 1, this function will act as if called with prefix arg
+\(`\\[universal-argument] TAB', same as `S-TAB') also when called without prefix arg, but only
+if the variable `org-cycle-global-at-bob' is t.
 
 \(fn &optional ARG)" t nil)
 
 (autoload 'org-global-cycle "org" "\
 Cycle the global visibility.  For details see `org-cycle'.
-With \\[universal-argument] prefix arg, switch to startup visibility.
+With `\\[universal-argument]' prefix ARG, switch to startup visibility.
 With a numeric prefix, show all headlines up to that level.
 
 \(fn &optional ARG)" t nil)
@@ -2670,7 +2685,7 @@ Toggle the minor mode `orgstruct-mode'.
 This mode is for using Org mode structure commands in other
 modes.  The following keys behave as if Org mode were active, if
 the cursor is on a headline, or on a plain list item (both as
-defined by Org-mode).
+defined by Org mode).
 
 \(fn &optional ARG)" t nil)
 
@@ -2685,26 +2700,27 @@ Unconditionally turn on `orgstruct++-mode'.
 \(fn)" nil nil)
 
 (autoload 'org-run-like-in-org-mode "org" "\
-Run a command, pretending that the current buffer is in Org-mode.
+Run a command, pretending that the current buffer is in Org mode.
 This will temporarily bind local variables that are typically bound in
-Org mode to the values they have in Org-mode, and then interactively
+Org mode to the values they have in Org mode, and then interactively
 call CMD.
 
 \(fn CMD)" nil nil)
 
 (autoload 'org-store-link "org" "\
-\\<org-mode-map>Store an org-link to the current location.
+Store an org-link to the current location.
+\\<org-mode-map>
 This link is added to `org-stored-links' and can later be inserted
-into an Org buffer with \\[org-insert-link].
+into an Org buffer with `org-insert-link' (`\\[org-insert-link]').
 
-For some link types, a prefix ARG is interpreted.
+For some link types, a `\\[universal-argument]' prefix ARG is interpreted.
 For links to Usenet articles, ARG negates `org-gnus-prefer-web-links'.
 For file links, ARG negates `org-context-in-file-links'.
 
-A double prefix ARG force skipping storing functions that are not
-part of Org's core.
+A `\\[universal-argument] \\[universal-argument]' prefix ARG forces skipping storing functions that are not
+part of Org core.
 
-A triple prefix ARG force storing a link for each line in the
+A `\\[universal-argument] \\[universal-argument] \\[universal-argument]' prefix ARG forces storing a link for each line in the
 active region.
 
 \(fn ARG)" t nil)
@@ -2725,16 +2741,16 @@ Raise an error when there is nothing to follow.
 \(fn)" t nil)
 
 (autoload 'org-open-link-from-string "org" "\
-Open a link in the string S, as if it was in Org-mode.
+Open a link in the string S, as if it was in Org mode.
 
 \(fn S &optional ARG REFERENCE-BUFFER)" t nil)
 
 (autoload 'org-switchb "org" "\
 Switch between Org buffers.
 
-With \\[universal-argument] prefix, restrict available buffers to files.
+With `\\[universal-argument]' prefix, restrict available buffers to files.
 
-With \\[universal-argument] \\[universal-argument] prefix, restrict available buffers to agenda files.
+With `\\[universal-argument] \\[universal-argument]' prefix, restrict available buffers to agenda files.
 
 \(fn &optional ARG)" t nil)
 
@@ -3752,10 +3768,10 @@ SPC and DEL (resp. C-n and C-p) keys.
 Set variable `org-export-dispatch-use-expert-ui' to switch to one
 flavor or the other.
 
-When ARG is \\[universal-argument], repeat the last export action, with the same set
-of options used back then, on the current buffer.
+When ARG is `\\[universal-argument]', repeat the last export action, with the same
+set of options used back then, on the current buffer.
 
-When ARG is \\[universal-argument] \\[universal-argument], display the asynchronous export stack.
+When ARG is `\\[universal-argument] \\[universal-argument]', display the asynchronous export stack.
 
 \(fn &optional ARG)" t nil)
 

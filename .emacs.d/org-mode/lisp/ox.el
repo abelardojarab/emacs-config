@@ -375,7 +375,7 @@ see.
 This option can also be set with the OPTIONS keyword, e.g.,
 \"creator:t\"."
   :group 'org-export-general
-  :version "25.1"
+  :version "25.2"
   :package-version '(Org . "8.3")
   :type 'boolean
   :safe #'booleanp)
@@ -790,7 +790,7 @@ e.g. \"tasks:nil\"."
 This option can also be set with the OPTIONS keyword,
 e.g. \"title:nil\"."
   :group 'org-export-general
-  :version "25.1"
+  :version "25.2"
   :package-version '(Org . "8.3")
   :type 'boolean
   :safe #'booleanp)
@@ -856,7 +856,7 @@ where PATH is the un-resolvable reference.
 This option can also be set with the OPTIONS keyword, e.g.,
 \"broken-links:mark\"."
   :group 'org-export-general
-  :version "25.1"
+  :version "25.2"
   :package-version '(Org . "9.0")
   :type '(choice
 	  (const :tag "Ignore broken links" t)
@@ -894,7 +894,7 @@ HTML code while every other back-end will ignore it."
   "Non-nil means pushing export output to the kill ring.
 This variable is ignored during asynchronous export."
   :group 'org-export-general
-  :version "25.1"
+  :version "25.2"
   :package-version '(Org . "8.3")
   :type '(choice
 	  (const :tag "Always" t)
@@ -922,7 +922,7 @@ these cases."
 (defcustom org-export-in-background nil
   "Non-nil means export and publishing commands will run in background.
 Results from an asynchronous export are never displayed
-automatically.  But you can retrieve them with \\[org-export-stack]."
+automatically.  But you can retrieve them with `\\[org-export-stack]'."
   :group 'org-export-general
   :version "24.4"
   :package-version '(Org . "8.0")
@@ -1405,8 +1405,9 @@ for export.  Return options as a plist."
 	 (cache (list
 		 (cons "TITLE"
 		       (or (org-entry-get (point) "EXPORT_TITLE" 'selective)
-			   (progn (looking-at org-complex-heading-regexp)
-				  (match-string-no-properties 4))))))
+			   (let ((case-fold-search nil))
+			     (looking-at org-complex-heading-regexp)
+			     (match-string-no-properties 4))))))
 	 ;; Look for both general keywords and back-end specific
 	 ;; options, with priority given to the latter.
 	 (options (append (and backend (org-export-get-all-options backend))
@@ -1912,6 +1913,7 @@ Return a string."
 			  (format "[BROKEN LINK: %s]" (nth 1 err)) info))
 		  (_ nil))))))
 	(let* ((type (org-element-type data))
+	       (parent (org-export-get-parent data))
 	       (results
 		(cond
 		 ;; Ignored element/object.
@@ -1965,12 +1967,11 @@ Return a string."
 				   ;; first line's indentation: there is
 				   ;; none and it might be misleading.
 				   (when (eq type 'paragraph)
-				     (let ((parent (org-export-get-parent data)))
-				       (and
-					(eq (car (org-element-contents parent))
-					    data)
-					(memq (org-element-type parent)
-					      '(footnote-definition item))))))))
+				     (and
+				      (eq (car (org-element-contents parent))
+					  data)
+				      (memq (org-element-type parent)
+					    '(footnote-definition item)))))))
 			       "")))
 			(broken-link-handler
 			 (funcall transcoder data
@@ -1986,17 +1987,14 @@ Return a string."
 	    ;; Append the same white space between elements or objects
 	    ;; as in the original buffer, and call appropriate filters.
 	    (t
-	     (let ((results
-		    (org-export-filter-apply-functions
-		     (plist-get info (intern (format ":filter-%s" type)))
-		     (let ((post-blank (or (org-element-property :post-blank data)
-					   0)))
-		       (if (memq type org-element-all-elements)
-			   (concat (org-element-normalize-string results)
-				   (make-string post-blank ?\n))
-			 (concat results (make-string post-blank ?\s))))
-		     info)))
-	       results)))
+	     (org-export-filter-apply-functions
+	      (plist-get info (intern (format ":filter-%s" type)))
+	      (let ((blank (or (org-element-property :post-blank data) 0)))
+		(if (eq (org-element-class data parent) 'object)
+		    (concat results (make-string blank ?\s))
+		  (concat (org-element-normalize-string results)
+			  (make-string blank ?\n))))
+	      info)))
 	   (plist-get info :exported-data))))))
 
 (defun org-export-data-with-backend (data backend info)
@@ -2031,7 +2029,8 @@ contents, as a string or nil.
 When optional argument WITH-AFFILIATED is non-nil, add affiliated
 keywords before output."
   (let ((type (org-element-type blob)))
-    (concat (and with-affiliated (memq type org-element-all-elements)
+    (concat (and with-affiliated
+		 (eq (org-element-class blob) 'element)
 		 (org-element--interpret-affiliated-keywords blob))
 	    (funcall (intern (format "org-element-%s-interpreter" type))
 		     blob contents))))
@@ -5251,6 +5250,16 @@ Return a list of src-block elements with a caption."
      (secondary-closing :utf-8 " »" :html "&nbsp;&raquo;" :latex "\\fg{}"
 			:texinfo "@tie{}@guillemetright{}")
      (apostrophe :utf-8 "’" :html "&rsquo;"))
+    ("is"
+     (primary-opening
+      :utf-8 "„" :html "&bdquo;" :latex "\"`" :texinfo "@quotedblbase{}")
+     (primary-closing
+      :utf-8 "“" :html "&ldquo;" :latex "\"'" :texinfo "@quotedblleft{}")
+     (secondary-opening
+      :utf-8 "‚" :html "&sbquo;" :latex "\\glq{}" :texinfo "@quotesinglbase{}")
+     (secondary-closing
+      :utf-8 "‘" :html "&lsquo;" :latex "\\grq{}" :texinfo "@quoteleft{}")
+     (apostrophe :utf-8 "’" :html "&rsquo;"))
     ("no"
      ;; https://nn.wikipedia.org/wiki/Sitatteikn
      (primary-opening
@@ -5587,6 +5596,7 @@ them."
      ("es" :ascii "Ecuacion" :html "Ecuaci&oacute;n" :default "Ecuación")
      ("et" :html "V&#245;rrand" :utf-8 "Võrrand")
      ("fr" :ascii "Equation" :default "Équation")
+     ("is" :default "Jafna")
      ("ja" :default "方程式")
      ("no" :default "Ligning")
      ("nb" :default "Ligning")
@@ -5601,6 +5611,7 @@ them."
      ("de" :default "Abbildung")
      ("es" :default "Figura")
      ("et" :default "Joonis")
+     ("is" :default "Mynd")
      ("ja" :default "図" :html "&#22259;")
      ("no" :default "Illustrasjon")
      ("nb" :default "Illustrasjon")
@@ -5615,6 +5626,7 @@ them."
      ("es" :default "Figura %d:")
      ("et" :default "Joonis %d:")
      ("fr" :default "Figure %d :" :html "Figure&nbsp;%d&nbsp;:")
+     ("is" :default "Mynd %d")
      ("ja" :default "図%d: " :html "&#22259;%d: ")
      ("no" :default "Illustrasjon %d")
      ("nb" :default "Illustrasjon %d")
@@ -5667,6 +5679,7 @@ them."
      ("es" :ascii "Indice de tablas" :html "&Iacute;ndice de tablas" :default "Índice de tablas")
      ("et" :default "Tabelite nimekiri")
      ("fr" :default "Liste des tableaux")
+     ("is" :default "Töfluskrá" :html "T&ouml;fluskr&aacute;")
      ("ja" :default "表目次")
      ("no" :default "Tabeller")
      ("nb" :default "Tabeller")
@@ -5723,6 +5736,7 @@ them."
      ("es" :default "Tabla")
      ("et" :default "Tabel")
      ("fr" :default "Tableau")
+     ("is" :default "Tafla")
      ("ja" :default "表" :html "&#34920;")
      ("pt_BR" :default "Tabela")
      ("ru" :html "&#1058;&#1072;&#1073;&#1083;&#1080;&#1094;&#1072;"
@@ -5734,6 +5748,7 @@ them."
      ("es" :default "Tabla %d")
      ("et" :default "Tabel %d")
      ("fr" :default "Tableau %d :")
+     ("is" :default "Tafla %d")
      ("ja" :default "表%d:" :html "&#34920;%d:")
      ("no" :default "Tabell %d")
      ("nb" :default "Tabell %d")
@@ -6168,13 +6183,13 @@ within Emacs."
 (define-derived-mode org-export-stack-mode tabulated-list-mode "Org-Stack"
   "Mode for displaying asynchronous export stack.
 
-Type \\[org-export-stack] to visualize the asynchronous export
+Type `\\[org-export-stack]' to visualize the asynchronous export
 stack.
 
 In an Org Export Stack buffer, use \
-\\<org-export-stack-mode-map>\\[org-export-stack-view] to view export output
-on current line, \\[org-export-stack-remove] to remove it from the stack and \
-\\[org-export-stack-clear] to clear
+\\<org-export-stack-mode-map>`\\[org-export-stack-view]' to view export output
+on current line, `\\[org-export-stack-remove]' to remove it from the stack and \
+`\\[org-export-stack-clear]' to clear
 stack completely.
 
 Removing entries in a stack buffer does not affect files
@@ -6242,7 +6257,7 @@ appropriate for `tabulated-list-print'."
 	  ;; SOURCE is not consistent with current line.  The stack
 	  ;; view is outdated.
 	  (error (substitute-command-keys
-		  "Source unavailable; type \\[org-export-stack-refresh] \
+		  "Source unavailable; type `\\[org-export-stack-refresh]' \
 to refresh buffer")))))))
 
 
@@ -6269,10 +6284,12 @@ SPC and DEL (resp. C-n and C-p) keys.
 Set variable `org-export-dispatch-use-expert-ui' to switch to one
 flavor or the other.
 
-When ARG is \\[universal-argument], repeat the last export action, with the same set
-of options used back then, on the current buffer.
+When ARG is `\\[universal-argument]', repeat the last export action, with the\
+ same
+set of options used back then, on the current buffer.
 
-When ARG is \\[universal-argument] \\[universal-argument], display the asynchronous export stack."
+When ARG is `\\[universal-argument] \\[universal-argument]', display the \
+asynchronous export stack."
   (interactive "P")
   (let* ((input
 	  (cond ((equal arg '(16)) '(stack))

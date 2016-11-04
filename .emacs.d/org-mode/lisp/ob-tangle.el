@@ -48,6 +48,7 @@
 (declare-function org-string-nw-p "org-macs" (s))
 (declare-function org-trim "org" (s &optional keep-lead))
 (declare-function outline-previous-heading "outline" ())
+(declare-function org-id-find "org-id" (id &optional markerp))
 
 (defvar org-link-types-re)
 
@@ -227,7 +228,7 @@ used to limit the exported source code blocks by language."
 	       org-babel-default-header-args))
 	    (tangle-file
 	     (when (equal arg '(16))
-	       (or (cdr (assoc :tangle (nth 2 (org-babel-get-src-block-info 'light))))
+	       (or (cdr (assq :tangle (nth 2 (org-babel-get-src-block-info 'light))))
 		   (user-error "Point is not in a source code block"))))
 	    path-collector)
 	(mapc ;; map over all languages
@@ -284,7 +285,7 @@ used to limit the exported source code blocks by language."
 			      (insert-file-contents file-name))
 			    (goto-char (point-max))
 			    ;; Handle :padlines unless first line in file
-			    (unless (or (string= "no" (cdr (assoc :padline (nth 4 spec))))
+			    (unless (or (string= "no" (cdr (assq :padline (nth 4 spec))))
 					(= (point) (point-min)))
 			      (insert "\n"))
 			    (insert content)
@@ -470,7 +471,7 @@ list to be used by `org-babel-tangle' directly."
                       (org-babel-expand-noweb-references info)
                     (nth 1 info)))
                  (body
-                  (if (assoc :no-expand params)
+                  (if (assq :no-expand params)
                       body
                     (if (fboundp expand-cmd)
                         (funcall expand-cmd body params)
@@ -488,8 +489,8 @@ list to be used by `org-babel-tangle' directly."
               (run-hooks 'org-babel-tangle-body-hook)
               (buffer-string))))
 	 (comment
-	  (when (or (string= "both" (cdr (assoc :comments params)))
-		    (string= "org" (cdr (assoc :comments params))))
+	  (when (or (string= "both" (cdr (assq :comments params)))
+		    (string= "org" (cdr (assq :comments params))))
 	    ;; From the previous heading or code-block end
 	    (funcall
 	     org-babel-process-comment-text
@@ -575,7 +576,7 @@ which enable the original code blocks to be found."
         (setq body (buffer-substring body-start end)))
       (when (string-match "::" path)
         (setq path (substring path 0 (match-beginning 0))))
-      (find-file path)
+      (find-file (or (car (org-id-find path)) path))
       (setq target-buffer (current-buffer))
       ;; Go to the beginning of the relative block in Org file.
       (org-open-link-from-string link)

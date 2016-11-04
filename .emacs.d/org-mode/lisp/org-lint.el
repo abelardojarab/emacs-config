@@ -844,7 +844,7 @@ Use \"export %s\" instead"
 			 (org-element-property :commentedp e))))
 	     nil t '(footnote-definition property-drawer))
 	   (list (org-element-property :begin h)
-		 "Extraneous elements in footnote section")))))
+		 "Extraneous elements in footnote section are not exported")))))
 
 (defun org-lint-quote-section (ast)
   (org-element-map ast '(headline inlinetask)
@@ -1162,10 +1162,10 @@ Checker will also be ignored in all subsequent reports."
 (defun org-lint (&optional arg)
   "Check current Org buffer for syntax mistakes.
 
-By default, run all checkers.  With a single prefix ARG \
-\\[universal-argument],
-select one category of checkers only.  With a double prefix
-\\[universal-argument] \\[universal-argument], select one precise \
+By default, run all checkers.  With a `\\[universal-argument]' prefix ARG, \
+select one
+category of checkers only.  With a `\\[universal-argument] \
+\\[universal-argument]' prefix, run one precise
 checker by its name.
 
 ARG can also be a list of checker names, as symbols, to run."

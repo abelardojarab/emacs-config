@@ -768,7 +768,7 @@ INFO      the export options (plist).
 
 The function result will be used in the section format string."
   :group 'org-export-html
-  :version "25.1"
+  :version "25.2"
   :package-version '(Org . "8.3")
   :type 'function)
 
@@ -800,7 +800,7 @@ The function must accept seven parameters:
 
 The function should return the string to be exported."
   :group 'org-export-html
-  :version "25.1"
+  :version "25.2"
   :package-version '(Org . "8.3")
   :type 'function)
 
@@ -895,7 +895,7 @@ a style file to define the look of these classes.
 To get a start for your css file, start Emacs session and make sure that
 all the faces you are interested in are defined, for example by loading files
 in all modes you want.  Then, use the command
-\\[org-html-htmlize-generate-css] to extract class definitions."
+`\\[org-html-htmlize-generate-css]' to extract class definitions."
   :group 'org-export-html
   :type '(choice (const css) (const inline-css) (const nil)))
 
@@ -948,18 +948,18 @@ The function will be called with these arguments:
 
          `number': row number (0 is the first row)
    `group-number': group number of current row
-  `start-group-p': non-nil means the row starts a group
-    `end-group-p': non-nil means the row ends a group
-           `topp': non-nil means this is the top row
-        `bottomp': non-nil means this is the bottom row
+   `start-group?': non-nil means the row starts a group
+     `end-group?': non-nil means the row ends a group
+           `top?': non-nil means this is the top row
+        `bottom?': non-nil means this is the bottom row
 
 For example:
 
-  \(setq org-html-table-row-open-tag
-        \(lambda (number group-number start-group-p end-group-p topp bottomp)
-           \(cond (topp \"<tr class=\\\"tr-top\\\">\")
-                 \(bottomp \"<tr class=\\\"tr-bottom\\\">\")
-                 \(t (if (= (mod number 2) 1)
+  (setq org-html-table-row-open-tag
+        (lambda (number group-number start-group? end-group-p top? bottom?)
+           (cond (top? \"<tr class=\\\"tr-top\\\">\")
+                 (bottom? \"<tr class=\\\"tr-bottom\\\">\")
+                 (t (if (= (mod number 2) 1)
                         \"<tr class=\\\"tr-odd\\\">\"
                       \"<tr class=\\\"tr-even\\\">\")))))
 
@@ -1511,7 +1511,7 @@ The viewport meta tag is inserted if this variable is non-nil.
 See the following site for a reference:
 https://developer.mozilla.org/en-US/docs/Mozilla/Mobile/Viewport_meta_tag"
   :group 'org-export-html
-  :version "25.1"
+  :version "25.2"
   :package-version '(Org . "8.3")
   :type '(choice (const :tag "Disable" nil)
 		 (list :tag "Enable"
@@ -1813,7 +1813,7 @@ INFO is a plist used as a communication channel."
 	      info)
 	     "\n")))
      (format "<title>%s</title>\n" title)
-     (org-html-close-tag "meta" "name=\"generator\" content=\"Org-mode\"" info)
+     (org-html-close-tag "meta" "name=\"generator\" content=\"Org mode\"" info)
      "\n"
      (and (org-string-nw-p author)
 	  (concat

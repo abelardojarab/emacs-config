@@ -35,6 +35,7 @@
 
 ;;; Code:
 
+(require 'cl-lib)
 (require 'org-clock)
 
 (declare-function org-agenda-error "org-agenda" ())
@@ -68,7 +69,7 @@ the value of the timer."
   "The default timer when a timer is set, in minutes or hh:mm:ss format.
 When 0, the user is prompted for a value."
   :group 'org-time
-  :version "25.1"
+  :version "25.2"
   :package-version '(Org . "8.3")
   :type 'string)
 
@@ -203,22 +204,25 @@ With prefix arg STOP, stop it entirely."
   (message "Timer stopped"))
 
 ;;;###autoload
-(defun org-timer (&optional restart no-insert-p)
+(defun org-timer (&optional restart no-insert)
   "Insert a H:MM:SS string from the timer into the buffer.
-The first time this command is used, the timer is started.  When used with
-a \\[universal-argument] prefix, force restarting the timer.
-When used with a double prefix argument \\[universal-argument], change all the timer string
-in the region by a fixed amount.  This can be used to recalibrate a timer
-that was not started at the correct moment.
+The first time this command is used, the timer is started.
 
-If NO-INSERT-P is non-nil, return the string instead of inserting
+When used with a `\\[universal-argument]' prefix, force restarting the timer.
+
+When used with a `\\[universal-argument] \\[universal-argument]' \
+prefix, change all the timer strings
+in the region by a fixed amount.  This can be used to re-calibrate
+a timer that was not started at the correct moment.
+
+If NO-INSERT is non-nil, return the string instead of inserting
 it in the buffer."
   (interactive "P")
   (if (equal restart '(16))
       (org-timer-start restart)
     (when (or (equal restart '(4)) (not org-timer-start-time))
       (org-timer-start))
-    (if no-insert-p
+    (if no-insert
 	(org-timer-value-string)
       (insert (org-timer-value-string)))))
 
@@ -342,43 +346,43 @@ VALUE can be `on', `off', or `paused'."
     (or (memq 'org-timer-mode-line-string frame-title-format)
 	(setq frame-title-format
 	      (append frame-title-format '(org-timer-mode-line-string)))))
-  (cond
-   ((equal value 'off)
-    (when org-timer-mode-line-timer
-      (cancel-timer org-timer-mode-line-timer)
-      (setq org-timer-mode-line-timer nil))
-    (when (or (eq org-timer-display 'mode-line)
-	      (eq org-timer-display 'both))
-      (setq global-mode-string
-	    (delq 'org-timer-mode-line-string global-mode-string)))
-    (when (or (eq org-timer-display 'frame-title)
-	      (eq org-timer-display 'both))
-      (setq frame-title-format
-	    (delq 'org-timer-mode-line-string frame-title-format)))
-    (force-mode-line-update))
-   ((equal value 'paused)
-    (when org-timer-mode-line-timer
-      (cancel-timer org-timer-mode-line-timer)
-      (setq org-timer-mode-line-timer nil)))
-   ((equal value 'on)
-    (when (or (eq org-timer-display 'mode-line)
-	      (eq org-timer-display 'both))
-      (or global-mode-string (setq global-mode-string '("")))
-      (or (memq 'org-timer-mode-line-string global-mode-string)
-	  (setq global-mode-string
-		(append global-mode-string '(org-timer-mode-line-string)))))
-    (when (or (eq org-timer-display 'frame-title)
-	      (eq org-timer-display 'both))
-      (or (memq 'org-timer-mode-line-string frame-title-format)
-	  (setq frame-title-format
-		(append frame-title-format '(org-timer-mode-line-string)))))
-    (org-timer-update-mode-line)
-    (when org-timer-mode-line-timer
-      (cancel-timer org-timer-mode-line-timer)
-      (setq org-timer-mode-line-timer nil))
-    (when org-timer-display
-      (setq org-timer-mode-line-timer
-	    (run-with-timer 1 1 'org-timer-update-mode-line))))))
+  (cl-case value
+    (off
+     (when org-timer-mode-line-timer
+       (cancel-timer org-timer-mode-line-timer)
+       (setq org-timer-mode-line-timer nil))
+     (when (or (eq org-timer-display 'mode-line)
+	       (eq org-timer-display 'both))
+       (setq global-mode-string
+	     (delq 'org-timer-mode-line-string global-mode-string)))
+     (when (or (eq org-timer-display 'frame-title)
+	       (eq org-timer-display 'both))
+       (setq frame-title-format
+	     (delq 'org-timer-mode-line-string frame-title-format)))
+     (force-mode-line-update))
+    (paused
+     (when org-timer-mode-line-timer
+       (cancel-timer org-timer-mode-line-timer)
+       (setq org-timer-mode-line-timer nil)))
+    (on
+     (when (or (eq org-timer-display 'mode-line)
+	       (eq org-timer-display 'both))
+       (or global-mode-string (setq global-mode-string '("")))
+       (or (memq 'org-timer-mode-line-string global-mode-string)
+	   (setq global-mode-string
+		 (append global-mode-string '(org-timer-mode-line-string)))))
+     (when (or (eq org-timer-display 'frame-title)
+	       (eq org-timer-display 'both))
+       (or (memq 'org-timer-mode-line-string frame-title-format)
+	   (setq frame-title-format
+		 (append frame-title-format '(org-timer-mode-line-string)))))
+     (org-timer-update-mode-line)
+     (when org-timer-mode-line-timer
+       (cancel-timer org-timer-mode-line-timer)
+       (setq org-timer-mode-line-timer nil))
+     (when org-timer-display
+       (setq org-timer-mode-line-timer
+	     (run-with-timer 1 1 'org-timer-update-mode-line))))))
 
 (defun org-timer-update-mode-line ()
   "Update the timer time in the mode line."

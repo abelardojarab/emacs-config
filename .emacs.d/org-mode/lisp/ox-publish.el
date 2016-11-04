@@ -67,9 +67,10 @@ produced.")
 
 (defcustom org-publish-project-alist nil
   "Association list to control publishing behavior.
-Each element of the alist is a publishing project.  The CAR of
+\\<org-mode-map>
+Each element of the alist is a publishing project.  The car of
 each element is a string, uniquely identifying the project.  The
-CDR of each element is in one of the following forms:
+cdr of each element is in one of the following forms:
 
 1. A well-formed property list with an even number of elements,
    alternating keys and values, specifying parameters for the
@@ -86,7 +87,7 @@ When the CDR of an element of org-publish-project-alist is in
 this second form, the elements of the list after `:components'
 are taken to be components of the project, which group together
 files requiring different publishing options.  When you publish
-such a project with \\[org-publish], the components all publish.
+such a project with `\\[org-publish]', the components all publish.
 
 When a property is given a value in `org-publish-project-alist',
 its setting overrides the value of the corresponding user
@@ -436,10 +437,10 @@ This splices all the components into the list."
         ;; a is directory, b not:
         (cond
          ((and (file-directory-p a) (not (file-directory-p b)))
-          (setq retval (equal org-publish-sitemap-sort-folders 'first)))
+          (setq retval (eq org-publish-sitemap-sort-folders 'first)))
 	 ;; a is not a directory, but b is:
          ((and (not (file-directory-p a)) (file-directory-p b))
-          (setq retval (equal org-publish-sitemap-sort-folders 'last))))))
+          (setq retval (eq org-publish-sitemap-sort-folders 'last))))))
     retval))
 
 (defun org-publish-get-base-files-1
@@ -1203,32 +1204,34 @@ the file including them will be republished as well."
 	 (pstamp (org-publish-cache-get key))
 	 (org-inhibit-startup t)
 	 (visiting (find-buffer-visiting filename))
-	 included-files-ctime buf)
+	 (buf (find-file-noselect (expand-file-name filename)))
+	 included-files-ctime)
     (when (equal (file-name-extension filename) "org")
-      (setq buf (find-file (expand-file-name filename)))
-      (with-current-buffer buf
-	(goto-char (point-min))
-	(while (re-search-forward "^[ \t]*#\\+INCLUDE:" nil t)
-	  (let* ((element (org-element-at-point))
-		 (included-file
-                  (and (eq (org-element-type element) 'keyword)
-                       (let ((value (org-element-property :value element)))
-                         (and value
-                              (string-match
-			       "\\`\\(\".+?\"\\|\\S-+\\)\\(?:\\s-+\\|$\\)"
-			       value)
-                              (let ((m (match-string 1 value)))
-                                (org-unbracket-string
-				 "\"" "\""
-				 ;; Ignore search suffix.
-                                 (if (string-match "\\(::\\(.*?\\)\\)\"?\\'" m)
-                                     (substring m 0 (match-beginning 0))
-                                   m))))))))
-	    (when included-file
-	      (push (org-publish-cache-ctime-of-src
-		     (expand-file-name included-file))
-		    included-files-ctime)))))
-      (unless visiting (kill-buffer buf)))
+      (unwind-protect
+	  (with-current-buffer buf
+	    (goto-char (point-min))
+	    (while (re-search-forward "^[ \t]*#\\+INCLUDE:" nil t)
+	      (let* ((element (org-element-at-point))
+		     (included-file
+		      (and (eq (org-element-type element) 'keyword)
+			   (let ((value (org-element-property :value element)))
+			     (and value
+				  (string-match
+				   "\\`\\(\".+?\"\\|\\S-+\\)\\(?:\\s-+\\|$\\)"
+				   value)
+				  (let ((m (match-string 1 value)))
+				    (org-unbracket-string
+				     "\"" "\""
+				     ;; Ignore search suffix.
+				     (if (string-match "\\(::\\(.*?\\)\\)\"?\\'"
+						       m)
+					 (substring m 0 (match-beginning 0))
+				       m))))))))
+		(when included-file
+		  (push (org-publish-cache-ctime-of-src
+			 (expand-file-name included-file))
+			included-files-ctime)))))
+	(unless visiting (kill-buffer buf))))
     (or (null pstamp)
 	(let ((ctime (org-publish-cache-ctime-of-src filename)))
 	  (or (< pstamp ctime)
@@ -1249,9 +1252,9 @@ will be created.  Return VALUE."
 (defun org-publish-cache-get-file-property
   (filename property &optional default no-create project-name)
   "Return the value for a PROPERTY of file FILENAME in publishing cache.
-Use cache file of PROJECT-NAME. Return the value of that PROPERTY
-or DEFAULT, if the value does not yet exist.  If the entry will
-be created, unless NO-CREATE is not nil."
+Use cache file of PROJECT-NAME.  Return the value of that
+PROPERTY or DEFAULT, if the value does not yet exist.  If the
+entry will be created, unless NO-CREATE is not nil."
   ;; Evtl. load the requested cache file:
   (if project-name (org-publish-initialize-cache project-name))
   (let ((pl (org-publish-cache-get filename)) retval)

@@ -89,7 +89,7 @@ for empty fields).  Outside tables, the correct binding of the keys is
 restored.
 
 The default for this option is t if the optimized version is also used in
-Org-mode.  See the variable `org-enable-table-editor' for details.  Changing
+Org mode.  See the variable `org-enable-table-editor' for details.  Changing
 this variable requires a restart of Emacs to become effective."
   :group 'org-table
   :type 'boolean)
@@ -144,7 +144,7 @@ table, obtained by prompting the user."
 		(string :tag "Format"))))
 
 (defgroup org-table-settings nil
-  "Settings for tables in Org-mode."
+  "Settings for tables in Org mode."
   :tag "Org Table Settings"
   :group 'org-table)
 
@@ -193,13 +193,13 @@ alignment to the right border applies."
   :type 'number)
 
 (defgroup org-table-editing nil
-  "Behavior of tables during editing in Org-mode."
+  "Behavior of tables during editing in Org mode."
   :tag "Org Table Editing"
   :group 'org-table)
 
 (defcustom org-table-automatic-realign t
   "Non-nil means automatically re-align table when pressing TAB or RETURN.
-When nil, aligning is only done with \\[org-table-align], or after column
+When nil, aligning is only done with `\\[org-table-align]', or after column
 removal/insertion."
   :group 'org-table-editing
   :type 'boolean)
@@ -245,7 +245,7 @@ this line."
   :type 'boolean)
 
 (defgroup org-table-calculation nil
-  "Options concerning tables in Org-mode."
+  "Options concerning tables in Org mode."
   :tag "Org Table Calculation"
   :group 'org-table)
 
@@ -262,9 +262,10 @@ t       accept as input and present for editing"
 	  (const :tag "Convert user input, don't offer during editing" from)))
 
 (defcustom org-table-copy-increment t
-  "Non-nil means increment when copying current field with \\[org-table-copy-down]."
+  "Non-nil means increment when copying current field with \
+`\\[org-table-copy-down]'."
   :group 'org-table-calculation
-  :version "25.1"
+  :version "25.2"
   :package-version '(Org . "8.3")
   :type '(choice
 	  (const :tag "Use the difference between the current and the above fields" t)
@@ -316,7 +317,7 @@ which should be evaluated as described in the manual and in the documentation
 string of the command `org-table-eval-formula'.  This feature requires the
 Emacs calc package.
 When this variable is nil, formula calculation is only available through
-the command \\[org-table-eval-formula]."
+the command `\\[org-table-eval-formula]'."
   :group 'org-table-calculation
   :type 'boolean)
 
@@ -349,7 +350,7 @@ Constants can also be defined on a per-file basis using a line like
 (defcustom org-table-allow-automatic-line-recalculation t
   "Non-nil means lines marked with |#| or |*| will be recomputed automatically.
 \\<org-mode-map>\
-Automatically means when TAB or RET or \\[org-ctrl-c-ctrl-c] \
+Automatically means when `TAB' or `RET' or `\\[org-ctrl-c-ctrl-c]' \
 are pressed in the line."
   :group 'org-table-calculation
   :type 'boolean)
@@ -377,7 +378,7 @@ portability of tables."
   "Non-nil means that evaluation of a field formula can add new
 columns if an out-of-bounds field is being set."
   :group 'org-table-calculation
-  :version "25.1"
+  :version "25.2"
   :package-version '(Org . "8.3")
   :type '(choice
 	  (const :tag "Setting an out-of-bounds field generates an error (default)" nil)
@@ -386,7 +387,7 @@ columns if an out-of-bounds field is being set."
 	  (const :tag "When setting an out-of-bounds field, the user is prompted" prompt)))
 
 (defgroup org-table-import-export nil
-  "Options concerning table import and export in Org-mode."
+  "Options concerning table import and export in Org mode."
   :tag "Org Table Import Export"
   :group 'org-table)
 
@@ -406,7 +407,7 @@ The function can be slow on larger regions; this safety feature
 prevents it from hanging emacs."
   :group 'org-table-import-export
   :type 'integer
-  :version "25.1"
+  :version "25.2"
   :package-version '(Org . "8.3"))
 
 (defconst org-table-auto-recalculate-regexp "^[ \t]*| *# *\\(|\\|$\\)"
@@ -1556,19 +1557,21 @@ non-nil, the one above is used."
   "Insert a new row above the current line into the table.
 With prefix ARG, insert below the current line."
   (interactive "P")
-  (if (not (org-at-table-p))
-      (user-error "Not at a table"))
-  (let* ((line (buffer-substring (point-at-bol) (point-at-eol)))
+  (unless (org-at-table-p) (user-error "Not at a table"))
+  (let* ((line (buffer-substring (line-beginning-position) (line-end-position)))
 	 (new (org-table-clean-line line)))
     ;; Fix the first field if necessary
     (if (string-match "^[ \t]*| *[#$] *|" line)
 	(setq new (replace-match (match-string 0 line) t t new)))
     (beginning-of-line (if arg 2 1))
+    ;; Buffer may not end of a newline character, so ensure
+    ;; (beginning-of-line 2) moves point to a new line.
+    (unless (bolp) (insert "\n"))
     (let (org-table-may-need-update) (insert-before-markers new "\n"))
     (beginning-of-line 0)
-    (re-search-forward "| ?" (point-at-eol) t)
-    (and (or org-table-may-need-update org-table-overlay-coordinates)
-	 (org-table-align))
+    (re-search-forward "| ?" (line-end-position) t)
+    (when (or org-table-may-need-update org-table-overlay-coordinates)
+      (org-table-align))
     (when (or (not org-table-fix-formulas-confirm)
 	      (funcall org-table-fix-formulas-confirm "Fix formulas? "))
       (org-table-fix-formulas "@" nil (1- (org-table-current-dline)) 1))))
@@ -1987,9 +1990,10 @@ blank, and the content is appended to the field above."
 ;;;###autoload
 (defun org-table-edit-field (arg)
   "Edit table field in a different window.
-This is mainly useful for fields that contain hidden parts.
-When called with a \\[universal-argument] prefix, just make the full field visible so that
-it can be edited in place."
+This is mainly useful for fields that contain hidden parts.  When called
+with a `\\[universal-argument]' prefix, just make the full field \
+visible so that it can be
+edited in place."
   (interactive "P")
   (cond
    ((equal arg '(16))
@@ -3317,7 +3321,14 @@ with the prefix ARG."
   "Recalculate all tables in the current buffer."
   (interactive)
   (org-with-wide-buffer
-   (org-table-map-tables (lambda () (org-table-recalculate t)) t)))
+   (org-table-map-tables
+    (lambda ()
+      ;; Reason for separate `org-table-align': When repeating
+      ;; (org-table-recalculate t) `org-table-may-need-update' gets in
+      ;; the way.
+      (org-table-recalculate t t)
+      (org-table-align))
+    t)))
 
 ;;;###autoload
 (defun org-table-iterate-buffer-tables ()
@@ -3331,12 +3342,14 @@ with the prefix ARG."
      (catch 'exit
        (while (> i 0)
 	 (setq i (1- i))
-	 (org-table-map-tables (lambda () (org-table-recalculate t)) t)
+	 (org-table-map-tables (lambda () (org-table-recalculate t t)) t)
 	 (if (equal checksum (setq c1 (md5 (buffer-string))))
 	     (progn
+	       (org-table-map-tables #'org-table-align t)
 	       (message "Convergence after %d iterations" (- imax i))
 	       (throw 'exit t))
 	   (setq checksum c1)))
+       (org-table-map-tables #'org-table-align t)
        (user-error "No convergence after %d iterations" imax)))))
 
 (defun org-table-calc-current-TBLFM (&optional arg)
@@ -4802,7 +4815,7 @@ strings, or the current cell) returning a string:
   a property list with column numbers and format strings, or
   functions, e.g.,
 
-    \(:fmt (2 \"$%s$\" 4 (lambda (c) (format \"$%s$\" c))))
+    (:fmt (2 \"$%s$\" 4 (lambda (c) (format \"$%s$\" c))))
 
 :hlstart :hllstart :hlend :hllend :hsep :hlfmt :hllfmt :hfmt
 
@@ -5293,12 +5306,15 @@ of regular ascii characters."
 
 ;;;###autoload
 (defun orgtbl-ascii-plot (&optional ask)
-  "Draw an ascii bar plot in a column.
-With cursor in a column containing numerical values, this
-function will draw a plot in a new column.
+  "Draw an ASCII bar plot in a column.
+
+With cursor in a column containing numerical values, this function
+will draw a plot in a new column.
+
 ASK, if given, is a numeric prefix to override the default 12
-characters width of the plot.  ASK may also be the
-\\[universal-argument] prefix, which will prompt for the width."
+characters width of the plot.  ASK may also be the `\\[universal-argument]' \
+prefix,
+which will prompt for the width."
   (interactive "P")
   (let ((col (org-table-current-column))
 	(min  1e999)		 ; 1e999 will be converted to infinity
@@ -5444,8 +5460,8 @@ distinguished from a plain table name or ID."
 
 (defmacro org-define-lookup-function (mode)
   (let ((mode-str (symbol-name mode))
-	(first-p (equal mode 'first))
-	(all-p (equal mode 'all)))
+	(first-p (eq mode 'first))
+	(all-p (eq mode 'all)))
     (let ((plural-str (if all-p "s" "")))
       `(defun ,(intern (format "org-lookup-%s" mode-str)) (val s-list r-list &optional predicate)
 	 ,(format "Find %s occurrence%s of VAL in S-LIST; return corresponding element%s of R-LIST.
