@@ -42,6 +42,9 @@
                   '(prog-mode-hook
                     ess-mode-hook))
 
+            ;; Hide flycheck indicator
+            (diminish 'flycheck-mode)
+
             ;; disable flycheck during idle time, if enabled
             (delete 'idle-change flycheck-check-syntax-automatically)
 

@@ -42,7 +42,7 @@
             (setq undo-tree-history-directory-alist
                   '((".*" . "~/.emacs.cache/undo-tree")))
             (global-undo-tree-mode)
-            (diminish 'undo-tree-mode "")))
+            (diminish 'undo-tree-mode)))
 
 (provide 'setup-undoandredo)
 ;;; setup-undoandredo.el ends here
