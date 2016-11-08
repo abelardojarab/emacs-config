@@ -25,7 +25,7 @@
 ;;; Code:
 
 (use-package eldoc
-  :diminish eldoc-mode
+  :diminish (eldoc-mode my/contextual-help-mode)
   :commands turn-on-eldoc-mode
   :init (progn
           (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)

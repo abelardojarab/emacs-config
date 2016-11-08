@@ -35,6 +35,7 @@
   :bind (:map c++-mode-map
               ("C-c I" . rtags-print-symbol-info)
               ("C-c S" . rtags-find-symbol-at-point))
+  :diminish rtags-cmake-mode
   :load-path (lambda () (expand-file-name "rtags/src/" user-emacs-directory))
   :config (progn
             (setq rtags-use-helm t)

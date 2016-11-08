@@ -27,6 +27,7 @@
 ;; Nyan cat
 (use-package nyan-mode
   :if (display-graphic-p)
+  :commands nyan-mode
   :load-path (lambda () (expand-file-name "nyan-mode/" user-emacs-directory))
   :config (nyan-mode t))
 
