@@ -78,6 +78,7 @@
 ;; Show inline arguments hint for the C/C++ function at point
 (use-package function-args
   :defer t
+  :diminish function-args-mode
   :commands (moo-complete moo-jump-local function-args-mode)
   :load-path (lambda () (expand-file-name "function-args/" user-emacs-directory))
   :bind (:map c-mode-map
