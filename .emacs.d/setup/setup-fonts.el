@@ -40,12 +40,12 @@
     (add-hook 'text-mode-hook 'variable-pitch-mode))
 
   ;; Dynamic font adjusting based on monitor resolution, using Android fonts
-  (when (find-font (font-spec :name "Roboto Mono"))
+  (when (find-font (font-spec :name "Cousine"))
 
     (defun fontify-frame (&optional frame)
       (interactive)
       (let (main-writing-font main-programming-font)
-        (setq main-programming-font "Roboto Mono")
+        (setq main-programming-font "Cousine")
         (if (find-font (font-spec :name "Menlo"))
             (setq main-writing-font "Menlo")
           (setq main-writing-font main-programming-font))

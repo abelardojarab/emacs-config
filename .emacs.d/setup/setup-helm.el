@@ -89,7 +89,17 @@
             (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ;; rebind tab to run persistent action
             (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ;; make TAB works in terminal
             (define-key helm-map (kbd "C-z") 'helm-select-action) ;; list actions using C-z
-            ))
+
+            ;; Helm fonts listing
+            (setq font-helm-source
+                  `((name . "Fonts")
+                    (candidates . ,(font-family-list))
+                    (action . (lambda (candidate) (set-face-attribute 'default nil
+                                                                      :family candidate)))))
+
+            (defun helm-fonts ()
+              (interactive)
+              (helm :sources '(font-helm-source)))))
 
 ;; Indent semantic entries
 (use-package helm-imenu
