@@ -53,6 +53,8 @@
             (setq svn-status-svn-file-coding-system 'utf-8)))
 
 ;; magit
+;; be careful that with-editor-file-name-history-exclude complains
+;; when added element is not a list
 (use-package magit
   :commands (magit-init
              magit-status
@@ -74,6 +76,7 @@
              magit-pull
              magit-pull-popup
              projectile-vc
+             git-commit-setup-check-buffer
              git-visit-diffs
              git-visit-diffs-prev
              git-visit-diffs-next)

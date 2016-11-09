@@ -50,7 +50,7 @@
                   ecb-create-layout-file "~/.emacs.cache/ecb-user-layouts.el"
                   ecb-windows-width 35
                   ecb-fix-window-size 'width
-                  ecb-layout-name "bodil"
+                  ecb-layout-name "left-speedbar-right"
                   ecb-history-make-buckets 'mode
                   ecb-highlight-tag-with-point-delay 180
                   ecb-kill-buffer-clears-history 'auto
@@ -189,10 +189,10 @@ little more place. "
    |              |                               |             |
    |              |                               |             |
    |              |                               |             |
-   |--------------|             Edit              |  Methods    |
+   |--------------|             Edit              | Directories |
    |              |                               |             |
    |              |                               |             |
-   |  Sources     |                               |             |
+   |  Analyze     |                               |             |
    |              |                               |             |
    |              |                               |             |
    |              |                               |             |
@@ -207,12 +207,11 @@ the layout contains no persistent compilation window and the other windows get a
 little more place. "
               (ecb-set-history-buffer)
               (ecb-split-ver 0.5)
-              (ecb-set-sources-buffer)
+              (ecb-set-methods-buffer)
 
-              (progn
-                (select-window (next-window (next-window)))
-                (ecb-set-methods-buffer)
-                (select-window (previous-window (selected-window) 0))))
+              (select-window (next-window (next-window)))
+              (ecb-set-directories-buffer)
+              (select-window (previous-window (selected-window) 0)))
 
             (ecb-layout-define "bodil" left
               "This function creates the following layout:

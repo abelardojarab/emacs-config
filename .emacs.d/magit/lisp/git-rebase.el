@@ -505,7 +505,8 @@ By default, this is the same except for the \"pick\" command."
 (eval-after-load 'recentf
   '(add-to-list 'recentf-exclude git-rebase-filename-regexp))
 
-(add-to-list 'with-editor-file-name-history-exclude git-rebase-filename-regexp)
+(ignore-errors
+  (add-to-list 'with-editor-file-name-history-exclude git-rebase-filename-regexp))
 
 (provide 'git-rebase)
 ;; Local Variables:
