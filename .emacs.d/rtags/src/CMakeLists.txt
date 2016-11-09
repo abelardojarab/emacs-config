@@ -13,7 +13,7 @@ if (RTAGS_BUILD_CLANG)
     ExternalProject_Add(llvmclang
         DOWNLOAD_COMMAND ${PROJECT_SOURCE_DIR}/scripts/getclang.sh 3.8.1
         SOURCE_DIR llvmclang-prefix/src/llvm
-        CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${CLANG_INSTALL_PATH} -DLLVM_BUILD_TOOLS=0
+        CMAKE_ARGS -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${CLANG_INSTALL_PATH} -DLLVM_BUILD_TOOLS=1
         LOG_DOWNLOAD 1            # Wrap download in script to log output
         LOG_UPDATE 1              # Wrap update in script to log output
         LOG_CONFIGURE 1           # Wrap configure in script to log output
@@ -21,9 +21,6 @@ if (RTAGS_BUILD_CLANG)
         LOG_TEST 1                # Wrap test in script to log output
         LOG_INSTALL 1             # Wrap install in script to log output
         )
-    set(LIBCLANG_LIBRARIES "${CLANG_INSTALL_PATH}/lib/libclang${CMAKE_SHARED_LIBRARY_SUFFIX}")
-    set(LIBCLANG_CXXFLAGS "-I${CLANG_INSTALL_PATH}/include -fPIC  -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS")
-    set(LIBCLANG_LIBDIR "${CLANG_INSTALL_PATH}/lib")
     if (CMAKE_SYSTEM_NAME MATCHES "Darwin")
         add_definitions("-DCLANG_INCLUDE=${CLANG_INSTALL_PATH}/include/c++/v1") # add libcxx include
     endif ()
@@ -97,6 +94,7 @@ endif ()
 add_definitions(
     "-DRTAGS_SOURCE_DIR=${CMAKE_CURRENT_SOURCE_DIR}"
     "-DCLANG_LIBDIR=${LIBCLANG_LIBDIR}"
+    "-DCLANG_VERSION=${LIBCLANG_VERSION_STRING}"
     "-DOS_${CMAKE_SYSTEM_NAME}"
     ${RCT_DEFINITIONS})
 
@@ -184,10 +182,10 @@ endif ()
 
 if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
     set_source_files_properties(AST.cpp PROPERTIES
-        COMPILE_FLAGS "-Wno-unused-parameter -Wno-unused-variable -ftemplate-depth=2000 -Wno-cast-qual")
+        COMPILE_FLAGS "-Wno-unused-parameter -Wno-unused-variable -ftemplate-depth=2000 -Wno-cast-qual -Wno-shadow")
 else ()
     set_source_files_properties(AST.cpp PROPERTIES
-        COMPILE_FLAGS "-Wno-unused-but-set-parameter -Wno-unused-parameter -Wno-unused-variable -ftemplate-depth=2000 -Wno-cast-qual")
+        COMPILE_FLAGS "-Wno-unused-but-set-parameter -Wno-unused-parameter -Wno-unused-variable -ftemplate-depth=2000 -Wno-cast-qual -Wno-shadow")
 endif()
 
 # RCT_LIBRARIES and stdc++ library must be at the end
@@ -236,6 +234,7 @@ endif ()
 set(RTAGS_ELISP_FILES
     rtags.el
     rtags-ac.el
+    rtags-helm.el
     company-rtags.el
     flycheck-rtags.el)
 
@@ -291,4 +290,9 @@ install(FILES ../bin/gcc-rtags-wrapper.sh DESTINATION bin
 install(FILES ../man/man7/rc.7 ../man/man7/rdm.7 DESTINATION share/man/man7/)
 if (NOT RTAGS_NO_ELISP_FILES)
     install(FILES ${RTAGS_ELISP_SOURCES} DESTINATION ${RTAGS_ELISP_INSTALL_LOCATION})
+endif ()
+
+if (CLANGTEST_ENABLED)
+    add_executable(clangtest clangtest.c)
+    target_link_libraries(clangtest ${LIBCLANG_LIBRARIES})
 endif ()

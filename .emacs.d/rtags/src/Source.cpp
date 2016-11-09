@@ -162,12 +162,16 @@ static inline String trim(const char *start, int size)
     return String(start, size);
 }
 
-static inline size_t hashIncludePaths(const List<Source::Include> &includes, const Path &buildRoot)
+static inline size_t hashIncludePaths(const List<Source::Include> &includes, const Path &buildRoot, Flags<Server::Option> flags)
 {
     size_t hash = 0;
     std::hash<Path> hasher;
     for (const auto &inc : includes) {
         size_t h;
+        if (flags & Server::SourceIgnoreIncludePathDifferencesInUsr && inc.path.startsWith("/usr/") && !inc.path.startsWith("/usr/home/")) {
+            continue;
+        }
+
         if (!buildRoot.isEmpty() && inc.path.startsWith(buildRoot)) {
             h = hasher(inc.path.mid(buildRoot.size()));
         } else {
@@ -230,6 +234,7 @@ static const char *valueArgs[] = {
 };
 
 static const char *blacklist[] = {
+    "--param",
     "-M",
     "-MD",
     "-MF",
@@ -240,8 +245,11 @@ static const char *blacklist[] = {
     "-MQ",
     "-MT",
     "-Og",
+    "-Wa,--32",
+    "-Wa,--64",
     "-Wl,--incremental-full",
     "-Wl,--incremental-patch,1",
+    "-Wl,--no-incremental",
     "-fbuild-session-file=",
     "-fbuild-session-timestamp=",
     "-fembed-bitcode",
@@ -259,7 +267,8 @@ static const char *blacklist[] = {
     "-masm=",
     "-mcpu=",
     "-mfpmath=",
-    "-mtune="
+    "-mtune=",
+    "-s"
 };
 
 static int compare(const void *s1, const void *s2)
@@ -385,7 +394,7 @@ static inline bool isCompiler(const Path &fullPath, const List<String> &environm
 }
 
 struct Input {
-    Path realPath, absolute;
+    Path realPath, absolute, unmolested;
     Source::Language language;
 };
 
@@ -497,12 +506,17 @@ List<Source> Source::parse(const String &cmdLine,
             (arg.startsWith('"') && arg.endsWith('"')))
             arg = arg.mid(1, arg.size() - 2);
         // ### is this even right?
-        if (arg.startsWith('-')) {
+        if (arg.size() > 1 && arg.startsWith('-')) {
             if (arg == "-E") {
                 warning() << "Preprocessing, ignore" << cmdLine;
                 return List<Source>();
-            } else if (arg == "-x") {
-                const String a = split.value(++i);
+            } else if (arg.startsWith("-x")) {
+                String a;
+                if (arg.size() == 2) {
+                    a = split.value(++i);
+                } else {
+                    a = arg.mid(2);
+                }
                 if (a == "c-header") {
                     language = CHeader;
                 } else if (a == "c++-header") {
@@ -613,10 +627,16 @@ List<Source> Source::parse(const String &cmdLine,
                     root.resolve();
                     arguments.append(root);
                 }
-            } else if (arg == "-o") {
-                if (i + 1 < s) {
+            } else if (arg.startsWith("-o")) {
+                Path p;
+                if (arg.size() > 2) {
+                    p = arg.mid(2);
+                } else if (i + 1 < s) {
+                    p = split.value(++i);
+                }
+                if (!p.isEmpty()) {
                     bool ok;
-                    Path p = Path::resolved(split.value(++i), Path::RealPath, path, &ok);
+                    p = Path::resolved(p, Path::RealPath, path, &ok);
                     // error() << p << ok << split.value(i) << Path::resolved(split.value(i), Path::MakeAbsolute);
                     if (!ok && !p.isAbsolute()) {
                         p.prepend(path); // the object file might not exist
@@ -651,7 +671,7 @@ List<Source> Source::parse(const String &cmdLine,
             } else {
                 const Path c = arg;
                 resolved = Path::resolved(arg, Path::RealPath, cwd);
-                if ((!resolved.extension() || !resolved.isHeader()) && !resolved.isSource()) {
+                if (arg != "-" && (!resolved.extension() || !resolved.isHeader()) && !resolved.isSource()) {
                     add = false;
                     if (i == 1) {
                         const Path inPath = findFileInPath(c, cwd, pathEnvironment);
@@ -666,7 +686,7 @@ List<Source> Source::parse(const String &cmdLine,
             if (add) {
                 const Language lang = language != NoLanguage ? language : guessLanguageFromSourceFile(resolved);
                 if (lang != NoLanguage) {
-                    inputs.append({resolved, Path::resolved(arg, Path::MakeAbsolute, cwd), lang});
+                    inputs.append({resolved, Path::resolved(arg, Path::MakeAbsolute, cwd), arg, lang});
                 } else {
                     warning() << "Can't figure out language for" << arg;
                 }
@@ -691,13 +711,15 @@ List<Source> Source::parse(const String &cmdLine,
             if (buildRoot.isDir())
                 buildRootId = Location::insertFile(buildRoot);
         }
-        includePathHash = ::hashIncludePaths(includePaths, buildRoot);
+        const Flags<Server::Option> serverFlags = Server::instance() ? Server::instance()->options().options : NullFlags;
+        includePathHash = ::hashIncludePaths(includePaths, buildRoot, serverFlags);
 
-        ret.resize(inputs.size());
-        int idx = 0;
+        ret.reserve(inputs.size());
         for (const auto input : inputs) {
             unresolvedInputLocations->append(input.absolute);
-            Source &source = ret[idx++];
+            if (input.unmolested == "-")
+                continue;
+            Source source;
             source.directory = path;
             source.fileId = Location::insertFile(input.realPath);
             source.extraCompiler = extraCompiler;
@@ -711,6 +733,7 @@ List<Source> Source::parse(const String &cmdLine,
             source.sysRootIndex = sysRootIndex;
             source.language = input.language;
             assert(source.language != NoLanguage);
+            ret.emplace_back(std::move(source));
         }
     }
     if (testLog(LogLevel::Warning))
@@ -752,7 +775,7 @@ static inline bool compareDefinesNoNDEBUG(const Set<Source::Define> &l, const Se
 
 static bool nextArg(List<String>::const_iterator &it,
                     const List<String>::const_iterator end,
-                    bool separateDebugAndRelease)
+                    Flags<Server::Option> flags)
 {
     while (it != end) {
         if (isBlacklisted(*it)) {
@@ -760,7 +783,9 @@ static bool nextArg(List<String>::const_iterator &it,
             ++it;
             if (val && it != end)
                 ++it;
-        } else if (!separateDebugAndRelease && (*it == "-g" || it->startsWith("-O"))) {
+        } else if (!(flags & Server::SeparateDebugAndRelease) && (*it == "-g" || it->startsWith("-O"))) {
+            ++it;
+        } else if (!(flags & Server::Separate32BitAnd64Bit) && (*it == "-m32" || *it == "-m64")) {
             ++it;
         } else {
             break;
@@ -774,16 +799,19 @@ bool Source::compareArguments(const Source &other) const
     assert(fileId == other.fileId);
 
     if  (includePathHash != other.includePathHash) {
+        warning() << "includepathhash is different";
         return false;
     }
 
     const Server *server = Server::instance();
-    const bool separateDebugAndRelease = server && server->options().options & Server::SeparateDebugAndRelease;
-    if (separateDebugAndRelease) {
+    const Flags<Server::Option> serverFlags = server ? server->options().options : NullFlags;
+    if (serverFlags & Server::SeparateDebugAndRelease) {
         if (defines != other.defines) {
+            warning() << "defines are different 1";
             return false;
         }
     } else if (!compareDefinesNoNDEBUG(defines, other.defines)) {
+        warning() << "defines are different 2";
         return false;
     }
 
@@ -793,44 +821,50 @@ bool Source::compareArguments(const Source &other) const
     const auto hisEnd = other.arguments.end();
 
     while (me != him) {
-        if (!nextArg(me, myEnd, separateDebugAndRelease))
+        if (!nextArg(me, myEnd, serverFlags))
             break;
-        if (!nextArg(him, hisEnd, separateDebugAndRelease))
+        if (!nextArg(him, hisEnd, serverFlags)) {
+            warning() << "Couldn't find arg for him" << *me;
             return false;
+        }
         if (*me != *him) {
+            warning() << "Args are different" << *me << *him;
             return false;
         }
         ++me;
         ++him;
     }
     if (him == hisEnd) {
+        warning() << "Args are the same";
         return true;
-    } else if (!nextArg(him, hisEnd, separateDebugAndRelease)) {
+    } else if (!nextArg(him, hisEnd, serverFlags)) {
+        warning() << "Args are the same";
         return true;
     }
+    warning() << "He has an arg that I don't have" << *him;
     return false;
 }
 
-List<String> Source::toCommandLine(Flags<CommandLineFlag> flags, bool *usedPch) const
+List<String> Source::toCommandLine(Flags<CommandLineFlag> f, bool *usedPch) const
 {
     if (usedPch)
         *usedPch = false;
     const Server *server = Server::instance();
     if (!server)
-        flags |= (ExcludeDefaultArguments|ExcludeDefaultDefines|ExcludeDefaultIncludePaths);
+        f |= (ExcludeDefaultArguments|ExcludeDefaultDefines|ExcludeDefaultIncludePaths);
 
     List<String> ret;
     ret.reserve(64);
-    if ((flags & IncludeCompiler) == IncludeCompiler) {
+    if ((f & IncludeCompiler) == IncludeCompiler) {
         ret.append(compiler());
     }
-    if (flags & IncludeExtraCompiler && !extraCompiler.isEmpty()) {
+    if (f & IncludeExtraCompiler && !extraCompiler.isEmpty()) {
         ret.append(extraCompiler);
     }
 
     Map<String, String> config;
     Set<String> remove;
-    if (flags & IncludeRTagsConfig) {
+    if (f & IncludeRTagsConfig) {
         config = RTags::rtagsConfig(sourceFile());
         remove = config.value("remove-arguments").split(";").toSet();
     }
@@ -839,7 +873,7 @@ List<String> Source::toCommandLine(Flags<CommandLineFlag> flags, bool *usedPch) 
         const String &arg = arguments.at(i);
         const bool hasValue = ::hasValue(arg);
         bool skip = false;
-        if (flags & FilterBlacklist && isBlacklisted(arg)) {
+        if (f & FilterBlacklist && isBlacklisted(arg)) {
             skip = true;
         }
         if (!skip && remove.contains(arg))
@@ -852,22 +886,22 @@ List<String> Source::toCommandLine(Flags<CommandLineFlag> flags, bool *usedPch) 
             ++i;
         }
     }
-    if (!(flags & ExcludeDefaultArguments)) {
+    if (!(f & ExcludeDefaultArguments)) {
         assert(server);
         for (const auto &arg : server->options().defaultArguments)
             ret.append(arg);
     }
 
-    if (flags & IncludeDefines) {
+    if (f & IncludeDefines) {
         for (const auto &def : defines)
-            ret += def.toString(flags);
-        if (!(flags & ExcludeDefaultIncludePaths)) {
+            ret += def.toString(f);
+        if (!(f & ExcludeDefaultIncludePaths)) {
             assert(server);
             for (const auto &def : server->options().defines)
-                ret += def.toString(flags);
+                ret += def.toString(f);
         }
     }
-    if (flags & IncludeIncludePaths) {
+    if (f & IncludeIncludePaths) {
         for (const auto &inc : includePaths) {
             switch (inc.type) {
             case Source::Include::Type_None:
@@ -890,7 +924,7 @@ List<String> Source::toCommandLine(Flags<CommandLineFlag> flags, bool *usedPch) 
                 break;
             case Source::Include::Type_FileInclude:
                 if (inc.isPch()) {
-                    if (flags & PCHEnabled) {
+                    if (f & PCHEnabled) {
                         if (usedPch)
                             *usedPch = true;
                         ret << "-include-pch" << (inc.path + ".gch");
@@ -901,7 +935,7 @@ List<String> Source::toCommandLine(Flags<CommandLineFlag> flags, bool *usedPch) 
                 break;
             }
         }
-        if (!(flags & ExcludeDefaultIncludePaths)) {
+        if (!(f & ExcludeDefaultIncludePaths)) {
             assert(server);
             for (const auto &inc : server->options().includePaths) {
                 switch (inc.type) {
@@ -930,11 +964,11 @@ List<String> Source::toCommandLine(Flags<CommandLineFlag> flags, bool *usedPch) 
             }
         }
     }
-    if (flags & IncludeRTagsConfig) {
+    if (f & IncludeRTagsConfig) {
         ret << config.value("add-arguments").split(' ');
     }
 
-    if (flags & IncludeSourceFile)
+    if (f & IncludeSourceFile)
         ret.append(sourceFile());
 
     return ret;

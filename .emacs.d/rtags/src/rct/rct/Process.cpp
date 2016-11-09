@@ -28,6 +28,9 @@ class ProcessThread : public Thread
 public:
     static void installProcessHandler();
     static void addPid(pid_t pid, Process* process, bool async);
+
+    /// Remove a pid that was previously added with addPid().
+    static void removePid(pid_t pid);
     static void shutdown();
     static void setPending(int pending);
 
@@ -40,6 +43,12 @@ private:
         Child,
         Stop
     };
+
+    /**
+     * Wakeup the listening thread, either because we are to be destructed from
+     * the static destructor, or because a child has terminated (sending
+     * SIGCHLD).
+     */
     static void wakeup(Signal sig);
 
     static void processSignalHandler(int sig);
@@ -122,6 +131,18 @@ void ProcessThread::addPid(pid_t pid, Process* process, bool async)
         sPendingPids.clear();
 }
 
+void ProcessThread::removePid(pid_t f_pid)
+{
+    std::lock_guard<std::mutex> lock(sProcessMutex);
+
+    auto it = sProcesses.find(f_pid);
+    if(it != sProcesses.end())
+    {
+        it->second.proc = nullptr;
+        it->second.loop = EventLoop::SharedPtr();
+    }
+}
+
 void ProcessThread::run()
 {
     ssize_t r;
@@ -137,7 +158,7 @@ void ProcessThread::run()
                 std::unique_lock<std::mutex> lock(sProcessMutex);
                 bool done = false;
                 do {
-                    //printf("testing pid %d\n", proc->first);
+                    // find out which process we're waking up on
                     eintrwrap(p, ::waitpid(0, &ret, WNOHANG));
                     switch(p) {
                     case 0:
@@ -153,23 +174,27 @@ void ProcessThread::run()
                         break;
                     default:
                         //printf("successfully waited for pid (got %d)\n", p);
+                        // child process with pid=p just exited.
                         if (WIFEXITED(ret)) {
                             ret = WEXITSTATUS(ret);
                         } else {
                             ret = Process::ReturnCrashed;
                         }
+                        // find the process object to this child process
                         auto proc = sProcesses.find(p);
                         if (proc != sProcesses.end()) {
                             Process *process = proc->second.proc;
-                            EventLoop::SharedPtr loop = proc->second.loop.lock();
-                            sProcesses.erase(proc++);
-                            lock.unlock();
-                            if (loop) {
-                                loop->callLater([process, ret]() { process->finish(ret); });
-                            } else {
-                                process->finish(ret);
+                            if(process != nullptr) {
+                                EventLoop::SharedPtr loop = proc->second.loop.lock();
+                                sProcesses.erase(proc++);
+                                lock.unlock();
+                                if (loop) {
+                                    loop->callLater([process, ret]() { process->finish(ret); });
+                                } else {
+                                    process->finish(ret);
+                                }
+                                lock.lock();
                             }
-                            lock.lock();
                         } else {
                             if (sPending) {
                                 assert(sPendingPids.find(p) == sPendingPids.end());
@@ -308,13 +333,13 @@ Path Process::findCommand(const String &command, const char *path)
     return Path();
 }
 
-Process::ExecState Process::startInternal(const Path &command, const List<String> &a, const List<String> &environ,
+Process::ExecState Process::startInternal(const Path &command, const List<String> &a, const List<String> &environment,
                                           int timeout, unsigned int execFlags)
 {
     mErrorString.clear();
 
     const char *path = 0;
-    for (const auto &it : environ) {
+    for (const auto &it : environment) {
         if (it.startsWith("PATH=")) {
             path = it.constData() + 5;
             break;
@@ -358,15 +383,15 @@ Process::ExecState Process::startInternal(const Path &command, const List<String
         ++pos;
     }
 
-    const bool hasEnviron = !environ.empty();
+    const bool hasEnviron = !environment.empty();
 
-    const char **env = new const char*[environ.size() + 1];
-    env[environ.size()] = 0;
+    const char **env = new const char*[environment.size() + 1];
+    env[environment.size()] = 0;
 
     if (hasEnviron) {
         pos = 0;
         //printf("fork, about to exec '%s'\n", cmd.nullTerminated());
-        for (List<String>::const_iterator it = environ.begin(); it != environ.end(); ++it) {
+        for (List<String>::const_iterator it = environment.begin(); it != environment.end(); ++it) {
             env[pos] = it->nullTerminated();
             //printf("env: '%s'\n", env[pos]);
             ++pos;
@@ -489,12 +514,11 @@ Process::ExecState Process::startInternal(const Path &command, const List<String
             }
         } else {
             // select and stuff
-            timeval started, now, *selecttime = 0;
+            timeval started, now, timeoutForSelect;
             if (timeout > 0) {
                 Rct::gettime(&started);
-                now = started;
-                selecttime = &now;
-                Rct::timevalAdd(selecttime, timeout);
+                timeoutForSelect.tv_sec = timeout / 1000;
+                timeoutForSelect.tv_usec = (timeout % 1000) * 1000;
             }
             if (!(execFlags & NoCloseStdIn)) {
                 closeStdIn(CloseForce);
@@ -517,7 +541,7 @@ Process::ExecState Process::startInternal(const Path &command, const List<String
                     max = std::max(max, mStdIn[1]);
                 }
                 int ret;
-                eintrwrap(ret, ::select(max + 1, &rfds, &wfds, 0, selecttime));
+                eintrwrap(ret, ::select(max + 1, &rfds, &wfds, 0, timeout > 0 ? &timeoutForSelect : 0));
                 if (ret == -1) { // ow
                     mErrorString = "Sync select failed: ";
                     mErrorString += Rct::strerror();
@@ -551,17 +575,29 @@ Process::ExecState Process::startInternal(const Path &command, const List<String
                     return Done;
                 }
                 if (timeout) {
-                    assert(selecttime);
-                    Rct::gettime(selecttime);
-                    const int lasted = Rct::timevalDiff(selecttime, &started);
+                    Rct::gettime(&now);
+
+                    // lasted is the amount of time we spent until now in ms
+                    const int lasted = Rct::timevalDiff(&now, &started);
                     if (lasted >= timeout) {
                         // timeout, we're done
                         kill(); // attempt to kill
+
+                        // we need to remove this Process object from
+                        // ProcessThread, because ProcessThread will try to
+                        // finish() this object. However, this object may
+                        // already have been deleted *before* ProcessThread
+                        // runs, creating a segfault.
+                        ProcessThread::removePid(mPid);
+
                         mErrorString = "Timed out";
                         return TimedOut;
                     }
-                    *selecttime = started;
-                    Rct::timevalAdd(selecttime, timeout);
+
+                    // (timeout - lasted) is guaranteed to be > 0 because of
+                    // the check above.
+                    timeoutForSelect.tv_sec = (timeout - lasted) / 1000;
+                    timeoutForSelect.tv_usec = ((timeout - lasted) % 1000) * 1000;
                 }
             }
         }
@@ -569,10 +605,10 @@ Process::ExecState Process::startInternal(const Path &command, const List<String
     return Done;
 }
 
-bool Process::start(const Path &command, const List<String> &a, const List<String> &environ)
+bool Process::start(const Path &command, const List<String> &a, const List<String> &environment)
 {
     mMode = Async;
-    return startInternal(command, a, environ) == Done;
+    return startInternal(command, a, environment) == Done;
 }
 
 Process::ExecState Process::exec(const Path &command, const List<String> &arguments, int timeout, unsigned int flags)
@@ -581,11 +617,11 @@ Process::ExecState Process::exec(const Path &command, const List<String> &argume
     return startInternal(command, arguments, List<String>(), timeout, flags);
 }
 
-Process::ExecState Process::exec(const Path &command, const List<String> &a, const List<String> &environ,
-                                 int timeout, unsigned int flags)
+Process::ExecState Process::exec(const Path &command, const List<String> &a,
+                                 const List<String> &environment, int timeout, unsigned int flags)
 {
     mMode = Sync;
-    return startInternal(command, a, environ, timeout, flags);
+    return startInternal(command, a, environment, timeout, flags);
 }
 
 void Process::write(const String &data)
