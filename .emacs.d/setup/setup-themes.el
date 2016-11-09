@@ -128,7 +128,7 @@
 ;; Choose different themes depending if we are using GUI or not
 ;; Console colors are enabled if "export TERM=xterm-256color" is added into .bashrc
 (if (display-graphic-p)
-    (load-theme 'spacemacs-dark t)
+    (load-theme 'monokai t)
   (load-theme 'monokai t))
 
 ;; So, fringe is nice actually, but the background for it kind of sucks in leuven
@@ -141,8 +141,6 @@
   (custom-set-faces
    `(fringe ((t (:background ,my/fringe-background-color))))))
 (add-hook 'after-init-hook #'my/set-faces)
-(if (display-graphic-p)
-    (my/set-faces))
 
 ;; Inherit theme for new frames
 (setq frame-inherited-parameters '(width height face background-mode
