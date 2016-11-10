@@ -125,9 +125,10 @@ non-nil."
                     (concat "/home/" user-login-name) "~"
                     (or buffer-file-name "%b"))))))
 
-;; Scrollbar
+;; Adaptive scrollbar
 (use-package lawlist-scroll-mode
   :if (display-graphic-p)
+  :diminish (lawlist-scroll-bar-mode)
   :init (set-scroll-bar-mode 'right)
   :config (add-hook 'prog-mode-hook (lambda () (lawlist-scroll-bar-mode 1))))
 
