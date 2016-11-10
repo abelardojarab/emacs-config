@@ -106,7 +106,8 @@ non-nil."
                         ;; turn off `linum-mode' when there are more than 5000 lines
                         (if (and (> (buffer-size)
                                     (* 5000 80)))
-                            (linum-mode -1))))
+                            (linum-mode -1)
+                          (linum-mode 1))))
 
             (defadvice linum-update-window (around linum-dynamic activate)
               (let* ((w (length (number-to-string
@@ -127,7 +128,8 @@ non-nil."
 ;; Scrollbar
 (use-package lawlist-scroll-mode
   :if (display-graphic-p)
-  :init (set-scroll-bar-mode 'right))
+  :init (set-scroll-bar-mode 'right)
+  :config (add-hook 'prog-mode-hook (lambda () (lawlist-scroll-mode 1))))
 
 ;; Showkey as typed
 (use-package showkey

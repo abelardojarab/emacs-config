@@ -132,7 +132,7 @@
 
 ;; Persistent scratch buffer
 (use-package persistent-scratch
-  :load-path (lambda () (expand-file-name "persistent-scratch/" user-emacs-directory)
+  :load-path (lambda () (expand-file-name "persistent-scratch/" user-emacs-directory))
   :config (persistent-scratch-setup-default))
 
 (provide 'setup-general)
