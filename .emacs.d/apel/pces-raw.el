@@ -56,16 +56,16 @@
 ;;;
 
 (defmacro as-binary-process (&rest body)
-  (` (let (selective-display)	; Disable ^M to nl translation.
-       (,@ body))))
+  `(let (selective-display)	; Disable ^M to nl translation.
+     ,@ body))
 
 (defmacro as-binary-input-file (&rest body)
-  (` (let ((emx-binary-mode t)) ; Stop CRLF to LF conversion in OS/2
-       (,@ body))))
+  `(let ((emx-binary-mode t)) ; Stop CRLF to LF conversion in OS/2
+     ,@ body))
 
 (defmacro as-binary-output-file (&rest body)
-  (` (let ((emx-binary-mode t)) ; Stop CRLF to LF conversion in OS/2
-       (,@ body))))
+  `(let ((emx-binary-mode t)) ; Stop CRLF to LF conversion in OS/2
+     ,@ body))
 
 (defun write-region-as-binary (start end filename
 				     &optional append visit lockname)
@@ -76,7 +76,7 @@
 (defun insert-file-contents-as-binary (filename
 				       &optional visit beg end replace)
   "Like `insert-file-contents', q.v., but don't code and format conversion.
-Like `insert-file-contents-literary', but it allows find-file-hooks,
+Like `insert-file-contents-literally', but it allows find-file-hooks,
 automatic uncompression, etc.
 
 Namely this function ensures that only format decoding and character

@@ -73,6 +73,8 @@
      ((ascii latin-iso8859-2)				. iso-8859-2)
      ((ascii latin-iso8859-3)				. iso-8859-3)
      ((ascii latin-iso8859-4)				. iso-8859-4)
+     ,(if (find-coding-system 'iso-8859-15)
+	  '((ascii latin-iso8859-15)			. iso-8859-15))
      ;;((ascii cyrillic-iso8859-5)			. iso-8859-5)
      ((ascii cyrillic-iso8859-5)			. koi8-r)
      ((ascii arabic-iso8859-6)				. iso-8859-6)
@@ -81,8 +83,6 @@
      ((ascii latin-iso8859-9)				. iso-8859-9)
      ,(if (find-coding-system 'iso-8859-14)
 	  '((ascii latin-iso8859-14)			. iso-8859-14))
-     ,(if (find-coding-system 'iso-8859-15)
-	  '((ascii latin-iso8859-15)			. iso-8859-15))
      ((ascii latin-jisx0201
 	     japanese-jisx0208-1978 japanese-jisx0208)	. iso-2022-jp)
      ((ascii latin-jisx0201
@@ -90,11 +90,15 @@
      ((ascii korean-ksc5601)				. euc-kr)
      ((ascii chinese-gb2312)				. gb2312)
      ((ascii chinese-big5-1 chinese-big5-2)		. big5)
-     ((ascii thai-tis620 composition)			. tis-620)
-     ((ascii latin-iso8859-1 greek-iso8859-7
-	     latin-jisx0201 japanese-jisx0208-1978
-	     chinese-gb2312 japanese-jisx0208
-	     korean-ksc5601 japanese-jisx0212)		. iso-2022-jp-2)
+     ,(static-cond
+       ((null (string< mule-version "6.0"))
+	'((ascii thai-tis620)				. tis-620))
+       (t
+	'((ascii thai-tis620 composition)      		. tis-620)))
+     ;; ((ascii latin-iso8859-1 greek-iso8859-7
+     ;; 	     latin-jisx0201 japanese-jisx0208-1978
+     ;; 	     chinese-gb2312 japanese-jisx0208
+     ;; 	     korean-ksc5601 japanese-jisx0212)		. iso-2022-jp-2)
      ;;((ascii latin-iso8859-1 greek-iso8859-7
      ;;        latin-jisx0201 japanese-jisx0208-1978
      ;;        chinese-gb2312 japanese-jisx0208
@@ -116,12 +120,25 @@
   (plist-get (coding-system-plist coding-system) prop)
   )
 
+(defvar coding-system-to-mime-charset-exclude-regexp
+  "^unknown$\\|^x-")
+
 (defun coding-system-to-mime-charset (coding-system)
   "Convert CODING-SYSTEM to a MIME-charset.
 Return nil if corresponding MIME-charset is not found."
-  (or (car (rassq coding-system mime-charset-coding-system-alist))
-      (coding-system-get coding-system 'mime-charset)
-      ))
+  (or (coding-system-get coding-system 'mime-charset)
+      (let ((coding (coding-system-base coding-system))
+	    (alist mime-charset-coding-system-alist)
+	    result)
+	(while alist
+	  (if (eq (coding-system-base (cdar alist)) coding)
+	      (setq result (caar alist)
+		    alist nil)
+	    (setq alist (cdr alist))))
+	(unless (and coding-system-to-mime-charset-exclude-regexp
+		     (string-match coding-system-to-mime-charset-exclude-regexp
+				   (symbol-name result)))
+	  result))))
 
 (defun-maybe-cond mime-charset-list ()
   "Return a list of all existing MIME-charset."
@@ -131,12 +148,9 @@ Return nil if corresponding MIME-charset is not found."
 	 cs)
      (while rest
        (setq cs (car rest))
-       (unless (rassq cs mime-charset-coding-system-alist)
-	 (if (setq cs (coding-system-get cs 'mime-charset))
-	     (or (rassq cs mime-charset-coding-system-alist)
-		 (memq cs dest)  
-		 (setq dest (cons cs dest))
-		 )))
+       (when (and (setq cs (coding-system-get cs 'mime-charset))
+		  (null (memq cs dest)))
+	 (setq dest (cons cs dest)))
        (setq rest (cdr rest)))
      dest))
    (t
@@ -154,10 +168,9 @@ Return nil if corresponding MIME-charset is not found."
 			      (string-match "(MIME:[ \t]*\\([^,)]+\\)" cs)
 			      (match-string 1 cs))))
 	    (setq cs (intern (downcase cs)))
-	    (or (rassq cs mime-charset-coding-system-alist)
-		(memq cs dest)
-		(setq dest (cons cs dest))
-		)))
+	    (unless (memq cs dest)
+	      (setq dest (cons cs dest))
+	      )))
 	(setq rest (cdr rest)))
       dest)
     ))

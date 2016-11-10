@@ -3,7 +3,7 @@
 ;; Copyright (C) 1994,1995,1996,1997 Free Software Foundation, Inc.
 
 ;; Author: MORIOKA Tomohiko <morioka@jaist.ac.jp>
-;; Version: $Id: atype.el,v 6.6 1997/03/10 14:11:23 morioka Exp $
+;; Version: $Id$
 ;; Keywords: atype
 
 ;; This file is part of APEL (A Portable Emacs Library).

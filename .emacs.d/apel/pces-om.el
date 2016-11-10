@@ -227,24 +227,24 @@ applied to `coding-system-for-write'."
 (make-coding-system 'binary nil ?= "No conversion")
 
 (defmacro as-binary-process (&rest body)
-  (` (let (selective-display	; Disable ^M to nl translation.
-	   ;; Mule
-	   mc-flag
-	   (default-process-coding-system (cons *noconv* *noconv*))
-	   program-coding-system-alist)
-       (,@ body))))
+  `(let (selective-display	; Disable ^M to nl translation.
+	 ;; Mule
+	 mc-flag
+	 (default-process-coding-system (cons *noconv* *noconv*))
+	 program-coding-system-alist)
+     ,@ body))
 
 (defmacro as-binary-input-file (&rest body)
-  (` (let (mc-flag
-	   (file-coding-system-for-read *noconv*)
-	   )
-       (,@ body))))
+  `(let (mc-flag
+	 (file-coding-system-for-read *noconv*)
+	 )
+     ,@ body))
 
 (defmacro as-binary-output-file (&rest body)
-  (` (let (mc-flag
-	   (file-coding-system *noconv*)
-	   )
-       (,@ body))))
+  `(let (mc-flag
+	 (file-coding-system *noconv*)
+	 )
+     ,@ body))
 
 (defalias 'set-process-input-coding-system 'set-process-coding-system)
 
@@ -254,7 +254,7 @@ applied to `coding-system-for-write'."
   (defun insert-file-contents-as-binary (filename
 					 &optional visit beg end replace)
     "Like `insert-file-contents', q.v., but don't code and format conversion.
-Like `insert-file-contents-literary', but it allows find-file-hooks,
+Like `insert-file-contents-literally', but it allows find-file-hooks,
 automatic uncompression, etc.
 
 Namely this function ensures that only format decoding and character
@@ -267,7 +267,7 @@ code conversion will not take place."
   (defun insert-file-contents-as-binary (filename
 					 &optional visit beg end replace)
     "Like `insert-file-contents', q.v., but don't code and format conversion.
-Like `insert-file-contents-literary', but it allows find-file-hooks,
+Like `insert-file-contents-literally', but it allows find-file-hooks,
 automatic uncompression, etc.
 
 Namely this function ensures that only format decoding and character
@@ -279,7 +279,7 @@ code conversion will not take place."
 (defun insert-file-contents-as-raw-text (filename
 					 &optional visit beg end replace)
   "Like `insert-file-contents', q.v., but don't code and format conversion.
-Like `insert-file-contents-literary', but it allows find-file-hooks,
+Like `insert-file-contents-literally', but it allows find-file-hooks,
 automatic uncompression, etc.
 Like `insert-file-contents-as-binary', but it converts line-break
 code."

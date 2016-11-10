@@ -3,7 +3,7 @@
 ;; Copyright (C) 1996,1997 Free Software Foundation, Inc.
 
 ;; Author: MORIOKA Tomohiko <morioka@jaist.ac.jp>
-;; Version: $Id: file-detect.el,v 7.1 1997/11/08 07:40:52 morioka Exp $
+;; Version: $Id$
 ;; Keywords: file detection, install, module
 ;; Status: obsoleted
 

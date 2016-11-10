@@ -1,6 +1,6 @@
 ;;; elmo-vars.el --- User variables for ELMO. -*- coding: iso-2022-jp-unix -*-
 
-;; Copyright (C) 1998,1999,2000 Yuuichi Teranishi <teranisi@gohome.org>
+;; Copyright (C) 1998,1999,2000,2016 Yuuichi Teranishi <teranisi@gohome.org>
 
 ;; Author: Yuuichi Teranishi <teranisi@gohome.org>
 ;; Keywords: mail, net news
@@ -28,7 +28,8 @@
 
 ;;; Code:
 ;;
-(require 'poe)
+(ignore-errors
+  (require 'poe))
 (require 'path-util)
 
 ;; silence byte compiler
@@ -43,8 +44,8 @@
     (void-variable
      (let ((kwds '(:cc :date :extra :message-id :number :references :subject)))
        (while kwds
-	 (set (car kwds) (car kwds))
-	 (setq kwds (cdr kwds)))))))
+     (set (car kwds) (car kwds))
+     (setq kwds (cdr kwds)))))))
 
 (defgroup elmo nil
   "ELMO, Elisp Library for Message Orchestration."
@@ -82,15 +83,15 @@ you have to add it to `elmo-digest-flags'.
 (defcustom elmo-msgdb-default-type 'standard
   "*Default type of Message Database for ELMO."
   :type '(radio (const legacy)
-		(const standard))
+        (const standard))
   :group 'elmo
   :group 'elmo-setting)
 
 (defcustom elmo-msgdb-convert-type 'auto
   "*MODB conversion type."
   :type '(radio (const sync)
-		(const auto)
-		(const :tag "No convert" nil))
+        (const auto)
+        (const :tag "No convert" nil))
   :group 'elmo
   :group 'elmo-setting)
 
@@ -112,7 +113,7 @@ you have to add it to `elmo-digest-flags'.
 (defcustom elmo-passwd-life-time nil
   "*Duration of ELMO Password in seconds.  nil means infinity."
   :type '(choice (const :tag "Infinity" nil)
-		 number)
+         number)
   :group 'elmo
   :group 'elmo-setting)
 
@@ -144,16 +145,16 @@ you have to add it to `elmo-digest-flags'.
 (defcustom elmo-imap4-default-authenticate-type 'login
   "*Default Authentication type for IMAP4."
   :type '(radio (const :tag "encoded password transmission (login)" login)
-		(const :tag "CRAM-MD5 authentication (cram-md5)" cram-md5)
-		(const :tag "DIGEST-MD5 authentication (digest-md5)" digest-md5)
-		(const :tag "plain password transmission (clear)" clear)
-		(const :tag "NTLM authentication (ntlm)" ntlm)
-		(function :tag "Other"))
+     (const :tag "CRAM-MD5 authentication (cram-md5)" cram-md5)
+     (const :tag "DIGEST-MD5 authentication (digest-md5)" digest-md5)
+     (const :tag "plain password transmission (clear)" clear)
+     (const :tag "NTLM authentication (ntlm)" ntlm)
+     (function :tag "Other"))
   :group 'elmo)
 
 (defcustom elmo-imap4-default-user (or (getenv "USER")
-				       (getenv "LOGNAME")
-				       (user-login-name))
+                    (getenv "LOGNAME")
+                    (user-login-name))
   "*Default username for IMAP4."
   :type 'string
   :group 'elmo
@@ -187,7 +188,7 @@ This is taken precedence over `elmo-network-stream-type-alist'.")
 (defcustom elmo-nntp-default-user nil
   "*Default User of NNTP.  nil means no user authentication."
   :type '(choice (const nil)
-		 string)
+      string)
   :group 'elmo
   :group 'elmo-setting)
 
@@ -211,8 +212,8 @@ This is taken precedence over `elmo-network-stream-type-alist'.")
 ;;; POP3
 
 (defcustom elmo-pop3-default-user (or (getenv "USER")
-				      (getenv "LOGNAME")
-				      (user-login-name))
+                   (getenv "LOGNAME")
+                   (user-login-name))
   "*Default username for POP3."
   :type 'string
   :group 'elmo
@@ -227,11 +228,11 @@ This is taken precedence over `elmo-network-stream-type-alist'.")
 (defcustom elmo-pop3-default-authenticate-type 'user
   "*Default Authentication type for POP3."
   :type '(radio (const :tag "plain password transmission (user)" user)
-		(const :tag "APOP authentication (apop)" apop)
-		(const :tag "CRAM-MD5 authentication (cram-md5)" cram-md5)
-		(const :tag "DIGEST-MD5 authentication (digest-md5)" digest-md5)
-		(const :tag "NTLM authentication (ntlm)" ntlm)
-		(function :tag "Other"))
+     (const :tag "APOP authentication (apop)" apop)
+     (const :tag "CRAM-MD5 authentication (cram-md5)" cram-md5)
+     (const :tag "DIGEST-MD5 authentication (digest-md5)" digest-md5)
+     (const :tag "NTLM authentication (ntlm)" ntlm)
+     (function :tag "Other"))
   :group 'elmo)
 
 (defcustom elmo-pop3-default-port 110
@@ -321,9 +322,9 @@ If function, return value of function.")
 
 (defvar elmo-plug-on-exclude-servers
   (list "localhost"
-	(system-name)
-	(and (string-match "[^.]+" (system-name))
-	     (substring (system-name) 0 (match-end 0)))))
+ (system-name)
+ (and (string-match "[^.]+" (system-name))
+      (substring (system-name) 0 (match-end 0)))))
 
 (defvar elmo-plugged-alist nil)
 
@@ -345,35 +346,35 @@ If function, return value of function.")
 
 (defvar elmo-database-dl-handle
   (if (and (fboundp 'dynamic-link)
-	   (file-exists-p
-	    elmo-database-dl-module))
+    (file-exists-p
+     elmo-database-dl-module))
       (if (fboundp 'open-database)
-	  t ;;
-	(dynamic-link elmo-database-dl-module))))
+   t ;;
+ (dynamic-link elmo-database-dl-module))))
 
 (if (and elmo-database-dl-handle
-	 (integerp elmo-database-dl-handle))
+  (integerp elmo-database-dl-handle))
     (dynamic-call "emacs_database_init" elmo-database-dl-handle))
 
 (defvar elmo-use-database (or (featurep 'dbm)
-			      (featurep 'gnudbm)
-			      (featurep 'berkdb)
-			      (featurep 'berkeley-db)
-			      ;; static/dl-database
-			      (fboundp 'open-database)))
+               (featurep 'gnudbm)
+               (featurep 'berkdb)
+               (featurep 'berkeley-db)
+               ;; static/dl-database
+               (fboundp 'open-database)))
 
 (defvar elmo-date-match t
   "Date match is available or not.")
 
 (defvar elmo-network-stream-type-alist
   `(("!" ssl ,@(cond
-		((and (fboundp 'gnutls-available-p)
-		      (gnutls-available-p))
-		 '(gnutls open-gnutls-stream))
-		((module-installed-p 'tls)
-		 '(tls    open-tls-stream))
-		(t
-		 '(ssl    open-ssl-stream))))
+     ((and (fboundp 'gnutls-available-p)
+           (gnutls-available-p))
+      '(gnutls open-gnutls-stream))
+     ((module-installed-p 'tls)
+      '(tls    open-tls-stream))
+     (t
+      '(ssl    open-ssl-stream))))
     ("!!"     starttls  starttls starttls-open-stream)
     ("!socks" socks     socks    socks-open-network-stream)
     ("!direct" direct   nil   open-network-stream))
@@ -452,7 +453,7 @@ Arguments for this function are NAME, BUFFER, HOST and SERVICE.")
   "Global variable for storing disconnected operation queues.")
 
 (defcustom elmo-mime-display-as-is-coding-system (if (boundp 'MULE)
-						     '*autoconv* 'undecided)
+                          '*autoconv* 'undecided)
   "*Coding system used when message is displayed as is."
   :type 'symbol
   :group 'elmo)
@@ -468,13 +469,13 @@ Arguments for this function are NAME, BUFFER, HOST and SERVICE.")
     (delivered-to "^mailing list \\([^@]+\\)@"))
   "*List of spec to extract mailing list name from field value."
   :type '(repeat
-	  (choice (symbol :tag "Field Name")
-		  (list (symbol :tag "Field Name")
-			(repeat
-			 :inline symbol
-			 (choice regexp
-				 (cons regexp
-				       (integer :tag "Match Index")))))))
+   (choice (symbol :tag "Field Name")
+       (list (symbol :tag "Field Name")
+         (repeat
+          :inline symbol
+          (choice regexp
+              (cons regexp
+                    (integer :tag "Match Index")))))))
   :group 'elmo)
 
 (defcustom elmo-mailing-list-count-spec-list
@@ -485,13 +486,13 @@ Arguments for this function are NAME, BUFFER, HOST and SERVICE.")
     (return-path "^<[^@>]+-return-\\([0-9]+\\)-"))
   "*List of spec to extract mailing list count from field value."
   :type '(repeat
-	  (choice (symbol :tag "Field Name")
-		  (list (symbol :tag "Field Name")
-			(repeat
-			 :inline symbol
-			 (choice regexp
-				 (cons regexp
-				       (integer :tag "Match Index")))))))
+   (choice (symbol :tag "Field Name")
+       (list (symbol :tag "Field Name")
+         (repeat
+          :inline symbol
+          (choice regexp
+              (cons regexp
+                    (integer :tag "Match Index")))))))
   :group 'elmo)
 
 (require 'product)

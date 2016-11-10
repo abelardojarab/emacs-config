@@ -110,7 +110,7 @@ Normally the return value is FEATURE."
 	  "\
 Extract a value from a property list.
 PLIST is a property list, which is a list of the form
-\(PROP1 VALUE1 PROP2 VALUE2...\).  This function returns the value
+(PROP1 VALUE1 PROP2 VALUE2...).  This function returns the value
 corresponding to the given PROP, or nil if PROP is not
 one of the properties on the list."
 	  (setplist 'plist-get-internal-symbol plist)
@@ -145,10 +145,10 @@ one of the properties on the list."
 	  "\
 Change value in PLIST of PROP to VAL.
 PLIST is a property list, which is a list of the form
-\(PROP1 VALUE1 PROP2 VALUE2 ...\).  PROP is a symbol and VAL is any object.
+(PROP1 VALUE1 PROP2 VALUE2 ...).  PROP is a symbol and VAL is any object.
 If PROP is already a property on the list, its value is set to VAL,
 otherwise the new PROP VAL pair is added.  The new plist is returned;
-use `\(setq x \(plist-put x prop val\)\)' to be sure to use the new value.
+use `(setq x (plist-put x prop val))' to be sure to use the new value.
 The PLIST is modified by side effects."
 	  (setplist 'plist-put-internal-symbol plist)
 	  (put 'plist-put-internal-symbol prop val)
@@ -916,20 +916,20 @@ APEL provides this as dummy for compatibility.")
 (defmacro-maybe save-current-buffer (&rest body)
   "Save the current buffer; execute BODY; restore the current buffer.
 Executes BODY just like `progn'."
-  (` (let ((orig-buffer (current-buffer)))
-       (unwind-protect
-	   (progn (,@ body))
-	 (if (buffer-live-p orig-buffer)
-	     (set-buffer orig-buffer))))))
+  `(let ((orig-buffer (current-buffer)))
+     (unwind-protect
+         (progn ,@ body)
+       (if (buffer-live-p orig-buffer)
+           (set-buffer orig-buffer)))))
 
 ;; Emacs 20.1/XEmacs 20.3(?) and later: (with-current-buffer BUFFER &rest BODY)
 (defmacro-maybe with-current-buffer (buffer &rest body)
   "Execute the forms in BODY with BUFFER as the current buffer.
 The value returned is the value of the last form in BODY.
 See also `with-temp-buffer'."
-  (` (save-current-buffer
-       (set-buffer (, buffer))
-       (,@ body))))
+  `(save-current-buffer
+     (set-buffer ,buffer)
+     ,@ body))
 
 ;; Emacs 20.1/XEmacs 20.3(?) and later: (with-temp-file FILE &rest FORMS)
 (defmacro-maybe with-temp-file (file &rest forms)
@@ -938,18 +938,18 @@ The value of the last form in FORMS is returned, like `progn'.
 See also `with-temp-buffer'."
   (let ((temp-file (make-symbol "temp-file"))
 	(temp-buffer (make-symbol "temp-buffer")))
-    (` (let (((, temp-file) (, file))
-	     ((, temp-buffer)
-	      (get-buffer-create (generate-new-buffer-name " *temp file*"))))
-	 (unwind-protect
-	     (prog1
-		 (with-current-buffer (, temp-buffer)
-		   (,@ forms))
-	       (with-current-buffer (, temp-buffer)
-		 (widen)
-		 (write-region (point-min) (point-max) (, temp-file) nil 0)))
-	   (and (buffer-name (, temp-buffer))
-		(kill-buffer (, temp-buffer))))))))
+    `(let ((,temp-file ,file)
+           (,temp-buffer
+            (get-buffer-create (generate-new-buffer-name " *temp file*"))))
+       (unwind-protect
+           (prog1
+               (with-current-buffer ,temp-buffer
+                 ,@forms)
+             (with-current-buffer ,temp-buffer
+               (widen)
+               (write-region (point-min) (point-max) ,temp-file nil 0)))
+         (and (buffer-name ,temp-buffer)
+              (kill-buffer ,temp-buffer))))))
 
 ;; Emacs 20.4 and later: (with-temp-message MESSAGE &rest BODY)
 ;; This macro uses `current-message', which appears in v20.
@@ -965,41 +965,41 @@ If MESSAGE is nil, the echo area and message log buffer are unchanged.
 Use a MESSAGE of \"\" to temporarily clear the echo area."
     (let ((current-message (make-symbol "current-message"))
 	  (temp-message (make-symbol "with-temp-message")))
-      (` (let (((, temp-message) (, message))
-	       ((, current-message)))
-	   (unwind-protect
-	       (progn
-		 (when (, temp-message)
-		   (setq (, current-message) (current-message))
-		   (message "%s" (, temp-message))
-		   (,@ body))
-		 (and (, temp-message) (, current-message)
-		      (message "%s" (, current-message))))))))))
+      `(let ((,temp-message ,message)
+             (,current-message))
+         (unwind-protect
+             (progn
+               (when ,temp-message
+                 (setq ,current-message (current-message))
+                 (message "%s" ,temp-message)
+                 ,@ body)
+               (and ,temp-message ,current-message
+                    (message "%s" ,current-message))))))))
 
 ;; Emacs 20.1/XEmacs 20.3(?) and later: (with-temp-buffer &rest FORMS)
 (defmacro-maybe with-temp-buffer (&rest forms)
   "Create a temporary buffer, and evaluate FORMS there like `progn'.
 See also `with-temp-file' and `with-output-to-string'."
   (let ((temp-buffer (make-symbol "temp-buffer")))
-    (` (let (((, temp-buffer)
-	      (get-buffer-create (generate-new-buffer-name " *temp*"))))
-	 (unwind-protect
-	     (with-current-buffer (, temp-buffer)
-	       (,@ forms))
-	   (and (buffer-name (, temp-buffer))
-		(kill-buffer (, temp-buffer))))))))
+    `(let ((,temp-buffer
+            (get-buffer-create (generate-new-buffer-name " *temp*"))))
+       (unwind-protect
+           (with-current-buffer ,temp-buffer
+             ,@ forms)
+         (and (buffer-name ,temp-buffer)
+              (kill-buffer ,temp-buffer))))))
 
 ;; Emacs 20.1/XEmacs 20.3(?) and later: (with-output-to-string &rest BODY)
 (defmacro-maybe with-output-to-string (&rest body)
   "Execute BODY, return the text it sent to `standard-output', as a string."
-  (` (let ((standard-output
-	    (get-buffer-create (generate-new-buffer-name " *string-output*"))))
-       (let ((standard-output standard-output))
-	 (,@ body))
-       (with-current-buffer standard-output
-	 (prog1
-	     (buffer-string)
-	   (kill-buffer nil))))))
+  `(let ((standard-output
+          (get-buffer-create (generate-new-buffer-name " *string-output*"))))
+     (let ((standard-output standard-output))
+       ,@ body)
+     (with-current-buffer standard-output
+       (prog1
+           (buffer-string)
+         (kill-buffer nil)))))
 
 ;; Emacs 20.1 and later: (combine-after-change-calls &rest BODY)
 (defmacro-maybe combine-after-change-calls (&rest body)
@@ -1079,11 +1079,11 @@ If the replaced text has at least one word starting with a capital letter,
 then capitalize each word in NEWTEXT.
 
 If third arg LITERAL is non-nil, insert NEWTEXT literally.
-Otherwise treat `\' as special:
-  `\&' in NEWTEXT means substitute original matched text.
-  `\N' means substitute what matched the Nth `\(...\)'.
+Otherwise treat `\\' as special:
+  `\\&' in NEWTEXT means substitute original matched text.
+  `\\N' means substitute what matched the Nth `\\(...\\)'.
        If Nth parens didn't match, substitute nothing.
-  `\\' means insert one `\'.
+  `\\\\' means insert one `\\'.
 FIXEDCASE and LITERAL are optional arguments.
 Leaves point at end of replacement text.
 
@@ -1131,11 +1131,11 @@ If the replaced text has at least one word starting with a capital letter,
 then capitalize each word in NEWTEXT.
 
 If third arg LITERAL is non-nil, insert NEWTEXT literally.
-Otherwise treat `\' as special:
-  `\&' in NEWTEXT means substitute original matched text.
-  `\N' means substitute what matched the Nth `\(...\)'.
+Otherwise treat `\\' as special:
+  `\\&' in NEWTEXT means substitute original matched text.
+  `\\N' means substitute what matched the Nth `\\(...\\)'.
        If Nth parens didn't match, substitute nothing.
-  `\\' means insert one `\'.
+  `\\\\' means insert one `\\'.
 FIXEDCASE and LITERAL are optional arguments.
 Leaves point at end of replacement text.
 
@@ -1528,7 +1528,7 @@ Not fully compatible especially when invalid format is specified."
   "The default value of separators for `split-string'.
 
 A regexp matching strings of whitespace.  May be locale-dependent
-\(as yet unimplemented).  Should not match non-breaking spaces.
+(as yet unimplemented).  Should not match non-breaking spaces.
 
 Warning: binding this to a different value and using it as default is
 likely to have undesired semantics.")
@@ -1547,7 +1547,7 @@ which separates, but is not part of, the substrings.  If nil it defaults to
 `split-string-default-separators', normally \"[ \\f\\t\\n\\r\\v]+\", and
 OMIT-NULLS is forced to t.
 
-If OMIT-NULLS is t, zero-length substrings are omitted from the list \(so
+If OMIT-NULLS is t, zero-length substrings are omitted from the list (so
 that for the default value of SEPARATORS leading and trailing whitespace
 are effectively trimmed).  If nil, all zero-length substrings are retained,
 which correctly parses CSV format, for example.
@@ -1638,14 +1638,14 @@ See `walk-windows' for the meaning of MINIBUF and FRAME."
 	  (or (getenv "TMPDIR") (getenv "TMP") (getenv "TEMP") "/tmp"))))
   "The directory for writing temporary files.")
 
-;; Emacs 21 CVS         ; nothing to do.
+;; Emacs 21 CVS and later ; nothing to do.
 ;;  (make-temp-file PREFIX &optional DIR-FLAG SUFFIX)
 ;;
-;; Emacs 21.1-21.3      ; replace with CVS version of `make-temp-file'.
+;; Emacs 21.1-21.3        ; replace with CVS version of `make-temp-file'.
 ;;  (make-temp-file PREFIX &optional DIR-FLAG)
 ;;
-;; Emacs 20 and earlier ; install our version of `make-temp-file', for
-;;  or XEmacs		; single-user system or for multi-user system.
+;; Emacs 20 and earlier   ; install our version of `make-temp-file', for
+;;  or XEmacs		  ; single-user system or for multi-user system.
 (eval-when-compile
   (cond
    ((get 'make-temp-file 'defun-maybe)
@@ -1667,11 +1667,15 @@ See `walk-windows' for the meaning of MINIBUF and FRAME."
                      )))
       ;; arglist: (prefix &optional dir-flag suffix)
       (cond
-       ((not arglist)
-        ;; `make-temp-file' is a built-in; expects 3-args.
-        (put 'make-temp-file 'defun-maybe '3-args))
-       ((> (length arglist) 3)
-        ;; Emacs 21 CVS.
+       ((or
+	 ;; `make-temp-file' is a built-in.
+	 (not arglist)
+	 ;; Emacs trunk r113642 and later.
+	 ;; `make-temp-file' is byte compiled with lexical-binding.
+	 (integerp arglist)
+	 ;; Emacs 21 CVS and later.
+	 ;; `make-temp-file' is byte compiled.
+	 (> (length arglist) 3))
         (put 'make-temp-file 'defun-maybe '3-args))
        (t
         ;; Emacs 21.1-21.3
@@ -1996,8 +2000,9 @@ in and returned; otherwise a new event object will be created and
 returned.
 If PROMPT is non-nil, it should be a string and will be displayed in
 the echo area while this function is waiting for an event."
-  ((and (>= emacs-major-version 20)
-	(>= emacs-minor-version 4))
+  ((or (>= emacs-major-version 21)
+       (and (>= emacs-major-version 20)
+	    (>= emacs-minor-version 4)))
    ;; Emacs 20.4 and later.
    (read-event prompt))			; should specify 2nd arg?
   ((and (= emacs-major-version 20)

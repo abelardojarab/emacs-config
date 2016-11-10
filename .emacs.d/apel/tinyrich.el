@@ -1,5 +1,5 @@
 ;;;
-;;; $Id: tinyrich.el,v 5.0 1995/09/20 14:45:56 morioka Exp $
+;;; $Id$
 ;;;
 ;;;          by MORIOKA Tomohiko  <morioka@jaist.ac.jp>
 ;;; modified by YAMATE Keiichirou <ics9118@sem1.info.osaka-cu.ac.jp>

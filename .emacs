@@ -167,8 +167,7 @@
 (require 'setup-search)
 
 ;; Setup tramp
-(ignore-errors
-  (require 'setup-tramp))
+(require 'setup-tramp)
 
 ;; Setup appearance
 (require 'setup-appearance)
@@ -204,8 +203,7 @@
 (require 'setup-highlight)
 
 ;; Setup CEDET
-(ignore-errors
-  (require 'setup-cedet))
+(require 'setup-cedet)
 
 ;; Setup C++
 (require 'setup-c++)
@@ -223,8 +221,7 @@
 (require 'setup-gnuplot)
 
 ;; Setup Org
-(ignore-errors
-  (require 'setup-org))
+(require 'setup-org)
 
 ;; Setup Org (babel support)
 (require 'setup-org-babel)
@@ -388,12 +385,14 @@
 ;; Setup gnus
 (require 'setup-gnus)
 
+;; Setup email
+(require 'setup-email)
+
 ;; Setup post
 (require 'setup-post)
 
 ;; Setup ECB
-(ignore-errors
-  (require 'setup-ecb))
+(require 'setup-ecb)
 
 ;; Setup mouse
 (require 'setup-mouse)

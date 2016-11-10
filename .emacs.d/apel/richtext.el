@@ -4,7 +4,7 @@
 
 ;; Author: MORIOKA Tomohiko <morioka@jaist.ac.jp>
 ;; Created: 1995/7/15
-;; Version: $Id: richtext.el,v 3.6 1997/06/28 17:58:34 morioka Exp $
+;; Version: $Id$
 ;; Keywords: wp, faces, MIME, multimedia
 
 ;; This file is not part of GNU Emacs yet.

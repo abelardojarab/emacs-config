@@ -30,7 +30,7 @@
 
 ;; Enable Semantic
 ;; (add-to-list 'load-path (expand-file-name "cedet/lisp/cedet/" user-emacs-directory))
-(semantic-load-enable-minimum-features)
+;; (semantic-load-enable-minimum-features)
 
 ;; To use additional features for names completion, and displaying of information for tags & classes,
 ;; you also need to load the semantic-ia package. Unfortunately, semantic makes Emacs slow
@@ -40,8 +40,8 @@
 (require 'semantic/wisent)
 
 ;; semantic support for clang
-(if (executable-find "clang")
-    (require 'semantic/bovine/clang))
+;; (if (executable-find "clang")
+;;    (require 'semantic/bovine/clang))
 
 ;; Enable case-insensitive searching
 (set-default 'semantic-case-fold t)
@@ -64,8 +64,8 @@
 (global-semantic-decoration-mode t)
 
 ;; etags support
-(when (cedet-ectag-version-check t)
-  (semantic-load-enable-primary-ectags-support))
+;; (when (cedet-ectag-version-check t)
+;; (semantic-load-enable-primary-ectags-support))
 
 ;; Fixing a bug in semantic, see #22287
 (defun semanticdb-save-all-db-idle ()

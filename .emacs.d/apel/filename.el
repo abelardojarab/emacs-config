@@ -3,7 +3,7 @@
 ;; Copyright (C) 1996,1997 MORIOKA Tomohiko
 
 ;; Author: MORIOKA Tomohiko <morioka@jaist.ac.jp>
-;; Version: $Id: filename.el,v 2.1 1997/11/06 15:50:53 morioka Exp $
+;; Version: $Id$
 ;; Keywords: file name, string
 
 ;; This file is part of APEL (A Portable Emacs Library).
@@ -102,26 +102,26 @@ Moreover, if you want to convert Japanese filename to roman string by kakasi,
 		inc-i '(1+ i))
 	(setq sref 'aref
 	      inc-i '(+ i (char-length chr))))
-      (` (let ((len (length (, string)))
-	       (b 0)(i 0)
-	       (dest ""))
-	   (while (< i len)
-	     (let ((chr ((, sref) (, string) i))
-		   (lst filename-replacement-alist)
-		   ret)
-	       (while (and lst (not ret))
-		 (if (if (functionp (car (car lst)))
-			 (setq ret (funcall (car (car lst)) chr))
-		       (setq ret (memq chr (car (car lst)))))
-		     t			; quit this loop.
-		   (setq lst (cdr lst))))
-	       (if ret
-		   (setq dest (concat dest (substring (, string) b i)
-				      (cdr (car lst)))
-			 i (, inc-i)
-			 b i)
-		 (setq i (, inc-i)))))
-	   (concat dest (substring (, string) b)))))))
+      `(let ((len (length ,string))
+	     (b 0)(i 0)
+	     (dest ""))
+	 (while (< i len)
+	   (let ((chr (,sref ,string i))
+		 (lst filename-replacement-alist)
+		 ret)
+	     (while (and lst (not ret))
+	       (if (if (functionp (car (car lst)))
+		       (setq ret (funcall (car (car lst)) chr))
+		     (setq ret (memq chr (car (car lst)))))
+		   t			; quit this loop.
+		 (setq lst (cdr lst))))
+	     (if ret
+		 (setq dest (concat dest (substring ,string b i)
+				    (cdr (car lst)))
+		       i ,inc-i
+		       b i)
+	       (setq i ,inc-i))))
+	 (concat dest (substring ,string b))))))
 
 (defun filename-special-filter (string)
   (filename-special-filter-1 string))
