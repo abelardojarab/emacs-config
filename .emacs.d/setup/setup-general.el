@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 2014, 2015, 2016  abelardo.jara-berrocal
 
-;; Author: abelardo.jara-berrocal <ajaraber@plxc25288.pdx.intel.com>
+;; Author: Abelardo Jara <abelardojara@Abelardos-MacBook-Pro.local>
 ;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -51,8 +51,7 @@
                                       (overlay-end (popup-line-overlay
                                                     menu (+ (popup-offset menu)
                                                             (popup-selected-line menu)))))
-                                    nil 0)
-                      nil))
+                                    nil 0) nil))
                 ad-do-it))))
 
 ;; Drop down list support, related to popup
@@ -130,6 +129,11 @@
   :defer 0.5
   :config (progn
             (use-package calfw-org)))
+
+;; Persistent scratch buffer
+(use-package persistent-scratch
+  :load-path (lambda () (expand-file-name "persistent-scratch/" user-emacs-directory)
+  :config (persistent-scratch-setup-default))
 
 (provide 'setup-general)
 ;;; setup-general.el ends here

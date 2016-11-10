@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 2014, 2015, 2016  abelardo.jara-berrocal
 
-;; Author: abelardo.jara-berrocal <ajaraber@plxc25288.pdx.intel.com>
+;; Author: Abelardo Jara <abelardojara@Abelardos-MacBook-Pro.local>
 ;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -210,6 +210,11 @@
 
 ;; Turn off the bell http://www.emacswiki.org/cgi-bin/wiki?AlarmBell
 (setq ring-bell-function 'ignore)
+
+;; Save whatever’s in the current (system) clipboard before
+;; replacing it with the Emacs’ text.
+;; https://github.com/dakrone/eos/blob/master/eos.org
+(setq save-interprogram-paste-before-kill t)
 
 ;; The default goes to the middle first. I prefer that the default goes to the top first. Let’s change this.
 (setq recenter-positions '(top middle bottom))

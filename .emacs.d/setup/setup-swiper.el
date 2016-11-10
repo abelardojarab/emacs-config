@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 2016  abelardo.jara-berrocal
 
-;; Author: abelardo.jara-berrocal <ajaraber@plxcj9063.pdx.intel.com>
+;; Author: Abelardo Jara <abelardojara@Abelardos-MacBook-Pro.local>
 ;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -26,19 +26,28 @@
 
 (use-package swiper
   :defer t
-  :commands (swiper swiper-all ivy-read ivy-completing-read ivy-mode)
+  :commands (swiper swiper-all ivy-read ivy-completing-read ivy-resume ivy-mode)
   :load-path (lambda () (expand-file-name "swiper/" user-emacs-directory))
+  :bind (("C-c C-r" . ivy-resume)
+         :map ctl-x-map
+              ("s" . swiper))
   :config (progn
             (set-variable 'ivy-on-del-error-function '(lambda()))
+            (setq ivy-display-style 'fancy)
             (setq ivy-use-virtual-buffers t)
-            (setq ivy-height 10)))
+            (setq ivy-height 20)
+
+            ;; advise swiper to recenter on exit
+            (defun my/swiper-recenter (&rest args)
+              "recenter display after swiper"
+              (recenter))
+            (advice-add 'swiper :after #'my/swiper-recenter)))
 
 (use-package swiper-helm
   :defer t
   :after (swiper helm)
-  :bind (:map ctl-x-map
-              ("s" . swiper-helm))
   :commands swiper-helm
   :load-path (lambda () (expand-file-name "swiper-helm/" user-emacs-directory)))
+
 (provide 'setup-swiper)
 ;;; setup-swiper.el ends here
