@@ -402,5 +402,9 @@
   :config (progn
             (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))))
 
+;; Lorg calendar
+(use-package lorg-calendar
+  :load-path (lambda () (expand-file-name "lorg-calendar/" user-emacs-directory)))
+
 (provide 'setup-org)
 ;;; setup-org.el ends here
