@@ -129,7 +129,7 @@ non-nil."
 (use-package lawlist-scroll-mode
   :if (display-graphic-p)
   :init (set-scroll-bar-mode 'right)
-  :config (add-hook 'prog-mode-hook (lambda () (lawlist-scroll-mode 1))))
+  :config (add-hook 'prog-mode-hook (lambda () (lawlist-scroll-bar-mode 1))))
 
 ;; Showkey as typed
 (use-package showkey
