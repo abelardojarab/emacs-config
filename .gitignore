@@ -21,6 +21,7 @@ tramp
 var/*
 .cask/
 .edbi-ds-history
+.persistent-scratch
 .projectile
 projectile-bookmarks.eld
 .projectile-bookmarks.eld

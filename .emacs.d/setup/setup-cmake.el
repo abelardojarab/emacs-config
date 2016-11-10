@@ -40,7 +40,6 @@
   :config (progn
             (setq rtags-use-helm t)
             (setq rtags-autostart-diagnostics t)
-            (setq my/rtags-cmake-build-dir "cmake_build_dir/")
 
             ;; Start rdm as a subprocess, with output in a buffer
             (defun my/rtags-start-rdm-maybe ()
@@ -241,7 +240,11 @@ just returns the path and content of the header file which
             ;; - `my/rtags-cmake-build-dir': Path to your build dir, absolute or
             ;;   relative to the root of a project. Default "cmake.bld/<arch>" where
             ;;   <arch> is replaced by the uname of your OS.
-            ;;
+
+            (defvar my/rtags-rdm-args () "List of strings containing the arguments to rdm")
+            (defvar my/rtags-cmake-build-dir "cmake_build_dir/" "Path to your build dir, absolute or relative to the root of a project")
+            (setq my/rtags-cmake-build-dir "cmake_build_dir/")
+
             ;; When you open a C++ file, it will detect if your project is CMake-enabled
             ;; by looking for CMakeLists.txt files up to the root of your repo. If it
             ;; finds such a file, it starts rdm if it is not running, and indexes your
