@@ -42,11 +42,6 @@
                 (setenv "SSH_AUTH_SOCK" agent)
                 (message agent))))
 
-          ;; Set tramp variables
-          (if (eq system-type 'windows-nt)
-              (setq tramp-default-method "plink")
-            (setq tramp-default-method "ssh"))
-
           ;; Set control master options before loading tramp
           (setq tramp-ssh-controlmaster-options "-o ControlMaster=auto -o ControlPath=~/.emacs.cache/ssh-ControlPath -o ControlPersist=no"))
   :config (progn

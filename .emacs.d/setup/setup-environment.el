@@ -171,16 +171,20 @@
           (file-directory-p "c:/cygwin64/bin"))
       (require 'setup-cygwin))
 
+  ;; Fix pipe delay
+  (setq w32-pipe-read-delay 0)
+
   ;; Custom $PATH
   (when (file-directory-p "c:/cygwin/bin")
     (setenv "PATH" (concat "c:/cygwin/bin:" (getenv "PATH")))
     (add-to-list 'exec-path "c:/cygwin/bin")
-    (setq explicit-shell-file-name "C:/cygwin/bin/bash.exe")
+    (setq explicit-shell-file-name "c:/cygwin/bin/bash.exe")
     (setq shell-file-name explicit-shell-file-name))
   (when (file-directory-p "c:/cygwin64/bin")
-    (setenv "PATH" (concat "c:/cygwin64/bin:" (getenv "PATH")))
+    (setenv "PATH" (concat "c:/cygwin64/bin:c:/cygwin64/usr/local/bin" (getenv "PATH")))
     (add-to-list 'exec-path "c:/cygwin64/bin")
-    (setq explicit-shell-file-name "C:/cygwin64/bin/bash.exe")
+    (add-to-list 'exec-path "c:/cygwin64/usr/local/bin")
+    (setq explicit-shell-file-name "c:/cygwin64/bin/bash.exe")
     (setq shell-file-name explicit-shell-file-name))
 
   (setenv "SHELL" shell-file-name)
