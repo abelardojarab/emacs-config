@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 2014, 2015, 2016  abelardo.jara-berrocal
 
-;; Author: abelardo.jara-berrocal <ajaraber@plxc25288.pdx.intel.com>
+;; Author: Abelardo Jara <abelardojara@Abelardos-MacBook-Pro.local>
 ;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -28,20 +28,12 @@
 (if (not (file-exists-p "~/.emacs.cache/semanticdb"))
     (make-directory "~/.emacs.cache/semanticdb") t)
 
-;; Enable Semantic
-;; (add-to-list 'load-path (expand-file-name "cedet/lisp/cedet/" user-emacs-directory))
-;; (semantic-load-enable-minimum-features)
-
 ;; To use additional features for names completion, and displaying of information for tags & classes,
 ;; you also need to load the semantic-ia package. Unfortunately, semantic makes Emacs slow
 (require 'semantic/ia)
 
 ;; Enable support for parsing additional languages
 (require 'semantic/wisent)
-
-;; semantic support for clang
-;; (if (executable-find "clang")
-;;    (require 'semantic/bovine/clang))
 
 ;; Enable case-insensitive searching
 (set-default 'semantic-case-fold t)
@@ -56,16 +48,12 @@
 ;; Disable Semantics for large files
 (add-hook 'semantic--before-fetch-tags-hook
           (lambda () (if (and (> (point-max) 500)
-                              (not (semantic-parse-tree-needs-rebuild-p)))
-                         nil
-                       t)))
+                         (not (semantic-parse-tree-needs-rebuild-p)))
+                    nil
+                  t)))
 
 ;; Enable decoration mode
 (global-semantic-decoration-mode t)
-
-;; etags support
-;; (when (cedet-ectag-version-check t)
-;; (semantic-load-enable-primary-ectags-support))
 
 ;; Fixing a bug in semantic, see #22287
 (defun semanticdb-save-all-db-idle ()
@@ -77,11 +65,11 @@ Exit the save between databases if there is user input."
       (semantic-safe "Auto-DB Save: %S"
         ;; FIXME: Use `while-no-input'?
         (save-mark-and-excursion ;; <-- added line
-         (semantic-exit-on-input 'semanticdb-idle-save
-           (mapc (lambda (db)
-                   (semantic-throw-on-input 'semanticdb-idle-save)
-                   (semanticdb-save-db db t))
-                 semanticdb-database-list))))
+          (semantic-exit-on-input 'semanticdb-idle-save
+            (mapc (lambda (db)
+                    (semantic-throw-on-input 'semanticdb-idle-save)
+                    (semanticdb-save-db db t))
+                  semanticdb-database-list))))
     (if (fboundp 'save-excursion)
         (save-excursion ;; <-- added line
           (semantic-exit-on-input 'semanticdb-idle-save
@@ -91,7 +79,6 @@ Exit the save between databases if there is user input."
                   semanticdb-database-list))))))
 
 ;; Enable semanticdb, slows down Emacs
-;; (require 'semantic/db)
 (global-semanticdb-minor-mode nil)
 
 ;; This prevents Emacs to become uresponsive
@@ -101,8 +88,7 @@ Exit the save between databases if there is user input."
   nil)
 
 ;; Default semanticdb directory
-(setq-default semanticdb-default-system-save-directory
-              (setq-default semanticdb-default-save-directory "~/.emacs.cache/semanticdb"))
+(setq-default semanticdb-default-save-directory "~/.emacs.cache/semanticdb")
 
 ;; semanticdb support for global/gtags
 (when (executable-find "global")
