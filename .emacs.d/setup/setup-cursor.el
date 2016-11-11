@@ -54,6 +54,7 @@
 
 ;; Blinking cursor
 (use-package heartbeat-cursor
+  :if (not (equal system-type 'windows-nt))
   :config (progn
             (add-hook 'prog-mode-hook (lambda () (heartbeat-cursor-mode)))
             (add-hook 'org-mode-hook (lambda () (heartbeat-cursor-mode)))))
