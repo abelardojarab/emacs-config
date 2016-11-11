@@ -665,6 +665,7 @@ the specified directory."
 ;; cmake-based IDE
 (use-package cmake-ide
   :defer 2
+  :if (executable-find "cmake")
   :commands (use-cmake-ide cmake-ide--locate-cmakelists)
   :after (rtags flycheck)
   :load-path (lambda () (expand-file-name "cmake-ide/" user-emacs-directory))

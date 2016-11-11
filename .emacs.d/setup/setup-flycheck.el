@@ -26,6 +26,7 @@
 
 ;; Flycheck
 (use-package flycheck
+  :if (not (equal system-type 'windows-nt))
   :load-path (lambda () (expand-file-name "flycheck/" user-emacs-directory))
   :config (progn
             (add-to-list 'display-buffer-alist
