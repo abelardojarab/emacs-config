@@ -1,0 +1,14 @@
+#!/System/Library/Frameworks/Ruby.framework/Versions/1.8/usr/bin/ruby
+APP_ROOT = File.expand_path(File.join(File.dirname(__FILE__), '..'))
+
+begin
+  require 'rubigen'
+rescue LoadError
+  require 'rubygems'
+  require 'rubigen'
+end
+require 'rubigen/scripts/destroy'
+
+ARGV.shift if ['--help', '-h'].include?(ARGV[0])
+RubiGen::Base.use_component_sources! [:newjs, :newjs_theme, :test_unit]
+RubiGen::Scripts::Destroy.new.run(ARGV)

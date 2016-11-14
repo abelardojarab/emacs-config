@@ -42,7 +42,6 @@
             (add-hook 'text-mode-hook
                       (lambda ()
                         (setq-default company-backends '(company-semantic
-                                                         company-dabbrev-code
                                                          company-dabbrev
                                                          company-bibtex))))
 

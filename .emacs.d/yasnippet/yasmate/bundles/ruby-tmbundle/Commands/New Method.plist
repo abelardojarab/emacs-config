@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/System/Library/Frameworks/Ruby.framework/Versions/1.8/usr/bin/ruby -wKU
+
+require "#{ENV['TM_SUPPORT_PATH']}/lib/exit_codes"
+require "#{ENV['TM_SUPPORT_PATH']}/lib/escape"
+require "#{ENV['TM_SUPPORT_PATH']}/lib/current_word"
+
+if ENV["TM_SELECTED_TEXT"]
+  print &lt;&lt;-END_SNIPPET
+def #{e_sn ENV["TM_SELECTED_TEXT"]}\${1/.+/(/}\${1:args}\${1/.+/)/}
+	\$0
+end
+END_SNIPPET
+else
+  word = Word.current_word(/([?!]?(?:\w(?=[a-zA-Z_]))*[a-zA-Z_](?:(?:\.|::)(?:\w(?=[a-zA-Z_]))*[a-zA-Z_])?)(.*$)/, :hash)
+
+  if word[:left].empty?
+    TextMate.exit_show_tool_tip(
+      "Please type the new function's name or use the def⇥ snippet."
+    )
+  end
+
+  indent = word[:before_match].match(/^\s*/)
+
+  print &lt;&lt;-END_SNIPPET
+#{e_sn word[:before_match]}def #{e_sn word[:left]}\${1/.+/(/}\${1:args}\${1/.+/)/}
+#{e_sn indent}	\$0
+#{e_sn indent}end#{e_sn word[:right]}#{e_sn word[:after_match]}
+END_SNIPPET
+end
+</string>
+	<key>fallbackInput</key>
+	<string>line</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>inputFormat</key>
+	<string>text</string>
+	<key>keyEquivalent</key>
+	<string>$</string>
+	<key>name</key>
+	<string>New Method</string>
+	<key>outputCaret</key>
+	<string>afterOutput</string>
+	<key>outputFormat</key>
+	<string>snippet</string>
+	<key>outputLocation</key>
+	<string>replaceInput</string>
+	<key>scope</key>
+	<string>source.ruby</string>
+	<key>uuid</key>
+	<string>0275EF39-9357-408F-AF20-79E415CA9504</string>
+	<key>version</key>
+	<integer>2</integer>
+</dict>
+</plist>

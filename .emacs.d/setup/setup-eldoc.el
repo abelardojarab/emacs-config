@@ -34,7 +34,7 @@
           (add-hook 'c-mode-hook 'turn-on-eldoc-mode)
           (add-hook 'c++-mode-hook 'turn-on-eldoc-mode)
 
-          ;; enable eldoc in eval-expression
+          ;; Enable eldoc in eval-expression
           (add-hook 'eval-expression-minibuffer-setup-hook #'eldoc-mode)
 
           ;; Show eldoc help in *Help* buffer
@@ -69,17 +69,16 @@ Advises `eldoc-print-current-symbol-info'."
                      (save-selected-window
                        (help-xref-interned sym))))))
 
-          (my/contextual-help-mode 1)))
+          (my/contextual-help-mode 1)
 
-(use-package irony-eldoc
-  :disabled t
-  :if (or (file-exists-p "~/.emacs.cache/irony-server/bin/irony-server")
-          (executable-find "irony-server"))
-  :after (irony eldoc)
-  :commands irony-eldoc
-  :load-path (lambda () (expand-file-name "irony-eldoc/" user-emacs-directory))
-  :init (progn
-          (add-hook 'irony-mode-hook 'irony-eldoc)))
+          ;; https://www.topbug.net/blog/2016/11/03/emacs-display-function-or-variable-information-near-point-cursor/
+          (defun my/eldoc-display-message (format-string &rest args)
+            "Display eldoc message near point."
+            (when format-string
+              (pos-tip-show (apply 'format format-string args))))
+          ;; (if (display-graphic-p)
+          ;;     (setq eldoc-message-function #'my/eldoc-display-message))
+          ))
 
 (provide 'setup-eldoc)
 ;;; setup-eldoc.el ends here

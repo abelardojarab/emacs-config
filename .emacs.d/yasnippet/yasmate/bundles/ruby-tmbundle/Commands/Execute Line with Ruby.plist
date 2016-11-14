@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env bash
+[[ -f "${TM_SUPPORT_PATH}/lib/bash_init.sh" ]] &amp;&amp; . "${TM_SUPPORT_PATH}/lib/bash_init.sh"
+
+export TM_RUBY=$(which "${TM_RUBY:-ruby}")
+
+"${TM_RUBY}" "$TM_BUNDLE_SUPPORT/bin/execute_line.rb"
+</string>
+	<key>fallbackInput</key>
+	<string>line</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>inputFormat</key>
+	<string>text</string>
+	<key>keyEquivalent</key>
+	<string>^E</string>
+	<key>name</key>
+	<string>Execute Line / Selection as Ruby</string>
+	<key>outputCaret</key>
+	<string>afterOutput</string>
+	<key>outputFormat</key>
+	<string>text</string>
+	<key>outputLocation</key>
+	<string>afterInput</string>
+	<key>uuid</key>
+	<string>EE5F1FB2-6C02-11D9-92BA-0011242E4184</string>
+	<key>version</key>
+	<integer>2</integer>
+</dict>
+</plist>

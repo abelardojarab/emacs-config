@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/System/Library/Frameworks/Ruby.framework/Versions/1.8/usr/bin/ruby -w
+require "#{ENV['TM_SUPPORT_PATH']}/lib/osx/plist"
+require "#{ENV['TM_SUPPORT_PATH']}/lib/escape"
+
+entities = [ ]
+File.read("#{ENV['TM_BUNDLE_SUPPORT']}/entities.txt").scan(/^(\d+)\t(.+)$/) do |key, value|
+  char = [key.to_i].pack('U')
+  entities &lt;&lt; { 'display' =&gt; "#{value} (#{char})", 'char' =&gt; char, 'entity' =&gt; value }
+end
+
+entities.sort! { |lhs, rhs| lhs['display'].downcase &lt;=&gt; rhs['display'].downcase }
+
+plist = { 'entities' =&gt; entities, 'insertAsEntity' =&gt; true }.to_plist
+open('|"$DIALOG" -cm "Insert Entity"', 'w+') do |io|
+  io &lt;&lt; plist; io.close_write
+
+  res = OSX::PropertyList.load(io.read)['result']
+  exit if res.nil?
+
+  if res['asEntity']
+    print '&amp;' + res['returnArgument'].first['entity'] + ';'
+  else
+    print res['returnArgument'].first['char']
+  end
+end
+</string>
+	<key>input</key>
+	<string>none</string>
+	<key>inputFormat</key>
+	<string>text</string>
+	<key>keyEquivalent</key>
+	<string>@&amp;</string>
+	<key>name</key>
+	<string>Insert Entity…</string>
+	<key>outputCaret</key>
+	<string>afterOutput</string>
+	<key>outputFormat</key>
+	<string>text</string>
+	<key>outputLocation</key>
+	<string>atCaret</string>
+	<key>scope</key>
+	<string>text.html</string>
+	<key>uuid</key>
+	<string>89E5CC0A-3EFF-4DEF-A299-2E9651DE6529</string>
+	<key>version</key>
+	<integer>2</integer>
+</dict>
+</plist>

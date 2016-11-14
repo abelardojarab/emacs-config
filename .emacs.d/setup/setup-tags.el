@@ -51,7 +51,7 @@
             (setq tags-add-tables t)
 
             ;; etags creation
-            (defun create-etags (dir-name)
+            (defun etags-create-or-update (dir-name)
               "Create tags file."
               (interactive "Directory: ")
               (eshell-command
@@ -172,11 +172,13 @@ tags table and its (recursively) included tags tables."
   :after projectile
   :config (progn
             ;; Helper functions for etags/ctags
-            (defun create-ctags (dir-name)
+            (defun ctags-create-or-update (dir-name)
               "Create tags file."
               (interactive "Directory: ")
               (shell-command
-               (format "ctags -e -f %s -R %s" "~/.gtags/TAGS" (projectile-project-root))))))
+               (format "ctags -e -f %s -R %s"
+                       (concat (projectile-project-root) "TAGS")
+                       (projectile-project-root))))))
 
 ;; Gtags
 (use-package ggtags
