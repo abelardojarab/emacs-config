@@ -50,7 +50,7 @@
  ;; If there is more than one, they won't work right.
  '(ansi-color-names-vector
    ["#272822" "#F92672" "#A6E22E" "#E6DB74" "#66D9EF" "#FD5FF0" "#A1EFE4" "#F8F8F2"])
- '(bmkp-last-as-first-bookmark-file "~/workspace/emacsfull/.emacs.d/bookmarks")
+ '(bmkp-last-as-first-bookmark-file "~/.emacs.cache/bookmarks")
  '(compilation-message-face (quote default))
  '(cua-enable-cua-keys nil)
  '(custom-safe-themes
@@ -59,11 +59,12 @@
  '(ecb-options-version "2.40")
  '(ecb-source-path
    (quote
-    (("~/Documents/workspace" "workspace")
-     ("~/workspace/Documents" "Documents")
+    (("~/workspace/Documents" "Documents")
+     ("~/Dropbox/Documents" "Documents")
+     ("~/workspace/emacsfull" "Emacs")
      ("~/workspace" "Workspace")
      ("~/" "Home")
-     ("/" "/"))))
+     ("/" "File System"))))
  '(ede-locate-setup-options (quote (ede-locate-global ede-locate-locate)))
  '(ede-project-directories (quote ("~/workspace")))
  '(ergoemacs-ctl-c-or-ctl-x-delay 0.2)
@@ -417,9 +418,7 @@
 (setq debug-on-error nil)
 
 ;; Setup server
-(ignore-errors
-  (require 'setup-server))
+(require 'setup-server)
 
 ;; Setup desktop
-(ignore-errors
-  (require 'setup-desktop))
+(require 'setup-desktop)

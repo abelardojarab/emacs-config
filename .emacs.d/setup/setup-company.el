@@ -23,7 +23,6 @@
 
 ;;; Code:
 (use-package company
-  :defer 2
   :diminish company-mode
   :load-path (lambda () (expand-file-name "company-mode/" user-emacs-directory))
   :config (progn
