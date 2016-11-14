@@ -26,5 +26,10 @@
 
 ;; Add all diminished modes here
 
+;; Dashboard
+(use-package dashboard
+  :load-path (lambda () (expand-file-name "dashboard/" user-emacs-directory))
+  :config (dashboard-setup-startup-hook))
+
 (provide 'setup-post)
 ;;; setup-post.el ends here

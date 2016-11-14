@@ -137,5 +137,9 @@
             (setq persistent-scratch-save-file "~/.emacs.cache/persistent-scratch-buffer")
             (persistent-scratch-setup-default)))
 
+;; Page break lines
+(use-package page-break-lines
+  :load-path (lambda () (expand-file-name "page-break-lines/" user-emacs-directory)))
+
 (provide 'setup-general)
 ;;; setup-general.el ends here
