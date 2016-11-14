@@ -1,6 +1,6 @@
 ;;; ecb-symboldef.el --- ECB window for symbol-definition or documentation
 
-;;; Copyright (C) 2005, 2015 Hauke Jans
+;;; Copyright (C) 2005, 2015, 2016 Hauke Jans
 
 ;; Author: Hauke Jans, <hauke.jans@sesa.de>, <hauke.jans@t-online.de>
 ;; Maintainer: Hauke Jans, <hauke.jans@sesa.de>, <hauke.jans@t-online.de>
@@ -227,7 +227,7 @@ could slow down dramatically!"
 (defun ecb-symboldef-get-find-function ()
   "Returns the symbol find function to use according to major-mode"
   (let ((mode-function (cdr (assoc major-mode ecb-symboldef-find-functions)))
-    (default-function (cdr (assoc 'default ecb-symboldef-find-functions))))
+        (default-function (cdr (assoc 'default ecb-symboldef-find-functions))))
     (or mode-function
         default-function
         'ecb-symboldef-find-null)))
@@ -286,9 +286,9 @@ EDIT-BUFFER is that buffer VSYMBOL is used."
           ;; this does not call temp-buffer-show-hook!!!
           (temp-buffer-show-function (function (lambda (b) nil))))
       (cl-flet ((help-buffer () ecb-symboldef-temp-buffer-name)
-             ;; (print-help-return-message (&optional function) nil)
-             ;; for XEmacs
-             (help-buffer-name () ecb-symboldef-temp-buffer-name))
+                ;; (print-help-return-message (&optional function) nil)
+                ;; for XEmacs
+                (help-buffer-name () ecb-symboldef-temp-buffer-name))
         (cl-labels ((print-help-return-message (&optional function) nil))
           (describe-variable vsymbol)))))
   (with-current-buffer ecb-symboldef-temp-buffer-name
@@ -305,25 +305,25 @@ EDIT-BUFFER is that buffer VSYMBOL is used."
 If that gives no function, return the function which is called by the
 list containing point.  If that doesn't give a function, return nil."
   (or (ignore-errors
-    (with-syntax-table emacs-lisp-mode-syntax-table
-      (save-excursion
-        (or (not (zerop (skip-syntax-backward "_w")))
-        (eq (char-syntax (char-after (point))) ?w)
-        (eq (char-syntax (char-after (point))) ?_)
-        (forward-sexp -1))
-        (skip-chars-forward "`'")
-        (let ((obj (read (current-buffer))))
-          (and (symbolp obj) (fboundp obj) obj)))))
+        (with-syntax-table emacs-lisp-mode-syntax-table
+          (save-excursion
+            (or (not (zerop (skip-syntax-backward "_w")))
+                (eq (char-syntax (char-after (point))) ?w)
+                (eq (char-syntax (char-after (point))) ?_)
+                (forward-sexp -1))
+            (skip-chars-forward "`'")
+            (let ((obj (read (current-buffer))))
+              (and (symbolp obj) (fboundp obj) obj)))))
       (ignore-errors
-    (save-excursion
-      (save-restriction
-        (narrow-to-region (max (point-min) (- (point) 1000))
-                  (point-max))
-        (backward-up-list 1)
-        (forward-char 1)
-        (let (obj)
-          (setq obj (read (current-buffer)))
-          (and (symbolp obj) (fboundp obj) obj)))))))
+        (save-excursion
+          (save-restriction
+            (narrow-to-region (max (point-min) (- (point) 1000))
+                              (point-max))
+            (backward-up-list 1)
+            (forward-char 1)
+            (let (obj)
+              (setq obj (read (current-buffer)))
+              (and (symbolp obj) (fboundp obj) obj)))))))
 
 (defun ecb-symboldef-function-at-point ()
   "Returns the function around point or nil if there is no function around."
@@ -393,13 +393,13 @@ list containing point.  If that doesn't give a function, return nil."
                              "Function"))))
     (when (boundp symbol)
       (and fsymbol (insert "\n\n___________\n\n"))
-;;       (insert (format "%s is a %s\n\n%s\n\nValue: %s\n\n" symbol
-;;                       (if (user-variable-p symbol)
-;;                           "Option " "Variable")
-;;                       (or (documentation-property
-;;                            symbol 'variable-documentation)
-;;                           "not documented")
-;;                       (symbol-value symbol)))
+      ;;       (insert (format "%s is a %s\n\n%s\n\nValue: %s\n\n" symbol
+      ;;                       (if (user-variable-p symbol)
+      ;;                           "Option " "Variable")
+      ;;                       (or (documentation-property
+      ;;                            symbol 'variable-documentation)
+      ;;                           "not documented")
+      ;;                       (symbol-value symbol)))
       (insert (ecb-symboldef-get-doc-for-vsymbol symbol edit-buffer))
       (let ((beg nil)
             (end nil))
@@ -506,14 +506,14 @@ Returns nil if not found otherwise a list \(tag-buffer tag-begin tag-end)"
   (with-current-buffer edit-buffer
     (let* ((mytag-list (ecb--semanticdb-brute-deep-find-tags-by-name symbol-name
                                                                      nil t))
-       (mytag (if mytag-list
+           (mytag (if mytag-list
                       (car (ecb--semanticdb-find-result-nth
                             mytag-list
                             (1- (ecb--semanticdb-find-result-length mytag-list))))))
-       (mytag-ovr (if mytag (ecb--semantic-tag-bounds mytag)))
-       (mytag-min (if mytag-ovr (car mytag-ovr)))
-       (mytag-max (if mytag-ovr (car (cdr mytag-ovr))))
-       (mytag-buf (if mytag (ecb--semantic-tag-buffer mytag))))
+           (mytag-ovr (if mytag (ecb--semantic-tag-bounds mytag)))
+           (mytag-min (if mytag-ovr (car mytag-ovr)))
+           (mytag-max (if mytag-ovr (car (cdr mytag-ovr))))
+           (mytag-buf (if mytag (ecb--semantic-tag-buffer mytag))))
       (if mytag-buf
           (list mytag-buf mytag-min mytag-max)))))
 
@@ -521,17 +521,27 @@ Returns nil if not found otherwise a list \(tag-buffer tag-begin tag-end)"
   "Try to find the definition of SYMBOL-NAME via etags.
 Returns nil if not found otherwise a list \(tag-buffer tag-begin tag-end)
 whereas tag-end is currently always nil."
-  (if ecb-running-xemacs
+  (if nil ;; ecb-running-xemacs
       (let ((result (ignore-errors (find-tag-internal (list symbol-name)))))
-    (if result
-        (list (car result) (cdr result) nil)))
+        (if result
+            (list (car result) (cdr result) nil)))
     ;; else gnu emacs:
     (let* ((result-buf (ignore-errors (find-tag-noselect symbol-name)))
-       (result-point (if result-buf
+           (result-point (if result-buf
                              (with-current-buffer result-buf
                                (point)))))
       (if result-buf
-      (list result-buf result-point nil)))))
+          (list result-buf result-point nil)
+
+        ;; (progn
+        ;;   (setq result-buf (ignore-errors (ggtags-find-definition symbol-name)))
+        ;;   (if result-buf
+        ;;       (progn
+        ;;         (setq result-point (if result-buf
+        ;;                                (with-current-buffer result-buf
+        ;;                                  (point))))
+        ;;         (list result-buf result-point nil))))
+        ))))
 
 (defun ecb-symboldef-find-definition (symbol-name edit-buffer)
   "Inserts the definition of symbol with name SYMBOL-NAME.
@@ -552,6 +562,7 @@ with semanticdb and then - if no success - with current etags-file."
          (extend-point-max nil)
          (hilight-point-min nil)
          (hilight-point-max nil))
+
     (setq truncate-lines t)
     (when tag-buf
       (with-current-buffer tag-buf
@@ -592,23 +603,23 @@ symbol. Displays the found text in the buffer of
             (find-func (ecb-symboldef-get-find-function)))
         ;; only use tags with a minimal length:
         (setq current-symbol (if (>= (length current-symbol)
-                                    ecb-symboldef-minimum-symbol-length)
+                                     ecb-symboldef-minimum-symbol-length)
                                  current-symbol))
         ;; buggy thingatpt returns whole buffer if on empty line:
         (setq current-symbol (if (< (length current-symbol) 80)
                                  current-symbol))
         ;; research tag only if different from last and not empty:
         (when (and current-symbol
-                 (not (equal current-symbol ecb-symboldef-last-symbol)))
+                   (not (equal current-symbol ecb-symboldef-last-symbol)))
           (ecb-with-readonly-buffer visible-buffer
             (setq ecb-symboldef-last-symbol current-symbol)
             (erase-buffer)
             (setq fill-column (1- (window-width visible-window)))
             (setq modeline-display
                   (or (funcall find-func
-                              current-symbol
-                              edit-buffer)
-                     ""))
+                               current-symbol
+                               edit-buffer)
+                      ""))
             ;; TODO: Klaus Berndl <klaus.berndl@sdm.de>: replace this by
             ;; a ecb-mode-line-format - if possible?!
             (ecb-mode-line-set (buffer-name visible-buffer)

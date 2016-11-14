@@ -101,7 +101,10 @@
  '(recentf-menu-before "Close")
  '(safe-local-variable-values
    (quote
-    ((eval when
+    ((eval c-set-offset
+           (quote innamespace)
+           0)
+     (eval when
            (fboundp
             (quote aggressive-indent-mode))
            (aggressive-indent-mode -1))
