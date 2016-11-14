@@ -27,7 +27,7 @@
 ;; Code Browser
 (use-package ecb
   :load-path (lambda () (expand-file-name "ecb/" user-emacs-directory))
-  :commands (ecb-activate) ;; enabling this line places ecb in autoload state
+  ;; :commands (ecb-activate) ;; enabling this line places ecb in autoload state
   :init (progn
           (setq stack-trace-on-error t)
           (setq after-find-file-from-revert-buffer t))

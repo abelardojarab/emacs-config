@@ -48,10 +48,13 @@
         (use-dialog-box t))
     ad-do-it))
 
-;; try to improve slow performance on windows.
+;; Try to improve slow performance on windows.
 (setq w32-get-true-file-attributes nil)
 
-;; auto revert files if they are modified in an external editor
+;; Fix pipe delay
+(setq w32-pipe-read-delay 0)
+
+;; Auto revert files if they are modified in an external editor
 (global-auto-revert-mode t)
 
 ;; Garantee utf8 as input-method

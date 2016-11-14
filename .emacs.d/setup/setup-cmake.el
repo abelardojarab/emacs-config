@@ -518,7 +518,7 @@ could not be loaded. The property list looks like this:
   :exclude-src (...)
   :macros (...))"
               (let ((compile-includes-file (concat (file-name-as-directory dir)
-                                                   "compile_includes")))
+                                                   "include")))
                 (cond ((file-exists-p compile-includes-file)
                        ;; Parse the file and return 3 lists: src, include, exclude
                        (let ((directives (rtags-load-compile-includes-file-content
@@ -699,33 +699,37 @@ the specified directory."
             (add-hook 'c-common-mode-hook 'cmake-project-hook)))
 
 ;; EDE project managment, slows down Emacs
-(global-ede-mode 1)
-(ede-enable-generic-projects)
-(setq ede-project-directories t)
+(use-package ede
+  :config (progn
+            (global-ede-mode 1)
+            (ede-enable-generic-projects)
+            (setq ede-project-directories t)
 
-;; Default EDE directory
-(setq-default ede-project-placeholder-cache-file "~/.emacs.cache/ede-projects.el")
+            ;; Default EDE directory
+            (setq-default ede-project-placeholder-cache-file "~/.emacs.cache/ede-projects.el")
 
-;; Redefine ede add projects to avoid errors
-(defun ede-add-project-to-global-list (proj)
-  "Add the project PROJ to the master list of projects.
+            ;; Redefine ede add projects to avoid errors
+            (defun ede-add-project-to-global-list (proj)
+              "Add the project PROJ to the master list of projects.
 On success, return the added project."
-  (ignore-errors
-    (when (not proj)
-      (error "No project created to add to master list"))
-    (when (not (eieio-object-p proj))
-      (error "Attempt to add non-object to master project list"))
-    (when (not (obj-of-class-p proj ede-project-placeholder))
-      (error "Attempt to add a non-project to the ede projects list"))
-    (add-to-list 'ede-projects proj))
-  proj)
+              (ignore-errors
+                (when (not proj)
+                  (error "No project created to add to master list"))
+                (when (not (eieio-object-p proj))
+                  (error "Attempt to add non-object to master project list"))
+                (when (not (obj-of-class-p proj ede-project-placeholder))
+                  (error "Attempt to add a non-project to the ede projects list"))
+                (add-to-list 'ede-projects proj))
+              proj)))
 
 ;; Enable the wrapper for compilation database projects
 (use-package ede-compdb
+  :after ede
   :load-path (lambda () (expand-file-name "ede-compdb/" user-emacs-directory)))
 
 ;; Extensions to Emacs Development Environment for use with CMake-based projects
 (use-package ede-cmake
+  :after ede
   :load-path (lambda () (expand-file-name "ede-cmake/" user-emacs-directory)))
 
 (provide 'setup-cmake)

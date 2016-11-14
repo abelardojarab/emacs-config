@@ -172,9 +172,6 @@
           (file-directory-p "c:/cygwin64/bin"))
       (require 'setup-cygwin))
 
-  ;; Fix pipe delay
-  (setq w32-pipe-read-delay 0)
-
   ;; Custom $PATH
   (when (file-directory-p "c:/cygwin/bin")
     (setenv "PATH" (concat "c:/cygwin/bin:" (getenv "PATH")))
