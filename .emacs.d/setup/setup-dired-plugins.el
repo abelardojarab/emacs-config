@@ -106,7 +106,7 @@
   :after (dired all-the-icons)
   :load-path (lambda () (expand-file-name "all-the-icons-dired/" user-emacs-directory))
   :commands all-the-icons-dired-mode
-  :config (add-hook 'dired-mode-hook 'all-the-icons-dired-mode)))
+  :config (add-hook 'dired-mode-hook 'all-the-icons-dired-mode))
 
 ;; neotree side bar
 (use-package neotree
