@@ -133,6 +133,7 @@
 ;; Sunrise Commander
 (use-package sunrise-commander
   :defer t
+  :disabled t
   :commands (sunrise sr-dired cb-sunrise-commander/dired-this-dir)
   :load-path (lambda () (expand-file-name "sunrise-commander/" user-emacs-directory))
   :bind (("C-;" . cb-sunrise-commander/dired-this-dir)

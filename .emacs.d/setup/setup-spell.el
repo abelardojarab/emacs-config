@@ -98,6 +98,7 @@
 ;; flyspell
 (use-package flyspell
   :diminish flyspell-mode
+  :if (not (equal 'system-type 'windows-nt))
   :config (progn
             (setq flyspell-issue-message-flag nil
                   flyspell-issue-welcome-flag nil)
@@ -105,7 +106,6 @@
               (add-hook hook (lambda () (flyspell-mode 1))))
             (dolist (hook '(change-log-mode-hook log-edit-mode-hook))
               (add-hook hook (lambda () (flyspell-mode -1))))
-            (add-hook 'prog-mode-hook 'flyspell-prog-mode)
 
             (defun flyspell-ajust-cursor-point (save cursor-location old-max)
               (when (not (looking-at "\\b"))

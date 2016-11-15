@@ -86,6 +86,7 @@
               (("C-c C-a" . magit-just-amend)
                ("c" . magit-maybe-commit)
                ("q" . magit-quit-session)))
+  :if (executable-find "git")
   :load-path (lambda () (expand-file-name "magit/lisp" user-emacs-directory))
   :init (progn
           (setenv "GIT_PAGER" "")
@@ -358,9 +359,11 @@ branch."
 
 ;; magit integration with git flow
 (use-package magit-gitflow
+  :if (executable-find "git")
+  :after magit
+  :defer t
   :load-path (lambda () (expand-file-name "magit-gitflow/" user-emacs-directory))
   :commands (turn-on-magit-gitflow)
-  :defer t
   :init (add-hook 'magit-mode-hook #'turn-on-magit-gitflow 'append))
 
 ;; diff-hl
@@ -385,6 +388,8 @@ branch."
 
 ;; emacs git utilities
 (use-package git-emacs
+  :if (executable-find "git")
+  :after magit
   :load-path (lambda () (expand-file-name "git-emacs/" user-emacs-directory))
   :config (require 'git-modeline))
 
@@ -393,6 +398,8 @@ branch."
   :commands (git-timemachine-start
              git-timemachine-toggle
              git-timemachine-switch-branch)
+  :if (executable-find "git")
+  :after magit
   :load-path (lambda () (expand-file-name "git-timemachine/" user-emacs-directory))
   :config (progn
             (defun my/git-timemachine-show-selected-revision ()
@@ -418,6 +425,7 @@ branch."
 
 ;; Show blame for current line
 (use-package git-messenger
+  :if (executable-find "git")
   :load-path (lambda () (expand-file-name "git-messenger/" user-emacs-directory)))
 
 (use-package git-gutter-plus

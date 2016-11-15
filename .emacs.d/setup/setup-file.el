@@ -1,8 +1,8 @@
 ;;; setup-file.el ---                                -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016, , , , ,   abelardo.jara-berrocal
+;; Copyright (C) 2014, 2015, 2016  abelardo.jara-berrocal
 
-;; Author: abelardo.jara-berrocal <ajaraber@plxcj9063.pdx.intel.com>
+;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
 ;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -55,7 +55,10 @@
 (setq w32-pipe-read-delay 0)
 
 ;; Auto revert files if they are modified in an external editor
-(global-auto-revert-mode t)
+(if (equal system-type 'windows-nt)
+    ;; auto-revert-remote-files freezes win64 emacs
+    (global-auto-revert-mode nil)
+  (global-auto-revert-mode t))
 
 ;; Garantee utf8 as input-method
 (set-input-method nil)
