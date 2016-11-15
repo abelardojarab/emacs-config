@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 2014, 2015, 2016  abelardo.jara-berrocal
 
-;; Author: abelardo.jara-berrocal <ajaraber@plxc25288.pdx.intel.com>
+;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
 ;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -162,8 +162,7 @@ tags table and its (recursively) included tags tables."
               "Update `etags-table-alist' based on the current project directory."
               (interactive)
               (add-to-list 'etags-table-alist
-                           `(,(concat (projectile-project-root) ".*")
-                             ,(concat (projectile-project-root) "TAGS"))
+                           `(,(concat (projectile-project-root) "TAGS"))
                            t))))
 
 ;; Ctags
@@ -201,7 +200,7 @@ tags table and its (recursively) included tags tables."
                (if (zerop (call-process "global" nil nil nil "-p"))
                    ;; case 1: tag file exists: update
                    (progn
-                     (shell-command "global -u -q 2>/dev/null")
+                     (shell-command "global -u -q 2> /dev/null")
                      (message "Tagfile updated"))
                  ;; case 2: no tag file yet: create it
                  (when (yes-or-no-p "Create tagfile?")
@@ -209,7 +208,7 @@ tags table and its (recursively) included tags tables."
                          (default-directory
                            (read-directory-name
                             "gtags: top of source tree:" default-directory)))
-                     (shell-command "gtags -i -q 2>/dev/null")
+                     (shell-command "gtags -i -q 2> /dev/null")
                      (message "Created tagfile"))))))))
 
 (provide 'setup-tags)

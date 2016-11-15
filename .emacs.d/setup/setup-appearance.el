@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 2014, 2015, 2016  abelardo.jara-berrocal
 
-;; Author: abelardo.jara-berrocal <ajaraber@plxc25288.pdx.intel.com>
+;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
 ;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -138,6 +138,12 @@ non-nil."
   :defer t
   :load-path (lambda () (expand-file-name "dadams/" user-emacs-directory))
   :commands (showkey-tooltip-mode showkey-log-mode))
+
+;; All the icons
+(use-package all-the-icons
+  :if (display-graphic-p)
+  :load-path (lambda () (expand-file-name "all-the-icons/" user-emacs-directory)))
+
 
 (provide 'setup-appearance)
 ;;; setup-appearance.el ends here

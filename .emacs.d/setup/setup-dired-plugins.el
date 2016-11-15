@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 2016  abelardo.jara-berrocal
 
-;; Author: abelardo.jara-berrocal <ajaraber@plxcj9063.pdx.intel.com>
+;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
 ;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -65,11 +65,11 @@
 ;; Display file icons in dired
 (use-package dired-icon
   :after dired
+  :disabled t
   :load-path (lambda () (expand-file-name "dired-icon/" user-emacs-directory))
   :if (display-graphic-p)
   :commands (dired-icon-mode)
-  :init (progn
-          (add-hook 'dired-mode-hook 'dired-icon-mode)))
+  :init (add-hook 'dired-mode-hook 'dired-icon-mode))
 
 ;; Facility to see images inside dired
 (use-package image-dired
@@ -97,6 +97,14 @@
   :defer t ;; don't access `dired-mode-map' until `peep-dired' is loaded
   :bind (:map dired-mode-map
               ("P" . peep-dired)))
+
+;; All the icons, dired plugin
+(use-package all-the-icons-dired
+  :if (display-graphic-p)
+  :after (dired all-the-icons)
+  :load-path (lambda () (expand-file-name "all-the-icons-dired/" user-emacs-directory))
+  :commands all-the-icons-dired-mode
+  :init (add-hook 'dired-mode-hook 'all-the-icons-dired-mode))
 
 ;; neotree side bar
 (use-package neotree

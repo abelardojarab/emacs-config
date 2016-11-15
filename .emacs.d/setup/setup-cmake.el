@@ -725,11 +725,13 @@ On success, return the added project."
 ;; Enable the wrapper for compilation database projects
 (use-package ede-compdb
   :after ede
+  :disabled t
   :load-path (lambda () (expand-file-name "ede-compdb/" user-emacs-directory)))
 
 ;; Extensions to Emacs Development Environment for use with CMake-based projects
 (use-package ede-cmake
-  :after ede
+  :after ede-compdb
+  :disabled t
   :load-path (lambda () (expand-file-name "ede-cmake/" user-emacs-directory)))
 
 (provide 'setup-cmake)

@@ -25,20 +25,20 @@
 ;;; Code:
 
 ;; Help to determine who modifies buffer
-(defvar my-debug-set-buffer-modified-p-buffers nil)
+(defvar my/debug-set-buffer-modified-p-buffers nil)
 (defadvice set-buffer-modified-p
-    (before my-debug-set-buffer-modified-p-advice)
-  (when (memq (current-buffer) my-debug-set-buffer-modified-p-buffers)
+    (before my/debug-set-buffer-modified-p-advice)
+  (when (memq (current-buffer) my/debug-set-buffer-modified-p-buffers)
     (debug)))
 (ad-activate 'set-buffer-modified-p)
 
-(defun my-debug-set-buffer-modified-p (buffer)
+(defun my/debug-set-buffer-modified-p (buffer)
   (interactive (list (current-buffer)))
-  (if (memq buffer my-debug-set-buffer-modified-p-buffers)
-      (progn (setq my-debug-set-buffer-modified-p-buffers
-                   (delq buffer my-debug-set-buffer-modified-p-buffers))
+  (if (memq buffer my/debug-set-buffer-modified-p-buffers)
+      (progn (setq my/debug-set-buffer-modified-p-buffers
+                   (delq buffer my/debug-set-buffer-modified-p-buffers))
              (message "Disabled for %s" buffer))
-    (add-to-list 'my-debug-set-buffer-modified-p-buffers buffer)
+    (add-to-list 'my/debug-set-buffer-modified-p-buffers buffer)
     (message "Enabled for %s" buffer)))
 
 ;; Trick emacs when opening a file through menu-find-file-existing

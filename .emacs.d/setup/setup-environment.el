@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 2014, 2015, 2016  abelardo.jara-berrocal
 
-;; Author: Abelardo Jara <abelardojara@Abelardos-MacBook-Pro.local>
+;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
 ;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
