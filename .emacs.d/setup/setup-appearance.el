@@ -28,10 +28,6 @@
 (if (display-graphic-p)
     (tool-bar-mode -1))
 
-;; GUI-specific thing
-(if (display-graphic-p)
-    (setenv "EMACS_GUI" "t"))
-
 ;; Dont pause screen refresh
 (setq redisplay-dont-pause t)
 
@@ -129,8 +125,10 @@ non-nil."
 (use-package lawlist-scroll-mode
   :if (display-graphic-p)
   :diminish (lawlist-scroll-bar-mode)
-  :init (progn (set-scroll-bar-mode 'right)
-               (scroll-bar-mode nil))
+  :commands lawlist-scroll-bar-mode
+  :init (progn
+          (scroll-bar-mode nil)
+          (set-scroll-bar-mode 'right))
   :config (add-hook 'prog-mode-hook (lambda () (lawlist-scroll-bar-mode 1))))
 
 ;; Showkey as typed
@@ -144,7 +142,6 @@ non-nil."
 (use-package all-the-icons
   :if (display-graphic-p)
   :load-path (lambda () (expand-file-name "all-the-icons/" user-emacs-directory)))
-
 
 (provide 'setup-appearance)
 ;;; setup-appearance.el ends here

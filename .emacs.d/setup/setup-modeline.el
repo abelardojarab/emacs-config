@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 2014, 2015, 2016  abelardo.jara-berrocal
 
-;; Author: abelardo.jara-berrocal <ajaraber@plxc25288.pdx.intel.com>
+;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
 ;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -27,16 +27,14 @@
 ;; Nyan cat
 (use-package nyan-mode
   :if (display-graphic-p)
+  :commands nyan-mode
   :load-path (lambda () (expand-file-name "nyan-mode/" user-emacs-directory))
   :config (nyan-mode t))
 
 ;; Powerline
 (use-package powerline
   :after projectile
-  :load-path (lambda () (expand-file-name "powerline/" user-emacs-directory))
-  :init (progn
-          (setq powerline-height 22)
-          (setq powerline-default-separator 'wave)))
+  :load-path (lambda () (expand-file-name "powerline/" user-emacs-directory)))
 
 (use-package spaceline
   :after powerline
