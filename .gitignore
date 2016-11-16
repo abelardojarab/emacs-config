@@ -46,3 +46,4 @@ Cask
 .nfs*
 *.gz
 TAGS
+cmake_build_dir/*
