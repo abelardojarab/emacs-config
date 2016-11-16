@@ -107,7 +107,7 @@ non-nil."
                         (if (and (> (buffer-size)
                                     (* 5000 80)))
                             (linum-mode -1)
-                          (linum-mode 1))))
+                          (linum-mode -1))))
 
             (defadvice linum-update-window (around linum-dynamic activate)
               (let* ((w (length (number-to-string
@@ -127,6 +127,7 @@ non-nil."
 
 ;; Adaptive scrollbar
 (use-package lawlist-scroll-mode
+  :commands lawlist-scroll-bar-mode
   :if (display-graphic-p)
   :diminish (lawlist-scroll-bar-mode)
   :init (set-scroll-bar-mode 'right)
