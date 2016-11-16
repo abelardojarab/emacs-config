@@ -127,10 +127,10 @@ non-nil."
 
 ;; Adaptive scrollbar
 (use-package lawlist-scroll-mode
-  :commands lawlist-scroll-bar-mode
   :if (display-graphic-p)
   :diminish (lawlist-scroll-bar-mode)
-  :init (set-scroll-bar-mode 'right)
+  :init (progn (set-scroll-bar-mode 'right)
+               (scroll-bar-mode nil))
   :config (add-hook 'prog-mode-hook (lambda () (lawlist-scroll-bar-mode 1))))
 
 ;; Showkey as typed
