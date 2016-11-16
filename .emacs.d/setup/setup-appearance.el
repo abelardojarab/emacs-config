@@ -125,7 +125,6 @@ non-nil."
 (use-package lawlist-scroll-mode
   :if (display-graphic-p)
   :diminish (lawlist-scroll-bar-mode)
-  :commands lawlist-scroll-bar-mode
   :init (progn
           (scroll-bar-mode nil)
           (set-scroll-bar-mode 'right))
