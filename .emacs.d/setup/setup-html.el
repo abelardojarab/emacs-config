@@ -1,6 +1,6 @@
 ;;; setup-html.el ---                            -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016  Abelardo Jara
+;; Copyright (C) 2016  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara <abelardojara@Abelardos-MacBook-Pro.local>
 ;; Keywords:
@@ -33,6 +33,8 @@
   :load-path (lambda () (expand-file-name "web-mode/" user-emacs-directory))
   :config (progn
             (setq web-mode-enable-css-colorization t
+                  web-mode-enable-auto-quoting t
+                  web-mode-enable-auto-closing t
                   web-mode-style-padding 2
                   web-mode-script-padding 2
                   web-mode-markup-indent-offset 2

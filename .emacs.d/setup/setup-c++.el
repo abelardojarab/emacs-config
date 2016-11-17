@@ -1,6 +1,6 @@
 ;;; setup-c++.el ---                                 -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016  Abelardo Jara
+;; Copyright (C) 2016  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara <abelardojara@Abelardos-MacBook-Pro.local>
 ;; Keywords:
@@ -32,6 +32,19 @@
   :config (progn
             ;; Put c++-mode as default for *.h files (improves parsing)
             (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
+
+            ;; Make C/C++ indentation reliable
+            ;; http://stackoverflow.com/questions/663588/emacs-c-mode-incorrect-indentation
+            (defun my/c-indent-offset-according-to-syntax-context (key val)
+              ;; remove the old element
+              (setq c-offsets-alist (delq (assoc key c-offsets-alist) c-offsets-alist))
+              ;; new value
+              (add-to-list 'c-offsets-alist '(key . val)))
+            (add-hook 'c-mode-common-hook
+                      (lambda ()
+                        (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
+                          ;; indent
+                          (my/c-indent-offset-according-to-syntax-context 'substatement-open 0))))
 
             ;; C/C++ style
             (defun my/c-mode-init ()
