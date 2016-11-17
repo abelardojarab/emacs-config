@@ -1,6 +1,6 @@
 ;;; setup-windows.el ---                             -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016  Abelardo Jara
+;; Copyright (C) 2014, 2015, 2016  abelardo.jara-berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
 ;; Keywords:
@@ -23,6 +23,9 @@
 ;;
 
 ;;; Code:
+
+;; http://stackoverflow.com/questions/25469319/prevent-emacs-from-opening-a-buffer-in-a-new-frame
+(setq menu-bar-select-buffer-function 'switch-to-buffer)
 
 ;; Always split horizontally
 (setq split-width-threshold 3000)

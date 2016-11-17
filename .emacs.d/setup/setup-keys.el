@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 2014, 2015, 2016  abelardo.jara-berrocal
 
-;; Author: abelardo.jara-berrocal <ajaraber@plxc25288.pdx.intel.com>
+;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
 ;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -30,19 +30,25 @@
 
 ;; Windows-like mouse/arrow movement & selection
 (use-package cua-base
+  :config (progn (cua-mode 1)))
+
+;; Shift mark package
+(use-package shift-mark
   :init (progn
-          (require 'shift-mark)
           (transient-mark-mode t)
           (setq shift-select-mode t))
   :config (progn
-            (cua-mode 1)))
+            (defun shift-mark-forward-page ()
+              (interactive)
+              (shift-mark 'my/page-down))
 
-;; key bindings for shift select
-(global-set-key [S-prior]      'shift-mark-backward-page)
-(global-set-key [S-next]       'shift-mark-forward-page)
+            (defun shift-mark-backward-page ()
+              (interactive)
+              (shift-mark 'my/page-up)))
 
-;; http://stackoverflow.com/questions/25469319/prevent-emacs-from-opening-a-buffer-in-a-new-frame
-(setq menu-bar-select-buffer-function 'switch-to-buffer)
+  ;; key bindings for shift select
+  (global-set-key [S-prior] 'shift-mark-backward-page)
+  (global-set-key [S-next]  'shift-mark-forward-page))
 
 ;; Smart tab
 (use-package smart-tab
@@ -52,14 +58,6 @@
             (cons 'yas-hippie-try-expand 'hippie-expand-try-functions-list)
             (setq smart-tab-using-hippie-expand t)
             (global-smart-tab-mode)))
-
-;; Fix tab problem in some modes that grab the tab key so auto-complete and yasnipet dont work
-(defun ac-tab-noconflict ()
-  (let ((command (key-binding [tab]))) ;; remember command
-    (local-unset-key [tab]) ;; unset from (kbd "<tab>")
-    (local-set-key (kbd "TAB") command))) ;; bind to (kbd "TAB")
-(add-hook 'markdown-mode-hook 'ac-tab-noconflict)
-(add-hook 'org-mode-hook 'ac-tab-noconflict)
 
 ;; popup-based buffer switcher
 (use-package popup-switcher

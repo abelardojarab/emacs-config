@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 2014, 2015, 2016  abelardo.jara-berrocal
 
-;; Author: abelardo.jara-berrocal <ajaraber@plxc25288.pdx.intel.com>
+;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
 ;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -483,8 +483,7 @@ dirs. Input is a string and output is a list of strings."
   "Return the path of the dir's parent directory"
   (file-name-directory (directory-file-name dir)))
 
-;;; String manipulation functions
-
+;; String manipulation functions
 (require 'subr-x)
 
 ;; string-prefix-p has been in Emacs for years, but string-suffix-p was
@@ -524,6 +523,19 @@ attention to case differences."
   (defun string-truncate (string n)
     "Return STRING minus the last N characters."
     (substring string 0 (max 0(- (length string) n)))))
+
+;; Page navigation funtions
+(defun my/page-down ()
+  (interactive)
+  (next-line
+   (- (window-text-height)
+      next-screen-context-lines)))
+
+(defun my/page-up ()
+  (interactive)
+  (previous-line
+   (- (window-text-height)
+      next-screen-context-lines)))
 
 (provide 'setup-functions)
 ;;; setup-utilities.el ends here

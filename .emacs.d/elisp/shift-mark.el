@@ -75,7 +75,6 @@ command 'cmd'. If no region is marked, we mark one first."
 
 (defun backspace-delete-marked-region ()
   (interactive)
-                                        ;  (zmacs-region-stays t)
   (if (region-active-p)
       (kill-region (mark) (point))
     (delete-backward-char 1)))
