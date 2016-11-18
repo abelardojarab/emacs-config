@@ -135,8 +135,6 @@
 
 ;; Window purpose
 (use-package window-purpose
-  :defer t
-  :commands (purpose-mode purpose-switch-buffer purpose-pop-buffer)
   :load-path (lambda () (expand-file-name "window-purpose/" user-emacs-directory))
   :init (progn
           ;; overriding `purpose-mode-map' with empty keymap, so it doesn't conflict
