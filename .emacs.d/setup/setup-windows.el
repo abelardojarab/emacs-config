@@ -136,7 +136,7 @@
 ;; Window purpose
 (use-package window-purpose
   :defer t
-  :commands purpose-mode
+  :commands (purpose-mode purpose-switch-buffer purpose-pop-buffer)
   :load-path (lambda () (expand-file-name "window-purpose/" user-emacs-directory))
   :init (progn
           ;; overriding `purpose-mode-map' with empty keymap, so it doesn't conflict
@@ -144,20 +144,58 @@
           ;; be done before `window-purpose' is loaded
           (setq purpose-mode-map (make-sparse-keymap)))
   :config (progn
-            (require 'window-purpose-x)
-            (setq purpose-preferred-prompt 'helm)
-            (defalias 'window-purpose/helm-mini-ignore-purpose
-              (without-purpose-command #'helm-mini)
-              "Same as `helm-mini', but disable window-purpose while this command executes.")
+            ;; Enable purpose mode
             (purpose-mode)
 
-            ;; Enable for popwin compatibility
-            (purpose-x-popwin-setup)
+            ;; Configuration
+            (setq purpose-user-name-purposes
+                  '(("*ag*"               . search)))
+
+            (setq purpose-user-regexp-purposes
+                  '(("^\\*elfeed"         . admin)))
+
+            (setq purpose-user-mode-purposes
+                  '((
+                     (circe-chat-mode     . comm)
+                     (circe-query-mode    . comm)
+                     (circe-lagmon-mode   . comm)
+                     (circe-server-mode   . comm)
+
+                     (ess-mode            . edit)
+                     (gitconfig-mode      . edit)
+                     (conf-xdefaults-mode . edit)
+                     (inferior-ess-mode   . interactive)
+
+                     (mu4e-main-mode      . admin)
+                     (mu4e-view-mode      . admin)
+                     (mu4e-about-mode     . admin)
+                     (mu4e-headers-mode   . admin)
+                     (mu4e-compose-mode   . edit)
+
+                     (pdf-view-mode       . view)
+                     (doc-view-mode       . view))))
+
+            (purpose-compile-user-configuration)
+
+            ;; Extra configuration
+            (require 'window-purpose-x)
+
+            ;; Single window magit
+            (purpose-x-magit-single-on)
 
             ;; when killing a purpose-dedicated buffer that is displayed in a window,
             ;; ensure that the buffer is replaced by a buffer with the same purpose
             ;; (or the window deleted, if no such buffer)
-            (purpose-x-kill-setup)))
+            (purpose-x-kill-setup)
+
+            ;; Prefer helm
+            (setq purpose-preferred-prompt 'helm)))
+
+;; Helm interface to purpose
+(use-package helm-purpose
+  :after (helm window-purpose)
+  :commands (helm-purpose-switch-buffer-with-purpose helm-purpose-switch-buffer-with-some-purpose)
+  :load-path (lambda () (expand-file-name "helm-purpose/" user-emacs-directory)))
 
 ;; Resize windows
 (use-package resize-window
