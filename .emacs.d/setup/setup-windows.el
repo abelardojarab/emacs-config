@@ -138,6 +138,9 @@
   :load-path (lambda () (expand-file-name "window-purpose/" user-emacs-directory))
   :after helm
   :init (progn
+          ;; Prefer helm
+          (setq purpose-preferred-prompt 'helm)
+
           ;; overriding `purpose-mode-map' with empty keymap, so it doesn't conflict
           ;; with original `C-x C-f', `C-x b', etc. and `semantic' key bindings. must
           ;; be done before `window-purpose' is loaded
@@ -145,35 +148,6 @@
   :config (progn
             ;; Enable purpose mode
             (purpose-mode)
-
-            ;; Configuration
-            (setq purpose-user-name-purposes
-                  '(("*ag*"              . search)))
-
-            (setq purpose-user-regexp-purposes
-                  '(("^\\*elfeed"        . admin)))
-
-            (setq purpose-user-mode-purposes
-                  '((circe-chat-mode     . comm)
-                    (circe-query-mode    . comm)
-                    (circe-lagmon-mode   . comm)
-                    (circe-server-mode   . comm)
-
-                    (ess-mode            . edit)
-                    (gitconfig-mode      . edit)
-                    (conf-xdefaults-mode . edit)
-                    (inferior-ess-mode   . interactive)
-
-                    (mu4e-main-mode      . admin)
-                    (mu4e-view-mode      . admin)
-                    (mu4e-about-mode     . admin)
-                    (mu4e-headers-mode   . admin)
-                    (mu4e-compose-mode   . edit)
-
-                    (pdf-view-mode       . view)
-                    (doc-view-mode       . view)))
-
-            (purpose-compile-user-configuration)
 
             ;; Extra configuration
             (require 'window-purpose-x)
