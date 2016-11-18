@@ -146,8 +146,32 @@
           ;; be done before `window-purpose' is loaded
           (setq purpose-mode-map (make-sparse-keymap)))
   :config (progn
-            ;; Enable purpose mode
-            (purpose-mode)
+            (setq purpose-user-name-purposes
+                  '(("*ag*"               . search)))
+
+            (setq purpose-user-regexp-purposes
+                  '(("^\\*elfeed"         . admin)))
+
+            (setq purpose-user-mode-purposes
+                  '((eshell-mode         . terminal)
+
+                    (circe-chat-mode     . comm)
+                    (circe-query-mode    . comm)
+                    (circe-lagmon-mode   . comm)
+                    (circe-server-mode   . comm)
+
+                    (ess-mode            . edit)
+                    (gitconfig-mode      . edit)
+                    (inferior-ess-mode   . interactive)
+
+                    (mu4e-main-mode      . admin)
+                    (mu4e-view-mode      . admin)
+                    (mu4e-about-mode     . admin)
+                    (mu4e-headers-mode   . admin)
+                    (mu4e-compose-mode   . edit)
+
+                    (pdf-view-mode       . view)
+                    (doc-view-mode       . view)))
 
             ;; Extra configuration
             (require 'window-purpose-x)
@@ -161,7 +185,11 @@
             (purpose-x-kill-setup)
 
             ;; Prefer helm
-            (setq purpose-preferred-prompt 'helm)))
+            (setq purpose-preferred-prompt 'helm)
+
+            ;; Load user preferences
+            (purpose-compile-user-configuration)
+            (purpose-mode)))
 
 ;; Helm interface to purpose
 (use-package helm-purpose

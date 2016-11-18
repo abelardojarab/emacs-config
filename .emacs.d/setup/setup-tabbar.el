@@ -50,7 +50,34 @@
               (set-buffer-modified-p t)
               (ztl-modification-state-change))
             (add-hook 'after-save-hook 'ztl-modification-state-change)
-            (add-hook 'first-change-hook 'ztl-on-buffer-modification)))
+            (add-hook 'first-change-hook 'ztl-on-buffer-modification)
+
+            ;; Assure switch tabbar uses switch-to-buffer
+            (defun switch-tabbar (num)
+              (let* ((tabs (tabbar-tabs
+                            (tabbar-current-tabset)))
+                     (tab (nth
+                           (if (> num 0) (- num 1) (+ (length tabs) num))
+                           tabs)))
+                (if tab (switch-to-buffer (car tab)))))
+
+            ;; Appearance
+            (defun my/tabbar-set-faces()
+              "Set the tabbar background to the same color as the regular background."
+              (interactive)
+              (setq tabbar-separator '(0.0))
+              (setq tabbar-background-color "#331214") ;; the color of the tabbar background
+
+              (set-face-attribute 'tabbar-default nil :background "black")
+              (set-face-attribute 'tabbar-unselected nil :background "black" :foreground "white" :box '(:line-width 1 :color "#331214" ))
+              (set-face-attribute 'tabbar-selected nil :background "#331213" :foreground "white" :box '(:line-width 1 :color "#331214" ))
+              (set-face-attribute 'tabbar-button nil :box '(:line-width 1 :color "black" :style released-button));
+              (set-face-attribute 'tabbar-highlight nil :underline nil)
+              (set-face-attribute 'tabbar-separator nil :height 0.5))
+
+            ;; Enable it
+            (my/tabbar-set-faces)
+            (add-hook 'window-configuration-change-hook #'my/tabbar-set-faces)))
 
 ;; Tabbar ruler pre-requisites
 (use-package mode-icons

@@ -141,6 +141,15 @@
   (custom-set-faces
    `(fringe ((t (:background ,my/fringe-background-color))))))
 (add-hook 'after-init-hook #'my/set-faces)
+(add-hook 'window-configuration-change-hook #'my/set-faces)
+
+;; Disable theme before setting a new one
+(defun disable-themes (&optional themes)
+  (interactive)
+  (mapc #'disable-theme (or themes custom-enabled-themes)))
+
+(defadvice load-theme (before disable-first activate)
+  (disable-themes))
 
 ;; Inherit theme for new frames
 (setq frame-inherited-parameters '(width height face background-mode
