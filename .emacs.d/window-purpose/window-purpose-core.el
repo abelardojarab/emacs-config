@@ -40,7 +40,7 @@
   :type 'symbol
   :package-version "1.2")
 
-(defcustom purpose-preferred-prompt 'auto
+(defcustom purpose-preferred-prompt 'helm
   "Which interface should Purpose use when prompting the user.
 Available options are: 'auto - use IDO when `ido-mode' is enabled,
 otherwise Helm when `helm-mode' is enabled, otherwise use default Emacs
