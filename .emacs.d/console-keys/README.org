@@ -1,0 +1,19 @@
+* Get all the emacs keys working in the Linux Console
+This adds support for some of the chords that doesn't work by default when running emacs in the Linux Console, such as a range of combination of arrows, =C=, =M=, =S= and =RET=. I use org pretty extensively, and all of the keys for that should be covered.
+
+Note: This works for the Linux Console (the one you're in before starting X) but it doesn't necessarrily work for terminal emulators in X.
+
+** Config
+Load =keys.txt= to the keymap by putting this somewhere appropriate like =/etc/rc.local=:
+
+#+BEGIN_SRC sh
+loadkeys /path/to/keys.txt
+#+END_SRC
+
+Load =keys.el= by putting this somewhere in your emacs init file:
+
+#+BEGIN_SRC emacs-lisp
+(load "/path/to/keys.el")
+#+END_SRC
+
+That's it.

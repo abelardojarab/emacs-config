@@ -266,5 +266,10 @@
         (add-to-list 'minor-mode-map-alist mykeys))))
 (ad-activate 'load)
 
+;; Enable console keys
+(use-package console-keys
+  :if (not (display-graphic-p))
+  :load-path (lambda () (expand-file-name "console-keys/" user-emacs-directory)))
+
 (provide 'setup-keys)
 ;;; setup-keys.el ends here
