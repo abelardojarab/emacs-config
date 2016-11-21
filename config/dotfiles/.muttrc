@@ -1,0 +1,9 @@
+set certificate_file=~/.mutt_certs
+set folder="imaps://ajaraber@imapmail.intel.com"
+set spoolfile="imaps://ajaraber@imapmail.intel.com"
+
+# Sanely handle multi-part messages (prefer text part, but yield to
+# mailcap-configured rendering for html-only)
+alternative_order text/plain text/html
+auto_view text/html
+
