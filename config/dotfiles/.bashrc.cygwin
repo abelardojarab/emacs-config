@@ -1,0 +1,36 @@
+function color_my_prompt {
+    local __user_and_host="\[\033[01;32m\]\u@\h"
+    local __cur_location="\[\033[01;34m\]\w"
+    local __git_branch_color="\[\033[31m\]"
+    #local __git_branch="\`ruby -e \"print (%x{git branch 2> /dev/null}.grep(/^\*/).first || '').gsub(/^\* (.+)$/, '(\1) ')\"\`"
+    local __git_branch='`git branch 2> /dev/null | grep -e ^* | sed -E  s/^\\\\\*\ \(.+\)$/\(\\\\\1\)\ /`'
+    local __prompt_tail="\[\033[35m\]$"
+    local __last_color="\[\033[00m\]"
+export PS1="$__user_and_host $__cur_location $__git_branch_color$__git_branch$__prompt_tail$__last_color "
+}
+color_my_prompt
+
+export LS_COLORS='rs=0:di=01;34:ln=01;36:mh=00:pi=40;33'
+export TERM=xterm-color
+export CLICOLOR=1
+
+# GNU ls supports colors!
+# See dircolors to customize colors
+export LS_OPTS='--color=auto --ignore="NT*" --ignore="nt*"'
+alias  ls='ls --ignore="NT*" --ignore="nt*" --color=auto --ignore="Intel*"'
+
+# Get color support for 'less'
+export LESS="--RAW-CONTROL-CHARS"
+
+export PATH=$HOME/bin:/usr/bin:/bin:/usr/local/bin:$PATH
+export PATH="/cygdrive/c/Program Files/nodejs":$PATH
+export PATH="/cygdrive/c/Software/Octave-3.6.4/bin":$PATH
+export PATH="/cygdrive/c/Program Files/R/R-3.1.2patched/bin":$PATH
+export PATH="/cygdrive/c/Program Files (x86)/MiKTeX 2.9/miktex/bin":$PATH
+export PATH="/cygdrive/c/Program Files (x86)/LLVM/bin":$PATH
+export PATH="/cygdrive/c/Program Files/qemu":$PATH
+
+# Cygwin-related
+export PATH=$PATH:"/cygdrive/c/Program Files/elinks-0.11.6"
+alias git='/usr/bin/git'
+cd $HOME
