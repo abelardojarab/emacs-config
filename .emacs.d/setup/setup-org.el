@@ -371,7 +371,7 @@
                   "Convert clipboard contents from HTML to Org and then paste (yank)."
                   (interactive)
                   (kill-new (shell-command-to-string
-                             "xclip -o -t text/html | pandoc -f html -t json | pandoc -f json -t org"))
+                             "xclip -o -t TARGETS | grep -q text/html && (xclip -o -t text/html | pandoc -f html -t json | pandoc -f json -t org) || xclip -o"))
                   (yank))
 
                 (defun org-formatted-copy ()

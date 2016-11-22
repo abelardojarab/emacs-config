@@ -29,7 +29,7 @@
 
 (use-package web-mode
   :mode ("\\.css?\\'" "\\.html?\\'")
-  :commands web-mode
+  :commands (web-mode htmlize-region-to-file)
   :load-path (lambda () (expand-file-name "web-mode/" user-emacs-directory))
   :config (progn
             (setq web-mode-enable-css-colorization t
