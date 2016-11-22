@@ -345,9 +345,16 @@
                    (interactive)
                    (org-text-wrapper "="))
 
-            ;; Org formatted copy
+            ;; Org formatted copy and paste
             (if (equal system-type 'darwin)
-                (defun org-formatted-copy ()
+                (progn
+                  (defun org-html-paste ()
+                    "Convert clipboard contents from HTML to Org and then paste (yank)."
+                    (interactive)
+                    (kill-new (shell-command-to-string "osascript -e 'the clipboard as \"HTML\"' | perl -ne 'print chr foreach unpack(\"C*\",pack(\"H*\",substr($_,11,-3)))' | pandoc -f html -t json | pandoc -f json -t org"))
+                    (yank))
+
+                (defun org-html-copy ()
                   "Export region to HTML, and copy it to the clipboard."
                   (interactive)
                   (save-window-excursion
@@ -358,15 +365,23 @@
                          (point-min)
                          (point-max)
                          "textutil -stdin -format html -convert rtf -stdout | pbcopy"))
-                      (kill-buffer buf))))
-              (defun org-formatted-copy ()
-                "Export region to HTML, and copy it to the clipboard."
-                (interactive)
-                (org-export-to-file 'html "/tmp/org.html")
-                (apply
-                 'start-process "xclip" "*xclip*"
-                 (split-string
-                  "xclip -verbose -i /tmp/org.html -t text/html -selection clipboard" " "))))
+                      (kill-buffer buf)))))
+              (progn
+                (defun org-html-paste ()
+                  "Convert clipboard contents from HTML to Org and then paste (yank)."
+                  (interactive)
+                  (kill-new (shell-command-to-string
+                             "xclip -o -t text/html | pandoc -f html -t json | pandoc -f json -t org"))
+                  (yank))
+
+                (defun org-formatted-copy ()
+                  "Export region to HTML, and copy it to the clipboard."
+                  (interactive)
+                  (org-export-to-file 'html "/tmp/org.html")
+                  (apply
+                   'start-process "xclip" "*xclip*"
+                   (split-string
+                    "xclip -verbose -i /tmp/org.html -t text/html -selection clipboard" " ")))))
 
             ;; convert csv to org-table considering "12,12"
             (defun org-convert-csv-table (beg end)
