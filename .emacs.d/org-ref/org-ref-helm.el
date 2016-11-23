@@ -143,7 +143,8 @@ This widens the file so that all links go to the right place."
         (bad-refs (org-ref-bad-ref-candidates))
         (bad-labels (org-ref-bad-label-candidates))
         (bad-files (org-ref-bad-file-link-candidates))
-        (bib-candidates '()))
+        (bib-candidates '())
+	(unreferenced-labels '()))
 
     ;; setup bib-candidates. This checks a variety of things in the
     ;; bibliography, bibtex files. check for which bibliographies are used
@@ -242,6 +243,74 @@ at the end of you file.
 	    bib-candidates)))
        bibfiles))
 
+    ;; unreferenced labels
+    (save-excursion
+      (save-restriction
+	(widen)
+	(goto-char (point-min))
+	(let ((matches '()))
+	  ;; these are the org-ref label:stuff  kinds
+	  (while (re-search-forward
+		  "[^#+]label:\\([a-zA-z0-9:-]*\\)" nil t)
+	    (setq matches (append matches
+				  (list (cons
+					 (match-string-no-properties 1)
+					 (point))))))
+	  ;; now add all the other kinds of labels.
+	  ;; #+label:
+	  (save-excursion
+	    (goto-char (point-min))
+	    (while (re-search-forward "^#\\+label:\\s-+\\(.*\\)\\b" nil t)
+	      ;; do not do this for tables. We get those in `org-ref-get-tblnames'.
+	      ;; who would have thought you have save match data here? Trust me. When
+	      ;; I wrote this, you did.
+	      (unless (save-match-data  (equal (car (org-element-at-point)) 'table))
+		(add-to-list 'matches (cons (match-string-no-properties 1) (point))
+			     t))))
+
+	  ;; \label{}
+	  (save-excursion
+	    (goto-char (point-min))
+	    (while (re-search-forward "\\\\label{\\([a-zA-z0-9:-]*\\)}"
+				      nil t)
+	      (add-to-list 'matches (cons (match-string-no-properties 1) (point)) t)))
+
+	  ;; #+tblname: and actually #+label
+	  (loop for cell in (org-element-map (org-element-parse-buffer 'element) 'table
+			      (lambda (table)
+				(cons (org-element-property :name table)
+				      (org-element-property :begin table))))
+		do
+		(add-to-list 'matches cell t))
+
+	  ;; CUSTOM_IDs
+	  (org-map-entries
+	   (lambda ()
+	     (let ((custom_id (org-entry-get (point) "CUSTOM_ID")))
+	       (when (not (null custom_id))
+		 (add-to-list 'matches (cons custom_id (point)))))))
+
+	  (goto-char (point-min))
+	  (while (re-search-forward "^#\\+name:\\s-+\\(.*\\)" nil t)
+	    (pushnew (cons (match-string 1) (point)) matches))
+
+
+	  ;; unreference labels
+	  (let ((refs (org-element-map (org-element-parse-buffer) 'link
+			(lambda (el) 
+			  (when (or (string= "ref" (org-element-property :type el))
+				    (string= "eqref" (org-element-property :type el))
+				    (string= "pageref" (org-element-property :type el))
+				    (string= "nameref" (org-element-property :type el))
+				    (string= "autoref" (org-element-property :type el)))
+			    (org-element-property :path el))))))
+	    (loop for (label . p) in matches 
+		  do
+		  (when (not (-contains? refs label))
+		    (cl-pushnew
+		     (cons label (set-marker (make-marker) p))
+		     unreferenced-labels)))))))
+
 
     (helm :sources `(((name . "Bad citations")
                       (candidates . ,bad-citations)
@@ -271,6 +340,13 @@ at the end of you file.
                         (goto-char marker)
 			(org-show-entry)))
 
+		     ((name . "Labels with no ref links")
+		      (candidates . ,unreferenced-labels)
+		      (action . (lambda (marker)
+                                  (switch-to-buffer (marker-buffer marker))
+                                  (goto-char marker)
+				  (org-show-entry))))
+
                      ((name . "Bibliography")
                       (candidates . ,bib-candidates)
                       (action . (lambda (x)
@@ -279,7 +355,9 @@ at the end of you file.
 		     ((name . "Miscellaneous")
 		      (candidates . (,(format "org-latex-prefer-user-labels = %s"
 					      org-latex-prefer-user-labels)
-				     ,(format "bibtex-dialect = %s" bibtex-dialect)))
+				     ,(format "bibtex-dialect = %s" bibtex-dialect)
+				     ,(format "org-version = %s" (org-version))
+				     ,(format "completion backend = %s" org-ref-completion-library)))
 		      (action . nil))
                      ;;
                      ((name . "Utilities")

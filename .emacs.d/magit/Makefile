@@ -23,6 +23,9 @@ help:
 	$(info make lisp             - compile elisp)
 	$(info make docs             - generate info manuals)
 	$(info make info             - generate info manuals)
+	$(info make html             - generate html manual files)
+	$(info make html-dir         - generate html manual directories)
+	$(info make pdf              - generate pdf manuals)
 	$(info )
 	$(info Install)
 	$(info =======)
@@ -43,15 +46,18 @@ help:
 	$(info =================)
 	$(info )
 	$(info make texi             - regenerate texi from org)
-	$(info make genstats         - regenerate statistics)
+	$(info make stats            - regenerate statistics)
 	$(info make authors          - regenerate AUTHORS.md)
+	$(info make preview-stats    - preview statistics)
+	$(info make publish-stats    - publish statistics)
+	$(info make preview-manuals  - preview manuals)
+	$(info make publish-manuals  - publish manuals)
 	$(info make dist             - create tarballs)
 	$(info make bump-versions    - bump versions for release)
 	$(info make bump-snapshots   - bump versions after release)
 	@printf "\n"
 
 lisp:
-	@$(RM) $(ELCS) $(ELGS) # temporary cleanup kludge
 	@$(MAKE) -C lisp lisp
 
 docs:
@@ -60,8 +66,14 @@ docs:
 info:
 	@$(MAKE) -C Documentation info
 
-texi:
-	@$(MAKE) -C Documentation texi
+html:
+	@$(MAKE) -C Documentation html
+
+html-dir:
+	@$(MAKE) -C Documentation html-dir
+
+pdf:
+	@$(MAKE) -C Documentation pdf
 
 install: install-lisp install-docs
 
@@ -92,7 +104,7 @@ emacs-Q: clean-lisp
 
 clean: clean-lisp clean-docs clean-archives
 	@printf "Cleaning...\n"
-	@$(RM) $(ELCS) $(ELGS) # temporary cleanup kludge
+	@$(RM) *.elc $(ELGS) # temporary cleanup kludge
 	@$(RM) Documentation/*.texi~ Documentation/*.info-1 Documentation/*.info-2
 	@$(RM) magit-pkg.el t/magit-tests.elc
 
@@ -108,12 +120,26 @@ clean-archives:
 
 # Release management
 
-genstats:
-	@printf "Generating stats\n"
-	@gitstats -c style=/css/stats.css -c max_authors=200 . $(statsdir)
+texi:
+	@$(MAKE) -C Documentation texi
+
+stats:
+	@$(MAKE) -C Documentation stats
 
 authors:
 	@$(MAKE) -C Documentation authors
+
+preview-stats:
+	@$(MAKE) -C Documentation preview-stats
+
+publish-stats:
+	@$(MAKE) -C Documentation publish-stats
+
+preview-manuals:
+	@$(MAKE) -C Documentation preview-manuals
+
+publish-manuals:
+	@$(MAKE) -C Documentation publish-manuals
 
 dist: magit-$(VERSION).tar.gz
 

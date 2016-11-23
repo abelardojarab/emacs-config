@@ -3249,7 +3249,9 @@ to a particular place after finishing update."
   ;; So go back to one window when updating if `helm-full-frame'
   ;; is non-`nil'.
   (with-helm-window
-    (when helm-onewindow-p (delete-other-windows)))
+    (when (and helm-onewindow-p
+               (not (helm-action-window)))
+      (delete-other-windows)))
   (with-current-buffer (helm-buffer-get)
     (set (make-local-variable 'helm-input-local) helm-pattern)
     (unwind-protect
@@ -3554,7 +3556,8 @@ If PRESERVE-SAVED-ACTION is non-`nil', then save the action."
                     (if (get-buffer helm-action-buffer)
                         (helm-get-selection helm-action-buffer)
                       (helm-get-actions-from-current-source)))))
-  (helm-aif (get-buffer helm-action-buffer)
+  (helm-aif (and (not helm-in-persistent-action)
+                 (get-buffer helm-action-buffer))
       (kill-buffer it))
   (let ((source (or helm-saved-current-source
                     (helm-get-current-source)))
@@ -3592,11 +3595,11 @@ If action buffer is selected, back to the helm buffer."
       (with-selected-frame (with-helm-window (selected-frame))
         (prog1
             (helm-acond ((get-buffer-window helm-action-buffer 'visible)
-                         (set-window-buffer (get-buffer-window helm-action-buffer)
-                                            helm-buffer)
+                         (set-window-buffer it helm-buffer)
                          (helm--set-action-prompt 'restore)
                          (when (and helm-show-action-window-other-window
-                                    helm-always-two-windows)
+                                    helm-always-two-windows
+                                    (eq helm-split-window-state 'vertical))
                            (delete-window it))
                          (kill-buffer helm-action-buffer)
                          (setq helm-saved-selection nil)
@@ -3637,7 +3640,8 @@ If action buffer is selected, back to the helm buffer."
     (erase-buffer)
     (buffer-disable-undo)
     (set-window-buffer (if (and helm-show-action-window-other-window
-                                helm-always-two-windows)
+                                helm-always-two-windows
+                                (eq helm-split-window-state 'vertical))
                            (split-window (get-buffer-window helm-buffer)
                                          nil helm-show-action-window-other-window)
                            (get-buffer-window helm-buffer))
@@ -3647,6 +3651,8 @@ If action buffer is selected, back to the helm buffer."
           (helm-build-sync-source "Actions"
             :volatile t
             :nomark t
+            :persistent-action #'ignore
+            :persistent-help "DoNothing"
             :keymap 'helm-map
             :candidates actions
             :mode-line '("Action(s)" "\\<helm-map>\\[helm-select-action]:BackToCands RET/f1/f2/fn:NthAct")
@@ -4930,6 +4936,8 @@ window to maintain visibility."
                           (cdr attr-val)))
            (cursor-in-echo-area t)
            mode-line-in-non-selected-windows)
+      (when (eq fn 'ignore)
+        (cl-return-from helm-execute-persistent-action nil))
       (when source
         (with-helm-window
           (save-selected-window
@@ -4944,7 +4952,8 @@ window to maintain visibility."
                   special-display-regexps special-display-buffer-names)
               (helm-execute-selection-action-1
                selection (or fn (helm-get-actions-from-current-source source)) t)
-              (helm-log-run-hook 'helm-after-persistent-action-hook))
+              (unless (helm-action-window)
+                (helm-log-run-hook 'helm-after-persistent-action-hook)))
             ;; A typical case is when a persistent action delete
             ;; the buffer already displayed in
             ;; `helm-persistent-action-display-window' and `helm-full-frame'
@@ -5509,7 +5518,7 @@ It may appear after first results popup in helm buffer."))
 (provide 'helm)
 
 ;; Local Variables:
-;; byte-compile-warnings: (not cl-functions obsolete)
+;; byte-compile-warnings: (not obsolete)
 ;; coding: utf-8
 ;; indent-tabs-mode: nil
 ;; End:

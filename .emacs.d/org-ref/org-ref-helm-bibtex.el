@@ -71,7 +71,8 @@
     ("Edit notes" . helm-bibtex-edit-notes)
     ("Show entry" . helm-bibtex-show-entry)
     ("Add keywords to entries" . org-ref-helm-tag-entries)
-    ("Copy entry to clipboard" . bibtex-completion-copy-candidate))
+    ("Copy entry to clipboard" . bibtex-completion-copy-candidate)
+    ("Add PDF to library" . helm-bibtex-add-pdf-to-library))
   "Cons cells of string and function to set the actions of `helm-bibtex' to.
 The car of cons cell is the string describing the function.
 The cdr of the the cons cell is the function to use."
@@ -107,35 +108,8 @@ The cdr of the the cons cell is the function to use."
 ;;* Helm bibtex setup.
 (setq bibtex-completion-additional-search-fields '(keywords))
 
-(defun helm-bibtex-candidates-formatter (candidates _source)
-  "Formats BibTeX entries for display in results list.
-Argument CANDIDATES helm candidates.
-Argument SOURCE the helm source.
-
-Adapted from the function in `helm-bibtex' to include additional
-fields, the keywords I think."
-  (cl-loop
-   with width = (with-helm-window (helm-bibtex-window-width))
-   for entry in candidates
-   for entry = (cdr entry)
-   for entry-key = (bibtex-completion-get-value "=key=" entry)
-   if (assoc-string "author" entry 'case-fold)
-   for fields = '("author" "title"  "year" "=has-pdf=" "=has-note=" "=type=")
-   else
-   for fields = '("editor" "title" "year" "=has-pdf=" "=has-note=" "=type=")
-   for fields = (--map (bibtex-completion-clean-string
-                        (bibtex-completion-get-value it entry " "))
-                       fields)
-   for fields = (-update-at 0 'bibtex-completion-shorten-authors fields)
-   for fields = (append fields
-                        (list (or (bibtex-completion-get-value "keywords" entry)
-                                  "")))
-   collect
-   (cons (s-format "$0 $1 $2 $3 $4$5 $6" 'elt
-                   (-zip-with (lambda (f w) (truncate-string-to-width f w 0 ?\s))
-                              fields (list 36 (- width 85) 4 1 1 7 31)))
-         entry-key)))
-
+(setq bibtex-completion-display-formats
+      '((t . "${author:36} ${title:*} ${year:4} ${=has-pdf=:1}${=has-note=:1} ${=type=:7} ${keywords:31}")))
 
 (defun bibtex-completion-copy-candidate (_candidate)
   "Copy the selected bibtex entries to the clipboard.
@@ -256,10 +230,10 @@ change the key at point to the selected keys."
 	  ;; goto next comma or end
 	  (re-search-forward
 	   ","
-	   (org-element-property :end object) t)
+	   (org-element-property :end object) 'mv)
 	  (skip-chars-backward " ")
-	  (insert (mapconcat 'identity keys ","))
-	  (unless (looking-at ",") (insert ",")))))
+	  (unless (looking-at ",") (insert ","))
+	  (insert (mapconcat 'identity keys ",")))))
        ;; double prefix, replace key at point
        ((equal helm-current-prefix-arg '(16))
         (setf (buffer-substring
@@ -389,11 +363,12 @@ With two prefix ARGs, insert a label link."
 Checks for pdf and doi, and add appropriate functions."
   (let* ((results (org-ref-get-bibtex-key-and-file))
          (key (car results))
-         (pdf-file (funcall org-ref-get-pdf-filename-function key))
-	 (pdf-bibtex-completion (car (bibtex-completion-find-pdf key)))
-	 (entry (bibtex-completion-get-entry key))
-	 (notes-p (cdr (assoc "=has-note=" entry)))
          (bibfile (cdr results))
+	 (bibtex-completion-bibliography (list bibfile))
+	 (entry (bibtex-completion-get-entry key))
+	 (pdf-file (funcall org-ref-get-pdf-filename-function key))
+	 (pdf-bibtex-completion (car (bibtex-completion-find-pdf key)))
+         (notes-p (cdr (assoc "=has-note=" entry)))
          (url (save-excursion
                 (with-temp-buffer
                   (insert-file-contents bibfile)
@@ -423,7 +398,7 @@ Checks for pdf and doi, and add appropriate functions."
     			     (funcall org-ref-open-pdf-function)))
     	    candidates))
 
-	   ;; try with bibtex-completion
+	  ;; try with bibtex-completion
     	  (pdf-bibtex-completion
     	   (cl-pushnew
     	    '("Open pdf" . (lambda ()

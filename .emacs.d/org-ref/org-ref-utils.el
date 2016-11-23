@@ -359,6 +359,15 @@ Argument KEY is the bibtex key."
                    "%s.pdf")
                   key))))))
 
+(defun org-ref-get-pdf-filename-helm-bibtex (key)
+  "Use helm-bibtex to retrieve a PDF filename for KEY.
+helm-bibtex looks in both the configured directory
+`bibtex-completion-library-path' and in the fields of the bibtex
+item for a filename. It understands file fields exported by
+Jabref, Mendeley and Zotero. See `bibtex-completion-find-pdf'."
+  (let ((bibtex-completion-bibliography (org-ref-find-bibliography)))
+    (or (car (bibtex-completion-find-pdf key)) "")))
+
 
 ;;;###autoload
 (defun org-ref-open-pdf-at-point ()
@@ -387,16 +396,16 @@ Argument KEY is the bibtex key."
         ;; I like this better than bibtex-url which does not always find
         ;; the urls
         (catch 'done
-          (let ((url (bibtex-autokey-get-field "url")))
-            (when  url
-              (browse-url (s-trim url))
+          (let ((url (s-trim (bibtex-autokey-get-field "url"))))
+            (unless (s-blank? url)
+              (browse-url url)
               (throw 'done nil)))
 
-          (let ((doi (bibtex-autokey-get-field "doi")))
-            (when doi
+          (let ((doi (s-trim (bibtex-autokey-get-field "doi"))))
+            (unless (s-blank? doi)
               (if (string-match "^http" doi)
                   (browse-url doi)
-                (browse-url (format "http://dx.doi.org/%s" (s-trim doi))))
+                (browse-url (format "http://dx.doi.org/%s" doi)))
               (throw 'done nil))))))))
 
 

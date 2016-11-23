@@ -90,8 +90,7 @@
 ;;
 ;;; Code:
 
-(with-no-warnings
-  (require 'cl))
+(require 'cl-lib)
 (require 'cc-mode)
 (require 'semantic)
 (require 'semantic/tag-ls)
@@ -103,21 +102,24 @@
 
 (if (not (version< emacs-version "24.4"))
     (require 'subr-x)
-  (defsubst string-empty-p (string)
+  (defun string-empty-p (string)
     "Check whether STRING is empty."
     (string= string ""))
 
-  (defsubst string-trim-left (string)
+  (defun string-trim-left (string)
     "Remove leading whitespace from STRING."
     (if (string-match "\\`[ \t\n\r]+" string)
         (replace-match "" t t string)
       string))
 
-  (defsubst string-trim-right (string)
+  (defun string-trim-right (string)
     "Remove trailing whitespace from STRING."
     (if (string-match "[ \t\n\r]+\\'" string)
         (replace-match "" t t string)
       string)))
+
+(when (version< emacs-version "25")
+  (defalias 'semantic-documentation-comment-preceding-tag 'semantic-documentation-comment-preceeding-tag))
 
 (defvar srefactor--current-local-var nil
   "Current local variable at point")
@@ -148,6 +150,14 @@
 (defvar srefactor-use-srecode-p nil
   "Use experimental SRecode tag insertion ")
 
+;; MACROS
+(defmacro srefactor--is-proto (type)
+  `(eq ,type 'gen-func-proto))
+
+(defmacro srefactor--add-menu-item (label operation-type file-options)
+  `(add-to-list 'menu-item-list (list ,label
+                                      ',operation-type
+                                      ,file-options)))
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Commands - only one currently
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -163,48 +173,48 @@ to perform."
          (refresh (semantic-parse-changes-default))
          (srefactor--file-options (srefactor-ui--return-option-list 'file))
          (tag (srefactor--copy-tag))
-         (menu (srefactor-ui-menu "menu"))
+         (menu (srefactor-ui-menu :name "menu"))
          menu-item-list)
     (setq srefactor--current-local-var (srefactor--menu-add-rename-local-p))
     (when (srefactor--menu-add-function-implementation-p tag)
-      (add-to-list 'menu-item-list `("Generate Function Implementation (Other file)"
-                                     gen-func-impl
-                                     ,srefactor--file-options)))
+      (srefactor--add-menu-item "Generate Function Implementation (Other file)"
+                                gen-func-impl
+                                srefactor--file-options))
     (when (srefactor--menu-add-function-proto-p tag)
-      (add-to-list 'menu-item-list `("Generate Function Prototype (Other file)"
-                                     gen-func-proto
-                                     ,srefactor--file-options)))
+      (srefactor--add-menu-item  "Generate Function Prototype (Other file)"
+                                 gen-func-proto
+                                 srefactor--file-options))
     (when (srefactor--menu-add-function-pointer-p tag)
-      (add-to-list 'menu-item-list `("Generate Function Pointer (Current file)"
-                                     gen-func-ptr
-                                     ,srefactor--file-options)))
+      (srefactor--add-menu-item "Generate Function Pointer (Current file)"
+                                gen-func-ptr
+                                srefactor--file-options))
     (when (srefactor--menu-add-getters-setters-p tag)
-      (add-to-list 'menu-item-list `("Generate Getters and Setters (Current file)"
-                                     gen-getters-setters
-                                     ,srefactor--file-options)))
+      (srefactor--add-menu-item  "Generate Getters and Setters (Current file)"
+                                 gen-getters-setters
+                                 srefactor--file-options))
     (when (srefactor--menu-add-getter-setter-p tag)
-      (add-to-list 'menu-item-list `("Generate Setter (Current file)"
-                                     gen-setter
-                                     ,srefactor--file-options))
-      (add-to-list 'menu-item-list `("Generate Getter (Current file)"
-                                     gen-getter
-                                     ,srefactor--file-options))
-      (add-to-list 'menu-item-list `("Generate Getter and Setter (Current file)"
-                                     gen-getter-setter
-                                     ,srefactor--file-options)))
+      (srefactor--add-menu-item  "Generate Setter (Current file)"
+                                 gen-setter
+                                 srefactor--file-options)
+      (srefactor--add-menu-item  "Generate Getter (Current file)"
+                                 gen-getter
+                                 srefactor--file-options)
+      (srefactor--add-menu-item  "Generate Getter and Setter (Current file)"
+                                 gen-getter-setter
+                                 srefactor--file-options))
     (when srefactor--current-local-var
       (setq tag srefactor--current-local-var)
-      (add-to-list 'menu-item-list `("Rename local variable (Current file)"
-                                     rename-local-var
-                                     ("(Current file)"))))
+      (srefactor--add-menu-item  "Rename local variable (Current file)"
+                                 rename-local-var
+                                 '("(Current file)")))
     (when (srefactor--menu-add-move-p)
-      (add-to-list 'menu-item-list `("Move (Current file)"
-                                     move
-                                     ,srefactor--file-options)))
+      (srefactor--add-menu-item  "Move (Current file)"
+                                 move
+                                 srefactor--file-options))
     (when (region-active-p)
-      (add-to-list 'menu-item-list `("Extract function (Current file)"
-                                     extract-function
-                                     nil)))
+      (srefactor--add-menu-item  "Extract function (Current file)"
+                                 extract-function
+                                 nil))
     (oset menu :items menu-item-list)
     (oset menu :action #'srefactor-ui--refactor-action)
     (oset menu :context tag)
@@ -227,11 +237,13 @@ Based on the type of list passed above, either use
 (defun srefactor--c-tag-start-with-comment (tag)
   (save-excursion
     (goto-char (semantic-tag-start tag))
-    (when (semantic-documentation-comment-preceeding-tag tag)
-      (search-backward-regexp "/\\*" nil t)
-      (beginning-of-line)
-      (looking-at "^[ ]*\\/\\*"))
-    (point)))
+    (if (and (search-backward-regexp "/\\*" nil t)
+             (semantic-documentation-comment-preceding-tag tag)
+             (looking-at "^[ ]*\\/\\*"))
+        (progn
+          (beginning-of-line)
+          (point))
+      (semantic-tag-start tag))))
 
 (defun srefactor--copy-tag ()
   "Take the current tag, and place it in the tag ring."
@@ -282,7 +294,7 @@ FILE-OPTION is a file destination associated with OPERATION."
                                                  refactor-tag
                                                  (read-from-minibuffer prompt)))
                 (error nil))
-            (srefactor--unhighlight-tag local-var))))
+            (remove-overlays))))
        (t
         (let ((other-file (srefactor--select-file file-option)))
           (srefactor--refactor-tag (srefactor--contextual-open-file other-file)
@@ -339,29 +351,36 @@ FILE-OPTION is a file destination associated with OPERATION."
                                 projectile-project-root
                                 projectile-find-file))
         other-files file l)
-    (when  (and (featurep 'projectile)
-                (cl-reduce (lambda (acc f)
-                             (and (fboundp f) acc))
-                           projectile-func-list
-                           :initial-value t))
-      (cond
-       ((string-equal option "(Other file)")
-        (setq other-files (projectile-get-other-files (buffer-file-name)
-                                                      (projectile-current-project-files)
-                                                      nil))
-        (setq l (length other-files))
-        (setq file (concat (projectile-project-root)
-                           (cond ((> l 1)
-                                  (completing-read "Select a file: "
-                                                   other-files))
-                                 ((= l 1)
-                                  (car other-files))
-                                 (t (projectile-find-file))))))
-       ((and (string-equal option "(Project file)") (featurep 'projectile))
-        (setq file (concat (projectile-project-root)
-                           (completing-read "Select a file: "
-                                            (projectile-current-project-files)))))
-       ))
+    (if (and (featurep 'projectile)
+             (cl-reduce (lambda (acc f)
+                          (and (fboundp f) acc))
+                        projectile-func-list
+                        :initial-value t))
+        (cond
+         ((string-equal option "(Other file)")
+          (condition-case nil
+              (progn
+                (setq other-files (projectile-get-other-files (buffer-file-name)
+                                                              (projectile-current-project-files)
+                                                              nil))
+                (setq l (length other-files))
+                (setq file (concat (projectile-project-root)
+                                   (cond ((> l 1)
+                                          (completing-read "Select a file: "
+                                                           other-files))
+                                         ((= l 1)
+                                          (car other-files))
+                                         (t (projectile-find-file))))))
+            (error nil)
+            (ff-find-other-file)))
+         ((and (string-equal option "(Project file)")
+               (featurep 'projectile))
+          (setq file (concat (projectile-project-root)
+                             (completing-read "Select a file: "
+                                              (projectile-current-project-files)))))
+         )
+      (if (string-equal option "(Other file)")
+          (ff-find-other-file)))
 
     (when (string-equal option "(Current file)")
       (setq file (buffer-file-name (current-buffer))))
@@ -453,8 +472,8 @@ REFACTOR-TAG is a Semantic tag that holds information of a C++ class."
          (dest-buffer-tags (with-current-buffer dest-buffer
                              (semantic-fetch-tags)))
          (diff (set-difference members
-                                dest-buffer-tags
-                                :test #'semantic-equivalent-tag-p))
+                               dest-buffer-tags
+                               :test #'semantic-equivalent-tag-p))
          )
     (dolist (tag diff)
       (cond
@@ -507,10 +526,12 @@ namespace.
               (srefactor--insert-function-pointer refactor-tag)
               (newline-and-indent)
               (recenter))
-             ((eq insert-type 'gen-func-impl)
-              (srefactor--insert-function refactor-tag 'gen-func-impl))
-             ((eq insert-type 'gen-func-proto)
-              (srefactor--insert-function refactor-tag 'gen-func-proto))
+             ((or (eq insert-type 'gen-func-impl) (eq insert-type 'gen-func-proto))
+              (if (region-active-p)
+                  (mapc (lambda (f-t)
+                          (srefactor--insert-function f-t insert-type))
+                        (semantic-parse-region (region-beginning) (region-end)))
+                (srefactor--insert-function refactor-tag insert-type)))
              ((srefactor--tag-pointer refactor-tag)
               (semantic-insert-foreign-tag (srefactor--function-pointer-to-function refactor-tag)))
              ((eq insert-type 'move)
@@ -553,24 +574,7 @@ namespace.
 
     ;; indent after inserting refactor-tag
     (indent-according-to-mode)
-
-    ;; post content insertion based on context
-    (unless srefactor-use-srecode-p
-      (unless parent-is-func-p
-        (if (eq insert-type 'gen-func-impl)
-            (progn
-              (end-of-line)
-              (insert " {")
-              (newline 1)
-              (save-excursion
-                (srefactor--insert-initial-content-based-on-return-type
-                 (if (or (srefactor--tag-function-constructor refactor-tag)
-                         (srefactor--tag-function-destructor refactor-tag))
-                     ""
-                   (semantic-tag-type refactor-tag)))
-                (insert "}")
-                (indent-according-to-mode))
-              (goto-char (line-end-position))))))))
+    ))
 
 ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Functions - IO
@@ -765,43 +769,56 @@ BUFFER is the destination buffer from file user selects from contextual menu."
 ;;
 ;; FUNCTION
 ;;
+(defun srefactor--insert-with-srecode (func-tag)
+  "Insert a tag using srecode"
+  (let* ((copy (semantic-tag-copy func-tag))
+         ;; (parent (semantic-tag-calculate-parent func-tag))
+         ;; TODO - below srefactor fcn should be a part of semantic or srecode.
+         (parentstring1 (srefactor--tag-parents-string func-tag))
+         (parentstring (substring parentstring1 0 (- (length parentstring1) 2)))
+         (endofinsert nil))
+    ;; Copied this line from original
+    (semantic-tag-put-attribute func-tag :typemodifiers nil)
+    (semantic-tag-put-attribute func-tag :parent parentstring)
+    ;; Insert the tag
+    (require 'srecode/semantic)
+    ;; TODO - does it need any special dictionary entries?
+    (setq endofinsert
+          (srecode-semantic-insert-tag
+           func-tag
+           nil ;; Style
+           (lambda (localtag)
+             (srefactor--insert-initial-content-based-on-return-type
+              (if (or (srefactor--tag-function-constructor copy)
+                      (srefactor--tag-function-destructor copy))
+                  ""
+                (semantic-tag-type copy)))
+             ) ;; Callbck for function body.
+           ;; Dictionary entries go here.
+           ))
+    (goto-char endofinsert)
+    (insert "\n\n")))
+
 (defun srefactor--insert-function (func-tag type)
-  "Insert function implementations for FUNC-TAG at point, a tag that is a function."
+  "Insert function implementations for FUNC-TAG at point, a tag that is a function.
+`type' is the operation to be done, not the type of the tag."
+  (newline)
+  (left-char)
   (if srefactor-use-srecode-p
       ;; Try using SRecode as the mechanism for inserting a tag.
-      (let* ((copy (semantic-tag-copy func-tag))
-             ;; (parent (semantic-tag-calculate-parent func-tag))
-             ;; TODO - below srefactor fcn should be a part of semantic or srecode.
-             (parentstring1 (srefactor--tag-parents-string func-tag))
-             (parentstring (substring parentstring1 0 (- (length parentstring1) 2)))
-             (endofinsert nil))
-        ;; Copied this line from original
-        (semantic-tag-put-attribute func-tag :typemodifiers nil)
-        (semantic-tag-put-attribute func-tag :parent parentstring)
-        ;; Insert the tag
-        (require 'srecode/semantic)
-        ;; TODO - does it need any special dictionary entries?
-        (setq endofinsert
-              (srecode-semantic-insert-tag
-               func-tag
-               nil ;; Style
-               (lambda (localtag)
-                 (srefactor--insert-initial-content-based-on-return-type
-                  (if (or (srefactor--tag-function-constructor copy)
-                          (srefactor--tag-function-destructor copy))
-                      ""
-                    (semantic-tag-type copy)))
-                 ) ;; Callbck for function body.
-               ;; Dictionary entries go here.
-               ))
-        (goto-char endofinsert)
-        (insert "\n\n"))
+      (srefactor--insert-with-srecode func-tag)
     ;; official routine
     ;; add 2 newlines before insert the function
-    (newline-and-indent)
-    (newline-and-indent)
+    ;; (newline-and-indent)
+    (unless (srefactor--is-proto type)
+      (newline-and-indent))
+
     (let ((func-tag-name (srefactor--tag-name func-tag))
           (parent (srefactor--calculate-parent-tag func-tag)))
+      ;; insert const if return a const value
+      (when (semantic-tag-get-attribute func-tag :constant-flag)
+        (insert "const "))
+
       (when (srefactor--tag-function-modifiers func-tag)
         (semantic-tag-put-attribute func-tag :typemodifiers nil))
       (save-excursion
@@ -809,20 +826,27 @@ BUFFER is the destination buffer from file user selects from contextual menu."
                    parent)
           (insert (srefactor--tag-templates-declaration-string parent)))
         (insert (srefactor--tag-function-string func-tag))
-        (when (eq type 'gen-func-proto)
+
+        ;; insert const modifer for method
+        (when (semantic-tag-get-attribute func-tag :methodconst-flag)
+          (insert " const"))
+
+        (when (srefactor--is-proto type)
           (insert ";\n")))
       (unless (eq major-mode 'c-mode)
         (search-forward-regexp (regexp-quote func-tag-name) (line-end-position) t)
         (search-backward-regexp (regexp-quote func-tag-name) (line-beginning-position) t)
+
         (when (srefactor--tag-function-destructor func-tag)
           (forward-char -1))
 
         ;; insert tag parent if any
         (unless (or (srefactor--tag-friend-p func-tag)
                     (eq type 'gen-func-proto)
-                    ;; insert inside a tag
-                    (semantic-current-tag))
+                    ;; must insert inside a tag
+                    (null (semantic-current-tag)))
           (insert (srefactor--tag-parents-string func-tag)))
+
         (when (srefactor--tag-function-constructor func-tag)
           (let ((variables (srefactor--tag-filter #'semantic-tag-class
                                                   '(variable)
@@ -838,7 +862,22 @@ BUFFER is the destination buffer from file user selects from contextual menu."
                       (when (string-match "const" (srefactor--tag-type-string v))
                         (insert (semantic-tag-name v))
                         (insert "()")))
-                    variables))))))))
+                    variables)))))))
+
+  ;; post content insertion based on context
+  (unless (srefactor--is-proto type)
+    (end-of-line)
+    (insert " {")
+    (newline 1)
+    (save-excursion
+      (srefactor--insert-initial-content-based-on-return-type
+       (if (or (srefactor--tag-function-constructor func-tag)
+               (srefactor--tag-function-destructor func-tag))
+           ""
+         (semantic-tag-type func-tag)))
+      (insert "}")
+      (indent-according-to-mode))
+    (goto-char (line-end-position))))
 
 (defun srefactor--insert-function-pointer (tag)
   "Insert function pointer definition for TAG."
@@ -851,15 +890,15 @@ BUFFER is the destination buffer from file user selects from contextual menu."
                   (semantic-tag-name tag)
                   ")"
                   "("))
-  (mapc (lambda (tag)
-          (let ((ptr-level (srefactor--tag-pointer tag))
-                (ref-level (srefactor--tag-reference tag)))
-            (insert (concat (srefactor--tag-type-string tag)
-                            ", ") )))
-        (semantic-tag-function-arguments tag))
-  (search-backward ",")
-  (replace-match "")
-  (insert ");"))
+  (let ((param-str (mapconcat
+                    (lambda (tag)
+                      (let ((ptr-level (srefactor--tag-pointer tag))
+                            (ref-level (srefactor--tag-reference tag)))
+                        (srefactor--tag-type-string tag)))
+                    (semantic-tag-function-arguments tag)
+                    ", ")))
+    (insert param-str)
+    (insert ");")))
 
 (defun srefactor--insert-function-as-parameter (tag)
   "Insert TAG that is a function as a function parameter.
@@ -1033,27 +1072,32 @@ TAG-TYPE is the return type such as int, long, float, double..."
   "Return a list of parent tags of a TAG.
 The closer to the end of the list, the higher the parents."
   (let* ((tag-buffer (semantic-tag-buffer tag))
-         (parent (with-current-buffer (if tag-buffer
-                                          tag-buffer
-                                        (current-buffer))
-                   (save-excursion
-                     (goto-char (semantic-tag-start tag))
-                     (semantic-current-tag-parent)))))
-    (when parent
-      (cons parent (srefactor--get-all-parents parent)))))
+         (parents (cdr (nreverse
+                        (semantic-find-tag-by-overlay (semantic-tag-start tag)
+                                                      (if tag-buffer
+                                                          tag-buffer
+                                                        (current-buffer)))))))
+    parents))
 
 (defun srefactor--tag-parents-string (tag)
   "Return parent prefix string of a TAG.
 
 It is used for prepending to function or variable name defined
 outside of a scope."
-  (let ((parents (srefactor--get-all-parents tag)))
-    (if parents
-        (concat (mapconcat (lambda (T)
-                             (concat (semantic-tag-name T)
-                                     (srefactor--tag-templates-parameters-string T)))
-                           (nreverse parents) "::") "::")
-      "")))
+  (let* ((parents (srefactor--get-all-parents tag))
+         (parents-at-point (semantic-find-tag-by-overlay))
+         (parents-str-lst (mapcar (lambda (tag)
+                                    (concat (semantic-tag-name tag)
+                                            (srefactor--tag-templates-parameters-string tag)))
+                                  parents))
+         (parents-at-point-str-lst (mapcar (lambda (tag)
+                                             (concat (semantic-tag-name tag)
+                                                     (srefactor--tag-templates-parameters-string tag)))
+                                           parents-at-point))
+         (diff (set-difference parents-str-lst
+                               parents-at-point-str-lst
+                               :test #'string-equal)))
+    (concat (mapconcat #'identity (nreverse diff) "::") "::")))
 
 (defun srefactor--tag-function-parameters-string (members)
   "Return function parameter string of a function.
@@ -1426,7 +1470,7 @@ tag and OPTIONS is a list of possible choices for each menu item.
          cur-tag-start cur-tag-end tag-name)
     (when (and local-var
                (eq (semantic-tag-class cur-tag) 'function)
-               (not (equal (car (semantic-ctxt-current-symbol))
+               (not (equal (car (nreverse (semantic-ctxt-current-symbol)))
                            (semantic-tag-name cur-tag)))
                (not (semantic-tag-prototype-p cur-tag))
                (not (region-active-p)))
@@ -1608,10 +1652,6 @@ PARENT-TAG is the tag that contains TAG, such as a function or a class or a name
                                                (point)))))
                 (overlay-put overlay 'face 'match))))
           tag-occurrences)))
-
-(defun srefactor--unhighlight-tag (tag)
-  "Unhighlight TAG."
-  (remove-overlays))
 
 (defun srefactor--switch-to-window (file-path)
   "Switch to window that contains FILE-PATH string."

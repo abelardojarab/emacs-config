@@ -93,7 +93,7 @@ Set to nil to avoid setting timestamps in the entries."
 (defcustom doi-utils-make-notes-function
   (lambda ()
     (bibtex-beginning-of-entry)
-    (bibtex-completion-edit-notes (cdr (assoc "=key=" (bibtex-parse-entry))) ))
+    (bibtex-completion-edit-notes (list (cdr (assoc "=key=" (bibtex-parse-entry))))))
   "Function to create notes for a bibtex entry.
 
 Set `doi-utils-make-notes' to nil if you want no notes."
@@ -101,19 +101,18 @@ Set `doi-utils-make-notes' to nil if you want no notes."
   :group 'doi-utils)
 
 (defcustom doi-utils-dx-doi-org-url
-  "http://dx.doi.org/"
-  "Base url to retrieve doi metadata from. A trailing / is required.
-Some users require https://dx.doi.org/."
+  "https://doi.org/"
+  "Base url to retrieve doi metadata from. A trailing / is required."
   :type 'string
   :group 'doi-utils)
 
 
 ;;* Getting pdf files from a DOI
 
-;; The idea here is simple. When you visit http://dx.doi.org/doi, you get
-;; redirected to the journal site. Once you have the url for the article, you
-;; can usually compute the url to the pdf, or find it in the page. Then you
-;; simply download it.
+;; The idea here is simple. When you visit http://dx.doi.org/doi or
+;; https://doi.org/doi, you get redirected to the journal site. Once you have
+;; the url for the article, you can usually compute the url to the pdf, or find
+;; it in the page. Then you simply download it.
 
 ;; There are some subtleties in doing this that are described here. To get the
 ;; redirect, we have to use url-retrieve, and a callback function. The callback
@@ -416,11 +415,25 @@ REDIRECT-URL is where the pdf url will be in."
   (when (string-match "^http://ieeexplore.ieee.org" *doi-utils-redirect*)
     (with-current-buffer (url-retrieve-synchronously *doi-utils-redirect*)
       (goto-char (point-min))
-      (when (re-search-forward "<meta name=\"citation_pdf_url\" content=\"\\([[:ascii:]]*?\\)\">")
+      (when (re-search-forward "<meta name=\"citation_pdf_url\" content=\"\\([[:ascii:]]*?\\)\">" nil t)
 	(let ((framed-url (match-string 1)))
           (with-current-buffer (url-retrieve-synchronously framed-url)
             (goto-char (point-min))
-            (when (re-search-forward "<frame src=\"\\(http[[:ascii:]]*?\\)\"")
+            (when (re-search-forward "<frame src=\"\\(http[[:ascii:]]*?\\)\"" nil t)
+              (match-string 1))))))))
+
+;; At least some IEEE papers need the following new pdf-link parsing
+;; Example: 10.1109/35.667413
+(defun ieee2-pdf-url (*doi-utils-redirect*)
+  "Get a url to the pdf from *DOI-UTILS-REDIRECT* for IEEE urls."
+  (when (string-match "^http://ieeexplore.ieee.org" *doi-utils-redirect*)
+    (with-current-buffer (url-retrieve-synchronously *doi-utils-redirect*)
+      (goto-char (point-min))
+      (when (re-search-forward "\"pdfUrl\":\"\\([[:ascii:]]*?\\)\"" nil t)
+	(let ((framed-url (match-string 1)))
+          (with-current-buffer (url-retrieve-synchronously (concat "http://ieeexplore.ieee.org" framed-url))
+            (goto-char (point-min))
+            (when (re-search-forward "<frame src=\"\\(http[[:ascii:]]*?\\)\"" nil t)
               (match-string 1))))))))
 
 ;; ACM Digital Library
@@ -430,9 +443,9 @@ REDIRECT-URL is where the pdf url will be in."
   "Get a url to the pdf from *DOI-UTILS-REDIRECT* for ACM urls."
   (when (string-match "^http://dl.acm.org" *doi-utils-redirect*)
     (with-current-buffer (url-retrieve-synchronously *doi-utils-redirect*)
-          (goto-char (point-min))
-          (when (re-search-forward "<a name=\"FullTextPDF\".*href=\"\\([[:ascii:]]*?\\)\"")
-            (concat "http://dl.acm.org/" (match-string 1))))))
+      (goto-char (point-min))
+      (when (re-search-forward "<a name=\"FullTextPDF\".*href=\"\\([[:ascii:]]*?\\)\"" nil t)
+	(concat "http://dl.acm.org/" (match-string 1))))))
 
 
 ;;** Add all functions
@@ -460,6 +473,7 @@ REDIRECT-URL is where the pdf url will be in."
        'sage-pdf-url
        'jneurosci-pdf-url
        'ieee-pdf-url
+       'ieee2-pdf-url
        'acm-pdf-url
        'generic-full-pdf-url))
 
@@ -502,7 +516,7 @@ checked."
     (bibtex-beginning-of-entry)
     (let (;; get doi, removing http://dx.doi.org/ if it is there.
           (doi (replace-regexp-in-string
-                "https?://dx.doi.org/" ""
+                "https?://\\(dx.\\)?.doi.org/" ""
                 (bibtex-autokey-get-field "doi")))
           (key)
           (pdf-url)
@@ -847,7 +861,7 @@ Optional argument NODELIM see `bibtex-make-field'."
 Every field will be updated, so previous change will be lost."
   (interactive (list
                 (or (replace-regexp-in-string
-                     "https?://dx.doi.org/" ""
+                     "https?://\\(dx.\\)?doi.org/" ""
                      (bibtex-autokey-get-field "doi"))
                     (read-string "DOI: "))))
   (let* ((results (doi-utils-get-json-metadata doi))
@@ -1063,21 +1077,37 @@ Argument LINK-STRING Passed in on link click."
         2)
        link-string))))
 
-(org-add-link-type
- "doi"
- 'doi-link-menu
- (lambda (doi desc format)
-   (cond
-    ((eq format 'html)
-     (format "<a href=\"%s%s\">%s</a>"
-	     doi-utils-dx-doi-org-url
-             doi
-             (or desc (concat "doi:" doi))))
-    ((eq format 'latex)
-     (format "\\href{%s%s}{%s}"
-	     doi-utils-dx-doi-org-url
-             doi
-             (or desc (concat "doi:" doi)))))))
+(if (fboundp 'org-link-set-parameters)
+    (org-link-set-parameters
+     "doi"
+     :follow #'doi-link-menu
+     :export (lambda (doi desc format)
+	       (cond
+		((eq format 'html)
+		 (format "<a href=\"%s%s\">%s</a>"
+			 doi-utils-dx-doi-org-url
+			 doi
+			 (or desc (concat "doi:" doi))))
+		((eq format 'latex)
+		 (format "\\href{%s%s}{%s}"
+			 doi-utils-dx-doi-org-url
+			 doi
+			 (or desc (concat "doi:" doi)))))))
+  (org-add-link-type
+   "doi"
+   'doi-link-menu
+   (lambda (doi desc format)
+     (cond
+      ((eq format 'html)
+       (format "<a href=\"%s%s\">%s</a>"
+	       doi-utils-dx-doi-org-url
+	       doi
+	       (or desc (concat "doi:" doi))))
+      ((eq format 'latex)
+       (format "\\href{%s%s}{%s}"
+	       doi-utils-dx-doi-org-url
+	       doi
+	       (or desc (concat "doi:" doi))))))))
 
 
 ;;* Getting a doi for a bibtex entry missing one
@@ -1167,7 +1197,7 @@ error."
                                                                 (bibtex-make-field "doi" t)
                                                                 (backward-char)
                                                                 ;; crossref returns doi url, but I prefer only a doi for the doi field
-                                                                (insert (replace-regexp-in-string "^https?://dx.doi.org/" "" doi))
+                                                                (insert (replace-regexp-in-string "^https?://\\(dx.\\)?doi.org/" "" doi))
                                                                 (when (string= ""(reftex-get-bib-field "url" entry))
                                                                   (bibtex-make-field "url" t)
                                                                   (backward-char)
@@ -1297,7 +1327,7 @@ error."
 								     do
 								     (doi-utils-add-bibtex-entry-from-doi
 								      (replace-regexp-in-string
-								       "^https?://dx.doi.org/" "" doi)
+								       "^https?://\\(dx.\\)?.doi.org/" "" doi)
 								      ,bibtex-file))
 							    (when doi-utils--bibtex-file
 							      (recenter-top-bottom 0))))

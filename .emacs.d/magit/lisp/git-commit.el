@@ -6,9 +6,9 @@
 ;; lists all contributors.  If not, see http://magit.vc/authors.
 
 ;; Authors: Jonas Bernoulli <jonas@bernoul.li>
-;;  Sebastian Wiesner <lunaryorn@gmail.com>
-;;  Florian Ragwitz <rafl@debian.org>
-;;  Marius Vollmer <marius.vollmer@gmail.com>
+;;	Sebastian Wiesner <lunaryorn@gmail.com>
+;;	Florian Ragwitz <rafl@debian.org>
+;;	Marius Vollmer <marius.vollmer@gmail.com>
 ;; Maintainer: Jonas Bernoulli <jonas@bernoul.li>
 
 ;; Package-Requires: ((emacs "24.4") (dash "20160820.501") (with-editor "20160929.734"))
@@ -370,8 +370,7 @@ already using it, then you probably shouldn't start doing so."
 (eval-after-load 'recentf
   '(add-to-list 'recentf-exclude git-commit-filename-regexp))
 
-(ignore-errors
-  (add-to-list 'with-editor-file-name-history-exclude git-commit-filename-regexp))
+(add-to-list 'with-editor-file-name-history-exclude git-commit-filename-regexp)
 
 (defun git-commit-setup-font-lock-in-buffer ()
   (and buffer-file-name

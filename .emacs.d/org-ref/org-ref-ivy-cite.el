@@ -56,9 +56,6 @@
   (kbd org-ref-insert-cite-key)
   org-ref-insert-link-function)
 
-;; messages in minibuffer interfere with hydra menus.
-(setq org-ref-show-citation-on-enter nil)
-
 
 (defun or-looking-forward-cite ()
   "Return if point is in the position before a citation."
@@ -390,14 +387,20 @@ prefix ARG is used, which uses `org-ref-default-bibliography'."
 
 
 (defun org-ref-ivy-cite-transformer (s)
-  "Make entry red if it is marked."
-  (if (-contains?
-       (if (listp (car org-ref-ivy-cite-marked-candidates))
-	   (mapcar 'car org-ref-ivy-cite-marked-candidates)
-	 org-ref-ivy-cite-marked-candidates)
-       s)
-      (propertize s 'face 'font-lock-warning-face)
-    (propertize s 'face s)))
+  "Make entry red if it is marked." 
+  (let* ((fill-column (frame-width))
+	 (fill-prefix "   ")
+	 (wrapped-s (with-temp-buffer
+		      (insert s)
+		      (fill-paragraph)
+		      (buffer-string))))
+    (if (-contains?
+	 (if (listp (car org-ref-ivy-cite-marked-candidates))
+	     (mapcar 'car org-ref-ivy-cite-marked-candidates)
+	   org-ref-ivy-cite-marked-candidates)
+	 s) 
+	(propertize wrapped-s 'face 'font-lock-warning-face)
+      (propertize wrapped-s 'face nil))))
 
 (ivy-set-display-transformer
  'org-ref-ivy-insert-cite-link

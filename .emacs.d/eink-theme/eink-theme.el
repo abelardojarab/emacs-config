@@ -130,12 +130,18 @@
    `(magit-branch-remote ((t (:weight bold))))
 
    ;; diff
+   `(diff-added ((t (:background "#e9ffe9"))))
+   `(diff-removed ((t (:background "#ffecec"))))
    `(diff-refine-added ((t (:background "#a4f4a3"))))
    `(diff-refine-removed ((t (:background "#f9cbca"))))
    `(magit-diff-added-highlight ((t (:weight demibold :background "#e9ffe9"))))
    `(magit-diff-added ((t (:background "#e9ffe9"))))
    `(magit-diff-removed-highlight ((t (:weight demibold :background "#ffecec"))))
    `(magit-diff-removed ((t (:background "#ffecec"))))
+
+   ;; git-timemachine
+   `(git-timemachine-minibuffer-author-face ((t (:inherit default))))
+   `(git-timemachine-minibuffer-detail-face ((t (:weight bold))))
 
    ;; compile
    `(compilation-error ((t (:inherit error))))
@@ -146,6 +152,10 @@
 
    ;; dired
    `(dired-directory ((t (:weight bold))))
+   `(dired-subtree-depth-1-face ((t (:inherit default))))
+   `(dired-subtree-depth-2-face ((t (:inherit default))))
+   `(dired-subtree-depth-3-face ((t (:inherit default))))
+   `(dired-subtree-depth-4-face ((t (:inherit default))))
 
    ;; helm
    `(helm-source-header ((t (:foreground ,fg :background "grey90" :weight bold))))
@@ -195,6 +205,12 @@
    `(rpm-spec-var-face ((t (:inherit default))))
    `(rpm-spec-ghost-face ((t (:inherit default))))
    `(rpm-spec-section-face ((t (:inherit default :weight bold))))
+
+   ;; nlinum-relative
+   `(nlinum-relative-current-face ((t (:inherit normal :weight bold))))
+
+   ;; web-mode
+   `(web-mode-current-element-highlight-face ((t (:inherit normal :weight bold :foreground ,fg))))
 
    ;; misc
    `(idle-highlight ((t (:background ,bg-highlight))))

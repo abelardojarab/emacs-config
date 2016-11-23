@@ -198,6 +198,9 @@ In this case last position is added to the register
     ("&shy;"    . 173)) ;; ­
 
   "Table of html character entities and values.")
+
+(defvar helm-find-many-files-after-hook nil
+  "Hook that run at end of `helm-find-many-files'.")
 
 ;;; Faces.
 ;;
@@ -768,8 +771,11 @@ directory, open this directory."
       (find-file remote-path))))
 
 (defun helm-find-many-files (_ignore)
+  "Simple action that run `find-file' on marked candidates.
+Run `helm-find-many-files-after-hook' at end"
   (let ((helm--reading-passwd-or-string t))
-    (mapc 'find-file (helm-marked-candidates))))
+    (mapc 'find-file (helm-marked-candidates))
+    (helm-log-run-hook 'helm-find-many-files-after-hook)))
 
 (defun helm-read-repeat-string (prompt &optional count)
   "Prompt as many time PROMPT is not empty.
@@ -823,7 +829,7 @@ When unable to decode ENTITY returns nil."
 (provide 'helm-utils)
 
 ;; Local Variables:
-;; byte-compile-warnings: (not cl-functions obsolete)
+;; byte-compile-warnings: (not obsolete)
 ;; coding: utf-8
 ;; indent-tabs-mode: nil
 ;; End:

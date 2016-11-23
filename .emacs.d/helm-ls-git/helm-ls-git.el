@@ -82,6 +82,11 @@ Glob are enclosed in single quotes by default."
   :group 'helm-ls-git
   :type 'string)
 
+(defcustom helm-ls-git-ls-switches '("ls-files" "--full-name" "--")
+  "A list of arguments to pass to `git-ls-files'."
+  :type '(repeat string)
+  :group 'helm-ls-git)
+
 
 (defface helm-ls-git-modified-not-staged-face
     '((t :foreground "yellow"))
@@ -135,8 +140,15 @@ Glob are enclosed in single quotes by default."
     (define-key map (kbd "C-s")   'helm-ff-run-grep)
     (define-key map (kbd "M-g g") 'helm-ls-git-run-grep)
     (define-key map (kbd "C-c g") 'helm-ff-run-gid)
+    (define-key map (kbd "C-c i") 'helm-ls-git-ls-files-show-others)
     map))
 
+(defvar helm-ls-git-buffer-map
+  (let ((map (make-sparse-keymap)))
+    (set-keymap-parent map helm-buffer-map)
+    (define-key map (kbd "C-c i") 'helm-ls-git-ls-files-show-others)
+    map))
+
 (defvar helm-ls-git-help-message
   "* Helm ls git
 
@@ -162,6 +174,7 @@ and launch git-grep from there.
 \\<helm-ls-git-map>
 \\[helm-ls-git-run-grep]\t\tRun git-grep.
 \\[helm-ff-run-gid]\t\tRun Gid.
+\\[helm-ls-git-ls-files-show-others]\t\tToggle tracked/non tracked files view.
 \\<helm-generic-files-map>
 \\[helm-ff-run-toggle-basename]\t\tToggle basename.
 \\[helm-ff-run-zgrep]\t\tRun zgrep.
@@ -205,10 +218,21 @@ and launch git-grep from there.
                 (apply #'process-file
                        "git"
                        nil (list t helm-ls-git-log-file) nil
-                       (list "ls-files" "--full-name" "--")))))
+                       helm-ls-git-ls-switches))))
     ;; Return empty string to give to `split-string'
     ;; in `helm-ls-git-init'.
     ""))
+
+(defun helm-ls-git-ls-files-show-others ()
+  "Toggle view of tracked/non tracked files."
+  (interactive)
+  (with-helm-alive-p
+    (setq helm-ls-git-ls-switches
+          (if (member "-o" helm-ls-git-ls-switches)
+              (remove "-o" helm-ls-git-ls-switches)
+              (helm-append-at-nth helm-ls-git-ls-switches "-o" 1)))
+    (helm-force-update)))
+(put 'helm-ls-git-ls-switches 'helm-only t)
 
 (cl-defun helm-ls-git-root-dir (&optional (directory default-directory))
   (let ((root (locate-dominating-file directory ".git")))
@@ -219,6 +243,7 @@ and launch git-grep from there.
 
 (defun helm-ls-git-transformer (candidates)
    (cl-loop with root = (helm-ls-git-root-dir)
+            with untracking = (member "-o" helm-ls-git-ls-switches)
             for i in candidates
             for abs = (expand-file-name i root)
             for disp = (if (and helm-ff-transformer-show-only-basename
@@ -228,7 +253,11 @@ and launch git-grep from there.
                              (absolute abs)
                              (relative (file-relative-name i root))))
             collect
-            (cons (propertize disp 'face 'helm-ff-file) abs)))
+            (cons (propertize (if untracking (concat "? " disp) disp)
+                              'face (if untracking
+                                        'helm-ls-git-untracked-face
+                                        'helm-ff-file))
+                              abs)))
 
 (defun helm-ls-git-sort-fn (candidates)
   "Transformer for sorting candidates."
@@ -288,6 +317,8 @@ and launch git-grep from there.
 (defclass helm-ls-git-source (helm-source-in-buffer)
   ((header-name :initform 'helm-ls-git-header-name)
    (init :initform 'helm-ls-git-init)
+   (cleanup :initform (lambda ()
+                        (setq helm-ls-git-ls-switches (remove "-o" helm-ls-git-ls-switches))))
    (update :initform (lambda ()
                        (helm-set-local-variable
                         'helm-ls-git--current-branch nil)))
@@ -501,7 +532,8 @@ and launch git-grep from there.
                (helm-make-source "Buffers in git project" 'helm-source-buffers
                  :header-name #'helm-ls-git-header-name
                  :buffer-list (lambda () (helm-browse-project-get-buffers
-                                          (helm-ls-git-root-dir)))))))
+                                          (helm-ls-git-root-dir)))
+                 :keymap helm-ls-git-buffer-map))))
   (helm-set-local-variable 'helm-ls-git--current-branch (helm-ls-git--branch))
   (helm :sources helm-ls-git-default-sources
         :ff-transformer-show-only-basename nil

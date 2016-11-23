@@ -10,7 +10,6 @@
 ;; Version: 0.10.0-snapshot
 ;; URL: https://github.com/yasuyk/helm-git-grep
 ;; Package-Requires: ((helm-core "2.2.0"))
-;; Keywords: helm, git
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -60,14 +59,14 @@
   :group 'helm)
 
 (defcustom helm-git-grep-sources
-  '(helm-source-git-grep helm-source-git-submodule-grep)
+  '(helm-git-grep-source helm-git-grep-submodule-source)
   "Default helm sources for `helm-git-grep'.
 
 If you don't want to search in submodules, \
-Set only `helm-source-git-grep' like this:
+Set only `helm-git-grep-source' like this:
 
-    (setq helm-git-grep-sources '(helm-source-git-grep))"
-  :group 'helm-gi-grep
+    (setq helm-git-grep-sources '(helm-git-grep-source))"
+  :group 'helm-git-grep
   :type '(repeat (choice symbol)))
 
 (defcustom helm-git-grep-candidate-number-limit 300
@@ -139,7 +138,7 @@ you can check limit paths by pathspec using
   "List of doc in name header for git-grep(1).
 list of following possible values:
     pathspec: if `helm-git-grep-pathspecs' is not nil, \
-availability of `helm-git-grep-pathspecs' and key of enable/disable command.
+availability of `helm-git-grep-pathspecs' and key of toggle command.
     basedir: value of `helm-git-grep-base-directory' \
 and key of toggle command.
     ignorecase: if `helm-git-grep-ignore-case' is t, show [i] \
@@ -181,15 +180,10 @@ and key of toggle command."
   (format "%s is nil, namely not activated."
           (symbol-name 'helm-git-grep-pathspecs)))
 
-(defvar helm-git-grep-history nil "The history list for `helm-git-grep'.")
-
-(defvar helm-git-grep-pathspec-available t
-  "Return t if `helm-git-grep-pathspec' is available in git-grep(1).")
-
-(defvar helm-git-grep-doc-order-in-name-header-plist
+(defconst helm-git-grep-doc-order-in-name-header-plist
   '(pathspec
     (:doc
-     "[helm-git-grep-pathspec-toggle-availability]: pathspec%s"
+     "[helm-git-grep-pathspec-toggle-availability]:Tog.pathspec%s"
      :function
      (lambda (doc)
        (when helm-git-grep-pathspecs
@@ -197,15 +191,21 @@ and key of toggle command."
                  (if helm-git-grep-pathspec-available "" "[disabled]")))))
     basedir
     (:doc
-     "[helm-git-grep-toggle-base-directory]: base dir[%s]"
+     "[helm-git-grep-toggle-base-directory]:Tog.basedir[%s]"
      :function
      (lambda (doc)
        (format doc (symbol-name helm-git-grep-base-directory))))
     ignorecase
     (:doc
-     "[helm-git-grep-toggle-ignore-case]: ignore case%s"
+     "[helm-git-grep-toggle-ignore-case]:Tog.ignorecase%s"
      :function
      (lambda (doc) (format doc (if helm-git-grep-ignore-case "[i]" ""))))))
+
+(defvar helm-git-grep-history nil "The history list for `helm-git-grep'.")
+
+(defvar helm-git-grep-pathspec-available t
+  "Return t if `helm-git-grep-pathspec' is available in git-grep(1).")
+
 
 
 (defun helm-git-grep-git-string (&rest args)
@@ -250,7 +250,7 @@ newline return an empty string."
   "Create arguments of `helm-git-grep-process' in `helm-git-grep'."
   (delq nil
         (append
-         (list "--no-pager" "grep" "-n" "--no-color"
+         (list "--no-pager" "grep" "--null" "-n" "--no-color"
                (if helm-git-grep-ignore-case "-i" nil)
                (helm-git-grep-showing-leading-and-trailing-lines-option))
          (nbutlast
@@ -260,7 +260,7 @@ newline return an empty string."
                   (split-string helm-pattern " +" t))))
          (helm-git-grep-pathspec-args))))
 
-(defun helm-git-submodule-grep-command ()
+(defun helm-git-grep-submodule-grep-command ()
   "Create command of `helm-git-submodule-grep-process' in `helm-git-grep'."
   (list "git" "--no-pager" "submodule" "--quiet" "foreach"
        (format "git grep -n --no-color %s %s %s | sed s!^!$path/!"
@@ -277,12 +277,12 @@ newline return an empty string."
       (let ((default-directory it))
         (apply 'start-process "git-grep-process" nil "git" (helm-git-grep-args))) '()))
 
-(defun helm-git-submodule-grep-process ()
+(defun helm-git-grep-submodule-grep-process ()
   "Retrieve candidates from result of git grep submodules."
   (helm-aif (helm-attr 'base-directory)
       (let ((default-directory it))
         (apply 'start-process "git-submodule-grep-process" nil
-               (helm-git-submodule-grep-command)))
+               (helm-git-grep-submodule-grep-command)))
     '()))
 
 (define-compilation-mode helm-git-grep-mode "Helm Git Grep"
@@ -291,6 +291,8 @@ newline return an empty string."
   (set (make-local-variable 'compilation-error-regexp-alist) grep-regexp-alist)
   (when (require 'wgrep nil t)
     (wgrep-setup-internal)))
+(put 'helm-git-grep-mode 'mode-class 'special)
+(put 'helm-git-grep-mode 'helm-only t)
 
 (defun helm-git-grep-save-results-1 ()
   "Save helm git grep result in a `helm-git-grep-mode' buffer."
@@ -367,7 +369,7 @@ if MARK is t, Set mark."
 
 (defun helm-git-grep-jump-elscreen (candidates)
   "Jump to result in elscreen from helm git grep with CANDIDATES."
-  (require 'elscreen)
+  (require 'elscreen nil t)
   (if (elscreen-get-conf-list 'screen-history)
       (helm-git-grep-action candidates 'elscreen)
     (error "Elscreen is not running")))
@@ -396,19 +398,12 @@ Argument SOURCE is not used."
                     candidates)))
 
 (defun helm-git-grep-filtered-candidate-transformer-display
-    (filename separator lineno content)
-  "Propertize FILENAME SEPARATOR LINENO CONTENT and concatenate them."
-  (let ((colonp (string= separator ":")))
-    (format "%s%s%s%s%s"
-            (if colonp
-                (propertize filename 'face 'helm-git-grep-file)
-              filename)
-            separator
-            (if colonp
-                (propertize lineno 'face 'helm-git-grep-line)
-              lineno)
-            separator
-            (helm-git-grep-highlight-match content))))
+    (filename lineno content)
+  "Propertize FILENAME LINENO CONTENT and concatenate them."
+  (format "%s:%s:%s"
+	  (propertize filename 'face 'helm-git-grep-file)
+	  (propertize lineno 'face 'helm-git-grep-line)
+	  (helm-git-grep-highlight-match content)))
 
 (defun helm-git-grep-highlight-match (content)
   "Highlight matched text with `helm-git-grep-match' face in CONTENT."
@@ -420,13 +415,12 @@ Argument SOURCE is not used."
 
 (defun helm-git-grep-filtered-candidate-transformer-file-line-1 (candidate)
   "Transform CANDIDATE to `helm-git-grep-mode' format."
-  (when (string-match "^\\(.+?\\)\\([:\\-]\\)\\([0-9]+\\)[:\\-]\\(.*\\)$" candidate)
+  (when (string-match "^\\(.+\\)\x00\\([0-9]+\\)\x00\\(.*\\)$" candidate)
     (let ((filename (match-string 1 candidate))
-          (separator (match-string 2 candidate))
-          (lineno (match-string 3 candidate))
-          (content (match-string 4 candidate)))
+          (lineno (match-string 2 candidate))
+          (content (match-string 3 candidate)))
       (cons (helm-git-grep-filtered-candidate-transformer-display
-             filename separator lineno content)
+             filename lineno content)
             (list (string-to-number lineno) content
                   (expand-file-name
                    filename
@@ -479,72 +473,71 @@ With a prefix arg record CANDIDATE in `mark-ring'."
               (ret (funcall func doc)))
          (when ret
            (substitute-command-keys
-            (format "(\\<helm-git-grep-map>\\%s)" ret))))))
+            (format "\\<helm-git-grep-map>\\%s" ret))))))
    helm-git-grep-doc-order-in-name-header))
 
 (defun helm-git-grep-concat-string-list (list)
-  "Concatenate string LIST separeted by a space."
+  "Concatenate string LIST separated by a space."
    (mapconcat 'identity(delq nil list) " "))
 
 (defun helm-git-grep-header-name (name)
   "Create header NAME for `helm-git-grep'."
   (concat
-   name " "
+   name "  |  "
    (helm-git-grep-concat-string-list (helm-git-grep-doc-list-in-name-header))))
 
-;;;###autoload
 (defun helm-git-grep-run-persistent-action ()
   "Run grep persistent action from `helm-git-grep'."
   (interactive)
   (helm-attrset 'jump-persistent 'helm-git-grep-persistent-action)
   (helm-execute-persistent-action 'jump-persistent))
+(put 'helm-git-grep-run-persistent-action 'helm-only t)
 
-;;;###autoload
 (defun helm-git-grep-run-default-action ()
   "Run grep default action from `helm-git-grep'."
   (interactive)
   (helm-exit-and-execute-action 'helm-git-grep-action))
+(put 'helm-git-grep-run-default-action 'helm-only t)
 
-;;;###autoload
 (defun helm-git-grep-run-other-window-action ()
   "Run grep goto other window action from `helm-git-grep'."
   (interactive)
   (helm-exit-and-execute-action 'helm-git-grep-other-window))
+(put 'helm-git-grep-run-other-window-action 'helm-only t)
 
-;;;###autoload
 (defun helm-git-grep-run-other-frame-action ()
   "Run grep goto other frame action from `helm-git-grep'."
   (interactive)
   (helm-exit-and-execute-action 'helm-git-grep-other-frame))
+(put 'helm-git-grep-run-other-frame-action 'helm-only t)
 
-;;;###autoload
 (defun helm-git-grep-run-elscreen-action ()
   "Run grep goto elscreen action from `helm-git-grep'."
   (interactive)
   (helm-exit-and-execute-action 'helm-git-grep-jump-elscreen))
+(put 'helm-git-grep-run-elscreen-action 'helm-only t)
 
-;;;###autoload
 (defun helm-git-grep-run-save-buffer ()
   "Run grep save results action from `helm-git-grep'."
   (interactive)
   (helm-exit-and-execute-action 'helm-git-grep-save-results))
+(put 'helm-git-grep-run-save-buffer 'helm-only t)
 
-;;;###autoload
 (defun helm-git-grep-toggle-ignore-case ()
   "Toggle ignore case option for git grep command from `helm-git-grep'."
   (interactive)
   (setq helm-git-grep-ignore-case (not helm-git-grep-ignore-case))
   (helm-git-grep-rerun-with-input))
+(put 'helm-git-grep-toggle-ignore-case 'helm-only t)
 
-;;;###autoload
 (defun helm-git-grep-toggle-showing-trailing-leading-line ()
   "Toggle show leading and trailing lines option for git grep."
   (interactive)
   (setq helm-git-grep-showing-leading-and-trailing-lines
         (not helm-git-grep-showing-leading-and-trailing-lines))
   (helm-git-grep-rerun-with-input))
+(put 'helm-git-grep-toggle-showing-trailing-leading-line 'helm-only t)
 
-;;;###autoload
 (defun helm-git-grep-toggle-base-directory ()
   "Toggle a value of `helm-git-grep-base-directory'\
 for git grep command from `helm-git-grep'."
@@ -552,29 +545,36 @@ for git grep command from `helm-git-grep'."
   (setq helm-git-grep-base-directory
         (if (eq helm-git-grep-base-directory 'root) 'current 'root))
   (helm-git-grep-rerun-with-input))
+(put 'helm-git-grep-toggle-base-directory 'helm-only t)
 
-;;;###autoload
 (defun helm-git-grep-pathspec-toggle-availability ()
   "Toggle availability of `helm-git-grep-pathspecs',\
 if `helm-git-grep-pathspecs' is not nil."
   (interactive)
+  (hack-dir-local-variables-non-file-buffer)
   (if helm-git-grep-pathspecs
       (progn
         (setq helm-git-grep-pathspec-available
               (not helm-git-grep-pathspec-available))
         (helm-git-grep-rerun-with-input))
     (message helm-git-grep-pathspec-disabled-message)))
+(put 'helm-git-grep-pathspec-toggle-availability 'helm-only t)
 
 ;;;###autoload
 (defun helm-git-grep-ls-files-limited-by-pathspec ()
   "Show result of `git ls-files' to check files limited by pathspec \
 which is defined by `helm-git-grep-pathspecs'."
   (interactive)
+  (hack-dir-local-variables-non-file-buffer)
   (if helm-git-grep-pathspecs
-      (let ((buf (get-buffer-create "*helm-git-grep ls-files*")))
-        (with-current-buffer buf (erase-buffer))
+      (let ((buf (get-buffer-create "*helm-git-grep ls-files*"))
+            (args (helm-git-grep-pathspec-args)))
+        (with-current-buffer buf
+          (erase-buffer)
+          (insert (format "git ls-files %s\n\n"
+                          (helm-git-grep-concat-string-list args))))
         (when (apply 'call-process "git" nil buf nil
-                         (append '("ls-files") (helm-git-grep-pathspec-args))))
+                         (append '("ls-files") args)))
           (display-buffer buf))
     (message helm-git-grep-pathspec-disabled-message)))
 
@@ -590,6 +590,8 @@ You can save your results in a helm-git-grep-mode buffer, see below.
 \\[helm-goto-next-file]\t->Next File.
 \\[helm-goto-precedent-file]\t\t->Precedent File.
 \\[helm-yank-text-at-point]\t\t->Yank Text at point in minibuffer.
+\\[helm-git-grep-ls-files-limited-by-pathspec]\t\t->Show result of `git ls-files'\
+ to check files limited by pathspec.
 \\[helm-git-grep-pathspec-toggle-availability]\t\t->Toggle pathspec availability.
 \\[helm-git-grep-toggle-base-directory]\t\t->Toggle base directory for search.
 \\[helm-git-grep-toggle-ignore-case]\t\t->Toggle ignore case option.
@@ -602,30 +604,19 @@ You can save your results in a helm-git-grep-mode buffer, see below.
 \n== Helm Map ==
 \\{helm-map}")
 
-;;;###autoload
 (defun helm-git-grep-help ()
   "Help command for `helm-git-grep'."
   (interactive)
   (let ((helm-help-message helm-git-grep-help-message))
     (helm-help)))
-
-;;;###autoload
-(defvar helm-git-grep-mode-line-string"\
-\\<helm-git-grep-map>\
-\\[helm-git-grep-help]:Help \
-\\<helm-map>\
-\\[helm-select-action]:Act \
-\\[helm-exit-minibuffer]/\
-\\[helm-select-2nd-action-or-end-of-line]/\
-\\[helm-select-3rd-action]:NthAct \
-\\[helm-toggle-suspend-update]:Tog.suspend"
-  "String displayed in mode-line in `helm-git-grep'.")
+(put 'helm-git-grep-help 'helm-only t)
 
 (defvar helm-git-grep-map
   (let ((map (make-sparse-keymap)))
     (set-keymap-parent map helm-map)
     (define-key map (kbd "M-<down>") 'helm-goto-next-file)
     (define-key map (kbd "M-<up>")   'helm-goto-precedent-file)
+    (define-key map (kbd "C-c l")    'helm-git-grep-ls-files-limited-by-pathspec)
     (define-key map (kbd "C-c p")    'helm-git-grep-pathspec-toggle-availability)
     (define-key map (kbd "C-c b")    'helm-git-grep-toggle-base-directory)
     (define-key map (kbd "C-c i")    'helm-git-grep-toggle-ignore-case)
@@ -642,7 +633,7 @@ You can save your results in a helm-git-grep-mode buffer, see below.
     (delq nil map))
   "Keymap used in Git Grep sources.")
 
-(eval `(defclass helm-git-grep-source (helm-source-async)
+(eval `(defclass helm-git-grep-class (helm-source-async)
          ((header-name :initform helm-git-grep-header-name)
           (default-directory :initform nil)
           (requires-pattern :initform 2)
@@ -655,20 +646,20 @@ You can save your results in a helm-git-grep-mode buffer, see below.
           (persistent-help
            :initform "Jump to line (`C-u' Record in mark ring)")
           (keymap :initform ,helm-git-grep-map)
-          (mode-line :initform helm-git-grep-mode-line-string)
           (init :initform helm-git-grep-init))))
 
-(defvar helm-source-git-grep
-  (helm-make-source "Git Grep" 'helm-git-grep-source
+(defvar helm-git-grep-source
+  (helm-make-source "Git Grep" 'helm-git-grep-class
     :candidates-process 'helm-git-grep-process))
 
-(defvar helm-source-git-submodule-grep
-  (helm-make-source "Git Submodule Grep" 'helm-git-grep-source
-    :candidates-process 'helm-git-submodule-grep-process))
+(defvar helm-git-grep-submodule-source
+  (helm-make-source "Git Submodule Grep" 'helm-git-grep-class
+    :candidates-process 'helm-git-grep-submodule-grep-process))
 
 (defun helm-git-grep-1 (&optional input)
   "Execute helm git grep.
 Optional argument INPUT is initial input."
+  (helm-set-local-variable 'helm-git-grep-pathspecs helm-git-grep-pathspecs)
   (helm :sources helm-git-grep-sources
         :buffer "*helm git grep*"
         :input input
@@ -679,7 +670,7 @@ Optional argument INPUT is initial input."
 (defun helm-git-grep ()
   "Helm git grep.
 
-if submodules exists, grep submodules too."
+`helm-git-grep-sources' is used as helm sources."
   (interactive)
   (helm-git-grep-1))
 
@@ -690,7 +681,7 @@ if submodules exists, grep submodules too."
 Use region as input instead of the thing at point
 if region exists.
 
-if submodules exists, grep submodules too."
+`helm-git-grep-sources' is used as helm sources."
   (interactive)
   (let* ((symbol (helm-git-grep-get-input-symbol))
          (input (if symbol (concat symbol " ") "")))
@@ -718,6 +709,7 @@ if submodules exists, grep submodules too."
 ;;; Obsolete
 ;;
 ;;
+;;;###autoload
 (defconst helm-git-grep-with-exclude-file-pattern-obsolete-message
   "use `helm-git-grep-pathspecs' to exclude files form search result.")
 
@@ -733,6 +725,15 @@ if submodules exists, grep submodules too."
 (make-obsolete
  'helm-git-grep-with-exclude-file-pattern
  helm-git-grep-with-exclude-file-pattern-obsolete-message "0.10.0")
+
+(define-obsolete-function-alias 'helm-git-submodule-grep-command
+  'helm-git-grep-submodule-grep-command "0.10.0")
+
+(define-obsolete-function-alias 'helm-git-submodule-grep-process
+  'helm-git-grep-submodule-grep-process "0.10.0")
+
+(define-obsolete-variable-alias 'helm-source-git-grep
+  'helm-git-grep-source "0.10.0")
 
 
 (provide 'helm-git-grep)

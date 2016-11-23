@@ -6,7 +6,7 @@
 
 ;; Author: Donald Ephraim Curtis <dcurtis@milkbox.net>
 ;; URL: http://github.com/milkypostman/powerline/
-;; Version: 2.3
+;; Version: 2.4
 ;; Keywords: mode-line
 ;; Package-Requires: ((cl-lib "0.2"))
 
@@ -68,7 +68,7 @@ utf-8."
                  (const slant)
                  (const wave)
                  (const zigzag)
-		 (const utf-8)
+                 (const utf-8)
                  (const nil)))
 
 (defcustom powerline-utf-8-separator-left #xe0b0
@@ -469,19 +469,20 @@ static char * %s[] = {
                                 (not powerline-buffer-size-suffix))
                           (force-mode-line-update)))))
 
-(defsubst powerline-trim (s)
-  "Remove whitespace at the beginning and the end of string S."
-  (replace-regexp-in-string
-   "\\`[ \t\n\r]+" ""
-   (replace-regexp-in-string "[ \t\n\r]+\\'" "" s)))
-
-(defun powerline-strip-text-properties (txt)
-  (set-text-properties 0 (length txt) nil txt)
-  txt)
-
 ;;;###autoload (autoload 'powerline-buffer-id "powerline")
-(defpowerline powerline-buffer-id
-    (powerline-strip-text-properties (powerline-trim (format-mode-line mode-line-buffer-identification))))
+(defun powerline-buffer-id (&optional face pad)
+  (powerline-raw
+   (format-mode-line
+    (concat " " (propertize
+		 "%b"
+		 'face face
+		 'mouse-face 'mode-line-highlight
+		 'help-echo "Buffer name\n\ mouse-1: Previous buffer\n\ mouse-3: Next buffer"
+		 'local-map (let ((map (make-sparse-keymap)))
+			      (define-key map [mode-line mouse-1] 'mode-line-previous-buffer)
+			      (define-key map [mode-line mouse-3] 'mode-line-next-buffer)
+			      map))))
+   face pad))
 
 ;;;###autoload (autoload 'powerline-process "powerline")
 (defpowerline powerline-process
