@@ -79,7 +79,7 @@
                 desktop-base-lock-name      "lock"
                 desktop-path                (list desktop-dirname)
                 desktop-save                t
-                desktop-load-locked-desktop nil
+                desktop-load-locked-desktop t
                 desktop-save 'ask-if-new
                 desktop-file-name-format 'absolute
                 desktop-restore-frames nil
