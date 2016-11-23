@@ -1,8 +1,8 @@
 ;;; setup-eshell.el ---
 
-;; Copyright (C) 2014, 2015, 2016
+;; Copyright (C) 2014, 2015, 2016  abelardo.jara-berrocal
 
-;; Author:  <ajaraber@AJARABER-MOBL5>
+;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
 ;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
