@@ -1,8 +1,8 @@
 ;;; setup-org.el ---
 
-;; Copyright (C) 2014, 2015, 2016  abelardo.jara-berrocal
+;; Copyright (C) 2016  Abelardo Jara
 
-;; Author: abelardo.jara-berrocal <ajaraber@plxc25288.pdx.intel.com>
+;; Author: Abelardo Jara <abelardojara@Abelardos-MacBook-Pro.local>
 ;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -35,7 +35,7 @@
          ("C-c O" . org-open-at-point-global)
          :map org-mode-map
          ("C-TAB" . org-cycle)
-         ("C-c w" . org-formatted-copy)
+         ("C-c c" . org-html-copy)
          ("C-c k" . org-cut-subtree)
          ("C-c t" . org-show-todo-tree)
          ("C-c r" . org-refile)
@@ -374,7 +374,7 @@
                              "xclip -o -t TARGETS | grep -q text/html && (xclip -o -t text/html | pandoc -f html -t json | pandoc -f json -t org) || xclip -o"))
                   (yank))
 
-                (defun org-formatted-copy ()
+                (defun org-html-copy ()
                   "Export region to HTML, and copy it to the clipboard."
                   (interactive)
                   (org-export-to-file 'html "/tmp/org.html")
