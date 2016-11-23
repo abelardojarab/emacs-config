@@ -148,28 +148,7 @@
 ;; Refresh the fringe colorset after loading a theme
 (defadvice load-theme (after enable-theme-first activate)
   (my/set-face-fringe))
-
 (ad-activate 'load-theme)
-
-;; Tabbar colors
-(eval-after-load 'tabbar
-  (progn
-    ;; Fix the tabbar appearance
-    (defun my/set-face-tabbar()
-      "Set the tabbar background to the same color as the regular background."
-      (interactive)
-      (setq tabbar-separator '(0.0))
-      (setq tabbar-background-color "#331214") ;; the color of the tabbar background
-
-      (set-face-attribute 'tabbar-default nil :background "black")
-      (set-face-attribute 'tabbar-unselected nil :background "black" :foreground "white" :box '(:line-width 1 :color "#331214" ))
-      (set-face-attribute 'tabbar-selected nil :background "#331213" :foreground "white" :box '(:line-width 1 :color "#331214" ))
-      (set-face-attribute 'tabbar-button nil :box '(:line-width 1 :color "black" :style released-button));
-      (set-face-attribute 'tabbar-highlight nil :underline nil)
-      (set-face-attribute 'tabbar-separator nil :height 0.5))
-
-    ;; Enable it
-    (my/set-face-tabbar)))
 
 ;; Choose different themes depending if we are using GUI or not
 ;; Console colors are enabled if "export TERM=xterm-256color" is added into .bashrc
