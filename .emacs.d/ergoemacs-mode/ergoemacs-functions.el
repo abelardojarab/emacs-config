@@ -1,6 +1,6 @@
 ;;; ergoemacs-functions.el --- miscellaneous functions for ErgoEmacs -*- lexical-binding: t -*-
 
-;; Copyright © 2013-2015 Free Software Foundation, Inc.
+;; Copyright © 2013-2016 Free Software Foundation, Inc.
 
 ;; Maintainer: Matthew L. Fidler
 ;; Authors: Xah Lee, Matthew Fidler, Drew Adams, Ting-Yu Lin, David
@@ -22,11 +22,11 @@
 
 ;;; Commentary:
 
-;; 
+;;
 
 ;; Todo:
 
-;; 
+;;
 
 ;;; Code:
 (require 'cl-lib)
@@ -153,7 +153,7 @@ The backup is determined by `find-backup-file-name'"
                     (setq ergoemacs-revert-buffer 0)
                     (file-readable-p (nth ergoemacs-revert-buffer backup-buffer))
                     (if (and (= (point-min) (point-max)) (not (eq last-command 'ergoemacs-revert-buffer))) nil
-		      (yes-or-no-p (format "Revert buffer to backup saved on disk (%s)?" (nth 0 backup-buffer)))))
+              (yes-or-no-p (format "Revert buffer to backup saved on disk (%s)?" (nth 0 backup-buffer)))))
                (and (eq last-command 'ergoemacs-revert-buffer)
                     (setq ergoemacs-revert-buffer (+ ergoemacs-revert-buffer 1)))))
       (if (= ergoemacs-revert-buffer (length backup-buffer))
@@ -218,11 +218,11 @@ The backup is determined by `find-backup-file-name'"
               val (ergoemacs-sv elt))
         (if (not (equal set val))
             (unless (or (eq elt 'echo-keystrokes)
-			(string-match-p "-\\(hook\\|mode\\)$" (symbol-name elt)))
-	      (setq save-p t)
+            (string-match-p "-\\(hook\\|mode\\)$" (symbol-name elt)))
+          (setq save-p t)
               (message "%s was changed outside of ergoemacs-mode\n\tPrior: %s\n\tErgoemacs: %s\n\tFinal: %s" elt
                        save
-                       set 
+                       set
                        val)
               (customize-mark-to-save elt))
           ;; Consider this value unchanged (even though it was...)
@@ -301,7 +301,7 @@ The PROCESS is the process where the clean environment is run."
       (with-temp-file ergoemacs-batch-file
         (insert cmd))
       (setq default-directory (file-name-directory ergoemacs-batch-file)))
-     ((executable-find "xterm") 
+     ((executable-find "xterm")
       (setq cmd (format "%s -e %s -nw --debug-init -Q -L \"%s\" %s"
                         (executable-find "xterm") emacs-exe
                         (expand-file-name (file-name-directory (locate-library "ergoemacs-mode")))
@@ -452,7 +452,7 @@ the first `kill-line', but not the second.
 
 Note that `ergoemacs-shortcut-remap' will remap mode-specific
 changes to `kill-line' to allow it to work as expected in
-major-modes like `org-mode'. 
+major-modes like `org-mode'.
 
 The ARG is passed to the respective function for any prefixes."
   (interactive "P")
@@ -593,7 +593,7 @@ followed by the beginning of indentation (if
   :type 'boolean
   :group 'ergoemacs-mode)
 
-(defcustom ergoemacs-use-beginning-or-end-of-line-only 'on-repeat 
+(defcustom ergoemacs-use-beginning-or-end-of-line-only 'on-repeat
   "Allow `ergoemacs-beginning-of-line-or-what' and `ergoemacs-end-of-line-or-what' to only go to the beginning/end of a line."
   :type '(choice
           (const t :tag "Only go to the beginning or end of a line")
@@ -635,7 +635,7 @@ the end of the buffer."
   :group 'ergoemacs-mode)
 
 (defun ergoemacs-beginning-or-end-of-buffer ()
-  "Goto end or beginning of buffer. 
+  "Goto end or beginning of buffer.
 
 See `ergoemacs-end-or-beginning-of-buffer'.
 
@@ -667,12 +667,12 @@ This behavior can be turned off with
   "Go to beginning or end of buffer.
 
 This calls `end-of-buffer', unless there is no prefix and the
-point is already at the beginning of the buffer.  
+point is already at the beginning of the buffer.
 
-On repeating, this function will call `beginning-of-buffer'. 
+On repeating, this function will call `beginning-of-buffer'.
 
 This function tries to be smart and if the major mode redefines
-the keys, use those keys instead.  
+the keys, use those keys instead.
 
 The repatable behavior can be turned off
 with`ergoemacs-repeatable-beginning-or-end-of-buffer'
@@ -1154,14 +1154,14 @@ When there is a text selection, act on the region."
   (interactive)
   ;; This command symbol has a property “'stateIsCompact-p”.
   (let (current-state-is-compact (big-fill-column-val 4333999) (deactivate-mark nil))
-    
+
     (save-excursion
       ;; Determine whether the text is currently compact.
       (setq current-state-is-compact
             (if (eq last-command this-command)
                 (get this-command 'state-is-compact-p)
               (if (> (- (line-end-position) (line-beginning-position)) fill-column) t nil) ) )
-      
+
       (if (region-active-p)
           (if current-state-is-compact
               (fill-region (region-beginning) (region-end))
@@ -1209,7 +1209,7 @@ Calling this command 3 times will always result in no whitespaces around cursor.
     (save-excursion
       ;; todo: might consider whitespace as defined by syntax table, and also consider whitespace chars in unicode if syntax table doesn't already considered it.
       (setq cursor-point (point))
-      
+
       (setq space-tab-neighbor-p (if (or (looking-at " \\|\t") (looking-back " \\|\t" nil)) t nil) )
       (move-beginning-of-line 1) (setq line-begin-pos (point) )
       (move-end-of-line 1) (setq line-end-pos (point) )
@@ -1217,18 +1217,18 @@ Calling this command 3 times will always result in no whitespaces around cursor.
       ;;       (re-search-forward "\n$") (setq line-end-pos (point) )
       (setq line-has-meat-p (if (< 0 (count-matches "[[:graph:]]" line-begin-pos line-end-pos)) t nil) )
       (goto-char cursor-point)
-      
+
       (skip-chars-backward "\t ")
       (setq space-or-tab-begin (point))
-      
+
       (skip-chars-backward "\t \n")
-      
+
       (goto-char cursor-point)
       (skip-chars-forward "\t ")
       (setq space-or-tab-end (point))
       (skip-chars-forward "\t \n")
       )
-    
+
     (if line-has-meat-p
         (let (deleted-text)
           (when space-tab-neighbor-p
@@ -1238,7 +1238,7 @@ Calling this command 3 times will always result in no whitespaces around cursor.
             ;; different that a simple whitespace
             (if (not (string= deleted-text " "))
                 (insert " "))))
-      
+
       (progn
         (delete-blank-lines))
       ;; todo: possibly code my own delete-blank-lines here for better efficiency, because delete-blank-lines seems complex.
@@ -1361,7 +1361,7 @@ the last misspelled word with
              (txt (if (not bds) nil
                     (filter-buffer-substring (car bds) (cdr bds)))))
         (cond
-         
+
          ((or (and (car bds)
                    (memq (get-text-property (car bds) 'face) '(font-lock-string-face font-lock-doc-face font-lock-comment-face)))
               (and (car bds)
@@ -1402,7 +1402,7 @@ the last misspelled word with
             (put this-command 'state "all caps"))
            (t
             (put this-command 'state "all lower")))))
-      
+
       (cond
        ((string= "all lower" (get this-command 'state))
         (upcase-initials-region p1 p2) (put this-command 'state "init caps"))
@@ -1635,9 +1635,9 @@ Installs `undo-tree' if not present."
    (t
     (if (not (yes-or-no-p "Redo command not found, install undo-tree for redo?"))
         (error "Redo not found, need undo-tree or redo commands present.")
-      (package-refresh-contents) ;;available in gnu elpa.
-      (package-initialize)
-      (package-install 'undo-tree)
+      ;; (package-refresh-contents) ;;available in gnu elpa.
+      ;; (package-initialize)
+      ;; (package-install 'undo-tree)
       (require 'undo-tree)
       (undo-tree-mode 1)
       (call-interactively 'undo-tree-redo)))))
@@ -1716,7 +1716,7 @@ true; otherwise it is an emacs buffer."
         (org-p (string-match "^[*]Org Src" (buffer-name)))
         (org-capture-p (string-match "CAPTURE-.*\\.org" (buffer-name)))
         (git-commit-p (eq major-mode 'git-commit-mode))
-	existing-buffer-p)
+    existing-buffer-p)
     (setq emacs-buff-p (if (not (ergoemacs-user-buffer-p (current-buffer))) t nil))
     (cond
      ((bound-and-true-p server-buffer-clients)
@@ -1728,10 +1728,10 @@ true; otherwise it is an emacs buffer."
             (save-buffer)
           (set-buffer-modified-p nil)))
       (setq existing-buffer-p (or (not server-kill-new-buffers)
-				  server-existing-buffer))
+                  server-existing-buffer))
       (server-edit)
       (when existing-buffer-p
-	(kill-buffer (current-buffer))))
+    (kill-buffer (current-buffer))))
      ((minibufferp)
       (minibuffer-keyboard-quit))
      (org-capture-p
@@ -1756,7 +1756,7 @@ true; otherwise it is an emacs buffer."
       ;; for non-file visiting buffer. (because kill-buffer does not
       ;; offer to save buffers that are not associated with files)
       (kill-buffer (current-buffer))
-      ;; 
+      ;;
       (when (and (buffer-modified-p)
                  org-p)
         (if (y-or-n-p (format "Buffer %s modified; Do you want to save? " (buffer-name)))
@@ -1828,9 +1828,9 @@ level, like in `ido-find-file'. "
 This requires `ergoemacs-mode' to be non-nil and
 `ergoemacs-helm-ido-style-return' to be non-nil."
   (let* ((follow (and (boundp 'helm-follow-mode)
-		      (buffer-local-value
-		       'helm-follow-mode
-		       (get-buffer-create helm-buffer))))
+              (buffer-local-value
+               'helm-follow-mode
+               (get-buffer-create helm-buffer))))
          (insert-in-minibuffer
           #'(lambda (fname)
               (with-selected-window (minibuffer-window)
@@ -1873,7 +1873,7 @@ Otherwise `helm-execute-persistent-action' is called.
 
 (defun ergoemacs-helm-ff-execute-dired-dir ()
   "Allow <M-return> to execute dired on directories in `helm-mode'.
-This requires `ergoemacs-mode' to be enabled with 
+This requires `ergoemacs-mode' to be enabled with
 `ergoemacs-helm-ido-style-return' to be non-nil."
   (interactive)
   (helm-attrset 'dired-dir 'ergoemacs-helm-ff-dired-dir)
@@ -1985,9 +1985,9 @@ initial pair in the unread command events."
 ;; (declare-function ergoemacs-key-description-kbd "ergoemacs-translate.el")
 ;; (defun ergoemacs-smart-punctuation ()
 ;;   "Smart Punctuation Function for `ergoemacs-mode'."
-;;   (interactive) 
+;;   (interactive)
 ;;   (unless (run-hook-with-args-until-success 'ergoemacs-smart-punctuation-hooks)
-;;     (cond 
+;;     (cond
 ;;      ((and (eq last-command this-command)
 ;;            (looking-back (regexp-opt (mapcar (lambda(pair) (substring pair 0 1)) ergoemacs-smart-punctuation-pairs) t)))
 ;;       (undo)
@@ -2198,7 +2198,7 @@ ARG is the prefix argument for either command." direction direction direction)
 ;; Camel Case
 ;; ==================================================
 
-;; These functions were taken from and then modified. 
+;; These functions were taken from and then modified.
 ;; http://www.emacswiki.org/emacs/CamelCase
 
 (defun ergoemacs-un-camelcase-string (s &optional sep start)
@@ -2470,7 +2470,7 @@ Sends shell prompt string to process, then turns on
     (funcall shell name)))
 
 (defvar ergoemacs-msys (when (file-exists-p "c:/msysgit/bin/bash.exe")
-			 "c:/msysgit/bin/bash.exe")
+             "c:/msysgit/bin/bash.exe")
   "msys bash executable.")
 
 (defun ergoemacs-msys-here ()
@@ -2478,7 +2478,7 @@ Sends shell prompt string to process, then turns on
   (interactive)
   (if (and ergoemacs-msys (file-exists-p ergoemacs-msys))
       (let ((explicit-shell-file-name ergoemacs-msys))
-	(ergoemacs-shell-here nil "MSYS"))
+    (ergoemacs-shell-here nil "MSYS"))
     (error "Need to specify `ergoemacs-msys'.")))
 
 ;; (add-hook 'eshell-post-command-hook 'ergoemacs-shell-here-directory-change-hook)
@@ -2537,7 +2537,7 @@ For a list of online reference sites, see:
             (if (region-active-p)
                 (buffer-substring-no-properties (region-beginning) (region-end))
               (thing-at-point 'word) )) )
-    
+
     (setq ξword (with-temp-buffer
                   (insert ξword)
                   (ergoemacs-unaccent-region (point-min) (point-max) t)
@@ -2545,7 +2545,7 @@ For a list of online reference sites, see:
                   (while (re-search-forward " " nil t)
                     (replace-match "%20"))
                   (buffer-string)))
-    
+
     (setq refUrl
           (if site-to-use
               site-to-use

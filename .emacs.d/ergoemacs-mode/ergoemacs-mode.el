@@ -64,9 +64,9 @@
 
 (defvar ergoemacs--system (replace-regexp-in-string "[^0-9A-Za-z]+" "-" (concat emacs-version "-" system-configuration)))
 
-(when (and (string= package-user-dir (locate-user-emacs-file "elpa"))
-           (not (file-exists-p (locate-user-emacs-file "elpa"))))
-  (setq package-user-dir (locate-user-emacs-file (format "elpa-%s" ergoemacs--system))))
+;; (when (and (string= package-user-dir (locate-user-emacs-file "elpa"))
+;;            (not (file-exists-p (locate-user-emacs-file "elpa"))))
+;;   (setq package-user-dir (locate-user-emacs-file (format "elpa-%s" ergoemacs--system))))
 
 (defvar cl-struct-ergoemacs-component-struct-tags)
 (defvar ergoemacs-component-struct--refresh-variables)
@@ -178,9 +178,9 @@ Added beginning-of-buffer Alt+n (QWERTY notation) and end-of-buffer Alt+Shift+n"
 (defcustom ergoemacs-mode-line t
   "Determines when the ergoemacs-mode modeline indicator is shown."
   :type '(choice
-	  (const :tag "Always Show Mode Line" t)
-	  (const :tag "Do not show layout" no-layout)
-	  (const :tag "Never Show Mode Line" nil))
+      (const :tag "Always Show Mode Line" t)
+      (const :tag "Do not show layout" no-layout)
+      (const :tag "Never Show Mode Line" nil))
   :group 'ergoemacs-mode)
 
 (defun ergoemacs-mode-line (&optional text)
@@ -296,9 +296,9 @@ The `execute-extended-command' is now \\[execute-extended-command].
   :keymap ergoemacs-menu-keymap
   :after-hook (if (and (not noninteractive)
                        (not ergoemacs-mode--start-p))
-                  (if ergoemacs-mode
-                      (message "Ergoemacs will be started.")
-                    (message "Ergoemacs startup canceled."))
+                  ;; (if ergoemacs-mode
+                  ;;     (message "Ergoemacs will be started.")
+                  ;;   (message "Ergoemacs startup canceled."))
                 (setq ergoemacs-map--hashkey nil)
                 (unless ergoemacs-require--ini-p
                   (setq ergoemacs-require--ini-p :ini)
@@ -312,9 +312,9 @@ The `execute-extended-command' is now \\[execute-extended-command].
                         (dolist (elt (reverse default-frame-alist))
                           (push elt ergoemacs-mode--default-frame-alist))
                         (run-hooks 'ergoemacs-mode-startup-hook)
-                        (add-hook 'pre-command-hook #'ergoemacs-pre-command-hook)
-                        (add-hook 'post-command-hook #'ergoemacs-post-command-hook)
-                        (add-hook 'after-load-functions #'ergoemacs-after-load-functions)
+                        ;; (add-hook 'pre-command-hook #'ergoemacs-pre-command-hook)
+                        ;; (add-hook 'post-command-hook #'ergoemacs-post-command-hook)
+                        ;; (add-hook 'after-load-functions #'ergoemacs-after-load-functions)
                         (setq ergoemacs-require--ini-p t
                               ergoemacs-component-struct--apply-ensure-p t)
                         (if refresh-p
@@ -327,11 +327,12 @@ The `execute-extended-command' is now \\[execute-extended-command].
                     (setq ergoemacs-mode--default-frame-alist nil
                           ergoemacs-component-struct--apply-ensure-p t)
                     (run-hooks 'ergoemacs-mode-shutdown-hook)
-                    (remove-hook 'post-command-hook #'ergoemacs-post-command-hook)
-                    (remove-hook 'pre-command-hook #'ergoemacs-pre-command-hook)
-                    (remove-hook 'after-load-functions #'ergoemacs-after-load-functions)
-                    (unless refresh-p
-                      (message "Ergoemacs-mode turned OFF."))))))
+                    ;; (remove-hook 'post-command-hook #'ergoemacs-post-command-hook)
+                    ;; (remove-hook 'pre-command-hook #'ergoemacs-pre-command-hook)
+                    ;; (remove-hook 'after-load-functions #'ergoemacs-after-load-functions)
+                    ;; (unless refresh-p
+                    ;;   (message "Ergoemacs-mode turned OFF."))
+                    ))))
 
 (defvar ergoemacs--gzip (executable-find "gzip")
   "Gzip location.")
@@ -454,7 +455,7 @@ This is structured by valid keyboard layouts for
       (if (not (setq val (gethash key ergoemacs-timing-hash)))
           (puthash key (vector 1 (setq val (float-time (time-subtract (current-time) entry-time)))
                                val val (or (and (setq file (assoc key ergoemacs-timing--locations)) (expand-file-name (cdr file) ergoemacs-dir))
-					   load-file-name buffer-file-name)) ergoemacs-timing-hash)
+                       load-file-name buffer-file-name)) ergoemacs-timing-hash)
         (cl-incf (aref val 0))
         (cl-incf (aref val 1) (setq time (float-time (time-subtract (current-time) entry-time))))
         (setf (aref val 2) (min time (aref val 2)))

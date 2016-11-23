@@ -1,6 +1,6 @@
 ;;; ergoemacs-component.el --- Ergoemacs map interface -*- lexical-binding: t -*-
 
-;; Copyright © 2013-2015  Free Software Foundation, Inc.
+;; Copyright © 2013-2016  Free Software Foundation, Inc.
 
 ;; Filename: ergoemacs-component.el
 ;; Description:
@@ -13,22 +13,22 @@
 ;; Code for ergoemacs components.
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; 
+;;
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License as
 ;; published by the Free Software Foundation; either version 3, or
 ;; (at your option) any later version.
-;; 
+;;
 ;; This program is distributed in the hope that it will be useful,
 ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
 ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 ;; General Public License for more details.
-;; 
+;;
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
-;; 
+;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; 
+;;
 ;;; Code:
 ;; (require 'guide-key nil t)
 (require 'cl-lib)
@@ -161,7 +161,7 @@ it is installed.
 
 The AUTOLOADS is a list of functions that need to be autoloaded
 if the package is deferred."
-  (when package
+  (when nil ;; when package
     (ergoemacs-timing ensure
       (ergoemacs-timing (intern (format "ensure-%s" package))
         (let ((package (or (and (symbolp package) package)
@@ -173,7 +173,7 @@ if the package is deferred."
                            ;; (message ,(format "Defer: %s %s" package defer))
                            ;; (require ,package)
                                  ;; (ergoemacs-component-struct--apply-inits))
-				 )
+                 )
             )
           (when (and defer autoloads)
             (dolist (c autoloads)
@@ -292,7 +292,7 @@ FILE is the file name where the component was created."
                  (demand (plist-get plist :demand))
                  (defer (if demand nil (plist-get plist :defer)))
                  (defer-present-p (or demand defer (memq :defer plist))))
-            
+
             ;; Handle :bind-keymap commands
             (when (and tmp (not defer-present-p) (not defer))
               (setq defer-present-p t defer t)
@@ -305,14 +305,14 @@ FILE is the file name where the component was created."
               (setq defer-present-p t defer t)
               (setf (ergoemacs-component-struct-defer ergoemacs-component-struct--define-key-current) t))
             (ergoemacs-component-struct--handle-bind tmp 'ergoemacs-override-keymap)
-            
+
             ;; Handle :bind keys
             (setq tmp (plist-get plist :bind))
             (when (and tmp (not defer-present-p) (not defer))
               (setq defer-present-p t defer t)
               (setf (ergoemacs-component-struct-defer ergoemacs-component-struct--define-key-current) t))
             (ergoemacs-component-struct--handle-bind tmp)
-            
+
             ;; Handle :bind* commands
             (setq tmp (plist-get plist :bind*))
             (when (and tmp (not defer-present-p) (not defer))
@@ -326,7 +326,7 @@ FILE is the file name where the component was created."
               (setq defer-present-p t defer t)
               (setf (ergoemacs-component-struct-defer ergoemacs-component-struct--define-key-current) t))
             (ergoemacs-component-struct--handle-mode tmp)
-            
+
             ;; Handle :commands
             (setq tmp (plist-get plist :commands))
             (when (and tmp (not defer-present-p) (not defer))
@@ -345,7 +345,7 @@ FILE is the file name where the component was created."
           (funcall body)
           (setf (ergoemacs-component-struct-variables ergoemacs-component-struct--define-key-current)
                 (reverse (ergoemacs-component-struct-variables ergoemacs-component-struct--define-key-current))))
-      
+
       (puthash (concat (ergoemacs-component-struct-name ergoemacs-component-struct--define-key-current)
                        (and (ergoemacs-component-struct-version ergoemacs-component-struct--define-key-current)
                             (concat "::" (ergoemacs-component-struct-version ergoemacs-component-struct--define-key-current))))
@@ -383,7 +383,7 @@ OBJECT is the ergoemacs component object, and defaults to
                         (symbol-name when-condition))))))))
       (if (not (ergoemacs-component-struct-p obj))
           (error "OBJECT is not an ergoemacs-component-structure")
-	(puthash hook plist (ergoemacs-component-struct-hook-plists obj))
+    (puthash hook plist (ergoemacs-component-struct-hook-plists obj))
         (setf (ergoemacs-component-struct-when-condition obj) when-condition)
         (setf (ergoemacs-component-struct-hook obj) hook)
         (funcall body)
@@ -559,7 +559,7 @@ If not specified, OBJECT is `ergoemacs-component-struct--define-key-current'."
           (cond
            ((and (not cur-map) (not when-condition))
             (cl-pushnew keymap ergoemacs-map-properties--known-maps)
-	    (cl-pushnew keymap ergoemacs-map-properties--label-atoms-maps)
+        (cl-pushnew keymap ergoemacs-map-properties--label-atoms-maps)
             (setq cur-map (make-sparse-keymap))
             (puthash keymap cur-map (ergoemacs-component-struct-maps obj)))
            ((and (not cur-map) when-condition global-map-p)
@@ -569,7 +569,7 @@ If not specified, OBJECT is `ergoemacs-component-struct--define-key-current'."
             (unless (ergoemacs-gethash hook (ergoemacs-component-struct-hook-maps obj))
               (puthash hook (make-hash-table) (ergoemacs-component-struct-hook-maps obj)))
             (cl-pushnew keymap ergoemacs-map-properties--known-maps)
-	    (cl-pushnew keymap ergoemacs-map-properties--label-atoms-maps)
+        (cl-pushnew keymap ergoemacs-map-properties--label-atoms-maps)
             (setq cur-map (make-sparse-keymap))
             (puthash keymap cur-map (ergoemacs-gethash hook (ergoemacs-component-struct-hook-maps obj)))))
           (cond
@@ -619,8 +619,8 @@ If not specified, OBJECT is `ergoemacs-component-struct--define-key-current'."
                         (if (not (commandp cur-def t))
                             (push cur-def fn-lst)
                           (if (ergoemacs-keymapp cur-def)
-			      (ergoemacs :define-key cur-map key (copy-keymap cur-def))
-			    (ergoemacs :define-key cur-map key cur-def))
+                  (ergoemacs :define-key cur-map key (copy-keymap cur-def))
+                (ergoemacs :define-key cur-map key cur-def))
                           (throw 'found-fn t)))
                       nil)
               ;; Not found
@@ -630,8 +630,8 @@ If not specified, OBJECT is `ergoemacs-component-struct--define-key-current'."
                     (ergoemacs-component-struct-dynamic-keys obj))))
            (t
             (if (ergoemacs-keymapp def)
-		(ergoemacs :define-key cur-map key (copy-keymap def))
-	      (ergoemacs :define-key cur-map key def))
+        (ergoemacs :define-key cur-map key (copy-keymap def))
+          (ergoemacs :define-key cur-map key def))
             (when (and package-name def (not (fboundp def)))
               ;; Create autoload.
               (autoload def (format "%s" package-name) nil t)
@@ -734,7 +734,7 @@ closest `ergoemacs-theme-version' calculated from
             (funcall ret)
             (setq ret (ergoemacs-gethash map ergoemacs-component-hash))))
         (if (string-match-p "::" map) ret
-	  (ergoemacs-component-struct--lookup-closest ret version))))))
+      (ergoemacs-component-struct--lookup-closest ret version))))))
 
 (defvar ergoemacs-component-struct--get-keymap nil)
 (defvar ergoemacs-component-struct--get-keymap-extra nil)
@@ -942,18 +942,18 @@ OBJ is the current object being modified, passed to
 `ergoemacs-component-struct--hook'."
   (dolist (elt (ergoemacs-component-struct--hook hook layout obj))
     (if (minibufferp)
-	(progn
-	  (unless ergoemacs-command-loop--minibuffer-unsupported-p
-	    (catch 'unsupported-p
-	      (dolist (elt (ergoemacs-component-struct--lookup-hash (or obj (ergoemacs-theme-components))))
-		(let ((plist (gethash hook (ergoemacs-component-struct-hook-plists elt))))
-		  (when (and plist (plist-get plist :command-loop-unsupported-p))
-		    (set (make-local-variable 'ergoemacs-command-loop--minibuffer-unsupported-p) t)
-		    (throw 'unsupported-p t))))))
-	  (if ergoemacs-component-struct--composed-hook-minibuffer
-	      (push elt ergoemacs-component-struct--composed-hook-minibuffer)
-	    (set (make-local-variable 'ergoemacs-component-struct--composed-hook-minibuffer)
-		 (list elt))))
+    (progn
+      (unless ergoemacs-command-loop--minibuffer-unsupported-p
+        (catch 'unsupported-p
+          (dolist (elt (ergoemacs-component-struct--lookup-hash (or obj (ergoemacs-theme-components))))
+        (let ((plist (gethash hook (ergoemacs-component-struct-hook-plists elt))))
+          (when (and plist (plist-get plist :command-loop-unsupported-p))
+            (set (make-local-variable 'ergoemacs-command-loop--minibuffer-unsupported-p) t)
+            (throw 'unsupported-p t))))))
+      (if ergoemacs-component-struct--composed-hook-minibuffer
+          (push elt ergoemacs-component-struct--composed-hook-minibuffer)
+        (set (make-local-variable 'ergoemacs-component-struct--composed-hook-minibuffer)
+         (list elt))))
       (set (make-local-variable (car elt)) (make-composed-keymap (cdr elt) (symbol-value (car elt)))))))
 
 (defvar ergoemacs-component-struct--create-hooks nil)
@@ -1042,8 +1042,8 @@ OBJECT is the `ergoemacs-component-struct' object being changed."
         ret))
      ((ergoemacs-component-struct-p obj)
       (mapcar (lambda(x)
-		(append x (list (ergoemacs-component-struct-name obj))))
-	      (ergoemacs-component-struct-variables obj)))
+        (append x (list (ergoemacs-component-struct-name obj))))
+          (ergoemacs-component-struct-variables obj)))
      (t (ergoemacs-component-struct--variables (ergoemacs-component-struct--lookup-hash obj))))))
 
 (defvar ergoemacs-component-struct--refresh-variables nil)
@@ -1065,7 +1065,7 @@ to prevent infinite recursion."
   (unless ergoemacs-component-struct--apply-inits
     (setq ergoemacs-component-struct--apply-inits t)
     (unwind-protect
-	(ergoemacs-component-struct--apply-inits-- file obj))
+    (ergoemacs-component-struct--apply-inits-- file obj))
     (setq ergoemacs-component-struct--apply-inits nil)))
 
 (defun ergoemacs-component-struct--apply-inits-- (&optional file obj)
@@ -1111,9 +1111,9 @@ to prevent infinite recursion."
           (ergoemacs-component-struct--ensure package-name defer autoloads))
          ((and ensure (symbolp ensure))
           (ergoemacs-component-struct--ensure ensure defer autoloads))
-	 ((and (consp ensure) (memq (car ensure) '(memq member and or if when = string= not string< eq equal)))
-	  (when (ignore-errors (eval ensure))
-	    (ergoemacs-component-struct--ensure package-name defer autoloads)))
+     ((and (consp ensure) (memq (car ensure) '(memq member and or if when = string= not string< eq equal)))
+      (when (ignore-errors (eval ensure))
+        (ergoemacs-component-struct--ensure package-name defer autoloads)))
          ((consp ensure)
           (dolist (elt ensure)
             (cond
@@ -1137,7 +1137,7 @@ to prevent infinite recursion."
                        (fboundp fn))
               (funcall fn plist)))
           (push elt ergoemacs-component-struct--applied-plists))))
-    
+
     ;; Turn off plist options
     (setq tmp nil)
     (dolist (elt ergoemacs-component-struct--applied-plists)
@@ -1194,8 +1194,8 @@ to prevent infinite recursion."
                   (condition-case err
                       (eval (nth 0 init))
                     (error (progn
-			     (ergoemacs-warn "%s while evaluating %s" err (nth 0 init))
-			     (debug err))))
+                 (ergoemacs-warn "%s while evaluating %s" err (nth 0 init))
+                 (debug err))))
                   (push (nth 0 init) ergoemacs-component-struct--deferred-functions))
                  ;; (t (ergoemacs-warn "Theme did not handle: %s" (nth 0 init)))
                  ))
@@ -1565,10 +1565,10 @@ Return 0 if there is no such symbol.  Based on
          (elc-file (and file (concat (file-name-sans-extension file) ".elc"))))
     (when file
       (catch 'loaded
-	(dolist (load load-history)
-	  (when (or (string= elc-file (car load))
-		    (string= el-file (car load)))
-	    (throw 'loaded nil))) t))))
+    (dolist (load load-history)
+      (when (or (string= elc-file (car load))
+            (string= el-file (car load)))
+        (throw 'loaded nil))) t))))
 
 (defun ergoemacs-component-describe (component)
   "Display the full documentation of COMPONENT (a symbol or string)."
@@ -1610,7 +1610,7 @@ Return 0 if there is no such symbol.  Based on
               (insert (format "  %s -- %s\n" prop tmp))))
           (insert "\n")
           (insert (format "Plist: %s\n" plist))
-          
+
           (insert (format "Base Layout: %s\n" (ergoemacs-component-struct-layout comp)))
           (when (looking-back ": \\(.*\\)\n" nil)
             (help-xref-button 1 'ergoemacs-layout-help (match-string 1)))
@@ -1634,7 +1634,7 @@ Return 0 if there is no such symbol.  Based on
                              (lambda(x) (ergoemacs-key-description x)) tmp ", "))))
 
           ;; FIXME: Describe major-mode / minor-mode differences
-          
+
           ;; FIXME: Describe what keys are deferred, and what they would
           ;; possibly bind to...
 
@@ -1644,7 +1644,7 @@ Return 0 if there is no such symbol.  Based on
             (insert (format "Versions: %s, %s\n" ergoemacs-mode-version
                             (mapconcat
                              (lambda(x) x) vers ", ")))
-            
+
             (setq lst `((,(format "Specified Keymap (%s)" (or (ergoemacs-theme--get-version) ergoemacs-mode-version))
                          ,(ergoemacs-component-struct-map comp))
                         ,@(mapcar
@@ -1663,7 +1663,7 @@ Return 0 if there is no such symbol.  Based on
                                  ,(ergoemacs-component-struct--get (ergoemacs-component-struct--lookup-hash component ver) ergoemacs-keyboard-layout))))
                            vers)
                         )))
-          
+
           (dolist (elt lst)
             (unless (or (not elt) (ergoemacs (nth 1 elt) :empty-p))
               (insert "\n")
@@ -1763,7 +1763,7 @@ modifications with `diminish-undo'"
                               (diminish (nth 0 dim) dim))))
          (t (eval-after-load diminish-symbol
               `(diminish ',(nth 0 dim))))))
-       
+
        ;; :diminish (" " " g")
        ((and (consp dim)
              (= 2 (length dim))

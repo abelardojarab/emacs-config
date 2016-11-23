@@ -26,6 +26,8 @@
 
 (use-package ielm
   :bind (("C-c C-z" . ielm-repl)
+         :map ctl-x-map
+         ("z" . ielm-repl)
          :map ielm-map
          ("C-c C-z" . quit-window))
   :config (progn

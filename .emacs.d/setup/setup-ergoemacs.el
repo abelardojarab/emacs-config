@@ -26,10 +26,9 @@
 
 ;; Ergoemacs
 (use-package ergoemacs-mode
-  ;; Ergoemacs does not work with Emacs 25
-  :if (= emacs-major-version 24)
   :ensure nil
-  :commands ergoemacs-mode
+  :if (and (display-graphic-p)
+           (executable-find "gzip"))
   :load-path (lambda () (expand-file-name "ergoemacs-mode/" user-emacs-directory))
   :init (progn
           (setq ergoemacs-theme nil

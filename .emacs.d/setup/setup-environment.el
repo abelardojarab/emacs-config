@@ -31,7 +31,7 @@
 
 ;; Improve Emacs performance
 (if (boundp 'max-specpdl-size)
-    (setq max-specpdl-size (* max-specpdl-size 15)
+    (setq max-specpdl-size (* max-specpdl-size 40)
           max-lisp-eval-depth (* max-lisp-eval-depth 30)))
 
 ;; ignore byte-compile warnings

@@ -1,6 +1,6 @@
 ;;; ergoemacs-lib.el --- Ergoemacs libraries -*- lexical-binding: t -*-
 
-;; Copyright © 2013-2015  Free Software Foundation, Inc.
+;; Copyright © 2013-2016  Free Software Foundation, Inc.
 
 ;; Author: Matthew L. Fidler, Xah Lee
 ;; Maintainer:
@@ -378,7 +378,7 @@ All other modes are assumed to be minor modes or unimportant.
             (push (cdr elt) modes)))))
     (setq modes (sort ret (lambda(x1 x2) (string< (downcase (nth 2 x2))
                                                   (downcase (nth 2 x1)))))
-	  ergoemacs-menu--get-major-modes (mapcar (lambda(x) (intern x)) added-modes))
+      ergoemacs-menu--get-major-modes (mapcar (lambda(x) (intern x)) added-modes))
     (setq ret '())
     (dolist (elt modes)
       (let ((this-letter (upcase (substring (nth 2 elt) 0 1))))
@@ -420,9 +420,9 @@ All other modes are assumed to be minor modes or unimportant.
         (if (fboundp 'tabbar-install-faces)
             (tabbar-install-faces)
           (when (fboundp 'package-install)
-            (package-refresh-contents)
-            (package-initialize)
-            (package-install 'tabbar-ruler)
+            ;; (package-refresh-contents)
+            ;; (package-initialize)
+            ;; (package-install 'tabbar-ruler)
             (require 'tabbar-ruler nil t)
             (tabbar-install-faces))))
     (if (not (featurep 'tabbar-ruler))
@@ -549,8 +549,8 @@ The reset is done with `ergoemacs-mode-reset'."
   (interactive)
   (if (called-interactively-p 'any)
       (progn
-	(setenv "ERGOEMACS_KEYBOARD_LAYOUT" ergoemacs-keyboard-layout)
-	(setenv "ERGOEMACS_THEME" ergoemacs-theme)
+    (setenv "ERGOEMACS_KEYBOARD_LAYOUT" ergoemacs-keyboard-layout)
+    (setenv "ERGOEMACS_THEME" ergoemacs-theme)
         (shell-command (format "%s -Q --batch -l %s/ergoemacs-mode --eval \"(ergoemacs-gen-ahk %s)\" &"
                                (ergoemacs-emacs-exe)
                                ergoemacs-dir (if current-prefix-arg "t" "nil"))))
@@ -720,14 +720,14 @@ EVENT is used when this is called from a mouse event."
                   (throw 'found t)))
               nil)
       (if file
-	  (insert (propertize sym
-			      'ergoemacs-timing-symbol (intern sym)
-			      'ergoemacs-timing-file file
-			      'keymap ergoemacs-timing-jump-map
-			      'mouse-face 'highlight
-			      'face 'link
-			      'help-echo "mouse-1 or RET jumps to definition"))
-	(insert sym)))))
+      (insert (propertize sym
+                  'ergoemacs-timing-symbol (intern sym)
+                  'ergoemacs-timing-file file
+                  'keymap ergoemacs-timing-jump-map
+                  'mouse-face 'highlight
+                  'face 'link
+                  'help-echo "mouse-1 or RET jumps to definition"))
+    (insert sym)))))
 
 (defun ergoemacs-timing-output-result (resultvec)
   "Output the RESULTVEC into the results buffer. RESULTVEC is a 4
