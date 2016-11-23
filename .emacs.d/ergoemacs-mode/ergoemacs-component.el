@@ -161,36 +161,38 @@ it is installed.
 
 The AUTOLOADS is a list of functions that need to be autoloaded
 if the package is deferred."
-  (when nil ;; when package
-    (ergoemacs-timing ensure
-      (ergoemacs-timing (intern (format "ensure-%s" package))
-        (let ((package (or (and (symbolp package) package)
-                           (and (stringp package) (intern package)))))
-          (unless (or defer (featurep package))
-            (require package nil t))
-          (when (and package (not (featurep package)) (numberp defer))
-            (run-with-idle-timer defer nil #'require package  ;; `(lambda()
-                           ;; (message ,(format "Defer: %s %s" package defer))
-                           ;; (require ,package)
-                                 ;; (ergoemacs-component-struct--apply-inits))
-                 )
-            )
-          (when (and defer autoloads)
-            (dolist (c autoloads)
-              (unless (fboundp (car c))
-                (autoload (car c) (format "%s" (cdr c)) nil t))))
-          (unless (featurep package)
-            (unless package--initialized
-              (package-initialize))
-            (if (package-installed-p package) t
-              (unless ergoemacs-component-struct--ensure-refreshed-p
-                (package-refresh-contents)
-                (setq ergoemacs-component-struct--ensure-refreshed-p t))
-              (unless (progn (ignore-errors (package-install package))
-                             (package-installed-p package))
-                (ergoemacs-warn "ergoemacs-mode could not install %s." package))
-              (unless defer
-                (require package nil t)))))))))
+  t
+  ;; (when package
+  ;;   (ergoemacs-timing ensure
+  ;;     (ergoemacs-timing (intern (format "ensure-%s" package))
+  ;;       (let ((package (or (and (symbolp package) package)
+  ;;                          (and (stringp package) (intern package)))))
+  ;;         (unless (or defer (featurep package))
+  ;;           (require package nil t))
+  ;;         (when (and package (not (featurep package)) (numberp defer))
+  ;;           (run-with-idle-timer defer nil #'require package  ;; `(lambda()
+  ;;                          ;; (message ,(format "Defer: %s %s" package defer))
+  ;;                          ;; (require ,package)
+  ;;                                ;; (ergoemacs-component-struct--apply-inits))
+  ;;             )
+  ;;           )
+  ;;         (when (and defer autoloads)
+  ;;           (dolist (c autoloads)
+  ;;             (unless (fboundp (car c))
+  ;;               (autoload (car c) (format "%s" (cdr c)) nil t))))
+  ;;         (unless (featurep package)
+  ;;           (unless package--initialized
+  ;;             (package-initialize))
+  ;;           (if (package-installed-p package) t
+  ;;             (unless ergoemacs-component-struct--ensure-refreshed-p
+  ;;               (package-refresh-contents)
+  ;;               (setq ergoemacs-component-struct--ensure-refreshed-p t))
+  ;;             (unless (progn (ignore-errors (package-install package))
+  ;;                            (package-installed-p package))
+  ;;               (ergoemacs-warn "ergoemacs-mode could not install %s." package))
+  ;;             (unless defer
+  ;;               (require package nil t))))))))
+  )
 
 (defun ergoemacs-component-struct--parse-list (list function &rest args)
   "Handle :bind and :mode LIST and call FUNCTION.

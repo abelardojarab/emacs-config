@@ -64,9 +64,9 @@
 
 (defvar ergoemacs--system (replace-regexp-in-string "[^0-9A-Za-z]+" "-" (concat emacs-version "-" system-configuration)))
 
-;; (when (and (string= package-user-dir (locate-user-emacs-file "elpa"))
-;;            (not (file-exists-p (locate-user-emacs-file "elpa"))))
-;;   (setq package-user-dir (locate-user-emacs-file (format "elpa-%s" ergoemacs--system))))
+(when (and (string= package-user-dir (locate-user-emacs-file "elpa"))
+           (not (file-exists-p (locate-user-emacs-file "elpa"))))
+  (setq package-user-dir (locate-user-emacs-file (format "elpa-%s" ergoemacs--system))))
 
 (defvar cl-struct-ergoemacs-component-struct-tags)
 (defvar ergoemacs-component-struct--refresh-variables)
@@ -296,9 +296,9 @@ The `execute-extended-command' is now \\[execute-extended-command].
   :keymap ergoemacs-menu-keymap
   :after-hook (if (and (not noninteractive)
                        (not ergoemacs-mode--start-p))
-                  ;; (if ergoemacs-mode
-                  ;;     (message "Ergoemacs will be started.")
-                  ;;   (message "Ergoemacs startup canceled."))
+                  (if ergoemacs-mode
+                      (message "Ergoemacs will be started.")
+                    (message "Ergoemacs startup canceled."))
                 (setq ergoemacs-map--hashkey nil)
                 (unless ergoemacs-require--ini-p
                   (setq ergoemacs-require--ini-p :ini)
@@ -314,7 +314,7 @@ The `execute-extended-command' is now \\[execute-extended-command].
                         (run-hooks 'ergoemacs-mode-startup-hook)
                         ;; (add-hook 'pre-command-hook #'ergoemacs-pre-command-hook)
                         ;; (add-hook 'post-command-hook #'ergoemacs-post-command-hook)
-                        ;; (add-hook 'after-load-functions #'ergoemacs-after-load-functions)
+                        (add-hook 'after-load-functions #'ergoemacs-after-load-functions)
                         (setq ergoemacs-require--ini-p t
                               ergoemacs-component-struct--apply-ensure-p t)
                         (if refresh-p
@@ -329,10 +329,9 @@ The `execute-extended-command' is now \\[execute-extended-command].
                     (run-hooks 'ergoemacs-mode-shutdown-hook)
                     ;; (remove-hook 'post-command-hook #'ergoemacs-post-command-hook)
                     ;; (remove-hook 'pre-command-hook #'ergoemacs-pre-command-hook)
-                    ;; (remove-hook 'after-load-functions #'ergoemacs-after-load-functions)
-                    ;; (unless refresh-p
-                    ;;   (message "Ergoemacs-mode turned OFF."))
-                    ))))
+                    (remove-hook 'after-load-functions #'ergoemacs-after-load-functions)
+                    (unless refresh-p
+                      (message "Ergoemacs-mode turned OFF."))))))
 
 (defvar ergoemacs--gzip (executable-find "gzip")
   "Gzip location.")

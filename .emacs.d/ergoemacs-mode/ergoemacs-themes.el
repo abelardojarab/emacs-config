@@ -771,7 +771,7 @@
 (ergoemacs-component execute ()
   "Execute Commands"
   ;; (global-unset-key (kbd "M-x"))
-  (global-set-key (kbd "M-a") '("M-x" :emacs))
+  ;; (global-set-key (kbd "M-a") '("M-x" :emacs))
   (global-unset-key (kbd "M-!"))
   (global-set-key (kbd "M-A") '("M-!" :emacs)))
 

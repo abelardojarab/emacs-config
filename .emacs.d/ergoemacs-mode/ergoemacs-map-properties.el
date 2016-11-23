@@ -644,16 +644,17 @@ These keymaps are saved in `ergoemacs-map-properties--hook-map-hash'."
         (message "Breadcrumb %s" (ergoemacs-gethash 'describe-european-environment-map ergoemacs-breadcrumb-hash))
         (ergoemacs-map-properties--label-known)
             (ergoemacs-map-properties--protect-global-map))
-        (if noninteractive
-            (ergoemacs-warn "Could not find global map information")
-          (ergoemacs-timing ergoemacs-create-global
-            (let* ((emacs-exe (ergoemacs-emacs-exe))
-                   (default-directory (expand-file-name (file-name-directory (locate-library "ergoemacs-mode"))))
-                   (cmd (format "%s -L %s --batch --load \"ergoemacs-mode\" -Q --eval \"(ergoemacs-map-properties--default-global-gen) (kill-emacs)\"" emacs-exe default-directory)))
-              (message "%s" (shell-command-to-string cmd))
-              (ergoemacs-map-properties--get-original-global-map))))))))
+        ;; (if noninteractive
+        ;;     (ergoemacs-warn "Could not find global map information")
+        ;;   (ergoemacs-timing ergoemacs-create-global
+        ;;     (let* ((emacs-exe (ergoemacs-emacs-exe))
+        ;;            (default-directory (expand-file-name (file-name-directory (locate-library "ergoemacs-mode"))))
+        ;;            (cmd (format "%s -L %s --batch --load \"ergoemacs-mode\" -Q --eval \"(ergoemacs-map-properties--default-global-gen) (kill-emacs)\"" emacs-exe default-directory)))
+        ;;       (message "%s" (shell-command-to-string cmd))
+        ;;       (ergoemacs-map-properties--get-original-global-map))))
+      ))))
 
-;; (add-hook 'ergoemacs-mode-intialize-hook 'ergoemacs-map-properties--get-original-global-map)
+(add-hook 'ergoemacs-mode-intialize-hook 'ergoemacs-map-properties--get-original-global-map)
 
 (defun ergoemacs-map-properties--map-fixed-plist (keymap)
   "Determines if this is an `ergoemacs-mode' KEYMAP.
