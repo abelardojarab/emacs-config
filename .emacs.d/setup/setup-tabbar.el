@@ -76,7 +76,7 @@
                `(tabbar-button-highlight ((t (:inherit tabbar-default))))
                `(tabbar-highlight ((t (:underline t))))
                `(tabbar-selected ((t (:inherit tabbar-default :background ,my/tabbar-background-color))))
-               `(tabbar-separator ((t (:inherit tabbar-default :background "white"))))
+               `(tabbar-separator ((t (:inherit tabbar-default :background ,my/tabbar-background-color))))
                `(tabbar-unselected ((t (:inherit tabbar-default))))))
 
             (add-hook 'after-init-hook #'my/set-face-tabbar)
