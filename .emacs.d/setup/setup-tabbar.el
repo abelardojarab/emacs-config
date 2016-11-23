@@ -62,6 +62,7 @@
                 (if tab (switch-to-buffer (car tab)))))
 
             ;; Default tabbar theme-ing
+            (require 'color)
             (defun my/set-face-tabbar()
               "Set the tabbar background to the same color as the regular background."
               (interactive)
@@ -70,17 +71,26 @@
                     (face-foreground 'default))
               (setq my/tabbar-background-color
                     (face-background 'default))
+              (setq my/tabbar-back-color
+                    (color-lighten-name (face-background 'default) 12))
               (custom-set-faces
-               `(tabbar-default ((t (:inherit fixed-pitch :background "black" :foreground ,my/tabbar-foreground-color))))
+               ;; tabbar background
+               `(tabbar-default ((t (:inherit fixed-pitch :background ,my/tabbar-back-color :foreground ,my/tabbar-foreground-color))))
                `(tabbar-button ((t (:inherit tabbar-default :foreground ,my/tabbar-background-color))))
                `(tabbar-button-highlight ((t (:inherit tabbar-default))))
                `(tabbar-highlight ((t (:underline t))))
+               ;; selected tab
                `(tabbar-selected ((t (:inherit tabbar-default :background ,my/tabbar-background-color))))
-               `(tabbar-separator ((t (:inherit tabbar-default :background ,my/tabbar-background-color))))
+               `(tabbar-separator ((t (:inherit tabbar-default :background ,my/tabbar-back-color))))
                `(tabbar-unselected ((t (:inherit tabbar-default))))))
 
             (add-hook 'after-init-hook #'my/set-face-tabbar)
-            (add-hook 'window-configuration-change-hook #'my/set-face-tabbar)))
+            (add-hook 'window-configuration-change-hook #'my/set-face-tabbar)
+
+            ;; Refresh the tabbar colorset after loading a theme
+            (defadvice load-theme (after enable-theme-second activate)
+              (my/set-face-tabbar))
+            (ad-activate 'load-theme)))
 
 ;; Tabbar ruler pre-requisites
 (use-package mode-icons
