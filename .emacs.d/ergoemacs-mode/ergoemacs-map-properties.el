@@ -1,6 +1,6 @@
 ;;; ergoemacs-map-properties.el --- Ergoemacs map interface -*- lexical-binding: t -*-
 
-;; Copyright © 2013-2015  Free Software Foundation, Inc.
+;; Copyright © 2013-2016  Free Software Foundation, Inc.
 
 ;; Filename: ergoemacs-map-properties.el
 ;; Description:
@@ -8,27 +8,27 @@
 ;; Maintainer:  Matthew L. Fidler
 ;; Created: Sat Sep 28 20:10:56 2013 (-0500)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; 
+;;
 ;;; Commentary:
 ;;
 ;;  These are functions that determine various properties of keymaps.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; 
+;;
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License as
 ;; published by the Free Software Foundation; either version 3, or
 ;; (at your option) any later version.
-;; 
+;;
 ;; This program is distributed in the hope that it will be useful,
 ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
 ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 ;; General Public License for more details.
-;; 
+;;
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
-;; 
+;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; 
+;;
 ;;; Code:
 
 (require 'cl-lib)
@@ -303,7 +303,7 @@ with this string.  Otherwise, it is assumed to be \"$\".r"
        global-map)
       (ergoemacs :label global-map)
       (ergoemacs :keys global-map) ;; Should calculate :where-is and :lookup from original map
-      
+
       (insert "(setq ergoemacs-map-properties--plist-hash '")
       (prin1 ergoemacs-map-properties--plist-hash (current-buffer))
       (goto-char (point-max))
@@ -313,14 +313,14 @@ with this string.  Otherwise, it is assumed to be \"$\".r"
       (prin1 ergoemacs-breadcrumb-hash (current-buffer))
       (goto-char (point-max))
       (insert ")")
-      
+
       (insert "(setq ergoemacs-map-properties--label-atoms-maps '")
       (prin1 ergoemacs-map-properties--label-atoms-maps (current-buffer))
       (goto-char (point-max))
       (insert ")")
-      
+
       (insert "(setq ergoemacs-map-properties--get-or-generate-map-key "
-	      (number-to-string ergoemacs-map-properties--get-or-generate-map-key) ")")
+          (number-to-string ergoemacs-map-properties--get-or-generate-map-key) ")")
       (message "global-map-list %s" (ergoemacs global-map :map-list))
       (message "minibuffer-local-map %s" (ergoemacs minibuffer-local-map :map-list))
       (message "European: %s" (ergoemacs describe-european-environment-map :map-list))
@@ -348,20 +348,20 @@ The submap is found by the `ergoemacs-map-properties--global-submap-p' function.
 If so, return the a vector with the key relative to the submap.
 The submap value is stored in the variable `ergoemacs-map-properties--global-submap-p'."
   (let* ((key (or (ergoemacs-translate--escape-to-meta key) key))
-	 (len (length key))
-	 cur-map
-	 (i 1))
+     (len (length key))
+     cur-map
+     (i 1))
     (catch 'found-submap
       (while (<= i len)
-	(setq cur-map (lookup-key (ergoemacs :global-map) (substring key 0 i))
-	      cur-map (or (and (symbolp cur-map) (boundp cur-map) (symbol-value cur-map))
-			  (and (symbolp cur-map) (fboundp cur-map) (symbol-function cur-map))
-			  cur-map))
-	(when (and (ergoemacs-keymapp cur-map)
-		   (integerp (ergoemacs cur-map :map-key)))
-	  (setq ergoemacs-map-properties--global-submap-p cur-map)
-	  (throw 'found-submap (substring key i)))
-	(setq i (1+ i))) nil)))
+    (setq cur-map (lookup-key (ergoemacs :global-map) (substring key 0 i))
+          cur-map (or (and (symbolp cur-map) (boundp cur-map) (symbol-value cur-map))
+              (and (symbolp cur-map) (fboundp cur-map) (symbol-function cur-map))
+              cur-map))
+    (when (and (ergoemacs-keymapp cur-map)
+           (integerp (ergoemacs cur-map :map-key)))
+      (setq ergoemacs-map-properties--global-submap-p cur-map)
+      (throw 'found-submap (substring key i)))
+    (setq i (1+ i))) nil)))
 
 (defun ergoemacs-map-properties--before-ergoemacs (&optional after)
   "Get a keymap of keys that changed before or after loading ergoemacs.
@@ -399,29 +399,29 @@ When AFTER is non-nil, this is a list of keys that changed after
                       ((eq 'ergoemacs-labeled (elt cur-key (- (length cur-key) 1))))
                       ((and (symbolp item) (string-match-p "clipboard" (symbol-name item))))
                       ((and (equal [27 115 104 102] cur-key) (eq item 'hi-lock-find-patterns)))
-		      ;; If this is bound to another keymap, assume it doesn't affect user maps.
-		      ;; For example the M-s keymap, or M-g keymaps.
-		      ((ergoemacs-map-properties--global-submap-p cur-key))
+              ;; If this is bound to another keymap, assume it doesn't affect user maps.
+              ;; For example the M-s keymap, or M-g keymaps.
+              ((ergoemacs-map-properties--global-submap-p cur-key))
                       ((and tmp (not (equal tmp item))
                             (or (not after)
                                 (not (and ergoemacs-map-properties--before-ergoemacs
                                           (eq item (lookup-key ergoemacs-map-properties--before-ergoemacs cur-key))))))
-		       (ergoemacs :define-key before-map cur-key item))
+               (ergoemacs :define-key before-map cur-key item))
                       ((and (not tmp)
                             (or (not after)
                                 (not (and ergoemacs-map-properties--before-ergoemacs
                                           (lookup-key ergoemacs-map-properties--before-ergoemacs cur-key)))))
-		       (ergoemacs :define-key before-map cur-key tmp)))))
+               (ergoemacs :define-key before-map cur-key tmp)))))
                  original-global-map t))
             (setq ergoemacs-map-keymap--load-autoloads-p t)))
         (if after
             (progn
               (setq ergoemacs-map-properties--after-ergoemacs before-map)
               (ergoemacs before-map :label)
-	      (ergoemacs :map-list before-map 'ergoemacs-map-properties--after-ergoemacs))
+          (ergoemacs :map-list before-map 'ergoemacs-map-properties--after-ergoemacs))
           (setq ergoemacs-map-properties--before-ergoemacs before-map)
           (ergoemacs before-map :label)
-	  (ergoemacs :map-list before-map 'ergoemacs-map-properties--before-ergoemacs))
+      (ergoemacs :map-list before-map 'ergoemacs-map-properties--before-ergoemacs))
         before-map)))
 
 (defvar ergoemacs-map-properties--protect-local nil)
@@ -455,7 +455,7 @@ This tests if HOOK is:
     (dolist (hook (or (and (consp hooks) hooks) (list hooks)))
       (if (consp hook)
           (dolist (lhook hook)
-	    (ergoemacs-map-properties--modify-run-mode-hooks lhook))
+        (ergoemacs-map-properties--modify-run-mode-hooks lhook))
         (when (and hook (ergoemacs-map-properties--modify-run-mode-hooks-p hook))
           (set hook
                (cond
@@ -483,9 +483,9 @@ This tests if HOOK is:
           (dolist (lhook hook)
             (ergoemacs-map-properties--reset-run-mode-hooks lhook))
         (when (and hook
-		   (boundp hook)
-		   (string-match-p "mode-hook" (symbol-name hook))
-		   (ergoemacs-map-properties--modify-run-mode-hooks-p hook))
+           (boundp hook)
+           (string-match-p "mode-hook" (symbol-name hook))
+           (ergoemacs-map-properties--modify-run-mode-hooks-p hook))
           (set hook
                (cond
                 ((and (setq hook-value (symbol-value hook))
@@ -544,34 +544,34 @@ These keymaps are saved in `ergoemacs-map-properties--hook-map-hash'."
   (ergoemacs keymap :label)
   (let* ((key (ergoemacs keymap :map-key))
          lst
-	 new-map
-	 standard
+     new-map
+     standard
          ret command condition)
     (when (integerp key)
       (setq lst (ergoemacs-gethash key ergoemacs-map-properties--hook-map-hash))
       (dolist (map-key lst)
-	(when (ergoemacs map-key :override-map-p)
+    (when (ergoemacs map-key :override-map-p)
           (push (ergoemacs-gethash map-key ergoemacs-map-properties--hook-map-hash) ret)))
       (when (and (boundp 'icicle-mode-map)
-		 (eq icicle-mode-map keymap))
-	(setq new-map (make-sparse-keymap))
-	(unless (equal icicle-search-key-prefix "\M-s\M-s")
-	  (ergoemacs :define-key new-map icicle-search-key-prefix icicle-search-map))
-	(when (and (boundp 'icicle-top-level-key-bindings) (custom-variable-p 'icicle-top-level-key-bindings))
-	  (setq standard (eval (car (get 'icicle-top-level-key-bindings 'standard-value))))
-	  ;; After determine if anything has changed...
-	  ;; Lifted partially from icicles
-	  (dolist (key-def  icicle-top-level-key-bindings)
-	    (unless (member key-def standard)
-	      (setq key        (car key-def)
-		    command    (cadr key-def)
-		    condition  (car (cddr key-def)))
-	      (when (eval condition)
-		(if (symbolp key)
-		    (icicle-remap key command new-map (current-global-map))
-		  (ergoemacs :define-key new-map key command))))))
-	(unless (ergoemacs new-map :empty-p)
-	  (push new-map ret))))
+         (eq icicle-mode-map keymap))
+    (setq new-map (make-sparse-keymap))
+    (unless (equal icicle-search-key-prefix "\M-s\M-s")
+      (ergoemacs :define-key new-map icicle-search-key-prefix icicle-search-map))
+    (when (and (boundp 'icicle-top-level-key-bindings) (custom-variable-p 'icicle-top-level-key-bindings))
+      (setq standard (eval (car (get 'icicle-top-level-key-bindings 'standard-value))))
+      ;; After determine if anything has changed...
+      ;; Lifted partially from icicles
+      (dolist (key-def  icicle-top-level-key-bindings)
+        (unless (member key-def standard)
+          (setq key        (car key-def)
+            command    (cadr key-def)
+            condition  (car (cddr key-def)))
+          (when (eval condition)
+        (if (symbolp key)
+            (icicle-remap key command new-map (current-global-map))
+          (ergoemacs :define-key new-map key command))))))
+    (unless (ergoemacs new-map :empty-p)
+      (push new-map ret))))
     ret))
 
 (defun ergoemacs-map-properties--deferred-maps (keymap)
@@ -632,17 +632,17 @@ These keymaps are saved in `ergoemacs-map-properties--hook-map-hash'."
   "Load/Create the default global map information."
   (if ergoemacs-mode--fast-p
       (progn
-	(setq ergoemacs-map-properties--known-maps ergoemacs-map-properties--label-atoms-maps)
-	(ergoemacs-map-properties--label-known))
+    (setq ergoemacs-map-properties--known-maps ergoemacs-map-properties--label-atoms-maps)
+    (ergoemacs-map-properties--label-known))
       ;; (ergoemacs-map-properties--label-atoms)
     (ergoemacs-timing get-original-global-map
       ;; (ergoemacs-map-properties--label-atoms)
       (if (file-readable-p (ergoemacs-map-properties--default-global-file))
           (progn
-	    (load (ergoemacs-map-properties--default-global-file))
-	    (setq ergoemacs-map-properties--known-maps ergoemacs-map-properties--label-atoms-maps)
-	    (message "Breadcrumb %s" (ergoemacs-gethash 'describe-european-environment-map ergoemacs-breadcrumb-hash))
-	    (ergoemacs-map-properties--label-known)
+        (load (ergoemacs-map-properties--default-global-file))
+        (setq ergoemacs-map-properties--known-maps ergoemacs-map-properties--label-atoms-maps)
+        (message "Breadcrumb %s" (ergoemacs-gethash 'describe-european-environment-map ergoemacs-breadcrumb-hash))
+        (ergoemacs-map-properties--label-known)
             (ergoemacs-map-properties--protect-global-map))
         (if noninteractive
             (ergoemacs-warn "Could not find global map information")
@@ -653,7 +653,7 @@ These keymaps are saved in `ergoemacs-map-properties--hook-map-hash'."
               (message "%s" (shell-command-to-string cmd))
               (ergoemacs-map-properties--get-original-global-map))))))))
 
-(add-hook 'ergoemacs-mode-intialize-hook 'ergoemacs-map-properties--get-original-global-map)
+;; (add-hook 'ergoemacs-mode-intialize-hook 'ergoemacs-map-properties--get-original-global-map)
 
 (defun ergoemacs-map-properties--map-fixed-plist (keymap)
   "Determines if this is an `ergoemacs-mode' KEYMAP.
@@ -708,7 +708,7 @@ composing or parent/child relationships)"
       (setq ergoemacs-map-properties--plist-hash (make-hash-table :test 'equal)))
     (setq tmp (ergoemacs-gethash (ergoemacs-map-properties--key-struct keymap) ergoemacs-map-properties--plist-hash))
     (if (not (and tmp (hash-table-p tmp)))
-	(setq ret nil)
+    (setq ret nil)
       (setq ret (ergoemacs-gethash property tmp)))
     ret))
 
@@ -766,10 +766,10 @@ The optional ADD-MAP argument adds maps to the map-list.  It can be a symbol or 
      ((and (integerp keymap) (consp add-map))
       (setq tmp (ergoemacs-gethash keymap ergoemacs-map-properties--plist-hash))
       (dolist (map add-map)
-	(when (symbolp map)
-	  (cl-pushnew map ergoemacs-map-properties--label-atoms-maps)
-	  (cl-pushnew map tmp)
-	  (puthash map keymap ergoemacs-breadcrumb-hash)
+    (when (symbolp map)
+      (cl-pushnew map ergoemacs-map-properties--label-atoms-maps)
+      (cl-pushnew map tmp)
+      (puthash map keymap ergoemacs-breadcrumb-hash)
           (puthash keymap map ergoemacs-breadcrumb-hash)
           ))
       (puthash keymap tmp ergoemacs-map-properties--plist-hash)
@@ -793,8 +793,8 @@ When LABEL-EMPTY-P is non-nil, also label empty maps."
      ((eq sv global-map)
       (put map :ergoemacs-labeled t))
      ((and (not label-empty-p)
-	   (or (equal sv (make-sparse-keymap)) ;; Empty
-	       (equal sv (make-keymap))))
+       (or (equal sv (make-sparse-keymap)) ;; Empty
+           (equal sv (make-keymap))))
       nil)
      ((ergoemacs sv :installed-p) ;; Already modified.
       (put map :ergoemacs-labeled t)
@@ -828,13 +828,13 @@ When LABEL-EMPTY-P is non-nil, also label empty maps."
 When DROP is non-nil, drop any found maps from `ergoemacs-map-properties--known-maps'."
   (let (map-list known)
     (when (and (ergoemacs-keymapp keymap)
-	       (not (ergoemacs :empty-p keymap)))
+           (not (ergoemacs :empty-p keymap)))
       (dolist (map ergoemacs-map-properties--known-maps)
-	(if (and (boundp map)
-		 (eq (ergoemacs-sv map) keymap))
-	    (push map map-list)
-	  (when drop
-	    (push map known))))
+    (if (and (boundp map)
+         (eq (ergoemacs-sv map) keymap))
+        (push map map-list)
+      (when drop
+        (push map known))))
       (when drop
         (setq ergoemacs-map-properties--known-maps known)))
     map-list))
@@ -844,7 +844,7 @@ When DROP is non-nil, drop any found maps from `ergoemacs-map-properties--known-
 (defun ergoemacs-map-properties--get-or-generate-map-key (keymap)
   "Gets the key for the KEYMAP."
   (let ((ret (ergoemacs-map-properties--map-fixed-plist (ergoemacs-map-properties--keymap-value keymap)))
-	map-list last-map tmp)
+    map-list last-map tmp)
     (cond
      ((and ret (setq ret (plist-get ret :map-key))) ret)
      ;; Special Keymaps
@@ -854,54 +854,54 @@ When DROP is non-nil, drop any found maps from `ergoemacs-map-properties--known-
      ;; Other keymaps
      (t
       (setq map-list (ergoemacs-map-properties--linked-map keymap t)
-	    last-map (or ergoemacs-map-properties--get-or-generate-map-name (car map-list)))
+        last-map (or ergoemacs-map-properties--get-or-generate-map-name (car map-list)))
       (when ergoemacs-map-properties--get-or-generate-map-name
-	(dolist (map ergoemacs-map-properties--known-maps)
-	  (unless (eq map ergoemacs-map-properties--get-or-generate-map-name)
-	    (push map tmp)))
-	(setq ergoemacs-map-properties--known-maps tmp
-	      ergoemacs-map-properties--get-or-generate-map-name nil))
+    (dolist (map ergoemacs-map-properties--known-maps)
+      (unless (eq map ergoemacs-map-properties--get-or-generate-map-name)
+        (push map tmp)))
+    (setq ergoemacs-map-properties--known-maps tmp
+          ergoemacs-map-properties--get-or-generate-map-name nil))
       (when (and ergoemacs-map-properties--breadcrumb (not (string= "" ergoemacs-map-properties--breadcrumb))
-		 (or (not ergoemacs-map--breadcrumb) (string= "" ergoemacs-map--breadcrumb)))
-	(setq ergoemacs-map--breadcrumb ergoemacs-map-properties--breadcrumb))
+         (or (not ergoemacs-map--breadcrumb) (string= "" ergoemacs-map--breadcrumb)))
+    (setq ergoemacs-map--breadcrumb ergoemacs-map-properties--breadcrumb))
       (cond
        ((and last-map (setq ret (ergoemacs-gethash last-map ergoemacs-breadcrumb-hash)))
-	;; Found id from bound map.
-	(ergoemacs :spinner '("🎫→%s (Restore)" "Label→%s (Restore)" "Label->%s (Restore)") last-map)
-	ret)
+    ;; Found id from bound map.
+    (ergoemacs :spinner '("🎫→%s (Restore)" "Label→%s (Restore)" "Label->%s (Restore)") last-map)
+    ret)
        (last-map
-	;; Generate and save.
-	(setq ergoemacs-map-properties--get-or-generate-map-key
-	      (+ 1 ergoemacs-map-properties--get-or-generate-map-key))
-	(ergoemacs :spinner :new '("🎫→%s (Save)" "Label→%s (Save)" "Label->%s (Save)") last-map)
-	(dolist (map map-list)
-	  (ergoemacs :map-list ergoemacs-map-properties--get-or-generate-map-key map))
-	ergoemacs-map-properties--get-or-generate-map-key)
+    ;; Generate and save.
+    (setq ergoemacs-map-properties--get-or-generate-map-key
+          (+ 1 ergoemacs-map-properties--get-or-generate-map-key))
+    (ergoemacs :spinner :new '("🎫→%s (Save)" "Label→%s (Save)" "Label->%s (Save)") last-map)
+    (dolist (map map-list)
+      (ergoemacs :map-list ergoemacs-map-properties--get-or-generate-map-key map))
+    ergoemacs-map-properties--get-or-generate-map-key)
        ((and ergoemacs-map--breadcrumb
-	     (not (string= "" ergoemacs-map--breadcrumb))
-	     (not (setq ret (ergoemacs-gethash (intern ergoemacs-map--breadcrumb) ergoemacs-breadcrumb-hash))))
-	;; Not found in breadcrumb hash, but breadcrumb is specified.
-	;; Generate and save.
-	(setq ergoemacs-map-properties--get-or-generate-map-key
-	      (+ 1 ergoemacs-map-properties--get-or-generate-map-key))
-	(puthash (intern ergoemacs-map--breadcrumb) ergoemacs-map-properties--get-or-generate-map-key ergoemacs-breadcrumb-hash)
-	(puthash ergoemacs-map-properties--get-or-generate-map-key (intern ergoemacs-map--breadcrumb) ergoemacs-breadcrumb-hash)
-	(ergoemacs :spinner :new '("🎫→%s (Save)" "Label→%s (Save)" "Label->%s (Save)") ergoemacs-map--breadcrumb)
-	(setq ergoemacs-map--breadcrumb "")
-	ergoemacs-map-properties--get-or-generate-map-key)
+         (not (string= "" ergoemacs-map--breadcrumb))
+         (not (setq ret (ergoemacs-gethash (intern ergoemacs-map--breadcrumb) ergoemacs-breadcrumb-hash))))
+    ;; Not found in breadcrumb hash, but breadcrumb is specified.
+    ;; Generate and save.
+    (setq ergoemacs-map-properties--get-or-generate-map-key
+          (+ 1 ergoemacs-map-properties--get-or-generate-map-key))
+    (puthash (intern ergoemacs-map--breadcrumb) ergoemacs-map-properties--get-or-generate-map-key ergoemacs-breadcrumb-hash)
+    (puthash ergoemacs-map-properties--get-or-generate-map-key (intern ergoemacs-map--breadcrumb) ergoemacs-breadcrumb-hash)
+    (ergoemacs :spinner :new '("🎫→%s (Save)" "Label→%s (Save)" "Label->%s (Save)") ergoemacs-map--breadcrumb)
+    (setq ergoemacs-map--breadcrumb "")
+    ergoemacs-map-properties--get-or-generate-map-key)
        (ret
-	;; Found in breadcrumb hash.
-	(ergoemacs :spinner '("🎫→%s (Restore)" "Label→%s (Restore)" "Label->%s (Restore)") ergoemacs-map--breadcrumb)
-	(setq ergoemacs-map--breadcrumb "")
-	ret)
+    ;; Found in breadcrumb hash.
+    (ergoemacs :spinner '("🎫→%s (Restore)" "Label→%s (Restore)" "Label->%s (Restore)") ergoemacs-map--breadcrumb)
+    (setq ergoemacs-map--breadcrumb "")
+    ret)
        (t
-	;; (ergoemacs-warn "Labeling untraceable map...%s" keymap)
-	(setq ergoemacs-map-properties--get-or-generate-map-key
-	      (+ 1 ergoemacs-map-properties--get-or-generate-map-key))
-	;; (setq map-list (format "New Map %s->%s" ergoemacs-map-properties--get-or-generate-map-key keymap)
-	;;       map-list (substring map-list 0 (min (length map-list) 80)))
-	;; (message "%s" map-list)
-	ergoemacs-map-properties--get-or-generate-map-key))))))
+    ;; (ergoemacs-warn "Labeling untraceable map...%s" keymap)
+    (setq ergoemacs-map-properties--get-or-generate-map-key
+          (+ 1 ergoemacs-map-properties--get-or-generate-map-key))
+    ;; (setq map-list (format "New Map %s->%s" ergoemacs-map-properties--get-or-generate-map-key keymap)
+    ;;       map-list (substring map-list 0 (min (length map-list) 80)))
+    ;; (message "%s" map-list)
+    ergoemacs-map-properties--get-or-generate-map-key))))))
 
 (defun ergoemacs-map-properties--label (keymap &optional map-key struct)
   "Label an `ergoemacs-mode' touched KEYMAP.
@@ -912,100 +912,100 @@ STRUCT is the keymap structure for the current map."
      ((ergoemacs-map-properties--composed-p keymap)
       (cond
        (map-key
-	(error "Will not label a composed map's members to %s" map-key))
+    (error "Will not label a composed map's members to %s" map-key))
        (t
-	(let ((parent (keymap-parent keymap))
-	      (breadcrumb-base ergoemacs-map--breadcrumb)
-	      (struct (or struct (ergoemacs-gethash map-key ergoemacs-map-properties--key-struct)))
-	      (comp (plist-get struct :composed))
-	      (comp-list (ergoemacs-map-properties--composed-list keymap))
-	      from-prop-p
-	      (i 0))
-	  (unless (= (length comp) (length comp-list))
-	    (setq comp nil))
-	  (when (and ergoemacs-map-properties--breadcrumb
-		     (not (string= ergoemacs-map-properties--breadcrumb ""))
-		     (or (not breadcrumb-base) (string= "" breadcrumb-base)))
-	    (setq breadcrumb-base ergoemacs-map-properties--breadcrumb
-		  from-prop-p t
-		  ergoemacs-map-properties--breadcrumb nil))
-	  (dolist (map comp-list)
-	    (when (and breadcrumb-base (not (string= breadcrumb-base "")))
-	      (setq ergoemacs-map--breadcrumb (concat breadcrumb-base "-" (number-to-string i))
-		    i (+ 1 i)))
-	    (if comp
-		(ergoemacs :label map nil (pop comp))
-	      (ergoemacs :label map)))
-	  ;; (when parent
-	  ;;   (when (and breadcrumb-base (not (string= breadcrumb-base "")))
-	  ;;     (setq ergoemacs-map--breadcrumb (concat breadcrumb-base "-parent")))
-	  ;;   (ergoemacs :label parent nil (plist-get struct :parent)))
-	  (if from-prop-p
-	      (setq ergoemacs-map-properties--breadcrumb breadcrumb-base)
-	    (setq ergoemacs-map--breadcrumb breadcrumb-base))))))
+    (let ((parent (keymap-parent keymap))
+          (breadcrumb-base ergoemacs-map--breadcrumb)
+          (struct (or struct (ergoemacs-gethash map-key ergoemacs-map-properties--key-struct)))
+          (comp (plist-get struct :composed))
+          (comp-list (ergoemacs-map-properties--composed-list keymap))
+          from-prop-p
+          (i 0))
+      (unless (= (length comp) (length comp-list))
+        (setq comp nil))
+      (when (and ergoemacs-map-properties--breadcrumb
+             (not (string= ergoemacs-map-properties--breadcrumb ""))
+             (or (not breadcrumb-base) (string= "" breadcrumb-base)))
+        (setq breadcrumb-base ergoemacs-map-properties--breadcrumb
+          from-prop-p t
+          ergoemacs-map-properties--breadcrumb nil))
+      (dolist (map comp-list)
+        (when (and breadcrumb-base (not (string= breadcrumb-base "")))
+          (setq ergoemacs-map--breadcrumb (concat breadcrumb-base "-" (number-to-string i))
+            i (+ 1 i)))
+        (if comp
+        (ergoemacs :label map nil (pop comp))
+          (ergoemacs :label map)))
+      ;; (when parent
+      ;;   (when (and breadcrumb-base (not (string= breadcrumb-base "")))
+      ;;     (setq ergoemacs-map--breadcrumb (concat breadcrumb-base "-parent")))
+      ;;   (ergoemacs :label parent nil (plist-get struct :parent)))
+      (if from-prop-p
+          (setq ergoemacs-map-properties--breadcrumb breadcrumb-base)
+        (setq ergoemacs-map--breadcrumb breadcrumb-base))))))
      (t
       (let* ((map keymap)
-	     (map-key (or map-key
-			  (plist-get struct :map-key)
-			  (ergoemacs-map-properties--get-or-generate-map-key map)))
-	     char-table
-	     indirect-p
-	     old-plist
-	     (breadcrumb-base ergoemacs-map--breadcrumb)
-	     (parent (keymap-parent map))
-	     (struct (or struct (ergoemacs-gethash map-key ergoemacs-map-properties--key-struct)))
-	     label tmp1 tmp2)
-	(unwind-protect
-	    (progn
-	      (ignore-errors (set-keymap-parent map nil))
-	      (if (ergoemacs-keymapp (symbol-function keymap))
-		  (setq indirect-p t ; Indirect keymap
-			old-plist (ergoemacs-gethash keymap ergoemacs-map-properties--indirect-keymaps))
-		(setq old-plist (lookup-key map [ergoemacs-labeled]))
-		(if (eq (car map) 'keymap)
-		    (setq map (cdr map))
-		  (setq map (list map)))
-		(when (ignore-errors (char-table-p (car map)))
-		  (setq char-table (pop map)))
-		(when (stringp (car map))
-		  (setq label (pop map)))
-		;; Drop prior `ergoemacs-mode' labels
-		(setq tmp1 '()
-		      tmp2 nil)
-		(when old-plist
-		  (setq old-plist (ignore-errors (funcall old-plist)))
-		  (while (not (and (consp tmp2)
-				   (eq (car tmp2) 'ergoemacs-labeled)))
-		    (setq tmp2 (pop map))
-		    (unless (and (consp tmp2) (equal 'ergoemacs-labeled (car tmp2)))
-		      (push tmp2 tmp1)))
-		  (while tmp1
-		    (push (pop tmp1) map))))
-	      (setq old-plist (list :map-key map-key))
-	      (unless indirect-p
-		(push (cons 'ergoemacs-labeled
-			    `(lambda() (interactive) ',old-plist)) map))
-	      (unless indirect-p
-		(when label
-		  (push label map))
-		(when char-table
-		  (push char-table map))
-		(push 'keymap map)))
+         (map-key (or map-key
+              (plist-get struct :map-key)
+              (ergoemacs-map-properties--get-or-generate-map-key map)))
+         char-table
+         indirect-p
+         old-plist
+         (breadcrumb-base ergoemacs-map--breadcrumb)
+         (parent (keymap-parent map))
+         (struct (or struct (ergoemacs-gethash map-key ergoemacs-map-properties--key-struct)))
+         label tmp1 tmp2)
+    (unwind-protect
+        (progn
+          (ignore-errors (set-keymap-parent map nil))
+          (if (ergoemacs-keymapp (symbol-function keymap))
+          (setq indirect-p t ; Indirect keymap
+            old-plist (ergoemacs-gethash keymap ergoemacs-map-properties--indirect-keymaps))
+        (setq old-plist (lookup-key map [ergoemacs-labeled]))
+        (if (eq (car map) 'keymap)
+            (setq map (cdr map))
+          (setq map (list map)))
+        (when (ignore-errors (char-table-p (car map)))
+          (setq char-table (pop map)))
+        (when (stringp (car map))
+          (setq label (pop map)))
+        ;; Drop prior `ergoemacs-mode' labels
+        (setq tmp1 '()
+              tmp2 nil)
+        (when old-plist
+          (setq old-plist (ignore-errors (funcall old-plist)))
+          (while (not (and (consp tmp2)
+                   (eq (car tmp2) 'ergoemacs-labeled)))
+            (setq tmp2 (pop map))
+            (unless (and (consp tmp2) (equal 'ergoemacs-labeled (car tmp2)))
+              (push tmp2 tmp1)))
+          (while tmp1
+            (push (pop tmp1) map))))
+          (setq old-plist (list :map-key map-key))
+          (unless indirect-p
+        (push (cons 'ergoemacs-labeled
+                `(lambda() (interactive) ',old-plist)) map))
+          (unless indirect-p
+        (when label
+          (push label map))
+        (when char-table
+          (push char-table map))
+        (push 'keymap map)))
           (when parent
-	    ;; (if (and breadcrumb-base (not (string= breadcrumb-base "")))
-	    ;; 	(setq ergoemacs-map--breadcrumb (concat breadcrumb-base "-parent"))
-	    ;;   (when (setq ergoemacs-map-properties--breadcrumb (gethash map-key ergoemacs-breadcrumb-hash))
-	    ;; 	(setq ergoemacs-map-properties--breadcrumb (format "%s-parent" ergoemacs-map-properties--breadcrumb))
-	    ;; 	;; (message "Set %s!" ergoemacs-map-properties--breadcrumb)
-	    ;; 	))
-	    ;; (ergoemacs :label parent nil (plist-get struct :parent))
-	    (set-keymap-parent map parent)
-	    (setq ergoemacs-map--breadcrumb breadcrumb-base)))
-	(if indirect-p
-	    (puthash keymap old-plist ergoemacs-map-properties--indirect-keymaps)
-	  (unless (ignore-errors (ergoemacs-setcdr keymap (cdr map)))
-	    (cl-pushnew (cons old-plist (cdr keymap)) ergoemacs-map-properties--const-keymaps)))
-	map)))))
+        ;; (if (and breadcrumb-base (not (string= breadcrumb-base "")))
+        ;;  (setq ergoemacs-map--breadcrumb (concat breadcrumb-base "-parent"))
+        ;;   (when (setq ergoemacs-map-properties--breadcrumb (gethash map-key ergoemacs-breadcrumb-hash))
+        ;;  (setq ergoemacs-map-properties--breadcrumb (format "%s-parent" ergoemacs-map-properties--breadcrumb))
+        ;;  ;; (message "Set %s!" ergoemacs-map-properties--breadcrumb)
+        ;;  ))
+        ;; (ergoemacs :label parent nil (plist-get struct :parent))
+        (set-keymap-parent map parent)
+        (setq ergoemacs-map--breadcrumb breadcrumb-base)))
+    (if indirect-p
+        (puthash keymap old-plist ergoemacs-map-properties--indirect-keymaps)
+      (unless (ignore-errors (ergoemacs-setcdr keymap (cdr map)))
+        (cl-pushnew (cons old-plist (cdr keymap)) ergoemacs-map-properties--const-keymaps)))
+    map)))))
 
 (defun ergoemacs-map-properties--empty-p (keymap &optional labeled-is-keymap-p)
   "Determines if a KEYMAP is empty.
@@ -1268,7 +1268,7 @@ Used for sorting keys in displays."
        ((and (not (memq 'super m1)) (memq 'super m2)) t)
        ((and (memq 'super m1) (not (memq 'super m2))) nil)
 
-       ;; 
+       ;;
        ((and (integerp e1) (symbolp e2)) t)
        ((and (symbolp e1) (integerp e2)) nil)
 
@@ -1281,10 +1281,10 @@ Used for sorting keys in displays."
              (string= "f" (substring (symbol-name e1) 0 1))
              (string= "f" (substring (symbol-name e2) 0 1)))
         (< (string-to-number (substring (symbol-name e1) 1)) (string-to-number (substring (symbol-name e2) 1))))
-       
+
        ((and (symbolp e1) (symbolp e2))
         (string-lessp (ergoemacs-key-description (vector e1)) (ergoemacs-key-description (vector e2))))
-       
+
        ((and (integerp e1) (integerp e2))
         (< e1 e2))
        (t t))))))
@@ -1300,7 +1300,7 @@ will unbind ergoemacs keys.
 
  This is useful in supporting isearch in Emacs 24.4+."
   (when (ergoemacs-keymapp keymap)
-    
+
     (let ((local-unbind-list-p (ergoemacs keymap :use-local-unbind-list-key)))
       (cond
        ((eq local-unbind-list-p 'no) nil)

@@ -510,7 +510,7 @@ REMOVE removes the cache insead of saving it."
     (ergoemacs-mode--setup-hash-tables t)
     (setq ergoemacs-map--cache-save nil))))
 
-(add-hook 'kill-emacs-hook 'ergoemacs-map--cache-save)
+;; (add-hook 'kill-emacs-hook 'ergoemacs-map--cache-save)
 
 
 (defun ergoemacs-mode--setup-hash-tables (&optional store-p)
