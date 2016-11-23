@@ -71,7 +71,6 @@
 
 ;; Automatically save and restore sessions
 (use-package desktop
-  :if (not (equal system-type 'windows-nt))
   :init (progn
           ;; Save desktops a minute after Emacs was idle.
           (setq-default desktop-missing-file-warning nil)
