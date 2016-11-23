@@ -125,31 +125,57 @@
 ;; (load-theme 'grandshell t)
 ;; (load-theme 'sexy-monochrome)
 
-;; Choose different themes depending if we are using GUI or not
-;; Console colors are enabled if "export TERM=xterm-256color" is added into .bashrc
-(if (display-graphic-p)
-    (load-theme 'monokai t)
-  (load-theme 'monokai t))
-
 ;; So, fringe is nice actually, but the background for it kind of sucks in leuven
 ;; so I set it to the same color as the background
-(defun my/set-faces ()
+(defvar my/set-face-fringe nil)
+(defun my/set-face-fringe ()
   "Set the fringe background to the same color as the regular background."
   (interactive)
   (setq my/fringe-background-color
         (face-background 'default))
   (custom-set-faces
    `(fringe ((t (:background ,my/fringe-background-color))))))
-(add-hook 'after-init-hook #'my/set-faces)
-(add-hook 'window-configuration-change-hook #'my/set-faces)
+(add-hook 'after-init-hook #'my/set-face-fringe)
+(add-hook 'window-configuration-change-hook #'my/set-face-fringe)
 
 ;; Disable theme before setting a new one
 (defun disable-themes (&optional themes)
-  (interactive)
   (mapc #'disable-theme (or themes custom-enabled-themes)))
 
-(defadvice load-theme (before disable-first activate)
+(defadvice load-theme (before disable-themes-first activate)
   (disable-themes))
+
+;; Refresh the fringe colorset after loading a theme
+(defadvice load-theme (after enable-theme-first activate)
+  (my/set-face-fringe))
+
+(ad-activate 'load-theme)
+
+;; Tabbar colors
+(eval-after-load 'tabbar
+  (progn
+    ;; Fix the tabbar appearance
+    (defun my/set-face-tabbar()
+      "Set the tabbar background to the same color as the regular background."
+      (interactive)
+      (setq tabbar-separator '(0.0))
+      (setq tabbar-background-color "#331214") ;; the color of the tabbar background
+
+      (set-face-attribute 'tabbar-default nil :background "black")
+      (set-face-attribute 'tabbar-unselected nil :background "black" :foreground "white" :box '(:line-width 1 :color "#331214" ))
+      (set-face-attribute 'tabbar-selected nil :background "#331213" :foreground "white" :box '(:line-width 1 :color "#331214" ))
+      (set-face-attribute 'tabbar-button nil :box '(:line-width 1 :color "black" :style released-button));
+      (set-face-attribute 'tabbar-highlight nil :underline nil)
+      (set-face-attribute 'tabbar-separator nil :height 0.5))
+
+    ;; Enable it
+    (my/set-face-tabbar)))
+
+;; Choose different themes depending if we are using GUI or not
+;; Console colors are enabled if "export TERM=xterm-256color" is added into .bashrc
+(if (display-graphic-p)
+    (load-theme 'monokai t)
+  (load-theme 'monokai t))
 
 ;; Inherit theme for new frames
 (setq frame-inherited-parameters '(width height face background-mode
