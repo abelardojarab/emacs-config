@@ -92,6 +92,10 @@
 (add-to-list 'load-path (expand-file-name "spacemacs-theme/" user-emacs-directory))
 (add-to-list 'custom-theme-load-path (expand-file-name "spacemacs-theme/" user-emacs-directory))
 
+;; Apropospiate theme
+(add-to-list 'load-path (expand-file-name "apropospriate-theme/" user-emacs-directory))
+(add-to-list 'custom-theme-load-path (expand-file-name "apropospriate-theme/" user-emacs-directory))
+
 ;; Tomorrow theme
 (add-to-list 'load-path (expand-file-name "sanityinc-tomorrow-theme/" user-emacs-directory))
 (add-to-list 'custom-theme-load-path (expand-file-name "sanityinc-tomorrow-theme/" user-emacs-directory))
@@ -102,28 +106,6 @@
 (add-to-list 'custom-theme-load-path (expand-file-name "solarized-theme" user-emacs-directory))
 (require 'solarized)
 (setq solarized-scale-org-headlines nil)
-
-;; Different possible themes
-;; (load-theme 'atom-one-dark t)
-;; (load-theme 'zenburn t)
-;; (load-theme 'leuven t)
-;; (load-theme 'zerodark t)
-;; (load-theme 'material t)
-;; (load-theme 'white-sand) ;; best light theme
-;; (load-theme 'minimal-light) ;; best ink theme
-;; (load-theme 'monokai t) ;; best dark color scheme
-;; (load-theme 'goose t)
-;; (load-theme 'tao-yang t)
-;; (load-theme 'tao-yin t)
-;; (load-theme 'eink)
-;; (load-theme 'solarized-dark t)
-;; (load-theme 'monotropic t)
-;; (load-theme 'material-light t)
-;; (load-theme 'sanityinc-tomorrow-night t)
-;; (load-theme 'spike t)
-;; (load-theme 'dracula t)
-;; (load-theme 'grandshell t)
-;; (load-theme 'sexy-monochrome)
 
 ;; So, fringe is nice actually, but the background for it kind of sucks in leuven
 ;; so I set it to the same color as the background
