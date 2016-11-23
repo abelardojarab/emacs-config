@@ -130,6 +130,7 @@
 ;; Refresh the fringe colorset after loading a theme
 (defadvice load-theme (after enable-theme-first activate)
   (my/set-face-fringe))
+
 (ad-activate 'load-theme)
 
 ;; Choose different themes depending if we are using GUI or not

@@ -105,6 +105,9 @@
     ;; hook for setting up UI when not running in daemon mode
     (add-hook 'emacs-startup-hook '(lambda () (fontify-frame (selected-frame))))
 
+    ;; Assure fontification is not lost
+    (add-hook 'window-configuration-change-hook '(lambda () (fontify-frame (selected-frame))))
+
     ;; Use Symbola font on Unicode mathematical symbols
     (if (find-font (font-spec :name "Symbola"))
       (set-fontset-font t nil "Symbola"))))
