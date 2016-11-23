@@ -71,6 +71,7 @@
 
 ;; Automatically save and restore sessions
 (use-package desktop
+  :commands (desktop-save-mode desktop-read desktop-save)
   :init (progn
           ;; Save desktops a minute after Emacs was idle.
           (setq-default desktop-missing-file-warning nil)
@@ -99,6 +100,11 @@
                   (regexp-search-ring       . 20)
                   (search-ring              . 20)
                   (shell-command-history    . 50)
+                  (ido-buffer-history       . 100)
+                  (ido-last-directory-list  . 100)
+                  (ido-work-directory-list  . 100)
+                  (ido-work-file-list       . 100)
+                  (magit-read-rev-history   . 50)
                   tags-file-name
                   register-alist)
                 desktop-locals-to-save
