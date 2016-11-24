@@ -1,8 +1,8 @@
 ;;; setup-company.el ---                             -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016
+;; Copyright (C) 2016  Abelardo Jara-Berrocal
 
-;; Author:  <abelardojara@abelardo-ubuntu>
+;; Author: Abelardo Jara <abelardojara@Abelardos-MacBook-Pro.local>
 ;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -39,19 +39,7 @@
                                      company-dabbrev-code
                                      company-dabbrev))
 
-            ;; Make company backends buffer ad-hoc
-            (add-hook 'prog-mode-hook
-                      (lambda ()
-
-                        ;; make `company-backends' local is critcal
-                        ;; or else, you will have completion in every major mode, that's very annoying!
-                        (make-local-variable 'company-backends)
-                        (setq company-backends '(company-semantic
-                                                 company-gtags
-                                                 company-dabbrev-code
-                                                 company-dabbrev))))
-
-            ;; Add company-ispell
+            ;; Add company-ispell as backend for text-mode's only
             ;; http://blog.binchen.org/posts/emacs-auto-completion-for-non-programmers.html
             (add-hook 'text-mode-hook
                       (lambda ()
