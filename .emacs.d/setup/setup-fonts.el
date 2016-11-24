@@ -120,9 +120,9 @@
                                   "-"
                                   main-programming-font-size)
                           frame)
-       (set-frame-font (concat main-programming-font
-                               "-"
-                               main-programming-font-size) t)
+        (set-frame-font (concat main-programming-font
+                                "-"
+                                main-programming-font-size) t)
         (set-face-attribute 'default nil :font (concat main-programming-font
                                                        "-"
                                                        main-programming-font-size))
