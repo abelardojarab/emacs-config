@@ -36,11 +36,37 @@
             (bind-key [remap completion-at-point] #'company-complete company-mode-map)
             (setq company-backends '(company-semantic
                                      company-gtags
-                                     company-dabbrev-code))
+                                     company-dabbrev-code
+                                     company-dabbrev))
+
+            ;; Make company backends buffer ad-hoc
+            (add-hook 'prog-mode-hook
+                      (lambda ()
+
+                        ;; make `company-backends' local is critcal
+                        ;; or else, you will have completion in every major mode, that's very annoying!
+                        (make-local-variable 'company-backends)
+                        (setq company-backends '(company-semantic
+                                                 company-gtags
+                                                 company-dabbrev-code
+                                                 company-dabbrev))))
+
+            ;; Add company-ispell
+            ;; http://blog.binchen.org/posts/emacs-auto-completion-for-non-programmers.html
             (add-hook 'text-mode-hook
                       (lambda ()
+
+                        ;; make `company-backends' local is critcal
+                        ;; or else, you will have completion in every major mode, that's very annoying!
+                        (make-local-variable 'company-backends)
+
+                        ;; OPTIONAL, if `company-ispell-dictionary' is nil, `ispell-complete-word-dict' is used
+                        ;;  but I prefer hard code the dictionary path. That's more portable.
+                        (setq company-ispell-dictionary (expand-file-name "dictionaries/words.txt" user-emacs-directory))
+
+                        ;; Initialize backends
                         (setq-default company-backends '(company-semantic
-                                                         company-dabbrev
+                                                         company-ispell
                                                          company-bibtex))))
 
             (setq company-idle-delay 0.1
@@ -81,6 +107,9 @@
             (add-to-list 'company-backends 'company-c-headers)
             (add-hook 'c-common-mode-hook
                       (lambda ()
+                        ;; make `company-backends' local is critcal
+                        ;; or else, you will have completion in every major mode, that's very annoying!
+                        (make-local-variable 'company-backends)
                         (setq-default company-backends '(company-semantic
                                                          company-gtags
                                                          company-c-headers
@@ -97,6 +126,9 @@
             (add-to-list 'company-backends 'company-irony)
             (add-hook 'irony-mode-hook
                       (lambda ()
+                        ;; make `company-backends' local is critcal
+                        ;; or else, you will have completion in every major mode, that's very annoying!
+                        (make-local-variable 'company-backends)
                         (if (and (executable-find "rdm")
                                  (cmake-ide--locate-cmakelists))
                             (setq-default company-backends '(company-rtags
