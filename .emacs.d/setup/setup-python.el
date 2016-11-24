@@ -32,7 +32,17 @@
   :commands python-mode
   :interpreter ("python" . python-mode)
   :load-path (lambda () (expand-file-name "python-mode/" user-emacs-directory))
+  :init (progn
+          ;; Check for web access
+          (defun check-python-module (&optional module)
+            (and (executable-find "python")
+                 (= 0 (call-process "python"  nil t nil "-c"
+                                    (concat "import "
+                                            (if module module "jedi")))))))
   :config (progn
+
+            (add-hook 'python-mode-hook
+                      (define-key python-mode-map (kbd "TAB") 'py-indent-line))
 
             ;; Python configuration
             (add-hook 'python-mode-hook 'autopair-mode)

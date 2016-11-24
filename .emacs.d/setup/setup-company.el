@@ -34,15 +34,15 @@
 
             ;; Use Company for completion
             (bind-key [remap completion-at-point] #'company-complete company-mode-map)
-            (setq-default company-backends
-                          '((company-files          ;; files & directory
-                             company-keywords       ;; keywords
-                             company-capf           ;; `completion-at-point-functions'
-                             company-yasnippet
-                             company-abbrev
-                             company-semantic)
-                            (company-dabbrev
-                             company-dabbrev-code)))
+            (setq company-backends
+                  '((company-files          ;; files & directory
+                     company-keywords       ;; keywords
+                     company-capf           ;; `completion-at-point-functions'
+                     company-yasnippet
+                     company-abbrev
+                     company-semantic)
+                    (company-dabbrev
+                     company-dabbrev-code)))
 
             ;; Add company-ispell as backend for text-mode's only
             ;; http://blog.binchen.org/posts/emacs-auto-completion-for-non-programmers.html

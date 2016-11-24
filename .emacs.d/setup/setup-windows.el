@@ -24,11 +24,24 @@
 
 ;;; Code:
 
+;; Display popup in inactive buffer
+;; http://stackoverflow.com/questions/4195666/display-compilation-in-inactive-buffer
+(defun display-on-side (buffer &optional not-this-window frame)
+  (let* ((window (or (minibuffer-selected-window)
+                     (selected-window)))
+         (display-buffer-function nil)
+         (pop-up-windows nil))
+    (with-selected-window (or window (error "display-on-side"))
+      (when (one-window-p t)
+        (split-window-horizontally))
+      (display-buffer buffer not-this-window frame))))
+(setq display-buffer-function 'display-on-side)
+
 ;; http://stackoverflow.com/questions/25469319/prevent-emacs-from-opening-a-buffer-in-a-new-frame
 (setq menu-bar-select-buffer-function 'switch-to-buffer)
 
 ;; Always split horizontally
-(setq split-width-threshold 3000)
+(setq split-width-threshold (ceiling (frame-width) 2))
 (setq split-height-threshold nil)
 
 ;; Helper function for horizontal splitting

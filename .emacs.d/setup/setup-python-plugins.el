@@ -37,22 +37,40 @@
 
 ;; only use Jedi if python interpreter is present
 (use-package jedi
-  :if (executable-find "python")
+  :if (and (executable-find "python")
+           (check-python-module "epc")
+           (check-python-module "jedi"))
   :commands (jedi:setup)
+  :after auto-complete
   :load-path (lambda () (expand-file-name "jedi/" user-emacs-directory))
   :config (progn
-            (add-hook 'python-mode-hook 'jedi:setup)
             (setq jedi:setup-keys nil
                   jedi:complete-on-dot t
                   jedi:tooltip-method t
                   jedi:get-in-function-call-delay 0.2)
+
+            (add-hook 'python-mode-hook 'jedi:setup)
             (if (featurep 'auto-complete)
-              (ac-flyspell-workaround))))
+                (ac-flyspell-workaround))))
 
 ;; Company backend for Python jedi
 (use-package company-jedi
-  :after (company jedi python-mode)
-  :load-path (lambda () (expand-file-name "company-jedi/" user-emacs-directory)))
+  :if (and (executable-find "python")
+           (check-python-module "epc")
+           (check-python-module "jedi"))
+  :after company
+  :load-path (lambda () (expand-file-name "company-jedi/" user-emacs-directory))
+  :config (progn
+            ;; Python-mode setup
+            (add-hook 'python-mode-hook
+                      (lambda ()
+                        ;; make `company-backends' local is critical
+                        ;; or else, you will have completion in every major mode, that's very annoying!
+                        (make-local-variable 'company-backends)
+                        (setq company-backends (copy-tree company-backends))
+                        (setf (car company-backends)
+                              (append '(company-jedi)
+                                      (car company-backends)))))))
 
 (provide 'setup-python-plugins)
 ;;; setup-python-plugins.el ends here
