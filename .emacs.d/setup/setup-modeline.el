@@ -43,7 +43,13 @@
             (require 'spaceline-config)
             (spaceline-spacemacs-theme)
             (spaceline-helm-mode)
-            (spaceline-toggle-buffer-size-off)))
+            (spaceline-toggle-buffer-size-off)
+
+            ;; Add powerline colorset
+            (defadvice my/set-face-tabbar (after load-tabbar-face)
+              (let ()
+                (spaceline-spacemacs-theme)))
+            (ad-activate 'my/set-face-tabbar)))
 
 (use-package airline-themes
   :disabled t
