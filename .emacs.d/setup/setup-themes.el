@@ -118,7 +118,6 @@
   (custom-set-faces
    `(fringe ((t (:background ,my/fringe-background-color))))))
 (add-hook 'after-init-hook #'my/set-face-fringe)
-(add-hook 'window-configuration-change-hook #'my/set-face-fringe)
 
 ;; Disable theme before setting a new one
 (defun disable-themes (&optional themes)

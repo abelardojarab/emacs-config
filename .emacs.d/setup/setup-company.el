@@ -34,17 +34,22 @@
 
             ;; Use Company for completion
             (bind-key [remap completion-at-point] #'company-complete company-mode-map)
-            (setq company-backends '(company-semantic
-                                     company-gtags
-                                     company-dabbrev-code
-                                     company-dabbrev))
+            (setq-default company-backends
+                          '((company-files          ;; files & directory
+                             company-keywords       ;; keywords
+                             company-capf           ;; `completion-at-point-functions'
+                             company-yasnippet
+                             company-abbrev
+                             company-semantic)
+                            (company-dabbrev
+                             company-dabbrev-code)))
 
             ;; Add company-ispell as backend for text-mode's only
             ;; http://blog.binchen.org/posts/emacs-auto-completion-for-non-programmers.html
             (add-hook 'text-mode-hook
                       (lambda ()
 
-                        ;; make `company-backends' local is critcal
+                        ;; make `company-backends' local is critical
                         ;; or else, you will have completion in every major mode, that's very annoying!
                         (make-local-variable 'company-backends)
 
@@ -53,9 +58,30 @@
                         (setq company-ispell-dictionary (expand-file-name "dictionaries/words.txt" user-emacs-directory))
 
                         ;; Initialize backends
-                        (setq-default company-backends '(company-semantic
-                                                         company-ispell
-                                                         company-bibtex))))
+                        (setq company-backends (copy-tree company-backends))
+                        (setf (car company-backends)
+                              (append '(company-bibtex)
+                                      (car company-backends)))))
+
+            ;; C-mode setup
+            (add-hook 'c-mode-common-hook
+                      (lambda ()
+                        ;; make `company-backends' local is critical
+                        ;; or else, you will have completion in every major mode, that's very annoying!
+                        (make-local-variable 'company-backends)
+                        (setq company-backends (copy-tree company-backends))
+                        (if (and (executable-find "rdm")
+                                 (executable-find "irony-server")
+                                 (cmake-ide--locate-cmakelists))
+                            (setf (car company-backends)
+                                  (append '(company-gtags
+                                            company-irony
+                                            company-rtags
+                                            company-c-headers)
+                                          (car company-backends)))
+                          (setf (car company-backends)
+                                (append '(company-gtags)
+                                        (car company-backends))))))
 
             (setq company-idle-delay 0.1
                   company-selection-wrap-around t
@@ -90,64 +116,27 @@
 (use-package company-c-headers
   :after company
   :if (executable-find "clang")
-  :load-path (lambda () (expand-file-name "company-c-headers/" user-emacs-directory))
-  :config (progn
-            (add-to-list 'company-backends 'company-c-headers)
-            (add-hook 'c-common-mode-hook
-                      (lambda ()
-                        ;; make `company-backends' local is critcal
-                        ;; or else, you will have completion in every major mode, that's very annoying!
-                        (make-local-variable 'company-backends)
-                        (setq-default company-backends '(company-semantic
-                                                         company-gtags
-                                                         company-c-headers
-                                                         company-dabbrev-code))))))
+  :load-path (lambda () (expand-file-name "company-c-headers/" user-emacs-directory)))
 
 ;; Company integration with irony
 (use-package company-irony
   :after irony
-  :if (or (file-exists-p "~/.emacs.cache/irony-server/bin/irony-server")
-          (file-exists-p "/usr/local/bin/irony-server")
-          (executable-find "irony-server"))
-  :load-path (lambda () (expand-file-name "company-irony/" user-emacs-directory))
-  :config (progn
-            (add-to-list 'company-backends 'company-irony)
-            (add-hook 'irony-mode-hook
-                      (lambda ()
-                        ;; make `company-backends' local is critcal
-                        ;; or else, you will have completion in every major mode, that's very annoying!
-                        (make-local-variable 'company-backends)
-                        (if (and (executable-find "rdm")
-                                 (cmake-ide--locate-cmakelists))
-                            (setq-default company-backends '(company-rtags
-                                                             company-gtags
-                                                             company-irony
-                                                             company-semantic
-                                                             company-c-headers
-                                                             company-dabbrev-code))
-                          (setq-default company-backends '(company-gtags
-                                                           company-irony
-                                                           company-semantic
-                                                           company-c-headers
-                                                           company-dabbrev-code)))))))
+  :if (executable-find "irony-server")
+  :load-path (lambda () (expand-file-name "company-irony/" user-emacs-directory)))
 
 ;; Company integration with rtags
 (use-package company-rtags
   :if (executable-find "rdm")
   :load-path (lambda () (expand-file-name "rtags/src/" user-emacs-directory))
   :after (company rtags)
-  :config (progn
-            (add-to-list 'company-backends 'company-rtags)
-            (setq rtags-completions-enabled t)))
+  :config (setq rtags-completions-enabled t))
 
 ;; Company bibtex integration
 (use-package company-bibtex
   :if (or (executable-find "bibtex")
           (executable-find "biber"))
   :load-path (lambda () (expand-file-name "company-bibtex/" user-emacs-directory))
-  :after (company org-mode)
-  :config (progn
-            (add-to-list 'company-backends 'company-bibtex)))
+  :after (company org-mode))
 
 (provide 'setup-company)
 ;;; setup-company.el ends here

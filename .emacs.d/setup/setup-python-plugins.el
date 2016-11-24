@@ -1,6 +1,6 @@
 ;;; setup-python-plugins.el ---                      -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016  Abelardo Jara
+;; Copyright (C) 2016  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara <abelardojara@Abelardos-MacBook-Pro.local>
 ;; Keywords:
@@ -42,25 +42,17 @@
   :load-path (lambda () (expand-file-name "jedi/" user-emacs-directory))
   :config (progn
             (add-hook 'python-mode-hook 'jedi:setup)
-            (setq jedi:setup-keys nil)
-            (setq jedi:complete-on-dot t)
-            (setq jedi:tooltip-method t)
+            (setq jedi:setup-keys nil
+                  jedi:complete-on-dot t
+                  jedi:tooltip-method t
+                  jedi:get-in-function-call-delay 0.2)
             (if (featurep 'auto-complete)
               (ac-flyspell-workaround))))
 
 ;; Company backend for Python jedi
 (use-package company-jedi
   :after (company jedi python-mode)
-  :load-path (lambda () (expand-file-name "company-jedi/" user-emacs-directory))
-  :config (progn
-            (setq-default jedi:complete-on-dot t
-                          jedi:get-in-function-call-delay 0.2)
-
-            (setq-default company-backends '(company-jedi
-                                             company-yasnippet
-                                             company-semantic
-                                             company-gtags
-                                             company-dabbrev-code))))
+  :load-path (lambda () (expand-file-name "company-jedi/" user-emacs-directory)))
 
 (provide 'setup-python-plugins)
 ;;; setup-python-plugins.el ends here

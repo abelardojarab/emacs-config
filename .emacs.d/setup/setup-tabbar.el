@@ -85,7 +85,6 @@
                `(tabbar-unselected ((t (:inherit tabbar-default))))))
 
             (add-hook 'after-init-hook #'my/set-face-tabbar)
-            (add-hook 'window-configuration-change-hook #'my/set-face-tabbar)
 
             ;; Refresh the tabbar colorset after loading a theme
             (defadvice load-theme (after enable-theme-second activate)

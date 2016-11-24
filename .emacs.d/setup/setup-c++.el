@@ -124,9 +124,7 @@
 (use-package irony
   :defer t
   :commands (irony-mode irony-install-server)
-  :if (or (file-exists-p "~/.emacs.cache/irony-server/bin/irony-server")
-          (file-exists-p "/usr/local/bin/irony-server")
-          (executable-find "irony-server"))
+  :if (executable-find "irony-server")
   :diminish irony-mode
   :load-path (lambda () (expand-file-name "irony-mode/" user-emacs-directory))
   :after (ggtags eldoc function-args company)
@@ -165,7 +163,7 @@
                   basic-c-compile-all-files nil
                   basic-c-compile-compiler-flags "-Wall -Werror -std=c++11"
                   basic-c-compile-outfile-extension nil
-                  basic-c-compile-make-clean "gfind . -type f -executable -delete")))
+                  basic-c-compile-make-clean "find . -type f -executable -delete")))
 
 (provide 'setup-c++)
 ;;; setup-c++.el ends here

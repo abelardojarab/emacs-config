@@ -86,9 +86,9 @@
             ;; ecb
             (push '("*ECB History*" :position left :width 0.3 :stick t)
                   popwin:special-display-config)
-            (push '("*ECB Source*" :position left :width 0.3 :stick t)
+            (push '("*ECB Methods*" :position left :width 0.3 :stick t)
                   popwin:special-display-config)
-            (push '("*ECB History*" :position right :width 0.3 :stick t)
+            (push '("*ECB Directories*" :position right :width 0.3 :stick t)
                   popwin:special-display-config)
 
             ;; sgit
@@ -150,34 +150,42 @@
                   '(("*ag*"               . search)))
 
             (setq purpose-user-regexp-purposes
-                  '(("^\\*elfeed"         . admin)))
+                  '(("^\\*elfeed"                  . admin)
+                    ("^\\*Python Completions"      . minibuf)
+                    ))
 
             (setq purpose-user-mode-purposes
-                  '((eshell-mode         . terminal)
+                  '((eshell-mode          . terminal)
 
-                    (circe-chat-mode     . comm)
-                    (circe-query-mode    . comm)
-                    (circe-lagmon-mode   . comm)
-                    (circe-server-mode   . comm)
+                    (python-mode          . py)
+                    (inferior-python-mode . py-repl)
 
-                    (ess-mode            . edit)
-                    (gitconfig-mode      . edit)
-                    (inferior-ess-mode   . interactive)
+                    (circe-chat-mode      . comm)
+                    (circe-query-mode     . comm)
+                    (circe-lagmon-mode    . comm)
+                    (circe-server-mode    . comm)
 
-                    (mu4e-main-mode      . admin)
-                    (mu4e-view-mode      . admin)
-                    (mu4e-about-mode     . admin)
-                    (mu4e-headers-mode   . admin)
-                    (mu4e-compose-mode   . edit)
+                    (ess-mode             . edit)
+                    (gitconfig-mode       . edit)
+                    (inferior-ess-mode    . interactive)
 
-                    (pdf-view-mode       . view)
-                    (doc-view-mode       . view)))
+                    (mu4e-main-mode       . admin)
+                    (mu4e-view-mode       . admin)
+                    (mu4e-about-mode      . admin)
+                    (mu4e-headers-mode    . admin)
+                    (mu4e-compose-mode    . edit)
+
+                    (pdf-view-mode        . view)
+                    (doc-view-mode        . view)))
 
             ;; Extra configuration
             (require 'window-purpose-x)
 
             ;; Single window magit
             (purpose-x-magit-single-on)
+
+            ;; Enable purpose compatibility
+            (purpose-x-popwin-setup)
 
             ;; when killing a purpose-dedicated buffer that is displayed in a window,
             ;; ensure that the buffer is replaced by a buffer with the same purpose

@@ -1,8 +1,8 @@
 ;;; setup-javascript.el ---
 
-;; Copyright (C) 2014, 2015, 2016  abelardo.jara-berrocal
+;; Copyright (C) 2016  Abelardo Jara-Berrocal
 
-;; Author: abelardo.jara-berrocal <ajaraber@plxc25288.pdx.intel.com>
+;; Author: Abelardo Jara <abelardojara@Abelardos-MacBook-Pro.local>
 ;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -101,10 +101,7 @@
   :disabled t
   :after (company tern)
   :load-path (lambda () (expand-file-name "company-tern/" user-emacs-directory))
-  :config (progn
-            (add-hook 'js2-mode-hook (lambda ()
-                                       (add-to-list 'company-backends 'company-tern)))
-            (setq company-tern-meta-as-single-line t)))
+  :config (setq company-tern-meta-as-single-line t))
 
 ;; json-reformat
 (use-package json-reformat
