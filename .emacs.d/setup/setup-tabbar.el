@@ -84,6 +84,12 @@
                `(tabbar-separator ((t (:inherit tabbar-default :background ,my/tabbar-back-color))))
                `(tabbar-unselected ((t (:inherit tabbar-default))))))
 
+            ;; Add tabbar colorset
+            (defadvice my/set-face-fringe (after load-fringe-face)
+              (let ()
+                (my/set-face-tabbar)))
+            (ad-activate 'my/set-face-fringe)
+
             (add-hook 'after-init-hook #'my/set-face-tabbar)))
 
 ;; Tabbar ruler pre-requisites
