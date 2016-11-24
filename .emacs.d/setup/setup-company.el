@@ -39,9 +39,9 @@
                      company-keywords       ;; keywords
                      company-capf           ;; `completion-at-point-functions'
                      company-yasnippet
-                     company-abbrev
-                     company-semantic)
-                    (company-dabbrev
+                     company-abbrev)
+                    (company-semantic
+                     company-dabbrev
                      company-dabbrev-code)))
 
             ;; Add company-ispell as backend for text-mode's only
@@ -70,18 +70,37 @@
                         ;; or else, you will have completion in every major mode, that's very annoying!
                         (make-local-variable 'company-backends)
                         (setq company-backends (copy-tree company-backends))
-                        (if (and (executable-find "rdm")
-                                 (executable-find "irony-server")
-                                 (cmake-ide--locate-cmakelists))
+
+                        ;; company-semantic configuration
+                        (if (executable-find "gcc")
                             (setf (car company-backends)
-                                  (append '(company-gtags
-                                            company-irony
-                                            company-rtags
-                                            company-c-headers)
-                                          (car company-backends)))
-                          (setf (car company-backends)
-                                (append '(company-gtags)
-                                        (car company-backends))))))
+                                  (append '(company-semantic)
+                                          (car company-backends))))
+
+                        ;; company-gtags configuration
+                        (if (executable-find "global")
+                            (setf (car company-backends)
+                                  (append '(company-gtags)
+                                          (car company-backends))))
+
+                        ;; company-c-headers configuration
+                        (if (executable-find "clang")
+                            (setf (car company-backends)
+                                  (append '(company-c-headers)
+                                          (car company-backends))))
+
+                        ;; irony and rtags configuration
+                        (if (cmake-ide--locate-cmakelists)
+                            (progn
+                              (if (executable-find "rdm")
+                                  (setf (car company-backends)
+                                        (append '(company-rtags)
+                                                (car company-backends))))
+
+                              (if (executable-find "irony-server")
+                                  (setf (car company-backends)
+                                        (append '(company-irony)
+                                                (car company-backends))))))))
 
             (setq company-idle-delay 0.1
                   company-selection-wrap-around t

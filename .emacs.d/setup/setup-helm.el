@@ -96,8 +96,8 @@
                     (candidates . ,(font-family-list))
                     (action . (lambda (candidate) (progn
                                                (setq main-programming-font candidate)
-                                               (set-face-attribute 'default nil
-                                                                      :family candidate))))))
+                                               (set-face-attribute 'default nil :family candidate)
+                                               (fontify-frame (selected-frame)))))))
 
             (defun helm-fonts ()
               (interactive)

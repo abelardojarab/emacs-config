@@ -109,7 +109,6 @@
 
 ;; So, fringe is nice actually, but the background for it kind of sucks in leuven
 ;; so I set it to the same color as the background
-(defvar my/set-face-fringe nil)
 (defun my/set-face-fringe ()
   "Set the fringe background to the same color as the regular background."
   (interactive)
@@ -123,13 +122,12 @@
 (defun disable-themes (&optional themes)
   (mapc #'disable-theme (or themes custom-enabled-themes)))
 
-(defadvice load-theme (before disable-themes-first activate)
-  (disable-themes))
-
-;; Refresh the fringe colorset after loading a theme
-(defadvice load-theme (after enable-theme-first activate)
-  (my/set-face-fringe))
-
+;; Advice the load theme function
+(defadvice load-theme (around load-theme-around)
+  (let ()
+    (disable-themes)
+    ad-do-it
+    (my/set-face-fringe)))
 (ad-activate 'load-theme)
 
 ;; Choose different themes depending if we are using GUI or not

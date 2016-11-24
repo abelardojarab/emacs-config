@@ -27,6 +27,7 @@
 ;; Ergoemacs
 (use-package ergoemacs-mode
   :ensure nil
+  :commands ergoemacs-mode
   :if (and (display-graphic-p)
            (executable-find "gzip"))
   :load-path (lambda () (expand-file-name "ergoemacs-mode/" user-emacs-directory))

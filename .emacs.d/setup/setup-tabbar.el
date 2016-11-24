@@ -63,7 +63,7 @@
 
             ;; Default tabbar theme-ing
             (require 'color)
-            (defun my/set-face-tabbar()
+            (defun my/set-face-tabbar ()
               "Set the tabbar background to the same color as the regular background."
               (interactive)
               (setq tabbar-separator '(0.0))
@@ -84,12 +84,7 @@
                `(tabbar-separator ((t (:inherit tabbar-default :background ,my/tabbar-back-color))))
                `(tabbar-unselected ((t (:inherit tabbar-default))))))
 
-            (add-hook 'after-init-hook #'my/set-face-tabbar)
-
-            ;; Refresh the tabbar colorset after loading a theme
-            (defadvice load-theme (after enable-theme-second activate)
-              (my/set-face-tabbar))
-            (ad-activate 'load-theme)))
+            (add-hook 'after-init-hook #'my/set-face-tabbar)))
 
 ;; Tabbar ruler pre-requisites
 (use-package mode-icons
