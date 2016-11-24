@@ -36,12 +36,10 @@
             (bind-key [remap completion-at-point] #'company-complete company-mode-map)
             (setq company-backends '(company-semantic
                                      company-gtags
-                                     company-dabbrev-code
-                                     company-dabbrev))
+                                     company-dabbrev-code))
             (add-hook 'text-mode-hook
                       (lambda ()
                         (setq-default company-backends '(company-semantic
-                                                         company-dabbrev
                                                          company-bibtex))))
 
             (setq company-idle-delay 0.1

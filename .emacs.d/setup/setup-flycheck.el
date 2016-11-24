@@ -107,5 +107,14 @@
   :config (progn
             (setq flycheck-tip-avoid-show-func nil)))
 
+;; Another tooltip using pos-tip
+(use-package flycheck-pos-tip
+  :if (display-graphic-p)
+  :after flycheck
+  :commands flycheck-pos-tip-mode
+  :load-path (lambda () (expand-file-name "flycheck-pos-tip/" user-emacs-directory))
+  :config (progn
+            (add-hook 'prog-mode-hook (lambda () (flycheck-pos-tip-mode)))))
+
 (provide 'setup-flycheck)
 ;;; setup-flycheck.el ends here

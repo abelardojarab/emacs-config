@@ -94,8 +94,10 @@
             (setq font-helm-source
                   `((name . "Fonts")
                     (candidates . ,(font-family-list))
-                    (action . (lambda (candidate) (set-face-attribute 'default nil
-                                                                      :family candidate)))))
+                    (action . (lambda (candidate) (progn
+                                               (setq main-programming-font candidate)
+                                               (set-face-attribute 'default nil
+                                                                      :family candidate))))))
 
             (defun helm-fonts ()
               (interactive)

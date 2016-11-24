@@ -25,74 +25,114 @@
 ;;; Code:
 
 ;; Adjust font when using graphical interface
+(defvar main-programming-font "Consolas" "Main font")
+(defvar main-programming-font-size "12" "Main font size")
+(defvar main-writing-font "Calibri" "Main writing font")
+(defvar main-writing-font-size "13" "Main writing font size")
+
 (when (display-graphic-p)
 
   ;; Use 12-pt Consolas as default font
   (when (find-font (font-spec :name "Consolas"))
-    (setq main-programming-font "Consolas-12")
-    (set-face-attribute 'default nil :font main-programming-font)
-    (set-face-attribute 'fixed-pitch nil :font main-programming-font)
-    (add-to-list 'default-frame-alist '(font . "Consolas-12"))) ;; default font, used by speedbar
+    (setq main-programming-font "Consolas")
+    (setq main-programming-font-size "12")
+    (set-face-attribute 'default nil :font (concat main-programming-font
+                                                   "-"
+                                                   main-programming-font-size))
+    (set-face-attribute 'fixed-pitch nil :font (concat main-programming-font
+                                                       "-"
+                                                       main-programming-font-size))
+    (add-to-list 'default-frame-alist (cons 'font
+                                            (concat
+                                             main-programming-font
+                                             "-"
+                                             main-programming-font-size))))
 
   (when (find-font (font-spec :name "Calibri"))
-    (setq main-writing-font "Calibri-13")
-    (set-face-attribute 'variable-pitch nil :font main-writing-font :weight 'normal)
+    (setq main-writing-font "Calibri")
+    (setq main-writing-font-size "13")
+    (set-face-attribute 'variable-pitch nil
+                        :font (concat main-writing-font
+                                      "-"
+                                      main-writing-font-size)
+                        :weight 'normal)
     (add-hook 'text-mode-hook 'variable-pitch-mode))
 
   ;; Dynamic font adjusting based on monitor resolution, using Android fonts
   (when (find-font (font-spec :name "Cousine"))
 
+    ;; Set fontset
+    (setq main-programming-font "Cousine")
+    (if (find-font (font-spec :name "Menlo"))
+        (setq main-writing-font "Menlo")
+      (setq main-writing-font main-programming-font))
+
     (defun fontify-frame (&optional frame)
       (interactive)
-      (let (main-writing-font main-programming-font)
-        (setq main-programming-font "Cousine")
-        (if (find-font (font-spec :name "Menlo"))
-            (setq main-writing-font "Menlo")
-          (setq main-writing-font main-programming-font))
+      (let ()
 
         ;; Adjust text size based on resolution
         (case system-type
           ('windows-nt
            (if (> (x-display-pixel-width) 2000)
                (progn ;; HD monitor in Windows
-                 (setq main-programming-font (concat main-programming-font "-11"))
-                 (setq main-writing-font (concat main-writing-font "-13")))
+                 (setq main-programming-font-size "11")
+                 (setq main-writing-font-size "13"))
              (progn
-               (setq main-programming-font (concat main-programming-font "-11"))
-               (setq main-writing-font (concat main-writing-font "-13")))))
+               (setq main-programming-font-size "11")
+               (setq main-writing-font-size "13"))))
           ('darwin
            (if (> (x-display-pixel-width) 1800)
                (if (> (x-display-pixel-width) 2000)
                    (progn ;; Ultra-HD monitor in OSX
-                     (setq main-programming-font (concat main-programming-font "-19"))
-                     (setq main-writing-font (concat main-writing-font "-20")))
+                     (setq main-programming-font-size "19")
+                     (setq main-writing-font-size "20"))
                  (progn ;; HD monitor in OSX
-                   (setq main-programming-font (concat main-programming-font "-16"))
-                   (setq main-writing-font (concat main-writing-font "-17"))))
+                   (setq main-programming-font-size "16")
+                   (setq main-writing-font-size "17")))
              (progn
-               (setq main-programming-font (concat main-programming-font "-16"))
-               (setq main-writing-font (concat main-writing-font "-16")))))
+               (setq main-programming-font-size "16")
+               (setq main-writing-font-size "16"))))
           (t ;; Linux
            (if (> (x-display-pixel-width) 2000)
                (progn ;; Ultra-HD monitor in Linux
-                 (setq main-programming-font (concat main-programming-font "-14"))
-                 (setq main-writing-font (concat main-writing-font "-15")))
+                 (setq main-programming-font-size "14")
+                 (setq main-writing-font-size "15"))
              (if (> (x-display-pixel-width) 1800)
                  (progn ;; HD monitor in Linux
-                   (setq main-programming-font (concat main-programming-font "-13"))
-                   (setq main-writing-font (concat main-writing-font "-14")))
+                   (setq main-programming-font-size "13")
+                   (setq main-writing-font-size "14"))
                (progn
-                 (setq main-programming-font (concat main-programming-font "-12"))
-                 (setq main-writing-font (concat main-writing-font "-13")))))))
+                 (setq main-programming-font-size "12")
+                 (setq main-writing-font-size "13"))))))
 
         ;; Apply fonts
-        (set-default-font main-programming-font frame)
-        (add-to-list 'default-frame-alist (cons 'font main-programming-font))
-        (set-default-font main-programming-font frame)
-        (set-frame-font main-programming-font t)
-        (set-face-attribute 'default nil :font main-programming-font)
-        (set-face-attribute 'fixed-pitch nil :font main-programming-font)
-        (set-face-attribute 'variable-pitch nil :font main-writing-font :weight 'normal)))
+        (set-default-font (concat main-programming-font
+                                  "-"
+                                  main-programming-font-size)
+                          frame)
+        (add-to-list 'default-frame-alist (cons 'font
+                                                (concat
+                                                 main-programming-font
+                                                 "-"
+                                                 main-programming-font-size)))
+        (set-default-font (concat main-programming-font
+                                  "-"
+                                  main-programming-font-size)
+                          frame)
+       (set-frame-font (concat main-programming-font
+                               "-"
+                               main-programming-font-size) t)
+        (set-face-attribute 'default nil :font (concat main-programming-font
+                                                       "-"
+                                                       main-programming-font-size))
+        (set-face-attribute 'fixed-pitch nil :font (concat main-programming-font
+                                                           "-"
+                                                           main-programming-font-size))
+        (set-face-attribute 'variable-pitch nil :font (concat main-writing-font
+                                                              "-"
+                                                              main-writing-font-size)
+                            :weight 'normal)))
 
     ;; Fontify current frame
     (fontify-frame nil)
@@ -110,7 +150,7 @@
 
     ;; Use Symbola font on Unicode mathematical symbols
     (if (find-font (font-spec :name "Symbola"))
-      (set-fontset-font t nil "Symbola"))))
+        (set-fontset-font t nil "Symbola"))))
 
 ;; Fixed pitch for HTML
 (defun fixed-pitch-mode ()
