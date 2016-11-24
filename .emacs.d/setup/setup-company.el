@@ -40,6 +40,7 @@
             (add-hook 'text-mode-hook
                       (lambda ()
                         (setq-default company-backends '(company-semantic
+                                                         company-dabbrev
                                                          company-bibtex))))
 
             (setq company-idle-delay 0.1
