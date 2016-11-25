@@ -24,6 +24,30 @@
 
 ;;; Code:
 
+;; intellij theme
+(add-to-list 'load-path (expand-file-name "intellij-theme/" user-emacs-directory))
+(add-to-list 'custom-theme-load-path (expand-file-name "intellij-theme/" user-emacs-directory))
+
+;; darcula theme
+(add-to-list 'load-path (expand-file-name "darcula-theme/" user-emacs-directory))
+(add-to-list 'custom-theme-load-path (expand-file-name "darcula-theme/" user-emacs-directory))
+
+;; faff theme
+(add-to-list 'load-path (expand-file-name "faff-theme/" user-emacs-directory))
+(add-to-list 'custom-theme-load-path (expand-file-name "faff-theme/" user-emacs-directory))
+
+;; Plan9 theme
+(add-to-list 'load-path (expand-file-name "plan9-theme/" user-emacs-directory))
+(add-to-list 'custom-theme-load-path (expand-file-name "plan9-theme/" user-emacs-directory))
+
+;; Creamsody theme
+(add-to-list 'load-path (expand-file-name "creamsody-theme/" user-emacs-directory))
+(add-to-list 'custom-theme-load-path (expand-file-name "creamsody-theme/" user-emacs-directory))
+
+;; Ample theme
+(add-to-list 'load-path (expand-file-name "ample-theme/" user-emacs-directory))
+(add-to-list 'custom-theme-load-path (expand-file-name "ample-theme/" user-emacs-directory))
+
 ;; Monokai theme
 (add-to-list 'load-path (expand-file-name "monokai-theme/" user-emacs-directory))
 (add-to-list 'custom-theme-load-path (expand-file-name "monokai-theme/" user-emacs-directory))
