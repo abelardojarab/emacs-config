@@ -25,6 +25,14 @@
 ;; this is the ivy version.
 ;;
 ;; News:
+;; - 11/24/2016: Added support for bare relative paths to PDF
+;;   files.  Concatenates the path in the `file' field to all paths
+;;   in `bibtex-completion-library-path'.
+;; - 11/24/2016: Added citation function APA-style citation for org
+;;   files.  See `bibtex-completion-format-citation-org-apa-link-to-PDF'.
+;; - 11/18/2016: Added support for bibliographies in org-bibtex
+;;   format.  See docstring of `bibtex-completion-bibliography'.
+;; - 11/10/2016: Layout of search results can now be customized.
 ;; - 09/29/2016: Performance improvements in ivy-bibtex.  Note: If
 ;;   you changed your default action in ivy-bibtex, you have to rename
 ;;   the action, e.g. from `bibtex-completion-insert-key` to
@@ -91,7 +99,8 @@
 
 (defmacro ivy-bibtex-ivify-action (action name)
   "Wraps the function ACTION in another function named NAME which
-extracts the key from the candidate selected in ivy and passes it to ACTION."
+extracts the key from the candidate selected in ivy and passes it
+to ACTION."
   `(defun ,name (candidate)
      (let ((key (cdr (assoc "=key=" (cdr candidate)))))
        (,action (list key)))))
@@ -109,7 +118,9 @@ extracts the key from the candidate selected in ivy and passes it to ACTION."
 (ivy-bibtex-ivify-action bibtex-completion-add-pdf-to-library ivy-bibtex-add-pdf-to-library)
 
 (defun ivy-bibtex-fallback (search-expression)
-  "Select a fallback option for SEARCH-EXPRESSION. This is meant to be used as an action in `ivy-read`, with `ivy-text` as search expression."
+  "Select a fallback option for SEARCH-EXPRESSION. This is meant
+to be used as an action in `ivy-read`, with `ivy-text` as search
+expression."
   (ivy-read "Fallback options: "
             (bibtex-completion-fallback-candidates)
             :caller 'ivy-bibtex-fallback
@@ -119,7 +130,8 @@ extracts the key from the candidate selected in ivy and passes it to ACTION."
 (defun ivy-bibtex (&optional arg)
   "Search BibTeX entries using ivy.
 
-With a prefix ARG the cache is invalidated and the bibliography reread."
+With a prefix ARG the cache is invalidated and the bibliography
+reread."
   (interactive "P")
   (when arg
     (bibtex-completion-clear-cache))
@@ -133,7 +145,8 @@ With a prefix ARG the cache is invalidated and the bibliography reread."
 (defun ivy-bibtex-with-local-bibliography (&optional arg)
   "Search BibTeX entries with local bibliography.
 
-With a prefix ARG the cache is invalidated and the bibliography reread."
+With a prefix ARG the cache is invalidated and the bibliography
+reread."
   (interactive "P")
   (let ((bibtex-completion-bibliography (bibtex-completion-find-local-bibliography)))
     (ivy-bibtex arg)))

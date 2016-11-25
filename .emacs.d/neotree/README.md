@@ -1,17 +1,17 @@
-# emacs-neotree #
+# emacs-neotree
 
 A Emacs tree plugin like NerdTree for Vim.
 
 [![Build Status](https://travis-ci.org/jaypei/emacs-neotree.svg?branch=master)](https://travis-ci.org/jaypei/emacs-neotree)
 [![MELPA Stable](http://stable.melpa.org/packages/neotree-badge.svg)](http://stable.melpa.org/#/neotree)
-[![MELPA](http://melpa.org/packages/neotree-badge.svg)](http://melpa.org/#/neotree)
+[![MELPA](https://melpa.org/packages/neotree-badge.svg)](https://melpa.org/#/neotree)
 
 
-## Screenshots ##
+## Screenshots
 
-![NeoTree-1] (https://raw.githubusercontent.com/wiki/jaypei/emacs-neotree/imgs/neotree-1.png)
+![NeoTree-1] (https://raw.githubusercontent.com/wiki/jaypei/emacs-neotree/imgs/neotree-1.png)  
 
-## Installation ##
+## Installation
 
 ### Melpa
 
@@ -55,8 +55,25 @@ Open (toggle) NeoTree:
 <F8>
 ```
 
+## Configurations
 
-## More documentation ##
+### Theme config
+NeoTree provides following themes: *classic*(default) *ascii* *arrow* *icons* *nerd*. 
+Theme can be configed by setting **neo-theme**. For example, use *icons* for window 
+system and *arrow* terminal.
+
+```elisp
+(setq neo-theme (if (display-graphic-p) 'icons 'arrow))
+```
+
+**Note**: For users who want to use the `icons` theme. Pls make sure you have installed the
+[all-the-icons](https://github.com/domtronn/all-the-icons.el) package and its
+[fonts](https://github.com/domtronn/all-the-icons.el/tree/master/fonts).
+
+* all-the-icons theme screenshots  
+![](screenshots/icons.png "neotree icons theme")
+
+## More documentation
 
 EmacsWiki:
 [En](http://www.emacswiki.org/emacs/NeoTree)

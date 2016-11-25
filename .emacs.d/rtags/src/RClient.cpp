@@ -143,7 +143,7 @@ std::initializer_list<CommandLineParser::Option<RClient::OptionType> > opts = {
     { RClient::CursorKind, "cursor-kind", 0, CommandLineParser::NoValue, "Include cursor kind in --find-symbols output." },
     { RClient::DisplayName, "display-name", 0, CommandLineParser::NoValue, "Include display name in --find-symbols output." },
     { RClient::CurrentFile, "current-file", 0, CommandLineParser::Required, "Pass along which file is being edited to give rdm a better chance at picking the right project." },
-    { RClient::DeclarationOnly, "declaration-only", 0, CommandLineParser::NoValue, "Filter out definitions (unless inline).", },
+    { RClient::DeclarationOnly, "declaration-only", 'G', CommandLineParser::NoValue, "Filter out definitions (unless inline).", },
     { RClient::DefinitionOnly, "definition-only", 0, CommandLineParser::NoValue, "Filter out declarations (unless inline).", },
     { RClient::KindFilter, "kind-filter", 0, CommandLineParser::Required, "Only return results matching this kind.", },
     { RClient::ContainingFunction, "containing-function", 'o', CommandLineParser::NoValue, "Include name of containing function in output."},
@@ -160,12 +160,13 @@ std::initializer_list<CommandLineParser::Option<RClient::OptionType> > opts = {
     { RClient::ProjectRoot, "project-root", 0, CommandLineParser::Required, "Override project root for compile commands." },
     { RClient::RTagsConfig, "rtags-config", 0, CommandLineParser::Required, "Print out .rtags-config for argument." },
     { RClient::WildcardSymbolNames, "wildcard-symbol-names", 'a', CommandLineParser::NoValue, "Expand * like wildcards in --list-symbols and --find-symbols." },
-    { RClient::NoColor, "no-color", 0, CommandLineParser::NoValue, "Don't colorize context." },
+    { RClient::NoColor, "no-color", 'z', CommandLineParser::NoValue, "Don't colorize context." },
     { RClient::Wait, "wait", 0, CommandLineParser::NoValue, "Wait for reindexing to finish." },
     { RClient::Autotest, "autotest", 0, CommandLineParser::NoValue, "Turn on behaviors appropriate for running autotests." },
     { RClient::CodeCompleteIncludeMacros, "code-complete-include-macros", 0, CommandLineParser::NoValue, "Include macros in code completion results." },
     { RClient::CodeCompleteIncludes, "code-complete-includes", 0, CommandLineParser::NoValue, "Give includes in completion results." },
     { RClient::CodeCompleteNoWait, "code-complete-no-wait", 0, CommandLineParser::NoValue, "Don't wait for synchronous completion if the translation unit has to be created." },
+    { RClient::CodeCompletePrefix, "code-complete-prefix", 0, CommandLineParser::Required, "Filter out code completion results that don't start with this prefix." },
     { RClient::CodeCompletionEnabled, "code-completion-enabled", 'b', CommandLineParser::NoValue, "Inform rdm that we're code-completing. Use with --diagnose" },
     { RClient::NoSpellCheckinging, "no-spell-checking", 0, CommandLineParser::NoValue, "Don't produce spell check info in diagnostics." },
 #ifdef RTAGS_HAS_LUA
@@ -210,6 +211,7 @@ public:
         msg.setRangeFilter(rc->minOffset(), rc->maxOffset());
         msg.setTerminalWidth(rc->terminalWidth());
         msg.setCurrentFile(rc->currentFile());
+        msg.setCodeCompletePrefix(rc->codeCompletePrefix());
 #ifdef RTAGS_HAS_LUA
         msg.setVisitASTScripts(rc->visitASTScripts());
 #endif
@@ -476,6 +478,9 @@ CommandLineParser::ParseStatus RClient::parse(size_t argc, char **argv)
             break; }
         case CodeCompleteIncludeMacros: {
             mQueryFlags |= QueryMessage::CodeCompleteIncludeMacros;
+            break; }
+        case CodeCompletePrefix: {
+            mCodeCompletePrefix = std::move(value);
             break; }
         case CodeCompleteIncludes: {
             mQueryFlags |= QueryMessage::CodeCompleteIncludes;
@@ -909,7 +914,7 @@ CommandLineParser::ParseStatus RClient::parse(size_t argc, char **argv)
             print(CXCursor_FirstPreprocessing, CXCursor_LastPreprocessing);
             return { String(), CommandLineParser::Parse_Ok }; }
         case SetBuffers: {
-            String arg = 0;
+            String arg;
             if (!value.isEmpty()) {
                 arg = std::move(value);
             } else if (idx < arguments.size() && (arguments[idx][0] != '-' || arguments[idx] == "-")) {

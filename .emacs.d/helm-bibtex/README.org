@@ -7,6 +7,10 @@ Ivy-bibtex: [[http://melpa.org/#/ivy-bibtex][http://melpa.org/packages/ivy-bibte
 Helm-bibtex and ivy-bibtex allow you to search and manage your BibTeX bibliography.  They both share the same generic backend, bibtex-completion, but one uses the Helm completion framework and the other Ivy as a front-end.
 
 * News
+- 2016-11-24: Added support for bare relative paths to PDF files.  Concatenates the path in the ~file~ field to all paths in ~bibtex-completion-library-path~.
+- 2016-11-24: Added citation function APA-style citation for org files.  See ~bibtex-completion-format-citation-org-apa-link-to-PDF~.
+- 2016-11-18: Added support for bibliographies in org-bibtex format.  See [[#minimal-configuration][here]] for details.  Thanks to @ericdanan for this contribution.
+- 2016-11-10: Layout of search results can now be customized.  See here [[#customize-layout-of-search-results][here]] for details.
 - 2016-10-07: Added bibtex-completion-open-any, made it the default action for helm-bibtex and ivy-bibtex
 - 2016-09-29: Performance improvements in ivy-bibtex.  *Note:* If you changed your default action in ivy-bibtex, you have to rename the action, e.g. from ~bibtex-completion-insert-key~ to ~ivy-bibtex-insert-key~.  See [[#change-the-default-action][here]] for details.
 - 2016-09-20: Added fallback options to ivy frontend.
@@ -62,7 +66,18 @@ When using helm-bibtex or ivy-bibtex, make sure that helm or ivy is correctly co
 A minimal configuration involves telling bibtex-completion where your bibliographies can be found:
 
 #+BEGIN_SRC emacs-lisp
-(setq bibtex-completion-bibliography '("/path/to/bibtex-file-1.bib" "/path/to/bibtex-file-2.bib"))
+(setq bibtex-completion-bibliography
+      '("/path/to/bibtex-file-1.bib"
+        "/path/to/bibtex-file-2.bib"))
+#+END_SRC
+
+Org-bibtex users can also specify org-mode bibliography files, in which case it will be assumed that a BibTeX file exists with the same name and extension bib instead of org.  If the bib file has a different name, use a cons cell ~("orgfile.org" . “bibfile.bib")~ instead:
+
+#+BEGIN_SRC emacs-lisp
+(setq bibtex-completion-bibliography
+      '("/path/to/bibtex-file-1.bib"
+        "/path/to/org-bibtex-file.org"
+        ("/path/to/org-bibtex-file2.org" . "/path/to/bibtex-file.bib")))
 #+END_SRC
 
 * Basic configuration (recommended)
@@ -108,6 +123,26 @@ The names of these files consist of the BibTeX key plus a user-defined suffix (~
 At this point most people will be ready to go.  Skip to [[#usage][Usage]] below to see how to use helm-bibtex and ivy-bibtex.
 
 * Advanced configuration
+** Customize layout of search results
+
+The variable ~bibtex-completion-display-formats~ can be used to customize how search results are presented on a per-entry-type basis.  The default is
+
+#+BEGIN_SRC elisp
+'((t . "${author:36} ${title:*} ${year:4} ${=has-pdf=:1}${=has-note=:1} ${=type=:7}"))
+#+END_SRC
+
+which means that all entry types are presented in the same way: authors, title, year, …  In this format string, the numbers indicate how much space is reserved for the respective field.  If there is a ~*~ instead of a number that means that this field gets whatever space remains.  Here is a setup that uses a different layout for different entry types:
+
+#+BEGIN_SRC elisp
+(setq bibtex-completion-display-formats
+    '((article       . "${=has-pdf=:1}${=has-note=:1} ${=type=:3} ${year:4} ${author:36} ${title:*} ${journal:40}")
+      (inbook        . "${=has-pdf=:1}${=has-note=:1} ${=type=:3} ${year:4} ${author:36} ${title:*} Chapter ${chapter:32}")
+      (incollection  . "${=has-pdf=:1}${=has-note=:1} ${=type=:3} ${year:4} ${author:36} ${title:*} ${booktitle:40}")
+      (inproceedings . "${=has-pdf=:1}${=has-note=:1} ${=type=:3} ${year:4} ${author:36} ${title:*} ${booktitle:40}")
+      (t             . "${=has-pdf=:1}${=has-note=:1} ${=type=:3} ${year:4} ${author:36} ${title:*}")))
+#+END_SRC
+
+For this to work, you have to add ~journal~ and ~booktitle~ to ~bibtex-completion~additional-search-fields~.  See next section.
 
 ** Fields used for searching
 
@@ -171,7 +206,7 @@ If the ~file~ field is not used but instead the naming scheme ~bibtex-key + .pdf
 *Helm-bibtex*:  Add the following after the above code:
 
 #+BEGIN_SRC elisp
-  (helm-bibtex-helmify-action 'bibtex-completion-open-annotated-pdf 'helm-bibtex-open-annotated-pdf)
+  (helm-bibtex-helmify-action bibtex-completion-open-annotated-pdf helm-bibtex-open-annotated-pdf)
   (helm-add-action-to-source
    "Open annotated PDF (if present)" 'helm-bibtex-open-annotated-pdf
    helm-source-bibtex 1)
@@ -180,7 +215,7 @@ If the ~file~ field is not used but instead the naming scheme ~bibtex-key + .pdf
 *Ivy-bibtex*:  Add the following after the above code:
 
 #+BEGIN_SRC elisp
-  (ivy-bibtex-ivify-action 'bibtex-completion-open-annotated-pdf 'ivy-bibtex-open-annotated-pdf)
+  (ivy-bibtex-ivify-action bibtex-completion-open-annotated-pdf ivy-bibtex-open-annotated-pdf)
   (ivy-add-actions
    'ivy-bibtex
    '(("P" ivy-bibtex-open-annotated-pdf "Open annotated PDF (if present)")))
@@ -368,13 +403,13 @@ The second step is to tailor the generic action function for helm-bibtex or ivy-
 *Helm-bibtex*:  This is simply done with:
 
 #+BEGIN_SRC emacs-lisp
-(helm-bibtex-helmify-action 'bibtex-completion-<action> 'helm-bibtex-<action>)
+(helm-bibtex-helmify-action bibtex-completion-<action> helm-bibtex-<action>)
 #+END_SRC
 
 *Ivy-bibtex*:  This is simply done with:
 
 #+BEGIN_SRC emacs-lisp
-(ivy-bibtex-ivify-action 'bibtex-completion-<action> 'ivy-bibtex-<action>)
+(ivy-bibtex-ivify-action bibtex-completion-<action> ivy-bibtex-<action>)
 #+END_SRC
 
 The third and final step is to make the tailored action function ~helm-bibtex-<action>~ or ~ivy-bibtex-<action>~ available in helm-bibtex or ivy-bibtex by adding it to the action menu. See [[#change-actions][Change the available actions]].
