@@ -113,10 +113,11 @@
   :config (progn
             (add-hook 'js2-mode-hook (lambda ()
                                        (set (make-local-variable 'company-backends)
-                                            '(company-yasnippet
-                                              company-capf
-                                              company-files
-                                              company-tern))))
+                                            '((company-yasnippet
+                                               company-tern
+                                               company-capf
+                                               company-files
+                                               company-abbrev)))))
             (setq company-tern-meta-as-single-line t)))
 
 ;; json-reformat
