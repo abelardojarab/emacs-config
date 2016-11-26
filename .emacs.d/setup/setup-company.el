@@ -55,8 +55,7 @@
                         ;; or else, you will have completion in every major mode, that's very annoying!
                         (set (make-local-variable 'company-backends) '((company-yasnippet
                                                                         company-files
-                                                                        company-abbrev
-                                                                        company-dabbrev)))))
+                                                                        company-abbrev)))))
 
             ;; C-mode setup
             (add-hook 'c-mode-common-hook
