@@ -98,10 +98,11 @@
               (setq-default ac-js2-evaluate-calls t))))
 
 (use-package company-tern
-  :disabled t
   :after (company tern)
   :load-path (lambda () (expand-file-name "company-tern/" user-emacs-directory))
-  :config (setq company-tern-meta-as-single-line t))
+  :config (progn
+            (add-hook 'js2-mode-hook (lambda () (set (make-local-variable 'company-backends) '(company-tern))))
+            (setq company-tern-meta-as-single-line t)))
 
 ;; json-reformat
 (use-package json-reformat

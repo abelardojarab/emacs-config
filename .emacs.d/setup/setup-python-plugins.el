@@ -60,17 +60,7 @@
            (check-python-module "jedi"))
   :after company
   :load-path (lambda () (expand-file-name "company-jedi/" user-emacs-directory))
-  :config (progn
-            ;; Python-mode setup
-            (add-hook 'python-mode-hook
-                      (lambda ()
-                        ;; make `company-backends' local is critical
-                        ;; or else, you will have completion in every major mode, that's very annoying!
-                        (make-local-variable 'company-backends)
-                        (setq company-backends (copy-tree company-backends))
-                        (setf (car company-backends)
-                              (append '(company-jedi)
-                                      (car company-backends)))))))
+  :config (add-hook 'python-mode-hook (lambda () (set (make-local-variable 'company-backends) '(company-jedi company-capf)))))
 
 (provide 'setup-python-plugins)
 ;;; setup-python-plugins.el ends here

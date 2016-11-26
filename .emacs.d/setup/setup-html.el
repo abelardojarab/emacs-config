@@ -222,9 +222,7 @@ plus add font-size: 8pt"
 (use-package company-web
   :after (company web-mode web-completion-data)
   :load-path (lambda () (expand-file-name "company-web/" user-emacs-directory))
-  :config (progn
-            (add-hook 'web-mode-hook (lambda ()
-                                       (set (make-local-variable 'company-backends) '(company-web-html))))))
+  :config (add-hook 'web-mode-hook (lambda () (set (make-local-variable 'company-backends) '(company-web-html)))))
 
 (provide 'setup-html)
 ;;; setup-org-html.el ends here

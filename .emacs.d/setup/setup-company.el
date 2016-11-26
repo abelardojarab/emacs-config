@@ -47,20 +47,16 @@
             ;; http://blog.binchen.org/posts/emacs-auto-completion-for-non-programmers.html
             (add-hook 'text-mode-hook
                       (lambda ()
-
-                        ;; make `company-backends' local is critical
-                        ;; or else, you will have completion in every major mode, that's very annoying!
-                        (make-local-variable 'company-backends)
-
                         ;; OPTIONAL, if `company-ispell-dictionary' is nil, `ispell-complete-word-dict' is used
                         ;;  but I prefer hard code the dictionary path. That's more portable.
                         (setq company-ispell-dictionary (expand-file-name "dictionaries/words.txt" user-emacs-directory))
 
-                        ;; Initialize backends
-                        (setq company-backends (copy-tree company-backends))
-                        (setf (car company-backends)
-                              (append '(company-bibtex)
-                                      (car company-backends)))))
+                        ;; make `company-backends' local is critical
+                        ;; or else, you will have completion in every major mode, that's very annoying!
+                        (set (make-local-variable 'company-backends) '(company-yasnippet
+                                                                       company-files
+                                                                       company-abbrev
+                                                                       company-dabbrev))))
 
             ;; C-mode setup
             (add-hook 'c-mode-common-hook
@@ -154,7 +150,8 @@
   :if (or (executable-find "bibtex")
           (executable-find "biber"))
   :load-path (lambda () (expand-file-name "company-bibtex/" user-emacs-directory))
-  :after (company org-mode))
+  :after (company org)
+  :config (setq company-bibtex-bibliography (list "~/workspace/Documents/Bibliography/biblio.bib")))
 
 (provide 'setup-company)
 ;;; setup-company.el ends here
