@@ -1,8 +1,8 @@
 ;;; py-ert-function-tests.el --- functionp ert tests  -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2015  Andreas Roehler
+;; Copyright (C) 2015  Andreas Röhler
 
-;; Author: Andreas Roehler <andreas.roehler@online.de>
+;; Author: Andreas Röhler <andreas.roehler@online.de>
 ;; Keywords: lisp
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -138,23 +138,11 @@
 (ert-deftest py-ert-down-base-functionp-test ()
   (should (functionp 'py-down-base)))
 
-(ert-deftest py-ert-up-base-bol-functionp-test ()
-  (should (functionp 'py-up-base-bol)))
-
-(ert-deftest py-ert-down-base-bol-functionp-test ()
-  (should (functionp 'py-down-base-bol)))
-
 (ert-deftest py-ert-up-block-functionp-test ()
   (should (functionp 'py-up-block)))
 
 (ert-deftest py-ert-up-minor-block-functionp-test ()
   (should (functionp 'py-up-minor-block)))
-
-(ert-deftest py-ert-up-clause-functionp-test ()
-  (should (functionp 'py-up-clause)))
-
-(ert-deftest py-ert-up-block-or-clause-functionp-test ()
-  (should (functionp 'py-up-block-or-clause)))
 
 (ert-deftest py-ert-up-def-functionp-test ()
   (should (functionp 'py-up-def)))
@@ -171,12 +159,6 @@
 (ert-deftest py-ert-down-minor-block-functionp-test ()
   (should (functionp 'py-down-minor-block)))
 
-(ert-deftest py-ert-down-clause-functionp-test ()
-  (should (functionp 'py-down-clause)))
-
-(ert-deftest py-ert-down-block-or-clause-functionp-test ()
-  (should (functionp 'py-down-block-or-clause)))
-
 (ert-deftest py-ert-down-def-functionp-test ()
   (should (functionp 'py-down-def)))
 
@@ -192,12 +174,6 @@
 (ert-deftest py-ert-up-minor-block-bol-functionp-test ()
   (should (functionp 'py-up-minor-block-bol)))
 
-(ert-deftest py-ert-up-clause-bol-functionp-test ()
-  (should (functionp 'py-up-clause-bol)))
-
-(ert-deftest py-ert-up-block-or-clause-bol-functionp-test ()
-  (should (functionp 'py-up-block-or-clause-bol)))
-
 (ert-deftest py-ert-up-def-bol-functionp-test ()
   (should (functionp 'py-up-def-bol)))
 
@@ -212,12 +188,6 @@
 
 (ert-deftest py-ert-down-minor-block-bol-functionp-test ()
   (should (functionp 'py-down-minor-block-bol)))
-
-(ert-deftest py-ert-down-clause-bol-functionp-test ()
-  (should (functionp 'py-down-clause-bol)))
-
-(ert-deftest py-ert-down-block-or-clause-bol-functionp-test ()
-  (should (functionp 'py-down-block-or-clause-bol)))
 
 (ert-deftest py-ert-down-def-bol-functionp-test ()
   (should (functionp 'py-down-def-bol)))
@@ -476,9 +446,6 @@
 
 (ert-deftest py-ert--end-of-for-block-bol-p-functionp-test ()
   (should (functionp 'py--end-of-for-block-bol-p)))
-
-(ert-deftest py-ert--end-of-top-level-bol-p-functionp-test ()
-  (should (functionp 'py--end-of-top-level-bol-p)))
 
 (ert-deftest py-ert--end-of-statement-bol-p-functionp-test ()
   (should (functionp 'py--end-of-statement-bol-p)))
@@ -1281,9 +1248,6 @@
 (ert-deftest py-ert-set-onetwo-docstring-style-functionp-test ()
   (should (functionp 'py-set-onetwo-docstring-style)))
 
-(ert-deftest py-ert-fill-decorator-functionp-test ()
-  (should (functionp 'py-fill-decorator)))
-
 (ert-deftest py-ert-fill-comment-functionp-test ()
   (should (functionp 'py-fill-comment)))
 
@@ -1800,9 +1764,6 @@
 (ert-deftest py-ert-close-class-functionp-test ()
   (should (functionp 'py-close-class)))
 
-(ert-deftest py-ert-close-clause-functionp-test ()
-  (should (functionp 'py-close-clause)))
-
 (ert-deftest py-ert-close-block-functionp-test ()
   (should (functionp 'py-close-block)))
 
@@ -2097,12 +2058,6 @@
 (ert-deftest py-ert-end-of-top-level-bol-functionp-test ()
   (should (functionp 'py-forward-top-level-bol)))
 
-(ert-deftest py-ert-up-functionp-test ()
-  (should (functionp 'py-up)))
-
-(ert-deftest py-ert-down-functionp-test ()
-  (should (functionp 'py-down)))
-
 (ert-deftest py-ert--beginning-of-line-form-functionp-test ()
   (should (functionp 'py--beginning-of-line-form)))
 
@@ -2261,9 +2216,6 @@
 
 (ert-deftest py-ert--quote-syntax-functionp-test ()
   (should (functionp 'py--quote-syntax)))
-
-(ert-deftest py-ert--delete-all-but-first-prompt-functionp-test ()
-  (should (functionp 'py--delete-all-but-first-prompt)))
 
 (ert-deftest py-ert--python-send-setup-code-intern-functionp-test ()
   (should (functionp 'py--python-send-setup-code-intern)))
@@ -2432,9 +2384,6 @@
 
 (ert-deftest py-ert--imenu-create-index-engine-functionp-test ()
   (should (functionp 'py--imenu-create-index-engine)))
-
-(ert-deftest py-ert--imenu-create-index-new-intern-functionp-test ()
-  (should (functionp 'py--imenu-create-index-new-intern)))
 
 (ert-deftest py-ert--imenu-create-index-new-functionp-test ()
   (should (functionp 'py--imenu-create-index-new)))
@@ -2624,72 +2573,6 @@
 
 (ert-deftest py-ert-end-of-class-functionp-test ()
   (should (functionp 'py-forward-class)))
-
-(ert-deftest py-ert-end-of-def-or-class-functionp-test ()
-  (should (functionp 'py-forward-def-or-class)))
-
-(ert-deftest py-ert-end-of-if-block-functionp-test ()
-  (should (functionp 'py-forward-if-block)))
-
-(ert-deftest py-ert-end-of-try-block-functionp-test ()
-  (should (functionp 'py-forward-try-block)))
-
-(ert-deftest py-ert-end-of-minor-block-functionp-test ()
-  (should (functionp 'py-forward-minor-block)))
-
-(ert-deftest py-ert-execute-section-functionp-test ()
-  (should (functionp 'py-execute-section)))
-
-(ert-deftest py-ert-execute-section-python-functionp-test ()
-  (should (functionp 'py-execute-section-python)))
-
-(ert-deftest py-ert-execute-section-python2-functionp-test ()
-  (should (functionp 'py-execute-section-python2)))
-
-(ert-deftest py-ert-execute-section-python3-functionp-test ()
-  (should (functionp 'py-execute-section-python3)))
-
-(ert-deftest py-ert-execute-section-ipython-functionp-test ()
-  (should (functionp 'py-execute-section-ipython)))
-
-(ert-deftest py-ert-execute-section-ipython2.7-functionp-test ()
-  (should (functionp 'py-execute-section-ipython2.7)))
-
-(ert-deftest py-ert-execute-section-ipython3-functionp-test ()
-  (should (functionp 'py-execute-section-ipython3)))
-
-(ert-deftest py-ert-execute-section-jython-functionp-test ()
-  (should (functionp 'py-execute-section-jython)))
-
-(ert-deftest py-ert-narrow-to-block-functionp-test ()
-  (should (functionp 'py-narrow-to-block)))
-
-(ert-deftest py-ert-narrow-to-block-or-clause-functionp-test ()
-  (should (functionp 'py-narrow-to-block-or-clause)))
-
-(ert-deftest py-ert-narrow-to-class-functionp-test ()
-  (should (functionp 'py-narrow-to-class)))
-
-(ert-deftest py-ert-narrow-to-clause-functionp-test ()
-  (should (functionp 'py-narrow-to-clause)))
-
-(ert-deftest py-ert-narrow-to-def-functionp-test ()
-  (should (functionp 'py-narrow-to-def)))
-
-(ert-deftest py-ert-narrow-to-def-or-class-functionp-test ()
-  (should (functionp 'py-narrow-to-def-or-class)))
-
-(ert-deftest py-ert-narrow-to-statement-functionp-test ()
-  (should (functionp 'py-narrow-to-statement)))
-
-(ert-deftest py-ert-execute-if-block-functionp-test ()
-  (should (functionp 'py-execute-if-block)))
-
-(ert-deftest py-ert-execute-try-block-functionp-test ()
-  (should (functionp 'py-execute-try-block)))
-
-(ert-deftest py-ert-execute-for-block-functionp-test ()
-  (should (functionp 'py-execute-for-block)))
 
 (provide 'py-ert-function-tests)
 ;;; py-ert-function-tests.el ends here

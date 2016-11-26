@@ -1,7 +1,7 @@
-;; py-ert-tests.el --- Tests, some adapted from python.el
+;; py-ert-tests.el --- Tests, some adapted from python.el -*- lexical-binding: t; -*- 
 
 ;; Copyright (C) 2013 Free Software Foundation, Inc.
-;; Copyright (C) 2014-2015 Andreas Roehler, <andreas.roehler@online.de>
+;; Copyright (C) 2014-2015 Andreas Röhler, <andreas.roehler@online.de>
 
 ;; GNU Emacs is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -54,12 +54,6 @@ if __name__ == \"__main__\":
 (setq ert-test-default-buffer "*Python*")
 
 (add-to-list 'load-path default-directory)
-
-
-(defun py-tests-go-to (string)
-  "Move point at beginning of STRING in the current test. "
-  (and (eq (point) (point-max))(goto-char (point-min)))
-  (search-forward string nil t 1))
 
 (ert-deftest py-ert-electric-kill-backward-bracket-test ()
   (let ((py-electric-kill-backward-p t))
@@ -136,27 +130,27 @@ def foo(a, b, c):
         finally:
             print ('nor a, nor b are true')
 "
-   (py-tests-go-to "if a:")
+   (search-forward "if a:")
    (should (= (py-compute-indentation) 4))
-   (py-tests-go-to "print (a)")
+   (search-forward "print (a)")
    (should (= (py-compute-indentation) 8))
-   (py-tests-go-to "elif b:")
+   (search-forward "elif b:")
    (should (= (py-compute-indentation) 4))
-   (py-tests-go-to "print (b)")
+   (search-forward "print (b)")
    (should (= (py-compute-indentation) 8))
-   (py-tests-go-to "else:")
+   (search-forward "else:")
    (should (= (py-compute-indentation) 4))
-   (py-tests-go-to "try:")
+   (search-forward "try:")
    (should (= (py-compute-indentation) 8))
-   (py-tests-go-to "print (c.pop())")
+   (search-forward "print (c.pop())")
    (should (= (py-compute-indentation) 12))
-   (py-tests-go-to "except (IndexError, AttributeError):")
+   (search-forward "except (IndexError, AttributeError):")
    (should (= (py-compute-indentation) 8))
-   (py-tests-go-to "print (c)")
+   (search-forward "print (c)")
    (should (= (py-compute-indentation) 12))
-   (py-tests-go-to "finally:")
+   (search-forward "finally:")
    (should (= (py-compute-indentation) 8))
-   (py-tests-go-to "print ('nor a, nor b are true')")
+   (search-forward "print ('nor a, nor b are true')")
    (should (= (py-compute-indentation) 12))))
 
 (ert-deftest py-ert-indent-after-backslash-lp-852052-1 ()
@@ -167,11 +161,11 @@ from foo.bar.baz import something, something_1 \\
      something_2 something_3, \\
      something_4, something_5
 "
-    (py-tests-go-to "from foo.bar.baz import something, something_1")
+    (search-forward "from foo.bar.baz import something, something_1")
     (should (= (py-compute-indentation) 0))
-    (py-tests-go-to "something_2 something_3,")
+    (search-forward "something_2 something_3,")
     (should (= (py-compute-indentation) 5))
-    (py-tests-go-to "something_4, something_5")
+    (search-forward "something_4, something_5")
     (should (= (py-compute-indentation) 5))))
 
 (ert-deftest py-ert-indent-closing ()
@@ -224,121 +218,97 @@ result = some_function_that_takes_arguments(
 '''
 ")
 
-(ert-deftest py-ert-moves-up-clause-bol-1 ()
-  (py-test-with-temp-buffer-point-min
-      py-ert-moves-text
-    (goto-char 592)
-    (should (eq 561 (py-up-clause-bol)))))
-
-(ert-deftest py-ert-moves-up-block-or-clause-bol-1 ()
-  (py-test-with-temp-buffer-point-min
-      py-ert-moves-text
-    (goto-char 410)
-    (should (eq 317 (py-up-block-or-clause-bol)))))
-
-(ert-deftest py-ert-moves-up-def-bol-1 ()
-  (py-test-with-temp-buffer-point-min
-      py-ert-moves-text
-    (goto-char 410)
-    (should (eq 234 (py-up-def-bol)))))
-
 (ert-deftest py-ert-moves-up-class-bol-1 ()
   (py-test-with-temp-buffer-point-min
       py-ert-moves-text
     (goto-char 410)
-    ;; (sit-for 1)
     (should (eq 1 (py-up-class-bol)))))
 
 (ert-deftest py-ert-moves-up-def-or-class-bol-1 ()
   (py-test-with-temp-buffer-point-min
       py-ert-moves-text
     (goto-char 410)
-    ;; (sit-for 1)
-    (should (eq 234 (py-up-def-or-class-bol)))))
-
-(ert-deftest py-ert-moves-up-block-bol-1 ()
-  (py-test-with-temp-buffer-point-min
-      py-ert-moves-text
-    (goto-char 410)
-    ;; (sit-for 1)
-    (should (eq 317 (py-up-block-bol)))))
+    (py-up-def-or-class)
+    (should (looking-at "class"))))
 
 (ert-deftest py-ert-moves-up-minor-block-bol-1 ()
   (py-test-with-temp-buffer-point-min
       py-ert-moves-text
     (goto-char 410)
-    ;; (sit-for 1)
-    (should (eq 317 (py-up-minor-block-bol)))))
+    (py-up-minor-block-bol)
+    (should (bobp))))
 
-(ert-deftest py-ert-moves-up-block-bol-2 ()
-  (py-test-with-temp-buffer-point-min
-      py-ert-moves-text
-    (goto-char 592)
-    ;; (sit-for 1)
-    (should (eq 325 (py-up-block)))))
-
-(ert-deftest py-ert-moves-up-minor-block-bol-2 ()
+(ert-deftest py-ert-moves-up-block-bol-1 ()
   (py-test-with-temp-buffer-point-min
       py-ert-moves-text
     (goto-char 410)
-    ;; (sit-for 1)
-    (should (eq 325 (py-up-minor-block)))))
+    (py-up-block-bol)
+    (should (looking-at " +def f():"))))
 
-(ert-deftest py-ert-moves-up-claus-bol-1 ()
-  (py-test-with-temp-buffer-point-min
+(ert-deftest py-ert-moves-up-block-2 ()
+  (py-test-with-temp-buffer
       py-ert-moves-text
-    (goto-char 592)
-    ;; (sit-for 1)
-    (should (eq 569 (py-up-clause)))))
+    (search-backward "pass")
+    (py-up-block)
+    (should (looking-at "def f():"))))
 
-(ert-deftest py-ert-moves-up-block-or-clause-bol-2 ()
-  (py-test-with-temp-buffer-point-min
+(ert-deftest py-ert-moves-up-minor-block-bol-2 ()
+  (py-test-with-temp-buffer
+      "class OrderedDict1(dict):
+    \"\"\"
+    This implementation of a dictionary keeps track of the order
+    in which keys were inserted.
+    \"\"\"
+
+    def __init__(self, d={}):
+        self._keys = d.keys()
+        dict.__init__(self, d)
+
+    def f():
+        \"\"\"
+        class for in 'for in while with blah'
+        \"\"\"
+        if a:
+        # if c
+            if b:
+                pass
+"
+    (py-up-minor-block)
+    (should (looking-at "if a:"))))
+
+(ert-deftest py-ert-moves-up-block-bol-2 ()
+  (py-test-with-temp-buffer
       py-ert-moves-text
-    (goto-char 592)
-    ;; (sit-for 1)
-    (should (eq 569 (py-up-block-or-clause)))))
+    (search-backward "pass")
+    (py-up-block-bol)
+    (should (looking-at " +def f"))))
 
 (ert-deftest py-ert-moves-up-def-bol-2 ()
   (py-test-with-temp-buffer-point-min
       py-ert-moves-text
     (goto-char 410)
-    ;; (sit-for 1)
-    (should (eq 238 (py-up-def)))))
+    (py-up-def-bol)
+    (should (bobp))))
 
 (ert-deftest py-ert-moves-up-class-bol-2 ()
   (py-test-with-temp-buffer-point-min
       py-ert-moves-text
     (goto-char 410)
-    ;; (sit-for 1)
     (should (eq 1 (py-up-class)))))
 
 (ert-deftest py-ert-moves-up-def-or-class-bol-2 ()
-  (py-test-with-temp-buffer-point-min
+  (py-test-with-temp-buffer
       py-ert-moves-text
-    (goto-char 410)
-    ;; (sit-for 1)
-    (should (eq 238 (py-up-def-or-class)))))
+    (search-backward "pass")
+    (py-up-def-or-class)
+    (should (looking-at "class"))))
 
 (ert-deftest py-ert-moves-down-block-bol-1 ()
   (py-test-with-temp-buffer-point-min
       py-ert-moves-text
     (goto-char 264)
-    ;; (sit-for 1)
-    (should (eq 317 (py-down-block-bol)))))
-
-(ert-deftest py-ert-moves-down-clause-bol-1 ()
-  (py-test-with-temp-buffer-point-min
-      py-ert-moves-text
-    (goto-char 561)
-    ;; (sit-for 1)
-    (should (eq 594 (py-down-clause-bol)))))
-
-(ert-deftest py-ert-moves-down-block-or-clause-bol-1 ()
-  (py-test-with-temp-buffer-point-min
-      py-ert-moves-text
-    (goto-char 264)
-    ;; (sit-for 1)
-    (should (eq 317 (py-down-block-or-clause-bol)))))
+    (py-down-block-bol)
+    (should (bolp))))
 
 (ert-deftest py-ert-moves-down-def-bol-1 ()
   (py-test-with-temp-buffer-point-min
@@ -350,7 +320,6 @@ result = some_function_that_takes_arguments(
   (py-test-with-temp-buffer-point-min
       py-ert-moves-text
     (goto-char 410)
-    ;; (sit-for 1)
     (should (not (py-down-class-bol)))))
 
 (ert-deftest py-ert-moves-down-def-or-class-bol-1 ()
@@ -363,42 +332,27 @@ result = some_function_that_takes_arguments(
   (py-test-with-temp-buffer-point-min
       py-ert-moves-text
     (goto-char 264)
-    ;; (sit-for 1)
-    (should (eq 325 (py-down-block)))))
+    (py-down-block)
+    (should (looking-at "if"))))
 
 (ert-deftest py-ert-moves-down-block-bol-2 ()
   (py-test-with-temp-buffer-point-min
       py-ert-moves-text
     (goto-char 264)
-    ;; (sit-for 1)
-    (should (eq 317 (py-down-block-bol)))))
+    (py-down-block-bol)
+    (should (looking-at "^ +if"))))
 
 (ert-deftest py-ert-moves-down-minor-block-1 ()
   (py-test-with-temp-buffer-point-min
       py-ert-moves-text
     (goto-char 264)
-    ;; (sit-for 1)
     (should (eq 325 (py-down-minor-block)))))
 
 (ert-deftest py-ert-moves-down-minor-block-bol-1 ()
   (py-test-with-temp-buffer-point-min
       py-ert-moves-text
     (goto-char 264)
-    ;; (sit-for 1)
     (should (eq 317 (py-down-minor-block-bol)))))
-
-(ert-deftest py-ert-moves-down-clause-1 ()
-  (py-test-with-temp-buffer-point-min
-      py-ert-moves-text
-    (goto-char 569)
-    (should (eq 602 (py-down-clause)))))
-
-(ert-deftest py-ert-moves-down-block-or-clause-1 ()
-  (py-test-with-temp-buffer-point-min
-      py-ert-moves-text
-    (goto-char 410)
-    ;; (sit-for 1)
-    (should (eq 569 (py-down-block-or-clause)))))
 
 (ert-deftest py-ert-moves-down-def-1 ()
   (py-test-with-temp-buffer-point-min
@@ -410,7 +364,6 @@ result = some_function_that_takes_arguments(
   (py-test-with-temp-buffer-point-min
       py-ert-moves-text
     (goto-char 410)
-    ;; (sit-for 1)
     (should (not (py-down-class)))))
 
 (ert-deftest py-ert-moves-down-def-or-class-1 ()
@@ -423,7 +376,6 @@ result = some_function_that_takes_arguments(
   (py-test-with-temp-buffer-point-min
       py-ert-moves-text
     (goto-char 410)
-    ;; (sit-for 1)
     (should (eq 332 (py-backward-statement-bol)))))
 
 (ert-deftest py-ert-moves-backward-block-bol-1 ()
@@ -431,7 +383,6 @@ result = some_function_that_takes_arguments(
       py-ert-moves-text
     (goto-char 410)
     (indent-to 8)
-    ;; (sit-for 1)
     (should (eq 317 (py-backward-block-bol)))))
 
 (ert-deftest py-ert-moves-backward-clause-bol-1 ()
@@ -439,7 +390,6 @@ result = some_function_that_takes_arguments(
       py-ert-moves-text
     (goto-char 410)
     (indent-to 8)
-    ;; (sit-for 1)
     (should (eq 317 (py-backward-clause-bol)))))
 
 (ert-deftest py-ert-moves-backward-block-or-clause-bol-1 ()
@@ -447,7 +397,6 @@ result = some_function_that_takes_arguments(
       py-ert-moves-text
     (goto-char 410)
     (indent-to 8)
-    ;; (sit-for 1)
     (should (eq 317 (py-backward-block-or-clause-bol)))))
 
 (ert-deftest py-ert-moves-backward-class-bol ()
@@ -460,278 +409,361 @@ result = some_function_that_takes_arguments(
       py-ert-moves-text
     (goto-char 410)
     (indent-to 4)
-    ;; (sit-for 1)
     (py-backward-def-or-class-bol)
-    (should (bolp))
-    (should (eq 10 (count-lines (point-min) (point))))))
-
+    (should (looking-at "^ +def"))))
 
 (ert-deftest py-ert-moves-forward-clause-bol ()
   (py-test-with-temp-buffer-point-min
       py-ert-moves-text
     (goto-char 576)
-    ;; (sit-for 1)
     (should (eq 594 (py-forward-clause-bol)))))
 
 (ert-deftest py-ert-moves-forward-block-or-clause-bol ()
   (py-test-with-temp-buffer-point-min
       py-ert-moves-text
     (goto-char 576)
-    ;; (sit-for 1)
     (should (eq 594 (py-forward-block-or-clause-bol)))))
 
-(ert-deftest py-ert-moves-forward-def-bol ()
-  (py-test-with-temp-buffer-point-min
-      py-ert-moves-text
-    (goto-char 410)
-    ;; (sit-for 1)
-    (should (eq 627 (py-forward-def-bol)))))
+;; (ert-deftest py-ert-moves-forward-def-bol ()
+;;   (py-test-with-temp-buffer-point-min
+;;       py-ert-moves-text
+;;     (goto-char 410)
+;;     (should (eq 627 (py-forward-def-bol)))))
 
-(ert-deftest py-ert-moves-forward-class-bol ()
-  (py-test-with-temp-buffer-point-min
-      py-ert-moves-text
-    (goto-char 410)
-    ;; (sit-for 1)
-    (should (eq 627 (py-forward-class-bol)))))
+;; (ert-deftest py-ert-moves-forward-class-bol ()
+;;   (py-test-with-temp-buffer-point-min
+;;       py-ert-moves-text
+;;     (goto-char 410)
+;;     (should (eq 627 (py-forward-class-bol)))))
 
-(ert-deftest py-ert-moves-forward-def-or-class-bol ()
-  (py-test-with-temp-buffer-point-min
-      py-ert-moves-text
-    (goto-char 410)
-    ;; (sit-for 1)
-    (should (eq 627 (py-forward-def-or-class-bol)))))
+;; (ert-deftest py-ert-moves-forward-def-or-class-bol ()
+;;   (py-test-with-temp-buffer-point-min
+;;       py-ert-moves-text
+;;     (goto-char 410)
+;;     (should (eq 627 (py-forward-def-or-class-bol)))))
 
-(ert-deftest py-ert-moves-forward-statement-bol ()
-  (py-test-with-temp-buffer-point-min
-      py-ert-moves-text
-    (goto-char 410)
-    ;; (sit-for 1)
-    (should (eq 561 (py-forward-statement-bol)))))
+;; (ert-deftest py-ert-moves-forward-statement-bol ()
+;;   (py-test-with-temp-buffer-point-min
+;;       py-ert-moves-text
+;;     (goto-char 410)
+;;     (should (eq 561 (py-forward-statement-bol)))))
 
-(ert-deftest py-ert-moves-backward-def-bol ()
-  (py-test-with-temp-buffer-point-min
-      py-ert-moves-text
-    (goto-char 410)
-    (indent-to 4)
-    ;; (sit-for 1)
-    (py-backward-def-bol)
-    (should (bolp))
-    (should (eq 10 (count-lines (point-min) (point))))))
+;; (ert-deftest py-ert-moves-backward-def-bol ()
+;;   (py-test-with-temp-buffer-point-min
+;;       py-ert-moves-text
+;;     (goto-char 410)
+;;     (indent-to 8)
+;;     (py-backward-def-bol)
+;;     (should (bolp))
+;;     (should (char-equal ?\ (char-after)))))
 
-(ert-deftest py-ert-moves-up-indent-tabs-mode-test ()
-  (py-test-with-temp-buffer-point-min
-      "class OrderedDict1(dict):"
-    (end-of-line)
-    (let ((indent-tabs-mode t))
-      (py-newline-and-indent)
-      (should (looking-back "^\t")))))
+;; (ert-deftest py-ert-moves-up-indent-tabs-mode-test ()
+;;   (py-test-with-temp-buffer-point-min
+;;       "class OrderedDict1(dict):"
+;;     (end-of-line)
+;;     (let ((indent-tabs-mode t))
+;;       (py-newline-and-indent)
+;;       (should (looking-back "^\t")))))
 
-(ert-deftest py-ert-moves-up-no-indent-tabs-mode-test ()
-  (py-test-with-temp-buffer-point-min
-      "class OrderedDict1(dict):"
-    (end-of-line)
-    (let ((indent-tabs-mode))
-      (py-newline-and-indent)
-      (should (looking-back "^    ")))))
+;; (ert-deftest py-ert-moves-up-no-indent-tabs-mode-test ()
+;;   (py-test-with-temp-buffer-point-min
+;;       "class OrderedDict1(dict):"
+;;     (end-of-line)
+;;     (let ((indent-tabs-mode))
+;;       (py-newline-and-indent)
+;;       (should (looking-back "^    ")))))
 
-(ert-deftest py-ert-moves-up-pyflakespep-command-test ()
-  (py-test-with-temp-buffer-point-min
-      ""
-      (file-readable-p py-pyflakespep8-command)))
+;; (ert-deftest py-ert-moves-up-pyflakespep-command-test ()
+;;   (py-test-with-temp-buffer-point-min
+;;       ""
+;;       (file-readable-p py-pyflakespep8-command)))
 
-(ert-deftest py-ert-moves-up-bogus-dedent-when-typing-colon-in-dictionary-literal-lp-1197171-1 ()
+;; (ert-deftest py-ert-moves-up-bogus-dedent-when-typing-colon-in-dictionary-literal-lp-1197171-1 ()
+;;   (py-test-with-temp-buffer
+;;       "#! /usr/bin/env python
+;; # -*- coding: utf-8 -*-
+;; # Put point at the end of the last line and hit colon, as you would to
+;; # separate the key from the value. The last line will incorrectly dedent
+;; # to column 4. Indentation should not change.
+
+;; def foo():
+;;     bar('thing',
+;;         {'another'"
+;;     (let (py-indent-paren-spanned-multilines-p)
+;;       (should (eq 8 (py-compute-indentation))))))
+
+;; (ert-deftest py-ert-moves-up-bogus-dedent-when-typing-colon-in-dictionary-literal-lp-1197171-2 ()
+;;   (py-test-with-temp-buffer
+;;       "#! /usr/bin/env python
+;; # -*- coding: utf-8 -*-
+;; # Put point at the end of the last line and hit colon, as you would to
+;; # separate the key from the value. The last line will incorrectly dedent
+;; # to column 4. Indentation should not change.
+
+;; def foo():
+;;     bar('thing',
+;;         {'another'"
+;;     (let ((py-indent-paren-spanned-multilines-p t))
+;;       (should (eq 12 (py-compute-indentation))))))
+
+;; (ert-deftest py-ert-moves-up-pep-arglist-indent-1 ()
+;;   (py-test-with-temp-buffer-point-min
+;;       "# Aligned with opening delimiter
+;; foo = long_function_name(var_one, var_two,
+;;                          var_three, var_four)
+
+;; # More indentation included to distinguish this from the rest.
+;; def long_function_name(
+;;         var_one, var_two, var_three,
+;;         var_four):
+;;     print(var_one)
+;; "
+;;     (let (py-indent-paren-spanned-multilines-p)
+;;       (search-forward "var_three")
+;;       (should (eq 25 (py-compute-indentation)))
+;;       (search-forward "var_three")
+;;       (should (eq 8 (py-compute-indentation))))))
+
+;; (ert-deftest py-ert-moves-up-pep-arglist-indent-2 ()
+;;   (py-test-with-temp-buffer-point-min
+;;       "# Aligned with opening delimiter
+;; foo = long_function_name(var_one, var_two,
+;;                          var_three, var_four)
+
+;; # More indentation included to distinguish this from the rest.
+;; def long_function_name(
+;;         var_one, var_two, var_three,
+;;         var_four):
+;;     print(var_one)
+;; "
+;;     (let ((py-indent-paren-spanned-multilines-p t))
+;;       (search-forward "var_three")
+;;       (should (eq 29 (py-compute-indentation)))
+;;       (search-forward "var_three")
+;;       (should (eq 8 (py-compute-indentation))))))
+
+;; (ert-deftest py-ert-moves-up-close-at-start-column ()
+;;   (py-test-with-temp-buffer-point-min
+;;       "# boolean `py-closing-list-dedents-bos',
+
+;; # Current behavior matches default nil
+
+;; my_list = [
+;;     1, 2, 3,
+;;     4, 5, 6,
+;;     ]
+
+;; result = some_function_that_takes_arguments(
+;;     'a', 'b', 'c',
+;;     'd', 'e', 'f',)
+
+;; # When non-nil, it will be lined up under the first character of the line that starts the multi-line construct, as in:
+
+;; my_list = [
+;;     1, 2, 3,
+;;     4, 5, 6,
+;; ]
+
+;; result = some_function_that_takes_arguments(
+;;     'a', 'b', 'c',
+;;     'd', 'e', 'f',)
+
+;; # Examples see PEP8
+
+;; asdf = {
+;;     'a':{
+;;         'b':3,
+;;         'c':4
+;;     }
+;; }
+
+;; data = {
+;;     'key':
+;;     {
+;;         'objlist': [
+;;             {
+;;                 'pk': 1,
+;;                 'name': 'first',
+;;             },
+;;             {
+;;                 'pk': 2,
+;;                 'name': 'second',
+;;             }
+;;         ]
+;;     }
+;; }
+
+;; "
+;;      (let (py-closing-list-dedents-bos)
+;;       (search-forward "]")
+;;       (should (eq 4 (py-compute-indentation)))
+;;       (search-forward ")")
+;;       (should (eq 4 (py-compute-indentation)))
+;;       (setq py-closing-list-dedents-bos t)
+;;       (search-forward "]")
+;;       (should (eq 0 (py-compute-indentation)))
+;;       (search-forward ")")
+;;       (should (eq 0 (py-compute-indentation)))
+;;       ;; dicts
+;;       (search-forward "}")
+;;       (should (eq 4 (py-compute-indentation)))
+;;       (search-forward "}")
+;;       (should (eq 0 (py-compute-indentation)))
+;;       (search-forward "}")
+;;       (should (eq 12 (py-compute-indentation)))
+;;       (search-forward "]")
+;;       (should (eq 8 (py-compute-indentation)))
+;;       (search-forward "}")
+;;       (should (eq 4 (py-compute-indentation)))
+;;       (search-forward "}")
+;;       (should (eq 0 (py-compute-indentation))))))
+
+;; (ert-deftest py-ert-moves-up-top-level-1 ()
+;;   (py-test-with-temp-buffer-point-min
+;;       "klauf = kugel()
+
+;; with file(\"roulette-\" + zeit + \".csv\", 'w') as datei:
+;;     for i in range(anzahl):
+;;         klauf.pylauf()
+;;             datei.write(str(spiel[i]) + \"\\n\")
+;; "
+;;     (message "%s" (point))
+;;     (should (eq 16 (py-forward-top-level)))
+;;     (should (eq 168 (py-forward-top-level)))
+
+;;     (should (eq 18 (py-backward-top-level)))
+;;     (should (eq 1 (py-backward-top-level)))
+;;     (should (eq 1 (py--beginning-of-top-level-p)))))
+
+;; (ert-deftest py-ert-moves-up-position-tests-2 ()
+;;   (interactive)
+;;   (py-test-with-temp-buffer
+;;       py-kugel-text
+;;     (search-backward "else:")
+;;     (should (eq 190 (py--beginning-of-block-position)))))
+
+;; (ert-deftest py-ert-moves-up-position-tests-3 ()
+;;   (interactive)
+;;   (py-test-with-temp-buffer
+;;       py-kugel-text
+;;     (search-backward "else:")
+;;     (should (eq 445 (py--end-of-block-position)))))
+
+(ert-deftest py-ert-moves-up-position-tests-4 ()
+  (interactive)
   (py-test-with-temp-buffer
-      "#! /usr/bin/env python
-# -*- coding: utf-8 -*-
-# Put point at the end of the last line and hit colon, as you would to
-# separate the key from the value. The last line will incorrectly dedent
-# to column 4. Indentation should not change.
+      py-kugel-text
+    (search-backward "else:")
+    (should (eq 190 (py--beginning-of-minor-block-position)))))
 
-def foo():
-    bar('thing',
-        {'another'"
-    (let (py-indent-paren-spanned-multilines-p)
-      (should (eq 8 (py-compute-indentation))))))
-
-(ert-deftest py-ert-moves-up-bogus-dedent-when-typing-colon-in-dictionary-literal-lp-1197171-2 ()
+(ert-deftest py-ert-moves-up-position-tests-5 ()
+  (interactive)
   (py-test-with-temp-buffer
-      "#! /usr/bin/env python
-# -*- coding: utf-8 -*-
-# Put point at the end of the last line and hit colon, as you would to
-# separate the key from the value. The last line will incorrectly dedent
-# to column 4. Indentation should not change.
+      py-kugel-text
+    (search-backward "else:")
+    (end-of-line) 
+    (should (eq 362 (py--beginning-of-clause-position)))))
 
-def foo():
-    bar('thing',
-        {'another'"
-    (let ((py-indent-paren-spanned-multilines-p t))
-      (should (eq 12 (py-compute-indentation))))))
+(ert-deftest py-ert-moves-up-position-tests-6 ()
+  (interactive)
+  (py-test-with-temp-buffer
+      py-kugel-text
+    (search-backward "else:")
+    (should (eq 362 (py--beginning-of-clause-position)))))
 
-(ert-deftest py-ert-moves-up-pep-arglist-indent-1 ()
-  (py-test-with-temp-buffer-point-min
-      "# Aligned with opening delimiter
-foo = long_function_name(var_one, var_two,
-                         var_three, var_four)
+(ert-deftest py-ert-moves-up-position-tests-7 ()
+  (interactive)
+  (py-test-with-temp-buffer
+      py-kugel-text
+    (search-backward "else:")
+    (should (eq 445 (py--end-of-clause-position)))))
 
-# More indentation included to distinguish this from the rest.
-def long_function_name(
-        var_one, var_two, var_three,
-        var_four):
-    print(var_one)
-"
-    (let (py-indent-paren-spanned-multilines-p)
-      (search-forward "var_three")
-      (should (eq 25 (py-compute-indentation)))
-      (search-forward "var_three")
-      (should (eq 8 (py-compute-indentation))))))
+(ert-deftest py-ert-moves-up-position-tests-8 ()
+  (interactive)
+  (py-test-with-temp-buffer
+      py-kugel-text
+    (search-backward "else:")
+    (end-of-line) 
+    (should (eq 362 (py--beginning-of-block-or-clause-position)))))
 
-(ert-deftest py-ert-moves-up-pep-arglist-indent-2 ()
-  (py-test-with-temp-buffer-point-min
-      "# Aligned with opening delimiter
-foo = long_function_name(var_one, var_two,
-                         var_three, var_four)
+(ert-deftest py-ert-moves-up-position-tests-9 ()
+  (interactive)
+  (py-test-with-temp-buffer
+      py-kugel-text
+    (search-backward "else:")
+    (should (eq 445 (py--end-of-block-or-clause-position)))))
 
-# More indentation included to distinguish this from the rest.
-def long_function_name(
-        var_one, var_two, var_three,
-        var_four):
-    print(var_one)
-"
-    (let ((py-indent-paren-spanned-multilines-p t))
-      (search-forward "var_three")
-      (should (eq 29 (py-compute-indentation)))
-      (search-forward "var_three")
-      (should (eq 8 (py-compute-indentation))))))
+(ert-deftest py-ert-moves-up-position-tests-10 ()
+  (interactive)
+  (py-test-with-temp-buffer
+      py-kugel-text
+    (search-backward "se:")
+    (should (eq 445 (py--end-of-block-or-clause-position)))))
 
-(ert-deftest py-ert-moves-up-close-at-start-column ()
-  (py-test-with-temp-buffer-point-min
-      "# boolean `py-closing-list-dedents-bos',
+(ert-deftest py-ert-moves-up-position-tests-11 ()
+  (interactive)
+  (py-test-with-temp-buffer
+      py-kugel-text
+    (search-backward "se:")
+    (should (eq 71 (py--beginning-of-def-position)))))
 
-# Current behavior matches default nil
+(ert-deftest py-ert-moves-up-position-tests-12 ()
+  (interactive)
+  (py-test-with-temp-buffer
+      py-kugel-text
+    (search-backward "self")
+    (end-of-line)
+    (py-forward-statement)
+    (should (eq (char-before) ?\]))))
 
-my_list = [
-    1, 2, 3,
-    4, 5, 6,
-    ]
+(ert-deftest py-ert-moves-up-position-tests-13 ()
+  (interactive)
+  (py-test-with-temp-buffer
+      py-kugel-text
+    (search-backward "se:")
+    (should (eq 445 (py--end-of-def-position)))))
 
-result = some_function_that_takes_arguments(
-    'a', 'b', 'c',
-    'd', 'e', 'f',)
+(ert-deftest py-ert-moves-up-position-tests-14 ()
+  (interactive)
+  (py-test-with-temp-buffer
+      py-kugel-text
+    (search-backward "se:")
+    (should (eq 1 (py--beginning-of-class-position)))))
 
-# When non-nil, it will be lined up under the first character of the line that starts the multi-line construct, as in:
+(ert-deftest py-ert-moves-up-position-tests-15 ()
+  (interactive)
+  (py-test-with-temp-buffer
+      py-kugel-text
+    (search-backward "se:")
+    (should (eq 445 (py--end-of-class-position)))))
 
-my_list = [
-    1, 2, 3,
-    4, 5, 6,
-]
+(ert-deftest py-ert-moves-up-position-tests-16 ()
+  (interactive)
+  (py-test-with-temp-buffer
+      py-kugel-text
+    (search-backward "se:")
+    (should (eq 71 (py--beginning-of-def-or-class-position)))))
 
-result = some_function_that_takes_arguments(
-    'a', 'b', 'c',
-    'd', 'e', 'f',)
+(ert-deftest py-ert-moves-up-position-tests-17 ()
+  (interactive)
+  (py-test-with-temp-buffer
+      py-kugel-text
+    (search-backward "se:")
+    (should (eq 445 (py--end-of-def-or-class-position)))))
 
-# Examples see PEP8
-
-asdf = {
-    'a':{
-        'b':3,
-        'c':4
-    }
-}
-
-data = {
-    'key':
-    {
-        'objlist': [
-            {
-                'pk': 1,
-                'name': 'first',
-            },
-            {
-                'pk': 2,
-                'name': 'second',
-            }
-        ]
-    }
-}
-
-"
-     (let (py-closing-list-dedents-bos)
-      (search-forward "]")
-      (should (eq 4 (py-compute-indentation)))
-      (search-forward ")")
-      (should (eq 4 (py-compute-indentation)))
-      (setq py-closing-list-dedents-bos t)
-      (search-forward "]")
-      (should (eq 0 (py-compute-indentation)))
-      (search-forward ")")
-      (should (eq 0 (py-compute-indentation)))
-      ;; dicts
-      (search-forward "}")
-      (should (eq 4 (py-compute-indentation)))
-      (search-forward "}")
-      (should (eq 0 (py-compute-indentation)))
-      (search-forward "}")
-      (should (eq 12 (py-compute-indentation)))
-      (search-forward "]")
-      (should (eq 8 (py-compute-indentation)))
-      (search-forward "}")
-      (should (eq 4 (py-compute-indentation)))
-      (search-forward "}")
-      (should (eq 0 (py-compute-indentation))))))
-
-(ert-deftest py-ert-moves-up-top-level-1 ()
-  (py-test-with-temp-buffer-point-min
-      "klauf = kugel()
-
-with file(\"roulette-\" + zeit + \".csv\", 'w') as datei:
-    for i in range(anzahl):
-        klauf.pylauf()
-            datei.write(str(spiel[i]) + \"\\n\")
-"
-    (message "%s" (point))
-    (should (eq 16 (py-forward-top-level)))
-    (should (eq 168 (py-forward-top-level)))
-
-    (should (eq 18 (py-backward-top-level)))
-    (should (eq 1 (py-backward-top-level)))
-    (should (eq 1 (py--beginning-of-top-level-p)))))
-
-(ert-deftest py-ert-moves-up-position-tests-2 ()
+(ert-deftest py-ert-moves-up-position-tests-18 ()
   (interactive)
   (py-test-with-temp-buffer-point-min
-      "class kugel(object):
-    zeit = time.strftime('%Y%m%d--%H-%M-%S')
-    def pylauf(self):
-        \"\"\"Eine Doku fuer pylauf\"\"\"
-        ausgabe = [\" \",\" \",\" \",\" \",\" \",\" \",\" \",\" \", \" \"]
-        if treffer in gruen:
-            # print \"0, Gruen\"
-        elif treffer in schwarz:
-            # print \"%i, Schwarz\" % (treffer)
-            ausgabe[1] = treffer
-        else:
-            # print \"%i, manque\" % (treffer)
-            ausgabe[7] = treffer
-"
-    (search-forward "else:")
-    (forward-char -1)
-    (should (eq 190 (py--beginning-of-block-position)))
-    (should (eq 445 (py--end-of-block-position)))
-    (should (eq 190 (py--beginning-of-minor-block-position)))
-    (should (eq 445 (py--end-of-minor-block-position)))
-    (should (eq 362 (py--beginning-of-clause-position)))
-    (should (eq 445 (py--end-of-clause-position)))
-    (should (eq 362 (py--beginning-of-block-or-clause-position)))
-    (should (eq 445 (py--end-of-block-or-clause-position)))
-    (should (eq 71 (py--beginning-of-def-position)))
-    (should (eq 445 (py--end-of-def-position)))
-    (should (eq 1 (py--beginning-of-class-position)))
-    (should (eq 445 (py--end-of-class-position)))
-    (should (eq 71 (py--beginning-of-def-or-class-position)))
-    (should (eq 445 (py--end-of-def-or-class-position)))
+      py-kugel-text
     (search-forward "#")
-    (should (eq 380 (py--beginning-of-comment-position)))
-    (should (eq 412 (py--end-of-comment-position)))))
+    (should (eq 223 (py--beginning-of-comment-position)))))
+
+(ert-deftest py-ert-moves-up-position-tests-19 ()
+  (interactive)
+  (py-test-with-temp-buffer-point-min
+      py-kugel-text
+    (search-forward "#")
+    (should (eq 241 (py--end-of-comment-position)))))
 
 (ert-deftest py-ert-moves-up-copy-statement-test ()
   (interactive)
@@ -847,7 +879,6 @@ def baz():
       (should (<= (current-column) 72))
       )))
 
-
 (ert-deftest py-ert-moves-up-fill-paragraph-pep-257 ()
   (let ((py-docstring-style 'pep-257))
     (py-test-with-temp-buffer-point-min
@@ -861,7 +892,6 @@ def baz():
     return 7
 "
       (font-lock-fontify-buffer)
-;;      (switch-to-buffer (current-buffer))
       (goto-char 49)
       (fill-paragraph)
       (end-of-line)
@@ -918,7 +948,6 @@ def baz():
     return 7
 "
       (goto-char 49)
-      ;; (when (called-interactively-p 'any) (message "fill-paragraph-function: %s" fill-paragraph-function))
       (message "fill-paragraph-function: %s" fill-paragraph-function)
       (fill-paragraph)
       (search-forward "\"\"\"")
@@ -950,12 +979,17 @@ def baz():
       (forward-line -1)
       (should (not (empty-line-p))))))
 
-
-(ert-deftest py-partial-expression-test ()
+(ert-deftest py-partial-expression-test-1 ()
   (py-test-with-temp-buffer-point-min
       "foo=1"
-     (message "%s" (py-partial-expression))
     (and (should (string= "foo" (py-partial-expression)))
+	 (py-kill-buffer-unconditional (current-buffer)))))
+
+(ert-deftest py-partial-expression-test-2 ()
+  (py-test-with-temp-buffer-point-min
+      "print(root.getchildren()[0])"
+    (search-forward "getchildren")
+    (and (should (string= "getchildren()[0]" (py-partial-expression)))
 	 (py-kill-buffer-unconditional (current-buffer)))))
 
 (ert-deftest py-ert-moves-up-execute-statement-test ()
@@ -969,18 +1003,6 @@ def baz():
       (and (should (search-backward "py-execute-statement-test" nil t 1))
 	   (sit-for 0.1 t)
 	   (py-kill-buffer-unconditional (current-buffer))))))
-
-(ert-deftest py-ert-moves-up-execute-statement-python3-dedicated-test ()
-  (py-test-with-temp-buffer-point-min
-      "print(\"I'm the py-execute-statement-python3-dedicated-test\")"
-    (let ((py-debug-p t)
-	  py-store-result-p
-	  erg)
-      (call-interactively 'py-execute-statement-python3-dedicated)
-      (sit-for 0.1 t)
-      (set-buffer py-buffer-name)
-      (goto-char (point-min))
-      (should (search-forward "py-execute-statement-python3-dedicated-test" nil t 1)))))
 
 (ert-deftest indent-region-lp-997958-lp-1426903-no-arg-1-test ()
   "Indent line-by-line as first line is okay "
@@ -1044,7 +1066,7 @@ for i in range(anzahl):
 bar.dosomething()
 datei.write(str(baz[i]) + \"\\n\")
 "
-   (py-indent-region 48 (point-max) '(4))
+   (py-indent-region 48 (point-max))
    (goto-char (point-min))
    (search-forward "print(123)")
    (should (eq 4 (current-indentation)))
@@ -1163,7 +1185,6 @@ with file(\"foo\" + zeit + \".ending\", 'w') as datei:
     (should (string-match "kugel" (py-which-def-or-class)))
     (search-forward "pylauf")
     (should (string-match "kugel.pylauf" (py-which-def-or-class)))))
-
 
 (ert-deftest py-ert-which-def-or-class-test-2 ()
   (py-test-with-temp-buffer
@@ -1339,6 +1360,7 @@ else:
 import sys
 import os
 "
+
     (py-match-paren)
     (should (looking-at "import sys"))
     (setq last-command 'py-match-paren)
@@ -1414,18 +1436,44 @@ except:
     (py-match-paren)
     (should (eq (char-after) ?e))
     (forward-line 3)
-    ;; check if the indent was removed again
     (should (eolp))))
 
-    ;; (indent-to 4)
-    ;; (py-match-paren)
-    ;; (should (eq (char-after) ?d))
-    ;; (forward-line 3)
-    ;; (should (eolp))
-    ;; (py-match-paren)
-    ;; (should (eq (char-after) ?c))
-    ;; ))
+(ert-deftest py-ert-backward-def-or-class-1 ()
+  (py-test-with-temp-buffer
+      "class _Simple(object):
+    # emulate something
+    def foo(self, element, tag, namespaces=None):
+        pass
+    def bar(self, element, tag, namespaces=None):
+        return list(self.iterfind(element, tag, namespaces))"
+    (forward-line -1)
+    (end-of-line)
+    (py-backward-def-or-class)
+    (should (char-equal ?d (char-after)))))
 
+(ert-deftest py-ert-backward-def-or-class-2 ()
+  (py-test-with-temp-buffer
+      "class _Simple(object):
+    # emulate something
+    def foo(self, element, tag, namespaces=None):
+        pass
+    def bar(self, element, tag, namespaces=None):
+        return list(self.iterfind(element, tag, namespaces))"
+    (search-backward "pass")
+    (py-backward-def-or-class)
+    (should (char-equal ?d (char-after)))))
+
+(ert-deftest py-ert-backward-def-or-class-3 ()
+  (py-test-with-temp-buffer
+      "class _Simple(object):
+    # emulate something
+    def foo(self, element, tag, namespaces=None):
+        pass
+    def bar(self, element, tag, namespaces=None):
+        return list(self.iterfind(element, tag, namespaces))"
+    (search-backward "def" nil t 2)
+    (py-backward-def-or-class)
+    (should (char-equal ?c (char-after)))))
 
 (provide 'py-ert-tests-1)
 ;;; py-ert-tests-1.el ends here

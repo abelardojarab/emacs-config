@@ -1,6 +1,6 @@
-;; py-ert-tests.el --- Tests, some adapted from python.el
+;; py-ert-tests.el --- Tests, some adapted from python.el -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014 Andreas Roehler, <andreas.roehler@online.de>
+;; Copyright (C) 2014 Andreas Röhler, <andreas.roehler@online.de>
 
 ;; GNU Emacs is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -25,27 +25,6 @@
 (load "py-ert-tests-1.el" nil t)
 
 ;; (require 'python-mode-test)
-
-;;; fast-process
-(ert-deftest py-shell-complete-in-dedicated-shell ()
-  (let (erg
-	;; py-split-window-on-execute
-	py-switch-buffers-on-execute-p)
-    (with-temp-buffer
-      (python-mode)
-      (setq erg (python-dedicated))
-      (with-current-buffer erg
-	(goto-char (point-max))
-	(when py-debug-p (switch-to-buffer (current-buffer)))
-	;; (switch-to-buffer (current-buffer))
-	(insert "pri")
-	(sit-for 1 t)
-	(call-interactively 'py-indent-or-complete)
-	(sit-for 0.1 t)
-	(should (or (eq 40 (char-before))
-		    ;; python may just offer print(
-		    (buffer-live-p (get-buffer  "*Python Completions*"))))
-      (py-kill-buffer-unconditional erg)))))
 
 ;;;
 (ert-deftest py-ert-keyword-face-lp-1294742 ()
@@ -238,33 +217,11 @@ by the
     (font-lock-fontify-buffer)
     (goto-char 632)
     (py-backward-same-level)
-    (should (eq (char-after) ?p))
+    (should (looking-at "except"))
     (py-backward-same-level)
-    (should (eq (char-after) ?f))
-    (py-backward-same-level)
-    (should (eq (char-after) ?e))
-    (py-backward-same-level)
-    (should (eq (char-after) ?e))
-    (py-backward-same-level)
-    (should (eq (char-after) ?t))
-    (py-backward-same-level)
-    (should (eq (char-after) ?e))
-    (py-backward-same-level)
-    (should (eq (char-after) ?e))
-    (py-backward-same-level)
-    (should (eq (char-after) ?i))
-    (py-backward-same-level)
-    (should (eq (char-after) ?d))
-    (py-backward-same-level)
-    (should (eq (char-after) ?e))
-    (py-backward-same-level)
-    (should (eq (char-after) ?t))
-    (py-backward-same-level)
-    (should (eq (char-after) ?e))
-    (py-backward-same-level)
-    (should (eq (char-after) ?e))))
+    (should (looking-at "try"))))
 
-(ert-deftest py-ert-up-level-test ()
+(ert-deftest py-ert-up-level-test-2 ()
   (py-test-with-temp-buffer-point-min
       "def foo():
     if True:
@@ -299,177 +256,9 @@ by the
             pass
 "
     (goto-char 632)
-    (py-up)
-    (should (eq (char-after) ?p))
-    (py-up)
-    (should (eq (char-after) ?f))
-    (py-up)
-    (should (eq (char-after) ?e))
-    (py-up)
-    (should (eq (char-after) ?d))
-    (py-up)
-    (should (eq (char-after) ?e))
-    (py-up)
-    (should (eq (char-after) ?e))
-    (py-up)
-    (should (eq (char-after) ?d))))
+    (py-up-block)
+    (should (looking-at "else:"))))
 
-(ert-deftest py-ert-hide-partial-expression-test ()
-
-  (py-test-with-temp-buffer-point-min "
-class kugel(object):
-    zeit = time.strftime('%Y%m%d--%H-%M-%S')
-
-    def pylauf(self):
-        \"\"\"Eine Doku fuer pylauf\"\"\"
-        ausgabe = [\" \",\" \",\" \",\" \",\" \",\" \",\" \",\" \", \" \"]
-
-        ausgabe[0] = treffer
-        if treffer in gruen:
-            # print \"0, Gruen\"
-            datei.write(str(spiel[i]) + \"\\n\")
-"
-    (font-lock-fontify-buffer)
-    (search-forward "+ \"")
-    (py-hide-partial-expression)
-    (should (string-match "overlay from 315 to 317" (prin1-to-string (car (overlays-at (point))))))
-    (py-show-partial-expression)
-    (should (not (string-match "overlay" (prin1-to-string (car (overlays-at (point)))))))
-    ))
-
-(ert-deftest py-ert-hide-expression-test ()
-  (py-test-with-temp-buffer-point-min "
-class kugel(object):
-    zeit = time.strftime('%Y%m%d--%H-%M-%S')
-
-    def pylauf(self):
-        \"\"\"Eine Doku fuer pylauf\"\"\"
-        ausgabe = [\" \",\" \",\" \",\" \",\" \",\" \",\" \",\" \", \" \"]
-
-        ausgabe[0] = treffer
-        if treffer in gruen:
-            # print \"0, Gruen\"
-            datei.write(str(spiel[i]) + \"\\n\")
-"
-    (font-lock-fontify-buffer)
-    (search-forward "+ \"")
-    (py-hide-expression)
-    (should (string-match "overlay from 286 to 319" (prin1-to-string (car (overlays-at (point))))))
-    (py-show-expression)
-    (should (not (string-match "overlay" (prin1-to-string (car (overlays-at (point)))))))
-    ))
-
-(ert-deftest py-ert-hide-clause-test ()
-  (py-test-with-temp-buffer-point-min "
-class kugel(object):
-    zeit = time.strftime('%Y%m%d--%H-%M-%S')
-
-    def pylauf(self):
-        \"\"\"Eine Doku fuer pylauf\"\"\"
-        ausgabe = [\" \",\" \",\" \",\" \",\" \",\" \",\" \",\" \", \" \"]
-
-        ausgabe[0] = treffer
-        if treffer in gruen:
-            # print \"0, Gruen\"
-            datei.write(str(spiel[i]) + \"\\n\")
-"
-    (font-lock-fontify-buffer)
-    (search-forward "+ \"")
-
-    
-    (py-hide-clause)
-    (should (string-match "overlay from 222 to 319" (prin1-to-string (car (overlays-at (point))))))
-    (py-show-clause)
-    (should (not (string-match "overlay" (prin1-to-string (car (overlays-at (point)))))))
-    ))
-
-(ert-deftest py-ert-hide-block-test ()
-  (py-test-with-temp-buffer-point-min "
-class kugel(object):
-    zeit = time.strftime('%Y%m%d--%H-%M-%S')
-
-    def pylauf(self):
-        \"\"\"Eine Doku fuer pylauf\"\"\"
-        ausgabe = [\" \",\" \",\" \",\" \",\" \",\" \",\" \",\" \", \" \"]
-
-        ausgabe[0] = treffer
-        if treffer in gruen:
-            # print \"0, Gruen\"
-            datei.write(str(spiel[i]) + \"\\n\")
-"
-    (font-lock-fontify-buffer)
-    (search-forward "+ \"")
-
-    (py-hide-block)
-    (should (string-match "overlay from 222 to 319" (prin1-to-string (car (overlays-at (point))))))
-    (py-show-block)
-    (should (not (string-match "overlay" (prin1-to-string (car (overlays-at (point)))))))
-    ))
-
-(ert-deftest py-ert-hide-def-test ()
-  (py-test-with-temp-buffer-point-min "
-class kugel(object):
-    zeit = time.strftime('%Y%m%d--%H-%M-%S')
-
-    def pylauf(self):
-        \"\"\"Eine Doku fuer pylauf\"\"\"
-        ausgabe = [\" \",\" \",\" \",\" \",\" \",\" \",\" \",\" \", \" \"]
-
-        ausgabe[0] = treffer
-        if treffer in gruen:
-            # print \"0, Gruen\"
-            datei.write(str(spiel[i]) + \"\\n\")
-"
-    (font-lock-fontify-buffer)
-    (search-forward "+ \"")
-    (py-hide-def)
-    (should (string-match "overlay from 73 to 319" (prin1-to-string (car (overlays-at (point))))))
-    (py-show-def)
-    (should (not (string-match "overlay" (prin1-to-string (car (overlays-at (point)))))))
-    ))
-
-(ert-deftest py-ert-hide-class-test ()
-  (py-test-with-temp-buffer-point-min "
-class kugel(object):
-    zeit = time.strftime('%Y%m%d--%H-%M-%S')
-
-    def pylauf(self):
-        \"\"\"Eine Doku fuer pylauf\"\"\"
-        ausgabe = [\" \",\" \",\" \",\" \",\" \",\" \",\" \",\" \", \" \"]
-
-        ausgabe[0] = treffer
-        if treffer in gruen:
-            # print \"0, Gruen\"
-            datei.write(str(spiel[i]) + \"\\n\")
-"
-    (font-lock-fontify-buffer)
-    (search-forward "+ \"")
-    (py-hide-class)
-    (should (string-match "overlay from 2 to 319" (prin1-to-string (car (overlays-at (point))))))
-    (py-show-class)
-    (should (not (string-match "overlay" (prin1-to-string (car (overlays-at (point)))))))))
-
-(ert-deftest py-ert-hide-indent-test ()
-  (py-test-with-temp-buffer-point-min "
-class kugel(object):
-    zeit = time.strftime('%Y%m%d--%H-%M-%S')
-
-    def pylauf(self):
-        \"\"\"Eine Doku fuer pylauf\"\"\"
-        ausgabe = [\" \",\" \",\" \",\" \",\" \",\" \",\" \",\" \", \" \"]
-
-        ausgabe[0] = treffer
-        if treffer in gruen:
-            print \"0, Gruen\"
-            # print \"0, Gruen\"
-            datei.write(str(spiel[i]) + \"\\n\")
-"
-    (font-lock-fontify-buffer)
-    (search-forward "+ \"")
-    (py-hide-indent)
-    (should (string-match "overlay from 255 to 348" (prin1-to-string (car (overlays-at (point))))))
-    (py-show-indent)
-    (should (not (string-match "overlay" (prin1-to-string (car (overlays-at (point)))))))))
 
 (ert-deftest py-ert-deletes-too-much-lp:1300270 ()
   (py-test-with-temp-buffer "
@@ -518,13 +307,14 @@ x = {'abc':'def',
     (should (get-buffer-process erg))))
 
 (ert-deftest py-keep-windows-configuration-test ()
-  "print('py-keep-windows-configuration-test-string')"
-  (delete-other-windows)
-  (let ((py-keep-windows-configuration t)
-	(py-split-window-on-execute t)
-	(full-height (window-height)))
-    (py-execute-statement)
-    (should (eq (window-height) full-height))))
+  (py-test-with-temp-buffer
+      "print('py-keep-windows-configuration-test-string')"
+    (delete-other-windows)
+    (let ((py-keep-windows-configuration t)
+	  (py-split-window-on-execute t)
+	  (full-height (window-height)))
+      (py-execute-statement)
+      (should (eq (window-height) full-height)))))
 
 (ert-deftest py-compute-indentation-after-import-test ()
     (py-test-with-temp-buffer
@@ -618,8 +408,6 @@ def foo(*args):2
 ")
     (py-backward-statement)
     (should (eq (char-after) ?a))
-    (py-backward-statement)
-    (should (eq (char-after) ?\"))
     (py-backward-statement)
     (should (eq (char-after) ?d))
     (py-backward-statement)
@@ -888,34 +676,6 @@ if __name__==\"__main__\":
     (search-forward "exit()")
     (should (eq 4 (py-close-block)))))
 
-(ert-deftest py-ert-close-clause-test ()
-  (py-test-with-temp-buffer-point-min
-      "# -*- coding: utf-8 -*-
-
-def main():
-    if len(sys.argv)==1:
-        usage()
-        sys.exit()
-if __name__==\"__main__\":
-    main()
-"
-    (search-forward "exit()")
-    (should (eq 4 (py-close-clause)))))
-
-(ert-deftest py-ert-close-block-or-clause-test ()
-  (py-test-with-temp-buffer-point-min
-      "# -*- coding: utf-8 -*-
-
-def main():
-    if len(sys.argv)==1:
-        usage()
-        sys.exit()
-if __name__==\"__main__\":
-    main()
-"
-    (search-forward "exit()")
-    (should (eq 4 (py-close-block-or-clause)))))
-
 (ert-deftest py-ert-close-def-or-class-test ()
   (py-test-with-temp-buffer-point-min
       "# -*- coding: utf-8 -*-
@@ -1035,14 +795,25 @@ print()")
     (py-electric-delete)
     (should (eq (char-after) ?{))))
 
-(ert-deftest py-ert-end-of-def-or-class-test ()
+(ert-deftest py-ert-end-of-def-or-class-test-1 ()
   (py-test-with-temp-buffer-point-min
       "class MyTest(unittest.TestCase):
     def test(self):
         self.assertEqual(fun(3), 4)"
     (skip-chars-forward "^(")
-    (py-end-of-def-or-class))
-  (should (eobp)))
+    (py-end-of-def-or-class)
+    (should (eobp))))
+
+(ert-deftest py-ert-end-of-def-or-class-test-2 ()
+  (py-test-with-temp-buffer-point-min
+      "class MyTest(unittest.TestCase):
+    def test(self):
+        pass
+    def test(self):
+        pass"
+    (search-forward "pass")
+    (py-end-of-def-or-class)
+    (should (eobp))))
 
 (ert-deftest py-ert-narrow-to-block-test ()
   (py-test-with-temp-buffer

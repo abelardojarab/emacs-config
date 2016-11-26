@@ -1,8 +1,8 @@
-;;; py-interactive-tests.el --- Tests expected to succeed interactively
+;;; py-interactive-tests.el --- Tests expected to succeed interactively -*- lexical-binding: t; -*- 
 
-;; Copyright (C) 2015  Andreas Roehler
+;; Copyright (C) 2015  Andreas Röhler
 
-;; Author: Andreas Roehler <andreas.roehler@online.de>
+;; Author: Andreas Röhler <andreas.roehler@online.de>
 ;; Keywords: lisp
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -145,6 +145,38 @@ impo")))
       (when py-debug-p (switch-to-buffer (current-buffer)))
       (py-fast-complete)
       (should (eq (char-before) 40)))))
+
+(ert-deftest py-shell-complete-in-dedicated-shell ()
+  (let (erg
+	;; py-split-window-on-execute
+	py-switch-buffers-on-execute-p)
+    (with-temp-buffer
+      (python-mode)
+      (setq erg (python-dedicated))
+      (with-current-buffer erg
+	(goto-char (point-max))
+	;; (when py-debug-p (switch-to-buffer (current-buffer)))
+	;; (switch-to-buffer (current-buffer))
+	(insert "pri")
+	(sit-for 1 t)
+	(call-interactively 'py-indent-or-complete)
+	(sit-for 0.1 t)
+	(should (or (eq 40 (char-before))
+		    ;; python may just offer print(
+		    (buffer-live-p (get-buffer  "*Python Completions*"))))
+      (py-kill-buffer-unconditional erg)))))
+
+(ert-deftest py-ert-moves-up-execute-statement-python3-dedicated-test ()
+  (py-test-with-temp-buffer-point-min
+      "print(\"I'm the py-execute-statement-python3-dedicated-test\")"
+    (let ((py-debug-p t)
+	  py-store-result-p
+	  erg)
+      (call-interactively 'py-execute-statement-python3-dedicated)
+      (sit-for 0.1 t)
+      (set-buffer py-buffer-name)
+      (goto-char (point-min))
+      (should (search-forward "py-execute-statement-python3-dedicated-test" nil t 1)))))
 
 (provide 'py-interactive-tests)
 ;;; py-interactive-tests.el ends here
