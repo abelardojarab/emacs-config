@@ -74,7 +74,6 @@
            (executable-find "npm")
            (or (check-npm-module "tern" t)
                (check-npm-module "tern")))
-  :commands (tern-mode)
   :diminish tern-mode
   :after js2-mode
   :load-path (lambda () (expand-file-name "tern/emacs/" user-emacs-directory))
