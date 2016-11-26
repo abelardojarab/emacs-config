@@ -27,6 +27,13 @@
 (use-package js2-mode
   :load-path (lambda () (expand-file-name "js2-mode/" user-emacs-directory))
   :init (progn
+
+          ;; Setup node.js path
+          (setenv "NODE_PATH" (concat (concat (getenv "HOME")
+                                              "/node_modules")
+                                      ":/usr/local/lib/node_modules:/usr/local/lib/node"
+                                      ":" (getenv "NODE_PATH")))
+
           ;; Check for node access
           (defun check-npm-module (&optional module local)
             (and (executable-find "npm")
@@ -66,7 +73,7 @@
   :if (and (executable-find "node")
            (executable-find "npm")
            (or (check-npm-module "tern" t)
-               (check-npm-module "tern" t)))
+               (check-npm-module "tern")))
   :commands (tern-mode)
   :diminish tern-mode
   :after js2-mode
