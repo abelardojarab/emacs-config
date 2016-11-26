@@ -40,7 +40,7 @@
                   (concat "pandoc -c "
                           (concat user-emacs-directory
                                   "/styles/github-pandoc.css")
-                          " --from markdown_github -t html5 --mathjax --highlight-style pygments --standalone")))
+                          " --from markdown_github -t html5 --mathjax --highlight-style pygments --standalone"))))
 
 (provide 'setup-markdown)
 ;;; setup-markdown.el ends here

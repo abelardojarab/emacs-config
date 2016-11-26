@@ -40,8 +40,7 @@
                      company-capf           ;; `completion-at-point-functions'
                      company-yasnippet
                      company-abbrev)
-                    (company-semantic
-                     company-dabbrev
+                    (company-dabbrev
                      company-dabbrev-code)))
 
             ;; Add company-ispell as backend for text-mode's only
