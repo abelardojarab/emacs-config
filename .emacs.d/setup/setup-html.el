@@ -87,11 +87,11 @@
               "Output directory for files exported by `my/htmlize-region-to-file'.")
 
             (defvar my/htmlize-css-file (concat user-emacs-directory
-                                                "/org-html-themes/styles/bigblow/css/htmlize.css")
+                                                "/styles/github-pandoc.css")
               "CSS file to be embedded in the html file created using the
              `my/htmlize-region-to-file' function.")
             (setq my/htmlize-css-file (concat user-emacs-directory
-                                              "/org-html-themes/styles/bigblow/css/htmlize.css"))
+                                              "/styles/github-pandoc.css"))
 
             (defun htmlize-region-to-file (option)
               "Export the selected region to an html file. If a region is not

@@ -24,6 +24,10 @@
 
 ;;; Code:
 
+;; ht, hash table library
+(use-package ht
+  :load-path (lambda () (expand-file-name "ht/" user-emacs-directory)))
+
 ;; Popup, used by auto-complete and other tools
 (use-package popup
   ;; We don't ensure this package, because we definitely don't want to have this

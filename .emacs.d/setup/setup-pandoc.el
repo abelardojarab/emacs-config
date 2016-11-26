@@ -28,9 +28,32 @@
 (use-package pandoc-mode
   :load-path (lambda () (expand-file-name "pandoc-mode/" user-emacs-directory))
   :config (progn
+            (setq pandoc-data-dir "~/.emacs.cache/pandoc/")
+            (add-hook 'pandoc-mode-hook 'pandoc-load-default-settings)
             (add-hook 'markdown-mode-hook 'pandoc-load-default-settings)
             (add-hook 'org-mode-hook 'pandoc-load-default-settings)
             (add-hook 'pandoc-mode-hook 'pandoc-load-default-settings)))
+
+;; Org integration with pandoc
+(use-package ox-pandoc
+  :if (executable-find "pandoc")
+  :load-path (lambda () (expand-file-name "ox-pandoc/" user-emacs-directory))
+  :config (progn
+
+            ;; Prefer xelatex
+            (if (executable-find "xelatex")
+                (setq org-pandoc-options '((standalone . t)) ; Default options
+                      ;; Special settings for beamer-pdf and latex-pdf exporters
+                      org-pandoc-options-for-beamer-pdf
+                      '((latex-engine . "xelatex"))
+                      org-pandoc-options-for-latex-pdf
+                      '((latex-engine . "xelatex"))))
+
+            ;; Use external css for html5
+            (let ((stylesheet (concat user-emacs-directory
+                                      "/styles/github-pandoc.css")))
+              (setq org-pandoc-options-for-html5
+                    `((css . ,(concat "file://" stylesheet)))))))
 
 (provide 'setup-pandoc)
 ;;; setup-pandoc.el ends here

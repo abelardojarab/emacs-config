@@ -1,6 +1,6 @@
 ;;; setup-org-babel.el ---                           -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016  Abelardo Jara
+;; Copyright (C) 2016  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara <abelardojara@Abelardos-MacBook-Pro.local>
 ;; Keywords:

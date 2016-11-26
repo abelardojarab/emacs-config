@@ -1,6 +1,6 @@
 ;;; setup-org-latex.el ---                           -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016  Abelardo Jara
+;; Copyright (C) 2016  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara <abelardojara@Abelardos-MacBook-Pro.local>
 ;; Keywords:
@@ -141,7 +141,7 @@
 (setq org-latex-table-caption-above nil)
 
 ;; Use centered images in Org-mode
-(ignore-errors 
+(ignore-errors
 (advice-add 'org-latex--inline-image :around
             (lambda (orig link info)
               (concat
