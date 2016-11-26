@@ -60,7 +60,12 @@
            (check-python-module "jedi"))
   :after company
   :load-path (lambda () (expand-file-name "company-jedi/" user-emacs-directory))
-  :config (add-hook 'python-mode-hook (lambda () (set (make-local-variable 'company-backends) '(company-jedi company-capf)))))
+  :config (add-hook 'python-mode-hook
+                    (lambda () (set (make-local-variable 'company-backends)
+                               '(company-yasnippet
+                                 company-capf
+                                 company-files
+                                 company-jedi)))))
 
 (provide 'setup-python-plugins)
 ;;; setup-python-plugins.el ends here

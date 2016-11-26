@@ -26,6 +26,14 @@
 
 (use-package js2-mode
   :load-path (lambda () (expand-file-name "js2-mode/" user-emacs-directory))
+  :init (progn
+          ;; Check for node access
+          (defun check-npm-module (&optional module local)
+            (and (executable-find "npm")
+                 (= 0 (call-process "npm"  nil nil nil "list"
+                                    (if local " " "-g")
+                                    (if module module "tern"))))))
+  :mode ("\\.js\\'" . js2-mode)
   :config (progn
             (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
             (add-to-list 'interpreter-mode-alist '("node" . js2-mode))
@@ -56,9 +64,12 @@
 (use-package tern
   :defer t
   :if (and (executable-find "node")
-           (executable-find "npm"))
+           (executable-find "npm")
+           (or (check-npm-module "tern" t)
+               (check-npm-module "tern" t)))
   :commands (tern-mode)
   :diminish tern-mode
+  :after js2-mode
   :load-path (lambda () (expand-file-name "tern/emacs/" user-emacs-directory))
   :init (add-hook 'js2-mode-hook 'tern-mode)
   :config (progn
@@ -85,8 +96,7 @@
   :diminish js2-refactor-mode
   :load-path (lambda () (expand-file-name "js2-refactor/" user-emacs-directory))
   :init (add-hook 'js2-mode-hook 'js2-refactor-mode)
-  :config
-  (js2r-add-keybindings-with-prefix "C-c r"))
+  :config (js2r-add-keybindings-with-prefix "C-c r"))
 
 ;; ac-js2
 (use-package ac-js2
@@ -101,7 +111,12 @@
   :after (company tern)
   :load-path (lambda () (expand-file-name "company-tern/" user-emacs-directory))
   :config (progn
-            (add-hook 'js2-mode-hook (lambda () (set (make-local-variable 'company-backends) '(company-tern))))
+            (add-hook 'js2-mode-hook (lambda ()
+                                       (set (make-local-variable 'company-backends)
+                                            '(company-yasnippet
+                                              company-capf
+                                              company-files
+                                              company-tern))))
             (setq company-tern-meta-as-single-line t)))
 
 ;; json-reformat

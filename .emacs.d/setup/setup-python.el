@@ -33,10 +33,10 @@
   :interpreter ("python" . python-mode)
   :load-path (lambda () (expand-file-name "python-mode/" user-emacs-directory))
   :init (progn
-          ;; Check for web access
+          ;; Check for python module
           (defun check-python-module (&optional module)
             (and (executable-find "python")
-                 (= 0 (call-process "python"  nil t nil "-c"
+                 (= 0 (call-process "python"  nil nil nil "-c"
                                     (concat "import "
                                             (if module module "jedi")))))))
   :config (progn
