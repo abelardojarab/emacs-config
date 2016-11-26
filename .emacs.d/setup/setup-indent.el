@@ -70,8 +70,7 @@
             (unless (or (equal system-type 'windows-nt)
                         (not (display-graphic-p)))
               (setq indent-guide-char "┊"))
-            (setq indent-guide-recursive t)
-            (add-hook 'python-mode-hook (lambda () (indent-guide-mode t)))))
+            (setq indent-guide-recursive t)))
 
 ;; Highlight indentation levels
 (use-package highlight-indentation

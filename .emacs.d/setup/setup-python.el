@@ -85,8 +85,8 @@
             ;; Stop cedet semantic-python-get-system-include-path to start the python interpreter
             (defun python-shell-internal-send-string (string) "")
 
-            ;; Add Wisent
-            (add-hook 'python-mode-hook 'wisent-python-default-setup)))
+            ;; Remove wisent, python becomes unusuable slow
+            (remove-hook 'python-mode-hook 'wisent-python-default-setup)))
 
 (provide 'setup-python)
 ;;; setup-python.el ends here
