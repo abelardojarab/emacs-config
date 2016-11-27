@@ -28,6 +28,10 @@
 (add-to-list 'load-path (expand-file-name "emacs-color-themes/themes/" user-emacs-directory))
 (add-to-list 'custom-theme-load-path (expand-file-name "emacs-color-themes/themes/" user-emacs-directory))
 
+;; darktooth theme
+(add-to-list 'load-path (expand-file-name "darktooth-theme/" user-emacs-directory))
+(add-to-list 'custom-theme-load-path (expand-file-name "darktooth-theme/" user-emacs-directory))
+
 ;; gruber-darker theme
 (add-to-list 'load-path (expand-file-name "gruber-darker-theme/" user-emacs-directory))
 (add-to-list 'custom-theme-load-path (expand-file-name "gruber-darker-theme/" user-emacs-directory))
