@@ -1,6 +1,6 @@
 ;;; setup-verilog.el ---                             -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016  Abelardo Jara
+;; Copyright (C) 2016  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara <abelardojara@Abelardos-MacBook-Pro.local>
 ;; Keywords:
@@ -26,11 +26,9 @@
 
 ;; Verilog mode
 (use-package verilog-mode
+  :mode ("\\.v\\'" . verilog-mode)
   :load-path (lambda () (expand-file-name "verilog-mode/" user-emacs-directory))
   :config (progn
-            ;; Any files that end in .v should be in verilog mode
-            (setq auto-mode-alist (cons '("\\.v\\'" . verilog-mode) auto-mode-alist))
-
             ;; Any files in verilog mode should have their keywords colorized
             (add-hook 'verilog-mode-hook 'font-lock-mode)))
 

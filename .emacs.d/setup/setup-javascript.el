@@ -27,7 +27,6 @@
 (use-package js2-mode
   :load-path (lambda () (expand-file-name "js2-mode/" user-emacs-directory))
   :init (progn
-
           ;; Setup node.js path
           (setenv "NODE_PATH" (concat (concat (getenv "HOME")
                                               "/node_modules")

@@ -1,8 +1,8 @@
 ;;; setup-vhdl.el ---
 
-;; Copyright (C) 2014, 2015, 2016  Abelardo
+;; Copyright (C) 2016  Abelardo Jara-Berrocal
 
-;; Author: Abelardo <abelardo@abelardo-Aspire-7720>
+;; Author: Abelardo Jara <abelardojara@Abelardos-MacBook-Pro.local>
 ;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify

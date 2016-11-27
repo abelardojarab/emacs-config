@@ -1,8 +1,8 @@
 ;;; setup-bison.el ---
 
-;; Copyright (C) 2014, 2016
+;; Copyright (C) 2016  Abelardo Jara-Berrocal
 
-;; Author:  <ajaraber@AJARABER-MOBL5>
+;; Author: Abelardo Jara <abelardojara@Abelardos-MacBook-Pro.local>
 ;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify

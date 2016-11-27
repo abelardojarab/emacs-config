@@ -51,10 +51,9 @@
 
 (use-package bibtex
   :mode ("\\.bib" . bibtex-mode)
-  :init
-  (progn
-    (setq bibtex-align-at-equal-sign t)
-    (add-hook 'bibtex-mode-hook (lambda () (set-fill-column 120)))))
+  :init (progn
+          (setq bibtex-align-at-equal-sign t)
+          (add-hook 'bibtex-mode-hook (lambda () (set-fill-column 120)))))
 
 (use-package latex-pretty-symbols
   :commands latex-unicode-simplified

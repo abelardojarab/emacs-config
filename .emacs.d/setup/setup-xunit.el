@@ -1,8 +1,8 @@
 ;;; setup-xunit.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016  lab
+;; Copyright (C) 2016  Abelardo Jara-Berrocal
 
-;; Author: lab <lab@lab-vm>
+;; Author: Abelardo Jara <abelardojara@Abelardos-MacBook-Pro.local>
 ;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify

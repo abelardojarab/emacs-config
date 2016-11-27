@@ -26,7 +26,7 @@
 
 ;; Markdown
 (use-package markdown-mode
-  :mode ("\\.markdown\\'" "\\.mk?d\\'" "\\.text\\'")
+  :mode ("\\.markdown\\'" "\\.mk?d\\'" "\\.te?xt\\'")
   :commands markdown-mode
   :load-path (lambda () (expand-file-name "markdown-mode/" user-emacs-directory))
   :config (progn
