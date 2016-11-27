@@ -24,6 +24,30 @@
 
 ;;; Code:
 
+;; assorted emacs color themes
+(add-to-list 'load-path (expand-file-name "emacs-color-themes/themes/" user-emacs-directory))
+(add-to-list 'custom-theme-load-path (expand-file-name "emacs-color-themes/themes/" user-emacs-directory))
+
+;; gruber-darker theme
+(add-to-list 'load-path (expand-file-name "gruber-darker-theme/" user-emacs-directory))
+(add-to-list 'custom-theme-load-path (expand-file-name "gruber-darker-theme/" user-emacs-directory))
+
+;; moe theme
+(add-to-list 'load-path (expand-file-name "moe-theme/" user-emacs-directory))
+(add-to-list 'custom-theme-load-path (expand-file-name "moe-theme/" user-emacs-directory))
+
+;; flatui theme
+(add-to-list 'load-path (expand-file-name "flatui-theme/" user-emacs-directory))
+(add-to-list 'custom-theme-load-path (expand-file-name "flatui-theme/" user-emacs-directory))
+
+;; borland-blue theme
+(add-to-list 'load-path (expand-file-name "borland-blue-theme/" user-emacs-directory))
+(add-to-list 'custom-theme-load-path (expand-file-name "borland-blue-theme/" user-emacs-directory))
+
+;; professional theme (port for vim)
+(add-to-list 'load-path (expand-file-name "professional-theme/" user-emacs-directory))
+(add-to-list 'custom-theme-load-path (expand-file-name "professional-theme/" user-emacs-directory))
+
 ;; intellij theme
 (add-to-list 'load-path (expand-file-name "intellij-theme/" user-emacs-directory))
 (add-to-list 'custom-theme-load-path (expand-file-name "intellij-theme/" user-emacs-directory))
