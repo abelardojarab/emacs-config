@@ -206,6 +206,9 @@
 ;; Setup themes
 (require 'setup-themes)
 
+;; Setup themes (setup)
+(require 'setup-themes-setup)
+
 ;; Setup parenthesis
 (require 'setup-parenthesis)
 
