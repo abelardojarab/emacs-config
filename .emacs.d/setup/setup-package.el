@@ -65,12 +65,5 @@
 (use-package yaxception      :defer t :load-path (lambda () (expand-file-name "yaxception/" user-emacs-directory)))
 (use-package dropdown-list   :defer t :load-path (lambda () (expand-file-name "dropdown-list/" user-emacs-directory)))
 
-;; With-editor (emacsclient support)
-(use-package with-editor
-  :load-path (lambda () (expand-file-name "with-editor/" user-emacs-directory))
-  :init (progn
-            (add-hook 'shell-mode-hook  'with-editor-export-editor)
-            (add-hook 'eshell-mode-hook 'with-editor-export-editor)))
-
 (provide 'setup-package)
 ;;; setup-package.el ends here

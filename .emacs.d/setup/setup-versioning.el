@@ -389,7 +389,6 @@ branch."
 ;; emacs git utilities
 (use-package git-emacs
   :if (executable-find "git")
-  :after magit
   :load-path (lambda () (expand-file-name "git-emacs/" user-emacs-directory))
   :config (require 'git-modeline))
 

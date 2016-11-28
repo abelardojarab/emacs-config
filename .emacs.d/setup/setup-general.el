@@ -24,6 +24,13 @@
 
 ;;; Code:
 
+;; With-editor (emacsclient support)
+(use-package with-editor
+  :load-path (lambda () (expand-file-name "with-editor/" user-emacs-directory))
+  :init (progn
+          (add-hook 'shell-mode-hook  'with-editor-export-editor)
+          (add-hook 'eshell-mode-hook 'with-editor-export-editor)))
+
 ;; Pos-tip library
 (use-package pos-tip
   :load-path (lambda () (expand-file-name "pos-tip/" user-emacs-directory))
@@ -66,7 +73,7 @@
              ;; don't muck with special buffers
              uniquify-ignore-buffers-re "^\\*")))
 
-;; unfill autofill
+;; Unfill and fill
 (use-package unfill
   :commands (unfill-region unfill-paragraph toggle-fill-unfill))
 
@@ -108,8 +115,7 @@
   :after org
   :load-path (lambda () (expand-file-name "calfw/" user-emacs-directory))
   :defer 0.5
-  :config (progn
-            (use-package calfw-org)))
+  :config (use-package calfw-org))
 
 ;; Persistent scratch buffer
 (use-package persistent-scratch
