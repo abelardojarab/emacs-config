@@ -60,6 +60,10 @@
 (use-package fringe-helper   :defer t :load-path (lambda () (expand-file-name "fringe-helper" user-emacs-directory)))
 (use-package parsebib        :defer t :load-path (lambda () (expand-file-name "parsebib/" user-emacs-directory)))
 (use-package ebib            :defer t :load-path (lambda () (expand-file-name "ebib/" user-emacs-directory)))
+(use-package ht              :defer t :load-path (lambda () (expand-file-name "ht/" user-emacs-directory)))
+(use-package log4e           :defer t :load-path (lambda () (expand-file-name "log4e/" user-emacs-directory)))
+(use-package yaxception      :defer t :load-path (lambda () (expand-file-name "yaxception/" user-emacs-directory)))
+(use-package dropdown-list   :defer t :load-path (lambda () (expand-file-name "dropdown-list/" user-emacs-directory)))
 
 ;; With-editor (emacsclient support)
 (use-package with-editor

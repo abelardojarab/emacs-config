@@ -24,18 +24,6 @@
 
 ;;; Code:
 
-;; ht, hash table library
-(use-package ht
-  :load-path (lambda () (expand-file-name "ht/" user-emacs-directory)))
-
-;; Popup, used by auto-complete and other tools
-(use-package popup
-  ;; We don't ensure this package, because we definitely don't want to have this
-  ;; mess, but unfortunately it's a dependency of Ensime :(
-  :load-path (lambda () (expand-file-name "popup/" user-emacs-directory))
-  :config (progn
-            (setq popup-use-optimized-column-computation t)))
-
 ;; Pos-tip library
 (use-package pos-tip
   :load-path (lambda () (expand-file-name "pos-tip/" user-emacs-directory))
@@ -57,9 +45,6 @@
                                                             (popup-selected-line menu)))))
                                     nil 0) nil))
                 ad-do-it))))
-
-;; Drop down list support, related to popup
-(use-package dropdown-list)
 
 ;; Turn on subword-mode for non-lispy languages
 (use-package subword
@@ -88,14 +73,6 @@
 ;; Browse kill ring
 (use-package browse-kill-ring
   :load-path (lambda () (expand-file-name "browse-kill-ring/" user-emacs-directory)))
-
-;; log4e
-(use-package log4e
-  :load-path (lambda () (expand-file-name "log4e/" user-emacs-directory)))
-
-;; yaxception
-(use-package yaxception
-  :load-path (lambda () (expand-file-name "yaxception/" user-emacs-directory)))
 
 ;; ediff
 (use-package ediff
