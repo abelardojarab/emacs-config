@@ -54,40 +54,6 @@
             (add-to-list 'iimage-mode-image-regex-alist '("@startuml\s+\\(.+\\)" . 1))
             (add-to-list 'iimage-mode-image-regex-alist (cons (concat "\[\[file:\(~?" iimage-mode-image-filename-regex "\)\]") 1))
 
-            ;; Insert screenshots into Org mode, very useful
-            (defun org-insert-screenshot ()
-              "Take a screenshot into a time stamped unique-named file in the same
-directory as the org-buffer and insert
-a link to this file."
-              (interactive)
-              (let ((case-fold-search nil))
-                (setq tilde-buffer-filename
-                      (replace-regexp-in-string "/" "\\" (buffer-file-name) t t))
-                (setq tilde-buffer-filename
-                      (replace-regexp-in-string ".org" "" tilde-buffer-filename t t))
-                (setq filename
-                      (concat
-                       (make-temp-name
-                        (concat tilde-buffer-filename
-                                "_"
-                                (format-time-string "%Y%m%d_%H%M%S_")) ) ".png"))
-                (setq filename (file-relative-name filename (file-name-directory (buffer-file-name))))
-                (setq filename (replace-regexp-in-string "\\\\" "/" filename))
-                (if (equal system-type 'windows-nt)
-                    ;; Windows: Irfanview
-                    (call-process "C:\\Program Files (x86)\\IrfanView\\i_view32.exe" nil nil nil (concat
-                                                                                                  "/clippaste /convert=" filename))
-
-                  (if (equal system-type 'darwin)
-                      ;; Mac OSX pngpaste utility: https://github.com/jcsalterego/pngpaste
-                      (call-process "pngpaste" nil nil nil filename)
-
-                    ;; Linux: ImageMagick: (call-process "import" nil nil nil filename)
-                    (call-process "import" nil nil nil filename))
-                  ) ;; if
-                (insert (concat "[[file:" filename "]]"))
-                (org-display-inline-images)))
-
             ;; Function to setup images for display on load
             (defun org-turn-on-iimage ()
               "display images in your org file"
