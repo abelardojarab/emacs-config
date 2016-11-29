@@ -46,12 +46,19 @@
             (setq mail-user-agent 'gnus-user-agent)
             (setq read-mail-command 'gnus-user-agent)
 
-            ;; message tweaks
+            ;; Use w3m to render html
             (if (executable-find "w3m")
                 (setq mm-text-html-renderer 'w3m))
+
+            ;; message preferences
             (setq message-generate-headers-first t)
-            (add-hook 'message-mode-hook 'flyspell-mode)
-            (add-hook 'message-mode-hook 'turn-on-auto-fill)))
+            (add-hook 'message-mode-hook #'flyspell-mode)
+            (add-hook 'message-mode-hook #'turn-on-orgstruct)
+            (add-hook 'message-mode-hook #'turn-on-orgstruct++)
+            (add-hook 'message-mode-hook #'turn-on-orgtbl)
+            (add-hook 'message-mode-hook #'typo-mode)
+            (add-hook 'message-mode-hook #'flyspell-mode)
+            (add-hook 'message-mode-hook #'turn-on-auto-fill)))
 
 ;; apel
 (use-package apel

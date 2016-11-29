@@ -89,6 +89,25 @@
                                         (lambda () (interactive)
                                           (flyspell-mode -1)))))
 
+            ;; Don't send ’ to the subprocess.
+            (defun my/replace-apostrophe (args)
+              (cons (replace-regexp-in-string
+                     "’" "'" (car args))
+                    (cdr args)))
+            (advice-add #'ispell-send-string :filter-args #'my/replace-apostrophe)
+
+            ;; Convert ' back to ’ from the subprocess.
+            (defun my/replace-quote (args)
+              (if (not (or (derived-mode-p 'org-mode)
+                           (derived-mode-p 'markdown-mode)
+                           (derived-mode-p 'rst-mode)
+                           (derived-mode-p 'message-mode)))
+                  args
+                (cons (replace-regexp-in-string
+                       "'" "’" (car args))
+                      (cdr args))))
+            (advice-add #'ispell-parse-output :filter-args #'my/replace-quote)
+
             ;; Ignored patterns
             (add-to-list 'ispell-skip-region-alist '("[^\000-\377]+"))
             (add-to-list 'ispell-skip-region-alist '(":\\(PROPERTIES\\|LOGBOOK\\):" . ":END:"))
@@ -165,6 +184,14 @@
                     (popup-tip msg)))))
             (setq langtool-autoshow-message-function
                   'langtool-autoshow-detail-popup)))
+
+;; Insert typographically useful unicode
+(use-package typo
+  :diminish typo-mode
+  :config (progn
+            (setq-default typo-language "English")
+            (add-hook 'text-mode-hook #'typo-mode)
+            (add-hook 'org-mode-hook #'typo-mode)))
 
 (provide 'setup-spell)
 ;;; setup-spell.el ends here

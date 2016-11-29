@@ -76,6 +76,18 @@
               (set (make-variable-buffer-local 'ispell-parser) 'tex))
             (add-hook 'org-mode-hook 'flyspell-ignore-tex)
 
+            ;; source http://endlessparentheses.com/ispell-and-org-mode.html
+            (defun my/org-ispell ()
+              "Configure `ispell-skip-region-alist' for `org-mode'."
+              (make-local-variable 'ispell-skip-region-alist)
+              (add-to-list 'ispell-skip-region-alist '(org-property-drawer-re))
+              (add-to-list 'ispell-skip-region-alist '("~" "~"))
+              (add-to-list 'ispell-skip-region-alist '("=" "="))
+              (add-to-list 'ispell-skip-region-alist '("#\\+BEGIN_SRC" . "^#\\+END_SRC"))
+              (add-to-list 'ispell-skip-region-alist '("#\\+BEGIN_EXAMPLE" . "#\\+END_EXAMPLE"))
+              (add-to-list 'ispell-skip-region-alist '("#\\+BEGIN_QUOTE" . "#\\+END_QUOTE")))
+            (add-hook 'org-mode-hook #'my/org-ispell)
+
             ;; Set up Org default files
             (let ((todo_workspace "~/workspace/Documents/Org/todo.org")
                   (todo_dropbox "~/Dropbox/Documents/Org/todo.org")
@@ -158,11 +170,12 @@
                     (800 1000 1200 1400 1600 1800)))
 
             ;; Export options
-            (setq org-export-time-stamp-file nil)
-            (setq org-export-with-smart-quotes t) ;; curly quotes in HTML
-            (setq org-export-with-sub-superscripts '{})
-            (setq org-export-allow-bind-keywords t)
-            (setq org-export-async-debug t)
+            (setq org-export-coding-system 'utf-8
+                  org-export-time-stamp-file nil
+                  org-export-with-smart-quotes t ;; curly quotes in HTML
+                  org-export-with-sub-superscripts '{}
+                  org-export-allow-bind-keywords t
+                  org-export-async-debug t)
 
             ;; Mouse in Org
             (require 'org-mouse)
@@ -354,18 +367,18 @@
                     (kill-new (shell-command-to-string "osascript -e 'the clipboard as \"HTML\"' | perl -ne 'print chr foreach unpack(\"C*\",pack(\"H*\",substr($_,11,-3)))' | pandoc -f html -t json | pandoc -f json -t org"))
                     (yank))
 
-                (defun org-html-copy ()
-                  "Export region to HTML, and copy it to the clipboard."
-                  (interactive)
-                  (save-window-excursion
-                    (let* ((buf (org-export-to-buffer 'html "*Formatted Copy*" nil nil t t))
-                           (html (with-current-buffer buf (buffer-string))))
-                      (with-current-buffer buf
-                        (shell-command-on-region
-                         (point-min)
-                         (point-max)
-                         "textutil -stdin -format html -convert rtf -stdout | pbcopy"))
-                      (kill-buffer buf)))))
+                  (defun org-html-copy ()
+                    "Export region to HTML, and copy it to the clipboard."
+                    (interactive)
+                    (save-window-excursion
+                      (let* ((buf (org-export-to-buffer 'html "*Formatted Copy*" nil nil t t))
+                             (html (with-current-buffer buf (buffer-string))))
+                        (with-current-buffer buf
+                          (shell-command-on-region
+                           (point-min)
+                           (point-max)
+                           "textutil -stdin -format html -convert rtf -stdout | pbcopy"))
+                        (kill-buffer buf)))))
               (progn
                 (defun org-html-paste ()
                   "Convert clipboard contents from HTML to Org and then paste (yank)."
@@ -398,6 +411,19 @@
                                           (org-re "fn:\\([-_[:word:]]+\\)?:\\|")
                                           (org-re "\\(fn:[-_[:word:]]+\\)")
                                           "\\)"))
+
+            ;; Use footnotes as eldoc source
+            (add-hook 'org-mode-hook #'org-eldoc-load)
+            (add-hook 'org-mode-hook #'eldoc-mode)
+
+            (defun my/org-eldoc-get-footnote ()
+              (save-excursion
+                (let ((fn (org-between-regexps-p "\\[fn:" "\\]")))
+                  (when fn
+                    (save-match-data
+                      (nth 3 (org-footnote-get-definition (buffer-substring (+ 1 (car fn)) (- (cdr fn) 1)))))))))
+            (advice-add 'org-eldoc-documentation-function
+                        :before-until #'my/org-eldoc-get-footnote)
 
             ;; Insert screenshots into Org mode, very useful
             (defun org-insert-screenshot ()

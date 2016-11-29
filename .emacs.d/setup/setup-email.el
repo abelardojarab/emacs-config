@@ -33,7 +33,16 @@
   :defer t
   :init (progn
           (add-to-list 'load-path (expand-file-name "wanderlust/elmo" user-emacs-directory))
-          (add-to-list 'load-path (expand-file-name "semi" user-emacs-directory)))
+          (add-to-list 'load-path (expand-file-name "semi" user-emacs-directory))
+
+          ;; message preferences
+          (add-hook 'message-mode-hook #'flyspell-mode)
+          (add-hook 'message-mode-hook #'turn-on-orgstruct)
+          (add-hook 'message-mode-hook #'turn-on-orgstruct++)
+          (add-hook 'message-mode-hook #'turn-on-orgtbl)
+          (add-hook 'message-mode-hook #'typo-mode)
+          (add-hook 'message-mode-hook #'flyspell-mode)
+          (add-hook 'message-mode-hook #'turn-on-auto-fill))
   :commands wl
   :load-path (lambda () (expand-file-name "wanderlust/wl/" user-emacs-directory))
   :config (let ((wl-root-dir "~/.emacs.cache/wl/"))

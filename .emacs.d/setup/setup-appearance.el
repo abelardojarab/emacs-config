@@ -142,5 +142,10 @@ non-nil."
   :if (display-graphic-p)
   :load-path (lambda () (expand-file-name "all-the-icons/" user-emacs-directory)))
 
+;; Use imagemagick, if available
+(when (and (fboundp 'imagemagick-register-types)
+           (executable-find "import"))
+  (imagemagick-register-types))
+
 (provide 'setup-appearance)
 ;;; setup-appearance.el ends here

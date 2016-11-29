@@ -24,91 +24,164 @@
 
 ;;; Code:
 
-;; Assure .emacs.cache/semanticdb directory exists
-(if (not (file-exists-p "~/.emacs.cache/semanticdb"))
-    (make-directory "~/.emacs.cache/semanticdb") t)
+(use-package semantic
+  :config (progn
 
-;; To use additional features for names completion, and displaying of information for tags & classes,
-;; you also need to load the semantic-ia package. Unfortunately, semantic makes Emacs slow
-(require 'semantic/ia)
+            ;; To use additional features for names completion, and displaying of information for tags & classes,
+            ;; you also need to load the semantic-ia package. Unfortunately, semantic makes Emacs slow
+            (use-package semantic/ia)
 
-;; Enable support for parsing additional languages
-(require 'semantic/wisent)
+            ;; Enable support for parsing additional languages
+            (use-package semantic/wisent)
 
-;; Enable case-insensitive searching
-(set-default 'semantic-case-fold t)
+            (add-to-list 'semantic-default-submodes 'global-semanticdb-minor-mode)
+            (add-to-list 'semantic-default-submodes 'global-semantic-idle-scheduler-mode)
+            (add-to-list 'semantic-default-submodes 'global-semantic-idle-summary-mode)
+            (add-to-list 'semantic-default-submodes 'global-semantic-decoration-mode)
 
-;; Faster parsing
-(setq semantic-idle-work-parse-neighboring-files-flag nil)
-(setq semantic-idle-work-update-headers-flag nil)
-(setq semantic-idle-scheduler-idle-time 60)
-(setq semantic-idle-scheduler-work-idle-time 1800) ;; default is 60
-(setq semantic-idle-scheduler-max-buffer-size 1)
+            ;; Assure .emacs.cache/semanticdb directory exists
+            (if (not (file-exists-p "~/.emacs.cache/semanticdb"))
+                (make-directory "~/.emacs.cache/semanticdb") t)
 
-;; Disable Semantics for large files
-(add-hook 'semantic--before-fetch-tags-hook
-          (lambda () (if (and (> (point-max) 500)
-                         (not (semantic-parse-tree-needs-rebuild-p)))
-                    nil
-                  t)))
+            ;; Enable case-insensitive searching
+            (set-default 'semantic-case-fold t)
 
-;; Enable decoration mode
-(global-semantic-decoration-mode t)
+            ;; Faster parsing
+            (setq semantic-idle-work-parse-neighboring-files-flag nil)
+            (setq semantic-idle-work-update-headers-flag nil)
+            (setq semantic-idle-scheduler-idle-time 60)
+            (setq semantic-idle-scheduler-work-idle-time 1800) ;; default is 60
+            (setq semantic-idle-scheduler-max-buffer-size 1)
 
-;; Fixing a bug in semantic, see #22287
-(defun semanticdb-save-all-db-idle ()
-  "Save all semantic tag databases from idle time.
+            ;; Disable Semantics for large files
+            (add-hook 'semantic--before-fetch-tags-hook
+                      (lambda () (if (and (> (point-max) 500)
+                                     (not (semantic-parse-tree-needs-rebuild-p)))
+                                nil
+                              t)))
+
+            ;; Enable decoration mode
+            (global-semantic-decoration-mode t)
+
+            ;; Fixing a bug in semantic, see #22287
+            (defun semanticdb-save-all-db-idle ()
+              "Save all semantic tag databases from idle time.
 Exit the save between databases if there is user input."
 
-  ;; save-mark-and-excursion is defined in Emacs 25.1-forward
-  (if (fboundp 'save-mark-and-excursion)
-      (semantic-safe "Auto-DB Save: %S"
-        ;; FIXME: Use `while-no-input'?
-        (save-mark-and-excursion ;; <-- added line
-          (semantic-exit-on-input 'semanticdb-idle-save
-            (mapc (lambda (db)
-                    (semantic-throw-on-input 'semanticdb-idle-save)
-                    (semanticdb-save-db db t))
-                  semanticdb-database-list))))
-    (if (fboundp 'save-excursion)
-        (save-excursion ;; <-- added line
-          (semantic-exit-on-input 'semanticdb-idle-save
-            (mapc (lambda (db)
-                    (semantic-throw-on-input 'semanticdb-idle-save)
-                    (semanticdb-save-db db t))
-                  semanticdb-database-list))))))
+              ;; save-mark-and-excursion is defined in Emacs 25.1-forward
+              (if (fboundp 'save-mark-and-excursion)
+                  (semantic-safe "Auto-DB Save: %S"
+                    ;; FIXME: Use `while-no-input'?
+                    (save-mark-and-excursion ;; <-- added line
+                      (semantic-exit-on-input 'semanticdb-idle-save
+                        (mapc (lambda (db)
+                                (semantic-throw-on-input 'semanticdb-idle-save)
+                                (semanticdb-save-db db t))
+                              semanticdb-database-list))))
+                (if (fboundp 'save-excursion)
+                    (save-excursion ;; <-- added line
+                      (semantic-exit-on-input 'semanticdb-idle-save
+                        (mapc (lambda (db)
+                                (semantic-throw-on-input 'semanticdb-idle-save)
+                                (semanticdb-save-db db t))
+                              semanticdb-database-list))))))
 
-;; Enable semanticdb, slows down Emacs
-(global-semanticdb-minor-mode nil)
+            ;; Enable semanticdb, slows down Emacs
+            (global-semanticdb-minor-mode nil)
 
-;; This prevents Emacs to become uresponsive
-(defun semanticdb-kill-hook ()
-  nil)
-(defun semanticdb-create-table-for-file-not-in-buffer (arg)
-  nil)
+            ;; This prevents Emacs to become uresponsive
+            (defun semanticdb-kill-hook ()
+              nil)
+            (defun semanticdb-create-table-for-file-not-in-buffer (arg)
+              nil)
 
-;; Default semanticdb directory
-(setq-default semanticdb-default-save-directory "~/.emacs.cache/semanticdb")
+            ;; Default semanticdb directory
+            (setq-default semanticdb-default-save-directory "~/.emacs.cache/semanticdb")
 
-;; semanticdb support for global/gtags
-(when (executable-find "global")
-  (semanticdb-enable-gnu-global-databases 'c-mode t)
-  (semanticdb-enable-gnu-global-databases 'c++-mode t))
+            ;; semanticdb support for global/gtags
+            (when (executable-find "global")
+              (semanticdb-enable-gnu-global-databases 'c-mode t)
+              (semanticdb-enable-gnu-global-databases 'c++-mode t))
+
+            (defvar semantic/c-files-regex ".*\\.\\(c\\|cpp\\|h\\|hpp\\)"
+              "A regular expression to match any c/c++ related files under a directory")
+
+            (defun semantic/semantic-parse-dir (root regex)
+              "This function is an attempt of mine to force semantic to
+     parse all source files under a root directory. Arguments:
+     -- root: The full path to the root directory
+     -- regex: A regular expression against which to match all files in the directory"
+              (let (
+                    ;;make sure that root has a trailing slash and is a dir
+                    (root (file-name-as-directory root))
+                    (files (directory-files root t ))
+                    )
+                ;; remove current dir and parent dir from list
+                (setq files (delete (format "%s." root) files))
+                (setq files (delete (format "%s.." root) files))
+                (while files
+                  (setq file (pop files))
+                  (if (not(file-accessible-directory-p file))
+                      ;;if it's a file that matches the regex we seek
+                      (progn (when (string-match-p regex file)
+                               (save-excursion
+                                 (semanticdb-file-table-object file))
+                               ))
+                    ;;else if it's a directory
+                    (semantic/semantic-parse-dir file regex)))))
+
+            (defun semantic/semantic-parse-current-dir (regex)
+              "Parses all files under the current directory matching regex"
+              (semantic/semantic-parse-dir (file-name-directory(buffer-file-name)) regex))
+
+            (defun semantic/parse-curdir-c ()
+              "Parses all the c/c++ related files under the current directory
+     and inputs their data into semantic"
+              (interactive)
+              (semantic/semantic-parse-current-dir semantic/c-files-regex))
+
+            (defun semantic/parse-dir-c (dir)
+              "Prompts the user for a directory and parses all c/c++ related files
+     under the directory"
+              (interactive (list (read-directory-name "Provide the directory to search in:")))
+              (semantic/semantic-parse-dir (expand-file-name dir) semantic/c-files-regex))))
 
 ;; Load contrib library
-(require 'eassist)
+(use-package eeassist)
 
-;; Enable which-function-mode for selected major modes
-(setq which-func-modes '(org-mode markdown-mode
-                                  ecmascript-mode emacs-lisp-mode lisp-mode java-mode
-                                  c-mode c++-mode makefile-mode sh-mode))
+;; Show function in mode-line
+(use-package which-func
+  :config (progn
+            (which-function-mode 1)
+            (mapc (lambda (mode)
+                    (add-hook mode (lambda () (which-function-mode t))))
+                  '(prog-mode-hook
+                    org-mode-hook))
 
-;; which-function-mode
-(which-func-mode t)
-(mapc (lambda (mode)
-        (add-hook mode (lambda () (which-function-mode t))))
-      '(prog-mode-hook
-        org-mode-hook))
+            ;; Enable which-function-mode for selected major modes
+            (setq which-func-unknown ""
+                  which-func-maxout 1024
+                  which-func-modes '(latex-mode
+                                     markdown-mode
+                                     c-mode
+                                     emacs-lisp-mode
+                                     org-mode
+                                     c++-mode))
+
+            (setq which-func-format
+                  `(" "
+                    (:propertize which-func-current local-map
+                                 (keymap
+                                  (mode-line keymap
+                                             (mouse-3 . end-of-defun)
+                                             (mouse-2 . narrow-to-defun)
+                                             (mouse-1 . beginning-of-defun)))
+                                 face which-func
+                                 mouse-face mode-line-highlight
+                                 help-echo "mouse-1: go to beginning\n\
+mouse-2: toggle rest visibility\n\
+mouse-3: go to end")
+                    " "))))
 
 (provide 'setup-cedet)
 ;;; setup-cedet.el ends here
