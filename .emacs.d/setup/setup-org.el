@@ -115,8 +115,8 @@
                   org-hide-leading-stars t
                   org-hide-emphasis-markers t
                   org-highlight-latex-and-related '(latex)
-                  org-ellipsis "⤵"
-                  org-indent-mode nil) ;; this causes problem in other modes
+                  ;; this causes problem in other modes
+                  org-indent-mode nil)
 
             ;; Insert blank line before new heading
             (setq org-blank-before-new-entry
@@ -247,7 +247,6 @@
                          (when (and (eq (org-element-type element) 'keyword)
                                     (string= (org-element-property :key element) "INCLUDE"))
                            (replace-match "EXPORT \\1" nil nil nil 1)))))))))
-
 
             ;; Add missing function
             (defun org-reverse-string (string)

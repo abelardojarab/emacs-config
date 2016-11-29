@@ -28,6 +28,10 @@
   :config (progn
             (global-company-mode)
 
+            ;; https://lists.gnu.org/archive/html/emacs-devel/2014-02/msg00067.html
+            (setq company-begin-commands '(self-insert-command
+                                           org-self-insert-command))
+
             ;; Use Emacs' built-in TAB completion hooks to trigger AC (Emacs >= 23.2)
             (setq tab-always-indent 'complete)  ;; use 'complete when auto-complete is disabled
             (add-to-list 'completion-styles 'initials t)
@@ -73,7 +77,8 @@
                         ;; or else, you will have completion in every major mode, that's very annoying!
                         (set (make-local-variable 'company-backends) '((company-yasnippet
                                                                         company-files
-                                                                        company-abbrev)))))
+                                                                        company-abbrev
+                                                                        company-ispell)))))
 
             ;; C-mode setup
             (add-hook 'c-mode-common-hook

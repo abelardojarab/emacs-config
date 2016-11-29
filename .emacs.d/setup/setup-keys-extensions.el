@@ -24,6 +24,13 @@
 
 ;;; Code:
 
+;; Showkey as typed
+(use-package showkey
+  :if (display-graphic-p)
+  :defer t
+  :load-path (lambda () (expand-file-name "dadams/" user-emacs-directory))
+  :commands (showkey-tooltip-mode showkey-log-mode))
+
 ;; visual feedback when pressing keys
 (use-package which-key
   :load-path (lambda () (expand-file-name "which-key/" user-emacs-directory))

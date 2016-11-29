@@ -130,13 +130,6 @@ non-nil."
           (set-scroll-bar-mode 'right))
   :config (add-hook 'prog-mode-hook (lambda () (lawlist-scroll-bar-mode 1))))
 
-;; Showkey as typed
-(use-package showkey
-  :if (display-graphic-p)
-  :defer t
-  :load-path (lambda () (expand-file-name "dadams/" user-emacs-directory))
-  :commands (showkey-tooltip-mode showkey-log-mode))
-
 ;; All the icons
 (use-package all-the-icons
   :if (display-graphic-p)
