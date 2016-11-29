@@ -65,13 +65,10 @@
                         ;; make `company-backends' local is critical
                         ;; or else, you will have completion in every major mode, that's very annoying!
                         (set (make-local-variable 'company-backends) '((company-yasnippet
-                                                                        company-math-symbols-latex
-                                                                        company-latex-commands
                                                                         company-math-symbols-unicode
-                                                                        company-auctex
+                                                                        company-latex-commands
                                                                         company-files
-                                                                        company-abbrev
-                                                                        )))))
+                                                                        company-abbrev)))))
 
             ;; C-mode setup
             (add-hook 'c-mode-common-hook
