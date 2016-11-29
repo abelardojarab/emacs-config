@@ -50,15 +50,6 @@
   (global-set-key [S-prior] 'shift-mark-backward-page)
   (global-set-key [S-next]  'shift-mark-forward-page))
 
-;; Smart tab
-(use-package smart-tab
-  :diminish smart-tab-mode
-  :load-path (lambda () (expand-file-name "smart-tab/" user-emacs-directory))
-  :config (progn
-            (cons 'yas-hippie-try-expand 'hippie-expand-try-functions-list)
-            (setq smart-tab-using-hippie-expand t)
-            (global-smart-tab-mode)))
-
 ;; popup-based buffer switcher
 (use-package popup-switcher
   :defer t

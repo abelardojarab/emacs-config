@@ -257,6 +257,9 @@
 ;; Setup Org (blogging support)
 (require 'setup-org-blog)
 
+;; Setup LaTeX
+(require 'setup-latex)
+
 ;; Setup modeline
 (require 'setup-modeline)
 
@@ -328,9 +331,6 @@
 
 ;; Setup HTML
 (require 'setup-html)
-
-;; Setup LaTeX
-(require 'setup-latex)
 
 ;; Setup Javascript
 (require 'setup-javascript)
@@ -427,6 +427,9 @@
 
 ;; Setup OS-specific keys
 (require 'setup-keys-extensions)
+
+;; Setup tab key
+(require 'setup-tabkey)
 
 ;; Setup ergoemacs
 (require 'setup-ergoemacs)

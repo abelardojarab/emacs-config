@@ -32,6 +32,17 @@
             (setq tab-always-indent 'complete)  ;; use 'complete when auto-complete is disabled
             (add-to-list 'completion-styles 'initials t)
 
+            ;; Add yasnippet support for all company backends
+            ;; https://github.com/syl20bnr/spacemacs/pull/179
+            (defvar company-mode/enable-yas t
+              "Enable yasnippet for all backends.")
+            (defun company-mode/backend-with-yas (backend)
+              (if (or (not company-mode/enable-yas) (and (listp backend) (member 'company-yasnippet backend)))
+                  backend
+                (append (if (consp backend) backend (list backend))
+                        '(:with company-yasnippet))))
+            (setq company-backends (mapcar #'company-mode/backend-with-yas company-backends))
+
             ;; Use Company for completion
             (bind-key [remap completion-at-point] #'company-complete company-mode-map)
             (setq company-backends
@@ -55,7 +66,9 @@
                         ;; or else, you will have completion in every major mode, that's very annoying!
                         (set (make-local-variable 'company-backends) '((company-yasnippet
                                                                         company-files
-                                                                        company-abbrev)))))
+                                                                        company-abbrev
+                                                                        company-math
+                                                                        company-auctex)))))
 
             ;; C-mode setup
             (add-hook 'c-mode-common-hook
@@ -149,8 +162,18 @@
   :if (or (executable-find "bibtex")
           (executable-find "biber"))
   :load-path (lambda () (expand-file-name "company-bibtex/" user-emacs-directory))
-  :after (company org)
+  :after company
   :config (setq company-bibtex-bibliography (list "~/workspace/Documents/Bibliography/biblio.bib")))
+
+;; Company auctex
+(use-package company-auctex
+  :load-path (lambda () (expand-file-name "company-auctex/" user-emacs-directory))
+  :after (company auctex))
+
+;; Company math
+(use-package company-math
+  :load-path (lambda () (expand-file-name "company-math/" user-emacs-directory))
+  :after (company math-symbol-lists))
 
 (provide 'setup-company)
 ;;; setup-company.el ends here
