@@ -158,9 +158,9 @@
               "Face used for the line delimiting the end of source blocks.")
 
             ;; Beamer/ODT/Markdown support
-            (require 'ox-beamer)
-            (require 'ox-odt)
-            (require 'ox-md)
+            (use-package ox-beamer)
+            (use-package ox-odt)
+            (use-package ox-md)
 
             ;; Org Templates
             (setq org-structure-template-alist
@@ -344,9 +344,9 @@
                                           "\\)"))
 
             ;; Use footnotes as eldoc source
+            (use-package org-eldoc)
             (add-hook 'org-mode-hook #'org-eldoc-load)
             (add-hook 'org-mode-hook #'eldoc-mode)
-
             (defun my/org-eldoc-get-footnote ()
               (save-excursion
                 (let ((fn (org-between-regexps-p "\\[fn:" "\\]")))
