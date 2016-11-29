@@ -26,15 +26,6 @@
 
 ;; Add all diminished modes here
 
-;; Insert typographically useful unicode
-(use-package typo
-  :diminish typo-mode
-  :config (progn
-            (setq-default  typo-language "English")
-            (add-hook 'markdown-mode-hook #'typo-mode)
-            (add-hook 'org-mode-hook #'typo-mode)
-            (add-hook 'rst-mode-hook #'typo-mode)))
-
 ;; Dashboard
 (use-package dashboard
   :load-path (lambda () (expand-file-name "dashboard/" user-emacs-directory))

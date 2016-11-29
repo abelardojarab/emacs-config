@@ -185,9 +185,11 @@
             (setq langtool-autoshow-message-function
                   'langtool-autoshow-detail-popup)))
 
+
 ;; Insert typographically useful unicode
 (use-package typo
   :diminish typo-mode
+  :load-path (lambda () (expand-file-name "typo/" user-emacs-directory))
   :config (progn
             (setq-default typo-language "English")
             (add-hook 'text-mode-hook #'typo-mode)
