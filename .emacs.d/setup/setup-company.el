@@ -32,6 +32,24 @@
             (setq tab-always-indent 'complete)  ;; use 'complete when auto-complete is disabled
             (add-to-list 'completion-styles 'initials t)
 
+            ;; Use Company for completion
+            (bind-key [remap completion-at-point] #'company-complete company-mode-map)
+
+            ;; Enable company in Org mode
+            (defun add-pcomplete-to-capf ()
+              (add-hook 'completion-at-point-functions 'pcomplete-completions-at-point nil t))
+            (add-hook 'org-mode-hook #'add-pcomplete-to-capf)
+
+            ;; Default company backends
+            (setq company-backends
+                  '((company-files          ;; files & directory
+                     company-keywords       ;; keywords
+                     company-capf           ;; `completion-at-point-functions'
+                     company-yasnippet
+                     company-abbrev)
+                    (company-dabbrev
+                     company-dabbrev-code)))
+
             ;; Add yasnippet support for all company backends
             ;; https://github.com/syl20bnr/spacemacs/pull/179
             (defvar company-mode/enable-yas t
@@ -42,17 +60,6 @@
                 (append (if (consp backend) backend (list backend))
                         '(:with company-yasnippet))))
             (setq company-backends (mapcar #'company-mode/backend-with-yas company-backends))
-
-            ;; Use Company for completion
-            (bind-key [remap completion-at-point] #'company-complete company-mode-map)
-            (setq company-backends
-                  '((company-files          ;; files & directory
-                     company-keywords       ;; keywords
-                     company-capf           ;; `completion-at-point-functions'
-                     company-yasnippet
-                     company-abbrev)
-                    (company-dabbrev
-                     company-dabbrev-code)))
 
             ;; Add company-ispell as backend for text-mode's only
             ;; http://blog.binchen.org/posts/emacs-auto-completion-for-non-programmers.html
@@ -65,8 +72,6 @@
                         ;; make `company-backends' local is critical
                         ;; or else, you will have completion in every major mode, that's very annoying!
                         (set (make-local-variable 'company-backends) '((company-yasnippet
-                                                                        company-math-symbols-unicode
-                                                                        company-latex-commands
                                                                         company-files
                                                                         company-abbrev)))))
 
@@ -165,21 +170,34 @@
   :after company
   :config (setq company-bibtex-bibliography (list "~/workspace/Documents/Bibliography/biblio.bib")))
 
-;; Company auctex
-(use-package company-auctex
-  :load-path (lambda () (expand-file-name "company-auctex/" user-emacs-directory))
-  :after (company auctex)
-  :config (company-auctex-init))
-
 ;; Company math
 (use-package company-math
   :load-path (lambda () (expand-file-name "company-math/" user-emacs-directory))
-  :after (company math-symbol-lists)
+  :after (company math-symbol-lists))
+
+;; Company auctex
+(use-package company-auctex
+  :load-path (lambda () (expand-file-name "company-auctex/" user-emacs-directory))
+  :after (company auctex company-math)
   :config (progn
+            (defun company-auctex-labels (command &optional arg &rest ignored)
+              "company-auctex-labels backend"
+              (interactive (list 'interactive))
+              (case command
+                (interactive (company-begin-backend 'company-auctex-labels))
+                (prefix (company-auctex-prefix "\\\\.*ref{\\([^}]*\\)\\="))
+                (candidates (company-auctex-label-candidates arg))))
+
             ;; local configuration for TeX modes
             (defun my/latex-mode-setup ()
               (setq-local company-backends
-                          (append '(company-math-symbols-latex company-latex-commands)
+                          (append '(company-auctex-macros
+                                    company-auctex-environments
+                                    company-math-symbols-unicode
+                                    company-math-symbols-latex
+                                    company-auctex-labels
+                                    company-auctex-bibs
+                                    company-bibtex)
                                   company-backends)))
 
             (add-hook 'TeX-mode-hook 'my/latex-mode-setup)))

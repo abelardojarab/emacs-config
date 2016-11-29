@@ -391,6 +391,14 @@
                                                                                         ((equal "," (match-string 0)) "|")
                                                                                         ((match-string 2))) ))  nil  beg end))
 
+            ;; Footnote definitions
+            (setq org-footnote-definition-re (org-re "^\\[\\(fn:[-_[:word:]]+\\)\\]")
+                  org-footnote-re (concat "\\[\\(?:"
+                                          ;; Match inline footnotes.
+                                          (org-re "fn:\\([-_[:word:]]+\\)?:\\|")
+                                          (org-re "\\(fn:[-_[:word:]]+\\)")
+                                          "\\)"))
+
             ;; Insert screenshots into Org mode, very useful
             (defun org-insert-screenshot ()
               "Take a screenshot into a time stamped unique-named file in the same
