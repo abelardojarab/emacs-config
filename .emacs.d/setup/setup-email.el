@@ -105,6 +105,7 @@
 
 ;; mu4e (asynchronous email client)
 (use-package mu4e
+  :defer t
   :if (executable-find "mu")
   :load-path (lambda () (expand-file-name "mu/mu4e/" user-emacs-directory))
   :commands (mu4e/start)
