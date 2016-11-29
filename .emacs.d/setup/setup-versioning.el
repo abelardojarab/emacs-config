@@ -75,6 +75,8 @@
              magit-push-popup
              magit-pull
              magit-pull-popup
+             magit-stage-file
+             magit-unstage-file
              projectile-vc
              git-commit-setup-check-buffer
              git-visit-diffs

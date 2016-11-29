@@ -170,6 +170,14 @@ plus add font-size: 8pt"
                   (replace-match pre-tag nil nil))
                 (goto-char (point-min))))))
 
+;; Formatted copy
+(use-package ox-clip
+  :after (htmlize org)
+  :commands ox-clip-formatted-copy
+  :if (or (executable-find "xclip")
+          (executable-find "python"))
+  :load-path (lambda () (expand-file-name "ox-clip/" user-emacs-directory)))
+
 (use-package web-completion-data
   :load-path (lambda () (expand-file-name "web-completion-data/" user-emacs-directory)))
 

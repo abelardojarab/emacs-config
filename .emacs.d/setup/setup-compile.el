@@ -41,29 +41,31 @@
                   compilation-auto-jump-to-first-error t      ;; jump to first error auto
                   compilation-auto-jump-to-next-error t)      ;; jump to next error
 
-            ))
+            ;; If there is no compilation window, open one at the bottom, spanning the complete width of the frame.
+            ;; Otherwise, reuse existing window
+            (add-to-list 'display-buffer-alist
+                         `(,(rx bos "*compilation*" eos)
+                           (display-buffer-reuse-window
+                            display-buffer-in-side-window)
+                           (reusable-frames . visible)
+                           (side            . bottom)
+                           (window-height   . 0.3)))
 
-(add-hook 'c-mode-common-hook
-          (lambda ()
-            (unless (file-exists-p "Makefile")
-              (set (make-local-variable 'compile-command)
-                   ;; emulate make's .c.o implicit pattern rule, but with
-                   ;; different defaults for the CC, CPPFLAGS, and CFLAGS
-                   ;; variables:
-                   ;; $(CC) -c -o $@ $(CPPFLAGS) $(CFLAGS) $<
-                   (let ((file (file-name-nondirectory buffer-file-name)))
-                     (format "%s -o %s %s %s"
-                             (or (getenv "CC") "g++")
-                             (file-name-sans-extension file)
-                             ;;(or (getenv "CPPFLAGS") "-DDEBUG=9")
-                             (or (getenv "CFLAGS") " -g -O2")
-                             file))))))
-
-;; makefiles
-(add-hook 'makefile-mode-hook
-          (lambda()
-            (setq whitespace-style '(face trailing tabs))
-            (whitespace-mode)))
+            (add-hook 'c-mode-common-hook
+                      (lambda ()
+                        (unless (file-exists-p "Makefile")
+                          (set (make-local-variable 'compile-command)
+                               ;; emulate make's .c.o implicit pattern rule, but with
+                               ;; different defaults for the CC, CPPFLAGS, and CFLAGS
+                               ;; variables:
+                               ;; $(CC) -c -o $@ $(CPPFLAGS) $(CFLAGS) $<
+                               (let ((file (file-name-nondirectory buffer-file-name)))
+                                 (format "%s -o %s %s %s"
+                                         (or (getenv "CC") "g++")
+                                         (file-name-sans-extension file)
+                                         ;;(or (getenv "CPPFLAGS") "-DDEBUG=9")
+                                         (or (getenv "CFLAGS") " -g -O2")
+                                         file))))))))
 
 (provide 'setup-compile)
 ;;; setup-compile.el ends here

@@ -24,104 +24,111 @@
 
 ;;; Code:
 
-(eval-after-load 'org
-  '(progn
-     ;; A progress indicator for code blocks in org-mode courtesy of John Kitchin
-     (defadvice org-babel-execute-src-block (around progress nil activate)
-       ;; (set-face-attribute
-       ;;  'org-block-background nil :background "LightSteelBlue")
-       (message "Running your code block")
-       ad-do-it
-       ;; (set-face-attribute 'org-block-background nil :background "gray")
-       (message "Done with code block"))
+(use-package ob
+  :after org
+  :config (progn
 
-     ;; Rendering ditaa
-     (setq org-ditaa-jar-path (expand-file-name "jar/ditaa.jar" user-emacs-directory))
+            ;; Settings
+            (setq org-src-tab-acts-natively nil  ;; BUG
+                  org-src-fontify-natively t
+                  org-src-tab-acts-natively t
 
-     ;; Rendering plantuml
-     (setq org-plantuml-jar-path (expand-file-name "jar/plantuml.jar" user-emacs-directory))
+                  ;; Don't ask for confirmation on every =C-c C-c= code-block compile.
+                  org-confirm-babel-evaluate nil
 
-     ;; Automatically refresh inline images that are generated from Babel blocks
-     (add-hook 'org-babel-after-execute-hook (lambda ()
-                                               (condition-case nil
-                                                   (org-display-inline-images)
-                                                 (error nil))) 'append)
+                  ;; Re-enable org-export babel evaluate
+                  org-export-babel-evaluate t
 
-     ;; Enable multiple languages
-     (org-babel-do-load-languages
-      'org-babel-load-languages
-      '((emacs-lisp . t)
-        (plantuml . t)
-        (ditaa . t)
-        (dot . t)
-        (gnuplot . t)
-        ;; sh was renamed to shell according to:
-        ;; http://comments.gmane.org/gmane.emacs.orgmode/102877
-        (shell . t)
-        (R . t)
-        (perl . t)
-        (ruby . t)
-        (python . t)
-        (js . t)
-        (C . t)
-        (haskell . t)))
+                  ;; Rendering ditaa
+                  org-ditaa-jar-path (expand-file-name "jar/ditaa.jar" user-emacs-directory)
 
-     ;; Don't ask for confirmation on every =C-c C-c= code-block compile.
-     (setq org-confirm-babel-evaluate nil)
+                  ;; Rendering plantuml
+                  org-plantuml-jar-path (expand-file-name "jar/plantuml.jar" user-emacs-directory))
 
-     ;; Re-enable org-export babel evaluate
-     (setq org-export-babel-evaluate t)
+            ;; A progress indicator for code blocks in org-mode courtesy of John Kitchin
+            (defadvice org-babel-execute-src-block (around progress nil activate)
+              ;; (set-face-attribute
+              ;;  'org-block-background nil :background "LightSteelBlue")
+              (message "Running your code block")
+              ad-do-it
+              ;; (set-face-attribute 'org-block-background nil :background "gray")
+              (message "Done with code block"))
 
-     ;; The next block makes org-babel aware that a lower-case 'r' in a =src= block header should be processed as R.
-     (add-to-list 'org-src-lang-modes
-                  '("r" . ess-mode))
+            ;; Automatically refresh inline images that are generated from Babel blocks
+            (add-hook 'org-babel-after-execute-hook (lambda ()
+                                                      (condition-case nil
+                                                          (org-display-inline-images)
+                                                        (error nil))) 'append)
 
-     ;; To edit Graphviz code in Org
-     (add-to-list 'org-src-lang-modes
-                  '("dot" . graphviz-dot))
+            ;; Enable multiple languages
+            (org-babel-do-load-languages
+             'org-babel-load-languages
+             '((emacs-lisp . t)
+               (plantuml . t)
+               (ditaa . t)
+               (dot . t)
+               (gnuplot . t)
+               ;; sh was renamed to shell according to:
+               ;; http://comments.gmane.org/gmane.emacs.orgmode/102877
+               (shell . t)
+               (R . t)
+               (perl . t)
+               (ruby . t)
+               (python . t)
+               (js . t)
+               (C . t)
+               (haskell . t)))
 
-     ;; To edit plantuml code in Org
-     (add-to-list
-      'org-src-lang-modes '("plantuml" . puml))
+            ;; The next block makes org-babel aware that a lower-case 'r' in a =src= block header should be processed as R.
+            (add-to-list 'org-src-lang-modes
+                         '("r" . ess-mode))
 
-     ;; Abbrev
-     (add-hook 'org-mode-hook (lambda () (abbrev-mode 1)))
-     (define-skeleton skel-org-block-elisp
-       "Insert an emacs-lisp block"
-       ""
-       "#+begin_src emacs-lisp\n"
-       _ - \n
-       "#+end_src\n")
-     (define-abbrev org-mode-abbrev-table "elsrc" "" 'skel-org-block-elisp)
+            ;; To edit Graphviz code in Org
+            (add-to-list 'org-src-lang-modes
+                         '("dot" . graphviz-dot))
 
-     (define-skeleton skel-org-block-js
-       "Insert a JavaScript block"
-       ""
-       "#+begin_src js\n"
-       _ - \n
-       "#+end_src\n")
-     (define-abbrev org-mode-abbrev-table "jssrc" "" 'skel-org-block-js)
+            ;; To edit plantuml code in Org
+            (add-to-list
+             'org-src-lang-modes '("plantuml" . puml))
 
-     (define-skeleton skel-header-block
-       "Creates my default header"
-       ""
-       "#+TITLE: " str "\n"
-       "#+AUTHOR:\n"
-       "#+EMAIL:\n"
-       "#+LANGUAGE: en\n"
-       "#+OPTIONS:  toc:nil num:0 H:2\n"
-       "#+OPTIONS: author:t email:nil  date:t\n"
-       "#+OPTIONS: c:nil d:(not LOGBOOK) e:t f:t inline:t p:nil pri:nil stat:t tags:t\n"
-       "#+OPTIONS: tasks:t tex:t timestamp:t todo:t\n"
-       "#+DESCRIPTION:\n"
-       "#+EXCLUDE_TAGS: noexport\n"
-       "#+KEYWORDS:\n"
-       "#+SELECT_TAGS: export\n"
-       "#+STYLE: <link rel=\"stylesheet\" type=\"text/css\" href=\"https://raw.githubusercontent.com/thi-ng/org-spec/master/css/style.css\" />\n")
-     (define-abbrev org-mode-abbrev-table "sheader" "" 'skel-header-block)
+            ;; Abbrev
+            (add-hook 'org-mode-hook (lambda () (abbrev-mode 1)))
+            (define-skeleton skel-org-block-elisp
+              "Insert an emacs-lisp block"
+              ""
+              "#+begin_src emacs-lisp\n"
+              _ - \n
+              "#+end_src\n")
+            (define-abbrev org-mode-abbrev-table "elsrc" "" 'skel-org-block-elisp)
 
-     ;; Tell auto-insert what to use for .org files
-     (define-auto-insert "\\.org" 'skel-header-block)))
+            (define-skeleton skel-org-block-js
+              "Insert a JavaScript block"
+              ""
+              "#+begin_src js\n"
+              _ - \n
+              "#+end_src\n")
+            (define-abbrev org-mode-abbrev-table "jssrc" "" 'skel-org-block-js)
+
+            (define-skeleton skel-header-block
+              "Creates my default header"
+              ""
+              "#+TITLE: " str "\n"
+              "#+AUTHOR:\n"
+              "#+EMAIL:\n"
+              "#+LANGUAGE: en\n"
+              "#+OPTIONS:  toc:nil num:0 H:2\n"
+              "#+OPTIONS: author:t email:nil  date:t\n"
+              "#+OPTIONS: c:nil d:(not LOGBOOK) e:t f:t inline:t p:nil pri:nil stat:t tags:t\n"
+              "#+OPTIONS: tasks:t tex:t timestamp:t todo:t\n"
+              "#+DESCRIPTION:\n"
+              "#+EXCLUDE_TAGS: noexport\n"
+              "#+KEYWORDS:\n"
+              "#+SELECT_TAGS: export\n"
+              "#+STYLE: <link rel=\"stylesheet\" type=\"text/css\" href=\"https://raw.githubusercontent.com/thi-ng/org-spec/master/css/style.css\" />\n")
+            (define-abbrev org-mode-abbrev-table "sheader" "" 'skel-header-block)
+
+            ;; Tell auto-insert what to use for .org files
+            (define-auto-insert "\\.org" 'skel-header-block)))
 
 (provide 'setup-org-babel)
 ;;; setup-org-babel.el ends here

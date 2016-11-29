@@ -147,7 +147,15 @@
 (use-package company-c-headers
   :after company
   :if (executable-find "clang")
-  :load-path (lambda () (expand-file-name "company-c-headers/" user-emacs-directory)))
+  :load-path (lambda () (expand-file-name "company-c-headers/" user-emacs-directory))
+  :config (progn
+            (defun my/ede-object-system-include-path ()
+              "Return the system include path for the current buffer."
+              (when ede-object
+                (ede-system-include-path ede-object)))
+
+            (setq company-c-headers-path-system
+                  #'my/ede-object-system-include-path)))
 
 ;; Company integration with irony
 (use-package company-irony

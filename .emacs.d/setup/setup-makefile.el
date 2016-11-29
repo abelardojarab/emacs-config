@@ -24,5 +24,13 @@
 
 ;;; Code:
 
+;; makefiles
+(use-package makefile-mode
+  :config (progn
+            (add-hook 'makefile-mode-hook
+                      (lambda ()
+                         (setq whitespace-style '(face trailing tabs))
+                         (whitespace-mode)))))
+
 (provide 'setup-makefile)
 ;;; setup-makefile.el ends here

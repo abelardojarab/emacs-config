@@ -242,8 +242,14 @@
 ;; Setup Org
 (require 'setup-org)
 
+;; Setup Org Agenda
+(require 'setup-org-agenda)
+
 ;; Setup Org (babel support)
 (require 'setup-org-babel)
+
+;; Setup Org plugins
+(require 'setup-org-plugins)
 
 ;; Setup Org (image supporg)
 (require 'setup-org-image)

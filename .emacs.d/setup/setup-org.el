@@ -56,8 +56,9 @@
           (defun org-element-verbatim-successor       (arg))
           (add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode)))
   :config (progn
-            (require 'org-list)
-            (require 'ox-org)
+            ;; Basic packages
+            (use-package org-list)
+            (use-package ox-org)
 
             ;; Tweaks
             (add-hook 'org-mode-hook
@@ -88,36 +89,19 @@
               (add-to-list 'ispell-skip-region-alist '("#\\+BEGIN_QUOTE" . "#\\+END_QUOTE")))
             (add-hook 'org-mode-hook #'my/org-ispell)
 
-            ;; Set up Org default files
-            (let ((todo_workspace "~/workspace/Documents/Org/todo.org")
-                  (todo_dropbox "~/Dropbox/Documents/Org/todo.org")
-                  (todo_googledrive "~/Google Drive/Documents/Org/todo.org"))
-              (when (or (file-readable-p todo_workspace)
-                        (file-readable-p todo_dropbox)
-                        (file-readable-p todo_googledrive))
 
-                ;; Set base Org directory
-                (if (file-exists-p todo_dropbox)
-                    (setq org-directory "~/Dropbox/Documents/Org")
-                  (if (file-exists-p todo_workspace)
-                      (setq org-directory "~/workspace/Documents/Org")
-                    (setq org-directory "~/Google Drive/Documents/Org")))
-
-                ;; Set remaining Org files
-                (setq diary-file (concat org-directory "/diary"))
-                (setq org-id-locations-file "~/.emacs.cache/org-id-locations")
-                (setq org-default-notes-file (concat org-directory "/notes.org"))
-                (setq org-default-refile-file (concat org-directory "/refile.org"))
-                (setq org-agenda-diary-file (concat org-directory "/todo.org"))
-                (setq org-mobile-file (concat org-directory "/mobileorg.org"))
-                (setq org-mobile-directory (concat org-directory "/mobile-org"))
-                (setq org-agenda-files (list
-                                        (concat org-directory "/diary.org")
-                                        (concat org-directory "/agenda.org")
-                                        (concat org-directory "/todo.org")
-                                        (concat org-directory "/notes.org")
-                                        (concat org-directory "/mobileorg.org")
-                                        (concat org-directory "/refile.org")))))
+            ;; Bind org-table-* command when the point is in an org table (source).
+            (bind-keys
+             :map org-mode-map
+             :filter (org-at-table-p)
+             ("C-c ?" . org-table-field-info)
+             ("C-c SPC" . org-table-blank-field)
+             ("C-c +" . org-table-sum)
+             ("C-c =" . org-table-eval-formula)
+             ("C-c `" . org-table-edit-field)
+             ("C-#" . org-table-rotate-recalc-marks)
+             ("C-c }" . org-table-toggle-coordinate-overlays)
+             ("C-c {" . org-table-toggle-formula-debugger))
 
             ;; Miscellanenous settings
             (setq org-startup-folded t
@@ -126,22 +110,17 @@
                   org-cycle-include-plain-lists 'integrate
                   org-startup-with-inline-images nil
                   org-startup-truncated t
-                  org-blank-before-new-entry '((heading . auto) (plain-list-item . auto))
-                  org-refile-targets '((org-agenda-files :maxlevel . 9))
-                  org-src-fontify-natively t
-                  org-src-tab-acts-natively t
-                  org-confirm-babel-evaluate nil
                   org-use-speed-commands t
                   org-completion-use-ido t
                   org-hide-leading-stars t
                   org-hide-emphasis-markers t
-                  org-log-done t
-                  org-enforce-todo-dependencies t
+                  org-highlight-latex-and-related '(latex)
+                  org-ellipsis "⤵"
                   org-indent-mode nil) ;; this causes problem in other modes
 
             ;; Insert blank line before new heading
             (setq org-blank-before-new-entry
-                  '((heading . t)))
+                  '((heading . t) (plain-list-item . auto)))
 
             ;; Allow quotes to be verbatim
             (add-hook 'org-mode-hook
@@ -151,24 +130,6 @@
                         (org-element--set-regexps)
                         (custom-set-variables `(org-emphasis-alist ',org-emphasis-alist))))
 
-            ;; Agenda settings
-            (setq org-agenda-inhibit-startup t ;; 50x speedup
-                  org-agenda-use-tag-inheritance nil ;; 3-4x speedup
-                  org-agenda-show-log t
-                  org-agenda-show-all-dates t
-                  org-agenda-start-on-weekday nil
-                  org-agenda-span 14
-                  org-agenda-ndays 14
-                  org-agenda-include-diary t
-                  org-agenda-window-setup 'current-window
-                  org-agenda-skip-scheduled-if-done t
-                  org-agenda-skip-deadline-if-done t
-                  org-deadline-warning-days 7
-                  org-agenda-time-grid
-                  '((daily today require-timed)
-                    "----------------"
-                    (800 1000 1200 1400 1600 1800)))
-
             ;; Export options
             (setq org-export-coding-system 'utf-8
                   org-export-time-stamp-file nil
@@ -177,8 +138,8 @@
                   org-export-allow-bind-keywords t
                   org-export-async-debug t)
 
-            ;; Mouse in Org
-            (require 'org-mouse)
+            ;; Enable mouse in Org
+            (use-package org-mouse)
 
             ;; Fonts
             (add-hook 'org-mode-hook (lambda () (variable-pitch-mode t)))
@@ -244,35 +205,6 @@
                         (define-key org-mode-map (kbd "RET") 'org-return)
                         (define-key org-mode-map [C-M-return] 'org-insert-todo-heading)
                         (define-key org-mode-map [S-return] 'org-insert-subheading)))
-
-            ;; define todo states: set time stamps one waiting, delegated and done
-            (setq org-todo-keywords
-                  '((sequence "TODO(t!)" "|" "DONE(d!)" "CANCELLED(c@/!)" "HOLD(h!)")
-                    (sequence "TASK(t!)" "|" "DONE(d!)" "IN PROGRESS(p@/!)" "CANCELLED(c@/!)")
-                    (sequence "IDEA(i!)" "MAYBE(y!)" "STAGED(s!)" "WORKING(k!)" "|" "USED(u!/@)")))
-            (setq org-todo-keyword-faces
-                  '(("IN PROGRESS" . 'warning)
-                    ("HOLD" . 'font-lock-keyword-face)
-                    ("TASK" . 'font-lock-builtin-face)
-                    ("CANCELLED" . 'font-lock-doc-face)))
-
-            ;; Tag tasks with GTD-ish contexts
-            (setq org-tag-alist '(("@work" . ?b)
-                                  ("@home" . ?h)
-                                  ("@place" . ?p)
-                                  ("@writing" . ?w)
-                                  ("@errands" . ?e)
-                                  ("@family" . ?f)
-                                  ("@coding" . ?c)
-                                  ("@tasks" . ?t)
-                                  ("@learning" . ?l)
-                                  ("@reading" . ?r)
-                                  ("time" . ?q)
-                                  ("high-energy" . ?1)))
-
-            ;; Enable filtering by effort estimates
-            (add-to-list 'org-global-properties
-                         '("Effort_ALL". "0:05 0:15 0:30 1:00 2:00 3:00 4:00"))
 
             ;; Make org do not open other frames
             (setq org-link-frame-setup (quote ((vm . vm-visit-folder-other-frame)
@@ -458,36 +390,6 @@ a link to this file."
                   ) ;; if
                 (insert (concat "[[file:" filename "]]"))
                 (org-display-inline-images)))))
-
-;; ASCII doc
-(use-package ox-asciidoc
-  :load-path (lambda () (expand-file-name "org-asciidoc/" user-emacs-directory)))
-
-;; Table ASCII plot
-(use-package orgtbl-ascii-plot
-  :load-path (lambda () (expand-file-name "orgtblasciiplot/" user-emacs-directory)))
-
-;; Org Table of Contents
-(use-package toc-org
-  :load-path (lambda () (expand-file-name "toc-org/" user-emacs-directory))
-  :config(add-hook 'org-mode-hook 'toc-org-enable))
-
-;; Nice bulleted lists
-(use-package org-autolist
-  :load-path (lambda () (expand-file-name "org-autolist/" user-emacs-directory))
-  :config (add-hook 'org-mode-hook (lambda () (org-autolist-mode))))
-
-;; Nice bulleted lists
-(use-package org-bullets
-  :unless (or (not (display-graphic-p))
-              (equal system-type 'windows-nt))
-  :load-path (lambda () (expand-file-name "org-bullets/" user-emacs-directory))
-  :config (progn
-            (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))))
-
-;; Lorg calendar
-(use-package lorg-calendar
-  :load-path (lambda () (expand-file-name "lorg-calendar/" user-emacs-directory)))
 
 (provide 'setup-org)
 ;;; setup-org.el ends here
