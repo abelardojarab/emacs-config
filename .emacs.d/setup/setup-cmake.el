@@ -700,6 +700,7 @@ the specified directory."
 
 ;; EDE project managment, slows down Emacs
 (use-package ede
+  :disabled t
   :config (progn
             (global-ede-mode 1)
             (ede-enable-generic-projects)
@@ -719,20 +720,9 @@ On success, return the added project."
                   (error "Attempt to add non-object to master project list"))
                 (when (not (obj-of-class-p proj ede-project-placeholder))
                   (error "Attempt to add a non-project to the ede projects list"))
-                (add-to-list 'ede-projects proj))
+                (if (stringp proj)
+                    (add-to-list 'ede-projects proj)))
               proj)))
-
-;; Enable the wrapper for compilation database projects
-(use-package ede-compdb
-  :after ede
-  :disabled t
-  :load-path (lambda () (expand-file-name "ede-compdb/" user-emacs-directory)))
-
-;; Extensions to Emacs Development Environment for use with CMake-based projects
-(use-package ede-cmake
-  :after ede-compdb
-  :disabled t
-  :load-path (lambda () (expand-file-name "ede-cmake/" user-emacs-directory)))
 
 (provide 'setup-cmake)
 ;;; setup-cmake.el ends here

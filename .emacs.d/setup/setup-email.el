@@ -38,9 +38,6 @@
                        (executable-find "import"))
               (imagemagick-register-types))
 
-            (use-package mu4e-contrib
-              :config (setq mu4e-html2text-command 'mu4e-shr2text))
-
             ;; Don’t add an empty line when quoting email
             (defun my/message-insert-citation-line ()
               "Insert a simple citation line."
@@ -189,6 +186,9 @@
 
             (setq mu4e-get-mail-command "timelimit -t 180 -T 180 mbsync googlemail-default"
                   mu4e-update-interval nil)
+
+            (use-package mu4e-contrib
+              :config (setq mu4e-html2text-command 'mu4e-shr2text))
 
             ;; Use <TAB> to preview messages and q to close previews.
             (use-package mu4e-view)

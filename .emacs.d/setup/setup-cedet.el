@@ -147,7 +147,7 @@ Exit the save between databases if there is user input."
               (semantic/semantic-parse-dir (expand-file-name dir) semantic/c-files-regex))))
 
 ;; Load contrib library
-(use-package eeassist)
+(use-package eassist)
 
 ;; Show function in mode-line
 (use-package which-func
