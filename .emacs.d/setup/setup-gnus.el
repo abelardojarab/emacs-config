@@ -42,23 +42,7 @@
 
             ;; gnus setup
             ;; (gnus-registry-initialize)
-            (setq gnus-treat-from-gravatar t)
-            (setq mail-user-agent 'gnus-user-agent)
-            (setq read-mail-command 'gnus-user-agent)
-
-            ;; Use w3m to render html
-            (if (executable-find "w3m")
-                (setq mm-text-html-renderer 'w3m))
-
-            ;; message preferences
-            (setq message-generate-headers-first t)
-            (add-hook 'message-mode-hook #'flyspell-mode)
-            (add-hook 'message-mode-hook #'turn-on-orgstruct)
-            (add-hook 'message-mode-hook #'turn-on-orgstruct++)
-            (add-hook 'message-mode-hook #'turn-on-orgtbl)
-            (add-hook 'message-mode-hook #'typo-mode)
-            (add-hook 'message-mode-hook #'flyspell-mode)
-            (add-hook 'message-mode-hook #'turn-on-auto-fill)))
+            (setq gnus-treat-from-gravatar t)))
 
 ;; apel
 (use-package apel
