@@ -65,10 +65,13 @@
                         ;; make `company-backends' local is critical
                         ;; or else, you will have completion in every major mode, that's very annoying!
                         (set (make-local-variable 'company-backends) '((company-yasnippet
+                                                                        company-math-symbols-latex
+                                                                        company-latex-commands
+                                                                        company-math-symbols-unicode
+                                                                        company-auctex
                                                                         company-files
                                                                         company-abbrev
-                                                                        company-math
-                                                                        company-auctex)))))
+                                                                        )))))
 
             ;; C-mode setup
             (add-hook 'c-mode-common-hook
@@ -168,12 +171,21 @@
 ;; Company auctex
 (use-package company-auctex
   :load-path (lambda () (expand-file-name "company-auctex/" user-emacs-directory))
-  :after (company auctex))
+  :after (company auctex)
+  :config (company-auctex-init))
 
 ;; Company math
 (use-package company-math
   :load-path (lambda () (expand-file-name "company-math/" user-emacs-directory))
-  :after (company math-symbol-lists))
+  :after (company math-symbol-lists)
+  :config (progn
+            ;; local configuration for TeX modes
+            (defun my/latex-mode-setup ()
+              (setq-local company-backends
+                          (append '(company-math-symbols-latex company-latex-commands)
+                                  company-backends)))
+
+            (add-hook 'TeX-mode-hook 'my/latex-mode-setup)))
 
 (provide 'setup-company)
 ;;; setup-company.el ends here

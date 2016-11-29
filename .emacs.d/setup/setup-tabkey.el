@@ -30,17 +30,8 @@
   :load-path (lambda () (expand-file-name "smart-tab/" user-emacs-directory))
   :config (progn
             (cons 'yas-hippie-try-expand 'hippie-expand-try-functions-list)
-            (setq smart-tab-using-hippie-expand t
-                  smart-tab-completion-functions-alist (quote
-                                                        ((emacs-lisp-mode . company-complete)
-                                                         (c-mode . company-complete)
-                                                         (c++-mode . company-complete)
-                                                         (j2-mode . company-mode)
-                                                         (python-mode . company-complete)
-                                                         (markdown-mode . company-complete)
-                                                         (text-mode . company-complete)
-                                                         (org-mode . company-complete))))
-            (global-smart-tab-mode 1)))
+            (setq smart-tab-using-hippie-expand t)
+            (global-smart-tab-mode)))
 
 (provide 'setup-tabkey)
 ;;; setup-tabkey.el ends here
