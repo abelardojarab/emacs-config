@@ -51,21 +51,8 @@
                            (side            . bottom)
                            (window-height   . 0.3)))
 
-            (add-hook 'c-mode-common-hook
-                      (lambda ()
-                        (unless (file-exists-p "Makefile")
-                          (set (make-local-variable 'compile-command)
-                               ;; emulate make's .c.o implicit pattern rule, but with
-                               ;; different defaults for the CC, CPPFLAGS, and CFLAGS
-                               ;; variables:
-                               ;; $(CC) -c -o $@ $(CPPFLAGS) $(CFLAGS) $<
-                               (let ((file (file-name-nondirectory buffer-file-name)))
-                                 (format "%s -o %s %s %s"
-                                         (or (getenv "CC") "g++")
-                                         (file-name-sans-extension file)
-                                         ;;(or (getenv "CPPFLAGS") "-DDEBUG=9")
-                                         (or (getenv "CFLAGS") " -g -O2")
-                                         file))))))))
+            ;; If the value is first-error, scrolling stops when the first error appears
+            (setq compilation-scroll-output 'first-error)))
 
 (provide 'setup-compile)
 ;;; setup-compile.el ends here
