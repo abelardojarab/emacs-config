@@ -166,5 +166,34 @@
             (add-hook 'sh-set-shell-hook #'my/tcsh-set-indent-functions)
             (add-hook 'sh-mode-hook (lambda () (electric-indent-mode -1)))))
 
+;; Send expressions to a REPL line-by-line by hitting C-RET
+(use-package eval-in-repl
+  :load-path (lambda () (expand-file-name "eval-in-repl/" user-emacs-directory))
+  :config (progn
+            (setq eir-jump-after-eval nil)
+            (setq eir-always-split-script-window t)
+            (setq eir-delete-other-windows t)
+            (setq eir-repl-placement 'right)))
+
+;; ielm support (for emacs lisp)
+(use-package eval-in-repl-ielm
+  :load-path (lambda () (expand-file-name "eval-in-repl/" user-emacs-directory))
+  :commands eir-eval-in-ielm)
+
+;; Shell support
+(use-package eval-in-repl-shell
+  :load-path (lambda () (expand-file-name "eval-in-repl/" user-emacs-directory))
+  :commands eir-eval-in-shell)
+
+;; Python support
+(use-package eval-in-repl-python
+  :load-path (lambda () (expand-file-name "eval-in-repl/" user-emacs-directory))
+  :commands eir-eval-in-python)
+
+;; Javascript support
+(use-package eval-in-repl-javascript
+  :load-path (lambda () (expand-file-name "eval-in-repl/" user-emacs-directory))
+  :commands eir-eval-in-javascript)
+
 (provide 'setup-eshell)
 ;;; setup-eshell.el ends here

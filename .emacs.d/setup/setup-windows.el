@@ -298,5 +298,22 @@
   :load-path (lambda () (expand-file-name "window-numbering/" user-emacs-directory))
   :config (window-numbering-mode 1))
 
+;; ace-window for switching windows, but we only call it as a subroutine from a hydra
+(use-package ace-window
+  :load-path (lambda () (expand-file-name "ace-window/" user-emacs-directory))
+  :config (progn
+            (setq aw-keys   '(?a ?s ?d ?f ?j ?k ?l)
+                  aw-dispatch-always nil
+                  aw-dispatch-alist
+                  '((?x aw-delete-window     "Ace - Delete Window")
+                    (?c aw-swap-window       "Ace - Swap Window")
+                    (?n aw-flip-window)
+                    (?v aw-split-window-vert "Ace - Split Vert Window")
+                    (?h aw-split-window-horz "Ace - Split Horz Window")
+                    (?g delete-other-windows "Ace - Maximize Window")
+                    (?b balance-windows)
+                    (?u winner-undo)
+                    (?r winner-redo)))))
+
 (provide 'setup-windows)
 ;;; setup-windows.el ends here

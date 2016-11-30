@@ -374,9 +374,6 @@
 ;; Setup xUnit
 (require 'setup-xunit)
 
-;; Setup shell
-(require 'setup-eshell)
-
 ;; Setup folding
 (require 'setup-folding)
 
@@ -385,6 +382,9 @@
 
 ;; Setup windows
 (require 'setup-windows)
+
+;; Setup shell
+(require 'setup-eshell)
 
 ;; Setup swiper
 (require 'setup-swiper)

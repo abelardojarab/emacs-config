@@ -93,5 +93,11 @@
             (add-hook 'lisp-mode-hook 'rainbow-delimiters-mode)
             (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)))
 
+;; Legacy minor mode
+(use-package paredit
+  :defer t
+  :commands paredit-mode
+  :load-path (lambda () (expand-file-name "paredit/" user-emacs-directory)))
+
 (provide 'setup-parenthesis)
 ;;; setup-autopair.el ends here
