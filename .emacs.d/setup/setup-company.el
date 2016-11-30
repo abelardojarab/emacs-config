@@ -75,10 +75,10 @@
 
                         ;; make `company-backends' local is critical
                         ;; or else, you will have completion in every major mode, that's very annoying!
-                        (set (make-local-variable 'company-backends) '((company-yasnippet
+                        (set (make-local-variable 'company-backends) '((company-capf
+                                                                        company-yasnippet
                                                                         company-files
-                                                                        company-abbrev
-                                                                        company-ispell)))))
+                                                                        company-abbrev)))))
 
             ;; C-mode setup
             (add-hook 'c-mode-common-hook
