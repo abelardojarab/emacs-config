@@ -287,8 +287,6 @@
 ;; Switch window
 (use-package switch-window
   :defer t
-  :bind (:map ctl-x-map
-              ("o" . switch-window))
   :if (display-graphic-p)
   :commands switch-window
   :load-path (lambda () (expand-file-name "switch-window/" user-emacs-directory)))
@@ -300,9 +298,18 @@
 
 ;; ace-window for switching windows, but we only call it as a subroutine from a hydra
 (use-package ace-window
+  :bind (:map ctl-x-map
+              ("o" . ace-window))
   :load-path (lambda () (expand-file-name "ace-window/" user-emacs-directory))
   :config (progn
-            (setq aw-keys   '(?a ?s ?d ?f ?j ?k ?l)
+            ;; Customize font on ace-window leading char
+            ;; http://oremacs.com/2015/02/27/ace-window-leading-char/
+            (if (display-graphic-p)
+                (custom-set-faces
+                 '(aw-leading-char-face
+                   ((t (:inherit ace-jump-face-foreground :height 3.0))))))
+
+            (setq aw-keys '(?a ?s ?d ?f ?j ?k ?l)
                   aw-dispatch-always nil
                   aw-dispatch-alist
                   '((?x aw-delete-window     "Ace - Delete Window")
