@@ -75,6 +75,25 @@
             (add-hook 'message-mode-hook #'footnote-mode)
             (add-hook 'message-mode-hook #'turn-on-auto-fill)))
 
+;; Attachments are mostly handled using the helm baloo interface below
+;; but sometimes we want to send files from a directory
+(use-package gnus-dired
+  :config (progn
+            (add-hook 'dired-mode-hook 'turn-on-gnus-dired-mode)
+
+            ;; make the `gnus-dired-mail-buffers' function also work on
+            ;; message-mode derived modes, such as mu4e-compose-mode
+            (defun gnus-dired-mail-buffers ()
+              "Return a list of active message buffers."
+              (let (buffers)
+                (save-current-buffer
+                  (dolist (buffer (buffer-list t))
+                    (set-buffer buffer)
+                    (when (and (derived-mode-p 'message-mode)
+                               (null message-sent-message-via))
+                      (push (buffer-name buffer) buffers))))
+                (nreverse buffers)))))
+
 ;; Flim, wanderlust requirement
 (use-package std11
   :load-path (lambda () (expand-file-name "flim/" user-emacs-directory)))
@@ -84,21 +103,77 @@
   :defer t
   :init (progn
           (add-to-list 'load-path (expand-file-name "wanderlust/elmo" user-emacs-directory))
-          (add-to-list 'load-path (expand-file-name "semi" user-emacs-directory))
-
-          ;; message preferences
-          (add-hook 'message-mode-hook #'flyspell-mode)
-          (add-hook 'message-mode-hook #'turn-on-orgstruct)
-          (add-hook 'message-mode-hook #'turn-on-orgstruct++)
-          (add-hook 'message-mode-hook #'turn-on-orgtbl)
-          (add-hook 'message-mode-hook #'typo-mode)
-          (add-hook 'message-mode-hook #'flyspell-mode)
-          (add-hook 'message-mode-hook #'turn-on-auto-fill))
-  :commands wl
+          (add-to-list 'load-path (expand-file-name "semi" user-emacs-directory)))
+  :commands (wl wl-draft wl-other-frame)
   :load-path (lambda () (expand-file-name "wanderlust/wl/" user-emacs-directory))
-  :config (let ((wl-root-dir "~/.emacs.cache/wl/"))
+  :config (let ((wl-root-dir "~/.emacs.cache/config/"))
+
+            ;; File locations
             (setq wl-init-file (concat wl-root-dir "wl.el")
-                  wl-folders-file (concat wl-root-dir "folders"))))
+                  wl-folders-file (concat wl-root-dir "folders"))
+
+            ;; Default look
+            (setq wl-message-visible-field-list '("^To" "^Subject" "^From" "^Date" "^Cc"))
+            (setq wl-message-ignored-field-list '("^"))
+
+            ;; Mime support
+            (setq wl-summary-toggle-mime "mime")
+            (use-package mime-w3m)
+            (setq mime-edit-split-message nil)
+            (setq wl-draft-reply-buffer-style 'full)
+
+            ;; IMAP
+            (setq elmo-imap4-default-authenticate-type 'clear)
+            (setq elmo-imap4-default-server "imap.gmail.com")
+            ;; (setq elmo-imap4-default-user "username@gmail.com")
+            (setq elmo-imap4-default-port '993)
+            (setq elmo-imap4-default-stream-type 'ssl)
+            (setq elmo-imap4-use-modified-utf7 t)
+
+            ;; SMTP
+            (setq wl-smtp-connection-type 'starttls)
+            (setq wl-smtp-posting-port 587)
+            (setq wl-smtp-authenticate-type "plain")
+            ;; (setq wl-smtp-posting-user "username")
+            (setq wl-smtp-posting-server "smtp.gmail.com")
+            (setq wl-local-domain "gmail.com")
+
+            ;; Folders
+            (setq wl-default-folder "%Inbox")
+            (setq wl-default-spec "%")
+            (setq wl-draft-folder "%[Gmail]/Drafts") ; Gmail IMAP
+            (setq wl-trash-folder "%[Gmail]/Trash")
+            (setq wl-folder-check-async t)
+
+            ;; Look in zip files as if they are folders
+            (setq elmo-archive-treat-file t)
+
+            ;; Expiration policies
+            (setq wl-expire-alist
+                  '(("^\\+trash$"   (date 14) remove) ;; delete
+                    ("^\\+tmp$"     (date 7) trash) ;; re-file to wl-trash-folder
+                    ("^\\%inbox"    (date 30) wl-expire-archive-date) ;; archive by year and month (numbers discarded)
+                    ))
+
+            ;; Show sent mail by who it was to
+            (setq wl-summary-showto-folder-regexp ".*")
+            (setq wl-summary-from-function 'wl-summary-default-from)
+
+            ;; Assure we use mu4e
+            (if (boundp 'mail-user-agent)
+                (setq mail-user-agent 'wl-user-agent))
+            (if (fboundp 'define-mail-user-agent)
+                (define-mail-user-agent
+                  'wl-user-agent
+                  'wl-user-agent-compose
+                  'wl-draft-send
+                  'wl-draft-kill
+                  'mail-send-hook))
+
+            ;; Assure we use mu4e
+            (setq mail-user-agent 'wl-user-agent)
+            (setq read-mail-command 'wl-user-agent)
+            (setq gnus-dired-mail-mode 'wl-user-agent)))
 
 ;; mu4e (asynchronous email client)
 (use-package mu4e
@@ -327,7 +402,8 @@
 
             ;; Assure we use mu4e
             (setq mail-user-agent 'mu4e-user-agent)
-            (setq read-mail-command 'mu4e-user-agent)))
+            (setq read-mail-command 'mu4e-user-agent)
+            (setq gnus-dired-mail-mode 'mu4e-user-agent)))
 
 ;; Link to mu4e messages and threads.
 (use-package org-mu4e
@@ -343,27 +419,6 @@
   :bind (:mu4e-main-mode-map
          ("S" . helm-mu))
   :load-path (lambda () (expand-file-name "helm-mu/" user-emacs-directory)))
-
-;; Attachments are mostly handled using the helm baloo interface below
-;; but sometimes we want to send files from a directory
-(use-package gnus-dired
-  :config (progn
-            (add-hook 'dired-mode-hook 'turn-on-gnus-dired-mode)
-
-            ;; make the `gnus-dired-mail-buffers' function also work on
-            ;; message-mode derived modes, such as mu4e-compose-mode
-            (defun gnus-dired-mail-buffers ()
-              "Return a list of active message buffers."
-              (let (buffers)
-                (save-current-buffer
-                  (dolist (buffer (buffer-list t))
-                    (set-buffer buffer)
-                    (when (and (derived-mode-p 'message-mode)
-                               (null message-sent-message-via))
-                      (push (buffer-name buffer) buffers))))
-                (nreverse buffers)))
-
-            (setq gnus-dired-mail-mode 'mu4e-user-agent)))
 
 (provide 'setup-email)
 ;;; setup-email.el ends here
