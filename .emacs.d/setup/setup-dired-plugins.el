@@ -133,7 +133,6 @@
 ;; Sunrise Commander
 (use-package sunrise-commander
   :defer t
-  :disabled t
   :commands (sunrise sr-dired cb-sunrise-commander/dired-this-dir)
   :load-path (lambda () (expand-file-name "sunrise-commander/" user-emacs-directory))
   :bind (("C-;" . cb-sunrise-commander/dired-this-dir)
@@ -151,8 +150,7 @@
             (setq sr-windows-locked nil)
             (setq sr-cursor-follows-mouse nil)
             (setq sr-windows-default-ratio 60)
-            (setq sr-use-commander-keys nil)
-            (setq dired-auto-revert-buffer t)))
+            (setq sr-use-commander-keys nil)))
 
 (provide 'setup-dired-plugins)
 ;;; setup-dired-plugins.el ends here
