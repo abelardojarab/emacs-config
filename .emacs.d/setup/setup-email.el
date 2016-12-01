@@ -117,8 +117,8 @@
             (setq wl-message-ignored-field-list '("^"))
 
             ;; Mime support
-            (setq wl-summary-toggle-mime "mime")
             (use-package mime-w3m)
+            (setq wl-summary-toggle-mime "mime")
             (setq mime-edit-split-message nil)
             (setq wl-draft-reply-buffer-style 'full)
 
