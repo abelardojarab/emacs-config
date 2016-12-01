@@ -33,6 +33,7 @@
 
 ;; Pos-tip library
 (use-package pos-tip
+  :defer t
   :load-path (lambda () (expand-file-name "pos-tip/" user-emacs-directory))
   :config (progn
             (defadvice popup-menu-show-quick-help
@@ -55,7 +56,9 @@
 
 ;; Turn on subword-mode for non-lispy languages
 (use-package subword
-  :config (progn (mapc (lambda (mode)
+  :defer t
+  :commands subword-mode
+  :init (progn (mapc (lambda (mode)
                          (add-hook mode 'subword-mode))
                        '(c-common-mode-hook
                          python-mode-hook
@@ -75,6 +78,7 @@
 
 ;; Unfill and fill
 (use-package unfill
+  :defer t
   :commands (unfill-region unfill-paragraph toggle-fill-unfill))
 
 ;; Browse kill ring
@@ -83,6 +87,7 @@
 
 ;; ediff
 (use-package ediff
+  :defer t
   :init (progn
           (defun my/setup-ediff ()
             (interactive)
@@ -97,6 +102,7 @@
 
 ;; async
 (use-package async
+  :defer t
   :load-path (lambda () (expand-file-name "async/" user-emacs-directory))
   :config (progn
             (require 'dired-async)
@@ -104,18 +110,10 @@
 
 ;; Unicode viewer (charmap)
 (use-package charmap
-  :commands charmap
   :defer t
+  :commands charmap
   :load-path (lambda () (expand-file-name "charmap/" user-emacs-directory))
   :config (setq charmap-text-scale-adjust 2))
-
-;; Calendar viewer
-(use-package calfw
-  :commands cfw:open-org-calendar
-  :after org
-  :load-path (lambda () (expand-file-name "calfw/" user-emacs-directory))
-  :defer 0.5
-  :config (use-package calfw-org))
 
 ;; Persistent scratch buffer
 (use-package persistent-scratch
@@ -126,6 +124,7 @@
 
 ;; Page break lines
 (use-package page-break-lines
+  :defer t
   :load-path (lambda () (expand-file-name "page-break-lines/" user-emacs-directory)))
 
 (provide 'setup-general)

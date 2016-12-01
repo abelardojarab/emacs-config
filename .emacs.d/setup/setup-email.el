@@ -96,6 +96,7 @@
 
 ;; Flim, wanderlust requirement
 (use-package std11
+  :defer t
   :load-path (lambda () (expand-file-name "flim/" user-emacs-directory)))
 
 ;; Wanderlust

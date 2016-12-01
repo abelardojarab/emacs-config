@@ -134,6 +134,13 @@
               (not (member (nth 2 (org-heading-components)) org-done-keywords)))
             (setq org-refile-target-verify-function 'my/verify-refile-target)))
 
+;; Calendar viewer
+(use-package calfw
+  :defer t
+  :commands cfw:open-org-calendar
+  :load-path (lambda () (expand-file-name "calfw/" user-emacs-directory))
+  :config (use-package calfw-org))
+
 ;; Lorg calendar
 (use-package lorg-calendar
   :load-path (lambda () (expand-file-name "lorg-calendar/" user-emacs-directory)))
