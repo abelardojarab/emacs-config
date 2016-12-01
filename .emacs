@@ -106,7 +106,8 @@
  '(recentf-menu-before "Close")
  '(safe-local-variable-values
    (quote
-    ((eval c-set-offset
+    ((encoding . utf-8-unix)
+     (eval c-set-offset
            (quote innamespace)
            0)
      (eval when
@@ -152,6 +153,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(aw-leading-char-face ((t (:inherit ace-jump-face-foreground :height 3.0))))
  '(fa-face-hint ((t (:background "#3f3f3f" :foreground "#ffffff"))))
  '(fa-face-hint-bold ((t (:background "#3f3f3f" :weight bold))))
  '(fa-face-semi ((t (:background "#3f3f3f" :foreground "#ffffff" :weight bold))))

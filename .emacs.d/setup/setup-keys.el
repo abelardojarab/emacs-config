@@ -214,46 +214,46 @@
 (define-key ctl-x-map (kbd "<end>") 'tabbar-forward-group)
 
 ;; Overwrite other modes
-(defvar my-keys-minor-mode-map (make-keymap) "my-keys-minor-mode keymap.")
-(define-key my-keys-minor-mode-map (kbd "<mouse-3>") 'mouse3-popup-menu)
-(define-key my-keys-minor-mode-map [C-tab] 'comment-or-uncomment-region)
-(define-key my-keys-minor-mode-map (kbd "M-.") 'helm-etags-select)
-(define-key my-keys-minor-mode-map (kbd "C-.") 'helm-gtags-dwim)
-(define-key my-keys-minor-mode-map (kbd "<f2>")   'bm-next)
-(define-key my-keys-minor-mode-map (kbd "<C-f2>") 'bm-toggle)
-(define-key my-keys-minor-mode-map (kbd "<left-fringe> <double-mouse-1>") 'bm-toggle)
-(define-key my-keys-minor-mode-map (kbd "C-b") 'beautify-buffer)
-(define-key my-keys-minor-mode-map (kbd "<f4>") 'helm-semantic-or-imenu)
-(define-key my-keys-minor-mode-map (kbd "C-`") 'helm-semantic-or-imenu)
-(define-key my-keys-minor-mode-map (kbd "<f12>") 'helm-buffers-list)
-(define-key my-keys-minor-mode-map (kbd "C-0") 'helm-buffers-list)
-(define-key my-keys-minor-mode-map (kbd "<f5>") 'recompile)
-(define-key my-keys-minor-mode-map [(control p)] 'scroll-down)
-(define-key my-keys-minor-mode-map [(control n)] 'scroll-up)
-(define-key my-keys-minor-mode-map [(control b)] 'psw-switch-buffer)
+(defvar my/keys-minor-mode-map (make-keymap) "my/keys-minor-mode keymap.")
+(define-key my/keys-minor-mode-map (kbd "<mouse-3>") 'mouse3-popup-menu)
+(define-key my/keys-minor-mode-map [C-tab] 'comment-or-uncomment-region)
+(define-key my/keys-minor-mode-map (kbd "M-.") 'helm-etags-select)
+(define-key my/keys-minor-mode-map (kbd "C-.") 'helm-gtags-dwim)
+(define-key my/keys-minor-mode-map (kbd "<f2>")   'bm-next)
+(define-key my/keys-minor-mode-map (kbd "<C-f2>") 'bm-toggle)
+(define-key my/keys-minor-mode-map (kbd "<left-fringe> <double-mouse-1>") 'bm-toggle)
+(define-key my/keys-minor-mode-map (kbd "C-b") 'beautify-buffer)
+(define-key my/keys-minor-mode-map (kbd "<f4>") 'helm-semantic-or-imenu)
+(define-key my/keys-minor-mode-map (kbd "C-`") 'helm-semantic-or-imenu)
+(define-key my/keys-minor-mode-map (kbd "<f12>") 'helm-buffers-list)
+(define-key my/keys-minor-mode-map (kbd "C-0") 'helm-buffers-list)
+(define-key my/keys-minor-mode-map (kbd "<f5>") 'recompile)
+(define-key my/keys-minor-mode-map [(control p)] 'scroll-down)
+(define-key my/keys-minor-mode-map [(control n)] 'scroll-up)
+(define-key my/keys-minor-mode-map [(control b)] 'psw-switch-buffer)
 
 ;; key bindings for shift select
-(define-key my-keys-minor-mode-map [S-prior] 'shift-mark-backward-page)
-(define-key my-keys-minor-mode-map [S-next] 'shift-mark-forward-page)
+(define-key my/keys-minor-mode-map [S-prior] 'shift-mark-backward-page)
+(define-key my/keys-minor-mode-map [S-next] 'shift-mark-forward-page)
 
 ;; Define custom key mode
-(define-minor-mode my-keys-minor-mode
+(define-minor-mode my/keys-minor-mode
   "A minor mode so that my key settings override annoying major modes."
-  t "" 'my-keys-minor-mode-map)
-(diminish 'my-keys-minor-mode)
-(my-keys-minor-mode 1)
+  t "" 'my/keys-minor-mode-map)
+(diminish 'my/keys-minor-mode)
+(my/keys-minor-mode 1)
 (defun my/minibuffer-setup-hook ()
-  (my-keys-minor-mode 0))
+  (my/keys-minor-mode 0))
 
 ;; Disable overwrite for some modes
 (add-hook 'org-mode-hook 'my/minibuffer-setup-hook)
 
 ;; Advice to set proper order for keymaps
-(defadvice load (after give-my-keybindings-priority)
+(defadvice load (after give-my/keybindings-priority)
   "Try to ensure that my keybindings always have priority."
-  (if (not (eq (car (car minor-mode-map-alist)) 'my-keys-minor-mode))
-      (let ((mykeys (assq 'my-keys-minor-mode minor-mode-map-alist)))
-        (assq-delete-all 'my-keys-minor-mode minor-mode-map-alist)
+  (if (not (eq (car (car minor-mode-map-alist)) 'my/keys-minor-mode))
+      (let ((mykeys (assq 'my/keys-minor-mode minor-mode-map-alist)))
+        (assq-delete-all 'my/keys-minor-mode minor-mode-map-alist)
         (add-to-list 'minor-mode-map-alist mykeys))))
 (ad-activate 'load)
 
