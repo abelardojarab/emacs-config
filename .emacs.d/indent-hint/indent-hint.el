@@ -195,10 +195,7 @@ s1 ",\n" s2 "};"
     (let* ((line (indent-hint-genid))
            (i (or column (current-indentation))))
       (make-local-variable line)
-      (setq indent-hint-list (cons line indent-hint-list))
-      (set line nil)
-      (while (< i (if (<= (point-max)(line-end-position))
-                      0
+      (while (< i (if (<= (point-max) (line-end-position))
                     (forward-line)
                     (if indent-hint-with-white-line
                         (indent-hint-white-line (1+ i)))
@@ -229,7 +226,7 @@ s1 ",\n" s2 "};"
       (overlay-put o 'insert-behind-hooks '(erase-indent-hint))
       (set r o))))
 
-(defun indent-hint-bgo-mv(&optional o)
+(defun indent-hint-bgo-mv (&optional o)
   (let* ((b (line-beginning-position))
          (e (+ b (current-indentation))))
     (when (not (or (equal o t) (equal o nil)))
@@ -248,8 +245,7 @@ s1 ",\n" s2 "};"
   (let ((x (or regexp "^")))
     (font-lock-remove-keywords mode
                                `((,x
-                                  (0 (draw-indent-hint-line ,column ,img ,color))))
-                               )))
+                                  (0 (draw-indent-hint-line ,column ,img ,color)))))))
 
 (defun indent-hint-current-column ()
   (save-excursion
@@ -284,8 +280,8 @@ s1 ",\n" s2 "};"
       (remove-hook 'post-command-hook 'indent-hint-bgo-mv)
       (dolist (x indent-hint-regexp-list)
         (indent-hint-remove-fontlock (car x) (cadr x)))
-      ;; (dolist (ov indent-hint-list)
-      ;;   (delete-overlay ov))
+      (dolist (ov indent-hint-list)
+        (delete-overlay ov))
       (dolist (x indent-hint-list)
         (if (null (eval x))
             (and (unintern x)

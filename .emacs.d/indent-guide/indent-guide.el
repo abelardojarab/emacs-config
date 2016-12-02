@@ -237,7 +237,9 @@ the point. When no such points are found, just return nil."
     (let ((win-start (window-start))
           (win-end (window-end nil t))
           line-col line-start line-end
-          last-col)
+          last-col
+          (img indent-hint-img)
+          (color "#4D4D4D"))
       ;; decide line-col, line-start
       (save-excursion
         (indent-guide--beginning-of-level)
@@ -264,6 +266,7 @@ the point. When no such points are found, just return nil."
           (setq line-end (line-number-at-pos)))
         ;; draw line
         (dotimes (tmp (- (1+ line-end) line-start))
+          (draw-indent-hint line-start (+ line-start tmp) nil img color)
           (indent-guide--make-overlay (+ line-start tmp) line-col))
         (remove-overlays (point) (point) 'category 'indent-guide)))))
 
