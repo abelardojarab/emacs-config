@@ -443,10 +443,10 @@
    `(org-column ((,class (:background ,current-line))))
    `(org-column-title ((,class (:inherit org-column :weight bold :underline t))))
    `(org-date ((,class (:foreground ,"#80cbc4" :underline t))))
-   `(org-document-info ((,class (:foreground ,aqua :height 1.1))))
+   `(org-document-info ((,class (:foreground ,aqua :height 1.0))))
    `(org-meta-line ((,class (:foreground ,aqua :height 0.9))))
-   `(org-document-info-keyword ((,class (:foreground ,green :height 1.0))))
-   `(org-document-title ((,class (:weight bold :foreground ,foreground :height 1.2))))
+   `(org-document-info-keyword ((,class (:foreground ,green :height 0.9))))
+   `(org-document-title ((,class (:weight bold :foreground ,foreground :height 1.1))))
    `(org-done ((,class (:foreground ,green :bold t :background,"#1b5e20"))))
    `(org-ellipsis ((,class (:foreground ,comment))))
    `(org-footnote ((,class (:foreground ,aqua))))
@@ -476,8 +476,8 @@
    `(org-level-2 ((,class (:inherit outline-2
                                     :background ,background
                                     :weight bold
-                                    :height 1.1))))
-   `(org-level-3 ((,class (:inherit outline-3 :height 1.1))))
+                                    :height 1.0))))
+   `(org-level-3 ((,class (:inherit outline-3 :height 1.0))))
    `(org-level-4 ((,class (:inherit outline-4 :height 1.0))))
    `(org-level-5 ((,class (:inherit outline-5 ))))
    `(org-level-6 ((,class (:inherit outline-6 ))))
