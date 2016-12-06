@@ -120,15 +120,20 @@ Down: ${alignr}${downspeedgraph eth4 8,60 8434A4 A672CF}
 Upload: ${alignr}${totalup eth4}
 Download: ${alignr}${totaldown eth4}
 Local Ip: ${alignr}${addr eth4}
-${endif}
-
-${if_existing /proc/net/route wlan0}
+${endif}${if_existing /proc/net/route wlan0}
 Up: ${alignr}${upspeedgraph wlan0 8,60 8434A4 A672CF}
 Down: ${alignr}${downspeedgraph wlan0 8,60 8434A4 A672CF}
 Upload: ${alignr}${totalup wlan0}
 Download: ${alignr}${totaldown wlan0}
 Signal: ${wireless_link_qual wlan0}% ${alignr}${wireless_link_bar 8,60 wlan0}
 Local IP: ${alignr}${addr wlan0}
+${endif}${if_existing /proc/net/route wlp2s0}
+Up: ${alignr}${upspeedgraph wlp2s0 8,60 8434A4 A672CF}
+Down: ${alignr}${downspeedgraph wlp2s0 8,60 8434A4 A672CF}
+Upload: ${alignr}${totalup wlp2s0}
+Download: ${alignr}${totaldown wlp2s0}
+Signal: ${wireless_link_qual wlp2s0}% ${alignr}${wireless_link_bar 8,60 wlp2s0}
+Local IP: ${alignr}${addr wlp2s0}
 ${endif}
 
 # The following settings are interpreted by EMACS, do not remove them.
