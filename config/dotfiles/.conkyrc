@@ -72,9 +72,8 @@ override_utf8_locale yes
 # Add spaces to keep things from moving about? This only affects certain objects.
 use_spacer left
 TEXT
-${font Unnamed Aquabase:size=18}S${color B8A0C8}ummary${color}${font}
-
-${font Roboto Mono:bold:size=12}${color FFCC00}SYSTEM $stippled_hr
+${font Aquabase:size=18}S${color B8A0C8}ystem${color} S${color B8A0C8}tatus${color}${font}
+${font Roboto Mono:bold:size=12}${color FFCC00}SUMMARY $stippled_hr
 ${font Roboto Mono:normal:size=12}${color FFFFCC}Hostname: ${alignr}${nodename}
 Kernel: ${alignr}${kernel}
 CPU1: ${alignr}${cpubar cpu1 8,60}
@@ -86,7 +85,7 @@ Battery: ${alignr}${battery_bar 8,60 BAT0}
 Temp: ${alignr}${acpitemp}°C
 Uptime: ${alignr}${uptime}
 ${hr 2}
-${font Unnamed Aquabase:size=18}M${color B8A0C8}emory${color} U${color B8A0C8}sage${color}${font}
+${font Aquabase:size=18}M${color B8A0C8}emory${color} U${color B8A0C8}sage${color}${font}
 ${font Roboto Mono:bold:size=12}${color FFCC00}TOP PROCS (MEM) $stippled_hr
 ${font Roboto Mono:normal:size=12}${color FFFFCC}${top_mem name 1} $alignr ${top_mem mem 1} %
 
@@ -99,7 +98,7 @@ ${font Roboto Mono:normal:size=12}${color FFFFCC}${top_mem name 1} $alignr ${top
 ${font Roboto Mono:bold:size=12}${color FFCC00}MEMORY $stippled_hr
 ${font Roboto Mono:normal:size=12}${color FFFFCC}RAM $alignc $mem / $memmax $alignr $memperc %
 ${hr 2}
-${font Unnamed Aquabase:size=18}C${color B8A0C8}PU${color} U${color B8A0C8}sage${color}${font}
+${font Aquabase:size=18}C${color B8A0C8}PU${color} U${color B8A0C8}sage${color}${font}
 ${font Roboto Mono:bold:size=12}${color FFCC00}TOP PROCS (CPU) $stippled_hr
 ${font Roboto Mono:normal:size=12}${color FFFFCC}${top name 1} $alignr ${top cpu 1}%
 
@@ -113,7 +112,7 @@ ${font Roboto Mono:bold:size=12}${color FFCC00}PROCESSORS $stippled_hr
 ${font Roboto Mono:normal:size=12}${color FFFFCC}CPU History:
 ${cpugraph 25,0 -t}
 ${hr 2}
-${font Unnamed Aquabase:size=18}N${color B8A0C8}etwork${color}${font}${if_existing /proc/net/route eth4}
+${font Aquabase:size=18}N${color B8A0C8}etwork${color}${font}${if_existing /proc/net/route eth4}
 Up: ${alignr}${upspeedgraph eth4 8,60 8434A4 A672CF}
 Down: ${alignr}${downspeedgraph eth4 8,60 8434A4 A672CF}
 Upload: ${alignr}${totalup eth4}
