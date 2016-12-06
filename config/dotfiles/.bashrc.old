@@ -189,6 +189,9 @@ export QSYS_ROOTDIR=/opt/Altera/15.1/quartus/sopc_builder/bin
 export ALTERAOCLSDKROOT=/opt/Altera/15.1/hld
 export PATH=/opt/Altera/15.1/quartus/bin:$PATH
 
+# Sublime Text settings
+export PATH=/opt/sublime_text:$PATH
+
 # Extra settings
 export PATH=/usr/local/bin:$PYTHONPATH/bin:$PATH
 

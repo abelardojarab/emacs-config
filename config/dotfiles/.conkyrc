@@ -1,6 +1,6 @@
 # Use Xft?
 use_xft yes
-xftfont Consolas:size=12
+xftfont Roboto Mono:size=13
 xftalpha 0.8
 text_buffer_size 2048
 imlib_cache_size 10
@@ -42,8 +42,8 @@ default_color white
 own_window_colour white
 
 # Text alignment, other possible values are commented
-alignment top_left
-#alignment top_right
+#alignment top_left
+alignment top_right
 #alignment bottom_left
 #alignment bottom_right
 
@@ -73,7 +73,7 @@ override_utf8_locale yes
 use_spacer left
 TEXT
 ${font Unnamed Cambria:size=16}S${color B8A0C8}tatus${color}${font}
-Operating System: ${alignr}Ubuntu 14.04
+Operating System: ${alignr}${pre_exec lsb_release -d | cut -f 2| tr "[:upper:]" "[:lower:]"}
 Kernel: ${alignr}${kernel}
 CPU1: ${alignr}${cpubar cpu1 8,60}
 CPU2: ${alignr}${cpubar cpu2 8,60}
