@@ -48,7 +48,7 @@
 
 (when (find-font (font-spec :name "Calibri"))
   (setq main-writing-font "Calibri")
-  (setq main-writing-font-size "13")
+  (setq main-writing-font-size "12")
   (set-face-attribute 'variable-pitch nil
                       :font (concat main-writing-font
                                     "-"
@@ -74,11 +74,11 @@
       ('windows-nt
        (if (> (x-display-pixel-width) 2000)
            (progn ;; HD monitor in Windows
-             (setq main-programming-font-size "11")
-             (setq main-writing-font-size "13"))
+             (setq main-programming-font-size "12")
+             (setq main-writing-font-size "12"))
          (progn
            (setq main-programming-font-size "11")
-           (setq main-writing-font-size "13"))))
+           (setq main-writing-font-size "11"))))
       ('darwin
        (if (> (x-display-pixel-width) 1800)
            (if (> (x-display-pixel-width) 2000)
