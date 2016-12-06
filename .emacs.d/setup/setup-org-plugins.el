@@ -36,8 +36,7 @@
 
 ;; Nice bulleted lists
 (use-package org-bullets
-  :unless (or (not (display-graphic-p))
-              (equal system-type 'windows-nt))
+  :if (display-graphic-p)
   :load-path (lambda () (expand-file-name "org-bullets/" user-emacs-directory))
   :config (progn
             (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))))
