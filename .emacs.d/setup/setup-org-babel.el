@@ -135,11 +135,8 @@
               "#+EXCLUDE_TAGS: noexport\n"
               "\n"
               "# Setup tikz package for both LaTeX and HTML export:\n"
-              "#+PROPERTY: header-args:latex+ :imagemagick (by-backend (latex nil) (t \"yes\"))\n"
-              "#+PROPERTY: header-args:latex+ :exports results :fit yes\n"
               "#+PROPERTY: header-args:latex+ :iminoptions -density 600 -resample 100x100\n"
-              "#+PROPERTY: header-args:latex+ :imoutoptions -resize 400\n"
-              "#+PROPERTY: header-args:latex+ :results (by-backend (latex \"latex\") (t \"graphics\"))\n"
+              "#+PROPERTY: header-args:latex+ :imoutoptions -geometry 600\n"
               "\n"
               "# Setup for HTML export:\n"
               "#+STYLE: <link rel=\"stylesheet\" type=\"text/css\" href=\"../csstheme/solarized-light.min.css\"/>\n")

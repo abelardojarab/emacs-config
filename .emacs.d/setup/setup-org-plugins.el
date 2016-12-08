@@ -50,12 +50,12 @@
   :load-path (lambda () (expand-file-name "orgtblasciiplot/" user-emacs-directory)))
 
 ;; Export org-mode to HTML5 slides
-(use-package org-html5presentation
+(use-package ox-html5presentation
   :load-path (lambda () (expand-file-name "org-html5presentation/" user-emacs-directory)))
 
 ;; Export org-mode to Google I/O HTML5 slides
 (use-package ox-ioslide
-  :load-path (lambda () (expand-file-name "ox-ioslide/" user-emacs-directory))
+  :load-path (lambda () (expand-file-name "org-ioslide/" user-emacs-directory))
   :config (use-package ox-ioslide-helper))
 
 (provide 'setup-org-plugins)
