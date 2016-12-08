@@ -58,6 +58,7 @@
 (use-package dash                :defer t :load-path (lambda () (expand-file-name "dash/" user-emacs-directory)))
 (use-package buttercup           :defer t :load-path (lambda () (expand-file-name "buttercup/" user-emacs-directory)))
 (use-package fringe-helper       :defer t :load-path (lambda () (expand-file-name "fringe-helper" user-emacs-directory)))
+(use-package makey               :defer t :load-path (lambda () (expand-file-name "makey/" user-emacs-directory)))
 (use-package parsebib            :defer t :load-path (lambda () (expand-file-name "parsebib/" user-emacs-directory)))
 (use-package ebib                :defer t :load-path (lambda () (expand-file-name "ebib/" user-emacs-directory)))
 (use-package ht                  :defer t :load-path (lambda () (expand-file-name "ht/" user-emacs-directory)))
