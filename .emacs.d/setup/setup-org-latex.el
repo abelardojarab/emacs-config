@@ -232,14 +232,28 @@
 \\usepackage{xcolor}
 \\usepackage{mathptmx}
 \\usepackage[section]{placeins}
+\\usepackage[]{xkeyval}
+\\usepackage{paralist}
+
+% Tikz images
 \\usepackage{filecontents}
 \\usepackage{tikz}
 \\usepackage{tikzscale}
-\\usepackage{csquotes}
+
+% For using MatLab matlab2tikz
+\\usepackage{pgfplots}
+\\pgfplotsset{compat=newest}
+\\pgfplotsset{plot coordinates/math parser=false}
+\\newlength\\figureheight
+\\newlength\\figurewidth
+
+% pstricks support, setting compatibility with Inkscape
+\\usepackage{pstricks}
+\\psset{xunit=.5pt,yunit=.5pt,runit=.5pt}
+
+% biblatex support
 \\usepackage[backend=biber,sorting=none]{biblatex}
 \\addbibresource[datatype=bibtex]{~/workspace/Documents/Bibliography/biblio.bib}
-\\usepackage[]{xkeyval}
-\\usepackage{paralist}
 \\geometry{a4paper, textwidth=6.5in, textheight=10in,
             marginparsep=7pt, marginparwidth=.6in}
 \\definecolor{light-gray}{gray}{0.95}
