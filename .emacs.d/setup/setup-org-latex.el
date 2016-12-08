@@ -292,6 +292,20 @@
 \\addbibresource{../../Bibliography/biblio.bib}  %% point at your bib file
 \\bibliography{biblio}
 
+% Load Tikz libraries
+\\usetikzlibrary{calc,trees,positioning,arrows,chains,shapes.geometric,%
+  decorations.pathreplacing,decorations.pathmorphing,shapes,%
+  matrix,shapes.symbols}
+
+% Define Tikz block styles
+\\tikzstyle{decision} = [diamond, draw,
+  text width=4.5em, text badly centered, node distance=3cm, inner sep=0pt]
+\\tikzstyle{block} = [rectangle, draw,
+  text width=5em, text centered, rounded corners, minimum height=4em]
+\\tikzstyle{line} = [draw, -latex']
+\\tikzstyle{cloud} = [draw, ellipse, node distance=3cm,
+  minimum height=2em]
+
 \\renewcommand{\\rmdefault}{ptm}
 \\title{}
       [NO-DEFAULT-PACKAGES]
