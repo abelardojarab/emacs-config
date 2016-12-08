@@ -115,6 +115,7 @@
                   org-hide-leading-stars t
                   org-hide-emphasis-markers t
                   org-highlight-latex-and-related '(latex)
+                  org-ellipsis " ⮷ "
                   ;; this causes problem in other modes
                   org-indent-mode nil)
 

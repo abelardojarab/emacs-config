@@ -314,7 +314,7 @@ The `execute-extended-command' is now \\[execute-extended-command].
                         (run-hooks 'ergoemacs-mode-startup-hook)
                         ;; (add-hook 'pre-command-hook #'ergoemacs-pre-command-hook)
                         ;; (add-hook 'post-command-hook #'ergoemacs-post-command-hook)
-                        (add-hook 'after-load-functions #'ergoemacs-after-load-functions)
+                        ;; (add-hook 'after-load-functions #'ergoemacs-after-load-functions)
                         (setq ergoemacs-require--ini-p t
                               ergoemacs-component-struct--apply-ensure-p t)
                         (if refresh-p
@@ -329,7 +329,7 @@ The `execute-extended-command' is now \\[execute-extended-command].
                     (run-hooks 'ergoemacs-mode-shutdown-hook)
                     ;; (remove-hook 'post-command-hook #'ergoemacs-post-command-hook)
                     ;; (remove-hook 'pre-command-hook #'ergoemacs-pre-command-hook)
-                    (remove-hook 'after-load-functions #'ergoemacs-after-load-functions)
+                    ;; (remove-hook 'after-load-functions #'ergoemacs-after-load-functions)
                     (unless refresh-p
                       (message "Ergoemacs-mode turned OFF."))))))
 

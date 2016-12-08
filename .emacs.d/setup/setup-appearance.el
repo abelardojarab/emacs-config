@@ -24,9 +24,11 @@
 
 ;;; Code:
 
-;; Disable tool-bar
-(if (display-graphic-p)
-    (tool-bar-mode -1))
+;; Disable tool-bar and scroll-bar
+(when (display-graphic-p)
+  (tool-bar-mode -1)
+  (set-scroll-bar-mode 'right)
+  (scroll-bar-mode -1))
 
 ;; Dont pause screen refresh
 (setq redisplay-dont-pause t)
@@ -96,6 +98,8 @@ non-nil."
 
 ;; Line numbers
 (use-package linum
+  :defer t
+  :commands linum-mode
   :config (progn
             (add-hook 'prog-mode-hook
                       (lambda ()
@@ -123,17 +127,24 @@ non-nil."
 
 ;; Adaptive scrollbar
 (use-package lawlist-scroll-mode
+  :defer t
   :if (display-graphic-p)
+  :commands lawlist-scroll-bar-mode
   :diminish (lawlist-scroll-bar-mode)
-  :init (progn
-          (scroll-bar-mode nil)
-          (set-scroll-bar-mode 'right))
   :config (add-hook 'prog-mode-hook (lambda () (lawlist-scroll-bar-mode 1))))
 
 ;; All the icons
 (use-package all-the-icons
+  :defer t
   :if (display-graphic-p)
+  :commands all-the-icons-insert
   :load-path (lambda () (expand-file-name "all-the-icons/" user-emacs-directory)))
+
+;; Better characters
+(unless standard-display-table
+  (setq standard-display-table (make-display-table)))
+(set-display-table-slot standard-display-table
+                        'selective-display (string-to-vector " ⮷ "))
 
 (provide 'setup-appearance)
 ;;; setup-appearance.el ends here
