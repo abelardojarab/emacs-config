@@ -59,22 +59,21 @@
   :defer t
   :commands subword-mode
   :init (progn (mapc (lambda (mode)
-                         (add-hook mode 'subword-mode))
-                       '(c-common-mode-hook
-                         python-mode-hook
-                         js2-mode-hook
-                         java-mode-hook))))
+                       (add-hook mode 'subword-mode))
+                     '(c-common-mode-hook
+                       python-mode-hook
+                       js2-mode-hook
+                       java-mode-hook))))
 
 ;; Uniquify-buffers
 (use-package uniquify
-  :config (progn
-            (setq
-             uniquify-buffer-name-style 'post-forward
-             uniquify-separator " • "
-             ;; rename after killing uniquified
-             uniquify-after-kill-buffer-p t
-             ;; don't muck with special buffers
-             uniquify-ignore-buffers-re "^\\*")))
+  :config (setq
+           uniquify-buffer-name-style 'post-forward
+           uniquify-separator " • "
+           ;; rename after killing uniquified
+           uniquify-after-kill-buffer-p t
+           ;; don't muck with special buffers
+           uniquify-ignore-buffers-re "^\\*"))
 
 ;; Unfill and fill
 (use-package unfill
@@ -117,6 +116,7 @@
 
 ;; Persistent scratch buffer
 (use-package persistent-scratch
+  :disabled t
   :load-path (lambda () (expand-file-name "persistent-scratch/" user-emacs-directory))
   :config (progn
             (setq persistent-scratch-save-file "~/.emacs.cache/persistent-scratch-buffer")

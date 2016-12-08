@@ -50,7 +50,7 @@
                   ecb-create-layout-file "~/.emacs.cache/ecb-user-layouts.el"
                   ecb-windows-width 35
                   ecb-fix-window-size 'width
-                  ecb-layout-name "bodil"
+                  ecb-layout-name "left-speedbar-right"
                   ecb-history-make-buckets 'mode
                   ecb-highlight-tag-with-point-delay 180
                   ecb-kill-buffer-clears-history 'auto
@@ -189,7 +189,7 @@ little more place. "
    |              |                               |             |
    |              |                               |             |
    |              |                               |             |
-   |--------------|             Edit              | Directories |
+   |--------------|             Edit              |   Sources   |
    |              |                               |             |
    |              |                               |             |
    |  Analyze     |                               |             |
@@ -210,7 +210,7 @@ little more place. "
               (ecb-set-methods-buffer)
 
               (select-window (next-window (next-window)))
-              (ecb-set-directories-buffer)
+              (ecb-set-sources-buffer)
               (select-window (previous-window (selected-window) 0)))
 
             (ecb-layout-define "bodil" left

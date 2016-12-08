@@ -29,7 +29,7 @@
   :config (progn
 
             ;; Settings
-            (setq org-src-tab-acts-natively nil  ;; BUG
+            (setq org-src-tab-acts-natively t
                   org-src-fontify-natively t
                   org-src-tab-acts-natively t
 
@@ -48,7 +48,6 @@
             ;; A progress indicator for code blocks in org-mode courtesy of John Kitchin
             (defadvice org-babel-execute-src-block (around progress nil activate)
               ;; (set-face-attribute
-              ;;  'org-block-background nil :background "LightSteelBlue")
               (message "Running your code block")
               ad-do-it
               ;; (set-face-attribute 'org-block-background nil :background "gray")
@@ -94,8 +93,8 @@
                          '("dot" . graphviz-dot))
 
             ;; To edit plantuml code in Org
-            (add-to-list
-             'org-src-lang-modes '("plantuml" . puml))
+            (add-to-list 'org-src-lang-modes
+                         '("plantuml" . puml))
 
             ;; Abbrev
             (add-hook 'org-mode-hook (lambda () (abbrev-mode 1)))
@@ -136,7 +135,6 @@
               "#+EXCLUDE_TAGS: noexport\n"
               "\n"
               "# Setup tikz package for both LaTeX and HTML export:\n"
-              "#+PROPERTY: header-args:latex+ :packages '((\"\" \"tikz\")  (\"active,tightpage\" \"preview\"))\n"
               "#+PROPERTY: header-args:latex+ :imagemagick (by-backend (latex nil) (t \"yes\"))\n"
               "#+PROPERTY: header-args:latex+ :exports results :fit yes\n"
               "#+PROPERTY: header-args:latex+ :iminoptions -density 600 -resample 100x100\n"

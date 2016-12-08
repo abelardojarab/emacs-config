@@ -30,16 +30,16 @@
   :config(add-hook 'org-mode-hook 'toc-org-enable))
 
 ;; Nice bulleted lists
-(use-package org-autolist
-  :load-path (lambda () (expand-file-name "org-autolist/" user-emacs-directory))
-  :config (add-hook 'org-mode-hook (lambda () (org-autolist-mode))))
-
-;; Nice bulleted lists
 (use-package org-bullets
   :if (display-graphic-p)
   :load-path (lambda () (expand-file-name "org-bullets/" user-emacs-directory))
   :config (progn
             (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))))
+
+;; Automated bulleting
+(use-package org-autolist
+  :load-path (lambda () (expand-file-name "org-autolist/" user-emacs-directory))
+  :config (add-hook 'org-mode-hook (lambda () (org-autolist-mode 1))))
 
 ;; ASCII doc
 (use-package ox-asciidoc
@@ -48,6 +48,15 @@
 ;; Table ASCII plot
 (use-package orgtbl-ascii-plot
   :load-path (lambda () (expand-file-name "orgtblasciiplot/" user-emacs-directory)))
+
+;; Export org-mode to HTML5 slides
+(use-package org-html5presentation
+  :load-path (lambda () (expand-file-name "org-html5presentation/" user-emacs-directory)))
+
+;; Export org-mode to Google I/O HTML5 slides
+(use-package ox-ioslide
+  :load-path (lambda () (expand-file-name "ox-ioslide/" user-emacs-directory))
+  :config (use-package ox-ioslide-helper))
 
 (provide 'setup-org-plugins)
 ;;; setup-org-plugins.el ends here
