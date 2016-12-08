@@ -319,6 +319,10 @@
 \\tikzstyle{line} = [draw, -latex']
 \\tikzstyle{cloud} = [draw, ellipse, node distance=3cm,
   minimum height=2em]
+\\tikzstyle{box} = [draw, rectangle, minimum width = 4em,
+ minimum height = 4em]
+\\tikzstyle{circle} = [draw, circle, minimum size=1em, node distance=1.75cm]
+\\tikzstyle{point} = [coordinate]
 
 \\renewcommand{\\rmdefault}{ptm}
 \\title{}
