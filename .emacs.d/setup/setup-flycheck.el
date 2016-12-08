@@ -91,7 +91,7 @@
 ;; Flycheck rtags
 (use-package flycheck-rtags
   :after (flycheck rtags)
-  :if (executable-find "rtags")
+  :if (executable-find "rdm")
   :load-path (lambda () (expand-file-name "rtags/src/" user-emacs-directory))
   :config (progn
             (defun my/flycheck-rtags-setup ()

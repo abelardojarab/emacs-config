@@ -31,6 +31,8 @@
 ;; Auto-indent mode
 (use-package auto-indent-mode
   :pin manual
+  :defer t
+  :commands auto-indent-mode
   :load-path (lambda () (expand-file-name "auto-indent-mode/" user-emacs-directory))
   :init (progn
           (setq auto-indent-indent-style 'conservative)
@@ -41,6 +43,8 @@
 
 ;; Permanent indentation guide
 (use-package indent-hint
+  :defer t
+  :commands indent-hint-mode
   :load-path (lambda () (expand-file-name "indent-hint/" user-emacs-directory))
   :init (progn
           (setq indent-hint-background-overlay t)
@@ -48,10 +52,11 @@
 
 ;; Transient indentation guide
 (use-package indent-guide
+  :defer t
+  :commands indent-guide-mode
   :load-path (lambda () (expand-file-name "indent-guide/" user-emacs-directory))
   :diminish indent-guide-mode
   :config (progn
-
             ;; Fix indent guide issue with popup
             (defvar my/indent-guide-mode-suppressed nil)
             (defadvice popup-create (before indent-guide-mode activate)
@@ -74,6 +79,8 @@
 
 ;; Highlight indentation levels
 (use-package highlight-indentation
+  :defer t
+  :commands highlight-indentation-mode
   :load-path (lambda () (expand-file-name "highlight-indentation/" user-emacs-directory)))
 
 (provide 'setup-indent)

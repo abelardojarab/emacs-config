@@ -47,6 +47,7 @@
 
 ;; psvn
 (use-package psvn
+  :defer t
   :config (progn
             (setq svn-status-hide-unmodified t)
             (setq svn-status-hide-unknown t)
@@ -361,11 +362,11 @@ branch."
 
 ;; magit integration with git flow
 (use-package magit-gitflow
+  :defer t
+  :commands (turn-on-magit-gitflow)
   :if (executable-find "git")
   :after magit
-  :defer t
   :load-path (lambda () (expand-file-name "magit-gitflow/" user-emacs-directory))
-  :commands (turn-on-magit-gitflow)
   :init (add-hook 'magit-mode-hook #'turn-on-magit-gitflow 'append))
 
 ;; diff-hl
@@ -396,12 +397,13 @@ branch."
 
 ;; git-timemachine
 (use-package git-timemachine
+  :defer t
   :commands (git-timemachine-start
              git-timemachine-toggle
              git-timemachine-switch-branch)
+  :load-path (lambda () (expand-file-name "git-timemachine/" user-emacs-directory))
   :if (executable-find "git")
   :after magit
-  :load-path (lambda () (expand-file-name "git-timemachine/" user-emacs-directory))
   :config (progn
             (defun my/git-timemachine-show-selected-revision ()
               "Show last (current) revision of file."

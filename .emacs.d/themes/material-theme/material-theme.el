@@ -444,7 +444,7 @@
    `(org-column-title ((,class (:inherit org-column :weight bold :underline t))))
    `(org-date ((,class (:foreground ,"#80cbc4" :underline t))))
    `(org-document-info ((,class (:foreground ,aqua :height 1.0))))
-   `(org-meta-line ((,class (:foreground ,aqua :height 0.9))))
+   `(org-meta-line ((,class (:foreground ,aqua :height 0.8))))
    `(org-document-info-keyword ((,class (:foreground ,green :height 0.9))))
    `(org-document-title ((,class (:weight bold :foreground ,foreground :height 1.1))))
    `(org-done ((,class (:foreground ,green :bold t :background,"#1b5e20"))))
@@ -463,8 +463,9 @@
    `(org-warning ((,class (:weight bold :foreground ,red))))
    `(org-block-begin-line ((,class (:foreground ,"#b3e5fc" :background "#1e2930"
                                                 :box (:style released-button)))))
-   `(org-block-end-line ((,class (:foreground ,"#b3e5fc" :background "#1e2930"
-                                              :box (:style released-button)))))
+   `(org-block-end-line ((,class (:foreground ,"#b3e5fc" :background ,background
+	           ;;                                  :box (:style released-button)
+				))))
    `(org-kbd ((,class (:background ,inactive-gray :foreground ,foreground
                                    :box (:line-width 1 :color nil :style pressed-button)))))
 

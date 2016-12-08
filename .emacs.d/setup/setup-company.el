@@ -46,11 +46,11 @@
 
             ;; Default company backends
             (setq company-backends
-                  '((company-files          ;; files & directory
-                     company-keywords       ;; keywords
-                     company-capf           ;; `completion-at-point-functions'
+                  '((company-capf           ;; `completion-at-point-functions'
                      company-yasnippet
-                     company-abbrev)
+                     company-abbrev
+                     company-files          ;; files & directory
+                     company-keywords)
                     (company-dabbrev
                      company-dabbrev-code)))
 
@@ -77,8 +77,8 @@
                         ;; or else, you will have completion in every major mode, that's very annoying!
                         (set (make-local-variable 'company-backends) '((company-capf
                                                                         company-yasnippet
-                                                                        company-files
-                                                                        company-abbrev)))))
+                                                                        company-abbrev
+                                                                        company-files)))))
 
             ;; C-mode setup
             (add-hook 'c-mode-common-hook
@@ -166,7 +166,7 @@
 
 ;; Company integration with irony
 (use-package company-irony
-  :after irony
+  :after (company irony)
   :if (executable-find "irony-server")
   :load-path (lambda () (expand-file-name "company-irony/" user-emacs-directory)))
 

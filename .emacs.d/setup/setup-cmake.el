@@ -30,13 +30,29 @@
 ;; (LIBCLANG_LLVM_CONFIG_EXECUTABLE=path_to_llvm-config CC=gcc CXX=g++ cmake ../rtags -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_INSTALL_PREFIX=where_to_install_rtags)
 ;; cmake --build ./ --target install
 (use-package rtags
-  :defer 2
+  :defer t
+  :commands (rtags-mode rtags-cmake-mode rtags-print-symbol-info rtags-find-symbol-at-point rtags-start-process-unless-running rtags-start)
   :if (executable-find "rdm")
+  :load-path (lambda () (expand-file-name "rtags/src/" user-emacs-directory))
   :bind (:map c++-mode-map
               ("C-c I" . rtags-print-symbol-info)
               ("C-c S" . rtags-find-symbol-at-point))
   :diminish rtags-cmake-mode
-  :load-path (lambda () (expand-file-name "rtags/src/" user-emacs-directory))
+  :init (progn
+          ;; Place the hooks
+          (defun my/enable-rtags-cmake-mode ()
+            "Enable rtags-cmake-mode for C/C++ buffers."
+            (add-hook 'c-mode-hook   #'rtags-cmake-mode)
+            (add-hook 'c++-mode-hook #'rtags-cmake-mode))
+
+          ;; Enable the hooks
+          (if (executable-find "rdm")
+              (my/enable-rtags-cmake-mode))
+
+          ;; Ensure rdm is running
+          (when (executable-find "rdm")
+              (add-hook 'c-mode-common-hook 'rtags-start-process-unless-running)
+              (add-hook 'c++-mode-common-hook 'rtags-start-process-unless-running)))
   :config (progn
             (setq rtags-use-helm t)
             (setq rtags-autostart-diagnostics t)
@@ -229,10 +245,6 @@ just returns the path and content of the header file which
                       (insert-file-contents path nil 0 200)) ;; first 200 content bytes
                     (buffer-string)))))
 
-            ;; Ensure rdm is running
-            (add-hook 'c-mode-common-hook 'rtags-start-process-unless-running)
-            (add-hook 'c++-mode-common-hook 'rtags-start-process-unless-running)
-
             ;; You may also set these variables:
             ;; - `my/rtags-rdm-args': list of strings containing the arguments to
             ;;   rdm, empty by default. For example:
@@ -284,11 +296,6 @@ enabled projects."
                           (with-current-buffer buff
                             (c++-mode))))
                       (my/rtags-cmake-index-project-maybe project-dir))))))
-
-            (defun my/enable-rtags-cmake-mode ()
-              "Enable rtags-cmake-mode for C/C++ buffers."
-              (add-hook 'c-mode-hook   #'rtags-cmake-mode)
-              (add-hook 'c++-mode-hook #'rtags-cmake-mode))
 
             ;; Find the (CMake) project root directory
             (defun my/rtags-cmake-find-buffer-project-root ()
@@ -374,9 +381,6 @@ the specified key, or nil if no such key."
   OS."
               (let ((uname (replace-regexp-in-string "\n$" "" (shell-command-to-string "uname"))))
                 (replace-regexp-in-string "<arch>" uname my/rtags-cmake-build-dir)))
-
-            ;; Enable hooks
-            (my/enable-rtags-cmake-mode)
 
             ;; This module provides a single command, `rtags-create-compilation-database',
             ;; which is an easy way to generate a CLang compilation database
@@ -664,10 +668,9 @@ the specified directory."
 
 ;; cmake-based IDE
 (use-package cmake-ide
-  :defer 2
-  :if (executable-find "cmake")
+  :defer t
   :commands (use-cmake-ide cmake-ide--locate-cmakelists)
-  :after (rtags flycheck)
+  :if (executable-find "cmake")
   :load-path (lambda () (expand-file-name "cmake-ide/" user-emacs-directory))
   :init (if (executable-find "cmake")
             (add-hook 'c-mode-common-hook #'use-cmake-ide))
@@ -679,24 +682,24 @@ the specified directory."
 
 ;; minor-mode integrating the CMake build process
 (use-package cmake-project
-  :after cmake-ide
+  :defer t
+  :commands cmake-project-mode
   :if (executable-find "cmake")
   :load-path (lambda () (expand-file-name "cmake-project/" user-emacs-directory))
   :diminish cmake-project-mode
+  :init (progn
+          (defun cmake-project-hook ()
+            (when (cmake-ide--locate-cmakelists)
+              (if (not (file-exists-p cmake-project-default-build-dir-name))
+                  (make-directory cmake-project-default-build-dir-name) t)
+              (cmake-project-mode)))
+          (add-hook 'c-common-mode-hook 'cmake-project-hook))
   :config (progn
             (if (cmake-ide--locate-cmakelists)
                 (setq-default cmake-project-build-directory (concat
                                                              (cmake-project-find-root-directory)
                                                              "cmake_build_dir/"))
-              (setq cmake-project-default-build-dir-name "cmake_build_dir/"))
-
-            (defun cmake-project-hook ()
-              (when (cmake-ide--locate-cmakelists)
-                (if (not (file-exists-p cmake-project-default-build-dir-name))
-                    (make-directory cmake-project-default-build-dir-name) t)
-                (cmake-project-mode)))
-
-            (add-hook 'c-common-mode-hook 'cmake-project-hook)))
+              (setq cmake-project-default-build-dir-name "cmake_build_dir/"))))
 
 ;; EDE project managment, slows down Emacs
 (use-package ede

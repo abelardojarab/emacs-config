@@ -513,6 +513,7 @@
           '("xelatex -interaction nonstopmode -synctex=1 -shell-escape -output-directory %o %f"
             "biber %b"
             "xelatex -interaction nonstopmode -synctex=1 -shell-escape -output-directory %o %f"
+            "xelatex -interaction nonstopmode -synctex=1 -shell-escape -output-directory %o %f"
             "xelatex -interaction nonstopmode -synctex=1 -shell-escape -output-directory %o %f")) ;; multipass
   (setq org-latex-pdf-process
         '("pdflatex -interaction nonstopmode -shell-escape -output-directory %o %f"
