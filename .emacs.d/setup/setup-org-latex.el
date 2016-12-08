@@ -35,11 +35,6 @@
 ;; and math templates”
 (add-hook 'org-mode-hook 'turn-on-org-cdlatex)
 
-;; for Tikz image in Org
-(setq org-babel-latex-htlatex "htlatex")
-(defmacro by-backend (&rest body)
-  `(case org-export-current-backend ,@body))
-
 ;; Preview LaTeX equations in buffers by showing images (C-c C-x C-l)
 (if (executable-find "convert")
     (setq org-latex-create-formula-image-program 'imagemagick)
@@ -237,7 +232,9 @@
 \\usepackage{xcolor}
 \\usepackage{mathptmx}
 \\usepackage[section]{placeins}
+\\usepackage{filecontents}
 \\usepackage{tikz}
+\\usepackage{tikzscale}
 \\usepackage{csquotes}
 \\usepackage[backend=biber,sorting=none]{biblatex}
 \\addbibresource[datatype=bibtex]{~/workspace/Documents/Bibliography/biblio.bib}

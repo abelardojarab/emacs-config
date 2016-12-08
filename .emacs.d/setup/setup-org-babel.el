@@ -63,7 +63,8 @@
             ;; Enable multiple languages
             (org-babel-do-load-languages
              'org-babel-load-languages
-             '((emacs-lisp . t)
+             '((latex . t)
+               (emacs-lisp . t)
                (plantuml . t)
                (ditaa . t)
                (dot . t)
@@ -78,6 +79,11 @@
                (js . t)
                (C . t)
                (haskell . t)))
+
+            ;; for Tikz image in Org
+            (setq org-babel-latex-htlatex "htlatex")
+            (defmacro by-backend (&rest body)
+              `(case org-export-current-backend ,@body))
 
             ;; The next block makes org-babel aware that a lower-case 'r' in a =src= block header should be processed as R.
             (add-to-list 'org-src-lang-modes
@@ -116,15 +122,29 @@
               "#+AUTHOR:\n"
               "#+EMAIL:\n"
               "#+LANGUAGE: en\n"
-              "#+OPTIONS:  toc:nil num:0 H:2\n"
+              "\n"
+              "# Setup for document style:\n"
+              "#+OPTIONS: toc:nil num:0 H:2\n"
               "#+OPTIONS: author:t email:nil  date:t\n"
               "#+OPTIONS: c:nil d:(not LOGBOOK) e:t f:t inline:t p:nil pri:nil stat:t tags:t\n"
               "#+OPTIONS: tasks:t tex:t timestamp:t todo:t\n"
+              "\n"
+              "# Setup for document summary and keywords:\n"
               "#+DESCRIPTION:\n"
-              "#+EXCLUDE_TAGS: noexport\n"
               "#+KEYWORDS:\n"
               "#+SELECT_TAGS: export\n"
-              "#+STYLE: <link rel=\"stylesheet\" type=\"text/css\" href=\"https://raw.githubusercontent.com/thi-ng/org-spec/master/css/style.css\" />\n")
+              "#+EXCLUDE_TAGS: noexport\n"
+              "\n"
+              "# Setup tikz package for both LaTeX and HTML export:\n"
+              "#+PROPERTY: header-args:latex+ :packages '((\"\" \"tikz\")  (\"active,tightpage\" \"preview\"))\n"
+              "#+PROPERTY: header-args:latex+ :imagemagick (by-backend (latex nil) (t \"yes\"))\n"
+              "#+PROPERTY: header-args:latex+ :exports results :fit yes\n"
+              "#+PROPERTY: header-args:latex+ :iminoptions -density 600 -resample 100x100\n"
+              "#+PROPERTY: header-args:latex+ :imoutoptions -resize 400\n"
+              "#+PROPERTY: header-args:latex+ :results (by-backend (latex \"latex\") (t \"file\"))\n"
+              "\n"
+              "# Setup for HTML export:\n"
+              "#+STYLE: <link rel=\"stylesheet\" type=\"text/css\" href=\"../csstheme/solarized-light.min.css\"/>\n")
             (define-abbrev org-mode-abbrev-table "sheader" "" 'skel-header-block)
 
             ;; Tell auto-insert what to use for .org files
