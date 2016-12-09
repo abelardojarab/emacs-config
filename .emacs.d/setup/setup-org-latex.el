@@ -233,7 +233,18 @@
 \\usepackage{mathptmx}
 \\usepackage[section]{placeins}
 \\usepackage[]{xkeyval}
+
+% Choose the main language
+\\usepackage[english]{babel}
+
+% Enumeration inside paragraphs
 \\usepackage{paralist}
+
+% Figure wrapping
+\\usepackage{wrapfig}
+
+% Enable support for floating figures [h], [t], etc.
+\\usepackage{float}
 
 % Lorem Ipsum generator
 \\usepackage{blindtext}
@@ -241,25 +252,7 @@
 % Fancy headers
 \\usepackage{fancyhdr}
 
-% Tikz images
-\\usepackage{filecontents}
-\\usepackage{tikz}
-\\usepackage{tikzscale}
-
-% For using MatLab matlab2tikz
-\\usepackage{pgfplots}
-\\pgfplotsset{compat=newest}
-\\pgfplotsset{plot coordinates/math parser=false}
-\\newlength\\figureheight
-\\newlength\\figurewidth
-
-% pstricks support, setting compatibility with Inkscape
-\\usepackage{pstricks}
-\\psset{xunit=.5pt,yunit=.5pt,runit=.5pt}
-
-% biblatex support
-\\usepackage[backend=biber,sorting=none]{biblatex}
-\\addbibresource[datatype=bibtex]{../../Bibliography/biblio.bib}
+% Code listings settings
 \\definecolor{light-gray}{gray}{0.95}
 \\lstset{
   frame=tlbr,
@@ -286,29 +279,27 @@
 % For wrapping text in tables
 \\usepackage{array}
 
-% Support for floats
-\\usepackage{float}
-
-% For more table formatting
+% Enable extra features for table formatting
 \\usepackage{booktabs}
 
 % Use hyperlinks for convenience, but let's not make them coloured
 \\usepackage[bookmarks,colorlinks,breaklinks]{hyperref}
 
-% Use the excellent biblatex package with IEEE style, sorted = none makes the numbering appear in order
-\\usepackage[american]{babel}
-\\usepackage{csquotes}
-\\usepackage[
-  sorting=none,
-  url=false,
-  hyperref=true,
-  style=authoryear,
-  bibencoding=ascii]{biblatex}
-\\DeclareLanguageMapping{american}{american-apa}
+% Tikz images
+\\usepackage{filecontents}
+\\usepackage{tikz}
+\\usepackage{tikzscale}
 
-% Bibliography
-\\addbibresource{../../Bibliography/biblio.bib}  %% point at your bib file
-\\bibliography{biblio}
+% For using MatLab matlab2tikz
+\\usepackage{pgfplots}
+\\pgfplotsset{compat=newest}
+\\pgfplotsset{plot coordinates/math parser=false}
+\\newlength\\figureheight
+\\newlength\\figurewidth
+
+% pstricks support, setting compatibility with Inkscape
+\\usepackage{pstricks}
+\\psset{xunit=.5pt,yunit=.5pt,runit=.5pt}
 
 % Load Tikz libraries
 \\usetikzlibrary{calc,trees,positioning,arrows,chains,shapes.geometric,%
@@ -327,6 +318,21 @@
  minimum height = 4em]
 \\tikzstyle{circle} = [draw, circle, minimum size=1em, node distance=1.75cm]
 \\tikzstyle{point} = [coordinate]
+
+% Use the excellent biblatex package with IEEE style, sorted = none makes the numbering appear in order
+\\usepackage{csquotes}
+\\usepackage[
+  sorting=none,
+  url=false,
+  hyperref=true,
+  style=authoryear,
+  bibencoding=ascii]{biblatex}
+\\DeclareLanguageMapping{american}{american-apa}
+
+% Bibliography (biblatex)
+\\usepackage[backend=biber,sorting=none]{biblatex}
+\\addbibresource[datatype=bibtex]{../../Bibliography/biblio.bib} %% point at your bib file
+\\bibliography{biblio}
 
 \\renewcommand{\\rmdefault}{ptm}
 \\title{}
