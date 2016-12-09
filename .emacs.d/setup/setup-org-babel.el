@@ -137,7 +137,7 @@
               "# LaTeX configuration\n"
               "#+LaTeX_CLASS: xelatex\n"
               "#+LaTeX_CLASS_OPTIONS: [koma, a4paper, portrait, onecolumn, 11pt]\n"
-              "#+LATEX_HEADER: \geometry{margin=0.8in, a4paper, textwidth=6.5in, textheight=10in, marginparsep=7pt, marginparwidth=0.6in}\n"
+              "#+LATEX_HEADER: \\geometry{margin=0.8in, a4paper, textwidth=6.5in, textheight=10in, marginparsep=7pt, marginparwidth=0.6in}\n"
               "\n"
               "# Additional LaTeX packages:\n"
               "#+LaTeX_HEADER: \\usepackage{etex}\n"
