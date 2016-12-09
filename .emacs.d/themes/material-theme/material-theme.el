@@ -463,9 +463,9 @@
    `(org-warning ((,class (:weight bold :foreground ,red))))
    `(org-block-begin-line ((,class (:foreground ,"#b3e5fc" :background "#1e2930"
                                                 :box (:style released-button)))))
-   `(org-block-end-line ((,class (:foreground ,"#b3e5fc" :background ,background
-	                                        ;; :box (:style released-button)
-						))))
+   `(org-block-end-line ((,class (:foreground ,"#b3e5fc" :background "#1e2930"
+                                              :box (:style released-button)
+                                              ))))
    `(org-kbd ((,class (:background ,inactive-gray :foreground ,foreground
                                    :box (:line-width 1 :color nil :style pressed-button)))))
 

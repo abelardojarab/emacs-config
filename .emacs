@@ -98,6 +98,15 @@
    (quote
     ("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3")))
  '(org-CUA-compatible t)
+ '(org-emphasis-alist
+   (quote
+    (("*" bold)
+     ("/" italic)
+     ("_" underline)
+     ("=" org-verbatim verbatim)
+     ("~" org-code verbatim)
+     ("+"
+      (:strike-through t)))))
  '(org-special-ctrl-a/e t)
  '(org-support-shift-select (quote always))
  '(pdf-view-midnight-colors (quote ("#DCDCCC" . "#383838")))
@@ -106,7 +115,9 @@
  '(recentf-menu-before "Close")
  '(safe-local-variable-values
    (quote
-    ((encoding . utf-8-unix)
+    ((hl-sexp-mode)
+     (rainbow-mode . t)
+     (encoding . utf-8-unix)
      (eval c-set-offset
            (quote innamespace)
            0)

@@ -235,7 +235,7 @@
 \\usepackage[]{xkeyval}
 
 % Choose the main language
-\\usepackage[english]{babel}
+\\usepackage[american]{babel}
 
 % Enumeration inside paragraphs
 \\usepackage{paralist}
@@ -319,20 +319,21 @@
 \\tikzstyle{circle} = [draw, circle, minimum size=1em, node distance=1.75cm]
 \\tikzstyle{point} = [coordinate]
 
-% Use the excellent biblatex package with IEEE style, sorted = none makes the numbering appear in order
+% Context sensitive quoting
 \\usepackage{csquotes}
-\\usepackage[
-  sorting=none,
-  url=false,
-  hyperref=true,
-  style=authoryear,
-  bibencoding=ascii]{biblatex}
-\\DeclareLanguageMapping{american}{american-apa}
 
 % Bibliography (biblatex)
-\\usepackage[backend=biber,sorting=none]{biblatex}
-\\addbibresource[datatype=bibtex]{../../Bibliography/biblio.bib} %% point at your bib file
-\\bibliography{biblio}
+% Using IEEE style, sorted = none makes the numbering appear in order
+% \\usepackage[
+%   sorting=none,
+%   url=false,
+%   hyperref=true,
+%   style=authoryear,
+%   backend=biber,
+%   bibencoding=ascii]{biblatex}
+% \\DeclareLanguageMapping{american}{american-apa}
+% \\addbibresource[datatype=bibtex]{../../Bibliography/biblio.bib} %% point at your bib file
+% \\bibliography{biblio}
 
 \\renewcommand{\\rmdefault}{ptm}
 \\title{}
