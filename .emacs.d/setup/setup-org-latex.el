@@ -223,7 +223,13 @@
 (add-to-list 'org-latex-classes
              '("xelatex"
                "\\documentclass[11pt,a4paper]{article}
+
+% Choose the main language
+\\usepackage[english]{babel}
+\\usepackage[utf8]{inputenc}
 \\usepackage[T1]{fontenc}
+
+% Additional packages
 \\usepackage{graphicx}
 \\usepackage{geometry}
 \\usepackage{listings}
@@ -233,9 +239,6 @@
 \\usepackage{mathptmx}
 \\usepackage[section]{placeins}
 \\usepackage[]{xkeyval}
-
-% Choose the main language
-\\usepackage[american]{babel}
 
 % Enumeration inside paragraphs
 \\usepackage{paralist}
