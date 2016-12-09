@@ -235,6 +235,9 @@
 \\usepackage[]{xkeyval}
 \\usepackage{paralist}
 
+% Lorem Ipsum generator
+\\usepackage{blindtext}
+
 % Fancy headers
 \\usepackage{fancyhdr}
 
