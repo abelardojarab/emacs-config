@@ -257,8 +257,6 @@
 % biblatex support
 \\usepackage[backend=biber,sorting=none]{biblatex}
 \\addbibresource[datatype=bibtex]{../../Bibliography/biblio.bib}
-\\geometry{a4paper, textwidth=6.5in, textheight=10in,
-            marginparsep=7pt, marginparwidth=.6in}
 \\definecolor{light-gray}{gray}{0.95}
 \\lstset{
   frame=tlbr,
@@ -351,8 +349,6 @@
 \\usepackage{color}
 \\usepackage{mathptmx}
 \\usepackage[section]{placeins}
-\\geometry{a4paper, textwidth=6.5in, textheight=10in,
-            marginparsep=7pt, marginparwidth=.6in}
 \\definecolor{light-gray}{gray}{0.95}
 \\lstset{
   frame=tlbr,
@@ -444,8 +440,6 @@
 \\usepackage{mathptmx}
 \\usepackage[mla]{ellipsis}
 \\usepackage[section]{placeins}
-\\geometry{a4paper, textwidth=6.5in, textheight=9.2in,
-            marginparsep=7pt, marginparwidth=.6in}
 \\definecolor{light-gray}{gray}{0.95}
 \\lstset{
   frame=tlbr,
