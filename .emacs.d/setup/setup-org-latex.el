@@ -235,6 +235,9 @@
 \\usepackage[]{xkeyval}
 \\usepackage{paralist}
 
+% Fancy headers
+\\usepackage{fancyhdr}
+
 % Tikz images
 \\usepackage{filecontents}
 \\usepackage{tikz}
@@ -253,7 +256,7 @@
 
 % biblatex support
 \\usepackage[backend=biber,sorting=none]{biblatex}
-\\addbibresource[datatype=bibtex]{~/workspace/Documents/Bibliography/biblio.bib}
+\\addbibresource[datatype=bibtex]{../../Bibliography/biblio.bib}
 \\geometry{a4paper, textwidth=6.5in, textheight=10in,
             marginparsep=7pt, marginparwidth=.6in}
 \\definecolor{light-gray}{gray}{0.95}
