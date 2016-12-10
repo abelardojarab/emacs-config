@@ -237,17 +237,23 @@
 \\usepackage{color}
 \\usepackage{xcolor}
 \\usepackage{mathptmx}
-\\usepackage[section]{placeins}
 \\usepackage[]{xkeyval}
 
 % Enumeration inside paragraphs
 \\usepackage{paralist}
+
+% Math macros and styles from American Math Society (AMS)
+\\usepackage{amsmath}
+\\usepackage{amsthm}
 
 % Figure wrapping
 \\usepackage{wrapfig}
 
 % Enable support for floating figures [h], [t], etc.
 \\usepackage{float}
+
+% Disable float to cross between sections boundaries
+\\usepackage[section]{placeins}
 
 % Lorem Ipsum generator
 \\usepackage{blindtext}
@@ -281,6 +287,9 @@
 
 % For wrapping text in tables
 \\usepackage{array}
+
+% Auto-fit columns to the table width
+\\usepackage{tabularx}
 
 % Enable extra features for table formatting
 \\usepackage{booktabs}
