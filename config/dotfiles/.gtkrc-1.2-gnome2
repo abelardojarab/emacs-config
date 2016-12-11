@@ -1,5 +1,5 @@
 # Autowritten by gnome-settings-daemon. Do not edit
 
-include "/opt/gnome/share/themes/Raleigh/gtk/gtkrc"
+include "/opt/gnome/share/themes/Ambiance/gtk/gtkrc"
 
 include "/nfs/pdx/home/ajaraber/.gtkrc.mine"
