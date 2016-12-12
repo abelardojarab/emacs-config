@@ -80,7 +80,7 @@
 
 (defgroup indent-guide nil
   "Show vertical lines to guide indentation."
-  :group 'emacs)
+  :group 'environment)
 
 (defcustom indent-guide-char "|"
   "Character used as vertical line."
@@ -92,7 +92,8 @@
     special-mode
     dired-mode
     eww-mode
-    eshell-mode)
+    eshell-mode
+    Custom-mode)
   "List of major-modes in which indent-guide should be turned off."
   :type '(repeat symbol)
   :group 'indent-guide)
@@ -114,7 +115,7 @@
   :type 'number
   :group 'indent-guide)
 
-(defface indent-guide-face '((t (:foreground "#535353")))
+(defface indent-guide-face '((t (:foreground "#535353" :slant normal)))
   "Face used to indent guide lines."
   :group 'indent-guide)
 
@@ -237,9 +238,7 @@ the point. When no such points are found, just return nil."
     (let ((win-start (window-start))
           (win-end (window-end nil t))
           line-col line-start line-end
-          last-col
-          (img indent-hint-img)
-          (color "#4D4D4D"))
+          last-col)
       ;; decide line-col, line-start
       (save-excursion
         (indent-guide--beginning-of-level)
@@ -266,7 +265,6 @@ the point. When no such points are found, just return nil."
           (setq line-end (line-number-at-pos)))
         ;; draw line
         (dotimes (tmp (- (1+ line-end) line-start))
-          (draw-indent-hint line-start (+ line-start tmp) nil img color)
           (indent-guide--make-overlay (+ line-start tmp) line-col))
         (remove-overlays (point) (point) 'category 'indent-guide)))))
 
