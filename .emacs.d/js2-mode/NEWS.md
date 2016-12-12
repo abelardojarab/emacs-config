@@ -2,6 +2,9 @@
 
 ## Next
 
+* `js2-include-*-externs` are now evaluated on demand.  As a result,
+  they can now be effectively used as file- or directory-local
+  variables.
 * Support for ES7 exponentiation operator.
 
 ## 2016-06-23

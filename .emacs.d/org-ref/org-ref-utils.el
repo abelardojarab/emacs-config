@@ -199,6 +199,9 @@ It is also possible to access all other BibTeX database fields:
 %D doi
 %S series        %N note
 
+%f pdf filename
+%F absolute pdf filename
+
 Usually, only %l is needed.  The other stuff is mainly for the echo area
 display, and for (setq reftex-comment-citations t).
 
@@ -250,6 +253,8 @@ environment, only %l is available."
                           (reftex-get-bib-names "editor" entry)
                           (or n 2)))
                ((= l ?E) (car (reftex-get-bib-names "editor" entry)))
+	       ((= l ?f) (concat (org-ref-reftex-get-bib-field "=key=" entry) ".pdf"))
+	       ((= l ?F) (concat org-ref-pdf-directory (org-ref-reftex-get-bib-field "=key=" entry) ".pdf"))
                ((= l ?h) (org-ref-reftex-get-bib-field "howpublished" entry))
                ((= l ?i) (org-ref-reftex-get-bib-field "institution" entry))
                ((= l ?j) (let ((jt (reftex-get-bib-field "journal" entry)))
@@ -462,9 +467,10 @@ function, and functions are conditionally added to it.")
 (defun org-ref-copy-entry-as-summary ()
   "Copy the bibtex entry for the citation at point as a summary."
   (interactive)
-  (save-window-excursion
-    (org-ref-open-citation-at-point)
-    (kill-new (org-ref-bib-citation))))
+  (let ((bibtex-completion-bibliography (org-ref-find-bibliography)))
+    (save-window-excursion
+      (org-ref-open-citation-at-point)
+      (kill-new (org-ref-bib-citation)))))
 
 
 ;;;###autoload
@@ -536,9 +542,21 @@ directory.  You can also specify a new file."
 
 ;;;###autoload
 (defun org-ref-google-scholar-at-point ()
-  "Open the doi in google scholar for bibtex key under point."
+  "Search google scholar for bibtex key under point using the title."
   (interactive)
-  (doi-utils-google-scholar (org-ref-get-doi-at-point)))
+  (browse-url
+   (format
+    "http://scholar.google.com/scholar?q=%s"
+    (let* ((key-file (org-ref-get-bibtex-key-and-file))
+	   (key (car key-file))
+	   (file (cdr key-file)) 
+	   entry) 
+      (with-temp-buffer
+	(insert-file-contents file)
+	(bibtex-set-dialect (parsebib-find-bibtex-dialect) t)
+	(bibtex-search-entry key nil 0)
+	(setq entry (bibtex-parse-entry))
+	(org-ref-reftex-get-bib-field "title" entry))))))
 
 
 ;;;###autoload

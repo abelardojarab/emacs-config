@@ -62,9 +62,9 @@ This string will be passed to format so it should end with `%s'.
 The first format spec is used for the \"-i\" value of locate/es,
 So don't set it directly but use `helm-locate-case-fold-search'
 for this.
-The \"-r\" option must be the last option, however if not specified you will
-be able to specify it during helm invocation by prefixing the pattern
-you enter with \"-r\"."
+The last option must be the one preceding pattern i.e \"-r\" or \"--regex\".
+You will be able to pass other options such as \"-b\" or \"l\"
+during helm invocation after entering pattern."
   :type 'string
   :group 'helm-locate)
 
@@ -269,7 +269,9 @@ See also `helm-locate'."
                        (shell-quote-argument (car args)) " "
                        ;; Possible locate args added
                        ;; after pattern, don't quote them.
-                       (mapconcat 'identity (cdr args) " ")))))
+                       (mapconcat 'identity (cdr args) " "))))
+         (default-directory (if (file-directory-p default-directory)
+                                default-directory "/")))
     (helm-log "Starting helm-locate process")
     (helm-log "Command line used was:\n\n%s"
               (concat ">>> " (propertize cmd 'face 'font-lock-comment-face) "\n\n"))

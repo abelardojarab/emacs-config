@@ -444,16 +444,28 @@ all the title entries in articles."
 		  (cdr (assoc "=type=" (bibtex-parse-entry)))))
       (setq words (mapcar
                    (lambda (word)
-                     (if (or
-                          ;; match words containing {} or \ which are probably
-                          ;; LaTeX or protected words
-                          (string-match "\\$\\|{\\|}\\|\\\\" word)
-                          ;; these words should not be capitalized, unless they
-                          ;; are the first word
-                          (-contains? org-ref-lower-case-words
-				      (s-downcase word)))
-                         word
-                       (s-capitalize word)))
+		     (cond
+		      ;; words containing more than one . are probably
+		      ;; abbreviations. We do not change those.
+		      ((with-temp-buffer
+			 (insert word)
+			 (goto-char (point-min))
+			 (> (count-matches "\\.") 1))
+		       word)
+		      ;; match words containing {} or \ which are probably
+		      ;; LaTeX or protected words, ignore
+		      ((string-match "\\$\\|{\\|}\\|\\\\" word)
+		       word)
+		      ;; these words should not be capitalized, unless they
+		      ;; are the first word
+		      ((-contains? org-ref-lower-case-words
+				   (s-downcase word))
+		       word)
+		      ;; Words that are quoted
+		      ((s-starts-with? "\"" word)
+		       (concat "\"" (s-capitalize (substring word 1))))
+		      (t
+		       (s-capitalize word))))
                    words))
 
       ;; Check if first word should be capitalized
@@ -575,6 +587,20 @@ N is a prefix argument.  If it is numeric, jump that many entries back."
     (bibtex-beginning-of-entry)
     (reftex-get-bib-field "doi" (bibtex-parse-entry t))))
 
+;; function that ensures that the url field of a bibtex entry is the
+;; properly-formatted hyperlink of the DOI. See
+;; http://blog.crossref.org/2016/09/new-crossref-doi-display-guidelines.html
+;; for more information.
+;;;###autoload
+(defun org-ref-bibtex-format-url-if-doi ()
+  "Hook function to format url to follow the current DOI conventions."
+  (interactive)
+  (if (eq (org-ref-bibtex-entry-doi) "") nil
+    (let ((front-url "https://doi.org/")
+          (doi (org-ref-bibtex-entry-doi)))
+      (bibtex-set-field "url"
+                        (concat front-url doi)))))
+
 
 ;;;###autoload
 (defun org-ref-bibtex-wos ()
@@ -610,7 +636,13 @@ there is a DOI."
 (defun org-ref-bibtex-google-scholar ()
   "Open the bibtex entry at point in google-scholar by its doi."
   (interactive)
-  (doi-utils-google-scholar (org-ref-bibtex-entry-doi)))
+  (let ((doi (org-ref-bibtex-entry-doi))) 
+    (doi-utils-google-scholar
+     (if (string= "" doi)
+	 (save-excursion
+	   (bibtex-beginning-of-entry)
+	   (reftex-get-bib-field "title" (bibtex-parse-entry t))) 
+       doi))))
 
 
 ;;;###autoload
@@ -693,7 +725,10 @@ _S_: Sentence case
   ("o" bibtex-copy-entry-as-kill)
   ("d" bibtex-kill-entry)
   ("L" org-ref-clean-bibtex-entry)
-  ("y" (kill-new  (bibtex-autokey-get-field "=key=")))
+  ("y" (save-excursion
+	 (bibtex-beginning-of-entry)
+	 (when (looking-at bibtex-entry-maybe-empty-head)
+	   (kill-new (bibtex-key-in-head)))))
   ("f" (progn
 	 (bibtex-beginning-of-entry)
 	 (kill-new (orhc-formatted-citation (bibtex-parse-entry t)))))

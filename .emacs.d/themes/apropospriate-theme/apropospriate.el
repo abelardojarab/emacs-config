@@ -33,7 +33,7 @@
 
 (defcustom apropospriate-mode-line-height 0.95
   "The proportional font size of the mode-line in the apropospriate theme.
-Set to `1.0' to prevent font size manipulation."
+Set to `1.0' or nil to prevent font size manipulation."
   :type 'number
   :group 'solarized)
 
@@ -148,16 +148,18 @@ Set to `1.0' to prevent font size manipulation."
      `(font-lock-variable-name-face ((,class (:foreground ,teal))))
      `(font-lock-warning-face ((,class (:foreground ,red))))
      `(mode-line ((,class (:box (:line-width 4 :color ,light-emphasis :style nil)
-                                :background ,base00-2 :foreground ,base03 :height ,apropospriate-mode-line-height))))
+                                :background ,base00-2 :foreground ,base03
+                                :height ,(or apropospriate-mode-line-height 1.0)))))
      `(mode-line-inactive ((,class (:box (:line-width 4 :color ,base00+1 :style nil)
-                                         :background ,base00+1 :foreground ,base02 :height ,apropospriate-mode-line-height))))
+                                         :background ,base00+1 :foreground ,base02
+                                         :height ,(or apropospriate-mode-line-height 1.0)))))
      `(mode-line-buffer-id ((,class (:foreground unspecified :background nil))))
      `(mode-line-emphasis ((,class (:foreground ,base02 :slant italic))))
      `(mode-line-highlight ((,class (:foreground ,base02 :box nil))))
-     `(powerline-active1 ((,class (:background ,base00 :height ,apropospriate-mode-line-height))))
-     `(powerline-active2 ((,class (:background ,base00+1 :height ,apropospriate-mode-line-height))))
-     `(powerline-inactive1 ((,class (:background ,base00+1 :height ,apropospriate-mode-line-height))))
-     `(powerline-inactive2 ((,class (:background ,base00+1 :height ,apropospriate-mode-line-height))))
+     `(powerline-active1 ((,class (:background ,base00 :height ,(or apropospriate-mode-line-height 1.0)))))
+     `(powerline-active2 ((,class (:background ,base00+1 :height ,(or apropospriate-mode-line-height 1.0)))))
+     `(powerline-inactive1 ((,class (:background ,base00+1 :height ,(or apropospriate-mode-line-height 1.0)))))
+     `(powerline-inactive2 ((,class (:background ,base00+1 :height ,(or apropospriate-mode-line-height 1.0)))))
      `(alert-trivial-face ((,class (:inherit nil :foreground nil :background nil))))
      `(anzu-mode-line ((,class (:foreground ,yellow))))
      `(persp-selected-face ((,class (:foreground ,base03))))
@@ -507,6 +509,15 @@ Set to `1.0' to prevent font size manipulation."
      `(eshell-ls-product ((,class (:inherit font-lock-doc-face))))
      `(eshell-ls-special ((,class (:foreground ,orange))))
      `(eshell-ls-symlink ((,class (:foreground ,purple))))
+     `(term ((,class (:foreground ,base03))))
+     `(term-color-black ((,class (:foreground ,base03))))
+     `(term-color-red ((,class (:foreground ,red))))
+     `(term-color-green ((,class (:foreground ,green))))
+     `(term-color-yellow ((,class (:foreground ,yellow))))
+     `(term-color-blue ((,class (:foreground ,blue))))
+     `(term-color-magenta ((,class (:foreground ,purple))))
+     `(term-color-cyan ((,class (:foreground ,cyan))))
+     `(term-color-white ((,class (:foreground ,base00))))
      `(erc-action-face ((,class (:inherit erc-default-face))))
      `(erc-bold-face ((,class (:weight bold))))
      `(erc-current-nick-face ((,class (:foreground ,blue :weight bold))))
@@ -557,11 +568,8 @@ Set to `1.0' to prevent font size manipulation."
        '((,flashing-color . 0) (,base00 . 100)))
 
      `(tabbar-background-color ,base00-2)
-
      `(ansi-color-names-vector
-       [,base00 ,red-1 ,green ,yellow ,blue ,purple ,cyan ,base03])
-     `(ansi-term-color-vector
-       [unspecified ,base00 ,red-1 ,green ,yellow ,blue ,purple ,cyan ,base03]))))
+       [,base00 ,red-1 ,green ,yellow ,blue ,purple ,cyan ,base03]))))
 
 ;;;###autoload
 (and load-file-name
