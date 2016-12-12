@@ -43,12 +43,26 @@
               (add-to-list 'which-key-key-replacement-alist '("DEL" . "⇤"))
               (add-to-list 'which-key-key-replacement-alist '("SPC" . "␣")))
 
+            ;; Set the delay before which-key appears.
+            (setq-default which-key-idle-delay 2.0)
+
+            ;; which-key will truncate special keys by default, eg. SPC turns into
+            ;; an orange D. Turn this off to avoid confusion.
+            (setq-default which-key-special-keys nil)
+
             ;; Side window setup
             ;; (setq which-key-popup-type 'side-window)
             (setq which-key-popup-type 'minibuffer)
             (setq which-key-side-window-location 'right)
             (setq which-key-side-window-max-width 0.33)
             (which-key-mode)))
+
+;; Get an instant cheat sheet for your current major mode
+;; with C-h C-m.
+(use-package discover-my-major
+  :load-path (lambda () (expand-file-name "discover-my-major/" user-emacs-directory))
+  :commands (discover-my-major discover-my-mode)
+  :bind ("C-h C-m" . discover-my-major))
 
 ;; Mac OS X extensions
 (use-package mac-key-mode

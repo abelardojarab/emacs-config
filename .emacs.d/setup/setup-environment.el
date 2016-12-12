@@ -235,33 +235,6 @@
 ;; Makes final line always be a return
 (setq require-final-newline t)
 
-;; Set indent to 4 instead of 2
-(setq standard-indent 4)
-
-;; My personal configurations, has to use setq-default
-(setq-default indent-tabs-mode nil
-              default-tab-width 4
-              tab-width 4)
-
-;; if indent-tabs-mode is off, untabify before saving
-(add-hook 'write-file-hooks
-          (lambda () (if (not indent-tabs-mode)
-                         (save-excursion
-                           (untabify (point-min) (point-max)))) nil))
-
-;; auto-indent pasted code
-(defadvice yank (after indent-region activate)
-  (if (member major-mode
-              '(emacs-lisp-mode lisp-mode c-mode c++-mode
-                                objc-mode latex-mode plain-tex-mode python-mode java-mode js2-mode))
-      (indent-region (region-beginning) (region-end) nil)))
-
-(defadvice yank-pop (after indent-region activate)
-  (if (member major-mode
-              '(emacs-lisp-mode lisp-mode c-mode c++-mode
-                                objc-mode latex-mode plain-tex-mode python-mode java-mode js2-mode))
-      (indent-region (region-beginning) (region-end) nil)))
-
 ;; Show line-number in the mode line
 (line-number-mode 1)
 

@@ -46,6 +46,7 @@
 
             (add-hook 'js2-mode-hook (lambda () (flycheck-mode 1)))
             (add-hook 'js2-mode-hook 'skewer-mode)
+            (setq-default js2-basic-offset 4)
             (setq-default js2-allow-rhino-new-expr-initializer nil)
             (setq-default js2-auto-indent-p nil)
             (setq-default js2-enter-indents-newline nil)
