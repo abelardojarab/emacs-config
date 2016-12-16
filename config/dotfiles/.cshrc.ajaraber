@@ -1,6 +1,0 @@
-if ( -r $HOME/.aliases ) then
-source $HOME/.aliases
-endif
-
-source $HOME/.ajaraber.csh
-source /p/foundry/env/startup/envrc.tcsh
