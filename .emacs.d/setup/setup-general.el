@@ -24,6 +24,11 @@
 
 ;;; Code:
 
+;; Emacs startup profiler
+(use-package esup
+  :load-path (lambda () (expand-file-name "esup/" user-emacs-directory))
+  :commands esup)
+
 ;; With-editor (emacsclient support)
 (use-package with-editor
   :load-path (lambda () (expand-file-name "with-editor/" user-emacs-directory))

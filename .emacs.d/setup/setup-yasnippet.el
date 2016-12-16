@@ -88,40 +88,7 @@
                           (apply 'append (mapcar (lambda (dir) (mapcar 'intern (directory-files dir nil "-mode$")))
                                                  (yas-snippet-dirs)))
                           ac-modes))))
-              (yas/set-ac-modes))
-
-            ;; Visual indication that available snippet exists
-            (setq default-cursor-color "gray")
-            (setq yasnippet-can-fire-cursor-color "purple")
-
-            ;; It will test whether it can expand, if yes, cursor color -> green.
-            (defun yasnippet-can-fire-p (&optional field)
-              (interactive)
-              (setq yas--condition-cache-timestamp (current-time))
-              (let (templates-and-pos)
-                (unless (and yas-expand-only-for-last-commands
-                             (not (member last-command yas-expand-only-for-last-commands)))
-                  (setq templates-and-pos (if field
-                                              (save-restriction
-                                                (narrow-to-region (yas--field-start field)
-                                                                  (yas--field-end field))
-                                                (yas--templates-for-key-at-point))
-                                            (yas--templates-for-key-at-point))))
-                (and templates-and-pos (first templates-and-pos))))
-
-            (defun my/change-cursor-color-when-can-expand (&optional field)
-              (interactive)
-              (when (eq last-command 'self-insert-command)
-                (set-cursor-color (if (my/can-expand)
-                                      yasnippet-can-fire-cursor-color
-                                    default-cursor-color))))
-
-            (defun my/can-expand ()
-              "Return true if right after an expandable thing."
-              (or (abbrev--before-point) (yasnippet-can-fire-p)))
-
-            ;; As pointed out by Dmitri, this will make sure it will update color when needed.
-            (remove-hook 'post-command-hook 'my/change-cursor-color-when-can-expand)))
+              (yas/set-ac-modes))))
 
 (provide 'setup-yasnippet)
 ;;; setup-yasnippet.el ends here

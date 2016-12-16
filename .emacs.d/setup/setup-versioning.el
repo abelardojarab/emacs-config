@@ -356,7 +356,6 @@ branch."
                       (progn
                         (setq *git-visit-current-hunk-list* (git-visit-get-hunk-list dir ref))
                         (setq *git-visit-previous-hunk-list* nil)
-                        ;; (print *git-visit-current-hunk-list* (get-buffer "*scratch*"))
                         (git-visit-diffs-next))
                     (git-error (message (cadr error)))))))))
 
@@ -393,7 +392,7 @@ branch."
 (use-package git-emacs
   :if (executable-find "git")
   :load-path (lambda () (expand-file-name "git-emacs/" user-emacs-directory))
-  :config (require 'git-modeline))
+  :config (use-package git-modeline))
 
 ;; git-timemachine
 (use-package git-timemachine
@@ -420,10 +419,8 @@ branch."
                                     (git-timemachine-show-revision rev)))))
 
             (defun git-timemachine-start ()
-              "Open git snapshot with the selected version.  Based on ivy-mode."
+              "Open git snapshot with the selected version. Based on ivy-mode."
               (interactive)
-              (unless (featurep 'git-timemachine)
-                (require 'git-timemachine))
               (git-timemachine--start #'my/git-timemachine-show-selected-revision))))
 
 ;; Show blame for current line

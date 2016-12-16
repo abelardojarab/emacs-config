@@ -55,7 +55,7 @@
               "Create tags file."
               (interactive "Directory: ")
               (eshell-command
-               (format "find %s -follow -type f -name \"*.[ch][ p][ p]\" | etags - -o %s/TAGS"
+               (format "find %s -follow -type f -name \"*.[ch][ px][ px]\" | etags - -o %s/TAGS"
                        (projectile-project-root)
                        (projectile-project-root))))
 
@@ -182,7 +182,7 @@ tags table and its (recursively) included tags tables."
 ;; Gtags
 (use-package ggtags
   :if (executable-find "global")
-  :after (eldoc)
+  :after eldoc
   :commands (ggtags-mode ggtags-find-tag-dwim ggtags-eldoc-function ggtags-show-definition)
   :diminish ggtags-mode
   :load-path (lambda () (expand-file-name "ggtags/" user-emacs-directory))
