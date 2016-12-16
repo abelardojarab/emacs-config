@@ -251,7 +251,7 @@
             (purpose-x-magit-single-on)
 
             ;; Enable purpose compatibility
-            (purpose-x-popwin-setup)
+            ;; (purpose-x-popwin-setup)
 
             ;; when killing a purpose-dedicated buffer that is displayed in a window,
             ;; ensure that the buffer is replaced by a buffer with the same purpose
