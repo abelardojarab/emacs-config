@@ -51,7 +51,13 @@
 ;; Console colors are enabled if "export TERM=xterm-256color" is added into .bashrc
 (if (display-graphic-p)
     (load-theme 'material t)
-  (load-theme 'monokai t))
+  (load-theme 'material t))
+
+;; http://sachachua.com/blog/2016/04/keep-emacs-alive-x-crashes-running-background-daemon/
+(add-hook 'after-make-frame-functions
+          (lambda (frame)
+            (select-frame frame)
+            (load-theme 'material t)))
 
 ;; Inherit theme for new frames
 (setq frame-inherited-parameters '(width height face background-mode
