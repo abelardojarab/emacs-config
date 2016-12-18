@@ -59,38 +59,7 @@
                      (tab (nth
                            (if (> num 0) (- num 1) (+ (length tabs) num))
                            tabs)))
-                (if tab (switch-to-buffer (car tab)))))
-
-            ;; Default tabbar theme-ing
-            (require 'color)
-            (defun my/set-face-tabbar ()
-              "Set the tabbar background to the same color as the regular background."
-              (interactive)
-              (setq tabbar-separator '(0.0))
-              (setq my/tabbar-foreground-color
-                    (face-foreground 'default))
-              (setq my/tabbar-background-color
-                    (face-background 'default))
-              (setq my/tabbar-back-color
-                    (color-lighten-name (face-background 'default) 12))
-              (custom-set-faces
-               ;; tabbar background
-               `(tabbar-default ((t (:inherit fixed-pitch :background ,my/tabbar-back-color :foreground ,my/tabbar-foreground-color))))
-               `(tabbar-button ((t (:inherit tabbar-default :foreground ,my/tabbar-background-color))))
-               `(tabbar-button-highlight ((t (:inherit tabbar-default))))
-               `(tabbar-highlight ((t (:underline t))))
-               ;; selected tab
-               `(tabbar-selected ((t (:inherit tabbar-default :background ,my/tabbar-background-color))))
-               `(tabbar-separator ((t (:inherit tabbar-default :background ,my/tabbar-back-color))))
-               `(tabbar-unselected ((t (:inherit tabbar-default))))))
-
-            ;; Add tabbar colorset
-            (defadvice my/set-face-fringe (after load-fringe-face)
-              (let ()
-                (my/set-face-tabbar)))
-            (ad-activate 'my/set-face-fringe)
-
-            (add-hook 'after-init-hook #'my/set-face-tabbar)))
+                (if tab (switch-to-buffer (car tab)))))))
 
 ;; Tabbar ruler pre-requisites
 (use-package mode-icons
