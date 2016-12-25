@@ -310,8 +310,10 @@ more place."
             (speedbar-add-supported-extension ".il")
             (speedbar-add-supported-extension ".ils")
 
-            ;; Finally activate ecb
-            (ecb-activate)))
+            ;; Finally activate ecb on HD-monitors or above
+            (if (and (> (car (screen-size)) 1900)
+                     (> (cadr (screen-size)) 1000))
+                (ecb-activate))))
 
 (provide 'setup-ecb)
 ;;; setup-ecb.el ends here

@@ -92,11 +92,15 @@
            (setq main-programming-font-size "16")
            (setq main-writing-font-size "16"))))
       (t ;; Linux
-       (if (> (x-display-pixel-width) 2000)
+       ;; ultra high-resolution 2560x1440-pixel
+       (if (and (> (car (screen-size)) 2200)
+                (> (cadr (screen-size)) 1300))
            (progn ;; Ultra-HD monitor in Linux
              (setq main-programming-font-size "14")
              (setq main-writing-font-size "15"))
-         (if (> (x-display-pixel-width) 1800)
+         ;; high-resolution 2048x1152 and 1920x1028-pixel
+         (if (and (> (car (screen-size)) 1900)
+                  (> (cadr (screen-size)) 1000))
              (progn ;; HD monitor in Linux
                (setq main-programming-font-size "13")
                (setq main-writing-font-size "14"))

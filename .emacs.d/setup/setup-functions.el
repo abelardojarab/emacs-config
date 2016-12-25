@@ -537,5 +537,16 @@ attention to case differences."
    (- (window-text-height)
       next-screen-context-lines)))
 
+;; Frame functions
+(defun screen-size ()
+  (let ((screen-width 0) (screen-height 0))
+    (dolist (attrs (display-monitor-attributes-list))
+      (let* ((geometry (cdr (assq 'geometry attrs)))
+             (right (+ (nth 0 geometry) (nth 2 geometry)))
+             (bottom (+ (nth 1 geometry) (nth 3 geometry))))
+        (when (> right screen-width) (setq screen-width right))
+        (when (> bottom screen-height) (setq screen-height bottom))))
+    (list screen-width screen-height)))
+
 (provide 'setup-functions)
 ;;; setup-utilities.el ends here
