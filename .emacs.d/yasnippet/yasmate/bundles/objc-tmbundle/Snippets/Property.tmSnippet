@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>@property (${2:nonatomic${1/.+/, /}}${1|readonly,weak,strong,copy,retain,assign|}) ${3:NSSomeClass}${3/^((?!NS(U?Integer|Point|Size|Rect)|C[GF]|BOOL|SEL)[A-Z]\w*)|.*/${1:?${TM_C_POINTER: *}: }/}${4:${3/^(?:(BOOL)|(SEL)|[A-Z](?:[A-Z]+|[a-z]+)([A-Z]\w*))/${1:?flag:${2:?action:\l$3}}/}};</string>
+	<key>name</key>
+	<string>Property (Objective-C 2.0)</string>
+	<key>scope</key>
+	<string>source.objc meta.scope.interface, source.objc++ meta.scope.interface</string>
+	<key>tabTrigger</key>
+	<string>prop</string>
+	<key>uuid</key>
+	<string>EE603767-8BA3-4F54-8DE5-0C9E64BE5DF7</string>
+</dict>
+</plist>

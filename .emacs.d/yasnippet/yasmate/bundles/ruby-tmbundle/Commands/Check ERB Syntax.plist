@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/System/Library/Frameworks/Ruby.framework/Versions/1.8/usr/bin/ruby
+require ENV['TM_SUPPORT_PATH'] + '/lib/textmate'
+puts "Using " + `"${TM_RUBY:=ruby}" -e'puts "ruby-" + RUBY_VERSION.to_s'`.chomp + " / " + `"${TM_ERB:=erb}" --version 2&gt;&amp;1`.chomp
+result = `"${TM_ERB:=erb}" -T - -x | "${TM_RUBY:=ruby}" -c 2&gt;&amp;1`
+puts result
+TextMate.go_to :line =&gt; $1 if result =~ /-:(\d+):/</string>
+	<key>input</key>
+	<string>document</string>
+	<key>inputFormat</key>
+	<string>text</string>
+	<key>keyEquivalent</key>
+	<string>^V</string>
+	<key>name</key>
+	<string>Validate Syntax (ERB)</string>
+	<key>outputCaret</key>
+	<string>afterOutput</string>
+	<key>outputFormat</key>
+	<string>text</string>
+	<key>outputLocation</key>
+	<string>toolTip</string>
+	<key>scope</key>
+	<string>text.html.erb, text.html source.ruby</string>
+	<key>uuid</key>
+	<string>76FCF165-54CB-4213-BC55-BD60B9C6A3EC</string>
+	<key>version</key>
+	<integer>2</integer>
+</dict>
+</plist>
