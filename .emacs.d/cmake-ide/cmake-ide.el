@@ -475,7 +475,7 @@ the object file's name just above."
         (make-local-variable 'company-c-headers-path-user)
         (setq company-c-headers-path-user (cmake-ide--flags-to-include-paths flags))
         (make-local-variable 'company-c-headers-path-system)
-        (setq company-c-headers-path-system sys-includes))
+        (when sys-includes (add-to-list 'company-c-headers-path-system sys-includes)))
 
       (when (and (featurep 'irony) (not (gethash (cmake-ide--get-build-dir) cmake-ide--irony)))
         (irony-cdb-json-add-compile-commands-path (cmake-ide--locate-project-dir) (cmake-ide--comp-db-file-name))
@@ -800,7 +800,7 @@ the object file's name just above."
   (let ((idb (make-hash-table :test #'equal))
         (json (json-read-from-string json-str)))
     (mapc (lambda (obj)
-            (let* ((file (cmake-ide--idb-obj-get obj 'file))
+            (let* ((file (cmake-ide--relativize (cmake-ide--idb-obj-get obj 'file)))
                    (objs (gethash file idb)))
               (push obj objs)
               (puthash file objs idb)))
