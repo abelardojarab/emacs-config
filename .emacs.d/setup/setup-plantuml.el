@@ -1,8 +1,8 @@
 ;;; setup-plantuml.el ---                            -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016
+;; Copyright (C) 2016  Abelardo Jara-Berrocal
 
-;; Author:  <abelardojara@abelardo-ubuntu>
+;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
 ;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
