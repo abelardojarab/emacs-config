@@ -22,6 +22,7 @@ engine>> to do the actual type inference.
 *** <<plugin_node_resolve,node-style module resolution>>
 *** <<plugin_modules,Module-loading infrastructure>>
 *** <<plugin_es_modules,ES6 module support>>
+*** <<plugin_webpack,webpack resolve support>>
 *** <<plugin_requirejs,RequireJS>>
 *** <<plugin_angular,Angular.js>>
 *** <<plugin_third_party,Third-party plugins>>
@@ -166,6 +167,9 @@ by at least to characters.
 
 `includeKeywords` (optional, default `false`);; Whether to include
 JavaScript keywords when completing something that is not a property.
+
+`inLiteral` (optional, default `true`);; If completions should be
+returned when inside a literal.
 
 +
 The result returned will be an object with `start` and `end`
@@ -530,7 +534,7 @@ defined.
 
 Finally, a function can be annotated with effects that it has. These
 aren't currently documented, but you can search for `!effects` in
-`defs/ecma5.json` to see some examples. Similarly, a function type
+`defs/ecmascript.json` to see some examples. Similarly, a function type
 string's return type may contain the variables `!0` (the first
 argument's type, `!N` for the N-1th), `!this` (the self type of the
 call), and a special property `!ret` (the return type of a function).
@@ -666,6 +670,37 @@ JSON data.
 This plugin (`es_modules`) builds on top of the
 <<plugin_modules,`modules` plugin>> to support ECMAScript 6's `import`
 and `export` based module inclusion.
+
+[[plugin_webpack]]
+==== Webpack plugin ====
+
+This plugin (`"webpack"`) make use of `enhance-resolve` module from
+webpack https://webpack.github.io/, so it can understand the `resolve`
+field of `webpack.config.js` for file resolving.
+<<plugin_commonjs,`commonjs` plugin>> and
+<<plugin_es_modules,`es_modules` plugin>> plugin are loaded in the
+meanwhile for correct file reoslve, this also means you can still
+have `commonjs` and/or `es_modules` in your `.tern-project` file,
+but not necessary.
+
+You can use `configPath` option for resolve the config file of webpack
+like:
+
+[source,application/x-json]
+----
+{
+  "libs": [
+  ],
+  "plugins": {
+    "webpack": {
+      "configPath": "./lib/webpack.prod.js",
+    }
+  }
+}
+----
+
+`configPath` should be a file path relative to `.tern-project`, you
+can omit it if they're in the same folder.
 
 [[plugin_requirejs]]
 ==== RequireJS plugin ====

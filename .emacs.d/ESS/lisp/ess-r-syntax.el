@@ -47,7 +47,8 @@
 
 (defun ess-up-list (&optional N)
   (condition-case nil
-      (progn (up-list N) t)
+      (let (forward-sexp-function)
+        (progn (up-list N) t))
     (error nil)))
 
 (defun ess-forward-char (&optional N)
@@ -161,9 +162,7 @@ Cons cell containing the token type and string representation."
     (ess-skip-blanks-backward t)
     (let ((token (or (ess-climb-token--back)
                      (ess-climb-token--back-and-forth)
-                     (error "Internal error: Backward tokenization failed:\n%s"
-                            (buffer-substring (line-beginning-position)
-                                              (line-end-position))))))
+                     (progn (forward-char -1) (ess-token-after)))))
       (if (or type string)
           (when (ess-token= token type string)
             token)
@@ -262,9 +261,7 @@ reached."
                            (ess-jump-token--literal)
                            (ess-jump-token--infix-op)
                            (ess-jump-token--punctuation)
-                           (error "Internal error: Forward tokenization failed:\n%s"
-                                  (buffer-substring (line-beginning-position)
-                                                    (line-end-position)))))
+                           (progn (forward-char) "unknown")))
            (token-value (buffer-substring-no-properties token-start (point))))
       (let ((token (list (ess-token--cons token-type token-value)
                          (cons token-start (point)))))
@@ -1265,43 +1262,48 @@ expression."
 
 ;; Currently returns t if we climbed lines, nil otherwise.
 (defun ess-climb-continuations (&optional cascade ignore-ifelse)
-  (let ((start-line (line-number-at-pos))
-        (moved 0)
-        (last-pos (point))
-        last-line prev-point def-op expr)
-    (setq last-line start-line)
-    (when (ess-while (and (<= moved 1)
+  (let* ((start-line (line-number-at-pos))
+         (state (list :start-line start-line
+                      :last-line start-line
+                      :moved 0
+                      :last-pos (point)
+                      :prev-point nil
+                      :def-op nil
+                      :expr nil)))
+    (when (ess-while (and (<= (plist-get state :moved) 1)
                           (or (ess-save-excursion-when-nil
                                 (and (ess-climb-operator)
-                                     (ess-climb-continuations--update-state 'op)
+                                     (ess-climb-continuations--update-state state 'op)
                                      (ess-climb-expression ignore-ifelse)))
                               (ess-climb-unary-operator))
-                          (/= last-pos (point)))
-            (ess-climb-continuations--update-state)
-            (setq last-pos (point)))
-      (when (and prev-point
-                 (or (= moved 3)
-                     (not expr)))
-        (goto-char prev-point))
-      (if def-op 'def-op (< (line-number-at-pos) start-line)))))
+                          (/= (plist-get state :last-pos) (point)))
+            (ess-climb-continuations--update-state state nil)
+            (plist-put state :last-pos (point)))
+      (when (and (plist-get state :prev-point)
+                 (or (= (plist-get state :moved) 3)
+                     (not (plist-get state :expr))))
+        (goto-char (plist-get state :prev-point)))
+      (if (plist-get state :def-op)
+          'def-op
+        (< (line-number-at-pos) (plist-get state :start-line))))))
 
-(defun ess-climb-continuations--update-state (&optional op)
+(defun ess-climb-continuations--update-state (state &optional op)
   ;; Climbing multi-line expressions should not count as moving up
   (when op
-    (setq expr (ess-ahead-closing-p)))
+    (plist-put state :expr (ess-ahead-closing-p)))
   (let ((cur-line (line-number-at-pos)))
-    (when (and last-line
-               (< cur-line last-line)
-               (or cascade (not expr)))
-      (setq moved (1+ moved))
-      (setq last-line cur-line)))
+    (when (and (plist-get state :last-line)
+               (< cur-line (plist-get state :last-line))
+               (or cascade (not (plist-get state :expr))))
+      (plist-put state :moved (1+ (plist-get state :moved)))
+      (plist-put state :last-line cur-line)))
   ;; Don't update counter after climbing operator or climbing too high
   (when (and (not op)
-             (<= moved 1))
-    (setq prev-point (point)))
+             (<= (plist-get state :moved) 1))
+    (plist-put state :prev-point (point)))
   (when (and (ess-behind-definition-op-p)
-             (<= moved 1))
-    (setq def-op t))
+             (<= (plist-get state :moved) 1))
+    (plist-put state :def-op t))
   t)
 
 (defun ess-jump-operator ()

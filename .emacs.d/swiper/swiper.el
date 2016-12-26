@@ -1,6 +1,6 @@
 ;;; swiper.el --- Isearch with an overview. Oh, man! -*- lexical-binding: t -*-
 
-;; Copyright (C) 2015  Free Software Foundation, Inc.
+;; Copyright (C) 2015-2016  Free Software Foundation, Inc.
 
 ;; Author: Oleh Krehel <ohwoeowho@gmail.com>
 ;; URL: https://github.com/abo-abo/swiper
@@ -31,11 +31,6 @@
 ;;
 ;; It can double as a quick `regex-builder', although only single
 ;; lines will be matched.
-;;
-;; It also provides `ivy-mode': a global minor mode that uses the
-;; matching back end of `swiper' for all matching on your system,
-;; including file matching. You can use it in place of `ido-mode'
-;; (can't have both on at once).
 
 ;;; Code:
 (require 'ivy)
@@ -588,7 +583,7 @@ Matched candidates should have `swiper-invocation-face'."
         (swiper--add-overlays
          re
          (max (window-start) swiper--point-min)
-         (min (window-end) swiper--point-max))))))
+         (min (window-end (selected-window) t) swiper--point-max))))))
 
 (defun swiper--add-overlays (re &optional beg end wnd)
   "Add overlays for RE regexp in visible part of the current buffer.

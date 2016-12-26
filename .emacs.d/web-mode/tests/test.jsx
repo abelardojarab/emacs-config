@@ -2,6 +2,24 @@
 var React = require('react/addons');
 var Component = require('./component');
 
+function f() {
+  return true
+      && <E b={true} />
+      || <E />;
+}
+
+export default class Header extends Component {
+  render() {
+    return (
+      <div {...attributes}
+           onClick={this.onClicked}
+           onKeyDown={this.onKeyDowned}>
+        {this.getChildren()}
+      </div>);
+  }
+}
+
+
 export default React.createClass({
   getInitialState() {
     return { num: this.getRandomNumber() };
@@ -31,6 +49,20 @@ function foo() {
   </label>;
 }
 
+var React = require('react')
+
+return React.render(
+  <div className="fooBar">
+    {
+      conditional &&
+      <myComponent className="myComponent" />
+    }
+    <label>{labelText}</label>
+    <div>
+      <span>Hello</span>
+    </div>
+  </div>
+);
 
 'use strict';
 

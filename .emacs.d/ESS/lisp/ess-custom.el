@@ -132,7 +132,7 @@
   :prefix "ess-")
 ;; Variables (not user-changeable)
 
-(defvar ess-version "16.04" ;; updated by 'make'
+(defvar ess-version "16.10-1" ;; updated by 'make'
   "Version of ESS currently loaded.")
 
 (defvar ess-revision nil ;; set
@@ -213,7 +213,7 @@ as `ess-imenu-use-S'."
 
 
 (defcustom ess-describe-at-point-method nil
-  "Whehter `ess-describe-object-at-point' should use a tooltip.
+  "Whether `ess-describe-object-at-point' should use a tooltip.
 If nil display in an electric buffer. If 'tooltip display in
 a tooltip.
 
@@ -1645,6 +1645,11 @@ non-nil."
   :group 'ess-proc
   :type 'boolean)
 
+(defcustom inferior-ess-jit-lock-chunk-size 10000
+  "Default for (buffer local) `jit-lock-chunk-size' in inferior ESS buffers."
+  :group 'ess-proc
+  :type 'integer)
+
 
 (defcustom inferior-R-program-name
   (if ess-microsoft-p "Rterm"  "R")
@@ -2161,7 +2166,7 @@ If you wish to pass arguments to a process, see e.g. `inferior-R-args'.")
   :group 'ess-proc
   :type '(choice (const nil) file))
 
-(defcustom inferior-ess-pager "cat"
+(defcustom inferior-ess-pager (if ess-microsoft-p "console" "cat")
   "Pager to use for reporting help files and similar things."
   :group 'ess-proc
   :type 'string)
@@ -2678,7 +2683,7 @@ system described in `ess-font-lock-keywords'.")
 
 ;;; fl-keywords S
 (defvar ess-S-fl-keyword:modifiers
-  (cons (concat "\\<" (regexp-opt ess-S-modifyiers 'enc-paren) "\\>")
+  (cons (regexp-opt ess-S-modifyiers 'words)
         'font-lock-constant-face)     ; modify search list or source (i.e. directives)
   "Font-lock keyword R modifiers")
 
@@ -2689,16 +2694,14 @@ system described in `ess-font-lock-keywords'.")
   "Font-lock function deffinitions keyword.")
 
 (defvar ess-S-fl-keyword:keywords
-  (cons (concat "\\<" (regexp-opt ess-S-keywords 'enc-paren) "\\>")
-        'font-lock-keyword-face))
+  (cons (regexp-opt ess-S-keywords 'words) 'font-lock-keyword-face))
 
 (defvar ess-S-fl-keyword:assign-ops
   (cons (regexp-opt ess-S-assign-ops) 'font-lock-constant-face)
   "Font-lock assign operators")
 
 (defvar ess-S-fl-keyword:constants
-  (cons (concat "\\<" (regexp-opt ess-S-constants 'enc-paren) "\\>")
-        'font-lock-type-face)
+  (cons (regexp-opt ess-S-constants 'words) 'font-lock-type-face)
   "Font-lock constants keyword.")
 
 
@@ -2724,7 +2727,7 @@ default or not."
 
 ;;; fl-keywords R
 (defvar ess-R-fl-keyword:modifiers
-  (cons (concat "\\<" (regexp-opt ess-R-modifyiers 'enc-paren) "\\>")
+  (cons (regexp-opt ess-R-modifyiers 'words)
         'font-lock-constant-face)     ; modify search list or source (i.e. directives)
   "Font-lock keyword R modifiers")
 
@@ -2734,7 +2737,7 @@ default or not."
   "Font-lock keyword - function defintions for R.")
 
 (defvar ess-R-fl-keyword:keywords
-  (cons (concat "\\<" (regexp-opt ess-R-keywords 'enc-paren) "\\>")
+  (cons (regexp-opt ess-R-keywords 'words)
         'font-lock-keyword-face))
 
 (defvar ess-R-fl-keyword:assign-ops
@@ -2742,8 +2745,7 @@ default or not."
   "Font-lock assign operators")
 
 (defvar ess-R-fl-keyword:constants
-  (cons (concat "\\<" (regexp-opt ess-R-constants 'enc-paren) "\\>")
-        'font-lock-type-face)
+  (cons (regexp-opt ess-R-constants 'words) 'font-lock-type-face)
   "Font-lock constants keyword.")
 
 (defvar ess-R-fl-keyword:numbers
@@ -3063,7 +3065,9 @@ Need to be a full path if julia executable is not in the `exec-path'"
 ;;; This syntax table is required by ess-mode.el, ess-inf.el and
 ;;; ess-trns.el, so we provide it here.
 (defvar ess-mode-syntax-table nil "Syntax table for `ess-mode'.")
+(defvar ess-mode-completion-syntax-table nil "Completion and help syntax table for `ess-mode'.")
 (make-variable-buffer-local 'ess-mode-syntax-table)
+(make-variable-buffer-local 'ess-mode-completion-syntax-table)
 
 (defvar inferior-ess-mode-syntax-table nil "Syntax table for `inferior-ess-mode'.")
 (make-variable-buffer-local 'inferior-ess-mode-syntax-table)

@@ -42,7 +42,10 @@
       },
       CallExpression: function(node) {
         if (isDefinePropertyCall(node)) attachComments(node);
-      }
+      },
+      ExportNamedDeclaration: attachComments,
+      ExportDefaultDeclaration: attachComments,
+      ClassDeclaration: attachComments
     });
   }
 
@@ -107,6 +110,20 @@
             var prop = type.props[node.arguments[1].value];
             if (prop) interpretComments(node, node.commentsBefore, scope, prop);
           }
+        }
+      },
+      ExportNamedDeclaration: function(node, scope) {
+        if (node.commentsBefore && node.declaration && node.declaration.type === 'FunctionDeclaration') {
+          interpretComments(node.declaration, node.commentsBefore, scope,
+                            scope.getProp(node.declaration.id.name),
+                            node.declaration.scope.fnType);
+        }
+      },
+      ExportDefaultDeclaration: function(node, scope) {
+        if (node.commentsBefore && node.declaration && node.declaration.type === 'FunctionDeclaration') {
+          interpretComments(node.declaration, node.commentsBefore, scope,
+                            scope.getProp(node.declaration.id.name),
+                            node.declaration.scope.fnType);
         }
       }
     }, infer.searchVisitor, scope);
@@ -247,6 +264,7 @@
 
   function parseTypeInner(scope, str, pos) {
     pos = skipSpace(str, pos);
+    if (/[?!]/.test(str.charAt(pos))) pos++
     var type, madeUp = false;
 
     if (str.indexOf("function(", pos) == pos) {
@@ -393,10 +411,43 @@
         case "type":
           type = parsed; break;
         case "param": case "arg": case "argument":
-            var name = m[2].slice(parsed.end).match(/^\s*(\[?)\s*([^\]\s=]+)\s*(?:=[^\]]+\s*)?(\]?).*/);
+            // Possible jsdoc param name situations:
+            // employee
+            // [employee]
+            // [employee=John Doe]
+            // employee.name
+            // employees[].name
+            var name = m[2].slice(parsed.end).match(/^\s*(\[?)\s*([^\[\]\s=]+(\[\][^\[\]\s=]+)?)\s*(?:=[^\]]+\s*)?(\]?).*/);
             if (!name) continue;
-            var argname = name[2] + (parsed.isOptional || (name[1] === '[' && name[3] === ']') ? "?" : "");
-          (args || (args = Object.create(null)))[argname] = parsed;
+            var argname = name[2] + (parsed.isOptional || (name[1] === '[' && name[4] === ']') ? "?" : "");
+
+            // Check to see if the jsdoc is indicating a property of a previously documented parameter
+            var isObjProp = false;
+            var parts = argname.split('.');
+            if (args && parts.length == 2) {
+              var objname = parts[0];
+              argname = parts[1];
+
+              // Go through each of the previously found parameter to find the
+              // object or array for which this new parameter should be a part
+              // of
+              var key, value;
+              for (key in args) {
+                value = args[key];
+
+                if (key === objname && value.type instanceof infer.Obj) {
+                  isObjProp = true;
+                  parsed.type.propagate(value.type.defProp(argname));
+                }
+                else if (key + '[]' === objname && value.type instanceof infer.Arr) {
+                  isObjProp = true;
+                  parsed.type.propagate(value.type.getProp("<i>").getType().defProp(argname));
+                }
+              }
+            }
+            if (!isObjProp) {
+              (args || (args = Object.create(null)))[argname] = parsed;
+            }
           break;
         }
       }
@@ -442,7 +493,7 @@
     } else if (node.type == "AssignmentExpression") {
       if (isFunExpr(node.right))
         fn = node.right.scope.fnType;
-    } else if (node.type == "CallExpression") {
+    } else if (node.type == "CallExpression" || node.type === "ClassDeclaration") {
     } else { // An object property
       if (isFunExpr(node.value)) fn = node.value.scope.fnType;
     }

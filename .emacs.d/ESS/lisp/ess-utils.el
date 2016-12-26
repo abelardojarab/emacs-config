@@ -1083,9 +1083,23 @@ queried for arguments.
 	     ;; push even if nil
 	     (puthash (substring-no-properties funname) args (process-get proc 'funargs-cache))))))))
 
+(defun ess-symbol-at-point ()
+  "Like `symbol-at-point' but consider fully qualified names.
+Fully qualified names include accessor symbols (like aaa$bbb and
+aaa@bbb in R)."
+  (with-syntax-table (or ess-mode-completion-syntax-table
+                         ess-mode-syntax-table
+                         (syntax-table))
+    (symbol-at-point)))
+
 (defun ess-symbol-start ()
-  "Get initial position for objects completion."
-  (let ((beg (car (bounds-of-thing-at-point 'symbol))))
+  "Get initial position for objects completion.
+Symbols are fully qualified names that include accessor
+symbols (like aaa$bbb and aaa@bbb in R)."
+  (let ((beg (car (with-syntax-table (or ess-mode-completion-syntax-table
+                                         ess-mode-syntax-table
+                                         (syntax-table))
+                    (bounds-of-thing-at-point 'symbol)))))
     (when (and beg (not (save-excursion (goto-char beg)
                                         (looking-at "/\\|.[0-9]"))))
       beg)))
@@ -1131,7 +1145,7 @@ later."
                      (up-list -1)
                      (while (not (looking-at "("))
                        (up-list -1))
-                     (let ((funname (symbol-name (symbol-at-point))))
+                     (let ((funname (symbol-name (ess-symbol-at-point))))
                        (when (and funname
                                   (not (member funname ess-S-non-functions)))
                          (cons funname (- (point) (length funname))))
@@ -1225,6 +1239,55 @@ Otherwise treat \\ in NEWTEXT string as special:
     (goto-char (point-max))
     (forward-line -1)
     (delete-region (point-at-eol) (point-max))))
+
+(defvar ess-adjust-chunk-faces t
+  "Whether to adjust background color in code chunks.")
+
+(defvar-local ess-buffer-has-chunks nil
+  "Internal usage: indicates whether a buffer has chunks.
+This is used to make face adjustment a no-op when a buffer does
+not contain chunks.")
+
+(defvar ess-adjust-face-intensity 2
+  "Default intensity for adjusting faces.")
+
+(defun ess-adjust-face-background (start end &optional intensity)
+  "Adjust face background between BEG and END.
+On dark background, lighten.  Oposite on light."
+  (let* ((intensity (or intensity ess-adjust-face-intensity))
+         (color (color-lighten-name
+                 (face-background 'default)
+                 (if (eq (frame-parameter nil 'background-mode) 'light)
+                     (- intensity)
+                   intensity)))
+         (face (list (cons 'background-color color))))
+    (with-silent-modifications
+      (ess-adjust-face-properties start end 'face face))))
+
+;; Taken from font-lock.el.
+(defun ess-adjust-face-properties (start end prop value)
+  "Tweaked `font-lock-prepend-text-property'.
+Adds the `ess-face-adjusted' property so we only adjust face once."
+  (let ((val (if (listp value) value (list value))) next prev)
+    (while (/= start end)
+      (setq next (next-single-property-change start prop nil end)
+            prev (get-text-property start prop))
+      ;; Canonicalize old forms of face property.
+      (and (memq prop '(face font-lock-face))
+           (listp prev)
+           (or (keywordp (car prev))
+               (memq (car prev) '(foreground-color background-color)))
+           (setq prev (list prev)))
+      (add-text-properties start next
+                           (list prop (append val (if (listp prev) prev (list prev)))
+                                 'ess-face-adjusted t))
+      (setq start next))))
+
+(defun ess-find-overlay (pos prop)
+  (cl-some (lambda (overlay)
+             (when (overlay-get overlay prop)
+               overlay))
+           (overlays-at pos)))
 
 (provide 'ess-utils)
 

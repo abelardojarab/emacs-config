@@ -98,7 +98,7 @@ whether the current file is part of a package, or the value of
     (setq ess-r-package-info pkg-info)))
 
 (defun ess-r--select-package-name ()
-  (ess-force-buffer-current)
+  (inferior-ess-r-force)
   (let ((pkgs (ess-get-words-from-vector
                (format "print(.packages(%s), max = 1e6)\n"
                        (if ess-r-prompt-for-attached-pkgs-only "FALSE" "TRUE"))))
@@ -119,7 +119,7 @@ whether the current file is part of a package, or the value of
 (add-hook 'R-mode-hook 'ess-r-package-set-namespaced-evaluation)
 
 (defun ess-r-package-send-process (command &optional msg alt default-alt)
-  (ess-force-buffer-current)
+  (inferior-ess-r-force)
   (let* ((pkg-info (or (ess-r-package-get-info)
                        (ess-r-package-set-package)))
          (name (car pkg-info))
@@ -160,21 +160,22 @@ Root is determined by locating `ess-r-package-root-file'."
                    (file-name-directory (buffer-file-name))
                  default-directory))
          (pkg-path
-          (or
-           ;; First check current directory
-           (and (file-exists-p (expand-file-name ess-r-package-root-file path))
-                path)
-           ;; Check for known directories in current path
-           (let ((current-dir (file-name-nondirectory (directory-file-name path)))
-                 known-pkg-dir known-path presumptive-path)
-             (while (and path (not presumptive-path))
-               (setq current-dir (file-name-nondirectory (directory-file-name path)))
-               (if (and (setq known-pkg-dir (assoc current-dir ess-r-package-dirs))
-                        (setq known-path (ess--parent-dir path (cdr known-pkg-dir)))
-                        (file-exists-p (expand-file-name ess-r-package-root-file known-path)))
-                   (setq presumptive-path known-path)
-                 (setq path (ess--parent-dir path 1))))
-             presumptive-path))))
+          (when path
+            (or
+             ;; First check current directory
+             (and (file-exists-p (expand-file-name ess-r-package-root-file path))
+                  path)
+             ;; Check for known directories in current path
+             (let ((current-dir (file-name-nondirectory (directory-file-name path)))
+                   known-pkg-dir known-path presumptive-path)
+               (while (and path (not presumptive-path))
+                 (setq current-dir (file-name-nondirectory (directory-file-name path)))
+                 (if (and (setq known-pkg-dir (assoc current-dir ess-r-package-dirs))
+                          (setq known-path (ess--parent-dir path (cdr known-pkg-dir)))
+                          (file-exists-p (expand-file-name ess-r-package-root-file known-path)))
+                     (setq presumptive-path known-path)
+                   (setq path (ess--parent-dir path 1))))
+               presumptive-path)))))
     (when pkg-path
       (directory-file-name pkg-path))))
 
@@ -221,6 +222,12 @@ Root is determined by locating `ess-r-package-root-file'."
   (ess-r-package-send-process "devtools::check(%s)\n"
                               "Checking %s"
                               alt "vignettes = FALSE"))
+
+(defun ess-r-devtools-check-package-buildwin (&optional alt)
+  "Interface for `devtools::buildwin()'."
+  (interactive "P")
+  (ess-r-package-send-process "devtools::build_win(%s)\n"
+                              "Checking %s on CRAN's Windows server"))
 
 (defun ess-r-devtools-test-package (&optional alt)
   "Interface for `devtools::test()'.
@@ -302,12 +309,32 @@ prefix."
         (args (ess-r-command--process-alt-args alt "ref = ")))
     (ess-eval-linewise (format command repo args))))
 
+(defun ess-r-devtools-create-package (&optional alt)
+  "Interface to `devtools::create()'.
+Default location is determined by `ess-r-package-library-path'."
+  (interactive "P")
+  (let* ((command "devtools::create(\"%s\")")
+         (default-path (expand-file-name ess-r-package-library-path))
+         (path (read-directory-name "Path: " default-path)))
+    (ess-eval-linewise (format command path))))
+
+(defun ess-r-devtools-ask (&optional alt)
+  "Asks with completion for a devtools command.
+When called with prefix, also asks for additional arguments."
+  (interactive "P")
+  (inferior-ess-r-force)
+  (let* ((devtools-funs (ess-get-words-from-vector ".ess_devtools_functions()\n"))
+         (fun (completing-read "Function: " devtools-funs))
+         (command (format "devtools::%s(%s)\n" fun "%s")))
+    (ess-r-package-send-process command
+                                (format "Running %s" fun)
+                                alt)))
+
 
 ;;;*;;; Minor Mode
 
 (defcustom ess-r-package-auto-activate t
-  "If non-nil, `ess-r-package-mode' is automatically turned on
-within R packages."
+  "If non-nil, `ess-r-package-mode' is turned on within R packages."
   :group 'ess-r-package
   :type 'boolean)
 
@@ -349,12 +376,14 @@ disable the mode line entirely."
    (t
     (run-hooks 'ess-r-package-exit-hook))))
 
-(add-hook 'hack-local-variables-hook 'ess-r-package-auto-activate)
+(add-hook 'after-change-major-mode-hook 'ess-r-package-auto-activate)
 
 (defun ess-r-package-auto-activate ()
   "Activate developer if current file is part of a package."
   (when (and ess-r-package-auto-activate
-             (buffer-file-name))
+             (not (memq major-mode '(minibuffer-inactive-mode fundamental-mode)))
+             (or (buffer-file-name)
+                 default-directory))
     (let ((pkg-info (ess-r-package-get-info)))
       (when (car pkg-info)
         (ess-r-package-mode 1)))))

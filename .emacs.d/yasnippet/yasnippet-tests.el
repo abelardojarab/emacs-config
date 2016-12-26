@@ -145,7 +145,7 @@
     (ert-simulate-command '(yas-next-field-or-maybe-expand))
     (ert-simulate-command '(yas-skip-and-clear-or-delete-char))
     (should (looking-at "ble"))
-    (should (null (yas--snippets-at-point)))))
+    (should (null (yas-active-snippets)))))
 
 (ert-deftest ignore-trailing-whitespace ()
   (should (equal
@@ -242,6 +242,68 @@ $1   ------------------------")
     (should (string= (yas--buffer-contents) "XXXXX --------
 XXXXX   ---------------- XXXXX ----
 XXXXX   ------------------------"))))
+
+(ert-deftest indent-org-property ()
+  "Handling of `org-mode' property indentation, see `org-property-format'."
+  ;; This is an interesting case because `org-indent-line' calls
+  ;; `replace-match' for properties.
+  (with-temp-buffer
+    (org-mode)
+    (yas-minor-mode +1)
+    (yas-expand-snippet "* Test ${1:test}\n:PROPERTIES:\n:ID: $1-after\n:END:")
+    (yas-mock-insert "foo bar")
+    (ert-simulate-command '(yas-next-field))
+    (goto-char (point-min))
+    (let ((expected (with-temp-buffer
+                      (insert (format (concat "* Test foo bar\n"
+                                              "  " org-property-format "\n"
+                                              "  " org-property-format "\n"
+                                              "  " org-property-format)
+                                      ":PROPERTIES:" ""
+                                      ":ID:" "foo bar-after"
+                                      ":END:" ""))
+                      (delete-trailing-whitespace)
+                      (buffer-string))))
+      ;; Some org-mode versions leave trailing whitespace, some don't.
+      (delete-trailing-whitespace)
+      (should (equal expected (buffer-string))))))
+
+(ert-deftest indent-cc-mode ()
+  "Handling of cc-mode's indentation."
+  ;; This is an interesting case because cc-mode deletes all the
+  ;; indentation before recreating it.
+  (with-temp-buffer
+    (c++-mode)
+    (yas-minor-mode +1)
+    (yas-expand-snippet "\
+int foo()
+{
+    if ($1) {
+        delete $1;
+        $1 = 0;
+    }
+}")
+    (yas-mock-insert "var")
+    (should (string= "\
+int foo()
+{
+  if (var) {
+    delete var;
+    var = 0;
+  }
+}" (buffer-string)))))
+
+(ert-deftest indent-snippet-mode ()
+  "Handling of snippet-mode indentation."
+  ;; This is an interesting case because newlines match [[:space:]] in
+  ;; snippet-mode.
+  (with-temp-buffer
+    (snippet-mode)
+    (yas-minor-mode +1)
+    (yas-expand-snippet "# -*- mode: snippet -*-\n# name: $1\n# key: $1\n# --\n")
+    (yas-mock-insert "foo")
+    (should (string= "# -*- mode: snippet -*-\n# name: foo\n# key: foo\n# --\n"
+                     (buffer-string)))))
 
 (ert-deftest indent-mirrors-on-update ()
   "Check that mirrors are always kept indented."
@@ -523,6 +585,17 @@ TODO: correct this bug!"
          (yas-should-expand '(("foo-barbaz" . "OKfoo-barbazOK")
                               ("foo " . "foo "))))))))
 
+(ert-deftest nested-snippet-expansion ()
+  (with-temp-buffer
+    (yas-minor-mode +1)
+    (let ((yas-triggers-in-field t))
+      (yas-expand-snippet "Parent $1 Snippet")
+      (yas-expand-snippet "(Child $1 $2 Snippet)")
+      (let ((snippets (yas-active-snippets)))
+        (should (= (length snippets) 2))
+        (should (= (length (yas--snippet-fields (nth 0 snippets))) 2))
+        (should (= (length (yas--snippet-fields (nth 1 snippets))) 1))))))
+
 
 ;;; Loading
 ;;;
@@ -770,6 +843,7 @@ TODO: correct this bug!"
 ;;; Menu
 ;;;
 (defmacro yas-with-even-more-interesting-snippet-dirs (&rest body)
+  (declare (debug t))
   `(yas-saving-variables
     (yas-with-snippet-dirs
       `((".emacs.d/snippets"
@@ -805,16 +879,16 @@ TODO: correct this bug!"
   (let ((yas-use-menu t))
     (yas-with-even-more-interesting-snippet-dirs
      (yas-reload-all 'no-jit)
-     (let ((menu (cdr (gethash 'fancy-mode yas--menu-table))))
-       (should (eql 4 (length menu)))
+     (let ((menu-items (yas--collect-menu-items
+                        (gethash 'fancy-mode yas--menu-table))))
+       (should (eql 4 (length menu-items)))
        (dolist (item '("a-guy" "a-beggar"))
-         (should (cl-find item menu :key #'cl-third :test #'string=)))
-       (should-not (cl-find "an-outcast" menu :key #'cl-third :test #'string=))
+         (should (cl-find item menu-items :key #'cl-second :test #'string=)))
+       (should-not (cl-find "an-outcast" menu-items :key #'cl-second :test #'string=))
        (dolist (submenu '("sirs" "ladies"))
          (should (keymapp
-                  (cl-fourth
-                   (cl-find submenu menu :key #'cl-third :test #'string=)))))
-       ))))
+                  (cl-third
+                   (cl-find submenu menu-items :key #'cl-second :test #'string=)))))))))
 
 (ert-deftest test-group-menus ()
   "Test group-based menus using .yas-make-groups and the group directive"
@@ -963,6 +1037,14 @@ add the snippets associated with the given mode."
                         (cdr key-and-expansion)
                         (yas--buffer-contents)))))
   (yas-exit-all-snippets))
+
+(defun yas--collect-menu-items (menu-keymap)
+  (let ((yas--menu-items ()))
+    (map-keymap (lambda (_binding definition)
+                  (when (eq (car-safe definition) 'menu-item)
+                    (push definition yas--menu-items)))
+                menu-keymap)
+    yas--menu-items))
 
 (defun yas-should-not-expand (keys)
   (dolist (key keys)

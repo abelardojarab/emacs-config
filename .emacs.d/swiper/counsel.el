@@ -1,6 +1,6 @@
 ;;; counsel.el --- Various completion functions using Ivy -*- lexical-binding: t -*-
 
-;; Copyright (C) 2015  Free Software Foundation, Inc.
+;; Copyright (C) 2015-2016  Free Software Foundation, Inc.
 
 ;; Author: Oleh Krehel <ohwoeowho@gmail.com>
 ;; URL: https://github.com/abo-abo/swiper
@@ -77,7 +77,7 @@
            (directory-file-name dir)) "/"))
 
 (defun counsel-string-compose (prefix str)
-  "Make PREFIX the display prefix of STR though text properties."
+  "Make PREFIX the display prefix of STR through text properties."
   (let ((str (copy-sequence str)))
     (put-text-property
      0 1 'display
@@ -2386,7 +2386,7 @@ An extra action allows to switch to the process buffer."
     (if (null collection)
         (error "%S is not supported" major-mode)
       (ivy-read "Ace-Link: " (funcall collection)
-                :action action
+                :action (lambda (x) (funcall action (cdr x)))
                 :require-match t
                 :caller 'counsel-ace-link))))
 ;;** `counsel-expression-history'
@@ -3035,6 +3035,89 @@ candidate."
               :history 'counsel-faces-history
               :caller 'counsel-faces
               :sort t)))
+
+;;** `counsel-command-history'
+(defun counsel-command-history-action-eval (cmd)
+  "Eval the command CMD."
+    (eval (read cmd)))
+
+(defun counsel-command-history-action-edit-and-eval (cmd)
+  "Edit and eval the command CMD."
+    (edit-and-eval-command "Eval: " (read cmd)))
+
+(ivy-set-actions
+ 'counsel-command-history
+ '(("r" counsel-command-history-action-eval           "eval command")
+   ("e" counsel-command-history-action-edit-and-eval  "edit and eval command")))
+
+(defun counsel-command-history ()
+  "Show the history of commands."
+  (interactive)
+  (ivy-read "%d Command: " (mapcar #'prin1-to-string command-history)
+          :require-match t
+          :action #'counsel-command-history-action-eval
+          :caller 'counsel-command-history))
+
+;;** `counsel-org-agenda-headlines'
+(defvar org-odd-levels-only)
+(declare-function org-set-startup-visibility "org")
+(declare-function org-show-entry "org")
+(declare-function org-map-entries "org")
+(declare-function org-heading-components "org")
+
+(defun counsel-org-agenda-headlines-action-goto (headline)
+  "Go to the `org-mode' agenda HEADLINE."
+  (find-file (nth 1 headline))
+  (org-set-startup-visibility)
+  (goto-char (nth 2 headline))
+  (org-show-entry))
+
+(ivy-set-actions
+ 'counsel-org-agenda-headlines
+ '(("g" counsel-org-agenda-headlines-action-goto "goto headline")))
+
+(defvar counsel-org-agenda-headlines-history nil
+  "History for `counsel-org-agenda-headlines'.")
+
+(defun counsel-org-agenda-headlines--candidates ()
+  "Return a list of completion candidates for `counsel-org-agenda-headlines'."
+  (org-map-entries
+   (lambda ()
+     (let* ((components (org-heading-components))
+            (level (make-string
+                    (if org-odd-levels-only
+                        (nth 1 components)
+                      (nth 0 components))
+                    ?*))
+            (todo (nth 2 components))
+            (priority (nth 3 components))
+            (text (nth 4 components))
+            (tags (nth 5 components)))
+       (list
+        (mapconcat
+         'identity
+         (cl-remove-if 'null
+                       (list
+                        level
+                        todo
+                        (if priority (format "[#%c]" priority))
+                        text
+                        tags))
+         " ")
+        (buffer-file-name) (point))))
+   nil
+   'agenda))
+
+;;;###autoload
+(defun counsel-org-agenda-headlines ()
+  "Choose from headers of `org-mode' files in the agenda."
+  (interactive)
+  (let ((minibuffer-allow-text-properties t))
+    (ivy-read "Org headline: "
+              (counsel-org-agenda-headlines--candidates)
+              :action #'counsel-org-agenda-headlines-action-goto
+              :history 'counsel-org-agenda-headlines-history
+              :caller 'counsel-org-agenda-headlines)))
 
 ;** `counsel-mode'
 (defvar counsel-mode-map

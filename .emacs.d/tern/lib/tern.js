@@ -82,7 +82,8 @@
       directSourceFile: file,
       allowReturnOutsideFunction: true,
       allowImportExportEverywhere: true,
-      ecmaVersion: srv.options.ecmaVersion
+      ecmaVersion: srv.options.ecmaVersion,
+      allowHashBang: true
     }
     var text = srv.signalReturnFirst("preParse", file.text, options) || file.text
     var ast = infer.parse(text, options)
@@ -137,7 +138,10 @@
       var file = this.findFile(name);
       if (file) {
         this.needsPurge.push(file.name);
-        this.files.splice(this.files.indexOf(file), 1);
+        for (var i = 0; i < this.files.length; i++) {
+          if (this.files[i] == file) this.files.splice(i--, 1);
+          else if (this.files[i].parent == name) this.files[i].parent = null;
+        }
         delete this.fileMap[file.name];
       }
     },
@@ -148,7 +152,10 @@
       this.budgets = Object.create(null);
       for (var i = 0; i < this.files.length; ++i) {
         var file = this.files[i];
-        file.scope = null;
+        if (file.scope) {
+          infer.clearScopes(file.ast);
+          file.scope = null;
+        }
       }
       this.signal("postReset");
     },
@@ -290,6 +297,7 @@
       if (text != null) {
         if (known.scope) {
           srv.needsPurge.push(name);
+          infer.clearScopes(known.ast);
           known.scope = null;
         }
         updateText(known, text, srv);
@@ -650,6 +658,7 @@
   var jsKeywords = ("break do instanceof typeof case else new var " +
     "catch finally return void continue for switch while debugger " +
     "function this with default if throw delete in try").split(" ");
+  var jsKeywordsES6 = jsKeywords.concat("export class extends const super yield import let static".split(" "))
 
   var addCompletion = exports.addCompletion = function(query, completions, name, aval, depth) {
     var typeInfo = query.types || query.docs || query.urls || query.origins;
@@ -710,6 +719,15 @@
     // expression or an object literal.
     if (exprAt) {
       var exprNode = exprAt.node;
+
+      if (query.inLiteral === false && exprNode.type === "Literal" &&
+          (typeof exprNode.value === 'string' || exprNode.regex))
+        return {
+          start: outputPos(query, file, wordStart),
+          end: outputPos(query, file, wordEnd),
+          completions: []
+        };
+
       if (exprNode.type == "MemberExpression" && exprNode.object.end < wordStart) {
         memberExpr = exprAt;
       } else if (isStringAround(exprNode, wordStart, wordEnd)) {
@@ -761,9 +779,11 @@
       hookname = "memberCompletion";
     } else {
       infer.forAllLocalsAt(file.ast, wordStart, file.scope, gather);
-      if (query.includeKeywords) jsKeywords.forEach(function(kw) {
-        gather(kw, null, 0, function(rec) { rec.isKeyword = true; });
-      });
+      if (query.includeKeywords) {
+        (srv.options.ecmaVersion >= 6 ? jsKeywordsES6 : jsKeywords).forEach(function(kw) {
+          gather(kw, null, 0, function(rec) { rec.isKeyword = true; });
+        });
+      };
       hookname = "variableCompletion";
     }
     srv.signal(hookname, file, wordStart, wordEnd, gather)
@@ -979,7 +999,7 @@
     return clean(result);
   }
 
-  function findRefsToVariable(srv, query, file, expr, checkShadowing) {
+  function findRefsToVariable(srv, query, file, expr, isRename) {
     var name = expr.node.name;
 
     for (var scope = expr.state; scope && !(name in scope.props); scope = scope.prev) {}
@@ -987,27 +1007,33 @@
 
     var type, refs = [];
     function storeRef(file) {
-      return function(node, scopeHere) {
-        if (checkShadowing) for (var s = scopeHere; s != scope; s = s.prev) {
-          var exists = s.hasProp(checkShadowing);
-          if (exists)
-            throw ternError("Renaming `" + name + "` to `" + checkShadowing + "` would make a variable at line " +
-                            (asLineChar(file, node.start).line + 1) + " point to the definition at line " +
-                            (asLineChar(file, exists.name.start).line + 1));
+      return function(node, scopeHere, ancestors) {
+        var value = {file: file.name,
+                     start: outputPos(query, file, node.start),
+                     end: outputPos(query, file, node.end)}
+        if (isRename) {
+          for (var s = scopeHere; s != scope; s = s.prev) {
+            var exists = s.hasProp(isRename);
+            if (exists)
+              throw ternError("Renaming `" + name + "` to `" + isRename + "` would make a variable at line " +
+                              (asLineChar(file, node.start).line + 1) + " point to the definition at line " +
+                              (asLineChar(file, exists.name.start).line + 1));
+          }
+          var parent = ancestors[ancestors.length - 2]
+          if (parent && parent.type == "Property" && parent.key == parent.value)
+            value.isShorthand = true
         }
-        refs.push({file: file.name,
-                   start: outputPos(query, file, node.start),
-                   end: outputPos(query, file, node.end)});
+        refs.push(value);
       };
     }
 
     if (scope.originNode) {
       type = "local";
-      if (checkShadowing) {
+      if (isRename) {
         for (var prev = scope.prev; prev; prev = prev.prev)
-          if (checkShadowing in prev.props) break;
-        if (prev) infer.findRefs(scope.originNode, scope, checkShadowing, prev, function(node) {
-          throw ternError("Renaming `" + name + "` to `" + checkShadowing + "` would shadow the definition used at line " +
+          if (isRename in prev.props) break;
+        if (prev) infer.findRefs(scope.originNode, scope, isRename, prev, function(node) {
+          throw ternError("Renaming `" + name + "` to `" + isRename + "` would shadow the definition used at line " +
                           (asLineChar(file, node.start).line + 1));
         });
       }
@@ -1090,7 +1116,8 @@
     var changes = data.changes = [];
     for (var i = 0; i < refs.length; ++i) {
       var use = refs[i];
-      use.text = query.newName;
+      if (use.isShorthand) use.text = expr.node.name + ": " + query.newName
+      else use.text = query.newName;
       changes.push(use);
     }
 
@@ -1101,5 +1128,5 @@
     return {files: srv.files.map(function(f){return f.name;})};
   }
 
-  exports.version = "0.18.1";
+  exports.version = "0.20.0";
 });

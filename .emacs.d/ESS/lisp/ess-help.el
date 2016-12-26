@@ -156,7 +156,8 @@ If COMMAND is suplied, it is used instead of `inferior-ess-help-command'."
 
 (defun ess--flush-help-into-current-buffer (object &optional command dont-ask)
   (ess-write-to-dribble-buffer
-   (format "(ess-help '%s' start  ..\n" (buffer-name (current-buffer))))
+   (format "(ess-help '%s' start (command: '%s') \n"
+           (buffer-name (current-buffer)) command))
 
   ;; Ask the corresponding ESS process for the help file:
   (if buffer-read-only (setq buffer-read-only nil))
@@ -219,7 +220,8 @@ If COMMAND is suplied, it is used instead of `inferior-ess-help-command'."
             (ess-command (format com-html-help  ess-help-object))
           (require 'browse-url)
           (if com-get-file-path
-              (browse-url (car (ess-get-words-from-vector (format com-get-file-path ess-help-object))))
+              (browse-url (car (ess-get-words-from-vector
+                                (format com-get-file-path ess-help-object))))
             (when (functionp fun-get-file-path)
               (browse-url (funcall fun-get-file-path ess-help-object)))))))))
 
@@ -688,6 +690,8 @@ Other keybindings are as follows:
   ;; section headings.
 
   (setq ess-help-sec-map (make-sparse-keymap))
+  (setq-local show-trailing-whitespace nil)
+
   (dolist (pair ess-help-sec-keys-alist)
     (define-key ess-help-sec-map (char-to-string (car pair))
       'ess-skip-to-help-section))
@@ -856,9 +860,10 @@ Stata or XLispStat for additional information."
              ;; \b_
              (delete-region (1- (point)) (1+ (point)))))))
   (goto-char (point-min))
-  (while (re-search-forward "URL:" nil t)
-    ;; quick fix for C-x f confusiong
-    (delete-region (match-beginning 0) (match-end 0)))
+  (let ((case-fold-search nil)); 'URL' != 'url' ('libcurl: ' on ?capabilities)
+    (while (re-search-forward "\\bURL: " nil t); test with ?rtags
+      ;; quick fix for C-x f confusion (getting into tramp)
+      (delete-region (match-beginning 0) (match-end 0))))
   ;; Crunch blank lines
   (goto-char (point-min))
   (while (re-search-forward "\n\n\n\n*" nil t)
@@ -920,7 +925,7 @@ option for other dialects)."
     (let ((map (make-sparse-keymap))
           (objname (or (and (use-region-p)
                             (buffer-substring-no-properties (point) (mark)))
-                       (symbol-at-point)))
+                       (ess-symbol-at-point)))
           bs ess--descr-o-a-p-commands) ;; used in ess--describe-object-at-point
       (unless objname (error "No object at point "))
       (define-key map (vector last-command-event) 'ess--describe-object-at-point)

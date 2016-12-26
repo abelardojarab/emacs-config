@@ -116,6 +116,8 @@
     (define-prefix-command 'ess-r-package-dev-map)
     (define-key ess-r-package-dev-map "\C-s" 'ess-r-package-set-package)
     (define-key ess-r-package-dev-map "s"    'ess-r-package-set-package)
+    (define-key ess-r-package-dev-map "\C-a" 'ess-r-devtools-ask)
+    (define-key ess-r-package-dev-map "a"    'ess-r-devtools-ask)
     (define-key ess-r-package-dev-map "\C-c" 'ess-r-devtools-check-package)
     (define-key ess-r-package-dev-map "c"    'ess-r-devtools-check-package)
     (define-key ess-r-package-dev-map "\C-d" 'ess-r-devtools-document-package)
@@ -200,7 +202,6 @@
 
 ;; Underscore is valid in R symbols
 (modify-syntax-entry ?_ "_" ess-r-syntax-table)
-
 (modify-syntax-entry ?: "." ess-r-syntax-table)
 (modify-syntax-entry ?@ "." ess-r-syntax-table)
 (modify-syntax-entry ?$ "." ess-r-syntax-table)
@@ -212,6 +213,16 @@
 ;; (modify-syntax-entry ?\" "." inferior-ess-r-syntax-table)
 ;; (modify-syntax-entry ?` "." inferior-ess-r-syntax-table)
 (modify-syntax-entry ?% "." inferior-ess-r-syntax-table)
+
+(defvar ess-r-completion-syntax-table
+  (let ((table (make-syntax-table ess-r-syntax-table)))
+    (modify-syntax-entry ?. "_" table)
+    (modify-syntax-entry ?: "_" table)
+    (modify-syntax-entry ?$ "_" table)
+    (modify-syntax-entry ?@ "_" table)
+    table)
+  "Syntax table used for completion and help symbol lookup.
+It makes underscores and dots word constituent chars.")
 
 (defun ess-r-font-lock-syntactic-face-function (state)
   (let ((string-end (save-excursion
@@ -263,6 +274,7 @@
      (ess-build-help-command-function   . #'ess-r-build-help-command)
      (ess-help-web-search-command       . 'ess-R-sos)
      (ess-mode-syntax-table             . ess-r-syntax-table)
+     (ess-mode-completion-syntax-table      . ess-r-completion-syntax-table)
      (ess-mode-editing-alist            . R-editing-alist)
      (ess-change-sp-regexp              . ess-R-change-sp-regexp)
      (ess-help-sec-regex                . ess-help-R-sec-regex)
@@ -464,6 +476,18 @@ Executed in process buffer."
   ;;    ;; "invisible(Sys.sleep(10))\n" nil (get-process ess-local-process-name) ;; test only
   ;;    (lambda (proc) (process-put proc 'packages-cached? t))))
 
+  ;; sometimes needed (MM w/ Emacs 25.1, on F24 where PAGER is 'more'):
+  ;; carefully set "pager" option  "when needed":
+  (ess-eval-linewise
+   (format
+    "if(identical(getOption('pager'), file.path(R.home('bin'), 'pager'))) # rather take the ESS one
+      options(pager='%s')\n" inferior-ess-pager)
+   ;; Even more careful / sophisticated :
+   ;;  "if(identical(getOption('pager'), file.path(R.home('bin'), 'pager')) &&
+   ;;  grepl('\\<more\\>', .P <- Sys.getenv('PAGER'))) {  # rather take the ESS one
+   ;;    cat('$PAGER has more: ', sQuote(.P), '\\n --> setting R`s pager option():\\n')
+   ;;    options(pager='%s')\n}\n" inferior-ess-pager)
+   nil nil nil 'wait)
   (inferior-ess-r-load-ESSR)
 
   (when inferior-ess-language-start
@@ -1128,7 +1152,7 @@ attached packages."
       (message (format "Evaluating in %s" (propertize env 'face font-lock-function-name-face))))
     (force-mode-line-update)))
 
-(defvar-local ess-r--evaluation-env-mode-line 
+(defvar-local ess-r--evaluation-env-mode-line
   '(:eval (let ((env (ess-r-get-evaluation-env)))
             (if env
                 (format " %s"
@@ -1356,22 +1380,20 @@ we flush the cache.")
   :type 'hook
   :group 'ess-R)
 
-(defun inferior-ess-r-reload (&optional start-args)
-  "Reload R and the currently activated developer package, if any."
-  (interactive)
-  (ess-force-buffer-current)
+(ess-defmethod R inferior-ess-reload (&optional start-args)
+  (inferior-ess-r-force)
   (let ((pkg-info ess-r-package-info)
         (r-proc (ess-get-process)))
     (with-ess-process-buffer nil
       (ess-quit 'no-save)
       (while (memq (process-status r-proc) '(run busy))
         (accept-process-output r-proc 0.002))
-      (kill-buffer)
       (R start-args)
-      (when pkg-info
-        (setq-local ess-r-package-info pkg-info)
-        (ess-r-devtools-load-package))
       (run-hooks 'inferior-ess-r-reload-hook))))
+
+(defun inferior-ess-r-force (&optional prompt force no-autostart ask-if-1)
+  (setq ess-dialect "R")
+  (ess-force-buffer-current prompt force no-autostart ask-if-1))
 
 
 ;;*;; Editing Tools

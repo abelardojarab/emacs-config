@@ -822,12 +822,12 @@ Returns the name of the selected process."
   (ess-write-to-dribble-buffer "ess-request-a-process: {beginning}\n")
   (update-ess-process-name-list)
 
-  (setq ess-dialect
-    (or ess-dialect (ess-completing-read
-                     "Set `ess-dialect'"
-                     (delete-dups (list "R" "S+" S+-dialect-name
-                                        "stata" STA-dialect-name
-                                        "julia" "SAS" "XLS"  "ViSta")))))
+  (setq ess-dialect (or ess-dialect
+                        (ess-completing-read
+                         "Set `ess-dialect'"
+                         (delete-dups (list "R" "S+" S+-dialect-name
+                                            "stata" STA-dialect-name
+                                            "julia" "SAS" "XLS"  "ViSta")))))
 
   (let* ((pname-list (delq nil ;; keep only those mathing dialect
                            (append
@@ -895,7 +895,6 @@ Returns the name of the selected process."
         (pop-to-buffer (buffer-name (process-buffer (get-process proc))) t))
       proc)))
 
-
 (defun ess-force-buffer-current (&optional prompt force no-autostart ask-if-1)
   "Make sure the current buffer is attached to an ESS process.
 If not, or FORCE (prefix argument) is non-nil, prompt for a
@@ -922,6 +921,8 @@ there is only one process running."
             (setq temp-ess-help-filetype inferior-ess-help-filetype))
           (setq ess-local-process-name proc)
           (setq inferior-ess-help-filetype temp-ess-help-filetype))))))
+
+(defalias 'inferior-ess-force #'ess-force-buffer-current)
 
 (defun ess-switch-process ()
   "Force a switch to a new underlying process."
@@ -1439,7 +1440,7 @@ wrapping the code into:
              (oldpb (process-buffer proc))
              (oldpf (process-filter proc))
              (oldpm (marker-position (process-mark proc))))
-         (ess-if-verbose-write (format "n(ess-command %s ..)" cmd))
+         (ess-if-verbose-write (format "(ess-command %s ..)" cmd))
          ;; Swap the process buffer with the output buffer before
          ;; sending the command
          (unwind-protect
@@ -1746,8 +1747,11 @@ Prefix arg VIS toggles visibility of ess-code as for `ess-eval-region'."
   (interactive "P")
   (save-excursion
     (forward-paragraph)
+    ;; Skip blank code to avoid sending surrounding comments
+    (ess-skip-blanks-backward 'multiline)
     (let ((end (point)))
       (backward-paragraph)
+      (ess-skip-blanks-forward 'multiline)
       (ess-eval-region (point) end vis "Eval paragraph"))))
 
 ;; ;; Experimental - after suggestion from Jenny Brian for an 'eval-multiline'
@@ -2130,9 +2134,8 @@ Paragraphs are separated only by blank lines.  Crosshatches start comments.
 If you accidentally suspend your process, use \\[comint-continue-subjob]
 to continue it."
   (interactive)
-
-  (comint-mode)
-
+  (delay-mode-hooks
+    (comint-mode))
   (set (make-local-variable 'comint-input-sender) 'inferior-ess-input-sender)
   (set (make-local-variable 'process-connection-type) t)
   ;; initialize all custom vars:
@@ -2243,19 +2246,15 @@ to continue it."
   (set (make-local-variable 'paragraph-start)
        (concat inferior-ess-primary-prompt "\\|\^L"))
   (set (make-local-variable 'paragraph-separate) "\^L")
-
-  ;; SJE Tue 28 Dec 2004: do not attempt to load object name db.
-  ;; (ess-load-object-name-db-file)
-  ;; (sleep-for 0.5)
+  (if (featurep 'jit-lock)
+      (setq-local jit-lock-chunk-size inferior-ess-jit-lock-chunk-size))
   (make-local-variable 'kill-buffer-hook)
   (add-hook 'kill-buffer-hook 'ess-kill-buffer-function)
-  (run-hooks 'inferior-ess-mode-hook)
-
+  (run-mode-hooks 'inferior-ess-mode-hook)
   (ess-write-to-dribble-buffer
    (format "(i-ess end): buf=%s, lang=%s, comint..echo=%s, comint..sender=%s,\n"
            (current-buffer) ess-language
            comint-process-echoes comint-input-sender))
-
   (message
    (concat (substitute-command-keys
             "Type \\[describe-mode] for help on ESS version ")
@@ -2572,6 +2571,15 @@ before you quit.  It is run automatically by \\[ess-quit]."
             (kill-buffer buf)))))
     (ess-switch-to-ESS nil)))
 
+(ess-defgeneric inferior-ess-reload (&optional start-args)
+  "Reload the inferior process."
+  (interactive)
+  (let ((dir (ess-get-working-directory))
+        (ess-ask-for-ess-directory nil))
+    (:override
+     (error "Unimplemented for this dialect"))
+    (ess-set-working-directory dir)))
+
 (defun ess-kill-buffer-function ()
   "Function run just before an ESS process buffer is killed."
   ;; This simply deletes the buffers process to avoid an Emacs bug
@@ -2663,30 +2671,37 @@ If exclude-first is non-nil, don't return objects in first positon (.GlobalEnv).
 (defun ess-get-words-from-vector (command &optional no-prompt-check wait proc)
   "Evaluate the S command COMMAND, which returns a character vector.
 Return the elements of the result of COMMAND as an alist of
-strings.  COMMAND should have a terminating newline. WAIT is
-passed to `ess-command'.
+strings.  COMMAND should have a terminating newline.  NO-PROMPT-CHECK,
+WAIT, and PROC are passed to `ess-command'.  FILTER may be the
+keyword 'non-... or nil.
 
 To avoid truncation of long vectors, wrap your
 command (%s) like this, or a version with explicit options(max.print=1e6):
 
 local({ out <- try({%s}); print(out, max=1e6) })\n
 "
-  (let ((tbuffer (get-buffer-create
+  (let* ((tbuffer (get-buffer-create
                   " *ess-get-words*")); initial space: disable-undo
-        words)
-    (ess-if-verbose-write (format "ess-get-words*(%s).. " command))
+         (word-RE
+          (concat "\\("
+                  "\\\\\\\"" "\\|" "[^\"]" ;  \" or non-"-char
+                  "\\)*"))
+         (full-word-regexp
+          (concat "\"" "\\(" word-RE "\\)"
+                   "\""
+                   "\\( \\|$\\)"; space or end
+                   ))
+         words)
+    (ess-if-verbose-write
+     (format "(ess-get-words-* command=%s full-word-regexp=%S)\n"
+                                  command full-word-regexp))
     (ess-command command tbuffer 'sleep no-prompt-check wait proc)
     (ess-if-verbose-write " [ok] ..")
     (with-current-buffer tbuffer
       (goto-char (point-min))
-      ;; this is bad, only R specific test
-      ;; (if (not (looking-at "[+ \t>\n]*\\[1\\]"))
-      ;;     (progn (ess-if-verbose-write "not seeing \"[1]\".. ")
-      ;;            (setq words nil)
-      ;;            )
-      (while (re-search-forward "\"\\(\\(\\\\\\\"\\|[^\"]\\)*\\)\"\\( \\|$\\)" nil t);match \"
-        (setq words (cons (buffer-substring (match-beginning 1)
-                                            (match-end 1)) words))))
+      (while (re-search-forward full-word-regexp nil t)
+        (setq words (cons (buffer-substring (match-beginning 1) (match-end 1))
+                          words))))
     (ess-if-verbose-write
      (if (> (length words) 5)
          (format " |-> (length words)= %d\n" (length words))
