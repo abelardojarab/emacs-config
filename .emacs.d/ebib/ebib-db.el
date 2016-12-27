@@ -5,9 +5,6 @@
 
 ;; Author: Joost Kremers <joostkremers@fastmail.fm>
 ;; Maintainer: Joost Kremers <joostkremers@fastmail.fm>
-;; Created: 2003
-;; Version: 2.6
-;; Keywords: text bibtex
 
 ;; Redistribution and use in source and binary forms, with or without
 ;; modification, are permitted provided that the following conditions
@@ -40,7 +37,155 @@
 ;;; Code:
 
 (require 'cl-lib)
-(require 'ebib-utils)
+(require 'bibtex)
+
+;; Entry type and field aliases defined by Biblatex.
+(defconst ebib--field-aliases '(("location" . "address")
+                            ("annotation" . "annote")
+                            ("eprinttype" . "archiveprefix")
+                            ("journaltitle" . "journal")
+                            ("sortkey" . "key")
+                            ("file" . "pdf")
+                            ("eprintclass" . "primaryclass")
+                            ("institution" . "school"))
+  "List of field aliases for Biblatex.")
+
+(defconst ebib--type-aliases '(("Conference" . "InProceedings")
+                           ("Electronic" . "Online")
+                           ("MastersThesis" . "Thesis")
+                           ("PhDThesis" . "Thesis")
+                           ("TechReport" . "Report")
+                           ("WWW" . "Online"))
+  "List of entry type aliases for Biblatex.")
+
+(defcustom ebib-bibtex-dialect 'BibTeX
+  "The default BibTeX dialect.
+A `.bib' file/database without explicit dialect setting is
+assumed to use this dialect.  Possible values are those listed in
+`bibtex-dialect-list'."
+  :group 'ebib
+  :type `(choice :tag "BibTeX Dialect"
+                 ,@(mapcar (lambda (d) `(const ,d))
+                           bibtex-dialect-list)))
+
+(defcustom ebib-biblatex-inheritances '(("all"
+                                     "all"
+                                     (("ids" . none)
+                                      ("crossref" . none)
+                                      ("xref" . none)
+                                      ("entryset" . none)
+                                      ("entrysubtype" . none)
+                                      ("execute" . none)
+                                      ("label" . none)
+                                      ("options" . none)
+                                      ("presort" . none)
+                                      ("related" . none)
+                                      ("relatedoptions" . none)
+                                      ("relatedstring" . none)
+                                      ("relatedtype" . none)
+                                      ("shorthand" . none)
+                                      ("shorthandintro" . none)
+                                      ("sortkey" . none)))
+
+                                    ("inbook, bookinbook, suppbook"
+                                     "mvbook, book"
+                                     (("author" . "author")
+                                      ("bookauthor" . "author")))
+
+                                    ("book, inbook, bookinbook, suppbook"
+                                     "mvbook"
+                                     (("maintitle" . "title")
+                                      ("mainsubtitle" . "subtitle")
+                                      ("maintitleaddon" . "titleaddon")
+                                      ("shorttitle" . none)
+                                      ("sorttitle" . none)
+                                      ("indextitle" . none)
+                                      ("indexsorttitle" . none)))
+
+                                    ("collection, reference, incollection, inreference, suppcollection"
+                                     "mvcollection, mvreference"
+                                     (("maintitle" . "title")
+                                      ("mainsubtitle" . "subtitle")
+                                      ("maintitleaddon" . "titleaddon")
+                                      ("shorttitle" . none)
+                                      ("sorttitle" . none)
+                                      ("indextitle" . none)
+                                      ("indexsorttitle" . none)))
+
+                                    ("proceedings, inproceedings"
+                                     "mvproceedings"
+                                     (("maintitle" . "title")
+                                      ("mainsubtitle" . "subtitle")
+                                      ("maintitleaddon" . "titleaddon")
+                                      ("shorttitle" . none)
+                                      ("sorttitle" . none)
+                                      ("indextitle" . none)
+                                      ("indexsorttitle" . none)))
+
+                                    ("inbook, bookinbook, suppbook"
+                                     "book"
+                                     (("booktitle" . "title")
+                                      ("booksubtitle" . "subtitle")
+                                      ("booktitleaddon" . "titleaddon")
+                                      ("shorttitle" . none)
+                                      ("sorttitle" . none)
+                                      ("indextitle" . none)
+                                      ("indexsorttitle" . none)))
+
+                                    ("incollection, inreference, suppcollection"
+                                     "collection, reference"
+                                     (("booktitle" . "title")
+                                      ("booksubtitle" . "subtitle")
+                                      ("booktitleaddon" . "titleaddon")
+                                      ("shorttitle" . none)
+                                      ("sorttitle" . none)
+                                      ("indextitle" . none)
+                                      ("indexsorttitle" . none)))
+
+                                    ("inproceedings"
+                                     "proceedings"
+                                     (("booktitle" . "title")
+                                      ("booksubtitle" . "subtitle")
+                                      ("booktitleaddon" . "titleaddon")
+                                      ("shorttitle" . none)
+                                      ("sorttitle" . none)
+                                      ("indextitle" . none)
+                                      ("indexsorttitle" . none)))
+                                    ("article, suppperiodical"
+                                     "periodical"
+                                     (("title" . "journaltitle")
+                                      ("subtitle" . "journalsubtitle")
+                                      ("shorttitle" . none)
+                                      ("sorttitle" . none)
+                                      ("indextitle" . none)
+                                      ("indexsorttitle" . none))))
+  "Inheritance scheme for cross-referencing.
+This option allows you to define inheritances for Biblatex.
+Inheritances are specified for pairs of target and source entry
+type, where the target is the cross-referencing entry and the
+source the cross-referenced entry.  For each pair, specify the
+fields that can inherit a value (the targets) and the fields that
+they inherit from (the sources).
+
+Inheritances for all entry types can be defined by specifying
+`all' as the entry type.  The entry type may also be
+a (comma-separated) list of entry types.
+
+If no inheritance rule is set up for a given entry type+field
+combination, the field inherits from the same-name field in the
+cross-referenced entry.  If no inheritance should take place, set
+the source field to \"No inheritance\".
+
+Note that this option is only relevant for Biblatex.  If the
+BibTeX dialect is set to `BibTeX', this option is ignored."
+  :group 'ebib
+  :type '(repeat (list (string :tag "Target entry type(s)")
+                       (string :tag "Source entry type(s)")
+                       (repeat (cons :tag "Inheritance"
+                                     (string :tag "Target field")
+                                     (choice (string :tag "Source field)")
+                                             (const :tag "No inheritance" none)))))))
+
 
 ;; each database is represented by a struct
 (cl-defstruct ebib--db-struct
@@ -81,6 +226,10 @@ it is deleted."
   (setf (ebib--db-struct-modified db) nil)
   (setf (ebib--db-struct-backup db) nil))
 
+(defun ebib-db-count-entries (db)
+  "Return the number of entries in DB."
+  (hash-table-count (ebib--db-struct-database db)))
+
 (defun ebib-db-get-dialect (db)
   "Return the BibTeX dialect of DB."
   (ebib--db-struct-dialect db))
@@ -110,28 +259,19 @@ No check is performed to see if VARS is really a local variable block."
   "Return the key of the current entry in DB."
   (ebib--db-struct-cur-entry db))
 
-(defun ebib-db-set-current-entry-key (entry db &optional noerror)
-  "Set ENTRY as the current entry of DB.
-ENTRY is a key in DB.  If ENTRY is not in DB, an error is raised
-unless NOERROR is non-nil.  In this case, if NOERROR is `first',
-the current entry key is set to the alphabetically first key in
-DB.  Any other non-nil value means do not change the current entry
-if ENTRY is not in DB.
+(defun ebib-db-set-current-entry-key (key db)
+  "Set KEY as the current entry of DB.
+KEY is a key in DB.  If KEY is not in DB, the current entry is
+set to nil, which signifies that a new current entry should be
+set.  It is allowed to pass a alue of nil for KEY, to unset the
+current entry unconditionally.
 
-ENTRY may also be t, in which case the current entry is
-unconditionally set to the alphabetically first entry in DB.
-
-Return the new entry key if successful, nil otherwise."
-  (cond
-   ((stringp entry)
-    (if (ebib-db-get-entry entry db 'noerror)
-        (setf (ebib--db-struct-cur-entry db) entry)
-      (unless noerror
-        (error "[Ebib] No entry key `%s' in the current database" entry))
-      (if (eq noerror 'first)
-          (setf (ebib--db-struct-cur-entry db) (car (ebib-db-list-keys db 'sort))))))
-   ((eq entry t)
-    (setf (ebib--db-struct-cur-entry db) (car (ebib-db-list-keys db 'sort))))))
+Return the new entry key if it could be made the new entry key,
+nil otherwise."
+  (if (and (stringp key)
+           (ebib-db-get-entry key db 'noerror))
+      (setf (ebib--db-struct-cur-entry db) key)
+    (setf (ebib--db-struct-cur-entry db) nil)))
 
 (defun ebib-db-set-entry (key data db &optional if-exists)
   "Set KEY to DATA in database DB.
@@ -196,16 +336,9 @@ is suffixed, then `ab' etc."
 	(setq suffix ?a)))
     unique-key))
 
-(defun ebib-db-list-keys (db &optional sort)
-  "Return a list of keys in DB.
-If SORT is non-nil, the list is sorted."
-  (let (keys)
-    (maphash #'(lambda (key _)
-		 (push key keys))
-	     (ebib--db-struct-database db))
-    (if sort
-        (ebib-db-sort-keys-list keys db)
-      keys)))
+(defun ebib-db-list-keys (db)
+  "Return a list of keys in DB."
+  (hash-table-keys (ebib--db-struct-database db)))
 
 (defun ebib-db-change-key (key new-key db &optional if-exists)
   "Change entry key KEY to NEW-KEY in DB.
@@ -406,13 +539,9 @@ the value without braces."
   "Return the alist containing all @STRING definitions in DB."
   (ebib--db-struct-strings db))
 
-(defun ebib-db-list-strings (db &optional sort)
-  "Return a list of @STRING abbreviations in DB without expansions.
-If SORT is non-nil, the list is sorted."
-  (let ((list (mapcar #'car (ebib--db-struct-strings db))))
-    (if sort
-        (sort list 'string<)
-      list)))
+(defsubst ebib-db-list-strings (db)
+  "Return a list of @STRING abbreviations in DB without expansions."
+  (mapcar #'car (ebib--db-struct-strings db)))
 
 (defun ebib-db-set-preamble (preamble db &optional if-exists)
   "Set PREAMBLE as the preamble of DB.
@@ -527,13 +656,9 @@ unmarked."
       (ebib-db-unmark-entry entry db)
     (ebib-db-mark-entry entry db)))
 
-(defun ebib-db-list-marked-entries (db &optional sort)
-  "Return a list of entry keys of all marked entries in DB.
-If SORT is non-nil, the list is sorted."
-  (let ((entries (copy-sequence (ebib--db-struct-marked-entries db))))
-    (if sort
-        (ebib-db-sort-keys-list entries db)
-      entries)))
+(defun ebib-db-list-marked-entries (db)
+  "Return a list of entry keys of all marked entries in DB."
+  (copy-sequence (ebib--db-struct-marked-entries db)))
 
 (defun ebib-db-filtered-p (db)
   "Return t if a filter exists for DB."
@@ -550,8 +675,8 @@ The filter is set unconditionally, overwriting any existing filter."
 
 (defun ebib-db-set-sortinfo (sortinfo db)
   "Set the SORTINFO of DB.
-The sortinfo is set unconditionally, overwriting
-any existing sortinfo."
+The sortinfo is set unconditionally, overwriting any existing
+sortinfo."
   (setf (ebib--db-struct-sortinfo db) sortinfo))
 
 (defun ebib-db-custom-sorted-p (db)
@@ -566,30 +691,8 @@ any existing sortinfo."
   "Return the sort order of DB, or nil if there is none."
   (cdr (ebib--db-struct-sortinfo db)))
 
-(defun ebib-db-sort-keys-list (keys db)
-  "Sort KEYS according to the sort info of DB."
-  ;; first sort the keys themselves
-  (setq keys (sort keys #'string<))
-  ;; and then stably sort on the sort field, if any
-  (when (ebib-db-custom-sorted-p db)
-    (let* ((field (ebib-db-get-sort-field db))
-           ;; We use a temp list for sorting, so that the :key argument to
-           ;; `cl-stable-sort' can simply be `car' rather than (a much
-           ;; heavier) `ebib-db-get-field-value'. Sorting is much faster
-           ;; that way.
-           (list (mapcar (lambda (key)
-                           (cons (ebib-db-get-field-value field key db "" 'unbraced 'xref) key))
-                         keys)))
-      (setq list (cl-stable-sort list #'string-lessp :key #'car))
-      (setq keys (mapcar #'cdr list)))
-    ;; reverse the list if necessary
-    (if (eq (ebib-db-get-sort-order db) 'descend)
-        (setq keys (nreverse keys))))
-  ;; now return the list of keys
-  keys)
-
 (defun ebib-db-set-backup (backup db)
-  "Set the backup flag of DB to BACKUP.
+  "Set BACKUP as the backup flag of DB.
 BACKUP must be either t (make backup at next save) or nil (do not
 make backup at next save)."
   (setf (ebib--db-struct-backup db) backup))

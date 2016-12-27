@@ -16,7 +16,7 @@
 ;;	Rémi Vanicat      <vanicat@debian.org>
 ;;	Yann Hodique      <yann.hodique@gmail.com>
 
-;; Package-Requires: ((emacs "24.4") (async "20160711.223") (dash "20160820.501") (with-editor "20160929.734") (git-commit "20160929.801") (magit-popup "20160821.1338"))
+;; Package-Requires: ((emacs "24.4") (async "20160711.223") (dash "20160820.501") (with-editor "20161201.925") (git-commit "20161123.2204") (magit-popup "20161201.1352"))
 ;; Keywords: git tools vc
 ;; Homepage: https://github.com/magit/magit
 
@@ -75,6 +75,7 @@
 
 (defgroup magit-status nil
   "Inspect and manipulate Git repositories."
+  :link '(info-link "(magit)Status Buffer")
   :group 'magit-modes)
 
 (defcustom magit-status-mode-hook nil
@@ -147,10 +148,39 @@ The functions which respect this option are
   :group 'magit-status
   :type 'boolean)
 
+(defcustom magit-status-margin
+  (list nil
+        (nth 1 magit-log-margin)
+        'magit-log-margin-width nil
+        (nth 4 magit-log-margin))
+  "Format of the margin in `magit-status-mode' buffers.
+
+The value has the form (INIT STYLE WIDTH AUTHOR AUTHOR-WIDTH).
+
+If INIT is non-nil, then the margin is shown initially.
+STYLE controls how to format the committer date.  It can be one
+  of `age' (to show the age of the commit), `age-abbreviated' (to
+  abbreviate the time unit to a character), or a string (suitable
+  for `format-time-string') to show the actual date.
+WIDTH controls the width of the margin.  This exists for forward
+  compatibility and currently the value should not be changed.
+AUTHOR controls whether the name of the author is also shown by
+  default.
+AUTHOR-WIDTH has to be an integer.  When the name of the author
+  is shown, then this specifies how much space is used to do so."
+  :package-version '(magit . "2.9.0")
+  :group 'magit-status
+  :group 'magit-margin
+  :type magit-log-margin--custom-type
+  :initialize 'magit-custom-initialize-reset
+  :set-after '(magit-log-margin)
+  :set (apply-partially #'magit-margin-set-variable 'magit-status-mode))
+
 ;;;; Refs Mode
 
 (defgroup magit-refs nil
   "Inspect and manipulate Git branches and tags."
+  :link '(info-link "(magit)References Buffer")
   :group 'magit-modes)
 
 (defcustom magit-refs-mode-hook nil
@@ -188,18 +218,44 @@ To change the value in an existing buffer use the command
 (put 'magit-refs-show-commit-count 'safe-local-variable 'symbolp)
 (put 'magit-refs-show-commit-count 'permanent-local t)
 
-(defcustom magit-refs-show-margin 'branch
-  "Whether to initially show the margin in refs buffers.
+(defcustom magit-refs-margin
+  (list nil
+        (nth 1 magit-log-margin)
+        'magit-log-margin-width nil
+        (nth 4 magit-log-margin))
+  "Format of the margin in `magit-refs-mode' buffers.
 
-When non-nil the committer name and date are initially displayed
-in the margin of refs buffers.  The margin can be shown or hidden
-in the current buffer using the command `magit-toggle-margin'."
-  :package-version '(magit . "2.1.0")
+The value has the form (INIT STYLE WIDTH AUTHOR AUTHOR-WIDTH).
+
+If INIT is non-nil, then the margin is shown initially.
+STYLE controls how to format the committer date.  It can be one
+  of `age' (to show the age of the commit), `age-abbreviated' (to
+  abbreviate the time unit to a character), or a string (suitable
+  for `format-time-string') to show the actual date.
+WIDTH controls the width of the margin.  This exists for forward
+  compatibility and currently the value should not be changed.
+AUTHOR controls whether the name of the author is also shown by
+  default.
+AUTHOR-WIDTH has to be an integer.  When the name of the author
+  is shown, then this specifies how much space is used to do so."
+  :package-version '(magit . "2.9.0")
   :group 'magit-refs
+  :group 'magit-margin
   :safe (lambda (val) (memq val '(all branch nil)))
-  :type '(choice (const all    :tag "For branches and tags")
-                 (const branch :tag "For branches only")
-                 (const nil    :tag "Never")))
+  :type magit-log-margin--custom-type
+  :initialize 'magit-custom-initialize-reset
+  :set-after '(magit-log-margin)
+  :set (apply-partially #'magit-margin-set-variable 'magit-refs-mode))
+
+(defcustom magit-refs-margin-for-tags nil
+  "Whether to show information about tags in the margin.
+
+This is disabled by default because it is slow if there are many
+tags."
+  :package-version '(magit . "2.9.0")
+  :group 'magit-refs
+  :group 'magit-margin
+  :type 'boolean)
 
 (defcustom magit-visit-ref-behavior nil
   "Control how `magit-visit-ref' behaves in `magit-refs-mode' buffers.
@@ -379,51 +435,59 @@ Of course you can also fine-tune:
                                (repeat :tag "except"
                                        (string :tag "branch"))))))
 
-(defcustom magit-branch-popup-show-variables nil
+(defcustom magit-branch-popup-show-variables t
   "Whether the `magit-branch-popup' shows Git variables.
-When this is nil then no variables are displayed directly in this
-popup.  Instead the sub-popup `magit-branch-config-popup' has to
-be used to view and change branch related variables."
-  :package-version '(magit . "2.9.0")
+This defaults to t to avoid changing key bindings.  When set to
+nil, no variables are displayed directly in this popup, instead
+the sub-popup `magit-branch-config-popup' has to be used to view
+and change branch related variables."
+  :package-version '(magit . "2.7.0")
   :group 'magit-commands
   :type 'boolean)
 
 (defcustom magit-repository-directories nil
   "List of directories that are or contain Git repositories.
+
 Each element has the form (DIRECTORY . DEPTH) or, for backward
 compatibility, just DIRECTORY.  DIRECTORY has to be a directory
 or a directory file-name, a string.  DEPTH, an integer, specifies
 the maximum depth to look for Git repositories.  If it is 0, then
-only add DIRECTORY itself.  For elements that are strings, the
-value of option `magit-repository-directories-depth' specifies
-the depth."
+only add DIRECTORY itself.
+
+For backward compatibility reasons an element may be a string,
+instead of a cons-cell, in which case the value of the obsolete
+option `magit-repository-directories-depth' specifies the depth."
   :package-version '(magit . "2.8.0")
-  :group 'magit
+  :group 'magit-essentials
   :type '(repeat (choice (cons directory (integer :tag "Depth")) directory)))
 
-(defcustom magit-repository-directories-depth 3
+(defvar magit-repository-directories-depth 3
   "The maximum depth to look for Git repositories.
-This option is obsolete and only used for elements of the option
-`magit-repository-directories' (which see) that don't specify the
-depth directly."
-  :group 'magit
-  :type 'integer)
+This variable is obsolete and only used for elements of the
+option `magit-repository-directories' (which see) that don't
+specify the depth directly.")
 
-(unless (find-lisp-object-file-name 'magit-repolist-mode-hook 'defvar)
-  (add-hook 'magit-repolist-mode-hook 'hl-line-mode))
+;;;; Repolist Mode
+
+(defgroup magit-repolist nil
+  "List repositories in a buffer."
+  :link '(info-link "(magit)Repository List")
+  :group 'magit-modes)
+
 (defcustom magit-repolist-mode-hook '(hl-line-mode)
   "Hook run after entering Magit-Repolist mode."
   :package-version '(magit . "2.9.0")
-  :group 'magit-modes
+  :group 'magit-repolist
   :type 'hook
+  :get 'magit-hook-custom-get
   :options '(hl-line-mode))
 
 (defcustom magit-repolist-columns
   '(("Name"    25 magit-repolist-column-ident                  nil)
     ("Version" 25 magit-repolist-column-version                nil)
-    ("L<U"      3 magit-repolist-column-unpulled-from-upstream (:right-align t))
-    ("L>U"      3 magit-repolist-column-unpushed-to-upstream   (:right-align t))
-    ("Path"    99 magit-repolist-column-path))
+    ("L<U"      3 magit-repolist-column-unpulled-from-upstream ((:right-align t)))
+    ("L>U"      3 magit-repolist-column-unpushed-to-upstream   ((:right-align t)))
+    ("Path"    99 magit-repolist-column-path                   nil))
   "List of columns displayed by `magit-list-repositories'.
 
 Each element has the form (HEADER WIDTH FORMAT PROPS).
@@ -435,7 +499,7 @@ and with `default-directory' bound to the toplevel of its working
 tree.  It has to return a string to be inserted or nil.  PROPS is
 an alist that supports the keys `:right-align' and `:pad-right'."
   :package-version '(magit . "2.8.0")
-  :group 'magit-commands
+  :group 'magit-repolist
   :type `(repeat (list :tag "Column"
                        (string   :tag "Header Label")
                        (integer  :tag "Column Width")
@@ -721,9 +785,10 @@ detached `HEAD'."
     (magit-insert-section (branch pull)
       (let ((rebase (magit-git-string "config"
                                       (format "branch.%s.rebase" branch))))
-        (if (equal rebase "false")
-            (setq rebase nil)
-          (setq rebase (magit-get-boolean "pull.rebase")))
+        (pcase rebase
+          ("true")
+          ("false" (setq rebase nil))
+          (_       (setq rebase (magit-get-boolean "pull.rebase"))))
         (insert (format "%-10s" (or keyword (if rebase "Rebase: " "Merge: ")))))
       (--when-let (and magit-status-show-hashes-in-headers
                        (magit-rev-format "%h" pull))
@@ -924,6 +989,7 @@ If there is no blob buffer in the same frame, then do nothing."
   (let ((map (make-sparse-keymap)))
     (set-keymap-parent map magit-mode-map)
     (define-key map "\C-y" 'magit-refs-set-show-commit-count)
+    (define-key map "L"    'magit-margin-popup)
     map)
   "Keymap for `magit-refs-mode'.")
 
@@ -950,7 +1016,6 @@ Type \\[magit-reset] to reset HEAD to the commit at point.
 ;;;###autoload (autoload 'magit-show-refs-popup "magit" nil t)
 (magit-define-popup magit-show-refs-popup
   "Popup console for `magit-show-refs'."
-  'magit-refs
   :man-page "git-branch"
   :switches '((?m "Merged to HEAD"            "--merged")
               (?M "Merged to master"          "--merged=master")
@@ -993,13 +1058,13 @@ it is detached."
 ;;;###autoload
 (defun magit-show-refs (&optional ref args)
   "List and compare references in a dedicated buffer.
-Refs are compared with a branch read form the user."
+Refs are compared with a branch read from the user."
   (interactive (list (magit-read-other-branch "Compare with")
                      (magit-show-refs-arguments)))
   (magit-mode-setup #'magit-refs-mode ref args))
 
 (defun magit-refs-refresh-buffer (&rest _ignore)
-  (setq magit-set-buffer-margin-refresh (not magit-show-margin))
+  (setq magit-set-buffer-margin-refresh (not (magit-buffer-margin-p)))
   (unless (magit-rev-verify (or (car magit-refresh-args) "HEAD"))
     (setq magit-refs-show-commit-count nil))
   (magit-insert-section (branchbuf)
@@ -1133,7 +1198,8 @@ different, but only if you have customized the option
          ((string-match magit-refs-symref-line-re line)
           (magit-bind-match-strings (symref ref) line
             (magit-insert-symref symref ref 'magit-branch-local))))))
-    (insert ?\n)))
+    (insert ?\n)
+    (magit-make-margin-overlay nil t)))
 
 (defun magit-insert-remote-branches ()
   "Insert sections showing all remote-tracking branches."
@@ -1158,7 +1224,8 @@ different, but only if you have customized the option
            ((string-match magit-refs-symref-line-re line)
             (magit-bind-match-strings (symref ref) line
               (magit-insert-symref symref ref 'magit-branch-remote))))))
-      (insert ?\n))))
+      (insert ?\n)
+      (magit-make-margin-overlay nil t))))
 
 (defun magit-insert-branch (branch format &rest args)
   "For internal use, don't add to a hook."
@@ -1213,7 +1280,7 @@ different, but only if you have customized the option
                                       (and behind (format "behind %s" behind))))
                              (t "")))
                   "")))))
-    (when magit-show-margin
+    (when (magit-buffer-margin-p)
       (magit-refs-format-margin branch))
     (magit-refs-insert-cherry-commits head branch section)))
 
@@ -1261,8 +1328,8 @@ different, but only if you have customized the option
                             `((?n . ,(propertize tag 'face 'magit-tag))
                               (?c . ,(or mark count ""))
                               (?m . ,(or message "")))))
-              (when (and magit-show-margin
-                         (eq magit-refs-show-margin 'all))
+              (when (and (magit-buffer-margin-p)
+                         magit-refs-margin-for-tags)
                 (magit-refs-format-margin (concat tag "^{commit}")))
               (magit-refs-insert-cherry-commits head tag section)))))
       (insert ?\n))))
@@ -1279,7 +1346,8 @@ different, but only if you have customized the option
     (magit-git-wash (apply-partially 'magit-log-wash-log 'cherry)
       "cherry" "-v" "--abbrev" head ref magit-refresh-args)
     (unless (= (point) start)
-      (insert (propertize "\n" 'magit-section section)))))
+      (insert (propertize "\n" 'magit-section section))
+      (magit-make-margin-overlay nil t))))
 
 (defun magit-refs-format-commit-count (ref head format &optional tag-p)
   (and (string-match-p "%-?[0-9]+c" format)
@@ -1294,7 +1362,7 @@ different, but only if you have customized the option
   (save-excursion
     (goto-char (line-beginning-position 0))
     (let ((line (magit-rev-format "%ct%cN" commit)))
-      (magit-format-log-margin (substring line 10)
+      (magit-log-format-margin (substring line 10)
                                (substring line 0 10)))))
 
 ;;;; Files
@@ -1385,7 +1453,9 @@ An empty REV stands for index."
               (if (string= rev "") "{index}" (magit-rev-format "%H" rev))
               magit-buffer-refname rev
               magit-buffer-file-name (expand-file-name file topdir))
-        (setq default-directory (file-name-directory magit-buffer-file-name))
+        (setq default-directory
+              (let ((dir (file-name-directory magit-buffer-file-name)))
+                (if (file-exists-p dir) dir topdir)))
         (setq-local revert-buffer-function #'magit-revert-rev-file-buffer)
         (revert-buffer t t)
         (run-hooks hookvar))
@@ -1499,7 +1569,6 @@ Non-interactively DIRECTORY is (re-)initialized unconditionally."
 ;;;###autoload (autoload 'magit-branch-popup "magit" nil t)
 (magit-define-popup magit-branch-popup
   "Popup console for branch commands."
-  'magit-commands
   :man-page "git-branch"
   :actions '((?b "Checkout"              magit-checkout)
              (?n "Create new branch"     magit-branch)
@@ -1674,7 +1743,7 @@ from the source branch's upstream, then an error is raised."
 
 When the branch being reset is the current branch, then do a
 hard reset.  If there are any uncommitted changes, then the user
-has to confirming the reset because those changes would be lost.
+has to confirm the reset because those changes would be lost.
 
 This is useful when you have started work on a feature branch but
 realize it's all crap and want to start over.
@@ -2108,7 +2177,6 @@ When `never' (the default) then the variable is never set."
 ;;;###autoload (autoload 'magit-merge-popup "magit" nil t)
 (magit-define-popup magit-merge-popup
   "Popup console for merge commands."
-  'magit-commands
   :man-page "git-merge"
   :switches '((?f "Fast-forward only" "--ff-only")
               (?n "No fast-forward"   "--no-ff")
@@ -2259,7 +2327,6 @@ If no merge is in progress, do nothing."
 ;;;###autoload (autoload 'magit-reset-popup "magit" nil t)
 (magit-define-popup magit-reset-popup
   "Popup console for reset commands."
-  'magit-commands
   :man-page "git-reset"
   :actions '((?m "reset mixed  (HEAD and index)"         magit-reset-head)
              (?s "reset soft   (HEAD only)"              magit-reset-soft)
@@ -2506,7 +2573,6 @@ If there is only one worktree, then insert nothing."
 ;;;###autoload (autoload 'magit-tag-popup "magit" nil t)
 (magit-define-popup magit-tag-popup
   "Popup console for tag commands."
-  'magit-commands
   :man-page "git-tag"
   :switches '((?a "Annotate" "--annotate")
               (?s "Sign"     "--sign")
@@ -2573,7 +2639,6 @@ defaulting to the tag at point.
 ;;;###autoload (autoload 'magit-notes-popup "magit" nil t)
 (magit-define-popup magit-notes-popup
   "Popup console for notes commands."
-  'magit-commands
   :man-page "git-tag"
   :switches '("Switch for prune"
               (?n "Dry run"          "--dry-run"))
@@ -2716,7 +2781,7 @@ the current repository."
 ;;;; Config Files
 
 (defun magit-find-git-config-file (filename &optional wildcards)
-  "Edit a located in the current repository's git directory.
+  "Edit a file located in the current repository's git directory.
 
 When \".git\", located at the root of the working tree, is a
 regular file, then that makes it cumbersome to open a file
@@ -2732,7 +2797,7 @@ reading the FILENAME."
   (find-file filename wildcards))
 
 (defun magit-find-git-config-file-other-window (filename &optional wildcards)
-  "Edit a located in the current repository's git directory, in another window.
+  "Edit a file located in the current repository's git directory, in another window.
 
 When \".git\", located at the root of the working tree, is a
 regular file, then that makes it cumbersome to open a file
@@ -2748,7 +2813,7 @@ directory, while reading the FILENAME."
   (find-file-other-window filename wildcards))
 
 (defun magit-find-git-config-file-other-frame (filename &optional wildcards)
-  "Edit a located in the current repository's git directory, in another frame.
+  "Edit a file located in the current repository's git directory, in another frame.
 
 When \".git\", located at the root of the working tree, is a
 regular file, then that makes it cumbersome to open a file
@@ -2790,7 +2855,7 @@ directory, while reading the FILENAME."
 (defvar magit-file-mode-lighter "")
 
 (define-minor-mode magit-file-mode
-  "Enable some Magit features in file-visiting buffers.
+  "Enable some Magit features in a file-visiting buffer.
 
 Currently this only adds the following key bindings.
 \n\\{magit-file-mode-map}"
@@ -2807,14 +2872,20 @@ Currently this only adds the following key bindings.
 (define-globalized-minor-mode global-magit-file-mode
   magit-file-mode magit-file-mode-turn-on
   :package-version '(magit . "2.2.0")
+  :link '(info-link "(magit)Minor Mode for Buffers Visiting Files")
+  :group 'magit-essentials
   :group 'magit-modes)
 
 ;;;; Blob Mode
 
 (defvar magit-blob-mode-map
   (let ((map (make-sparse-keymap)))
-    (define-key map "n" 'magit-blob-next)
-    (define-key map "p" 'magit-blob-previous)
+    (cond ((featurep 'jkl)
+           (define-key map "i" 'magit-blob-previous)
+           (define-key map "k" 'magit-blob-next))
+          (t
+           (define-key map "p" 'magit-blob-previous)
+           (define-key map "n" 'magit-blob-next)))
     (define-key map "q" 'magit-kill-this-buffer)
     map)
   "Keymap for `magit-blob-mode'.")
@@ -2853,13 +2924,9 @@ Currently this only adds the following key bindings.
       (find-file blob-or-file)
     (-let [(rev file) blob-or-file]
       (magit-find-file rev file)
-      (let ((str (magit-rev-format "%ct%s" rev)))
-        (message "%s (%s ago)" (substring str 10)
-                 (magit-format-duration
-                  (abs (truncate (- (float-time)
-                                    (string-to-number
-                                     (substring str 0 10)))))
-                  magit-duration-spec)))))
+      (apply #'message "%s (%s %s ago)"
+             (magit-rev-format "%s" rev)
+             (magit--age (magit-rev-format "%ct" rev)))))
   (goto-char (point-min))
   (forward-line (1- line)))
 
@@ -2889,7 +2956,6 @@ Currently this only adds the following key bindings.
 ;;;###autoload (autoload 'magit-dispatch-popup "magit" nil t)
 (magit-define-popup magit-dispatch-popup
   "Popup console for dispatching other popups."
-  'magit-commands nil nil
   :actions '("Popup and dwim commands"
              (?A "Cherry-picking"  magit-cherry-pick-popup)
              (?b "Branching"       magit-branch-popup)
@@ -2922,37 +2988,49 @@ Currently this only adds the following key bindings.
              (?a "Apply"           magit-apply)
              (?s "Stage"           magit-stage)
              (?u "Unstage"         magit-unstage)
-             nil
              (?v "Reverse"         magit-reverse)
              (?S "Stage all"       magit-stage-modified)
              (?U "Unstage all"     magit-unstage-all)
-             nil
              (?k "Discard"         magit-discard)
              "Essential commands"
-             (?g  "    refresh current buffer"   magit-refresh) nil
+             (?g  "    refresh current buffer"   magit-refresh)
              ;; These bindings only work because of :setup-function.
-             (?\t   "  toggle section at point"  magit-section-toggle) nil
-             (?\r   "  visit thing at point"     magit-visit-thing) nil
+             (?\t   "  toggle section at point"  magit-section-toggle)
+             (?\r   "  visit thing at point"     magit-visit-thing)
              ;; This binding has no effect and only appears to do
              ;; so because it is identical to the global binding.
-             ("C-h m" "show all key bindings"    describe-mode) nil)
+             ("C-h m" "show all key bindings"    describe-mode))
   :setup-function 'magit-dispatch-popup-setup
-  :max-action-columns 4)
+  :max-action-columns (lambda (heading)
+                        (pcase heading
+                          ("Popup and dwim commands" 4)
+                          ("Applying changes" 3)
+                          ("Essential commands" 1))))
+
+(defvar magit-dispatch-popup-map
+  (let ((map (make-sparse-keymap)))
+    (set-keymap-parent map magit-popup-mode-map)
+    (cond ((featurep 'jkl)
+           (define-key map [tab]    'magit-invoke-popup-action)
+           (define-key map [return] 'magit-invoke-popup-action))
+          (t
+           (define-key map (kbd "C-i") 'magit-invoke-popup-action)
+           (define-key map (kbd "C-m") 'magit-invoke-popup-action)))
+    map)
+  "Keymap used by `magit-dispatch-popup'.")
 
 (defun magit-dispatch-popup-setup (val def)
   (magit-popup-default-setup val def)
+  (use-local-map magit-dispatch-popup-map)
+  ;; This is necessary for users (i.e. me) who have broken the
+  ;; connection between C-i (aka TAB) and tab, and C-m (aka RET)
+  ;; and return.
   (magit-popup-put
    :actions (nconc (magit-popup-get :actions)
                    (list (make-magit-popup-event :key 'tab
                                                  :fun 'magit-section-toggle)
                          (make-magit-popup-event :key 'return
-                                                 :fun 'magit-visit-thing))))
-  (let ((map (copy-keymap (current-local-map))))
-    (use-local-map map)
-    (define-key map "\t"     'magit-invoke-popup-action)
-    (define-key map "\r"     'magit-invoke-popup-action)
-    (define-key map [tab]    'magit-invoke-popup-action)
-    (define-key map [return] 'magit-invoke-popup-action)))
+                                                 :fun 'magit-visit-thing)))))
 
 ;;;; Git Popup
 
@@ -2961,7 +3039,6 @@ Currently this only adds the following key bindings.
 ;;;###autoload (autoload 'magit-run-popup "magit" nil t)
 (magit-define-popup magit-run-popup
   "Popup console for running raw Git commands."
-  'magit-commands nil nil
   :actions '((?! "Git Subcommand (in topdir)" magit-git-command-topdir)
              (?k "Gitk"                       magit-run-gitk)
              (?p "Git Subcommand (in pwd)"    magit-git-command)
@@ -3063,8 +3140,9 @@ control which repositories are displayed."
 (defvar magit-repolist-mode-map
   (let ((map (make-sparse-keymap)))
     (set-keymap-parent map tabulated-list-mode-map)
-    (define-key map "g"  'magit-list-repositories)
-    (define-key map "\r" 'magit-repolist-status)
+    (define-key map "g" 'magit-list-repositories)
+    (define-key map (if (featurep 'jkl) [return] (kbd "C-m"))
+      'magit-repolist-status)
     map)
   "Local keymap for Magit-Repolist mode buffers.")
 
@@ -3112,33 +3190,31 @@ Usually this is just its basename."
 
 (defun magit-repolist-column-upstream (_id)
   "Insert the upstream branch of the current branch."
-  (magit-get-current-branch))
+  (magit-get-upstream-branch))
 
 (defun magit-repolist-column-unpulled-from-upstream (_id)
   "Insert number of upstream commits not in the current branch."
-  (--when-let (magit-get-upstream-branch)
+  (--when-let (magit-get-upstream-branch nil t)
     (let ((n (cadr (magit-rev-diff-count "HEAD" it))))
       (propertize (number-to-string n) 'face (if (> n 0) 'bold 'shadow)))))
 
 (defun magit-repolist-column-unpulled-from-pushremote (_id)
   "Insert number of commits in the push branch but not the current branch."
-  (--when-let (magit-get-push-branch)
-    (when (magit-rev-verify it)
-      (let ((n (cadr (magit-rev-diff-count "HEAD" it))))
-        (propertize (number-to-string n) 'face (if (> n 0) 'bold 'shadow))))))
+  (--when-let (magit-get-push-branch nil t)
+    (let ((n (cadr (magit-rev-diff-count "HEAD" it))))
+      (propertize (number-to-string n) 'face (if (> n 0) 'bold 'shadow)))))
 
 (defun magit-repolist-column-unpushed-to-upstream (_id)
   "Insert number of commits in the current branch but not its upstream."
-  (--when-let (magit-get-upstream-branch)
+  (--when-let (magit-get-upstream-branch nil t)
     (let ((n (car (magit-rev-diff-count "HEAD" it))))
       (propertize (number-to-string n) 'face (if (> n 0) 'bold 'shadow)))))
 
 (defun magit-repolist-column-unpushed-to-pushremote (_id)
   "Insert number of commits in the current branch but not its push branch."
-  (--when-let (magit-get-push-branch)
-    (when (magit-rev-verify it)
-      (let ((n (car (magit-rev-diff-count "HEAD" it))))
-        (propertize (number-to-string n) 'face (if (> n 0) 'bold 'shadow))))))
+  (--when-let (magit-get-push-branch nil t)
+    (let ((n (car (magit-rev-diff-count "HEAD" it))))
+      (propertize (number-to-string n) 'face (if (> n 0) 'bold 'shadow)))))
 
 (defun magit-read-repository (&optional read-directory-name)
   "Read a Git repository in the minibuffer, with completion.
@@ -3608,6 +3684,9 @@ use `magit-pre-refresh-hook', `magit-post-refresh-hook',
   If your hook function only has to be run once, when the buffer
   is first created, then `magit-status-mode-hook' instead.
 " "Magit 2.4.0")
+
+(make-obsolete-variable 'magit-repository-directories-depth
+                        'magit-repository-directories "Magit 2.8.0")
 
 (define-obsolete-function-alias 'global-magit-file-buffer-mode
   'global-magit-file-mode "Magit 2.3.0")

@@ -155,6 +155,11 @@ buffer-local wherever it is set."
   :group 'neotree
   :link '(info-link "(neotree)Configuration"))
 
+(defgroup neotree-confirmations nil
+  "Neotree confirmation customizations."
+  :prefix "neo-confirm-"
+  :group 'neotree)
+
 (defcustom neo-window-position 'left
   "*The position of NeoTree window."
   :group 'neotree
@@ -301,6 +306,48 @@ This variable is used in `neo-vc-for-node' when
   :group 'neotree-vc
   :type '(alist :key-type symbol
                 :value-type character))
+
+(defcustom neo-confirm-change-root 'yes-or-no-p
+  "Confirmation asking for permission to change root if file was not found in root path."
+  :type '(choice (function-item :tag "Verbose" yes-or-no-p)
+                 (function-item :tag "Succinct" y-or-n-p)
+                 (function-item :tag "Off" off-p))
+  :group 'neotree-confirmations)
+
+(defcustom neo-confirm-create-file 'yes-or-no-p
+  "Confirmation asking whether *NeoTree* should create a file."
+  :type '(choice (function-item :tag "Verbose" yes-or-no-p)
+                 (function-item :tag "Succinct" y-or-n-p)
+                 (function-item :tag "Off" off-p))
+  :group 'neotree-confirmations)
+
+(defcustom neo-confirm-create-directory 'yes-or-no-p
+  "Confirmation asking whether *NeoTree* should create a directory."
+  :type '(choice (function-item :tag "Verbose" yes-or-no-p)
+                 (function-item :tag "Succinct" y-or-n-p)
+                 (function-item :tag "Off" off-p))
+  :group 'neotree-confirmations)
+
+(defcustom neo-confirm-delete-file 'yes-or-no-p
+  "Confirmation asking whether *NeoTree* should delete the file."
+  :type '(choice (function-item :tag "Verbose" yes-or-no-p)
+                 (function-item :tag "Succinct" y-or-n-p)
+                 (function-item :tag "Off" off-p))
+  :group 'neotree-confirmations)
+
+(defcustom neo-confirm-delete-directory-recursively 'yes-or-no-p
+  "Confirmation asking whether the directory should be deleted recursively."
+  :type '(choice (function-item :tag "Verbose" yes-or-no-p)
+                 (function-item :tag "Succinct" y-or-n-p)
+                 (function-item :tag "Off" off-p))
+  :group 'neotree-confirmations)
+
+(defcustom neo-confirm-kill-buffers-for-files-in-directory 'yes-or-no-p
+  "Confirmation asking whether *NeoTree* should kill buffers for the directory in question."
+  :type '(choice (function-item :tag "Verbose" yes-or-no-p)
+                 (function-item :tag "Succinct" y-or-n-p)
+                 (function-item :tag "Off" off-p))
+  :group 'neotree-confirmations)
 
 (defcustom neo-toggle-window-keep-p nil
   "If not nil, not switch to *NeoTree* buffer when executing `neotree-toggle'."
@@ -712,6 +759,11 @@ The description of ARG is in `neotree-enter'."
     (neo-window--zoom 'minimize))
   ;; select target window
   (cond
+   ;; select window with winum
+   ((and (integerp arg)
+         (bound-and-true-p winum-mode)
+         (fboundp 'winum-select-window-by-number))
+    (winum-select-window-by-number arg))
    ;; select window with window numbering
    ((and (integerp arg)
          (boundp 'window-numbering-mode)
@@ -1058,6 +1110,10 @@ Return nil if DIR is not an existing directory."
     (beginning-of-line 1)
     (re-search-forward "[^-\s+]" (line-end-position 1) t)
     (backward-char 1)))
+
+(defun off-p (msg)
+  "Returns true regardless of message value in the argument."
+  t)
 
 ;;
 ;; Buffer methods
@@ -1624,7 +1680,7 @@ If path is nil and no buffer file name, then use DEFAULT-PATH,"
     (if (and (not neo-force-change-root)
              (not (neo-global--file-in-root-p npath))
              (neo-global--window-exists-p))
-        (setq do-open-p (yes-or-no-p "File not found in root path, do you want to change root?"))
+        (setq do-open-p (funcall neo-confirm-change-root "File not found in root path, do you want to change root?"))
       (setq do-open-p t))
     (when do-open-p
       (neo-global--open-and-find npath))
@@ -1666,7 +1722,7 @@ ARG is same as `neo-open-file'."
 
 FULL-PATH is the file path you want to open.
 If ARG is an integer then the node is opened in a window selected via
-`window-numbering' (if available) according to the passed number.
+`winum' or`window-numbering' (if available) according to the passed number.
 If ARG is `|' then the node is opened in new vertically split window.
 If ARG is `-' then the node is opened in new horizontally split window."
   (neo-global--select-mru-window arg)
@@ -1781,8 +1837,8 @@ If the current node is the first node then the last node is selected."
         (message "File %S already exists." filename)
         (throw 'rlt nil))
       (when (and is-file
-                 (yes-or-no-p (format "Do you want to create file %S ?"
-                                      filename)))
+                 (funcall neo-confirm-create-file (format "Do you want to create file %S ?"
+                                                          filename)))
         ;; NOTE: create a empty file
         (write-region "" nil filename)
         (neo-buffer--save-cursor-pos filename)
@@ -1790,8 +1846,8 @@ If the current node is the first node then the last node is selected."
         (if neo-create-file-auto-open
             (find-file-other-window filename)))
       (when (and (not is-file)
-                 (yes-or-no-p (format "Do you want to create directory %S?"
-                                      filename)))
+                 (funcall neo-confirm-create-directory (format "Do you want to create directory %S?"
+                                                               filename)))
         (mkdir filename)
         (neo-buffer--save-cursor-pos filename)
         (neo-buffer--refresh nil)))))
@@ -1805,8 +1861,8 @@ If the current node is the first node then the last node is selected."
     (catch 'end
       (if (null filename) (throw 'end nil))
       (if (not (file-exists-p filename)) (throw 'end nil))
-      (if (not (yes-or-no-p (format "Do you really want to delete %S?"
-                                    filename)))
+      (if (not (funcall neo-confirm-delete-file (format "Do you really want to delete %S?"
+                                                        filename)))
           (throw 'end nil))
       (if (file-directory-p filename)
           ;; delete directory
@@ -1815,12 +1871,12 @@ If the current node is the first node then the last node is selected."
               (delete-directory filename)
               (setq deleted-p t)
               (throw 'end nil))
-            (when (yes-or-no-p
-                   (format "%S is a directory, delete it recursively?"
-                           filename))
-              (when (yes-or-no-p
-                     (format "kill buffers for files in directory %S?"
-                             filename))
+            (when (funcall neo-confirm-delete-directory-recursively
+                           (format "%S is a directory, delete it recursively?"
+                                   filename))
+              (when (funcall neo-confirm-kill-buffers-for-files-in-directory
+                             (format "kill buffers for files in directory %S?"
+                                     filename))
                 (neo-util--kill-buffers-for-path filename))
               (delete-directory filename t)
               (setq deleted-p t)))
@@ -1971,6 +2027,23 @@ ARG are the same as `neo-open-file'."
   "Neotree convenience interactive function: file node path will be added to the kill ring."
   (interactive)
   (kill-new (neo-buffer--get-filename-current-line)))
+
+(defun neotree-split-window-sensibly (&optional window)
+  "An neotree-version of split-window-sensibly,
+which is used to fix issue #209.
+(setq split-window-preferred-function 'neotree-split-window-sensibly)"
+  (let ((window (or window (selected-window))))
+    (or (split-window-sensibly window)
+        (and (get-buffer-window neo-buffer-name)
+             (not (window-minibuffer-p window))
+             ;; If WINDOW is the only window on its frame
+             ;; (or only include Neo window) and is not the
+             ;; minibuffer window, try to split it vertically disregarding
+             ;; the value of `split-height-threshold'.
+             (let ((split-height-threshold 0))
+               (when (window-splittable-p window)
+                 (with-selected-window window
+                   (split-window-below))))))))
 
 (provide 'neotree)
 ;;; neotree.el ends here

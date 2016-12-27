@@ -1,13 +1,13 @@
 -include ../config.mk
 include ../default.mk
 
-######################################################################
+## ###################################################################
 
 .PHONY: texi install clean AUTHORS.md stats
 
 all: info
 
-# Build ##############################################################
+## Build #############################################################
 
 info: $(INFOPAGES) dir
 html: $(HTMLFILES)
@@ -35,7 +35,7 @@ html-dir: $(TEXIFILES)
 	@printf "Generating $@\n"
 	@texi2pdf --clean $< > /dev/null
 
-# Install ############################################################
+## Install ###########################################################
 
 install: install-info install-docs
 
@@ -47,13 +47,13 @@ install-info: info
 	@$(MKDIR) $(DESTDIR)$(infodir)
 	$(CP) $(INFOPAGES) $(DESTDIR)$(infodir)
 
-# Clean ##############################################################
+## Clean #############################################################
 
 clean:
 	@printf "Cleaning Documentation/*...\n"
-	@$(RM) $(INFOPAGES) dir
+	@$(RMDIR) dir $(INFOPAGES) $(HTMLFILES) $(HTMLDIRS) $(PDFFILES)
 
-# Release management #################################################
+## Release management ################################################
 
 # Because most users don't have the necessary tools we cannot
 # use "%.texi: %.org".  Instead we have to hardcode each file
@@ -61,18 +61,21 @@ clean:
 texi: $(TEXIPAGES)
 	@printf "Generating magit.texi\n"
 	@$(EMACSBIN) -batch -Q $(DOC_LOAD_PATH) \
-	-l ox-texinfo+.el magit.org -f org-texinfo+export-to-texinfo
+	-l magit-utils.el -l org-man -l ox-texinfo+.el \
+	magit.org -f org-texinfo-export-to-texinfo
 	@echo >> magit.texi
 	@printf "Generating magit-popup.texi\n"
 	@$(EMACSBIN) -batch -Q $(DOC_LOAD_PATH) \
-	-l ox-texinfo+.el magit-popup.org -f org-texinfo+export-to-texinfo
+	-l ox-texinfo+.el \
+	magit-popup.org -f org-texinfo-export-to-texinfo
 	@echo >> magit-popup.texi
 
 stats:
 	@printf "Generating statistics\n"
-	@gitstats -c style=/assets/stats.css -c max_authors=64 . $(statsdir)
+	@gitstats -c style=/assets/stats.css -c max_authors=64 $(TOP) $(statsdir)
 
 authors: AUTHORS.md
+
 AUTHORS.md:
 	@printf "Generating AUTHORS.md..."
 	@test -e $(TOP).git \
@@ -84,14 +87,18 @@ AUTHORS.md:
 DOMAIN         ?= magit.vc
 PUBLISH_BUCKET ?= s3://$(DOMAIN)
 PREVIEW_BUCKET ?= s3://preview.$(DOMAIN)
+PUBLISH_URL    ?= http://$(DOMAIN).s3-website.eu-central-1.amazonaws.com
+PREVIEW_URL    ?= http://preview.$(DOMAIN).s3-website.eu-central-1.amazonaws.com
 
 preview-stats: stats
 	@printf "Uploading statistics...\n"
 	@aws s3 sync $(statsdir)      $(PREVIEW_BUCKET)/stats/
+	@printf "Uploaded to $(PREVIEW_URL)/stats/\n"
 
 publish-stats: stats
 	@printf "Uploading statistics...\n"
 	@aws s3 sync $(statsdir)      $(PUBLISH_BUCKET)/stats/
+	@printf "Uploaded to $(PUBLISH_URL)/stats/\n"
 
 preview-manuals: html html-dir pdf
 	@printf "Uploading manuals...\n"
@@ -101,6 +108,7 @@ preview-manuals: html html-dir pdf
 	@aws s3 sync magit-popup      $(PREVIEW_BUCKET)/manual/magit-popup/
 	@aws s3 cp   magit-popup.html $(PREVIEW_BUCKET)/manual/
 	@aws s3 cp   magit-popup.pdf  $(PREVIEW_BUCKET)/manual/
+	@printf "Uploaded to $(PREVIEW_URL)/manual/\n"
 
 publish-manuals: html html-dir pdf
 	@printf "Uploading manuals...\n"
@@ -110,6 +118,7 @@ publish-manuals: html html-dir pdf
 	@aws s3 sync magit-popup      $(PUBLISH_BUCKET)/manual/magit-popup/
 	@aws s3 cp   magit-popup.html $(PUBLISH_BUCKET)/manual/
 	@aws s3 cp   magit-popup.pdf  $(PUBLISH_BUCKET)/manual/
+	@printf "Uploaded to $(PUBLISH_URL)/manual/\n"
 
 # Templates ##########################################################
 

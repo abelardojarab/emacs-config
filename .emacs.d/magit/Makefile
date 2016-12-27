@@ -1,11 +1,13 @@
-include default.mk
 -include config.mk
+include default.mk
+
+## ###################################################################
 
 .PHONY: lisp \
 	install install-lisp install-docs install-info \
 	test test-interactive magit \
 	clean clean-lisp clean-docs clean-archives \
-	genstats bump-version melpa-post-release \
+	stats bump-version melpa-post-release \
 	dist magit-$(VERSION).tar.gz
 
 all: lisp docs
@@ -35,6 +37,16 @@ help:
 	$(info make install-docs     - install all documentation)
 	$(info make install-info     - install info manuals only)
 	$(info )
+	$(info Clean)
+	$(info ====)
+	$(info )
+	$(info make clean            - clean elisp, documentation and tarball)
+	$(info make clean-lisp       - clean elisp)
+	$(info make clean-docs       - clean docs)
+	$(info make clean-archives   - clean release tarball)
+	$(info make clean-all        - clean everything except tracked texi)
+	$(info make clean-stats      - clean stats)
+	$(info )
 	$(info Test)
 	$(info ====)
 	$(info )
@@ -57,6 +69,8 @@ help:
 	$(info make bump-snapshots   - bump versions after release)
 	@printf "\n"
 
+## Build #############################################################
+
 lisp:
 	@$(MAKE) -C lisp lisp
 
@@ -75,6 +89,8 @@ html-dir:
 pdf:
 	@$(MAKE) -C Documentation pdf
 
+## Install ###########################################################
+
 install: install-lisp install-docs
 
 install-lisp: lisp
@@ -85,6 +101,8 @@ install-docs: docs
 
 install-info: info
 	@$(MAKE) -C Documentation install-info
+
+## Test ##############################################################
 
 test:
 	@$(BATCH) --eval "(progn\
@@ -102,6 +120,8 @@ emacs-Q: clean-lisp
 	(require 'magit)\
 	(global-set-key \"\\C-xg\" 'magit-status))"
 
+## Clean #############################################################
+
 clean: clean-lisp clean-docs clean-archives
 	@printf "Cleaning...\n"
 	@$(RM) *.elc $(ELGS) # temporary cleanup kludge
@@ -118,7 +138,12 @@ clean-archives:
 	@$(RM) git-commit-*.el *.tar.gz *.tar
 	@$(RMDIR) magit-$(VERSION)
 
-# Release management
+clean-all: clean clean-stats
+
+clean-stats:
+	@$(RMDIR) $(statsdir)
+
+## Release management ################################################
 
 texi:
 	@$(MAKE) -C Documentation texi
@@ -211,4 +236,4 @@ bump-snapshots:
         (setq git-commit-version \"$(GIT_COMMIT_MELPA_SNAPSHOT)\")\
         (setq magit-popup-version \"$(MAGIT_POPUP_MELPA_SNAPSHOT)\")\
         $$set_package_requires)"
-	git commit -a -m "reset Package-Requires for Melpa"
+	git commit -a -m "Reset Package-Requires for Melpa"

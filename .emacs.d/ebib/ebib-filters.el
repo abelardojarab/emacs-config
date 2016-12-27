@@ -5,9 +5,6 @@
 
 ;; Author: Joost Kremers <joostkremers@fastmail.fm>
 ;; Maintainer: Joost Kremers <joostkremers@fastmail.fm>
-;; Created: 2014
-;; Version: 2.6
-;; Keywords: text bibtex
 
 ;; Redistribution and use in source and binary forms, with or without
 ;; modification, are permitted provided that the following conditions
@@ -231,24 +228,20 @@ If there are no stored filters, the filter file is deleted."
     (let ((file (read-file-name "Save filters to file: ")))
       (ebib--filters-save-file file))))
 
-(defun ebib--filters-run-filter (db &optional sort)
-  "Run the filter of DB and return a list of matching keys.
-If SORT is non-nil, sort the list according to DB's sort info."
+(defun ebib--filters-run-filter (db)
+  "Run the filter of DB and return a list of matching keys."
   ;; The filter uses a macro `contains', which we locally define here. This
   ;; macro in turn uses a dynamic variable `entry', which we must set
   ;; before eval'ing the filter.
-  (let* ((filter (ebib-db-get-filter db))
-         (matches (eval
-                   `(cl-macrolet ((contains (field regexp)
-                                            `(ebib--search-in-entry ,regexp entry ,(unless (cl-equalp field "any") field))))
-                      (delq nil (mapcar (lambda (key)
-                                          (let ((entry (ebib-db-get-entry key db 'noerror)))
-                                            (when ,filter
-                                              key)))
-                                        (ebib-db-list-keys db)))))))
-    (if sort
-        (ebib-db-sort-keys-list matches db)
-      matches)))
+  (let ((filter (ebib-db-get-filter db)))
+    (eval
+     `(cl-macrolet ((contains (field regexp)
+                              `(ebib--search-in-entry ,regexp entry ,(unless (cl-equalp field "any") field))))
+        (delq nil (mapcar (lambda (key)
+                            (let ((entry (ebib-db-get-entry key db 'noerror)))
+                              (when ,filter
+                                key)))
+                          (ebib-db-list-keys db)))))))
 
 (defun ebib--filters-pp-filter (filter)
   "Convert FILTER into a string suitable for displaying.
@@ -304,16 +297,16 @@ there is a name conflict."
 
 (defun ebib--filters-save-file (file)
   "Write `ebib--filters-alist' to FILE."
-  (with-temp-buffer
-    (let ((print-length nil)
-          (print-level nil)
-          (print-circle nil))
-      (insert ";; -*- mode: emacs-lisp -*-\n\n")
-      (insert (format ";; Ebib filters file\n;; Saved on %s\n\n" (format-time-string "%Y.%m.%d %H:%M")))
-      (pp ebib--filters-alist (current-buffer))
-      (condition-case nil ;; TODO I should use this for the keywords file as well, so that ebib--quit doesn't terminate prematurely.
-	  (write-region (point-min) (point-max) file)
-	(file-error (message "Can't write %s" file))))))
+  (if (file-writable-p file)
+      (with-temp-buffer
+        (let ((print-length nil)
+              (print-level nil)
+              (print-circle nil))
+          (insert ";; -*- mode: emacs-lisp -*-\n\n")
+          (insert (format ";; Ebib filters file\n;; Saved on %s\n\n" (format-time-string "%Y.%m.%d %H:%M")))
+          (pp ebib--filters-alist (current-buffer))
+          (write-region (point-min) (point-max) file)))
+    (ebib-log 'warning "Could not write to filters file `%s'" file)))
 
 (defun ebib--filters-update-filters-file ()
   "Update the filters file.

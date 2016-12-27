@@ -88,7 +88,7 @@ a fresh version of it, at any time, from [[http://melpa.milkbox.net/][MELPA]] or
 
 ** Install the ELPA package
 
-In Emacs 24.x, ~M-x list-packages~ is the /recommended way/ to list and install
+In Emacs 24+, ~M-x list-packages~ is the /recommended way/ to list and install
 packages.
 
 MELPA keeps stable releases of Leuven theme.
@@ -134,11 +134,17 @@ Restart Emacs.
 ** Customize it
 
 You don't like my large Org level-1 headings (though I made them larger on
-purpose!)?
+purpose!)?  You find that Org-mode headlines are too big?
+
+Then, set the variable ~leuven-scale-outline-headlines~ to nil before the theme is
+loaded.
 
 #+begin_src emacs-lisp
 (setq leuven-scale-outline-headlines nil)
 #+end_src
+
+One way to do that is to it through ~M-x customize-variable~ and then restart
+Emacs.
 
 You don't like my large Org agenda-date heading either?
 

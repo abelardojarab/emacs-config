@@ -26,6 +26,13 @@
 (require 'cl-lib)
 (require 'dired)
 
+(declare-function helm-get-sources "helm.el")
+(declare-function helm-marked-candidates "helm.el")
+(declare-function helm-follow-mode-p "helm.el")
+(declare-function helm-attr "helm.el")
+(declare-function helm-attrset "helm.el")
+(defvar helm-current-position)
+
 
 ;;; User vars.
 ;;
@@ -152,12 +159,11 @@ a function.
 If NAME returns nil the pair is skipped.
 
 \(fn NAME ACTION ...)"
-  (cl-loop for i on args by #'cddr
-           for name  = (car i)
+  (cl-loop for (name fn) on args by #'cddr
            when (functionp name)
            do (setq name (funcall name))
            when name
-           collect (cons name (cadr i))))
+           collect (cons name fn)))
 
 ;;; Anaphoric macros.
 ;;

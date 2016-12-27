@@ -34,16 +34,19 @@
 
 (require 'magit-utils)
 
+(declare-function magit-maybe-make-margin-overlay 'magit-log)
 (defvar magit-keep-region-overlay)
 
 ;;; Options
 
 (defgroup magit-section nil
   "Expandable sections."
+  :link '(info-link "(magit)Sections")
   :group 'magit)
 
 (defcustom magit-section-show-child-count t
-  "Whether to append the number of children to section headings."
+  "Whether to append the number of children to section headings.
+This only applies to sections for which doing so makes sense."
   :package-version '(magit . "2.1.0")
   :group 'magit-section
   :type 'boolean)
@@ -269,7 +272,7 @@ If there is no previous sibling section, then move to the parent."
     (set-window-start (selected-window) (magit-section-start section))))
 
 (defun magit-hunk-set-window-start (section)
-  "Ensure the beginning of the `hunk' SECTION is visible.
+  "When SECTION is a `hunk', ensure that its beginning is visible.
 It the SECTION has a different type, then do nothing."
   (when (eq (magit-section-type section) 'hunk)
     (magit-section-set-window-start section)))
@@ -780,6 +783,7 @@ insert a newline character if necessary."
                 (propertize heading 'face 'magit-section-heading)))))
   (unless (bolp)
     (insert ?\n))
+  (magit-maybe-make-margin-overlay)
   (setf (magit-section-content magit-insert-section--current) (point-marker)))
 
 (defvar magit-insert-headers-hook nil "For internal use only.")
@@ -833,7 +837,11 @@ evaluated its BODY.  Admittedly that's a bit of a hack."
 (defvar-local magit-section-unhighlight-sections nil)
 
 (defun magit-section-update-region (_)
-  ;; Don't show complete region.  Highlighting emphasizes headings.
+  "When the region is a valid section-selection, highlight them all."
+  ;; At least that's what it does conceptually.  In actuality it just
+  ;; returns a list of those sections, and it doesn't even matter if
+  ;; this is a member of `magit-region-highlight-hook'.  It probably
+  ;; should be removed, but I want to make sure before removing it.
   (magit-region-sections))
 
 (defun magit-section-update-highlight ()
@@ -843,9 +851,10 @@ evaluated its BODY.  Admittedly that's a bit of a hack."
             (deactivate-mark nil)
             (selection (magit-region-sections)))
         (mapc #'delete-overlay magit-section-highlight-overlays)
+        (setq magit-section-highlight-overlays nil)
         (setq magit-section-unhighlight-sections
-              magit-section-highlighted-sections
-              magit-section-highlighted-sections nil)
+              magit-section-highlighted-sections)
+        (setq magit-section-highlighted-sections nil)
         (unless (eq section magit-root-section)
           (run-hook-with-args-until-success
            'magit-section-highlight-hook section selection))
@@ -859,7 +868,7 @@ evaluated its BODY.  Admittedly that's a bit of a hack."
       (setq deactivate-mark nil))))
 
 (defun magit-section-highlight (section selection)
-  "Highlight SECTION and if non-nil all SELECTION.
+  "Highlight SECTION and if non-nil all sections in SELECTION.
 This function works for any section but produces undesirable
 effects for diff related sections, which by default are
 highlighted using `magit-diff-highlight'.  Return t."
@@ -875,7 +884,7 @@ highlighted using `magit-diff-highlight'.  Return t."
   t)
 
 (defun magit-section-highlight-selection (_ selection)
-  "Highlight the section selection region.
+  "Highlight the section-selection region.
 If SELECTION is non-nil then it is a list of sections selected by
 the region.  The headings of these sections are then highlighted.
 

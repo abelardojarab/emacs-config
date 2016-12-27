@@ -40,12 +40,17 @@
 ;;         'irony-completion-at-point-async))
 ;;     (add-hook 'irony-mode-hook 'my-irony-mode-hook)
 ;;
-;;     ;; Only needed on Windows
-;;     (when (eq system-type 'windows-nt)
+;;     ;; Windows performance tweaks
+;;     ;;
+;;     (when (boundp 'w32-pipe-read-delay)
 ;;       (setq w32-pipe-read-delay 0))
+;;     ;; Set the buffer size to 64K on Windows (from the original 4K)
+;;     (when (boundp 'w32-pipe-buffer-size)
+;;       (setq irony-server-w32-pipe-buffer-size (* 64 1024)))
 ;;
 ;; See also:
 ;; - https://github.com/Sarcasm/company-irony
+;; - https://github.com/Sarcasm/flycheck-irony
 ;; - https://github.com/Sarcasm/ac-irony
 
 ;;; Code:
@@ -166,6 +171,15 @@ The irony-server executable is expected to be in
   :type 'directory
   :group 'irony)
 
+(defcustom irony-server-w32-pipe-buffer-size nil
+  "Windows-only setting,
+the buffer size to use for the irony-server process pipe on Windows.
+
+Larger values can improve performances on large buffers.
+
+If non-nil, `w32-pipe-buffer-size' will be let-bound to this value
+during the creation of the irony-server process.")
+
 
 ;;
 ;; Public/API variables
@@ -205,6 +219,7 @@ buffer file.")
 ;; Utility functions & macros
 ;;
 
+;; TODO: remove and use `if-let' when supported version jumps to Emacs 25.1
 (defmacro irony--aif (test if-expr &rest else-body)
   (declare (indent 2))
   `(let ((it ,test))
@@ -212,6 +227,7 @@ buffer file.")
          ,if-expr
        (progn ,@else-body))))
 
+;; TODO: remove and use `when-let' when supported version jumps to Emacs 25.1
 (defmacro irony--awhen (test &rest body)
   (declare (indent 1))
   `(let ((it ,test))
@@ -219,9 +235,9 @@ buffer file.")
        (progn ,@body))))
 
 (defun irony--assoc-all (key list)
-  (delq nil (mapcar #'(lambda (c)
-                        (when (equal (car c) key)
-                          c))
+  (delq nil (mapcar (lambda (c)
+                      (when (equal (car c) key)
+                        c))
                     list)))
 
 (defmacro irony--without-narrowing (&rest body)
@@ -483,7 +499,7 @@ The installation requires CMake and the libclang developpement package."
                  (shell-quote-argument irony-cmake-executable))))
            (irony--install-server-read-command command))))
   (let ((build-dir (or irony-server-build-dir
-                       (concat 
+                       (concat
                         (file-name-as-directory temporary-file-directory)
                         (file-name-as-directory (format "build-irony-server-%s"
                                                         (irony-version)))))))
@@ -550,6 +566,9 @@ list (and undo information is not kept).")
                                            (irony--locate-server-executable)))
     (let ((process-connection-type nil)
           (process-adaptive-read-buffering nil)
+          (w32-pipe-buffer-size (when (boundp 'w32-pipe-buffer-size)
+                                  (or irony-server-w32-pipe-buffer-size
+                                      w32-pipe-buffer-size)))
           process)
       (setq process
             (start-process-shell-command

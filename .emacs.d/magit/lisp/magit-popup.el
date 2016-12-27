@@ -76,6 +76,7 @@
 
 (defgroup magit-popup nil
   "Infix arguments with a popup as feedback."
+  :link '(info-link "(magit-popup)")
   :group 'bindings)
 
 (defgroup magit-popup-faces nil
@@ -166,20 +167,26 @@ before entering a popup has.
 (defvar magit-popup-mode-map
   (let ((map (make-sparse-keymap)))
     (define-key map [remap self-insert-command] 'magit-invoke-popup-action)
-    (define-key map [?- t]        'magit-invoke-popup-switch)
-    (define-key map [?= t]        'magit-invoke-popup-option)
-    (define-key map [?\C-c ?\C-c] 'magit-popup-set-default-arguments)
-    (define-key map [?\C-x ?\C-s] 'magit-popup-save-default-arguments)
-    (define-key map [?\C-g]       'magit-popup-quit)
-    (define-key map [??]          'magit-popup-help)
-    (define-key map [?\C-h ?k]    'magit-popup-help)
-    (define-key map [?\C-h ?i]    'magit-popup-info)
-    (define-key map [?\C-t]       'magit-popup-toggle-show-common-commands)
-    (define-key map [?\d]         'backward-button)
-    (define-key map [?\C-p]       'backward-button)
-    (define-key map [?\t]         'forward-button)
-    (define-key map [?\C-n]       'forward-button)
-    (define-key map [?\r]         'push-button)
+    (define-key map (kbd "- <t>")               'magit-invoke-popup-switch)
+    (define-key map (kbd "= <t>")               'magit-invoke-popup-option)
+    (define-key map (kbd "C-g")     'magit-popup-quit)
+    (define-key map (kbd "?")       'magit-popup-help)
+    (define-key map (kbd "C-h k")   'magit-popup-help)
+    (define-key map (kbd "C-h i")   'magit-popup-info)
+    (define-key map (kbd "C-t")     'magit-popup-toggle-show-common-commands)
+    (define-key map (kbd "C-c C-c") 'magit-popup-set-default-arguments)
+    (define-key map (kbd "C-x C-s") 'magit-popup-save-default-arguments)
+    (cond ((featurep 'jkl)
+           (define-key map (kbd "C-p") 'universal-argument)
+           (define-key map [return]    'push-button)
+           (define-key map (kbd "C-i") 'backward-button)
+           (define-key map (kbd "C-k") 'forward-button))
+          (t
+           (define-key map (kbd "C-m") 'push-button)
+           (define-key map (kbd "DEL") 'backward-button)
+           (define-key map (kbd "C-p") 'backward-button)
+           (define-key map (kbd "C-i") 'forward-button)
+           (define-key map (kbd "C-n") 'forward-button)))
     map)
   "Keymap for `magit-popup-mode'.
 
@@ -432,9 +439,11 @@ the value of the variable `magit-current-popup-args'; however
 when the command is invoked directly, then it returns the default
 value of the variable `SHORTNAME-arguments'.
 
-Optional argument GROUP specifies the Custom group in which the
-option is placed.  If omitted then the option is placed in some
-group the same way it is done when directly using `defcustom'.
+Optional argument GROUP specifies the Custom group into which the
+option is placed.  If omitted then the option is placed into some
+group the same way it is done when directly using `defcustom' and
+omitting the group, except when NAME begins with \"magit-\", in
+which case the group `magit-git-arguments' is used.
 
 Optional argument MODE is deprecated, instead use the keyword
 arguments `:setup-function' and/or `:refresh-function'.  If MODE
@@ -484,10 +493,11 @@ usually specified in that order):
   The value, if specified, should be one of `default' or `popup'.
 
 `:max-action-columns'
-  The maximum number of actions to display on a single line.
-  This helps arranging actions more sensibly.  If there is not
-  enough room to display that many actions on one line, then
-  this is ignored.
+  The maximum number of actions to display on a single line, a
+  number or a function that returns a number and takes the name
+  of the section currently being inserted as argument.  If there
+  isn't enough room to display as many columns as specified here,
+  then fewer are used.
 
 `:switches'
   The popup arguments which can be toggled on and off.  VALUE
@@ -503,6 +513,12 @@ usually specified in that order):
   The default arguments, a list of switches (which are then
   enabled by default) and options with there default values, as
   in \"--OPT=OPTVAL\".
+
+`:variables'
+
+  Git variables which can be set from the popup.  VALUE is a list
+  whose members have the form (KEY DESC COMMAND FORMATTER), see
+  `magit-define-popup-variable' for details.
 
 `:sequence-predicate'
   When this function returns non-nil, then the popup uses
@@ -529,13 +545,15 @@ usually specified in that order):
 
 \(fn NAME DOC [GROUP [MODE [OPTION]]] :KEYWORD VALUE...)"
   (declare (indent defun) (doc-string 2))
-  (let* ((grp  (unless (keywordp (car args)) (pop args)))
-         (mode (unless (keywordp (car args)) (pop args)))
-         (opt  (symbol-name name))
+  (let* ((str  (symbol-name name))
+         (grp  (if (keywordp (car args))
+                   (and (string-prefix-p "magit-" str) ''magit-git-arguments)
+                 (pop args)))
+         (mode (and (not (keywordp (car args))) (pop args)))
          (opt  (if (keywordp (car args))
-                   (intern (concat (if (string-suffix-p "-popup" opt)
-                                       (substring opt 0 -6)
-                                     opt)
+                   (intern (concat (if (string-suffix-p "-popup" str)
+                                       (substring str 0 -6)
+                                     str)
                                    "-arguments"))
                  (eval (pop args)))))
     `(progn
@@ -1098,6 +1116,8 @@ of events shared by all popups and before point is adjusted.")
         (cl-typecase maxcols
           (keyword (setq maxcols (magit-popup-get maxcols)))
           (symbol  (setq maxcols (symbol-value maxcols)))))
+      (when (functionp maxcols)
+        (setq maxcols (funcall maxcols heading)))
       (when items
         (if (functionp heading)
             (when (setq heading (funcall heading))
