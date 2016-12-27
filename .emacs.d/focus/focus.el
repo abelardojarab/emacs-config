@@ -5,7 +5,7 @@
 ;; Author: Lars Tveito <larstvei@ifi.uio.no>
 ;; URL: http://github.com/larstvei/Focus
 ;; Created: 11th May 2015
-;; Version: 0.1.0
+;; Version: 0.1.1
 ;; Package-Requires: ((emacs "24") (cl-lib "0.5"))
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -91,13 +91,6 @@ The timer calls `focus-read-only-hide-cursor' after
                focus-read-only-blink-timer))
   (make-local-variable var))
 
-;; Changing major-mode should not affect Focus mode.
-(dolist (var '(focus-current-thing
-               focus-pre-overlay
-               focus-post-overlay
-               post-command-hook))
-  (put var 'permanent-local t))
-
 (defun focus-any (f lst)
   "Apply F to each element of LST and return first NON-NIL."
   (when lst
@@ -163,7 +156,8 @@ adds `focus-move-focus' to `post-command-hook'."
     (let ((color (focus-make-dim-color)))
       (mapc (lambda (o) (overlay-put o 'face (cons 'foreground-color color)))
             (list focus-pre-overlay focus-post-overlay)))
-    (add-hook 'post-command-hook 'focus-move-focus nil t)))
+    (add-hook 'post-command-hook 'focus-move-focus nil t)
+    (add-hook 'change-major-mode-hook 'focus-terminate)))
 
 (defun focus-terminate ()
   "This function is run when command `focus-mode' is disabled.
@@ -218,7 +212,7 @@ if active."
         (thing (focus-get-thing)))
     (forward-thing thing n)
     (when (equal current-bounds (focus-bounds))
-      (forward-thing thing (signum n)))
+      (forward-thing thing (cl-signum n)))
     (focus-goto-thing (focus-bounds))))
 
 (defun focus-prev-thing (&optional n)

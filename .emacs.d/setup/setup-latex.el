@@ -55,6 +55,17 @@
           (setq bibtex-align-at-equal-sign t)
           (add-hook 'bibtex-mode-hook (lambda () (set-fill-column 120)))))
 
+(use-package ebib-handy
+  :load-path (lambda () (expand-file-name "ebib-handy/" user-emacs-directory))
+  :bind ("C-c b" . ebib-handy)
+  :config (progn
+            (ebib-handy-enable)
+            (setq ebib-extra-fields
+                  '((BibTeX "keywords" "abstract" "timestamp"
+                            "file"  "url" "crossref" "annote" "doi")
+                    (biblatex "keywords" "abstract" "timestamp"
+                              "file"  "url" "crossref" "annote" "doi")))))
+
 (use-package latex-pretty-symbols
   :commands latex-unicode-simplified
   :load-path (lambda () (expand-file-name "latex-pretty-symbols/" user-emacs-directory))

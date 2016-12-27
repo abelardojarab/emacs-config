@@ -29,7 +29,9 @@
   :if (display-graphic-p)
   :commands nyan-mode
   :load-path (lambda () (expand-file-name "nyan-mode/" user-emacs-directory))
-  :config (nyan-mode t))
+  :config (progn
+            (nyan-mode t)
+            (nyan-start-animation)))
 
 ;; Powerline
 (use-package powerline

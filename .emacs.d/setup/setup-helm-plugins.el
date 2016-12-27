@@ -245,5 +245,11 @@
   :load-path (lambda () (expand-file-name "helm-company/" user-emacs-directory))
   :commands (helm-company))
 
+;; helm pages
+;; Text is divided into pages delimited by the formfeed character (ASCII code 12, also denoted as ‘control-L’)
+(use-package helm-pages
+  :after helm
+  :load-path (lambda () (expand-file-name "helm-pages/" user-emacs-directory)))
+
 (provide 'setup-helm-plugins)
 ;;; setup-helm-plugins.el ends here

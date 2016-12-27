@@ -441,6 +441,9 @@
 ;; Setup write room
 (require 'setup-writeroom)
 
+;; Setup regular expressions
+(require 'setup-regex)
+
 ;; Setup keys
 (require 'setup-keys)
 

@@ -1,0 +1,10 @@
+#+TITLE:  Ebib test file
+* 综述
+估时作业成本法最初主要在制造业应用，在医院应用的时间比较晚，Bank等学者2009年利用
+估计时作业成本法计算急诊服务成本 [[cite:bank2009][(Bank 2009)]]。Demeere和Nathalie等学者在2009年通过
+案例说明医院门诊部门实施估时作业成本法的步骤，并说明估时作业成本法对医院门诊管理
+的价值 [[cite:demeere2009time][(Demeere 2009)]] 。
+
+* 参考文献
+# \bibliography{thesis.bib}
+#+BIBLIOGRAPHY: thesis nil limit:t

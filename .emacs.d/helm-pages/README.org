@@ -1,0 +1,23 @@
+[[https://melpa.org/#/helm-pages][file:https://melpa.org/packages/helm-pages-badge.svg]]
+
+* Helm Pages
+
+** Introduction
+
+This packages introduces a command, ~helm-pages~, that displays the first lines of [[https://www.gnu.org/software/emacs/manual/emacs.html#Pages][pages]] in the current buffer using [[file:~/Dropbox/work/healthtechreality/topics.org::*The%20healthcare%20(IT)%20industry][Helm]].
+
+[[./doc/helm-pages.png]]
+
+** Installation
+
+[[https://www.gnu.org/software/emacs/manual/html_node/emacs/Package-Installation.html#Package-Installation][Install the package]] from [[https://melpa.org/][MELPA]]. See the [[https://www.emacswiki.org/emacs/MELPA][Emacs Wiki]] for instructions on using MELPA.
+
+** Usage
+
+Bind the ~helm-pages~ command to a key sequence, e.g.
+
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "M-p") #'helm-pages)
+#+END_SRC
+
+Or, invoke it manually using =M-x helm-pages=.
