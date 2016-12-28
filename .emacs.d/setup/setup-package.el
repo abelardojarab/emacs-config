@@ -39,6 +39,7 @@
 (use-package bind-key)
 (use-package diminish)
 (use-package let-alist)
+(use-package color)
 
 ;; Namespace implementation (baseline package)
 (use-package ctable              :defer t :load-path (lambda () (expand-file-name "ctable/" user-emacs-directory)))

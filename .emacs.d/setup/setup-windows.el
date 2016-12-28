@@ -24,102 +24,6 @@
 
 ;;; Code:
 
-;; Display popup in inactive buffer
-;; http://stackoverflow.com/questions/4195666/display-compilation-in-inactive-buffer
-(defun display-on-side (buffer &optional not-this-window frame)
-  (let* ((window (or (minibuffer-selected-window)
-                     (selected-window)))
-         (display-buffer-function nil)
-         (pop-up-windows nil))
-    (with-selected-window (or window (error "display-on-side"))
-      (when (one-window-p t)
-        (split-window-horizontally))
-      (display-buffer buffer not-this-window frame))))
-(setq display-buffer-function 'display-on-side)
-
-;; http://stackoverflow.com/questions/25469319/prevent-emacs-from-opening-a-buffer-in-a-new-frame
-(setq menu-bar-select-buffer-function 'switch-to-buffer)
-
-;; Always split horizontally
-(setq split-width-threshold (ceiling (frame-width) 2))
-(setq split-height-threshold nil)
-
-;; Helper function for horizontal splitting
-(defun split-horizontally-for-temp-buffers ()
-  "Split the window horizontally for temp buffers."
-  (when (and (one-window-p t)
-             (not (active-minibuffer-window)))
-    (split-window-horizontally)))
-(add-hook 'temp-buffer-setup-hook 'split-horizontally-for-temp-buffers)
-
-;; horizontal splitting - when opening files or buffers with C-x4b or C-x4f
-(defun my/split-window-sensibly (&optional window)
-  (let ((window (or window (selected-window))))
-    (or (and (window-splittable-p window t)
-             (= (length (window-list)) 1)
-             ;; Split window horizontally.
-             (with-selected-window window
-               (split-window-right)))
-        (and (window-splittable-p window)
-             ;; Split window vertically.
-             (with-selected-window window
-               (split-window-below)))
-        (and (eq window (frame-root-window (window-frame window)))
-             (not (window-minibuffer-p window))
-             ;; If WINDOW is the only window on its frame and is not the
-             ;; minibuffer window, try to split it vertically disregarding
-             ;; the value of `split-height-threshold'.
-             (let ((split-height-threshold 0))
-               (when (window-splittable-p window)
-                 (with-selected-window window
-                   (split-window-below))))))))
-(setq split-window-preferred-function 'my/split-window-sensibly)
-
-;; Resize windows to accommodate new ones.
-(setq window-combination-resize t)
-
-;; Avoid multiple windows when opening multiple files
-;; http://stackoverflow.com/questions/1144729/how-do-i-prevent-emacs-from-horizontally-splitting-the-screen-when-opening-multip
-;; (add-hook 'window-setup-hook 'delete-other-windows)
-
-;; Some buffers should behave like pop ups:
-;; display at the bottom with 0.3 height
-;; We then use malb/quit-bottom-side-windows to close them.
-(defvar my/popup-windows '("\\`\\*helm flycheck\\*\\'"
-                           "\\`\\*Flycheck errors\\*\\'"
-                           "\\`\\*helm projectile\\*\\'"
-                           "\\`\\*Helm all the things\\*\\'"
-                           "\\`\\*Helm Find Files\\*\\'"
-                           "\\`\\*Help\\*\\'"
-                           "\\`\\*anaconda-doc\\*\\'"
-                           "\\`\\*Google Translate\\*\\'"
-                           "\\` \\*LanguageTool Errors\\* \\'"
-                           "\\`\\*Edit footnote .*\\*\\'"
-                           "\\`\\*TeX errors*\\*\\'"
-                           "\\`\\*mu4e-update*\\*\\'"
-                           "\\`\\*prodigy-.*\\*\\'"
-                           "\\`\\*Org Export Dispatcher\\*\\'"
-                           "\\`\\*Helm Swoop\\*\\'"
-                           "\\`\\*Backtrace\\*\\'"))
-
-(dolist (name my/popup-windows)
-  (add-to-list 'display-buffer-alist
-               `(,name
-                 (display-buffer-reuse-window
-                  display-buffer-in-side-window)
-                 (reusable-frames . visible)
-                 (side            . bottom)
-                 ;; height only applies when golden-ratio-mode is off
-                 (window-height   . 0.3))))
-
-;; In case we just want to kill the bottom window, set a shortcut do to this
-(defun my/quit-bottom-side-windows ()
-  "Quit side windows of the current frame."
-  (interactive)
-  (dolist (window (window-at-side-list))
-    (delete-window window)))
-(bind-key "C-§" #'my/quit-bottom-side-windows)
-
 ;; Manage popup windows
 (use-package popwin
   :defer t
@@ -290,11 +194,6 @@
   :if (display-graphic-p)
   :commands switch-window
   :load-path (lambda () (expand-file-name "switch-window/" user-emacs-directory)))
-
-;; Window numbering
-(use-package window-numbering
-  :load-path (lambda () (expand-file-name "window-numbering/" user-emacs-directory))
-  :config (window-numbering-mode 1))
 
 ;; ace-window for switching windows, but we only call it as a subroutine from a hydra
 (use-package ace-window

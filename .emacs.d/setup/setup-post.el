@@ -26,13 +26,6 @@
 
 ;; Add all diminished modes here
 
-;; Dashboard
-(use-package dashboard
-  :load-path (lambda () (expand-file-name "dashboard/" user-emacs-directory))
-  :disabled t
-  :config (progn
-            (dashboard-setup-startup-hook)))
-
 ;; So, fringe is nice actually, but the background for it kind of sucks in leuven
 ;; so I set it to the same color as the background
 (defun my/set-face-fringe ()
@@ -48,7 +41,6 @@
   (mapc #'disable-theme (or themes custom-enabled-themes)))
 
 ;; Default tabbar theme-ing
-(use-package color)
 (defun my/set-face-tabbar ()
   "Set the tabbar background to the same color as the regular background."
   (interactive)
@@ -70,7 +62,6 @@
    `(tabbar-separator ((t (:inherit tabbar-default :background ,my/tabbar-back-color))))
    `(tabbar-unselected ((t (:inherit tabbar-default))))))
 
-
 (add-hook 'after-init-hook #'my/set-face-fringe)
 (add-hook 'after-init-hook #'my/set-face-tabbar)
 
@@ -85,21 +76,6 @@
     (my/set-face-tabbar)
     (spaceline-spacemacs-theme)))
 (ad-activate 'load-theme)
-
-;; Inherit theme for new frames
-(setq frame-inherited-parameters '(width height face background-mode
-                                         tool-bar-lines menu-bar-lines
-                                         scroll-bar-width right-fringe left-fringe
-                                         vertical-scroll-bars
-                                         background-color foreground-color
-                                         font alpha))
-
-;; http://sachachua.com/blog/2016/04/keep-emacs-alive-x-crashes-running-background-daemon/
-(defun on-frame-open (&optional frame)
-  (set-face-background 'default "unspecified-bg" frame)
-  (select-frame frame)
-  (load-theme 'material t))
-(add-hook 'after-make-frame-functions 'on-frame-open)
 
 (provide 'setup-post)
 ;;; setup-post.el ends here
