@@ -2,11 +2,13 @@
 [[http://melpa.org/#/which-key][http://melpa.org/packages/which-key-badge.svg]] [[http://stable.melpa.org/#/which-key][file:http://stable.melpa.org/packages/which-key-badge.svg]] [[https://travis-ci.org/justbur/emacs-which-key][file:https://travis-ci.org/justbur/emacs-which-key.svg?branch=master]]
 
 ** Recent Changes
-*** [2016-11-21] Replacement list changes
+*** 2016-12-20: Added =which-key-max-display-columns=
+Allows control over the number of columns in the popup. See [[#other-options][Other Options]].
+*** 2016-11-21: Replacement list changes
 The alists controlling the replacement of key binding descriptions was
 simplified to use one centralized alist, =which-key-replacement-alist=. This
 change also allows for some new features compared to the old method. The other
-alists are deprecated. See [[Custom%20String%20Replacement%20Options][Custom String Replacement Options]].
+alists are deprecated. See [[#custom-string-replacement-options][Custom String Replacement Options]].
 
 ** Introduction
 =which-key= is a minor mode for Emacs that displays the key bindings following
@@ -18,8 +20,11 @@ prefixes like =C-x 8= which are shown in a different face. Screenshots of what
 the popup will look like are included below. =which-key= started as a rewrite of
 [[https://github.com/kai2nenobu/guide-key][guide-key-mode]], but the feature sets have diverged to a certain extent.
 
-** Table of Contents                                                 :TOC@4:
+** Table of Contents                                                  :TOC_3:
  - [[#which-key][which-key]]
+   - [[#recent-changes][Recent Changes]]
+     - [[#2016-12-20-added-which-key-max-display-columns][2016-12-20: Added =which-key-max-display-columns=]]
+     - [[#2016-11-21-replacement-list-changes][2016-11-21: Replacement list changes]]
    - [[#introduction][Introduction]]
    - [[#install][Install]]
      - [[#melpa][MELPA]]
@@ -32,17 +37,9 @@ the popup will look like are included below. =which-key= started as a rewrite of
    - [[#additional-commands][Additional Commands]]
    - [[#special-features-and-configuration-options][Special Features and Configuration Options]]
      - [[#popup-type-options][Popup Type Options]]
-       - [[#minibuffer][minibuffer]]
-       - [[#side-window][side window]]
-       - [[#frame][frame]]
-       - [[#custom][custom]]
      - [[#custom-string-replacement-options][Custom String Replacement Options]]
-       - [[#key-based-replacement]["Key-Based" replacement]]
-       - [[#key-and-description-replacement][Key and Description replacement]]
      - [[#sorting-options][Sorting Options]]
      - [[#paging-options][Paging Options]]
-       - [[#method-1-default-using-c-h-or-help-char][Method 1 (default): Using C-h (or =help-char=)]]
-       - [[#method-2-bind-your-own-keys][Method 2: Bind your own keys]]
      - [[#face-customization-options][Face Customization Options]]
      - [[#other-options][Other Options]]
    - [[#support-for-third-party-libraries][Support for Third-Party Libraries]]
@@ -215,6 +212,7 @@ current implementation of side-window bottom).
 #+END_SRC
 
 *** Custom String Replacement Options
+    #+NAME: #custom-string-replacement-options
 You can customize the way the keys show in the buffer using three different
 replacement methods, each of which corresponds replacement alist. The basic idea
 of behind each alist is that you specify a selection string in the =car= of each
@@ -277,6 +275,22 @@ monospace font and alignment is based on character width.
 (add-to-list 'which-key-replacement-alist '(("DEL" . nil) . ("⇤" . nil))
 (add-to-list 'which-key-replacement-alist '(("SPC" . nil) . ("␣" . nil))
 #+END_SRC
+
+The =cdr= may also be a function that receives a =cons= of the form =(KEY
+. BINDING)= and produces a =cons= of the same form. This allows for interesting
+ideas like this one suggested by [[https://github.com/pdcawley][@pdcawley]] in [[https://github.com/justbur/emacs-which-key/pull/147][PR #147]].
+
+#+BEGIN_SRC emacs-lisp
+(push (cons '(nil . "paredit-mode") 
+            (lambda (kb)
+              (cons (car kb)
+                    (if paredit-mode
+                        "[x] paredit-mode"
+                      "[ ] paredit-mode"))))
+      which-key-replacement-alist)
+#+END_SRC
+
+The box will be checked if =paredit-mode= is currently active. 
 
 *** Sorting Options
 By default the output is sorted by the key in a custom order. The default order
@@ -387,6 +401,7 @@ You can also use =M-x customize-face= to customize any of the above faces to
 your liking.
 
 *** Other Options
+    #+NAME: #other-options
 The options below are also available through customize. Their defaults are
 shown.
 
@@ -402,6 +417,10 @@ shown.
   ;; Use additonal padding between columns of keys. This variable specifies the
   ;; number of spaces to add to the left of each column.
   (setq which-key-add-column-padding 0)
+
+  ;; The maximum number of columns to display in the which-key buffer. nil means
+  ;; don't impose a maximum.
+  (setq which-key-max-display-columns nil)
 
   ;; Set the separator used between keys and descriptions. Change this setting to
   ;; an ASCII character if your font does not show the default arrow. The second
@@ -459,7 +478,6 @@ windows.
 
 ** Thanks
 Special thanks to
-- @bmag for helping with the initial development and finding many
-  bugs.
-- @iqbalansari who among other things adapted the code to make
+- [[https://github.com/bmag][@bmag]] for helping with the initial development and finding many bugs.
+- [[https://github/iqbalansari][@iqbalansari]] who among other things adapted the code to make
   =which-key-show-top-level= possible.

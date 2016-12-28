@@ -1,8 +1,8 @@
 ;;; setup-helm.el ---                                -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2015, 2016  Abelardo Jara
+;; Copyright (C) 2015, 2016  Abelardo Jara-Berrocal
 
-;; Author: Abelardo Jara <abelardojara@Abelardos-MacBook-Pro.local>
+;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
 ;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -39,7 +39,6 @@
          ("n" . helm-mini)
          ("h" . helm-apropos)
          ("u" . helm-resume)
-         ("b" . helm-buffers-list)
          ("f" . helm-for-files)
          ("<tab>" . helm-find-files))
   :config (progn

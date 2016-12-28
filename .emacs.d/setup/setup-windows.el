@@ -1,6 +1,6 @@
 ;;; setup-windows.el ---                             -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014, 2015, 2016  abelardo.jara-berrocal
+;; Copyright (C) 2014, 2015, 2016  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
 ;; Keywords:
@@ -118,8 +118,10 @@
 
 ;; Window purpose
 (use-package window-purpose
-  :load-path (lambda () (expand-file-name "window-purpose/" user-emacs-directory))
   :after helm
+  :defer t
+  :commands purpose-mode
+  :load-path (lambda () (expand-file-name "window-purpose/" user-emacs-directory))
   :init (progn
           ;; Prefer helm
           (setq purpose-preferred-prompt 'helm)

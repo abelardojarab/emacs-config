@@ -24,13 +24,13 @@
 
 ;;; Code:
 
-(use-package puml-mode
+(use-package plantuml-mode
   :mode ("\\.puml\\'" "\\.plantuml\\'")
-  :commands (puml-mode puml-complete-symbol puml-render-buffer)
-  :load-path (lambda () (expand-file-name "puml-mode/" user-emacs-directory))
-  :init (setq puml-plantuml-jar-path (expand-file-name "jar/plantuml.jar" user-emacs-directory))
+  :commands (plauntuml-mode plantuml-complete-symbol plantuml-render-buffer)
+  :load-path (lambda () (expand-file-name "plantuml-mode/" user-emacs-directory))
+  :init (setq plantuml-jar-path (expand-file-name "jar/plantuml.jar" user-emacs-directory))
   :config (progn
-            (defun puml-render-buffer ()
+            (defun plantuml-render-buffer ()
               (interactive)
               (message "PlantUML rendering")
               (shell-command (concat "java -jar "

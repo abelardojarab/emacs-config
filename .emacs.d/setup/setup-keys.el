@@ -222,7 +222,6 @@
 (define-key my/keys-minor-mode-map (kbd "<f2>")   'bm-next)
 (define-key my/keys-minor-mode-map (kbd "<C-f2>") 'bm-toggle)
 (define-key my/keys-minor-mode-map (kbd "<left-fringe> <double-mouse-1>") 'bm-toggle)
-(define-key my/keys-minor-mode-map (kbd "C-b") 'beautify-buffer)
 (define-key my/keys-minor-mode-map (kbd "<f4>") 'helm-semantic-or-imenu)
 (define-key my/keys-minor-mode-map (kbd "C-`") 'helm-semantic-or-imenu)
 (define-key my/keys-minor-mode-map (kbd "<f12>") 'helm-buffers-list)
@@ -230,7 +229,7 @@
 (define-key my/keys-minor-mode-map (kbd "<f5>") 'recompile)
 (define-key my/keys-minor-mode-map [(control p)] 'scroll-down)
 (define-key my/keys-minor-mode-map [(control n)] 'scroll-up)
-(define-key my/keys-minor-mode-map [(control b)] 'psw-switch-buffer)
+(define-key my/keys-minor-mode-map [(control b)] 'ivy-switch-buffer)
 
 ;; key bindings for shift select
 (define-key my/keys-minor-mode-map [S-prior] 'shift-mark-backward-page)

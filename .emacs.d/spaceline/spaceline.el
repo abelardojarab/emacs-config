@@ -280,7 +280,7 @@ Returns a list of forms."
            (condition (if (plist-member props :when)
                           (plist-get props :when) t))
            (face (or (plist-get props :face) 'default-face))
-           (face (if (memq face '(default-face other-face highlight-face))
+           (face (if (memq face '(default-face other-face highlight-face line-face))
                      face `(quote ,face)))
            (separator `(powerline-raw ,(or (plist-get props :separator) " ") ,face))
            (tight-left (or (plist-get props :tight)
@@ -588,7 +588,7 @@ the changes to take effect."
 (spaceline-define-segment global
   (let* ((global-excludes (bound-and-true-p global-excludes))
          (global (if (listp global-mode-string)
-                     (-difference global-mode-string global-excludes)
+                     (cons "" (-difference global-mode-string global-excludes))
                    global-mode-string)))
     (when (spaceline--mode-line-nonempty global)
       (powerline-raw global))))

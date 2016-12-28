@@ -137,9 +137,13 @@ Search pattern is `--count`.
 `ag`(`ack`, `pt`) takes Perl compatible PCRE so that you need to escape meta characters
 likes brackets, braces, asterisk, when you search them as literals.
 
+##### Use short option
+
+Don't use space between option and its value. For example `-tcpp` is ok, `-t cpp` is not ok.
+
 ##### Use long option
 
-Please always use `=` separator for using long option. For example `--ignore=pattern` is ok, `--ignore pattern` is not ok.
+Please always use `=` separator for using long option. Don't use space as separator. For example `--ignore=pattern` is ok, `--ignore pattern` is not ok.
 
 ## Customize
 
@@ -276,13 +280,13 @@ I think the searching tool which supports grep like output, helm-ag can work wit
  '(helm-ag-base-command "rg --vimgrep --no-heading"))
 ```
 
-#### NOTE: For pt users
+#### NOTE: For pt and rg users
 
-Case using `ag` or `ack`, `helm-do-ag` convert pattern from `foo bar` to `"(?=.*" foo ".*)(?=.*" bar ".*)"`
-which patterns matches line which contains both `foo` and `bar`. But case using `pt`, `helm-do-ag`
-does not convert because Golang `regexp`(`pt` is written in Golang) does not support look-a-head pattern.
-So using `pt` behaviors is different from `ag` when you use such pattern. I suppose there is same problem
-if you use search programs which are written in Golang.
+When using `ag` or `ack`, `helm-do-ag` convert pattern from `foo bar` to `"(?=.*" foo ".*)(?=.*" bar ".*)"`
+which pattern matches line which contains both `foo` and `bar`. But when using `pt` or `rg`, `helm-do-ag`
+does not convert the pattern because Golang `regexp`(`pt` is written in Golang)
+and rust's `regex` (`rg` is written in rust) does not support look-a-head pattern.
+So using `pt` or `rg` behaves differently from `ag` when you use such pattern.
 
 ## Alternatives
 

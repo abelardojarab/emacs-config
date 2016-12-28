@@ -113,6 +113,7 @@ Default behaviour shows finish and result in mode-line."
   "Face of deleted line in edit mode.")
 
 (defvar helm-ag--command-history '())
+(defvar helm-ag--helm-history '())
 (defvar helm-ag--context-stack nil)
 (defvar helm-ag--default-directory nil)
 (defvar helm-ag--last-default-directory nil)
@@ -126,7 +127,7 @@ Default behaviour shows finish and result in mode-line."
 (defvar helm-ag--search-this-file-p nil)
 (defvar helm-ag--default-target nil)
 (defvar helm-ag--buffer-search nil)
-(defvar helm-ag--command-feature nil)
+(defvar helm-ag--command-features '())
 (defvar helm-ag--ignore-case nil)
 (defvar helm-do-ag--extensions nil)
 (defvar helm-do-ag--commands nil)
@@ -150,7 +151,7 @@ Default behaviour shows finish and result in mode-line."
         (push (list :file it :point curpoint) helm-ag--context-stack)
       (push (list :buffer helm-current-buffer :point curpoint) helm-ag--context-stack))))
 
-(defsubst helm-ag--insert-thing-at-point (thing)
+(defun helm-ag--insert-thing-at-point (thing)
   (helm-aif (thing-at-point thing)
       (substring-no-properties it)
     ""))
@@ -295,7 +296,7 @@ Default behaviour shows finish and result in mode-line."
         target))))
 
 (defun helm-ag--find-file-action (candidate find-func this-file &optional persistent)
-  (when helm-ag--command-feature
+  (when (memq 'pt helm-ag--command-features)
     ;; 'pt' always show filename if matched file is only one.
     (setq this-file nil))
   (let* ((file-line (helm-grep-split-line candidate))
@@ -317,13 +318,15 @@ Default behaviour shows finish and result in mode-line."
            (goto-char (match-beginning 0))))))
 
 (defun helm-ag--open-file-with-temp-buffer (filename)
-  (switch-to-buffer (get-buffer-create " *helm-ag persistent*"))
-  (fundamental-mode)
-  (erase-buffer)
-  (insert-file-contents filename)
-  (let ((buffer-file-name filename))
-    (set-auto-mode)
-    (font-lock-fontify-region (point-min) (point-max))))
+  (let ((search-directory default-directory))
+    (switch-to-buffer (get-buffer-create " *helm-ag persistent*"))
+    (setq default-directory search-directory)
+    (fundamental-mode)
+    (erase-buffer)
+    (insert-file-contents filename)
+    (let ((buffer-file-name filename))
+      (set-auto-mode)
+      (font-lock-fontify-region (point-min) (point-max)))))
 
 (defsubst helm-ag--vimgrep-option ()
   (member "--vimgrep" helm-ag--last-command))
@@ -799,7 +802,8 @@ Continue searching the parent directory? "))
                   (helm-ag--default-directory parent))
              (setq helm-ag--last-default-directory default-directory)
              (helm-attrset 'name (helm-ag--helm-header default-directory) helm-ag-source)
-             (helm :sources '(helm-ag-source) :buffer "*helm-ag*" :keymap helm-ag-map)))))
+             (helm :sources '(helm-ag-source) :buffer "*helm-ag*" :keymap helm-ag-map
+                   :history 'helm-ag--helm-history)))))
     (message nil)))
 
 ;;;###autoload
@@ -809,11 +813,12 @@ Continue searching the parent directory? "))
   (let ((filename (file-name-nondirectory (buffer-file-name)))
         (helm-ag--default-directory default-directory))
     (helm-ag--query)
-    (helm-ag--set-command-feature)
+    (helm-ag--set-command-features)
     (helm-attrset 'search-this-file (file-relative-name (buffer-file-name))
                   helm-ag-source)
     (helm-attrset 'name (format "Search at %s" filename) helm-ag-source)
-    (helm :sources '(helm-ag-source) :buffer "*helm-ag*" :keymap helm-ag-map)))
+    (helm :sources '(helm-ag-source) :buffer "*helm-ag*" :keymap helm-ag-map
+          :history 'helm-ag--helm-history)))
 
 ;;;###autoload
 (defun helm-ag (&optional basedir)
@@ -829,7 +834,8 @@ Continue searching the parent directory? "))
       (helm-ag--query)
       (helm-attrset 'search-this-file nil helm-ag-source)
       (helm-attrset 'name (helm-ag--helm-header helm-ag--default-directory) helm-ag-source)
-      (helm :sources '(helm-ag-source) :buffer "*helm-ag*" :keymap helm-ag-map))))
+      (helm :sources '(helm-ag-source) :buffer "*helm-ag*" :keymap helm-ag-map
+            :history 'helm-ag--helm-history))))
 
 (defun helm-ag--split-string (str)
   (with-temp-buffer
@@ -851,7 +857,7 @@ Continue searching the parent directory? "))
       (reverse (cl-loop for p in patterns unless (string= p "") collect p)))))
 
 (defsubst helm-ag--convert-invert-pattern (pattern)
-  (when (and (not helm-ag--command-feature)
+  (when (and (memq 'pcre helm-ag--command-features)
              (string-prefix-p "!" pattern) (> (length pattern) 1))
     (concat "^(?!.*" (substring pattern 1) ").+$")))
 
@@ -860,22 +866,24 @@ Continue searching the parent directory? "))
     (if (= (length patterns) 1)
         (or (helm-ag--convert-invert-pattern (car patterns))
             (car patterns))
-      (cl-case helm-ag--command-feature
-        (pt input)
-        (pt-regexp (string-join patterns ".*"))
-        (otherwise (cl-loop for s in patterns
-                            if (helm-ag--convert-invert-pattern s)
-                            concat (concat "(?=" it ")")
-                            else
-                            concat (concat "(?=.*" s ".*)")))))))
+      (cond ((memq 'pcre helm-ag--command-features)
+             (cl-loop for s in patterns
+                      if (helm-ag--convert-invert-pattern s)
+                      concat (concat "(?=" it ")")
+                      else
+                      concat (concat "(?=.*" s ".*)")))
+            ((memq 're2 helm-ag--command-features)
+             (string-join patterns ".*"))
+            ;; we don't know anything about this pattern
+            (t input)))))
 
 (defun helm-ag--do-ag-highlight-patterns (input)
-  (if helm-ag--command-feature
-      (list (helm-ag--join-patterns input))
-    (cl-loop with regexp = (helm-ag--pcre-to-elisp-regexp input)
-             for pattern in (helm-ag--split-string regexp)
-             when (helm-ag--validate-regexp pattern)
-             collect pattern)))
+  (if (memq 'pcre helm-ag--command-features)
+      (cl-loop with regexp = (helm-ag--pcre-to-elisp-regexp input)
+               for pattern in (helm-ag--split-string regexp)
+               when (helm-ag--validate-regexp pattern)
+               collect pattern)
+    (list (helm-ag--join-patterns input))))
 
 (defun helm-ag--propertize-candidates (input)
   (save-excursion
@@ -1053,7 +1061,8 @@ Continue searching the parent directory? "))
              (helm-attrset 'name (helm-ag--helm-header parent)
                            helm-source-do-ag)
              (helm :sources '(helm-source-do-ag) :buffer "*helm-ag*"
-                   :keymap helm-do-ag-map :input initial-input)))))
+                   :keymap helm-do-ag-map :input initial-input
+                   :history 'helm-ag--helm-history)))))
     (message nil)))
 
 (defun helm-ag--set-do-ag-option ()
@@ -1063,12 +1072,26 @@ Continue searching the parent directory? "))
                                'helm-ag--extra-options-history)))
       (setq helm-ag--extra-options option))))
 
-(defun helm-ag--set-command-feature ()
-  (setq helm-ag--command-feature
-        (when (string-prefix-p "pt" helm-ag-base-command)
-          (if (string-match-p "-e" helm-ag-base-command)
-              'pt-regexp
-            'pt))))
+(defun helm-ag--set-command-features ()
+  (let ((cmd (intern (car (split-string helm-ag-base-command)))))
+    (setq helm-ag--command-features (list cmd))
+    (cl-case cmd
+      (ack (add-to-list 'helm-ag--command-features
+                        (if (string-match-p "-\\(?:Q\\|-literal\\)\\>" helm-ag-base-command)
+                            'fixed
+                          'pcre)))
+      (ag (add-to-list 'helm-ag--command-features
+                       (if (string-match-p "-\\(?:[QF]\\|-literal\\|-fixed-strings\\)\\>" helm-ag-base-command)
+                           'fixed
+                         'pcre)))
+      (pt (add-to-list 'helm-ag--command-features
+                       (if (string-match-p "-e\\>" helm-ag-base-command)
+                           're2
+                         'fixed)))
+      (rg (add-to-list 'helm-ag--command-features
+                       (if (string-match-p "-\\(?:F\\|-fixed-strings\\)\\>" helm-ag-base-command)
+                           'fixed
+                         're2))))))
 
 (defun helm-ag--do-ag-searched-extensions ()
   (when (and current-prefix-arg (= (abs (prefix-numeric-value current-prefix-arg)) 4))
@@ -1087,7 +1110,8 @@ Continue searching the parent directory? "))
                   helm-source-do-ag)
     (helm :sources '(helm-source-do-ag) :buffer "*helm-ag*" :keymap helm-do-ag-map
           :input (or (helm-ag--marked-input t)
-                     (helm-ag--insert-thing-at-point helm-ag-insert-at-point)))))
+                     (helm-ag--insert-thing-at-point helm-ag-insert-at-point))
+          :history 'helm-ag--helm-history)))
 
 ;;;###autoload
 (defun helm-do-ag-this-file ()
@@ -1115,7 +1139,7 @@ Continue searching the parent directory? "))
          (one-directory-p (helm-do-ag--target-one-directory-p
                            helm-ag--default-target)))
     (helm-ag--set-do-ag-option)
-    (helm-ag--set-command-feature)
+    (helm-ag--set-command-features)
     (helm-ag--save-current-context)
     (helm-attrset 'search-this-file
                   (and (= (length helm-ag--default-target) 1)

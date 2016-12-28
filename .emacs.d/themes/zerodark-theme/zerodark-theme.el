@@ -194,9 +194,12 @@ The result is cached for one second to avoid hiccups."
       (mode-line-active (if (true-color-p) "#6f337e" "#875f87"))
       (background-lighter (if (true-color-p) "#3a3f4b" "#5f5f5f"))
       (background-red (if (true-color-p) "#4c3840" "#5f5f5f"))
+      (bright-background-red (if (true-color-p) "#744a5b" "#744a5b"))
       (background-purple (if (true-color-p) "#48384c" "#5f5f5f"))
       (background-blue (if (true-color-p) "#38394c" "#444444"))
+      (bright-background-blue (if (true-color-p) "#4e5079" "#4e5079"))
       (background-green (if (true-color-p) "#3d4a41" "#5f5f5f"))
+      (bright-background-green (if (true-color-p) "#3f6d54" "#3f6d54"))
       (background-orange (if (true-color-p) "#4a473d" "#5f5f5f"))
       (hl-line (if (true-color-p) "#2c323b" "#333333"))
       (grey (if (true-color-p) "#cccccc" "#cccccc"))
@@ -214,11 +217,11 @@ The result is cached for one second to avoid hiccups."
       (green-light (if (true-color-p) "#9eac8c" "#afaf87"))
       (peach "PeachPuff3")
       (diff-added-background (if (true-color-p) "#284437" "#284437"))
-      (diff-added-refined-background (if (true-color-p) "#198754" "#00875f"))
+      (diff-added-refined-background (if (true-color-p) "#1e8967" "#1e8967"))
       (diff-removed-background (if (true-color-p) "#583333" "#580000"))
-      (diff-removed-refined-background (if (true-color-p) "#981b1b" "#870000"))
-      (diff-current-background (if (true-color-p) "#3e4d58" "#5f;5f5f"))
-      (diff-current-refined-background (if (true-color-p) "#456981" "#5f5f87")))
+      (diff-removed-refined-background (if (true-color-p) "#b33c49" "#b33c49"))
+      (diff-current-background (if (true-color-p) "#29457b" "#29457b"))
+      (diff-current-refined-background (if (true-color-p) "#4174ae" "#4174ae")))
   (custom-theme-set-faces
    'zerodark
    `(default ((,class (:background ,background :foreground ,default))))
@@ -337,14 +340,32 @@ The result is cached for one second to avoid hiccups."
    `(dired-header ((,class (:foreground ,blue :background ,background-blue :weight bold))))
    `(dired-directory ((,class (:foreground ,purple :weight bold))))
 
+   ;; diff
+   `(diff-removed ((,class (:background ,background-red :foreground ,red))))
+   `(diff-added ((,class (:background ,background-green :foreground ,green))))
+   `(diff-hunk-header ((,class (:background ,background-blue :weight bold :foreground ,blue))))
+   `(diff-file-header ((,class (:weight bold))))
+   `(diff-header ((,class (:background ,background :foreground ,blue))))
+   `(diff-context ((,class (:foreground ,default))))
+   `(diff-refine-added ((,class (:foreground ,green :background ,bright-background-green))))
+   `(diff-refine-removed ((,class (:background ,bright-background-red :foreground ,red))))
+
+   ;; ediff
+   `(ediff-fine-diff-B ((,class (:inherit diff-refine-added))))
+   `(ediff-current-diff-B ((,class (:inherit diff-added))))
+   `(ediff-fine-diff-A ((,class (:inherit diff-refine-removed))))
+   `(ediff-current-diff-A ((,class (:inherit diff-removed))))
+   `(ediff-fine-diff-C ((,class (:foreground ,blue :background ,bright-background-blue))))
+   `(ediff-current-diff-C ((,class (:background ,background-blue :foreground ,blue))))
+
    ;; magit
    `(magit-diff-context-highlight ((,class (:background ,background-darker))))
    `(magit-diff-file-heading ((,class (:weight bold :foreground ,blue))))
    `(magit-diff-file-heading-highlight ((,class (:weight bold :foreground ,blue :background ,background-blue))))
-   `(magit-diff-removed-highlight ((,class (:background ,diff-removed-background))))
-   `(magit-diff-removed ((,class (:background ,diff-removed-background))))
-   `(magit-diff-added-highlight ((,class (:background ,diff-added-background))))
-   `(magit-diff-added ((,class (:background ,diff-added-background))))
+   `(magit-diff-removed-highlight ((,class (:inherit diff-removed))))
+   `(magit-diff-removed ((,class (:inherit diff-removed))))
+   `(magit-diff-added-highlight ((,class (:inherit diff-added))))
+   `(magit-diff-added ((,class (:inherit diff-added))))
    `(magit-diff-lines-heading ((,class (:background ,blue-dark :foreground "white"))))
    `(magit-diff-hunk-heading ((,class (:background ,background-lighter))))
    `(magit-diff-hunk-heading-highlight ((,class (:background ,blue-dark))))
@@ -354,9 +375,9 @@ The result is cached for one second to avoid hiccups."
 
    `(magit-section-highlight ((,class (:background ,background-darker))))
    `(magit-section-heading ((,class (:foreground ,grey :weight bold))))
-   `(magit-branch-current ((,class (:foreground ,blue :box 1))))
-   `(magit-branch-local ((,class (:foreground ,purple :box 1))))
-   `(magit-branch-remote ((,class (:foreground ,green :box 1))))
+   `(magit-branch-current ((,class (:foreground ,blue :background ,background-darker :box 1))))
+   `(magit-branch-local ((,class (:foreground ,purple :background ,background-darker :box 1))))
+   `(magit-branch-remote ((,class (:foreground ,green :background ,background-darker :box 1))))
 
    `(magit-reflog-reset ((,class (:background ,background-red :foreground ,red :weight bold))))
    `(magit-reflog-amend ((,class (:background ,background-blue :foreground ,blue :weight bold))))
@@ -404,6 +425,8 @@ The result is cached for one second to avoid hiccups."
    `(notmuch-crypto-signature-good-key ((,class (:background ,blue :foreground ,background :weight bold))))
    `(notmuch-crypto-signature-bad ((,class (:background ,red :foreground ,background :weight bold))))
    `(notmuch-tag-face ((,class (:foreground ,green :weight bold))))
+   `(notmuch-tree-match-author-face ((,class (:foreground ,purple))))
+   `(notmuch-tree-match-tag-face ((,class (:foreground ,green :weight bold))))
 
    ;; company
    `(company-preview ((,class (:background ,background-darker :foreground ,default))))
@@ -447,12 +470,12 @@ The result is cached for one second to avoid hiccups."
    `(org-headline-done ((,class (:foreground ,comment))))
    `(outline-1 ((,class (:foreground ,blue :weight bold))))
    `(outline-2 ((,class (:foreground ,purple :weight bold))))
-   `(outline-3 ((,class (:weight bold :foreground ,default))))
-   `(outline-4 ((,class (:weight bold :foreground ,default))))
-   `(outline-5 ((,class (:weight bold :foreground ,default))))
-   `(outline-6 ((,class (:weight bold :foreground ,default))))
-   `(outline-7 ((,class (:weight bold :foreground ,default))))
-   `(outline-8 ((,class (:weight bold :foreground ,default))))
+   `(outline-3 ((,class (:foreground ,peach :weight bold))))
+   `(outline-4 ((,class (:foreground ,green-light :weight bold))))
+   `(outline-5 ((,class (:foreground ,blue :weight bold))))
+   `(outline-6 ((,class (:foreground ,purple :weight bold))))
+   `(outline-7 ((,class (:foreground ,peach :weight bold))))
+   `(outline-8 ((,class (:foreground ,green-light :weight bold))))
    `(org-column-title ((,class (:foreground unspecified :background unspecified))))
    `(org-agenda-date ((,class (:foreground ,purple :weight bold))))
    `(org-agenda-date-today ((,class (:foreground ,blue :weight bold :background ,background-blue :box 1))))
@@ -496,23 +519,6 @@ The result is cached for one second to avoid hiccups."
 
    ;; which-function
    `(which-func ((,class (:foreground ,purple))))
-
-   ;; diff
-   `(diff-removed ((,class (:foreground ,default :background ,diff-removed-background))))
-   `(diff-added ((,class (:foreground ,default :background ,diff-added-background))))
-   `(diff-hunk-header ((,class (:background ,background-blue :weight bold :foreground ,blue))))
-   `(diff-file-header ((,class (:weight bold))))
-   `(diff-header ((,class (:background ,background :foreground ,blue))))
-   `(diff-context ((,class (:foreground ,default))))
-   `(diff-refine-added ((,class (:foreground ,grey :background ,diff-added-refined-background))))
-   `(diff-refine-removed ((,class (:background ,diff-removed-refined-background :foreground ,grey))))
-
-   ;; ediff
-   `(ediff-fine-diff-B ((,class (:foreground ,grey :background ,diff-added-refined-background))))
-   `(ediff-current-diff-B ((,class (:background ,diff-added-background))))
-   `(ediff-fine-diff-A ((,class (:background ,diff-removed-refined-background :foreground ,grey))))
-   `(ediff-current-diff-C ((,class (:background ,diff-current-background))))
-   `(ediff-fine-diff-C ((,class (:foreground ,grey :background ,diff-current-refined-background))))
 
    `(ediff-even-diff-A ((,class (:background ,highlight :foreground unspecified))))
    `(ediff-even-diff-B ((,class (:background ,highlight :foreground unspecified))))
@@ -664,6 +670,16 @@ The result is cached for one second to avoid hiccups."
 
    ;; paren-face.el
    `(parenthesis ((,class (:foreground ,comment))))
+
+   ;; makefile
+   `(makefile-space ((,class (:background ,background-blue))))
+
+   ;; epa
+   `(epa-validity-high ((,class (:foreground ,green))))
+   `(epa-validity-low ((,class (:foreground ,default))))
+   `(epa-validity-disabled ((,class (:foreground ,red :weight bold :background ,background-red))))
+   `(epa-field-name ((,class (:foreground ,purple :weight bold))))
+   `(epa-field-body ((,class (:foreground ,orange))))
    )
 
   (custom-theme-set-variables

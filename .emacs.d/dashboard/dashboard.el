@@ -11,22 +11,25 @@
 ;;
 ;; Created: October 05, 2016
 ;; Modified: October 06, 2016
-;; Version: 1.0.0
+;; Version: 1.0.3
 ;; Keywords: startup screen tools
-;; Package-Requires: ((emacs "24.4") (page-break-lines "0.11") (projectile "0.14.0"))
+;; Package-Requires: ((emacs "24.4") (page-break-lines "0.11"))
 ;;; Commentary:
 
 ;; A shameless extraction of Spacemacs’ startup screen, with sections for
-;; bookmarks, projectile projects and more.
+;; bookmarks, projectil projects and more.
 
 ;;; Code:
 
 (require 'bookmark)
 (require 'page-break-lines)
+(require 'recentf)
 
 (defun dashboard-subseq (seq start end)
-  "Use `cl-subseq`, but accounting for end points greater than the size of the
-list. Return entire list if `END' is omitted."
+  "Return the subsequence of SEQ from START to END..
+Uses `cl-subseq`, but accounts for end points greater than the size of the
+list.
+Return entire list if `END' is omitted."
   (let ((len (length seq)))
     (cl-subseq seq start (and (number-or-marker-p end)
                               (min len end)))))
@@ -40,6 +43,7 @@ list. Return entire list if `END' is omitted."
     (define-key map [backtab] 'widget-backward)
     (define-key map (kbd "RET") 'widget-button-press)
     (define-key map [down-mouse-1] 'widget-button-click)
+    (define-key map (kbd "g") #'dashboard-insert-startupify-lists)
     map)
   "Keymap for dashboard mode.")
 
@@ -50,7 +54,10 @@ list. Return entire list if `END' is omitted."
   :group 'dashboard
   :syntax-table nil
   :abbrev-table nil
+  (whitespace-mode -1)
   (linum-mode -1)
+  (page-break-lines-mode 1)
+  (setq inhibit-startup-screen t)
   (setq buffer-read-only t
         truncate-lines t))
 
@@ -59,7 +66,7 @@ list. Return entire list if `END' is omitted."
   :group 'dashboard)
 
 (defcustom dashboard-page-separator "\n\f\n"
-  "Separator to use between the different pages"
+  "Separator to use between the different pages."
   :type 'string
   :group 'dashboard)
 
@@ -71,13 +78,11 @@ list. Return entire list if `END' is omitted."
                                      (projects  . dashboard-insert-projects)))
 
 (defvar dashboard-items '((recents   . 5)
-			  (bookmarks . 5)
-			  (projects  . 7))
-  "Association list of items to show in the startup buffer of the form
-`(list-type . list-size)`. If nil it is disabled.
-Possible values for list-type are:
-`recents' `bookmarks' `projects'
-")
+			  (bookmarks . 5))
+  "Association list of items to show in the startup buffer.
+Will be of the form `(list-type . list-size)`.
+If nil it is disabled.  Possible values for list-type are:
+`recents' `bookmarks' `projects'")
 
 (defvar dashboard-items-default-length 20
   "Length used for startup lists with otherwise unspecified bounds.
@@ -85,7 +90,7 @@ Set to nil for unbounded.")
 
 (defun dashboard-insert-ascii-banner-centered (file)
   "Insert banner from FILE."
-  (insert-string
+  (insert
    (with-temp-buffer
      (insert-file-contents file)
      (let ((banner-width 0))
@@ -97,7 +102,8 @@ Set to nil for unbounded.")
        (goto-char 0)
        (let ((margin (max 0 (floor (/ (- dashboard-banner-length banner-width) 2)))))
          (while (not (eobp))
-           (insert (make-string margin ?\ ))
+           (when (not (looking-at-p "$"))
+             (insert (make-string margin ?\ )))
            (forward-line 1))))
      (buffer-string))))
 
@@ -132,7 +138,8 @@ Set to nil for unbounded.")
     (mapc (lambda (el)
             (insert "\n    ")
             (widget-create 'push-button
-                           :action `(lambda (&rest ignore) (projectile-switch-project-by-name ,el))
+                           :action `(lambda (&rest ignore)
+				      (projectile-switch-project-by-name ,el))
                            :mouse-face 'highlight
                            :follow-link "\C-m"
                            :button-prefix ""
@@ -170,7 +177,11 @@ If MESSAGEBUF is not nil then MSG is also written in message buffer."
     (let ((buffer-read-only nil))
       (insert msg))))
 
-(defmacro dashboard-insert--shortcut (shortcut-char search-label &optional no-next-line)
+(defmacro dashboard-insert--shortcut (shortcut-char
+				      search-label
+				      &optional no-next-line)
+  "Insert a shortcut SHORTCUT-CHAR for a given SEARCH-LABEL.
+Optionally, provide NO-NEXT-LINE to move the cursor forward a line."
   `(define-key dashboard-mode-map ,shortcut-char (lambda ()
 			       (interactive)
 			       (unless (search-forward ,search-label (point-max) t)
@@ -208,14 +219,16 @@ If MESSAGEBUF is not nil then MSG is also written in message buffer."
 
 (defun dashboard-insert-projects (list-size)
   "Add the list of LIST-SIZE items of projects."
-  (require 'projectile)
-  (projectile-mode)
-  (projectile-load-known-projects)
-  (when (dashboard-insert-project-list
-	 "Projects:"
-	 (dashboard-subseq (projectile-relevant-known-projects)
-			   0 list-size))
-    (dashboard-insert--shortcut "p" "Projects:")))
+  (if (bound-and-true-p projectile-mode)
+      (progn
+	(projectile-load-known-projects)
+	(when (dashboard-insert-project-list
+	       "Projects:"
+	       (dashboard-subseq (projectile-relevant-known-projects)
+				 0 list-size))
+	  (dashboard-insert--shortcut "p" "Projects:")))
+    (error "Projects list depends on 'projectile-mode` to be activated")))
+
 
 (defun dashboard-insert-startupify-lists ()
   "Insert the list of widgets into the buffer."
@@ -223,6 +236,7 @@ If MESSAGEBUF is not nil then MSG is also written in message buffer."
   (with-current-buffer (get-buffer-create "*dashboard*")
     (let ((buffer-read-only nil)
           (list-separator "\n\n"))
+      (erase-buffer)
       (dashboard-insert-banner)
       (dashboard-insert-page-break)
       (mapc (lambda (els)
@@ -237,21 +251,26 @@ If MESSAGEBUF is not nil then MSG is also written in message buffer."
 		(dashboard-insert-page-break)
 		))
 	    dashboard-items))
-    (dashboard-mode)))
+    (dashboard-mode)
+    (goto-char (point-min))))
 
 ;;;###autoload
 (defun dashboard-setup-startup-hook ()
-  "Add post init processing."
-  (setq inhibit-startup-screen t)
-  (add-hook
-   'emacs-startup-hook
-   (lambda ()
-     ;; Display useful lists of items
-     (dashboard-insert-startupify-lists)
-     (page-break-lines-mode 1)
-     (goto-char (point-min)))
-   (redisplay))
-  (add-hook 'after-init-hook '(lambda () (switch-to-buffer "*dashboard*"))))
+  "Setup post initialization hooks.
+If a command line argument is provided, assume a filename and skip displaying Dashboard"
+  (if (< (length command-line-args) 2 )
+      (progn
+	(add-hook 'after-init-hook (lambda ()
+				     ;; Display useful lists of items
+				     (dashboard-insert-startupify-lists)))
+	(add-hook 'emacs-startup-hook '(lambda ()
+					 (switch-to-buffer "*dashboard*")
+					 (goto-char (point-min))
+					 (redisplay))))))
+
+;; Forward declartions for optional dependency to keep check-declare happy.
+(declare-function projectile-load-known-projects "ext:projectile.el")
+(declare-function projectile-relevant-known-projects "ext:projectile.el")
 
 (provide 'dashboard)
 ;;; dashboard.el ends here

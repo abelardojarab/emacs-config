@@ -34,7 +34,8 @@
 (require 'all-the-icons)
 
 (defface all-the-icons-dired-dir-face
-  '((t (:foreground "black")))
+  '((((background dark)) :foreground "white")
+    (((background light)) :foreground "black"))
   "Face for the directory icon"
   :group 'all-the-icons-faces)
 
@@ -50,7 +51,6 @@
   "Display the icons of files in a dired buffer."
   (when (and (not all-the-icons-dired-displayed) dired-subdir-alist)
     (setq-local all-the-icons-dired-displayed t)
-    (message "Displaying icons")
     (let ((inhibit-read-only t)
 	  (remote-p (tramp-tramp-file-p default-directory)))
       (save-excursion
@@ -84,11 +84,11 @@
 (define-minor-mode all-the-icons-dired-mode
   "Display all-the-icons icon for each files in a dired buffer."
   :lighter " all-the-icons-dired-mode"
-  (if all-the-icons-dired-mode
+  (if (and (display-graphic-p) all-the-icons-dired-mode)
       (progn
-	(add-hook 'dired-after-readin-hook 'all-the-icons-dired--display t t)
-	(when (eq major-mode 'dired-mode)
-	  (all-the-icons-dired--display)))
+        (add-hook 'dired-after-readin-hook 'all-the-icons-dired--display t t)
+        (when (eq major-mode 'dired-mode)
+          (all-the-icons-dired--display)))
     (remove-hook 'dired-after-readin-hook 'all-the-icons-dired--display t)
     (dired-revert)))
 

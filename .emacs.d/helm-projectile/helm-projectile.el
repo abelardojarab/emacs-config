@@ -7,7 +7,7 @@
 ;; Created: 2011-31-07
 ;; Keywords: project, convenience
 ;; Version: 0.14.0
-;; Package-Requires: ((helm "1.7.7") (projectile "0.14.0") (dash "1.5.0") (cl-lib "0.3"))
+;; Package-Requires: ((helm "1.7.7") (projectile "0.14.0") (cl-lib "0.3"))
 
 ;; This file is NOT part of GNU Emacs.
 
@@ -59,7 +59,7 @@
   "Helm support for projectile."
   :prefix "helm-projectile-"
   :group 'projectile
-  :link `(url-link :tag "helm-projectile homepage" "https://github.com/bbatsov/projectile"))
+  :link `(url-link :tag "GitHub" "https://github.com/bbatsov/helm-projectile"))
 
 (defvar helm-projectile-current-project-root)
 
@@ -115,7 +115,7 @@ If an INSTRUCTION is of the form \(FUNCTION . DESCRIPTION\), and
 if an action with function name FUNCTION exists in the original
 Helm action list, the action in the Helm action list, with
 function name FUNCTION will change it's description to
-DESCRIPTION. Otherwise, (FUNCTION . DESCRIPTION) will be added to
+DESCRIPTION.  Otherwise, (FUNCTION . DESCRIPTION) will be added to
 the action list.
 
 Please check out how `helm-projectile-file-actions' is defined
@@ -226,6 +226,18 @@ It is there because Helm requires it."
     (interactive)
     (helm-run-after-exit 'helm-projectile-find-file nil)))
 
+(defun helm-projectile-file-persistent-action (candidate)
+  "Persistent action for file-related functionality.
+
+Previews the contents of a file in a temporary buffer."
+  (switch-to-buffer (get-buffer-create " *helm-projectile persistent*"))
+  (fundamental-mode)
+  (erase-buffer)
+  (insert-file-contents candidate)
+  (let ((buffer-file-name candidate))
+    (set-auto-mode)
+    (font-lock-ensure)))
+
 (defun helm-projectile-find-files-eshell-command-on-file-action (_candidate)
   (interactive)
   (let* ((helm-ff-default-directory (file-name-directory _candidate)))
@@ -262,11 +274,12 @@ It is there because Helm requires it."
   "Get all current Dired buffers."
   (mapcar (lambda (b)
             (with-current-buffer b (buffer-name)))
-          (-filter (lambda (b)
-                     (with-current-buffer b
-                       (and (eq major-mode 'dired-mode)
-                            (buffer-name))))
-                   (buffer-list))))
+          (cl-remove-if-not
+           (lambda (b)
+             (with-current-buffer b
+               (and (eq major-mode 'dired-mode)
+                    (buffer-name))))
+           (buffer-list))))
 
 (defvar helm-projectile-virtual-dired-remote-enable nil
   "Enable virtual Dired manager on remote host.
@@ -279,11 +292,12 @@ CANDIDATE is the selected file, but choose the marked files if available."
            (not helm-projectile-virtual-dired-remote-enable))
       (message "Virtual Dired manager is disabled in remote host. Enable with %s."
                (propertize "helm-projectile-virtual-dired-remote-enable" 'face 'font-lock-keyword-face))
-    (let ((files (-filter (lambda (f)
-                            (not (string= f "")))
-                          (mapcar (lambda (file)
-                                    (replace-regexp-in-string (projectile-project-root) "" file))
-                                  (helm-marked-candidates :with-wildcard t))))
+    (let ((files (cl-remove-if-not
+                  (lambda (f)
+                    (not (string= f "")))
+                  (mapcar (lambda (file)
+                            (replace-regexp-in-string (projectile-project-root) "" file))
+                          (helm-marked-candidates :with-wildcard t))))
           (new-name (completing-read "Select or enter a new buffer name: "
                                      (helm-projectile-all-dired-buffers)))
           (helm--reading-passwd-or-string t)
@@ -368,6 +382,12 @@ CANDIDATE is the selected file.  Used when no file is explicitly marked."
                                             (list candidate))))
           (rename-buffer dired-buffer-name))))))
 
+(advice-add 'helm-find-file-or-marked :after
+            (lambda (orig-fun &rest args)
+              "Run `projectile-find-file-hook' if using projectile."
+              (when (and projectile-mode (projectile-project-p))
+                (run-hooks 'projectile-find-file-hook))))
+
 (defvar helm-projectile-find-file-map
   (let ((map (copy-keymap helm-find-files-map)))
     (helm-projectile-define-key map
@@ -414,7 +434,8 @@ CANDIDATE is the selected file.  Used when no file is explicitly marked."
     :keymap helm-projectile-find-file-map
     :help-message helm-ff-help-message
     :mode-line helm-read-file-name-mode-line-string
-    :action helm-projectile-file-actions))
+    :action helm-projectile-file-actions
+    :persistent-action #'helm-projectile-file-persistent-action))
 
 (defvar helm-source-projectile-files-list
   (helm-build-in-buffer-source "Projectile files"
@@ -428,6 +449,7 @@ CANDIDATE is the selected file.  Used when no file is explicitly marked."
     :help-message 'helm-ff-help-message
     :mode-line helm-read-file-name-mode-line-string
     :action helm-projectile-file-actions
+    :persistent-action #'helm-projectile-file-persistent-action
     )
   "Helm source definition for Projectile files.")
 
@@ -442,6 +464,7 @@ CANDIDATE is the selected file.  Used when no file is explicitly marked."
     :help-message 'helm-ff-help-message
     :mode-line helm-read-file-name-mode-line-string
     :action helm-projectile-file-actions
+    :persistent-action #'helm-projectile-file-persistent-action
     )
   "Helm source definition for all Projectile files in all projects.")
 
@@ -564,6 +587,7 @@ CANDIDATE is the selected file.  Used when no file is explicitly marked."
     :help-message 'helm-ff-help-message
     :mode-line helm-read-file-name-mode-line-string
     :action helm-projectile-file-actions
+    :persistent-action #'helm-projectile-file-persistent-action
     )
   "Helm source definition for recent files in current project.")
 
@@ -633,26 +657,51 @@ With a prefix ARG invalidates the cache first."
 With FLEX-MATCHING, match any file that contains the base name of current file.
 Other file extensions can be customized with the variable `projectile-other-file-alist'."
   (interactive "P")
-  (-if-let (other-files (projectile-get-other-files (buffer-file-name)
-                                                    (projectile-current-project-files)
-                                                    flex-matching))
-      (if (= (length other-files) 1)
-          (find-file (expand-file-name (car other-files) (projectile-project-root)))
-        (progn
-          (let* ((helm-ff-transformer-show-only-basename nil))
-            (helm :sources (helm-build-in-buffer-source "Projectile other files"
-                             :data other-files
-                             :coerce 'helm-projectile-coerce-file
-                             :keymap (let ((map (copy-keymap helm-find-files-map)))
-                                       (define-key map (kbd "<left>") 'helm-previous-source)
-                                       (define-key map (kbd "<right>") 'helm-next-source)
-                                       map)
-                             :help-message helm-ff-help-message
-                             :mode-line helm-read-file-name-mode-line-string
-                             :action helm-projectile-file-actions)
-                  :buffer "*helm projectile*"
-                  :prompt (projectile-prepend-project-name "Find other file: ")))))
-    (error "No other file found")))
+  (let ((other-files (projectile-get-other-files (buffer-file-name)
+                                                 (projectile-current-project-files)
+                                                 flex-matching)))
+    (if other-files
+        (if (= (length other-files) 1)
+            (find-file (expand-file-name (car other-files) (projectile-project-root)))
+          (progn
+            (let* ((helm-ff-transformer-show-only-basename nil))
+              (helm :sources (helm-build-in-buffer-source "Projectile other files"
+                               :data other-files
+                               :coerce 'helm-projectile-coerce-file
+                               :keymap (let ((map (copy-keymap helm-find-files-map)))
+                                         (define-key map (kbd "<left>") 'helm-previous-source)
+                                         (define-key map (kbd "<right>") 'helm-next-source)
+                                         map)
+                               :help-message helm-ff-help-message
+                               :mode-line helm-read-file-name-mode-line-string
+                               :action helm-projectile-file-actions
+                               :persistent-action #'helm-projectile-file-persistent-action)
+                    :buffer "*helm projectile*"
+                    :prompt (projectile-prepend-project-name "Find other file: ")))))
+      (error "No other file found"))))
+
+(defcustom helm-projectile-grep-or-ack-actions
+  '("Find file" helm-grep-action
+    "Find file other frame" helm-grep-other-frame
+    (lambda () (and (locate-library "elscreen")
+                    "Find file in Elscreen"))
+    helm-grep-jump-elscreen
+    "Save results in grep buffer" helm-grep-save-results
+    "Find file other window" helm-grep-other-window)
+  "Available actions for `helm-projectile-grep-or-ack'.
+The contents of this list are passed as the arguments to `helm-make-actions'."
+  :group 'helm-projectile)
+
+(defcustom helm-projectile-set-input-automatically t
+  "If non-nil, attempt to set search input automatically.
+Automatic input selection uses the region (if there is an active
+region), otherwise it uses the current symbol at point (if there
+is one). Applies to `helm-projectile-grep' and
+`helm-projectile-ack' only. If the `helm-ag' package is
+installed, then automatic input behavior for `helm-projectile-ag'
+can be customized using `helm-ag-insert-at-point'."
+  :group 'helm-projectile
+  :type 'boolean)
 
 (defun helm-projectile-grep-or-ack (&optional dir use-ack-p ack-ignored-pattern ack-executable)
   "Perform helm-grep at project root.
@@ -667,8 +716,10 @@ If it is nil, or ack/ack-grep not found then use default grep command."
          (follow (and helm-follow-mode-persistent
                       (assoc-default 'follow helm-source-grep)))
          (helm-grep-in-recurse t)
-         (helm-grep-ignored-files (-union (projectile-ignored-files-rel)  grep-find-ignored-files))
-         (helm-grep-ignored-directories (-union (projectile-ignored-directories-rel) grep-find-ignored-directories))
+         (helm-grep-ignored-files (cl-union (projectile-ignored-files-rel)  grep-find-ignored-files))
+         (helm-grep-ignored-directories
+          (cl-union (mapcar 'directory-file-name (projectile-ignored-directories-rel))
+                    grep-find-ignored-directories))
          (helm-grep-default-command (if use-ack-p
                                         (concat ack-executable " -H --no-group --no-color " ack-ignored-pattern " %p %f")
                                       (if (and projectile-use-git-grep (eq (projectile-project-vcs) 'git))
@@ -692,22 +743,16 @@ If it is nil, or ack/ack-grep not found then use default grep command."
             ;; to make it available in further resuming.
             :keymap helm-grep-map
             :history 'helm-grep-history
-            :action (helm-make-actions
-                     "Find file" 'helm-grep-action
-                     "Find file other frame" 'helm-grep-other-frame
-                     (lambda () (and (locate-library "elscreen")
-                                     "Find file in Elscreen"))
-                     'helm-grep-jump-elscreen
-                     "Save results in grep buffer" 'helm-grep-save-results
-                     "Find file other window" 'helm-grep-other-window)
+            :action (apply #'helm-make-actions helm-projectile-grep-or-ack-actions)
             :persistent-action 'helm-grep-persistent-action
             :persistent-help "Jump to line (`C-u' Record in mark ring)"
             :requires-pattern 2))
     (helm
      :sources 'helm-source-grep
-     :input (if (region-active-p)
-                (buffer-substring-no-properties (region-beginning) (region-end))
-              (thing-at-point 'symbol))
+     :input (when helm-projectile-set-input-automatically
+              (if (region-active-p)
+                  (buffer-substring-no-properties (region-beginning) (region-end))
+                (thing-at-point 'symbol)))
      :buffer (format "*helm %s*" (if use-ack-p
                                      "ack"
                                    "grep"))
@@ -736,8 +781,8 @@ If it is nil, or ack/ack-grep not found then use default grep command."
 DIR is the project root, if not set then current directory is used"
   (interactive)
   (let ((project-root (or dir (projectile-project-root) (error "You're not in a project"))))
-    (funcall'run-with-timer 0.01 nil
-                              #'helm-projectile-grep-or-ack project-root nil)))
+    (funcall 'run-with-timer 0.01 nil
+             #'helm-projectile-grep-or-ack project-root nil)))
 
 ;;;###autoload
 (defun helm-projectile-ack (&optional dir)
@@ -746,16 +791,16 @@ DIR is the project root, if not set then current directory is used"
   (let ((project-root (or dir (projectile-project-root) (error "You're not in a project"))))
     (let ((ack-ignored (mapconcat
                         'identity
-                        (-union (-map (lambda (path)
-                                        (concat "--ignore-dir=" (file-name-nondirectory (directory-file-name path))))
-                                      (projectile-ignored-directories))
-                                (-map (lambda (path)
-                                        (concat "--ignore-file=match:" (shell-quote-argument path)))
-                                      (append (projectile-ignored-files) (projectile-patterns-to-ignore)))) " "))
+                        (cl-union (mapcar (lambda (path)
+                                            (concat "--ignore-dir=" (file-name-nondirectory (directory-file-name path))))
+                                          (projectile-ignored-directories))
+                                  (mapcar (lambda (path)
+                                            (concat "--ignore-file=match:" (shell-quote-argument path)))
+                                          (append (projectile-ignored-files) (projectile-patterns-to-ignore)))) " "))
           (helm-ack-grep-executable (cond
                                      ((executable-find "ack") "ack")
                                      ((executable-find "ack-grep") "ack-grep")
-                                     (t (error "ack or ack-grep is not available.")))))
+                                     (t (error "ack or ack-grep is not available")))))
       (funcall 'run-with-timer 0.01 nil
                #'helm-projectile-grep-or-ack project-root t ack-ignored helm-ack-grep-executable))))
 
@@ -765,8 +810,8 @@ DIR is the project root, if not set then current directory is used"
   (interactive (if current-prefix-arg (list (read-string "option: " "" 'helm-ag--extra-options-history))))
   (if (require 'helm-ag nil  'noerror)
       (if (projectile-project-p)
-          (let* ((grep-find-ignored-files (-union (projectile-ignored-files-rel) grep-find-ignored-files))
-                 (grep-find-ignored-directories (-union (projectile-ignored-directories-rel) grep-find-ignored-directories))
+          (let* ((grep-find-ignored-files (cl-union (projectile-ignored-files-rel) grep-find-ignored-files))
+                 (grep-find-ignored-directories (cl-union (projectile-ignored-directories-rel) grep-find-ignored-directories))
                  (ignored (mapconcat (lambda (i)
                                        (concat "--ignore " i))
                                      (append grep-find-ignored-files grep-find-ignored-directories)

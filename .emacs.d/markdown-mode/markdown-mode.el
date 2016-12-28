@@ -1277,7 +1277,7 @@ Group 2 matches only the label, without the surrounding markup.
 Group 3 matches the closing square bracket.")
 
 (defconst markdown-regex-header
-  "^\\(?:\\([^\r\n- ].*\\)\n\\(?:\\(=+\\)\\|\\(-+\\)\\)\\|\\(#+\\)[ \t]+\\(.*?\\)[ \t]*\\(#*\\)\\)$"
+  "^\\(?:\\([^\r\n\t -].*\\)\n\\(?:\\(=+\\)\\|\\(-+\\)\\)\\|\\(#+\\)[ \t]+\\(.*?\\)[ \t]*\\(#*\\)\\)$"
   "Regexp identifying Markdown headings.
 Group 1 matches the text of a setext heading.
 Group 2 matches the underline of a level-1 setext heading.
@@ -1287,7 +1287,7 @@ Group 5 matches the text, without surrounding whitespace, of an atx heading.
 Group 6 matches the closing hash marks of an atx heading.")
 
 (defconst markdown-regex-header-setext
-  "^\\([^\r\n- ].*\\)\n\\(=+\\|-+\\)$"
+  "^\\([^\r\n\t -].*\\)\n\\(=+\\|-+\\)$"
   "Regular expression for generic setext-style (underline) headers.")
 
 (defconst markdown-regex-header-atx
@@ -1442,7 +1442,7 @@ Groups 1 and 3 match opening and closing dollar signs.
 Group 3 matches the mathematical expression contained within.")
 
 (defconst markdown-regex-math-display
-  "^\\(\\\\\\[\\)\\(\\(?:.\\|\n\\)*\\)?\\(\\\\\\]\\)$"
+  "^\\(\\\\\\[\\)\\(\\(?:.\\|\n\\)*?\\)?\\(\\\\\\]\\)$"
   "Regular expression for itex \[..\] display mode expressions.
 Groups 1 and 3 match the opening and closing delimiters.
 Group 2 matches the mathematical expression contained within.")
@@ -6476,9 +6476,9 @@ This is an exact copy of `line-number-at-pos' for use in emacs21."
     ;; Update font lock keywords with extensions
     (setq markdown-mode-font-lock-keywords
           (append
+           (markdown-mode-font-lock-keywords-math)
            markdown-mode-font-lock-keywords-basic
-           (markdown-mode-font-lock-keywords-wiki-links)
-           (markdown-mode-font-lock-keywords-math)))
+           (markdown-mode-font-lock-keywords-wiki-links)))
     ;; Update font lock defaults
     (setq font-lock-defaults
           '(markdown-mode-font-lock-keywords

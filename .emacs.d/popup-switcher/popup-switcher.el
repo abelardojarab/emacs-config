@@ -5,7 +5,7 @@
 ;; Author: Kostafey <kostafey@gmail.com>
 ;; URL: https://github.com/kostafey/popup-switcher
 ;; Keywords: popup, switch, buffers, functions
-;; Version: 0.2.13
+;; Version: 0.2.14
 ;; Package-Requires: ((cl-lib "0.3")(popup "0.5.3"))
 
 ;; This file is not part of GNU Emacs.
@@ -73,7 +73,8 @@ fill-column - centered relative to `fill-column'"
 (defcustom psw-uneditable-modes '(circe-channel-mode
                                   circe-query-mode
                                   circe-server-mode
-                                  slime-repl-mode)
+                                  slime-repl-mode
+                                  shell-mode)
   "List of major modes unsuitable to keep buffer text manually.
 Consequences of menu drawing and probable text changing should not be removed
 by buffer editing for this comint-like modes."
@@ -145,17 +146,18 @@ POSITION - if set, overrides `psw-popup-position' var value."
     (unwind-protect
         (progn
           (psw-copy-face 'popup-isearch-match 'flx-highlight-face)
-          (let* ((menu-pos (psw-popup-menu-point menu-height item-names-list position))
-                 (target-item-name (popup-menu* item-names-list
-                                                :point menu-pos
-                                                :height menu-height
-                                                :scroll-bar t
-                                                :margin-left 1
-                                                :margin-right 1
-                                                :around t
-                                                :isearch t
-                                                :fallback fallback)))
-            target-item-name))
+          (flet ((ask-user-about-supersession-threat (_)))
+            (let* ((menu-pos (psw-popup-menu-point menu-height item-names-list position))
+                   (target-item-name (popup-menu* item-names-list
+                                                  :point menu-pos
+                                                  :height menu-height
+                                                  :scroll-bar t
+                                                  :margin-left 1
+                                                  :margin-right 1
+                                                  :around t
+                                                  :isearch t
+                                                  :fallback fallback)))
+              target-item-name)))
       (progn
         (when (and (buffer-modified-p)
                    (not (member major-mode psw-uneditable-modes)))
@@ -244,6 +246,8 @@ SWITCHER - function, that describes what do with the selected item."
                              (1- buffer-name-length)
                              buffer-name-length))))))
 
+(declare-function psw-restore-menu "popup-switcher")
+
 ;;;###autoload
 (defun psw-switch-buffer ()
   (interactive)
@@ -271,15 +275,25 @@ SWITCHER - function, that describes what do with the selected item."
                                             psw-buffer-modified)
                                            t)))
                      (when (kill-buffer buff)
-                       (setf (popup-list menu)
-                             (remove buff (popup-list menu))
-                             (popup-original-list menu)
-                             (remove buff (popup-original-list menu)))
                        (if (not same-buffer-p)
                            (progn
-                             (popup-previous menu)
+                             (if (= (1+ (popup-cursor menu))
+                                    (length (popup-list menu)))
+                                 (popup-previous menu))
+                             (setf (popup-list menu)
+                                   (remove buff (popup-list menu))
+                                   (popup-original-list menu)
+                                   (remove buff (popup-original-list menu)))
                              (popup-draw menu))
-                         (popup-delete menu))))))))
+                         (progn
+                           (popup-delete menu)
+                           (add-hook 'window-configuration-change-hook
+                                     'psw-restore-menu)))))))))
+
+(defun psw-restore-menu ()
+  "Restore menu after the current buffer killed."
+  (remove-hook 'window-configuration-change-hook 'psw-restore-menu)
+  (psw-switch-buffer))
 
 ;;;###autoload
 (defun psw-switch-recentf ()
