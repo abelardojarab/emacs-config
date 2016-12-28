@@ -59,6 +59,8 @@
 
 ;; StackExchange client for Emacs
 (use-package sx
+  :if (and (not (equal system-type 'windows-nt))
+           (internet-up-p))
   :defer t
   :load-path (lambda () (expand-file-name "sx/" user-emacs-directory))
   :bind (("C-c a S a" . sx-ask)
@@ -75,6 +77,8 @@
 
 ;; Write questions/answers for Stack Exchange
 (use-package sx-compose
+  :if (and (not (equal system-type 'windows-nt))
+           (internet-up-p))
   :after sx
   :defer t
   :load-path (lambda () (expand-file-name "sx/" user-emacs-directory))
@@ -90,6 +94,8 @@
 
 ;; Show Stack
 (use-package sx-question-mode
+  :if (and (not (equal system-type 'windows-nt))
+           (internet-up-p))
   :after sx
   :defer t
   :load-path (lambda () (expand-file-name "sx/" user-emacs-directory))
@@ -98,6 +104,8 @@
 
 ;; Elfeed
 (use-package elfeed
+  :if (and (not (equal system-type 'windows-nt))
+           (internet-up-p))
   :commands (elfeed elfeed-update)
   :load-path (lambda () (expand-file-name "elfeed/" user-emacs-directory))
   :init (progn
@@ -129,7 +137,6 @@
   :config (progn
             (define-key elfeed-show-mode-map (kbd "j") 'next-line)
             (define-key elfeed-show-mode-map (kbd "k") 'previous-line)))
-
 
 (provide 'setup-nettools)
 ;;; setup-nettools.el ends here
