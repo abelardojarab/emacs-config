@@ -24,6 +24,19 @@
 
 ;;; Code:
 
+;; Prefer horizontal window splitting
+(setq split-height-threshold nil)
+(setq split-width-threshold 9999)
+(defun split-window-prefer-horizonally (window)
+  "If there's only one window (excluding any possibly active
+         minibuffer), then split the current window horizontally."
+  (if (and (one-window-p t)
+           (not (active-minibuffer-window)))
+      (let ((split-height-threshold nil))
+        (split-window-sensibly window))
+    (split-window-sensibly window)))
+(setq split-window-preferred-function 'split-window-prefer-horizonally)
+
 ;; Manage popup windows
 (use-package popwin
   :defer t
