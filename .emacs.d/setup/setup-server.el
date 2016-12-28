@@ -26,7 +26,6 @@
 
 ;; Server configuration
 (use-package server
-  :commands server-start
   :init (progn
           (require 'server)
 
@@ -46,29 +45,9 @@
                 (make-directory server-auth-dir t))
             (and (>= emacs-major-version 23)
                  (defun server-ensure-safe-dir (dir) "Noop" t))
-            (when (and
-                   (not (display-graphic-p))
-                   (not (eq 'windows-nt system-type)))
+            (if (not (eq 'windows-nt system-type))
               (server-start))))
   :config (progn
-
-            ;; Avoid Emacs bug#20015,
-            (setq tramp-ssh-controlmaster-options "-o ControlMaster=auto -o ControlPath='tramp.%%C' -o ControlPersist=no")
-
-            ;; Re-enable the SSH keyring in case Emacs does not refreshes it
-            (defun my/ssh-refresh ()
-              "Reset the environment variable SSH_AUTH_SOCK"
-              (interactive)
-              (let (ssh-auth-sock-old (getenv "SSH_AUTH_SOCK"))
-                (setenv "SSH_AUTH_SOCK"
-                        (car (split-string
-                              (shell-command-to-string
-                               "ls -t $(find /tmp/ssh-* -user $USER -name 'agent.*' 2> /dev/null)"))))
-                (message
-                 (format "SSH_AUTH_SOCK %s --> %s"
-                         ssh-auth-sock-old (getenv "SSH_AUTH_SOCK")))))
-            (if (equal system-type 'gnu/linux)
-                (my/ssh-refresh))
 
             ;; Ensure there is always at least one visible frame open at all times
             (defadvice server-save-buffers-kill-terminal (around dont-kill-last-client-frame activate)

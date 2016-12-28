@@ -45,6 +45,22 @@
           ;; Set control master options before loading tramp
           (setq tramp-ssh-controlmaster-options "-o ControlMaster=auto -o ControlPath=~/.emacs.cache/ssh-ControlPath -o ControlPersist=no"))
   :config (progn
+
+            ;; Re-enable the SSH keyring in case Emacs does not refreshes it
+            (defun my/ssh-refresh ()
+              "Reset the environment variable SSH_AUTH_SOCK"
+              (interactive)
+              (let (ssh-auth-sock-old (getenv "SSH_AUTH_SOCK"))
+                (setenv "SSH_AUTH_SOCK"
+                        (car (split-string
+                              (shell-command-to-string
+                               "ls -t $(find /tmp/ssh-* -user $USER -name 'agent.*' 2> /dev/null)"))))
+                (message
+                 (format "SSH_AUTH_SOCK %s --> %s"
+                         ssh-auth-sock-old (getenv "SSH_AUTH_SOCK")))))
+            (if (equal system-type 'gnu/linux)
+                (my/ssh-refresh))
+
             ;; Fix auto save problem
             (setq tramp-persistency-file-name "~/.emacs.cache/tramp")
             (setq tramp-auto-save-directory "~/.emacs.cache/auto-save")
