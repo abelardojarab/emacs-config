@@ -88,7 +88,8 @@
 ;; Choose different themes depending if we are using GUI or not
 ;; Console colors are enabled if "export TERM=xterm-256color" is added into .bashrc
 (if (display-graphic-p)
-    (load-theme 'material t))
+    (load-theme 'material t)
+  (load-theme 'monokai t))
 
 (provide 'setup-themes)
 ;;; setup-themes.el ends here
