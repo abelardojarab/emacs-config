@@ -49,12 +49,10 @@
                                               "--user-agent" "testing"))
             (setq newsticker-sort-method (quote sort-by-time))
             (setq newsticker-url-list
-                  (quote (("BBC News" "http://www.bbc.co.uk/syndication/feeds/news/ukfs_news/front_page/rss091.xml" nil nil nil)
-                          ("Phoronix" "http://www.phoronix.com/rss.php")
+                  (quote (("Phoronix" "http://www.phoronix.com/rss.php")
                           ("Google News" "http://news.google.com/?output=rss"))))
             (setq newsticker-url-list-defaults
-                  (quote (("BBC News" "http://www.bbc.co.uk/syndication/feeds/news/ukfs_news/front_page/rss091.xml" nil nil nil)
-                          ("Phoronix" "http://www.phoronix.com/rss.php")
+                  (quote (("Phoronix" "http://www.phoronix.com/rss.php")
                           ("Google News" "http://news.google.com/?output=rss"))))
             (newsticker-start)
             (newsticker-start-ticker)))
@@ -64,10 +62,10 @@
   :defer t
   :load-path (lambda () (expand-file-name "sx/" user-emacs-directory))
   :bind (("C-c a S a" . sx-ask)
-       ("C-c a S s" . sx-tab-all-questions)
-       ("C-c a S q" . sx-tab-all-questions)
-       ("C-c a S f" . sx-tab-all-questions)
-       ("C-c a S n" . sx-tab-newest))
+         ("C-c a S s" . sx-tab-all-questions)
+         ("C-c a S q" . sx-tab-all-questions)
+         ("C-c a S f" . sx-tab-all-questions)
+         ("C-c a S n" . sx-tab-newest))
   :config (progn
             ;; defines sx-ask
             (use-package sx-interaction)
@@ -81,14 +79,14 @@
   :defer t
   :load-path (lambda () (expand-file-name "sx/" user-emacs-directory))
   :config (progn
-  ;; Don't fill in SX questions/answers, and use visual lines instead.  Plays
-  ;; more nicely with the website.
-  (add-hook 'sx-compose-mode-hook #'turn-off-auto-fill)
-  (add-hook 'sx-compose-mode-hook #'visual-line-mode)
+            ;; Don't fill in SX questions/answers, and use visual lines instead.  Plays
+            ;; more nicely with the website.
+            (add-hook 'sx-compose-mode-hook #'turn-off-auto-fill)
+            (add-hook 'sx-compose-mode-hook #'visual-line-mode)
 
-  ;; Clean up whitespace before sending questions
-  (add-hook 'sx-compose-before-send-hook
-            (lambda () (whitespace-cleanup) t))))
+            ;; Clean up whitespace before sending questions
+            (add-hook 'sx-compose-before-send-hook
+                      (lambda () (whitespace-cleanup) t))))
 
 ;; Show Stack
 (use-package sx-question-mode
@@ -97,6 +95,41 @@
   :load-path (lambda () (expand-file-name "sx/" user-emacs-directory))
   ;; Display questions in the same window
   :config (setq sx-question-mode-display-buffer-function #'switch-to-buffer))
+
+;; Elfeed
+(use-package elfeed
+  :commands (elfeed elfeed-update)
+  :load-path (lambda () (expand-file-name "elfeed/" user-emacs-directory))
+  :init (progn
+          ;; URLs in no particular order
+          (setq elfeed-use-curl t)
+          (setq elfeed-feeds
+                '(;; Blogs
+
+                  ;; News
+                  ("http://news.google.com/?output=rss" news)
+                  ("http://feeds.arstechnica.com/arstechnica/index/" news)
+
+                  ;; Github feeds
+                  ("https://github.com/milkypostman/melpa/commits/master.atom" github emacs)
+
+                  ;; Linux
+                  ("http://www.phoronix.com/rss.php" linux news)
+
+                  ;; Emacs
+                  ("http://www.masteringemacs.org/feed/" emacs)
+                  ("http://planet.emacsen.org/atom.xml" emacs)
+
+                  ;; Reddit
+                  ("https://www.reddit.com/r/orgmode/.rss" emacs reddit)
+
+                  ;; Other
+                  ("http://www.elastic.co/blog/feed/" elasticsearch)
+                  )))
+  :config (progn
+            (define-key elfeed-show-mode-map (kbd "j") 'next-line)
+            (define-key elfeed-show-mode-map (kbd "k") 'previous-line)))
+
 
 (provide 'setup-nettools)
 ;;; setup-nettools.el ends here
