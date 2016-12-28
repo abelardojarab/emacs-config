@@ -13,7 +13,7 @@
 ;; This program is distributed in the hope that it will be useful,
 ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
 ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-;; GNU General Public License for more details.g
+;; GNU General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
@@ -134,7 +134,7 @@
 (global-set-key (kbd "<f11>") 'toggle-frame-maximized)
 
 ;; List buffers
-(global-set-key (kbd "<f12>") 'helm-buffers-list)
+(global-set-key (kbd "<f12>") 'ivy-switch-buffer)
 (global-set-key (kbd "C-<f12>") 'neotree-toggle)
 
 ;; Native file opening
@@ -166,7 +166,6 @@
 (global-set-key (kbd "C->") (lambda () (interactive) (unindent-dwim -1)))
 
 ;; Beautify buffer
-(global-unset-key "\C-c\C-b")
 (global-set-key "\C-c\C-b" 'beautify-buffer)
 
 ;; Escape key in minibuffer
@@ -224,8 +223,8 @@
 (define-key my/keys-minor-mode-map (kbd "<left-fringe> <double-mouse-1>") 'bm-toggle)
 (define-key my/keys-minor-mode-map (kbd "<f4>") 'helm-semantic-or-imenu)
 (define-key my/keys-minor-mode-map (kbd "C-`") 'helm-semantic-or-imenu)
-(define-key my/keys-minor-mode-map (kbd "<f12>") 'helm-buffers-list)
-(define-key my/keys-minor-mode-map (kbd "C-0") 'helm-buffers-list)
+(define-key my/keys-minor-mode-map (kbd "<f12>") 'ivy-switch-buffer)
+(define-key my/keys-minor-mode-map (kbd "C-0") 'ivy-switch-buffer)
 (define-key my/keys-minor-mode-map (kbd "<f5>") 'recompile)
 (define-key my/keys-minor-mode-map [(control p)] 'scroll-down)
 (define-key my/keys-minor-mode-map [(control n)] 'scroll-up)

@@ -34,6 +34,7 @@
 (require 'markdown-mode)
 
 (require 'sx)
+(require 'sx-tag)
 
 (defgroup sx-compose-mode nil
   "Customization group for sx-compose-mode."
@@ -139,10 +140,15 @@ contents to the API, then calls `sx-compose-after-send-functions'."
   (interactive)
   (when (run-hook-with-args-until-failure
          'sx-compose-before-send-hook)
-    (let ((result (funcall sx-compose--send-function)))
-      (with-demoted-errors
-          (run-hook-with-args 'sx-compose-after-send-functions
-                              (current-buffer) result)))))
+    (let ((result (funcall sx-compose--send-function))
+          (buf (current-buffer)))
+      (run-hook-wrapped
+       'sx-compose-after-send-functions
+       (lambda (func)
+         (with-demoted-errors
+             "[sx] Error encountered AFTER sending post, but the post was sent successfully: %s"
+           (funcall func buf result))
+         nil)))))
 
 (defun sx-compose-insert-tags ()
   "Prompt for a tag list for this draft and insert them."
@@ -187,8 +193,7 @@ tags.  Return a list of already inserted tags."
            'noerror)
     (error "No Tags header found"))
   (save-match-data
-    (split-string (match-string 1) (rx (any space ",;"))
-                  'omit-nulls (rx space))))
+    (sx--split-string (match-string 1) (rx (any space ",;")))))
 
 (defun sx-compose--check-tags ()
   "Check if tags in current compose buffer are valid."
@@ -199,7 +204,7 @@ tags.  Return a list of already inserted tags."
       (if invalid-tags
           ;; If the user doesn't want to create the tags, we return
           ;; nil and sending is aborted.
-          (y-or-n-p "Following tags don't exist. Create them? %s " invalid-tags)
+          (y-or-n-p (format "Following tags don't exist. Create them? %s " invalid-tags))
         t))))
 
 
@@ -289,15 +294,14 @@ Keywords meant to be used in `sx-method-call'.
 
 `body' is read as the `buffer-string'. If IS-QUESTION is non-nil,
 other keywords are read from the header "
+  (goto-char (point-min))
   `(,@(when is-question
         (let ((inhibit-point-motion-hooks t)
-              (inhibit-read-only t)
               (header-end
                (next-single-property-change
                 (point-min) 'sx-compose-separator))
               keywords)
           ;; Read the Title.
-          (goto-char (point-min))
           (unless (search-forward-regexp
                    "^Title: *\\(.*\\) *$" header-end 'noerror)
             (error "No Title header found"))
@@ -307,16 +311,13 @@ other keywords are read from the header "
           (unless (search-forward-regexp "^Tags : *\\([^[:space:]].*\\) *$"
                                          header-end 'noerror)
             (error "No Tags header found"))
-          (push (cons 'tags (split-string (match-string 1)
-                                          "[[:space:],;]" 'omit-nulls))
+          (push (cons 'tags (sx--split-string (match-string 1) "[[:space:],;]"))
                 keywords)
-          ;; And erase the header so it doesn't get sent.
-          (delete-region
-           (point-min)
-           (next-single-property-change
-            header-end 'sx-compose-separator))
+          ;; And move past the header so it doesn't get sent.
+          (goto-char (next-single-property-change
+                      header-end 'sx-compose-separator))
           keywords))
-    (body . ,(buffer-string))))
+    (body . ,(buffer-substring-no-properties (point) (point-max)))))
 
 (defun sx-compose--get-buffer-create (site data)
   "Get or create a buffer for use with `sx-compose-mode'.

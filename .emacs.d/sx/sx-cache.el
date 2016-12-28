@@ -73,8 +73,9 @@ DATA will be written as returned by `prin1'.
 
 CACHE is resolved to a file name by `sx-cache-get-file-name'."
   (sx-cache--ensure-sx-cache-directory-exists)
-  (write-region (prin1-to-string data) nil
-                (sx-cache-get-file-name cache))
+  (let (print-length print-level)
+    (write-region (prin1-to-string data) nil
+                  (sx-cache-get-file-name cache)))
   data)
 
 (defun sx-cache--invalidate (cache &optional vars init-method)
@@ -94,7 +95,9 @@ re-initialize the cache."
 Afterwards reinitialize caches using `sx-initialize'. If
 SAVE-AUTH is non-nil, do not clear AUTH cache.
 
-Interactively only clear AUTH cache if prefix arg was given.
+Interactively, SAVE-AUTH is the negation of the prefix argument.
+That is, by default the auth cache is PRESERVED interactively.
+If you provide a prefix argument, the auth cache is INVALIDATED.
 
 Note:  This will also remove read/unread status of questions as well
 as delete the list of hidden questions."

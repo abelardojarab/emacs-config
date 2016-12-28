@@ -36,7 +36,7 @@
 ;;; Customizations
 
 (defvar sx--filter-alist
-  (sx-cache-get 'filter)
+  nil
   "An alist of known filters.  See `sx-filter-compile'.
 Structure:
 
@@ -47,7 +47,7 @@ Structure:
 
 ;;; Creation
 (defmacro sx-filter-from-nil (included)
-  "Creates a filter data structure with INCLUDED fields.
+  "Create a filter data structure with INCLUDED fields.
 All wrapper fields are included by default."
   `(quote
     ((,@(sx--tree-expand
@@ -64,23 +64,21 @@ All wrapper fields are included by default."
       .page_size
       .quota_max
       .quota_remaining
-      .total)
-     nil none)))
+      )
+     nil nil)))
 
 ;;; @TODO allow BASE to be a precompiled filter name
 (defun sx-filter-compile (&optional include exclude base)
   "Compile INCLUDE and EXCLUDE into a filter derived from BASE.
-INCLUDE and EXCLUDE must both be lists; BASE should be a string.
+INCLUDE and EXCLUDE must both be lists; BASE should be a symbol.
 
 Returns the compiled filter as a string."
   (let ((keyword-arguments
          `((include . ,(if include (sx--thing-as-string include)))
            (exclude . ,(if exclude (sx--thing-as-string exclude)))
            (base    . ,(if base base)))))
-    (let ((response (elt (sx-request-make
-                          "filter/create"
-                          keyword-arguments) 0)))
-      (sx-assoc-let response
+    (let ((result (elt (sx-request-make "filter/create" keyword-arguments) 0)))
+      (sx-assoc-let result
         .filter))))
 
 
@@ -93,11 +91,13 @@ Returns the compiled filter as a string."
 (defun sx-filter-get (&optional include exclude base)
   "Return the string representation of the given filter.
 
-If the filter data exist in `sx--filter-alist', that value will
+If the filter data exists in `sx--filter-alist', that value will
 be returned.  Otherwise, compile INCLUDE, EXCLUDE, and BASE into
 a filter with `sx-filter-compile' and push the association onto
 `sx--filter-alist'.  Re-cache the alist with `sx-cache-set' and
 return the compiled filter."
+  (unless sx--filter-alist
+    (setq sx--filter-alist (sx-cache-get 'filter)))
   (or (cdr (assoc (list include exclude base) sx--filter-alist))
       (let ((filter (sx-filter-compile include exclude base)))
         (when filter
@@ -113,6 +113,9 @@ return the compiled filter."
               bounty_amount
               comments
               creation_date
+              closed_reason
+              closed_date
+              closed_details
               answers
               answer_count
               score
@@ -128,8 +131,12 @@ return the compiled filter."
               question_id
               share_link)
     (user display_name
+          link
+          accept_rate
           reputation)
     (shallow_user display_name
+                  link
+                  accept_rate
                   reputation)
     (comment owner
              body_markdown

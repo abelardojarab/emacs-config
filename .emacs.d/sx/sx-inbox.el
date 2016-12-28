@@ -25,6 +25,7 @@
 (require 'sx-filter)
 (require 'sx-method)
 (require 'sx-question-list)
+(require 'sx-interaction)
 
 
 ;;; API
@@ -69,6 +70,7 @@ KEYWORDS are added to the method call along with PAGE.
 `sx-method-call' is used with `sx-inbox-filter'."
   (sx-method-call (if notifications 'notifications 'inbox)
     :keywords keywords
+    :page page
     :filter sx-inbox-filter))
 
 
@@ -126,11 +128,7 @@ These are identified by their links.")
   (setq tabulated-list-format
         [("Type" 30 t nil t) ("Date" 10 t :right-align t) ("Title" 0)])
   (setq mode-line-format sx-inbox--mode-line)
-  (setq header-line-format sx-inbox--header-line)
-  ;; @TODO: This will no longer be necessary once we properly
-  ;; refactor sx-question-list-mode.
-  (remove-hook 'tabulated-list-revert-hook
-    #'sx-question-list--update-mode-line t))
+  (setq header-line-format sx-inbox--header-line))
 
 
 ;;; Keybinds
@@ -184,6 +182,7 @@ is an alist containing the elements:
 (defvar sx-inbox--buffer nil
   "Buffer being used to display inbox.")
 
+;;;###autoload
 (defun sx-inbox (&optional notifications)
   "Display a buffer listing inbox items.
 With prefix NOTIFICATIONS, list notifications instead of inbox."
@@ -203,6 +202,7 @@ With prefix NOTIFICATIONS, list notifications instead of inbox."
        (- (+ fill-column 4) (window-width))
        'horizontal))))
 
+;;;###autoload
 (defun sx-inbox-notifications ()
   "Display a buffer listing notification items."
   (interactive)

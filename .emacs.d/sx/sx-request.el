@@ -92,13 +92,27 @@ number of requests left every time it finishes a call."
   :group 'sx
   :type 'integer)
 
-(defvar sx-request-all-items-delay
-  1
+(defvar sx-request-all-items-delay 0
   "Delay in seconds with each `sx-request-all-items' iteration.
 It is good to use a reasonable delay to avoid rate-limiting.")
 
 
 ;;; Making Requests
+(defvar sx--backoff-time nil)
+
+(defun sx-request--wait-while-backoff ()
+  (when sx--backoff-time
+    (message "Waiting for backoff time: %s" sx--backoff-time)
+    (let ((time  (cadr (current-time))))
+      (if (> (- sx--backoff-time time) 1000)
+          ;; If backoff-time is more than 1000 seconds in the future,
+          ;; we've likely just looped around the "least significant"
+          ;; bits of `current-time'.
+          (setq sx--backoff-time time)
+        (when (< time sx--backoff-time)
+          (message "Backoff detected, waiting %s seconds" (- sx--backoff-time time))
+          (sleep-for (+ 0.3 (- sx--backoff-time time))))))))
+
 (defun sx-request-all-items (method &optional args request-method
                                     stop-when)
   "Call METHOD with ARGS until there are no more items.
@@ -112,7 +126,7 @@ access the response wrapper."
   ;; @TODO: Refactor.  This is the product of a late-night jam
   ;; session...  it is not intended to be model code.
   (declare (indent 1))
-  (let* ((return-value [])
+  (let* ((return-value nil)
          (current-page 1)
          (stop-when (or stop-when #'sx-request-all-stop-when-no-more))
          (process-function #'identity)
@@ -120,16 +134,16 @@ access the response wrapper."
           (sx-request-make method `((page . ,current-page) ,@args)
                            request-method process-function)))
     (while (not (funcall stop-when response))
-      (setq current-page (1+ current-page)
-            return-value
-            (vconcat return-value
-                     (cdr (assoc 'items response))))
+      (let-alist response
+        (setq current-page (1+ current-page)
+              return-value
+              (nconc return-value .items)))
       (sleep-for sx-request-all-items-delay)
       (setq response
             (sx-request-make method `((page . ,current-page) ,@args)
                              request-method process-function)))
-    (vconcat return-value
-             (cdr (assoc 'items response)))))
+    (nconc return-value
+           (cdr (assoc 'items response)))))
 
 ;;; NOTE: Whenever this is arglist changes, `sx-request-fallback' must
 ;;; also change.
@@ -156,11 +170,12 @@ then read with `json-read-from-string'.
 `sx-request-remaining-api-requests' is updated appropriately and
 the main content of the response is returned."
   (declare (indent 1))
+  (sx-request--wait-while-backoff)
   (let* ((url-automatic-caching t)
          (url-inhibit-uncompression t)
          (url-request-data (sx-request--build-keyword-arguments args nil))
          (request-url (concat sx-request-api-root method))
-         (url-request-method (and request-method (symbol-name request-method)))
+         (url-request-method (and request-method (upcase (symbol-name request-method))))
          (url-request-extra-headers
           '(("Content-Type" . "application/x-www-form-urlencoded")))
          (response-buffer (url-retrieve-synchronously request-url)))
@@ -190,22 +205,27 @@ the main content of the response is returned."
                ;; @TODO should use `condition-case' here -- set
                ;; RESPONSE to 'corrupt or something
                (response (with-demoted-errors "`json' error: %S"
-                           (json-read-from-string data))))
+                           (let ((json-false nil)
+                                 (json-array-type 'list)
+                                 (json-null :null))
+                             (json-read-from-string data)))))
           (kill-buffer response-buffer)
-          (when (and (not response) (string-equal data "{}"))
-            (sx-message "Unable to parse response: %S" response)
-            (error "Response could not be read by `json-read-from-string'"))
+          (when (not response)
+            (error "Invalid response to the url request: %s" data))
           ;; If we get here, the response is a valid data structure
           (sx-assoc-let response
             (when .error_id
               (error "Request failed: (%s) [%i %s] %S"
-                     .method .error_id .error_name .error_message))
+                .method .error_id .error_name .error_message))
+            (when .backoff
+              (message "Backoff received %s" .backoff)
+              (setq sx--backoff-time (+ (cadr (current-time)) .backoff)))
             (when (< (setq sx-request-remaining-api-requests .quota_remaining)
                      sx-request-remaining-api-requests-message-threshold)
               (sx-message "%d API requests remaining"
                           sx-request-remaining-api-requests))
             (funcall (or process-function #'sx-request-response-get-items)
-                     response)))))))
+              response)))))))
 
 (defun sx-request-fallback (_method &optional _args _request-method _process-function)
   "Fallback method when authentication is not available.
@@ -217,32 +237,56 @@ Currently returns nil."
 
 
 ;;; Our own generated data
-(defvar sx-request--data-url-format
+(defconst sx-request--data-url-format
   "https://raw.githubusercontent.com/vermiculus/sx.el/data/data/%s.el"
   "Url of the \"data\" directory inside the SX `data' branch.")
+
+(defun sx-request--read-buffer-data ()
+  "Return the buffer contents after any url headers.
+Error if url headers are absent or if they indicate something
+went wrong."
+  (goto-char (point-min))
+  (unless (string-match "200" (thing-at-point 'line))
+    (error "Page not found."))
+  (if (not (search-forward "\n\n" nil t))
+      (error "Headers missing; response corrupt")
+    (prog1 (buffer-substring (point) (point-max))
+      (kill-buffer (current-buffer)))))
+
+(defun sx-request-get-url (url &optional callback)
+  "Fetch and return data stored online at URL.
+If CALLBACK is nil, fetching is done synchronously and the
+data (buffer contents sans headers) is returned as a string.
+
+Otherwise CALLBACK must be a function of a single argument.  Then
+`url-retrieve' is called asynchronously and CALLBACK is passed
+the retrieved data."
+  (let* ((url-automatic-caching t)
+         (url-inhibit-uncompression t)
+         (url-request-method "GET")
+         (url-request-extra-headers
+          '(("Content-Type" . "application/x-www-form-urlencoded")))
+         (callback-internal
+          (when callback
+            ;; @TODO: Error check in STATUS.
+            (lambda (_status)
+              (funcall callback (sx-request--read-buffer-data)))))
+         (response-buffer
+          (if callback (url-retrieve url callback-internal nil 'silent)
+            (url-retrieve-synchronously url))))
+    (unless callback
+      (if (not response-buffer)
+          (error "Something went wrong in `url-retrieve-synchronously'")
+        (with-current-buffer response-buffer
+          (sx-request--read-buffer-data))))))
 
 (defun sx-request-get-data (file)
   "Fetch and return data stored online by SX.
 FILE is a string or symbol, the name of the file which holds the
 desired data, relative to `sx-request--data-url-format'.  For
 instance, `tags/emacs' returns the list of tags on Emacs.SE."
-  (let* ((url-automatic-caching t)
-         (url-inhibit-uncompression t)
-         (request-url (format sx-request--data-url-format file))
-         (url-request-method "GET")
-         (url-request-extra-headers
-          '(("Content-Type" . "application/x-www-form-urlencoded")))
-         (response-buffer (url-retrieve-synchronously request-url)))
-    (if (not response-buffer)
-        (error "Something went wrong in `url-retrieve-synchronously'")
-      (with-current-buffer response-buffer
-        (progn
-          (goto-char (point-min))
-          (if (not (search-forward "\n\n" nil t))
-              (error "Headers missing; response corrupt")
-            (when (looking-at-p "Not Found") (error "Page not found."))
-            (prog1 (read (current-buffer))
-              (kill-buffer (current-buffer)))))))))
+  (read (sx-request-get-url
+         (format sx-request--data-url-format file))))
 
 
 ;;; Support Functions
@@ -284,7 +328,7 @@ false, use the symbol `false'.  Each element is processed with
 
 (defun sx-request-all-stop-when-no-more (response)
   (or (not response)
-      (equal :json-false (cdr (assoc 'has_more response)))))
+      (not (cdr (assoc 'has_more response)))))
 
 (provide 'sx-request)
 ;;; sx-request.el ends here
