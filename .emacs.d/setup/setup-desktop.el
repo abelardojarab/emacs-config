@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 2016  Abelardo Jara-Berrocal
 
-;; Author: Abelardo Jara <abelardojara@Abelardos-MacBook-Pro.local>
+;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
 ;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -133,6 +133,19 @@
                     (buffer-list)))
             (add-hook 'desktop-after-read-hook 'set-buffer-display-time)
             (desktop-save-mode)))
+
+;; Dashboard startup screen
+(use-package dashboard
+  :load-path (lambda () (expand-file-name "dashboard/" user-emacs-directory))
+  :config (progn
+            (add-hook 'dashboard-mode-hook
+                      (lambda ()
+                        (visual-line-mode -1)
+                        (toggle-truncate-lines t)
+                        (setq truncate-lines t)))
+
+            (setq dashboard-items '((recents . 10) (projects . 10)))
+            (dashboard-setup-startup-hook)))
 
 (provide 'setup-desktop)
 ;;; setup-desktop.el ends here

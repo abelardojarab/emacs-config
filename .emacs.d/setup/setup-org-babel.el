@@ -220,7 +220,7 @@
               "#+PROPERTY: header-args:latex+ :imoutoptions -geometry 600\n"
               "\n"
               "# Setup for HTML export:\n"
-              "#+STYLE: <link rel=\"stylesheet\" type=\"text/css\" href=\"../csstheme/solarized-light.min.css\"/>\n"
+              "#+STYLE: <link rel=\"stylesheet\" type=\"text/css\" href=\"http://thomasf.github.io/solarized-css/solarized-light.min.css\"/>\n"
               "\n"
               "#+LATEX_HEADER: %% Bibliography (biblatex)\n"
               "#+LATEX_HEADER: %% Using IEEE style, sorted = none makes the numbering appear in order.\n"

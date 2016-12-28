@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 2016  Abelardo Jara-Berrocal
 
-;; Author: Abelardo Jara <abelardojara@Abelardos-MacBook-Pro.local>
+;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
 ;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -36,8 +36,9 @@
                         (flyspell-mode t)))
 
             ;; Github markdown style
+            (setq markdown-css-paths `(,(expand-file-name "styles/github-pandoc.css" user-emacs-directory)))
             (setq markdown-command
-                  (concat "pandoc -c "
+                  (concat "pandoc --smart -c "
                           (concat user-emacs-directory
                                   "/styles/github-pandoc.css")
                           " --from markdown_github -t html5 --mathjax --highlight-style pygments --standalone"))))

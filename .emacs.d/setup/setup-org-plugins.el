@@ -36,6 +36,12 @@
   :config (progn
             (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))))
 
+;; Seek headlines or content inside org buffers
+(use-package org-seek
+  :defer t
+  :load-path (lambda () (expand-file-name "org-seek/" user-emacs-directory))
+  :commands (org-seek-string org-seek-regexp org-seek-headlines))
+
 ;; Automated bulleting
 (use-package org-autolist
   :load-path (lambda () (expand-file-name "org-autolist/" user-emacs-directory))

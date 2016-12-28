@@ -463,5 +463,8 @@
 ;; Setup server
 (require 'setup-server)
 
+;; Setup network-related tools
+(require 'setup-nettools)
+
 ;; Setup desktop
 (require 'setup-desktop)

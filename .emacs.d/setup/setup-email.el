@@ -24,84 +24,10 @@
 
 ;;; Code:
 
-;; Message mode
-(use-package message
-  :config (progn
-            (bind-key "C-c C-x f" #'org-footnote-action message-mode-map)
-
-            ;; Use w3m to render html
-            (if (executable-find "w3m")
-                (setq mm-text-html-renderer 'w3m))
-
-            ;; use imagemagick, if available
-            (when (and (fboundp 'imagemagick-register-types)
-                       (executable-find "import"))
-              (imagemagick-register-types))
-
-            ;; Don’t add an empty line when quoting email
-            (defun my/message-insert-citation-line ()
-              "Insert a simple citation line."
-              (when message-reply-headers
-                (newline)
-                (insert (mail-header-from message-reply-headers) " writes:")
-                (newline)))
-            (setq message-citation-line-function #'my/message-insert-citation-line)
-
-            ;; Put attachments at end of buffer
-            (defun my/mml-attach-file--go-to-eob (orig-fun &rest args)
-              "Go to the end of buffer before attaching files."
-              (save-excursion
-                (save-restriction
-                  (widen)
-                  (goto-char (point-max))
-                  (apply orig-fun args))))
-            (advice-add 'mml-attach-file :around #'my/mml-attach-file--go-to-eob)
-
-            ;; We add a copy of the buffer to the kill ring, to make it easy to refer to it later.
-            (defun my/copy-buffer-to-kill-ring ()
-              "Copy buffer to kill ring."
-              (interactive)
-              (kill-ring-save (point-min) (point-max)))
-            (add-hook 'message-send-hook #'my/copy-buffer-to-kill-ring)
-
-            ;; message preferences
-            (setq message-generate-headers-first t)
-            (add-hook 'message-mode-hook #'flyspell-mode)
-            (add-hook 'message-mode-hook #'turn-on-orgstruct)
-            (add-hook 'message-mode-hook #'turn-on-orgstruct++)
-            (add-hook 'message-mode-hook #'turn-on-orgtbl)
-            (add-hook 'message-mode-hook #'typo-mode)
-            (add-hook 'message-mode-hook #'flyspell-mode)
-            (add-hook 'message-mode-hook #'footnote-mode)
-            (add-hook 'message-mode-hook #'turn-on-auto-fill)))
-
-;; Attachments are mostly handled using the helm baloo interface below
-;; but sometimes we want to send files from a directory
-(use-package gnus-dired
-  :config (progn
-            (add-hook 'dired-mode-hook 'turn-on-gnus-dired-mode)
-
-            ;; make the `gnus-dired-mail-buffers' function also work on
-            ;; message-mode derived modes, such as mu4e-compose-mode
-            (defun gnus-dired-mail-buffers ()
-              "Return a list of active message buffers."
-              (let (buffers)
-                (save-current-buffer
-                  (dolist (buffer (buffer-list t))
-                    (set-buffer buffer)
-                    (when (and (derived-mode-p 'message-mode)
-                               (null message-sent-message-via))
-                      (push (buffer-name buffer) buffers))))
-                (nreverse buffers)))))
-
-;; Flim, wanderlust requirement
-(use-package std11
-  :defer t
-  :load-path (lambda () (expand-file-name "flim/" user-emacs-directory)))
-
 ;; Wanderlust
 (use-package wl
   :defer t
+  :after std11
   :init (progn
           (add-to-list 'load-path (expand-file-name "wanderlust/elmo" user-emacs-directory))
           (add-to-list 'load-path (expand-file-name "semi" user-emacs-directory)))

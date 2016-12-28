@@ -1,6 +1,6 @@
 ;;; setup-gnus.el ---                                -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014, 2015, 2016  abelardo.jara-berrocal
+;; Copyright (C) 2014, 2015, 2016  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
 ;; Keywords:
@@ -49,40 +49,79 @@
   :defer t
   :load-path (lambda () (expand-file-name "apel/" user-emacs-directory)))
 
-;; newsticker
-(use-package newsticker
-  :commands (newsticker-start newsticker-start-ticker)
-  :if (and (not (equal system-type 'windows-nt))
-           (internet-up-p))
-  :load-path (lambda () (expand-file-name "newsticker/" user-emacs-directory))
+;; Message mode
+(use-package message
   :config (progn
-            (require 'newsticker-notify)
-            (setq newsticker-dir "~/.emacs.cache/newsticker")
-            (setq newsticker-url-list-defaults nil)
-            (setq newsticker-automatically-mark-items-as-old t)
-            (setq newsticker-automatically-mark-visited-items-as-old t)
-            (setq newsticker-retrieval-interval 600)
-            (setq newsticker-html-renderer 'w3m-region)
-            (setq newsticker-retrieval-method 'extern)
-            (setq newsticker-treeview-treewindow-width 40)
-            (setq newsticker-treeview-listwindow-height 30)
-            (setq newsticker-obsolete-item-max-age (* 30 (* 24 3600)))
-            (setq newsticker-ticker-interval 4.3) ;;
-            (setq newsticker-display-interval 3.3) ;; 0.3 for scroll-smooth, 15.3 otherwise
-            (setq newsticker-scroll-smoothly nil) ;; dont make it t otherwise will start scrolling
-            (setq newsticker-wget-arguments '("-q" "-O" "-"
-                                              "--user-agent" "testing"))
-            (setq newsticker-sort-method (quote sort-by-time))
-            (setq newsticker-url-list
-                  (quote (("BBC News" "http://www.bbc.co.uk/syndication/feeds/news/ukfs_news/front_page/rss091.xml" nil nil nil)
-                          ("Phoronix" "http://www.phoronix.com/rss.php")
-                          ("Google News" "http://news.google.com/?output=rss"))))
-            (setq newsticker-url-list-defaults
-                  (quote (("BBC News" "http://www.bbc.co.uk/syndication/feeds/news/ukfs_news/front_page/rss091.xml" nil nil nil)
-                          ("Phoronix" "http://www.phoronix.com/rss.php")
-                          ("Google News" "http://news.google.com/?output=rss"))))
-            (newsticker-start)
-            (newsticker-start-ticker)))
+            (bind-key "C-c C-x f" #'org-footnote-action message-mode-map)
+
+            ;; Use w3m to render html
+            (if (executable-find "w3m")
+                (setq mm-text-html-renderer 'w3m))
+
+            ;; use imagemagick, if available
+            (when (and (fboundp 'imagemagick-register-types)
+                       (executable-find "import"))
+              (imagemagick-register-types))
+
+            ;; Don’t add an empty line when quoting email
+            (defun my/message-insert-citation-line ()
+              "Insert a simple citation line."
+              (when message-reply-headers
+                (newline)
+                (insert (mail-header-from message-reply-headers) " writes:")
+                (newline)))
+            (setq message-citation-line-function #'my/message-insert-citation-line)
+
+            ;; Put attachments at end of buffer
+            (defun my/mml-attach-file--go-to-eob (orig-fun &rest args)
+              "Go to the end of buffer before attaching files."
+              (save-excursion
+                (save-restriction
+                  (widen)
+                  (goto-char (point-max))
+                  (apply orig-fun args))))
+            (advice-add 'mml-attach-file :around #'my/mml-attach-file--go-to-eob)
+
+            ;; We add a copy of the buffer to the kill ring, to make it easy to refer to it later.
+            (defun my/copy-buffer-to-kill-ring ()
+              "Copy buffer to kill ring."
+              (interactive)
+              (kill-ring-save (point-min) (point-max)))
+            (add-hook 'message-send-hook #'my/copy-buffer-to-kill-ring)
+
+            ;; message preferences
+            (setq message-generate-headers-first t)
+            (add-hook 'message-mode-hook #'flyspell-mode)
+            (add-hook 'message-mode-hook #'turn-on-orgstruct)
+            (add-hook 'message-mode-hook #'turn-on-orgstruct++)
+            (add-hook 'message-mode-hook #'turn-on-orgtbl)
+            (add-hook 'message-mode-hook #'typo-mode)
+            (add-hook 'message-mode-hook #'flyspell-mode)
+            (add-hook 'message-mode-hook #'footnote-mode)
+            (add-hook 'message-mode-hook #'turn-on-auto-fill)))
+
+;; Enabling attaching files from dired
+(use-package gnus-dired
+  :config (progn
+            (add-hook 'dired-mode-hook 'turn-on-gnus-dired-mode)
+
+            ;; make the `gnus-dired-mail-buffers' function also work on
+            ;; message-mode derived modes, such as mu4e-compose-mode
+            (defun gnus-dired-mail-buffers ()
+              "Return a list of active message buffers."
+              (let (buffers)
+                (save-current-buffer
+                  (dolist (buffer (buffer-list t))
+                    (set-buffer buffer)
+                    (when (and (derived-mode-p 'message-mode)
+                               (null message-sent-message-via))
+                      (push (buffer-name buffer) buffers))))
+                (nreverse buffers)))))
+
+;; Flim, wanderlust requirement
+(use-package std11
+  :defer t
+  :load-path (lambda () (expand-file-name "flim/" user-emacs-directory)))
 
 (provide 'setup-gnus)
 ;;; setup-gnus.el ends here
