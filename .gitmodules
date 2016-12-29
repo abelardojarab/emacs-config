@@ -1,0 +1,3 @@
+[submodule ".emacs.d/docsets"]
+	path = .emacs.d/docsets
+	url = https://github.com/abelardojarab/emacs-docsets.git
