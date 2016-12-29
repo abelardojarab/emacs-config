@@ -108,35 +108,48 @@
            (internet-up-p))
   :commands (elfeed elfeed-update)
   :load-path (lambda () (expand-file-name "elfeed/" user-emacs-directory))
-  :init (progn
-          ;; URLs in no particular order
-          (setq elfeed-use-curl t)
-          (setq elfeed-feeds
-                '(;; Blogs
-
-                  ;; News
-                  ("http://news.google.com/?output=rss" news)
-                  ("http://feeds.arstechnica.com/arstechnica/index/" news)
-
-                  ;; Github feeds
-                  ("https://github.com/milkypostman/melpa/commits/master.atom" github emacs)
-
-                  ;; Linux
-                  ("http://www.phoronix.com/rss.php" linux news)
-
-                  ;; Emacs
-                  ("http://www.masteringemacs.org/feed/" emacs)
-                  ("http://planet.emacsen.org/atom.xml" emacs)
-
-                  ;; Reddit
-                  ("https://www.reddit.com/r/orgmode/.rss" emacs reddit)
-
-                  ;; Other
-                  ("http://www.elastic.co/blog/feed/" elasticsearch)
-                  )))
   :config (progn
-            (define-key elfeed-show-mode-map (kbd "j") 'next-line)
-            (define-key elfeed-show-mode-map (kbd "k") 'previous-line)))
+            (setq elfeed-use-curl t
+                  elfeed-db-directory "~/.emacs.cache/elfeed"
+                  elfeed-search-filter "@4-days-old +unread "
+                  elfeed-search-title-max-width 100)
+
+            (bind-keys :map elfeed-search-mode-map
+                       ("a"   .  elfeed-search-update--force)
+                       ("A"   .  elfeed-update)
+                       ("d"   .  elfeed-unjam)
+                       ("o"   .  elfeed-search-browse-url)
+                       ("j"   .  next-line)
+                       ("k"   .  previous-line)
+                       ("g"   .  beginning-of-buffer)
+                       ("G"   .  end-of-buffer)
+                       ("v"   .  set-mark-command)
+                       ("<escape>" .  keyboard-quit))
+            (bind-keys :map elfeed-show-mode-map
+                       ("j"     . elfeed-show-next)
+                       ("k"     . elfeed-show-prev)
+                       ("o"     . elfeed-show-visit)
+                       ("<escape>" .  keyboard-quit)
+                       ("SPC"   . scroll-up)
+                       ("S-SPC" . scroll-down)
+                       ("TAB"   . shr-next-link)
+                       ("S-TAB" . shr-previous-link))
+
+            ;; URLs in no particular order
+            (setq elfeed-feeds
+                  '(;; News
+                    ("http://rss.cnn.com/rss/cnn_topstories.rss" news)
+                    ("http://feeds.foxnews.com/foxnews/latest?format=xml" news)
+
+                    ;; Blogs
+                    ("http://feeds.feedburner.com/webupd8?format=xml" linux ubuntu)
+                    ("http://feeds.feedburner.com/d0od?format=xml" linux ubuntu)
+
+                    ;; Linux
+                    ("http://www.phoronix.com/rss.php" linux news)
+
+                    ;; Emacs
+                    ("http://planet.emacsen.org/atom.xml" emacs)))))
 
 (provide 'setup-nettools)
 ;;; setup-nettools.el ends here

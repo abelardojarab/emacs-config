@@ -30,7 +30,7 @@
 
 ;; Windows-like mouse/arrow movement & selection
 (use-package cua-base
-  :config (progn (cua-mode 1)))
+  :config (cua-mode 1))
 
 ;; Shift mark package
 (use-package shift-mark
