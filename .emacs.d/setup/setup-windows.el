@@ -28,45 +28,6 @@
 ;; http://stackoverflow.com/questions/2081577/setting-emacs-split-to-horizontal
 (setq split-height-threshold nil)
 (setq split-width-threshold 0)
-(defun split-window-prefer-horizontally (window)
-  "If there's only one window (excluding any possibly active
-         minibuffer), then split the current window horizontally."
-  (if (and (one-window-p t)
-           (not (active-minibuffer-window)))
-      (let ((split-height-threshold nil)
-            (split-width-threshold 0))
-        (split-window-horizontally window))
-    (progn (split-window-sensibly window)
-           (delete-other-windows))))
-(setq split-window-preferred-function 'split-window-prefer-horizontally)
-(add-hook 'temp-buffer-setup-hook 'split-window-prefer-horizontally)
-
-;; Automatically split window vertically (left/right) if current window is wide enough
-(defun display-new-buffer (buffer force-other-window)
-  "If BUFFER is visible, select it.
-If it's not visible and there's only one window, split the
-current window and select BUFFER in the new window. If the
-current window (before the split) is more than 100 columns wide,
-split horizontally(left/right), else split vertically(up/down).
-If the current buffer contains more than one window, select
-BUFFER in the least recently used window.
-This function returns the window which holds BUFFER.
-FORCE-OTHER-WINDOW is ignored."
-  (or (get-buffer-window buffer)
-      (if (one-window-p)
-          (let ((new-win
-                 (if (> (window-width) 180)
-                     (split-window-horizontally)
-                   (progn (split-window-sensibly)
-                          (delete-other-windows)))))
-            (set-window-buffer new-win buffer)
-            new-win)
-        (let ((new-win (get-lru-window)))
-          (set-window-buffer new-win buffer)
-          new-win))))
-
-;; use display-buffer-alist instead of display-buffer-function if the following line won't work
-(setq display-buffer-function 'display-new-buffer)
 
 ;; Switch between vertical and horizontal splitting
 (defun toggle-window-split ()
