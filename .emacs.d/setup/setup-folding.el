@@ -1,6 +1,6 @@
 ;;; setup-folding.el ---
 
-;; Copyright (C) 2014, 2015, 2016  abelardo.jara-berrocal
+;; Copyright (C) 2014, 2015, 2016  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
 ;; Keywords:

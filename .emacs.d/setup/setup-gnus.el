@@ -98,7 +98,16 @@
             (add-hook 'message-mode-hook #'typo-mode)
             (add-hook 'message-mode-hook #'flyspell-mode)
             (add-hook 'message-mode-hook #'footnote-mode)
-            (add-hook 'message-mode-hook #'turn-on-auto-fill)))
+            (add-hook 'message-mode-hook #'turn-on-auto-fill)
+
+            ;; Enable mutt client
+            (add-to-list 'auto-mode-alist '(".*mutt.*" . message-mode))
+            (setq mail-header-separator "")
+            (define-key message-mode-map (kbd "C-c C-c")  '(lambda ()
+                                                             "save and exit quickly"
+                                                             (interactive)
+                                                             (save-buffer)
+                                                             (server-edit)))))
 
 ;; Enabling attaching files from dired
 (use-package gnus-dired
