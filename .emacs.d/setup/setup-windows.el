@@ -36,9 +36,67 @@
       (let ((split-height-threshold nil)
             (split-width-threshold 0))
         (split-window-horizontally window))
-    (split-window-sensibly window)))
+    (progn (split-window-sensibly window)
+           (delete-other-windows))))
 (setq split-window-preferred-function 'split-window-prefer-horizontally)
 (add-hook 'temp-buffer-setup-hook 'split-window-prefer-horizontally)
+
+;; Automatically split window vertically (left/right) if current window is wide enough
+(defun display-new-buffer (buffer force-other-window)
+  "If BUFFER is visible, select it.
+If it's not visible and there's only one window, split the
+current window and select BUFFER in the new window. If the
+current window (before the split) is more than 100 columns wide,
+split horizontally(left/right), else split vertically(up/down).
+If the current buffer contains more than one window, select
+BUFFER in the least recently used window.
+This function returns the window which holds BUFFER.
+FORCE-OTHER-WINDOW is ignored."
+  (or (get-buffer-window buffer)
+      (if (one-window-p)
+          (let ((new-win
+                 (if (> (window-width) 180)
+                     (split-window-horizontally)
+                   (progn (split-window-sensibly)
+                          (delete-other-windows)))))
+            (set-window-buffer new-win buffer)
+            new-win)
+        (let ((new-win (get-lru-window)))
+          (set-window-buffer new-win buffer)
+          new-win))))
+
+;; use display-buffer-alist instead of display-buffer-function if the following line won't work
+(setq display-buffer-function 'display-new-buffer)
+
+;; Switch between vertical and horizontal splitting
+(defun toggle-window-split ()
+  (interactive)
+  (if (= (count-windows) 2)
+      (let* ((this-win-buffer (window-buffer))
+             (next-win-buffer (window-buffer (next-window)))
+             (this-win-edges (window-edges (selected-window)))
+             (next-win-edges (window-edges (next-window)))
+             (this-win-2nd
+              (not (and (<= (car this-win-edges)
+                            (car next-win-edges))
+                        (<= (cadr this-win-edges)
+                            (cadr next-win-edges)))))
+             (splitter
+              (if (= (car this-win-edges)
+                     (car (window-edges (next-window))))
+                  'split-window-horizontally
+                'split-window-vertically)))
+        (delete-other-windows)
+        (let ((first-win (selected-window)))
+          (funcall splitter)
+          (if this-win-2nd (other-window 1))
+          (set-window-buffer (selected-window) this-win-buffer)
+          (set-window-buffer (next-window) next-win-buffer)
+          (select-window first-win)
+          (if this-win-2nd (other-window 1))))))
+
+;; C-x 4 t 'toggle-window-split
+(define-key ctl-x-4-map "t" 'toggle-window-split)
 
 ;; Manage popup windows
 (use-package popwin
