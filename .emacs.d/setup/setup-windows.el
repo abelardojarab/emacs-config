@@ -24,20 +24,21 @@
 
 ;;; Code:
 
-;; Prefer vertical window splitting
-(setq split-height-threshold 9999)
-(setq split-width-threshold nil)
-(defun split-window-prefer-vertically (window)
+;; Prefer horizontal window splitting
+;; http://stackoverflow.com/questions/2081577/setting-emacs-split-to-horizontal
+(setq split-height-threshold nil)
+(setq split-width-threshold 0)
+(defun split-window-prefer-horizontally (window)
   "If there's only one window (excluding any possibly active
          minibuffer), then split the current window horizontally."
   (if (and (one-window-p t)
            (not (active-minibuffer-window)))
-      (let ((split-height-threshold 9999)
-            (split-width-threshold nil))
-        (split-window-vertically window))
+      (let ((split-height-threshold nil)
+            (split-width-threshold 0))
+        (split-window-horizontally window))
     (split-window-sensibly window)))
-(setq split-window-preferred-function 'split-window-prefer-vertically)
-(add-hook 'temp-buffer-setup-hook 'split-window-prefer-vertically)
+(setq split-window-preferred-function 'split-window-prefer-horizontally)
+(add-hook 'temp-buffer-setup-hook 'split-window-prefer-horizontally)
 
 ;; Manage popup windows
 (use-package popwin
