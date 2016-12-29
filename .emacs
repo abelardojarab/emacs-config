@@ -21,8 +21,8 @@
  Something like 'emacs20, 'xemacs20, etc.")
 
 ;; Setup the starting directories
-(if (file-exists-p "~/workspace/emacsfull/.emacs.d")
-    (setq user-emacs-directory "~/workspace/emacsfull/.emacs.d"))
+(if (file-exists-p "~/workspace/emacs-config/.emacs.d")
+    (setq user-emacs-directory "~/workspace/emacs-config/.emacs.d"))
 (add-to-list 'load-path (expand-file-name "elisp/" user-emacs-directory))
 (add-to-list 'load-path (expand-file-name "dadams/" user-emacs-directory))
 (add-to-list 'load-path (expand-file-name "setup/" user-emacs-directory))
