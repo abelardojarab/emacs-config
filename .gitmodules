@@ -1,3 +1,6 @@
 [submodule ".emacs.d/docsets"]
 	path = .emacs.d/docsets
 	url = https://github.com/abelardojarab/emacs-docsets.git
+[submodule ".emacs.d/snippets"]
+	path = .emacs.d/snippets
+	url = https://github.com/abelardojarab/yasnippet-snippets
