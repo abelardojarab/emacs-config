@@ -103,7 +103,17 @@
             (add-hook 'message-mode-hook #'footnote-mode)
             (add-hook 'message-mode-hook #'turn-on-auto-fill)
 
-            ;; Enable mutt client
+            ;; Send mail using postfix
+            ;; http://pragmaticemacs.com/emacs/using-postfix-instead-of-smtpmail-to-send-email-in-mu4e/
+
+            ;; Postfix configuration according to:
+            ;; https://www.linode.com/docs/email/postfix/postfix-smtp-debian7 and
+            ;; https://www.howtoforge.com/tutorial/configure-postfix-to-use-gmail-as-a-mail-relay/
+            ;; https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-postfix-as-a-send-only-smtp-server-on-ubuntu-14-04
+            (setq send-mail-function 'sendmail-send-it)
+            (setq message-send-mail-function 'message-send-mail-with-sendmail)
+
+            ;; Enable emacsclient in mutt
             (add-to-list 'auto-mode-alist '(".*mutt.*" . message-mode))
             (setq mail-header-separator "")
             (define-key message-mode-map (kbd "C-c C-c")  '(lambda ()
