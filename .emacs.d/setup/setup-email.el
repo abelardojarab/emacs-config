@@ -33,7 +33,11 @@
           (add-to-list 'load-path (expand-file-name "semi" user-emacs-directory)))
   :commands (wl wl-draft wl-other-frame)
   :load-path (lambda () (expand-file-name "wanderlust/wl/" user-emacs-directory))
-  :config (let ((wl-root-dir "~/.emacs.cache/config/"))
+  :config (let ((wl-root-dir "~/.emacs.cache/wanderlust/"))
+
+            ;; Assure wanderlust directory exists
+            (if (not (file-exists-p "~/.emacs.cache/wanderlust"))
+                (make-directory "~/.emacs.cache/wanderlust") t)
 
             ;; File locations
             (setq wl-init-file (concat wl-root-dir "wl.el")
@@ -45,9 +49,9 @@
 
             ;; Mime support
             (use-package mime-w3m)
-            (setq wl-summary-toggle-mime "mime")
             (setq mime-edit-split-message nil)
             (setq wl-draft-reply-buffer-style 'full)
+            (setq wl-summary-toggle-mime "mime")
 
             ;; IMAP
             (setq elmo-imap4-default-authenticate-type 'clear)
@@ -110,14 +114,13 @@
   :commands (mu4e/start)
   :init (progn
           ;; Assure .emacs.cache/mu4e exists
-          (defvar my/mu4e-maildir "~/.emacs.cache/mu4e" "Location of the mu4e mailbox")
+          (defvar my/mu4e-maildir "~/.mbsync" "Location of the mu4e/mbsync mailbox")
           (if (not (file-exists-p my/mu4e-maildir))
               (make-directory my/mu4e-maildir) t))
   :config (progn
             (setq mu4e-headers-skip-duplicates t
                   mu4e-use-fancy-chars t
                   mu4e-view-show-images t
-                  message-kill-buffer-on-exit t
                   mu4e-hide-index-messages t
                   mu4e-auto-retrieve-keys t
                   mu4e-compose-dont-reply-to-self t
@@ -148,32 +151,32 @@
                   mu4e-headers-has-child-prefix '("+" . "●"))
 
             (setq mu4e-maildir my/mu4e-maildir
-                  mu4e-drafts-folder "/[Google Mail]/.Drafts"
-                  mu4e-sent-folder   "/[Google Mail]/.Sent Mail"
-                  mu4e-trash-folder  "/[Google Mail]/.Bin")
+                  mu4e-refile-folder "/[Google Mail]/Archive"
+                  mu4e-drafts-folder "/[Google Mail]/Drafts"
+                  mu4e-sent-folder   "/[Google Mail]/Sent Mail"
+                  mu4e-trash-folder  "/[Google Mail]/Bin")
 
             (setq mu4e-maildir-shortcuts
-                  '(("/Inbox"                        . ?i)
-                    ("/[Google Mail]/.Drafts"        . ?d)
-                    ("/[Google Mail]/.Sent Mail"     . ?s)
-                    ("/[Google Mail]/.Bin"           . ?t)
-                    ("/royal holloway/.msc projects" . ?m)))
+                  '(("/Inbox"                       . ?i)
+                    ("/[Google Mail]/Drafts"        . ?d)
+                    ("/[Google Mail]/Sent Mail"     . ?s)
+                    ("/[Google Mail]/Bin"           . ?t)))
 
             (setq mu4e-attachment-dir "~/Downloads")
 
             (add-to-list
              'mu4e-bookmarks
-             '("flag:unread NOT flag:trashed AND (flag:list OR from:trac@sagemath.org OR maildir:/bulk OR maildir:/research/.lists)"
+             '("flag:unread NOT flag:trashed AND (flag:list OR maildir:/bulk OR maildir:/research/.lists)"
                "Unread bulk messages" ?l))
 
             (add-to-list
              'mu4e-bookmarks
-             '("flag:unread NOT flag:trashed AND NOT flag:list AND (maildir:\"/royal holloway\" OR maildir:/INBOX)"
+             '("flag:unread NOT flag:trashed AND NOT flag:list AND maildir:/INBOX"
                "Unread messages addressed to me" ?i))
 
             (add-to-list
              'mu4e-bookmarks
-             '("mime:application/* AND NOT mime:application/pgp* AND (maildir:\"/royal holloway\" OR maildir:/INBOX)"
+             '("mime:application/* AND NOT mime:application/pgp* AND OR maildir:/INBOX"
                "Messages with attachments for me." ?d) t)
 
             (add-to-list
@@ -183,11 +186,11 @@
 
             (add-to-list
              'mu4e-bookmarks
-             '("(maildir:\"/[Google Mail]/.Sent Mail\" OR maildir:\"/royal holloway/.sent\") AND date:7d..now"
+             '("maildir:\"/[Google Mail]/.Sent Mail\" AND date:7d..now"
                "Sent in last 7 days" ?s) t)
 
             (setq mu4e-get-mail-command "timelimit -t 180 -T 180 mbsync googlemail-default"
-                  mu4e-update-interval nil)
+                  mu4e-update-interval 30) ;; update interval in seconds
 
             (use-package mu4e-contrib
               :config (setq mu4e-html2text-command 'mu4e-shr2text))
@@ -214,7 +217,6 @@
                   (mu4e~headers-quit-buffer))))
             (bind-key "<tab>" #'my/preview-message mu4e-headers-mode-map)
             (bind-key "q" #'my/close-message-view mu4e-headers-mode-map)
-            (bind-key "z" #'my/close-message-view mu4e-headers-mode-map)
             (setq mu4e-headers-fields '((:human-date . 12)
                                         (:flags . 6)
                                         (:mailing-list . 22)
@@ -235,7 +237,7 @@
             ;; My uni likes “Lastname, Firstname (Year)” which is weird, so we fix it.
             ;; Some people like to capitalize their LASTNAME and then write the first name
             ;; Some people like to send incomplete data, so we maintain a local replacement list
-            (defcustom my-mu4e-name-replacements nil
+            (defcustom my/mu4e-name-replacements nil
               "replacement names from e-mail addresses"
               :type '(alist :key-type string :value-type string)
               :group 'my)
@@ -245,7 +247,7 @@
                      (name (or name ""))
                      (email (replace-regexp-in-string "^.* <?\\([^ ]+@[^ ]+\.[^ >]+\\)>?" "\\1" name))
                      ;; look up email address and use entry if found
-                     (candidate (cdr (assoc email my-mu4e-name-replacements))))
+                     (candidate (cdr (assoc email my/mu4e-name-replacements))))
                 (if candidate candidate
                   (progn
                     (setq name (replace-regexp-in-string "^\\(.*\\) [^ ]+@[^ ]+\.[^ ]" "\\1" name)) ;; drop email address
@@ -300,9 +302,8 @@
                      (name  (helm-read-string "Name: "
                                               (my/canonicalise-contact-name
                                                (get-text-property (point) 'long)))))
-                (add-to-list 'my-mu4e-name-replacements (cons email name) t)
-                (customize-save-variable 'my-mu4e-name-replacements my-mu4e-name-replacements)))
-
+                (add-to-list 'my/mu4e-name-replacements (cons email name) t)
+                (customize-save-variable 'my/mu4e-name-replacements my/mu4e-name-replacements)))
             (bind-key "N" #'my/add-mu4e-name-replacement mu4e-view-mode-map)
 
             ;; Ignore some email addresses when auto completing:

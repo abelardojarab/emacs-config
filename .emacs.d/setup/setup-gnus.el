@@ -90,7 +90,12 @@
             (add-hook 'message-send-hook #'my/copy-buffer-to-kill-ring)
 
             ;; message preferences
-            (setq message-generate-headers-first t)
+            (setq message-generate-headers-first t
+                  message-kill-buffer-on-exit t
+                  message-signature-file ".signature"
+                  )
+
+            ;; message mode hooks
             (add-hook 'message-mode-hook #'flyspell-mode)
             (add-hook 'message-mode-hook #'turn-on-orgstruct)
             (add-hook 'message-mode-hook #'turn-on-orgstruct++)
