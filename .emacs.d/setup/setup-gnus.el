@@ -92,8 +92,7 @@
             ;; message preferences
             (setq message-generate-headers-first t
                   message-kill-buffer-on-exit t
-                  message-signature-file ".signature"
-                  )
+                  message-signature-file ".signature")
 
             ;; message mode hooks
             (add-hook 'message-mode-hook #'flyspell-mode)
@@ -101,7 +100,6 @@
             (add-hook 'message-mode-hook #'turn-on-orgstruct++)
             (add-hook 'message-mode-hook #'turn-on-orgtbl)
             (add-hook 'message-mode-hook #'typo-mode)
-            (add-hook 'message-mode-hook #'flyspell-mode)
             (add-hook 'message-mode-hook #'footnote-mode)
             (add-hook 'message-mode-hook #'turn-on-auto-fill)
 
