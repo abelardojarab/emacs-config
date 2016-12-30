@@ -186,11 +186,11 @@
 
             (add-to-list
              'mu4e-bookmarks
-             '("maildir:\"/[Google Mail]/.Sent Mail\" AND date:7d..now"
+             '("maildir:\"/[Google Mail]/Sent Mail\" AND date:7d..now"
                "Sent in last 7 days" ?s) t)
 
-            (setq mu4e-get-mail-command "timelimit -t 180 -T 180 mbsync googlemail-default"
-                  mu4e-update-interval 30) ;; update interval in seconds
+            (setq mu4e-get-mail-command "timelimit -t 180 -T 180 mbsync gmail"
+                  mu4e-update-interval nil) ;; update interval in seconds
 
             (use-package mu4e-contrib
               :config (setq mu4e-html2text-command 'mu4e-shr2text))
