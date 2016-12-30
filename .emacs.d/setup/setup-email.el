@@ -72,7 +72,7 @@
             ;; Folders
             (setq wl-default-folder "%Inbox")
             (setq wl-default-spec "%")
-            (setq wl-draft-folder "%[Gmail]/Drafts") ; Gmail IMAP
+            (setq wl-draft-folder "%[Gmail]/Drafts") ;; Gmail IMAP
             (setq wl-trash-folder "%[Gmail]/Trash")
             (setq wl-folder-check-async t)
 
@@ -151,16 +151,16 @@
                   mu4e-headers-has-child-prefix '("+" . "●"))
 
             (setq mu4e-maildir my/mu4e-maildir
-                  mu4e-refile-folder "/[Gmail]/Archive"
-                  mu4e-drafts-folder "/[Gmail]/Drafts"
-                  mu4e-sent-folder   "/[Gmail]/Sent Mail"
-                  mu4e-trash-folder  "/[Gmail]/Bin")
+                  mu4e-refile-folder "/[Gmail].Archive"
+                  mu4e-drafts-folder "/[Gmail].Drafts"
+                  mu4e-sent-folder   "/[Gmail].Sent Mail"
+                  mu4e-trash-folder  "/[Gmail].Bin")
 
             (setq mu4e-maildir-shortcuts
                   '(("/Inbox"                 . ?i)
-                    ("/[Gmail]/Drafts"        . ?d)
-                    ("/[Gmail]/Sent Mail"     . ?s)
-                    ("/[Gmail]/Bin"           . ?t)))
+                    ("/[Gmail].Drafts"        . ?d)
+                    ("/[Gmail].Sent Mail"     . ?s)
+                    ("/[Gmail].Bin"           . ?t)))
 
             (setq mu4e-attachment-dir "~/Downloads")
 
@@ -186,7 +186,7 @@
 
             (add-to-list
              'mu4e-bookmarks
-             '("maildir:\"/[Gmail]/Sent Mail\" AND date:7d..now"
+             '("maildir:\"/[Gmail].Sent Mail\" AND date:7d..now"
                "Sent in last 7 days" ?s) t)
 
             (setq mu4e-get-mail-command "timelimit -t 180 -T 180 mbsync gmail"
