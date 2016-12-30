@@ -151,22 +151,22 @@
                   mu4e-headers-has-child-prefix '("+" . "●"))
 
             (setq mu4e-maildir my/mu4e-maildir
-                  mu4e-refile-folder "/[Google Mail]/Archive"
-                  mu4e-drafts-folder "/[Google Mail]/Drafts"
-                  mu4e-sent-folder   "/[Google Mail]/Sent Mail"
-                  mu4e-trash-folder  "/[Google Mail]/Bin")
+                  mu4e-refile-folder "/[Gmail]/Archive"
+                  mu4e-drafts-folder "/[Gmail]/Drafts"
+                  mu4e-sent-folder   "/[Gmail]/Sent Mail"
+                  mu4e-trash-folder  "/[Gmail]/Bin")
 
             (setq mu4e-maildir-shortcuts
-                  '(("/Inbox"                       . ?i)
-                    ("/[Google Mail]/Drafts"        . ?d)
-                    ("/[Google Mail]/Sent Mail"     . ?s)
-                    ("/[Google Mail]/Bin"           . ?t)))
+                  '(("/Inbox"                 . ?i)
+                    ("/[Gmail]/Drafts"        . ?d)
+                    ("/[Gmail]/Sent Mail"     . ?s)
+                    ("/[Gmail]/Bin"           . ?t)))
 
             (setq mu4e-attachment-dir "~/Downloads")
 
             (add-to-list
              'mu4e-bookmarks
-             '("flag:unread NOT flag:trashed AND (flag:list OR maildir:/bulk OR maildir:/research/.lists)"
+             '("flag:unread NOT flag:trashed AND (flag:list OR maildir:/bulk)"
                "Unread bulk messages" ?l))
 
             (add-to-list
@@ -186,7 +186,7 @@
 
             (add-to-list
              'mu4e-bookmarks
-             '("maildir:\"/[Google Mail]/Sent Mail\" AND date:7d..now"
+             '("maildir:\"/[Gmail]/Sent Mail\" AND date:7d..now"
                "Sent in last 7 days" ?s) t)
 
             (setq mu4e-get-mail-command "timelimit -t 180 -T 180 mbsync gmail"
