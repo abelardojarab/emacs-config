@@ -72,14 +72,14 @@ If time is not given, defaults to 0:00.  However, with optional
 NODEFAULT, hour and minute fields will be nil if not given."
   (if (string-match mu4e~ts-regexp0 s)
       (list 0
-	    (if (or (match-beginning 8) (not nodefault))
-		(string-to-number (or (match-string 8 s) "0")))
-	    (if (or (match-beginning 7) (not nodefault))
-		(string-to-number (or (match-string 7 s) "0")))
-	    (string-to-number (match-string 4 s))
-	    (string-to-number (match-string 3 s))
-	    (string-to-number (match-string 2 s))
-	    nil nil nil)
+        (if (or (match-beginning 8) (not nodefault))
+        (string-to-number (or (match-string 8 s) "0")))
+        (if (or (match-beginning 7) (not nodefault))
+        (string-to-number (or (match-string 7 s) "0")))
+        (string-to-number (match-string 4 s))
+        (string-to-number (match-string 3 s))
+        (string-to-number (match-string 2 s))
+        nil nil nil)
     (mu4e-error "Not a standard mu4e time string: %s" s)))
 
 
@@ -88,9 +88,9 @@ NODEFAULT, hour and minute fields will be nil if not given."
 User's addresses are set in `mu4e-user-mail-address-list'.  Case
 insensitive comparison is used."
   (when (and addr mu4e-user-mail-address-list
-	  (find addr mu4e-user-mail-address-list
-		:test (lambda (s1 s2)
-			(eq t (compare-strings s1 nil nil s2 nil nil t)))))
+      (find addr mu4e-user-mail-address-list
+        :test (lambda (s1 s2)
+            (eq t (compare-strings s1 nil nil s2 nil nil t)))))
     t))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -112,17 +112,17 @@ If FOLDER is a string, return it, if it is a function, evaluate
 this function with MSG as parameter (which may be `nil'), and
 return the result."
   (unless (member foldervar
-	    '(mu4e-sent-folder mu4e-drafts-folder
-	       mu4e-trash-folder mu4e-refile-folder))
+        '(mu4e-sent-folder mu4e-drafts-folder
+           mu4e-trash-folder mu4e-refile-folder))
     (mu4e-error "Folder must be one of mu4e-(sent|drafts|trash|refile)-folder"))
   ;; get the value with the vars for the relevants context let-bound
   (with~mu4e-context-vars (mu4e-context-determine msg nil)
     (let* ((folder (symbol-value foldervar))
-	    (val
-	      (cond
-		((stringp   folder) folder)
-		((functionp folder) (funcall folder msg))
-		(t (mu4e-error "unsupported type for %S" folder)))))
+        (val
+          (cond
+        ((stringp   folder) folder)
+        ((functionp folder) (funcall folder msg))
+        (t (mu4e-error "unsupported type for %S" folder)))))
       (or val (mu4e-error "%S evaluates to nil" foldervar)))))
 
 (defun mu4e-get-drafts-folder (&optional msg)
@@ -171,12 +171,12 @@ see its docstring)."
   (let
     ((dir
        (cond
-	 ((stringp mu4e-attachment-dir)
-	   mu4e-attachment-dir)
-	 ((functionp mu4e-attachment-dir)
-	   (funcall mu4e-attachment-dir fname mimetype))
-	 (t
-	   (mu4e-error "unsupported type for mu4e-attachment-dir" )))))
+     ((stringp mu4e-attachment-dir)
+       mu4e-attachment-dir)
+     ((functionp mu4e-attachment-dir)
+       (funcall mu4e-attachment-dir fname mimetype))
+     (t
+       (mu4e-error "unsupported type for mu4e-attachment-dir" )))))
     (if dir
       (expand-file-name dir)
       (mu4e-error (mu4e-error "mu4e-attachment-dir evaluates to nil")))))
@@ -188,10 +188,10 @@ see its docstring)."
   (let ((idx (string-match mu4e-maildir path)))
     (when (and idx (zerop idx))
       (replace-regexp-in-string
-	mu4e-maildir
-	""
-	(expand-file-name
-	  (concat path "/../.."))))))
+    mu4e-maildir
+    ""
+    (expand-file-name
+      (concat path "/../.."))))))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
@@ -258,8 +258,8 @@ trying an exact match."
       (message nil);; this seems needed...
       (setq choice (read-char-exclusive prompt))
       (setq chosen (or (member choice choices)
-		     (member (downcase choice) choices)
-		     (member (upcase choice) choices))))
+             (member (downcase choice) choices)
+             (member (upcase choice) choices))))
     (car chosen)))
 
 (defun mu4e-read-option (prompt options)
@@ -285,32 +285,32 @@ User now will be presented with a list: \"Choose an animal:
 
 Function will return the cdr of the list element."
   (let* ((prompt (mu4e-format "%s" prompt))
-	  (chosen)
-	  (optionsstr
-	    (mapconcat
-	      (lambda (option)
-		;; try to detect old-style options, and warn
-		(when (characterp (car-safe (cdr-safe option)))
-		  (mu4e-error
-		    (concat "Please use the new format for options/actions; "
-				"see the manual")))
-		(let* ((kar (substring (car option) 0 1))
-			(val (cdr option)))
-		  (concat
-		    "[" (propertize kar 'face 'mu4e-highlight-face) "]"
-		    (substring (car option) 1))))
-	      options ", "))
-	  (response
-	    (mu4e~read-char-choice
-	      (concat prompt optionsstr
-		" [" (propertize "C-g" 'face 'mu4e-highlight-face)
-		" to cancel]")
-	      ;; the allowable chars
-	      (map 'list (lambda(elm) (string-to-char (car elm))) options)))
-	  (chosen
-	    (find-if
-	      (lambda (option) (eq response (string-to-char (car option))))
-	      options)))
+      (chosen)
+      (optionsstr
+        (mapconcat
+          (lambda (option)
+        ;; try to detect old-style options, and warn
+        (when (characterp (car-safe (cdr-safe option)))
+          (mu4e-error
+            (concat "Please use the new format for options/actions; "
+                "see the manual")))
+        (let* ((kar (substring (car option) 0 1))
+            (val (cdr option)))
+          (concat
+            "[" (propertize kar 'face 'mu4e-highlight-face) "]"
+            (substring (car option) 1))))
+          options ", "))
+      (response
+        (mu4e~read-char-choice
+          (concat prompt optionsstr
+        " [" (propertize "C-g" 'face 'mu4e-highlight-face)
+        " to cancel]")
+          ;; the allowable chars
+          (map 'list (lambda(elm) (string-to-char (car elm))) options)))
+      (chosen
+        (find-if
+          (lambda (option) (eq response (string-to-char (car option))))
+          options)))
     (if chosen
       (cdr chosen)
       (mu4e-warn "Unknown shortcut '%c'" response))))
@@ -318,19 +318,19 @@ Function will return the cdr of the list element."
 (defun mu4e~get-maildirs-1 (path mdir)
   "Get maildirs under path, recursively, as a list of relative paths."
   (let ((dirs)
-	 (dentries
-	   (ignore-errors
-	     (directory-files-and-attributes
-	       (concat path mdir) nil
-	       "^[^.]\\|\\.[^.][^.]" t))))
+     (dentries
+       (ignore-errors
+         (directory-files-and-attributes
+           (concat path mdir) nil
+           "^[^.]\\|\\.[^.][^.]" t))))
     (dolist (dentry dentries)
       (when (and (booleanp (cadr dentry)) (cadr dentry))
-	(if (file-accessible-directory-p
-	      (concat mu4e-maildir "/" mdir "/" (car dentry) "/cur"))
-	  (setq dirs (cons (concat mdir (car dentry)) dirs)))
-	(unless (member (car dentry) '("cur" "new" "tmp"))
-	  (setq dirs (append dirs (mu4e~get-maildirs-1 path
-				    (concat mdir (car dentry) "/")))))))
+    (if (file-accessible-directory-p
+          (concat mu4e-maildir "/" mdir "/" (car dentry) "/cur"))
+      (setq dirs (cons (concat mdir (car dentry)) dirs)))
+    (unless (member (car dentry) '("cur" "new" "tmp"))
+      (setq dirs (append dirs (mu4e~get-maildirs-1 path
+                    (concat mdir (car dentry) "/")))))))
     dirs))
 
 (defvar mu4e-cache-maildir-list nil
@@ -351,11 +351,11 @@ the list of maildirs will not change until you restart mu4e."
   (unless (and mu4e-maildir-list mu4e-cache-maildir-list)
     (setq mu4e-maildir-list
       (sort
-	(append
-	  (when (file-accessible-directory-p
-		  (concat mu4e-maildir "/cur")) '("/"))
-	  (mu4e~get-maildirs-1 mu4e-maildir "/"))
-	(lambda (s1 s2) (string< (downcase s1) (downcase s2))))))
+    (append
+      (when (file-accessible-directory-p
+          (concat mu4e-maildir "/cur")) '("/"))
+      (mu4e~get-maildirs-1 mu4e-maildir "/"))
+    (lambda (s1 s2) (string< (downcase s1) (downcase s2))))))
   mu4e-maildir-list)
 
 (defun mu4e-ask-maildir (prompt)
@@ -368,35 +368,35 @@ maildirs under `mu4e-maildir'."
     (if (not mu4e-maildir-shortcuts)
       (funcall mu4e-completing-read-function prompt (mu4e-get-maildirs))
       (let* ((mlist (append mu4e-maildir-shortcuts '(("ther" . ?o))))
-	      (fnames
-		(mapconcat
-		  (lambda (item)
-		    (concat
-		      "["
-		      (propertize (make-string 1 (cdr item))
-			'face 'mu4e-highlight-face)
-		      "]"
-		      (car item)))
-		  mlist ", "))
-	      (kar (read-char (concat prompt fnames))))
-	(if (member kar '(?/ ?o)) ;; user chose 'other'?
-	  (funcall mu4e-completing-read-function prompt
-	    (mu4e-get-maildirs) nil nil "/")
-	  (or (car-safe
-		(find-if (lambda (item) (= kar (cdr item)))
-		  mu4e-maildir-shortcuts))
-	    (mu4e-warn "Unknown shortcut '%c'" kar)))))))
+          (fnames
+        (mapconcat
+          (lambda (item)
+            (concat
+              "["
+              (propertize (make-string 1 (cdr item))
+            'face 'mu4e-highlight-face)
+              "]"
+              (car item)))
+          mlist ", "))
+          (kar (read-char (concat prompt fnames))))
+    (if (member kar '(?/ ?o)) ;; user chose 'other'?
+      (funcall mu4e-completing-read-function prompt
+        (mu4e-get-maildirs) nil nil "/")
+      (or (car-safe
+        (find-if (lambda (item) (= kar (cdr item)))
+          mu4e-maildir-shortcuts))
+        (mu4e-warn "Unknown shortcut '%c'" kar)))))))
 
 
 (defun mu4e-ask-maildir-check-exists (prompt)
   "Like `mu4e-ask-maildir', but check for existence of the maildir,
 and offer to create it if it does not exist yet."
   (let* ((mdir (mu4e-ask-maildir prompt))
-	  (fullpath (concat mu4e-maildir mdir)))
+      (fullpath (concat mu4e-maildir mdir)))
     (unless (file-directory-p fullpath)
       (and (yes-or-no-p
-	     (mu4e-format "%s does not exist. Create now?" fullpath))
-	      (mu4e~proc-mkdir fullpath)))
+         (mu4e-format "%s does not exist. Create now?" fullpath))
+          (mu4e~proc-mkdir fullpath)))
     mdir))
 
 
@@ -417,13 +417,13 @@ format if needed."
   (map 'list
     (lambda (item)
       (if (mu4e-bookmark-p item)
-	item ;; already in the right format
-	(if (and (listp item) (= (length item) 3))
-	  (make-mu4e-bookmark
-	    :name (nth 1 item)
-	    :query (nth 0 item)
-	    :key (nth 2 item))
-	  (mu4e-error "Invalid bookmark in mu4e-bookmarks"))))
+    item ;; already in the right format
+    (if (and (listp item) (= (length item) 3))
+      (make-mu4e-bookmark
+        :name (nth 1 item)
+        :query (nth 0 item)
+        :key (nth 2 item))
+      (mu4e-error "Invalid bookmark in mu4e-bookmarks"))))
       mu4e-bookmarks))
 
 
@@ -432,28 +432,28 @@ format if needed."
 `mu4e-bookmarks', then return the corresponding query."
   (unless (mu4e-bookmarks) (mu4e-error "No bookmarks defined"))
   (let* ((prompt (mu4e-format "%s" prompt))
-	  (bmarks
-	   (mapconcat
-	     (lambda (bm)
-	       (concat
-		 "[" (propertize (make-string 1 (mu4e-bookmark-key bm))
-		       'face 'mu4e-highlight-face)
-		 "]"
-		 (mu4e-bookmark-name bm))) (mu4e-bookmarks) ", "))
-	     (kar (read-char (concat prompt bmarks))))
+      (bmarks
+       (mapconcat
+         (lambda (bm)
+           (concat
+         "[" (propertize (make-string 1 (mu4e-bookmark-key bm))
+               'face 'mu4e-highlight-face)
+         "]"
+         (mu4e-bookmark-name bm))) (mu4e-bookmarks) ", "))
+         (kar (read-char (concat prompt bmarks))))
     (mu4e-get-bookmark-query kar)))
 
 (defun mu4e-get-bookmark-query (kar)
   "Get the corresponding bookmarked query for shortcut character
 KAR, or raise an error if none is found."
   (let* ((chosen-bm
-	   (or (find-if
-		 (lambda (bm)
-		   (= kar (mu4e-bookmark-key bm)))
-		 (mu4e-bookmarks))
-	    (mu4e-warn "Unknown shortcut '%c'" kar)))
-	 (expr (mu4e-bookmark-query chosen-bm))
-	 (query (eval expr)))
+       (or (find-if
+         (lambda (bm)
+           (= kar (mu4e-bookmark-key bm)))
+         (mu4e-bookmarks))
+        (mu4e-warn "Unknown shortcut '%c'" kar)))
+     (expr (mu4e-bookmark-query chosen-bm))
+     (query (eval expr)))
     (if (stringp query)
       query
       (mu4e-warn "Expression must evaluate to query string ('%S')" expr))))
@@ -466,7 +466,7 @@ replaces any existing bookmark with KEY."
   (setq mu4e-bookmarks
     (remove-if
       (lambda (bm)
-	(= (mu4e-bookmark-key bm) key))
+    (= (mu4e-bookmark-key bm) key))
       (mu4e-bookmarks)))
   (add-to-list 'mu4e-bookmarks
     (make-mu4e-bookmark
@@ -486,25 +486,25 @@ Also see `mu4e-flags-to-string'.
 \[1\]: http://cr.yp.to/proto/maildir.html"
   (when flags
     (let ((kar (case (car flags)
-		 ('draft     ?D)
-		 ('flagged   ?F)
-		 ('new       ?N)
-		 ('passed    ?P)
-		 ('replied   ?R)
-		 ('seen      ?S)
-		 ('trashed   ?T)
-		 ('attach    ?a)
-		 ('encrypted ?x)
-		 ('signed    ?s)
-		 ('unread    ?u))))
+         ('draft     ?D)
+         ('flagged   ?F)
+         ('new       ?N)
+         ('passed    ?P)
+         ('replied   ?R)
+         ('seen      ?S)
+         ('trashed   ?T)
+         ('attach    ?a)
+         ('encrypted ?x)
+         ('signed    ?s)
+         ('unread    ?u))))
       (concat (and kar (string kar))
-	(mu4e~flags-to-string-raw (cdr flags))))))
+    (mu4e~flags-to-string-raw (cdr flags))))))
 
 (defun mu4e-flags-to-string (flags)
   "Remove duplicates and sort the output of `mu4e~flags-to-string-raw'."
   (concat
     (sort (remove-duplicates
-	    (append (mu4e~flags-to-string-raw flags) nil)) '>)))
+        (append (mu4e~flags-to-string-raw flags) nil)) '>)))
 
 (defun mu4e~string-to-flags-1 (str)
   "Convert a string with message flags as seen in Maildir
@@ -516,15 +516,15 @@ Also see `mu4e-flags-to-string'.
 \[1\]: http://cr.yp.to/proto/maildir.html."
   (when (/= 0 (length str))
     (let ((flag
-	    (case (string-to-char str)
-	      (?D   'draft)
-	      (?F   'flagged)
-	      (?P   'passed)
-	      (?R   'replied)
-	      (?S   'seen)
-	      (?T   'trashed))))
+        (case (string-to-char str)
+          (?D   'draft)
+          (?F   'flagged)
+          (?P   'passed)
+          (?R   'replied)
+          (?S   'seen)
+          (?T   'trashed))))
       (append (when flag (list flag))
-	(mu4e~string-to-flags-1 (substring str 1))))))
+    (mu4e~string-to-flags-1 (substring str 1))))))
 
 (defun mu4e-string-to-flags (str)
   "Convert a string with message flags as seen in Maildir messages
@@ -554,10 +554,10 @@ http://cr.yp.to/proto/maildir.html "
 Or go to the top level if there is none."
   (interactive)
   (info (case major-mode
-	  ('mu4e-main-mode "(mu4e)Main view")
-	  ('mu4e-headers-mode "(mu4e)Headers view")
-	  ('mu4e-view-mode "(mu4e)Message view")
-	  (t               "mu4e"))))
+      ('mu4e-main-mode "(mu4e)Main view")
+      ('mu4e-headers-mode "(mu4e)Headers view")
+      ('mu4e-view-mode "(mu4e)Message view")
+      (t               "mu4e"))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun mu4e-last-query ()
@@ -571,12 +571,12 @@ Or go to the top level if there is none."
 that has a live window), and vice versa."
   (interactive)
   (let* ((other-buf
-	   (cond
-	     ((eq major-mode 'mu4e-headers-mode)
-	       mu4e~view-buffer)
-	     ((eq major-mode 'mu4e-view-mode)
-	       mu4e~headers-buffer)))
-	  (other-win (and other-buf (get-buffer-window other-buf))))
+       (cond
+         ((eq major-mode 'mu4e-headers-mode)
+           mu4e~view-buffer)
+         ((eq major-mode 'mu4e-view-mode)
+           mu4e~headers-buffer)))
+      (other-win (and other-buf (get-buffer-window other-buf))))
     (if (window-live-p other-win)
       (select-window other-win)
       (mu4e-message "No window to switch to"))))
@@ -590,9 +590,9 @@ that has a live window), and vice versa."
   (let ((buf (get-buffer-create mu4e-output-buffer-name)))
     (with-current-buffer buf
       (let ((inhibit-read-only t))
-	(erase-buffer)
-	(call-process-shell-command pipecmd path t t)
-	(view-mode)))
+    (erase-buffer)
+    (call-process-shell-command pipecmd path t t)
+    (view-mode)))
     (switch-to-buffer buf)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -647,18 +647,18 @@ process."
     (cond
       ((eq type 'add) t) ;; do nothing
       ((eq type 'index)
-	(if (eq (plist-get info :status) 'running)
-	  (mu4e-index-message "Indexing... processed %d, updated %d"
-	    (plist-get info :processed) (plist-get info :updated))
-	  (progn
-	    (mu4e-index-message
-	      "Indexing completed; processed %d, updated %d, cleaned-up %d"
-	      (plist-get info :processed) (plist-get info :updated)
-	      (plist-get info :cleaned-up))
-	    (unless (zerop (plist-get info :updated))
-	      (run-hooks 'mu4e-index-updated-hook)))))
+    (if (eq (plist-get info :status) 'running)
+      (mu4e-index-message "Indexing... processed %d, updated %d"
+        (plist-get info :processed) (plist-get info :updated))
+      (progn
+        (mu4e-index-message
+          "Indexing completed; processed %d, updated %d, cleaned-up %d"
+          (plist-get info :processed) (plist-get info :updated)
+          (plist-get info :cleaned-up))
+        (unless (zerop (plist-get info :updated))
+          (run-hooks 'mu4e-index-updated-hook)))))
       ((plist-get info :message)
-	(mu4e-index-message "%s" (plist-get info :message))))))
+    (mu4e-index-message "%s" (plist-get info :message))))))
 
 (defun mu4e-error-handler (errcode errmsg)
   "Handler function for showing an error."
@@ -688,8 +688,8 @@ process."
     ((= (length ph) 0) 'rfc822-empty)
     ((= (aref ph 0) ?\")
       (if (string-match "\"\\([^\"\\\n]\\|\\\\.\\|\\\\\n\\)*\"" ph)
-	'rfc822-quoted-string
-	'rfc822-containing-quote)) ; starts with quote, but doesn't end with one
+    'rfc822-quoted-string
+    'rfc822-containing-quote)) ; starts with quote, but doesn't end with one
     ((string-match-p "[\"]" ph) 'rfc822-containing-quote)
     ((string-match-p "[\000-\037()\*<>@,;:\\\.]+" ph) nil)
     (t 'rfc822-atom)))
@@ -703,8 +703,8 @@ process."
       ((eq type 'rfc822-atom) ph)
       ((eq type 'rfc822-quoted-string) ph)
       ((eq type 'rfc822-containing-quote)
-	(format "\"%s\""
-	  (replace-regexp-in-string "\"" "\\\\\"" ph)))
+    (format "\"%s\""
+      (replace-regexp-in-string "\"" "\\\\\"" ph)))
       (t (format "\"%s\"" ph)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -715,39 +715,39 @@ or (rfc822-string . CONTACT) otherwise."
     (setq contact (funcall mu4e-contact-rewrite-function contact)))
   (when contact
     (let ((name (plist-get contact :name))
-	   (mail (plist-get contact :mail))
-	   (ignore-rx (or mu4e-compose-complete-ignore-address-regexp "$^")))
+       (mail (plist-get contact :mail))
+       (ignore-rx (or mu4e-compose-complete-ignore-address-regexp "$^")))
       (when (and mail (not (string-match ignore-rx mail)))
-	(cons
-	  (if name (format "%s <%s>" (mu4e~rfc822-quoteit name) mail) mail)
-	  contact)))))
+    (cons
+      (if name (format "%s <%s>" (mu4e~rfc822-quoteit name) mail) mail)
+      contact)))))
 
 
 (defun mu4e~sort-contacts (contacts)
   "Destructively sort contacts (only for cycling) in order of
  'mostly likely contact'.t See the code for the detail"
   (let* ((now (+ (float-time) 3600)) ;; allow for clock diffs
-	  (recent (- (float-time) (* 15 24 3600))))
+      (recent (- (float-time) (* 15 24 3600))))
     (sort* contacts
       (lambda (c1 c2)
-	(let* ( (c1 (cdr c1)) (c2 (cdr c2))
-		(personal1 (plist-get c1 :personal))
-		(personal2 (plist-get c2 :personal))
-		;; note: freq, tstamp can only be missing if the rewrite
-		;; function removed them. If the rewrite function changed the
-		;; contact somehow, we guess it's important.
-		(freq1 (or (plist-get c1 :freq) 500))
-		(freq2 (or (plist-get c2 :freq) 500))
-		(tstamp1 (or (plist-get c1 :tstamp) now))
-		(tstamp2 (or (plist-get c2 :tstamp) now)))
-	  ;; only one is personal? if so, that one comes first
-	  (if (not (equal personal1 personal2))
-	    (if personal1 t nil)
-	    ;; only one is recent? that one comes first
-	    (if (not (equal (> tstamp1 recent) (> tstamp2 recent)))
-	      (> tstamp1 tstamp2)
-	      ;; otherwise, use the frequency
-	      (> freq1 freq2))))))))
+    (let* ( (c1 (cdr c1)) (c2 (cdr c2))
+        (personal1 (plist-get c1 :personal))
+        (personal2 (plist-get c2 :personal))
+        ;; note: freq, tstamp can only be missing if the rewrite
+        ;; function removed them. If the rewrite function changed the
+        ;; contact somehow, we guess it's important.
+        (freq1 (or (plist-get c1 :freq) 500))
+        (freq2 (or (plist-get c2 :freq) 500))
+        (tstamp1 (or (plist-get c1 :tstamp) now))
+        (tstamp2 (or (plist-get c2 :tstamp) now)))
+      ;; only one is personal? if so, that one comes first
+      (if (not (equal personal1 personal2))
+        (if personal1 t nil)
+        ;; only one is recent? that one comes first
+        (if (not (equal (> tstamp1 recent) (> tstamp2 recent)))
+          (> tstamp1 tstamp2)
+          ;; otherwise, use the frequency
+          (> freq1 freq2))))))))
 
 (defun mu4e~sort-contacts-for-completion (contacts)
   "Takes CONTACTS, which is a list of RFC-822 addresses, and sort them based
@@ -755,8 +755,8 @@ on the ranking in `mu4e~contacts.'"
   (sort* contacts
     (lambda (c1 c2)
       (let ((rank1 (gethash c1 mu4e~contacts))
-	     (rank2 (gethash c2 mu4e~contacts)))
-	(< rank1 rank2)))))
+         (rank2 (gethash c2 mu4e~contacts)))
+    (< rank1 rank2)))))
 
 ;; start and stopping
 (defun mu4e~fill-contacts (contact-data)
@@ -769,15 +769,15 @@ This is used by the completion function in mu4e-compose."
   (let ((contacts) (rank 0))
     (dolist (contact contact-data)
       (let ((contact-maybe (mu4e~process-contact contact)))
-	;; note, this gives cells (rfc822-address . contact)
-	(when contact-maybe (push contact-maybe contacts))))
+    ;; note, this gives cells (rfc822-address . contact)
+    (when contact-maybe (push contact-maybe contacts))))
     (setq contacts (mu4e~sort-contacts contacts))
     ;; now, we have our nicely sorted list, map them to a list
     ;; of increasing integers. We use that map in the composer
     ;; to sort them there. It would have been so much easier if emacs
     ;; allowed us to use the sorted-list as-is, but no such luck.
     (setq mu4e~contacts (make-hash-table :test 'equal :weakness nil
-			  :size (length contacts)))
+              :size (length contacts)))
     (dolist (contact contacts)
       (puthash (car contact) rank mu4e~contacts)
       (incf rank))
@@ -788,11 +788,11 @@ This is used by the completion function in mu4e-compose."
   "Check for the settings required for running mu4e."
   (unless (>= emacs-major-version 23)
     (mu4e-error "Emacs >= 23.x is required for mu4e"))
-  (when mu4e~server-props
+  (when nil ;; mu4e~server-props
     (let ((version (plist-get mu4e~server-props :version)))
       (unless (string= version mu4e-mu-version)
-	(mu4e-error "mu server has version %s, but we need %s"
-	  version mu4e-mu-version))))
+    (mu4e-error "mu server has version %s, but we need %s"
+      version mu4e-mu-version))))
   (unless (and mu4e-mu-binary (file-executable-p mu4e-mu-binary))
     (mu4e-error "Please set `mu4e-mu-binary' to the full path to the mu
     binary."))
@@ -804,16 +804,16 @@ This is used by the completion function in mu4e-compose."
   (unless (mu4e-create-maildir-maybe mu4e-maildir)
     (mu4e-error "%s is not a valid maildir directory" mu4e-maildir))
   (dolist (var '(mu4e-sent-folder mu4e-drafts-folder
-		  mu4e-trash-folder))
+          mu4e-trash-folder))
     (unless (and (boundp var) (symbol-value var))
       (mu4e-error "Please set %S" var))
     (unless (functionp (symbol-value var)) ;; functions are okay, too
       (let* ((dir (symbol-value var))
-	      (path (concat mu4e-maildir dir)))
-	(unless (string= (substring dir 0 1) "/")
-	  (mu4e-error "%S must start with a '/'" dir))
-	(unless (mu4e-create-maildir-maybe path)
-	  (mu4e-error "%s (%S) does not exist" path var))))))
+          (path (concat mu4e-maildir dir)))
+    (unless (string= (substring dir 0 1) "/")
+      (mu4e-error "%S must start with a '/'" dir))
+    (unless (mu4e-create-maildir-maybe path)
+      (mu4e-error "%s (%S) does not exist" path var))))))
 
 
 (defun mu4e-running-p ()
@@ -845,9 +845,9 @@ list of contacts we use for autocompletion; otherwise, do nothing."
     (mu4e~proc-contacts
       mu4e-compose-complete-only-personal
       (when mu4e-compose-complete-only-after
-	(float-time
-	  (apply 'encode-time
-	    (mu4e-parse-time-string mu4e-compose-complete-only-after)))))))
+    (float-time
+      (apply 'encode-time
+        (mu4e-parse-time-string mu4e-compose-complete-only-after)))))))
 
 (defun mu4e~start (&optional func)
   "If `mu4e-contexts' have been defined, but we don't have a
@@ -864,23 +864,23 @@ successful, call FUNC (if non-nil) afterwards."
       ;; the server maybe switch the context
       (mu4e~context-autoswitch nil mu4e-context-policy)
       (lexical-let ((func func))
-	(mu4e~check-requirements)
-	;; set up the 'pong' handler func
-	(setq mu4e-pong-func
-	  (lambda (props)
-	    (setq mu4e~server-props props) ;; save props from the server
-	    (let ((version (plist-get props :version))
-		   (doccount (plist-get props :doccount)))
-	      (mu4e~check-requirements)
-	      (when func (funcall func))
-	      (when (and mu4e-update-interval (null mu4e~update-timer))
-		(setq mu4e~update-timer
-		  (run-at-time
-		    0 mu4e-update-interval
-		    (lambda () (mu4e-update-mail-and-index
-				 mu4e-index-update-in-background)))))
-	      (mu4e-message "Started mu4e with %d message%s in store"
-		doccount (if (= doccount 1) "" "s"))))))
+    (mu4e~check-requirements)
+    ;; set up the 'pong' handler func
+    (setq mu4e-pong-func
+      (lambda (props)
+        (setq mu4e~server-props props) ;; save props from the server
+        (let ((version (plist-get props :version))
+           (doccount (plist-get props :doccount)))
+          (mu4e~check-requirements)
+          (when func (funcall func))
+          (when (and mu4e-update-interval (null mu4e~update-timer))
+        (setq mu4e~update-timer
+          (run-at-time
+            0 mu4e-update-interval
+            (lambda () (mu4e-update-mail-and-index
+                 mu4e-index-update-in-background)))))
+          (mu4e-message "Started mu4e with %d message%s in store"
+        doccount (if (= doccount 1) "" "s"))))))
       ;; wake up server
       (mu4e~proc-ping)
       ;; maybe request the list of contacts, automatically refresh after
@@ -905,9 +905,9 @@ successful, call FUNC (if non-nil) afterwards."
   (mapcar
     (lambda (buf)
       (with-current-buffer buf
-	(when (member major-mode
-		'(mu4e-headers-mode mu4e-view-mode mu4e-main-mode))
-	  (kill-buffer))))
+    (when (member major-mode
+        '(mu4e-headers-mode mu4e-view-mode mu4e-main-mode))
+      (kill-buffer))))
     (buffer-list)))
 
 
@@ -929,7 +929,7 @@ Also scrolls to the final line, and update the progress throbber."
     (if (process-get proc 'x-interactive)
         (process-send-string proc
                              (concat (read-passwd mu4e~get-mail-ask-password)
-			       "\n"))
+                   "\n"))
       ;; TODO kill process?
       (mu4e-error "Unrecognized password request")))
   (when (process-buffer proc)
@@ -939,17 +939,17 @@ Also scrolls to the final line, and update the progress throbber."
       (with-current-buffer (process-buffer proc)
         (goto-char (point-max))
         (if (string-match ".*\r\\(.*\\)" msg)
-	  (progn
-	    ;; kill even with \r
-	    (end-of-line)
-	    (let ((end (point)))
-	      (beginning-of-line)
-	      (delete-region (point) end))
-	    (insert (match-string 1 msg)))
+      (progn
+        ;; kill even with \r
+        (end-of-line)
+        (let ((end (point)))
+          (beginning-of-line)
+          (delete-region (point) end))
+        (insert (match-string 1 msg)))
           (insert msg)))
       ;; Auto-scroll unless user is interacting with the window.
       (when (and (window-live-p procwin)
-	      (not (eq (selected-window) procwin)))
+          (not (eq (selected-window) procwin)))
         (with-selected-window procwin
           (goto-char (point-max)))))))
 
@@ -976,9 +976,9 @@ Also scrolls to the final line, and update the progress throbber."
   "Create a temporary window with HEIGHT at the bottom of the
 frame to display buffer BUF."
   (let ((win
-	  (split-window
-	    (frame-root-window)
-	    (- (window-height (frame-root-window)) height))))
+      (split-window
+        (frame-root-window)
+        (- (window-height (frame-root-window)) height))))
     (set-window-buffer win buf)
     (set-window-dedicated-p win t)
     win))
@@ -989,19 +989,19 @@ frame to display buffer BUF."
     (progress-reporter-done mu4e~progress-reporter)
     (setq mu4e~progress-reporter nil))
   (let* ((status (process-status proc))
-	  (code (process-exit-status proc))
-	  (maybe-error (or (not (eq status 'exit)) (/= code 0)))
-	  (buf (and (buffer-live-p mu4e~update-buffer) mu4e~update-buffer))
-	  (win (and buf (get-buffer-window buf))))
+      (code (process-exit-status proc))
+      (maybe-error (or (not (eq status 'exit)) (/= code 0)))
+      (buf (and (buffer-live-p mu4e~update-buffer) mu4e~update-buffer))
+      (win (and buf (get-buffer-window buf))))
     (unless mu4e-hide-index-messages
       (message nil))
     (if maybe-error
       (progn
-	(when mu4e-index-update-error-warning
-	  (mu4e-message "Update process returned with non-zero exit code")
-	  (sit-for 5))
-	(when mu4e-index-update-error-continue
-	  (mu4e-update-index)))
+    (when mu4e-index-update-error-warning
+      (mu4e-message "Update process returned with non-zero exit code")
+      (sit-for 5))
+    (when mu4e-index-update-error-continue
+      (mu4e-update-index)))
       (mu4e-update-index))
     (if (window-live-p win)
       (with-selected-window win (kill-buffer-and-window))
@@ -1016,24 +1016,24 @@ frame to display buffer BUF."
 RUN-IN-BACKGROUND is non-nil (or called with prefix-argument),
 run in the background; otherwise, pop up a window."
   (let* ((process-connection-type t)
-	  (proc (start-process-shell-command
-		  "mu4e-update" " *mu4e-update*"
-		  mu4e-get-mail-command))
-	  (buf (process-buffer proc))
-	  (win (or run-in-background
-		 (mu4e~temp-window buf mu4e~update-buffer-height))))
+      (proc (start-process-shell-command
+          "mu4e-update" " *mu4e-update*"
+          mu4e-get-mail-command))
+      (buf (process-buffer proc))
+      (win (or run-in-background
+         (mu4e~temp-window buf mu4e~update-buffer-height))))
     (setq mu4e~update-buffer buf)
     (when (window-live-p win)
       (with-selected-window win
-	 ;; ;;(switch-to-buffer buf)
-	 ;; (set-window-dedicated-p win t)
-	 (erase-buffer)
-	 (insert "\n") ;; FIXME -- needed so output start
-	 (mu4e~update-mail-mode)))
+     ;; ;;(switch-to-buffer buf)
+     ;; (set-window-dedicated-p win t)
+     (erase-buffer)
+     (insert "\n") ;; FIXME -- needed so output start
+     (mu4e~update-mail-mode)))
     (setq mu4e~progress-reporter
       (unless mu4e-hide-index-messages
-	(make-progress-reporter
-	  (mu4e-format "Retrieving mail..."))))
+    (make-progress-reporter
+      (mu4e-format "Retrieving mail..."))))
     (set-process-sentinel proc 'mu4e~update-sentinel-func)
     ;; if we're running in the foreground, handle password requests
     (unless run-in-background
@@ -1048,7 +1048,7 @@ in the background; otherwise, pop up a window."
   (unless mu4e-get-mail-command
     (mu4e-error "`mu4e-get-mail-command' is not defined"))
   (if (and (buffer-live-p mu4e~update-buffer)
-	(process-live-p (get-buffer-process mu4e~update-buffer)))
+    (process-live-p (get-buffer-process mu4e~update-buffer)))
     (mu4e-message "Update process is already running")
     (progn
       (run-hooks 'mu4e-update-pre-hook)
@@ -1058,7 +1058,7 @@ in the background; otherwise, pop up a window."
   "Stop the update process by sending SIGINT to it."
   (interactive)
   (let* ((proc (and (buffer-live-p mu4e~update-buffer)
-		 (get-buffer-process mu4e~update-buffer))))
+         (get-buffer-process mu4e~update-buffer))))
     (when (process-live-p proc)
       (interrupt-process proc t))))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1081,35 +1081,35 @@ either 'to-server, 'from-server or 'misc. This function is meant for debugging."
       (view-mode)
       (setq buffer-undo-list t)
       (let* ((inhibit-read-only t)
-	      (tstamp (propertize (format-time-string "%Y-%m-%d %T"
-				    (current-time))
-			'face 'font-lock-string-face))
-	      (msg-face
-		(case type
-		  (from-server 'font-lock-type-face)
-		  (to-server   'font-lock-function-name-face)
-		  (misc        'font-lock-variable-name-face)
-		  (error       'font-lock-warning-face)
-		  (otherwise   (mu4e-error "Unsupported log type"))))
-	      (msg (propertize (apply 'format frm args) 'face msg-face)))
-	(goto-char (point-max))
-	(insert tstamp
-	  (case type
-	    (from-server " <- ")
-	    (to-server   " -> ")
-	    (error       " !! ")
-	    (otherwise   " "))
-	  msg "\n")
+          (tstamp (propertize (format-time-string "%Y-%m-%d %T"
+                    (current-time))
+            'face 'font-lock-string-face))
+          (msg-face
+        (case type
+          (from-server 'font-lock-type-face)
+          (to-server   'font-lock-function-name-face)
+          (misc        'font-lock-variable-name-face)
+          (error       'font-lock-warning-face)
+          (otherwise   (mu4e-error "Unsupported log type"))))
+          (msg (propertize (apply 'format frm args) 'face msg-face)))
+    (goto-char (point-max))
+    (insert tstamp
+      (case type
+        (from-server " <- ")
+        (to-server   " -> ")
+        (error       " !! ")
+        (otherwise   " "))
+      msg "\n")
 
-	;; if `mu4e-log-max-lines is specified and exceeded, clearest the oldest
-	;; lines
-	(when (numberp mu4e~log-max-lines)
-	  (let ((lines (count-lines (point-min) (point-max))))
-	    (when (> lines mu4e~log-max-lines)
-	      (goto-char (point-max))
-	      (forward-line (- mu4e~log-max-lines lines))
-	      (beginning-of-line)
-	      (delete-region (point-min) (point)))))))))
+    ;; if `mu4e-log-max-lines is specified and exceeded, clearest the oldest
+    ;; lines
+    (when (numberp mu4e~log-max-lines)
+      (let ((lines (count-lines (point-min) (point-max))))
+        (when (> lines mu4e~log-max-lines)
+          (goto-char (point-max))
+          (forward-line (- mu4e~log-max-lines lines))
+          (beginning-of-line)
+          (delete-region (point-min) (point)))))))))
 
 (defun mu4e-toggle-logging ()
   "Toggle between enabling/disabling debug-mode (in debug-mode,
@@ -1137,30 +1137,30 @@ STR is a string; N is the highest possible number in the list.
 This includes expanding e.g. 3-5 into 3,4,5.  If the letter
 \"a\" ('all')) is given, that is expanded to a list with numbers [1..n]."
   (let ((str-split (split-string str))
-	 beg end list)
+     beg end list)
     (dolist (elem str-split list)
       ;; special number "a" converts into all attachments 1-N.
       (when (equal elem "a")
-	(setq elem (concat "1-" (int-to-string n))))
+    (setq elem (concat "1-" (int-to-string n))))
       (if (string-match "\\([0-9]+\\)-\\([0-9]+\\)" elem)
-	;; we have found a range A-B, which needs converting
-	;; into the numbers A, A+1, A+2, ... B.
-	(progn
-	  (setq beg (string-to-number (match-string 1 elem))
-	    end (string-to-number (match-string 2 elem)))
-	  (while (<= beg end)
-	    (add-to-list 'list beg 'append)
-	    (setq beg (1+ beg))))
-	;; else just a number
-	(add-to-list 'list (string-to-number elem) 'append)))
+    ;; we have found a range A-B, which needs converting
+    ;; into the numbers A, A+1, A+2, ... B.
+    (progn
+      (setq beg (string-to-number (match-string 1 elem))
+        end (string-to-number (match-string 2 elem)))
+      (while (<= beg end)
+        (add-to-list 'list beg 'append)
+        (setq beg (1+ beg))))
+    ;; else just a number
+    (add-to-list 'list (string-to-number elem) 'append)))
     ;; Check that all numbers are valid.
     (mapc
       #'(lambda (x)
-	  (cond
-	    ((> x n)
-	      (mu4e-warn "Attachment %d bigger than maximum (%d)" x n))
-	    ((< x 1)
-	      (mu4e-warn "Attachment number must be greater than 0 (%d)" x))))
+      (cond
+        ((> x n)
+          (mu4e-warn "Attachment %d bigger than maximum (%d)" x n))
+        ((< x 1)
+          (mu4e-warn "Attachment number must be greater than 0 (%d)" x))))
       list)))
 
 
@@ -1175,27 +1175,27 @@ MAXHEIGHT. Function tries to use imagemagick if available (ie.,
 emacs was compiled with inmagemagick support); otherwise MAXWIDTH
 and MAXHEIGHT are ignored."
   (let* ((have-im (and (fboundp 'imagemagick-types)
-		    (imagemagick-types))) ;; hmm, should check for specific type
-	  (identify (and have-im maxwidth
-		      (executable-find mu4e-imagemagick-identify)))
-	  (props (and identify (shell-command-to-string
-				 (format "%s -format '%%w' %s"
-				   identify (shell-quote-argument imgpath)))))
-	  (width (and props (string-to-number props)))
-	  (img (if have-im
-		 (if (> (or width 0) (or maxwidth 0))
-		   (create-image imgpath 'imagemagick nil :width maxwidth)
-		   (create-image imgpath 'imagemagick))
-		 (create-image imgpath))))
+            (imagemagick-types))) ;; hmm, should check for specific type
+      (identify (and have-im maxwidth
+              (executable-find mu4e-imagemagick-identify)))
+      (props (and identify (shell-command-to-string
+                 (format "%s -format '%%w' %s"
+                   identify (shell-quote-argument imgpath)))))
+      (width (and props (string-to-number props)))
+      (img (if have-im
+         (if (> (or width 0) (or maxwidth 0))
+           (create-image imgpath 'imagemagick nil :width maxwidth)
+           (create-image imgpath 'imagemagick))
+         (create-image imgpath))))
     (when img
       (save-excursion
-	(insert "\n")
-	(let ((size (image-size img))) ;; inspired by gnus..
-	  (insert-char ?\n
-	    (max 0 (round (- (window-height) (or maxheight (cdr size)) 1) 2)))
-	  (insert-char ?\.
-	    (max 0 (round (- (window-width)  (or maxwidth (car size))) 2)))
-	  (insert-image img))))))
+    (insert "\n")
+    (let ((size (image-size img))) ;; inspired by gnus..
+      (insert-char ?\n
+        (max 0 (round (- (window-height) (or maxheight (cdr size)) 1) 2)))
+      (insert-char ?\.
+        (max 0 (round (- (window-width)  (or maxwidth (car size))) 2)))
+      (insert-image img))))))
 
 
 (defun mu4e-hide-other-mu4e-buffers ()
@@ -1207,11 +1207,11 @@ displaying it). Do _not_ bury the current buffer, though."
     ;; windows; therefore, the doloops here
     (dolist (frame (frame-list))
       (dolist (win (window-list frame nil))
-	(with-current-buffer (window-buffer win)
-	  (unless (eq curbuf (current-buffer))
-	    (when (member major-mode '(mu4e-headers-mode mu4e-view-mode))
-	      (when (eq t (window-deletable-p win))
-		(delete-window win))))))) t))
+    (with-current-buffer (window-buffer win)
+      (unless (eq curbuf (current-buffer))
+        (when (member major-mode '(mu4e-headers-mode mu4e-view-mode))
+          (when (eq t (window-deletable-p win))
+        (delete-window win))))))) t))
 
 
 (defun mu4e-get-time-date (prompt)
@@ -1237,9 +1237,9 @@ displaying it). Do _not_ bury the current buffer, though."
     (setq buffer-read-only t)
     (define-key mu4e-org-mode-map (kbd "q")
       (lambda ()
-	(interactive)
-	(bury-buffer)
-	(switch-to-buffer curbuf)))))
+    (interactive)
+    (bury-buffer)
+    (switch-to-buffer curbuf)))))
 
 (defun mu4e-about ()
   "Show the mu4e 'about' page."
@@ -1282,8 +1282,8 @@ the view and compose modes."
       ;; give the footer a different color...
       (goto-char (point-min))
       (let ((p (search-forward "^-- *$" nil t)))
-	(when p
-	  (add-text-properties p (point-max) '(face mu4e-footer-face)))))))
+    (when p
+      (add-text-properties p (point-max) '(face mu4e-footer-face)))))))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun mu4e~quote-for-modeline (str)
