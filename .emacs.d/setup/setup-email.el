@@ -111,7 +111,7 @@
   :defer t
   :if (executable-find "mu")
   :load-path (lambda () (expand-file-name "mu/mu4e/" user-emacs-directory))
-  :commands (mu4e/start)
+  :commands (mu4e/start mu4e)
   :init (progn
           ;; Assure .emacs.cache/mu4e exists
           (defvar my/mu4e-maildir "~/.mbsync" "Location of the mu4e/mbsync mailbox")
