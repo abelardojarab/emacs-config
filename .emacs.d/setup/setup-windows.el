@@ -1,6 +1,6 @@
 ;;; setup-windows.el ---                             -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014, 2015, 2016  Abelardo Jara-Berrocal
+;; Copyright (C) 2014, 2015, 2016, 2017  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
 ;; Keywords:
@@ -280,6 +280,11 @@
                     (?b balance-windows)
                     (?u winner-undo)
                     (?r winner-redo)))))
+
+;; Change window sizes based on currently open buffers and focus
+(use-package golden-ratio
+  :commands golden-ratio-adjust
+  :load-path (lambda () (expand-file-name "golden-ratio/" user-emacs-directory)))
 
 (provide 'setup-windows)
 ;;; setup-windows.el ends here

@@ -1,6 +1,6 @@
 ;;; setup-org.el ---
 
-;; Copyright (C) 2016  Abelardo Jara
+;; Copyright (C) 2016, 2017  Abelardo Jara
 
 ;; Author: Abelardo Jara <abelardojara@Abelardos-MacBook-Pro.local>
 ;; Keywords:
@@ -115,7 +115,7 @@
                   org-hide-leading-stars t
                   org-hide-emphasis-markers t
                   org-highlight-latex-and-related '(latex)
-                  org-ellipsis " ⮷ "
+                  org-ellipsis " ••• "
                   ;; this causes problem in other modes
                   org-indent-mode nil)
 
