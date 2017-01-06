@@ -30,6 +30,7 @@
 #include "LogOutputMessage.h"
 #include "QueryMessage.h"
 #include "rct/Rct.h"
+#include "rct/Connection.h"
 #include "rct/StopWatch.h"
 #include "Server.h"
 #include "ClangIndexer.h"
@@ -94,12 +95,19 @@ Path encodeSourceFilePath(const Path &dataDir, const Path &project, uint32_t fil
     return str;
 }
 
-
-Path findAncestor(Path path, const char *fn, Flags<FindAncestorFlag> flags = Flags<FindAncestorFlag>())
+Path findAncestor(Path path, const String &fn, Flags<FindAncestorFlag> flags, SourceCache *cache)
 {
+    Path *cacheResult = 0;
+    if (cache) {
+        const Path parent = path.parentDir();
+        cacheResult = &cache->ancestorCache[parent][SourceCache::AncestorCacheKey { fn, flags }];
+        if (!cacheResult->isEmpty()) {
+            return *cacheResult;
+        }
+    }
     Path ret;
     int slash = path.size();
-    const int len = strlen(fn) + 1;
+    const int len = fn.size() + 1;
     struct stat st;
     char buf[PATH_MAX + sizeof(dirent) + 1];
     dirent *direntBuf = 0, *entry = 0;
@@ -109,7 +117,7 @@ Path findAncestor(Path path, const char *fn, Flags<FindAncestorFlag> flags = Fla
     memcpy(buf, path.constData(), path.size() + 1);
     while ((slash = path.lastIndexOf('/', slash - 1)) > 0) { // We don't want to search in /
         if (!(flags & Wildcard)) {
-            memcpy(buf + slash + 1, fn, len);
+            memcpy(buf + slash + 1, fn.constData(), len);
             if (!stat(buf, &st)) {
                 buf[slash + 1] = '\0';
                 ret = buf;
@@ -137,7 +145,7 @@ Path findAncestor(Path path, const char *fn, Flags<FindAncestorFlag> flags = Fla
                     assert(buf[slash] == '/');
                     assert(l + slash + 1 < static_cast<int>(sizeof(buf)));
                     memcpy(buf + slash + 1, entry->d_name, l);
-                    if (!fnmatch(fn, buf, 0)) {
+                    if (!fnmatch(fn.constData(), buf, 0)) {
                         ret = buf;
                         ret.truncate(slash + 1);
                         found = true;
@@ -153,49 +161,67 @@ Path findAncestor(Path path, const char *fn, Flags<FindAncestorFlag> flags = Fla
     if (flags & Wildcard)
         free(direntBuf);
 
-    return ret.ensureTrailingSlash();
+    ret = ret.ensureTrailingSlash();
+    if (cacheResult) {
+        *cacheResult = ret;
+    }
+    return ret;
 }
 
-Map<String, String> rtagsConfig(const Path &path)
+Map<String, String> rtagsConfig(const Path &path, SourceCache *cache)
 {
     Path dir = path.isDir() ? path : path.parentDir();
     Map<String, String> ret;
-    if (dir.resolve()) {
-        char buf[1024];
-        struct stat statBuf;
-        while (dir.size() > 1) {
-            assert(dir.endsWith('/'));
-            snprintf(buf, sizeof(buf), "%s.rtags-config", dir.constData());
-            if (!stat(buf, &statBuf) && S_ISREG(statBuf.st_mode)) {
-                FILE *f = fopen(buf, "r");
-                if (f) {
-                    while ((fgets(buf, sizeof(buf), f))) {
-                        int len = strlen(buf);
-                        while (len > 0 && isspace(buf[len - 1]))
-                            --len;
-                        if (len) {
-                            buf[len] = '\0';
-                            String key;
-                            char *colon = strchr(buf, ':');
-                            char *value = 0;
-                            if (colon) {
-                                key.assign(buf, colon - buf);
-                                value = colon + 1;
-                                while (isspace(*value))
-                                    ++value;
-                            } else {
-                                key.assign(buf, len);
-                            }
-                            if (!key.isEmpty() && !ret.contains(key)) {
-                                ret[key] = value;
-                            }
-                        }
+    char buf[1024];
+    while (dir.size() > 1) {
+        assert(dir.endsWith('/'));
+        if (cache) {
+            auto it = cache->rtagsConfigCache.find(dir);
+            if (it != cache->rtagsConfigCache.end()) {
+                for (const auto entry : it->second) {
+                    auto &ref = ret[entry.first];
+                    if (ref.isEmpty())
+                        ref = entry.second;
+                }
+                dir = dir.parentDir();
+                continue;
+            }
+        }
+        Map<String, String> *cacheEntry = 0;
+        if (cache) {
+            cacheEntry = &cache->rtagsConfigCache[dir];
+            // we want to cache empty entries
+        }
+        snprintf(buf, sizeof(buf), "%s.rtags-config", dir.constData());
+        if (FILE *f = fopen(buf, "r")) {
+            while ((fgets(buf, sizeof(buf), f))) {
+                int len = strlen(buf);
+                while (len > 0 && isspace(buf[len - 1]))
+                    --len;
+                if (len) {
+                    buf[len] = '\0';
+                    String key;
+                    char *colon = strchr(buf, ':');
+                    char *value = 0;
+                    if (colon) {
+                        key.assign(buf, colon - buf);
+                        value = colon + 1;
+                        while (isspace(*value))
+                            ++value;
+                    } else {
+                        key.assign(buf, len);
                     }
-                    fclose(f);
+                    if (!key.isEmpty()) {
+                        if (!ret.contains(key))
+                            ret[key] = value;
+                        if (cacheEntry)
+                            (*cacheEntry)[key] = value;
+                    }
                 }
             }
-            dir = dir.parentDir();
+            fclose(f);
         }
+        dir = dir.parentDir();
     }
     return ret;
 }
@@ -205,16 +231,16 @@ struct Entry {
     const Flags<FindAncestorFlag> flags;
 };
 
-static inline Path checkEntries(const Entry *entries, const Path &path, const Path &home)
+static inline Path checkEntries(const Entry *entries, const Path &path, const Path &home, SourceCache *cache)
 {
     Path best;
     for (int i=0; entries[i].name; ++i) {
-        Path p = findAncestor(path, entries[i].name, entries[i].flags);
+        Path p = findAncestor(path, entries[i].name, entries[i].flags, cache);
         if ((p.isEmpty() || p == home) && (entries[i].flags & Wildcard)) {
             const int len = strlen(entries[i].name);
             if (entries[i].name[len - 1] == '*') {
                 const String name(entries[i].name, len - 1);
-                p = findAncestor(path, name.constData(), entries[i].flags & ~Wildcard);
+                p = findAncestor(path, name.constData(), entries[i].flags & ~Wildcard, cache);
             }
         }
         if (!p.isEmpty() && p != home && (best.isEmpty() || p.size() < best.size())) {
@@ -225,14 +251,14 @@ static inline Path checkEntries(const Entry *entries, const Path &path, const Pa
 }
 
 
-Path findProjectRoot(const Path &path, ProjectRootMode mode)
+Path findProjectRoot(const Path &path, ProjectRootMode mode, SourceCache *cache)
 {
     if (path == "-")
         return Path();
     if (!path.isAbsolute())
         error() << "GOT BAD PATH" << path;
     assert(path.isAbsolute());
-    const Map<String, String> config = rtagsConfig(path);
+    const Map<String, String> config = rtagsConfig(path, cache);
     {
         const Path project = config.value("project");
         if (!project.isEmpty() && project.isDir())
@@ -261,7 +287,7 @@ Path findProjectRoot(const Path &path, ProjectRootMode mode)
             { 0, Flags<FindAncestorFlag>() }
         };
         {
-            const Path e = checkEntries(before, path, home);
+            const Path e = checkEntries(before, path, home, cache);
             if (!e.isEmpty() && (e.size() < ret.size() || ret.isEmpty()))
                 ret = e;
         }
@@ -269,7 +295,7 @@ Path findProjectRoot(const Path &path, ProjectRootMode mode)
     if (!ret.isEmpty())
         return ret;
     {
-        const Path configStatus = findAncestor(path, "config.status");
+        const Path configStatus = findAncestor(path, "config.status", Flags<FindAncestorFlag>(), cache);
         if (!configStatus.isEmpty()) {
             if (mode == BuildRoot)
                 return configStatus;
@@ -306,7 +332,7 @@ Path findProjectRoot(const Path &path, ProjectRootMode mode)
         }
     }
     {
-        const Path cmakeCache = findAncestor(path, "CMakeCache.txt");
+        const Path cmakeCache = findAncestor(path, "CMakeCache.txt", Flags<FindAncestorFlag>(), cache);
         if (!cmakeCache.isEmpty()) {
             if (mode == BuildRoot)
                 return cmakeCache;
@@ -366,7 +392,7 @@ Path findProjectRoot(const Path &path, ProjectRootMode mode)
     };
 
     {
-        const Path e = checkEntries(after, path, home);
+        const Path e = checkEntries(after, path, home, cache);
         if (!e.isEmpty() && (e.size() < ret.size() || ret.isEmpty()))
             ret = e;
     }
@@ -375,7 +401,7 @@ Path findProjectRoot(const Path &path, ProjectRootMode mode)
         return ret;
 
     if (mode == BuildRoot)
-        return findProjectRoot(path, SourceRoot);
+        return findProjectRoot(path, SourceRoot, cache);
 
     return Path();
 }
@@ -482,7 +508,7 @@ std::shared_ptr<TranslationUnit> TranslationUnit::create(const Path &sourceFile,
                                                          bool displayDiagnostics)
 
 {
-    std::shared_ptr<TranslationUnit> ret(new TranslationUnit);
+    auto ret = std::make_shared<TranslationUnit>();
     ret->clangLine = "clang ";
     ret->index = clang_createIndex(0, displayDiagnostics);
 
@@ -755,131 +781,6 @@ String typeString(const CXType &type)
     return ret;
 }
 
-class CompileCommandsOperation
-{
-public:
-    CompileCommandsOperation(const Hash<Path, CompilationDataBaseInfo> &i, const Path &p)
-        : infos(i), projectRootOverride(p), indexIndex(0)
-    {}
-    ~CompileCommandsOperation()
-    {
-        if (project) {
-            for (auto &info : infos) {
-                info.second.lastModified = Path(info.first + "compile_commands.json").lastModifiedMs();
-                if (info.second.indexFlags & IndexMessage::AppendCompilationDatabase) {
-                    assert(infos.size() == 1);
-                    info.second.indexFlags &= ~IndexMessage::AppendCompilationDatabase;
-                    project->addCompilationDatabaseInfo(std::move(info.first), std::move(info.second));
-                    return;
-                }
-            }
-            project->setCompilationDatabaseInfos(std::move(infos), indexed);
-        }
-    }
-
-    struct Index {
-        String args;
-        Path dir, compileCommandsDir;
-    };
-
-    void work()
-    {
-        Server *server = Server::instance();
-        if (!server) {
-            delete this;
-            return;
-        }
-        const size_t max = std::min(indexIndex + 5, indexes.size());
-        while (indexIndex < max) {
-            const Index &idx = indexes.at(indexIndex);
-            const auto it = infos.find(idx.compileCommandsDir);
-            assert(it != infos.end());
-            server->index(idx.args,
-                          idx.dir,
-                          it->second.environment,
-                          projectRootOverride,
-                          it->second.indexFlags,
-                          &project,
-                          &indexed);
-            ++indexIndex;
-        }
-        if (indexIndex == indexes.size()) {
-            EventLoop::deleteLater(this);
-        } else {
-            EventLoop::eventLoop()->callLater(std::bind(&CompileCommandsOperation::work, this));
-        }
-    }
-    Hash<Path, CompilationDataBaseInfo> infos;
-    const Path projectRootOverride;
-    Set<uint64_t> indexed;
-    std::shared_ptr<Project> project;
-    List<Index> indexes;
-    size_t indexIndex;
-};
-
-bool loadCompileCommands(const Hash<Path, CompilationDataBaseInfo> &infos, const Path &projectRootOverride)
-{
-#if CINDEX_VERSION >= CINDEX_VERSION_ENCODE(0, 20)
-    if (Sandbox::hasRoot() && !projectRootOverride.isEmpty() && !projectRootOverride.startsWith(Sandbox::root())) {
-        error("Invalid --project-root '%s', must be inside --sandbox-root '%s'",
-              projectRootOverride.constData(), Sandbox::root().constData());
-        return false;
-    }
-    CompileCommandsOperation *op = 0;
-    for (const auto &info : infos) {
-        CXCompilationDatabase_Error err;
-        CXCompilationDatabase db = clang_CompilationDatabase_fromDirectory(info.first.constData(), &err);
-        if (err != CXCompilationDatabase_NoError) {
-            error("Can't load compilation database from %scompile_Commands.json", info.first.constData());
-            continue;
-        }
-        CXCompileCommands cmds = clang_CompilationDatabase_getAllCompileCommands(db);
-        const unsigned int sz = clang_CompileCommands_getSize(cmds);
-        if (!op) {
-            op = new CompileCommandsOperation(infos, projectRootOverride);
-            op->indexes.reserve(sz);
-        } else {
-            op->indexes.reserve(op->indexes.size() + sz);
-        }
-        for (unsigned int i = 0; i < sz; ++i) {
-            CXCompileCommand cmd = clang_CompileCommands_getCommand(cmds, i);
-            String args;
-            CXString str = clang_CompileCommand_getDirectory(cmd);
-            const Path compileDir = clang_getCString(str);
-            clang_disposeString(str);
-            const unsigned int num = clang_CompileCommand_getNumArgs(cmd);
-            for (unsigned int j = 0; j < num; ++j) {
-                str = clang_CompileCommand_getArg(cmd, j);
-                const char *ch = clang_getCString(str);
-                if (strchr(ch, ' ')) {
-                    args += '"';
-                    args += ch;
-                    args += '"';
-                } else {
-                    args += ch;
-                }
-                clang_disposeString(str);
-                if (j < num - 1)
-                    args += ' ';
-            }
-            op->indexes.push_back(CompileCommandsOperation::Index { args, compileDir.ensureTrailingSlash(), info.first } );
-        }
-        clang_CompileCommands_dispose(cmds);
-        clang_CompilationDatabase_dispose(db);
-    };
-
-
-    if (op) {
-        EventLoop::eventLoop()->callLater(std::bind(&CompileCommandsOperation::work, op));
-        return true;
-    }
-#else
-    (void)infos;
-    (void)projectRootOverride;
-#endif
-    return false;
-}
-
 #define OUTPUT_LITERAL(string)                  \
     {                                           \
         const char literal[] = string;          \
@@ -970,3 +871,4 @@ String toElisp(const Value &value)
     return ElispFormatter().toString(value);
 }
 }
+

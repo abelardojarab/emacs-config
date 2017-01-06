@@ -45,11 +45,12 @@ char crashDumpFilePath[PATH_MAX];
 FILE *crashDumpFile = 0;
 static void signalHandler(int signal)
 {
+    fprintf(stderr, "Caught signal %d\n", signal);
+
+#ifdef HAVE_BACKTRACE
     enum { SIZE = 1024 };
     void *stack[SIZE];
 
-    fprintf(stderr, "Caught signal %d\n", signal);
-#ifdef HAVE_BACKTRACE
     const int frameCount = backtrace(stack, sizeof(stack) / sizeof(void*));
     if (frameCount <= 0) {
         fprintf(stderr, "Couldn't get stack trace\n");
@@ -149,7 +150,7 @@ enum OptionType {
     BlockArgument,
     NoSpellChecking,
     LargeByValueCopy,
-    DisallowMultipleSources,
+    AllowMultipleSources,
     NoStartupProject,
     NoNoUnknownWarningsOption,
     IgnoreCompiler,
@@ -200,7 +201,9 @@ enum OptionType {
     TcpPort,
     RpPath,
     LogTimestamp,
+    LogFlushOption,
     SandboxRoot,
+    PollTimer,
     NoRealPath,
     Noop
 };
@@ -222,7 +225,12 @@ int main(int argc, char** argv)
 
     bool daemon = false;
     Server::Options serverOpts;
-    serverOpts.socketFile = String::format<128>("%s.rdm", Path::home().constData());
+    const char * runtimeDir = getenv("XDG_RUNTIME_DIR");
+    if (runtimeDir == NULL) {
+        serverOpts.socketFile = String::format<128>("%s.rdm", Path::home().constData());
+    } else {
+        serverOpts.socketFile = String::format<1024>("%s/rdm.socket", runtimeDir);
+    }
     serverOpts.jobCount = std::max(2, ThreadPool::idealThreadCount());
     serverOpts.headerErrorJobCount = -1;
     serverOpts.rpVisitFileTimeout = DEFAULT_RP_VISITFILE_TIMEOUT;
@@ -245,7 +253,12 @@ int main(int argc, char** argv)
     //     serverOpts.options |= Server::SuspendRPOnCrash;
     // #endif
     serverOpts.dataDir = String::format<128>("%s.rtags", Path::home().constData());
-
+    if (!serverOpts.dataDir.exists()) {
+         const char * dataDir = getenv("XDG_CACHE_HOME");
+         serverOpts.dataDir = dataDir ? dataDir : Path::home() + ".cache";
+         serverOpts.dataDir += "/rtags/";
+         serverOpts.dataDir.mkdir(Path::Recursive);
+    }
     Path logFile;
     Flags<LogFlag> logFlags = DontRotate|LogStderr;
     LogLevel logLevel(LogLevel::Error);
@@ -283,7 +296,7 @@ int main(int argc, char** argv)
         { BlockArgument, "block-argument", 'G', CommandLineParser::Required, "Block this argument from being passed to clang. E.g. rdm --block-argument -fno-inline" },
         { NoSpellChecking, "no-spell-checking", 'l', CommandLineParser::NoValue, "Don't pass -fspell-checking." },
         { LargeByValueCopy, "large-by-value-copy", 'r', CommandLineParser::Required, "Use -Wlarge-by-value-copy=[arg] when invoking clang." },
-        { DisallowMultipleSources, "disallow-multiple-sources", 'm', CommandLineParser::NoValue, "With this setting different sources will be merged for each source file." },
+        { AllowMultipleSources, "allow-multiple-sources", 'm', CommandLineParser::NoValue, "Don't merge source files added with -c." },
         { NoStartupProject, "no-startup-project", 'o', CommandLineParser::NoValue, "Don't restore the last current project on startup." },
         { NoNoUnknownWarningsOption, "no-no-unknown-warnings-option", 'Y', CommandLineParser::NoValue, "Don't pass -Wno-unknown-warning-option." },
         { IgnoreCompiler, "ignore-compiler", 'b', CommandLineParser::Required, "Ignore this compiler." },
@@ -334,7 +347,9 @@ int main(int argc, char** argv)
         { TcpPort, "tcp-port", 0, CommandLineParser::Required, "Listen on this tcp socket (default none)." },
         { RpPath, "rp-path", 0, CommandLineParser::Required, String::format<256>("Path to rp (default %s).", defaultRP().constData()) },
         { LogTimestamp, "log-timestamp", 0, CommandLineParser::NoValue, "Add timestamp to logs." },
+        { LogFlushOption, "log-flush", 0, CommandLineParser::NoValue, "Flush stderr/stdout after each log." },
         { SandboxRoot, "sandbox-root",  0, CommandLineParser::Required, "Create index using relative paths by stripping dir (enables copying of tag index db files without need to reindex)." },
+        { PollTimer, "poll-timer", 0, CommandLineParser::Required, "Poll the database of the current project every <arg> seconds. " },
         { NoRealPath, "no-realpath", 0, CommandLineParser::NoValue, "Don't use realpath(3) for files" },
         { Noop, "config", 'c', CommandLineParser::Required, "Use this file (instead of ~/.rdmrc)." },
         { Noop, "no-rc", 'N', CommandLineParser::NoValue, "Don't load any rc files." }
@@ -417,6 +432,12 @@ int main(int argc, char** argv)
                 return { String::format<1024>("Invalid argument to -z %s", value.constData()), CommandLineParser::Parse_Error };
             }
             break; }
+        case PollTimer: {
+            serverOpts.pollTimer = atoi(value.constData());
+            if (serverOpts.pollTimer < 0) {
+                return { String::format<1024>("Invalid argument to --poll-timer %s", value.constData()), CommandLineParser::Parse_Error };
+            }
+            break; }
         case CleanSlate: {
             serverOpts.options |= Server::ClearProjects;
             break; }
@@ -459,8 +480,8 @@ int main(int argc, char** argv)
             }
             serverOpts.defaultArguments.append("-Wlarge-by-value-copy=" + String(value)); // ### not quite working
             break; }
-        case DisallowMultipleSources: {
-            serverOpts.options |= Server::DisallowMultipleSources;
+        case AllowMultipleSources: {
+            serverOpts.options |= Server::AllowMultipleSources;
             break; }
         case NoStartupProject: {
             serverOpts.options |= Server::NoStartupCurrentProject;
@@ -659,6 +680,9 @@ int main(int argc, char** argv)
         case LogTimestamp: {
             logFlags |= LogTimeStamp;
             break; }
+        case LogFlushOption: {
+            logFlags |= LogFlush;
+            break; }
         case SandboxRoot: {
             serverOpts.sandboxRoot = std::move(value);
             if (!serverOpts.sandboxRoot.endsWith('/'))
@@ -761,7 +785,7 @@ int main(int argc, char** argv)
     EventLoop::SharedPtr loop(new EventLoop);
     loop->init(EventLoop::MainEventLoop|EventLoop::EnableSigIntHandler|EventLoop::EnableSigTermHandler);
 
-    std::shared_ptr<Server> server(new Server);
+    auto server = std::make_shared<Server>();
     if (!serverOpts.tests.isEmpty()) {
         char buf[1024];
         Path path;

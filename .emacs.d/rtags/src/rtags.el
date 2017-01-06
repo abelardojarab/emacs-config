@@ -176,6 +176,13 @@ warnings and fixups."
   :type 'boolean
   :safe 'booleanp)
 
+(defcustom rtags-multiple-targets t
+  "Whether RTags will offer multiple choices for rtags-find-symbol-at-point when appropriate,
+warnings and fixups."
+  :group 'rtags
+  :type 'boolean
+  :safe 'booleanp)
+
 (defcustom rtags-verbose-results nil
   "Print more verbose results buffer."
   :group 'rtags
@@ -195,6 +202,7 @@ warnings and fixups."
   :type 'boolean
   :safe 'booleanp)
 
+(defvar rtags-periodic-reparse-timer nil)
 (defun rtags--update-periodic-reparse-timer ()
   (when (and (not rtags-periodic-reparse-timer)
              rtags-periodic-reparse-timeout)
@@ -627,6 +635,10 @@ Effected interactive functions:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Logic
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun rtags-buffer-file-name (&optional buffer)
+  (buffer-file-name (or (buffer-base-buffer buffer) buffer)))
+
 (defun rtags-remove (predicate seq &optional not)
   (let ((ret))
     (while seq
@@ -645,7 +657,7 @@ Effected interactive functions:
     seq))
 
 (defun rtags-is-indexable-default (buffer)
-  (let ((filename (buffer-file-name buffer)))
+  (let ((filename (rtags-buffer-file-name buffer)))
     (when filename
       (let ((suffix (and (string-match "\.\\([^.]+\\)$" filename) (match-string 1 filename))))
         (or (not suffix)
@@ -697,19 +709,6 @@ to case differences."
     (quit-window nil (selected-window))
     (when (and conf (equal frame (window-configuration-frame conf)))
       (set-window-configuration conf))))
-
-(defun magit-restore-window-configuration (&optional kill-buffer)
-  "Bury or kill the current buffer and restore previous window configuration."
-  (let ((winconf magit-previous-window-configuration)
-        (buffer (current-buffer))
-        (frame (selected-frame)))
-    (quit-window kill-buffer (selected-window))
-    (when (and winconf (equal frame (window-configuration-frame winconf)))
-      (set-window-configuration winconf)
-      (when (buffer-live-p buffer)
-        (with-current-buffer buffer
-          (setq magit-previous-window-configuration nil))))))
-
 
 ;;;###autoload
 (defun rtags-call-bury-or-delete ()
@@ -863,12 +862,24 @@ to case differences."
   (rtags-init-current-line-overlay)
   (setq buffer-read-only t))
 
+(defun rtags-bookmark-all-names ()
+  (condition-case nil
+      (bookmark-all-names)
+    (error
+     nil)))
+
+(defun rtags-bookmark-set (name)
+  (condition-case nil
+      (progn (bookmark-set name) t)
+    (error
+     nil)))
+
 (defun rtags-reset-bookmarks ()
   (setq rtags-buffer-bookmarks 0)
   (let ((bookmark-save-flag t))
     (mapcar (lambda (bookmark)
               (when (string-match "^RTags_" bookmark) (bookmark-delete bookmark)))
-            (bookmark-all-names))))
+            (rtags-bookmark-all-names))))
 
 ;;;###autoload
 (defun rtags-next-match () (interactive) (rtags-next-prev-match 1 nil))
@@ -1090,7 +1101,7 @@ to only call this when `rtags-socket-file' is defined.
         (t arg)))
 
 (defun* rtags-call-rc (&rest arguments
-                       &key (path (buffer-file-name))
+                       &key (path (rtags-buffer-file-name))
                        unsaved
                        async ;; nil or a cons (process-filter . sentinel)
                        path-filter
@@ -1122,9 +1133,9 @@ to only call this when `rtags-socket-file' is defined.
           (push (concat "--path-filter=" (rtags-untrampify path-filter)) arguments)
           (when path-filter-regex
             (push "-Z" arguments)))
-        (when (and unsaved (buffer-file-name unsaved))
+        (when (and unsaved (rtags-buffer-file-name unsaved))
           (push (format "--unsaved-file=%s:%d"
-                        (rtags-untrampify (buffer-file-name unsaved))
+                        (rtags-untrampify (rtags-buffer-file-name unsaved))
                         (with-current-buffer unsaved
                           (rtags-buffer-size)))
                 arguments))
@@ -1164,14 +1175,14 @@ to only call this when `rtags-socket-file' is defined.
                                proc))
                             (async (apply #'start-file-process "rc" (current-buffer) rc arguments))
                             ((and unsaved (or (buffer-modified-p unsaved)
-                                              (not (buffer-file-name unsaved))))
+                                              (not (rtags-buffer-file-name unsaved))))
                              (with-current-buffer unsaved
                                (save-restriction
                                  (widen)
                                  (apply #'rtags-call-process-region (point-min) (point-max) rc
                                         nil output nil arguments))))
                             (unsaved (apply #'process-file
-                                            rc (rtags-untrampify (buffer-file-name unsaved)) output nil arguments) nil)
+                                            rc (rtags-untrampify (rtags-buffer-file-name unsaved)) output nil arguments) nil)
                             (t (apply #'process-file rc nil output nil arguments)))))
           (if (processp result)
               (progn
@@ -1209,8 +1220,8 @@ to only call this when `rtags-socket-file' is defined.
   ;; Do not run any hooks from `c++-mode', as this could cause issues with, e.g. flycheck
   (set (make-local-variable 'c-mode-common-hook) nil)
   (set (make-local-variable 'c++-mode-hook) nil)
-  (when (buffer-file-name)
-    (error "Set buffer with file %s read only " (buffer-file-name)))
+  (when (rtags-buffer-file-name)
+    (error "Set buffer with file %s read only " (rtags-buffer-file-name)))
   (setq buffer-read-only t))
 
 (defun rtags-sources (&optional file)
@@ -1239,13 +1250,13 @@ It uses the stored compile command from the RTags database for preprocessing."
                  (not (equal (region-beginning) (region-end))))
         (setq narrow-start (+ 1 (count-lines (point-min) (region-beginning)))
               narrow-end (+ 1 (count-lines (point-min) (region-end)))))
-      (let ((preprocess-buffer (rtags-get-buffer (format "*RTags preprocessed %s*" (buffer-file-name buffer)))))
+      (let ((preprocess-buffer (rtags-get-buffer (format "*RTags preprocessed %s*" (rtags-buffer-file-name buffer)))))
         (rtags-delete-rtags-windows)
         (rtags-location-stack-push)
         (with-current-buffer preprocess-buffer
-          (rtags-call-rc :path (buffer-file-name buffer) "--preprocess" (buffer-file-name buffer))
+          (rtags-call-rc :path (rtags-buffer-file-name buffer) "--preprocess" (rtags-buffer-file-name buffer))
           (when (and narrow-start narrow-end)
-            (let ((match-regexp (concat "^# \\([0-9]*\\) \"" (file-truename (buffer-file-name buffer)) "\""))
+            (let ((match-regexp (concat "^# \\([0-9]*\\) \"" (file-truename (rtags-buffer-file-name buffer)) "\""))
                   last-match last-line start end)
               (while (re-search-forward match-regexp nil t)
                 (let ((current-line (string-to-number (match-string-no-properties 1))))
@@ -1308,7 +1319,7 @@ Uses `completing-read' to ask for the project."
                                           (location (rtags-current-location))
                                           (silent nil))
   (when location
-    (let* ((path (buffer-file-name))
+    (let* ((path (rtags-buffer-file-name))
            (object (with-temp-buffer
                      (and location
                           (rtags-call-rc :path path :noerror t :silent-query silent "-U" location "--elisp"
@@ -1336,7 +1347,7 @@ Uses `completing-read' to ask for the project."
   (interactive)
   (when (or (not (rtags-called-interactively-p)) (rtags-sandbox-id-matches))
     (let ((loc (or location (rtags-current-location)))
-          (path (buffer-file-name)))
+          (path (rtags-buffer-file-name)))
       (when (not no-reparse)
         (rtags-reparse-file-if-needed))
       (with-temp-buffer
@@ -1395,7 +1406,7 @@ instead of file from `current-buffer'.
 "
   (interactive "P")
   (let ((dep-buffer (rtags-get-buffer))
-        (fn (buffer-file-name buffer))
+        (fn (rtags-buffer-file-name buffer))
         (args (and prefix
                    (completing-read "Type: " '("includes" "included-by" "depends-on" "depended-on" "tree-depends-on")))))
     (when fn
@@ -1577,7 +1588,7 @@ instead of file from `current-buffer'.
   (when (or (not (rtags-called-interactively-p)) (rtags-sandbox-id-matches))
     (let ((dep-buffer (rtags-get-buffer "*RTags Dependencies*"))
           (deps)
-          (fn (buffer-file-name)))
+          (fn (rtags-buffer-file-name)))
       (when (or all fn)
         (rtags-delete-rtags-windows)
         (rtags-location-stack-push)
@@ -1745,9 +1756,9 @@ instead of file from `current-buffer'.
                 (save-restriction
                   (widen)
                   (when (rtags-goto-line-col (nth 1 components) (nth 2 components))
-                    (bookmark-set (format "RTags_%d" rtags-buffer-bookmarks))
-                    (incf rtags-buffer-bookmarks)
-                    (1- rtags-buffer-bookmarks))))))))
+                    (when (rtags-bookmark-set (format "RTags_%d" rtags-buffer-bookmarks))
+                      (incf rtags-buffer-bookmarks)
+                      (1- rtags-buffer-bookmarks)))))))))
     (insert (rtags-tree-indent level) location " " (rtags-format-context (cdr (assoc 'ctx ref)) .4))
     (let ((cf (cdr (assoc 'cf ref)))
           (props (list 'rtags-ref-containing-function-location (cdr (assoc 'cfl ref))))
@@ -1796,7 +1807,7 @@ instead of file from `current-buffer'.
           (loc (rtags-current-location))
           (refs)
           (project)
-          (fn (buffer-file-name)))
+          (fn (rtags-buffer-file-name)))
       (when (and fn loc)
         (rtags-reparse-file-if-needed)
         (with-temp-buffer
@@ -1852,7 +1863,7 @@ instead of file from `current-buffer'.
          (or (null filter) (funcall filter container))
          (cons container (rtags-symbol-info-internal :targets t
                                                      :location (format "%s:%d:%d:-:%d:%d:"
-                                                                       (buffer-file-name)
+                                                                       (rtags-buffer-file-name)
                                                                        (cdr (assoc 'startLine container))
                                                                        (cdr (assoc 'startColumn container))
                                                                        (cdr (assoc 'endLine container))
@@ -1880,7 +1891,7 @@ instead of file from `current-buffer'.
   (let* ((containersyms (rtags-symbols-in-container 'rtags-is-function))
          (container (car containersyms))
          (symbols (cdr containersyms))
-         (file (buffer-file-name))
+         (file (rtags-buffer-file-name))
          (calls))
     (while symbols
       (when (and (cdr (assoc 'reference (car symbols))))
@@ -1933,7 +1944,7 @@ instead of file from `current-buffer'.
   (interactive)
   (when (or (not (rtags-called-interactively-p)) (rtags-sandbox-id-matches))
     (let ((args-buffer (rtags-get-buffer))
-          (source (buffer-file-name buffer)))
+          (source (rtags-buffer-file-name buffer)))
       (when source
         (rtags-delete-rtags-windows)
         (rtags-location-stack-push)
@@ -1950,7 +1961,7 @@ instead of file from `current-buffer'.
   (interactive)
   (when (or (not (rtags-called-interactively-p)) (rtags-sandbox-id-matches))
     (let ((class-hierarchy-buffer (rtags-get-buffer))
-          (path (buffer-file-name))
+          (path (rtags-buffer-file-name))
           (location (rtags-current-location)))
       (when (and path location)
         (rtags-delete-rtags-windows)
@@ -2015,7 +2026,7 @@ instead of file from `current-buffer'.
     (goto-char (1+ pos))))
 
 (defun rtags-current-location (&optional offset truename)
-  (let ((fn (buffer-file-name)))
+  (let ((fn (rtags-buffer-file-name)))
     (and fn (format "%s:%d:%d:" (if truename (file-truename fn) fn)
                     (line-number-at-pos offset) (1+ (- (or offset (point)) (point-at-bol)))))))
 
@@ -2292,7 +2303,7 @@ of PREFIX or not, if doesn't contain one, one will be added."
 
 (defun rtags-target (&optional filter declaration-only no-reparse no-error)
   "DONT-REPARSE : do not reparse file even if it appears as modified."
-  (let ((path (buffer-file-name))
+  (let ((path (rtags-buffer-file-name))
         (location (rtags-current-location))
         (unsaved (and (buffer-modified-p) (current-buffer))))
     (when path
@@ -2314,7 +2325,10 @@ to find anything about the item."
                     (rtags-target nil nil nil t))))
     target))
 
+
+(defun rtags-buffer-lines () (count-lines (point-min) (point-max)))
 ;;;###autoload
+
 (defun rtags-find-symbol-at-point (&optional prefix)
   "Find the natural target for the symbol under the cursor and moves to that location.
 For references this means to jump to the definition/declaration of the referenced symbol (it jumps to the definition if it is indexed).
@@ -2322,44 +2336,34 @@ For definitions it jumps to the declaration (if there is only one) For declarati
 If called with prefix, open first match in other window"
   (interactive "P")
   (let ((otherwindow (and prefix (listp prefix)))
-        (pathfilter (and (numberp prefix) (buffer-file-name))))
+        (pathfilter (and (numberp prefix) (rtags-buffer-file-name))))
     (when (or (not (rtags-called-interactively-p)) (rtags-sandbox-id-matches))
-      (rtags-delete-rtags-windows)
       (rtags-location-stack-push)
       (let ((arg (rtags-current-location))
             (tagname (or (rtags-current-symbol) (rtags-current-token)))
-            (fn (buffer-file-name)))
+            (fn (rtags-buffer-file-name)))
         (rtags-reparse-file-if-needed)
-        (let ((old (let ((buf (get-buffer rtags-buffer-name)))
-                     (and buf (with-current-buffer buf
-                                (cons (buffer-string) (point))))))
-              (buf (rtags-get-buffer)))
-          (with-current-buffer buf
-            (rtags-call-rc :path fn :path-filter pathfilter "-f" arg)
-            (let ((ret (cond ((or (not rtags-follow-symbol-try-harder)
-                                  (= (length tagname) 0))
-                              (rtags-handle-results-buffer nil nil fn otherwindow))
-                             ((rtags-handle-results-buffer nil t fn otherwindow))
-                             (t
-                              (erase-buffer)
-                              (rtags-call-rc :path-filter pathfilter :path fn
-                                             "-F" tagname "--definition-only" "-M" "1" "--dependency-filter" fn
-                                             (when rtags-wildcard-symbol-names "--wildcard-symbol-names")
-                                             (when rtags-symbolnames-case-insensitive "-I"))
-                              (unless (rtags-handle-results-buffer nil nil fn otherwindow)
-                                (erase-buffer)
-                                (rtags-call-rc :path fn :path-filter pathfilter "-F" tagname "-M" "1" "--dependency-filter" fn
-                                               (when rtags-wildcard-symbol-names "--wildcard-symbol-names")
-                                               (when rtags-symbolnames-case-insensitive "-I"))
-                                (rtags-handle-results-buffer nil nil fn otherwindow))))))
-              (when (and old (> (length (car old)) 0))
-                (with-current-buffer buf
-                  (when (<= (count-lines (point-min) (point-max)) 1)
-                    (setq buffer-read-only nil)
-                    (erase-buffer)
-                    (insert (car old))
-                    (goto-char (cdr old)))))
-              ret)))))))
+        (let ((results (with-temp-buffer
+                         (rtags-call-rc :path fn :path-filter pathfilter "-f" arg (if rtags-multiple-targets "--all-targets"))
+                         (when (and (= (rtags-buffer-lines) 0)
+                                    rtags-follow-symbol-try-harder
+                                    (> (length tagname) 0))
+                           (rtags-call-rc :path-filter pathfilter :path fn "-F" tagname "--definition-only" "-M" "1" "--dependency-filter" fn)
+                           (when (= (rtags-buffer-lines) 0)
+                             (rtags-call-rc :path fn :path-filter pathfilter "-F" tagname "-M" "1" "--dependency-filter" fn)))
+                         (cons (buffer-string) (rtags-buffer-lines)))))
+          (cond ((= (cdr results) 0) nil)
+                ((= (cdr results) 1)
+                 (with-temp-buffer
+                   (insert (car results))
+                   (goto-char (point-min))
+                   (rtags-handle-results-buffer nil nil fn otherwindow)))
+                (t
+                 (rtags-delete-rtags-windows)
+                 (with-current-buffer (rtags-get-buffer)
+                   (insert (car results))
+                   (goto-char (point-min))
+                   (rtags-handle-results-buffer)))))))))
 
 ;;;###autoload
 (defun rtags-find-references-at-point (&optional prefix)
@@ -2372,12 +2376,12 @@ buffer with the different alternatives and jump to the first one, if
 treated as references to the referenced symbol."
   (interactive "P")
   (let ((otherwindow (and prefix (listp prefix)))
-        (pathfilter (and (numberp prefix) (buffer-file-name))))
+        (pathfilter (and (numberp prefix) (rtags-buffer-file-name))))
     (when (or (not (rtags-called-interactively-p)) (rtags-sandbox-id-matches))
       (rtags-delete-rtags-windows)
       (rtags-location-stack-push)
       (let ((arg (rtags-current-location))
-            (fn (buffer-file-name)))
+            (fn (rtags-buffer-file-name)))
         (rtags-reparse-file-if-needed)
         (with-current-buffer (rtags-get-buffer)
           (rtags-call-rc :path fn :path-filter pathfilter "-r" arg
@@ -2390,12 +2394,12 @@ treated as references to the referenced symbol."
 This includes both declarations and definitions."
   (interactive "P")
   (let ((otherwindow (and prefix (listp prefix)))
-        (pathfilter (and (numberp prefix) (buffer-file-name))))
+        (pathfilter (and (numberp prefix) (rtags-buffer-file-name))))
     (when (or (not (rtags-called-interactively-p)) (rtags-sandbox-id-matches))
       (rtags-delete-rtags-windows)
       (rtags-location-stack-push)
       (let ((arg (rtags-current-location))
-            (fn (buffer-file-name)))
+            (fn (rtags-buffer-file-name)))
         (rtags-reparse-file-if-needed)
         (with-current-buffer (rtags-get-buffer)
           (rtags-call-rc :path fn
@@ -2410,12 +2414,12 @@ This includes both declarations and definitions."
 (defun rtags-find-all-references-at-point (&optional prefix)
   (interactive "P")
   (let ((otherwindow (and prefix (listp prefix)))
-        (pathfilter (and (numberp prefix) (buffer-file-name))))
+        (pathfilter (and (numberp prefix) (rtags-buffer-file-name))))
     (when (or (not (rtags-called-interactively-p)) (rtags-sandbox-id-matches))
       (rtags-delete-rtags-windows)
       (rtags-location-stack-push)
       (let ((arg (rtags-current-location))
-            (fn (buffer-file-name)))
+            (fn (rtags-buffer-file-name)))
         (rtags-reparse-file-if-needed)
         (with-current-buffer (rtags-get-buffer)
           (rtags-call-rc :path fn
@@ -2433,7 +2437,7 @@ This includes both declarations and definitions."
     (rtags-delete-rtags-windows)
     (rtags-location-stack-push)
     (let ((token (rtags-current-token))
-          (fn (buffer-file-name)))
+          (fn (rtags-buffer-file-name)))
       (when token
         (rtags-reparse-file-if-needed)
         (with-current-buffer (rtags-get-buffer)
@@ -2462,7 +2466,7 @@ This includes both declarations and definitions."
                          (token)
                          (t (error "Not sure what to rename")))))
            (len (and prev (length prev)))
-           (file (buffer-file-name))
+           (file (rtags-buffer-file-name))
            (replacewith (read-from-minibuffer
                          (if len
                              (format "Replace '%s' with: " prev)
@@ -2615,7 +2619,7 @@ This includes both declarations and definitions."
           (delete-overlay overlay)))))
   (unless no-update-diagnostics-buffer
     (let ((diagnostics-buffer (get-buffer rtags-diagnostics-buffer-name))
-          (rx (concat "^" (file-truename (buffer-file-name)) ":")))
+          (rx (concat "^" (file-truename (rtags-buffer-file-name)) ":")))
       (when diagnostics-buffer
         (with-current-buffer diagnostics-buffer
           (setq buffer-read-only nil)
@@ -2638,10 +2642,11 @@ This includes both declarations and definitions."
 (defun rtags-clear-all-diagnostics-overlays()
   (interactive)
   (dolist (buf rtags-overlays-buffers)
-    (with-current-buffer buf
-      (rtags-overlays-remove t)))
+    (when (buffer-live-p buf)
+      (with-current-buffer buf
+        (rtags-overlays-remove t))))
   (let ((diagnostics-buffer (get-buffer rtags-diagnostics-buffer-name)))
-    (when diagnostics-buffer
+    (when (buffer-live-p diagnostics-buffer)
       (with-current-buffer diagnostics-buffer
         (setq buffer-read-only nil)
         (erase-buffer)
@@ -2686,7 +2691,7 @@ This includes both declarations and definitions."
 (make-variable-buffer-local 'rtags-error-warning-count)
 
 (defun rtags-handle-check-style (filename data)
-  ;; (message "parsing nodes %s" (buffer-file-name buffer))
+  ;; (message "parsing nodes %s" (rtags-buffer-file-name buffer))
   (let* ((line (nth 1 data))
          (column (nth 2 data))
          (length (nth 3 data))
@@ -2855,7 +2860,7 @@ This includes both declarations and definitions."
       (when children
         (setq msg (concat msg "\n" (mapconcat #'(lambda (child)
                                                   (let* ((location (format "%s:%d:%d: "
-                                                                           (file-name-nondirectory (or (car child) (buffer-file-name)))
+                                                                           (file-name-nondirectory (or (car child) (rtags-buffer-file-name)))
                                                                            (nth 1 child)
                                                                            (nth 2 child)))
                                                          (ret (concat location
@@ -2976,7 +2981,7 @@ This includes both declarations and definitions."
   (when (and (not (window-minibuffer-p (get-buffer-window)))
              (not (buffer-modified-p)))
     (if (and (or (eq major-mode 'c++-mode) (eq major-mode 'c-mode) (eq major-mode 'objc-mode))
-             (file-exists-p (or (buffer-file-name) "")))
+             (file-exists-p (or (rtags-buffer-file-name) "")))
         (let ((loc (rtags-current-location)))
           (when (and loc (not (string= loc rtags-container-last-location)))
             (setq rtags-container-last-location loc)
@@ -3030,9 +3035,9 @@ This includes both declarations and definitions."
 (defun rtags-after-save-hook ()
   (interactive)
   (when (and rtags-reindex-on-save (funcall rtags-is-indexable (current-buffer)))
-    (rtags-call-rc :path (buffer-file-name)
+    (rtags-call-rc :path (rtags-buffer-file-name)
                    :silent t
-                   "-V" (buffer-file-name))))
+                   "-V" (rtags-buffer-file-name))))
 
 
 (add-hook 'after-save-hook 'rtags-after-save-hook)
@@ -3086,14 +3091,15 @@ This includes both declarations and definitions."
 ;;;###autoload
 (defun rtags-clear-diagnostics ()
   (interactive)
-  (when (get-buffer rtags-diagnostics-buffer-name)
-    (let (deactivate-mark)
-      (with-current-buffer rtags-diagnostics-buffer-name
-        (setq buffer-read-only nil)
-        (goto-char (point-min))
-        (delete-char (- (point-max) (point-min)))
-        (setq buffer-read-only t))))
-  (rtags-clear-all-diagnostics-overlays))
+  (let ((buf (get-buffer rtags-diagnostics-buffer-name)))
+    (when (buffer-live-p buf)
+      (let (deactivate-mark)
+        (with-current-buffer buf
+          (setq buffer-read-only nil)
+          (goto-char (point-min))
+          (delete-char (- (point-max) (point-min)))
+          (setq buffer-read-only t))))
+    (rtags-clear-all-diagnostics-overlays)))
 
 (defun rtags-diagnostics-process-filter (process output)
   ;; Collect the diagnostics into rtags-diagnostics-raw-buffer-name until a newline is found
@@ -3112,8 +3118,8 @@ This includes both declarations and definitions."
 (define-key rtags-diagnostics-mode-map (kbd "f") 'rtags-apply-fixit-at-point)
 (set-keymap-parent rtags-diagnostics-mode-map compilation-mode-map)
 (define-derived-mode rtags-diagnostics-mode compilation-mode "rtags-diagnostics"
-  (when (buffer-file-name)
-    (error "Set buffer with file %s read only " (buffer-file-name)))
+  (when (rtags-buffer-file-name)
+    (error "Set buffer with file %s read only " (rtags-buffer-file-name)))
   (setq buffer-read-only t))
 
 (defun rtags-diagnostics-sentinel (process event)
@@ -3163,7 +3169,7 @@ This includes both declarations and definitions."
 
 (defun rtags-buffer-status (&optional buffer)
   (when rtags-enabled
-    (let* ((fn (buffer-file-name buffer))
+    (let* ((fn (rtags-buffer-file-name buffer))
            (path (cond (fn (and (file-exists-p fn) fn))
                        (dired-directory)
                        (default-directory)
@@ -3180,7 +3186,7 @@ This includes both declarations and definitions."
 ;;;###autoload
 (defun rtags-compilation-flags ()
   (interactive)
-  (let ((path (buffer-file-name)))
+  (let ((path (rtags-buffer-file-name)))
     (when path
       (with-temp-buffer
         (rtags-call-rc :path path "--source" path "--compilation-flags-only" "--compilation-flags-split-line")
@@ -3190,7 +3196,7 @@ This includes both declarations and definitions."
           (split-string str "\n" t))))))
 
 (defun rtags-is-working (&optional buffer)
-  (let ((path (expand-file-name (or (buffer-file-name buffer) dired-directory default-directory))))
+  (let ((path (expand-file-name (or (rtags-buffer-file-name buffer) dired-directory default-directory))))
     (with-temp-buffer
       ;;(message ":debug: rtags-is-working: buffer=%s, path=%s" buffer path)
       (rtags-call-rc :output (list t t) :silent-query t :path path "-s" "jobs")
@@ -3202,7 +3208,7 @@ This includes both declarations and definitions."
 
 
 (defun rtags-is-indexed (&optional buffer)
-  (let ((path (buffer-file-name buffer)))
+  (let ((path (rtags-buffer-file-name buffer)))
     (cond ((not path) nil)
           ((equal (rtags-buffer-status buffer) 'rtags-indexed)))))
 
@@ -3245,8 +3251,8 @@ This includes both declarations and definitions."
                 (save-excursion
                   (save-restriction
                     (widen)
-                    (when (rtags-goto-line-col line column)
-                      (bookmark-set (format "RTags_%d" rtags-buffer-bookmarks))
+                    (when (and (rtags-goto-line-col line column)
+                               (rtags-bookmark-set (format "RTags_%d" rtags-buffer-bookmarks)))
                       (setq bookmark-idx rtags-buffer-bookmarks)
                       (incf rtags-buffer-bookmarks)))))))
           (when rtags-verbose-results
@@ -3367,12 +3373,12 @@ other window instead of the current one."
 (defun rtags-taglist (&optional dest-window)
   (interactive)
   (when (or (not (rtags-called-interactively-p)) (rtags-sandbox-id-matches))
-    (unless (buffer-file-name)
+    (unless (rtags-buffer-file-name)
       (error "rtags-taglist must be run from a buffer visiting a file"))
     (rtags-delete-rtags-windows)
     (rtags-location-stack-push)
     (setq rtags-taglist-locations nil)
-    (let* ((fn (buffer-file-name)) functions classes variables enums macros other)
+    (let* ((fn (rtags-buffer-file-name)) functions classes variables enums macros other)
       (with-temp-buffer
         (rtags-call-rc :path fn :path-filter fn "-F" "--cursor-kind" "--display-name" "--no-context")
         ;; (message (buffer-string))
@@ -3445,7 +3451,7 @@ other window instead of the current one."
                (rtags-goto-location (car cur) nil other-window))))
           ((and (car idx)
                 (>= rtags-buffer-bookmarks (car idx))
-                (member bookmark (bookmark-all-names)))
+                (member bookmark (rtags-bookmark-all-names)))
            (when other-window
              (when (= (length (window-list)) 1)
                (funcall rtags-split-window-function))
@@ -3509,7 +3515,7 @@ other window instead of the current one."
   (when (or (not (rtags-called-interactively-p)) (rtags-sandbox-id-matches))
     (rtags-delete-rtags-windows)
     (rtags-location-stack-push)
-    (let* ((fn (buffer-file-name))
+    (let* ((fn (rtags-buffer-file-name))
            (alternatives (with-temp-buffer
                            (rtags-call-rc :path fn :path-filter fn
                                           "--kind-filter" rtags-imenu-kind-filter
@@ -3630,7 +3636,7 @@ other window instead of the current one."
     (unless buffer
       (setq buffer (current-buffer)))
     (save-excursion
-      (let* ((path (buffer-file-name buffer))
+      (let* ((path (rtags-buffer-file-name buffer))
              (tempbuf nil)
              (buffertext (when ediff (with-current-buffer buffer (buffer-string))))
              (min (line-number-at-pos
@@ -3770,14 +3776,14 @@ other window instead of the current one."
 ;;;###autoload
 (defun rtags-update-current-project ()
   (interactive)
-  (when (and (or (buffer-file-name) dired-directory)
+  (when (and (or (rtags-buffer-file-name) dired-directory)
              (not (eq (current-buffer) rtags-last-update-current-project-buffer))
              default-directory
              (not (and (tramp-tramp-file-p default-directory) (not rtags-tramp-enabled)))
              (file-directory-p default-directory))
     (setq rtags-last-update-current-project-buffer (current-buffer))
     (let* ((rc (rtags-executable-find "rc"))
-           (path (rtags-untrampify (or (buffer-file-name) default-directory)))
+           (path (rtags-untrampify (or (rtags-buffer-file-name) default-directory)))
            (arguments (list "-T" path "--diagnose" path "--silent-query")))
       (when (and rtags-completions-enabled
                  (or (and (boundp 'company-mode) company-mode)
@@ -3833,7 +3839,7 @@ definition."
   (rtags-delete-rtags-windows)
   (rtags-location-stack-push)
   (let ((tagname (rtags-current-symbol))
-        (path (buffer-file-name))
+        (path (rtags-buffer-file-name))
         input)
     (if (> (length tagname) 0)
         (setq prompt (concat prompt ": (default: " tagname ") "))
@@ -3912,20 +3918,30 @@ definition."
        (<= end (window-end))))
 
 ;;;###autoload
-(defun rtags-toggle-file-suspended()
+(defun rtags-suspend-file(&optional arg)
   (interactive)
-  (let ((buffer (buffer-file-name)))
+  (let ((buffer (rtags-buffer-file-name)))
     (when buffer
       (with-temp-buffer
-        (rtags-call-rc :path buffer "-X" buffer)
+        (rtags-call-rc :path buffer "-X" buffer (or arg "on"))
         (if (> (point-max) (point-min))
             (message (buffer-substring-no-properties (point-min) (1- (point-max))))
           (message (buffer-string)))))))
 
 ;;;###autoload
+(defun rtags-unsuspend-file()
+  (interactive)
+  (rtags-suspend-file "off"))
+
+;;;###autoload
+(defun rtags-toggle-file-suspended()
+  (interactive)
+  (rtags-suspend-file "toggle"))
+
+;;;###autoload
 (defun rtags-clear-suspended-files()
   (interactive)
-  (let ((buffer (buffer-file-name)))
+  (let ((buffer (rtags-buffer-file-name)))
     (when buffer
       (with-temp-buffer
         (rtags-call-rc :path buffer "-X" "clear")
@@ -3936,7 +3952,7 @@ definition."
 ;;;###autoload
 (defun rtags-suspend-all-files()
   (interactive)
-  (let ((buffer (buffer-file-name)))
+  (let ((buffer (rtags-buffer-file-name)))
     (when buffer
       (with-temp-buffer
         (rtags-call-rc :path buffer "-X" "all")
@@ -3947,7 +3963,7 @@ definition."
 ;;;###autoload
 (defun rtags-list-suspended-files()
   (interactive)
-  (let ((buffer (buffer-file-name)))
+  (let ((buffer (rtags-buffer-file-name)))
     (when buffer
       (with-temp-buffer
         (rtags-call-rc :path buffer "-X")
@@ -3961,8 +3977,8 @@ definition."
   (interactive)
   (when (or (not (rtags-called-interactively-p)) (rtags-sandbox-id-matches))
     (let ((source (cond ((stringp buffer) buffer)
-                        ((bufferp buffer) (buffer-file-name buffer))
-                        (t (buffer-file-name)))))
+                        ((bufferp buffer) (rtags-buffer-file-name buffer))
+                        (t (rtags-buffer-file-name)))))
       (with-temp-buffer
         (setq rtags-last-compiled-source source)
         (rtags-call-rc :path source "--sources" source "--compilation-flags-only")
@@ -4085,7 +4101,7 @@ definition."
   (when (or (not (rtags-called-interactively-p)) (rtags-sandbox-id-matches))
     (unless buffer
       (setq buffer (current-buffer)))
-    (let ((file (buffer-file-name buffer)))
+    (let ((file (rtags-buffer-file-name buffer)))
       ;;(when (null (rtags-buffer-status buffer))
       ;;(message ":debug: file not indexed"))
       (when (and file (rtags-buffer-status buffer))
@@ -4136,7 +4152,7 @@ force means do it regardless of rtags-enable-unsaved-reparsing "
 ;;;###autoload
 (defun rtags-maybe-reparse-file (&optional buffer)
   (interactive)
-  (let ((file (buffer-file-name buffer)))
+  (let ((file (rtags-buffer-file-name buffer)))
     (when file
       (with-temp-buffer
         (rtags-call-rc :path file "-x" file)))))
@@ -4175,7 +4191,7 @@ force means do it regardless of rtags-enable-unsaved-reparsing "
                  t))
               ((and startLine)
                (unless file
-                 (setq file (buffer-file-name)))
+                 (setq file (rtags-buffer-file-name)))
                (unless endLine
                  (setq endLine startLine))
                (unless startColumn
@@ -4248,7 +4264,7 @@ the definition, etc.
 
 Return nil if it can't get any info about the item."
   ;; try first with --declaration-only
-  (let ((symbol (rtags-symbol-info-internal :location (rtags-target-declaration-first) :silent t)))
+  (let ((symbol (rtags-symbol-info-internal :location (or (rtags-target-declaration-first) (rtags-current-location)) :silent t)))
     (when symbol
       (let ((brief (cdr (assoc 'briefComment symbol)))
             symbol-text
@@ -4311,7 +4327,7 @@ so it knows what files may be queried which helps with responsiveness.
     (with-temp-buffer
       (mapc #'(lambda (x)
                 (when (funcall rtags-is-indexable x)
-                  (insert (buffer-file-name x) "\n")))
+                  (insert (rtags-buffer-file-name x) "\n")))
             buffers)
       (when (> (point-max) 1)
         (rtags-log (concat "--set-buffers files: "
@@ -4322,7 +4338,7 @@ so it knows what files may be queried which helps with responsiveness.
 (defun rtags-kill-buffer-hook ()
   "When killing a buffer that is indexable, inform rdm of the new
 set of buffers we are visiting."
-  (when (and (buffer-file-name)
+  (when (and (rtags-buffer-file-name)
              (memq major-mode rtags-supported-major-modes))
     (unless (file-directory-p default-directory)
       (cd "/"))
@@ -4346,7 +4362,7 @@ set of buffers we are visiting."
 
 (defun rtags-find-file-hook ()
   (interactive)
-  (when (buffer-file-name)
+  (when (rtags-buffer-file-name)
     (rtags-schedule-buffer-list-update))
   t)
 (add-hook 'find-file-hook 'rtags-find-file-hook)
@@ -4381,7 +4397,7 @@ With optional PREFIX insert include at point."
            (input (if (fboundp 'completing-read-default)
                       (completing-read-default prompt #'rtags-symbolname-complete nil nil nil 'rtags-symbol-history)
                     (completing-read prompt #'rtags-symbolname-complete nil nil nil 'rtags-symbol-history)))
-           (current-file (buffer-file-name)))
+           (current-file (rtags-buffer-file-name)))
       (setq rtags-symbol-history (rtags-remove-last-if-duplicated rtags-symbol-history))
       (when (string= "" input)
         (if token
@@ -4407,7 +4423,7 @@ With optional PREFIX insert include at point."
   "Insert selected or entered include name in buffer.
 With optional PREFIX insert include at point."
   (interactive "P")
-  (let* ((alternatives (let ((buf (or (buffer-file-name) (error "Buffer is not visiting a file"))))
+  (let* ((alternatives (let ((buf (or (rtags-buffer-file-name) (error "Buffer is not visiting a file"))))
                          (with-temp-buffer (rtags-call-rc :path buf
                                                           "--code-complete-at" (concat buf ":1:1:")
                                                           "--code-complete-includes"
@@ -4491,9 +4507,9 @@ With optional PREFIX insert include at point."
         (setq loc (rtags-peer-member-end-location))))
     (unless loc
       ;; Need to handle creation of a buffer with appropriate name
-      (if (member (downcase (file-name-extension (buffer-file-name))) (list "c" "cxx" "cc" "cpp" "c++"))
+      (if (member (downcase (file-name-extension (rtags-buffer-file-name))) (list "c" "cxx" "cc" "cpp" "c++"))
           (setq loc (cons (current-buffer) (+ (cdr range) 2)))
-        (let ((fn (buffer-file-name)))
+        (let ((fn (rtags-buffer-file-name)))
           (find-file (concat (file-name-sans-extension fn) ".cpp"))
           (insert "#include \"" (file-name-nondirectory fn) "\"\n")
           (setq loc (cons (current-buffer) (point))))))
@@ -4575,7 +4591,7 @@ the class.
 (defun rtags-check-includes ()
   (interactive)
   (when (or (not (rtags-called-interactively-p)) (rtags-sandbox-id-matches))
-    (let ((filename (rtags-untrampify (buffer-file-name)))
+    (let ((filename (rtags-untrampify (rtags-buffer-file-name)))
           (rc (rtags-executable-find "rc")))
       (unless rc
         (error "Can't find rc"))
@@ -4622,7 +4638,7 @@ the class.
           (max (max from to)))
       (setq from min)
       (setq to max)))
-  (let ((path (buffer-file-name)))
+  (let ((path (rtags-buffer-file-name)))
     (unless path
       (error "rtags-tokens must be run from a buffer visiting a file"))
     (cond ((functionp callback)

@@ -43,13 +43,51 @@ class Database;
 class Project;
 struct Diagnostic;
 struct DependencyNode;
-struct CompilationDataBaseInfo;
 typedef List<std::pair<uint32_t, uint32_t> > Includes;
 typedef Hash<uint32_t, DependencyNode*> Dependencies;
-typedef Map<uint64_t, Source> Sources;
+typedef Hash<uint32_t, SourceList> Sources;
 typedef Map<Path, Set<String> > Files;
 typedef Hash<uint32_t, Set<FixIt> > FixIts;
 typedef Hash<Path, String> UnsavedFiles;
+
+struct SourceCache;
+inline bool operator==(const CXCursor &l, CXCursorKind r)
+{
+    return clang_getCursorKind(l) == r;
+}
+inline bool operator==(CXCursorKind l, const CXCursor &r)
+{
+    return l == clang_getCursorKind(r);
+}
+
+inline bool operator!=(const CXCursor &l, CXCursorKind r)
+{
+    return clang_getCursorKind(l) != r;
+}
+inline bool operator!=(CXCursorKind l, const CXCursor &r)
+{
+    return l != clang_getCursorKind(r);
+}
+
+inline bool operator==(const CXCursor &l, const CXCursor &r)
+{
+    return clang_equalCursors(l, r);
+}
+inline bool operator!=(const CXCursor &l, const CXCursor &r)
+{
+    return !clang_equalCursors(l, r);
+}
+
+inline bool operator!(const CXCursor &cursor)
+{
+    return clang_Cursor_isNull(cursor);
+}
+
+inline bool operator!(const CXSourceLocation &location)
+{
+    static const CXSourceLocation sNullLocation = clang_getNullLocation();
+    return clang_equalLocations(location, sNullLocation);
+}
 
 namespace RTags {
 
@@ -569,15 +607,14 @@ enum ProjectRootMode {
     SourceRoot,
     BuildRoot
 };
-Path findProjectRoot(const Path &path, ProjectRootMode mode);
+Path findProjectRoot(const Path &path, ProjectRootMode mode, SourceCache *cache = 0);
 enum FindAncestorFlag {
     Shallow = 0x1,
     Wildcard = 0x2
 };
 RCT_FLAGS(FindAncestorFlag);
-Path findAncestor(Path path, const char *fn, Flags<FindAncestorFlag> flags);
-Map<String, String> rtagsConfig(const Path &path);
-bool loadCompileCommands(const Hash<Path, CompilationDataBaseInfo> &infos, const Path &projectRoot);
+Path findAncestor(Path path, const String &fn, Flags<FindAncestorFlag> flags, SourceCache *cache = 0);
+Map<String, String> rtagsConfig(const Path &path, SourceCache *cache = 0);
 
 enum { DefinitionBit = 0x1000 };
 inline CXCursorKind targetsValueKind(uint16_t val)
@@ -599,8 +636,8 @@ inline uint16_t createTargetsValue(const CXCursor &cursor)
 inline int targetRank(CXCursorKind kind)
 {
     switch (kind) {
-    case CXCursor_Constructor: // this one should be more than class/struct decl
-        return 1;
+    case CXCursor_Constructor: // this one should be more than class/struct decl and fielddecl
+        return 5;
     case CXCursor_ClassDecl:
     case CXCursor_StructDecl:
     case CXCursor_ClassTemplate:
@@ -614,7 +651,7 @@ inline int targetRank(CXCursorKind kind)
         // objects seem to come out as function templates
         return 3;
     case CXCursor_MacroDefinition:
-        return 4;
+        return 5;
     default:
         return 2;
     }
@@ -743,44 +780,51 @@ inline Location createLocation(const CXCursor &cursor, int *offsetPtr = 0)
 {
     return createLocation(clang_getCursorLocation(cursor), offsetPtr);
 }
+
+inline bool isValid(const CXCursor &cursor)
+{
+    return !!cursor;
 }
 
-struct CompilationDataBaseInfo {
-    uint64_t lastModified;
-    List<String> environment;
-    Flags<IndexMessage::Flag> indexFlags;
+inline bool isValid(CXCursorKind kind)
+{
+    return !clang_isInvalid(kind);
+}
+inline bool isValid(const CXSourceLocation &location)
+{
+    return !!location;
+}
+}
+
+namespace std
+{
+template <> struct hash<CXCursor> : public unary_function<CXCursor, size_t>
+{
+    size_t operator()(const CXCursor &value) const
+    {
+        return clang_hashCursor(value);
+    }
 };
-
-inline Serializer &operator<<(Serializer &s, const CompilationDataBaseInfo &info)
-{
-    s << info.lastModified << Sandbox::encoded(info.environment) << info.indexFlags;
-    return s;
 }
 
-inline Deserializer &operator>>(Deserializer &s, CompilationDataBaseInfo &info)
+struct SourceCache
 {
-    s >> info.lastModified >> info.environment >> info.indexFlags;
-    Sandbox::decode(info.environment);
-    return s;
-}
+    Hash<Path, Map<String, String> > rtagsConfigCache;
+    Hash<Path, std::pair<Path, bool> > compilerCache; // bool signifies isCompiler, not just executable
+    struct AncestorCacheKey {
+        String string;
+        Flags<RTags::FindAncestorFlag> flags;
 
-inline bool operator==(const CXCursor &l, CXCursorKind r)
-{
-    return clang_getCursorKind(l) == r;
-}
-inline bool operator==(CXCursorKind l, const CXCursor &r)
-{
-    return l == clang_getCursorKind(r);
-}
-
-inline bool operator!=(const CXCursor &l, CXCursorKind r)
-{
-    return clang_getCursorKind(l) != r;
-}
-inline bool operator!=(CXCursorKind l, const CXCursor &r)
-{
-    return l != clang_getCursorKind(r);
-}
+        bool operator<(const AncestorCacheKey &other) const
+        {
+            const int cmp = string.compare(other.string);
+            if (cmp)
+                return cmp < 0;
+            return flags < other.flags;
+        }
+    };
+    Hash<Path, Map<AncestorCacheKey, Path> > ancestorCache;
+};
 
 inline Log operator<<(Log dbg, CXCursor cursor);
 inline Log operator<<(Log dbg, CXType type);
@@ -788,8 +832,6 @@ inline Log operator<<(Log dbg, CXCursorKind kind);
 inline Log operator<<(Log dbg, CXTypeKind kind);
 inline Log operator<<(Log dbg, CXLinkageKind kind);
 
-inline bool operator==(const CXCursor &l, const CXCursor &r) { return clang_equalCursors(l, r); }
-inline bool operator!=(const CXCursor &l, const CXCursor &r) { return !clang_equalCursors(l, r); }
 class CXStringScope
 {
 public:

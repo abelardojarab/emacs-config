@@ -24,6 +24,7 @@
 #include "IndexerJob.h"
 #include "IndexMessage.h"
 #include "QueryMessage.h"
+#include "IndexParseData.h"
 #include "rct/EmbeddedLinkedList.h"
 #include "rct/FileSystemWatcher.h"
 #include "rct/Flags.h"
@@ -67,10 +68,6 @@ public:
     std::shared_ptr<FileManager> fileManager() const { return mFileManager; }
 
     Path path() const { return mPath; }
-    void setCompilationDatabaseInfos(Hash<Path, CompilationDataBaseInfo> &&infos, const Set<uint64_t> &indexed);
-    void addCompilationDatabaseInfo(const Path &path, CompilationDataBaseInfo &&info);
-    Hash<Path, CompilationDataBaseInfo> compilationDataBaseInfos() const { return mCompilationDatabaseInfos; }
-
     bool match(const Match &match, bool *indexed = 0) const;
 
     enum FileMapType {
@@ -121,7 +118,8 @@ public:
 
     enum DependencyMode {
         DependsOnArg,
-        ArgDependsOn
+        ArgDependsOn,
+        All
     };
 
     Set<uint32_t> dependencies(uint32_t fileId, DependencyMode mode) const;
@@ -132,8 +130,7 @@ public:
     const Hash<uint32_t, DependencyNode*> &dependencies() const { return mDependencies; }
     DependencyNode *dependencyNode(uint32_t fileId) const { return mDependencies.value(fileId); }
 
-    static bool readSources(const Path &path, Sources &sources,
-                            Hash<Path, CompilationDataBaseInfo> *compileCommands, String *error);
+    static bool readSources(const Path &path, IndexParseData &data, String *error);
     enum SymbolMatchType {
         Exact,
         Wildcard,
@@ -160,10 +157,11 @@ public:
     Set<Symbol> findCallers(const Symbol &symbol);
     Set<Symbol> findVirtuals(Location location) { return findVirtuals(findSymbol(location)); }
     Set<Symbol> findVirtuals(const Symbol &symbol);
+    Set<String> findTargetUsrs(const Symbol &symbol);
     Set<String> findTargetUsrs(Location loc);
     Set<Symbol> findSubclasses(const Symbol &symbol);
 
-    Set<Symbol> findByUsr(const String &usr, uint32_t fileId, DependencyMode mode, Location filtered = Location());
+    Set<Symbol> findByUsr(const String &usr, uint32_t fileId = 0, DependencyMode mode = All, Location filtered = Location());
 
     Path sourceFilePath(uint32_t fileId, const char *path = "") const;
 
@@ -175,16 +173,21 @@ public:
 
     const Set<uint32_t> &suspendedFiles() const;
     bool toggleSuspendFile(uint32_t file);
+    void setSuspended(uint32_t file, bool suspended);
     bool isSuspended(uint32_t file) const;
     void clearSuspendedFiles();
 
     bool isIndexed(uint32_t fileId) const;
 
+    void processParseData(IndexParseData &&data);
+    const IndexParseData &indexParseData() const { return mIndexParseData; }
     void index(const std::shared_ptr<IndexerJob> &job);
-    List<Source> sources(uint32_t fileId) const;
+    void reindex(uint32_t fileId, Flags<IndexerJob::Flag> flags);
+    SourceList sources(uint32_t fileId) const;
+    Source source(uint32_t fileId, int buildIndex) const;
     bool hasSource(uint32_t fileId) const;
-    bool isActiveJob(uint64_t key) { return !key || mActiveJobs.contains(key); }
-    inline bool visitFile(uint32_t fileId, const Path &path, uint64_t id);
+    bool isActiveJob(uint32_t sourceFileId) { return !sourceFileId || mActiveJobs.contains(sourceFileId); }
+    inline bool visitFile(uint32_t fileId, const Path &path, uint32_t sourceFileId);
     inline void releaseFileIds(const Set<uint32_t> &fileIds);
     String fixIts(uint32_t fileId) const;
     int reindex(const Match &match,
@@ -192,13 +195,12 @@ public:
                 const std::shared_ptr<Connection> &wait);
     int remove(const Match &match);
     void onJobFinished(const std::shared_ptr<IndexerJob> &job, const std::shared_ptr<IndexDataMessage> &msg);
-    Sources sources() const { return mSources; }
-    String toCompilationDatabase() const;
+    String toCompileCommands() const;
     enum WatchMode {
         Watch_FileManager = 0x1,
         Watch_SourceFile = 0x2,
         Watch_Dependency = 0x4,
-        Watch_CompilationDatabase = 0x8
+        Watch_CompileCommands = 0x8
     };
 
     void watch(const Path &dir, WatchMode mode);
@@ -211,6 +213,8 @@ public:
     void onFileModified(const Path &path);
     void onFileRemoved(const Path &path);
     void dumpFileMaps(const std::shared_ptr<QueryMessage> &msg, const std::shared_ptr<Connection> &conn);
+    void removeSources(const Hash<uint32_t, uint32_t> &sources); // key fileid, value fileid for compile_commands.json
+    void removeSource(uint32_t fileId);
     Hash<uint32_t, Path> visitedFiles() const
     {
         std::lock_guard<std::mutex> lock(mMutex);
@@ -236,9 +240,32 @@ public:
     void includeCompletions(Flags<QueryMessage::Flag> flags, const std::shared_ptr<Connection> &conn, Source &&source) const;
     size_t bytesWritten() const { return mBytesWritten; }
     void destroy() { mSaveDirty = false; }
+    void poll();
+    enum VisitResult {
+        Stop,
+        Continue,
+        Remove // not allowed for const calls
+    };
+    static void forEachSources(const IndexParseData &data, std::function<VisitResult(const Sources &sources)> cb);
+    static void forEachSources(IndexParseData &data, std::function<VisitResult(Sources &sources)> cb);
+    void forEachSources(std::function<VisitResult(const Sources &sources)> cb) const { forEachSources(mIndexParseData, cb); }
+    void forEachSources(std::function<VisitResult(Sources &sources)> cb) { forEachSources(mIndexParseData, cb); }
+
+    static void forEachSourceList(const IndexParseData &data, std::function<VisitResult(const SourceList &sources)> cb);
+    static void forEachSourceList(IndexParseData &data, std::function<VisitResult(SourceList &sources)> cb);
+    static void forEachSourceList(Sources &sources, std::function<VisitResult(SourceList &source)> cb);
+    static void forEachSourceList(const Sources &sources, std::function<VisitResult(const SourceList &source)> cb);
+    void forEachSourceList(std::function<VisitResult(const SourceList &sources)> cb) const { forEachSourceList(mIndexParseData, cb); }
+    void forEachSourceList(std::function<VisitResult(SourceList &sources)> cb) { forEachSourceList(mIndexParseData, cb); }
+
+    static void forEachSource(Sources &sources, std::function<VisitResult(Source &source)> cb);
+    static void forEachSource(const Sources &sources, std::function<VisitResult(const Source &source)> cb);
+    static void forEachSource(IndexParseData &data, std::function<VisitResult(Source &source)> cb);
+    static void forEachSource(const IndexParseData &data, std::function<VisitResult(const Source &source)> cb);
+    void forEachSource(std::function<VisitResult(const Source &source)> cb) const { forEachSource(mIndexParseData, cb); }
+    void forEachSource(std::function<VisitResult(Source &source)> cb) { forEachSource(mIndexParseData, cb); }
 private:
-    void reloadCompilationDatabases();
-    void removeSource(Sources::iterator it);
+    void reloadCompileCommands();
     void onFileAddedOrModified(const Path &path);
     void watchFile(uint32_t fileId);
     enum ValidateMode {
@@ -252,7 +279,7 @@ private:
     void updateFixIts(const Set<uint32_t> &visited, FixIts &fixIts);
     Diagnostics updateDiagnostics(const Diagnostics &diagnostics);
     int startDirtyJobs(Dirty *dirty,
-                       IndexerJob::Flag type,
+                       Flags<IndexerJob::Flag> type,
                        const UnsavedFiles &unsavedFiles = UnsavedFiles(),
                        const std::shared_ptr<Connection> &wait = std::shared_ptr<Connection>());
     void onDirtyTimeout(Timer *);
@@ -303,12 +330,12 @@ private:
                 return it->second;
             }
             const Path path = project->sourceFilePath(fileId, Project::fileMapName(type));
-            std::shared_ptr<FileMap<Key, Value> > fileMap(new FileMap<Key, Value>);
+            auto fileMap = std::make_shared<FileMap<Key, Value>>();
             String err;
             if (fileMap->load(path, project->fileMapOptions(), &err)) {
                 ++totalOpened;
                 cache[fileId] = fileMap;
-                std::shared_ptr<LRUEntry> entry(new LRUEntry(type, fileId));
+                auto entry = std::make_shared<LRUEntry>(type, fileId);
                 entryList.append(entry);
                 entryMap[entry->key] = entry;
                 if (++openedFiles > max) {
@@ -367,7 +394,6 @@ private:
     std::shared_ptr<FileMapScope> mFileMapScope;
 
     const Path mPath, mSourceFilePathBase;
-    Hash<Path, CompilationDataBaseInfo> mCompilationDatabaseInfos;
     Path mProjectFilePath, mSourcesFilePath;
 
     Files mFiles;
@@ -377,15 +403,14 @@ private:
 
     Diagnostics mDiagnostics;
 
-    // key'ed on Source::key()
-    Hash<uint64_t, std::shared_ptr<IndexerJob> > mActiveJobs;
+    Hash<uint32_t, std::shared_ptr<IndexerJob> > mActiveJobs;
 
     Timer mDirtyTimer;
     Set<uint32_t> mPendingDirtyFiles;
 
     StopWatch mTimer;
     FileSystemWatcher mWatcher;
-    Sources mSources;
+    IndexParseData mIndexParseData;
     Hash<Path, Flags<WatchMode> > mWatchedPaths;
     std::shared_ptr<FileManager> mFileManager;
     FixIts mFixIts;
@@ -401,15 +426,15 @@ private:
 
 RCT_FLAGS(Project::WatchMode);
 
-inline bool Project::visitFile(uint32_t visitFileId, const Path &path, uint64_t key)
+inline bool Project::visitFile(uint32_t visitFileId, const Path &path, uint32_t id)
 {
-    assert(key);
+    assert(id);
     std::lock_guard<std::mutex> lock(mMutex);
     assert(visitFileId);
     Path &p = mVisitedFiles[visitFileId];
-    assert(key);
-    assert(mActiveJobs.contains(key));
-    std::shared_ptr<IndexerJob> &job = mActiveJobs[key];
+    assert(id);
+    assert(mActiveJobs.contains(id));
+    std::shared_ptr<IndexerJob> &job = mActiveJobs[id];
     assert(job);
     if (p.isEmpty()) {
         p = path;

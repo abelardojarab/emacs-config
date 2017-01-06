@@ -24,11 +24,13 @@
 #include "rct/Path.h"
 #include "rct/Serializer.h"
 
+struct SourceCache;
+class SourceList;
 struct Source
 {
     inline Source();
 
-    uint32_t fileId, compilerId, buildRootId;
+    uint32_t fileId, compilerId, buildRootId, compileCommandsFileId;
     Path extraCompiler;
     uint64_t includePathHash;
     enum Language {
@@ -45,14 +47,11 @@ struct Source
 
     static const char *languageName(Language language);
 
-    uint64_t parsed;
-
     enum Flag {
         NoFlag = 0x0,
         NoRtti = 0x1,
         M32 = 0x2,
-        M64 = 0x4,
-        Active = 0x8
+        M64 = 0x4
     };
     Flags<Flag> flags;
 
@@ -147,21 +146,6 @@ struct Source
     bool isValid() const { return fileId; }
     bool isNull() const  { return !fileId; }
 
-    uint64_t key() const { return key(fileId, buildRootId); }
-
-    static inline uint64_t key(uint32_t fileId, uint32_t buildRootId)
-    {
-        uint64_t ret = fileId;
-        ret <<= 32;
-        ret |= buildRootId;
-        return ret;
-    }
-    static inline void decodeKey(uint64_t key, uint32_t &fileId, uint32_t &buildRootId)
-    {
-        fileId = static_cast<uint32_t>(key >> 32);
-        buildRootId = static_cast<uint32_t>(key);
-    }
-
     int compare(const Source &other) const;
     bool compareArguments(const Source &other) const;
     bool operator==(const Source &other) const;
@@ -169,22 +153,23 @@ struct Source
     bool operator<(const Source &other) const;
     bool operator>(const Source &other) const;
 
-    List<String> toCommandLine(Flags<CommandLineFlag> flags = Flags<CommandLineFlag>(),
-                               bool *usedPch = 0) const;
+    List<String> toCommandLine(Flags<CommandLineFlag> flags = Flags<CommandLineFlag>(), bool *usedPch = 0) const;
     inline bool isIndexable() const;
     static inline bool isIndexable(Language lang);
 
     Path sourceFile() const;
     Path buildRoot() const;
+    Path compileCommands() const;
     Path compiler() const;
     void clear();
     String toString() const;
     Path sysRoot() const { return arguments.value(sysRootIndex, "/"); }
 
-    static List<Source> parse(const String &cmdLine,
+    static SourceList parse(const String &cmdLine,
                               const Path &pwd,
                               const List<String> &environment,
-                              List<Path> *unresolvedInputLocation = 0);
+                              List<Path> *unresolvedInputLocation = 0,
+                              SourceCache *cache = 0);
     enum EncodeMode {
         IgnoreSandbox,
         EncodeSandbox
@@ -198,7 +183,7 @@ RCT_FLAGS(Source::CommandLineFlag);
 
 inline Source::Source()
     : fileId(0), compilerId(0), buildRootId(0), includePathHash(0),
-      language(NoLanguage), parsed(0), sysRootIndex(-1)
+      language(NoLanguage), sysRootIndex(-1)
 {
 }
 
@@ -378,5 +363,26 @@ inline String Source::Define::toString(Flags<CommandLineFlag> f) const
     return ret;
 }
 
+class SourceList : public List<Source>
+{
+public:
+    uint64_t parsed = 0;
+
+    uint32_t fileId() const { return isEmpty() ? 0 : front().fileId; }
+};
+
+template <>
+inline Serializer &operator<<(Serializer &s, const SourceList &sources)
+{
+    s << static_cast<const List<Source> &>(sources) << sources.parsed;
+    return s;
+}
+
+template <>
+inline Deserializer &operator>>(Deserializer &d, SourceList &sources)
+{
+    d >> static_cast<List<Source> &>(sources) >> sources.parsed;
+    return d;
+}
 
 #endif

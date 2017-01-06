@@ -26,14 +26,12 @@
 #include "RTags.h"
 #include "Server.h"
 #include "Symbol.h"
+#include <unordered_set>
 
 struct Unit;
 class ClangIndexer
 {
 public:
-    static const CXSourceLocation nullLocation;
-    static const CXCursor nullCursor;
-
     ClangIndexer();
     ~ClangIndexer();
 
@@ -50,6 +48,8 @@ private:
     void addFileSymbol(uint32_t file);
     int symbolLength(CXCursorKind kind, const CXCursor &cursor);
     void extractArguments(List<Symbol::Argument> *arguments, const CXCursor &cursor);
+    CXCursor resolveTemplate(CXCursor cursor, Location location = Location(), bool *specialized = 0);
+    static CXCursor resolveTypedef(CXCursor cursor);
 
     inline Location createLocation(const CXSourceLocation &location, bool *blocked = 0, unsigned *offset = 0)
     {
@@ -96,7 +96,7 @@ private:
     inline Location createLocation(const CXCursor &cursor, bool *blocked = 0, unsigned *offset = 0)
     {
         const CXSourceLocation location = clang_getCursorLocation(cursor);
-        if (clang_equalLocations(location, nullLocation))
+        if (!location)
             return Location();
         return createLocation(location, blocked, offset);
     }
@@ -115,7 +115,7 @@ private:
     void handleLiteral(const CXCursor &cursor, CXCursorKind kind, Location location);
     CXChildVisitResult handleStatement(const CXCursor &cursor, CXCursorKind kind, Location location);
     Location findByUSR(const CXCursor &cursor, CXCursorKind kind, Location loc) const;
-    void addOverriddenCursors(const CXCursor &cursor, Location location);
+    std::unordered_set<CXCursor> addOverriddenCursors(const CXCursor &cursor, Location location);
     bool superclassTemplateMemberFunctionUgleHack(const CXCursor &cursor, CXCursorKind kind,
                                                   Location location, const CXCursor &ref,
                                                   Symbol **cursorPtr = 0);
@@ -140,11 +140,12 @@ private:
         Map<uint32_t, Token> tokens;
     };
 
-    std::shared_ptr<Unit> unit(uint32_t fileId)
+    std::shared_ptr<Unit> &unit(uint32_t fileId)
     {
         std::shared_ptr<Unit> &unit = mUnits[fileId];
-        if (!unit)
+        if (!unit) {
             unit.reset(new Unit);
+        }
         return unit;
     }
     std::shared_ptr<Unit> unit(Location loc) { return unit(loc.fileId()); }
@@ -169,10 +170,11 @@ private:
     Hash<uint32_t, std::shared_ptr<Unit> > mUnits;
 
     Path mProject;
-    Source mSource;
+    SourceList mSources;
     Path mSourceFile;
     IndexDataMessage mIndexDataMessage;
-    std::shared_ptr<RTags::TranslationUnit> mTranslationUnit;
+    List<std::shared_ptr<RTags::TranslationUnit> > mTranslationUnits;
+    size_t mCurrentTranslationUnit;
     CXCursor mLastCursor;
     Symbol *mLastCallExprSymbol;
     Location mLastClass;
@@ -209,6 +211,8 @@ private:
     List<Loop> mLoopStack;
 
     List<CXCursor> mParents;
+    std::unordered_set<CXCursor> mTemplateSpecializations;
+    size_t mInTemplateFunction;
 
     static Flags<Server::Option> sServerOpts;
     static Path sServerSandboxRoot;

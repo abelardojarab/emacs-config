@@ -41,7 +41,7 @@ public:
         DeleteProject,
         Dependencies,
         Diagnose,
-        DumpCompilationDatabase,
+        DumpCompileCommands,
         DumpCompletions,
         DumpFile,
         DumpFileMaps,
@@ -94,7 +94,7 @@ public:
         SymbolInfoIncludeBaseClasses = (1ull << 15),
         DeclarationOnly = (1ull << 16),
         DefinitionOnly = (1ull << 17),
-        AllTargets = (1ull << 18),
+        TargetUsrs = (1ull << 18),
         CursorKind = (1ull << 19),
         DisplayName = (1ull << 20),
         CompilationFlagsOnly = (1ull << 21),
@@ -120,7 +120,8 @@ public:
         JSON = (1ull << 41),
         CodeCompletionEnabled = (1ull << 42),
         SynchronousDiagnostics = (1ull << 43),
-        CodeCompleteNoWait = (1ull << 44)
+        CodeCompleteNoWait = (1ull << 44),
+        AllTargets = (1ull << 45)
     };
 
     QueryMessage(Type type = Invalid);
@@ -165,9 +166,9 @@ public:
         }
     };
     const List<PathFilter> &pathFilters() const { return mPathFilters; }
-    void setPathFilters(const Set<PathFilter> &pathFilters)
+    void setPathFilters(const Set<PathFilter> &filters)
     {
-        mPathFilters = pathFilters.toList();
+        mPathFilters = filters.toList();
         std::sort(mPathFilters.begin(), mPathFilters.end());
     }
 
@@ -187,7 +188,7 @@ public:
     {
         return Location::decode(mQuery, flag);
     }
-    void setQuery(const String &query) { mQuery = query; }
+    void setQuery(String &&query) { mQuery = std::move(query); }
     void setBuildIndex(int index) { mBuildIndex = index; }
     int buildIndex() const { return mBuildIndex; }
 
@@ -238,7 +239,7 @@ public:
     Path currentFile() const { return mCurrentFile; }
 
     String codeCompletePrefix() const { return mCodeCompletePrefix; }
-    void setCodeCompletePrefix(const String &prefix) { mCodeCompletePrefix = prefix; }
+    void setCodeCompletePrefix(String &&prefix) { mCodeCompletePrefix = std::move(prefix); }
 private:
     String mQuery, mCodeCompletePrefix;
     Type mType;

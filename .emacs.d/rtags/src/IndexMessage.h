@@ -31,20 +31,21 @@ public:
     const Path &projectRoot() const { return mProjectRoot; }
     void setProjectRoot(const Path &projectRoot) { mProjectRoot = projectRoot; }
     const Path &workingDirectory() const { return mWorkingDirectory; }
-    void setWorkingDirectory(const Path &workingDirectory) { mWorkingDirectory = workingDirectory; }
+    void setWorkingDirectory(Path &&wd) { mWorkingDirectory = std::move(wd); }
     void setEnvironment(const List<String> &environment) { mEnvironment = environment; }
-    List<String> environment() const { return mEnvironment; }
-    Path compilationDatabaseDir() const { return mCompilationDatabaseDir; }
-    void setCompilationDatabaseDir(const Path &path) { mCompilationDatabaseDir = path; }
+    const List<String> &environment() const { return mEnvironment; }
+    List<String> &&takeEnvironment() { return std::move(mEnvironment); }
+    Path compileCommands() const { return mCompileCommands; }
+    void setCompileCommands(Path &&path) { mCompileCommands = std::move(path); }
     const String &arguments() const { return mArgs; }
-    void setArguments(const String &arguments) { mArgs = arguments; }
+    String &&takeArguments() { return std::move(mArgs); }
+    void setArguments(String &&args) { mArgs = std::move(args); }
     enum Flag {
         None = 0x0,
-        GuessFlags = 0x1,
-        AppendCompilationDatabase = 0x2
+        GuessFlags = 0x1
     };
     Flags<Flag> flags() const { return mFlags; }
-    void setFlags(Flags<Flag> flags) { mFlags = flags; }
+    void setFlags(Flags<Flag> f) { mFlags = f; }
     void setFlag(Flag flag, bool on = true) { mFlags.set(flag, on); }
     virtual void encode(Serializer &serializer) const override;
     virtual void decode(Deserializer &deserializer) override;
@@ -53,7 +54,7 @@ private:
     String mArgs;
     List<String> mEnvironment;
     Path mProjectRoot;
-    Path mCompilationDatabaseDir;
+    Path mCompileCommands;
     Flags<Flag> mFlags;
 };
 

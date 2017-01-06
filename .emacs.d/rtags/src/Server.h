@@ -24,6 +24,7 @@
 #include "rct/String.h"
 #include "rct/Thread.h"
 #include "Source.h"
+#include "RTags.h"
 #ifdef OS_Darwin
 #include <Availability.h>
 #if __MAC_OS_X_VERSION_MAX_ALLOWED >= 101000
@@ -32,6 +33,7 @@
 #endif
 #endif
 
+class Match;
 class CompletionThread;
 class Connection;
 class ErrorMessage;
@@ -44,6 +46,7 @@ class Project;
 class QueryMessage;
 class VisitFileMessage;
 class JobScheduler;
+class IndexParseData;
 class Server
 {
 public:
@@ -56,7 +59,7 @@ public:
         Wall = (1ull << 2),
         IgnorePrintfFixits = (1ull << 3),
         SpellChecking = (1ull << 4),
-        DisallowMultipleSources = (1ull << 5),
+        AllowMultipleSources = (1ull << 5),
         NoStartupCurrentProject = (1ull << 6),
         WatchSystemPaths = (1ull << 7),
         NoFileManagerWatch = (1ull << 8),
@@ -91,7 +94,7 @@ public:
               rpVisitFileTimeout(0), rpIndexDataMessageTimeout(0), rpConnectTimeout(0),
               rpConnectAttempts(0), rpNiceValue(0), maxCrashCount(0),
               completionCacheSize(0), testTimeout(60 * 1000 * 5),
-              maxFileMapScopeCacheSize(512), tcpPort(0)
+              maxFileMapScopeCacheSize(512), pollTimer(0), tcpPort(0)
         {
         }
 
@@ -100,7 +103,8 @@ public:
         size_t jobCount, headerErrorJobCount, maxIncludeCompletionDepth;
         int rpVisitFileTimeout, rpIndexDataMessageTimeout,
             rpConnectTimeout, rpConnectAttempts, rpNiceValue, maxCrashCount,
-            completionCacheSize, testTimeout, maxFileMapScopeCacheSize, errorLimit;
+            completionCacheSize, testTimeout, maxFileMapScopeCacheSize, errorLimit,
+            pollTimer;
         uint16_t tcpPort;
         List<String> defaultArguments, excludeFilters;
         Set<String> blockedArguments;
@@ -126,23 +130,26 @@ public:
     std::shared_ptr<Project> currentProject() const { return mCurrentProject.lock(); }
     void onNewMessage(const std::shared_ptr<Message> &message, const std::shared_ptr<Connection> &conn);
     bool saveFileIds();
-    bool index(const String &arguments,
+    bool loadCompileCommands(IndexParseData &data, const Path &compileCommands, const List<String> &environment, SourceCache *cache) const;
+    bool parse(IndexParseData &data,
+               String &&arguments,
                const Path &pwd,
-               const List<String> &environment,
-               const Path &projectRootOverride,
-               Flags<IndexMessage::Flag> flags = Flags<IndexMessage::Flag>(),
-               std::shared_ptr<Project> *projectPtr = 0,
-               Set<uint64_t> *indexed = 0);
+               uint32_t compileCommandsFileId = 0,
+               SourceCache *cache = 0) const;
     enum FileIdsFileFlag {
         None = 0x0,
         HasSandboxRoot = 0x1
     };
 private:
-    String guessArguments(const String &args, const Path &pwd, const Path &projectRootOverride);
+    String guessArguments(const String &args, const Path &pwd, const Path &projectRootOverride) const;
     bool load();
     void onNewConnection(SocketServer *server);
     void setCurrentProject(const std::shared_ptr<Project> &project);
-    void clearProjects();
+    enum ClearMode {
+        Clear_All,
+        Clear_KeepFileIds
+    };
+    void clearProjects(ClearMode mode);
     void handleIndexMessage(const std::shared_ptr<IndexMessage> &message, const std::shared_ptr<Connection> &conn);
     void handleIndexDataMessage(const std::shared_ptr<IndexDataMessage> &message, const std::shared_ptr<Connection> &conn);
     void handleQueryMessage(const std::shared_ptr<QueryMessage> &message, const std::shared_ptr<Connection> &conn);
@@ -180,7 +187,7 @@ private:
     void removeProject(const std::shared_ptr<QueryMessage> &query, const std::shared_ptr<Connection> &conn);
     void sources(const std::shared_ptr<QueryMessage> &query, const std::shared_ptr<Connection> &conn);
     void dumpCompletions(const std::shared_ptr<QueryMessage> &query, const std::shared_ptr<Connection> &conn);
-    void dumpCompilationDatabase(const std::shared_ptr<QueryMessage> &query, const std::shared_ptr<Connection> &conn);
+    void dumpCompileCommands(const std::shared_ptr<QueryMessage> &query, const std::shared_ptr<Connection> &conn);
     void status(const std::shared_ptr<QueryMessage> &query, const std::shared_ptr<Connection> &conn);
     void suspend(const std::shared_ptr<QueryMessage> &query, const std::shared_ptr<Connection> &conn);
     void setBuffers(const std::shared_ptr<QueryMessage> &query, const std::shared_ptr<Connection> &conn);
@@ -189,6 +196,7 @@ private:
     void tokens(const std::shared_ptr<QueryMessage> &query, const std::shared_ptr<Connection> &conn);
 
     std::shared_ptr<Project> projectForQuery(const std::shared_ptr<QueryMessage> &queryMessage);
+    std::shared_ptr<Project> projectForMatches(const List<Match> &matches);
     std::shared_ptr<Project> addProject(const Path &path);
 
     bool initServers();
@@ -205,7 +213,7 @@ private:
     SocketServer::SharedPtr mUnixServer, mTcpServer;
     List<String> mEnvironment;
 
-    int mExitCode;
+    int mPollTimer, mExitCode;
     uint32_t mLastFileId;
     std::shared_ptr<JobScheduler> mJobScheduler;
     CompletionThread *mCompletionThread;

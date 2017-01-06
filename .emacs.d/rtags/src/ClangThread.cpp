@@ -29,9 +29,6 @@ struct Dep : public DependencyNode
     Hash<uint32_t, Map<Location, Location> > references;
 };
 
-static const CXSourceLocation nullLocation = clang_getNullLocation();
-static const CXCursor nullCursor = clang_getNullCursor();
-
 ClangThread::ClangThread(const std::shared_ptr<QueryMessage> &queryMessage,
                          const Source &source, const std::shared_ptr<Connection> &conn)
     : Thread(), mQueryMessage(queryMessage), mSource(source),
@@ -88,31 +85,44 @@ CXChildVisitResult ClangThread::visit(const CXCursor &cursor)
             message.append(" " + RTags::typeName(cursor));;
             if (clang_getCursorKind(cursor) == CXCursor_VarDecl) {
                 RTags::Auto autoResolved;
-                if (RTags::resolveAuto(cursor, &autoResolved) && !clang_equalCursors(autoResolved.cursor, nullCursor)) {
+                if (RTags::resolveAuto(cursor, &autoResolved) && RTags::isValid(autoResolved.cursor)) {
                     message += "auto resolves to " + RTags::cursorToString(autoResolved.cursor, RTags::AllCursorToStringFlags);
                 }
             }
+            auto printCursor = [&message](const CXCursor &c, bool *spec = 0) {
+                CXCursor canonical = clang_getCanonicalCursor(c);
+                if (canonical != c && RTags::isValid(canonical)) {
+                    message.append(" canonical ");
+                    message.append(RTags::cursorToString(canonical, RTags::AllCursorToStringFlags));
+                }
+
+                CXCursor specialized = clang_getSpecializedCursorTemplate(c);
+                if (specialized != c && RTags::isValid(specialized)) {
+                    message.append(" specialized ");
+                    message.append(RTags::cursorToString(specialized, RTags::AllCursorToStringFlags));
+                    if (spec)
+                        *spec = true;
+                } else if (spec) {
+                    *spec = false;
+                }
+            };
+
             CXCursor ref = clang_getCursorReferenced(cursor);
-            if (clang_equalCursors(ref, cursor)) {
-                message.append("refs self");
-            } else if (!clang_equalCursors(ref, nullCursor)) {
+            bool refSpecialized = false;
+            if (RTags::isValid(ref) && ref != cursor) {
                 message.append("refs ");
                 message.append(RTags::cursorToString(ref, RTags::AllCursorToStringFlags));
+                printCursor(ref, &refSpecialized);
+                if (refSpecialized && cursor != CXCursor_DeclRefExpr && cursor != CXCursor_MemberRefExpr)
+                    refSpecialized = false;
             }
 
-            CXCursor canonical = clang_getCanonicalCursor(cursor);
-            if (!clang_equalCursors(canonical, cursor) && !clang_equalCursors(canonical, nullCursor)) {
-                message.append("canonical ");
-                message.append(RTags::cursorToString(canonical, RTags::AllCursorToStringFlags));
-            }
-
-            CXCursor specialized = clang_getSpecializedCursorTemplate(cursor);
-            if (!clang_equalCursors(specialized, cursor) && !clang_equalCursors(specialized, nullCursor)) {
-                message.append("specialized ");
-                message.append(RTags::cursorToString(specialized, RTags::AllCursorToStringFlags));
-            }
+            printCursor(cursor);
 
             writeToConnetion(message);
+            if (refSpecialized && false) {
+                visit(ref);
+            }
         }
     }
     ++mIndentLevel;
@@ -158,14 +168,16 @@ void ClangThread::run()
         }
     } else
 #endif
-        if (mQueryMessage->type() == QueryMessage::DumpFile && mQueryMessage->flags() & QueryMessage::DumpCheckIncludes) {
+    {
+        if (mQueryMessage->type() == QueryMessage::DumpFile && mQueryMessage->flags() & QueryMessage::DumpCheckIncludes)
             writeToConnetion(String::format<128>("Indexed: %s => %s", translationUnit->clangLine.constData(), translationUnit ? "success" : "failure"));
-            if (translationUnit) {
-                clang_visitChildren(clang_getTranslationUnitCursor(translationUnit->unit), ClangThread::visitor, this);
-                if (mQueryMessage->flags() & QueryMessage::DumpCheckIncludes)
-                    checkIncludes();
-            }
+
+        if (translationUnit) {
+            clang_visitChildren(clang_getTranslationUnitCursor(translationUnit->unit), ClangThread::visitor, this);
+            if (mQueryMessage->flags() & QueryMessage::DumpCheckIncludes)
+                checkIncludes();
         }
+    }
 
 
     mConnection->disconnected().disconnect(key);
@@ -231,7 +243,7 @@ void ClangThread::checkIncludes(Location location, const CXCursor &cursor)
         handleInclude(location, cursor);
     } else {
         const CXCursor ref = clang_getCursorReferenced(cursor);
-        if (!clang_equalCursors(cursor, nullCursor) && !clang_equalCursors(cursor, ref)) {
+        if (RTags::isValid(cursor) && cursor != ref) {
             handleReference(location, ref);
         }
     }

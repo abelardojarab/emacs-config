@@ -34,8 +34,8 @@ public:
     enum OptionType {
         None = 0,
         AbsolutePath,
-        AllReferences,
         AllDependencies,
+        AllReferences,
         AllTargets,
         Autotest,
         BuildIndex,
@@ -68,7 +68,7 @@ public:
         DiagnoseAll,
         Diagnostics,
         DisplayName,
-        DumpCompilationDatabase,
+        DumpCompileCommands,
         DumpCompletions,
         DumpFile,
         DumpFileMaps,
@@ -90,13 +90,13 @@ public:
         IncludeFile,
         IsIndexed,
         IsIndexing,
-        JobCount,
         JSON,
+        JobCount,
         KindFilter,
         ListBuffers,
         ListCursorKinds,
         ListSymbols,
-        LoadCompilationDatabase,
+        LoadCompileCommands,
         LogFile,
         Man,
         MatchCaseInsensitive,
@@ -133,12 +133,13 @@ public:
         StripParen,
         Suspend,
         SymbolInfo,
+        SymbolInfoIncludeBaseClasses,
         SymbolInfoIncludeParents,
         SymbolInfoIncludeReferences,
         SymbolInfoIncludeTargets,
-        SymbolInfoIncludeBaseClasses,
         SynchronousCompletions,
         SynchronousDiagnostics,
+        TargetUsrs,
         Timeout,
         Tokens,
         TokensIncludeSymbols,
@@ -199,13 +200,13 @@ public:
     List<String> visitASTScripts() const { return mVisitASTScripts; }
 #endif
 private:
-    void addQuery(QueryMessage::Type t, const String &query = String(),
+    void addQuery(QueryMessage::Type t, String &&query = String(),
                   Flags<QueryMessage::Flag> extraQueryFlags = Flags<QueryMessage::Flag>());
     void addQuitCommand(int exitCode);
 
     void addLog(LogLevel level);
-    void addCompile(const Path &cwd, const String &args);
-    void addCompile(const Path &dir);
+    void addCompile(String &&args, const Path &cwd);
+    void addCompile(Path &&compileCommands);
 
     Flags<Flag> mFlags;
     Flags<QueryMessage::Flag> mQueryFlags;

@@ -18,6 +18,7 @@
 
 #include <arpa/inet.h>
 #include <clang-c/Index.h>
+#include <clang-c/CXCompilationDatabase.h>
 #include <stdio.h>
 #include <limits>
 #include <regex>
@@ -43,6 +44,7 @@
 #include "Project.h"
 #include "QueryMessage.h"
 #include "RClient.h"
+#include "IndexParseData.h"
 #include "rct/Connection.h"
 #include "rct/DataFile.h"
 #include "rct/EventLoop.h"
@@ -84,7 +86,7 @@ static const List<Path> sSystemIncludePaths = {
 
 Server *Server::sInstance = 0;
 Server::Server()
-    : mSuspended(false), mEnvironment(Rct::environment()), mExitCode(0), mLastFileId(0), mCompletionThread(0)
+    : mSuspended(false), mEnvironment(Rct::environment()), mPollTimer(-1), mExitCode(0), mLastFileId(0), mCompletionThread(0)
 {
     assert(!sInstance);
     sInstance = this;
@@ -92,6 +94,9 @@ Server::Server()
 
 Server::~Server()
 {
+    if (mPollTimer >= 0)
+        EventLoop::eventLoop()->unregisterTimer(mPollTimer);
+
     if (mCompletionThread) {
         mCompletionThread->stop();
         mCompletionThread->join();
@@ -121,6 +126,8 @@ bool Server::init(const Options &options)
         mOptions.defaultArguments << "-fspell-checking";
     if (!(options.options & NoNoUnknownWarningsOption))
         mOptions.defaultArguments.append("-Wno-unknown-warning-option");
+
+    mOptions.defines << Source::Define("RTAGS");
 
     if (mOptions.options & EnableCompilerManager) {
 #ifndef OS_Darwin   // this causes problems on MacOS+clang
@@ -178,7 +185,7 @@ bool Server::init(const Options &options)
     }
 
     if (mOptions.options & ClearProjects) {
-        clearProjects();
+        clearProjects(Clear_All);
     }
 
     mJobScheduler.reset(new JobScheduler);
@@ -198,6 +205,15 @@ bool Server::init(const Options &options)
                 setCurrentProject(project);
             }
         }
+    }
+
+    assert(mOptions.pollTimer >= 0);
+    if (mOptions.pollTimer) {
+        mPollTimer = EventLoop::eventLoop()->registerTimer([this](int) {
+                if (std::shared_ptr<Project> proj = mCurrentProject.lock()) {
+                    proj->poll();
+                }
+            }, mOptions.pollTimer * 1000);
     }
     return true;
 }
@@ -322,6 +338,13 @@ void Server::onNewConnection(SocketServer *server)
             break;
         }
         std::shared_ptr<Connection> conn = Connection::create(client, RClient::NumOptions);
+        conn->setErrorHandler([](const SocketClient::SharedPtr &, Message::MessageError &&error) {
+                if (error.type == Message::Message_VersionError) {
+                    ::error("Wrong version marker. You're probably using mismatched versions of rc and rdm");
+                } else {
+                    logDirect(LogLevel::Error, error.text);
+                }
+            });
         conn->newMessage().connect(std::bind(&Server::onNewMessage, this, std::placeholders::_1, std::placeholders::_2));
         mConnections.insert(conn);
         std::weak_ptr<Connection> weak = conn;
@@ -378,7 +401,7 @@ void Server::onNewMessage(const std::shared_ptr<Message> &message, const std::sh
     }
 }
 
-String Server::guessArguments(const String &args, const Path &pwd, const Path &projectRootOverride)
+String Server::guessArguments(const String &args, const Path &pwd, const Path &projectRootOverride) const
 {
     Set<Path> includePaths;
     List<String> ret;
@@ -447,97 +470,120 @@ String Server::guessArguments(const String &args, const Path &pwd, const Path &p
     return String::join(ret, ' ');
 }
 
-bool Server::index(const String &args,
-                   const Path &pwd,
-                   const List<String> &environment,
-                   const Path &projectRootOverride,
-                   Flags<IndexMessage::Flag> indexMessageFlags,
-                   std::shared_ptr<Project> *projectPtr,
-                   Set<uint64_t> *indexed)
+bool Server::loadCompileCommands(IndexParseData &data, const Path &compileCommands, const List<String> &environment, SourceCache *cache) const
 {
-    if (Sandbox::hasRoot() && !projectRootOverride.isEmpty() && !projectRootOverride.startsWith(Sandbox::root())) {
+    if (Sandbox::hasRoot() && !data.project.isEmpty() && !data.project.startsWith(Sandbox::root())) {
         error("Invalid --project-root '%s', must be inside --sandbox-root '%s'",
-              projectRootOverride.constData(), Sandbox::root().constData());
+              data.project.constData(), Sandbox::root().constData());
+        return false;
+    }
+
+    CXCompilationDatabase_Error err;
+    CXCompilationDatabase db = clang_CompilationDatabase_fromDirectory(compileCommands.parentDir().constData(), &err);
+    if (err != CXCompilationDatabase_NoError) {
+        error("Can't load compilation database from %s", compileCommands.constData());
+        return false;
+    }
+    const uint32_t fileId = Location::insertFile(compileCommands);
+    bool ret = false;
+    CXCompileCommands cmds = clang_CompilationDatabase_getAllCompileCommands(db);
+    const unsigned int sz = clang_CompileCommands_getSize(cmds);
+    auto &ref = data.compileCommands[fileId];
+    ref.environment = environment;
+    ref.lastModifiedMs = compileCommands.lastModifiedMs();
+    for (unsigned int i = 0; i < sz; ++i) {
+        CXCompileCommand cmd = clang_CompileCommands_getCommand(cmds, i);
+        String args;
+        CXString str = clang_CompileCommand_getDirectory(cmd);
+        const Path compileDir = clang_getCString(str);
+        clang_disposeString(str);
+        const unsigned int num = clang_CompileCommand_getNumArgs(cmd);
+        for (unsigned int j = 0; j < num; ++j) {
+            str = clang_CompileCommand_getArg(cmd, j);
+            const char *ch = clang_getCString(str);
+            if (strchr(ch, ' ')) {
+                args += '"';
+                args += ch;
+                args += '"';
+            } else {
+                args += ch;
+            }
+            clang_disposeString(str);
+            if (j < num - 1)
+                args += ' ';
+        }
+        ret = parse(data, std::move(args), compileDir.ensureTrailingSlash(), fileId, cache) || ret;
+    }
+    clang_CompileCommands_dispose(cmds);
+    clang_CompilationDatabase_dispose(db);
+    if (!ret) {
+        data.compileCommands.remove(fileId);
+    }
+    return ret;
+}
+
+bool Server::parse(IndexParseData &data, String &&arguments, const Path &pwd, uint32_t compileCommandsFileId, SourceCache *cache) const
+{
+    if (Sandbox::hasRoot() && !data.project.isEmpty() && !data.project.startsWith(Sandbox::root())) {
+        error("Invalid --project-root '%s', must be inside --sandbox-root '%s'",
+              data.project.constData(), Sandbox::root().constData());
         return false;
     }
 
     assert(pwd.endsWith('/'));
-    String arguments;
     List<Path> unresolvedPaths;
-    List<Source> sources;
-    bool parse = true;
-    if (indexMessageFlags & IndexMessage::GuessFlags) {
-        arguments = guessArguments(args, pwd, projectRootOverride);
-        if (arguments.isEmpty()) {
-            error() << "Can't guess args from" << args;
-            return false;
-        }
-    } else {
-        arguments = args;
-        if (!mOptions.argTransform.isEmpty()) {
-            Process process;
-            if (process.exec(mOptions.argTransform, List<String>() << arguments) == Process::Done) {
-                if (process.returnCode() != 0) {
-                    warning() << "--arg-transform returned" << process.returnCode() << "for" << arguments;
-                    return false;
-                }
-                const String stdOut = process.readAllStdOut();
-                if (stdOut != arguments) {
-                    warning() << "Changed\n" << arguments << "\nto\n" << stdOut;
-                    parse = false;
-                    sources = Source::parse(stdOut, pwd, environment, &unresolvedPaths);
-                }
+    if (!mOptions.argTransform.isEmpty()) {
+        Process process;
+        if (process.exec(mOptions.argTransform, List<String>() << arguments) == Process::Done) {
+            if (process.returnCode() != 0) {
+                warning() << "--arg-transform returned" << process.returnCode() << "for" << arguments;
+                return false;
+            }
+            String stdOut = process.readAllStdOut();
+            if (!stdOut.isEmpty() && stdOut != arguments) {
+                warning() << "Changed\n" << arguments << "\nto\n" << stdOut;
+                arguments = std::move(stdOut);
             }
         }
     }
 
-    if (parse)
-        sources = Source::parse(arguments, pwd, environment, &unresolvedPaths);
-
+    assert(!compileCommandsFileId || data.compileCommands.contains(compileCommandsFileId));
+    const auto &env = compileCommandsFileId ? data.compileCommands[compileCommandsFileId].environment : data.environment;
+    SourceList sources = Source::parse(arguments, pwd, env, &unresolvedPaths, cache);
     bool ret = (sources.isEmpty() && unresolvedPaths.size() == 1 && unresolvedPaths.front() == "-");
-    int idx = 0;
+    size_t idx = 0;
     for (Source &source : sources) {
         const Path path = source.sourceFile();
 
         std::shared_ptr<Project> current = currentProject();
-        Path root;
-        const Path unresolvedPath = unresolvedPaths.at(idx++);
-        if (current && (current->match(unresolvedPath) || (path != unresolvedPath && current->match(path)))) {
-            root = current->path();
-        } else {
-            for (const auto &proj : mProjects) {
-                if (proj.second->match(unresolvedPath) || (path != unresolvedPath && proj.second->match(path))) {
-                    root = proj.first;
-                    break;
+        if (data.project.isEmpty()) {
+            const Path unresolvedPath = unresolvedPaths.at(idx++);
+            if (current && (current->match(unresolvedPath) || (path != unresolvedPath && current->match(path)))) {
+                data.project = current->path();
+            } else {
+                for (const auto &proj : mProjects) {
+                    if (proj.second->match(unresolvedPath) || (path != unresolvedPath && proj.second->match(path))) {
+                        data.project = proj.first;
+                        break;
+                    }
                 }
             }
-        }
 
-        if (root.isEmpty()) {
-            root = projectRootOverride.ensureTrailingSlash();
-            if (root.isEmpty()) {
-                root = RTags::findProjectRoot(unresolvedPath, RTags::SourceRoot);
-                if (root.isEmpty() && path != unresolvedPath) {
-                    root = RTags::findProjectRoot(path, RTags::SourceRoot);
+            if (data.project.isEmpty()) {
+                data.project = RTags::findProjectRoot(unresolvedPath, RTags::SourceRoot, cache);
+                if (data.project.isEmpty() && path != unresolvedPath) {
+                    data.project = RTags::findProjectRoot(path, RTags::SourceRoot, cache);
                 }
             }
+            data.project.resolve(Path::RealPath, pwd);
         }
 
-        root.resolve(Path::RealPath, pwd);
-
-        if (shouldIndex(source, root)) {
-            std::shared_ptr<Project> &project = mProjects[root];
-            if (!project) {
-                addProject(root);
-                assert(project);
-            }
-            if (indexed)
-                indexed->insert(source.key());
-            if (!mCurrentProject.lock())
-                setCurrentProject(project);
-            project->index(std::shared_ptr<IndexerJob>(new IndexerJob(source, IndexerJob::Compile, project)));
-            if (projectPtr)
-                *projectPtr = project;
+        if (shouldIndex(source, data.project)) {
+            Sources &s = compileCommandsFileId ? data.compileCommands[compileCommandsFileId].sources : data.sources;
+            source.compileCommandsFileId = compileCommandsFileId;
+            auto &list = s[source.fileId];
+            if (!list.contains(source))
+                list.append(source);
             ret = true;
         }
     }
@@ -546,34 +592,46 @@ bool Server::index(const String &args,
 
 void Server::handleIndexMessage(const std::shared_ptr<IndexMessage> &message, const std::shared_ptr<Connection> &conn)
 {
-    const Path path = message->compilationDatabaseDir();
+    const Path path = message->compileCommands();
+    IndexParseData data;
+    data.project = message->projectRoot();
+    bool ret = true;
     if (!path.isEmpty()) {
-        Hash<Path, CompilationDataBaseInfo> infos;
-        infos[message->compilationDatabaseDir().ensureTrailingSlash()] = {
-            0,
-            message->environment(),
-            message->flags() | IndexMessage::AppendCompilationDatabase
-        };
-        if (RTags::loadCompileCommands(infos, message->projectRoot())) {
-            if (conn) {
+        SourceCache cache;
+        if (loadCompileCommands(data, path, message->environment(), &cache)) {
+            if (conn)
                 conn->write("[Server] Compilation database loading...");
-                conn->finish();
-            }
         } else if (conn) {
+            ret = false;
             conn->write("[Server] Compilation failed to load.");
-            conn->finish();
         }
     } else {
-        const bool ret = index(message->arguments(), message->workingDirectory(),
-                               message->environment(), message->projectRoot(), message->flags());
-        if (conn)
-            conn->finish(ret ? 0 : 1);
+        data.environment = std::move(message->takeEnvironment());
+        String arguments = std::move(message->takeArguments());
+        if (message->flags() & IndexMessage::GuessFlags) {
+            arguments = guessArguments(arguments, message->workingDirectory(), data.project);
+            if (arguments.isEmpty()) {
+                conn->write("Can't guess args from arguments");
+                ret = false;
+            }
+        }
+        if (ret)
+            ret = parse(data, std::move(arguments), message->workingDirectory());
+    }
+    if (conn)
+        conn->finish(ret ? 0 : 1);
+    if (ret) {
+        auto proj = addProject(data.project);
+        assert(proj);
+        proj->processParseData(std::move(data));
+        if (!currentProject())
+            setCurrentProject(proj);
     }
 }
 
 void Server::handleLogOutputMessage(const std::shared_ptr<LogOutputMessage> &message, const std::shared_ptr<Connection> &conn)
 {
-    std::shared_ptr<RTagsLogOutput> log(new RTagsLogOutput(message->level(), message->flags(), conn));
+    auto log = std::make_shared<RTagsLogOutput>(message->level(), message->flags(), conn);
     log->add();
 }
 
@@ -606,8 +664,8 @@ void Server::handleQueryMessage(const std::shared_ptr<QueryMessage> &message, co
     case QueryMessage::DumpCompletions:
         dumpCompletions(message, conn);
         break;
-    case QueryMessage::DumpCompilationDatabase:
-        dumpCompilationDatabase(message, conn);
+    case QueryMessage::DumpCompileCommands:
+        dumpCompileCommands(message, conn);
         break;
     case QueryMessage::SendDiagnostics:
         sendDiagnostics(message, conn);
@@ -840,7 +898,7 @@ void Server::startClangThread(const std::shared_ptr<QueryMessage> &query, const 
         return;
     }
 
-    const Source source = project->sources(fileId).value(query->buildIndex());
+    const Source source = project->source(fileId, query->buildIndex());
     if (!source.isNull()) {
         ClangThread *thread = new ClangThread(query, source, conn);
         thread->start(Thread::Normal, 8 * 1024 * 1024); // 8MiB stack size
@@ -941,7 +999,7 @@ void Server::generateTest(const std::shared_ptr<QueryMessage> &query, const std:
     }
     project->beginScope();
 
-    const Source source = project->sources(fileId).value(query->buildIndex());
+    const Source source = project->source(fileId, query->buildIndex());
     if (!source.isNull()) {
         const Flags<Source::CommandLineFlag> flags = (Source::Default
                                                       | Source::ExcludeDefaultDefines
@@ -1267,7 +1325,7 @@ void Server::preprocessFile(const std::shared_ptr<QueryMessage> &query, const st
     }
     if (fileId)
         prepareCompletion(query, fileId, project);
-    const Source source = project->sources(fileId).value(query->buildIndex());
+    const Source source = project->source(fileId, query->buildIndex());
     if (!source.isValid()) {
         conn->write<256>("%s build: %d not found", query->query().constData(), query->buildIndex());
         conn->finish();
@@ -1277,7 +1335,7 @@ void Server::preprocessFile(const std::shared_ptr<QueryMessage> &query, const st
     }
 }
 
-void Server::clearProjects()
+void Server::clearProjects(ClearMode mode)
 {
     Path::rmdir(mOptions.dataDir);
     setCurrentProject(std::shared_ptr<Project>());
@@ -1285,7 +1343,8 @@ void Server::clearProjects()
         p.second->destroy();
     }
     mProjects.clear();
-    Location::init(Hash<Path, uint32_t>());
+    if (mode == Clear_All)
+        Location::init(Hash<Path, uint32_t>());
 }
 
 void Server::reindex(const std::shared_ptr<QueryMessage> &query, const std::shared_ptr<Connection> &conn)
@@ -1386,6 +1445,11 @@ std::shared_ptr<Project> Server::projectForQuery(const std::shared_ptr<QueryMess
     if (!(query->flags() & QueryMessage::HasLocation))
         matches << query->match();
 
+    return projectForMatches(matches);
+}
+
+std::shared_ptr<Project> Server::projectForMatches(const List<Match> &matches)
+{
     std::shared_ptr<Project> cur = currentProject();
     // give current a chance first to avoid switching project when using system headers etc
     for (const Match &match : matches) {
@@ -1523,7 +1587,7 @@ void Server::sendDiagnostics(const std::shared_ptr<QueryMessage> &query, const s
 
 void Server::clearProjects(const std::shared_ptr<QueryMessage> &/*query*/, const std::shared_ptr<Connection> &conn)
 {
-    clearProjects();
+    clearProjects(Clear_All);
     conn->write("Cleared projects");
     conn->finish();
 }
@@ -1553,10 +1617,10 @@ void Server::sources(const std::shared_ptr<QueryMessage> &query, const std::shar
             const uint32_t fileId = Location::fileId(path);
             if (fileId) {
                 prepareCompletion(query, fileId, project);
-                List<Source> sources = project->sources(fileId);
+                SourceList sources = project->sources(fileId);
                 if (sources.isEmpty() && path.isHeader()) {
                     Set<uint32_t> seen;
-                    std::function<uint32_t(uint32_t)> findSource = [&findSource, &project, &seen](uint32_t file) {
+                    std::function<uint32_t(uint32_t)> findSourceFileId = [&findSourceFileId, &project, &seen](uint32_t file) {
                         DependencyNode *node = project->dependencyNode(file);
                         uint32_t ret = 0;
                         if (node) {
@@ -1568,7 +1632,7 @@ void Server::sources(const std::shared_ptr<QueryMessage> &query, const std::shar
                                     ret = dep.first;
                                     break;
                                 } else {
-                                    ret  = findSource(dep.first);
+                                    ret  = findSourceFileId(dep.first);
                                     if (ret)
                                         break;
                                 }
@@ -1577,10 +1641,15 @@ void Server::sources(const std::shared_ptr<QueryMessage> &query, const std::shar
                         return ret;
                     };
 
-                    const uint32_t source = findSource(fileId);
+                    const uint32_t source = findSourceFileId(fileId);
                     sources = project->sources(source);
-                    if (sources.size() > 1)
-                        sources.resize(1);
+                    if (sources.size() > 1) {
+                        auto it = sources.begin();
+                        ++it;
+                        while (it != sources.end()) {
+                            sources.erase(it++);
+                        }
+                    }
                 }
                 int idx = 0;
                 for (const auto &src : sources) {
@@ -1596,13 +1665,7 @@ void Server::sources(const std::shared_ptr<QueryMessage> &query, const std::shar
     }
 
     if (std::shared_ptr<Project> project = currentProject()) {
-        const Match match = query->match();
-        const Sources infos = project->sources();
-        for (const auto &it : infos) {
-            if (match.isEmpty() || match.match(it.second.sourceFile())) {
-                conn->write(format(it.second));
-            }
-        }
+        project->indexParseData().write([&conn](const String &str) { return conn->write(str); });
     } else {
         conn->write("No project");
     }
@@ -1619,7 +1682,7 @@ void Server::dumpCompletions(const std::shared_ptr<QueryMessage> &/*query*/, con
     conn->finish();
 }
 
-void Server::dumpCompilationDatabase(const std::shared_ptr<QueryMessage> &query, const std::shared_ptr<Connection> &conn)
+void Server::dumpCompileCommands(const std::shared_ptr<QueryMessage> &query, const std::shared_ptr<Connection> &conn)
 {
     std::shared_ptr<Project> project = projectForQuery(query);
     if (!project)
@@ -1630,33 +1693,53 @@ void Server::dumpCompilationDatabase(const std::shared_ptr<QueryMessage> &query,
         return;
     }
 
-    conn->write(project->toCompilationDatabase());
+    conn->write(project->toCompileCommands());
     conn->finish();
 }
 
 void Server::suspend(const std::shared_ptr<QueryMessage> &query, const std::shared_ptr<Connection> &conn)
 {
-    const Path p = query->match().pattern();
+    Path p;
+    String modeString;
+    const String pattern = query->match().pattern();
+    Deserializer deserializer(pattern);
+    deserializer >> p >> modeString;
     enum Mode {
-        List,
+        ListFiles,
         All,
         Clear,
-        File
-    } mode = List;
+        FileToggle,
+        FileOn,
+        FileOff
+    } mode = ListFiles;
     if (p == "clear") {
         mode = Clear;
+        assert(modeString.isEmpty());
     } else if (p == "all") {
         mode = All;
+        assert(modeString.isEmpty());
     } else if (!p.isEmpty()) {
-        mode = File;
+        if (modeString == "on") {
+            mode = FileOn;
+        } else if (modeString == "off") {
+            mode = FileOff;
+        } else {
+            mode = FileToggle;
+        }
     }
 
+    List<Match> matches;
+    if (!query->currentFile().isEmpty())
+        matches.push_back(query->currentFile());
+    if (mode == FileOn || mode == FileOff || mode == FileOn)
+        matches.push_back(p);
     std::shared_ptr<Project> project;
-    if (mode == File) {
-        project = projectForQuery(query);
-    } else {
+    if (matches.isEmpty()) {
         project = currentProject();
+    } else {
+        project = projectForMatches(matches);
     }
+
     const bool old = mSuspended;
     switch (mode) {
     case All:
@@ -1669,7 +1752,7 @@ void Server::suspend(const std::shared_ptr<QueryMessage> &query, const std::shar
             project->clearSuspendedFiles();
         conn->write("No files suspended.");
         break;
-    case List:
+    case ListFiles:
         if (mSuspended)
             conn->write("All files are suspended.");
         if (project) {
@@ -1682,7 +1765,9 @@ void Server::suspend(const std::shared_ptr<QueryMessage> &query, const std::shar
             }
         }
         break;
-    case File:
+    case FileOn:
+    case FileOff:
+    case FileToggle:
         if (!project) {
             conn->write("No project");
         } else if (!p.isFile()) {
@@ -1690,8 +1775,15 @@ void Server::suspend(const std::shared_ptr<QueryMessage> &query, const std::shar
         } else {
             const uint32_t fileId = Location::fileId(p);
             if (fileId) {
+                bool suspended = false;
+                switch (mode) {
+                case FileToggle: suspended = project->toggleSuspendFile(fileId); break;
+                case FileOff: suspended = false; project->setSuspended(fileId, false); break;
+                case FileOn: suspended = true; project->setSuspended(fileId, true); break;
+                default: assert(0);
+                }
                 conn->write<512>("%s is no%s suspended", p.constData(),
-                                 project->toggleSuspendFile(fileId) ? "w" : " longer");
+                                 suspended ? "w" : " longer");
             } else {
                 conn->write<512>("%s is not indexed", p.constData());
             }
@@ -1811,11 +1903,11 @@ void Server::handleVisitFileMessage(const std::shared_ptr<VisitFileMessage> &mes
     bool visit = false;
 
     std::shared_ptr<Project> project = mProjects.value(message->project());
-    const uint64_t key = message->key();
-    if (project && project->isActiveJob(key)) {
+    const uint32_t id = message->sourceFileId();
+    if (project && project->isActiveJob(id)) {
         assert(message->file() == message->file().resolved());
         fileId = Location::insertFile(message->file());
-        visit = project->visitFile(fileId, message->file(), key);
+        visit = project->visitFile(fileId, message->file(), id);
     }
     VisitFileResponseMessage msg(fileId, visit);
     conn->send(msg);
@@ -1823,16 +1915,17 @@ void Server::handleVisitFileMessage(const std::shared_ptr<VisitFileMessage> &mes
 
 bool Server::load()
 {
-    const Path p = mOptions.dataDir + "fileids";
     DataFile fileIdsFile(mOptions.dataDir + "fileids", RTags::DatabaseVersion);
     if (fileIdsFile.open(DataFile::Read)) {
         Flags<FileIdsFileFlag> flags;
         fileIdsFile >> flags;
         if (flags & HasSandboxRoot && !Sandbox::hasRoot()) {
-            error() << "This database was produced with --sandbox-root option using relative path. You have to specify a sandbox-root argument or wipe the db by running with -C";
+            error() << ("This database was produced with --sandbox-root option using relative path. "
+                        "You have to specify a sandbox-root argument or wipe the db by running with -C");
             return false;
         } else if (Sandbox::hasRoot() && !(flags & HasSandboxRoot)) {
-            error() << "This database was produced without --sandbox-root option using relative path. You can't specify a sandbox-root argument for this db unless you start the db over by passing -C";
+            error() << ("This database was produced without --sandbox-root option using relative path. "
+                        "You can't specify a sandbox-root argument for this db unless you start the db over by passing -C");
             return false;
         }
 
@@ -1883,8 +1976,8 @@ bool Server::load()
         if (!fileIdsFile.error().isEmpty()) {
             error("Can't restore file ids: %s", fileIdsFile.error().constData());
         }
-        Hash<Path, Sources> sources;
-        mOptions.dataDir.visit([&sources](const Path &path) {
+        Hash<Path, IndexParseData> projects;
+        mOptions.dataDir.visit([&projects](const Path &path) {
                 if (path.isDir()) {
                     const char *fn = path.fileName();
                     if (*fn == '_' || !strncmp(fn, "$_", 2))
@@ -1896,30 +1989,25 @@ bool Server::load()
                     RTags::decodePath(filePath);
 
                     String err;
-                    if (!Project::readSources(path, sources[filePath], 0, &err)) {
+                    IndexParseData data;
+                    if (!Project::readSources(path, data, &err)) {
                         error("Sources restore error %s: %s", path.constData(), err.constData());
-                        sources.remove(filePath);
+                    } else {
+                        data.project = filePath;
+                        projects[filePath] = std::move(data);
                     }
-                    // error() << sources[p].size();
                 }
                 return Path::Continue;
             });
-        // for (const auto &s : sources) {
-        //     error() << s.first << s.second.size();
-        // }
 
-        clearProjects();
-        if (!sources.isEmpty()) {
-            error() << "Recovering sources" << sources.size();
+        clearProjects(Clear_KeepFileIds);
+        if (!projects.isEmpty()) {
+            error() << "Recovering sources" << projects.size();
         }
-        for (const auto &s : sources) {
-            if (!s.second.isEmpty()) {
-                auto project = addProject(s.first);
-                for (const auto &source : s.second) {
-                    project->index(std::shared_ptr<IndexerJob>(new IndexerJob(source.second, IndexerJob::Compile, project)));
-                }
-                project->save();
-            }
+        for (auto &s : projects) {
+            auto p = addProject(s.first);
+            p->processParseData(std::move(s.second));
+            p->save();
         }
     }
     return true;
@@ -1982,7 +2070,7 @@ void Server::codeCompleteAt(const std::shared_ptr<QueryMessage> &query, const st
         return;
     }
     const uint32_t fileId = loc.fileId();
-    Source source = project->sources(fileId).value(query->buildIndex());
+    Source source = project->source(fileId, query->buildIndex());
     if (source.isNull()) {
         const Set<uint32_t> deps = project->dependencies(fileId, Project::DependsOnArg);
         if (mCompletionThread)
@@ -1990,7 +2078,7 @@ void Server::codeCompleteAt(const std::shared_ptr<QueryMessage> &query, const st
 
         if (source.isNull()) {
             for (uint32_t dep : deps) {
-                source = project->sources(dep).value(query->buildIndex());
+                source = project->source(dep, query->buildIndex());
                 if (!source.isNull())
                     break;
             }
@@ -2114,13 +2202,17 @@ bool Server::runTests()
             ret = false;
             continue;
         }
+        IndexParseData data;
+        data.environment = mEnvironment;
         for (const auto &source : sources) {
             if (!source.isString()) {
                 error() << "Invalid source" << source;
                 ret = false;
                 continue;
             }
-            if (!index("clang " + source.convert<String>(), workingDirectory, mEnvironment, workingDirectory)) {
+            data.project = workingDirectory;
+            String commands = "clang " + source.convert<String>();
+            if (!parse(data, std::move(commands), workingDirectory)) {
                 error() << "Failed to index" << ("clang " + source.convert<String>()) << workingDirectory;
                 ret = false;
                 continue;
@@ -2153,32 +2245,32 @@ bool Server::runTests()
             }
             std::shared_ptr<QueryMessage> query;
             if (type == "follow-location") {
-                const String location = Location::encode(test.operator[]<String>("location"), workingDirectory);
+                String location = Location::encode(test.operator[]<String>("location"), workingDirectory);
                 if (location.isEmpty()) {
                     error() << "Invalid test. Invalid location";
                     ret = false;
                     continue;
                 }
                 query.reset(new QueryMessage(QueryMessage::FollowLocation));
-                query->setQuery(location);
+                query->setQuery(std::move(location));
             } else if (type == "references") {
-                const String location = Location::encode(test.operator[]<String>("location"), workingDirectory);
+                String location = Location::encode(test.operator[]<String>("location"), workingDirectory);
                 if (location.isEmpty()) {
                     error() << "Invalid test. Invalid location";
                     ret = false;
                     continue;
                 }
                 query.reset(new QueryMessage(QueryMessage::ReferencesLocation));
-                query->setQuery(location);
+                query->setQuery(std::move(location));
             } else if (type == "references-name") {
-                const String name = test.operator[]<String>("name");
+                String name = test.operator[]<String>("name");
                 if (name.isEmpty()) {
                     error() << "Invalid test. Invalid name";
                     ret = false;
                     continue;
                 }
                 query.reset(new QueryMessage(QueryMessage::ReferencesLocation));
-                query->setQuery(name);
+                query->setQuery(std::move(name));
             } else {
                 error() << "Unknown test" << type;
                 ret = false;
@@ -2251,10 +2343,10 @@ void Server::prepareCompletion(const std::shared_ptr<QueryMessage> &query, uint3
 
     if (mCompletionThread && fileId) {
         if (!mCompletionThread->isCached(fileId, project)) {
-            Source source = project->sources(fileId).value(query->buildIndex());
+            Source source = project->source(fileId, query->buildIndex());
             if (source.isNull()) {
                 for (const uint32_t dep : project->dependencies(fileId, Project::DependsOnArg)) {
-                    source = project->sources(dep).value(query->buildIndex());
+                    source = project->source(dep, query->buildIndex());
                     if (!source.isNull())
                         break;
                 }

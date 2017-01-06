@@ -60,7 +60,7 @@ std::initializer_list<CommandLineParser::Option<RClient::OptionType> > opts = {
     { RClient::None, String(), 0, CommandLineParser::NoValue, "Indexing commands:" },
     { RClient::Compile, "compile", 'c', CommandLineParser::Optional, "Pass compilation arguments to rdm." },
     { RClient::GuessFlags, "guess-flags", 0, CommandLineParser::NoValue, "Guess compile flags (used with -c)." },
-    { RClient::LoadCompilationDatabase, "load-compilation-database", 'J', CommandLineParser::Optional, "Load compile_commands.json from directory" },
+    { RClient::LoadCompileCommands, "load-compile-commands", 'J', CommandLineParser::Optional, "Load compile_commands.json from directory" },
     { RClient::Suspend, "suspend", 'X', CommandLineParser::Optional, "Dump suspended files (don't track changes in these files) with no arg. Otherwise toggle suspension for arg." },
 
     { RClient::None, String(), 0, CommandLineParser::NoValue, "" },
@@ -100,7 +100,7 @@ std::initializer_list<CommandLineParser::Option<RClient::OptionType> > opts = {
     { RClient::CodeCompleteAt, "code-complete-at", 'l', CommandLineParser::Required, "Code complete at location: arg is file:line:col." },
     { RClient::SendDiagnostics, "send-diagnostics", 0, CommandLineParser::Required, "Only for debugging. Send data to all -G connections." },
     { RClient::DumpCompletions, "dump-completions", 0, CommandLineParser::NoValue, "Dump cached completions." },
-    { RClient::DumpCompilationDatabase, "dump-compilation-database", 0, CommandLineParser::NoValue, "Dump compilation database for project." },
+    { RClient::DumpCompileCommands, "dump-compile-commands", 0, CommandLineParser::NoValue, "Dump compilation database for project." },
     { RClient::SetBuffers, "set-buffers", 0, CommandLineParser::Optional, "Set active buffers (list of filenames for active buffers in editor)." },
     { RClient::ListBuffers, "list-buffers", 0, CommandLineParser::NoValue, "List active buffers." },
     { RClient::ListCursorKinds, "list-cursor-kinds", 0, CommandLineParser::NoValue, "List spelling for known cursor kinds." },
@@ -124,7 +124,8 @@ std::initializer_list<CommandLineParser::Option<RClient::OptionType> > opts = {
     { RClient::RangeFilter, "range-filter", 0, CommandLineParser::Required, "Filter out results not in the specified range." },
     { RClient::FilterSystemHeaders, "filter-system-headers", 'H', CommandLineParser::NoValue, "Don't exempt system headers from path filters." },
     { RClient::AllReferences, "all-references", 'e', CommandLineParser::NoValue, "Include definitions/declarations/constructors/destructors for references. Used for rename symbol." },
-    { RClient::AllTargets, "all-targets", 0, CommandLineParser::NoValue, "Print all targets for -f. Used for debugging." },
+    { RClient::TargetUsrs, "target-usrs", 0, CommandLineParser::NoValue, "Print all matching usr targets for -f. Used for debugging." },
+    { RClient::AllTargets, "all-targets", 0, CommandLineParser::NoValue, "Print multiple targets for -f. Sorted by best match." },
     { RClient::Elisp, "elisp", 'Y', CommandLineParser::NoValue, "Output elisp: (list \"one\" \"two\" ...)." },
     { RClient::JSON, "json", 0, CommandLineParser::NoValue, "Output json." },
     { RClient::Diagnostics, "diagnostics", 'm', CommandLineParser::NoValue, "Receive async formatted diagnostics from rdm." },
@@ -189,19 +190,19 @@ public:
 class QueryCommand : public RCCommand
 {
 public:
-    QueryCommand(QueryMessage::Type t, const String &q)
-        : RCCommand(), type(t), query(q)
+    QueryCommand(QueryMessage::Type t, String &&q)
+        : RCCommand(), type(t), query(std::move(q))
     {}
 
     const QueryMessage::Type type;
-    const String query;
+    String query;
     Flags<QueryMessage::Flag> extraQueryFlags;
 
     virtual bool exec(RClient *rc, const std::shared_ptr<Connection> &connection) override
     {
         QueryMessage msg(type);
         msg.setCommandLine(rc->commandLine());
-        msg.setQuery(query);
+        msg.setQuery(std::move(query));
         msg.setBuildIndex(rc->buildIndex());
         msg.setUnsavedFiles(rc->unsavedFiles());
         msg.setFlags(extraQueryFlags | rc->queryFlags());
@@ -283,24 +284,24 @@ const LogLevel RdmLogCommand::Default(-1);
 class CompileCommand : public RCCommand
 {
 public:
-    CompileCommand(const Path &c, const String &a)
-        : RCCommand(), cwd(c), args(a)
+    CompileCommand(String &&a, const Path &c)
+        : RCCommand(), args(std::move(a)), cwd(c)
     {}
-    CompileCommand(const Path &dir)
-        : RCCommand(), compilationDatabaseDir(dir)
+    CompileCommand(Path &&path)
+        : RCCommand(), compileCommands(std::move(path))
     {}
 
-    const Path compilationDatabaseDir;
-    const Path cwd;
-    const String args;
+    String args;
+    Path cwd;
+    Path compileCommands;
     virtual bool exec(RClient *rc, const std::shared_ptr<Connection> &connection) override
     {
         IndexMessage msg;
         msg.setCommandLine(rc->commandLine());
-        msg.setWorkingDirectory(cwd);
+        msg.setWorkingDirectory(std::move(cwd));
         msg.setFlag(IndexMessage::GuessFlags, rc->mGuessFlags);
-        msg.setArguments(args);
-        msg.setCompilationDatabaseDir(compilationDatabaseDir);
+        msg.setArguments(std::move(args));
+        msg.setCompileCommands(std::move(compileCommands));
         msg.setEnvironment(rc->environment());
         if (!rc->projectRoot().isEmpty())
             msg.setProjectRoot(rc->projectRoot());
@@ -331,32 +332,32 @@ RClient::~RClient()
     cleanupLogging();
 }
 
-void RClient::addQuery(QueryMessage::Type type, const String &query, Flags<QueryMessage::Flag> extraQueryFlags)
+void RClient::addQuery(QueryMessage::Type type, String &&query, Flags<QueryMessage::Flag> extraQueryFlags)
 {
-    std::shared_ptr<QueryCommand> cmd(new QueryCommand(type, query));
+    auto cmd = std::make_shared<QueryCommand>(type, std::move(query));
     cmd->extraQueryFlags = extraQueryFlags;
     mCommands.append(cmd);
 }
 
 void RClient::addQuitCommand(int exitCode)
 {
-    std::shared_ptr<QuitCommand> cmd(new QuitCommand(exitCode));
+    auto cmd = std::make_shared<QuitCommand>(exitCode);
     mCommands.append(cmd);
 }
 
 void RClient::addLog(LogLevel level)
 {
-    mCommands.append(std::shared_ptr<RCCommand>(new RdmLogCommand(level)));
+    mCommands.append(std::make_shared<RdmLogCommand>(level));
 }
 
-void RClient::addCompile(const Path &cwd, const String &args)
+void RClient::addCompile(String &&args, const Path &cwd)
 {
-    mCommands.append(std::shared_ptr<RCCommand>(new CompileCommand(cwd, args)));
+    mCommands.append(std::make_shared<CompileCommand>(std::move(args), cwd));
 }
 
-void RClient::addCompile(const Path &dir)
+void RClient::addCompile(Path &&path)
 {
-    mCommands.append(std::shared_ptr<RCCommand>(new CompileCommand(dir)));
+    mCommands.append(std::make_shared<CompileCommand>(std::move(path)));
 }
 
 int RClient::exec()
@@ -419,7 +420,13 @@ int RClient::exec()
 CommandLineParser::ParseStatus RClient::parse(size_t argc, char **argv)
 {
     Rct::findExecutablePath(*argv);
-    mSocketFile = Path::home() + ".rdm";
+    const char * runtimeDir = getenv("XDG_RUNTIME_DIR");
+    if (runtimeDir == NULL) {
+         mSocketFile = Path::home() + ".rdm";
+    } else {
+         mSocketFile = runtimeDir;
+         mSocketFile += "/rdm.socket";
+    }
 
     List<std::shared_ptr<QueryCommand> > projectCommands;
 
@@ -551,6 +558,9 @@ CommandLineParser::ParseStatus RClient::parse(size_t argc, char **argv)
         case AllTargets: {
             mQueryFlags |= QueryMessage::AllTargets;
             break; }
+        case TargetUsrs: {
+            mQueryFlags |= QueryMessage::TargetUsrs;
+            break; }
         case MatchCaseInsensitive: {
             mQueryFlags |= QueryMessage::MatchCaseInsensitive;
             break; }
@@ -619,12 +629,12 @@ CommandLineParser::ParseStatus RClient::parse(size_t argc, char **argv)
             ++mLogLevel;
             break; }
         case CodeCompleteAt: {
-            const String encoded = Location::encode(value);
+            String encoded = Location::encode(value);
             if (encoded.isEmpty()) {
                 return { String::format<1024>("Can't resolve argument %s", value.constData()), CommandLineParser::Parse_Error };
             }
 
-            addQuery(QueryMessage::CodeCompleteAt, encoded);
+            addQuery(QueryMessage::CodeCompleteAt, std::move(encoded));
             break; }
         case Silent: {
             mLogLevel = LogLevel::None;
@@ -700,7 +710,7 @@ CommandLineParser::ParseStatus RClient::parse(size_t argc, char **argv)
         case FollowLocation:
         case ClassHierarchy:
         case ReferenceLocation: {
-            const String encoded = Location::encode(value);
+            String encoded = Location::encode(value);
             if (encoded.isEmpty()) {
                 return { String::format<1024>("Can't resolve argument %s", value.constData()), CommandLineParser::Parse_Error };
             }
@@ -719,7 +729,7 @@ CommandLineParser::ParseStatus RClient::parse(size_t argc, char **argv)
                 assert(0);
                 break;
             }
-            addQuery(queryType, encoded, QueryMessage::HasLocation);
+            addQuery(queryType, std::move(encoded), QueryMessage::HasLocation);
             break; }
         case SymbolInfo: {
             std::cmatch match;
@@ -741,7 +751,7 @@ CommandLineParser::ParseStatus RClient::parse(size_t argc, char **argv)
             String query;
             Serializer serializer(query);
             serializer << path << line << col << line2 << col2;
-            addQuery(QueryMessage::SymbolInfo, query);
+            addQuery(QueryMessage::SymbolInfo, std::move(query));
             break; }
         case CurrentFile: {
             mCurrentFile = Path(value).resolved();
@@ -751,11 +761,11 @@ CommandLineParser::ParseStatus RClient::parse(size_t argc, char **argv)
             break; }
         case DumpCompletions: {
             addQuery(QueryMessage::DumpCompletions);
-            break; }
-        case DumpCompilationDatabase: {
-            addQuery(QueryMessage::DumpCompilationDatabase);
-            break; }
-        case Clear: {
+            break;
+        case DumpCompileCommands:
+            addQuery(QueryMessage::DumpCompileCommands);
+            break;
+        case Clear:
             addQuery(QueryMessage::ClearProjects);
             break; }
         case RdmLog: {
@@ -782,7 +792,7 @@ CommandLineParser::ParseStatus RClient::parse(size_t argc, char **argv)
             addQuitCommand(exit);
             break; }
         case DeleteProject: {
-            addQuery(QueryMessage::DeleteProject, value);
+            addQuery(QueryMessage::DeleteProject, std::move(value));
             break; }
         case DebugLocations: {
             String arg;
@@ -791,10 +801,10 @@ CommandLineParser::ParseStatus RClient::parse(size_t argc, char **argv)
             } else if (idx < arguments.size() && arguments[idx][0] != '-') {
                 arg = arguments[idx++];
             }
-            addQuery(QueryMessage::DebugLocations, arg);
+            addQuery(QueryMessage::DebugLocations, std::move(arg));
             break; }
         case SendDiagnostics: {
-            addQuery(QueryMessage::SendDiagnostics, value);
+            addQuery(QueryMessage::SendDiagnostics, std::move(value));
             break; }
         case FindProjectRoot: {
             const Path p = Path::resolved(value); // this won't work correctly with --no-realpath unless --no-realpath is passed first
@@ -876,9 +886,9 @@ CommandLineParser::ParseStatus RClient::parse(size_t argc, char **argv)
                 Path p(arg);
                 if (resolve && p.exists()) {
                     p.resolve();
-                    addQuery(queryType, p, extraQueryFlags);
+                    addQuery(queryType, std::move(p), extraQueryFlags);
                 } else {
-                    addQuery(queryType, arg, extraQueryFlags);
+                    addQuery(queryType, std::move(arg), extraQueryFlags);
                 }
             } else {
                 addQuery(queryType, String(), extraQueryFlags);
@@ -950,35 +960,30 @@ CommandLineParser::ParseStatus RClient::parse(size_t argc, char **argv)
                 Serializer serializer(encoded);
                 serializer << paths;
             }
-            addQuery(QueryMessage::SetBuffers, encoded);
+            addQuery(QueryMessage::SetBuffers, std::move(encoded));
             break; }
-        case LoadCompilationDatabase: {
-            Path dir;
+        case LoadCompileCommands: {
+            Path path;
             if (!value.isEmpty()) {
-                dir = std::move(value);
+                path = std::move(value);
             } else if (idx < arguments.size() && arguments[idx][0] != '-') {
-                dir = arguments[idx++];
+                path = arguments[idx++];
             } else {
-                dir = Path::pwd();
+                path = Path::pwd();
             }
-            dir.resolve(Path::MakeAbsolute);
-            if (!dir.exists()) {
-                return { String::format<1024>("%s does not seem to exist", dir.constData()), CommandLineParser::Parse_Error };
+            path.resolve(Path::MakeAbsolute);
+            if (!path.exists()) {
+                return { String::format<1024>("%s does not seem to exist", path.constData()), CommandLineParser::Parse_Error };
+            } else if (path.isDir()) {
+                path += "compile_commands.json";
+            } else if (!path.endsWith("/compile_commands.json")) {
+                return { "The file has to be called compile_commands.json", CommandLineParser::Parse_Error };
             }
-            if (!dir.isDir()) {
-                if (dir.isFile() && dir.endsWith("/compile_commands.json")) {
-                    dir = dir.parentDir();
-                } else {
-                    return { String::format<1024>("%s is not a directory", dir.constData()), CommandLineParser::Parse_Error };
-                }
+            if (!path.exists()) {
+                return { String::format<1024>("no compile_commands.json file in %s", path.constData()), CommandLineParser::Parse_Error };
             }
-            if (!dir.endsWith('/'))
-                dir += '/';
-            const Path file = dir + "compile_commands.json";
-            if (!file.isFile()) {
-                return { String::format<1024>("no compile_commands.json file in %s", dir.constData()), CommandLineParser::Parse_Error };
-            }
-            addCompile(dir);
+
+            addCompile(std::move(path));
             break; }
         case HasFileManager: {
             Path p;
@@ -995,7 +1000,7 @@ CommandLineParser::ParseStatus RClient::parse(size_t argc, char **argv)
             }
             if (p.isDir() && !p.endsWith('/'))
                 p.append('/');
-            addQuery(QueryMessage::HasFileManager, p);
+            addQuery(QueryMessage::HasFileManager, std::move(p));
             break; }
         case ProjectRoot: {
             Path p = std::move(value);
@@ -1013,15 +1018,24 @@ CommandLineParser::ParseStatus RClient::parse(size_t argc, char **argv)
             } else if (idx < arguments.size() && arguments[idx][0] != '-') {
                 p = arguments[idx++];
             }
-            if (!p.isEmpty()) {
-                if (p != "clear" && p != "all") {
-                    p.resolve(Path::MakeAbsolute);
-                    if (!p.isFile()) {
-                        return { String::format<1024>("%s is not a file", value.constData()), CommandLineParser::Parse_Error };
+            String change;
+            if (!p.isEmpty() && p != "clear" && p != "all") {
+                p.resolve(Path::MakeAbsolute);
+                if (!p.isFile()) {
+                    return { String::format<1024>("%s is not a file", value.constData()), CommandLineParser::Parse_Error };
+                }
+                if (idx + 1 < arguments.size()) {
+                    if (arguments[idx + 1] == "on" || arguments[idx + 1] == "off") {
+                        change = std::move(arguments[++idx]);
+                    } else if (arguments[idx + 1] == "toggle") {
+                        ++idx;
                     }
                 }
             }
-            addQuery(QueryMessage::Suspend, p);
+            String data;
+            Serializer serializer(data);
+            serializer << p << change;
+            addQuery(QueryMessage::Suspend, std::move(data));
             break; }
         case Compile: {
             auto quote = [](const String &str) -> String {
@@ -1034,14 +1048,16 @@ CommandLineParser::ParseStatus RClient::parse(size_t argc, char **argv)
                 }
                 return str;
             };
-            String args = quote(std::move(value));
-
+            String args;
             if (idx + 1 < arguments.size()) {
+                args = quote(std::move(value));
                 while (++idx < arguments.size()) {
                     if (!args.isEmpty())
                         args.append(' ');
                     args.append(quote(arguments[idx]));
                 }
+            } else {
+                args = std::move(value);
             }
             if (args == "-" || args.isEmpty()) {
                 String pending;
@@ -1049,17 +1065,16 @@ CommandLineParser::ParseStatus RClient::parse(size_t argc, char **argv)
                 while (fgets(buf, sizeof(buf), stdin)) {
                     pending += buf;
                     if (!pending.endsWith("\\\n")) {
-                        addCompile(Path::pwd(), pending);
-                        pending.clear();
+                        addCompile(std::move(pending), Path::pwd());
                     } else {
                         memset(pending.data() + pending.size() - 2, ' ', 2);
                     }
                 }
                 if (!pending.isEmpty()) {
-                    addCompile(Path::pwd(), pending);
+                    addCompile(std::move(pending), Path::pwd());
                 }
             } else {
-                addCompile(Path::pwd(), args);
+                addCompile(std::move(args), Path::pwd());
             }
             break; }
         case IsIndexing: {
@@ -1120,7 +1135,7 @@ CommandLineParser::ParseStatus RClient::parse(size_t argc, char **argv)
                 break;
             }
 
-            addQuery(queryType, p, extraQueryFlags);
+            addQuery(queryType, std::move(p), extraQueryFlags);
             break; }
         case AllDependencies: {
             String encoded;
@@ -1130,7 +1145,7 @@ CommandLineParser::ParseStatus RClient::parse(size_t argc, char **argv)
             }
             Serializer s(encoded);
             s << Path() << args;
-            addQuery(QueryMessage::Dependencies, encoded);
+            addQuery(QueryMessage::Dependencies, std::move(encoded));
             break; }
         case DumpFileMaps:
         case Dependencies: {
@@ -1140,14 +1155,14 @@ CommandLineParser::ParseStatus RClient::parse(size_t argc, char **argv)
             }
             p.resolve();
             List<String> args;
-            while (idx < arguments.size() && arguments[idx][0] != '-') {
-                args.append(arguments[idx++]);
+            while (idx + 1 < arguments.size() && arguments[idx + 1][0] != '-') {
+                args.append(arguments[++idx]);
             }
 
             String encoded;
             Serializer s(encoded);
             s << p << args;
-            addQuery(type == DumpFileMaps ? QueryMessage::DumpFileMaps : QueryMessage::Dependencies, encoded);
+            addQuery(type == DumpFileMaps ? QueryMessage::DumpFileMaps : QueryMessage::Dependencies, std::move(encoded));
             break; }
         case Tokens: {
             char path[PATH_MAX];
@@ -1174,7 +1189,7 @@ CommandLineParser::ParseStatus RClient::parse(size_t argc, char **argv)
             String data;
             Serializer s(data);
             s << p << from << to;
-            addQuery(QueryMessage::Tokens, data);
+            addQuery(QueryMessage::Tokens, std::move(data));
             break; }
         case TokensIncludeSymbols: {
             mQueryFlags |= QueryMessage::TokensIncludeSymbols;
@@ -1185,18 +1200,18 @@ CommandLineParser::ParseStatus RClient::parse(size_t argc, char **argv)
             if (!p.isFile()) {
                 return { String::format<1024>("%s is not a file", value.constData()), CommandLineParser::Parse_Error };
             }
-            addQuery(QueryMessage::PreprocessFile, p);
+            addQuery(QueryMessage::PreprocessFile, std::move(p));
             break; }
         case RemoveFile: {
-            const Path p = Path::resolved(value, Path::MakeAbsolute);
+            Path p = Path::resolved(value, Path::MakeAbsolute);
             if (!p.exists()) {
-                addQuery(QueryMessage::RemoveFile, p);
+                addQuery(QueryMessage::RemoveFile, std::move(p));
             } else {
-                addQuery(QueryMessage::RemoveFile, value);
+                addQuery(QueryMessage::RemoveFile, std::move(value));
             }
             break; }
         case ReferenceName: {
-            addQuery(QueryMessage::ReferencesName, value);
+            addQuery(QueryMessage::ReferencesName, std::move(value));
             break; }
 #ifdef RTAGS_HAS_LUA
         case VisitAST: {
@@ -1205,7 +1220,7 @@ CommandLineParser::ParseStatus RClient::parse(size_t argc, char **argv)
             if (!p.isFile()) {
                 return { String::format<1024>("%s is not a file", value.constData()), CommandLineParser::Parse_Error };
             }
-            addQuery(QueryMessage::VisitAST, p);
+            addQuery(QueryMessage::VisitAST, std::move(p));
             break; }
         case VisitASTScript: {
             String code = std::move(value);
@@ -1219,7 +1234,7 @@ CommandLineParser::ParseStatus RClient::parse(size_t argc, char **argv)
             if (code.isEmpty()) {
                 return { String::format<1024>("Script is empty"), CommandLineParser::Parse_Error };
             }
-            mVisitASTScripts.push_back(code);
+            mVisitASTScripts.push_back(std::move(code));
             break; }
 #endif
         }

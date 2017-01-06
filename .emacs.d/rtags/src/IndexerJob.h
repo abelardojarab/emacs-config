@@ -33,21 +33,25 @@ public:
         Crashed = 0x020,
         Aborted = 0x040,
         Complete = 0x080,
+        NoAbort = 0x100,
         Type_Mask = Dirty|Compile|Reindex
     };
 
     static String dumpFlags(Flags<Flag> flags);
 
-    IndexerJob(const Source &source,
+    IndexerJob(const SourceList &sources,
                Flags<Flag> flags,
                const std::shared_ptr<Project> &project,
                const UnsavedFiles &unsavedFiles = UnsavedFiles());
     ~IndexerJob();
+
     void acquireId();
     String encode() const;
 
+    uint32_t fileId() const { assert(!sources.isEmpty()); return sources.begin()->fileId; }
+
     uint64_t id;
-    Source source;
+    SourceList sources;
     Path sourceFile;
     Flags<Flag> flags;
     Path project;
