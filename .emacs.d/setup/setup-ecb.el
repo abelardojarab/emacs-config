@@ -1,6 +1,6 @@
 ;;; setup-ecb.el ---
 
-;; Copyright (C) 2016  Abelardo Jara-Berrocal
+;; Copyright (C) 2016, 2017  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara <abelardojara@Abelardos-MacBook-Pro.local>
 ;; Keywords:
@@ -260,15 +260,14 @@ more place."
                              (ecb-window-sync)))))
 
             ;; Reparse after a file load
-            (add-hook 'find-file-hook
+            (add-hook 'prog-mode-hook
                       '(lambda()
-                         (when (bound-and-true-p ecb-minor-mode)
-                           (ignore-errors
-                             ;; this is to get the methods buffer to refresh correctly.
-                             ;; semantic idle mode refresh doesn't seem to work all that well.
-                             (semantic-force-refresh)
-                             (ecb-rebuild-methods-buffer)
-                             (ecb-window-sync)))))
+                         (progn
+                           ;; this is to get the methods buffer to refresh correctly.
+                           ;; semantic idle mode refresh doesn't seem to work all that well.
+                           (semantic-force-refresh)
+                           (ecb-rebuild-methods-buffer)
+                           (ecb-window-sync))))
 
             ;; Redefine fonts, not needed
             (set-face-attribute 'ecb-default-general-face nil
