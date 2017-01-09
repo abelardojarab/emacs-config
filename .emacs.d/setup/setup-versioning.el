@@ -388,7 +388,7 @@ branch."
             ;; Enable diff-hl
             (global-diff-hl-mode)))
 
-;; emacs git utilities
+;; git modeline and git utilities
 (use-package git-emacs
   :if (executable-find "git")
   :load-path (lambda () (expand-file-name "git-emacs/" user-emacs-directory))

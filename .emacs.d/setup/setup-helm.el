@@ -1,6 +1,6 @@
 ;;; setup-helm.el ---                                -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2015, 2016  Abelardo Jara-Berrocal
+;; Copyright (C) 2015, 2016, 2017  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
 ;; Keywords:
@@ -29,9 +29,9 @@
   :load-path (lambda () (expand-file-name "helm/" user-emacs-directory))
   :bind (("C-'" . helm-semantic-or-imenu)
          :map isearch-mode-map
-         ("C-f" . helm-occur-from-isearch)
+         ("C-." . helm-occur-from-isearch)
          :map minibuffer-local-isearch-map
-         ("C-f" . helm-occur-from-isearch)
+         ("C-." . helm-occur-from-isearch)
          :map ctl-x-map
          ("C-r" . helm-recentf)
          ("p" . helm-show-kill-ring)

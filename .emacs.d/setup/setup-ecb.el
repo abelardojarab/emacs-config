@@ -206,7 +206,7 @@ If you have not set a compilation-window in `ecb-compile-window-height' then
 the layout contains no persistent compilation window and the other windows get a
 little more place. "
               (ecb-set-history-buffer)
-              (ecb-split-ver 0.5)
+              (ecb-split-ver 0.3)
               (ecb-set-methods-buffer)
 
               (select-window (next-window (next-window)))
@@ -269,45 +269,40 @@ more place."
                            (ecb-rebuild-methods-buffer)
                            (ecb-window-sync))))
 
-            ;; Redefine fonts, not needed
-            (set-face-attribute 'ecb-default-general-face nil
-                                :inherit 'default)
-            (set-face-attribute 'ecb-default-highlight-face nil
-                                :inherit 'hl-line)
-
             ;; Speedbar
-            (require 'sr-speedbar)
-            (setq speedbar-hide-button-brackets-flag t
-                  speedbar-show-unknown-files t
-                  speedbar-smart-directory-expand-flag t
-                  speedbar-directory-button-trim-method 'trim
-                  speedbar-use-images t
-                  speedbar-indentation-width 2
-                  speedbar-use-imenu-flag t
-                  speedbar-file-unshown-regexp "flycheck-.*"
-                  speedbar-update-flag t
-                  sr-speedbar-width 40
-                  sr-speedbar-width-x 40
-                  sr-speedbar-auto-refresh t
-                  sr-speedbar-skip-other-window-p t
-                  sr-speedbar-right-side nil)
+            (use-package sr-speedbar
+              :config (progn
+                        (setq speedbar-hide-button-brackets-flag t
+                              speedbar-show-unknown-files t
+                              speedbar-smart-directory-expand-flag t
+                              speedbar-directory-button-trim-method 'trim
+                              speedbar-use-images t
+                              speedbar-indentation-width 2
+                              speedbar-use-imenu-flag t
+                              speedbar-file-unshown-regexp "flycheck-.*"
+                              speedbar-update-flag t
+                              sr-speedbar-width 40
+                              sr-speedbar-width-x 40
+                              sr-speedbar-auto-refresh t
+                              sr-speedbar-skip-other-window-p t
+                              sr-speedbar-right-side nil)
 
-            ;; More familiar keymap settings.
-            (add-hook 'speedbar-reconfigure-keymaps-hook
-                      '(lambda ()
-                         (define-key speedbar-mode-map [S-up] 'speedbar-up-directory)
-                         (define-key speedbar-mode-map [right] 'speedbar-flush-expand-line)
-                         (define-key speedbar-mode-map [left] 'speedbar-contract-line)))
+                        ;; More familiar keymap settings.
+                        (add-hook 'speedbar-reconfigure-keymaps-hook
+                                  '(lambda ()
+                                     (define-key speedbar-mode-map [S-up] 'speedbar-up-directory)
+                                     (define-key speedbar-mode-map [right] 'speedbar-flush-expand-line)
+                                     (define-key speedbar-mode-map [left] 'speedbar-contract-line)))
 
-            ;; Highlight the current line
-            (add-hook 'speedbar-mode-hook '(lambda () (hl-line-mode 1)))
+                        ;; Highlight the current line
+                        (add-hook 'speedbar-mode-hook '(lambda () (hl-line-mode 1)))
 
-            ;; Add Javascript
-            (speedbar-add-supported-extension ".js")
-            (add-to-list 'speedbar-fetch-etags-parse-list
-                         '("\\.js" . speedbar-parse-c-or-c++tag))
-            (speedbar-add-supported-extension ".il")
-            (speedbar-add-supported-extension ".ils")
+                        ;; Add Javascript
+                        (speedbar-add-supported-extension ".js")
+                        (add-to-list 'speedbar-fetch-etags-parse-list
+                                     '("\\.js" . speedbar-parse-c-or-c++tag))
+                        (speedbar-add-supported-extension ".il")
+                        (speedbar-add-supported-extension ".ils")))
 
             ;; Finally activate ecb on HD-monitors or above
             (if (and (> (car (screen-size)) 1900)
