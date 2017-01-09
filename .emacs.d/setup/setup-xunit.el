@@ -1,8 +1,8 @@
 ;;; setup-xunit.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016  Abelardo Jara-Berrocal
+;; Copyright (C) 2016, 2017  Abelardo Jara-Berrocal
 
-;; Author: Abelardo Jara <abelardojara@Abelardos-MacBook-Pro.local>
+;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
 ;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
@@ -24,7 +24,7 @@
 
 ;;; Code:
 
-;; Show inline arguments hint for the C/C++ function at point
+;; Test-case mode
 (use-package test-case-mode
   :load-path (lambda () (expand-file-name "test-case-mode/" user-emacs-directory))
   :init (progn

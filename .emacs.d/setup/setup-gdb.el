@@ -1,8 +1,8 @@
 ;;; setup-gdb.el ---                                 -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016  Lab
+;; Copyright (C) 2014, 2015, 2016, 2017  Abelardo Jara-Berrocal
 
-;; Author: Lab <lab@cpt-swdev1.jf.intel.com>
+;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
 ;; Keywords:
 
 ;; This program is free software; you can redistribute it and/or modify
