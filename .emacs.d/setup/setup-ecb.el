@@ -260,7 +260,7 @@ more place."
                              (ecb-window-sync)))))
 
             ;; Reparse after a file load
-            (add-hook 'prog-mode-hook
+            (add-hook 'find-file-hooks
                       '(lambda()
                          (progn
                            ;; this is to get the methods buffer to refresh correctly.
