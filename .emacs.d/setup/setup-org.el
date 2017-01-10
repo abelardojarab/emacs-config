@@ -113,11 +113,22 @@
                   org-use-speed-commands t
                   org-completion-use-ido t
                   org-hide-leading-stars t
-                  org-hide-emphasis-markers t
                   org-highlight-latex-and-related '(latex)
                   org-ellipsis " ••• "
                   ;; this causes problem in other modes
                   org-indent-mode nil)
+
+            ;; Hide the /italics/ and *bold* markers
+            (setq org-hide-emphasis-markers t)
+
+            ;; org-entities displays \alpha etc. as Unicode characters.
+            (setq org-pretty-entities t)
+
+            ;; Allow a) b) c) lists
+            (setq org-list-allow-alphabetical t)
+
+            ;; Right-align tags to an indent from the right margin
+            (setq org-tags-column 120)
 
             ;; Insert blank line before new heading
             (setq org-blank-before-new-entry
@@ -134,10 +145,12 @@
             ;; Export options
             (setq org-export-coding-system 'utf-8
                   org-export-time-stamp-file nil
-                  org-export-with-smart-quotes t ;; curly quotes in HTML
                   org-export-with-sub-superscripts '{}
                   org-export-allow-bind-keywords t
                   org-export-async-debug t)
+
+            ;; Turn ' and " into ‘posh’ “quotes”
+            (setq org-export-with-smart-quotes t)
 
             ;; Enable mouse in Org
             (use-package org-mouse)

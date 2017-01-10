@@ -1,6 +1,6 @@
 ;;; setup-org-babel.el ---                           -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016  Abelardo Jara-Berrocal
+;; Copyright (C) 2016, 2017  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
 ;; Keywords:
@@ -33,6 +33,9 @@
                   org-src-fontify-natively t
                   org-src-tab-acts-natively t
 
+                  ;; Preserve indentation when tangling source blocks (important for makefiles)
+                  org-src-preserve-indentation t
+
                   ;; Don't ask for confirmation on every =C-c C-c= code-block compile.
                   org-confirm-babel-evaluate nil
 
@@ -56,7 +59,7 @@
             ;; Automatically refresh inline images that are generated from Babel blocks
             (add-hook 'org-babel-after-execute-hook (lambda ()
                                                       (condition-case nil
-                                                          (org-display-inline-images)
+                                                          (org-redisplay-inline-images)
                                                         (error nil))) 'append)
 
             ;; Enable multiple languages

@@ -1,6 +1,6 @@
 ;;; setup-org-plugins.el ---                         -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016  Abelardo Jara-Berrocal
+;; Copyright (C) 2016, 2017  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojara@ubuntu-MacBookPro>
 ;; Keywords:
@@ -34,6 +34,7 @@
   :if (display-graphic-p)
   :load-path (lambda () (expand-file-name "org-bullets/" user-emacs-directory))
   :config (progn
+            (setq org-bullets-bullet-list '("●" "►" "•" "•")
             (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))))
 
 ;; Seek headlines or content inside org buffers

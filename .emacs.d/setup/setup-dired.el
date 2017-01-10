@@ -1,6 +1,6 @@
 ;;; setup-dired.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016  Abelardo Jara-Berrocal
+;; Copyright (C) 2016, 2017  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
 ;; Keywords:
@@ -36,6 +36,14 @@
             (defun my/dired-mode-hook ()
               (setq-local truncate-lines t))
             (add-hook 'dired-mode-hook 'projectile-mode)
+
+            ;; Emacs 24.4 defaults to an ls -1 view, not ls -l, but I want
+            ;; details. This needs to be specified before requiring dired+ (see
+            ;; http://irreal.org/blog/?p=3341)
+            (setq diredp-hide-details-initially-flag nil)
+
+            ;; "In Dired, visit this file or directory instead of the Dired buffer."
+            ;; Prevents buffers littering up things when moving around in Dired
             (put 'dired-find-alternate-file 'disabled nil)
 
             ;; toggle `dired-omit-mode' with C-x M-o
@@ -55,6 +63,7 @@
                   dired-ls-F-marks-symlinks t
                   ;; Auto refresh dired
                   dired-auto-revert-buffer t
+                  ;; Auto refresh dired, but be quiet about it
                   global-auto-revert-non-file-buffers t)
 
             ;; rsync helper
