@@ -34,7 +34,7 @@
   :if (display-graphic-p)
   :load-path (lambda () (expand-file-name "org-bullets/" user-emacs-directory))
   :config (progn
-            (setq org-bullets-bullet-list '("●" "►" "•" "•")
+            (setq org-bullets-bullet-list '("●" "►" "•" "•"))
             (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))))
 
 ;; Seek headlines or content inside org buffers
