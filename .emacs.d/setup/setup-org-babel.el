@@ -180,7 +180,7 @@
               "#+LATEX_HEADER: %% footskip - Distance between the baseline of the text and the baseline of the footnote.\n"
               "#+LATEX_HEADER: %% marginparwidth, marginparsep - Width and separation of the margin notes.\n"
               "#+LATEX_HEADER: %% columnsep - Inter-column separation (documents using two columns)\n"
-              "#+LATEX_HEADER: \\geometry{margin=0.8in, a4paper, textwidth=6.5in, textheight=10in, marginparsep=7pt, marginparwidth=0.6in}\n"
+              "#+LATEX_HEADER: \\geometry{margin=1.0in, top=1.25in, a4paper, textwidth=6.5in, textheight=9.0in, marginparsep=0.5in, marginparwidth=0.5in}\n"
               "\n"
               "# Header and footer configurations\n"
               "#+LATEX_HEADER: %% Header and footer configuration\n"
