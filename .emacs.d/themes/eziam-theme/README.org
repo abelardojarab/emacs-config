@@ -1,0 +1,56 @@
+#+TITLE: Eziam Theme
+
+Eziam is a theme for Emacs, which tries to combine the simplicity of [[https://github.com/11111000000/tao-theme-emacs][Tao]] with the org-mode goodness of [[https://github.com/fniessen/emacs-leuven-theme/issues][Leuven]].  Unlike Tao, keeps some very minimal color indications, while remaining mainly grayscale and trying to avoid the “angry fruit salad” syndrome.  Unlike Leuven, it remains mostly greyscale, with no color for syntax, and easily allows multiple variants.
+
+
+** Contents :TOC:
+   - [[#screenshots][Screenshots]]
+   - [[#installation][Installation]]
+   - [[#configuration][Configuration]]
+   - [[#credits][Credits]]
+
+** Screenshots
+
+ - Org mode, light theme ::
+
+     #+CAPTION: Editing an org file with Eziam-light
+     #+NAME:    org-light
+     [[https://raw.githubusercontent.com/thblt/eziam-theme-emacs/master/screenshots/org-light.png]]
+
+ - Org mode, light theme, headers scaling activated ::
+
+     #+CAPTION: Editing an org file with Eziam-light
+     #+NAME:    org-light
+     [[https://raw.githubusercontent.com/thblt/eziam-theme-emacs/master/screenshots/org-light-scaled.png]]
+
+ - Org mode, dark theme ::
+
+     #+CAPTION: Editing an org file with Eziam-dark
+     #+NAME:    org-dark
+     [[https://raw.githubusercontent.com/thblt/eziam-theme-emacs/master/screenshots/org-dark.png]]
+
+ - Code, light theme ::
+
+     #+CAPTION: Editing code with Eziam-dark
+     #+NAME:    code-light
+     [[https://raw.githubusercontent.com/thblt/eziam-theme-emacs/master/screenshots/code-light.png]]
+
+ - Code, dark theme ::
+
+     #+CAPTION: Editing code with Eziam-dark
+     #+NAME:    code-dark
+     [[https://raw.githubusercontent.com/thblt/eziam-theme-emacs/master/screenshots/code-dark.png]]
+
+** Installation
+
+Eziam is not yet in Melpa.  Clone the repository somewhere in your load-path or use [[https://github.com/dimitri/el-get][el-get]].
+
+** Configuration
+
+Eziam can be customized.  =M-x customize-group RET eziam-theme RET=.
+
+** Credits
+
+Eziam is essentially a mix of two remarkable themes, Peter Kosov's [[https://github.com/11111000000/tao-theme-emacs][Tao]] and Fabrice Niessen's [[https://github.com/fniessen/emacs-leuven-theme/issues][Leuven]].  Although it is technically a fork of the former, it also borrows a lot of ideas from the latter, especially the “generic colors” logic (which may not be original, but as an Emacs Lisp beginner, that's where I found it) and, of course, the great org/markdown outlines.
+
+The name “Eziam” is an extraordinarily bad pun, which I feel like I probably shouldn't explain.  If you don't get it, you're probably OK.

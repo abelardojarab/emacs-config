@@ -58,6 +58,7 @@
           "monotropic"
           "spike"
           "dracula"
+          "eziam"
           "grandshell"
           "monochrome"
           "spacemacs"
@@ -88,7 +89,7 @@
 ;; Choose different themes depending if we are using GUI or not
 ;; Console colors are enabled if "export TERM=xterm-256color" is added into .bashrc
 (if (display-graphic-p)
-    (load-theme 'zenburn t)
+    (load-theme 'eziam-dark t)
   (load-theme 'monokai t))
 
 (provide 'setup-themes)

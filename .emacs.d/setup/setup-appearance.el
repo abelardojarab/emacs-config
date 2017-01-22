@@ -1,6 +1,6 @@
 ;;; setup-appearance.el ---
 
-;; Copyright (C) 2014, 2015, 2016  Abelardo Jara-Berrocal
+;; Copyright (C) 2014, 2015, 2016, 2017  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
 ;; Keywords:
@@ -129,7 +129,6 @@ non-nil."
 (use-package lawlist-scroll-mode
   :defer t
   :if (display-graphic-p)
-  :commands lawlist-scroll-bar-mode
   :diminish (lawlist-scroll-bar-mode)
   :config (add-hook 'prog-mode-hook (lambda () (lawlist-scroll-bar-mode 1))))
 
