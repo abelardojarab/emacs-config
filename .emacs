@@ -1,5 +1,5 @@
 ;; -*-mode: Emacs-Lisp; -*-
-;; Copyright (C) 1996-2016 Abelardo Jara-Berrocal
+;; Copyright (C) 1996-2017 Abelardo Jara-Berrocal
 ;; URL: http://pintucoperu.wordpress.com
 ;; This file is free software licensed under the terms of the
 ;; GNU General Public License, version 3 or later.
@@ -218,9 +218,6 @@
 
 ;; Setup themes
 (require 'setup-themes)
-
-;; Setup themes (setup)
-(require 'setup-themes-setup)
 
 ;; Setup parenthesis
 (require 'setup-parenthesis)
