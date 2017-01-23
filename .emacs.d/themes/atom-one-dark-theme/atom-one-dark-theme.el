@@ -21,6 +21,8 @@
     ("atom-one-dark-bg"       . "#282C34")
     ("atom-one-dark-bg-1"     . "#121417")
     ("atom-one-dark-bg-hl"    . "#2F343D")
+    ("atom-one-dark-gutter"   . "#666D7A")
+    ("atom-one-dark-accent"   . "#AEB9F5")
     ("atom-one-dark-mono-1"   . "#ABB2BF")
     ("atom-one-dark-mono-2"   . "#828997")
     ("atom-one-dark-mono-3"   . "#5C6370")
@@ -75,7 +77,7 @@
    `(font-lock-preprocessor-face ((t (:foreground ,atom-one-dark-mono-2))))
    `(font-lock-string-face ((t (:foreground ,atom-one-dark-green))))
    `(font-lock-type-face ((t (:foreground ,atom-one-dark-orange-2))))
-   `(font-lock-constant-face ((t (:foreground ,atom-one-dark-orange-1))))
+   `(font-lock-constant-face ((t (:foreground ,atom-one-dark-cyan))))
    `(font-lock-variable-name-face ((t (:foreground ,atom-one-dark-red-1))))
    `(font-lock-warning-face ((t (:foreground ,atom-one-dark-mono-3 :bold t))))
 
@@ -168,11 +170,24 @@
    `(helm-grep-lineno ((t (:foreground ,atom-one-dark-mono-2))))
    `(helm-grep-finish ((t (:foreground ,atom-one-dark-red-1))))
    `(helm-grep-match ((t (:foreground nil :background nil :inherit helm-match))))
+   `(helm-swoop-target-line-block-face ((t (:background ,atom-one-dark-mono-3 :foreground "#222222"))))
+   `(helm-swoop-target-line-face ((t (:background ,atom-one-dark-mono-3 :foreground "#222222"))))
+   `(helm-swoop-target-word-face ((t (:background ,atom-one-dark-purple :foreground "#ffffff"))))
+   `(helm-locate-finish ((t (:foreground ,atom-one-dark-green))))
+   `(info-menu-star ((t (:foreground ,atom-one-dark-red-1))))
 
    ;; git-commit
    `(git-commit-comment-action  ((t (:foreground ,atom-one-dark-green :weight bold))))
    `(git-commit-comment-branch  ((t (:foreground ,atom-one-dark-blue :weight bold))))
    `(git-commit-comment-heading ((t (:foreground ,atom-one-dark-orange-2 :weight bold))))
+
+   ;; js2-mode
+   `(js2-function-call ((t (:inherit (font-lock-function-name-face)))))
+   `(js2-function-param ((t (:foreground ,atom-one-dark-mono-1))))
+   `(js2-jsdoc-tag ((t (:foreground ,atom-one-dark-purple))))
+   `(js2-jsdoc-type ((t (:foreground ,atom-one-dark-orange-2))))
+   `(js2-jsdoc-value((t (:foreground ,atom-one-dark-red-1))))
+   `(js2-object-property ((t (:foreground ,atom-one-dark-red-1))))
 
    ;; magit
    `(magit-section-highlight ((t (:background ,atom-one-dark-bg-hl))))
@@ -261,6 +276,17 @@
    ;; flx-ido
    `(flx-highlight-face ((t (:inherit (link) :weight bold))))
 
+   ;; rpm-spec-mode
+   `(rpm-spec-tag-face ((t (:foreground ,atom-one-dark-blue))))
+   `(rpm-spec-obsolete-tag-face ((t (:foreground "#FFFFFF" :background ,atom-one-dark-red-2))))
+   `(rpm-spec-macro-face ((t (:foreground ,atom-one-dark-orange-2))))
+   `(rpm-spec-var-face ((t (:foreground ,atom-one-dark-red-1))))
+   `(rpm-spec-doc-face ((t (:foreground ,atom-one-dark-purple))))
+   `(rpm-spec-dir-face ((t (:foreground ,atom-one-dark-cyan))))
+   `(rpm-spec-package-face ((t (:foreground ,atom-one-dark-red-2))))
+   `(rpm-spec-ghost-face ((t (:foreground ,atom-one-dark-red-2))))
+   `(rpm-spec-section-face ((t (:foreground ,atom-one-dark-orange-2))))
+
    ;; term
    `(term-color-black ((t :foreground ,atom-one-dark-mono-1)))
    `(term-color-blue ((t (:foreground ,atom-one-dark-blue))))
@@ -270,7 +296,75 @@
    `(term-color-red ((t :foreground ,atom-one-dark-red-1)))
    `(term-color-white ((t :foreground ,atom-one-dark-fg)))
    `(term-color-yellow ((t (:foreground ,atom-one-dark-orange-1))))
+
+   ;; linum
+   `(linum ((t (:foreground ,atom-one-dark-gutter :background ,atom-one-dark-bg))))
+   ;; hlinum
+   `(linum-highlight-face ((t (:foreground ,atom-one-dark-accent :background ,atom-one-dark-bg))))
+
+   ;; latex-mode
+   `(font-latex-sectioning-0-face ((t (:foreground ,atom-one-dark-blue :height 1.0))))
+   `(font-latex-sectioning-1-face ((t (:foreground ,atom-one-dark-blue :height 1.0))))
+   `(font-latex-sectioning-2-face ((t (:foreground ,atom-one-dark-blue :height 1.0))))
+   `(font-latex-sectioning-3-face ((t (:foreground ,atom-one-dark-blue :height 1.0))))
+   `(font-latex-sectioning-4-face ((t (:foreground ,atom-one-dark-blue :height 1.0))))
+   `(font-latex-sectioning-5-face ((t (:foreground ,atom-one-dark-blue :height 1.0))))
+   `(font-latex-bold-face ((t (:foreground ,atom-one-dark-green :weight bold))))
+   `(font-latex-italic-face ((t (:foreground ,atom-one-dark-green))))
+   `(font-latex-warning-face ((t (:foreground ,atom-one-dark-red-1))))
+   `(font-latex-doctex-preprocessor-face ((t (:foreground ,atom-one-dark-cyan))))
+
+   ;; org-mode
+   `(org-date ((t (:foreground ,atom-one-dark-cyan))))
+   `(org-footnote ((t (:foreground ,atom-one-dark-cyan))))
+   `(org-sexp-date ((t (:foreground ,atom-one-dark-cyan))))
+
+   ;; undo-tree
+   `(undo-tree-visualizer-current-face ((t (:foreground ,atom-one-dark-red-1))))
+   `(undo-tree-visualizer-register-face ((t (:foreground ,atom-one-dark-orange-1))))
+   `(undo-tree-visualizer-unmodified-face ((t (:foreground ,atom-one-dark-cyan))))
    ))
+
+(atom-one-dark-with-color-variables
+  (custom-theme-set-variables
+   'atom-one-dark
+;;;;; fill-column-indicator
+   `(fci-rule-color ,atom-one-dark-gray)
+   ))
+
+(defvar atom-one-dark-theme-force-faces-for-mode t
+  "If t, atom-one-dark-theme will use Face Remapping to alter the theme faces for
+the current buffer based on its mode in an attempt to mimick the Atom One Dark
+Theme from Atom.io as best as possible.
+The reason this is required is because some modes (html-mode, jyaml-mode, ...)
+do not provide the necessary faces to do theming without conflicting with other
+modes.
+Current modes, and their faces, impacted by this variable:
+* js2-mode: font-lock-constant-face, font-lock-doc-face, font-lock-variable-name-face
+")
+
+;; Many modes in Emacs do not define their own faces and instead use standard Emacs faces when it comes to theming.
+;; That being said, to have a real "Atom One Dark Theme" for Emacs, we need to work around this so that these themes look
+;; as much like "Atom One Dark Theme" as possible.  This means using per-buffer faces via "Face Remapping":
+;;
+;;   http://www.gnu.org/software/emacs/manual/html_node/elisp/Face-Remapping.html
+;;
+;; Of course, this might be confusing to some when in one mode they see keywords highlighted in one face and in another
+;; mode they see a different face.  That being said, you can set the `atom-one-dark-theme-force-faces-for-mode` variable to
+;; `nil` to disable this feature.
+(defun atom-one-dark-theme-change-faces-for-mode ()
+  (interactive)
+  (and (eq atom-one-dark-theme-force-faces-for-mode t)
+       (cond
+        ((member major-mode '(js2-mode))
+         ;; atom-one-dark-orange-1
+         (face-remap-add-relative 'font-lock-constant-face :foreground "#D19A66")
+         (face-remap-add-relative 'font-lock-doc-face '(:inherit (font-lock-comment-face)))
+         ;; atom-one-dark-mono-1
+         (face-remap-add-relative 'font-lock-variable-name-face :foreground "#ABB2BF"))
+        )))
+
+(add-hook 'after-change-major-mode-hook 'atom-one-dark-theme-change-faces-for-mode)
 
 ;;;###autoload
 (and load-file-name
