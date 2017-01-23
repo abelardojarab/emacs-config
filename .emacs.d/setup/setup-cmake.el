@@ -1,6 +1,6 @@
 ;;; setup-cmake.el ---                            -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014, 2015, 2016  Abelardo Jara-Berrocal
+;; Copyright (C) 2014, 2015, 2016, 2017  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
 ;; Keywords:
@@ -660,7 +660,6 @@ the specified directory."
 
 ;; cmake syntax highlighting
 (use-package cmake-mode
-  :defer t
   :commands cmake-mode
   :mode (("/CMakeLists\\.txt\\'" . cmake-mode)
          ("\\.cmake\\'" . cmake-mode))
