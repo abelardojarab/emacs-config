@@ -68,6 +68,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Constants
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defconst rtags-protocol-version 121)
 (defconst rtags-popup-available (require 'popup nil t))
 (defconst rtags-supported-major-modes '(c-mode c++-mode objc-mode) "Major modes RTags supports.")
 (defconst rtags-verbose-results-delimiter "------------------------------------------")
@@ -758,6 +759,8 @@ to case differences."
 (defvar rtags-references-tree-mode-map nil)
 (setq rtags-references-tree-mode-map (make-sparse-keymap))
 (define-key rtags-references-tree-mode-map (kbd "TAB") 'rtags-references-tree-toggle-current-expanded)
+(define-key rtags-references-tree-mode-map (kbd "e") 'rtags-references-tree-expand-all)
+(define-key rtags-references-tree-mode-map (kbd "c") 'rtags-references-tree-collapse-all)
 (define-key rtags-references-tree-mode-map (kbd "-") 'rtags-references-tree-collapse-current)
 (define-key rtags-references-tree-mode-map (kbd "+") 'rtags-references-tree-expand-current)
 (define-key rtags-references-tree-mode-map (kbd "n") 'rtags-references-tree-next-level)
@@ -1127,6 +1130,7 @@ to only call this when `rtags-socket-file' is defined.
         (setq arguments (mapcar 'rtags-untrampify arguments))
         ;; other way to ignore colors would IMHO be to configure tramp,
         ;; but: do we need colors from rc?
+        (push (format "--verify-version=%d" rtags-protocol-version) arguments)
         (push "-z" arguments)
         (setq path (rtags-untrampify path))
         (when path-filter
@@ -1199,6 +1203,12 @@ to only call this when `rtags-socket-file' is defined.
                           (setq rtags-last-request-not-connected t)
                           (unless noerror
                             (error "Can't seem to connect to server. Is rdm running?"))
+                          nil)
+                         ((re-search-forward "^Protocol version mismatch" nil t)
+                          (erase-buffer)
+                          (unless noerror
+                            (error (concat "RTags protocol version mismatch. This is usually caused by getting rtags.el from melpa\n"
+                                           "and installing a new rtags build that modified the protocol. They need to be in sync.")))
                           nil)
                          ((re-search-forward "^Not indexed" nil t)
                           (erase-buffer)
@@ -1316,6 +1326,7 @@ Uses `completing-read' to ask for the project."
                                           (targets nil)
                                           (base-classes nil)
                                           (piece nil)
+                                          (relative-filenames nil)
                                           (location (rtags-current-location))
                                           (silent nil))
   (when location
@@ -1323,6 +1334,7 @@ Uses `completing-read' to ask for the project."
            (object (with-temp-buffer
                      (and location
                           (rtags-call-rc :path path :noerror t :silent-query silent "-U" location "--elisp"
+                                         (unless relative-filenames "-K")
                                          (when parents "--symbol-info-include-parents")
                                          (when references "--symbol-info-include-references")
                                          (when targets "--symbol-info-include-targets")
@@ -1353,9 +1365,9 @@ Uses `completing-read' to ask for the project."
       (with-temp-buffer
         (rtags-call-rc :path path
                        :noerror noerror
+                       :relative-filenames rtags-print-filenames-relative
                        :silent-query silent-query
                        "-U" loc
-                       (unless rtags-print-filenames-relative "-K")
                        (when include-targets "--symbol-info-include-targets")
                        (when include-references "--symbol-info-include-references")
                        (when include-base-classes "--symbol-info-include-base-classes")
@@ -1621,9 +1633,6 @@ instead of file from `current-buffer'.
   (when (or (not (rtags-called-interactively-p)) (rtags-sandbox-id-matches))
     (rtags-dependency-tree t)))
 
-(defvar rtags-references-tree-data nil)
-(make-variable-buffer-local 'rtags-references-tree-data)
-
 (defun rtags-references-tree-current-location ()
   (save-excursion
     (goto-char (point-at-bol))
@@ -1631,6 +1640,47 @@ instead of file from `current-buffer'.
          (cons
           (concat rtags-current-project (buffer-substring-no-properties (match-beginning 2) (match-end 2)))
           (/ (length (match-string 1)) rtags-tree-indent)))))
+
+(defun rtags-references-tree-collapse-all ()
+  (interactive)
+  (goto-char (point-min))
+  (save-excursion
+    (while (not (eobp))
+      (rtags-references-tree-collapse-current)
+      (if (= (point-at-eol) (point-max))
+          (goto-char (point-max))
+        (forward-line 1)))))
+
+(defun rtags-references-tree-expand-all (&optional maxdepth)
+  (interactive "p")
+  (unless (integerp maxdepth)
+    (setq maxdepth nil))
+  (rtags-references-tree-collapse-all)
+  (goto-char (point-min))
+  (let ((seen (make-hash-table :test 'equal)) roots (done 0))
+    (save-excursion
+      (while (not (eobp))
+        (puthash (car (rtags-references-tree-current-location)) t seen)
+        (if (= (point-at-eol) (point-max))
+            (goto-char (point-max))
+          (forward-line 1))))
+    (save-excursion
+      (setq roots (float (hash-table-count seen)))
+      (while (not (eobp))
+        (let ((loc (rtags-references-tree-current-location)))
+          (cond ((= (cdr loc) 0)
+                 (message "Expand all: %g%% %d/%d" (* (/ done roots) 100.0) done roots)
+                 (rtags-references-tree-expand-current)
+                 (incf done))
+                ((not (gethash (car loc) seen))
+                 (when (or (not maxdepth) (< (cdr loc) maxdepth))
+                   (puthash (car loc) t seen)
+                   (rtags-references-tree-expand-current)))
+                (t)))
+        (if (= (point-at-eol) (point-max))
+            (goto-char (point-max))
+          (forward-line 1))))
+    (message "Expand all: 100%% %d/%d" done roots)))
 
 (defun rtags-file-from-location (location)
   (and location
@@ -1776,6 +1826,7 @@ instead of file from `current-buffer'.
   (save-excursion
     (goto-char (point-min))
     (let ((longest 0)
+          (max)
           (cfs))
       (while (not (eobp))
         (goto-char (point-at-eol))
@@ -1789,10 +1840,14 @@ instead of file from `current-buffer'.
         (setq longest (max longest (current-column)))
         (or (eobp) (forward-char 1)))
       (goto-char (point-min))
+      (setq max (- (frame-width) 2 longest))
       (mapc (lambda (cf)
               (goto-char (point-at-eol))
               (when cf
-                (insert (make-string (+ (- longest (current-column)) 2) ? ) cf))
+                (when (> (length cf) max)
+                  ;; (message "truncating %s %d vs %d to " cf (length cf) max (substring cf 0 max))
+                  (setq cf (substring cf 0 max)))
+                (insert (make-string (+ (- longest (current-column))) ? ) cf))
               (unless (eobp)
                 (forward-char)))
             (nreverse cfs)))))
@@ -1923,7 +1978,7 @@ instead of file from `current-buffer'.
         (goto-char (point-min))
         (insert "Functions called from: " (cdr (assoc 'location container)) " " (cdr (assoc 'symbolName container)) "\n")
         (goto-char (point-min))
-        (rtags-handle-results-buffer)))))
+        (rtags-handle-results-buffer nil nil file)))))
 
 ;;;###autoload
 (defun rtags-find-all-functions-called-this-function ()
@@ -2363,7 +2418,7 @@ If called with prefix, open first match in other window"
                  (with-current-buffer (rtags-get-buffer)
                    (insert (car results))
                    (goto-char (point-min))
-                   (rtags-handle-results-buffer)))))))))
+                   (rtags-handle-results-buffer nil nil fn otherwindow)))))))))
 
 ;;;###autoload
 (defun rtags-find-references-at-point (&optional prefix)

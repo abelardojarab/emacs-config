@@ -1,6 +1,6 @@
 ;;; helm-lib.el --- Helm routines. -*- lexical-binding: t -*-
 
-;; Copyright (C) 2015 ~ 2016  Thierry Volpiatto <thierry.volpiatto@gmail.com>
+;; Copyright (C) 2015 ~ 2017  Thierry Volpiatto <thierry.volpiatto@gmail.com>
 
 ;; Author: Thierry Volpiatto <thierry.volpiatto@gmail.com>
 ;; URL: http://github.com/emacs-helm/helm
@@ -191,13 +191,17 @@ of `cl-return' is possible to exit the loop."
              (setq ,flag nil)))))))
 
 (defmacro helm-acond (&rest clauses)
-  "Anaphoric version of `cond'."
+  "Anaphoric version of `cond'.
+In each clause of CLAUSES, the result of the car of clause
+is stored in a temporary variable called `it' and usable in the cdr
+of this same clause.  Each `it' variable is independent of its clause.
+The usage is the same as `cond'."
   (unless (null clauses)
     (helm-with-gensyms (sym)
       (let ((clause1 (car clauses)))
         `(let ((,sym ,(car clause1)))
            (helm-aif ,sym
-               (progn ,@(cdr clause1))
+               (or (progn ,@(cdr clause1)) it)
              (helm-acond ,@(cdr clauses))))))))
 
 

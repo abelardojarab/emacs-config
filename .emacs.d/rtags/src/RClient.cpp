@@ -39,6 +39,7 @@ std::initializer_list<CommandLineParser::Option<RClient::OptionType> > opts = {
     { RClient::None, String(), 0, CommandLineParser::NoValue, "Options:" },
     { RClient::Verbose, "verbose", 'v', CommandLineParser::NoValue, "Be more verbose." },
     { RClient::Version, "version", 0, CommandLineParser::NoValue, "Print current version." },
+    { RClient::VerifyVersion, "verify-version", 0, CommandLineParser::Required, "Verify that the correct protocol version is used." },
     { RClient::Silent, "silent", 'Q', CommandLineParser::NoValue, "Be silent." },
     { RClient::Help, "help", 'h', CommandLineParser::NoValue, "Display this help." },
     { RClient::Noop, "config", 0, CommandLineParser::Required, "Use this file (instead of ~/.rcrc)." },
@@ -625,6 +626,13 @@ CommandLineParser::ParseStatus RClient::parse(size_t argc, char **argv)
         case Version: {
             fprintf(stdout, "%s\n", RTags::versionString().constData());
             return { String(), CommandLineParser::Parse_Ok }; }
+        case VerifyVersion: {
+            const int version = strtoul(value.constData(), 0, 10);
+            if (version != NumOptions) {
+                fprintf(stdout, "Protocol version mismatch\n");
+                return { String(), CommandLineParser::Parse_Error };
+            }
+            break; }
         case Verbose: {
             ++mLogLevel;
             break; }
@@ -733,8 +741,9 @@ CommandLineParser::ParseStatus RClient::parse(size_t argc, char **argv)
             break; }
         case SymbolInfo: {
             std::cmatch match;
-            std::regex rx("^(.*):([0-9]+):([0-9]+):?-:?([0-9]+):([0-9]+):?");
+            std::regex rx("^(.*):([0-9]+):([0-9]+):?-:?([0-9]+):([0-9]+):?(@[A-Za-z,]+)?");
             Path path;
+            List<String> kinds;
             uint32_t line = 0, col = 0, line2 = 0, col2 = 0;
             if (std::regex_match(value.constData(), match, rx)) {
                 path.assign(value.constData(), match.length(1));
@@ -742,15 +751,32 @@ CommandLineParser::ParseStatus RClient::parse(size_t argc, char **argv)
                 col = atoi(value.constData() + match.position(3));
                 line2 = atoi(value.constData() + match.position(4));
                 col2 = atoi(value.constData() + match.position(5));
+                if (match.length(6) > 1)
+                    kinds = String(value.constData() + match.position(6) + 1, match.length(6) - 1).split(",");
                 if (!line || !col || !line2 || !col2 || !path.resolve(Path::MakeAbsolute)) {
                     return { String::format<1024>("Can't parse range %s", value.constData()), CommandLineParser::Parse_Error };
                 }
-            } else if (!Location::parse(value, Path(), Path::MakeAbsolute, &path, &line, &col)) {
-                return { String::format<1024>("Can't parse range %s", value.constData()), CommandLineParser::Parse_Error };
+            } else {
+                std::regex rx2("^(.*):([0-9]+):([0-9]+):?(@[A-Za-z,]+)?");
+                if (std::regex_match(value.constData(), match, rx2)) {
+                    path.assign(value.constData(), match.length(1));
+                    line = atoi(value.constData() + match.position(2));
+                    col = atoi(value.constData() + match.position(3));
+                    if (match.length(4) > 1)
+                        kinds = String(value.constData() + match.position(4) + 1, match.length(4) - 1).split(",");
+                    if (!line || !col || !path.resolve(Path::MakeAbsolute)) {
+                        return { String::format<1024>("Can't parse range %s", value.constData()), CommandLineParser::Parse_Error };
+                    }
+                } else if (!Location::parse(value, Path(), Path::MakeAbsolute, &path, &line, &col)) {
+                    return { String::format<1024>("Can't parse range %s", value.constData()), CommandLineParser::Parse_Error };
+                }
+            }
+            for (String &k : kinds) {
+                k.lowerCase();
             }
             String query;
             Serializer serializer(query);
-            serializer << path << line << col << line2 << col2;
+            serializer << path << line << col << line2 << col2 << kinds;
             addQuery(QueryMessage::SymbolInfo, std::move(query));
             break; }
         case CurrentFile: {
@@ -1213,16 +1239,18 @@ CommandLineParser::ParseStatus RClient::parse(size_t argc, char **argv)
         case ReferenceName: {
             addQuery(QueryMessage::ReferencesName, std::move(value));
             break; }
-#ifdef RTAGS_HAS_LUA
         case VisitAST: {
+#ifdef RTAGS_HAS_LUA
             Path p = std::move(value);
             p.resolve(Path::MakeAbsolute);
             if (!p.isFile()) {
                 return { String::format<1024>("%s is not a file", value.constData()), CommandLineParser::Parse_Error };
             }
             addQuery(QueryMessage::VisitAST, std::move(p));
+#endif
             break; }
         case VisitASTScript: {
+#ifdef RTAGS_HAS_LUA
             String code = std::move(value);
             if (code.startsWith("@")) {
                 const Path p = code.mid(1);
@@ -1235,8 +1263,8 @@ CommandLineParser::ParseStatus RClient::parse(size_t argc, char **argv)
                 return { String::format<1024>("Script is empty"), CommandLineParser::Parse_Error };
             }
             mVisitASTScripts.push_back(std::move(code));
-            break; }
 #endif
+            break; }
         }
         return { String(), CommandLineParser::Parse_Exec };
     };

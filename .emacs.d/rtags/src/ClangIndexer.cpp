@@ -1096,7 +1096,7 @@ bool ClangIndexer::handleReference(const CXCursor &cursor, CXCursorKind kind, Lo
             && type.kind != CXType_RValueReference
             && type.kind != CXType_Auto
             && type.kind != CXType_Unexposed) {
-            c->size = clang_Type_getSizeOf(type);
+            c->size = std::max<uint16_t>(0, clang_Type_getSizeOf(type));
             c->alignment = std::max<int16_t>(-1, clang_Type_getAlignOf(type));
         }
     }
@@ -1139,8 +1139,7 @@ bool ClangIndexer::handleReference(const CXCursor &cursor, CXCursorKind kind, Lo
                 const CXTokenKind k = clang_getTokenKind(tokens[i]);
                 if (k == CXToken_Punctuation) {
                     const CXStringScope str(clang_getTokenSpelling(tu, tokens[i]));
-                    if (str == "->" || str == "." || str == "::") {
-                        ++i;
+                    if ((str == "->" || str == "." || str == "::") && ++i < numTokens) {
                         assert(i < numTokens);
                         CXSourceRange memberRange = clang_getTokenExtent(tu, tokens[i]);
                         unsigned line, column;
@@ -1681,7 +1680,7 @@ CXChildVisitResult ClangIndexer::handleCursor(const CXCursor &cursor, CXCursorKi
         && c.type != CXType_RValueReference
         && c.type != CXType_Auto
         && c.type != CXType_Unexposed) {
-        c.size = clang_Type_getSizeOf(type);
+        c.size = std::max<uint16_t>(0, clang_Type_getSizeOf(type));
         c.alignment = std::max<int16_t>(-1, clang_Type_getAlignOf(type));
         if (c.size > 0 && (kind == CXCursor_VarDecl || kind == CXCursor_ParmDecl)) {
             for (int i=mScopeStack.size() - 1; i>=0; --i) {
@@ -1806,17 +1805,19 @@ CXChildVisitResult ClangIndexer::handleCursor(const CXCursor &cursor, CXCursorKi
         mScopeStack.append({definition ? Scope::FunctionDefinition : Scope::FunctionDeclaration, definition ? &c : 0,
                 Location(location.fileId(), c.startLine, c.startColumn),
                 Location(location.fileId(), c.endLine, c.endColumn - 1)});
-        if (c.kind == CXCursor_FunctionTemplate)
+        bool isTemplateFunction = c.kind == CXCursor_FunctionTemplate;
+        if (!isTemplateFunction  && (c.kind == CXCursor_CXXMethod
+                                     || c.kind == CXCursor_Constructor
+                                     || c.kind == CXCursor_Destructor)
+            && clang_getCursorSemanticParent(cursor) == CXCursor_ClassTemplate) {
+            isTemplateFunction = true;
+        }
+        if (isTemplateFunction)
             ++mInTemplateFunction;
         visit(cursor);
-        if (c.kind == CXCursor_FunctionTemplate)
+        if (isTemplateFunction)
             --mInTemplateFunction;
         mScopeStack.removeLast();
-        return CXChildVisit_Continue;
-    } else if (c.kind == CXCursor_ClassTemplate) {
-        ++mInTemplateFunction;
-        visit(cursor);
-        --mInTemplateFunction;
         return CXChildVisit_Continue;
     }
 

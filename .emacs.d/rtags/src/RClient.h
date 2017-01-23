@@ -146,10 +146,9 @@ public:
         UnsavedFile,
         Verbose,
         Version,
-#ifdef RTAGS_HAS_LUA
+        VerifyVersion,
         VisitAST,
         VisitASTScript,
-#endif
         Wait,
         WildcardSymbolNames,
         XML,

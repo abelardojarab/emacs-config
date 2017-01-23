@@ -1,6 +1,6 @@
 ;;; helm-ring.el --- kill-ring, mark-ring, and register browsers for helm. -*- lexical-binding: t -*-
 
-;; Copyright (C) 2012 ~ 2016 Thierry Volpiatto <thierry.volpiatto@gmail.com>
+;; Copyright (C) 2012 ~ 2017 Thierry Volpiatto <thierry.volpiatto@gmail.com>
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -35,11 +35,13 @@
   :type 'integer
   :group 'helm-ring)
 
-(defcustom helm-kill-ring-max-lines-number 5
-  "Max number of lines displayed per candidate in kill-ring browser.
-If nil or zero (disabled), don't truncate candidate, show all."
+(defcustom helm-kill-ring-max-offset 400
+  "Max number of chars displayed per candidate in kill-ring browser.
+If nil, don't truncate candidate, show all.
+By default it is approximatively the number of bits contained in five lines
+of 80 chars each i.e 80*5."
   :type '(choice (const :tag "Disabled" nil)
-          (integer :tag "Max number of lines"))
+          (integer :tag "Max candidate offset"))
   :group 'helm-ring)
 
 (defcustom helm-register-max-offset 160
@@ -48,11 +50,8 @@ If nil or zero (disabled), don't truncate candidate, show all."
   :type  'integer)
 
 (defcustom helm-kill-ring-actions
-  '(("Yank" . helm-kill-ring-action)
-    ("Delete" . (lambda (_candidate)
-                  (cl-loop for cand in (helm-marked-candidates)
-                           do (setq kill-ring
-                                    (delete cand kill-ring))))))
+  '(("Yank" . helm-kill-ring-action-yank)
+    ("Delete" . helm-kill-ring-action-delete))
   "List of actions for kill ring source."
   :group 'helm-ring
   :type '(alist :key-type string :value-type function))
@@ -66,6 +65,8 @@ If nil or zero (disabled), don't truncate candidate, show all."
     (set-keymap-parent map helm-map)
     (define-key map (kbd "M-y") 'helm-next-line)
     (define-key map (kbd "M-u") 'helm-previous-line)
+    (define-key map (kbd "M-D") 'helm-kill-ring-delete)
+    (define-key map (kbd "C-]") 'helm-kill-ring-toggle-truncated)
     map)
   "Keymap for `helm-show-kill-ring'.")
 
@@ -93,23 +94,57 @@ If nil or zero (disabled), don't truncate candidate, show all."
   (cl-loop for i in candidates
            when (get-text-property 0 'read-only i)
            do (set-text-properties 0 (length i) '(read-only nil) i)
-           for nlines = (with-temp-buffer (insert i) (count-lines (point-min) (point-max)))
-           if (and helm-kill-ring-max-lines-number
-                   (> nlines helm-kill-ring-max-lines-number))
-           collect (cons
-                    (with-temp-buffer
-                      (insert i)
-                      (goto-char (point-min))
-                      (concat
-                       (buffer-substring
-                        (point-min)
-                        (save-excursion
-                          (forward-line helm-kill-ring-max-lines-number)
-                          (point)))
-                       "[...]")) i)
-           else collect i))
+           collect (cons (helm-kill-ring--get-truncated-candidate i) i)))
 
-(defun helm-kill-ring-action (str)
+(defun helm-kill-ring--get-truncated-candidate (candidate)
+  "Truncate CANDIDATE when its length is > than `helm-kill-ring-max-offset'."
+  (with-temp-buffer
+    (insert candidate)
+    (goto-char (point-min))
+    (if (and helm-kill-ring-max-offset
+             (> (buffer-size) helm-kill-ring-max-offset))
+        (let ((end-str "[...]"))
+          (concat
+           (buffer-substring
+            (point)
+            (save-excursion
+              (forward-char helm-kill-ring-max-offset)
+              (setq end-str (if (looking-at "\n")
+                                end-str (concat "\n" end-str)))
+              (point)))
+           end-str))
+        (buffer-string))))
+
+(defvar helm-kill-ring--truncated-flag nil)
+(defun helm-kill-ring-toggle-truncated ()
+  "Toggle truncated view of candidates in helm kill-ring browser."
+  (interactive)
+  (with-helm-alive-p
+    (setq helm-kill-ring--truncated-flag (not helm-kill-ring--truncated-flag))
+    (let* ((cur-cand (helm-get-selection))
+           (presel-fn (lambda ()
+                        (helm-kill-ring--preselect-fn cur-cand))))
+      (let ((helm-kill-ring-max-offset
+             (if helm-kill-ring--truncated-flag
+                 15000000
+                 (default-toplevel-value
+                     'helm-kill-ring-max-offset))))
+        (helm-update presel-fn)))))
+(put 'helm-kill-ring-toggle-truncated 'helm-only t)
+
+(defun helm-kill-ring--preselect-fn (candidate)
+  "Internal, used to preselect CANDIDATE when toggling truncated view."
+  ;; Preselection by regexp may not work if candidate is huge, so walk
+  ;; the helm buffer until selection is on CANDIDATE.
+  (helm-awhile (condition-case-unless-debug nil
+                   (and (not (helm-pos-header-line-p))
+                        (helm-get-selection))
+                 (error nil))
+    (if (string= it candidate)
+        (cl-return)
+        (helm-next-line))))
+
+(defun helm-kill-ring-action-yank (str)
   "Insert STR in `kill-ring' and set STR to the head.
 If this action is executed just after `yank',
 replace with STR as yanked string."
@@ -142,6 +177,21 @@ replace with STR as yanked string."
           (goto-char (prog1 (mark t)
                        (set-marker (mark-marker) (point) helm-current-buffer))))))
     (kill-new str)))
+(define-obsolete-function-alias 'helm-kill-ring-action 'helm-kill-ring-action-yank "2.4.0")
+
+(defun helm-kill-ring-action-delete (_candidate)
+  "Delete marked candidates from `kill-ring'."
+  (cl-loop for c in (helm-marked-candidates)
+           do (setq kill-ring
+                    (delete c kill-ring))))
+
+(defun helm-kill-ring-delete ()
+  "Delete marked candidates from `kill-ring'.
+
+This is a command for `helm-kill-ring-map'."
+  (interactive)
+  (with-helm-alive-p
+    (helm-exit-and-execute-action 'helm-kill-ring-action-delete)))
 
 
 ;;;; <Mark ring>
@@ -179,8 +229,8 @@ replace with STR as yanked string."
                . (lambda (candidate)
                    (helm-goto-line (string-to-number candidate))))) 
     :persistent-action (lambda (candidate)
-                         (helm-goto-line (string-to-number candidate))
-                         (helm-highlight-current-line))
+                         (switch-to-buffer helm-current-buffer)
+                         (helm-goto-line (string-to-number candidate)))
     :persistent-help "Show this line"))
 
 ;;; Global-mark-ring
@@ -195,8 +245,7 @@ replace with STR as yanked string."
     :persistent-action (lambda (candidate)
                          (let ((items (split-string candidate ":")))
                            (switch-to-buffer (cl-second items))
-                           (helm-goto-line (string-to-number (car items)))
-                           (helm-highlight-current-line)))
+                           (helm-goto-line (string-to-number (car items)))))
     :persistent-help "Show this line"))
 
 (defun helm-global-mark-ring-format-buffer (marker)
@@ -417,6 +466,7 @@ It is drop-in replacement of `yank-pop'.
 
 First call open the kill-ring browser, next calls move to next line."
   (interactive)
+  (setq helm-kill-ring--truncated-flag nil)
   (let ((enable-recursive-minibuffers t))
     (helm :sources helm-source-kill-ring
           :buffer "*helm kill ring*"

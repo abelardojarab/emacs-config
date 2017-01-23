@@ -1,6 +1,6 @@
 ;;; helm-misc.el --- Various functions for helm -*- lexical-binding: t -*-
 
-;; Copyright (C) 2012 ~ 2016 Thierry Volpiatto <thierry.volpiatto@gmail.com>
+;; Copyright (C) 2012 ~ 2017 Thierry Volpiatto <thierry.volpiatto@gmail.com>
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -316,23 +316,33 @@ Default action change TZ environment variable locally to emacs."
   (interactive)
   (cl-assert (minibuffer-window-active-p (selected-window)) nil
              "Error: Attempt to use minibuffer history outside a minibuffer")
-  (let ((enable-recursive-minibuffers t)
-        (elm (helm-comp-read "pattern: "
-                             (cl-loop for i in
-                                      (symbol-value minibuffer-history-variable)
-                                      unless (string= "" i) collect i into history
-                                      finally return
-                                      (if (consp (car history))
-                                          (mapcar 'prin1-to-string history)
-                                          history))
-                             :header-name
-                             (lambda (name)
-                               (format "%s (%s)" name minibuffer-history-variable))
-                             :buffer "*helm minibuffer-history*"
-                             :must-match helm-minibuffer-history-must-match
-                             :multiline t
-                             :keymap helm-minibuffer-history-map
-                             :allow-nest t)))
+  (let* ((enable-recursive-minibuffers t)
+         (query-replace-p (or (eq last-command 'query-replace)
+                              (eq last-command 'query-replace-regexp)))
+         (elm (helm-comp-read "pattern: "
+                              (cl-loop for i in
+                                       (symbol-value minibuffer-history-variable)
+                                       unless (string= "" i) collect i into history
+                                       finally return
+                                       (if (consp (car history))
+                                           (mapcar 'prin1-to-string history)
+                                           history))
+                              :header-name
+                              (lambda (name)
+                                (format "%s (%s)" name minibuffer-history-variable))
+                              :buffer "*helm minibuffer-history*"
+                              :must-match helm-minibuffer-history-must-match
+                              :multiline t
+                              :keymap helm-minibuffer-history-map
+                              :allow-nest t)))
+    ;; Fix issue #1667 with emacs-25+ `query-replace-from-to-separator'.
+    (when (and (boundp 'query-replace-from-to-separator) query-replace-p)
+      (let ((pos (string-match "\0" elm)))
+        (and pos
+             (add-text-properties
+              pos (1+ pos)
+              `(display ,query-replace-from-to-separator separator t)
+              elm))))
     (delete-minibuffer-contents)
     (insert elm)))
 

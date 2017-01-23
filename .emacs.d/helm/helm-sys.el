@@ -1,6 +1,6 @@
 ;;; helm-sys.el --- System related functions for helm. -*- lexical-binding: t -*-
 
-;; Copyright (C) 2012 ~ 2016 Thierry Volpiatto <thierry.volpiatto@gmail.com>
+;; Copyright (C) 2012 ~ 2017 Thierry Volpiatto <thierry.volpiatto@gmail.com>
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -406,8 +406,9 @@ Show actions only on line starting by a PID."
                          (helm-delete-current-selection))
     :persistent-help "Kill Process"
     :action (helm-make-actions "Kill Process"
-                               (lambda (elm)
-                                 (delete-process (get-process elm))))))
+                               (lambda (_elm)
+                                 (cl-loop for p in (helm-marked-candidates)
+                                          do (delete-process (get-process p)))))))
 
 
 ;;;###autoload

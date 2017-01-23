@@ -1,6 +1,6 @@
 ;;; helm-source.el --- Helm source creation. -*- lexical-binding: t -*-
 
-;; Copyright (C) 2015 ~ 2016  Thierry Volpiatto <thierry.volpiatto@gmail.com>
+;; Copyright (C) 2015 ~ 2017  Thierry Volpiatto <thierry.volpiatto@gmail.com>
 
 ;; Author: Thierry Volpiatto <thierry.volpiatto@gmail.com>
 ;; URL: http://github.com/emacs-helm/helm
@@ -126,15 +126,11 @@
 
    (keymap
     :initarg :keymap
-    :initform nil
+    :initform helm-map
     :custom sexp
     :documentation
     "  Specific keymap for this source.
-  It is useful to have a keymap per source when using more than
-  one source.  Otherwise, a keymap can be set per command with
-  `helm' argument KEYMAP.  NOTE: when a source have `helm-map' as
-  keymap attr, the global value of `helm-map' will override the
-  actual local one.")
+  Default value is `helm-map'.")
 
    (action
     :initarg :action
@@ -381,7 +377,23 @@
   sources built with child class `helm-source-in-buffer' the SEARCH slot.
   This is an easy way of enabling fuzzy matching, but you can use the MATCH
   or SEARCH slots yourself if you want something more elaborated, mixing
-  different type of match (See `helm-source-buffers' class for example).")
+  different type of match (See `helm-source-buffers' class for example).
+
+  This attribute is not supported for asynchronous sources
+  since they perform pattern matching themselves.")
+
+   (redisplay
+    :initarg :redisplay
+    :initform 'identity
+    :custom (choice list function)
+    :documentation
+    "  A function or a list of functions to apply to current list
+  of candidates when redisplaying buffer with `helm-redisplay-buffer'.
+  This is only interesting for modifying and redisplaying the whole list
+  of candidates in async sources.
+  It uses `identity' by default for when async sources are mixed with
+  normal sources, in this case these normal sources are not modified and
+  redisplayed as they are.")
 
    (nomark
     :initarg :nomark
@@ -507,7 +519,9 @@ With a value of 1 enable, a value of -1 or nil disable the mode.
   If source contain match-part attribute, match is computed only
   on part of candidate returned by the call of function provided
   by this attribute. The function should have one arg, candidate,
-  and return only a specific part of candidate.")
+  and return only a specific part of candidate.
+  On async sources, as matching is done by the backend, this have
+  no effect apart for highlighting matches.")
 
    (before-init-hook
     :initarg :before-init-hook
@@ -945,7 +959,9 @@ an eieio class."
   (cl-assert (null (slot-value source 'candidates))
              nil "Incorrect use of `candidates' use `candidates-process' instead")
   (cl-assert (null (slot-value source 'multimatch))
-             nil "`multimatch' not allowed in async sources."))
+             nil "`multimatch' not allowed in async sources.")
+  (cl-assert (null (slot-value source 'fuzzy-match))
+             nil "`fuzzy-match' not supported in async sources."))
 
 (defmethod helm--setup-source ((source helm-source-dummy))
   (let ((mtc (slot-value source 'match)))

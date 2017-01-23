@@ -121,11 +121,21 @@ Initially selected candidate.  Specified by exact candidate or a regexp.
 
 :buffer
 
-`helm-buffer' instead of *helm*.
+The buffer name for this helm session. `helm-buffer' will take this value.
 
 :keymap
 
-`helm-map' for current `helm' session.
+\[Obsolete]
+
+Keymap used at start of this Helm session.
+
+It is overridden by keymaps specified in sources, and is here
+only for backward compatibility.
+
+Keymaps should be specified in sources using the :keymap slot
+instead.
+
+This keymap is not restored by `helm-resume'.
 
 :default
 

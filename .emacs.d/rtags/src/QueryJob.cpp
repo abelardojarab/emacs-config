@@ -218,7 +218,10 @@ bool QueryJob::write(const Symbol &symbol, Flags<WriteFlag> writeFlags)
         toStringFlags |= Symbol::IncludeParents;
     if (queryFlags() & QueryMessage::SymbolInfoIncludeBaseClasses)
         toStringFlags |= Symbol::IncludeBaseClasses;
-
+    if (queryFlags() & (QueryMessage::ContainingFunction|QueryMessage::JSON|QueryMessage::Elisp))
+        toStringFlags |= Symbol::IncludeContainingFunction;
+    if (queryFlags() & (QueryMessage::ContainingFunctionLocation|QueryMessage::JSON|QueryMessage::Elisp))
+        toStringFlags |= Symbol::IncludeContainingFunctionLocation;
 
     if (symbol.isNull())
         return false;
@@ -230,12 +233,15 @@ bool QueryJob::write(const Symbol &symbol, Flags<WriteFlag> writeFlags)
         return false;
 
     String out;
-    if (queryFlags() & QueryMessage::Elisp) {
-        out = RTags::toElisp(symbol.toValue(project(), toStringFlags, Location::NoColor|Location::AbsolutePath));
-    } else if (queryFlags() & QueryMessage::JSON) {
-        out = symbol.toValue(project(), toStringFlags, Location::NoColor|Location::AbsolutePath).toJSON();
+    if (queryFlags() & (QueryMessage::Elisp|QueryMessage::JSON)) {
+        Value val = symbol.toValue(project(), toStringFlags, locationToStringFlags() | Location::NoColor, mPieceFilters);
+        if (queryFlags() & QueryMessage::Elisp) {
+            out = RTags::toElisp(val);
+        } else {
+            out = val.toJSON();
+        }
     } else {
-        out = symbol.toString(toStringFlags, locationToStringFlags(), project());
+        out = symbol.toString(project(), toStringFlags, locationToStringFlags(), mPieceFilters);
     }
     return write(out, writeFlags|Unfiltered);
 }
