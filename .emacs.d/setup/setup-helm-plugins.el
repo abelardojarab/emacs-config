@@ -198,7 +198,6 @@
             (setq helm-dash-min-length 2)
             (setq helm-dash-docsets-path (expand-file-name "docsets/" user-emacs-directory))
             (setq helm-dash-common-docsets '("Git"
-                                             "Org"
                                              "Emacs_Lisp"))
 
             ;; Mode-specific hooks
