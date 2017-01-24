@@ -197,12 +197,18 @@
             (setq helm-dash-enable-debugging nil)
             (setq helm-dash-min-length 2)
             (setq helm-dash-docsets-path (expand-file-name "docsets/" user-emacs-directory))
-            (setq helm-dash-common-docsets '("Git"))
+            (setq helm-dash-common-docsets '("Git"
+                                             "Org"))
 
             ;; Mode-specific hooks
             (defun dash-load-git ()
               (interactive)
               (setq-local helm-dash-docsets '("Git")))
+
+            (defun dash-load-org ()
+              (interactive)
+              (setq-local helm-dash-docsets '("Org")))
+            (add-hook 'org-mode-hook 'dash-load-org)
 
             (defun dash-load-cmake ()
               (interactive)
