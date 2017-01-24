@@ -1,6 +1,6 @@
 ;;; setup-helm-plugins.el ---                        -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016  Abelardo Jara-Berrocal
+;; Copyright (C) 2016, 2017  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
 ;; Keywords:
@@ -197,40 +197,61 @@
             (setq helm-dash-enable-debugging nil)
             (setq helm-dash-min-length 2)
             (setq helm-dash-docsets-path (expand-file-name "docsets/" user-emacs-directory))
-            (setq helm-dash-common-docsets '(
-                                             "Emacs_Lisp"
-                                             ))
+            (setq helm-dash-common-docsets '("Git"))
 
             ;; Mode-specific hooks
-            (defun c-doc-hook ()
+            (defun dash-load-git ()
+              (interactive)
+              (setq-local helm-dash-docsets '("Git")))
+
+            (defun dash-load-cmake ()
+              (interactive)
+              (setq-local helm-dash-docsets '("CMake")))
+            (add-hook 'cmake-mode-hook 'dash-load-cmake)
+
+            (defun dash-load-elisp ()
+              (interactive)
+              (setq-local helm-dash-docsets '("Emacs_Lisp")))
+            (add-hook 'emacs-lisp-mode-hook 'dash-load-elisp)
+
+            (defun dash-load-c ()
               (interactive)
               (setq-local helm-dash-docsets '("C")))
-            (add-hook 'c-mode-hook 'c-doc-hook)
+            (add-hook 'c-mode-hook 'dash-load-c)
 
-            (defun c++-doc-hook ()
+            (defun dash-load-c++ ()
               (interactive)
-              (setq-local helm-dash-docsets '("C" "C++")))
-            (add-hook 'c++-mode-hook 'c++-doc-hook)
+              (setq-local helm-dash-docsets '("C++"
+                                              "GLib")))
+            (add-hook 'c++-mode-hook 'dash-load-c++)
 
-            (defun python-doc-hook ()
+            (defun dash-load-py ()
               (interactive)
-              (setq-local helm-dash-docsets '("Python_2")))
-            (add-hook 'python-mode-hook 'python-doc-hook)
+              (setq-local helm-dash-docsets '("Python_2"
+                                              "Pandas")))
+            (add-hook 'python-mode-hook 'dash-load-py)
 
-            (defun javascript-doc-hook ()
+            (defun dash-load-js ()
               (interactive)
-              (setq-local helm-dash-docsets '("JavaScript")))
-            (add-hook 'python-mode-hook 'javascript-doc-hook)
+              (setq-local helm-dash-docsets '("JavaScript"
+                                              "NodeJS"
+                                              "AngularJS")))
+            (add-hook 'js2-mode-hook 'dash-load-js)
 
-            (defun ess-doc-hook ()
+            (defun dash-load-r ()
               (interactive)
               (setq-local helm-dash-docsets '("R")))
-            (add-hook 'ess-mode-hook 'ess-doc-hook)
+            (add-hook 'ess-mode-hook 'dash-load-r)
 
-            (defun shell-doc-hook ()
+            (defun dash-load-bash ()
               (interactive)
               (setq-local helm-dash-docsets '("Bash")))
-            (add-hook 'shell-mode-hook 'shell-doc-hook)
+            (add-hook 'shell-mode-hook 'dash-load-bash)
+
+            (defun dash-load-md ()
+              (interactive)
+              (setq-local helm-dash-docsets '("Markdown")))
+            (add-hook 'markdown-mode-hook 'dash-load-md)
 
             ))
 
