@@ -26,6 +26,10 @@
 
 ;; Add all diminished modes here
 
+;; Disable theme before setting a new one
+(defun disable-themes (&optional themes)
+  (mapc #'disable-theme (or themes custom-enabled-themes)))
+
 ;; So, fringe is nice actually, but the background for it kind of sucks in leuven
 ;; so I set it to the same color as the background
 (defun my/set-face-fringe ()
@@ -36,9 +40,15 @@
   (custom-set-faces
    `(fringe ((t (:background ,my/fringe-background-color))))))
 
-;; Disable theme before setting a new one
-(defun disable-themes (&optional themes)
-  (mapc #'disable-theme (or themes custom-enabled-themes)))
+;; Default ECB theme-ing
+(defun my/set-face-ecb ()
+  "Set the ecb background to the same color as the regular background."
+  (interactive)
+  (setq my/ecb-background-color
+        (face-background 'default))
+  (custom-set-faces
+   `(ecb-default-general-face ((t (:background ,my/ecb-background-color :inherit fixed-pitch))))
+   `(ecb-default-highlight-face ((t (:inherit helm-selection-line))))))
 
 ;; Default tabbar theme-ing
 (defun my/set-face-tabbar ()
@@ -64,6 +74,7 @@
 
 (add-hook 'after-init-hook #'my/set-face-fringe)
 (add-hook 'after-init-hook #'my/set-face-tabbar)
+(add-hook 'after-init-hook #'my/set-face-ecb)
 
 ;; Advice the load theme function
 (defadvice load-theme (around load-theme-around)
@@ -74,6 +85,7 @@
     ;; Add required faces
     (my/set-face-fringe)
     (my/set-face-tabbar)
+    (my/set-face-ecb)
     (spaceline-spacemacs-theme)))
 (ad-activate 'load-theme)
 
