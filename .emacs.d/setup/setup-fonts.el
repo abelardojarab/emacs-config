@@ -103,7 +103,7 @@
                   (> (cadr (screen-size)) 1000))
              (progn ;; HD monitor in Linux
                (setq main-programming-font-size "13")
-               (setq main-writing-font-size "14"))
+               (setq main-writing-font-size "13"))
            (progn
              (setq main-programming-font-size "12")
              (setq main-writing-font-size "13"))))))
