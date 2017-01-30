@@ -63,37 +63,43 @@
   :init (if (executable-find "cmake")
             (add-hook 'c-mode-common-hook #'use-cmake-ide))
   :config (progn
+
+            ;; Asure cmake_build directory exists
+            (if (not (file-exists-p "~/cmake_builds"))
+                (make-directory "~/cmake_builds"))
+
+            ;; Define cmake-ide-build-dir under ~/cmake_builds
             (defun use-cmake-ide ()
-              (cmake-ide-setup)
-              (if (cmake-ide--locate-cmakelists)
-                  (progn
-                    ;; (setq-default cmake-ide-build-dir (concat
-                    ;;                                    (cmake-ide--locate-cmakelists)
-                    ;;                                    "cmake_build_dir/"))
+              (let (my/cmake-build-dir my/projectile-build-dir)
+                (cmake-ide-setup)
+                (if (cmake-ide--locate-cmakelists)
+                    (progn
+                      (if (and (file-exists-p "~/cmake_builds")
+                               (projectile-project-name))
+                          (progn
 
-                    ;; Centralize all project builds under ~/cmake_builds
-                    (if (and (file-exists-p "~/cmake_builds")
-                             (projectile-project-name))
-                        (progn
+                            ;; Define project build directory
+                            (setq my/projectile-build-dir (concat
+                                                        "~/cmake_builds/"
+                                                        (projectile-project-name)))
 
-                          ;; Create top project directory under ~/cmake_builds
-                          (if (not (file-exists-p (concat
-                                                   "~/cmake_builds/"
-                                                   (projectile-project-name))))
-                                   (make-directory (concat
-                                                    "~/cmake_builds/"
-                                                    (projectile-project-name))))
+                            ;; Create project build directory under ~/cmake_builds
+                            (if (not (file-exists-p my/projectile-build-dir))
+                                (make-directory my/projectile-build-dir))
 
-                          ;; Set cmake-ide-build-dir according to both top project and cmake project names
-                          (setq-default cmake-ide-build-dir
-                                        (concat
-                                         "~/cmake_builds/"
-                                         (projectile-project-name)
-                                         "/"
-                                         (file-relative-name (cmake-ide--locate-cmakelists)
-                                                             (projectile-project-root)))))))))
+                            ;; Define cmake build directory
+                            (setq my/cmake-build-dir (concat
+                                                      my/projectile-build-dir
+                                                      "/"
+                                                      (file-relative-name (cmake-ide--locate-cmakelists)
+                                                                          (projectile-project-root))))
 
-            ))
+                            ;; Create cmake project directory under project directory
+                            (if (not (file-exists-p my/cmake-build-dir))
+                                (make-directory my/cmake-build-dir))
+
+                            ;; Set cmake-ide-build-dir according to both top project and cmake project names
+                            (setq-default cmake-ide-build-dir my/cmake-build-dir)))))))))
 
 ;; minor-mode integrating the CMake build process
 (use-package cmake-project
