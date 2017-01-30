@@ -66,7 +66,34 @@
             (defun use-cmake-ide ()
               (cmake-ide-setup)
               (if (cmake-ide--locate-cmakelists)
-                  (setq cmake-ide-build-dir (concat (cmake-ide--locate-cmakelists) "cmake_build_dir/"))))))
+                  (progn
+                    ;; (setq-default cmake-ide-build-dir (concat
+                    ;;                                    (cmake-ide--locate-cmakelists)
+                    ;;                                    "cmake_build_dir/"))
+
+                    ;; Centralize all project builds under ~/cmake_builds
+                    (if (and (file-exists-p "~/cmake_builds")
+                             (projectile-project-name))
+                        (progn
+
+                          ;; Create top project directory under ~/cmake_builds
+                          (if (not (file-exists-p (concat
+                                                   "~/cmake_builds/"
+                                                   (projectile-project-name))))
+                                   (make-directory (concat
+                                                    "~/cmake_builds/"
+                                                    (projectile-project-name))))
+
+                          ;; Set cmake-ide-build-dir according to both top project and cmake project names
+                          (setq-default cmake-ide-build-dir
+                                        (concat
+                                         "~/cmake_builds/"
+                                         (projectile-project-name)
+                                         "/"
+                                         (file-relative-name (cmake-ide--locate-cmakelists)
+                                                             (projectile-project-root)))))))))
+
+            ))
 
 ;; minor-mode integrating the CMake build process
 (use-package cmake-project
