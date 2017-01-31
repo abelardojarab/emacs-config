@@ -192,6 +192,9 @@
 ;; Setup files
 (require 'setup-file)
 
+;; Setup ediff
+(require 'setup-ediff)
+
 ;; Setup search
 (require 'setup-search)
 

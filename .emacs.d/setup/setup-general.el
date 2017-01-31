@@ -89,21 +89,6 @@
 (use-package browse-kill-ring
   :load-path (lambda () (expand-file-name "browse-kill-ring/" user-emacs-directory)))
 
-;; ediff
-(use-package ediff
-  :defer t
-  :init (progn
-          (defun my/setup-ediff ()
-            (interactive)
-            (ediff-setup-keymap))
-          (add-hook 'ediff-mode-hook 'my/setup-ediff))
-  :config (progn
-            (setq ediff-window-setup-function 'ediff-setup-windows-plain
-                  ;; Always split nicely for wide screens
-                  ediff-split-window-function 'split-window-horizontally
-                  ;; Ignore whitespace
-                  ediff-diff-options "-w")))
-
 ;; async
 (use-package async
   :defer t

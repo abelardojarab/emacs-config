@@ -80,19 +80,18 @@
 
                             ;; Define project build directory
                             (setq my/projectile-build-dir (concat
-                                                        "~/cmake_builds/"
-                                                        (projectile-project-name)))
+                                                           "~/cmake_builds/"
+                                                           (projectile-project-name)))
 
                             ;; Create project build directory under ~/cmake_builds
                             (if (not (file-exists-p my/projectile-build-dir))
                                 (make-directory my/projectile-build-dir))
 
                             ;; Define cmake build directory
-                            (setq my/cmake-build-dir (concat
-                                                      my/projectile-build-dir
-                                                      "/"
-                                                      (file-relative-name (cmake-ide--locate-cmakelists)
-                                                                          (projectile-project-root))))
+                            (setq my/cmake-build-dir (expand-file-name
+                                                      (file-name-nondirectory
+                                                       (directory-file-name (cmake-ide--locate-cmakelists)))
+                                                      my/projectile-build-dir))
 
                             ;; Create cmake project directory under project directory
                             (if (not (file-exists-p my/cmake-build-dir))

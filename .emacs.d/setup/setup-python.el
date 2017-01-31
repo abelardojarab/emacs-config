@@ -29,6 +29,7 @@
 
 (use-package python-mode
   :mode ("\\.py\\'" . python-mode)
+  :delight python-mode "Python"
   :commands python-mode
   :interpreter ("python" . python-mode)
   :load-path (lambda () (expand-file-name "python-mode/" user-emacs-directory))
@@ -84,6 +85,20 @@
 
             ;; Stop cedet semantic-python-get-system-include-path to start the python interpreter
             (defun python-shell-internal-send-string (string) "")
+
+            ;; Use ipython as default interpreter
+            (if (executable-find "ipython")
+                (setq-default
+                 python-shell-interpreter "ipython"
+                 python-shell-interpreter-args "--colors=Linux --profile=default"
+                 python-shell-prompt-output-regexp "Out\\[[0-9]+\\]: "
+                 python-shell-prompt-regexp "In \\[[0-9]+\\]: "
+                 python-shell-completion-setup-code
+                 "from IPython.core.completerlib import module_completion"
+                 python-shell-completion-module-string-code
+                 "';'.join(module_completion('''%s'''))\n"
+                 python-shell-completion-string-code
+                 "';'.join(get_ipython().Completer.all_completions('''%s'''))\n"))
 
             ;; Remove wisent, python becomes unusuable slow
             (remove-hook 'python-mode-hook 'wisent-python-default-setup)))
