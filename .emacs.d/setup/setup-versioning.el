@@ -295,7 +295,6 @@ branch."
                 (narrow-to-region beginning-position (line-beginning-position))
                 (beginning-of-buffer)))
 
-
             (defun git-visit-get-hunk-list (dir ref)
               "Return a list of changes between the current working copy and a git ref"
               ;; one triplet per change, like this: ((file1 13 8) (file1 19 63) (file2 24 12))
