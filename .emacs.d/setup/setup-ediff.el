@@ -1,4 +1,4 @@
-;;; setup-diff.el ---                                -*- lexical-binding: t; -*-
+;;; setup-ediff.el ---                               -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2017  Abelardo Jara-Berrocal
 
@@ -31,7 +31,7 @@
             (interactive)
             (ediff-setup-keymap)
             (define-key ediff-mode-map (kbd "<down>") #'ediff-next-difference)
-            (define-key ediff-mode-map (kbd "<up>") #'ediff-previous-difference)))
+            (define-key ediff-mode-map (kbd "<up>") #'ediff-previous-difference))
           (add-hook 'ediff-mode-hook 'my/setup-ediff))
   :config (progn
             (setq ediff-window-setup-function 'ediff-setup-windows-plain
@@ -41,10 +41,11 @@
                   ediff-diff-options "-w")))
 
 (use-package ediff-wind
+  :disabled t
   :config
   (setq-default
    ediff-split-window-function #'split-window-horizontally
    ediff-window-setup-function #'ediff-setup-windows-plain))
 
-(provide 'setup-diff)
-;;; setup-diff.el ends here
+(provide 'setup-ediff)
+;;; setup-ediff.el ends here

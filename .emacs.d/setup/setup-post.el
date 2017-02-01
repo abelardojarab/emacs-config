@@ -89,5 +89,10 @@
     (spaceline-spacemacs-theme)))
 (ad-activate 'load-theme)
 
+;; User-specific configuration file
+(setq-default custom-file "~/.emacs.cache/.custom.el")
+(when (file-exists-p custom-file)
+  (load custom-file))
+
 (provide 'setup-post)
 ;;; setup-post.el ends here

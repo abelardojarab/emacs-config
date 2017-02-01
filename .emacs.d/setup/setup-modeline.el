@@ -42,8 +42,67 @@
   :after powerline
   :load-path (lambda () (expand-file-name "spaceline/" user-emacs-directory))
   :config (progn
-            (require 'spaceline-config)
-            (spaceline-spacemacs-theme)
+            (use-package spaceline-config
+              :after spaceline
+              :config
+
+              ;; Configure the mode-line
+              (setq-default
+               mode-line-format '("%e" (:eval (spaceline-ml-main)))
+               powerline-default-separator 'wave
+               spaceline-display-default-perspective t
+               powerline-height 20
+               spaceline-highlight-face-func 'spaceline-highlight-face-modified
+               spaceline-flycheck-bullet "• %s"
+               spaceline-separator-dir-left '(left . left)
+               spaceline-separator-dir-right '(right . right))
+              (spaceline-helm-mode)
+
+              ;; Build a segment for the version control branch
+              (spaceline-define-segment my/version-control
+                (when vc-mode
+                  (substring vc-mode (+ 2 (length (symbol-name (vc-backend buffer-file-name)))))))
+
+              ;; Build a segment for helm-follow-mode
+              (spaceline-define-segment my/helm-follow
+                (when (and (bound-and-true-p helm-alive-p)
+                           spaceline--helm-current-source
+                           (eq 1 (cdr (assq 'follow spaceline--helm-current-source))))
+                  (propertize "" 'face 'success)))
+
+              ;; Build a segment for the active region
+              (spaceline-define-segment my/selection-info
+                (when mark-active
+                  (let* ((lines (count-lines (region-beginning) (min (1+ (region-end)) (point-max))))
+                         (chars (- (1+ (region-end)) (region-beginning)))
+                         (cols (1+ (abs (- (spaceline--column-number-at-pos (region-end))
+                                           (spaceline--column-number-at-pos (region-beginning))))))
+                         (rect (bound-and-true-p rectangle-mark-mode))
+                         (multi-line (> lines 1)))
+                    (cond
+                     (rect (format "%d × %d" (1- cols) lines))
+                     (multi-line (format "%d lines" (if (eq (current-column) 0) (1- lines) lines)))
+                     (t (format "%d chars" (1- chars)))))))
+
+              ;; Build the mode-lines
+              (spaceline-install
+               `((major-mode :face highlight-face)
+                 ((remote-host buffer-id line) :separator ":")
+                 (anzu))
+               `((my/selection-info)
+                 ((flycheck-error flycheck-warning flycheck-info) :when active)
+                 ((projectile-root my/version-control) :separator "  ")
+                 (workspace-number)
+                 (global :face highlight-face)))
+              (spaceline-install
+               'helm
+               '((helm-buffer-id :face spaceline-read-only)
+                 (helm-number)
+                 (my/helm-follow :fallback "")
+                 helm-prefix-argument)
+               '((helm-help)
+                 (global :face spaceline-read-only))))
+
             (spaceline-helm-mode)
             (spaceline-toggle-buffer-size-off)))
 

@@ -29,7 +29,6 @@
 
 (use-package python-mode
   :mode ("\\.py\\'" . python-mode)
-  :delight python-mode "Python"
   :commands python-mode
   :interpreter ("python" . python-mode)
   :load-path (lambda () (expand-file-name "python-mode/" user-emacs-directory))

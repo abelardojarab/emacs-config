@@ -1,6 +1,6 @@
 ;;; setup-environment.el ---
 
-;; Copyright (C) 2014, 2015, 2016  Abelardo Jara-Berrocal
+;; Copyright (C) 2014, 2015, 2016, 2017  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
 ;; Keywords:
@@ -23,6 +23,11 @@
 ;;
 
 ;;; Code:
+
+;; Secrets file
+(let ((secret.el "~/.emacs.cache/.secret.el"))
+  (when (file-exists-p secret.el)
+    (load secret.el)))
 
 ;; garbage collection
 (setq-default ;; alloc.c
