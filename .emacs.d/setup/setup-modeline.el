@@ -103,7 +103,6 @@
                '((helm-help)
                  (global :face spaceline-read-only))))
 
-            (spaceline-helm-mode)
             (spaceline-toggle-buffer-size-off)))
 
 (use-package airline-themes

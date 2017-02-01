@@ -45,19 +45,19 @@
             (defadvice helm-buffers-sort-transformer (around ignore activate)
               (setq ad-return-value (ad-get-arg 0)))
 
-            (setq helm-candidate-number-limit 100)
-
             ;; From https://gist.github.com/antifuchs/9238468
-            (setq helm-idle-delay 0.0 ;; update fast sources immediately (doesn't).
+            (setq helm-always-two-windows t
+                  helm-quick-update t
+                  helm-split-window-default-side 'right
+                  helm-idle-delay 0.0 ;; update fast sources immediately (doesn't).
                   helm-input-idle-delay 0.01  ;; this actually updates things quicker
                   helm-yas-display-key-on-candidate t
-                  helm-quick-update t
                   helm-M-x-requires-pattern nil
-                  helm-candidate-number-limit 100 ;; limit max number of matches displayed for speed
-                  helm-ff-skip-boring-files t ;; ignore boring files like .o and .a
+                  helm-candidate-number-limit 50 ;; limit max number of matches displayed for speed
                   helm-move-to-line-cycle-in-source nil ;; move to end or beginning of source when reaching top or bottom of source.
-                  helm-ff-search-library-in-sexp t ;; search for library in `require' and `declare-function' sexp.
                   helm-scroll-amount 8 ;; scroll 8 lines other window using M-<next>/M-<prior>
+                  helm-ff-search-library-in-sexp t ;; search for library in `require' and `declare-function' sexp.
+                  helm-ff-skip-boring-files t ;; ignore boring files like .o and .a
                   helm-ff-file-name-history-use-recentf t)
 
             ;; use silver searcher when available

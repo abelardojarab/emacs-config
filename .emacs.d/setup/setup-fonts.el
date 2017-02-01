@@ -1,6 +1,6 @@
 ;;; setup-fonts.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016  Abelardo Jara-Berrocal
+;; Copyright (C) 2016, 2017  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
 ;; Keywords:
@@ -56,10 +56,10 @@
                       :weight 'normal)
   (add-hook 'text-mode-hook 'variable-pitch-mode))
 
-(when (find-font (font-spec :name "Cousine"))
+(when (find-font (font-spec :name "Roboto Mono for Powerline"))
 
   ;; Set fontset
-  (setq main-programming-font "Cousine")
+  (setq main-programming-font "Roboto Mono for Powerline")
   (if (find-font (font-spec :name "Menlo"))
       (setq main-writing-font "Menlo")
     (setq main-writing-font main-programming-font)))

@@ -27,9 +27,6 @@
 ;; Follow symbolic links
 (setq vc-follow-symlinks t)
 
-;; Speed up find file
-(remove-hook 'find-file-hooks 'vc-find-file-hook)
-
 ;; Designsync versioning control
 (use-package vc-sync
   :config (progn

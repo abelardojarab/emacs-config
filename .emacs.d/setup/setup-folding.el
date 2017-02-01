@@ -1,6 +1,6 @@
 ;;; setup-folding.el ---
 
-;; Copyright (C) 2014, 2015, 2016  Abelardo Jara-Berrocal
+;; Copyright (C) 2014, 2015, 2016, 2017  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
 ;; Keywords:
@@ -26,7 +26,7 @@
 
 (use-package folding
   :config (progn
-            (defun iy-folding-check-folded ()
+            (defun my/folding-check-folded ()
               "Function to determine if this file is in folded form."
               (let ((folding-re1 "^.?.?.?{{{")
                     (folding-re2 "[\r\n].*}}}"))
@@ -39,35 +39,9 @@
                        ;; if file is folded, there are \r's
                        (re-search-forward "[\r\n]" nil t)
                        (re-search-forward folding-re2 nil t)))))
-            (setq folding-check-folded-file-function 'iy-folding-check-folded)
+            (setq folding-check-folded-file-function 'my/folding-check-folded)
             (folding-mode-add-find-file-hook)
             (define-key folding-mode-prefix-map (kbd "<SPC>") 'folding-context-next-action)
-
-            ;; why open-fold is defined but not called in this function?
-            (defun folding-shift-in (&optional noerror)
-              (interactive)
-              (labels
-                  ((open-fold nil
-                              (let ((data (folding-show-current-entry noerror t)))
-                                (and data
-                                     (progn
-                                       (when folding-narrow-by-default
-                                         (setq folding-stack
-                                               (if folding-stack
-                                                   (cons (cons (point-min-marker)
-                                                               (point-max-marker))
-                                                         folding-stack)
-                                                 '(folded)))
-                                         (folding-set-mode-line))
-                                       (folding-narrow-to-region (car data) (nth 1 data)))))))
-                (let ((goal (point)))
-                  (while (folding-skip-ellipsis-backward)
-                    (beginning-of-line)
-                    (open-fold)
-                    (goto-char goal))
-                  (if folding-narrow-by-default
-                      (open-fold)
-                    (widen)))))
 
             ;; add keywords to current buffer directly, overwrite the original function in folding.el
             (defun folding-font-lock-support ()
@@ -250,7 +224,15 @@
 ;; Vi-like fold
 (use-package vimish-fold
   :commands (vimish-fold-mode vimish-fold-global-mode)
-  :load-path (lambda () (expand-file-name "vimish-fold/" user-emacs-directory)))
+  :bind (:map
+         vimish-fold-folded-keymap ("<tab>" . vimish-fold-unfold)
+         :map
+         vimish-fold-unfolded-keymap ("<tab>" . vimish-fold-refold))
+  :load-path (lambda () (expand-file-name "vimish-fold/" user-emacs-directory))
+  :config (progn
+            (setq-default
+             vimish-fold-dir "~/.emacs.cache/.vimish-fold/"
+             vimish-fold-header-width 79)))
 
 (provide 'setup-folding)
 ;;; setup-hideshow.el ends here
