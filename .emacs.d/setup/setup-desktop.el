@@ -1,6 +1,6 @@
 ;;; setup-desktop.el ---                             -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016  Abelardo Jara-Berrocal
+;; Copyright (C) 2016, 2017  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
 ;; Keywords:
@@ -43,10 +43,10 @@
 ;; Autosave
 (setq auto-save-default nil)
 (setq auto-save-interval 500)
-(defvar my-auto-save-folder "~/.emacs.cache/auto-save/") ;; folder for auto-saves
+(defvar my/auto-save-folder "~/.emacs.cache/auto-save/" "Folder for auto-saves")
 (setq auto-save-list-file-prefix "~/.emacs.cache/auto-save/.saves-") ;; set prefix for auto-saves
-(setq auto-save-file-name-transforms `((".*" ,my-auto-save-folder t))) ;; location for all auto-save files
-(make-directory my-auto-save-folder t)
+(setq auto-save-file-name-transforms `((".*" ,my/auto-save-folder t))) ;; location for all auto-save files
+(make-directory my/auto-save-folder t)
 
 ;; Savehist: save some history
 (use-package savehist

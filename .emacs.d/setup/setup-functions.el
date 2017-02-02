@@ -212,13 +212,13 @@ buffer."
         (t (self-insert-command (or arg 1)))))
 
 ;; Indent and unindent blocks
-(defvar my-tab-width 4)
+(defvar my/tab-width 4)
 (defun indent-block()
-  (shift-region my-tab-width)
+  (shift-region my/tab-width)
   (setq deactivate-mark nil))
 
 (defun unindent-block()
-  (shift-region (- my-tab-width))
+  (shift-region (- my/tab-width))
   (setq deactivate-mark nil))
 
 (defun shift-region(numcols)
@@ -249,9 +249,9 @@ Now it correctly stops at the beginning of the line when the pointer is at the f
               ;;"a" holds how many spaces are there to the beginning of the line
               (let ((a (length(buffer-substring-no-properties (point-at-bol) (point)))))
                 (progn
-                  ;; delete backwards progressively in my-tab-width steps, but without going further of the beginning of line.
-                  (if (> a my-tab-width)
-                      (delete-backward-char my-tab-width)
+                  ;; delete backwards progressively in my/tab-width steps, but without going further of the beginning of line.
+                  (if (> a my/tab-width)
+                      (delete-backward-char my/tab-width)
                     (backward-delete-char a)))))
           ;; delete tab and spaces first, if at least 2 exist, before removing words
           (progn

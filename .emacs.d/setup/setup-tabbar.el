@@ -96,56 +96,56 @@
                     frame-cache)))
 
             ;; necessary support function for buffer burial
-            (defun crs-delete-these (delete-these from-this-list)
+            (defun my/delete-these (delete-these from-this-list)
               "Delete DELETE-THESE FROM-THIS-LIST."
               (cond
                ((car delete-these)
                 (if (member (car delete-these) from-this-list)
-                    (crs-delete-these (cdr delete-these) (delete (car delete-these)
+                    (my/delete-these (cdr delete-these) (delete (car delete-these)
                                                                  from-this-list))
-                  (crs-delete-these (cdr delete-these) from-this-list)))
+                  (my/delete-these (cdr delete-these) from-this-list)))
                (t from-this-list)))
 
             ;; this is the list of avoided buffers
-            (defvar crs-hated-buffers
+            (defvar my/hated-buffers
               '("*Compile-Log*"))
-            (add-to-list 'crs-hated-buffers "^ ")
-            (add-to-list 'crs-hated-buffers "*Messages*")
-            (add-to-list 'crs-hated-buffers "*Completions*")
-            (add-to-list 'crs-hated-buffers "*scratch*")
-            (add-to-list 'crs-hated-buffers "*Python*")
-            (add-to-list 'crs-hated-buffers "*GNU Emacs*")
-            (add-to-list 'crs-hated-buffers "*compilation*")
-            (add-to-list 'crs-hated-buffers "*cmake*")
-            (add-to-list 'crs-hated-buffers "*etags tmp*")
-            (add-to-list 'crs-hated-buffers "TAGS")
-            (add-to-list 'crs-hated-buffers "*ECB")
-            (add-to-list 'crs-hated-buffers "*Buffer")
+            (add-to-list 'my/hated-buffers "^ ")
+            (add-to-list 'my/hated-buffers "*Messages*")
+            (add-to-list 'my/hated-buffers "*Completions*")
+            (add-to-list 'my/hated-buffers "*scratch*")
+            (add-to-list 'my/hated-buffers "*Python*")
+            (add-to-list 'my/hated-buffers "*GNU Emacs*")
+            (add-to-list 'my/hated-buffers "*compilation*")
+            (add-to-list 'my/hated-buffers "*cmake*")
+            (add-to-list 'my/hated-buffers "*etags tmp*")
+            (add-to-list 'my/hated-buffers "TAGS")
+            (add-to-list 'my/hated-buffers "*ECB")
+            (add-to-list 'my/hated-buffers "*Buffer")
 
             ;; might as well use this for both
-            (defun crs-hated-buffers ()
+            (defun my/hated-buffers ()
               "List of buffers I never want to see, converted from names to buffers."
               (delete nil
                       (append
-                       (mapcar 'get-buffer crs-hated-buffers)
+                       (mapcar 'get-buffer my/hated-buffers)
                        (mapcar (lambda (this-buffer)
                                  (if (string-match "^ " (buffer-name this-buffer))
                                      this-buffer))
                                (buffer-list)))))
 
             ;; bury buffer function
-            (defun crs-bury-buffer (&optional n)
+            (defun my/bury-buffer (&optional n)
               (interactive)
               (unless n
                 (setq n 1))
-              (let ((my-buffer-list (crs-delete-these (crs-hated-buffers)
+              (let ((my/buffer-list (my/delete-these (my/hated-buffers)
                                                       (buffer-list (selected-frame)))))
                 (switch-to-buffer
                  (if (< n 0)
-                     (nth (+ (length my-buffer-list) n)
-                          my-buffer-list)
+                     (nth (+ (length my/buffer-list) n)
+                          my/buffer-list)
                    (bury-buffer)
-                   (nth n my-buffer-list)))))
+                   (nth n my/buffer-list)))))
 
             ;; Enable tab-bar
             (tabbar-mode t)))

@@ -49,6 +49,7 @@
             (setq helm-always-two-windows t
                   helm-quick-update t
                   helm-split-window-default-side 'right
+                  helm-echo-input-in-header-line t
                   helm-idle-delay 0.0 ;; update fast sources immediately (doesn't).
                   helm-input-idle-delay 0.01  ;; this actually updates things quicker
                   helm-yas-display-key-on-candidate t
@@ -75,7 +76,6 @@
               (setq helm-locate-command "mdfind -name %s %s"))
 
             ;; Via: https://www.reddit.com/r/emacs/comments/3asbyn/new_and_very_useful_helm_feature_enter_search/
-            (setq helm-echo-input-in-header-line t)
             (defun helm-hide-minibuffer-maybe ()
               (when (with-helm-buffer helm-echo-input-in-header-line)
                 (let ((ov (make-overlay (point-min) (point-max) nil nil t)))
@@ -105,7 +105,7 @@
 ;; Indent semantic entries
 (use-package helm-imenu
   :config (progn
-            (defun my-helm-imenu-transformer (cands)
+            (defun my/helm-imenu-transformer (cands)
               (with-helm-current-buffer
                 (save-excursion
                   (cl-loop for (func-name . mrkr) in cands
@@ -116,16 +116,16 @@
                                                 (buffer-substring mrkr (line-end-position))))
                                  (cons func-name mrkr))))))
 
-            (defvar my-helm-imenu-source  (helm-make-source "Imenu" 'helm-imenu-source
+            (defvar my/helm-imenu-source  (helm-make-source "Imenu" 'helm-imenu-source
                                             :candidate-transformer
-                                            'my-helm-imenu-transformer))
-            (defun my-helm-imenu ()
+                                            'my/helm-imenu-transformer))
+            (defun my/helm-imenu ()
               (interactive)
               (let ((imenu-auto-rescan t)
                     (str (thing-at-point 'symbol))
                     (helm-execute-action-at-once-if-one
                      helm-imenu-execute-action-at-once-if-one))
-                (helm :sources 'my-helm-imenu-source
+                (helm :sources 'my/helm-imenu-source
                       :preselect str
                       :buffer "*helm imenu*")))))
 

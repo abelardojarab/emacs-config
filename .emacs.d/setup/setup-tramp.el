@@ -1,6 +1,6 @@
 ;;; setup-tramp.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2015, 2016  Abelardo Jara-Berrocal
+;; Copyright (C) 2015, 2016, 2017  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
 ;; Keywords:
@@ -66,11 +66,11 @@
             (setq tramp-auto-save-directory "~/.emacs.cache/auto-save")
 
             ;; Tramp configurations
-            (setq my-tramp-ssh-completions
+            (setq my/tramp-ssh-completions
                   '((tramp-parse-sconfig "~/.ssh/config")
                     (tramp-parse-shosts "~/.ssh/known_hosts")))
             (mapc (lambda (method)
-                    (tramp-set-completion-function method my-tramp-ssh-completions))
+                    (tramp-set-completion-function method my/tramp-ssh-completions))
                   '("rsync" "scp" "scpc" "scpx" "sftp" "ssh" "plink"))
 
             ;; have tramp save temps locally

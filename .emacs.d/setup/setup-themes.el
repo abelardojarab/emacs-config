@@ -24,6 +24,9 @@
 
 ;;; Code:
 
+;; Adjust theme when using graphical interface
+(defvar my/emacs-theme "eziam" "Emacs theme")
+
 ;; assorted emacs color themes
 (add-to-list 'load-path (expand-file-name "emacs-color-themes/themes/" user-emacs-directory))
 (add-to-list 'custom-theme-load-path (expand-file-name "emacs-color-themes/themes/" user-emacs-directory))
@@ -89,8 +92,9 @@
 ;; Choose different themes depending if we are using GUI or not
 ;; Console colors are enabled if "export TERM=xterm-256color" is added into .bashrc
 (if (display-graphic-p)
-    (load-theme 'eziam-dark t)
-  (load-theme 'monokai t))
+    (setq my/emacs-theme 'eziam-dark)
+  (setq my/emacs-theme 'monokai))
+(load-theme my/emacs-theme t)
 
 (provide 'setup-themes)
 ;;; setup-themes.el ends here

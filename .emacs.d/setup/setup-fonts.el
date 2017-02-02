@@ -25,44 +25,44 @@
 ;;; Code:
 
 ;; Adjust font when using graphical interface
-(defvar main-programming-font "Consolas" "Main font")
-(defvar main-programming-font-size "12" "Main font size")
-(defvar main-writing-font "Calibri" "Main writing font")
-(defvar main-writing-font-size "13" "Main writing font size")
+(defvar my/main-programming-font "Consolas" "Main font")
+(defvar my/main-programming-font-size "12" "Main font size")
+(defvar my/main-writing-font "Calibri" "Main writing font")
+(defvar my/main-writing-font-size "13" "Main writing font size")
 
 ;; Use 12-pt Consolas as default font
 (when (find-font (font-spec :name "Consolas"))
-  (setq main-programming-font "Consolas")
-  (setq main-programming-font-size "12")
-  (set-face-attribute 'default nil :font (concat main-programming-font
+  (setq my/main-programming-font "Consolas")
+  (setq my/main-programming-font-size "12")
+  (set-face-attribute 'default nil :font (concat my/main-programming-font
                                                  "-"
-                                                 main-programming-font-size))
-  (set-face-attribute 'fixed-pitch nil :font (concat main-programming-font
+                                                 my/main-programming-font-size))
+  (set-face-attribute 'fixed-pitch nil :font (concat my/main-programming-font
                                                      "-"
-                                                     main-programming-font-size))
+                                                     my/main-programming-font-size))
   (add-to-list 'default-frame-alist (cons 'font
                                           (concat
-                                           main-programming-font
+                                           my/main-programming-font
                                            "-"
-                                           main-programming-font-size))))
+                                           my/main-programming-font-size))))
 
 (when (find-font (font-spec :name "Calibri"))
-  (setq main-writing-font "Calibri")
-  (setq main-writing-font-size "12")
+  (setq my/main-writing-font "Calibri")
+  (setq my/main-writing-font-size "12")
   (set-face-attribute 'variable-pitch nil
-                      :font (concat main-writing-font
+                      :font (concat my/main-writing-font
                                     "-"
-                                    main-writing-font-size)
+                                    my/main-writing-font-size)
                       :weight 'normal)
   (add-hook 'text-mode-hook 'variable-pitch-mode))
 
 (when (find-font (font-spec :name "Roboto Mono for Powerline"))
 
   ;; Set fontset
-  (setq main-programming-font "Roboto Mono for Powerline")
+  (setq my/main-programming-font "Roboto Mono for Powerline")
   (if (find-font (font-spec :name "Menlo"))
-      (setq main-writing-font "Menlo")
-    (setq main-writing-font main-programming-font)))
+      (setq my/main-writing-font "Menlo")
+    (setq my/main-writing-font my/main-programming-font)))
 
 ;; Dynamic font adjusting based on monitor resolution, using Android fonts
 (defun fontify-frame (&optional frame)
@@ -74,66 +74,66 @@
       ('windows-nt
        (if (> (x-display-pixel-width) 2000)
            (progn ;; HD monitor in Windows
-             (setq main-programming-font-size "12")
-             (setq main-writing-font-size "12"))
+             (setq my/main-programming-font-size "12")
+             (setq my/main-writing-font-size "12"))
          (progn
-           (setq main-programming-font-size "11")
-           (setq main-writing-font-size "11"))))
+           (setq my/main-programming-font-size "11")
+           (setq my/main-writing-font-size "11"))))
       ('darwin
        (if (> (x-display-pixel-width) 1800)
            (if (> (x-display-pixel-width) 2000)
                (progn ;; Ultra-HD monitor in OSX
-                 (setq main-programming-font-size "19")
-                 (setq main-writing-font-size "20"))
+                 (setq my/main-programming-font-size "19")
+                 (setq my/main-writing-font-size "20"))
              (progn ;; HD monitor in OSX
-               (setq main-programming-font-size "16")
-               (setq main-writing-font-size "17")))
+               (setq my/main-programming-font-size "16")
+               (setq my/main-writing-font-size "17")))
          (progn
-           (setq main-programming-font-size "16")
-           (setq main-writing-font-size "16"))))
+           (setq my/main-programming-font-size "16")
+           (setq my/main-writing-font-size "16"))))
       (t ;; Linux
        ;; ultra high-resolution 2560x1440-pixel
        (if (and (> (car (screen-size)) 2200)
                 (> (cadr (screen-size)) 1300))
            (progn ;; Ultra-HD monitor in Linux
-             (setq main-programming-font-size "14")
-             (setq main-writing-font-size "15"))
+             (setq my/main-programming-font-size "14")
+             (setq my/main-writing-font-size "15"))
          ;; high-resolution 2048x1152 and 1920x1028-pixel
          (if (and (> (car (screen-size)) 1900)
                   (> (cadr (screen-size)) 1000))
              (progn ;; HD monitor in Linux
-               (setq main-programming-font-size "13")
-               (setq main-writing-font-size "13"))
+               (setq my/main-programming-font-size "13")
+               (setq my/main-writing-font-size "13"))
            (progn
-             (setq main-programming-font-size "12")
-             (setq main-writing-font-size "13"))))))
+             (setq my/main-programming-font-size "12")
+             (setq my/main-writing-font-size "13"))))))
 
     ;; Apply fonts
-    (set-default-font (concat main-programming-font
+    (set-default-font (concat my/main-programming-font
                               "-"
-                              main-programming-font-size)
+                              my/main-programming-font-size)
                       frame)
     (add-to-list 'default-frame-alist (cons 'font
                                             (concat
-                                             main-programming-font
+                                             my/main-programming-font
                                              "-"
-                                             main-programming-font-size)))
-    (set-default-font (concat main-programming-font
+                                             my/main-programming-font-size)))
+    (set-default-font (concat my/main-programming-font
                               "-"
-                              main-programming-font-size)
+                              my/main-programming-font-size)
                       frame)
-    (set-frame-font (concat main-programming-font
+    (set-frame-font (concat my/main-programming-font
                             "-"
-                            main-programming-font-size) t)
-    (set-face-attribute 'default nil :font (concat main-programming-font
+                            my/main-programming-font-size) t)
+    (set-face-attribute 'default nil :font (concat my/main-programming-font
                                                    "-"
-                                                   main-programming-font-size))
-    (set-face-attribute 'fixed-pitch nil :font (concat main-programming-font
+                                                   my/main-programming-font-size))
+    (set-face-attribute 'fixed-pitch nil :font (concat my/main-programming-font
                                                        "-"
-                                                       main-programming-font-size))
-    (set-face-attribute 'variable-pitch nil :font (concat main-writing-font
+                                                       my/main-programming-font-size))
+    (set-face-attribute 'variable-pitch nil :font (concat my/main-writing-font
                                                           "-"
-                                                          main-writing-font-size)
+                                                          my/main-writing-font-size)
                         :weight 'normal))
 
   ;; Use Symbola font on Unicode mathematical symbols

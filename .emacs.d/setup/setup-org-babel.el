@@ -32,6 +32,7 @@
             (setq org-src-tab-acts-natively t
                   org-src-fontify-natively t
                   org-src-tab-acts-natively t
+                  org-src-window-setup 'current-window
 
                   ;; Preserve indentation when tangling source blocks (important for makefiles)
                   org-src-preserve-indentation t

@@ -114,5 +114,15 @@
             (airline-themes-set-modeline)
             (load-theme 'airline-dark)))
 
+;; Customize Emacs lighters
+(use-package delight
+  :load-path (lambda () (expand-file-name "delight/" user-emacs-directory))
+  :config (progn
+            (defadvice powerline-major-mode (around delight-powerline-major-mode activate)
+              (let ((inhibit-mode-name-delight nil)) ad-do-it))
+            (defadvice powerline-minor-modes (around delight-powerline-minor-modes activate)
+              (let ((inhibit-mode-name-delight nil)) ad-do-it))))
+
+
 (provide 'setup-modeline)
 ;;; setup-modeline.el ends here

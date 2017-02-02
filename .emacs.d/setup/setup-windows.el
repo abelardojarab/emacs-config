@@ -286,5 +286,12 @@
   :commands golden-ratio-adjust
   :load-path (lambda () (expand-file-name "golden-ratio/" user-emacs-directory)))
 
+;; Auto-dim unselected windows
+(use-package auto-dim-other-buffers
+  :defer t
+  :commands auto-dim-other-buffers-mode
+  :load-path (lambda () (expand-file-name "auto-dim-other-buffers/" user-emacs-directory))
+  :config (auto-dim-other-buffers-mode 1))
+
 (provide 'setup-windows)
 ;;; setup-windows.el ends here

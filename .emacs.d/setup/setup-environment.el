@@ -31,8 +31,12 @@
 
 ;; garbage collection
 (setq-default ;; alloc.c
- gc-cons-threshold (* 20 1204 1204)
+ gc-cons-threshold most-positive-fixnum
  gc-cons-percentage 0.5)
+
+;; Reset garbage collector after initialization is finished and garbage-collect on focus out
+(add-hook 'after-init-hook (lambda () (setq gc-cons-threshold (* 20 1204 1204))))
+(add-hook 'focus-out-hook 'garbage-collect)
 
 ;; Improve Emacs performance
 (if (boundp 'max-specpdl-size)

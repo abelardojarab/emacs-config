@@ -180,9 +180,17 @@
                   ;; attempt to disable magit-auto-revert-immediately
                   magit-auto-revert-immediately (null (and (boundp 'auto-revert-use-notify)
                                                            auto-revert-use-notify))
+                  magit-refs-show-commit-count 'all
                   git-commit-fill-column 120
                   git-commit-summary-max-length 80
                   auto-revert-verbose nil)
+
+            ;; Customize lighters
+            (delight
+             '((magit-diff-mode "Magit Diff")
+               (magit-log-mode "Magit Log")
+               (magit-popup-mode "Magit Popup")
+               (magit-status-mode "Magit Status")))
 
             ;; Face setup
             (set-face-foreground 'magit-hash (face-foreground 'font-lock-type-face))

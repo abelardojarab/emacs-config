@@ -32,13 +32,13 @@
 (defun global-font-lock-mode-check-buffers () nil)
 
 ;; Do not fontify large files
-(defun my-find-file-check-make-large-file-read-only-hook ()
+(defun my/find-file-check-make-large-file-read-only-hook ()
   "If a file is over a given size, make the buffer read only."
   (when (> (buffer-size) (* 512 512))
     (setq buffer-read-only t)
     (buffer-disable-undo)
     (fundamental-mode)))
-(add-hook 'find-file-hook 'my-find-file-check-make-large-file-read-only-hook)
+(add-hook 'find-file-hook 'my/find-file-check-make-large-file-read-only-hook)
 
 ;; In programming modes, make sure things like FIXME and TODO are highlighted so they stand out:
 (defun my/add-watchwords ()
