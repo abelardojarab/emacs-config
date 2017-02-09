@@ -212,7 +212,7 @@ buffer."
         (t (self-insert-command (or arg 1)))))
 
 ;; Indent and unindent blocks
-(defvar my/tab-width 4)
+(defvar my/tab-width 4 "Emacs tab width")
 (defun indent-block()
   (shift-region my/tab-width)
   (setq deactivate-mark nil))
