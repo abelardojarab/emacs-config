@@ -440,7 +440,6 @@ branch."
 
 (use-package git-gutter-fringe+
   :if (display-graphic-p)
-  :commands global-git-gutter+-mode
   :load-path (lambda () (expand-file-name "git-gutter-fringe-plus/" user-emacs-directory))
   :config (progn
             (global-git-gutter+-mode t)

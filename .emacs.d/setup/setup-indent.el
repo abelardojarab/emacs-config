@@ -25,12 +25,24 @@
 ;;; Code:
 
 ;; Set indent to 4 instead of 2
-(setq standard-indent 4)
+(setq standard-indent my/tab-width)
 
 ;; My personal configurations, has to use setq-default
 (setq-default indent-tabs-mode nil
-              default-tab-width 4
-              tab-width 4)
+              default-tab-width my/tab-width
+              tab-width my/tab-width)
+
+(defun tabtab/forward-char (n)
+  (let ((space (- (line-end-position) (point))))
+    (if (> space my/tab-width)
+        (forward-char n)
+      (move-end-of-line 1)
+      (insert (make-string (- n space) ? )))))
+
+(defun my/tab-jump ()
+  (interactive)
+  (let ((shift (mod (current-column) my/tab-width)))
+    (tabtab/forward-char (- my/tab-width shift))))
 
 ;; if indent-tabs-mode is off, untabify before saving
 (add-hook 'write-file-hooks
