@@ -49,21 +49,21 @@
             ;; C/C++ style
             (defun my/c-mode-init ()
               (interactive)
-              (c-set-style "bsd")
+              (c-set-style "Linux")
               (c-set-offset 'substatement-open 0)
               (c-toggle-electric-state -1)
               (setq comment-multi-line t)
               (setq-default c-default-style "bsd")
+              (setq-default indent-tabs-mode t)
 
               (make-local-variable 'c-basic-offset)
-              (setq c-basic-offset 4)
+              (setq c-basic-offset tab-width)
               (make-local-variable 'c-indent-level)
-              (setq c-indent-level 4)
+              (setq c-indent-level tab-width)
 
               ;; tab width
-              (setq-default tab-width 4)
               (setq-default tab-stop-list '(4 8 12 16 20 24 28 32 36 40 44 48 52 56 60 64 68 72 76 80 84 88 92 96 100)))
-            (add-hook 'c-common-mode-hook 'my/c-mode-init)
+            (add-hook 'c-mode-common-hook 'my/c-mode-init)
 
             ;; C++ 11 fontification
             (add-to-list 'c++-font-lock-extra-types "auto")
@@ -134,8 +134,8 @@
   :load-path (lambda () (expand-file-name "irony-mode/" user-emacs-directory))
   :after (ggtags eldoc function-args company)
   :init (progn
-            (add-hook 'c++-mode-hook 'irony-mode)
-            (add-hook 'c-mode-hook 'irony-mode))
+          (add-hook 'c++-mode-hook 'irony-mode)
+          (add-hook 'c-mode-hook 'irony-mode))
   :config (progn
             (if (file-exists-p "/usr/local/bin/irony-server")
                 (setq irony-server-install-prefix "/usr/local/"))
