@@ -56,13 +56,14 @@
               (setq-default c-default-style "bsd")
               (setq-default indent-tabs-mode t)
 
+	      (setq-default tab-width 8)
               (make-local-variable 'c-basic-offset)
               (setq c-basic-offset tab-width)
               (make-local-variable 'c-indent-level)
               (setq c-indent-level tab-width)
 
               ;; tab width
-              (setq-default tab-stop-list '(4 8 12 16 20 24 28 32 36 40 44 48 52 56 60 64 68 72 76 80 84 88 92 96 100)))
+              (setq-default tab-stop-list '(8 16 24 32 40 48 56 64 72 80 88 96 108)))
             (add-hook 'c-mode-common-hook 'my/c-mode-init)
 
             ;; C++ 11 fontification
