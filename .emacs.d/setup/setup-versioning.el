@@ -432,17 +432,17 @@ branch."
   :if (executable-find "git")
   :load-path (lambda () (expand-file-name "git-messenger/" user-emacs-directory)))
 
-(use-package git-gutter-plus
-  :defer t
-  :if (display-graphic-p)
+;; Show git state for individual lines on the margin
+(use-package git-gutter+
   :diminish git-gutter+-mode
-  :load-path (lambda () (expand-file-name "git-gutter-plus/" user-emacs-directory)))
+  :load-path (lambda () (expand-file-name "git-gutter-plus/" user-emacs-directory))
+  :config (global-git-gutter+-mode t))
 
+;; Use fringe instead of margin for git-gutter-plus
 (use-package git-gutter-fringe+
   :if (display-graphic-p)
   :load-path (lambda () (expand-file-name "git-gutter-fringe-plus/" user-emacs-directory))
   :config (progn
-            (global-git-gutter+-mode t)
             (set-face-foreground 'git-gutter-fr+-modified "LightSeaGreen")
             (set-face-foreground 'git-gutter-fr+-added    "SeaGreen")
             (set-face-foreground 'git-gutter-fr+-deleted  "red")
