@@ -56,7 +56,7 @@
               (setq-default c-default-style "bsd")
               (setq-default indent-tabs-mode t)
 
-	      (setq-default tab-width 8)
+              (setq-default tab-width 8)
               (make-local-variable 'c-basic-offset)
               (setq c-basic-offset tab-width)
               (make-local-variable 'c-indent-level)
