@@ -37,6 +37,12 @@
             (setq tags-revert-without-query t)
             (setq tags-always-build-completion-table t)
 
+	    ;; Descend into GTAGSLIBPATH if definition is not found
+	    (setenv "GTAGSTHROUGH" "true")
+
+	    ;; Use exhuberant ctags format
+	    (setenv "GTAGSLABEL" "exuberant-ctags")
+
             ;; Assure .gtags directory exists
             (if (not (file-exists-p "~/.gtags"))
                 (make-directory "~/.gtags") t)
