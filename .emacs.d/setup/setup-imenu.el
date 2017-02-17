@@ -31,7 +31,7 @@
             (set-default 'imenu-auto-rescan t)
             (mapc (lambda (mode)
                     (add-hook mode 'imenu-add-menubar-index))
-                  '(c-common-mode-hook
+                  '(c-mode-common-hook
                     python-mode-hook
                     reftex-mode-hook
                     reftex-load-hook
@@ -44,7 +44,11 @@
                       (forward-line 1)
                       (setq end (save-excursion (re-search-forward "^%%") (point)))
                       (loop while (re-search-forward "^\\([a-z].*?\\)\\s-*\n?\\s-*:" end t)
-                            collect (cons (match-string 1) (point))))))))
+                            collect (cons (match-string 1) (point))))))
+
+            ;; Find definitions in current buffer using gtags
+            (if (executable-find "global")
+                (setq-local imenu-create-index-function #'ggtags-build-imenu-index))))
 
 ;; iMenu list
 (use-package imenu-list

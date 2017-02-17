@@ -117,12 +117,23 @@
 ;; Helm gtags
 (use-package helm-gtags
   :defer t
-  :commands (helm-gtags-select helm-gtags-dwim)
+  :commands (helm-gtags-select
+             helm-gtags-dwim
+             helm-gtags-mode)
   :if (executable-find "global")
   :load-path (lambda () (expand-file-name "helm-gtags/" user-emacs-directory))
   :bind (("C-." . helm-gtags-dwim)
          :map ctl-x-map
-         ("." . helm-gtags-dwim)))
+         ("." . helm-gtags-dwim))
+  :init (add-hook 'c-mode-common-hook
+                  (lambda () (helm-gtags-mode t)))
+  :config (setq
+           helm-gtags-ignore-case t
+           helm-gtags-auto-update t
+           helm-gtags-use-input-at-cursor t
+           helm-gtags-pulse-at-cursor t
+           helm-gtags-prefix-key "\C-cg"
+           helm-gtags-suggested-key-mapping t))
 
 ;; Helm yasnippet
 (use-package helm-c-yasnippet

@@ -65,7 +65,7 @@
   :commands subword-mode
   :init (progn (mapc (lambda (mode)
                        (add-hook mode 'subword-mode))
-                     '(c-common-mode-hook
+                     '(c-mode-common-hook
                        python-mode-hook
                        js2-mode-hook
                        java-mode-hook))))

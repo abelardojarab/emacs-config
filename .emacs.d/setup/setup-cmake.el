@@ -113,7 +113,7 @@
               (if (not (file-exists-p cmake-project-default-build-dir-name))
                   (make-directory cmake-project-default-build-dir-name) t)
               (cmake-project-mode)))
-          (add-hook 'c-common-mode-hook 'cmake-project-hook))
+          (add-hook 'c-mode-common-hook 'cmake-project-hook))
   :config (progn
             (if (cmake-ide--locate-cmakelists)
                 (setq-default cmake-project-build-directory (concat

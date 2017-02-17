@@ -37,11 +37,11 @@
             (setq tags-revert-without-query t)
             (setq tags-always-build-completion-table t)
 
-	    ;; Descend into GTAGSLIBPATH if definition is not found
-	    (setenv "GTAGSTHROUGH" "true")
+            ;; Descend into GTAGSLIBPATH if definition is not found
+            (setenv "GTAGSTHROUGH" "true")
 
-	    ;; Use exhuberant ctags format
-	    (setenv "GTAGSLABEL" "exuberant-ctags")
+            ;; Use exhuberant ctags format
+            (setenv "GTAGSLABEL" "exuberant-ctags")
 
             ;; Assure .gtags directory exists
             (if (not (file-exists-p "~/.gtags"))
@@ -189,7 +189,19 @@ tags table and its (recursively) included tags tables."
 (use-package ggtags
   :if (executable-find "global")
   :after eldoc
-  :commands (ggtags-mode ggtags-find-tag-dwim ggtags-eldoc-function ggtags-show-definition)
+  :commands (ggtags-mode
+             ggtags-find-tag-dwim
+             ggtags-eldoc-function
+             ggtags-show-definition)
+  ;; Taken from https://tuhdo.github.io/c-ide.html
+  :bind (:map ggtags-mode-map
+              ("M-,"     . pop-tag-mark)
+              ("C-c g s" . ggtags-find-other-symbol)
+              ("C-c g h" . ggtags-view-tag-history)
+              ("C-c g r" . ggtags-find-reference)
+              ("C-c g f" . ggtags-find-file)
+              ("C-c g c" . ggtags-create-tags)
+              ("C-c g u" . ggtags-update-tags))
   :diminish ggtags-mode
   :load-path (lambda () (expand-file-name "ggtags/" user-emacs-directory))
   :config (progn
