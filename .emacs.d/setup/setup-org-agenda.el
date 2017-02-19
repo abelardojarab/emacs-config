@@ -1,6 +1,6 @@
 ;;; setup-org-agenda.el ---                          -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016  Abelardo Jara-Berrocal
+;; Copyright (C) 2016, 2017  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojara@ubuntu-MacBookPro>
 ;; Keywords:
@@ -82,14 +82,14 @@
                 (setq org-default-notes-file (concat org-directory "/notes.org"))
                 (setq org-default-refile-file (concat org-directory "/refile.org"))
                 (setq org-agenda-diary-file (concat org-directory "/todo.org"))
-                (setq org-mobile-file (concat org-directory "/mobileorg.org"))
-                (setq org-mobile-directory (concat org-directory "/mobile-org"))
+                (setq org-mobile-file (concat org-directory "/mobile.org"))
+                (setq org-mobile-directory (concat org-directory "/mobile"))
                 (setq org-agenda-files (list
                                         (concat org-directory "/diary.org")
                                         (concat org-directory "/agenda.org")
                                         (concat org-directory "/todo.org")
                                         (concat org-directory "/notes.org")
-                                        (concat org-directory "/mobileorg.org")
+                                        (concat org-directory "/mobile.org")
                                         (concat org-directory "/refile.org")))))
 
             ;; define todo states: set time stamps one waiting, delegated and done
