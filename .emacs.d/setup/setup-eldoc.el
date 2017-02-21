@@ -1,6 +1,6 @@
 ;;; setup-eldoc.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014, 2015, 2016  Abelardo Jara-Berrocal
+;; Copyright (C) 2014, 2015, 2016, 2017  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
 ;; Keywords:
@@ -31,7 +31,13 @@
           (add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
           (add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)
           (add-hook 'c-mode-hook 'turn-on-eldoc-mode)
-          (add-hook 'c++-mode-hook 'turn-on-eldoc-mode)))
+          (add-hook 'c++-mode-hook 'turn-on-eldoc-mode)
+
+	  ;; Use gtags to show documentation
+	  (if (executable-find "global")
+	      (add-hook 'c-mode-common-hook
+			(lambda ()
+			  (setq-local eldoc-documentation-function #'ggtags-eldoc-function))))))
 
 (provide 'setup-eldoc)
 ;;; setup-eldoc.el ends here
