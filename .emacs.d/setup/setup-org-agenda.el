@@ -36,7 +36,6 @@
 
             ;; Agenda settings
             (setq org-agenda-inhibit-startup t ;; 50x speedup
-                  org-agenda-include-diary nil
                   org-agenda-dim-blocked-tasks t
                   org-agenda-default-appointment-duration 60
                   org-agenda-skip-deadline-prewarning-if-scheduled t
@@ -78,8 +77,11 @@
                       (setq org-directory "~/workspace/Documents/Org")
                     (setq org-directory "~/Google Drive/Documents/Org")))
 
-                ;; Set remaining Org files
+                ;; Diary file
                 (setq diary-file (concat org-directory "/diary"))
+                (setq org-agenda-include-diary (file-exists-p diary-file))
+
+                ;; Set remaining Org files
                 (setq org-id-locations-file "~/.emacs.cache/org-id-locations")
                 (setq org-default-notes-file (concat org-directory "/notes.org"))
                 (setq org-default-refile-file (concat org-directory "/refile.org"))
