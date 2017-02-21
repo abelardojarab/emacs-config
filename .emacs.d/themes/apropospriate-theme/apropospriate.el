@@ -131,6 +131,9 @@ Set to `1.0' or nil to prevent font size manipulation."
      `(avy-background-face ((,class (:foreground ,base00+3))))
      `(aw-leading-char-face ((,class (:inherit avy-lead-face))))
      `(aw-background-face ((,class (:inherit avy-background-face))))
+     `(highlight-indent-guides-odd-face ((,class (:background ,base00+1))))
+     `(highlight-indent-guides-even-face ((,class (:background ,base00))))
+     `(highlight-indent-guides-character-face ((,class (:foreground ,base00+2))))
      `(parenthesis ((,class (:foreground ,base00+3))))
      `(font-lock-comment-face ((,class (:foreground ,base01))))
      `(font-lock-comment-delimiter-face ((,class (:foreground ,base01))))
@@ -292,6 +295,13 @@ Set to `1.0' or nil to prevent font size manipulation."
      `(helm-ls-git-modified-not-staged-face ((,class (:foreground ,orange-1))))
      `(helm-ls-git-renamed-modified-face ((,class (:foreground ,orange-1))))
      `(helm-ls-git-untracked-face ((,class (:foreground ,blue))))
+     `(helm-css-scss-target-line-face ((,class (:background ,base00 :foreground ,yellow))))
+     `(helm-css-scss-selector-depth-face-1 ((,class (:foreground ,yellow))))
+     `(helm-css-scss-selector-depth-face-2 ((,class (:inherit helm-css-scss-selector-depth-face-1))))
+     `(helm-css-scss-selector-depth-face-3 ((,class (:inherit helm-css-scss-selector-depth-face-1))))
+     `(helm-css-scss-selector-depth-face-4 ((,class (:inherit helm-css-scss-selector-depth-face-1))))
+     `(helm-css-scss-selector-depth-face-5 ((,class (:inherit helm-css-scss-selector-depth-face-1))))
+     `(helm-css-scss-selector-depth-face-6 ((,class (:inherit helm-css-scss-selector-depth-face-1))))
      `(show-paren-match ((,class (:background unspecified :underline (:style line :color ,pink)))))
      `(show-paren-mismatch ((,class (:background unspecified :foreground ,red :inverse-video t :underline (:style line :color ,red)))))
      `(highlight-symbol-face ((,class (:foreground unspecified :background unspecified :underline (:style line :color ,base02)))))
@@ -343,6 +353,8 @@ Set to `1.0' or nil to prevent font size manipulation."
      `(undo-tree-visualizer-current-face ((,class (:foreground ,green :weight bold))))
      `(undo-tree-visualizer-active-branch-face ((,class (:foreground ,red))))
      `(undo-tree-visualizer-register-face ((,class (:foreground ,yellow))))
+     `(erm-syn-errline ((,class (:box nil :underline (:style wave :color ,red)))))
+     `(erm-syn-warnline ((,class (:box nil :underline (:style wave :color ,orange)))))
      `(dired-directory ((,class (:inherit ido-subdir))))
      `(dired-header ((,class (:inherit header-line))))
      `(diredp-compressed-file-suffix ((,class (:foreground ,blue))))
@@ -545,7 +557,16 @@ Set to `1.0' or nil to prevent font size manipulation."
      `(neo-expand-btn-face ((,class (:foreground ,base02))))
      `(neo-header-face ((,class (:inherit header-line))))
      `(neo-file-link-face ((,class (:foreground ,base03))))
-     `(neo-root-dir-face ((,class (:foregroud ,base02)))))
+     `(neo-root-dir-face ((,class (:foregroud ,base02))))
+     `(org-ellipsis ((,class (:inherit font-lock-keyword-face))))
+     `(org-level-1 ((,class (:inherit header-line :height 1.3))))
+     `(org-level-2 ((,class (:inherit header-line :height 1.2))))
+     `(org-level-3 ((,class (:inherit header-line :height 1.1))))
+     `(org-level-4 ((,class (:inherit header-line))))
+     `(org-level-5 ((,class (:inherit header-line))))
+     `(org-level-6 ((,class (:inherit header-line))))
+     `(org-level-7 ((,class (:inherit header-line))))
+     `(org-level-8 ((,class (:inherit header-line)))))
 
     (custom-theme-set-variables
      theme-name
@@ -555,7 +576,7 @@ Set to `1.0' or nil to prevent font size manipulation."
      `(evil-visual-state-cursor '(,green box))
      `(pos-tip-foreground-color ,base02)
      `(pos-tip-background-color ,base00-1)
-
+     `(highlight-indent-guides-auto-enabled nil)
      `(highlight-symbol-foreground-color ,base03)
      `(highlight-symbol-colors '(,yellow
                                  ,green
@@ -566,7 +587,6 @@ Set to `1.0' or nil to prevent font size manipulation."
      `(beacon-color ,flashing-color)
      `(highlight-tail-colors
        '((,flashing-color . 0) (,base00 . 100)))
-
      `(tabbar-background-color ,base00-2)
      `(ansi-color-names-vector
        [,base00 ,red-1 ,green ,yellow ,blue ,purple ,cyan ,base03]))))
