@@ -36,7 +36,6 @@ install : .timestamps ChangeLog test $(D)/mmencoded_verilog-mode $(D)/emacs-vers
 
 test:	.timestamps/test
 .timestamps/test: x/verilog-mode.elc e/verilog-mode.elc mmencoded_verilog-mode verilog.info 0test.el .timestamps
-	mkdir -p e/t x/t
 ifeq ($(VERILOG_MODE_TEST_FILE),)
 	$(MAKE) test_batch test_errors test_emacs test_xemacs
 	@touch $@
@@ -51,8 +50,8 @@ test_emacs:: $(1)
 $(1): e/verilog-mode.elc
 	@echo
 	@echo == $(1)
-	@mkdir -p e/t x/t
-	VERILOG_MODE_THREAD=$(2) time $(EMACS)  --batch -q -l e/verilog-mode.elc -l 0test.el
+	@mkdir -p e/t
+	VERILOG_MODE_THREAD=$(2) time $(EMACS)  --batch -q --no-site-file -l e/verilog-mode.elc -l 0test.el
 endef
 
 $(eval $(call test_emacs_sub,test_emacs_1,1of5))
@@ -69,7 +68,8 @@ test_xemacs:: $(1)
 $(1): x/verilog-mode.elc
 	@echo
 	@echo == $(1)
-	VERILOG_MODE_THREAD=$(2) time $(XEMACS)  --batch -q -l x/verilog-mode.elc -l 0test.el
+	@mkdir -p x/t
+	VERILOG_MODE_THREAD=$(2) time $(XEMACS)  --batch -vanilla -l x/verilog-mode.elc -l 0test.el
 endef
 
 $(eval $(call test_xemacs_sub,test_xemacs_1,1of5))
@@ -157,16 +157,16 @@ verilog.info : verilog.texinfo
 	makeinfo verilog.texinfo > verilog.info
 
 ######################################################################
-# GNU BZR version
+# GNU GIT version
 
 gnutrunk:
-	@echo "gnutrunk needs to be a symlink to a emacs/trunk bazaar checkout"
+	@echo "gnutrunk needs to be a symlink to a emacs/trunk git checkout"
 	false
 
 .PHONY: gnu-update gnu-update-trunk
 gnu-update: gnu-update-trunk
 gnu-update-trunk: gnutrunk
-	echo "NOT DOING: cd gnutrunk && bzr update"
+	echo "NOT DOING: cd gnutrunk && git pull"
 
 .PHONY: gnu-diff-trunk gnu-diff
 gnu-diff: gnu-diff-trunk
@@ -174,6 +174,11 @@ gnu-diff-trunk: gnu-update-trunk verilog-mode-tognu.el
 	diff -u gnutrunk/lisp/progmodes/verilog-mode.el verilog-mode-tognu.el 
 verilog-mode.patch: gnu-update verilog-mode-tognu.el
 	diff -u gnutrunk/lisp/progmodes/verilog-mode.el verilog-mode-tognu.el > $@
+# Before install, clean to make sure we get proper git ID
+gnu-cp:
+	$(MAKE) clean
+	$(MAKE) verilog-mode-tognu.el
+	cp verilog-mode-tognu.el gnutrunk/lisp/progmodes/verilog-mode.el
 
 verilog-mode-tognu.el: e/verilog-mode.el Makefile
 	cat e/verilog-mode.el \
