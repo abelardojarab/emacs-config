@@ -1,6 +1,6 @@
 ;;; magit-submodule.el --- submodule support for Magit  -*- lexical-binding: t -*-
 
-;; Copyright (C) 2011-2016  The Magit Project Contributors
+;; Copyright (C) 2011-2017  The Magit Project Contributors
 ;;
 ;; You should have received a copy of the AUTHORS.md file which
 ;; lists all contributors.  If not, see http://magit.vc/authors.
@@ -24,6 +24,8 @@
 ;;; Code:
 
 (require 'magit)
+
+(defvar x-stretch-cursor)
 
 ;;; Options
 
@@ -205,8 +207,9 @@ For each section insert the path and the output of `git describe --tags'."
 
 (defvar magit-submodule-section-map
   (let ((map (make-sparse-keymap)))
+    (unless (featurep 'jkl)
+      (define-key map "\C-j"   'magit-submodule-visit))
     (define-key map [C-return] 'magit-submodule-visit)
-    (define-key map "\C-j"     'magit-submodule-visit)
     (define-key map [remap magit-visit-thing]  'magit-submodule-visit)
     (define-key map [remap magit-delete-thing] 'magit-submodule-deinit)
     (define-key map "K" 'magit-file-untrack)
@@ -342,15 +345,5 @@ These sections can be expanded to show the respective commits."
   "Insert the relative path of the submodule."
   path)
 
-;;; magit-submodule.el ends soon
-
-(define-obsolete-function-alias 'magit-insert-unpulled-module-commits
-  'magit-insert-modules-unpulled-from-upstream "Magit 2.6.0")
-(define-obsolete-function-alias 'magit-insert-unpushed-module-commits
-  'magit-insert-modules-unpushed-to-upstream "Magit 2.6.0")
-
 (provide 'magit-submodule)
-;; Local Variables:
-;; indent-tabs-mode: nil
-;; End:
 ;;; magit-submodule.el ends here

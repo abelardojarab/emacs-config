@@ -1,6 +1,6 @@
 ;;; magit-mode.el --- create and refresh Magit buffers  -*- lexical-binding: t -*-
 
-;; Copyright (C) 2010-2016  The Magit Project Contributors
+;; Copyright (C) 2010-2017  The Magit Project Contributors
 ;;
 ;; You should have received a copy of the AUTHORS.md file which
 ;; lists all contributors.  If not, see http://magit.vc/authors.
@@ -485,7 +485,7 @@ Magit is documented in info node `(magit)'."
   (setq buffer-read-only t)
   (setq-local line-move-visual t) ; see #1771
   (setq show-trailing-whitespace nil)
-  (setq list-buffers-directory default-directory)
+  (setq list-buffers-directory (abbreviate-file-name default-directory))
   (hack-dir-local-variables-non-file-buffer)
   (make-local-variable 'text-property-default-nonsticky)
   (push (cons 'keymap t) text-property-default-nonsticky)
@@ -737,7 +737,7 @@ thinking a buffer belongs to a repo that it doesn't.")
     (when magit-uniquify-buffer-names
       (add-to-list 'uniquify-list-buffers-directory-modes mode)
       (with-current-buffer buffer
-        (setq list-buffers-directory default-directory))
+        (setq list-buffers-directory (abbreviate-file-name default-directory)))
       (let ((uniquify-buffer-name-style
              (if (memq uniquify-buffer-name-style '(nil forward))
                  'post-forward-angle-brackets
@@ -1152,9 +1152,5 @@ Currently `magit-log-mode', `magit-reflog-mode',
                    (float-time (time-subtract (current-time) start))))
       (run-hooks hook))))
 
-;;; magit-mode.el ends soon
 (provide 'magit-mode)
-;; Local Variables:
-;; indent-tabs-mode: nil
-;; End:
 ;;; magit-mode.el ends here

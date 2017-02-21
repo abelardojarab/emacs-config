@@ -1,6 +1,6 @@
 ;;; magit-git.el --- Git functionality  -*- lexical-binding: t -*-
 
-;; Copyright (C) 2010-2016  The Magit Project Contributors
+;; Copyright (C) 2010-2017  The Magit Project Contributors
 ;;
 ;; You should have received a copy of the AUTHORS.md file which
 ;; lists all contributors.  If not, see http://magit.vc/authors.
@@ -395,6 +395,21 @@ absolute path is returned."
         (setq it (file-name-as-directory (magit-expand-git-file-name it)))
         (if path (expand-file-name (convert-standard-filename path) it) it)))))
 
+(defvar magit--separated-gitdirs nil)
+
+(defun magit--record-separated-gitdir ()
+  (let ((topdir (magit-toplevel))
+        (gitdir (magit-git-dir)))
+    ;; We want to delete the entry for `topdir' here, rather than within
+    ;; (unless ...), in case a `--separate-git-dir' repository was switched to
+    ;; the standard structure (i.e., "topdir/.git/").
+    (setq magit--separated-gitdirs (cl-delete topdir
+                                            magit--separated-gitdirs
+                                            :key #'car :test #'equal))
+    (unless (equal (file-name-as-directory (expand-file-name ".git" topdir))
+                   gitdir)
+      (push (cons topdir gitdir) magit--separated-gitdirs))))
+
 (defun magit-toplevel (&optional directory)
   "Return the absolute path to the toplevel of the current repository.
 
@@ -459,14 +474,20 @@ returning the truename."
             (let* ((link (expand-file-name "gitdir" gitdir))
                    (wtree (and (file-exists-p link)
                                (magit-file-line link))))
-              (if (and wtree
-                       ;; Ignore .git/gitdir files that result from a
-                       ;; Git bug.  See #2364.
-                       (not (equal wtree ".git")))
-                  ;; Return the linked working tree.
-                  (file-name-directory wtree)
+              (cond
+               ((and wtree
+                     ;; Ignore .git/gitdir files that result from a
+                     ;; Git bug.  See #2364.
+                     (not (equal wtree ".git")))
+                ;; Return the linked working tree.
+                (file-name-directory wtree))
+               ;; The working directory may not be the parent directory of
+               ;; .git if it was set up with `git init --separate-git-dir'.
+               ;; See #2955.
+               ((car (rassoc gitdir magit--separated-gitdirs)))
+               (t
                 ;; Step outside the control directory to enter the working tree.
-                (file-name-directory (directory-file-name gitdir))))))))))
+                (file-name-directory (directory-file-name gitdir)))))))))))
 
 (defmacro magit-with-toplevel (&rest body)
   (declare (indent defun) (debug (body)))
@@ -495,7 +516,7 @@ returning the truename."
 (defun magit-git-repo-p (directory &optional non-bare)
   "Return t if DIRECTORY is a Git repository.
 When optional NON-BARE is non-nil also return nil if DIRECTORY is
-a bare repositories."
+a bare repository."
   (or (file-regular-p (expand-file-name ".git" directory))
       (file-directory-p (expand-file-name ".git" directory))
       (and (not non-bare)
@@ -861,19 +882,17 @@ which is different from the current branch and still exists."
       (cl-incf i))
     prev))
 
-(cl-defun magit-get-upstream-ref
-    (&optional (branch (magit-get-current-branch)))
-  (when branch
-    (let ((remote (magit-get "branch" branch "remote"))
-          (merge  (magit-get "branch" branch "merge")))
-      (when (and remote merge)
-        (cond ((string-equal remote ".") merge)
-              ((string-prefix-p "refs/heads/" merge)
-               (concat "refs/remotes/" remote "/" (substring merge 11))))))))
+(defun magit-get-upstream-ref (&optional branch)
+  (and (or branch (setq branch (magit-get-current-branch)))
+       (let ((remote (magit-get "branch" branch "remote"))
+             (merge  (magit-get "branch" branch "merge")))
+         (when (and remote merge)
+           (cond ((string-equal remote ".") merge)
+                 ((string-prefix-p "refs/heads/" merge)
+                  (concat "refs/remotes/" remote "/" (substring merge 11))))))))
 
-(cl-defun magit-get-upstream-branch
-    (&optional (branch (magit-get-current-branch)) verify)
-  (and branch
+(defun magit-get-upstream-branch (&optional branch verify)
+  (and (or branch (setq branch (magit-get-current-branch)))
        (-when-let* ((remote (magit-get "branch" branch "remote"))
                     (merge  (magit-get "branch" branch "merge")))
          (and (string-prefix-p "refs/heads/" merge)
@@ -906,19 +925,17 @@ which is different from the current branch and still exists."
                 (magit-rev-ancestor-p upstream branch)
                 upstream)))))
 
-(cl-defun magit-get-upstream-remote
-    (&optional (branch (magit-get-current-branch)))
-  (when branch
-    (magit-get "branch" branch "remote")))
+(defun magit-get-upstream-remote (&optional branch)
+  (and (or branch (setq branch (magit-get-current-branch)))
+       (magit-get "branch" branch "remote")))
 
-(cl-defun magit-get-push-remote
-    (&optional (branch (magit-get-current-branch)))
-  (or (and branch (magit-get "branch" branch "pushRemote"))
+(defun magit-get-push-remote (&optional branch)
+  (or (and (or branch (setq branch (magit-get-current-branch)))
+           (magit-get "branch" branch "pushRemote"))
       (magit-get "remote.pushDefault")))
 
-(cl-defun magit-get-push-branch
-    (&optional (branch (magit-get-current-branch)) verify)
-  (and branch
+(defun magit-get-push-branch (&optional branch verify)
+  (and (or branch (setq branch (magit-get-current-branch)))
        (-when-let* ((remote (magit-get-push-remote branch))
                     (push-branch (concat remote "/" branch)))
          (and (or (not verify)
@@ -1137,7 +1154,10 @@ Return a list of two integers: (A>B B>A)."
 (defun magit-abbrev-length ()
   (--if-let (magit-get "core.abbrev")
       (string-to-number it)
-    (length (magit-rev-parse "--short" "HEAD"))))
+    (--if-let (magit-rev-parse "--short" "HEAD")
+        (length it)
+      ;; We are either in an empty repository or not in a repository.
+      7)))
 
 (defun magit-abbrev-arg (&optional arg)
   (format "--%s=%d" (or arg "abbrev") (magit-abbrev-length)))
@@ -1298,7 +1318,7 @@ Return a list of two integers: (A>B B>A)."
   (when (string-match magit-range-re range)
     (let ((beg (or (match-string 1 range) "HEAD"))
           (end (or (match-string 3 range) "HEAD")))
-      (cons (if (string-equal (match-string 2) "...")
+      (cons (if (string-equal (match-string 2 range) "...")
                 (magit-git-string "merge-base" beg end)
               beg)
             end))))
@@ -1535,19 +1555,5 @@ Return a list of two integers: (A>B B>A)."
 (gv-define-setter magit-get (val &rest keys)
   `(magit-set ,val ,@keys))
 
-;;; magit-git.el ends soon
-
-(define-obsolete-variable-alias 'magit-git-standard-options
-  'magit-git-global-arguments "Magit 2.1.0")
-(define-obsolete-function-alias 'magit-get-tracked-ref
-  'magit-get-upstream-ref "Magit 2.4.0")
-(define-obsolete-function-alias 'magit-get-tracked-branch
-  'magit-get-upstream-branch "Magit 2.4.0")
-(define-obsolete-function-alias 'magit-get-tracked-remote
-  'magit-get-upstream-remote "Magit 2.4.0")
-
 (provide 'magit-git)
-;; Local Variables:
-;; indent-tabs-mode: nil
-;; End:
 ;;; magit-git.el ends here

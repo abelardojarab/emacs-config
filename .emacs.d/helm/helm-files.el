@@ -278,6 +278,10 @@ in `current-buffer'."
   :group 'helm-files
   :type 'boolean)
 
+(defcustom helm-ff-goto-first-real-dired-exceptions '(dired-goto-file)
+  "Dired commands that are allowed moving to first real candidate."
+  :group 'helm-files
+  :type '(repeat (choice symbol)))
 
 ;;; Faces
 ;;
@@ -781,12 +785,12 @@ otherwise do
 \"eshell-command command baz\"
 
 Note:
-If `eshell' or `eshell-command' have not been run once,
-or if you have no eshell aliases `eshell-command-aliases-list'
-will not be loaded first time you use this."
+You have to setup some aliases in eshell with the `alias' command or
+by editing yourself the file `eshell-aliases-file' to make this
+working."
+  (require 'em-alias) (eshell-read-aliases-list)
   (when (or eshell-command-aliases-list
-            (y-or-n-p "Eshell is not loaded, run eshell-command without alias anyway? "))
-    (and eshell-command-aliases-list (eshell-read-aliases-list))
+            (y-or-n-p "No eshell aliases found, run eshell-command without alias anyway? "))
     (let* ((cand-list (helm-marked-candidates))
            (default-directory (or helm-ff-default-directory
                                   ;; If candidate is an url *-ff-default-directory is nil
@@ -1516,12 +1520,15 @@ or hitting C-j on \"..\"."
 
 (defun helm-ff-move-to-first-real-candidate ()
   "When candidate is an incomplete file name move to first real candidate."
-  (let ((src (helm-get-current-source)))
+  (let* ((src (helm-get-current-source))
+         (name (assoc-default 'name src)))
     (helm-aif (and (helm-file-completion-source-p src)
                    (not (helm-empty-source-p))
-                   (not (string-match
-                         "\\`[Dd]ired-"
-                         (assoc-default 'name src)))
+                   ;; Prevent dired commands moving to first real
+                   ;; (Issue #910).
+                   (or (memq (intern-soft name)
+                             helm-ff-goto-first-real-dired-exceptions)
+                       (not (string-match "\\`[Dd]ired-" name)))
                    helm-ff--move-to-first-real-candidate
                    (helm-get-selection nil nil src))
         (unless (or (not (stringp it))
@@ -2746,7 +2753,7 @@ Use it for non--interactive calls of `helm-find-files'."
           (hlink)    ; String at point is an hyperlink.
           (file-p    ; a regular file
            (helm-aif (ffap-file-at-point) (expand-file-name it)))
-          (urlp file-at-pt) ; possibly an url or email.
+          (urlp (helm-html-decode-entities-string file-at-pt)) ; possibly an url or email.
           ((and file-at-pt
                 (not remp)
                 (file-exists-p file-at-pt))
@@ -3429,18 +3436,29 @@ See `helm-browse-project'."
 ;;  session (http://emacs-session.sourceforge.net/) is an alternative to
 ;;  recentf that saves recent file history and much more.
 (defvar session-file-alist)
-(defvar helm-source-session
-  (helm-build-sync-source "Session"
-    :candidates (lambda ()
-                  (cl-delete-if-not
-                   (lambda (f)
-                     (or (string-match helm-tramp-file-name-regexp f)
-                         (file-exists-p f)))
-                   (mapcar 'car session-file-alist)))
-    :keymap helm-generic-files-map
-    :help-message helm-generic-file-help-message
-    :action 'helm-type-file-actions)
+(defclass helm-source-session-class (helm-source-sync)
+  ((candidates :initform (lambda ()
+                           (cl-delete-if-not
+                            (lambda (f)
+                              (or (string-match helm-tramp-file-name-regexp f)
+                                  (file-exists-p f)))
+                            (mapcar 'car session-file-alist))))
+   (keymap       :initform helm-generic-files-map)
+   (help-message :initform helm-generic-file-help-message)
+   (action       :initform 'helm-type-file-actions)))
+
+(defvar helm-source-session nil
   "File list from emacs-session.")
+
+(defcustom helm-session-fuzzy-match nil
+  "Enable fuzzy matching in `helm-source-session' when non--nil."
+  :group 'helm-files
+  :type 'boolean
+  :set (lambda (var val)
+         (set var val)
+         (setq helm-source-session
+               (helm-make-source "Session" 'helm-source-session-class
+                 :fuzzy-match val))))
 
 
 ;;; Files in current dir
@@ -3459,11 +3477,17 @@ Colorize only symlinks, directories and files."
                                          (string-match ffap-url-regexp i)))
                                (not (string-match helm-ff-url-regexp i)))
                           (helm-basename i) i)
-           for type = (car (file-attributes i))
+           for isremote = (file-remote-p i)
+           ;; Call file-attributes only if:
+           ;; - file is not remote
+           ;; - helm-ff-tramp-not-fancy is nil and file is remote AND
+           ;; connected. (Issue #1679)
+           for type = (and (or (null isremote)
+                               (and (null helm-ff-tramp-not-fancy)
+                                    (file-remote-p i nil t)))
+                           (car (file-attributes i)))
            collect
-           (cond ((and helm-ff-tramp-not-fancy
-                       (string-match helm-tramp-file-name-regexp i))
-                  (cons disp i))
+           (cond ((and (null type) isremote) (cons disp i))
                  ((stringp type)
                   (cons (propertize disp
                                     'face 'helm-ff-symlink

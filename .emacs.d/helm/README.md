@@ -137,7 +137,7 @@ below).
 
 ## Installing just the helm-core package
 
-`helm-core` package is available on [MELPA](http://melpa.org/) for
+`helm-core` package is available on [MELPA](https://melpa.org/) for
 third party packages that depend on helm libraries. These packages
 should require helm as follows:
 
@@ -188,12 +188,12 @@ a specialized info buffer.
 
 Use these embedded Info screens first before reporting bugs.
 
-`M-x helm-mode` to enable helm completion for common Emacs commands
-(e.g `M-x`, `C-x C-f`, etc...). Note that the helm functionality
-enabled through helm-mode comes from a generic implementation and does
-not include all helm features available through equivalent
-helm-specific commands. For example, `helm-M-x` has more features than
-helm completion through `M-x`.
+`M-x helm-mode` to enable helm completion for common Emacs
+commands. Note that the helm functionality enabled through helm-mode
+comes from a generic implementation and does not include all helm
+features available through equivalent helm-specific commands.
+See [FAQ](https://github.com/emacs-helm/helm/wiki/FAQ#why-after-enabling-helm-mode-m-x-and-c-x-c-f-are-not-helmized)
+about `M-x` and `C-x C-f`.
 
 To make helm-mode start with Emacs init file: 
 
@@ -214,7 +214,7 @@ Helm contains many features, some of which are easier to follow
 visually. Here is a demo of `helm-buffers-list` used with
 `helm-moccur`. Demo starts with `Eval: START` in the minibuffer.
 
-![helm-buffers-list](doc/helm-buffers-list.gif)
+![helm-buffers-list](images/helm-buffers-list.gif)
 
 - Regexp `*C` selects the C buffers. `*Tcl` in the demo selects TCL
   buffers, then with `*C` switches back to C buffers.
@@ -357,6 +357,10 @@ One way to ascertain that the bugs are helm-related, recreate the
 error either by using `Emacs -Q` or by running the included package
 script `./emacs-helm.sh` located in the helm directory.
 
+Helm comes now with a template for filling bugs, when reporting issues,
+be sure to fill all sections and to run helm from a minimal install as
+described above to reproduce your bug.
+ 
 # Getting help
 
 [Helm Wiki](https://github.com/emacs-helm/helm/wiki) and

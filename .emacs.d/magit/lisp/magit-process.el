@@ -1,6 +1,6 @@
 ;;; magit-process.el --- process functionality  -*- lexical-binding: t -*-
 
-;; Copyright (C) 2010-2016  The Magit Project Contributors
+;; Copyright (C) 2010-2017  The Magit Project Contributors
 ;;
 ;; You should have received a copy of the AUTHORS.md file which
 ;; lists all contributors.  If not, see http://magit.vc/authors.
@@ -337,12 +337,12 @@ conversion."
 
 (defun magit-cygwin-env-vars ()
   (append magit-git-environment
-          (when magit-need-cygwin-noglob
-            (mapcar (lambda (var)
-                      (concat var "=" (--if-let (getenv var)
-                                          (concat it " noglob")
-                                        "noglob")))
-                    '("CYGWIN" "MSYS")))))
+          (and magit-need-cygwin-noglob
+               (mapcar (lambda (var)
+                         (concat var "=" (--if-let (getenv var)
+                                             (concat it " noglob")
+                                           "noglob")))
+                       '("CYGWIN" "MSYS")))))
 
 (defvar magit-this-process nil)
 
@@ -417,6 +417,7 @@ current when this function was called (if it is a Magit buffer
 and still alive), as well as the respective Magit status buffer.
 
 See `magit-start-process' and `with-editor' for more information."
+  (magit--record-separated-gitdir)
   (magit-with-editor (magit-run-git-async args)))
 
 (defun magit-run-git-sequencer (&rest args)
@@ -872,13 +873,5 @@ as argument."
                                        (pop-to-buffer buf))))))
                              process))))))
 
-;;; magit-process.el ends soon
-
-(define-obsolete-variable-alias 'magit-log-output-coding-system
-  'magit-git-output-coding-system "Magit 2.9.0")
-
 (provide 'magit-process)
-;; Local Variables:
-;; indent-tabs-mode: nil
-;; End:
 ;;; magit-process.el ends here
