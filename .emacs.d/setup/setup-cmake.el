@@ -57,11 +57,10 @@
 ;; cmake-based IDE
 (use-package cmake-ide
   :defer t
-  :commands (use-cmake-ide cmake-ide--locate-cmakelists)
+  :commands (my/cmake-enable-ide cmake-ide--locate-cmakelists cmake-ide-compile cmake-ide-run-cmake)
   :if (executable-find "cmake")
   :load-path (lambda () (expand-file-name "cmake-ide/" user-emacs-directory))
-  :init (if (executable-find "cmake")
-            (add-hook 'c-mode-common-hook #'use-cmake-ide))
+  :init (add-hook 'c-mode-common-hook 'my/cmake-enable-ide)
   :config (progn
 
             ;; Asure cmake_build directory exists
@@ -69,7 +68,9 @@
                 (make-directory "~/cmake_builds"))
 
             ;; Define cmake-ide-build-dir under ~/cmake_builds
-            (defun use-cmake-ide ()
+            (defun my/cmake-enable-ide ()
+	      "Modify cmake-build-dir and make it point to ~/cmake_builds"
+	      (interactive)
               (let (my/cmake-build-dir my/projectile-build-dir)
                 (cmake-ide-setup)
                 (if (cmake-ide--locate-cmakelists)
@@ -77,6 +78,7 @@
                       (if (and (file-exists-p "~/cmake_builds")
                                (projectile-project-name))
                           (progn
+			    (make-local-variable 'cmake-ide-build-dir)
 
                             ;; Define project build directory
                             (setq my/projectile-build-dir (concat
@@ -92,13 +94,14 @@
                                                       (file-name-nondirectory
                                                        (directory-file-name (cmake-ide--locate-cmakelists)))
                                                       my/projectile-build-dir))
+			    (message "* cmake-ide Building directory set to: %s" my/cmake-build-dir)
 
                             ;; Create cmake project directory under project directory
                             (if (not (file-exists-p my/cmake-build-dir))
                                 (make-directory my/cmake-build-dir))
 
                             ;; Set cmake-ide-build-dir according to both top project and cmake project names
-                            (setq-default cmake-ide-build-dir my/cmake-build-dir)))))))))
+                            (setq cmake-ide-build-dir my/cmake-build-dir)))))))))
 
 ;; minor-mode integrating the CMake build process
 (use-package cmake-project
