@@ -1,6 +1,6 @@
 ;;; setup-dired-plugins.el ---                       -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016  Abelardo Jara-Berrocal
+;; Copyright (C) 2016, 2017  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
 ;; Keywords:
@@ -73,6 +73,7 @@
 
 ;; Facility to see images inside dired
 (use-package image-dired
+  :disabled t ;; issue with emacs server
   :after dired
   :config (progn
             (setq image-dired-cmd-create-thumbnail-options

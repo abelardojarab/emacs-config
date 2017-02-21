@@ -1,6 +1,6 @@
 ;;; setup-file.el ---                                -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014, 2015, 2016  Abelardo Jara-Berrocal
+;; Copyright (C) 2014, 2015, 2016, 2017  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
 ;; Keywords:
@@ -23,6 +23,8 @@
 ;;
 
 ;;; Code:
+
+(setq after-find-file-from-revert-buffer t)
 
 ;; Help to determine who modifies buffer
 (defvar my/debug-set-buffer-modified-p-buffers nil)
