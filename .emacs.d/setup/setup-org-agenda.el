@@ -45,8 +45,8 @@
                   org-agenda-sticky t
                   ;; Compact the block agenda view
                   org-agenda-compact-blocks t
-                  ;; span 2 days of agenda
-                  org-agenda-span 2
+                  ;; span 14 days of agenda
+                  org-agenda-span 14
                   ;; start today not on Monday
                   org-agenda-start-on-weekday nil
                   org-agenda-show-log t
@@ -78,8 +78,45 @@
                     (setq org-directory "~/Google Drive/Documents/Org")))
 
                 ;; Diary file
-                (setq diary-file (concat org-directory "/diary"))
-                (setq org-agenda-include-diary (file-exists-p diary-file))
+                (use-package calendar
+                  :config (progn
+                            (setq diary-file (concat org-directory "/agenda.org")
+                                  diary-date-forms diary-iso-date-forms
+                                  calendar-set-date-style 'iso
+                                  calendar-week-start-day 1
+                                  calendar-view-diary-initially-flag t
+                                  calendar-mark-diary-entries-flag t
+                                  calendar-today-marker 'calendar-today-face)
+
+                            ;; Enable Org date formatting
+                            (setq diary-date-forms (cons '(" *" "[<\* ]*" " *"
+                                                           dayname "[, ]*" " *"
+                                                           monthname "[, ]*" " *"
+                                                           day "[, ]*" " *"
+                                                           year "[^0-9]*[>]*")
+                                                         diary-date-forms))
+
+                            (add-hook 'diary-display-hook 'fancy-diary-display)
+                            (add-hook 'today-visible-calendar-hook 'calendar-mark-today)
+                            (add-hook 'list-diary-entries-hook 'sort-diary-entries t)
+
+                            ;; https://www.emacswiki.org/emacs/InsertingTodaysDate
+                            (defun my/insert-current-date (&optional omit-day-of-week-p)
+                              "Insert today's date using the current locale.
+  With a prefix argument, the date is inserted without the day of
+  the week."
+                              (interactive "P*")
+                              (insert (calendar-date-string (calendar-current-date) nil
+                                                            omit-day-of-week-p)))
+
+                            ;; Enable diary file in Org mode
+                            (setq org-agenda-include-diary (file-exists-p diary-file))))
+
+                ;; http://emacs.stackexchange.com/questions/19863/how-to-set-my-own-date-format-for-org
+                ;; This will give you <Thu Jan 26 2016> for date timestamps
+                ;; or <Thu Jan 26 2016 11:30> for timestamps with times.
+                (setq-default org-display-custom-times t)
+                (setq org-time-stamp-custom-formats '("<%A, %B %e, %Y>" . "<%A, %B %e, %Y %H:%M>"))
 
                 ;; Set remaining Org files
                 (setq org-id-locations-file "~/.emacs.cache/org-id-locations")
@@ -152,7 +189,7 @@
                                   ("@family" . ?f)
                                   ("@coding" . ?c)
                                   ("@tasks" . ?t)
-                                  ("@computer" . ?l)
+                                  ("@learning" . ?l)
                                   ("@reading" . ?r)
                                   ("quantified" . ?q)
                                   ("high-energy" . ?1)))
@@ -247,7 +284,7 @@ DEF-FLAG   is t when a double ++ or -- indicates shift relative to
               '((tags-todo "+@work/!-SOMEDAY")
                 (tags-todo "+@coding/!-SOMEDAY")
                 (tags-todo "+@writing/!-SOMEDAY")
-                (tags-todo "+@computer/!-SOMEDAY")
+                (tags-todo "+@learning/!-SOMEDAY")
                 (tags-todo "+@home/!-SOMEDAY")
                 (tags-todo "+@errands/!-SOMEDAY"))
               "Usual list of contexts.")
@@ -306,7 +343,7 @@ DEF-FLAG   is t when a double ++ or -- indicates shift relative to
                       (org-agenda-log-mode-items '(clock closed))
                       (org-agenda-clockreport-mode t)
                       (org-agenda-entry-types '())))
-                    ("w" "Waiting for" todo "WAITING")
+                    ("w" "Waiting for" todo "HOLD")
                     ("u" "Unscheduled tasks" alltodo ""
                      ((org-agenda-skip-function 'my/org-agenda-skip-scheduled)
                       (org-agenda-overriding-header "Unscheduled TODO entries: ")))
@@ -319,7 +356,7 @@ DEF-FLAG   is t when a double ++ or -- indicates shift relative to
                       (org-agenda-sorting-strategy '(priority-down tag-up category-keep effort-down))))
                     ("p" tags "+PROJECT"
                      ((org-agenda-sorting-strategy '(priority-down tag-up category-keep effort-down))) )
-                    ("S" tags-todo "TODO=\"STARTED\"")
+                    ("S" tags-todo "TODO=\"IN PROGRESS\"")
                     ("2" "List projects with tasks" my/org-agenda-projects-and-tasks
                      "+PROJECT"
                      ((my/org-agenda-limit-items 3)))))
@@ -506,9 +543,9 @@ this with to-do items than with projects or headings."
                                (my/quantified-get-hours "Work - Build" time-summary)
                                (/ (my/quantified-get-hours "Work - Build" time-summary) (* 0.01 biz-time)))
                        (format "    - *Coding* (%.1fh)\n"
-                               (my/quantified-get-hours '("Work - Build - Coding" "Work - Build - Book review")  time-summary))
-                       (format "    - *Delegation* (%.1fh)\n"
-                               (my/quantified-get-hours "Work - Build - Delegation" time-summary))
+                               (my/quantified-get-hours '("Work - Build - Coding" "Work - Build - Documentation")  time-summary))
+                       (format "    - *Writing* (%.1fh)\n"
+                               (my/quantified-get-hours "Work - Build - Writing" time-summary))
                        (format "    - *Research* (%.1fh)\n"
                                (my/quantified-get-hours "Work - Build - Research" time-summary))
                        (format "    - *Learning* (%.1fh)\n"

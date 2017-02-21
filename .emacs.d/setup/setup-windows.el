@@ -24,10 +24,10 @@
 
 ;;; Code:
 
-;; Prefer horizontal window splitting
+;; Prefer horizontal window splitting (new window on the right)
 ;; http://stackoverflow.com/questions/2081577/setting-emacs-split-to-horizontal
 (setq split-height-threshold nil)
-(setq split-width-threshold 1000)
+(setq split-width-threshold 100)
 
 ;; http://stackoverflow.com/questions/23659909/reverse-evaluation-order-of-split-height-threshold-and-split-width-threshold-in
 (defun my/split-window-sensibly (&optional window)
@@ -45,12 +45,15 @@
              ;; If WINDOW is the only window on its frame and is not the
              ;; minibuffer window, try to split it horizontally disregarding
              ;; the value of `split-width-threshold'.
-             (let ((split-width-threshold 0))
+             (let ((split-width-threshold 100))
                (when (window-splittable-p window t)
                  (with-selected-window window
                    (split-window-right))))))))
 
 (setq split-window-preferred-function 'my/split-window-sensibly)
+(defadvice org-agenda (around split-vertically activate)
+  (let ((split-width-threshold 100))  ; or whatever width makes sense for you
+    ad-do-it))
 
 ;; Switch between vertical and horizontal splitting
 (defun toggle-window-split ()
