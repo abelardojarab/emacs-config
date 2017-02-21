@@ -92,6 +92,39 @@
                                         (concat org-directory "/mobile.org")
                                         (concat org-directory "/refile.org")))))
 
+            ;; Make appt aware of appointments from the agenda
+            ;; http://sachachua.com/blog/2007/11/setting-up-appointment-reminders-in-org/
+            (defun org-agenda-to-appt ()
+              "Activate appointments found in `org-agenda-files'."
+              (interactive)
+              (require 'org)
+              (let* ((today (org-date-to-gregorian
+                             (time-to-days (current-time))))
+                     (files org-agenda-files) entries file)
+                (while (setq file (pop files))
+                  (setq entries (append entries (org-agenda-get-day-entries
+                                                 file today :timestamp))))
+                (setq entries (delq nil entries))
+                (mapc (lambda(x)
+                        (let* ((event (org-trim (get-text-property 1 'txt x)))
+                               (time-of-day (get-text-property 1 'time-of-day x)) tod)
+                          (when time-of-day
+                            (setq tod (number-to-string time-of-day)
+                                  tod (when (string-match
+                                             "\\([0-9]\\{1,2\\}\\)\\([0-9]\\{2\\}\\)" tod)
+                                        (concat (match-string 1 tod) ":"
+                                                (match-string 2 tod))))
+                            (if tod (appt-add tod event))))) entries)))
+            (add-hook 'org-finalize-agenda-hook
+                      (lambda ()
+                        (setq appt-message-warning-time 10        ;; warn 10 min in advance
+                              appt-display-diary nil              ;; do not display diary when (appt-activate) is called
+                              appt-display-mode-line t            ;; show in the modeline
+                              appt-display-format 'window         ;; display notification in window
+                              calendar-mark-diary-entries-flag t) ;; mark diary entries in calendar
+                        (org-agenda-to-appt)                      ;; copy all agenda schedule to appointments
+                        (appt-activate 1)))                       ;; active appt (appointment notification)
+
             ;; define todo states: set time stamps one waiting, delegated and done
             (setq org-todo-keywords
                   '((sequence "TODO(t!)" "|" "IN PROGRESS(p@/!)" "DONE(d!)" "CANCELLED(c@/!)" "HOLD(h!)")

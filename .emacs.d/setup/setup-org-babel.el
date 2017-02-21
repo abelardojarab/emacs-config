@@ -28,6 +28,9 @@
   :after org
   :config (progn
 
+	    ;; Assure you can execute org code
+	    (use-package ob-org)
+
             ;; Settings
             (setq org-src-tab-acts-natively t
                   org-src-fontify-natively t
