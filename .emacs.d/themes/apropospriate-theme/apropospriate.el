@@ -1,6 +1,6 @@
 ;;; apropospriate.el --- A light & dark theme set for Emacs.
 
-;; Copyright (C) 2015 Justin Talbott
+;; Copyright (C) 2015, 2017 Justin Talbott
 
 ;; Author: Justin Talbott <justin@waymondo.com>
 ;; URL: http://github.com/waymondo/apropospriate-theme
@@ -111,7 +111,7 @@ Set to `1.0' or nil to prevent font size manipulation."
      `(trailing-whitespace ((,class (:background ,base00+1 :foreground ,yellow))))
      `(next-error ((,class (:background ,base01))))
      `(secondary-selection ((,class (:background ,base00-1))))
-     `(header-line ((,class (:foreground ,purple :background nil))))
+     `(header-line ((,class (:foreground ,yellow-1 :background nil))))
      `(auto-dim-other-buffers-face ((,class (:background ,base00+1))))
      `(fringe ((,class (:background ,base00+1 :foreground ,base02))))
      `(linum ((,class (:inherit fringe :foreground ,base01))))
@@ -469,8 +469,8 @@ Set to `1.0' or nil to prevent font size manipulation."
      `(org-upcoming-deadline ((,class (:foreground ,orange))))
      `(org-warning ((,class (:foreground ,red))))
      `(org-block ((,class (:foreground ,orange :background ,base00+1))))
-     `(org-meta-line ((,class (:inherit font-lock-comment-face))))
-     `(org-block-end-line ((,class (:inherit font-lock-comment-face))))
+     `(org-meta-line ((,class (:inherit font-lock-comment-face :height 0.7))))
+     `(org-block-end-line ((,class (:inherit font-lock-comment-face :height 0.7))))
      `(org-block-end-line ((,class (:inherit font-lock-comment-face))))
      `(org-block-background ((,class (:background ,base00+1))))
      `(markdown-url-face ((,class (:inherit link))))
@@ -559,9 +559,9 @@ Set to `1.0' or nil to prevent font size manipulation."
      `(neo-file-link-face ((,class (:foreground ,base03))))
      `(neo-root-dir-face ((,class (:foregroud ,base02))))
      `(org-ellipsis ((,class (:inherit font-lock-keyword-face))))
-     `(org-level-1 ((,class (:inherit header-line :height 1.3))))
-     `(org-level-2 ((,class (:inherit header-line :height 1.2))))
-     `(org-level-3 ((,class (:inherit header-line :height 1.1))))
+     `(org-level-1 ((,class (:inherit header-line :weight bold :height 1.1))))
+     `(org-level-2 ((,class (:inherit header-line :weight bold :height 1.0))))
+     `(org-level-3 ((,class (:inherit header-line))))
      `(org-level-4 ((,class (:inherit header-line))))
      `(org-level-5 ((,class (:inherit header-line))))
      `(org-level-6 ((,class (:inherit header-line))))
