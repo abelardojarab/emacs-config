@@ -106,23 +106,19 @@
 ;; minor-mode integrating the CMake build process
 (use-package cmake-project
   :defer t
+  :after cmake-ide
   :commands cmake-project-mode
   :if (executable-find "cmake")
   :load-path (lambda () (expand-file-name "cmake-project/" user-emacs-directory))
   :diminish cmake-project-mode
-  :init (progn
-          (defun cmake-project-hook ()
-            (when (cmake-ide--locate-cmakelists)
-              (if (not (file-exists-p cmake-project-default-build-dir-name))
-                  (make-directory cmake-project-default-build-dir-name) t)
-              (cmake-project-mode)))
-          (add-hook 'c-mode-common-hook 'cmake-project-hook))
+  :init (add-hook 'c-mode-common-hook 'cmake-project-mode)
   :config (progn
-            (if (cmake-ide--locate-cmakelists)
-                (setq-default cmake-project-build-directory (concat
-                                                             (cmake-project-find-root-directory)
-                                                             "cmake_build_dir/"))
-              (setq cmake-project-default-build-dir-name "cmake_build_dir/"))))
+            (when (cmake-ide--locate-cmakelists)
+	      (setq-default cmake-project-build-directory cmake-ide-build-dir)
+              (setq cmake-project-default-build-dir-name "cmake_build_dir/"))
+
+	    (if (not (file-exists-p cmake-project-build-directory))
+		(make-directory cmake-project-build-directory) t)))
 
 ;; EDE project managment, slows down Emacs
 (use-package ede

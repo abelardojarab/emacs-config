@@ -30,14 +30,12 @@
           (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
           (add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
           (add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)
-          (add-hook 'c-mode-hook 'turn-on-eldoc-mode)
-          (add-hook 'c++-mode-hook 'turn-on-eldoc-mode)
+          (add-hook 'c-mode-common-hook 'turn-on-eldoc-mode)
 
 	  ;; Use gtags to show documentation
 	  (if (executable-find "global")
 	      (add-hook 'c-mode-common-hook
-			(lambda ()
-			  (setq-local eldoc-documentation-function #'ggtags-eldoc-function))))))
+			(lambda () (setq-local eldoc-documentation-function #'ggtags-eldoc-function))))))
 
 (provide 'setup-eldoc)
 ;;; setup-eldoc.el ends here

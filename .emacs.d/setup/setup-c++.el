@@ -134,9 +134,7 @@
   :diminish irony-mode
   :load-path (lambda () (expand-file-name "irony-mode/" user-emacs-directory))
   :after (ggtags eldoc function-args company)
-  :init (progn
-          (add-hook 'c++-mode-hook 'irony-mode)
-          (add-hook 'c-mode-hook 'irony-mode))
+  :init (add-hook 'c-mode-common-hook 'irony-mode)
   :config (progn
             (if (file-exists-p "/usr/local/bin/irony-server")
                 (setq irony-server-install-prefix "/usr/local/"))
