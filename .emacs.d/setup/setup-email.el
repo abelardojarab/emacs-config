@@ -1,6 +1,6 @@
 ;;; setup-email.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016  Abelardo Jara-Berrocal
+;; Copyright (C) 2016, 2017  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojara@ubuntu-MacBookPro>
 ;; Keywords:
@@ -24,6 +24,10 @@
 
 ;;; Code:
 
+;; Define user email
+(defvar my/user-email  "abelardotomasjb@gmail.com" "User email")
+(defvar my/user-domain "abelardojarab.dyndns.org"  "User domain")
+
 ;; Wanderlust
 (use-package wl
   :defer t
@@ -33,19 +37,66 @@
           (add-to-list 'load-path (expand-file-name "semi" user-emacs-directory)))
   :commands (wl wl-draft wl-other-frame)
   :load-path (lambda () (expand-file-name "wanderlust/wl/" user-emacs-directory))
-  :config (let ((wl-root-dir "~/.emacs.cache/wanderlust/"))
+  :config (let ()
+
+            ;; Location for custom scripts
+            (setq wl-root-dir "~/.emacs.cache/wanderlust/")
 
             ;; Assure wanderlust directory exists
             (if (not (file-exists-p "~/.emacs.cache/wanderlust"))
                 (make-directory "~/.emacs.cache/wanderlust") t)
 
+            ;; General settings
+            (setq elmo-maildir-folder-path "~/.mbsync"          ;; where i store my mail
+
+                  wl-stay-folder-window t                       ;; show the folder pane (left)
+                  wl-folder-window-width 25                     ;; toggle on/off with 'i'
+
+                  ;; Domains
+                  wl-local-domain my/user-domain
+                  wl-message-id-domain my/user-domain
+
+                  ;; From entry
+                  wl-from my/user-email                         ;; my From:
+
+                  ;; note: all below are dirs (Maildirs) under elmo-maildir-folder-path
+                  ;; the '.'-prefix is for marking them as maildirs
+                  wl-fcc "[Gmail].Sent Mail"           ;; sent msgs go to the "sent"-folder
+                  wl-fcc-force-as-read t               ;; mark sent messages as read
+                  wl-default-folder "INBOX"            ;; my main inbox
+                  wl-sent-folder "[Gmail].Sent Mail"   ;; sent emails
+                  wl-draft-folder "[Gmail].Drafts"     ;; store drafts in 'postponed'
+                  wl-trash-folder "[Gmail].Bin"        ;; put trash in 'trash'
+                  wl-spam-folder "[Gmail].Sent Mail"              ;; ...spam as well
+                  wl-queue-folder "Queue"             ;; we don't use this
+
+                  ;; check this folder periodically, and update modeline
+                  wl-biff-check-folder-list '("TODO")
+
+                  ;; check every 180 seconds
+                  ;; (default: wl-biff-check-interval)
+
+                  ;; hide many fields from message buffers
+                  wl-message-ignored-field-list '("^.*:")
+                  wl-message-visible-field-list
+                  '("^\\(To\\|Cc\\):"
+                    "^Subject:"
+                    "^\\(From\\|Reply-To\\):"
+                    "^Organization:"
+                    "^Message-Id:"
+                    "^\\(Posted\\|Date\\):")
+                  wl-message-sort-field-list
+                  '("^From"
+                    "^Organization:"
+                    "^X-Attribution:"
+                    "^Subject"
+                    "^Date"
+                    "^To"
+                    "^Cc"))
+
             ;; File locations
             (setq wl-init-file (concat wl-root-dir "wl.el")
                   wl-folders-file (concat wl-root-dir "folders"))
-
-            ;; Default look
-            (setq wl-message-visible-field-list '("^To" "^Subject" "^From" "^Date" "^Cc"))
-            (setq wl-message-ignored-field-list '("^"))
 
             ;; Mime support
             (use-package mime-w3m)
@@ -53,42 +104,66 @@
             (setq wl-draft-reply-buffer-style 'full)
             (setq wl-summary-toggle-mime "mime")
 
-            ;; IMAP
-            (setq elmo-imap4-default-authenticate-type 'clear)
-            (setq elmo-imap4-default-server "imap.gmail.com")
-            ;; (setq elmo-imap4-default-user "username@gmail.com")
-            (setq elmo-imap4-default-port '993)
-            (setq elmo-imap4-default-stream-type 'ssl)
-            (setq elmo-imap4-use-modified-utf7 t)
-
-            ;; SMTP
-            (setq wl-smtp-connection-type 'starttls)
-            (setq wl-smtp-posting-port 587)
-            (setq wl-smtp-authenticate-type "plain")
-            ;; (setq wl-smtp-posting-user "username")
-            (setq wl-smtp-posting-server "smtp.gmail.com")
-            (setq wl-local-domain "gmail.com")
-
-            ;; Folders
-            (setq wl-default-folder "%Inbox")
-            (setq wl-default-spec "%")
-            (setq wl-draft-folder "%[Gmail]/Drafts") ;; Gmail IMAP
-            (setq wl-trash-folder "%[Gmail]/Trash")
-            (setq wl-folder-check-async t)
-
             ;; Look in zip files as if they are folders
             (setq elmo-archive-treat-file t)
 
-            ;; Expiration policies
-            (setq wl-expire-alist
-                  '(("^\\+trash$"   (date 14) remove) ;; delete
-                    ("^\\+tmp$"     (date 7) trash) ;; re-file to wl-trash-folder
-                    ("^\\%inbox"    (date 30) wl-expire-archive-date) ;; archive by year and month (numbers discarded)
-                    ))
+            ;; SMTP
+            ;; (setq wl-smtp-connection-type 'starttls)
+            ;; (setq wl-smtp-posting-port 587)
+            ;; (setq wl-smtp-authenticate-type "plain")
+            ;; (setq wl-smtp-posting-user my/user-email)
+            ;; (setq wl-smtp-posting-server "smtp.gmail.com")
+            ;; (setq wl-local-domain "gmail.com")
+
+            ;; Folders
+            (setq wl-default-spec "%")
+            (setq wl-folder-check-async t)
+
+            ;; Forwarded mails should use 'Fwd:', not 'Forward:'
+            (setq wl-forward-subject-prefix "Fwd: " )
 
             ;; Show sent mail by who it was to
             (setq wl-summary-showto-folder-regexp ".*")
             (setq wl-summary-from-function 'wl-summary-default-from)
+
+            ;; from a WL-mailinglist post by David Bremner
+            ;; Invert behaviour of with and without argument replies.
+            (setq wl-draft-reply-without-argument-list
+                  '(("Reply-To" ("Reply-To") nil nil)
+                    ("Mail-Reply-To" ("Mail-Reply-To") nil nil)
+                    ("From" ("From") nil nil)))
+
+            ;; Bombard the world
+            (setq wl-draft-reply-with-argument-list
+                  '(("Followup-To" nil nil ("Followup-To"))
+                    ("Mail-Followup-To" ("Mail-Followup-To") nil ("Newsgroups"))
+                    ("Reply-To" ("Reply-To") ("To" "Cc" "From") ("Newsgroups"))
+                    ("From" ("From") ("To" "Cc") ("Newsgroups"))))
+
+            ;; suggested by Masaru Nomiya on the WL mailing list
+            (defun my/wl-draft-subject-check ()
+              "check whether the message has a subject before sending"
+              (if (and (< (length (std11-field-body "Subject")) 1)
+                       (null (y-or-n-p "No subject! Send current draft?")))
+                  (error "Abort.")))
+
+            ;; It's not uncommon to forget to add a subject or an attachment when you send a mail
+            ;; note, this check could cause some false positives; anyway, better
+            ;; safe than sorry...
+            (defun my/wl-draft-attachment-check ()
+              "if attachment is mention but none included, warn the the user"
+              (save-excursion
+                (goto-char 0)
+                (unless ;; don't we have an attachment?
+
+                    (re-search-forward "^Content-Disposition: attachment" nil t)
+                  (when ;; no attachment; did we mention an attachment?
+                      (re-search-forward "attach" nil t)
+                    (unless (y-or-n-p "Possibly missing an attachment. Send current draft?")
+                      (error "Abort."))))))
+
+            (add-hook 'wl-mail-send-pre-hook 'my/wl-draft-subject-check)
+            (add-hook 'wl-mail-send-pre-hook 'my/wl-draft-attachment-check)
 
             ;; Assure we use mu4e
             (if (boundp 'mail-user-agent)
@@ -111,7 +186,7 @@
   :defer t
   :if (executable-find "mu")
   :load-path (lambda () (expand-file-name "mu/mu4e/" user-emacs-directory))
-  :commands (mu4e/start mu4e)
+  :commands (my/mu4e-start mu4e)
   :init (progn
           ;; Assure .emacs.cache/mu4e exists
           (defvar my/mu4e-maildir "~/.mbsync" "Location of the mu4e/mbsync mailbox")
@@ -157,7 +232,7 @@
                   mu4e-trash-folder  "/[Gmail].Bin")
 
             (setq mu4e-maildir-shortcuts
-                  '(("/Inbox"                 . ?i)
+                  '(("/INBOX"                 . ?i)
                     ("/[Gmail].Drafts"        . ?d)
                     ("/[Gmail].Sent Mail"     . ?s)
                     ("/[Gmail].Bin"           . ?t)))
@@ -312,7 +387,7 @@
                                                                        (seq "@" (one-or-more char) ".twitter.com")
                                                                        (seq "do-not-reply" (zero-or-more char) "@"))))
             ;; Launch dedicated email frame
-            (defun mu4e/start ()
+            (defun my/mu4e-start ()
               (interactive)
               (select-frame (make-frame-command))
               (sleep-for 0.1) ;; this is a HACK

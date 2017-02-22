@@ -1,6 +1,6 @@
 ;;; setup-gnus.el ---                                -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014, 2015, 2016  Abelardo Jara-Berrocal
+;; Copyright (C) 2014, 2015, 2016, 2017  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
 ;; Keywords:
@@ -30,15 +30,14 @@
   :commands (gnus compose-mail)
   :config (progn
             (setq gnus-select-method
-                  '(nnimap "Gmail"
-                           (nnimap-address "imap.gmail.com")
-                           (nnimap-server-port 993)
-                           (nnimap-stream ssl)))
+                  '(nnmaildir "GMail"
+                              (directory "~/.mbsync")
+                              (directory-files nnheader-directory-files-safe)
+                              (get-new-mail nil)))
 
             ;; Gnus news
             (setq gnus-summary-line-format "%U%R%z%d %I%(%[ %F %] %s %)\n")
-            (setq gnus-secondary-select-methods '((nntp "news.gmane.org")
-                                                  (nntp "news.gwene.org")))
+            (setq gnus-secondary-select-methods '())
 
             ;; gnus setup
             ;; (gnus-registry-initialize)

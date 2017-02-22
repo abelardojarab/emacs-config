@@ -203,12 +203,11 @@ little more place. "
 If you have not set a compilation-window in `ecb-compile-window-height' then
 the layout contains no persistent compilation window and the other windows get a
 little more place. "
-              (ecb-set-history-buffer)
-              (ecb-split-ver 0.3)
               (ecb-set-methods-buffer)
-
               (select-window (next-window (next-window)))
-              (ecb-set-sources-buffer)
+              (ecb-set-history-buffer)
+              (ecb-split-ver 0.4)
+	      (ecb-set-sources-buffer)
               (select-window (previous-window (selected-window) 0)))
 
             (ecb-layout-define "bodil" left
@@ -256,16 +255,6 @@ more place."
                              (semantic-force-refresh)
                              (ecb-rebuild-methods-buffer)
                              (ecb-window-sync)))))
-
-            ;; Reparse after a file load
-            (add-hook 'find-file-hooks
-                      '(lambda()
-                         (progn
-                           ;; this is to get the methods buffer to refresh correctly.
-                           ;; semantic idle mode refresh doesn't seem to work all that well.
-                           (semantic-force-refresh)
-                           (ecb-rebuild-methods-buffer)
-                           (ecb-window-sync))))
 
             ;; Speedbar
             (use-package sr-speedbar

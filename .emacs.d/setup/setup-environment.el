@@ -218,6 +218,9 @@
 (if (display-graphic-p)
     (tooltip-mode t))
 
+;; http://emacs.stackexchange.com/questions/21330/query-replace-read-to-command-attempted-to-use-minibuffer-while-in-minibuffer
+(setq enable-recursive-minibuffers t)
+
 ;; Bell instead of annoying beep
 (setq visible-bell t)
 
