@@ -24,24 +24,50 @@
 
 ;;; Code:
 
+;; Define user email
+(defvar my/user-email  "abelardotomasjb@gmail.com" "User email")
+(defvar my/user-domain "abelardojarab.dyndns.org"  "User domain")
+
 ;; Gnus
 (use-package gnus
   :defer t
   :commands (gnus compose-mail)
   :config (progn
-            (setq gnus-select-method
-                  '(nnmaildir "GMail"
-                              (directory "~/.mbsync")
-                              (directory-files nnheader-directory-files-safe)
-                              (get-new-mail nil)))
+            ;; notmuch search
+            (setq notmuch-message-headers '("Subject" "To" "Cc" "Date" "Reply-To"))
+
+            ;; Setup gnus inboxes
+            (setq gnus-select-method '(nnnil ""))
+            (setq gnus-secondary-select-methods
+                  '((nntp "news.gmane.org")
+                    (nnmaildir "mail"
+                               (directory "~/.mbsync")
+                               (directory-files nnheader-directory-files-safe)
+                               (get-new-mail nil))))
 
             ;; Gnus news
             (setq gnus-summary-line-format "%U%R%z%d %I%(%[ %F %] %s %)\n")
-            (setq gnus-secondary-select-methods '())
+
+            ;; Get smarter about filtering depending on what I reed or mark.
+            ;; I use ! (tick) for marking threads as something that interests me.
+            (setq gnus-use-adaptive-scoring t
+                  gnus-treat-from-gravatar t)
+
+            (setq gnus-default-adaptive-score-alist
+                  '((gnus-unread-mark)
+                    (gnus-ticked-mark (subject 10))
+                    (gnus-killed-mark (subject -5))
+                    (gnus-catchup-mark (subject -1))))
 
             ;; gnus setup
             ;; (gnus-registry-initialize)
-            (setq gnus-treat-from-gravatar t)))
+
+            (use-package mm-decode
+              :config
+              (setq mm-discouraged-alternatives
+                    '("text/html" "text/richtext")
+                    mm-automatic-display
+                    (-difference mm-automatic-display '("text/html" "text/enriched" "text/richtext"))))))
 
 ;; apel
 (use-package apel

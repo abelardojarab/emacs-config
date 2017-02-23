@@ -69,8 +69,8 @@
 
             ;; Define cmake-ide-build-dir under ~/cmake_builds
             (defun my/cmake-enable-ide ()
-	      "Modify cmake-build-dir and make it point to ~/cmake_builds"
-	      (interactive)
+              "Modify cmake-build-dir and make it point to ~/cmake_builds"
+              (interactive)
               (let (my/cmake-build-dir my/projectile-build-dir)
                 (cmake-ide-setup)
                 (if (cmake-ide--locate-cmakelists)
@@ -78,7 +78,7 @@
                       (if (and (file-exists-p "~/cmake_builds")
                                (projectile-project-name))
                           (progn
-			    (make-local-variable 'cmake-ide-build-dir)
+                            (make-local-variable 'cmake-ide-build-dir)
 
                             ;; Define project build directory
                             (setq my/projectile-build-dir (concat
@@ -94,7 +94,7 @@
                                                       (file-name-nondirectory
                                                        (directory-file-name (cmake-ide--locate-cmakelists)))
                                                       my/projectile-build-dir))
-			    (message "* cmake-ide Building directory set to: %s" my/cmake-build-dir)
+                            (message "* cmake-ide Building directory set to: %s" my/cmake-build-dir)
 
                             ;; Create cmake project directory under project directory
                             (if (not (file-exists-p my/cmake-build-dir))
@@ -106,6 +106,7 @@
 ;; minor-mode integrating the CMake build process
 (use-package cmake-project
   :defer t
+  :disabled t
   :after cmake-ide
   :commands cmake-project-mode
   :if (executable-find "cmake")
@@ -114,11 +115,11 @@
   :init (add-hook 'c-mode-common-hook 'cmake-project-mode)
   :config (progn
             (when (cmake-ide--locate-cmakelists)
-	      (setq-default cmake-project-build-directory cmake-ide-build-dir)
+              (setq-default cmake-project-build-directory cmake-ide-build-dir)
               (setq cmake-project-default-build-dir-name "cmake_build_dir/"))
 
-	    (if (not (file-exists-p cmake-project-build-directory))
-		(make-directory cmake-project-build-directory) t)))
+            (if (not (file-exists-p cmake-project-build-directory))
+                (make-directory cmake-project-build-directory) t)))
 
 ;; EDE project managment, slows down Emacs
 (use-package ede

@@ -24,10 +24,6 @@
 
 ;;; Code:
 
-;; Define user email
-(defvar my/user-email  "abelardotomasjb@gmail.com" "User email")
-(defvar my/user-domain "abelardojarab.dyndns.org"  "User domain")
-
 ;; Wanderlust
 (use-package wl
   :defer t
@@ -47,34 +43,40 @@
                 (make-directory "~/.emacs.cache/wanderlust") t)
 
             ;; General settings
-            (setq elmo-maildir-folder-path "~/.mbsync"          ;; where i store my mail
-
-                  wl-stay-folder-window t                       ;; show the folder pane (left)
-                  wl-folder-window-width 25                     ;; toggle on/off with 'i'
+            (setq elmo-maildir-folder-path "~/.mbsync"  ;; where i store my mail
+                  wl-stay-folder-window t               ;; show the folder pane (left)
+                  wl-folder-window-width 25             ;; toggle on/off with 'i'
 
                   ;; Domains
                   wl-local-domain my/user-domain
                   wl-message-id-domain my/user-domain
 
                   ;; From entry
-                  wl-from my/user-email                         ;; my From:
+                  wl-from my/user-email
 
                   ;; note: all below are dirs (Maildirs) under elmo-maildir-folder-path
                   ;; the '.'-prefix is for marking them as maildirs
-                  wl-fcc "[Gmail].Sent Mail"           ;; sent msgs go to the "sent"-folder
-                  wl-fcc-force-as-read t               ;; mark sent messages as read
-                  wl-default-folder "INBOX"            ;; my main inbox
-                  wl-sent-folder "[Gmail].Sent Mail"   ;; sent emails
-                  wl-draft-folder "[Gmail].Drafts"     ;; store drafts in 'postponed'
-                  wl-trash-folder "[Gmail].Bin"        ;; put trash in 'trash'
-                  wl-spam-folder "[Gmail].Sent Mail"              ;; ...spam as well
-                  wl-queue-folder "Queue"             ;; we don't use this
+                  wl-fcc ".[Gmail].Sent Mail"             ;; sent msgs go to the "sent"-folder
+                  wl-fcc-force-as-read t                  ; mark sent messages as read
+                  wl-default-folder ".INBOX"              ;; my main inbox
+                  wl-sent-folder ".[Gmail].Sent Mail"     ;; sent emails
+                  wl-draft-folder ".[Gmail].Drafts"       ;; store drafts in 'postponed'
+                  wl-trash-folder ".[Gmail].Bin"          ;; put trash in 'trash'
+                  wl-spam-folder ".[Gmail].Bin"
+                  wl-queue-folder ".Queue"                 ;; we don't use this
 
-                  ;; check this folder periodically, and update modeline
-                  wl-biff-check-folder-list '("TODO")
+                  wl-draft-reply-buffer-style 'full
+                  wl-summary-toggle-mime "mime"
 
-                  ;; check every 180 seconds
-                  ;; (default: wl-biff-check-interval)
+                  ;; Folders
+                  wl-folder-check-async t
+
+                  ;; Forwarded mails should use 'Fwd:', not 'Forward:'
+                  wl-forward-subject-prefix "Fwd: "
+
+                  ;; Show sent mail by who it was to
+                  wl-summary-showto-folder-regexp ".*"
+                  wl-summary-from-function 'wl-summary-default-from
 
                   ;; hide many fields from message buffers
                   wl-message-ignored-field-list '("^.*:")
@@ -99,32 +101,11 @@
                   wl-folders-file (concat wl-root-dir "folders"))
 
             ;; Mime support
-            (use-package mime-w3m)
-            (setq mime-edit-split-message nil)
-            (setq wl-draft-reply-buffer-style 'full)
-            (setq wl-summary-toggle-mime "mime")
+            (use-package mime-w3m
+              :config (setq mime-edit-split-message nil))
 
             ;; Look in zip files as if they are folders
             (setq elmo-archive-treat-file t)
-
-            ;; SMTP
-            ;; (setq wl-smtp-connection-type 'starttls)
-            ;; (setq wl-smtp-posting-port 587)
-            ;; (setq wl-smtp-authenticate-type "plain")
-            ;; (setq wl-smtp-posting-user my/user-email)
-            ;; (setq wl-smtp-posting-server "smtp.gmail.com")
-            ;; (setq wl-local-domain "gmail.com")
-
-            ;; Folders
-            (setq wl-default-spec "%")
-            (setq wl-folder-check-async t)
-
-            ;; Forwarded mails should use 'Fwd:', not 'Forward:'
-            (setq wl-forward-subject-prefix "Fwd: " )
-
-            ;; Show sent mail by who it was to
-            (setq wl-summary-showto-folder-regexp ".*")
-            (setq wl-summary-from-function 'wl-summary-default-from)
 
             ;; from a WL-mailinglist post by David Bremner
             ;; Invert behaviour of with and without argument replies.
