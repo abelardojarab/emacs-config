@@ -1,6 +1,6 @@
 ;;; setup-cedet.el ---
 
-;; Copyright (C) 2014, 2015, 2016  Abelardo Jara-Berrocal
+;; Copyright (C) 2014, 2015, 2016, 2017  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
 ;; Keywords:
@@ -73,11 +73,11 @@ Exit the save between databases if there is user input."
                   (semantic-safe "Auto-DB Save: %S"
                     ;; FIXME: Use `while-no-input'?
                     (save-mark-and-excursion ;; <-- added line
-                      (semantic-exit-on-input 'semanticdb-idle-save
-                        (mapc (lambda (db)
-                                (semantic-throw-on-input 'semanticdb-idle-save)
-                                (semanticdb-save-db db t))
-                              semanticdb-database-list))))
+		     (semantic-exit-on-input 'semanticdb-idle-save
+		       (mapc (lambda (db)
+			       (semantic-throw-on-input 'semanticdb-idle-save)
+			       (semanticdb-save-db db t))
+			     semanticdb-database-list))))
                 (if (fboundp 'save-excursion)
                     (save-excursion ;; <-- added line
                       (semantic-exit-on-input 'semanticdb-idle-save
@@ -111,11 +111,9 @@ Exit the save between databases if there is user input."
      parse all source files under a root directory. Arguments:
      -- root: The full path to the root directory
      -- regex: A regular expression against which to match all files in the directory"
-              (let (
-                    ;;make sure that root has a trailing slash and is a dir
+              (let (;;make sure that root has a trailing slash and is a dir
                     (root (file-name-as-directory root))
-                    (files (directory-files root t ))
-                    )
+                    (files (directory-files root t )))
                 ;; remove current dir and parent dir from list
                 (setq files (delete (format "%s." root) files))
                 (setq files (delete (format "%s.." root) files))
@@ -125,8 +123,7 @@ Exit the save between databases if there is user input."
                       ;;if it's a file that matches the regex we seek
                       (progn (when (string-match-p regex file)
                                (save-excursion
-                                 (semanticdb-file-table-object file))
-                               ))
+                                 (semanticdb-file-table-object file))))
                     ;;else if it's a directory
                     (semantic/semantic-parse-dir file regex)))))
 
@@ -148,6 +145,32 @@ Exit the save between databases if there is user input."
 
 ;; Load contrib library
 (use-package eassist)
+
+;; EDE project managment, slows down Emacs
+(use-package ede
+  :disabled t
+  :config (progn
+            (global-ede-mode 1)
+            (ede-enable-generic-projects)
+            (setq ede-project-directories t)
+
+            ;; Default EDE directory
+            (setq-default ede-project-placeholder-cache-file "~/.emacs.cache/ede-projects.el")
+
+            ;; Redefine ede add projects to avoid errors
+            (defun ede-add-project-to-global-list (proj)
+              "Add the project PROJ to the master list of projects.
+On success, return the added project."
+              (ignore-errors
+                (when (not proj)
+                  (error "No project created to add to master list"))
+                (when (not (eieio-object-p proj))
+                  (error "Attempt to add non-object to master project list"))
+                (when (not (obj-of-class-p proj ede-project-placeholder))
+                  (error "Attempt to add a non-project to the ede projects list"))
+                (if (stringp proj)
+                    (add-to-list 'ede-projects proj)))
+              proj)))
 
 ;; Show function in mode-line
 (use-package which-func

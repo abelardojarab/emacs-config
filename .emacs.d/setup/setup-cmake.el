@@ -103,49 +103,5 @@
                             ;; Set cmake-ide-build-dir according to both top project and cmake project names
                             (setq cmake-ide-build-dir my/cmake-build-dir)))))))))
 
-;; minor-mode integrating the CMake build process
-(use-package cmake-project
-  :defer t
-  :disabled t
-  :after cmake-ide
-  :commands cmake-project-mode
-  :if (executable-find "cmake")
-  :load-path (lambda () (expand-file-name "cmake-project/" user-emacs-directory))
-  :diminish cmake-project-mode
-  :init (add-hook 'c-mode-common-hook 'cmake-project-mode)
-  :config (progn
-            (when (cmake-ide--locate-cmakelists)
-              (setq-default cmake-project-build-directory cmake-ide-build-dir)
-              (setq cmake-project-default-build-dir-name "cmake_build_dir/"))
-
-            (if (not (file-exists-p cmake-project-build-directory))
-                (make-directory cmake-project-build-directory) t)))
-
-;; EDE project managment, slows down Emacs
-(use-package ede
-  :disabled t
-  :config (progn
-            (global-ede-mode 1)
-            (ede-enable-generic-projects)
-            (setq ede-project-directories t)
-
-            ;; Default EDE directory
-            (setq-default ede-project-placeholder-cache-file "~/.emacs.cache/ede-projects.el")
-
-            ;; Redefine ede add projects to avoid errors
-            (defun ede-add-project-to-global-list (proj)
-              "Add the project PROJ to the master list of projects.
-On success, return the added project."
-              (ignore-errors
-                (when (not proj)
-                  (error "No project created to add to master list"))
-                (when (not (eieio-object-p proj))
-                  (error "Attempt to add non-object to master project list"))
-                (when (not (obj-of-class-p proj ede-project-placeholder))
-                  (error "Attempt to add a non-project to the ede projects list"))
-                (if (stringp proj)
-                    (add-to-list 'ede-projects proj)))
-              proj)))
-
 (provide 'setup-cmake)
 ;;; setup-cmake.el ends here
