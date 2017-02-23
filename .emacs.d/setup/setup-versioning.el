@@ -58,6 +58,7 @@
              magit-status
              magit-diff
              magit-log
+             magit-log-mode
              magit-commit
              magit-blame
              magit-mode
@@ -75,6 +76,9 @@
              magit-pull-popup
              magit-stage-file
              magit-unstage-file
+             magit-display-buffer
+             magit-git-wash
+             magit-insert-section
              projectile-vc
              git-commit-setup-check-buffer
              git-visit-diffs
