@@ -117,5 +117,10 @@
   :defer t
   :load-path (lambda () (expand-file-name "page-break-lines/" user-emacs-directory)))
 
+;; Simple HTTP requests
+(use-package request
+  :defer t
+  :load-path (lambda () (expand-file-name "request/" user-emacs-directory)))
+
 (provide 'setup-general)
 ;;; setup-general.el ends here

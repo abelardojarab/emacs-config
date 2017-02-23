@@ -50,6 +50,10 @@
             (setq svn-status-hide-unknown t)
             (setq svn-status-svn-file-coding-system 'utf-8)))
 
+;; git-modes
+(use-package git-modes
+  :load-path (lambda () (expand-file-name "git-modes/" user-emacs-directory)))
+
 ;; magit
 ;; be careful that with-editor-file-name-history-exclude complains
 ;; when added element is not a list
