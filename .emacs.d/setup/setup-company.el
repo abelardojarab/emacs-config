@@ -28,10 +28,6 @@
   :config (progn
             (global-company-mode)
 
-            ;; https://lists.gnu.org/archive/html/emacs-devel/2014-02/msg00067.html
-            (setq company-begin-commands '(self-insert-command
-                                           org-self-insert-command))
-
             ;; Use Emacs' built-in TAB completion hooks to trigger AC (Emacs >= 23.2)
             (setq tab-always-indent 'complete)  ;; use 'complete when auto-complete is disabled
             (add-to-list 'completion-styles 'initials t)
@@ -119,7 +115,11 @@
                                         (append '(company-irony)
                                                 (car company-backends))))))))
 
-            (setq company-idle-delay 0.1
+            (setq company-begin-commands '(self-insert-command
+					   org-self-insert-command
+					   c-electric-lt-gt c-electric-colon
+					   completion-separator-self-insert-command)
+		  company-idle-delay 0.2
                   company-selection-wrap-around t
                   company-minimum-prefix-length 2
                   company-show-numbers t
@@ -134,7 +134,47 @@
             (define-key company-active-map (kbd "C-p") 'company-select-previous)
             (define-key company-active-map (kbd "TAB") 'company-complete-selection)
             (define-key company-active-map (kbd "<tab>") 'company-complete-selection)
-            (define-key company-active-map (kbd "RET") 'company-complete-selection)))
+            (define-key company-active-map (kbd "RET") 'company-complete-selection)
+
+	    ;; Enable company in minibufer
+	    ;; https://gist.github.com/Bad-ptr/7787596
+	    (defun company-elisp-minibuffer (command &optional arg &rest ignored)
+	      "`company-mode' completion back-end for Emacs Lisp in the minibuffer."
+	      (interactive (list 'interactive))
+	      (case command
+		('prefix (and (minibufferp)
+			      (case company-minibuffer-mode
+				('execute-extended-command (company-grab-symbol))
+				(t (company-capf `prefix)))))
+		('candidates
+		 (case company-minibuffer-mode
+		   ('execute-extended-command (all-completions arg obarray 'commandp))
+		   (t nil)))))
+
+	    (defun minibuffer-company ()
+	      (unless company-mode
+		(when (and global-company-mode (or (eq this-command #'execute-extended-command)
+						   (eq this-command #'eval-expression)))
+
+		  (setq-local company-minibuffer-mode this-command)
+		  (setq-local completion-at-point-functions
+			      (list (if (fboundp 'elisp-completion-at-point)
+					#'elisp-completion-at-point
+				      #'lisp-completion-at-point) t))
+
+		  (setq-local company-show-numbers nil)
+		  (setq-local company-backends '((company-elisp-minibuffer company-capf)))
+		  (setq-local company-tooltip-limit 8)
+		  (setq-local company-col-offset 1)
+		  (setq-local company-row-offset 1)
+		  (setq-local company-frontends '(company-pseudo-tooltip-unless-just-one-frontend
+						  company-preview-if-just-one-frontend))
+
+		  (company-mode 1)
+		  (when (eq this-command #'execute-extended-command)
+		    (company-complete)))))
+
+	    (add-hook 'minibuffer-setup-hook #'minibuffer-company)))
 
 ;; Documentation popups for Company
 (use-package company-quickhelp

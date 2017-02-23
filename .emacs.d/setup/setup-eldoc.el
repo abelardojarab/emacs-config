@@ -32,6 +32,9 @@
           (add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)
           (add-hook 'c-mode-common-hook 'turn-on-eldoc-mode)
 
+	  ;; http://emacsredux.com/blog/2016/03/02/pimp-my-minibuffer/
+	  (add-hook 'eval-expression-minibuffer-setup-hook #'eldoc-mode)
+
 	  ;; Use gtags to show documentation
 	  (if (executable-find "global")
 	      (add-hook 'c-mode-common-hook
