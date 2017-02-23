@@ -140,6 +140,7 @@
   (if (find-font (font-spec :name "Symbola"))
       (set-fontset-font t nil "Symbola")))
 
+
 ;; Fontify frame only for graphical mode
 (when (display-graphic-p)
 
