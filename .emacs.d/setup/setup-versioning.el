@@ -497,5 +497,11 @@ branch."
 (use-package ibuffer-vc
   :load-path (lambda () (expand-file-name "ibuffer-vc/" user-emacs-directory)))
 
+;; highlight regions according to age
+(use-package smeargle
+  :if (executable-find "git")
+  :commands (smeargle smeargle-commits smeargle-clear)
+  :load-path (lambda () (expand-file-name "smeargle/" user-emacs-directory)))
+
 (provide 'setup-versioning)
 ;;; setup-versioning.el ends here

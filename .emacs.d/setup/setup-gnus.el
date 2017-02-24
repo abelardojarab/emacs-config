@@ -41,7 +41,7 @@
             (setq gnus-secondary-select-methods
                   '((nntp "news.gmane.org")
                     (nnmaildir "mail"
-                               (directory "~/.mbsync")
+                               (directory "~/Maildir")
                                (directory-files nnheader-directory-files-safe)
                                (get-new-mail nil))))
 

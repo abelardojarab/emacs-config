@@ -293,8 +293,10 @@
   :if (executable-find "git")
   :after (helm magit))
 
-;; helm company
+;; helm gitignore generation
 (use-package helm-gitignore
+  :defer t
+  :commands helm-gitignore
   :after (helm git-modes request)
   :load-path (lambda () (expand-file-name "helm-gitignore/" user-emacs-directory)))
 

@@ -43,7 +43,7 @@
                 (make-directory "~/.emacs.cache/wanderlust") t)
 
             ;; General settings
-            (setq elmo-maildir-folder-path "~/.mbsync"  ;; where i store my mail
+            (setq elmo-maildir-folder-path "~/Maildir"  ;; where i store my mail
                   wl-stay-folder-window t               ;; show the folder pane (left)
                   wl-folder-window-width 25             ;; toggle on/off with 'i'
 
@@ -170,7 +170,7 @@
   :commands (my/mu4e-start mu4e)
   :init (progn
           ;; Assure .emacs.cache/mu4e exists
-          (defvar my/mu4e-maildir "~/.mbsync" "Location of the mu4e/mbsync mailbox")
+          (defvar my/mu4e-maildir "~/Maildir" "Location of the mu4e/mbsync mailbox")
           (if (not (file-exists-p my/mu4e-maildir))
               (make-directory my/mu4e-maildir) t))
   :config (progn
