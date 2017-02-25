@@ -25,6 +25,7 @@
 ;;; Code:
 
 (use-package js2-mode
+  :defer nil ;; do not defer, as other modes depend on it
   :load-path (lambda () (expand-file-name "js2-mode/" user-emacs-directory))
   :init (progn
           ;; Setup node.js path
@@ -40,6 +41,7 @@
                                     (if local " " "-g")
                                     (if module module "tern"))))))
   :mode ("\\.js\\'" . js2-mode)
+  :commands (js2-mode js2-minor-mode)
   :config (progn
             (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
             (add-to-list 'interpreter-mode-alist '("node" . js2-mode))
@@ -134,6 +136,7 @@
 (use-package json-mode
   :mode "\\.json$"
   :commands json-mode
+  :after js2-mode
   :load-path (lambda () (expand-file-name "json-mode/" user-emacs-directory))
   :config (progn
             (add-hook 'json-mode-hook 'js2-minor-mode)
@@ -141,6 +144,7 @@
 
 ;; json-snatcher
 (use-package json-snatcher
+  :after js2-mode
   :bind (:map js2-minor-mode-map
               ("C-c C-g" . jsons-print-path))
   :config (bind-key "C-c C-g" 'jsons-print-path js2-mode-map)
