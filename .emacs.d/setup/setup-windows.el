@@ -119,6 +119,9 @@ place the new frame at the right side of the current frame."
   (interactive)
   (fit-largest-display 'right))
 
+;; Treat all windows as same
+(setq same-window-regexps '("."))
+
 ;; Prefer horizontal window splitting (new window on the right)
 ;; http://stackoverflow.com/questions/2081577/setting-emacs-split-to-horizontal
 (setq split-height-threshold nil)
