@@ -44,13 +44,6 @@
             (add-hook 'python-mode-hook
                       (define-key python-mode-map (kbd "TAB") 'py-indent-line))
 
-            ;; Python configuration
-            (add-hook 'python-mode-hook 'autopair-mode)
-
-            ;; When using auto-complete
-            (if (featurep 'auto-complete)
-                (add-hook 'python-mode-hook 'auto-complete-mode))
-
             ;; Python hook
             (add-hook 'python-mode-hook
                       (function (lambda ()

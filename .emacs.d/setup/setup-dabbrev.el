@@ -1,6 +1,6 @@
 ;;; setup-dabbrev.el ---                             -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016  Abelardo Jara-Berrocal
+;; Copyright (C) 2016, 2017  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
 ;; Keywords:
@@ -33,16 +33,12 @@
               (quietly-read-abbrev-file))
           (add-hook 'kill-emacs-hook
                     'write-abbrev-file))
-
   :config (progn
             ;; Activate template autocompletion
             (abbrev-mode t)
             (setq save-abbrevs 'silently)
             (setq-default abbrev-mode t)
-            (dolist (hook '(prog-mode-hook
-                            markdown-mode-hook
-                            org-mode-hook
-                            text-mode-hook))
+            (dolist (hook my/abbrev-modes)
               (add-hook hook (lambda () (abbrev-mode 1))))))
 
 (provide 'setup-dabbrev)

@@ -63,12 +63,9 @@
 (use-package subword
   :defer t
   :commands subword-mode
-  :init (progn (mapc (lambda (mode)
-                       (add-hook mode 'subword-mode))
-                     '(c-mode-common-hook
-                       python-mode-hook
-                       js2-mode-hook
-                       java-mode-hook))))
+  :init (mapc (lambda (mode)
+                (add-hook mode 'subword-mode))
+              my/subword-modes))
 
 ;; Uniquify-buffers
 (use-package uniquify

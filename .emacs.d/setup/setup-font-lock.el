@@ -85,9 +85,9 @@
   :commands rainbow-mode
   :load-path (lambda () (expand-file-name "rainbow-mode/" user-emacs-directory))
   :diminish rainbow-mode
-  :config (progn (mapc (lambda (mode)
-                         (add-hook mode 'rainbow-mode))
-                       '(prog-mode-hook text-mode-hook markdown-mode-hook org-mode-hook))))
+  :config (mapc (lambda (mode)
+                  (add-hook mode 'rainbow-mode))
+                my/rainbow-modes))
 
 (provide 'setup-font-lock)
 ;;; setup-font-lock.el ends here

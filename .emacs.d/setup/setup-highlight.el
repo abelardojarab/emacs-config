@@ -89,9 +89,9 @@ create the new one."
   :commands highlight-blocks-mode
   :load-path (lambda () (expand-file-name "highlight-blocks/" user-emacs-directory))
   :diminish highlight-blocks-mode
-  :config (progn (mapc (lambda (mode)
-                         (add-hook mode 'highlight-sexp-mode))
-                       '(prog-mode-hook))))
+  :config (mapc (lambda (mode)
+                  (add-hook mode 'highlight-sexp-mode))
+                my/highlight-blocks-modes))
 
 ;; Highlight s-exp
 (use-package highlight-sexp
@@ -99,9 +99,9 @@ create the new one."
   :commands highlight-sexp-mode
   :load-path (lambda () (expand-file-name "highlight-sexp/" user-emacs-directory))
   :diminish highlight-sexp-mode
-  :config (progn (mapc (lambda (mode)
-                         (add-hook mode 'highlight-sexp-mode))
-                       '(prog-mode-hook))))
+  :config (mapc (lambda (mode)
+                  (add-hook mode 'highlight-sexp-mode))
+                my/highlight-sexp-modes))
 
 ;; Highlight the latest changes in the buffer (like text inserted from: yank, undo, etc.) until the next command is run
 (use-package volatile-highlights

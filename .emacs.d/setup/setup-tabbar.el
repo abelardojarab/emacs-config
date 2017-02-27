@@ -72,9 +72,8 @@
   :if (display-graphic-p)
   :after (powerline tabbar mode-icons projectile)
   :load-path (lambda () (expand-file-name "tabbar-ruler/" user-emacs-directory))
-  :init (setq tabbar-ruler-global-tabbar 't) ;; If you want tabbar
+  :init (setq tabbar-ruler-global-tabbar 't)
   :config (progn
-            (global-set-key (kbd "C-c C-t") 'tabbar-ruler-move)
 
             ;; https://github.com/mattfidler/tabbar-ruler.el/issues/10
             (setq tabbar-ruler-movement-timer-delay 1000000)
@@ -102,32 +101,16 @@
                ((car delete-these)
                 (if (member (car delete-these) from-this-list)
                     (my/delete-these (cdr delete-these) (delete (car delete-these)
-                                                                 from-this-list))
+                                                                from-this-list))
                   (my/delete-these (cdr delete-these) from-this-list)))
                (t from-this-list)))
-
-            ;; this is the list of avoided buffers
-            (defvar my/hated-buffers
-              '("*Compile-Log*"))
-            (add-to-list 'my/hated-buffers "^ ")
-            (add-to-list 'my/hated-buffers "*Messages*")
-            (add-to-list 'my/hated-buffers "*Completions*")
-            (add-to-list 'my/hated-buffers "*scratch*")
-            (add-to-list 'my/hated-buffers "*Python*")
-            (add-to-list 'my/hated-buffers "*GNU Emacs*")
-            (add-to-list 'my/hated-buffers "*compilation*")
-            (add-to-list 'my/hated-buffers "*cmake*")
-            (add-to-list 'my/hated-buffers "*etags tmp*")
-            (add-to-list 'my/hated-buffers "TAGS")
-            (add-to-list 'my/hated-buffers "*ECB")
-            (add-to-list 'my/hated-buffers "*Buffer")
 
             ;; might as well use this for both
             (defun my/hated-buffers ()
               "List of buffers I never want to see, converted from names to buffers."
               (delete nil
                       (append
-                       (mapcar 'get-buffer my/hated-buffers)
+                       (mapcar 'get-buffer my/ignored-buffers)
                        (mapcar (lambda (this-buffer)
                                  (if (string-match "^ " (buffer-name this-buffer))
                                      this-buffer))
@@ -139,7 +122,7 @@
               (unless n
                 (setq n 1))
               (let ((my/buffer-list (my/delete-these (my/hated-buffers)
-                                                      (buffer-list (selected-frame)))))
+                                                     (buffer-list (selected-frame)))))
                 (switch-to-buffer
                  (if (< n 0)
                      (nth (+ (length my/buffer-list) n)

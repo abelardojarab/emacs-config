@@ -1,6 +1,6 @@
-;;; setup-flycheck.el ---
+;;; setup-flycheck.el ---                           -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016  Abelardo Jara-Berrocal
+;; Copyright (C) 2016, 2017  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
 ;; Keywords:
@@ -40,8 +40,7 @@
             ;; Enable flycheck for set of modes
             (mapc (lambda (mode)
                     (add-hook mode (lambda () (flycheck-mode t))))
-                  '(prog-mode-hook
-                    ess-mode-hook))
+                  my/flycheck-modes)
 
             ;; disable flycheck during idle time, if enabled
             (delete 'idle-change flycheck-check-syntax-automatically)
@@ -104,8 +103,7 @@
 (use-package flycheck-tip
   :after flycheck
   :load-path (lambda () (expand-file-name "flycheck-tip/" user-emacs-directory))
-  :config (progn
-            (setq flycheck-tip-avoid-show-func nil)))
+  :config (setq flycheck-tip-avoid-show-func nil))
 
 ;; Another tooltip using pos-tip
 (use-package flycheck-pos-tip
@@ -113,8 +111,7 @@
   :after flycheck
   :commands flycheck-pos-tip-mode
   :load-path (lambda () (expand-file-name "flycheck-pos-tip/" user-emacs-directory))
-  :config (progn
-            (add-hook 'prog-mode-hook (lambda () (flycheck-pos-tip-mode)))))
+  :config (add-hook 'flycheck-mode-hook (lambda () (flycheck-pos-tip-mode t))))
 
 (provide 'setup-flycheck)
 ;;; setup-flycheck.el ends here

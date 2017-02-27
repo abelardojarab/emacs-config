@@ -31,11 +31,7 @@
             (set-default 'imenu-auto-rescan t)
             (mapc (lambda (mode)
                     (add-hook mode 'imenu-add-menubar-index))
-                  '(c-mode-common-hook
-                    python-mode-hook
-                    reftex-mode-hook
-                    reftex-load-hook
-                    org-mode-hook))
+                  my/imenu-anywhere-modes)
             (setq imenu-create-index-function
                   (lambda ()
                     (let ((end))
@@ -48,9 +44,9 @@
 
             ;; Find definitions in current buffer using gtags
             (if (executable-find "global")
-		(add-hook 'c-mode-common-hook (lambda ()
-						(make-local-variable 'imenu-create-index-function)
-						(setq imenu-create-index-function #'ggtags-build-imenu-index))))))
+        (add-hook 'c-mode-common-hook (lambda ()
+                        (make-local-variable 'imenu-create-index-function)
+                        (setq imenu-create-index-function #'ggtags-build-imenu-index))))))
 
 ;; iMenu list
 (use-package imenu-list

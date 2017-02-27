@@ -121,9 +121,9 @@
   :config (progn
             (setq flyspell-issue-message-flag nil
                   flyspell-issue-welcome-flag nil)
-            (dolist (hook '(text-mode-hook org-mode-hook markdown-mode-hook))
+            (dolist (hook my/flyspell-modes)
               (add-hook hook (lambda () (flyspell-mode 1))))
-            (dolist (hook '(change-log-mode-hook log-edit-mode-hook))
+            (dolist (hook my/flyspell-modes-disabled)
               (add-hook hook (lambda () (flyspell-mode -1))))
 
             (defun flyspell-ajust-cursor-point (save cursor-location old-max)

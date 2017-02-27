@@ -111,9 +111,8 @@
                 (nconc '(word-wrap line-move-visual) desktop-locals-to-save)))
   :config (progn
             ;; Don't save Magit and Git related buffers
-            (dolist (mode '(magit-mode magit-log-mode dired-mode Info-mode fundamental-mode DocView-mode))
+            (dolist (mode my/desktop-modes-disabled)
               (add-to-list 'desktop-modes-not-to-save mode))
-            ;; (add-to-list 'desktop-files-not-to-save (rx bos "COMMIT_EDITMSG"))
 
             ;; buffer-display-time is changed when desktop is loaded
             (add-to-list 'desktop-locals-to-save 'buffer-display-time-1)

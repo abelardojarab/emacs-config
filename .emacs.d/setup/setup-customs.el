@@ -115,12 +115,6 @@
   :group 'my/customs
   :type 'list)
 
-(defcustom my/show-battery
-  nil
-  "Show the battery level"
-  :group 'my/customs
-  :type 'boolean)
-
 (defcustom my/spell-langs
   '(emacs-lisp-mode-hook
     python-mode-hook
@@ -133,7 +127,38 @@
   '(python-mode-hook
     java-mode-hook
     c-mode-common-hook)
-  "Modes where camelizing is allowed"
+  "Modes where camelizing is enabled"
+  :group 'my/customs
+  :type 'list)
+
+(defcustom my/subword-modes
+  '(c-mode-common-hook
+    python-mode-hook
+    js2-mode-hook
+    java-mode-hook)
+  "Modes where subword mode is enabled"
+  :group 'my/customs
+  :type 'list)
+
+(defcustom my/imenu-anywhere-modes
+  '(c-mode-common-hook
+    python-mode-hook
+    reftex-mode-hook
+    reftex-load-hook
+    org-mode-hook)
+  "Modes where imenu anywhere is enabled"
+  :group 'my/customs
+  :type 'list)
+
+(defcustom my/highlight-blocks-modes
+  '(prog-mode-hook)
+  "Modes where highlight blocks mode is enabled"
+  :group 'my/customs
+  :type 'list)
+
+(defcustom my/highlight-sexp-modes
+  '(prog-mode-hook)
+  "Modes where highlight sexp mode is enabled"
   :group 'my/customs
   :type 'list)
 
@@ -141,7 +166,82 @@
   '(lisp-interaction-mode-hook
     ielm-mode-hook
     emacs-lisp-mode-hook)
-  "Modes where eldoc eldoc mode is enabled"
+  "Modes where eldoc mode is enabled"
+  :group 'my/customs
+  :type 'list)
+
+(defcustom my/flycheck-modes
+  '(prog-mode-hook
+    ess-mode-hook)
+  "Modes where flycheck mode is enabled"
+  :group 'my/customs
+  :type 'list)
+
+(defcustom my/rainbow-modes
+  '(prog-mode-hook
+    text-mode-hook
+    markdown-mode-hook
+    org-mode-hook)
+  "Modes where rainbow mode is enabled"
+  :group 'my/customs
+  :type 'list)
+
+(defcustom my/abbrev-modes
+  '(prog-mode-hook
+    markdown-mode-hook
+    org-mode-hook
+    text-mode-hook)
+  "Modes where abbrev mode is enabled"
+  :group 'my/customs
+  :type 'list)
+
+(defcustom my/flyspell-modes
+  '(text-mode-hook
+    org-mode-hook
+    markdown-mode-hook)
+  "Modes where flyspell mode is enabled"
+  :group 'my/customs
+  :type 'list)
+
+(defcustom my/flyspell-modes-disabled
+  '(change-log-mode-hook
+    log-edit-mode-hook)
+  "Modes where flyspell mode is disabled"
+  :group 'my/customs
+  :type 'list)
+
+(defcustom my/hideshow-modes
+  '(prog-mode-hook)
+  "Modes where hideshow mode is enabled"
+  :group 'my/customs
+  :type 'list)
+
+(defcustom my/desktop-modes-disabled
+  '(magit-mode
+    magit-log-mode
+    dired-mode
+    Info-mode
+    fundamental-mode
+    DocView-mode)
+  "Modes where desktop mode is disabled"
+  :group 'my/customs
+  :type 'list)
+
+(defcustom my/ignored-buffers
+  '("*Compile-Log*"
+    "^ "
+    "*Messages*"
+    "*Completions*"
+    "*scratch*"
+    "*Python*"
+    "*GNU Emacs*"
+    "*compilation*"
+    "*cmake*"
+    "*etags tmp*"
+    "TAGS"
+    "*ECB"
+    "*Buffer")
+  "List of buffers to be ignored on tabbar and when switching buffers"
   :group 'my/customs
   :type 'list)
 
@@ -150,6 +250,7 @@
     ('Hg . 'hg-status)
     ('Svn . 'svn-status))
   "Mapping between backend and function"
+  :group 'my/customs
   :type 'list)
 
 ;; TODO: how do we check if we can check for the existing snippets?
@@ -206,13 +307,13 @@
   :type 'boolean
   :group 'my/customs)
 
-(defcustom my/fixme-mode-hooks
+(defcustom my/fixme-modes
   '(python-mode-hook
     c-mode-common-hook
     lisp-interaction-mode-hook
     org-mode-hook
     emacs-lisp-mode-hook)
-  "Modes for which fixme-mode should be enabled"
+  "Modes for which fixme mode should be enabled"
   :type 'list
   :group 'my/customs)
 

@@ -75,13 +75,12 @@
   :commands (hideshowvis-enable toggle-fold toggle-fold-all hs-toggle-hiding hs-toggle-hiding-all)
   :diminish hs-minor-mode
   :init (progn
-          ;; enable `hs-minor-mode' at startup
-          (dolist (hook (list 'prog-mode-hook))
-            (add-hook hook (lambda () (hs-minor-mode 1))))
-
-          ;; enable 'hideshowvis-minor-mode at startup
-          (dolist (hook (list 'prog-mode-hook))
-            (add-hook hook 'hideshowvis-enable)))
+          ;; enable `hs-minor-mode' and 'hideshowvis-minor-mode
+          (dolist (hook my/hideshow-modes)
+            (add-hook hook (lambda ()
+                             (progn
+                               (hs-minor-mode 1)
+                               (hideshowvis-enable))))))
   :config (progn
 
             (defvar hs-special-modes-alist
