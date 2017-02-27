@@ -26,7 +26,7 @@
 
 ;; Gnus
 (use-package gnus
-  :defer nil
+  :defer 1
   :commands (gnus compose-mail)
   :config (progn
             ;; notmuch search

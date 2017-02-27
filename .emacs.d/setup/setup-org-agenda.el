@@ -26,7 +26,7 @@
 
 (use-package org-agenda
   :after org
-  :defer nil
+  :defer 1
   :bind (:map org-mode-map
          ("C-c i" . my/org-add-line-item-task))
   :config (progn
