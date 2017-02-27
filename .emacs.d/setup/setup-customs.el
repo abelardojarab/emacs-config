@@ -90,8 +90,7 @@
   :type 'string
   :group 'my/customs)
 
-(defcustom my/dired-git-after-desktop
-  nil
+(defcustom my/dired-git-after-desktop nil
   "Ask to open a dired buffer every time"
   :group 'my/customs
   :type 'boolean)
