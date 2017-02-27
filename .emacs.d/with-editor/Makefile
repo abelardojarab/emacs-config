@@ -56,7 +56,7 @@ pdf:  $(PKG).pdf
 %.texi: %.org
 	@printf "Generating $@\n"
 	@$(EMACS) -Q --batch $(OFLAGS) \
-	-l ox-texinfo+.el $< -f org-texinfo+export-to-texinfo
+	-l ox-texinfo+.el $< -f org-texinfo-export-to-texinfo
 	@printf "\n" >> $@
 	@sed -i -e '/^@title /a@subtitle for version $(VERSION)' $@
 	@rm -f $@~
@@ -148,4 +148,4 @@ $(PKG)-autoloads.el: $(ELS)
 	(setq default-directory (file-truename default-directory))\
 	(setq generated-autoload-file (expand-file-name \"$@\"))\
 	(setq find-file-visit-truename t)\
-	(update-directory-autoloads default-directory)))"
+	(update-directory-autoloads default-directory))"

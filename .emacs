@@ -333,7 +333,7 @@
 ;; Setup dash
 (require 'setup-dash)
 
-;; Setup versioning (optional)
+;; Setup versioning (optional; this is causing emacsclient to fail)
 (require 'setup-versioning)
 
 ;; Setup eldoc
