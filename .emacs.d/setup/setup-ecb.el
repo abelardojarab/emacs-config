@@ -48,7 +48,7 @@
                   ecb-create-layout-file "~/.emacs.cache/ecb-user-layouts.el"
                   ecb-windows-width 35
                   ecb-fix-window-size 'width
-                  ecb-layout-name "left-speedbar-right"
+                  ecb-layout-name my/ecb-layout-theme
                   ecb-history-make-buckets 'mode
                   ecb-highlight-tag-with-point-delay 180
                   ecb-kill-buffer-clears-history 'auto
@@ -207,7 +207,7 @@ little more place. "
               (select-window (next-window (next-window)))
               (ecb-set-history-buffer)
               (ecb-split-ver 0.4)
-	      (ecb-set-sources-buffer)
+          (ecb-set-sources-buffer)
               (select-window (previous-window (selected-window) 0)))
 
             (ecb-layout-define "bodil" left

@@ -25,7 +25,7 @@
 ;;; Code:
 
 (defcustom my/tab-width 4
-  "Default Emacs tab width"
+  "Default tab width"
   :type 'int
   :group 'my/customs)
 
@@ -45,32 +45,32 @@
   :type 'string)
 
 (defcustom my/preferred-to-language "Spanish"
-  "Language to translate to"
+  "Preferred language to translate to ..."
   :group 'my/customs
   :type 'string)
 
 (defcustom my/preferred-from-language "English"
-  "Language to translate from"
+  "Language languate to translate from ..."
   :group 'my/customs
   :type 'string)
 
 (defcustom my/main-programming-font "Roboto Mono for Powerline"
-  "Preferred Emacs font"
+  "Preferred programming font"
   :type 'string
   :group 'my/customs)
 
 (defcustom my/main-programming-font-size "12"
-  "Preferred Emacs font size"
+  "Preferred programming font size"
   :type 'string
   :group 'my/customs)
 
 (defcustom my/main-writing-font "Meslo"
-  "Preferred Emacs font"
+  "Preferred writing font"
   :type 'string
   :group 'my/customs)
 
 (defcustom my/main-writing-font-size "13"
-  "Preferred Emacs font size"
+  "Preferred writing font size"
   :type 'string
   :group 'my/customs)
 
@@ -79,6 +79,11 @@
   "Preferred Emacs theme"
   :group 'my/customs
   :type 'list)
+
+(defcustom my/ecb-layout-theme "left-speedbar-right"
+  "Preferred ECB layout name"
+  :group 'my/customs
+  :type 'string)
 
 (defcustom my/preferred-reopen-rw-mode "sudo"
   "Preferred mode for reopen"
@@ -97,7 +102,7 @@
   :type 'boolean)
 
 (defcustom my/default-closing-char ";"
-  "default closing char, change in my/newline-force-close-alist if needed"
+  "Default closing char, change in my/newline-force-close-alist if needed"
   :group 'my/customs
   :type 'string)
 
@@ -112,7 +117,7 @@
 
 (defcustom my/show-battery
   nil
-  "show the battery level"
+  "Show the battery level"
   :group 'my/customs
   :type 'boolean)
 
@@ -158,8 +163,7 @@
   :group 'my/customs
   :type 'list)
 
-(defcustom my/whitespace-cleanup-enabled
-  nil
+(defcustom my/whitespace-cleanup-enabled nil
   "True if the whitespace cleanup should be enabled, good candidate to use as dir-local variable"
   :type 'boolean
   :group 'my/customs)
@@ -172,8 +176,7 @@
   :type 'list
   :group 'my/customs)
 
-(defcustom my/command-frequency-enabled
-  nil
+(defcustom my/command-frequency-enabled nil
   "Enable recording the command frequency"
   :type 'boolean
   :group 'my/customs)
@@ -198,8 +201,7 @@
   :type 'list
   :group 'my/customs)
 
-(defcustom my/cedet-enabled
-  t
+(defcustom my/cedet-enabled t
   "Enable cedet"
   :type 'boolean
   :group 'my/customs)
@@ -241,6 +243,15 @@
   "Seconds to wait before kill the compilation buffer"
   :type 'int
   :group 'my/customs)
+
+;; User-specific configuration file
+(setq-default custom-file "~/.emacs.cache/.custom.el")
+(when (file-exists-p custom-file)
+  (load custom-file))
+
+;; Prompt about unsaved customizations at termination time
+(add-hook 'kill-emacs-query-functions
+          'custom-prompt-customize-unsaved-options)
 
 (provide 'setup-customs)
 ;;; setup-customs.el ends here
