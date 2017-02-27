@@ -90,8 +90,7 @@
   :type 'string
   :group 'my/customs)
 
-(defcustom my/dired-git-after-desktop
-  nil
+(defcustom my/dired-git-after-desktop nil
   "Ask to open a dired buffer every time"
   :group 'my/customs
   :type 'boolean)
@@ -216,6 +215,16 @@
   :group 'my/customs
   :type 'list)
 
+(defcustom my/fixme-modes
+  '(python-mode-hook
+    c-mode-common-hook
+    lisp-interaction-mode-hook
+    org-mode-hook
+    emacs-lisp-mode-hook)
+  "Modes for which fixme mode should be enabled"
+  :type 'list
+  :group 'my/customs)
+
 (defcustom my/desktop-modes-disabled
   '(magit-mode
     magit-log-mode
@@ -269,7 +278,7 @@
   :type 'boolean
   :group 'my/customs)
 
-(defcustom my/non-whitespaces-modes
+(defcustom my/whitespaces-modes-disabled
   '(makefile-mode
     message-mode
     mail-mode)
@@ -294,26 +303,21 @@
   :type 'string
   :group 'my/customs)
 
-(defcustom my/cedet-modes
-  '(c-mode-common-hook
-    emacs-lisp-mode-hook
-    makefile-mode-hook)
-  "Modes for which cedet should be enabled"
-  :type 'list
-  :group 'my/customs)
-
 (defcustom my/cedet-enabled t
   "Enable cedet"
   :type 'boolean
   :group 'my/customs)
 
-(defcustom my/fixme-modes
-  '(python-mode-hook
-    c-mode-common-hook
-    lisp-interaction-mode-hook
-    org-mode-hook
-    emacs-lisp-mode-hook)
-  "Modes for which fixme mode should be enabled"
+(defcustom my/ecb-enabled t
+  "Enable ECB"
+  :type 'boolean
+  :group 'my/customs)
+
+(defcustom my/cedet-modes
+  '(c-mode-common-hook
+    emacs-lisp-mode-hook
+    makefile-mode-hook)
+  "Modes for which cedet should be enabled"
   :type 'list
   :group 'my/customs)
 
@@ -335,7 +339,8 @@
   :group 'my/customs)
 
 (defcustom my/anything-prune-dir
-  '(".git" ".svn")
+  '(".git"
+    ".svn")
   "Directories to skip"
   :type 'list
   :group 'my/customs)
