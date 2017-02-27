@@ -212,7 +212,6 @@ buffer."
         (t (self-insert-command (or arg 1)))))
 
 ;; Indent and unindent blocks
-(defvar my/tab-width 4 "Emacs tab width")
 (defun indent-block()
   (shift-region my/tab-width)
   (setq deactivate-mark nil))
@@ -324,7 +323,6 @@ Now it correctly stops at the beginning of the line when the pointer is at the f
   (set-selective-display (if selective-display nil 1)))
 
 ;; Xah next/previous buffer functions
-(defvar my/switch-buffer-ignore-dired t "If t, ignore dired buffer when calling `my/next-user-buffer' or `my/previous-user-buffer'")
 (setq my/switch-buffer-ignore-dired t)
 
 (defun my/next-user-buffer ()

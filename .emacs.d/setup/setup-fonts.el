@@ -24,16 +24,8 @@
 
 ;;; Code:
 
-;; Adjust font when using graphical interface
-(defvar my/main-programming-font "Consolas" "Main font")
-(defvar my/main-programming-font-size "12" "Main font size")
-(defvar my/main-writing-font "Calibri" "Main writing font")
-(defvar my/main-writing-font-size "13" "Main writing font size")
-
 ;; Use 12-pt Consolas as default font
-(when (find-font (font-spec :name "Consolas"))
-  (setq my/main-programming-font "Consolas")
-  (setq my/main-programming-font-size "12")
+(when (find-font (font-spec :name my/main-programming-font))
   (set-face-attribute 'default nil :font (concat my/main-programming-font
                                                  "-"
                                                  my/main-programming-font-size))
@@ -46,9 +38,7 @@
                                            "-"
                                            my/main-programming-font-size))))
 
-(when (find-font (font-spec :name "Calibri"))
-  (setq my/main-writing-font "Calibri")
-  (setq my/main-writing-font-size "12")
+(when (find-font (font-spec :name my/main-writing-font))
   (set-face-attribute 'variable-pitch nil
                       :font (concat my/main-writing-font
                                     "-"
@@ -56,12 +46,12 @@
                       :weight 'normal)
   (add-hook 'text-mode-hook 'variable-pitch-mode))
 
-(when (find-font (font-spec :name "Roboto Mono for Powerline"))
+
+;; Prefer user choices
+(when (find-font (font-spec :name my/main-programming-font))
 
   ;; Set fontset
-  (setq my/main-programming-font "Roboto Mono for Powerline")
-  (if (find-font (font-spec :name "Menlo"))
-      (setq my/main-writing-font "Menlo")
+  (if (not (find-font (font-spec :name my/main-writing-font)))
     (setq my/main-writing-font my/main-programming-font)))
 
 ;; Dynamic font adjusting based on monitor resolution, using Android fonts

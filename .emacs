@@ -180,6 +180,9 @@
  '(tabbar-separator ((t (:inherit tabbar-default :background "#47493e"))))
  '(tabbar-unselected ((t (:inherit tabbar-default)))))
 
+;; Setup customs
+(require 'setup-customs)
+
 ;; Setup environment
 (require 'setup-environment)
 

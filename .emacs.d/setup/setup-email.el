@@ -170,7 +170,6 @@
   :commands (my/mu4e-start mu4e)
   :init (progn
           ;; Assure .emacs.cache/mu4e exists
-          (defvar my/mu4e-maildir "~/Maildir" "Location of the mu4e/mbsync mailbox")
           (if (not (file-exists-p my/mu4e-maildir))
               (make-directory my/mu4e-maildir) t))
   :config (progn

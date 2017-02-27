@@ -24,13 +24,9 @@
 
 ;;; Code:
 
-;; Define user email
-(defvar my/user-email  "abelardotomasjb@gmail.com" "User email")
-(defvar my/user-domain "abelardojarab.dyndns.org"  "User domain")
-
 ;; Gnus
 (use-package gnus
-  :defer t
+  :defer nil
   :commands (gnus compose-mail)
   :config (progn
             ;; notmuch search
@@ -59,15 +55,11 @@
                     (gnus-killed-mark (subject -5))
                     (gnus-catchup-mark (subject -1))))
 
+
             ;; gnus setup
             ;; (gnus-registry-initialize)
 
-            (use-package mm-decode
-              :config
-              (setq mm-discouraged-alternatives
-                    '("text/html" "text/richtext")
-                    mm-automatic-display
-                    (-difference mm-automatic-display '("text/html" "text/enriched" "text/richtext"))))))
+            ))
 
 ;; apel
 (use-package apel
@@ -78,6 +70,14 @@
 (use-package message
   :config (progn
             (bind-key "C-c C-x f" #'org-footnote-action message-mode-map)
+
+            ;; decode html
+            (use-package mm-decode
+              :config
+              (setq mm-discouraged-alternatives
+                    '("text/html" "text/richtext")
+                    mm-automatic-display
+                    (-difference mm-automatic-display '("text/html" "text/enriched" "text/richtext"))))
 
             ;; Use w3m to render html
             (if (executable-find "w3m")
