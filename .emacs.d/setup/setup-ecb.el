@@ -1,4 +1,4 @@
-;;; setup-ecb.el ---
+;;; setup-ecb.el ---                       -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2016, 2017  Abelardo Jara-Berrocal
 

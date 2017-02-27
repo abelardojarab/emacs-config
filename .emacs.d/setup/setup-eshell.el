@@ -1,4 +1,5 @@
 ;;; setup-eshell.el ---                       -*- lexical-binding: t; -*-
+
 ;; Copyright (C) 2014, 2015, 2016, 2017  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
