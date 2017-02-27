@@ -94,6 +94,10 @@
  ;; Linux
  ((equal system-type 'gnu/linux)
 
+  ;; Prefer /bin/bash
+  (if (executable-find "/bin/bash")
+      (setenv "SHELL" "/bin/bash"))
+
   ;; Get back font antialiasing
   (push '(font-backend xft x) default-frame-alist)
 

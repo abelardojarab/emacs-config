@@ -26,6 +26,9 @@
 
 (use-package tramp
   :init (progn
+          ;; Create an alias
+          (defalias 'exit-tramp 'tramp-cleanup-all-connections)
+
           ;; Fix SSH agent on UNIX
           (when (not (equal system-type 'windows-nt))
             (defun find-agent ()
@@ -83,6 +86,12 @@
 (use-package eol-conversion
   :pin manual
   :config (setq inhibit-eol-conversion 't))
+
+;; helm interface for tramp
+(use-package helm-tramp
+  :defer t
+  :bind ("C-c s" . helm-tramp)
+  :load-path (lambda () (expand-file-name "helm-tramp/" user-emacs-directory)))
 
 (provide 'setup-tramp)
 ;;; setup-tramp.el ends here
