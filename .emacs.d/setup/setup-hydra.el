@@ -149,10 +149,7 @@ _q_: quit
   ("o" org-open-at-point)
   ("p" org-previous-link)
   ("s" org-store-link)
-  ("v" org-overview))
-
-            (global-set-key (kbd "C-x t") 'my/hydra-toggle-map/body))
-  )
+  ("v" org-overview))))
 
 (provide 'setup-hydra)
 ;;; setup-hydra.el ends here

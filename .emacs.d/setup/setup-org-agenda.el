@@ -26,9 +26,10 @@
 
 (use-package org-agenda
   :after org
+  :defer nil
+  :bind (:map org-mode-map
+         ("C-c i" . my/org-add-line-item-task))
   :config (progn
-            ;; Some functions are using cl-functions
-            (use-package cl)
 
             ;; Org log
             (setq org-log-done t
@@ -595,7 +596,6 @@ this with to-do items than with projects or headings."
                                          "")))
                 (org-capture nil "t")
                 (insert "TODO " task "\nSCHEDULED: <" (org-read-date) ">")))
-            (define-key org-mode-map (kbd "C-c t") 'my/org-add-line-item-task)
 
             ;; Now we put it all together
             (defun my/org-prepare-weekly-review ()

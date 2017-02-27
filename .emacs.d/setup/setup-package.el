@@ -36,6 +36,7 @@
   (require 'use-package))
 
 ;; Baseline packages
+(use-package cl)
 (use-package bind-key)
 (use-package diminish)
 (use-package let-alist)

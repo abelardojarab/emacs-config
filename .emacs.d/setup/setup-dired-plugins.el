@@ -111,6 +111,7 @@
 
 ;; neotree side bar
 (use-package neotree
+  :disabled t
   :defer t
   :commands (neotree-toggle)
   :bind (:map ctl-x-map

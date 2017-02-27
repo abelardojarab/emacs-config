@@ -1,6 +1,5 @@
-;;; setup-eshell.el ---
-
-;; Copyright (C) 2014, 2015, 2016  Abelardo Jara-Berrocal
+;;; setup-eshell.el ---                       -*- lexical-binding: t; -*-
+;; Copyright (C) 2014, 2015, 2016, 2017  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
 ;; Keywords:
@@ -27,9 +26,11 @@
 (use-package ielm
   :bind (("C-c C-z" . ielm-repl)
          :map ctl-x-map
-         ("z" . ielm-repl)
+         (("C-t" . ielm-repl)
+          ("z" . ielm-repl))
          :map ielm-map
-         ("C-c C-z" . quit-window))
+         (("C-t" . quit-window)
+          ("C-c C-z" . quit-window)))
   :config (progn
             (defun ielm-repl ()
               (interactive)
@@ -51,9 +52,19 @@
 
 (use-package eshell
   :commands (eshell eshell-vertical eshell-horizontal)
-  :bind ("C-t" . eshell)
+  :bind (("C-t" . eshell)
+         ("C-c C-t" . eshell)
+         :map ctl-x-map
+         ("t" . eshell)
+         :map eshell-mode-map
+         (("C-c C-t" . quit-window)
+         ("C-t" . quit-window)))
   :after helm
   :init  (progn
+           ;; Fix lack of eshell-mode-map
+           (if (not (boundp 'eshell-mode-map))
+               (defvar eshell-mode-map (make-sparse-keymap)))
+
            ;; First, Emacs doesn't handle less well, so use cat instead for the shell pager:
            (setenv "PAGER" "cat")
            (setq-default eshell-directory-name "~/.emacs.cache/eshell")
@@ -67,9 +78,6 @@
                  eshell-aliases-file (concat user-emacs-directory ".eshell-aliases")
                  eshell-last-dir-ring-size 512))
   :config (progn
-            ;; Fix lack of eshell-mode-map
-            (if (not (boundp 'eshell-mode-map))
-                (defvar eshell-mode-map (make-sparse-keymap)))
             (add-hook 'eshell-mode-hook '(lambda ()
                                            (define-key eshell-mode-map
                                              [remap eshell-pcomplete]

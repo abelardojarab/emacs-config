@@ -115,12 +115,12 @@
                   org-hide-leading-stars t
                   org-highlight-latex-and-related '(latex)
                   org-ellipsis " ••• "
-		                    ;; this causes problem in other modes
+                            ;; this causes problem in other modes
                   org-indent-mode nil)
 
-	    ;; Enable sub and super script only when enclosed by {}
-	    ;; Also improves readability when exponent/subscript is composed of multiple words
-	    (setq org-use-sub-superscripts nil)
+        ;; Enable sub and super script only when enclosed by {}
+        ;; Also improves readability when exponent/subscript is composed of multiple words
+        (setq org-use-sub-superscripts nil)
 
             ;; Hide the /italics/ and *bold* markers
             (setq org-hide-emphasis-markers t)
