@@ -1,4 +1,3 @@
-
 ;;; setup-versioning.el ---                               -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2016, 2017  Abelardo Jara-Berrocal
