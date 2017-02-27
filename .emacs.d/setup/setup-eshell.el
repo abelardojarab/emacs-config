@@ -204,5 +204,20 @@
   :load-path (lambda () (expand-file-name "eval-in-repl/" user-emacs-directory))
   :commands eir-eval-in-javascript)
 
+;; Emacs interaction with tmux
+(use-package emamux
+  :load-path (lambda () (expand-file-name "emamux/" user-emacs-directory))
+  :commands (emamux:send-command
+             emamux:run-command
+             emamux:run-last-command
+             emamux:zoom-runner
+             emamux:inspect-runner
+             emamux:close-runner-pane
+             emamux:close-panes
+             emamux:clear-runner-history
+             emamux:interrupt-runner
+             emamux:copy-kill-ring
+             emamux:yank-from-list-buffers))
+
 (provide 'setup-eshell)
 ;;; setup-eshell.el ends here
