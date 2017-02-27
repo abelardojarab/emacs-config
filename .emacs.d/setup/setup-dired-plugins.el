@@ -134,6 +134,7 @@
 
 ;; Sunrise Commander
 (use-package sunrise-commander
+  :disabled t
   :defer t
   :commands (sunrise sr-dired cb-sunrise-commander/dired-this-dir)
   :load-path (lambda () (expand-file-name "sunrise-commander/" user-emacs-directory))
