@@ -303,5 +303,15 @@
   :after (helm git-modes request)
   :load-path (lambda () (expand-file-name "helm-gitignore/" user-emacs-directory)))
 
+;; helm hunks
+(use-package helm-hunks
+  :defer t
+  :commands (helm-hunks
+	     helm-hunks-current-buffer
+	     helm-hunks-staged
+	     helm-hunks-staged-current-buffer)
+  :after (helm git-modes request)
+  :load-path (lambda () (expand-file-name "helm-hunks/" user-emacs-directory)))
+
 (provide 'setup-helm-plugins)
 ;;; setup-helm-plugins.el ends here
