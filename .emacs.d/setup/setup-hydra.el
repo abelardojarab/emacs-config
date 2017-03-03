@@ -28,7 +28,7 @@
   :load-path (lambda () (expand-file-name "hydra/" user-emacs-directory))
   :config (progn
 
-            (defhydra hydra-helm (:hint nil :color pink)
+            (defhydra my/hydra-helm (:hint nil :color pink)
               "
                                                                           ╭──────┐
    Navigation   Other  Sources     Mark             Do             Help   │ Helm │

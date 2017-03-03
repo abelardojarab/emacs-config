@@ -158,7 +158,7 @@
             (setq reftex-cite-cleanup-optional-args t)
 
             ;; Enable RefTeX in Org-mode to find bibliography
-            (setq reftex-default-bibliography '("~/workspace/Documents/Bibliography/biblio.bib"))
+            (setq reftex-default-bibliography (list my/bibtex-completion-bibliography))
             (defun org-mode-reftex-setup ()
               (interactive)
               (and (buffer-file-name) (file-exists-p (buffer-file-name))

@@ -86,14 +86,6 @@
 (use-package browse-kill-ring
   :load-path (lambda () (expand-file-name "browse-kill-ring/" user-emacs-directory)))
 
-;; async
-(use-package async
-  :defer t
-  :load-path (lambda () (expand-file-name "async/" user-emacs-directory))
-  :config (progn
-            (require 'dired-async)
-            (dired-async-mode 1)))
-
 ;; Unicode viewer (charmap)
 (use-package charmap
   :defer t

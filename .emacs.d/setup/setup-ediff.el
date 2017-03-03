@@ -40,12 +40,5 @@
                   ;; Ignore whitespace
                   ediff-diff-options "-w")))
 
-(use-package ediff-wind
-  :disabled t
-  :config
-  (setq-default
-   ediff-split-window-function #'split-window-horizontally
-   ediff-window-setup-function #'ediff-setup-windows-plain))
-
 (provide 'setup-ediff)
 ;;; setup-ediff.el ends here

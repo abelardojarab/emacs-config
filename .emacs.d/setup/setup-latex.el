@@ -53,7 +53,7 @@
   :mode ("\\.bib" . bibtex-mode)
   :init (progn
           (setq bibtex-completion-bibliography (list my/bibtex-completion-bibliography)
-                bibtex-completion-library-path my/bibtex-completion-path
+                bibtex-completion-library-path my/bibtex-completion-library-path
                 bibtex-completion-notes-path my/bibtex-completion-notes)
 
           (setq bibtex-align-at-equal-sign t)

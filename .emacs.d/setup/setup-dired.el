@@ -101,5 +101,10 @@
             (add-hook 'dired-mode-hook #'hl-line-mode)
             (add-hook 'dired-mode-hook #'my/dired-mode-hook)))
 
+;; async support for dired
+(use-package dired-async
+  :load-path (lambda () (expand-file-name "async/" user-emacs-directory))
+  :config (dired-async-mode 1))
+
 (provide 'setup-dired)
 ;;; setup-dired.el ends here

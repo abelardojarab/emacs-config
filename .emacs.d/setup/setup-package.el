@@ -37,12 +37,14 @@
 
 ;; Baseline packages
 (use-package cl)
+(use-package cl-lib)
 (use-package bind-key)
 (use-package diminish)
 (use-package let-alist)
 (use-package color)
 
 ;; Namespace implementation (baseline package)
+(use-package async               :defer t :load-path (lambda () (expand-file-name "async/" user-emacs-directory)))
 (use-package ctable              :defer t :load-path (lambda () (expand-file-name "ctable/" user-emacs-directory)))
 (use-package deferred            :defer t :load-path (lambda () (expand-file-name "deferred/" user-emacs-directory)))
 (use-package epc                 :defer t :load-path (lambda () (expand-file-name "epc/" user-emacs-directory)))

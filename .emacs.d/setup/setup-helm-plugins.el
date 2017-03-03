@@ -163,9 +163,10 @@
               ("[" . helm-bibtex))
   :load-path (lambda () (expand-file-name "helm-bibtex/" user-emacs-directory))
   :config (progn
-            (setq helm-bibtex-bibliography my/helm-bibtex-bibliography
-                  helm-bibtex-library-path my/helm-bibtex-path
-                  helm-bibtex-notes-path my/helm-bibtex-notes)
+
+            (setq helm-bibtex-bibliography my/bibtex-completion-bibliography
+                  helm-bibtex-library-path my/bibtex-completion-library-path
+                  helm-bibtex-notes-path my/bibtex-completion-notes)
 
             ;; open pdf with system pdf viewer (works on mac)
             (setq helm-bibtex-pdf-open-function
@@ -186,7 +187,7 @@
   :config (progn
             (setq org-ref-default-bibliography (list my/bibtex-completion-bibliography)
                   org-ref-bibliography-files (list my/bibtex-completion-bibliography)
-                  org-ref-pdf-directory my/bibtex-completion-path
+                  org-ref-pdf-directory my/bibtex-completion-library-path
                   org-ref-bibliography-notes my/bibtex-completion-notes)
 
             (setq org-ref-insert-cite-key "C-c [")
