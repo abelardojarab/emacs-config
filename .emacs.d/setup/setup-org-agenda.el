@@ -28,7 +28,7 @@
   :after org
   :defer 1
   :bind (:map org-mode-map
-         ("C-c i" . my/org-add-line-item-task))
+              ("C-c i" . my/org-add-line-item-task))
   :config (progn
 
             ;; Org log
@@ -615,19 +615,121 @@ this with to-do items than with projects or headings."
                   (my/org-summarize-focus-areas)
                   "\n"))))
 
-            ;; Define the custum capture templates
-            ;; http://cachestocaches.com/2016/9/my-workflow-org-agenda/
-            (setq org-capture-templates
-                  '(("t" "todo" entry (file org-default-notes-file)
-                     "* TODO %?\n%u\n%a\n" :clock-in t :clock-resume t)
-                    ("m" "Meeting" entry (file org-default-notes-file)
-                     "* MEETING with %? :MEETING:\n%t" :clock-in t :clock-resume t)
-                    ("d" "Diary" entry (file+datetree org-agenda-diary-file)
-                     "* %?\n%U\n" :clock-in t :clock-resume t)
-                    ("i" "Idea" entry (file org-default-notes-file)
-                     "* %? :IDEA: \n%t" :clock-in t :clock-resume t)
-                    ("n" "Next Task" entry (file+headline org-default-notes-file "Tasks")
-                     "** NEXT %? \nDEADLINE: %t")))
+            (setq org-capture-templates `(
+
+                                          ;; For notes or something regarding more work
+                                          ("t"               ;; key
+                                           "TODO"            ;; name
+                                           entry             ;; type
+                                           (file+headline ,org-agenda-todo-file "Work")  ;; target
+                                           "* TODO %^{Todo} %(org-set-tags)  :work:\n:PROPERTIES:\n:Created: %U\n:END:\n%i\n%?"  ;; template
+                                           :clock-in t
+                                           :clock-resume t
+                                           :prepend t        ;; properties
+                                           :empty-lines 1    ;; properties
+                                           :created t        ;; properties
+                                           :kill-buffer t)   ;; properties
+
+                                          ;; For taking notes on random things
+                                          ("n"               ;; key
+                                           "Note"            ;; name
+                                           entry             ;; type
+                                           (file+headline ,org-default-notes-file "Notes")  ;; target
+                                           "* %? %(org-set-tags)  :note:\n:PROPERTIES:\n:Created: %U\n:Linked: %A\n:END:\n%i"  ;; template
+                                           :prepend t        ;; properties
+                                           :empty-lines 1    ;; properties
+                                           :created t        ;; properties
+                                           :kill-buffer t)   ;; properties
+
+                                          ;; For capturing minutes of the meeting
+                                          ("m"               ;; key
+                                           "Meeting"         ;; name
+                                           entry             ;; type
+                                           (file+datetree ,org-agenda-default-file "Meeting")  ;; target
+                                           "* %^{Title} %(org-set-tags)  :meeting:\n:PROPERTIES:\n:Created: %U\n:END:\n%i\n** Agenda:\n%?\n\n** Minutes of the meeting:\n"  ;; template
+                                           :clock-in t
+                                           :clock-resume t
+                                           :prepend t        ;; properties
+                                           :empty-lines 1    ;; properties
+                                           :created t        ;; properties
+                                           :kill-buffer t)   ;; properties
+
+                                          ;; Ledger is a CLI accounting system
+                                          ("l"               ;; key
+                                           "Ledger"          ;; name
+                                           entry             ;; type
+                                           (file+datetree ,org-default-notes-file "Ledger")  ;; target
+                                           "* %^{expense} %(org-set-tags)  :accounts:\n:PROPERTIES:\n:Created: %U\n:END:\n%i
+#+NAME: %\\1-%t
+\#+BEGIN_SRC ledger :noweb yes
+%^{Date of expense (yyyy/mm/dd)} %^{'*' if cleared, else blank} %\\1
+    %^{Account name}                                $%^{Amount}
+    %?
+\#+END_SRC
+"  ;; template
+                                           :prepend t        ;; properties
+                                           :empty-lines 1    ;; properties
+                                           :created t        ;; properties
+                                           :kill-buffer t)   ;; properties
+
+                                          ;; For code snippets
+                                          ("a"               ;; key
+                                           "Code"            ;; name
+                                           entry             ;; type
+                                           (file+headline ,org-default-notes-file "Code")  ;; target
+                                           "* %^{TITLE} %(org-set-tags)  :code:\n:PROPERTIES:\n:Created: %U\n:END:\n%i\#+BEGIN_SRC %^{language}\n%?\n\#END_SRC"  ;; template
+                                           :prepend t        ;; properties
+                                           :empty-lines 1    ;; properties
+                                           :created t        ;; properties
+                                           :kill-buffer t)   ;; properties
+
+                                          ;; For capturing some things that are worth reading
+                                          ("r"               ;; key
+                                           "Reading"         ;; name
+                                           entry             ;; type
+                                           (file+headline ,org-default-notes-file "Reading")  ;; target
+                                           "* %^{Title} %(org-set-tags)\n:PROPERTIES:\n:Created: %U\n:END:\n%i\n%?"  ;; template
+                                           :prepend t        ;; properties
+                                           :empty-lines 1    ;; properties
+                                           :created t        ;; properties
+                                           :kill-buffer t)   ;; properties
+
+                                          ;; To capture ideas for my blog
+                                          ("b"               ;; key
+                                           "Blog"            ;; name
+                                           entry             ;; type
+                                           (file+headline ,org-default-notes-file "Blog")  ;; target
+                                           "* %^{Title} %(org-set-tags)  :blog:\n:PROPERTIES:\n:Created: %U\n:END:\n%i\n%?"  ;; template
+                                           :prepend t        ;; properties
+                                           :empty-lines 1    ;; properties
+                                           :created t        ;; properties
+                                           :kill-buffer t)   ;; properties
+
+                                          ;; To capture errands
+                                          ("e"               ;; key
+                                           "Errands"         ;; name
+                                           entry             ;; type
+                                           (file+headline ,org-agenda-todo-file "Errands")  ;; target
+                                           "* TODO %^{Todo} %(org-set-tags)  :errands:\n:PROPERTIES:\n:Created: %U\n:END:\n%i\n%?"  ;; template
+                                           :prepend t        ;; properties
+                                           :empty-lines 1    ;; properties
+                                           :created t        ;; properties
+                                           :kill-buffer t)   ;; properties
+
+                                          ;; To capture diary entries
+                                          ("d"               ;; key
+                                           "Diary"           ;; name
+                                           entry             ;; type
+                                           (file+datetree ,org-agenda-diary-file) ;; target
+                                           "* TODO %^{Todo} %(org-set-tags)  :errands:\n:PROPERTIES:\n:Created: %U\n:END:\n%i\n%?"  ;; template
+                                           :clock-in t
+                                           :clock-resume t
+                                           :prepend t        ;; properties
+                                           :empty-lines 1    ;; properties
+                                           :created t        ;; properties
+                                           :kill-buffer t)   ;; properties
+
+                                          )) ;; properties
 
             ;; Refiling options
             (setq org-refile-targets (quote ((org-agenda-files :maxlevel . 9)))
