@@ -25,186 +25,189 @@
 ;;; Code:
 
 ;; Tweaks for LaTeX exporting
-(require 'ox-latex)
-(setq org-latex-listings t)
-(setq org-export-latex-quotes
-      '(("en" ("\\(\\s-\\|[[(]\\)\"" . "\\enquote{") ("\\(\\S-\\)\"" . "}") ("\\(\\s-\\|(\\)'" . "`"))))
+(use-package ox-latex
+  :config (progn
+            (setq org-latex-listings t)
+            (setq org-export-latex-quotes
+                  '(("en" ("\\(\\s-\\|[[(]\\)\"" . "\\enquote{") ("\\(\\S-\\)\"" . "}") ("\\(\\s-\\|(\\)'" . "`"))))
 
-;; CDLaTeX is “is a minor mode that is normally used in combination with a
-;; major LaTeX mode like AUCTeX in order to speed-up insertion of environments
-;; and math templates”
-(add-hook 'org-mode-hook 'turn-on-org-cdlatex)
+            ;; CDLaTeX is “is a minor mode that is normally used in combination with a
+            ;; major LaTeX mode like AUCTeX in order to speed-up insertion of environments
+            ;; and math templates”
+            (add-hook 'org-mode-hook 'turn-on-org-cdlatex)
 
-;; Preview LaTeX equations in buffers by showing images (C-c C-x C-l)
-(if (executable-find "convert")
-    (setq org-latex-create-formula-image-program 'imagemagick)
-  (setq org-latex-create-formula-image-program 'dvipng))
+            ;; Preview LaTeX equations in buffers by showing images (C-c C-x C-l)
+            (if (executable-find "convert")
+                (setq org-latex-create-formula-image-program 'imagemagick)
+              (setq org-latex-create-formula-image-program 'dvipng))
 
-;; Directory where LaTeX previews are stored
-(if (not (file-exists-p "~/.emacs.cache/ltxpng"))
-    (make-directory "~/.emacs.cache/ltxpng") t)
-(setq org-latex-preview-ltxpng-directory "~/.emacs.cache/ltxpng/")
+            ;; Directory where LaTeX previews are stored
+            (if (not (file-exists-p "~/.emacs.cache/ltxpng"))
+                (make-directory "~/.emacs.cache/ltxpng") t)
+            (setq org-latex-preview-ltxpng-directory "~/.emacs.cache/ltxpng/")
 
-;; Bigger LaTeX fragments and other options for LaTeX export
-(setq org-format-latex-options '(:scale 2.0
-                                        :html-foreground "Black" :html-background "Transparent"
-                                        :html-scale 1.0
-                                        :matchers ("begin" "$1" "$" "$$" "\\(" "\\[")))
+            ;; Bigger LaTeX fragments and other options for LaTeX export
+            (setq org-format-latex-options '(:scale 2.0
+                                                    :html-foreground "Black" :html-background "Transparent"
+                                                    :html-scale 1.0
+                                                    :matchers ("begin" "$1" "$" "$$" "\\(" "\\[")))
 
-;; Toggle previsualization of LaTeX equations in Org-mode
-(when (display-graphic-p)
-  (defvar org-latex-fragment-last nil
-    "Holds last fragment/environment you were on.")
+            ;; Toggle previsualization of LaTeX equations in Org-mode
+            (when (display-graphic-p)
+              (defvar org-latex-fragment-last nil
+                "Holds last fragment/environment you were on.")
 
-  (defun org-latex-fragment-toggle ()
-    "Toggle a latex fragment image "
-    (and (eq 'org-mode major-mode)
-         (let* ((el (org-element-context))
-                (el-type (car el)))
-           (cond
-            ;; were on a fragment and now on a new fragment
-            ((and
-              ;; fragment we were on
-              org-latex-fragment-last
-              ;; and are on a fragment now
-              (or
-               (eq 'latex-fragment el-type)
-               (eq 'latex-environment el-type))
-              ;; but not on the last one this is a little tricky. as you edit the
-              ;; fragment, it is not equal to the last one. We use the begin
-              ;; property which is less likely to change for the comparison.
-              (not (= (org-element-property :begin el)
-                      (org-element-property :begin org-latex-fragment-last))))
-             ;; go back to last one and put image back
-             (save-excursion
-               (goto-char (org-element-property :begin org-latex-fragment-last))
-               (org-preview-latex-fragment))
-             ;; now remove current image
-             (goto-char (org-element-property :begin el))
-             (let ((ov (loop for ov in (org--list-latex-overlays)
-                             if
-                             (and
-                              (<= (overlay-start ov) (point))
-                              (>= (overlay-end ov) (point)))
-                             return ov)))
-               (when ov
-                 (delete-overlay ov)))
-             ;; and save new fragment
-             (setq org-latex-fragment-last el))
+              (defun org-latex-fragment-toggle ()
+                "Toggle a latex fragment image "
+                (and (eq 'org-mode major-mode)
+                     (let* ((el (org-element-context))
+                            (el-type (car el)))
+                       (cond
+                        ;; were on a fragment and now on a new fragment
+                        ((and
+                          ;; fragment we were on
+                          org-latex-fragment-last
+                          ;; and are on a fragment now
+                          (or
+                           (eq 'latex-fragment el-type)
+                           (eq 'latex-environment el-type))
+                          ;; but not on the last one this is a little tricky. as you edit the
+                          ;; fragment, it is not equal to the last one. We use the begin
+                          ;; property which is less likely to change for the comparison.
+                          (not (= (org-element-property :begin el)
+                                  (org-element-property :begin org-latex-fragment-last))))
+                         ;; go back to last one and put image back
+                         (save-excursion
+                           (goto-char (org-element-property :begin org-latex-fragment-last))
+                           (org-preview-latex-fragment))
+                         ;; now remove current image
+                         (goto-char (org-element-property :begin el))
+                         (let ((ov (loop for ov in (org--list-latex-overlays)
+                                         if
+                                         (and
+                                          (<= (overlay-start ov) (point))
+                                          (>= (overlay-end ov) (point)))
+                                         return ov)))
+                           (when ov
+                             (delete-overlay ov)))
+                         ;; and save new fragment
+                         (setq org-latex-fragment-last el))
 
-            ;; were on a fragment and now are not on a fragment
-            ((and
-              ;; not on a fragment now
-              (not (or
-                    (eq 'latex-fragment el-type)
-                    (eq 'latex-environment el-type)))
-              ;; but we were on one
-              org-latex-fragment-last)
-             ;; put image back on
-             (save-excursion
-               (goto-char (org-element-property :begin org-latex-fragment-last))
-               (org-preview-latex-fragment))
-             ;; unset last fragment
-             (setq org-latex-fragment-last nil))
+                        ;; were on a fragment and now are not on a fragment
+                        ((and
+                          ;; not on a fragment now
+                          (not (or
+                                (eq 'latex-fragment el-type)
+                                (eq 'latex-environment el-type)))
+                          ;; but we were on one
+                          org-latex-fragment-last)
+                         ;; put image back on
+                         (save-excursion
+                           (goto-char (org-element-property :begin org-latex-fragment-last))
+                           (org-preview-latex-fragment))
+                         ;; unset last fragment
+                         (setq org-latex-fragment-last nil))
 
-            ;; were not on a fragment, and now are
-            ((and
-              ;; we were not one one
-              (not org-latex-fragment-last)
-              ;; but now we are
-              (or
-               (eq 'latex-fragment el-type)
-               (eq 'latex-environment el-type)))
-             (goto-char (org-element-property :begin el))
-             ;; remove image
-             (let ((ov (loop for ov in (org--list-latex-overlays)
-                             if
-                             (and
-                              (<= (overlay-start ov) (point))
-                              (>= (overlay-end ov) (point)))
-                             return ov)))
-               (when ov
-                 (delete-overlay ov)))
-             (setq org-latex-fragment-last el))))))
+                        ;; were not on a fragment, and now are
+                        ((and
+                          ;; we were not one one
+                          (not org-latex-fragment-last)
+                          ;; but now we are
+                          (or
+                           (eq 'latex-fragment el-type)
+                           (eq 'latex-environment el-type)))
+                         (goto-char (org-element-property :begin el))
+                         ;; remove image
+                         (let ((ov (loop for ov in (org--list-latex-overlays)
+                                         if
+                                         (and
+                                          (<= (overlay-start ov) (point))
+                                          (>= (overlay-end ov) (point)))
+                                         return ov)))
+                           (when ov
+                             (delete-overlay ov)))
+                         (setq org-latex-fragment-last el))))))
 
-  (add-hook 'post-command-hook 'org-latex-fragment-toggle))
+              (add-hook 'post-command-hook 'org-latex-fragment-toggle))
 
-;; Force figure position
-(setq org-latex-default-figure-position "!htb")
+            ;; Force figure position
+            (setq org-latex-default-figure-position "!htb")
 
-;; Place table caption below table
-(setq org-latex-table-caption-above nil)
+            ;; Place table caption below table
+            (setq org-latex-table-caption-above nil)
 
-;; Use centered images in Org-mode
-(ignore-errors
-(advice-add 'org-latex--inline-image :around
-            (lambda (orig link info)
-              (concat
-               "\\begin{center}"
-               (funcall orig link info)
-               "\\end{center}"))))
-
-;; Add cite link
-(org-add-link-type "cite" 'ebib
-                   (lambda (path desc format)
-                     (cond
-                      ((eq format 'html)  (format "(<cite>%s</cite>)" path))
-                      ((eq format 'latex) (format "\\cite{%s}" path)))))
-
-;; Make RefTeX faster
-(setq reftex-enable-partial-scans t)
-(setq reftex-save-parse-info t)
-(setq reftex-use-multiple-selection-buffers t)
-(setq reftex-plug-into-AUCTeX t)
+            ;; Use centered images in Org-mode
+            (ignore-errors
+              (advice-add 'org-latex--inline-image :around
+                          (lambda (orig link info)
+                            (concat
+                             "\\begin{center}"
+                             (funcall orig link info)
+                             "\\end{center}"))))))
 
 ;; Reftex
-(require 'reftex-cite)
-(setq reftex-default-bibliography '("~/workspace/Documents/Bibliography/biblio.bib")) ;; So that RefTeX in Org-mode knows bibliography
-(defun org-mode-reftex-setup ()
-  (interactive)
-  (and (buffer-file-name) (file-exists-p (buffer-file-name))
-       (progn
-         ;; Reftex should use the org file as master file. See C-h v TeX-master for infos.
-         (setq TeX-master t)
-         (load-library "reftex")
-         (turn-on-reftex)
-         (and (buffer-file-name)
-              (file-exists-p (buffer-file-name))
-              (reftex-parse-all))
-         ;; enable auto-revert-mode to update reftex when bibtex file changes on disk
-         (global-auto-revert-mode t)
-         ;; add a custom reftex cite format to insert links
-         ;; This also changes any call to org-citation!
-         ;; RefTeX formats for biblatex (not natbib)
-         (reftex-set-cite-format
-          '((?\C-m . "\\cite[]{%l}")
-            (?t . "\\textcite{%l}")
-            (?a . "\\autocite[]{%l}")
-            (?p . "\\parencite{%l}")
-            (?f . "\\footcite[][]{%l}")
-            (?F . "\\fullcite[]{%l}")
-            (?x . "[]{%l}")
-            (?X . "{%l}")
-            ))))
-  (define-key org-mode-map (kbd "C-c )") 'reftex-citation)
-  (define-key org-mode-map (kbd "C-c (") 'org-mode-reftex-search))
-(add-hook 'org-mode-hook 'org-mode-reftex-setup)
+(use-package reftex-cite
+  :config (progn
 
-(setq font-latex-match-reference-keywords
-      '(("cite" "[{")
-        ("cites" "[{}]")
-        ("autocite" "[{")
-        ("footcite" "[{")
-        ("footcites" "[{")
-        ("parencite" "[{")
-        ("textcite" "[{")
-        ("fullcite" "[{")
-        ("citetitle" "[{")
-        ("citetitles" "[{")
-        ("headlessfullcite" "[{")))
+            ;; Make RefTeX faster
+            (setq reftex-enable-partial-scans t)
+            (setq reftex-save-parse-info t)
+            (setq reftex-use-multiple-selection-buffers t)
+            (setq reftex-plug-into-AUCTeX t)
+            (setq reftex-cite-prompt-optional-args nil)
+            (setq reftex-cite-cleanup-optional-args t)
 
-(setq reftex-cite-prompt-optional-args nil)
-(setq reftex-cite-cleanup-optional-args t)
+            ;; Enable RefTeX in Org-mode to find bibliography
+            (setq reftex-default-bibliography '("~/workspace/Documents/Bibliography/biblio.bib"))
+            (defun org-mode-reftex-setup ()
+              (interactive)
+              (and (buffer-file-name) (file-exists-p (buffer-file-name))
+                   (progn
+                     ;; Reftex should use the org file as master file. See C-h v TeX-master for infos.
+                     (setq TeX-master t)
+                     (load-library "reftex")
+                     (turn-on-reftex)
+                     (and (buffer-file-name)
+                          (file-exists-p (buffer-file-name))
+                          (reftex-parse-all))
+                     ;; enable auto-revert-mode to update reftex when bibtex file changes on disk
+                     (global-auto-revert-mode t)
+                     ;; add a custom reftex cite format to insert links
+                     ;; This also changes any call to org-citation!
+                     ;; RefTeX formats for biblatex (not natbib)
+                     (reftex-set-cite-format
+                      '((?\C-m . "\\cite[]{%l}")
+                        (?t . "\\textcite{%l}")
+                        (?a . "\\autocite[]{%l}")
+                        (?p . "\\parencite{%l}")
+                        (?f . "\\footcite[][]{%l}")
+                        (?F . "\\fullcite[]{%l}")
+                        (?x . "[]{%l}")
+                        (?X . "{%l}")
+                        ))))
+              (define-key org-mode-map (kbd "C-c )") 'reftex-citation)
+              (define-key org-mode-map (kbd "C-c (") 'org-mode-reftex-search))
+            (add-hook 'org-mode-hook 'org-mode-reftex-setup)
+
+            ;; Add cite link
+            (org-add-link-type "cite" 'ebib
+                               (lambda (path desc format)
+                                 (cond
+                                  ((eq format 'html)  (format "(<cite>%s</cite>)" path))
+                                  ((eq format 'latex) (format "\\cite{%s}" path)))))
+
+            (setq font-latex-match-reference-keywords
+                  '(("cite" "[{")
+                    ("cites" "[{}]")
+                    ("autocite" "[{")
+                    ("footcite" "[{")
+                    ("footcites" "[{")
+                    ("parencite" "[{")
+                    ("textcite" "[{")
+                    ("fullcite" "[{")
+                    ("citetitle" "[{")
+                    ("citetitles" "[{")
+                    ("headlessfullcite" "[{")))))
 
 ;; Add defaults packages to include when exporting.
 (setq org-latex-hyperref-template

@@ -59,7 +59,7 @@
          ("t" . eshell)
          :map eshell-mode-map
          (("C-c C-t" . quit-window)
-         ("C-t" . quit-window)))
+          ("C-t" . quit-window)))
   :after helm
   :init  (progn
            ;; Fix lack of eshell-mode-map
@@ -218,6 +218,28 @@
              emamux:interrupt-runner
              emamux:copy-kill-ring
              emamux:yank-from-list-buffers))
+
+
+(use-package multi-term
+  :commands (multi-term
+             my/multi-term-vertical
+             my/multi-term-horizontal)
+  :config (progn
+            ;; Vertical split multi-term
+            (defun my/multi-term-vertical ()
+              "opens up a new terminal in the directory associated with the current buffer's file."
+              (interactive)
+              (split-window-right)
+              (other-window 1)
+              (multi-term))
+
+            ;; Horizontal split multi-term
+            (defun my/multi-term-horizontal ()
+              "opens up a new terminal in the directory associated with the current buffer's file."
+              (interactive)
+              (split-window-below)
+              (other-window 1)
+              (multi-term))))
 
 (provide 'setup-eshell)
 ;;; setup-eshell.el ends here

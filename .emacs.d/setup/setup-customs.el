@@ -24,6 +24,21 @@
 
 ;;; Code:
 
+(defcustom my/bibtex-completion-bibliography "~/workspace/Documents/Bibliography/biblio.bib"
+  "Preferred bibliography file"
+  :type 'string
+  :group 'my/customs)
+
+(defcustom my/bibtex-completion-library-path "~/workspace/Documents/Bibliography/PDFs"
+  "Preferred bibliography path for storing PDFs"
+  :type 'string
+  :group 'my/customs)
+
+(defcustom my/bibtex-completion-notes "~/workspace/Documents/Bibliography/notes.org"
+  "Preferred bibliography notes file"
+  :type 'string
+  :group 'my/customs)
+
 (defcustom my/tab-width 4
   "Default tab width"
   :type 'int

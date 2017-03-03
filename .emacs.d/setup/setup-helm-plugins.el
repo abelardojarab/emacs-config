@@ -163,9 +163,9 @@
               ("[" . helm-bibtex))
   :load-path (lambda () (expand-file-name "helm-bibtex/" user-emacs-directory))
   :config (progn
-            (setq helm-bibtex-bibliography "~/workspace/Documents/Bibliography/biblio.bib")
-            (setq helm-bibtex-library-path "~/workspace/Documents/Bibliography/PDFs")
-            (setq helm-bibtex-notes-path "~/workspace/Documents/Bibliography/notes.org")
+            (setq helm-bibtex-bibliography my/helm-bibtex-bibliography
+                  helm-bibtex-library-path my/helm-bibtex-path
+                  helm-bibtex-notes-path my/helm-bibtex-notes)
 
             ;; open pdf with system pdf viewer (works on mac)
             (setq helm-bibtex-pdf-open-function
@@ -184,9 +184,11 @@
   :after (helm async)
   :load-path (lambda () (expand-file-name "org-ref/" user-emacs-directory))
   :config (progn
-            (setq org-ref-bibliography-notes "~/workspace/Documents/Bibliography/notes.org"
-                  org-ref-default-bibliography '("~/workspace/Documents/Bibliography/biblio.bib")
-                  org-ref-pdf-directory "~/workspace/Documents/Bibliography/PDFs")
+            (setq org-ref-default-bibliography (list my/bibtex-completion-bibliography)
+                  org-ref-bibliography-files (list my/bibtex-completion-bibliography)
+                  org-ref-pdf-directory my/bibtex-completion-path
+                  org-ref-bibliography-notes my/bibtex-completion-notes)
+
             (setq org-ref-insert-cite-key "C-c [")
             (setq org-ref-default-citation-link "autocite")))
 

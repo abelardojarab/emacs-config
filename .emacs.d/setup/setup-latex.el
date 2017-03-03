@@ -1,6 +1,6 @@
 ;;; setup-latex.el ---                           -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016  Abelardo Jara-Berrocal
+;; Copyright (C) 2016, 2017  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
 ;; Keywords:
@@ -52,6 +52,10 @@
 (use-package bibtex
   :mode ("\\.bib" . bibtex-mode)
   :init (progn
+          (setq bibtex-completion-bibliography (list my/bibtex-completion-bibliography)
+                bibtex-completion-library-path my/bibtex-completion-path
+                bibtex-completion-notes-path my/bibtex-completion-notes)
+
           (setq bibtex-align-at-equal-sign t)
           (add-hook 'bibtex-mode-hook (lambda () (set-fill-column 120)))))
 
