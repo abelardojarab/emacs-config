@@ -27,7 +27,7 @@
 (use-package dired-x
   :bind (("C-x C-j" . dired-jump)
          :map dired-mode-map
-         (("." . dired-up-directory)
+         (("u" . dired-up-directory)
           ("Y" . my/dired-rsync)
           ("RET" . dired-find-alternate-file)
           ("C-c d" . dired-filter-by-directory)

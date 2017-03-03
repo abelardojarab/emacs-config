@@ -1,4 +1,4 @@
-;;; setup-environment.el ---
+;;; setup-environment.el ---                 -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2014, 2015, 2016, 2017  Abelardo Jara-Berrocal
 
@@ -93,6 +93,10 @@
 
  ;; Linux
  ((equal system-type 'gnu/linux)
+
+  ;; Prefer /bin/bash
+  (if (executable-find "/bin/bash")
+      (setenv "SHELL" "/bin/bash"))
 
   ;; Get back font antialiasing
   (push '(font-backend xft x) default-frame-alist)

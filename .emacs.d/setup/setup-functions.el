@@ -1,4 +1,4 @@
-;;; setup-functions.el ---                               -*- lexical-binding: t; -*-
+;;; setup-functions.el ---                   -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2014, 2015, 2016, 2017  Abelardo Jara-Berrocal
 
