@@ -615,6 +615,7 @@ this with to-do items than with projects or headings."
                   (my/org-summarize-focus-areas)
                   "\n"))))
 
+	    ;; From https://sriramkswamy.github.io/dotemacs/#orgheadline16
             (setq org-capture-templates `(
 
                                           ;; For notes or something regarding more work
@@ -622,7 +623,35 @@ this with to-do items than with projects or headings."
                                            "TODO"            ;; name
                                            entry             ;; type
                                            (file+headline ,org-agenda-todo-file "Work")  ;; target
-                                           "* TODO %^{Todo} %(org-set-tags)  :work:\n:PROPERTIES:\n:Created: %U\n:END:\n%i\n%?"  ;; template
+                                           "* TODO %^{Todo} %(org-set-tags)  :@work:
+:PROPERTIES:
+:Effort: %^{effort|1:00|0:05|0:15|0:30|2:00|4:00}
+:Created: %U
+:END:
+%i
+%?"  ;; template
+                                           :clock-in t
+                                           :clock-resume t
+                                           :prepend t        ;; properties
+                                           :empty-lines 1    ;; properties
+                                           :created t        ;; properties
+                                           :kill-buffer t)   ;; properties
+
+                                          ;; For capturing minutes of the meeting
+                                          ("m"                              ;; key
+                                           "Meeting or Appointment"         ;; name
+                                           entry                            ;; type
+                                           (file+datetree ,org-agenda-default-file "Meeting")  ;; target
+                                           "* %^{Title} %(org-set-tags)  :@meeting:
+:PROPERTIES:
+:Effort: %^{effort|1:00|0:05|0:15|0:30|2:00|4:00}
+:Created: %U
+:END:%i
+** Agenda:
+%?
+
+** Minutes of the meeting:
+"  ;; template
                                            :clock-in t
                                            :clock-resume t
                                            :prepend t        ;; properties
@@ -635,20 +664,13 @@ this with to-do items than with projects or headings."
                                            "Note"            ;; name
                                            entry             ;; type
                                            (file+headline ,org-default-notes-file "Notes")  ;; target
-                                           "* %? %(org-set-tags)  :note:\n:PROPERTIES:\n:Created: %U\n:Linked: %A\n:END:\n%i"  ;; template
-                                           :prepend t        ;; properties
-                                           :empty-lines 1    ;; properties
-                                           :created t        ;; properties
-                                           :kill-buffer t)   ;; properties
-
-                                          ;; For capturing minutes of the meeting
-                                          ("m"               ;; key
-                                           "Meeting"         ;; name
-                                           entry             ;; type
-                                           (file+datetree ,org-agenda-default-file "Meeting")  ;; target
-                                           "* %^{Title} %(org-set-tags)  :meeting:\n:PROPERTIES:\n:Created: %U\n:END:\n%i\n** Agenda:\n%?\n\n** Minutes of the meeting:\n"  ;; template
-                                           :clock-in t
-                                           :clock-resume t
+                                           "* %? %(org-set-tags)  :@note:
+:PROPERTIES:
+:Created: %U
+:Linked: %A
+:END:
+Captured %<%Y-%m-%d %H:%M>
+%i"  ;; template
                                            :prepend t        ;; properties
                                            :empty-lines 1    ;; properties
                                            :created t        ;; properties
@@ -659,7 +681,11 @@ this with to-do items than with projects or headings."
                                            "Ledger"          ;; name
                                            entry             ;; type
                                            (file+datetree ,org-default-notes-file "Ledger")  ;; target
-                                           "* %^{expense} %(org-set-tags)  :accounts:\n:PROPERTIES:\n:Created: %U\n:END:\n%i
+                                           "* %^{expense} %(org-set-tags)  :@accounts:
+:PROPERTIES:
+:Created: %U
+:END:
+%i
 #+NAME: %\\1-%t
 \#+BEGIN_SRC ledger :noweb yes
 %^{Date of expense (yyyy/mm/dd)} %^{'*' if cleared, else blank} %\\1
@@ -673,11 +699,17 @@ this with to-do items than with projects or headings."
                                            :kill-buffer t)   ;; properties
 
                                           ;; For code snippets
-                                          ("a"               ;; key
-                                           "Code"            ;; name
+                                          ("c"               ;; key
+                                           "Coding"          ;; name
                                            entry             ;; type
-                                           (file+headline ,org-default-notes-file "Code")  ;; target
-                                           "* %^{TITLE} %(org-set-tags)  :code:\n:PROPERTIES:\n:Created: %U\n:END:\n%i\#+BEGIN_SRC %^{language}\n%?\n\#END_SRC"  ;; template
+                                           (file+headline ,org-default-notes-file "Coding")  ;; target
+                                           "* %^{TITLE} %(org-set-tags)  :@coding:
+:PROPERTIES:
+:Created: %U
+:END:
+%i\#+BEGIN_SRC %^{language}
+%?
+\#END_SRC"  ;; template
                                            :prepend t        ;; properties
                                            :empty-lines 1    ;; properties
                                            :created t        ;; properties
@@ -688,18 +720,28 @@ this with to-do items than with projects or headings."
                                            "Reading"         ;; name
                                            entry             ;; type
                                            (file+headline ,org-default-notes-file "Reading")  ;; target
-                                           "* %^{Title} %(org-set-tags)\n:PROPERTIES:\n:Created: %U\n:END:\n%i\n%?"  ;; template
+                                           "* %^{Title} %(org-set-tags)  :@reading:
+:PROPERTIES:
+:Created: %U
+:END:
+%i
+%?"  ;; template
                                            :prepend t        ;; properties
                                            :empty-lines 1    ;; properties
                                            :created t        ;; properties
                                            :kill-buffer t)   ;; properties
 
-                                          ;; To capture ideas for my blog
-                                          ("b"               ;; key
-                                           "Blog"            ;; name
+                                          ;; To capture ideas for writing
+                                          ("w"               ;; key
+                                           "Writing"            ;; name
                                            entry             ;; type
-                                           (file+headline ,org-default-notes-file "Blog")  ;; target
-                                           "* %^{Title} %(org-set-tags)  :blog:\n:PROPERTIES:\n:Created: %U\n:END:\n%i\n%?"  ;; template
+                                           (file+headline ,org-default-notes-file "Writing")  ;; target
+                                           "* %^{Title} %(org-set-tags)  :@writing:
+:PROPERTIES:
+:Created: %U
+:END:
+%i
+%?"  ;; template
                                            :prepend t        ;; properties
                                            :empty-lines 1    ;; properties
                                            :created t        ;; properties
@@ -710,7 +752,12 @@ this with to-do items than with projects or headings."
                                            "Errands"         ;; name
                                            entry             ;; type
                                            (file+headline ,org-agenda-todo-file "Errands")  ;; target
-                                           "* TODO %^{Todo} %(org-set-tags)  :errands:\n:PROPERTIES:\n:Created: %U\n:END:\n%i\n%?"  ;; template
+                                           "* TODO %^{Todo} %(org-set-tags)  :@errands:
+:PROPERTIES:
+:Created: %U
+:END:
+%i
+%?"  ;; template
                                            :prepend t        ;; properties
                                            :empty-lines 1    ;; properties
                                            :created t        ;; properties
@@ -721,7 +768,12 @@ this with to-do items than with projects or headings."
                                            "Diary"           ;; name
                                            entry             ;; type
                                            (file+datetree ,org-agenda-diary-file) ;; target
-                                           "* TODO %^{Todo} %(org-set-tags)  :errands:\n:PROPERTIES:\n:Created: %U\n:END:\n%i\n%?"  ;; template
+                                           "* TODO %^{Todo} %(org-set-tags)
+:PROPERTIES:
+:Created: %U
+:END:
+%i
+%?"  ;; template
                                            :clock-in t
                                            :clock-resume t
                                            :prepend t        ;; properties
