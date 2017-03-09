@@ -49,20 +49,34 @@
           (setq tramp-ssh-controlmaster-options "-o ControlMaster=auto -o ControlPath=~/.emacs.cache/ssh-ControlPath -o ControlPersist=no"))
   :config (progn
 
-            ;; Re-enable the SSH keyring in case Emacs does not refreshes it
-            (defun my/ssh-refresh ()
-              "Reset the environment variable SSH_AUTH_SOCK"
-              (interactive)
-              (let (ssh-auth-sock-old (getenv "SSH_AUTH_SOCK"))
-                (setenv "SSH_AUTH_SOCK"
-                        (car (split-string
-                              (shell-command-to-string
-                               "ls -t $(find /tmp/ssh-* -user $USER -name 'agent.*' 2> /dev/null)"))))
-                (message
-                 (format "SSH_AUTH_SOCK %s --> %s"
-                         ssh-auth-sock-old (getenv "SSH_AUTH_SOCK")))))
-            (if (equal system-type 'gnu/linux)
-                (my/ssh-refresh))
+            ;; Refresh SSH agent
+            (when (executable-find "keychain")
+              ;; Re-enable the SSH keyring in case Emacs does not refreshes it
+              (defun my/keychain-refresh-environment ()
+                "Set ssh-agent and gpg-agent environment variables.
+Set the environment variables `SSH_AUTH_SOCK', `SSH_AGENT_PID'
+and `GPG_AGENT' in Emacs' `process-environment' according to
+information retrieved from files created by the keychain script."
+                (interactive)
+                (let* ((ssh-auth-sock-old (getenv "SSH_AUTH_SOCK"))
+                       (ssh (shell-command-to-string "keychain -q --noask --agents ssh --eval"))
+                       (gpg (shell-command-to-string "keychain -q --noask --agents gpg --eval")))
+                  (list (and ssh
+                             (string-match "SSH_AUTH_SOCK[=\s]\\([^\s;\n]*\\)" ssh)
+                             (setenv       "SSH_AUTH_SOCK" (match-string 1 ssh)))
+                        (and ssh
+                             (string-match "SSH_AGENT_PID[=\s]\\([0-9]*\\)?" ssh)
+                             (setenv       "SSH_AGENT_PID" (match-string 1 ssh)))
+                        (and gpg
+                             (string-match "GPG_AGENT_INFO[=\s]\\([^\s;\n]*\\)" gpg)
+                             (setenv "GPG_AGENT_INFO" (match-string 1 gpg))))
+
+                  (message
+                   (format "SSH_AUTH_SOCK %s --> %s"
+                           ssh-auth-sock-old (getenv "SSH_AUTH_SOCK")))))
+
+              (if (equal system-type 'gnu/linux)
+                  (my/keychain-refresh-environment)))
 
             ;; Fix auto save problem
             (setq tramp-persistency-file-name "~/.emacs.cache/tramp")

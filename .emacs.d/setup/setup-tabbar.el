@@ -79,7 +79,7 @@
             (setq tabbar-ruler-movement-timer-delay 1000000)
 
             ;; Group user buffers
-            (tabbar-ruler-group-by-projectile-project)
+            ;; (tabbar-ruler-group-by-projectile-project)
 
             ;; Fix for tabbar under Emacs 24.4
             ;; store tabbar-cache into a real hash,
