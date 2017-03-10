@@ -27,7 +27,7 @@
 ;; Code Browser
 (use-package ecb
   :load-path (lambda () (expand-file-name "ecb/" user-emacs-directory))
-  :commands (ecb-activate) ;; enabling this line places ecb in autoload state
+  ;; :commands (ecb-activate) ;; enabling this line places ecb in autoload state
   :init (setq stack-trace-on-error t)
   :config (progn
 
@@ -207,7 +207,7 @@ little more place. "
               (select-window (next-window (next-window)))
               (ecb-set-history-buffer)
               (ecb-split-ver 0.4)
-          (ecb-set-sources-buffer)
+	      (ecb-set-sources-buffer)
               (select-window (previous-window (selected-window) 0)))
 
             (ecb-layout-define "bodil" left
@@ -222,7 +222,7 @@ little more place. "
    |--------------|                                      |
    |              |                                      |
    |              |                                      |
-   |  Methods     |                                      |
+   |  Sources     |                                      |
    |              |                                      |
    -------------------------------------------------------
    |                                                     |
@@ -232,9 +232,9 @@ little more place. "
 If you have not set a compilation-window in `ecb-compile-window-height' then the
 layout contains no persistent compilation window and the other windows get a little
 more place."
-              (ecb-set-history-buffer)
+	      (ecb-set-sources-buffer)
               (ecb-split-ver 0.5)
-              (ecb-set-methods-buffer)
+              (ecb-set-history-buffer)
               (select-window (next-window)))
 
             ;; disable global semantic idle scheduler.
