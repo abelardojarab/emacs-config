@@ -90,7 +90,7 @@
   :group 'my/customs)
 
 (defcustom my/emacs-theme
-  'apropospriate-dark
+  'eziam-light
   "Preferred Emacs theme"
   :group 'my/customs
   :type 'list)
@@ -366,7 +366,7 @@
   :group 'my/customs)
 
 ;; User-specific configuration file
-(setq-default custom-file "~/.emacs.cache/.custom.el")
+(setq-default custom-file "~/.emacs.cache/customizations.el")
 (when (file-exists-p custom-file)
   (load custom-file))
 
