@@ -7,6 +7,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
+- Icon for LUA (from LUA)
 - Icon for emmet minor mode.
 - Icon for spacemacs buffer.
 - Icon for Isearch (from Font Awesome)
@@ -15,6 +16,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - Icon for Windows cmd
 - Icon for MSYS shell
 - Icon for Cygwin shell
+- Icon for ivy-mode
 - Added option mode-icons-line-height-adjust to allow imagmagick to
   adjust icons up or down a bit compared to what emacs returns as the
   mode-line height.
@@ -34,6 +36,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
   missing from the system
 - mode-icons now allows for a default icon.  This can be turned on
   with the new option `mode-icons-use-default-icon`
+- Fix coloring algorithm for xpm images.
+- Fix icon for Shell-script.
+- Response to emojify's update.
+
 
 ## [0.4.0]
 

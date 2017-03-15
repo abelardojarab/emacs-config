@@ -36,6 +36,7 @@
 ;; - Haml
 ;; - JavaScript
 ;; - Lisp
+;; - Lua
 ;; - nXML
 ;; - PHP
 ;; - Python
@@ -148,6 +149,7 @@ This was stole/modified from `c-save-buffer-state'"
     ("\\`Inf-Ruby\\'" "infruby" xpm)
     ("\\`Java[Ss]cript\\'" "js" xpm)
     ("\\`Lisp\\'" "cl" xpm)
+    ("\\`Lua\\'" "Lua-Logo_16x16" png)
     ("\\`nXML\\'" "xml" xpm)
     ("\\`Org\\'" "org" xpm)
     ("\\`PHP\\(\\|/.*\\)\\'" "php" xpm)
@@ -155,6 +157,7 @@ This was stole/modified from `c-save-buffer-state'"
     ("\\`Python\\'" "python" xpm)
     ("\\` Emmet\\'" "emmet" xpm)
     ("\\`Ruby\\'" "ruby" xpm)
+    ("\\`EnhRuby\\'" "ruby" xpm)
     ("\\`ESS\\[S\\]\\'" "R" xpm)
     ("\\`ESS\\[SAS\\]\\'" "sas" xpm)
     ("\\`ESS\\[BUGS\\]\\'" #xf188 FontAwesome)
@@ -189,6 +192,7 @@ This was stole/modified from `c-save-buffer-state'"
     ("\\`Custom\\'" #xf013 FontAwesome)
     ("\\`Go\\'" "go" xpm)
     ("\\` ?Rbow\\'" "rainbow" xpm)
+    ("\\` ?ivy\\'" "ivy" xpm) ;; Icon created by Philipp Lehmann from the Noun Project https://thenounproject.com/search/?q=ivy&i=329756
     ("\\` ?ICY\\'" "icy" xpm) ;; http://www.clipartpal.com/clipart_pd/weather/ice_10206.html
     ("\\` ?Golden\\'" "golden" xpm-bw) ;; Icon created by Arthur Shlain from Noun Project
     ("\\`BibTeX\\'\\'" "bibtex" xpm-bw)
@@ -315,12 +319,18 @@ If ICON-PATH is a string, return that."
       (and (stringp icon-path) icon-path)))
 
 (defun mode-icons-get-icon-display-xpm-replace (icon-path rep-alist &optional name)
-  "Get xpm image from ICON-PATH and reaplce REP-ALIST in file.
+  "Get xpm image from ICON-PATH and replace REP-ALIST in file.
 When NAME is non-nil, also replace the internal xpm image name."
   (let ((case-fold-search t)
-        (img (mode-icons-get-xpm-string icon-path)))
+        (img (mode-icons-get-xpm-string icon-path))
+        (i 0))
     (dolist (c rep-alist)
-      (setq img (replace-regexp-in-string (regexp-quote (car c)) (cdr c) img t t)))
+      (setq img (replace-regexp-in-string (regexp-quote (car c)) (format "COLOR<%d>" i) img t t)
+            i (1+ i)))
+    (let ((i 0))
+      (dolist (c rep-alist)
+        (setq img (replace-regexp-in-string (format "COLOR<%d>" i) (cdr c) img t t)
+              i (1+ i))))
     (when name
       (setq img (replace-regexp-in-string "^[ ]*static[ ]+char[ ]+[*][ ]+.*?\\[" (concat "static char * " name "[") img t t)))
     img))
@@ -383,7 +393,7 @@ In order, will try to get the foreground color from:
   "Change xpm at ICON-PATH to match FACE.
 The white is changed to the background color.
 The black is changed to the foreground color.
-Grayscale colors are aslo changed by `mode-icons-interpolate-from-scale'."
+Grayscale colors are also changed by `mode-icons-interpolate-from-scale'."
   (let* ((background (mode-icons-background-color face))
          (foreground (mode-icons-foreground-color face))
          (lst (mode-icons-interpolate-from-scale foreground background))
@@ -726,8 +736,6 @@ everywhere else."
        (and (eq (nth 2 icon-spec) 'png)
             (and (image-type-available-p 'xpm)
                  (file-exists-p (mode-icons--get-png-xpm-file icon-spec))))) ))
-
-(defvar emojify-image-dir)
 
 (defvar emojify-emojis)
 
@@ -1133,7 +1141,9 @@ ACTIVE is a flag for if  the current window is active."
       (unless emojify-emojis
         (emojify-set-emoji-data))
       (let* ((emoji (ht-get emojify-emojis (nth 1 icon-spec)))
-             (image-file (expand-file-name (ht-get emoji "image") emojify-image-dir))
+             (image-file (expand-file-name (ht-get emoji "image") (if (fboundp 'emojify-image-dir)
+                                                                      (emojify-image-dir)
+                                                                    emojify-image-dir)))
              (image-type (intern (upcase (file-name-extension image-file)))))
         (if (not (file-exists-p image-file))
             (propertize (format "%s" mode)
