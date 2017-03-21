@@ -74,7 +74,6 @@
 (global-set-key [end] 'end-of-line)
 (global-set-key [delete] 'delete-char)
 (global-set-key [kp-delete] 'delete-char)
-(global-set-key [(control o)] 'find-file)
 (global-set-key [(control s)] 'save-buffer)
 (global-set-key [(meta s)] 'write-file)
 (global-set-key [(control q)] 'save-buffers-kill-emacs)
