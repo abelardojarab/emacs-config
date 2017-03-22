@@ -59,7 +59,10 @@
                      (tab (nth
                            (if (> num 0) (- num 1) (+ (length tabs) num))
                            tabs)))
-                (if tab (switch-to-buffer (car tab)))))))
+                (if tab (switch-to-buffer (car tab)))))
+
+	    ;; Enable tabbar
+	    (tabbar-mode t)))
 
 ;; Tabbar ruler pre-requisites
 (use-package mode-icons

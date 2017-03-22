@@ -1,6 +1,6 @@
 ;;; setup-swiper.el ---                              -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016  Abelardo Jara-Berrocal
+;; Copyright (C) 2016, 2017  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
 ;; Keywords:
@@ -60,8 +60,9 @@
   :after swiper
   :commands ivy-switch-buffer
   :bind (("C-b" . ivy-switch-buffer)
-         :map ctl-x-map
-         ("b" . ivy-switch-buffer))
+         ;; :map ctl-x-map
+         ;; ("b" . ivy-switch-buffer)
+         )
   :load-path (lambda () (expand-file-name "ivy-rich/" user-emacs-directory))
   :config (progn
             (ivy-set-display-transformer 'ivy-switch-buffer 'ivy-rich-switch-buffer-transformer)

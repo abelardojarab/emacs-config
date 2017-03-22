@@ -28,13 +28,14 @@
 (use-package helm-config
   :load-path (lambda () (expand-file-name "helm/" user-emacs-directory))
   :bind (("C-'" . helm-semantic-or-imenu)
-	 ("C-o" . helm-find-files)
+     ;; ("C-o" . helm-find-files)
          :map isearch-mode-map
          ("C-." . helm-occur-from-isearch)
          :map minibuffer-local-isearch-map
          ("C-." . helm-occur-from-isearch)
          :map ctl-x-map
          ("C-r" . helm-recentf)
+         ("b" . helm-buffers-list)
          ("p" . helm-show-kill-ring)
          ("x" . helm-M-x)
          ("n" . helm-mini)

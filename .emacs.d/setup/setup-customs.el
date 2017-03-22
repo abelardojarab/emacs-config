@@ -90,7 +90,7 @@
   :group 'my/customs)
 
 (defcustom my/emacs-theme
-  'eziam-light
+  'eziam-dark
   "Preferred Emacs theme"
   :group 'my/customs
   :type 'list)
