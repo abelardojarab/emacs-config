@@ -26,7 +26,12 @@
 
 ;; Tabbar mode
 (use-package tabbar
+  :defer 1
   :load-path (lambda () (expand-file-name "tabbar/" user-emacs-directory))
+  :bind (("C-c <right>" . tabbar-forward)
+     ("C-c <left>" . tabbar-backward)
+     ("C-c <up>" . tabbar-backward-group)
+     ("C-c <down>" . tabbar-forward-group))
   :config (progn
             (setq tabbar-use-images t)
             (setq tabbar-cycle-scope (quote tabs))
@@ -61,8 +66,8 @@
                            tabs)))
                 (if tab (switch-to-buffer (car tab)))))
 
-	    ;; Enable tabbar
-	    (tabbar-mode t)))
+        ;; Enable tabbar
+        (tabbar-mode t)))
 
 ;; Tabbar ruler pre-requisites
 (use-package mode-icons
