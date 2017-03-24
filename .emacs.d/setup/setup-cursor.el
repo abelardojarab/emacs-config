@@ -1,6 +1,6 @@
 ;;; setup-cursor.el ---                              -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2016  Abelardo Jara-Berrocal
+;; Copyright (C) 2016, 2017  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
 ;; Keywords:
@@ -25,29 +25,29 @@
 ;;; Code:
 
 ;; Change form/shape of emacs cursor
-(setq djcb-read-only-color "green")
-(setq djcb-read-only-cursor-type 'hbar)
-(setq djcb-overwrite-color "red")
-(setq djcb-overwrite-cursor-type 'box)
-(setq djcb-normal-color "white")
-(setq djcb-normal-cursor-type 'bar)
-(defun djcb-set-cursor-according-to-mode ()
+(setq my/read-only-color "green")
+(setq my/read-only-cursor-type 'hbar)
+(setq my/overwrite-color "red")
+(setq my/overwrite-cursor-type 'box)
+(setq my/normal-color "white")
+(setq my/normal-cursor-type 'bar)
+(defun my/set-cursor-according-to-mode ()
   "change cursor color and type according to some minor modes."
   (cond
    (buffer-read-only
-    (set-cursor-color djcb-read-only-color)
-    (setq cursor-type djcb-read-only-cursor-type))
+    (set-cursor-color my/read-only-color)
+    (setq cursor-type my/read-only-cursor-type))
    (overwrite-mode
-    (set-cursor-color djcb-overwrite-color)
-    (setq cursor-type djcb-overwrite-cursor-type))
+    (set-cursor-color my/overwrite-color)
+    (setq cursor-type my/overwrite-cursor-type))
    (t
-    (set-cursor-color djcb-normal-color)
-    (setq cursor-type djcb-normal-cursor-type))))
+    (set-cursor-color my/normal-color)
+    (setq cursor-type my/normal-cursor-type))))
 (add-hook 'post-command-hook
           (lambda () (interactive)
             (unless (member
                      major-mode '(pdf-docs doc-view-mode))
-              (djcb-set-cursor-according-to-mode))))
+              (my/set-cursor-according-to-mode))))
 
 ;; Disable blinking cursor
 (blink-cursor-mode 0)
