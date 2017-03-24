@@ -24,6 +24,11 @@
 
 ;;; Code:
 
+;; Secrets file
+(let ((secrets-file "~/.emacs.cache/.secret.el"))
+  (when (file-exists-p secrets-file)
+    (load secrets-file)))
+
 (defcustom my/bibtex-completion-bibliography "~/workspace/Documents/Bibliography/biblio.bib"
   "Preferred bibliography file"
   :type 'string
@@ -366,13 +371,17 @@
   :group 'my/customs)
 
 ;; User-specific configuration file
-(setq-default custom-file "~/.emacs.cache/customizations.el")
+(setq-default custom-file "~/.emacs.cache/custom.el")
 (when (file-exists-p custom-file)
   (load custom-file))
 
 ;; Prompt about unsaved customizations at termination time
 (add-hook 'kill-emacs-query-functions
           'custom-prompt-customize-unsaved-options)
+
+;; Settings for currently logged in user
+(setq user-settings-dir "~/.emacs.cache/custom")
+(add-to-list 'load-path user-settings-dir)
 
 (provide 'setup-customs)
 ;;; setup-customs.el ends here

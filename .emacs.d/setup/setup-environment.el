@@ -24,11 +24,6 @@
 
 ;;; Code:
 
-;; Secrets file
-(let ((secret.el "~/.emacs.cache/.secret.el"))
-  (when (file-exists-p secret.el)
-    (load secret.el)))
-
 ;; garbage collection
 (setq-default ;; alloc.c
  gc-cons-threshold most-positive-fixnum
@@ -147,9 +142,8 @@
   (push "/usr/local/bin" exec-path)
   (push "/opt/local/bin" exec-path)
   (push "/usr/texbin" exec-path)
-  (push "/usr/local/texlive/2014/bin/x86_64-darwin" exec-path)
 
-  (defun mac-open-file ()
+  (defun my/mac-open-file ()
     (interactive)
     (let ((file (do-applescript "try
  POSIX path of (choose file)
@@ -162,7 +156,7 @@
           (find-file file)
         (beep))))
 
-  (defun mac-save-file-as ()
+  (defun my/mac-save-file-as ()
     (interactive)
     (let ((file (do-applescript "try
  POSIX path of (choose file name with prompt \"Save As...\")

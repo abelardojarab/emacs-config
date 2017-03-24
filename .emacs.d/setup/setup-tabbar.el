@@ -46,18 +46,18 @@
                       (concat "" (concat ad-return-value "")))))
 
             ;; called each time the modification state of the buffer changed
-            (defun ztl-modification-state-change ()
+            (defun my/modification-state-change ()
               (tabbar-set-template tabbar-current-tabset nil)
               (tabbar-display-update))
 
             ;; first-change-hook is called BEFORE the change is made
-            (defun ztl-on-buffer-modification ()
+            (defun my/on-buffer-modification ()
               (set-buffer-modified-p t)
-              (ztl-modification-state-change))
-            (add-hook 'after-save-hook 'ztl-modification-state-change)
-            (add-hook 'first-change-hook 'ztl-on-buffer-modification)
+              (my/modification-state-change))
+            (add-hook 'after-save-hook 'my/modification-state-change)
+            (add-hook 'first-change-hook 'my/on-buffer-modification)
 
-            ;; Assure switch tabbar uses switch-to-buffer
+            ;; Assure switching tabs uses switch-to-buffer
             (defun switch-tabbar (num)
               (let* ((tabs (tabbar-tabs
                             (tabbar-current-tabset)))
@@ -85,9 +85,6 @@
 
             ;; https://github.com/mattfidler/tabbar-ruler.el/issues/10
             (setq tabbar-ruler-movement-timer-delay 1000000)
-
-            ;; Group user buffers
-            ;; (tabbar-ruler-group-by-projectile-project)
 
             ;; Fix for tabbar under Emacs 24.4
             ;; store tabbar-cache into a real hash,
@@ -138,7 +135,7 @@
                    (bury-buffer)
                    (nth n my/buffer-list)))))
 
-            ;; Enable tab-bar
+            ;; Enable tabbar
             (tabbar-mode t)))
 
 (provide 'setup-tabbar)

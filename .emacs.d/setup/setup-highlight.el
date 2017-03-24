@@ -46,7 +46,8 @@
 (use-package hl-line
   :config (progn
             (global-hl-line-mode t)
-            (defun local-hl-line-mode-off ()
+
+            (defun my/hl-line-mode-off ()
               (interactive)
               (make-local-variable 'global-hl-line-mode)
               (setq global-hl-line-mode nil))
@@ -55,7 +56,7 @@
             (defadvice hi-lock-set-pattern (around use-overlays activate)
               (let ((font-lock-fontified nil))
                 ad-do-it))
-            (add-hook 'org-mode-hook 'local-hl-line-mode-off)))
+            (add-hook 'org-mode-hook 'my/hl-line-mode-off)))
 
 ;; Highlight symbol
 (use-package highlight-symbol

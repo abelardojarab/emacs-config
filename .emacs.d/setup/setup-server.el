@@ -27,7 +27,6 @@
 ;; Server configuration
 (use-package server
   :init (progn
-          (require 'server)
 
           ;; Monkey patch the server to force it to use ipv4. This is a bug fix that will
           ;; hopefully be in emacs 24: http://debbugs.gnu.org/cgi/bugreport.cgi?bug=6781"
@@ -35,19 +34,19 @@
             (if (eq nil (plist-get (ad-get-args 0) :family))
                 (ad-set-args 0 (plist-put (ad-get-args 0) :family 'ipv4))))
 
-          ;; Launch the server
-          (unless (server-running-p)
-            (setq server-use-tcp t)
-            (setq server-port 9999)
-            (setq server-auth-dir "~/.emacs.cache/server")
-            (setq server-socket-dir "~/.emacs.cache/server")
-            (if (not (file-exists-p server-auth-dir))
-                (make-directory server-auth-dir t))
-            (and (>= emacs-major-version 23)
-                 (defun server-ensure-safe-dir (dir) "Noop" t))
-            (if (not (eq 'windows-nt system-type))
-              (server-start))))
+          ;; Server configuration
+          (setq server-use-tcp t)
+          (setq server-port 9999)
+          (setq server-auth-dir "~/.emacs.cache/server")
+          (setq server-socket-dir "~/.emacs.cache/server")
+          (if (not (file-exists-p server-auth-dir))
+              (make-directory server-auth-dir t)))
   :config (progn
+
+            ;; Launch the server
+            (unless (server-running-p)
+              (if (not (eq 'windows-nt system-type))
+                  (server-start)))
 
             ;; Ensure there is always at least one visible frame open at all times
             (defadvice server-save-buffers-kill-terminal (around dont-kill-last-client-frame activate)
@@ -56,7 +55,7 @@
 
             ;; Keeping emacs running even when "exiting"
             ;; http://bnbeckwith.com/blog/not-killing-emacs-on-windows.html
-            (defun bnb/exit ()
+            (defun my/exit ()
               (interactive)
               ;; message
               (message (format "There are currently %d client(s) and %d frame(s)."
@@ -71,26 +70,27 @@
               (if (display-graphic-p)
                   (iconify-frame)
                 (make-frame-invisible nil t)))
-            (global-set-key (kbd "C-x C-c") 'bnb/exit)
+            (global-set-key (kbd "C-x C-c") 'my/exit)
 
-            (defvar bnb/really-kill-emacs nil)
-            (defadvice kill-emacs (around bnb/really-exit activate)
+            (defvar my/really-kill-emacs nil)
+            (defadvice kill-emacs (around my/really-exit activate)
               "Only kill emacs if a prefix is set"
-              (when bnb/really-kill-emacs
+              (when my/really-kill-emacs
                 ;; Kill all remaining clients
-                (if (not (modified-buffers-exist))
+                (if (not (my/modified-buffers-exist))
                     (progn
                       (dolist (client server-clients)
                         (server-delete-client client))))
                 ad-do-it)
-              (bnb/exit))
+              (my/exit))
 
-            (defun bnb/really-kill-emacs ()
+            (defun my/really-kill-emacs ()
               (interactive)
-              (setq bnb/really-kill-emacs t)
+              (setq my/really-kill-emacs t)
               (kill-emacs))
 
-            (defun modified-buffers-exist()
+            ;; Detect presence of modified buffers
+            (defun my/modified-buffers-exist()
               "This function will check to see if there are any buffers
 that have been modified.  It will return true if there are
 and nil otherwise. Buffers that have buffer-offer-save set to

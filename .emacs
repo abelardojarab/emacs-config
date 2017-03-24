@@ -23,6 +23,8 @@
 ;; Setup the starting directories
 (if (file-exists-p "~/workspace/emacs-config/.emacs.d")
     (setq user-emacs-directory "~/workspace/emacs-config/.emacs.d"))
+
+;; Basics
 (add-to-list 'load-path (expand-file-name "elisp/" user-emacs-directory))
 (add-to-list 'load-path (expand-file-name "dadams/" user-emacs-directory))
 (add-to-list 'load-path (expand-file-name "setup/" user-emacs-directory))
@@ -468,6 +470,10 @@
 
 ;; Setup network-related tools
 (require 'setup-nettools)
+
+;; Conclude init by setting up specifics for the current user
+(when (file-exists-p user-settings-dir)
+  (mapc 'load (directory-files user-settings-dir nil "^[^#].*el$")))
 
 ;; Setup desktop
 (require 'setup-desktop)
