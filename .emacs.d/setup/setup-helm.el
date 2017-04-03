@@ -34,7 +34,7 @@
          ("C-." . helm-occur-from-isearch)
          :map ctl-x-map
          ("C-r" . helm-recentf)
-         ("b" . helm-buffers-list)
+         ("C-b" . helm-buffers-list)
          ("p" . helm-show-kill-ring)
          ("x" . helm-M-x)
          ("n" . helm-mini)

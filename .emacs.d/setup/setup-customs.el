@@ -71,7 +71,7 @@
 
 (defcustom my/smtp-accounts
   '((ssl "abelardotomasjb@gmail.com" "smtp.gmail.com"
-	 587 "abelardojarab@gmail.com"))
+     587 "abelardojarab@gmail.com"))
   "Availble SMTP accounts"
   :group 'my/customs
   :type 'list)
@@ -386,6 +386,10 @@
 (setq-default custom-file "~/.emacs.cache/custom.el")
 (when (file-exists-p custom-file)
   (load custom-file))
+
+;; User information
+(setq user-full-name my/user-full-name)
+(setq user-mail-address my/user-email)
 
 ;; Prompt about unsaved customizations at termination time
 (add-hook 'kill-emacs-query-functions

@@ -27,7 +27,10 @@
 ;; Gnus
 (use-package gnus
   :defer 1
-  :commands (gnus compose-mail)
+  :commands (gnus compose-mail switch-to-gnus)
+  :bind (("M-G"   . switch-to-gnus)
+         :map ctl-x-map
+         ("m" . compose-mail))
   :config (progn
             ;; notmuch search
             (setq notmuch-message-headers '("Subject" "To" "Cc" "Date" "Reply-To"))
@@ -35,11 +38,15 @@
             ;; You need this to be able to list all labels in gmail
             (setq gnus-ignored-newsgroups "")
 
+            ;; To be able to search within your gmail/imap mail
+            (use-package nnir)
+
             ;; And this to configure gmail imap
             (setq gnus-select-method '(nnimap "gmail"
                                               (nnimap-address "imap.gmail.com")
                                               (nnimap-server-port 993)
-                                              (nnimap-stream ssl)))
+                                              (nnimap-stream ssl)
+                                              (nnir-search-engine imap)))
 
             ;; Setup gnus inboxes
             (setq gnus-secondary-select-methods
@@ -57,29 +64,38 @@
             ;; Gnus news
             (setq gnus-summary-line-format "%U%R%z%d %I%(%[ %F %] %s %)\n")
 
+            ;; A gravatar is an image registered to an e-mail address
+            (setq gnus-treat-from-gravatar t)
+
             ;; Get smarter about filtering depending on what I reed or mark.
             ;; I use ! (tick) for marking threads as something that interests me.
             (setq gnus-use-adaptive-scoring t
-                  gnus-treat-from-gravatar t)
-
-            (setq gnus-default-adaptive-score-alist
+                  gnus-default-adaptive-score-alist
                   '((gnus-unread-mark)
                     (gnus-ticked-mark (subject 10))
                     (gnus-killed-mark (subject -5))
-                    (gnus-catchup-mark (subject -1))))))
+                    (gnus-catchup-mark (subject -1))))
 
+            ;; Use gnus for email
+            (setq mail-user-agent 'gnus-user-agent)
+            (setq read-mail-command 'gnus-user-agent)
+
+            ;; Mode hooks
+            (add-hook 'gnus-group-mode-hook 'gnus-topic-mode)
+            (add-hook 'gnus-group-mode-hook 'hl-line-mode)
+            (add-hook 'gnus-summary-mode-hook 'hl-line-mode)))
+
+;; To be able to send email with your gmail/smtp mail
 (use-package smtpmail
   :config (progn
 
             ;; Send mail using postfix
             ;; http://pragmaticemacs.com/emacs/using-postfix-instead-of-smtpmail-to-send-email-in-mu4e/
-            (setq send-mail-function 'sendmail-send-it
-                  message-send-mail-function 'message-send-mail-with-sendmail)
+            ;; (setq send-mail-function 'sendmail-send-it
+            ;;       message-send-mail-function 'message-send-mail-with-sendmail)
 
             (setq send-mail-function 'smtpmail-send-it
                   message-send-mail-function 'smtpmail-send-it
-                  mail-from-style nil
-                  user-full-name my/user-full-name
                   smtpmail-debug-info t smtpmail-debug-verb t)
 
             (defun set-smtp (mech server port user password)

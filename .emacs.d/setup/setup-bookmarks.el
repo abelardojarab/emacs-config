@@ -36,8 +36,7 @@
 (use-package bm
   :load-path (lambda () (expand-file-name "bm/" user-emacs-directory))
   :commands (bm-repository-load bm-buffer-restore bm-buffer-save bm-buffer-save-all bm-repository-save bm-toggle)
-  :bind (
-         ;; bind left mouse clicks and scrolls in left margin/fringe
+  :bind (;; bind left mouse clicks and scrolls in left margin/fringe
          ("<left-fringe> <mouse-5>" . bm-next-mouse)
          ("<left-margin> <mouse-5>" . bm-next-mouse)
          ("<left-fringe> <mouse-4>" . bm-previous-mouse)
@@ -46,7 +45,7 @@
          ("<left-margin> <mouse-1>" . bm-toggle-mouse)
 
          :map ctl-x-map
-         ("m" . bm-toggle))
+         ("M" . bm-toggle))
   :init (progn
 
           ;; bm-repository

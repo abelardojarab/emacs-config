@@ -59,10 +59,6 @@
 (use-package ivy-rich
   :after swiper
   :commands ivy-switch-buffer
-  :bind (("C-b" . ivy-switch-buffer)
-         ;; :map ctl-x-map
-         ;; ("b" . ivy-switch-buffer)
-         )
   :load-path (lambda () (expand-file-name "ivy-rich/" user-emacs-directory))
   :config (progn
             (ivy-set-display-transformer 'ivy-switch-buffer 'ivy-rich-switch-buffer-transformer)
