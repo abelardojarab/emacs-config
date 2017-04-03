@@ -43,10 +43,8 @@
               (make-directory server-auth-dir t)))
   :config (progn
 
-            ;; Launch the server
-            (unless (server-running-p)
-              (if (not (eq 'windows-nt system-type))
-                  (server-start)))
+            ;; http://stackoverflow.com/questions/885793/emacs-error-when-calling-server-start
+            (defun server-ensure-safe-dir (dir) "Noop" t)
 
             ;; Ensure there is always at least one visible frame open at all times
             (defadvice server-save-buffers-kill-terminal (around dont-kill-last-client-frame activate)
@@ -84,7 +82,7 @@
                 ad-do-it)
               (my/exit))
 
-            (defun my/really-kill-emacs ()
+            (defun quit-emacs ()
               (interactive)
               (setq my/really-kill-emacs t)
               (kill-emacs))
@@ -106,7 +104,12 @@ nil are ignored."
                                 (set-buffer buffer)
                                 (and buffer-offer-save (> (buffer-size) 0)))))
                     (setq modified-found t)))
-                modified-found))))
+                modified-found))
+
+            ;; Launch the server
+            (unless (server-running-p)
+              (if (not (eq 'windows-nt system-type))
+                  (server-start)))))
 
 ;; emacsclient support
 (use-package remote-emacsclient
