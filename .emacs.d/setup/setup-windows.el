@@ -394,5 +394,34 @@ place the new frame at the right side of the current frame."
   :load-path (lambda () (expand-file-name "auto-dim-other-buffers/" user-emacs-directory))
   :config (auto-dim-other-buffers-mode 1))
 
+;; Shackle windows (controls popup windows)
+(use-package shackle
+  :load-path (lambda () (expand-file-name "shackle/" user-emacs-directory))
+  :config   (progn
+              (setq shackle-lighter "")
+              (setq shackle-select-reused-windows nil) ; default nil
+              (setq shackle-default-alignment 'below) ; default below
+              (setq shackle-default-size 0.4) ; default 0.5
+
+              (setq shackle-rules
+                    ;; CONDITION(:regexp)    :select     :inhibit-window-quit   :size+:align|:other     :same|:popup
+                    '((compilation-mode      :select     nil)
+                      ("\\`\\*helm.*?\\*\\'" :regexp     t        :align               t       :ratio               0.4)
+                      ("*undo-tree*"         :size       0.25     :align               right)
+                      ("*eshell*"            :select     t        :other               t)
+                      ("*Shell               Command     Output*" :select              nil)
+                      ("\\*Async             Shell.*\\*" :regexp  t                    :ignore t)
+                      (occur-mode            :select     nil      :align               t)
+                      ("*Help*"              :select     t        :inhibit-window-quit t       :other               t)
+                      ("*Completions*"       :size       0.3      :align               t       )
+                      ("*Messages*"          :select     nil      :inhibit-window-quit t       :other               t)
+                      ("\\*[Wo]*Man.*\\*"    :regexp     t        :select              t       :inhibit-window-quit t :other t)
+                      ("\\`\\*helm.*?\\*\\'" :regexp     t        :size                0.3     :align               t)
+                      ("*Calendar*"          :select     t        :size                0.3     :align               below)
+                      ))
+
+              ;; Enable shackle
+              (shackle-mode 1)))
+
 (provide 'setup-windows)
 ;;; setup-windows.el ends here
