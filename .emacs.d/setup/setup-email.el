@@ -188,22 +188,22 @@
                   mu4e-change-filenames-when-moving t
                   mu4e-confirm-quit nil)
 
-            (setq mu4e-use-fancy-chars t
-                  mu4e-headers-draft-mark     '("D" . "⚒ ") ; draft
-                  mu4e-headers-seen-mark      '("S" . "☑ ")  ; seen
-                  mu4e-headers-unread-mark    '("u" . "☐ ")  ; unseen
-                  mu4e-headers-new-mark       '("N" .  "")
-                  mu4e-headers-seen-mark      '("S" . "")    ; seen
-                  mu4e-headers-unread-mark    '("u" . "")    ; unseen
-                  mu4e-headers-flagged-mark   '("F" .  "⚵ ") ; flagged
-                  mu4e-headers-new-mark       '("N" .  "✉ ")  ; new
-                  mu4e-headers-replied-mark   '("R" . "↵ ")  ; replied
-                  mu4e-headers-passed-mark    '("P" . "⇉ ")  ; passed
-                  mu4e-headers-encrypted-mark '("x" . "⚷ ")   ; encrypted
-                  mu4e-headers-signed-mark    '("s" . "✍ ")  ; signed
-                  mu4e-headers-empty-parent-prefix '("-" . "○")
-                  mu4e-headers-first-child-prefix '("\\" . "▶")
-                  mu4e-headers-has-child-prefix '("+" . "●"))
+            (setq mu4e-use-fancy-chars             t
+                  mu4e-headers-draft-mark	   '("D"  . "⚒  ") ; draft
+                  mu4e-headers-seen-mark	   '("S"  . "☑  ") ; seen
+                  mu4e-headers-unread-mark	   '("u"  . "☐  ") ; unseen
+                  mu4e-headers-new-mark		   '("N"  . "")
+                  mu4e-headers-seen-mark	   '("S"  . "") ;  seen
+                  mu4e-headers-unread-mark	   '("u"  . "") ;  unseen
+                  mu4e-headers-flagged-mark	   '("F"  . "⚵  ") ; flagged
+                  mu4e-headers-new-mark		   '("N"  . "✉  ") ; new
+                  mu4e-headers-replied-mark	   '("R"  . "↵  ") ; replied
+                  mu4e-headers-passed-mark	   '("P"  . "⇉  ") ; passed
+                  mu4e-headers-encrypted-mark	   '("x"  . "⚷  ") ; encrypted
+                  mu4e-headers-signed-mark	   '("s"  . "✍  ") ; signed
+                  mu4e-headers-empty-parent-prefix '("-"  . "○")
+                  mu4e-headers-first-child-prefix  '("\\" . "▶")
+                  mu4e-headers-has-child-prefix	   '("+"  . "●"))
 
             (setq mu4e-maildir my/mu4e-maildir
                   mu4e-refile-folder "/[Gmail].Archive"
@@ -251,8 +251,8 @@
               :config (setq mu4e-html2text-command 'mu4e-shr2text))
 
             ;; Use <TAB> to preview messages and q to close previews.
+	    (use-package mu4e-headers)
             (use-package mu4e-view)
-            (use-package mu4e-headers)
             (defun my/preview-message ()
               (interactive)
               (mu4e-headers-view-message)

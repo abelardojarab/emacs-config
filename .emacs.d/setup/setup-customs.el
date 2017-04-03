@@ -49,6 +49,11 @@
   :type 'int
   :group 'my/customs)
 
+(defcustom my/user-full-name  "Abelardo Jara-Berrocal"
+  "User full name"
+  :group 'my/customs
+  :type 'string)
+
 (defcustom my/user-email  "abelardojarab@gmail.com"
   "Preferred user email"
   :group 'my/customs
@@ -63,6 +68,13 @@
   "Location of the mu4e/mbsync mailbox"
   :group 'my/customs
   :type 'string)
+
+(defcustom my/smtp-accounts
+  '((ssl "abelardotomasjb@gmail.com" "smtp.gmail.com"
+	 587 "abelardojarab@gmail.com"))
+  "Availble SMTP accounts"
+  :group 'my/customs
+  :type 'list)
 
 (defcustom my/preferred-to-language "Spanish"
   "Preferred language to translate to ..."

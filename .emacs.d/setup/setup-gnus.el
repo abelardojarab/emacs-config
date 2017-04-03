@@ -1,4 +1,4 @@
-;;; setup-gnus.el ---                                -*- lexical-binding: t; -*-
+;;; setup-gnus.el ---                         -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2014, 2015, 2016, 2017  Abelardo Jara-Berrocal
 
@@ -32,14 +32,27 @@
             ;; notmuch search
             (setq notmuch-message-headers '("Subject" "To" "Cc" "Date" "Reply-To"))
 
+            ;; You need this to be able to list all labels in gmail
+            (setq gnus-ignored-newsgroups "")
+
+            ;; And this to configure gmail imap
+            (setq gnus-select-method '(nnimap "gmail"
+                                              (nnimap-address "imap.gmail.com")
+                                              (nnimap-server-port 993)
+                                              (nnimap-stream ssl)))
+
             ;; Setup gnus inboxes
-            (setq gnus-select-method '(nnnil ""))
             (setq gnus-secondary-select-methods
-                  '((nntp "news.gmane.org")
-                    (nnmaildir "mail"
+                  '((nnmaildir "mail"
                                (directory "~/Maildir")
                                (directory-files nnheader-directory-files-safe)
                                (get-new-mail nil))))
+
+            ;; My version of gnus in my Mac does not handle html messages
+            ;; correctly (the one in the netbook does, I guess it is a different
+            ;; version). The following will chose plaintext every time this is
+            ;; possible.
+            (setq mm-discouraged-alternatives '("text/html" "text/richtext"))
 
             ;; Gnus news
             (setq gnus-summary-line-format "%U%R%z%d %I%(%[ %F %] %s %)\n")
@@ -53,13 +66,72 @@
                   '((gnus-unread-mark)
                     (gnus-ticked-mark (subject 10))
                     (gnus-killed-mark (subject -5))
-                    (gnus-catchup-mark (subject -1))))
+                    (gnus-catchup-mark (subject -1))))))
 
+(use-package smtpmail
+  :config (progn
 
-            ;; gnus setup
-            ;; (gnus-registry-initialize)
+            ;; Send mail using postfix
+            ;; http://pragmaticemacs.com/emacs/using-postfix-instead-of-smtpmail-to-send-email-in-mu4e/
+            (setq send-mail-function 'sendmail-send-it
+                  message-send-mail-function 'message-send-mail-with-sendmail)
 
-            ))
+            (setq send-mail-function 'smtpmail-send-it
+                  message-send-mail-function 'smtpmail-send-it
+                  mail-from-style nil
+                  user-full-name my/user-full-name
+                  smtpmail-debug-info t smtpmail-debug-verb t)
+
+            (defun set-smtp (mech server port user password)
+              "Set related SMTP variables for supplied parameters."
+              (setq smtpmail-smtp-server server
+                    smtpmail-smtp-service port
+                    smtpmail-auth-credentials (list (list server port user
+                                                          password))
+                    smtpmail-auth-supported (list mech)
+                    smtpmail-starttls-credentials nil)
+              (message "Setting SMTP server to `%s:%s' for user `%s'."
+                       server port user))
+
+            (defun set-smtp-ssl (server port user password &optional key
+                                        cert)
+              "Set related SMTP and SSL variables for supplied parameters."
+              (setq starttls-use-gnutls t
+                    starttls-gnutls-program "gnutls-cli"
+                    starttls-extra-arguments nil
+                    smtpmail-smtp-server server
+                    smtpmail-smtp-service port
+                    smtpmail-auth-credentials (list (list server port user
+                                                          password))
+                    smtpmail-starttls-credentials (list (list
+                                                         server port key cert)))
+              (message
+               "Setting SMTP server to `%s:%s' for user `%s'. (SSL enabled.)" server port user))
+
+            (defun change-smtp ()
+              "Change the SMTP server according to the current from line."
+              (save-excursion
+                (loop with from = (save-restriction
+                                    (message-narrow-to-headers)
+                                    (message-fetch-field "from"))
+                      for (auth-mech address . auth-spec) in my/smtp-accounts
+                      when (string-match address from)
+                      do (cond
+                          ((memq auth-mech '(cram-md5 plain login))
+                           (return (apply 'set-smtp (cons auth-mech auth-spec))))
+                          ((eql auth-mech 'ssl)
+                           (return (apply 'set-smtp-ssl auth-spec)))
+                          (t (error "Unrecognized SMTP auth. mechanism: `%s'." auth-mech)))
+                      finally (error "Cannot infer SMTP information."))))
+
+            ;; The previous function will complain if you fill the from field with
+            ;; an account not present in my/smtp-accounts.
+            (defvar %smtpmail-via-smtp (symbol-function 'smtpmail-via-smtp))
+            (defun smtpmail-via-smtp (recipient smtpmail-text-buffer)
+              (with-current-buffer smtpmail-text-buffer
+                (change-smtp))
+              (funcall (symbol-value '%smtpmail-via-smtp) recipient
+                       smtpmail-text-buffer))))
 
 ;; apel
 (use-package apel
@@ -127,16 +199,6 @@
             (add-hook 'message-mode-hook #'typo-mode)
             (add-hook 'message-mode-hook #'footnote-mode)
             (add-hook 'message-mode-hook #'turn-on-auto-fill)
-
-            ;; Send mail using postfix
-            ;; http://pragmaticemacs.com/emacs/using-postfix-instead-of-smtpmail-to-send-email-in-mu4e/
-
-            ;; Postfix configuration according to:
-            ;; https://www.linode.com/docs/email/postfix/postfix-smtp-debian7 and
-            ;; https://www.howtoforge.com/tutorial/configure-postfix-to-use-gmail-as-a-mail-relay/
-            ;; https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-postfix-as-a-send-only-smtp-server-on-ubuntu-14-04
-            (setq send-mail-function 'sendmail-send-it)
-            (setq message-send-mail-function 'message-send-mail-with-sendmail)
 
             ;; Enable emacsclient in mutt
             (add-to-list 'auto-mode-alist '(".*mutt.*" . message-mode))
