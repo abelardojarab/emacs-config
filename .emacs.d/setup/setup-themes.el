@@ -31,6 +31,8 @@
 ;; Add themes
 (dolist (my/theme
          (list
+	  "madhat2r"
+	  "kaolin"
           "darktooth"
           "gruber-darker"
           "moe"
