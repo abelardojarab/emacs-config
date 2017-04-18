@@ -35,6 +35,13 @@
 (require 'eieio-core)
 
 ;; Missing function
+(when (not (fboundp 'font-lock-flush))
+  (defun font-lock-flush ()
+    (when font-lock-mode
+      (with-no-warnings
+	(font-lock-fontify-buffer)))))
+
+;; Missing function
 (when (not (fboundp 'special-form-p))
   (defun special-form-p (object)
     "Non-nil if and only if OBJECT is a special form."
