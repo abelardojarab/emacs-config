@@ -89,32 +89,33 @@
           (setq indent-hint-background-overlay t)
           (setq indent-hint-bg nil)))
 
+
+
 ;; Transient indentation guide
-(use-package indent-guide
+(use-package highlight-indent-guides
   :defer t
-  :commands indent-guide-mode
-  :load-path (lambda () (expand-file-name "indent-guide/" user-emacs-directory))
-  :diminish indent-guide-mode
+  :commands highlight-indent-guides-mode
+  :load-path (lambda () (expand-file-name "highlight-indent-guides/" user-emacs-directory))
+  :init (add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
   :config (progn
+
             ;; Fix indent guide issue with popup
             (defvar my/indent-guide-mode-suppressed nil)
-            (defadvice popup-create (before indent-guide-mode activate)
-              "Suspend indent-guide-mode while popups are visible"
-              (let ((indent-guide-enabled (and (boundp 'indent-guide-mode) indent-guide-mode)))
-                (set (make-local-variable 'my/indent-guide-mode-suppressed) indent-guide-mode)
-                (when indent-guide-enabled
-                  (indent-guide-mode -1))))
-            (defadvice popup-delete (after indent-guide-mode activate)
-              "Restore indent-guide-mode when all popups have closed"
-              (let ((indent-guide-enabled (and (boundp 'indent-guide-mode) indent-guide-mode)))
-                (when (and (not popup-instances) my/indent-guide-mode-suppressed)
-                  (setq my/indent-guide-mode-suppressed nil)
-                  (indent-guide-mode 1))))
+            (defadvice popup-create (before highlight-indent-guides-mode activate)
+              "Suspend highlight-indent-guides-mode while popups are visible"
+              (let ((highlight-indent-guides-enabled (and (boundp 'highlight-indent-guides-mode) highlight-indent-guides-mode)))
+                (set (make-local-variable 'my/highlight-indent-guides-mode-suppressed) highlight-indent-guides-mode)
+                (when highlight-indent-guides-enabled
+                  (highlight-indent-guides-mode -1))))
+            (defadvice popup-delete (after highlight-indent-guides-mode activate)
+              "Restore highlight-indent-guides-mode when all popups have closed"
+              (let ((highlight-indent-guides-enabled (and (boundp 'highlight-indent-guides-mode) highlight-indent-guides-mode)))
+                (when (and (not popup-instances) my/highlight-indent-guides-mode-suppressed)
+                  (setq my/highlight-indent-guides-mode-suppressed nil)
+                  (highlight-indent-guides-mode 1))))
 
-            (unless (or (equal system-type 'windows-nt)
-                        (not (display-graphic-p)))
-              (setq indent-guide-char "┊"))
-            (setq indent-guide-recursive t)))
+            (setq highlight-indent-guides-method 'character
+                  highlight-indent-guides-chararacter "┊")))
 
 ;; Highlight indentation levels
 (use-package highlight-indentation
