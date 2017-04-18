@@ -11,7 +11,7 @@
 
   (custom-theme-set-faces
    'monotropic
- 
+
    ;; generic stuff
    `(default ((t (:background ,bg :foreground ,fg))))
    `(button ((t (:foreground ,fg :underline t))))
@@ -52,9 +52,9 @@
    `(mode-line-buffer ((t (:foreground ,fg :weight bold))))
    `(mode-line-inactive ((t (:background ,bg-light :foreground ,bg-light))))
    `(mode-line-minor-mode ((t (:weight ultra-light))))
-   `(modeline ((t (:background ,bg :foreground ,fg :height 1.4))))
-   `(org-agenda-date ((t (:foreground ,fg :height 1.2))))
-   `(org-agenda-date-today ((t (:foreground ,fg :weight bold :height 1.4))))
+   `(modeline ((t (:background ,bg :foreground ,fg :height 1.1))))
+   `(org-agenda-date ((t (:foreground ,fg :height 1.1))))
+   `(org-agenda-date-today ((t (:foreground ,fg :weight bold :height 1.1))))
    `(org-agenda-date-weekend ((t (:foreground ,fg :weight normal))))
    `(org-agenda-structure ((t (:foreground ,fg :weight bold))))
    `(org-block ((t (:foreground ,fg))))
@@ -63,7 +63,7 @@
    `(org-date ((t (:foreground ,fg) :underline)))
    `(org-done ((t (:foreground ,fg-light))))
    `(org-hide ((t (:foreground ,bg))))
-   `(org-level-1 ((t (:foreground ,fg :weight semi-bold :height 1.3))))
+   `(org-level-1 ((t (:foreground ,fg :weight semi-bold :height 1.2))))
    `(org-level-2 ((t (:foreground ,fg :weight semi-bold :height 1.1))))
    `(org-level-3 ((t (:foreground ,fg :weight semi-bold :height 1.1))))
    `(org-level-4 ((t (:foreground ,fg :weight semi-bold :height 1.1))))
@@ -85,7 +85,7 @@
    `(magit-header ((t (:weight bold))))
    `(magit-item-mark ((t (:background ,bg-highlight))))
    `(magit-item-highlight ((t (:weight bold))))
-   `(magit-section-heading ((t (:weight bold :height 1.2))))
+   `(magit-section-heading ((t (:weight bold :height 1.1))))
    `(magit-section-highlight ((t (:inherit default))))
    `(magit-diff-context-highlight ((t (:weight bold))))
    `(magit-branch-local ((t (:weight bold))))

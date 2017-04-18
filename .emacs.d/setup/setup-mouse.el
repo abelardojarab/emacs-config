@@ -1,6 +1,6 @@
 ;;; setup-mouse.el ---                               -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014, 2015, 2016  Abelardo Jara-Berrocal
+;; Copyright (C) 2014, 2015, 2016, 2017  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
 ;; Keywords:
@@ -69,11 +69,9 @@
 
 ;; Right click mouse
 (use-package mouse3
-  :init (progn
-          (global-unset-key [(control mouse-3)]))
-  :config (progn
-            (defalias 'mouse3-region-popup-menu 'mouse3-popup-menu)
-            (global-set-key (kbd "<mouse-3>") 'mouse3-popup-menu)))
+  :init (global-unset-key (kbd "<mouse-3>"))
+  :bind ("<mouse-3>" . mouse3-popup-menu)
+  :config (defalias 'mouse3-region-popup-menu 'mouse3-popup-menu))
 
 ;; Cancel minibuffer operation if you click outside
 (defun stop-using-minibuffer ()
