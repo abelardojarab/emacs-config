@@ -107,7 +107,7 @@
   :group 'my/customs)
 
 (defcustom my/emacs-theme
-  'madhat2r
+  'zenburn
   "Preferred Emacs theme"
   :group 'my/customs
   :type 'list)

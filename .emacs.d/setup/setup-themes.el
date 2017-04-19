@@ -31,8 +31,8 @@
 ;; Add themes
 (dolist (my/theme
          (list
-	  "madhat2r"
-	  "kaolin"
+          "madhat2r"
+          "kaolin"
           "darktooth"
           "gruber-darker"
           "moe"
@@ -76,6 +76,13 @@
                                                   my/theme
                                                   "-theme/")
                                           user-emacs-directory))))
+
+;; Override zenburn colors
+(defvar zenburn-override-colors-alist
+  '(("zenburn-bg+05" . "#282828")
+    ("zenburn-bg+1"  . "#2F2F2F")
+    ("zenburn-bg+2"  . "#3F3F3F")
+    ("zenburn-bg+3"  . "#4F4F4F")))
 
 ;; Tomorrow theme
 (add-to-list 'load-path (expand-file-name "themes/sanityinc-tomorrow-theme/" user-emacs-directory))
