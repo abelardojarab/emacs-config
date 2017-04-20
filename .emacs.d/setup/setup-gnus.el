@@ -24,6 +24,9 @@
 
 ;;; Code:
 
+;; Make gnutls a bit safer
+(setq gnutls-min-prime-bits 4096)
+
 ;; Gnus
 (use-package gnus
   :defer 1

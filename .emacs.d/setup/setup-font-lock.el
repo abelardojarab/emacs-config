@@ -24,6 +24,11 @@
 
 ;;; Code:
 
+;; Allow font-lock-mode to do background parsing
+(setq jit-lock-stealth-time 1
+      jit-lock-chunk-size 1000
+      jit-lock-defer-time 0.05)
+
 ;; Syntax coloring
 (global-font-lock-mode t)
 (setq font-lock-maximum-decoration t)

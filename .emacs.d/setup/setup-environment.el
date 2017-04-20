@@ -236,6 +236,11 @@
 ;; Disable word wrapping
 (setq-default word-wrap nil)
 
+;; It's much easier to move around lines based on how they are displayed,
+;; rather than the actual line. This helps a ton with long log file lines
+;; that may be wrapped:
+(setq line-move-visual t)
+
 ;; Do not add empty lines at the end of our file if we press down key
 (setq next-line-add-newlines nil)
 
