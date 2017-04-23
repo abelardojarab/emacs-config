@@ -108,7 +108,8 @@
 (use-package spaceline-all-the-icons
   :after spaceline
   :load-path (lambda () (expand-file-name "spaceline-all-the-icons/" user-emacs-directory))
-  :config (spaceline-all-the-icons-theme))
+  :config (progn (spaceline-all-the-icons-theme)
+                 (setq powerline-default-separator 'wave)))
 
 (use-package airline-themes
   :disabled t
