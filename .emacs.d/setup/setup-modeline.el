@@ -105,6 +105,11 @@
 
             (spaceline-toggle-buffer-size-off)))
 
+(use-package spaceline-all-the-icons
+  :after spaceline
+  :load-path (lambda () (expand-file-name "spaceline-all-the-icons/" user-emacs-directory))
+  :config (spaceline-all-the-icons-theme))
+
 (use-package airline-themes
   :disabled t
   :after powerline
