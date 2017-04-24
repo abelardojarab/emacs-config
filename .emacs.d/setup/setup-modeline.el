@@ -111,8 +111,8 @@
 (use-package spaceline-all-the-icons
   :after spaceline
   :load-path (lambda () (expand-file-name "spaceline-all-the-icons/" user-emacs-directory))
-  :init (setq spaceline-all-the-icons-separators-type 'slant)
-  :config (spaceline-all-the-icons-theme))
+  :config (progn (setq spaceline-all-the-icons-separators-type 'slant)
+                 (spaceline-all-the-icons-theme)))
 
 ;; Customize Emacs lighters
 (use-package delight
