@@ -46,7 +46,7 @@
             ;; Configure the mode-line
             (setq-default
              mode-line-format '("%e" (:eval (spaceline-ml-main)))
-             powerline-default-separator 'arrow
+             powerline-default-separator 'slant
              spaceline-display-default-perspective t
              powerline-height 20
              spaceline-highlight-face-func 'spaceline-highlight-face-modified
@@ -111,7 +111,7 @@
 (use-package spaceline-all-the-icons
   :after spaceline
   :load-path (lambda () (expand-file-name "spaceline-all-the-icons/" user-emacs-directory))
-  :init (setq spaceline-all-the-icons-separators-type 'Wave)
+  :init (setq spaceline-all-the-icons-separators-type 'Slant)
   :config (spaceline-all-the-icons-theme))
 
 ;; Customize Emacs lighters
