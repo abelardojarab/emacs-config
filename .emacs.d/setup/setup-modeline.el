@@ -41,13 +41,8 @@
 ;; Spaceline
 (use-package spaceline
   :after powerline
-  :load-path (lambda () (expand-file-name "spaceline/" user-emacs-directory)))
-
-;; Spaceline configuration
-(use-package spaceline-config
-  :after spaceline
+  :load-path (lambda () (expand-file-name "spaceline/" user-emacs-directory))
   :config (progn
-
             ;; Configure the mode-line
             (setq-default
              mode-line-format '("%e" (:eval (spaceline-ml-main)))
@@ -58,7 +53,15 @@
              spaceline-flycheck-bullet "• %s"
              spaceline-separator-dir-left '(left . left)
              spaceline-separator-dir-right '(right . right))
-            (spaceline-helm-mode)
+
+            (use-package spaceline-config)
+            (spaceline-helm-mode)))
+
+;; Spaceline configuration
+(use-package spaceline-config
+  :after spaceline
+  :disabled t
+  :config (progn
 
             ;; Build a segment for the version control branch
             (spaceline-define-segment my/version-control
@@ -108,8 +111,8 @@
 (use-package spaceline-all-the-icons
   :after spaceline
   :load-path (lambda () (expand-file-name "spaceline-all-the-icons/" user-emacs-directory))
-  :init (setq spaceline-all-the-icons-separators-type 'arrow)
-  :config (progn (spaceline-all-the-icons-theme)))
+  :init (setq spaceline-all-the-icons-separators-type 'Wave)
+  :config (spaceline-all-the-icons-theme))
 
 ;; Customize Emacs lighters
 (use-package delight
