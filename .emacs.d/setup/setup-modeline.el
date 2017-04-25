@@ -52,15 +52,16 @@
              spaceline-highlight-face-func 'spaceline-highlight-face-modified
              spaceline-flycheck-bullet "• %s"
              spaceline-separator-dir-left '(left . left)
-             spaceline-separator-dir-right '(right . right))
-
-            (use-package spaceline-config)
-            (spaceline-helm-mode)))
+             spaceline-separator-dir-right '(right . right))))
 
 ;; Spaceline configuration
 (use-package spaceline-config
   :after spaceline
-  :disabled t
+  :config (spaceline-helm-mode))
+
+(use-package spaceline-all-the-icons
+  :after spaceline
+  :load-path (lambda () (expand-file-name "spaceline-all-the-icons/" user-emacs-directory))
   :config (progn
 
             ;; Build a segment for the version control branch
@@ -91,14 +92,26 @@
 
             ;; Build the mode-lines
             (spaceline-install
-             `((major-mode :face highlight-face)
+             `( ;; All the icons segments
+               (all-the-icons-mode-icon)
+               (all-the-icons-modified)
+               (all-the-icons-window-number)
+               (all-the-icons-projectile)
+               ((all-the-icons-vc-icon)
+                (all-the-icons-vc-status) :separator "")
+
                ((remote-host buffer-id line) :separator ":")
+               (all-the-icons-which-function)
+
                (anzu))
              `((my/selection-info)
-               ((flycheck-error flycheck-warning flycheck-info) :when active)
-               ((projectile-root my/version-control) :separator "  ")
-               (workspace-number)
+               ;; All the icons segments
+               (all-the-icons-process)
+               (all-the-icons-flycheck-status)
+               (all-the-icons-time)
+
                (global :face highlight-face)))
+
             (spaceline-install
              'helm
              '((helm-buffer-id :face spaceline-read-only)
@@ -106,13 +119,9 @@
                (my/helm-follow :fallback "")
                helm-prefix-argument)
              '((helm-help)
-               (global :face spaceline-read-only)))))
+               (global :face spaceline-read-only)))
 
-(use-package spaceline-all-the-icons
-  :after spaceline
-  :load-path (lambda () (expand-file-name "spaceline-all-the-icons/" user-emacs-directory))
-  :config (progn (setq spaceline-all-the-icons-separators-type 'slant)
-                 (spaceline-all-the-icons-theme)))
+            ))
 
 ;; Customize Emacs lighters
 (use-package delight
