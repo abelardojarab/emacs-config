@@ -38,4 +38,4 @@ Packages included (differences and improvements over prelude and spacemacs):
 
 Screenshot
 ----------
-![](https://github.com/abelardojarab/emacs-config/edit/master/README.png)
+![](https://raw.githubusercontent.com/abelardojarab/emacs-config/master/README.png)
