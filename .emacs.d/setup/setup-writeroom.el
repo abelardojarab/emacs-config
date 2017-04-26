@@ -40,5 +40,13 @@
   :commands focus-mode
   :load-path (lambda () (expand-file-name "focus/" user-emacs-directory)))
 
+;; Insert typographically useful unicode
+(use-package typo
+  :diminish typo-mode
+  :load-path (lambda () (expand-file-name "typo/" user-emacs-directory))
+  :config (progn
+            (setq-default typo-language "English")
+            (add-hook 'org-mode-hook #'typo-mode)))
+
 (provide 'setup-writeroom)
 ;;; setup-writeroom.el ends here

@@ -86,7 +86,8 @@
     (my/set-face-fringe)
     (my/set-face-tabbar)
     (my/set-face-ecb)
-    (spaceline-spacemacs-theme)))
+    (setq-default mode-line-format '("%e" (:eval (spaceline-ml-custom))))
+    ))
 (ad-activate 'load-theme)
 
 (provide 'setup-post)

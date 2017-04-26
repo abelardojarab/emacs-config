@@ -45,8 +45,7 @@
   :config (progn
             ;; Configure the mode-line
             (setq-default
-             mode-line-format '("%e" (:eval (spaceline-ml-main)))
-             powerline-default-separator 'arrow
+             powerline-default-separator 'bar
              spaceline-display-default-perspective t
              spaceline-highlight-face-func 'spaceline-highlight-face-modified
              spaceline-flycheck-bullet "• %s"
@@ -90,7 +89,8 @@
                    (t (format "%d chars" (1- chars)))))))
 
             ;; Build the mode-lines
-            (spaceline-install
+            (spaceline-compile
+             "custom"
              `( ;; All the icons segments
                (all-the-icons-anzu
                 :face mode-line
@@ -104,15 +104,26 @@
                  all-the-icons-buffer-size) :face default-face :skip-alternate t)
 
                (all-the-icons-projectile :face default-face)
-               ((all-the-icons-vc-status) "" :separator " ")
+               ((all-the-icons-vc-status) "" :separator "")
 
-               ((remote-host buffer-id line) :separator ":")
+               ((remote-host
+                 all-the-icons-buffer-path
+                 all-the-icons-buffer-id)
+                :separator "")
                (all-the-icons-which-function :face powerline-active2))
 
              `((my/selection-info)
                ;; All the icons segments
-               (all-the-icons-process :face default-face)
-               (all-the-icons-flycheck-status)
+               ((all-the-icons-process
+                 all-the-icons-position
+                 all-the-icons-region-info
+                 all-the-icons-fullscreen
+                 all-the-icons-text-scale)
+                :face highlight-face
+                :separator (spaceline-all-the-icons--separator "|" " "))
+
+               (("" all-the-icons-flycheck-status)
+                :face default-face)
                (all-the-icons-time)
 
                (global :face highlight-face)))
@@ -124,7 +135,10 @@
                (my/helm-follow :fallback "")
                helm-prefix-argument)
              '((helm-help)
-               (global :face spaceline-read-only)))))
+               (global :face spaceline-read-only)))
+
+            ;; Enable modeline
+            (setq-default mode-line-format '("%e" (:eval (spaceline-ml-custom))))))
 
 ;; Customize Emacs lighters
 (use-package delight
