@@ -192,7 +192,6 @@
   :load-path (lambda () (expand-file-name "typo/" user-emacs-directory))
   :config (progn
             (setq-default typo-language "English")
-            (add-hook 'text-mode-hook #'typo-mode)
             (add-hook 'org-mode-hook #'typo-mode)))
 
 (provide 'setup-spell)
