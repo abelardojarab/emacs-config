@@ -11,8 +11,8 @@ Target Emacs' versions:
 Packages included (differences and improvements over prelude and spacemacs):
 ----------------------------------------------------------------------------
 
--   use-package, company, flycheck, yasnippet
--   wunderlust, sx, mu4e and elfeed
+-   use-package, company, flycheck, yasnippet, auctex
+-   wunderlust, sx, mu4e, elfeed
 
 -   *Fixed htmlize* library so it is possible to export code or text
     segments as formatted HTML
@@ -20,14 +20,13 @@ Packages included (differences and improvements over prelude and spacemacs):
 -   *Fixed ergoemacs-mode*, such that it does not
     invoke (package-initialize) in case there is no Internet connection
 
--   **Adaptive loading of company-jedi** (check that
+-   **Adaptive loading of company-jedi** (by checking that
     'jedi' module is an installed Python module or not)
--   **Adaptive usage of company-tern** (check that
+-   **Adaptive usage of company-tern** (by checking that
     'tern' module is an installed node.js module or not)
 
--   Added helm-fonts, to enable fontset selection from a helm
-    source
--   adviced (load-theme ') function such that fringe,
+-   Added helm-fonts, to enable fontset selection through helm.
+-   *adviced* (load-theme ') function such that fringe,
     modeline (powerline) and tabbar colorsets are refreshed after a theme change
     (improvement over prelude and spacemacs)
 -   Included org-insert-screenshot (Windows, Mac OS X and -of course,
