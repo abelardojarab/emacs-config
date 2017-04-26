@@ -48,7 +48,6 @@
              mode-line-format '("%e" (:eval (spaceline-ml-main)))
              powerline-default-separator 'arrow
              spaceline-display-default-perspective t
-             powerline-height 20
              spaceline-highlight-face-func 'spaceline-highlight-face-modified
              spaceline-flycheck-bullet "• %s"
              spaceline-separator-dir-left '(left . left)
