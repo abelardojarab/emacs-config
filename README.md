@@ -14,10 +14,10 @@ Packages included (differences and improvements over prelude and spacemacs):
 -   use-package, company, flycheck, yasnippet
 -   wunderlust, sx, mu4e and elfeed
 
--   **Fixed htmlize** library so it is possible to export code or text
+-   *Fixed htmlize* library so it is possible to export code or text
     segments as formatted HTML
--   **Fixed ECB ** - works with Emacs 25 and above
--   **Fixed ergoemacs-mode**, such that it does not
+-   *Fixed ECB* - works with Emacs 25 and above
+-   *Fixed ergoemacs-mode*, such that it does not
     invoke (package-initialize) in case there is no Internet connection
 
 -   **Adaptive loading of company-jedi** (check that
