@@ -46,7 +46,7 @@
             ;; Configure the mode-line
             (setq-default
              mode-line-format '("%e" (:eval (spaceline-ml-main)))
-             powerline-default-separator 'slant
+             powerline-default-separator 'arrow
              spaceline-display-default-perspective t
              powerline-height 20
              spaceline-highlight-face-func 'spaceline-highlight-face-modified
@@ -93,20 +93,26 @@
             ;; Build the mode-lines
             (spaceline-install
              `( ;; All the icons segments
-               (all-the-icons-mode-icon)
-               (all-the-icons-modified)
-               (all-the-icons-window-number)
-               (all-the-icons-projectile)
-               ((all-the-icons-vc-icon)
-                (all-the-icons-vc-status) :separator "")
+               (all-the-icons-anzu
+                :face mode-line
+                :skip-alternate t)
+
+               (((major-mode :face default-face)
+                 all-the-icons-modified
+                 all-the-icons-bookmark
+                 all-the-icons-dedicated
+                 all-the-icons-window-number
+                 all-the-icons-buffer-size) :face default-face :skip-alternate t)
+
+               (all-the-icons-projectile :face default-face)
+               ((all-the-icons-vc-status) "" :separator " ")
 
                ((remote-host buffer-id line) :separator ":")
-               (all-the-icons-which-function)
+               (all-the-icons-which-function :face powerline-active2))
 
-               (anzu))
              `((my/selection-info)
                ;; All the icons segments
-               (all-the-icons-process)
+               (all-the-icons-process :face default-face)
                (all-the-icons-flycheck-status)
                (all-the-icons-time)
 
@@ -119,9 +125,7 @@
                (my/helm-follow :fallback "")
                helm-prefix-argument)
              '((helm-help)
-               (global :face spaceline-read-only)))
-
-            ))
+               (global :face spaceline-read-only)))))
 
 ;; Customize Emacs lighters
 (use-package delight
