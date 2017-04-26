@@ -93,12 +93,11 @@ non-nil."
   :diminish column-enforce-mode
   :init (setq column-enforce-column 99)
   :load-path (lambda () (expand-file-name "column-enforce-mode/" user-emacs-directory))
-  :config (progn
-            (add-hook 'prog-mode-hook 'column-enforce-mode)))
+  :config (add-hook 'prog-mode-hook 'column-enforce-mode))
 
 ;; Line numbers
 (use-package linum
-  :defer t
+  :defer 2
   :commands linum-mode
   :config (progn
             (add-hook 'prog-mode-hook
@@ -107,7 +106,7 @@ non-nil."
                         (if (and (> (buffer-size)
                                     (* 5000 80)))
                             (linum-mode -1)
-                          (linum-mode -1))))
+                          (linum-mode 1))))
 
             (defadvice linum-update-window (around linum-dynamic activate)
               (let* ((w (length (number-to-string
@@ -127,7 +126,6 @@ non-nil."
 
 ;; Adaptive scrollbar
 (use-package lawlist-scroll-mode
-  :defer t
   :if (display-graphic-p)
   :diminish (lawlist-scroll-bar-mode)
   :config (add-hook 'prog-mode-hook (lambda () (lawlist-scroll-bar-mode 1))))
