@@ -114,6 +114,11 @@ non-nil."
                      (linum-format (concat " %" (number-to-string w) "d ")))
                 ad-do-it))))
 
+;; Highlight line number
+(use-package hlinum
+  :load-path (lambda () (expand-file-name "hlinum-mode/" user-emacs-directory))
+  :config (hlinum-activate))
+
 ;; Put a nice title to the window, including filename
 (add-hook 'window-configuration-change-hook
           (lambda ()
