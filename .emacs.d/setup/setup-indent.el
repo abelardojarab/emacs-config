@@ -89,8 +89,6 @@
           (setq indent-hint-background-overlay t)
           (setq indent-hint-bg nil)))
 
-
-
 ;; Transient indentation guide
 (use-package highlight-indent-guides
   :defer t
@@ -114,8 +112,9 @@
                   (setq my/highlight-indent-guides-mode-suppressed nil)
                   (highlight-indent-guides-mode 1))))
 
-            (setq highlight-indent-guides-method 'character
-                  highlight-indent-guides-chararacter "┊")))
+            (setq highlight-indent-guides-method 'character)
+            (if (display-graphic-p)
+                (setq highlight-indent-guides-character ?┊)))
 
 ;; Highlight indentation levels
 (use-package highlight-indentation

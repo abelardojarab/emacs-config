@@ -434,11 +434,10 @@ This runs whenever a theme is loaded."
       (highlight-indent-guides--unguide-region (point-min) (point-max))
 
       (if (fboundp 'font-lock-flush)
-	  (progn
-	    (font-lock-flush)
-	    (font-lock-ensure))
-	(font-lock-fontify-region (point-min) (point-max)) ;emacs 24
-	) ;; if
+          (progn
+            (font-lock-flush)
+            (font-lock-ensure))
+        (font-lock-fontify-region (point-min) (point-max))) ;; if
 
       )))
 
