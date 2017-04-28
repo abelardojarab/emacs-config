@@ -114,7 +114,7 @@
 
             (setq highlight-indent-guides-method 'character)
             (if (display-graphic-p)
-                (setq highlight-indent-guides-character ?┊)))
+                (setq highlight-indent-guides-character ?┊))))
 
 ;; Highlight indentation levels
 (use-package highlight-indentation
