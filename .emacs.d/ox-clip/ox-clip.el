@@ -26,7 +26,7 @@
 ;; Boston, MA 02111-1307, USA.
 
 ;;; Commentary:
-;; 
+;;
 ;; This module copies selected regions in org-mode as formatted text on the
 ;; clipboard that can be pasted into other applications. When not in org-mode,
 ;; the htmlize library is used instead.
@@ -54,9 +54,9 @@
 
 (defcustom ox-clip-w32-cmd
   (format "python %s"
-	  (expand-file-name
-	   "html-clip-w32.py"
-	   (file-name-directory (or load-file-name (buffer-file-name)))))
+          (expand-file-name
+           "html-clip-w32.py"
+           (file-name-directory (or load-file-name (locate-library "ox-clip")))))
   "Absolute path to html-clip-w32.py."
   :group 'ox-clip)
 
@@ -337,7 +337,7 @@ def DumpHtml():
         print(\"GetHtml()=>>>%s<<<END\" % cb.GetHtml())
         print(\"GetSource()=>>>%s<<<END\" % cb.GetSource())
 
-        
+
 if __name__ == '__main__':
     import sys
     data = sys.stdin.read()
@@ -347,8 +347,12 @@ if __name__ == '__main__':
 
 ;; Create the windows python script if needed.
 (when (and (eq system-type 'windows-nt)
-	   (not (file-exists-p ox-clip-w32-cmd)))
-  (with-temp-file "html-clip-w32.py"
+           (not (file-exists-p (expand-file-name
+                                "html-clip-w32.py"
+                                (file-name-directory (or load-file-name (locate-library "ox-clip")))))))
+  (with-temp-file (expand-file-name
+                   "html-clip-w32.py"
+                   (file-name-directory (or load-file-name (locate-library "ox-clip"))))
     (insert ox-clip-w32-py)))
 
 
@@ -360,52 +364,52 @@ R1 and R2 define the selected region."
   (copy-region-as-kill r1 r2)
   (if (equal major-mode 'org-mode)
       (save-window-excursion
-	(let* ((buf (org-export-to-buffer 'html "*Formatted Copy*" nil nil t t))
-	       (html (with-current-buffer buf (buffer-string))))
-	  (cond
-	   ((eq system-type 'windows-nt)
-	    (with-current-buffer buf
-	      (shell-command-on-region
-	       (point-min)
-	       (point-max)
-	       ox-clip-w32-cmd)))
-	   ((eq system-type 'darwin)
-	    (with-current-buffer buf
-	      (shell-command-on-region
-	       (point-min)
-	       (point-max)
-	       ox-clip-osx-cmd)))
-	   ((eq system-type 'gnu/linux)
-	    ;; For some reason shell-command on region does not work with xclip.
-	    (with-temp-file "/tmp/ox-clip-org.html"
-	      (insert (with-current-buffer buf (buffer-string))))
-	    (apply
-	     'start-process "ox-clip" "*ox-clip*"
-	     (split-string ox-clip-linux-cmd " ")))) 
-	  (kill-buffer buf)))
+        (let* ((buf (org-export-to-buffer 'html "*Formatted Copy*" nil nil t t))
+               (html (with-current-buffer buf (buffer-string))))
+          (cond
+           ((eq system-type 'windows-nt)
+            (with-current-buffer buf
+              (shell-command-on-region
+               (point-min)
+               (point-max)
+               ox-clip-w32-cmd)))
+           ((eq system-type 'darwin)
+            (with-current-buffer buf
+              (shell-command-on-region
+               (point-min)
+               (point-max)
+               ox-clip-osx-cmd)))
+           ((eq system-type 'gnu/linux)
+            ;; For some reason shell-command on region does not work with xclip.
+            (with-temp-file "/tmp/ox-clip-org.html"
+              (insert (with-current-buffer buf (buffer-string))))
+            (apply
+             'start-process "ox-clip" "*ox-clip*"
+             (split-string ox-clip-linux-cmd " "))))
+          (kill-buffer buf)))
     ;; Use htmlize when not in org-mode.
     (let ((html (htmlize-region-for-paste r1 r2)))
       (cond
        ((eq system-type 'windows-nt)
-	(with-temp-buffer
-	  (insert html)
-	  (shell-command-on-region
-	   (point-min)
-	   (point-max)
-	   ox-clip-w32-cmd)))
+        (with-temp-buffer
+          (insert html)
+          (shell-command-on-region
+           (point-min)
+           (point-max)
+           ox-clip-w32-cmd)))
        ((eq system-type 'darwin)
-	(with-temp-buffer
-	  (insert html)
-	  (shell-command-on-region
-	   (point-min)
-	   (point-max)
-	   ox-clip-osx-cmd)))
+        (with-temp-buffer
+          (insert html)
+          (shell-command-on-region
+           (point-min)
+           (point-max)
+           ox-clip-osx-cmd)))
        ((eq system-type 'gnu/linux)
-	(with-temp-file "/tmp/ox-clip-org.html"
-	  (insert html))
-	(apply
-	 'start-process "ox-clip" "*ox-clip*"
-	 (split-string ox-clip-linux-cmd " ")))))))
+        (with-temp-file "/tmp/ox-clip-org.html"
+          (insert html))
+        (apply
+         'start-process "ox-clip" "*ox-clip*"
+         (split-string ox-clip-linux-cmd " ")))))))
 
 (provide 'ox-clip)
 
