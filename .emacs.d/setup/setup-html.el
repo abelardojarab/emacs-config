@@ -178,6 +178,7 @@ plus add font-size: 8pt"
           (executable-find "python"))
   :load-path (lambda () (expand-file-name "ox-clip/" user-emacs-directory)))
 
+;; Required by web-mode
 (use-package web-completion-data
   :load-path (lambda () (expand-file-name "web-completion-data/" user-emacs-directory)))
 
@@ -193,39 +194,7 @@ plus add font-size: 8pt"
                   web-mode-script-padding 2
                   web-mode-markup-indent-offset 2
                   web-mode-code-indent-offset 2
-                  web-mode-enable-current-element-highlight t)
-
-            ;; When using auto-complete
-            (if (featurep 'auto-complete)
-                (setq web-mode-ac-sources-alist
-                      '(("css" . (ac-source-css-property))
-                        ("html" . (ac-source-words-in-buffer ac-source-abbrev)))))
-
-            (add-hook 'web-mode-hook 'autopair-mode)))
-
-(use-package ac-html
-  :after auto-complete
-  :load-path (lambda () (expand-file-name "ac-html/" user-emacs-directory))
-  :config (progn
-            (defun setup-ac-for-html ()
-              ;; Require ac-html since we are setup html auto completion
-              (require 'ac-html)
-              ;; Require default data provider if you want to use
-              (require 'ac-html-default-data-provider)
-              ;; Enable data providers,
-              ;; currently only default data provider available
-              (ac-html-enable-data-provider 'ac-html-default-data-provider)
-              ;; Let ac-html do some setup
-              (ac-html-setup)
-              ;; Set your ac-source
-              (setq ac-sources '(ac-source-html-tag
-                                 ac-source-html-attr
-                                 ac-source-html-attrv))
-              ;; Enable auto complete mode
-              (auto-complete-mode))
-
-            (add-hook 'web-mode-hook 'setup-ac-for-html)
-            (add-hook 'html-mode-hook 'setup-ac-for-html)))
+                  web-mode-enable-current-element-highlight t)))
 
 (use-package company-web
   :after (company web-mode web-completion-data)
