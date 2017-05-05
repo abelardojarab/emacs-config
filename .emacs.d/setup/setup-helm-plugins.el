@@ -28,9 +28,10 @@
 (use-package helm-grepint
   :defer t
   :commands (helm-grepint-grep)
+  :bind (:map ctl-x-map
+              ("a" . helm-grepint-grep))
   :load-path (lambda () (expand-file-name "helm-grepint/" user-emacs-directory))
-  :config (progn
-            (helm-grepint-set-default-config)))
+  :config (helm-grepint-set-default-config))
 
 ;; Helm git-grep
 (use-package helm-git-grep
@@ -39,15 +40,12 @@
   :load-path (lambda () (expand-file-name "helm-git-grep/" user-emacs-directory))
   :bind (:map ctl-x-map
               ("g" . helm-git-grep))
-  :config (progn
-            (setq helm-git-grep-candidate-number-limit nil)))
+  :config (setq helm-git-grep-candidate-number-limit nil))
 
 ;; Helm ag/ack
 (use-package helm-ag
   :defer t
   :commands (helm-ag helm-do-ag helm-do-ag-this-file helm-do-ag-project-root)
-  :bind (:map ctl-x-map
-              ("a" . helm-ag))
   :load-path (lambda () (expand-file-name "helm-ag/" user-emacs-directory))
   :config (progn
             ;; Fallback to ack if the silver searcher is not found
@@ -134,6 +132,11 @@
            helm-gtags-pulse-at-cursor t
            helm-gtags-prefix-key "\C-cg"
            helm-gtags-suggested-key-mapping t))
+
+;; Helm xref
+(use-package helm-xref
+  :load-path (lambda () (expand-file-name "helm-xref/" user-emacs-directory))
+  :config (setq xref-show-xrefs-function 'helm-xref-show-xrefs))
 
 ;; Helm yasnippet
 (use-package helm-c-yasnippet
@@ -307,9 +310,9 @@
 (use-package helm-hunks
   :defer t
   :commands (helm-hunks
-	     helm-hunks-current-buffer
-	     helm-hunks-staged
-	     helm-hunks-staged-current-buffer)
+         helm-hunks-current-buffer
+         helm-hunks-staged
+         helm-hunks-staged-current-buffer)
   :after (helm git-modes request)
   :load-path (lambda () (expand-file-name "helm-hunks/" user-emacs-directory)))
 

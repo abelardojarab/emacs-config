@@ -1,5 +1,9 @@
 # Kaolin theme
+[![MELPA Stable](https://stable.melpa.org/packages/kaolin-theme-badge.svg)](https://stable.melpa.org/#/kaolin-theme)
 [![MELPA](https://melpa.org/packages/kaolin-theme-badge.svg)](https://melpa.org/#/kaolin-theme)
+[![Emacs](https://img.shields.io/badge/Emacs-24%2B-d24b83.svg)](https://www.gnu.org/software/emacs/)
+[![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
+
 
 A dark jade Emacs theme inspired by [Sierra.vim](https://github.com/AlessandroYorba/Sierra)
 
@@ -23,3 +27,7 @@ Copy the `kaolin-theme.el` file to your `~/.emacs.d/themes` directory and add th
 * [highlight-quoted](https://github.com/Fanael/highlight-quoted) — highlight Lisp quotes and quoted symbols
 * [rainbow-delimiters](https://github.com/Fanael/rainbow-delimiters) — mode which highlights delimiters such as parentheses, brackets or braces according to their depth.
 * [highlight-defined](https://github.com/Fanael/highlight-defined) — highlight known Emacs Lisp symbols
+
+# Modeline
+
+The mode-line config isn't a part of the Kaolin theme, you can find my telephone-line config [here](https://github.com/0rdy/emacs.d/blob/master/env/env-modeline.el).

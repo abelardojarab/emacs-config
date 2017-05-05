@@ -159,7 +159,8 @@
   nil)) ;; cond
 
 ;; C-v
-(global-set-key (kbd "C-v") 'counsel-yank-pop)
+(global-set-key (kbd "C-v") 'yank)
+(global-set-key (kbd "C-c v") 'counsel-yank-pop)
 
 ;; Unindent (do what I mean version)
 (global-set-key (kbd "C-<") 'unindent-dwim)

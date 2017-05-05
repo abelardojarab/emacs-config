@@ -68,7 +68,7 @@
   :bind (("M-x" . counsel-M-x)
          ("M-y" . counsel-yank-pop)
          ("C-o" . counsel-find-file)
-         ("C-v" . counsel-yank-pop)
+         ("C-c v" . counsel-yank-pop)
          :map ctl-x-map
          ("x" . counsel-M-x)
          :map ivy-minibuffer-map

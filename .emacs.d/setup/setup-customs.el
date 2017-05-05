@@ -107,7 +107,7 @@
   :group 'my/customs)
 
 (defcustom my/emacs-theme
-  'apropospriate-dark
+  'kaolin
   "Preferred Emacs theme"
   :group 'my/customs
   :type 'list)
