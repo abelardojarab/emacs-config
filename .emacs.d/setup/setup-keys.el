@@ -75,7 +75,7 @@
 (global-set-key [delete] 'delete-char)
 (global-set-key [kp-delete] 'delete-char)
 (global-set-key [(control s)] 'save-buffer)
-(global-set-key [(control o)] 'find-file)
+(global-set-key [(control o)] 'counsel-find-file)
 (global-set-key [(meta s)] 'write-file)
 (global-set-key [(control q)] 'save-buffers-kill-emacs)
 (global-set-key [(meta q)] 'kill-this-buffer)
@@ -159,7 +159,7 @@
   nil)) ;; cond
 
 ;; C-v
-(global-set-key (kbd "C-v") 'yank)
+(global-set-key (kbd "C-v") 'counsel-yank-pop)
 
 ;; Unindent (do what I mean version)
 (global-set-key (kbd "C-<") 'unindent-dwim)

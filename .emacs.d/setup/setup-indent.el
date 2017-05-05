@@ -92,9 +92,9 @@
 ;; Transient indentation guide
 (use-package highlight-indent-guides
   :defer t
+  :disabled t
   :commands highlight-indent-guides-mode
   :load-path (lambda () (expand-file-name "highlight-indent-guides/" user-emacs-directory))
-  :init (add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
   :config (progn
 
             ;; Fix indent guide issue with popup

@@ -24,6 +24,8 @@
 
 ;;; Code:
 
+
+
 (use-package swiper
   :defer t
   :commands (swiper
@@ -44,11 +46,34 @@
             (setq ivy-use-virtual-buffers t)
             (setq ivy-height 20)
 
+            (ivy-set-actions
+             'ivy-switch-buffer
+             '(("k"
+                (lambda (x)
+                  (kill-buffer x)
+                  (ivy--reset-state ivy-last))
+                "kill")
+               ("j"
+                ivy--switch-buffer-other-window-action
+                "other window")))
+
             ;; advise swiper to recenter on exit
             (defun my/swiper-recenter (&rest args)
               "recenter display after swiper"
               (recenter))
             (advice-add 'swiper :after #'my/swiper-recenter)))
+
+(use-package counsel
+  :load-path (lambda () (expand-file-name "swiper/" user-emacs-directory))
+  :bind (("M-x" . counsel-M-x)
+         ("M-y" . counsel-yank-pop)
+         ("C-o" . counsel-find-file)
+         ("C-v" . counsel-yank-pop)
+         :map ctl-x-map
+         ("x" . counsel-M-s)
+         :map ivy-minibuffer-map
+         ("M-y" . ivy-next-line))
+  :config (define-key read-expression-map (kbd "C-r") #'counsel-expression-history))
 
 (use-package swiper-helm
   :defer t

@@ -93,6 +93,23 @@
   (if (executable-find "/bin/bash")
       (setenv "SHELL" "/bin/bash"))
 
+  (when (display-graphic-p)
+    (setq x-select-enable-clipboard t)
+    (setq interprogram-paste-function 'x-cut-buffer-or-selection-value)
+
+    (when (executable-find "xsel")
+      (defun xsel-cut-function (text &optional push)
+        (with-temp-buffer
+          (insert text)
+          (call-process-region (point-min) (point-max) "xsel" nil 0 nil "--clipboard" "--input")))
+      (defun xsel-paste-function()
+
+        (let ((xsel-output (shell-command-to-string "xsel --clipboard --output")))
+          (unless (string= (car kill-ring) xsel-output)
+            xsel-output )))
+      (setq interprogram-cut-function 'xsel-cut-function)
+      (setq interprogram-paste-function 'xsel-paste-function)))
+
   ;; Get back font antialiasing
   (push '(font-backend xft x) default-frame-alist)
 
