@@ -92,8 +92,20 @@
                             ;; Define cmake build directory
                             (setq my/cmake-build-dir (expand-file-name
                                                       (file-name-nondirectory
-                                                       (directory-file-name (cmake-ide--locate-cmakelists)))
+                                                       (directory-file-name
+							(expand-file-name
+							 (cmake-ide--locate-cmakelists))))
                                                       my/projectile-build-dir))
+
+			    ;; Avoid path repetitions
+			    (if (equal (file-name-nondirectory
+					(directory-file-name
+					 (expand-file-name
+					  (cmake-ide--locate-cmakelists))))
+				       (projectile-project-name))
+				(setq my/cmake-build-dir (concat
+                                                           "~/cmake_builds/"
+                                                           (projectile-project-name))))
                             (message "* cmake-ide Building directory set to: %s" my/cmake-build-dir)
 
                             ;; Create cmake project directory under project directory

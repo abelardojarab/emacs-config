@@ -36,7 +36,6 @@
          ("C-r" . helm-recentf)
          ("C-b" . helm-buffers-list)
          ("p" . helm-show-kill-ring)
-         ("x" . helm-M-x)
          ("n" . helm-mini)
          ("h" . helm-apropos)
          ("u" . helm-resume)

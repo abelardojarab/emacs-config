@@ -70,7 +70,7 @@
          ("C-o" . counsel-find-file)
          ("C-v" . counsel-yank-pop)
          :map ctl-x-map
-         ("x" . counsel-M-s)
+         ("x" . counsel-M-x)
          :map ivy-minibuffer-map
          ("M-y" . ivy-next-line))
   :config (define-key read-expression-map (kbd "C-r") #'counsel-expression-history))
