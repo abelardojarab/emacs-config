@@ -29,13 +29,32 @@
   :defer 1
   :load-path (lambda () (expand-file-name "tabbar/" user-emacs-directory))
   :bind (("C-c <right>" . tabbar-forward)
-     ("C-c <left>" . tabbar-backward)
-     ("C-c <up>" . tabbar-backward-group)
-     ("C-c <down>" . tabbar-forward-group))
+         ("C-c <left>" . tabbar-backward)
+         ("C-c <up>" . tabbar-backward-group)
+         ("C-c <down>" . tabbar-forward-group))
   :config (progn
-            (setq tabbar-use-images t)
-            (setq tabbar-cycle-scope (quote tabs))
-            (setq table-time-before-update 0.1)
+            (setq tabbar-auto-scroll-flag t
+                  tabbar-use-images t
+                  tabbar-cycle-scope (quote tabs)
+                  table-time-before-update 0.1)
+
+            ;; Reduce tabbar width to enable as many buffers as possible
+            ;; https://gist.github.com/3demax/1264635
+            (defun tabbar-buffer-tab-label (tab)
+              "Return a label for TAB.
+That is, a string used to represent it on the tab bar."
+              (let ((label  (if tabbar--buffer-show-groups
+                                (format "[%s]  " (tabbar-tab-tabset tab))
+                              (format "%s  " (tabbar-tab-value tab)))))
+                ;; Unless the tab bar auto scrolls to keep the selected tab
+                ;; visible, shorten the tab label to keep as many tabs as possible
+                ;; in the visible area of the tab bar.
+                (if tabbar-auto-scroll-flag
+                    label
+                  (tabbar-shorten
+                   label (max 1 (/ (window-width)
+                                   (length (tabbar-view
+                                            (tabbar-current-tabset)))))))))
 
             ;; Tweaking the tabbar
             (defadvice tabbar-buffer-tab-label (after fixup_tab_label_space_and_flag activate)
@@ -66,8 +85,8 @@
                            tabs)))
                 (if tab (switch-to-buffer (car tab)))))
 
-        ;; Enable tabbar
-        (tabbar-mode t)))
+            ;; Enable tabbar
+            (tabbar-mode t)))
 
 ;; Tabbar ruler pre-requisites
 (use-package mode-icons
