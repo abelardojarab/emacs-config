@@ -36,7 +36,9 @@
 ;; Powerline
 (use-package powerline
   :after projectile
-  :load-path (lambda () (expand-file-name "powerline/" user-emacs-directory)))
+  :load-path (lambda () (expand-file-name "powerline/" user-emacs-directory))
+  :config (unless (display-graphic-p)
+            (powerline-default-theme)))
 
 ;; Spaceline
 (use-package spaceline
@@ -58,6 +60,7 @@
   :config (spaceline-helm-mode))
 
 (use-package spaceline-all-the-icons
+  :if (display-graphic-p)
   :after spaceline
   :load-path (lambda () (expand-file-name "spaceline-all-the-icons/" user-emacs-directory))
   :config (progn
