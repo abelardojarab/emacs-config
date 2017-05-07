@@ -6,3 +6,4 @@ git subtree pull --prefix=.emacs.d/magit  --squash https://github.com/abelardoja
 git subtree pull --prefix=.emacs.d/flycheck  --squash https://github.com/abelardojarab/flycheck.git master
 git subtree pull --prefix=.emacs.d/company-mode  --squash https://github.com/abelardojarab/company-mode.git master
 git subtree pull --prefix=.emacs.d/yasnippet  --squash https://github.com/abelardojarab/yasnippet.git master
+git subtree pull --prefix=.emacs.d/swiper  --squash https://github.com/abelardojarab/swiper.git master
