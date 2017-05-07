@@ -11,7 +11,7 @@ Target Emacs' versions:
 Packages included (differences and improvements over prelude and spacemacs):
 ----------------------------------------------------------------------------
 
--   use-package, company, flycheck, yasnippet, auctex
+-   use-package, company, flycheck, yasnippet, auctex, cmake-ide
 -   wunderlust, sx, mu4e, elfeed
 
 -   *Fixed htmlize* library so it is possible to export code or text
