@@ -135,6 +135,8 @@
 
 ;; Helm xref
 (use-package helm-xref
+  :if (and (executable-find "global")
+           (boundp 'xref-backend-functions))
   :load-path (lambda () (expand-file-name "helm-xref/" user-emacs-directory))
   :config (setq xref-show-xrefs-function 'helm-xref-show-xrefs))
 
