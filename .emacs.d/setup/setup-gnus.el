@@ -91,12 +91,7 @@
 ;; To be able to send email with your gmail/smtp mail
 (use-package smtpmail
   :config (progn
-
-            ;; Send mail using postfix
-            ;; http://pragmaticemacs.com/emacs/using-postfix-instead-of-smtpmail-to-send-email-in-mu4e/
-            ;; (setq send-mail-function 'sendmail-send-it
-            ;;       message-send-mail-function 'message-send-mail-with-sendmail)
-
+            ;; Using smptmail to assure portability; we dont always have postfix
             (setq send-mail-function 'smtpmail-send-it
                   message-send-mail-function 'smtpmail-send-it
                   smtpmail-debug-info t smtpmail-debug-verb t)
@@ -160,7 +155,6 @@
 ;; Message mode
 (use-package message
   :config (progn
-            (bind-key "C-c C-x f" #'org-footnote-action message-mode-map)
 
             ;; decode html
             (use-package mm-decode
@@ -215,18 +209,18 @@
             (add-hook 'message-mode-hook #'turn-on-orgstruct)
             (add-hook 'message-mode-hook #'turn-on-orgstruct++)
             (add-hook 'message-mode-hook #'turn-on-orgtbl)
-            (add-hook 'message-mode-hook #'typo-mode)
-            (add-hook 'message-mode-hook #'footnote-mode)
             (add-hook 'message-mode-hook #'turn-on-auto-fill)
+            (add-hook 'message-mode-hook #'footnote-mode)
 
             ;; Enable emacsclient in mutt
             (add-to-list 'auto-mode-alist '(".*mutt.*" . message-mode))
             (setq mail-header-separator "")
-            (define-key message-mode-map (kbd "C-c C-c")  '(lambda ()
-                                                             "save and exit quickly"
-                                                             (interactive)
-                                                             (save-buffer)
-                                                             (server-edit)))))
+            (define-key message-mode-map (kbd "C-c C-c")
+              '(lambda ()
+                 "save and exit quickly"
+                 (interactive)
+                 (save-buffer)
+                 (server-edit)))))
 
 ;; Enabling attaching files from dired
 (use-package gnus-dired

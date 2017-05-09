@@ -33,7 +33,7 @@
           (add-to-list 'load-path (expand-file-name "semi" user-emacs-directory)))
   :commands (wl wl-draft wl-other-frame)
   :load-path (lambda () (expand-file-name "wanderlust/wl/" user-emacs-directory))
-  :config (let ()
+  :config (progn
 
             ;; Location for custom scripts
             (setq wl-root-dir "~/.emacs.cache/wanderlust/")
@@ -167,7 +167,7 @@
   :defer t
   :if (executable-find "mu")
   :load-path (lambda () (expand-file-name "mu/mu4e/" user-emacs-directory))
-  :commands (my/mu4e-start mu4e)
+  :commands mu4e
   :init (progn
           ;; Assure .emacs.cache/mu4e exists
           (if (not (file-exists-p my/mu4e-maildir))
@@ -188,22 +188,22 @@
                   mu4e-change-filenames-when-moving t
                   mu4e-confirm-quit nil)
 
-            (setq mu4e-use-fancy-chars             t
-                  mu4e-headers-draft-mark	   '("D"  . "⚒  ") ; draft
-                  mu4e-headers-seen-mark	   '("S"  . "☑  ") ; seen
-                  mu4e-headers-unread-mark	   '("u"  . "☐  ") ; unseen
-                  mu4e-headers-new-mark		   '("N"  . "")
-                  mu4e-headers-seen-mark	   '("S"  . "") ;  seen
-                  mu4e-headers-unread-mark	   '("u"  . "") ;  unseen
-                  mu4e-headers-flagged-mark	   '("F"  . "⚵  ") ; flagged
-                  mu4e-headers-new-mark		   '("N"  . "✉  ") ; new
-                  mu4e-headers-replied-mark	   '("R"  . "↵  ") ; replied
-                  mu4e-headers-passed-mark	   '("P"  . "⇉  ") ; passed
-                  mu4e-headers-encrypted-mark	   '("x"  . "⚷  ") ; encrypted
-                  mu4e-headers-signed-mark	   '("s"  . "✍  ") ; signed
+            (setq mu4e-use-fancy-chars t
+                  mu4e-headers-draft-mark          '("D"  . "⚒  ") ;; draft
+                  mu4e-headers-seen-mark           '("S"  . "☑  ") ;; seen
+                  mu4e-headers-unread-mark         '("u"  . "☐  ") ;; unseen
+                  mu4e-headers-new-mark            '("N"  . "")
+                  mu4e-headers-seen-mark           '("S"  . "") ;;  seen
+                  mu4e-headers-unread-mark         '("u"  . "") ;;  unseen
+                  mu4e-headers-flagged-mark        '("F"  . "⚵  ") ;; flagged
+                  mu4e-headers-new-mark            '("N"  . "✉  ") ;; new
+                  mu4e-headers-replied-mark        '("R"  . "↵  ") ;; replied
+                  mu4e-headers-passed-mark         '("P"  . "⇉  ") ;; passed
+                  mu4e-headers-encrypted-mark      '("x"  . "⚷  ") ;; encrypted
+                  mu4e-headers-signed-mark         '("s"  . "✍  ") ;; signed
                   mu4e-headers-empty-parent-prefix '("-"  . "○")
                   mu4e-headers-first-child-prefix  '("\\" . "▶")
-                  mu4e-headers-has-child-prefix	   '("+"  . "●"))
+                  mu4e-headers-has-child-prefix    '("+"  . "●"))
 
             (setq mu4e-maildir my/mu4e-maildir
                   mu4e-refile-folder "/[Gmail].Archive"
@@ -251,7 +251,7 @@
               :config (setq mu4e-html2text-command 'mu4e-shr2text))
 
             ;; Use <TAB> to preview messages and q to close previews.
-	    (use-package mu4e-headers)
+            (use-package mu4e-headers)
             (use-package mu4e-view)
             (defun my/preview-message ()
               (interactive)
@@ -366,22 +366,6 @@
                                                                        (seq "replyto-" (one-or-more char) "@plus.google.com")
                                                                        (seq "@" (one-or-more char) ".twitter.com")
                                                                        (seq "do-not-reply" (zero-or-more char) "@"))))
-            ;; Launch dedicated email frame
-            (defun my/mu4e-start ()
-              (interactive)
-              (select-frame (make-frame-command))
-              (sleep-for 0.1) ;; this is a HACK
-              (toggle-frame-maximized)
-              (sleep-for 0.1) ;; this is a HACK
-              (set-frame-size (selected-frame) 200 64)
-              (mu4e))
-
-            ;; Kill mu4e frame.
-            (defun my/mu4e-quit-session ()
-              (interactive)
-              (kill-buffer)
-              (delete-frame))
-            (bind-key "Q" #'my/mu4e-quit-session mu4e-main-mode-map)
 
             ;; Assure we use mu4e
             (setq mail-user-agent 'mu4e-user-agent)
