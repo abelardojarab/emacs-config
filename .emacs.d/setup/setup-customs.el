@@ -384,8 +384,10 @@
 
 ;; User-specific configuration file
 (setq-default custom-file "~/.emacs.cache/custom.el")
-(when (file-exists-p custom-file)
-  (load custom-file))
+(if (file-exists-p custom-file)
+    (load custom-file)
+  ;; http://stackoverflow.com/questions/14071991/how-to-create-an-empty-file-by-elisp
+  (write-region "" nil custom-file))
 
 ;; User information
 (setq user-full-name my/user-full-name)
