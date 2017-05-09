@@ -53,7 +53,13 @@
 ;; popup-based buffer switcher
 (use-package popup-switcher
   :defer t
-  :commands (psw-switch-recentf psw-switch-buffer psw-switch-function psw-switch-projectile-files psw-navigate-files)
+  :commands (psw-switch-recentf
+             psw-switch-buffer
+             psw-switch-function
+             psw-switch-projectile-files
+             psw-navigate-files)
+  :bind (:map ctl-x-map
+              ("/" . psw-switch-function))
   :load-path (lambda () (expand-file-name "popup-switcher/" user-emacs-directory)))
 
 ;; Treat 'y' or <CR> as yes, 'n' as no.
@@ -161,6 +167,7 @@
 ;; C-v
 (global-set-key (kbd "C-v") 'yank)
 (global-set-key (kbd "C-c v") 'counsel-yank-pop)
+(define-key ctl-x-map (kbd "P") '(lambda () (interactive) (popup-menu 'yank-menu)))
 
 ;; Unindent (do what I mean version)
 (global-set-key (kbd "C-<") 'unindent-dwim)
@@ -195,13 +202,11 @@
 (global-set-key (kbd "C-x <right>") 'windmove-right)
 
 ;; Extra Ctrl-x mappings
-(define-key ctl-x-map (kbd "P") '(lambda () (interactive) (popup-menu 'yank-menu)))
 (define-key ctl-x-map (kbd "SPC") (lambda () (interactive) (push-mark nil nil 1)))
 (define-key ctl-x-map (kbd ">") 'increase-left-margin)
 (define-key ctl-x-map (kbd "<") 'decrease-left-margin)
 (define-key ctl-x-map (kbd "F") 'toggle-frame-fullscreen)
 (define-key ctl-x-map (kbd "T") 'toggle-truncate-lines)
-(define-key ctl-x-map (kbd "/") 'psw-switch-functions)
 
 ;; Extra Ctrl-x mappings for navigation
 (define-key ctl-x-map (kbd "<up>") 'windmove-up)
