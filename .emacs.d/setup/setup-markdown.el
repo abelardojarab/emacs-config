@@ -45,6 +45,14 @@
                         (writegood-mode t)
                         (flyspell-mode t)))
 
+            ;; http://stackoverflow.com/questions/14275122/editing-markdown-pipe-tables-in-emacs
+            (defun cleanup-org-tables ()
+              (save-excursion
+                (goto-char (point-min))
+                (while (search-forward "-+-" nil t) (replace-match "-|-"))))
+            (add-hook 'markdown-mode-hook
+                      (lambda () (add-hook 'after-save-hook 'cleanup-org-tables  nil 'make-it-local)))
+
             ;; Github markdown style
             (setq markdown-css-paths `(,(expand-file-name "styles/github-pandoc.css" user-emacs-directory)))
             (setq markdown-command
