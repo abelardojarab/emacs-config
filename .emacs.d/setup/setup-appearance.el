@@ -73,9 +73,9 @@ non-nil."
             (setq truncate-lines t)))
 (add-hook 'text-mode-hook
           (lambda ()
-            (visual-line-mode 1)
-            (toggle-truncate-lines -1)
-            (setq truncate-lines nil)))
+            (visual-line-mode -1)
+            (toggle-truncate-lines t)
+            (setq truncate-lines t)))
 
 ;; Visual fill column
 (use-package visual-fill-column
