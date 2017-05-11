@@ -31,7 +31,7 @@
 (use-package gnus
   :defer 1
   :commands (gnus compose-mail switch-to-gnus)
-  :bind (("M-G"   . switch-to-gnus)
+  :bind (("M-G" . switch-to-gnus)
          :map ctl-x-map
          ("m" . compose-mail))
   :config (progn
@@ -86,7 +86,52 @@
             ;; Mode hooks
             (add-hook 'gnus-group-mode-hook 'gnus-topic-mode)
             (add-hook 'gnus-group-mode-hook 'hl-line-mode)
-            (add-hook 'gnus-summary-mode-hook 'hl-line-mode)))
+            (add-hook 'gnus-summary-mode-hook 'hl-line-mode)
+
+            (defun my/gnus-summary-save-parts (&optional arg)
+              (interactive "P")
+              (let ((directory "~/Downloads"))
+                (message "Saving all MIME parts to %s..." directory)
+                (gnus-summary-save-parts ".*" directory arg)
+                (message "Saving all MIME parts to %s...done" directory)))
+
+            ;; https://www.emacswiki.org/emacs/SwitchToGnus
+            (defun switch-to-gnus (&optional arg)
+              "Switch to a Gnus related buffer.
+    Candidates are buffers starting with
+     *mail or *reply or *wide reply
+     *Summary or
+     *Group*
+    Use a prefix argument to start Gnus if no candidate exists."
+              (interactive "P")
+              (let (candidate
+                    (alist '(("^\\*\\(mail\\|\\(wide \\)?reply\\)" t)
+                             ("^\\*Group")
+                             ("^\\*Summary")
+                             ("^\\*Article" nil (lambda ()
+                                                  (buffer-live-p gnus-article-current-summary))))))
+                (catch 'none-found
+                  (dolist (item alist)
+                    (let (last
+                          (regexp (nth 0 item))
+                          (optional (nth 1 item))
+                          (test (nth 2 item)))
+                      (dolist (buf (buffer-list))
+                        (when (and (string-match regexp (buffer-name buf))
+                                   (> (buffer-size buf) 0))
+                          (setq last buf)))
+                      (cond ((and last (or (not test) (funcall test)))
+                             (setq candidate last))
+                            (optional
+                             nil)
+                            (t
+                             (throw 'none-found t))))))
+                (cond (candidate
+                       (switch-to-buffer candidate))
+                      (arg
+                       (gnus))
+                      (t
+                       (error "No candidate found")))))))
 
 ;; To be able to send email with your gmail/smtp mail
 (use-package smtpmail
@@ -182,16 +227,6 @@
                 (newline)))
             (setq message-citation-line-function #'my/message-insert-citation-line)
 
-            ;; Put attachments at end of buffer
-            (defun my/mml-attach-file--go-to-eob (orig-fun &rest args)
-              "Go to the end of buffer before attaching files."
-              (save-excursion
-                (save-restriction
-                  (widen)
-                  (goto-char (point-max))
-                  (apply orig-fun args))))
-            (advice-add 'mml-attach-file :around #'my/mml-attach-file--go-to-eob)
-
             ;; We add a copy of the buffer to the kill ring, to make it easy to refer to it later.
             (defun my/copy-buffer-to-kill-ring ()
               "Copy buffer to kill ring."
@@ -221,6 +256,19 @@
                  (interactive)
                  (save-buffer)
                  (server-edit)))))
+
+;; mml
+(use-package mml
+  :config (progn
+            ;; Put attachments at end of buffer
+            (defun my/mml-attach-file--go-to-eob (orig-fun &rest args)
+              "Go to the end of buffer before attaching files."
+              (save-excursion
+                (save-restriction
+                  (widen)
+                  (goto-char (point-max))
+                  (apply orig-fun args))))
+            (advice-add 'mml-attach-file :around #'my/mml-attach-file--go-to-eob)))
 
 ;; Enabling attaching files from dired
 (use-package gnus-dired

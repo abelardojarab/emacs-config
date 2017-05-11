@@ -89,6 +89,21 @@
                                         (lambda () (interactive)
                                           (flyspell-mode -1)))))
 
+            ;; Redefine ispell minor check such that it ignores errors
+            (defun ispell-minor-check ()
+              "Check previous word, then continue with the normal binding of this key.
+Don't check previous word when character before point is a space or newline.
+Don't read buffer-local settings or word lists."
+              (interactive "*")
+              (let ((ispell-minor-mode nil)
+                    (ispell-check-only t)
+                    (last-char (char-after (1- (point)))))
+                (ignore-errors (command-execute (key-binding (this-command-keys))))
+                (if (not (or (eq last-char ?\ ) (eq last-char ?\n)
+                             (and ispell-skip-html (eq last-char ?>))
+                             (and ispell-skip-html (eq last-char ?\;))))
+                    (ispell-word nil t))))
+
             ;; Don't send ’ to the subprocess.
             (defun my/replace-apostrophe (args)
               (cons (replace-regexp-in-string
