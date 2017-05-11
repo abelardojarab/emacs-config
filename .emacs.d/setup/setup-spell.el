@@ -98,7 +98,10 @@ Don't read buffer-local settings or word lists."
               (let ((ispell-minor-mode nil)
                     (ispell-check-only t)
                     (last-char (char-after (1- (point)))))
-                (ignore-errors (command-execute (key-binding (this-command-keys))))
+                (ignore-errors
+                  (if (key-binding (this-command-keys))
+                      (command-execute (key-binding (this-command-keys)))
+                    (newline-and-indent)))
                 (if (not (or (eq last-char ?\ ) (eq last-char ?\n)
                              (and ispell-skip-html (eq last-char ?>))
                              (and ispell-skip-html (eq last-char ?\;))))

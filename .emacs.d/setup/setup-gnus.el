@@ -240,12 +240,18 @@
                   message-signature-file ".signature")
 
             ;; message mode hooks
-            (add-hook 'message-mode-hook #'flyspell-mode)
-            (add-hook 'message-mode-hook #'turn-on-orgstruct)
-            (add-hook 'message-mode-hook #'turn-on-orgstruct++)
-            (add-hook 'message-mode-hook #'turn-on-orgtbl)
-            (add-hook 'message-mode-hook #'turn-on-auto-fill)
-            (add-hook 'message-mode-hook #'footnote-mode)
+            (add-hook 'message-mode-hook
+                      (lambda ()
+                        ;; Org goodies
+                        (orgtbl-mode t)
+                        (orgstruct-mode t)
+                        (orgstruct++-mode t)
+
+                        ;; Extra modes
+                        (footnote-mode t)
+                        (auto-fill-mode t)
+                        (writegood-mode t)
+                        (flyspell-mode t)))
 
             ;; Enable emacsclient in mutt
             (add-to-list 'auto-mode-alist '(".*mutt.*" . message-mode))

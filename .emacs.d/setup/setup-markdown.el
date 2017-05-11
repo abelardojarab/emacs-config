@@ -34,7 +34,13 @@
   :config (progn
             (add-hook 'markdown-mode-hook
                       (lambda ()
+                        ;; Org goodies
                         (orgtbl-mode t)
+                        (orgstruct-mode t)
+                        (orgstruct++-mode t)
+
+                        ;; Extra modes
+                        (footnote-mode t)
                         (auto-fill-mode t)
                         (writegood-mode t)
                         (flyspell-mode t)))
