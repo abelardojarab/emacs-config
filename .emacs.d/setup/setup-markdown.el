@@ -32,8 +32,24 @@
   :commands markdown-mode
   :load-path (lambda () (expand-file-name "markdown-mode/" user-emacs-directory))
   :config (progn
+
+	    ;; http://endlessparentheses.com/ispell-and-org-mode.html
+	    (defun my/markdown-ispell ()
+	      "Configure `ispell-skip-region-alist' for `markdown-mode'."
+	      (make-local-variable 'ispell-skip-region-alist)
+	      (add-to-list 'ispell-skip-region-alist '("~" "~"))
+	      (add-to-list 'ispell-skip-region-alist '("```" "```")))
+	    (add-hook 'markdown-mode-hook #'my/markdown-ispell)
+
+	    ;; Markdown preferences
             (add-hook 'markdown-mode-hook
                       (lambda ()
+			;; Do not wrap lines
+			;; we will use autofill
+			(visual-line-mode -1)
+			(toggle-truncate-lines t)
+			(setq truncate-lines t)
+
                         ;; Org goodies
                         (orgtbl-mode t)
                         (orgstruct-mode t)
@@ -51,7 +67,7 @@
                 (goto-char (point-min))
                 (while (search-forward "-+-" nil t) (replace-match "-|-"))))
             (add-hook 'markdown-mode-hook
-                      (lambda () (add-hook 'after-save-hook 'cleanup-org-tables  nil 'make-it-local)))
+                      (lambda () (add-hook 'after-save-hook 'cleanup-org-tables  nil t)))
 
             ;; Github markdown style
             (setq markdown-css-paths `(,(expand-file-name "styles/github-pandoc.css" user-emacs-directory)))

@@ -29,7 +29,10 @@
   :config (progn
             ;; General configuration
             (setq ispell-highlight-face 'flyspell-incorrect
-                  ispell-silently-savep t)
+                  ispell-silently-savep t ;; Don't ask when saving the private dict
+		  ;; Increase the height of the choices window to take our header line
+		  ;; into account.
+		  ispell-choices-win-default-height 5)
             (add-to-list 'ispell-skip-region-alist '("[^\000-\377]+"))
 
             ;; find aspell and hunspell automatically
