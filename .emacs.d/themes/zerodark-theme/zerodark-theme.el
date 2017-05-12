@@ -5,7 +5,7 @@
 ;; Author: Nicolas Petton <nicolas@petton.fr>
 ;; Keywords: themes
 ;; URL: https://github.com/NicolasPetton/zerodark-theme
-;; Version: 3.6
+;; Version: 4.3
 ;; Package: zerodark-theme
 ;; Package-Requires: ((all-the-icons "2.0.0") (magit "2.8.0") (flycheck "29"))
 
@@ -670,6 +670,10 @@ The result is cached for one second to avoid hiccups."
 
    ;; paren-face.el
    `(parenthesis ((,class (:foreground ,comment))))
+
+   ;; rainbow-delimiters
+   `(rainbow-delimiters-mismatched-face ((,class :foreground ,red :weight bold :background ,background-red)))
+   `(rainbow-delimiters-unmatched-face ((,class :foreground ,red :weight bold :background ,background-red)))
 
    ;; makefile
    `(makefile-space ((,class (:background ,background-blue))))
