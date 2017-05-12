@@ -24,33 +24,52 @@
 
 ;;; Code:
 
+;; Polymode; syntax highlighting inside markdown
+(use-package polymode
+  :after org
+  :defer t
+  :diminish polymode-minor-mode
+  :commands (polymode-mode polymode-minor-mode)
+  :load-path (lambda () (expand-file-name "polymode/" user-emacs-directory))
+  :init (add-to-list 'load-path (expand-file-name "polymode/modes" user-emacs-directory))
+  :config (progn
+            (use-package poly-R)
+            (use-package poly-markdown)
+            (setq pm-weaver   "knitR-ESS" ;; Default weaver
+                  pm-exporter "pandoc")))
+
 ;; Markdown
 (use-package markdown-mode
   :mode (("README\\.md\\'" . gfm-mode)
          ("\\.md\\'" . markdown-mode)
          ("\\.markdown\\'" . markdown-mode))
+  :after org
   :commands markdown-mode
   :load-path (lambda () (expand-file-name "markdown-mode/" user-emacs-directory))
   :config (progn
 
-	    ;; http://endlessparentheses.com/ispell-and-org-mode.html
-	    (defun my/markdown-ispell ()
-	      "Configure `ispell-skip-region-alist' for `markdown-mode'."
-	      (make-local-variable 'ispell-skip-region-alist)
-	      (add-to-list 'ispell-skip-region-alist '("~" "~"))
-	      (add-to-list 'ispell-skip-region-alist '("```" "```")))
-	    (add-hook 'markdown-mode-hook #'my/markdown-ispell)
+            ;; http://endlessparentheses.com/ispell-and-org-mode.html
+            (defun my/markdown-ispell ()
+              "Configure `ispell-skip-region-alist' for `markdown-mode'."
+              (make-local-variable 'ispell-skip-region-alist)
+              (add-to-list 'ispell-skip-region-alist '("~" "~"))
+              (add-to-list 'ispell-skip-region-alist '("```" "```")))
+            (add-hook 'markdown-mode-hook #'my/markdown-ispell)
 
-	    ;; Markdown preferences
+            ;; Markdown preferences
             (add-hook 'markdown-mode-hook
                       (lambda ()
-			;; Do not wrap lines
-			;; we will use autofill
-			(visual-line-mode -1)
-			(toggle-truncate-lines t)
-			(setq truncate-lines t)
+                        ;; Do not wrap lines
+                        ;; we will use autofill
+                        (visual-line-mode -1)
+                        (toggle-truncate-lines t)
+                        (setq truncate-lines t)
+
+                        ;; Enable polymode minor mode
+                        (polymode-minor-mode t)
 
                         ;; Org goodies
+                        (outline-minor-mode t)
                         (orgtbl-mode t)
                         (orgstruct-mode t)
                         (orgstruct++-mode t)

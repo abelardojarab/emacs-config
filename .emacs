@@ -422,9 +422,6 @@
 ;; Setup dired plugins
 (require 'setup-dired-plugins)
 
-;; Setup polymode
-(require 'setup-polymode)
-
 ;; Setup gnus
 (require 'setup-gnus)
 
