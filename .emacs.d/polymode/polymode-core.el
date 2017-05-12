@@ -309,7 +309,7 @@ near future.")
             (with-current-buffer buff
               (revert-buffer t t)))
           (when polymode-display-output-file
-            (if (string-match-p "html\\|htm$")
+            (if (string-match-p "html\\|htm$" ofile)
                 (browse-url ofile)
               (display-buffer (find-file-noselect ofile 'nowarn)))))
       (error (message "Error while displaying '%s': %s"
@@ -330,7 +330,8 @@ near future.")
          (mname (if (string-match-p "-mode$" str)
                     str
                   (concat str "-mode"))))
-    (pm--get-existent-mode (intern mname) no-fallback)))
+    (or (pm--get-existent-mode (intern mname) t)
+        (pm--get-existent-mode (intern (downcase mname))) no-fallback)))
 
 (defun pm--get-existent-mode (mode &optional no-fallback)
   "Check if MODE symbol is defined and is a valid function.
