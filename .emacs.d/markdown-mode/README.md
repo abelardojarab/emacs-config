@@ -275,7 +275,9 @@ keybindings by pressing <kbd>C-c C-h</kbd>.
     side-by-side with the source Markdown. **For all export commands,
     the output file will be overwritten without notice.**
     `markdown-live-preview-window-function` can be customized to open
-    in a browser other than `eww`.
+    in a browser other than `eww`.  If you want to force the
+    preview window to appear at the bottom or right, you can
+    customize `markdown-split-window-direction`.
 
     To summarize:
 
@@ -528,8 +530,8 @@ provides an interface to all of the possible customizations:
     indentation (default: `markdown-indent-line`).
 
   * `markdown-indent-on-enter` - set to a non-nil value to
-    automatically indent new lines when the enter key is pressed
-    (default: <kbd>t</kbd>)
+    automatically indent new lines and/or continue lists when the
+    enter key is pressed (default: <kbd>t</kbd>)
 
   * `markdown-enable-wiki-links` - syntax highlighting for wiki
     links (default: `nil`).  Set this to a non-nil value to turn on
@@ -647,6 +649,8 @@ are also supported.  Since some wikis reverse these components, set
 is also non-nil, Markdown Mode will highlight wiki links with
 missing target file in a different color.  By default, Markdown
 Mode only searches for target files in the current directory.
+Search in subdirectories can be enabled by setting
+`markdown-wiki-link-search-subdirectories` to a non-nil value.
 Sequential parent directory search (as in [Ikiwiki][]) can be
 enabled by setting `markdown-wiki-link-search-parent-directories`
 to a non-nil value.
@@ -717,7 +721,9 @@ by `markdown-mode` and `gfm-mode` as described below.
   (Emacs buttons) in both `markdown-mode` and `gfm-mode` when
   `markdown-make-gfm-checkboxes-buttons` is set to a non-nil value
   (and it is set to t by default).  These checkboxes can be
-  toggled by clicking `mouse-1` or pressing <kbd>RET</kbd> over the button.
+  toggled by clicking `mouse-1`, pressing <kbd>RET</kbd> over the button,
+  or by pressing <kbd>C-c C-x C-x</kbd> with the point anywhere in the task
+  list item.
 
 * **Wiki links:** Generic wiki links are supported in
   `markdown-mode`, but in `gfm-mode` specifically they will be
@@ -725,6 +731,8 @@ by `markdown-mode` and `gfm-mode` as described below.
   in filenames and the first letter of the filename will be
   capitalized.  For example, `[[wiki link]]` will map to a file
   named `Wiki-link` with the same extension as the current file.
+  If a file with this name does not exist in the current directory,
+  the first match in a subdirectory, if any, will be used instead.
 
 * **Newlines:** Neither `markdown-mode` nor `gfm-mode` do anything
   specifically with respect to newline behavior.  If you use
@@ -750,107 +758,12 @@ by `markdown-mode` and `gfm-mode` as described below.
 
 ## Acknowledgments
 
-markdown-mode has benefited greatly from the efforts of the
-following people:
+markdown-mode has benefited greatly from the efforts of the many
+volunteers who have sent patches, test cases, bug reports,
+suggestions, helped with packaging, etc.  Thank you for your
+contributions!  See the [contributors graph][contrib] for details.
 
-  * Cyril Brulebois for Debian packaging.
-  * Conal Elliott for a font-lock regexp patch.
-  * Edward O'Connor for a font-lock regexp fix and
-    GitHub Flavored Markdown mode (`gfm-mode`).
-  * Greg Bognar for menus and running
-    `markdown` with an active region.
-  * Daniel Burrows for filing Debian bug #456592.
-  * Peter S. Galbraith for maintaining `emacs-goodies-el`.
-  * Dmitry Dzhus for undefined reference checking.
-  * Carsten Dominik for `org-mode`, from which the
-    visibility cycling functionality was derived, and for a bug fix
-    related to `orgtbl-mode`.
-  * Bryan Kyle for indentation code.
-  * Ben Voui for font-lock face customizations.
-  * Ankit Solanki for `longlines.el`
-    compatibility and custom CSS.
-  * Hilko Bengen for proper XHTML output.
-  * Jose A. Ortega Ruiz for Emacs 23 fixes.
-  * Nelson Minar for `html-helper-mode`, from which
-    comment matching functions were derived.
-  * Alec Resnick for bug reports.
-  * Joost Kremers for footnote-handling
-    functions, bug reports regarding indentation, and
-    fixes for byte-compilation warnings.
-  * Peter Williams for `fill-paragraph`
-    enhancements.
-  * George Ogata for fixing several
-    byte-compilation warnings.
-  * Eric Merritt for wiki link features.
-  * Philippe Ivaldi for XHTML preview
-    customizations and XHTML export.
-  * Jeremiah Dodds for supporting
-    Markdown processors which do not accept input from stdin.
-  * Werner Dittmann for bug reports
-    regarding the `cl` dependency and `auto-fill-mode` and indentation.
-  * Scott Pfister for generalizing the space
-    substitution character for mapping wiki links to filenames.
-  * Marcin Kasperski for a patch to
-    escape shell commands.
-  * Christopher J. Madsen for patches to fix a match
-    data bug and to prefer `visual-line-mode` in `gfm-mode`.
-  * Shigeru Fukaya for better adherence to
-    Emacs Lisp coding conventions.
-  * Donald Ephraim Curtis for fixing the `fill-paragraph`
-    regexp, refactoring the compilation and preview functions,
-    heading font-lock generalizations, list renumbering,
-    and kill ring save.
-  * Kevin Porter for wiki link handling in `gfm-mode`.
-  * Max Penet and Peter Eisentraut <peter_e@gmx.net>
-    for an autoload token for `gfm-mode`.
-  * Ian Yang for improving the reference definition regex.
-  * Akinori Musha for an imenu index function.
-  * Michael Sperber for XEmacs fixes.
-  * Francois Gannaz for suggesting charset
-    declaration in XHTML output.
-  * Zhenlei Jia for smart exdention function.
-  * Matus Goljer for improved wiki link following
-    and GFM code block insertion.
-  * Peter Jones for link following functions.
-  * Bryan Fink for a bug report regarding
-    externally modified files.
-  * Vegard Vesterheim for a bug fix
-    related to `orgtbl-mode`.
-  * Makoto Motohashi for before- and after-
-    export hooks, unit test improvements, and updates to support
-    wide characters.
-  * Michael Dwyer for `gfm-mode` underscore regexp.
-  * Chris Lott for suggesting reference label
-    completion.
-  * Gunnar Franke for a completion bug report.
-  * David Glasser for a `paragraph-separate` fix.
-  * Daniel Brotsky for better auto-fill defaults.
-  * Samuel Freilich for improved filling
-    behavior regarding list items, footnotes, and reference
-    definitions, improved killing of footnotes, and numerous other
-    tests and bug fixes.
-  * Antonis Kanouras for strikethrough support.
-  * Tim Visher for multiple CSS files and other
-    general improvements.
-  * Matt McClure for a patch to prevent
-    overwriting source files with .html extensions upon export.
-  * Roger Bolsius for ordered list improvements.
-  * Google's Open Source Programs Office for recognizing the project with
-    a monetary contribution in June 2015.
-  * Howard Melman for supporting GFM checkboxes
-    as buttons.
-  * Danny McClanahan for live preview
-    mode, completion of GFM programming language names, improved
-    font lock for fenced code blocks and metadata blocks, `cl-lib`
-    updates, and numerous other improvements.
-  * Syohei Yoshida for better heading detection
-    and movement functions, improved italic font lock, fixing adaptive
-    filling for hanging list items, more efficient fontification,
-    and numerous other improvements.
-  * Vitalie Spinu for improvements to font
-    lock and source code aesthetics.
-  * Kévin Le Gouguec for improvements
-    related to ATX headings and Pandoc fancy lists.
+ [contrib]: https://github.com/jrblevin/markdown-mode/graphs/contributors
 
 ## Bugs
 
@@ -866,10 +779,10 @@ ticket on the [GitHub issue tracker][issues].
 markdown-mode was written and is maintained by Jason Blevins.  The
 first version was released on May 24, 2007.
 
-  * 2007-05-24: Version 1.1
-  * 2007-05-25: Version 1.2
+  * 2007-05-24: [Version 1.1][]
+  * 2007-05-25: [Version 1.2][]
   * 2007-06-05: [Version 1.3][]
-  * 2007-06-29: Version 1.4
+  * 2007-06-29: [Version 1.4][]
   * 2007-10-11: [Version 1.5][]
   * 2008-06-04: [Version 1.6][]
   * 2009-10-01: [Version 1.7][]
@@ -879,7 +792,10 @@ first version was released on May 24, 2007.
   * 2013-03-24: [Version 2.0][]
   * 2016-01-09: [Version 2.1][]
 
+[Version 1.1]: http://jblevins.org/projects/markdown-mode/rev-1-1
+[Version 1.2]: http://jblevins.org/projects/markdown-mode/rev-1-2
 [Version 1.3]: http://jblevins.org/projects/markdown-mode/rev-1-3
+[Version 1.4]: http://jblevins.org/projects/markdown-mode/rev-1-4
 [Version 1.5]: http://jblevins.org/projects/markdown-mode/rev-1-5
 [Version 1.6]: http://jblevins.org/projects/markdown-mode/rev-1-6
 [Version 1.7]: http://jblevins.org/projects/markdown-mode/rev-1-7
