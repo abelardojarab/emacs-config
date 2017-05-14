@@ -35,6 +35,21 @@
          :map ctl-x-map
          ("m" . compose-mail))
   :config (progn
+            ;; http://sachachua.com/blog/2007/12/gnus-multi-pane-tricks-or-i-heart-planet-emacsen/
+            (gnus-add-configuration
+             '(article
+               (horizontal 1.0
+                           (vertical 60 (group 1.0))
+                           (vertical 1.0
+                                     (summary 0.40 point)
+                                     (article 1.0)))))
+
+            (gnus-add-configuration
+             '(summary
+               (horizontal 1.0
+                           (vertical 60 (group 1.0))
+                           (vertical 1.0 (summary 1.0 point)))))
+
             ;; notmuch search
             (setq notmuch-message-headers '("Subject" "To" "Cc" "Date" "Reply-To"))
 
