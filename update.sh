@@ -8,3 +8,4 @@ git subtree pull --prefix=.emacs.d/company-mode  --squash https://github.com/abe
 git subtree pull --prefix=.emacs.d/yasnippet  --squash https://github.com/abelardojarab/yasnippet.git master
 git subtree pull --prefix=.emacs.d/swiper  --squash https://github.com/abelardojarab/swiper.git master
 git subtree pull --prefix=.emacs.d/ecb  --squash https://github.com/abelardojarab/ecb.git master
+git subtree pull --prefix=.emacs.d/ergoemacs-mode  --squash https://github.com/abelardojarab/ergoemacs-mode.git master
