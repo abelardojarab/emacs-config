@@ -49,6 +49,7 @@
             (setq helm-always-two-windows t
                   helm-quick-update t
                   helm-split-window-default-side 'right
+                  helm-split-window-in-side-p t
                   helm-echo-input-in-header-line t
                   helm-idle-delay 0.0 ;; update fast sources immediately (doesn't).
                   helm-input-idle-delay 0.01  ;; this actually updates things quicker
