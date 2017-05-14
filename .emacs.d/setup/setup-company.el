@@ -116,19 +116,23 @@
                                                 (car company-backends))))))))
 
             (setq company-begin-commands '(self-insert-command
-					   org-self-insert-command
-					   c-electric-lt-gt c-electric-colon
-					   completion-separator-self-insert-command)
-		  company-idle-delay 0.2
-                  company-selection-wrap-around t
-                  company-minimum-prefix-length 2
-                  company-show-numbers t
+                                           org-self-insert-command
+                                           c-electric-lt-gt
+                                           c-electric-colon
+                                           completion-separator-self-insert-command)
+                  company-transformers '(company-sort-by-occurrence
+                                         company-sort-by-backend-importance)
+                  company-idle-delay 0
+                  company-echo-delay                0
+                  company-selection-wrap-around     t
+                  company-minimum-prefix-length     2
+                  company-show-numbers              t
                   company-tooltip-align-annotations t
-                  company-tooltip-limit 20
-                  company-dabbrev-downcase nil
-                  company-dabbrev-ignore-case t
+                  company-tooltip-limit             20
+                  company-dabbrev-downcase          nil
+                  company-dabbrev-ignore-case       t
                   company-semantic-insert-arguments t
-                  company-gtags-insert-arguments t)
+                  company-gtags-insert-arguments    t)
 
             (define-key company-active-map (kbd "C-n") 'company-select-next)
             (define-key company-active-map (kbd "C-p") 'company-select-previous)
@@ -136,45 +140,45 @@
             (define-key company-active-map (kbd "<tab>") 'company-complete-selection)
             (define-key company-active-map (kbd "RET") 'company-complete-selection)
 
-	    ;; Enable company in minibufer
-	    ;; https://gist.github.com/Bad-ptr/7787596
-	    (defun company-elisp-minibuffer (command &optional arg &rest ignored)
-	      "`company-mode' completion back-end for Emacs Lisp in the minibuffer."
-	      (interactive (list 'interactive))
-	      (case command
-		('prefix (and (minibufferp)
-			      (case company-minibuffer-mode
-				('execute-extended-command (company-grab-symbol))
-				(t (company-capf `prefix)))))
-		('candidates
-		 (case company-minibuffer-mode
-		   ('execute-extended-command (all-completions arg obarray 'commandp))
-		   (t nil)))))
+            ;; Enable company in minibufer
+            ;; https://gist.github.com/Bad-ptr/7787596
+            (defun company-elisp-minibuffer (command &optional arg &rest ignored)
+              "`company-mode' completion back-end for Emacs Lisp in the minibuffer."
+              (interactive (list 'interactive))
+              (case command
+                ('prefix (and (minibufferp)
+                              (case company-minibuffer-mode
+                                ('execute-extended-command (company-grab-symbol))
+                                (t (company-capf `prefix)))))
+                ('candidates
+                 (case company-minibuffer-mode
+                   ('execute-extended-command (all-completions arg obarray 'commandp))
+                   (t nil)))))
 
-	    (defun minibuffer-company ()
-	      (unless company-mode
-		(when (and global-company-mode (or (eq this-command #'execute-extended-command)
-						   (eq this-command #'eval-expression)))
+            (defun minibuffer-company ()
+              (unless company-mode
+                (when (and global-company-mode (or (eq this-command #'execute-extended-command)
+                                                   (eq this-command #'eval-expression)))
 
-		  (setq-local company-minibuffer-mode this-command)
-		  (setq-local completion-at-point-functions
-			      (list (if (fboundp 'elisp-completion-at-point)
-					#'elisp-completion-at-point
-				      #'lisp-completion-at-point) t))
+                  (setq-local company-minibuffer-mode this-command)
+                  (setq-local completion-at-point-functions
+                              (list (if (fboundp 'elisp-completion-at-point)
+                                        #'elisp-completion-at-point
+                                      #'lisp-completion-at-point) t))
 
-		  (setq-local company-show-numbers nil)
-		  (setq-local company-backends '((company-elisp-minibuffer company-capf)))
-		  (setq-local company-tooltip-limit 8)
-		  (setq-local company-col-offset 1)
-		  (setq-local company-row-offset 1)
-		  (setq-local company-frontends '(company-pseudo-tooltip-unless-just-one-frontend
-						  company-preview-if-just-one-frontend))
+                  (setq-local company-show-numbers nil)
+                  (setq-local company-backends '((company-elisp-minibuffer company-capf)))
+                  (setq-local company-tooltip-limit 8)
+                  (setq-local company-col-offset 1)
+                  (setq-local company-row-offset 1)
+                  (setq-local company-frontends '(company-pseudo-tooltip-unless-just-one-frontend
+                                                  company-preview-if-just-one-frontend))
 
-		  (company-mode 1)
-		  (when (eq this-command #'execute-extended-command)
-		    (company-complete)))))
+                  (company-mode 1)
+                  (when (eq this-command #'execute-extended-command)
+                    (company-complete)))))
 
-	    (add-hook 'minibuffer-setup-hook #'minibuffer-company)))
+            (add-hook 'minibuffer-setup-hook #'minibuffer-company)))
 
 ;; Documentation popups for Company
 (use-package company-quickhelp

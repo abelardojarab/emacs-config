@@ -257,6 +257,9 @@
 ;; Setup gnuplot (so org-babel accepts)
 (require 'setup-gnuplot)
 
+;; Setup calendar
+(require 'setup-calendar)
+
 ;; Setup Org
 (require 'setup-org)
 

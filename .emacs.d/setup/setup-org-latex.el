@@ -26,6 +26,7 @@
 
 ;; Tweaks for LaTeX exporting
 (use-package ox-latex
+  :defer 5
   :config (progn
             (setq org-latex-listings t)
             (setq org-export-latex-quotes
@@ -136,96 +137,32 @@
             ;; Place table caption below table
             (setq org-latex-table-caption-above nil)
 
-            ;; Use centered images in Org-mode
+            ;; Use centered images
             (ignore-errors
               (advice-add 'org-latex--inline-image :around
                           (lambda (orig link info)
                             (concat
                              "\\begin{center}"
                              (funcall orig link info)
-                             "\\end{center}"))))))
+                             "\\end{center}"))))
 
-;; Reftex
-(use-package reftex-cite
-  :config (progn
+            ;; Add defaults packages to include when exporting.
+            (setq org-latex-hyperref-template
+                  "\\hypersetup{\n  pdfkeywords={%k},\n  pdfsubject={%d},\n  pdfcreator={%c},\n  citecolor=black,\n  filecolor=black,\n  colorlinks=true,\n  linkcolor=black,\n  urlcolor=black}\n")
+            (add-to-list 'org-latex-packages-alist '("" "graphicx"))
+            (add-to-list 'org-latex-packages-alist '("" "geometry"))
+            (add-to-list 'org-latex-packages-alist '("" "hyperref"))
+            (add-to-list 'org-latex-packages-alist '("" "caption"))
+            (add-to-list 'org-latex-packages-alist '("" "listings"))
+            (add-to-list 'org-latex-packages-alist '("" "color"))
+            (add-to-list 'org-latex-packages-alist '("" "mathptmx"))
 
-            ;; Make RefTeX faster
-            (setq reftex-enable-partial-scans t)
-            (setq reftex-save-parse-info t)
-            (setq reftex-use-multiple-selection-buffers t)
-            (setq reftex-plug-into-AUCTeX t)
-            (setq reftex-cite-prompt-optional-args nil)
-            (setq reftex-cite-cleanup-optional-args t)
-
-            ;; Enable RefTeX in Org-mode to find bibliography
-            (setq reftex-default-bibliography (list my/bibtex-completion-bibliography))
-            (defun org-mode-reftex-setup ()
-              (interactive)
-              (and (buffer-file-name) (file-exists-p (buffer-file-name))
-                   (progn
-                     ;; Reftex should use the org file as master file. See C-h v TeX-master for infos.
-                     (setq TeX-master t)
-                     (load-library "reftex")
-                     (turn-on-reftex)
-                     (and (buffer-file-name)
-                          (file-exists-p (buffer-file-name))
-                          (reftex-parse-all))
-                     ;; enable auto-revert-mode to update reftex when bibtex file changes on disk
-                     (global-auto-revert-mode t)
-                     ;; add a custom reftex cite format to insert links
-                     ;; This also changes any call to org-citation!
-                     ;; RefTeX formats for biblatex (not natbib)
-                     (reftex-set-cite-format
-                      '((?\C-m . "\\cite[]{%l}")
-                        (?t . "\\textcite{%l}")
-                        (?a . "\\autocite[]{%l}")
-                        (?p . "\\parencite{%l}")
-                        (?f . "\\footcite[][]{%l}")
-                        (?F . "\\fullcite[]{%l}")
-                        (?x . "[]{%l}")
-                        (?X . "{%l}")
-                        ))))
-              (define-key org-mode-map (kbd "C-c )") 'reftex-citation)
-              (define-key org-mode-map (kbd "C-c (") 'org-mode-reftex-search))
-            (add-hook 'org-mode-hook 'org-mode-reftex-setup)
-
-            ;; Add cite link
-            (org-add-link-type "cite" 'ebib
-                               (lambda (path desc format)
-                                 (cond
-                                  ((eq format 'html)  (format "(<cite>%s</cite>)" path))
-                                  ((eq format 'latex) (format "\\cite{%s}" path)))))
-
-            (setq font-latex-match-reference-keywords
-                  '(("cite" "[{")
-                    ("cites" "[{}]")
-                    ("autocite" "[{")
-                    ("footcite" "[{")
-                    ("footcites" "[{")
-                    ("parencite" "[{")
-                    ("textcite" "[{")
-                    ("fullcite" "[{")
-                    ("citetitle" "[{")
-                    ("citetitles" "[{")
-                    ("headlessfullcite" "[{")))))
-
-;; Add defaults packages to include when exporting.
-(setq org-latex-hyperref-template
-      "\\hypersetup{\n  pdfkeywords={%k},\n  pdfsubject={%d},\n  pdfcreator={%c},\n  citecolor=black,\n  filecolor=black,\n  colorlinks=true,\n  linkcolor=black,\n  urlcolor=black}\n")
-(add-to-list 'org-latex-packages-alist '("" "graphicx"))
-(add-to-list 'org-latex-packages-alist '("" "geometry"))
-(add-to-list 'org-latex-packages-alist '("" "hyperref"))
-(add-to-list 'org-latex-packages-alist '("" "caption"))
-(add-to-list 'org-latex-packages-alist '("" "listings"))
-(add-to-list 'org-latex-packages-alist '("" "color"))
-(add-to-list 'org-latex-packages-alist '("" "mathptmx"))
-
-;; Define the output styles
-(unless (boundp 'org-latex-classes)
-  (setq org-latex-classes nil))
-(add-to-list 'org-latex-classes
-             '("xelatex"
-               "\\documentclass[11pt,a4paper]{article}
+            ;; Define the output styles
+            (unless (boundp 'org-latex-classes)
+              (setq org-latex-classes nil))
+            (add-to-list 'org-latex-classes
+                         '("xelatex"
+                           "\\documentclass[11pt,a4paper]{article}
 
 % Choose the main language
 \\usepackage[english]{babel}
@@ -342,15 +279,15 @@
       [NO-DEFAULT-PACKAGES]
       [NO-PACKAGES]
 \\hypersetup{pdfencoding=auto,colorlinks=true}"
-               ("\\section{%s}" . "\\section*{%s}")
-               ("\\subsection{%s}" . "\\subsection*{%s}")
-               ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-               ("\\paragraph{%s}" . "\\paragraph*{%s}")
-               ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+                           ("\\section{%s}" . "\\section*{%s}")
+                           ("\\subsection{%s}" . "\\subsection*{%s}")
+                           ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                           ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                           ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
 
-(add-to-list 'org-latex-classes
-             '("pdflatex"
-               "\\documentclass[11pt,a4paper]{article}
+            (add-to-list 'org-latex-classes
+                         '("pdflatex"
+                           "\\documentclass[11pt,a4paper]{article}
 \\usepackage[T1]{fontenc}
 \\usepackage{lmodern}
 \\usepackage{graphicx}
@@ -387,15 +324,15 @@
 \\title{}
       [NO-DEFAULT-PACKAGES]
       [NO-PACKAGES]"
-               ("\\section{%s}" . "\\section*{%s}")
-               ("\\subsection{%s}" . "\\subsection*{%s}")
-               ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-               ("\\paragraph{%s}" . "\\paragraph*{%s}")
-               ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+                           ("\\section{%s}" . "\\section*{%s}")
+                           ("\\subsection{%s}" . "\\subsection*{%s}")
+                           ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                           ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                           ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
 
-(add-to-list 'org-latex-classes
-             '("beamer"
-               "\\documentclass[11pt,presentation]{beamer}
+            (add-to-list 'org-latex-classes
+                         '("beamer"
+                           "\\documentclass[11pt,presentation]{beamer}
 \\usepackage[T1]{fontenc}
 \\usepackage{lmodern}
 \\usepackage{graphicx}
@@ -432,16 +369,16 @@
       [NO-DEFAULT-PACKAGES]
       [NO-PACKAGES]"
 
-               ;; Other section
-               ("\\section{%s}" . "\\section*{%s}")
-               ("\\begin{frame}[fragile]\\frametitle{%s}"
-                "\\end{frame}"
-                "\\begin{frame}[fragile]\\frametitle{%s}"
-                "\\end{frame}")))
+                           ;; Other section
+                           ("\\section{%s}" . "\\section*{%s}")
+                           ("\\begin{frame}[fragile]\\frametitle{%s}"
+                            "\\end{frame}"
+                            "\\begin{frame}[fragile]\\frametitle{%s}"
+                            "\\end{frame}")))
 
-(add-to-list 'org-latex-classes
-             '("ieeeproceedings"
-               "\\documentclass[conference]{IEEEtran}
+            (add-to-list 'org-latex-classes
+                         '("ieeeproceedings"
+                           "\\documentclass[conference]{IEEEtran}
 \\usepackage[T1]{fontenc}
 \\usepackage{lmodern}
 \\usepackage{graphicx}
@@ -505,46 +442,98 @@
 \\title{}
       [NO-DEFAULT-PACKAGES]
       [NO-PACKAGES]"
-               ("\\section{%s}" . "\\section*{%s}")
-               ("\\subsection{%s}" . "\\subsection*{%s}")
-               ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
-               ("\\paragraph{%s}" . "\\paragraph*{%s}")
-               ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+                           ("\\section{%s}" . "\\section*{%s}")
+                           ("\\subsection{%s}" . "\\subsection*{%s}")
+                           ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                           ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                           ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
 
-;; Set default document stylesheet
-(if (executable-find "xelatex")
-    (setq org-latex-default-class "xelatex")
-  (setq org-latex-default-class "pdflatex"))
+            ;; Set default document stylesheet
+            (if (executable-find "xelatex")
+                (setq org-latex-default-class "xelatex")
+              (setq org-latex-default-class "pdflatex"))
 
-;; Let the exporter use the -shell-escape option to let latex execute external programs.
-(if (executable-find "xelatex")
-    (setq org-latex-pdf-process
-          '("xelatex -interaction nonstopmode -synctex=1 -shell-escape -output-directory %o %f"
-            "biber %b"
-            "xelatex -interaction nonstopmode -synctex=1 -shell-escape -output-directory %o %f"
-            "xelatex -interaction nonstopmode -synctex=1 -shell-escape -output-directory %o %f"
-            "xelatex -interaction nonstopmode -synctex=1 -shell-escape -output-directory %o %f")) ;; multipass
-  (setq org-latex-pdf-process
-        '("pdflatex -interaction nonstopmode -shell-escape -output-directory %o %f"
-          "bibtex $(basename %b)"
-          "pdflatex -interaction nonstopmode -shell-escape -output-directory %o %f"
-          "pdflatex -interaction nonstopmode -shell-escape -output-directory %o %f"))
-  ) ;; multipass
+            ;; Let the exporter use the -shell-escape option to let latex execute external programs.
+            (if (executable-find "xelatex")
+                (setq org-latex-pdf-process
+                      '("xelatex -interaction nonstopmode -synctex=1 -shell-escape -output-directory %o %f"
+                        "biber %b"
+                        "xelatex -interaction nonstopmode -synctex=1 -shell-escape -output-directory %o %f"
+                        "xelatex -interaction nonstopmode -synctex=1 -shell-escape -output-directory %o %f"
+                        "xelatex -interaction nonstopmode -synctex=1 -shell-escape -output-directory %o %f")) ;; multipass
+              (setq org-latex-pdf-process
+                    '("pdflatex -interaction nonstopmode -shell-escape -output-directory %o %f"
+                      "bibtex $(basename %b)"
+                      "pdflatex -interaction nonstopmode -shell-escape -output-directory %o %f"
+                      "pdflatex -interaction nonstopmode -shell-escape -output-directory %o %f"))) ;; multipass
 
-;; add emacs lisp support for minted
-(setq org-latex-custom-lang-environments
-      '((emacs-lisp "common-lispcode")))
+            ;; add emacs lisp support for minted
+            (setq org-latex-custom-lang-environments
+                  '((emacs-lisp "common-lispcode")))))
 
-;; Tweak the PDF viewer
-(eval-after-load "org"
-  '(progn
-     ;; .txt files aren't in the list initially, but in case that changes
-     ;; in a future version of org, use if to avoid errors
-     (if (assoc "\\.txt\\'" org-file-apps)
-         (setcdr (assoc "\\.txt\\'" org-file-apps) "kate %s")
-       (add-to-list 'org-file-apps '("\\.txt\\'" . "kate %s") t))
-     ;; Change .pdf association directly within the alist
-     (setcdr (assoc "\\.pdf\\'" org-file-apps) "acroread %s")))
+;; Reftex
+(use-package reftex-cite
+  :config (progn
+
+            ;; Make RefTeX faster
+            (setq reftex-enable-partial-scans t)
+            (setq reftex-save-parse-info t)
+            (setq reftex-use-multiple-selection-buffers t)
+            (setq reftex-plug-into-AUCTeX t)
+            (setq reftex-cite-prompt-optional-args nil)
+            (setq reftex-cite-cleanup-optional-args t)
+
+            ;; Enable RefTeX in Org-mode to find bibliography
+            (setq reftex-default-bibliography (list my/bibtex-completion-bibliography))
+            (defun org-mode-reftex-setup ()
+              (interactive)
+              (and (buffer-file-name) (file-exists-p (buffer-file-name))
+                   (progn
+                     ;; Reftex should use the org file as master file. See C-h v TeX-master for infos.
+                     (setq TeX-master t)
+                     (load-library "reftex")
+                     (turn-on-reftex)
+                     (and (buffer-file-name)
+                          (file-exists-p (buffer-file-name))
+                          (reftex-parse-all))
+                     ;; enable auto-revert-mode to update reftex when bibtex file changes on disk
+                     (global-auto-revert-mode t)
+                     ;; add a custom reftex cite format to insert links
+                     ;; This also changes any call to org-citation!
+                     ;; RefTeX formats for biblatex (not natbib)
+                     (reftex-set-cite-format
+                      '((?\C-m . "\\cite[]{%l}")
+                        (?t . "\\textcite{%l}")
+                        (?a . "\\autocite[]{%l}")
+                        (?p . "\\parencite{%l}")
+                        (?f . "\\footcite[][]{%l}")
+                        (?F . "\\fullcite[]{%l}")
+                        (?x . "[]{%l}")
+                        (?X . "{%l}")
+                        ))))
+              (define-key org-mode-map (kbd "C-c )") 'reftex-citation)
+              (define-key org-mode-map (kbd "C-c (") 'org-mode-reftex-search))
+            (add-hook 'org-mode-hook 'org-mode-reftex-setup)
+
+            ;; Add cite link
+            (org-add-link-type "cite" 'ebib
+                               (lambda (path desc format)
+                                 (cond
+                                  ((eq format 'html)  (format "(<cite>%s</cite>)" path))
+                                  ((eq format 'latex) (format "\\cite{%s}" path)))))
+
+            (setq font-latex-match-reference-keywords
+                  '(("cite" "[{")
+                    ("cites" "[{}]")
+                    ("autocite" "[{")
+                    ("footcite" "[{")
+                    ("footcites" "[{")
+                    ("parencite" "[{")
+                    ("textcite" "[{")
+                    ("fullcite" "[{")
+                    ("citetitle" "[{")
+                    ("citetitles" "[{")
+                    ("headlessfullcite" "[{")))))
 
 (provide 'setup-org-latex)
 ;;; setup-org-latex.el ends here

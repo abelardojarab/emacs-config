@@ -25,8 +25,7 @@
 ;;; Code:
 
 (use-package org-agenda
-  :after org
-  :defer 1
+  :after (org calendar)
   :bind (:map org-mode-map
               ("C-c i" . my/org-add-line-item-task))
   :config (progn
@@ -77,41 +76,6 @@
                   (if (file-exists-p todo_workspace)
                       (setq org-directory "~/workspace/Documents/Org")
                     (setq org-directory "~/Google Drive/Documents/Org")))
-
-                ;; Diary file
-                (use-package calendar
-                  :config (progn
-                            (setq diary-file (concat org-directory "/agenda.org")
-                                  diary-date-forms diary-iso-date-forms
-                                  calendar-set-date-style 'iso
-                                  calendar-week-start-day 1
-                                  calendar-view-diary-initially-flag t
-                                  calendar-mark-diary-entries-flag t
-                                  calendar-today-marker 'calendar-today-face)
-
-                            ;; Enable Org date formatting
-                            (setq diary-date-forms (cons '(" *" "[<\* ]*" " *"
-                                                           dayname "[, ]*" " *"
-                                                           monthname "[, ]*" " *"
-                                                           day "[, ]*" " *"
-                                                           year "[^0-9]*[>]*")
-                                                         diary-date-forms))
-
-                            (add-hook 'diary-display-hook 'fancy-diary-display)
-                            (add-hook 'today-visible-calendar-hook 'calendar-mark-today)
-                            (add-hook 'list-diary-entries-hook 'sort-diary-entries t)
-
-                            ;; https://www.emacswiki.org/emacs/InsertingTodaysDate
-                            (defun my/insert-current-date (&optional omit-day-of-week-p)
-                              "Insert today's date using the current locale.
-  With a prefix argument, the date is inserted without the day of
-  the week."
-                              (interactive "P*")
-                              (insert (calendar-date-string (calendar-current-date) nil
-                                                            omit-day-of-week-p)))
-
-                            ;; Enable diary file in Org mode
-                            (setq org-agenda-include-diary (file-exists-p diary-file))))
 
                 ;; http://emacs.stackexchange.com/questions/19863/how-to-set-my-own-date-format-for-org
                 ;; This will give you <Thu Jan 26 2016> for date timestamps
@@ -615,7 +579,7 @@ this with to-do items than with projects or headings."
                   (my/org-summarize-focus-areas)
                   "\n"))))
 
-	    ;; From https://sriramkswamy.github.io/dotemacs/#orgheadline16
+            ;; From https://sriramkswamy.github.io/dotemacs/#orgheadline16
             (setq org-capture-templates `(
 
                                           ;; For notes or something regarding more work

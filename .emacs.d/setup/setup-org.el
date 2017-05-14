@@ -115,12 +115,12 @@
                   org-hide-leading-stars t
                   org-highlight-latex-and-related '(latex)
                   org-ellipsis " ••• "
-                            ;; this causes problem in other modes
+                  ;; this causes problem in other modes
                   org-indent-mode nil)
 
-        ;; Enable sub and super script only when enclosed by {}
-        ;; Also improves readability when exponent/subscript is composed of multiple words
-        (setq org-use-sub-superscripts nil)
+            ;; Enable sub and super script only when enclosed by {}
+            ;; Also improves readability when exponent/subscript is composed of multiple words
+            (setq org-use-sub-superscripts nil)
 
             ;; Hide the /italics/ and *bold* markers
             (setq org-hide-emphasis-markers t)
@@ -174,11 +174,6 @@
               '((t (:inherit org-meta-line
                              :underline "light grey" :foreground "#008ED1")))
               "Face used for the line delimiting the end of source blocks.")
-
-            ;; Beamer/ODT/Markdown support
-            (use-package ox-beamer)
-            (use-package ox-odt)
-            (use-package ox-md)
 
             ;; Org Templates
             (setq org-structure-template-alist
@@ -361,19 +356,6 @@
                                           (org-re "\\(fn:[-_[:word:]]+\\)")
                                           "\\)"))
 
-            ;; Use footnotes as eldoc source
-            (use-package org-eldoc)
-            (add-hook 'org-mode-hook #'org-eldoc-load)
-            (add-hook 'org-mode-hook #'eldoc-mode)
-            (defun my/org-eldoc-get-footnote ()
-              (save-excursion
-                (let ((fn (org-between-regexps-p "\\[fn:" "\\]")))
-                  (when fn
-                    (save-match-data
-                      (nth 3 (org-footnote-get-definition (buffer-substring (+ 1 (car fn)) (- (cdr fn) 1)))))))))
-            (advice-add 'org-eldoc-documentation-function
-                        :before-until #'my/org-eldoc-get-footnote)
-
             ;; Insert screenshots into Org mode, very useful
             (defun org-insert-screenshot ()
               "Take a screenshot into a time stamped unique-named file in the same
@@ -406,7 +388,36 @@ a link to this file."
                     (call-process "import" nil nil nil filename))
                   ) ;; if
                 (insert (concat "[[file:" filename "]]"))
-                (org-display-inline-images)))))
+                (org-display-inline-images)))
+
+            ;; .txt files aren't in the list initially, but in case that changes
+            ;; in a future version of org, use if to avoid errors
+            (if (assoc "\\.txt\\'" org-file-apps)
+                (setcdr (assoc "\\.txt\\'" org-file-apps) "kate %s")
+              (add-to-list 'org-file-apps '("\\.txt\\'" . "kate %s") t))
+
+            ;; Change .pdf association directly within the alist
+            (setcdr (assoc "\\.pdf\\'" org-file-apps) "acroread %s")))
+
+;; Use footnotes as eldoc source
+(use-package org-eldoc
+  :defer 5
+  :config (progn
+            (add-hook 'org-mode-hook #'org-eldoc-load)
+            (add-hook 'org-mode-hook #'eldoc-mode)
+            (defun my/org-eldoc-get-footnote ()
+              (save-excursion
+                (let ((fn (org-between-regexps-p "\\[fn:" "\\]")))
+                  (when fn
+                    (save-match-data
+                      (nth 3 (org-footnote-get-definition (buffer-substring (+ 1 (car fn)) (- (cdr fn) 1)))))))))
+            (advice-add 'org-eldoc-documentation-function
+                        :before-until #'my/org-eldoc-get-footnote)))
+
+;; Beamer/ODT/Markdown exporters
+(use-package ox-beamer :defer 5)
+(use-package ox-odt    :defer 5)
+(use-package ox-md     :defer 5)
 
 (provide 'setup-org)
 ;;; setup-org.el ends here
