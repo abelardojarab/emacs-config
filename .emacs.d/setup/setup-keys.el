@@ -222,6 +222,7 @@
 (defvar my/keys-minor-mode-map (make-keymap) "my/keys-minor-mode keymap.")
 (define-key my/keys-minor-mode-map (kbd "<mouse-3>") 'mouse3-popup-menu)
 (define-key my/keys-minor-mode-map [C-tab] 'comment-or-uncomment-region)
+(define-key my/keys-minor-mode-map (kbd "C-x z") 'ielm-repl)
 (define-key my/keys-minor-mode-map (kbd "M-.") 'helm-etags-select)
 (define-key my/keys-minor-mode-map (kbd "C-.") 'helm-gtags-dwim)
 (define-key my/keys-minor-mode-map (kbd "<f2>")   'bm-next)

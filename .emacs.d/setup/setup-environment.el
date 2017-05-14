@@ -298,4 +298,42 @@
            (emacs-uptime "%s")))
 (add-hook 'emacs-startup-hook 'show-startup-time 'append)
 
+;; Replace expression with the value
+(defadvice eval-last-sexp (around replace-sexp (arg) activate)
+  "Replace sexp when called with a prefix argument."
+  (if arg
+      (let ((pos (point)))
+        ad-do-it
+        (goto-char pos)
+        (backward-kill-sexp)
+        (forward-sexp))
+    ad-do-it))
+
+;; From init benchmark at:
+;; https://github.com/purcell/emacs.d/blob/master/lisp/init-benchmarking.el
+(defun my/time-subtract-millis (b a)
+  (* 1000.0 (float-time (time-subtract b a))))
+
+(defvar my/require-times nil
+  "A list of (FEATURE . LOAD-DURATION).
+LOAD-DURATION is the time taken in milliseconds to load FEATURE.")
+
+(defadvice require (around my/build-require-times (feature &optional filename noerror) activate)
+  "Note in `my/require-times' the time taken to require each feature."
+  (let* ((already-loaded (memq feature features))
+         (require-start-time (and (not already-loaded) (current-time))))
+    (prog1
+        ad-do-it
+      (when (and (not already-loaded) (memq feature features))
+        (let ((time (my/time-subtract-millis (current-time) require-start-time)))
+          (add-to-list 'my/require-times
+                       (cons feature time)
+                       t))))))
+
+(defun my/show-init-time ()
+  (message "Emacs startup completed in: %.2fms"
+           (my/time-subtract-millis after-init-time before-init-time)))
+
+(add-hook 'after-init-hook 'my/show-init-time)
+
 (provide 'setup-environment)
