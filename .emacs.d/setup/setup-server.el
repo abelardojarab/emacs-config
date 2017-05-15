@@ -35,7 +35,7 @@
                 (ad-set-args 0 (plist-put (ad-get-args 0) :family 'ipv4))))
 
           ;; Server configuration
-          (setq server-use-tcp t)
+          (setq server-use-tcp nil)
           (setq server-port 9999)
           (setq server-auth-dir "~/.emacs.cache/server")
           (setq server-socket-dir "~/.emacs.cache/server")

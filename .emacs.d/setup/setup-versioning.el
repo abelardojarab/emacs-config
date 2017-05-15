@@ -442,13 +442,40 @@ branch."
 
 ;; Show git state for individual lines on the margin
 (use-package git-gutter+
+  :if (executable-find "git")
   :diminish git-gutter+-mode
+  :after magit
   :load-path (lambda () (expand-file-name "git-gutter-plus/" user-emacs-directory))
-  :config (global-git-gutter+-mode t))
+  :config (progn
+            ;; auto-save-buffer calls write-file which doesn't naturally call the git-gutter refresh fn
+            (defadvice write-file (after write-file-git-gutter-mode activate) (git-gutter+-refresh))
+            (defadvice refresh-file (after write-file-git-gutter-mode activate) (git-gutter+-refresh))
+
+            ;; http://stackoverflow.com/questions/23344540/emacs-update-git-gutter-annotations-when-staging-or-unstaging-changes-in-magit
+            (defvar my/magit-after-stage-hooks nil
+              "Hooks to be run after staging one item in magit.")
+
+            (defvar my/magit-after-unstage-hooks nil
+              "Hooks to be run after unstaging one item in magit.")
+
+            (defun my/refresh-visible-git-gutter-buffers ()
+              "Refresh git-gutter-mode on all visible git-gutter-mode buffers."
+              (dolist (buff (buffer-list))
+                (with-current-buffer buff
+                  (when (and git-gutter+-mode (get-buffer-window buff))
+                    (git-gutter+-mode t)))))
+
+            (add-hook 'my/magit-after-unstage-hooks
+                      'my/refresh-visible-git-gutter-buffers)
+            (add-hook 'my/magit-after-stage-hooks
+                      'my/refresh-visible-git-gutter-buffers)
+
+            (global-git-gutter+-mode t)))
 
 ;; Use fringe instead of margin for git-gutter-plus
 (use-package git-gutter-fringe+
   :if (display-graphic-p)
+  :after git-gutter+
   :load-path (lambda () (expand-file-name "git-gutter-fringe-plus/" user-emacs-directory))
   :config (progn
             (set-face-foreground 'git-gutter-fr+-modified "LightSeaGreen")
