@@ -42,11 +42,12 @@
 
 ;; Insert typographically useful unicode
 (use-package typo
+  :defer t
   :diminish typo-mode
+  :commands typo-mode
   :load-path (lambda () (expand-file-name "typo/" user-emacs-directory))
-  :config (progn
-            (setq-default typo-language "English")
-            (add-hook 'org-mode-hook #'typo-mode)))
+  :init (add-hook 'org-mode-hook #'typo-mode)
+  :config (setq-default typo-language "English"))
 
 (provide 'setup-writeroom)
 ;;; setup-writeroom.el ends here

@@ -25,9 +25,12 @@
 ;;; Code:
 
 (use-package org-agenda
+  :defer t
   :after (org calendar)
-  :bind (:map org-mode-map
-              ("C-c i" . my/org-add-line-item-task))
+  :commands org-agenda
+  :bind (("C-c A" . org-agenda)
+         :map org-mode-map
+         ("C-c i" . my/org-add-line-item-task))
   :config (progn
 
             ;; Org log

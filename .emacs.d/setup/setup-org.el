@@ -26,10 +26,10 @@
 
 ;; Org mode
 (use-package org
+  :defer nil
   :mode (("\\.org$" . org-mode))
   :load-path (lambda () (expand-file-name "org-mode/lisp" user-emacs-directory))
   :bind (("C-c C" . org-capture)
-         ("C-c A" . org-agenda)
          ("C-c L" . org-store-link)
          ("C-c I" . org-insert-link-global)
          ("C-c O" . org-open-at-point-global)
