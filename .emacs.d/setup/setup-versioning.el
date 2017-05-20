@@ -520,10 +520,6 @@ branch."
               (defadvice git-gutter+-process-diff (before git-gutter+-process-diff-advice activate)
                 (ad-set-arg 0 (file-truename (ad-get-arg 0)))))))
 
-;; ibuffer versioning-based groups
-(use-package ibuffer-vc
-  :load-path (lambda () (expand-file-name "ibuffer-vc/" user-emacs-directory)))
-
 ;; highlight regions according to age
 (use-package smeargle
   :if (executable-find "git")

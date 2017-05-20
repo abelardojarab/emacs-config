@@ -24,8 +24,6 @@
 
 ;;; Code:
 
-
-
 (use-package swiper
   :defer t
   :commands (swiper
@@ -90,6 +88,12 @@
 
             ;; Do not align the virtual buffers, breaks ivy-rich
             (setq ivy-rich-switch-buffer-align-virtual-buffer nil)))
+
+(use-package all-the-icons-ivy
+  :if (display-grayscale-p)
+  :after swiper
+  :load-path (lambda () (expand-file-name "all-the-icons-ivy/" user-emacs-directory))
+  :config (all-the-icons-ivy-setup))
 
 (provide 'setup-swiper)
 ;;; setup-swiper.el ends here

@@ -149,12 +149,12 @@
                           " "
                           filename-and-process)))))
 
+;; ibuffer versioning-oriented grouping
 (use-package ibuffer-vc
   :after ibuffer
   :defer nil
-  :commands ibuffer-vc-generate-filter-groups-by-vc-root
   :init (progn
-          (defun nox/ibuffer-apply-filter-groups ()
+          (defun my/ibuffer-apply-filter-groups ()
             "Combine my saved ibuffer filter groups with those generated
      by `ibuffer-vc-generate-filter-groups-by-vc-root'"
             (interactive)
@@ -168,7 +168,7 @@
                   (pop-to-buffer ibuf)
                   (ibuffer-update nil t)))))
 
-          (add-hook 'ibuffer-hook 'nox/ibuffer-apply-filter-groups)))
+          (add-hook 'ibuffer-hook 'my/ibuffer-apply-filter-groups)))
 
 (provide 'setup-ido)
 ;;; setup-ido.el ends here
