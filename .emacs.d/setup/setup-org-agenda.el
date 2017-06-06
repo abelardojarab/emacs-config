@@ -28,7 +28,7 @@
   :defer t
   :after (org calendar)
   :commands org-agenda
-  :bind (("C-c a" . org-agenda)
+  :bind (("C-c A" . org-agenda)
          :map org-mode-map
          ("C-c i" . my/org-add-line-item-task))
   :config (progn
