@@ -28,7 +28,7 @@
   :defer t
   :after (org calendar)
   :commands org-agenda
-  :bind (("C-c A" . org-agenda)
+  :bind (("C-c a" . org-agenda)
          :map org-mode-map
          ("C-c i" . my/org-add-line-item-task))
   :config (progn
@@ -137,6 +137,13 @@
                         (org-agenda-to-appt)                      ;; copy all agenda schedule to appointments
                         (appt-activate 1)))                       ;; active appt (appointment notification)
 
+            ;; Fontify done checkbox items in org-mode
+            ;; https://fuco1.github.io/2017-05-25-Fontify-done-checkbox-items-in-org-mode.html
+            (font-lock-add-keywords
+             'org-mode
+             `(("^[ \t]*\\(?:[-+*]\\|[0-9]+[).]\\)[ \t]+\\(\\(?:\\[@\\(?:start:\\)?[0-9]+\\][ \t]*\\)?\\[\\(?:X\\|\\([0-9]+\\)/\\2\\)\\][^\n]*\n\\)" 1 'org-headline-done prepend))
+             'append)
+
             ;; define todo states: set time stamps one waiting, delegated and done
             (setq org-todo-keywords
                   '((sequence "TODO(t!)" "|" "IN PROGRESS(p@/!)" "DONE(d!)" "CANCELLED(c@/!)" "HOLD(h!)")
@@ -144,9 +151,9 @@
                     (sequence "IDEA(i!)" "MAYBE(y!)" "STAGED(s!)" "WORKING(k!)" "|" "USED(u!/@)")))
             (setq org-todo-keyword-faces
                   '(("IN PROGRESS" . 'warning)
-                    ("HOLD" . 'font-lock-keyword-face)
-                    ("TASK" . 'font-lock-builtin-face)
-                    ("CANCELLED" . 'font-lock-doc-face)))
+                    ("HOLD"        . 'font-lock-keyword-face)
+                    ("TASK"        . 'font-lock-builtin-face)
+                    ("CANCELLED"   . 'font-lock-doc-face)))
 
             ;; Tag tasks with GTD-ish contexts
             (setq org-tag-alist '(("@work" . ?b)
