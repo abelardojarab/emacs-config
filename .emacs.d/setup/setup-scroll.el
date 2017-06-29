@@ -32,8 +32,8 @@
       scroll-down-aggressively 0.01)
 
 ;; Enable smooth scrolling package
+;; Be careful it can ruin shift-select-mode
 (use-package smooth-scrolling
-  :disabled t ;; ruins the shift selection
   :load-path (lambda () (expand-file-name "smooth-scrolling/" user-emacs-directory))
   :config (smooth-scrolling-mode 1))
 
