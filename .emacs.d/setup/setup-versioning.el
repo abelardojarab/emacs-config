@@ -85,9 +85,9 @@
              magit-insert-section
              projectile-vc
              git-commit-setup-check-buffer
-             git-visit-diffs
-             git-visit-diffs-prev
-             git-visit-diffs-next)
+             my/git-visit-diffs
+             my/git-visit-diffs-prev
+             my/git-visit-diffs-next)
   :bind (:map ctl-x-map
               ("v" . magit-status)
               :map magit-mode-map
@@ -207,32 +207,8 @@
             (setq magit-branch-popup-show-variables nil)
             (defconst magit-pull-request-remote "upstream"
               "Where to find pull requests.")
-            ;; From https://github.com/tarsius/magit-rockstar/
-            ;; Changed "origin" to `magit-pull-request-remote', remove log action,
-            ;; fetch it to <remote>/pull/<num> instead of pr-<num>.
-            (defun magit-branch-pull-request (number &optional branch checkout)
-              "Create a new branch from a Github pull request.
-Read \"NR[:BRANCH-NAME] from the user. If BRANCH-NAME is not
-provided use \"pr-NR\". Assume all pull requests can be found on
-`magit-pull-request-remote'. With a prefix argument checkout
-branch."
-              (interactive
-               (let ((input (magit-read-string "Branch pull request (NR[:BRANCH-NAME])")))
-                 (if (string-match "\\([1-9][0-9]*\\)\\(?::\\(.+\\)\\)?" input)
-                     (list (match-string 1 input)
-                           (match-string 2 input)
-                           current-prefix-arg)
-                   (user-error "Invalid input"))))
-              (unless branch
-                (setq branch number))
-              (magit-call-git "fetch" magit-pull-request-remote
-                              (format "pull/%s/head:refs/remotes/%s/pull/%s"
-                                      number magit-pull-request-remote branch))
-              (when checkout
-                (magit-run-git "checkout" branch)))
-            (magit-define-popup-action 'magit-fetch-popup
-              ?p "Fetch pull request" 'magit-branch-pull-request)
 
+            ;; From https://github.com/tarsius/magit-rockstar
             ;; Show worktree section if there are worktrees, avoid overhead if
             ;; there aren't.
             (defvar-local my/magit-want-worktrees t)
@@ -295,14 +271,14 @@ branch."
             (setq pretty-magit-alist nil)
             (setq pretty-magit-prompt nil)
             (pretty-magit "Feature" ? (:foreground "slate gray" :height 1.1))
-            (pretty-magit "Add"     ? (:foreground "#375E97" :height 1.1))
-            (pretty-magit "Fix"     ? (:foreground "#FB6542" :height 1.1))
+            (pretty-magit "Add"     ? (:foreground "#375E97" :height 1.1))
+            (pretty-magit "Fix"     ? (:foreground "#FB6542" :height 1.1))
             (pretty-magit "Clean"   ? (:foreground "#FFBB00" :height 1.1))
-            (pretty-magit "Docs"    ? (:foreground "#3F681C" :height 1.1))
+            (pretty-magit "Docs"    ? (:foreground "#3F681C" :height 1.1))
             (pretty-magit "master"  ? (:box nil :height 1.1) t)
-            (pretty-magit "origin"  ? (:box nil :height 1.1) t)
+            (pretty-magit "origin"  ? (:box nil :height 1.1) t)
 
-            (defun add-magit-faces ()
+            (defun my/add-magit-faces ()
               "Add face properties and compose symbols for buffer from pretty-magit."
               (interactive)
               (with-silent-modifications
@@ -317,25 +293,25 @@ branch."
                           (add-face-text-property
                            (match-beginning 1) (match-end 1) props))))))))
 
-            (advice-add 'magit-status :after 'add-magit-faces)
-            (advice-add 'magit-refresh-buffer :after 'add-magit-faces)
+            (advice-add 'magit-status :after 'my/add-magit-faces)
+            (advice-add 'magit-refresh-buffer :after 'my/add-magit-faces)
 
-            (setq use-magit-commit-prompt-p nil)
-            (defun use-magit-commit-prompt (&rest args)
-              (setq use-magit-commit-prompt-p t))
+            (setq my/use-magit-commit-prompt-p nil)
+            (defun my/use-magit-commit-prompt (&rest args)
+              (setq my/use-magit-commit-prompt-p t))
 
-            (defun magit-commit-prompt ()
+            (defun my/magit-commit-prompt ()
               "Magit prompt and insert commit header with faces."
               (interactive)
-              (when use-magit-commit-prompt-p
-                (setq use-magit-commit-prompt-p nil)
+              (when my/use-magit-commit-prompt-p
+                (setq my/use-magit-commit-prompt-p nil)
                 (insert (ivy-read "Commit Type " pretty-magit-prompt
                                   :require-match t :sort t :preselect "Add: "))
-                (add-magit-faces)))
+                (my/add-magit-faces)))
 
             (remove-hook 'git-commit-setup-hook 'with-editor-usage-message)
-            (add-hook 'git-commit-setup-hook 'magit-commit-prompt)
-            (advice-add 'magit-commit :after 'use-magit-commit-prompt)
+            (add-hook 'git-commit-setup-hook 'my/magit-commit-prompt)
+            (advice-add 'magit-commit :after 'my/use-magit-commit-prompt)
 
             ;; This extension finds all the changes ("hunks") between a working copy of a
             ;; git repository and a reference (branch name or hashref) and presents them
@@ -343,11 +319,11 @@ branch."
             ;;
             ;; Interactive functions:
             ;;
-            ;; git-visit-diffs (ref) : prompts for a ref, to be passed to `git diff`;
+            ;; my/git-visit-diffs (ref) : prompts for a ref, to be passed to `git diff`;
             ;; collects the hunks and view the first hunk, if any. Operates from the
             ;; current directory.
-            ;; git-visit-diffs-next () : view the next hunk, if any.
-            ;; git-visit-diffs-prev () : view the previous hunk, if any.
+            ;; my/git-visit-diffs-next () : view the next hunk, if any.
+            ;; my/git-visit-diffs-prev () : view the previous hunk, if any.
 
             ;; Global variables and types
             (defvar *git-visit-current-hunk-list*)
@@ -355,7 +331,7 @@ branch."
             (define-error 'git-error "Git error")
 
             ;; Utility functions
-            (defun git-visit-visit-modified-region (filename line count)
+            (defun my/git-visit-visit-modified-region (filename line count)
               "Visit a hunk in a narrowed buffer"
               (find-file filename)
               (widen)
@@ -366,7 +342,7 @@ branch."
                 (narrow-to-region beginning-position (line-beginning-position))
                 (beginning-of-buffer)))
 
-            (defun git-visit-get-hunk-list (dir ref)
+            (defun my/git-visit-get-hunk-list (dir ref)
               "Return a list of changes between the current working copy and a git ref"
               ;; one triplet per change, like this: ((file1 13 8) (file1 19 63) (file2 24 12))
               (save-excursion
@@ -392,38 +368,38 @@ branch."
                   hunk-list)))
 
             ;; Interactive functions
-            (defun git-visit-diffs-next ()
+            (defun my/git-visit-diffs-next ()
               "Show next diff in narrowed buffer."
               (interactive)
               (if *git-visit-current-hunk-list*
                   (let ((next-hunk (car *git-visit-current-hunk-list*)))
                     (setq *git-visit-previous-hunk-list* (cons next-hunk *git-visit-previous-hunk-list*))
                     (setq *git-visit-current-hunk-list* (cdr *git-visit-current-hunk-list*))
-                    (apply 'git-visit-visit-modified-region next-hunk))
-                (message "at end of hunk list")))
+                    (apply 'my/git-visit-visit-modified-region next-hunk))
+                (message "At end of hunk list")))
 
-            (defun git-visit-diffs-prev ()
+            (defun my/git-visit-diffs-prev ()
               "Show previous diff in narrowed buffer."
               (interactive)
               (if (and *git-visit-previous-hunk-list* (cdr *git-visit-previous-hunk-list*))
                   (let ((next-hunk (cadr *git-visit-previous-hunk-list*)))
                     (setq *git-visit-current-hunk-list* (cons (car *git-visit-previous-hunk-list*) *git-visit-current-hunk-list*))
                     (setq *git-visit-previous-hunk-list* (cdr *git-visit-previous-hunk-list*))
-                    (apply 'git-visit-visit-modified-region next-hunk))
-                (message "at beginning of hunk list")))
+                    (apply 'my/git-visit-visit-modified-region next-hunk))
+                (message "At beginning of hunk list")))
 
-            (defun git-visit-diffs (ref)
+            (defun my/git-visit-diffs (ref)
               "Finds the diffs between REF and working copy. Shows the first diff in a narrowed buffer."
               (interactive "sref: ")
               (let ((dir (ignore-errors
                            (file-name-as-directory (car (process-lines "git" "rev-parse" "--show-toplevel"))))))
                 (if (not dir)
-                    (error (message "%s" "cannot locate repository root"))
+                    (error (message "%s" "Cannot locate repository root"))
                   (condition-case error
                       (progn
-                        (setq *git-visit-current-hunk-list* (git-visit-get-hunk-list dir ref))
+                        (setq *git-visit-current-hunk-list* (my/git-visit-get-hunk-list dir ref))
                         (setq *git-visit-previous-hunk-list* nil)
-                        (git-visit-diffs-next))
+                        (my/git-visit-diffs-next))
                     (git-error (message (cadr error)))))))))
 
 ;; magit integration with git flow
@@ -464,7 +440,7 @@ branch."
 ;; git-timemachine
 (use-package git-timemachine
   :defer t
-  :commands (git-timemachine-start
+  :commands (my/git-timemachine-start
              git-timemachine-toggle
              git-timemachine-switch-branch)
   :load-path (lambda () (expand-file-name "git-timemachine/" user-emacs-directory))
@@ -485,7 +461,7 @@ branch."
                           :action (lambda (rev)
                                     (git-timemachine-show-revision rev)))))
 
-            (defun git-timemachine-start ()
+            (defun my/git-timemachine-start ()
               "Open git snapshot with the selected version. Based on ivy-mode."
               (interactive)
               (git-timemachine--start #'my/git-timemachine-show-selected-revision))))
