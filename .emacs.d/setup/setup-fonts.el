@@ -24,6 +24,9 @@
 
 ;;; Code:
 
+;; https://emacs.stackexchange.com/questions/33510/unicode-txt-slowness/33514
+(setq inhibit-compacting-font-caches t)
+
 ;; Use 12-pt Consolas as default font
 (when (find-font (font-spec :name my/main-programming-font))
   (set-face-attribute 'default nil :font (concat my/main-programming-font
