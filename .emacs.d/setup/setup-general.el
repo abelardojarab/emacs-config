@@ -103,6 +103,13 @@
   :defer t
   :load-path (lambda () (expand-file-name "uuidgen/" user-emacs-directory)))
 
+;; This is a elisp library for websocket clients to talk to websocket servers,
+;; and for websocket servers to accept connections from websocket clients.
+;; This library is designed to be used by other library writers
+(use-package websocket
+  :defer t
+  :load-path (lambda () (expand-file-name "websocket/" user-emacs-directory)))
+
 ;; Simple HTTP requests
 (use-package request
   :defer t
