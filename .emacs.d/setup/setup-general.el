@@ -93,18 +93,15 @@
   :load-path (lambda () (expand-file-name "charmap/" user-emacs-directory))
   :config (setq charmap-text-scale-adjust 2))
 
-;; Persistent scratch buffer
-(use-package persistent-scratch
-  :disabled t
-  :load-path (lambda () (expand-file-name "persistent-scratch/" user-emacs-directory))
-  :config (progn
-            (setq persistent-scratch-save-file "~/.emacs.cache/persistent-scratch-buffer")
-            (persistent-scratch-setup-default)))
-
 ;; Page break lines
 (use-package page-break-lines
   :defer t
   :load-path (lambda () (expand-file-name "page-break-lines/" user-emacs-directory)))
+
+;; Naive implementation of RFC4122 Universally Unique IDentifier generation
+(use-package uuidgen
+  :defer t
+  :load-path (lambda () (expand-file-name "uuidgen/" user-emacs-directory)))
 
 ;; Simple HTTP requests
 (use-package request
