@@ -34,6 +34,7 @@
 (require 'cl)
 (require 'auto-complete-clang)
 (require 'company)
+(require 'company-c-headers)
 (require 'flycheck)
 
 (defun equal-lists (lst1 lst2)
@@ -115,7 +116,7 @@
   (let* ((idb (cmake-ide--cdb-json-string-to-idb
                "[{\"file\": \"/dir1/file1.h\",
                   \"command\": \"cmd1 -Ifoo -Ibar\"}]"))
-         (commands (cmake-ide--idb-param-all-files idb 'command)))
+         (commands (cmake-ide--idb-all-commands idb)))
 
     (should (equal-lists (cmake-ide--commands-to-hdr-flags commands)
                          '("-Ifoo" "-Ibar")))))
@@ -126,7 +127,7 @@
                   \"command\": \"cmd1 -Ifoo -Ibar\"},
                  {\"file\": \"/dir2/file2.h\",
                   \"command\": \"cmd2 -Iloo -Dboo\"}]"))
-         (commands (cmake-ide--idb-param-all-files idb 'command)))
+         (commands (cmake-ide--idb-all-commands idb)))
 
     (should (equal-lists (cmake-ide--commands-to-hdr-flags commands)
                          '("-Ifoo" "-Ibar" "-Iloo" "-Dboo")))))
@@ -139,7 +140,7 @@
                   \"command\": \"cmd2 -o file2.c.o -Iloo -Dboo -include foo.h\"},
                  {\"file\": \"/dir2/file3.c\",
                   \"command\": \"cmd2 -o file3.c.o -Iloo -Dboo -include bar.h\"}]"))
-         (commands (cmake-ide--idb-param-all-files idb 'command)))
+         (commands (cmake-ide--idb-all-commands idb)))
     (should (equal-lists (cmake-ide--commands-to-hdr-flags commands)
                          '( "-Ifoo" "-Ibar" "-Iloo" "-Dboo" "otherfile" "-weird" "-include" "foo.h" "-include" "bar.h")))))
 
@@ -173,7 +174,7 @@
                   \"command\": \"cmd1 -Ifoo -Ibar -include /foo/bar.h -include a.h\"},
                   {\"file\": \"file2\",
                    \"command\": \"cmd2 foo bar -g -pg -Ibaz -Iboo -Dloo -include h.h\"}]"))
-         (commands (cmake-ide--idb-param-all-files idb 'command)))
+         (commands (cmake-ide--idb-all-commands idb)))
     (should (equal-lists (cmake-ide--commands-to-hdr-includes commands)
                          '("/foo/bar.h" "a.h" "h.h")))))
 
@@ -183,7 +184,7 @@
                   \"command\": \"cmd1 -Ifoo -Ibar -include /foo/bar.h -include a.h\"},
                   {\"file\": \"file2\",
                    \"command\": \"cmd2 foo bar -g -pg -Ibaz -Iboo -Dloo -include h.h\"}]"))
-         (commands (cmake-ide--idb-param-all-files idb 'command)))
+         (commands (cmake-ide--idb-all-commands idb)))
     (should (equal-lists (cmake-ide--commands-to-hdr-includes commands)
                          '("/foo/bar.h" "a.h" "h.h")))))
 
@@ -232,13 +233,6 @@
     (should (equal (cmake-ide--idb-obj-get obj 'bar) "the bar is weak"))
     (should (equal (cmake-ide--idb-obj-get obj 'oops) nil))))
 
-(ert-deftest test-idb-param-all-files ()
-  (let* ((idb (cmake-ide--cdb-json-string-to-idb
-               "[
-                    {\"file\": \"file1.c\", \"foo\": \"the foo is mighty\", \"bar\": \"the bar is weak\"},
-                    {\"file\": \"file2.c\", \"foo\": \"the foo is ugly\",   \"bar\": \"the bar is cool\"}
-                ]")))
-    (should (equal-lists (cmake-ide--idb-param-all-files idb 'foo) '("the foo is mighty" "the foo is ugly")))))
 
 (ert-deftest test-idb-set-value-on-obj ()
   (let* ((idb (cmake-ide--cdb-json-string-to-idb
@@ -270,8 +264,6 @@
                 ]"))
          (obj (cmake-ide--idb-file-to-obj idb "foobar/f.c")))
     (should (equal (cmake-ide--idb-obj-get obj 'foo) "the foo is really mighty"))
-    (should (equal-lists (cmake-ide--idb-param-all-files idb 'foo)
-                         '("the foo is mighty" "the foo is ugly" "the foo is just a foo" "the foo is really mighty")))
     ))
 
 (ert-deftest test-issue-43 ()
@@ -371,6 +363,143 @@
      (should (equal-lists flycheck-cppcheck-include-path
                           '("/usr/include")))
      )))
+
+(ert-deftest test-issue-108 ()
+  "Check that company-c-headers is set correctly by cmake-ide-set-compiler-flags.
+This is a regression test for Issue #108 on github. Previously,
+after a call to cmake-ide-set-compiler-flags, the
+company-c-headers-path-system variable would have the provided
+list of sys-includes consed on the front, causing
+company-c-headers to break."
+  (with-non-empty-file
+   (let ((old-company-c-headers-path-system company-c-headers-path-system))
+     (cmake-ide-set-compiler-flags (current-buffer) () () '("/foo" "/bar"))
+     (should (equal
+              (append '("/foo" "/bar") old-company-c-headers-path-system)
+              company-c-headers-path-system)))))
+
+(ert-deftest test-cmake-ide--valid-cppcheck-standard-p ()
+  "Check that cmake-ide--valid-cppcheck-standard-p behaves as expected."
+  (let ((valid-standards '("posix" "c89" "c99" "c11" "c++03" "c++11"))
+        (invalid-standards '("c90" "c94" "c++98"
+                             "c++0x" "c++1y" "c++1z"
+                             "c++14" "c++17"
+                             "foo" "bar" "baz" "")))
+    ;; Check that valid standards satisfy the predicate.
+    (mapc
+     (lambda (candidate) (should (cmake-ide--valid-cppcheck-standard-p candidate)))
+     valid-standards)
+    ;; Check that invalid standards don't.
+    (mapc
+     (lambda (candidate) (should-not (cmake-ide--valid-cppcheck-standard-p candidate)))
+     invalid-standards)))
+
+(ert-deftest test-cmake-ide--cmake-standard-to-cppcheck-standard ()
+  "Check that cmake-ide--cmake-standard-to-cppcheck-standard behaves as expected."
+  (let ((valid-standards '("posix" "c89" "c99" "c11" "c++03" "c++11"))
+        (convertible-standards '("c90" "c++98" "c++0x" "c++1y" "c++1z" "c++14" "c++17"
+                                 "gnu90" "gnu99" "gnu11"
+                                 "gnu++98" "gnu++03" "gnu++11" "gnu++14" "gnu++17"
+                                 "gnu++0x" "gnu++1y" "gnu++1z"))
+        (expected-conversions '("c89" "c++03" "c++03" "c++11" "c++11" "c++11" "c++11"
+                                "c89" "c99" "c11"
+                                "c++03" "c++03" "c++11" "c++11" "c++11"
+                                "c++03" "c++11" "c++11"))
+        (inconvertible-standards '("foo" "bar" "baz" "iso199009")))
+    ;; Valid standards should be left unchanged.
+    (mapc
+     (lambda (candidate) (should (equal (cmake-ide--cmake-standard-to-cppcheck-standard candidate) candidate)))
+     valid-standards)
+    ;; Invalid but convertible standards should become valid, and be
+    ;; converted to an expected cppcheck-compatible standard.
+    (let ((conversions (mapcar 'cmake-ide--cmake-standard-to-cppcheck-standard convertible-standards)))
+      (mapc (lambda (conversion) (should (cmake-ide--valid-cppcheck-standard-p conversion))) conversions)
+      (should (equal expected-conversions conversions)))
+    ;; Invalid and unconvertible standards should be left unchanged.
+    (let ((bad-conversions (mapcar 'cmake-ide--cmake-standard-to-cppcheck-standard inconvertible-standards)))
+      (should (equal inconvertible-standards bad-conversions)))))
+
+(ert-deftest test-cmake-ide-set-compiler-flags-sets-flycheck-cppcheck-standards ()
+  "Check that cmake-ide-set-compiler-flags sets flycheck-cppcheck-standards as expected."
+  (let ((saved-strict-standards cmake-ide-flycheck-cppcheck-strict-standards))
+    (unwind-protect
+        (with-non-empty-file
+         ;; If strict-standards is on, then passing a set of compiler
+         ;; flags with a cppcheck-invalid -std=* entry should leave
+         ;; the flycheck-cppcheck-standards variable untouched.
+         (setq cmake-ide-flycheck-cppcheck-strict-standards t)
+         (let ((original-standards flycheck-cppcheck-standards))
+           (cmake-ide-set-compiler-flags (current-buffer) '("-std=gnu++98") () ())
+           (should (equal flycheck-cppcheck-standards original-standards)))
+
+         ;; Passing a flag representing a cppcheck-valid standard
+         ;; should produce a change, though.
+         (cmake-ide-set-compiler-flags (current-buffer) '("-std=c++03") () ())
+         (should (equal flycheck-cppcheck-standards '("c++03")))
+
+         ;; If strict standards are turned off, then passing a
+         ;; convertible standard in the flags should produce a change
+         ;; as well.
+         (setq cmake-ide-flycheck-cppcheck-strict-standards nil)
+         (cmake-ide-set-compiler-flags (current-buffer) '("-std=gnu++98") () ())
+         (should (equal flycheck-cppcheck-standards '("c++03")))
+         (cmake-ide-set-compiler-flags (current-buffer) '("-std=c89") () ())
+         (should (equal flycheck-cppcheck-standards '("c89")))))
+
+    ;; Restore pre-test state.
+    (setq cmake-ide-flycheck-cppcheck-strict-standards saved-strict-standards)))
+
+
+(ert-deftest test-get-command-args-with-command ()
+  "Check getting command arguments from file-params."
+  (let* ((idb (cmake-ide--cdb-json-string-to-idb
+               "[{\"file\": \"file1\",
+                  \"command\": \"cmd1 -Ifoo -Ibar -std=c++14 --foo --bar\"},
+                 {\"file\": \"file2\",
+                  \"command\": \"cmd2 foo bar -g -pg -Ibaz -Iboo -Dloo\"}]"))
+         (file-params (cmake-ide--idb-file-to-obj idb "file1"))
+         (args (cmake-ide--file-params-to-args file-params)))
+    (should (equal args '("cmd1" "-Ifoo" "-Ibar" "-std=c++14" "--foo" "--bar"))))
+  )
+
+(ert-deftest test-get-command-args-with-arguments ()
+  "Check getting command arguments from file-params."
+  (let* ((idb (cmake-ide--cdb-json-string-to-idb
+               "[{\"file\": \"file1\",
+                  \"arguments\": [\"cmd1\", \"-Ifoo\", \"-Ibar\", \"-std=c++14\", \"--foo\", \"--bar\"]},
+                 {\"file\": \"file2\",
+                  \"command\": \"cmd2 foo bar -g -pg -Ibaz -Iboo -Dloo\"}]"))
+         (file-params (cmake-ide--idb-file-to-obj idb "file1"))
+         (args (cmake-ide--file-params-to-args file-params)))
+    (should (equal args '("cmd1" "-Ifoo" "-Ibar" "-std=c++14" "--foo" "--bar"))))
+  )
+
+(ert-deftest test-all-commands ()
+  "Check getting command arguments from file-params."
+  (let* ((idb (cmake-ide--cdb-json-string-to-idb
+               "[{\"file\": \"file1\",
+                  \"arguments\": [\"cmd1\", \"-Ifoo\", \"-Ibar\", \"-std=c++14\", \"--foo\", \"--bar\"]},
+                 {\"file\": \"file2\",
+                  \"command\": \"cmd2 foo bar -g -pg -Ibaz -Iboo -Dloo\"}]"))
+         (commands (cmake-ide--idb-all-commands idb)))
+    (should (equal commands '("cmd1 -Ifoo -Ibar -std=c++14 --foo --bar" "cmd2 foo bar -g -pg -Ibaz -Iboo -Dloo"))))
+  )
+
+
+(ert-deftest test-all-vars-arguments ()
+  (let ((cmake-ide-build-dir "/tmp")
+        (idb (cmake-ide--cdb-json-string-to-idb
+              "[{\"file\": \"file1.c\",
+                  \"arguments\": [\"cmd1\", \"-Iinc1\", \"-Iinc2\", \"-Dfoo=bar\", \"-S\", \"-F\", \"-g\"]}]")))
+    (with-non-empty-file
+     (cmake-ide--set-flags-for-file idb (current-buffer))
+     (should (equal-lists ac-clang-flags '("-Iinc1" "-Iinc2" "-Dfoo=bar" "-S" "-F")))
+     (should (equal-lists company-clang-arguments ac-clang-flags))
+     (should (equal-lists flycheck-clang-include-path '("/tmp/inc1" "/tmp/inc2")))
+     (should (equal-lists flycheck-clang-definitions '("foo=bar")))
+     (should (equal-lists flycheck-clang-includes nil))
+     (should (equal-lists flycheck-clang-args '("-S" "-F" "-g"))))))
+
 
 (provide 'cmake-ide-test)
 ;;; cmake-ide-test.el ends here
