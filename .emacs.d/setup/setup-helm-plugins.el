@@ -37,7 +37,7 @@
 ;; helm elscreen
 (use-package helm-elscreen
   :defer t
-  :after helm
+  :after (helm elscreen)
   :load-path (lambda () (expand-file-name "helm-elscreen/" user-emacs-directory)))
 
 ;; helm git-grep

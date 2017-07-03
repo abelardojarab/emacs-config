@@ -407,6 +407,9 @@
 ;; Setup shell
 (require 'setup-eshell)
 
+;; Setup elscreen
+(require 'setup-elscreen)
+
 ;; Setup swiper
 (require 'setup-swiper)
 
