@@ -42,6 +42,7 @@
 
 ;; Spaceline
 (use-package spaceline
+  :if (display-graphic-p)
   :after powerline
   :load-path (lambda () (expand-file-name "spaceline/" user-emacs-directory))
   :config (progn
@@ -56,12 +57,13 @@
 
 ;; Spaceline configuration
 (use-package spaceline-config
+  :if (display-graphic-p)
   :after spaceline
   :config (spaceline-helm-mode))
 
 (use-package spaceline-all-the-icons
   :if (display-graphic-p)
-  :after spaceline
+  :after spaceline-config
   :load-path (lambda () (expand-file-name "spaceline-all-the-icons/" user-emacs-directory))
   :config (progn
 

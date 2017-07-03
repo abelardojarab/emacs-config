@@ -1,6 +1,6 @@
 ;;; setup-dash.el ---                                -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2015, 2016  Abelardo Jara-Berrocal
+;; Copyright (C) 2015, 2016, 2017  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
 ;; Keywords:
@@ -25,6 +25,7 @@
 ;;; Code:
 
 (use-package dash
+  :defer t
   :load-path (lambda () (expand-file-name "dash/" user-emacs-directory)))
 
 (provide 'setup-dash)

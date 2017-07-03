@@ -24,27 +24,36 @@
 
 ;;; Code:
 
-;; Helm grepint
+;; helm grepint
 (use-package helm-grepint
   :defer t
+  :after helm
   :commands (helm-grepint-grep)
   :bind (:map ctl-x-map
               ("a" . helm-grepint-grep))
   :load-path (lambda () (expand-file-name "helm-grepint/" user-emacs-directory))
   :config (helm-grepint-set-default-config))
 
-;; Helm git-grep
+;; helm elscreen
+(use-package helm-elscreen
+  :defer t
+  :after helm
+  :load-path (lambda () (expand-file-name "helm-elscreen/" user-emacs-directory)))
+
+;; helm git-grep
 (use-package helm-git-grep
   :defer t
+  :after (helm helm-elscreen)
   :commands (helm-git-grep)
   :load-path (lambda () (expand-file-name "helm-git-grep/" user-emacs-directory))
   :bind (:map ctl-x-map
               ("g" . helm-git-grep))
   :config (setq helm-git-grep-candidate-number-limit nil))
 
-;; Helm ag/ack
+;; helm ag/ack
 (use-package helm-ag
   :defer t
+  :after helm
   :commands (helm-ag helm-do-ag helm-do-ag-this-file helm-do-ag-project-root)
   :load-path (lambda () (expand-file-name "helm-ag/" user-emacs-directory))
   :config (progn
@@ -53,17 +62,19 @@
                         (executable-find "pt"))
               (setq helm-ag-base-command "awk --nocolor --nogroup"))))
 
-;; Helm describe modes
+;; helm describe modes
 (use-package helm-describe-modes
   :defer t
+  :after helm
   :commands (helm-describe-modes)
   :load-path (lambda () (expand-file-name "helm-describe-modes/" user-emacs-directory))
   :config (progn
             (global-set-key [remap describe-mode] #'helm-describe-modes)))
 
-;; Helm desc-binds
+;; helm desc-binds
 (use-package helm-descbinds
   :defer t
+  :after helm
   :commands (helm-descbinds)
   :load-path (lambda () (expand-file-name "helm-descbinds/" user-emacs-directory))
   :bind (:map ctl-x-map
@@ -71,23 +82,25 @@
   :config (progn
             (helm-descbinds-mode 1)))
 
-;; Helm flycheck
+;; helm flycheck
 (use-package helm-flycheck
   :defer t
+  :after (helm flycheck)
   :commands (helm-flycheck)
   :load-path (lambda () (expand-file-name "helm-flycheck/" user-emacs-directory))
   :bind (:map ctl-x-map
               ("e" . helm-flycheck)))
 
-;; Helm flyspell
+;; helm flyspell
 (use-package helm-flyspell
   :defer t
+  :after (helm flyspell)
   :commands (helm-flyspell-correct)
   :load-path (lambda () (expand-file-name "helm-flyspell/" user-emacs-directory))
   :bind (:map ctl-x-map
               ("c" . helm-flyspell-correct)))
 
-;; Helm ls git
+;; helm ls git
 (use-package helm-ls-git
   :defer t
   :commands (helm-ls-git-ls helm-browse-project)
@@ -95,26 +108,28 @@
               ("C-d" . helm-browse-project))
   :load-path (lambda () (expand-file-name "helm-ls-git/" user-emacs-directory)))
 
-;; Helm bm support
+;; helm bm support
 (use-package helm-bm
   :defer t
   :commands (helm-bm)
-  :after bm
+  :after (helm bm)
   :load-path (lambda () (expand-file-name "helm-bm/" user-emacs-directory))
   :bind (:map ctl-x-map
               ("l" . helm-bm))
   :config (setq helm-bookmark-show-location t))
 
-;; Helm etags plus
+;; helm etags plus
 (use-package helm-etags+
   :defer t
+  :after (helm etags)
   :commands (helm-etags-select)
   :load-path (lambda () (expand-file-name "helm-etags-plus/" user-emacs-directory))
   :bind ("M-." . helm-etags-select))
 
-;; Helm gtags
+;; helm gtags
 (use-package helm-gtags
   :defer t
+  :after (helm ggtags)
   :commands (helm-gtags-select
              helm-gtags-dwim
              helm-gtags-mode)
@@ -133,36 +148,41 @@
            helm-gtags-prefix-key "\C-cg"
            helm-gtags-suggested-key-mapping t))
 
-;; Helm xref
+;; helm xref
 (use-package helm-xref
+  :after helm
   :if (and (executable-find "global")
            (boundp 'xref-backend-functions))
   :load-path (lambda () (expand-file-name "helm-xref/" user-emacs-directory))
   :config (setq xref-show-xrefs-function 'helm-xref-show-xrefs))
 
-;; Helm yasnippet
+;; helm yasnippet
 (use-package helm-c-yasnippet
   :defer t
+  :after (helm yasnippet)
   :commands (helm-yas-complete)
   :load-path (lambda () (expand-file-name "helm-c-yasnippet/" user-emacs-directory))
   :bind (:map ctl-x-map
               ("y" . helm-yas-complete)))
 
-;; Helm make support
+;; helm make support
 (use-package helm-make
   :defer t
+  :after helm
   :commands (helm-make)
   :load-path (lambda () (expand-file-name "helm-make/" user-emacs-directory)))
 
 ;; Biblio (helm-bibtex requirement)
 ;; extensible Emacs package for browsing and fetching references
 (use-package biblio
+  :after helm
   :defer t
   :load-path (lambda () (expand-file-name "biblio/" user-emacs-directory)))
 
-;; Helm bibtex
+;; helm bibtex
 (use-package helm-bibtex
   :defer t
+  :after (helm biblio)
   :commands (helm-bibtex)
   :bind (:map ctl-x-map
               ("[" . helm-bibtex))
@@ -179,7 +199,7 @@
                     (start-process "open" "*open*" "open" fpath)))
 
             (defun helm-bibtex-cite ()
-              "Helm command to cite bibliography."
+              "helm command to cite bibliography."
               (interactive)
               (helm-other-buffer
                '(helm-c-source-bibtex)
@@ -187,7 +207,7 @@
 
 ;; Org-Ref
 (use-package org-ref
-  :after (helm async)
+  :after (helm async org)
   :load-path (lambda () (expand-file-name "org-ref/" user-emacs-directory))
   :config (progn
             (setq org-ref-default-bibliography (list my/bibtex-completion-bibliography)
@@ -198,15 +218,17 @@
             (setq org-ref-insert-cite-key "C-c [")
             (setq org-ref-default-citation-link "autocite")))
 
-;; Helm themes
+;; helm themes
 (use-package helm-themes
+  :after helm
   :defer t
   :commands (helm-themes)
   :load-path (lambda () (expand-file-name "helm-themes/" user-emacs-directory)))
 
-;; Helm dash
+;; helm dash
 (use-package helm-dash
   :defer t
+  :after (helm dash)
   :if (executable-find "sqlite3")
   :commands (helm-dash)
   :load-path (lambda () (expand-file-name "helm-dash/" user-emacs-directory))
