@@ -1,6 +1,6 @@
 ;;; setup-region.el ---                              -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2014, 2015, 2016  Abelardo Jara-Berrocal
+;; Copyright (C) 2014, 2015, 2016, 2017  Abelardo Jara-Berrocal
 
 ;; Author: Abelardo Jara-Berrocal <abelardojara@Abelardos-MacBook-Pro.local>
 ;; Keywords:
@@ -45,10 +45,10 @@
 
             ;; shift select bindings
             (define-key region-bindings-mode-map (kbd "<prior>") 'shift-mark-backward-page)
-            (define-key region-bindings-mode-map (kbd "<next>") 'shift-mark-forward-page)
-            (define-key region-bindings-mode-map (kbd "<left>") 'shift-mark-backward-char)
+            (define-key region-bindings-mode-map (kbd "<next>")  'shift-mark-forward-page)
+            (define-key region-bindings-mode-map (kbd "<left>")  'shift-mark-backward-char)
             (define-key region-bindings-mode-map (kbd "<right>") 'shift-mark-forward-char)
-            (define-key region-bindings-mode-map (kbd "p") 'shift-mark-forward-paragraph)
+            (define-key region-bindings-mode-map (kbd "p")       'shift-mark-forward-paragraph)
 
             ;; movement bindings
             (define-key region-bindings-mode-map (kbd "U") 'move-text-up)

@@ -209,14 +209,23 @@
 (define-key ctl-x-map (kbd "T") 'toggle-truncate-lines)
 
 ;; Extra Ctrl-x mappings for navigation
-(define-key ctl-x-map (kbd "<up>") 'windmove-up)
-(define-key ctl-x-map (kbd "<down>") 'windmove-down)
-(define-key ctl-x-map (kbd "<left>") 'windmove-left)
+(define-key ctl-x-map (kbd "<up>")    'windmove-up)
+(define-key ctl-x-map (kbd "<down>")  'windmove-down)
+(define-key ctl-x-map (kbd "<left>")  'windmove-left)
 (define-key ctl-x-map (kbd "<right>") 'windmove-right)
 (define-key ctl-x-map (kbd "<prior>") 'tabbar-backward-tab)
-(define-key ctl-x-map (kbd "<next>") 'tabbar-forward-tab)
-(define-key ctl-x-map (kbd "<home>") 'tabbar-backward-group)
-(define-key ctl-x-map (kbd "<end>") 'tabbar-forward-group)
+(define-key ctl-x-map (kbd "<next>")  'tabbar-forward-tab)
+(define-key ctl-x-map (kbd "<home>")  'tabbar-backward-group)
+(define-key ctl-x-map (kbd "<end>")   'tabbar-forward-group)
+
+;; Cua mode helpers
+(define-key ctl-x-map (kbd "C-c") 'clipboard-kill-ring-save)
+(define-key ctl-x-map (kbd "C-x") 'clipboard-kill-region)
+(define-key ctl-x-map (kbd "C-k") 'kill-line)
+(define-key ctl-x-map (kbd "C-s") 'save-buffer)
+(define-key ctl-x-map (kbd "C-a") 'mark-whole-buffer)
+(define-key ctl-x-map (kbd "C-v") 'clipboard-yank)
+(define-key ctl-x-map (kbd "C-z") 'undo)
 
 ;; Overwrite other modes
 (defvar my/keys-minor-mode-map (make-keymap) "my/keys-minor-mode keymap.")
@@ -225,7 +234,7 @@
 (define-key my/keys-minor-mode-map (kbd "C-x z") 'ielm-repl)
 (define-key my/keys-minor-mode-map (kbd "M-.") 'helm-etags-select)
 (define-key my/keys-minor-mode-map (kbd "C-.") 'helm-gtags-dwim)
-(define-key my/keys-minor-mode-map (kbd "<f2>")   'bm-next)
+(define-key my/keys-minor-mode-map (kbd "<f2>") 'bm-next)
 (define-key my/keys-minor-mode-map (kbd "<C-f2>") 'bm-toggle)
 (define-key my/keys-minor-mode-map (kbd "<left-fringe> <double-mouse-1>") 'bm-toggle)
 (define-key my/keys-minor-mode-map (kbd "<f4>") 'helm-semantic-or-imenu)

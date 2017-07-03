@@ -28,11 +28,105 @@
 (use-package elscreen
   :defer t
   :load-path (lambda () (expand-file-name "elscreen/" user-emacs-directory))
+  :init (progn
+          ;; Do not set a prefix (conflicts with helm)
+          (setq elscreen-prefix-key (kbd "C-a")))
+  :bind (:map ctl-x-map
+              ("0" . elscreen-start)
+              ("1" . elscreen-previous)
+              ("2" . elscreen-next)
+              ;; Cloning is more useful than fresh creation
+              ("3" . elscreen-clone)
+              ("4" . elscreen-kill)
+              ("5" . elscreen-screen-nickname)
+              ("6" . elscreen-toggle-display-tab))
   :config (progn
             (set-face-attribute 'elscreen-tab-background-face nil :inherit 'default :background nil)
-            (setq-default elscreen-tab-display-control nil)
-            (setq-default elscreen-tab-display-kill-screen nil)
-            ;; (elscreen-set-prefix-key "\C-p")
+
+            ;; Do not show tabs to save space
+            ;; Can use M-x elscreen-toggle-display-tab
+            (setq elscreen-display-tab nil)
+
+            ;; No preceding [X] for closing
+            (setq elscreen-tab-display-kill-screen nil)
+
+            ;; No [<->] at the beginning
+            (setq elscreen-tab-display-control nil)
+
+            ;; buffer-dependent naming scheme
+            (setq elscreen-buffer-to-nickname-alist
+                  '(("^dired-mode$" .
+                     (lambda ()
+                       (format "Dired(%s)" dired-directory)))
+                    ("^Info-mode$" .
+                     (lambda ()
+                       (format "Info(%s)" (file-name-nondirectory Info-current-file))))
+                    ("^mew-draft-mode$" .
+                     (lambda ()
+                       (format "Mew(%s)" (buffer-name (current-buffer)))))
+                    ("^mew-" . "Mew")
+                    ("^irchat-" . "IRChat")
+                    ("^liece-" . "Liece")
+                    ("^lookup-" . "Lookup")))
+
+            (setq elscreen-mode-to-nickname-alist
+                  '(("[Ss]hell" . "shell")
+                    ("compilation" . "compile")
+                    ("-telnet" . "telnet")
+                    ("dict" . "OnlineDict")
+                    ("*WL:Message*" . "Wanderlust")))
+
+            ;;  Use frame-title for tabs
+            ;; How to display the list of screens on the frame-title of my Emacs?
+            ;; This is broken. get-alist should be changed to alist-get
+            ;; https://www.emacswiki.org/emacs/EmacsLispScreen#toc8
+            (defvar *elscreen-tab-truncate-length*
+              20 "Number of characters to truncate tab names in frame title")
+
+            (defun elscreen-tabs-as-string ()
+              "Return a string representation of elscreen tab names
+Set name truncation length in ELSCREEN-TRUNCATE-LENGTH"
+              (let* ((screen-list (sort (elscreen-get-screen-list) '<))
+                     (screen-to-name-alist (elscreen-get-screen-to-name-alist)))
+                ;; mapconcat: mapping and then concate name elements together with separator
+                (mapconcat
+                 (lambda (screen)
+                   (format (if (string-equal "+" (elscreen-status-label screen))
+                               ;; Current screen format
+                               "[ %d ] %s"
+                             ;; Others
+                             "(%d) %s")
+                           ;; screen number: replaces %d (integer)
+                           screen
+                           ;; screen name: replaces %s (string)
+                           (elscreen-truncate-screen-name
+                            ;; Return the value associated with KEY in ALIST
+                            (alist-get screen screen-to-name-alist)
+                            *elscreen-tab-truncate-length*)))
+                 ;; Screen numbers (keys for alist)
+                 screen-list
+                 ;; Separator
+                 " | ")))
+
+            (defvar *elscreen-tabs-as-string*
+              "" "Variable to hold curent elscreen tab names as a string")
+
+            (defun update-elscreen-tabs-as-string ()
+              "Update *elscreen-tabs-as-string* variable"
+              (interactive)
+              (setq *elscreen-tabs-as-string* (elscreen-tabs-as-string)))
+
+            ;; Update *elscreen-tabs-as-string* whenever elscreen status updates
+            (add-hook 'elscreen-screen-update-hook 'update-elscreen-tabs-as-string)
+
+            ;; Set frame title format as combination of current elscreen tabs and buffer/path
+            (setq frame-title-format '(:eval (concat *elscreen-tabs-as-string*
+                                                     "    ||    "
+                                                     (if buffer-file-name
+                                                         (abbreviate-file-name buffer-file-name)
+                                                       "%b"))))
+
+            ;; It has to kick in.
             (elscreen-start)))
 
 (provide 'setup-elscreen)
