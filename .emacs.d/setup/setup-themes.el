@@ -87,17 +87,23 @@
 ;; Tomorrow theme
 (add-to-list 'load-path (expand-file-name "themes/sanityinc-tomorrow-theme/" user-emacs-directory))
 (add-to-list 'custom-theme-load-path (expand-file-name "themes/sanityinc-tomorrow-theme/" user-emacs-directory))
-(require 'color-theme-sanityinc-tomorrow)
+(use-package color-theme-sanityinc-tomorrow)
 
 ;; Solarized theme
 (add-to-list 'load-path (expand-file-name "themes/solarized-theme/" user-emacs-directory))
 (add-to-list 'custom-theme-load-path (expand-file-name "themes/solarized-theme" user-emacs-directory))
-(require 'solarized)
-(setq solarized-scale-org-headlines nil)
+(use-package solarized
+  :config (setq solarized-scale-org-headlines nil))
 
 ;; Choose different themes depending if we are using GUI or not
 ;; Console colors are enabled if "export TERM=xterm-256color" is added into .bashrc
 (load-theme my/emacs-theme t)
+
+;; Remember last theme
+(use-package remember-last-theme
+  :if (display-graphic-p)
+  :load-path (lambda () (expand-file-name "remember-last-theme/" user-emacs-directory))
+  :config (remember-last-theme-enable))
 
 (provide 'setup-themes)
 ;;; setup-themes.el ends here

@@ -1,0 +1,56 @@
+* Remember Last Theme(s)
+
+  This package makes possible that when you quit Emacs, the current
+ theme(s) settings will be stored as if they had been set using
+ =customize-themes=, and restored back in the next session when your
+ =custom-file= is loaded.
+
+  [[https://raw.githubusercontent.com/anler/remember-last-theme/master/usage.gif]]
+
+** Installation
+   
+*** Using Emacs' built-in customization
+
+    *NOTICE* make sure your =custom-file= is loaded when you start
+    Emacs, otherwise the saved theme(s) won't activate.
+
+**** Manual
+
+    Download =remember-last-theme.el= to some place in your emacs' load
+    path and add the following to your emacs' initialization file:
+   #+BEGIN_SRC elisp
+     (require 'remember-last-theme)
+     (remember-last-theme-enable)
+   #+END_SRC
+
+**** With =use-package=
+
+   #+BEGIN_SRC elisp
+     (use-package remember-last-theme
+       :ensure t
+       :config (remember-last-theme-enable))
+   #+END_SRC
+
+*** Using an external file
+
+    You can also use an external file for saving the theme
+    settings. This is particular useful if from time to time you
+    declare =custom-file= bankruptcy due to the file getting
+    inconsistent. 
+
+**** Manual
+
+    Download =remember-last-theme.el= to some place in your emacs' load
+    path and add the following to your emacs' initialization file:
+   #+BEGIN_SRC elisp
+     (require 'remember-last-theme)
+     (remember-last-theme-with-file-enable "path to file")
+   #+END_SRC
+
+**** With =use-package=
+
+   #+BEGIN_SRC elisp
+     (use-package remember-last-theme
+       :ensure t
+       :config (remember-last-theme-with-file-enable "path to file"))
+   #+END_SRC
