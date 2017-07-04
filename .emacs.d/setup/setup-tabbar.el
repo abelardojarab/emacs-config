@@ -28,10 +28,11 @@
 (use-package tabbar
   :defer 1
   :load-path (lambda () (expand-file-name "tabbar/" user-emacs-directory))
-  :bind (("C-c <right>" . tabbar-forward)
-         ("C-c <left>" . tabbar-backward)
-         ("C-c <up>" . tabbar-backward-group)
-         ("C-c <down>" . tabbar-forward-group))
+  :bind (
+         ("C-c <right>" . tabbar-forward)
+         ("C-c <left>"  . tabbar-backward)
+         ("C-c <up>"    . tabbar-backward-group)
+         ("C-c <down>"  . tabbar-forward-group))
   :config (progn
             (setq tabbar-auto-scroll-flag t
                   tabbar-use-images t
@@ -132,13 +133,16 @@ That is, a string used to represent it on the tab bar."
             ;; might as well use this for both
             (defun my/hated-buffers ()
               "List of buffers I never want to see, converted from names to buffers."
-              (delete nil
-                      (append
-                       (mapcar 'get-buffer my/ignored-buffers)
-                       (mapcar (lambda (this-buffer)
-                                 (if (string-match "^ " (buffer-name this-buffer))
-                                     this-buffer))
-                               (buffer-list)))))
+              (remove-if
+               (lambda (buffer)
+                 (not (char-or-string-p (buffer-name buffer))))
+               (delete nil
+                       (append
+                        (mapcar 'get-buffer my/ignored-buffers)
+                        (mapcar (lambda (this-buffer)
+                                  (if (string-match "^ " (buffer-name this-buffer))
+                                      this-buffer))
+                                (buffer-list))))))
 
             ;; bury buffer function
             (defun my/bury-buffer (&optional n)
@@ -153,6 +157,17 @@ That is, a string used to represent it on the tab bar."
                           my/buffer-list)
                    (bury-buffer)
                    (nth n my/buffer-list)))))
+
+            (setq tabbar-buffer-list-function
+                  (lambda ()
+                    (remove-if
+                     (lambda (buffer)
+                       (and (not (eq (current-buffer) buffer)) ;; Always include the current buffer.
+                            ;; remove buffer name in this list.
+                            (loop for name in (mapcar (lambda (this-buffer) (buffer-name this-buffer))
+                                                      (my/hated-buffers))
+                                  thereis (string-match-p name (buffer-name buffer)))))
+                     (buffer-list))))
 
             ;; Enable tabbar
             (tabbar-mode t)))

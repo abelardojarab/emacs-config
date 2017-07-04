@@ -271,8 +271,8 @@
 (defcustom my/ignored-buffers
   '("*Compile-Log*"
     "^ "
-    "*TAGS*"
-    "*Grepint*"
+    "TAGS"
+    "Grepint: git-grep"
     "*Messages*"
     "*Completions*"
     "*scratch*"
