@@ -271,7 +271,8 @@
 (defcustom my/ignored-buffers
   '("*Compile-Log*"
     "^ "
-    "Grepint: git-grep"
+    "*TAGS*"
+    "*Grepint*"
     "*Messages*"
     "*Completions*"
     "*scratch*"
@@ -279,8 +280,7 @@
     "*GNU Emacs*"
     "*compilation*"
     "*cmake*"
-    "*etags tmp*"
-    "TAGS")
+    "*etags tmp*")
   "List of buffers to be ignored on tabbar and when switching buffers"
   :group 'my/customs
   :type 'list)
