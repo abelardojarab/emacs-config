@@ -99,3 +99,4 @@ Cask
 TAGS
 cmake_build_dir/*
 *.rel
+.Rhistory
