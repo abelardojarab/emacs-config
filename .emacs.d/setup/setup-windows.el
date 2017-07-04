@@ -309,20 +309,25 @@ place the new frame at the right side of the current frame."
                     (pdf-view-mode        . view)
                     (doc-view-mode        . view)))
 
-            ;; Single window magit
-            (purpose-x-magit-single-on)
-
-            ;; when killing a purpose-dedicated buffer that is displayed in a window,
-            ;; ensure that the buffer is replaced by a buffer with the same purpose
-            ;; (or the window deleted, if no such buffer)
-            (purpose-x-kill-setup)
-
             ;; Prefer helm
             (setq purpose-preferred-prompt 'helm)
 
             ;; Load user preferences
             (purpose-compile-user-configuration)
             (purpose-mode)))
+
+;; Extensions for purpose
+(use-package window-purpose-x
+  :after window-purpose
+  :config (progn
+
+            ;; Single window magit
+            (purpose-x-magit-single-on)
+
+            ;; when killing a purpose-dedicated buffer that is displayed in a window,
+            ;; ensure that the buffer is replaced by a buffer with the same purpose
+            ;; (or the window deleted, if no such buffer)
+            (purpose-x-kill-setup)))
 
 ;; Helm interface to purpose
 (use-package helm-purpose
