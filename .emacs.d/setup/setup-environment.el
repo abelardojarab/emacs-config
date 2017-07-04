@@ -42,7 +42,9 @@
 (setq byte-compile-warnings nil)
 
 ;; prefer newer non-byte compiled sources to older byte compiled ones
-(setq load-prefer-newer t)
+;; Debian Bug report logs - #803462
+;; Setting load-prefer-newer break Emacs startup
+(setq load-prefer-newer nil)
 
 ;; Assure .emacs.cache directory exists
 (if (not (file-exists-p "~/.emacs.cache"))

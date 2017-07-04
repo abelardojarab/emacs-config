@@ -27,7 +27,7 @@
 ;; Helm
 (use-package helm-config
   :load-path (lambda () (expand-file-name "helm/" user-emacs-directory))
-  :bind (("C-'" . helm-semantic-or-imenu)
+  :bind (("C-`" . helm-semantic-or-imenu)
          :map isearch-mode-map
          ("C-." . helm-occur-from-isearch)
          :map minibuffer-local-isearch-map

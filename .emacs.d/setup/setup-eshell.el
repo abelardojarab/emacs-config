@@ -25,13 +25,13 @@
 ;;; Code:
 
 (use-package ielm
-  :bind (("C-c C-z" . ielm-repl)
+  :bind (("C-'" . ielm-repl)
+         ("C-0" . ielm-repl)
          :map ctl-x-map
          (("C-t" . ielm-repl)
           ("z" . ielm-repl))
          :map ielm-map
-         (("C-t" . quit-window)
-          ("C-c C-z" . quit-window)))
+         (("C-t" . quit-window)))
   :config (progn
             (defun ielm-repl ()
               (interactive)

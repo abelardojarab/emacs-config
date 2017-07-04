@@ -219,9 +219,6 @@
 (define-key ctl-x-map (kbd "<end>")   'tabbar-forward-group)
 
 ;; Cua mode helpers
-(define-key ctl-x-map (kbd "C-c") 'clipboard-kill-ring-save)
-(define-key ctl-x-map (kbd "C-x") 'clipboard-kill-region)
-(define-key ctl-x-map (kbd "C-k") 'kill-line)
 (define-key ctl-x-map (kbd "C-s") 'save-buffer)
 (define-key ctl-x-map (kbd "C-a") 'mark-whole-buffer)
 (define-key ctl-x-map (kbd "C-v") 'clipboard-yank)
@@ -240,7 +237,6 @@
 (define-key my/keys-minor-mode-map (kbd "<f4>") 'helm-semantic-or-imenu)
 (define-key my/keys-minor-mode-map (kbd "C-`") 'helm-semantic-or-imenu)
 (define-key my/keys-minor-mode-map (kbd "<f12>") 'ivy-switch-buffer)
-(define-key my/keys-minor-mode-map (kbd "C-0") 'ivy-switch-buffer)
 (define-key my/keys-minor-mode-map (kbd "<f5>") 'recompile)
 (define-key my/keys-minor-mode-map [(control p)] 'scroll-down)
 (define-key my/keys-minor-mode-map [(control n)] 'scroll-up)
