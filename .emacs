@@ -214,9 +214,6 @@
 ;; Setup recentf (causes crash?)
 (require 'setup-recentf)
 
-;; Setup dash
-(require 'setup-dash)
-
 ;; Setup versioning
 (require 'setup-versioning)
 
