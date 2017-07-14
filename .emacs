@@ -286,8 +286,8 @@
 ;; Setup elscreen
 (require 'setup-elscreen)
 
-;; Setup swiper
-(require 'setup-swiper)
+;; Setup ivy
+(require 'setup-ivy)
 
 ;; Setup helm
 (require 'setup-helm)

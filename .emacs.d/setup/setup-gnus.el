@@ -50,44 +50,42 @@
                            (vertical 60 (group 1.0))
                            (vertical 1.0 (summary 1.0 point)))))
 
-            ;; notmuch search
-            (setq notmuch-message-headers '("Subject" "To" "Cc" "Date" "Reply-To"))
-
-            ;; You need this to be able to list all labels in gmail
-            (setq gnus-ignored-newsgroups "")
-
             ;; To be able to search within your gmail/imap mail
             (use-package nnir)
 
-            ;; And this to configure gmail imap
-            (setq gnus-select-method '(nnimap "gmail"
+            ;; notmuch search
+            (setq notmuch-message-headers '("Subject" "To" "Cc" "Date" "Reply-To")
+
+                  ;; You need this to be able to list all labels in gmail
+                  gnus-ignored-newsgroups ""
+
+                  ;; And this to configure gmail imap
+                  gnus-select-method '(nnimap "gmail"
                                               (nnimap-address "imap.gmail.com")
                                               (nnimap-server-port 993)
                                               (nnimap-stream ssl)
-                                              (nnir-search-engine imap)))
+                                              (nnir-search-engine imap))
 
-            ;; Setup gnus inboxes
-            (setq gnus-secondary-select-methods
+                  ;; Setup gnus inboxes
+                  gnus-secondary-select-methods
                   '((nnmaildir "mail"
                                (directory "~/Maildir")
                                (directory-files nnheader-directory-files-safe)
-                               (get-new-mail nil))))
+                               (get-new-mail nil)))
 
-            ;; My version of gnus in my Mac does not handle html messages
-            ;; correctly (the one in the netbook does, I guess it is a different
-            ;; version). The following will chose plaintext every time this is
-            ;; possible.
-            (setq mm-discouraged-alternatives '("text/html" "text/richtext"))
+                  ;; Archive outgoing email in Sent folder on imap.gmail.com
+                  gnus-message-archive-method '(nnimap "imap.gmail.com")
+                  gnus-message-archive-group "[Gmail]/Sent Mail"
 
-            ;; Gnus news
-            (setq gnus-summary-line-format "%U%R%z%d %I%(%[ %F %] %s %)\n")
+                  ;; Gnus news
+                  gnus-summary-line-format "%U%R%z%d %I%(%[ %F %] %s %)\n"
 
-            ;; A gravatar is an image registered to an e-mail address
-            (setq gnus-treat-from-gravatar t)
+                  ;; A gravatar is an image registered to an e-mail address
+                  gnus-treat-from-gravatar t
 
-            ;; Get smarter about filtering depending on what I reed or mark.
-            ;; I use ! (tick) for marking threads as something that interests me.
-            (setq gnus-use-adaptive-scoring t
+                  ;; Get smarter about filtering depending on what I reed or mark.
+                  ;; I use ! (tick) for marking threads as something that interests me.
+                  gnus-use-adaptive-scoring t
                   gnus-default-adaptive-score-alist
                   '((gnus-unread-mark)
                     (gnus-ticked-mark (subject 10))
@@ -212,9 +210,29 @@
   :defer t
   :load-path (lambda () (expand-file-name "apel/" user-emacs-directory)))
 
+;; MIME language support
+(use-package mml
+  :config (progn
+            ;; Put attachments at end of buffer
+            (defun my/mml-attach-file--go-to-eob (orig-fun &rest args)
+              "Go to the end of buffer before attaching files."
+              (save-excursion
+                (save-restriction
+                  (widen)
+                  (goto-char (point-max))
+                  (apply orig-fun args))))
+            (advice-add 'mml-attach-file :around #'my/mml-attach-file--go-to-eob)))
+
 ;; Message mode
 (use-package message
   :config (progn
+
+            ;; My version of gnus in my Mac does not handle html messages
+            ;; correctly (the one in the netbook does, I guess it is a different
+            ;; version). The following will chose plaintext every time this is
+            ;; possible.
+            (setq mm-discouraged-alternatives '("text/html" "text/richtext"))
+
 
             ;; decode html
             (use-package mm-decode
@@ -249,8 +267,15 @@
               (kill-ring-save (point-min) (point-max)))
             (add-hook 'message-send-hook #'my/copy-buffer-to-kill-ring)
 
-            ;; message preferences
-            (setq message-generate-headers-first t
+            ;; store email in ~/Maildir directory
+            (setq nnml-directory "~/Maildir"
+                  message-directory "~/Maildir"
+
+                  ;; Full size images
+                  mm-inline-large-images 'resize
+
+                  ;; message preferences
+                  message-generate-headers-first t
                   message-kill-buffer-on-exit t
                   message-signature-file ".signature")
 
@@ -277,19 +302,6 @@
                  (interactive)
                  (save-buffer)
                  (server-edit)))))
-
-;; mml
-(use-package mml
-  :config (progn
-            ;; Put attachments at end of buffer
-            (defun my/mml-attach-file--go-to-eob (orig-fun &rest args)
-              "Go to the end of buffer before attaching files."
-              (save-excursion
-                (save-restriction
-                  (widen)
-                  (goto-char (point-max))
-                  (apply orig-fun args))))
-            (advice-add 'mml-attach-file :around #'my/mml-attach-file--go-to-eob)))
 
 ;; Enabling attaching files from dired
 (use-package gnus-dired

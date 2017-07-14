@@ -1,4 +1,4 @@
-;;; setup-swiper.el ---                              -*- lexical-binding: t; -*-
+;;; setup-ivy.el ---                              -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2016, 2017  Abelardo Jara-Berrocal
 
@@ -40,9 +40,11 @@
          ("s" . swiper))
   :config (progn
             (set-variable 'ivy-on-del-error-function '(lambda()))
-            (setq ivy-display-style 'fancy)
-            (setq ivy-use-virtual-buffers t)
-            (setq ivy-height 20)
+            (setq ivy-display-style 'fancy
+                  ivy-format-function 'ivy-format-function-arrow
+                  ivy-use-virtual-buffers t
+                  ivy-height 20
+                  completion-in-region-function 'ivy-completion-in-region)
 
             (ivy-set-actions
              'ivy-switch-buffer
@@ -95,5 +97,5 @@
   :load-path (lambda () (expand-file-name "all-the-icons-ivy/" user-emacs-directory))
   :config (all-the-icons-ivy-setup))
 
-(provide 'setup-swiper)
+(provide 'setup-ivy)
 ;;; setup-swiper.el ends here
