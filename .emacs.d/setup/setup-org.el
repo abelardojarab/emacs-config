@@ -59,6 +59,7 @@
             ;; Basic packages
             (use-package org-list)
             (use-package ox-org)
+            (use-package ox-extras)
 
             ;; Tweaks
             (add-hook 'org-mode-hook
@@ -94,14 +95,14 @@
             (bind-keys
              :map org-mode-map
              :filter (org-at-table-p)
-             ("C-c ?" . org-table-field-info)
+             ("C-c ?"   . org-table-field-info)
              ("C-c SPC" . org-table-blank-field)
-             ("C-c +" . org-table-sum)
-             ("C-c =" . org-table-eval-formula)
-             ("C-c `" . org-table-edit-field)
-             ("C-#" . org-table-rotate-recalc-marks)
-             ("C-c }" . org-table-toggle-coordinate-overlays)
-             ("C-c {" . org-table-toggle-formula-debugger))
+             ("C-c +"   . org-table-sum)
+             ("C-c ="   . org-table-eval-formula)
+             ("C-c `"   . org-table-edit-field)
+             ("C-#"     . org-table-rotate-recalc-marks)
+             ("C-c }"   . org-table-toggle-coordinate-overlays)
+             ("C-c {"   . org-table-toggle-formula-debugger))
 
             ;; Miscellanenous settings
             (setq org-startup-folded t
@@ -115,27 +116,28 @@
                   org-hide-leading-stars t
                   org-highlight-latex-and-related '(latex)
                   org-ellipsis " ••• "
+
                   ;; this causes problem in other modes
-                  org-indent-mode nil)
+                  org-indent-mode nil
 
-            ;; Enable sub and super script only when enclosed by {}
-            ;; Also improves readability when exponent/subscript is composed of multiple words
-            (setq org-use-sub-superscripts nil)
+                  ;; Enable sub and super script only when enclosed by {}
+                  ;; Also improves readability when exponent/subscript is composed of multiple words
+                  org-use-sub-superscripts nil
 
-            ;; Hide the /italics/ and *bold* markers
-            (setq org-hide-emphasis-markers t)
+                  ;; Hide the /italics/ and *bold* markers
+                  org-hide-emphasis-markers t
 
-            ;; org-entities displays \alpha etc. as Unicode characters.
-            (setq org-pretty-entities t)
+                  ;; org-entities displays \alpha etc. as Unicode characters.
+                  org-pretty-entities t
 
-            ;; Allow a) b) c) lists
-            (setq org-list-allow-alphabetical t)
+                  ;; Allow a) b) c) lists
+                  org-list-allow-alphabetical t
 
-            ;; Right-align tags to an indent from the right margin
-            (setq org-tags-column 120)
+                  ;; Right-align tags to an indent from the right margin
+                  org-tags-column 120
 
-            ;; Insert blank line before new heading
-            (setq org-blank-before-new-entry
+                  ;; Insert blank line before new heading
+                  org-blank-before-new-entry
                   '((heading . t) (plain-list-item . auto)))
 
             ;; Allow quotes to be verbatim
@@ -147,14 +149,14 @@
                         (custom-set-variables `(org-emphasis-alist ',org-emphasis-alist))))
 
             ;; Export options
-            (setq org-export-coding-system 'utf-8
-                  org-export-time-stamp-file nil
+            (setq org-export-coding-system         'utf-8
+                  org-export-time-stamp-file       nil
                   org-export-with-sub-superscripts '{}
-                  org-export-allow-bind-keywords t
-                  org-export-async-debug t)
+                  org-export-allow-bind-keywords   t
+                  org-export-async-debug           t
 
-            ;; Turn ' and " into ‘posh’ “quotes”
-            (setq org-export-with-smart-quotes t)
+                  ;; Turn ' and " into ‘posh’ “quotes”
+                  org-export-with-smart-quotes     t)
 
             ;; Enable mouse in Org
             (use-package org-mouse)
@@ -162,7 +164,7 @@
             ;; Fonts
             (add-hook 'org-mode-hook (lambda () (variable-pitch-mode t)))
             (set-face-attribute 'org-table nil :inherit 'fixed-pitch)
-            (set-face-attribute 'org-code nil :inherit 'fixed-pitch)
+            (set-face-attribute 'org-code  nil :inherit 'fixed-pitch)
             (set-face-attribute 'org-block nil :inherit 'fixed-pitch)
 
             (defface org-block-begin-line

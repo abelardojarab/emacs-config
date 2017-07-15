@@ -55,8 +55,6 @@
   :load-path (lambda () (expand-file-name "git-modes/" user-emacs-directory)))
 
 ;; magit
-;; be careful that with-editor-file-name-history-exclude complains
-;; when added element is not a list
 (use-package magit
   :commands (magit-init
              magit-status

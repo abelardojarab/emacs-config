@@ -28,6 +28,10 @@
 (use-package ox-latex
   :defer 5
   :config (progn
+
+            ;; Enable bibtex support
+            (use-package ox-bibtex)
+
             (setq org-latex-listings t)
             (setq org-export-latex-quotes
                   '(("en" ("\\(\\s-\\|[[(]\\)\"" . "\\enquote{") ("\\(\\S-\\)\"" . "}") ("\\(\\s-\\|(\\)'" . "`"))))
@@ -458,7 +462,6 @@
                 (setq org-latex-pdf-process
                       '("xelatex -interaction nonstopmode -synctex=1 -shell-escape -output-directory %o %f"
                         "biber %b"
-                        "xelatex -interaction nonstopmode -synctex=1 -shell-escape -output-directory %o %f"
                         "xelatex -interaction nonstopmode -synctex=1 -shell-escape -output-directory %o %f"
                         "xelatex -interaction nonstopmode -synctex=1 -shell-escape -output-directory %o %f")) ;; multipass
               (setq org-latex-pdf-process
