@@ -24,6 +24,10 @@
 
 ;;; Code:
 
+;; Revert buffer
+(use-package files
+  :bind ("C-c r" . revert-buffer))
+
 ;; Emacs startup profiler
 (use-package esup
   :load-path (lambda () (expand-file-name "esup/" user-emacs-directory))

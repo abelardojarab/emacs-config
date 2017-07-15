@@ -413,7 +413,6 @@
 
 ;; diff-hl
 (use-package diff-hl
-  :defer t
   :commands (global-diff-hl-mode
              diff-hl-mode
              diff-hl-next-hunk
@@ -426,10 +425,18 @@
             (setq diff-hl-draw-borders t)
             (defadvice svn-sttus-update-modeline (after svn-update-diff-hl activate)
               (diff-hl-update))
-            (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh)
+
+	    ;; highlight in unsaved buffers as well
+	    (diff-hl-flydiff-mode 1)
+
+	    ;; Integrate with Magit
+	    (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh)
+
+	    ;; Highlight changed files in the fringe of dired
+	    (add-hook 'dired-mode-hook #'diff-hl-dired-mode)
 
             ;; Enable diff-hl
-            (global-diff-hl-mode)))
+            (global-diff-hl-mode 1)))
 
 ;; git modeline and git utilities
 (use-package git-emacs

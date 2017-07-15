@@ -28,6 +28,13 @@
 (use-package flycheck
   :if (not (equal system-type 'windows-nt))
   :load-path (lambda () (expand-file-name "flycheck/" user-emacs-directory))
+  :commands (flycheck-add-next-checker
+             flycheck-mode)
+  :init (progn
+          ;; Enable flycheck for set of modes
+          (mapc (lambda (mode)
+                  (add-hook mode (lambda () (flycheck-mode t))))
+                my/flycheck-modes))
   :config (progn
             (add-to-list 'display-buffer-alist
                          `(,(rx bos "*Flycheck errors*" eos)
@@ -37,10 +44,9 @@
                            (side            . bottom)
                            (window-height   . 0.4)))
 
-            ;; Enable flycheck for set of modes
-            (mapc (lambda (mode)
-                    (add-hook mode (lambda () (flycheck-mode t))))
-                  my/flycheck-modes)
+            ;; Ubuntu 16.04 shellcheck is too old to understand this
+            ;; command-line option
+            (setq flycheck-shellcheck-follow-sources nil)
 
             ;; disable flycheck during idle time, if enabled
             (delete 'idle-change flycheck-check-syntax-automatically)
@@ -81,7 +87,8 @@
 ;; Flycheck irony
 (use-package flycheck-irony
   :after flycheck
-  :if (file-exists-p "~/.emacs.cache/irony-server/bin/irony-server")
+  :if (or (file-exists-p "~/.emacs.cache/irony-server/bin/irony-server")
+          (executable-find "irony-server"))
   :load-path (lambda () (expand-file-name "flycheck-irony/" user-emacs-directory))
   :config (progn
             (add-hook 'flycheck-mode-hook #'flycheck-irony-setup)

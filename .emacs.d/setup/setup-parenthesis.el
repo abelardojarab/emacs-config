@@ -62,8 +62,6 @@
   :load-path (lambda () (expand-file-name "smartparens/" user-emacs-directory))
   :init (use-package smartparens-config)
   :config (progn
-            ;; use smartparens in strict mode for programming etc
-            (add-hook 'prog-mode-hook #'smartparens-strict-mode)
             (show-smartparens-global-mode 1)
 
             ;; disable pairing of ' in minibuffer

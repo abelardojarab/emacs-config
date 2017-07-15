@@ -26,10 +26,10 @@
   :diminish company-mode
   :load-path (lambda () (expand-file-name "company-mode/" user-emacs-directory))
   :commands global-company-mode
-  :bind (("C-;" . company-complete-common)
+  :bind (("C-;"				. company-complete-common)
          :map company-mode-map
-         ([remap completion-at-point] . company-complete-common)
-         ([remap complete-symbol] . company-complete-common))
+         ([remap completion-at-point]	. company-complete-common)
+         ([remap complete-symbol]	. company-complete-common))
   :init (progn
           ;; set default lighter as nothing so in general it is not displayed
           ;; but will still be shown when completion popup is active to show the
@@ -144,11 +144,13 @@
                   company-semantic-insert-arguments t
                   company-gtags-insert-arguments    t)
 
-            (define-key company-active-map (kbd "C-n")   'company-select-next)
-            (define-key company-active-map (kbd "C-p")   'company-select-previous)
-            (define-key company-active-map (kbd "TAB")   'company-complete-selection)
-            (define-key company-active-map (kbd "<tab>") 'company-complete-selection)
-            (define-key company-active-map (kbd "RET")   'company-complete-selection)
+	    ;; nicer keybindings
+	    (define-key company-active-map (kbd "C-n")   'company-select-next)
+	    (define-key company-active-map (kbd "C-p")   'company-select-previous)
+	    (define-key company-active-map (kbd "C-d")   'company-show-doc-buffer)
+	    (define-key company-active-map (kbd "TAB")   'company-complete-common-or-cycle)
+	    (define-key company-active-map (kbd "<tab>") 'company-complete-common-or-cycle)
+	    (define-key company-active-map (kbd "RET")   'company-complete-selection)
 
             ;; Enable company in minibufer
             ;; https://gist.github.com/Bad-ptr/7787596
