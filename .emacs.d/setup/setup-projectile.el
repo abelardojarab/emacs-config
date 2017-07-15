@@ -27,16 +27,27 @@
 (use-package projectile
   :defer 1
   :diminish projectile-mode
-  :commands (projectile-global-mode projectile-ignored-projects projectile-compile-project projectile-find-file)
+  :defines (projectile-ignored-projects
+            projectile-enable-caching)
+  :commands (projectile-global-mode
+             projectile-compile-project
+             projectile-find-file)
   :load-path (lambda () (expand-file-name "projectile/" user-emacs-directory))
   :init (projectile-global-mode)
+  :bind (("C-x C-m" . projectile-compile-project)
+         ("C-x C-g" . projectile-find-file))
   :config (progn
-            (setq projectile-known-projects-file "~/.emacs.cache/projectile-bookmarks.eld")
-            (setq projectile-cache-file "~/.emacs.cache/projectile.cache")
-            (setq projectile-enable-caching t)
-            (setq projectile-sort-order 'recently-active)
-            (setq projectile-indexing-method 'alien)
-            (setq projectile-globally-ignored-files (quote ("TAGS" "*.log" "*DS_Store" "node-modules")))))
+            (add-to-list 'projectile-project-root-files "configure.ac")
+            (add-to-list 'projectile-project-root-files ".clang_complete")
+            (add-to-list 'projectile-project-root-files ".clang_complete.in")
+            (add-to-list 'projectile-project-root-files "AndroidManifest.xml")
+
+            (setq projectile-known-projects-file "~/.emacs.cache/projectile-bookmarks.eld"
+                  projectile-cache-file "~/.emacs.cache/projectile.cache"
+                  projectile-enable-caching t
+                  projectile-sort-order 'recently-active
+                  projectile-indexing-method 'alien
+                  projectile-globally-ignored-files (quote ("TAGS" "*.log" "*DS_Store" "node-modules")))))
 
 (use-package helm-projectile
   :defer 1

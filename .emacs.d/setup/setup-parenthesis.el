@@ -60,10 +60,19 @@
 (use-package smartparens
   :diminish smartparens-mode
   :load-path (lambda () (expand-file-name "smartparens/" user-emacs-directory))
-  :init (progn
-          (require 'smartparens-config))
+  :init (use-package smartparens-config)
   :config (progn
-            (show-smartparens-global-mode 1)))
+            ;; use smartparens in strict mode for programming etc
+            (add-hook 'prog-mode-hook #'smartparens-strict-mode)
+            (show-smartparens-global-mode 1)
+
+            ;; disable pairing of ' in minibuffer
+            (sp-local-pair 'minibuffer-inactive-mode "'" nil :actions nil)
+
+            ;; use smartparens to automatically indent correctly when opening
+            ;; a new block
+            (dolist (mode '(c-mode c++-mode java-mode))
+              (sp-local-pair mode "{" nil :post-handlers '((apm-c-mode-common-open-block "RET")))))
 
 ;; Autopair
 (use-package autopair

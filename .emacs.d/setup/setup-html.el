@@ -209,6 +209,11 @@ plus add font-size: 8pt"
   :commands (web-mode htmlize-region-to-file)
   :load-path (lambda () (expand-file-name "web-mode/" user-emacs-directory))
   :config (progn
+
+            ;; use smartparens instead
+            (setq web-mode-enable-auto-pairing nil)
+
+            ;; extra settings
             (setq web-mode-enable-css-colorization t
                   web-mode-enable-auto-quoting t
                   web-mode-enable-auto-closing t

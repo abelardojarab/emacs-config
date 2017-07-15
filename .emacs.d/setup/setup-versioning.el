@@ -256,7 +256,7 @@
                   (magit-key-mode-popup-committing)
                 (magit-commit)))
 
-            ;; Pretify magit interface
+            ;; Prettify magit interface
             ;; https://ekaschalk.github.io/post/pretty-magit
             (when (display-graphic-p)
               (defmacro pretty-magit (WORD ICON PROPS &optional NO-PROMPT?)
