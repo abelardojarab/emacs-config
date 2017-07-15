@@ -24,6 +24,12 @@
 
 ;;; Code:
 
+;; default to maximised windows
+(add-to-list 'default-frame-alist '(fullscreen . maximized))
+
+;; prompt when trying to switch out of a dedicated window
+(setq switch-to-buffer-in-dedicated-window 'prompt)
+
 ;; creating new frames
 (defun clone-frame-1 (direction)
   (let* ((frame (selected-frame))

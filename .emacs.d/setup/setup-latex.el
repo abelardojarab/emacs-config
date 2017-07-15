@@ -26,28 +26,38 @@
 
 (use-package auctex
   :load-path (lambda () (expand-file-name "auctex/" user-emacs-directory))
+  :commands (LaTeX-math-mode TeX-source-correlate-mode)
+  :mode ("\\.tex\\'" . LaTeX-mode)
   :init (progn
-          (add-hook 'LaTeX-mode-hook #'LaTeX-preview-setup)
-          (add-hook 'LaTeX-mode-hook #'flyspell-mode)
-          (add-hook 'LaTeX-mode-hook #'turn-on-reftex)
-          (setq TeX-auto-save t
-                TeX-parse-self t
-                TeX-save-query nil
-                TeX-PDF-mode t)
-          (setq-default TeX-master nil)
+          (setq-default TeX-auto-save t
+                        TeX-parse-self t
+                        TeX-save-query nil
+                        TeX-PDF-mode t
+                        TeX-source-correlate-start-server t
+                        TeX-master nil)
 
-          ;; Auto-fill for LaTeX
-          (defun my/latex-auto-fill ()
-            "Turn on auto-fill for LaTeX mode."
+          (defun my/latex-mode-setup ()
+            "Tweaks and customisations for LaTeX mode."
+            ;; Auto-fill for LaTeX
             (turn-on-auto-fill)
             (set-fill-column 80)
-            (setq default-justification 'left))
-          (add-hook 'LaTeX-mode-hook #'my/latex-auto-fill)))
+            (setq default-justification 'left)
+            ;; enable spell checking
+            (flyspell-mode 1)
+            ;; enable source-correlate for Control-click forward/reverse search.
+            (TeX-source-correlate-mode 1)
+            ;; enable math mode in latex
+            (LaTeX-math-mode 1)
+            ;; enable math mode in latex
+            (LaTeX-preview-setup)
+            ;; Enable reftex
+            (turn-on-reftex))
+
+          (add-hook 'LaTeX-mode-hook #'my/latex-mode-setup)))
 
 (use-package reftex
   :commands turn-on-reftex
-  :init (progn
-          (setq reftex-plug-into-AUCTeX t)))
+  :init (setq reftex-plug-into-AUCTeX t))
 
 (use-package bibtex
   :mode ("\\.bib" . bibtex-mode)
@@ -71,6 +81,7 @@
                               "file"  "url" "crossref" "annote" "doi")))))
 
 (use-package latex-pretty-symbols
+  :defer t
   :commands latex-unicode-simplified
   :load-path (lambda () (expand-file-name "latex-pretty-symbols/" user-emacs-directory))
   :init (progn

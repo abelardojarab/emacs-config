@@ -25,15 +25,25 @@
 (use-package company
   :diminish company-mode
   :load-path (lambda () (expand-file-name "company-mode/" user-emacs-directory))
+  :commands global-company-mode
+  :bind (("C-;" . company-complete-common)
+         :map company-mode-map
+         ([remap completion-at-point] . company-complete-common)
+         ([remap complete-symbol] . company-complete-common))
+  :init (progn
+          ;; set default lighter as nothing so in general it is not displayed
+          ;; but will still be shown when completion popup is active to show the
+          ;; backend which is in use
+          (setq company-lighter-base "")
+          (global-company-mode 1))
   :config (progn
-            (global-company-mode)
 
             ;; Use Emacs' built-in TAB completion hooks to trigger AC (Emacs >= 23.2)
-            (setq tab-always-indent 'complete)  ;; use 'complete when auto-complete is disabled
+            (setq tab-always-indent 'complete)
             (add-to-list 'completion-styles 'initials t)
 
             ;; Use Company for completion
-            (bind-key [remap completion-at-point] #'company-complete company-mode-map)
+            (bind-key [remap completion-at-point] #'company-complete-common company-mode-map)
 
             ;; Enable company in Org mode
             (defun add-pcomplete-to-capf ()
@@ -128,17 +138,17 @@
                   company-minimum-prefix-length     2
                   company-show-numbers              t
                   company-tooltip-align-annotations t
-                  company-tooltip-limit             20
+                  company-tooltip-limit             10
                   company-dabbrev-downcase          nil
                   company-dabbrev-ignore-case       t
                   company-semantic-insert-arguments t
                   company-gtags-insert-arguments    t)
 
-            (define-key company-active-map (kbd "C-n") 'company-select-next)
-            (define-key company-active-map (kbd "C-p") 'company-select-previous)
-            (define-key company-active-map (kbd "TAB") 'company-complete-selection)
+            (define-key company-active-map (kbd "C-n")   'company-select-next)
+            (define-key company-active-map (kbd "C-p")   'company-select-previous)
+            (define-key company-active-map (kbd "TAB")   'company-complete-selection)
             (define-key company-active-map (kbd "<tab>") 'company-complete-selection)
-            (define-key company-active-map (kbd "RET") 'company-complete-selection)
+            (define-key company-active-map (kbd "RET")   'company-complete-selection)
 
             ;; Enable company in minibufer
             ;; https://gist.github.com/Bad-ptr/7787596
@@ -204,15 +214,25 @@
                          (strinp (ede-system-include-path)))
                 (ede-system-include-path ede-object)))
 
-            ;; (setq company-c-headers-path-system
-            ;;       #'my/ede-object-system-include-path)
-            ))
+            (setq company-c-headers-path-system
+                  #'my/ede-object-system-include-path)))
 
 ;; Company integration with irony
 (use-package company-irony
   :after (company irony)
   :if (executable-find "irony-server")
   :load-path (lambda () (expand-file-name "company-irony/" user-emacs-directory)))
+
+;; Irony C/C++ headers
+(use-package company-irony-c-headers
+  :after (company irony company-irony)
+  :if (executable-find "clang++")
+  :load-path (lambda () (expand-file-name "company-irony-c-headers/" user-emacs-directory))
+  :config (progn
+            (setq company-irony-c-headers--compiler-executable (executable-find "clang++"))
+
+            ;; group with company-irony but beforehand so we get first pick
+            (add-to-list 'company-backends '(company-irony-c-headers company-irony))))
 
 ;; Company integration with rtags
 (use-package company-rtags
@@ -259,7 +279,8 @@
                                     company-bibtex)
                                   company-backends)))
 
-            (add-hook 'TeX-mode-hook 'my/latex-mode-setup)))
+            (add-hook 'TeX-mode-hook 'my/latex-mode-setup)
+            (add-hook 'LaTeX-mode-hook #'company-auctex-init)))
 
 (provide 'setup-company)
 ;;; setup-company.el ends here

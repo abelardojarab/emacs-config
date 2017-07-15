@@ -29,9 +29,23 @@
  gc-cons-threshold most-positive-fixnum
  gc-cons-percentage 0.5)
 
-;; Reset garbage collector after initialization is finished and garbage-collect on focus out
-(add-hook 'after-init-hook (lambda () (setq gc-cons-threshold (* 20 1204 1204))))
+;; Reset garbage collector after initialization is finished
+(add-hook 'after-init-hook (lambda () (setq gc-cons-threshold (* 64 1204 1204))))
+
+;; automatically garbage collect when switch away from emacs
 (add-hook 'focus-out-hook 'garbage-collect)
+
+;; set high gc limit for minibuffer so doesn't slowdown on helm etc
+(defun my/minibuffer-setup ()
+  "Setup minibuffer."
+  (setq gc-cons-threshold most-positive-fixnum))
+
+(defun my/minibuffer-exit ()
+  "Undo minibuffer setup."
+  (setq gc-cons-threshold (* 64 1024 1024)))
+
+(add-hook 'minibuffer-setup-hook #'my/minibuffer-setup)
+(add-hook 'minibuffer-exit-hook #'my/minibuffer-exit)
 
 ;; Improve Emacs performance
 (if (boundp 'max-specpdl-size)
