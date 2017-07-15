@@ -1,4 +1,4 @@
-;;; setup-helm-plugins.el ---                        -*- lexical-binding: t; -*-
+;; setup-helm-plugins.el ---                        -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2016, 2017  Abelardo Jara-Berrocal
 
@@ -75,12 +75,11 @@
 (use-package helm-descbinds
   :defer t
   :after helm
-  :commands (helm-descbinds)
+  :commands (helm-descbinds helm-descbinds-mode)
   :load-path (lambda () (expand-file-name "helm-descbinds/" user-emacs-directory))
   :bind (:map ctl-x-map
               ("k" . helm-descbinds))
-  :config (progn
-            (helm-descbinds-mode 1)))
+  :init (helm-descbinds-mode 1))
 
 ;; helm flycheck
 (use-package helm-flycheck
@@ -97,8 +96,9 @@
   :after (helm flyspell)
   :commands (helm-flyspell-correct)
   :load-path (lambda () (expand-file-name "helm-flyspell/" user-emacs-directory))
-  :bind (:map ctl-x-map
-              ("c" . helm-flyspell-correct)))
+  :bind (([remap ispell-word] . helm-flyspell-correct)
+         :map ctl-x-map
+         ("c" . helm-flyspell-correct)))
 
 ;; helm ls git
 (use-package helm-ls-git

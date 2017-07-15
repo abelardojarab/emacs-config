@@ -28,7 +28,9 @@
 (when (display-graphic-p)
   (tool-bar-mode -1)
   (set-scroll-bar-mode 'right)
-  (scroll-bar-mode -1))
+  (scroll-bar-mode -1)
+  (when (fboundp 'horizontal-scroll-bar-mode)
+    (horizontal-scroll-bar-mode 0)))
 
 ;; Dont pause screen refresh
 (setq redisplay-dont-pause t)
