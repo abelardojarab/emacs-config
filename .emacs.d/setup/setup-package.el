@@ -27,9 +27,9 @@
 (setq package-user-dir "~/.emacs.d/site-lisp/package-install")
 (require 'package)
 (setq package-enable-at-startup nil)
-(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
+(add-to-list 'package-archives '("melpa"     . "http://melpa.org/packages/"))
 (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
-(add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/"))
+(add-to-list 'package-archives '("gnu"       . "http://elpa.gnu.org/packages/"))
 
 ;; Use Package
 (eval-when-compile

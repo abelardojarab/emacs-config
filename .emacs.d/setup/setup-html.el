@@ -178,12 +178,34 @@ plus add font-size: 8pt"
           (executable-find "python"))
   :load-path (lambda () (expand-file-name "ox-clip/" user-emacs-directory)))
 
+;; XML mode
+(use-package nxml-mode
+  :after (hideshow smartparens)
+  :init (progn
+          (use-package sgml-mode)
+
+          (add-to-list 'hs-special-modes-alist
+                       '(nxml-mode
+                         "<!--\\|<[^/>]*[^/]>"
+                         "-->\\|</[^/>]*[^/]>"
+
+                         "<!--"
+                         sgml-skip-tag-forward
+                         nil)))
+  :config (progn
+            (setq nxml-slash-auto-complete-flag t)
+
+            ;; don't try and complete tag end - breaks nxml completion etc
+            (sp-local-pair 'nxml-mode "<" ">" :actions '(:rem insert))))
+
 ;; Required by web-mode
 (use-package web-completion-data
   :load-path (lambda () (expand-file-name "web-completion-data/" user-emacs-directory)))
 
+;; HTML mode
 (use-package web-mode
   :mode ("\\.css?\\'" "\\.html?\\'")
+  :after (nxml-mode web-completion-data)
   :commands (web-mode htmlize-region-to-file)
   :load-path (lambda () (expand-file-name "web-mode/" user-emacs-directory))
   :config (progn
@@ -196,6 +218,7 @@ plus add font-size: 8pt"
                   web-mode-code-indent-offset 2
                   web-mode-enable-current-element-highlight t)))
 
+;; Company backend
 (use-package company-web
   :after (company web-mode web-completion-data)
   :load-path (lambda () (expand-file-name "company-web/" user-emacs-directory))

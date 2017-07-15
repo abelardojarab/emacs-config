@@ -30,7 +30,8 @@
 
 ;; Windows-like mouse/arrow movement & selection
 (use-package cua-base
-  :config (cua-mode 1))
+  ;; use CUA mode for rectangle selections etc but not copy/paste etc
+  :config (cua-selection-mode 1))
 
 ;; Shift mark package
 (use-package shift-mark

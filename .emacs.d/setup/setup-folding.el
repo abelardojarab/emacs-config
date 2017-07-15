@@ -69,10 +69,16 @@
                     (folding-mode))
                 ad-do-it))))
 
-;; Enable hideshowvis
+;; hideshow (hs-minor-mode)
+(use-package hideshow
+  :defer t
+  :commands hs-toggle-hiding)
+
+;; Visual hideshow mode
 (use-package hideshowvis
   :if (display-graphic-p)
-  :commands (hideshowvis-enable toggle-fold toggle-fold-all hs-toggle-hiding hs-toggle-hiding-all)
+  :after hideshow
+  :commands (hideshowvis-enable toggle-fold toggle-fold-all hs-toggle-hiding-all)
   :diminish hs-minor-mode
   :init (progn
           ;; enable `hs-minor-mode' and 'hideshowvis-minor-mode
