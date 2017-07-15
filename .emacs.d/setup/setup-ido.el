@@ -153,7 +153,9 @@
 (use-package ibuffer-vc
   :after ibuffer
   :defer nil
-  :init (progn
+  :commands ibuffer-vc-generate-filter-groups-by-vc-root
+  :load-path (lambda () (expand-file-name "ibuffer-vc/" user-emacs-directory))
+  :config (progn
           (defun my/ibuffer-apply-filter-groups ()
             "Combine my saved ibuffer filter groups with those generated
      by `ibuffer-vc-generate-filter-groups-by-vc-root'"
