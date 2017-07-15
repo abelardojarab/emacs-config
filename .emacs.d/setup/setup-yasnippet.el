@@ -48,12 +48,12 @@
                                       (null (yas--get-snippet-tables))))))
 
             ;; Remove Yasnippet's default tab key binding (avoid collision with auto-complete)
-            (define-key yas-minor-mode-map (kbd "<tab>") nil)
-            (define-key yas-minor-mode-map (kbd "TAB") nil)
+            (define-key yas-minor-mode-map (kbd "<tab>")     nil)
+            (define-key yas-minor-mode-map (kbd "TAB")       nil)
             (define-key yas-minor-mode-map (kbd "M-<right>") 'yas-next-field-or-maybe-expand)
-            (define-key yas-minor-mode-map (kbd "M-<left>") 'yas-next-field-or-maybe-expand)
+            (define-key yas-minor-mode-map (kbd "M-<left>")  'yas-next-field-or-maybe-expand)
             (define-key yas-minor-mode-map (kbd "<backtab>") 'yas-insert-snippet)
-            (define-key yas-minor-mode-map (kbd "<S-tab>") 'yas-insert-snippet)
+            (define-key yas-minor-mode-map (kbd "<S-tab>")   'yas-insert-snippet)
 
             ;; Select a snippet with popup library
             (setq yas-prompt-functions '(yas-dropdown-prompt

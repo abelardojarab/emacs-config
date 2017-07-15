@@ -50,17 +50,17 @@
             (define-key region-bindings-mode-map (kbd "<right>") 'shift-mark-forward-char)
 
             ;; movement bindings
-            (define-key region-bindings-mode-map (kbd "U") 'move-text-up)
-            (define-key region-bindings-mode-map (kbd "D") 'move-text-down)
-            (define-key region-bindings-mode-map (kbd "<") 'decrease-left-margin)
-            (define-key region-bindings-mode-map (kbd ">") 'increase-right-margin)
+            (define-key region-bindings-mode-map (kbd "M-<up>")   'move-text-up)
+            (define-key region-bindings-mode-map (kbd "M-<down>") 'move-text-down)
+            (define-key region-bindings-mode-map (kbd "<")        'decrease-left-margin)
+            (define-key region-bindings-mode-map (kbd ">")        'increase-right-margin)
 
-            (define-key region-bindings-mode-map (kbd "C-x C-c") 'clipboard-kill-ring-save)
-            (define-key region-bindings-mode-map (kbd "C-x C-x") 'clipboard-kill-region)
-            (define-key region-bindings-mode-map (kbd "C-x C-k") 'kill-line)
+            (define-key region-bindings-mode-map (kbd "C-x C-c")  'clipboard-kill-ring-save)
+            (define-key region-bindings-mode-map (kbd "C-x C-x")  'clipboard-kill-region)
+            (define-key region-bindings-mode-map (kbd "C-x C-k")  'kill-line)
 
-            (define-key region-bindings-mode-map (kbd "c") 'kill-ring-save)
-            (define-key region-bindings-mode-map (kbd "x") 'kill-region)))
+            (define-key region-bindings-mode-map (kbd "c")        'kill-ring-save)
+            (define-key region-bindings-mode-map (kbd "x")        'kill-region)))
 
 (provide 'setup-region)
 ;;; setup-region.el ends here
