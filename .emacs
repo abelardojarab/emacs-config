@@ -154,9 +154,6 @@
 ;; Setup Org plugins
 (require 'setup-org-plugins)
 
-;; Setup Org (image supporg)
-(require 'setup-org-image)
-
 ;; Setup Org (latex support)
 (require 'setup-org-latex)
 
@@ -285,6 +282,9 @@
 
 ;; Setup elscreen
 (require 'setup-elscreen)
+
+;; Setup Imagemagick support
+(require 'setup-iimage)
 
 ;; Setup ivy
 (require 'setup-ivy)
