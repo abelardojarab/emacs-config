@@ -72,7 +72,7 @@
             ;; use smartparens to automatically indent correctly when opening
             ;; a new block
             (dolist (mode '(c-mode c++-mode java-mode))
-              (sp-local-pair mode "{" nil :post-handlers '((apm-c-mode-common-open-block "RET")))))
+              (sp-local-pair mode "{" nil :post-handlers '((apm-c-mode-common-open-block "RET"))))))
 
 ;; Autopair
 (use-package autopair
