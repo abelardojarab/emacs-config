@@ -253,13 +253,13 @@ The result is cached for one second to avoid hiccups."
    `(font-lock-warning-face ((,class (:foreground ,red :weight bold :background ,background-red))))
 
    ;; Mode line faces
-      `(mode-line ((,class (:background ,background-blue :height 0.9 :foreground ,blue
+   `(mode-line ((,class (:background ,background-blue :height 0.9 :foreground ,blue
                                      :box ,(when zerodark-use-paddings-in-mode-line
-                                              (list :line-width 6 :color background-blue))))))
-      `(mode-line-inactive ((,class (:background ,background-darker :height 0.9 :foreground ,default
-                                                 :box ,(when zerodark-use-paddings-in-mode-line
-                                                         (list :line-width 6 :color background-darker))))))
-      `(header-line ((,class (:inherit mode-line-inactive))))
+                                             (list :line-width 6 :color background-blue))))))
+   `(mode-line-inactive ((,class (:background ,background-darker :height 0.9 :foreground ,default
+                                              :box ,(when zerodark-use-paddings-in-mode-line
+                                                      (list :line-width 6 :color background-darker))))))
+   `(header-line ((,class (:inherit mode-line-inactive))))
 
    ;; error & success
    `(error ((,class (:foreground ,red :weight bold))))
@@ -284,6 +284,10 @@ The result is cached for one second to avoid hiccups."
    `(linum ((,class (:foreground ,comment :background ,background))))
    ;; from hlinum
    `(linum-highlight-face ((,class (:foreground ,blue ,background ,background-blue))))
+
+   ;; native line numbers (emacs 26)
+   `(line-number ((,class (:foreground ,comment :background ,background-darker))))
+   `(line-number-current-line ((,class (:foreground ,blue :background ,background-darker))))
 
    ;; eshell
    `(eshell-prompt ((,class (:foreground ,orange :background ,background :weight bold))))
@@ -448,6 +452,8 @@ The result is cached for one second to avoid hiccups."
    ;; js2-mode
    `(js2-function-param ((,class (:foreground ,blue))))
    `(js2-error ((,class (:foreground ,red))))
+   `(js2-jsdoc-html-tag-name ((,class (:foreground ,peach))))
+   `(js2-jsdoc-html-tag-delimiter ((,class (:foreground ,peach))))
 
    ;; flycheck
    `(flycheck-fringe-error ((,class (:foreground ,red :background ,background-red :weight bold :inverse-video t))))
@@ -684,6 +690,16 @@ The result is cached for one second to avoid hiccups."
    `(epa-validity-disabled ((,class (:foreground ,red :weight bold :background ,background-red))))
    `(epa-field-name ((,class (:foreground ,purple :weight bold))))
    `(epa-field-body ((,class (:foreground ,orange))))
+
+   ;; tabbar
+   `(tabbar-default ((,class (:inherit variable-pitch :background ,background-darker :foreground ,green-light :height 0.9))))
+   `(tabbar-button ((,class (:inherit tabbar-default ))))
+   `(tabbar-button-highlight ((,class (:inherit tabbar-default))))
+   `(tabbar-highlight ((,class (:underline t))))
+   `(tabbar-selected ((,class (:inherit tabbar-default :foreground ,orange :background ,background :weight bold))))
+   `(tabbar-separator ((,class (:inherit tabbar-default :background ,background-darker))))
+   `(tabbar-unselected ((,class (:inherit tabbar-default :slant italic :weight semi-bold))))
+
    )
 
   (custom-theme-set-variables
