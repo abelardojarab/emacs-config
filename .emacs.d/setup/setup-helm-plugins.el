@@ -162,8 +162,12 @@
   :after (helm yasnippet)
   :commands (helm-yas-complete)
   :load-path (lambda () (expand-file-name "helm-c-yasnippet/" user-emacs-directory))
-  :bind (:map ctl-x-map
-              ("y" . helm-yas-complete)))
+  :bind (:map yas-minor-mode-map
+              ([(shift tab)]     . helm-c-yas-complete)
+              ([backtab]         . helm-c-yas-complete)
+              ("<S-iso-lefttab>" . helm-c-yas-complete)
+         :map ctl-x-map
+              ("y"               . helm-c-yas-complete)))
 
 ;; helm make support
 (use-package helm-make

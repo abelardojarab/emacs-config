@@ -28,18 +28,37 @@
 (use-package yasnippet
   :diminish yas-minor-mode
   :load-path (lambda () (expand-file-name "yasnippet/" user-emacs-directory))
+  :bind (:map yas-minor-mode-map
+              ;; Remove Yasnippet's default tab key binding (avoid collision with auto-complete)
+              ([tab]         . nil)
+              ([?\t]         . nil)
+              ([(shift tab)] . nil)
+              ([backtab]     . nil)
+              ("C-c r"       . yas-prev-field)
+              ("C-c t"       . yas-next-field-or-maybe-expand)
+              :map yas-keymap
+              ([tab]         . nil)
+              ([?\t]         . nil)
+              ([(shift tab)] . nil)
+              ([backtab]     . nil)
+              ("C-c r"       . yas-prev-field)
+              ("C-c t"       . yas-next-field-or-maybe-expand))
+  :commands (yas-initialize
+             yas-global-mode
+             yas-minor-mode
+             yas-snippet-dirs)
+  :init (progn
+          (if (file-exists-p "~/.emacs.d/snippets")
+              (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
+            (setq yas-snippet-dirs '()))
+          (setq yas-snippet-dirs (cons (expand-file-name "snippets" user-emacs-directory)
+                                       (yas-snippet-dirs)))
+          (setq yas-snippet-dirs (cons (expand-file-name "snippets-extra" user-emacs-directory)
+                                       (yas-snippet-dirs)))
+
+          (yas-initialize)
+          (yas-global-mode 1))
   :config (progn
-            (if (file-exists-p "~/.emacs.d/snippets")
-                (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
-              (setq yas-snippet-dirs '()))
-            (setq yas-snippet-dirs (cons (expand-file-name "snippets" user-emacs-directory)
-                                         (yas-snippet-dirs)))
-            (setq yas-snippet-dirs (cons (expand-file-name "snippets-extra" user-emacs-directory)
-                                         (yas-snippet-dirs)))
-
-            (yas-initialize)
-            (yas-global-mode 1)
-
             ;; Do not activate for read only and non-existent snippets
             (set-default 'yas--dont-activate
                          #'(lambda ()
@@ -47,13 +66,9 @@
                                  (and yas-snippet-dirs
                                       (null (yas--get-snippet-tables))))))
 
-            ;; Remove Yasnippet's default tab key binding (avoid collision with auto-complete)
-            (define-key yas-minor-mode-map (kbd "<tab>")     nil)
-            (define-key yas-minor-mode-map (kbd "TAB")       nil)
+            ;; Simplify navigation of yasnippet fields
             (define-key yas-minor-mode-map (kbd "M-<right>") 'yas-next-field-or-maybe-expand)
-            (define-key yas-minor-mode-map (kbd "M-<left>")  'yas-next-field-or-maybe-expand)
-            (define-key yas-minor-mode-map (kbd "<backtab>") 'yas-insert-snippet)
-            (define-key yas-minor-mode-map (kbd "<S-tab>")   'yas-insert-snippet)
+            (define-key yas-minor-mode-map (kbd "M-<left>")  'yas-prev-field)
 
             ;; Select a snippet with popup library
             (setq yas-prompt-functions '(yas-dropdown-prompt

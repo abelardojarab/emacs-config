@@ -34,6 +34,7 @@
             (imagex-global-sticky-mode 1)
             (imagex-auto-adjust-mode 1)
             (setq imagex-quiet-error t)
+
             ;; Insert images from files like this:
             ;; #+BEGIN: image :file "~/Documents/personal/foo.png"
             ;; #+END
