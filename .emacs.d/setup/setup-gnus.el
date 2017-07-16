@@ -24,16 +24,31 @@
 
 ;;; Code:
 
-;; Make gnutls a bit safer
-(setq gnutls-min-prime-bits 4096)
+(use-package starttls
+  :config (progn
+            ;; Options
+            (setq starttls-use-gnutls t
+                  starttls-gnutls-program "gnutls-cli"
+                  starttls-extra-arguments nil)
+
+            ;; Make gnutls a bit safer
+            (setq gnutls-min-prime-bits 4096)))
+
+(use-package epg)
+
+(use-package epa
+  :config (setq epa-popup-info-window nil))
+
+(use-package ecomplete)
 
 ;; Gnus
 (use-package gnus
+  :after starttls
   :defer 1
   :commands (gnus compose-mail switch-to-gnus)
   :bind (("M-G" . switch-to-gnus)
          :map ctl-x-map
-         ("m" . compose-mail))
+         ("m"   . compose-mail))
   :config (progn
             ;; http://sachachua.com/blog/2007/12/gnus-multi-pane-tricks-or-i-heart-planet-emacsen/
             (gnus-add-configuration
@@ -51,13 +66,19 @@
                            (vertical 1.0 (summary 1.0 point)))))
 
             ;; To be able to search within your gmail/imap mail
-            (use-package nnir)
+            (use-package nnir
+              :config (progn
+                        (setq nndraft-directory "~/Maildir/[Gmail].Drafts"
+                              nnmh-directory "~/Maildir/[Gmail].Drafts"
 
-            ;; notmuch search
-            (setq notmuch-message-headers '("Subject" "To" "Cc" "Date" "Reply-To")
+                              ;; archive directory
+                              nnfolder-directory "~/Maildir/archive"
 
-                  ;; You need this to be able to list all labels in gmail
-                  gnus-ignored-newsgroups ""
+                              ;; spool directory
+                              nnml-directory "~/Maildir/Mail")))
+
+            ;; You need this to be able to list all labels in gmail
+            (setq gnus-ignored-newsgroups ""
 
                   ;; And this to configure gmail imap
                   gnus-select-method '(nnimap "gmail"
@@ -67,11 +88,10 @@
                                               (nnir-search-engine imap))
 
                   ;; Setup gnus inboxes
-                  gnus-secondary-select-methods
-                  '((nnmaildir "mail"
-                               (directory "~/Maildir")
-                               (directory-files nnheader-directory-files-safe)
-                               (get-new-mail nil)))
+                  gnus-secondary-select-methods '((nnmaildir "mail"
+                                                             (directory "~/Maildir")
+                                                             (directory-files nnheader-directory-files-safe)
+                                                             (get-new-mail nil)))
 
                   ;; Archive outgoing email in Sent folder on imap.gmail.com
                   gnus-message-archive-method '(nnimap "imap.gmail.com")
@@ -101,6 +121,7 @@
             (add-hook 'gnus-group-mode-hook 'hl-line-mode)
             (add-hook 'gnus-summary-mode-hook 'hl-line-mode)
 
+            ;; Save email attachments
             (defun my/gnus-summary-save-parts (&optional arg)
               (interactive "P")
               (let ((directory "~/Downloads"))
@@ -148,6 +169,7 @@
 
 ;; To be able to send email with your gmail/smtp mail
 (use-package smtpmail
+  :after gnus
   :config (progn
             ;; Using smptmail to assure portability; we dont always have postfix
             (setq send-mail-function 'smtpmail-send-it
@@ -168,10 +190,7 @@
             (defun set-smtp-ssl (server port user password &optional key
                                         cert)
               "Set related SMTP and SSL variables for supplied parameters."
-              (setq starttls-use-gnutls t
-                    starttls-gnutls-program "gnutls-cli"
-                    starttls-extra-arguments nil
-                    smtpmail-smtp-server server
+              (setq smtpmail-smtp-server server
                     smtpmail-smtp-service port
                     smtpmail-auth-credentials (list (list server port user
                                                           password))
@@ -268,16 +287,16 @@
             (add-hook 'message-send-hook #'my/copy-buffer-to-kill-ring)
 
             ;; store email in ~/Maildir directory
-            (setq nnml-directory "~/Maildir"
-                  message-directory "~/Maildir"
+            (setq
+             message-directory "~/Maildir"
 
-                  ;; Full size images
-                  mm-inline-large-images 'resize
+             ;; Full size images
+             mm-inline-large-images 'resize
 
-                  ;; message preferences
-                  message-generate-headers-first t
-                  message-kill-buffer-on-exit t
-                  message-signature-file ".signature")
+             ;; message preferences
+             message-generate-headers-first t
+             message-kill-buffer-on-exit t
+             message-signature-file ".signature")
 
             ;; message mode hooks
             (add-hook 'message-mode-hook
