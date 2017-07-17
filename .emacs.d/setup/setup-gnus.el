@@ -27,29 +27,105 @@
 (use-package starttls
   :config (progn
             ;; Options
-            (setq starttls-use-gnutls t
-                  starttls-gnutls-program "gnutls-cli"
-                  starttls-extra-arguments nil)
+            (if (executable-find "gnutls-cli")
+                (setq starttls-use-gnutls      t
+                      starttls-gnutls-program  "gnutls-cli"
+                      starttls-extra-arguments nil))
 
             ;; Make gnutls a bit safer
             (setq gnutls-min-prime-bits 4096)))
 
-(use-package epg)
+;; Keeping Secrets in Emacs with GnuPG & EasyPG
+(use-package epg
+  :config (progn
+            ;; https://www.masteringemacs.org/article/keeping-secrets-in-emacs-gnupg-auth-sources
+            (if (executable-find "gpg2")
+                (setq epg-gpg-program "gpg2"))
+
+            ;; Disable External Pin Entry
+            (setenv "GPG_AGENT_INFO" nil)))
 
 (use-package epa
-  :config (setq epa-popup-info-window nil))
+  :defer t
+  :config (progn
+            (setq epa-popup-info-window nil)
+
+            ;; https://github.com/jwiegley/dot-emacs/blob/master/dot-gnus.el
+            (defun epa--key-widget-value-create (widget)
+              (let* ((key (widget-get widget :value))
+                     (primary-sub-key (car (last (epg-key-sub-key-list key) 3)))
+                     (primary-user-id (car (epg-key-user-id-list key))))
+                (insert (format "%c "
+                                (if (epg-sub-key-validity primary-sub-key)
+                                    (car (rassq (epg-sub-key-validity primary-sub-key)
+                                                epg-key-validity-alist))
+                                  ? ))
+                        (epg-sub-key-id primary-sub-key)
+                        " "
+                        (if primary-user-id
+                            (if (stringp (epg-user-id-string primary-user-id))
+                                (epg-user-id-string primary-user-id)
+                              (epg-decode-dn (epg-user-id-string primary-user-id)))
+                          ""))))))
 
 (use-package ecomplete)
 
+;; To be able to search within your gmail/imap mail
+(use-package nnir
+  :config (progn
+            (setq nndraft-directory "~/Mail/[Gmail].Drafts"
+
+                  ;; MH Spooling directory
+                  nnmh-directory "~/Mail"
+
+                  ;; Directory containing Unix mbox; defaults to message-directory
+                  nnfolder-directory "~/Mail"
+
+                  ;; Spool directory; defaults to message-directory
+                  nnml-directory "~/Mail")
+
+            (defun gnus-goto-article (message-id)
+              (activate-gnus)
+              (gnus-summary-read-group "INBOX" 15 t)
+              (let ((nnir-imap-default-search-key "imap")
+                    (nnir-ignored-newsgroups
+                     (concat "\\(\\(list\\.wg21\\|archive\\)\\.\\|"
+                             "mail\\.\\(spam\\|save\\|trash\\|sent\\)\\)")))
+                (gnus-summary-refer-article message-id)))
+
+            (defvar gnus-query-history nil)
+            (defun gnus-query (query &optional arg)
+              (interactive
+               (list (read-string (format "IMAP Query %s: "
+                                          (if current-prefix-arg "All" "Mail"))
+                                  (format-time-string "SENT SINCE %d-%b-%Y "
+                                                      (time-subtract (current-time)
+                                                                     (days-to-time 90)))
+                                  'gnus-query-history)
+                     current-prefix-arg))
+              (activate-gnus)
+              (let ((nnir-imap-default-search-key "gmail"))
+                (gnus-group-make-nnir-group
+                 nil (list (cons 'nnir-query-spec
+                                 (list (cons 'query query)
+                                       (cons 'criteria "")))
+                           (cons 'nnir-group-spec
+                                 (list (list "nnimap:Local")))))))))
+
 ;; Gnus
 (use-package gnus
-  :after starttls
+  :after (starttls nnir epa)
   :defer 1
-  :commands (gnus compose-mail switch-to-gnus)
+  :commands (gnus compose-mail switch-to-gnus activate-gnus)
   :bind (("M-G" . switch-to-gnus)
          :map ctl-x-map
          ("m"   . compose-mail))
   :config (progn
+
+            ;; Start gnus if not available
+            (defun activate-gnus ()
+              (unless (get-buffer "*Group*") (gnus)))
+
             ;; http://sachachua.com/blog/2007/12/gnus-multi-pane-tricks-or-i-heart-planet-emacsen/
             (gnus-add-configuration
              '(article
@@ -65,20 +141,18 @@
                            (vertical 60 (group 1.0))
                            (vertical 1.0 (summary 1.0 point)))))
 
-            ;; To be able to search within your gmail/imap mail
-            (use-package nnir
-              :config (progn
-                        (setq nndraft-directory "~/Maildir/[Gmail].Drafts"
-                              nnmh-directory "~/Maildir/[Gmail].Drafts"
-
-                              ;; archive directory
-                              nnfolder-directory "~/Maildir/archive"
-
-                              ;; spool directory
-                              nnml-directory "~/Maildir/Mail")))
-
             ;; You need this to be able to list all labels in gmail
             (setq gnus-ignored-newsgroups ""
+
+                  ;; Asynchronous support
+                  gnus-asynchronous t
+
+                  ;; Dont ask question on exit
+                  gnus-interactive-catchup nil
+                  gnus-interactive-exit nil
+
+                  ;; Headers we wanna see:
+                  gnus-visible-headers "^From:\\|^Subject:\\|^X-Mailer:\\|^X-Newsreader:\\|^Date:\\|^To:\\|^Cc:\\|^User-agent:\\|^Newsgroups:\\|^Comments:"
 
                   ;; And this to configure gmail imap
                   gnus-select-method '(nnimap "gmail"
@@ -88,8 +162,8 @@
                                               (nnir-search-engine imap))
 
                   ;; Setup gnus inboxes
-                  gnus-secondary-select-methods '((nnmaildir "mail"
-                                                             (directory "~/Maildir")
+                  gnus-secondary-select-methods '((nnmaildir "Local"
+                                                             (directory "~/Mail")
                                                              (directory-files nnheader-directory-files-safe)
                                                              (get-new-mail nil)))
 
@@ -97,20 +171,18 @@
                   gnus-message-archive-method '(nnimap "imap.gmail.com")
                   gnus-message-archive-group "[Gmail]/Sent Mail"
 
+                  ;; Display a button for MIME parts
+                  gnus-buttonized-mime-types '("multipart/alternative")
+
                   ;; Gnus news
-                  gnus-summary-line-format "%U%R%z%d %I%(%[ %F %] %s %)\n"
+                  gnus-summary-line-format (concat "%*%0{%U%R%z%d%}"
+                                                   "%0{ %}(%2t)"
+                                                   "%2{ %}%-23,23n"
+                                                   "%1{ %}%1{%B%}%2{%-102,102s%}%-140="
+                                                   "\n")
 
                   ;; A gravatar is an image registered to an e-mail address
-                  gnus-treat-from-gravatar t
-
-                  ;; Get smarter about filtering depending on what I reed or mark.
-                  ;; I use ! (tick) for marking threads as something that interests me.
-                  gnus-use-adaptive-scoring t
-                  gnus-default-adaptive-score-alist
-                  '((gnus-unread-mark)
-                    (gnus-ticked-mark (subject 10))
-                    (gnus-killed-mark (subject -5))
-                    (gnus-catchup-mark (subject -1))))
+                  gnus-treat-from-gravatar t)
 
             ;; Use gnus for email
             (setq mail-user-agent 'gnus-user-agent)
@@ -120,6 +192,27 @@
             (add-hook 'gnus-group-mode-hook 'gnus-topic-mode)
             (add-hook 'gnus-group-mode-hook 'hl-line-mode)
             (add-hook 'gnus-summary-mode-hook 'hl-line-mode)
+            (add-hook 'gnus-summary-mode-hook (lambda () (setq-local truncate-lines t)))
+
+            ;; Sort email
+            (add-hook 'gnus-summary-exit-hook 'gnus-summary-bubble-group)
+            (add-hook 'gnus-suspend-gnus-hook 'gnus-group-sort-groups-by-rank)
+            (add-hook 'gnus-exit-gnus-hook 'gnus-group-sort-groups-by-rank)
+
+            ;; Get smarter about filtering depending on what I reed or mark.
+            ;; I use ! (tick) for marking threads as something that interests me.
+            (setq gnus-use-adaptive-scoring 'line
+                  gnus-default-adaptive-score-alist
+                  '((gnus-dormant-mark (from 20) (subject 100))
+                    (gnus-ticked-mark (subject 30))
+                    (gnus-read-mark (subject 30))
+                    (gnus-del-mark (subject -150))
+                    (gnus-catchup-mark (subject -150))
+                    (gnus-killed-mark (subject -1000))
+                    (gnus-expirable-mark (from -1000) (subject -1000)))
+                  gnus-score-decay-constant 1
+                  gnus-score-decay-scale 0.03
+                  gnus-decay-scores t)
 
             ;; Save email attachments
             (defun my/gnus-summary-save-parts (&optional arg)
@@ -261,10 +354,6 @@
                     mm-automatic-display
                     (-difference mm-automatic-display '("text/html" "text/enriched" "text/richtext"))))
 
-            ;; Use w3m to render html
-            (if (executable-find "w3m")
-                (setq mm-text-html-renderer 'w3m))
-
             ;; use imagemagick, if available
             (when (and (fboundp 'imagemagick-register-types)
                        (executable-find "import"))
@@ -286,17 +375,23 @@
               (kill-ring-save (point-min) (point-max)))
             (add-hook 'message-send-hook #'my/copy-buffer-to-kill-ring)
 
-            ;; store email in ~/Maildir directory
-            (setq
-             message-directory "~/Maildir"
+            ;; Use w3m to display HTML mails
+            ;; Use w3m to render html
+            (if (executable-find "w3m")
+                (setq mm-text-html-renderer 'w3m))
 
-             ;; Full size images
-             mm-inline-large-images 'resize
+            ;; Full sized images
+            (setq mm-inline-text-html-with-images t
+                  mm-inline-large-images 'resize
+                  mm-attachment-file-modes 420)
 
-             ;; message preferences
-             message-generate-headers-first t
-             message-kill-buffer-on-exit t
-             message-signature-file ".signature")
+            ;; store email in ~/Mail directory
+            (setq message-directory "~/Mail"
+
+                  ;; message preferences
+                  message-generate-headers-first t
+                  message-kill-buffer-on-exit t
+                  message-signature-file ".signature")
 
             ;; message mode hooks
             (add-hook 'message-mode-hook

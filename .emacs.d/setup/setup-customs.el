@@ -64,7 +64,7 @@
   :group 'my/customs
   :type 'string)
 
-(defcustom my/mu4e-maildir "~/Maildir"
+(defcustom my/mu4e-maildir "~/Mail"
   "Location of the mu4e/mbsync mailbox"
   :group 'my/customs
   :type 'string)
