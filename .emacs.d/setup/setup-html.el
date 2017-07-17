@@ -24,10 +24,66 @@
 
 ;;; Code:
 
-;; htmlize, require to format source for wordpress (otherwise code blocks will appear empty)
-;; Prefer the Org version
+;; XML mode
+(use-package nxml-mode
+  :after (hideshow smartparens)
+  :init (progn
+          (use-package sgml-mode)
+
+          (add-to-list 'hs-special-modes-alist
+                       '(nxml-mode
+                         "<!--\\|<[^/>]*[^/]>"
+                         "-->\\|</[^/>]*[^/]>"
+
+                         "<!--"
+                         sgml-skip-tag-forward
+                         nil)))
+  :config (progn
+            (setq nxml-slash-auto-complete-flag t)
+
+            ;; don't try and complete tag end - breaks nxml completion etc
+            (sp-local-pair 'nxml-mode "<" ">" :actions '(:rem insert))))
+
+;; Required by web-mode
+(use-package web-completion-data
+  :load-path (lambda () (expand-file-name "web-completion-data/" user-emacs-directory)))
+
+;; HTML mode
+(use-package web-mode
+  :mode ("\\.css?\\'" "\\.html?\\'")
+  :after (nxml-mode web-completion-data)
+  :commands (web-mode htmlize-region-to-file)
+  :load-path (lambda () (expand-file-name "web-mode/" user-emacs-directory))
+  :config (progn
+
+            ;; use smartparens instead
+            (setq web-mode-enable-auto-pairing nil)
+
+            ;; extra settings
+            (setq web-mode-enable-css-colorization t
+                  web-mode-enable-auto-quoting t
+                  web-mode-enable-auto-closing t
+                  web-mode-style-padding 2
+                  web-mode-script-padding 2
+                  web-mode-markup-indent-offset 2
+                  web-mode-code-indent-offset 2
+                  web-mode-enable-current-element-highlight t)))
+
+;; Company backend
+(use-package company-web
+  :after (company web-mode web-completion-data)
+  :load-path (lambda () (expand-file-name "company-web/" user-emacs-directory))
+  :config (add-hook 'web-mode-hook
+                    (lambda () (set (make-local-variable 'company-backends)
+                               '((company-web-html
+                                  company-capf
+                                  company-files
+                                  company-abbrev))))))
+
+;; htmlize, required to format source for wordpress (otherwise code blocks will appear empty)
 (use-package htmlize
   :load-path (lambda () (expand-file-name "htmlize" user-emacs-directory))
+  :after (org web-mode)
   :commands (htmlize-faces-in-buffer
              htmlize-make-face-map
              htmlize-css-specs htmlize-region
@@ -177,62 +233,6 @@ plus add font-size: 8pt"
   :if (or (executable-find "xclip")
           (executable-find "python"))
   :load-path (lambda () (expand-file-name "ox-clip/" user-emacs-directory)))
-
-;; XML mode
-(use-package nxml-mode
-  :after (hideshow smartparens)
-  :init (progn
-          (use-package sgml-mode)
-
-          (add-to-list 'hs-special-modes-alist
-                       '(nxml-mode
-                         "<!--\\|<[^/>]*[^/]>"
-                         "-->\\|</[^/>]*[^/]>"
-
-                         "<!--"
-                         sgml-skip-tag-forward
-                         nil)))
-  :config (progn
-            (setq nxml-slash-auto-complete-flag t)
-
-            ;; don't try and complete tag end - breaks nxml completion etc
-            (sp-local-pair 'nxml-mode "<" ">" :actions '(:rem insert))))
-
-;; Required by web-mode
-(use-package web-completion-data
-  :load-path (lambda () (expand-file-name "web-completion-data/" user-emacs-directory)))
-
-;; HTML mode
-(use-package web-mode
-  :mode ("\\.css?\\'" "\\.html?\\'")
-  :after (nxml-mode web-completion-data)
-  :commands (web-mode htmlize-region-to-file)
-  :load-path (lambda () (expand-file-name "web-mode/" user-emacs-directory))
-  :config (progn
-
-            ;; use smartparens instead
-            (setq web-mode-enable-auto-pairing nil)
-
-            ;; extra settings
-            (setq web-mode-enable-css-colorization t
-                  web-mode-enable-auto-quoting t
-                  web-mode-enable-auto-closing t
-                  web-mode-style-padding 2
-                  web-mode-script-padding 2
-                  web-mode-markup-indent-offset 2
-                  web-mode-code-indent-offset 2
-                  web-mode-enable-current-element-highlight t)))
-
-;; Company backend
-(use-package company-web
-  :after (company web-mode web-completion-data)
-  :load-path (lambda () (expand-file-name "company-web/" user-emacs-directory))
-  :config (add-hook 'web-mode-hook
-                    (lambda () (set (make-local-variable 'company-backends)
-                               '((company-web-html
-                                  company-capf
-                                  company-files
-                                  company-abbrev))))))
 
 (provide 'setup-html)
 ;;; setup-org-html.el ends here
