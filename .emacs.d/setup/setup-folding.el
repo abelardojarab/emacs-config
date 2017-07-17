@@ -223,16 +223,15 @@
          ("C-c *" . origami-toggle-all-nodes)
          ("C-c +" . origami-open-all-nodes))
   :load-path (lambda () (expand-file-name "origami/" user-emacs-directory))
-  :config (progn
-            (global-origami-mode)))
+  :config (global-origami-mode))
 
-;; Vi-like fold
+;; vim-like fold
 (use-package vimish-fold
   :commands (vimish-fold-mode vimish-fold-global-mode)
-  :bind (:map
-         vimish-fold-folded-keymap ("<tab>" . vimish-fold-unfold)
-         :map
-         vimish-fold-unfolded-keymap ("<tab>" . vimish-fold-refold))
+  :bind (:map vimish-fold-folded-keymap
+              ("<tab>" . vimish-fold-unfold)
+              :map vimish-fold-unfolded-keymap
+              ("<tab>" . vimish-fold-refold))
   :load-path (lambda () (expand-file-name "vimish-fold/" user-emacs-directory))
   :config (progn
             (setq-default
