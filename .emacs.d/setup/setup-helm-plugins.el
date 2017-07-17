@@ -98,7 +98,7 @@
   :load-path (lambda () (expand-file-name "helm-flyspell/" user-emacs-directory))
   :bind (([remap ispell-word] . helm-flyspell-correct)
          :map ctl-x-map
-         ("c" . helm-flyspell-correct)))
+         (";" . helm-flyspell-correct)))
 
 ;; helm ls git
 (use-package helm-ls-git
