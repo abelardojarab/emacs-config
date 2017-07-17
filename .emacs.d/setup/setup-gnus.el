@@ -45,6 +45,7 @@
             ;; Disable External Pin Entry
             (setenv "GPG_AGENT_INFO" nil)))
 
+;; EasyPG Emacs assistant
 (use-package epa
   :defer t
   :config (progn
@@ -68,6 +69,7 @@
                               (epg-decode-dn (epg-user-id-string primary-user-id)))
                           ""))))))
 
+;; Electric completions of email addresses and the like
 (use-package ecomplete)
 
 ;; To be able to search within your gmail/imap mail
@@ -82,35 +84,7 @@
                   nnfolder-directory "~/Mail"
 
                   ;; Spool directory; defaults to message-directory
-                  nnml-directory "~/Mail")
-
-            (defun gnus-goto-article (message-id)
-              (activate-gnus)
-              (gnus-summary-read-group "INBOX" 15 t)
-              (let ((nnir-imap-default-search-key "imap")
-                    (nnir-ignored-newsgroups
-                     (concat "\\(\\(list\\.wg21\\|archive\\)\\.\\|"
-                             "mail\\.\\(spam\\|save\\|trash\\|sent\\)\\)")))
-                (gnus-summary-refer-article message-id)))
-
-            (defvar gnus-query-history nil)
-            (defun gnus-query (query &optional arg)
-              (interactive
-               (list (read-string (format "IMAP Query %s: "
-                                          (if current-prefix-arg "All" "Mail"))
-                                  (format-time-string "SENT SINCE %d-%b-%Y "
-                                                      (time-subtract (current-time)
-                                                                     (days-to-time 90)))
-                                  'gnus-query-history)
-                     current-prefix-arg))
-              (activate-gnus)
-              (let ((nnir-imap-default-search-key "gmail"))
-                (gnus-group-make-nnir-group
-                 nil (list (cons 'nnir-query-spec
-                                 (list (cons 'query query)
-                                       (cons 'criteria "")))
-                           (cons 'nnir-group-spec
-                                 (list (list "nnimap:Local")))))))))
+                  nnml-directory "~/Mail")))
 
 ;; Gnus
 (use-package gnus
@@ -161,8 +135,8 @@
                                               (nnimap-stream ssl)
                                               (nnir-search-engine imap))
 
-                  ;; Setup gnus inboxes
-                  gnus-secondary-select-methods '((nnmaildir "Local"
+                  ;; Add Unix mbox'es (mbsync); in case we have local email
+                  gnus-secondary-select-methods '((nnmaildir "gmail"
                                                              (directory "~/Mail")
                                                              (directory-files nnheader-directory-files-safe)
                                                              (get-new-mail nil)))
@@ -192,7 +166,9 @@
             (add-hook 'gnus-group-mode-hook 'gnus-topic-mode)
             (add-hook 'gnus-group-mode-hook 'hl-line-mode)
             (add-hook 'gnus-summary-mode-hook 'hl-line-mode)
-            (add-hook 'gnus-summary-mode-hook (lambda () (setq-local truncate-lines t)))
+            (add-hook 'gnus-summary-mode-hook (lambda ()
+                                                (toggle-truncate-lines t)
+                                                (setq-local truncate-lines t)))
 
             ;; Sort email
             (add-hook 'gnus-summary-exit-hook 'gnus-summary-bubble-group)
