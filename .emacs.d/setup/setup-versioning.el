@@ -497,6 +497,7 @@
 
             (defun my/refresh-visible-git-gutter-buffers ()
               "Refresh git-gutter-mode on all visible git-gutter-mode buffers."
+              (interactive)
               (dolist (buff (buffer-list))
                 (with-current-buffer buff
                   (when (and git-gutter+-mode (get-buffer-window buff))
@@ -508,9 +509,9 @@
                       'my/refresh-visible-git-gutter-buffers)
 
             ;; https://stackoverflow.com/questions/23344540/emacs-update-git-gutter-annotations-when-staging-or-unstaging-changes-in-magit
-            (add-hook 'magit-after-revert-hook 'git-gutter+-refresh)
-            (add-hook 'magit-not-reverted-hook 'git-gutter+-refresh)
-            (add-hook 'magit-post-refresh-hook 'git-gutter+-refresh)
+            (add-hook 'magit-after-revert-hook 'my/refresh-visible-git-gutter-buffers)
+            (add-hook 'magit-not-reverted-hook 'my/refresh-visible-git-gutter-buffers)
+            (add-hook 'magit-post-refresh-hook 'my/refresh-visible-git-gutter-buffers)
 
             (global-git-gutter+-mode t)))
 
