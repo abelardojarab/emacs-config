@@ -495,6 +495,16 @@
             (defvar my/magit-after-unstage-hooks nil
               "Hooks to be run after unstaging one item in magit.")
 
+            (defadvice magit-stage-item (after run-my-after-stage-hooks activate)
+              "Run `my-magit-after-stage-hooks` after staging an item in magit."
+              (when (called-interactively-p 'interactive)
+                (run-hooks 'my/magit-after-stage-hooks)))
+
+            (defadvice magit-unstage-item (after run-my-after-unstage-hooks activate)
+              "Run `my-magit-after-unstage-hooks` after unstaging an item in magit."
+              (when (called-interactively-p 'interactive)
+                (run-hooks 'my/magit-after-unstage-hooks)))
+
             (defun my/refresh-visible-git-gutter-buffers ()
               "Refresh git-gutter-mode on all visible git-gutter-mode buffers."
               (interactive)
