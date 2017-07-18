@@ -45,16 +45,24 @@
             ;; Disable External Pin Entry
             (setenv "GPG_AGENT_INFO" nil)))
 
+;; Enable encryption/decryption of .gpg files
+(use-package epa-file
+  :config  (progn
+             ;; 'silent to use symmetric encryption
+             ;; nil to ask for users unless specified
+             ;; t to always ask for a user
+             ;; (setq epa-file-select-keys t)
+
+             (setq epa-file-name-regexp "\\.\\(gpg\\|asc\\)$"
+                   epa-armor t)
+             (epa-file-name-regexp-update)
+             (epa-file-enable)))
+
 ;; EasyPG Emacs assistant
 (use-package epa
   :defer t
   :config (progn
             (setq epa-popup-info-window nil)
-
-            ;; 'silent to use symmetric encryption
-            ;; nil to ask for users unless specified
-            ;; t to always ask for a user
-            (setq epa-file-select-keys t)
 
             ;; https://github.com/jwiegley/dot-emacs/blob/master/dot-gnus.el
             (defun epa--key-widget-value-create (widget)
