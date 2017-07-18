@@ -413,6 +413,7 @@
 
 ;; diff-hl
 (use-package diff-hl
+  :after magit
   :commands (global-diff-hl-mode
              diff-hl-mode
              diff-hl-next-hunk
@@ -421,22 +422,20 @@
              diff-hl-diff-goto-hunk
              diff-hl-revert-hunk)
   :load-path (lambda () (expand-file-name "diff-hl/" user-emacs-directory))
+  :init (global-diff-hl-mode 1)
   :config (progn
             (setq diff-hl-draw-borders t)
             (defadvice svn-sttus-update-modeline (after svn-update-diff-hl activate)
               (diff-hl-update))
 
-	    ;; highlight in unsaved buffers as well
-	    (diff-hl-flydiff-mode 1)
+            ;; highlight in unsaved buffers as well
+            (diff-hl-flydiff-mode 1)
 
-	    ;; Integrate with Magit
-	    (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh)
+            ;; Integrate with Magit
+            (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh)
 
-	    ;; Highlight changed files in the fringe of dired
-	    (add-hook 'dired-mode-hook #'diff-hl-dired-mode)
-
-            ;; Enable diff-hl
-            (global-diff-hl-mode 1)))
+            ;; Highlight changed files in the fringe of dired
+            (add-hook 'dired-mode-hook #'diff-hl-dired-mode)))
 
 ;; git modeline and git utilities
 (use-package git-emacs
@@ -507,6 +506,11 @@
                       'my/refresh-visible-git-gutter-buffers)
             (add-hook 'my/magit-after-stage-hooks
                       'my/refresh-visible-git-gutter-buffers)
+
+            ;; https://stackoverflow.com/questions/23344540/emacs-update-git-gutter-annotations-when-staging-or-unstaging-changes-in-magit
+            (add-hook 'magit-after-revert-hook 'git-gutter+-refresh)
+            (add-hook 'magit-not-reverted-hook 'git-gutter+-refresh)
+            (add-hook 'magit-post-refresh-hook 'git-gutter+-refresh)
 
             (global-git-gutter+-mode t)))
 
