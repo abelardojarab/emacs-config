@@ -496,12 +496,12 @@
               "Hooks to be run after unstaging one item in magit.")
 
             (defadvice magit-stage-item (after run-my-after-stage-hooks activate)
-              "Run `my-magit-after-stage-hooks` after staging an item in magit."
+              "Run `my/magit-after-stage-hooks` after staging an item in magit."
               (when (called-interactively-p 'interactive)
                 (run-hooks 'my/magit-after-stage-hooks)))
 
             (defadvice magit-unstage-item (after run-my-after-unstage-hooks activate)
-              "Run `my-magit-after-unstage-hooks` after unstaging an item in magit."
+              "Run `my/magit-after-unstage-hooks` after unstaging an item in magit."
               (when (called-interactively-p 'interactive)
                 (run-hooks 'my/magit-after-unstage-hooks)))
 
@@ -511,17 +511,20 @@
               (dolist (buff (buffer-list))
                 (with-current-buffer buff
                   (when (and git-gutter+-mode (get-buffer-window buff))
-                    (git-gutter+-mode t)))))
+                    (git-gutter+-mode t)
+                    (git-gutter+-refresh)))))
 
             (add-hook 'my/magit-after-unstage-hooks
                       'my/refresh-visible-git-gutter-buffers)
             (add-hook 'my/magit-after-stage-hooks
                       'my/refresh-visible-git-gutter-buffers)
 
-            ;; https://stackoverflow.com/questions/23344540/emacs-update-git-gutter-annotations-when-staging-or-unstaging-changes-in-magit
-            (add-hook 'magit-after-revert-hook 'my/refresh-visible-git-gutter-buffers)
-            (add-hook 'magit-not-reverted-hook 'my/refresh-visible-git-gutter-buffers)
-            (add-hook 'magit-post-refresh-hook 'my/refresh-visible-git-gutter-buffers)
+            (add-hook 'magit-after-revert-hook
+                      'my/refresh-visible-git-gutter-buffers)
+            (add-hook 'magit-not-reverted-hook
+                      'my/refresh-visible-git-gutter-buffers)
+            (add-hook 'magit-post-refresh-hook
+                      'my/refresh-visible-git-gutter-buffers)
 
             (global-git-gutter+-mode t)))
 
