@@ -1,4 +1,4 @@
-;;; setup-folding.el ---
+;;; setup-folding.el ---                       -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2014, 2015, 2016, 2017  Abelardo Jara-Berrocal
 
@@ -218,10 +218,8 @@
              origami-show-only-node
              origami-recursively-toggle-node
              origami-mode)
-  :bind (("C-c SPC" . origami-recursively-toggle-node)
-         ("C-c TAB" . origami-toggle-all-nodes)
-         ("C-c *" . origami-toggle-all-nodes)
-         ("C-c +" . origami-open-all-nodes))
+  :bind (("C-c *"   . origami-toggle-all-nodes)
+         ("C-c +"   . origami-open-all-nodes))
   :load-path (lambda () (expand-file-name "origami/" user-emacs-directory))
   :config (global-origami-mode))
 
