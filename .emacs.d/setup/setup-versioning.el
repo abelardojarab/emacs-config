@@ -518,11 +518,6 @@
                       'my/refresh-visible-git-gutter-buffers)
             (add-hook 'my/magit-after-stage-hooks
                       'my/refresh-visible-git-gutter-buffers)
-
-            (add-hook 'magit-after-revert-hook
-                      'my/refresh-visible-git-gutter-buffers)
-            (add-hook 'magit-not-reverted-hook
-                      'my/refresh-visible-git-gutter-buffers)
             (add-hook 'magit-post-refresh-hook
                       'my/refresh-visible-git-gutter-buffers)
 
