@@ -160,9 +160,6 @@
 ;; Setup Org (html support)
 (require 'setup-org-html)
 
-;; Setup Org (blogging support)
-(require 'setup-org-blog)
-
 ;; Setup LaTeX
 (require 'setup-latex)
 
@@ -309,6 +306,9 @@
 
 ;; Setup email
 (require 'setup-email)
+
+;; Setup Org (blogging support)
+(require 'setup-org-blog)
 
 ;; Setup post
 (require 'setup-post)

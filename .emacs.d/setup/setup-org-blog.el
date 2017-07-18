@@ -24,15 +24,6 @@
 
 ;;; Code:
 
-;; .authinfo parsing (not longer valid for org2blog, use auth-source)
-(use-package netrc)
-
-;; .authinfo parsing
-(use-package auth-source
-  :config (progn
-            (if (file-exists-p "~/.authinfo")
-                (add-to-list 'auth-sources "~/.authinfo"))))
-
 ;; org2blog pre-requisite
 (use-package metaweblog
   :defer t

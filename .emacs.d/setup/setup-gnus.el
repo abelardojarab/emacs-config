@@ -51,6 +51,11 @@
   :config (progn
             (setq epa-popup-info-window nil)
 
+            ;; 'silent to use symmetric encryption
+            ;; nil to ask for users unless specified
+            ;; t to always ask for a user
+            (setq epa-file-select-keys t)
+
             ;; https://github.com/jwiegley/dot-emacs/blob/master/dot-gnus.el
             (defun epa--key-widget-value-create (widget)
               (let* ((key (widget-get widget :value))
@@ -68,6 +73,20 @@
                                 (epg-user-id-string primary-user-id)
                               (epg-decode-dn (epg-user-id-string primary-user-id)))
                           ""))))))
+
+;; .authinfo parsing (not longer valid for org2blog, use auth-source)
+(use-package netrc)
+
+;; .authinfo parsing
+(use-package auth-source
+  :config (progn
+            (if (file-exists-p "~/.authinfo")
+                (add-to-list 'auth-sources "~/.authinfo"))))
+
+;; Secrets file
+(let ((secrets-file "~/.emacs.cache/.secret.el"))
+  (when (file-exists-p secrets-file)
+    (load secrets-file)))
 
 ;; Electric completions of email addresses and the like
 (use-package ecomplete)

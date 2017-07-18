@@ -411,16 +411,22 @@
   :load-path (lambda () (expand-file-name "magit-gitflow/" user-emacs-directory))
   :init (add-hook 'magit-mode-hook #'turn-on-magit-gitflow 'append))
 
+;; flydiff
+(use-package diff-hl-flydiff
+  :commands diff-hl-flydiff-mode
+  :load-path (lambda () (expand-file-name "diff-hl/" user-emacs-directory)))
+
 ;; diff-hl
 (use-package diff-hl
-  :after magit
+  :after (diff-hl-flydiff magit)
   :commands (global-diff-hl-mode
              diff-hl-mode
              diff-hl-next-hunk
              diff-hl-previous-hunk
              diff-hl-mark-hunk
              diff-hl-diff-goto-hunk
-             diff-hl-revert-hunk)
+             diff-hl-revert-hunk
+             diff-hl-flydiff-mode)
   :load-path (lambda () (expand-file-name "diff-hl/" user-emacs-directory))
   :init (global-diff-hl-mode 1)
   :config (progn

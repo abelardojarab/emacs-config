@@ -24,11 +24,6 @@
 
 ;;; Code:
 
-;; Secrets file
-(let ((secrets-file "~/.emacs.cache/.secret.el"))
-  (when (file-exists-p secrets-file)
-    (load secrets-file)))
-
 (defcustom my/bibtex-completion-bibliography "~/workspace/Documents/Bibliography/biblio.bib"
   "Preferred bibliography file"
   :type 'string

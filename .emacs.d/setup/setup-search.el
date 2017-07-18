@@ -41,6 +41,7 @@
               (recenter))
             (ad-activate 'isearch-repeat-forward)
             (ad-activate 'isearch-repeat-backward)
+            (add-hook 'isearch-mode-end-hook 'recenter-top-bottom)
 
             ;; search forward with Ctrl-f
             (global-set-key [(control f)] 'isearch-forward)
