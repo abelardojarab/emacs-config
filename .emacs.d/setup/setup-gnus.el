@@ -35,6 +35,14 @@
             ;; Make gnutls a bit safer
             (setq gnutls-min-prime-bits 4096)))
 
+;; Keychain access
+(use-package keychain-environment
+  :if (equal system-type 'gnu/linux)
+  :load-path (lambda () (expand-file-name "keychain-environment/" user-emacs-directory))
+  :commands keychain-refresh-environment
+  :defer 60
+  :init (keychain-refresh-environment))
+
 ;; Keeping Secrets in Emacs with GnuPG & EasyPG
 (use-package epg
   :config (progn
@@ -42,11 +50,35 @@
             (if (executable-find "gpg2")
                 (setq epg-gpg-program "gpg2"))
 
+            ;; enable EasyPG handling
+            ;; gpg-agent confuses epa when getting passphrase
+            (defun my/squash-gpg (&rest ignored-frame)
+              "Kill any GPG_AGENT_INFO in our environment."
+              (setenv "GPG_AGENT_INFO" nil))
+
+            ;; Fix up the frame so we don't send pinentry to the wrong place
+            (defun my/fixup-gpg-agent (&optional frame)
+              "Tweak DISPLAY and GPG_TTY environment variables as appropriate to `FRAME'."
+              (when (not frame)
+                (setq frame (selected-frame)))
+              (when (fboundp 'keychain-refresh-environment)
+                (keychain-refresh-environment))
+              (if (display-graphic-p frame)
+                  (setenv "DISPLAY" (terminal-name frame))
+                (setenv "GPG_TTY" (terminal-name frame))
+                (setenv "DISPLAY" nil)))
+
+            (when (getenv "DISPLAY")
+              (add-hook 'after-make-frame-functions 'my/fixup-gpg-agent)
+              (add-hook 'focus-in-hook 'my/fixup-gpg-agent))
+
+            ;; https://github.com/stsquad/my-emacs-stuff/blob/master/my-gpg.el
             ;; Disable External Pin Entry
             (setenv "GPG_AGENT_INFO" nil)))
 
 ;; Enable encryption/decryption of .gpg files
 (use-package epa-file
+  :commands epa-file-enable
   :config  (progn
              ;; 'silent to use symmetric encryption
              ;; nil to ask for users unless specified
@@ -80,7 +112,9 @@
                             (if (stringp (epg-user-id-string primary-user-id))
                                 (epg-user-id-string primary-user-id)
                               (epg-decode-dn (epg-user-id-string primary-user-id)))
-                          ""))))))
+                          ""))))
+
+            (epa-file-enable)))
 
 ;; .authinfo parsing (not longer valid for org2blog, use auth-source)
 (use-package netrc)
