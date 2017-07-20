@@ -122,6 +122,9 @@
 ;; .authinfo parsing
 (use-package auth-source
   :config (progn
+            (if (file-exists-p "~/.authinfo.gpg")
+                (add-to-list 'auth-sources "~/.authinfo.gpg"))
+
             (if (file-exists-p "~/.authinfo")
                 (add-to-list 'auth-sources "~/.authinfo"))))
 

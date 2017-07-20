@@ -102,7 +102,7 @@
   :group 'my/customs)
 
 (defcustom my/emacs-theme
-  'apropospriate-dark
+  'monokai
   "Preferred Emacs theme"
   :group 'my/customs
   :type 'list)
