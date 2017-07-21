@@ -65,14 +65,20 @@
 
 (use-package counsel
   :load-path (lambda () (expand-file-name "swiper/" user-emacs-directory))
-  :bind (("M-x" . counsel-M-x)
-         ("M-y" . counsel-yank-pop)
-         ("C-o" . counsel-find-file)
-         ("C-c v" . counsel-yank-pop)
+  :bind (("M-x"                     . counsel-M-x)
+         ("M-y"                     . counsel-yank-pop)
+         ("C-o"                     . counsel-find-file)
+         ("C-c v"                   . counsel-yank-pop)
+         ("C-O"                     . counsel-find-file)
+         ([remap bookmark-jump]     . counsel-bookmark) ;; Jump to book or set it if it doesn't exist, C-x r b
+         ([remap bookmark-set]      . counsel-bookmark)  ;; C-x r m
+         ([remap find-file]         . counsel-find-file)
+         ([remap describe-variable] . counsel-describe-variable)
+         ([remap describe-function] . counsel-describe-function)
          :map ctl-x-map
-         ("x" . counsel-M-x)
+         ("x"                       . counsel-M-x)
          :map ivy-minibuffer-map
-         ("M-y" . ivy-next-line))
+         ("M-y"                     . ivy-next-line))
   :config (define-key read-expression-map (kbd "C-r") #'counsel-expression-history))
 
 (use-package swiper-helm
