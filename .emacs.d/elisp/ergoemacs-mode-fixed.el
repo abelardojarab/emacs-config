@@ -302,7 +302,8 @@ The `execute-extended-command' is now \\[execute-extended-command].
   :after-hook (if (and (not noninteractive)
                        (not ergoemacs-mode--start-p))
                   (if ergoemacs-mode
-                      (message "Ergoemacs will be started.")
+                      (progn (message "Ergoemacs will be started.")
+                             (ergoemacs-mode-after-init-emacs))
                     (message "Ergoemacs startup canceled."))
                 (setq ergoemacs-map--hashkey nil)
                 (unless ergoemacs-require--ini-p
@@ -320,7 +321,6 @@ The `execute-extended-command' is now \\[execute-extended-command].
                         ;; (add-hook 'pre-command-hook #'ergoemacs-pre-command-hook)
                         ;; (add-hook 'post-command-hook #'ergoemacs-post-command-hook)
                         ;; (add-hook 'after-load-functions #'ergoemacs-after-load-functions)
-                        (ergoemacs-mode-after-init-emacs)
                         (setq ergoemacs-require--ini-p t
                               ergoemacs-component-struct--apply-ensure-p t)
                         (ergoemacs-setup-override-keymap)
@@ -1283,7 +1283,8 @@ also perform `outline-next-visible-heading'"
       (setq ergoemacs-mode--start-p t)
       (ergoemacs-mode ergoemacs-mode)
       (run-hooks 'ergoemacs-mode-init-hook)
-      (add-hook 'after-load-functions #'ergoemacs-mode-after-startup-run-load-hooks)))
+      (add-hook 'after-load-functions #'ergoemacs-mode-after-startup-run-load-hooks))
+    (message "Ergoemacs has started."))
   (setq ergoemacs-mode-started-p t))
 
 (if ergoemacs-mode--fast-p

@@ -84,6 +84,8 @@
 
             (defun quit-emacs ()
               (interactive)
+              (if (bound-and-true-p ergoemacs-mode)
+                  (ergoemacs-mode -1))
               (setq my/really-kill-emacs t)
               (kill-emacs))
 
