@@ -69,6 +69,8 @@
          ("M-y"                     . counsel-yank-pop)
          ("C-o"                     . counsel-find-file)
          ("C-c v"                   . counsel-yank-pop)
+         ("C-c g"                   . counsel-git-grep)
+         ("C-c o"                   . counsel-find-file)
          ([remap bookmark-jump]     . counsel-bookmark) ;; Jump to book or set it if it doesn't exist, C-x r b
          ([remap bookmark-set]      . counsel-bookmark)  ;; C-x r m
          ([remap find-file]         . counsel-find-file)
